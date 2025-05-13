@@ -18,6 +18,7 @@ import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
 import { CompatibilityFilterSyncController, FilterSyncController } from './filtering/filter_sync/index';
 import { ClearFilterVisitor } from './filtering/filter_visitors/clear_filter_visitor';
+import { FilterCustomOperationsVisitor } from './filtering/filter_visitors/filter_custom_operations_visitor';
 import { GetAppliedFilterVisitor } from './filtering/filter_visitors/get_applied_filters_visitor';
 import { CompatibilityHeaderFilterController, HeaderFilterController } from './filtering/header_filter/index';
 import { HeaderFilterViewController } from './filtering/header_filter/view_controller';
@@ -85,13 +86,11 @@ export class GridCoreNewBase<
 
   private getAppliedFiltersVisitor!: GetAppliedFilterVisitor;
 
+  private filterCustomOperationsVisitor!: FilterCustomOperationsVisitor;
+
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
     di.register(this.diContext);
-  }
-
-  private _initWidgetMockRefs(): void {
-    this.filterController.widgetMockGetter = () => this.diContext.tryGet(WidgetMock);
   }
 
   protected _initWidgetMock() {
@@ -128,6 +127,7 @@ export class GridCoreNewBase<
 
     this.clearFilterVisitor = this.diContext.get(ClearFilterVisitor);
     this.getAppliedFiltersVisitor = this.diContext.get(GetAppliedFilterVisitor);
+    this.filterCustomOperationsVisitor = this.diContext.get(FilterCustomOperationsVisitor);
   }
 
   protected _init(): void {
@@ -136,7 +136,6 @@ export class GridCoreNewBase<
     this._registerDIContext();
     this._initWidgetMock();
     this._initDIContext();
-    this._initWidgetMockRefs();
   }
 
   protected _getDefaultOptions() {

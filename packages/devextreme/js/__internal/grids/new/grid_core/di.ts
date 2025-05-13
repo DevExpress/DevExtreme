@@ -10,6 +10,7 @@ import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
 import * as FilterSyncModule from './filtering/filter_sync/index';
 import { ClearFilterVisitor } from './filtering/filter_visitors/clear_filter_visitor';
+import { FilterCustomOperationsVisitor } from './filtering/filter_visitors/filter_custom_operations_visitor';
 import { GetAppliedFilterVisitor } from './filtering/filter_visitors/get_applied_filters_visitor';
 import {
   CompatibilityHeaderFilterController,
@@ -59,5 +60,6 @@ export function register(diContext: DIContext): void {
 
   diContext.register(ClearFilterVisitor);
   diContext.register(GetAppliedFilterVisitor);
+  diContext.register(FilterCustomOperationsVisitor);
   diContext.register(KeyboardNavigationController);
 }

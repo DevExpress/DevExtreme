@@ -1,18 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import type { Signal } from '@preact/signals-core';
+import type { ReadonlySignal, Signal } from '@preact/signals-core';
 import { computed, signal } from '@preact/signals-core';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import { ColumnsController } from '../columns_controller/index';
 import { OptionsController } from '../options_controller/options_controller';
-import type { WidgetMock } from '../widget_mock';
-import { anyOf, noneOf } from './legacy_filter_custom_operations';
 import type { AppliedFilters } from './types';
 import { getAppliedFilterExpressions } from './utils';
 
 export class FilterController {
-  private readonly filterBuilderCustomOperations = this.options.oneWay('filterBuilder.customOperations');
-
   public readonly filterPanelFilterEnabled = this.options.oneWay('filterPanel.filterEnabled');
 
   public readonly filterPanelVisible = this.options.oneWay('filterPanel.visible');
@@ -47,14 +43,8 @@ export class FilterController {
     },
   );
 
-  public readonly customOperations = computed(
-    () => [
-      anyOf(this.gridGetter),
-      noneOf(this.gridGetter),
-    ]
-      .concat(this.filterBuilderCustomOperations.value)
-      .filter((o) => o),
-  );
+  // This property is defined in filter_custom_operations_visitor.ts
+  public customOperations: ReadonlySignal<unknown[]> = computed(() => []);
 
   public readonly filterPanelValue = computed(
     () => {
@@ -91,10 +81,6 @@ export class FilterController {
     private readonly options: OptionsController,
     private readonly columnsController: ColumnsController,
   ) { }
-
-  public widgetMockGetter = (): WidgetMock | null => null;
-
-  private readonly gridGetter = (): unknown => this.widgetMockGetter();
 
   public clearFilterCallback = (): void => {};
 

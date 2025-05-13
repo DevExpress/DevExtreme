@@ -19,9 +19,12 @@ import {
   getFilterExpression, isCondition, isGroup, renderValueText,
 } from '@ts/filter_builder/m_utils';
 
+import { getColumnByIndexOrName } from '../columns_controller/utils';
 import { getHeaderItemText } from './header_filter/legacy_header_filter';
 
-function baseOperation(gridGetter) {
+function baseOperation(config) {
+  const { headerFilterController, headerFilterOptions, columns } = config;
+
   const calculateFilterExpression = function (filterValue, field, fields) {
     const result: string[] = [];
     const lastIndex = filterValue.length - 1;
@@ -59,11 +62,11 @@ function baseOperation(gridGetter) {
 
   // Override in the private API WA [T1232532]
   const customizeText = function (fieldInfo, options) {
-    const headerFilterController = gridGetter().headerFilter;
     options = options || {};
     const { value } = fieldInfo;
-    let column = gridGetter().columnOption(fieldInfo.field.dataField);
+    let column = getColumnByIndexOrName(columns, fieldInfo.field.dataField);
     const headerFilter = column && column.headerFilter;
+    // @ts-expect-error lookup is not supported in CardView yet
     const lookup = column && column.lookup;
     const values = options.values || [value];
 
@@ -74,6 +77,7 @@ function baseOperation(gridGetter) {
       const itemsDeferred = options.items || new Deferred();
       if (!options.items) {
         column = extend({}, column, { filterType: 'include', filterValues: values });
+        // TODO:
         const dataSourceOptions = headerFilterController.getDataSource(column);
         dataSourceOptions.paginate = false;
         const dataSource = new DataSource(dataSourceOptions);
@@ -107,9 +111,10 @@ function baseOperation(gridGetter) {
       });
       return result;
     }
-    const text = getHeaderItemText(value, column, 0, gridGetter().option('headerFilter'));
+    const text = getHeaderItemText(value, column, 0, headerFilterOptions);
     return text;
   };
+
   return {
     dataTypes: ['string', 'date', 'datetime', 'number', 'boolean', 'object'],
     calculateFilterExpression,
@@ -117,7 +122,9 @@ function baseOperation(gridGetter) {
       const div = $('<div>')
         .addClass('dx-filterbuilder-item-value-text')
         .appendTo(container);
-      const column = extend(true, {}, gridGetter().columnOption(conditionInfo.field.dataField));
+
+      const originalColumn = getColumnByIndexOrName(columns, conditionInfo.field.dataField);
+      const column = extend(true, {}, originalColumn);
 
       renderValueText(div, conditionInfo.text && conditionInfo.text.split('|'));
 
@@ -128,12 +135,12 @@ function baseOperation(gridGetter) {
       column.filterType = 'include';
       column.filterValues = conditionInfo.value ? conditionInfo.value.slice() : [];
 
-      gridGetter().headerFilter.showHeaderFilterMenuBase({
+      headerFilterController.showHeaderFilterMenuBase({
         columnElement: div,
         column,
         apply() {
           setValue(this.filterValues);
-          gridGetter().headerFilter.hideHeaderFilterMenu();
+          headerFilterController.hideHeaderFilterMenu();
           conditionInfo.closeEditor();
         },
         onHidden() {
@@ -147,16 +154,16 @@ function baseOperation(gridGetter) {
   };
 }
 
-export function anyOf(gridGetter) {
-  return extend(baseOperation(gridGetter), {
+export function anyOf(config) {
+  return extend(baseOperation(config), {
     name: 'anyof',
     icon: 'selectall',
     caption: messageLocalization.format('dxFilterBuilder-filterOperationAnyOf'),
   });
 }
 
-export function noneOf(gridGetter) {
-  const baseOp = baseOperation(gridGetter);
+export function noneOf(config) {
+  const baseOp = baseOperation(config);
   return extend({}, baseOp, {
     calculateFilterExpression(filterValue, field, fields) {
       const baseFilter = baseOp.calculateFilterExpression(filterValue, field, fields);
