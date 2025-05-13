@@ -697,7 +697,7 @@ test('Ungroup column when pressing Ctrl + Shift + G', async (t) => {
     .pressKey('ctrl+shift+g');
 
   await takeScreenshot(
-    'ungroup_column_when_pressing_Ctrl_+_Shift_+_G',
+    'ungroup_column_when_pressing_Ctrl_+_Shift_+_G.png',
     dataGrid.element,
   );
 
@@ -828,7 +828,10 @@ test('Ungroup column when pressing Ctrl + Shift + G if showWhenGrouped is enable
     .click(secondHeader.element)
     .pressKey('ctrl+shift+g');
 
-  await takeScreenshot('ungroup_column_when_pressing_ctrl_+_shift_+_g_if_showWhenGrouped_is_true');
+  await takeScreenshot(
+    'ungroup_column_when_pressing_ctrl_+_shift_+_g_if_showWhenGrouped_is_true.png',
+    dataGrid.element,
+  );
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -915,7 +918,10 @@ test('Ungroup all columns when pressing Shift + Alt + G', async (t) => {
     .click(firstGroupedHeader.element)
     .pressKey('shift+alt+g');
 
-  await takeScreenshot('ungroup_all_columns_when_pressing_Shift_+_Alt_+_G');
+  await takeScreenshot(
+    'ungroup_all_columns_when_pressing_Shift_+_Alt_+_G.png',
+    dataGrid.element,
+  );
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -1010,7 +1016,10 @@ safeSizeTest('Ungroup all columns when pressing Shift + Alt + G on the header', 
     .click(fourthHeader.element)
     .pressKey('shift+alt+g');
 
-  await takeScreenshot('ungroup_all_columns_when_pressing_Shift_+_Alt_+_G_on_header');
+  await takeScreenshot(
+    'ungroup_all_columns_when_pressing_Shift_+_Alt_+_G_on_header.png',
+    dataGrid.element,
+  );
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
