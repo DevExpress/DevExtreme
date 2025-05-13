@@ -1,4 +1,4 @@
-import { computed, effect } from '@preact/signals-core';
+import { effect } from '@preact/signals-core';
 
 import { ColumnsController } from '../../columns_controller/index';
 import type { Column } from '../../columns_controller/types';

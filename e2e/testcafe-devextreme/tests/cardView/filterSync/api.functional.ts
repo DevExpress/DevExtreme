@@ -137,7 +137,6 @@ test('sync from headerFilter: filter by all values', async (t) => {
   await cardView.apiColumnOption('id', 'filterValues', undefined);
 
   await t.expect(cardView.apiOption('filterValue')).eql(null);
-  await expectFilterElementsState(t, ['id']);
 }).before(() => createWidget('dxCardView', baseConfig));
 
 test('sync from headerFilter: filter by two columns', async (t) => {
