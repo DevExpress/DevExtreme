@@ -4,7 +4,11 @@ import {
     Response,
 } from 'devextreme/common/ai-integration';
 import { AICommand, AICommandName } from 'devextreme/ui/html_editor';
-import { AzureOpenAI } from 'openai';
+import { AzureOpenAI, OpenAI } from 'openai';
+
+type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
+  content: string;
+};
 
 const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,
@@ -16,7 +20,7 @@ const AzureOpenAIConfig = {
 
 const aiService = new AzureOpenAI(AzureOpenAIConfig);
 
-async function getAIResponse(messages, signal: AbortSignal) {
+async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
   const params = {
     messages,
     model: AzureOpenAIConfig.deployment,
@@ -32,7 +36,7 @@ export const aiIntegration = new AIIntegration({
     const controller = new AbortController();
     const signal = controller.signal;
 
-    const aiPrompt = [
+    const aiPrompt: AIMessage[] = [
       { role: 'system', content: prompt.system, },
       { role: 'user', content: prompt.user, },
     ];
