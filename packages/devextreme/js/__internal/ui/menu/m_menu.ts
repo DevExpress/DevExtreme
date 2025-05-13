@@ -64,7 +64,7 @@ class Menu extends MenuBase {
 
   _submenus!: Submenu[];
 
-  _visibleSubmenu?: Submenu;
+  _visibleSubmenu?: Submenu | null;
 
   _overlay!: dxOverlay<OverlayProperties>;
 
@@ -264,7 +264,6 @@ class Menu extends MenuBase {
   }
 
   _initMarkup(): void {
-    // @ts-expect-error
     this._visibleSubmenu = null;
 
     this.$element().addClass(DX_MENU_CLASS);
@@ -693,9 +692,20 @@ class Menu extends MenuBase {
 
     this._actions.onSubmenuHiding(eventArgs);
 
+    const { focusedElement } = this.option();
+    const { focusedElement: submenuFocusedElement } = submenu.option();
+
+    const isVisibleSubmenuHiding = this._visibleSubmenu === submenu;
+    const isFocusedElementHiding = focusedElement === submenuFocusedElement;
+
+    if (isVisibleSubmenuHiding && isFocusedElementHiding) {
+      this.option('focusedElement', null);
+    }
+
     if (!eventArgs.cancel) {
-      // @ts-expect-error
-      if (this._visibleSubmenu === submenu) this._visibleSubmenu = null;
+      if (isVisibleSubmenuHiding) {
+        this._visibleSubmenu = null;
+      }
       $border.hide();
       $menuAnchorItem.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
     }
@@ -904,7 +914,6 @@ class Menu extends MenuBase {
     }
 
     if (this._visibleSubmenu === submenu) {
-      // @ts-expect-error
       this._visibleSubmenu = null;
     }
     // @ts-expect-error
