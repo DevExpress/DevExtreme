@@ -107,7 +107,7 @@ export default class FormDialog extends BaseDialog {
           },
         },
       ],
-      ...this._popupUserConfig,
+      ...this._popupConfig,
     }) as PopupProperties;
   }
 

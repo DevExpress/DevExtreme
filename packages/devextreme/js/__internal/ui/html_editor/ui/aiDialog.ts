@@ -163,7 +163,10 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         at: 'center',
         of: this._$container,
       },
-      ...this._popupUserConfig,
+      onHiding: () => {
+        this._processCommandCompletion();
+      },
+      ...this._popupConfig,
     }) as PopupProperties;
   }
 
@@ -524,6 +527,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   private _processCommandCompletion(dialogState?: DialogState): void {
+    this._abort?.();
     this._abort = undefined;
     this._isAICommandExecuting = false;
 
@@ -568,7 +572,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   private _stopAICommandExecution(): void {
-    this._abort?.();
     this._processCommandCompletion(this._getInitialDialogState());
   }
 
@@ -734,7 +737,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   updateAIIntegration(aiIntegration: AIIntegration): void {
-    this._abort?.();
     this._processCommandCompletion(this._getInitialDialogState());
     this._aiIntegration = aiIntegration;
     this._executeAICommand();
@@ -765,10 +767,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   hide(resultText: AIDialogResult['resultText'], event: AIDialogResult['event']): void {
     this.deferred?.resolve({ resultText, event });
-
-    this._abort?.();
-    this._processCommandCompletion();
-
     super.hide();
   }
 }
