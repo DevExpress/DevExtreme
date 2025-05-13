@@ -7,7 +7,7 @@ import {
     RequestParams,
     Response,
 } from 'devextreme/common/ai-integration';
-import { AzureOpenAI } from 'openai';
+import { AzureOpenAI, OpenAI } from 'openai';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -19,6 +19,10 @@ let modulePrefix = '';
 if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
+
+type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
+  content: string;
+};
 
 @Component({
   selector: 'demo-app',
@@ -53,13 +57,12 @@ export class AppComponent {
     const controller = new AbortController();
     const signal = controller.signal;
 
-    const aiPrompt = [
+    const aiPrompt: AIMessage[] = [
       { role: 'system', content: prompt.system, },
       { role: 'user', content: prompt.user, },
     ];
     const promise = new Promise<string>(async (resolve, reject) => {
       try {
-        debugger
         const response = await this.getAIResponse(aiPrompt, signal);
         const result = response.choices[0].message?.content;
 
@@ -79,14 +82,14 @@ export class AppComponent {
     return result;
   }
 
-  async getAIResponse(messages, signal: AbortSignal) {
+  async getAIResponse(messages: AIMessage[], signal: AbortSignal) {
     const params = {
       messages,
       model: this.azureOpenAIConfig.deployment,
       max_tokens: 1000,
       temperature: 0.7,
     };
-    debugger
+
     return this.aiService.chat.completions.create(params, { signal });
   }
 }
