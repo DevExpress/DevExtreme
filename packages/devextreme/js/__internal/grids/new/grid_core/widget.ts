@@ -7,6 +7,7 @@ import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
 import type { Subscription } from '@ts/core/reactive/index';
+import { setupStateManager } from '@ts/core/state_manager/index';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';
 import { render } from 'inferno';
 
@@ -72,6 +73,9 @@ export class GridCoreNewBase<
 
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
+
+    setupStateManager({ diContext: this.diContext, componentName: this.constructor.name });
+
     this.diContext.register(DataControllerModule.DataController);
     this.diContext.register(DataControllerModule.CompatibilityDataController);
     this.diContext.register(ItemsController);
