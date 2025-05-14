@@ -5965,5 +5965,10 @@
         ]
       }
     ]
+  },
+  {
+    "Name": "CardView",
+    "Equivalents": "",
+    "Groups": []
   }
 ]
