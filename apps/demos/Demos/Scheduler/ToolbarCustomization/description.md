@@ -1,13 +1,18 @@
-In our upcoming major release (v25.1) the DevExtreme Scheduler will include a customizable integrated toolbar. 
-
-For instance, in the screenshot, our new toolbar includes two custom buttons: "Today" and "New event".  
-
+DevExtreme Scheduler includes a toolbar that can display predefined and custom items. You can specify the order and the position of toolbar controls. This demo illustrates how to implement a custom toolbar.
 <!--split-->
 
-Configuration options will include:  
+To display a custom toolbar, add desired items to the [toolbar](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/toolbar/).[items[]](/Documentation/25_1/ApiReference/UI_Components/dxScheduler/Configuration/toolbar/items/) array. Scheduler supports the following types of toolbar items:
 
-- **Choosing from predefined elements:** Select and arrange built-in elements as needed. 
+- Predefined Controls    
+    * dateNavigator    
+    Features arrows and a date interval button for switching dates. You can customize the elements to display and their order within the date navigator. 
+    * viewSwitcher    
+    Switches between views like day, month, and week.
+    * today    
+    A "Today" button focusing the current date.
 
-- **Adding DevExtreme components:** Include and configure DevExtreme components like Button or Checkbox in the toolbar. 
+- DevExtreme Components    
+Configure the desired DevExtreme component within a toolbar item element. In this demo, we extended the toolbar's item collection with a Button and a TagBox.
 
-- **Inserting custom elements:** Define templates for custom elements within toolbar items for a curated experience. 
+- Custom Controls
+Specify **items[]**.[template](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/toolbar/items/#template) to implement custom controls.
