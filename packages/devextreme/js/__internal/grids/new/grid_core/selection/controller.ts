@@ -2,7 +2,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import type { DeferredObj } from '@js/core/utils/deferred';
+import { isDefined } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
+import errors from '@js/ui/widget/ui.errors';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
@@ -210,10 +212,18 @@ export class SelectionController {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private selectionChanged(e: any): void {
     if (e.addedItemKeys.length || e.removedItemKeys.length) {
+      const keyExpr = this.dataController.dataSource.peek().key();
+
+      if (!isDefined(keyExpr)) {
+        throw errors.Error('E1042', 'keyExpr is missing');
+      }
+
       const onSelectionChanged = this.onSelectionChanged.peek();
       const eventArgs = this.getSelectionEventArgs(e);
 
       this.selectedCardKeys.value = [...e.selectedItemKeys];
+      this.itemsController.setSelectionState([...e.selectedItemKeys]);
+
       // @ts-expect-error
       onSelectionChanged?.(eventArgs);
     }
