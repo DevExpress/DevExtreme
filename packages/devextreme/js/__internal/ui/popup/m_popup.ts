@@ -58,7 +58,7 @@ const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
 const POPUP_TITLE_CLASS = 'dx-popup-title';
-const POPUP_TITLE_CLOSEBUTTON_CLASS = 'dx-closebutton';
+export const POPUP_TITLE_CLOSEBUTTON_CLASS = 'dx-closebutton';
 
 const POPUP_BOTTOM_CLASS = 'dx-popup-bottom';
 
