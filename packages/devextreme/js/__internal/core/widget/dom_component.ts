@@ -143,10 +143,15 @@ class DOMComponent<
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _setOptionsByDevice(instanceCustomRules): void {
     const ctor = this.constructor;
-    const ownClassCustomRules = Object.prototype.hasOwnProperty.call(ctor, '_classCustomRules')
+
+    const hasOwnCustomRules = Object.prototype.hasOwnProperty.call(ctor, '_classCustomRules');
+    const hasOwnDefaultOptions = Object.prototype.hasOwnProperty.call(ctor, 'defaultOptions');
+
+    const ownClassCustomRules = hasOwnCustomRules
+      || hasOwnDefaultOptions
       // @ts-expect-error
       ? ctor._classCustomRules
-      : [];
+      || [] : [];
 
     super._setOptionsByDevice([].concat(ownClassCustomRules || [], instanceCustomRules || []));
   }
