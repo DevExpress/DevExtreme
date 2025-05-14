@@ -63,6 +63,8 @@ export interface TagBoxProperties extends Omit<Properties,
 class TagBox<
   TProperties extends TagBoxProperties = TagBoxProperties,
 > extends SelectBox<TProperties> {
+  static _classCustomRules: any[] = [];
+
   _$focusedTag?: dxElementWrapper;
 
   _$tagsContainer!: dxElementWrapper;
