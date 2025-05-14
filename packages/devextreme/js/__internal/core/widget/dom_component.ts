@@ -151,7 +151,7 @@ class DOMComponent<
       || hasOwnDefaultOptions
       // @ts-expect-error
       ? ctor._classCustomRules
-      || [] : [];
+      : [];
 
     super._setOptionsByDevice([].concat(ownClassCustomRules || [], instanceCustomRules || []));
   }
