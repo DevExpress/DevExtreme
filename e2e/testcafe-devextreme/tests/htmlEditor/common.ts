@@ -71,8 +71,8 @@ test('AI toolbar item', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await createWidget('dxHtmlEditor', {
-    height: 380,
-    width: 300,
+    height: 500,
+    width: 350,
     aiIntegration: {},
     toolbar: {
       items: ['ai'],
