@@ -104,9 +104,15 @@
                     $menu.trigger('dxclick');
 
                     setTimeout(() => {
-                        const $menuItem = $(document).find('.dx-submenu .dx-menu-item').eq(5);
+                        const $menuItem = $(document).find('.dx-submenu .dx-menu-item').eq(5)
 
                         $menuItem.trigger('dxclick');
+
+                        setTimeout(() => {
+                            const $subMenuItem = $menuItem.find('.dx-submenu .dx-menu-item').eq(0)
+
+                            $subMenuItem.trigger('dxclick');
+                        }, 10);
                     }, 10);
                 }, 0);
             });
