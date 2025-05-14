@@ -6,7 +6,7 @@ import {
     AIIntegration,
     RequestParams,
     Response,
-} from 'devextreme/common/ai-integration';
+} from 'devextreme-angular/common/ai-integration';
 import { AzureOpenAI, OpenAI } from 'openai';
 import { Service } from './app.service';
 
