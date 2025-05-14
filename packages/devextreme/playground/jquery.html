@@ -98,23 +98,23 @@
                     },
                 });
 
-                setTimeout(() => {
-                    const $menu = $htmlEditorElement.find('.dx-ai-format .dx-menu-item');
+                // setTimeout(() => {
+                //     const $menu = $htmlEditorElement.find('.dx-ai-format .dx-menu-item');
 
-                    $menu.trigger('dxclick');
+                //     $menu.trigger('dxclick');
 
-                    setTimeout(() => {
-                        const $menuItem = $(document).find('.dx-submenu .dx-menu-item').eq(5)
+                //     setTimeout(() => {
+                //         const $menuItem = $(document).find('.dx-submenu .dx-menu-item').eq(5)
 
-                        $menuItem.trigger('dxclick');
+                //         $menuItem.trigger('dxclick');
 
-                        setTimeout(() => {
-                            const $subMenuItem = $menuItem.find('.dx-submenu .dx-menu-item').eq(0)
+                //         setTimeout(() => {
+                //             const $subMenuItem = $menuItem.find('.dx-submenu .dx-menu-item').eq(0)
 
-                            $subMenuItem.trigger('dxclick');
-                        }, 10);
-                    }, 10);
-                }, 0);
+                //             $subMenuItem.trigger('dxclick');
+                //         }, 10);
+                //     }, 10);
+                // }, 0);
             });
         </script>
     </div>

@@ -44,7 +44,20 @@ export default class Overlay extends Widget {
     const { getInstance } = this;
 
     return ClientFunction(
-      () => (getInstance() as any).show(),
+      () => {
+        // @ts-ignore
+        const $ = window.$;
+
+        const el = document.querySelector('.dx-popup-wrapper.dx-ai-dialog');
+        console.log('Dialog element:', el);
+        if (!el) throw new Error('AI dialog element not found');
+
+        // @ts-ignore
+        const instance = $(el).dxPopup?.('instance');
+        if (!instance) throw new Error('Popup instance not found');
+
+        return (getInstance() as any).show()
+      },
       { dependencies: { getInstance } },
     )();
   }
