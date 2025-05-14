@@ -1088,12 +1088,12 @@
             ]
           },
           {
-            "Name": "Sorting",
+            "Name": "Filtering",
             "Equivalents": "",
             "Demos": [
               {
-                "Title": "Multiple Sorting",
-                "Name": "MultipleSorting",
+                "Title": "Search Panel",
+                "Name": "SearchPanel",
                 "Widget": "TreeList",
                 "MvcAdditionalFiles": [
                   "/Controllers/ApiControllers/TreeListTasksController.cs",
@@ -1102,16 +1102,54 @@
                   "/Models/SampleData/EmployeeTasks.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "Filter Row",
+                "Name": "FilterRow",
+                "Widget": "TreeList",
+                "MvcAdditionalFiles": [
+                  "/Models/TreeList/Employee.cs",
+                  "/Models/SampleData/TreeListEmployees.cs"
+                ],
+                "DemoType": "Web"
+              },
+              {
+                "Title": "Column Header Filter",
+                "Name": "ColumnHeaderFilter",
+                "Widget": "TreeList",
+                "MvcAdditionalFiles": [
+                  "/Models/TreeList/Employee.cs",
+                  "/Models/SampleData/TreeListEmployees.cs"
+                ],
+                "DemoType": "Web"
+              },
+              {
+                "Title": "Filter Panel",
+                "Equivalents": "dxFilterBuilder, FilterBuilder, QueryBuilder, dxFilterPanel, FilterPanel",
+                "Name": "FilterPanel",
+                "Widget": "TreeList",
+                "DemoType": "Web",
+                "MvcAdditionalFiles": [
+                  "/Models/SampleData/OrdersWithCustomerInfo.cs",
+                  "/Models/OrderWithCustomerInfo.cs",
+                  "/Models/CustomerInfo.cs"
+                ]
+              },
+              {
+                "Title": "Filter Modes",
+                "Name": "FilterModes",
+                "Widget": "TreeList",
+                "DemoType": "Web"
               }
             ]
           },
           {
-            "Name": "Paging",
+            "Name": "Sorting",
             "Equivalents": "",
             "Demos": [
               {
-                "Title": "Paging",
-                "Name": "Paging",
+                "Title": "Multiple Sorting",
+                "Name": "MultipleSorting",
                 "Widget": "TreeList",
                 "MvcAdditionalFiles": [
                   "/Controllers/ApiControllers/TreeListTasksController.cs",
@@ -1186,48 +1224,6 @@
                   "/Models/SampleData/TreeListEmployees.cs"
                 ],
                 "DemoType": "Web"
-              },
-              {
-                "Title": "Customize Keyboard Navigation",
-                "Name": "CustomizeKeyboardNavigation",
-                "Widget": "TreeList",
-                "MvcAdditionalFiles": [
-                  "/Controllers/ApiControllers/TreeListEmployeesController.cs",
-                  "/Models/TreeList/InMemoryEmployeesDataContext.cs",
-                  "/Models/TreeList/Employee.cs",
-                  "/Models/SampleData/TreeListEmployees.cs"
-                ],
-                "DemoType": "Web"
-              }
-            ]
-          },
-          {
-            "Name": "Node Drag & Drop",
-            "Equivalents": "",
-            "Demos": [
-              {
-                "Title": "Node Drag & Drop",
-                "Name": "LocalReordering",
-                "Widget": "TreeList",
-                "Equivalents": "Node Drag and Drop",
-                "Modules": "devextreme-aspnet-data-nojquery",
-                "MvcAdditionalFiles": [
-                  "/Scripts/data/employees.js"
-                ],
-                "DemoType": "Web"
-              }
-            ]
-          },
-          {
-            "Name": "Focused Row",
-            "Equivalents": "",
-            "Demos": [
-              {
-                "Title": "Focused Row",
-                "Name": "FocusedRow",
-                "Widget": "TreeList",
-                "DemoType": "Web",
-                "Modules": "devextreme-aspnet-data-nojquery"
               }
             ]
           },
@@ -1259,12 +1255,25 @@
             ]
           },
           {
-            "Name": "Filtering",
+            "Name": "Focused Row",
             "Equivalents": "",
             "Demos": [
               {
-                "Title": "Using Search Panel",
-                "Name": "UsingSearchPanel",
+                "Title": "Focused Row",
+                "Name": "FocusedRow",
+                "Widget": "TreeList",
+                "DemoType": "Web",
+                "Modules": "devextreme-aspnet-data-nojquery"
+              }
+            ]
+          },
+          {
+            "Name": "Paging",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Paging",
+                "Name": "Paging",
                 "Widget": "TreeList",
                 "MvcAdditionalFiles": [
                   "/Controllers/ApiControllers/TreeListTasksController.cs",
@@ -1273,49 +1282,11 @@
                   "/Models/SampleData/EmployeeTasks.cs"
                 ],
                 "DemoType": "Web"
-              },
-              {
-                "Title": "Using Filter Row",
-                "Name": "UsingFilterRow",
-                "Widget": "TreeList",
-                "MvcAdditionalFiles": [
-                  "/Models/TreeList/Employee.cs",
-                  "/Models/SampleData/TreeListEmployees.cs"
-                ],
-                "DemoType": "Web"
-              },
-              {
-                "Title": "Column Header Filter",
-                "Name": "ColumnHeaderFilter",
-                "Widget": "TreeList",
-                "MvcAdditionalFiles": [
-                  "/Models/TreeList/Employee.cs",
-                  "/Models/SampleData/TreeListEmployees.cs"
-                ],
-                "DemoType": "Web"
-              },
-              {
-                "Title": "Filter Panel",
-                "Equivalents": "dxFilterBuilder, FilterBuilder, QueryBuilder, dxFilterPanel, FilterPanel",
-                "Name": "FilterPanel",
-                "Widget": "TreeList",
-                "DemoType": "Web",
-                "MvcAdditionalFiles": [
-                  "/Models/SampleData/OrdersWithCustomerInfo.cs",
-                  "/Models/OrderWithCustomerInfo.cs",
-                  "/Models/CustomerInfo.cs"
-                ]
-              },
-              {
-                "Title": "Filter Modes",
-                "Name": "FilterModes",
-                "Widget": "TreeList",
-                "DemoType": "Web"
               }
             ]
           },
           {
-            "Name": "Column Customization",
+            "Name": "Columns",
             "Equivalents": "",
             "Demos": [
               {
@@ -1340,7 +1311,7 @@
               },
               {
                 "Title": "Fixed and Sticky Columns",
-                "Name": "ColumnFixing",
+                "Name": "FixedAndStickyColumns",
                 "Equivalents": "fixed column, frozen column, pinned column",
                 "Widget": "TreeList",
                 "MvcAdditionalFiles": [
@@ -1356,6 +1327,23 @@
                 "MvcAdditionalFiles": [
                   "/Models/TreeList/Employee.cs",
                   "/Models/SampleData/TreeListEmployees.cs"
+                ],
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Drag & Drop",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Node Drag & Drop",
+                "Name": "LocalReordering",
+                "Widget": "TreeList",
+                "Equivalents": "Node Drag and Drop",
+                "Modules": "devextreme-aspnet-data-nojquery",
+                "MvcAdditionalFiles": [
+                  "/Scripts/data/employees.js"
                 ],
                 "DemoType": "Web"
               }
@@ -1403,6 +1391,18 @@
                 "Name": "KeyboardNavigation",
                 "DocUrl": "Guide/UI_Components/TreeList/Keyboard_Support/",
                 "Widget": "TreeList",
+                "DemoType": "Web"
+              },
+              {
+                "Title": "Customize Keyboard Navigation",
+                "Name": "CustomizeKeyboardNavigation",
+                "Widget": "TreeList",
+                "MvcAdditionalFiles": [
+                  "/Controllers/ApiControllers/TreeListEmployeesController.cs",
+                  "/Models/TreeList/InMemoryEmployeesDataContext.cs",
+                  "/Models/TreeList/Employee.cs",
+                  "/Models/SampleData/TreeListEmployees.cs"
+                ],
                 "DemoType": "Web"
               }
             ]
