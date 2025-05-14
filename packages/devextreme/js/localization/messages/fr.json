@@ -539,7 +539,7 @@
         "dxHtmlEditor-aiInsertAbove": "Insert above",
         "dxHtmlEditor-aiInsertBelow": "Insert below",
         "dxHtmlEditor-aiCopy": "Copy",
-        "dxHtmlEditor-aiTryAgain": "Try again",
+        "dxHtmlEditor-aiRegenerate": "Regenerate",
         "dxHtmlEditor-aiGenerate": "Generate",
         "dxHtmlEditor-aiStop": "Stop",
         "dxHtmlEditor-aiToolbarItemAriaLabel": "AI Assistant toolbar item",
