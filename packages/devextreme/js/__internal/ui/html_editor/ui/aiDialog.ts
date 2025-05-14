@@ -103,6 +103,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   private _commandChangeSuppressed = false;
 
+  private _commandOptionSuppressed = false;
+
   private _commandOptionsList?: string[];
 
   private _commandSelectBox!: dxSelectBox;
@@ -163,7 +165,10 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         at: 'center',
         of: this._$container,
       },
-      ...this._popupUserConfig,
+      onHiding: () => {
+        this._processCommandCompletion();
+      },
+      ...this._popupConfig,
     }) as PopupProperties;
   }
 
@@ -199,12 +204,17 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   protected _renderOptionSelectBox($container: dxElementWrapper): void {
     const $optionSelectBox = $('<div>').appendTo($container);
+
     this._optionSelectBox = new SelectBox($optionSelectBox.get(0), {
       items: this._commandOptionsList,
       value: this._currentOption ?? this._commandOptionsList?.[0],
       visible: this._isCommandWithOptionsSelected(),
       onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: ({ value }): void => {
+        if (this._commandOptionSuppressed) {
+          return;
+        }
+
         this._currentOption = value;
 
         if (this._isOpen() && value) {
@@ -524,6 +534,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   private _processCommandCompletion(dialogState?: DialogState): void {
+    this._abort?.();
     this._abort = undefined;
     this._isAICommandExecuting = false;
 
@@ -568,7 +579,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   private _stopAICommandExecution(): void {
-    this._abort?.();
     this._processCommandCompletion(this._getInitialDialogState());
   }
 
@@ -599,12 +609,14 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _refreshOptionSelectBox(): void {
     const hasOptions = this._isCommandWithOptionsSelected();
 
+    this._commandOptionSuppressed = true;
     this._optionSelectBox.option({
       disabled: this._isAICommandExecuting,
       visible: hasOptions,
       items: this._commandOptionsList ?? [],
       value: this._currentOption ?? this._commandOptionsList?.[0],
     });
+    this._commandOptionSuppressed = false;
   }
 
   private _setTextAreasInitialState(): void {
@@ -734,7 +746,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   updateAIIntegration(aiIntegration: AIIntegration): void {
-    this._abort?.();
     this._processCommandCompletion(this._getInitialDialogState());
     this._aiIntegration = aiIntegration;
     this._executeAICommand();
@@ -765,10 +776,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   hide(resultText: AIDialogResult['resultText'], event: AIDialogResult['event']): void {
     this.deferred?.resolve({ resultText, event });
-
-    this._abort?.();
-    this._processCommandCompletion();
-
     super.hide();
   }
 }

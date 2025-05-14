@@ -11,7 +11,7 @@ const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 abstract class BaseDialog<T = unknown> {
   _$container: dxElementWrapper;
 
-  _popupUserConfig?: PopupProperties;
+  _popupConfig?: PopupProperties;
 
   _popup!: Popup;
 
@@ -19,7 +19,7 @@ abstract class BaseDialog<T = unknown> {
 
   constructor($container: dxElementWrapper, popupConfig?: PopupProperties) {
     this._$container = $container;
-    this._popupUserConfig = popupConfig;
+    this._popupConfig = popupConfig;
 
     this._renderPopup();
   }
