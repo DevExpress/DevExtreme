@@ -2776,12 +2776,12 @@
             ]
           },
           {
-            "Name": "Data Binding",
+            "Name": "Runtime update",
             "Equivalents": "dxLinearGauge, dx-linear-gauge, dxBarGauge, dx-bar-gauge",
             "Demos": [
               {
-                "Title": "Update Circular Gauge Data at Runtime",
-                "Name": "UpdateCircularGaugeDataAtRuntime",
+                "Title": "Circular Gauge",
+                "Name": "CircularGauge",
                 "DocUrl": "ApiReference/UI_Components/dxCircularGauge/",
                 "Widget": "Gauges",
                 "MvcAdditionalFiles": [
@@ -2791,8 +2791,8 @@
                 "DemoType": "Viz"
               },
               {
-                "Title": "Update Linear Gauge Data at Runtime",
-                "Name": "UpdateLinearGaugeDataAtRuntime",
+                "Title": "Linear Gauge",
+                "Name": "LinearGauge",
                 "DocUrl": "ApiReference/UI_Components/dxLinearGauge/",
                 "Widget": "Gauges",
                 "MvcAdditionalFiles": [
@@ -2803,8 +2803,8 @@
                 "DemoType": "Viz"
               },
               {
-                "Title": "Update Bar Gauge Data at Runtime",
-                "Name": "UpdateBarGaugeDataAtRuntime",
+                "Title": "Bar Gauge",
+                "Name": "BarGauge",
                 "DocUrl": "ApiReference/UI_Components/dxBarGauge/",
                 "Widget": "Gauges",
                 "MvcAdditionalFiles": [
@@ -2971,8 +2971,8 @@
                 "DemoType": "Viz"
               },
               {
-                "Title": "Base Value for Range Bar",
-                "Name": "BaseValueForRangeBar",
+                "Title": "Range Bar Base Value",
+                "Name": "RangeBarBaseValue",
                 "DocUrl": "ApiReference/UI_Components/dxLinearGauge/Indicator_Types/RangeBar/#baseValue",
                 "Widget": "Gauges",
                 "DemoType": "Viz"
@@ -2985,8 +2985,8 @@
                 "DemoType": "Viz"
               },
               {
-                "Title": "Variable Number of Subvalue Indicators",
-                "Name": "VariableNumberOfSubvalueIndicators",
+                "Title": "Subvalue Indicators Runtime Customization",
+                "Name": "SubvalueIndicatorsRuntimeCustomization",
                 "DocUrl": "ApiReference/UI_Components/dxLinearGauge/Methods/",
                 "Widget": "Gauges",
                 "MvcAdditionalFiles": [
