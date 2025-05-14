@@ -869,17 +869,17 @@ QUnit.module('AIDialog', () => {
             this.resolve('');
         });
 
-        QUnit.test('change dialog state does not trigger any additional command execution if command with options', function(assert) {
+        QUnit.test('changing the dialog state does not trigger additional command execution if the command has options', function(assert) {
             this.showDialog({ currentCommand: 'changeStyle', currentCommandOption: 'business' });
             const commandSelectBox = getCommandSelectBoxInstance(this.$element);
 
-            assert.ok(this.sendRequestStub.calledOnce, 'execute command is called once');
+            assert.ok(this.sendRequestStub.calledOnce, 'command execution is called once');
 
             commandSelectBox.option('value', 'askAI');
-            assert.ok(this.sendRequestStub.calledOnce, 'execute command still called once');
+            assert.ok(this.sendRequestStub.calledOnce, 'command execution is called once');
 
             commandSelectBox.option('value', 'changeStyle');
-            assert.strictEqual(this.sendRequestStub.callCount, 2, 'execute command is called twice');
+            assert.strictEqual(this.sendRequestStub.callCount, 2, 'command execution is called twice');
         });
     });
 
