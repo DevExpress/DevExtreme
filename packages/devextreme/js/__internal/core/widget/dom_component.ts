@@ -142,9 +142,13 @@ class DOMComponent<
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _setOptionsByDevice(instanceCustomRules): void {
-    // @ts-expect-error
-    // eslint-disable-next-line @stylistic/max-len
-    super._setOptionsByDevice([].concat(this.constructor._classCustomRules || [], instanceCustomRules || []));
+    const ctor = this.constructor;
+    const ownClassCustomRules = Object.prototype.hasOwnProperty.call(ctor, '_classCustomRules')
+      // @ts-expect-error
+      ? ctor._classCustomRules
+      : [];
+
+    super._setOptionsByDevice([].concat(ownClassCustomRules || [], instanceCustomRules || []));
   }
 
   _isInitialOptionValue(name: string): boolean {
