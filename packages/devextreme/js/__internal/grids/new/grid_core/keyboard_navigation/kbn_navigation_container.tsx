@@ -90,8 +90,10 @@ export class KbnNavigationContainerEnabled extends Component<KbnNavigationContai
     );
   }
 
+  // TODO: KeyboardEvent
   @eventHandler
-  private onKeyDown(event: KeyboardEvent): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private onKeyDown(event: any): void {
     const { navigationStrategy, onKeyDown } = this.props;
     const elementRef = this.getActualRef();
 
