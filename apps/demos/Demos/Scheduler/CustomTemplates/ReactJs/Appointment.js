@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import Query from 'devextreme/data/query';
+import { query as Query } from 'devextreme-react/common/data';
 import { formatDate } from 'devextreme/localization';
 import { moviesData } from './data.js';
 

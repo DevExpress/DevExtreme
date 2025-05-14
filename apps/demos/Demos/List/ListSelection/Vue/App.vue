@@ -53,7 +53,7 @@ import type { SingleMultipleAllOrNone } from 'devextreme-vue/common';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxList, { type DxListTypes } from 'devextreme-vue/list';
 import DxCheckBox from 'devextreme-vue/check-box';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-vue/common/data';
 import { tasks } from './data.ts';
 
 const dataSource = new ArrayStore({

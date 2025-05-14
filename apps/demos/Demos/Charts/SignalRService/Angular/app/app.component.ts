@@ -5,7 +5,7 @@ import { DecimalPipe, CurrencyPipe } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
-import CustomStore from 'devextreme/data/custom_store';
+import { CustomStore } from 'devextreme-angular/common/data';
 import { DxChartModule, DxChartComponent, DxChartTypes } from 'devextreme-angular/ui/chart';
 
 if (!/localhost/.test(document.location.host)) {

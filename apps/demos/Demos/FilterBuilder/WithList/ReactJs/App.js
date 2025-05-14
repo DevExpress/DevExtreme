@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useEffect } from 'react';
 import FilterBuilder from 'devextreme-react/filter-builder';
 import Button from 'devextreme-react/button';
 import List from 'devextreme-react/list';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-react/common/data';
 import { filter, fields, products } from './data.js';
 import CustomItem from './CustomItem.js';
 
