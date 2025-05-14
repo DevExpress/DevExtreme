@@ -5,6 +5,10 @@ import url from '../../helpers/getPageUrl';
 import { testScreenshot } from '../../helpers/themeUtils';
 import { appendElementTo, setStyleAttribute } from '../../helpers/domUtils';
 
+const AI_FORMAT_CLASS = 'dx-ai-format';
+const MENU_ITEM_CLASS = 'dx-menu-item';
+const SUBMENU_CLASS = 'dx-submenu';
+
 fixture.disablePageReloads`HtmlEditor`
   .page(url(__dirname, '../container.html'));
 
@@ -48,5 +52,28 @@ fixture.disablePageReloads`HtmlEditor`
         items: ['bold', 'color'],
       },
     }, '#editorWithToolbar');
+  });
+});
+
+test('AI toolbar item', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'htmleditor-ai-toolbar-item.png', { element: '#container' });
+
+  await t
+    .click(Selector(`.${AI_FORMAT_CLASS} .${MENU_ITEM_CLASS}`))
+    .click(Selector(`.${SUBMENU_CLASS} .${MENU_ITEM_CLASS}:nth-child(5)`));
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxHtmlEditor', {
+    height: 380,
+    width: 300,
+    aiIntegration: {},
+    toolbar: {
+      items: ['ai'],
+    },
   });
 });
