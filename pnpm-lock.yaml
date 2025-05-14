@@ -739,6 +739,9 @@ importers:
       '@storybook/test':
         specifier: 7.6.19
         version: 7.6.19
+      http-server:
+        specifier: 14.1.1
+        version: 14.1.1
       prop-types:
         specifier: 15.8.1
         version: 15.8.1
@@ -754,6 +757,9 @@ importers:
       typescript:
         specifier: 4.9.5
         version: 4.9.5
+      webpack:
+        specifier: 5.96.1
+        version: 5.96.1(@swc/core@1.9.2(@swc/helpers@0.5.15))(esbuild@0.18.20)
 
   apps/vue:
     dependencies:
@@ -19268,7 +19274,7 @@ snapshots:
       loader-utils: 2.0.4
       typescript: 4.3.5
       vinyl: 2.2.1
-      webpack: 5.94.0(@swc/core@1.9.2(@swc/helpers@0.5.15))(esbuild@0.20.1)
+      webpack: 5.96.1(@swc/core@1.9.2(@swc/helpers@0.5.15))
     transitivePeerDependencies:
       - '@swc/core'
       - '@typescript-eslint/eslint-plugin'

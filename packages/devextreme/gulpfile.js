@@ -27,6 +27,8 @@ gulp.task('clean', function(callback) {
     callback();
 });
 
+const ctx = require('./build/gulp/context');
+
 require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
@@ -40,6 +42,8 @@ require('./build/gulp/generator/gulpfile');
 require('./build/gulp/check_licenses');
 require('./build/gulp/qunit-in-docker');
 require('./build/gulp/systemjs');
+
+const createRemoveDevelopmentStateManagerModulesTask = require('./build/gulp/state_manager/remove_development_state_manager_modules');
 
 if(env.TEST_CI) {
     console.warn('Using test CI mode!');
@@ -74,6 +78,10 @@ function createDefaultBatch(dev) {
     if(!env.TEST_CI && !dev && !env.BUILD_TESTCAFE) {
         tasks.push('npm');
         tasks.push('check-license-notices');
+    }
+
+    if(ctx.BUILD_MODE === 'production') {
+        tasks.push(createRemoveDevelopmentStateManagerModulesTask(ctx));
     }
 
     return gulp.series(tasks);
