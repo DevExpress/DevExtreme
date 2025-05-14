@@ -196,7 +196,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       return elementProps;
     }, [element.current]);
 
-    let templateUpdateCallback = useCallback(() => {
+    const templateUpdateCallback = useCallback(() => {
       if(instance.current){
         guardsUpdateScheduled.current = false;
         updateTemplates.current?.(() => scheduleGuards());
