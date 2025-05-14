@@ -24,10 +24,19 @@ $cardview-fluent-border-radius-8: null;
 $cardview-fluent-gaps-16: null;
 $cardview-fluent-gaps-24: null;
 
+$cardview-fluent-card-header-height: null;
+
 $cardview-fluent-headerpanel-text-empty-line-height: null;
 $cardview-fluent-headerpanel-dropzone-height: null;
 $cardview-fluent-headerpanel-dropzone-top: null;
 $cardview-fluent-column-chooser-select-all-item-horizontal-padding: null;
+
+$cardview-fluent-headers-container-gap: null;
+$cardview-fluent-headerpanel-vertical-margin: null;
+
+$cardview-fluent-content-card-cover-max-height-default: null;
+$cardview-fluent-headerpanel-content-gap: null;
+$cardview-fluent-card-content-row-gap: null;
 
 @if $size == "default" {
   $cardview-fluent-sizes-64: 64px;
@@ -42,10 +51,19 @@ $cardview-fluent-column-chooser-select-all-item-horizontal-padding: null;
   $cardview-fluent-gaps-16: 16px;
   $cardview-fluent-gaps-24: 24px;
 
+  $cardview-fluent-card-header-height: 48px;
+
   $cardview-fluent-headerpanel-text-empty-line-height: 32px;
   $cardview-fluent-headerpanel-dropzone-height: 44px;
   $cardview-fluent-headerpanel-dropzone-top: -6px;
   $cardview-fluent-column-chooser-select-all-item-horizontal-padding: 14px;
+
+  $cardview-fluent-headers-container-gap: 0;
+  $cardview-fluent-headerpanel-vertical-margin: 8px;
+
+  $cardview-fluent-content-card-cover-max-height-default: 180px;
+  $cardview-fluent-headerpanel-content-gap: 8px;
+  $cardview-fluent-card-content-row-gap: 8px;
 }
 @else if $size == "compact" {
   $cardview-fluent-sizes-64: 48px;
@@ -60,17 +78,30 @@ $cardview-fluent-column-chooser-select-all-item-horizontal-padding: null;
   $cardview-fluent-gaps-16: 12px;
   $cardview-fluent-gaps-24: 16px;
 
+  $cardview-fluent-card-header-height: 36px;
+
   $cardview-fluent-headerpanel-text-empty-line-height: 24px;
   $cardview-fluent-headerpanel-dropzone-height: 32px;
   $cardview-fluent-headerpanel-dropzone-top: -4px;
   $cardview-fluent-column-chooser-select-all-item-horizontal-padding: 12px;
+
+  $cardview-fluent-headers-container-gap: 4px;
+  $cardview-fluent-headerpanel-vertical-margin: 4px;
+
+  $cardview-fluent-content-card-cover-max-height-default: 140px;
+  $cardview-fluent-headerpanel-content-gap: 4px;
+  $cardview-fluent-card-content-row-gap: 4px;
 }
 
 $cardview-border-radius: 16px !default;
 $cardview-gap: $cardview-fluent-gaps-24 !default;
 $cardview-padding: $cardview-fluent-paddings-24 !default;
 
-$cardview-headerpanel-content-gap: 8px !default;
+$cardview-card-header-height: $cardview-card-header-height !default;
+
+$cardview-headers-container-gap: $cardview-fluent-headers-container-gap !default;
+$cardview-headerpanel-vertical-margin: $cardview-fluent-headerpanel-vertical-margin !default;
+$cardview-headerpanel-content-gap: $cardview-fluent-headerpanel-content-gap !default;
 $cardview-headerpanel-text-empty-line-height: $cardview-fluent-headerpanel-text-empty-line-height !default;
 
 $cardview-headerpanel-dropzone-height: $cardview-fluent-headerpanel-dropzone-height;
@@ -97,9 +128,8 @@ $cardview-card-border-radius: $cardview-fluent-border-radius-8 !default;
 
 $cardview-card-cover-noimage-icon-size: $cardview-fluent-sizes-48 !default;
 
-$cardview-card-content-padding-vertical: $cardview-fluent-paddings-12 !default;
-$cardview-card-content-padding-horizontal: $cardview-fluent-paddings-12 !default;
-$cardview-card-content-field-gap: 5px !default;
+$cardview-card-content-padding: $cardview-fluent-paddings-12 !default;
+$cardview-card-content-row-gap: $cardview-fluent-card-content-row-gap !default;
 $cardview-card-content-cell-padding-vertical: $cardview-fluent-paddings-6 !default;
 $cardview-card-content-cell-padding-horizontal: $cardview-fluent-paddings-12 !default;
 
@@ -108,3 +138,9 @@ $cardview-card-header-border-radius: $cardview-fluent-border-radius-8 !default;
 
 $cardview-column-chooser-empty-message-horizontal-padding: $cardview-fluent-paddings-24 !default;
 $cardview-column-chooser-select-all-item-horizontal-padding: $cardview-fluent-column-chooser-select-all-item-horizontal-padding !default;
+
+$cardview-content-card-cover-max-height-default: $cardview-fluent-content-card-cover-max-height-default !default;
+
+$cardview-card-header-selection-checkbox-padding-right: $cardview-fluent-paddings-12 !default;
+
+$cardview-card-content-field-caption-font-weight: 600;

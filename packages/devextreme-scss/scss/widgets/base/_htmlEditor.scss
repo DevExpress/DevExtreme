@@ -352,6 +352,12 @@ $transparent-border: 1px solid transparent;
   min-width: 360px;
 }
 
+.dx-aidialog {
+  .dx-toolbar-after .dx-toolbar-item:nth-last-child(2) {
+    padding-inline-end: 0;
+  }
+}
+
 .dx-aidialog-controls {
   display: flex;
 

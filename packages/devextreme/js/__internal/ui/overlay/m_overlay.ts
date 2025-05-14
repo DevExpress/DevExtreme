@@ -1185,7 +1185,7 @@ class Overlay<
     this._keyboardListenerId = keyboard.on(
       this._$content,
       null,
-      (opts) => this._keyboardHandler(opts),
+      (options) => this._keyboardHandler(options),
     );
   }
 

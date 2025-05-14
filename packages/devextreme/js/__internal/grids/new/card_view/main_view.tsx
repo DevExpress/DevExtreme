@@ -61,9 +61,10 @@ function MainViewComponent({
             class="dx-cardview-root-container"
             onKeyDown={onKeyDown}
           >
-            <Toolbar/>
-            <HeaderPanel/>
-            <HeaderFilterPopup />
+            <div class="dx-cardview-header-container">
+              <Toolbar/>
+              <HeaderPanel/>
+            </div>
             <Content/>
             <FilterPanel/>
             <div>
@@ -76,6 +77,7 @@ function MainViewComponent({
               */}
               <Pager/>
             </div>
+            <HeaderFilterPopup />
             <EditPopup/>
             <ColumnChooser/>
             <ContextMenu/>

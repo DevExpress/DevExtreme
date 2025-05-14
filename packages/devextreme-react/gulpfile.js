@@ -22,6 +22,8 @@ const NPM_BUILD_CJS = 'npm.build-cjs';
 const NPM_PREPARE_MODULES = 'npm.prepare-modules';
 const NPM_PACK = 'npm.pack';
 
+const unifiedConfig = require('../../tools/generators-config').reactConfig;
+
 gulp.task(CLEAN, (c) =>
     del([`${config.generatedComponentsDir}\\*`, `!${config.coreComponentsDir}`], c)
 );
@@ -47,6 +49,7 @@ gulp.task(GEN_RUN, (done) => {
             quotes: 'double',
             excplicitIndexInImports: true,
         },
+        unifiedConfig,
     });
 
     done();

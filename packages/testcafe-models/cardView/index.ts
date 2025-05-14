@@ -16,6 +16,7 @@ export const CLASS = {
     cardViewContent: 'dx-cardview-content',
     selectCheckBoxesHidden: 'dx-cardview-select-checkboxes-hidden',
     headers: 'headers',
+    headerContainer: 'header-container',
     headerItem: 'header-item',
     headerFilterMenu: 'dx-header-filter-menu',
     card: 'card',
@@ -90,7 +91,11 @@ export default class CardView extends GridCore {
   }
 
   getToolbar(): Toolbar {
-    return new Toolbar(this.element.child().child(`.${CLASS.toolbar}`));
+    return new Toolbar(
+      this
+        .element
+        .find(`.${this.addWidgetPrefix(CLASS.headerContainer)} .${CLASS.toolbar}`),
+    );
   }
 
   isCheckBoxesHidden(): Promise<boolean> {

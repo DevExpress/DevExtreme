@@ -55,6 +55,7 @@ import {
   COMMAND_SELECT_CLASS,
   DATA_ROW_CLASS,
   DATEBOX_WIDGET_NAME,
+  DRAG_COLUMN_NAME,
   DROPDOWN_EDITOR_OVERLAY_CLASS,
   EDIT_FORM_ITEM_CLASS,
   FAST_EDITING_DELETE_KEY,
@@ -247,6 +248,13 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     eventsEngine.off($rowsView, 'focusin', this.focusinHandlerContext);
     eventsEngine.off($rowsView, 'focusout', this.focusOutHandlerContext);
+  }
+
+  protected resizeCompleted(): void {
+    if (this.needToRestoreFocus) {
+      this.needToRestoreFocus = false;
+      this.focusFirstOrLastCell();
+    }
   }
 
   protected renderCompleted(e: any): void {
@@ -499,6 +507,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
             isHandled = this._beginFastEditing(originalEvent, true);
           }
           break;
+        case 'home':
+        case 'end':
+          this.homeOrEndKeyHandler(e);
+          break;
       }
 
       if (!isHandled && !this._beginFastEditing(originalEvent)) {
@@ -723,8 +735,17 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
   }
 
+  private _getMaxVerticalOffset() {
+    const scrollable = this.component.getScrollable();
+
+    return scrollable
+      ? scrollable.scrollHeight() - getHeight(this._rowsView.element())
+      : 0;
+  }
+
   private _getMaxHorizontalOffset() {
     const scrollable = this.component.getScrollable();
+
     return scrollable
       ? scrollable.scrollWidth() - getWidth(this._rowsView.element())
       : 0;
@@ -1194,6 +1215,77 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     return true;
   }
+
+  // ## Quick navigation through grid rows
+  private canNavigateQuickly(): boolean {
+    const visibleRowIndex = this.getVisibleRowIndex();
+    const $row = this._rowsView?.getRow(visibleRowIndex);
+    const dataRowTemplate = this.option('dataRowTemplate');
+    const isEditRowByIndex = this._editingController?.isEditRowByIndex?.(visibleRowIndex);
+
+    return !isEditRowByIndex && !dataRowTemplate && isDataRow($row);
+  }
+
+  private getFirstOrLastVisibleColumnIndex(needFirstCell: boolean): number {
+    const allVisibleColumns: any[] = this._columnsController.getVisibleColumns(null, true);
+
+    return allVisibleColumns[needFirstCell ? 'findIndex' : 'findLastIndex']((column) => column.type !== DRAG_COLUMN_NAME) as number;
+  }
+
+  private getFirstOrLastRowIndex(needFirstRow: boolean): number {
+    return needFirstRow ? 0 : this._dataController.totalCount() - 1;
+  }
+
+  private focusFirstOrLastCell(e = null) {
+    const $cell = this._getFocusedCell();
+
+    this._focusElement($cell, true, true, e);
+  }
+
+  private navigateToFirstOrLastCell(e) {
+    const needToFirstCell = e.keyName === 'home';
+    const needToNavigateInFirstOrLastRow = isCommandKeyPressed(e?.originalEvent);
+    const firstOrLastVisibleColumnIndex = this.getFirstOrLastVisibleColumnIndex(needToFirstCell);
+
+    if (firstOrLastVisibleColumnIndex >= 0) {
+      const scrollable = this._rowsView?.getScrollable();
+      const scrollOffset: {
+        left: number;
+        top?: number;
+      } = { left: needToFirstCell ? 0 : this._getMaxHorizontalOffset() };
+      const isNeedToRenderVirtualColumns = this._columnsController
+        ?.isNeedToRenderVirtualColumns(scrollOffset.left);
+
+      this.setFocusedColumnIndex(firstOrLastVisibleColumnIndex);
+
+      if (needToNavigateInFirstOrLastRow) {
+        const maxVerticalOffset = this._getMaxVerticalOffset();
+        const hasScroll = maxVerticalOffset > 0;
+        const firstOrLastRowIndex = this.getFirstOrLastRowIndex(needToFirstCell);
+        const isVirtualScrolling = this._isVirtualScrolling();
+
+        this.setFocusedRowIndex(firstOrLastRowIndex);
+
+        if (isVirtualScrolling && hasScroll) {
+          scrollOffset.top = needToFirstCell ? 0 : maxVerticalOffset;
+        }
+      }
+
+      if (isNeedToRenderVirtualColumns || isDefined(scrollOffset.top)) {
+        this.needToRestoreFocus = true;
+        scrollable?.scrollTo(scrollOffset);
+      } else {
+        this.focusFirstOrLastCell(e);
+      }
+    }
+  }
+
+  private homeOrEndKeyHandler(e): void {
+    if (this.canNavigateQuickly()) {
+      this.navigateToFirstOrLastCell(e);
+      e.originalEvent.preventDefault();
+    }
+  }
   // #endregion Key_Handlers
 
   // #region Pointer_Event_Handler
@@ -1322,10 +1414,15 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
   }
 
-  private _focusElement($element, isHighlighted) {
+  private _focusElement(
+    $element,
+    isHighlighted,
+    isCellFocusType = false,
+    event = null,
+  ) {
     const rowsViewElement = $(this._getRowsViewElement());
     const $focusedView = $element.closest(rowsViewElement);
-    const isRowFocusType = this.isRowFocusType();
+    const isRowFocusType = !isCellFocusType && this.isRowFocusType();
     let args: any = {};
 
     if (
@@ -1342,9 +1439,9 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     if (this._isCellElement($element) || isGroupRow($element)) {
       this.setCellFocusType();
       args = this._fireFocusChangingEvents(
-        null,
+        event,
         $element,
-        true,
+        !isCellFocusType,
         isHighlighted,
       );
       $element = args.$newCellElement;
@@ -1355,7 +1452,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     if (!args.cancel) {
       this._focus($element, !args.isHighlighted);
-      this._focusInteractiveElement($element);
+
+      if (!isCellFocusType) {
+        this._focusInteractiveElement($element);
+      }
     }
   }
 

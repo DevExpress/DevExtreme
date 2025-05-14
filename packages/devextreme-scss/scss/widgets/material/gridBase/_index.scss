@@ -1113,7 +1113,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
     }
 
     &.dx-#{$widget-name}-sticky-columns {
-      .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+      .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused, .dx-row-removed) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
         padding-top: $material-grid-base-cell-vertical-padding + 1px;
       }
 
@@ -1139,6 +1139,14 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       }
 
       .dx-row.dx-row-lines.dx-edit-row > td {
+        border-top-width: 0;
+      }
+
+      .dx-row-removed:not(.dx-row-lines) > td {
+        border-bottom-width: 0;
+      }
+
+      .dx-row-removed.dx-row-lines > td {
         border-top-width: 0;
       }
     }

@@ -12,6 +12,8 @@
 }
 
 .dx-cardview-headers {
+  margin: $cardview-headerpanel-vertical-margin 0;
+
   .dx-sortable {
     position: relative;
     overflow: visible;

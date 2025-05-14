@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Chat from 'devextreme-testcafe-models/chat';
-import { createUser, generateMessages } from './data';
+import { createUser, generateImageMessage, generateMessages } from './data';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
@@ -35,6 +35,32 @@ test('Chat: messagebubble', async (t) => {
 
   return createWidget('dxChat', {
     width: 400,
+    height: 650,
+  }, '#chat');
+});
+
+test('Chat: messagebubble - image rendering with size variations', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const chat = new Chat('#chat');
+
+  const user = createUser(1, 'ImageUser');
+
+  let imageMessages = generateImageMessage(user, '../../../apps/demos/images/products/1.png');
+
+  await chat.option({ items: [imageMessages] });
+  await testScreenshot(t, takeScreenshot, 'Bubbles with image.png', { element: '#chat' });
+
+  imageMessages = generateImageMessage(user, '../../../apps/demos/images/products/1-small.png');
+
+  await chat.option({ items: [imageMessages] });
+  await testScreenshot(t, takeScreenshot, 'Bubbles with small image.png', { element: '#chat' });
+
+  await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'chat');
+
+  return createWidget('dxChat', {
+    width: 600,
     height: 650,
   }, '#chat');
 });

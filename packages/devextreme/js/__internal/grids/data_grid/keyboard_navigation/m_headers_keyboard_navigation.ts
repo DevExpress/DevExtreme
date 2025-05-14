@@ -1,0 +1,164 @@
+import { isCommandKeyPressed } from '@js/common/core/events/utils';
+import $ from '@js/core/renderer';
+import { isDefined } from '@js/core/utils/type';
+import { Direction, KEY_CODES, ViewName } from '@ts/grids/grid_core/keyboard_navigation/const';
+import type { HeadersKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
+import { headersKeyboardNavigationModule } from '@ts/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
+
+import gridCore from '../m_core';
+import { ColumnKeyboardNavigationMixin } from './m_column_keyboard_navigation_mixin';
+
+const headersKeyboardNavigation = (
+  Base: ModuleType<HeadersKeyboardNavigationController>,
+) => class HeadersKeyboardNavigationControllerExtender extends ColumnKeyboardNavigationMixin(Base) {
+  private groupColumn(e): void {
+    const $cell = $(e.originalEvent.target).closest('td');
+    const rowIndex = this._getRowIndex($cell.parent());
+    const column = this._getColumnByCellElement($cell, rowIndex);
+    const contextMenuEnabled = this.option('grouping.contextMenuEnabled');
+
+    if (!isDefined(column.groupIndex) && column?.allowGrouping && contextMenuEnabled) {
+      this.moveColumn({
+        column,
+        sourceLocation: 'headers',
+        targetLocation: 'group',
+        rowIndex,
+      });
+      e.originalEvent?.preventDefault();
+    }
+  }
+
+  private getGroupColumnVisibleIndex(
+    visibleIndex: number,
+    targetLocation: ViewName,
+  ) {
+    const isGrouping = targetLocation === ViewName.Group;
+
+    if (isGrouping) {
+      return visibleIndex + 1;
+    }
+
+    const groupColumns = this._columnsController.getGroupColumns();
+
+    return this.getVisibleIndex(groupColumns[visibleIndex]) - 1;
+  }
+
+  private canGroupColumnByPressingKey(e) {
+    return e.which === KEY_CODES.G && isCommandKeyPressed(e.originalEvent);
+  }
+
+  protected ungroupColumn(e): void {
+    const column = this.getColumnFromEvent(e);
+
+    if (isDefined(column?.groupIndex)) {
+      super.ungroupColumn(e);
+    }
+  }
+
+  protected getColumnFromEvent(e) {
+    const $cell = $(e.originalEvent.target).closest('td');
+    const rowIndex = this._getRowIndex($cell.parent());
+
+    return this._getColumnByCellElement($cell, rowIndex);
+  }
+
+  protected keyDownHandler(e): boolean {
+    let isHandled = super.keyDownHandler(e);
+
+    if (isHandled) {
+      return true;
+    }
+
+    if (this.canGroupColumnByPressingKey(e)) {
+      this.groupColumn(e);
+      isHandled = true;
+    }
+
+    return isHandled;
+  }
+
+  protected getNewVisibleIndex(
+    visibleIndex: number,
+    direction: Direction,
+    sourceLocation?: ViewName,
+    targetLocation?: ViewName,
+  ): number {
+    if (targetLocation === ViewName.Group) {
+      return this._columnsController.getGroupColumns()?.length ?? 0;
+    }
+
+    return super.getNewVisibleIndex(visibleIndex, direction, sourceLocation, targetLocation);
+  }
+
+  protected getNewFocusedColumnIndex(
+    visibleIndex: number,
+    direction: Direction,
+    sourceLocation: ViewName,
+    targetLocation: ViewName,
+    showWhenGrouped?: boolean,
+  ): number {
+    const isGroupOperation = sourceLocation !== targetLocation;
+
+    if (showWhenGrouped && isGroupOperation) {
+      return this.getGroupColumnVisibleIndex(visibleIndex, targetLocation);
+    }
+
+    if (targetLocation === ViewName.Group) {
+      const focusableColumns = this.getFocusableColumns();
+      const lastFocusableColumn = focusableColumns[focusableColumns.length - 1];
+
+      if (visibleIndex === this._columnsController.getVisibleIndex(lastFocusableColumn.index)) {
+        return focusableColumns.length === 1
+          ? -1
+          : this.getNewVisibleIndex(
+            visibleIndex,
+            Direction.Previous,
+            ViewName.Headers,
+            ViewName.Headers,
+          ) + 1;
+      }
+
+      return this.getNewVisibleIndex(
+        visibleIndex,
+        Direction.Next,
+        ViewName.Headers,
+        ViewName.Headers,
+      ) - 1;
+    }
+
+    return super.getNewFocusedColumnIndex(
+      visibleIndex,
+      direction,
+      sourceLocation,
+      targetLocation,
+      showWhenGrouped,
+    );
+  }
+
+  public ungroupAllColumns(): void {
+    const $focusedCell = this._getFocusedCell();
+    const focusedColumn = this._getColumnByCellElement($focusedCell);
+
+    this._columnsController.beginUpdate();
+    super.ungroupAllColumns();
+
+    const rowIndex = this._columnsController.getRowIndex(focusedColumn.index, true);
+    const newVisibleIndex = this.getVisibleIndex(focusedColumn);
+
+    this.updateFocusPosition({
+      rowIndex,
+      columnIndex: newVisibleIndex,
+    });
+    this._columnsController.endUpdate();
+  }
+};
+
+gridCore.registerModule('headersKeyboardNavigation', {
+  ...headersKeyboardNavigationModule,
+  extenders: {
+    controllers: {
+      headersKeyboardNavigation,
+    },
+  },
+});

@@ -11,6 +11,12 @@ import { getData } from '../../helpers/generateDataSourceData';
 
 const CLASS = ClassNames;
 
+const getOrderOfEventCalls = ClientFunction(
+  () => (window as any).focusedEventsTestData.map((data) => data.type),
+);
+
+const getOnKeyDownCallCount = ClientFunction(() => (window as any).onKeyDownCallCount);
+
 fixture.disablePageReloads`Keyboard Navigation - common`
   .page(url(__dirname, '../../../container.html'));
 
@@ -5010,4 +5016,160 @@ test('DataGrid with Pagination in master detail - Ctrl+Up on focused standalone 
       },
     },
   });
+});
+
+test('Focus events should be called when pressing the End key', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  await ClientFunction(() => {
+    (window as any).focusedEventsTestData = [];
+  })();
+
+  // act
+  await t.pressKey('end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 14).element.focused)
+    .ok()
+    .expect(getOrderOfEventCalls())
+    .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).focusedEventsTestData = [];
+  })();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(20, 15),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    showBorders: true,
+    onFocusedCellChanging: () => {
+      (window as any).focusedEventsTestData.push({ type: 'onFocusedCellChanging' });
+    },
+    onFocusedCellChanged: () => {
+      (window as any).focusedEventsTestData.push({ type: 'onFocusedCellChanged' });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
+  })();
+});
+
+test('Focus events should be called when pressing the Ctrl + End key', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  await ClientFunction(() => {
+    (window as any).focusedEventsTestData = [];
+  })();
+
+  // act
+  await t.pressKey('end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 14).element.focused)
+    .ok()
+    .expect(getOrderOfEventCalls())
+    .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).focusedEventsTestData = [];
+  })();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(20, 15),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    showBorders: true,
+    onFocusedCellChanging: () => {
+      (window as any).focusedEventsTestData.push({ type: 'onFocusedCellChanging' });
+    },
+    onFocusedCellChanged: () => {
+      (window as any).focusedEventsTestData.push({ type: 'onFocusedCellChanged' });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
+  })();
+});
+
+test('DataGrid - The onKeyDown event should be called once for group panel', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const firstGroupedColumn = dataGrid.getGroupPanel().getHeader(0);
+
+  await t.click(firstGroupedColumn.element);
+
+  // act
+  await t.pressKey('tab');
+
+  // assert
+  await t.expect(getOnKeyDownCallCount()).eql(1);
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).onKeyDownCallCount = 0;
+  })();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(5, 5),
+    showBorders: true,
+    onKeyDown() {
+      (window as any).onKeyDownCallCount += 1;
+    },
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      { dataField: 'field_0', groupIndex: 0 },
+      { dataField: 'field_1', groupIndex: 1 },
+      'field_2',
+      'field_3',
+      'field_4',
+    ],
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).onKeyDownCallCount;
+  })();
+});
+
+test('DataGrid - The onKeyDown event should be called once for headers', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const firstHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+
+  await t.click(firstHeader.element);
+
+  // act
+  await t.pressKey('tab');
+
+  // assert
+  await t.expect(getOnKeyDownCallCount()).eql(1);
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).onKeyDownCallCount = 0;
+  })();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(5, 5),
+    showBorders: true,
+    onKeyDown() {
+      (window as any).onKeyDownCallCount += 1;
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).onKeyDownCallCount;
+  })();
 });

@@ -1,24 +1,10 @@
 $(() => {
   const customStore = new DevExpress.data.CustomStore({
     key: 'id',
-    load: () => {
-      const d = $.Deferred();
-
-      setTimeout(() => {
-        d.resolve([...messages]);
-      });
-
-      return d.promise();
-    },
-    insert: (message) => {
-      const d = $.Deferred();
-
-      setTimeout(() => {
-        store.push(message);
-        d.resolve();
-      });
-
-      return d.promise();
+    load: async () => messages,
+    insert: async (message) => {
+      messages.push(message);
+      return message;
     },
   });
 
@@ -28,7 +14,7 @@ $(() => {
   });
 
   const chat = $('#chat').dxChat({
-    height: 710,
+    height: 600,
     dataSource,
     editing: {
       allowUpdating: true,
@@ -88,4 +74,19 @@ $(() => {
       chat.option('editing.allowDeleting', editingStrategy[data.value]);
     },
   });
+
+  const editingStrategy = {
+    enabled: true,
+    disabled: false,
+    custom: ({ component, message }) => {
+      const { items, user } = component.option();
+      const userId = user.id;
+
+      const lastNotDeletedMessage = items.findLast(
+        (item) => item.author?.id === userId && !item.isDeleted
+      );
+
+      return message.id === lastNotDeletedMessage?.id;
+    },
+  };
 });

@@ -1533,7 +1533,7 @@ export type Grouping = {
   autoExpandAll?: boolean;
   /**
    * @docid dxDataGridOptions.grouping.contextMenuEnabled
-   * @default false
+   * @default true
    */
   contextMenuEnabled?: boolean;
   /**

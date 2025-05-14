@@ -31,6 +31,14 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiChatItemComponent extends CollectionNestedOption {
     @Input()
+    get alt(): string {
+        return this._getOption('alt');
+    }
+    set alt(value: string) {
+        this._setOption('alt', value);
+    }
+
+    @Input()
     get author(): User {
         return this._getOption('author');
     }
@@ -63,6 +71,14 @@ export class DxiChatItemComponent extends CollectionNestedOption {
     }
 
     @Input()
+    get src(): string {
+        return this._getOption('src');
+    }
+    set src(value: string) {
+        this._setOption('src', value);
+    }
+
+    @Input()
     get text(): string {
         return this._getOption('text');
     }
@@ -76,6 +92,14 @@ export class DxiChatItemComponent extends CollectionNestedOption {
     }
     set timestamp(value: Date | number | string) {
         this._setOption('timestamp', value);
+    }
+
+    @Input()
+    get type(): string | undefined {
+        return this._getOption('type');
+    }
+    set type(value: string | undefined) {
+        this._setOption('type', value);
     }
 
 
