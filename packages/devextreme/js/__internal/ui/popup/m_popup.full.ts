@@ -19,8 +19,4 @@ export default class PopupFull extends Popup {
   }
 }
 
-PopupFull.defaultOptions = function (rule) {
-  Popup.defaultOptions(rule);
-};
-
 registerComponent('dxPopup', PopupFull);
