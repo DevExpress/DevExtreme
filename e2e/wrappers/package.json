@@ -1,7 +1,7 @@
 {
   "name": "wrappers-testing",
   "version": "1.0.0",
-  "description": "DevExtreme wrappers для тестирования компонентов на разных фреймворках",
+  "description": "DevExtreme wrappers for e2e tests in components & frameworks",
   "scripts": {
     "dev:react19": "vite builders/react19",
     "dev:vue3": "vite builders/vue3",
