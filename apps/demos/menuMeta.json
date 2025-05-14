@@ -5398,135 +5398,95 @@
         "Name": "Tree View",
         "Breadcrumb": true,
         "Equivalents": "TreeView, TreeList, dxTreeView, dx-tree-view",
-        "Groups": [
+        "Demos": [
           {
-            "Name": "Hierarchical Data Structure",
-            "Demos": [
-              {
-                "Title": "Hierarchical Data Structure",
-                "Name": "HierarchicalDataStructure",
-                "Widget": "TreeView",
-                "MvcAdditionalFiles": [
-                  "/Models/Product.cs",
-                  "/Models/SampleData/TreeViewHierarchicalData.cs"
-                ],
-                "DemoType": "Web"
-              }
-            ]
+            "Title": "Hierarchical Data Structure",
+            "Name": "HierarchicalDataStructure",
+            "Widget": "TreeView",
+            "MvcAdditionalFiles": [
+              "/Models/Product.cs",
+              "/Models/SampleData/TreeViewHierarchicalData.cs"
+            ],
+            "DemoType": "Web"
           },
           {
-            "Name": "Plain Data Structure",
-            "Demos": [
-              {
-                "Title": "Plain Data Structure",
-                "Name": "FlatDataStructure",
-                "DocUrl": "Guide/UI_Components/TreeView/Use_Plain_Data/",
-                "Widget": "TreeView",
-                "MvcAdditionalFiles": [
-                  "/Models/Product.cs",
-                  "/Models/SampleData/TreeViewPlainData.cs",
-                  "/Controllers/ApiControllers/TreeViewPlainDataController.cs"
-                ],
-                "DemoType": "Web"
-              }
-            ]
+            "Title": "Plain Data Structure",
+            "Name": "FlatDataStructure",
+            "DocUrl": "Guide/UI_Components/TreeView/Use_Plain_Data/",
+            "Widget": "TreeView",
+            "MvcAdditionalFiles": [
+              "/Models/Product.cs",
+              "/Models/SampleData/TreeViewPlainData.cs",
+              "/Controllers/ApiControllers/TreeViewPlainDataController.cs"
+            ],
+            "DemoType": "Web"
           },
           {
-            "Name": "Node Selection and Customization",
-            "Demos": [
-              {
-                "Title": "Node Selection and Customization",
-                "Name": "ItemSelectionAndCustomization",
-                "DocUrl": "Guide/UI_Components/TreeView/Select_Nodes/",
-                "Widget": "TreeView",
-                "MvcAdditionalFiles": [
-                  "/Models/TreeView/Employee.cs",
-                  "/Models/SampleData/TreeViewHierarchicalDataForSelection.cs"
-                ],
-                "DemoType": "Web"
-              }
-            ]
+            "Title": "Load Data on Demand",
+            "Name": "LoadDataOnDemand",
+            "Widget": "TreeView",
+            "Modules": "whatwg-fetch",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/TreeViewDataController.cs"
+            ],
+            "DemoType": "Web"
           },
           {
-            "Name": "Virtual Mode",
-            "Demos": [
-              {
-                "Title": "Virtual Mode",
-                "Name": "VirtualMode",
-                "Widget": "TreeView",
-                "DemoType": "Web"
-              }
-            ]
+            "Title": "Virtual Mode",
+            "Name": "VirtualMode",
+            "Widget": "TreeView",
+            "DemoType": "Web"
           },
           {
-            "Name": "Load Data on Demand",
-            "Demos": [
-              {
-                "Title": "Load Data on Demand",
-                "Name": "LoadDataOnDemand",
-                "Widget": "TreeView",
-                "Modules": "whatwg-fetch",
-                "MvcAdditionalFiles": [
-                  "/Controllers/ApiControllers/TreeViewDataController.cs"
-                ],
-                "DemoType": "Web"
-              }
-            ]
+            "Title": "Node Selection and Customization",
+            "Name": "ItemSelectionAndCustomization",
+            "DocUrl": "Guide/UI_Components/TreeView/Select_Nodes/",
+            "Widget": "TreeView",
+            "MvcAdditionalFiles": [
+              "/Models/TreeView/Employee.cs",
+              "/Models/SampleData/TreeViewHierarchicalDataForSelection.cs"
+            ],
+            "DemoType": "Web"
           },
           {
-            "Name": "TreeView with Search Bar",
-            "Demos": [
-              {
-                "Title": "TreeView with Search Bar",
-                "Name": "TreeViewWithSearchBar",
-                "Widget": "TreeView",
-                "MvcAdditionalFiles": [
-                  "/Models/Product.cs",
-                  "/Models/SampleData/TreeViewHierarchicalDataForSearch.cs"
-                ],
-                "DemoType": "Web"
-              }
-            ]
+            "Title": "Search",
+            "Name": "TreeViewWithSearchBar",
+            "Widget": "TreeView",
+            "MvcAdditionalFiles": [
+              "/Models/Product.cs",
+              "/Models/SampleData/TreeViewHierarchicalDataForSearch.cs"
+            ],
+            "DemoType": "Web"
           },
           {
-            "Name": "ContextMenu Integration",
-            "Demos": [
-              {
-                "Title": "ContextMenu Integration",
-                "Name": "ContextMenuIntegration",
-                "Widget": "TreeView",
-                "MvcAdditionalFiles": [
-                  "/Models/Product.cs",
-                  "/Models/SampleData/TreeViewHierarchicalDataForContextMenu.cs"
-                ],
-                "DemoType": "Web"
-              }
-            ]
+            "Title": "ContextMenu",
+            "Name": "ContextMenuIntegration",
+            "Widget": "TreeView",
+            "MvcAdditionalFiles": [
+              "/Models/Product.cs",
+              "/Models/SampleData/TreeViewHierarchicalDataForContextMenu.cs"
+            ],
+            "DemoType": "Web"
           },
           {
-            "Name": "Drag & Drop and Reordering",
-            "Demos": [
-              {
-                "Title": "Drag & Drop for Plain Data Structure",
-                "Name": "DragAndDropPlainDataStructure",
-                "Widget": "TreeView",
-                "MvcAdditionalFiles": [
-                  "/Models/TreeView/FileSystemItem.cs",
-                  "/Models/SampleData/TreeViewPlainDataForDragAndDrop.cs"
-                ],
-                "DemoType": "Web"
-              },
-              {
-                "Title": "Drag & Drop for Hierarchical Data Structure",
-                "Name": "DragAndDropHierarchicalDataStructure",
-                "Widget": "TreeView",
-                "MvcAdditionalFiles": [
-                  "/Models/TreeView/FileSystemItem.cs",
-                  "/Models/SampleData/TreeViewHierarchicalDataForDragAndDrop.cs"
-                ],
-                "DemoType": "Web"
-              }
-            ]
+            "Title": "Drag & Drop for Plain Data Structure",
+            "Name": "DragAndDropPlainDataStructure",
+            "Widget": "TreeView",
+            "MvcAdditionalFiles": [
+              "/Models/TreeView/FileSystemItem.cs",
+              "/Models/SampleData/TreeViewPlainDataForDragAndDrop.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Drag & Drop for Hierarchical Data Structure",
+            "Name": "DragAndDropHierarchicalDataStructure",
+            "Widget": "TreeView",
+            "MvcAdditionalFiles": [
+              "/Models/TreeView/FileSystemItem.cs",
+              "/Models/SampleData/TreeViewHierarchicalDataForDragAndDrop.cs"
+            ],
+            "DemoType": "Web"
           }
         ]
       },
