@@ -75,7 +75,7 @@ test('TagBox - Methods specified in DevExpress.ui.dxSelectBox.defaultOptions are
   await tagBox.isActive;
 
   const consoleMessages = await t.getBrowserConsoleMessages();
-  const hasSelectBoxLog = consoleMessages.log.some((message) => message.startsWith('selectbox'));
+  const hasSelectBoxLog = consoleMessages?.log?.some((message) => message.startsWith('selectbox'));
 
   await t.expect(hasSelectBoxLog).notOk();
 }).before(async () => {
