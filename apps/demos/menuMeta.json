@@ -3616,26 +3616,12 @@
             ]
           },
           {
-            "Name": "Data",
+            "Name": "Data Binding",
             "Equivalents": "",
             "Demos": [
               {
-                "Title": "Data Binding and Editing",
+                "Title": "Data Binding",
                 "Name": "DataBinding",
-                "Widget": "Gantt",
-                "DemoType": "Web",
-                "WideDemo": true,
-                "MvcAdditionalFiles": [
-                  "/Models/SampleData/GanttData.cs",
-                  "/Models/Gantt/Dependency.cs",
-                  "/Models/Gantt/Resource.cs",
-                  "/Models/Gantt/ResourceAssignment.cs",
-                  "/Models/Gantt/Task.cs"
-                ]
-              },
-              {
-                "Title": "Validation",
-                "Name": "Validation",
                 "Widget": "Gantt",
                 "DemoType": "Web",
                 "WideDemo": true,
@@ -3650,12 +3636,12 @@
             ]
           },
           {
-            "Name": "UI Customization",
+            "Name": "Filtering",
             "Equivalents": "",
             "Demos": [
               {
-                "Title": "Chart Appearance",
-                "Name": "ChartAppearance",
+                "Title": "Filter Row",
+                "Name": "FilterRow",
                 "Widget": "Gantt",
                 "DemoType": "Web",
                 "WideDemo": true,
@@ -3668,8 +3654,8 @@
                 ]
               },
               {
-                "Title": "Task Template",
-                "Name": "TaskTemplate",
+                "Title": "Header Filter",
+                "Name": "HeaderFilter",
                 "Widget": "Gantt",
                 "DemoType": "Web",
                 "WideDemo": true,
@@ -3680,24 +3666,16 @@
                   "/Models/Gantt/ResourceAssignment.cs",
                   "/Models/Gantt/Task.cs"
                 ]
-              },
+              }
+            ]
+          },
+          {
+            "Name": "Sorting",
+            "Equivalents": "",
+            "Demos": [
               {
-                "Title": "Toolbar",
-                "Name": "Toolbar",
-                "Widget": "Gantt",
-                "DemoType": "Web",
-                "WideDemo": true,
-                "MvcAdditionalFiles": [
-                  "/Models/SampleData/GanttData.cs",
-                  "/Models/Gantt/Dependency.cs",
-                  "/Models/Gantt/Resource.cs",
-                  "/Models/Gantt/ResourceAssignment.cs",
-                  "/Models/Gantt/Task.cs"
-                ]
-              },
-              {
-                "Title": "Context Menu",
-                "Name": "ContextMenu",
+                "Title": "Sorting",
+                "Name": "Sorting",
                 "Widget": "Gantt",
                 "DemoType": "Web",
                 "WideDemo": true,
@@ -3753,12 +3731,12 @@
             ]
           },
           {
-            "Name": "Sorting",
+            "Name": "Validation",
             "Equivalents": "",
             "Demos": [
               {
-                "Title": "Sorting",
-                "Name": "Sorting",
+                "Title": "Validation",
+                "Name": "Validation",
                 "Widget": "Gantt",
                 "DemoType": "Web",
                 "WideDemo": true,
@@ -3773,12 +3751,12 @@
             ]
           },
           {
-            "Name": "Filtering",
+            "Name": "Customization",
             "Equivalents": "",
             "Demos": [
               {
-                "Title": "Filter Row",
-                "Name": "FilterRow",
+                "Title": "Appearance",
+                "Name": "Appearance",
                 "Widget": "Gantt",
                 "DemoType": "Web",
                 "WideDemo": true,
@@ -3791,8 +3769,36 @@
                 ]
               },
               {
-                "Title": "Header Filter",
-                "Name": "HeaderFilter",
+                "Title": "Task Template",
+                "Name": "TaskTemplate",
+                "Widget": "Gantt",
+                "DemoType": "Web",
+                "WideDemo": true,
+                "MvcAdditionalFiles": [
+                  "/Models/SampleData/GanttData.cs",
+                  "/Models/Gantt/Dependency.cs",
+                  "/Models/Gantt/Resource.cs",
+                  "/Models/Gantt/ResourceAssignment.cs",
+                  "/Models/Gantt/Task.cs"
+                ]
+              },
+              {
+                "Title": "Toolbar",
+                "Name": "Toolbar",
+                "Widget": "Gantt",
+                "DemoType": "Web",
+                "WideDemo": true,
+                "MvcAdditionalFiles": [
+                  "/Models/SampleData/GanttData.cs",
+                  "/Models/Gantt/Dependency.cs",
+                  "/Models/Gantt/Resource.cs",
+                  "/Models/Gantt/ResourceAssignment.cs",
+                  "/Models/Gantt/Task.cs"
+                ]
+              },
+              {
+                "Title": "Context Menu",
+                "Name": "ContextMenu",
                 "Widget": "Gantt",
                 "DemoType": "Web",
                 "WideDemo": true,
