@@ -3314,7 +3314,7 @@
                 "DemoType": "Web"
               },
               {
-                "Title": "Timelines",
+                "Title": "Timeline",
                 "Name": "Timelines",
                 "Widget": "Scheduler",
                 "MvcAdditionalFiles": [
@@ -3338,31 +3338,9 @@
             ]
           },
           {
-            "Name": "Features",
+            "Name": "Appointments",
             "Equivalents": "",
             "Demos": [
-              {
-                "Title": "Current Time Indicator",
-                "Name": "CurrentTimeIndicator",
-                "Widget": "Scheduler",
-                "MvcAdditionalFiles": [
-                  "/Models/DynamicAppointment.cs",
-                  "/Models/DynamicAppointmentsResource.cs",
-                  "/Models/SampleData/DynamicAppointments.cs",
-                  "/Models/SampleData/DynamicAppointmentsResources.cs"
-                ],
-                "DemoType": "Web"
-              },
-              {
-                "Title": "Time Zone Support",
-                "Name": "TimeZonesSupport",
-                "Widget": "Scheduler",
-                "MvcAdditionalFiles": [
-                  "/Models/Event.cs",
-                  "/Models/SampleData/Events.cs"
-                ],
-                "DemoType": "Web"
-              },
               {
                 "Title": "Recurring Appointments",
                 "Name": "RecurringAppointments",
@@ -3372,27 +3350,6 @@
                   "/Models/RecurringAppointmentsResource.cs",
                   "/Models/SampleData/RecurringAppointments.cs",
                   "/Models/SampleData/RecurringAppointmentsResources.cs"
-                ],
-                "DemoType": "Web"
-              },
-              {
-                "Title": "Editing",
-                "Name": "Editing",
-                "Widget": "Scheduler",
-                "MvcAdditionalFiles": [
-                  "/Models/Appointment.cs",
-                  "/Models/SampleData/Appointments.cs"
-                ],
-                "DemoType": "Web"
-              },
-              {
-                "Title": "Custom Drag & Drop",
-                "Name": "CustomDragAndDrop",
-                "Widget": "Scheduler",
-                "Equivalents": "Custom Drag and Drop",
-                "MvcAdditionalFiles": [
-                  "/Models/Appointment.cs",
-                  "/Models/SampleData/Appointments.cs"
                 ],
                 "DemoType": "Web"
               },
@@ -3411,7 +3368,13 @@
                   "/Models/SampleData/PriorityResources.cs"
                 ],
                 "DemoType": "Web"
-              },
+              }
+            ]
+          },
+          {
+            "Name": "Timetable",
+            "Equivalents": "",
+            "Demos": [
               {
                 "Title": "All Day Panel Mode",
                 "Name": "AllDayPanelMode",
@@ -3426,6 +3389,81 @@
                 "MvcDescription": "",
                 "NetCoreDescription": "",
                 "MvcAdditionalFiles": [],
+                "DemoType": "Web"
+              },
+              {
+                "Title": "Time Zone Support",
+                "Name": "TimeZonesSupport",
+                "Widget": "Scheduler",
+                "MvcAdditionalFiles": [
+                  "/Models/Event.cs",
+                  "/Models/SampleData/Events.cs"
+                ],
+                "DemoType": "Web"
+              },
+              {
+                "Title": "Current Time Indicator",
+                "Name": "CurrentTimeIndicator",
+                "Widget": "Scheduler",
+                "MvcAdditionalFiles": [
+                  "/Models/DynamicAppointment.cs",
+                  "/Models/DynamicAppointmentsResource.cs",
+                  "/Models/SampleData/DynamicAppointments.cs",
+                  "/Models/SampleData/DynamicAppointmentsResources.cs"
+                ],
+                "DemoType": "Web"
+              },
+              {
+                "Title": "Disabled Date/Time Ranges",
+                "Name": "CellTemplates",
+                "Widget": "Scheduler",
+                "Equivalents": "customization, disable dates, work hours",
+                "MvcAdditionalFiles": [
+                  "/Models/Appointment.cs",
+                  "/Models/SampleData/AppointmentsWorkHours.cs"
+                ],
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Editing",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Editing",
+                "Name": "Editing",
+                "Widget": "Scheduler",
+                "MvcAdditionalFiles": [
+                  "/Models/Appointment.cs",
+                  "/Models/SampleData/Appointments.cs"
+                ],
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Grouping",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Grouping by Resources",
+                "Name": "GroupingByResources",
+                "Widget": "Scheduler",
+                "MvcAdditionalFiles": [
+                  "/Models/EmployeeTask.cs",
+                  "/Models/SampleData/Tasks.cs"
+                ],
+                "DemoType": "Web"
+              },
+              {
+                "Title": "Grouping by Date",
+                "Name": "GroupByDate",
+                "Widget": "Scheduler",
+                "MvcAdditionalFiles": [
+                  "/Models/EmployeeTask.cs",
+                  "/Models/SampleData/GroupByDateTasks.cs"
+                ],
                 "DemoType": "Web"
               }
             ]
@@ -3444,26 +3482,17 @@
             ]
           },
           {
-            "Name": "Grouping",
+            "Name": "Drag & Drop",
             "Equivalents": "",
             "Demos": [
               {
-                "Title": "Group Orientation",
-                "Name": "GroupOrientation",
+                "Title": "Drag & Drop",
+                "Name": "DragAndDrop",
                 "Widget": "Scheduler",
+                "Equivalents": "Custom Drag and Drop",
                 "MvcAdditionalFiles": [
-                  "/Models/EmployeeTask.cs",
-                  "/Models/SampleData/Tasks.cs"
-                ],
-                "DemoType": "Web"
-              },
-              {
-                "Title": "Grouping By Date",
-                "Name": "GroupByDate",
-                "Widget": "Scheduler",
-                "MvcAdditionalFiles": [
-                  "/Models/EmployeeTask.cs",
-                  "/Models/SampleData/GroupByDateTasks.cs"
+                  "/Models/Appointment.cs",
+                  "/Models/SampleData/Appointments.cs"
                 ],
                 "DemoType": "Web"
               }
@@ -3474,10 +3503,11 @@
             "Equivalents": "",
             "Demos": [
               {
-                "Title": "Custom Templates",
-                "Name": "CustomTemplates",
+                "Title": "Templates",
+                "Name": "Templates",
                 "Credits": "www.wikipedia.org",
                 "Widget": "Scheduler",
+                "Modules": "globalize--vue&react",
                 "MvcAdditionalFiles": [
                   "/Views/Scheduler/_AppointmentTooltipTemplate.cshtml",
                   "/Models/Movie.cs",
@@ -3491,32 +3521,8 @@
                 "DemoType": "Web"
               },
               {
-                "Title": "Toolbar Customization",
-                "Name": "ToolbarCustomization",
-                "Widget": "Scheduler",
-                "MvcAdditionalFiles": [
-                  "/Models/AppointmentWithResources.cs",
-                  "/Models/AssigneeResource.cs",
-                  "/Models/SampleData/AppointmentsWithResources.cs",
-                  "/Models/SampleData/AssigneeResources.cs"
-                ],
-                "DemoType": "Web",
-                "Badge": "Updated"
-              },
-              {
-                "Title": "Disabled Date/Time Ranges",
-                "Name": "CellTemplates",
-                "Widget": "Scheduler",
-                "Equivalents": "customization, disable dates, work hours",
-                "MvcAdditionalFiles": [
-                  "/Models/Appointment.cs",
-                  "/Models/SampleData/AppointmentsWorkHours.cs"
-                ],
-                "DemoType": "Web"
-              },
-              {
-                "Title": "Customize Individual Views",
-                "Name": "CustomizeIndividualViews",
+                "Title": "Individual Views Customization",
+                "Name": "IndividualViewsCustomization",
                 "Widget": "Scheduler",
                 "MvcAdditionalFiles": [
                   "/Views/Scheduler/_DateCellTemplate.cshtml",
@@ -3526,8 +3532,8 @@
                 "DemoType": "Web"
               },
               {
-                "Title": "Increased View Duration",
-                "Name": "IncreaseViewDuration",
+                "Title": "Custom View Duration",
+                "Name": "CustomViewDuration",
                 "DocUrl": "ApiReference/UI_Components/dxScheduler/Configuration/views/#intervalCount",
                 "Widget": "Scheduler",
                 "MvcAdditionalFiles": [
@@ -3537,9 +3543,10 @@
                 "DemoType": "Web"
               },
               {
-                "Title": "Limit the Appointment Count per Cell",
-                "Name": "LimitAppointmentCountPerCell",
+                "Title": "Appointment Count per Cell",
+                "Name": "AppointmentCountPerCell",
                 "Widget": "Scheduler",
+                "Modules": "globalize--vue&react",
                 "MvcAdditionalFiles": [
                   "/Models/SampleData/LimitAppointmentCountPerCellAppointments.cs",
                   "/Models/SampleData/AdaptiveAppointmentsResources.cs"
@@ -3547,8 +3554,8 @@
                 "DemoType": "Web"
               },
               {
-                "Title": "Context Menu Integration",
-                "Name": "ContextMenuIntegration",
+                "Title": "Context Menu",
+                "Name": "ContextMenu",
                 "DocUrl": "ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentContextMenu",
                 "Widget": "Scheduler",
                 "MvcAdditionalFiles": [
