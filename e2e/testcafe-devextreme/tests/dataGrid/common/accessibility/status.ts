@@ -41,7 +41,7 @@ test('Accessibility: DataGrid general status should contains correct text', asyn
 }));
 
 test('Accessibility: DataGrid general status should contains correct text after header filter interaction', async (t) => {
-  const expectedStatusText = '';
+  const expectedStatusText = 'Data grid with 1 rows and 2 columns';
   const dataGrid = new DataGrid('#container');
   const headerFilter = new HeaderFilter();
 
@@ -71,7 +71,7 @@ test('Accessibility: DataGrid general status should contains correct text after 
 }));
 
 test('Accessibility: DataGrid general status should contains correct text after filter row interaction', async (t) => {
-  const expectedStatusText = '';
+  const expectedStatusText = 'Data grid with 1 rows and 2 columns';
   const dataGrid = new DataGrid('#container');
   const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
 
@@ -96,7 +96,7 @@ test('Accessibility: DataGrid general status should contains correct text after 
 }));
 
 test('Accessibility: DataGrid general status should contains correct text after search panel interaction', async (t) => {
-  const expectedStatusText = '';
+  const expectedStatusText = 'Data grid with 1 rows and 2 columns';
   const dataGrid = new DataGrid('#container');
 
   const searchInput = dataGrid.getSearchBox();
@@ -120,7 +120,7 @@ test('Accessibility: DataGrid general status should contains correct text after 
 }));
 
 test('Accessibility: DataGrid general status should contains correct text after column count change', async (t) => {
-  const expectedStatusText = '';
+  const expectedStatusText = 'Data grid with 3 rows and 1 columns';
   const dataGrid = new DataGrid('#container');
 
   const columnChooserBtn = dataGrid.getColumnChooserButton();
