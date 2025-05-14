@@ -11,7 +11,7 @@ export const Consts = {
     TASK_SELECTED_SELECTOR: '.dx-gantt-selectedTask',
     TASK_RESOURCES_SELECTOR: '.dx-gantt-taskRes',
     TASK_ARROW_SELECTOR: '.dx-gantt-arrow',
-    TASK_TITLE_SELECTOR: '.dx-gantt-taskTitle',
+    TASK_TITLE_SELECTOR: 'dx-gantt-taskTitle',
     TASK_TITLE_IN_SELECTOR: '.dx-gantt-titleIn',
     TASK_TITLE_OUT_SELECTOR: '.dx-gantt-titleOut',
     TREELIST_EXPANDED_SELECTOR: '.dx-treelist-expanded',
@@ -32,7 +32,7 @@ export const Consts = {
     PARENT_TASK_SELECTOR: '.dx-gantt-parent',
     TOOLBAR_SEPARATOR_SELECTOR: '.dx-gantt-toolbar-separator',
     TOOLTIP_SELECTOR: '.dx-gantt-task-edit-tooltip',
-    MILESTONE_SELECTOR: '.dx-gantt-milestone',
+    MILESTONE_SELECTOR: 'dx-gantt-milestone',
     TASK_SELECTOR: '.dx-gantt-task',
     TASK_EDIT_WRAPPER: '.dx-gantt-task-edit-wrapper',
 };
