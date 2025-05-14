@@ -64,6 +64,8 @@ test('AI toolbar item', async (t) => {
     .click(Selector(`.${AI_FORMAT_CLASS} .${MENU_ITEM_CLASS}`))
     .click(Selector(`.${SUBMENU_CLASS} .${MENU_ITEM_CLASS}:nth-child(5)`));
 
+  await testScreenshot(t, takeScreenshot, 'htmleditor-ai-toolbar-item-expanded.png', { element: '#container' });
+
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
