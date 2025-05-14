@@ -47,7 +47,7 @@ const AI_DIALOG_TITLE_TEXT_CLASS = 'dx-aidialog-title-text';
 const ICON_CLASS = 'dx-icon';
 const ICON_SPARKLE_CLASS = 'dx-icon-sparkle';
 const COPY_BUTTON_ICON = 'copy';
-const TRY_AGAIN_BUTTON_ICON = 'restore';
+const REGENERATE_BUTTON_ICON = 'restore';
 
 const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone'];
 
@@ -392,16 +392,17 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
   }
 
-  protected _getTryAgainButtonItem(): NamedToolbarItem {
-    const text = isSmallScreen() ? undefined : localizationMessage.format('dxHtmlEditor-aiTryAgain');
+  protected _getRegenerateButtonItem(): NamedToolbarItem {
+    const text = isSmallScreen() ? undefined : localizationMessage.format('dxHtmlEditor-aiRegenerate');
+
     return {
-      name: 'tryAgain',
+      name: 'regenerate',
       toolbar: 'bottom',
       location: 'before',
       widget: 'dxButton',
       options: {
         stylingMode: 'outlined',
-        icon: TRY_AGAIN_BUTTON_ICON,
+        icon: REGENERATE_BUTTON_ICON,
         text,
         onClick: () => this._retryExecuteAICommand(),
         onInitialized: this._addEscapeHandler.bind(this),
@@ -447,7 +448,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   private _getInitialToolbarItems(): NamedToolbarItem[] {
     return [
-      this._getTryAgainButtonItem(),
+      this._getRegenerateButtonItem(),
       this._getCopyButtonItem(),
       this._getReplaceButtonItem(),
     ];
