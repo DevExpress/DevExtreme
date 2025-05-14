@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -18,7 +19,7 @@
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
-    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
+    <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script>
 
     <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
@@ -39,9 +40,16 @@
     -->
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../artifacts/js/dx.ai-integration.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+    <!-- <style>
+        body {
+            margin: 0;
+        }
+    </style> -->
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -51,11 +59,56 @@
         <br />
         <div id="button"></div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+            const value = 'your text';
+            let counter = 0;
+
+            $(function () {
+                const provider = {
+                    sendRequest: () => {
+                        counter += 1;
+
+                        const promise = new Promise((resolve, reject) => {
+                            const a = counter;
+
+                            setTimeout(() => {
+                                resolve(`Promise is resolved! ${a}`);
+                            }, 500);
+                        });
+
+                        const id = counter;
+
+                        const result = {
+                            promise,
+                            abort: () => {},
+                            signal: id,
+                        };
+
+                        return result;
+                    },
+                };
+                const aiIntegration = new DevExpress.aiIntegration(provider);
+
+                const $htmlEditorElement = $("#button").dxHtmlEditor({
+                    value,
+                    height: 500,
+                    width: 350,
+                    aiIntegration,
+                    toolbar: {
+                        items: ['ai'],
+                    },
                 });
+
+                setTimeout(() => {
+                    const $menu = $htmlEditorElement.find('.dx-ai-format .dx-menu-item');
+
+                    $menu.trigger('dxclick');
+
+                    setTimeout(() => {
+                        const $menuItem = $(document).find('.dx-submenu .dx-menu-item').eq(5);
+
+                        $menuItem.trigger('dxclick');
+                    }, 10);
+                }, 0);
             });
         </script>
     </div>
