@@ -12,7 +12,6 @@ export default function ComponentView() {
     componentData.component()
       .then(module => {
         setComponent(() => module.default);
-        setLoading(false);
       })
   }, [examplePath]);
 
