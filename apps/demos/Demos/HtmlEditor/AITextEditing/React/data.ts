@@ -2,7 +2,7 @@ import {
     AIIntegration,
     RequestParams,
     Response,
-} from 'devextreme/common/ai-integration';
+} from 'devextreme-react/common/ai-integration';
 import { AICommand, AICommandName } from 'devextreme/ui/html_editor';
 import { AzureOpenAI, OpenAI } from 'openai';
 
