@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import Map from 'devextreme-react/map';
 import SelectBox from 'devextreme-react/select-box';
 
-import { type mapTypes, mapProviders, mapTypeLabel, mapProviderLabel } from './data.ts';
+import { mapTypes, mapProviders, mapTypeLabel, mapProviderLabel } from './data.ts';
 
 const apiKey = {
   azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',

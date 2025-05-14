@@ -6,7 +6,7 @@ import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
 import { NumberBox } from 'devextreme-react/number-box';
 import { CheckBox } from 'devextreme-react/check-box';
 
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-react/common/data';
 
 import {
   simpleProducts,

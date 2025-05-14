@@ -96,10 +96,8 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import ODataStore from 'devextreme/data/odata/store';
+import { ODataStore, CustomStore, type LoadOptions } from 'devextreme-vue/common/data';
 import { DxAutocomplete } from 'devextreme-vue/autocomplete';
-import { type LoadOptions } from 'devextreme-vue/common/data';
-import CustomStore from 'devextreme/data/custom_store';
 import 'whatwg-fetch';
 import { names, surnames, positions } from './data.ts';
 

@@ -47,7 +47,7 @@ import { Anchor, Workbook } from 'exceljs';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
 import { saveAs } from 'file-saver-es';
-import { exportDataGrid } from 'devextreme/excel_exporter';
+import { exportDataGrid } from 'devextreme-vue/common/export/excel';
 import { employees } from './data.ts';
 
 const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
