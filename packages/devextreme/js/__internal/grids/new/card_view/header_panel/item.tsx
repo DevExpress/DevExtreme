@@ -1,8 +1,10 @@
+import { hasFilterValues } from '@ts/grids/new/card_view/header_panel/utils';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { ComponentType, RefObject } from 'inferno';
 import { Component } from 'inferno';
 
 import { Icon } from '../../grid_core/icon';
+import { getHeaderItemA11yLabel } from './a11y/index';
 import type { Status } from './column_sortable';
 
 export const CLASSES = {
@@ -57,13 +59,12 @@ export interface ItemProps {
 
 export class Item extends Component<ItemProps> {
   public render(): JSX.Element {
-    const Template = this.props.column.headerItemTemplate ?? this.props.template;
-    const cssClass = `${CLASSES.item} ${this.props.column.headerItemCssClass ?? ''} ${this.props.cssClass ?? ''}`;
+    const { column } = this.props;
 
-    const { filterType, filterValues } = this.props.column;
+    const Template = column.headerItemTemplate ?? this.props.template;
+    const cssClass = `${CLASSES.item} ${column.headerItemCssClass ?? ''} ${this.props.cssClass ?? ''}`;
 
-    const hasHeaderFilterValue = filterType === 'exclude'
-      || !!filterValues?.length;
+    const hasHeaderFilterValue = hasFilterValues(column.filterType, column.filterValues);
     const headerFilterIconClass = [
       CLASSES.headerFilter.iconEmpty,
       hasHeaderFilterValue ? CLASSES.headerFilter.iconFilled : '',
@@ -75,14 +76,25 @@ export class Item extends Component<ItemProps> {
       none: undefined,
     }[this.props.status];
 
-    const showSortIcon = !this.props.isDragging && this.props.column.sortOrder !== undefined;
-    const showHeaderFilterIcon = !this.props.isDragging && this.props.column?.allowHeaderFiltering;
+    const showSortIcon = !this.props.isDragging && column.sortOrder !== undefined;
+    const showHeaderFilterIcon = !this.props.isDragging && column?.allowHeaderFiltering;
+
+    const ariaLabel = getHeaderItemA11yLabel(
+      column.caption,
+      {
+        hasHeaderFilterValue,
+        sortOrder: column.sortOrder,
+        sortIndex: column.sortIndex,
+      },
+    );
 
     return (
       <div
         ref={this.props.elementRef}
         className={cssClass}
         tabIndex={this.props.tabIndex}
+        role="menuitem"
+        aria-label={ariaLabel}
         onClick={this.props.onSortClick}
         onKeyDown={this.props.onKeyDown}
         onContextMenu={this.props.onContextMenu}

@@ -211,8 +211,6 @@
         "dxTreeList-ariaToolbar": "Trælisteværktøjslinje",
         "dxTreeList-editingAddRowToNode": "Tilføj",
 
-        "dxCardView-ariaSearchInGrid": "Search in the card view",
-
         "dxPager-infoText": "Side {0} af {1} ({2} elementer)",
         "dxPager-pagesCountText": "af",
         "dxPager-pageSize": "Elementer per side: {0}",
@@ -359,6 +357,12 @@
         "dxCalendar-selectedDateRangeCount": "Der er {0} valgte datointervaller",
         "dxCalendar-readOnlyLabel": "Skrivebeskyttet kalender",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+        "dxCardView-ariaHeaderItemLabel": "Field name {0}",
+        "dxCardView-ariaHeaderItemSortingAscendingLabel": "Sorted in ascending order",
+        "dxCardView-ariaHeaderItemSortingDescendingLabel": "Sorted in descending order",
+        "dxCardView-ariaHeaderItemSortingIndexLabel": "Sort index {0}",
+        "dxCardView-ariaHeaderHasHeaderFilterLabel": "Header filter applied",
         "dxCardView-selectAll": "Select all",
         "dxCardView-clearSelection": "Clear selection",
         "dxCardView-cardNoImageAriaLabel": "No image",

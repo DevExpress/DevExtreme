@@ -39,6 +39,7 @@ exports[`common initial render should be successfull 1`] = `
                     />
                     <div
                       class="dx-cardview-headerpanel-content"
+                      role="menubar"
                     >
                       <span
                         class="dx-cardview-headerpanel-text-empty"

@@ -3591,9 +3591,12 @@ exports[`Options HeaderFilter visible: false 1`] = `
               />
               <div
                 class="dx-cardview-headerpanel-content"
+                role="menubar"
               >
                 <div
+                  aria-label="Field name A"
                   class="dx-cardview-header-item  "
+                  role="menuitem"
                   tabindex="0"
                 >
                   A
@@ -3667,9 +3670,12 @@ exports[`Options HeaderFilter visible: true 1`] = `
               />
               <div
                 class="dx-cardview-headerpanel-content"
+                role="menubar"
               >
                 <div
+                  aria-label="Field name A"
                   class="dx-cardview-header-item  "
+                  role="menuitem"
                   tabindex="0"
                 >
                   A
@@ -3743,9 +3749,12 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
               />
               <div
                 class="dx-cardview-headerpanel-content"
+                role="menubar"
               >
                 <div
+                  aria-label="Field name A"
                   class="dx-cardview-header-item  "
+                  role="menuitem"
                   tabindex="0"
                 >
                   A
