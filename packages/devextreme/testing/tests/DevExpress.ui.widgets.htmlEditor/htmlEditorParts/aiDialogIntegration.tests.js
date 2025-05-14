@@ -550,7 +550,7 @@ QUnit.module('AI dialog integration', () => {
             QUnit.test(`should abort on ${name}`, function(assert) {
                 openAIDialog($(this.htmlEditor.$element()));
 
-                assert.ok(this.commandSpy.calledOnce, 'command exution is started');
+                assert.ok(this.commandSpy.calledOnce, 'command execution is started');
 
                 action.call(this);
 
