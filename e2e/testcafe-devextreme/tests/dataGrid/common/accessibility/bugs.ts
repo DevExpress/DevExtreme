@@ -8,6 +8,7 @@ fixture`Accessibility bugs`
 test('T1187314 - DataGrid displays an incorrect row count in "aria-label" if there is no data after filtering', async (t) => {
   const dataGrid = new DataGrid('#container');
 
+  await dataGrid.apiFilter(['id', '=', '1']);
   await t
     .expect(dataGrid.getContainer().getAttribute('aria-label'))
     .eql('Data grid with 0 rows and 2 columns');
@@ -18,7 +19,6 @@ test('T1187314 - DataGrid displays an incorrect row count in "aria-label" if the
     data: 'A',
   }],
   filterRow: { visible: true },
-  filterValue: ['id', '=', '1'],
   scrolling: { mode: 'infinite' },
 }));
 
