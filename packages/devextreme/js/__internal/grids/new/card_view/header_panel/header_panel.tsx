@@ -117,7 +117,10 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
               enabled={this.props.kbnEnabled}
               navigationStrategy={this.props.navigationStrategy}
             >
-              <div className={CLASSES.content}>
+              <div
+                className={CLASSES.content}
+                role="menubar"
+              >
                 {this.props.visibleColumns.length === 0 && (
                   <EmptyHeaderPanelText openColumnChooser={this.props.openColumnChooser}/>
                 )}
