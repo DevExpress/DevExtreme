@@ -1460,7 +1460,7 @@
             ]
           },
           {
-            "Name": "Field Chooser",
+            "Name": "Field Management",
             "Equivalents": "",
             "Demos": [
               {
@@ -1481,13 +1481,7 @@
                   "/Models/SampleData/Layouts.cs"
                 ],
                 "DemoType": "Web"
-              }
-            ]
-          },
-          {
-            "Name": "Features",
-            "Equivalents": "",
-            "Demos": [
+              },
               {
                 "Title": "Field Panel",
                 "Name": "FieldPanel",
@@ -1498,13 +1492,13 @@
                   "/Models/SampleData/Sales.cs"
                 ],
                 "DemoType": "Web"
-              },
-              {
-                "Title": "Header Filter",
-                "Name": "HeaderFilter",
-                "Widget": "PivotGrid",
-                "DemoType": "Web"
-              },
+              }
+            ]
+          },
+          {
+            "Name": "Data Summaries",
+            "Equivalents": "",
+            "Demos": [
               {
                 "Title": "Running Totals",
                 "Name": "RunningTotals",
@@ -1526,7 +1520,13 @@
                   "/Models/SampleData/Sales.cs"
                 ],
                 "DemoType": "Web"
-              },
+              }
+            ]
+          },
+          {
+            "Name": "Drill Down",
+            "Equivalents": "",
+            "Demos": [
               {
                 "Title": "Drill Down",
                 "Name": "DrillDown",
@@ -1537,7 +1537,25 @@
                   "/Models/SampleData/Sales.cs"
                 ],
                 "DemoType": "Web"
-              },
+              }
+            ]
+          },
+          {
+            "Name": "Filtering",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Filtering",
+                "Name": "Filtering",
+                "Widget": "PivotGrid",
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Scrolling",
+            "Equivalents": "",
+            "Demos": [
               {
                 "Title": "Virtual Scrolling",
                 "Name": "VirtualScrolling",
@@ -1553,39 +1571,6 @@
                 "Title": "Remote Virtual Scrolling",
                 "Name": "RemoteVirtualScrolling",
                 "Widget": "PivotGrid",
-                "DemoType": "Web"
-              },
-              {
-                "Title": "State Persistence",
-                "Name": "StatePersistence",
-                "Widget": "PivotGrid",
-                "MvcAdditionalFiles": [
-                  "/Controllers/ApiControllers/PivotGridDataController.cs",
-                  "/Models/Sale.cs",
-                  "/Models/SampleData/Sales.cs"
-                ],
-                "DemoType": "Web"
-              },
-              {
-                "Title": "Chart Integration",
-                "Name": "ChartIntegration",
-                "Widget": "PivotGrid",
-                "MvcAdditionalFiles": [
-                  "/Controllers/ApiControllers/PivotGridDataController.cs",
-                  "/Models/Sale.cs",
-                  "/Models/SampleData/Sales.cs"
-                ],
-                "DemoType": "Web"
-              },
-              {
-                "Title": "Layout Customization",
-                "Name": "LayoutCustomization",
-                "Widget": "PivotGrid",
-                "MvcAdditionalFiles": [
-                  "/Controllers/ApiControllers/PivotGridDataController.cs",
-                  "/Models/Sale.cs",
-                  "/Models/SampleData/Sales.cs"
-                ],
                 "DemoType": "Web"
               }
             ]
@@ -1624,6 +1609,58 @@
                 "Widget": "PivotGrid",
                 "Modules": "exceljs&file-saver",
                 "Credits": "www.wikipedia.org",
+                "MvcAdditionalFiles": [
+                  "/Controllers/ApiControllers/PivotGridDataController.cs",
+                  "/Models/Sale.cs",
+                  "/Models/SampleData/Sales.cs"
+                ],
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Chart Integration",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Chart Integration",
+                "Name": "ChartIntegration",
+                "Widget": "PivotGrid",
+                "Modules": "globalize--vue&react",
+                "MvcAdditionalFiles": [
+                  "/Controllers/ApiControllers/PivotGridDataController.cs",
+                  "/Models/Sale.cs",
+                  "/Models/SampleData/Sales.cs"
+                ],
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Customization",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Customization",
+                "Name": "Customization",
+                "Widget": "PivotGrid",
+                "MvcAdditionalFiles": [
+                  "/Controllers/ApiControllers/PivotGridDataController.cs",
+                  "/Models/Sale.cs",
+                  "/Models/SampleData/Sales.cs"
+                ],
+                "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "State Persistence",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "State Persistence",
+                "Name": "StatePersistence",
+                "Widget": "PivotGrid",
                 "MvcAdditionalFiles": [
                   "/Controllers/ApiControllers/PivotGridDataController.cs",
                   "/Models/Sale.cs",
