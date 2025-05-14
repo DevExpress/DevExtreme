@@ -1773,8 +1773,8 @@
                 "DemoType": "Viz"
               },
               {
-                "Title": "Dynamic Series from the DataSource",
-                "Name": "SeriesTemplates",
+                "Title": "Dynamic Series",
+                "Name": "DynamicSeries",
                 "Widget": "Charts",
                 "MvcAdditionalFiles": [
                   "/Models/OilProduction.cs",
@@ -1813,6 +1813,241 @@
                   "/Controllers/ApiControllers/TemperatureDataController.cs"
                 ],
                 "DemoType": "Viz"
+              }
+            ]
+          },
+          {
+            "Name": "Common Concepts",
+            "Groups": [
+              {
+                "Name": "Axis",
+                "Equivalents": "",
+                "Demos": [
+                  {
+                    "Title": "Multiple Axes",
+                    "Name": "MultipleAxes",
+                    "Credits": "www.wikipedia.org",
+                    "Widget": "Charts",
+                    "DemoType": "Viz"
+                  },
+                  {
+                    "Title": "Strips",
+                    "Name": "Strips",
+                    "DocUrl": "Guide/UI_Components/Chart/Strips/",
+                    "Widget": "Charts",
+                    "MvcDescription": "",
+                    "NetCoreDescription": "",
+                    "MvcAdditionalFiles": [],
+                    "DemoType": "Viz"
+                  }
+                ]
+              },
+              {
+                "Name": "Aggregation",
+                "Equivalents": "",
+                "Demos": [
+                  {
+                    "Title": "Points Aggregation",
+                    "Name": "PointsAggregation",
+                    "DocUrl": "Guide/UI_Components/Chart/Data_Aggregation/",
+                    "Widget": "Charts",
+                    "MvcAdditionalFiles": [
+                      "/Models/WeatherIndicator.cs",
+                      "/Models/SampleData/WeatherIndicators.cs"
+                    ],
+                    "DemoType": "Viz",
+                    "Equivalents": "aggregationInterval"
+                  },
+                  {
+                    "Title": "Discrete Points Aggregation",
+                    "Name": "DiscretePointsAggregation",
+                    "Widget": "Charts",
+                    "DemoType": "Viz"
+                  }
+                ]
+              },
+              {
+                "Name": "Tooltips",
+                "Equivalents": "",
+                "Demos": [
+                  {
+                    "Title": "Tooltip API",
+                    "Name": "TooltipAPI",
+                    "DocUrl": "Guide/UI_Components/Chart/Tooltips/Show_and_Hide_a_Tooltip/",
+                    "Credits": "www.wikipedia.org",
+                    "Widget": "Charts",
+                    "DemoType": "Viz"
+                  },
+                  {
+                    "Title": "Tooltip Customization",
+                    "Name": "TooltipCustomization",
+                    "Credits": "en.wikipedia.org",
+                    "Widget": "Charts",
+                    "DemoType": "Viz",
+                    "Equivalents": "tooltip template"
+                  }
+                ]
+              },
+              {
+                "Name": "Selection",
+                "Equivalents": "",
+                "Demos": [
+                  {
+                    "Title": "Selection",
+                    "Name": "Selection",
+                    "DocUrl": "Guide/UI_Components/Chart/Series_Points/Selection/",
+                    "Widget": "Charts",
+                    "DemoType": "Viz"
+                  },
+                  {
+                    "Title": "Multiple Series Selection",
+                    "Name": "MultipleSeriesSelection",
+                    "DocUrl": "Guide/UI_Components/Chart/Series/Selection/",
+                    "Widget": "Charts",
+                    "DemoType": "Viz"
+                  },
+                  {
+                    "Title": "Multiple Point Selection",
+                    "Name": "MultiplePointSelection",
+                    "DocUrl": "Guide/UI_Components/Chart/Series_Points/Selection/",
+                    "Credits": "www.wikipedia.org",
+                    "Widget": "Charts",
+                    "DemoType": "Viz"
+                  },
+                  {
+                    "Title": "Point Selection API",
+                    "Name": "PointSelectionAPI",
+                    "DocUrl": "Guide/UI_Components/Chart/Series_Points/Selection/",
+                    "Widget": "Charts",
+                    "DemoType": "Viz",
+                    "Equivalents": "hatching, rotated"
+                  }
+                ]
+              },
+              {
+                "Name": "Customization",
+                "Equivalents": "",
+                "Demos": [
+                  {
+                    "Title": "Axis Label Customization",
+                    "Name": "AxisLabelCustomization",
+                    "Widget": "Charts",
+                    "MvcDescription": "",
+                    "NetCoreDescription": "",
+                    "MvcAdditionalFiles": [],
+                    "DemoType": "Viz"
+                  },
+                  {
+                    "Title": "Legend Markers Customization",
+                    "Name": "LegendMarkersCustomization",
+                    "MvcAdditionalFiles": [
+                      "/Models/SampleData/CustomLegendMarkersSampleData.cs"
+                    ],
+                    "Widget": "Charts",
+                    "DemoType": "Viz",
+                    "Equivalents": ""
+                  },
+                  {
+                    "Title": "Multiple Panes",
+                    "Name": "MultiplePanes",
+                    "DocUrl": "Guide/UI_Components/Chart/Panes/Multi-Pane_Chart/",
+                    "Credits": "www.wikipedia.org",
+                    "Widget": "Charts",
+                    "DemoType": "Viz"
+                  },
+                  {
+                    "Title": "Error Bars",
+                    "Name": "ErrorBars",
+                    "DocUrl": "Guide/UI_Components/Chart/Error_Bars/",
+                    "Credits": "www.wikipedia.org",
+                    "Widget": "Charts",
+                    "DemoType": "Viz",
+                    "Equivalents": "valueErrorBar"
+                  }
+                ]
+              },
+              {
+                "Name": "Zooming",
+                "Equivalents": "",
+                "Demos": [
+                  {
+                    "Title": "Area Selection Zooming",
+                    "Name": "AreaSelectionZooming",
+                    "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/",
+                    "Widget": "Charts",
+                    "DemoType": "Viz",
+                    "Equivalents": "zoomAndPan, seriesTemplate, resetVisualRange",
+                    "MvcAdditionalFiles": [
+                      "/Content/SampleData/Birthlife.json"
+                    ]
+                  },
+                  {
+                    "Title": "Zooming and Panning",
+                    "Name": "ZoomingAndScrolling",
+                    "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/",
+                    "Widget": "Charts",
+                    "MvcAdditionalFiles": [
+                      "/Models/SampleData/PointsData.cs"
+                    ],
+                    "DemoType": "Viz",
+                    "Equivalents": "visualRange, zoomAndPan, scrolling"
+                  },
+                  {
+                    "Title": "Zooming and Panning API",
+                    "Name": "ZoomingAndScrollingAPI",
+                    "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/#Using_the_RangeSelector_Widget",
+                    "Widget": "Charts",
+                    "MvcAdditionalFiles": [
+                      "/Models/SampleData/PointsData.cs"
+                    ],
+                    "DemoType": "Viz",
+                    "Equivalents": "visualRange, rangeSelector, scrolling"
+                  },
+                  {
+                    "Title": "Discrete Axis Zooming and Panning",
+                    "Name": "DiscreteAxisZoomingAndScrolling",
+                    "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/#Using_the_RangeSelector_Widget",
+                    "Widget": "Charts",
+                    "DemoType": "Viz",
+                    "Equivalents": "orientation, rangeSelector, visualRange, legend, scrolling"
+                  },
+                  {
+                    "Title": "Polar Chart Zooming and Panning API",
+                    "Name": "PolarChartZoomingAndScrollingAPI",
+                    "Widget": "Charts",
+                    "MvcAdditionalFiles": [
+                      "/Models/SampleData/StochasticData.cs"
+                    ],
+                    "DemoType": "Viz",
+                    "Equivalents": "visualRange, rangeSelector, scrolling"
+                  }
+                ]
+              },
+              {
+                "Name": "Export",
+                "Equivalents": "",
+                "Demos": [
+                  {
+                    "Title": "Export and Printing API",
+                    "Name": "ExportAndPrintingAPI",
+                    "Credits": "en.wikipedia.org",
+                    "Widget": "Charts",
+                    "DemoType": "Viz"
+                  },
+                  {
+                    "Title": "Export Several Charts",
+                    "Name": "ExportSeveralCharts",
+                    "Widget": "Charts",
+                    "DemoType": "Viz"
+                  },
+                  {
+                    "Title": "Export Custom Markup",
+                    "Name": "ExportCustomMarkup",
+                    "Widget": "Charts",
+                    "DemoType": "Viz",
+                    "Modules": "canvg"
+                  }
+                ]
               }
             ]
           },
@@ -1895,8 +2130,8 @@
                 "DemoType": "Viz"
               },
               {
-                "Title": "Drill-Down Chart",
-                "Name": "ChartsDrillDown",
+                "Title": "Drill-Down",
+                "Name": "BarDrillDown",
                 "Widget": "Charts",
                 "DemoType": "Viz",
                 "MvcAdditionalFiles": [
@@ -1929,8 +2164,8 @@
                 "Equivalents": "barPadding"
               },
               {
-                "Title": "Color Each Bar Differently",
-                "Name": "ColorEachBar",
+                "Title": "Bar Color Customization",
+                "Name": "BarColorCustomization",
                 "DocUrl": "Guide/UI_Components/Chart/Data_Binding/Bind_Series_to_Data/#Using_a_Series_Template",
                 "Widget": "Charts",
                 "DemoType": "Viz",
@@ -2021,8 +2256,8 @@
                 "Equivalents": "innerRadius"
               },
               {
-                "Title": "Custom Label in the Center",
-                "Name": "DoughnutWithCustomLabelInCenter",
+                "Title": "Center Label Customization",
+                "Name": "CenterLabelCustomization",
                 "MvcAdditionalFiles": [
                   "/Models/SampleData/DoughnutWithCustomLabelInCenterData.cs"
                 ],
@@ -2070,7 +2305,7 @@
                 "Equivalents": "candleStick, RangeSelector, dxRangeSelector, minorTickInterval, aggregationInterval, snapToTicks, zoomArgument"
               },
               {
-                "Title": "Chart with Annotations",
+                "Title": "Annotations",
                 "Name": "Annotation",
                 "Widget": "Charts",
                 "DemoType": "Viz",
@@ -2078,6 +2313,27 @@
                   "/Models/SampleData/AnnotationData.cs"
                 ],
                 "Credits": "https://www.wikipedia.org/"
+              }
+            ]
+          },
+          {
+            "Name": "Funnel and Pyramid Charts",
+            "HasCustomImage": true,
+            "Equivalents": "dxFunnel, dx-funnel",
+            "Demos": [
+              {
+                "Title": "Funnel Chart",
+                "Name": "FunnelChart",
+                "DocUrl": "Guide/UI_Components/Funnel/Overview/",
+                "Widget": "Charts",
+                "DemoType": "Viz"
+              },
+              {
+                "Title": "Pyramid Chart",
+                "Name": "PyramidChart",
+                "DocUrl": "Guide/UI_Components/Funnel/Pyramid_Chart/",
+                "Widget": "Charts",
+                "DemoType": "Viz"
               }
             ]
           },
@@ -2101,8 +2357,8 @@
                 "Equivalents": "stackedspline, fullstackedspline, allowDecimals"
               },
               {
-                "Title": "Resolved Axis Label Overlapping",
-                "Name": "AxisLabelsOverlapping",
+                "Title": "Resolve Label Overlap",
+                "Name": "ResolveLabelOverlap",
                 "Widget": "Charts",
                 "DemoType": "Viz",
                 "Equivalents": "overlappingBehavior"
@@ -2150,6 +2406,23 @@
             ]
           },
           {
+            "Name": "Pareto Chart",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Pareto Chart",
+                "Name": "ParetoChart",
+                "Widget": "Charts",
+                "MvcAdditionalFiles": [
+                  "/Models/SampleData/ParetoChartData.cs",
+                  "/Models/ParetoChartData.cs"
+                ],
+                "DemoType": "Viz",
+                "Equivalents": "showZero, constantLines"
+              }
+            ]
+          },
+          {
             "Name": "Pie Charts",
             "HasCustomImage": true,
             "Equivalents": "dxPieChart, dx-pie-chart",
@@ -2163,22 +2436,22 @@
                 "DemoType": "Viz"
               },
               {
-                "Title": "Pies with Equal Sizes",
-                "Name": "PiesWithEqualSize",
+                "Title": "Equal Size Pies",
+                "Name": "EqualSizePies",
                 "Widget": "Charts",
                 "DemoType": "Viz",
                 "Equivalents": "sizeGroup"
               },
               {
-                "Title": "Pie with Custom Labels",
-                "Name": "PieWithCustomLabels",
+                "Title": "Label Customization",
+                "Name": "LabelCustomization",
                 "Credits": "www.wikipedia.org",
                 "Widget": "Charts",
                 "DemoType": "Viz"
               },
               {
-                "Title": "Pie with Small Values Grouped",
-                "Name": "PieWithSmallValuesGrouped",
+                "Title": "Small Value Groups",
+                "Name": "SmallValueGroups",
                 "DocUrl": "Guide/UI_Components/PieChart/Series/Group_Smaller_Points/",
                 "Credits": "www.wikipedia.org",
                 "Widget": "Charts",
@@ -2189,8 +2462,8 @@
                 "Equivalents": "grouping"
               },
               {
-                "Title": "Pie with Resolved Label Overlapping",
-                "Name": "PieWithResolvedLabelOverlapping",
+                "Title": "Resolve Label Overlap",
+                "Name": "PieResolveLabelOverlap",
                 "DocUrl": "Guide/UI_Components/PieChart/Point_Labels/Resolve_Overlapping/",
                 "Credits": "www.wikipedia.org",
                 "Widget": "Charts",
@@ -2204,8 +2477,8 @@
                 "DemoType": "Viz"
               },
               {
-                "Title": "Pie with Annotations",
-                "Name": "PieWithAnnotations",
+                "Title": "Annotations",
+                "Name": "PieAnnotations",
                 "DocUrl": "",
                 "Widget": "Charts",
                 "MvcDescription": "",
@@ -2219,8 +2492,8 @@
                 "DemoType": "Viz"
               },
               {
-                "Title": "Pie with Custom Fill Styles",
-                "Name": "PieWithCustomStyles",
+                "Title": "Custom Fill Styles",
+                "Name": "CustomFillStyles",
                 "DocUrl": "",
                 "Widget": "Charts",
                 "MvcDescription": "",
@@ -2326,7 +2599,7 @@
                 "Equivalents": "angle"
               },
               {
-                "Title": "Polar Chart with Annotations",
+                "Title": "Annotations",
                 "Name": "PolarChartAnnotations",
                 "DocUrl": "",
                 "Credits": "www.wikipedia.org",
@@ -2366,6 +2639,19 @@
                 "Widget": "Charts",
                 "DemoType": "Viz",
                 "Equivalents": "rangeArea"
+              }
+            ]
+          },
+          {
+            "Name": "Sankey Chart",
+            "HasCustomImage": true,
+            "Equivalents": "dxSankey, dx-sankey",
+            "Demos": [
+              {
+                "Title": "Overview",
+                "Name": "SankeyChart",
+                "Widget": "Charts",
+                "DemoType": "Viz"
               }
             ]
           },
@@ -2467,275 +2753,6 @@
                 ],
                 "DemoType": "Viz",
                 "Equivalents": "interactWithGroup"
-              }
-            ]
-          },
-          {
-            "Name": "Funnel and Pyramid Charts",
-            "HasCustomImage": true,
-            "Equivalents": "dxFunnel, dx-funnel",
-            "Demos": [
-              {
-                "Title": "Funnel Chart",
-                "Name": "FunnelChart",
-                "DocUrl": "Guide/UI_Components/Funnel/Overview/",
-                "Widget": "Charts",
-                "DemoType": "Viz"
-              },
-              {
-                "Title": "Pyramid Chart",
-                "Name": "PyramidChart",
-                "DocUrl": "Guide/UI_Components/Funnel/Pyramid_Chart/",
-                "Widget": "Charts",
-                "DemoType": "Viz"
-              }
-            ]
-          },
-          {
-            "Name": "Sankey Chart",
-            "HasCustomImage": true,
-            "Equivalents": "dxSankey, dx-sankey",
-            "Demos": [
-              {
-                "Title": "Overview",
-                "Name": "SankeyChart",
-                "Widget": "Charts",
-                "DemoType": "Viz"
-              }
-            ]
-          },
-          {
-            "Name": "Combinations",
-            "Equivalents": "",
-            "Demos": [
-              {
-                "Title": "Multiple Axes",
-                "Name": "MultipleAxes",
-                "Credits": "www.wikipedia.org",
-                "Widget": "Charts",
-                "DemoType": "Viz"
-              },
-              {
-                "Title": "Multiple Panes",
-                "Name": "MultiplePanes",
-                "DocUrl": "Guide/UI_Components/Chart/Panes/Multi-Pane_Chart/",
-                "Credits": "www.wikipedia.org",
-                "Widget": "Charts",
-                "DemoType": "Viz"
-              },
-              {
-                "Title": "Points Aggregation",
-                "Name": "PointsAggregation",
-                "DocUrl": "Guide/UI_Components/Chart/Data_Aggregation/",
-                "Widget": "Charts",
-                "MvcAdditionalFiles": [
-                  "/Models/WeatherIndicator.cs",
-                  "/Models/SampleData/WeatherIndicators.cs"
-                ],
-                "DemoType": "Viz",
-                "Equivalents": "aggregationInterval"
-              },
-              {
-                "Title": "Error Bars",
-                "Name": "ErrorBars",
-                "DocUrl": "Guide/UI_Components/Chart/Error_Bars/",
-                "Credits": "www.wikipedia.org",
-                "Widget": "Charts",
-                "DemoType": "Viz",
-                "Equivalents": "valueErrorBar"
-              },
-              {
-                "Title": "Pareto Chart",
-                "Name": "ParetoChart",
-                "Widget": "Charts",
-                "MvcAdditionalFiles": [
-                  "/Models/SampleData/ParetoChartData.cs",
-                  "/Models/ParetoChartData.cs"
-                ],
-                "DemoType": "Viz",
-                "Equivalents": "showZero, constantLines"
-              },
-              {
-                "Title": "Custom Legend Markers",
-                "Name": "CustomLegendMarkers",
-                "MvcAdditionalFiles": [
-                  "/Models/SampleData/CustomLegendMarkersSampleData.cs"
-                ],
-                "Widget": "Charts",
-                "DemoType": "Viz",
-                "Equivalents": ""
-              },
-              {
-                "Title": "Discrete Aggregation",
-                "Name": "DiscreteAggregation",
-                "Widget": "Charts",
-                "DemoType": "Viz"
-              },
-              {
-                "Title": "Axis Label Templates",
-                "Name": "AxisLabelsTemplates",
-                "Widget": "Charts",
-                "MvcDescription": "",
-                "NetCoreDescription": "",
-                "MvcAdditionalFiles": [],
-                "DemoType": "Viz"
-              },
-              {
-                "Title": "Strips",
-                "Name": "Strips",
-                "DocUrl": "Guide/UI_Components/Chart/Strips/",
-                "Widget": "Charts",
-                "MvcDescription": "",
-                "NetCoreDescription": "",
-                "MvcAdditionalFiles": [],
-                "DemoType": "Viz"
-              }
-            ]
-          },
-          {
-            "Name": "More Features",
-            "Equivalents": "",
-            "Groups": [
-              {
-                "Name": "Export",
-                "Equivalents": "",
-                "Demos": [
-                  {
-                    "Title": "Export and Printing API",
-                    "Name": "ExportAndPrintingAPI",
-                    "Credits": "en.wikipedia.org",
-                    "Widget": "Charts",
-                    "DemoType": "Viz"
-                  },
-                  {
-                    "Title": "Export Several Charts",
-                    "Name": "ExportSeveralCharts",
-                    "Widget": "Charts",
-                    "DemoType": "Viz"
-                  },
-                  {
-                    "Title": "Export Custom Markup",
-                    "Name": "ExportCustomMarkup",
-                    "Widget": "Charts",
-                    "DemoType": "Viz",
-                    "Modules": "canvg"
-                  }
-                ]
-              },
-              {
-                "Name": "Selection",
-                "Equivalents": "",
-                "Demos": [
-                  {
-                    "Title": "Selection",
-                    "Name": "Selection",
-                    "DocUrl": "Guide/UI_Components/Chart/Series_Points/Selection/",
-                    "Widget": "Charts",
-                    "DemoType": "Viz"
-                  },
-                  {
-                    "Title": "Multiple Series Selection",
-                    "Name": "MultipleSeriesSelection",
-                    "DocUrl": "Guide/UI_Components/Chart/Series/Selection/",
-                    "Widget": "Charts",
-                    "DemoType": "Viz"
-                  },
-                  {
-                    "Title": "Multiple Point Selection",
-                    "Name": "MultiplePointSelection",
-                    "DocUrl": "Guide/UI_Components/Chart/Series_Points/Selection/",
-                    "Credits": "www.wikipedia.org",
-                    "Widget": "Charts",
-                    "DemoType": "Viz"
-                  },
-                  {
-                    "Title": "API - Select a Point",
-                    "Name": "APISelectAPoint",
-                    "DocUrl": "Guide/UI_Components/Chart/Series_Points/Selection/",
-                    "Widget": "Charts",
-                    "DemoType": "Viz",
-                    "Equivalents": "hatching, rotated"
-                  }
-                ]
-              },
-              {
-                "Name": "Tooltips",
-                "Equivalents": "",
-                "Demos": [
-                  {
-                    "Title": "API - Display a Tooltip",
-                    "Name": "APIDisplayATooltip",
-                    "DocUrl": "Guide/UI_Components/Chart/Tooltips/Show_and_Hide_a_Tooltip/",
-                    "Credits": "www.wikipedia.org",
-                    "Widget": "Charts",
-                    "DemoType": "Viz"
-                  },
-                  {
-                    "Title": "Tooltips: HTML Markup Support",
-                    "Name": "TooltipHTMLSupport",
-                    "Credits": "en.wikipedia.org",
-                    "Widget": "Charts",
-                    "DemoType": "Viz",
-                    "Equivalents": "tooltip template"
-                  }
-                ]
-              },
-              {
-                "Name": "Zooming",
-                "Equivalents": "",
-                "Demos": [
-                  {
-                    "Title": "Zooming on Area Selection",
-                    "Name": "ZoomingOnAreaSelection",
-                    "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/",
-                    "Widget": "Charts",
-                    "DemoType": "Viz",
-                    "Equivalents": "zoomAndPan, seriesTemplate, resetVisualRange",
-                    "MvcAdditionalFiles": [
-                      "/Content/SampleData/Birthlife.json"
-                    ]
-                  },
-                  {
-                    "Title": "Zooming and Panning",
-                    "Name": "ZoomingAndScrolling",
-                    "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/",
-                    "Widget": "Charts",
-                    "MvcAdditionalFiles": [
-                      "/Models/SampleData/PointsData.cs"
-                    ],
-                    "DemoType": "Viz",
-                    "Equivalents": "visualRange, zoomAndPan, scrolling"
-                  },
-                  {
-                    "Title": "Zooming and Panning API",
-                    "Name": "ZoomingAndScrollingAPI",
-                    "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/#Using_the_RangeSelector_Widget",
-                    "Widget": "Charts",
-                    "MvcAdditionalFiles": [
-                      "/Models/SampleData/PointsData.cs"
-                    ],
-                    "DemoType": "Viz",
-                    "Equivalents": "visualRange, rangeSelector, scrolling"
-                  },
-                  {
-                    "Title": "Discrete Axis Zooming and Panning",
-                    "Name": "DiscreteAxisZoomingAndScrolling",
-                    "DocUrl": "Guide/UI_Components/Chart/Zooming_and_Panning/#Using_the_RangeSelector_Widget",
-                    "Widget": "Charts",
-                    "DemoType": "Viz",
-                    "Equivalents": "orientation, rangeSelector, visualRange, legend, scrolling"
-                  },
-                  {
-                    "Title": "Polar Chart Zooming and Panning API",
-                    "Name": "PolarChartZoomingAndScrollingAPI",
-                    "Widget": "Charts",
-                    "MvcAdditionalFiles": [
-                      "/Models/SampleData/StochasticData.cs"
-                    ],
-                    "DemoType": "Viz",
-                    "Equivalents": "visualRange, rangeSelector, scrolling"
-                  }
-                ]
               }
             ]
           }
