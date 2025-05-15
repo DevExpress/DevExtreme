@@ -11,6 +11,7 @@ import fx from 'common/core/animation/fx';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import ajaxMock from '../../helpers/ajaxMock.js';
+import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import 'ui/drop_down_editor/ui.drop_down_list';
 
@@ -72,8 +73,7 @@ QUnit.module('focus policy', {
     }
 }, () => {
     QUnit.test('focus removed from list on type some text', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -139,8 +139,7 @@ QUnit.module('focus policy', {
     });
 
     QUnit.test('setFocusPolicy should correctly renew subscription', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
         const setFocusPolicySpy = sinon.spy(this.instance, '_setFocusPolicy');

@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import SpinButton from '__internal/ui/number_box/m_number_box.spin';
 import config from 'core/config';
-import devices from '__internal/core/m_devices';
 import eventsEngine from 'common/core/events/core/events_engine';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
@@ -9,6 +8,7 @@ import { normalizeKeyName } from 'common/core/events/utils/index';
 
 import 'ui/number_box';
 import 'ui/validator';
+import { shouldSkipOnMobile } from '../../../helpers/device.js';
 
 const NUMBERBOX_CLASS = 'dx-numberbox';
 const INVALID_CLASS = 'dx-invalid';
@@ -634,8 +634,7 @@ QUnit.module('basics', {}, () => {
     });
 
     QUnit.test('T220209 - the \'displayValueFormatter\' option when value is changed using keyboard', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'this test is actual only for desktop ');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -2219,8 +2218,7 @@ QUnit.module('valueChanged should receive correct event parameter', {
 
     [['up', 10], ['down', -10]].forEach(([direction, delta]) => {
         QUnit.testInActiveWindow(`on mouse wheel ${direction}`, function(assert) {
-            if(devices.real().deviceType !== 'desktop') {
-                assert.ok(true, 'this test is actual only for desktop');
+            if(shouldSkipOnMobile(assert)) {
                 return;
             }
 
