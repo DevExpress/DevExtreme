@@ -1,4 +1,5 @@
 import type { TextBoxInstance } from '@js/ui/text_box';
+import type { Signal } from '@preact/signals-core';
 import { effect, signal } from '@preact/signals-core';
 import { ToolbarController } from '@ts/grids/new/grid_core/toolbar/controller';
 
@@ -15,7 +16,7 @@ export class SearchView {
     SearchController,
   ] as const;
 
-  private searchTextBox: TextBoxInstance | null = null;
+  private readonly searchTextBox: Signal<null | TextBoxInstance> = signal(null);
 
   constructor(
     private readonly options: OptionsController,
@@ -33,7 +34,7 @@ export class SearchView {
         },
       },
       (component) => {
-        this.searchTextBox = component;
+        this.searchTextBox.value = component;
       },
     );
     this.toolbarController.addDefaultItem(
@@ -42,18 +43,13 @@ export class SearchView {
     );
 
     effect(() => {
-      // eslint-disable-next-line
-      const value = this.searchController.searchTextOption.value;
-      const placeholder = this.searchController.searchPlaceholder.value;
-      const width = this.searchController.searchWidth.value;
-
-      this.searchTextBox?.option('value', value);
-      this.searchTextBox?.option('placeholder', placeholder);
-      this.searchTextBox?.option('width', width);
+      this.searchTextBox.value?.option('value', this.searchController.searchTextOption.value);
+      this.searchTextBox.value?.option('placeholder', this.searchController.searchPlaceholder.value);
+      this.searchTextBox.value?.option('width', this.searchController.searchWidth.value);
     });
 
     this.searchUIController.registerCallback('focusSearchTextBox', () => {
-      this.searchTextBox?.focus();
+      this.searchTextBox.value?.focus();
     });
   }
 }
