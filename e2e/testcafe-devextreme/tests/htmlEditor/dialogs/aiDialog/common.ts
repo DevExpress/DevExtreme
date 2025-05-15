@@ -84,7 +84,7 @@ test('generating state', async (t) => {
   `);
 
   await createWidget('dxHtmlEditor', {
-    height: 550,
+    height: 600,
     width: 900,
     aiIntegration: {
       changeStyle() {},
