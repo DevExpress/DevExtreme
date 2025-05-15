@@ -428,19 +428,19 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
   }
 
-  protected _getStopButtonItem(): NamedToolbarItem {
+  protected _getCancelButtonItem(): NamedToolbarItem {
     const width = getActionButtonWidth();
     return {
-      name: 'stop',
+      name: 'cancel',
       toolbar: 'bottom',
       location: 'after',
       widget: 'dxButton',
       options: {
         type: 'default',
         stylingMode: 'contained',
-        text: localizationMessage.format('dxHtmlEditor-aiStop'),
+        text: localizationMessage.format('dxHtmlEditor-aiCancel'),
         width,
-        onClick: () => this._stopAICommandExecution(),
+        onClick: () => this._cancelAICommandExecution(),
         onInitialized: this._addEscapeHandler.bind(this),
       },
     };
@@ -466,7 +466,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         items.push(this._getGenerateButtonItem());
         break;
       case DialogState.Generating:
-        items.push(this._getStopButtonItem());
+        items.push(this._getCancelButtonItem());
         break;
       case DialogState.Error: {
         if (this._isAskAICommandSelected) {
@@ -579,7 +579,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._abort = abort;
   }
 
-  private _stopAICommandExecution(): void {
+  private _cancelAICommandExecution(): void {
     this._processCommandCompletion(this._getInitialDialogState());
   }
 

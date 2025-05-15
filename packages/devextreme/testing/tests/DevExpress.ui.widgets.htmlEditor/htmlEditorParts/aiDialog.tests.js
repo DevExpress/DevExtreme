@@ -193,7 +193,7 @@ QUnit.module('AIDialog', () => {
             { name: 'replace button', domClass: BUTTON_CLASS, index: 1, state: 'resultReady', class: 'dxButton' },
             { name: 'copy button', domClass: BUTTON_CLASS, index: 1, state: 'resultReady', class: 'dxButton' },
             { name: 'generate button', domClass: BUTTON_CLASS, index: 1, state: 'asking', class: 'dxButton' },
-            { name: 'stop button', domClass: BUTTON_CLASS, index: 1, state: 'generating', class: 'dxButton' },
+            { name: 'cancel button', domClass: BUTTON_CLASS, index: 1, state: 'generating', class: 'dxButton' },
         ].forEach(element => {
             QUnit.test(`esc keydown on ${element.name} should hide dialog`, function(assert) {
                 if(devices.real().deviceType !== 'desktop') {
@@ -342,7 +342,7 @@ QUnit.module('AIDialog', () => {
             });
         });
 
-        QUnit.test('should display only stop button while loading', function(assert) {
+        QUnit.test('should display only cancel button while loading', function(assert) {
             showAIDialog(this, {
                 config: { currentCommand: 'translate' },
             });
@@ -352,7 +352,7 @@ QUnit.module('AIDialog', () => {
             const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
 
             assert.strictEqual(bottomToolbarItems.length, 1, 'one item in bottom toolbar');
-            assert.strictEqual(bottomToolbarItems[0].name, 'stop', 'stop button is shown');
+            assert.strictEqual(bottomToolbarItems[0].name, 'cancel', 'cancel button is shown');
         });
 
         ['replace', 'insertAbove', 'insertBelow'].forEach((mode) => {
@@ -432,15 +432,15 @@ QUnit.module('AIDialog', () => {
             });
         });
 
-        QUnit.test('should reset state after clicking Stop', function(assert) {
+        QUnit.test('should reset state after clicking Cancel', function(assert) {
             showAIDialog(this, {
                 config: { currentCommand: 'askAI' }
             });
 
             this.setDialogState('generating');
 
-            const $stopButton = findButtonByName(this.aiDialogPopup, 'stop');
-            $stopButton.trigger('dxclick');
+            const $cancelButton = findButtonByName(this.aiDialogPopup, 'cancel');
+            $cancelButton.trigger('dxclick');
 
             const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
             const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
@@ -642,24 +642,24 @@ QUnit.module('AIDialog', () => {
     });
 
     QUnit.module('request lifecycle management', integrationModuleConfig, () => {
-        QUnit.test('stop should abort request', function(assert) {
+        QUnit.test('cancel should abort request', function(assert) {
             this.showDialog({ currentCommand: 'translate' });
 
             assert.notOk(this.abortSpy.calledOnce, 'abort is not called');
 
-            const $stopButton = findButtonByName(this.aiDialogPopup, 'stop');
-            $stopButton.trigger('dxclick');
+            const $cancelButton = findButtonByName(this.aiDialogPopup, 'cancel');
+            $cancelButton.trigger('dxclick');
 
             assert.ok(this.abortSpy.calledOnce, 'abort is called');
         });
 
-        QUnit.test('stop should reset dialog state', function(assert) {
+        QUnit.test('cancel should reset dialog state', function(assert) {
             this.showDialog({ currentCommand: 'translate' });
 
             assert.strictEqual(getLoadIndicator(this.$element).length, 1, 'loadindicator is rendered');
 
-            const $stopButton = findButtonByName(this.aiDialogPopup, 'stop');
-            $stopButton.trigger('dxclick');
+            const $cancelButton = findButtonByName(this.aiDialogPopup, 'cancel');
+            $cancelButton.trigger('dxclick');
 
             assert.strictEqual(getLoadIndicator(this.$element).length, 0, 'loadindicator is removed');
         });
@@ -922,7 +922,7 @@ QUnit.module('AIDialog', () => {
             this.initialLocale = localization.locale();
             this.dictionary = {
                 'dxHtmlEditor-aiGenerate': 'custom generate',
-                'dxHtmlEditor-aiStop': 'custom stop',
+                'dxHtmlEditor-aiCancel': 'custom cancel',
                 'dxHtmlEditor-aiReplace': 'custom replace',
                 'dxHtmlEditor-aiInsertAbove': 'custom insert above',
                 'dxHtmlEditor-aiInsertBelow': 'custom insert below',
@@ -960,26 +960,26 @@ QUnit.module('AIDialog', () => {
             assert.strictEqual(generateButtonOptions.text, this.dictionary['dxHtmlEditor-aiGenerate'], 'text is localized');
         });
 
-        QUnit.test('should be correct for stop button', function(assert) {
+        QUnit.test('should be correct for cancel button', function(assert) {
             showAIDialog(this, {
                 config: { currentCommand: 'translate' },
             });
 
             const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
-            const stopToolbarItem = getItemByName(bottomToolbarItems, 'stop');
-            const stopButtonOptions = stopToolbarItem.options;
+            const cancelToolbarItem = getItemByName(bottomToolbarItems, 'cancel');
+            const cancelButtonOptions = cancelToolbarItem.options;
 
-            assertConfig(assert, stopToolbarItem, {
+            assertConfig(assert, cancelToolbarItem, {
                 toolbar: 'bottom',
                 location: 'after',
                 widget: 'dxButton'
             });
-            assertConfig(assert, stopButtonOptions, {
+            assertConfig(assert, cancelButtonOptions, {
                 stylingMode: 'contained',
                 type: 'default',
                 width: ACTION_BUTTON_WIDTH,
             });
-            assert.strictEqual(stopButtonOptions.text, this.dictionary['dxHtmlEditor-aiStop'], 'text is localized');
+            assert.strictEqual(cancelButtonOptions.text, this.dictionary['dxHtmlEditor-aiCancel'], 'text is localized');
         });
 
         QUnit.test('should be correct for copy button', function(assert) {
@@ -1376,16 +1376,16 @@ QUnit.module('AIDialog', () => {
             assert.strictEqual(generateButtonOptions.width, COMPACT_ACTION_BUTTON_WIDTH, 'width is specific');
         });
 
-        QUnit.test('stop button should have special width', function(assert) {
+        QUnit.test('cancel button should have special width', function(assert) {
             showAIDialog(this, {
                 config: { currentCommand: 'translate' },
             });
 
             const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
-            const stopToolbarItem = getItemByName(bottomToolbarItems, 'stop');
-            const stopButtonOptions = stopToolbarItem.options;
+            const cancelToolbarItem = getItemByName(bottomToolbarItems, 'cancel');
+            const cancelButtonOptions = cancelToolbarItem.options;
 
-            assert.strictEqual(stopButtonOptions.width, COMPACT_ACTION_BUTTON_WIDTH, 'width is specific');
+            assert.strictEqual(cancelButtonOptions.width, COMPACT_ACTION_BUTTON_WIDTH, 'width is specific');
         });
     });
 
