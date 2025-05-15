@@ -30,8 +30,8 @@ async function openAIDialog(t: TestController, command: number, option?: number)
 }
 
 [
-  { name: 'with no options', command: 0, option: undefined },
-  { name: 'with options', command: 4, option: 0 },
+  { name: 'with-no-options', command: 0, option: undefined },
+  { name: 'with-options', command: 4, option: 0 },
 ].forEach(({ name, command, option }) => {
   test(`initial state ${name}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -78,7 +78,7 @@ test('generating state', async (t) => {
     height: 500,
     width: 900,
     aiIntegration: {
-      summarize() {},
+      changeStyle() {},
     },
     toolbar: {
       items: ['ai'],

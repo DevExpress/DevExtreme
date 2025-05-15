@@ -1,10 +1,6 @@
 import Button from '../../button';
-import {
-  // ClientFunction,
-  Selector,
-} from 'testcafe';
+import { Selector } from 'testcafe';
 import Popup from '../../popup';
-// import type { WidgetName } from '../../types';
 
 const CLASSES = {
   wrapper: 'dx-popup-wrapper',
