@@ -75,19 +75,18 @@ test('searchPanel.placeholder API', async (t) => {
   });
 });
 
-// TODO: unskip when update text property state issue is resolved
-test.skip('searchPanel.text API', async (t) => {
+test('searchPanel.text API', async (t) => {
   const cardView = new CardView('#container');
   const searchBox = cardView.getSearchBox();
 
   await t
-    .expect(searchBox.getInput().getAttribute('value'))
+    .expect(searchBox.getInput().value)
     .eql('rt');
 
   await cardView.apiOption('searchPanel.text', '');
 
   await t
-    .expect(searchBox.getInput().getAttribute('value'))
+    .expect(searchBox.getInput().value)
     .eql('');
 }).before(async () => {
   await createWidget('dxCardView', {
@@ -95,6 +94,23 @@ test.skip('searchPanel.text API', async (t) => {
     searchPanel: {
       ...baseConfig.searchPanel,
       text: 'rt',
+    },
+  });
+});
+
+test('searchPanel.text API from UI', async (t) => {
+  const cardView = new CardView('#container');
+  const searchBox = cardView.getSearchBox().getInput();
+
+  await t
+    .typeText(searchBox, 'rt')
+    .expect(cardView.apiOption('searchPanel.text')).eql('rt');
+}).before(async () => {
+  await createWidget('dxCardView', {
+    ...baseConfig,
+    searchPanel: {
+      ...baseConfig.searchPanel,
+      text: '',
     },
   });
 });
