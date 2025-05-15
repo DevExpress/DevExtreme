@@ -1,14 +1,11 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxChatModule, DxSelectBoxModule } from 'devextreme-angular';
-import {
-  User,
-  MessageEnteredEvent,
-  MessageDeletedEvent,
-  MessageUpdatedEvent,
-} from 'devextreme/ui/chat';
-import DataSource from 'devextreme/data/data_source';
+
+import { DxSelectBoxModule } from 'devextreme-angular';
+import { DxChatModule, type DxChatTypes } from 'devextreme-angular/ui/chat';
+import { DataSource } from 'devextreme-angular/common/data';
+
 import { AppService } from './app.service';
 
 if (!document.location.host.includes('localhost')) {
@@ -27,7 +24,7 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
 })
 export class AppComponent {
-  currentUser: User;
+  currentUser: DxChatTypes.User;
 
   allowUpdating = true;
 
@@ -69,15 +66,15 @@ export class AppComponent {
     this.dataSource = this.appService.dataSource;
   }
 
-  onMessageEntered(e: MessageEnteredEvent): void {
+  onMessageEntered(e: DxChatTypes.MessageEnteredEvent): void {
     this.appService.onMessageEntered(e);
   }
 
-  onMessageDeleted(e: MessageDeletedEvent): void {
+  onMessageDeleted(e: DxChatTypes.MessageDeletedEvent): void {
     this.appService.onMessageDeleted(e);
   }
 
-  onMessageUpdated(e: MessageUpdatedEvent): void {
+  onMessageUpdated(e: DxChatTypes.MessageUpdatedEvent): void {
     this.appService.onMessageUpdated(e);
   }
 

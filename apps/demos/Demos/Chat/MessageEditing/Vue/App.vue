@@ -44,11 +44,12 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import DxChat, { DxEditing } from 'devextreme-vue/chat';
-import DxSelectBox from 'devextreme-vue/select-box';
-import CustomStore from 'devextreme/data/custom_store';
-import DataSource from 'devextreme/data/data_source';
-import Guid from 'devextreme/core/guid';
+
+import { DxChat, DxEditing } from 'devextreme-vue/chat';
+import { DxSelectBox } from 'devextreme-vue/select-box';
+import { DataSource, CustomStore } from 'devextreme-vue/common/data'
+import { Guid } from 'devextreme-vue/common';
+
 import {
   messages as initialMessages,
   currentUser,

@@ -1,35 +1,28 @@
-import {
-  User,
-  Message,
-  MessageEnteredEvent,
-  MessageUpdatedEvent,
-  MessageDeletedEvent,
-} from 'devextreme/ui/chat';
-import DataSource from 'devextreme/data/data_source';
-import CustomStore from 'devextreme/data/custom_store';
-import Guid from 'devextreme/core/guid';
+import { type DxChatTypes } from 'devextreme-angular/ui/chat';
+import { Guid } from 'devextreme-angular/common';
+import { DataSource, CustomStore } from 'devextreme-angular/common/data';
 
 export class AppService {
   date: Date;
 
-  store: Message[] = [];
+  store: DxChatTypes.Message[] = [];
 
   customStore: CustomStore;
 
   dataSource: DataSource;
 
-  currentUser: User = {
+  currentUser: DxChatTypes.User = {
     id: 'c94c0e76-fb49-4b9b-8f07-9f93ed93b4f3',
     name: 'John Doe',
   };
 
-  supportAgent: User = {
+  supportAgent: DxChatTypes.User = {
     id: 'd16d1a4c-5c67-4e20-b70e-2991c22747c3',
     name: 'Support Agent',
     avatarUrl: '../../../../images/petersmith.png',
   };
 
-  messages: Message[] = [];
+  messages: DxChatTypes.Message[] = [];
 
   allowEditingLabel = { 'aria-label': 'Allow Editing' };
 
@@ -92,7 +85,7 @@ export class AppService {
     });
   }
 
-  getUsers(): User[] {
+  getUsers(): DxChatTypes.User[] {
     return [this.currentUser, this.supportAgent];
   }
 
@@ -100,7 +93,7 @@ export class AppService {
     return date.getTime() + offsetMinutes * 60000;
   }
 
-  onMessageEntered({ message }: MessageEnteredEvent): void {
+  onMessageEntered({ message }: DxChatTypes.MessageEnteredEvent): void {
     this.dataSource.store().push([{
       type: 'insert',
       data: {
@@ -110,7 +103,7 @@ export class AppService {
     }]);
   }
 
-  onMessageDeleted({ message }: MessageDeletedEvent): void {
+  onMessageDeleted({ message }: DxChatTypes.MessageDeletedEvent): void {
     this.dataSource.store().push([{
       type: 'update',
       key: message.id,
@@ -118,7 +111,7 @@ export class AppService {
     }]);
   }
 
-  onMessageUpdated({ message, text }: MessageUpdatedEvent): void {
+  onMessageUpdated({ message, text }: DxChatTypes.MessageUpdatedEvent): void {
     this.dataSource.store().push([{
       type: 'update',
       key: message.id,
