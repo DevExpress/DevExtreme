@@ -6,7 +6,7 @@ export const shouldSkipOnDevices = ({
     message = null
 } = {}) => {
     if(!Array.isArray(deviceTypes)) {
-        throw new Error('allowedDevices should be an array');
+        throw new Error('deviceTypes should be an array');
     }
     if(deviceTypes.includes(devices.real().deviceType)) {
         assert && assert.ok(true, message || `Test skipped on devices:  ${deviceTypes.toString()}`);
