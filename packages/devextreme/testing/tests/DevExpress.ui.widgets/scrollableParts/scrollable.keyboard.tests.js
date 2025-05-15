@@ -5,7 +5,7 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import { setWindow, getWindow } from 'core/utils/window';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
-import { shouldSkipOnDevice } from '../../../helpers/device.js';
+import { shouldSkipOnPhone } from '../../../helpers/device.js';
 
 import 'generic_light.css!';
 
@@ -70,11 +70,7 @@ const getKeyboardMock = ($scrollable) => {
 };
 
 QUnit.test('support arrow keys', function(assert) {
-    if(shouldSkipOnDevice({
-        allowedDevices: ['desktop'],
-        assert,
-        message: 'mobile device does not support tabindex on div element',
-    })) {
+    if(shouldSkipOnPhone(assert, 'mobile device does not support tabindex on div element')) {
         return;
     }
 
@@ -104,11 +100,7 @@ QUnit.test('support arrow keys', function(assert) {
 });
 
 QUnit.test('support pageup and pagedown', function(assert) {
-    if(shouldSkipOnDevice({
-        allowedDevices: ['desktop'],
-        assert,
-        message: 'mobile device does not support tabindex on div element',
-    })) {
+    if(shouldSkipOnPhone(assert, 'mobile device does not support tabindex on div element')) {
         return;
     }
 
@@ -134,11 +126,7 @@ QUnit.test('support pageup and pagedown', function(assert) {
 });
 
 QUnit.test('support end and home', function(assert) {
-    if(shouldSkipOnDevice({
-        allowedDevices: ['desktop'],
-        assert,
-        message: 'mobile device does not support tabindex on div element',
-    })) {
+    if(shouldSkipOnPhone(assert, 'mobile device does not support tabindex on div element')) {
         return;
     }
 
@@ -163,11 +151,7 @@ QUnit.test('support end and home', function(assert) {
 });
 
 QUnit.test('supportKeyboard option', function(assert) {
-    if(shouldSkipOnDevice({
-        allowedDevices: ['desktop'],
-        assert,
-        message: 'mobile device does not support tabindex on div element',
-    })) {
+    if(shouldSkipOnPhone(assert, 'mobile device does not support tabindex on div element')) {
         return;
     }
 
@@ -188,11 +172,7 @@ QUnit.test('supportKeyboard option', function(assert) {
 });
 
 QUnit.test('supportKeyboard option after render', function(assert) {
-    if(shouldSkipOnDevice({
-        allowedDevices: ['desktop'],
-        assert,
-        message: 'mobile device does not support tabindex on div element',
-    })) {
+    if(shouldSkipOnPhone(assert, 'mobile device does not support tabindex on div element')) {
         return;
     }
 
@@ -219,11 +199,7 @@ QUnit.test('supportKeyboard option after render', function(assert) {
 });
 
 QUnit.test('arrow keys does not trigger when it not need', function(assert) {
-    if(shouldSkipOnDevice({
-        allowedDevices: ['desktop'],
-        assert,
-        message: 'mobile device does not support tabindex on div element',
-    })) {
+    if(shouldSkipOnPhone(assert, 'mobile device does not support tabindex on div element')) {
         return;
     }
 
@@ -251,11 +227,7 @@ QUnit.test('arrow keys does not trigger when it not need', function(assert) {
 });
 
 QUnit.test('arrows work correctly after scroll by scrollbar', function(assert) {
-    if(shouldSkipOnDevice({
-        allowedDevices: ['desktop'],
-        assert,
-        message: 'mobile device does not support tabindex on div element',
-    })) {
+    if(shouldSkipOnPhone(assert, 'mobile device does not support tabindex on div element')) {
         return;
     }
 

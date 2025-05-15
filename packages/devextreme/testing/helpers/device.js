@@ -1,16 +1,28 @@
 import devices from '__internal/core/m_devices';
 
-export const shouldSkipOnDevice = ({
-    allowedDevices = [],
+export const shouldSkipOnDevices = ({
+    deviceTypes = [],
     assert = null,
     message = null
 } = {}) => {
-    if(!Array.isArray(allowedDevices)) {
+    if(!Array.isArray(deviceTypes)) {
         throw new Error('allowedDevices should be an array');
     }
-    if(!allowedDevices.includes(devices.real().deviceType)) {
-        assert && assert.ok(true, message || 'Test should be skipped on devices not in list:  ' + allowedDevices.toString());
+    if(deviceTypes.includes(devices.real().deviceType)) {
+        assert && assert.ok(true, message || `Test skipped on devices:  ${deviceTypes.toString()}`);
         return true;
     }
     return false;
 };
+
+export const shouldSkipOnDesktop = (assert = null, message = null) => shouldSkipOnDevices({
+    deviceTypes: ['desktop'],
+    assert,
+    message,
+});
+
+export const shouldSkipOnPhone = (assert = null, message = null) => shouldSkipOnDevices({
+    deviceTypes: ['phone'],
+    assert,
+    message,
+});

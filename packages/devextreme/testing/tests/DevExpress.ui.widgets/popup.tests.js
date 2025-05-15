@@ -29,7 +29,7 @@ import {
     TEMPLATE_WRAPPER_CLASS,
     POPUP_CONTENT_SCROLLABLE_CLASS,
 } from '__internal/ui/popup/m_popup';
-import { shouldSkipOnDevice } from '../../helpers/device.js';
+import { shouldSkipOnPhone } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 import 'ui/popup';
@@ -3065,7 +3065,7 @@ QUnit.module('positioning', {
         });
 
         QUnit.test('drag using kbn should raise visualPositionChanged event with correct parameters', function(assert) {
-            if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+            if(shouldSkipOnPhone(assert)) {
                 return;
             }
 

@@ -28,7 +28,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
-import { shouldSkipOnDevice } from '../../helpers/device.js';
+import { shouldSkipOnPhone, shouldSkipOnDesktop } from '../../helpers/device.js';
 import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
 
 import 'generic_light.css!';
@@ -1618,7 +1618,7 @@ QUnit.module('options', {
     });
 
     QUnit.test('popup height should have correct size on mobile devices', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['phone'], assert })) {
+        if(shouldSkipOnDesktop(assert)) {
             return;
         }
         const initialVisualViewport = window.visualViewport;
@@ -1683,7 +1683,7 @@ QUnit.module('options', {
     });
 
     QUnit.test('cleanSearchOnOpening', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
 
@@ -2337,7 +2337,7 @@ QUnit.module('popup options', {
     });
 
     QUnit.test('popup height should be stretch when data items are loaded asynchronously', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
 
@@ -2374,7 +2374,7 @@ QUnit.module('popup options', {
     });
 
     QUnit.test('popover height should be recalculated after async datasource load(T655040)', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
 
@@ -2769,7 +2769,7 @@ QUnit.module('focus policy', {
     }
 }, () => {
     QUnit.testInActiveWindow('T338144 - focused element should not be reset after popup is reopened if the \'searchEnabled\' is false', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
 
@@ -2899,7 +2899,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('lookup-list should be focused after \'down\' key pressing', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
 
@@ -2918,7 +2918,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('lookup-list keyboard navigation should work after focusing on list', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
 
@@ -2942,7 +2942,7 @@ QUnit.module('keyboard navigation', {
 
     [true, false].forEach(value => {
         QUnit.test(`focus from last Popover element should ${value ? 'not' : ''} move to Lookup field while keeping Popup open when usePopover: true and _scrollToSelectedItemEnabled: ${value}`, function(assert) {
-            if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+            if(shouldSkipOnPhone(assert)) {
                 return;
             }
 
@@ -2966,7 +2966,7 @@ QUnit.module('keyboard navigation', {
 
     [true, false].forEach(value => {
         QUnit.test(`focus from last Popover element should not move to Lookup field while keeping Popup open when usePopover: false and dropDownCentered: ${value}`, function(assert) {
-            if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+            if(shouldSkipOnPhone(assert)) {
                 return;
             }
 
@@ -2991,7 +2991,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('focus from first Popover element should move back to Lookup field while keeping Popup open when usePopover: true and shift+Tab is pressed', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
 
@@ -3012,7 +3012,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('lookup value should not be changed after pressing tab', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
 
@@ -3033,7 +3033,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('lookup item should be selected after \'enter\' key pressing', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
 
@@ -3054,7 +3054,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('lookup item should be selected after \'space\' key pressing', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
 
@@ -3075,7 +3075,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('keyboard for lookup-list should work correctly after \'searchEnabled\' option changed', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
 
@@ -3146,7 +3146,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('escape key press close overlay without search enabled', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
 
@@ -3235,7 +3235,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('Pressing escape when focus \'cancel\' button must hide the popup', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
 

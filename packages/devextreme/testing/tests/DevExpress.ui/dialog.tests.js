@@ -8,7 +8,7 @@ import fx from 'common/core/animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { value as viewPort } from 'core/utils/view_port';
 import domAdapter from '__internal/core/m_dom_adapter';
-import { shouldSkipOnDevice } from '../../helpers/device.js';
+import { shouldSkipOnPhone } from '../../helpers/device.js';
 
 const { module, test, testInActiveWindow } = QUnit;
 
@@ -60,7 +60,7 @@ module('dialog', {
     }
 }, () => {
     test('should remove its markup after hiding by escape (T1154325)', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
 
@@ -102,7 +102,7 @@ module('dialog', {
         }
     }, () => {
         test('should remove its markup after hiding by escape only after hiding animation is finished', function(assert) {
-            if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+            if(shouldSkipOnPhone(assert)) {
                 return;
             }
 
@@ -140,7 +140,7 @@ module('dialog', {
     });
 
     test('dialog show/hide by Escape (T686065)', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
 
@@ -180,7 +180,7 @@ module('dialog', {
     });
 
     testInActiveWindow('first button in dialog obtained focus on shown', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
         alert('Sample message', 'Alert');

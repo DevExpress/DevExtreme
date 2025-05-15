@@ -21,7 +21,7 @@ import {
     STEP_INVALID_ICON,
 } from '__internal/ui/stepper/stepper_item';
 import { HOVER_STATE_CLASS } from '__internal/core/widget/widget';
-import { shouldSkipOnDevice } from '../../helpers/device.js';
+import { shouldSkipOnPhone } from '../../helpers/device.js';
 
 const STEP_CONTENT_CLASS = 'dx-step-content';
 const ICON_CLASS = 'dx-icon';
@@ -320,7 +320,7 @@ QUnit.module('Stepper markup', moduleConfig, () => {
 
     QUnit.module('Hover steps', () => {
         QUnit.test(`Selected and neighbor items have ${HOVER_STATE_CLASS} on hover`, function(assert) {
-            if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+            if(shouldSkipOnPhone(assert)) {
                 return;
             }
 
@@ -353,7 +353,7 @@ QUnit.module('Stepper markup', moduleConfig, () => {
         });
 
         QUnit.test(`In linear mode non-neighbor steps not have ${HOVER_STATE_CLASS} on hover`, function(assert) {
-            if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+            if(shouldSkipOnPhone(assert)) {
                 return;
             }
 
@@ -383,7 +383,7 @@ QUnit.module('Stepper markup', moduleConfig, () => {
         });
 
         QUnit.test(`In non-linear mode non-neighbor steps have ${HOVER_STATE_CLASS} on hover`, function(assert) {
-            if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+            if(shouldSkipOnPhone(assert)) {
                 return;
             }
 

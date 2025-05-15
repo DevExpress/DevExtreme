@@ -7,7 +7,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import 'ui/date_box';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import devices from '__internal/core/m_devices';
-import { shouldSkipOnDevice } from '../../helpers/device.js';
+import { shouldSkipOnPhone } from '../../helpers/device.js';
 
 const { test, module } = QUnit;
 
@@ -1452,7 +1452,7 @@ module('Empty dateBox', {
     });
 
     test('space keydown event should be prevented', function(assert) {
-        if(shouldSkipOnDevice({ allowedDevices: ['desktop'], assert })) {
+        if(shouldSkipOnPhone(assert)) {
             return;
         }
 
