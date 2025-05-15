@@ -25,6 +25,10 @@ export default class AIDialog extends Popup {
     return new Button(this.getBottomToolbar().find(`.${CLASSES.button}`).nth(0));
   }
 
+  getCancelButton(): Button {
+    return new Button(this.getBottomToolbar().find(`.${CLASSES.button}`).nth(0));
+  }
+
   getPromptTextArea(): TextArea {
     return new TextArea(this.getWrapper().find(`.${CLASSES.textArea}`).nth(0));
   }

@@ -183,3 +183,30 @@ test('askAI result ready state', async (t) => {
     },
   });
 });
+
+test('result ready after canceletion', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const htmlEditor = await openAIDialog(t, 0);
+  const aiDialog = htmlEditor.getAIDialog();
+  const cancelButton = aiDialog.getCancelButton();
+
+  await t.click(cancelButton.element);
+
+  await testScreenshot(t, takeScreenshot, 'htmleditor-ai-dialog-result-ready-after-canceletion.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxHtmlEditor', {
+    height: 600,
+    width: 900,
+    aiIntegration: {
+      summarize() { return () => {}; },
+    },
+    toolbar: {
+      items: ['ai'],
+    },
+  });
+});
