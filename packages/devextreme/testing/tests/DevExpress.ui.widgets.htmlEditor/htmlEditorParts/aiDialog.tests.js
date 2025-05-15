@@ -324,7 +324,7 @@ QUnit.module('AIDialog', () => {
             });
         });
 
-        QUnit.test('should trigger generation on try again button click', function(assert) {
+        QUnit.test('should trigger generation on regenerate button click', function(assert) {
             const done = assert.async();
 
             showAIDialog(this, {
@@ -333,9 +333,9 @@ QUnit.module('AIDialog', () => {
 
             this.promise.then(() => {
                 const generateSpy = sinon.spy(this.aiDialog, '_executeAICommand');
-                const $tryAgainButton = findButtonByName(this.aiDialogPopup, 'tryAgain');
+                const $regenerateButton = findButtonByName(this.aiDialogPopup, 'regenerate');
 
-                $tryAgainButton.trigger('dxclick');
+                $regenerateButton.trigger('dxclick');
 
                 assert.strictEqual(generateSpy.calledOnce, true, 'retry triggered generate');
                 done();
@@ -424,7 +424,7 @@ QUnit.module('AIDialog', () => {
                 assert.strictEqual(promptTextAreaInstance.option('readOnly'), true, 'prompt TextArea is readOnly');
                 assert.strictEqual(resultTextAreaInstance.option('visible'), true, 'result TextArea is visible');
 
-                assert.strictEqual(bottomToolbarItems.length, 3, '3 buttons are shown: tryAgain, copy and regenerate');
+                assert.strictEqual(bottomToolbarItems.length, 3, '3 buttons are shown: regenerate, copy and regenerate');
                 assert.strictEqual(replaceButtonItem.disabled, undefined, 'replace button is not disabled');
                 assert.strictEqual(copyButtonItem.disabled, undefined, 'copy button is not disabled');
 
@@ -664,7 +664,7 @@ QUnit.module('AIDialog', () => {
             assert.strictEqual(getLoadIndicator(this.$element).length, 0, 'loadindicator is removed');
         });
 
-        QUnit.test('try again should clear result and retry request', function(assert) {
+        QUnit.test('regenerate should clear result and retry request', function(assert) {
             const done = assert.async();
 
             this.showDialog({ currentCommand: 'summarize' });
@@ -674,9 +674,9 @@ QUnit.module('AIDialog', () => {
             this.resolve('Response');
 
             this.promise.then(() => {
-                const $tryAgain = findButtonByName(this.aiDialogPopup, 'tryAgain');
+                const $regenerate = findButtonByName(this.aiDialogPopup, 'regenerate');
 
-                $tryAgain.trigger('dxclick');
+                $regenerate.trigger('dxclick');
 
                 assert.strictEqual(this.sendRequestStub.callCount, 2, 'sendRequest is called twice');
 
@@ -687,7 +687,7 @@ QUnit.module('AIDialog', () => {
             });
         });
 
-        QUnit.test('try again should hide Informer', function(assert) {
+        QUnit.test('regenerate should hide Informer', function(assert) {
             const done = assert.async();
 
             this.showDialog({ currentCommand: 'summarize' });
@@ -699,9 +699,9 @@ QUnit.module('AIDialog', () => {
 
                 assert.strictEqual(informerInstance.option('visible'), true, 'Informer is visible');
 
-                const $tryAgain = findButtonByName(this.aiDialogPopup, 'tryAgain');
+                const $regenerate = findButtonByName(this.aiDialogPopup, 'regenerate');
 
-                $tryAgain.trigger('dxclick');
+                $regenerate.trigger('dxclick');
 
                 assert.strictEqual(informerInstance.option('visible'), false, 'Informer is hidden');
                 done();
@@ -738,11 +738,11 @@ QUnit.module('AIDialog', () => {
             this.promise.then(() => {
                 const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
                 const replaceButton = getItemByName(bottomToolbarItems, 'replace');
-                const tryAgainButton = getItemByName(bottomToolbarItems, 'tryAgain');
+                const regenerateButton = getItemByName(bottomToolbarItems, 'regenerate');
 
-                assert.strictEqual(bottomToolbarItems.length, 3, '3 buttons are shown: try again, copy and replace');
+                assert.strictEqual(bottomToolbarItems.length, 3, '3 buttons are shown: regenerate, copy and replace');
                 assert.strictEqual(replaceButton.disabled, undefined);
-                assert.strictEqual(tryAgainButton.disabled, undefined);
+                assert.strictEqual(regenerateButton.disabled, undefined);
 
                 assert.strictEqual(getLoadIndicator(this.$element).length, 0, 'indicator is removed');
 
@@ -778,14 +778,14 @@ QUnit.module('AIDialog', () => {
             setTimeout(() => {
                 const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
                 const replaceButton = getItemByName(bottomToolbarItems, 'replace');
-                const tryAgainButton = getItemByName(bottomToolbarItems, 'tryAgain');
+                const regenerateButton = getItemByName(bottomToolbarItems, 'regenerate');
                 const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
                 const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
                 const informerInstance = getInformerInstance(this.$element);
 
-                assert.strictEqual(bottomToolbarItems.length, 3, '3 buttons in bottom toolbar: tryAgain, copy and replace');
+                assert.strictEqual(bottomToolbarItems.length, 3, '3 buttons in bottom toolbar: regenerate, copy and replace');
                 assert.strictEqual(replaceButton.disabled, undefined, 'replace button is not disabled');
-                assert.strictEqual(tryAgainButton.disabled, undefined, 'tryAgain button is not disabled');
+                assert.strictEqual(regenerateButton.disabled, undefined, 'regenerate button is not disabled');
                 assert.strictEqual(resultTextAreaInstance.option('disabled'), false, 'result textArea is not disabled');
                 assert.strictEqual(resultTextAreaInstance.option('readOnly'), true, 'result textArea is readOnly');
                 assert.strictEqual(resultTextAreaInstance.option('visible'), true, 'result textArea is visible');
@@ -867,6 +867,19 @@ QUnit.module('AIDialog', () => {
             });
 
             this.resolve('');
+        });
+
+        QUnit.test('changing the dialog state does not trigger additional command execution if the command has options', function(assert) {
+            this.showDialog({ currentCommand: 'changeStyle', currentCommandOption: 'business' });
+            const commandSelectBox = getCommandSelectBoxInstance(this.$element);
+
+            assert.ok(this.sendRequestStub.calledOnce, 'command execution is called once');
+
+            commandSelectBox.option('value', 'askAI');
+            assert.ok(this.sendRequestStub.calledOnce, 'command execution is called once');
+
+            commandSelectBox.option('value', 'changeStyle');
+            assert.strictEqual(this.sendRequestStub.callCount, 2, 'command execution is called twice');
         });
     });
 
@@ -998,7 +1011,7 @@ QUnit.module('AIDialog', () => {
             });
         });
 
-        QUnit.test('should be correct for try again button', function(assert) {
+        QUnit.test('should be correct for regenerate button', function(assert) {
             const done = assert.async();
 
             showAIDialog(this, {
@@ -1009,15 +1022,15 @@ QUnit.module('AIDialog', () => {
 
             this.promise.then(() => {
                 const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
-                const tryAgainToolbarItem = getItemByName(bottomToolbarItems, 'tryAgain');
-                const tryAgainButtonOptions = tryAgainToolbarItem.options;
+                const regenerateToolbarItem = getItemByName(bottomToolbarItems, 'regenerate');
+                const regenerateButtonOptions = regenerateToolbarItem.options;
 
-                assertConfig(assert, tryAgainToolbarItem, {
+                assertConfig(assert, regenerateToolbarItem, {
                     toolbar: 'bottom',
                     location: 'before',
                     widget: 'dxButton',
                 });
-                assertConfig(assert, tryAgainButtonOptions, {
+                assertConfig(assert, regenerateButtonOptions, {
                     stylingMode: 'outlined',
                     icon: 'restore',
                 });
@@ -1144,12 +1157,12 @@ QUnit.module('AIDialog', () => {
             });
         });
 
-        QUnit.test('tryAgain button text is shown and localized', function(assert) {
-            const localizedTryAgainText = 'custom copy';
+        QUnit.test('regenerate button text is shown and localized', function(assert) {
+            const localizedRegenerateText = 'custom copy';
             const initialLocale = localization.locale();
             localization.loadMessages({
                 'ja': {
-                    'dxHtmlEditor-aiTryAgain': localizedTryAgainText,
+                    'dxHtmlEditor-aiRegenerate': localizedRegenerateText,
                 }
             });
             localization.locale('ja');
@@ -1164,10 +1177,10 @@ QUnit.module('AIDialog', () => {
 
             this.promise.then(() => {
                 const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
-                const tryAgainToolbarItem = getItemByName(bottomToolbarItems, 'tryAgain');
-                const tryAgainButtonOptions = tryAgainToolbarItem.options;
+                const regenerateToolbarItem = getItemByName(bottomToolbarItems, 'regenerate');
+                const regenerateButtonOptions = regenerateToolbarItem.options;
 
-                assert.strictEqual(tryAgainButtonOptions.text, localizedTryAgainText, 'text is localized');
+                assert.strictEqual(regenerateButtonOptions.text, localizedRegenerateText, 'text is localized');
 
                 localization.locale(initialLocale);
                 done();
@@ -1315,7 +1328,7 @@ QUnit.module('AIDialog', () => {
                     });
                 });
 
-                QUnit.test('tryAgain button text is not shown', function(assert) {
+                QUnit.test('regenerate button text is not shown', function(assert) {
                     const done = assert.async();
 
                     showAIDialog(this, {
@@ -1326,7 +1339,7 @@ QUnit.module('AIDialog', () => {
 
                     this.promise.then(() => {
                         const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
-                        const copyToolbarItem = getItemByName(bottomToolbarItems, 'tryAgain');
+                        const copyToolbarItem = getItemByName(bottomToolbarItems, 'regenerate');
                         const copyButtonOptions = copyToolbarItem.options;
 
                         assert.strictEqual(copyButtonOptions.text, undefined, 'text is not passed');

@@ -47,7 +47,7 @@ const AI_DIALOG_TITLE_TEXT_CLASS = 'dx-aidialog-title-text';
 const ICON_CLASS = 'dx-icon';
 const ICON_SPARKLE_CLASS = 'dx-icon-sparkle';
 const COPY_BUTTON_ICON = 'copy';
-const TRY_AGAIN_BUTTON_ICON = 'restore';
+const REGENERATE_BUTTON_ICON = 'restore';
 
 const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone'];
 
@@ -102,6 +102,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _askAIPrompt = '';
 
   private _commandChangeSuppressed = false;
+
+  private _commandOptionSuppressed = false;
 
   private _commandOptionsList?: string[];
 
@@ -163,7 +165,10 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         at: 'center',
         of: this._$container,
       },
-      ...this._popupUserConfig,
+      onHiding: () => {
+        this._processCommandCompletion();
+      },
+      ...this._popupConfig,
     }) as PopupProperties;
   }
 
@@ -199,12 +204,17 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   protected _renderOptionSelectBox($container: dxElementWrapper): void {
     const $optionSelectBox = $('<div>').appendTo($container);
+
     this._optionSelectBox = new SelectBox($optionSelectBox.get(0), {
       items: this._commandOptionsList,
       value: this._currentOption ?? this._commandOptionsList?.[0],
       visible: this._isCommandWithOptionsSelected(),
       onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: ({ value }): void => {
+        if (this._commandOptionSuppressed) {
+          return;
+        }
+
         this._currentOption = value;
 
         if (this._isOpen() && value) {
@@ -382,16 +392,17 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
   }
 
-  protected _getTryAgainButtonItem(): NamedToolbarItem {
-    const text = isSmallScreen() ? undefined : localizationMessage.format('dxHtmlEditor-aiTryAgain');
+  protected _getRegenerateButtonItem(): NamedToolbarItem {
+    const text = isSmallScreen() ? undefined : localizationMessage.format('dxHtmlEditor-aiRegenerate');
+
     return {
-      name: 'tryAgain',
+      name: 'regenerate',
       toolbar: 'bottom',
       location: 'before',
       widget: 'dxButton',
       options: {
         stylingMode: 'outlined',
-        icon: TRY_AGAIN_BUTTON_ICON,
+        icon: REGENERATE_BUTTON_ICON,
         text,
         onClick: () => this._retryExecuteAICommand(),
         onInitialized: this._addEscapeHandler.bind(this),
@@ -437,7 +448,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   private _getInitialToolbarItems(): NamedToolbarItem[] {
     return [
-      this._getTryAgainButtonItem(),
+      this._getRegenerateButtonItem(),
       this._getCopyButtonItem(),
       this._getReplaceButtonItem(),
     ];
@@ -524,6 +535,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   private _processCommandCompletion(dialogState?: DialogState): void {
+    this._abort?.();
     this._abort = undefined;
     this._isAICommandExecuting = false;
 
@@ -568,7 +580,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   private _stopAICommandExecution(): void {
-    this._abort?.();
     this._processCommandCompletion(this._getInitialDialogState());
   }
 
@@ -599,12 +610,14 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _refreshOptionSelectBox(): void {
     const hasOptions = this._isCommandWithOptionsSelected();
 
+    this._commandOptionSuppressed = true;
     this._optionSelectBox.option({
       disabled: this._isAICommandExecuting,
       visible: hasOptions,
       items: this._commandOptionsList ?? [],
       value: this._currentOption ?? this._commandOptionsList?.[0],
     });
+    this._commandOptionSuppressed = false;
   }
 
   private _setTextAreasInitialState(): void {
@@ -734,7 +747,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   updateAIIntegration(aiIntegration: AIIntegration): void {
-    this._abort?.();
     this._processCommandCompletion(this._getInitialDialogState());
     this._aiIntegration = aiIntegration;
     this._executeAICommand();
@@ -765,10 +777,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   hide(resultText: AIDialogResult['resultText'], event: AIDialogResult['event']): void {
     this.deferred?.resolve({ resultText, event });
-
-    this._abort?.();
-    this._processCommandCompletion();
-
     super.hide();
   }
 }
