@@ -4,42 +4,30 @@ import { Selector } from 'testcafe';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../../helpers/themeUtils';
-// import { appendElementTo, setStyleAttribute } from '../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 
 const MENU_ITEM_CLASS = 'dx-menu-item';
 const SUBMENU_CLASS = 'dx-submenu';
+const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
+const LOADINDICATOR_CONTENT_CLASS = 'dx-loadindicator-content';
+const LOADINDICATOR_ICON_CLASS = 'dx-loadindicator-icon';
+const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
 
 fixture.disablePageReloads`HtmlEditor: AIDialog`
   .page(url(__dirname, '../../../container.html'));
 
-test('initial state', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+async function openAIDialog(t: TestController): Promise<void> {
   const htmlEditor = new HtmlEditor('#container');
-
   await t
     .click(htmlEditor.toolbar.getItemByName('ai'))
     .click(Selector(`.${SUBMENU_CLASS}`).find(`.${MENU_ITEM_CLASS}`).nth(0));
-  // .click(Selector(`.${SUBMENU_CLASS}`).find(`.${MENU_ITEM_CLASS}`).nth(0));
+}
 
-  // const aiDialog = htmlEditor.getAIDialog();
+test('initial state', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  // await aiDialog.show();
-
-  await testScreenshot(
-    t,
-    takeScreenshot,
-    'htmleditor-ai-dialog-initial-state.png',
-    { element: '#container' },
-  );
-
-  // await t.debug();
-
-  // await t
-  //   .click(htmlEditor.toolbar.getItemByName('ai'))
-  //   .click(Selector(`.${SUBMENU_CLASS}`).find(`.${MENU_ITEM_CLASS}`).nth(5));
-
-  // await testScreenshot(
-  //   t, takeScreenshot, 'htmleditor-ai-toolbar-item-expanded.png', { element: '#container' });
+  await openAIDialog(t);
+  await testScreenshot(t, takeScreenshot, 'htmleditor-ai-dialog-initial-state.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -57,37 +45,24 @@ test('initial state', async (t) => {
 
 test('generating state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const htmlEditor = new HtmlEditor('#container');
 
-  await t
-    .click(htmlEditor.toolbar.getItemByName('ai'))
-    .click(Selector(`.${SUBMENU_CLASS}`).find(`.${MENU_ITEM_CLASS}`).nth(0));
-  // .click(Selector(`.${SUBMENU_CLASS}`).find(`.${MENU_ITEM_CLASS}`).nth(0));
-
-  // const aiDialog = htmlEditor.getAIDialog();
-
-  // await aiDialog.show();
-
-  await testScreenshot(
-    t,
-    takeScreenshot,
-    'htmleditor-ai-dialog-generating-state.png',
-    { element: '#container' },
-  );
-
-  // await t.debug();
-
-  // await t
-  //   .click(htmlEditor.toolbar.getItemByName('ai'))
-  //   .click(Selector(`.${SUBMENU_CLASS}`).find(`.${MENU_ITEM_CLASS}`).nth(5));
-
-  // await testScreenshot(
-  //   t, takeScreenshot, 'htmleditor-ai-toolbar-item-expanded.png', { element: '#container' });
+  await openAIDialog(t);
+  await testScreenshot(t, takeScreenshot, 'htmleditor-ai-dialog-generating-state.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await insertStylesheetRulesToPage(`
+    .${LOADINDICATOR_SEGMENT_CLASS},
+    .${LOADINDICATOR_CONTENT_CLASS},
+    .${LOADINDICATOR_ICON_CLASS},
+    .${LOADINDICATOR_SEGMENT_INNER_CLASS} {
+      animation: none !important;
+      opacity: 1 !important;
+    }
+  `);
+
   await createWidget('dxHtmlEditor', {
     height: 500,
     width: 900,
@@ -102,32 +77,9 @@ test('generating state', async (t) => {
 
 test('resultReady state', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const htmlEditor = new HtmlEditor('#container');
 
-  await t
-    .click(htmlEditor.toolbar.getItemByName('ai'))
-    .click(Selector(`.${SUBMENU_CLASS}`).find(`.${MENU_ITEM_CLASS}`).nth(0));
-  // .click(Selector(`.${SUBMENU_CLASS}`).find(`.${MENU_ITEM_CLASS}`).nth(0));
-
-  // const aiDialog = htmlEditor.getAIDialog();
-
-  // await aiDialog.show();
-
-  await testScreenshot(
-    t,
-    takeScreenshot,
-    'htmleditor-ai-dialog-result-ready-state.png',
-    { element: '#container' },
-  );
-
-  // await t.debug();
-
-  // await t
-  //   .click(htmlEditor.toolbar.getItemByName('ai'))
-  //   .click(Selector(`.${SUBMENU_CLASS}`).find(`.${MENU_ITEM_CLASS}`).nth(5));
-
-  // await testScreenshot(
-  //   t, takeScreenshot, 'htmleditor-ai-toolbar-item-expanded.png', { element: '#container' });
+  await openAIDialog(t);
+  await testScreenshot(t, takeScreenshot, 'htmleditor-ai-dialog-result-ready-state.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -137,7 +89,7 @@ test('resultReady state', async (t) => {
     height: 500,
     width: 900,
     aiIntegration: {
-      summarize({ onComplete }) { onComplete('result'); },
+      summarize(_, { onComplete }) { onComplete('result'); },
     },
     toolbar: {
       items: ['ai'],
