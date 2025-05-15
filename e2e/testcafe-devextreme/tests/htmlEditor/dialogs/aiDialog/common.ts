@@ -100,6 +100,13 @@ test('generating state', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await openAIDialog(t, 4, 0);
+
+    const htmlEditor = new HtmlEditor('#container');
+    const aiDialog = htmlEditor.getAIDialog();
+    const splitButton = aiDialog.getSplitButton();
+
+    await t.click(splitButton.element);
+
     await testScreenshot(t, takeScreenshot, `htmleditor-ai-dialog-result-ready-state-with-${name}.png`, { element: '#container' });
 
     await t
