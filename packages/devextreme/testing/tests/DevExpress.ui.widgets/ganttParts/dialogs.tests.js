@@ -79,7 +79,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
         assert.equal($dialog.find('.dx-popup-bottom').find('.dx-button').length, 1, 'only cancel button in toolbar');
         $dialog = $('body').find(Consts.POPUP_SELECTOR);
         const inputs = $dialog.find('.dx-texteditor-input');
-        assert.equal(inputs.attr('readOnly'), 'readonly', 'all inputs is readOnly');
+        assert.equal(inputs.attr('readOnly'), '', 'all inputs is readOnly');
     });
     test('showTaskDetailsDialog', function(assert) {
         this.createInstance(options.allSourcesOptions);
@@ -126,7 +126,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
         assert.equal($dialog.find('.dx-popup-bottom').find('.dx-button').length, 1, 'only cancel button in toolbar');
         $dialog = $('body').find(Consts.POPUP_SELECTOR);
         const inputs = $dialog.find('.dx-texteditor-input');
-        assert.equal(inputs.attr('readOnly'), 'readonly', 'all inputs is readOnly');
+        assert.equal(inputs.attr('readOnly'), '', 'all inputs is readOnly');
     });
     test('resources editing', function(assert) {
         this.createInstance(options.allSourcesOptions);

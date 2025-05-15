@@ -394,7 +394,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
         const inputs = $dialog.find('.dx-texteditor-input');
-        assert.equal(inputs.attr('readOnly'), 'readonly', 'all inputs is readOnly');
+        assert.equal(inputs.attr('readOnly'), '', 'all inputs is readOnly');
     });
     test('task dialog showing - hide fields', function(assert) {
         this.createInstance(options.allSourcesOptions);
