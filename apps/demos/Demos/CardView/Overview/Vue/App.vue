@@ -31,7 +31,8 @@
 import DxCardView, {
   DxColumn, DxCardCover, DxPager, DxSelection,
 } from 'devextreme-vue/card-view';
-import { Employee, employees } from './data.ts';
+import type { Employee } from './data.ts';
+import { employees } from './data.ts';
 
 const IMG_URL = 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos';
 const getEmployeeImage = ({ Picture }: Employee): string => `${IMG_URL}/${Picture}`;
