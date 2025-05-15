@@ -298,12 +298,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     const $cell = $(cell);
 
-    if (options.rowType === 'data' && column.headerId && !column.type) {
-      if (this.component.option('showColumnHeaders')) {
-        this.setAria('describedby', column.headerId, $cell);
-      }
-    }
-
     if (column.cssClass) {
       $cell.addClass(column.cssClass);
     }
