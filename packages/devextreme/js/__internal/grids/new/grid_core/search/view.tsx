@@ -1,12 +1,12 @@
 import type { TextBoxInstance } from '@js/ui/text_box';
-import type { ReadonlySignal } from '@preact/signals-core';
-import { computed } from '@preact/signals-core';
+import {
+  computed, effect,
+} from '@preact/signals-core';
 import { ToolbarController } from '@ts/grids/new/grid_core/toolbar/controller';
 
 import { OptionsController } from '../options_controller/options_controller';
 import { SearchController } from './controller';
 import { SearchUIController } from './controller_ui';
-import type { SearchFieldProps } from './types';
 import { addSearchTextBox } from './utils';
 
 export class SearchView {
@@ -25,28 +25,37 @@ export class SearchView {
     private readonly searchUIController: SearchUIController,
     private readonly searchController: SearchController,
   ) {
+    const toolbarItem = addSearchTextBox(
+      {
+        placeholder: this.searchController.searchPlaceholder.value,
+        value: this.searchController.searchTextOption.value,
+        width: this.searchController.searchWidth.value,
+        onValueChanged: (text): void => {
+          this.searchController.updateSearchText(text);
+        },
+      },
+      (component) => {
+        this.searchTextBox = component;
+      },
+    );
     this.toolbarController.addDefaultItem(
-      computed(() => addSearchTextBox(
-        this.getProps().value,
-        (component) => { this.searchTextBox = component; },
-      )),
+      computed(() => toolbarItem),
       this.options.oneWay('searchPanel.visible'),
     );
+
+    effect(() => {
+      // eslint-disable-next-line
+      const value = this.searchController.searchTextOption.value;
+      const placeholder = this.searchController.searchPlaceholder.value;
+      const width = this.searchController.searchWidth.value;
+
+      this.searchTextBox?.option('value', value);
+      this.searchTextBox?.option('placeholder', placeholder);
+      this.searchTextBox?.option('width', width);
+    });
 
     this.searchUIController.registerCallback('focusSearchTextBox', () => {
       this.searchTextBox?.focus();
     });
-  }
-
-  protected getProps(): ReadonlySignal<SearchFieldProps> {
-    return computed(() => ({
-      placeholder: this.options.oneWay('searchPanel.placeholder').value,
-      // TODO: resolve update cycle: editor - option - editor
-      // value: this.searchController.searchTextOption.value,
-      width: this.options.oneWay('searchPanel.width').value,
-      onValueChanged: (text): void => {
-        this.searchController.updateSearchText(text);
-      },
-    }));
   }
 }
