@@ -149,7 +149,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
     }
 
     function updateTemplates(onUpdated: () => void): void {
-      if(mounted.current) {
+      if (mounted.current) {
         setUpdateContext({ onUpdated });
       }
     }
@@ -161,9 +161,9 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
     mounted.current = true;
 
     return () => {
-        mounted.current = false;
+      mounted.current = false;
     };
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (updateContext) {
