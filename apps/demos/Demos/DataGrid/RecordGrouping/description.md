@@ -12,7 +12,7 @@ Remove the focused column header from the group panel. This shortcut is availabl
 - **Shift+Alt+G**    
 Ungroup all items from the group panel.
 
-To allow users to reorder headers within the group panel, assign `true` to the [allowColumnReordering](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#allowColumnReordering) property. Reordering headers in the group panel will change the component's group hierarchy. Users can reorder headers with mouse drag-and-drop operations or with keyboard shortcuts:
+To allow users to reorder headers within the group panel, assign `true` to the [allowColumnReordering](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#allowColumnReordering) property. Reordering headers in the group panel changes the component's group hierarchy. Users can reorder headers with mouse drag-and-drop operations or keyboard shortcuts:
 
 - **Ctrl/Cmd+Left Arrow**    
 Move the focused header to the left.
