@@ -43,7 +43,7 @@ export class FilterController {
   public readonly displayFilter = computed(
     () => gridCoreUtils.combineFilters(
       this.appliedFilterExpressions.value,
-    ) || null,
+    ) ?? null,
   );
 
   constructor(
