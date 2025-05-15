@@ -1,11 +1,13 @@
 import Button from '../../button';
 import { Selector } from 'testcafe';
 import Popup from '../../popup';
+import TextArea from '../../textArea';
 
 const CLASSES = {
   wrapper: 'dx-popup-wrapper',
   dialog: 'dx-aidialog',
   button: 'dx-button',
+  textArea: 'dx-textarea',
 };
 
 export default class AIDialog extends Popup {
@@ -17,5 +19,13 @@ export default class AIDialog extends Popup {
 
   getSplitButton(): Button {
     return new Button(this.getBottomToolbar().find(`.${CLASSES.button}`).nth(5));
+  }
+
+  getGenerateButton(): Button {
+    return new Button(this.getBottomToolbar().find(`.${CLASSES.button}`).nth(2));
+  }
+
+  getPromptTextArea(): TextArea {
+    return new TextArea(this.getWrapper().find(`.${CLASSES.textArea}`).nth(0));
   }
 }
