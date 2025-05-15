@@ -545,7 +545,7 @@
         "dxHtmlEditor-aiCopy": "Copy",
         "dxHtmlEditor-aiRegenerate": "Regenerate",
         "dxHtmlEditor-aiGenerate": "Generate",
-        "dxHtmlEditor-aiStop": "Stop",
+        "dxHtmlEditor-aiCancel": "Cancel",
         "dxHtmlEditor-aiToolbarItemAriaLabel": "AI Assistant toolbar item",
         "dxHtmlEditor-aiResultTextAreaAriaLabel": "AI Assistant result",
         "dxHtmlEditor-aiAskPlaceholder": "Ask AI to modify text",
