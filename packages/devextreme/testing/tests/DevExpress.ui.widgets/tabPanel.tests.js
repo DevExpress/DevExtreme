@@ -11,7 +11,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import translator from 'common/core/animation/translator';
-import { shouldSkipOnPhone } from '../../helpers/device.js';
+import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 
 QUnit.testStart(() => {
@@ -1123,7 +1123,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('looping should work on keyboard navigation after loop runtime change to true and swipe', function(assert) {
-        if(shouldSkipOnPhone(assert, 'there is no keyboard navigation on mobile devices')) {
+        if(shouldSkipOnMobile(assert, 'there is no keyboard navigation on mobile devices')) {
             return;
         }
 

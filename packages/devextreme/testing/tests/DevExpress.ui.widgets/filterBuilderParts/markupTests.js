@@ -1,13 +1,13 @@
 import $ from 'jquery';
 import fields from '../../../helpers/filterBuilderTestData.js';
-import { shouldSkipOnPhone } from '../../../helpers/device.js';
+import { shouldSkipOnMobile } from '../../../helpers/device.js';
 
 import 'ui/filter_builder';
 
 const FILTER_BUILDER_GROUP_CONTENT_CLASS = 'dx-filterbuilder-group-content';
 
 QUnit.test('markup init', function(assert) {
-    if(shouldSkipOnPhone(assert)) {
+    if(shouldSkipOnMobile(assert)) {
         return;
     }
 
@@ -51,7 +51,7 @@ QUnit.test('filterbuilder is created by different values', function(assert) {
 });
 
 QUnit.test('filter Content init by one condition', function(assert) {
-    if(shouldSkipOnPhone(assert)) {
+    if(shouldSkipOnMobile(assert)) {
         return;
     }
 
@@ -87,7 +87,7 @@ QUnit.test('filter Content init by one condition', function(assert) {
 });
 
 QUnit.test('filter Content init by several conditions', function(assert) {
-    if(shouldSkipOnPhone(assert, 'Not applicable to non-desktop devices: dxclick adds onclick=\'void(0)\' to every button in mobile')) {
+    if(shouldSkipOnMobile(assert, 'Not applicable to non-desktop devices: dxclick adds onclick=\'void(0)\' to every button in mobile')) {
         return;
     }
 
@@ -133,7 +133,7 @@ QUnit.test('filter Content init by several conditions', function(assert) {
     };
     [null, []].forEach(value => {
         QUnit.test(`filter content with custom group operations (${groupOperations}) and ${!value ? value : 'empty'} value`, function(assert) {
-            if(shouldSkipOnPhone(assert, 'Not applicable to non-desktop devices: dxclick adds onclick=\'void(0)\' to every button in mobile')) {
+            if(shouldSkipOnMobile(assert, 'Not applicable to non-desktop devices: dxclick adds onclick=\'void(0)\' to every button in mobile')) {
                 return;
             }
 

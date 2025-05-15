@@ -22,6 +22,12 @@ export const shouldSkipOnDesktop = (assert = null, message = null) => shouldSkip
 });
 
 export const shouldSkipOnPhone = (assert = null, message = null) => shouldSkipOnDevices({
+    deviceTypes: ['phone'],
+    assert,
+    message,
+});
+
+export const shouldSkipOnMobile = (assert = null, message = null) => shouldSkipOnDevices({
     deviceTypes: ['phone', 'tablet'],
     assert,
     message,

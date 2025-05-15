@@ -17,7 +17,7 @@ import fx from 'common/core/animation/fx';
 import messageLocalization from 'common/core/localization/message';
 import dateSerialization from 'core/utils/date_serialization';
 import { ListSearchBoxWrapper } from '../../helpers/wrappers/searchBoxWrappers.js';
-import { shouldSkipOnPhone } from '../../helpers/device.js';
+import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 const TREEVIEW_ITEM_CLASS = 'dx-treeview-item';
 
@@ -2262,7 +2262,7 @@ QUnit.module('Header Filter', {
 
     // T644753
     QUnit.testInActiveWindow('No scroll on opening the header filter when the popup is cropped', function(assert) {
-        if(shouldSkipOnPhone(assert, 'focus is disabled for non-desktop devices')) {
+        if(shouldSkipOnMobile(assert, 'focus is disabled for non-desktop devices')) {
             return;
         }
         // arrange

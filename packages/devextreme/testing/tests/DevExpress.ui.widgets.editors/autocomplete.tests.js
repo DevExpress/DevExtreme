@@ -11,7 +11,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import { getHeight, getOuterHeight } from 'core/utils/size';
-import { shouldSkipOnPhone } from '../../helpers/device.js';
+import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 import 'ui/select_box';
@@ -533,7 +533,7 @@ QUnit.module('dxAutocomplete', {
     });
 
     QUnit.test('arrow_down/arrow_up/enter provide item navigation and selection', function(assert) {
-        if(shouldSkipOnPhone(assert)) {
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -639,7 +639,7 @@ QUnit.module('dxAutocomplete', {
     });
 
     QUnit.testInActiveWindow('key_tab for autocomplete current value', function(assert) {
-        if(shouldSkipOnPhone(assert)) {
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -738,7 +738,7 @@ QUnit.module('dxAutocomplete', {
     QUnit.testInActiveWindow('enter - prevent default', function(assert) {
         assert.expect(1);
 
-        if(shouldSkipOnPhone(assert)) {
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -1309,7 +1309,7 @@ QUnit.module('regressions', {
     });
 
     QUnit.testInActiveWindow('update input value on press complete key', function(assert) {
-        if(shouldSkipOnPhone(assert)) {
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -1323,7 +1323,7 @@ QUnit.module('regressions', {
     });
 
     QUnit.testInActiveWindow('update input value on press enter key', function(assert) {
-        if(shouldSkipOnPhone(assert)) {
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 

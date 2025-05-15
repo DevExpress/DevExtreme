@@ -2,7 +2,7 @@ import $ from 'jquery';
 import fx from 'common/core/animation/fx';
 import dataUtils from 'core/element_data';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import { shouldSkipOnPhone } from '../../helpers/device.js';
+import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import 'ui/date_range_box';
 
@@ -553,7 +553,7 @@ QUnit.module('Strategy', moduleConfig, () => {
         });
 
         QUnit.test('startDate should be contoured after moving focus from endDate to startDate', function(assert) {
-            if(shouldSkipOnPhone(assert)) {
+            if(shouldSkipOnMobile(assert)) {
                 return;
             }
 
@@ -572,7 +572,7 @@ QUnit.module('Strategy', moduleConfig, () => {
         });
 
         QUnit.test('endDate should be contoured after moving focus from startDate to endDate', function(assert) {
-            if(shouldSkipOnPhone(assert)) {
+            if(shouldSkipOnMobile(assert)) {
                 return;
             }
 

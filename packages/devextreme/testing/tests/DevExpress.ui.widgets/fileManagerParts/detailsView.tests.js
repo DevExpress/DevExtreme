@@ -8,7 +8,7 @@ import { FileManagerWrapper, createTestFileSystem, createHugeFileSystem } from '
 import { triggerCellClick } from '../../../helpers/fileManager/events.js';
 import { implementationsMap } from 'core/utils/size';
 import devices from '__internal/core/m_devices';
-import { shouldSkipOnPhone } from '../../../helpers/device.js';
+import { shouldSkipOnMobile } from '../../../helpers/device.js';
 
 const { test } = QUnit;
 
@@ -279,7 +279,7 @@ QUnit.module('Details View', moduleConfig, () => {
     });
 
     test('Select All check box ignore parent directory item when it is checked', function(assert) {
-        if(shouldSkipOnPhone(assert)) {
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -431,7 +431,7 @@ QUnit.module('Details View', moduleConfig, () => {
     });
 
     test('Raise the ContextMenuItemClick event', function(assert) {
-        if(shouldSkipOnPhone(assert)) {
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
