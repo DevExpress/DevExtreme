@@ -212,22 +212,49 @@ test('result ready after canceletion', async (t) => {
   });
 });
 
-safeSizeTest('initial state on small screen', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await openAIDialog(t, 0);
-  await testScreenshot(t, takeScreenshot, 'htmleditor-ai-dialog-initial-state-on-small-screen.png', { element: '#container' });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}, [400, 700]).before(async () => {
-  await createWidget('dxHtmlEditor', {
-    height: 700,
-    width: 400,
-    aiIntegration: {},
-    toolbar: {
-      items: ['ai'],
+[
+  { state: 'initial', configuration: {} },
+  {
+    state: 'generating',
+    configuration: {
+      summarize() {},
     },
+  },
+  {
+    state: 'result-ready',
+    configuration: {
+      result: longResult,
+      summarize(_, { onComplete }) { onComplete(this.result); },
+    },
+  },
+].forEach(({ state, configuration }) => {
+  safeSizeTest(`${state} state on small screen`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await openAIDialog(t, 0);
+    await testScreenshot(t, takeScreenshot, `htmleditor-ai-dialog-${state}-state-on-small-screen.png`, { element: '#container' });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [400, 700]).before(async () => {
+    await insertStylesheetRulesToPage(`
+      .${LOADINDICATOR_SEGMENT_CLASS},
+      .${LOADINDICATOR_CONTENT_CLASS},
+      .${LOADINDICATOR_ICON_CLASS},
+      .${LOADINDICATOR_SEGMENT_INNER_CLASS} {
+        animation: none !important;
+        opacity: 1 !important;
+      }
+    `);
+
+    await createWidget('dxHtmlEditor', {
+      height: 700,
+      width: 400,
+      aiIntegration: { ...configuration },
+      toolbar: {
+        items: ['ai'],
+      },
+    });
   });
 });
