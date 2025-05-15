@@ -244,6 +244,7 @@ export class DataController {
           },
         )) {
           this.previousDisplayFilter = displayFilter;
+          this.dataSource.peek().pageIndex(0);
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.dataSource.peek().load();
         }
