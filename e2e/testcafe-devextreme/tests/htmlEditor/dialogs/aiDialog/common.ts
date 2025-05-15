@@ -212,6 +212,28 @@ test('result ready after canceletion', async (t) => {
   });
 });
 
+test('error state', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await openAIDialog(t, 0);
+  await testScreenshot(t, takeScreenshot, 'htmleditor-ai-dialog-error-state.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxHtmlEditor', {
+    height: 600,
+    width: 900,
+    aiIntegration: {
+      summarize(_, { onError }) { onError(); },
+    },
+    toolbar: {
+      items: ['ai'],
+    },
+  });
+});
+
 [
   { state: 'initial', configuration: {} },
   {
@@ -225,6 +247,12 @@ test('result ready after canceletion', async (t) => {
     configuration: {
       result: longResult,
       summarize(_, { onComplete }) { onComplete(this.result); },
+    },
+  },
+  {
+    state: 'error',
+    configuration: {
+      summarize(_, { onError }) { onError(); },
     },
   },
 ].forEach(({ state, configuration }) => {
