@@ -16,6 +16,7 @@ import type { Props as ColumnSortableProps } from './column_sortable';
 import { ColumnSortable } from './column_sortable';
 import { CLASSES as itemClasses, Item } from './item';
 import type { DraggingOptions } from './options';
+import { hasFilterValues } from './utils';
 
 export const CLASSES = {
   link: 'dx-link',
@@ -183,7 +184,7 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
 
     const columnId = getColumnIdentifier(column);
 
-    const hasHeaderFilterValue = !!filterValues?.length || filterType === 'exclude';
+    const hasHeaderFilterValue = hasFilterValues(filterType, filterValues);
     const hasFilterSyncValue = filterHasField(filterSyncValue, columnId) as boolean;
 
     return hasHeaderFilterValue || hasFilterSyncValue;
