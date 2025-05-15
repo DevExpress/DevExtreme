@@ -160,6 +160,7 @@ export class EditorFactory extends ViewControllerWithMixin {
           this.focus($focus, isHideBorder);
           return;
         }
+        this.focus($dataGridElement, true);
       }
     }
 

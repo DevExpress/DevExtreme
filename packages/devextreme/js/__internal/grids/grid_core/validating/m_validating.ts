@@ -1443,6 +1443,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
             super.focus.call(this, $element, isHideBorder);
           });
         });
+        this._rowsView?.updateFreeSpaceRowHeight();
         return super.focus($element, isHideBorder);
       }
     }
