@@ -149,7 +149,9 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
     }
 
     function updateTemplates(onUpdated: () => void): void {
-      if(mounted.current) setUpdateContext({ onUpdated });
+      if(mounted.current) {
+        setUpdateContext({ onUpdated });
+      }
     }
 
     init({ createDXTemplates, clearInstantiationModels, updateTemplates });
