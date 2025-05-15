@@ -53,7 +53,7 @@ async function openAIDialog(
       .ok(compareResults.errorMessages());
   }).before(async () => {
     await createWidget('dxHtmlEditor', {
-      height: 550,
+      height: 600,
       width: 900,
       aiIntegration: {},
       toolbar: {
@@ -121,7 +121,7 @@ test('generating state', async (t) => {
       .ok(compareResults.errorMessages());
   }).before(async () => {
     await createWidget('dxHtmlEditor', {
-      height: 550,
+      height: 600,
       width: 900,
       aiIntegration: {
         result,
@@ -145,7 +145,7 @@ test('asking state', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await createWidget('dxHtmlEditor', {
-    height: 550,
+    height: 600,
     width: 900,
     aiIntegration: {},
     toolbar: {
@@ -172,7 +172,7 @@ test('askAI result ready state', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await createWidget('dxHtmlEditor', {
-    height: 550,
+    height: 600,
     width: 900,
     aiIntegration: {
       result: longResult,
