@@ -12,11 +12,7 @@ const options: Options<Properties> = {
   dataSource: [[], items],
   disabled: [true, false],
   readOnly: [true, false],
-  name: [undefined, 'name'],
-  text: [undefined, 'Download Trial'],
-  label: [undefined, 'label'],
   showClearButton: [true, false],
-  showDropDownButton: [true, false],
   opened: [true, false],
   deferRendering: [true, false],
   buttons: [
