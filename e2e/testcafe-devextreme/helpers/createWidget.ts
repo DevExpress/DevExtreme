@@ -19,9 +19,6 @@ const createWidgetCore = <TWidgetName extends WidgetName>(
   selector: string,
   isShadowDom: boolean,
 ) => {
-  // @ts-expect-error ts-error
-  const { $ } = window;
-
   if (isShadowDom) {
     return new (window as any).DevExpress.ui[widgetName](
       ($(selector) as any).get(0),

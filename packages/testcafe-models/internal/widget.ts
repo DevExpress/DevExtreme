@@ -8,9 +8,6 @@ function getComponentInstance(
 ): () => Promise<unknown> {
   return ClientFunction(
     () => {
-      // @ts-ignore
-      const $ = window.$;
-
       const $widgetElement = $(selector());
       const elementData = $widgetElement.data();
       const widgetNames = elementData.dxComponents;
