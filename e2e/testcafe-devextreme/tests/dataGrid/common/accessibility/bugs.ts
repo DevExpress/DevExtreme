@@ -1,6 +1,7 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { getData } from '../../helpers/generateDataSourceData';
 
 fixture`Accessibility bugs`
   .page(url(__dirname, '../../../container.html'));
@@ -47,4 +48,17 @@ test('DataGrid - The \'aria-label\' attribute value is "Show filter options for 
       groupIndex: 0,
     },
   ],
+}));
+
+test('DataGrid - NVDA reads column information twice (T1286287)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const dataCell = dataGrid.getDataCell(1, 1).element;
+
+  await dataGrid.isReady();
+  await t
+    .expect(dataCell.hasAttribute('aria-describedby'))
+    .notOk();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(5, 5),
+  keyExpr: 'field_0',
 }));
