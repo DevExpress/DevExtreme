@@ -8,7 +8,6 @@ const CLASSES = {
   button: 'dx-button',
 };
 
-
 export default class AIDialog extends Popup {
   public static className = `.${CLASSES.wrapper}.${CLASSES.dialog}`;
 

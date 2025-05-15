@@ -44,7 +44,7 @@ async function openAIDialog(t: TestController, command: number, option?: number)
       .ok(compareResults.errorMessages());
   }).before(async () => {
     await createWidget('dxHtmlEditor', {
-      height: 500,
+      height: 550,
       width: 900,
       aiIntegration: {},
       toolbar: {
@@ -75,7 +75,7 @@ test('generating state', async (t) => {
   `);
 
   await createWidget('dxHtmlEditor', {
-    height: 500,
+    height: 550,
     width: 900,
     aiIntegration: {
       changeStyle() {},
@@ -114,7 +114,7 @@ test('generating state', async (t) => {
       .ok(compareResults.errorMessages());
   }).before(async () => {
     await createWidget('dxHtmlEditor', {
-      height: 500,
+      height: 550,
       width: 900,
       aiIntegration: {
         result,
