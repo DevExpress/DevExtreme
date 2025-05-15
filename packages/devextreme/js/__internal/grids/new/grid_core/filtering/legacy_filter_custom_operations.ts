@@ -137,8 +137,8 @@ function baseOperation(config) {
       headerFilterController.showHeaderFilterMenuBase({
         columnElement: div,
         column,
-        apply() {
-          setValue(this.filterValues);
+        customApply(filterValues) {
+          setValue(filterValues);
           headerFilterController.hideHeaderFilterMenu();
           conditionInfo.closeEditor();
         },

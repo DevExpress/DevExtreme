@@ -39,7 +39,7 @@ export class HeaderFilterViewController {
     element: Element,
     column: Column,
     onFilterCloseCallback?: () => void,
-    apply?: () => void,
+    customApply?: (filterValues) => void,
     isFilterBuilder?: boolean,
   ): void {
     const rootDataSource = this.dataController.getStoreLoadAdapter();
@@ -62,7 +62,7 @@ export class HeaderFilterViewController {
     );
 
     const type = getFilterType(column);
-    const colsController = this.columnsController;
+    const { columnsController } = this;
 
     this.popupStateInternal.value = {
       element,
@@ -78,10 +78,10 @@ export class HeaderFilterViewController {
           ? [...column.filterValues]
           : column.filterValues,
         apply(): void {
-          if (apply) {
-            apply.call(this);
+          if (customApply) {
+            customApply(this.filterValues);
           } else {
-            colsController.updateColumns(
+            columnsController.updateColumns(
               (columns) => {
                 const index = getColumnIndexByName(columns, column.name);
                 const newColumns = [...columns];

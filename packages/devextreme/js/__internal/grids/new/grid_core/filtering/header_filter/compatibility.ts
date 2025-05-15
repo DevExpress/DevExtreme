@@ -21,14 +21,14 @@ export class CompatibilityHeaderFilterController {
     columnElement: Element;
     column: Column;
     onHidden?: () => void;
-    apply?: () => void;
+    customApply?: (filterValues) => void;
     isFilterBuilder?: boolean;
   }): void {
     this.realHeaderFilterViewController.openPopup(
       args.columnElement,
       args.column,
       args.onHidden,
-      args.apply,
+      args.customApply,
       args.isFilterBuilder,
     );
   }
