@@ -12,7 +12,7 @@ const PRODUCTION_FILE_NAME = 'production.js';
 
 function transpileStateManagerProd(isEsm) {
     return through2.obj(function(file, enc, callback) {
-        if (file.path.includes(STATE_MANAGER_FOLDER_PATH)) {
+        if (file.path.includes(path.join(STATE_MANAGER_FOLDER_PATH, 'setup_state_manager.js'))) {
             try {
                 const productionFilePath = path.resolve(
                     path.dirname(file.path),
