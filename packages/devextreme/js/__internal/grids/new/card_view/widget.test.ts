@@ -65,3 +65,44 @@ describe('regressions', () => {
     expect(cardView.option('pager.showPageSizeSelector')).toBe(false);
   });
 });
+
+describe.only('editing validation', () => {
+  const checkError = (error: { __id: string; __details: string }): void => {
+    expect(error.__id).toBe('E1042');
+    expect(error.__details).toBe('editing operation requires the key field to be specified');
+  };
+
+  it('should throw E1042 error when no keyExpr and clicking on add/edit/delete', async () => {
+    const container = document.createElement('div');
+
+    const cardView = new CardView(container, {
+      editing: {
+        allowAdding: true,
+        allowUpdating: true,
+        allowDeleting: true,
+      },
+      dataSource: [{ id: 1, name: 'Test' }],
+    });
+
+    try {
+      // @ts-expect-error
+      await cardView.editingController.addCard();
+    } catch (e) {
+      checkError(e as { __id: string; __details: string });
+    }
+
+    try {
+      // @ts-expect-error
+      cardView.editingController.editRow(1);
+    } catch (e) {
+      checkError(e as { __id: string; __details: string });
+    }
+
+    try {
+      // @ts-expect-error
+      await cardView.editingController.deleteRow(1);
+    } catch (e) {
+      checkError(e as { __id: string; __details: string });
+    }
+  });
+});

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable spellcheck/spell-checker */
 import { applyChanges } from '@js/common/data';
+import errors from '@js/core/errors';
 import { isDefined } from '@js/core/utils/type';
 import { confirm } from '@js/ui/dialog';
 import { computed, type Signal } from '@preact/signals-core';
@@ -95,7 +96,17 @@ export class EditingController {
     private readonly kbn: KeyboardNavigationController,
   ) {}
 
+  private validateKeyExpr(): void {
+    const keyExpr = this.dataController.dataSource.peek().key();
+
+    if (!isDefined(keyExpr)) {
+      throw errors.Error('E1042', 'keyExpr is missing');
+    }
+  }
+
   public editCard(key: Key): void {
+    this.validateKeyExpr();
+
     const eventArgs = {
       cancel: false,
       key,
@@ -110,6 +121,8 @@ export class EditingController {
   }
 
   public async addCard(): Promise<void> {
+    this.validateKeyExpr();
+
     const eventArgs = {
       promise: undefined,
       data: {},
@@ -155,6 +168,8 @@ export class EditingController {
   }
 
   public async deleteCard(key: Key): Promise<void> {
+    this.validateKeyExpr();
+
     const confirmStatus = await this.confirmDelete();
 
     if (!confirmStatus) {
