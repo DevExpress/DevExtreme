@@ -34,21 +34,21 @@ const baseConfig = {
 const expectFilterElementsState = async (t, filteredColumns: string[], active = true) => {
   const cardView = new CardView('#container');
 
-  // TODO: move to POM, when classes are correct for cardview
-  const filterPanelClearBtn = cardView.element.find('.dx-datagrid-filter-panel-clear-filter');
+  const filterPanelClearBtn = cardView.getFilterPanel().getClearFilterButton();
+
   const headerItems = filteredColumns.map(
     (column) => cardView.getHeaders().getHeaderItemByText(column),
   );
 
   if (active) {
-    await t.expect(filterPanelClearBtn.exists).ok();
+    await t.expect(filterPanelClearBtn.element.exists).ok();
 
     // eslint-disable-next-line no-restricted-syntax
     for (const headerItem of headerItems) {
       await t.expect(headerItem.isHeaderFilterSelected()).ok();
     }
   } else {
-    await t.expect(filterPanelClearBtn.exists).notOk();
+    await t.expect(filterPanelClearBtn.element.exists).notOk();
 
     // eslint-disable-next-line no-restricted-syntax
     for (const headerItem of headerItems) {
