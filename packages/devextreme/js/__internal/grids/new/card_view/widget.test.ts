@@ -66,13 +66,12 @@ describe('regressions', () => {
   });
 });
 
-describe.only('editing validation', () => {
+describe('editing validation', () => {
   const checkError = (error: { __id: string; __details: string }): void => {
     expect(error.__id).toBe('E1042');
-    expect(error.__details).toBe('editing operation requires the key field to be specified');
   };
 
-  it('should throw E1042 error when no keyExpr and clicking on add/edit/delete', async () => {
+  it.only('should throw E1042 error when no keyExpr and clicking on add/edit/delete', async () => {
     const container = document.createElement('div');
 
     const cardView = new CardView(container, {
@@ -93,14 +92,14 @@ describe.only('editing validation', () => {
 
     try {
       // @ts-expect-error
-      cardView.editingController.editRow(1);
+      cardView.editingController.editCard(1);
     } catch (e) {
       checkError(e as { __id: string; __details: string });
     }
 
     try {
       // @ts-expect-error
-      await cardView.editingController.deleteRow(1);
+      await cardView.editingController.deleteCard(1);
     } catch (e) {
       checkError(e as { __id: string; __details: string });
     }

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable spellcheck/spell-checker */
 import { applyChanges } from '@js/common/data';
-import errors from '@js/core/errors';
 import { isDefined } from '@js/core/utils/type';
 import { confirm } from '@js/ui/dialog';
+import errors from '@js/ui/widget/ui.errors';
 import { computed, type Signal } from '@preact/signals-core';
 import { generateNewRowTempKey } from '@ts/grids/grid_core/editing/m_editing_utils';
 
