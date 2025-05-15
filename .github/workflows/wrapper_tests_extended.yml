@@ -20,7 +20,6 @@ env:
 jobs:
   build-packages:
     runs-on: devextreme-shr2
-    # runs-on: ubuntu-latest
     name: Build DevExtreme and Wrappers
     timeout-minutes: 40
 
@@ -61,6 +60,22 @@ jobs:
           BUILD_TEST_INTERNAL_PACKAGE: true
         run: pnpm run all:build-dev
 
+      - name: Build wrappers apps
+        working-directory: e2e/wrappers
+        run: |
+          pnpm run build:all
+          mkdir -p builds-artifacts
+          7z a -tzip -mx3 -mmt2 builds-artifacts/react19-build.zip ./builders/react19/dist/*
+          7z a -tzip -mx3 -mmt2 builds-artifacts/vue3-build.zip ./builders/vue3/dist/*
+          7z a -tzip -mx3 -mmt2 builds-artifacts/angular19-build.zip ./builders/angular19/dist/*
+
+      - name: Upload wrappers builds
+        uses: actions/upload-artifact@v4
+        with:
+          name: wrappers-builds
+          path: e2e/wrappers/builds-artifacts
+          retention-days: 1
+
       - name: Move packages
         run: |
           mv ./packages/devextreme/artifacts/npm/devextreme/*.tgz ./devextreme-installer.tgz
@@ -81,74 +96,8 @@ jobs:
             devextreme-vue-installer.tgz
           retention-days: 1
 
-  build-wrappers-apps:
-    needs: build-packages
-    runs-on: devextreme-shr2
-    name: Build Wrappers Apps
-    timeout-minutes: 30
-
-    steps:
-      - name: Get sources
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
-          run_install: false
-
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - uses: actions/cache@v4
-        name: Setup pnpm cache
-        with:
-          path: |
-            ${{ env.STORE_PATH }}
-            .nx/cache
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Download devextreme sources
-        uses: actions/download-artifact@v4
-        with:
-          name: devextreme-sources
-
-      - name: Install tgz
-        working-directory: e2e/wrappers
-        run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
-
-      - name: Build wrappers apps
-        working-directory: e2e/wrappers
-        run: pnpm run build:all
-
-      - name: Zip wrappers builds
-        working-directory: e2e/wrappers
-        run: |
-          mkdir -p builds-artifacts
-          7z a -tzip -mx3 -mmt2 builds-artifacts/react19-build.zip ./builders/react19/dist/*
-          7z a -tzip -mx3 -mmt2 builds-artifacts/vue3-build.zip ./builders/vue3/dist/*
-          7z a -tzip -mx3 -mmt2 builds-artifacts/angular19-build.zip ./builders/angular19/dist/*
-
-      - name: Upload wrappers builds
-        uses: actions/upload-artifact@v4
-        with:
-          name: wrappers-builds
-          path: e2e/wrappers/builds-artifacts
-          retention-days: 1
-
   test-wrappers:
-    needs: build-wrappers-apps
+    needs: build-packages
     runs-on: devextreme-shr2
     name: Test ${{ matrix.framework }}
     timeout-minutes: 30
@@ -161,12 +110,6 @@ jobs:
       - name: Get sources
         uses: actions/checkout@v4
 
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: devextreme-sources
-          path: ./artifacts
-
       - name: Download wrappers builds
         uses: actions/download-artifact@v4
         with:
@@ -176,7 +119,6 @@ jobs:
       - name: Unpack wrapper build for ${{ matrix.framework }}
         run: |
           7z x wrappers-builds/${{ matrix.framework }}-build.zip -o./e2e/wrappers/builders/${{ matrix.framework }}/dist
-
 
       - name: Setup Chrome
         uses: ./.github/actions/setup-chrome
@@ -214,16 +156,7 @@ jobs:
       - name: Start server for ${{ matrix.framework }}
         working-directory: e2e/wrappers
         run: |
-          if [ "${{ matrix.framework }}" = "react19" ]; then
-            pnpm run start:react19 &
-            echo "SERVER_STARTED=true" >> $GITHUB_ENV
-          elif [ "${{ matrix.framework }}" = "vue3" ]; then
-            pnpm run start:vue3 &
-            echo "SERVER_STARTED=true" >> $GITHUB_ENV
-          elif [ "${{ matrix.framework }}" = "angular19" ]; then
-            pnpm run start:angular19 &
-            echo "SERVER_STARTED=true" >> $GITHUB_ENV
-          fi
+          pnpm run start:${{ matrix.framework }} &
           sleep 10
 
       - name: Run tests for ${{ matrix.framework }}
