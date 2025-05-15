@@ -98,6 +98,23 @@ test('searchPanel.text API', async (t) => {
   });
 });
 
+test('searchPanel.text API from UI', async (t) => {
+  const cardView = new CardView('#container');
+  const searchBox = cardView.getSearchBox().getInput();
+
+  await t
+    .typeText(searchBox, 'rt')
+    .expect(cardView.apiOption('searchPanel.text')).eql('rt');
+}).before(async () => {
+  await createWidget('dxCardView', {
+    ...baseConfig,
+    searchPanel: {
+      ...baseConfig.searchPanel,
+      text: '',
+    },
+  });
+});
+
 test('searchPanel.searchVisibleColumnsOnly API', async (t) => {
   const cardView = new CardView('#container');
   const searchInput = cardView.getSearchBox().getInput();
