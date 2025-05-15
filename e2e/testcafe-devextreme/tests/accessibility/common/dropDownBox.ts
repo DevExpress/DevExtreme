@@ -12,7 +12,9 @@ const options: Options<Properties> = {
   dataSource: [[], items],
   disabled: [true, false],
   readOnly: [true, false],
+  label: [undefined, 'label'],
   showClearButton: [true, false],
+  showDropDownButton: [true, false],
   opened: [true, false],
   deferRendering: [true, false],
   buttons: [
