@@ -6,7 +6,6 @@ import url from '../../helpers/getPageUrl';
 import { testScreenshot } from '../../helpers/themeUtils';
 import { appendElementTo, setStyleAttribute } from '../../helpers/domUtils';
 
-// const AI_FORMAT_CLASS = 'dx-ai-format';
 const MENU_ITEM_CLASS = 'dx-menu-item';
 const SUBMENU_CLASS = 'dx-submenu';
 

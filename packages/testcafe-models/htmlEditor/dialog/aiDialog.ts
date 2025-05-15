@@ -18,11 +18,11 @@ export default class AIDialog extends Popup {
   }
 
   getSplitButton(): Button {
-    return new Button(this.getBottomToolbar().find(`.${CLASSES.button}`).nth(5));
+    return new Button(this.getBottomToolbar().find(`.${CLASSES.button}`).nth(3));
   }
 
   getGenerateButton(): Button {
-    return new Button(this.getBottomToolbar().find(`.${CLASSES.button}`).nth(2));
+    return new Button(this.getBottomToolbar().find(`.${CLASSES.button}`).nth(0));
   }
 
   getPromptTextArea(): TextArea {
