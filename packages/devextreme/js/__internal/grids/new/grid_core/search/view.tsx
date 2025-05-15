@@ -1,7 +1,5 @@
 import type { TextBoxInstance } from '@js/ui/text_box';
-import {
-  computed, effect,
-} from '@preact/signals-core';
+import { effect, signal } from '@preact/signals-core';
 import { ToolbarController } from '@ts/grids/new/grid_core/toolbar/controller';
 
 import { OptionsController } from '../options_controller/options_controller';
@@ -39,7 +37,7 @@ export class SearchView {
       },
     );
     this.toolbarController.addDefaultItem(
-      computed(() => toolbarItem),
+      signal(toolbarItem),
       this.options.oneWay('searchPanel.visible'),
     );
 
