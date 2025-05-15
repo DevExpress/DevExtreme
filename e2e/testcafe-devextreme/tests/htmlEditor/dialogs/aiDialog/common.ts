@@ -278,7 +278,6 @@ test('error state', async (t) => {
 
     await createWidget('dxHtmlEditor', {
       height: 700,
-      width: 400,
       aiIntegration: { ...configuration },
       toolbar: {
         items: ['ai'],
