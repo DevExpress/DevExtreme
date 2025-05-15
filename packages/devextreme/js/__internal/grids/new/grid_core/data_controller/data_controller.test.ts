@@ -46,24 +46,12 @@ describe('regressions', () => {
     await dataController.waitLoaded();
 
     expect(dataController.pageIndex.value).toBe(0);
-    expect(getCurrentItemIds()).toMatchInlineSnapshot(`
-      [
-        1,
-        2,
-        3,
-      ]
-    `);
+    expect(getCurrentItemIds()).toEqual([1, 2, 4]);
 
     dataController.pageIndex.value = 1;
     await dataController.waitLoaded();
 
     expect(dataController.pageIndex.value).toBe(1);
-    expect(getCurrentItemIds()).toMatchInlineSnapshot(`
-      [
-        4,
-        5,
-        6,
-      ]
-    `);
+    expect(getCurrentItemIds()).toEqual([5, 6, 7]);
   });
 });

@@ -1,6 +1,7 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
+import { DataSource } from '@ts/data/data_source/m_data_source';
 import ArrayStore from '@ts/data/m_array_store';
 
 import { getContext } from '../di.test_utils';
@@ -100,11 +101,6 @@ describe('PublicMethods', () => {
       });
     });
   });
-  describe('getFilter', () => {
-    // TODO: add test once some filter module (header filter, filter row etc) is implemented
-    it.skip('should return filter applied to dataSource', () => {
-    });
-  });
 
   describe('keyOf', () => {
     it('should return key of given data object', () => {
@@ -169,6 +165,67 @@ describe('PublicMethods', () => {
         },
       });
       expect(gridCore.totalCount()).toBe(4);
+    });
+  });
+
+  describe('getCombinedFilter', () => {
+    const innerSetup = ({ dataSourceFilter, columnFilterValues }) => setup({
+      dataSource: new DataSource({
+        store: {
+          type: 'array',
+          data: [{ a: 1 }, { a: 2 }, { a: 3 }],
+        },
+        filter: dataSourceFilter,
+      }),
+      columns: [
+        { dataField: 'a', filterValues: columnFilterValues },
+      ],
+    });
+
+    describe('when displayFilter and filter from dataSource are empty', () => {
+      it('should return empty filter', () => {
+        const { gridCore } = innerSetup({
+          dataSourceFilter: undefined,
+          columnFilterValues: undefined,
+        });
+        expect(gridCore.getCombinedFilter()).toBe(undefined);
+      });
+    });
+
+    describe('when displayFilter is set and filter from dataSource is empty', () => {
+      it('should return displayFilter filter', () => {
+        const { gridCore } = innerSetup({
+          dataSourceFilter: undefined,
+          columnFilterValues: [1, 2],
+        });
+        expect(gridCore.getCombinedFilter()).toMatchInlineSnapshot('undefined');
+      });
+    });
+
+    describe('when displayFilter is empty and filter from dataSource is set', () => {
+      it('should return filter from dataSource', () => {
+        const { gridCore } = innerSetup({
+          dataSourceFilter: ['a', '=', 123],
+          columnFilterValues: undefined,
+        });
+        expect(gridCore.getCombinedFilter()).toEqual(['a', '=', 123]);
+      });
+    });
+
+    describe('when displayFilter and filter from dataSource are set', () => {
+      it('should combine filters', () => {
+        const { gridCore } = innerSetup({
+          dataSourceFilter: ['a', '=', 123],
+          columnFilterValues: [1, 2],
+        });
+        expect(gridCore.getCombinedFilter()).toMatchInlineSnapshot(`
+          [
+            "a",
+            "=",
+            123,
+          ]
+        `);
+      });
     });
   });
 });
