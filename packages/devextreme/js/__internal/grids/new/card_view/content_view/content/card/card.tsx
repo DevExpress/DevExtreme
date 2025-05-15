@@ -5,6 +5,7 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import { off, on } from '@js/events/index';
 import type * as dxToolbar from '@js/ui/toolbar';
+import { Guid } from '@ts/core/m_guid';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { CardInfo, FieldInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { DataObject, Key } from '@ts/grids/new/grid_core/data_controller/types';
@@ -12,7 +13,7 @@ import { KbnFocusTrap } from '@ts/grids/new/grid_core/keyboard_navigation/index'
 import type { ComponentType, InfernoNode, RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
-import type { SelectCardOptions } from '../../types';
+import type { Position, SelectCardOptions } from '../../types';
 import { Cover } from './cover';
 import { Field } from './field';
 import { CardHeader } from './header';
@@ -109,6 +110,8 @@ export interface CardProps {
   onDelete?: (key: Key) => void;
 
   fieldHintEnabled?: boolean;
+
+  position: Position;
 }
 
 export class Card extends Component<CardProps> {
@@ -139,6 +142,11 @@ export class Card extends Component<CardProps> {
     const imageSrc = cover?.imageExpr?.(this.props.card.data);
     const alt = cover?.altExpr?.(this.props.card.data);
 
+    const cardRole = Template ? 'presentation' : 'application';
+
+    const coverId = new Guid();
+    const contentId = new Guid();
+
     return (
       <KbnFocusTrap
         elementRef={this.containerRef}
@@ -150,6 +158,18 @@ export class Card extends Component<CardProps> {
         onMouseLeave={this.handleMouseLeave}
         onContextMenu={this.props.onContextMenu}
         onKeyDown={this.props.onKeyDown}
+
+        role={cardRole}
+        aria-roledescription={this.getCardRoleDescription(this.props.allowUpdating)}
+        aria-label={this.getCardStateDescription(
+          this.props.isCheckBoxesRendered,
+          this.props.card.isSelected,
+        )}
+        aria-describedby={this.getCardDescriptiveLabel(
+          this.props,
+          coverId,
+          contentId,
+        )}
       >
         {
           Template
@@ -169,6 +189,7 @@ export class Card extends Component<CardProps> {
               />
               {hasCover && (
                 <Cover
+                  id={coverId}
                   card={card}
                   template={this.props.cover?.template}
                   imageSrc={imageSrc}
@@ -176,7 +197,7 @@ export class Card extends Component<CardProps> {
                 />
               ) }
               {!!this.props.card.fields.length && (
-                <div className={CLASSES.content}>
+                <div className={CLASSES.content} id={contentId}>
                   {ContentTemplate
                     ? <ContentTemplate card={card}/>
                     : this.props.card.fields.map((field) => (
@@ -262,4 +283,40 @@ export class Card extends Component<CardProps> {
     onHold?.({ event, card });
     event.stopPropagation();
   };
+
+  getCardRoleDescription(
+    isEditable?: boolean,
+  ): string {
+    return isEditable ? 'Editable card' : 'Card';
+  }
+
+  getCardStateDescription(
+    isSelectable?: boolean,
+    isSelected?: boolean,
+  ): string {
+    const parts: string[] = [this.getPositionDescription()];
+    if (isSelectable) {
+      parts.push(isSelected ? 'Selected' : 'Not selected');
+    }
+    return parts.join(', ');
+  }
+
+  getPositionDescription(): string {
+    return `Row ${this.props.position.rowIndex + 1}, Column ${this.props.position.columnIndex + 1}`;
+  }
+
+  getCardDescriptiveLabel(
+    props: CardProps,
+    coverId: string,
+    contentId: string,
+  ): string {
+    const ids: string[] = [];
+    if (props.cover?.imageExpr) {
+      ids.push(coverId);
+    }
+
+    ids.push(contentId);
+
+    return ids.join(' ');
+  }
 }

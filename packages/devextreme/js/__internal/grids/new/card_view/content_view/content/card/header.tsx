@@ -43,6 +43,9 @@ export class CardHeader extends Component<CardHeaderProps> {
         widget: 'dxCheckBox',
         cssClass: CLASSES.cardSelectCheckBox,
         options: {
+          elementAttr: {
+            'aria-label': 'Select card',
+          },
           value: card.isSelected,
           onValueChanged: (e: ValueChangedEvent): void => {
             const event = e.event as MouseEvent;

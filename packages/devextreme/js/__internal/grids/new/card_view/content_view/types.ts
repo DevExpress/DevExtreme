@@ -10,3 +10,8 @@ export interface CardHoldEvent {
   event?: MouseEvent;
   card: CardInfo;
 }
+
+export interface Position {
+  rowIndex: number;
+  columnIndex: number;
+}
