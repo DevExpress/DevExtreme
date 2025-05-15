@@ -1,4 +1,3 @@
-import { hasFilterValues } from '@ts/grids/new/card_view/header_panel/utils';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { ComponentType, RefObject } from 'inferno';
 import { Component } from 'inferno';
@@ -82,7 +81,7 @@ export class Item extends Component<ItemProps> {
     const ariaLabel = getHeaderItemA11yLabel(
       column.caption,
       {
-        hasHeaderFilterValue: this.props.isFiltered,
+        hasHeaderFilterValue: this.props.hasFilters,
         sortOrder: column.sortOrder,
         sortIndex: column.sortIndex,
       },
