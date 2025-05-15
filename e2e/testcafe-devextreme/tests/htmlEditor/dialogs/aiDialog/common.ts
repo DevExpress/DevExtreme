@@ -6,6 +6,7 @@ import url from '../../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import { getLongText } from '../../../chat/data';
+import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 
 const MENU_ITEM_CLASS = 'dx-menu-item';
 const SUBMENU_CLASS = 'dx-submenu';
@@ -205,6 +206,26 @@ test('result ready after canceletion', async (t) => {
     aiIntegration: {
       summarize() { return () => {}; },
     },
+    toolbar: {
+      items: ['ai'],
+    },
+  });
+});
+
+safeSizeTest('initial state on small screen', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await openAIDialog(t, 0);
+  await testScreenshot(t, takeScreenshot, 'htmleditor-ai-dialog-initial-state-on-small-screen.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [400, 700]).before(async () => {
+  await createWidget('dxHtmlEditor', {
+    height: 700,
+    width: 400,
+    aiIntegration: {},
     toolbar: {
       items: ['ai'],
     },
