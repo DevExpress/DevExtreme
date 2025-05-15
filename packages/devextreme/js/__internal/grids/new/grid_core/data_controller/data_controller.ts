@@ -228,6 +228,7 @@ export class DataController {
         const sortParameters = this.sortingController.sortParameters.value;
 
         let someParamChanged = false;
+
         if (dataSource.pageIndex() !== pageIndex) {
           dataSource.pageIndex(pageIndex);
           someParamChanged ||= true;
@@ -245,7 +246,7 @@ export class DataController {
 
         if (!equalByValue(
           dataSource.filter(),
-          displayFilter,
+          displayFilter ?? null,
           {
             maxDepth: FILTER_OBJ_COMPARE_DEPTH,
             strict: true,
