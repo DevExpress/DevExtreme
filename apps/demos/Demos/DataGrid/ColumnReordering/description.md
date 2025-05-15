@@ -5,9 +5,9 @@ To allow users to reorder columns, set [allowColumnReordering](/Documentation/Ap
 
 Users can reorder columns with mouse drag-and-drop operations or with keyboard shortcuts:
 
-- **Ctrl+Left Arrow**    
+- **Ctrl/Cmd+Left Arrow**    
 Move the focused column to the left.
-- **Ctrl+Right Arrow**    
+- **Ctrl/Cmd+Right Arrow**    
 Move the focused column to the right.
 
 Reordering operations are also available in the component's context menu.
