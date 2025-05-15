@@ -14,9 +14,9 @@ Ungroup all items from the group panel.
 
 To allow users to reorder headers within the group panel, assign `true` to the [allowColumnReordering](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#allowColumnReordering) property. Reordering headers in the group panel will change the component's group hierarchy. Users can reorder headers with mouse drag-and-drop operations or with keyboard shortcuts:
 
-- **Ctrl+Left Arrow**    
+- **Ctrl/Cmd+Left Arrow**    
 Move the focused header to the left.
-- **Ctrl+Right Arrow**    
+- **Ctrl/Cmd+Right Arrow**    
 Move the focused header to the right.
 
 Grouping and reordering operations are also available in the component's context menu.
