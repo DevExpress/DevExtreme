@@ -17,7 +17,10 @@
     <DxColumn data-field="Phone"/>
     <DxColumn data-field="Email"/>
 
-    <DxCardCover :image-expr="getEmployeeImage"/>
+    <DxCardCover
+      :image-expr="getEmployeeImage"
+      :alt-expr="getEmployeeImageAltText"
+    />
     <DxPager
       :show-info="true"
       :show-navigation-buttons="true"
@@ -36,6 +39,7 @@ import { employees } from './data.ts';
 
 const IMG_URL = 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos';
 const getEmployeeImage = ({ Picture }: Employee): string => `${IMG_URL}/${Picture}`;
+const getEmployeeImageAltText = ({ FullName }: Employee): string => `${FullName} picture`;
 
 // TODO: Nested component does not exist
 const headerFilterConfig = {

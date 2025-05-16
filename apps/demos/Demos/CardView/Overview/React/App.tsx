@@ -6,6 +6,7 @@ import { Employee, employees } from './data.ts';
 
 const IMG_URL = 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos';
 const getEmployeeImage = ({ Picture }: Employee): string => `${IMG_URL}/${Picture}`;
+const getEmployeeImageAltText = ({ FullName }: Employee): string => `${FullName} picture`;
 
 // TODO: Nested component does not exist
 const headerFilterConfig = {
@@ -49,7 +50,10 @@ const App = () => (
     <Column dataField="Phone" />
     <Column dataField="Email" />
 
-    <CardCover imageExpr={getEmployeeImage} />
+    <CardCover
+      imageExpr={getEmployeeImage}
+      altExpr={getEmployeeImageAltText}
+    />
     <Pager showInfo={true} showNavigationButtons={true} showPageSizeSelector={true} />
     <Selection mode="multiple" />
   </CardView>

@@ -59,7 +59,7 @@ const getTestSpecificSkipRules = (testName) => {
       return ['label'];
       // TODO CardView a11y: remove after a11y completion for CardView
     case 'CardView-Overview':
-      return ['aria-toggle-field-name', 'image-alt'];
+      return ['aria-toggle-field-name'];
     default:
       return [];
   }

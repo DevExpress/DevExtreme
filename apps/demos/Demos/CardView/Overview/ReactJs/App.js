@@ -6,6 +6,7 @@ import { employees } from './data.js';
 
 const IMG_URL = 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos';
 const getEmployeeImage = ({ Picture }) => `${IMG_URL}/${Picture}`;
+const getEmployeeImageAltText = ({ FullName }) => `${FullName} picture`;
 // TODO: Nested component does not exist
 const headerFilterConfig = {
   visible: true,
@@ -48,7 +49,10 @@ const App = () => (
     <Column dataField="Phone" />
     <Column dataField="Email" />
 
-    <CardCover imageExpr={getEmployeeImage} />
+    <CardCover
+      imageExpr={getEmployeeImage}
+      altExpr={getEmployeeImageAltText}
+    />
     <Pager
       showInfo={true}
       showNavigationButtons={true}

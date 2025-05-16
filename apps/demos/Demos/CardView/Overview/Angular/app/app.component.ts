@@ -57,6 +57,10 @@ export class AppComponent {
   getEmployeeImage({ Picture }: Employee): string {
     return `${IMG_URL}/${Picture}`;
   }
+
+  getEmployeeImageAltText({ FullName }: Employee): string {
+    return `${FullName} picture`;
+  }
 }
 
 @NgModule({
