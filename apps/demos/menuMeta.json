@@ -4041,7 +4041,7 @@
         "Demos": [
           {
             "Title": "Overview",
-            "Name": "FormsAndMultiPurposeOverview",
+            "Name": "FormsOverview",
             "DocUrl": "",
             "Widget": "Common",
             "MvcAdditionalFiles": [
@@ -4066,19 +4066,19 @@
             ]
           },
           {
-            "Title": "Customize Item",
-            "Name": "CustomizeItem",
+            "Title": "Item Customization",
+            "Name": "ItemCustomization",
             "Widget": "Form"
           },
           {
-            "Title": "Grouped Fields",
-            "Name": "GroupedFields",
+            "Title": "Grouping",
+            "Name": "Grouping",
             "Widget": "Form"
           },
           {
-            "Title": "Columns Adaptability",
+            "Title": "Adaptability",
             "Equivalents": "adaptive",
-            "Name": "ColumnsAdaptability",
+            "Name": "Adaptability",
             "Widget": "Form",
             "DemoType": "Adaptivity"
           },
@@ -4386,15 +4386,15 @@
             "DemoType": "Viz"
           },
           {
-            "Title": "Use Range Selection for Calculation",
-            "Name": "UseRangeSelectionForCalculation",
+            "Title": "Calculation",
+            "Name": "Calculation",
             "DocUrl": "Guide/UI_Components/RangeSelector/Range_Changing/#Handle_the_Range_Changing_Event",
             "Widget": "RangeSelector",
             "DemoType": "Viz"
           },
           {
-            "Title": "Use Range Selection for Filtering",
-            "Name": "UseRangeSelectionForFiltering",
+            "Title": "Filter",
+            "Name": "Filter",
             "DocUrl": "Guide/UI_Components/RangeSelector/Range_Changing/#Handle_the_Range_Changing_Event",
             "Widget": "RangeSelector",
             "MvcAdditionalFiles": [
@@ -4404,15 +4404,15 @@
             "DemoType": "Viz"
           },
           {
-            "Title": "Image on Background",
-            "Name": "ImageOnBackground",
+            "Title": "Background Image",
+            "Name": "BackgroundImage",
             "DocUrl": "Guide/UI_Components/RangeSelector/Visual_Elements/#Background/Displaying_an_Image",
             "Widget": "RangeSelector",
             "DemoType": "Viz"
           },
           {
-            "Title": "Chart on Background",
-            "Name": "ChartOnBackground",
+            "Title": "Embedded Chart",
+            "Name": "EmbeddedChart",
             "DocUrl": "Guide/UI_Components/RangeSelector/Visual_Elements/#Background/Displaying_a_Chart",
             "Widget": "RangeSelector",
             "MvcAdditionalFiles": [
@@ -4422,8 +4422,8 @@
             "DemoType": "Viz"
           },
           {
-            "Title": "Customized Chart on Background",
-            "Name": "CustomizedChartOnBackground",
+            "Title": "Embedded Chart (Customized)",
+            "Name": "EmbeddedChartCustomized",
             "DocUrl": "Guide/UI_Components/RangeSelector/Visual_Elements/#Background/Displaying_a_Chart",
             "Widget": "RangeSelector",
             "MvcAdditionalFiles": [
@@ -4432,8 +4432,8 @@
             "DemoType": "Viz"
           },
           {
-            "Title": "Chart on Background with Series Template",
-            "Name": "ChartOnBackgroundWithSeriesTemplate",
+            "Title": "Embedded Chart (Series Template)",
+            "Name": "EmbeddedChartSeriesTemplate",
             "DocUrl": "ApiReference/UI_Components/dxRangeSelector/Configuration/chart/",
             "Widget": "RangeSelector",
             "MvcAdditionalFiles": [
@@ -4601,8 +4601,8 @@
             ]
           },
           {
-            "Title": "Grouped Items",
-            "Name": "GroupedItems",
+            "Title": "Grouping",
+            "Name": "Grouping",
             "Widget": "SelectBox",
             "MvcAdditionalFiles": [
               "/Models/ElectronicsItem.cs",
@@ -4630,8 +4630,8 @@
             ]
           },
           {
-            "Title": "Grouped Items",
-            "Name": "GroupedItems",
+            "Title": "Grouping",
+            "Name": "Grouping",
             "Widget": "TagBox",
             "MvcAdditionalFiles": [
               "/Models/ElectronicsItem.cs",
@@ -4902,8 +4902,8 @@
             ]
           },
           {
-            "Title": "Chunk Uploading",
-            "Name": "ChunkUploading",
+            "Title": "Chunk Upload",
+            "Name": "ChunkUpload",
             "DocUrl": "",
             "Widget": "FileUploader",
             "MvcAdditionalFiles": [
@@ -5188,8 +5188,8 @@
             ]
           },
           {
-            "Title": "Tab Drag & Drop",
-            "Name": "SortableClosableTabs",
+            "Title": "Drag & Drop",
+            "Name": "DragAndDrop",
             "Widget": "TabPanel",
             "Equivalents": "Tab Drag and Drop",
             "MvcAdditionalFiles": [
@@ -5282,7 +5282,7 @@
         "Demos": [
           {
             "Title": "Overview",
-            "Name": "ActionAndListsOverview",
+            "Name": "ListsOverview",
             "DocUrl": "",
             "Widget": "Common",
             "MvcAdditionalFiles": [
@@ -5292,8 +5292,8 @@
             "DemoType": "Web"
           },
           {
-            "Title": "Item Deletion UI",
-            "Name": "ListEditingAndAPI",
+            "Title": "Item Deletion",
+            "Name": "ItemDeletion",
             "Widget": "List",
             "MvcAdditionalFiles": [
               "/Models/InMemoryListDataContext.cs",
@@ -5303,8 +5303,8 @@
             ]
           },
           {
-            "Title": "Grouped List",
-            "Name": "GroupedList",
+            "Title": "Grouping",
+            "Name": "Grouping",
             "Widget": "List",
             "MvcAdditionalFiles": [
               "/Models/SampleData/ListGroupedData.cs"
@@ -5326,8 +5326,8 @@
             "Widget": "List"
           },
           {
-            "Title": "List with Search Bar",
-            "Name": "ListWithSearchBar",
+            "Title": "Search",
+            "Name": "Search",
             "Widget": "List",
             "MvcAdditionalFiles": [
               "/Models/ListProduct.cs",
@@ -5335,8 +5335,8 @@
             ]
           },
           {
-            "Title": "List Selection",
-            "Name": "ListSelection",
+            "Title": "Selection",
+            "Name": "Selection",
             "Widget": "List",
             "MvcAdditionalFiles": [
               "/Models/ListItem.cs",
@@ -5344,8 +5344,8 @@
             ]
           },
           {
-            "Title": "Item Drag & Drop",
-            "Name": "ItemDragging",
+            "Title": "Drag & Drop",
+            "Name": "DragAndDrop",
             "DocUrl": "",
             "Widget": "List",
             "MvcAdditionalFiles": [
@@ -5839,172 +5839,203 @@
         "Name": "Vector Map",
         "Breadcrumb": true,
         "Equivalents": "VectorMap, dxVectorMap, dx-vector-map",
-        "Demos": [
+        "Groups": [
           {
-            "Title": "Colors Customization",
-            "Name": "ColorsCustomization",
-            "DocUrl": "Guide/UI_Components/VectorMap/Visual_Elements/#Areas",
-            "Widget": "VectorMap",
-            "Modules": "vectormap",
-            "MvcAdditionalFiles": [
-              "/Scripts/data/countries.js"
-            ],
-            "DemoType": "Viz"
+            "Name": "Data Binding",
+            "Demos": [
+              {
+                "Title": "Custom Map Data",
+                "Name": "CustomMapData",
+                "DocUrl": "Guide/UI_Components/VectorMap/Providing_Data/#Data_for_Areas",
+                "Credits": "www.wikipedia.org",
+                "Widget": "VectorMap",
+                "Modules": "vectormap",
+                "MvcAdditionalFiles": [
+                  "/Scripts/data/customMapData.js",
+                  "/Models/SampleData/PangaeaBorders.cs",
+                  "/Models/SampleData/PangaeaContinents.cs"
+                ],
+                "DemoType": "Viz"
+              },
+              {
+                "Title": "Floor Plan",
+                "Name": "FloorPlan",
+                "DocUrl": "ApiReference/UI_Components/dxVectorMap/Configuration/#projection",
+                "Widget": "VectorMap",
+                "Modules": "vectormap",
+                "MvcAdditionalFiles": [
+                  "/Scripts/data/floorPlanProjection.js",
+                  "/Models/SampleData/BuildingData.cs",
+                  "/Models/SampleData/RoomData.cs"
+                ],
+                "DemoType": "Viz"
+              }
+            ]
           },
           {
-            "Title": "Zooming and Centering",
-            "Name": "ZoomingAndCentering",
-            "DocUrl": "Guide/UI_Components/VectorMap/End-User_Interaction/#Zooming",
-            "Widget": "VectorMap",
-            "Modules": "vectormap",
-            "MvcAdditionalFiles": [
-              "/Models/VectorMapMarker.cs",
-              "/Models/MarkerAttribute.cs",
-              "/Models/SampleData/VectorMapMarkerData.cs"
-            ],
-            "DemoType": "Viz"
+            "Name": "Multiple Layers",
+            "Demos": [
+              {
+                "Title": "Multiple Layers",
+                "Name": "MultipleLayers",
+                "DocUrl": "ApiReference/UI_Components/dxVectorMap/Configuration/layers/",
+                "Widget": "VectorMap",
+                "Modules": "vectormap",
+                "MvcAdditionalFiles": [
+                  "/Models/SampleData/StreamsData.cs"
+                ],
+                "DemoType": "Viz"
+              }
+            ]
           },
           {
-            "Title": "Palette",
-            "Name": "Palette",
-            "DocUrl": "ApiReference/UI_Components/dxVectorMap/Configuration/layers/#palette",
-            "Widget": "VectorMap",
-            "Modules": "vectormap",
-            "MvcAdditionalFiles": [
-              "/Scripts/data/populations.js"
-            ],
-            "DemoType": "Viz"
+            "Name": "Markers",
+            "Demos": [
+              {
+                "Title": "Image Markers",
+                "Name": "ImageMarkers",
+                "DocUrl": "Guide/UI_Components/VectorMap/Visual_Elements/#Markers",
+                "Widget": "VectorMap",
+                "Modules": "vectormap",
+                "MvcAdditionalFiles": [
+                  "/Models/SampleData/WeatherData.cs"
+                ],
+                "DemoType": "Viz"
+              },
+              {
+                "Title": "Bubble Markers",
+                "Name": "BubbleMarkers",
+                "DocUrl": "Guide/UI_Components/VectorMap/Visual_Elements/#Markers",
+                "Widget": "VectorMap",
+                "Modules": "vectormap",
+                "MvcAdditionalFiles": [
+                  "/Models/SampleData/BubbleMarkers.cs"
+                ],
+                "DemoType": "Viz"
+              },
+              {
+                "Title": "Pie Markers",
+                "Name": "PieMarkers",
+                "DocUrl": "Guide/UI_Components/VectorMap/Visual_Elements/#Markers",
+                "Widget": "VectorMap",
+                "Modules": "vectormap",
+                "MvcAdditionalFiles": [
+                  "/Scripts/data/names.js",
+                  "/Models/SampleData/PieMarkersData.cs"
+                ],
+                "DemoType": "Viz"
+              }
+            ]
           },
           {
-            "Title": "Image Markers",
-            "Name": "ImageMarkers",
-            "DocUrl": "Guide/UI_Components/VectorMap/Visual_Elements/#Markers",
-            "Widget": "VectorMap",
-            "Modules": "vectormap",
-            "MvcAdditionalFiles": [
-              "/Models/SampleData/WeatherData.cs"
-            ],
-            "DemoType": "Viz"
+            "Name": "Legend",
+            "Demos": [
+              {
+                "Title": "Legend",
+                "Name": "Legend",
+                "DocUrl": "Guide/UI_Components/VectorMap/Visual_Elements/#Legend",
+                "Widget": "VectorMap",
+                "Modules": "vectormap",
+                "MvcAdditionalFiles": [
+                  "/Models/SampleData/AreaLabelsData.cs",
+                  "/Scripts/data/areaPopulations.js"
+                ],
+                "DemoType": "Viz"
+              }
+            ]
           },
           {
-            "Title": "Bubble Markers",
-            "Name": "BubbleMarkers",
-            "DocUrl": "Guide/UI_Components/VectorMap/Visual_Elements/#Markers",
-            "Widget": "VectorMap",
-            "Modules": "vectormap",
-            "MvcAdditionalFiles": [
-              "/Models/SampleData/BubbleMarkers.cs"
-            ],
-            "DemoType": "Viz"
+            "Name": "Zooming and Panning",
+            "Demos": [
+              {
+                "Title": "Zooming and Centering",
+                "Name": "ZoomingAndCentering",
+                "DocUrl": "Guide/UI_Components/VectorMap/End-User_Interaction/#Zooming",
+                "Widget": "VectorMap",
+                "Modules": "vectormap",
+                "MvcAdditionalFiles": [
+                  "/Models/VectorMapMarker.cs",
+                  "/Models/MarkerAttribute.cs",
+                  "/Models/SampleData/VectorMapMarkerData.cs"
+                ],
+                "DemoType": "Viz"
+              },
+
+              {
+                "Title": "Dynamic Viewport",
+                "Name": "DynamicViewport",
+                "Widget": "VectorMap",
+                "Modules": "vectormap",
+                "MvcAdditionalFiles": [
+                  "/Models/SampleData/ViewportCoordinateData.cs",
+                  "/Models/ViewportCoordinate.cs"
+                ],
+                "DemoType": "Viz"
+              }
+            ]
           },
           {
-            "Title": "Pie Markers",
-            "Name": "PieMarkers",
-            "DocUrl": "Guide/UI_Components/VectorMap/Visual_Elements/#Markers",
-            "Widget": "VectorMap",
-            "Modules": "vectormap",
-            "MvcAdditionalFiles": [
-              "/Scripts/data/names.js",
-              "/Models/SampleData/PieMarkersData.cs"
-            ],
-            "DemoType": "Viz"
-          },
-          {
-            "Title": "Dynamic Viewport",
-            "Name": "DynamicViewport",
-            "Widget": "VectorMap",
-            "Modules": "vectormap",
-            "MvcAdditionalFiles": [
-              "/Models/SampleData/ViewportCoordinateData.cs",
-              "/Models/ViewportCoordinate.cs"
-            ],
-            "DemoType": "Viz"
-          },
-          {
-            "Title": "Area with Labels and Two Legends",
-            "Name": "AreaWithLabelsAndTwoLegends",
-            "DocUrl": "Guide/UI_Components/VectorMap/Visual_Elements/#Legend",
-            "Widget": "VectorMap",
-            "Modules": "vectormap",
-            "MvcAdditionalFiles": [
-              "/Models/SampleData/AreaLabelsData.cs",
-              "/Scripts/data/areaPopulations.js"
-            ],
-            "DemoType": "Viz"
-          },
-          {
-            "Title": "Tooltips: HTML Markup Support",
-            "Name": "TooltipHTMLSupport",
-            "Credits": "www.wikipedia.org",
-            "Widget": "VectorMap",
-            "Modules": "vectormap",
-            "MvcAdditionalFiles": [
-              "/Scripts/data/countriesGDP.js"
-            ],
-            "DemoType": "Viz"
-          },
-          {
-            "Title": "Custom Projection",
-            "Name": "CustomProjection",
-            "Credits": "www.wikipedia.org",
-            "Widget": "VectorMap",
-            "Modules": "vectormap",
-            "MvcAdditionalFiles": [
-              "/Scripts/data/customProjection.js",
-              "/Models/CoordLines.cs",
-              "/Models/SampleData/CoordLinesData.cs"
-            ],
-            "DemoType": "Viz"
-          },
-          {
-            "Title": "Floor Plan",
-            "Name": "FloorPlan",
-            "DocUrl": "ApiReference/UI_Components/dxVectorMap/Configuration/#projection",
-            "Widget": "VectorMap",
-            "Modules": "vectormap",
-            "MvcAdditionalFiles": [
-              "/Scripts/data/floorPlanProjection.js",
-              "/Models/SampleData/BuildingData.cs",
-              "/Models/SampleData/RoomData.cs"
-            ],
-            "DemoType": "Viz"
-          },
-          {
-            "Title": "Multiple Layers",
-            "Name": "MultipleLayers",
-            "DocUrl": "ApiReference/UI_Components/dxVectorMap/Configuration/layers/",
-            "Widget": "VectorMap",
-            "Modules": "vectormap",
-            "MvcAdditionalFiles": [
-              "/Models/SampleData/StreamsData.cs"
-            ],
-            "DemoType": "Viz"
-          },
-          {
-            "Title": "Custom Map Data",
-            "Name": "CustomMapData",
-            "DocUrl": "Guide/UI_Components/VectorMap/Providing_Data/#Data_for_Areas",
-            "Credits": "www.wikipedia.org",
-            "Widget": "VectorMap",
-            "Modules": "vectormap",
-            "MvcAdditionalFiles": [
-              "/Scripts/data/customMapData.js",
-              "/Models/SampleData/PangaeaBorders.cs",
-              "/Models/SampleData/PangaeaContinents.cs"
-            ],
-            "DemoType": "Viz"
-          },
-          {
-            "Title": "Custom Annotations",
-            "Name": "CustomAnnotations",
-            "DocUrl": "ApiReference/UI_Components/dxVectorMap/Configuration/annotations",
-            "Widget": "VectorMap",
-            "Modules": "vectormap",
-            "MvcAdditionalFiles": [
-              "/Models/StateData.cs",
-              "/Models/SampleData/StatesData.cs"
-            ],
-            "DemoType": "Viz"
+            "Name": "Customization",
+            "Demos": [
+              {
+                "Title": "Colors Customization",
+                "Name": "ColorsCustomization",
+                "DocUrl": "Guide/UI_Components/VectorMap/Visual_Elements/#Areas",
+                "Widget": "VectorMap",
+                "Modules": "vectormap",
+                "MvcAdditionalFiles": [
+                  "/Scripts/data/countries.js"
+                ],
+                "DemoType": "Viz"
+              },
+              {
+                "Title": "Palette",
+                "Name": "Palette",
+                "DocUrl": "ApiReference/UI_Components/dxVectorMap/Configuration/layers/#palette",
+                "Widget": "VectorMap",
+                "Modules": "vectormap",
+                "MvcAdditionalFiles": [
+                  "/Scripts/data/populations.js"
+                ],
+                "DemoType": "Viz"
+              },
+              {
+                "Title": "Tooltips Customization",
+                "Name": "TooltipsCustomization",
+                "Credits": "www.wikipedia.org",
+                "Widget": "VectorMap",
+                "Modules": "vectormap",
+                "MvcAdditionalFiles": [
+                  "/Scripts/data/countriesGDP.js"
+                ],
+                "DemoType": "Viz"
+              },
+              {
+                "Title": "Custom Projection",
+                "Name": "CustomProjection",
+                "Credits": "www.wikipedia.org",
+                "Widget": "VectorMap",
+                "Modules": "vectormap",
+                "MvcAdditionalFiles": [
+                  "/Scripts/data/customProjection.js",
+                  "/Models/CoordLines.cs",
+                  "/Models/SampleData/CoordLinesData.cs"
+                ],
+                "DemoType": "Viz"
+              },
+              {
+                "Title": "Custom Annotations",
+                "Name": "CustomAnnotations",
+                "DocUrl": "ApiReference/UI_Components/dxVectorMap/Configuration/annotations",
+                "Widget": "VectorMap",
+                "Modules": "vectormap",
+                "MvcAdditionalFiles": [
+                  "/Models/StateData.cs",
+                  "/Models/SampleData/StatesData.cs"
+                ],
+                "DemoType": "Viz"
+              }
+            ]
           }
         ]
       }
