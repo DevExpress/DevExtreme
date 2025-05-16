@@ -19,6 +19,8 @@ export const BaseGauge = BaseWidget.inherit({
 
     _themeSection: 'gauge',
 
+    _titleRectCache: null,
+
     _createThemeManager: function() {
         return new themeManagerModule.ThemeManager(this._getThemeManagerOptions());
     },
@@ -118,6 +120,30 @@ export const BaseGauge = BaseWidget.inherit({
         that.callBase.apply(that, arguments);
     },
 
+    _getChangesRequireCoreUpdate: function() {
+        return ['DOMAIN', 'MOSTLY_TOTAL', 'EXPORT'];
+    },
+
+    _shouldCoreUpdate: function() {
+        const requireCoreUpdate = this._getChangesRequireCoreUpdate().some((change) => this._changes.has(change));
+
+        if(requireCoreUpdate) {
+            return true;
+        }
+
+        if(this._changes.has('TITLE')) {
+            const hasTitleHeightChanged = this._title._boundingRect.height !== this._titleRectCache?.height;
+            const hasTitleYChanged = this._title._boundingRect.y !== this._titleRectCache?.y;
+            const hasVerticalAlignmentChanged = this._title._boundingRect.verticalAlignment !== this._titleRectCache?.verticalAlignment;
+
+            this._titleRectCache = null;
+
+            return hasTitleHeightChanged || hasTitleYChanged || hasVerticalAlignmentChanged;
+        }
+
+        return true;
+    },
+
     _applySize: function(rect) {
         const that = this;
         ///#DEBUG
@@ -131,8 +157,12 @@ export const BaseGauge = BaseWidget.inherit({
         // The appropriate solution is to remove heavy rendering from "_applySize" - it should be done later during some other change processing.
         // It would be even better to somehow defer any inside option changes - so they all are applied after all changes are processed.
         const layoutCache = that._layout._cache;
-        that._cleanCore();
-        that._renderCore();
+
+        if(that._shouldCoreUpdate()) {
+            that._cleanCore();
+            that._renderCore();
+        }
+
         that._layout._cache = that._layout._cache || layoutCache;
         return [rect[0], that._innerRect.top, rect[2], that._innerRect.bottom];
     },
@@ -283,4 +313,11 @@ const _setTooltipOptions = BaseGauge.prototype._setTooltipOptions;
 BaseGauge.prototype._setTooltipOptions = function() {
     _setTooltipOptions.apply(this, arguments);
     this._tracker && this._tracker.setTooltipState(this._tooltip.isEnabled());
+};
+
+const { _change_TITLE } = BaseGauge.prototype;
+BaseGauge.prototype._change_TITLE = function() {
+    this._titleRectCache = { ...this._title._boundingRect };
+
+    _change_TITLE.apply(this, arguments);
 };
