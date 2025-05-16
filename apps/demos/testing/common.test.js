@@ -76,13 +76,6 @@ const SKIPPED_TESTS = {
       { demo: 'Markers', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Routes', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
-    Scheduler: [
-      /*
-       * Dates are generating dynamically, whole toolbar changes each week,
-       * so no point to screenshot other part
-       */
-      'ToolbarCustomization',
-    ],
   },
   Angular: {
     DataGrid: [
@@ -118,7 +111,6 @@ const SKIPPED_TESTS = {
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
-      'ToolbarCustomization',
     ],
     PivotGrid: [
       { demo: 'Overview', themes: [THEME.material] },
@@ -186,7 +178,6 @@ const SKIPPED_TESTS = {
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'GroupByDate', themes: [THEME.fluent, THEME.material] },
-      'ToolbarCustomization',
     ],
     List: [
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
@@ -252,9 +243,6 @@ const SKIPPED_TESTS = {
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
       { demo: 'PopupEditing', themes: [THEME.generic] },
       { demo: 'RecordPaging', themes: [THEME.generic] },
-    ],
-    Scheduler: [
-      'ToolbarCustomization',
     ],
     FileManager: [
       { demo: 'BindingToFileSystem', themes: [THEME.material] },
