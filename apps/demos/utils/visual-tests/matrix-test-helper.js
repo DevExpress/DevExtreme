@@ -188,6 +188,10 @@ const SKIPPED_TESTS = {
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
       { demo: 'ToolbarCustomization', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
+    Scheduler: [
+      // dates are generating dynamicly, whole toolbar changes each week, so no point to screenshot other part
+      'ToolbarCustomization',
+    ],
     Gantt: [
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -249,6 +253,7 @@ const SKIPPED_TESTS = {
       { demo: 'CellTemplates', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Resources', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ContextMenuIntegration', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      'ToolbarCustomization',
     ],
     Sortable: [
       { demo: 'Kanban', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -299,6 +304,7 @@ const SKIPPED_TESTS = {
     Scheduler: [
       { demo: 'Overview', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'ContextMenuIntegration', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      'ToolbarCustomization',
     ],
   },
   React: {
@@ -330,6 +336,7 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
       { demo: 'ContextMenuIntegration', themes: [THEME.generic, THEME.fluent, THEME.material] },
+      'ToolbarCustomization',
     ],
     FileUploader: [
       { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
