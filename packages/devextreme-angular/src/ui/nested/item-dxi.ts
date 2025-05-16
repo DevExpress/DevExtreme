@@ -108,6 +108,7 @@ import { DxiLocationComponent } from './location-dxi';
         'acceptedValues',
         'formatName',
         'formatValues',
+        'commands',
         'key',
         'showChevron',
         'linkAttr',

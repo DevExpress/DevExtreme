@@ -19,7 +19,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
+import { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem, AICommand, AICommandName } from 'devextreme/ui/html_editor';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
@@ -218,6 +218,14 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     }
     set widget(value: ToolbarItemComponent) {
         this._setOption('widget', value);
+    }
+
+    @Input()
+    get commands(): Array<AICommand | AICommandName> {
+        return this._getOption('commands');
+    }
+    set commands(value: Array<AICommand | AICommandName>) {
+        this._setOption('commands', value);
     }
 
 

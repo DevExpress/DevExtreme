@@ -29,6 +29,9 @@ import {
  dxHtmlEditorTableContextMenuItem,
  HtmlEditorPredefinedContextMenuItem,
  HtmlEditorPredefinedToolbarItem,
+ AICommand,
+ AICommandName,
+ AIToolbarItem,
  dxHtmlEditorToolbarItem,
 } from "devextreme/ui/html_editor";
 import {
@@ -437,6 +440,7 @@ const DxItemConfig = {
     "update:acceptedValues": null,
     "update:beginGroup": null,
     "update:closeMenuOnClick": null,
+    "update:commands": null,
     "update:cssClass": null,
     "update:disabled": null,
     "update:formatName": null,
@@ -461,6 +465,7 @@ const DxItemConfig = {
     acceptedValues: Array as PropType<Array<boolean | number | string>>,
     beginGroup: Boolean,
     closeMenuOnClick: Boolean,
+    commands: Array as PropType<Array<AICommand | AICommandName>>,
     cssClass: String,
     disabled: Boolean,
     formatName: String as PropType<HtmlEditorPredefinedToolbarItem | string>,
@@ -659,7 +664,7 @@ const DxToolbarConfig = {
   },
   props: {
     container: {},
-    items: Array as PropType<Array<dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem>>,
+    items: Array as PropType<Array<AIToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem>>,
     multiline: Boolean
   }
 };

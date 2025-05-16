@@ -794,7 +794,7 @@ export interface dxHtmlEditorToolbar {
     container?: string | UserDefinedElement;
     /**
      * @docid
-     * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorPredefinedToolbarItem>
+     * @type Array<AIToolbarItem,dxHtmlEditorToolbarItem,Enums.HtmlEditorPredefinedToolbarItem>
      * @public
      */
     items?: Array<ToolbarItem | HtmlEditorPredefinedToolbarItem>;

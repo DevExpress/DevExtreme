@@ -8,7 +8,7 @@ import dxHtmlEditor, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ContentReadyEvent, DisposingEvent, FocusInEvent, FocusOutEvent, InitializedEvent, ValueChangedEvent, HtmlEditorImageUploadMode, dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadTab, dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem, dxHtmlEditorToolbarItem } from "devextreme/ui/html_editor";
+import type { ContentReadyEvent, DisposingEvent, FocusInEvent, FocusOutEvent, InitializedEvent, ValueChangedEvent, HtmlEditorImageUploadMode, dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadTab, dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem, AICommand, AICommandName, AIToolbarItem, dxHtmlEditorToolbarItem } from "devextreme/ui/html_editor";
 import type { ContentReadyEvent as FileUploaderContentReadyEvent, DisposingEvent as FileUploaderDisposingEvent, InitializedEvent as FileUploaderInitializedEvent, ValueChangedEvent as FileUploaderValueChangedEvent, BeforeSendEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, UploadHttpMethod, FileUploadMode, dxFileUploaderOptions } from "devextreme/ui/file_uploader";
 import type { ValidationStatus, template, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
@@ -247,6 +247,7 @@ type IItemProps = React.PropsWithChildren<{
   options?: any;
   showText?: ShowTextMode;
   widget?: ToolbarItemComponent;
+  commands?: Array<AICommand | AICommandName>;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
   menuItemRender?: (...params: any) => React.ReactNode;
@@ -443,7 +444,7 @@ const TableResizing = Object.assign<typeof _componentTableResizing, NestedCompon
 // HtmlEditor
 type IToolbarProps = React.PropsWithChildren<{
   container?: any | string;
-  items?: Array<dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem>;
+  items?: Array<AIToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem>;
   multiline?: boolean;
 }>
 const _componentToolbar = (props: IToolbarProps) => {
