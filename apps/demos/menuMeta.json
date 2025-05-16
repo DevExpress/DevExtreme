@@ -3541,6 +3541,19 @@
                 "DemoType": "Web"
               },
               {
+                "Title": "Toolbar",
+                "Name": "Toolbar",
+                "Widget": "Scheduler",
+                "MvcAdditionalFiles": [
+                  "/Models/AppointmentWithResources.cs",
+                  "/Models/AssigneeResource.cs",
+                  "/Models/SampleData/AppointmentsWithResources.cs",
+                  "/Models/SampleData/AssigneeResources.cs"
+                ],
+                "DemoType": "Web",
+                "Badge": "Updated"
+              },
+              {
                 "Title": "Individual Views Customization",
                 "Name": "IndividualViewsCustomization",
                 "Widget": "Scheduler",
@@ -4933,7 +4946,7 @@
         "Demos": [
           {
             "Title": "Overview",
-            "Name": "DialogsAndNotificationsOverview",
+            "Name": "PopupAndNotificationsOverview",
             "DocUrl": "",
             "Widget": "Common",
             "MvcAdditionalFiles": [

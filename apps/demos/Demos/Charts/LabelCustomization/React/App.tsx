@@ -1,37 +1,41 @@
 import React from 'react';
 import PieChart, {
-  Series,
-  Label,
-  Connector,
-  SmallValuesGrouping,
   Legend,
   Export,
+  Series,
+  Label,
+  Font,
+  Connector,
 } from 'devextreme-react/pie-chart';
 import { dataSource } from './data.ts';
 
-function formatLabel(arg: { argumentText: string; valueText: string; }) {
-  return `${arg.argumentText}: ${arg.valueText}%`;
+function customizeText(arg: { valueText: string; percentText: string; }) {
+  return `${arg.valueText} (${arg.percentText})`;
 }
 
 function App() {
   return (
-    <PieChart
-      id="pie"
-      dataSource={dataSource}
+    <PieChart id="pie"
       palette="Bright"
-      title="Top internet languages"
+      dataSource={dataSource}
+      title="Olympic Medals in 2008"
     >
-      <Series
-        argumentField="language"
-        valueField="percent"
-      >
-        <Label visible={true} customizeText={formatLabel} format="fixedPoint">
+      <Legend
+        orientation="horizontal"
+        itemTextPosition="right"
+        horizontalAlignment="center"
+        verticalAlignment="bottom"
+        columnCount={4} />
+      <Export enabled={true} />
+      <Series argumentField="country" valueField="medals">
+        <Label
+          visible={true}
+          position="columns"
+          customizeText={customizeText}>
+          <Font size={16} />
           <Connector visible={true} width={0.5} />
         </Label>
-        <SmallValuesGrouping threshold={4.5} mode="smallValueThreshold" />
       </Series>
-      <Legend horizontalAlignment="center" verticalAlignment="bottom" />
-      <Export enabled={true} />
     </PieChart>
   );
 }

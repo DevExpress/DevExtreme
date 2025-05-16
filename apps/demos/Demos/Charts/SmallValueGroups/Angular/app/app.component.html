@@ -1,25 +1,25 @@
 <dx-pie-chart
   id="pie"
-  title="Olympic Medals in 2008"
+  title="Top internet languages"
   palette="bright"
-  [dataSource]="olympicMedals"
+  [dataSource]="internetLanguages"
 >
   <dxo-legend
-    orientation="horizontal"
-    itemTextPosition="right"
     horizontalAlignment="center"
     verticalAlignment="bottom"
-    [columnCount]="4"
   ></dxo-legend>
   <dxo-export [enabled]="true"></dxo-export>
-  <dxi-series argumentField="country" valueField="medals">
+  <dxi-series argumentField="language" valueField="percent">
     <dxo-label
       [visible]="true"
-      position="columns"
+      format="fixedPoint"
       [customizeText]="customizeLabel"
     >
-      <dxo-font [size]="16"></dxo-font>
       <dxo-connector [visible]="true" [width]="0.5"></dxo-connector>
     </dxo-label>
+    <dxo-small-values-grouping
+      mode="smallValueThreshold"
+      [threshold]="4.5"
+    ></dxo-small-values-grouping>
   </dxi-series>
 </dx-pie-chart>

@@ -2,31 +2,33 @@ $(() => {
   $('#pie').dxPieChart({
     palette: 'bright',
     dataSource,
-    title: 'Top internet languages',
+    title: 'Olympic Medals in 2008',
     legend: {
+      orientation: 'horizontal',
+      itemTextPosition: 'right',
       horizontalAlignment: 'center',
       verticalAlignment: 'bottom',
+      columnCount: 4,
     },
     export: {
       enabled: true,
     },
     series: [{
-      argumentField: 'language',
-      valueField: 'percent',
+      argumentField: 'country',
+      valueField: 'medals',
       label: {
         visible: true,
+        font: {
+          size: 16,
+        },
         connector: {
           visible: true,
           width: 0.5,
         },
-        format: 'fixedPoint',
-        customizeText(point) {
-          return `${point.argumentText}: ${point.valueText}%`;
+        position: 'columns',
+        customizeText(arg) {
+          return `${arg.valueText} (${arg.percentText})`;
         },
-      },
-      smallValuesGrouping: {
-        mode: 'smallValueThreshold',
-        threshold: 4.5,
       },
     }],
   });

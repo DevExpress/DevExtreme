@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxPieChartModule } from 'devextreme-angular';
-import { LanguageData, Service } from './app.service';
+import { MedalsInfo, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -22,14 +22,14 @@ if (window && window.config?.packageConfigPaths) {
 })
 
 export class AppComponent {
-  internetLanguages: LanguageData[];
+  olympicMedals: MedalsInfo[];
 
   constructor(service: Service) {
-    this.internetLanguages = service.getLanguagesData();
+    this.olympicMedals = service.getMedalsData();
   }
 
-  customizeLabel(point) {
-    return `${point.argumentText}: ${point.valueText}%`;
+  customizeLabel(arg) {
+    return `${arg.valueText} (${arg.percentText})`;
   }
 }
 

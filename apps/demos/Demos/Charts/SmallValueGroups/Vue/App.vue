@@ -3,28 +3,28 @@
     id="pie"
     :data-source="dataSource"
     palette="Bright"
-    title="Olympic Medals in 2008"
+    title="Top internet languages"
   >
     <DxSeries
-      argument-field="country"
-      value-field="medals"
+      argument-field="language"
+      value-field="percent"
     >
       <DxLabel
         :visible="true"
         :customize-text="formatLabel"
-        position="columns"
+        format="fixedPoint"
       >
         <DxConnector
           :visible="true"
           :width="0.5"
         />
-        <DxFont :size="16"/>
       </DxLabel>
+      <DxSmallValuesGrouping
+        :threshold="4.5"
+        mode="smallValueThreshold"
+      />
     </DxSeries>
     <DxLegend
-      :column-count="4"
-      orientation="horizontal"
-      item-text-position="right"
       horizontal-alignment="center"
       vertical-alignment="bottom"
     />
@@ -35,15 +35,15 @@
 <script setup lang="ts">
 import DxPieChart, {
   DxSeries,
-  DxLegend,
   DxLabel,
   DxConnector,
-  DxFont,
+  DxSmallValuesGrouping,
+  DxLegend,
   DxExport,
 } from 'devextreme-vue/pie-chart';
 import { dataSource } from './data.ts';
 
-const formatLabel = ({ valueText, percentText }) => `${valueText} (${percentText})`;
+const formatLabel = ({ argumentText, valueText }) => `${argumentText}: ${valueText}%`;
 </script>
 
 <style>
