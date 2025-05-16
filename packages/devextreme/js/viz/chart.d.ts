@@ -850,6 +850,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
       color?: string;
       /**
        * @docid
+       * @type object
        * @default 'solid'
        */
       dashStyle?: DashStyle;
@@ -869,6 +870,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
         color?: string;
         /**
          * @docid
+         * @type object
          * @default 'solid'
          */
         dashStyle?: DashStyle;
@@ -964,6 +966,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
         color?: string;
         /**
          * @docid
+         * @type object
          * @default 'solid'
          */
         dashStyle?: DashStyle;
@@ -1968,6 +1971,7 @@ export type CommonAxisSettingsConstantLineStyle = {
     color?: string;
     /**
      * @docid dxChartOptions.commonAxisSettings.constantLineStyle.dashStyle
+     * @type object
      * @default 'solid'
      * @public
      */
@@ -2215,6 +2219,7 @@ export type CommonPaneSettings = {
       color?: string;
       /**
        * @docid dxChartOptions.commonPaneSettings.border.dashStyle
+       * @type object
        * @default 'solid'
        */
       dashStyle?: DashStyle;
@@ -3399,6 +3404,7 @@ export interface dxChartSeriesTypesCommonSeries {
     cornerRadius?: number;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.dashStyle
+     * @type object
      * @default 'solid'
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
      * @public
@@ -3670,6 +3676,7 @@ export interface dxChartSeriesTypesCommonSeriesBorder {
     color?: string | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.border.dashStyle
+     * @type object
      * @default undefined
      * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
      * @public
@@ -3707,6 +3714,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyle {
     color?: string | ChartsColor | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.dashStyle
+     * @type object
      * @default 'solid'
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
      * @public
@@ -3743,6 +3751,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
     color?: string | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.dashStyle
+     * @type object
      * @default 'solid'
      * @public
      */
@@ -3805,6 +3814,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyle {
     color?: string | ChartsColor | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.dashStyle
+     * @type object
      * @default 'solid'
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
      * @public
@@ -3841,6 +3851,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyleBorder {
     color?: string | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.border.dashStyle
+     * @type object
      * @default 'solid'
      * @public
      */

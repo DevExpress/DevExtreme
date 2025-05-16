@@ -49,7 +49,13 @@ export type ChartsDataType = 'datetime' | 'numeric' | 'string';
  * @public
  * @namespace DevExpress.common.charts
  */
-export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
+export type PredefinedDashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
+
+/**
+ * @public
+ * @namespace DevExpress.common.charts
+ */
+export type DashStyle = PredefinedDashStyle | string;
 
 /**
  * @public
@@ -637,6 +643,7 @@ export interface SeriesLabel {
       color?: string | undefined;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.label.border.dashStyle
+       * @type object
        * @default 'solid'
        */
       dashStyle?: DashStyle | undefined;

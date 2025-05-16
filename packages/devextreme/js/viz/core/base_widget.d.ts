@@ -483,6 +483,7 @@ export interface BaseWidgetTooltip {
       color?: string;
       /**
        * @docid BaseWidgetOptions.tooltip.border.dashStyle
+       * @type object
        * @default 'solid'
        */
       dashStyle?: DashStyle;
@@ -703,6 +704,7 @@ export interface BaseWidgetAnnotationConfig {
       cornerRadius?: number;
       /**
        * @docid
+       * @type object
        * @default 'solid'
        */
       dashStyle?: DashStyle;

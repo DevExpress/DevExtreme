@@ -989,6 +989,7 @@ export type CommonAxisSettingsConstantLineStyle = {
     color?: string;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.dashStyle
+     * @type object
      * @default 'solid'
      * @public
      */
@@ -1665,6 +1666,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
       color?: string | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.border.dashStyle
+       * @type object
        * @default undefined
        * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
        */
@@ -1697,6 +1699,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     color?: string | ChartsColor | undefined;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle
+     * @type object
      * @default 'solid'
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries
      * @public
@@ -1726,6 +1729,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
         color?: string | undefined;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.dashStyle
+         * @type object
          * @default 'solid'
          */
         dashStyle?: DashStyle | undefined;
@@ -1747,6 +1751,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
       color?: string | ChartsColor | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.dashStyle
+       * @type object
        * @default 'solid'
        * @propertyOf dxPolarChartSeriesTypes.linepolarseries
        */
@@ -1853,6 +1858,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
         color?: string | undefined;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.dashStyle
+         * @type object
          * @default 'solid'
          */
         dashStyle?: DashStyle | undefined;
@@ -1874,6 +1880,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
       color?: string | ChartsColor | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.dashStyle
+       * @type object
        * @default 'solid'
        * @propertyOf dxPolarChartSeriesTypes.linepolarseries
        */
@@ -2036,6 +2043,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
       color?: string | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.dashStyle
+       * @type object
        * @default 'solid'
        */
       dashStyle?: DashStyle | undefined;

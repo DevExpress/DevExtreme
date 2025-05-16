@@ -406,6 +406,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
         color?: string;
         /**
          * @docid
+         * @type object
          * @default 'solid'
          */
         dashStyle?: DashStyle;

@@ -60,6 +60,7 @@ export interface BaseLegend {
       cornerRadius?: number;
       /**
        * @docid
+       * @type object
        * @default 'solid'
        */
       dashStyle?: DashStyle;

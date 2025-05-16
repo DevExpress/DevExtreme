@@ -592,6 +592,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
       color?: string | undefined;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border.dashStyle
+       * @type object
        * @default undefined
        */
       dashStyle?: DashStyle | undefined;
@@ -634,6 +635,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
           color?: string | undefined;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.dashStyle
+           * @type object
            * @default undefined
            */
           dashStyle?: DashStyle | undefined;
@@ -710,6 +712,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
           color?: string | undefined;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.dashStyle
+           * @type object
            * @default 'solid'
            */
           dashStyle?: DashStyle | undefined;
@@ -832,6 +835,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
           color?: string | undefined;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.dashStyle
+           * @type object
            * @default undefined
            */
           dashStyle?: DashStyle | undefined;

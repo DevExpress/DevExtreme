@@ -1903,7 +1903,7 @@ declare module DevExpress.common.charts {
   };
   export type ChartsDataType = 'datetime' | 'numeric' | 'string';
   export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
-  export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
+  export type DashStyle = PredefinedDashStyle | string;
   export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
   /**
    * [descr:Font]
@@ -1988,6 +1988,7 @@ declare module DevExpress.common.charts {
     | 'triangle'
     | 'triangleDown'
     | 'triangleUp';
+  export type PredefinedDashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
   /**
    * [descr:viz.registerGradient(type, options)]
    */
