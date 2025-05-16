@@ -445,7 +445,7 @@ test('Header container should have padding-right if grid has max-height and scro
     .ok(compareResults.errorMessages());
 }).before(async () => {
   await ClientFunction(() => {
-    $('#container').css('max-height', 200);
+    $('#container').css('max-height', '200px');
   })();
 
   return createWidget('dxDataGrid', {
@@ -752,7 +752,7 @@ test('New row should be rendered at the top when grid is scrolled in virtual scr
     return items;
   };
   await ClientFunction(() => {
-    $('#container').css('max-height', 440);
+    $('#container').css('max-height', '440px');
   })();
   await createWidget('dxDataGrid', {
     dataSource: generateData(),
@@ -1119,8 +1119,8 @@ safeSizeTest('The page should not be changed when hiding/showing the grid view a
     (window as any).testLoadCount = 0;
 
     $('body').css({
-      minHeight: 100,
-      minWidth: 100,
+      minHeight: '100px',
+      minWidth: '100px',
     });
   })();
 

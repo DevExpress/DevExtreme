@@ -9,21 +9,21 @@ fixture.disablePageReloads`Draggable`
 const init = ClientFunction(() => {
   $('<div>', {
     id: 'scrollview',
-    width: 400,
-    height: 400,
+    width: '400px',
+    height: '400px',
   })
     .css({
       position: 'absolute',
       top: 0,
-      padding: 20,
+      padding: '20px',
       background: '#f18787',
     })
     .appendTo('#container');
 
   $('<div>', {
     id: 'scrollview-content',
-    height: 500,
-    width: 500,
+    height: '500px',
+    width: '500px',
   }).appendTo('#scrollview');
 
   $('<div>', {
