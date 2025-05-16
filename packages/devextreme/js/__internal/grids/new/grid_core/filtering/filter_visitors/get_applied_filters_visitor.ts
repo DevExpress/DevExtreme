@@ -1,4 +1,4 @@
-import { computed, effect } from '@preact/signals-core';
+import { effect } from '@preact/signals-core';
 
 import { SearchController } from '../../search/index';
 import { FilterController } from '../filter_controller';
@@ -11,14 +11,6 @@ export class GetAppliedFilterVisitor {
     FilterController,
   ] as const;
 
-  private readonly filterPanelValue = computed(
-    () => (
-      this.filterController.filterPanelFilterEnabled.value
-        ? this.filterController.filterValueOption.value
-        : undefined
-    ),
-  );
-
   constructor(
     private readonly searchController: SearchController,
     private readonly headerFilterController: HeaderFilterController,
@@ -26,7 +18,7 @@ export class GetAppliedFilterVisitor {
   ) {
     effect(() => {
       this.filterController.appliedFilters.value = {
-        filterPanel: this.filterPanelValue.value,
+        filterPanel: this.filterController.filterPanelValue.value,
         headerFilter: this.headerFilterController.composedHeaderFilter.value,
         search: this.searchController.searchFilter.value,
       };
