@@ -213,7 +213,7 @@ export class ResizingController extends modules.ViewController {
         labelParts.push(expandableWidgetAriaLabel);
       }
     }
-
+    // @ts-expect-error
     const $ariaLabelElement = this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`);
 
     this.component.setAria('label', labelParts.join('. '), $ariaLabelElement);
