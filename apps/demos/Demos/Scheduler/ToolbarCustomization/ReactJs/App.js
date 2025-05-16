@@ -13,9 +13,10 @@ const App = () => {
   const [assigneesFilterValue, setAssigneesFilterValue] = useState();
   const onAssigneesFilterChange = useCallback((event) => {
     const scheduler = schedulerRef.current.instance();
+    const dataSource = scheduler.option('dataSource');
     const filter = event.value ? ['assigneeId', 'contains', event.value] : null;
-    schedulerDataSource.filter(filter);
-    scheduler.option('dataSource', schedulerDataSource);
+    dataSource.filter(filter);
+    scheduler.option('dataSource', dataSource);
     setAssigneesFilterValue(event.value);
   }, []);
   const toggleButtonOptions = useMemo(

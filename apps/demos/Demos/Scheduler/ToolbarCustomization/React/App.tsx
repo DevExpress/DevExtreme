@@ -15,10 +15,11 @@ const App = () => {
 
   const onAssigneesFilterChange = useCallback((event: SelectBoxTypes.ValueChangedEvent) => {
     const scheduler = schedulerRef.current!.instance()!;
+    const dataSource = scheduler.option('dataSource');
     const filter = event.value ? ['assigneeId', 'contains', event.value] : null;
 
-    schedulerDataSource.filter(filter);
-    scheduler.option('dataSource', schedulerDataSource);
+    dataSource.filter(filter);
+    scheduler.option('dataSource', dataSource);
     setAssigneesFilterValue(event.value);
   }, []);
   const toggleButtonOptions = useMemo(() => ({
