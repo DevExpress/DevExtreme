@@ -9,7 +9,7 @@ on:
     paths-ignore:
       - 'apps/**/*.md'
   push:
-    branches: [25_1]
+    branches: [24_2, 25_*, 26_*]
   workflow_dispatch:
 
 env:
@@ -74,26 +74,6 @@ jobs:
         with:
           name: wrappers-builds
           path: e2e/wrappers/builds-artifacts
-          retention-days: 1
-
-      - name: Move packages
-        run: |
-          mv ./packages/devextreme/artifacts/npm/devextreme/*.tgz ./devextreme-installer.tgz
-          mv ./packages/devextreme/artifacts/npm/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
-          mv ./packages/devextreme-angular/npm/dist/*.tgz ./devextreme-angular-installer.tgz
-          mv ./packages/devextreme-react/npm/*.tgz ./devextreme-react-installer.tgz
-          mv ./packages/devextreme-vue/npm/*.tgz ./devextreme-vue-installer.tgz
-
-      - name: Copy build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: devextreme-sources
-          path: |
-            devextreme-installer.tgz
-            devextreme-dist-installer.tgz
-            devextreme-angular-installer.tgz
-            devextreme-react-installer.tgz
-            devextreme-vue-installer.tgz
           retention-days: 1
 
   test-wrappers:
@@ -162,10 +142,6 @@ jobs:
       - name: Run tests for ${{ matrix.framework }}
         working-directory: e2e/wrappers
         run: pnpm run test:${{ matrix.framework }}
-
-      - name: Sanitize job name
-        if: ${{ failure() }}
-        run: echo "JOB_NAME=${{ matrix.framework }}" >> $GITHUB_ENV
 
       - name: Upload test artifacts on failure
         if: ${{ failure() }}

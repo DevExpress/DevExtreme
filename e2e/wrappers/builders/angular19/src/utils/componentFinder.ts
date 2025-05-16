@@ -2,7 +2,7 @@ export const COMPONENTS = [
   {
     path: 'button',
     name: 'Button',
-    loadComponent: () => import('@external/button/angular/button.component').then((m) => m.ButtonComponent),
+    component: import('@external/button/angular19/button.component').then((m) => m.ButtonComponent),
   },
 ];
 
