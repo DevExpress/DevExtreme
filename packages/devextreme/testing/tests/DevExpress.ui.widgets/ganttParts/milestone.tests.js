@@ -27,8 +27,7 @@ const moduleConfig = {
 
 QUnit.module('Milestone', moduleConfig, () => {
     test('default', function(assert) {
-        const options = { taskTitlePosition: 'outside' };
-        this.createInstance(options);
+        this.createInstance();
         this.clock.tick(10);
         const milestoneWrapper = this.$element.find(Consts.MILESTONE_WRAPPER_SELECTOR);
         const children = milestoneWrapper.children();
