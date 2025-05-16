@@ -109,6 +109,7 @@ const CardView = memo(
         pager: { optionName: "pager", isCollectionItem: false },
         paging: { optionName: "paging", isCollectionItem: false },
         remoteOperations: { optionName: "remoteOperations", isCollectionItem: false },
+        searchPanel: { optionName: "searchPanel", isCollectionItem: false },
         selection: { optionName: "selection", isCollectionItem: false },
         toolbar: { optionName: "toolbar", isCollectionItem: false }
       }), []);
@@ -1412,6 +1413,35 @@ const RequiredRule = Object.assign<typeof _componentRequiredRule, NestedComponen
 
 // owners:
 // CardView
+type ISearchPanelProps = React.PropsWithChildren<{
+  highlightCaseSensitive?: boolean;
+  highlightSearchText?: boolean;
+  placeholder?: string;
+  searchVisibleColumnsOnly?: boolean;
+  text?: string;
+  visible?: boolean;
+  width?: number | string;
+  defaultText?: string;
+  onTextChange?: (value: string) => void;
+}>
+const _componentSearchPanel = (props: ISearchPanelProps) => {
+  return React.createElement(NestedOption<ISearchPanelProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "searchPanel",
+      DefaultsProps: {
+        defaultText: "text"
+      },
+    },
+  });
+};
+
+const SearchPanel = Object.assign<typeof _componentSearchPanel, NestedComponentMeta>(_componentSearchPanel, {
+  componentType: "option",
+});
+
+// owners:
+// CardView
 type ISelectionProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
   mode?: SingleMultipleOrNone;
@@ -1699,6 +1729,8 @@ export {
   IRemoteOperationsProps,
   RequiredRule,
   IRequiredRuleProps,
+  SearchPanel,
+  ISearchPanelProps,
   Selection,
   ISelectionProps,
   Show,

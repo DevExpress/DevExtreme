@@ -44,6 +44,7 @@ export * from './pager';
 export * from './popup-options';
 export * from './position-config';
 export * from './scheduler-scrolling';
+export * from './search-panel';
 export * from './sortable-options';
 export * from './splitter-options';
 export * from './tab-panel-options';

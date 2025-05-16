@@ -13,6 +13,7 @@ import  dxDraggable from "devextreme/ui/draggable";
 import {
  ColumnResizeMode,
  Pager,
+ SearchPanel,
  DataChangeType,
  FilterOperation,
  FilterType,
@@ -409,7 +410,7 @@ const componentConfig = {
     rowDragging: Object as PropType<Record<string, any>>,
     rtlEnabled: Boolean,
     scrolling: Object as PropType<Record<string, any>>,
-    searchPanel: Object as PropType<Record<string, any>>,
+    searchPanel: Object as PropType<SearchPanel | Record<string, any>>,
     selectedRowKeys: Array as PropType<Array<any>>,
     selection: Object as PropType<Record<string, any>>,
     showBorders: Boolean,
