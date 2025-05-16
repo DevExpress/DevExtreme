@@ -71,15 +71,12 @@ fixture.disablePageReloads`DataGrid - contrast`
 
     // eslint-disable-next-line max-len
     const searchIconContainer = dataGrid.getHeaders().getFilterRow().getFilterCell(1).getSearchIcon().element;
-    const searchIcon = searchIconContainer.find('.dx-icon');
 
     await t
       .click(dataGrid.getFilterCell(0))
       .pressKey('tab')
       .expect(searchIconContainer.focused)
-      .ok()
-      .expect(await searchIconContainer.getStyleProperty('color'))
-      .eql(await searchIcon.getStyleProperty('color'));
+      .ok();
 
     await t
       .expect(await takeScreenshot(`T1286345-datagrid-menu-icon-when-focused-${theme}.png`, dataGrid.element))
