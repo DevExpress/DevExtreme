@@ -3,7 +3,8 @@
 */
 import { isCommandKeyPressed } from '@js/common/core/events/utils';
 import { combineClasses } from '@ts/core/utils/combine_classes';
-import type { Position, SelectCardOptions } from '@ts/grids/new/card_view/content_view/types';
+import type { SelectCardOptions } from '@ts/grids/new/card_view/content_view/types';
+import type { Position } from '@ts/grids/new/grid_core/accessibility/types';
 import type { CardInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 import {

@@ -7,13 +7,15 @@ import { off, on } from '@js/events/index';
 import type * as dxToolbar from '@js/ui/toolbar';
 import { Guid } from '@ts/core/m_guid';
 import { combineClasses } from '@ts/core/utils/combine_classes';
+import type { Position } from '@ts/grids/new/grid_core/accessibility/types';
+import { getCardDescriptiveLabel, getCardRoleDescription, getCardStateDescription } from '@ts/grids/new/grid_core/accessibility/utils';
 import type { CardInfo, FieldInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { DataObject, Key } from '@ts/grids/new/grid_core/data_controller/types';
 import { KbnFocusTrap } from '@ts/grids/new/grid_core/keyboard_navigation/index';
 import type { ComponentType, InfernoNode, RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
-import type { Position, SelectCardOptions } from '../../types';
+import type { SelectCardOptions } from '../../types';
 import { Cover } from './cover';
 import { Field } from './field';
 import { CardHeader } from './header';
@@ -137,7 +139,7 @@ export class Card extends Component<CardProps> {
       [CLASSES.selectCard]: !!card.isSelected,
     });
 
-    const hasCover = cover?.imageExpr;
+    const hasCover = !!cover?.imageExpr;
 
     const imageSrc = cover?.imageExpr?.(this.props.card.data);
     const alt = cover?.altExpr?.(this.props.card.data);
@@ -160,13 +162,14 @@ export class Card extends Component<CardProps> {
         onKeyDown={this.props.onKeyDown}
 
         role={cardRole}
-        aria-roledescription={this.getCardRoleDescription(this.props.allowUpdating)}
-        aria-label={this.getCardStateDescription(
+        aria-roledescription={getCardRoleDescription(this.props.allowUpdating)}
+        aria-label={getCardStateDescription(
+          this.props.position,
           this.props.isCheckBoxesRendered,
           this.props.card.isSelected,
         )}
-        aria-describedby={this.getCardDescriptiveLabel(
-          this.props,
+        aria-describedby={getCardDescriptiveLabel(
+          hasCover,
           coverId,
           contentId,
         )}
@@ -283,40 +286,4 @@ export class Card extends Component<CardProps> {
     onHold?.({ event, card });
     event.stopPropagation();
   };
-
-  getCardRoleDescription(
-    isEditable?: boolean,
-  ): string {
-    return isEditable ? 'Editable card' : 'Card';
-  }
-
-  getCardStateDescription(
-    isSelectable?: boolean,
-    isSelected?: boolean,
-  ): string {
-    const parts: string[] = [this.getPositionDescription()];
-    if (isSelectable) {
-      parts.push(isSelected ? 'Selected' : 'Not selected');
-    }
-    return parts.join(', ');
-  }
-
-  getPositionDescription(): string {
-    return `Row ${this.props.position.rowIndex + 1}, Column ${this.props.position.columnIndex + 1}`;
-  }
-
-  getCardDescriptiveLabel(
-    props: CardProps,
-    coverId: string,
-    contentId: string,
-  ): string {
-    const ids: string[] = [];
-    if (props.cover?.imageExpr) {
-      ids.push(coverId);
-    }
-
-    ids.push(contentId);
-
-    return ids.join(' ');
-  }
 }
