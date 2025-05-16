@@ -42,6 +42,8 @@ export class ContentView extends Component<ContentViewProps> {
 
   private readonly containerRef = createRef<HTMLDivElement>();
 
+  private resizeObserverTimeout: number | null = null;
+
   public render(): JSX.Element {
     return (
       <div
@@ -82,7 +84,14 @@ export class ContentView extends Component<ContentViewProps> {
     resizeObserverSingleton.observe(
       this.containerRef.current!,
       (entry: ResizeObserverEntry) => {
-        this.props.onWidthChange?.(entry.contentRect.width);
+        // NOTE: Hotfix for demos test resize windows issue
+        this.resizeObserverTimeout = setTimeout(
+          () => {
+            this.resizeObserverTimeout = null;
+            this.props.onWidthChange?.(entry.contentRect.width);
+          },
+          0,
+        ) as unknown as number;
       },
     );
   }
@@ -95,5 +104,9 @@ export class ContentView extends Component<ContentViewProps> {
     resizeObserverSingleton.unobserve(
       this.containerRef.current!,
     );
+
+    if (this.resizeObserverTimeout !== null) {
+      clearTimeout(this.resizeObserverTimeout);
+    }
   }
 }

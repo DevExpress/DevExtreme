@@ -3,7 +3,8 @@ import $ from 'jquery';
 import 'ui/file_manager';
 import fx from 'common/core/animation/fx';
 import windowUtils from 'core/utils/window';
-import { FileManagerWrapper, createTestFileSystem, Consts, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
+import { FileManagerWrapper, createTestFileSystem, Consts } from '../../../helpers/fileManagerHelpers.js';
+import devices from '__internal/core/m_devices';
 import 'generic_light.css!';
 
 const getDefaultConfig = () => {
@@ -113,7 +114,7 @@ QUnit.module('Markup rendering', moduleConfig, () => {
         const $headers = this.wrapper.getDetailsColumnsHeaders();
 
         let indexOffset = 0;
-        if(isDesktopDevice()) {
+        if(devices.real().deviceType === 'desktop') {
             assert.strictEqual($headers.length, 6, 'column headres number is correct');
             assert.ok($headers.eq(0).hasClass('dx-command-select'), 'selection header is rendered');
             indexOffset = 1;

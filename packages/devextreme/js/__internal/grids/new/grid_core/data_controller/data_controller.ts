@@ -244,7 +244,7 @@ export class DataController {
         }
 
         if (!equalByValue(
-          dataSource.filter(),
+          dataSource.filter() ?? null,
           displayFilter,
           {
             maxDepth: FILTER_OBJ_COMPARE_DEPTH,

@@ -406,7 +406,7 @@ export class FileManagerWrapper {
     }
 
     getDetailsCellValue(rowIndex, columnIndex) {
-        columnIndex += isDesktopDevice() ? 1 : 0;
+        columnIndex += devices.real().deviceType === 'desktop' ? 1 : 0;
         return this.getRowInDetailsView(rowIndex)
             .find(`td:nth-child(${columnIndex})`)
             .text()
@@ -971,10 +971,6 @@ export const stubFileReader = object => {
     if(!(object['_createFileReader'].restore && object['_createFileReader'].restore.sinon)) {
         sinon.stub(object, '_createFileReader').callsFake(() => new FileReaderMock());
     }
-};
-
-export const isDesktopDevice = () => {
-    return devices.real().deviceType === 'desktop';
 };
 
 export const getDropFileEvent = file => $.Event($.Event('drop', { dataTransfer: { files: [file] } }));

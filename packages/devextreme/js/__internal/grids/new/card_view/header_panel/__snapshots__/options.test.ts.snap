@@ -32,9 +32,12 @@ exports[`ColumnProperties headerItemCssClass should override content of headerPa
                 />
                 <div
                   class="dx-cardview-headerpanel-content"
+                  role="menubar"
                 >
                   <div
+                    aria-label="Field name Column 1"
                     class="dx-cardview-header-item my-css-class "
+                    role="menuitem"
                     tabindex="0"
                   >
                     Column 1
@@ -100,9 +103,12 @@ exports[`Options headerPanel itemCssClass should add css class to headerPanel it
           />
           <div
             class="dx-cardview-headerpanel-content"
+            role="menubar"
           >
             <div
+              aria-label="Field name Column 1"
               class="dx-cardview-header-item  my-class"
+              role="menuitem"
               tabindex="0"
             >
               Column 1
@@ -171,9 +177,12 @@ exports[`Options headerPanel visible when it is true should show headerPanel 1`]
                 />
                 <div
                   class="dx-cardview-headerpanel-content"
+                  role="menubar"
                 >
                   <div
+                    aria-label="Field name Column 1"
                     class="dx-cardview-header-item  "
+                    role="menuitem"
                     tabindex="0"
                   >
                     Column 1

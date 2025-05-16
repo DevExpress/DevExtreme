@@ -164,6 +164,10 @@ const meta: Meta<typeof CardView> = {
     'filterValue': {
       control: 'object',
     },
+    'filterSyncEnabled': {
+      control: 'radio',
+      options: ['auto', true, false]
+    },
     'filterPanel.visible': {
       control: 'boolean'
     },
@@ -382,6 +386,40 @@ export const SearchCardView: Story = {
     'searchPanel.placeholder': 'Search...',
     'searchPanel.searchVisibleColumnsOnly': false,
     'searchPanel.width': 160,
+  }
+}
+
+export const FilterSyncStory: Story = {
+  ...SearchCardView,
+  args: {
+    ...SearchCardView.args,
+    dataSource: 'local',
+    columns: 'local',
+    'searchPanel.highlightCaseSensitive': false,
+    'searchPanel.highlightSearchText': true,
+    'searchPanel.text': '',
+    'searchPanel.visible': true,
+    'searchPanel.placeholder': 'Search...',
+    'searchPanel.searchVisibleColumnsOnly': false,
+    'searchPanel.width': 160,
+    'headerFilter.visible': true,
+    'paging.pageSize': 6,
+    headerFilter: {
+      width: 252,
+      height: 325,
+      allowSelectAll: true,
+      search: {
+        enabled: false,
+        timeout: 500,
+        mode: 'contains',
+        editorOptions: {},
+      },
+      texts: {
+        emptyValue: 'empty',
+        ok: 'ok',
+        cancel: 'cancel',
+      },
+    }
   }
 }
 
