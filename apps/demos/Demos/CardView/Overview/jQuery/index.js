@@ -1,5 +1,5 @@
 $(() => {
-  const IMG_URL = 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos';
+  const IMG_URL = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos';
 
   $('#card-view').dxCardView({
     dataSource: employees,
@@ -26,13 +26,13 @@ $(() => {
       showNavigationButtons: true,
       showPageSizeSelector: true,
     },
+    searchPanel: {
+      visible: true,
+    },
     selection: {
       mode: 'multiple',
     },
     headerFilter: {
-      visible: true,
-    },
-    searchPanel: {
       visible: true,
     },
     columnChooser: {

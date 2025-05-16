@@ -1,20 +1,18 @@
 import React from 'react';
-import CardView, {
-  CardCover, Column, Pager, Selection,
+import { CardView,
+   CardCover, Column, Pager, SearchPanel, Selection,
 } from 'devextreme-react/card-view';
 import { employees } from './data.js';
 
-const IMG_URL = 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos';
+const IMG_URL = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos';
 const getEmployeeImage = ({ Picture }) => `${IMG_URL}/${Picture}`;
 const getEmployeeImageAltText = ({ FullName }) => `${FullName} picture`;
+
 // TODO: Nested component does not exist
 const headerFilterConfig = {
   visible: true,
 };
-// TODO: Nested component does not exist
-const searchPanelConfig = {
-  visible: true,
-};
+
 // TODO: Nested component does not exist
 // TODO: Bad position types (strings not allowed)
 const columnChooserConfig = {
@@ -59,6 +57,7 @@ const App = () => (
       showNavigationButtons={true}
       showPageSizeSelector={true}
     />
+    <SearchPanel visible={true} />
     <Selection mode="multiple" />
   </CardView>
 );

@@ -15,7 +15,7 @@ if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
-const IMG_URL = 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos';
+const IMG_URL = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos';
 
 @Component({
   selector: 'demo-app',
@@ -27,11 +27,6 @@ export class AppComponent {
 
   // TODO: Nested component does not exist
   headerFilterConfig = {
-    visible: true,
-  };
-
-  // TODO: Nested component does not exist
-  searchPanelConfig = {
     visible: true,
   };
 

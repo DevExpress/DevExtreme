@@ -1,20 +1,15 @@
 import React from 'react';
-import CardView, {
-  CardCover, Column, Pager, Selection,
+import { CardView,
+   CardCover, Column, Pager, SearchPanel, Selection,
 } from 'devextreme-react/card-view';
 import { Employee, employees } from './data.ts';
 
-const IMG_URL = 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos';
+const IMG_URL = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos';
 const getEmployeeImage = ({ Picture }: Employee): string => `${IMG_URL}/${Picture}`;
 const getEmployeeImageAltText = ({ FullName }: Employee): string => `${FullName} picture`;
 
 // TODO: Nested component does not exist
 const headerFilterConfig = {
-  visible: true,
-};
-
-// TODO: Nested component does not exist
-const searchPanelConfig = {
   visible: true,
 };
 
@@ -42,7 +37,6 @@ const App = () => (
     cardsPerRow="auto"
     cardMinWidth={250}
     headerFilter={headerFilterConfig}
-    searchPanel={searchPanelConfig}
     columnChooser={columnChooserConfig}
   >
     <Column dataField="FullName" allowHiding={false} />
@@ -56,6 +50,7 @@ const App = () => (
       altExpr={getEmployeeImageAltText}
     />
     <Pager showInfo={true} showNavigationButtons={true} showPageSizeSelector={true} />
+    <SearchPanel visible={true} />
     <Selection mode="multiple" />
   </CardView>
 );

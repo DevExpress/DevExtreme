@@ -6,7 +6,6 @@
     [cardsPerRow]="'auto'"
     [cardMinWidth]="250"
     [headerFilter]="headerFilterConfig"
-    [searchPanel]="searchPanelConfig"
     [columnChooser]="columnChooserConfig"
   >
     <!-- Columns -->
@@ -29,6 +28,8 @@
       [showNavigationButtons]="true"
       [showPageSizeSelector]="true"
     ></dxo-card-view-pager>
+    <!-- Search panel -->
+    <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
     <!-- Selection -->
     <dxo-card-view-selection mode="multiple"></dxo-card-view-selection>
   </dx-card-view>
