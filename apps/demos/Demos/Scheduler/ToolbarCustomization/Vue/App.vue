@@ -2,12 +2,12 @@
   <DxScheduler
     time-zone="America/Los_Angeles"
     :data-source="dataSource"
-    :current-date="currentDate"
     :views="views"
-    :height="600"
-    :start-day-hour="9"
-    :first-day-of-week="1"
     current-view="workWeek"
+    :current-date="currentDate"
+    :start-day-hour="9"
+    :end-day-hour="19"
+    :height="600"
     ref="schedulerRef"
   >
     <DxResource
@@ -57,10 +57,11 @@ import DxScheduler, {
   DxResource, DxToolbar, DxItem, type DxSchedulerTypes,
 } from 'devextreme-vue/scheduler';
 import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
+import DataSource from 'devextreme/data/data_source';
 import { assignees, currentDate, schedulerDataSource } from './data.ts';
 
 const views: DxSchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];
-const assigneesFilterValue = ref([]);
+const assigneesFilterValue = ref(undefined);
 const schedulerRef = ref<DxScheduler | null>(null);
 const dataSource = ref(schedulerDataSource);
 
@@ -97,16 +98,11 @@ const newEventButtonOptions = {
 
 function onAssigneesFilterChange(event: DxSelectBoxTypes.ValueChangedEvent) {
   const scheduler = schedulerRef.value!.instance!;
+  const dataSource = scheduler.option('dataSource') as DataSource;
   const filter = event.value ? ['assigneeId', 'contains', event.value] : null;
 
-  schedulerDataSource.filter(filter);
-  scheduler.option('dataSource', schedulerDataSource);
+  dataSource.filter(filter);
+  scheduler.option('dataSource', dataSource);
   assigneesFilterValue.value = event.value;
 }
 </script>
-
-<style scoped>
-  .assignees-tag-box {
-    min-width: 200px;
-  }
-</style>
