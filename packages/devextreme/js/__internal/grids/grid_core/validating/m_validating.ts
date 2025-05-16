@@ -1443,7 +1443,6 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
             super.focus.call(this, $element, isHideBorder);
           });
         });
-        this._rowsView?.updateFreeSpaceRowHeight();
         return super.focus($element, isHideBorder);
       }
     }
@@ -1521,7 +1520,17 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
       $freeSpaceRowElements = that._getFreeSpaceRowElements($table);
       $freeSpaceRowElement = $freeSpaceRowElements.first();
 
-      if ($freeSpaceRowElement && $rowElements.length === 1 && (!$freeSpaceRowElement.is(':visible') || getOuterHeight($tooltipContent) > getOuterHeight($freeSpaceRowElement))) {
+      const rowElementsHasFocusInside = $rowElements.find(':focus').length > 0;
+
+      if (
+        $freeSpaceRowElement
+        && $rowElements.length === 1
+        && (
+          !$freeSpaceRowElement.is(':visible')
+          || getOuterHeight($tooltipContent) > getOuterHeight($freeSpaceRowElement)
+        )
+        && rowElementsHasFocusInside
+      ) {
         $freeSpaceRowElements.show();
         setHeight($freeSpaceRowElements, getOuterHeight($tooltipContent));
         return true;
