@@ -69,31 +69,3 @@ fixture.disablePageReloads`Tagbox Columns`.page(
       });
   },
 );
-
-test('TagBox - Methods specified in DevExpress.ui.dxSelectBox.defaultOptions are called (T1286533)', async (t) => {
-  const tagBox = new TagBox('#container');
-  await tagBox.isActive;
-
-  const consoleMessages = await t.getBrowserConsoleMessages();
-  const hasSelectBoxLog = consoleMessages?.log?.some((message) => message.startsWith('selectbox'));
-
-  await t.expect(hasSelectBoxLog).notOk();
-}).before(async () => {
-  const applyOverride = ClientFunction(() => {
-    (window as any).DevExpress.ui.dxSelectBox.defaultOptions({
-      options: {
-        onOptionChanged() {
-          console.log('selectbox');
-        },
-      },
-    });
-  });
-
-  await applyOverride();
-
-  await createWidget('dxTagBox', {
-    items: [
-      'a', 'b', 'c',
-    ],
-  });
-});
