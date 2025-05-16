@@ -3,7 +3,10 @@ import ArrayStore from '@js/common/data/array_store';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import type { ReadonlySignal } from '@preact/signals-core';
-import { computed, effect, signal } from '@preact/signals-core';
+import {
+  batch, computed, effect, signal,
+  untracked,
+} from '@preact/signals-core';
 import { equalByValue } from '@ts/core/utils/m_common';
 import type { PromiseWithResolvers } from '@ts/core/utils/promise';
 import { createPromise } from '@ts/core/utils/promise';
@@ -111,15 +114,6 @@ export class DataController {
     effect(() => {
       if (this.dataSource.value) {
         this.columnsController.resetColumnOptionsFromDataItem();
-      }
-    });
-
-    effect(() => {
-      // TODO: refactor, not it is unobvious
-      const isLoaded = this.isLoaded.value && !this.isReloading.value;
-
-      if (isLoaded && this.pageCount.value <= this.pageIndex.value) {
-        this.pageIndex.value = this.pageCount.value - 1;
       }
     });
 
@@ -232,6 +226,8 @@ export class DataController {
         const dataSource = this.dataSource.value;
         const pageIndex = this.pageIndex.value;
         const pageSize = this.pageSize.value;
+        const pageCount = this.pageCount.value;
+        const isLoaded = this.isLoaded.value;
         const displayFilter = this.filterController.displayFilter.value;
         const pagingEnabled = this.pagingEnabled.value;
         const sortParameters = this.sortingController.sortParameters.value;
@@ -243,7 +239,13 @@ export class DataController {
         }
 
         if (dataSource.pageSize() !== pageSize) {
+          const newPageIndex = isLoaded
+            ? Math.max(Math.min(pageCount - 1, pageIndex), 0)
+            : pageIndex;
+
           dataSource.pageSize(pageSize);
+          dataSource.pageIndex(newPageIndex);
+
           someParamChanged ||= true;
         }
 

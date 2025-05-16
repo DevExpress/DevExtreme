@@ -128,10 +128,8 @@ export class OptionsController<
     return getOr(this.cache.twoWay, name, () => {
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       const that = this;
-      const obs = signal(this.component.option(name));
-      effect(() => {
-        obs.value = this.oneWay(name).value as any;
-      });
+      const obs = this.oneWay(name) as any;
+
       return {
         get value(): any {
           return obs.value;
@@ -151,15 +149,12 @@ export class OptionsController<
           return obs.peek();
         },
         subscribe(...params: any): any {
-        // @ts-expect-error
           return obs.subscribe(...params);
         },
         toJSON(...params: any[]): any {
-        // @ts-expect-error
           return obs.toJSON(...params);
         },
         valueOf(...params: any[]): any {
-        // @ts-expect-error
           return obs.valueOf(...params);
         },
         brand: obs.brand,

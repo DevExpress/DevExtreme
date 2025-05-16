@@ -223,6 +223,12 @@ describe('Pager View', () => {
     it('pageIndex is normalized after pageSize changed', async () => {
       const { optionsController, dataController } = createPagerView({
         dataSource: [...new Array(20)].map((_, index) => ({ field: `test_${index}` })),
+        // dataSource: {
+        //   load: async () => ({
+        //     data: [...new Array(20)].map((_, index) => ({ field: `test_${index}` })),
+        //     totalCount: 20,
+        //   }),
+        // },
         paging: {
           pageIndex: 3,
           pageSize: 5,
