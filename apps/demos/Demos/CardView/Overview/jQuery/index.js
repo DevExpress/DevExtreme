@@ -18,6 +18,7 @@ $(() => {
     cardMinWidth: 250,
     cardCover: {
       imageExpr: ({ Picture }) => `${IMG_URL}/${Picture}`,
+      altExpr: ({ FullName }) => `${FullName} picture`,
     },
     pager: {
       showInfo: true,
