@@ -25,6 +25,7 @@ meta.forEach((section) => {
   section.Groups.forEach((group) => {
     if (group.Groups) {
       group.Groups.forEach((nestedGroup) => {
+        console.log('-----nestedGroup.Name----->', nestedGroup.Name, group.Name);
         nestedGroup.Demos.forEach((demo) => demos.push(demo));
       });
     }
