@@ -1218,7 +1218,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   public updateItems(change?, isDataChanged?) {
     change = change || {};
     const that = this;
-    change.isDataValueChanged = that.changed._fired;
+    change.isFirstRender = !that.changed.fired();
 
     if (that._repaintChangesOnly !== undefined) {
       change.repaintChangesOnly = change.repaintChangesOnly ?? that._repaintChangesOnly;
