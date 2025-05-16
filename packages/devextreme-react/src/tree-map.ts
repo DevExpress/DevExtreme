@@ -9,7 +9,7 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { ClickEvent, DisposingEvent, DrawnEvent, DrillEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, NodesInitializedEvent, NodesRenderingEvent, TreeMapColorizerType, dxTreeMapNode } from "devextreme/viz/tree_map";
-import type { DashStyle, Palette, PaletteExtensionMode, Font as ChartsFont, TextOverflow, WordWrap } from "devextreme/common/charts";
+import type { Palette, PaletteExtensionMode, Font as ChartsFont, TextOverflow, WordWrap } from "devextreme/common/charts";
 import type { ExportFormat, Format as CommonFormat, HorizontalAlignment, VerticalEdge, template } from "devextreme/common";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 
@@ -96,7 +96,7 @@ const TreeMap = memo(
 type IBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
   width?: number | undefined;
-  dashStyle?: DashStyle;
+  dashStyle?: Record<string, any>;
   opacity?: number | undefined;
   visible?: boolean;
 }>
@@ -603,7 +603,7 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: DashStyle;
+    dashStyle?: Record<string, any>;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;
@@ -659,7 +659,7 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 // Tooltip
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: DashStyle;
+  dashStyle?: Record<string, any>;
   opacity?: number | undefined;
   visible?: boolean;
   width?: number;

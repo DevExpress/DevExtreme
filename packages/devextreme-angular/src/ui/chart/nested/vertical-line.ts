@@ -14,8 +14,8 @@ import {
 
 
 
-import { DashStyle, Font } from 'devextreme/common/charts';
 import { chartPointObject } from 'devextreme/viz/chart';
+import { Font } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
@@ -43,10 +43,10 @@ export class DxoChartVerticalLineComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): Record<string, any> {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: Record<string, any>) {
         this._setOption('dashStyle', value);
     }
 

@@ -14,8 +14,8 @@ import {
 
 
 
-import { DashStyle, Font } from 'devextreme/common/charts';
 import { chartPointObject } from 'devextreme/viz/chart';
+import { Font } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
@@ -43,10 +43,10 @@ export class DxoChartCrosshairComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): Record<string, any> {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: Record<string, any>) {
         this._setOption('dashStyle', value);
     }
 
@@ -59,10 +59,10 @@ export class DxoChartCrosshairComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get horizontalLine(): boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get horizontalLine(): boolean | { color?: string, dashStyle?: Record<string, any>, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('horizontalLine');
     }
-    set horizontalLine(value: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set horizontalLine(value: boolean | { color?: string, dashStyle?: Record<string, any>, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('horizontalLine', value);
     }
 
@@ -83,10 +83,10 @@ export class DxoChartCrosshairComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get verticalLine(): boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get verticalLine(): boolean | { color?: string, dashStyle?: Record<string, any>, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('verticalLine');
     }
-    set verticalLine(value: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set verticalLine(value: boolean | { color?: string, dashStyle?: Record<string, any>, label?: { backgroundColor?: string, customizeText?: ((info: { point: chartPointObject, value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('verticalLine', value);
     }
 

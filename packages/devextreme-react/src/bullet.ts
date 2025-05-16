@@ -9,9 +9,9 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent } from "devextreme/viz/bullet";
-import type { DashStyle, Font as ChartsFont } from "devextreme/common/charts";
 import type { Format as CommonFormat, template } from "devextreme/common";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
+import type { Font as ChartsFont } from "devextreme/common/charts";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -74,7 +74,7 @@ const Bullet = memo(
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: DashStyle;
+  dashStyle?: Record<string, any>;
   opacity?: number | undefined;
   visible?: boolean;
   width?: number;
@@ -205,7 +205,7 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: DashStyle;
+    dashStyle?: Record<string, any>;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;

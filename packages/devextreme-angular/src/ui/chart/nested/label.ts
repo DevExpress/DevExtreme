@@ -18,7 +18,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { Font, RelativePosition, ChartsAxisLabelOverlap, TextOverflow, WordWrap, DashStyle } from 'devextreme/common/charts';
+import { Font, RelativePosition, ChartsAxisLabelOverlap, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import { HorizontalAlignment, Position, VerticalAlignment } from 'devextreme/common';
 import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
 import { Format } from 'devextreme/common/core/localization';
@@ -205,10 +205,10 @@ export class DxoChartLabelComponent extends NestedOption implements AfterViewIni
     }
 
     @Input()
-    get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string | undefined, dashStyle?: Record<string, any>, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string | undefined, dashStyle?: Record<string, any>, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 

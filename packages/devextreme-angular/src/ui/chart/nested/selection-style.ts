@@ -14,7 +14,7 @@ import {
 
 
 
-import { DashStyle, ChartsColor, HatchDirection } from 'devextreme/common/charts';
+import { ChartsColor, HatchDirection } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -33,10 +33,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChartSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string | undefined, visible?: boolean, width?: number, dashStyle?: DashStyle | undefined } {
+    get border(): { color?: string | undefined, visible?: boolean, width?: number, dashStyle?: Record<string, any> } {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, visible?: boolean, width?: number, dashStyle?: DashStyle | undefined }) {
+    set border(value: { color?: string | undefined, visible?: boolean, width?: number, dashStyle?: Record<string, any> }) {
         this._setOption('border', value);
     }
 
@@ -57,10 +57,10 @@ export class DxoChartSelectionStyleComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): Record<string, any> {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: Record<string, any>) {
         this._setOption('dashStyle', value);
     }
 

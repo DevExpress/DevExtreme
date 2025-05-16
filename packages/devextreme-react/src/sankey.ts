@@ -9,9 +9,9 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LinkClickEvent, NodeClickEvent, dxSankeyNode, SankeyColorMode } from "devextreme/viz/sankey";
-import type { DashStyle, HatchDirection, Font as ChartsFont, TextOverflow, WordWrap } from "devextreme/common/charts";
 import type { ExportFormat, Format as CommonFormat, HorizontalAlignment, VerticalEdge, template } from "devextreme/common";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
+import type { HatchDirection, Font as ChartsFont, TextOverflow, WordWrap } from "devextreme/common/charts";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -117,7 +117,7 @@ type IBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
   visible?: boolean | undefined;
   width?: number | undefined;
-  dashStyle?: DashStyle;
+  dashStyle?: Record<string, any>;
   opacity?: number | undefined;
 }>
 const _componentBorder = (props: IBorderProps) => {
@@ -586,7 +586,7 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: DashStyle;
+    dashStyle?: Record<string, any>;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;
@@ -650,7 +650,7 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 // Tooltip
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: DashStyle;
+  dashStyle?: Record<string, any>;
   opacity?: number | undefined;
   visible?: boolean;
   width?: number;

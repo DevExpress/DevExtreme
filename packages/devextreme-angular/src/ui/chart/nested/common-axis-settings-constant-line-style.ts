@@ -14,7 +14,7 @@ import {
 
 
 
-import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
+import { Font, RelativePosition } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -41,10 +41,10 @@ export class DxoChartCommonAxisSettingsConstantLineStyleComponent extends Nested
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): Record<string, any> {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: Record<string, any>) {
         this._setOption('dashStyle', value);
     }
 

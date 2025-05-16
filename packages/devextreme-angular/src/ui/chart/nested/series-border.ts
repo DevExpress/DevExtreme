@@ -14,7 +14,6 @@ import {
 
 
 
-import { DashStyle } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -41,10 +40,10 @@ export class DxoChartSeriesBorderComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get dashStyle(): DashStyle | undefined {
+    get dashStyle(): Record<string, any> {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle | undefined) {
+    set dashStyle(value: Record<string, any>) {
         this._setOption('dashStyle', value);
     }
 

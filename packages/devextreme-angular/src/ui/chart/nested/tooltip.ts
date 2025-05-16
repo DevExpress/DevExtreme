@@ -15,7 +15,7 @@ import {
 
 
 import { Format } from 'devextreme/common/core/localization';
-import { DashStyle, Font } from 'devextreme/common/charts';
+import { Font } from 'devextreme/common/charts';
 import { ChartTooltipLocation } from 'devextreme/viz/chart';
 
 import {
@@ -51,10 +51,10 @@ export class DxoChartTooltipComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get border(): { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string, dashStyle?: Record<string, any>, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, dashStyle?: Record<string, any>, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 

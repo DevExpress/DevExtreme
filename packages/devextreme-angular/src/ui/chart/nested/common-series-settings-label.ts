@@ -16,7 +16,7 @@ import {
 
 import { HorizontalAlignment } from 'devextreme/common';
 import { Format } from 'devextreme/common/core/localization';
-import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
+import { Font, RelativePosition } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -59,10 +59,10 @@ export class DxoChartCommonSeriesSettingsLabelComponent extends NestedOption imp
     }
 
     @Input()
-    get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string | undefined, dashStyle?: Record<string, any>, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string | undefined, dashStyle?: Record<string, any>, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 

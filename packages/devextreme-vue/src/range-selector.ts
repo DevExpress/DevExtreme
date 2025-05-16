@@ -27,7 +27,6 @@ import {
 import {
  VisualRangeUpdateMode,
  Theme,
- DashStyle,
  ScaleBreakLineStyle,
  Palette,
  PaletteExtensionMode,
@@ -386,7 +385,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<Record<string, any>>,
     visible: Boolean,
     width: Number
   }
@@ -589,7 +588,7 @@ const DxCommonSeriesSettingsConfig = {
     closeValueField: String,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
     cornerRadius: Number,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<Record<string, any>>,
     fullstackedarea: {},
     fullstackedbar: {},
     fullstackedline: {},
@@ -674,7 +673,7 @@ const DxCommonSeriesSettingsHoverStyleConfig = {
   props: {
     border: Object as PropType<Record<string, any>>,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<Record<string, any>>,
     hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     width: Number
@@ -760,7 +759,7 @@ const DxCommonSeriesSettingsSelectionStyleConfig = {
   props: {
     border: Object as PropType<Record<string, any>>,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<Record<string, any>>,
     hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     width: Number
@@ -959,7 +958,7 @@ const DxHoverStyleConfig = {
   props: {
     border: Object as PropType<Record<string, any>>,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<Record<string, any>>,
     hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     size: Number,
@@ -1638,7 +1637,7 @@ const DxSelectionStyleConfig = {
   props: {
     border: Object as PropType<Record<string, any>>,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<Record<string, any>>,
     hatching: Object as PropType<Record<string, any>>,
     highlight: Boolean,
     size: Number,
@@ -1715,7 +1714,7 @@ const DxSeriesConfig = {
     closeValueField: String,
     color: [Object, String] as PropType<ChartsColor | string | Record<string, any>>,
     cornerRadius: Number,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<Record<string, any>>,
     highValueField: String,
     hoverMode: String as PropType<SeriesHoverMode>,
     hoverStyle: Object as PropType<Record<string, any>>,
@@ -1781,7 +1780,7 @@ const DxSeriesBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<Record<string, any>>,
     visible: Boolean,
     width: Number
   }

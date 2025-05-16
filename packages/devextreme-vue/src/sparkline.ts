@@ -25,7 +25,6 @@ import {
 import {
  PointSymbol,
  Theme,
- DashStyle,
  Font,
 } from "devextreme/common/charts";
 import {
@@ -203,7 +202,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<Record<string, any>>,
     opacity: Number,
     visible: Boolean,
     width: Number

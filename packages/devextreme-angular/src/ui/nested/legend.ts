@@ -15,7 +15,7 @@ import {
 
 
 import { HorizontalAlignment, Orientation, Position, VerticalEdge } from 'devextreme/common';
-import { DashStyle, Font, LegendHoverMode, RelativePosition } from 'devextreme/common/charts';
+import { Font, LegendHoverMode, RelativePosition } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';
 import { PieChartLegendHoverMode } from 'devextreme/viz/pie_chart';
 
@@ -44,10 +44,10 @@ export class DxoLegendComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
-    get border(): { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string, cornerRadius?: number, dashStyle?: any, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, cornerRadius?: number, dashStyle?: any, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 

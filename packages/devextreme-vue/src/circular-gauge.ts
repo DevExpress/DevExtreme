@@ -22,7 +22,6 @@ import {
 import {
  Theme,
  AnimationEaseMode,
- DashStyle,
  Font,
  LabelOverlap,
  ChartsColor,
@@ -235,7 +234,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: Object as PropType<Record<string, any>>,
     opacity: Number,
     visible: Boolean,
     width: Number

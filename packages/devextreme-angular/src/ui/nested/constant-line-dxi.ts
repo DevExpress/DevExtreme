@@ -13,7 +13,7 @@ import {
 
 
 import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
+import { Font, RelativePosition } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -40,10 +40,10 @@ export class DxiConstantLineComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): any {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: any) {
         this._setOption('dashStyle', value);
     }
 

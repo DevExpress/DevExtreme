@@ -12,7 +12,7 @@ import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSav
 import type { chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod, dxChartCommonSeriesSettings, FinancialChartReductionLevel } from "devextreme/viz/chart";
 import type { Format as CommonFormat, SliderValueChangeMode, HorizontalAlignment, ExportFormat, VerticalEdge } from "devextreme/common";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
-import type { DashStyle, ScaleBreakLineStyle, Palette, PaletteExtensionMode, ChartsDataType, ChartsColor, SeriesHoverMode, HatchDirection, Font as ChartsFont, RelativePosition, PointInteractionMode, PointSymbol, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType, LabelOverlap, TimeInterval, ScaleBreak, DiscreteAxisDivisionMode, TextOverflow, WordWrap } from "devextreme/common/charts";
+import type { ScaleBreakLineStyle, Palette, PaletteExtensionMode, ChartsDataType, ChartsColor, SeriesHoverMode, HatchDirection, Font as ChartsFont, RelativePosition, PointInteractionMode, PointSymbol, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType, LabelOverlap, TimeInterval, ScaleBreak, DiscreteAxisDivisionMode, TextOverflow, WordWrap } from "devextreme/common/charts";
 import type { ChartSeries } from "devextreme/viz/common";
 
 import type * as CommonChartTypes from "devextreme/common/charts";
@@ -246,7 +246,7 @@ const Behavior = Object.assign<typeof _componentBehavior, NestedComponentMeta>(_
 // Point
 type IBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
-  dashStyle?: DashStyle | undefined;
+  dashStyle?: Record<string, any>;
   visible?: boolean;
   width?: number;
 }>
@@ -395,7 +395,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   barWidth?: number | undefined;
   border?: Record<string, any> | {
     color?: string | undefined;
-    dashStyle?: DashStyle | undefined;
+    dashStyle?: Record<string, any>;
     visible?: boolean;
     width?: number;
   };
@@ -404,7 +404,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   closeValueField?: string;
   color?: ChartsColor | string | undefined;
   cornerRadius?: number;
-  dashStyle?: DashStyle;
+  dashStyle?: Record<string, any>;
   fullstackedarea?: any;
   fullstackedbar?: any;
   fullstackedline?: any;
@@ -415,12 +415,12 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   hoverStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string | undefined;
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: Record<string, any>;
       visible?: boolean;
       width?: number;
     };
     color?: ChartsColor | string | undefined;
-    dashStyle?: DashStyle;
+    dashStyle?: Record<string, any>;
     hatching?: Record<string, any> | {
       direction?: HatchDirection;
       opacity?: number;
@@ -438,7 +438,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
     backgroundColor?: string | undefined;
     border?: Record<string, any> | {
       color?: string | undefined;
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: Record<string, any>;
       visible?: boolean;
       width?: number;
     };
@@ -523,12 +523,12 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   selectionStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string | undefined;
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: Record<string, any>;
       visible?: boolean;
       width?: number;
     };
     color?: ChartsColor | string | undefined;
-    dashStyle?: DashStyle;
+    dashStyle?: Record<string, any>;
     hatching?: Record<string, any> | {
       direction?: HatchDirection;
       opacity?: number;
@@ -602,12 +602,12 @@ const CommonSeriesSettings = Object.assign<typeof _componentCommonSeriesSettings
 type ICommonSeriesSettingsHoverStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string | undefined;
-    dashStyle?: DashStyle | undefined;
+    dashStyle?: Record<string, any>;
     visible?: boolean;
     width?: number;
   };
   color?: ChartsColor | string | undefined;
-  dashStyle?: DashStyle;
+  dashStyle?: Record<string, any>;
   hatching?: Record<string, any> | {
     direction?: HatchDirection;
     opacity?: number;
@@ -645,7 +645,7 @@ type ICommonSeriesSettingsLabelProps = React.PropsWithChildren<{
   backgroundColor?: string | undefined;
   border?: Record<string, any> | {
     color?: string | undefined;
-    dashStyle?: DashStyle | undefined;
+    dashStyle?: Record<string, any>;
     visible?: boolean;
     width?: number;
   };
@@ -692,12 +692,12 @@ const CommonSeriesSettingsLabel = Object.assign<typeof _componentCommonSeriesSet
 type ICommonSeriesSettingsSelectionStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string | undefined;
-    dashStyle?: DashStyle | undefined;
+    dashStyle?: Record<string, any>;
     visible?: boolean;
     width?: number;
   };
   color?: ChartsColor | string | undefined;
-  dashStyle?: DashStyle;
+  dashStyle?: Record<string, any>;
   hatching?: Record<string, any> | {
     direction?: HatchDirection;
     opacity?: number;
@@ -891,12 +891,12 @@ const Height = Object.assign<typeof _componentHeight, NestedComponentMeta>(_comp
 type IHoverStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string | undefined;
-    dashStyle?: DashStyle | undefined;
+    dashStyle?: Record<string, any>;
     visible?: boolean;
     width?: number;
   };
   color?: ChartsColor | string | undefined;
-  dashStyle?: DashStyle;
+  dashStyle?: Record<string, any>;
   hatching?: Record<string, any> | {
     direction?: HatchDirection;
     opacity?: number;
@@ -993,7 +993,7 @@ type ILabelProps = React.PropsWithChildren<{
   backgroundColor?: string | undefined;
   border?: Record<string, any> | {
     color?: string | undefined;
-    dashStyle?: DashStyle | undefined;
+    dashStyle?: Record<string, any>;
     visible?: boolean;
     width?: number;
   };
@@ -1647,11 +1647,11 @@ type ISelectionStyleProps = React.PropsWithChildren<{
     color?: string | undefined;
     visible?: boolean;
     width?: number;
-    dashStyle?: DashStyle | undefined;
+    dashStyle?: Record<string, any>;
   };
   color?: ChartsColor | string | undefined;
   size?: number | undefined;
-  dashStyle?: DashStyle;
+  dashStyle?: Record<string, any>;
   hatching?: Record<string, any> | {
     direction?: HatchDirection;
     opacity?: number;
@@ -1696,25 +1696,25 @@ type ISeriesProps = React.PropsWithChildren<{
   barWidth?: number | undefined;
   border?: Record<string, any> | {
     color?: string | undefined;
-    dashStyle?: DashStyle | undefined;
+    dashStyle?: Record<string, any>;
     visible?: boolean;
     width?: number;
   };
   closeValueField?: string;
   color?: ChartsColor | string | undefined;
   cornerRadius?: number;
-  dashStyle?: DashStyle;
+  dashStyle?: Record<string, any>;
   highValueField?: string;
   hoverMode?: SeriesHoverMode;
   hoverStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string | undefined;
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: Record<string, any>;
       visible?: boolean;
       width?: number;
     };
     color?: ChartsColor | string | undefined;
-    dashStyle?: DashStyle;
+    dashStyle?: Record<string, any>;
     hatching?: Record<string, any> | {
       direction?: HatchDirection;
       opacity?: number;
@@ -1732,7 +1732,7 @@ type ISeriesProps = React.PropsWithChildren<{
     backgroundColor?: string | undefined;
     border?: Record<string, any> | {
       color?: string | undefined;
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: Record<string, any>;
       visible?: boolean;
       width?: number;
     };
@@ -1814,12 +1814,12 @@ type ISeriesProps = React.PropsWithChildren<{
   selectionStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string | undefined;
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: Record<string, any>;
       visible?: boolean;
       width?: number;
     };
     color?: ChartsColor | string | undefined;
-    dashStyle?: DashStyle;
+    dashStyle?: Record<string, any>;
     hatching?: Record<string, any> | {
       direction?: HatchDirection;
       opacity?: number;
@@ -1887,7 +1887,7 @@ const Series = Object.assign<typeof _componentSeries, NestedComponentMeta>(_comp
 // Series
 type ISeriesBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
-  dashStyle?: DashStyle | undefined;
+  dashStyle?: Record<string, any>;
   visible?: boolean;
   width?: number;
 }>

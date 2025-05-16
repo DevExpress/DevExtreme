@@ -22,6 +22,7 @@ export {
     PaletteExtensionMode,
     PointInteractionMode,
     PointSymbol,
+    PredefinedDashStyle,
     registerGradient,
     registerPattern,
     RelativePosition,

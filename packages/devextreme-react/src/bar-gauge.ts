@@ -9,7 +9,7 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent, BarGaugeBarInfo, BarGaugeLegendItem } from "devextreme/viz/bar_gauge";
-import type { AnimationEaseMode, Font as ChartsFont, TextOverflow, WordWrap, DashStyle } from "devextreme/common/charts";
+import type { AnimationEaseMode, Font as ChartsFont, TextOverflow, WordWrap } from "devextreme/common/charts";
 import type { HorizontalAlignment, VerticalEdge, ExportFormat, Format as CommonFormat, Position, template, Orientation } from "devextreme/common";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 
@@ -196,7 +196,7 @@ const BarGaugeTitleSubtitle = Object.assign<typeof _componentBarGaugeTitleSubtit
 type IBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
-  dashStyle?: DashStyle;
+  dashStyle?: Record<string, any>;
   opacity?: number | undefined;
   visible?: boolean;
   width?: number;
@@ -368,7 +368,7 @@ type ILegendProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: DashStyle;
+    dashStyle?: Record<string, any>;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;
@@ -451,7 +451,7 @@ const Legend = Object.assign<typeof _componentLegend, NestedComponentMeta>(_comp
 type ILegendBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
-  dashStyle?: DashStyle;
+  dashStyle?: Record<string, any>;
   opacity?: number | undefined;
   visible?: boolean;
   width?: number;
@@ -701,7 +701,7 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: DashStyle;
+    dashStyle?: Record<string, any>;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;
@@ -758,7 +758,7 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 // Tooltip
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: DashStyle;
+  dashStyle?: Record<string, any>;
   opacity?: number | undefined;
   visible?: boolean;
   width?: number;

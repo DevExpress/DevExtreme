@@ -16,8 +16,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextreme/common/charts';
 import { dxPolarChartAnnotationConfig } from 'devextreme/viz/polar_chart';
+import { Font, TextOverflow, AnnotationType, WordWrap } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,
@@ -81,10 +81,10 @@ export class DxiPolarChartAnnotationComponent extends CollectionNestedOption imp
     }
 
     @Input()
-    get border(): { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string, cornerRadius?: number, dashStyle?: Record<string, any>, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, cornerRadius?: number, dashStyle?: Record<string, any>, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 

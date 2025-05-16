@@ -9,7 +9,7 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, TooltipHiddenEvent, TooltipShownEvent, dxPieChartAnnotationConfig, PieChartAnnotationLocation, dxPieChartCommonAnnotationConfig, PieChartSeriesInteractionMode, SmallValuesGroupingMode, PieChartLegendItem, PieChartLegendHoverMode, PieChartSeries } from "devextreme/viz/pie_chart";
-import type { AnimationEaseMode, DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, ChartsDataType, ChartsColor, HatchDirection, LabelPosition } from "devextreme/common/charts";
+import type { AnimationEaseMode, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, ChartsDataType, ChartsColor, HatchDirection, LabelPosition } from "devextreme/common/charts";
 import type { template, Format as CommonFormat, ExportFormat, HorizontalAlignment, Position, Orientation, VerticalEdge } from "devextreme/common";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 
@@ -157,7 +157,7 @@ type IAnnotationProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: DashStyle;
+    dashStyle?: Record<string, any>;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;
@@ -240,7 +240,7 @@ const Annotation = Object.assign<typeof _componentAnnotation, NestedComponentMet
 type IAnnotationBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
-  dashStyle?: DashStyle;
+  dashStyle?: Record<string, any>;
   opacity?: number | undefined;
   visible?: boolean;
   width?: number;
@@ -295,7 +295,7 @@ const ArgumentFormat = Object.assign<typeof _componentArgumentFormat, NestedComp
 type IBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
   cornerRadius?: number;
-  dashStyle?: DashStyle | undefined;
+  dashStyle?: Record<string, any>;
   opacity?: number | undefined;
   visible?: boolean;
   width?: number;
@@ -345,7 +345,7 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: DashStyle;
+    dashStyle?: Record<string, any>;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;
@@ -426,7 +426,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   argumentType?: ChartsDataType | undefined;
   border?: Record<string, any> | {
     color?: string | undefined;
-    dashStyle?: DashStyle | undefined;
+    dashStyle?: Record<string, any>;
     visible?: boolean;
     width?: number;
   };
@@ -435,7 +435,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   hoverStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string | undefined;
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: Record<string, any>;
       visible?: boolean;
       width?: number;
     };
@@ -453,7 +453,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
     backgroundColor?: string | undefined;
     border?: Record<string, any> | {
       color?: string | undefined;
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: Record<string, any>;
       visible?: boolean;
       width?: number;
     };
@@ -479,7 +479,7 @@ type ICommonSeriesSettingsProps = React.PropsWithChildren<{
   selectionStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string | undefined;
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: Record<string, any>;
       visible?: boolean;
       width?: number;
     };
@@ -650,7 +650,7 @@ const Hatching = Object.assign<typeof _componentHatching, NestedComponentMeta>(_
 type IHoverStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string | undefined;
-    dashStyle?: DashStyle | undefined;
+    dashStyle?: Record<string, any>;
     visible?: boolean;
     width?: number;
   };
@@ -711,7 +711,7 @@ type ILabelProps = React.PropsWithChildren<{
   backgroundColor?: string | undefined;
   border?: Record<string, any> | {
     color?: string | undefined;
-    dashStyle?: DashStyle | undefined;
+    dashStyle?: Record<string, any>;
     visible?: boolean;
     width?: number;
   };
@@ -759,7 +759,7 @@ type ILegendProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: DashStyle;
+    dashStyle?: Record<string, any>;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;
@@ -1026,7 +1026,7 @@ const PieChartTitleSubtitle = Object.assign<typeof _componentPieChartTitleSubtit
 type ISelectionStyleProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string | undefined;
-    dashStyle?: DashStyle | undefined;
+    dashStyle?: Record<string, any>;
     visible?: boolean;
     width?: number;
   };
@@ -1065,7 +1065,7 @@ type ISeriesProps = React.PropsWithChildren<{
   argumentType?: ChartsDataType | undefined;
   border?: Record<string, any> | {
     color?: string | undefined;
-    dashStyle?: DashStyle | undefined;
+    dashStyle?: Record<string, any>;
     visible?: boolean;
     width?: number;
   };
@@ -1074,7 +1074,7 @@ type ISeriesProps = React.PropsWithChildren<{
   hoverStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string | undefined;
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: Record<string, any>;
       visible?: boolean;
       width?: number;
     };
@@ -1092,7 +1092,7 @@ type ISeriesProps = React.PropsWithChildren<{
     backgroundColor?: string | undefined;
     border?: Record<string, any> | {
       color?: string | undefined;
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: Record<string, any>;
       visible?: boolean;
       width?: number;
     };
@@ -1119,7 +1119,7 @@ type ISeriesProps = React.PropsWithChildren<{
   selectionStyle?: Record<string, any> | {
     border?: Record<string, any> | {
       color?: string | undefined;
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: Record<string, any>;
       visible?: boolean;
       width?: number;
     };
@@ -1173,7 +1173,7 @@ const Series = Object.assign<typeof _componentSeries, NestedComponentMeta>(_comp
 // Series
 type ISeriesBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
-  dashStyle?: DashStyle | undefined;
+  dashStyle?: Record<string, any>;
   visible?: boolean;
   width?: number;
 }>
@@ -1351,7 +1351,7 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: DashStyle;
+    dashStyle?: Record<string, any>;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;
@@ -1410,7 +1410,7 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 // Tooltip
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: DashStyle;
+  dashStyle?: Record<string, any>;
   opacity?: number | undefined;
   visible?: boolean;
   width?: number;

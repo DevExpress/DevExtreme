@@ -14,8 +14,8 @@ import {
 
 
 
-import { DashStyle, Font } from 'devextreme/common/charts';
 import { BarGaugeBarInfo, BarGaugeLegendItem } from 'devextreme/viz/bar_gauge';
+import { Font } from 'devextreme/common/charts';
 import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 import { Format } from 'devextreme/common/core/localization';
 
@@ -44,10 +44,10 @@ export class DxoBarGaugeLegendComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get border(): { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string, cornerRadius?: number, dashStyle?: Record<string, any>, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, cornerRadius?: number, dashStyle?: Record<string, any>, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 

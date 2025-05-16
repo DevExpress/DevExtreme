@@ -5,7 +5,7 @@ import {
     Component,
 } from '@angular/core';
 
-import { AnnotationType, DashStyle, Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import { AnnotationType, Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import { PieChartAnnotationLocation } from 'devextreme/viz/pie_chart';
 
 @Component({
@@ -47,10 +47,10 @@ export abstract class DxoChartCommonAnnotationConfig extends NestedOption {
         this._setOption('axis', value);
     }
 
-    get border(): { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string, cornerRadius?: number, dashStyle?: any, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, cornerRadius?: number, dashStyle?: any, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 

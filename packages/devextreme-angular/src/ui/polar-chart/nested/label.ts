@@ -14,7 +14,7 @@ import {
 
 
 
-import { Font, LabelOverlap, DashStyle, RelativePosition } from 'devextreme/common/charts';
+import { Font, LabelOverlap, RelativePosition } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
@@ -114,10 +114,10 @@ export class DxoPolarChartLabelComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string | undefined, dashStyle?: Record<string, any>, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string | undefined, dashStyle?: Record<string, any>, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
