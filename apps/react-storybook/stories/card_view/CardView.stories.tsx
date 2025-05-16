@@ -498,3 +498,58 @@ export const ColumnChooserDragAndDropModeStory: Story = {
   }
 }
 
+export const AccessibilityStory: Story = {
+  ...DefaultMode,
+  args: {
+    ...DefaultMode.args,
+
+    // Sorting
+    'sorting.mode': 'multiple',
+
+    // Selection
+    keyExpr: 'id',
+    'selection.mode': 'multiple',
+    'selection.showCheckBoxesMode': 'always',
+    'selection.allowSelectAll': false,
+
+    // Search
+    'searchPanel.highlightCaseSensitive': false,
+    'searchPanel.highlightSearchText': true,
+    'searchPanel.text': '',
+    'searchPanel.visible': true,
+    'searchPanel.placeholder': 'Search...',
+    'searchPanel.searchVisibleColumnsOnly': false,
+    'searchPanel.width': 160,
+
+    // HeaderFilter
+    'headerFilter.visible': true,
+    headerFilter: {
+      width: 252,
+      height: 325,
+      allowSelectAll: true,
+      search: {
+        enabled: false,
+        timeout: 500,
+        mode: 'contains',
+        editorOptions: {},
+      },
+      texts: {
+        emptyValue: 'empty',
+        ok: 'ok',
+        cancel: 'cancel',
+      },
+    },
+
+    // Editing
+    editing: {
+      allowAdding: true,
+      allowEditing: true,
+      allowUpdating: true,
+      allowDeleting: true,
+      popup: {
+        title: 'Employee Info',
+        showTitle: true,
+      },
+    },
+  }
+}
