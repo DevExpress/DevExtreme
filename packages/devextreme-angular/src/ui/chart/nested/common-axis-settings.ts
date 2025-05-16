@@ -67,10 +67,10 @@ export class DxoChartCommonAxisSettingsComponent extends NestedOption implements
     }
 
     @Input()
-    get constantLineStyle(): { color?: string, dashStyle?: DashStyle, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } {
+    get constantLineStyle(): { color?: string, dashStyle?: DashStyle | string, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }) {
+    set constantLineStyle(value: { color?: string, dashStyle?: DashStyle | string, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number }) {
         this._setOption('constantLineStyle', value);
     }
 

@@ -67,10 +67,10 @@ export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDe
     }
 
     @Input()
-    get constantLineStyle(): { color?: string, dashStyle?: DashStyle, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } | { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number } {
+    get constantLineStyle(): { color?: string, dashStyle?: DashStyle | string, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } | { color?: string, dashStyle?: DashStyle | string, label?: { font?: Font, visible?: boolean }, width?: number } {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } | { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }) {
+    set constantLineStyle(value: { color?: string, dashStyle?: DashStyle | string, label?: { font?: Font, position?: RelativePosition, visible?: boolean }, paddingLeftRight?: number, paddingTopBottom?: number, width?: number } | { color?: string, dashStyle?: DashStyle | string, label?: { font?: Font, visible?: boolean }, width?: number }) {
         this._setOption('constantLineStyle', value);
     }
 

@@ -119,7 +119,7 @@ type IBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
   visible?: boolean | undefined;
   width?: number | undefined;
-  dashStyle?: DashStyle;
+  dashStyle?: DashStyle | string;
   cornerRadius?: number;
   opacity?: number | undefined;
 }>
@@ -439,7 +439,7 @@ type ILabelProps = React.PropsWithChildren<{
   backgroundColor?: string;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | string;
     visible?: boolean;
     width?: number;
   };
@@ -484,7 +484,7 @@ const Label = Object.assign<typeof _componentLabel, NestedComponentMeta>(_compon
 // Label
 type ILabelBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: DashStyle;
+  dashStyle?: DashStyle | string;
   visible?: boolean;
   width?: number;
 }>
@@ -508,7 +508,7 @@ type ILegendProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | string;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;
@@ -589,7 +589,7 @@ const Legend = Object.assign<typeof _componentLegend, NestedComponentMeta>(_comp
 type ILegendBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
-  dashStyle?: DashStyle;
+  dashStyle?: DashStyle | string;
   opacity?: number | undefined;
   visible?: boolean;
   width?: number;
@@ -873,7 +873,7 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | string;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;
@@ -929,7 +929,7 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 // Tooltip
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: DashStyle;
+  dashStyle?: DashStyle | string;
   opacity?: number | undefined;
   visible?: boolean;
   width?: number;

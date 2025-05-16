@@ -96,7 +96,7 @@ const TreeMap = memo(
 type IBorderProps = React.PropsWithChildren<{
   color?: string | undefined;
   width?: number | undefined;
-  dashStyle?: DashStyle;
+  dashStyle?: DashStyle | string;
   opacity?: number | undefined;
   visible?: boolean;
 }>
@@ -603,7 +603,7 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | string;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;
@@ -659,7 +659,7 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 // Tooltip
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: DashStyle;
+  dashStyle?: DashStyle | string;
   opacity?: number | undefined;
   visible?: boolean;
   width?: number;

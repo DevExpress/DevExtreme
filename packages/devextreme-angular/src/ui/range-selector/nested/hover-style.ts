@@ -33,10 +33,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoRangeSelectorHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string | undefined, dashStyle?: DashStyle | string | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string | undefined, dashStyle?: DashStyle | string | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -49,10 +49,10 @@ export class DxoRangeSelectorHoverStyleComponent extends NestedOption implements
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): DashStyle | string {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: DashStyle | string) {
         this._setOption('dashStyle', value);
     }
 

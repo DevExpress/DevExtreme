@@ -257,7 +257,7 @@ const DxBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: String as PropType<DashStyle | string>,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -595,7 +595,7 @@ const DxLabelBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: String as PropType<DashStyle | string>,
     visible: Boolean,
     width: Number
   }
@@ -688,7 +688,7 @@ const DxLegendBorderConfig = {
   props: {
     color: String,
     cornerRadius: Number,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: String as PropType<DashStyle | string>,
     opacity: Number,
     visible: Boolean,
     width: Number
@@ -1010,7 +1010,7 @@ const DxTooltipBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: String as PropType<DashStyle | string>,
     opacity: Number,
     visible: Boolean,
     width: Number

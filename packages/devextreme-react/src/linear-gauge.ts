@@ -138,7 +138,7 @@ const BackgroundColor = Object.assign<typeof _componentBackgroundColor, NestedCo
 // Tooltip
 type IBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: DashStyle;
+  dashStyle?: DashStyle | string;
   opacity?: number | undefined;
   visible?: boolean;
   width?: number;
@@ -695,7 +695,7 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | string;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;

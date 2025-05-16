@@ -1750,7 +1750,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @default 'solid'
        * @propertyOf dxPolarChartSeriesTypes.linepolarseries
        */
-      dashStyle?: DashStyle;
+      dashStyle?: DashStyle | string;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching
        * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
@@ -1855,7 +1855,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.dashStyle
          * @default 'solid'
          */
-        dashStyle?: DashStyle | undefined;
+        dashStyle?: DashStyle | string | undefined;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.visible
          * @default false
@@ -1877,7 +1877,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @default 'solid'
        * @propertyOf dxPolarChartSeriesTypes.linepolarseries
        */
-      dashStyle?: DashStyle;
+      dashStyle?: DashStyle | string;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching
        * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
@@ -2038,7 +2038,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.dashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: DashStyle | string | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.visible
        * @default false

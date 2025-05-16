@@ -42,10 +42,10 @@ export class DxoCrosshairComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): DashStyle | string {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: DashStyle | string) {
         this._setOption('dashStyle', value);
     }
 
@@ -58,10 +58,10 @@ export class DxoCrosshairComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
-    get horizontalLine(): boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get horizontalLine(): boolean | { color?: string, dashStyle?: DashStyle | string, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('horizontalLine');
     }
-    set horizontalLine(value: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set horizontalLine(value: boolean | { color?: string, dashStyle?: DashStyle | string, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('horizontalLine', value);
     }
 
@@ -82,10 +82,10 @@ export class DxoCrosshairComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
-    get verticalLine(): boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get verticalLine(): boolean | { color?: string, dashStyle?: DashStyle | string, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('verticalLine');
     }
-    set verticalLine(value: boolean | { color?: string, dashStyle?: DashStyle, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set verticalLine(value: boolean | { color?: string, dashStyle?: DashStyle | string, label?: { backgroundColor?: string, customizeText?: Function, font?: Font, format?: Format | string | undefined, visible?: boolean }, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('verticalLine', value);
     }
 

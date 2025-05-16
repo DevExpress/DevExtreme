@@ -231,10 +231,10 @@ export class DxoLabelComponent extends NestedOption implements AfterViewInit, On
     }
 
     @Input()
-    get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } {
+    get border(): { color?: string | undefined, dashStyle?: DashStyle | string | undefined, visible?: boolean, width?: number } | { color?: string, dashStyle?: DashStyle | string, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } | { color?: string, dashStyle?: DashStyle, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }) {
+    set border(value: { color?: string | undefined, dashStyle?: DashStyle | string | undefined, visible?: boolean, width?: number } | { color?: string, dashStyle?: DashStyle | string, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined }) {
         this._setOption('border', value);
     }
 

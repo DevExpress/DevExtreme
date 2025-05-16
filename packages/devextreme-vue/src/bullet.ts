@@ -155,7 +155,7 @@ const DxBorderConfig = {
   },
   props: {
     color: String,
-    dashStyle: String as PropType<DashStyle>,
+    dashStyle: String as PropType<DashStyle | string>,
     opacity: Number,
     visible: Boolean,
     width: Number

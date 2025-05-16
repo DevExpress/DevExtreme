@@ -103,7 +103,7 @@ type IAnnotationProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | string;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;
@@ -185,7 +185,7 @@ const Annotation = Object.assign<typeof _componentAnnotation, NestedComponentMet
 type IAnnotationBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
-  dashStyle?: DashStyle;
+  dashStyle?: DashStyle | string;
   opacity?: number | undefined;
   visible?: boolean;
   width?: number;
@@ -230,7 +230,7 @@ const Background = Object.assign<typeof _componentBackground, NestedComponentMet
 type IBorderProps = React.PropsWithChildren<{
   color?: string;
   cornerRadius?: number;
-  dashStyle?: DashStyle;
+  dashStyle?: DashStyle | string;
   opacity?: number | undefined;
   visible?: boolean;
   width?: number;
@@ -257,7 +257,7 @@ type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | string;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;
@@ -516,7 +516,7 @@ type ILegendProps = React.PropsWithChildren<{
   border?: Record<string, any> | {
     color?: string;
     cornerRadius?: number;
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | string;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;
@@ -873,7 +873,7 @@ type ITooltipProps = React.PropsWithChildren<{
   arrowLength?: number;
   border?: Record<string, any> | {
     color?: string;
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | string;
     opacity?: number | undefined;
     visible?: boolean;
     width?: number;
@@ -927,7 +927,7 @@ const Tooltip = Object.assign<typeof _componentTooltip, NestedComponentMeta>(_co
 // Tooltip
 type ITooltipBorderProps = React.PropsWithChildren<{
   color?: string;
-  dashStyle?: DashStyle;
+  dashStyle?: DashStyle | string;
   opacity?: number | undefined;
   visible?: boolean;
   width?: number;

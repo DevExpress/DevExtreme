@@ -49,10 +49,10 @@ export class DxoPolarChartCommonAxisSettingsComponent extends NestedOption imple
     }
 
     @Input()
-    get constantLineStyle(): { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number } {
+    get constantLineStyle(): { color?: string, dashStyle?: DashStyle | string, label?: { font?: Font, visible?: boolean }, width?: number } {
         return this._getOption('constantLineStyle');
     }
-    set constantLineStyle(value: { color?: string, dashStyle?: DashStyle, label?: { font?: Font, visible?: boolean }, width?: number }) {
+    set constantLineStyle(value: { color?: string, dashStyle?: DashStyle | string, label?: { font?: Font, visible?: boolean }, width?: number }) {
         this._setOption('constantLineStyle', value);
     }
 

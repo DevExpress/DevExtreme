@@ -49,10 +49,10 @@ export class DxoChartBorderComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get dashStyle(): DashStyle | undefined {
+    get dashStyle(): DashStyle | string | undefined {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle | undefined) {
+    set dashStyle(value: DashStyle | string | undefined) {
         this._setOption('dashStyle', value);
     }
 

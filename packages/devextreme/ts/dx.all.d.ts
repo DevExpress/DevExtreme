@@ -38242,7 +38242,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.dashStyle]
      */
-    dashStyle?: DevExpress.common.charts.DashStyle;
+    dashStyle?: DevExpress.common.charts.DashStyle | string;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.highValueField]
      */
@@ -38427,7 +38427,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.border.dashStyle]
      */
-    dashStyle?: DevExpress.common.charts.DashStyle | undefined;
+    dashStyle?: DevExpress.common.charts.DashStyle | string | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.border.visible]
      */
@@ -38452,7 +38452,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.dashStyle]
      */
-    dashStyle?: DevExpress.common.charts.DashStyle;
+    dashStyle?: DevExpress.common.charts.DashStyle | string;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.hatching]
      */
@@ -38477,7 +38477,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.dashStyle]
      */
-    dashStyle?: DevExpress.common.charts.DashStyle | undefined;
+    dashStyle?: DevExpress.common.charts.DashStyle | string | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.visible]
      */
@@ -38523,7 +38523,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.dashStyle]
      */
-    dashStyle?: DevExpress.common.charts.DashStyle;
+    dashStyle?: DevExpress.common.charts.DashStyle | string;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.hatching]
      */
@@ -38548,7 +38548,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border.dashStyle]
      */
-    dashStyle?: DevExpress.common.charts.DashStyle | undefined;
+    dashStyle?: DevExpress.common.charts.DashStyle | string | undefined;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border.visible]
      */
@@ -42278,7 +42278,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.dashStyle]
        */
-      dashStyle?: DevExpress.common.charts.DashStyle;
+      dashStyle?: DevExpress.common.charts.DashStyle | string;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching]
        */
@@ -42352,7 +42352,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.dashStyle]
          */
-        dashStyle?: DevExpress.common.charts.DashStyle | undefined;
+        dashStyle?: DevExpress.common.charts.DashStyle | string | undefined;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.visible]
          */
@@ -42369,7 +42369,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.dashStyle]
        */
-      dashStyle?: DevExpress.common.charts.DashStyle;
+      dashStyle?: DevExpress.common.charts.DashStyle | string;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching]
        */
@@ -42489,7 +42489,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.dashStyle]
        */
-      dashStyle?: DevExpress.common.charts.DashStyle | undefined;
+      dashStyle?: DevExpress.common.charts.DashStyle | string | undefined;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.visible]
        */

@@ -33,10 +33,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } | { color?: string | undefined, width?: number | undefined } {
+    get border(): { color?: string | undefined, dashStyle?: DashStyle | string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } | { color?: string | undefined, width?: number | undefined } {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } | { color?: string | undefined, width?: number | undefined }) {
+    set border(value: { color?: string | undefined, dashStyle?: DashStyle | string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } | { color?: string | undefined, width?: number | undefined }) {
         this._setOption('border', value);
     }
 
@@ -49,10 +49,10 @@ export class DxoHoverStyleComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): DashStyle | string {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: DashStyle | string) {
         this._setOption('dashStyle', value);
     }
 

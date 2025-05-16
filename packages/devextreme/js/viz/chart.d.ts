@@ -3403,7 +3403,7 @@ export interface dxChartSeriesTypesCommonSeries {
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
      * @public
      */
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | string;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.highValueField
      * @default 'high'
@@ -3674,7 +3674,7 @@ export interface dxChartSeriesTypesCommonSeriesBorder {
      * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
      * @public
      */
-    dashStyle?: DashStyle | undefined;
+    dashStyle?: DashStyle | string | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.border.visible
      * @default false
@@ -3711,7 +3711,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyle {
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
      * @public
      */
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | string;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.hatching
      * @type object
@@ -3746,7 +3746,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
      * @default 'solid'
      * @public
      */
-    dashStyle?: DashStyle | undefined;
+    dashStyle?: DashStyle | string | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.visible
      * @default false
@@ -3809,7 +3809,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyle {
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
      * @public
      */
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | string;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.hatching
      * @type object
@@ -3844,7 +3844,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyleBorder {
      * @default 'solid'
      * @public
      */
-    dashStyle?: DashStyle | undefined;
+    dashStyle?: DashStyle | string | undefined;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.border.visible
      * @default false

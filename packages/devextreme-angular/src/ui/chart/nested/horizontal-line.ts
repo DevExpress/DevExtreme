@@ -43,10 +43,10 @@ export class DxoChartHorizontalLineComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): DashStyle | string {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: DashStyle | string) {
         this._setOption('dashStyle', value);
     }
 

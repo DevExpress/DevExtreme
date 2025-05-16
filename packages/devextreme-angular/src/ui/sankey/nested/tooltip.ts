@@ -42,10 +42,10 @@ export class DxoSankeyTooltipComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get border(): { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string, dashStyle?: DashStyle | string, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, dashStyle?: DashStyle | string, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 

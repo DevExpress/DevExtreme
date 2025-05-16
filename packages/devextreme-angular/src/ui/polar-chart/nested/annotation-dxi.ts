@@ -81,10 +81,10 @@ export class DxiPolarChartAnnotationComponent extends CollectionNestedOption imp
     }
 
     @Input()
-    get border(): { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string, cornerRadius?: number, dashStyle?: DashStyle | string, opacity?: number | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string, cornerRadius?: number, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string, cornerRadius?: number, dashStyle?: DashStyle | string, opacity?: number | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
