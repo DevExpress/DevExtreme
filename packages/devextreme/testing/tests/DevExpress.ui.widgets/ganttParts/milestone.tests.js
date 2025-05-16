@@ -110,10 +110,6 @@ QUnit.module('Milestone', moduleConfig, () => {
     });
 
     test('position is correctly calculated', function(assert) {
-        // TODO: figure out how to add styles properly
-        // const style = document.createElement('style');
-        // style.textContent = '.dx-gantt-milestoneWrapper{position:absolute}';
-        // document.head.appendChild(style);
         const customTasks = [
             { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-03-26'), 'progress': 0 },
             { 'id': 2, 'parentId': 1, 'title': 'Milestone 1', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-21'), 'progress': 0 },
@@ -140,6 +136,6 @@ QUnit.module('Milestone', moduleConfig, () => {
         const milestoneWrapper = this.$element.find(Consts.MILESTONE_WRAPPER_SELECTOR);
         const firstLeft = parseFloat(milestoneWrapper.eq(0).css('left'));
         const secondLeft = parseFloat(milestoneWrapper.eq(1).css('left'));
-        assert.equal(firstLeft - secondLeft, 45, 'left position is the same');
+        assert.equal(firstLeft - secondLeft, 45, 'left position is different');
     });
 });
