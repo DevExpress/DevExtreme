@@ -115,7 +115,10 @@ export class DataController {
     });
 
     effect(() => {
-      if (this.isLoaded.value && this.pageCount.value <= this.pageIndex.value) {
+      // TODO: refactor, not it is unobvious
+      const isLoaded = this.isLoaded.value && !this.isReloading.value;
+
+      if (isLoaded && this.pageCount.value <= this.pageIndex.value) {
         this.pageIndex.value = this.pageCount.value - 1;
       }
     });
