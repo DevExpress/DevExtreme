@@ -485,7 +485,7 @@ export interface BaseWidgetTooltip {
        * @docid BaseWidgetOptions.tooltip.border.dashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyle;
+      dashStyle?: DashStyle | string;
       /**
        * @docid BaseWidgetOptions.tooltip.border.opacity
        * @default undefined
@@ -705,7 +705,7 @@ export interface BaseWidgetAnnotationConfig {
        * @docid
        * @default 'solid'
        */
-      dashStyle?: DashStyle;
+      dashStyle?: DashStyle | string;
       /**
        * @docid
        * @default undefined

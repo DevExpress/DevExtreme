@@ -852,7 +852,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
        * @docid
        * @default 'solid'
        */
-      dashStyle?: DashStyle;
+      dashStyle?: DashStyle | string;
       /**
        * @docid
        * @default false
@@ -871,7 +871,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
          * @docid
          * @default 'solid'
          */
-        dashStyle?: DashStyle;
+        dashStyle?: DashStyle | string;
         /**
          * @docid
          */
@@ -966,7 +966,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
          * @docid
          * @default 'solid'
          */
-        dashStyle?: DashStyle;
+        dashStyle?: DashStyle | string;
         /**
          * @docid
          */
@@ -1971,7 +1971,7 @@ export type CommonAxisSettingsConstantLineStyle = {
      * @default 'solid'
      * @public
      */
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | string;
     /**
      * @docid dxChartOptions.commonAxisSettings.constantLineStyle.label
      * @type object
@@ -2217,7 +2217,7 @@ export type CommonPaneSettings = {
        * @docid dxChartOptions.commonPaneSettings.border.dashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyle;
+      dashStyle?: DashStyle | string;
       /**
        * @docid dxChartOptions.commonPaneSettings.border.left
        * @default true

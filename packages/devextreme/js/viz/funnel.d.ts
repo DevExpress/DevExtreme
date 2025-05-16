@@ -408,7 +408,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
          * @docid
          * @default 'solid'
          */
-        dashStyle?: DashStyle;
+        dashStyle?: DashStyle | string;
         /**
          * @docid
          * @default false

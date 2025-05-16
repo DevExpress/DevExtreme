@@ -62,7 +62,7 @@ export interface BaseLegend {
        * @docid
        * @default 'solid'
        */
-      dashStyle?: DashStyle;
+      dashStyle?: DashStyle | string;
       /**
        * @docid
        * @default undefined

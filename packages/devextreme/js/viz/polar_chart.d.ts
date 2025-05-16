@@ -992,7 +992,7 @@ export type CommonAxisSettingsConstantLineStyle = {
      * @default 'solid'
      * @public
      */
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | string;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.label
      * @type object
@@ -1668,7 +1668,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @default undefined
        * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
        */
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: DashStyle | string | undefined;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.border.visible
        * @default false
@@ -1701,7 +1701,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries
      * @public
      */
-    dashStyle?: DashStyle;
+    dashStyle?: DashStyle | string;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverMode
      * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.linepolarseries
@@ -1728,7 +1728,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.dashStyle
          * @default 'solid'
          */
-        dashStyle?: DashStyle | undefined;
+        dashStyle?: DashStyle | string | undefined;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.visible
          * @default false

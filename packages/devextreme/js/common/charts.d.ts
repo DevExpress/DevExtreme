@@ -639,7 +639,7 @@ export interface SeriesLabel {
        * @docid dxChartSeriesTypes.CommonSeries.label.border.dashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: DashStyle | string | undefined;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.label.border.visible
        * @default false

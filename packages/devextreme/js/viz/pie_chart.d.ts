@@ -594,7 +594,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border.dashStyle
        * @default undefined
        */
-      dashStyle?: DashStyle | undefined;
+      dashStyle?: DashStyle | string | undefined;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border.visible
        * @default false
@@ -636,7 +636,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.dashStyle
            * @default undefined
            */
-          dashStyle?: DashStyle | undefined;
+          dashStyle?: DashStyle | string | undefined;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.visible
            * @default false
@@ -712,7 +712,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.dashStyle
            * @default 'solid'
            */
-          dashStyle?: DashStyle | undefined;
+          dashStyle?: DashStyle | string | undefined;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.visible
            * @default false
@@ -834,7 +834,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.dashStyle
            * @default undefined
            */
-          dashStyle?: DashStyle | undefined;
+          dashStyle?: DashStyle | string | undefined;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.visible
            * @default false
