@@ -2,6 +2,7 @@
 import type { DIContext } from '@ts/core/di/index';
 import { SearchUIController } from '@ts/grids/new/grid_core/search/index';
 
+import { AccessibilityController } from './accessibility/controller';
 import * as ColumnChooserModule from './column_chooser/index';
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
@@ -57,4 +58,5 @@ export function register(diContext: DIContext): void {
   diContext.register(ClearFilterVisitor);
   diContext.register(GetAppliedFilterVisitor);
   diContext.register(KeyboardNavigationController);
+  diContext.register(AccessibilityController);
 }
