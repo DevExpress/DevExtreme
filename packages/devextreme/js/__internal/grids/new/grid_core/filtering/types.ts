@@ -3,3 +3,5 @@ export interface AppliedFilters {
   headerFilter?: unknown;
   search?: unknown;
 }
+
+export type FilterValue = unknown[];

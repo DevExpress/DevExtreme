@@ -1,9 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import type { SortOrder } from '@js/common';
-import type { FilterType } from '@js/common/grids';
 import type { ItemProps } from '@ts/grids/new/card_view/header_panel/item';
 import { Item } from '@ts/grids/new/card_view/header_panel/item';
-import { hasFilterValues } from '@ts/grids/new/card_view/header_panel/utils';
 import { normalizeColumn } from '@ts/grids/new/grid_core/columns_controller/columns_controller.mock';
 import { render } from 'inferno';
 
@@ -43,31 +41,17 @@ describe('Item', () => {
       expect(itemRoot?.getAttribute('aria-label')).toBe(expectedAriaLabel);
     });
 
-    it.each<{
-      filterType: FilterType | undefined;
-      filterValues: any[] | undefined;
-    }>([
-      { filterType: 'include', filterValues: ['A'] },
-      { filterType: 'exclude', filterValues: ['A'] },
-      { filterType: 'include', filterValues: [] },
-      { filterType: 'exclude', filterValues: [] },
-      { filterType: 'include', filterValues: undefined },
-      { filterType: 'exclude', filterValues: undefined },
-      { filterType: undefined, filterValues: [] },
-      { filterType: undefined, filterValues: ['A'] },
-      { filterType: undefined, filterValues: undefined },
-    ])('should has aria label with header filter info', ({ filterType, filterValues }) => {
+    it.each<boolean>([true, false])('should has aria label with header filter info', (hasFilters) => {
       const expectedColumnName = 'TEST_COL';
       const expectedAriaLabel = getHeaderItemA11yLabel(expectedColumnName, {
-        hasHeaderFilterValue: hasFilterValues(filterType, filterValues),
+        hasHeaderFilterValue: hasFilters,
       });
       const element = setup({
         column: normalizeColumn({
           dataField: 'SOME_DATA_FIELD',
           caption: expectedColumnName,
-          filterType,
-          filterValues,
         }),
+        hasFilters,
       });
 
       const itemRoot = getItemRoot(element);
@@ -127,29 +111,25 @@ describe('Item', () => {
 
     it.each<{
       caption: string;
-      filterType: FilterType | undefined;
-      filterValues: any[] | undefined;
+      hasFilters: boolean;
       sortOrder: SortOrder | undefined;
       sortIndex: number | undefined;
     }>([
       {
         caption: 'TEST #0',
-        filterType: 'include',
-        filterValues: ['A'],
+        hasFilters: true,
         sortOrder: 'asc',
         sortIndex: 100,
       },
       {
         caption: 'TEST #1',
-        filterType: 'exclude',
-        filterValues: undefined,
+        hasFilters: true,
         sortOrder: undefined,
         sortIndex: 100,
       },
       {
         caption: 'TEST #2',
-        filterType: undefined,
-        filterValues: ['A'],
+        hasFilters: true,
         sortOrder: undefined,
         sortIndex: 1,
       },
@@ -160,13 +140,12 @@ describe('Item', () => {
       + '| sortIndex: $sortIndex'
       + ' -> complex case', ({
       caption,
-      filterType,
-      filterValues,
+      hasFilters,
       sortOrder,
       sortIndex,
     }) => {
       const expectedAriaLabel = getHeaderItemA11yLabel(caption, {
-        hasHeaderFilterValue: hasFilterValues(filterType, filterValues),
+        hasHeaderFilterValue: hasFilters,
         sortOrder,
         sortIndex,
       });
@@ -174,11 +153,10 @@ describe('Item', () => {
         column: normalizeColumn({
           dataField: 'SOME_DATA_FIELD',
           caption,
-          filterType,
-          filterValues,
           sortOrder,
           sortIndex,
         }),
+        hasFilters,
       });
 
       const itemRoot = getItemRoot(element);

@@ -2,7 +2,7 @@ import type { ReadonlySignal, Signal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
 import type { DataObject } from '@ts/grids/new/grid_core/data_controller/types';
 import type { HeaderFilterRootOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
-import { mergeColumnHeaderFilterOptions } from '@ts/grids/new/grid_core/filtering/header_filter/utils';
+import { isColumnFilterable, mergeColumnHeaderFilterOptions } from '@ts/grids/new/grid_core/filtering/header_filter/utils';
 import type { OptionWithChanges } from '@ts/grids/new/grid_core/options_controller/types';
 
 import { OptionsController } from '../options_controller/options_controller';
@@ -30,6 +30,8 @@ export class ColumnsController {
   private readonly columnsConfigurationFromData: Signal<ColumnsConfigurationFromData | null>;
 
   public readonly columns: ReadonlySignal<Column[]>;
+
+  public readonly filterableColumns: ReadonlySignal<Column[]>;
 
   public readonly visibleColumns: ReadonlySignal<VisibleColumn[]>;
 
@@ -86,6 +88,10 @@ export class ColumnsController {
         (column) => mergeColumnHeaderFilterOptions(column, headerFilterRootOptions),
       );
     });
+
+    this.filterableColumns = computed(() => this.columns.value.filter(
+      (col) => isColumnFilterable(col),
+    ));
 
     this.visibleColumns = computed(
       () => this.columns.value
