@@ -46,7 +46,9 @@ async function openAIDialog(
   test(`initial state ${name}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await openAIDialog(t, command, option);
+    const htmlEditor = await openAIDialog(t, command, option);
+
+    await htmlEditor.getAIDialog().repaint();
     await testScreenshot(t, takeScreenshot, `htmleditor-ai-dialog-initial-state-${name}.png`, { element: '#container' });
 
     await t
