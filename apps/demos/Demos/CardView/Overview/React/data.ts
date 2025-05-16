@@ -317,15 +317,6 @@ export const employees: Employee[] = [
   },
   {
     ID: 35,
-    FullName: 'Billy Zimmer',
-    Position: 'Engineer',
-    Picture: 'images/employees/51.png',
-    Department: 'Engineering',
-    Phone: '+1 (909) 555-6939',
-    Email: 'williamz@dx-email.com',
-  },
-  {
-    ID: 36,
     FullName: 'Samantha Piper',
     Position: 'Engineer',
     Picture: 'images/employees/35.png',
@@ -334,7 +325,7 @@ export const employees: Employee[] = [
     Email: 'samanthap@dx-email.com',
   },
   {
-    ID: 37,
+    ID: 36,
     FullName: 'Maggie Boxter',
     Position: 'Engineer',
     Picture: 'images/employees/36.png',
@@ -343,7 +334,7 @@ export const employees: Employee[] = [
     Email: 'margaretb@dx-email.com',
   },
   {
-    ID: 38,
+    ID: 37,
     FullName: 'Terry Bradley',
     Position: 'QA Engineer',
     Picture: 'images/employees/37.png',
@@ -352,7 +343,7 @@ export const employees: Employee[] = [
     Email: 'terryb@dx-email.com',
   },
   {
-    ID: 39,
+    ID: 38,
     FullName: 'Gabe Jones',
     Position: 'Retail Coordinator',
     Picture: 'images/employees/38.png',
@@ -361,7 +352,7 @@ export const employees: Employee[] = [
     Email: 'gabrielj@dx-email.com',
   },
   {
-    ID: 40,
+    ID: 39,
     FullName: 'Lucy Ball',
     Position: 'Sales Assistant',
     Picture: 'images/employees/39.png',
@@ -370,7 +361,7 @@ export const employees: Employee[] = [
     Email: 'lucyb@dx-email.com',
   },
   {
-    ID: 41,
+    ID: 40,
     FullName: 'Jim Packard',
     Position: 'Retail Sales Manager',
     Picture: 'images/employees/40.png',
@@ -379,7 +370,7 @@ export const employees: Employee[] = [
     Email: 'jamesp@dx-email.com',
   },
   {
-    ID: 42,
+    ID: 41,
     FullName: 'Hannah Brookly',
     Position: 'Online Sales Manager',
     Picture: 'images/employees/41.png',
@@ -388,7 +379,7 @@ export const employees: Employee[] = [
     Email: 'hannahb@dx-email.com',
   },
   {
-    ID: 43,
+    ID: 42,
     FullName: 'Harv Mudd',
     Position: 'Retail Sales Manager',
     Picture: 'images/employees/42.png',
@@ -397,7 +388,7 @@ export const employees: Employee[] = [
     Email: 'harveym@dx-email.com',
   },
   {
-    ID: 44,
+    ID: 43,
     FullName: 'Clark Morgan',
     Position: 'Retail Sales Manager',
     Picture: 'images/employees/43.png',
@@ -406,7 +397,7 @@ export const employees: Employee[] = [
     Email: 'clarkm@dx-email.com',
   },
   {
-    ID: 45,
+    ID: 44,
     FullName: 'Todd Hoffman',
     Position: 'Retail Sales Manager',
     Picture: 'images/employees/44.png',
@@ -415,7 +406,7 @@ export const employees: Employee[] = [
     Email: 'toddh@dx-email.com',
   },
   {
-    ID: 46,
+    ID: 45,
     FullName: 'Jackie Garmin',
     Position: 'Support Assistant',
     Picture: 'images/employees/45.png',
@@ -424,7 +415,7 @@ export const employees: Employee[] = [
     Email: 'jackg@dx-email.com',
   },
   {
-    ID: 47,
+    ID: 46,
     FullName: 'Lincoln Bartlett',
     Position: 'Sales Assistant',
     Picture: 'images/employees/46.png',
@@ -433,7 +424,7 @@ export const employees: Employee[] = [
     Email: 'lincolnb@dx-email.com',
   },
   {
-    ID: 48,
+    ID: 47,
     FullName: 'Brad Farkus',
     Position: 'Engineer',
     Picture: 'images/employees/47.png',
@@ -442,7 +433,7 @@ export const employees: Employee[] = [
     Email: 'bradf@dx-email.com',
   },
   {
-    ID: 49,
+    ID: 48,
     FullName: 'Jenny Hobbs',
     Position: 'Shipping Assistant',
     Picture: 'images/employees/48.png',
@@ -451,7 +442,7 @@ export const employees: Employee[] = [
     Email: 'jennyh@dx-email.com',
   },
   {
-    ID: 50,
+    ID: 49,
     FullName: 'Dallas Lou',
     Position: 'Shipping Assistant',
     Picture: 'images/employees/49.png',
@@ -460,7 +451,7 @@ export const employees: Employee[] = [
     Email: 'dallas@dx-email.com',
   },
   {
-    ID: 51,
+    ID: 50,
     FullName: 'Stu Pizaro',
     Position: 'Engineer',
     Picture: 'images/employees/50.png',
