@@ -17,23 +17,22 @@ fixture('Scheduler.ToolbarCustomization')
 runManualTest('Scheduler', 'ToolbarCustomization', (test) => {
   test('ToolbarCustomization', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const scheduler = $('#scheduler');
     const menuButtonSelector = $('.dx-toolbar').find('.dx-toolbar-menu-container').find('.dx-button');
 
-    await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_wide.png', scheduler);
+    await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_wide.png');
 
     await t
       .resizeWindow(...SCREEN_SIZES.medium)
       .click(menuButtonSelector);
 
-    await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_medium.png', scheduler);
+    await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_medium.png');
 
     await t
       .click($('body'), { offsetX: 0, offsetY: 0 }) // close menu by clicking outside
       .resizeWindow(...SCREEN_SIZES.thin)
       .click(menuButtonSelector); // open menu with additional items and updated dimensions
 
-    await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_thin.png', scheduler);
+    await testScreenshot(t, takeScreenshot, 'scheduler_toolbar_customization_thin.png');
 
     await t
       .expect(compareResults.isValid())
