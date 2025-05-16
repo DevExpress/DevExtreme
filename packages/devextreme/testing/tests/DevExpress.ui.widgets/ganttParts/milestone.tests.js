@@ -115,15 +115,10 @@ QUnit.module('Milestone', moduleConfig, () => {
             { 'id': 2, 'parentId': 1, 'title': 'Milestone 1', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-21'), 'progress': 0 },
             { 'id': 3, 'parentId': 2, 'title': 'Milestone 2', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-21'), 'progress': 0 },
         ];
-        let firstMilestone = true;
         const customTaskFunction = (item, container) => {
             if(item.isMilestone) {
-                if(firstMilestone) {
-                    firstMilestone = false;
-                    return $(document.createElement('div')).attr('style', 'width: 10px; height: 10px;');
-                } else {
-                    return $(document.createElement('div')).attr('style', 'width: 100px; height: 50px;');
-                }
+                const style = item.taskData.id === 2 ? 'width: 10px; height: 10px;' : 'width: 100px; height: 50px;';
+                return $(document.createElement('div')).attr('style', style);
             }
             return item.taskHTML;
         };
