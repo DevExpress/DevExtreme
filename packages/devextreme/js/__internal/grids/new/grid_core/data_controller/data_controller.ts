@@ -114,6 +114,12 @@ export class DataController {
       }
     });
 
+    effect(() => {
+      if (this.isLoaded.value && this.pageCount.value <= this.pageIndex.value) {
+        this.pageIndex.value = this.pageCount.value - 1;
+      }
+    });
+
     effect(
       () => {
         const dataSource = this.dataSource.value;

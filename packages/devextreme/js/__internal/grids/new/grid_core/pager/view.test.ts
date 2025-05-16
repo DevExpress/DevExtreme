@@ -209,4 +209,27 @@ describe('Applying options', () => {
       expect(rootElement).toMatchSnapshot();
     });
   });
+
+  describe('When pageSize changed', () => {
+    it('normalizes pageIndex so data is visible', () => {
+      const { optionsController } = createPagerView({
+        dataSource: [...new Array(20)].map((_, index) => ({ field: `test_${index}` })),
+        paging: {
+          pageIndex: 3,
+          pageSize: 5,
+        },
+      });
+
+      expect(optionsController.oneWay('paging.pageIndex').peek()).toEqual(3);
+
+      optionsController.option('paging.pageSize', 10);
+      expect(optionsController.oneWay('paging.pageIndex').peek()).toEqual(1);
+
+      optionsController.option('paging.pageSize', 5);
+      expect(optionsController.oneWay('paging.pageIndex').peek()).toEqual(1);
+
+      optionsController.option('paging.pageSize', 20);
+      expect(optionsController.oneWay('paging.pageIndex').peek()).toEqual(0);
+    });
+  });
 });
