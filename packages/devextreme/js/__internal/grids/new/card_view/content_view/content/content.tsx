@@ -4,7 +4,7 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { SelectCardOptions } from '@ts/grids/new/card_view/content_view/types';
-import type { Position } from '@ts/grids/new/grid_core/accessibility/types';
+import { getPosition } from '@ts/grids/new/grid_core/accessibility/utils';
 import type { CardInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { Key } from '@ts/grids/new/grid_core/data_controller/types';
 import {
@@ -190,7 +190,7 @@ export class Content extends Component<ContentProps> {
               }}
               caughtEventPreventDefault={true}
               card={item}
-              position={this.getPosition(idx, this.props.cardsPerRow ?? 1)}
+              position={getPosition(idx, this.props.cardsPerRow ?? 1)}
               onContextMenu={(e) => {
                 this.props.showCardContextMenu?.(e, item, idx);
               }}
@@ -250,15 +250,5 @@ export class Content extends Component<ContentProps> {
         this.onCardFocusMoved(newActiveItem.idx, newActiveItem.element);
       }
     }
-  }
-
-  private getPosition(idx: number, columnCount: number): Position {
-    const currentColumnIdx = idx % columnCount;
-    const currentRowIdx = Math.floor(idx / columnCount);
-
-    return {
-      rowIndex: currentRowIdx,
-      columnIndex: currentColumnIdx,
-    };
   }
 }
