@@ -7,8 +7,8 @@ fixture('TagBox.GroupedItems')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('TagBox', 'GroupedItems', (test) => {
-  test('GroupedItems', async (t) => {
+runManualTest('TagBox', 'Grouping', (test) => {
+  test('Grouping', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
