@@ -69,8 +69,12 @@ fixture.disablePageReloads`DataGrid - contrast`
       .expect(dataGrid.isReady())
       .ok();
 
-    // eslint-disable-next-line max-len
-    const searchIconContainer = dataGrid.getHeaders().getFilterRow().getFilterCell(1).getSearchIcon().element;
+    const searchIconContainer = dataGrid
+      .getHeaders()
+      .getFilterRow()
+      .getFilterCell(1)
+      .getSearchIcon()
+      .element;
 
     await t
       .click(dataGrid.getFilterCell(0))
@@ -95,9 +99,6 @@ fixture.disablePageReloads`DataGrid - contrast`
     },
   ).after(
     async () => {
-      if (theme === Themes.genericLight) {
-        return;
-      }
       await changeTheme(Themes.genericLight);
     },
   );
