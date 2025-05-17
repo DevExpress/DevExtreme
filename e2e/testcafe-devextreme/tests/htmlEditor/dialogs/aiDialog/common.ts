@@ -7,6 +7,7 @@ import { testScreenshot } from '../../../../helpers/themeUtils';
 import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import { getLongText } from '../../../chat/data';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
+import { changeTheme } from '../../../../helpers/changeTheme';
 
 const MENU_ITEM_CLASS = 'dx-menu-item';
 const SUBMENU_CLASS = 'dx-submenu';
@@ -61,6 +62,33 @@ async function openAIDialog(
         items: ['ai'],
       },
     });
+  });
+});
+
+test('resize window when initial state', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const htmlEditor = await openAIDialog(t, 0);
+
+  await t.resizeWindow(400, 600);
+
+  const aiDialog = htmlEditor.getAIDialog();
+  const menuButton = aiDialog.getMenuButton();
+
+  await t.click(menuButton.element);
+  await testScreenshot(t, takeScreenshot, 'htmleditor-ai-dialog-initial-state-resize-window.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await changeTheme('material.blue.light');
+
+  await createWidget('dxHtmlEditor', {
+    height: 600,
+    aiIntegration: {},
+    toolbar: {
+      items: ['ai'],
+    },
   });
 });
 

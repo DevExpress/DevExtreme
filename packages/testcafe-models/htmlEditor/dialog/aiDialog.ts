@@ -8,6 +8,7 @@ const CLASSES = {
   dialog: 'dx-aidialog',
   button: 'dx-button',
   textArea: 'dx-textarea',
+  menuButton: 'dx-dropdownmenu-button',
 };
 
 export default class AIDialog extends Popup {
@@ -27,6 +28,10 @@ export default class AIDialog extends Popup {
 
   getCancelButton(): Button {
     return new Button(this.getBottomToolbar().find(`.${CLASSES.button}`).nth(0));
+  }
+
+  getMenuButton(): Button {
+    return new Button(this.getBottomToolbar().find(`.${CLASSES.menuButton}`).nth(0));
   }
 
   getPromptTextArea(): TextArea {
