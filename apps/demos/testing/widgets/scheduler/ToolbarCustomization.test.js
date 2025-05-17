@@ -9,13 +9,13 @@ const SCREEN_SIZES = {
   thin: [320, 600],
 };
 
-fixture('Scheduler.ToolbarCustomization')
+fixture('Scheduler.Toolbar')
   .before(async (ctx) => {
     ctx.initialWindowSize = SCREEN_SIZES.wide;
   });
 
-runManualTest('Scheduler', 'ToolbarCustomization', (test) => {
-  test('ToolbarCustomization', async (t) => {
+runManualTest('Scheduler', 'Toolbar', (test) => {
+  test('Toolbar', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const scheduler = $('#scheduler');
     const menuButtonSelector = $('.dx-toolbar').find('.dx-toolbar-menu-container').find('.dx-button');
