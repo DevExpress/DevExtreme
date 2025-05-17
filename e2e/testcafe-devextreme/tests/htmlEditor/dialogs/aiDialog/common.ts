@@ -21,7 +21,7 @@ const longResult = getLongText(false, 10);
 fixture.disablePageReloads`HtmlEditor: AIDialog`
   .page(url(__dirname, '../../../container.html'));
 
-async function openAIDialog(
+export async function openAIDialog(
   t: TestController,
   command: number,
   option?: number,

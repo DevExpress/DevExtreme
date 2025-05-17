@@ -1,5 +1,6 @@
 import { Properties } from 'devextreme/ui/html_editor.d';
 import { Selector } from 'testcafe';
+import { openAIDialog } from '../../htmlEditor/dialogs/aiDialog/common';
 import url from '../../../helpers/getPageUrl';
 import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
 import { Options } from '../../../helpers/generateOptionMatrix';
@@ -42,3 +43,29 @@ const configuration: Configuration = {
 };
 
 testAccessibility(configuration);
+
+const aiOptions: Options<Properties> = {
+  value: [markup],
+  focusStateEnabled: [true],
+  toolbar: [{ items: ['ai'] }],
+  aiIntegration: [
+    ({} as any),
+    { changeStyle() {} },
+    { changeStyle(_, { onComplete }) { onComplete?.('Result'); } },
+    { changeStyle(_, { onError }) { onError?.('Error' as any); } },
+  ],
+};
+
+const aiCreated = async (t: TestController): Promise<void> => {
+  await t.click(Selector(defaultSelector));
+  await openAIDialog(t, 4, 0);
+};
+
+const aiConfiguration: Configuration = {
+  component: 'dxHtmlEditor',
+  a11yCheckConfig,
+  options: aiOptions,
+  created: aiCreated,
+};
+
+testAccessibility(aiConfiguration);
