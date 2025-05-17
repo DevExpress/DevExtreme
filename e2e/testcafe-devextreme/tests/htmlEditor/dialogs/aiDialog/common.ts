@@ -7,7 +7,6 @@ import { testScreenshot } from '../../../../helpers/themeUtils';
 import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 import { getLongText } from '../../../chat/data';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
-import { changeTheme } from '../../../../helpers/changeTheme';
 
 const MENU_ITEM_CLASS = 'dx-menu-item';
 const SUBMENU_CLASS = 'dx-submenu';
@@ -81,8 +80,6 @@ test('resize window when initial state', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await changeTheme('material.blue.light');
-
   await createWidget('dxHtmlEditor', {
     height: 600,
     aiIntegration: {},
