@@ -114,6 +114,6 @@
     { "Widget": "TreeList", "Name": "UsingHeaderFilter", "NewWidget": "TreeList", "NewName": "ColumnHeaderFilter" },
     { "Widget": "HtmlEditor", "Name": "OutputFormats", "NewWidget": "HtmlEditor", "NewName": "MarkdownSupport" },
     { "Widget": "Vector_Map", "NewWidget": "VectorMap" },
-    { "Widget": "VectorMap", "Name": "TooltipHTMLSupport", "NewWidget": "VectorMap", "NewName": "TooltipsCustomization" }
+    { "Widget": "VectorMap", "Name": "TooltipHTMLSupport", "NewWidget": "VectorMap", "NewName": "TooltipsCustomization" },
     { "Widget": "VectorMap", "Name": "AreaWithLabelsAndTwoLegends", "NewWidget": "VectorMap", "NewName": "Legend" }
 ]
