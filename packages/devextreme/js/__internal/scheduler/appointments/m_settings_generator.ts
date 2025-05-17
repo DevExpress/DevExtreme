@@ -66,8 +66,6 @@ export class DateGeneratorBaseStrategy {
 
   get dataAccessors(): AppointmentDataAccessor { return this.options.dataAccessors; }
 
-  get loadedResources() { return this.options.loadedResources; }
-
   get isDateAppointment() { return !isDateAndTimeView(this.viewType) && this.appointmentTakesAllDay; }
 
   getIntervalDuration() {

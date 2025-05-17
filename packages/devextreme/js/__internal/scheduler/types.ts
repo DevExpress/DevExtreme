@@ -1,7 +1,8 @@
-import type { Appointment } from '@js/ui/scheduler';
+import type { Appointment, Properties } from '@js/ui/scheduler';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
 
+export type RawViewType = Required<Properties>['views'][number];
 export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';

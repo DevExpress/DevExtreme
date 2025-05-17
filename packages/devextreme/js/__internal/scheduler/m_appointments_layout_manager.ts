@@ -1,6 +1,6 @@
 import { equalByValue } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
-import { getCellDuration, getGroupCount } from '@ts/scheduler/r1/utils/index';
+import { getCellDuration } from '@ts/scheduler/r1/utils/index';
 import type {
   AppointmentViewModel,
   BaseAppointmentViewModelSettings,
@@ -59,7 +59,7 @@ class AppointmentLayoutManager {
       cellCountInsideLeftVirtualCell,
       cellCountInsideTopVirtualRow,
     } = virtualScrollingDispatcher;
-    const groupCount = getGroupCount(this.instance.option('loadedResources'));
+    const groupCount = this.instance.resourceManager.groupCount();
     const DOMMetaData = workspace.getDOMElementsMetaData();
     const allDayHeight = getAllDayHeight(
       workspace.option('showAllDayPanel'),

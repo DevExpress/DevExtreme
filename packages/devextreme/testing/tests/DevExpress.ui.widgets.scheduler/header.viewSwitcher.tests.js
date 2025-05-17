@@ -5,8 +5,8 @@ import devices from '__internal/core/m_devices';
 
 testStart(() => initTestMarkup());
 if(devices.current().deviceType === 'desktop') {
-    test('should pass the "views" option', function(assert) {
-        const scheduler = createWrapper({
+    test('should pass the "views" option', async function(assert) {
+        const scheduler = await createWrapper({
             views: ['day', 'week', 'month'],
             currentView: 'day',
         });
@@ -28,8 +28,8 @@ if(devices.current().deviceType === 'desktop') {
     });
 
     module('Option Changing', () => {
-        test('should pass the "views" option', function(assert) {
-            const scheduler = createWrapper({
+        test('should pass the "views" option', async function(assert) {
+            const scheduler = await createWrapper({
                 views: ['day', 'week', 'month'],
                 currentView: 'day',
             });
@@ -72,8 +72,8 @@ if(devices.current().deviceType === 'desktop') {
             );
         });
 
-        test('should select view button after changing "currentView"', function(assert) {
-            const scheduler = createWrapper({
+        test('should select view button after changing "currentView"', async function(assert) {
+            const scheduler = await createWrapper({
                 views: [
                     {
                         type: 'month'
@@ -100,8 +100,8 @@ if(devices.current().deviceType === 'desktop') {
             assert.equal(viewSwitcher.selectedButton.getText(), 'Month', 'current view is correct');
         });
 
-        test('should select view button after changing "currentView" and "views"', function(assert) {
-            const scheduler = createWrapper({
+        test('should select view button after changing "currentView" and "views"', async function(assert) {
+            const scheduler = await createWrapper({
                 views: ['day', 'week'],
                 currentView: 'day',
                 currentDate: new Date(2021, 6, 7),
@@ -119,8 +119,8 @@ if(devices.current().deviceType === 'desktop') {
             assert.equal(viewSwitcher.selectedButton.getText(), 'Month', 'Month button is selected');
         });
 
-        test('should save selected view button when "views" changes', function(assert) {
-            const scheduler = createWrapper({
+        test('should save selected view button when "views" changes', async function(assert) {
+            const scheduler = await createWrapper({
                 views: ['month', 'day'],
                 currentView: 'day',
             });
@@ -132,8 +132,8 @@ if(devices.current().deviceType === 'desktop') {
             assert.equal(viewSwitcher.selectedButton.getText(), 'Day', 'current view is Day');
         });
 
-        test('should render dropDownButton after enabling "useDropDownViewSwitcher"', function(assert) {
-            const scheduler = createWrapper({
+        test('should render dropDownButton after enabling "useDropDownViewSwitcher"', async function(assert) {
+            const scheduler = await createWrapper({
                 views: ['month', 'day'],
                 currentView: 'day',
             });
@@ -149,8 +149,8 @@ if(devices.current().deviceType === 'desktop') {
     });
 
     module('Selected view', () => {
-        test('should be no buttons selected if the "currentView" is not set', function(assert) {
-            const scheduler = createWrapper({
+        test('should be no buttons selected if the "currentView" is not set', async function(assert) {
+            const scheduler = await createWrapper({
                 views: ['month'],
             });
 
@@ -161,8 +161,8 @@ if(devices.current().deviceType === 'desktop') {
             );
         });
 
-        test('should be no buttons selected if the "currentView" is not in views', function(assert) {
-            const scheduler = createWrapper({
+        test('should be no buttons selected if the "currentView" is not in views', async function(assert) {
+            const scheduler = await createWrapper({
                 views: ['month'],
                 currentView: 'day',
             });
@@ -174,8 +174,8 @@ if(devices.current().deviceType === 'desktop') {
             );
         });
 
-        test('should be the selected button if "currentView" in views', function(assert) {
-            const scheduler = createWrapper({
+        test('should be the selected button if "currentView" in views', async function(assert) {
+            const scheduler = await createWrapper({
                 currentView: 'month',
                 views: ['month'],
             });
@@ -187,8 +187,8 @@ if(devices.current().deviceType === 'desktop') {
             );
         });
 
-        test('should select view button after click', function(assert) {
-            const scheduler = createWrapper({
+        test('should select view button after click', async function(assert) {
+            const scheduler = await createWrapper({
                 views: [
                     {
                         type: 'month',
@@ -232,8 +232,8 @@ module('Meterial theme', {
         themes.isMaterial = this.origIsMaterial;
     }
 }, () => {
-    test('dropdown button should have correct label', function(assert) {
-        const scheduler = createWrapper({
+    test('dropdown button should have correct label', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'workWeek',
             views: ['workWeek'],
         });

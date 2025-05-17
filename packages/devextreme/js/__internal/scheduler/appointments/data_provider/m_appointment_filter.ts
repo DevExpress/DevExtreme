@@ -231,9 +231,9 @@ export class AppointmentFilterBaseStrategy {
   _filterAppointmentByResources(appointment, groupsResources: ResourceLoader[]) {
     const appointmentGroupValues = getAppointmentGroupValues(appointment, groupsResources);
 
-    return groupsResources.some((resource) => {
+    return groupsResources.every((resource) => {
       const value = appointmentGroupValues[resource.resourceIndex];
-      return resource.items.some((item) => value.includes(item.id));
+      return resource.items.some((item) => value?.includes(item.id));
     });
   }
 

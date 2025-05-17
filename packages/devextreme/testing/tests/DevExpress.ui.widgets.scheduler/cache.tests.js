@@ -7,7 +7,7 @@ const {
 
 module('Cache', () => {
     module('Initialization', () => {
-        test('Cache should be empty', function(assert) {
+        test('Cache should be empty', async function(assert) {
             const cache = new Cache();
 
             assert.equal(cache.size, 0, 'Cache is empty');
@@ -15,7 +15,7 @@ module('Cache', () => {
     });
 
     module('API', () => {
-        test('get and set', function(assert) {
+        test('get and set', async function(assert) {
             const cache = new Cache();
             cache.set('test', 'value');
 
@@ -23,7 +23,7 @@ module('Cache', () => {
             assert.equal(cache.get('test'), 'value', 'Cache value is correct');
         });
 
-        test('get with callback', function(assert) {
+        test('get with callback', async function(assert) {
             const cache = new Cache();
             cache.get('test', () => 'callbackValue');
 
@@ -31,7 +31,7 @@ module('Cache', () => {
             assert.equal(cache.get('test'), 'callbackValue', 'Cache value is correct');
         });
 
-        test('clear', function(assert) {
+        test('clear', async function(assert) {
             const cache = new Cache();
             cache.set('test0', () => 'callbackValue');
             cache.set('test1', 'value');

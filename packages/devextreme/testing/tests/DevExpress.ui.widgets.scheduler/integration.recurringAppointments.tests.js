@@ -37,8 +37,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             fx.off = true;
 
             this.clock = sinon.useFakeTimers();
-            this.createInstance = options => {
-                const scheduler = createWrapper({
+            this.createInstance = async(options) => {
+                const scheduler = await createWrapper({
                     height: 600,
                     width: 800,
                     scrolling: {
@@ -46,7 +46,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                     },
                     _draggingMode: 'default',
                     ...options
-                }, this.clock);
+                });
 
                 const workspace = scheduler.instance.getWorkSpace();
                 workspace.renderer.getRenderTimeout = () => -1;
@@ -59,7 +59,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             this.clock.restore();
         }
     }, () => {
-        test('Tasks should be duplicated according to recurrence rule', function(assert) {
+        test('Tasks should be duplicated according to recurrence rule', async function(assert) {
             const tasks = [
                 { text: 'One', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 2), recurrenceRule: 'FREQ=DAILY;INTERVAL=4' },
                 { text: 'Two', startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
@@ -67,7 +67,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             const dataSource = new DataSource({
                 store: tasks
             });
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentView: 'week',
                 currentDate: new Date(2015, 2, 16),
                 dataSource: dataSource
@@ -77,14 +77,14 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 2, 'recurrence tasks are OK');
         });
 
-        test('Tasks should be duplicated according to recurrence rule, if firstDayOfWeek was set', function(assert) {
+        test('Tasks should be duplicated according to recurrence rule, if firstDayOfWeek was set', async function(assert) {
             const tasks = [
                 { text: 'One', startDate: new Date(2015, 2, 12), endDate: new Date(2015, 2, 12, 2), recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH,SA' }
             ];
             const dataSource = new DataSource({
                 store: tasks
             });
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentView: 'week',
                 currentDate: new Date(2015, 2, 12),
                 dataSource: dataSource,
@@ -94,8 +94,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 3, 'recurrence tasks are OK');
         });
 
-        test('Recurring appointments with resources should have color of the first resource if groups option is not defined', function(assert) {
-            const scheduler = this.createInstance({
+        test('Recurring appointments with resources should have color of the first resource if groups option is not defined', async function(assert) {
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 firstDayOfWeek: 1,
                 views: ['week'],
@@ -121,7 +121,7 @@ supportedScrollingModes.forEach(scrollingMode => {
 
         });
 
-        test('Recurring Task dragging', function(assert) {
+        test('Recurring Task dragging', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -133,7 +133,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -176,7 +176,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, 'data does not changed');
         });
 
-        test('Recurring Task dragging with \'series\' recurrenceEditMode', function(assert) {
+        test('Recurring Task dragging with \'series\' recurrenceEditMode', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -188,7 +188,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -217,7 +217,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.deepEqual(dataSourceItem, updatedItem, 'New data is correct');
         });
 
-        test('Recurring Task dragging to the other group in "series" recurrenceEditMode', function(assert) {
+        test('Recurring Task dragging to the other group in "series" recurrenceEditMode', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -230,7 +230,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -267,7 +267,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.deepEqual(dataSourceItem, updatedItem, 'New data is correct');
         });
 
-        test('Recurrent Task dragging with "occurrence" recurrenceEditMode', function(assert) {
+        test('Recurrent Task dragging with "occurrence" recurrenceEditMode', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -279,7 +279,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -311,7 +311,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
-        test('Recurring Task dragging to the other group in "ocurrence" recurrenceEditMode', function(assert) {
+        test('Recurring Task dragging to the other group in "ocurrence" recurrenceEditMode', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -324,7 +324,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -364,7 +364,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
-        test('Recurrent Task dragging with \'occurrence\' recurrenceEditMode, \'hourly\' recurrence', function(assert) {
+        test('Recurrent Task dragging with \'occurrence\' recurrenceEditMode, \'hourly\' recurrence', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -376,7 +376,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -407,8 +407,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
-        test('Appointment should not render on view if he is excluded from recurrence', function(assert) {
-            const scheduler = createWrapper({
+        test('Appointment should not render on view if he is excluded from recurrence', async function(assert) {
+            const scheduler = await createWrapper({
                 currentDate: new Date(2015, 1, 12),
                 dataSource: [{
                     text: 'Task 1',
@@ -425,7 +425,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'There are no appointments');
         });
 
-        test('Updated single item should not have recurrenceException ', function(assert) {
+        test('Updated single item should not have recurrenceException ', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -438,7 +438,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -456,7 +456,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(singleItem.recurrenceException, undefined, 'Single appointment data is correct');
         });
 
-        test('Recurrent Task dragging, single mode', function(assert) {
+        test('Recurrent Task dragging, single mode', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -468,7 +468,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -497,7 +497,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
-        test('Recurrent Task dragging, single mode - recurrenceException updating ', function(assert) {
+        test('Recurrent Task dragging, single mode - recurrenceException updating ', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -510,7 +510,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -529,7 +529,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(updatedRecurringItem.recurrenceException, '20150214T010000Z,' + dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
-        test('Recurrent Task resizing, single mode', function(assert) {
+        test('Recurrent Task resizing, single mode', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -541,7 +541,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -573,8 +573,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
-        test('Recurrence task resizing when currentDate != recStartDate (T488760)', function(assert) {
-            const scheduler = this.createInstance({
+        test('Recurrence task resizing when currentDate != recStartDate (T488760)', async function(assert) {
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2017, 2, 20),
                 editing: true,
                 recurrenceEditMode: 'occurrence',
@@ -599,7 +599,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.deepEqual(apptData.endDate, new Date(2017, 2, 20, 3), 'End date is OK');
         });
 
-        test('Recurrent Task deleting, single mode', function(assert) {
+        test('Recurrent Task deleting, single mode', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -611,7 +611,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -631,7 +631,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(scheduler.instance.option('dataSource').items().length, 1, 'Single item was deleted');
         });
 
-        test('Recurrent Task editing, confirmation tooltip should be shown after trying to edit recurrent appointment', function(assert) {
+        test('Recurrent Task editing, confirmation tooltip should be shown after trying to edit recurrent appointment', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -643,7 +643,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -658,7 +658,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
         });
 
-        test('Recurrent Task editing, single mode', function(assert) {
+        test('Recurrent Task editing, single mode', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -676,7 +676,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 endDate: new Date(2015, 1, 11, 4),
             };
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -707,7 +707,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
-        test('Recurrent Task editing, single mode, should not reference copy recurrent data (T1228488)', function(assert) {
+        test('Recurrent Task editing, single mode, should not reference copy recurrent data (T1228488)', async function(assert) {
             const updatedItem = {
                 text: 'Task 2',
                 customData: { texts: ['123', '456'] },
@@ -715,7 +715,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 endDate: new Date(2015, 1, 11, 4),
             };
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: [{
                     text: 'Task 1',
@@ -753,7 +753,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.deepEqual(updatedRecurringItem.customData.texts, ['123'], 'Recurrence data is correct');
         });
 
-        test('Recurrent Task edition canceling, single mode', function(assert) {
+        test('Recurrent Task edition canceling, single mode', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -765,7 +765,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -789,7 +789,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(items.length, 1, 'Items are correct');
         });
 
-        test('Recurrent Task editing, single mode - canceling', function(assert) {
+        test('Recurrent Task editing, single mode - canceling', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -801,7 +801,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -821,7 +821,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(recurrentItem.recurrenceException, undefined, 'Exception for recurrence appointment is correct');
         });
 
-        test('Recurrent Task editing, confirmation tooltip should be shown after double click on recurrent appointment', function(assert) {
+        test('Recurrent Task editing, confirmation tooltip should be shown after double click on recurrent appointment', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -833,7 +833,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -847,7 +847,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
         });
 
-        test('Recurrent Task editing, single mode - double click', function(assert) {
+        test('Recurrent Task editing, single mode - double click', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -865,7 +865,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 endDate: new Date(2015, 1, 11, 4)
             };
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'week',
@@ -895,7 +895,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
-        test('Recurrent allDay task dragging on month view, single mode', function(assert) {
+        test('Recurrent allDay task dragging on month view, single mode', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -908,7 +908,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 endDayHour: 10,
                 dataSource: data,
@@ -937,7 +937,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
-        test('Recurrent allDay task dragging on month view, single mode, 24h appointment duration', function(assert) {
+        test('Recurrent allDay task dragging on month view, single mode, 24h appointment duration', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -950,7 +950,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 ]
             });
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentDate: new Date(2015, 1, 9),
                 dataSource: data,
                 currentView: 'month',
@@ -981,14 +981,14 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
         });
 
-        test('AllDay recurrence appointments should be rendered correctly after changing currentDate', function(assert) {
+        test('AllDay recurrence appointments should be rendered correctly after changing currentDate', async function(assert) {
             const tasks = [
                 { text: 'One', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 17), allDay: true, recurrenceRule: 'FREQ=DAILY' }
             ];
             const dataSource = new DataSource({
                 store: tasks
             });
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentView: 'week',
                 startDayHour: 8,
                 endDayHour: 19,
@@ -1001,7 +1001,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 8, 'appointments are OK');
         });
 
-        test('AllDay recurrence appointments should be rendered correctly after changing currentDate, day view', function(assert) {
+        test('AllDay recurrence appointments should be rendered correctly after changing currentDate, day view', async function(assert) {
             const tasks = [{
                 startDate: new Date(2015, 4, 25, 9, 30),
                 endDate: new Date(2015, 4, 26, 11, 30),
@@ -1010,7 +1010,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             const dataSource = new DataSource({
                 store: tasks
             });
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 currentView: 'day',
                 currentDate: new Date(2015, 4, 26),
                 dataSource: dataSource
@@ -1020,11 +1020,11 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment-recurrence').length, 1, 'appointments are OK');
         });
 
-        test('Recurring appt should be rendered correctly after changing of repeate count', function(assert) {
+        test('Recurring appt should be rendered correctly after changing of repeate count', async function(assert) {
             const task = { startDate: new Date(2017, 7, 9), endDate: new Date(2017, 7, 9, 0, 30), recurrenceRule: 'FREQ=DAILY;COUNT=2' };
             const newTask = { startDate: new Date(2017, 7, 9), endDate: new Date(2017, 7, 9, 0, 30), recurrenceRule: 'FREQ=DAILY;COUNT=4' };
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 dataSource: [task],
                 views: ['week'],
                 currentView: 'week',
@@ -1039,7 +1039,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(appointments.length, 4, 'appt was rendered correctly');
         });
 
-        test('Recurring appt should be rendered correctly after setting recurrenceException', function(assert) {
+        test('Recurring appt should be rendered correctly after setting recurrenceException', async function(assert) {
             const task = {
                 text: 'Stand-up meeting',
                 startDate: new Date(2015, 4, 4, 9, 0),
@@ -1054,7 +1054,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 recurrenceException: '20150506T090000'
             };
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 dataSource: [task],
                 views: ['month'],
                 currentView: 'month',
@@ -1067,7 +1067,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'appt was rendered correctly');
         });
 
-        test('Recurring appt should be rendered correctly after setting several recurrenceExceptions', function(assert) {
+        test('Recurring appt should be rendered correctly after setting several recurrenceExceptions', async function(assert) {
             const task = {
                 text: 'Stand-up meeting',
                 startDate: new Date(2015, 4, 4, 9, 0),
@@ -1082,7 +1082,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 recurrenceException: '20150506T090000, 20150505T090000'
             };
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 dataSource: [task],
                 views: ['month'],
                 currentView: 'month',
@@ -1096,7 +1096,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'appt was rendered correctly');
         });
 
-        test('Recurrence exception time should be considered when recurrent appointment rendering (T862204)', function(assert) {
+        test('Recurrence exception time should be considered when recurrent appointment rendering (T862204)', async function(assert) {
             const task = {
                 text: 'No Recruiting students',
                 roomId: [5],
@@ -1106,7 +1106,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 recurrenceException: '20170516T070000Z'
             };
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 dataSource: [task],
                 views: ['month'],
                 currentView: 'month',
@@ -1116,7 +1116,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(scheduler.appointments.getAppointmentCount(), 3, 'Correct appointment count is rendered');
         });
 
-        test('Recurrence exception time should be considered when recurrent appointment rendering and timezones are set', function(assert) {
+        test('Recurrence exception time should be considered when recurrent appointment rendering and timezones are set', async function(assert) {
             const task = {
                 text: 'No Recruiting students',
                 roomId: [5],
@@ -1127,7 +1127,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 startDateTimeZone: 'Etc/UTC'
             };
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 dataSource: [task],
                 timeZone: 'Europe/Paris',
                 views: ['month'],
@@ -1138,8 +1138,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(scheduler.appointments.getAppointmentCount(), 3, 'Correct appointment count is rendered');
         });
 
-        test('The second appointment in recurring series in Month view should have correct width', function(assert) {
-            const scheduler = this.createInstance({
+        test('The second appointment in recurring series in Month view should have correct width', async function(assert) {
+            const scheduler = await this.createInstance({
                 dataSource: [{
                     text: 'Appointment 1',
                     startDate: new Date(2017, 9, 17, 9),
@@ -1157,8 +1157,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.roughEqual(getOuterWidth($appointments.eq(1)), cellWidth * 2, 2, '2d appt has correct width');
         });
 
-        test('The second appointment in recurring series in Week view should have correct width', function(assert) {
-            const scheduler = this.createInstance({
+        test('The second appointment in recurring series in Week view should have correct width', async function(assert) {
+            const scheduler = await this.createInstance({
                 dataSource: [{
                     text: 'Appointment 1',
                     startDate: new Date(2017, 9, 17, 9),
@@ -1176,8 +1176,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.roughEqual(getOuterWidth($appointments.eq(1)), cellWidth * 2, 1.001, '2d appt has correct width');
         });
 
-        test('The second appointment in recurring series in Week view should be rendered correctly', function(assert) {
-            const scheduler = this.createInstance({
+        test('The second appointment in recurring series in Week view should be rendered correctly', async function(assert) {
+            const scheduler = await this.createInstance({
                 dataSource: [
                     {
                         startDate: new Date(2019, 9, 20, 8, 30),
@@ -1198,8 +1198,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal($dropDown.length, 0, 'There is no dropDown appointment');
         });
 
-        test('The second weekend appointment in recurring series in Week view should be rendered correctly', function(assert) {
-            const scheduler = this.createInstance({
+        test('The second weekend appointment in recurring series in Week view should be rendered correctly', async function(assert) {
+            const scheduler = await this.createInstance({
                 dataSource: [
                     {
                         startDate: new Date(2019, 9, 26, 8, 30),
@@ -1230,8 +1230,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal($dropDown.length, 0, 'There is no dropDown appointment');
         });
 
-        test('Reduced reccuring appt should have right left position in first column in Month view', function(assert) {
-            const scheduler = this.createInstance({
+        test('Reduced reccuring appt should have right left position in first column in Month view', async function(assert) {
+            const scheduler = await this.createInstance({
                 dataSource: [{
                     text: 'Appointment 1',
                     startDate: new Date(2017, 9, 17, 9),
@@ -1249,8 +1249,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.roughEqual($reducedAppointment.eq(1).position().left, 0, 0.1, 'first appt has right left position');
         });
 
-        test('Reduced reccuring appt should have right left position in first column in grouped Month view', function(assert) {
-            const scheduler = this.createInstance({
+        test('Reduced reccuring appt should have right left position in first column in grouped Month view', async function(assert) {
+            const scheduler = await this.createInstance({
                 dataSource: [{
                     text: 'Appointment 1',
                     startDate: new Date(2017, 9, 17, 9),
@@ -1280,10 +1280,10 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 4.01, 'first appt in 2d group has right left position');
         });
 
-        test('Recurrence exception should be adjusted by scheduler timezone', function(assert) {
+        test('Recurrence exception should be adjusted by scheduler timezone', async function(assert) {
             const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-39600000);
             try {
-                const scheduler = this.createInstance({
+                const scheduler = await this.createInstance({
                     dataSource: [{
                         text: 'a',
                         startDate: new Date(2018, 2, 26, 10),
@@ -1307,7 +1307,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             }
         });
 
-        test('Single changed appointment should be rendered correctly in specified timeZone', function(assert) {
+        test('Single changed appointment should be rendered correctly in specified timeZone', async function(assert) {
             if(!isDesktopEnvironment()) {
                 assert.ok(true, 'This test is for desktop only');
                 return;
@@ -1315,7 +1315,7 @@ supportedScrollingModes.forEach(scrollingMode => {
 
             const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
             try {
-                const scheduler = this.createInstance({
+                const scheduler = await this.createInstance({
                     dataSource: [{
                         text: 'Recurrence',
                         startDate: '2018-05-23T10:00:00Z',
@@ -1350,8 +1350,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             }
         });
 
-        test('Recurrent appointment considers firstDayOfWeek of Scheduler, WEEKLY,INTERVAL=2 (T744191)', function(assert) {
-            const scheduler = this.createInstance({
+        test('Recurrent appointment considers firstDayOfWeek of Scheduler, WEEKLY,INTERVAL=2 (T744191)', async function(assert) {
+            const scheduler = await this.createInstance({
                 dataSource: [{
                     text: 'test',
                     startDate: new Date(2018, 4, 18, 6, 0),
@@ -1382,7 +1382,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(secondRowAppointmentCoords.top, translator.locate(scheduler.appointments.getAppointment(7)).top, 'Eighth occurence has same top coordinate as fifth');
         });
 
-        test('Prerender filter by recurrence rule determines renderable appointments correctly (T736600)', function(assert) {
+        test('Prerender filter by recurrence rule determines renderable appointments correctly (T736600)', async function(assert) {
             const data = [
                 {
                     text: 'Recurrent app with exc',
@@ -1393,7 +1393,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 }
             ];
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 dataSource: data,
                 views: ['day'],
                 currentView: 'day',
@@ -1405,7 +1405,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appt is filtered on prerender and not rendered');
         });
 
-        test('Recurring appointment with interval > 1 rendered correctly (T823073)', function(assert) {
+        test('Recurring appointment with interval > 1 rendered correctly (T823073)', async function(assert) {
             const data = [
                 {
                     text: '5-week recur',
@@ -1416,7 +1416,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 }
             ];
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 dataSource: data,
                 views: ['month'],
                 currentView: 'month',
@@ -1435,7 +1435,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.roughEqual(Math.ceil(position.top - cellWorkspaceRect.top), 5, 1.01, 'Appointment position.top is correct');
         });
 
-        test('Appointment has correct occurrences dates with interval > 1', function(assert) {
+        test('Appointment has correct occurrences dates with interval > 1', async function(assert) {
             const data = [
                 {
                     text: 'Appointment with interval',
@@ -1446,7 +1446,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 }
             ];
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 dataSource: data,
                 views: ['month'],
                 currentView: 'month',
@@ -1465,7 +1465,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.roughEqual(Math.ceil(firstPosition.top - cellWorkspaceRect.top), 5, 1.01, 'Appointment position.top is correct');
         });
 
-        test('Appointment has correct occurrences dates with interval > 1, custom firstDayOfWeek', function(assert) {
+        test('Appointment has correct occurrences dates with interval > 1, custom firstDayOfWeek', async function(assert) {
             const data = [
                 {
                     text: 'Appointment with interval',
@@ -1476,7 +1476,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 }
             ];
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 dataSource: data,
                 views: ['month'],
                 currentView: 'month',
@@ -1497,7 +1497,7 @@ supportedScrollingModes.forEach(scrollingMode => {
         });
 
         [undefined, 1].forEach(firstDayOfWeek => {
-            test(`Appointment has correct occurrences dates with interval > 1, custom WKST, firstDayOfWeek: ${firstDayOfWeek}`, function(assert) {
+            test(`Appointment has correct occurrences dates with interval > 1, custom WKST, firstDayOfWeek: ${firstDayOfWeek}`, async function(assert) {
                 const data = [
                     {
                         text: 'Appointment with interval',
@@ -1508,7 +1508,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                     }
                 ];
 
-                const scheduler = this.createInstance({
+                const scheduler = await this.createInstance({
                     dataSource: data,
                     views: ['month'],
                     currentView: 'month',
@@ -1531,7 +1531,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             });
         });
 
-        test('Appointment has correct occurrences dates with interval > 1, custom firstDayOfWeek & WKST', function(assert) {
+        test('Appointment has correct occurrences dates with interval > 1, custom firstDayOfWeek & WKST', async function(assert) {
             const data = [
                 {
                     text: 'Appointment with interval',
@@ -1542,7 +1542,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 }
             ];
 
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 dataSource: data,
                 views: ['month'],
                 currentView: 'month',
@@ -1565,8 +1565,8 @@ supportedScrollingModes.forEach(scrollingMode => {
         });
 
         if(isDesktopEnvironment()) {
-            test('Recurrent appointment occurrence should be resized correctly, when startDayHour is changed on recurrent appointment (T832115)', function(assert) {
-                const scheduler = this.createInstance({
+            test('Recurrent appointment occurrence should be resized correctly, when startDayHour is changed on recurrent appointment (T832115)', async function(assert) {
+                const scheduler = await this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     views: ['week'],
                     currentView: 'week',
@@ -1588,8 +1588,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             });
         }
 
-        test('Recurrence appointment occurrences should have correct start date with timezone changing (T818393)', function(assert) {
-            const scheduler = this.createInstance({
+        test('Recurrence appointment occurrences should have correct start date with timezone changing (T818393)', async function(assert) {
+            const scheduler = await this.createInstance({
                 views: ['day', 'week', 'workWeek', 'month'],
                 currentView: 'week',
                 startDayHour: 1,
@@ -1609,8 +1609,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal(scheduler.appointments.getAppointmentPosition(0).top, scheduler.appointments.getAppointmentPosition(2).top, 'Appointment first and third occurrences have same top coordinate');
         });
 
-        test('Recurrence appointment occurrences should have correct text (T818393)', function(assert) {
-            const scheduler = this.createInstance({
+        test('Recurrence appointment occurrences should have correct text (T818393)', async function(assert) {
+            const scheduler = await this.createInstance({
                 views: ['week'],
                 currentView: 'week',
                 height: 600,
@@ -1631,8 +1631,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.equal($thirdAppointment.find('.dx-scheduler-appointment-content-date').eq(0).text(), '4:00 AM - 5:00 AM', 'Appointment third occurrences has correct date text');
         });
 
-        test('Recurrent appointment with tail on next week has most top coordinate (T805446)', function(assert) {
-            const scheduler = this.createInstance({
+        test('Recurrent appointment with tail on next week has most top coordinate (T805446)', async function(assert) {
+            const scheduler = await this.createInstance({
                 views: ['week', { type: 'day', intervalCount: 2 }],
                 currentView: 'week',
                 crossScrollingEnabled: true,
@@ -1659,8 +1659,8 @@ supportedScrollingModes.forEach(scrollingMode => {
         const apptStartDate = new Date(2019, 2, 30, 2, 0);
         const apptEndDate = new Date(2019, 2, 30, 3, 0);
 
-        test('Recurrence appointment is rendered correctly, freq=MINUTELY', function(assert) {
-            const scheduler = this.createInstance({
+        test('Recurrence appointment is rendered correctly, freq=MINUTELY', async function(assert) {
+            const scheduler = await this.createInstance({
                 views: ['day'],
                 currentView: 'day',
                 height: 600,
@@ -1686,8 +1686,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.deepEqual(formEndDate.option('value'), new Date(2019, 2, 30, 3, 2), 'Appointment third occurrence sets right endDate in appointmentForm');
         });
 
-        test('Recurrence appointment is rendered correctly, freq=HOURLY', function(assert) {
-            const scheduler = this.createInstance({
+        test('Recurrence appointment is rendered correctly, freq=HOURLY', async function(assert) {
+            const scheduler = await this.createInstance({
                 views: ['day'],
                 currentView: 'day',
                 height: 600,
@@ -1713,9 +1713,9 @@ supportedScrollingModes.forEach(scrollingMode => {
             assert.deepEqual(formEndDate.option('value'), new Date(2019, 2, 30, 5, 0), 'Appointment third occurrence sets right endDate in appointmentForm');
         });
 
-        test('Recurrence appointment sends correct data to appointmentTemplate, freq=MINUTELY', function(assert) {
+        test('Recurrence appointment sends correct data to appointmentTemplate, freq=MINUTELY', async function(assert) {
             let appTemplateIndex = 0;
-            this.createInstance({
+            await this.createInstance({
                 views: ['day'],
                 currentView: 'day',
                 height: 600,
@@ -1743,9 +1743,9 @@ supportedScrollingModes.forEach(scrollingMode => {
             });
         });
 
-        test('Recurrence appointment sends correct data to appointmentTooltipTemplate, freq=HOURLY', function(assert) {
+        test('Recurrence appointment sends correct data to appointmentTooltipTemplate, freq=HOURLY', async function(assert) {
             const appTooltipTemplateIndex = 2;
-            const scheduler = this.createInstance({
+            const scheduler = await this.createInstance({
                 views: ['day'],
                 currentView: 'day',
                 height: 600,
@@ -1775,8 +1775,8 @@ supportedScrollingModes.forEach(scrollingMode => {
         $.each(['minutely', 'hourly'], (_, value) => {
             const apptStartDate = new Date(2019, 2, 30, 2, 0);
             const apptEndDate = new Date(2019, 2, 30, 3, 0);
-            test(`Recurrence appointment renders correctly with INTERVAL rule, freq=${value}`, function(assert) {
-                const scheduler = this.createInstance({
+            test(`Recurrence appointment renders correctly with INTERVAL rule, freq=${value}`, async function(assert) {
+                const scheduler = await this.createInstance({
                     views: ['day'],
                     currentView: 'day',
                     height: 2000,
@@ -1799,8 +1799,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                     assert.roughEqual(scheduler.appointments.getAppointmentPosition(0).top + appointmentHeight * 2, scheduler.appointments.getAppointmentPosition(1).top, 1, 'Appointment interval rendered correctly');
                 }
             });
-            test(`Recurrence appointment renders correctly with COUNT rule, freq=${value}`, function(assert) {
-                const scheduler = this.createInstance({
+            test(`Recurrence appointment renders correctly with COUNT rule, freq=${value}`, async function(assert) {
+                const scheduler = await this.createInstance({
                     views: ['week'],
                     currentView: 'week',
                     height: 600,
@@ -1816,8 +1816,8 @@ supportedScrollingModes.forEach(scrollingMode => {
 
                 assert.equal(scheduler.appointments.getAppointmentCount(), 3, 'Appointments are rendered with correct count');
             });
-            test(`Recurrence appointment renders correctly with UNTIL rule, freq=${value}`, function(assert) {
-                const scheduler = this.createInstance({
+            test(`Recurrence appointment renders correctly with UNTIL rule, freq=${value}`, async function(assert) {
+                const scheduler = await this.createInstance({
                     views: ['week'],
                     currentView: 'week',
                     height: 600,
@@ -1842,8 +1842,8 @@ supportedScrollingModes.forEach(scrollingMode => {
 
                 assert.ok(translator.locate($(lastAppointment)).top > translator.locate($(lastRecurrentAppointment)).top, 'Last occurrence renders correctly');
             });
-            test(`RecurrenceException should be formed correctly after appointment deletion, freq=${value}`, function(assert) {
-                const scheduler = this.createInstance({
+            test(`RecurrenceException should be formed correctly after appointment deletion, freq=${value}`, async function(assert) {
+                const scheduler = await this.createInstance({
                     views: ['week'],
                     currentView: 'week',
                     height: 600,

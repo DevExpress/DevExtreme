@@ -212,7 +212,7 @@ module('Initialization', () => {
     GENERAL_TEST_CASES
         .concat(COMPLEX_CASES)
         .forEach(({ options, expectedErrors }) => {
-            test(`Should log option validation errors (options: ${JSON.stringify(options)}, errors: ${JSON.stringify(expectedErrors)}).`, function(assert) {
+            test(`Should log option validation errors (options: ${JSON.stringify(options)}, errors: ${JSON.stringify(expectedErrors)}).`, async function(assert) {
                 const [stub, consoleErrors] = setupConsoleSpy();
 
                 try {
@@ -229,7 +229,7 @@ module('Initialization', () => {
 
 module('Change options', () => {
     GENERAL_TEST_CASES.forEach(({ options, expectedErrors }) => {
-        test(`Should log option validation errors (options: ${JSON.stringify(options)}, errors: ${JSON.stringify(expectedErrors)}).`, function(assert) {
+        test(`Should log option validation errors (options: ${JSON.stringify(options)}, errors: ${JSON.stringify(expectedErrors)}).`, async function(assert) {
             const [stub, consoleErrors] = setupConsoleSpy();
             const scheduler = createScheduler();
 
@@ -248,7 +248,7 @@ module('Change options', () => {
 });
 
 module('Runtime', () => {
-    test('Should validate only current view options', function(assert) {
+    test('Should validate only current view options', async function(assert) {
         const expectedErrors = ['E1061', 'E1058', 'E1062'];
         const [stub, consoleErrors] = setupConsoleSpy();
         const scheduler = createScheduler({
@@ -282,7 +282,7 @@ module('Runtime', () => {
         stub.restore();
     });
 
-    test('Should validate views nested options if this view is current', function(assert) {
+    test('Should validate views nested options if this view is current', async function(assert) {
         const expectedErrors = ['E1061'];
         const [stub, consoleErrors] = setupConsoleSpy();
 

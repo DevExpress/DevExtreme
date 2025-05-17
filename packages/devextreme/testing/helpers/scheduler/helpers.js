@@ -9,6 +9,8 @@ import 'generic_light.css!';
 import '__internal/scheduler/m_scheduler';
 import 'ui/drop_down_button';
 
+import { waitAsync, waitForAsync } from './waitForAsync.js';
+
 export const TOOLBAR_TOP_LOCATION = 'top';
 export const TOOLBAR_BOTTOM_LOCATION = 'bottom';
 
@@ -74,9 +76,17 @@ export const supportedScrollingModes = ['standard', 'virtual'];
 
 export const supportedViews = ['day', 'week', 'workWeek', 'month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
 
-export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id="${SCHEDULER_ID}"><div data-options="dxTemplate: { name: 'template' }">Task Template</div></div>`);
+export const initTestMarkup = () => {
+    return $(`#${TEST_ROOT_ELEMENT_ID}`)
+        .html(`<div id="${SCHEDULER_ID}"><div data-options="dxTemplate: { name: 'template' }">Task Template</div></div>`);
+};
 
-export const createWrapper = (option, clock) => new SchedulerTestWrapper($(`#${SCHEDULER_ID}`).dxScheduler(option).dxScheduler('instance'), clock);
+export async function createWrapper(option) {
+    const instance = $(`#${SCHEDULER_ID}`).dxScheduler(option).dxScheduler('instance');
+    const scheduler = new SchedulerTestWrapper(instance);
+    await waitForAsync(() => instance._workSpace);
+    return scheduler;
+}
 
 export const isDesktopEnvironment = () => devices.real().deviceType === 'desktop';
 const isMACEnvironment = () => devices.real().mac;
@@ -206,9 +216,8 @@ class AppointmentMarker extends ElementWrapper {
 }
 
 class Appointment extends ClickElementWrapper {
-    constructor(parent, index, clock) {
+    constructor(parent, index) {
         super(CLASSES.appointment, parent, index);
-        this.clock = clock;
     }
 
     get rectangle() {
@@ -270,16 +279,14 @@ class Appointment extends ClickElementWrapper {
         };
     }
 
-    click() {
+    async click() {
         this.getElement().trigger('dxclick');
-        this.clock && this.clock.tick(300);
+        await waitAsync(300);
     }
 
-    dbClick() {
-        // const clock = sinon.useFakeTimers();
+    async dbClick() {
         this.getElement().trigger('dxdblclick');
-        // clock.tick(300);
-        // clock.restore();
+        await waitAsync(300);
     }
 }
 
@@ -404,10 +411,9 @@ class HeaderWrapper extends ElementWrapper {
 }
 
 export class SchedulerTestWrapper extends ElementWrapper {
-    constructor(instance, clock) {
+    constructor(instance) {
         super(`#${SCHEDULER_ID}`);
         this.instance = instance;
-        this.clock = clock;
 
         this.timePanel = {
             getElement: () => {
@@ -494,16 +500,9 @@ export class SchedulerTestWrapper extends ElementWrapper {
                     .filter((index, element) => $(element).find('.dx-scheduler-appointment-title').text() === text);
             },
 
-            click: (index = 0, isAsync = false) => {
-                const click = () => this.appointments.getAppointment(index).trigger('dxclick');
-
-                if(isAsync) {
-                    click();
-                } else {
-                    click();
-
-                    this.clock && this.clock.tick(300);
-                }
+            click: async(index = 0) => {
+                this.appointments.getAppointment(index).trigger('dxclick');
+                await waitAsync(300);
             },
 
             dblclick: (index = 0) => {
@@ -719,7 +718,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
         const length = this.getElement().find(CLASSES.appointment).length;
 
         for(let i = 0; i < length; i++) {
-            result.push(new Appointment(this.getElement(), i, this.clock));
+            result.push(new Appointment(this.getElement(), i));
         }
 
         return result;

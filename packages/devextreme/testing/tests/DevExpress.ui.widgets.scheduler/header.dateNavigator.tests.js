@@ -4,8 +4,8 @@ import devices from '__internal/core/m_devices';
 
 testStart(() => initTestMarkup());
 
-test('should has correct caption', function(assert) {
-    const scheduler = createWrapper({
+test('should has correct caption', async function(assert) {
+    const scheduler = await createWrapper({
         views: ['week'],
         currentView: 'week',
         currentDate: new Date(2021, 4, 7),
@@ -14,8 +14,8 @@ test('should has correct caption', function(assert) {
     assert.equal(scheduler.header.navigator.getText(), '2-8 May 2021');
 });
 
-test('should has correct caption(with firstDayOfWeek)', function(assert) {
-    const scheduler = createWrapper({
+test('should has correct caption(with firstDayOfWeek)', async function(assert) {
+    const scheduler = await createWrapper({
         views: ['week'],
         currentView: 'week',
         firstDayOfWeek: 3,
@@ -25,8 +25,8 @@ test('should has correct caption(with firstDayOfWeek)', function(assert) {
     assert.equal(scheduler.header.navigator.getText(), '5-11 May 2021');
 });
 
-test('should has correct caption(with intervalCount and startDate in view)', function(assert) {
-    const scheduler = createWrapper({
+test('should has correct caption(with intervalCount and startDate in view)', async function(assert) {
+    const scheduler = await createWrapper({
         currentView: 'week',
         views: [{
             type: 'week',
@@ -39,8 +39,8 @@ test('should has correct caption(with intervalCount and startDate in view)', fun
     assert.equal(scheduler.header.navigator.getText(), '2-22 May 2021');
 });
 
-test('should has correct caption(with agendaDuration)', function(assert) {
-    const scheduler = createWrapper({
+test('should has correct caption(with agendaDuration)', async function(assert) {
+    const scheduler = await createWrapper({
         currentView: 'agenda',
         views: [{
             type: 'agenda',
@@ -54,8 +54,8 @@ test('should has correct caption(with agendaDuration)', function(assert) {
 });
 
 test('should display correct caption after changing to day view if startDate is settled in views',
-    function(assert) {
-        const scheduler = createWrapper({
+    async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2021, 6, 28),
             currentView: 'month',
             views: [
@@ -83,8 +83,8 @@ test('should display correct caption after changing to day view if startDate is 
 );
 
 test('should display correct caption after changing to month view if startDate is settled in views',
-    function(assert) {
-        const scheduler = createWrapper({
+    async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2021, 6, 28),
             currentView: 'day',
             views: [
@@ -107,8 +107,8 @@ test('should display correct caption after changing to month view if startDate i
     }
 );
 
-test('should display correct caption after switching to the next week', function(assert) {
-    const scheduler = createWrapper({
+test('should display correct caption after switching to the next week', async function(assert) {
+    const scheduler = await createWrapper({
         currentDate: new Date(2021, 8, 22),
         views: [
             {
@@ -131,8 +131,8 @@ test('should display correct caption after switching to the next week', function
 });
 
 module('Option Changing', () => {
-    test('should change caption text after changing "currentView"', function(assert) {
-        const scheduler = createWrapper({
+    test('should change caption text after changing "currentView"', async function(assert) {
+        const scheduler = await createWrapper({
             views: ['day', 'week', 'month', 'agenda'],
             currentView: 'day',
             currentDate: new Date(2021, 4, 7),
@@ -152,8 +152,8 @@ module('Option Changing', () => {
         assert.equal(navigator.getText(), '7-13 May 2021', 'Correct caption for agenda view');
     });
 
-    test('should toggle previous and next buttons depending on "min" & "max"', function(assert) {
-        const scheduler = createWrapper({
+    test('should toggle previous and next buttons depending on "min" & "max"', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2021, 6, 5),
             min: new Date(2021, 6, 4),
             max: new Date(2021, 6, 6),
@@ -177,8 +177,8 @@ module('Option Changing', () => {
         assert.equal(navigator.nextButton.isDisabled(), true, 'next button disabled');
     });
 
-    test('should update caption after changing "currentDate"', function(assert) {
-        const scheduler = createWrapper({
+    test('should update caption after changing "currentDate"', async function(assert) {
+        const scheduler = await createWrapper({
             views: ['day'],
             currentView: 'day',
             currentDate: new Date(2020, 6, 7),
@@ -187,8 +187,8 @@ module('Option Changing', () => {
         assert.equal(scheduler.header.navigator.getText(), '4 May 2021', 'Caption is correct');
     });
 
-    test('should update caption after changing "currentView"', function(assert) {
-        const scheduler = createWrapper({
+    test('should update caption after changing "currentView"', async function(assert) {
+        const scheduler = await createWrapper({
             views: ['month', 'day'],
             currentView: 'day',
             currentDate: new Date(2021, 4, 7),
@@ -197,8 +197,8 @@ module('Option Changing', () => {
         assert.equal(scheduler.header.navigator.getText(), 'May 2021', 'Caption is correct');
     });
 
-    test('should update caption after changing "firstDayOfWeek"', function(assert) {
-        const scheduler = createWrapper({
+    test('should update caption after changing "firstDayOfWeek"', async function(assert) {
+        const scheduler = await createWrapper({
             views: ['week'],
             currentView: 'week',
             currentDate: new Date(2021, 4, 7),
@@ -208,8 +208,8 @@ module('Option Changing', () => {
     });
 
 
-    test('should update caption after changing "agendaDuration"', function(assert) {
-        const scheduler = createWrapper({
+    test('should update caption after changing "agendaDuration"', async function(assert) {
+        const scheduler = await createWrapper({
             views: [{
                 type: 'agenda',
                 agendaDuration: 5,
@@ -227,8 +227,8 @@ module('Option Changing', () => {
 });
 
 module('Interface Interaction', () => {
-    test('should disabled previous button depending on "min"', function(assert) {
-        const scheduler = createWrapper({
+    test('should disabled previous button depending on "min"', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2021, 6, 5),
             min: new Date(2021, 6, 4),
             views: ['day'],
@@ -249,8 +249,8 @@ module('Interface Interaction', () => {
         assert.equal(navigator.prevButton.isDisabled(), false, 'previous button is endabled');
     });
 
-    test('should disabled next button depending on "max"', function(assert) {
-        const scheduler = createWrapper({
+    test('should disabled next button depending on "max"', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2021, 6, 5),
             max: new Date(2021, 6, 6),
             views: ['day', 'week', 'month'],

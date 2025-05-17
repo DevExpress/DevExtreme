@@ -31,35 +31,33 @@ const tasks = [
 
 const moduleConfig = {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
     afterEach: function() {
-        this.clock.restore();
         fx.off = false;
     }
 };
 
 QUnit.module('Scheduler markup', moduleConfig, () => {
-    QUnit.test('Scheduler should be initialized', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('Scheduler should be initialized', async function(assert) {
+        const scheduler = await createWrapper();
 
         assert.ok(scheduler.instance instanceof dxScheduler, 'Scheduler was initialized');
     });
 
-    QUnit.test('Scheduler should have a right css classes', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('Scheduler should have a right css classes', async function(assert) {
+        const scheduler = await createWrapper();
 
         assert.ok(scheduler.instance.$element().hasClass('dx-scheduler'), 'Scheduler has \'dx-scheduler\' css class');
         assert.ok(scheduler.instance.$element().hasClass('dx-widget'), 'Scheduler has \'dx-widget\' css class');
     });
 
-    QUnit.test('Scheduler should not fail when dataSource is set', function(assert) {
+    QUnit.test('Scheduler should not fail when dataSource is set', async function(assert) {
         const data = new DataSource({
             store: tasks
         });
 
-        const { instance } = createWrapper({
+        const { instance } = await createWrapper({
             dataSource: data,
             views: ['day'],
             currentView: 'day',
@@ -70,12 +68,12 @@ QUnit.module('Scheduler markup', moduleConfig, () => {
         assert.ok(instance.appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
-    QUnit.test('Scheduler should not fail when dataSource is set, timelineView', function(assert) {
+    QUnit.test('Scheduler should not fail when dataSource is set, timelineView', async function(assert) {
         const data = new DataSource({
             store: tasks
         });
 
-        const { instance } = createWrapper({
+        const { instance } = await createWrapper({
             dataSource: data,
             views: ['timelineDay'],
             currentView: 'timelineDay',
@@ -86,12 +84,12 @@ QUnit.module('Scheduler markup', moduleConfig, () => {
         assert.ok(instance.appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
-    QUnit.test('Scheduler should not fail when dataSource is set, timelineWeek', function(assert) {
+    QUnit.test('Scheduler should not fail when dataSource is set, timelineWeek', async function(assert) {
         const data = new DataSource({
             store: tasks
         });
 
-        const { instance } = createWrapper({
+        const { instance } = await createWrapper({
             dataSource: data,
             views: ['timelineWeek'],
             currentView: 'timelineWeek',
@@ -102,12 +100,12 @@ QUnit.module('Scheduler markup', moduleConfig, () => {
         assert.ok(instance.appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
-    QUnit.test('Scheduler should not fail when dataSource is set, agenda', function(assert) {
+    QUnit.test('Scheduler should not fail when dataSource is set, agenda', async function(assert) {
         const data = new DataSource({
             store: tasks
         });
 
-        const { instance } = createWrapper({
+        const { instance } = await createWrapper({
             dataSource: data,
             views: ['agenda'],
             currentView: 'agenda',
@@ -118,8 +116,8 @@ QUnit.module('Scheduler markup', moduleConfig, () => {
         assert.ok(instance.appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
-    QUnit.test('Header & work space currentDate should not contain information about hours, minutes, seconds', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('Header & work space currentDate should not contain information about hours, minutes, seconds', async function(assert) {
+        const scheduler = await createWrapper();
 
         let currentDate = scheduler.instance.option('currentDate');
         const header = scheduler.instance.getHeader();
@@ -143,16 +141,9 @@ QUnit.module('Scheduler markup', moduleConfig, () => {
     });
 });
 
-QUnit.module('Scheduler with config', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-}, () => {
-    QUnit.test('Scheduler should not fail when crossScrollingEnabled is set', function(assert) {
-        const scheduler = createWrapper();
+QUnit.module('Scheduler with config', () => {
+    QUnit.test('Scheduler should not fail when crossScrollingEnabled is set', async function(assert) {
+        const scheduler = await createWrapper();
 
         assert.strictEqual(scheduler.instance.getWorkSpace().option('crossScrollingEnabled'), false, 'option is OK');
 
@@ -160,8 +151,8 @@ QUnit.module('Scheduler with config', {
         assert.strictEqual(scheduler.instance.getWorkSpace().option('crossScrollingEnabled'), true, 'option is OK');
     });
 
-    QUnit.test('Scheduler should not fail when crossScrollingEnabled is set, agenda view', function(assert) {
-        createWrapper({
+    QUnit.test('Scheduler should not fail when crossScrollingEnabled is set, agenda view', async function(assert) {
+        await createWrapper({
             crossScrollingEnabled: true,
             currentView: 'agenda'
         });

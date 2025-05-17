@@ -30,8 +30,8 @@ QUnit.module('Scrolling to time', () => {
                 fx.off = false;
             }
         }, () => {
-            QUnit.test('Check scrolling to time', function(assert) {
-                const scheduler = this.createScheduler({
+            QUnit.test('Check scrolling to time', async function(assert) {
+                const scheduler = await this.createScheduler({
                     currentView: 'week',
                     currentDate: new Date(2015, 1, 9),
                     height: 500
@@ -49,8 +49,8 @@ QUnit.module('Scrolling to time', () => {
                 assert.equal(scrollBy.getCall(0).args[0].left, 0, 'scrollBy was called with right distance');
             });
 
-            QUnit.test('Check scrolling to time, if startDayHour is not 0', function(assert) {
-                const scheduler = this.createScheduler({
+            QUnit.test('Check scrolling to time, if startDayHour is not 0', async function(assert) {
+                const scheduler = await this.createScheduler({
                     currentView: 'week',
                     currentDate: new Date(2015, 1, 9),
                     height: 500,
@@ -77,8 +77,8 @@ QUnit.module('Scrolling to time', () => {
                 );
             });
 
-            QUnit.test('Check scrolling to time, if \'hours\' argument greater than the \'endDayHour\' option', function(assert) {
-                const scheduler = this.createScheduler({
+            QUnit.test('Check scrolling to time, if \'hours\' argument greater than the \'endDayHour\' option', async function(assert) {
+                const scheduler = await this.createScheduler({
                     currentView: 'week',
                     currentDate: new Date(2015, 1, 9),
                     height: 500,
@@ -101,8 +101,8 @@ QUnit.module('Scrolling to time', () => {
                 );
             });
 
-            QUnit.test('Scrolling to date which doesn\'t locate on current view should call console warning', function(assert) {
-                const scheduler = this.createScheduler({
+            QUnit.test('Scrolling to date which doesn\'t locate on current view should call console warning', async function(assert) {
+                const scheduler = await this.createScheduler({
                     currentView: 'week',
                     currentDate: new Date(2015, 1, 9),
                     height: 500
@@ -114,8 +114,8 @@ QUnit.module('Scrolling to time', () => {
                 assert.equal(errors.log.getCall(1).args[0], 'W1008', 'warning has correct error id');
             });
 
-            QUnit.test('Check scrolling to time for timeline view', function(assert) {
-                const scheduler = this.createScheduler({
+            QUnit.test('Check scrolling to time for timeline view', async function(assert) {
+                const scheduler = await this.createScheduler({
                     views: ['timelineWeek'],
                     currentView: 'timelineWeek',
                     currentDate: new Date(2015, 1, 9),
@@ -138,8 +138,8 @@ QUnit.module('Scrolling to time', () => {
                 );
             });
 
-            QUnit.test('Check scrolling to time for timeline view, rtl mode', function(assert) {
-                const scheduler = this.createScheduler({
+            QUnit.test('Check scrolling to time for timeline view, rtl mode', async function(assert) {
+                const scheduler = await this.createScheduler({
                     views: ['timelineWeek'],
                     currentView: 'timelineWeek',
                     currentDate: new Date(2015, 1, 9),
@@ -165,8 +165,8 @@ QUnit.module('Scrolling to time', () => {
                 );
             });
 
-            QUnit.test('Check scrolling to time for timeline view if date was set', function(assert) {
-                const scheduler = this.createScheduler({
+            QUnit.test('Check scrolling to time for timeline view if date was set', async function(assert) {
+                const scheduler = await this.createScheduler({
                     views: ['timelineWeek'],
                     currentView: 'timelineWeek',
                     currentDate: new Date(2015, 1, 9),
@@ -190,8 +190,8 @@ QUnit.module('Scrolling to time', () => {
                 );
             });
 
-            QUnit.test('Check scrolling to time for timeline view if date was set, rtl mode', function(assert) {
-                const scheduler = this.createScheduler({
+            QUnit.test('Check scrolling to time for timeline view if date was set, rtl mode', async function(assert) {
+                const scheduler = await this.createScheduler({
                     views: ['timelineWeek'],
                     currentView: 'timelineWeek',
                     currentDate: new Date(2015, 1, 9),
@@ -218,8 +218,8 @@ QUnit.module('Scrolling to time', () => {
                 );
             });
 
-            QUnit.test('scrollToTime should throw a deprecation warning', function(assert) {
-                const scheduler = createWrapper({
+            QUnit.test('scrollToTime should throw a deprecation warning', async function(assert) {
+                const scheduler = await createWrapper({
                     views: ['day'],
                     currentView: 'day',
                     currentDate: new Date(2021, 8, 9),

@@ -34,17 +34,15 @@ const createScheduler = (options) => {
 const moduleConfig = {
     beforeEach() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
 
     afterEach() {
         fx.off = false;
-        this.clock.restore();
     }
 };
 
 QUnit.module('onContentReady event', moduleConfig, () => {
-    QUnit.test('contentReady action should rise after change dataSource', function(assert) {
+    QUnit.test('contentReady action should rise after change dataSource', async function(assert) {
         const dataSource1 = [{
             text: '1',
             startDate: new Date(2016, 2, 15, 1),
@@ -76,7 +74,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
         assert.equal(contentReadyCount, 3, 'contentReady should be rise after change dataSource');
     });
 
-    QUnit.test('contentReady action should rise after call repaint', function(assert) {
+    QUnit.test('contentReady action should rise after call repaint', async function(assert) {
         let contentReadyCount = 0;
         const scheduler = createScheduler({
             onContentReady: e => contentReadyCount++
@@ -88,7 +86,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
         assert.equal(contentReadyCount, 2, 'contentReady should be rise after call repaint');
     });
 
-    QUnit.test('contentReady action should rise on first init, data source load and after call repaint method', function(assert) {
+    QUnit.test('contentReady action should rise on first init, data source load and after call repaint method', async function(assert) {
         let contentReadyCount = 0;
 
         const dataSource = new DataSource({
@@ -121,7 +119,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
         assert.equal(contentReadyCount, 2, 'contentReady should be rise after call repaint');
     });
 
-    QUnit.test('contentReady action should rise even if dataSource isn\'t set', function(assert) {
+    QUnit.test('contentReady action should rise even if dataSource isn\'t set', async function(assert) {
         let contentReadyCount = 0;
 
         createScheduler({
@@ -131,7 +129,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
         assert.equal(contentReadyCount, 1, 'contentReady is fired');
     });
 
-    QUnit.test('contentReady action should rise at the right time', function(assert) {
+    QUnit.test('contentReady action should rise at the right time', async function(assert) {
         const done = assert.async();
         this.clock.restore();
 
@@ -173,7 +171,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
         });
     });
 
-    QUnit.test('contentReady action should rise when appointment is added', function(assert) {
+    QUnit.test('contentReady action should rise when appointment is added', async function(assert) {
         const scheduler = createScheduler({
             currentDate: new Date(2016, 2, 15),
             views: ['week'],
@@ -196,7 +194,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
         });
     });
 
-    QUnit.test('contentReady action should rise when appointment is updated', function(assert) {
+    QUnit.test('contentReady action should rise when appointment is updated', async function(assert) {
         const appointment = {
             startDate: new Date(2016, 2, 15, 1).toString(),
             endDate: new Date(2016, 2, 15, 2).toString()
@@ -223,7 +221,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
         });
     });
 
-    QUnit.test('contentReady action should rise when appointment is deleted', function(assert) {
+    QUnit.test('contentReady action should rise when appointment is deleted', async function(assert) {
         const appointment = {
             startDate: new Date(2016, 2, 15, 1).toString(),
             endDate: new Date(2016, 2, 15, 2).toString()

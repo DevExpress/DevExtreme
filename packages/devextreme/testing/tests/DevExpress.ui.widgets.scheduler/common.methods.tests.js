@@ -5,11 +5,12 @@ import { DataSource } from 'common/data/data_source/data_source';
 
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 QUnit.testStart(() => initTestMarkup());
 
-const createInstance = (options = {}) => {
-    const scheduler = createWrapper({
+const createInstance = async(options = {}) => {
+    const scheduler = await createWrapper({
         showCurrentTimeIndicator: false,
         ...options
     });
@@ -19,8 +20,6 @@ const createInstance = (options = {}) => {
 
 QUnit.module('Methods', {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-
         fx.off = true;
         this.tasks = [
             {
@@ -36,48 +35,43 @@ QUnit.module('Methods', {
         ];
     },
     afterEach: function() {
-        this.clock.restore();
         fx.off = false;
     }
 }, () => {
-    QUnit.test('Add new item', function(assert) {
+    QUnit.test('Add new item', async function(assert) {
         const data = new DataSource({
             store: this.tasks
         });
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: data
         });
 
-        this.clock.tick(10);
-
         scheduler.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' });
-        this.clock.tick(10);
+        await waitAsync(10);
         assert.strictEqual(scheduler.instance.option('dataSource').items().length, 3, 'new item is added');
     });
 
-    QUnit.test('Add new item with empty text', function(assert) {
+    QUnit.test('Add new item with empty text', async function(assert) {
         const data = new DataSource({
             store: this.tasks
         });
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: data
         });
 
-        this.clock.tick(10);
-
         scheduler.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17) });
-        this.clock.tick(10);
+        await waitAsync(10);
         assert.strictEqual(scheduler.instance.option('dataSource').items()[2].text, '', 'new item was added with correct text');
     });
 
-    QUnit.test('addAppointment shouldn\'t have an effect on data item, when timezone is set', function(assert) {
+    QUnit.test('addAppointment shouldn\'t have an effect on data item, when timezone is set', async function(assert) {
         const data = [];
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: data,
             timeZone: 'Etc/GMT-5'
@@ -89,12 +83,12 @@ QUnit.module('Methods', {
         assert.deepEqual(data[0].endDate, new Date(2015, 1, 9, 17), 'End date is OK');
     });
 
-    QUnit.test('Update item', function(assert) {
+    QUnit.test('Update item', async function(assert) {
         const data = new DataSource({
             store: this.tasks
         });
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: data
         });
@@ -109,12 +103,12 @@ QUnit.module('Methods', {
         assert.deepEqual(scheduler.instance.option('dataSource').items()[0], newTask, 'item is updated');
     });
 
-    QUnit.test('Updated item should be rerendered', function(assert) {
+    QUnit.test('Updated item should be rerendered', async function(assert) {
         const data = new DataSource({
             store: this.tasks
         });
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: data
         });
@@ -134,12 +128,12 @@ QUnit.module('Methods', {
         this.clock.tick(10);
     });
 
-    QUnit.test('Updated item should be rerendered if it\'s coordinates weren\'t changed (T650811)', function(assert) {
+    QUnit.test('Updated item should be rerendered if it\'s coordinates weren\'t changed (T650811)', async function(assert) {
         const data = new DataSource({
             store: [this.tasks[0]]
         });
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: data
         });
@@ -162,12 +156,12 @@ QUnit.module('Methods', {
         this.clock.tick(10);
     });
 
-    QUnit.test('Other appointments should not be rerendered after update item', function(assert) {
+    QUnit.test('Other appointments should not be rerendered after update item', async function(assert) {
         const data = new DataSource({
             store: this.tasks
         });
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: data
         });
@@ -188,12 +182,12 @@ QUnit.module('Methods', {
         assert.equal(counter, 1, 'Only updated appointment was rerendered');
     });
 
-    QUnit.test('Update item when custom timeZone was set', function(assert) {
+    QUnit.test('Update item when custom timeZone was set', async function(assert) {
         const data = new DataSource({
             store: this.tasks
         });
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: data,
             timeZone: 'Etc/GMT-5'
@@ -209,12 +203,12 @@ QUnit.module('Methods', {
         assert.deepEqual(scheduler.instance.option('dataSource').items()[0], newTask, 'item is updated');
     });
 
-    QUnit.test('Update item when custom timeZone was set as string', function(assert) {
+    QUnit.test('Update item when custom timeZone was set as string', async function(assert) {
         const data = new DataSource({
             store: this.tasks
         });
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: data,
             timeZone: 'Asia/Muscat'
@@ -230,12 +224,12 @@ QUnit.module('Methods', {
         assert.deepEqual(scheduler.instance.option('dataSource').items()[0], newTask, 'item is updated');
     });
 
-    QUnit.test('Updated directly from store item should be rerendered correctly', function(assert) {
+    QUnit.test('Updated directly from store item should be rerendered correctly', async function(assert) {
         const data = [{
             text: 'abc', startDate: new Date(2015, 1, 9, 10), endDate: new Date(2015, 1, 9, 11)
         }];
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: data
         });
@@ -249,7 +243,7 @@ QUnit.module('Methods', {
         assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment-title').eq(0).text(), 'def', 'Appointment is rerendered');
     });
 
-    QUnit.test('Pushed directly from store item should be rerendered correctly', function(assert) {
+    QUnit.test('Pushed directly from store item should be rerendered correctly', async function(assert) {
         const data = [{
             id: 0,
             text: 'abc',
@@ -272,7 +266,7 @@ QUnit.module('Methods', {
             }
         });
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             dataSource: dataSource,
             views: ['week'],
             currentView: 'week',
@@ -302,7 +296,7 @@ QUnit.module('Methods', {
         assert.equal(appointment.eq(1).text(), 'Update-2', 'Appointment is rerendered');
     });
 
-    QUnit.test('the \'update\' method of store should have key as arg is store has the \'key\' field', function(assert) {
+    QUnit.test('the \'update\' method of store should have key as arg is store has the \'key\' field', async function(assert) {
         const data = [{
             id: 1, text: 'abc', startDate: new Date(2015, 1, 9, 10)
         }];
@@ -318,7 +312,7 @@ QUnit.module('Methods', {
             })
         });
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: dataSource
         });
@@ -328,7 +322,7 @@ QUnit.module('Methods', {
         scheduler.instance.updateAppointment(data[0], {});
     });
 
-    QUnit.test('the \'update\' method of store should have item as arg is store has not the \'key\' field', function(assert) {
+    QUnit.test('the \'update\' method of store should have item as arg is store has not the \'key\' field', async function(assert) {
         const data = [{
             id: 1, text: 'abc', startDate: new Date(2015, 1, 9, 10)
         }];
@@ -343,7 +337,7 @@ QUnit.module('Methods', {
             })
         });
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: dataSource
         });
@@ -352,12 +346,12 @@ QUnit.module('Methods', {
         scheduler.instance.updateAppointment(data[0], {});
     });
 
-    QUnit.test('Remove item', function(assert) {
+    QUnit.test('Remove item', async function(assert) {
         const data = new DataSource({
             store: this.tasks
         });
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: data
         });
@@ -371,12 +365,12 @@ QUnit.module('Methods', {
         assert.deepEqual(scheduler.instance.option('dataSource').items(), [lastTask], 'Task is removed');
     });
 
-    QUnit.test('Other appointments should not be rerendered after remove appointment', function(assert) {
+    QUnit.test('Other appointments should not be rerendered after remove appointment', async function(assert) {
         const data = new DataSource({
             store: this.tasks
         });
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: data
         });
@@ -393,7 +387,7 @@ QUnit.module('Methods', {
         assert.deepEqual(scheduler.instance.option('dataSource').items(), [lastTask], 'Task is removed');
     });
 
-    QUnit.test('the \'remove\' method of store should have key as arg is store has the \'key\' field', function(assert) {
+    QUnit.test('the \'remove\' method of store should have key as arg is store has the \'key\' field', async function(assert) {
         const data = [{
             id: 1, text: 'abc', startDate: new Date(2015, 1, 9, 10)
         }];
@@ -409,7 +403,7 @@ QUnit.module('Methods', {
             })
         });
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: dataSource
         });
@@ -418,7 +412,7 @@ QUnit.module('Methods', {
         scheduler.instance.deleteAppointment(data[0]);
     });
 
-    QUnit.test('the \'remove\' method of store should have item as arg is store has not the \'key\' field', function(assert) {
+    QUnit.test('the \'remove\' method of store should have item as arg is store has not the \'key\' field', async function(assert) {
         const data = [{
             id: 1, text: 'abc', startDate: new Date(2015, 1, 9, 10)
         }];
@@ -433,7 +427,7 @@ QUnit.module('Methods', {
             })
         });
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: dataSource
         });
@@ -442,8 +436,8 @@ QUnit.module('Methods', {
         scheduler.instance.deleteAppointment(data[0]);
     });
 
-    QUnit.test('Check appointment takes all day', function(assert) {
-        const scheduler = createInstance({
+    QUnit.test('Check appointment takes all day', async function(assert) {
+        const scheduler = await createInstance({
             dataSource: []
         });
         let result = scheduler.instance.appointmentTakesAllDay({
@@ -467,8 +461,8 @@ QUnit.module('Methods', {
         assert.ok(!result, 'Appointment doesn\'t take all day');
     });
 
-    QUnit.test('Check appointment takes all day if start & end hours are defined', function(assert) {
-        const scheduler = createInstance({
+    QUnit.test('Check appointment takes all day if start & end hours are defined', async function(assert) {
+        const scheduler = await createInstance({
             dataSource: [],
             startDayHour: 5,
             endDayHour: 10
@@ -500,8 +494,8 @@ QUnit.module('Methods', {
         assert.ok(!result, 'Appointment doesn\'t take all day');
     });
 
-    QUnit.test('Scheduler focus method should call workspace focus method when appointment wasn\'t updated', function(assert) {
-        const scheduler = createInstance({
+    QUnit.test('Scheduler focus method should call workspace focus method when appointment wasn\'t updated', async function(assert) {
+        const scheduler = await createInstance({
             dataSource: [],
             currentView: 'day',
             currentDate: new Date(2015, 10, 3)
@@ -515,7 +509,7 @@ QUnit.module('Methods', {
         assert.ok(spy.calledOnce, 'focus is called');
     });
 
-    QUnit.test('Scheduler focus method should call appointments focus method when appointment was updated', function(assert) {
+    QUnit.test('Scheduler focus method should call appointments focus method when appointment was updated', async function(assert) {
         const tasks = [{
             text: 'a',
             startDate: new Date(2015, 6, 8, 8, 0),
@@ -523,7 +517,7 @@ QUnit.module('Methods', {
             allDay: true
         }];
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             dataSource: tasks,
             currentDate: new Date(2015, 6, 8)
         });
@@ -537,8 +531,8 @@ QUnit.module('Methods', {
         assert.ok(focusSpy.calledOnce, 'focus is called');
     });
 
-    QUnit.test('Scheduler dateTable should have right position, crossScrollingEnabled=true, rtl mode', function(assert) {
-        const scheduler = createInstance({
+    QUnit.test('Scheduler dateTable should have right position, crossScrollingEnabled=true, rtl mode', async function(assert) {
+        const scheduler = await createInstance({
             currentView: 'day',
             currentDate: new Date(2015, 10, 3),
             crossScrollingEnabled: true,
@@ -550,7 +544,7 @@ QUnit.module('Methods', {
         assert.equal(dateTable.position().left, 0, 'Date Table left is correct');
     });
 
-    QUnit.test('Timezone offset calculation(T388304)', function(assert) {
+    QUnit.test('Timezone offset calculation(T388304)', async function(assert) {
         [{ tz: 'Europe/Belgrade', offset: 1, daylightOffset: 2, daylightDate: new Date(2016, 4, 10), date: new Date(2016, 10, 20) },
             { tz: 'Asia/Ashgabat', offset: 5, daylightOffset: 5, daylightDate: new Date(2016, 4, 10), date: new Date(2016, 10, 20) },
             { tz: 'America/Los_Angeles', offset: -8, daylightOffset: -7, daylightDate: new Date(2016, 4, 10), date: new Date(2016, 10, 20) },
@@ -569,10 +563,10 @@ QUnit.module('Methods', {
         });
     });
 
-    QUnit.test('Scheduler should work correctly when groupOrientation is set without groups', function(assert) {
+    QUnit.test('Scheduler should work correctly when groupOrientation is set without groups', async function(assert) {
         assert.expect(1);
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             dataSource: [],
             resources: [{
                 fieldExpr: 'owner.id',
@@ -603,10 +597,10 @@ QUnit.module('Methods', {
         assert.notOk($workSpace.hasClass('dx-scheduler-work-space-vertical-grouped'), 'Workspace hasn\'t \'dx-scheduler-work-space-vertical-grouped\' css class');
     });
 
-    QUnit.test('getWorkSpaceScrollableScrollTop should return right value for allDay appointments depending on the group orientation', function(assert) {
+    QUnit.test('getWorkSpaceScrollableScrollTop should return right value for allDay appointments depending on the group orientation', async function(assert) {
         assert.expect(4);
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             dataSource: [],
             groups: ['owner.id'],
             resources: [{
@@ -652,13 +646,13 @@ QUnit.module('Methods', {
         assert.equal(scheduler.instance.getWorkSpace().getGroupedScrollableScrollTop(true), 400, 'Returned value is right for allDay appt and vertical grouping');
     });
 
-    QUnit.test('checkAndDeleteAppointment', function(assert) {
+    QUnit.test('checkAndDeleteAppointment', async function(assert) {
         const data = [{
             text: 'a',
             startDate: new Date(2015, 6, 8, 8, 0),
             endDate: new Date(2015, 6, 8, 17, 0),
         }];
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             dataSource: data,
         });
 
@@ -667,8 +661,8 @@ QUnit.module('Methods', {
         assert.equal(scheduler.instance.option('dataSource').length, 0);
     });
 
-    QUnit.test('showAppointmentTooltipCore, should call show tooltip', function(assert) {
-        const scheduler = createInstance({});
+    QUnit.test('showAppointmentTooltipCore, should call show tooltip', async function(assert) {
+        const scheduler = await createInstance({});
         scheduler.instance._appointmentTooltip.isAlreadyShown = sinon.stub().returns(false);
         scheduler.instance._appointmentTooltip.show = sinon.stub();
         scheduler.instance._appointmentTooltip.hide = sinon.stub();
@@ -678,8 +672,8 @@ QUnit.module('Methods', {
         assert.ok(scheduler.instance._appointmentTooltip.show.called, 'show tooltip is called');
     });
 
-    QUnit.test('showAppointmentTooltipCore, should call hide tooltip', function(assert) {
-        const scheduler = createInstance({});
+    QUnit.test('showAppointmentTooltipCore, should call hide tooltip', async function(assert) {
+        const scheduler = await createInstance({});
         scheduler.instance._appointmentTooltip.isAlreadyShown = sinon.stub().returns(true);
         scheduler.instance._appointmentTooltip.show = sinon.stub();
         scheduler.instance._appointmentTooltip.hide = sinon.stub();
@@ -689,8 +683,8 @@ QUnit.module('Methods', {
         assert.ok(!scheduler.instance._appointmentTooltip.show.called, 'show tooltip is not called');
     });
 
-    QUnit.test('showAppointmentTooltip, should call show tooltip', function(assert) {
-        const scheduler = createInstance({});
+    QUnit.test('showAppointmentTooltip, should call show tooltip', async function(assert) {
+        const scheduler = await createInstance({});
         scheduler.instance._appointmentTooltip.isAlreadyShown = sinon.stub().returns(false);
         scheduler.instance._appointmentTooltip.show = sinon.stub();
         scheduler.instance._appointmentTooltip.hide = sinon.stub();
@@ -700,8 +694,8 @@ QUnit.module('Methods', {
         assert.ok(scheduler.instance._appointmentTooltip.show.called, 'show tooltip is called');
     });
 
-    QUnit.test('showAppointmentTooltip, should call hide tooltip', function(assert) {
-        const scheduler = createInstance({});
+    QUnit.test('showAppointmentTooltip, should call hide tooltip', async function(assert) {
+        const scheduler = await createInstance({});
         scheduler.instance._appointmentTooltip.isAlreadyShown = sinon.stub().returns(true);
         scheduler.instance._appointmentTooltip.show = sinon.stub();
         scheduler.instance._appointmentTooltip.hide = sinon.stub();
@@ -711,10 +705,10 @@ QUnit.module('Methods', {
         assert.ok(!scheduler.instance._appointmentTooltip.show.called, 'show tooltip is not called');
     });
 
-    QUnit.test('_getUpdatedData for the empty data item (T906240)', function(assert) {
+    QUnit.test('_getUpdatedData for the empty data item (T906240)', async function(assert) {
         const startCellDate = new Date(2020, 1, 2, 3);
         const endCellDate = new Date(2020, 1, 2, 4);
-        const scheduler = createWrapper({});
+        const scheduler = await createWrapper({});
 
         scheduler.instance.getTargetCellData = () => {
             return {

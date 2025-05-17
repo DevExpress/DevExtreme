@@ -26,7 +26,7 @@ const config = {
 module('crossScrollingEnabled = true', config, () => {
     const isMobile = devices.current().deviceType !== 'desktop';
 
-    test('Appointments should be rendered on the same line after navigating to the next month(T804721)', function(assert) {
+    test('Appointments should be rendered on the same line after navigating to the next month(T804721)', async function(assert) {
         const expectedTop = 26;
         const views = ['timelineMonth', 'timelineWeek'];
 
@@ -37,7 +37,7 @@ module('crossScrollingEnabled = true', config, () => {
             endDate: new Date(2019, 1, 1, 12, 30),
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: data,
             views: views,
             currentView: views[0],
@@ -73,8 +73,8 @@ module('crossScrollingEnabled = true', config, () => {
         });
     });
 
-    test('Appointment should have correct position while vertical dragging', function(assert) {
-        const scheduler = createWrapper({
+    test('Appointment should have correct position while vertical dragging', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 6, 10),
             _draggingMode: 'default',
             editing: true,
@@ -118,8 +118,8 @@ module('crossScrollingEnabled = true', config, () => {
         pointer.up();
     });
 
-    test('Appointments should be repainted if the \'crossScrollingEnabled\' is changed', function(assert) {
-        const scheduler = createWrapper({
+    test('Appointments should be repainted if the \'crossScrollingEnabled\' is changed', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 6, 10),
             dataSource: [{
                 text: 'a',
@@ -141,8 +141,8 @@ module('crossScrollingEnabled = true', config, () => {
     });
 
     if(!isMobile) {
-        test('Month appointment inside grouped view should have a right resizable area after horizontal scroll end', function(assert) {
-            const scheduler = createWrapper({
+        test('Month appointment inside grouped view should have a right resizable area after horizontal scroll end', async function(assert) {
+            const scheduler = await createWrapper({
                 currentDate: new Date(2015, 6, 10),
                 views: ['month'],
                 editing: true,
@@ -182,10 +182,10 @@ module('crossScrollingEnabled = true', config, () => {
             assert.equal($appointment.dxResizable('instance').option('area').right, initialResizableAreaRight - scrollOffset);
         });
 
-        test('Appointment should have correct position while horizontal dragging', function(assert) {
+        test('Appointment should have correct position while horizontal dragging', async function(assert) {
             const dragDistance = 150;
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 height: 500,
                 _draggingMode: 'default',
                 editing: true,
@@ -211,8 +211,8 @@ module('crossScrollingEnabled = true', config, () => {
             pointer.up();
         });
 
-        test('Appointment should have correct position while horizontal dragging, crossScrollingEnabled = true (T732885)', function(assert) {
-            const scheduler = createWrapper({
+        test('Appointment should have correct position while horizontal dragging, crossScrollingEnabled = true (T732885)', async function(assert) {
+            const scheduler = await createWrapper({
                 height: 500,
                 _draggingMode: 'default',
                 editing: true,
@@ -241,8 +241,8 @@ module('crossScrollingEnabled = true', config, () => {
             pointer.up();
         });
 
-        test('Appointment should have correct position while horizontal dragging in scrolled date table', function(assert) {
-            const scheduler = createWrapper({
+        test('Appointment should have correct position while horizontal dragging in scrolled date table', async function(assert) {
+            const scheduler = await createWrapper({
                 height: 500,
                 width: 800,
                 _draggingMode: 'default',

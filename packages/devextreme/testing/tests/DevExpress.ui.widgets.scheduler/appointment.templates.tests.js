@@ -15,13 +15,12 @@ QUnit.testStart(() => initTestMarkup());
 
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
-const createInstance = (options, clock) => {
-    const scheduler = createWrapper({
+const createInstance = async(options) => {
+    const scheduler = await createWrapper({
         height: 600,
         ...options,
     });
 
-    clock.tick(300);
     scheduler.instance.focus();
 
     return scheduler;
@@ -29,12 +28,10 @@ const createInstance = (options, clock) => {
 
 QUnit.module('Integration: Appointment templates', {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 }, () => {
     let eventCallCount = 0;
@@ -195,22 +192,22 @@ QUnit.module('Integration: Appointment templates', {
     }];
 
     QUnit.module('appointmentTemplate', () => {
-        QUnit.test('model.targetedAppointmentData argument should have current appointment data', function(assert) {
-            const scheduler = createScheduler(commonData);
+        QUnit.test('model.targetedAppointmentData argument should have current appointment data', async function(assert) {
+            const scheduler = await createScheduler(commonData);
             scheduler.option({ appointmentTemplate: createTestForCommonData(assert) });
 
             assert.strictEqual(eventCallCount, 5, 'appointmentTemplate should be raised');
         });
 
-        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence', function(assert) {
-            const scheduler = createScheduler(recurrenceData);
+        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence', async function(assert) {
+            const scheduler = await createScheduler(recurrenceData);
             scheduler.option({ appointmentTemplate: createTestForRecurrenceData(assert, scheduler) });
 
             assert.strictEqual(eventCallCount, 5, 'appointmentTemplate should be raised');
         });
 
-        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence and custom data properties', function(assert) {
-            const scheduler = createScheduler(recurrenceDataWithCustomNames, {
+        QUnit.test('model.targetedAppointmentData argument should have current appointment data in case recurrence and custom data properties', async function(assert) {
+            const scheduler = await createScheduler(recurrenceDataWithCustomNames, {
                 textExpr: 'textCustom',
                 startDateExpr: 'startDateCustom',
                 endDateExpr: 'endDateCustom'
@@ -220,7 +217,7 @@ QUnit.module('Integration: Appointment templates', {
             assert.strictEqual(eventCallCount, 5, 'appointmentTemplate should be raised');
         });
 
-        QUnit.test('appointmentTemplate option should be passed to the Task module', function(assert) {
+        QUnit.test('appointmentTemplate option should be passed to the Task module', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -230,18 +227,18 @@ QUnit.module('Integration: Appointment templates', {
                     }
                 ]
             });
-            const scheduler = createInstance({
+            const scheduler = await createInstance({
                 views: ['day', 'week'],
                 currentView: 'day',
                 currentDate: new Date(2015, 1, 9),
                 appointmentTemplate: 'template',
                 dataSource: data
-            }, this.clock);
+            });
 
             assert.deepEqual(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0).text(), 'Task Template', 'Tasks itemTemplate option is correct');
         });
 
-        QUnit.test('DOM element should be rendered by render function', function(assert) {
+        QUnit.test('DOM element should be rendered by render function', async function(assert) {
             const startDate = new Date(2015, 1, 4, 1);
             const endDate = new Date(2015, 1, 4, 2);
             const appointment = {
@@ -250,7 +247,7 @@ QUnit.module('Integration: Appointment templates', {
                 Text: 'abc'
             };
 
-            const scheduler = createInstance({
+            const scheduler = await createInstance({
                 currentDate: new Date(2015, 1, 4),
                 dataSource: [appointment],
                 startDateExpr: 'Start',
@@ -270,7 +267,7 @@ QUnit.module('Integration: Appointment templates', {
                         }
                     }
                 }
-            }, this.clock);
+            });
 
             const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
 
@@ -291,8 +288,8 @@ QUnit.module('Integration: Appointment templates', {
                 name: 'recurrence'
             },
         ].forEach(testCase => {
-            QUnit.test(`Appointment click - model.targetedAppointmentData argument should be equal to the current appointmentData, ${testCase.name} case`, function(assert) {
-                const scheduler = createScheduler(testCase.data, testCase.options);
+            QUnit.test(`Appointment click - model.targetedAppointmentData argument should be equal to the current appointmentData, ${testCase.name} case`, async function(assert) {
+                const scheduler = await createScheduler(testCase.data, testCase.options);
                 const DoubleClickTimeout = 300;
                 const appointmentAmount = 5;
 
@@ -300,8 +297,6 @@ QUnit.module('Integration: Appointment templates', {
                     'appointmentTooltipTemplate',
                     testCase.appointmentTooltip(assert, scheduler, true)
                 );
-
-                this.clock.restore();
 
                 return asyncWrapper(assert, promise => {
                     for(let i = 0; i < appointmentAmount; ++i) {
@@ -356,8 +351,8 @@ QUnit.module('Integration: Appointment templates', {
             name: 'hourly recurrence in collector, custom timezone is set',
             testCollector: true
         }].forEach(testCase => {
-            QUnit.test(`Appointment tooltip click - model.targetedAppointmentData argument should be equal to the current appointmentData, ${testCase.name} case`, function(assert) {
-                const scheduler = createScheduler(testCase.data, testCase.options);
+            QUnit.test(`Appointment tooltip click - model.targetedAppointmentData argument should be equal to the current appointmentData, ${testCase.name} case`, async function(assert) {
+                const scheduler = await createScheduler(testCase.data, testCase.options);
                 const doubleClickTimeout = 300;
                 const appointmentAmount = 5;
 
@@ -365,8 +360,6 @@ QUnit.module('Integration: Appointment templates', {
                     'appointmentTooltipTemplate',
                     testCase.appointmentTooltip(assert, scheduler)
                 );
-
-                this.clock.restore();
 
                 return asyncWrapper(assert, promise => {
                     for(let i = 0; i < appointmentAmount; ++i) {

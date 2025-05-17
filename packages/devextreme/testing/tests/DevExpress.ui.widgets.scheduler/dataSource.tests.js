@@ -12,8 +12,10 @@ import translator from 'common/core/animation/translator';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 import { CustomStore } from 'common/data/custom_store';
 import { noop } from 'core/utils/common';
-import pointerMock from '../../helpers/pointerMock.js';
 import dragEvents from 'common/core/events/drag';
+
+import pointerMock from '../../helpers/pointerMock.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 const { module, test, testStart } = QUnit;
 
@@ -32,19 +34,17 @@ const moduleConfig = {
 module('Events', {
     beforeEach() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
 
     afterEach() {
         fx.off = false;
-        this.clock.restore();
     }
 }, () => {
     module('add', () => {
-        test('onAppointmentAdding', function(assert) {
+        test('onAppointmentAdding', async function(assert) {
             const addingSpy = sinon.spy(noop);
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentAdding: addingSpy,
                 dataSource: []
             });
@@ -56,8 +56,6 @@ module('Events', {
             };
 
             scheduler.instance.addAppointment(newAppointment);
-            this.clock.tick(10);
-
 
             const args = addingSpy.getCall(0).args[0];
 
@@ -68,11 +66,11 @@ module('Events', {
             assert.deepEqual(args.appointmentData, newAppointment, 'Appointment field is OK');
         });
 
-        test('Appointment should not be added to the data source if \'cancel\' flag is defined as true', function(assert) {
+        test('Appointment should not be added to the data source if \'cancel\' flag is defined as true', async function(assert) {
             const dataSource = new DataSource({
                 store: []
             });
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentAdding: function(args) {
                     args.cancel = true;
                 },
@@ -80,16 +78,15 @@ module('Events', {
             });
 
             scheduler.instance.addAppointment({ startDate: new Date(), text: 'Appointment 1' });
-            this.clock.tick(10);
 
             assert.strictEqual(dataSource.items().length, 0, 'Insert operation is canceled');
         });
 
-        test('Appointment should not be added to the data source if \'cancel\' flag is defined as true during async operation', function(assert) {
+        test('Appointment should not be added to the data source if \'cancel\' flag is defined as true during async operation', async function(assert) {
             const dataSource = new DataSource({
                 store: []
             });
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentAdding: function(args) {
                     args.cancel = $.Deferred();
                     setTimeout(function() {
@@ -100,12 +97,12 @@ module('Events', {
             });
 
             scheduler.instance.addAppointment({ startDate: new Date(), text: 'Appointment 1' });
-            this.clock.tick(200);
+            await waitAsync(250);
 
             assert.strictEqual(dataSource.items().length, 0, 'Insert operation is canceled');
         });
 
-        test('Appointment should not be added to the data source if \'cancel\' flag is defined as Promise', function(assert) {
+        test('Appointment should not be added to the data source if \'cancel\' flag is defined as Promise', async function(assert) {
             const promise = new Promise(function(resolve) {
                 setTimeout(function() {
                     resolve(true);
@@ -114,7 +111,7 @@ module('Events', {
             const dataSource = new DataSource({
                 store: []
             });
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentAdding: function(args) {
                     args.cancel = promise;
                 },
@@ -122,7 +119,7 @@ module('Events', {
             });
 
             scheduler.instance.addAppointment({ startDate: new Date(), text: 'Appointment 1' });
-            this.clock.tick(200);
+            await waitAsync(250);
 
             promise.then(function() {
                 assert.strictEqual(dataSource.items().length, 0, 'Insert operation is canceled');
@@ -131,10 +128,10 @@ module('Events', {
             return promise;
         });
 
-        test('onAppointmentAdded', function(assert) {
+        test('onAppointmentAdded', async function(assert) {
             const addedSpy = sinon.spy(noop);
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentAdded: addedSpy,
                 dataSource: []
             });
@@ -142,7 +139,6 @@ module('Events', {
             const newAppointment = { startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' };
 
             scheduler.instance.addAppointment(newAppointment);
-            this.clock.tick(10);
 
             const args = addedSpy.getCall(0).args[0];
 
@@ -153,10 +149,10 @@ module('Events', {
             assert.strictEqual(args.error, undefined, 'Error field is not defined');
         });
 
-        test('onAppointmentAdded should have error field in args if an error occurs while data inserting', function(assert) {
+        test('onAppointmentAdded should have error field in args if an error occurs while data inserting', async function(assert) {
             const addedSpy = sinon.spy(noop);
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentAdded: addedSpy,
                 dataSource: new DataSource({
                     store: new CustomStore({
@@ -169,7 +165,6 @@ module('Events', {
             });
 
             scheduler.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' });
-            this.clock.tick(10);
 
             const error = addedSpy.getCall(0).args[0].error;
 
@@ -179,7 +174,7 @@ module('Events', {
     });
 
     module('Update', () => {
-        isDesktopEnvironment() && test('oldData shouldn\'t has recurrenceException property', function(assert) {
+        isDesktopEnvironment() && test('oldData shouldn\'t has recurrenceException property', async function(assert) {
             const appointment = {
                 text: 'Watercolor Landscape',
                 startDate: new Date(2021, 1, 25, 1),
@@ -187,7 +182,7 @@ module('Events', {
                 recurrenceRule: 'FREQ=DAILY'
             };
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 _draggingMode: 'default',
                 dataSource: [appointment],
                 currentView: 'day',
@@ -204,18 +199,17 @@ module('Events', {
             assert.expect(2);
         });
 
-        test('onAppointmentUpdating', function(assert) {
+        test('onAppointmentUpdating', async function(assert) {
             const updatingSpy = sinon.spy(noop);
             const oldData = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
             const newData = { startDate: new Date(2015, 1, 10, 16), endDate: new Date(2015, 1, 10, 17), text: 'title' };
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentUpdating: updatingSpy,
                 dataSource: new DataSource({ store: oldData })
             });
 
             scheduler.instance.updateAppointment($.extend({}, oldData[0]), newData);
-            this.clock.tick(10);
 
             const args = updatingSpy.getCall(0).args[0];
 
@@ -227,13 +221,13 @@ module('Events', {
             assert.deepEqual(args.oldData, oldData[0], 'oldData field is OK');
         });
 
-        test('Appointment should not be updated if \'cancel\' flag is defined as true', function(assert) {
+        test('Appointment should not be updated if \'cancel\' flag is defined as true', async function(assert) {
             const appointments = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
             const dataSource = new DataSource({
                 store: appointments
             });
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentUpdating: function(args) {
                     args.cancel = true;
                 },
@@ -242,12 +236,11 @@ module('Events', {
             });
 
             scheduler.instance.updateAppointment(appointments[0], { startDate: new Date(), text: 'Appointment 1' });
-            this.clock.tick(10);
 
             assert.deepEqual(dataSource.items(), [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }], 'Update operation is canceled');
         });
 
-        test('Appointment form should not be updated if \'cancel\' flag is defined as true (T653358)', function(assert) {
+        test('Appointment form should not be updated if \'cancel\' flag is defined as true (T653358)', async function(assert) {
             const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
 
             try {
@@ -256,7 +249,7 @@ module('Events', {
                     store: appointments
                 });
 
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     timeZone: 'Etc/UTC',
                     onAppointmentUpdating: function(args) {
                         args.cancel = true;
@@ -268,8 +261,6 @@ module('Events', {
                 scheduler.instance.showAppointmentPopup(appointments[0]);
                 $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                this.clock.tick(10);
-
                 const appointmentForm = scheduler.instance._appointmentPopup.form;
 
                 assert.deepEqual(appointmentForm.formData.startDate, new Date(2015, 1, 9, 13), 'Form data is correct');
@@ -278,13 +269,13 @@ module('Events', {
             }
         });
 
-        test('Appointment should not be updated if \'cancel\' flag is defined as true during async operation', function(assert) {
+        test('Appointment should not be updated if \'cancel\' flag is defined as true during async operation', async function(assert) {
             const appointments = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
             const dataSource = new DataSource({
                 store: appointments
             });
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentUpdating: function(args) {
                     args.cancel = $.Deferred();
                     setTimeout(function() {
@@ -296,13 +287,13 @@ module('Events', {
             });
 
             scheduler.instance.updateAppointment(appointments[0], { startDate: new Date(), text: 'Appointment 1' });
-            this.clock.tick(200);
+            await waitAsync(250);
 
             assert.deepEqual(dataSource.items(), [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }], 'Update operation is canceled');
         });
 
-        test('Appointment should be returned to the initial state if \'cancel\' flag is defined as true during async operation', function(assert) {
-            const scheduler = createWrapper({
+        test('Appointment should be returned to the initial state if \'cancel\' flag is defined as true during async operation', async function(assert) {
+            const scheduler = await createWrapper({
                 onAppointmentUpdating: function(args) {
                     const d = $.Deferred();
                     args.cancel = d.promise();
@@ -324,17 +315,17 @@ module('Events', {
             const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-left').eq(0)).start();
 
             pointer.dragStart().drag(-cellWidth * 2, 0).dragEnd();
-            this.clock.tick(200);
+            await waitAsync(250);
             assert.equal(translator.locate(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)).left, initialLeftPosition, 'Left position is OK');
         });
 
-        test('Appointment should have initial position if \'cancel\' flag is defined as true during update operation', function(assert) {
+        test('Appointment should have initial position if \'cancel\' flag is defined as true during update operation', async function(assert) {
             const appointments = [{ startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2), text: 'caption' }];
             const dataSource = new DataSource({
                 store: appointments
             });
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 _draggingMode: 'default',
                 onAppointmentUpdating: function(args) {
                     args.cancel = true;
@@ -359,8 +350,8 @@ module('Events', {
             assert.deepEqual(translator.locate($appointment), initialPosition, 'Appointments position is OK');
         });
 
-        test('Appointment should have initial size if \'cancel\' flag is defined as true during update operation (day view)', function(assert) {
-            const scheduler = createWrapper({
+        test('Appointment should have initial size if \'cancel\' flag is defined as true during update operation (day view)', async function(assert) {
+            const scheduler = await createWrapper({
                 onAppointmentUpdating: function(args) {
                     args.cancel = true;
                 },
@@ -379,8 +370,8 @@ module('Events', {
             assert.equal(getOuterHeight(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)), initialHeight, 'Height is OK');
         });
 
-        test('Appointment should have initial size if "cancel" flag is defined as true during update operation (month view)', function(assert) {
-            const scheduler = createWrapper({
+        test('Appointment should have initial size if "cancel" flag is defined as true during update operation (month view)', async function(assert) {
+            const scheduler = await createWrapper({
                 onAppointmentUpdating: function(args) {
                     args.cancel = true;
                 },
@@ -401,8 +392,8 @@ module('Events', {
             assert.roughEqual(getOuterWidth(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)), initialWidth, 0.5, 'Width is OK');
         });
 
-        test('Appointment should have initial size if \'cancel\' flag is defined as true during update operation (all day)', function(assert) {
-            const scheduler = createWrapper({
+        test('Appointment should have initial size if \'cancel\' flag is defined as true during update operation (all day)', async function(assert) {
+            const scheduler = await createWrapper({
                 onAppointmentUpdating: function(args) {
                     args.cancel = true;
                 },
@@ -424,8 +415,8 @@ module('Events', {
             assert.roughEqual(getOuterWidth(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)), initialWidth, 1, 'Width is OK');
         });
 
-        test('Appointment should have initial size if \'cancel\' flag is defined as true during update operation (if appointment takes few days)', function(assert) {
-            const scheduler = createWrapper({
+        test('Appointment should have initial size if \'cancel\' flag is defined as true during update operation (if appointment takes few days)', async function(assert) {
+            const scheduler = await createWrapper({
                 onAppointmentUpdating: function(args) {
                     args.cancel = true;
                 },
@@ -447,8 +438,8 @@ module('Events', {
             assert.roughEqual(getOuterWidth(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)), 1.1, initialWidth, 'Width is OK');
         });
 
-        test('Appointment should have initial left coordinate if \'cancel\' flag is defined as true during resize operation', function(assert) {
-            const scheduler = createWrapper({
+        test('Appointment should have initial left coordinate if \'cancel\' flag is defined as true during resize operation', async function(assert) {
+            const scheduler = await createWrapper({
                 onAppointmentUpdating: function(args) {
                     args.cancel = true;
                 },
@@ -470,8 +461,8 @@ module('Events', {
             assert.equal(translator.locate(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)).left, initialLeftPosition, 'Left position is OK');
         });
 
-        test('Appointment should have initial top coordinate if \'cancel\' flag is defined as true during resize operation', function(assert) {
-            const scheduler = createWrapper({
+        test('Appointment should have initial top coordinate if \'cancel\' flag is defined as true during resize operation', async function(assert) {
+            const scheduler = await createWrapper({
                 onAppointmentUpdating: function(args) {
                     args.cancel = true;
                 },
@@ -493,19 +484,18 @@ module('Events', {
             assert.equal(translator.locate(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)).top, initialTopPosition, 'Top position is OK');
         });
 
-        test('onAppointmentUpdated', function(assert) {
+        test('onAppointmentUpdated', async function(assert) {
             const updatedSpy = sinon.spy(noop);
             const oldData = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
             const newData = { startDate: new Date(2015, 1, 10, 16), endDate: new Date(2015, 1, 10, 17), text: 'title' };
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentUpdated: updatedSpy,
                 dataSource: new DataSource({ store: oldData }),
                 currentDate: new Date(2015, 1, 9)
             });
 
             scheduler.instance.updateAppointment(oldData[0], newData);
-            this.clock.tick(10);
 
             const args = updatedSpy.getCall(0).args[0];
 
@@ -516,12 +506,12 @@ module('Events', {
             assert.strictEqual(args.error, undefined, 'Error field is not defined');
         });
 
-        test('onAppointmentUpdated should have error field in args if an error occurs while data updating', function(assert) {
+        test('onAppointmentUpdated should have error field in args if an error occurs while data updating', async function(assert) {
             const updatedSpy = sinon.spy(noop);
             const oldData = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
             const newData = { startDate: new Date(2015, 1, 10, 16), endDate: new Date(2015, 1, 10, 17), text: 'title' };
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentUpdated: updatedSpy,
                 dataSource: new DataSource({
                     store: new CustomStore({
@@ -538,7 +528,6 @@ module('Events', {
             });
 
             scheduler.instance.updateAppointment(oldData[0], newData);
-            this.clock.tick(10);
 
             const error = updatedSpy.getCall(0).args[0].error;
 
@@ -548,14 +537,14 @@ module('Events', {
     });
 
     module('Delete', () => {
-        test('Args should be valid in event', function(assert) {
+        test('Args should be valid in event', async function(assert) {
             const data = [{
                 startDate: new Date(2020, 6, 10, 2),
                 endDate: new Date(2020, 6, 10, 3),
                 text: 'Test'
             }];
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 dataSource: data,
                 views: ['day'],
                 currentView: 'day',
@@ -572,21 +561,21 @@ module('Events', {
                         text: 'Test'
                     }, 'e.appointmentData arg should be equal with deleted appointment');
                 }
-            }, this.clock);
+            });
 
-            scheduler.appointmentList[0].click();
+            await scheduler.appointmentList[0].click();
             scheduler.tooltip.clickOnDeleteButton();
 
             assert.expect(4);
         });
 
-        test('onAppointmentDeleting', function(assert) {
+        test('onAppointmentDeleting', async function(assert) {
             const deletingSpy = sinon.spy(noop);
             const appointments = [
                 { startDate: new Date(2015, 3, 29, 5), text: 'Appointment 1', endDate: new Date(2015, 3, 29, 6) }
             ];
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentDeleting: deletingSpy,
                 currentDate: new Date(2015, 3, 29),
                 dataSource: new DataSource({
@@ -595,7 +584,6 @@ module('Events', {
             });
 
             scheduler.instance.deleteAppointment(appointments[0]);
-            this.clock.tick(10);
 
             const args = deletingSpy.getCall(0).args[0];
 
@@ -606,13 +594,13 @@ module('Events', {
             assert.strictEqual(args.cancel, false, '\'Cancel\' flag is OK');
         });
 
-        test('Appointment should not be deleted if \'cancel\' flag is defined as true', function(assert) {
+        test('Appointment should not be deleted if \'cancel\' flag is defined as true', async function(assert) {
             const appointments = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
             const dataSource = new DataSource({
                 store: appointments
             });
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentDeleting: function(args) {
                     args.cancel = true;
                 },
@@ -621,18 +609,17 @@ module('Events', {
             });
 
             scheduler.instance.deleteAppointment(appointments[0]);
-            this.clock.tick(10);
 
             assert.deepEqual(dataSource.items(), [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }], 'Delete operation is canceled');
         });
 
-        test('Appointment should not be deleted if \'cancel\' flag is defined as true during async operation', function(assert) {
+        test('Appointment should not be deleted if \'cancel\' flag is defined as true during async operation', async function(assert) {
             const appointments = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
             const dataSource = new DataSource({
                 store: appointments
             });
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentDeleting: function(args) {
                     args.cancel = $.Deferred();
                     setTimeout(function() {
@@ -644,18 +631,18 @@ module('Events', {
             });
 
             scheduler.instance.deleteAppointment(appointments[0]);
-            this.clock.tick(200);
+            await waitAsync(250);
 
             assert.deepEqual(dataSource.items(), [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }], 'Delete operation is canceled');
         });
 
-        test('Appointment should be deleted correctly if \'cancel\' flag is defined as false during async operation', function(assert) {
+        test('Appointment should be deleted correctly if \'cancel\' flag is defined as false during async operation', async function(assert) {
             const appointments = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
             const dataSource = new DataSource({
                 store: appointments
             });
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentDeleting: function(args) {
                     args.cancel = $.Deferred();
                     setTimeout(function() {
@@ -667,18 +654,18 @@ module('Events', {
             });
 
             scheduler.instance.deleteAppointment(appointments[0]);
-            this.clock.tick(200);
+            await waitAsync(250);
 
             assert.equal(dataSource.items().length, 0, 'Delete operation is completed');
         });
 
-        test('onAppointmentDeleted', function(assert) {
+        test('onAppointmentDeleted', async function(assert) {
             const deletedSpy = sinon.spy(noop);
             const appointments = [
                 { startDate: new Date(2015, 3, 29, 5), text: 'Appointment 1', endDate: new Date(2015, 3, 29, 6) }
             ];
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentDeleted: deletedSpy,
                 currentDate: new Date(2015, 3, 29),
                 dataSource: new DataSource({
@@ -687,7 +674,6 @@ module('Events', {
             });
 
             scheduler.instance.deleteAppointment(appointments[0]);
-            this.clock.tick(10);
 
             const args = deletedSpy.getCall(0).args[0];
             assert.ok(deletedSpy.calledOnce, 'onAppointmentDeleted was called');
@@ -697,10 +683,10 @@ module('Events', {
             assert.strictEqual(args.error, undefined, 'Error field is not defined');
         });
 
-        test('onAppointmentDeleted should have error field in args if an error occurs while data deleting', function(assert) {
+        test('onAppointmentDeleted should have error field in args if an error occurs while data deleting', async function(assert) {
             const deletedSpy = sinon.spy(noop);
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 onAppointmentDeleted: deletedSpy,
                 dataSource: new DataSource({
                     store: new CustomStore({
@@ -713,7 +699,6 @@ module('Events', {
             });
 
             scheduler.instance.deleteAppointment({});
-            this.clock.tick(10);
 
             const error = deletedSpy.getCall(0).args[0].error;
 
@@ -724,7 +709,7 @@ module('Events', {
 });
 
 module('ArraySore(auto generated id)', moduleConfig, () => {
-    test('onAppointmentAdd[*] events should be work right(T961110)', function(assert) {
+    test('onAppointmentAdd[*] events should be work right(T961110)', async function(assert) {
         const dataSource = new DataSource({
             store: new ArrayStore({
                 data: [],
@@ -732,7 +717,7 @@ module('ArraySore(auto generated id)', moduleConfig, () => {
             }),
         });
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource,
             views: ['day'],
             currentView: 'day',
@@ -759,56 +744,50 @@ module('ArraySore(auto generated id)', moduleConfig, () => {
         assert.expect(5);
     });
 
-    test('onAppointmentDelete[*] events should be work right', function(assert) {
-        const clock = sinon.useFakeTimers();
+    test('onAppointmentDelete[*] events should be work right', async function(assert) {
+        const dataSource = new DataSource({
+            store: new ArrayStore({
+                data: [{
+                    id: 'bc0eadf8-608a-491f-9f23-e5a8100352e7',
+                    startDate: new Date(2020, 6, 10, 1),
+                    endDate: new Date(2020, 6, 10, 2),
+                    text: 'Test'
+                }],
+                key: 'id'
+            }),
+        });
 
-        try {
-            const dataSource = new DataSource({
-                store: new ArrayStore({
-                    data: [{
-                        id: 'bc0eadf8-608a-491f-9f23-e5a8100352e7',
-                        startDate: new Date(2020, 6, 10, 1),
-                        endDate: new Date(2020, 6, 10, 2),
-                        text: 'Test'
-                    }],
-                    key: 'id'
-                }),
-            });
+        const scheduler = await createWrapper({
+            dataSource,
+            views: ['day'],
+            currentView: 'day',
+            currentDate: new Date(2020, 6, 10),
+            height: 600,
+            onAppointmentDeleting: e => {
+                assert.deepEqual(e.appointmentData, {
+                    id: 'bc0eadf8-608a-491f-9f23-e5a8100352e7',
+                    startDate: new Date(2020, 6, 10, 1),
+                    endDate: new Date(2020, 6, 10, 2),
+                    text: 'Test'
+                }, 'Appointment should be equal with dataSource appointment on onAppointmentDeleting event');
+            },
+            onAppointmentDeleted: e => {
+                assert.deepEqual(e.appointmentData, {
+                    id: 'bc0eadf8-608a-491f-9f23-e5a8100352e7',
+                    startDate: new Date(2020, 6, 10, 1),
+                    endDate: new Date(2020, 6, 10, 2),
+                    text: 'Test'
+                }, 'Appointment should be equal with dataSource appointment on onAppointmentDeleted event');
+            }
+        });
 
-            const scheduler = createWrapper({
-                dataSource,
-                views: ['day'],
-                currentView: 'day',
-                currentDate: new Date(2020, 6, 10),
-                height: 600,
-                onAppointmentDeleting: e => {
-                    assert.deepEqual(e.appointmentData, {
-                        id: 'bc0eadf8-608a-491f-9f23-e5a8100352e7',
-                        startDate: new Date(2020, 6, 10, 1),
-                        endDate: new Date(2020, 6, 10, 2),
-                        text: 'Test'
-                    }, 'Appointment should be equal with dataSource appointment on onAppointmentDeleting event');
-                },
-                onAppointmentDeleted: e => {
-                    assert.deepEqual(e.appointmentData, {
-                        id: 'bc0eadf8-608a-491f-9f23-e5a8100352e7',
-                        startDate: new Date(2020, 6, 10, 1),
-                        endDate: new Date(2020, 6, 10, 2),
-                        text: 'Test'
-                    }, 'Appointment should be equal with dataSource appointment on onAppointmentDeleted event');
-                }
-            }, clock);
+        await scheduler.appointmentList[0].click();
+        scheduler.tooltip.clickOnDeleteButton();
 
-            scheduler.appointmentList[0].click();
-            scheduler.tooltip.clickOnDeleteButton();
-
-            assert.expect(2);
-        } finally {
-            clock.restore();
-        }
+        assert.expect(2);
     });
 
-    test('onAppointmentUpdate[*] events should be work right', function(assert) {
+    test('onAppointmentUpdate[*] events should be work right', async function(assert) {
         const dataSource = new DataSource({
             store: new ArrayStore({
                 data: [{
@@ -831,7 +810,7 @@ module('ArraySore(auto generated id)', moduleConfig, () => {
             }),
         });
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource,
             views: ['day'],
             currentView: 'day',
@@ -869,7 +848,7 @@ module('ArraySore(auto generated id)', moduleConfig, () => {
     });
 
     if(isDesktopEnvironment()) {
-        test('Excluded appointment\'s key property shouldn\'t equal to parent appointment(T929772)', function(assert) {
+        test('Excluded appointment\'s key property shouldn\'t equal to parent appointment(T929772)', async function(assert) {
             const data = [{
                 id: 'ff1dbf32-54d3-414c-8713-3a7c21de406b',
                 text: 'Appointment',
@@ -878,7 +857,7 @@ module('ArraySore(auto generated id)', moduleConfig, () => {
                 recurrenceRule: 'FREQ=DAILY',
             }];
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 dataSource: {
                     store: new ArrayStore({
                         data: data,
@@ -924,14 +903,14 @@ module('Timezones', moduleConfig, () => {
     };
 
     [undefined, timeZones.UTC, timeZones.LosAngeles].forEach(timeZone => {
-        test(`Correct args should be passed into events when appointment is added, timezone='${timeZone}'`, function(assert) {
+        test(`Correct args should be passed into events when appointment is added, timezone='${timeZone}'`, async function(assert) {
             const appointment = {
                 text: 'test',
                 startDate: new Date(2020, 6, 15, 14),
                 endDate: new Date(2020, 6, 15, 15)
             };
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 timeZone,
                 views: ['day'],
                 currentView: 'day',
@@ -952,7 +931,7 @@ module('Timezones', moduleConfig, () => {
     });
 
     [undefined, timeZones.UTC, timeZones.LosAngeles].forEach(timeZone => {
-        test(`Correct args should be passed into events when appointment is updated, timezone='${timeZone}'`, function(assert) {
+        test(`Correct args should be passed into events when appointment is updated, timezone='${timeZone}'`, async function(assert) {
             const appointment = {
                 text: 'test',
                 startDate: new Date(2020, 6, 15, 14),
@@ -965,7 +944,7 @@ module('Timezones', moduleConfig, () => {
                 endDate: new Date(2020, 6, 16, 16)
             };
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 timeZone,
                 views: ['day'],
                 currentView: 'day',
@@ -986,14 +965,14 @@ module('Timezones', moduleConfig, () => {
     });
 
     [undefined, timeZones.UTC, timeZones.LosAngeles].forEach(timeZone => {
-        test(`Correct args should be passed into events when appointment is deleted, timezone='${timeZone}'`, function(assert) {
+        test(`Correct args should be passed into events when appointment is deleted, timezone='${timeZone}'`, async function(assert) {
             const appointment = {
                 text: 'test',
                 startDate: new Date(2020, 6, 15, 14),
                 endDate: new Date(2020, 6, 15, 15)
             };
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 timeZone,
                 views: ['day'],
                 currentView: 'day',
@@ -1015,7 +994,7 @@ module('Timezones', moduleConfig, () => {
 });
 
 module('Push API', () => {
-    QUnit.test('Push new item to the store (remoteFiltering: true) (T900529)', function(assert) {
+    QUnit.test('Push new item to the store (remoteFiltering: true) (T900529)', async function(assert) {
         const data = [{
             id: 0,
             text: 'Test Appointment',
@@ -1030,7 +1009,7 @@ module('Push API', () => {
             endDate: new Date(2017, 4, 23, 11, 30)
         };
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: {
                 pushAggregationTimeout: 0,
                 reshapeOnPush: true,
@@ -1049,7 +1028,7 @@ module('Push API', () => {
         assert.equal(scheduler.appointments.getTitleText(1), 'Pushed Appointment', 'Pushed appointment is rerendered');
     });
 
-    QUnit.test('Push API should work correctly for the wrong data item (T986087)', function(assert) {
+    QUnit.test('Push API should work correctly for the wrong data item (T986087)', async function(assert) {
         const data = [{
             id: 0,
             text: 'Test Appointment',
@@ -1057,7 +1036,7 @@ module('Push API', () => {
             endDate: new Date(2017, 4, 22, 11, 30)
         }];
 
-        const { instance } = createWrapper({
+        const { instance } = await createWrapper({
             dataSource: {
                 pushAggregationTimeout: 0,
                 reshapeOnPush: true,

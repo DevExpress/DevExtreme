@@ -17,7 +17,7 @@ const moduleConfig = {
 QUnit.testStart(() => initTestMarkup());
 
 QUnit.module('Integration: Resources data source', moduleConfig, function() {
-    QUnit.test('DataSource should not lose sort option when used in resources', function(assert) {
+    QUnit.test('DataSource should not lose sort option when used in resources', async function(assert) {
         let resultSortLoadOption;
         const expectedSortLoadOption = ['TestSortParam'];
 
@@ -27,7 +27,7 @@ QUnit.module('Integration: Resources data source', moduleConfig, function() {
                 resultSortLoadOption = (loadOptions || { sort: undefined }).sort;
             }
         });
-        createWrapper({
+        await createWrapper({
             dataSource: [],
             currentView: 'week',
             currentDate: new Date('2022-01-01T00:00:00.000Z'),

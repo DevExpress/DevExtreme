@@ -23,7 +23,7 @@ QUnit.module('Integration: View switcher', {
     }
 });
 
-QUnit.test('dataSource should be filtered if \'currentView\' option is changed', function(assert) {
+QUnit.test('dataSource should be filtered if \'currentView\' option is changed', async function(assert) {
     const dataSource = new DataSource({
         store: [{
             startDate: new Date(2015, 3, 1),
@@ -75,7 +75,7 @@ QUnit.test('dataSource should be filtered if \'currentView\' option is changed',
     }], 'Data is filtered');
 });
 
-QUnit.test('Appointment should be rerendered only once if \'currentView\' option is changed', function(assert) {
+QUnit.test('Appointment should be rerendered only once if \'currentView\' option is changed', async function(assert) {
     const options = {
         views: ['month', 'week'],
         currentView: 'week',

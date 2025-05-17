@@ -21,7 +21,7 @@ QUnit.testStart(function() {
 });
 
 QUnit.module('Integration: options change tests', moduleConfig, () => {
-    QUnit.test('Should correctly update currentView and height options from agenda view', function(assert) {
+    QUnit.test('Should correctly update currentView and height options from agenda view', async function(assert) {
         const priorityData = [{
             text: 'Test priority',
             id: 1,

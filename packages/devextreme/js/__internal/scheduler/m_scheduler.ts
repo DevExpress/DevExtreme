@@ -35,19 +35,6 @@ import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import type { RawViewType } from '@ts/scheduler/header/types';
-import { createTimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/index';
-import {
-  excludeFromRecurrence,
-  getAppointmentDataItems,
-  getToday,
-  isAppointmentTakesAllDay,
-  isDateAndTimeView,
-  isTimelineView,
-  viewsUtils,
-} from '@ts/scheduler/r1/utils/index';
-import type { IFieldExpr } from '@ts/scheduler/utils/index';
-import { macroTaskArray } from '@ts/scheduler/utils/index';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
@@ -67,12 +54,25 @@ import subscribes from './m_subscribes';
 import { utils } from './m_utils';
 import timeZoneUtils, { type TimezoneLabel } from './m_utils_time_zone';
 import { SchedulerOptionsValidator, SchedulerOptionsValidatorErrorsHandler } from './options_validator/index';
+import { createTimeZoneCalculator } from './r1/timezone_calculator/index';
+import {
+  excludeFromRecurrence,
+  getAppointmentDataItems,
+  getToday,
+  isAppointmentTakesAllDay,
+  isDateAndTimeView,
+  isTimelineView,
+  viewsUtils,
+} from './r1/utils/index';
 import { DesktopTooltipStrategy } from './tooltip_strategies/m_desktop_tooltip_strategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_strategy';
 import type {
-  AppointmentDataItem, AppointmentViewModel, SafeAppointment, ViewType,
+  AppointmentDataItem, AppointmentViewModel, RawViewType,
+  SafeAppointment, ViewType,
 } from './types';
 import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
+import type { IFieldExpr } from './utils/index';
+import { macroTaskArray } from './utils/index';
 import { promiseToDeferred } from './utils/promise_to_deferred';
 import { setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
 import { getLeafGroupValues } from './utils/resource_manager/group_utils';
@@ -605,6 +605,7 @@ class Scheduler extends Widget<any> {
         });
         break;
       case 'resources':
+        this.resourceManager?.dispose();
         this.resourceManager = new ResourceManager(this.option('resources'));
         this.updateInstances();
         this.option('resourceLoaderMap').clear();
@@ -1255,6 +1256,7 @@ class Scheduler extends Widget<any> {
   }
 
   _dispose() {
+    this.resourceManager?.dispose();
     this._appointmentTooltip?.dispose();
     this._recurrenceDialog?.hide(RECURRENCE_EDITING_MODE.CANCEL);
 

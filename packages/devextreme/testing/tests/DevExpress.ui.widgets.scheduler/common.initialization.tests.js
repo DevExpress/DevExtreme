@@ -35,30 +35,30 @@ QUnit.module('Initialization', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('Scheduler should have task model instance', function(assert) {
+    QUnit.test('Scheduler should have task model instance', async function(assert) {
         const data = new DataSource({
             store: this.tasks
         });
 
-        const { instance } = createWrapper({ dataSource: data });
+        const { instance } = await createWrapper({ dataSource: data });
 
         assert.ok(instance.appointmentDataProvider instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
         assert.ok(instance.appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
-    QUnit.test('Scheduler should work correctly when wrong timeZone was set', function(assert) {
-        createWrapper({ timeZone: 'Wrong/timeZone' });
+    QUnit.test('Scheduler should work correctly when wrong timeZone was set', async function(assert) {
+        await createWrapper({ timeZone: 'Wrong/timeZone' });
         assert.ok(true, 'Widget works correctly');
     });
 
-    QUnit.test('Scheduler shouldn\'t have paginate in default DataSource', function(assert) {
-        const { instance } = createWrapper({ dataSource: this.tasks });
+    QUnit.test('Scheduler shouldn\'t have paginate in default DataSource', async function(assert) {
+        const { instance } = await createWrapper({ dataSource: this.tasks });
 
         assert.notOk(instance.appointmentDataProvider.dataSource.paginate(), 'Paginate is false');
     });
 
-    QUnit.test('Rendering inside invisible element', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('Rendering inside invisible element', async function(assert) {
+        const scheduler = await createWrapper();
         try {
             triggerHidingEvent($('#scheduler'));
             $('#scheduler').hide();
@@ -79,8 +79,8 @@ QUnit.module('Initialization', {
         }
     });
 
-    QUnit.test('Data expressions should be compiled on init', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('Data expressions should be compiled on init', async function(assert) {
+        const scheduler = await createWrapper();
         const dataAccessors = scheduler.instance._dataAccessors;
 
         $.each([
@@ -98,8 +98,8 @@ QUnit.module('Initialization', {
         });
     });
 
-    QUnit.test('RecurrenceRule expression should not be compiled, if recurrenceRuleExpr = null', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('RecurrenceRule expression should not be compiled, if recurrenceRuleExpr = null', async function(assert) {
+        const scheduler = await createWrapper({
             'startDateExpr': '_startDate',
             'endDateExpr': '_endDate',
             'textExpr': '_text',
@@ -114,8 +114,8 @@ QUnit.module('Initialization', {
         assert.strictEqual(dataAccessors.setter.recurrenceRule, undefined, 'setter for recurrenceRule is OK');
     });
 
-    QUnit.test('appointmentCollectorTemplate rendering args should be correct', function(assert) {
-        createWrapper({
+    QUnit.test('appointmentCollectorTemplate rendering args should be correct', async function(assert) {
+        await createWrapper({
             dataSource: [{
                 startDate: new Date(2015, 4, 24, 9, 10),
                 endDate: new Date(2015, 4, 24, 11, 1),
@@ -144,26 +144,24 @@ QUnit.module('Initialization', {
         { startDayHour: 0, endDayHour: 0 },
         { startDayHour: 2, endDayHour: 0 }
     ].forEach(dayHours => {
-        QUnit.test(`Generate error if startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, function(assert) {
-            assert.throws(
-                () => {
-                    createWrapper({
-                        currentDate: new Date(2015, 4, 24),
-                        views: ['day'],
-                        currentView: 'day',
-                        startDayHour: dayHours.startDayHour,
-                        endDayHour: dayHours.endDayHour
-                    });
-                },
-                e => /E1058/.test(e.message) || /E1062/.test(e.message),
-                'E1058 Error message'
-            );
+        QUnit.test(`Generate error if startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, async function(assert) {
+            try {
+                await createWrapper({
+                    currentDate: new Date(2015, 4, 24),
+                    views: ['day'],
+                    currentView: 'day',
+                    startDayHour: dayHours.startDayHour,
+                    endDayHour: dayHours.endDayHour
+                });
+            } catch(e) {
+                assert.ok(/E1058/.test(e.message) || /E1062/.test(e.message), 'E1058 Error message');
+            }
             this.clock.tick(1000);
         });
     });
 
-    QUnit.test('Header panel should be visible in "Day" view with intervalCount > 1 if crossScrollingEnabled: true, showAllDayPanel: false (T895058)', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Header panel should be visible in "Day" view with intervalCount > 1 if crossScrollingEnabled: true, showAllDayPanel: false (T895058)', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [],
             views: [{
                 type: 'day',

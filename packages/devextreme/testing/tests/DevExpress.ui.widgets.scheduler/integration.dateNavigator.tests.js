@@ -44,7 +44,7 @@ QUnit.module('Integration: Date navigator with min and max values', moduleConfig
         assert.equal(instance.option('currentDate').valueOf(), INIT_CURRENT_DATE.valueOf(), 'currentDate value is not changed');
     };
 
-    QUnit.test('The navigator switcher should be disabled only one side in Day view mode, if currentDate property equal min property value (T714398)', function(assert) {
+    QUnit.test('The navigator switcher should be disabled only one side in Day view mode, if currentDate property equal min property value (T714398)', async function(assert) {
         this.createInstance({
             currentDate: INIT_CURRENT_DATE,
             min: '2017/05/25',
@@ -60,7 +60,7 @@ QUnit.module('Integration: Date navigator with min and max values', moduleConfig
         ]);
     });
 
-    QUnit.test('The navigator switcher should be disabled only one side in Day view mode, if startDayHour property is set', function(assert) {
+    QUnit.test('The navigator switcher should be disabled only one side in Day view mode, if startDayHour property is set', async function(assert) {
         this.createInstance({
             currentDate: INIT_CURRENT_DATE,
             min: new Date(2017, 4, 25),
@@ -77,7 +77,7 @@ QUnit.module('Integration: Date navigator with min and max values', moduleConfig
         ]);
     });
 
-    QUnit.test('The navigator switcher should be disabled only one side in Day view mode, if currentDate property equal max property value', function(assert) {
+    QUnit.test('The navigator switcher should be disabled only one side in Day view mode, if currentDate property equal max property value', async function(assert) {
         this.createInstance({
             currentDate: INIT_CURRENT_DATE,
             min: '2017/05/24',
@@ -93,7 +93,7 @@ QUnit.module('Integration: Date navigator with min and max values', moduleConfig
         ]);
     });
 
-    QUnit.test('The navigator switcher should be disabled only one side in Month view mode, if currentDate property equal min property value', function(assert) {
+    QUnit.test('The navigator switcher should be disabled only one side in Month view mode, if currentDate property equal min property value', async function(assert) {
         this.createInstance({
             currentDate: INIT_CURRENT_DATE,
             min: new Date(2017, 4, 25),
@@ -109,7 +109,7 @@ QUnit.module('Integration: Date navigator with min and max values', moduleConfig
         ]);
     });
 
-    QUnit.test('Previous button shouldn\'t be disabled if current date is next day after min and equal new Date()', function(assert) {
+    QUnit.test('Previous button shouldn\'t be disabled if current date is next day after min and equal new Date()', async function(assert) {
         this.createInstance({
             views: ['day'],
             currentView: 'day',
@@ -123,7 +123,7 @@ QUnit.module('Integration: Date navigator with min and max values', moduleConfig
         assert.notOk(prevButton.option('disabled'), 'previous button isn\'t disabled');
     });
 
-    QUnit.test('Next button shouldn\'t be disabled if current date is previous day before max', function(assert) {
+    QUnit.test('Next button shouldn\'t be disabled if current date is previous day before max', async function(assert) {
         this.createInstance({
             views: ['day'],
             currentView: 'day',
@@ -135,7 +135,7 @@ QUnit.module('Integration: Date navigator with min and max values', moduleConfig
         assert.notOk(nextButton.option('disabled'), 'next button isn\'t disabled');
     });
 
-    QUnit.test('Min & Max options should be passed to header', function(assert) {
+    QUnit.test('Min & Max options should be passed to header', async function(assert) {
         this.createInstance({ currentDate: new Date(2015, 1, 9), min: new Date(2015, 1, 2), max: new Date(2015, 1, 4) });
 
         const header = $(this.instance.$element()).find('.dx-scheduler-header').dxSchedulerHeader('instance');
@@ -152,7 +152,7 @@ QUnit.module('Integration: Date navigator with min and max values', moduleConfig
 });
 
 QUnit.module('Integration: Date navigator', moduleConfig, function() {
-    QUnit.test('Click on the \'next\' button should update currentDate', function(assert) {
+    QUnit.test('Click on the \'next\' button should update currentDate', async function(assert) {
 
         this.createInstance({ currentDate: new Date(2015, 1, 9) });
 
@@ -161,7 +161,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.deepEqual(this.instance.option('currentDate'), new Date(2015, 1, 10), 'New date is correct');
     });
 
-    QUnit.test('Click on the \'next\' button should update currentDate correctly, when intervalCount & startDate', function(assert) {
+    QUnit.test('Click on the \'next\' button should update currentDate correctly, when intervalCount & startDate', async function(assert) {
         this.createInstance(
             {
                 currentDate: new Date(2015, 1, 9),
@@ -179,7 +179,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.deepEqual(this.instance.option('currentDate'), new Date(2015, 1, 11, 8), 'New date is correct');
     });
 
-    QUnit.test('Click on the \'next\' button should update firstViewDate of workspace correctly, when intervalCount & startDate', function(assert) {
+    QUnit.test('Click on the \'next\' button should update firstViewDate of workspace correctly, when intervalCount & startDate', async function(assert) {
         this.createInstance(
             {
                 startDayHour: 8,
@@ -197,7 +197,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.deepEqual(this.instance.getStartViewDate(), new Date(2017, 4, 3, 8, 0), 'New date is correct');
     });
 
-    QUnit.test('Click on the \'previous\' button should update firstViewDate of workspace correctly, when intervalCount & startDate', function(assert) {
+    QUnit.test('Click on the \'previous\' button should update firstViewDate of workspace correctly, when intervalCount & startDate', async function(assert) {
         this.createInstance(
             {
                 startDayHour: 8,
@@ -215,7 +215,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.deepEqual(this.instance.getStartViewDate(), new Date(2017, 3, 27, 8, 0), 'New date is correct');
     });
 
-    QUnit.test('Caption should be correct when intervalCount & startDate are set, month view', function(assert) {
+    QUnit.test('Caption should be correct when intervalCount & startDate are set, month view', async function(assert) {
         this.createInstance({
             currentDate: new Date(2018, 4, 21),
             currentView: 'month',
@@ -230,7 +230,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.equal($caption.text(), 'May-Jun 2018', 'Caption is correct');
     });
 
-    QUnit.test('Click on the \'next\' button should update currentDate correctly, when intervalCount & startDate, month view', function(assert) {
+    QUnit.test('Click on the \'next\' button should update currentDate correctly, when intervalCount & startDate, month view', async function(assert) {
         this.createInstance({
             currentDate: new Date(2017, 5, 9),
             currentView: 'month',
@@ -245,7 +245,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.deepEqual(this.instance.option('currentDate'), new Date(2017, 8, 1), 'New date is correct');
     });
 
-    QUnit.test('Multiple click on the \'next\' button should update currentDate correctly when intervalCount, month view', function(assert) {
+    QUnit.test('Multiple click on the \'next\' button should update currentDate correctly when intervalCount, month view', async function(assert) {
         this.createInstance({
             currentDate: new Date(2017, 8, 1),
             currentView: 'month',
@@ -262,7 +262,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.equal($caption.text(), 'Jan-Feb 2018', 'Caption is correct');
     });
 
-    QUnit.test('Multiple click on the \'next\' button should update currentDate correctly when intervalCount & startDate, month view', function(assert) {
+    QUnit.test('Multiple click on the \'next\' button should update currentDate correctly when intervalCount & startDate, month view', async function(assert) {
         this.createInstance({
             currentDate: new Date(2018, 4, 21),
             currentView: 'month',
@@ -280,7 +280,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.equal($caption.text(), 'Sep-Oct 2018', 'Caption is correct');
     });
 
-    QUnit.test('Multiple click on the \'previous\' button should update currentDate correctly when intervalCount & startDate, month view', function(assert) {
+    QUnit.test('Multiple click on the \'previous\' button should update currentDate correctly when intervalCount & startDate, month view', async function(assert) {
         this.createInstance({
             currentDate: new Date(2018, 4, 21),
             currentView: 'month',
@@ -298,7 +298,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.equal($caption.text(), 'Jan-Feb 2018', 'Caption is correct');
     });
 
-    QUnit.test('Multiple click on the \'next\' and \'previous\' button should update currentDate correctly, month view', function(assert) {
+    QUnit.test('Multiple click on the \'next\' and \'previous\' button should update currentDate correctly, month view', async function(assert) {
         this.createInstance({
             currentDate: new Date(2017, 4, 1),
             currentView: 'month',
@@ -319,7 +319,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.equal(this.instance.option('currentDate').getMonth(), 4, 'New date is correct');
     });
 
-    QUnit.test('Multiple click on the \'next\' and \'previous\' button should update currentDate correctly when intervalCount, currentDate = startDate, month view', function(assert) {
+    QUnit.test('Multiple click on the \'next\' and \'previous\' button should update currentDate correctly when intervalCount, currentDate = startDate, month view', async function(assert) {
         this.createInstance({
             currentDate: new Date(2017, 11, 11),
             currentView: 'month',
@@ -340,7 +340,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.equal(this.instance.option('currentDate').getMonth(), 11, 'New date is correct');
     });
 
-    QUnit.test('Click on the \'previous\' button should update currentDate', function(assert) {
+    QUnit.test('Click on the \'previous\' button should update currentDate', async function(assert) {
 
         this.createInstance({ currentDate: new Date(2015, 1, 9) });
 
@@ -349,7 +349,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.deepEqual(this.instance.option('currentDate'), new Date(2015, 1, 8), 'New date is correct');
     });
 
-    QUnit.test('Click on the \'previous\' button should update currentDate correctly, when intervalCount & startDate', function(assert) {
+    QUnit.test('Click on the \'previous\' button should update currentDate correctly, when intervalCount & startDate', async function(assert) {
 
         this.createInstance({ currentDate: new Date(2015, 1, 9), views: [{
             type: 'day',
@@ -362,7 +362,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.deepEqual(this.instance.option('currentDate'), new Date(2015, 1, 4), 'New date is correct');
     });
 
-    QUnit.test('Click on the \'previous\' button should update currentDate correctly, when intervalCount & startDate, month view', function(assert) {
+    QUnit.test('Click on the \'previous\' button should update currentDate correctly, when intervalCount & startDate, month view', async function(assert) {
         this.createInstance({
             currentDate: new Date(2017, 5, 9),
             currentView: 'month',
@@ -377,7 +377,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.deepEqual(this.instance.option('currentDate'), new Date(2017, 2, 1), 'New date is correct');
     });
 
-    QUnit.test('Tasks should be rerendered after click on next/prev button', function(assert) {
+    QUnit.test('Tasks should be rerendered after click on next/prev button', async function(assert) {
         this.createInstance({ currentDate: new Date(2015, 1, 24) });
 
         const spy = sinon.spy(this.instance.appointmentDataProvider, 'filterByDate');
@@ -390,7 +390,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         }
     });
 
-    QUnit.test('Tasks should have correct position after click on next/prev button & calendar', function(assert) {
+    QUnit.test('Tasks should have correct position after click on next/prev button & calendar', async function(assert) {
         this.createInstance({
             currentDate: new Date(2016, 0, 24),
             startDayHour: 2,
@@ -410,7 +410,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.roughEqual(currentPosition.top, appointmentPosition.top, 1.001, 'position is not modified');
     });
 
-    QUnit.test('Click on the \'next\' button should update currentDate correctly when intervalCount, month view, currentDate > 1', function(assert) {
+    QUnit.test('Click on the \'next\' button should update currentDate correctly when intervalCount, month view, currentDate > 1', async function(assert) {
         this.createInstance({
             currentDate: new Date(2018, 3, 21),
             currentView: 'month',
@@ -428,8 +428,8 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
         assert.equal($caption.text(), 'Jun-Jul 2018', 'Caption is correct');
     });
 
-    QUnit.test('Calendar should be able to scroll content(T882633)', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('Calendar should be able to scroll content(T882633)', async function(assert) {
+        const scheduler = await createWrapper();
         const { navigator } = scheduler.header;
 
         navigator.caption.click();

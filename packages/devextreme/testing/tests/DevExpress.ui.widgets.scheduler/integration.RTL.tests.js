@@ -22,7 +22,7 @@ const moduleConfig = {
 
 module('RTL', moduleConfig, () => {
     if(isDesktopEnvironment()) {
-        test('Appointment should have correct position with multiple resources if rtlEnabled is true (T803275)', function(assert) {
+        test('Appointment should have correct position with multiple resources if rtlEnabled is true (T803275)', async function(assert) {
             const views = ['month', 'week', 'day'];
 
             const expectedValues = {
@@ -55,7 +55,7 @@ module('RTL', moduleConfig, () => {
                 ]
             };
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 views: views,
                 currentView: views[0],
                 rtlEnabled: true,
@@ -114,8 +114,8 @@ module('RTL', moduleConfig, () => {
             });
         };
 
-        test('Day view', function(assert) {
-            const scheduler = createScheduler('day');
+        test('Day view', async function(assert) {
+            const scheduler = await createScheduler('day');
 
             const cell = scheduler.workSpace.getCell(8);
             const appointment = scheduler.appointments.getAppointment();
@@ -123,8 +123,8 @@ module('RTL', moduleConfig, () => {
             assert.roughEqual(appointment.position().left + appointment.outerWidth(), cell.position().left + cell.outerWidth(), 1.1, 'task position is correct');
         });
 
-        test('Week view', function(assert) {
-            const scheduler = createScheduler('week');
+        test('Week view', async function(assert) {
+            const scheduler = await createScheduler('week');
 
             const cell = scheduler.workSpace.getCell(1);
             const appointment = scheduler.appointments.getAppointment();
@@ -132,8 +132,8 @@ module('RTL', moduleConfig, () => {
             assert.roughEqual(Math.round(appointment.position().left + appointment.outerWidth()), Math.round(cell.position().left + cell.outerWidth()), 1.1, 'task position is correct');
         });
 
-        test('Month view', function(assert) {
-            const scheduler = createScheduler('month');
+        test('Month view', async function(assert) {
+            const scheduler = await createScheduler('month');
 
             const cell = scheduler.workSpace.getCell(1);
             const appointment = scheduler.appointments.getAppointment();

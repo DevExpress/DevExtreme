@@ -69,7 +69,7 @@ export const getAppointmentResources = (
 export const setAppointmentGroupValues = <T extends Record<string, unknown>>(
   item: T,
   resourceById: Record<string, ResourceLoader>,
-  groups: Record<string, ResourceId>,
+  groups: Record<string, ResourceId> = {},
 ): void => {
   Object.entries(groups).forEach(([resourceIndex, resourceId]) => {
     const resource = resourceById[resourceIndex];

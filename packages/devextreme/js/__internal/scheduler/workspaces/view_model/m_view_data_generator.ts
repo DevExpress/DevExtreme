@@ -4,7 +4,7 @@ import {
   calculateCellIndex,
   calculateDayDuration,
   getDisplayedCellCount,
-  getDisplayedRowCount, getGroupCount,
+  getDisplayedRowCount,
   getIsGroupedAllDayPanel,
   getKeyByGroup,
   getStartViewDateWithoutDST,

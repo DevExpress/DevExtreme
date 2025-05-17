@@ -51,7 +51,6 @@ export {
   getDatesWithoutTime,
   getDisplayedCellCount,
   getDisplayedRowCount,
-  getGroupCount,
   getGroupPanelData,
   getHeaderCellText,
   getHorizontalGroupCount,

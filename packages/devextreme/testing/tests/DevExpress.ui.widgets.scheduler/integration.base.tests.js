@@ -31,12 +31,12 @@ QUnit.module('Integration: Base', {
     }
 });
 
-QUnit.test('Scheduler should have a header', function(assert) {
+QUnit.test('Scheduler should have a header', async function(assert) {
     this.createInstance();
     assert.equal(this.instance.$element().find('.dx-scheduler-header').length, 1, 'Scheduler has the header');
 });
 
-QUnit.test('Header should be initialized with correct views and currentView options', function(assert) {
+QUnit.test('Header should be initialized with correct views and currentView options', async function(assert) {
     this.createInstance({
         views: ['day', 'week'],
         currentView: 'week'
@@ -107,7 +107,7 @@ QUnit.test('Height of \'dx-scheduler-group-row\' should be equal with height of 
     assert.roughEqual(getOuterHeight(groupRow), getOuterHeight(dataTableRow), 0.3, 'Row heights are equal');
 });
 
-QUnit.test('Header should be updated with correct \'width\' option', function(assert) {
+QUnit.test('Header should be updated with correct \'width\' option', async function(assert) {
     this.createInstance({
         views: ['day', 'week'],
         currentView: 'week',
@@ -119,7 +119,7 @@ QUnit.test('Header should be updated with correct \'width\' option', function(as
     assert.equal(header.option('width'), 800, 'Header has a right width');
 });
 
-QUnit.test('Header should be initialized with correct useDropDownViewSwitcher option', function(assert) {
+QUnit.test('Header should be initialized with correct useDropDownViewSwitcher option', async function(assert) {
     this.createInstance({
         useDropDownViewSwitcher: true
     });
@@ -127,7 +127,7 @@ QUnit.test('Header should be initialized with correct useDropDownViewSwitcher op
     assert.strictEqual($element.find('.dx-scheduler-header').dxSchedulerHeader('instance').option('useDropDownViewSwitcher'), true, 'Scheduler header has a correct useDropDownViewSwitcher option');
 });
 
-QUnit.test('Header should be updated with correct useDropDownViewSwitcher option', function(assert) {
+QUnit.test('Header should be updated with correct useDropDownViewSwitcher option', async function(assert) {
     this.createInstance({
         useDropDownViewSwitcher: true
     });
@@ -136,17 +136,17 @@ QUnit.test('Header should be updated with correct useDropDownViewSwitcher option
     assert.strictEqual($element.find('.dx-scheduler-header').dxSchedulerHeader('instance').option('useDropDownViewSwitcher'), false, 'Scheduler header has a correct useDropDownViewSwitcher option');
 });
 
-QUnit.test('Scheduler should have a work space', function(assert) {
+QUnit.test('Scheduler should have a work space', async function(assert) {
     this.createInstance();
     assert.equal(this.instance.$element().find('.dx-scheduler-work-space').length, 1, 'Scheduler has the work space');
 });
 
-QUnit.test('Scheduler should have a tasks', function(assert) {
+QUnit.test('Scheduler should have a tasks', async function(assert) {
     this.createInstance();
     assert.equal(this.instance.$element().find('.dx-scheduler-scrollable-appointments').length, 1, 'Scheduler has tasks');
 });
 
-QUnit.test('Scheduler should handle events from units', function(assert) {
+QUnit.test('Scheduler should handle events from units', async function(assert) {
     this.createInstance();
     const checkSchedulerUnit = function(selector, unitName) {
         const unit = this.instance.$element().find(selector)[unitName]('instance');
@@ -170,7 +170,7 @@ QUnit.test('Scheduler should handle events from units', function(assert) {
     checkSchedulerUnit.call(this, '.dx-scheduler-scrollable-appointments', 'dxSchedulerAppointments');
 });
 
-QUnit.test('Scheduler should be able to invoke unit methods', function(assert) {
+QUnit.test('Scheduler should be able to invoke unit methods', async function(assert) {
     this.createInstance();
 
     this.instance.subscribe('testFn', function(a, b) {
@@ -186,7 +186,7 @@ QUnit.test('Scheduler should be able to invoke unit methods', function(assert) {
     assert.equal(result, 3, 'result is OK');
 });
 
-QUnit.test('scheduler should work with disabled: true', function(assert) {
+QUnit.test('scheduler should work with disabled: true', async function(assert) {
     assert.expect(0);
 
     this.createInstance({
@@ -194,7 +194,7 @@ QUnit.test('scheduler should work with disabled: true', function(assert) {
     });
 });
 
-QUnit.test('The \'min\' option should be converted to Date obj before send to work space and header', function(assert) {
+QUnit.test('The \'min\' option should be converted to Date obj before send to work space and header', async function(assert) {
     let date = new Date(1422738000000);
     this.createInstance({
         min: date.getTime()
@@ -209,7 +209,7 @@ QUnit.test('The \'min\' option should be converted to Date obj before send to wo
     this.compareDates(header.option('min'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
 });
 
-QUnit.test('The \'max\' option should be converted to Date obj before send to work space and header', function(assert) {
+QUnit.test('The \'max\' option should be converted to Date obj before send to work space and header', async function(assert) {
     let date = new Date(1422738000000);
     this.createInstance({
         max: date.getTime()
@@ -224,7 +224,7 @@ QUnit.test('The \'max\' option should be converted to Date obj before send to wo
     this.compareDates(header.option('max'), { year: date.getFullYear(), month: date.getMonth(), date: date.getDate() }, assert);
 });
 
-QUnit.test('Scheduler should not throw an error when the details form is opened for the first time', function(assert) {
+QUnit.test('Scheduler should not throw an error when the details form is opened for the first time', async function(assert) {
     const errorLogStub = sinon.stub(errors, 'log');
 
     try {
@@ -260,7 +260,7 @@ QUnit.module('Integration: Date options with ISO8601', {
     }
 });
 
-QUnit.test('currentDate option should be parsed with ISO8601 dates before sending to workspace and header', function(assert) {
+QUnit.test('currentDate option should be parsed with ISO8601 dates before sending to workspace and header', async function(assert) {
     this.createInstance({
         views: ['day'],
         currentView: 'day',
@@ -279,7 +279,7 @@ QUnit.test('currentDate option should be parsed with ISO8601 dates before sendin
     assert.deepEqual(header.option('currentDate'), new Date(2017, 1, 9), 'currentDate is OK  after option change');
 });
 
-QUnit.test('max option should be parsed with ISO8601 dates before sending to workspace and header', function(assert) {
+QUnit.test('max option should be parsed with ISO8601 dates before sending to workspace and header', async function(assert) {
     this.createInstance({
         views: ['day'],
         currentView: 'day',
@@ -296,7 +296,7 @@ QUnit.test('max option should be parsed with ISO8601 dates before sending to wor
     assert.deepEqual(header.option('max'), new Date(2017, 1, 10), 'max is OK  after option change');
 });
 
-QUnit.test('min option should be parsed with ISO8601 dates before sending to workspace and header', function(assert) {
+QUnit.test('min option should be parsed with ISO8601 dates before sending to workspace and header', async function(assert) {
     this.createInstance({
         views: ['day'],
         currentView: 'day',
@@ -313,7 +313,7 @@ QUnit.test('min option should be parsed with ISO8601 dates before sending to wor
     assert.deepEqual(header.option('min'), new Date(2017, 1, 6), 'min is OK  after option change');
 });
 
-QUnit.test('dimensionChanged should not generate exception if workspace is not created', function(assert) {
+QUnit.test('dimensionChanged should not generate exception if workspace is not created', async function(assert) {
     this.createInstance({
         views: ['day'],
         currentView: 'day',

@@ -137,8 +137,8 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             testCase1AmTo3AmWinterTime,
             testCase2AmTo3AmWinterTime
         ].forEach(testCase => {
-            test(testCase.name, function(assert) {
-                const scheduler = createWrapper({
+            test(testCase.name, async function(assert) {
+                const scheduler = await createWrapper({
                     dataSource: [{
                         startDate: testCase.startDate,
                         endDate: testCase.endDate,
@@ -153,7 +153,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                     startDayHour: 0,
                     height: 600,
                     width: 600
-                }, this.clock);
+                });
 
                 const appointmentCount = scheduler.appointments.getAppointmentCount();
                 testCase.result.forEach((expectedText, index) => {
@@ -193,8 +193,8 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             view: 'timelineWeek',
             startDate: new Date(2020, 2, 8, 4, 30),
         }].forEach(({ cellDuration, appointmentTop, appointmentLeft, view, startDate }) => {
-            test(`Appointments should be rendered correctly after DST when cellDuration is ${cellDuration} in ${view}`, function(assert) {
-                const scheduler = createWrapper({
+            test(`Appointments should be rendered correctly after DST when cellDuration is ${cellDuration} in ${view}`, async function(assert) {
+                const scheduler = await createWrapper({
                     dataSource: [{
                         startDate,
                         endDate: new Date(2020, 2, 8, 6),
@@ -262,10 +262,10 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
         [true, false].forEach((renovateRender) => {
             module('timeCellTemplate', () => {
                 testCases.forEach(testCase => {
-                    test(`arguments should be valid in '${testCase.view}' view when renovateRender is ${renovateRender}`, function(assert) {
+                    test(`arguments should be valid in '${testCase.view}' view when renovateRender is ${renovateRender}`, async function(assert) {
                         let index = 0;
 
-                        createWrapper({
+                        await createWrapper({
                             dataSource: [],
                             timeCellTemplate: arg => {
                                 if(index < expectedAllTimes.length) {
@@ -286,13 +286,13 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                         assert.expect(expectedAllTimes.length * 2);
                     });
 
-                    test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, function(assert) {
+                    test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, async function(assert) {
                         let index = 0;
 
                         const validExpectedDateResults = testCase.dates.slice(4);
                         const times = testCase.times.slice(4);
 
-                        createWrapper({
+                        await createWrapper({
                             dataSource: [],
                             timeCellTemplate: ({ date, text }) => {
                                 if(index < validExpectedDateResults.length) {
@@ -324,12 +324,12 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                         });
                     })
                     .forEach((testCase) => {
-                        test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, function(assert) {
+                        test(`template args should be valid in '${testCase.view}' view when startViewDate is during DST change when renovateRender is ${renovateRender}`, async function(assert) {
                             let index = 0;
 
                             const validExpectedDateResults = expectedDateResults.slice(4);
 
-                            createWrapper({
+                            await createWrapper({
                                 dataSource: [],
                                 dataCellTemplate: ({ startDate, allDay }) => {
                                     if(allDay) {
@@ -364,8 +364,8 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
 
         module('Time panel render', () => {
             testCases.forEach(testCase => {
-                test(`Time value in time panel should be correct in ${testCase.view} (T852308, T860281)`, function(assert) {
-                    const scheduler = createWrapper({
+                test(`Time value in time panel should be correct in ${testCase.view} (T852308, T860281)`, async function(assert) {
+                    const scheduler = await createWrapper({
                         dataSource: [],
                         views: testCases.map(testCases => testCases.view),
                         currentView: testCase.view,
@@ -384,10 +384,10 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                     assert.expect(testCase.times.length + 1);
                 });
 
-                test(`Time value in time panel should be correct in ${testCase.view} when startViewDate is during DST change`, function(assert) {
+                test(`Time value in time panel should be correct in ${testCase.view} when startViewDate is during DST change`, async function(assert) {
                     const times = testCase.times.slice(4);
 
-                    const scheduler = createWrapper({
+                    const scheduler = await createWrapper({
                         dataSource: [],
                         views: testCases.map(testCases => testCases.view),
                         currentView: testCase.view,
@@ -417,9 +417,9 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             currentDate: new Date(2021, 10, 7),
             text: 'winter time'
         }].forEach(({ currentDate, text }) => {
-            test(`If local time zone and scheduler time zone equal by declaration, then should be valid display appointments(skip scheduler timezone engine), ${text}`, function(assert) {
+            test(`If local time zone and scheduler time zone equal by declaration, then should be valid display appointments(skip scheduler timezone engine), ${text}`, async function(assert) {
                 const etalonDateText = '10:30 AM - 12:00 PM';
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     currentDate,
                     timeZone: 'America/Tijuana',
                     dataSource: [{
@@ -433,14 +433,16 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                     firstDayOfWeek: 5,
                     startDayHour: 9,
                     height: 600
-                }, this.clock);
+                });
 
-                scheduler.appointmentList.forEach(appointment => {
+                const promises = scheduler.appointmentList.map(async(appointment) => {
                     assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
-                    appointment.click();
+                    await appointment.click();
 
                     assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
                 });
+
+                await Promise.all(promises);
 
                 assert.expect(14);
             });
@@ -457,8 +459,8 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             text: 'Test',
             recurrenceRule: 'FREQ=DAILY;UNTIL=20200506T010000'
         }].forEach(appointment => {
-            test(`UNTIL property should be apply right in case '${appointment.recurrenceRule}'`, function(assert) {
-                const scheduler = createWrapper({
+            test(`UNTIL property should be apply right in case '${appointment.recurrenceRule}'`, async function(assert) {
+                const scheduler = await createWrapper({
                     dataSource: [appointment],
                     views: ['week'],
                     currentView: 'week',
@@ -496,8 +498,8 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             left: 400,
             top: 26,
         }].forEach(({ view, left, top }) => {
-            test(`Appointments should be rendered corrrectly when startViewDate is during DST change in ${view}`, function(assert) {
-                const scheduler = createWrapper({
+            test(`Appointments should be rendered corrrectly when startViewDate is during DST change in ${view}`, async function(assert) {
+                const scheduler = await createWrapper({
                     dataSource: [{
                         startDate: new Date(2020, 2, 8, 3),
                         endDate: new Date(2020, 2, 8, 4),
@@ -546,8 +548,8 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                     timeZone: schedulerTimeZone,
                     today: getTodayValue(1)
                 }].forEach(({ timeZone, today }) => {
-                    skip(`Today in calendar should be equal with today in grid, view='${currentView}' timeZone='${timeZone}' (T946335)`, function(assert) {
-                        const scheduler = createWrapper({
+                    skip(`Today in calendar should be equal with today in grid, view='${currentView}' timeZone='${timeZone}' (T946335)`, async function(assert) {
+                        const scheduler = await createWrapper({
                             timeZone,
                             currentView,
                             views,
@@ -574,8 +576,8 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                 timeZone: schedulerTimeZone,
                 expectedToday: getTodayValue(1)
             }].forEach(({ timeZone, expectedToday }) => {
-                skip(`Scheduler should be valid display today after change view type, timeZone='${timeZone}'`, function(assert) {
-                    const scheduler = createWrapper({
+                skip(`Scheduler should be valid display today after change view type, timeZone='${timeZone}'`, async function(assert) {
+                    const scheduler = await createWrapper({
                         timeZone,
                         views,
                         currentView: 'month',
@@ -601,9 +603,9 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             });
         });
 
-        test('onAppointmentFormOpening should have correct dates on new appointment when custom timezone(T862350)', function(assert) {
+        test('onAppointmentFormOpening should have correct dates on new appointment when custom timezone(T862350)', async function(assert) {
             const assertDate = new Date(2015, 0, 25, 2, 0);
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 height: 600,
                 dataSource: [],
                 timeZone: 'Etc/UTC',
@@ -626,7 +628,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             assert.expect(2);
         });
 
-        test('Recurrence rule with UNTIL date in UTC format should apply correctly to local dates', function(assert) {
+        test('Recurrence rule with UNTIL date in UTC format should apply correctly to local dates', async function(assert) {
             const dates = getRecurrenceProcessor().generateDates(
                 {
                     rule: 'FREQ=DAILY;UNTIL=20210625T075959Z',
@@ -681,8 +683,8 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                     currentView: 'timelineWeek'
                 }
             ].forEach(({ cell, currentView }) => {
-                test(`Correct cell should be selected when ${currentView} view is used`, function(assert) {
-                    const scheduler = createWrapper(Object.assign({ currentView }, schedulerSettings));
+                test(`Correct cell should be selected when ${currentView} view is used`, async function(assert) {
+                    const scheduler = await createWrapper(Object.assign({ currentView }, schedulerSettings));
                     scheduler.workSpace.selectCells(cell, cell);
 
                     const selectedCell = scheduler.workSpace.getCell(cell);
@@ -761,8 +763,8 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                     testDescription: 'Cells that end on dead zone of DST'
                 },
             ].forEach(({ firstCell, lastCell, selectedCellCount, currentView, mustBeSelectedCells, testDescription }) => {
-                test(`${testDescription} should be selected when ${currentView} view is used`, function(assert) {
-                    const scheduler = createWrapper({ ...schedulerSettings, currentView });
+                test(`${testDescription} should be selected when ${currentView} view is used`, async function(assert) {
+                    const scheduler = await createWrapper({ ...schedulerSettings, currentView });
 
                     scheduler.workSpace.selectCells(firstCell, lastCell);
 
@@ -782,10 +784,10 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
     });
 
     module('Current Time Indicator', () => {
-        test('Current time indicator should have correct top in week view when DST is present (T1040849)', function(assert) {
+        test('Current time indicator should have correct top in week view when DST is present (T1040849)', async function(assert) {
             const clock = sinon.useFakeTimers((new Date(2021, 10, 7, 10)).getTime());
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 views: ['week'],
                 currentView: 'week',
                 currentDate: new Date(),
@@ -799,10 +801,10 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             clock.restore();
         });
 
-        test('Current time indicator should have correct left in timeline-week view when DST is present (T1040849)', function(assert) {
+        test('Current time indicator should have correct left in timeline-week view when DST is present (T1040849)', async function(assert) {
             const clock = sinon.useFakeTimers((new Date(2021, 10, 7, 10)).getTime());
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 views: ['timelineWeek'],
                 currentView: 'timelineWeek',
                 currentDate: new Date(),

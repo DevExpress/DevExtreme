@@ -38,7 +38,7 @@ QUnit.module('Integration: recurrence rules validation', {
     }
 });
 
-QUnit.test('Incorrect recurrence rule should not be applied', function(assert) {
+QUnit.test('Incorrect recurrence rule should not be applied', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), recurrenceRule: 'FREQ=DAILY,INTERVAL=1' };
 
     const data = new DataSource({
@@ -50,7 +50,7 @@ QUnit.test('Incorrect recurrence rule should not be applied', function(assert) {
     assert.equal(this.instance.$element().find('.dx-scheduler-appointment').length, 1, 'dxSchedulerAppointments has only one item');
 });
 
-QUnit.test('Appointment with incorrect recurrence rule should not have specific class', function(assert) {
+QUnit.test('Appointment with incorrect recurrence rule should not have specific class', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9), recurrenceRule: 'FREQ=DAILY,INTERVAL=1' };
 
     const data = new DataSource({
@@ -64,7 +64,7 @@ QUnit.test('Appointment with incorrect recurrence rule should not have specific 
     assert.notOk($appointment.hasClass('dx-scheduler-appointment-recurrence'), 'Appointment has not specific class');
 });
 
-QUnit.test('Recurrence rule with incorrect ruleName should not be applied ', function(assert) {
+QUnit.test('Recurrence rule with incorrect ruleName should not be applied ', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), recurrenceRule: 'FREQ=DAILY;INTERVAL=1;AA=2' };
 
     const data = new DataSource({
@@ -76,7 +76,7 @@ QUnit.test('Recurrence rule with incorrect ruleName should not be applied ', fun
     assert.equal(this.instance.$element().find('.dx-scheduler-appointment').length, 1, 'dxSchedulerAppointments has only one item');
 });
 
-QUnit.test('Confirmation dialog should not be shown if rrule is invalid', function(assert) {
+QUnit.test('Confirmation dialog should not be shown if rrule is invalid', async function(assert) {
     const data = new DataSource({
         store: [
             {

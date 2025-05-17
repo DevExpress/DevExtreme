@@ -88,6 +88,14 @@ describe('appointment groups utils', () => {
   });
 
   describe('setAppointmentGroupValues', () => {
+    it('should set nothing', () => {
+      const appointment = { something: 1 };
+      const manager = getResourceManagerMock();
+      setAppointmentGroupValues(appointment, manager.resourceById, undefined);
+
+      expect(appointment).toEqual(appointment);
+    });
+
     it('should set appointment group values', () => {
       const appointment = {};
       const manager = getResourceManagerMock();

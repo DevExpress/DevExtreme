@@ -23,9 +23,9 @@ const moduleConfig = {
 };
 
 QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleConfig, () => {
-    QUnit.test('Any recurrence appt part should be rendered correctly if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', function(assert) {
+    QUnit.test('Any recurrence appt part should be rendered correctly if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', async function(assert) {
         // NOTE: The daylight saving changed in Montreal on 10.03.2019 and in Paris on 31.03.2019
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: 'Daily meeting',
@@ -71,12 +71,12 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         assert.equal(scheduler.appointments.getDateText(0), '3:00 AM - 6:00 AM', 'Dates and time were displayed correctly in appointment after time changing in appointment timezone');
     });
 
-    QUnit.test('Any recurrence appt part should have correct tooltip and popup if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', function(assert) {
+    QUnit.test('Any recurrence appt part should have correct tooltip and popup if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', async function(assert) {
         if(shouldSkipOnMobile(assert)) {
             return;
         }
         // NOTE: The daylight saving changed in Montreal on 10.03.2019 and in Paris on 31.03.2019
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: 'Daily meeting',
@@ -136,9 +136,9 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         assert.equal(endDateEditor.option('text'), '4/2/2019, 6:00 AM', 'End Date is displayed correctly in appointment popup form before time changing in custom timezone');
     });
 
-    QUnit.test('Recurrence appt part at the time of DST should be rendered correctly if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', function(assert) {
+    QUnit.test('Recurrence appt part at the time of DST should be rendered correctly if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', async function(assert) {
         // NOTE: The daylight saving changed in Montreal on 10.03.2019 and in Paris on 31.03.2019
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: 'Daily meeting',
@@ -179,13 +179,13 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         assert.equal(scheduler.tooltip.getDateText(), '3:00 AM - 6:00 AM', 'Dates and time were displayed correctly in tooltip after time changing in appointment timezone');
     });
 
-    QUnit.test('Recurrence appt part at the time of DST should have correct tooltip and popup if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', function(assert) {
+    QUnit.test('Recurrence appt part at the time of DST should have correct tooltip and popup if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', async function(assert) {
         if(shouldSkipOnMobile(assert)) {
             return;
         }
 
         // NOTE: The daylight saving changed in Montreal on 10.03.2019 and in Paris on 31.03.2019
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: 'Daily meeting',
@@ -233,9 +233,9 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         scheduler.appointmentPopup.clickCancelButton();
     });
 
-    QUnit.test('Recurrence appt part should be rendered correctly if recurrence starts in STD and ends in DST in custom timezone', function(assert) {
+    QUnit.test('Recurrence appt part should be rendered correctly if recurrence starts in STD and ends in DST in custom timezone', async function(assert) {
         // NOTE: The daylight saving changed in Montreal on 10.03.2019
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: 'Daily meeting',
@@ -268,9 +268,9 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
     });
 
-    QUnit.test('Recurrence appt part should be rendered correctly if recurrence starts in STD and ends in DST, appointment timezone is set', function(assert) {
+    QUnit.test('Recurrence appt part should be rendered correctly if recurrence starts in STD and ends in DST, appointment timezone is set', async function(assert) {
         // NOTE: The daylight saving changed in Paris on 31.03.2019
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: 'Daily meeting',
@@ -297,9 +297,9 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         assert.equal(appointment.position().top, appointmentPosition, 'Recurrence appointment part positions are the same and independent of time changing');
     });
 
-    QUnit.test('Recurrence appt part at the time of DST-end should be rendered correctly if recurrence starts in DST and ends in STD in custom timezone, appointment timezone is set (T804886)', function(assert) {
+    QUnit.test('Recurrence appt part at the time of DST-end should be rendered correctly if recurrence starts in DST and ends in STD in custom timezone, appointment timezone is set (T804886)', async function(assert) {
         // NOTE: The daylight saving changed backward in Montreal on 03.11.2019 and in Paris on 27.10.2019
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: 'Daily meeting',
@@ -336,13 +336,13 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         assert.equal(scheduler.appointments.getDateText(0), '3:00 AM - 6:00 AM', 'Dates and time were displayed correctly in appointment after time changing in appointment timezone');
     });
 
-    QUnit.test('Recurrence appt part at the time of DST-end should have correct tooltip and popup if recurrence starts in DST and ends in STD in custom timezone, appointment timezone is set (T804886)', function(assert) {
+    QUnit.test('Recurrence appt part at the time of DST-end should have correct tooltip and popup if recurrence starts in DST and ends in STD in custom timezone, appointment timezone is set (T804886)', async function(assert) {
         if(shouldSkipOnMobile(assert)) {
             return;
         }
 
         // NOTE: The daylight saving changed backward in Montreal on 03.11.2019 and in Paris on 27.10.2019
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: 'Daily meeting',
@@ -390,11 +390,11 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         scheduler.appointmentPopup.clickCancelButton();
     });
 
-    QUnit.test('Scheduler - Fix - Recurrent appointment settings generator should consider daylight saving time (T985142)', function(assert) {
+    QUnit.test('Scheduler - Fix - Recurrent appointment settings generator should consider daylight saving time (T985142)', async function(assert) {
         // NOTE: The daylight saving changed in Pacific/Tahiti on 28.03.2021
         let scheduler;
         try {
-            scheduler = createWrapper({
+            scheduler = await createWrapper({
                 dataSource: [{
                     startDate: '2021-03-28T10:00:00.000Z',
                     endDate: '2021-03-29T10:00:00.000Z',
@@ -438,11 +438,11 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
 QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {
     const getDeltaTz = (schedulerTz, date) => schedulerTz * toMs('hour') + date.getTimezoneOffset() * toMs('minute');
 
-    QUnit.test('Appointment wich started in DST and ended in STD time should have correct start & end dates', function(assert) {
+    QUnit.test('Appointment wich started in DST and ended in STD time should have correct start & end dates', async function(assert) {
         const startDate = new Date(1541311200000);
         const endDate = new Date(1541319000000);
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2018, 10, 4),
             views: ['week'],
             currentView: 'week',
@@ -464,11 +464,11 @@ QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {
         assert.equal(scheduler.appointments.getDateText(), resultDateText, 'Date is correct on init');
     });
 
-    QUnit.test('Appointment wich started in STD and ended in DST time should have correct start & end dates', function(assert) {
+    QUnit.test('Appointment wich started in STD and ended in DST time should have correct start & end dates', async function(assert) {
         const startDate = new Date(1520748000000);
         const endDate = new Date(1520751600000);
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2018, 2, 11),
             views: ['timelineDay'],
             currentView: 'timelineDay',
@@ -490,11 +490,11 @@ QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {
         assert.equal(scheduler.appointments.getDateText(), resultDateText, 'Date is correct on init');
     });
 
-    QUnit.test('Second recurring appointment wich started in STD and ended in DST time should have correct start & end dates & position', function(assert) {
+    QUnit.test('Second recurring appointment wich started in STD and ended in DST time should have correct start & end dates & position', async function(assert) {
         const startDate = new Date(1520748000000);
         const endDate = new Date(1520751600000);
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2018, 2, 12),
             views: ['timelineDay'],
             currentView: 'timelineDay',
@@ -513,12 +513,12 @@ QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {
     });
 
     // NOTE: Timezone-sensitive test, use US/Pacific for proper testing
-    QUnit.test('Appointment which started in DST and ended in STD time should have right width, timeline view', function(assert) {
+    QUnit.test('Appointment which started in DST and ended in STD time should have right width, timeline view', async function(assert) {
         const startDate = new Date(2018, 10, 4, 1);
         const endDate = new Date(2018, 10, 4, 3);
         const currentDate = new Date(2018, 10, 4);
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             views: ['timelineWeek'],
             currentView: 'timelineWeek',
             cellDuration: 60,
@@ -536,12 +536,12 @@ QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {
         assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth() * (duration + tzDiff), 2.001, 'Appt width is correct on the day of the time ajusting');
     });
 
-    QUnit.test('Second recurring appointment should have right width if previous appt started in STD and ended in DST, timeline view', function(assert) {
+    QUnit.test('Second recurring appointment should have right width if previous appt started in STD and ended in DST, timeline view', async function(assert) {
         const startDate = new Date(1520758800000);
         const endDate = new Date(1520762400000);
         const currentDate = new Date(2018, 2, 12);
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: currentDate,
             views: ['timelineDay'],
             currentView: 'timelineDay',
@@ -561,8 +561,8 @@ QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {
         assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth() * duration, 2.001, 'Appt width is correct after the day of the time ajusting');
     });
 
-    QUnit.test('Appointment should be rendered correctly if end date appointment coincided translation on STD', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointment should be rendered correctly if end date appointment coincided translation on STD', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 text: 'November 4',
                 startDate: new Date(2018, 10, 4, 18, 0),
@@ -579,10 +579,10 @@ QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {
         assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth(), 2.001, 'Appointment width is correct after translation from STD');
     });
 
-    QUnit.test('Recurrence exception should not be rendered if exception goes after adjusting AEST-> AEDT (T619455)', function(assert) {
+    QUnit.test('Recurrence exception should not be rendered if exception goes after adjusting AEST-> AEDT (T619455)', async function(assert) {
         const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-39600000);
         try {
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 dataSource: [{
                     text: 'Recruiting students',
                     startDate: new Date(2018, 2, 30, 10, 0),
@@ -607,8 +607,8 @@ QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {
         }
     });
 
-    QUnit.test('Recurrence exception should be adjusted by scheduler timezone after deleting of the single appt', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Recurrence exception should be adjusted by scheduler timezone after deleting of the single appt', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 text: 'Recruiting students',
                 startDate: new Date(2018, 2, 26, 10, 0),
@@ -622,15 +622,14 @@ QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {
             recurrenceEditMode: 'occurrence'
         });
 
-        scheduler.appointments.click();
-        this.clock.tick(300);
+        await scheduler.appointments.click();
         scheduler.tooltip.clickOnDeleteButton();
 
         assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointment was deleted');
     });
 
-    QUnit.test('Recurrence exception should be adjusted by appointment timezone after deleting of the single appt', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Recurrence exception should be adjusted by appointment timezone after deleting of the single appt', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 text: 'Recruiting students',
                 startDate: new Date(2018, 2, 26, 10, 0),
@@ -645,8 +644,7 @@ QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {
             recurrenceEditMode: 'occurrence'
         });
 
-        scheduler.appointments.click();
-        this.clock.tick(300);
+        await scheduler.appointments.click();
         scheduler.tooltip.clickOnDeleteButton();
 
         assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointment was deleted');

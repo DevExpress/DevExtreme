@@ -62,7 +62,7 @@ function checkCell(cell, expectedData, assert) {
 
 QUnit.module('Vertical table');
 
-QUnit.test('Default rendering', function(assert) {
+QUnit.test('Default rendering', async function(assert) {
     const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA);
     const rows = table.getElementsByTagName('tr');
     const cells = table.getElementsByTagName('td');
@@ -103,7 +103,7 @@ QUnit.test('Default rendering', function(assert) {
     checkCell(cells[19], { totalCellCount: 1, textContent: 'a2', rowspan: null }, assert);
 });
 
-QUnit.test('Cells rendering using the \'th\' tag', function(assert) {
+QUnit.test('Cells rendering using the \'th\' tag', async function(assert) {
     const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
         cellTag: 'th'
     });
@@ -113,7 +113,7 @@ QUnit.test('Cells rendering using the \'th\' tag', function(assert) {
     assert.equal(cells.length, 20, 'Cells are OK');
 });
 
-QUnit.test('Custom css class for the table', function(assert) {
+QUnit.test('Custom css class for the table', async function(assert) {
     const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
         groupTableClass: 'group-table'
     });
@@ -121,7 +121,7 @@ QUnit.test('Custom css class for the table', function(assert) {
     assert.equal(table.className, 'group-table', 'The table css class is OK');
 });
 
-QUnit.test('Custom css class for rows', function(assert) {
+QUnit.test('Custom css class for rows', async function(assert) {
     const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
         groupRowClass: 'group-row'
     });
@@ -133,7 +133,7 @@ QUnit.test('Custom css class for rows', function(assert) {
     });
 });
 
-QUnit.test('Custom css class for cells', function(assert) {
+QUnit.test('Custom css class for cells', async function(assert) {
     const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
         groupCellClass: 'group-cell'
     });
@@ -145,7 +145,7 @@ QUnit.test('Custom css class for cells', function(assert) {
     });
 });
 
-QUnit.test('Custom content for cells', function(assert) {
+QUnit.test('Custom content for cells', async function(assert) {
     const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, FIXTURE_DATA, {
         groupCellCustomContent: function(cell, cellText) {
             const innerCellContent = document.createElement('div');
@@ -163,7 +163,7 @@ QUnit.test('Custom content for cells', function(assert) {
     });
 });
 
-QUnit.test('Custom \'children\' and \'title\' fields', function(assert) {
+QUnit.test('Custom \'children\' and \'title\' fields', async function(assert) {
     const table = tableCreator.makeGroupedTableFromJSON(tableCreator.VERTICAL, [{
         name: 'One', items: [
             { name: 'Sub 1' },

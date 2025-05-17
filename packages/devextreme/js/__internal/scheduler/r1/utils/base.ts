@@ -207,20 +207,6 @@ export const isVerticalGroupingApplied = (
 ): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION
   && !!groups.length;
 
-export const getGroupCount = (groups: ResourceLoader[]): number => {
-  let result = 0;
-
-  for (let i = 0, len = groups.length; i < len; i += 1) {
-    if (!i) {
-      result = groups[i].items.length;
-    } else {
-      result *= groups[i].items.length;
-    }
-  }
-
-  return result;
-};
-
 // TODO(9): Get rid of it as soon as you can. More parameters then needed
 export const getHorizontalGroupCount = (
   groupLeafs: GroupLeaf[],

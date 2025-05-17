@@ -108,8 +108,8 @@ module('Browser zoom', zoomModuleConfig, () => {
         endDate: new Date(2017, 4, 25, 11, 30)
     }];
 
-    QUnit.test('Appointment should drag to above cell in browser zoom case(T833310)', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointment should drag to above cell in browser zoom case(T833310)', async function(assert) {
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             views: views,
             currentView: views[0],
@@ -279,8 +279,8 @@ module('Appointment should move a same distance in dragging from tooltip case, r
     }
     [commonViews, timeLineViews, groupViews].forEach(views => {
         views.forEach(view => {
-            test(`Views: ${view.name}`, function(assert) {
-                const scheduler = this.createScheduler(views, view.name, false);
+            test(`Views: ${view.name}`, async function(assert) {
+                const scheduler = await this.createScheduler(views, view.name, false);
                 const compactAppointmentButton = scheduler.appointments.compact.getButton(0);
 
                 const dragOffset = { left: 100, top: 100 };
@@ -319,8 +319,8 @@ module('Appointment should move a same distance in dragging from tooltip case, r
 
     [commonViews, timeLineViews, groupViews].forEach(views => {
         views.forEach(view => {
-            test(`Views: ${view.name}`, function(assert) {
-                const scheduler = this.createScheduler(views, view.name, true);
+            test(`Views: ${view.name}`, async function(assert) {
+                const scheduler = await this.createScheduler(views, view.name, true);
                 const compactAppointmentButton = scheduler.appointments.compact.getButton(0);
 
                 const dragOffset = { left: 100, top: 100 };
@@ -395,7 +395,7 @@ const moveAsMouseConfig = $.extend({}, {
             `appointment '${text}' should have correct top position in ${viewName}`);
     },
     testViews: function(views, assert, rtlEnabled) {
-        const scheduler = this.createScheduler(views, rtlEnabled);
+        const scheduler = await this.createScheduler(views, rtlEnabled);
 
         views.forEach(view => {
             scheduler.option('currentView', view.name);
@@ -433,25 +433,25 @@ module('Appointment should move a same distance as mouse, rtlEnabled = false', m
     if(!isDesktopEnvironment()) {
         return;
     }
-    test('Common Views', function(assert) { this.testViews(commonViews, assert, false); });
-    test('Time Line Views', function(assert) { this.testViews(timeLineViews, assert, false); });
-    test('Group Views', function(assert) { this.testViews(groupViews, assert, false); });
+    test('Common Views', async function(assert) { this.testViews(commonViews, assert, false); });
+    test('Time Line Views', async function(assert) { this.testViews(timeLineViews, assert, false); });
+    test('Group Views', async function(assert) { this.testViews(groupViews, assert, false); });
 });
 
 module('Appointment should move a same distance as mouse, rtlEnabled = true', moveAsMouseConfig, () => {
     if(!isDesktopEnvironment()) {
         return;
     }
-    test('Common Views', function(assert) { this.testViews(commonViews, assert, true); });
-    test('Time Line Views', function(assert) { this.testViews(timeLineViews, assert, true); });
-    test('Group Views', function(assert) { this.testViews(groupViews, assert, true); });
+    test('Common Views', async function(assert) { this.testViews(commonViews, assert, true); });
+    test('Time Line Views', async function(assert) { this.testViews(timeLineViews, assert, true); });
+    test('Group Views', async function(assert) { this.testViews(groupViews, assert, true); });
 });
 
 module('Common', commonModuleConfig, () => {
     if(!isDesktopEnvironment()) {
         return;
     }
-    test('DropDownAppointment shouldn\'t be draggable if editing.allowDragging is false', function(assert) {
+    test('DropDownAppointment shouldn\'t be draggable if editing.allowDragging is false', async function(assert) {
         const tasks = [
             {
                 text: 'Task 1',
@@ -470,7 +470,7 @@ module('Common', commonModuleConfig, () => {
             }
         ];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             editing: {
                 allowDragging: false
@@ -492,8 +492,8 @@ module('Common', commonModuleConfig, () => {
         assert.notOk(renderStub.calledOnce, 'Phanton item was not rendered');
     });
 
-    test('Phantom appointment should have correct template', function(assert) {
-        const scheduler = createWrapper({
+    test('Phantom appointment should have correct template', async function(assert) {
+        const scheduler = await createWrapper({
             editing: true,
             height: 600,
             views: [{ type: 'timelineDay', maxAppointmentsPerCell: 1 }],
@@ -522,8 +522,8 @@ module('Common', commonModuleConfig, () => {
         pointer.dragEnd();
     });
 
-    test('Appointment should move to the first cell from tooltip case', function(assert) {
-        const scheduler = createWrapper({
+    test('Appointment should move to the first cell from tooltip case', async function(assert) {
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             editing: true,
             height: 600,
@@ -553,8 +553,8 @@ module('Common', commonModuleConfig, () => {
         assert.deepEqual(data.endDate, new Date(2015, 1, 1, 2), 'end date is correct');
     });
 
-    test('Appointment shouldn\'t move to the cell from tooltip case if it is disabled', function(assert) {
-        const scheduler = createWrapper({
+    test('Appointment shouldn\'t move to the cell from tooltip case if it is disabled', async function(assert) {
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             editing: true,
             height: 600,
@@ -586,8 +586,8 @@ module('Common', commonModuleConfig, () => {
         assert.deepEqual(data.endDate, new Date(2015, 1, 9, 2, 0), 'end date is correct');
     });
 
-    test('The recurring appointment should have correct position when dragging', function(assert) {
-        const scheduler = createWrapper({
+    test('The recurring appointment should have correct position when dragging', async function(assert) {
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             editing: true,
             height: 600,
@@ -637,14 +637,14 @@ module('Common', commonModuleConfig, () => {
     });
 
     // T835049
-    QUnit.test('The appointment should have correct position after a drop when the store is asynchronous', function(assert) {
+    QUnit.test('The appointment should have correct position after a drop when the store is asynchronous', async function(assert) {
         const data = [{
             text: 'Task 1',
             startDate: new Date(2015, 1, 1, 11, 0),
             endDate: new Date(2015, 1, 1, 11, 30)
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             editing: true,
             height: 600,
@@ -714,7 +714,7 @@ module('Common', commonModuleConfig, () => {
     });
 
     // Timezone-sensitive test, use US/Pacific for proper testing
-    QUnit.test('Appointment should have correct dates after dragging through timezone change (T835544)', function(assert) {
+    QUnit.test('Appointment should have correct dates after dragging through timezone change (T835544)', async function(assert) {
         const isPacificTimezone = new Date('2024-01-01T08:00:00Z').getTimezoneOffset() === 480;
         const expectedTimeText = !isPacificTimezone
             ? '12:00 AM - 12:00 AM'
@@ -725,7 +725,7 @@ module('Common', commonModuleConfig, () => {
             // Because the appointment's duration wasn't changed.
             : '12:00 AM - 11:00 PM';
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             dataSource: [{
                 text: 'Staff Productivity Report',
@@ -758,8 +758,8 @@ module('Common', commonModuleConfig, () => {
         assert.equal(appointmentContent, expectedTimeText, 'Dates when dragging from timezone change are correct');
     });
 
-    QUnit.test('The appointment should be dragged into the all-day panel when there is a scroll offset(T851985)', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('The appointment should be dragged into the all-day panel when there is a scroll offset(T851985)', async function(assert) {
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             dataSource: [{
                 text: 'Task 1',
@@ -796,8 +796,8 @@ module('Common', commonModuleConfig, () => {
     });
 
     // T938908
-    test('Appointment dragged from tooltip should have correct css', function(assert) {
-        const scheduler = createWrapper({
+    test('Appointment dragged from tooltip should have correct css', async function(assert) {
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             dataSource: [{
                 text: 'App 1',
@@ -834,8 +834,8 @@ module('Common', commonModuleConfig, () => {
         pointer.up();
     });
 
-    test('Dragged appointment should not have a right border', function(assert) {
-        const scheduler = createWrapper({
+    test('Dragged appointment should not have a right border', async function(assert) {
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             dataSource: [{
                 text: 'App 1',
@@ -904,7 +904,7 @@ module('appointmentDragging customization', $.extend({}, {
     if(!isDesktopEnvironment()) {
         return;
     }
-    test('Event calls on appointment drag', function(assert) {
+    test('Event calls on appointment drag', async function(assert) {
         const appointmentDragging = {
             onDragStart: sinon.spy(),
             onDragEnd: sinon.spy(),
@@ -912,7 +912,7 @@ module('appointmentDragging customization', $.extend({}, {
             onRemove: sinon.spy()
         };
 
-        const scheduler = this.createScheduler({
+        const scheduler = await this.createScheduler({
             appointmentDragging
         });
 
@@ -941,7 +941,7 @@ module('appointmentDragging customization', $.extend({}, {
         assert.strictEqual(appointmentDragging.onRemove.callCount, 0, 'onRemove is not called');
     });
 
-    test('Cancel onDragStart event', function(assert) {
+    test('Cancel onDragStart event', async function(assert) {
         const appointmentDragging = {
             onDragStart: sinon.spy(e => {
                 e.cancel = true;
@@ -949,7 +949,7 @@ module('appointmentDragging customization', $.extend({}, {
             onDragEnd: sinon.spy()
         };
 
-        const scheduler = this.createScheduler({
+        const scheduler = await this.createScheduler({
             appointmentDragging
         });
 
@@ -973,7 +973,7 @@ module('appointmentDragging customization', $.extend({}, {
         assert.strictEqual(appointmentDragging.onDragEnd.callCount, 0, 'onDragEnd is not called');
     });
 
-    test('Cancel onDragEnd event', function(assert) {
+    test('Cancel onDragEnd event', async function(assert) {
         const appointmentDragging = {
             onDragEnd: e => {
                 e.cancel = true;
@@ -981,7 +981,7 @@ module('appointmentDragging customization', $.extend({}, {
         };
         const text = 'App 1';
 
-        const scheduler = this.createScheduler({
+        const scheduler = await this.createScheduler({
             appointmentDragging
         });
 
@@ -1004,7 +1004,7 @@ module('appointmentDragging customization', $.extend({}, {
         assert.deepEqual(dataSource[0].startDate, new Date(2018, 4, 21, 9, 30), 'startDate is not changed');
     });
 
-    test('Move appointment from Draggable', function(assert) {
+    test('Move appointment from Draggable', async function(assert) {
         const group = 'testGroup';
 
         const appointmentDragging = {
@@ -1014,7 +1014,7 @@ module('appointmentDragging customization', $.extend({}, {
             }
         };
 
-        const scheduler = this.createScheduler({
+        const scheduler = await this.createScheduler({
             appointmentDragging
         });
 
@@ -1045,7 +1045,7 @@ module('appointmentDragging customization', $.extend({}, {
         assert.deepEqual(draggableData, { text: 'App from Draggable' }, 'draggable data is not changed');
     });
 
-    test('Move appointment to Draggable', function(assert) {
+    test('Move appointment to Draggable', async function(assert) {
         const group = 'testGroup';
 
         const appointmentDragging = {
@@ -1055,7 +1055,7 @@ module('appointmentDragging customization', $.extend({}, {
             })
         };
 
-        const scheduler = this.createScheduler({
+        const scheduler = await this.createScheduler({
             appointmentDragging
         });
 
@@ -1080,7 +1080,7 @@ module('appointmentDragging customization', $.extend({}, {
     // T895576
     [true, false].forEach(createDraggableFirst => {
         [true, false].forEach(allDay => {
-            const testAppointmentDraggingFromSchedulerWithScroll = (assert, that, data, pointerMove, draggablePos, schedulerPos, scrollPos) => {
+            const testAppointmentDraggingFromSchedulerWithScroll = async (assert, that, data, pointerMove, draggablePos, schedulerPos, scrollPos) => {
                 const group = 'testGroup';
 
                 const appointmentDragging = {
@@ -1118,9 +1118,9 @@ module('appointmentDragging customization', $.extend({}, {
 
                 if(createDraggableFirst) {
                     draggable = createDraggable();
-                    scheduler = createScheduler();
+                    scheduler = await createScheduler();
                 } else {
-                    scheduler = createScheduler();
+                    scheduler = await createScheduler();
                     draggable = createDraggable();
                 }
 
@@ -1161,7 +1161,7 @@ module('appointmentDragging customization', $.extend({}, {
                 assert.strictEqual(appointmentDragging.onRemove.getCall(0).args[0].itemData.text, 'App 1', 'onRemove itemData parameter');
             };
 
-            test(`Move appointment to Draggable when scheduler has horizontal scroll (allDay=${allDay}, createDraggableFirst=${createDraggableFirst})`, function(assert) {
+            test(`Move appointment to Draggable when scheduler has horizontal scroll (allDay=${allDay}, createDraggableFirst=${createDraggableFirst})`, async function(assert) {
                 const draggablePosition = {
                     top: '0px',
                     left: '400px'
@@ -1178,10 +1178,10 @@ module('appointmentDragging customization', $.extend({}, {
                     y: false
                 };
 
-                testAppointmentDraggingFromSchedulerWithScroll(assert, this, dataSource, pointerMove, draggablePosition);
+                await testAppointmentDraggingFromSchedulerWithScroll(assert, this, dataSource, pointerMove, draggablePosition);
             });
 
-            test(`Move appointment to Draggable when scheduler has horizontal scroll and it is scrolled right (allDay=${allDay}, createDraggableFirst=${createDraggableFirst})`, function(assert) {
+            test(`Move appointment to Draggable when scheduler has horizontal scroll and it is scrolled right (allDay=${allDay}, createDraggableFirst=${createDraggableFirst})`, async function(assert) {
                 const draggablePosition = {
                     top: '0px',
                     left: '0px'
@@ -1209,11 +1209,11 @@ module('appointmentDragging customization', $.extend({}, {
                     y: 0
                 };
 
-                testAppointmentDraggingFromSchedulerWithScroll(assert, this, dataSource, pointerMove, draggablePosition, schedulerPos, scrollPos);
+                await testAppointmentDraggingFromSchedulerWithScroll(assert, this, dataSource, pointerMove, draggablePosition, schedulerPos, scrollPos);
             });
 
 
-            test(`Move appointment to Draggable when scheduler has vertical scroll (allDay=${allDay}, createDraggableFirst=${createDraggableFirst})`, function(assert) {
+            test(`Move appointment to Draggable when scheduler has vertical scroll (allDay=${allDay}, createDraggableFirst=${createDraggableFirst})`, async function(assert) {
                 const draggablePosition = {
                     top: '350px',
                     left: '0px'
@@ -1230,10 +1230,10 @@ module('appointmentDragging customization', $.extend({}, {
                     y: true
                 };
 
-                testAppointmentDraggingFromSchedulerWithScroll(assert, this, dataSource, pointerMove, draggablePosition);
+                await testAppointmentDraggingFromSchedulerWithScroll(assert, this, dataSource, pointerMove, draggablePosition);
             });
 
-            test(`Move appointment to Draggable when scheduler has vertical scroll and it is scrolled down (allDay=${allDay}, createDraggableFirst=${createDraggableFirst})`, function(assert) {
+            test(`Move appointment to Draggable when scheduler has vertical scroll and it is scrolled down (allDay=${allDay}, createDraggableFirst=${createDraggableFirst})`, async function(assert) {
                 const draggablePosition = {
                     top: '0px',
                     left: '100px'
@@ -1261,12 +1261,12 @@ module('appointmentDragging customization', $.extend({}, {
                     y: 10000
                 };
 
-                testAppointmentDraggingFromSchedulerWithScroll(assert, this, dataSource, pointerMove, draggablePosition, schedulerPos, scrollPos);
+                await testAppointmentDraggingFromSchedulerWithScroll(assert, this, dataSource, pointerMove, draggablePosition, schedulerPos, scrollPos);
             });
         });
     });
 
-    test('Move appointment to Draggable from tooltip', function(assert) {
+    test('Move appointment to Draggable from tooltip', async function(assert) {
         const group = 'testGroup';
 
         const appointmentDragging = {
@@ -1276,7 +1276,7 @@ module('appointmentDragging customization', $.extend({}, {
             })
         };
 
-        const scheduler = this.createScheduler({
+        const scheduler = await this.createScheduler({
             appointmentDragging
         });
 
@@ -1300,11 +1300,11 @@ module('appointmentDragging customization', $.extend({}, {
         assert.strictEqual(appointmentDragging.onRemove.getCall(0).args[0].itemData.text, 'App 2', 'onRemove itemData parameter');
     });
 
-    test('The external appointment should move in the month view', function(assert) {
+    test('The external appointment should move in the month view', async function(assert) {
         const group = 'shared';
         const itemData = { text: 'Test' };
         const $dragElement = this.createDraggable({ clone: false, group: group }, itemData);
-        const scheduler = this.createScheduler({
+        const scheduler = await this.createScheduler({
             views: ['month'],
             currentView: 'month',
             appointmentDragging: {
@@ -1337,9 +1337,9 @@ module('appointmentDragging customization', $.extend({}, {
     });
 
     // T885459
-    test('Move appointment to Draggable - droppable class should be removed', function(assert) {
+    test('Move appointment to Draggable - droppable class should be removed', async function(assert) {
         const group = 'shared';
-        const scheduler = this.createScheduler({
+        const scheduler = await this.createScheduler({
             views: ['month'],
             currentView: 'month',
             dataSource: [{
@@ -1371,10 +1371,10 @@ module('appointmentDragging customization', $.extend({}, {
     });
 
     // T885459
-    test('Move item from Draggable to Scheduler and back - droppable class should be removed', function(assert) {
+    test('Move item from Draggable to Scheduler and back - droppable class should be removed', async function(assert) {
         const group = 'shared';
         const $dragElement = this.createDraggable({ group: group });
-        const scheduler = this.createScheduler({
+        const scheduler = await this.createScheduler({
             views: ['month'],
             currentView: 'month',
             dataSource: [{
@@ -1405,9 +1405,9 @@ module('appointmentDragging customization', $.extend({}, {
     });
 
     // T885459
-    test('Move appointment outside Scheduler - droppable class should not be removed', function(assert) {
+    test('Move appointment outside Scheduler - droppable class should not be removed', async function(assert) {
         const group = 'shared';
-        const scheduler = this.createScheduler({
+        const scheduler = await this.createScheduler({
             views: ['month'],
             currentView: 'month',
             dataSource: [{
@@ -1456,10 +1456,10 @@ module('appointmentDragging customization', $.extend({}, {
             assert.strictEqual(e.itemData, data[index], 'Correct itemData');
         };
 
-        test(`itemData should be correct in appointmentDragging events when dragging from ${testText}`, function(assert) {
+        test(`itemData should be correct in appointmentDragging events when dragging from ${testText}`, async function(assert) {
             assert.expect(3);
 
-            const scheduler = this.createScheduler({
+            const scheduler = await this.createScheduler({
                 dataSource: data,
                 appointmentDragging: {
                     onDragStart: checkItemData(assert),
@@ -1578,7 +1578,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         assert.equal(dragSource.length, 0, 'Drag source exists');
     };
 
-    test('A phantom appointment should be created on appointment dragging', function(assert) {
+    test('A phantom appointment should be created on appointment dragging', async function(assert) {
         const views = ['day', 'week', 'month', 'timelineDay', 'timelineWeek', 'timelineMonth'];
         const appointmentTitle = 'App';
         const getDataSource = () => [{
@@ -1587,7 +1587,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             endDate: new Date(2020, 10, 14, 11, 30),
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             views: views,
             currentView: views[0],
@@ -1608,7 +1608,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         });
     });
 
-    test('Dragging should work correctly when an appointment is dragged from the all-day panel', function(assert) {
+    test('Dragging should work correctly when an appointment is dragged from the all-day panel', async function(assert) {
         const appointmentTitle = 'App';
         const dataSource = [{
             text: appointmentTitle,
@@ -1617,7 +1617,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             allDay: true,
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             views: ['week'],
             currentView: 'week',
@@ -1630,7 +1630,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         checkAppointmentDragging(assert, scheduler, appointmentTitle, -30, 0);
     });
 
-    test('Dragging should work correctly with long appoinments', function(assert) {
+    test('Dragging should work correctly with long appoinments', async function(assert) {
         const appointmentTitle = 'App';
         const dataSource = [{
             text: appointmentTitle,
@@ -1638,7 +1638,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             endDate: new Date(2020, 10, 14, 9, 30),
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             views: ['week'],
             currentView: 'week',
@@ -1651,7 +1651,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         checkAppointmentDragging(assert, scheduler, appointmentTitle, -30, 0, 2);
     });
 
-    test('Dragging should work correctly with long appoinments in month view', function(assert) {
+    test('Dragging should work correctly with long appoinments in month view', async function(assert) {
         const appointmentTitle = 'App';
         const dataSource = [{
             text: appointmentTitle,
@@ -1659,7 +1659,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             endDate: new Date(2020, 10, 30, 9, 30),
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             views: ['month'],
             currentView: 'month',
@@ -1672,7 +1672,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         checkAppointmentDragging(assert, scheduler, appointmentTitle, 30, 0, 5);
     });
 
-    test('Phantom appointment should be removed after DnD from tooltip', function(assert) {
+    test('Phantom appointment should be removed after DnD from tooltip', async function(assert) {
         const dataSource = [{
             text: 'App 1',
             startDate: new Date(2020, 10, 12, 9, 30),
@@ -1683,7 +1683,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             endDate: new Date(2020, 10, 12, 10, 30),
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             views: [{ type: 'week', maxAppointmentsPerCell: 1 }],
             currentView: 'week',
@@ -1723,7 +1723,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         assert.equal(appointments.length, 0, 'Phantom appointment does not exist');
     });
 
-    test('Dragging should work correctly with recurrent appointments', function(assert) {
+    test('Dragging should work correctly with recurrent appointments', async function(assert) {
         const appointmentTitle = 'App 1';
         const dataSource = [{
             text: appointmentTitle,
@@ -1732,7 +1732,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             recurrenceRule: 'FREQ=DAILY;COUNT=3',
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             views: ['week'],
             currentView: 'week',
@@ -1774,7 +1774,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         assert.equal(dragSource.length, 0, 'Drag source does not exist');
     });
 
-    test('Dragging should work correctly with multiple resources', function(assert) {
+    test('Dragging should work correctly with multiple resources', async function(assert) {
         const appointmentTitle = 'App';
         const dataSource = [{
             text: appointmentTitle,
@@ -1783,7 +1783,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             priorityId: [1, 2],
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             views: ['month'],
             currentView: 'month',
@@ -1802,7 +1802,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         checkAppointmentDragging(assert, scheduler, appointmentTitle, 30, 0, 2, 1);
     });
 
-    test('DnD should work correctly with virtual scrolling while scrolling', function(assert) {
+    test('DnD should work correctly with virtual scrolling while scrolling', async function(assert) {
         const done = assert.async();
         const appointmentTitle = 'Appointment';
         const data = [{
@@ -1811,7 +1811,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             endDate: new Date(2020, 9, 14, 0, 5),
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             height: 600,
             views: ['day'],
@@ -1916,10 +1916,10 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         const firstAppointmentTitle = getData()[0].text;
         const secondAppointmentTitle = getData()[1].text;
 
-        test(`Drag Source should be selected correctly ${text}`, function(assert) {
+        test(`Drag Source should be selected correctly ${text}`, async function(assert) {
             const data = getData();
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 _draggingMode: 'default',
                 height: 600,
                 views: ['week'],
@@ -1954,10 +1954,10 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             data[0].recurrenceRule && scheduler.appointmentPopup.dialog.hide();
         });
 
-        test(`Drag Source should be updated correctly when using virtual scrolling ${text}`, function(assert) {
+        test(`Drag Source should be updated correctly when using virtual scrolling ${text}`, async function(assert) {
             const data = getData();
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 _draggingMode: 'default',
                 height: 600,
                 views: ['week'],
@@ -2001,7 +2001,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         });
     });
 
-    test('Drag Source should be rerendered correctly when virtual scrolling is used', function(assert) {
+    test('Drag Source should be rerendered correctly when virtual scrolling is used', async function(assert) {
         const appointmentTitle = 'Appointment';
         const data = [{
             text: appointmentTitle,
@@ -2009,7 +2009,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             endDate: new Date(2020, 9, 14, 0, 5),
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             height: 600,
             views: ['day'],
@@ -2024,7 +2024,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         checkVirtualAppointmentDragging(assert, scheduler, appointmentTitle, 1, 1);
     });
 
-    test('Drag Source should be rerendered correctly when virtual scrolling and multiple resources are used', function(assert) {
+    test('Drag Source should be rerendered correctly when virtual scrolling and multiple resources are used', async function(assert) {
         const appointmentTitle = 'Appointment';
         const data = [{
             text: appointmentTitle,
@@ -2033,7 +2033,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             priorityId: [1, 2],
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             height: 600,
             views: [{
@@ -2058,7 +2058,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         checkVirtualAppointmentDragging(assert, scheduler, appointmentTitle, 2, 1);
     });
 
-    test('Drag Source should be rerendered correctly when virtual scrolling and recurrent appointments are used', function(assert) {
+    test('Drag Source should be rerendered correctly when virtual scrolling and recurrent appointments are used', async function(assert) {
         const appointmentTitle = 'Appointment';
         const data = [{
             text: appointmentTitle,
@@ -2067,7 +2067,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             recurrenceRule: 'FREQ=DAILY;COUNT=3',
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             height: 600,
             views: ['week'],
@@ -2082,7 +2082,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         checkVirtualAppointmentDragging(assert, scheduler, appointmentTitle, 3, 3, true);
     });
 
-    test('Drag source should not be rendered if an appointment is not being dragged', function(assert) {
+    test('Drag source should not be rendered if an appointment is not being dragged', async function(assert) {
         const appointmentTitle = 'Appointment';
         const data = [{
             text: appointmentTitle,
@@ -2094,7 +2094,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             endDate: new Date(2020, 10, 16, 0, 10),
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             height: 600,
             views: ['week'],
@@ -2119,7 +2119,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         assert.equal(dragSource.length, 0, 'Drag Source was not rendered');
     });
 
-    test('Appointment should be updated correctly after DnD with virtual scrolling', function(assert) {
+    test('Appointment should be updated correctly after DnD with virtual scrolling', async function(assert) {
         const appointmentTitle = 'Appointment';
         const data = [{
             text: appointmentTitle,
@@ -2127,7 +2127,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             endDate: new Date(2020, 10, 16, 0, 5),
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             height: 600,
             views: ['week'],
@@ -2171,7 +2171,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         assert.equal(scheduler.appointments.getDateText(0), '12:01 AM - 12:06 AM', 'Correct appointment after drag');
     });
 
-    test('Drag source should not be created while dragging from tooltip', function(assert) {
+    test('Drag source should not be created while dragging from tooltip', async function(assert) {
         const dataSource = [{
             text: 'App 1',
             startDate: new Date(2020, 10, 12, 9, 30),
@@ -2182,7 +2182,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             endDate: new Date(2020, 10, 12, 10, 30),
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             views: [{ type: 'week', maxAppointmentsPerCell: 1 }],
             currentView: 'week',
@@ -2210,7 +2210,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         pointer.up();
     });
 
-    test('Drag Source should be rerendered correctly while dragging a long appointment and using virtual scrolling', function(assert) {
+    test('Drag Source should be rerendered correctly while dragging a long appointment and using virtual scrolling', async function(assert) {
         const done = assert.async();
         const appointmentTitle = 'Appointment';
         const data = [{
@@ -2219,7 +2219,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             endDate: new Date(2020, 10, 16, 15, 0),
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             height: 600,
             views: ['week'],
@@ -2298,7 +2298,7 @@ module('Appointment dragging', {
         this.clock.restore();
     }
 }, () => {
-    test('Draggable rendering option "immediate" should be turned off', function(assert) {
+    test('Draggable rendering option "immediate" should be turned off', async function(assert) {
         const tasks = [
             { text: 'Task', startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
         ];
@@ -2319,7 +2319,7 @@ module('Appointment dragging', {
     });
 
     ['default', 'outlook'].forEach((draggingMode) => {
-        test(`Drag and drop appointment when draggingMode = ${draggingMode}`, function(assert) {
+        test(`Drag and drop appointment when draggingMode = ${draggingMode}`, async function(assert) {
             $('#qunit-fixture').addClass('qunit-fixture-visible');
 
             try {
@@ -2372,7 +2372,7 @@ module('Appointment dragging', {
                 };
             }
         }, () => {
-            test('Appointment should be returned back if an error occurs during drag (T453486)', function(assert) {
+            test('Appointment should be returned back if an error occurs during drag (T453486)', async function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual Scrolling - Month view');
                     return;
@@ -2418,7 +2418,7 @@ module('Appointment dragging', {
                 }.bind(this));
             });
 
-            test('Appointment should be returned back if the "update" method rejects deferred during drag (T453486)', function(assert) {
+            test('Appointment should be returned back if the "update" method rejects deferred during drag (T453486)', async function(assert) {
                 this.createInstance({
                     views: ['month'],
                     currentView: 'month',
@@ -2452,7 +2452,7 @@ module('Appointment dragging', {
                 assert.equal(updatedPosition.left, initialPosition.left, 'Left is OK');
             });
 
-            test('Appointment should be dragged correctly between the groups in vertical grouped workspace Month', function(assert) {
+            test('Appointment should be dragged correctly between the groups in vertical grouped workspace Month', async function(assert) {
                 this.createInstance({
                     dataSource: [{
                         text: 'a',
@@ -2493,7 +2493,7 @@ module('Appointment dragging', {
                 assert.deepEqual(appointmentData.id, 2, 'Group is OK');
             });
 
-            test('Long appt parts should have correct coordinates after drag to the last row cell in vertical grouped workspace Month', function(assert) {
+            test('Long appt parts should have correct coordinates after drag to the last row cell in vertical grouped workspace Month', async function(assert) {
                 this.createInstance({
                     dataSource: [{
                         text: 'a',
@@ -2533,7 +2533,7 @@ module('Appointment dragging', {
                 assert.roughEqual($secondPart.position.left, 0, 0.1, 'second part has correct left position');
             });
 
-            test('Appointment should be dragged correctly in grouped timeline (T739132)', function(assert) {
+            test('Appointment should be dragged correctly in grouped timeline (T739132)', async function(assert) {
                 const data = new DataSource({
                     store: [{
                         'text': 'Google AdWords Strategy',
@@ -2593,7 +2593,7 @@ module('Appointment dragging', {
                 assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, 'New data is correct');
             });
 
-            test('Appointment should not be updated if it is dropped to the initial cell (month view)', function(assert) {
+            test('Appointment should not be updated if it is dropped to the initial cell (month view)', async function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual Scrolling - Month view');
                     return;
@@ -2621,7 +2621,7 @@ module('Appointment dragging', {
                 assert.deepEqual(appointmentData.endDate, new Date(2015, 1, 9, 8, 37), 'End date is correct');
             });
 
-            test('Appointment should be updated correctly if it is dropped to the neighbor cell (month view)', function(assert) {
+            test('Appointment should be updated correctly if it is dropped to the neighbor cell (month view)', async function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual Scrolling - Month view');
                     return;
@@ -2649,7 +2649,7 @@ module('Appointment dragging', {
                 assert.deepEqual(appointmentData.endDate, new Date(2015, 1, 10, 9, 0), 'End date is correct');
             });
 
-            test('Dropping appointment should keep predefined hours (month view)', function(assert) {
+            test('Dropping appointment should keep predefined hours (month view)', async function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual Scrolling - Month view');
                     return;
@@ -2679,7 +2679,7 @@ module('Appointment dragging', {
                 assert.deepEqual(appointmentData.endDate, new Date(2015, 4, 12, 17), 'End date is correct');
             });
 
-            test('Dropping appointment to the neighbor cell (month view) with predefined start & end day hours', function(assert) {
+            test('Dropping appointment to the neighbor cell (month view) with predefined start & end day hours', async function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual Scrolling - Month view');
                     return;
@@ -2710,7 +2710,7 @@ module('Appointment dragging', {
             });
 
             // TODO: also need test when task is dragging outside the area. updated dates should be equal to old dates
-            test('Task dragging', function(assert) {
+            test('Task dragging', async function(assert) {
                 const data = new DataSource({
                     store: this.tasks
                 });
@@ -2786,7 +2786,7 @@ module('Appointment dragging', {
                 });
             });
 
-            test('Appointment should have correct position while dragging from group', function(assert) {
+            test('Appointment should have correct position while dragging from group', async function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 6, 10),
                     editing: true,
@@ -2822,7 +2822,7 @@ module('Appointment dragging', {
                 assert.deepEqual(appointmentData.ownerId, { id: 2 }, 'Resources is correct');
             });
 
-            test('Appointment should have correct position while dragging from group, vertical grouping', function(assert) {
+            test('Appointment should have correct position while dragging from group, vertical grouping', async function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 6, 10),
                     editing: true,
@@ -2885,7 +2885,7 @@ module('Appointment dragging', {
                 assert.deepEqual(appointmentData.ownerId, { id: 1 }, 'Resources is correct');
             });
 
-            test('Appointment should have correct position while dragging into allDay panel, vertical grouping', function(assert) {
+            test('Appointment should have correct position while dragging into allDay panel, vertical grouping', async function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 6, 10),
                     editing: true,
@@ -2938,7 +2938,7 @@ module('Appointment dragging', {
                 assert.deepEqual(appointmentData.ownerId, { id: 2 }, 'Resources is correct');
             });
 
-            test('Appointment should have correct coordinates after drag if onAppointmentUpdating is canceled (T813826)', function(assert) {
+            test('Appointment should have correct coordinates after drag if onAppointmentUpdating is canceled (T813826)', async function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 4, 25),
                     editing: true,
@@ -2983,7 +2983,7 @@ module('Appointment dragging', {
                 this.clock.tick(10);
             });
 
-            test('Appointment should push correct data to the onAppointmentUpdating event on changing group by dragging', function(assert) {
+            test('Appointment should push correct data to the onAppointmentUpdating event on changing group by dragging', async function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 4, 25),
                     editing: true,
@@ -3024,7 +3024,7 @@ module('Appointment dragging', {
                 this.clock.tick(10);
             });
 
-            test('Appointment should not be updated if it is dropped to the initial cell (week view)', function(assert) {
+            test('Appointment should not be updated if it is dropped to the initial cell (week view)', async function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     currentView: 'week',

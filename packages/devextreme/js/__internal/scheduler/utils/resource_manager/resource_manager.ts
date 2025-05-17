@@ -56,7 +56,9 @@ export class ResourceManager {
   }
 
   public groupResources(): ResourceLoader[] {
-    return this.groups.map((group) => this.resourceById[group]);
+    return this.groups
+      .map((group) => this.resourceById[group])
+      .filter(Boolean);
   }
 
   public async loadAppointmentsResources(

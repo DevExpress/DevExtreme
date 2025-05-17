@@ -5,7 +5,7 @@ export const groupResources = (resourceById: Record<string, ResourceLoader>, gro
   groupTree: GroupNode[];
   groupLeafs: GroupLeaf[];
 } => {
-  if (!groups.length) {
+  if (!groups.length || Object.keys(resourceById).length === 0) {
     return {
       groupTree: [],
       groupLeafs: [],
@@ -15,25 +15,27 @@ export const groupResources = (resourceById: Record<string, ResourceLoader>, gro
   const head: GroupNode[] = [{} as GroupNode];
   let leafs: GroupNode[] = head;
 
-  groups.forEach((group) => {
-    const resource = resourceById[group];
-    const nodes = resource.items.map<GroupNode>((item) => ({
-      resourceText: item.text,
-      resourceIndex: resource.resourceIndex,
-      grouped: { [resource.resourceIndex]: item.id },
-      children: [],
-    }));
-    const nextLeafs: GroupNode[] = [];
-
-    leafs.forEach((leaf) => {
-      leaf.children = nodes.map((node) => ({
-        ...node,
-        grouped: { ...node.grouped, ...leaf.grouped },
+  groups
+    .filter((group) => resourceById[group])
+    .forEach((group) => {
+      const resource = resourceById[group];
+      const nodes = resource.items.map<GroupNode>((item) => ({
+        resourceText: item.text,
+        resourceIndex: resource.resourceIndex,
+        grouped: { [resource.resourceIndex]: item.id },
+        children: [],
       }));
-      nextLeafs.push(...leaf.children);
+      const nextLeafs: GroupNode[] = [];
+
+      leafs.forEach((leaf) => {
+        leaf.children = nodes.map((node) => ({
+          ...node,
+          grouped: { ...node.grouped, ...leaf.grouped },
+        }));
+        nextLeafs.push(...leaf.children);
+      });
+      leafs = nextLeafs;
     });
-    leafs = nextLeafs;
-  });
 
   const groupLeafs = leafs.map<GroupLeaf>((leaf, index) => ({
     ...leaf,

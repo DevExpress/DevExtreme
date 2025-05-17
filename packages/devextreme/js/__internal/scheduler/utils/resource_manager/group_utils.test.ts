@@ -32,8 +32,52 @@ describe('groups utils', () => {
       });
     });
 
+    it('should return empty tree for empty resources', () => {
+      expect(groupResources({}, ['roomId', 'assigneeId'])).toEqual({
+        groupTree: [],
+        groupLeafs: [],
+      });
+    });
+
     it('should group by one group', () => {
       expect(groupResources(resourceById, ['roomId'])).toEqual({
+        groupTree: [
+          {
+            children: [],
+            grouped: { roomId: 0 },
+            resourceIndex: 'roomId',
+            resourceText: 'Room 1',
+          },
+          {
+            children: [],
+            grouped: { roomId: 1 },
+            resourceIndex: 'roomId',
+            resourceText: 'Room 2',
+          },
+        ],
+        groupLeafs: [
+          {
+            children: [],
+            groupIndex: 0,
+            grouped: { roomId: 0 },
+            resourceIndex: 'roomId',
+            resourceText: 'Room 1',
+          },
+          {
+            children: [],
+            groupIndex: 1,
+            grouped: { roomId: 1 },
+            resourceIndex: 'roomId',
+            resourceText: 'Room 2',
+          },
+        ],
+      });
+    });
+
+    it('should ignore missed resources and group by one group', () => {
+      expect(groupResources({
+        roomId: resourceById.roomId,
+      }, ['roomId', 'assigneeId'])).toEqual({
         groupTree: [
           {
             children: [],

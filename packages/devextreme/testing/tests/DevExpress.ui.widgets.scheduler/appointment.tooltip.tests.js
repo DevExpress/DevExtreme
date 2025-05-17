@@ -18,11 +18,9 @@ QUnit.testStart(() => initTestMarkup());
 module('Integration: Appointment tooltip', {
     beforeEach: function() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 }, () => {
     [{
@@ -45,8 +43,8 @@ module('Integration: Appointment tooltip', {
         result: true,
         text: 'disabled is function, return true'
     }].forEach(testCase => {
-        test(`Appointment tooltip should be consider disabled property of appointment (${testCase.text})`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Appointment tooltip should be consider disabled property of appointment (${testCase.text})`, async function(assert) {
+            const scheduler = await createWrapper({
                 dataSource: [{
                     text: 'Website Re-Design Plan',
                     startDate: new Date(2021, 4, 24, 1),
@@ -55,11 +53,11 @@ module('Integration: Appointment tooltip', {
                 }],
                 currentDate: new Date(2021, 4, 24),
                 height: 600
-            }, this.clock);
+            });
 
             const getAppointmentDisabled = sinon.spy(scheduler.instance._appointmentTooltip._options, 'getAppointmentDisabled');
 
-            scheduler.appointments.click();
+            await scheduler.appointments.click();
 
             const deleteButton = scheduler.tooltip.getDeleteButton();
             const getAppointmentDisabledResult = getAppointmentDisabled.returnValues[0];

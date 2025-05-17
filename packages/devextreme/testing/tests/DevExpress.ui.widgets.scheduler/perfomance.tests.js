@@ -148,7 +148,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
         });
     };
 
-    QUnit.test('Scheduler should render appointments only for appointments that need redraw', function(assert) {
+    QUnit.test('Scheduler should render appointments only for appointments that need redraw', async function(assert) {
         const dataSource = createDataSource();
         const scheduler = createScheduler('week', dataSource);
 
@@ -176,7 +176,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
         assert.equal(getUnmarkedAppointments(scheduler).length, 0, 'Html element should removed and should not redrawing another appointments');
     });
 
-    QUnit.test('Scheduler should render only necessary appointments in crossing appointments case', function(assert) {
+    QUnit.test('Scheduler should render only necessary appointments in crossing appointments case', async function(assert) {
         const dataSource = createDataSource();
         const scheduler = createScheduler('week', dataSource);
 
@@ -206,7 +206,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
         assert.equal(getUnmarkedAppointments(scheduler).length, 1, 'Should rendered only two updated appointments');
     });
 
-    QUnit.test('Scheduler should throw onAppointmentRendered event only for appointments that need redraw', function(assert) {
+    QUnit.test('Scheduler should throw onAppointmentRendered event only for appointments that need redraw', async function(assert) {
         const dataSource = createDataSource();
         const fakeHandler = {
             onAppointmentRendered: () => { }
@@ -247,7 +247,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
         assert.equal(renderedStub.callCount, 1, 'Should throw one call onAppointmentRendered event');
     });
 
-    QUnit.test('Scheduler should render appointments only for appointments that need redraw in Month view', function(assert) {
+    QUnit.test('Scheduler should render appointments only for appointments that need redraw in Month view', async function(assert) {
         const dataSource = createDataSource();
         const scheduler = createScheduler('month', dataSource);
 
@@ -277,7 +277,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
         assert.equal(getUnmarkedAppointments(scheduler).length, 1, 'Should rendered only one appointment');
     });
 
-    QUnit.test('Scheduler should render appointments only for appointments that need redraw. Use scheduler API', function(assert) {
+    QUnit.test('Scheduler should render appointments only for appointments that need redraw. Use scheduler API', async function(assert) {
         const scheduler = createScheduler('week', defaultData);
 
         markAppointments(scheduler);
@@ -293,7 +293,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
         assert.equal(getUnmarkedAppointments(scheduler).length, 0, 'Nothing should be redrawing');
     });
 
-    QUnit.test('Scheduler should re-render all appointments in Agenda view case', function(assert) {
+    QUnit.test('Scheduler should re-render all appointments in Agenda view case', async function(assert) {
         const dataSource = createDataSource();
         const scheduler = createScheduler('agenda', dataSource);
 
@@ -316,7 +316,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
         assert.equal(scheduler.appointments.getAppointmentCount(), getUnmarkedAppointments(scheduler).length, 'Should rendered all appointments');
     });
 
-    QUnit.test('Scheduler should re-render appointments in Agenda view, if data source loading data', function(assert) {
+    QUnit.test('Scheduler should re-render appointments in Agenda view, if data source loading data', async function(assert) {
         const items = [
             { id: 0, startDate: new Date(2017, 4, 25, 9), endDate: new Date(2017, 4, 25, 9, 30), text: 'a' },
             { id: 1, startDate: new Date(2017, 4, 27, 15), endDate: new Date(2017, 4, 27, 15, 30), text: 'b' }
@@ -329,11 +329,11 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
                 update: (key, values) => items[parseInt(key)] = values
             })
         };
-        const scheduler = createScheduler('agenda', dataSource, undefined, this.clock);
+        const scheduler = createScheduler('agenda', dataSource, undefined);
         assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Should render 2 appointments');
         markAppointments(scheduler);
 
-        scheduler.appointments.click();
+        await scheduler.appointments.click();
         scheduler.tooltip.clickOnItem();
         scheduler.appointmentForm.setSubject('new text');
         scheduler.appointmentPopup.clickDoneButton();
@@ -342,7 +342,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
         assert.equal(scheduler.appointments.getAppointmentCount(), getUnmarkedAppointments(scheduler).length, 'Should re-rendered all appointments');
     });
 
-    QUnit.test('Scheduler should leave appointments consistently if no data has been changed (T751129)', function(assert) {
+    QUnit.test('Scheduler should leave appointments consistently if no data has been changed (T751129)', async function(assert) {
         const data = [{
             startDate: new Date(2017, 4, 25, 9),
             endDate: new Date(2017, 4, 25, 9, 30),
@@ -368,7 +368,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
         assert.equal(appointmentFirst.css('backgroundColor'), 'rgb(0, 255, 0)', 'Appointment background color is not changed after another appointment update');
     });
 
-    QUnit.test('Scheduler must re-render appointments if resource color has been changed (T751129)', function(assert) {
+    QUnit.test('Scheduler must re-render appointments if resource color has been changed (T751129)', async function(assert) {
         const resourcesData = [{
             id: 1,
             color: '#48392c',
