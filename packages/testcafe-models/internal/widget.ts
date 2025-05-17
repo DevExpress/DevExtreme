@@ -98,7 +98,11 @@ export default abstract class Widget {
     const { getInstance } = this;
 
     return ClientFunction(
-      () => { (getInstance() as any).repaint(); },
+      () => {
+        const instance = (getInstance() as any)
+        debugger
+        instance.repaint();
+      },
       { dependencies: { getInstance } },
     )();
   }

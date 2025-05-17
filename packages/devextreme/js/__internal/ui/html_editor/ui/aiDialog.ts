@@ -52,7 +52,7 @@ const REGENERATE_BUTTON_ICON = 'restore';
 const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone'];
 
 const POPUP_MIN_WIDTH = 288;
-const POPUP_MAX_WIDTH = 460;
+const POPUP_MAX_WIDTH = 494;
 const LOADINDICATOR_SIZE = 48;
 
 export const TEXT_AREA_MIN_HEIGHT = 64;
