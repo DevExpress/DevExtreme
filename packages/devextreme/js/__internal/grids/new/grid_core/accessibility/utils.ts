@@ -36,12 +36,7 @@ export const getCardDescriptiveLabel = (
   return ids.join(' ');
 };
 
-export const getPosition = (idx: number, columnCount: number): Position => {
-  const currentColumnIdx = idx % columnCount;
-  const currentRowIdx = Math.floor(idx / columnCount);
-
-  return {
-    rowIndex: currentRowIdx,
-    columnIndex: currentColumnIdx,
-  };
-};
+export const getPosition = (idx: number, columnCount: number): Position => ({
+  rowIndex: Math.floor(idx / columnCount),
+  columnIndex: idx % columnCount,
+});
