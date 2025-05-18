@@ -23,7 +23,7 @@ import { getElementMaxHeightByWindow } from '@ts/ui/overlay/m_utils';
 
 import Submenu from './m_submenu';
 
-const DX_MENU_CLASS = 'dx-menu';
+export const DX_MENU_CLASS = 'dx-menu';
 const DX_MENU_VERTICAL_CLASS = `${DX_MENU_CLASS}-vertical`;
 const DX_MENU_HORIZONTAL_CLASS = `${DX_MENU_CLASS}-horizontal`;
 export const DX_MENU_ITEM_CLASS = `${DX_MENU_CLASS}-item`;
@@ -32,7 +32,7 @@ const DX_MENU_ITEM_EXPANDED_CLASS = `${DX_MENU_ITEM_CLASS}-expanded`;
 const DX_CONTEXT_MENU_CLASS = 'dx-context-menu';
 const DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS = `${DX_CONTEXT_MENU_CLASS}-container-border`;
 const DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS = 'dx-context-menu-content-delimiter';
-const DX_SUBMENU_CLASS = 'dx-submenu';
+export const DX_SUBMENU_CLASS = 'dx-submenu';
 
 const DX_STATE_DISABLED_CLASS = 'dx-state-disabled';
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';

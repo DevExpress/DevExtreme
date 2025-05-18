@@ -36,6 +36,9 @@ import {
 } from '../utils/m_toolbar_helper';
 import BaseModule from './m_base';
 import WidgetCollector from './m_widget_collector';
+
+export const TOOLBAR_AI_OVERLAY_CONTENT_CLASS = 'dx-htmleditor-toolbar-ai-overlay-content';
+
 // eslint-disable-next-line import/no-mutable-exports
 let ToolbarModule = BaseModule;
 
@@ -45,7 +48,6 @@ if (Quill) {
   const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
   const TOOLBAR_SEPARATOR_CLASS = 'dx-htmleditor-toolbar-separator';
   const TOOLBAR_MENU_SEPARATOR_CLASS = 'dx-htmleditor-toolbar-menu-separator';
-  const TOOLBAR_AI_OVERLAY_CONTENT_CLASS = 'dx-htmleditor-toolbar-ai-overlay-content';
   const ACTIVE_FORMAT_CLASS = 'dx-format-active';
   const SELECTED_STATE_CLASS = 'dx-state-selected';
 
