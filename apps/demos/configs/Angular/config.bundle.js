@@ -71,7 +71,6 @@ function useBundle() {
       'devexpress-gantt',
       'devexpress-diagram',
       'rxjs',
-      'devextreme/bundles/dx.all',
     ].forEach((pkg) => delete window.config.map[pkg]);
   }
 }
