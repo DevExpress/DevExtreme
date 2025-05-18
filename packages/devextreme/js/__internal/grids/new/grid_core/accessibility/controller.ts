@@ -1,3 +1,4 @@
+import messageLocalization from '@js/localization/message';
 import { computed, effect, signal } from '@preact/signals-core';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
@@ -12,7 +13,8 @@ export class AccessibilityController {
   private readonly firstRender = signal(true);
 
   private readonly description = computed(
-    () => `Card view with ${this.dataController.totalCount.value} cards and ${this.columnsController.visibleColumns.value.length} fields`,
+    // @ts-expect-error ts-error
+    () => messageLocalization.format('dxCardView-ariaCardView', this.dataController.totalCount.value, this.columnsController.visibleColumns.value.length),
   );
 
   public readonly componentDescription = computed(

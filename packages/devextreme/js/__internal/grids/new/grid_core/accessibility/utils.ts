@@ -1,10 +1,13 @@
+import messageLocalization from '@js/localization/message';
+
 import type { Position } from './types';
 
 export const getCardRoleDescription = (
   isEditable?: boolean,
-): string => (isEditable ? 'Editable card' : 'Card');
+): string => (isEditable ? messageLocalization.format('dxCardView-ariaEditableCard') : messageLocalization.format('dxCardView-ariaCard'));
 
-const getPositionDescription = (position: Position): string => `Row ${position.rowIndex + 1}, Column ${position.columnIndex + 1}`;
+// @ts-expect-error ts-error
+const getPositionDescription = (position: Position): string => messageLocalization.format('dxCardView-ariaCardPosition', position.rowIndex + 1, position.columnIndex + 1);
 
 export const getCardStateDescription = (
   position: Position,
@@ -13,7 +16,7 @@ export const getCardStateDescription = (
 ): string => {
   const parts: string[] = [getPositionDescription(position)];
   if (isSelectable) {
-    parts.push(isSelected ? 'Selected' : 'Not selected');
+    parts.push(isSelected ? messageLocalization.format('dxCardView-ariaSelectedCardState') : messageLocalization.format('dxCardView-ariaNotSelectedCardState'));
   }
   return parts.join(', ');
 };
