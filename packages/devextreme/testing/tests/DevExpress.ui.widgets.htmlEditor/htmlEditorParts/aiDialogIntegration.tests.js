@@ -270,7 +270,6 @@ QUnit.module('AI dialog integration', () => {
 
         QUnit.test('root menu item is disabled if commands list is empty', function(assert) {
             setupHtmlEditorWithAi({ toolbar: { items: [{ name: 'ai', commands: [] }] } });
-
             openAIToolbarMenu($('#htmlEditor'));
 
             const menuInstance = $(`.${DX_MENU_CLASS}`).dxMenu('instance');
