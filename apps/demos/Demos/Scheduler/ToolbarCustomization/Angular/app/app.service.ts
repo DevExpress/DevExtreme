@@ -1,30 +1,25 @@
 import { Injectable } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 
-export class Appointment {
+export interface Appointment {
   text: string;
-
   startDate: number;
-
   endDate: number;
-
   allDay?: boolean;
-
   assigneeId: number[];
-
   recurrenceRule?: string;
 }
 
-export class Assignee {
-  text: string;
-
+export interface Assignee {
   id: number;
+  text: string;
 }
 
+const ONE_MONTH_DAYS = 30;
 const addDays = (date, days) => new Date(new Date(date).setUTCDate(date.getUTCDate() + days));
 const now = new Date(new Date().setUTCHours(0, 0, 0, 0));
 const startOfTheWeek = addDays(now, -now.getUTCDay());
-const currentDate = addDays(now, 30);
+const currentDate = addDays(now, ONE_MONTH_DAYS);
 const currentStartOfTheWeek = addDays(currentDate, -currentDate.getUTCDay());
 const appointments: Appointment[] = [
   {

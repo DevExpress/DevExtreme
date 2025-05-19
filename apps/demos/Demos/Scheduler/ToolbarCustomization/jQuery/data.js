@@ -1,7 +1,8 @@
+const ONE_MONTH_DAYS = 30;
 const addDays = (date, days) => new Date(new Date(date).setUTCDate(date.getUTCDate() + days));
 const now = new Date(new Date().setUTCHours(0, 0, 0, 0));
 const startOfTheWeek = addDays(now, -now.getUTCDay());
-const currentDate = addDays(now, 30);
+const currentDate = addDays(now, ONE_MONTH_DAYS);
 const currentStartOfTheWeek = addDays(currentDate, -currentDate.getUTCDay());
 const data = [
   {

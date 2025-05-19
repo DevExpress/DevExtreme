@@ -1,7 +1,7 @@
 <template>
   <DxScheduler
     time-zone="America/Los_Angeles"
-    :data-source="dataSource"
+    :data-source="schedulerDataSource"
     :views="views"
     current-view="workWeek"
     :current-date="currentDate"
@@ -52,52 +52,67 @@
   </DxScheduler>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import DxScheduler, {
   DxResource, DxToolbar, DxItem, type DxSchedulerTypes,
 } from 'devextreme-vue/scheduler';
 import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
-import DataSource from 'devextreme/data/data_source';
+import type DataSource from 'devextreme/data/data_source';
 import { assignees, currentDate, schedulerDataSource } from './data.ts';
 
+const MS_IN_HOUR = 60 * 1000;
 const views: DxSchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];
 const assigneesFilterValue = ref(undefined);
 const schedulerRef = ref<DxScheduler | null>(null);
-const dataSource = ref(schedulerDataSource);
+
+const onAppointmentAdd = () => {
+  const scheduler = schedulerRef.value?.instance;
+  if (!scheduler) {
+    return;
+  }
+
+  const selected = scheduler.option('selectedCellData') ?? [];
+
+  if (selected.length) {
+    const firstSelected = selected[0];
+    const lastSelected = selected.at(-1);
+
+    scheduler.showAppointmentPopup({
+      ...firstSelected.groups,
+      allDay: firstSelected.allDay,
+      startDate: new Date(firstSelected.startDateUTC),
+      endDate: new Date(lastSelected.endDateUTC),
+    }, true);
+
+    return;
+  }
+
+  const currentDate = scheduler.option('currentDate');
+  const cellDuration = scheduler.option('cellDuration') as number;
+  const cellDurationMs = cellDuration * MS_IN_HOUR;
+  const currentTime = new Date(currentDate as Date).getTime();
+  const roundTime = Math.round(currentTime / cellDurationMs) * cellDurationMs;
+
+  scheduler.showAppointmentPopup({
+    startDate: new Date(roundTime),
+    endDate: new Date(roundTime + cellDurationMs),
+  }, true);
+};
 
 const newEventButtonOptions = {
   icon: 'plus',
   text: 'New Appointment',
   stylingMode: 'outlined',
   type: 'normal',
-  onClick: () => {
-    const scheduler = schedulerRef.value!.instance!;
-    const selected = scheduler.option('selectedCellData') ?? [];
-
-    if (selected.length) {
-      scheduler.showAppointmentPopup({
-        ...selected[0].groups,
-        allDay: selected[0].allDay,
-        startDate: new Date(selected[0].startDateUTC),
-        endDate: new Date(selected.at(-1).endDateUTC),
-      }, true);
-    } else {
-      const currentDate = scheduler.option('currentDate');
-      const cellDuration = scheduler.option('cellDuration') as number;
-      const cellDurationMs = cellDuration * 60 * 1000; // ms
-      const currentTime = new Date(currentDate as Date).getTime();
-      const roundTime = Math.round(currentTime / cellDurationMs) * cellDurationMs;
-
-      scheduler.showAppointmentPopup({
-        startDate: new Date(roundTime),
-        endDate: new Date(roundTime + cellDurationMs),
-      }, true);
-    }
-  },
+  onClick: () => { onAppointmentAdd(); },
 };
 
 function onAssigneesFilterChange(event: DxSelectBoxTypes.ValueChangedEvent) {
-  const scheduler = schedulerRef.value!.instance!;
+  const scheduler = schedulerRef.value?.instance;
+  if (!scheduler) {
+    return;
+  }
+
   const dataSource = scheduler.option('dataSource') as DataSource;
   const filter = event.value ? ['assigneeId', 'contains', event.value] : null;
 

@@ -1,4 +1,6 @@
 $(() => {
+  const MS_IN_HOUR = 60 * 1000;
+
   const scheduler = $('#scheduler').dxScheduler({
     timeZone: 'America/Los_Angeles',
     dataSource: schedulerDataSource,
@@ -30,23 +32,28 @@ $(() => {
               const selected = scheduler.option('selectedCellData');
 
               if (selected.length) {
-                scheduler.showAppointmentPopup({
-                  ...selected[0].groups,
-                  allDay: selected[0].allDay,
-                  startDate: new Date(selected[0].startDateUTC),
-                  endDate: new Date(selected.at(-1).endDateUTC),
-                }, true);
-              } else {
-                const currentDate = scheduler.option('currentDate');
-                const cellDuration = scheduler.option('cellDuration') * 60 * 1000; // ms
-                const currentTime = currentDate.getTime();
-                const roundTime = Math.round(currentTime / cellDuration) * cellDuration;
+                const firstSelected = selected[0];
+                const lastSelected = selected.at(-1);
 
                 scheduler.showAppointmentPopup({
-                  startDate: new Date(roundTime),
-                  endDate: new Date(roundTime + cellDuration),
+                  ...firstSelected.groups,
+                  allDay: firstSelected.allDay,
+                  startDate: new Date(firstSelected.startDateUTC),
+                  endDate: new Date(lastSelected.endDateUTC),
                 }, true);
+
+                return;
               }
+
+              const currentDate = scheduler.option('currentDate');
+              const cellDuration = scheduler.option('cellDuration') * MS_IN_HOUR;
+              const currentTime = currentDate.getTime();
+              const roundTime = Math.round(currentTime / cellDuration) * cellDuration;
+
+              scheduler.showAppointmentPopup({
+                startDate: new Date(roundTime),
+                endDate: new Date(roundTime + cellDuration),
+              }, true);
             },
           },
         },
