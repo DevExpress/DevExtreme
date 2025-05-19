@@ -1,5 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import $ from '@js/core/renderer';
+import type { DataSourceLike } from '@js/data/data_source';
 import type dxPagination from '@js/ui/pagination';
 
 import { DataController } from '../data_controller';
@@ -220,34 +221,45 @@ describe('Pager View', () => {
   });
 
   describe('pageSize', () => {
-    it('pageIndex is normalized after pageSize changed', async () => {
-      const { optionsController, dataController } = createPagerView({
-        dataSource: [...new Array(20)].map((_, index) => ({ field: `test_${index}` })),
-        // dataSource: {
-        //   load: async () => ({
-        //     data: [...new Array(20)].map((_, index) => ({ field: `test_${index}` })),
-        //     totalCount: 20,
-        //   }),
-        // },
-        paging: {
-          pageIndex: 3,
-          pageSize: 5,
-        },
-      });
+    it.each([
+      { isRemoteDataSource: false },
+      { isRemoteDataSource: true },
+    ])(
+      'pageIndex is normalized after pageSize changed, isRemoteDataSource: $isRemoteDataSource',
+      async ({ isRemoteDataSource }) => {
+        const data = [...new Array(20)].map((_, index) => ({ field: `test_${index}` }));
+        const dataSource = isRemoteDataSource
+          ? {
+            load: async () => Promise.resolve({
+              data,
+              totalCount: data.length,
+            }),
+          } as DataSourceLike<unknown>
+          : data;
 
-      expect(optionsController.oneWay('paging.pageIndex').peek()).toEqual(3);
+        const { optionsController, dataController } = createPagerView({
+          dataSource,
+          paging: {
+            pageIndex: 3,
+            pageSize: 5,
+          },
+        });
 
-      optionsController.option('paging.pageSize', 10);
-      await dataController.waitLoaded();
-      expect(optionsController.oneWay('paging.pageIndex').peek()).toEqual(1);
+        await dataController.waitLoaded();
+        expect(optionsController.oneWay('paging.pageIndex').peek()).toEqual(3);
 
-      optionsController.option('paging.pageSize', 5);
-      await dataController.waitLoaded();
-      expect(optionsController.oneWay('paging.pageIndex').peek()).toEqual(1);
+        optionsController.option('paging.pageSize', 10);
+        await dataController.waitLoaded();
+        expect(optionsController.oneWay('paging.pageIndex').peek()).toEqual(1);
 
-      optionsController.option('paging.pageSize', 20);
-      await dataController.waitLoaded();
-      expect(optionsController.oneWay('paging.pageIndex').peek()).toEqual(0);
-    });
+        optionsController.option('paging.pageSize', 5);
+        await dataController.waitLoaded();
+        expect(optionsController.oneWay('paging.pageIndex').peek()).toEqual(1);
+
+        optionsController.option('paging.pageSize', 20);
+        await dataController.waitLoaded();
+        expect(optionsController.oneWay('paging.pageIndex').peek()).toEqual(0);
+      },
+    );
   });
 });

@@ -3,10 +3,7 @@ import ArrayStore from '@js/common/data/array_store';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import type { ReadonlySignal } from '@preact/signals-core';
-import {
-  batch, computed, effect, signal,
-  untracked,
-} from '@preact/signals-core';
+import { computed, effect, signal } from '@preact/signals-core';
 import { equalByValue } from '@ts/core/utils/m_common';
 import type { PromiseWithResolvers } from '@ts/core/utils/promise';
 import { createPromise } from '@ts/core/utils/promise';
