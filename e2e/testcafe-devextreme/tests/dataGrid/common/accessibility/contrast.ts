@@ -54,3 +54,52 @@ fixture.disablePageReloads`DataGrid - contrast`
     },
   );
 });
+
+// T1286345
+[
+  Themes.genericLight,
+  Themes.fluentBlue,
+  Themes.materialBlue,
+].forEach((theme) => {
+  test('DataGrid - Filter icon should remain visible when it\'s focused', async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
+
+    const searchIconContainer = dataGrid
+      .getHeaders()
+      .getFilterRow()
+      .getFilterCell(1)
+      .getSearchIcon()
+      .element;
+
+    await t
+      .click(dataGrid.getFilterCell(0))
+      .pressKey('tab')
+      .expect(searchIconContainer.focused)
+      .ok();
+
+    await t
+      .expect(await takeScreenshot(`T1286345-datagrid-menu-icon-when-focused-${theme}.png`, dataGrid.element))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(
+    async () => {
+      await changeTheme(theme);
+      await createWidget('dxDataGrid', {
+        dataSource: getData(2, 2),
+        filterRow: {
+          visible: true,
+        },
+      });
+    },
+  ).after(
+    async () => {
+      await changeTheme(Themes.genericLight);
+    },
+  );
+});
