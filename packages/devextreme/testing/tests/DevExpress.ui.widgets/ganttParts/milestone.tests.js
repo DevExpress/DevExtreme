@@ -96,12 +96,7 @@ QUnit.module('Milestone', moduleConfig, () => {
     test('task title inside', function(assert) {
         const options = {
             taskTitlePosition: 'inside',
-            taskContentTemplate: (item, container) => {
-                if(item.isMilestone) {
-                    $(item.taskHTML).appendTo(container);
-                }
-                return item.taskHTML;
-            }
+            taskContentTemplate: (item, container) => $(item.taskHTML).appendTo(container)
         };
         this.createInstance(options);
         this.clock.tick(10);
