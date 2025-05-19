@@ -16,6 +16,7 @@ const options: Options<Properties> = {
   showClearButton: [true, false],
   showDropDownButton: [true, false],
   inputAttr: [{ 'aria-label': 'aria-label' }],
+  opened: [true],
   buttons: [
     undefined,
     [
@@ -32,28 +33,6 @@ const options: Options<Properties> = {
   ],
 };
 
-const created = async (t: TestController, optionConfiguration): Promise<void> => {
-  const {
-    disabled, readOnly, type, value,
-  } = optionConfiguration;
-
-  if (
-    disabled
-    || readOnly
-    || (type === 'datetime' && !value)
-  ) {
-    return;
-  }
-
-  const dateBox = new DateBox(defaultSelector);
-
-  await ClientFunction(() => {
-    (dateBox.getInstance() as any).open();
-  }, {
-    dependencies: { dateBox },
-  })();
-};
-
 const a11yCheckConfig = {
   rules: {
     // NOTE: color-contrast issues
@@ -65,7 +44,6 @@ const configuration: Configuration = {
   component: 'dxDateBox',
   a11yCheckConfig,
   options,
-  created,
 };
 
 testAccessibility(configuration);

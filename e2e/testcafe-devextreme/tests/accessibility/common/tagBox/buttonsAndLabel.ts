@@ -38,13 +38,7 @@ const options: Options<Properties> = {
   ],
 };
 
-const created = async (t: TestController, optionConfiguration): Promise<void> => {
-  const { disabled, readOnly } = optionConfiguration;
-
-  if (disabled || readOnly) {
-    return;
-  }
-
+const created = async (t: TestController): Promise<void> => {
   const tagBox = new TagBox(defaultSelector);
 
   await t
