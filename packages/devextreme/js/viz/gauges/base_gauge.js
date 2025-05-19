@@ -19,7 +19,7 @@ export const BaseGauge = BaseWidget.inherit({
 
     _themeSection: 'gauge',
 
-    _titleRectCache: null,
+    _titleBBoxCache: null,
 
     _createThemeManager: function() {
         return new themeManagerModule.ThemeManager(this._getThemeManagerOptions());
@@ -124,21 +124,24 @@ export const BaseGauge = BaseWidget.inherit({
         return ['DOMAIN', 'MOSTLY_TOTAL', 'EXPORT'];
     },
 
-    _shouldCoreUpdate: function() {
-        const requireCoreUpdate = this._getChangesRequireCoreUpdate().some((change) => this._changes.has(change));
+    _isTitleBBoxChanged: function() {
+        const titleBBox = this._title.getLayoutOptions();
+        const hasTitleHeightChanged = titleBBox.height !== this._titleBBoxCache?.height;
+        const hasTitleYChanged = titleBBox.y !== this._titleBBoxCache?.y;
+        const hasVerticalAlignmentChanged = titleBBox.verticalAlignment !== this._titleBBoxCache?.verticalAlignment;
 
-        if(requireCoreUpdate) {
-            return true;
-        }
+        this._titleBBoxCache = null;
 
-        if(this._changes.has('TITLE')) {
-            const hasTitleHeightChanged = this._title._boundingRect.height !== this._titleRectCache?.height;
-            const hasTitleYChanged = this._title._boundingRect.y !== this._titleRectCache?.y;
-            const hasVerticalAlignmentChanged = this._title._boundingRect.verticalAlignment !== this._titleRectCache?.verticalAlignment;
+        return hasTitleHeightChanged || hasTitleYChanged || hasVerticalAlignmentChanged;
+    },
 
-            this._titleRectCache = null;
+    _forceCoreUpdate: function() {
+        const isTriggeredByTitleOnly =
+            this._changes.has('TITLE')
+            && !this._getChangesRequireCoreUpdate().some((change) => this._changes.has(change));
 
-            return hasTitleHeightChanged || hasTitleYChanged || hasVerticalAlignmentChanged;
+        if(isTriggeredByTitleOnly) {
+            return this._isTitleBBoxChanged();
         }
 
         return true;
@@ -158,7 +161,7 @@ export const BaseGauge = BaseWidget.inherit({
         // It would be even better to somehow defer any inside option changes - so they all are applied after all changes are processed.
         const layoutCache = that._layout._cache;
 
-        if(that._shouldCoreUpdate()) {
+        if(that._forceCoreUpdate()) {
             that._cleanCore();
             that._renderCore();
         }
@@ -317,7 +320,11 @@ BaseGauge.prototype._setTooltipOptions = function() {
 
 const { _change_TITLE } = BaseGauge.prototype;
 BaseGauge.prototype._change_TITLE = function() {
-    this._titleRectCache = { ...this._title._boundingRect };
+    this._titleBBoxCache = { ...this._title.getLayoutOptions() };
 
     _change_TITLE.apply(this, arguments);
+
+    ///#DEBUG
+    this._DEBUG_change_title && this._DEBUG_change_title();
+    ///#ENDDEBUG
 };
