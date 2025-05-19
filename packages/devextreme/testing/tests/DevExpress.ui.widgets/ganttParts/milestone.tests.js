@@ -48,9 +48,8 @@ QUnit.module('Milestone', moduleConfig, () => {
 
                 title.appendTo(customHtml);
                 milestone.appendTo(customHtml);
-                $(item.taskHTML).appendTo(container);
             }
-            return item.taskHTML;
+            $(item.taskHTML).appendTo(container);
         };
         const options = { taskContentTemplate: customTaskFunction };
         this.createInstance(options);
