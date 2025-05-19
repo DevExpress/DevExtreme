@@ -4,6 +4,7 @@ const CLASS = {
   ascendingIcon: 'dx-icon-sortup',
   descendingIcon: 'dx-icon-sortdown',
   sortingOrder: 'header-item-sorting-order',
+  headerFilterIconSelected: 'dx-header-filter-icon--selected'
 };
 
 export default class HeaderItem extends FocusableElement {
@@ -26,5 +27,9 @@ export default class HeaderItem extends FocusableElement {
   getSortIndex(): Promise<string> {
     const orderElement = this.element.find(`.${CLASS.sortingOrder}`);
     return orderElement.innerText;
+  }
+  
+  isHeaderFilterSelected(): Promise<boolean> {
+    return this.element.find(`.${CLASS.headerFilterIconSelected}`).exists;
   }
 }

@@ -30,9 +30,9 @@ import { RowsView } from '__internal/grids/data_grid/module_not_extended/rows';
 import { GroupingHeaderPanelExtender } from '__internal/grids/data_grid/grouping/m_grouping';
 import { HeaderPanel } from '__internal/grids/data_grid/module_not_extended/header_panel';
 import Action from '__internal/core/m_action';
-import devices from '__internal/core/m_devices';
 import { getHeight } from 'core/utils/size';
 import publicComponentUtils from 'core/utils/public_component';
+import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 class TestDraggingHeader2 extends columnsResizingReordering.DraggingHeaderView {
     callDragCounter = 0;
@@ -2503,8 +2503,7 @@ QUnit.module('Columns resizing', {
     });
 
     QUnit.test('The free space row is not displayed when horizontal scrollbar is shown_B253714', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'height of scrollbar equal zero on mobile device');
+        if(shouldSkipOnMobile(assert, 'height of scrollbar equals zero on mobile devices')) {
             return;
         }
 

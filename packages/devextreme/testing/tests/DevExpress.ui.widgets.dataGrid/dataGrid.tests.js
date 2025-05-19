@@ -22,6 +22,7 @@ import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE, DX_ICON_EXPORT_SELECTE
 import { createDataGrid, baseModuleConfig, findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import { getOuterWidth } from 'core/utils/size';
 import { generateItems } from '../../helpers/dataGridMocks.js';
+import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const CELL_UPDATED_CLASS = 'dx-datagrid-cell-updated-animation';
@@ -173,7 +174,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(filterRowWrapper.getTextEditorInput(1).attr('aria-describedby'), headersWrapper.getHeaderItem(0, 4).attr('id'));
 
         assert.equal(dataGridWrapper.getElement().find('.dx-datagrid').attr('role'), 'group', 'group role');
-        assert.equal(dataGridWrapper.getElement().find('.dx-datagrid').attr('aria-label'), 'Data grid with 2 rows and 4 columns', 'aria-label of the datagrid container');
+        // T1288423
+        assert.equal(dataGridWrapper.getElement().find('.dx-datagrid').attr('aria-label'), '', 'aria-label of the datagrid container');
         assert.equal(headersWrapper.getElement().attr('role'), 'presentation', 'Headers role');
         assert.equal(headersWrapper.getColumnsIndicators().attr('role'), 'presentation', 'Headers columns indicators role');
         assert.equal($('.dx-datagrid-scroll-container').attr('role'), 'presentation', 'Scroll container role');
@@ -193,17 +195,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // arrange, assert
         let headerId = headersWrapper.getHeaderItem(0, 3).attr('id');
         assert.ok(headerId.match(/dx-col-\d+/), 'HeaderCell[0, 3] ID is valid');
-        assert.equal(rowsViewWrapper.getCellElement(1, 3).attr('aria-describedby'), headerId, 'Data cell[1, 3] aria-describedby is valid');
 
         // arrange, assert
         headerId = headersWrapper.getHeaderItem(0, 4).attr('id');
         assert.ok(headerId.match(/dx-col-\d+/), 'HeaderCell[0, 4] ID is valid');
-        assert.equal(rowsViewWrapper.getCellElement(1, 4).attr('aria-describedby'), headerId, 'Cell[1, 4] aria-describedby is valid');
 
         // arrange, assert
         headerId = headersWrapper.getHeaderItem(0, 5).attr('id');
         assert.ok(headerId.match(/dx-col-\d+/), 'HeaderCell[0, 5] ID is valid (ShowWhenGrouped)');
-        assert.equal(rowsViewWrapper.getCellElement(1, 5).attr('aria-describedby'), headerId, 'Cell[1, 5] aria-describedby is valid');
 
         assert.equal(headersWrapper.getTable().attr('role'), 'presentation', 'Headers table role');
         assert.ok(headersWrapper.getTable().attr('id'), 'Headers table has an id attribute');
@@ -232,26 +231,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const $buttons = pagerWrapper.getPagerButtonsElements();
         assert.equal($buttons.length, 2, 'buttons count');
         $buttons.each((index, button) => assert.equal($(button).attr('tabindex'), -1, `button ${index} tabindex`));
-    });
-
-    // T892543
-    QUnit.test('cells should have aria-describedby attribute if column is without dataField', function(assert) {
-        const headersWrapper = dataGridWrapper.headers;
-        const rowsViewWrapper = dataGridWrapper.rowsView;
-
-        createDataGrid({
-            dataSource: [{}],
-            columns: [{ type: 'selection' }, { caption: 'test' }]
-        });
-
-        this.clock.tick(10);
-
-        // assert
-        const $secondCell = rowsViewWrapper.getCellElement(0, 1);
-        const $secondHeaderItem = headersWrapper.getHeaderItem(0, 1);
-
-        assert.notOk(rowsViewWrapper.getCellElement(0, 0).attr('aria-describedby'), 'no aria-describedby on first cell');
-        assert.equal($secondCell.attr('aria-describedby'), $secondHeaderItem.attr('id'), 'second cell\'s aria-describedby');
     });
 
     QUnit.test('DataGrid elements shouldn\'t have aria-describedby attributes if showColumnHeaders is false', function(assert) {
@@ -553,8 +532,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Enable rows hover', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'hover is disabled for not desktop devices');
+        if(shouldSkipOnMobile(assert, 'hover is disabled for non desktop devices')) {
             return;
         }
 
@@ -579,8 +557,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Enable rows hover and row position', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'hover is disabled for not desktop devices');
+        if(shouldSkipOnMobile(assert, 'hover is disabled for non desktop devices')) {
             return;
         }
 
@@ -636,8 +613,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Enable rows hover via option method', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'hover is disabled for not desktop devices');
+        if(shouldSkipOnMobile(assert, 'hover is disabled for non desktop devices')) {
             return;
         }
 

@@ -1,7 +1,7 @@
 import dxTreeView from '@js/ui/tree_view';
 import { effect } from '@preact/signals-core';
 
-import type { ColumnsController } from '../columns_controller';
+import type { ColumnsController } from '../columns_controller/index';
 import type { OptionsController } from '../options_controller/options_controller';
 import { ColumnChooserController } from './controller';
 
