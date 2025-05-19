@@ -5,7 +5,7 @@ import { Component } from '@js/core/component';
 import { getPathParts } from '@js/core/utils/data';
 import type { ChangedOptionInfo } from '@js/events';
 import type { ReadonlySignal, Signal } from '@preact/signals-core';
-import { computed, signal } from '@preact/signals-core';
+import { computed, effect, signal } from '@preact/signals-core';
 import { extend } from '@ts/core/utils/m_extend';
 import type { ComponentType } from 'inferno';
 
@@ -128,8 +128,10 @@ export class OptionsController<
     return getOr(this.cache.twoWay, name, () => {
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       const that = this;
-      const obs = this.oneWay(name) as any;
-
+      const obs = signal(this.component.option(name));
+      effect(() => {
+        obs.value = this.oneWay(name).value as any;
+      });
       return {
         get value(): any {
           return obs.value;
@@ -149,12 +151,15 @@ export class OptionsController<
           return obs.peek();
         },
         subscribe(...params: any): any {
+        // @ts-expect-error
           return obs.subscribe(...params);
         },
         toJSON(...params: any[]): any {
+        // @ts-expect-error
           return obs.toJSON(...params);
         },
         valueOf(...params: any[]): any {
+        // @ts-expect-error
           return obs.valueOf(...params);
         },
         brand: obs.brand,
