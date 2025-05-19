@@ -1,6 +1,6 @@
 import { isDefined } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
-import { DataController } from '@ts/grids/new/grid_core/data_controller';
+import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
 
 export class OptionsValidationController {
   public static dependencies = [
