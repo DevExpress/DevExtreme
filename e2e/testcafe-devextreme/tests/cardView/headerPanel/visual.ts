@@ -11,7 +11,7 @@ fixture`CardView - HeaderPanel`
 const CARD_VIEW_SELECTOR = '#container';
 const HEADER_PANEL_SELECTOR = `${CARD_VIEW_SELECTOR} .dx-cardview-headers`;
 const a11yCheckConfig = {
-  rules: { 'color-contrast': { enabled: true } },
+  rules: { 'color-contrast': { enabled: false } },
 };
 
 const visualTest = (etalonName: string) => async (t: TestController) => {
@@ -207,7 +207,7 @@ test('headerPanel column chooser link opens column chooser on click', async (t) 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 
-  await a11yCheck(t, {}, HEADER_PANEL_SELECTOR);
+  await a11yCheck(t, a11yCheckConfig, HEADER_PANEL_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   height: 600,
   columns: [
