@@ -1,10 +1,27 @@
+import { Injectable } from '@angular/core';
+import DataSource from 'devextreme/data/data_source';
+
+export interface Appointment {
+  text: string;
+  startDate: number;
+  endDate: number;
+  allDay?: boolean;
+  assigneeId: number[];
+  recurrenceRule?: string;
+}
+
+export interface Assignee {
+  id: number;
+  text: string;
+}
+
 const ONE_MONTH_DAYS = 30;
 const addDays = (date, days) => new Date(new Date(date).setUTCDate(date.getUTCDate() + days));
 const now = new Date(new Date().setUTCHours(0, 0, 0, 0));
 const startOfTheWeek = addDays(now, -now.getUTCDay());
 const currentDate = addDays(now, ONE_MONTH_DAYS);
 const currentStartOfTheWeek = addDays(currentDate, -currentDate.getUTCDay());
-const data = [
+const appointments: Appointment[] = [
   {
     text: 'Website Re-Design Plan',
     assigneeId: [4],
@@ -89,9 +106,8 @@ const data = [
     endDate: addDays(currentStartOfTheWeek, 4).setUTCHours(21),
   },
 ];
-const schedulerDataSource = new DevExpress.data.DataSource(data);
 
-const assignees = [
+const assignees: Assignee[] = [
   {
     text: 'Samantha Bright',
     id: 1,
@@ -106,3 +122,18 @@ const assignees = [
     id: 4,
   },
 ];
+
+@Injectable()
+export class Service {
+  getAppointmentsDataSource(): DataSource {
+    return new DataSource(appointments);
+  }
+
+  getAssignees(): Assignee[] {
+    return assignees;
+  }
+
+  getInitialCurrentDate(): Date {
+    return currentDate;
+  }
+}
