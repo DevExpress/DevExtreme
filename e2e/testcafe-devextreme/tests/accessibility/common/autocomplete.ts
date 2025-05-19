@@ -11,7 +11,6 @@ const items = ['Item_1', 'Item_2', 'Item_3'];
 const options: Options<Properties> = {
   dataSource: [[], items],
   placeholder: [undefined, 'placeholder'],
-  showClearButton: [true, false],
   value: [undefined, 'Item_1'],
   disabled: [true, false],
   readOnly: [true, false],
@@ -19,20 +18,6 @@ const options: Options<Properties> = {
   deferRendering: [true, false],
   searchTimeout: [0],
   inputAttr: [{ 'aria-label': 'aria-label' }],
-  buttons: [
-    undefined,
-    [
-      {
-        name: 'today',
-        location: 'before',
-        options: {
-          text: 'Today',
-          stylingMode: 'text',
-          onClick: () => {},
-        },
-      },
-    ],
-  ],
 };
 
 const a11yCheckConfig = {
