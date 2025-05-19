@@ -12,7 +12,7 @@ To customize the toolbar, add items to the [toolbar](/Documentation/ApiReference
     A "Today" button that navigates to the current date.
 
 - DevExtreme Components    
-You can configure a DevExtreme component within a toolbar item element. In this demo, we extended the toolbar with a Button and a TagBox.
+You can configure a DevExtreme component within a toolbar item element. In this demo, we extended the toolbar with a Button and TagBox.
 
 - Custom Controls
 Specify **items[]**.[template](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/toolbar/items/#template) to implement custom controls.
