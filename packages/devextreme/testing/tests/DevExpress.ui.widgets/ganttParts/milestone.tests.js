@@ -48,6 +48,7 @@ QUnit.module('Milestone', moduleConfig, () => {
 
                 title.appendTo(customHtml);
                 milestone.appendTo(customHtml);
+                $(item.taskHTML).appendTo(container);
             }
             return item.taskHTML;
         };
@@ -96,7 +97,12 @@ QUnit.module('Milestone', moduleConfig, () => {
     test('task title inside', function(assert) {
         const options = {
             taskTitlePosition: 'inside',
-            taskContentTemplate: (item) => item.taskHTML
+            taskContentTemplate: (item, container) => {
+                if(item.isMilestone) {
+                    $(item.taskHTML).appendTo(container);
+                }
+                return item.taskHTML;
+            }
         };
         this.createInstance(options);
         this.clock.tick(10);
