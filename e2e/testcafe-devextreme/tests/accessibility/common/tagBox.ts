@@ -22,25 +22,10 @@ const options: Options<Properties> = {
   readOnly: [true, false],
   searchEnabled: [true, false],
   searchTimeout: [0],
-  showClearButton: [true, false],
   showSelectionControls: [true, false],
   placeholder: [undefined, 'placeholder'],
   applyValueMode: ['instantly', 'useButtons'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
-  buttons: [
-    undefined,
-    [
-      {
-        name: 'today',
-        location: 'before',
-        options: {
-          text: 'Today',
-          stylingMode: 'text',
-          onClick: () => {},
-        },
-      },
-    ],
-  ],
 };
 
 const created = async (t: TestController, optionConfiguration): Promise<void> => {

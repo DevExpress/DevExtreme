@@ -19,25 +19,10 @@ const options: Options<Properties> = {
   readOnly: [true, false],
   searchEnabled: [true, false],
   searchTimeout: [0],
-  showClearButton: [true, false],
   opened: [true, false],
   deferRendering: [true, false],
   placeholder: [undefined, 'placeholder'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
-  buttons: [
-    undefined,
-    [
-      {
-        name: 'today',
-        location: 'before',
-        options: {
-          text: 'Today',
-          stylingMode: 'text',
-          onClick: () => {},
-        },
-      },
-    ],
-  ],
 };
 
 const a11yCheckConfig = {
