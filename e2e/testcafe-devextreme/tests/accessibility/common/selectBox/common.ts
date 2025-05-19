@@ -1,22 +1,27 @@
-import { Properties } from 'devextreme/ui/autocomplete.d';
-import url from '../../../helpers/getPageUrl';
-import { testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
+import { Properties } from 'devextreme/ui/select_box.d';
+import url from '../../../../helpers/getPageUrl';
+import { testAccessibility, Configuration } from '../../../../helpers/accessibility/test';
+import { Options } from '../../../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../../container.html'));
 
-const items = ['Item_1', 'Item_2', 'Item_3'];
+const items = [
+  'HD Video Player',
+  'SuperHD Video Player',
+  'SuperPlasma 50',
+];
 
 const options: Options<Properties> = {
   dataSource: [[], items],
-  placeholder: [undefined, 'placeholder'],
-  value: [undefined, 'Item_1'],
+  value: [undefined, items[0]],
   disabled: [true, false],
   readOnly: [true, false],
+  searchEnabled: [true, false],
+  searchTimeout: [0],
   opened: [true, false],
   deferRendering: [true, false],
-  searchTimeout: [0],
+  placeholder: [undefined, 'placeholder'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
 
@@ -28,7 +33,7 @@ const a11yCheckConfig = {
 };
 
 const configuration: Configuration = {
-  component: 'dxAutocomplete',
+  component: 'dxSelectBox',
   a11yCheckConfig,
   options,
 };
