@@ -66,7 +66,6 @@ QUnit.module('Milestone', moduleConfig, () => {
             if(item.isMilestone) {
                 return customHtml.text();
             }
-            return item.taskHTML;
         };
         const options = { taskContentTemplate: customTaskFunction };
         this.createInstance(options);
@@ -83,7 +82,6 @@ QUnit.module('Milestone', moduleConfig, () => {
                 $(item.taskHTML[1].cloneNode(true)).appendTo(customHtml);
                 return customHtml.html();
             }
-            return item.taskHTML;
         };
         const options = { taskContentTemplate: customTaskFunction };
         this.createInstance(options);
@@ -119,7 +117,6 @@ QUnit.module('Milestone', moduleConfig, () => {
                 const style = item.taskData.id === 2 ? 'width: 10px; height: 10px;' : 'width: 100px; height: 50px;';
                 return $(document.createElement('div')).attr('style', style);
             }
-            return item.taskHTML;
         };
         const options = {
             tasks: { dataSource: customTasks },
