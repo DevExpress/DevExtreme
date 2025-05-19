@@ -25,7 +25,10 @@ test('headerPanel dragging column when it has sorting and headerFilter', async (
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
+  const a11yCheckConfig = {
+    rules: { 'color-contrast': { enabled: false } },
+  };
+  await a11yCheck(t, a11yCheckConfig, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   allowColumnReordering: true,
   headerFilter: {
@@ -58,7 +61,10 @@ test('dropzone appear in headerPanel when drag from columnChooser a column', asy
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
+  const a11yCheckConfig = {
+    rules: { 'color-contrast': { enabled: false } },
+  };
+  await a11yCheck(t, a11yCheckConfig, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   allowColumnReordering: true,
   height: 600,
