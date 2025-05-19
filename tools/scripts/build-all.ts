@@ -14,6 +14,9 @@ console.log(`Dev mode: ${devMode}`);
 
 const DEVEXTREME_NPM_DIR = path.join(ROOT_DIR, 'packages/devextreme/artifacts/npm');
 
+const monorepoVersion = sh.exec('pnpm pkg get version', { silent: true }).stdout.replaceAll('"', '');
+const MAJOR_VERSION = monorepoVersion.split('.').slice(0, 2).join('_');
+
 const injectDescriptions = () => {
     sh.pushd(ROOT_DIR);
 
@@ -40,15 +43,12 @@ const packAndCopy = (outputDir: string) => {
     sh.cp('*.tgz', outputDir);
 }
 
-const monorepoVersion = sh.exec('pnpm pkg get version', { silent: true }).stdout.replaceAll('"', '');
-const MAJOR_VERSION = monorepoVersion.split('.').slice(0, 2).join('_');
-
 sh.cd(ROOT_DIR);
 
 if (!devMode) {
     sh.exec('pnpm run tools:discover-declarations');
     // aspnet metadata will be used in Build custom-tasks to inject aspnet descriptions
-    sh.exec(`pnpm run tools make-aspnet-metadata --config ./tools/smd-cfg.json --version ${MAJOR_VERSION}`);
+    sh.exec('pnpm run tools:generate-aspnet-smd');
 
     injectDescriptions();
 }

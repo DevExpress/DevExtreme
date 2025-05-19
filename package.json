@@ -17,6 +17,7 @@
     "tools:discover-declarations": "dx-tools discover-declarations --sources ./packages/devextreme/js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\" --artifacts ./artifacts/internal-tools",
     "tools:generate-imd": "dx-tools make-integration-metadata --config ./tools/imd-cfg.json",
     "tools:generate-ng-smd": "dx-tools make-angular-metadata --config ./tools/ng-smd-cfg.json",
+    "tools:generate-aspnet-smd": "dx-tools make-aspnet-metadata --config ./tools/smd-cfg.json --version 25_1",
     "tools:discover-metadata": "npm run tools:discover-declarations && npm run tools:generate-imd && npm run tools:generate-ng-smd",
     "vue:copy-metadata": "shx mkdir -p ./packages/devextreme-vue/metadata/ && shx cp ./artifacts/internal-tools/integration-data.json ./packages/devextreme-vue/metadata/",
     "vue:regenerate": "nx regenerate devextreme-vue",
