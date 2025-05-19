@@ -3,9 +3,9 @@
 import { applyChanges } from '@js/common/data';
 import { isDefined } from '@js/core/utils/type';
 import { confirm } from '@js/ui/dialog';
-import errors from '@js/ui/widget/ui.errors';
 import { computed, type Signal } from '@preact/signals-core';
 import { generateNewRowTempKey } from '@ts/grids/grid_core/editing/m_editing_utils';
+import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/controller';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { DataController } from '../data_controller/data_controller';
@@ -86,6 +86,7 @@ export class EditingController {
     OptionsController, ItemsController,
     ColumnsController, DataController,
     KeyboardNavigationController,
+    OptionsValidationController,
   ] as const;
 
   constructor(
@@ -94,18 +95,11 @@ export class EditingController {
     private readonly columnController: ColumnsController,
     private readonly dataController: DataController,
     private readonly kbn: KeyboardNavigationController,
+    private readonly optionsValidationController: OptionsValidationController,
   ) {}
 
-  private validateKeyExpr(): void {
-    const keyExpr = this.dataController.dataSource.peek().key();
-
-    if (!isDefined(keyExpr)) {
-      throw errors.Error('E1042', 'keyExpr is missing');
-    }
-  }
-
   public editCard(key: Key): void {
-    this.validateKeyExpr();
+    this.optionsValidationController.validateKeyExpr();
 
     const eventArgs = {
       cancel: false,
@@ -121,7 +115,7 @@ export class EditingController {
   }
 
   public async addCard(): Promise<void> {
-    this.validateKeyExpr();
+    this.optionsValidationController.validateKeyExpr();
 
     const eventArgs = {
       promise: undefined,
@@ -168,7 +162,7 @@ export class EditingController {
   }
 
   public async deleteCard(key: Key): Promise<void> {
-    this.validateKeyExpr();
+    this.optionsValidationController.validateKeyExpr();
 
     const confirmStatus = await this.confirmDelete();
 

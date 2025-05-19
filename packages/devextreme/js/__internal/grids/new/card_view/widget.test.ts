@@ -71,14 +71,12 @@ describe('editing validation', () => {
     expect(error.__id).toBe('E1042');
   };
 
-  it.only('should throw E1042 error when no keyExpr and clicking on add/edit/delete', async () => {
+  it('should throw E1042 error when no keyExpr and clicking on add', async () => {
     const container = document.createElement('div');
 
     const cardView = new CardView(container, {
       editing: {
         allowAdding: true,
-        allowUpdating: true,
-        allowDeleting: true,
       },
       dataSource: [{ id: 1, name: 'Test' }],
     });
@@ -89,6 +87,17 @@ describe('editing validation', () => {
     } catch (e) {
       checkError(e as { __id: string; __details: string });
     }
+  });
+
+  it('should throw E1042 error when no keyExpr and clicking on edit', () => {
+    const container = document.createElement('div');
+
+    const cardView = new CardView(container, {
+      editing: {
+        allowUpdating: true,
+      },
+      dataSource: [{ id: 1, name: 'Test' }],
+    });
 
     try {
       // @ts-expect-error
@@ -96,6 +105,17 @@ describe('editing validation', () => {
     } catch (e) {
       checkError(e as { __id: string; __details: string });
     }
+  });
+
+  it('should throw E1042 error when no keyExpr and clicking on delete', async () => {
+    const container = document.createElement('div');
+
+    const cardView = new CardView(container, {
+      editing: {
+        allowDeleting: true,
+      },
+      dataSource: [{ id: 1, name: 'Test' }],
+    });
 
     try {
       // @ts-expect-error
