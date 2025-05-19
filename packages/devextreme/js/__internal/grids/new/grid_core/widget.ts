@@ -13,7 +13,7 @@ import { CompatibilityColumnsController } from './columns_controller/compatibili
 import * as ColumnsControllerModule from './columns_controller/index';
 import * as DataControllerModule from './data_controller/index';
 import * as di from './di';
-import { EditingController } from './editing/controller';
+import * as EditingModule from './editing/index';
 import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
 import { ClearFilterVisitor } from './filtering/filter_visitors/clear_filter_visitor';
@@ -50,7 +50,7 @@ export class GridCoreNewBase<
 
   protected selectionController!: SelectionControllerModule.Controller;
 
-  private editingController!: EditingController;
+  private editingController!: EditingModule.Controller;
 
   private editPopupView!: EditPopupView;
 
@@ -103,7 +103,7 @@ export class GridCoreNewBase<
     this.itemsController = this.diContext.get(ItemsController);
     this.toolbarController = this.diContext.get(ToolbarController);
     this.toolbarView = this.diContext.get(ToolbarView);
-    this.editingController = this.diContext.get(EditingController);
+    this.editingController = this.diContext.get(EditingModule.Controller);
     this.editPopupView = this.diContext.get(EditPopupView);
     this.pagerView = this.diContext.get(PagerView);
     this.searchController = this.diContext.get(SearchControllerModule.SearchController);
@@ -180,7 +180,9 @@ export class GridCoreNew extends ColumnsControllerModule.PublicMethods(
         ColumnChooserModule.PublicMethods(
           SelectionControllerModule.PublicMethods(
             SearchControllerModule.PublicMethods(
-              GridCoreNewBase,
+              EditingModule.PublicMethods(
+                GridCoreNewBase,
+              ),
             ),
           ),
         ),

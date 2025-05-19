@@ -172,7 +172,7 @@ export class EditingController {
     this.kbn.returnFocus();
   }
 
-  private clear(): void {
+  public clear(): void {
     this.changes.value = [];
     this.editCardKey.value = null;
     this.itemsController.additionalItems.value = [];
