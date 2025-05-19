@@ -45,4 +45,5 @@
     { "Widget": "Common", "Name": "StylingMode", "NewWidget": "Common", "NewName": "EditorAppearanceVariants" },
 	{ "Widget": "TreeList", "Name": "UsingHeaderFilter", "NewWidget": "TreeList", "NewName": "ColumnHeaderFilter" },
     { "Widget": "HtmlEditor", "Name": "OutputFormats", "NewWidget": "HtmlEditor", "NewName": "MarkdownSupport" }
+    { "Widget": "HtmlEditor", "Name": "OutputFormats", "NewWidget": "HtmlEditor", "NewName": "MarkdownSupport" }
 ]
