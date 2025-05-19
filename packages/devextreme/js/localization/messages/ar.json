@@ -364,7 +364,7 @@
         "dxCardView-ariaHeaderItemSortingIndexLabel": "Sort index {0}",
         "dxCardView-ariaHeaderHasHeaderFilterLabel": "Header filter applied",
         "dxCardView-ariaSelectCard": "Select card",
-        "dxCardView-ariaCardView": "Card view with {0} cards and {1} fields",
+        "dxCardView-ariaCardView": "Card view with {0} cards. Each card has {1} fields",
         "dxCardView-ariaCard": "Card",
         "dxCardView-ariaEditableCard": "Editable card",
         "dxCardView-ariaCardPosition": "Row {0}, column {1}",
