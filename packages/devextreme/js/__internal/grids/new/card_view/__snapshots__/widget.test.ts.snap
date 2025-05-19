@@ -49,6 +49,7 @@ exports[`common initial render should be successfull 1`] = `
                     >
                       <span
                         class="dx-cardview-headerpanel-text-empty"
+                        role="menuitem"
                       >
                         Use 
                         <a

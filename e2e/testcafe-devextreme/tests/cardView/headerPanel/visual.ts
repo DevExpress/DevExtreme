@@ -196,7 +196,7 @@ test(
 
 test('headerPanel column chooser link opens column chooser on click', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const cardView = new CardView('#container');
+  const cardView = new CardView(CARD_VIEW_SELECTOR);
   const headerPanel = cardView.getHeaderPanel();
 
   await t.click(headerPanel.getColumnChooserLink());
@@ -206,6 +206,8 @@ test('headerPanel column chooser link opens column chooser on click', async (t) 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+
+  await a11yCheck(t, {}, HEADER_PANEL_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   height: 600,
   columns: [
