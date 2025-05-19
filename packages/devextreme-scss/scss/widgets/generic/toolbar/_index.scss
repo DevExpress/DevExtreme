@@ -82,7 +82,7 @@
 }
 
 .dx-toolbar-button {
-  .dx-menu {
+  .dx-menu:not(.dx-ai-format) {
     .dx-menu-item {
       border: $generic-button-border-weight solid transparent;
       border-radius: $button-border-radius;
