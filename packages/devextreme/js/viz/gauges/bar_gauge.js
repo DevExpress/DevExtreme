@@ -520,6 +520,13 @@ export const dxBarGauge = BaseGauge.inherit({
 
     _initialChanges: ['VALUES'],
 
+    _getChangesRequireCoreUpdate: function() {
+        return [
+            ...this.callBase(),
+            'LEGEND',
+        ];
+    },
+
     _change_NODES() {
         this._buildNodes();
     },
