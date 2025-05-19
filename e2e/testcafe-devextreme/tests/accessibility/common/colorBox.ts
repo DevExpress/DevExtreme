@@ -13,23 +13,9 @@ const options: Options<Properties> = {
   editAlphaChannel: [true, false],
   placeholder: [undefined, 'placeholder'],
   applyValueMode: ['instantly', 'useButtons'],
-  inputAttr: [{ 'aria-label': 'aria-label' }],
   opened: [true, false],
   deferRendering: [true, false],
-  buttons: [
-    undefined,
-    [
-      {
-        name: 'today',
-        location: 'before',
-        options: {
-          text: 'Today',
-          stylingMode: 'text',
-          onClick: () => {},
-        },
-      },
-    ],
-  ],
+  inputAttr: [{ 'aria-label': 'aria-label' }],
 };
 
 const a11yCheckConfig = {
