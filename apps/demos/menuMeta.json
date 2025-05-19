@@ -5557,20 +5557,17 @@
       {
         "Name": "Card View",
         "Equivalents": "dxCardView, dx-cardview, cardview",
-        "Badge": "Roadmap",
         "Groups": [
           {
             "Name": "Overview",
             "Equivalents": "",
-            "Badge": "Roadmap",
             "Demos": [
               {
                 "Title": "Overview",
                 "Name": "Overview",
                 "Widget": "CardView",
                 "DemoType": "Web",
-                "Badge": "Roadmap",
-                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-cardview.xml"
+                "Badge": "New"
               }
             ]
           }
