@@ -147,6 +147,6 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
-          name: test-fails-${{ env.JOB_NAME }}
+          name: test-fails-${{matrix.framework}} 
           path: e2e/wrappers/screenshots
           if-no-files-found: ignore 
