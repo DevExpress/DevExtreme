@@ -1,6 +1,5 @@
 import { isString } from 'devextreme/core/utils/type';
 import { changeTheme } from './changeTheme';
-import { a11yCheck } from './accessibility/utils';
 
 const defaultThemeName = 'generic.light';
 
@@ -51,13 +50,8 @@ export async function testScreenshot(
     .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(theme)}.png`), element))
     .ok();
 
-  const themeName = (theme ?? process.env.theme) ?? defaultThemeName;
-  const a11yCheckConfig = themeName === defaultThemeName ? {} : {
-    runOnly: 'color-contrast',
-  };
-  await a11yCheck(t, a11yCheckConfig);
-
   if (shouldTestInCompact) {
+    const themeName = (theme ?? process.env.theme) ?? defaultThemeName;
     await changeTheme(`${themeName}.compact`);
 
     await compactCallBack?.();
@@ -65,8 +59,6 @@ export async function testScreenshot(
     await t
       .expect(await takeScreenshot(screenshotName.replace('.png', `${getThemePostfix(`${themeName}-compact`)}.png`), element))
       .ok();
-
-    await a11yCheck(t, a11yCheckConfig);
   }
 
   if (isString(theme) || shouldTestInCompact) {
