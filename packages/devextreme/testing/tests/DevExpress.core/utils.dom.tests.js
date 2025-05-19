@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import domUtils from '__internal/core/utils/m_dom';
+import { EmptyTemplate } from '__internal/core/templates/m_empty_template';
 import support from '__internal/core/utils/m_support';
 import styleUtils from 'core/utils/style';
 import devices from '__internal/core/m_devices';
@@ -7,6 +8,36 @@ import initMobileViewport from 'common/core/environment/init_mobile_viewport';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 QUnit.module('createMarkup');
+
+QUnit.test('normalizeTemplateElement returns a wrapper if given an element', function(assert) {
+    const domElement = document.createElement('span');
+
+    domElement.innerHTML = 'Some text';
+
+    const $result = domUtils.normalizeTemplateElement(domElement);
+
+    assert.equal($result.length, 1, 'normalizeTemplateElement works with elements');
+    assert.equal($result[0].localName, 'span', 'normalizeTemplateElement works with elements');
+    assert.equal($result.text(), 'Some text', 'normalizeTemplateElement works with elements');
+});
+
+QUnit.test('normalizeTemplateElement returns a wrapper if given an HTML string', function(assert) {
+    const htmlString = '<span>Some text</span>';
+
+    const $result = domUtils.normalizeTemplateElement(htmlString);
+
+    assert.equal($result.length, 1, 'normalizeTemplateElement works with strings');
+    assert.equal($result[0].localName, 'span', 'normalizeTemplateElement works with strings');
+    assert.equal($result.text(), 'Some text', 'normalizeTemplateElement works with strings');
+});
+
+QUnit.test('normalizeTemplateElement returns an empty element for other inputs (T1280032) (jQuery 4)', function(assert) {
+    const template = new EmptyTemplate();
+
+    const $result = domUtils.normalizeTemplateElement(template);
+
+    assert.equal($result.length, 0, 'normalizeTemplateElement works with TemplateBase objects');
+});
 
 QUnit.test('normalizeTemplateElement with script element', function(assert) {
     const domElement = document.createElement('script');
@@ -17,7 +48,6 @@ QUnit.test('normalizeTemplateElement with script element', function(assert) {
 
     assert.equal($result.text(), 'Test', 'template based on script element works fine');
 });
-
 
 QUnit.module('clipboard');
 
