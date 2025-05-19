@@ -8,7 +8,7 @@ import dxHtmlEditor, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ContentReadyEvent, DisposingEvent, FocusInEvent, FocusOutEvent, InitializedEvent, ValueChangedEvent, HtmlEditorImageUploadMode, dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadTab, dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem, AICommand, AICommandName, AIToolbarItem, dxHtmlEditorToolbarItem } from "devextreme/ui/html_editor";
+import type { ContentReadyEvent, DisposingEvent, FocusInEvent, FocusOutEvent, InitializedEvent, ValueChangedEvent, AICommandNameExtended, HtmlEditorImageUploadMode, dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadTab, dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem, AICommand, AICommandName, AIToolbarItem, dxHtmlEditorToolbarItem } from "devextreme/ui/html_editor";
 import type { ContentReadyEvent as FileUploaderContentReadyEvent, DisposingEvent as FileUploaderDisposingEvent, InitializedEvent as FileUploaderInitializedEvent, ValueChangedEvent as FileUploaderValueChangedEvent, BeforeSendEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, UploadHttpMethod, FileUploadMode, dxFileUploaderOptions } from "devextreme/ui/file_uploader";
 import type { ValidationStatus, template, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
@@ -87,6 +87,28 @@ const HtmlEditor = memo(
   ),
 ) as (props: React.PropsWithChildren<IHtmlEditorOptions> & { ref?: Ref<HtmlEditorRef> }) => ReactElement | null;
 
+
+// owners:
+// Item
+type ICommandProps = React.PropsWithChildren<{
+  name?: AICommandNameExtended;
+  options?: any;
+  prompt?: ((param: string) => string);
+  text?: string;
+}>
+const _componentCommand = (props: ICommandProps) => {
+  return React.createElement(NestedOption<ICommandProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "commands",
+      IsCollectionItem: true,
+    },
+  });
+};
+
+const Command = Object.assign<typeof _componentCommand, NestedComponentMeta>(_componentCommand, {
+  componentType: "option",
+});
 
 // owners:
 // HtmlEditor
@@ -260,6 +282,7 @@ const _componentItem = (props: IItemProps) => {
       OptionName: "items",
       IsCollectionItem: true,
       ExpectedChildren: {
+        command: { optionName: "commands", isCollectionItem: true },
         item: { optionName: "items", isCollectionItem: true }
       },
       TemplateProps: [{
@@ -535,6 +558,8 @@ export {
   HtmlEditor,
   IHtmlEditorOptions,
   HtmlEditorRef,
+  Command,
+  ICommandProps,
   Converter,
   IConverterProps,
   FileUploaderOptions,

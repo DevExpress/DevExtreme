@@ -31,6 +31,7 @@ import {
 import { DxiButtonGroupItem } from './base/button-group-item-dxi';
 import { DxiValidationRuleComponent } from './validation-rule-dxi';
 import { DxiTabComponent } from './tab-dxi';
+import { DxiCommandComponent } from './command-dxi';
 import { DxiLocationComponent } from './location-dxi';
 
 
@@ -158,6 +159,14 @@ export class DxiItemComponent extends DxiButtonGroupItem implements AfterViewIni
     }
     set tabsChildren(value) {
         this.setChildren('tabs', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiCommandComponent))
+    get commandsChildren(): QueryList<DxiCommandComponent> {
+        return this._getOption('commands');
+    }
+    set commandsChildren(value) {
+        this.setChildren('commands', value);
     }
 
     @ContentChildren(forwardRef(() => DxiLocationComponent))

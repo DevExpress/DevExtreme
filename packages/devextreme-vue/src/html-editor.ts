@@ -23,6 +23,8 @@ import {
  dxHtmlEditorTableResizing,
  dxHtmlEditorToolbar,
  dxHtmlEditorVariables,
+ AICommandNameExtended,
+ AICommandName,
  HtmlEditorImageUploadMode,
  dxHtmlEditorImageUploadTabItem,
  HtmlEditorImageUploadTab,
@@ -30,7 +32,6 @@ import {
  HtmlEditorPredefinedContextMenuItem,
  HtmlEditorPredefinedToolbarItem,
  AICommand,
- AICommandName,
  AIToolbarItem,
  dxHtmlEditorToolbarItem,
 } from "devextreme/ui/html_editor";
@@ -239,6 +240,30 @@ prepareComponentConfig(componentConfig);
 
 const DxHtmlEditor = defineComponent(componentConfig);
 
+
+const DxCommandConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:name": null,
+    "update:options": null,
+    "update:prompt": null,
+    "update:text": null,
+  },
+  props: {
+    name: [Object, String] as PropType<AICommandNameExtended | AICommandName | "custom">,
+    options: {},
+    prompt: Function as PropType<((param: string) => string)>,
+    text: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxCommandConfig);
+
+const DxCommand = defineComponent(DxCommandConfig);
+
+(DxCommand as any).$_optionName = "commands";
+(DxCommand as any).$_isCollectionItem = true;
 
 const DxConverterConfig = {
   emits: {
@@ -495,6 +520,7 @@ const DxItem = defineComponent(DxItemConfig);
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
 (DxItem as any).$_expectedChildren = {
+  command: { isCollectionItem: true, optionName: "commands" },
   item: { isCollectionItem: true, optionName: "items" }
 };
 
@@ -749,6 +775,7 @@ const DxVariables = defineComponent(DxVariablesConfig);
 export default DxHtmlEditor;
 export {
   DxHtmlEditor,
+  DxCommand,
   DxConverter,
   DxFileUploaderOptions,
   DxImageUpload,

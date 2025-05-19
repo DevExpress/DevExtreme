@@ -32,6 +32,7 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+import { DxiHtmlEditorCommandComponent } from './command-dxi';
 
 
 @Component({
@@ -233,6 +234,14 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
         return 'items';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiHtmlEditorCommandComponent))
+    get commandsChildren(): QueryList<DxiHtmlEditorCommandComponent> {
+        return this._getOption('commands');
+    }
+    set commandsChildren(value) {
+        this.setChildren('commands', value);
+    }
 
     @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent))
     get itemsChildren(): QueryList<DxiHtmlEditorItemComponent> {
