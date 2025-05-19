@@ -1,10 +1,12 @@
 $(() => {
+  const MS_IN_HOUR = 60 * 1000;
+
   const scheduler = $('#scheduler').dxScheduler({
     timeZone: 'America/Los_Angeles',
-    dataSource: data,
+    dataSource: schedulerDataSource,
     views: ['day', 'week', 'workWeek', 'month'],
     currentView: 'workWeek',
-    currentDate: new Date(2021, 3, 27),
+    currentDate,
     startDayHour: 9,
     endDayHour: 19,
     resources: [{
@@ -23,51 +25,58 @@ $(() => {
           widget: 'dxButton',
           options: {
             icon: 'plus',
-            text: 'New Event',
+            text: 'New Appointment',
+            stylingMode: 'outlined',
+            type: 'normal',
             onClick() {
               const selected = scheduler.option('selectedCellData');
 
               if (selected.length) {
-                scheduler.showAppointmentPopup({
-                  ...selected[0].groups,
-                  allDay: selected[0].allDay,
-                  startDate: new Date(selected[0].startDateUTC),
-                  endDate: new Date(selected.at(-1).endDateUTC),
-                }, true);
-              } else {
-                const cellDuration = scheduler.option('cellDuration') * 60 * 1000; // ms
-                const currentTime = new Date().getTime();
-                const roundTime = Math.round(currentTime / cellDuration) * cellDuration;
+                const firstSelected = selected[0];
+                const lastSelected = selected.at(-1);
 
                 scheduler.showAppointmentPopup({
-                  startDate: new Date(roundTime),
-                  endDate: new Date(roundTime + cellDuration),
+                  ...firstSelected.groups,
+                  allDay: firstSelected.allDay,
+                  startDate: new Date(firstSelected.startDateUTC),
+                  endDate: new Date(lastSelected.endDateUTC),
                 }, true);
+
+                return;
               }
+
+              const currentDate = scheduler.option('currentDate');
+              const cellDuration = scheduler.option('cellDuration') * MS_IN_HOUR;
+              const currentTime = currentDate.getTime();
+              const roundTime = Math.round(currentTime / cellDuration) * cellDuration;
+
+              scheduler.showAppointmentPopup({
+                startDate: new Date(roundTime),
+                endDate: new Date(roundTime + cellDuration),
+              }, true);
             },
           },
         },
         {
-          location: 'center',
+          location: 'before',
           locateInMenu: 'auto',
-          widget: 'dxTagBox',
+          widget: 'dxSelectBox',
           options: {
+            placeholder: 'Select Employee',
             items: assignees,
+            showClearButton: true,
             displayExpr: 'text',
             valueExpr: 'id',
-            searchEnabled: true,
-            showSelectionControls: true,
-            maxDisplayedTags: 1,
             inputAttr: {
-              'aria-label': 'Assignees',
+              'aria-label': 'Select Employee',
             },
             width: 200,
             onValueChanged({ value }) {
-              const nextDataSource = value.length
-                ? data.filter((item) => value.some((id) => item.assigneeId?.includes(id)))
-                : data;
+              const dataSource = scheduler.option('dataSource');
+              const filter = value ? ['assigneeId', 'contains', value] : null;
 
-              scheduler.option('dataSource', nextDataSource);
+              dataSource.filter(filter);
+              scheduler.option('dataSource', dataSource);
             },
           },
         },
