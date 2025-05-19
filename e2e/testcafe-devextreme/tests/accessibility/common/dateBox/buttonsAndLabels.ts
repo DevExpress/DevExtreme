@@ -6,7 +6,7 @@ import { defaultSelector, testAccessibility, Configuration } from '../../../../h
 import { Options } from '../../../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const now = new Date();
 

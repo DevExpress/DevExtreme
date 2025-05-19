@@ -7,7 +7,7 @@ import { Options } from '../../../../helpers/generateOptionMatrix';
 const TIME_TO_WAIT = 150;
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const items = [
   'HD Video Player',
