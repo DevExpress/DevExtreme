@@ -2,12 +2,11 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import type { DeferredObj } from '@js/core/utils/deferred';
-import { isDefined } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
-import errors from '@js/ui/widget/ui.errors';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
+import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/controller';
 import { ShowCheckBoxesMode } from '@ts/grids/new/grid_core/selection/const';
 import Selection from '@ts/ui/selection/m_selection';
 
@@ -27,9 +26,22 @@ export class SelectionController {
     DataController,
     ItemsController,
     ToolbarController,
+    OptionsValidationController,
   ] as const;
 
   private readonly selectedCardKeys = this.options.twoWay('selectedCardKeys');
+
+  // Note: moved option validation logic to computed to make it execute before other effects
+  private readonly normalizedSelectedCardKeys = computed(() => {
+    const selectedCardKeys = this.selectedCardKeys.value;
+    const isSelectionEnabled = this.selectionOption.value.mode !== SelectionMode.None;
+
+    if (isSelectionEnabled && Array.isArray(selectedCardKeys) && selectedCardKeys.length) {
+      this.optionsValidationController.validateKeyExpr();
+    }
+
+    return this.selectedCardKeys.value;
+  });
 
   private readonly selectionOption: ReadonlySignal<SelectionOptions> = this.options.oneWay('selection');
 
@@ -103,6 +115,7 @@ export class SelectionController {
     private readonly dataController: DataController,
     private readonly itemsController: ItemsController,
     private readonly toolbarController: ToolbarController,
+    private readonly optionsValidationController: OptionsValidationController,
   ) {
     this.selectionHelper = computed(() => {
       const dataSource = this.dataController.dataSource.value;
@@ -121,7 +134,7 @@ export class SelectionController {
     });
 
     effect(() => {
-      const selectedCardKeys = this.selectedCardKeys.value;
+      const selectedCardKeys = this.normalizedSelectedCardKeys.value;
       const selectionOption = this.selectionOption.value;
       if (selectionOption.mode !== SelectionMode.None) {
         this.itemsController.setSelectionState(selectedCardKeys);
@@ -146,7 +159,7 @@ export class SelectionController {
     effect(() => {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       this.dataController.items.value;
-      this.updateSelectionToolbarButtons(this.selectedCardKeys.value);
+      this.updateSelectionToolbarButtons(this.normalizedSelectedCardKeys.value);
     });
   }
 
@@ -212,17 +225,12 @@ export class SelectionController {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private selectionChanged(e: any): void {
     if (e.addedItemKeys.length || e.removedItemKeys.length) {
-      const keyExpr = this.dataController.dataSource.peek().key();
-
-      if (!isDefined(keyExpr)) {
-        throw errors.Error('E1042', 'keyExpr is missing');
-      }
+      this.optionsValidationController.validateKeyExpr();
 
       const onSelectionChanged = this.onSelectionChanged.peek();
       const eventArgs = this.getSelectionEventArgs(e);
 
       this.selectedCardKeys.value = [...e.selectedItemKeys];
-      this.itemsController.setSelectionState([...e.selectedItemKeys]);
 
       // @ts-expect-error
       onSelectionChanged?.(eventArgs);
@@ -325,7 +333,7 @@ export class SelectionController {
   }
 
   public isCardSelected(key: Key): boolean {
-    const selectedCardKeys = this.selectedCardKeys.peek();
+    const selectedCardKeys = this.normalizedSelectedCardKeys.peek();
 
     return selectedCardKeys.includes(key);
   }
@@ -364,7 +372,7 @@ export class SelectionController {
   }
 
   public getSelectedCardKeys(): Key[] {
-    return this.selectedCardKeys.peek();
+    return this.normalizedSelectedCardKeys.peek();
   }
 
   private toggleSelectionCheckBoxes(): void {
