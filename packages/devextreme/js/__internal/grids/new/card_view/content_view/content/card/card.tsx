@@ -113,7 +113,7 @@ export interface CardProps {
 
   fieldHintEnabled?: boolean;
 
-  position: Position;
+  position?: Position;
 }
 
 export class Card extends Component<CardProps> {

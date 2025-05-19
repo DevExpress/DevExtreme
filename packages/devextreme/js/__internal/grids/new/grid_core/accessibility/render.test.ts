@@ -48,10 +48,10 @@ describe('Accessibility attributes', () => {
 
       const rootContainer = rootQuerySelector(SELECTORS.rootContainer);
       expect(rootContainer?.getAttribute('role')).toBe('group');
-      expect(rootContainer?.getAttribute('aria-label')).toBe('Card view with 5 cards and 1 fields');
+      expect(rootContainer?.getAttribute('aria-label')).toBe('Card view with 5 cards. Each card has 1 fields');
 
       cardView.option('filterValue', ['A', '=', 'A_1']);
-      expect(rootContainer?.getAttribute('aria-label')).toBe('Card view with 1 cards and 1 fields');
+      expect(rootContainer?.getAttribute('aria-label')).toBe('Card view with 1 cards. Each card has 1 fields');
     });
   });
 
@@ -69,15 +69,15 @@ describe('Accessibility attributes', () => {
       expect(statusContainer?.innerHTML).toBe('');
 
       cardView.option('filterValue', ['A', '=', 'A_1']);
-      expect(statusContainer?.innerHTML).toBe('Card view with 1 cards and 1 fields');
+      expect(statusContainer?.innerHTML).toBe('Card view with 1 cards. Each card has 1 fields');
 
       cardView.option('filterValue', null);
-      expect(statusContainer?.innerHTML).toBe('Card view with 5 cards and 1 fields');
+      expect(statusContainer?.innerHTML).toBe('Card view with 5 cards. Each card has 1 fields');
 
       cardView.option('paging', { pageSize: 2 });
-      expect(statusContainer?.innerHTML).toBe('Card view with 5 cards and 1 fields');
+      expect(statusContainer?.innerHTML).toBe('Card view with 5 cards. Each card has 1 fields');
       cardView.option('paging', { pageIndex: 2 });
-      expect(statusContainer?.innerHTML).toBe('Card view with 5 cards and 1 fields');
+      expect(statusContainer?.innerHTML).toBe('Card view with 5 cards. Each card has 1 fields');
     });
   });
 

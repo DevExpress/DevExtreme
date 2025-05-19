@@ -5,8 +5,14 @@ exports[`common initial render should be successfull 1`] = `
   class="dx-widget dx-cardview"
 >
   <div
+    aria-label="Card view with 0 cards. Each card has 0 fields"
     class="dx-cardview-root-container"
+    role="group"
   >
+    <div
+      class="dx-gridbase-a11y-status-container dx-cardview-exclude-flexbox"
+      role="status"
+    />
     <div
       class="dx-cardview-header-container"
     >
