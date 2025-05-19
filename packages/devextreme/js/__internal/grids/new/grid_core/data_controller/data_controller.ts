@@ -223,6 +223,7 @@ export class DataController {
         const dataSource = this.dataSource.value;
         const pageIndex = this.pageIndex.value;
         const pageSize = this.pageSize.value;
+        const isLoaded = this.isLoaded.value;
         const displayFilter = this.filterController.displayFilter.value;
         const pagingEnabled = this.pagingEnabled.value;
         const sortParameters = this.sortingController.sortParameters.value;
@@ -234,7 +235,13 @@ export class DataController {
         }
 
         if (dataSource.pageSize() !== pageSize) {
+          const newPageIndex = isLoaded
+            ? Math.max(Math.min(this.pageCount.peek() - 1, pageIndex), 0)
+            : pageIndex;
+
           dataSource.pageSize(pageSize);
+          dataSource.pageIndex(newPageIndex);
+
           someParamChanged ||= true;
         }
 
