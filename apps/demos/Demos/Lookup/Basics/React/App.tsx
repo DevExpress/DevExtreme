@@ -1,7 +1,6 @@
 import React from 'react';
 import { Lookup, DropDownOptions } from 'devextreme-react/lookup';
-import DataSource from 'devextreme/data/data_source';
-import ArrayStore from 'devextreme/data/array_store';
+import { DataSource, ArrayStore } from 'devextreme-react/common/data';
 import { employeesList, employeesTasks } from './data.ts';
 
 const simpleLookupLabel = { 'aria-label': 'Simple lookup' };

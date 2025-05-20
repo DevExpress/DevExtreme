@@ -56,7 +56,7 @@ import {
   DxDiagram, DxNodes, DxAutoLayout, DxCustomShape,
 } from 'devextreme-vue/diagram';
 import { DxPopup } from 'devextreme-vue/popup';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-vue/common/data';
 import CustomShapeTemplate from './CustomShapeTemplate.vue';
 import service from './data.ts';
 
