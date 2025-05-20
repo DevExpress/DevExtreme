@@ -10,7 +10,6 @@ import { isDefined } from '@js/core/utils/type';
 import Button from '@js/ui/button';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
-import { current, isGeneric, isMaterial as isMaterialTheme } from '@js/ui/themes';
 import TreeView from '@js/ui/tree_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
@@ -158,19 +157,15 @@ export class ColumnChooserView extends ColumnsView {
     const columnChooserOptions = that.option('columnChooser')!;
     const popupPosition = this._columnChooserController.getPosition();
 
-    const themeName = current();
-    const isGenericTheme = isGeneric(themeName);
-    const isMaterial = isMaterialTheme(themeName);
-
     const dxPopupOptions = {
       visible: false,
       shading: false,
-      showCloseButton: true,
+      showCloseButton: false,
       dragEnabled: true,
       resizeEnabled: true,
       wrapperAttr: { class: columnChooserClass },
       toolbarItems: [
-        { text: columnChooserOptions.title, toolbar: 'top', location: isGenericTheme || isMaterial ? 'before' : 'center' },
+        { text: columnChooserOptions.title, toolbar: 'top', location: 'before' },
       ],
       position: popupPosition,
       width: columnChooserOptions.width,
