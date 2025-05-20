@@ -160,7 +160,7 @@ export class ColumnChooserView extends ColumnsView {
     const dxPopupOptions = {
       visible: false,
       shading: false,
-      showCloseButton: false,
+      showCloseButton: true,
       dragEnabled: true,
       resizeEnabled: true,
       wrapperAttr: { class: columnChooserClass },

@@ -3,15 +3,10 @@ import 'ui/data_grid';
 
 import $ from 'jquery';
 import typeUtils from 'core/utils/type';
-import supportUtils from 'core/utils/support';
-import devices from '__internal/core/m_devices';
-import themes from 'ui/themes';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import publicComponentUtils from 'core/utils/public_component';
 import messageLocalization from 'common/core/localization/message';
 import { TreeViewSearchBoxWrapper } from '../../helpers/wrappers/searchBoxWrappers.js';
-
-const device = devices.real();
 
 QUnit.testStart(function() {
     const markup =
