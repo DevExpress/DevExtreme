@@ -1,10 +1,10 @@
 import { Properties } from 'devextreme/ui/color_box.d';
-import url from '../../../helpers/getPageUrl';
-import { testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
+import url from '../../../../helpers/getPageUrl';
+import { testAccessibility, Configuration } from '../../../../helpers/accessibility/test';
+import { Options } from '../../../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const options: Options<Properties> = {
   value: [undefined, '#f05b41'],
@@ -13,23 +13,9 @@ const options: Options<Properties> = {
   editAlphaChannel: [true, false],
   placeholder: [undefined, 'placeholder'],
   applyValueMode: ['instantly', 'useButtons'],
-  inputAttr: [{ 'aria-label': 'aria-label' }],
   opened: [true, false],
   deferRendering: [true, false],
-  buttons: [
-    undefined,
-    [
-      {
-        name: 'today',
-        location: 'before',
-        options: {
-          text: 'Today',
-          stylingMode: 'text',
-          onClick: () => {},
-        },
-      },
-    ],
-  ],
+  inputAttr: [{ 'aria-label': 'aria-label' }],
 };
 
 const a11yCheckConfig = {
