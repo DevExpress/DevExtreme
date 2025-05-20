@@ -21,6 +21,8 @@ export class ClearFilterVisitor {
     this.searchController.searchTextOption.value = '';
     this.filterController.filterValueOption.value = null;
     // Note: if filterSync is enabled headerFilters should be cleared already
-    this.headerFilterController.clearHeaderFilters();
+    if (!this.filterController.filterSyncEnabled.value) {
+      this.headerFilterController.clearHeaderFilters();
+    }
   }
 }

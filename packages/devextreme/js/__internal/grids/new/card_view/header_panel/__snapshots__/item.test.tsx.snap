@@ -3,7 +3,9 @@
 exports[`Item should render headerFilter icons if enabled 1`] = `
 <div>
   <div
+    aria-label="Field name Column 1"
     class="dx-cardview-header-item  "
+    role="menuitem"
   >
     Column 1
     <div
@@ -16,7 +18,9 @@ exports[`Item should render headerFilter icons if enabled 1`] = `
 exports[`Item should render sort icons 1`] = `
 <div>
   <div
+    aria-label="Field name Column 1, Sorted in ascending order, Sort index 1"
     class="dx-cardview-header-item  "
+    role="menuitem"
   >
     Column 1
     <div
@@ -36,7 +40,9 @@ exports[`Item should render sort icons 1`] = `
 exports[`Item should use column caption as text 1`] = `
 <div>
   <div
+    aria-label="Field name my column caption"
     class="dx-cardview-header-item  "
+    role="menuitem"
   >
     my column caption
     <div

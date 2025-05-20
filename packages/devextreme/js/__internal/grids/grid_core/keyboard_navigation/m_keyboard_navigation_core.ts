@@ -11,6 +11,10 @@ import { isElementDefined, isFixedColumnIndexOffsetRequired } from './m_keyboard
 export class KeyboardNavigationController extends modules.ViewController {
   private keyDownListener: any;
 
+  private resizeCompletedWithContext!: (e: any) => void;
+
+  protected needToRestoreFocus = false;
+
   protected renderCompletedWithContext!: (e: any) => void;
 
   protected focusinHandlerContext!: (event: any) => void;
@@ -44,6 +48,8 @@ export class KeyboardNavigationController extends modules.ViewController {
       this.keyDownListener = keyboard.on($focusedViewElement, null, (e) => this.keyDownHandler(e));
     }
   }
+
+  protected resizeCompleted() {}
 
   protected getColumnIndexOffset(visibleIndex) {
     let offset = 0;
@@ -99,9 +105,11 @@ export class KeyboardNavigationController extends modules.ViewController {
     this.unsubscribeFromKeyDownEvent();
 
     focusedView?.renderCompleted?.remove(this.renderCompletedWithContext);
+    focusedView?.resizeCompleted?.remove(this.resizeCompletedWithContext);
 
     if (this.isKeyboardEnabled()) {
       focusedView?.renderCompleted?.add(this.renderCompletedWithContext);
+      focusedView?.resizeCompleted?.add(this.resizeCompletedWithContext);
     }
   }
 
@@ -232,6 +240,10 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     this.renderCompletedWithContext = this.renderCompletedWithContext
       ?? this.renderCompleted.bind(this);
+
+    this.resizeCompletedWithContext = this.resizeCompletedWithContext
+    ?? this.resizeCompleted.bind(this);
+
     this.focusinHandlerContext = this.focusinHandlerContext ?? this.focusinHandler.bind(this);
 
     this.initHandlers();

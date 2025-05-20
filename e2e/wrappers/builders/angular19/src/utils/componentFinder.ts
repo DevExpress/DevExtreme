@@ -2,12 +2,12 @@ export const COMPONENTS = [
   {
     path: 'button',
     name: 'Button',
-    loadComponent: () => import('@external/button/angular/button.component').then((m) => m.ButtonComponent),
+    component: import('@external/button/angular19/button.component').then((m) => m.ButtonComponent),
   },
   {
     path: 'inputs-list-in-form',
-    name: 'InputsListInForm', 
-    loadComponent: () => import('@external/inputs-list-in-form/angular/inputs-list-in-form.component').then((m) => m.InputsListInFormComponent),
+    name: 'InputsListInForm',
+    component: import('@external/inputs-list-in-form/angular19/inputs-list-in-form.component').then((m) => m.InputsListInFormComponent),
   },
 ];
 

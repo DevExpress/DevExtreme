@@ -28,6 +28,10 @@ export class SearchController {
 
   public readonly searchTextOption = this.options.twoWay('searchPanel.text');
 
+  public readonly searchPlaceholder = this.options.oneWay('searchPanel.placeholder');
+
+  public readonly searchWidth = this.options.oneWay('searchPanel.width');
+
   private readonly searchVisibleColumnsOnly = this.options.oneWay('searchPanel.searchVisibleColumnsOnly');
 
   public readonly searchFilter = computed(() => {

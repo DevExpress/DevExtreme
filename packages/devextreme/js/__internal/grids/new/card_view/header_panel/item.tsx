@@ -3,6 +3,7 @@ import type { ComponentType, RefObject } from 'inferno';
 import { Component } from 'inferno';
 
 import { Icon } from '../../grid_core/icon';
+import { getHeaderItemA11yLabel } from './a11y/index';
 import type { Status } from './column_sortable';
 
 export const CLASSES = {
@@ -13,7 +14,7 @@ export const CLASSES = {
     order: 'dx-cardview-header-item-sorting-order',
   },
   headerFilter: {
-    iconEmpty: 'dx-header-filter-icon',
+    icon: 'dx-header-filter-icon',
     iconFilled: 'dx-header-filter-icon--selected',
   },
 };
@@ -49,6 +50,7 @@ export interface ItemProps {
   isDragging?: boolean;
   template?: ComponentType<{ column: Column }>;
   cssClass?: string;
+  hasFilters?: boolean;
   onKeyDown?: (event: KeyboardEvent) => void;
   onSortClick?: (event: MouseEvent) => void;
   onFilterClick?: (element: Element) => void;
@@ -57,16 +59,14 @@ export interface ItemProps {
 
 export class Item extends Component<ItemProps> {
   public render(): JSX.Element {
-    const Template = this.props.column.headerItemTemplate ?? this.props.template;
-    const cssClass = `${CLASSES.item} ${this.props.column.headerItemCssClass ?? ''} ${this.props.cssClass ?? ''}`;
+    const { column } = this.props;
 
-    const { filterType, filterValues } = this.props.column;
+    const Template = column.headerItemTemplate ?? this.props.template;
+    const cssClass = `${CLASSES.item} ${column.headerItemCssClass ?? ''} ${this.props.cssClass ?? ''}`;
 
-    const hasHeaderFilterValue = filterType === 'exclude'
-      || !!filterValues?.length;
     const headerFilterIconClass = [
-      CLASSES.headerFilter.iconEmpty,
-      hasHeaderFilterValue ? CLASSES.headerFilter.iconFilled : '',
+      CLASSES.headerFilter.icon,
+      this.props.hasFilters ? CLASSES.headerFilter.iconFilled : '',
     ].join(' ');
 
     const icon = this.props.status && {
@@ -75,14 +75,25 @@ export class Item extends Component<ItemProps> {
       none: undefined,
     }[this.props.status];
 
-    const showSortIcon = !this.props.isDragging && this.props.column.sortOrder !== undefined;
-    const showHeaderFilterIcon = !this.props.isDragging && this.props.column?.allowHeaderFiltering;
+    const showSortIcon = !this.props.isDragging && column.sortOrder !== undefined;
+    const showHeaderFilterIcon = !this.props.isDragging && column?.allowHeaderFiltering;
+
+    const ariaLabel = getHeaderItemA11yLabel(
+      column.caption,
+      {
+        hasHeaderFilterValue: this.props.hasFilters,
+        sortOrder: column.sortOrder,
+        sortIndex: column.sortIndex,
+      },
+    );
 
     return (
       <div
         ref={this.props.elementRef}
         className={cssClass}
         tabIndex={this.props.tabIndex}
+        role="menuitem"
+        aria-label={ariaLabel}
         onClick={this.props.onSortClick}
         onKeyDown={this.props.onKeyDown}
         onContextMenu={this.props.onContextMenu}

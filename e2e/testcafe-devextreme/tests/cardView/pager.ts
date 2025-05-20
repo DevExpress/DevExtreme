@@ -78,3 +78,28 @@ test('Page index interaction', async (t) => {
       .ok(compareResults.errorMessages());
   }).before(async () => createCardViewWithPager({ remoteOperations: remoteOperation }));
 });
+
+test('Paging after resetting filter', async (t) => {
+  const cardView = new CardView('#container');
+  const pager = cardView.getPager();
+
+  await cardView.apiOption('filterValue', ['text', '=', '0']);
+
+  // only one card should be visible, so Pager is not rendered
+  await t.expect(pager.element.exists).notOk();
+
+  await cardView.apiClearFilter();
+  await t
+    .expect(pager.element.exists).ok()
+    .expect(pager.getInfoText().textContent).eql('Page 1 of 10 (20 items)');
+
+  // navigate to next page
+  await t
+    .click(pager.getNextNavButton().element)
+    .expect(cardView.getCard(1).getFieldValueCell('Text').innerText)
+    .eql('3');
+}).before(async () => createCardViewWithPager({
+  filterPanel: {
+    visible: true,
+  },
+}));

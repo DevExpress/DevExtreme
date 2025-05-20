@@ -25,7 +25,7 @@ export class ComponentViewComponent implements OnInit {
     const entry = findComponentByPath(path!);
 
     if (entry) {
-      const component = await entry.loadComponent();
+      const component = await entry.component;
       this.vcRef.createComponent(component, { injector: this.injector });
     } else {
       this.vcRef.element.nativeElement.innerHTML = '<p>404 – Component not found</p>';

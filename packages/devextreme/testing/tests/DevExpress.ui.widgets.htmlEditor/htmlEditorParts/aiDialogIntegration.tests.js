@@ -14,7 +14,10 @@ import {
     getResultTextAreaValue,
 } from '../../../helpers/aiDialog.js';
 import { AI_DIALOG_CLASS } from '__internal/ui/html_editor/ui/aiDialog';
+import { POPUP_TITLE_CLOSEBUTTON_CLASS } from '__internal/ui/popup/m_popup';
+import { DX_MENU_ITEM_CLASS } from '__internal/ui/menu/m_menu';
 import uiErrors from 'ui/widget/ui.errors';
+import keyboardMock from '../../../helpers/keyboardMock.js';
 
 const MENU_ITEM_CLASS = 'dx-menu-item';
 const MENU_CLASS = 'dx-menu';
@@ -27,7 +30,7 @@ const setupHtmlEditorWithAi = (config) => {
         toolbar: {
             items: [{
                 name: 'ai',
-                commands: ['summarize']
+                commands: ['summarize'],
             }],
         },
         ...config
@@ -42,7 +45,19 @@ const getAIDialogElement = ($htmlEditor) => {
     return $htmlEditor.find(`.${AI_DIALOG_CLASS}`);
 };
 
-QUnit.module('AI dialog integration', {}, () => {
+const getPopup = (htmlEditor) => {
+    return getAIDialog(htmlEditor)._popup;
+};
+
+const getOverlayContentElement = (htmlEditor) => {
+    return $(getPopup(htmlEditor).content()).parent();
+};
+
+const getCloseButtonElement = (htmlEditor) => {
+    return getOverlayContentElement(htmlEditor).find(`.${POPUP_TITLE_CLOSEBUTTON_CLASS}`);
+};
+
+QUnit.module('AI dialog integration', () => {
     QUnit.module('toolbar', () => {
         QUnit.test('Should pass correct payload to dialog on item click', function(assert) {
             const instance = setupHtmlEditorWithAi();
@@ -135,7 +150,7 @@ QUnit.module('AI dialog integration', {}, () => {
 
             openAIToolbarMenu($('#htmlEditor'));
 
-            const $rootItem = $(`${MENU_CLASS} .${MENU_ITEM_CLASS}`).eq(0);
+            const $rootItem = $(`.${MENU_CLASS} .${MENU_ITEM_CLASS}`).eq(0);
             $rootItem.trigger('dxclick');
 
             assert.strictEqual(showSpy.callCount, 0, 'showAIDialog is not called on root item click');
@@ -495,6 +510,52 @@ QUnit.module('AI dialog integration', {}, () => {
             }] } });
 
             assert.deepEqual(uiErrors.log.lastCall.args, ['W1027'], 'logged with correct args');
+        });
+    });
+
+    QUnit.module('Accessibility', () => {
+        QUnit.test('menu item should have correct aria-label', function(assert) {
+            const instance = setupHtmlEditorWithAi();
+            const $menuItem = instance.$element().find(`.${DX_MENU_ITEM_CLASS}`).first();
+
+            assert.strictEqual($menuItem.attr('aria-label'), 'AI Assistant toolbar item', 'menu item has correct aria-label');
+        });
+    });
+
+    QUnit.module('command execution abort on hiding', {
+        beforeEach() {
+            this.abortSpy = sinon.spy();
+            this.commandSpy = sinon.stub().returns(this.abortSpy);
+            const aiIntegration = { summarize: this.commandSpy };
+            this.htmlEditor = setupHtmlEditorWithAi({ aiIntegration });
+        },
+        afterEach() {
+            sinon.restore();
+        },
+    }, () => {
+        [
+            {
+                name: 'click outside',
+                action() { $(document).trigger('dxpointerdown'); },
+            },
+            {
+                name: 'click on the close button',
+                action() { getCloseButtonElement(this.htmlEditor).trigger('dxclick'); },
+            },
+            {
+                name: 'esc keydown',
+                action() { keyboardMock(getOverlayContentElement(this.htmlEditor)).press('escape'); },
+            },
+        ].forEach(({ name, action }) => {
+            QUnit.test(`should abort on ${name}`, function(assert) {
+                openAIDialog($(this.htmlEditor.$element()));
+
+                assert.ok(this.commandSpy.calledOnce, 'command execution is started');
+
+                action.call(this);
+
+                assert.ok(this.abortSpy.calledOnce, 'abort function is called once');
+            });
         });
     });
 });

@@ -3,7 +3,9 @@ const { test } = QUnit;
 import 'ui/file_manager';
 import fx from 'common/core/animation/fx';
 import pointerEvents from 'common/core/events/pointer';
-import { Consts, FileManagerWrapper, createTestFileSystem, isDesktopDevice } from '../../../helpers/fileManagerHelpers.js';
+import { Consts, FileManagerWrapper, createTestFileSystem } from '../../../helpers/fileManagerHelpers.js';
+import devices from '__internal/core/m_devices';
+import { shouldSkipOnDesktop, shouldSkipOnMobile } from '../../../helpers/device.js';
 
 const moduleConfig = {
 
@@ -46,10 +48,10 @@ const moduleConfig = {
 QUnit.module('Raise context menu', moduleConfig, () => {
 
     test('right click by row on desktops', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desctops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
+
         const $row1 = this.wrapper.getRowInDetailsView(1);
         assert.notOk($row1.hasClass(Consts.SELECTION_CLASS));
         assert.equal(this.wrapper.getContextMenuItems().length, 0);
@@ -68,8 +70,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('right click by row on mobiles', function(assert) {
-        if(isDesktopDevice()) {
-            assert.ok(true, 'only on mobiles');
+        if(shouldSkipOnDesktop(assert)) {
             return;
         }
 
@@ -83,8 +84,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('right click by thumbnails item on desktops', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desctops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -116,8 +116,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('right click by thumbnails item on mobiles', function(assert) {
-        if(isDesktopDevice()) {
-            assert.ok(true, 'only on mobiles');
+        if(shouldSkipOnDesktop(assert)) {
             return;
         }
 
@@ -139,10 +138,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('right click by row and click by select check box', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true);
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
+
         this.wrapper.getSelectCheckBoxInDetailsView(1).trigger('dxclick');
 
         const $row1 = this.wrapper.getRowInDetailsView(1);
@@ -182,7 +181,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         const $row2 = this.wrapper.getRowInDetailsView(2);
         $row2.trigger('dxhoverstart');
         this.wrapper.getRowActionButtonInDetailsView(2).trigger('dxclick');
-        if(isDesktopDevice()) {
+        if(devices.real().deviceType === 'desktop') {
             assert.ok($row1.hasClass(Consts.SELECTION_CLASS));
         }
         assert.ok($row2.hasClass(Consts.SELECTION_CLASS));
@@ -366,10 +365,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Raise the ContextMenuItemClick event on subitems', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
+
         const spy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
@@ -496,10 +495,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Raise the contextMenuShowing event on treeView items', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
+
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
@@ -569,10 +568,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Raise the contextMenuShowing event on detailsView items', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
+
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
@@ -625,10 +624,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Raise the contextMenuShowing event on detailsView free space', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
+
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
@@ -669,10 +668,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Raise the contextMenuShowing event on thumbnailsView items', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
+
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
@@ -700,10 +699,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Raise the contextMenuShowing event on thumbnailsView free space', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
+
         const eventSpy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
@@ -728,10 +727,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
     });
 
     test('Cancel the context menu on the contextMenuShowing event: thumbnailsView', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
+
         const fileManager = this.wrapper.getInstance();
         const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
         fileManager.option({
@@ -769,10 +768,10 @@ QUnit.module('Raise context menu', moduleConfig, () => {
 QUnit.module('Cutomize context menu', moduleConfig, () => {
 
     test('default items rearrangement and modification', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
+
         const testClick = sinon.spy();
 
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
@@ -822,10 +821,10 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('custom items render and modification', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
+
         const testClick = sinon.spy();
 
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
@@ -906,10 +905,10 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('nested items set and use', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
+
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
         fileManagerInstance.option('contextMenu', {
             items: [
@@ -961,10 +960,10 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('context menu for parent directory item contains no edit actions', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
+
         const fileManager = this.$element.dxFileManager('instance');
         fileManager.option('currentPath', 'Folder 1');
         this.clock.tick(400);
@@ -985,8 +984,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('context menu items can be updated on selection changed event after right button click', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -1006,8 +1004,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('context menu items can be updated on selection changed event after action button click', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -1028,8 +1025,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('context menu items can be updated for visible menu after action button click', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -1046,8 +1042,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('default context menu items can be updated for visible menu after action button click', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -1067,8 +1062,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('default items visibility - all items are visible (T922557)', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -1129,8 +1123,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('default items visibility - none items are visible (T922557)', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -1223,8 +1216,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('Customize the context menu on the contextMenuShowing event: thumbnailsView', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
         const contextMenuItems = ['rename', { text: 'someText', beginGroup: true }];
@@ -1249,10 +1241,10 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test.skip('default items missed and forbidden options (T972377)', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
+
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
         fileManagerInstance.option('contextMenu', {
             items: ['upload', {
@@ -1286,10 +1278,10 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
     });
 
     test('custom items missed and forbidden options (T972377)', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
+
         const customText = 'customText';
         const clickSpy = sinon.spy();
         const fileManagerInstance = $('#fileManager').dxFileManager('instance');
