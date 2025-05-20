@@ -13,7 +13,7 @@
         },
         {
             "kind": "remove",
-            "uid": "/scheduler:Toolbar"
+            "uid": "/scheduler:DateNavigatorItemProperties"
         }
     ]
 }
