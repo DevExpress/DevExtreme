@@ -1756,7 +1756,7 @@
         "Demos": [
           {
             "Title": "Columns Reordering",
-            "Name": "Columns Reordering",
+            "Name": "ColumnsReordering",
             "DocUrl": "",
             "Widget": "CardView",
             "MvcDescription": "",
@@ -1806,7 +1806,7 @@
           },
           {
             "Title": "Toolbar Customization",
-            "Name": "Toolbar Customization",
+            "Name": "ToolbarCustomization",
             "DocUrl": "",
             "Widget": "CardView",
             "MvcDescription": "",
