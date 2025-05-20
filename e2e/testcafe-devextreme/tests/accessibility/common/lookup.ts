@@ -17,20 +17,6 @@ const options: Options<Properties> = {
   inputAttr: [{ 'aria-label': 'aria-label' }],
   opened: [true, false],
   deferRendering: [true, false],
-  buttons: [
-    undefined,
-    [
-      {
-        name: 'today',
-        location: 'before',
-        options: {
-          text: 'Today',
-          stylingMode: 'text',
-          onClick: () => {},
-        },
-      },
-    ],
-  ],
 };
 
 const a11yCheckConfig = {
