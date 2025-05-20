@@ -50,7 +50,7 @@ describe('when keyExpr is missing', () => {
   });
   
   describe('selection mode single', () => {
-    it('shouldn\'t throw E1042 error if keyExpr is missing and selection', () => {
+    it('shouldn\'t throw E1042 on initial startup', () => {
       setup({
         dataSource: [{ value: 'test1' }, { value: 'test2' }],
         selection: {
