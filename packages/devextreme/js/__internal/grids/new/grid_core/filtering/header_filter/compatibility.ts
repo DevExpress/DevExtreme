@@ -1,16 +1,24 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Column } from '../../columns_controller/types';
+import { DataController } from '../../data_controller/index';
+import { OptionsController } from '../../options_controller/options_controller';
 import { FilterController } from '../filter_controller';
+import { getDataSourceOptions } from './legacy_header_filter';
 import { HeaderFilterViewController } from './view_controller';
 
 export class CompatibilityHeaderFilterController {
   public static dependencies = [
     FilterController,
     HeaderFilterViewController,
+    DataController,
+    OptionsController,
   ] as const;
 
   constructor(
     private readonly realFilterController: FilterController,
     private readonly realHeaderFilterViewController: HeaderFilterViewController,
+    private readonly realDataController: DataController,
+    private readonly options: OptionsController,
   ) {}
 
   public getCustomFilterOperations(): unknown[] {
@@ -35,5 +43,17 @@ export class CompatibilityHeaderFilterController {
 
   public hideHeaderFilterMenu(): void {
     this.realHeaderFilterViewController.closePopup();
+  }
+
+  public getDataSource(column: Column): any {
+    const adapter = this.realDataController.getStoreLoadAdapter();
+    const popupOptions = {
+      column,
+      filterType: column.filterType,
+      filterValues: column.filterValues,
+    } as any;
+    const rootHeaderFilterOptions = this.options.oneWay('headerFilter').peek();
+
+    return getDataSourceOptions(adapter, popupOptions, rootHeaderFilterOptions, null);
   }
 }
