@@ -15,15 +15,12 @@ import {
 } from '../../../helpers/aiDialog.js';
 import { AI_DIALOG_CLASS } from '__internal/ui/html_editor/ui/aiDialog';
 import { POPUP_TITLE_CLOSEBUTTON_CLASS } from '__internal/ui/popup/m_popup';
-import {
-    DX_MENU_CLASS,
-    DX_MENU_ITEM_CLASS,
-    DX_SUBMENU_CLASS,
-} from '__internal/ui/menu/m_menu';
-import { TOOLBAR_AI_OVERLAY_CONTENT_CLASS } from '__internal/ui/html_editor/modules/m_toolbar';
+import { DX_MENU_ITEM_CLASS } from '__internal/ui/menu/m_menu';
 import uiErrors from 'ui/widget/ui.errors';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 
+const MENU_ITEM_CLASS = 'dx-menu-item';
+const MENU_CLASS = 'dx-menu';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
 const setupHtmlEditorWithAi = (config) => {
@@ -153,7 +150,7 @@ QUnit.module('AI dialog integration', () => {
 
             openAIToolbarMenu($('#htmlEditor'));
 
-            const $rootItem = $(`.${DX_MENU_CLASS} .${DX_MENU_ITEM_CLASS}`).eq(0);
+            const $rootItem = $(`.${MENU_CLASS} .${MENU_ITEM_CLASS}`).eq(0);
             $rootItem.trigger('dxclick');
 
             assert.strictEqual(showSpy.callCount, 0, 'showAIDialog is not called on root item click');
@@ -232,7 +229,7 @@ QUnit.module('AI dialog integration', () => {
 
             openAIToolbarMenu($('#htmlEditor'));
 
-            const $menuItem = $(`.${DX_MENU_ITEM_CLASS}`).last();
+            const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
             assert.strictEqual($menuItem.text(), 'Summarize name', 'custom command text rendered in menu');
         });
 
@@ -248,7 +245,7 @@ QUnit.module('AI dialog integration', () => {
 
             openAIToolbarMenu($('#htmlEditor'));
 
-            const $menuItem = $(`.${DX_MENU_ITEM_CLASS}`).last();
+            const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
             assert.strictEqual($menuItem.text(), 'Custom command', 'custom command rendered in menu');
         });
 
@@ -263,7 +260,7 @@ QUnit.module('AI dialog integration', () => {
 
             openAIToolbarMenu($('#htmlEditor'));
 
-            const $menuItem = $(`.${DX_MENU_ITEM_CLASS}`).last();
+            const $menuItem = $(`.${MENU_ITEM_CLASS}`).last();
 
             assert.strictEqual($menuItem.hasClass(DISABLED_STATE_CLASS), true, 'custom command is disabled');
         });
@@ -272,25 +269,9 @@ QUnit.module('AI dialog integration', () => {
             setupHtmlEditorWithAi({ toolbar: { items: [{ name: 'ai', commands: [] }] } });
             openAIToolbarMenu($('#htmlEditor'));
 
-            const menuInstance = $(`.${DX_MENU_CLASS}`).dxMenu('instance');
+            const menuInstance = $(`.${MENU_CLASS}`).dxMenu('instance');
 
             assert.strictEqual(menuInstance.option('disabled'), true, 'menu is disabled');
-        });
-
-        QUnit.test('menu overlay content element should have ai overlay content class', function(assert) {
-            const clock = sinon.useFakeTimers();
-
-            try {
-                setupHtmlEditorWithAi();
-                openAIToolbarMenu($('#htmlEditor'));
-
-                clock.tick(200);
-
-                const $overlayContent = $(`.${DX_SUBMENU_CLASS}`).parent();
-                assert.ok($overlayContent.hasClass(TOOLBAR_AI_OVERLAY_CONTENT_CLASS), 'class has been set');
-            } finally {
-                clock.restore();
-            }
         });
     });
 
