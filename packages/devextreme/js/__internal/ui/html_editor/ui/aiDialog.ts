@@ -55,6 +55,8 @@ const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
 const LOADINDICATOR_SIZE = 48;
 
+const INPUT_EVENT = 'input';
+
 export const TEXT_AREA_MIN_HEIGHT = 64;
 export const TEXT_AREA_MAX_HEIGHT = 128;
 export const REPLACE_DROPDOWN_WIDTH = 150;
@@ -236,8 +238,17 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       placeholder: localizationMessage.format('dxHtmlEditor-aiAskPlaceholder'),
       _shouldAttachKeyboardEvents: true,
       onInitialized: this._addEscapeHandler.bind(this),
+      valueChangeEvent: INPUT_EVENT,
       onValueChanged: (e): void => {
         this._askAIPrompt = e.value;
+
+        if (this._isAskAICommandSelected) {
+          const shouldRefreshToolbarItems = !e.value || !e.previousValue;
+
+          if (shouldRefreshToolbarItems) {
+            this._refreshToolbarItems();
+          }
+        }
       },
     };
 
@@ -412,6 +423,9 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   protected _getGenerateButtonItem(): NamedToolbarItem {
     const width = getActionButtonWidth();
+    const promptTextArea = this._promptTextArea;
+    const disabled = !promptTextArea.option('value');
+
     return {
       name: 'generate',
       toolbar: 'bottom',
@@ -421,6 +435,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         type: 'default',
         text: localizationMessage.format('dxHtmlEditor-aiGenerate'),
         stylingMode: 'contained',
+        disabled,
         width,
         onClick: () => this._executeAICommand(),
         onInitialized: this._addEscapeHandler.bind(this),
