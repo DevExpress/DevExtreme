@@ -12,8 +12,8 @@ import { OptionsController } from '../../options_controller/options_controller';
 import { FilterController } from '../filter_controller';
 import type { AppliedFilters } from '../types';
 import { getAppliedFilterExpressions } from '../utils';
-import { getDataSourceOptions, getFilterType } from './legacy_header_filter';
-import type { PopupState } from './types';
+import { getDataSourceOptions, getHeaderFilterListType } from './legacy_header_filter';
+import type { PopupOptions, PopupState } from './types';
 import { getColumnIdentifier } from './utils';
 
 export class HeaderFilterViewController {
@@ -45,10 +45,9 @@ export class HeaderFilterViewController {
     const rootDataSource = this.dataController.getStoreLoadAdapter();
     const rootHeaderFilterOptions = this.options.oneWay('headerFilter').peek();
     const filterExpression = this.getFilterExpressionWithoutCurrentColumn(column);
-    const type = getFilterType(column);
+    const type = getHeaderFilterListType(column);
     const { columnsController } = this;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const popupOptions: any = {
+    const popupOptions: PopupOptions = {
       type,
       column: { ...column },
       isFilterBuilder,

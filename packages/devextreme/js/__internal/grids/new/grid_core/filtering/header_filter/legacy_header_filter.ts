@@ -25,6 +25,8 @@ import { updateHeaderFilterItemSelectionState } from '@ts/grids/grid_core/header
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 
+import type { HeaderFilterListType } from './types';
+
 export const getHeaderItemText = (
   displayValue,
   column,
@@ -211,9 +213,9 @@ export const getDataSourceOptions = (
   return options.dataSource;
 };
 
-export const getFilterType = (
+export const getHeaderFilterListType = (
   column: Column,
-): 'tree' | 'list' => {
+): HeaderFilterListType => {
   const groupInterval = filteringUtils.getGroupInterval(column);
   return groupInterval && groupInterval.length > 1 ? 'tree' : 'list';
 };

@@ -156,8 +156,8 @@ describe('HeaderFilter', () => {
 
         const state = viewController.popupState.peek();
 
-        expect(typeof state?.options.dataSource.load).toBe('function');
-        expect(typeof state?.options.dataSource.postProcess).toBe('function');
+        expect(typeof (state?.options.dataSource as any).load).toBe('function');
+        expect(typeof (state?.options.dataSource as any).postProcess).toBe('function');
       });
 
       // NOTE: Unfortunately, we cannot test perfectly local group functions here
@@ -195,8 +195,8 @@ describe('HeaderFilter', () => {
 
             const state = viewController.popupState.peek();
 
-            expect(state?.options.dataSource.group).toBeTruthy();
-            expect(checkFn(state?.options.dataSource.group)).toBeTruthy();
+            expect((state?.options.dataSource as any).group).toBeTruthy();
+            expect(checkFn((state?.options.dataSource as any).group)).toBeTruthy();
           });
     });
   });
