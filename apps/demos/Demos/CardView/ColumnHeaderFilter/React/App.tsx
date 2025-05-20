@@ -8,7 +8,6 @@ const App = () => (
   <CardView
     dataSource={customers}
     keyExpr="ID"
-    defaultColumns={columns}
   >
     { columns.map((column, index) => <Column dataField={column} key={index} />) }
   </CardView>
