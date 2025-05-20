@@ -19,7 +19,7 @@ const JS_VENDORS = [
         path: 'file-saver/dist/FileSaver.js'
     },
     {
-        path: 'jquery'
+        path: 'jquery/dist/jquery.js'
     },
     {
         path: 'jspdf/dist/jspdf.umd.js'
