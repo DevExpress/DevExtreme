@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxTemplateModule } from 'devextreme-angular';
-import { exportDataGrid } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme-angular/common/export/pdf';
 import { jsPDF } from 'jspdf';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { Service, Country } from './app.service';

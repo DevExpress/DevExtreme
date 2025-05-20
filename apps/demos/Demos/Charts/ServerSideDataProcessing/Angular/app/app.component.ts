@@ -3,8 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { DxChartModule, DxSelectBoxModule } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
-import 'devextreme/data/odata/store';
+import { DataSource } from 'devextreme-angular/common/data';
+
 
 import { Month, Service } from './app.service';
 

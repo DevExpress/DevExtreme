@@ -17,7 +17,7 @@
 </template>
 <script setup lang="ts">
 import DxList from 'devextreme-vue/list';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-vue/common/data';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import ProductInfo from './ProductInfo.vue';
 

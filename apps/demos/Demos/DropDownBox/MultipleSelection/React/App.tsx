@@ -8,7 +8,7 @@ import DataGrid, {
   Scrolling,
   type DataGridTypes,
 } from 'devextreme-react/data-grid';
-import CustomStore from 'devextreme/data/custom_store';
+import { CustomStore } from 'devextreme-react/common/data';
 import 'whatwg-fetch';
 
 const gridColumns = ['CompanyName', 'City', 'Phone'];

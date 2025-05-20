@@ -40,7 +40,7 @@ import {
   DxPager,
 } from 'devextreme-vue/data-grid';
 import { jsPDF } from 'jspdf';
-import { exportDataGrid } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme-vue/common/export/pdf';
 import { customers } from './data.ts';
 
 const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
