@@ -60,21 +60,18 @@ const bundleConfig = {
   },
 };
 
-// eslint-disable-next-line no-unused-vars
-function useBundle() {
-  System.config(bundleConfig);
+System.config(bundleConfig);
 
-  if (window.config) {
-    [
-      'devextreme',
-      'devextreme-angular',
-      'devexpress-gantt',
-      'devexpress-diagram',
-      'rxjs',
-    ].forEach((pkg) => delete window.config.map[pkg]);
-  }
+if (window.config) {
+  [
+    'devextreme',
+    'devextreme-angular',
+    'devexpress-gantt',
+    'devexpress-diagram',
+    'rxjs',
+  ].forEach((pkg) => delete window.config.map[pkg]);
+
+  System.config(window.config);
 }
 
-// useBundle();
-System.config(window.config);
 System.import('@angular/compiler').catch(console.error.bind(console));
