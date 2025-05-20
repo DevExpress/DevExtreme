@@ -211,12 +211,6 @@
   border-top-color: $htmleditor-toolbar-border-color;
 }
 
-.dx-htmleditor-toolbar-ai-overlay-content {
-  .dx-context-menu-content-delimiter::before {
-    content: none;
-  }
-}
-
 .dx-resize-frame {
   border-color: $htmleditor-resize-frame-border-color;
 

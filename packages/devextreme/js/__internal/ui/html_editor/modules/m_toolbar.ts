@@ -15,7 +15,7 @@ import {
   isDefined, isEmptyObject, isObject, isString,
 } from '@js/core/utils/type';
 import type { AICommandName, AICustomCommand, AIToolbarItem } from '@js/ui/html_editor';
-import type { ContentReadyEvent, ItemClickEvent, SubmenuShownEvent } from '@js/ui/menu';
+import type { ContentReadyEvent, ItemClickEvent } from '@js/ui/menu';
 import type { Item } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import errors from '@js/ui/widget/ui.errors';
@@ -487,9 +487,6 @@ if (Quill) {
       const options = {
         dataSource,
         disabled: isMenuDisabled,
-        onSubmenuShown: ({ submenuContainer }: SubmenuShownEvent): void => {
-          $(submenuContainer).parent().addClass(TOOLBAR_AI_OVERLAY_CONTENT_CLASS);
-        },
         onContentReady: (e: ContentReadyEvent): void => {
           const $item = $(e.element).find(`.${DX_MENU_ITEM_CLASS}`).first();
           $item.attr('aria-label', localizationMessage.format('dxHtmlEditor-aiToolbarItemAriaLabel'));
