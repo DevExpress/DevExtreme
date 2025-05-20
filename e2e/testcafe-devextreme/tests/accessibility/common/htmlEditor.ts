@@ -1,9 +1,12 @@
 import { Properties } from 'devextreme/ui/html_editor.d';
+import HtmlEditor from 'devextreme-testcafe-models/htmlEditor';
 import { Selector } from 'testcafe';
-import { openAIDialog } from '../../htmlEditor/dialogs/aiDialog/common';
 import url from '../../../helpers/getPageUrl';
 import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
 import { Options } from '../../../helpers/generateOptionMatrix';
+
+const MENU_ITEM_CLASS = 'dx-menu-item';
+const SUBMENU_CLASS = 'dx-submenu';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../../container.html'));
@@ -57,8 +60,17 @@ const aiOptions: Options<Properties> = {
 };
 
 const aiCreated = async (t: TestController): Promise<void> => {
+  const htmlEditor = new HtmlEditor('#container');
+
   await t.click(Selector(defaultSelector));
-  await openAIDialog(t, 4, 0);
+
+  await t
+    .click(htmlEditor.toolbar.getItemByName('ai'))
+    .click(Selector(`.${SUBMENU_CLASS} .${MENU_ITEM_CLASS}`).nth(4));
+
+  await t
+    .click(Selector(`.${SUBMENU_CLASS} .${MENU_ITEM_CLASS}`).nth(4)
+      .find(`.${SUBMENU_CLASS} .${MENU_ITEM_CLASS}`).nth(0));
 };
 
 const aiConfiguration: Configuration = {
