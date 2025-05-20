@@ -55,7 +55,7 @@ const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
 const LOADINDICATOR_SIZE = 48;
 
-const inputEvent = 'input';
+const INPUT_EVENT = 'input';
 
 export const TEXT_AREA_MIN_HEIGHT = 64;
 export const TEXT_AREA_MAX_HEIGHT = 128;
@@ -238,7 +238,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       placeholder: localizationMessage.format('dxHtmlEditor-aiAskPlaceholder'),
       _shouldAttachKeyboardEvents: true,
       onInitialized: this._addEscapeHandler.bind(this),
-      valueChangeEvent: inputEvent,
+      valueChangeEvent: INPUT_EVENT,
       onValueChanged: (e): void => {
         this._askAIPrompt = e.value;
 
