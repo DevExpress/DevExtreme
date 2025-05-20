@@ -6,7 +6,7 @@ import messageLocalization from '@js/localization/message';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/index';
-import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/controller';
+import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/index';
 import { ShowCheckBoxesMode } from '@ts/grids/new/grid_core/selection/const';
 import Selection from '@ts/ui/selection/m_selection';
 

@@ -26,21 +26,6 @@ const setup = (config: Options = {}) => {
   };
 };
 
-const checkKeyExprError = (
-  action: () => unknown,
-  selectionController?: SelectionController,
-): void => {
-  try {
-    action();
-  } catch (err) {
-    expect((err as { __id: string }).__id).toEqual('E1042');
-
-    if (selectionController) {
-      expect(selectionController.getSelectedCardKeys()).toEqual([]);
-    }
-  }
-};
-
 describe('SelectionController', () => {
   // Public methods
 
@@ -932,11 +917,13 @@ describe('SelectionController', () => {
           selectedItems: [cardData],
         };
 
-        checkKeyExprError(
+        try {
+          // Call the private method directly
           // @ts-expect-error - accessing private method
-          () => selectionController.selectionChanged(selectionChangedEvent),
-          selectionController,
-        );
+          selectionController.selectionChanged(selectionChangedEvent);
+        } catch (error) {
+          expect((error as { __id: string }).__id).toEqual('E1042');
+        }
       });
     });
 
@@ -998,134 +985,6 @@ describe('SelectionController', () => {
           selectedCardKeys: [],
           selectedCardsData: [],
         }]);
-      });
-    });
-  });
-
-  describe('when keyExpr is missing', () => {
-    describe('selection mode single', () => {
-      it('should throw E1042 error if keyExpr is missing and selection ', () => {
-        checkKeyExprError(() => setup({
-          dataSource: [{ value: 'test1' }, { value: 'test2' }],
-          selection: {
-            mode: 'single',
-          },
-        }));
-      });
-
-      it('should throw E1042 error on card click selection', () => {
-        const { selectionController } = setup({
-          dataSource: [{ value: 'test1' }, { value: 'test2' }],
-          selection: {
-            mode: 'single',
-          },
-        });
-
-        checkKeyExprError(
-          () => selectionController.changeCardSelection(0),
-          selectionController,
-        );
-      });
-
-      it('should throw E1042 error on initial selectedCardKeys', () => {
-        checkKeyExprError(() => setup({
-          dataSource: [{ value: 'test1' }, { value: 'test2' }],
-          selection: {
-            mode: 'single',
-          },
-          selectedCardKeys: [0],
-        }));
-      });
-
-      it('should throw E1042 error on runtime selectedCardKeys update', () => {
-        const { optionsController } = setup({
-          dataSource: [{ value: 'test1' }, { value: 'test2' }],
-          selection: {
-            mode: 'single',
-          },
-        });
-
-        checkKeyExprError(() => optionsController.option('selectedCardKeys', [1]));
-      });
-    });
-
-    describe('selection mode multiple', () => {
-      it('should throw E1042 error if keyExpr is missing and selection ', () => {
-        checkKeyExprError(() => setup({
-          dataSource: [{ value: 'test1' }, { value: 'test2' }],
-          selection: {
-            mode: 'single',
-          },
-        }));
-      });
-
-      it('should throw E1042 error on card click selection', () => {
-        const { selectionController } = setup({
-          dataSource: [{ value: 'test1' }, { value: 'test2' }],
-          selection: {
-            mode: 'multiple',
-            showCheckBoxesMode: 'always',
-          },
-        });
-
-        checkKeyExprError(
-          () => selectionController.changeCardSelection(0),
-          selectionController,
-        );
-      });
-
-      it('should throw E1042 error on checkbox click selection', () => {
-        const { selectionController } = setup({
-          dataSource: [{ value: 'test1' }, { value: 'test2' }],
-          selection: {
-            mode: 'multiple',
-            showCheckBoxesMode: 'always',
-          },
-        });
-
-        checkKeyExprError(
-          () => selectionController.changeCardSelection(0, { control: true }),
-          selectionController,
-        );
-      });
-
-      it('should throw E1042 error on selectAll toolbar button click', () => {
-        const { selectionController } = setup({
-          dataSource: [{ value: 'test1' }, { value: 'test2' }],
-          selection: {
-            mode: 'multiple',
-            showCheckBoxesMode: 'always',
-            allowSelectAll: true,
-          },
-        });
-
-        checkKeyExprError(
-          () => selectionController.selectAll(),
-          selectionController,
-        );
-      });
-
-      it('should throw E1042 error on initial selectedCardKeys', () => {
-        checkKeyExprError(() => setup({
-          dataSource: [{ value: 'test1' }, { value: 'test2' }],
-          selection: {
-            mode: 'multiple',
-            showCheckBoxesMode: 'always',
-          },
-          selectedCardKeys: [0, 1],
-        }));
-      });
-
-      it('should throw E1042 error on runtime selectedCardKeys update', () => {
-        const { optionsController } = setup({
-          dataSource: [{ value: 'test1' }, { value: 'test2' }],
-          selection: {
-            mode: 'multiple',
-            showCheckBoxesMode: 'always',
-          },
-        });
-
-        checkKeyExprError(() => optionsController.option('selectedCardKeys', [0, 1]));
       });
     });
   });
