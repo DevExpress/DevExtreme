@@ -47,6 +47,33 @@ export class HeaderFilterViewController {
     const filterExpression = this.getFilterExpressionWithoutCurrentColumn(column);
     const type = getHeaderFilterListType(column);
     const { columnsController } = this;
+    const applyFilter = (filterValues, filterType): void => {
+      if (customApply) {
+        customApply(filterValues);
+      } else {
+        columnsController.updateColumns(
+          (columns) => {
+            const index = getColumnIndexByName(columns, column.name);
+            const newColumns = [...columns];
+
+            newColumns[index] = {
+              ...newColumns[index],
+              headerFilter: {
+                ...newColumns[index].headerFilter,
+              },
+              // NOTE: Copy array because of mutations in legacy code
+              filterValues: Array.isArray(filterValues)
+                ? [...filterValues]
+                : filterValues,
+              filterType,
+            };
+            return newColumns;
+          },
+        );
+      }
+
+      onFilterCloseCallback?.();
+    };
     const popupOptions: PopupOptions = {
       type,
       column: { ...column },
@@ -58,31 +85,7 @@ export class HeaderFilterViewController {
         ? [...column.filterValues]
         : column.filterValues,
       apply(): void {
-        if (customApply) {
-          customApply(this.filterValues);
-        } else {
-          columnsController.updateColumns(
-            (columns) => {
-              const index = getColumnIndexByName(columns, column.name);
-              const newColumns = [...columns];
-
-              newColumns[index] = {
-                ...newColumns[index],
-                headerFilter: {
-                  ...newColumns[index].headerFilter,
-                },
-                // NOTE: Copy array because of mutations in legacy code
-                filterValues: Array.isArray(this.filterValues)
-                  ? [...this.filterValues]
-                  : this.filterValues,
-                filterType: this.filterType,
-              };
-              return newColumns;
-            },
-          );
-        }
-
-        onFilterCloseCallback?.();
+        applyFilter(this.filterValues, this.filterType);
       },
       hidePopupCallback: (): void => {
         this.popupStateInternal.value = null;
