@@ -2,7 +2,6 @@
 
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { ColumnChooserMode } from 'devextreme/artifacts/npm/devextreme/common/grids';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../helpers/generateDataSourceData';
@@ -12,7 +11,7 @@ fixture.disablePageReloads`Column chooser`
   .page(url(__dirname, '../../container.html'));
 
 ['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
-  ['dragAndDrop', 'select'].forEach((mode: ColumnChooserMode) => {
+  ['dragAndDrop', 'select'].forEach((mode: any) => {
     test('Column chooser screenshot', async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       const dataGrid = new DataGrid('#container');
