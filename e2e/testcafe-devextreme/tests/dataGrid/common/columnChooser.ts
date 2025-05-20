@@ -15,10 +15,11 @@ fixture.disablePageReloads`Column chooser`
     test(`Column chooser screenshot in mode=${mode}, theme=${theme}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       const dataGrid = new DataGrid('#container');
+      const columnChooser = dataGrid.getColumnChooser();
 
       await dataGrid.apiShowColumnChooser();
 
-      await takeScreenshot(`column-chooser-${mode}-mode (${theme}).png`, dataGrid.getColumnChooser().element);
+      await takeScreenshot(`column-chooser-${mode}-mode (${theme}).png`, columnChooser.element);
 
       await t
         .expect(compareResults.isValid())
