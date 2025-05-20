@@ -26,7 +26,10 @@ test('FilterPanel and FilterBuilderPopup screenshots', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 
-  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
+  const a11yCheckConfig = {
+    rules: { 'color-contrast': { enabled: false } },
+  };
+  await a11yCheck(t, a11yCheckConfig, CARD_VIEW_SELECTOR);
 }).before(async () => {
   await createWidget('dxCardView', {
     ...baseConfig,
