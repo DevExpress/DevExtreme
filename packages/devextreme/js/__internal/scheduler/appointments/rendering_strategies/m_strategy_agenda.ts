@@ -29,11 +29,14 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
   }
 
   groupAppointmentByResources(appointments) {
-    return groupAppointmentsByGroupLeafs(
+    const grouped = groupAppointmentsByGroupLeafs(
       this.resourceManager.resourceById,
       this.resourceManager.groupsLeafs,
       appointments,
     );
+
+    // TODO(9): Get rid of it as soon as you can. Unnecessary copy of appointments
+    return grouped.map((group) => group.map((item) => ({ ...item })));
   }
 
   createTaskPositionMap(appointments: SafeAppointment[]) {
@@ -53,11 +56,11 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
 
       let groupedAppts: any = [];
 
-      each(appointmentsByResources, (i, appts) => {
+      appointmentsByResources.forEach((appts) => {
         let additionalAppointments = [];
         let recurrentIndexes = [];
 
-        each(appts, (index, appointment) => {
+        appts.forEach((appointment, index) => {
           const recurrenceBatch = this.instance.getAppointmentsInstance()._processRecurrenceAppointment(appointment, index);
           let appointmentBatch: any = null;
 
