@@ -154,41 +154,40 @@ export const getDataSourceOptions = (
   if (isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
     // @ts-expect-error
     options.dataSource = oldNormalizeDataSourceOptions(headerFilterDataSource);
-    return options.dataSource;
+  } else {
+    const cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;
+
+    options.dataSource = {
+      filter,
+      group,
+      useDefaultSearch: true,
+      load: (loadOptions) => {
+        // @ts-expect-error Deferred ctor.
+        const d = new Deferred();
+        // NOTE: this marked as deprecated in original code
+        loadOptions.dataField = column.dataField || column.name;
+        storeLoadAdapter.load(loadOptions).done((data) => {
+          const convertUTCDates = remoteGrouping
+              && isUTCFormat(column.serializationFormat)
+              && cutoffLevel > 3;
+
+          if (convertUTCDates) {
+            data = convertDataFromUTCToLocal(data, column);
+          }
+
+          _processGroupItems(data, null, null, {
+            level: cutoffLevel,
+            column,
+            headerFilterOptions,
+          });
+
+          d.resolve(data);
+        }).fail(d.reject);
+
+        return d;
+      },
+    };
   }
-
-  const cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;
-
-  options.dataSource = {
-    filter,
-    group,
-    useDefaultSearch: true,
-    load: (loadOptions) => {
-      // @ts-expect-error Deferred ctor.
-      const d = new Deferred();
-      // NOTE: this marked as deprecated in original code
-      loadOptions.dataField = column.dataField || column.name;
-      storeLoadAdapter.load(loadOptions).done((data) => {
-        const convertUTCDates = remoteGrouping
-            && isUTCFormat(column.serializationFormat)
-            && cutoffLevel > 3;
-
-        if (convertUTCDates) {
-          data = convertDataFromUTCToLocal(data, column);
-        }
-
-        _processGroupItems(data, null, null, {
-          level: cutoffLevel,
-          column,
-          headerFilterOptions,
-        });
-
-        d.resolve(data);
-      }).fail(d.reject);
-
-      return d;
-    },
-  };
 
   if (isFunction(headerFilterDataSource)) {
     headerFilterDataSource.call(column, options);
