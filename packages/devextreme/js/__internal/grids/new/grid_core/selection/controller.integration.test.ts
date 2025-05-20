@@ -44,11 +44,11 @@ describe('when keyExpr is missing', () => {
     $(cardView ?? undefined as any)?.dxCardView('dispose');
     document.body.innerHTML = '';
   });
-  
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  
+
   describe('selection mode single', () => {
     it('shouldn\'t throw E1042 on initial startup', () => {
       setup({

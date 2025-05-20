@@ -917,13 +917,10 @@ describe('SelectionController', () => {
           selectedItems: [cardData],
         };
 
-        try {
-          // Call the private method directly
+        expect(() => {
           // @ts-expect-error - accessing private method
           selectionController.selectionChanged(selectionChangedEvent);
-        } catch (error) {
-          expect((error as { __id: string }).__id).toEqual('E1042');
-        }
+        }).toThrowError('E1042');
       });
     });
 
