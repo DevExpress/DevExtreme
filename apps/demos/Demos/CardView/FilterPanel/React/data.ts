@@ -1,4 +1,15 @@
-export const customers = [{
+export interface Customer {
+  ID: number;
+  CompanyName: string;
+  Address: string;
+  City: string;
+  State: string;
+  Zipcode: number;
+  Phone: string;
+  Fax: string;
+}
+
+export const customers: Customer[] = [{
   ID: 1,
   CompanyName: 'Super Mart of the West',
   Address: '702 SW 8th Street',
