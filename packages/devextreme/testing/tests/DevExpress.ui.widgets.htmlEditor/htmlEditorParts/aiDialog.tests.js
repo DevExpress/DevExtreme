@@ -33,6 +33,7 @@ import {
     clickActionButton,
     getBottomToolbarItems,
     findButtonByName,
+    getButtonInstance,
     getCommandSelectBoxInstance,
     getItemByName,
     getLoadIndicator,
@@ -209,6 +210,11 @@ QUnit.module('AIDialog', () => {
                 this.showDialog(config);
                 this.promise.then(() => {
                     this.setDialogState(element.state);
+
+                    if(element.name === 'generate button') {
+                        const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
+                        promptTextAreaInstance.option('value', 'some question');
+                    }
 
                     const $element = $(`.${element.domClass}`).eq(element.index);
                     const instance = $element[element.class]('instance');
@@ -410,6 +416,9 @@ QUnit.module('AIDialog', () => {
                 },
             });
 
+            const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
+            promptTextAreaInstance.option('value', 'some question');
+
             const $generateButton = findButtonByName(this.aiDialogPopup, 'generate');
             $generateButton.trigger('dxclick');
 
@@ -500,6 +509,28 @@ QUnit.module('AIDialog', () => {
 
             assert.strictEqual(bottomToolbarItems.length, 1, '1 button is rendered');
             assert.strictEqual(bottomToolbarItems[0].name, 'generate', 'generate button is shown');
+        });
+
+        QUnit.test('generate button should be disabled when textArea is empty', function(assert) {
+            showAIDialog(this, {
+                config: { currentCommand: 'askAI' }
+            });
+
+            let generateButton = getButtonInstance(findButtonByName(this.aiDialogPopup, 'generate'));
+
+            assert.strictEqual(generateButton.option('disabled'), true, 'generate button is disabled on init');
+
+            const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
+
+            promptTextAreaInstance.option('value', 'f');
+            generateButton = getButtonInstance(findButtonByName(this.aiDialogPopup, 'generate'));
+
+            assert.strictEqual(generateButton.option('disabled'), false, 'generate button is enabled after input some text');
+
+            promptTextAreaInstance.option('value', '');
+            generateButton = getButtonInstance(findButtonByName(this.aiDialogPopup, 'generate'));
+
+            assert.strictEqual(generateButton.option('disabled'), true, 'generate button is disabled after input is cleared');
         });
     });
 
@@ -804,6 +835,9 @@ QUnit.module('AIDialog', () => {
 
             this.showDialog({ currentCommand: 'askAI' });
 
+            const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
+            promptTextAreaInstance.option('value', 'some question');
+
             const $generateButton = findButtonByName(this.aiDialogPopup, 'generate');
             $generateButton.trigger('dxclick');
 
@@ -900,8 +934,9 @@ QUnit.module('AIDialog', () => {
             this.showDialog({ currentCommand: 'askAI' });
 
             const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
-            const generateButton = findButtonByName(this.aiDialogPopup, 'generate');
+            promptTextAreaInstance.option('value', 'some question');
 
+            const generateButton = findButtonByName(this.aiDialogPopup, 'generate');
             generateButton.trigger('dxclick');
 
             assert.strictEqual(promptTextAreaInstance.option('disabled'), true, 'disabled during generating');
