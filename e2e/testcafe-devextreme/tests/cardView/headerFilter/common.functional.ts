@@ -258,3 +258,48 @@ test('Filter values should be filtered by SearchPanel', async (t) => {
     },
   });
 });
+
+test('Select item state should be correct after search', async (t) => {
+  // arrange
+  const cardView = new CardView('#container');
+
+  await t
+    .click(cardView.getHeaderPanel().getHeaderItem(0).getFilterIcon());
+
+  // assert
+  await t
+    .expect(cardView.getHeaderFilterList().getItems().count)
+    .eql(4);
+
+  const firstHeaderFilterItem = cardView.getHeaderFilterList().getItem(0);
+
+  // act
+  await t
+    .click(firstHeaderFilterItem.element);
+
+  // assert
+  await t
+    .expect(firstHeaderFilterItem.isSelected)
+    .ok();
+
+  // act
+  await t
+    .typeText(cardView.getHeaderFilterList().searchInput, '1');
+
+  // assert
+  await t
+    .expect(cardView.getHeaderFilterList().getItems().count)
+    .eql(1)
+    .expect(cardView.getHeaderFilterList().getItem(0).isSelected)
+    .ok();
+}).before(async () => {
+  await createWidget('dxCardView', {
+    ...baseConfig,
+    headerFilter: {
+      visible: true,
+      search: {
+        enabled: true,
+      },
+    },
+  });
+});
