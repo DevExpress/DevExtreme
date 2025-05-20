@@ -1,10 +1,10 @@
 import { Properties } from 'devextreme/ui/select_box.d';
-import url from '../../../helpers/getPageUrl';
-import { testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
+import url from '../../../../helpers/getPageUrl';
+import { testAccessibility, Configuration } from '../../../../helpers/accessibility/test';
+import { Options } from '../../../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const items = [
   'HD Video Player',
@@ -14,15 +14,10 @@ const items = [
 
 const options: Options<Properties> = {
   dataSource: [[], items],
-  value: [undefined, items[0]],
-  disabled: [true, false],
-  readOnly: [true, false],
-  searchEnabled: [true, false],
-  searchTimeout: [0],
+  value: [items[0]],
+  label: [undefined, 'label'],
   showClearButton: [true, false],
-  opened: [true, false],
-  deferRendering: [true, false],
-  placeholder: [undefined, 'placeholder'],
+  showDropDownButton: [true, false],
   inputAttr: [{ 'aria-label': 'aria-label' }],
   buttons: [
     undefined,
