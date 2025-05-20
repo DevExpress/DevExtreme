@@ -1,0 +1,7 @@
+<dx-card-view
+  id="cardView"
+  [dataSource]="customers"
+  keyExpr="ID"
+>
+  <dxi-column *ngFor="let column of columns" [dataField]="column"></dxi-column>
+</dx-card-view>

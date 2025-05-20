@@ -1628,6 +1628,23 @@
             "Badge": "New"
           }
         ]
+      },
+      {
+        "Name": "Data Binding",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Simple Array",
+            "Name": "SimpleArray",
+            "DocUrl": "",
+            "Widget": "CardView",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
+          }
+        ]
       }
     ]
   },
