@@ -86,7 +86,7 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
       { demo: 'Toolbar', themes: [THEME.fluent, THEME.material] },
       { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },
-      { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
+      { demo: 'CellEditing', themes: [THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'RemoteGrouping', themes: [THEME.generic] },
     ],
@@ -168,7 +168,7 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
       { demo: 'Toolbar', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
-      { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
+      { demo: 'CellEditing', themes: [THEME.material] },
     ],
     TreeList: [
       { demo: 'Resizing', themes: [THEME.material] },

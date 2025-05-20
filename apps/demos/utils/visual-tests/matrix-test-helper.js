@@ -249,7 +249,6 @@ const SKIPPED_TESTS = {
       { demo: 'CellTemplates', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'Resources', themes: [THEME.generic, THEME.material, THEME.fluent] },
       { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'Toolbar', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     Sortable: [
       { demo: 'Kanban', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -299,7 +298,6 @@ const SKIPPED_TESTS = {
     Scheduler: [
       { demo: 'Overview', themes: [THEME.generic, THEME.fluent, THEME.material] },
       { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'Toolbar', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
   },
   React: {
@@ -331,7 +329,6 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
       { demo: 'ContextMenu', themes: [THEME.generic, THEME.fluent, THEME.material] },
-      { demo: 'Toolbar', themes: [THEME.generic, THEME.fluent, THEME.material] },
     ],
     FileUploader: [
       { demo: 'CustomDropzone', themes: [THEME.generic, THEME.material, THEME.fluent] },
