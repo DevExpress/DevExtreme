@@ -137,10 +137,12 @@ const _processGroupItems = (
 
 export const getDataSourceOptions = (
   storeLoadAdapter,
-  column,
+  popupOptions,
   headerFilterOptions,
   filter,
 ) => {
+  const { column } = popupOptions;
+
   if (!storeLoadAdapter) {
     return undefined;
   }
@@ -198,7 +200,11 @@ export const getDataSourceOptions = (
     let items = data;
 
     items = origPostProcess?.call(this, items) || items;
-    _updateSelectedState(items, column);
+    _updateSelectedState(items, {
+      ...column,
+      filterType: popupOptions.filterType,
+      filterValues: popupOptions.filterValues,
+    });
     return items;
   };
 
