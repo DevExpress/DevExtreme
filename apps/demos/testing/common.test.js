@@ -100,7 +100,7 @@ const SKIPPED_TESTS = {
       { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'MultiplePointSelection', themes: [THEME.material] },
-      { demo: 'PiesWithEqualSize', themes: [THEME.material] },
+      { demo: 'EqualSizePies', themes: [THEME.material] },
       { demo: 'Selection', themes: [THEME.material] },
       { demo: 'CustomMapData', themes: [THEME.material] },
       { demo: 'MultipleSeriesSelection', themes: [THEME.material] },
@@ -156,7 +156,7 @@ const SKIPPED_TESTS = {
   },
   React: {
     Charts: [
-      { demo: 'PiesWithEqualSize', themes: [THEME.material] },
+      { demo: 'EqualSizePies', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
