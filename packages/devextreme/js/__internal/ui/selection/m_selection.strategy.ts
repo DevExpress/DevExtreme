@@ -209,11 +209,10 @@ export default class SelectionStrategy {
     const items = this.options.plainItems();
     const dataFilter = this.options.filter();
     let selectedItems = this.options.ignoreDisabledItems ? this.options.selectedItems : this.options.selectedItems.filter((item) => !item?.disabled);
-    const queryParams = this._getQueryParams();
 
     if (dataFilter) {
       // @ts-expect-error
-      selectedItems = dataQuery(selectedItems, queryParams).filter(dataFilter).toArray();
+      selectedItems = dataQuery(selectedItems).filter(dataFilter).toArray();
     }
 
     const selectedItemsLength = selectedItems.length;
