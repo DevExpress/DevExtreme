@@ -41,16 +41,23 @@ describe('Accessibility attributes', () => {
     it('should be displayed on the root container', () => {
       const cardView = setup({
         dataSource: [
-          { A: 'A_0' }, { A: 'A_1' }, { A: 'A_2' }, { A: 'A_3' }, { A: 'A_4' },
+          { A: 'A_0', B: 'B_0' },
+          { A: 'A_1', B: 'B_1' },
+          { A: 'A_2', B: 'B_2' },
+          { A: 'A_3', B: 'B_3' },
+          { A: 'A_4', B: 'B_4' },
         ],
-        columns: ['A'],
+        columns: ['A', 'B'],
       });
 
       const rootContainer = rootQuerySelector(SELECTORS.rootContainer);
       expect(rootContainer?.getAttribute('role')).toBe('group');
-      expect(rootContainer?.getAttribute('aria-label')).toBe('Card view with 5 cards. Each card has 1 fields');
+      expect(rootContainer?.getAttribute('aria-label')).toBe('Card view with 5 cards. Each card has 2 fields');
 
       cardView.option('filterValue', ['A', '=', 'A_1']);
+      expect(rootContainer?.getAttribute('aria-label')).toBe('Card view with 1 cards. Each card has 2 fields');
+
+      cardView.columnOption('B', 'visible', false);
       expect(rootContainer?.getAttribute('aria-label')).toBe('Card view with 1 cards. Each card has 1 fields');
     });
   });

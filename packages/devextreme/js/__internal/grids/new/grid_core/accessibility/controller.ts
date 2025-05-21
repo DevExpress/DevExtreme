@@ -39,7 +39,7 @@ export class AccessibilityController {
     effect(() => {
       // TODO: FirstRender refactor
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      this.dataController.totalCount.value;
+      this.componentDescription.value;
 
       if (!firstRender) {
         this.firstRender.value = false;
