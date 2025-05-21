@@ -5,7 +5,7 @@ import { isDefined } from '@js/core/utils/type';
 import { confirm } from '@js/ui/dialog';
 import { computed, type Signal } from '@preact/signals-core';
 import { generateNewRowTempKey } from '@ts/grids/grid_core/editing/m_editing_utils';
-import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/controller';
+import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/index';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { DataController } from '../data_controller/data_controller';
