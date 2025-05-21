@@ -139,20 +139,20 @@ export default class SelectionStrategy {
 
   _getQueryParams() {
     const { sensitivity } = this.options;
-    return {
+    return sensitivity ? {
       langParams: {
         collatorOptions: {
           sensitivity,
         },
       },
-    };
+    } : undefined;
   }
 
   _loadFilteredData(remoteFilter, localFilter?: any, select?: any, isSelectAll?: boolean) {
     const filterLength = encodeURI(JSON.stringify(this._removeTemplateProperty(remoteFilter))).length;
     const needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest);
     const deferred = Deferred();
-    const { langParams } = this._getQueryParams();
+    const { langParams } = this._getQueryParams() ?? {};
 
     const loadOptions = {
       filter: needLoadAllData ? undefined : remoteFilter,
