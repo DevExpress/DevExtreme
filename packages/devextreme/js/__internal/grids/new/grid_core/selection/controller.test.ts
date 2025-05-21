@@ -932,11 +932,10 @@ describe('SelectionController', () => {
           selectedItems: [cardData],
         };
 
-        checkKeyExprError(
+        expect(() => {
           // @ts-expect-error - accessing private method
-          () => selectionController.selectionChanged(selectionChangedEvent),
-          selectionController,
-        );
+          selectionController.selectionChanged(selectionChangedEvent);
+        }).toThrowError('E1042');
       });
     });
 
