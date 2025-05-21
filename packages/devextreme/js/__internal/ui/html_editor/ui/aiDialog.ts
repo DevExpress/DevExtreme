@@ -2,6 +2,7 @@ import '@js/ui/drop_down_button';
 
 import type { AIIntegration, RequestCallbacks } from '@js/common/ai-integration';
 import localizationMessage from '@js/common/core/localization/message';
+import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
@@ -39,20 +40,21 @@ import BaseDialog from './m_baseDialog';
 export const AI_DIALOG_CLASS = 'dx-aidialog';
 export const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
 export const AI_DIALOG_CONTENT_CLASS = 'dx-aidialog-content';
+export const AI_DIALOG_TITLE_CLASS = 'dx-aidialog-title';
 
 const AI_DIALOG_LOAD_INDICATOR_CLASS = 'dx-pending-indicator';
-const AI_DIALOG_TITLE_CLASS = 'dx-aidialog-title';
 const AI_DIALOG_TITLE_TEXT_CLASS = 'dx-aidialog-title-text';
 const ICON_CLASS = 'dx-icon';
 const ICON_SPARKLE_CLASS = 'dx-icon-sparkle';
 const COPY_BUTTON_ICON = 'copy';
-const TRY_AGAIN_BUTTON_ICON = 'restore';
+const REGENERATE_BUTTON_ICON = 'restore';
 
 const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone'];
 
 const POPUP_MIN_WIDTH = 288;
 const POPUP_MAX_WIDTH = 460;
 const LOADINDICATOR_SIZE = 48;
+
 export const TEXT_AREA_MIN_HEIGHT = 64;
 export const TEXT_AREA_MAX_HEIGHT = 128;
 export const REPLACE_DROPDOWN_WIDTH = 150;
@@ -100,6 +102,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _askAIPrompt = '';
 
   private _commandChangeSuppressed = false;
+
+  private _commandOptionSuppressed = false;
 
   private _commandOptionsList?: string[];
 
@@ -161,7 +165,10 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         at: 'center',
         of: this._$container,
       },
-      ...this._popupUserConfig,
+      onHiding: () => {
+        this._processCommandCompletion();
+      },
+      ...this._popupConfig,
     }) as PopupProperties;
   }
 
@@ -197,12 +204,17 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   protected _renderOptionSelectBox($container: dxElementWrapper): void {
     const $optionSelectBox = $('<div>').appendTo($container);
+
     this._optionSelectBox = new SelectBox($optionSelectBox.get(0), {
       items: this._commandOptionsList,
       value: this._currentOption ?? this._commandOptionsList?.[0],
       visible: this._isCommandWithOptionsSelected(),
       onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: ({ value }): void => {
+        if (this._commandOptionSuppressed) {
+          return;
+        }
+
         this._currentOption = value;
 
         if (this._isOpen() && value) {
@@ -244,6 +256,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
 
     const options = {
+      inputAttr: { 'aria-label': localizationMessage.format('dxHtmlEditor-aiResultTextAreaAriaLabel') },
       minHeight: TEXT_AREA_MIN_HEIGHT,
       width: '100%',
       readOnly: true,
@@ -335,6 +348,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       widget: 'dxDropDownButton',
       locateInMenu: 'auto',
       options: {
+        displayExpr: 'text',
         text: localizationMessage.format('dxHtmlEditor-aiReplace'),
         stylingMode: 'contained',
         type: 'default',
@@ -378,16 +392,17 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
   }
 
-  protected _getTryAgainButtonItem(): NamedToolbarItem {
-    const text = isSmallScreen() ? undefined : localizationMessage.format('dxHtmlEditor-aiTryAgain');
+  protected _getRegenerateButtonItem(): NamedToolbarItem {
+    const text = isSmallScreen() ? undefined : localizationMessage.format('dxHtmlEditor-aiRegenerate');
+
     return {
-      name: 'tryAgain',
+      name: 'regenerate',
       toolbar: 'bottom',
       location: 'before',
       widget: 'dxButton',
       options: {
         stylingMode: 'outlined',
-        icon: TRY_AGAIN_BUTTON_ICON,
+        icon: REGENERATE_BUTTON_ICON,
         text,
         onClick: () => this._retryExecuteAICommand(),
         onInitialized: this._addEscapeHandler.bind(this),
@@ -413,19 +428,19 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
   }
 
-  protected _getStopButtonItem(): NamedToolbarItem {
+  protected _getCancelButtonItem(): NamedToolbarItem {
     const width = getActionButtonWidth();
     return {
-      name: 'stop',
+      name: 'cancel',
       toolbar: 'bottom',
       location: 'after',
       widget: 'dxButton',
       options: {
         type: 'default',
         stylingMode: 'contained',
-        text: localizationMessage.format('dxHtmlEditor-aiStop'),
+        text: localizationMessage.format('dxHtmlEditor-aiCancel'),
         width,
-        onClick: () => this._stopAICommandExecution(),
+        onClick: () => this._cancelAICommandExecution(),
         onInitialized: this._addEscapeHandler.bind(this),
       },
     };
@@ -433,7 +448,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   private _getInitialToolbarItems(): NamedToolbarItem[] {
     return [
-      this._getTryAgainButtonItem(),
+      this._getRegenerateButtonItem(),
       this._getCopyButtonItem(),
       this._getReplaceButtonItem(),
     ];
@@ -451,7 +466,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         items.push(this._getGenerateButtonItem());
         break;
       case DialogState.Generating:
-        items.push(this._getStopButtonItem());
+        items.push(this._getCancelButtonItem());
         break;
       case DialogState.Error: {
         if (this._isAskAICommandSelected) {
@@ -480,6 +495,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._refreshToolbarItems();
     this._refreshLoadIndicator();
     this._refreshInformer();
+    this._refreshDialogAria();
   }
 
   private _refreshToolbarItems(): void {
@@ -519,6 +535,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   private _processCommandCompletion(dialogState?: DialogState): void {
+    this._abort?.();
     this._abort = undefined;
     this._isAICommandExecuting = false;
 
@@ -562,8 +579,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._abort = abort;
   }
 
-  private _stopAICommandExecution(): void {
-    this._abort?.();
+  private _cancelAICommandExecution(): void {
     this._processCommandCompletion(this._getInitialDialogState());
   }
 
@@ -594,12 +610,14 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _refreshOptionSelectBox(): void {
     const hasOptions = this._isCommandWithOptionsSelected();
 
+    this._commandOptionSuppressed = true;
     this._optionSelectBox.option({
       disabled: this._isAICommandExecuting,
       visible: hasOptions,
       items: this._commandOptionsList ?? [],
       value: this._currentOption ?? this._commandOptionsList?.[0],
     });
+    this._commandOptionSuppressed = false;
   }
 
   private _setTextAreasInitialState(): void {
@@ -719,8 +737,16 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     return visible as boolean;
   }
 
+  private _refreshDialogAria(): void {
+    const id = String(new Guid());
+    const $overlayContent = $(this._popup.content()).parent();
+    const $title = $overlayContent.find(`.${AI_DIALOG_TITLE_CLASS}`);
+
+    $title.attr('id', id);
+    $overlayContent.attr('aria-labelledby', id);
+  }
+
   updateAIIntegration(aiIntegration: AIIntegration): void {
-    this._abort?.();
     this._processCommandCompletion(this._getInitialDialogState());
     this._aiIntegration = aiIntegration;
     this._executeAICommand();
@@ -751,10 +777,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   hide(resultText: AIDialogResult['resultText'], event: AIDialogResult['event']): void {
     this.deferred?.resolve({ resultText, event });
-
-    this._abort?.();
-    this._processCommandCompletion();
-
     super.hide();
   }
 }

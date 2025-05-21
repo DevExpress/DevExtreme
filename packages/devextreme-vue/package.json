@@ -1,6 +1,6 @@
 {
   "name": "devextreme-vue",
-  "version": "25.1.0",
+  "version": "25.1.2",
   "description": "DevExtreme Vue UI and Visualization Components",
   "repository": {
     "type": "git",
@@ -56,7 +56,7 @@
   "author": "Developer Express Inc.",
   "license": "MIT",
   "peerDependencies": {
-    "devextreme": "workspace:~",
+    "devextreme": "workspace:*",
     "vue": "^3.0.0"
   },
   "devDependencies": {

@@ -1615,20 +1615,17 @@
   {
     "Name": "Card View",
     "Equivalents": "dxCardView, dx-cardview, cardview",
-    "Badge": "Roadmap",
     "Groups": [
       {
         "Name": "Overview",
         "Equivalents": "",
-        "Badge": "Roadmap",
         "Demos": [
           {
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "CardView",
             "DemoType": "Web",
-            "Badge": "Roadmap",
-            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-cardview.xml"
+            "Badge": "New"
           }
         ]
       }
@@ -2050,15 +2047,15 @@
       },
       {
         "Name": "AI-powered Text Editing",
-        "Equivalents": "AI, text editing, text editor",
+        "Equivalents": "AI, AI text transformation, AI editor",
         "Demos": [
           {
             "Title": "AI-powered Text Editing",
             "Name": "AITextEditing",
             "Widget": "HtmlEditor",
             "DemoType": "Web",
-            "Badge": "Roadmap",
-            "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-ai.xml"
+            "Badge": "New",
+            "Modules": "openai"
           }
         ]
       },

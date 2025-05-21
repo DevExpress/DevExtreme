@@ -652,6 +652,36 @@ QUnit.module('default', {
         assert.equal(new TestComponent1($('<div/>')).option('anotherOption'), 'Another option value', 'Multiple calls should not clean previous rules');
     });
 
+    QUnit.test('should not be inherited by child class/component (T1286533)', function(assert) {
+        const TestComponent1 = DOMComponent.inherit({
+            _getDefaultOptions() {
+                return $.extend(this.callBase(), {
+                    test: 'test1'
+                });
+            },
+        });
+
+        const TestComponent2 = TestComponent1.inherit({
+            _getDefaultOptions() {
+                return $.extend(this.callBase(), {
+                    test: 'test2'
+                });
+            },
+        });
+
+        registerComponent('TestComponent1', TestComponent1);
+        registerComponent('TestComponent2', TestComponent2);
+
+        TestComponent1.defaultOptions({
+            options: {
+                notInherited: 'notInherited',
+            }
+        });
+
+        assert.equal(new TestComponent1($('<div>')).option('notInherited'), 'notInherited');
+        assert.equal(new TestComponent2($('<div>')).option('notInherited'), undefined);
+    });
+
     QUnit.test('DevExpress.rtlEnabled proxied to DOMComponent', function(assert) {
         assert.equal(config().rtlEnabled, false, 'DevExpress.rtlEnabled equals false by default');
         assert.equal(new DOMComponent($('<div/>')).option('rtlEnabled'), false, 'false by default');

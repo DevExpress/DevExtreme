@@ -4,13 +4,17 @@
       #chat
       [height]="600"
       [dataSource]="dataSource"
-      [editing]="editingOptions"
       [reloadOnChange]="false"
       [user]="currentUser"
       (onMessageEntered)="onMessageEntered($event)"
       (onMessageDeleted)="onMessageDeleted($event)"
       (onMessageUpdated)="onMessageUpdated($event)"
-    ></dx-chat>
+    >
+      <dxo-chat-editing
+        [allowUpdating]="allowUpdating"
+        [allowDeleting]="allowDeleting"
+      ></dxo-chat-editing>
+    </dx-chat>
   </div>
 
   <div class="options">
@@ -24,7 +28,7 @@
         valueExpr="key"
         [value]="selectedEditingStrategy"
         [inputAttr]="alloUpdatingLabel"
-        (onValueChanged)="onEditingStrategyChange($event, 'allowUpdating')"
+        (onValueChanged)="onAllowUpdatingChange($event)"
       ></dx-select-box>
     </div>
 
@@ -36,7 +40,7 @@
         valueExpr="key"
         [value]="selectedDeletingStrategy"
         [inputAttr]="allowDeletingLabel"
-        (onValueChanged)="onEditingStrategyChange($event, 'allowDeleting')"
+        (onValueChanged)="onAllowDeletingChange($event)"
       ></dx-select-box>
     </div>
   </div>

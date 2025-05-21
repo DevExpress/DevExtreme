@@ -238,13 +238,13 @@ describe('HeaderFilter', () => {
 
     describe('needCreateHeaderFilter', () => {
       each`
-      column                                                      | expectedResult
-      ${{ allowFiltering: true, allowHeaderFiltering: false }}    | ${false}
-      ${{ allowFiltering: false, allowHeaderFiltering: true }}    | ${false}
-      ${{ allowFiltering: false, allowHeaderFiltering: false }}   | ${false}
+      column                                                                               | expectedResult
+      ${{ allowFiltering: true, allowHeaderFiltering: false, filterValues: [1, 2, 3] }}    | ${true}
+      ${{ allowFiltering: false, allowHeaderFiltering: true, filterValues: [1, 2, 3] }}    | ${true}
+      ${{ allowFiltering: false, allowHeaderFiltering: false, filterValues: [1, 2, 3] }}   | ${false}
 
 `
-        .it('should return false if filtering is prohibited', ({
+        .it('should take into account allowFiltering and allowHeaderFiltering', ({
           column,
 
           expectedResult,
@@ -325,6 +325,19 @@ describe('HeaderFilter', () => {
             filterValues: ['test1', 'test2'],
           }] as unknown[],
           result: [['ID1', 'anyof', [1, 2, 3]], 'and', ['ID2', 'anyof', ['test1', 'test2']]],
+        },
+        {
+          caseName: 'two columns have array values, one of them contain 1 item',
+          columns: [{
+            ...allowFilteringColumnConfig,
+            dataField: 'ID1',
+            filterValues: [1],
+          }, {
+            ...allowFilteringColumnConfig,
+            dataField: 'ID2',
+            filterValues: ['test1', 'test2'],
+          }] as unknown[],
+          result: [['ID1', '=', 1], 'and', ['ID2', 'anyof', ['test1', 'test2']]],
         },
         {
           caseName: 'it is prohibited to sort the first column',

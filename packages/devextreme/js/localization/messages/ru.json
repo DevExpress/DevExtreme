@@ -211,8 +211,6 @@
         "dxTreeList-ariaToolbar": "Панель инструментов иерархической таблицы данных",
         "dxTreeList-editingAddRowToNode": "Добавить",
 
-        "dxCardView-ariaSearchInGrid": "Search in the card view",
-
         "dxPager-infoText": "Страница {0} из {1} (Всего элементов: {2})",
         "dxPager-pagesCountText": "из",
         "dxPager-pageSize": "Количество элементов на странице: {0}",
@@ -359,6 +357,12 @@
         "dxCalendar-selectedDateRangeCount": "There are {0} selected date ranges",
         "dxCalendar-readOnlyLabel": "Read-only calendar",
 
+        "dxCardView-ariaSearchInGrid": "Search in the card view",
+        "dxCardView-ariaHeaderItemLabel": "Field name {0}",
+        "dxCardView-ariaHeaderItemSortingAscendingLabel": "Sorted in ascending order",
+        "dxCardView-ariaHeaderItemSortingDescendingLabel": "Sorted in descending order",
+        "dxCardView-ariaHeaderItemSortingIndexLabel": "Sort index {0}",
+        "dxCardView-ariaHeaderHasHeaderFilterLabel": "Header filter applied",
         "dxCardView-selectAll": "Select all",
         "dxCardView-clearSelection": "Clear selection",
         "dxCardView-cardNoImageAriaLabel": "No image",
@@ -387,6 +391,7 @@
         "dxChat-editingDeleteMessage": "Удалить",
         "dxChat-editingDeleteConfirmText": "Are you sure you want to delete this message?",
         "dxChat-deletedMessageText": "This message was deleted",
+        "dxChat-defaultImageAlt": "Image shared in chat",
 
         "dxColorView-ariaRed": "Красный",
         "dxColorView-ariaGreen": "Зеленый",
@@ -538,9 +543,11 @@
         "dxHtmlEditor-aiInsertAbove": "Insert above",
         "dxHtmlEditor-aiInsertBelow": "Insert below",
         "dxHtmlEditor-aiCopy": "Copy",
-        "dxHtmlEditor-aiTryAgain": "Try again",
+        "dxHtmlEditor-aiRegenerate": "Regenerate",
         "dxHtmlEditor-aiGenerate": "Generate",
-        "dxHtmlEditor-aiStop": "Stop",
+        "dxHtmlEditor-aiCancel": "Cancel",
+        "dxHtmlEditor-aiToolbarItemAriaLabel": "AI Assistant toolbar item",
+        "dxHtmlEditor-aiResultTextAreaAriaLabel": "AI Assistant result",
         "dxHtmlEditor-aiAskPlaceholder": "Ask AI to modify text",
 
         "dxFileManager-newDirectoryName": "Без названия",

@@ -5,6 +5,7 @@ import rendererModule from 'viz/core/renderers/renderer';
 import titleModule from 'viz/core/title';
 import tooltipModule from 'viz/core/tooltip';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
+import dxBarGauge from 'viz/bar_gauge';
 
 import 'viz/gauges/bar_gauge';
 
@@ -166,6 +167,11 @@ QUnit.module('Legend', {
             return this.renderer;
         });
 
+        dxBarGauge.prototype._debug_rendered = function() {
+            this.renderCount = (this.renderCount || 0) + 1;
+            this.rendered && this.rendered();
+        };
+
         legendModule._setLegend(sinon.spy(
             () => {
                 const stub = new stubLegend();
@@ -184,6 +190,7 @@ QUnit.module('Legend', {
     afterEach() {
         legendModule._setLegend(Legend);
         rendererModule.Renderer.restore();
+        delete dxBarGauge.prototype._debug_rendered;
     },
 
     createGauge(options) {
@@ -315,6 +322,21 @@ QUnit.test('Format legend with custom type', function(assert) {
 
     const passedItems = legendModule.Legend.getCall(0).returnValue.update.lastCall.args[0];
     assert.deepEqual(passedItems[0].text, '6K');
+});
+
+QUnit.test('Legend update should call trigger core content rerender', function(assert) {
+    const gauge = this.createGauge({
+        values: [1, 2],
+        legend: { visible: true }
+    });
+
+    gauge._legend.stub('update').returns(true);
+
+    const initialRenderCount = gauge.renderCount;
+
+    gauge.values([10]);
+
+    assert.strictEqual(gauge.renderCount, initialRenderCount + 1);
 });
 
 QUnit.module('Center Template', environment);

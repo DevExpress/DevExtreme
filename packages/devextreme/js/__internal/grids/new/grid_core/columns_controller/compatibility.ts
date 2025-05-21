@@ -13,6 +13,6 @@ export class CompatibilityColumnsController {
   }
 
   public getFilteringColumns(): Column[] {
-    return this.realColumnsController.columns.peek();
+    return this.realColumnsController.filterableColumns.peek();
   }
 }

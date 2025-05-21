@@ -1,12 +1,11 @@
 import type { TextBoxInstance } from '@js/ui/text_box';
-import type { ReadonlySignal } from '@preact/signals-core';
-import { computed } from '@preact/signals-core';
+import type { Signal } from '@preact/signals-core';
+import { effect, signal } from '@preact/signals-core';
 import { ToolbarController } from '@ts/grids/new/grid_core/toolbar/controller';
 
 import { OptionsController } from '../options_controller/options_controller';
 import { SearchController } from './controller';
 import { SearchUIController } from './controller_ui';
-import type { SearchFieldProps } from './types';
 import { addSearchTextBox } from './utils';
 
 export class SearchView {
@@ -17,7 +16,7 @@ export class SearchView {
     SearchController,
   ] as const;
 
-  private searchTextBox: TextBoxInstance | null = null;
+  private readonly searchTextBox: Signal<null | TextBoxInstance> = signal(null);
 
   constructor(
     private readonly options: OptionsController,
@@ -25,28 +24,32 @@ export class SearchView {
     private readonly searchUIController: SearchUIController,
     private readonly searchController: SearchController,
   ) {
+    const toolbarItem = addSearchTextBox(
+      {
+        placeholder: this.searchController.searchPlaceholder.value,
+        value: this.searchController.searchTextOption.value,
+        width: this.searchController.searchWidth.value,
+        onValueChanged: (text): void => {
+          this.searchController.updateSearchText(text);
+        },
+      },
+      (component) => {
+        this.searchTextBox.value = component;
+      },
+    );
     this.toolbarController.addDefaultItem(
-      computed(() => addSearchTextBox(
-        this.getProps().value,
-        (component) => { this.searchTextBox = component; },
-      )),
+      signal(toolbarItem),
       this.options.oneWay('searchPanel.visible'),
     );
 
-    this.searchUIController.registerCallback('focusSearchTextBox', () => {
-      this.searchTextBox?.focus();
+    effect(() => {
+      this.searchTextBox.value?.option('value', this.searchController.searchTextOption.value);
+      this.searchTextBox.value?.option('placeholder', this.searchController.searchPlaceholder.value);
+      this.searchTextBox.value?.option('width', this.searchController.searchWidth.value);
     });
-  }
 
-  protected getProps(): ReadonlySignal<SearchFieldProps> {
-    return computed(() => ({
-      placeholder: this.options.oneWay('searchPanel.placeholder').value,
-      // TODO: resolve update cycle: editor - option - editor
-      // value: this.searchController.searchTextOption.value,
-      width: this.options.oneWay('searchPanel.width').value,
-      onValueChanged: (text): void => {
-        this.searchController.updateSearchText(text);
-      },
-    }));
+    this.searchUIController.registerCallback('focusSearchTextBox', () => {
+      this.searchTextBox.value?.focus();
+    });
   }
 }

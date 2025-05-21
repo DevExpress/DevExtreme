@@ -5,11 +5,11 @@ import type { ColumnFocusDispatcher } from './m_column_focus_dispatcher';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 
 export class ColumnKeyboardNavigationController extends KeyboardNavigationControllerCore {
-  private resizeCompletedWithContext!: (e: any) => void;
-
-  protected needToRestoreFocus = false;
-
   public columnFocusDispatcher!: ColumnFocusDispatcher;
+
+  protected keyDownHandler(e): boolean {
+    return this.processOnKeyDown(e);
+  }
 
   protected getVisibleIndex(
     column,
@@ -85,16 +85,8 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
   public init() {
     super.init();
 
-    const focusedView = this.getFocusedView();
-
     this.columnFocusDispatcher = this.getController('columnFocusDispatcher');
     this.columnFocusDispatcher?.registerKeyboardNavigationController(this);
-
-    this.resizeCompletedWithContext = this.resizeCompletedWithContext
-      ?? this.resizeCompleted.bind(this);
-
-    focusedView?.resizeCompleted?.remove(this.resizeCompletedWithContext);
-    focusedView?.resizeCompleted?.add(this.resizeCompletedWithContext);
   }
 
   public moveColumn({
@@ -161,9 +153,5 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
 
     const $focusedCell = this._getFocusedCell();
     $focusedCell?.[0]?.focus({ preventScroll: true });
-  }
-
-  public ungroupAllColumns(): void {
-    this._columnsController.clearGrouping();
   }
 }

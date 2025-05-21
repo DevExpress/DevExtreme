@@ -197,14 +197,22 @@ export type Alert = {
 /**
  * @docid
  * @namespace DevExpress.ui.dxChat
- * @public
+ * @type object
+ * @hidden
  */
-export type Message = {
+export type MessageBase = {
     /**
      * @docid
      * @public
      */
     id?: number | string;
+    /**
+     * @docid
+     * @default undefined
+     * @type string|undefined
+     * @public
+     */
+    type?: 'text' | 'image' | undefined;
     /**
      * @docid
      * @public
@@ -219,20 +227,56 @@ export type Message = {
      * @docid
      * @public
      */
+    isDeleted?: boolean;
+
+    [key: string]: any;
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.ui.dxChat
+ * @inherits MessageBase
+ */
+export type TextMessage = MessageBase & {
+    /**
+     * @docid
+     * @public
+     */
     text?: string;
     /**
      * @docid
      * @public
      */
     isEdited?: boolean;
+};
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.ui.dxChat
+ * @inherits MessageBase
+ */
+export type ImageMessage = MessageBase & {
     /**
      * @docid
      * @public
      */
-    isDeleted?: boolean;
-
-    [key: string]: any;
+    src?: string;
+    /**
+     * @docid
+     * @public
+     */
+    alt?: string;
 };
+
+/**
+ * @docid
+ * @namespace DevExpress.ui.dxChat
+ * @public
+ * @inherits TextMessage,ImageMessage
+ */
+export type Message = TextMessage | ImageMessage;
 
 /** @public */
 export type MessageTemplateData = {
