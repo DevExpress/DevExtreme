@@ -50,6 +50,7 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
     selectedFilterOperation: string | undefined,
     target: string,
   ) => unknown;
+  defaultCalculateFilterExpression: Column['calculateFilterExpression'];
 
   format?: Format;
 
