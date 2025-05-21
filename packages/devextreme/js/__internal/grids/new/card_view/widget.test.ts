@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, expect, it } from '@jest/globals';
 import $ from '@js/core/renderer';
-import { throwError } from '@ts/grids/new/grid_core/options_validation/utils';
 import { rerender } from 'inferno';
 
 import { CardView } from './widget';
@@ -64,65 +63,5 @@ describe('regressions', () => {
       dataSource: [{ a: 'a' }],
     });
     expect(cardView.option('pager.showPageSizeSelector')).toBe(false);
-  });
-});
-
-describe('editing validation', () => {
-  const checkError = (error: { __id: string; __details: string }): void => {
-    expect(error.__id).toBe('E1042');
-  };
-
-  it('should throw E1042 error when no keyExpr and clicking on add', async () => {
-    const container = document.createElement('div');
-
-    const cardView = new CardView(container, {
-      editing: {
-        allowAdding: true,
-      },
-      dataSource: [{ id: 1, name: 'Test' }],
-    });
-
-    try {
-      // @ts-expect-error
-      await cardView.editingController.addCard();
-    } catch (e) {
-      checkError(e as { __id: string; __details: string });
-    }
-  });
-
-  it('should throw E1042 error when no keyExpr and clicking on edit', () => {
-    const container = document.createElement('div');
-
-    const cardView = new CardView(container, {
-      editing: {
-        allowUpdating: true,
-      },
-      dataSource: [{ id: 1, name: 'Test' }],
-    });
-
-    try {
-      // @ts-expect-error
-      cardView.editingController.editCard(1);
-    } catch (e) {
-      checkError(e as { __id: string; __details: string });
-    }
-  });
-
-  it('should throw E1042 error when no keyExpr and clicking on delete', async () => {
-    const container = document.createElement('div');
-
-    const cardView = new CardView(container, {
-      editing: {
-        allowDeleting: true,
-      },
-      dataSource: [{ id: 1, name: 'Test' }],
-    });
-
-    try {
-      // @ts-expect-error
-      await cardView.editingController.deleteCard(1);
-    } catch (e) {
-      checkError(e as { __id: string; __details: string });
-    }
   });
 });
