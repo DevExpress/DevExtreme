@@ -11,7 +11,7 @@ import { createPromise } from '@ts/core/utils/promise';
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { FilterController } from '../filtering/filter_controller';
 import { OptionsController } from '../options_controller/options_controller';
-import { SortingController } from '../sorting_controller/sorting_controller';
+import { SortingController } from '../sorting_controller/index';
 import { StoreLoadAdapter } from './store_load_adapter/index';
 import type { DataObject, Key } from './types';
 import {
