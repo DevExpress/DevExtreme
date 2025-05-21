@@ -462,6 +462,68 @@ describe('Template Manager', () => {
     expect(callbackCalled).toBeTruthy();
   });
 
+  it.only('update callback re-renderers template manager', () => {
+    let createDXTemplates;
+    let updateTemplates;
+
+
+    const init = ({
+      createDXTemplates: createDXTemplatesFn,
+      updateTemplates: updateTemplatesFn
+    }: InitArgument) => {
+      createDXTemplates = createDXTemplatesFn;
+      updateTemplates = updateTemplatesFn;
+    };
+
+    const templateOptions = getTemplateOptions([{ type: 'render' }]);
+    let showTemplateManager = true;
+    const { unmount } = render(
+      <React.Fragment>
+        <div className='render-template-container'></div>
+        {showTemplateManager ? <TemplateManager init={init} onTemplatesRendered={() => undefined} /> : ''}
+      </React.Fragment>
+    );
+
+    let dxTemplates;
+
+    act(() => { dxTemplates = createDXTemplates(templateOptions); });
+
+    act(() => dxTemplates.renderKey.render({
+      model: { text: 'Render template text' },
+      index: 2,
+      container: document.querySelector('.render-template-container'),
+    }));
+
+    expect(document.querySelector('.render-template-container')?.innerHTML)
+      .toBe('<div class="render-template">Render template text-2</div><div style="display: none;"></div>');
+
+    const newTemplateOptions = {
+      renderKey: {
+        type: 'render',
+        content: (data) => {
+          return (
+            <div className='new-render-template'>{data.text}</div>
+          );
+        },
+      },
+    };
+
+    let callbackCalled = false;
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    act(() => {
+      dxTemplates = createDXTemplates(newTemplateOptions);
+      setTimeout(() => updateTemplates(() => { callbackCalled = true; }), 1000)
+      showTemplateManager = false;
+    });
+
+    unmount();
+    setTimeout(() => {
+      expect(callbackCalled).toBeTruthy();
+      expect(warnSpy).not.toHaveBeenCalled();
+      warnSpy.mockRestore();
+    }, 1000);
+  });
+
   it('replaces templates with matching keys, adds templates with new keys', () => {
     let createDXTemplates;
 
