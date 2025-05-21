@@ -305,3 +305,108 @@ test('The item\'s selection state should be correct if a custom data source is s
     ],
   });
 });
+
+test('The item\'s selection state should be correct after search', async (t) => {
+  // arrange
+  const cardView = new CardView('#container');
+
+  await t
+    .click(cardView.getHeaderPanel().getHeaderItem(0).getFilterIcon());
+
+  const headerFilterList = cardView.getHeaderFilterList();
+
+  // assert
+  await t
+    .expect(headerFilterList.getItems().count)
+    .eql(4);
+
+  const firstHeaderFilterItem = headerFilterList.getItem(0);
+
+  // act
+  await t
+    .click(firstHeaderFilterItem.element);
+
+  // assert
+  await t
+    .expect(firstHeaderFilterItem.isSelected)
+    .ok();
+
+  // act
+  await t
+    .typeText(headerFilterList.searchInput, '1');
+
+  // assert
+  await t
+    .expect(headerFilterList.getItems().count)
+    .eql(1)
+    .expect(headerFilterList.getItem(0).isSelected)
+    .ok();
+}).before(async () => {
+  await createWidget('dxCardView', {
+    ...baseConfig,
+    headerFilter: {
+      visible: true,
+      search: {
+        enabled: true,
+      },
+    },
+  });
+});
+
+test('The item\'s selection state should be correct after resetting the search', async (t) => {
+  // arrange
+  const cardView = new CardView('#container');
+
+  await t
+    .click(cardView.getHeaderPanel().getHeaderItem(0).getFilterIcon());
+
+  const headerFilterList = cardView.getHeaderFilterList();
+
+  // assert
+  await t
+    .expect(headerFilterList.getItems().count)
+    .eql(4);
+
+  // act
+  await t
+    .typeText(headerFilterList.searchInput, '1');
+
+  // assert
+  await t
+    .expect(headerFilterList.getItems().count)
+    .eql(1);
+
+  const firstHeaderFilterItem = headerFilterList.getItem(0);
+
+  // act
+  await t
+    .click(firstHeaderFilterItem.element);
+
+  // assert
+  await t
+    .expect(firstHeaderFilterItem.isSelected)
+    .ok();
+
+  // act
+  await t
+    .click(headerFilterList.searchInput)
+    .selectText(headerFilterList.searchInput)
+    .pressKey('backspace');
+
+  // assert
+  await t
+    .expect(headerFilterList.getItems().count)
+    .eql(4)
+    .expect(headerFilterList.getItem(0).isSelected)
+    .ok();
+}).before(async () => {
+  await createWidget('dxCardView', {
+    ...baseConfig,
+    headerFilter: {
+      visible: true,
+      search: {
+        enabled: true,
+      },
+    },
+  });
+});
