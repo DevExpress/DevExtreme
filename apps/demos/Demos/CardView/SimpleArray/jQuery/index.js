@@ -2,6 +2,6 @@ $(() => {
   $('#card-view').dxCardView({
     dataSource: customers,
     keyExpr: 'ID',
-    columns: ['CompanyName', 'City', 'State', 'Phone', 'Fax'],
+    columns: ['CompanyName', 'Address', 'City', 'State', 'Zipcode', 'Phone'],
   });
 });

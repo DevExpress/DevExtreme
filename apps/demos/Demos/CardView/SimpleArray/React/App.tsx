@@ -2,7 +2,7 @@ import React from 'react';
 import CardView, { Column } from 'devextreme-react/card-view';
 import { customers } from './data.ts';
 
-const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+const columns = ['CompanyName', 'Address', 'City', 'State', 'Zipcode', 'Phone'];
 
 const App = () => (
   <CardView
