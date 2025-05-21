@@ -1,8 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxCardViewModule } from 'devextreme-angular';
-import { Customer, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -14,19 +14,33 @@ if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
+const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
+
 @Component({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
-  providers: [Service],
 })
 export class AppComponent {
-  customers: Customer[];
+  dataSource = AspNetData.createStore({
+    key: 'Task_ID',
+    loadUrl: `${url}/Tasks`,
+    insertUrl: `${url}/InsertTask`,
+    updateUrl: `${url}/UpdateTask`,
+    deleteUrl: `${url}/DeleteTask`,
+    onBeforeSend(method, ajaxOptions) {
+      ajaxOptions.xhrFields = { withCredentials: true };
+    },
+  });
 
-  columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+  // TODO: Nested component does not exist
+  headerFilterConfig = {
+    visible: true,
+  };
 
-  constructor(service: Service) {
-    this.customers = service.getCustomers();
-  }
+  // TODO: Nested component does not exist
+  searchPanelConfig = {
+    visible: true,
+  };
 }
 
 @NgModule({

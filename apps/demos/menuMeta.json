@@ -1648,6 +1648,7 @@
             "Title": "Web API Service",
             "Name": "WebAPIService",
             "DocUrl": "",
+            "Modules": "devextreme-aspnet-data-nojquery",
             "Widget": "CardView",
             "MvcDescription": "",
             "NetCoreDescription": "",
