@@ -172,7 +172,6 @@ window.config = {
     /* devextreme */
     'devextreme': 'npm:devextreme/cjs',
     '@devextreme/runtime': 'npm:@devextreme/runtime',
-    'devextreme/bundles/dx.all': 'npm:devextreme/bundles/dx.all.js',
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram',
     'devexpress-gantt': 'npm:devexpress-gantt',
