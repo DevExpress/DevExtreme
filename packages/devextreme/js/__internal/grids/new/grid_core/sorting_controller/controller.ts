@@ -1,5 +1,5 @@
 import type { ReadonlySignal } from '@preact/signals-core';
-import { computed } from '@preact/signals-core';
+import { batch, computed } from '@preact/signals-core';
 
 import { ColumnsController } from '../columns_controller/index';
 import type { Column } from '../columns_controller/types';
@@ -121,22 +121,26 @@ export class SortingController {
     if (!column.allowSorting) {
       return;
     }
-    const isCtrl = e.ctrlKey || e.metaKey;
 
+    const isCtrl = e.ctrlKey || e.metaKey;
     const isClearSorting = !!column.sortOrder && isCtrl;
+
     if (isClearSorting) {
       this.clearSorting();
       return;
     }
 
     const isClearSortingRequired = (!column.sortOrder && !isCtrl)
-    || this.sortedColumns.peek().length > 1;
-    if (isClearSortingRequired) {
-      this.clearSorting();
-    }
-
+      || this.sortedColumns.peek().length > 1;
     const nextSortOrder = getNextSortOrder(column.sortOrder, isCtrl);
-    this.columnsController.columnOption(column, 'sortOrder', nextSortOrder);
+
+    batch(() => {
+      if (isClearSortingRequired) {
+        this.clearSorting();
+      }
+
+      this.columnsController.columnOption(column, 'sortOrder', nextSortOrder);
+    });
   }
 
   public onMultipleModeSortClick(column: Column, e: KeyboardEvent | MouseEvent): void {
@@ -146,19 +150,23 @@ export class SortingController {
 
     const isCtrl = e.ctrlKey || e.metaKey;
     const hasNothingToChange = !column.sortOrder && isCtrl && !e.shiftKey;
+
     if (hasNothingToChange) {
       return;
     }
 
     const nextSortOrder = getNextSortOrder(column.sortOrder, isCtrl);
     const isClearSortingRequired = !isCtrl && !e.shiftKey;
-    if (isClearSortingRequired) {
-      this.clearSorting();
-    }
 
-    // TODO: Resolve the nested update issue
-    // this.columnsController.columnOption(column, 'sortOrder', nextSortOrder);
-    this.updateColumnSortOrder(column, nextSortOrder);
+    batch(() => {
+      if (isClearSortingRequired) {
+        this.clearSorting();
+      }
+
+      // TODO: Resolve the nested update issue
+      // this.columnsController.columnOption(column, 'sortOrder', nextSortOrder);
+      this.updateColumnSortOrder(column, nextSortOrder);
+    });
   }
 
   private updateColumnSortOrder(column, nextSortOrder): void {
