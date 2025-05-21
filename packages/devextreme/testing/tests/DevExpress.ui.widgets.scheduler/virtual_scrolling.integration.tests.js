@@ -12,6 +12,7 @@ import {
     asyncScrollTest,
     asyncWrapper,
 } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 const supportedViews = ['day', 'week', 'workWeek', 'month']; // TODO: add timelines
 
@@ -152,6 +153,7 @@ module('Virtual scrolling integration', () => {
                     });
 
                     scheduler.instance.option('scrolling', { mode: 'virtual', orientation: 'both' });
+                    await waitAsync(0);
 
                     const headerScrollable = scheduler.workSpace.getHeaderScrollable();
                     const sideBarScrollable = scheduler.workSpace.getSideBarScrollable();
@@ -173,6 +175,7 @@ module('Virtual scrolling integration', () => {
                     });
 
                     scheduler.instance.option('views[0].scrolling', { mode: 'virtual', orientation: 'both' });
+                    await waitAsync(0);
 
                     const headerScrollable = scheduler.workSpace.getHeaderScrollable();
                     const sideBarScrollable = scheduler.workSpace.getSideBarScrollable();

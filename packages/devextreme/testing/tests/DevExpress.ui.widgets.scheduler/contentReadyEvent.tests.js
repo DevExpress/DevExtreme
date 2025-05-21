@@ -1,4 +1,5 @@
 import { SchedulerTestWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 import $ from 'jquery';
 import translator from 'common/core/animation/translator';
 import { DataSource } from 'common/data/data_source/data_source';
@@ -10,7 +11,7 @@ import 'generic_light.css!';
 
 QUnit.testStart(() => initTestMarkup());
 
-const createScheduler = (options) => {
+const createScheduler = async(options) => {
     const data = [
         {
             text: 'Task 1',
@@ -28,6 +29,7 @@ const createScheduler = (options) => {
         dataSource: data
     };
     const instance = $('#scheduler').dxScheduler($.extend(defaultOption, options)).dxScheduler('instance');
+    await waitForAsync(() => instance._workSpace);
     return new SchedulerTestWrapper(instance);
 };
 
@@ -56,7 +58,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
         }];
 
         let contentReadyCount = 0;
-        const scheduler = createScheduler({
+        const scheduler = await createScheduler({
             onContentReady: e => contentReadyCount++,
             views: ['week'],
             currentView: 'week',
@@ -66,23 +68,26 @@ QUnit.module('onContentReady event', moduleConfig, () => {
         assert.equal(contentReadyCount, 1, 'contentReady should be rise after first init control');
 
         scheduler.option('dataSource', dataSource1);
+        await waitForAsync(() => contentReadyCount === 2);
         assert.equal(scheduler.appointments.getTitleText(), '1', 'Appointment should be render');
         assert.equal(contentReadyCount, 2, 'contentReady should be rise after set dataSource');
 
         scheduler.option('dataSource', dataSource2);
+        await waitForAsync(() => contentReadyCount === 3);
         assert.equal(scheduler.appointments.getTitleText(), '2', 'Appointment should be re-render');
         assert.equal(contentReadyCount, 3, 'contentReady should be rise after change dataSource');
     });
 
     QUnit.test('contentReady action should rise after call repaint', async function(assert) {
         let contentReadyCount = 0;
-        const scheduler = createScheduler({
+        const scheduler = await createScheduler({
             onContentReady: e => contentReadyCount++
         });
 
         assert.equal(contentReadyCount, 1, 'contentReady should be rise after first init control');
 
         scheduler.instance.repaint();
+        await waitForAsync(() => contentReadyCount === 2);
         assert.equal(contentReadyCount, 2, 'contentReady should be rise after call repaint');
     });
 
@@ -105,34 +110,34 @@ QUnit.module('onContentReady event', moduleConfig, () => {
             })
         });
 
-        const scheduler = createScheduler({
+        const scheduler = await createScheduler({
             dataSource: dataSource,
             onContentReady: e => contentReadyCount++
         });
 
         assert.equal(contentReadyCount, 0, 'contentReady should be rise after first init control');
 
-        this.clock.tick(200);
+        await waitForAsync(() => contentReadyCount === 1);
         assert.equal(contentReadyCount, 1, 'contentReady should be rise after dataSource loaded');
 
         scheduler.instance.repaint();
+        await waitForAsync(() => contentReadyCount === 2);
         assert.equal(contentReadyCount, 2, 'contentReady should be rise after call repaint');
     });
 
     QUnit.test('contentReady action should rise even if dataSource isn\'t set', async function(assert) {
         let contentReadyCount = 0;
 
-        createScheduler({
+        await createScheduler({
             onContentReady: e => contentReadyCount++
         });
 
+        await waitForAsync(() => contentReadyCount === 1);
         assert.equal(contentReadyCount, 1, 'contentReady is fired');
     });
 
     QUnit.test('contentReady action should rise at the right time', async function(assert) {
         const done = assert.async();
-        this.clock.restore();
-
         const dataSource = new DataSource({
             store: new CustomStore({
                 load: () => {
@@ -149,7 +154,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
             })
         });
 
-        const scheduler = createScheduler({
+        const scheduler = await createScheduler({
             currentDate: new Date(2016, 2, 15),
             views: ['week'],
             currentView: 'week',
@@ -172,7 +177,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
     });
 
     QUnit.test('contentReady action should rise when appointment is added', async function(assert) {
-        const scheduler = createScheduler({
+        const scheduler = await createScheduler({
             currentDate: new Date(2016, 2, 15),
             views: ['week'],
             currentView: 'week',
@@ -200,7 +205,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
             endDate: new Date(2016, 2, 15, 2).toString()
         };
 
-        const scheduler = createScheduler({
+        const scheduler = await createScheduler({
             currentDate: new Date(2016, 2, 15),
             views: ['week'],
             currentView: 'week',
@@ -227,7 +232,7 @@ QUnit.module('onContentReady event', moduleConfig, () => {
             endDate: new Date(2016, 2, 15, 2).toString()
         };
 
-        const scheduler = createScheduler({
+        const scheduler = await createScheduler({
             currentDate: new Date(2016, 2, 15),
             views: ['week'],
             currentView: 'week',

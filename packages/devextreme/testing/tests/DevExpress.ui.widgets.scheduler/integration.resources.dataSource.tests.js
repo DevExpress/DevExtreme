@@ -5,12 +5,10 @@ import { CustomStore } from 'common/data/custom_store';
 const moduleConfig = {
     beforeEach() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
 
     afterEach() {
         fx.off = false;
-        this.clock.restore();
     }
 };
 
@@ -43,6 +41,6 @@ QUnit.module('Integration: Resources data source', moduleConfig, function() {
             }],
         });
 
-        assert.equal(resultSortLoadOption, expectedSortLoadOption);
+        assert.equal(resultSortLoadOption, expectedSortLoadOption, 'sort order saved');
     });
 });

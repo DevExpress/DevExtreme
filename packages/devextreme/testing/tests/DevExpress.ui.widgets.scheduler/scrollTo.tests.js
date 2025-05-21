@@ -3,6 +3,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import errors from 'ui/widget/ui.errors';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 const { test, module, testStart } = QUnit;
 
@@ -12,12 +13,10 @@ testStart(function() {
 
 module('ScrollTo', {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
         sinon.spy(errors, 'log');
         fx.off = true;
     },
     afterEach: function() {
-        this.clock.restore();
         errors.log.restore();
         fx.off = false;
     }
@@ -55,14 +54,20 @@ module('ScrollTo', {
                 }]
             }],
         };
-        const createScheduler = (options = {}) => {
-            return createWrapper({
+        const createScheduler = async(options = {}) => {
+            const scheduler = await createWrapper({
                 ...baseProps,
                 ...options,
             });
+            if(scrolling.mode === 'virtual') {
+                const workspace = scheduler.instance.getWorkSpace();
+                workspace.renderer.getRenderTimeout = () => -1;
+            }
+
+            return scheduler;
         };
 
-        const checkScrollTo = (assert, scheduler, topCellCount, leftCellCount, date, groups, allDay) => {
+        const checkScrollTo = async(assert, scheduler, topCellCount, leftCellCount, date, groups, allDay) => {
             const $scrollable = scheduler.workSpace.getDateTableScrollable();
             const scrollableInstance = $scrollable.dxScrollable('instance');
             const scrollByStub = sinon.stub(scrollableInstance, 'scrollBy');
@@ -72,6 +77,7 @@ module('ScrollTo', {
                 : 0;
 
             scheduler.instance.scrollTo(date, groups, allDay);
+            await waitAsync(20);
 
             const scrollableHeight = $scrollable.height();
             const scrollableWidth = $scrollable.width();
@@ -98,11 +104,13 @@ module('ScrollTo', {
             const scheduler = await createScheduler();
 
             scheduler.instance.scrollTo(new Date(2020, 8, 5));
+            await waitAsync(0);
 
             assert.equal(errors.log.callCount, 1, 'warning has been called once');
             assert.equal(errors.log.getCall(0).args[0], 'W1008', 'warning has correct error id');
 
             scheduler.instance.scrollTo(new Date(2020, 8, 14));
+            await waitAsync(0);
 
             assert.equal(errors.log.callCount, 2, 'warning has been called once');
             assert.equal(errors.log.getCall(1).args[0], 'W1008', 'warning has correct error id');
@@ -112,6 +120,7 @@ module('ScrollTo', {
             const scheduler = await createScheduler();
 
             scheduler.instance.scrollTo(new Date(2020, 8, 7));
+            await waitAsync(0);
 
             assert.equal(errors.log.callCount, 0, 'warning has been called once');
         });
@@ -143,7 +152,7 @@ module('ScrollTo', {
                     currentView: view.type,
                 });
 
-                checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date);
+                await checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date);
             });
         });
 
@@ -174,7 +183,7 @@ module('ScrollTo', {
                     currentView: view.type,
                 });
 
-                checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date);
+                await checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date);
             });
         });
 
@@ -211,7 +220,7 @@ module('ScrollTo', {
                     width: 400,
                 });
 
-                checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 });
+                await checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 });
             });
         });
 
@@ -248,7 +257,7 @@ module('ScrollTo', {
                     width: 400,
                 });
 
-                checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 });
+                await checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 });
             });
         });
 
@@ -284,7 +293,7 @@ module('ScrollTo', {
                     showAllDayPanel: false,
                 });
 
-                checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 });
+                await checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 });
             });
         });
 
@@ -303,7 +312,7 @@ module('ScrollTo', {
                 showAllDayPanel: true,
             });
 
-            checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 });
+            await checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 });
         });
 
         test(`ScrollTo should work with vertical grouping when scrolling to an all-day cell when ${scrolling.text} is used`, async function(assert) {
@@ -321,7 +330,7 @@ module('ScrollTo', {
                 showAllDayPanel: true,
             });
 
-            checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 }, true);
+            await checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 }, true);
         });
 
         [{
@@ -356,6 +365,7 @@ module('ScrollTo', {
                 const scrollBy = sinon.stub(scrollableInstance, 'scrollBy');
 
                 scheduler.instance.scrollTo(date, undefined, true);
+                await waitAsync(0);
 
                 const scrollableHeight = $scrollable.height();
                 const scrollableWidth = $scrollable.width();
@@ -410,7 +420,7 @@ module('ScrollTo', {
                     height: 400,
                 });
 
-                checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date);
+                await checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date);
             });
         });
     });

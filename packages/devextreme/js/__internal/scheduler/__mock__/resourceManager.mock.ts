@@ -1,6 +1,7 @@
 import { DataSource } from '@ts/data/data_source/m_data_source';
 import CustomStore from '@ts/data/m_custom_store';
 
+import type { ResourceConfig } from '../utils/loader/types';
 import { ResourceManager } from '../utils/resource_manager/resource_manager';
 
 export const resourceItemsByIdMock = {
@@ -48,6 +49,8 @@ export const resourceConfigMock = [{
   label: 'Room',
 }];
 
-export const getResourceManagerMock = (): ResourceManager => new ResourceManager(
-  resourceConfigMock.map((item) => ({ ...item })),
+export const getResourceManagerMock = (
+  config?: ResourceConfig[],
+): ResourceManager => new ResourceManager(
+  config ?? resourceConfigMock.map((item) => ({ ...item })),
 );

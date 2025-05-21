@@ -12,7 +12,7 @@ const getAppointmentResourcesValues = jest.fn();
 const options = {
   dataAccessors: mockAppointmentDataAccessor,
   timeZoneCalculator: mockTimeZoneCalculator,
-  getResourceProcessor: () => ({
+  getResourceManager: () => ({
     getAppointmentResourcesValues,
   }),
 } as any;

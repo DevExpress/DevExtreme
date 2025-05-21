@@ -3,6 +3,7 @@ import translator from 'common/core/animation/translator';
 import fx from 'common/core/animation/fx';
 import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import themes from 'ui/themes';
 import { CompactAppointmentsHelper } from '__internal/scheduler/m_compact_appointments_helper';
 import Widget from 'ui/widget/ui.widget';
@@ -28,11 +29,9 @@ const COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 1;
 const baseConfig = {
     beforeEach: function() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 };
 
@@ -279,12 +278,14 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             { startDate: new Date(2019, 2, 4), text: 'e', endDate: new Date(2019, 2, 4, 0, 30) },
             { startDate: new Date(2019, 2, 4), text: 'f', endDate: new Date(2019, 2, 4, 0, 30) }
         ]);
+        await waitAsync(0);
 
         const cellWidth = scheduler.workSpace.getCell(0).outerWidth();
 
         assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), cellWidth - 60, 1.5, 'Collector width is ok');
 
         scheduler.instance.option('views', ['month']);
+        await waitAsync(0);
 
         assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), cellWidth - 36, 1, 'Collector width is ok');
         assert.roughEqual(scheduler.appointments.compact.getButtonHeight(), 20, 1, 'Collector height is ok');
@@ -307,6 +308,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             { text: 'e', startDate: new Date(2019, 8, 12), endDate: new Date(2019, 8, 15) },
             { text: 'f', startDate: new Date(2019, 8, 12), endDate: new Date(2019, 8, 15) }
         ]);
+        await waitAsync(0);
 
         assert.equal(scheduler.appointments.compact.getButtonCount(), 3, 'Collectors count is ok');
     });
@@ -319,7 +321,6 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             width: 800,
             height: 490
         });
-        this.clock.tick(300);
         scheduler.instance.focus();
 
         scheduler.instance.option('dataSource', [
@@ -333,9 +334,9 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             { text: '8', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 29, 1) },
             { text: 'long appt', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 31, 1) }
         ]);
+        await waitAsync(0);
 
         scheduler.appointments.compact.click(0);
-        this.clock.tick(300);
         assert.equal(scheduler.tooltip.getItemCount(), 8, 'There are 8 collapsed appts');
     });
 
@@ -348,7 +349,6 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             width: 800,
             height: 950
         });
-        this.clock.tick(300);
         scheduler.instance.focus();
 
         scheduler.instance.option('dataSource', [
@@ -367,9 +367,9 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             { text: '12', startDate: new Date(2019, 5, 11, 14, 0), endDate: new Date(2019, 5, 11, 15, 30) },
             { text: '13', startDate: new Date(2019, 5, 11, 14, 30), endDate: new Date(2019, 5, 11, 16, 0) }
         ]);
+        await waitAsync(0);
 
         scheduler.appointments.compact.click(0);
-        this.clock.tick(300);
         assert.equal(scheduler.tooltip.getItemCount(), 13, 'There are 13 drop down appts');
     });
 
@@ -434,6 +434,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             instance = scheduler.instance;
 
             instance.option('dataSource', appointments);
+            await waitAsync(0);
             scheduler.appointments.compact.click();
             tooltipItemElement = scheduler.tooltip.getItemElement(2).get(0);
             scheduler.tooltip.clickOnItem(2);
@@ -611,6 +612,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             { startDate: new Date(2015, 2, 4), text: 'e', endDate: new Date(2015, 2, 4, 0, 30) },
             { startDate: new Date(2015, 2, 4), text: 'f', endDate: new Date(2015, 2, 4, 0, 30) }
         ]);
+        await waitAsync(0);
 
         const collectorWidth = scheduler.appointments.compact.getButtonWidth(0);
         const cellWidth = scheduler.workSpace.getCell(0).outerWidth();
@@ -800,6 +802,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointments are not rendered');
 
         scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }]);
+        await waitAsync(0);
 
         assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
         assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointments are not rendered');
@@ -810,6 +813,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
 
         scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
 
         assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
         assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointments are not rendered');
@@ -854,6 +858,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
 
         scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
 
         const $collector = scheduler.appointments.compact.getButton(0);
 
@@ -869,6 +874,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
 
         scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
 
         const $collector = scheduler.appointments.compact.getButton(0);
 
@@ -883,6 +889,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
 
         scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
 
         assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
         assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
@@ -905,6 +912,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
 
         scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
 
         const $appointment = scheduler.appointments.getAppointment(0);
 
@@ -930,6 +938,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
 
         scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
 
         const $collector = scheduler.appointments.compact.getButton(0);
 
@@ -945,6 +954,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
             this.themeMock = sinon.stub(themes, 'current').returns('generic.light.compact');
             const scheduler = await createInstance();
             scheduler.instance.option('currentView', 'week');
+            await waitAsync(0);
 
             const $collector = scheduler.appointments.compact.getButton(0);
 
@@ -965,6 +975,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
 
         scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
 
         const $collector = scheduler.appointments.compact.getButton(0);
 

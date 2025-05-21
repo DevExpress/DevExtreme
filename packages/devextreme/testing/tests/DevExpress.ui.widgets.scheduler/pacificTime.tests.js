@@ -1,7 +1,12 @@
-import { initTestMarkup, createWrapper, isDesktopEnvironment, CLASSES } from '../../helpers/scheduler/helpers.js';
+import {
+    initTestMarkup,
+    createWrapper,
+    createWrapperFakeClock,
+    isDesktopEnvironment,
+    CLASSES,
+} from '../../helpers/scheduler/helpers.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'common/core/animation/fx';
-import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 import { getRecurrenceProcessor } from '__internal/scheduler/m_recurrence';
 
 import '__internal/scheduler/m_scheduler';
@@ -26,19 +31,8 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             fx.off = false;
         }
     };
-    const moduleConfigWithClock = {
-        beforeEach() {
-            fx.off = true;
-            this.clock = sinon.useFakeTimers();
-        },
 
-        afterEach() {
-            fx.off = false;
-            this.clock.restore();
-        }
-    };
-
-    module('Day light saving time in native JS Date', moduleConfigWithClock, () => {
+    module('Day light saving time in native JS Date', () => {
         const testCase1AmTo2AmSummerTime = {
             name: 'Summer time:source appointment from 1:00 AM to 2:00 AM',
             result: [
@@ -162,7 +156,9 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                 });
 
                 const lastAppointmentIndex = testCase.result.length - 1;
-                scheduler.appointments.click(lastAppointmentIndex);
+                const clock = sinon.useFakeTimers();
+                await scheduler.appointments.click(lastAppointmentIndex, clock);
+                clock.restore();
 
                 scheduler.tooltip.clickOnDeleteButton(0);
 
@@ -409,7 +405,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
         });
     });
 
-    module('Common', moduleConfigWithClock, () => {
+    module('Common', () => {
         [{
             currentDate: new Date(2021, 2, 14),
             text: 'summer time'
@@ -435,14 +431,16 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                     height: 600
                 });
 
-                const promises = scheduler.appointmentList.map(async(appointment) => {
+                const clock = sinon.useFakeTimers();
+                for(let index = 0; index < scheduler.appointmentList.length; index++) {
+                    const appointment = scheduler.appointmentList[index];
                     assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
-                    await appointment.click();
+                    appointment.click();
+                    await clock.tickAsync(300);
 
                     assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
-                });
-
-                await Promise.all(promises);
+                }
+                clock.restore();
 
                 assert.expect(14);
             });
@@ -787,12 +785,12 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
         test('Current time indicator should have correct top in week view when DST is present (T1040849)', async function(assert) {
             const clock = sinon.useFakeTimers((new Date(2021, 10, 7, 10)).getTime());
 
-            const scheduler = await createWrapper({
+            const scheduler = await createWrapperFakeClock({
                 views: ['week'],
                 currentView: 'week',
                 currentDate: new Date(),
                 height: 580,
-            });
+            }, clock);
 
             const currentTimeIndicator = scheduler.workSpace.getCurrentTimeIndicator();
 
@@ -804,12 +802,12 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
         test('Current time indicator should have correct left in timeline-week view when DST is present (T1040849)', async function(assert) {
             const clock = sinon.useFakeTimers((new Date(2021, 10, 7, 10)).getTime());
 
-            const scheduler = await createWrapper({
+            const scheduler = await createWrapperFakeClock({
                 views: ['timelineWeek'],
                 currentView: 'timelineWeek',
                 currentDate: new Date(),
                 height: 580,
-            });
+            }, clock);
 
             const currentTimeIndicator = scheduler.workSpace.getCurrentTimeIndicator();
 

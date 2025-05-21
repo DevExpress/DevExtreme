@@ -12,6 +12,7 @@ require('generic_light.css!');
 const fx = require('common/core/animation/fx');
 const dragEvents = require('common/core/events/drag');
 const DataSource = require('common/data/data_source/data_source').DataSource;
+const { createWrapper } = require('../../helpers/scheduler/helpers.js');
 
 require('__internal/scheduler/m_scheduler');
 require('ui/drop_down_button');
@@ -19,11 +20,11 @@ require('ui/drop_down_button');
 QUnit.module('Integration: recurrence rules validation', {
     beforeEach: function() {
         fx.off = true;
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
+        this.createInstance = async function(options) {
+            const scheduler = await createWrapper(options);
+            this.instance = scheduler.instance;
         };
 
-        this.clock = sinon.useFakeTimers();
         this.tasks = [
             {
                 text: 'Task 1',
@@ -34,7 +35,6 @@ QUnit.module('Integration: recurrence rules validation', {
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 });
 
@@ -45,7 +45,7 @@ QUnit.test('Incorrect recurrence rule should not be applied', async function(ass
         store: [item]
     });
 
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week' });
+    await this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week' });
 
     assert.equal(this.instance.$element().find('.dx-scheduler-appointment').length, 1, 'dxSchedulerAppointments has only one item');
 });
@@ -57,7 +57,7 @@ QUnit.test('Appointment with incorrect recurrence rule should not have specific 
         store: [item]
     });
 
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week' });
+    await this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week' });
 
     const $appointment = this.instance.$element().find('.dx-scheduler-appointment').eq(0);
 
@@ -71,7 +71,7 @@ QUnit.test('Recurrence rule with incorrect ruleName should not be applied ', asy
         store: [item]
     });
 
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week' });
+    await this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week' });
 
     assert.equal(this.instance.$element().find('.dx-scheduler-appointment').length, 1, 'dxSchedulerAppointments has only one item');
 });
@@ -88,7 +88,7 @@ QUnit.test('Confirmation dialog should not be shown if rrule is invalid', async 
         ]
     });
 
-    this.createInstance({
+    await this.createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: data,
         currentView: 'week',

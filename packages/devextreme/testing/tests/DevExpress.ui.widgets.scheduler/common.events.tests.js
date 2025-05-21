@@ -10,6 +10,7 @@ import { DataSource } from 'common/data/data_source/data_source';
 import $ from 'jquery';
 import dxScheduler from '__internal/scheduler/m_scheduler';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -81,6 +82,7 @@ QUnit.module('Events', {
     });
 
     QUnit.test('onAppointmentRendered should fires when appointment is completely rendered', async function(assert) {
+        const done = assert.async();
         await createWrapper({
             editing: {
                 allowResizing: true,
@@ -107,9 +109,11 @@ QUnit.module('Events', {
                     ]
                 }
             ],
-            onAppointmentRendered: function(args) {
+            onAppointmentRendered: async function(args) {
                 const $appointment = $(args.appointmentElement);
 
+                await waitAsync(10);
+                done();
                 assert.equal(new Color($appointment.css('backgroundColor')).toHex(), '#ff0000', 'Resource color is applied');
                 assert.ok($appointment.attr('data-groupid-1'), 'Resource data attribute is defined');
                 assert.ok($appointment.hasClass('dx-scheduler-appointment-recurrence'), 'Recurrent class is defined');
@@ -651,7 +655,7 @@ QUnit.module('Events', {
     });
 
     QUnit.test('Option changed', async function(assert) {
-        const scheduler = createWrapper();
+        const scheduler = await createWrapper();
 
         scheduler.instance.option({
             'onAppointmentAdding': function() { return true; },

@@ -1,5 +1,6 @@
 import fx from 'common/core/animation/fx';
 import { createWrapper, initTestMarkup, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import translator from 'common/core/animation/translator';
 
 import '__internal/scheduler/m_scheduler';
@@ -12,11 +13,9 @@ testStart(() => initTestMarkup());
 const moduleConfig = {
     beforeEach() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
     afterEach() {
         fx.off = false;
-        this.clock.restore();
     }
 };
 
@@ -83,11 +82,13 @@ module('RTL', moduleConfig, () => {
                 height: 600
             });
 
-            views.forEach(view => {
+            for(let i = 0; i < views.length; i++) {
+                const view = views[i];
                 const { getAppointment } = scheduler.appointments;
                 const expectedValue = expectedValues[view];
 
                 scheduler.option('currentView', view);
+                await waitAsync(0);
 
                 [getAppointment(0), getAppointment(1)].forEach((appointment, index) => {
                     const position = translator.locate(appointment);
@@ -95,7 +96,7 @@ module('RTL', moduleConfig, () => {
                     assert.roughEqual(Math.round(position.left), expectedValue[index].left, 3.01, `left position of ${index} appointment should be correct in ${view} view`);
                     assert.roughEqual(Math.round(position.top), expectedValue[index].top, 3.01, `top position of ${index} appointment should be correct in ${view} view`);
                 });
-            });
+            }
         });
     }
 

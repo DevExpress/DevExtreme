@@ -453,24 +453,28 @@ export const getGroupPanelData = (
   baseColSpan: number,
 ): GroupPanelData => {
   let repeatCount = 1;
-  let groupPanelItems = groupResources.map((group) => {
-    const result = [] as GroupRenderItem[];
-    const { resourceName, items, data } = group;
+  let groupPanelItems = groupResources
+    .map((group) => {
+      const result = [] as GroupRenderItem[];
+      const {
+        resourceName, resourceIndex, items, data,
+      } = group;
 
-    for (let iterator = 0; iterator < repeatCount; iterator += 1) {
-      result.push(...items.map(({ id, text, color }, index) => ({
-        id,
-        text,
-        color,
-        key: `${iterator}_${resourceName}_${id}`,
-        resourceName,
-        data: data?.[index],
-      }) as GroupRenderItem));
-    }
+      for (let iterator = 0; iterator < repeatCount; iterator += 1) {
+        result.push(...items.map(({ id, text, color }, index) => ({
+          id,
+          text,
+          color,
+          key: `${iterator}_${resourceIndex}_${id}`,
+          resourceName,
+          data: data?.[index],
+        }) as GroupRenderItem));
+      }
 
-    repeatCount *= items.length;
-    return result;
-  });
+      repeatCount *= items.length;
+      return result;
+    })
+    .filter((group) => group.length);
 
   if (groupByDate) {
     groupPanelItems = extendGroupItemsForGroupingByDate(groupPanelItems, columnCountPerGroup);

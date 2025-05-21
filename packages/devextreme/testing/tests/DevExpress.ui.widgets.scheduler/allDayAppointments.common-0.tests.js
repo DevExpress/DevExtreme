@@ -814,7 +814,7 @@ module('All day appointments common', config, () => {
                                 const d = $.Deferred();
                                 setTimeout(function() {
                                     d.resolve(data);
-                                }, 300);
+                                }, 100);
 
                                 return d.promise();
                             }
@@ -822,8 +822,8 @@ module('All day appointments common', config, () => {
                     })
                 });
 
+                await waitAsync(110);
                 const workspace = scheduler.instance.getWorkSpace();
-                await waitForAsync(() => scheduler.appointments.getAppointments().length === 1);
 
                 assert.ok(workspace.option('allDayExpanded'), 'allDay panel is expanded');
             });
@@ -832,6 +832,7 @@ module('All day appointments common', config, () => {
                 const data = [{
                     text: 'a', allDay: true, startDate: new Date(2015, 2, 5)
                 }];
+                let counter = 0;
 
                 const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 4),
@@ -842,7 +843,8 @@ module('All day appointments common', config, () => {
                                 const d = $.Deferred();
                                 setTimeout(function() {
                                     d.resolve(Query([data[0]]).filter(options.filter).toArray());
-                                }, 300);
+                                    counter++;
+                                }, 100);
 
                                 return d.promise();
                             }
@@ -853,7 +855,7 @@ module('All day appointments common', config, () => {
                 scheduler.instance.option('currentView', 'day');
 
                 const workspace = scheduler.instance.getWorkSpace();
-                await waitForAsync(() => scheduler.appointments.getAppointments().length === 1);
+                await waitForAsync(() => counter === 2);
                 assert.notOk(workspace.option('allDayExpanded'), 'allDay panel is not expanded');
             });
         });

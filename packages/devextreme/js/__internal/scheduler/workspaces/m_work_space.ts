@@ -50,7 +50,6 @@ import {
   isDateAndTimeView,
 } from '@ts/scheduler/r1/utils/index';
 import type { SafeAppointment, ViewType } from '@ts/scheduler/types';
-import { getLeafGroupValues } from '@ts/scheduler/utils/resource_manager/group_utils';
 
 import WidgetObserver from '../base/m_widget_observer';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
@@ -74,6 +73,7 @@ import {
   getAppointmentGroupIndex,
   getSafeGroupValues,
 } from '../utils/resource_manager/appointment_groups_utils';
+import { getLeafGroupValues } from '../utils/resource_manager/group_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import type { GroupValues, RawGroupValues } from '../utils/resource_manager/types';
 import {

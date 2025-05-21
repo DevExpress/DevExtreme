@@ -3,18 +3,18 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { isEmptyObject } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import { isDateAndTimeView } from '@ts/scheduler/r1/utils/index';
-import {
-  getAppointmentGroupIndex,
-  getAppointmentGroupValues,
-} from '@ts/scheduler/utils/resource_manager/appointment_groups_utils';
-import type ViewDataProvider from '@ts/scheduler/workspaces/view_model/m_view_data_provider';
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
+import { isDateAndTimeView } from '../r1/utils/index';
 import type { AppointmentDataAccessor } from '../utils';
+import {
+  getAppointmentGroupIndex,
+  getAppointmentGroupValues,
+} from '../utils/resource_manager/appointment_groups_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
+import type ViewDataProvider from '../workspaces/view_model/m_view_data_provider';
 import { CellPositionCalculator } from './m_cell_position_calculator';
 import { createFormattedDateText } from './m_text_utils';
 

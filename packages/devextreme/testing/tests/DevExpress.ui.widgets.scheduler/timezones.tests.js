@@ -7,6 +7,7 @@ import {
     initTestMarkup,
     isDesktopEnvironment
 } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import dateUtils from 'core/utils/date';
 import dateLocalization from 'common/core/localization/date';
@@ -54,12 +55,10 @@ const moduleConfig = {
 const moduleConfigWithClock = {
     beforeEach() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
 
     afterEach() {
         fx.off = false;
-        this.clock.restore();
     }
 };
 
@@ -81,14 +80,14 @@ const data = [{
     endDate: new Date('2017-05-22T16:30:00.000Z')
 }];
 
-const createScheduler = (options = {}, clock) => {
+const createScheduler = (options = {}) => {
     return createWrapper($.extend({
         dataSource: data,
         views: ['week', 'month'],
         currentView: 'week',
         currentDate: new Date(2017, 4, 22),
         height: 600
-    }, options), clock);
+    }, options));
 };
 
 module('Common', moduleConfig, () => {
@@ -177,7 +176,7 @@ module('Common', moduleConfig, () => {
                 stubClientTimeZone: false
             }];
 
-            const runTest = (config, assert) => {
+            const runTest = async(config, assert) => {
                 const scheduler = await createWrapper({
                     currentDate: new Date(2020, 1, 4),
                     views: ['day'],
@@ -204,12 +203,12 @@ module('Common', moduleConfig, () => {
                     if(config.stubClientTimeZone) {
                         const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
                         try {
-                            runTest(config, assert);
+                            await runTest(config, assert);
                         } finally {
                             tzOffsetStub.restore();
                         }
                     } else {
-                        runTest(config, assert);
+                        await runTest(config, assert);
                     }
                 });
             });
@@ -440,7 +439,10 @@ module('Not native date DST', moduleConfigWithClock, () => {
                 currentDate: new Date(2020, 2, 16)
             });
 
-            await scheduler.appointmentList[3].click();
+            const clock = sinon.useFakeTimers();
+            scheduler.appointmentList[3].click();
+            await clock.tickAsync(300);
+            clock.restore();
             scheduler.tooltip.clickOnDeleteButton();
 
             assert.equal(scheduler.appointmentList.length, 6);
@@ -509,19 +511,25 @@ module('Not native date DST', moduleConfigWithClock, () => {
                     currentDate: new Date(2020, 2, 8)
                 });
 
-                await scheduler.appointmentList[1].click();
+                const clock = sinon.useFakeTimers();
+                scheduler.appointmentList[1].click();
+                await clock.tickAsync(300);
                 scheduler.tooltip.clickOnDeleteButton();
-                await scheduler.appointmentList[2].click();
+                scheduler.appointmentList[2].click();
+                await clock.tickAsync(300);
                 scheduler.tooltip.clickOnDeleteButton();
-                await scheduler.appointmentList[3].click();
+                scheduler.appointmentList[3].click();
+                await clock.tickAsync(300);
                 scheduler.tooltip.clickOnDeleteButton();
 
-                const promises = scheduler.appointmentList.map(async (appointment, index) => {
-                    await appointment.click();
+                for(let index = 0; index < scheduler.appointmentList.length; index++) {
+                    const appointment = scheduler.appointmentList[index];
+                    appointment.click();
+                    await clock.tickAsync(300);
                     const tooltipText = scheduler.tooltip.getDateText();
                     assert.equal(tooltipText, testCase.expectedText, `date text should be right in ${index}'th appointment`);
-                });
-                await Promise.all(promises);
+                }
+                clock.restore();
 
                 const dataSource = scheduler.option('dataSource');
                 const recurrenceExceptions = dataSource[0].recurrenceException.split(',');
@@ -595,7 +603,7 @@ module('Not native date DST', moduleConfigWithClock, () => {
         };
 
         [from1amTo2amCase, from1amTo3amCase, from2amTo3amCase, from6amTo7amCase].forEach(testCase => {
-            test(testCase.text, function(assert) {
+            test(testCase.text, async function(assert) {
                 const scheduler = await createScheduler({
                     dataSource: [{
                         startDate: testCase.startDate,
@@ -608,19 +616,21 @@ module('Not native date DST', moduleConfigWithClock, () => {
                     currentDate: new Date(2020, 2, 8)
                 });
 
+                const clock = sinon.useFakeTimers();
                 const count = scheduler.appointments.getAppointmentCount();
                 for(let i = 0; i < count; i++) {
                     const expectedText = testCase.expectedTexts[i];
                     const appointmentText = scheduler.appointments.getDateText(i);
                     assert.equal(appointmentText, expectedText, `appointment date text should be equal ${expectedText}`);
 
-                    scheduler.appointments.click(i);
+                    await scheduler.appointments.click(i, clock);
 
                     const tooltipText = scheduler.tooltip.getDateText();
                     assert.equal(tooltipText, expectedText, `tooltip date text should be equal ${expectedText}`);
 
                     scheduler.instance.hideAppointmentTooltip();
                 }
+                clock.restore();
 
                 assert.expect(testCase.expectedTexts.length * 2);
             });
@@ -700,16 +710,18 @@ module('Not native date DST', moduleConfigWithClock, () => {
                     currentDate: new Date(2020, 2, 8)
                 });
 
+                const clock = sinon.useFakeTimers();
                 for(let i = 0; i < testCase.expectedTexts.length; i++) {
                     const expectedText = testCase.expectedTexts[i];
 
-                    scheduler.appointments.click(i);
+                    await scheduler.appointments.click(i, clock);
 
                     const tooltipText = scheduler.tooltip.getDateText();
                     assert.equal(tooltipText, expectedText, `tooltip date text should be equal ${expectedText}`);
 
                     scheduler.instance.hideAppointmentTooltip();
                 }
+                clock.restore();
 
                 assert.expect(testCase.expectedTexts.length);
             });
@@ -773,19 +785,25 @@ module('Not native date DST', moduleConfigWithClock, () => {
                     currentDate: new Date(2020, 10, 1)
                 });
 
+                const clock = sinon.useFakeTimers();
                 scheduler.appointmentList[1].click();
+                await clock.tickAsync(300);
                 scheduler.tooltip.clickOnDeleteButton();
                 scheduler.appointmentList[2].click();
+                await clock.tickAsync(300);
                 scheduler.tooltip.clickOnDeleteButton();
                 scheduler.appointmentList[3].click();
+                await clock.tickAsync(300);
                 scheduler.tooltip.clickOnDeleteButton();
 
-                const promises = scheduler.appointmentList.map(async (appointment, index) => {
-                    await appointment.click();
+                for(let index = 0; index < scheduler.appointmentList.length; index++) {
+                    const appointment = scheduler.appointmentList[index];
+                    appointment.click();
+                    await clock.tickAsync(300);
                     const tooltipText = scheduler.tooltip.getDateText();
                     assert.equal(tooltipText, testCase.expectedText, `date text should be right in ${index}'th appointment`);
-                });
-                await Promise.all(promises);
+                }
+                clock.restore();
 
                 const dataSource = scheduler.option('dataSource');
                 const recurrenceExceptions = dataSource[0].recurrenceException.split(',');
@@ -859,7 +877,7 @@ module('Not native date DST', moduleConfigWithClock, () => {
         };
 
         [from1amTo2amCase, from2amTo3amCase, from1amTo3amCase, from6amTo7amCase].forEach(testCase => {
-            test(testCase.text, function(assert) {
+            test(testCase.text, async function(assert) {
                 const scheduler = await createScheduler({
                     dataSource: [{
                         startDate: testCase.startDate,
@@ -872,19 +890,21 @@ module('Not native date DST', moduleConfigWithClock, () => {
                     currentDate: new Date(2020, 10, 1),
                 });
 
+                const clock = sinon.useFakeTimers();
                 const count = scheduler.appointments.getAppointmentCount();
                 for(let i = 0; i < count; i++) {
                     const expectedText = testCase.expectedTexts[i];
                     const appointmentText = scheduler.appointments.getDateText(i);
                     assert.equal(appointmentText, expectedText, `appointment date text should be equal ${expectedText}`);
 
-                    scheduler.appointments.click(i);
+                    await scheduler.appointments.click(i, clock);
 
                     const tooltipText = scheduler.tooltip.getDateText();
                     assert.equal(tooltipText, expectedText, `tooltip date text should be equal ${expectedText}`);
 
                     scheduler.instance.hideAppointmentTooltip();
                 }
+                clock.restore();
 
                 assert.expect(testCase.expectedTexts.length * 2);
             });
@@ -965,16 +985,18 @@ module('Not native date DST', moduleConfigWithClock, () => {
                     currentDate: new Date(2020, 10, 1),
                 });
 
+                const clock = sinon.useFakeTimers();
                 for(let i = 0; i < testCase.expectedTexts.length; i++) {
                     const expectedText = testCase.expectedTexts[i];
 
-                    scheduler.appointments.click(i);
+                    await scheduler.appointments.click(i, clock);
 
                     const tooltipText = scheduler.tooltip.getDateText();
                     assert.equal(tooltipText, expectedText, `tooltip date text should be equal ${expectedText}`);
 
                     scheduler.instance.hideAppointmentTooltip();
                 }
+                clock.restore();
 
                 assert.expect(testCase.expectedTexts.length);
             });
@@ -1053,13 +1075,13 @@ module('Scheduler grid', moduleConfigWithClock, () => {
                 height: 600
             });
 
-            const promises = scheduler.appointmentList.map(async (appointment) => {
+            for(let i = 0; i < scheduler.appointmentList.length; i++) {
+                const appointment = scheduler.appointmentList[i];
                 assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
                 await appointment.click();
 
                 assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
-            });
-            await Promise.all(promises);
+            }
 
             scheduler.header.navigator.nextButton.click();
             assert.equal(scheduler.header.navigator.caption.getText(), '19-25 March 2021');
@@ -1070,13 +1092,13 @@ module('Scheduler grid', moduleConfigWithClock, () => {
             scheduler.header.navigator.nextButton.click();
             assert.equal(scheduler.header.navigator.caption.getText(), '2-8 April 2021');
 
-            const promises = scheduler.appointmentList.map(async (appointment) => {
+            for(let i = 0; i < scheduler.appointmentList.length; i++) {
+                const appointment = scheduler.appointmentList[i];
                 assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
                 await appointment.click();
 
                 assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
-            });
-            await Promise.all(promises);
+            }
 
             assert.expect(31);
         });
@@ -1094,15 +1116,18 @@ module('Scheduler grid', moduleConfigWithClock, () => {
         test(`startDate and endDate of appointments should valid in ${testCase.timeZone}`, async function(assert) {
             const scheduler = await createScheduler({ timeZone: testCase.timeZone });
 
-            testCase.times.forEach((expected, index) => {
+            const clock = sinon.useFakeTimers();
+            for(let index = 0; index < testCase.times.length; index++) {
+                const expected = testCase.times[index];
                 const gridDateText = scheduler.appointments.getDateText(index);
                 assert.equal(gridDateText, expected, 'Appointment date text should be valid');
 
-                scheduler.appointments.click(index);
+                await scheduler.appointments.click(index, clock);
 
                 const tooltipDateText = scheduler.tooltip.getDateText();
                 assert.equal(gridDateText, tooltipDateText, 'Tooltip date text should be valid');
-            });
+            }
+            clock.restore();
         });
     });
 
@@ -1408,6 +1433,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
             endDate: new Date(Date.UTC(2016, 4, 7, 1, 30)),
             text: 'new Date sample'
         }]);
+        await waitAsync(0);
 
         const $appt = scheduler.getElement().find(CLASSES.appointment);
         const $contentDates = $appt.find('.dx-scheduler-appointment-content-date');
@@ -1595,6 +1621,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
             currentView: 'day',
             currentDate: new Date(2015, 4, 26)
         });
+        await waitAsync(0);
 
         $appt = $element.find(CLASSES.appointment);
         assert.equal($appt.length, 1, 'Appts are OK on the Day view');
@@ -1881,13 +1908,11 @@ module('Appointment popup', moduleConfig, () => {
 
 module('Fixed client time zone offset', {
     beforeEach() {
-        this.clock = sinon.useFakeTimers();
         this.tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
         fx.off = true;
     },
 
     afterEach() {
-        this.clock.restore();
         this.tzOffsetStub.restore();
         fx.off = false;
     }

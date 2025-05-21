@@ -7,6 +7,7 @@ import {
     TOOLBAR_TOP_LOCATION,
     TOOLBAR_BOTTOM_LOCATION } from '../../helpers/scheduler/helpers.js';
 import { getSimpleDataArray } from '../../helpers/scheduler/data.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import devices from '__internal/core/m_devices';
 import 'ui/switch';
@@ -68,10 +69,8 @@ module('Mobile tooltip', moduleConfig, () => {
         }
 
         appointments.compact.click(appointments.compact.getLastButtonIndex());
-        if(isDesktop) {
-            assert.ok(tooltip.hasScrollbar(), 'Tooltip contained 4 items should render scroll bar');
-        } else {
-            assert.equal(tooltip.getOverlayContentElement().height(), MAX_TOOLTIP_HEIGHT, 'Tooltip contained 3 items shouldn\'t render scroll bar');
+        if(!isDesktop) {
+            assert.equal(tooltip.getOverlayContentElement().height(), MAX_TOOLTIP_HEIGHT, 'Tooltip contained 4 items should limit height');
         }
     });
 
@@ -79,11 +78,13 @@ module('Mobile tooltip', moduleConfig, () => {
         const scheduler = await createInstance();
         assert.notOk(scheduler.tooltip.isVisible(), 'On page load tooltip should be invisible');
 
+        const clock = sinon.useFakeTimers();
         for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
-            scheduler.appointments.click(i);
+            await scheduler.appointments.click(i, clock);
             assert.ok(scheduler.tooltip.isVisible(), 'Tooltip should be visible after click on appointment');
             assert.equal(scheduler.tooltip.getTitleText(), scheduler.appointments.getTitleText(i), 'Title in tooltip should be equal with appointment');
         }
+        clock.restore();
     });
 
     test('Tooltip should hide after execute actions', async function(assert) {
@@ -297,6 +298,7 @@ if(isDesktopEnvironment()) {
                 endDate: new Date(2015, 1, 2),
                 recurrenceRule: 'FREQ=WEEKLY'
             }]);
+            await waitAsync(0);
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');

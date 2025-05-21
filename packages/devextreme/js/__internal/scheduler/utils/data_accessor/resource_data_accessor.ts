@@ -1,8 +1,8 @@
 import { compileGetter, compileSetter } from '@js/core/utils/data';
-import type { DataAccessorGetter, DataAccessorSetter } from '@ts/scheduler/utils/data_accessor/types';
 
 import type { RawResourceData, ResourceConfig, ResourceData } from '../loader/types';
 import { DataAccessor } from './data_accessor';
+import type { DataAccessorGetter, DataAccessorSetter } from './types';
 
 export class ResourceDataAccessor extends DataAccessor<RawResourceData, ResourceData> {
   constructor(

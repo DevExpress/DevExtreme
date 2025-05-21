@@ -14,19 +14,12 @@ import { DataSource } from 'common/data/data_source/data_source';
 import devices from '__internal/core/m_devices';
 
 import '__internal/scheduler/m_scheduler';
-import { SchedulerTestWrapper, createWrapper } from '../../helpers/scheduler/helpers.js';
-
-const createInstance = options => {
-    const instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
-    return new SchedulerTestWrapper(instance);
-};
+import { createWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 QUnit.module('Integration: Timeline', {
     beforeEach: function() {
         fx.off = true;
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
-        };
     },
     afterEach: function() {
         fx.off = false;
@@ -51,7 +44,7 @@ QUnit.test('Special classes should be applied in grouped timeline', async functi
             { text: 'Five', id: 6 }
         ];
 
-        const scheduler = createInstance({
+        const scheduler = await createWrapper({
             views: ['timelineWeek'],
             currentView: 'timelineWeek',
             crossScrollingEnabled: true,
@@ -70,7 +63,7 @@ QUnit.test('Special classes should be applied in grouped timeline', async functi
 });
 
 QUnit.test('Scheduler should have a right timeline work space', async function(assert) {
-    const scheduler = createInstance({
+    const scheduler = await createWrapper({
         views: ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'],
         currentView: 'timelineDay'
     });
@@ -78,17 +71,20 @@ QUnit.test('Scheduler should have a right timeline work space', async function(a
     assert.ok(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineDay('instance'), 'Work space is timelineDay on init');
 
     scheduler.instance.option('currentView', 'timelineWeek');
+    await waitAsync(0);
     assert.ok(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWeek('instance'), 'Work space is timelineWeek after change option ');
 
     scheduler.instance.option('currentView', 'timelineWorkWeek');
+    await waitAsync(0);
     assert.ok(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWorkWeek('instance'), 'Work space is timelineWorkWeek after change option ');
 
     scheduler.instance.option('currentView', 'timelineMonth');
+    await waitAsync(0);
     assert.ok(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineMonth('instance'), 'Work space is timelineMonth after change option ');
 });
 
 QUnit.test('Scheduler should not update scroll position if appointment is visible, timeline day view ', async function(assert) {
-    const scheduler = createInstance({
+    const scheduler = await createWrapper({
         currentDate: new Date(2015, 1, 9),
         dataSource: new DataSource({
             store: []
@@ -113,7 +109,7 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
 });
 
 QUnit.test('Scheduler should not update scroll position if appointment is visible, timeline week view ', async function(assert) {
-    const scheduler = createInstance({
+    const scheduler = await createWrapper({
         firstDayOfWeek: 1,
         currentDate: new Date(2015, 2, 2),
         dataSource: new DataSource({
@@ -144,7 +140,7 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
 });
 
 QUnit.test('Scheduler should update scroll position if appointment is not visible, timeline week view ', async function(assert) {
-    const scheduler = createInstance({
+    const scheduler = await createWrapper({
         firstDayOfWeek: 1,
         currentDate: new Date(2015, 2, 2),
         dataSource: new DataSource({
@@ -174,7 +170,7 @@ QUnit.test('Scheduler should update scroll position if appointment is not visibl
 });
 
 QUnit.test('getEndViewDate should return correct value on timelineMonth view DST date (T720694)', async function(assert) {
-    const scheduler = createInstance({
+    const scheduler = await createWrapper({
         currentDate: new Date(2019, 2, 5),
         views: ['timelineMonth'],
         currentView: 'timelineMonth',
@@ -187,7 +183,7 @@ QUnit.test('getEndViewDate should return correct value on timelineMonth view DST
 });
 
 QUnit.test('Scheduler should not update scroll position if appointment is visible, timeline month view ', async function(assert) {
-    const scheduler = createInstance({
+    const scheduler = await createWrapper({
         firstDayOfWeek: 1,
         currentDate: new Date(2015, 2, 2),
         dataSource: new DataSource({
@@ -218,7 +214,7 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
 });
 
 QUnit.test('Scheduler should update scroll position if appointment is not visible, timeline month view ', async function(assert) {
-    const scheduler = createInstance({
+    const scheduler = await createWrapper({
         firstDayOfWeek: 1,
         currentDate: new Date(2015, 2, 2),
         dataSource: new DataSource({
@@ -248,7 +244,7 @@ QUnit.test('Scheduler should update scroll position if appointment is not visibl
 });
 
 QUnit.test('Appointments should have a right order on timeline month', async function(assert) {
-    const scheduler = createInstance({
+    const scheduler = await createWrapper({
         currentDate: new Date(2016, 1, 2),
         dataSource: new DataSource([
             {
@@ -282,7 +278,7 @@ QUnit.test('Scheduler timeline dateTable should have right height after changing
         { text: 'Five', id: 6 }
     ];
 
-    const scheduler = createInstance({
+    const scheduler = await createWrapper({
         dataSource: [],
         views: ['timelineDay'],
         currentView: 'timelineDay',
@@ -315,7 +311,7 @@ QUnit.test('Scheduler timeline groupTable should have right height if widget has
         { text: 'Five', id: 6 }
     ];
 
-    const scheduler = createInstance({
+    const scheduler = await createWrapper({
         dataSource: [],
         views: ['timelineDay'],
         currentView: 'timelineDay',
@@ -344,7 +340,7 @@ QUnit.test('Appointment has correct render with timelineWeek view & endHour outs
         text: 'blah',
     }];
 
-    const scheduler = createInstance({
+    const scheduler = await createWrapper({
         dataSource: data,
         views: [{
             type: 'timelineWeek',

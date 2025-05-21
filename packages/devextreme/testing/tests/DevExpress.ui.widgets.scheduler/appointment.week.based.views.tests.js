@@ -15,9 +15,9 @@ import {
     initTestMarkup,
     asyncAssert,
     createWrapper,
-    supportedScrollingModes
+    supportedScrollingModes, createWrapperFakeClock
 } from '../../helpers/scheduler/helpers.js';
-import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
@@ -347,7 +347,7 @@ module('Integration: Appointment Day, Week views', {
                 });
 
                 scheduler.instance.option('dataSource', data);
-                await waitAsync(10);
+                await waitAsync(0);
 
                 const itemShift = (getOuterWidth($('.dx-scheduler-date-table'))) * 0.5;
                 const position = $('.dx-scheduler-appointment').position();
@@ -492,49 +492,51 @@ module('Integration: Appointment Day, Week views', {
             });
 
             test('Appointments should be cleared when currentDate option is changed', async function(assert) {
-                const scheduler = await createInstance({
+                const clock = sinon.useFakeTimers();
+                const scheduler = await createWrapperFakeClock({
                     currentDate: new Date(2015, 3, 16),
                     firstDayOfWeek: 1,
                     currentView: 'week',
                     dataSource: new DataSource({
                         store: new CustomStore({
-                            load: function(options) {
+                            load: function() {
                                 const d = $.Deferred();
                                 setTimeout(function() {
-                                    d.resolve([{
-                                        text: 'b', allDay: true, startDate: new Date(2015, 3, 16), endDate: new Date(2015, 3, 16, 0, 30)
-                                    }, {
-                                        text: 'a', startDate: new Date(2015, 3, 16), endDate: new Date(2015, 3, 16, 0, 30)
-                                    }]);
+                                    d.resolve([
+                                        { text: 'b', allDay: true, startDate: new Date(2015, 3, 16), endDate: new Date(2015, 3, 16, 0, 30) },
+                                        { text: 'a', startDate: new Date(2015, 3, 16), endDate: new Date(2015, 3, 16, 0, 30) },
+                                    ]);
                                 }, 300);
 
                                 return d.promise();
                             }
                         })
                     })
-                });
-                await waitForAsync(() => scheduler.appointments.getAppointments().length === 2);
+                }, clock);
+                await clock.tickAsync(310);
                 assert.strictEqual(scheduler.appointments.getAppointments().length, 2);
 
                 scheduler.instance.option('currentDate', new Date(2015, 4, 6));
 
-                await waitForAsync(() => scheduler.appointments.getAppointments().length === 0);
+                await clock.tickAsync(310);
                 assert.strictEqual(scheduler.appointments.getAppointments().length, 0);
 
                 scheduler.instance.option('currentDate', new Date(2015, 3, 16));
 
-                await waitForAsync(() => scheduler.appointments.getAppointments().length === 2);
+                await clock.tickAsync(310);
                 assert.equal(scheduler.appointments.getAppointments().length, 2);
+                clock.restore();
             });
 
             test('Appointments should be cleared when startDayHour option is changed', async function(assert) {
-                const scheduler = await createInstance({
+                const clock = sinon.useFakeTimers();
+                const scheduler = await createWrapperFakeClock({
                     currentDate: new Date(2015, 3, 16),
                     firstDayOfWeek: 1,
                     currentView: 'day',
                     dataSource: new DataSource({
                         store: new CustomStore({
-                            load: function(options) {
+                            load: function() {
                                 const d = $.Deferred();
                                 setTimeout(function() {
                                     d.resolve([{
@@ -548,29 +550,31 @@ module('Integration: Appointment Day, Week views', {
                             }
                         })
                     })
-                });
-                await waitForAsync(() => scheduler.appointments.getAppointments().length === 2);
+                }, clock);
+                await clock.tickAsync(310);
                 assert.strictEqual(scheduler.appointments.getAppointments().length, 2);
 
                 scheduler.instance.option('startDayHour', 2);
 
-                await waitForAsync(() => scheduler.appointments.getAppointments().length === 1);
+                await clock.tickAsync(310);
                 assert.strictEqual(scheduler.appointments.getAppointments().length, 1);
 
                 scheduler.instance.option('startDayHour', 0);
 
-                await waitForAsync(() => scheduler.appointments.getAppointments().length === 2);
+                await clock.tickAsync(310);
                 assert.strictEqual(scheduler.appointments.getAppointments().length, 2);
+                clock.restore();
             });
 
             test('Appointments should be cleared when endDayHour option is changed', async function(assert) {
-                const scheduler = await createInstance({
+                const clock = sinon.useFakeTimers();
+                const scheduler = await createWrapperFakeClock({
                     currentDate: new Date(2015, 3, 16),
                     firstDayOfWeek: 1,
                     currentView: 'day',
                     dataSource: new DataSource({
                         store: new CustomStore({
-                            load: function(options) {
+                            load: function() {
                                 const d = $.Deferred();
                                 setTimeout(function() {
                                     d.resolve([{
@@ -584,19 +588,20 @@ module('Integration: Appointment Day, Week views', {
                             }
                         })
                     })
-                });
-                await waitForAsync(() => scheduler.appointments.getAppointments().length === 2);
+                }, clock);
+                await clock.tickAsync(310);
                 assert.strictEqual(scheduler.appointments.getAppointments().length, 2);
 
                 scheduler.instance.option('endDayHour', 2);
 
-                await waitForAsync(() => scheduler.appointments.getAppointments().length === 1);
+                await clock.tickAsync(310);
                 assert.strictEqual(scheduler.appointments.getAppointments().length, 1);
 
                 scheduler.instance.option('endDayHour', 10);
 
-                await waitForAsync(() => scheduler.appointments.getAppointments().length === 2);
+                await clock.tickAsync(310);
                 assert.strictEqual(scheduler.appointments.getAppointments().length, 2);
+                clock.restore();
             });
 
             test('Appointment should be rendered correctly with expressions on init', async function(assert) {

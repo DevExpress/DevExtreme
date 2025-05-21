@@ -260,7 +260,7 @@ class SchedulerAgenda extends WorkSpace {
       resourceManager.groupsTree,
       allAppointments,
     );
-    const oldTree = convertToOldTree(tree);
+    const oldTree = convertToOldTree(resourceManager.resourceById, tree);
 
     const cellTemplate: any = this.option('resourceCellTemplate');
     const getGroupHeaderContentClass = GROUP_HEADER_CONTENT_CLASS;

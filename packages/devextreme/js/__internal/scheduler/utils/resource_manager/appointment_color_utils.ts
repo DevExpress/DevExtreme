@@ -6,26 +6,36 @@ import { getAppointmentGroupValues } from './appointment_groups_utils';
 import { getLeafGroupValues } from './group_utils';
 import type { GroupLeaf } from './types';
 
-const filterResourcesByGroups = (
-  resources: ResourceLoader[],
-  groups: string[],
-): ResourceLoader[] => resources.filter((resource) => groups.includes(resource.resourceIndex));
-
+/*
+ Order:
+ 1. assigned resource with useColorAsDefault
+ 2. last resource of assigned groups (in order of grouping)
+ 3. last resource of assigned resources (in order of resources config)
+ 4. undefined
+ */
 export const getPaintedResource = (
   resources: ResourceLoader[],
+  appointmentGroups: string[],
   groups: string[],
-): ResourceLoader => {
-  const result = resources.find((resource) => resource.useColorAsDefault);
+): ResourceLoader | undefined => {
+  const assignedResources = resources
+    .filter((resource) => appointmentGroups.includes(resource.resourceIndex));
+  const defaultColorResource = assignedResources
+    .find((resource) => resource.useColorAsDefault);
 
-  if (result) {
-    return result;
+  if (defaultColorResource) {
+    return defaultColorResource;
   }
 
-  const newResources = groups.length
-    ? filterResourcesByGroups(resources, groups)
-    : resources;
+  const assignedGroups = groups.filter((group) => appointmentGroups.includes(group));
+  const availableGroupedResources = assignedGroups
+    .map((group) => assignedResources
+      .find((resource) => resource.resourceIndex === group))
+    .filter(Boolean);
 
-  return newResources[newResources.length - 1];
+  return availableGroupedResources.length
+    ? availableGroupedResources.at(-1)
+    : assignedResources.at(-1);
 };
 
 const getResourceColor = (
@@ -37,22 +47,32 @@ const getResourceColor = (
 export const getAppointmentColor = async (
   resources: ResourceLoader[],
   groupsLeafs: GroupLeaf[],
+  groups: string[],
   appointmentConfig: {
     itemData: SafeAppointment;
     groupIndex: string | number;
   },
 ): Promise<string | undefined> => {
   const { groupIndex, itemData } = appointmentConfig;
-  const appointmentGroups = getAppointmentGroupValues(itemData, resources);
-  const groups = Object.keys(appointmentGroups);
-  const paintedResource = getPaintedResource(resources || [], groups);
+  const appointmentGroupValues = getAppointmentGroupValues(itemData, resources);
+  const appointmentGroups = Object.keys(appointmentGroupValues);
+  const paintedResource = getPaintedResource(
+    resources,
+    appointmentGroups,
+    groups,
+  );
 
   if (paintedResource) {
     await paintedResource.load();
 
-    const cellGroups = getLeafGroupValues(groupsLeafs, groupIndex);
+    /*
+     Order:
+     1. resource value of group with groupIndex
+     2. resource value of the last value in appointment
+     */
+    const leafGroupValue = getLeafGroupValues(groupsLeafs, groupIndex);
     const resourceValues = paintedResource.idsGetter(itemData);
-    const resourceId = cellGroups[paintedResource.resourceIndex] ?? resourceValues[0];
+    const resourceId = leafGroupValue[paintedResource.resourceIndex] ?? resourceValues[0];
 
     return getResourceColor(paintedResource, resourceId);
   }

@@ -1,6 +1,6 @@
-export const waitAsync = (timeout = 1000) => new Promise((resolve) => setTimeout(resolve, timeout));
+export const waitAsync = (timeout = 0) => new Promise((resolve) => setTimeout(resolve, timeout));
 
-export const waitForAsync = (condition, timeout = 1000, step = 10) => {
+export const waitForAsync = (condition, timeout = 500, step = 10) => {
     const startTime = Date.now();
     const loop = () => {
         if(!condition() && Date.now() - startTime < timeout) {
@@ -9,4 +9,16 @@ export const waitForAsync = (condition, timeout = 1000, step = 10) => {
     };
 
     return Promise.resolve().then(loop);
+};
+
+export const waitGlobalFailure = () => {
+    return new Promise((resolve) => {
+        const original = QUnit.onUncaughtException;
+        QUnit.onUncaughtException = function(message) {
+            QUnit.onUncaughtException = original;
+
+            resolve(message);
+            return false;
+        };
+    });
 };

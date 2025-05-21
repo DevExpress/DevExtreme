@@ -1,6 +1,7 @@
 import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import translator from 'common/core/animation/translator';
 import Color from 'color';
 import fx from 'common/core/animation/fx';
@@ -242,6 +243,7 @@ QUnit.test('Multi-week appointments should be split by several parts', async fun
             endDate: new Date(2015, 2, 4)
         }]
     });
+    await waitAsync(0);
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
     const rowHeight = getOuterHeight(
@@ -370,7 +372,6 @@ QUnit.test('Multi-week appointments with resources should have a correct left co
 });
 
 QUnit.test('Multi-week appointments with resources should have a correct left coordinate on timeline view, rtl mode', async function(assert) {
-    const clock = sinon.useFakeTimers();
     const data = [{
         text: 'Task',
         roomId: [1, 2],
@@ -409,31 +410,27 @@ QUnit.test('Multi-week appointments with resources should have a correct left co
         }
     ];
 
-    try {
-        await this.createInstance({
-            rtlEnabled: true,
-            views: ['timelineDay'],
-            currentView: 'timelineDay',
-            dataSource: data,
-            firstDayOfWeek: 1,
-            currentDate: new Date(2015, 2, 4),
-            groups: ['roomId', 'ownerId'],
-            resources: resources
-        });
+    await this.createInstance({
+        rtlEnabled: true,
+        views: ['timelineDay'],
+        currentView: 'timelineDay',
+        dataSource: data,
+        firstDayOfWeek: 1,
+        currentDate: new Date(2015, 2, 4),
+        groups: ['roomId', 'ownerId'],
+        resources: resources
+    });
 
-        mockWorkSpaceRendering.call(this, this.instance, 100, [700]);
+    mockWorkSpaceRendering.call(this, this.instance, 100, [700]);
 
-        const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
-        const $dateTable = $(this.instance.$element()).find('.dx-scheduler-date-table');
-        const expectedLeft = getOuterWidth($dateTable) - getOuterWidth($appointments.eq(0)) - 400;
+    const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
+    const $dateTable = $(this.instance.$element()).find('.dx-scheduler-date-table');
+    const expectedLeft = getOuterWidth($dateTable) - getOuterWidth($appointments.eq(0)) - 400;
 
-        assert.roughEqual(translator.locate($appointments.eq(0)).left, expectedLeft, 1.001, 'Left coordinate is OK');
-        assert.roughEqual(translator.locate($appointments.eq(1)).left, expectedLeft, 1.001, 'Left coordinate is OK');
-        assert.roughEqual(translator.locate($appointments.eq(2)).left, expectedLeft, 1.001, 'Left coordinate is OK');
-        assert.roughEqual(translator.locate($appointments.eq(3)).left, expectedLeft, 1.001, 'Left coordinate is OK');
-    } finally {
-        clock.restore();
-    }
+    assert.roughEqual(translator.locate($appointments.eq(0)).left, expectedLeft, 1.001, 'Left coordinate is OK');
+    assert.roughEqual(translator.locate($appointments.eq(1)).left, expectedLeft, 1.001, 'Left coordinate is OK');
+    assert.roughEqual(translator.locate($appointments.eq(2)).left, expectedLeft, 1.001, 'Left coordinate is OK');
+    assert.roughEqual(translator.locate($appointments.eq(3)).left, expectedLeft, 1.001, 'Left coordinate is OK');
 });
 
 QUnit.test('Multi-week appointments should have correct resizable handles', async function(assert) {
@@ -452,6 +449,7 @@ QUnit.test('Multi-week appointments should have correct resizable handles', asyn
             endDate: new Date(2015, 1, 25)
         }]
     });
+    await waitAsync(0);
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
@@ -475,6 +473,7 @@ QUnit.test('Multi-week appointments should have correct resizable handles in rtl
         }],
         rtlEnabled: true
     });
+    await waitAsync(0);
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
@@ -499,6 +498,7 @@ QUnit.test('Multi-week appointments should have correct CSS classes', async func
             endDate: new Date(2015, 1, 25)
         }]
     });
+    await waitAsync(0);
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
@@ -602,6 +602,7 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
             groups: ['roomId'],
             renovateRender,
         });
+        await waitAsync(0);
 
         this.instance.option('dataSource', [{
             text: 'a',
@@ -609,6 +610,7 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
             endDate: new Date(2015, 1, 25),
             roomId: [1, 2]
         }]);
+        await waitAsync(0);
 
         const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 

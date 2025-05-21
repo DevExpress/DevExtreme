@@ -12,6 +12,7 @@ import dateUtils from 'core/utils/date';
 import config from 'core/config';
 
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import { getAppointmentTakesSeveralDays } from '__internal/scheduler/appointments/data_provider/m_utils';
 
@@ -27,7 +28,6 @@ testStart(function() {
 
 module('Subscribes', {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
         this.createInstance = async(options) => {
             this.scheduler = await createWrapper(options);
             this.instance = this.scheduler.instance;
@@ -36,7 +36,6 @@ module('Subscribes', {
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 }, function() {
     test('"getTargetedAppointmentData" should return correct data for recurrence appointments (T660901)', async function(assert) {
@@ -206,6 +205,7 @@ module('Subscribes', {
                 recurrenceRule: 'FREQ=DAILY'
             }]
         });
+        await waitAsync(0);
 
         const layoutManager = this.instance.getLayoutManager();
         const { _positionMap } = layoutManager;
@@ -228,6 +228,7 @@ module('Subscribes', {
                 allDay: true
             }]
         });
+        await waitAsync(0);
 
         const layoutManager = this.instance.getLayoutManager();
         const { _positionMap } = layoutManager;
@@ -500,6 +501,7 @@ module('Subscribes', {
             currentView: 'week',
             currentDate: new Date(2016, 1, 1),
         });
+        await waitAsync(0);
 
         const appointments = [
             {
@@ -532,6 +534,7 @@ module('Subscribes', {
             startDayHour: 1,
             endDayHour: 10
         });
+        await waitAsync(0);
 
         const appointment = {
             startDate: new Date(2015, 2, 3, 9, 30),
@@ -553,6 +556,7 @@ module('Subscribes', {
             startDayHour: 1,
             endDayHour: 10
         });
+        await waitAsync(0);
 
         const appointment = {
             startDate: new Date(2015, 2, 2, 9, 30),
@@ -609,6 +613,7 @@ module('Subscribes', {
             startDayHour: 8,
             endDayHour: 20
         });
+        await waitAsync(0);
 
         const renderingStrategy = this.instance.getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
@@ -626,6 +631,7 @@ module('Subscribes', {
             startDayHour: 8,
             endDayHour: 20
         });
+        await waitAsync(0);
 
         const renderingStrategy = this.instance.getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
@@ -642,6 +648,7 @@ module('Subscribes', {
             startDayHour: 1,
             endDayHour: 22
         });
+        await waitAsync(0);
 
         const renderingStrategy = this.instance.getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
@@ -658,6 +665,7 @@ module('Subscribes', {
             startDayHour: 8,
             endDayHour: 20
         });
+        await waitAsync(0);
 
         const renderingStrategy = this.instance.getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
@@ -674,6 +682,7 @@ module('Subscribes', {
             startDayHour: 8,
             endDayHour: 20
         });
+        await waitAsync(0);
 
         const renderingStrategy = this.instance.getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
@@ -690,6 +699,7 @@ module('Subscribes', {
             startDayHour: 8,
             endDayHour: 20
         });
+        await waitAsync(0);
 
         const renderingStrategy = this.instance.getRenderingStrategyInstance();
         const result = renderingStrategy.getAppointmentDurationInMs(
@@ -721,6 +731,7 @@ module('Subscribes', {
             }]
         });
 
+        const done = assert.async();
         const getAppointmentColor = this.instance.createGetAppointmentColor();
         const result = getAppointmentColor({
             itemData: {
@@ -732,9 +743,9 @@ module('Subscribes', {
 
         result.done(function(color) {
             appointmentColor = color;
+            done();
+            assert.strictEqual(appointmentColor, 'red', 'appointment color');
         });
-
-        assert.strictEqual(appointmentColor, 'red', 'appointment color');
     });
 
     test('"getAppointmentColor" with fieldExpr for complex resource', async function(assert) {
@@ -770,6 +781,7 @@ module('Subscribes', {
             }]
         });
 
+        const done = assert.async();
         const getAppointmentColor = this.instance.createGetAppointmentColor();
         const result = getAppointmentColor({
             itemData: {
@@ -786,9 +798,9 @@ module('Subscribes', {
 
         result.done(function(color) {
             appointmentColor = color;
+            done();
+            assert.strictEqual(appointmentColor, 'red', 'appointment color is OK');
         });
-
-        assert.strictEqual(appointmentColor, 'red', 'appointment color is OK');
     });
 
     test('"maxAppointmentsPerCell" should return correct value in accordance with scheduler configuration', async function(assert) {
@@ -810,6 +822,7 @@ module('Subscribes', {
         assert.equal(countPerCell, 5, 'overlappingMode is OK');
 
         this.instance.option('currentView', 'WEEK');
+        await waitAsync(0);
 
         countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
 
@@ -836,6 +849,7 @@ module('Subscribes', {
         assert.equal(countPerCell, 5, 'overlappingMode is OK');
 
         this.instance.option('currentView', 'WEEK');
+        await waitAsync(0);
 
         countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
 
@@ -851,8 +865,8 @@ module('Subscribes', {
         assert.ok(this.instance.fire('isAdaptive'), 'Scheduler is adaptive');
 
         this.instance.option('adaptivityEnabled', false);
+        await waitAsync(0);
 
-        this.clock.tick(300);
         assert.notOk(this.instance.fire('isAdaptive'), 'Scheduler isn\'t adaptive');
     });
 
@@ -861,7 +875,6 @@ module('Subscribes', {
             dataSource: [],
             adaptivityEnabled: true
         });
-        this.clock.tick(300);
 
         const width = this.instance.fire('getDropDownAppointmentWidth');
         const height = this.instance.fire('getDropDownAppointmentHeight');
@@ -876,11 +889,11 @@ module('Subscribes', {
             views: ['motnh', 'week'],
             currentView: 'week'
         });
-        this.clock.tick(300);
 
         assert.ok(this.instance.fire('supportCompactDropDownAppointments'));
 
         this.instance.option('currentView', 'month');
+        await waitAsync(0);
 
         assert.notOk(this.instance.fire('supportCompactDropDownAppointments'));
     });
@@ -1069,10 +1082,12 @@ module('Grouping By Date', {
             assert.equal(this.instance.fire('isGroupedByDate'), true, 'Workspace is grouped by date');
 
             this.instance.option('currentView', 'WEEK');
+            await waitAsync(0);
             assert.equal(this.instance.fire('isGroupedByDate'), false, 'Workspace isn\'t grouped by date');
 
             this.instance.option('groups', []);
             this.instance.option('currentView', 'DAY');
+            await waitAsync(0);
             assert.equal(this.instance.fire('isGroupedByDate'), false, 'Workspace isn\'t grouped by date');
         });
 

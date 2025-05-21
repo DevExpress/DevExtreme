@@ -5,15 +5,15 @@ import dataUtils from 'core/element_data';
 import { isRenderer } from 'core/utils/type';
 import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
-import timeZoneDataUtils from '__internal/scheduler/timezones/m_utils_timezones_data';
-
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 import { getTimeZones } from 'time_zone_utils';
 import themes from 'ui/themes';
-import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import Scrollable from 'ui/scroll_view/ui.scrollable.js';
+
+import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
@@ -21,11 +21,9 @@ QUnit.testStart(() => initTestMarkup());
 
 QUnit.module('Loading', {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
     afterEach: function() {
-        this.clock.restore();
         fx.off = false;
     }
 }, () => {
@@ -36,6 +34,7 @@ QUnit.module('Loading', {
     };
 
     QUnit.test('Loading panel should be shown while datasource is reloading', async function(assert) {
+        let count = 0;
         const scheduler = await createWrapper({
             ...baseProps,
             dataSource: new DataSource({
@@ -43,6 +42,7 @@ QUnit.module('Loading', {
                     load: function() {
                         const d = $.Deferred();
                         setTimeout(function() {
+                            count++;
                             d.resolve([]);
                         }, 100);
 
@@ -52,14 +52,15 @@ QUnit.module('Loading', {
             })
         });
 
-        this.clock.tick(100);
-
+        await waitForAsync(() => count === 1);
         scheduler.instance.option('currentView', 'week');
-
+        await waitAsync(0);
         assert.equal(scheduler.instance.$element().find('.dx-loadpanel-wrapper').length, 1, 'loading panel is shown');
+        await waitForAsync(() => count === 2);
     });
 
     QUnit.test('Loading panel should hide', async function(assert) {
+        let count = 0;
         const scheduler = await createWrapper({
             ...baseProps,
             dataSource: new DataSource({
@@ -67,6 +68,7 @@ QUnit.module('Loading', {
                     load: function() {
                         const d = $.Deferred();
                         setTimeout(function() {
+                            count++;
                             d.resolve([]);
                         }, 100);
 
@@ -76,16 +78,15 @@ QUnit.module('Loading', {
             })
         });
 
-        this.clock.tick(100);
-
+        await waitForAsync(() => count === 1);
         scheduler.instance.option('currentView', 'week');
-
-        this.clock.tick(100);
+        await waitForAsync(() => count === 2);
 
         assert.equal($('.dx-loadpanel-wrapper').length, 0, 'loading panel hide');
     });
 
     QUnit.test('Loading panel should be shown in centre of scheduler', async function(assert) {
+        let count = 0;
         const scheduler = await createWrapper({
             ...baseProps,
             dataSource: new DataSource({
@@ -93,6 +94,7 @@ QUnit.module('Loading', {
                     load: function() {
                         const d = $.Deferred();
                         setTimeout(function() {
+                            count++;
                             d.resolve([]);
                         }, 100);
 
@@ -102,11 +104,12 @@ QUnit.module('Loading', {
             })
         });
 
-        this.clock.tick(100);
-
+        await waitForAsync(() => count === 1);
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
         const loadingInstance = $('.dx-loadpanel').last().dxLoadPanel('instance');
         assert.deepEqual(loadingInstance.option('position.of').get(0), scheduler.instance.$element().get(0), 'loading panel is shown in right place');
+        await waitForAsync(() => count === 2);
     });
 });
 
@@ -324,14 +327,7 @@ QUnit.module('Filtering', () => {
     });
 });
 
-QUnit.module('Small size', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-}, () => {
+QUnit.module('Small size', () => {
     QUnit.test('Scheduler should have a small css class on init', async function(assert) {
         const scheduler = await createWrapper({
             width: 300
@@ -383,7 +379,6 @@ QUnit.module('Small size', {
             triggerShownEvent($('#scheduler'));
             const schedulerInstance = $('#scheduler').dxScheduler('instance');
             schedulerInstance.option('width', 600);
-            this.clock.tick(10);
 
             const $appointment = $(schedulerInstance.$element().find('.dx-scheduler-appointment'));
             assert.roughEqual($appointment.position().left, 0, 1.001, 'Appointment is rendered correctly');
@@ -391,14 +386,7 @@ QUnit.module('Small size', {
     });
 });
 
-QUnit.module('View with configuration', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-}, () => {
+QUnit.module('View with configuration', () => {
     QUnit.test('Scheduler should have specific cellDuration setting of the view', async function(assert) {
         const viewCellDuration = 60;
         const scheduler = await createWrapper({
@@ -415,6 +403,7 @@ QUnit.module('View with configuration', {
         assert.equal(workSpace.option('hoursInterval') * 60, viewCellDuration, 'value of the cellDuration');
 
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(10);
 
         workSpace = scheduler.instance.getWorkSpace();
 
@@ -468,8 +457,8 @@ QUnit.module('View with configuration', {
             { id: 2, text: 'group2' }
         ];
         const dataSource2 = [
-            { id: 1, text: 'group3' },
-            { id: 2, text: 'group4' }
+            { id: 1, text: 'group3', color: 'red' },
+            { id: 2, text: 'group4', color: 'red' }
         ];
 
         const scheduler = await createWrapper({
@@ -491,11 +480,11 @@ QUnit.module('View with configuration', {
             currentView: 'workWeek'
         });
 
-        assert.deepEqual(scheduler.instance._workSpace.option('groups'), [{
-            data: dataSource2,
-            items: dataSource2,
-            name: 'test2'
-        }], 'value of the groups');
+        const groups = scheduler.instance._workSpace.option('groups');
+        assert.equal(groups.length, 1, 'only one grouped resource');
+        assert.deepEqual(groups[0].data, dataSource2, 'data is correct');
+        assert.deepEqual(groups[0].items, dataSource2, 'items is correct');
+        assert.equal(groups[0].resourceIndex, 'test2', 'index is correct');
     });
 
     QUnit.test('Scheduler should have specific agendaDuration setting of the view', async function(assert) {
@@ -567,6 +556,7 @@ QUnit.module('View with configuration', {
         });
 
         scheduler.instance.option('currentView', 'WorkWeek');
+        await waitAsync(10);
 
         assert.notEqual(countCallTemplate1, 0, 'count call first template');
         assert.notEqual(countCallTemplate2, 0, 'count call second template');
@@ -677,7 +667,7 @@ QUnit.module('View with configuration', {
         });
 
         $(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)).trigger('dxclick');
-        this.clock.tick(300);
+        await waitAsync(300);
 
         assert.equal(countCallTemplate1, 0, 'count call first template');
         assert.notEqual(countCallTemplate2, 0, 'count call second template');
@@ -863,10 +853,8 @@ QUnit.module('Options for Material-based themes in components', {
     beforeEach: function() {
         this.origIsMaterialBased = themes.isMaterialBased;
         themes.isMaterialBased = function() { return true; };
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        this.clock.restore();
         themes.isMaterialBased = this.origIsMaterialBased;
     }
 }, () => {
@@ -881,6 +869,7 @@ QUnit.module('Options for Material-based themes in components', {
         assert.equal(appointments.option('_collectorOffset'), 20, 'SchedulerAppointments has correct _collectorOffset');
 
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(10);
         assert.equal(appointments.option('_collectorOffset'), 0, 'SchedulerAppointments has correct _collectorOffset');
     });
 

@@ -16,6 +16,7 @@ import {
     CLASSES,
     supportedScrollingModes
 } from '../../helpers/scheduler/helpers.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import 'generic_light.css!';
 import '__internal/scheduler/m_scheduler';
@@ -83,13 +84,11 @@ const groupViews = [{
 const zoomModuleConfig = {
     beforeEach() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
 
     afterEach() {
         fx.off = false;
         window.document.body.style.zoom = 'normal';
-        this.clock.restore();
     }
 };
 
@@ -122,9 +121,10 @@ module('Browser zoom', zoomModuleConfig, () => {
         scheduler.drawControl();
         window.document.body.style.zoom = '125%';
 
-        views.forEach(view => {
+        const testView = async(view) => {
             scheduler.option('currentView', view);
             scheduler.option('dataSource', createDataSource());
+            await waitAsync(10);
 
             const appointment = scheduler.appointments.getAppointment();
 
@@ -139,7 +139,10 @@ module('Browser zoom', zoomModuleConfig, () => {
             pointer.up();
 
             assert.equal(scheduler.appointments.getDateText(), '9:00 AM - 11:00 AM', `appointment should move to previous cell in ${view} view`);
-        });
+        };
+
+        await testView(views[0]);
+        await testView(views[1]);
 
         scheduler.hideControl();
     });
@@ -148,12 +151,10 @@ module('Browser zoom', zoomModuleConfig, () => {
 const commonModuleConfig = {
     beforeEach() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
 
     afterEach() {
         fx.off = false;
-        this.clock.restore();
     }
 };
 
@@ -351,8 +352,8 @@ module('Appointment should move a same distance in dragging from tooltip case, r
     });
 });
 
-const moveAsMouseConfig = $.extend({}, {
-    data: [{
+module('test views', () => {
+    const data = [{
         text: 'Website Re-Design Plan',
         priorityId: 2,
         startDate: new Date(2018, 4, 21, 9, 30),
@@ -363,17 +364,31 @@ const moveAsMouseConfig = $.extend({}, {
         startDate: new Date(2018, 4, 21, 10, 0),
         endDate: new Date(2018, 4, 21, 12, 0),
         allDay: true
-    }],
-    dragCases: [
-        {
-            top: 20,
-            left: 20
-        }, {
-            top: -10,
-            left: 5
-        }
-    ],
-    testAppointmentPosition: function(scheduler, text, dragCase, viewName, assert) {
+    }];
+
+    function createScheduler(views, rtlEnabled) {
+        return createWrapper({
+            _draggingMode: 'default',
+            dataSource: $.extend(true, [], data),
+            width: 850,
+            height: 600,
+            views: views,
+            currentView: views[0].name,
+            crossScrollingEnabled: true,
+            currentDate: new Date(2018, 4, 21),
+            startDayHour: 9,
+            endDayHour: 16,
+            groups: ['priorityId'],
+            rtlEnabled: rtlEnabled,
+            resources: [{
+                fieldExpr: 'priorityId',
+                dataSource: priorityData,
+                label: 'Priority'
+            }]
+        });
+    }
+
+    async function testAppointmentPosition(scheduler, text, dragCase, viewName, assert) {
         const appointment = scheduler.appointments.find(text);
 
         const positionBeforeDrag = getAbsolutePosition(appointment);
@@ -393,58 +408,46 @@ const moveAsMouseConfig = $.extend({}, {
             `appointment '${text}' should have correct left position in ${viewName}`);
         assert.equal(positionAfterDrag.top - positionBeforeDrag.top, dragCase.top,
             `appointment '${text}' should have correct top position in ${viewName}`);
-    },
-    testViews: function(views, assert, rtlEnabled) {
-        const scheduler = await this.createScheduler(views, rtlEnabled);
+    }
 
-        views.forEach(view => {
+    async function testViews(views, assert, rtlEnabled) {
+        const dragCases = [
+            { top: 20, left: 20 },
+            { top: -10, left: 5 },
+        ];
+        const scheduler = await createScheduler(views, rtlEnabled);
+        const testView = async(view) => {
             scheduler.option('currentView', view.name);
+            await waitAsync(0);
+            await testAppointmentPosition(scheduler, data[0].text, dragCases[0], view.name, assert);
+            await testAppointmentPosition(scheduler, data[0].text, dragCases[1], view.name, assert);
+            await testAppointmentPosition(scheduler, data[1].text, dragCases[0], view.name, assert);
+            await testAppointmentPosition(scheduler, data[1].text, dragCases[0], view.name, assert);
+        };
 
-            this.dragCases.forEach(dragCase =>
-                this.data.forEach(({ text }) => this.testAppointmentPosition(scheduler, text, dragCase, view.name, assert))
-            );
-        });
-    },
-    createScheduler: function(views, rtlEnabled) {
-        return createWrapper({
-            _draggingMode: 'default',
-            dataSource: $.extend(true, [], this.data),
-            width: 850,
-            height: 600,
-            views: views,
-            currentView: views[0].name,
-            crossScrollingEnabled: true,
-            currentDate: new Date(2018, 4, 21),
-            startDayHour: 9,
-            endDayHour: 16,
-            groups: ['priorityId'],
-            rtlEnabled: rtlEnabled,
-            resources: [{
-                fieldExpr: 'priorityId',
-                dataSource: priorityData,
-                label: 'Priority'
-            }]
-        });
-    },
-}, commonModuleConfig);
-
-
-module('Appointment should move a same distance as mouse, rtlEnabled = false', moveAsMouseConfig, () => {
-    if(!isDesktopEnvironment()) {
-        return;
+        for(let i = 0; i < views.length; i++) {
+            await testView(views[i]);
+        }
     }
-    test('Common Views', async function(assert) { this.testViews(commonViews, assert, false); });
-    test('Time Line Views', async function(assert) { this.testViews(timeLineViews, assert, false); });
-    test('Group Views', async function(assert) { this.testViews(groupViews, assert, false); });
-});
 
-module('Appointment should move a same distance as mouse, rtlEnabled = true', moveAsMouseConfig, () => {
-    if(!isDesktopEnvironment()) {
-        return;
-    }
-    test('Common Views', async function(assert) { this.testViews(commonViews, assert, true); });
-    test('Time Line Views', async function(assert) { this.testViews(timeLineViews, assert, true); });
-    test('Group Views', async function(assert) { this.testViews(groupViews, assert, true); });
+
+    module('Appointment should move a same distance as mouse, rtlEnabled = false', commonModuleConfig, () => {
+        if(!isDesktopEnvironment()) {
+            return;
+        }
+        test('Common Views', async function(assert) { await testViews(commonViews, assert, false); });
+        test('Time Line Views', async function(assert) { await testViews(timeLineViews, assert, false); });
+        test('Group Views', async function(assert) { await testViews(groupViews, assert, false); });
+    });
+
+    module('Appointment should move a same distance as mouse, rtlEnabled = true', commonModuleConfig, () => {
+        if(!isDesktopEnvironment()) {
+            return;
+        }
+        test('Common Views', async function(assert) { await testViews(commonViews, assert, true); });
+        test('Time Line Views', async function(assert) { await testViews(timeLineViews, assert, true); });
+        test('Group Views', async function(assert) { await testViews(groupViews, assert, true); });
+    });
 });
 
 module('Common', commonModuleConfig, () => {
@@ -643,7 +646,6 @@ module('Common', commonModuleConfig, () => {
             startDate: new Date(2015, 1, 1, 11, 0),
             endDate: new Date(2015, 1, 1, 11, 30)
         }];
-
         const scheduler = await createWrapper({
             _draggingMode: 'default',
             editing: true,
@@ -672,8 +674,7 @@ module('Common', commonModuleConfig, () => {
             currentDate: new Date(2015, 1, 1),
             startDayHour: 9
         });
-
-        this.clock.tick(30);
+        await waitForAsync(() => scheduler.appointments.getAppointments().length === 1);
 
         let $appointment = scheduler.appointments.find('Task 1').first();
         const positionBeforeDrag = getAbsolutePosition($appointment);
@@ -694,15 +695,13 @@ module('Common', commonModuleConfig, () => {
             top: positionBeforeDrag.top
         }, 'appointment position is correct');
         assert.ok($appointment.hasClass('dx-draggable-dragging'), 'appointment is dragging');
-
-        this.clock.tick(30); // waiting for data update
+        await waitAsync(40);
 
         const $appointments = scheduler.appointments.find('Task 1');
 
         assert.equal($appointments.length, 1, 'Dragged appointment disappeared');
 
-        this.clock.tick(30); // waiting for data loading
-
+        await waitAsync(40);
         $appointment = scheduler.appointments.find('Task 1').first();
         positionAfterDrag = getAbsolutePosition($appointment);
 
@@ -1080,7 +1079,7 @@ module('appointmentDragging customization', $.extend({}, {
     // T895576
     [true, false].forEach(createDraggableFirst => {
         [true, false].forEach(allDay => {
-            const testAppointmentDraggingFromSchedulerWithScroll = async (assert, that, data, pointerMove, draggablePos, schedulerPos, scrollPos) => {
+            const testAppointmentDraggingFromSchedulerWithScroll = async(assert, that, data, pointerMove, draggablePos, schedulerPos, scrollPos) => {
                 const group = 'testGroup';
 
                 const appointmentDragging = {
@@ -1597,15 +1596,17 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             height: 600,
         });
 
-        views.forEach((view, index) => {
+        for(let index = 0; index < views.length; index++) {
+            const view = views[index];
             scheduler.option('currentView', view);
             scheduler.option('dataSource', getDataSource());
+            await waitAsync(0);
 
             const dX = index < 3 ? 0 : 30;
             const dY = index < 3 ? 30 : 0;
 
             checkAppointmentDragging(assert, scheduler, appointmentTitle, dX, dY);
-        });
+        }
     });
 
     test('Dragging should work correctly when an appointment is dragged from the all-day panel', async function(assert) {
@@ -1918,7 +1919,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
 
         test(`Drag Source should be selected correctly ${text}`, async function(assert) {
             const data = getData();
-
             const scheduler = await createWrapper({
                 _draggingMode: 'default',
                 height: 600,
@@ -1930,6 +1930,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
                 resources,
                 groups,
             });
+            await waitAsync(0);
 
             const $appointment = scheduler.appointments.find(firstAppointmentTitle).eq(draggedAppointmentIndex);
             const positionBeforeDrag = getAbsolutePosition($appointment);
@@ -2264,11 +2265,9 @@ module('Appointment dragging', {
 
         fx.off = true;
 
-        this.createInstance = function(options) {
+        this.createInstance = async function(options) {
             this.instance = $('#scheduler').dxScheduler({ _draggingMode: 'default', ...options }).dxScheduler('instance');
-
-            this.clock.tick(300);
-
+            await waitForAsync(() => this.instance._workSpace);
             this.scheduler = new SchedulerTestWrapper(this.instance);
         };
 
@@ -2276,8 +2275,6 @@ module('Appointment dragging', {
             checkedProperty = checkedProperty || 'backgroundColor';
             return new Color($task.css(checkedProperty)).toHex();
         };
-
-        this.clock = sinon.useFakeTimers();
 
         this.tasks = [
             {
@@ -2294,9 +2291,6 @@ module('Appointment dragging', {
 
         this.scrollTo = args => this.instance.getWorkSpace().getScrollable().scrollTo(args);
     },
-    afterEach: function() {
-        this.clock.restore();
-    }
 }, () => {
     test('Draggable rendering option "immediate" should be turned off', async function(assert) {
         const tasks = [
@@ -2305,7 +2299,7 @@ module('Appointment dragging', {
         const dataSource = new DataSource({
             store: tasks
         });
-        this.createInstance({
+        await this.createInstance({
             currentView: 'week',
             currentDate: new Date(2015, 2, 16),
             dataSource: dataSource,
@@ -2329,7 +2323,7 @@ module('Appointment dragging', {
                 const dataSource = new DataSource({
                     store: tasks
                 });
-                this.createInstance({
+                await this.createInstance({
                     currentView: 'week',
                     currentDate: new Date(2015, 2, 16),
                     dataSource: dataSource,
@@ -2350,8 +2344,8 @@ module('Appointment dragging', {
     supportedScrollingModes.forEach(scrollingMode => {
         module(`Scrolling mode ${scrollingMode}`, {
             beforeEach: function() {
-                this.createInstance = function(options) {
-                    this.instance = $('#scheduler').dxScheduler($.extend(options,
+                this.createInstance = async function(options) {
+                    const scheduler = await createWrapper($.extend(options,
                         {
                             _draggingMode: 'default',
                             height: options && options.height || 600,
@@ -2359,11 +2353,9 @@ module('Appointment dragging', {
                                 mode: scrollingMode
                             }
                         })
-                    ).dxScheduler('instance');
-
-                    this.clock.tick(300);
-
-                    this.scheduler = new SchedulerTestWrapper(this.instance);
+                    );
+                    this.instance = scheduler.instance;
+                    this.scheduler = scheduler;
 
                     if(scrollingMode === 'virtual') {
                         const workspace = this.instance.getWorkSpace();
@@ -2378,7 +2370,7 @@ module('Appointment dragging', {
                     return;
                 }
 
-                this.createInstance({
+                await this.createInstance({
                     views: ['month'],
                     currentView: 'month',
                     editing: true,
@@ -2419,7 +2411,7 @@ module('Appointment dragging', {
             });
 
             test('Appointment should be returned back if the "update" method rejects deferred during drag (T453486)', async function(assert) {
-                this.createInstance({
+                await this.createInstance({
                     views: ['month'],
                     currentView: 'month',
                     editing: true,
@@ -2453,7 +2445,7 @@ module('Appointment dragging', {
             });
 
             test('Appointment should be dragged correctly between the groups in vertical grouped workspace Month', async function(assert) {
-                this.createInstance({
+                await this.createInstance({
                     dataSource: [{
                         text: 'a',
                         startDate: new Date(2018, 2, 16, 12),
@@ -2494,7 +2486,7 @@ module('Appointment dragging', {
             });
 
             test('Long appt parts should have correct coordinates after drag to the last row cell in vertical grouped workspace Month', async function(assert) {
-                this.createInstance({
+                await this.createInstance({
                     dataSource: [{
                         text: 'a',
                         startDate: new Date(2018, 2, 4, 12),
@@ -2556,7 +2548,7 @@ module('Appointment dragging', {
                     }
                 ];
 
-                this.createInstance({
+                await this.createInstance({
                     dataSource: data,
                     views: ['timelineMonth'],
                     currentView: 'timelineMonth',
@@ -2574,8 +2566,6 @@ module('Appointment dragging', {
                     }]
                 });
 
-                this.clock.tick(10);
-
                 const updatedItem = {
                     'text': 'Google AdWords Strategy',
                     'ownerId': [2],
@@ -2585,10 +2575,10 @@ module('Appointment dragging', {
                 };
 
                 this.scheduler.appointmentList[0].drag.toCell(0);
+                await waitAsync(0);
 
                 const dataSourceItem = this.instance.option('dataSource').items()[0];
 
-                this.clock.tick(10);
                 assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, 'New data is correct');
                 assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, 'New data is correct');
             });
@@ -2599,7 +2589,7 @@ module('Appointment dragging', {
                     return;
                 }
 
-                this.createInstance({
+                await this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     views: ['month'],
                     currentView: 'month',
@@ -2612,8 +2602,7 @@ module('Appointment dragging', {
                 });
 
                 this.scheduler.appointmentList[0].drag.toCell(8);
-
-                this.clock.tick(10);
+                await waitAsync(0);
 
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
@@ -2627,7 +2616,7 @@ module('Appointment dragging', {
                     return;
                 }
 
-                this.createInstance({
+                await this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     views: ['month'],
                     editing: true,
@@ -2641,8 +2630,8 @@ module('Appointment dragging', {
                 });
 
                 this.scheduler.appointmentList[0].drag.toCell(9);
+                await waitAsync(0);
 
-                this.clock.tick(10);
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 1, 10, 8, 0), 'Start date is correct');
@@ -2655,7 +2644,7 @@ module('Appointment dragging', {
                     return;
                 }
 
-                this.createInstance({
+                await this.createInstance({
                     views: ['month'],
                     currentView: 'month',
                     editing: true,
@@ -2671,8 +2660,8 @@ module('Appointment dragging', {
                 });
 
                 this.scheduler.appointmentList[0].drag.toCell(16);
+                await waitAsync(0);
 
-                this.clock.tick(10);
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 4, 12, 10), 'Start date is correct');
@@ -2685,7 +2674,7 @@ module('Appointment dragging', {
                     return;
                 }
 
-                this.createInstance({
+                await this.createInstance({
                     views: ['month'],
                     currentView: 'month',
                     editing: true,
@@ -2701,8 +2690,8 @@ module('Appointment dragging', {
                 });
 
                 this.scheduler.appointmentList[0].drag.toCell(16);
+                await waitAsync(0);
 
-                this.clock.tick(10);
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 4, 12, 8), 'Start date is correct');
@@ -2715,9 +2704,7 @@ module('Appointment dragging', {
                     store: this.tasks
                 });
 
-                this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, editing: true });
-
-                this.clock.tick(10);
+                await this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, editing: true });
 
                 const updatedItem = {
                     text: 'Task 1',
@@ -2727,10 +2714,10 @@ module('Appointment dragging', {
                 };
 
                 this.scheduler.appointmentList[0].drag.toCell(5);
+                await waitAsync(0);
 
                 const dataSourceItem = this.instance.option('dataSource').items()[0];
 
-                this.clock.tick(10);
                 assert.equal(dataSourceItem.text, updatedItem.text, 'New data is correct');
                 assert.equal(dataSourceItem.allDay, updatedItem.allDay, 'New data is correct');
                 assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, 'New data is correct');
@@ -2738,7 +2725,7 @@ module('Appointment dragging', {
             });
 
             [false, true].forEach(function(forceIsoDateParsing) {
-                test('Drag task that contains timestamps when forceIsoDateParsing is ' + forceIsoDateParsing, function(assert) {
+                test('Drag task that contains timestamps when forceIsoDateParsing is ' + forceIsoDateParsing, async function(assert) {
                     const defaultForceIsoDateParsing = config().forceIsoDateParsing;
 
                     try {
@@ -2754,14 +2741,12 @@ module('Appointment dragging', {
                             ]
                         });
 
-                        this.createInstance({
+                        await this.createInstance({
                             currentDate: new Date(2015, 1, 9),
                             dataSource: data,
                             editing: true,
                             allDayExpr: 'AllDay'
                         });
-
-                        this.clock.tick(10);
 
                         const updatedItem = {
                             text: 'Task 1',
@@ -2771,8 +2756,7 @@ module('Appointment dragging', {
                         };
 
                         this.scheduler.appointmentList[0].drag.toCell(5);
-
-                        this.clock.tick(10);
+                        await waitAsync(0);
 
                         const dataSourceItem = this.instance.option('dataSource').items()[0];
 
@@ -2787,7 +2771,7 @@ module('Appointment dragging', {
             });
 
             test('Appointment should have correct position while dragging from group', async function(assert) {
-                this.createInstance({
+                await this.createInstance({
                     currentDate: new Date(2015, 6, 10),
                     editing: true,
                     views: ['week'],
@@ -2813,8 +2797,8 @@ module('Appointment dragging', {
                 });
 
                 this.scheduler.appointmentList[0].drag.toCell(7);
+                await waitAsync(0);
 
-                this.clock.tick(10);
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 5, 0), 'Start date is correct');
@@ -2823,7 +2807,7 @@ module('Appointment dragging', {
             });
 
             test('Appointment should have correct position while dragging from group, vertical grouping', async function(assert) {
-                this.createInstance({
+                await this.createInstance({
                     currentDate: new Date(2015, 6, 10),
                     editing: true,
                     views: [{
@@ -2877,7 +2861,6 @@ module('Appointment dragging', {
                 $(this.instance.$element().find('.' + DATE_TABLE_CELL_CLASS)).eq(7).trigger(dragEvents.enter);
                 pointer.up();
 
-                this.clock.tick(10);
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 5, 9, 30), 'Start date is correct');
@@ -2886,7 +2869,7 @@ module('Appointment dragging', {
             });
 
             test('Appointment should have correct position while dragging into allDay panel, vertical grouping', async function(assert) {
-                this.createInstance({
+                await this.createInstance({
                     currentDate: new Date(2015, 6, 10),
                     editing: true,
                     views: [{
@@ -2929,8 +2912,8 @@ module('Appointment dragging', {
 
                 $(this.instance.$element().find('.dx-scheduler-all-day-table-cell')).eq(11).trigger(dragEvents.enter);
                 pointer.up();
+                await waitAsync(0);
 
-                this.clock.tick(10);
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 9, 0), 'Start date is correct');
@@ -2939,7 +2922,7 @@ module('Appointment dragging', {
             });
 
             test('Appointment should have correct coordinates after drag if onAppointmentUpdating is canceled (T813826)', async function(assert) {
-                this.createInstance({
+                await this.createInstance({
                     currentDate: new Date(2015, 4, 25),
                     editing: true,
                     views: ['workWeek'],
@@ -2973,18 +2956,17 @@ module('Appointment dragging', {
                 const oldAppointmentCoords = translator.locate($appointment);
 
                 this.scheduler.appointmentList[0].drag.toCell(7);
+                await waitAsync(0);
 
                 this.scheduler.appointmentForm.clickFormDialogButton(1);
 
                 const newAppointmentCoords = translator.locate(this.scheduler.appointments.getAppointment(0));
 
                 assert.deepEqual(oldAppointmentCoords, newAppointmentCoords, 'Appointment has correct coords');
-
-                this.clock.tick(10);
             });
 
             test('Appointment should push correct data to the onAppointmentUpdating event on changing group by dragging', async function(assert) {
-                this.createInstance({
+                await this.createInstance({
                     currentDate: new Date(2015, 4, 25),
                     editing: true,
                     views: ['workWeek'],
@@ -3015,17 +2997,16 @@ module('Appointment dragging', {
                 const stub = sinon.stub(this.instance.option(), 'onAppointmentUpdating');
 
                 this.scheduler.appointmentList[0].drag.toCell(7);
+                await waitAsync(0);
 
                 const result = stub.getCall(0).args[0];
 
                 assert.equal(result.oldData.priorityId, 1, 'Appointment was located in the first group');
                 assert.equal(result.newData.priorityId, 2, 'Appointment located in the second group now');
-
-                this.clock.tick(10);
             });
 
             test('Appointment should not be updated if it is dropped to the initial cell (week view)', async function(assert) {
-                this.createInstance({
+                await this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     currentView: 'week',
                     firstDayOfWeek: 0,
@@ -3037,8 +3018,8 @@ module('Appointment dragging', {
                 });
 
                 this.scheduler.appointmentList[0].drag.toCell(1);
+                await waitAsync(0);
 
-                this.clock.tick(10);
                 const appointmentData = dataUtils.data(this.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
                 assert.deepEqual(appointmentData.startDate, new Date(2015, 1, 9, 0, 7), 'Start date is correct');

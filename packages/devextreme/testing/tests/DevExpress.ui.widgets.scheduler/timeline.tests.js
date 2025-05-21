@@ -11,6 +11,11 @@ import '__internal/scheduler/workspaces/m_timeline_week';
 import '__internal/scheduler/workspaces/m_timeline_work_week';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
+import {
+    applyWorkspaceGroups,
+    getEmptyResourceManager,
+    getWorkspaceResourceConfig
+} from '../../helpers/scheduler/mockResourceManager.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-timeline"></div></div>\
@@ -27,7 +32,9 @@ const TIMELINE_MONTH = { class: 'dxSchedulerTimelineMonth', name: 'SchedulerTime
 QUnit.module('Timeline Base', {
 
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({}).dxSchedulerTimelineDay('instance');
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
+            getResourceManager: getEmptyResourceManager,
+        }).dxSchedulerTimelineDay('instance');
     }
 });
 
@@ -88,11 +95,16 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', a
     QUnit.test(`Sidebar scrollable should update position if date scrollable position is changed when renovateRender is ${renovateRender}`, async function(assert) {
         const done = assert.async();
 
+        const resourceConfig = await getWorkspaceResourceConfig([{
+            label: 'one',
+            fieldExpr: 'one',
+            dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }]
+        }]);
         this.instance.option({
             crossScrollingEnabled: true,
             width: 400,
             height: 150,
-            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }],
+            ...resourceConfig,
             renovateRender,
         });
 
@@ -112,11 +124,16 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', a
     });
 
     QUnit.test(`Date table scrollable should update position if sidebar position is changed when renovateRender is ${renovateRender}`, async function(assert) {
+        const resourceConfig = await getWorkspaceResourceConfig([{
+            label: 'one',
+            fieldExpr: 'one',
+            dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }]
+        }]);
         this.instance.option({
             crossScrollingEnabled: true,
             width: 400,
             height: 150,
-            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }],
+            ...resourceConfig,
             renovateRender,
         });
 
@@ -157,7 +174,11 @@ QUnit.test('Sidebar should be hidden in simple mode', async function(assert) {
 QUnit.test('Sidebar should be visible in grouped mode', async function(assert) {
     const $element = this.instance.$element();
 
-    this.instance.option('groups', [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]);
+    await applyWorkspaceGroups(this.instance, [{
+        label: 'one',
+        fieldExpr: 'one',
+        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+    }]);
     const $sidebar = $element.find('.dx-scheduler-sidebar-scrollable');
 
     assert.equal($sidebar.css('display'), 'block', 'Sidebar is visible');
@@ -166,10 +187,15 @@ QUnit.test('Sidebar should be visible in grouped mode', async function(assert) {
 QUnit.test('Group table cells should have correct height', async function(assert) {
     const $element = this.instance.$element();
 
-    this.instance.option('groups', [
-        { name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] },
-        { name: 'two', items: [{ id: 1, text: '1' }, { id: 2, text: '2' }] }
-    ]);
+    await applyWorkspaceGroups(this.instance, [{
+        label: 'one',
+        fieldExpr: 'one',
+        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+    }, {
+        label: 'two',
+        fieldExpr: 'two',
+        dataSource: [{ id: 1, text: '1' }, { id: 2, text: '2' }]
+    }]);
 
     const $groupTable = $element.find('.dx-scheduler-sidebar-scrollable .dx-scheduler-group-table');
     const $groupRows = $groupTable.find('.dx-scheduler-group-row');
@@ -184,12 +210,18 @@ QUnit.skip('the "getCoordinatesByDate" method should return right coordinates fo
     const instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
         'currentDate': new Date(2015, 9, 28),
         groupOrientation: 'vertical',
+        getResourceManager: getEmptyResourceManager,
     }).dxSchedulerTimelineDay('instance');
 
-    instance.option('groups', [
-        { name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] },
-        { name: 'two', items: [{ id: 1, text: '1' }, { id: 2, text: '2' }] }
-    ]);
+    await applyWorkspaceGroups(instance, [{
+        label: 'one',
+        fieldExpr: 'one',
+        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+    }, {
+        label: 'two',
+        fieldExpr: 'two',
+        dataSource: [{ id: 1, text: '1' }, { id: 2, text: '2' }]
+    }]);
 
     const coordinates = instance.positionHelper.getCoordinatesByDate(new Date(2015, 9, 28, 1), 1);
     const expectedPosition = instance.$element()
@@ -210,10 +242,15 @@ QUnit.test('the \'getCellIndexByCoordinates\' method should return right coordin
 });
 
 QUnit.test('the \'getCellIndexByCoordinates\' method should return right coordinates for fractional value', async function(assert) {
-    this.instance.option('groups', [
-        { name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] },
-        { name: 'two', items: [{ id: 1, text: '1' }, { id: 2, text: '2' }] }
-    ]);
+    await applyWorkspaceGroups(this.instance, [{
+        label: 'one',
+        fieldExpr: 'one',
+        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+    }, {
+        label: 'two',
+        fieldExpr: 'two',
+        dataSource: [{ id: 1, text: '1' }, { id: 2, text: '2' }]
+    }]);
 
     const cellWidth = getOuterWidth(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
     const cellHeight = getOuterHeight(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
@@ -260,11 +297,14 @@ QUnit.test('dateUtils.getTimezonesDifference should be called when calculating i
 
 QUnit.test('Ensure cell min height is equal to cell height(T389468)', async function(assert) {
     const stub = sinon.stub(this.instance, 'getCellHeight').returns(10);
+    const resourceConfig = await getWorkspaceResourceConfig([{
+        label: 'one',
+        fieldExpr: 'one',
+        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+    }]);
 
     this.instance.option({
-        groups: [
-            { name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }
-        ],
+        ...resourceConfig,
         height: 400
     });
 
@@ -282,7 +322,9 @@ QUnit.test('Ensure cell min height is equal to cell height(T389468)', async func
 
 QUnit.module('Timeline Day', {
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({}).dxSchedulerTimelineDay('instance');
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
+            getResourceManager: getEmptyResourceManager,
+        }).dxSchedulerTimelineDay('instance');
     }
 });
 
@@ -324,10 +366,15 @@ QUnit.module('Timeline Day', {
 });
 
 QUnit.module('Timeline Day, groupOrientation = horizontal', {
-    beforeEach: function() {
+    beforeEach: async function() {
+        const resourceConfig = await getWorkspaceResourceConfig([{
+            label: 'one',
+            fieldExpr: 'one',
+            dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+        }]);
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
             groupOrientation: 'horizontal',
-            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]
+            ...resourceConfig,
         }).dxSchedulerTimelineDay('instance');
     }
 });
@@ -372,7 +419,9 @@ QUnit.skip('the \'getCoordinatesByDate\' method should return right coordinates 
 
 QUnit.module('Timeline Week', {
     beforeEach: function() {
-        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({}).dxSchedulerTimelineWeek('instance');
+        this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({
+            getResourceManager: getEmptyResourceManager,
+        }).dxSchedulerTimelineWeek('instance');
     }
 });
 
@@ -409,10 +458,15 @@ QUnit.test('Scheduler timeline week header cells should have right width if cros
 });
 
 QUnit.test('Scheduler timeline week cells should have right height if crossScrollingEnabled = true', async function(assert) {
+    const resourceConfig = await getWorkspaceResourceConfig([{
+        label: 'one',
+        fieldExpr: 'one',
+        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+    }]);
     this.instance.option({
         currentDate: new Date(2015, 9, 29),
         crossScrollingEnabled: true,
-        groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' } ] }]
+        ...resourceConfig,
     });
 
     resizeCallbacks.fire();
@@ -464,13 +518,18 @@ QUnit.module('Timeline Month', {
             currentDate: new Date(2015, 9, 16),
             showCurrentTimeIndicator: false,
             shadeUntilCurrentTime: false,
+            getResourceManager: getEmptyResourceManager,
         }).dxSchedulerTimelineMonth('instance');
     }
 });
 
 QUnit.test('timeline should have correct group table width (T718364)', async function(assert) {
     this.instance.option('crossScrollingEnabled', true);
-    this.instance.option('groups', [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }] }]);
+    await applyWorkspaceGroups(this.instance, [{
+        label: 'one',
+        fieldExpr: 'one',
+        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }, { id: 4, text: 'd' }]
+    }]);
 
     assert.equal(this.instance.getGroupTableWidth(), 100, 'Group table width is OK');
 });
@@ -530,16 +589,22 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                     },
                     renovateRender: true,
                     scrolling: { mode: scrollingMode, orientation: 'vertical' },
+                    getResourceManager: getEmptyResourceManager,
                 }).dxSchedulerTimelineMonth('instance');
             }
         }, () => {
             QUnit.test('Timeline should select/unselect cells with shift & arrows', async function(assert) {
+                const resourceConfig = await getWorkspaceResourceConfig([{
+                    label: 'one',
+                    fieldExpr: 'one',
+                    dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }]
+                }]);
                 this.instance.option({
                     focusStateEnabled: true,
                     width: 1000,
                     height: 800,
                     currentDate: new Date(2015, 3, 1),
-                    groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }, { id: 3, text: 'c' }] }]
+                    ...resourceConfig,
                 });
 
                 const $element = this.instance.$element();
@@ -565,11 +630,16 @@ QUnit.module('Timeline Keyboard Navigation', () => {
             });
 
             QUnit.test('Timeline should select/unselect cells with mouse', async function(assert) {
+                const resourceConfig = await getWorkspaceResourceConfig([{
+                    label: 'one',
+                    fieldExpr: 'one',
+                    dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                }]);
                 this.instance.option({
                     width: 1000,
                     height: 800,
                     currentDate: new Date(2015, 3, 1),
-                    groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }]
+                    ...resourceConfig,
                 });
 
                 const $element = this.instance.$element();
@@ -610,13 +680,18 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                         const {
                             startCell, endCell, focusedCellsCount, rtlEnabled, key,
                         } = config;
+                        const resourceConfig = await getWorkspaceResourceConfig([{
+                            label: 'one',
+                            fieldExpr: 'one',
+                            dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                        }]);
 
                         this.instance.option({
                             focusStateEnabled: true,
                             groupOrientation: 'horizontal',
                             groupByDate: true,
                             rtlEnabled,
-                            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
+                            ...resourceConfig,
                         });
 
                         const $element = this.instance.$element();
@@ -654,12 +729,17 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                     startCell, endCell, focusedCellsCount, cellFromAnotherGroup,
                     groupOrientation, groupByDate, description,
                 }) => {
-                    QUnit.test(description, function(assert) {
+                    QUnit.test(description, async function(assert) {
+                        const resourceConfig = await getWorkspaceResourceConfig([{
+                            label: 'one',
+                            fieldExpr: 'one',
+                            dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                        }]);
                         this.instance.option({
                             focusStateEnabled: true,
                             groupOrientation,
                             groupByDate,
-                            groups: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
+                            ...resourceConfig,
                             allowMultipleCellSelection: true,
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
                             renovateRender: true,
@@ -700,7 +780,9 @@ QUnit.module('Timeline Keyboard Navigation', () => {
 QUnit.module('Mouse Interaction', () => {
     [TIMELINE_DAY, TIMELINE_WEEK, TIMELINE_MONTH].forEach((workSpace) => {
         QUnit.test(`Cell hover should work correctly in ${workSpace.name}`, async function(assert) {
-            const $element = $('#scheduler-timeline')[workSpace.class]({});
+            const $element = $('#scheduler-timeline')[workSpace.class]({
+                getResourceManager: getEmptyResourceManager,
+            });
 
             const cells = $element.find(`.${CELL_CLASS}`);
 
@@ -715,6 +797,7 @@ QUnit.module('TimelineWorkWeek with intervalCount', {
     beforeEach: function() {
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineWorkWeek({
             currentDate: new Date(2015, 9, 16),
+            getResourceManager: getEmptyResourceManager,
         }).dxSchedulerTimelineWorkWeek('instance');
     }
 });
@@ -749,7 +832,7 @@ QUnit.skip('\'getCoordinatesByDateInGroup\' method should return only work week 
 });
 
 QUnit.module('TimelineWeek with grouping by date', {
-    beforeEach: function() {
+    beforeEach: async function() {
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineWeek({
             currentDate: new Date(2018, 2, 1),
             groupByDate: true,
@@ -757,11 +840,13 @@ QUnit.module('TimelineWeek with grouping by date', {
             endDayHour: 12,
             groupOrientation: 'horizontal',
             showCurrentTimeIndicator: false,
+            getResourceManager: getEmptyResourceManager,
         }).dxSchedulerTimelineWeek('instance');
 
-        this.instance.option('groups', [{
-            name: 'one',
-            items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+        await applyWorkspaceGroups(this.instance, [{
+            label: 'one',
+            fieldExpr: 'one',
+            dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
         }]);
     }
 });
@@ -904,7 +989,12 @@ QUnit.test('Group table cells should have right cellData, groupByDate = true', a
 });
 
 QUnit.module('TimelineDay with grouping by date', {
-    beforeEach: function() {
+    beforeEach: async function() {
+        const resourceConfig = await getWorkspaceResourceConfig([{
+            label: 'one',
+            fieldExpr: 'one',
+            dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+        }]);
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
             currentDate: new Date(2018, 2, 1),
             groupByDate: true,
@@ -912,10 +1002,7 @@ QUnit.module('TimelineDay with grouping by date', {
             endDayHour: 12,
             groupOrientation: 'horizontal',
             showCurrentTimeIndicator: false,
-            groups: [{
-                name: 'one',
-                items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-            }],
+            ...resourceConfig,
         }).dxSchedulerTimelineDay('instance');
     }
 }, () => {
@@ -965,19 +1052,16 @@ QUnit.module('Renovated Render', {
         QUnit.dump.maxDepth = 10;
     },
     beforeEach() {
-        this.clock = sinon.useFakeTimers();
         this.createInstance = (options = {}, workSpace = 'dxSchedulerTimelineDay') => {
             this.instance = $('#scheduler-timeline')[workSpace]({
                 renovateRender: true,
                 currentDate: new Date(2020, 11, 21),
                 startDayHour: 0,
                 endDayHour: 1,
+                getResourceManager: getEmptyResourceManager,
                 ...options,
             })[workSpace]('instance');
         };
-    },
-    afterEach() {
-        this.clock.restore();
     },
     after() {
         QUnit.dump.maxDepth = this.qUnitMaxDepth;
@@ -1052,14 +1136,11 @@ QUnit.module('Renovated Render', {
             this.createInstance({
                 groupOrientation: 'horizontal',
             });
-            this.instance.option('groups', [
-                {
-                    name: 'res',
-                    items: [
-                        { id: 1, text: 'one' }, { id: 2, text: 'two' }
-                    ]
-                }
-            ]);
+            await applyWorkspaceGroups(this.instance, [{
+                label: 'res',
+                fieldExpr: 'res',
+                dataSource: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }]
+            }]);
 
             this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
@@ -1130,14 +1211,11 @@ QUnit.module('Renovated Render', {
 
         QUnit.test('should work with vertical grouping', async function(assert) {
             this.createInstance();
-            this.instance.option('groups', [
-                {
-                    name: 'res',
-                    items: [
-                        { id: 1, text: 'one' }, { id: 2, text: 'two' }
-                    ]
-                }
-            ]);
+            await applyWorkspaceGroups(this.instance, [{
+                label: 'res',
+                fieldExpr: 'res',
+                dataSource: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }]
+            }]);
             this.instance.option('groupOrientation', 'vertical');
 
             this.instance.viewDataProvider.update(this.instance.generateRenderOptions());

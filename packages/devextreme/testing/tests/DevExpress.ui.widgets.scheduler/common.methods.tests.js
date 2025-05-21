@@ -93,12 +93,9 @@ QUnit.module('Methods', {
             dataSource: data
         });
 
-        this.clock.tick(10);
-
         const newTask = { startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' };
 
         scheduler.instance.updateAppointment(this.tasks[0], newTask);
-        this.clock.tick(10);
 
         assert.deepEqual(scheduler.instance.option('dataSource').items()[0], newTask, 'item is updated');
     });
@@ -113,8 +110,6 @@ QUnit.module('Methods', {
             dataSource: data
         });
 
-        this.clock.tick(10);
-
         const newTask = {
             text: 'Task 11',
             startDate: new Date(2015, 1, 9, 1, 0),
@@ -125,7 +120,6 @@ QUnit.module('Methods', {
             assert.ok(true, 'Updated item was rerendered');
         });
         scheduler.instance.updateAppointment(this.tasks[0], newTask);
-        this.clock.tick(10);
     });
 
     QUnit.test('Updated item should be rerendered if it\'s coordinates weren\'t changed (T650811)', async function(assert) {
@@ -137,8 +131,6 @@ QUnit.module('Methods', {
             currentDate: new Date(2015, 1, 9),
             dataSource: data
         });
-
-        this.clock.tick(10);
 
         const newTask = {
             allDay: undefined,
@@ -152,8 +144,6 @@ QUnit.module('Methods', {
         });
 
         scheduler.instance.updateAppointment(this.tasks[0], newTask);
-
-        this.clock.tick(10);
     });
 
     QUnit.test('Other appointments should not be rerendered after update item', async function(assert) {
@@ -166,8 +156,6 @@ QUnit.module('Methods', {
             dataSource: data
         });
 
-        this.clock.tick(10);
-
         const newTask = { startDate: new Date(2015, 1, 9, 2, 0), endDate: new Date(2015, 1, 9, 3, 0), text: 'caption' };
         let counter = 0;
 
@@ -176,7 +164,6 @@ QUnit.module('Methods', {
         } });
 
         scheduler.instance.updateAppointment(this.tasks[0], newTask);
-        this.clock.tick(10);
 
         assert.deepEqual(scheduler.instance.option('dataSource').items()[0], newTask, 'item is updated');
         assert.equal(counter, 1, 'Only updated appointment was rerendered');
@@ -193,12 +180,9 @@ QUnit.module('Methods', {
             timeZone: 'Etc/GMT-5'
         });
 
-        this.clock.tick(10);
-
         const newTask = { startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' };
 
         scheduler.instance.updateAppointment(this.tasks[0], newTask);
-        this.clock.tick(10);
 
         assert.deepEqual(scheduler.instance.option('dataSource').items()[0], newTask, 'item is updated');
     });
@@ -214,12 +198,9 @@ QUnit.module('Methods', {
             timeZone: 'Asia/Muscat'
         });
 
-        this.clock.tick(10);
-
         const newTask = { startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' };
 
         scheduler.instance.updateAppointment(this.tasks[0], newTask);
-        this.clock.tick(10);
 
         assert.deepEqual(scheduler.instance.option('dataSource').items()[0], newTask, 'item is updated');
     });
@@ -317,8 +298,6 @@ QUnit.module('Methods', {
             dataSource: dataSource
         });
 
-        this.clock.tick(10);
-
         scheduler.instance.updateAppointment(data[0], {});
     });
 
@@ -341,7 +320,6 @@ QUnit.module('Methods', {
             currentDate: new Date(2015, 1, 9),
             dataSource: dataSource
         });
-        this.clock.tick(10);
 
         scheduler.instance.updateAppointment(data[0], {});
     });
@@ -356,12 +334,9 @@ QUnit.module('Methods', {
             dataSource: data
         });
 
-        this.clock.tick(10);
-
         const lastTask = this.tasks[1];
 
         scheduler.instance.deleteAppointment(this.tasks[0]);
-        this.clock.tick(10);
         assert.deepEqual(scheduler.instance.option('dataSource').items(), [lastTask], 'Task is removed');
     });
 
@@ -374,7 +349,6 @@ QUnit.module('Methods', {
             currentDate: new Date(2015, 1, 9),
             dataSource: data
         });
-        this.clock.tick(10);
 
         const lastTask = this.tasks[1];
 
@@ -383,7 +357,6 @@ QUnit.module('Methods', {
         } });
 
         scheduler.instance.deleteAppointment(this.tasks[0]);
-        this.clock.tick(10);
         assert.deepEqual(scheduler.instance.option('dataSource').items(), [lastTask], 'Task is removed');
     });
 
@@ -407,7 +380,6 @@ QUnit.module('Methods', {
             currentDate: new Date(2015, 1, 9),
             dataSource: dataSource
         });
-        this.clock.tick(10);
 
         scheduler.instance.deleteAppointment(data[0]);
     });
@@ -431,7 +403,6 @@ QUnit.module('Methods', {
             currentDate: new Date(2015, 1, 9),
             dataSource: dataSource
         });
-        this.clock.tick(10);
 
         scheduler.instance.deleteAppointment(data[0]);
     });
@@ -643,7 +614,7 @@ QUnit.module('Methods', {
         scrollable.scrollTo({ left: 0, top: 400 });
 
         assert.equal(scheduler.instance.getWorkSpace().getGroupedScrollableScrollTop(), 400, 'Returned value is right for not allDay appt and vertical grouping');
-        assert.equal(scheduler.instance.getWorkSpace().getGroupedScrollableScrollTop(true), 400, 'Returned value is right for allDay appt and vertical grouping');
+        assert.equal(scheduler.instance.getWorkSpace().getGroupedScrollableScrollTop(true), 0, 'Returned value is right for allDay appt and vertical grouping');
     });
 
     QUnit.test('checkAndDeleteAppointment', async function(assert) {

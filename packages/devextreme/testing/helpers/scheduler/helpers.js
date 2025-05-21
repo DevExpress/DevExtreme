@@ -81,11 +81,17 @@ export const initTestMarkup = () => {
         .html(`<div id="${SCHEDULER_ID}"><div data-options="dxTemplate: { name: 'template' }">Task Template</div></div>`);
 };
 
-export async function createWrapper(option) {
-    const instance = $(`#${SCHEDULER_ID}`).dxScheduler(option).dxScheduler('instance');
+export async function createWrapper(options, selector = `#${SCHEDULER_ID}`) {
+    const instance = $(selector).dxScheduler(options).dxScheduler('instance');
     const scheduler = new SchedulerTestWrapper(instance);
     await waitForAsync(() => instance._workSpace);
     return scheduler;
+}
+
+export async function createWrapperFakeClock(options, clock, tickTimeout = 100, selector = `#${SCHEDULER_ID}`) {
+    const promise = createWrapper(options, selector);
+    await clock.tickAsync(tickTimeout);
+    return promise;
 }
 
 export const isDesktopEnvironment = () => devices.real().deviceType === 'desktop';
@@ -483,6 +489,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
 
                 return result;
             },
+            getAriaLabel: (index = 0) => this.appointments.getAppointment(index).attr('aria-label'),
             getAppointmentWidth: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().width,
             getAppointmentHeight: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().height,
             getAppointmentPosition: (index = 0) => locate($(this.appointments.getAppointment(index))),
@@ -500,9 +507,13 @@ export class SchedulerTestWrapper extends ElementWrapper {
                     .filter((index, element) => $(element).find('.dx-scheduler-appointment-title').text() === text);
             },
 
-            click: async(index = 0) => {
+            click: async(index = 0, clock, timeout = 300) => {
                 this.appointments.getAppointment(index).trigger('dxclick');
-                await waitAsync(300);
+                if(clock) {
+                    await clock.tickAsync(timeout);
+                } else {
+                    await waitAsync(timeout);
+                }
             },
 
             dblclick: (index = 0) => {

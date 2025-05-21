@@ -22,9 +22,20 @@ export const normalizeDataSource = <T>(
   return new DataSource(result);
 };
 
-export const loadResource = async <T>(dataSource: DataSource<T, unknown>): Promise<T[]> => {
+export const loadResource = async <T>(
+  dataSource: DataSource<T, unknown>,
+  forceReload = false,
+): Promise<T[]> => {
   if (!dataSource) {
     return [];
+  }
+
+  if (forceReload) {
+    return new Promise((resolve, reject) => {
+      dataSource
+        .reload()
+        .then(resolve, reject);
+    });
   }
 
   if (dataSource.isLoaded()) {

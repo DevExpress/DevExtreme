@@ -3,7 +3,9 @@ import dxScheduler from '__internal/scheduler/m_scheduler';
 import { DataSource } from 'common/data/data_source/data_source';
 import dateUtils from 'core/utils/date';
 import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
+
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 QUnit.testStart(() => {
     initTestMarkup();
@@ -148,6 +150,7 @@ QUnit.module('Scheduler with config', () => {
         assert.strictEqual(scheduler.instance.getWorkSpace().option('crossScrollingEnabled'), false, 'option is OK');
 
         scheduler.instance.option('crossScrollingEnabled', true);
+        await waitAsync(10);
         assert.strictEqual(scheduler.instance.getWorkSpace().option('crossScrollingEnabled'), true, 'option is OK');
     });
 

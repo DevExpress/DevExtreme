@@ -4,6 +4,7 @@ import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import devices from '__internal/core/m_devices';
 import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
@@ -52,10 +53,10 @@ module('crossScrollingEnabled = true', config, () => {
                 assert.equal(currentTop, expectedTop, `current appointment top position should be equal ${expectedTop} in ${view} type, ${navigatorDate} date`);
             });
         };
-
-        views.forEach(view => {
+        const testView = async(view) => {
             const { navigator } = scheduler.header;
             scheduler.option('currentView', view);
+            await waitAsync(0);
 
             testTopPosition(view, navigator.caption.getElement());
 
@@ -70,7 +71,10 @@ module('crossScrollingEnabled = true', config, () => {
 
             navigator.prevButton.click();
             testTopPosition(view, navigator.caption.getElement());
-        });
+        };
+
+        await testView(views[0]);
+        await testView(views[1]);
     });
 
     test('Appointment should have correct position while vertical dragging', async function(assert) {
@@ -134,6 +138,7 @@ module('crossScrollingEnabled = true', config, () => {
         $apptBeforeRepaint.attr('test', 'true');
 
         scheduler.option('crossScrollingEnabled', false);
+        await waitAsync(0);
 
         const $apptAfterRepaint = scheduler.appointments.getAppointment();
         const customTestAttr = $apptAfterRepaint.attr('test');

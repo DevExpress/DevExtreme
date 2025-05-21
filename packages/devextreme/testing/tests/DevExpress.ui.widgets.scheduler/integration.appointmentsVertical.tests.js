@@ -1,9 +1,10 @@
 import { getOuterHeight, getOuterWidth, getWidth, getHeight } from 'core/utils/size';
 import $ from 'jquery';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import pointerMock from '../../helpers/pointerMock.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import translator from 'common/core/animation/translator';
 import fx from 'common/core/animation/fx';
-import pointerMock from '../../helpers/pointerMock.js';
 import { DataSource } from 'common/data/data_source/data_source';
 import dataUtils from 'core/element_data';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
@@ -237,6 +238,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal(scheduler.appointments.getAppointmentPosition().top, 0, 'Appointment has a correct top position');
 
         scheduler.instance.option('currentDate', new Date(2015, 4, 28));
+        await waitAsync(0);
 
         assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appt part is shown on 2d day');
         assert.equal(scheduler.appointments.getAppointmentPosition().top, 0, 'Appointment has a correct top position');
@@ -407,6 +409,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         });
 
         scheduler.instance.option('currentDate', new Date(2015, 1, 5));
+        await waitAsync(0);
 
         const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
 
@@ -429,6 +432,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         });
 
         scheduler.instance.option('currentDate', new Date(2015, 1, 5));
+        await waitAsync(0);
 
         const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
 
@@ -468,6 +472,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
             { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1) },
             { text: '3', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1) }
         ]);
+        await waitAsync(0);
 
         const $dropDown = $(scheduler.instance.$element()).find('.dx-scheduler-appointment-collector').eq(0);
 
@@ -940,6 +945,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
                 endDate: new Date(2018, 4, 22, 11, 30)
             },
         ]);
+        await waitAsync(0);
 
         const $appointments = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
         assert.equal($appointments.length, 2, 'two appointments are rendered');

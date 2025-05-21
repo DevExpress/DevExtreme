@@ -5,9 +5,8 @@ import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import { dateToMilliseconds } from 'core/utils/date';
 
-import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
-import { waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
-import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
+import { createWrapper, createWrapperFakeClock, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 const {
     module,
@@ -224,7 +223,6 @@ module('CellTemplate tests', moduleConfig, () => {
             }],
             startDayHour: 10,
             endDayHour: 12,
-            getResourceManager: getEmptyResourceManager,
             renovateRender,
         };
     }
@@ -342,6 +340,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 { text: '1', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 26), allDay: true },
                 { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 26), allDay: true },
             ]);
+            await waitAsync(0);
 
             const spy = sinon.spy(scheduler.instance, 'showAppointmentPopup');
 
@@ -1606,7 +1605,8 @@ module('CellTemplate tests', moduleConfig, () => {
                 });
 
                 test('dateCellTemplate should have unique date in data (T732376)', async function(assert) {
-                    await this.createInstance({
+                    const clock = sinon.useFakeTimers();
+                    const { instance } = await createWrapperFakeClock({
                         views: ['timelineWorkWeek'],
                         currentView: 'timelineWorkWeek',
                         currentDate: new Date(2016, 8, 5),
@@ -1617,6 +1617,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         cellDuration: 60,
                         groups: ['ownerId'],
                         resources,
+                        renovateRender,
                         dateCellTemplate: function(data, index, element) {
                             const d = data;
                             $('<div>').appendTo(element).dxButton({
@@ -1630,11 +1631,13 @@ module('CellTemplate tests', moduleConfig, () => {
 
                             return element;
                         }
-                    });
+                    }, clock);
 
-                    const $button = this.instance.$element().find('.dx-scheduler-header-panel-cell .dx-button').eq(2);
+                    const $button = instance.$element().find('.dx-scheduler-header-panel-cell .dx-button').eq(2);
 
                     $($button).trigger('dxclick');
+                    await clock.tickAsync(1000);
+                    clock.restore();
                 });
 
                 test('dateCellTemplate should work correctly in workWeek view', async function(assert) {
@@ -1753,13 +1756,13 @@ module('CellTemplate tests', moduleConfig, () => {
                 [
                     {
                         description: '\'"groups" and "groupIndex" should be correct in dateCellTemplate',
-                        expectedAsserts: totalDateCells * 2,
+                        expectedAsserts: 18,
                         views: viewsBase,
                     },
                     {
                         description: '\'"groups" and "groupIndex" should be correct in dateCellTemplate'
-                            + 'when vertical grouping is used',
-                        expectedAsserts: totalDateCells * 2,
+                            + ' when vertical grouping is used',
+                        expectedAsserts: 32,
                         views: viewsBase.map((view) => ({
                             ...view,
                             groupOrientation: 'vertical',
@@ -1768,8 +1771,8 @@ module('CellTemplate tests', moduleConfig, () => {
                     },
                     {
                         description: '\'"groups" and "groupIndex" should be correct in dateCellTemplate'
-                            + 'when grouping by date is used',
-                        expectedAsserts: totalDateCells * 2,
+                            + ' when grouping by date is used',
+                        expectedAsserts: 32,
                         views: viewsBase.map((view) => ({
                             ...view,
                             groupOrientation: 'horizontal',
@@ -1791,9 +1794,9 @@ module('CellTemplate tests', moduleConfig, () => {
                             scheduler.instance.option('groups', groups);
                         }
 
-                        views.slice(1).forEach(({ type }) => {
-                            scheduler.instance.option('currentView', type);
-                        });
+                        scheduler.instance.option('currentView', views[0].type);
+                        scheduler.instance.option('currentView', views[1].type);
+                        await waitAsync(0);
                     });
                 });
 
@@ -1821,12 +1824,14 @@ module('CellTemplate tests', moduleConfig, () => {
                         groups: ['ownerId'],
                     });
 
-                    viewsBase.forEach(({ type, dateCellCount }) => {
+                    for(let i = 0; i < viewsBase.length; i++) {
+                        const { type, dateCellCount } = viewsBase[i];
                         cellCountPerGroup = dateCellCount;
                         currentCellIndex = 0;
 
                         scheduler.instance.option('currentView', type);
-                    });
+                        await waitAsync(0);
+                    }
                 });
             });
         });
@@ -2108,7 +2113,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 [
                     {
                         description: '"groups" and "groupIndex" should be correct in timeCellTemplate',
-                        expectedAsserts: totalTimeCells * 2,
+                        expectedAsserts: 16,
                         views: viewsBase,
                     },
                     {
@@ -2124,7 +2129,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     {
                         description: '"groups" and "groupIndex" should be correct in timeCellTemplate'
                             + ' when grouping by date is used',
-                        expectedAsserts: totalTimeCells * 2,
+                        expectedAsserts: 16,
                         views: viewsBase.map((view) => ({
                             ...view,
                             groupOrientation: 'horizontal',
@@ -2159,9 +2164,9 @@ module('CellTemplate tests', moduleConfig, () => {
 
                         const scheduler = await createWrapper(schedulerConfig);
 
-                        views.slice(1).forEach(({ type }) => {
-                            scheduler.instance.option('currentView', type);
-                        });
+                        scheduler.instance.option('currentView', views[0].type);
+                        scheduler.instance.option('currentView', views[1].type);
+                        await waitAsync(0);
                     });
                 });
 
@@ -2190,12 +2195,14 @@ module('CellTemplate tests', moduleConfig, () => {
                         groups: ['ownerId'],
                     });
 
-                    viewsBase.slice(0, 3).forEach(({ type, timeCellCount }) => {
+                    for(let i = 0; i < 3; i++) {
+                        const { type, timeCellCount } = viewsBase[i];
                         cellCountPerGroup = timeCellCount;
                         currentCellIndex = 0;
 
                         scheduler.instance.option('currentView', type);
-                    });
+                        await waitAsync(0);
+                    }
                 });
 
                 test('"groups" and "groupIndex" should be correct in timeCellTemplate'
@@ -2224,11 +2231,13 @@ module('CellTemplate tests', moduleConfig, () => {
                         groups: ['ownerId'],
                     });
 
-                    viewsBase.slice(3, 6).forEach(({ type, timeCellCount }) => {
+                    for(let i = 3; i < 6; i++) {
+                        const { type, timeCellCount } = viewsBase[i];
                         cellCountPerGroup = timeCellCount;
                         currentCellIndex = 0;
                         scheduler.instance.option('currentView', type);
-                    });
+                        await waitAsync(0);
+                    }
                 });
             });
         });

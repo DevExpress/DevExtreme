@@ -1,4 +1,5 @@
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 const { testStart, test, module } = QUnit;
 import devices from '__internal/core/m_devices';
 
@@ -69,6 +70,7 @@ test('should display correct caption after changing to day view if startDate is 
         });
 
         scheduler.option('currentView', 'day');
+        await waitAsync(0);
 
         const expectedCaption = devices.current().deviceType === 'desktop'
             ? '27-29 July 2021'
@@ -98,6 +100,7 @@ test('should display correct caption after changing to month view if startDate i
         });
 
         scheduler.option('currentView', 'month');
+        await waitAsync(0);
 
         assert.equal(
             scheduler.header.navigator.caption.getText(),
@@ -143,12 +146,15 @@ module('Option Changing', () => {
         assert.equal(navigator.getText(), '7 May 2021', 'Correct caption for day view');
 
         scheduler.option('currentView', 'week');
+        await waitAsync(0);
         assert.equal(navigator.getText(), '2-8 May 2021', 'Correct caption for week view');
 
         scheduler.option('currentView', 'month');
+        await waitAsync(0);
         assert.equal(navigator.getText(), 'May 2021', 'Correct caption for month view');
 
         scheduler.option('currentView', 'agenda');
+        await waitAsync(0);
         assert.equal(navigator.getText(), '7-13 May 2021', 'Correct caption for agenda view');
     });
 
@@ -194,6 +200,7 @@ module('Option Changing', () => {
             currentDate: new Date(2021, 4, 7),
         });
         scheduler.option('currentView', 'month');
+        await waitAsync(0);
         assert.equal(scheduler.header.navigator.getText(), 'May 2021', 'Caption is correct');
     });
 

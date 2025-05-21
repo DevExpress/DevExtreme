@@ -1,4 +1,5 @@
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 const { testStart, test, module } = QUnit;
 import themes from 'ui/themes';
 import devices from '__internal/core/m_devices';
@@ -51,6 +52,7 @@ if(devices.current().deviceType === 'desktop') {
                 },
                 'workWeek'
             ]);
+            await waitAsync(0);
 
             const viewSwitcher = scheduler.header.viewSwitcher;
 
@@ -91,12 +93,15 @@ if(devices.current().deviceType === 'desktop') {
             assert.equal(viewSwitcher.selectedButton.getText(), 'Month', 'current view is correct');
 
             scheduler.option('currentView', 'week');
+            await waitAsync(0);
             assert.equal(viewSwitcher.selectedButton.getText(), 'Week', 'current view is correct');
 
             scheduler.option('currentView', 'TestDay');
+            await waitAsync(0);
             assert.equal(viewSwitcher.selectedButton.getText(), 'TestDay', 'current view is correct');
 
             scheduler.option('currentView', 'month');
+            await waitAsync(0);
             assert.equal(viewSwitcher.selectedButton.getText(), 'Month', 'current view is correct');
         });
 
@@ -110,10 +115,12 @@ if(devices.current().deviceType === 'desktop') {
             const viewSwitcher = scheduler.header.viewSwitcher;
 
             scheduler.option('currentView', 'month');
+            await waitAsync(0);
 
             assert.equal(viewSwitcher.selectedButton.getText(), '', 'no one button is selected');
 
             scheduler.option('views', ['day', 'month']);
+            await waitAsync(0);
 
 
             assert.equal(viewSwitcher.selectedButton.getText(), 'Month', 'Month button is selected');
@@ -128,6 +135,7 @@ if(devices.current().deviceType === 'desktop') {
             const viewSwitcher = scheduler.header.viewSwitcher;
 
             scheduler.option('views', ['month', 'week', 'day']);
+            await waitAsync(0);
 
             assert.equal(viewSwitcher.selectedButton.getText(), 'Day', 'current view is Day');
         });

@@ -1,20 +1,18 @@
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
-
+import { CustomStore } from 'common/data/custom_store';
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import { isFunction } from 'core/utils/type';
 import $ from 'jquery';
 import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
-import errors from 'ui/widget/ui.errors';
-import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+
+import { createWrapper, initTestMarkup, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitAsync, waitForAsync, waitGlobalFailure } from '../../helpers/scheduler/waitForAsync.js';
 
 QUnit.testStart(() => initTestMarkup());
 
 QUnit.module('Initialization', {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-        sinon.spy(errors, 'log');
-
         fx.off = true;
         this.tasks = [
             {
@@ -30,8 +28,6 @@ QUnit.module('Initialization', {
         ];
     },
     afterEach: function() {
-        errors.log.restore();
-        this.clock.restore();
         fx.off = false;
     }
 }, () => {
@@ -74,8 +70,9 @@ QUnit.module('Initialization', {
         } finally {
             $('#scheduler').show();
             triggerShownEvent($('#scheduler'));
-            this.clock.tick(10);
-            assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment').length, 1, 'Appointment is rendered');
+            const isSchedulerShown = () => scheduler.instance.$element().find('.dx-scheduler-appointment').length === 1;
+            await waitForAsync(() => isSchedulerShown());
+            assert.ok(isSchedulerShown(), 'Appointment is rendered');
         }
     });
 
@@ -145,18 +142,16 @@ QUnit.module('Initialization', {
         { startDayHour: 2, endDayHour: 0 }
     ].forEach(dayHours => {
         QUnit.test(`Generate error if startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, async function(assert) {
-            try {
-                await createWrapper({
-                    currentDate: new Date(2015, 4, 24),
-                    views: ['day'],
-                    currentView: 'day',
-                    startDayHour: dayHours.startDayHour,
-                    endDayHour: dayHours.endDayHour
-                });
-            } catch(e) {
-                assert.ok(/E1058/.test(e.message) || /E1062/.test(e.message), 'E1058 Error message');
-            }
-            this.clock.tick(1000);
+            const promise = waitGlobalFailure();
+            await createWrapper({
+                currentDate: new Date(2015, 4, 24),
+                views: ['day'],
+                currentView: 'day',
+                startDayHour: dayHours.startDayHour,
+                endDayHour: dayHours.endDayHour
+            });
+            const error = await promise;
+            assert.ok(error.message.startsWith('E1062'), 'E1062 Error message');
         });
     });
 
@@ -175,5 +170,45 @@ QUnit.module('Initialization', {
         const headerHeight = scheduler.header.getElement().height();
 
         assert.ok(headerScrollableHeight >= headerHeight, 'HeaderScrollable height is correct');
+    });
+
+    QUnit.test('Option should apply before resource loaded', async function(assert) {
+        const done = assert.async();
+        const instance = $('#scheduler').dxScheduler({
+            timeZone: 'America/Los_Angeles',
+            dataSource: [],
+            startDayHour: 12,
+            currentView: 'week',
+            currentDate: new Date('2021-03-29T21:30:00.000Z'),
+            groups: ['Priority'],
+            resources: [{
+                fieldExpr: 'Priority',
+                allowMultiple: false,
+                label: 'Priority',
+                dataSource: new DataSource({
+                    store: new CustomStore({
+                        load: function() {
+                            const d = $.Deferred();
+                            setTimeout(function() {
+                                d.resolve([{ id: 1, text: 'Low' }]);
+                            }, 100);
+
+                            return d.promise();
+                        }
+                    })
+                })
+            }],
+            onContentReady: () => {
+                done();
+                assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'DataSource set correctly after resource rendered');
+            }
+        }).dxScheduler('instance');
+        const scheduler = new SchedulerTestWrapper(instance);
+        instance.option('dataSource', [{
+            text: 'Install New Router in Dev Room',
+            startDate: new Date('2021-03-29T21:30:00.000Z'),
+            endDate: new Date('2021-03-29T22:30:00.000Z'),
+            Priority: 1,
+        }]);
     });
 });

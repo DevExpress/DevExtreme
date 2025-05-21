@@ -1,17 +1,16 @@
-import { equalByValue } from '@js/core/utils/common';
 import type { SafeAppointment } from '@ts/scheduler/types';
-import { getAppointmentColor } from '@ts/scheduler/utils/resource_manager/appointment_color_utils';
-import type { AppointmentResource } from '@ts/scheduler/utils/resource_manager/appointment_groups_utils';
-import {
-  getAppointmentGroupValues,
-  getAppointmentResources,
-} from '@ts/scheduler/utils/resource_manager/appointment_groups_utils';
 
 import { getResourceIndex } from '../data_accessor/appointment_resource_data_accessor';
 import { ResourceLoader } from '../loader/resource_loader';
 import type {
   ResourceConfig,
 } from '../loader/types';
+import { getAppointmentColor } from './appointment_color_utils';
+import type { AppointmentResource } from './appointment_groups_utils';
+import {
+  getAppointmentGroupValues,
+  getAppointmentResources,
+} from './appointment_groups_utils';
 import { groupResources } from './group_utils';
 import type { GroupLeaf, GroupNode } from './types';
 
@@ -24,7 +23,7 @@ export class ResourceManager {
     public groupsLeafs: GroupLeaf[] = [],
     public groupsTree: GroupNode[] = [],
   ) {
-    config.filter(getResourceIndex)
+    config?.filter(getResourceIndex)
       .forEach((item) => {
         const loader = new ResourceLoader(item);
         this.resourceById[loader.resourceIndex] = loader;
@@ -38,8 +37,8 @@ export class ResourceManager {
     ));
   }
 
-  async loadGroupResources(groups: string[], forceReload = false): Promise<ResourceLoader[]> {
-    await this.load(groups, forceReload || !equalByValue(groups, this.groups));
+  async loadGroupResources(groups: string[] = [], forceReload = false): Promise<ResourceLoader[]> {
+    await this.load(groups, forceReload);
 
     const { groupTree, groupLeafs } = groupResources(this.resourceById, groups);
 
@@ -79,7 +78,7 @@ export class ResourceManager {
       groupIndex: number;
     },
   ): Promise<string | undefined> {
-    return getAppointmentColor(this.resources, this.groupsLeafs, appointmentConfig);
+    return getAppointmentColor(this.resources, this.groupsLeafs, this.groups, appointmentConfig);
   }
 
   public async getAppointmentResourcesValues(

@@ -23,7 +23,6 @@ import {
 } from '@js/core/utils/type';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import { getAppointmentGroupValues } from '@ts/scheduler/utils/resource_manager/appointment_groups_utils';
 
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { createAppointmentAdapter } from '../m_appointment_adapter';
@@ -32,6 +31,7 @@ import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
 import type { AppointmentViewModel } from '../types';
 import type { AppointmentDataAccessor } from '../utils';
+import { getAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import { getGroupTexts } from '../utils/resource_manager/group_utils';
 import { AgendaAppointment } from './appointment/agenda_appointment';
 import { Appointment } from './appointment/m_appointment';

@@ -45,10 +45,8 @@ module('Material-based themes', {
     beforeEach: function() {
         this.origIsMaterialBased = themes.isMaterialBased;
         themes.isMaterialBased = function() { return true; };
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        this.clock.restore();
         themes.isMaterialBased = this.origIsMaterialBased;
     }
 }, () => {

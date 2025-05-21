@@ -12,18 +12,17 @@ import translator from 'common/core/animation/translator';
 import '__internal/scheduler/m_scheduler';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 QUnit.testStart(() => initTestMarkup());
 
 const moduleConfig = {
     beforeEach() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
 
     afterEach() {
         fx.off = false;
-        this.clock.restore();
     }
 };
 
@@ -106,9 +105,9 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                 dataSource: bookingResource
             }]
         });
-
-        views.forEach((view, index) => {
+        const viewTest = async(view, index) => {
             scheduler.option('currentView', view);
+            await waitAsync(0);
 
             const expectedValue = expectedValues[index];
             ['appointment1', 'appointment2'].forEach(appointmentName => {
@@ -118,7 +117,10 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                 assert.roughEqual(position.top, expectedPosition.top, 2, `top position of ${appointmentName} should be valid in ${view}`);
                 assert.roughEqual(position.left, expectedPosition.left, 2, `left position of ${appointmentName} should be valid in ${view}`);
             });
-        });
+        };
+
+        await viewTest(views[0], 0);
+        await viewTest(views[1], 1);
     });
 
     QUnit.test('Resource editors should have valid value after show appointment form', async function(assert) {
@@ -236,13 +238,12 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             currentDate: new Date(2015, 1, 9)
         });
 
-        this.clock.tick(10);
         scheduler.instance.showAppointmentPopup(task1);
 
         let taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
 
         const ownerEditor = taskDetailsView.option('items')[0].items[6];
-        ownerEditor.editorOptions.dataSource.load();
+        await ownerEditor.editorOptions.dataSource.load();
 
         assert.ok(taskDetailsView.getEditor('ownerId'), 'Editor is exist');
         assert.equal(ownerEditor.editorType, 'dxTagBox', 'Editor is dxTagBox');
@@ -274,18 +275,11 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         const resources = [{
             field: 'ownerId',
             allowMultiple: true,
+            valueExpr: 'uid',
             displayExpr: 'name',
             dataSource: [
-                {
-                    name: 'Jack',
-                    id: 1,
-                    color: '#606060'
-                },
-                {
-                    name: 'Mike',
-                    id: 2,
-                    color: '#ff0000'
-                }
+                { uid: 1, name: 'Jack', color: '#606060' },
+                { uid: 2, name: 'Mike', color: '#ff0000' },
             ]
         }];
 
@@ -298,15 +292,14 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             currentDate: new Date(2015, 1, 9)
         });
 
-        this.clock.tick(10);
         scheduler.instance.showAppointmentPopup(task);
 
         const taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
         const ownerEditor = taskDetailsView.option('items')[0].items[6];
 
-
         assert.equal(ownerEditor.editorType, 'dxTagBox', 'Editor is dxTagBox');
-        assert.deepEqual(ownerEditor.editorOptions.dataSource, resources[0].dataSource, 'Data source is OK');
+        assert.deepEqual(ownerEditor.editorOptions.dataSource.items(), resources[0].dataSource, 'Data source is OK');
+        assert.equal(ownerEditor.editorOptions.valueExpr, resources[0].valueExpr, 'valueExpr is OK');
         assert.equal(ownerEditor.editorOptions.displayExpr, resources[0].displayExpr, 'displayExpr is OK');
     });
 
@@ -349,7 +342,6 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             currentDate: new Date(2015, 4, 24)
         });
 
-        this.clock.tick(10);
         scheduler.instance.showAppointmentPopup(appointment);
 
         const taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
@@ -388,6 +380,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment').length, 4, 'Appointments are OK');
 
         scheduler.instance.option('groups', ['ownerId']);
+        await waitAsync(0);
         assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment').length, 2, 'Appointments are OK');
     });
 
@@ -427,8 +420,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             }]
         });
 
-        // TODO(6): fix it when after resource refactoring
-        assert.equal(loadStub.callCount, 2, 'Resources are loaded only once');
+        assert.equal(loadStub.callCount, 1, 'Resources are loaded only once');
     });
 
     QUnit.test('Paint appts if groups array don\'t contain all resources', async function(assert) {
@@ -507,10 +499,12 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             }]
         });
 
+        assert.equal(loadStub.callCount, 1, 'Resources are loaded only once');
+
         scheduler.instance.showAppointmentPopup(data[0]);
 
-        // TODO(6): fix it when after resource refactoring
-        assert.equal(loadStub.callCount, 2, 'Resources are loaded only once');
+        // TODO: replace with 2 after edit form refactor
+        assert.equal(loadStub.callCount, 3, 'Store requested in select box');
         assert.equal(byKeyStub.callCount, 0, 'Resources are loaded only once');
     });
 
@@ -530,6 +524,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             });
 
             instance.option('resources[0].dataSource', resourceData);
+            await waitAsync(0);
 
             assert.deepEqual(instance.option('resources'), [{
                 fieldExpr: 'ownerId',
@@ -560,6 +555,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                     { text: 'o2', id: 2, color: 'blue' }
                 ]
             }]);
+        await waitAsync(0);
 
         const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
         assert.equal(new Color($appointments.eq(0).css('backgroundColor')).toHex(), '#ff0000', 'Color is OK');

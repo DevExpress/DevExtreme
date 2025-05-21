@@ -1,7 +1,8 @@
 import { noop } from '@js/core/utils/common';
 import type { DataSourceLike } from '@js/data/data_source';
 import DataSource from '@js/data/data_source';
-import { loadResource, normalizeDataSource } from '@ts/scheduler/utils/loader/utils';
+
+import { loadResource, normalizeDataSource } from './utils';
 
 interface BaseConfig<T> {
   dataSource?: DataSourceLike<T, unknown> | null;
@@ -18,6 +19,7 @@ export abstract class Loader<T, Data, Config extends BaseConfig<T> = BaseConfig<
     public items: Data[] = [],
     public data: T[] = [], // TODO(9): probably we dont need it. Used in getGroupPanelData
     protected readonly isSharedDataSource = config.dataSource instanceof DataSource,
+    protected loadingStatePromise?: Promise<T[]>,
     protected unsubscribe = noop,
   ) {
     this.addDataSourceHandlers();
@@ -53,8 +55,14 @@ export abstract class Loader<T, Data, Config extends BaseConfig<T> = BaseConfig<
   }
 
   async load(forceReload = false): Promise<void> {
-    if (this.dataSource && (forceReload || !this.dataSource.isLoaded())) {
-      await loadResource(this.dataSource);
+    if (this.dataSource && (
+      forceReload
+      || (!this.dataSource.isLoaded() && !this.loadingStatePromise)
+    )) {
+      this.loadingStatePromise = this.loadingStatePromise && !forceReload
+        ? this.loadingStatePromise
+        : loadResource(this.dataSource, forceReload);
+      await this.loadingStatePromise;
     }
   }
 

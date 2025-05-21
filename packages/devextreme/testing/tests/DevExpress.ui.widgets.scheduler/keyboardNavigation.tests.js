@@ -7,11 +7,9 @@ QUnit.testStart(() => initTestMarkup());
 
 QUnit.module('Keyboard Navigation', {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
     afterEach: function() {
-        this.clock.restore();
         fx.off = false;
     }
 }, () => {

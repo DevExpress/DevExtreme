@@ -14,8 +14,8 @@ QUnit.testStart(() => {
 
 QUnit.module('View switcher server markup');
 
-QUnit.test('RenovateRender in workspace should be false on server', function(assert) {
-    const scheduler = createWrapper({
+QUnit.test('RenovateRender in workspace should be false on server', async function(assert) {
+    const scheduler = await createWrapper({
         renovateRender: true,
     });
 

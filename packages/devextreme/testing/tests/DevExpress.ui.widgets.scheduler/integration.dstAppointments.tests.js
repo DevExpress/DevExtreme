@@ -5,6 +5,7 @@ import { dateToMilliseconds as toMs } from 'core/utils/date';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 import '__internal/scheduler/m_scheduler';
 import { shouldSkipOnMobile } from '../../helpers/device.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import 'generic_light.css!';
 
@@ -13,11 +14,9 @@ QUnit.testStart(() => initTestMarkup());
 const moduleConfig = {
     beforeEach() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
 
     afterEach() {
-        this.clock.restore();
         fx.off = false;
     }
 };
@@ -53,6 +52,7 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         assert.equal(scheduler.appointments.getDateText(0), '3:00 AM - 6:00 AM', 'Dates and time were displayed correctly in appointment before time changing in custom timezone');
 
         scheduler.instance.option('currentDate', new Date(2019, 2, 14)); // NOTE: DST Montreal, STD Paris
+        await waitAsync(0);
 
         targetCell = scheduler.workSpace.getCell(8);
         appointment = scheduler.appointments.getAppointment(0);
@@ -62,6 +62,7 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         assert.equal(scheduler.appointments.getDateText(0), '4:00 AM - 7:00 AM', 'Dates and time were displayed correctly in appointment after time changing in custom timezone');
 
         scheduler.instance.option('currentDate', new Date(2019, 3, 2)); // NOTE: DST Paris
+        await waitAsync(0);
 
         targetCell = scheduler.workSpace.getCell(6);
         appointment = scheduler.appointments.getAppointment(0);
@@ -111,6 +112,7 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         scheduler.appointmentPopup.clickCancelButton();
 
         scheduler.instance.option('currentDate', new Date(2019, 2, 14)); // NOTE: DST Montreal, STD Paris
+        await waitAsync(0);
 
         scheduler.appointments.click(0);
         assert.equal(scheduler.tooltip.getDateText(), '4:00 AM - 7:00 AM', 'Dates and time were displayed correctly in tooltip after time changing in custom timezone');
@@ -124,6 +126,7 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         scheduler.appointmentPopup.clickCancelButton();
 
         scheduler.instance.option('currentDate', new Date(2019, 3, 2)); // NOTE: DST Paris
+        await waitAsync(0);
 
         scheduler.appointments.click(0);
         assert.equal(scheduler.tooltip.getDateText(), '3:00 AM - 6:00 AM', 'Dates and time were displayed correctly in tooltip after time changing in appointment timezone');
@@ -166,6 +169,7 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         assert.equal(scheduler.appointments.getDateText(0), '4:00 AM - 7:00 AM', 'Dates and time were displayed correctly in appointment after time changing in custom timezone');
 
         scheduler.instance.option('currentDate', new Date(2019, 2, 31)); // NOTE: DST Paris
+        await waitAsync(0);
 
         targetCell = scheduler.workSpace.getCell(6);
         appointment = scheduler.appointments.getAppointment(0);
@@ -220,6 +224,7 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         scheduler.appointmentPopup.clickCancelButton();
 
         scheduler.instance.option('currentDate', new Date(2019, 2, 31)); // NOTE: DST Paris
+        await waitAsync(0);
 
         scheduler.appointments.click(0);
         assert.equal(scheduler.tooltip.getDateText(), '3:00 AM - 6:00 AM', 'Dates and time were displayed correctly in tooltip after time changing in appointment timezone');
@@ -260,6 +265,7 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         assert.equal(appointment.outerHeight(), targetCell.outerHeight() * 6, 'Recurrence appointment part has right size');
 
         scheduler.instance.option('currentDate', new Date(2019, 3, 1)); // NOTE: DST Montreal
+        await waitAsync(0);
 
         targetCell = scheduler.workSpace.getCell(6);
         appointment = scheduler.appointments.getAppointment(0);
@@ -292,6 +298,7 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         const appointmentPosition = scheduler.appointments.getAppointment(0).position().top;
 
         scheduler.instance.option('currentDate', new Date(2019, 3, 1)); // NOTE: DST Paris
+        await waitAsync(0);
 
         const appointment = scheduler.appointments.getAppointment(0);
         assert.equal(appointment.position().top, appointmentPosition, 'Recurrence appointment part positions are the same and independent of time changing');
@@ -327,6 +334,7 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         assert.equal(scheduler.appointments.getDateText(0), '4:00 AM - 7:00 AM', 'Dates and time were displayed correctly in appointment after time changing in custom timezone');
 
         scheduler.instance.option('currentDate', new Date(2019, 10, 3)); // NOTE: STD Montreal, STD Paris
+        await waitAsync(0);
 
         targetCell = scheduler.workSpace.getCell(6);
         appointment = scheduler.appointments.getAppointment(0);
@@ -377,6 +385,7 @@ QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleCon
         scheduler.appointmentPopup.clickCancelButton();
 
         scheduler.instance.option('currentDate', new Date(2019, 10, 3)); // NOTE: STD Montreal, STD Paris
+        await waitAsync(0);
 
         scheduler.appointments.click(0);
         assert.equal(scheduler.tooltip.getDateText(), '3:00 AM - 6:00 AM', 'Dates and time were displayed correctly in tooltip after time changing in appointment timezone');
@@ -556,6 +565,7 @@ QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {
         });
 
         scheduler.instance.option('currentDate', scheduler.instance.fire('convertDateByTimezone', currentDate, -5));
+        await waitAsync(0);
         const duration = (endDate - startDate) / toMs('hour');
 
         assert.roughEqual(scheduler.appointments.getAppointment(0).outerWidth(), scheduler.workSpace.getCellWidth() * duration, 2.001, 'Appt width is correct after the day of the time ajusting');
@@ -600,6 +610,7 @@ QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {
 
             scheduler.instance.option('currentView', 'day');
             scheduler.instance.option('currentDate', new Date(2018, 3, 1));
+            await waitAsync(0);
 
             assert.notOk(scheduler.appointments.getAppointmentCount(), 'event is an exception');
         } finally {

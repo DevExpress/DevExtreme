@@ -22,7 +22,7 @@ export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
     public allowMultiple = Boolean(config.allowMultiple),
     public useColorAsDefault = Boolean(config.useColorAsDefault),
     public resourceIndex = String(getResourceIndex(config)),
-    public resourceName = config.label ?? '',
+    public resourceName = config.label,
   ) {
     super(config, { pageSize: 0 });
     const accessor = getAppointmentResourceAccessor(config);

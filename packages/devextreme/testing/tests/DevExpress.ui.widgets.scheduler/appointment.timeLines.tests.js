@@ -6,7 +6,7 @@ import {
     CLASSES,
     createWrapper
 } from '../../helpers/scheduler/helpers.js';
-import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
+import { waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
@@ -417,7 +417,7 @@ module('Integration: Appointments in Timeline views', {
                     endDate: '2019-11-06T00:00',
                 },
                 expectedValue: '12:00 AM - 12:00 AM',
-                expectedTooltipValue: 'November 3 12:00 AM - November 6 12:00 AM',
+                expectedLabelValue: 'Staff Productivity Report: November 3, 2019, 12:00 AM - November 6, 2019, 12:00 AM',
                 scrollDate: new Date(2019, 10, 1),
                 text: 'in case drag left handle to winter DST'
             }, {
@@ -429,7 +429,7 @@ module('Integration: Appointments in Timeline views', {
                     endDate: '2019-03-13T00:00',
                 },
                 expectedValue: '12:00 AM - 12:00 AM',
-                expectedTooltipValue: 'March 10 12:00 AM - March 13 12:00 AM',
+                expectedLabelValue: 'Staff Productivity Report: March 10, 2019, 12:00 AM - March 13, 2019, 12:00 AM',
                 scrollDate: new Date(2019, 2, 10),
                 text: 'in case drag left handle to summer DST'
             }, {
@@ -441,7 +441,7 @@ module('Integration: Appointments in Timeline views', {
                     endDate: '2019-11-03T00:00',
                 },
                 expectedValue: '12:00 AM - 12:00 AM',
-                expectedTooltipValue: 'November 1 12:00 AM - November 4 12:00 AM',
+                expectedLabelValue: 'Staff Productivity Report: November 1, 2019, 12:00 AM - November 4, 2019, 12:00 AM',
                 scrollDate: new Date(2019, 10, 1),
                 text: 'in case drag right handle to winter DST'
             }, {
@@ -453,7 +453,7 @@ module('Integration: Appointments in Timeline views', {
                     endDate: '2019-03-10T00:00',
                 },
                 expectedValue: '12:00 AM - 12:00 AM',
-                expectedTooltipValue: 'March 8 12:00 AM - March 11 12:00 AM',
+                expectedLabelValue: 'Staff Productivity Report: March 8, 2019, 12:00 AM - March 11, 2019, 12:00 AM',
                 scrollDate: new Date(2019, 2, 7),
                 text: 'in case drag right handle to summer DST'
             }].forEach(testCase => {
@@ -486,9 +486,7 @@ module('Integration: Appointments in Timeline views', {
                     pointer.dragEnd();
 
                     assert.equal(getDateText(), testCase.expectedValue, 'Dates should correct after resizing');
-
-                    await scheduler.appointments.click();
-                    assert.equal(scheduler.tooltip.getDateText(), testCase.expectedTooltipValue, 'Dates in tooltip should correct');
+                    assert.equal(scheduler.appointments.getAriaLabel(), testCase.expectedLabelValue, 'Dates in aria-label should correct');
 
                     pointer = pointerMock($(getAppointment()).find(testCase.handle).eq(0)).start();
 

@@ -299,19 +299,21 @@ module('Integration: Appointment filtering', {
                     currentView: 'week',
                     height: 600,
                 });
+                const getAppointments = () => scheduler.appointments.getAppointments();
 
-                let $appointments = scheduler.appointments.getAppointments();
+                let $appointments = getAppointments();
 
                 assert.equal($appointments.length, 1, 'There is only one appointment');
                 assert.deepEqual(dataUtils.data($appointments[0], 'dxItemData'), tasks[0], 'Appointment data is OK');
 
                 scheduler.instance.option('endDayHour', 14);
+                await waitAsync(0);
 
                 const scrollable = scheduler.workSpace.getScrollable();
                 scrollable.scrollTo({ top: 500 });
 
-                $appointments = scheduler.appointments.getAppointments();
-
+                await waitForAsync(() => getAppointments().length === 3);
+                $appointments = getAppointments();
                 assert.equal($appointments.length, 3, 'There are three appointments');
                 assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[0], 'Appointment data is OK');
                 assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[1], 'Appointment data is OK');

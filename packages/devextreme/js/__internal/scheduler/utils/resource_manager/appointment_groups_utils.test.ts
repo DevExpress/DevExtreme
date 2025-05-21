@@ -2,7 +2,7 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 import {
-  getResourceManagerMock, resourceIndexesMock,
+  getResourceManagerMock, resourceIndexesMock, resourceItemsByIdMock,
 } from '@ts/scheduler/__mock__/resourceManager.mock';
 
 import {
@@ -69,21 +69,36 @@ describe('appointment groups utils', () => {
   });
 
   describe('getAppointmentResources', () => {
-    it('should return appointment resource texts', async () => {
+    it('should return appointment resource texts in order as in appointment', async () => {
       const manager = getResourceManagerMock();
       await manager.loadGroupResources(resourceIndexesMock);
 
       expect(
         getAppointmentResources({
-          assigneeId: [1, 2],
+          assigneeId: [4, 1, 2],
           roomId: [2],
           'nested.priorityId': [1],
         }, manager.resourceById),
       ).toEqual([
-        { label: 'Assignee', values: ['Samantha Bright', 'John Heart'] },
+        { label: 'Assignee', values: ['Sandra Johnson', 'Samantha Bright', 'John Heart'] },
         { label: 'Room', values: ['Room 3'] },
         { label: 'Priority', values: ['Low Priority'] },
       ]);
+    });
+
+    it('label can be undefined if not specified', async () => {
+      const manager = getResourceManagerMock([
+        {
+          field: 'roomId',
+          dataSource: resourceItemsByIdMock.roomId,
+          allowMultiple: true,
+        },
+      ]);
+      await manager.loadGroupResources(resourceIndexesMock);
+
+      expect(
+        getAppointmentResources({ roomId: [2, 0] }, manager.resourceById),
+      ).toEqual([{ label: undefined, values: ['Room 3', 'Room 1'] }]);
     });
   });
 

@@ -7,6 +7,7 @@ import {
     asyncWrapper,
     execAsync
 } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
@@ -290,7 +291,6 @@ QUnit.module('Integration: Appointment templates', {
         ].forEach(testCase => {
             QUnit.test(`Appointment click - model.targetedAppointmentData argument should be equal to the current appointmentData, ${testCase.name} case`, async function(assert) {
                 const scheduler = await createScheduler(testCase.data, testCase.options);
-                const DoubleClickTimeout = 300;
                 const appointmentAmount = 5;
 
                 scheduler.option(
@@ -298,23 +298,13 @@ QUnit.module('Integration: Appointment templates', {
                     testCase.appointmentTooltip(assert, scheduler, true)
                 );
 
-                return asyncWrapper(assert, promise => {
-                    for(let i = 0; i < appointmentAmount; ++i) {
-                        promise = execAsync(
-                            assert,
-                            promise,
-                            null,
-                            () => {
-                                scheduler.appointments.click(i, true);
+                const clock = sinon.useFakeTimers();
+                for(let i = 0; i < appointmentAmount; ++i) {
+                    await scheduler.appointments.click(i, clock);
 
-                                assert.strictEqual(eventCallCount, i, `appointmentTemplate raised ${i} times`);
-                            },
-                            DoubleClickTimeout,
-                        );
-                    }
-
-                    return promise;
-                });
+                    assert.strictEqual(eventCallCount, i + 1, `appointmentTemplate raised ${i} times`);
+                }
+                clock.restore();
             });
         });
 
@@ -353,7 +343,6 @@ QUnit.module('Integration: Appointment templates', {
         }].forEach(testCase => {
             QUnit.test(`Appointment tooltip click - model.targetedAppointmentData argument should be equal to the current appointmentData, ${testCase.name} case`, async function(assert) {
                 const scheduler = await createScheduler(testCase.data, testCase.options);
-                const doubleClickTimeout = 300;
                 const appointmentAmount = 5;
 
                 scheduler.option(
@@ -361,24 +350,15 @@ QUnit.module('Integration: Appointment templates', {
                     testCase.appointmentTooltip(assert, scheduler)
                 );
 
-                return asyncWrapper(assert, promise => {
-                    for(let i = 0; i < appointmentAmount; ++i) {
-                        promise = execAsync(
-                            assert,
-                            promise,
-                            null,
-                            () => {
-                                scheduler.appointments.compact.click(i);
+                const clock = sinon.useFakeTimers();
+                for(let i = 0; i < appointmentAmount; ++i) {
+                    scheduler.appointments.compact.click(i);
+                    await clock.tickAsync(300);
 
-                                const callCount = i + 1;
-                                assert.strictEqual(eventCallCount, callCount, `appointmentTemplate raised ${callCount} times`);
-                            },
-                            doubleClickTimeout,
-                        );
-                    }
-
-                    return promise;
-                });
+                    const callCount = i + 1;
+                    assert.strictEqual(eventCallCount, callCount, `appointmentTemplate raised ${callCount} times`);
+                }
+                clock.restore();
             });
         });
     });

@@ -47,6 +47,18 @@ export const getSafeGroupValues = (
     return result;
   }, {});
 
+const getResourceTextMap = (
+  resource: ResourceLoader,
+  resourceIds: ResourceId[],
+): Record<string, string> => resource.items
+  .reduce<Record<string, string>>((result, data) => {
+    if (resourceIds.includes(data.id)) {
+      result[data.id] = data.text;
+    }
+
+    return result;
+  }, {});
+
 export const getAppointmentResources = (
   appointmentGroupValues: GroupValues,
   resourceById: Record<string, ResourceLoader>,
@@ -54,12 +66,13 @@ export const getAppointmentResources = (
   .entries(appointmentGroupValues)
   .reduce<AppointmentResource[]>((result, [resourceIndex, resourceIds]) => {
     const resource = resourceById[resourceIndex];
-    const resourceData = resource.items.filter((data) => resourceIds.includes(data.id));
+    const resourceTextMap = getResourceTextMap(resource, resourceIds);
+    const values = resourceIds.map((id) => resourceTextMap[id]);
 
-    if (resourceData.length) {
+    if (values.length) {
       result.push({
         label: resource.resourceName,
-        values: resourceData.map((data) => data.text),
+        values,
       });
     }
 

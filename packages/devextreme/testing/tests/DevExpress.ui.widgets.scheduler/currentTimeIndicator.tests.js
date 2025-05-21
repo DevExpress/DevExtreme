@@ -2,6 +2,13 @@ import { getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 
+import {
+    applyWorkspaceGroups,
+    getEmptyResourceManager,
+    getWorkspaceResourceConfig
+} from '../../helpers/scheduler/mockResourceManager.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
+
 const SCHEDULER_DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 const SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day';
 const SCHEDULER_DATE_TIME_SHADER_TOP_CLASS = 'dx-scheduler-date-time-shader-top';
@@ -21,19 +28,13 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-work-space-rtl"></div><div id="scheduler-work-space"></div></div>');
 });
 
-QUnit.module('DateTime indicator on Day View', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-}, () => {
+QUnit.module('DateTime indicator on Day View', () => {
     const createInstance = (options) => {
         const instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
+            getResourceManager: getEmptyResourceManager,
             ...options,
         }).dxSchedulerWorkSpaceDay('instance');
 
@@ -66,19 +67,14 @@ QUnit.module('DateTime indicator on Day View', {
 
     QUnit.test('Indication should be updated by some timer', async function(assert) {
         const instance = createInstance({});
-
         const renderIndicatorStub = sinon.stub(instance, '_renderDateTimeIndication');
 
         instance.option({
-            indicatorUpdateInterval: 20
+            indicatorUpdateInterval: 10
         });
 
-        const timer = setTimeout(function() {
-            assert.ok(renderIndicatorStub.calledTwice, 'Indicator was updated');
-        }, 40);
-
-        this.clock.tick(40);
-        clearTimeout(timer);
+        await waitAsync(40);
+        assert.roughEqual(renderIndicatorStub.callCount, 4, 1.1, 'Indicator was updated');
     });
 
     QUnit.test('Indication should not be updated by some timer if indicatorUpdateInterval = 0', async function(assert) {
@@ -90,12 +86,8 @@ QUnit.module('DateTime indicator on Day View', {
             indicatorUpdateInterval: 0
         });
 
-        const timer = setTimeout(function() {
-            assert.equal(renderIndicatorStub.callCount, 0, 'Indicator wasn\'t updated');
-        }, 40);
-
-        this.clock.tick(40);
-        clearTimeout(timer);
+        await waitAsync(40);
+        assert.equal(renderIndicatorStub.callCount, 0, 'Indicator wasn\'t updated');
     });
 
     QUnit.test('Indication should be updated on dimensionChanged', async function(assert) {
@@ -109,7 +101,7 @@ QUnit.module('DateTime indicator on Day View', {
 
         resizeCallbacks.fire();
 
-        assert.ok(renderIndicatorStub.calledTwice, 'Indicator was updated');
+        assert.equal(renderIndicatorStub.callCount, 2, 'Indicator was updated');
     });
 
     QUnit.test('DateTimeIndicator should not be renderd after currentDate changing, Day view', async function(assert) {
@@ -145,7 +137,11 @@ QUnit.module('DateTime indicator on Day View', {
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+        await applyWorkspaceGroups(instance, [{
+            label: 'a',
+            fieldExpr: 'a',
+            dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+        }]);
 
         const $element = instance.$element();
         const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
@@ -163,7 +159,11 @@ QUnit.module('DateTime indicator on Day View', {
             shadeUntilCurrentTime: false
         });
 
-        instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+        await applyWorkspaceGroups(instance, [{
+            label: 'a',
+            fieldExpr: 'a',
+            dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+        }]);
 
         const $element = instance.$element();
         const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
@@ -345,7 +345,11 @@ QUnit.module('DateTime indicator on Day View', {
             intervalCount: 3
         });
 
-        instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }, { id: 3, text: 'a.3' }] }]);
+        await applyWorkspaceGroups(instance, [{
+            label: 'a',
+            fieldExpr: 'a',
+            dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }, { id: 3, text: 'a.3' }]
+        }]);
 
         const $element = instance.$element();
         const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
@@ -422,14 +426,7 @@ QUnit.module('DateTime indicator on Day View', {
 });
 
 
-QUnit.module('DateTime indicator on Day View, vertical grouping', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-}, () => {
+QUnit.module('DateTime indicator on Day View, vertical grouping', () => {
     const createInstance = (options) => {
         const instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({
             showCurrentTimeIndicator: true,
@@ -437,6 +434,7 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
             endDayHour: 14,
+            getResourceManager: getEmptyResourceManager,
             ...options,
         }).dxSchedulerWorkSpaceDay('instance');
 
@@ -449,7 +447,11 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
             indicatorTime: new Date(2017, 8, 5, 12, 45),
         });
 
-        instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+        await applyWorkspaceGroups(instance, [{
+            label: 'a',
+            fieldExpr: 'a',
+            dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+        }]);
 
         const $element = instance.$element();
         const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
@@ -480,7 +482,11 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
                 indicatorTime: new Date(2017, 8, 5, 12, 45)
             });
 
-            instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+            await applyWorkspaceGroups(instance, [{
+                label: 'a',
+                fieldExpr: 'a',
+                dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+            }]);
 
             const $element = instance.$element();
             const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
@@ -501,7 +507,11 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+        await applyWorkspaceGroups(instance, [{
+            label: 'a',
+            fieldExpr: 'a',
+            dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+        }]);
 
         const $element = instance.$element();
         const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
@@ -519,7 +529,11 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+        await applyWorkspaceGroups(instance, [{
+            label: 'a',
+            fieldExpr: 'a',
+            dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+        }]);
 
         const $element = instance.$element();
         const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
@@ -548,7 +562,11 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
             intervalCount: 3
         });
 
-        instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }, { id: 3, text: 'a.3' }] }]);
+        await applyWorkspaceGroups(instance, [{
+            label: 'a',
+            fieldExpr: 'a',
+            dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }, { id: 3, text: 'a.3' }]
+        }]);
 
         const $element = instance.$element();
         const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
@@ -590,6 +608,7 @@ QUnit.module('DateTime indicator on Week View', () => {
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
+            getResourceManager: getEmptyResourceManager,
             ...options,
         }).dxSchedulerWorkSpaceWeek('instance');
 
@@ -632,7 +651,11 @@ QUnit.module('DateTime indicator on Week View', () => {
             crossScrollingEnabled: true,
         });
 
-        instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+        await applyWorkspaceGroups(instance, [{
+            label: 'a',
+            fieldExpr: 'a',
+            dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+        }]);
 
         resizeCallbacks.fire();
 
@@ -714,6 +737,7 @@ QUnit.module('DateTime indicator on Week View', () => {
                 startDayHour: testCase.startDayHour,
                 endDayHour: testCase.endDayHour,
                 hoursInterval: 1,
+                getResourceManager: getEmptyResourceManager,
             }).dxSchedulerWorkSpaceWeek('instance');
 
             const $element = instance.$element();
@@ -799,6 +823,7 @@ QUnit.module('DateTime indicator on Week View', () => {
             indicatorTime: new Date(2017, 8, 5, 12, 45),
             rtlEnabled: true,
             intervalCount: 2,
+            getResourceManager: getEmptyResourceManager,
         }).dxSchedulerWorkSpaceWeek('instance');
 
         const $element = workspace.$element();
@@ -819,6 +844,7 @@ QUnit.module('DateTime indicator on grouped Week View', () => {
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
+            getResourceManager: getEmptyResourceManager,
             ...options,
         }).dxSchedulerWorkSpaceWeek('instance');
 
@@ -832,7 +858,11 @@ QUnit.module('DateTime indicator on grouped Week View', () => {
             indicatorTime: new Date(2017, 7, 30, 19, 45),
         });
 
-        instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],);
+        await applyWorkspaceGroups(instance, [{
+            label: 'a',
+            fieldExpr: 'a',
+            dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+        }]);
 
         const $element = instance.$element();
         const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS);
@@ -864,7 +894,11 @@ QUnit.module('DateTime indicator on grouped Week View', () => {
             indicatorTime: new Date(2017, 7, 30, 19, 45),
         });
 
-        instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],);
+        await applyWorkspaceGroups(instance, [{
+            label: 'a',
+            fieldExpr: 'a',
+            dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+        }]);
 
         const $element = instance.$element();
         const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS);
@@ -883,10 +917,15 @@ QUnit.module('DateTime indicator on grouped Week View', () => {
     });
 
     QUnit.test('DateTimeIndicator should have correct position and size, Week view with groupByDate = true', async function(assert) {
+        const resourceConfig = await getWorkspaceResourceConfig([{
+            label: 'a',
+            fieldExpr: 'a',
+            dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+        }]);
         const instance = createInstance({
             groupByDate: true,
             indicatorTime: new Date(2017, 8, 5, 12, 45),
-            groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
+            ...resourceConfig,
         });
 
         const $element = instance.$element();
@@ -904,9 +943,11 @@ QUnit.module('DateTime indicator on grouped Week View', () => {
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        instance.option({
-            groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }, { id: 3, text: 'a.3' }] }],
-        });
+        await applyWorkspaceGroups(instance, [{
+            label: 'a',
+            fieldExpr: 'a',
+            dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }, { id: 3, text: 'a.3' }]
+        }]);
 
         const $element = instance.$element();
         const $topShader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS);
@@ -938,6 +979,7 @@ QUnit.module('DateTime indicator on TimelineDay View', () => {
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
             height: 307,
+            getResourceManager: getEmptyResourceManager,
             ...options,
         }).dxSchedulerTimelineDay('instance');
     };
@@ -1018,6 +1060,7 @@ QUnit.module('DateTime indicator on TimelineDay View, horizontal grouping', () =
             endDayHour: 14,
             hoursInterval: 1,
             height: 307,
+            getResourceManager: getEmptyResourceManager,
             ...options,
         }).dxSchedulerTimelineDay('instance');
 
@@ -1028,7 +1071,11 @@ QUnit.module('DateTime indicator on TimelineDay View, horizontal grouping', () =
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+        await applyWorkspaceGroups(instance, [{
+            label: 'a',
+            fieldExpr: 'a',
+            dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+        }]);
 
         const $element = instance.$element();
         const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
@@ -1042,12 +1089,17 @@ QUnit.module('DateTime indicator on TimelineDay View, horizontal grouping', () =
 
     [true, false].forEach(groupByDate => {
         QUnit.test(`Shader should have correct marginTop, when crossScrollingEnabled = true and groupByDate = ${groupByDate}`, async function(assert) {
+            const resourceConfig = await getWorkspaceResourceConfig([{
+                label: 'a',
+                fieldExpr: 'a',
+                dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+            }]);
             const instance = createInstance({
                 indicatorTime: new Date(2017, 8, 5, 12, 45),
                 groupByDate: groupByDate,
                 startDayHour: 11,
                 crossScrollingEnabled: true,
-                groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
+                ...resourceConfig,
             });
 
             const $element = instance.$element();
@@ -1065,7 +1117,11 @@ QUnit.module('DateTime indicator on TimelineDay View, horizontal grouping', () =
             startDayHour: 11
         });
 
-        instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+        await applyWorkspaceGroups(instance, [{
+            label: 'a',
+            fieldExpr: 'a',
+            dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+        }]);
 
         const $element = instance.$element();
         const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
@@ -1086,7 +1142,11 @@ QUnit.module('DateTime indicator on TimelineDay View, horizontal grouping', () =
             startDayHour: 11
         });
 
-        instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+        await applyWorkspaceGroups(instance, [{
+            label: 'a',
+            fieldExpr: 'a',
+            dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+        }]);
 
         const $element = instance.$element();
         const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
@@ -1111,7 +1171,11 @@ QUnit.module('DateTime indicator on TimelineDay View, horizontal grouping', () =
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+        await applyWorkspaceGroups(instance, [{
+            label: 'a',
+            fieldExpr: 'a',
+            dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+        }]);
 
         const $element = instance.$element();
         const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
@@ -1162,6 +1226,7 @@ QUnit.module('DateTime indicator on other timelines', () => {
                 startDayHour: testCase.startDayHour,
                 endDayHour: testCase.endDayHour,
                 hoursInterval: 1,
+                getResourceManager: getEmptyResourceManager,
             }).dxSchedulerTimelineWeek('instance');
 
             const $element = instance.$element();
@@ -1202,6 +1267,7 @@ QUnit.module('DateTime indicator on other timelines', () => {
                 startDayHour: testCase.startDayHour,
                 endDayHour: testCase.endDayHour,
                 hoursInterval: 1,
+                getResourceManager: getEmptyResourceManager,
             }).dxSchedulerTimelineMonth('instance');
             const $element = instance.$element();
             const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
@@ -1223,6 +1289,7 @@ QUnit.module('DateTime indicator on other timelines', () => {
             height: 307,
             indicatorTime: new Date(2017, 8, 5, 12, 30),
             hoursInterval: 1,
+            getResourceManager: getEmptyResourceManager,
         }).dxSchedulerTimelineWeek('instance');
 
         const $element = instance.$element();
@@ -1239,6 +1306,7 @@ QUnit.module('DateTime indicator on other timelines', () => {
             height: 307,
             indicatorTime: new Date(2017, 8, 16, 12, 0),
             hoursInterval: 1,
+            getResourceManager: getEmptyResourceManager,
         }).dxSchedulerTimelineMonth('instance');
 
         const $element = instance.$element();
@@ -1257,6 +1325,7 @@ QUnit.module('DateTime indicator on other timelines', () => {
             startDayHour: 8,
             height: 307,
             indicatorTime: new Date(2017, 8, 15, 12, 30),
+            getResourceManager: getEmptyResourceManager,
         }).dxSchedulerTimelineMonth('instance');
 
         const $element = instance.$element();
