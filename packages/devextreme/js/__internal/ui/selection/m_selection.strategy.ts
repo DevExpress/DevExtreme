@@ -152,12 +152,12 @@ export default class SelectionStrategy {
     const filterLength = encodeURI(JSON.stringify(this._removeTemplateProperty(remoteFilter))).length;
     const needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest);
     const deferred = Deferred();
-    const queryParams = this._getQueryParams();
+    const { langParams } = this._getQueryParams();
 
     const loadOptions = {
       filter: needLoadAllData ? undefined : remoteFilter,
       select: needLoadAllData ? this.options.dataFields() : select || this.options.dataFields(),
-      langParams: queryParams.langParams,
+      langParams,
     };
 
     if (remoteFilter && remoteFilter.length === 0) {
