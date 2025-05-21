@@ -466,7 +466,6 @@ describe('Template Manager', () => {
     let createDXTemplates;
     let updateTemplates;
 
-
     const init = ({
       createDXTemplates: createDXTemplatesFn,
       updateTemplates: updateTemplatesFn
@@ -474,7 +473,6 @@ describe('Template Manager', () => {
       createDXTemplates = createDXTemplatesFn;
       updateTemplates = updateTemplatesFn;
     };
-
     const templateOptions = getTemplateOptions([{ type: 'render' }]);
     const { unmount } = render(
       <React.StrictMode>
@@ -482,28 +480,29 @@ describe('Template Manager', () => {
         <TemplateManager init={init} onTemplatesRendered={() => undefined} />
       </React.StrictMode>
     );
-
     let dxTemplates;
-
-    act(() => { dxTemplates = createDXTemplates(templateOptions); });
-
-    act(() => dxTemplates.renderKey.render({
-      model: { text: 'Render template text' },
-      index: 2,
-      container: document.querySelector('.render-template-container'),
-    }));
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     act(() => {
-      setTimeout(() => {
-        updateTemplates(() => {});
-        expect(warnSpy).not.toHaveBeenCalled();
-        warnSpy.mockRestore();
-        done();
-      }, 1000);
+      dxTemplates = createDXTemplates(templateOptions);
+    });
+    act(() => {
+      dxTemplates.renderKey.render({
+        model: { text: 'Render template text' },
+        index: 2,
+        container: document.querySelector('.render-template-container'),
+      });
+    });
+  
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+  
+    setTimeout(() => {
+      updateTemplates(() => {});
+      expect(warnSpy).not.toHaveBeenCalled();
+      done();
+    }, 1000);
+
+    act(() => {
       unmount();
     });
-    
-    
   });
 
   it('replaces templates with matching keys, adds templates with new keys', () => {
