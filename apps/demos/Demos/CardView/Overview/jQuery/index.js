@@ -14,6 +14,7 @@ $(() => {
       'Email',
     ],
     keyExpr: 'ID',
+    allowColumnReordering: true,
     cardsPerRow: 'auto',
     cardMinWidth: 250,
     cardCover: {

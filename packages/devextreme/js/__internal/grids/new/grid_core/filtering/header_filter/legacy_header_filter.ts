@@ -25,6 +25,8 @@ import { updateHeaderFilterItemSelectionState } from '@ts/grids/grid_core/header
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 
+import type { HeaderFilterListType } from './types';
+
 export const getHeaderItemText = (
   displayValue,
   column,
@@ -156,7 +158,6 @@ export const getDataSourceOptions = (
   if (isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
     // @ts-expect-error
     options.dataSource = oldNormalizeDataSourceOptions(headerFilterDataSource);
-    // return options.dataSource;
   } else {
     const cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;
 
@@ -165,14 +166,14 @@ export const getDataSourceOptions = (
       group,
       useDefaultSearch: true,
       load: (loadOptions) => {
-      // @ts-expect-error Deferred ctor.
+        // @ts-expect-error Deferred ctor.
         const d = new Deferred();
         // NOTE: this marked as deprecated in original code
         loadOptions.dataField = column.dataField || column.name;
         storeLoadAdapter.load(loadOptions).done((data) => {
           const convertUTCDates = remoteGrouping
-            && isUTCFormat(column.serializationFormat)
-            && cutoffLevel > 3;
+              && isUTCFormat(column.serializationFormat)
+              && cutoffLevel > 3;
 
           if (convertUTCDates) {
             data = convertDataFromUTCToLocal(data, column);
@@ -212,9 +213,9 @@ export const getDataSourceOptions = (
   return options.dataSource;
 };
 
-export const getFilterType = (
+export const getHeaderFilterListType = (
   column: Column,
-): 'tree' | 'list' => {
+): HeaderFilterListType => {
   const groupInterval = filteringUtils.getGroupInterval(column);
   return groupInterval && groupInterval.length > 1 ? 'tree' : 'list';
 };

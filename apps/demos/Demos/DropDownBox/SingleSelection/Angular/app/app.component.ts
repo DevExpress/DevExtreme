@@ -5,7 +5,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { lastValueFrom } from 'rxjs';
-import CustomStore from 'devextreme/data/custom_store';
+import { CustomStore } from 'devextreme-angular/common/data';
 import { DxDataGridModule } from 'devextreme-angular';
 import { DxTreeViewModule, DxTreeViewComponent, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 import { DxDropDownBoxModule, DxDropDownBoxTypes } from 'devextreme-angular/ui/drop-down-box';

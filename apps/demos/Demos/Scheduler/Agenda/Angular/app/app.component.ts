@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSchedulerModule } from 'devextreme-angular';
-import ArrayStore from "devextreme/data/array_store"
+import { ArrayStore } from 'devextreme-angular/common/data';
 import {
   Appointment, Service, Priority, Assignee,
 } from './app.service';

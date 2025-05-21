@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { PositionConfig } from 'devextreme/animation/position';
+import { PositionConfig } from 'devextreme-angular/common/core/animation';
 import { DxFilterBuilderTypes } from 'devextreme-angular/ui/filter-builder';
 import { DxoHeaderFilterComponent } from 'devextreme-angular/ui/nested/header-filter';
 import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
