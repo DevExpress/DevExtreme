@@ -305,9 +305,9 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterSyn
 
     const filters = [super._calculateAdditionalFilter()];
     const columns = this._columnsController.getFilteringColumns();
-    let filterValue = this.option('filterValue');
+    const filterValue = this.option('filterValue');
 
-    if (this.isFilterSyncActive()) {
+    /* if (this.isFilterSyncActive()) {
       const currentColumnForHeaderFilter = this._headerFilterController.getCurrentColumn();
       const currentColumnForFilterRow = this._applyFilterController.getCurrentColumnForFiltering();
       const currentColumn = currentColumnForHeaderFilter || currentColumnForFilterRow;
@@ -316,7 +316,7 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterSyn
       if (needRemoveCurrentColumnFilter && filterValue) {
         filterValue = removeFieldConditionsFromFilter(filterValue, getColumnIdentifier(currentColumn));
       }
-    }
+    } */
     const customOperations = this._filterSyncController.getCustomFilterOperations();
     const calculatedFilterValue = getFilterExpression(filterValue, columns, customOperations, 'filterBuilder');
     if (calculatedFilterValue) {
