@@ -462,7 +462,7 @@ describe('Template Manager', () => {
     expect(callbackCalled).toBeTruthy();
   });
 
-  it.only('update callback re-renderers template manager', () => {
+  it.only('check console to ensure no warnings while calling update on an unmounted component', (done) => {
     let createDXTemplates;
     let updateTemplates;
 
@@ -476,12 +476,11 @@ describe('Template Manager', () => {
     };
 
     const templateOptions = getTemplateOptions([{ type: 'render' }]);
-    let showTemplateManager = true;
     const { unmount } = render(
-      <React.Fragment>
+      <React.StrictMode>
         <div className='render-template-container'></div>
-        {showTemplateManager ? <TemplateManager init={init} onTemplatesRendered={() => undefined} /> : ''}
-      </React.Fragment>
+        <TemplateManager init={init} onTemplatesRendered={() => undefined} />
+      </React.StrictMode>
     );
 
     let dxTemplates;
@@ -493,35 +492,18 @@ describe('Template Manager', () => {
       index: 2,
       container: document.querySelector('.render-template-container'),
     }));
-
-    expect(document.querySelector('.render-template-container')?.innerHTML)
-      .toBe('<div class="render-template">Render template text-2</div><div style="display: none;"></div>');
-
-    const newTemplateOptions = {
-      renderKey: {
-        type: 'render',
-        content: (data) => {
-          return (
-            <div className='new-render-template'>{data.text}</div>
-          );
-        },
-      },
-    };
-
-    let callbackCalled = false;
     const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     act(() => {
-      dxTemplates = createDXTemplates(newTemplateOptions);
-      setTimeout(() => updateTemplates(() => { callbackCalled = true; }), 1000)
-      showTemplateManager = false;
+      setTimeout(() => {
+        updateTemplates(() => {});
+        expect(warnSpy).not.toHaveBeenCalled();
+        warnSpy.mockRestore();
+        done();
+      }, 1000);
+      unmount();
     });
-
-    unmount();
-    setTimeout(() => {
-      expect(callbackCalled).toBeTruthy();
-      expect(warnSpy).not.toHaveBeenCalled();
-      warnSpy.mockRestore();
-    }, 1000);
+    
+    
   });
 
   it('replaces templates with matching keys, adds templates with new keys', () => {
