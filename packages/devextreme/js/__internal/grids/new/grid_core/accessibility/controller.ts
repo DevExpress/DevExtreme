@@ -37,7 +37,7 @@ export class AccessibilityController {
     let firstRender = true;
 
     effect(() => {
-      // TODO: FirstRender refactor
+      // TODO: First Render refactor
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       this.componentDescription.value;
 
