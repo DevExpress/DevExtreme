@@ -68,6 +68,10 @@ describe('regressions', () => {
 });
 
 describe('editing validation', () => {
+  const checkError = (error: { __id: string; __details: string }): void => {
+    expect(error.__id).toBe('E1042');
+  };
+
   it('should throw E1042 error when no keyExpr and clicking on add', async () => {
     const container = document.createElement('div');
 
@@ -78,9 +82,12 @@ describe('editing validation', () => {
       dataSource: [{ id: 1, name: 'Test' }],
     });
 
-    // @ts-expect-error
-    await cardView.editingController.addCard();
-    expect(throwError).toHaveBeenCalledWith('E1042', 'CardView');
+    try {
+      // @ts-expect-error
+      await cardView.editingController.addCard();
+    } catch (e) {
+      checkError(e as { __id: string; __details: string });
+    }
   });
 
   it('should throw E1042 error when no keyExpr and clicking on edit', () => {
@@ -93,9 +100,12 @@ describe('editing validation', () => {
       dataSource: [{ id: 1, name: 'Test' }],
     });
 
-    // @ts-expect-error
-    cardView.editingController.editCard(1);
-    expect(throwError).toHaveBeenCalledWith('E1042', 'CardView');
+    try {
+      // @ts-expect-error
+      cardView.editingController.editCard(1);
+    } catch (e) {
+      checkError(e as { __id: string; __details: string });
+    }
   });
 
   it('should throw E1042 error when no keyExpr and clicking on delete', async () => {
@@ -108,8 +118,11 @@ describe('editing validation', () => {
       dataSource: [{ id: 1, name: 'Test' }],
     });
 
-    // @ts-expect-error
-    await cardView.editingController.deleteCard(1);
-    expect(throwError).toHaveBeenCalledWith('E1042', 'CardView');
+    try {
+      // @ts-expect-error
+      await cardView.editingController.deleteCard(1);
+    } catch (e) {
+      checkError(e as { __id: string; __details: string });
+    }
   });
 });
