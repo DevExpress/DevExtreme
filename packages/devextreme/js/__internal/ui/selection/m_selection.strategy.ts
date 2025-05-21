@@ -137,13 +137,27 @@ export default class SelectionStrategy {
     return remoteFilter;
   }
 
+  _getQueryParams() {
+    const { sensitivity } = this.options;
+    return {
+      langParams: {
+        collatorOptions: {
+          sensitivity,
+        },
+      },
+    };
+  }
+
   _loadFilteredData(remoteFilter, localFilter?: any, select?: any, isSelectAll?: boolean) {
     const filterLength = encodeURI(JSON.stringify(this._removeTemplateProperty(remoteFilter))).length;
     const needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest);
     const deferred = Deferred();
+    const queryParams = this._getQueryParams();
+
     const loadOptions = {
       filter: needLoadAllData ? undefined : remoteFilter,
       select: needLoadAllData ? this.options.dataFields() : select || this.options.dataFields(),
+      langParams: queryParams.langParams,
     };
 
     if (remoteFilter && remoteFilter.length === 0) {
@@ -195,10 +209,11 @@ export default class SelectionStrategy {
     const items = this.options.plainItems();
     const dataFilter = this.options.filter();
     let selectedItems = this.options.ignoreDisabledItems ? this.options.selectedItems : this.options.selectedItems.filter((item) => !item?.disabled);
+    const queryParams = this._getQueryParams();
 
     if (dataFilter) {
       // @ts-expect-error
-      selectedItems = dataQuery(selectedItems).filter(dataFilter).toArray();
+      selectedItems = dataQuery(selectedItems, queryParams).filter(dataFilter).toArray();
     }
 
     const selectedItemsLength = selectedItems.length;

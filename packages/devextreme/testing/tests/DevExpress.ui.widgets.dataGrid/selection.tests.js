@@ -4643,6 +4643,33 @@ QUnit.module('Deferred selection', {
         // assert
         assert.deepEqual(this.option('selectionFilter'), []);
     });
+
+    QUnit.test('DataGrid - getSelectedRowKeys method returns incorrect keys if deferred selection is enabled (T1280037)', function(assert) {
+        this.setupDataGrid({
+            dataSource: [
+                { ID: 'aaa', Name: 'Name a' },
+                { ID: 'AAA', Name: 'Name A' },
+            ],
+            keyExpr: 'ID',
+            columns: ['ID', 'Name'],
+            showBorders: true,
+            selection: {
+                sensitivity: 'variant',
+                mode: 'multiple',
+                deferred: true,
+            },
+            selectionFilter: ['ID', '=', 'aaa'],
+        });
+
+        let selectedRowKeys = [];
+
+        this.getSelectedRowKeys().done((keys) => {
+            selectedRowKeys = keys;
+        });
+        this.clock.tick();
+
+        assert.deepEqual(selectedRowKeys, ['aaa'], 'selection filter is case sensitive');
+    });
 });
 
 QUnit.module('Selection with virtual scrolling', {
