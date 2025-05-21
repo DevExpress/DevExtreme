@@ -72,6 +72,13 @@ function useBundle() {
       'devexpress-diagram',
       'rxjs',
     ].forEach((pkg) => delete window.config.map[pkg]);
+    /*
+    Object.keys(window.config.map).forEach((pkg) => {
+      if (pkg.startsWith('devextreme-angular/')) {
+        delete window.config.map[pkg];
+      }
+    });
+    */
   }
 }
 
