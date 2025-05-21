@@ -65,10 +65,6 @@ describe('editing validation', () => {
     setup({
       dataSource: [{ value: 'test1' }],
       editing: { allowUpdating: true },
-      onEditingStart: (e) => {
-        // Note: This is a workaround to prevent the default behavior of the editCard
-        e.cancel = true;
-      },
     });
     const editButton = getEditButton();
     editButton?.dispatchEvent(new MouseEvent('click'));

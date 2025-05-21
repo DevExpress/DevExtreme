@@ -65,6 +65,11 @@ export class EditingController {
     }
 
     const oldItem = this.itemsController.findItemByKey(items, editCardKey)!;
+
+    if (!oldItem) {
+      return null;
+    }
+
     const newData = applyChanges(
       [oldItem.data],
       changes,
