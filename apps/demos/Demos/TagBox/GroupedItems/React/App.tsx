@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TagBox } from 'devextreme-react/tag-box';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-react/common/data';
 import Group from './Group.tsx';
 
 import productsData from './data.ts';

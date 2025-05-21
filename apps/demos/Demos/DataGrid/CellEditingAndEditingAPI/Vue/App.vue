@@ -79,8 +79,7 @@ import {
 } from 'devextreme-vue/data-grid';
 import { DxButton } from 'devextreme-vue/button';
 
-import DataSource from 'devextreme/data/data_source';
-import ArrayStore from 'devextreme/data/array_store';
+import { DataSource, ArrayStore } from 'devextreme-vue/common/data';
 
 import { type Employee, employees, states } from './data.ts';
 

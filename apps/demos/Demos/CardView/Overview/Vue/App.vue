@@ -2,6 +2,7 @@
   <DxCardView
     :data-source="employees"
     key-expr="ID"
+    :allow-column-reordering="true"
     cards-per-row="auto"
     :card-min-width="250"
     :header-filter="headerFilterConfig"

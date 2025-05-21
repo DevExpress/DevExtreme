@@ -22,6 +22,7 @@ import { HeaderFilterViewController } from './filtering/header_filter/view_contr
 import * as FilterControllerModule from './filtering/index';
 import { ItemsController } from './items_controller/items_controller';
 import { KeyboardNavigationController } from './keyboard_navigation/index';
+import { OptionsValidationController } from './options_validation/index';
 import { PagerView } from './pager/view';
 import { SearchController } from './search/controller';
 import { SearchView } from './search/view';
@@ -64,4 +65,5 @@ export function register(diContext: DIContext): void {
   diContext.register(FilterCustomOperationsVisitor);
   diContext.register(KeyboardNavigationController);
   diContext.register(AccessibilityController);
+  diContext.register(OptionsValidationController);
 }

@@ -2,6 +2,7 @@ import type { WidgetName } from '../types';
 import Widget from '../internal/widget';
 import Popup from '../popup';
 import Dialog from './dialog/dialog';
+import AIDialog from './dialog/aiDialog';
 import RootToolbar from './rootToolbar';
 
 const CLASS = {
@@ -26,5 +27,10 @@ export default class HtmlEditor extends Widget {
   // eslint-disable-next-line class-methods-use-this
   public get toolbar(): RootToolbar {
     return new RootToolbar();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public getAIDialog(): AIDialog {
+    return new AIDialog();
   }
 }

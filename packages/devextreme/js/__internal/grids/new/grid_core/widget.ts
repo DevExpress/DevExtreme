@@ -7,6 +7,7 @@ import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
 import { infernoRenderer } from '@ts/core/m_inferno_renderer';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';
+import { rerender } from 'inferno';
 
 import { AccessibilityController } from './accessibility/index';
 import * as ColumnChooserModule from './column_chooser/index';
@@ -162,6 +163,9 @@ export class GridCoreNewBase<
     this.renderSubscription = this.diContext.get(MainView).render(
       this.$element().get(0) as HTMLDivElement,
     );
+    // NOTE: We flush all Inferno async render operations after initial render
+    // Because after component creation markup should be ready
+    rerender();
   }
 
   private _optionChanged(args) {

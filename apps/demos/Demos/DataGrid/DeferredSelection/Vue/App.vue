@@ -71,9 +71,8 @@ import {
   DxDataGrid, DxColumn, DxFilterRow, DxSelection, type DxDataGridTypes, DxPager,
 } from 'devextreme-vue/data-grid';
 import DxButton from 'devextreme-vue/button';
-import { type Options as DataSourceOptions } from 'devextreme/data/data_source';
-import query from 'devextreme/data/query';
-import 'devextreme/data/odata/store';
+import { type DataSourceOptions } from 'devextreme-vue/common/data';
+import { query } from 'devextreme-vue/common/data';
 
 const MILLISECONDS_IN_DAY = 1000 * 60 * 60 * 24;
 
