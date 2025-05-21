@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Column } from '../../columns_controller/types';
 import { DataController } from '../../data_controller/index';
 import { OptionsController } from '../../options_controller/options_controller';
@@ -45,13 +44,18 @@ export class CompatibilityHeaderFilterController {
     this.realHeaderFilterViewController.closePopup();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public getDataSource(column: Column): any {
     const adapter = this.realDataController.getStoreLoadAdapter();
     const popupOptions = {
-      column,
+      column: { ...column },
       filterType: column.filterType,
       filterValues: column.filterValues,
-    } as any;
+    };
+    /*
+      Note: Root headerFilter options are used because the legacy code handles retrieving
+      options for specific columns on its own
+    */
     const rootHeaderFilterOptions = this.options.oneWay('headerFilter').peek();
 
     return getDataSourceOptions(adapter, popupOptions, rootHeaderFilterOptions, null);

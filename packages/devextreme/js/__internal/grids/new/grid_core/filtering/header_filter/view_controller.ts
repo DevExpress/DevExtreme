@@ -43,6 +43,10 @@ export class HeaderFilterViewController {
     isFilterBuilder?: boolean,
   ): void {
     const rootDataSource = this.dataController.getStoreLoadAdapter();
+    /*
+      Note: Root headerFilter options are used because the legacy code handles retrieving
+      options for specific columns on its own
+    */
     const rootHeaderFilterOptions = this.options.oneWay('headerFilter').peek();
     const filterExpression = this.getFilterExpressionWithoutCurrentColumn(column);
     const type = getHeaderFilterListType(column);

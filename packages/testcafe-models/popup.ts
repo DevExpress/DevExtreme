@@ -18,6 +18,11 @@ const CLASS = {
   navigatorCaption: 'dx-calendar-caption-button',
   viewsWrapper: 'dx-calendar-views-wrapper',
 };
+
+const SELECTORS = {
+  okButton: '[aria-label="OK"]',
+};
+
 export default class Popup extends Overlay {
   public static className = '.dx-popup-wrapper';
 
@@ -51,6 +56,10 @@ export default class Popup extends Overlay {
 
   getButton(idx = 0): Button {
     return new Button(this.getWrapper().find(`.${CLASS.button}`).nth(idx));
+  }
+
+  getOkButton(): Button {
+    return new Button(this.getWrapper().find(SELECTORS.okButton));
   }
 
   getCloseButton(): Button {

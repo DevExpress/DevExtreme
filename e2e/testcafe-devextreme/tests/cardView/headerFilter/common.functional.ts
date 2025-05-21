@@ -414,27 +414,30 @@ test('The item\'s selection state should be correct after resetting the search',
 
 test('FilterBuilder should work with custom headerFilter data source', async (t) => {
   const cardView = new CardView('#container');
+  const IS_ANY_OPERATION_ITEM_INDEX = 9;
+  const ADD_CONDITION_ITEM_INDEX = 0;
 
   await t
     .click(cardView.getHeaderPanel().getHeaderItem(0).getFilterIcon());
 
   await t
     .expect(cardView.getHeaderFilterList().getItems().count)
-    .eql(3);
+    .eql(3)
+    .click(cardView.getHeaderFilterPopup().getOkButton().element);
 
   const filterBuilderPopup = await cardView.getFilterPanel().openFilterBuilderPopup(t);
   const filterBuilder = filterBuilderPopup.getFilterBuilder();
   await t
     .click(filterBuilder.getAddButton())
     .expect(FilterBuilder.getPopupTreeView().visible).ok()
-    .click(FilterBuilder.getPopupTreeViewNode(0))
+    .click(FilterBuilder.getPopupTreeViewNode(ADD_CONDITION_ITEM_INDEX))
     .click(filterBuilder.getField(0, 'itemOperation').element)
-    .click(FilterBuilder.getPopupTreeViewNode(9))
+    .click(FilterBuilder.getPopupTreeViewNode(IS_ANY_OPERATION_ITEM_INDEX))
     .click(filterBuilder.getField(0, 'itemValue').element)
     .click(cardView.getHeaderFilterList().getItem(1).element)
     .click(cardView.getHeaderFilterList().getItem(2).element)
-    .click(cardView.getHeaderFilterPopup().getButton(3).element)
-    .click(filterBuilderPopup.asPopup().getButton(1).element);
+    .click(cardView.getHeaderFilterPopup().getOkButton().element)
+    .click(filterBuilderPopup.asPopup().getOkButton().element);
 
   await t
     .expect(cardView.getCards().count)
