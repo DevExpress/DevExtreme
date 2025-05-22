@@ -11,6 +11,7 @@ import  dxPopup from "devextreme/ui/popup";
 import  dxSortable from "devextreme/ui/sortable";
 import  dxDraggable from "devextreme/ui/draggable";
 import {
+ ColumnChooser,
  ColumnResizeMode,
  FilterPanel,
  HeaderFilter,
@@ -323,7 +324,7 @@ const componentConfig = {
     cacheEnabled: Boolean,
     cellHintEnabled: Boolean,
     columnAutoWidth: Boolean,
-    columnChooser: Object as PropType<Record<string, any>>,
+    columnChooser: Object as PropType<ColumnChooser | Record<string, any>>,
     columnFixing: Object as PropType<Record<string, any>>,
     columnHidingEnabled: Boolean,
     columnMinWidth: Number,

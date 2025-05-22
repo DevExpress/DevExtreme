@@ -24,14 +24,14 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-card-view-search',
+    selector: 'dxo-card-view-header-filter-search',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoCardViewSearchComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewHeaderFilterSearchComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get editorOptions(): any {
         return this._getOption('editorOptions');
@@ -49,19 +49,19 @@ export class DxoCardViewSearchComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get timeout(): number {
-        return this._getOption('timeout');
-    }
-    set timeout(value: number) {
-        this._setOption('timeout', value);
-    }
-
-    @Input()
     get mode(): SearchMode {
         return this._getOption('mode');
     }
     set mode(value: SearchMode) {
         this._setOption('mode', value);
+    }
+
+    @Input()
+    get timeout(): number {
+        return this._getOption('timeout');
+    }
+    set timeout(value: number) {
+        this._setOption('timeout', value);
     }
 
 
@@ -91,10 +91,10 @@ export class DxoCardViewSearchComponent extends NestedOption implements OnDestro
 
 @NgModule({
   imports: [
-    DxoCardViewSearchComponent
+    DxoCardViewHeaderFilterSearchComponent
   ],
   exports: [
-    DxoCardViewSearchComponent
+    DxoCardViewHeaderFilterSearchComponent
   ],
 })
-export class DxoCardViewSearchModule { }
+export class DxoCardViewHeaderFilterSearchModule { }

@@ -14,7 +14,6 @@ import {
 
 
 
-import { SearchMode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -24,49 +23,41 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-card-view-search',
+    selector: 'dxo-card-view-column-chooser-selection',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoCardViewSearchComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewColumnChooserSelectionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get editorOptions(): any {
-        return this._getOption('editorOptions');
+    get allowSelectAll(): boolean {
+        return this._getOption('allowSelectAll');
     }
-    set editorOptions(value: any) {
-        this._setOption('editorOptions', value);
+    set allowSelectAll(value: boolean) {
+        this._setOption('allowSelectAll', value);
     }
 
     @Input()
-    get enabled(): boolean {
-        return this._getOption('enabled');
+    get recursive(): boolean {
+        return this._getOption('recursive');
     }
-    set enabled(value: boolean) {
-        this._setOption('enabled', value);
-    }
-
-    @Input()
-    get timeout(): number {
-        return this._getOption('timeout');
-    }
-    set timeout(value: number) {
-        this._setOption('timeout', value);
+    set recursive(value: boolean) {
+        this._setOption('recursive', value);
     }
 
     @Input()
-    get mode(): SearchMode {
-        return this._getOption('mode');
+    get selectByClick(): boolean {
+        return this._getOption('selectByClick');
     }
-    set mode(value: SearchMode) {
-        this._setOption('mode', value);
+    set selectByClick(value: boolean) {
+        this._setOption('selectByClick', value);
     }
 
 
     protected get _optionPath() {
-        return 'search';
+        return 'selection';
     }
 
 
@@ -91,10 +82,10 @@ export class DxoCardViewSearchComponent extends NestedOption implements OnDestro
 
 @NgModule({
   imports: [
-    DxoCardViewSearchComponent
+    DxoCardViewColumnChooserSelectionComponent
   ],
   exports: [
-    DxoCardViewSearchComponent
+    DxoCardViewColumnChooserSelectionComponent
   ],
 })
-export class DxoCardViewSearchModule { }
+export class DxoCardViewColumnChooserSelectionModule { }

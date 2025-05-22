@@ -53,17 +53,35 @@ import {
  VerticalAlignment,
  ToolbarItemLocation,
  ToolbarItemComponent,
+ SingleMultipleOrNone,
+ SelectAllMode,
  DataType,
  Format as CommonFormat,
  SortOrder,
  ComparisonOperator,
+ SearchMode,
  Direction,
  PositionAlignment,
  DisplayMode,
- SearchMode,
- SingleMultipleOrNone,
- SelectAllMode,
 } from "devextreme/common";
+import {
+ ColumnChooser,
+ FilterPanel,
+ HeaderFilter,
+ Pager,
+ SearchPanel,
+ SelectionColumnDisplayMode,
+ DataChangeType,
+ FilterType,
+ ColumnChooserMode,
+ ColumnChooserSearchConfig,
+ ColumnChooserSelectionConfig,
+ DataChange,
+ FilterPanelTexts,
+ HeaderFilterSearchConfig,
+ HeaderFilterTexts,
+ PagerPageSize,
+} from "devextreme/common/grids";
 import {
  DataSourceOptions,
 } from "devextreme/common/data";
@@ -85,20 +103,6 @@ import {
  OptionChangedEvent,
  ValueChangedEvent,
 } from "devextreme/ui/filter_builder";
-import {
- FilterPanel,
- HeaderFilter,
- Pager,
- SearchPanel,
- DataChangeType,
- FilterType,
- DataChange,
- FilterPanelTexts,
- HeaderFilterSearchConfig,
- HeaderFilterTexts,
- PagerPageSize,
- SelectionColumnDisplayMode,
-} from "devextreme/common/grids";
 import {
  dxLoadPanelOptions,
  ContentReadyEvent as LoadPanelContentReadyEvent,
@@ -243,7 +247,7 @@ const componentConfig = {
     cardMinWidth: Number,
     cardsPerRow: [String, Number] as PropType<Mode | number>,
     cardTemplate: {},
-    columnChooser: Object as PropType<Record<string, any>>,
+    columnChooser: Object as PropType<ColumnChooser | Record<string, any>>,
     columns: Array as PropType<Array<ColumnProperties | string>>,
     dataSource: [Array, Object, String] as PropType<Array<any> | DataSource | DataSourceOptions | Store | string | Record<string, any>>,
     disabled: Boolean,
@@ -402,7 +406,9 @@ const componentConfig = {
     (this as any).$_expectedChildren = {
       cardCover: { isCollectionItem: false, optionName: "cardCover" },
       cardHeader: { isCollectionItem: false, optionName: "cardHeader" },
+      cardViewSelection: { isCollectionItem: false, optionName: "selection" },
       column: { isCollectionItem: true, optionName: "columns" },
+      columnChooser: { isCollectionItem: false, optionName: "columnChooser" },
       editing: { isCollectionItem: false, optionName: "editing" },
       filterBuilder: { isCollectionItem: false, optionName: "filterBuilder" },
       filterPanel: { isCollectionItem: false, optionName: "filterPanel" },
@@ -606,6 +612,29 @@ const DxCardHeaderItem = defineComponent(DxCardHeaderItemConfig);
 (DxCardHeaderItem as any).$_optionName = "items";
 (DxCardHeaderItem as any).$_isCollectionItem = true;
 
+const DxCardViewSelectionConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allowSelectAll": null,
+    "update:mode": null,
+    "update:selectAllMode": null,
+    "update:showCheckBoxesMode": null,
+  },
+  props: {
+    allowSelectAll: Boolean,
+    mode: String as PropType<SingleMultipleOrNone>,
+    selectAllMode: String as PropType<SelectAllMode>,
+    showCheckBoxesMode: String as PropType<SelectionColumnDisplayMode>
+  }
+};
+
+prepareConfigurationComponentConfig(DxCardViewSelectionConfig);
+
+const DxCardViewSelection = defineComponent(DxCardViewSelectionConfig);
+
+(DxCardViewSelection as any).$_optionName = "selection";
+
 const DxChangeConfig = {
   emits: {
     "update:isActive": null,
@@ -756,6 +785,96 @@ const DxColumn = defineComponent(DxColumnConfig);
   StringLengthRule: { isCollectionItem: true, optionName: "validationRules" },
   validationRule: { isCollectionItem: true, optionName: "validationRules" }
 };
+
+const DxColumnChooserConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allowSearch": null,
+    "update:container": null,
+    "update:emptyPanelText": null,
+    "update:enabled": null,
+    "update:height": null,
+    "update:mode": null,
+    "update:position": null,
+    "update:search": null,
+    "update:searchTimeout": null,
+    "update:selection": null,
+    "update:sortOrder": null,
+    "update:title": null,
+    "update:width": null,
+  },
+  props: {
+    allowSearch: Boolean,
+    container: {},
+    emptyPanelText: String,
+    enabled: Boolean,
+    height: [Number, String],
+    mode: String as PropType<ColumnChooserMode>,
+    position: Object as PropType<PositionConfig | Record<string, any>>,
+    search: Object as PropType<ColumnChooserSearchConfig | Record<string, any>>,
+    searchTimeout: Number,
+    selection: Object as PropType<ColumnChooserSelectionConfig | Record<string, any>>,
+    sortOrder: String as PropType<SortOrder>,
+    title: String,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxColumnChooserConfig);
+
+const DxColumnChooser = defineComponent(DxColumnChooserConfig);
+
+(DxColumnChooser as any).$_optionName = "columnChooser";
+(DxColumnChooser as any).$_expectedChildren = {
+  columnChooserSearch: { isCollectionItem: false, optionName: "search" },
+  columnChooserSelection: { isCollectionItem: false, optionName: "selection" },
+  position: { isCollectionItem: false, optionName: "position" },
+  search: { isCollectionItem: false, optionName: "search" },
+  selection: { isCollectionItem: false, optionName: "selection" }
+};
+
+const DxColumnChooserSearchConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:editorOptions": null,
+    "update:enabled": null,
+    "update:timeout": null,
+  },
+  props: {
+    editorOptions: {},
+    enabled: Boolean,
+    timeout: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxColumnChooserSearchConfig);
+
+const DxColumnChooserSearch = defineComponent(DxColumnChooserSearchConfig);
+
+(DxColumnChooserSearch as any).$_optionName = "search";
+
+const DxColumnChooserSelectionConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allowSelectAll": null,
+    "update:recursive": null,
+    "update:selectByClick": null,
+  },
+  props: {
+    allowSelectAll: Boolean,
+    recursive: Boolean,
+    selectByClick: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxColumnChooserSelectionConfig);
+
+const DxColumnChooserSelection = defineComponent(DxColumnChooserSelectionConfig);
+
+(DxColumnChooserSelection as any).$_optionName = "selection";
 
 const DxCompareRuleConfig = {
   emits: {
@@ -1283,10 +1402,34 @@ const DxHeaderFilter = defineComponent(DxHeaderFilterConfig);
 
 (DxHeaderFilter as any).$_optionName = "headerFilter";
 (DxHeaderFilter as any).$_expectedChildren = {
+  headerFilterSearch: { isCollectionItem: false, optionName: "search" },
   headerFilterTexts: { isCollectionItem: false, optionName: "texts" },
   search: { isCollectionItem: false, optionName: "search" },
   texts: { isCollectionItem: false, optionName: "texts" }
 };
+
+const DxHeaderFilterSearchConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:editorOptions": null,
+    "update:enabled": null,
+    "update:mode": null,
+    "update:timeout": null,
+  },
+  props: {
+    editorOptions: {},
+    enabled: Boolean,
+    mode: String as PropType<SearchMode>,
+    timeout: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxHeaderFilterSearchConfig);
+
+const DxHeaderFilterSearch = defineComponent(DxHeaderFilterSearchConfig);
+
+(DxHeaderFilterSearch as any).$_optionName = "search";
 
 const DxHeaderFilterTextsConfig = {
   emits: {
@@ -1867,13 +2010,17 @@ const DxSelectionConfig = {
     "update:hoveredElement": null,
     "update:allowSelectAll": null,
     "update:mode": null,
+    "update:recursive": null,
     "update:selectAllMode": null,
+    "update:selectByClick": null,
     "update:showCheckBoxesMode": null,
   },
   props: {
     allowSelectAll: Boolean,
     mode: String as PropType<SingleMultipleOrNone>,
+    recursive: Boolean,
     selectAllMode: String as PropType<SelectAllMode>,
+    selectByClick: Boolean,
     showCheckBoxesMode: String as PropType<SelectionColumnDisplayMode>
   }
 };
@@ -2129,9 +2276,13 @@ export {
   DxCardCover,
   DxCardHeader,
   DxCardHeaderItem,
+  DxCardViewSelection,
   DxChange,
   DxCollision,
   DxColumn,
+  DxColumnChooser,
+  DxColumnChooserSearch,
+  DxColumnChooserSelection,
   DxCompareRule,
   DxCustomOperation,
   DxCustomRule,
@@ -2147,6 +2298,7 @@ export {
   DxFrom,
   DxGroupOperationDescriptions,
   DxHeaderFilter,
+  DxHeaderFilterSearch,
   DxHeaderFilterTexts,
   DxHeaderPanel,
   DxHide,

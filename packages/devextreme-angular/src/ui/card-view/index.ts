@@ -26,10 +26,10 @@ export { ExplicitTypes } from 'devextreme/ui/card_view';
 import DataSource from 'devextreme/data/data_source';
 import { CardCover, CardHeader, ColumnProperties, dxCardViewEditing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, SelectionChangedEvent, SelectionChangingEvent, Paging, RemoteOperations, SelectionConfiguration, Toolbar } from 'devextreme/ui/card_view';
 import { Mode } from 'devextreme/common';
+import { ColumnChooser, FilterPanel, HeaderFilter, Pager, SearchPanel } from 'devextreme/common/grids';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
-import { FilterPanel, HeaderFilter, Pager, SearchPanel } from 'devextreme/common/grids';
 import { dxLoadPanelOptions } from 'devextreme/ui/load_panel';
 import { EventInfo } from 'devextreme/common/core/events';
 
@@ -54,9 +54,13 @@ import { DxoCardViewBoundaryOffsetModule } from 'devextreme-angular/ui/card-view
 import { DxoCardViewCardCoverModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewCardHeaderModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewCardHeaderItemModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewCardViewSelectionModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewChangeModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewCollisionModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewColumnModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewColumnChooserModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewColumnChooserSearchModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewColumnChooserSelectionModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewCompareRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewCustomOperationModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewCustomRuleModule } from 'devextreme-angular/ui/card-view/nested';
@@ -72,6 +76,7 @@ import { DxoCardViewFormItemModule } from 'devextreme-angular/ui/card-view/neste
 import { DxoCardViewFromModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewGroupOperationDescriptionsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewHeaderFilterModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewHeaderFilterSearchModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewHeaderFilterTextsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewHeaderPanelModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewHideModule } from 'devextreme-angular/ui/card-view/nested';
@@ -233,10 +238,10 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     
     @Input()
-    get columnChooser(): Record<string, any> {
+    get columnChooser(): ColumnChooser {
         return this._getOption('columnChooser');
     }
-    set columnChooser(value: Record<string, any>) {
+    set columnChooser(value: ColumnChooser) {
         this._setOption('columnChooser', value);
     }
 
@@ -910,7 +915,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnChooserChange: EventEmitter<Record<string, any>>;
+    @Output() columnChooserChange: EventEmitter<ColumnChooser>;
 
     /**
     
@@ -1314,9 +1319,13 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewCardCoverModule,
     DxoCardViewCardHeaderModule,
     DxiCardViewCardHeaderItemModule,
+    DxoCardViewCardViewSelectionModule,
     DxiCardViewChangeModule,
     DxoCardViewCollisionModule,
     DxiCardViewColumnModule,
+    DxoCardViewColumnChooserModule,
+    DxoCardViewColumnChooserSearchModule,
+    DxoCardViewColumnChooserSelectionModule,
     DxiCardViewCompareRuleModule,
     DxiCardViewCustomOperationModule,
     DxiCardViewCustomRuleModule,
@@ -1332,6 +1341,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewFromModule,
     DxoCardViewGroupOperationDescriptionsModule,
     DxoCardViewHeaderFilterModule,
+    DxoCardViewHeaderFilterSearchModule,
     DxoCardViewHeaderFilterTextsModule,
     DxoCardViewHeaderPanelModule,
     DxoCardViewHideModule,
@@ -1371,9 +1381,13 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewCardCoverModule,
     DxoCardViewCardHeaderModule,
     DxiCardViewCardHeaderItemModule,
+    DxoCardViewCardViewSelectionModule,
     DxiCardViewChangeModule,
     DxoCardViewCollisionModule,
     DxiCardViewColumnModule,
+    DxoCardViewColumnChooserModule,
+    DxoCardViewColumnChooserSearchModule,
+    DxoCardViewColumnChooserSelectionModule,
     DxiCardViewCompareRuleModule,
     DxiCardViewCustomOperationModule,
     DxiCardViewCustomRuleModule,
@@ -1389,6 +1403,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewFromModule,
     DxoCardViewGroupOperationDescriptionsModule,
     DxoCardViewHeaderFilterModule,
+    DxoCardViewHeaderFilterSearchModule,
     DxoCardViewHeaderFilterTextsModule,
     DxoCardViewHeaderPanelModule,
     DxoCardViewHideModule,
