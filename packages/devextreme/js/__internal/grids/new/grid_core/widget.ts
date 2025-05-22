@@ -9,6 +9,7 @@ import { infernoRenderer } from '@ts/core/m_inferno_renderer';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';
 import { rerender } from 'inferno';
 
+import { AccessibilityController } from './accessibility/index';
 import * as ColumnChooserModule from './column_chooser/index';
 import { CompatibilityColumnsController } from './columns_controller/compatibility';
 import * as ColumnsControllerModule from './columns_controller/index';
@@ -87,6 +88,8 @@ export class GridCoreNewBase<
 
   private getAppliedFiltersVisitor!: GetAppliedFilterVisitor;
 
+  private accessibilityController!: AccessibilityController;
+
   private filterCustomOperationsVisitor!: FilterCustomOperationsVisitor;
 
   protected _registerDIContext(): void {
@@ -123,6 +126,7 @@ export class GridCoreNewBase<
     this.headerFilterController = this.diContext.get(HeaderFilterController);
     this.filterPanelView = this.diContext.get(FilterControllerModule.FilterPanelView);
     this.headerFilterViewController = this.diContext.get(HeaderFilterViewController);
+    this.accessibilityController = this.diContext.get(AccessibilityController);
     this.filterSyncController = this.diContext.get(FilterSyncController);
     this.searchView = this.diContext.get(SearchView);
 
