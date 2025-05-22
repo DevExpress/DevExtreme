@@ -306,8 +306,7 @@ export interface ColumnBase<TRowData = any> {
    */
   format?: Format;
   /**
-   * @docid GridBaseColumn.headerFilter
-   * @type object
+   * @docid
    * @default undefined
    * @public
    */
@@ -699,50 +698,51 @@ export type ColumnFixingIcons = {
 };
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type ColumnHeaderFilter = {
   /**
-   * @docid GridBaseColumn.headerFilter.allowSearch
+   * @docid
    * @default false
    * @deprecated
    */
   allowSearch?: boolean;
   /**
-   * @docid GridBaseColumn.headerFilter.allowSelectAll
+   * @docid
    * @default true
    */
   allowSelectAll?: boolean;
   /**
-   * @docid GridBaseColumn.headerFilter.dataSource
+   * @docid
    * @type_function_param1_field component:object
    * @default undefined
    * @type Array<any>|Store|DataSourceOptions|Function|null|undefined
    */
   dataSource?: FilterLookupDataSource<any> | ((options: { component?: any; dataSource?: DataSourceOptions | null }) => void) | undefined;
   /**
-   * @docid GridBaseColumn.headerFilter.groupInterval
+   * @docid
    * @default undefined
    */
   groupInterval?: HeaderFilterGroupInterval | number | undefined;
   /**
-   * @docid GridBaseColumn.headerFilter.height
+   * @docid
    * @default undefined
    */
   height?: number | string | undefined;
   /**
-   * @docid GridBaseColumn.headerFilter.search
+   * @docid
    */
   search?: ColumnHeaderFilterSearchConfig;
   /**
-   * @docid GridBaseColumn.headerFilter.searchMode
+   * @docid
    * @default 'contains'
    * @deprecated
    */
   searchMode?: SearchMode;
   /**
-   * @docid GridBaseColumn.headerFilter.width
+   * @docid
    * @default undefined
    */
   width?: number | string | undefined;
