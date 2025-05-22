@@ -198,7 +198,7 @@ describe('PublicMethods', () => {
           dataSourceFilter: undefined,
           columnFilterValues: [1, 2],
         });
-        expect(gridCore.getCombinedFilter()).toMatchInlineSnapshot('undefined');
+        expect(gridCore.getCombinedFilter()).toBe(undefined);
       });
     });
 
@@ -218,13 +218,7 @@ describe('PublicMethods', () => {
           dataSourceFilter: ['a', '=', 123],
           columnFilterValues: [1, 2],
         });
-        expect(gridCore.getCombinedFilter()).toMatchInlineSnapshot(`
-          [
-            "a",
-            "=",
-            123,
-          ]
-        `);
+        expect(gridCore.getCombinedFilter()).toEqual(['a', '=', 123]);
       });
     });
   });

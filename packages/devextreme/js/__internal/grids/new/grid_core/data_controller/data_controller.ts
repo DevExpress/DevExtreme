@@ -260,14 +260,15 @@ export class DataController {
           someParamChanged ||= true;
         }
 
-        if (!equalByValue(
+        const filterChanged = !equalByValue(
           this.previousDisplayFilter,
           displayFilter,
           {
             maxDepth: FILTER_OBJ_COMPARE_DEPTH,
             strict: true,
           },
-        )) {
+        );
+        if (filterChanged) {
           this.previousDisplayFilter = displayFilter;
           someParamChanged ||= true;
         }
