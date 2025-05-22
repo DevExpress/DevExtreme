@@ -84,11 +84,12 @@ class Informer extends Widget<Properties> {
     const { type } = this.option();
 
     switch (type) {
-      case 'error':
-        this.$element().addClass(INFORMER_ERROR_CLASS);
-        break;
       case 'info':
         this.$element().addClass(INFORMER_INFO_CLASS);
+        break;
+      case 'error':
+      default:
+        this.$element().addClass(INFORMER_ERROR_CLASS);
         break;
     }
   }
