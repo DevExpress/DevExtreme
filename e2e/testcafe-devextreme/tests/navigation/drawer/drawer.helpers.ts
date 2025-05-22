@@ -25,7 +25,7 @@ export function createDrawer({
       opened: true,
       height: 400,
       template: () => {
-        const $result = $('<div>').width(200).css('background-color', 'aqua').css('height', '100%');
+        const $result = $('<div>').width('200px').css('background-color', 'aqua').css('height', '100%');
         if (createDrawerContent) {
           createDrawerContent($result);
         }

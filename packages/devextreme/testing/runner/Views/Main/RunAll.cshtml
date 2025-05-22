@@ -79,7 +79,7 @@
             noRenovation = @Html.Raw(Json.Serialize(Model.NoRenovation)),
             noCsp = @Html.Raw(Json.Serialize(Model.NoCsp)),
             farmMode = @Html.Raw(Json.Serialize(Model.IsContinuousIntegration)),
-            DX_HTTP_CACHE = $.now(),
+            DX_HTTP_CACHE = Date.now(),
             lastTestCaseDoneTime = 0,
             runWorkerInNewWindow = @Html.Raw(Json.Serialize(Model.WorkerInWindow)),
 
@@ -226,7 +226,7 @@
 
             for(var i = 0; i < WORKER_COUNT; i++) {
                 if(runWorkerInNewWindow) {
-                    worker = window.open("about:blank", "popup" + $.now(), "left=0,top=0,width=500,height=500");
+                    worker = window.open("about:blank", "popup" + Date.now(), "left=0,top=0,width=500,height=500");
                 } else {
                     var workerWrapper = $("<div class=worker></div>")
                         .attr("id", "worker" + i)
@@ -388,8 +388,8 @@
                 testCases,
                 testCase;
 
-            if($.now() - lastTestCaseDoneTime > 1000) {
-                lastTestCaseDoneTime = $.now();
+            if(Date.now() - lastTestCaseDoneTime > 1000) {
+                lastTestCaseDoneTime = Date.now();
                 notifyDeviceTestManager("QUnit.testCaseDone");
                 notifyIsAlive();
             }
