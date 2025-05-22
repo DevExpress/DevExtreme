@@ -553,7 +553,7 @@ export type ColumnChooser = {
 export type ColumnChooserMode = 'dragAndDrop' | 'select';
 
 /**
- * @docid 
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
@@ -1315,7 +1315,7 @@ export type HeaderFilter = {
 export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year';
 
 /**
- * @docid 
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
