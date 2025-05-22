@@ -1413,6 +1413,213 @@
         ]
       },
       {
+        "Name": "Card View",
+        "Equivalents": "dxCardView, dx-cardview, cardview",
+        "Groups": [
+          {
+            "Name": "Overview",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Overview",
+                "Name": "Overview",
+                "Widget": "CardView",
+                "DemoType": "Web",
+                "Badge": "New"
+              }
+            ]
+          },
+          {
+            "Name": "Data Binding",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Simple Array",
+                "Name": "SimpleArray",
+                "DocUrl": "",
+                "Widget": "CardView",
+                "MvcDescription": "",
+                "NetCoreDescription": "",
+                "MvcAdditionalFiles": [],
+                "DemoType": "Web",
+                "Badge": "New"
+              },
+              {
+                "Title": "Web API Service",
+                "Name": "WebAPIService",
+                "DocUrl": "",
+                "Widget": "CardView",
+                "MvcDescription": "",
+                "NetCoreDescription": "",
+                "MvcAdditionalFiles": [],
+                "DemoType": "Web",
+                "Badge": "New"
+              }
+            ]
+          },
+          {
+            "Name": "Filtering",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Column Header Filter",
+                "Name": "ColumnHeaderFilter",
+                "DocUrl": "",
+                "Widget": "CardView",
+                "MvcDescription": "",
+                "NetCoreDescription": "",
+                "MvcAdditionalFiles": [],
+                "DemoType": "Web",
+                "Badge": "New"
+              },
+              {
+                "Title": "Filter Panel",
+                "Name": "FilterPanel",
+                "DocUrl": "",
+                "Widget": "CardView",
+                "MvcDescription": "",
+                "NetCoreDescription": "",
+                "MvcAdditionalFiles": [],
+                "DemoType": "Web",
+                "Badge": "New"
+              },
+              {
+                "Title": "Search Panel",
+                "Name": "SearchPanel",
+                "DocUrl": "",
+                "Widget": "CardView",
+                "MvcDescription": "",
+                "NetCoreDescription": "",
+                "MvcAdditionalFiles": [],
+                "DemoType": "Web",
+                "Badge": "New"
+              }
+            ]
+          },
+          {
+            "Name": "Sorting",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Sorting",
+                "Name": "Sorting",
+                "Widget": "CardView",
+                "DemoType": "Web",
+                "Badge": "New"
+              }
+            ]
+          },
+          {
+            "Name": "Editing",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Popup Editing",
+                "Name": "PopupEditing",
+                "DocUrl": "",
+                "Widget": "CardView",
+                "MvcDescription": "",
+                "NetCoreDescription": "",
+                "MvcAdditionalFiles": [],
+                "DemoType": "Web",
+                "Badge": "New"
+              },
+              {
+                "Title": "Data Validation",
+                "Name": "DataValidation",
+                "DocUrl": "",
+                "Widget": "CardView",
+                "MvcDescription": "",
+                "NetCoreDescription": "",
+                "MvcAdditionalFiles": [],
+                "DemoType": "Web",
+                "Badge": "New"
+              }
+            ]
+          },
+          {
+            "Name": "Selection",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Selection",
+                "Name": "Selection",
+                "Widget": "CardView",
+                "DemoType": "Web",
+                "Badge": "New"
+              }
+            ]
+          },
+          {
+            "Name": "Columns",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Columns Reordering",
+                "Name": "ColumnsReordering",
+                "DocUrl": "",
+                "Widget": "CardView",
+                "MvcDescription": "",
+                "NetCoreDescription": "",
+                "MvcAdditionalFiles": [],
+                "DemoType": "Web",
+                "Badge": "New"
+              },
+              {
+                "Title": "Column Chooser",
+                "Name": "ColumnChooser",
+                "DocUrl": "",
+                "Widget": "CardView",
+                "MvcDescription": "",
+                "NetCoreDescription": "",
+                "MvcAdditionalFiles": [],
+                "DemoType": "Web",
+                "Badge": "New"
+              }
+            ]
+          },
+          {
+            "Name": "Customization",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Card Template",
+                "Name": "CardTemplate",
+                "DocUrl": "",
+                "Widget": "CardView",
+                "MvcDescription": "",
+                "NetCoreDescription": "",
+                "MvcAdditionalFiles": [],
+                "DemoType": "Web",
+                "Badge": "New"
+              },
+              {
+                "Title": "Field Template",
+                "Name": "FieldTemplate",
+                "DocUrl": "",
+                "Widget": "CardView",
+                "MvcDescription": "",
+                "NetCoreDescription": "",
+                "MvcAdditionalFiles": [],
+                "DemoType": "Web",
+                "Badge": "New"
+              },
+              {
+                "Title": "Toolbar Customization",
+                "Name": "ToolbarCustomization",
+                "DocUrl": "",
+                "Widget": "CardView",
+                "MvcDescription": "",
+                "NetCoreDescription": "",
+                "MvcAdditionalFiles": [],
+                "DemoType": "Web",
+                "Badge": "New"
+              }
+            ]
+          }
+        ]
+      },
+      {
         "Name": "Pivot Grid",
         "Equivalents": "dxPivotGrid, dx-pivot-grid",
         "Groups": [
@@ -5273,6 +5480,50 @@
         ]
       },
       {
+        "Name": "Stepper",
+        "Breadcrumb": true,
+        "Badge": "New",
+        "Equivalents": "dxStepper, dx-stepper, stepper",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Equivalents": "stepper configuration, step settings, step options",
+            "Widget": "Stepper",
+            "DocUrl": "",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Form Integration",
+            "Name": "FormIntegration",
+            "Equivalents": "multi-page form, wizard, multi-steps form, step validation",
+            "DocUrl": "",
+            "Widget": "Stepper",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/StepperData.cs",
+              "/ViewModels/StepperViewModel.cs"
+            ],
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Step Template",
+            "Name": "StepTemplate",
+            "Equivalents": "step customization, templates, custom steps",
+            "DocUrl": "Guide/UI_Components/Stepper/Customization/",
+            "Widget": "Stepper",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
         "Name": "Pagination",
         "Equivalents": "",
         "Demos": [
@@ -5385,50 +5636,6 @@
             "BackendFiles": [
               "ListDataController.cs"
             ],
-            "DemoType": "Web"
-          }
-        ]
-      },
-      {
-        "Name": "Stepper",
-        "Breadcrumb": true,
-        "Badge": "New",
-        "Equivalents": "dxStepper, dx-stepper, stepper",
-        "Demos": [
-          {
-            "Title": "Overview",
-            "Name": "Overview",
-            "Equivalents": "stepper configuration, step settings, step options",
-            "Widget": "Stepper",
-            "DocUrl": "",
-            "MvcDescription": "",
-            "NetCoreDescription": "",
-            "MvcAdditionalFiles": [],
-            "DemoType": "Web"
-          },
-          {
-            "Title": "Form Integration",
-            "Name": "FormIntegration",
-            "Equivalents": "multi-page form, wizard, multi-steps form, step validation",
-            "DocUrl": "",
-            "Widget": "Stepper",
-            "MvcDescription": "",
-            "NetCoreDescription": "",
-            "MvcAdditionalFiles": [
-              "/Models/SampleData/StepperData.cs",
-              "/ViewModels/StepperViewModel.cs"
-            ],
-            "DemoType": "Web"
-          },
-          {
-            "Title": "Step Template",
-            "Name": "StepTemplate",
-            "Equivalents": "step customization, templates, custom steps",
-            "DocUrl": "Guide/UI_Components/Stepper/Customization/",
-            "Widget": "Stepper",
-            "MvcDescription": "",
-            "NetCoreDescription": "",
-            "MvcAdditionalFiles": [],
             "DemoType": "Web"
           }
         ]
@@ -5554,213 +5761,6 @@
     "Name": "Layout",
     "Equivalents": "",
     "Groups": [
-      {
-        "Name": "Card View",
-        "Equivalents": "dxCardView, dx-cardview, cardview",
-        "Groups": [
-          {
-            "Name": "Overview",
-            "Equivalents": "",
-            "Demos": [
-              {
-                "Title": "Overview",
-                "Name": "Overview",
-                "Widget": "CardView",
-                "DemoType": "Web",
-                "Badge": "New"
-              }
-            ]
-          },
-          {
-            "Name": "Data Binding",
-            "Equivalents": "",
-            "Demos": [
-              {
-                "Title": "Simple Array",
-                "Name": "SimpleArray",
-                "DocUrl": "",
-                "Widget": "CardView",
-                "MvcDescription": "",
-                "NetCoreDescription": "",
-                "MvcAdditionalFiles": [],
-                "DemoType": "Web",
-                "Badge": "New"
-              },
-              {
-                "Title": "Web API Service",
-                "Name": "WebAPIService",
-                "DocUrl": "",
-                "Widget": "CardView",
-                "MvcDescription": "",
-                "NetCoreDescription": "",
-                "MvcAdditionalFiles": [],
-                "DemoType": "Web",
-                "Badge": "New"
-              }
-            ]
-          },
-          {
-            "Name": "Filtering",
-            "Equivalents": "",
-            "Demos": [
-              {
-                "Title": "Column Header Filter",
-                "Name": "ColumnHeaderFilter",
-                "DocUrl": "",
-                "Widget": "CardView",
-                "MvcDescription": "",
-                "NetCoreDescription": "",
-                "MvcAdditionalFiles": [],
-                "DemoType": "Web",
-                "Badge": "New"
-              },
-              {
-                "Title": "Filter Panel",
-                "Name": "FilterPanel",
-                "DocUrl": "",
-                "Widget": "CardView",
-                "MvcDescription": "",
-                "NetCoreDescription": "",
-                "MvcAdditionalFiles": [],
-                "DemoType": "Web",
-                "Badge": "New"
-              },
-              {
-                "Title": "Search Panel",
-                "Name": "SearchPanel",
-                "DocUrl": "",
-                "Widget": "CardView",
-                "MvcDescription": "",
-                "NetCoreDescription": "",
-                "MvcAdditionalFiles": [],
-                "DemoType": "Web",
-                "Badge": "New"
-              }
-            ]
-          },
-          {
-            "Name": "Sorting",
-            "Equivalents": "",
-            "Demos": [
-              {
-                "Title": "Sorting",
-                "Name": "Sorting",
-                "Widget": "CardView",
-                "DemoType": "Web",
-                "Badge": "New"
-              }
-            ]
-          },
-          {
-            "Name": "Editing",
-            "Equivalents": "",
-            "Demos": [
-              {
-                "Title": "Popup Editing",
-                "Name": "PopupEditing",
-                "DocUrl": "",
-                "Widget": "CardView",
-                "MvcDescription": "",
-                "NetCoreDescription": "",
-                "MvcAdditionalFiles": [],
-                "DemoType": "Web",
-                "Badge": "New"
-              },
-              {
-                "Title": "Data Validation",
-                "Name": "DataValidation",
-                "DocUrl": "",
-                "Widget": "CardView",
-                "MvcDescription": "",
-                "NetCoreDescription": "",
-                "MvcAdditionalFiles": [],
-                "DemoType": "Web",
-                "Badge": "New"
-              }
-            ]
-          },
-          {
-            "Name": "Selection",
-            "Equivalents": "",
-            "Demos": [
-              {
-                "Title": "Selection",
-                "Name": "Selection",
-                "Widget": "CardView",
-                "DemoType": "Web",
-                "Badge": "New"
-              }
-            ]
-          },
-          {
-            "Name": "Columns",
-            "Equivalents": "",
-            "Demos": [
-              {
-                "Title": "Columns Reordering",
-                "Name": "ColumnsReordering",
-                "DocUrl": "",
-                "Widget": "CardView",
-                "MvcDescription": "",
-                "NetCoreDescription": "",
-                "MvcAdditionalFiles": [],
-                "DemoType": "Web",
-                "Badge": "New"
-              },
-              {
-                "Title": "Column Chooser",
-                "Name": "ColumnChooser",
-                "DocUrl": "",
-                "Widget": "CardView",
-                "MvcDescription": "",
-                "NetCoreDescription": "",
-                "MvcAdditionalFiles": [],
-                "DemoType": "Web",
-                "Badge": "New"
-              }
-            ]
-          },
-          {
-            "Name": "Customization",
-            "Equivalents": "",
-            "Demos": [
-              {
-                "Title": "Card Template",
-                "Name": "CardTemplate",
-                "DocUrl": "",
-                "Widget": "CardView",
-                "MvcDescription": "",
-                "NetCoreDescription": "",
-                "MvcAdditionalFiles": [],
-                "DemoType": "Web",
-                "Badge": "New"
-              },
-              {
-                "Title": "Field Template",
-                "Name": "FieldTemplate",
-                "DocUrl": "",
-                "Widget": "CardView",
-                "MvcDescription": "",
-                "NetCoreDescription": "",
-                "MvcAdditionalFiles": [],
-                "DemoType": "Web",
-                "Badge": "New"
-              },
-              {
-                "Title": "Toolbar Customization",
-                "Name": "ToolbarCustomization",
-                "DocUrl": "",
-                "Widget": "CardView",
-                "MvcDescription": "",
-                "NetCoreDescription": "",
-                "MvcAdditionalFiles": [],
-                "DemoType": "Web",
-                "Badge": "New"
-              }
-            ]
-          }
-        ]
-      },
       {
         "Name": "Tile View",
         "Breadcrumb": true,
