@@ -232,8 +232,15 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
   }
 
-  protected focusOutHandler(): void {
+  protected focusOutHandler(e): void {
+    const { relatedTarget } = e;
+
     this._toggleInertAttr(false);
+
+    if (relatedTarget && !this.isInsideFocusedView($(relatedTarget))) {
+      this._isNeedFocus = false;
+      this._isNeedScroll = false;
+    }
   }
 
   protected subscribeToRowsViewFocusEvent(): void {
@@ -1459,10 +1466,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
   }
 
-  private _getFocusedViewByElement($element) {
-    const $view = $(this._focusedView?.element());
-
-    return $element?.closest($view).length !== 0;
+  private isInsideFocusedView($element: dxElementWrapper): boolean {
+    return $element.closest(this._focusedView?.element()).length !== 0;
   }
 
   private _focusView() {
