@@ -1089,17 +1089,17 @@ export interface FilterPanelCustomizeTextArg<TComponent> {
  */
 export type FilterPanelTexts = {
   /**
-   * @docid GridBaseOptions.filterPanel.texts.clearFilter
+   * @docid
    * @default "Clear"
    */
   clearFilter?: string;
   /**
-   * @docid GridBaseOptions.filterPanel.texts.createFilter
+   * @docid
    * @default "Create Filter"
    */
   createFilter?: string;
   /**
-   * @docid GridBaseOptions.filterPanel.texts.filterEnabledHint
+   * @docid
    * @default "Enable the filter"
    */
   filterEnabledHint?: string;
@@ -1112,26 +1112,25 @@ export type FilterPanelTexts = {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface FilterPanel<TComponent, TRowData = any, TKey = any> {
   /**
-   * @docid GridBaseOptions.filterPanel.customizeText
+   * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field filterValue:object
    */
   customizeText?: ((e: FilterPanelCustomizeTextArg<TComponent>) => string);
   /**
-   * @docid GridBaseOptions.filterPanel.filterEnabled
+   * @docid
    * @default true
    * @fires GridBaseOptions.onOptionChanged
    */
   filterEnabled?: boolean;
   /**
-   * @docid GridBaseOptions.filterPanel.texts
-   * @type object
+   * @docid
    * @default {}
    */
   texts?: FilterPanelTexts;
   /**
-   * @docid GridBaseOptions.filterPanel.visible
+   * @docid
    * @default false
    */
   visible?: boolean;
@@ -1929,7 +1928,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   filterBuilderPopup?: PopupProperties;
   /**
    * @docid
-   * @type object
    * @default {}
    * @public
    */

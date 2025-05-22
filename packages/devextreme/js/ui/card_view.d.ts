@@ -1469,7 +1469,6 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     filterBuilder?: dxFilterBuilderOptions;
     /**
      * @docid
-     * @type object
      * @public
      */
     filterPanel?: FilterPanel<dxCardView>;
