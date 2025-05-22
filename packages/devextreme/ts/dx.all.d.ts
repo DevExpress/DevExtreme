@@ -10821,7 +10821,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCardViewOptions.filterPanel]
      */
-    filterPanel?: DevExpress.common.grids.FilterPanel<dxCardView>;
+    filterPanel?: DevExpress.common.grids.FilterPanel<
+      dxCardView,
+      TCardData,
+      TKey
+    >;
     /**
      * [descr:dxCardViewOptions.columnChooser]
      */
