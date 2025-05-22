@@ -3276,3 +3276,88 @@ QUnit.module('positioning', {
         });
     });
 });
+
+QUnit.module('animation', {
+    beforeEach: function() {
+        this.animateStub = sinon.stub(fx, 'animate');
+        this.positionOf = 'container';
+        this.popup = $('#popup').dxPopup({
+            animation: {
+                show: {
+                    type: 'slide',
+                    duration: 0,
+                    from: {
+                        position: {
+                            my: 'top',
+                            at: 'bottom',
+                        },
+                    },
+                    to: {
+                        position: {
+                            my: 'center',
+                            at: 'center',
+                        },
+                    },
+                },
+                hide: {
+                    type: 'slide',
+                    duration: 0,
+                    from: {
+                        opacity: 1,
+                        position: {
+                            my: 'center',
+                            at: 'center',
+                        },
+                    },
+                    to: {
+                        opacity: 1,
+                        position: {
+                            my: 'top',
+                            at: 'bottom',
+                        },
+                    },
+                }
+            },
+            position: {
+                of: this.positionOf
+            },
+            fullScreen: true,
+        }).dxPopup('instance');
+    },
+    afterEach: function() {
+        this.animateStub.restore();
+    }
+}, () => {
+    QUnit.test('animation.show.to should have position.of=window if fullScreen=true even if popup position.of is set', function(assert) {
+        this.popup.show();
+
+        const showAnimationConfig = this.animateStub.getCall(0).args[1];
+        assert.strictEqual(showAnimationConfig.to.position.of, 'window', 'animation is relative to window');
+    });
+
+    QUnit.test('animation.show.to should have position.of equal to popup position.of after fullScreen runtime disable', function(assert) {
+        this.popup.option('fullScreen', false);
+        this.popup.show();
+
+        const showAnimationConfig = this.animateStub.getCall(0).args[1];
+        assert.strictEqual(showAnimationConfig.to.position.of, this.positionOf, 'animation is relative to position.of');
+    });
+
+    QUnit.test('animation.hide.from should have position.of=window if fullScreen=true even if popup position.of is set', function(assert) {
+        this.popup.show();
+        this.popup.hide();
+
+        const hideAnimationConfig = this.animateStub.getCall(1).args[1];
+        assert.strictEqual(hideAnimationConfig.from.position.of, 'window', 'animation is relative to window');
+    });
+
+    QUnit.test('animation.hide.from should have position.of equal to popup position.of after fullScreen runtime disable', function(assert) {
+        this.popup.option('fullScreen', false);
+
+        this.popup.show();
+        this.popup.hide();
+
+        const hideAnimationConfig = this.animateStub.getCall(1).args[1];
+        assert.strictEqual(hideAnimationConfig.from.position.of, this.positionOf, 'animation is relative to position.of');
+    });
+});
