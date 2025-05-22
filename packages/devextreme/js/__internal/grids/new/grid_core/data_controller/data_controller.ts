@@ -270,12 +270,12 @@ export class DataController {
         );
         if (filterChanged) {
           this.previousDisplayFilter = displayFilter;
+          this.dataSource.peek().pageIndex(0);
           someParamChanged ||= true;
         }
 
         if (!equalByValue(dataSource.paginate(), pagingEnabled)) {
           dataSource.paginate(pagingEnabled);
-          this.dataSource.peek().pageIndex(0);
           someParamChanged ||= true;
         }
 
