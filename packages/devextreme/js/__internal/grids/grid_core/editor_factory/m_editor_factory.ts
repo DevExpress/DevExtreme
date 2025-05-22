@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
-import positionUtils from '@js/common/core/animation/position';
-import { name as clickEventName } from '@js/common/core/events/click';
-import eventsEngine from '@js/common/core/events/core/events_engine';
-import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
+import positionUtils from '@js/animation/position';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
@@ -14,7 +11,6 @@ import {
 } from '@js/core/utils/size';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
-import pointerEvents from '@js/events/pointer';
 import { addNamespace, normalizeKeyName } from '@js/events/utils/index';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
