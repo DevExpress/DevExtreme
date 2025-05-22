@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 
 import { SearchMode } from 'devextreme/common';
-import { ColumnHeaderFilterSearchConfig, HeaderFilterGroupInterval, HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import { ColumnHeaderFilterSearchConfig, HeaderFilterGroupInterval, HeaderFilterSearchConfig, HeaderFilterTexts } from 'devextreme/common/grids';
 import { Store } from 'devextreme/data';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
@@ -14,7 +14,7 @@ import { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
 @Component({
     template: ''
 })
-export abstract class DxoGanttHeaderFilter extends NestedOption {
+export abstract class DxoHeaderFilter extends NestedOption {
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
     }
@@ -78,10 +78,10 @@ export abstract class DxoGanttHeaderFilter extends NestedOption {
         this._setOption('searchTimeout', value);
     }
 
-    get texts(): { cancel?: string, emptyValue?: string, ok?: string } | dxGanttHeaderFilterTexts {
+    get texts(): HeaderFilterTexts | dxGanttHeaderFilterTexts | { cancel?: string, emptyValue?: string, ok?: string } {
         return this._getOption('texts');
     }
-    set texts(value: { cancel?: string, emptyValue?: string, ok?: string } | dxGanttHeaderFilterTexts) {
+    set texts(value: HeaderFilterTexts | dxGanttHeaderFilterTexts | { cancel?: string, emptyValue?: string, ok?: string }) {
         this._setOption('texts', value);
     }
 

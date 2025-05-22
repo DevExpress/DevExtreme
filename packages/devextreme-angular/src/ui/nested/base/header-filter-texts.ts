@@ -9,7 +9,7 @@ import {
 @Component({
     template: ''
 })
-export abstract class DxoGanttHeaderFilterTexts extends NestedOption {
+export abstract class DxoHeaderFilterTexts extends NestedOption {
     get fix(): string {
         return this._getOption('fix');
     }

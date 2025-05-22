@@ -14,10 +14,7 @@ import {
 
 
 
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig, HeaderFilterTexts } from 'devextreme/common/grids';
-import { SearchMode } from 'devextreme/common';
+import { HeaderFilterSearchConfig, HeaderFilterTexts } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,
@@ -27,14 +24,14 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tree-list-header-filter',
+    selector: 'dxo-card-view-header-filter',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoTreeListHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
@@ -52,51 +49,19 @@ export class DxoTreeListHeaderFilterComponent extends NestedOption implements On
     }
 
     @Input()
-    get dataSource(): Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined {
-        return this._getOption('dataSource');
-    }
-    set dataSource(value: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined) {
-        this._setOption('dataSource', value);
-    }
-
-    @Input()
-    get groupInterval(): HeaderFilterGroupInterval | number | undefined {
-        return this._getOption('groupInterval');
-    }
-    set groupInterval(value: HeaderFilterGroupInterval | number | undefined) {
-        this._setOption('groupInterval', value);
-    }
-
-    @Input()
-    get height(): number | string | undefined {
+    get height(): number | string {
         return this._getOption('height');
     }
-    set height(value: number | string | undefined) {
+    set height(value: number | string) {
         this._setOption('height', value);
     }
 
     @Input()
-    get search(): ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig {
+    get search(): HeaderFilterSearchConfig {
         return this._getOption('search');
     }
-    set search(value: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig) {
+    set search(value: HeaderFilterSearchConfig) {
         this._setOption('search', value);
-    }
-
-    @Input()
-    get searchMode(): SearchMode {
-        return this._getOption('searchMode');
-    }
-    set searchMode(value: SearchMode) {
-        this._setOption('searchMode', value);
-    }
-
-    @Input()
-    get width(): number | string | undefined {
-        return this._getOption('width');
-    }
-    set width(value: number | string | undefined) {
-        this._setOption('width', value);
     }
 
     @Input()
@@ -121,6 +86,14 @@ export class DxoTreeListHeaderFilterComponent extends NestedOption implements On
     }
     set visible(value: boolean) {
         this._setOption('visible', value);
+    }
+
+    @Input()
+    get width(): number | string {
+        return this._getOption('width');
+    }
+    set width(value: number | string) {
+        this._setOption('width', value);
     }
 
 
@@ -150,10 +123,10 @@ export class DxoTreeListHeaderFilterComponent extends NestedOption implements On
 
 @NgModule({
   imports: [
-    DxoTreeListHeaderFilterComponent
+    DxoCardViewHeaderFilterComponent
   ],
   exports: [
-    DxoTreeListHeaderFilterComponent
+    DxoCardViewHeaderFilterComponent
   ],
 })
-export class DxoTreeListHeaderFilterModule { }
+export class DxoCardViewHeaderFilterModule { }

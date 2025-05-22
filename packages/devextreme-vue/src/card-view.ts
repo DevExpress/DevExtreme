@@ -60,6 +60,7 @@ import {
  Direction,
  PositionAlignment,
  DisplayMode,
+ SearchMode,
  SingleMultipleOrNone,
  SelectAllMode,
 } from "devextreme/common";
@@ -85,6 +86,18 @@ import {
  ValueChangedEvent,
 } from "devextreme/ui/filter_builder";
 import {
+ HeaderFilter,
+ Pager,
+ SearchPanel,
+ DataChangeType,
+ FilterType,
+ DataChange,
+ HeaderFilterSearchConfig,
+ HeaderFilterTexts,
+ PagerPageSize,
+ SelectionColumnDisplayMode,
+} from "devextreme/common/grids";
+import {
  dxLoadPanelOptions,
  ContentReadyEvent as LoadPanelContentReadyEvent,
  DisposingEvent as LoadPanelDisposingEvent,
@@ -101,15 +114,6 @@ import {
 import {
  Component,
 } from "devextreme/core/component";
-import {
- Pager,
- SearchPanel,
- DataChangeType,
- FilterType,
- DataChange,
- PagerPageSize,
- SelectionColumnDisplayMode,
-} from "devextreme/common/grids";
 import {
  PagerBase,
 } from "devextreme/ui/pagination";
@@ -250,7 +254,7 @@ const componentConfig = {
     filterPanel: Object as PropType<Record<string, any>>,
     filterValue: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
     focusStateEnabled: Boolean,
-    headerFilter: Object as PropType<Record<string, any>>,
+    headerFilter: Object as PropType<HeaderFilter | Record<string, any>>,
     headerPanel: Object as PropType<HeaderPanel | Record<string, any>>,
     height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
@@ -399,6 +403,7 @@ const componentConfig = {
       column: { isCollectionItem: true, optionName: "columns" },
       editing: { isCollectionItem: false, optionName: "editing" },
       filterBuilder: { isCollectionItem: false, optionName: "filterBuilder" },
+      headerFilter: { isCollectionItem: false, optionName: "headerFilter" },
       headerPanel: { isCollectionItem: false, optionName: "headerPanel" },
       loadPanel: { isCollectionItem: false, optionName: "loadPanel" },
       pager: { isCollectionItem: false, optionName: "pager" },
@@ -1196,6 +1201,41 @@ const DxGroupOperationDescriptions = defineComponent(DxGroupOperationDescription
 
 (DxGroupOperationDescriptions as any).$_optionName = "groupOperationDescriptions";
 
+const DxHeaderFilterConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allowSearch": null,
+    "update:allowSelectAll": null,
+    "update:height": null,
+    "update:search": null,
+    "update:searchTimeout": null,
+    "update:texts": null,
+    "update:visible": null,
+    "update:width": null,
+  },
+  props: {
+    allowSearch: Boolean,
+    allowSelectAll: Boolean,
+    height: [Number, String],
+    search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,
+    searchTimeout: Number,
+    texts: Object as PropType<HeaderFilterTexts | Record<string, any>>,
+    visible: Boolean,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxHeaderFilterConfig);
+
+const DxHeaderFilter = defineComponent(DxHeaderFilterConfig);
+
+(DxHeaderFilter as any).$_optionName = "headerFilter";
+(DxHeaderFilter as any).$_expectedChildren = {
+  search: { isCollectionItem: false, optionName: "search" },
+  texts: { isCollectionItem: false, optionName: "texts" }
+};
+
 const DxHeaderPanelConfig = {
   emits: {
     "update:isActive": null,
@@ -1696,6 +1736,29 @@ const DxRequiredRule = defineComponent(DxRequiredRuleConfig);
   type: "required"
 };
 
+const DxSearchConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:editorOptions": null,
+    "update:enabled": null,
+    "update:mode": null,
+    "update:timeout": null,
+  },
+  props: {
+    editorOptions: {},
+    enabled: Boolean,
+    mode: String as PropType<SearchMode>,
+    timeout: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxSearchConfig);
+
+const DxSearch = defineComponent(DxSearchConfig);
+
+(DxSearch as any).$_optionName = "search";
+
 const DxSearchPanelConfig = {
   emits: {
     "update:isActive": null,
@@ -1817,6 +1880,27 @@ const DxStringLengthRule = defineComponent(DxStringLengthRuleConfig);
 (DxStringLengthRule as any).$_predefinedProps = {
   type: "stringLength"
 };
+
+const DxTextsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:cancel": null,
+    "update:emptyValue": null,
+    "update:ok": null,
+  },
+  props: {
+    cancel: String,
+    emptyValue: String,
+    ok: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxTextsConfig);
+
+const DxTexts = defineComponent(DxTextsConfig);
+
+(DxTexts as any).$_optionName = "texts";
 
 const DxToConfig = {
   emits: {
@@ -1981,6 +2065,7 @@ export {
   DxFormItem,
   DxFrom,
   DxGroupOperationDescriptions,
+  DxHeaderFilter,
   DxHeaderPanel,
   DxHide,
   DxItem,
@@ -1997,10 +2082,12 @@ export {
   DxRangeRule,
   DxRemoteOperations,
   DxRequiredRule,
+  DxSearch,
   DxSearchPanel,
   DxSelection,
   DxShow,
   DxStringLengthRule,
+  DxTexts,
   DxTo,
   DxToolbar,
   DxToolbarItem,

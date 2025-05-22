@@ -12,6 +12,7 @@ import  dxSortable from "devextreme/ui/sortable";
 import  dxDraggable from "devextreme/ui/draggable";
 import {
  ColumnResizeMode,
+ HeaderFilter,
  Pager,
  SearchPanel,
  DataChangeType,
@@ -25,6 +26,7 @@ import {
  HeaderFilterGroupInterval,
  ColumnHeaderFilterSearchConfig,
  HeaderFilterSearchConfig,
+ HeaderFilterTexts,
  SelectionColumnDisplayMode,
  DataChange,
  GridsEditMode,
@@ -352,7 +354,7 @@ const componentConfig = {
     focusedRowKey: {},
     grouping: Object as PropType<Record<string, any>>,
     groupPanel: Object as PropType<Record<string, any>>,
-    headerFilter: Object as PropType<Record<string, any>>,
+    headerFilter: Object as PropType<HeaderFilter | Record<string, any>>,
     height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     highlightChanges: Boolean,
     hint: String,
@@ -1305,7 +1307,7 @@ const DxDataGridHeaderFilterConfig = {
     height: [Number, String],
     search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,
     searchTimeout: Number,
-    texts: Object as PropType<Record<string, any>>,
+    texts: Object as PropType<HeaderFilterTexts | Record<string, any>>,
     visible: Boolean,
     width: [Number, String]
   }
@@ -2323,7 +2325,7 @@ const DxHeaderFilterConfig = {
     search: Object as PropType<ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig | Record<string, any>>,
     searchMode: String as PropType<SearchMode>,
     searchTimeout: Number,
-    texts: Object as PropType<Record<string, any>>,
+    texts: Object as PropType<HeaderFilterTexts | Record<string, any>>,
     visible: Boolean,
     width: [Number, String]
   }

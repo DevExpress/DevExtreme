@@ -29,9 +29,9 @@ import { Mode } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
+import { HeaderFilter, Pager, SearchPanel } from 'devextreme/common/grids';
 import { dxLoadPanelOptions } from 'devextreme/ui/load_panel';
 import { EventInfo } from 'devextreme/common/core/events';
-import { Pager, SearchPanel } from 'devextreme/common/grids';
 
 import DxCardView from 'devextreme/ui/card_view';
 
@@ -69,6 +69,7 @@ import { DxoCardViewFormatModule } from 'devextreme-angular/ui/card-view/nested'
 import { DxoCardViewFormItemModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewFromModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewGroupOperationDescriptionsModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewHeaderFilterModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewHeaderPanelModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewHideModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewItemModule } from 'devextreme-angular/ui/card-view/nested';
@@ -85,10 +86,12 @@ import { DxoCardViewPositionModule } from 'devextreme-angular/ui/card-view/neste
 import { DxiCardViewRangeRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewRemoteOperationsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewRequiredRuleModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewSearchModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewSearchPanelModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewSelectionModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewShowModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewStringLengthRuleModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewTextsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewToModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewToolbarModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewToolbarItemModule } from 'devextreme-angular/ui/card-view/nested';
@@ -357,10 +360,10 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     
     @Input()
-    get headerFilter(): Record<string, any> {
+    get headerFilter(): HeaderFilter {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: Record<string, any>) {
+    set headerFilter(value: HeaderFilter) {
         this._setOption('headerFilter', value);
     }
 
@@ -995,7 +998,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() headerFilterChange: EventEmitter<Record<string, any>>;
+    @Output() headerFilterChange: EventEmitter<HeaderFilter>;
 
     /**
     
@@ -1323,6 +1326,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewFormItemModule,
     DxoCardViewFromModule,
     DxoCardViewGroupOperationDescriptionsModule,
+    DxoCardViewHeaderFilterModule,
     DxoCardViewHeaderPanelModule,
     DxoCardViewHideModule,
     DxiCardViewItemModule,
@@ -1339,10 +1343,12 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxiCardViewRangeRuleModule,
     DxoCardViewRemoteOperationsModule,
     DxiCardViewRequiredRuleModule,
+    DxoCardViewSearchModule,
     DxoCardViewSearchPanelModule,
     DxoCardViewSelectionModule,
     DxoCardViewShowModule,
     DxiCardViewStringLengthRuleModule,
+    DxoCardViewTextsModule,
     DxoCardViewToModule,
     DxoCardViewToolbarModule,
     DxiCardViewToolbarItemModule,
@@ -1374,6 +1380,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewFormItemModule,
     DxoCardViewFromModule,
     DxoCardViewGroupOperationDescriptionsModule,
+    DxoCardViewHeaderFilterModule,
     DxoCardViewHeaderPanelModule,
     DxoCardViewHideModule,
     DxiCardViewItemModule,
@@ -1390,10 +1397,12 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxiCardViewRangeRuleModule,
     DxoCardViewRemoteOperationsModule,
     DxiCardViewRequiredRuleModule,
+    DxoCardViewSearchModule,
     DxoCardViewSearchPanelModule,
     DxoCardViewSelectionModule,
     DxoCardViewShowModule,
     DxiCardViewStringLengthRuleModule,
+    DxoCardViewTextsModule,
     DxoCardViewToModule,
     DxoCardViewToolbarModule,
     DxiCardViewToolbarItemModule,

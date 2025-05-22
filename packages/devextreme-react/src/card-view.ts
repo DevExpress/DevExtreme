@@ -11,10 +11,10 @@ import NestedOption from "./core/nested-option";
 
 import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, SelectionChangingEvent, CardTemplateData, CardHeaderItem as CardViewCardHeaderItem, CardHeaderPredefinedItem, FieldTemplateData, ColumnTemplateData, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
-import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, ToolbarItemLocation, ToolbarItemComponent, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, Direction, PositionAlignment, Mode, DisplayMode, SingleMultipleOrNone, SelectAllMode } from "devextreme/common";
+import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, ToolbarItemLocation, ToolbarItemComponent, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, Direction, PositionAlignment, Mode, DisplayMode, SearchMode, SingleMultipleOrNone, SelectAllMode } from "devextreme/common";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { DataChangeType, FilterType, DataChange, PagerPageSize, SelectionColumnDisplayMode } from "devextreme/common/grids";
+import type { DataChangeType, FilterType, DataChange, HeaderFilterSearchConfig, HeaderFilterTexts, PagerPageSize, SelectionColumnDisplayMode } from "devextreme/common/grids";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { dxFormSimpleItem, FormItemComponent, FormItemType, LabelLocation } from "devextreme/ui/form";
 import type { dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
@@ -104,6 +104,7 @@ const CardView = memo(
         column: { optionName: "columns", isCollectionItem: true },
         editing: { optionName: "editing", isCollectionItem: false },
         filterBuilder: { optionName: "filterBuilder", isCollectionItem: false },
+        headerFilter: { optionName: "headerFilter", isCollectionItem: false },
         headerPanel: { optionName: "headerPanel", isCollectionItem: false },
         loadPanel: { optionName: "loadPanel", isCollectionItem: false },
         pager: { optionName: "pager", isCollectionItem: false },
@@ -927,6 +928,35 @@ const GroupOperationDescriptions = Object.assign<typeof _componentGroupOperation
 
 // owners:
 // CardView
+type IHeaderFilterProps = React.PropsWithChildren<{
+  allowSearch?: boolean;
+  allowSelectAll?: boolean;
+  height?: number | string;
+  search?: HeaderFilterSearchConfig;
+  searchTimeout?: number;
+  texts?: HeaderFilterTexts;
+  visible?: boolean;
+  width?: number | string;
+}>
+const _componentHeaderFilter = (props: IHeaderFilterProps) => {
+  return React.createElement(NestedOption<IHeaderFilterProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "headerFilter",
+      ExpectedChildren: {
+        search: { optionName: "search", isCollectionItem: false },
+        texts: { optionName: "texts", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const HeaderFilter = Object.assign<typeof _componentHeaderFilter, NestedComponentMeta>(_componentHeaderFilter, {
+  componentType: "option",
+});
+
+// owners:
+// CardView
 type IHeaderPanelProps = React.PropsWithChildren<{
   dragging?: Record<string, any>;
   itemCssClass?: string;
@@ -1412,6 +1442,27 @@ const RequiredRule = Object.assign<typeof _componentRequiredRule, NestedComponen
 });
 
 // owners:
+// HeaderFilter
+type ISearchProps = React.PropsWithChildren<{
+  editorOptions?: any;
+  enabled?: boolean;
+  mode?: SearchMode;
+  timeout?: number;
+}>
+const _componentSearch = (props: ISearchProps) => {
+  return React.createElement(NestedOption<ISearchProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "search",
+    },
+  });
+};
+
+const Search = Object.assign<typeof _componentSearch, NestedComponentMeta>(_componentSearch, {
+  componentType: "option",
+});
+
+// owners:
 // CardView
 type ISearchPanelProps = React.PropsWithChildren<{
   highlightCaseSensitive?: boolean;
@@ -1517,6 +1568,26 @@ const _componentStringLengthRule = (props: IStringLengthRuleProps) => {
 };
 
 const StringLengthRule = Object.assign<typeof _componentStringLengthRule, NestedComponentMeta>(_componentStringLengthRule, {
+  componentType: "option",
+});
+
+// owners:
+// HeaderFilter
+type ITextsProps = React.PropsWithChildren<{
+  cancel?: string;
+  emptyValue?: string;
+  ok?: string;
+}>
+const _componentTexts = (props: ITextsProps) => {
+  return React.createElement(NestedOption<ITextsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "texts",
+    },
+  });
+};
+
+const Texts = Object.assign<typeof _componentTexts, NestedComponentMeta>(_componentTexts, {
   componentType: "option",
 });
 
@@ -1697,6 +1768,8 @@ export {
   IFromProps,
   GroupOperationDescriptions,
   IGroupOperationDescriptionsProps,
+  HeaderFilter,
+  IHeaderFilterProps,
   HeaderPanel,
   IHeaderPanelProps,
   Hide,
@@ -1729,6 +1802,8 @@ export {
   IRemoteOperationsProps,
   RequiredRule,
   IRequiredRuleProps,
+  Search,
+  ISearchProps,
   SearchPanel,
   ISearchPanelProps,
   Selection,
@@ -1737,6 +1812,8 @@ export {
   IShowProps,
   StringLengthRule,
   IStringLengthRuleProps,
+  Texts,
+  ITextsProps,
   To,
   IToProps,
   Toolbar,
