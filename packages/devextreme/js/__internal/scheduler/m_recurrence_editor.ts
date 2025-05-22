@@ -29,6 +29,8 @@ const INTERVAL_EDITOR = 'dx-recurrence-numberbox-interval';
 const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
 const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
 const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
+const REPEAT_UNTIL_ID = 'dx-repeat-until-input-container';
+const REPEAT_COUNT_ID = 'dx-repeat-count-input-container';
 
 const recurrentEditorNumberBoxWidth = 90;
 const repeatInputWidth = '100%';
@@ -191,6 +193,7 @@ class RecurrenceEditor extends Editor {
 
     this._prepareEditors();
     this._renderEditors(this._$container);
+    this._updateRepeatInputAriaLabel();
   }
 
   getEditorByField(fieldName) {
@@ -540,6 +543,7 @@ class RecurrenceEditor extends Editor {
     }
 
     this._changeEditorValue();
+    this._updateRepeatInputAriaLabel();
   }
 
   _changeRepeatEndInputsVisibility(value = this._recurrenceRule.getRepeatEndRule()) {
@@ -575,9 +579,22 @@ class RecurrenceEditor extends Editor {
         useLargeSpinButtons: false,
         value: count,
         onValueChanged: this._repeatCountValueChangeHandler.bind(this),
+        elementAttr: { id: REPEAT_COUNT_ID },
         inputAttr: { 'aria-label': messageLocalization.format('dxScheduler-recurrenceOccurrenceLabel') },
       },
     };
+  }
+
+  _updateRepeatInputAriaLabel(): void {
+    const radioButtons = this.getEditorByField('repeatEnd').itemElements();
+    const untilLabel = messageLocalization.format('dxScheduler-recurrenceOn');
+    const untilValue = (document.querySelector(`#${REPEAT_UNTIL_ID} input`) as HTMLInputElement)?.value;
+    const countLabel = messageLocalization.format('dxScheduler-recurrenceAfter');
+    const countPostfix = messageLocalization.format('dxScheduler-recurrenceRepeatCount');
+    const countValue = (document.querySelector(`#${REPEAT_COUNT_ID} input`) as HTMLInputElement)?.value;
+
+    radioButtons[1].setAttribute('aria-label', untilValue ? `${untilLabel} ${untilValue}` : untilLabel);
+    radioButtons[2].setAttribute('aria-label', countValue ? `${countLabel} ${countValue} ${countPostfix}` : countLabel);
   }
 
   _repeatCountValueChangeHandler(args) {
@@ -585,15 +602,8 @@ class RecurrenceEditor extends Editor {
       const { value } = args;
       this._recurrenceRule.makeRule('count', value);
       this._changeEditorValue();
+      this._updateRepeatInputAriaLabel();
     }
-  }
-
-  _formatUntilDate(date) {
-    if (this._recurrenceRule.getRules().until && dateUtils.sameDate(this._recurrenceRule.getRules().until, date)) {
-      return date;
-    }
-
-    return dateUtils.setToDayEnd(date);
   }
 
   _getRepeatUntilEditorOptions() {
@@ -615,9 +625,18 @@ class RecurrenceEditor extends Editor {
           firstDayOfWeek: this._getFirstDayOfWeek(),
         },
         useMaskBehavior: true,
+        elementAttr: { id: REPEAT_UNTIL_ID },
         inputAttr: { 'aria-label': messageLocalization.format('dxScheduler-recurrenceUntilDateLabel') },
       },
     };
+  }
+
+  _formatUntilDate(date) {
+    if (this._recurrenceRule.getRules().until && dateUtils.sameDate(this._recurrenceRule.getRules().until, date)) {
+      return date;
+    }
+
+    return dateUtils.setToDayEnd(date);
   }
 
   _repeatUntilValueChangeHandler(args) {
@@ -634,6 +653,7 @@ class RecurrenceEditor extends Editor {
 
       this._recurrenceRule.makeRule('until', dateInLocaleTimeZone);
       this._changeEditorValue();
+      this._updateRepeatInputAriaLabel();
     }
   }
 
