@@ -462,7 +462,6 @@ describe('Template Manager', () => {
     expect(callbackCalled).toBeTruthy();
   });
 
-
   it('replaces templates with matching keys, adds templates with new keys', () => {
     let createDXTemplates;
 
