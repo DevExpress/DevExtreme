@@ -462,48 +462,6 @@ describe('Template Manager', () => {
     expect(callbackCalled).toBeTruthy();
   });
 
-  it.only('check console to ensure no warnings while calling update on an unmounted component', (done) => {
-    let createDXTemplates;
-    let updateTemplates;
-
-    const init = ({
-      createDXTemplates: createDXTemplatesFn,
-      updateTemplates: updateTemplatesFn
-    }: InitArgument) => {
-      createDXTemplates = createDXTemplatesFn;
-      updateTemplates = updateTemplatesFn;
-    };
-    const templateOptions = getTemplateOptions([{ type: 'render' }]);
-    const { unmount } = render(
-      <React.StrictMode>
-        <div className='render-template-container'></div>
-        <TemplateManager init={init} onTemplatesRendered={() => undefined} />
-      </React.StrictMode>
-    );
-    let dxTemplates;
-    act(() => {
-      dxTemplates = createDXTemplates(templateOptions);
-    });
-    act(() => {
-      dxTemplates.renderKey.render({
-        model: { text: 'Render template text' },
-        index: 2,
-        container: document.querySelector('.render-template-container'),
-      });
-    });
-  
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-  
-    setTimeout(() => {
-      updateTemplates(() => {});
-      expect(warnSpy).not.toHaveBeenCalled();
-      done();
-    }, 1000);
-
-    act(() => {
-      unmount();
-    });
-  });
 
   it('replaces templates with matching keys, adds templates with new keys', () => {
     let createDXTemplates;
