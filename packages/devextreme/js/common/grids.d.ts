@@ -479,68 +479,68 @@ export interface ColumnButtonBase {
  */
 export type ColumnChooser = {
   /**
-   * @docid GridBaseOptions.columnChooser.allowSearch
+   * @docid
    * @default false
    * @deprecated
    */
   allowSearch?: boolean;
   /**
-     * @docid GridBaseOptions.columnChooser.container
+     * @docid
      * @default undefined
      * @public
      */
   container?: string | UserDefinedElement | undefined;
   /**
-   * @docid GridBaseOptions.columnChooser.emptyPanelText
+   * @docid
    * @default "Drag a column here to hide it"
    */
   emptyPanelText?: string;
   /**
-   * @docid GridBaseOptions.columnChooser.enabled
+   * @docid
    * @default false
    */
   enabled?: boolean;
   /**
-   * @docid GridBaseOptions.columnChooser.height
+   * @docid
    * @default 260
    */
   height?: number | string;
   /**
-   * @docid GridBaseOptions.columnChooser.mode
+   * @docid
    * @default "dragAndDrop"
    */
   mode?: ColumnChooserMode;
   /**
-   * @docid GridBaseOptions.columnChooser.position
+   * @docid
    * @default undefined
    */
   position?: PositionConfig | undefined;
   /**
-   * @docid GridBaseOptions.columnChooser.search
+   * @docid
    */
   search?: ColumnChooserSearchConfig;
   /**
-   * @docid GridBaseOptions.columnChooser.searchTimeout
+   * @docid
    * @default 500
    * @deprecated
    */
   searchTimeout?: number;
   /**
-   * @docid GridBaseOptions.columnChooser.selection
+   * @docid
    */
   selection?: ColumnChooserSelectionConfig;
   /**
-   * @docid GridBaseOptions.columnChooser.title
+   * @docid
    * @default "Column Chooser"
    */
   title?: string;
   /**
-   * @docid GridBaseOptions.columnChooser.width
+   * @docid
    * @default 250
    */
   width?: number | string;
   /**
-   * @docid GridBaseOptions.columnChooser.sortOrder
+   * @docid
    * @default undefined
    */
   sortOrder?: SortOrder | undefined;
@@ -553,8 +553,8 @@ export type ColumnChooser = {
 export type ColumnChooserMode = 'dragAndDrop' | 'select';
 
 /**
+ * @docid 
  * @public
- * @docid
  * @namespace DevExpress.common.grids
  */
 export type ColumnChooserSearchConfig = {
@@ -576,8 +576,8 @@ export type ColumnChooserSearchConfig = {
 };
 
 /**
- * @public
  * @docid
+ * @public
  * @namespace DevExpress.common.grids
  */
 export type ColumnChooserSelectionConfig = {
@@ -1845,7 +1845,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   columnAutoWidth?: boolean;
   /**
    * @docid
-   * @type object
    * @public
    * @inherits ColumnChooser
    */
