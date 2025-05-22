@@ -269,7 +269,7 @@ test('The cell focus should be correct after column reordering when previously t
     .pressKey('ctrl+left');
 
   await takeScreenshot(
-    'cell_focus_after_column_reordering_when_data_cell_was_focused',
+    'cell_focus_after_column_reordering_when_data_cell_was_focused.png',
     dataGrid.element,
   );
 
