@@ -765,6 +765,7 @@ testComponentDefaults(Informer,
         icon: '',
         showBackground: true,
         text: '',
+        type: 'error',
     }
 );
 

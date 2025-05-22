@@ -7,6 +7,8 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
 export const INFORMER_CLASS = 'dx-informer';
+const INFORMER_ERROR_CLASS = 'dx-informer-error';
+const INFORMER_INFO_CLASS = 'dx-informer-info';
 const INFORMER_ALIGNMENT_START_CLASS = 'dx-informer-alignment-start';
 const INFORMER_ALIGNMENT_CENTER_CLASS = 'dx-informer-alignment-center';
 const INFORMER_ALIGNMENT_END_CLASS = 'dx-informer-alignment-end';
@@ -19,6 +21,7 @@ export interface Properties extends WidgetOptions<Informer> {
   icon?: string;
   showBackground?: boolean;
   text?: string;
+  type?: 'error' | 'info';
 }
 
 class Informer extends Widget<Properties> {
@@ -33,6 +36,7 @@ class Informer extends Widget<Properties> {
       icon: '',
       showBackground: true,
       text: '',
+      type: 'error',
     };
   }
 
@@ -42,6 +46,7 @@ class Informer extends Widget<Properties> {
     this.$element().addClass(INFORMER_CLASS);
     this.$element().toggleClass(INFORMER_BG_CLASS, showBackground);
     this._setAlignmentClass();
+    this._setTypeClass();
 
     super._initMarkup();
 
@@ -67,6 +72,23 @@ class Informer extends Widget<Properties> {
       case 'center':
       default:
         this.$element().addClass(INFORMER_ALIGNMENT_CENTER_CLASS);
+        break;
+    }
+  }
+
+  _setTypeClass(): void {
+    this.$element()
+      .removeClass(INFORMER_ERROR_CLASS)
+      .removeClass(INFORMER_INFO_CLASS);
+
+    const { type } = this.option();
+
+    switch (type) {
+      case 'error':
+        this.$element().addClass(INFORMER_ERROR_CLASS);
+        break;
+      case 'info':
+        this.$element().addClass(INFORMER_INFO_CLASS);
         break;
     }
   }
@@ -118,6 +140,9 @@ class Informer extends Widget<Properties> {
         break;
       case 'text':
         this._updateText();
+        break;
+      case 'type':
+        this._setTypeClass();
         break;
       default:
         super._optionChanged(args);
