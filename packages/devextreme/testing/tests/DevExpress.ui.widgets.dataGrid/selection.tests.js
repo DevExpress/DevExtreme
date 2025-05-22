@@ -4644,7 +4644,7 @@ QUnit.module('Deferred selection', {
         assert.deepEqual(this.option('selectionFilter'), []);
     });
 
-    QUnit.test('DataGrid - getSelectedRowKeys method returns incorrect keys if deferred selection is enabled (T1280037)', function(assert) {
+    QUnit.test('DataGrid - getSelectedRowKeys method returns incorrect keys if deferred selection.sensitivity is "variant" (T1280037)', function(assert) {
         this.setupDataGrid({
             dataSource: [
                 { ID: 'aaa', Name: 'Name a' },
