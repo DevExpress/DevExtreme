@@ -526,8 +526,8 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         return null;
     },
 
-    _isPointerOut: function(canvas) {
-        return !canvas && this._stuckSeries;
+    _isPointerOut: function(canvas, point) {
+        return !canvas && this._stuckSeries && point?.series !== this._stuckSeries;
     },
 
     _hideCrosshair: function() {
