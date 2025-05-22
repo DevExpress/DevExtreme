@@ -371,6 +371,7 @@ export type ColumnProperties<TCardData = unknown, TKey = unknown> = {
     format?: Format;
     /**
      * @docid
+     * @type object
      * @public
      */
     headerFilter?: ColumnHeaderFilter | undefined;
