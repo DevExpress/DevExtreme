@@ -43,18 +43,11 @@ export default {
       $element.addClass(rootElementClassName);
       this._$searchEditorElement = $('<div>').addClass(searchBoxClassName).prependTo($element);
       this._searchEditor = this._createComponent(this._$searchEditorElement, EditorClass, editorOptions);
-      const focusedElement = this.option('focusedElement');
-      const isSearchEditorFocused = !!focusedElement
-      && !!editorOptions
-      && focusedElement.id === editorOptions.id;
-      if (isSearchEditorFocused) {
-        this._searchEditor.focus();
-      }
     }
   },
 
   _removeSearchBox(): void {
-    this._$searchEditorElement && this._$searchEditorElement.remove();
+    this._$searchEditorElement?.remove();
     delete this._$searchEditorElement;
     delete this._searchEditor;
   },
@@ -63,7 +56,6 @@ export default {
     const that = this;
     const userEditorOptions = that.option('searchEditorOptions');
     const searchText = messageLocalization.format('Search');
-    const searchId = that._focusedItemId;
 
     return extend({
       mode: 'search',
@@ -74,7 +66,6 @@ export default {
       inputAttr: {
         'aria-label': searchText,
       },
-      id: searchId,
       onValueChanged(e) {
         const searchTimeout = that.option('searchTimeout');
         that._valueChangeDeferred = Deferred();
@@ -150,7 +141,7 @@ export default {
 
   focus() {
     if (!this.option('focusedElement') && this.option('searchEnabled')) {
-      this._searchEditor && this._searchEditor.focus();
+      this._searchEditor?.focus();
       return;
     }
 
