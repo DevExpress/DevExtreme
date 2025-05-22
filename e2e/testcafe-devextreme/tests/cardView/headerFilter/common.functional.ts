@@ -1,4 +1,5 @@
 import CardView from 'devextreme-testcafe-models/cardView';
+import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { baseConfig } from './helpers/baseConfig';
@@ -408,5 +409,67 @@ test('The item\'s selection state should be correct after resetting the search',
         enabled: true,
       },
     },
+  });
+});
+
+test('FilterBuilder should work with custom headerFilter data source', async (t) => {
+  const cardView = new CardView('#container');
+  const IS_ANY_OPERATION_ITEM_INDEX = 9;
+  const ADD_CONDITION_ITEM_INDEX = 0;
+
+  await t
+    .click(cardView.getHeaderPanel().getHeaderItem(0).getFilterIcon());
+
+  await t
+    .expect(cardView.getHeaderFilterList().getItems().count)
+    .eql(3)
+    .click(cardView.getHeaderFilterPopup().getOkButton().element);
+
+  const filterBuilderPopup = await cardView.getFilterPanel().openFilterBuilderPopup(t);
+  const filterBuilder = filterBuilderPopup.getFilterBuilder();
+  await t
+    .click(filterBuilder.getAddButton())
+    .expect(FilterBuilder.getPopupTreeView().visible).ok()
+    .click(FilterBuilder.getPopupTreeViewNode(ADD_CONDITION_ITEM_INDEX))
+    .click(filterBuilder.getField(0, 'itemOperation').element)
+    .click(FilterBuilder.getPopupTreeViewNode(IS_ANY_OPERATION_ITEM_INDEX))
+    .click(filterBuilder.getField(0, 'itemValue').element)
+    .click(cardView.getHeaderFilterList().getItem(1).element)
+    .click(cardView.getHeaderFilterList().getItem(2).element)
+    .click(cardView.getHeaderFilterPopup().getOkButton().element)
+    .click(filterBuilderPopup.asPopup().getOkButton().element);
+
+  await t
+    .expect(cardView.getCards().count)
+    .eql(2)
+    .expect(cardView.getCard(0).getFieldValueCell('Id').textContent)
+    .eql('2')
+    .expect(cardView.getCard(1).getFieldValueCell('Id').textContent)
+    .eql('3');
+}).before(async () => {
+  await createWidget('dxCardView', {
+    ...baseConfig,
+    columns: [
+      {
+        dataField: 'id',
+        headerFilter: {
+          dataSource: [
+            { value: 1, text: '1' },
+            { value: 2, text: '2' },
+            { value: 3, text: '3' },
+          ],
+        },
+      },
+      {
+        dataField: 'title',
+      },
+      {
+        dataField: 'name',
+      },
+      {
+        dataField: 'lastName',
+      },
+    ],
+    filterPanel: { visible: true },
   });
 });
