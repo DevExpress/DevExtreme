@@ -41,8 +41,12 @@ class CreateConfig {
 
     baseContent += fs.readFileSync(path.join(this.configDir, approach, 'config.js'), 'utf8');
     if (this.useBundles) {
+      // removes ending non bundle config.js call, config.bundle.js calls its own (single per merged file)
       baseContent = baseContent.replace('System.config(window.config);', '');
-      baseContent = baseContent.replace('System.import(\'@angular/compiler\').catch(console.error.bind(console));', '');
+      if (approach === 'Angular') {
+        // removes ending non bundle Angular call, config.bundle.js calls its own (single per merged file)
+        baseContent = baseContent.replace('System.import(\'@angular/compiler\').catch(console.error.bind(console));', '');
+      }
       baseContent += fs.readFileSync(path.join(this.configDir, approach, 'config.bundle.js'), 'utf8');
     }
 

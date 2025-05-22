@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { DataSource } from 'common/data/data_source/data_source';
-import { isRenderer } from 'core/utils/type';
+import { isFunction, isRenderer } from 'core/utils/type';
 import { noop } from 'core/utils/common';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
@@ -87,7 +87,7 @@ const ScrollViewMock = DOMComponent.inherit({
 
     pullDown() {
         const pullDownHandler = this.option('onPullDown');
-        if($.isFunction(pullDownHandler)) {
+        if(isFunction(pullDownHandler)) {
             pullDownHandler();
         }
     },
@@ -95,7 +95,7 @@ const ScrollViewMock = DOMComponent.inherit({
     scrollBottom() {
         const scrollBottomHandler = this.option('onReachBottom');
 
-        if($.isFunction(scrollBottomHandler)) {
+        if(isFunction(scrollBottomHandler)) {
             scrollBottomHandler();
         }
     },
@@ -2307,7 +2307,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
 
         this.clock.tick(400);
 
-        assert.equal($.trim($list.find('.dx-list-item').text()), '012');
+        assert.equal($list.find('.dx-list-item').text().trim(), '012');
     });
 
     QUnit.test('shared data source', function(assert) {
@@ -2319,7 +2319,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
 
         const widget = this.element.dxList('instance');
         const changedHandler = widget._proxiedDataSourceChangedHandler;
-        assert.ok($.isFunction(changedHandler));
+        assert.ok(isFunction(changedHandler));
         assert.ok(dataSource._eventsStrategy._events['changed'].has(changedHandler));
 
         widget._dispose();

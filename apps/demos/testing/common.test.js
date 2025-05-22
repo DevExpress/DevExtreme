@@ -57,9 +57,6 @@ const getTestSpecificSkipRules = (testName) => {
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
-      // TODO CardView a11y: remove after a11y completion for CardView
-    case 'CardView-Overview':
-      return ['aria-toggle-field-name'];
     default:
       return [];
   }

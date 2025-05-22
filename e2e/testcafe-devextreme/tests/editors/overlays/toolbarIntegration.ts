@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Popup from 'devextreme-testcafe-models/popup';
 import Popover from 'devextreme-testcafe-models/popover';
 import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
+import { Selector } from 'testcafe';
 import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -16,6 +17,9 @@ const dynamicFixture = isMaterialBased()
 dynamicFixture`Popup_toolbar`
   .page(url(__dirname, '../../container.html'));
 
+const COMPONENT_SELECTOR = '#container';
+const CLOSE_BUTTON_SELECTOR = '.dx-closebutton';
+
 [
   { name: 'dxPopup', Class: Popup },
   { name: 'dxPopover', Class: Popover },
@@ -24,7 +28,7 @@ dynamicFixture`Popup_toolbar`
     [true, false].forEach((rtlEnabled) => {
       safeSizeTest(`Extended toolbar should be used in ${name},rtlEnabled=${rtlEnabled},toolbar=${toolbar}`, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-        const instance = new Class('#container');
+        const instance = new Class(COMPONENT_SELECTOR);
 
         if (toolbar === 'top') {
           const topToolbar = new Toolbar(instance.getToolbar());
@@ -34,7 +38,7 @@ dynamicFixture`Popup_toolbar`
           await bottomToolbar.option('overflowMenuVisible', true);
         }
 
-        await t.hover(instance.getCloseButton().element);
+        await t.hover(Selector(CLOSE_BUTTON_SELECTOR));
 
         await testScreenshot(t, takeScreenshot, `${name.replace('dx', '')}_${toolbar}_toolbar_menu,rtlEnabled=${rtlEnabled}.png`);
 
@@ -55,7 +59,7 @@ dynamicFixture`Popup_toolbar`
         rtlEnabled,
         visible: true,
         animation: undefined,
-        target: '#container',
+        target: COMPONENT_SELECTOR,
         hideOnOutsideClick: true,
         toolbarItems: [{
           location: 'before',

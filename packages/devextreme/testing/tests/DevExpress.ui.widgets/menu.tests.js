@@ -296,7 +296,7 @@ QUnit.module('Menu rendering', {
         assert.equal($menu.find('.' + DX_MENU_ITEM_CLASS).length, 1);
         rootMenuItem.trigger('dxclick');
         const submenu = getSubMenuInstance(rootMenuItem);
-        assert.equal($.trim($(submenu._overlay.$content()).find('.' + DX_MENU_ITEM_CLASS).eq(0).text()), 'Menu Test');
+        assert.equal($(submenu._overlay.$content()).find('.' + DX_MENU_ITEM_CLASS).eq(0).text().trim(), 'Menu Test');
     });
 
     QUnit.test('Render horizontal menu with default submenuDirection', function(assert) {

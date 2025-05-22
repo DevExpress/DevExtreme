@@ -201,6 +201,12 @@
   &.dx-size-format {
     width: $generic-toolbar-size-editor-width;
   }
+
+  &.dx-ai-format {
+    .dx-menu-item {
+      border: none;
+    }
+  }
 }
 
 .dx-htmleditor-toolbar-separator {

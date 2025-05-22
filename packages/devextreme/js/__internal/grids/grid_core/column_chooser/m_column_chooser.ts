@@ -8,8 +8,8 @@ import { each } from '@js/core/utils/iterator';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import Button from '@js/ui/button';
+import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
-import { current, isGeneric, isMaterial as isMaterialTheme } from '@js/ui/themes';
 import TreeView from '@js/ui/tree_view';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
@@ -108,7 +108,7 @@ export class ColumnChooserController extends modules.ViewController {
     return isDefined(position) ? position : {
       my: 'right bottom',
       at: 'right bottom',
-      of: this._rowsView && this._rowsView.element(),
+      of: this._rowsView?.element(),
       collision: 'fit',
       offset: '-2 -2',
       boundaryOffset: '2 2',
@@ -157,19 +157,15 @@ export class ColumnChooserView extends ColumnsView {
     const columnChooserOptions = that.option('columnChooser')!;
     const popupPosition = this._columnChooserController.getPosition();
 
-    const themeName = current();
-    const isGenericTheme = isGeneric(themeName);
-    const isMaterial = isMaterialTheme(themeName);
-
     const dxPopupOptions = {
       visible: false,
       shading: false,
-      showCloseButton: false,
+      showCloseButton: true,
       dragEnabled: true,
       resizeEnabled: true,
       wrapperAttr: { class: columnChooserClass },
       toolbarItems: [
-        { text: columnChooserOptions.title, toolbar: 'top', location: isGenericTheme || isMaterial ? 'before' : 'center' },
+        { text: columnChooserOptions.title, toolbar: 'top', location: 'before' },
       ],
       position: popupPosition,
       width: columnChooserOptions.width,
@@ -182,14 +178,7 @@ export class ColumnChooserView extends ColumnsView {
       },
       container: columnChooserOptions.container,
       _loopFocus: true,
-    };
-
-    if (isGenericTheme || isMaterial) {
-      extend(dxPopupOptions, { showCloseButton: true });
-    } else {
-      // @ts-expect-error
-      dxPopupOptions.toolbarItems[dxPopupOptions.toolbarItems.length] = { shortcut: 'cancel' };
-    }
+    } as PopupProperties;
 
     if (!isDefined(this._popupContainer)) {
       that._popupContainer = that._createComponent($element, Popup, dxPopupOptions);
@@ -429,8 +418,8 @@ export class ColumnChooserView extends ColumnsView {
 
     const isSelectMode = this.isSelectMode();
     const chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
-    const $content = this._popupContainer && this._popupContainer.$content();
-    const $nodes = $content && $content.find('.dx-treeview-node');
+    const $content = this._popupContainer?.$content();
+    const $nodes = $content?.find('.dx-treeview-node');
 
     if ($nodes) {
       chooserColumns.forEach((column) => {
@@ -466,9 +455,9 @@ export class ColumnChooserView extends ColumnsView {
 
   protected getBoundingRect() {
     const that = this;
-    const container = that._popupContainer && that._popupContainer.$overlayContent();
+    const container = that._popupContainer?.$overlayContent();
 
-    if (container && container.is(':visible')) {
+    if (container?.is(':visible')) {
       const offset = container.offset();
 
       return {
@@ -511,7 +500,7 @@ export class ColumnChooserView extends ColumnsView {
   public isColumnChooserVisible() {
     const popupContainer = this._popupContainer;
 
-    return popupContainer && popupContainer.option('visible');
+    return popupContainer?.option('visible');
   }
 
   public isSelectMode() {

@@ -67,7 +67,7 @@ QUnit.module('Tabs markup', () => {
 
         assert.equal(tabsInstance.option('selectedIndex'), -1);
 
-        assert.strictEqual($.trim(tabsElement.text()), '001122');
+        assert.strictEqual(tabsElement.text().trim(), '001122');
 
         assert.equal(tabElements.find('.dx-icon-custom').length, 1);
 
@@ -224,19 +224,19 @@ QUnit.module('Default template', moduleConfig, () => {
     QUnit.test('template should be rendered correctly with boolean', function(assert) {
         const $content = this.prepareItemTest(true);
 
-        assert.strictEqual($.trim($content.text()), 'truetrue');
+        assert.strictEqual($content.text().trim(), 'truetrue');
     });
 
     QUnit.test('template should be rendered correctly with number', function(assert) {
         const $content = this.prepareItemTest(1);
 
-        assert.strictEqual($.trim($content.text()), '11');
+        assert.strictEqual($content.text().trim(), '11');
     });
 
     QUnit.test('template should be rendered correctly with object that contains the "text" property', function(assert) {
         const $content = this.prepareItemTest({ text: 'custom' });
 
-        assert.strictEqual($.trim($content.text()), 'customcustom');
+        assert.strictEqual($content.text().trim(), 'customcustom');
     });
 
     QUnit.test('template should be rendered correctly with html', function(assert) {
