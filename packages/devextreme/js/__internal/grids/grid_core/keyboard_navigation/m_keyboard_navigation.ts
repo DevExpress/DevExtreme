@@ -239,6 +239,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     if (relatedTarget && !this.isInsideFocusedView($(relatedTarget))) {
       this._isNeedFocus = false;
+      this._isHiddenFocus = false;
       this._isNeedScroll = false;
     }
   }
