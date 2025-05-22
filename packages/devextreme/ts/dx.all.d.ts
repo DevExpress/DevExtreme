@@ -5134,19 +5134,19 @@ declare module DevExpress.common.grids {
    */
   export interface FilterPanel<TComponent, TRowData = any, TKey = any> {
     /**
-     * [descr:GridBaseOptions.filterPanel.customizeText]
+     * [descr:FilterPanel.customizeText]
      */
     customizeText?: (e: FilterPanelCustomizeTextArg<TComponent>) => string;
     /**
-     * [descr:GridBaseOptions.filterPanel.filterEnabled]
+     * [descr:FilterPanel.filterEnabled]
      */
     filterEnabled?: boolean;
     /**
-     * [descr:GridBaseOptions.filterPanel.texts]
+     * [descr:FilterPanel.texts]
      */
     texts?: FilterPanelTexts;
     /**
-     * [descr:GridBaseOptions.filterPanel.visible]
+     * [descr:FilterPanel.visible]
      */
     visible?: boolean;
   }
@@ -5163,15 +5163,15 @@ declare module DevExpress.common.grids {
    */
   export type FilterPanelTexts = {
     /**
-     * [descr:GridBaseOptions.filterPanel.texts.clearFilter]
+     * [descr:FilterPanelTexts.clearFilter]
      */
     clearFilter?: string;
     /**
-     * [descr:GridBaseOptions.filterPanel.texts.createFilter]
+     * [descr:FilterPanelTexts.createFilter]
      */
     createFilter?: string;
     /**
-     * [descr:GridBaseOptions.filterPanel.texts.filterEnabledHint]
+     * [descr:FilterPanelTexts.filterEnabledHint]
      */
     filterEnabledHint?: string;
   };

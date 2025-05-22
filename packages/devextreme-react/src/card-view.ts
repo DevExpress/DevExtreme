@@ -14,7 +14,7 @@ import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationSta
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, ToolbarItemLocation, ToolbarItemComponent, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, Direction, PositionAlignment, Mode, DisplayMode, SearchMode, SingleMultipleOrNone, SelectAllMode } from "devextreme/common";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { DataChangeType, FilterType, DataChange, HeaderFilterSearchConfig, HeaderFilterTexts, PagerPageSize, SelectionColumnDisplayMode } from "devextreme/common/grids";
+import type { DataChangeType, FilterType, DataChange, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, HeaderFilterSearchConfig, HeaderFilterTexts as GridsHeaderFilterTexts, PagerPageSize, SelectionColumnDisplayMode } from "devextreme/common/grids";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { dxFormSimpleItem, FormItemComponent, FormItemType, LabelLocation } from "devextreme/ui/form";
 import type { dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
@@ -104,6 +104,7 @@ const CardView = memo(
         column: { optionName: "columns", isCollectionItem: true },
         editing: { optionName: "editing", isCollectionItem: false },
         filterBuilder: { optionName: "filterBuilder", isCollectionItem: false },
+        filterPanel: { optionName: "filterPanel", isCollectionItem: false },
         headerFilter: { optionName: "headerFilter", isCollectionItem: false },
         headerPanel: { optionName: "headerPanel", isCollectionItem: false },
         loadPanel: { optionName: "loadPanel", isCollectionItem: false },
@@ -798,6 +799,56 @@ const FilterOperationDescriptions = Object.assign<typeof _componentFilterOperati
 });
 
 // owners:
+// CardView
+type IFilterPanelProps = React.PropsWithChildren<{
+  customizeText?: ((e: { component: GridsFilterPanel, filterValue: Record<string, any>, text: string }) => string);
+  filterEnabled?: boolean;
+  texts?: GridsFilterPanelTexts;
+  visible?: boolean;
+  defaultFilterEnabled?: boolean;
+  onFilterEnabledChange?: (value: boolean) => void;
+}>
+const _componentFilterPanel = (props: IFilterPanelProps) => {
+  return React.createElement(NestedOption<IFilterPanelProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "filterPanel",
+      DefaultsProps: {
+        defaultFilterEnabled: "filterEnabled"
+      },
+      ExpectedChildren: {
+        filterPanelTexts: { optionName: "texts", isCollectionItem: false },
+        texts: { optionName: "texts", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const FilterPanel = Object.assign<typeof _componentFilterPanel, NestedComponentMeta>(_componentFilterPanel, {
+  componentType: "option",
+});
+
+// owners:
+// FilterPanel
+type IFilterPanelTextsProps = React.PropsWithChildren<{
+  clearFilter?: string;
+  createFilter?: string;
+  filterEnabledHint?: string;
+}>
+const _componentFilterPanelTexts = (props: IFilterPanelTextsProps) => {
+  return React.createElement(NestedOption<IFilterPanelTextsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "texts",
+    },
+  });
+};
+
+const FilterPanelTexts = Object.assign<typeof _componentFilterPanelTexts, NestedComponentMeta>(_componentFilterPanelTexts, {
+  componentType: "option",
+});
+
+// owners:
 // Column
 // Field
 type IFormatProps = React.PropsWithChildren<{
@@ -934,7 +985,7 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   height?: number | string;
   search?: HeaderFilterSearchConfig;
   searchTimeout?: number;
-  texts?: HeaderFilterTexts;
+  texts?: GridsHeaderFilterTexts;
   visible?: boolean;
   width?: number | string;
 }>
@@ -944,6 +995,7 @@ const _componentHeaderFilter = (props: IHeaderFilterProps) => {
     elementDescriptor: {
       OptionName: "headerFilter",
       ExpectedChildren: {
+        headerFilterTexts: { optionName: "texts", isCollectionItem: false },
         search: { optionName: "search", isCollectionItem: false },
         texts: { optionName: "texts", isCollectionItem: false }
       },
@@ -952,6 +1004,26 @@ const _componentHeaderFilter = (props: IHeaderFilterProps) => {
 };
 
 const HeaderFilter = Object.assign<typeof _componentHeaderFilter, NestedComponentMeta>(_componentHeaderFilter, {
+  componentType: "option",
+});
+
+// owners:
+// HeaderFilter
+type IHeaderFilterTextsProps = React.PropsWithChildren<{
+  cancel?: string;
+  emptyValue?: string;
+  ok?: string;
+}>
+const _componentHeaderFilterTexts = (props: IHeaderFilterTextsProps) => {
+  return React.createElement(NestedOption<IHeaderFilterTextsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "texts",
+    },
+  });
+};
+
+const HeaderFilterTexts = Object.assign<typeof _componentHeaderFilterTexts, NestedComponentMeta>(_componentHeaderFilterTexts, {
   componentType: "option",
 });
 
@@ -1572,8 +1644,12 @@ const StringLengthRule = Object.assign<typeof _componentStringLengthRule, Nested
 });
 
 // owners:
+// FilterPanel
 // HeaderFilter
 type ITextsProps = React.PropsWithChildren<{
+  clearFilter?: string;
+  createFilter?: string;
+  filterEnabledHint?: string;
   cancel?: string;
   emptyValue?: string;
   ok?: string;
@@ -1760,6 +1836,10 @@ export {
   IFilterBuilderProps,
   FilterOperationDescriptions,
   IFilterOperationDescriptionsProps,
+  FilterPanel,
+  IFilterPanelProps,
+  FilterPanelTexts,
+  IFilterPanelTextsProps,
   Format,
   IFormatProps,
   FormItem,
@@ -1770,6 +1850,8 @@ export {
   IGroupOperationDescriptionsProps,
   HeaderFilter,
   IHeaderFilterProps,
+  HeaderFilterTexts,
+  IHeaderFilterTextsProps,
   HeaderPanel,
   IHeaderPanelProps,
   Hide,
