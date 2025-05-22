@@ -229,33 +229,11 @@ export class DataController {
 
     effect(
       () => {
-        const displayFilter = this.filterController.displayFilter.value;
-
-        if (!this.dataSource.peek().isLoaded()) {
-          return;
-        }
-
-        if (!equalByValue(
-          this.previousDisplayFilter ?? null,
-          displayFilter ?? null,
-          {
-            maxDepth: FILTER_OBJ_COMPARE_DEPTH,
-            strict: true,
-          },
-        )) {
-          this.previousDisplayFilter = displayFilter;
-          this.dataSource.peek().pageIndex(0);
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this.dataSource.peek().load();
-        }
-      },
-    );
-
-    effect(
-      () => {
         const dataSource = this.dataSource.value;
         const pageIndex = this.pageIndex.value;
         const pageSize = this.pageSize.value;
+        const isLoaded = this.isLoaded.value;
+        const displayFilter = this.filterController.displayFilter.value;
         const pagingEnabled = this.pagingEnabled.value;
         const sortParameters = this.sortingController.sortParameters.value;
 
@@ -267,7 +245,13 @@ export class DataController {
         }
 
         if (dataSource.pageSize() !== pageSize) {
+          const newPageIndex = isLoaded
+            ? Math.max(Math.min(this.pageCount.peek() - 1, pageIndex), 0)
+            : pageIndex;
+
           dataSource.pageSize(pageSize);
+          dataSource.pageIndex(newPageIndex);
+
           someParamChanged ||= true;
         }
 
@@ -276,8 +260,21 @@ export class DataController {
           someParamChanged ||= true;
         }
 
+        if (!equalByValue(
+          this.previousDisplayFilter,
+          displayFilter,
+          {
+            maxDepth: FILTER_OBJ_COMPARE_DEPTH,
+            strict: true,
+          },
+        )) {
+          this.previousDisplayFilter = displayFilter;
+          someParamChanged ||= true;
+        }
+
         if (!equalByValue(dataSource.paginate(), pagingEnabled)) {
           dataSource.paginate(pagingEnabled);
+          this.dataSource.peek().pageIndex(0);
           someParamChanged ||= true;
         }
 

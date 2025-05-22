@@ -1,10 +1,10 @@
 import $ from 'jquery';
-import devices from '__internal/core/m_devices';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import MenuBase from 'ui/context_menu/ui.menu_base';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
+import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 
@@ -67,15 +67,6 @@ function createMenu(options) {
 
     return { instance: instance, element: element };
 }
-
-const isDeviceDesktop = function(assert) {
-    if(devices.real().deviceType !== 'desktop') {
-        assert.ok(true, 'if device is not desktop we do not QUnit.test the case');
-        return false;
-    }
-    return true;
-};
-
 
 QUnit.module('Menu rendering', () => {
     QUnit.test('Render root submenu group', function(assert) {
@@ -581,34 +572,42 @@ QUnit.module('ShowSubmenuMode', {
     });
 
     QUnit.test('showSubmenuMode - by default', function(assert) {
+        if(shouldSkipOnMobile(assert)) {
+            return;
+        }
+
         const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }] });
         const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
-        if(isDeviceDesktop(assert)) {
-            menuBase.element.trigger({ target: $item.get(0), type: 'dxpointerenter', pointerType: 'mouse' });
-            assert.ok(!$item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is not expanded');
-            this.clock.tick(25);
-            assert.ok(!$item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is not expanded yet');
-            this.clock.tick(25);
-            assert.ok($item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is expanded');
-        }
+        menuBase.element.trigger({ target: $item.get(0), type: 'dxpointerenter', pointerType: 'mouse' });
+        assert.ok(!$item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is not expanded');
+        this.clock.tick(25);
+        assert.ok(!$item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is not expanded yet');
+        this.clock.tick(25);
+        assert.ok($item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is expanded');
     });
 
     QUnit.test('showSubmenuMode - onHover - set as object and delay set as number', function(assert) {
+        if(shouldSkipOnMobile(assert)) {
+            return;
+        }
+
         const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { type: 'onHover', delay: 50 } });
         const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
-        if(isDeviceDesktop(assert)) {
-            menuBase.element.trigger({ target: $item.get(0), type: 'dxpointerenter', pointerType: 'mouse' });
-            assert.ok(!$item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is not expanded');
-            this.clock.tick(25);
-            assert.ok(!$item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is not expanded yet');
-            this.clock.tick(25);
-            assert.ok($item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is expanded');
-        }
+        menuBase.element.trigger({ target: $item.get(0), type: 'dxpointerenter', pointerType: 'mouse' });
+        assert.ok(!$item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is not expanded');
+        this.clock.tick(25);
+        assert.ok(!$item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is not expanded yet');
+        this.clock.tick(25);
+        assert.ok($item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is expanded');
     });
 
     QUnit.test('showSubmenuMode - onHover - function has item element as parameter', function(assert) {
+        if(shouldSkipOnMobile(assert)) {
+            return;
+        }
+
         const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { type: 'onHover', delay: 50 } });
         const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
@@ -616,41 +615,47 @@ QUnit.module('ShowSubmenuMode', {
             assert.ok(!!$item);
         };
 
-        if(isDeviceDesktop(assert)) {
-            menuBase.element.trigger({ target: $item.get(0), type: 'dxpointerenter', pointerType: 'mouse' });
-            this.clock.tick(55);
-        }
+        menuBase.element.trigger({ target: $item.get(0), type: 'dxpointerenter', pointerType: 'mouse' });
+        this.clock.tick(55);
     });
 
     QUnit.test('showSubmenuMode - onHover - set as object and delay set as object too', function(assert) {
+        if(shouldSkipOnMobile(assert)) {
+            return;
+        }
+
         const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: { type: 'onHover', delay: { show: 100, hide: 500 } } });
         const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
-        if(isDeviceDesktop(assert)) {
-            menuBase.element.trigger({ target: $item.get(0), type: 'dxpointerenter', pointerType: 'mouse' });
-            assert.ok(!$item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is not expanded');
-            this.clock.tick(50);
-            assert.ok(!$item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is not expanded yet');
-            this.clock.tick(50);
-            assert.ok($item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is expanded');
-        }
+        menuBase.element.trigger({ target: $item.get(0), type: 'dxpointerenter', pointerType: 'mouse' });
+        assert.ok(!$item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is not expanded');
+        this.clock.tick(50);
+        assert.ok(!$item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is not expanded yet');
+        this.clock.tick(50);
+        assert.ok($item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is expanded');
     });
 
     QUnit.test('showSubmenuMode - onHover - set as string without delay', function(assert) {
+        if(shouldSkipOnMobile(assert)) {
+            return;
+        }
+
         const menuBase = createMenu({ items: [{ text: 'item1', items: [{ text: 'item1-1' }] }], showSubmenuMode: 'onHover' });
         const $item = menuBase.element.find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
-        if(isDeviceDesktop(assert)) {
-            menuBase.element.trigger({ target: $item.get(0), type: 'dxpointerenter', pointerType: 'mouse' });
-            assert.ok(!$item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is not expanded');
-            this.clock.tick(25);
-            assert.ok(!$item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is not expanded yet');
-            this.clock.tick(25);
-            assert.ok($item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is expanded');
-        }
+        menuBase.element.trigger({ target: $item.get(0), type: 'dxpointerenter', pointerType: 'mouse' });
+        assert.ok(!$item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is not expanded');
+        this.clock.tick(25);
+        assert.ok(!$item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is not expanded yet');
+        this.clock.tick(25);
+        assert.ok($item.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Menu is expanded');
     });
 
     QUnit.test('previous submenu should not appear if other submenu shown timeout is started', function(assert) {
+        if(shouldSkipOnMobile(assert)) {
+            return;
+        }
+
         const menuBase = createMenu({
             items: [
                 { text: 'item1', items: [{ text: 'item1-1' }] },
@@ -660,16 +665,14 @@ QUnit.module('ShowSubmenuMode', {
         });
         const $rootItems = menuBase.element.find('.' + DX_MENU_ITEM_CLASS);
 
-        if(isDeviceDesktop(assert)) {
-            menuBase.element.trigger({ target: $rootItems.eq(0).get(0), type: 'dxpointerenter', pointerType: 'mouse' });
-            this.clock.tick(25);
+        menuBase.element.trigger({ target: $rootItems.eq(0).get(0), type: 'dxpointerenter', pointerType: 'mouse' });
+        this.clock.tick(25);
 
-            menuBase.element.trigger({ target: $rootItems.eq(1).get(0), type: 'dxpointerenter', pointerType: 'mouse' });
-            this.clock.tick(300);
+        menuBase.element.trigger({ target: $rootItems.eq(1).get(0), type: 'dxpointerenter', pointerType: 'mouse' });
+        this.clock.tick(300);
 
-            assert.notOk($rootItems.eq(0).hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'First item is not expanded');
-            assert.ok($rootItems.eq(1).hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Second item is expanded');
-        }
+        assert.notOk($rootItems.eq(0).hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'First item is not expanded');
+        assert.ok($rootItems.eq(1).hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'Second item is expanded');
     });
 });
 

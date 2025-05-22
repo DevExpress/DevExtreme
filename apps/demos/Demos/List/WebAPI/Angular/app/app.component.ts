@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { DxListModule, DxTemplateModule } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-angular/common/data';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 if (!/localhost/.test(document.location.host)) {

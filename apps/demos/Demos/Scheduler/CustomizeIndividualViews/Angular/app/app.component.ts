@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSchedulerModule, DxTemplateModule } from 'devextreme-angular';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-angular/common/data';
 import { Service, PriorityData, TypeData } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

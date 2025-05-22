@@ -133,7 +133,7 @@ export class ResizingController extends modules.ViewController {
 
         if (needFireContentReady) {
           when(resizeDeferred).done(() => {
-            this._setAriaLabel();
+            this._setAriaLabel(e);
             this.fireContentReadyAction();
           });
         }
@@ -191,20 +191,28 @@ export class ResizingController extends modules.ViewController {
     return 'dxDataGrid-ariaDataGrid';
   }
 
-  private _setAriaLabel(): void {
-    const columnCount = this._columnsController?._columns?.filter(({ visible }) => !!visible).length ?? 0;
-    const totalItemsCount = Math.max(0, this._dataController.totalItemsCount());
-    const widgetAriaLabel = this._getWidgetAriaLabel();
-    const widgetStatusText = messageLocalization
-    // @ts-expect-error Badly typed format method
-      .format(widgetAriaLabel, totalItemsCount, columnCount);
-    const $ariaLabelElement = this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`);
-    // @ts-expect-error Treelist Variable
-    const expandableWidgetAriaLabel = messageLocalization.format(this._expandableWidgetAriaId);
-    const labelParts = [widgetStatusText];
-    if (expandableWidgetAriaLabel) {
-      labelParts.push(expandableWidgetAriaLabel);
+  private _setAriaLabel(e?: any): void {
+    let widgetStatusText = '';
+    let labelParts: string[] = [];
+
+    if (!e?.isFirstRender) {
+      const columnCount = this._columnsController?._columns?.filter(({ visible }) => !!visible).length ?? 0;
+      const totalItemsCount = Math.max(0, this._dataController.totalItemsCount());
+      const widgetAriaLabel = this._getWidgetAriaLabel();
+      widgetStatusText = messageLocalization
+      // @ts-expect-error Badly typed format method
+        .format(widgetAriaLabel, totalItemsCount, columnCount);
+
+      // @ts-expect-error Treelist Variable
+      const expandableWidgetAriaLabel = messageLocalization.format(this._expandableWidgetAriaId);
+      labelParts = [widgetStatusText];
+      if (expandableWidgetAriaLabel) {
+        labelParts.push(expandableWidgetAriaLabel);
+      }
     }
+
+    const $ariaLabelElement = this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`);
+
     this.component.setAria('label', labelParts.join('. '), $ariaLabelElement);
     this._gridView.setWidgetA11yStatusText(widgetStatusText);
   }

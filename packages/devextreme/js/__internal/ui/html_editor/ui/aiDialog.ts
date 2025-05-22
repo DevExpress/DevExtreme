@@ -1,5 +1,6 @@
 import '@js/ui/drop_down_button';
 
+import type { EditorStyle } from '@js/common';
 import type { AIIntegration, RequestCallbacks } from '@js/common/ai-integration';
 import localizationMessage from '@js/common/core/localization/message';
 import Guid from '@js/core/guid';
@@ -15,8 +16,8 @@ import type dxSelectBox from '@js/ui/select_box';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import SelectBox from '@js/ui/select_box';
 import TextArea from '@js/ui/text_area';
-import { isCompact } from '@js/ui/themes';
-import { currentTheme } from '@js/viz/themes';
+import { current, isCompact, isMaterial } from '@js/ui/themes';
+import BaseDialog from '@ts/ui/html_editor/ui/m_baseDialog';
 import type {
   AICommandExecutor,
   AICommandParamsMap,
@@ -29,13 +30,11 @@ import {
   buildAICommandParams,
   getAICommandName,
 } from '@ts/ui/html_editor/utils/ai';
+import { isSmallScreen } from '@ts/ui/html_editor/utils/small_screen';
 import type { Properties as InformerProperties } from '@ts/ui/informer/informer';
 import type { LoadIndicatorProperties } from '@ts/ui/m_load_indicator';
 import { AnimationType } from '@ts/ui/m_load_indicator';
 import { TEXTEDITOR_INPUT_CONTAINER_CLASS } from '@ts/ui/text_box/m_text_editor.base';
-
-import { isSmallScreen } from '../utils/small_screen';
-import BaseDialog from './m_baseDialog';
 
 export const AI_DIALOG_CLASS = 'dx-aidialog';
 export const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
@@ -47,13 +46,15 @@ const AI_DIALOG_TITLE_TEXT_CLASS = 'dx-aidialog-title-text';
 const ICON_CLASS = 'dx-icon';
 const ICON_SPARKLE_CLASS = 'dx-icon-sparkle';
 const COPY_BUTTON_ICON = 'copy';
-const TRY_AGAIN_BUTTON_ICON = 'restore';
+const REGENERATE_BUTTON_ICON = 'restore';
 
 const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone'];
 
 const POPUP_MIN_WIDTH = 288;
-const POPUP_MAX_WIDTH = 460;
+const POPUP_MAX_WIDTH = isMaterial(current()) ? 494 : 460;
 const LOADINDICATOR_SIZE = 48;
+
+const INPUT_EVENT = 'input';
 
 export const TEXT_AREA_MIN_HEIGHT = 64;
 export const TEXT_AREA_MAX_HEIGHT = 128;
@@ -62,7 +63,7 @@ export const ACTION_BUTTON_WIDTH = 110;
 export const COMPACT_ACTION_BUTTON_WIDTH = 100;
 
 function getActionButtonWidth(): number {
-  return isCompact(currentTheme()) ? COMPACT_ACTION_BUTTON_WIDTH : ACTION_BUTTON_WIDTH;
+  return isCompact(current()) ? COMPACT_ACTION_BUTTON_WIDTH : ACTION_BUTTON_WIDTH;
 }
 
 enum DialogState {
@@ -102,6 +103,8 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _askAIPrompt = '';
 
   private _commandChangeSuppressed = false;
+
+  private _commandOptionSuppressed = false;
 
   private _commandOptionsList?: string[];
 
@@ -163,16 +166,21 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         at: 'center',
         of: this._$container,
       },
-      ...this._popupUserConfig,
+      onHiding: () => {
+        this._processCommandCompletion();
+      },
+      ...this._popupConfig,
     }) as PopupProperties;
   }
 
   protected _renderCommandSelectBox($container: dxElementWrapper): void {
     const $commandSelectBox = $('<div>').appendTo($container);
+
     this._commandSelectBox = new SelectBox($commandSelectBox.get(0), {
       value: this._currentCommand,
       displayExpr: 'text',
       valueExpr: 'name',
+      stylingMode: 'outlined',
       onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: (e): void => {
         if (this._commandChangeSuppressed) {
@@ -199,12 +207,18 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   protected _renderOptionSelectBox($container: dxElementWrapper): void {
     const $optionSelectBox = $('<div>').appendTo($container);
+
     this._optionSelectBox = new SelectBox($optionSelectBox.get(0), {
       items: this._commandOptionsList,
       value: this._currentOption ?? this._commandOptionsList?.[0],
       visible: this._isCommandWithOptionsSelected(),
+      stylingMode: 'outlined',
       onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: ({ value }): void => {
+        if (this._commandOptionSuppressed) {
+          return;
+        }
+
         this._currentOption = value;
 
         if (this._isOpen() && value) {
@@ -225,9 +239,19 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       width: '100%',
       placeholder: localizationMessage.format('dxHtmlEditor-aiAskPlaceholder'),
       _shouldAttachKeyboardEvents: true,
+      stylingMode: 'outlined' as EditorStyle,
       onInitialized: this._addEscapeHandler.bind(this),
+      valueChangeEvent: INPUT_EVENT,
       onValueChanged: (e): void => {
         this._askAIPrompt = e.value;
+
+        if (this._isAskAICommandSelected) {
+          const shouldRefreshToolbarItems = !e.value || !e.previousValue;
+
+          if (shouldRefreshToolbarItems) {
+            this._refreshToolbarItems();
+          }
+        }
       },
     };
 
@@ -251,6 +275,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       width: '100%',
       readOnly: true,
       _shouldAttachKeyboardEvents: true,
+      stylingMode: 'outlined' as EditorStyle,
       onInitialized: this._addEscapeHandler.bind(this),
       ...screenSpecificOptions,
     };
@@ -382,16 +407,17 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
   }
 
-  protected _getTryAgainButtonItem(): NamedToolbarItem {
-    const text = isSmallScreen() ? undefined : localizationMessage.format('dxHtmlEditor-aiTryAgain');
+  protected _getRegenerateButtonItem(): NamedToolbarItem {
+    const text = isSmallScreen() ? undefined : localizationMessage.format('dxHtmlEditor-aiRegenerate');
+
     return {
-      name: 'tryAgain',
+      name: 'regenerate',
       toolbar: 'bottom',
       location: 'before',
       widget: 'dxButton',
       options: {
         stylingMode: 'outlined',
-        icon: TRY_AGAIN_BUTTON_ICON,
+        icon: REGENERATE_BUTTON_ICON,
         text,
         onClick: () => this._retryExecuteAICommand(),
         onInitialized: this._addEscapeHandler.bind(this),
@@ -401,6 +427,9 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   protected _getGenerateButtonItem(): NamedToolbarItem {
     const width = getActionButtonWidth();
+    const promptTextArea = this._promptTextArea;
+    const disabled = !promptTextArea.option('value');
+
     return {
       name: 'generate',
       toolbar: 'bottom',
@@ -410,6 +439,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         type: 'default',
         text: localizationMessage.format('dxHtmlEditor-aiGenerate'),
         stylingMode: 'contained',
+        disabled,
         width,
         onClick: () => this._executeAICommand(),
         onInitialized: this._addEscapeHandler.bind(this),
@@ -417,19 +447,19 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     };
   }
 
-  protected _getStopButtonItem(): NamedToolbarItem {
+  protected _getCancelButtonItem(): NamedToolbarItem {
     const width = getActionButtonWidth();
     return {
-      name: 'stop',
+      name: 'cancel',
       toolbar: 'bottom',
       location: 'after',
       widget: 'dxButton',
       options: {
         type: 'default',
         stylingMode: 'contained',
-        text: localizationMessage.format('dxHtmlEditor-aiStop'),
+        text: localizationMessage.format('dxHtmlEditor-aiCancel'),
         width,
-        onClick: () => this._stopAICommandExecution(),
+        onClick: () => this._cancelAICommandExecution(),
         onInitialized: this._addEscapeHandler.bind(this),
       },
     };
@@ -437,7 +467,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   private _getInitialToolbarItems(): NamedToolbarItem[] {
     return [
-      this._getTryAgainButtonItem(),
+      this._getRegenerateButtonItem(),
       this._getCopyButtonItem(),
       this._getReplaceButtonItem(),
     ];
@@ -455,7 +485,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
         items.push(this._getGenerateButtonItem());
         break;
       case DialogState.Generating:
-        items.push(this._getStopButtonItem());
+        items.push(this._getCancelButtonItem());
         break;
       case DialogState.Error: {
         if (this._isAskAICommandSelected) {
@@ -524,6 +554,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   private _processCommandCompletion(dialogState?: DialogState): void {
+    this._abort?.();
     this._abort = undefined;
     this._isAICommandExecuting = false;
 
@@ -567,8 +598,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
     this._abort = abort;
   }
 
-  private _stopAICommandExecution(): void {
-    this._abort?.();
+  private _cancelAICommandExecution(): void {
     this._processCommandCompletion(this._getInitialDialogState());
   }
 
@@ -599,12 +629,14 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _refreshOptionSelectBox(): void {
     const hasOptions = this._isCommandWithOptionsSelected();
 
+    this._commandOptionSuppressed = true;
     this._optionSelectBox.option({
       disabled: this._isAICommandExecuting,
       visible: hasOptions,
       items: this._commandOptionsList ?? [],
       value: this._currentOption ?? this._commandOptionsList?.[0],
     });
+    this._commandOptionSuppressed = false;
   }
 
   private _setTextAreasInitialState(): void {
@@ -734,7 +766,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   updateAIIntegration(aiIntegration: AIIntegration): void {
-    this._abort?.();
     this._processCommandCompletion(this._getInitialDialogState());
     this._aiIntegration = aiIntegration;
     this._executeAICommand();
@@ -765,10 +796,6 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   hide(resultText: AIDialogResult['resultText'], event: AIDialogResult['event']): void {
     this.deferred?.resolve({ resultText, event });
-
-    this._abort?.();
-    this._processCommandCompletion();
-
     super.hide();
   }
 }

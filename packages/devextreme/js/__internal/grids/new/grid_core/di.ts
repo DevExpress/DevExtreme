@@ -8,10 +8,12 @@ import * as DataControllerModule from './data_controller/index';
 import { EditingController } from './editing/controller';
 import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
-import { FilterPanelView } from './filtering/filter_panel/view';
+import * as FilterSyncModule from './filtering/filter_sync/index';
 import { ClearFilterVisitor } from './filtering/filter_visitors/clear_filter_visitor';
+import { FilterCustomOperationsVisitor } from './filtering/filter_visitors/filter_custom_operations_visitor';
 import { GetAppliedFilterVisitor } from './filtering/filter_visitors/get_applied_filters_visitor';
 import {
+  CompatibilityHeaderFilterController,
   HeaderFilterController,
   HeaderFilterPopupView,
 } from './filtering/header_filter/index';
@@ -19,6 +21,7 @@ import { HeaderFilterViewController } from './filtering/header_filter/view_contr
 import * as FilterControllerModule from './filtering/index';
 import { ItemsController } from './items_controller/items_controller';
 import { KeyboardNavigationController } from './keyboard_navigation/index';
+import { OptionsValidationController } from './options_validation/index';
 import { PagerView } from './pager/view';
 import { SearchController } from './search/controller';
 import { SearchView } from './search/view';
@@ -44,9 +47,11 @@ export function register(diContext: DIContext): void {
   diContext.register(ColumnChooserModule.ColumnChooserView);
   diContext.register(FilterControllerModule.FilterController);
   diContext.register(FilterControllerModule.FilterPanelView);
-  diContext.register(FilterPanelView);
   diContext.register(HeaderFilterController);
   diContext.register(HeaderFilterPopupView);
+  diContext.register(FilterSyncModule.FilterSyncController);
+  diContext.register(FilterSyncModule.CompatibilityFilterSyncController);
+  diContext.register(CompatibilityHeaderFilterController);
   diContext.register(ErrorController);
   diContext.register(EditingController);
   diContext.register(EditPopupView);
@@ -56,5 +61,7 @@ export function register(diContext: DIContext): void {
 
   diContext.register(ClearFilterVisitor);
   diContext.register(GetAppliedFilterVisitor);
+  diContext.register(FilterCustomOperationsVisitor);
   diContext.register(KeyboardNavigationController);
+  diContext.register(OptionsValidationController);
 }

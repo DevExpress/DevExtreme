@@ -458,20 +458,20 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with exclude 
                 tabindex="0"
               >
                 <div
-                  aria-label="Select All, Not checked"
+                  aria-label="Select All, Checked"
                   class="dx-list-select-all"
                 >
                   <div
-                    aria-checked="false"
+                    aria-checked="true"
                     aria-invalid="false"
                     aria-label="Select All"
                     aria-readonly="false"
-                    class="dx-widget dx-checkbox dx-list-select-all-checkbox"
+                    class="dx-widget dx-checkbox dx-checkbox-checked dx-list-select-all-checkbox"
                     role="checkbox"
                   >
                     <input
                       type="hidden"
-                      value="false"
+                      value="true"
                     />
                     <div
                       class="dx-checkbox-container"
@@ -495,24 +495,24 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with exclude 
                 >
                   <div
                     aria-label="A"
-                    aria-selected="false"
-                    class="dx-item dx-list-item"
+                    aria-selected="true"
+                    class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
                     >
                       <div
-                        aria-checked="false"
+                        aria-checked="true"
                         aria-invalid="false"
                         aria-label="Check state"
                         aria-readonly="false"
-                        class="dx-widget dx-checkbox dx-list-select-checkbox"
+                        class="dx-widget dx-checkbox dx-checkbox-checked dx-list-select-checkbox"
                         role="checkbox"
                       >
                         <input
                           type="hidden"
-                          value="false"
+                          value="true"
                         />
                         <div
                           class="dx-checkbox-container"
@@ -532,24 +532,24 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with exclude 
                   </div>
                   <div
                     aria-label="B"
-                    aria-selected="false"
-                    class="dx-item dx-list-item"
+                    aria-selected="true"
+                    class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
                     >
                       <div
-                        aria-checked="false"
+                        aria-checked="true"
                         aria-invalid="false"
                         aria-label="Check state"
                         aria-readonly="false"
-                        class="dx-widget dx-checkbox dx-list-select-checkbox"
+                        class="dx-widget dx-checkbox dx-checkbox-checked dx-list-select-checkbox"
                         role="checkbox"
                       >
                         <input
                           type="hidden"
-                          value="false"
+                          value="true"
                         />
                         <div
                           class="dx-checkbox-container"
@@ -862,24 +862,24 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with exclude 
                 >
                   <div
                     aria-label="A"
-                    aria-selected="false"
-                    class="dx-item dx-list-item"
+                    aria-selected="true"
+                    class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
                     >
                       <div
-                        aria-checked="false"
+                        aria-checked="true"
                         aria-invalid="false"
                         aria-label="Check state"
                         aria-readonly="false"
-                        class="dx-widget dx-checkbox dx-list-select-checkbox"
+                        class="dx-widget dx-checkbox dx-checkbox-checked dx-list-select-checkbox"
                         role="checkbox"
                       >
                         <input
                           type="hidden"
-                          value="false"
+                          value="true"
                         />
                         <div
                           class="dx-checkbox-container"
@@ -1266,24 +1266,24 @@ exports[`Options Column.HeaderFilter dataSource: custom dataSource with filter v
                   </div>
                   <div
                     aria-label="B"
-                    aria-selected="false"
-                    class="dx-item dx-list-item"
+                    aria-selected="true"
+                    class="dx-item dx-list-item dx-list-item-selected"
                     role="option"
                   >
                     <div
                       class="dx-list-item-before-bag dx-list-select-checkbox-container"
                     >
                       <div
-                        aria-checked="false"
+                        aria-checked="true"
                         aria-invalid="false"
                         aria-label="Check state"
                         aria-readonly="false"
-                        class="dx-widget dx-checkbox dx-list-select-checkbox"
+                        class="dx-widget dx-checkbox dx-checkbox-checked dx-list-select-checkbox"
                         role="checkbox"
                       >
                         <input
                           type="hidden"
-                          value="false"
+                          value="true"
                         />
                         <div
                           class="dx-checkbox-container"
@@ -3591,9 +3591,12 @@ exports[`Options HeaderFilter visible: false 1`] = `
               />
               <div
                 class="dx-cardview-headerpanel-content"
+                role="menubar"
               >
                 <div
+                  aria-label="Field name A"
                   class="dx-cardview-header-item  "
+                  role="menuitem"
                   tabindex="0"
                 >
                   A
@@ -3667,9 +3670,12 @@ exports[`Options HeaderFilter visible: true 1`] = `
               />
               <div
                 class="dx-cardview-headerpanel-content"
+                role="menubar"
               >
                 <div
+                  aria-label="Field name A"
                   class="dx-cardview-header-item  "
+                  role="menuitem"
                   tabindex="0"
                 >
                   A
@@ -3743,9 +3749,12 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
               />
               <div
                 class="dx-cardview-headerpanel-content"
+                role="menubar"
               >
                 <div
+                  aria-label="Field name A"
                   class="dx-cardview-header-item  "
+                  role="menuitem"
                   tabindex="0"
                 >
                   A

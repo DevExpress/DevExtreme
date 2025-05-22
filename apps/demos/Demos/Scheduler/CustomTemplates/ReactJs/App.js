@@ -1,6 +1,6 @@
 import React from 'react';
 import Scheduler, { Editing, Resource } from 'devextreme-react/scheduler';
-import Query from 'devextreme/data/query';
+import { query as Query } from 'devextreme-react/common/data';
 import Appointment from './Appointment.js';
 import AppointmentTooltip from './AppointmentTooltip.js';
 import { data, moviesData, theatreData } from './data.js';

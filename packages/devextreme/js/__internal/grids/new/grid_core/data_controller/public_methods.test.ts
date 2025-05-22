@@ -151,8 +151,8 @@ describe('PublicMethods', () => {
       });
       expect(gridCore.pageIndex()).toBe(0);
 
-      dataController.pageIndex.value = 3;
-      expect(gridCore.pageIndex()).toBe(3);
+      dataController.pageIndex.value = 1;
+      expect(gridCore.pageIndex()).toBe(1);
     });
   });
 

@@ -29,6 +29,7 @@ import {
     TEMPLATE_WRAPPER_CLASS,
     POPUP_CONTENT_SCROLLABLE_CLASS,
 } from '__internal/ui/popup/m_popup';
+import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 import 'ui/popup';
@@ -3064,9 +3065,7 @@ QUnit.module('positioning', {
         });
 
         QUnit.test('drag using kbn should raise visualPositionChanged event with correct parameters', function(assert) {
-            const isDesktop = devices.real().deviceType === 'desktop';
-            if(!isDesktop) {
-                assert.ok(true, 'test is actual only for desktop');
+            if(shouldSkipOnMobile(assert)) {
                 return;
             }
 

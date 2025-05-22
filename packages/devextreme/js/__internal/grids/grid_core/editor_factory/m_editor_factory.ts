@@ -2,7 +2,6 @@
 import positionUtils from '@js/common/core/animation/position';
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -41,7 +40,7 @@ const CONTENT_CLASS = 'content';
 const FOCUSED_ELEMENT_CLASS = 'dx-focused';
 const ROW_CLASS = 'dx-row';
 const MODULE_NAMESPACE = 'dxDataGridEditorFactory';
-const UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, 'focusin', clickEventName].join(' '), MODULE_NAMESPACE);
+const UPDATE_FOCUS_EVENTS = addNamespace([clickEventName, 'focusin'].join(' '), MODULE_NAMESPACE);
 const DX_HIDDEN = 'dx-hidden';
 
 interface EditorFactoryMixinType {

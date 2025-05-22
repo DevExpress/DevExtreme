@@ -47,7 +47,7 @@
 </template>
 <script setup lang="ts">
 import { DxSelectBox } from 'devextreme-vue/select-box';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-vue/common/data';
 import Group from './Group.vue';
 import { ungroupedData, pregroupedData } from './data.ts';
 
