@@ -316,3 +316,34 @@ test('[T1284200] Should handle dxList "selectAll" when has unselected items on t
     visible: true,
   },
 }));
+
+test('DataGrid – Header filters show "No data to display" when "not and" or "not or" operations are used in the filter panel (T1291737)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(GRID_CONTAINER);
+  const headerFilterButton = dataGrid.getHeaders()
+    .getHeaderRow(0)
+    .getHeaderCell(0)
+    .getFilterIcon();
+
+  await dataGrid.isReady();
+  await t.click(headerFilterButton);
+
+  await t
+    .expect(await takeScreenshot('header-filter-should-have-list-displayed-for-negation-filter.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 1),
+  keyExpr: 'field_0',
+  filterValue: [
+    '!',
+    [['field_0', '=', '1']],
+  ],
+  filterPanel: {
+    visible: true,
+  },
+  headerFilter: {
+    visible: true,
+  },
+}));
