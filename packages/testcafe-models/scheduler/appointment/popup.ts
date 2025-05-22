@@ -34,8 +34,8 @@ export const SELECTORS = {
   endDateTimeZoneInput: `.${CLASS.endDateTimeZoneEditor} .${CLASS.textEditorInput}`,
   allDaySwitch: `.${CLASS.allDaySwitch} .${CLASS.switch}`,
   recurrenceSwitch: `.${CLASS.recurrenceSwitch} .${CLASS.switch}`,
-  repeatUntilInput: '#dx-repeat-until-input-container input[type="text"]',
-  repeatCountInput: '#dx-repeat-count-input-container input[type="text"]',
+  repeatUntilInput: '.dx-recurrence-datebox-until-date input[type="text"]',
+  repeatCountInput: '.dx-recurrence-numberbox-repeat-count input[type="text"]',
 };
 
 export default class AppointmentPopup {

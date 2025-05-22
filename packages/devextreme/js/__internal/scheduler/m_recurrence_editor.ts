@@ -29,8 +29,6 @@ const INTERVAL_EDITOR = 'dx-recurrence-numberbox-interval';
 const REPEAT_ON_EDITOR = 'dx-recurrence-repeat-on';
 const DAY_OF_MONTH = 'dx-recurrence-numberbox-day-of-month';
 const MONTH_OF_YEAR = 'dx-recurrence-selectbox-month-of-year';
-const REPEAT_UNTIL_ID = 'dx-repeat-until-input-container';
-const REPEAT_COUNT_ID = 'dx-repeat-count-input-container';
 
 const recurrentEditorNumberBoxWidth = 90;
 const repeatInputWidth = '100%';
@@ -579,7 +577,6 @@ class RecurrenceEditor extends Editor {
         useLargeSpinButtons: false,
         value: count,
         onValueChanged: this._repeatCountValueChangeHandler.bind(this),
-        elementAttr: { id: REPEAT_COUNT_ID },
         inputAttr: { 'aria-label': messageLocalization.format('dxScheduler-recurrenceOccurrenceLabel') },
       },
     };
@@ -629,18 +626,18 @@ class RecurrenceEditor extends Editor {
           firstDayOfWeek: this._getFirstDayOfWeek(),
         },
         useMaskBehavior: true,
-        elementAttr: { id: REPEAT_UNTIL_ID },
         inputAttr: { 'aria-label': messageLocalization.format('dxScheduler-recurrenceUntilDateLabel') },
       },
     };
   }
 
-  _formatUntilDate(date) {
-    if (this._recurrenceRule.getRules().until && dateUtils.sameDate(this._recurrenceRule.getRules().until, date)) {
-      return date;
-    }
+  _formatUntilDate(date: Date): Date {
+    const untilDate = this._recurrenceRule.getRules().until;
+    const isSameDate = dateUtils.sameDate(untilDate, date);
 
-    return dateUtils.setToDayEnd(date);
+    return untilDate && isSameDate
+      ? date
+      : dateUtils.setToDayEnd(date);
   }
 
   _repeatUntilValueChangeHandler(args) {

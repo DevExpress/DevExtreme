@@ -16,7 +16,6 @@ test('Scheduler edit appointment is accessible', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t.doubleClick(scheduler.getAppointmentByIndex(0).element());
-  await t.click(Scheduler.getEditRecurrenceDialog().series);
   await t.expect(scheduler.appointmentPopup.isVisible()).ok();
 
   await a11yCheck(t, checkOptions, '#container');
@@ -29,6 +28,7 @@ test('Scheduler edit appointment is accessible', async (t) => {
       endDate: new Date('2021-03-29T22:30:00.000Z'),
       recurrenceRule: 'FREQ=DAILY',
     }],
+    recurrenceEditMode: 'series',
     currentView: 'week',
     currentDate: new Date(2021, 2, 28),
   });
@@ -43,7 +43,6 @@ test('Scheduler recurrence editor repeat end accessible', async (t) => {
     .getAttribute('aria-label');
 
   await t.doubleClick(scheduler.getAppointmentByIndex(0).element());
-  await t.click(Scheduler.getEditRecurrenceDialog().series);
   await t.expect(scheduler.appointmentPopup.isVisible()).ok();
 
   await t
@@ -88,6 +87,7 @@ test('Scheduler recurrence editor repeat end accessible', async (t) => {
       endDate: new Date('2021-03-29T22:30:00.000Z'),
       recurrenceRule: 'FREQ=DAILY;UNTIL=20250522T215959Z',
     }],
+    recurrenceEditMode: 'series',
     currentView: 'week',
     currentDate: new Date('2021-03-29T21:30:00.000Z'),
   });
