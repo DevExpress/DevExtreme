@@ -6531,31 +6531,31 @@ declare module DevExpress.common.grids {
    */
   export type SearchPanel = {
     /**
-     * [descr:GridBaseOptions.searchPanel.highlightCaseSensitive]
+     * [descr:SearchPanel.highlightCaseSensitive]
      */
     highlightCaseSensitive?: boolean;
     /**
-     * [descr:GridBaseOptions.searchPanel.highlightSearchText]
+     * [descr:SearchPanel.highlightSearchText]
      */
     highlightSearchText?: boolean;
     /**
-     * [descr:GridBaseOptions.searchPanel.placeholder]
+     * [descr:SearchPanel.placeholder]
      */
     placeholder?: string;
     /**
-     * [descr:GridBaseOptions.searchPanel.searchVisibleColumnsOnly]
+     * [descr:SearchPanel.searchVisibleColumnsOnly]
      */
     searchVisibleColumnsOnly?: boolean;
     /**
-     * [descr:GridBaseOptions.searchPanel.text]
+     * [descr:SearchPanel.text]
      */
     text?: string;
     /**
-     * [descr:GridBaseOptions.searchPanel.visible]
+     * [descr:SearchPanel.visible]
      */
     visible?: boolean;
     /**
-     * [descr:GridBaseOptions.searchPanel.width]
+     * [descr:SearchPanel.width]
      */
     width?: string | number;
   };
