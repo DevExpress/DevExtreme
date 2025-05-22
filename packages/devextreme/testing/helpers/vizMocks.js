@@ -15,7 +15,8 @@
                 require('viz/core/renderers/renderer'),
                 require('viz/core/errors_warnings'),
                 require('__internal/viz/core/m_base_widget'),
-                require('viz/core/base_widget.utils')
+                require('viz/core/base_widget.utils'),
+                require('core/utils/type')
             );
         });
     } else {
@@ -32,10 +33,11 @@
             DevExpress.require('viz/core/renderers/renderer'),
             DevExpress.require('viz/core/errors_warnings'),
             DevExpress.require('__internal/viz/core/m_base_widget'),
-            DevExpress.require('viz/core/base_widget.utils')
+            DevExpress.require('viz/core/base_widget.utils'),
+            DevExpress.require('core/utils/type')
         );
     }
-}(window, function($, tooltipModule, titleModule, legendModule, axisModule, pointModule, Series, loadingIndicatorModule, exportMenuModule, rendererModule, errors, baseWidgetModule, baseWidgetUtils) {
+}(window, function($, tooltipModule, titleModule, legendModule, axisModule, pointModule, Series, loadingIndicatorModule, exportMenuModule, rendererModule, errors, baseWidgetModule, baseWidgetUtils, typeUtils) {
     /* global currentAssert, currentTest */
 
     const Element = stubClass(rendererModule.SvgElement, {
@@ -94,7 +96,7 @@
             return this;
         },
         getBBox: function() {
-            const template = $.isFunction(this.renderer.bBoxTemplate) ? this.renderer.bBoxTemplate.call(this) : this.renderer.bBoxTemplate;
+            const template = typeUtils.isFunction(this.renderer.bBoxTemplate) ? this.renderer.bBoxTemplate.call(this) : this.renderer.bBoxTemplate;
             return $.extend({}, template);
         },
         dispose: function() {
@@ -219,9 +221,9 @@
 
         this._resetStub = function(stub) {
             $.each(stub, function(key, value) {
-                if($.isFunction(value && value.reset)) {
+                if(typeUtils.isFunction(value && value.reset)) {
                     value.reset();
-                    $.isFunction(value.resetBehavior) && value.resetBehavior();
+                    typeUtils.isFunction(value.resetBehavior) && value.resetBehavior();
                 } else {
                     stub[key] = undefined;
                 }

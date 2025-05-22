@@ -15,7 +15,7 @@ import { value as viewPort } from 'core/utils/view_port';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import config from 'core/config';
-import { isRenderer } from 'core/utils/type';
+import { isRenderer, isWindow } from 'core/utils/type';
 import browser from 'core/utils/browser';
 import { compare as compareVersions } from 'core/utils/version';
 import resizeCallbacks from 'core/utils/resize_callbacks';
@@ -256,7 +256,7 @@ QUnit.module('basic', () => {
 
         assert.equal($content.children().length, 1);
         assert.ok($content.find('.testContent').length);
-        assert.equal($.trim($content.text()), 'testContent');
+        assert.equal($content.text().trim(), 'testContent');
     });
 
     QUnit.test('title and content template', function(assert) {
@@ -267,18 +267,18 @@ QUnit.module('basic', () => {
 
         assert.equal($title.children().length, 1);
         assert.ok($title.find('.testTitle').length);
-        assert.equal($.trim($title.text()), 'testTitle');
+        assert.equal($title.text().trim(), 'testTitle');
 
         assert.equal($content.children().length, 1);
         assert.ok($content.find('.testContent').length);
-        assert.equal($.trim($content.text()), 'testContent');
+        assert.equal($content.text().trim(), 'testContent');
     });
 
     QUnit.test('custom titleTemplate option', function(assert) {
         $('#popupWithTitleTemplate').dxPopup({ titleTemplate: 'customTitle', visible: true });
 
         const $title = $(`.${POPUP_TITLE_CLASS}`, viewport());
-        assert.equal($.trim($title.text()), 'testTitle', 'title text is correct');
+        assert.equal($title.text().trim(), 'testTitle', 'title text is correct');
     });
 
     QUnit.test('done button is located after cancel button in device', function(assert) {
@@ -2337,7 +2337,7 @@ QUnit.module('resize', {
             this.reinit({ width: 2, height: 2 });
             const resizable = this.$overlayContent.dxResizable('instance');
 
-            assert.ok($.isWindow(resizable.option('area').get(0)), 'window is the area of the resizable');
+            assert.ok(isWindow(resizable.option('area').get(0)), 'window is the area of the resizable');
         } finally {
             viewPort(toSelector(VIEWPORT_CLASS));
         }
@@ -2535,7 +2535,7 @@ QUnit.module('rendering', {
 
         const $content = $popup.dxPopup('$content');
 
-        assert.equal($.trim($content.text()), 'TestContent', 'content rendered');
+        assert.equal($content.text().trim(), 'TestContent', 'content rendered');
         assert.equal($content.find('.testContent').get(0), $inner[0], 'content should not lost the link');
     });
 
@@ -2547,7 +2547,7 @@ QUnit.module('rendering', {
 
         const $content = $popup.dxPopup('$content');
 
-        assert.equal($.trim($content.text()), 'TestContent', 'content is correct');
+        assert.equal($content.text().trim(), 'TestContent', 'content is correct');
     });
 
     QUnit.test('title toolbar with buttons when \'showTitle\' is false', function(assert) {

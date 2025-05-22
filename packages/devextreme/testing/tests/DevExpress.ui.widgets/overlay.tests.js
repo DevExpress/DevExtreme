@@ -1929,14 +1929,14 @@ testModule('content', moduleConfig, () => {
         const $content = $($overlay.dxOverlay('instance').$content());
 
         assert.strictEqual($content.children().length, 1, 'Overlay content has only one child');
-        assert.strictEqual($.trim($content.text()), 'TestContent', 'Overlay content text is correct');
+        assert.strictEqual($content.text().trim(), 'TestContent', 'Overlay content text is correct');
     });
 
     test('wrong content template name is specified', function(assert) {
         const $overlay = $('#overlayWithWrongTemplateName').dxOverlay({ contentTemplate: 'custom', visible: true });
         const $content = $overlay.dxOverlay('instance').$content();
 
-        assert.strictEqual($.trim($content.text()), 'custom', 'content has no text');
+        assert.strictEqual($content.text().trim(), 'custom', 'content has no text');
     });
 
     test('contentTemplate option accepts template instance', function(assert) {
@@ -1949,7 +1949,7 @@ testModule('content', moduleConfig, () => {
 
         const $content = $overlay.dxOverlay('instance').$content();
 
-        assert.strictEqual($.trim($content.text()), 'test', 'template rendered');
+        assert.strictEqual($content.text().trim(), 'test', 'template rendered');
     });
 
     test('contentTemplate option support dynamic change', function(assert) {
@@ -1960,7 +1960,7 @@ testModule('content', moduleConfig, () => {
 
         $overlay.dxOverlay('option', 'contentTemplate', 'template2');
 
-        assert.strictEqual($.trim($overlay.dxOverlay('$content').text()), 'template2', 'template rerendered');
+        assert.strictEqual($overlay.dxOverlay('$content').text().trim(), 'template2', 'template rerendered');
     });
 
     test('contentTemplate option support dynamic change in a set of options', function(assert) {

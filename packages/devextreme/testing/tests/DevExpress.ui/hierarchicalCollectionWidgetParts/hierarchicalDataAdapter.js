@@ -897,7 +897,7 @@ module('Search operation', moduleConfig, () => {
 
         const result = dataAdapter.search('bla-bla-bla');
 
-        assert.ok($.isArray(result), 'The result is array');
+        assert.ok(Array.isArray(result), 'The result is array');
         assert.equal(result.length, 0, 'The result is empty');
     });
 

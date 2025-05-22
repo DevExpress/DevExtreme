@@ -95,7 +95,7 @@ test('Checkbox appearance', async (t) => {
     `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`,
   ] as string[]) {
     await ClientFunction(() => {
-      $('#container').append($('<div>').text(`State: ${state}`).css('fontSize', 10));
+      $('#container').append($('<div>').text(`State: ${state}`).css('fontSize', '10px'));
     }, {
       dependencies: {
         state,

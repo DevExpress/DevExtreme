@@ -1,4 +1,5 @@
 import { setHeight, getHeight } from 'core/utils/size';
+import { isNumeric } from 'core/utils/type';
 import $ from 'jquery';
 import { DEBUG_stub_createIncidentOccurred, DEBUG_restore_createIncidentOccurred } from 'viz/core/base_widget.utils';
 import commons from './rangeSelectorParts/commons.js';
@@ -98,8 +99,8 @@ QUnit.test('check default value valueType when start value is numeric', function
     });
 
     const options = this.axis.updateOptions.lastCall.args[0];
-    assert.ok($.isNumeric(options.startValue));
-    assert.ok($.isNumeric(options.endValue));
+    assert.ok(isNumeric(options.startValue));
+    assert.ok(isNumeric(options.endValue));
     assert.strictEqual(options.valueType, 'numeric');
 });
 

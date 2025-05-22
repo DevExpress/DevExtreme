@@ -530,7 +530,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
 
         this.clock.tick(10);
 
-        assert.equal($.trim($('.dx-list-item').text()), 'test', 'template rendered');
+        assert.equal($('.dx-list-item').text().trim(), 'test', 'template rendered');
     });
 
     QUnit.test('dataSource with Guid key', function(assert) {
@@ -687,7 +687,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         const instance = $element.dxDropDownList('instance');
         instance.option('opened', true);
 
-        assert.equal($.trim($('.dx-list-item').text()), '<None>', 'template rendered');
+        assert.equal($('.dx-list-item').text().trim(), '<None>', 'template rendered');
     });
 
     QUnit.test('searchTimeout should be refreshed after next symbol entered', function(assert) {
