@@ -268,11 +268,11 @@ export class DataController {
             strict: true,
           },
         );
-        if (filterChanged) {
-          this.previousDisplayFilter = displayFilter;
+        if (filterChanged && isLoaded) {
           this.dataSource.peek().pageIndex(0);
           someParamChanged ||= true;
         }
+        this.previousDisplayFilter = displayFilter;
 
         if (!equalByValue(dataSource.paginate(), pagingEnabled)) {
           dataSource.paginate(pagingEnabled);
