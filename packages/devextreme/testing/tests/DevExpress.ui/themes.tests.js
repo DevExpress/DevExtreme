@@ -66,7 +66,7 @@ QUnit.module('Selector check', () => {
         selectorText = selectorText.replace(/[+~>]/g, '');
 
         // normalize whitespace
-        selectorText = $.trim(selectorText).replace(/\s+/g, ' ');
+        selectorText = selectorText.trim().replace(/\s+/g, ' ');
 
         return selectorText;
     }
@@ -81,7 +81,7 @@ QUnit.module('Selector check', () => {
         }
 
         for(i = 0; i < parts.length; i++) {
-            part = $.trim(parts[i]);
+            part = parts[i].trim();
 
             if(part === '') {
                 continue;

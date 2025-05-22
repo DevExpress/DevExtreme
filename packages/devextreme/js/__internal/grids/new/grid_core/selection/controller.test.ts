@@ -762,6 +762,168 @@ describe('SelectionController', () => {
       });
     });
 
+    describe('when selection changes via selectionChanged callback', () => {
+      it('should update both selectionController and itemsController selection states when selecting single card', () => {
+        const cardData = { id: 1, value: 'test' };
+        const {
+          selectionController,
+          itemsController,
+        } = setup({
+          keyExpr: 'id',
+          dataSource: [cardData],
+          selection: {
+            mode: 'multiple',
+          },
+        });
+
+        // Set up the spy before calling the method
+        const setSelectionStateSpy = jest.spyOn(itemsController, 'setSelectionState');
+
+        // Mock the selectionChanged private method call with test data
+        const selectionChangedEvent = {
+          addedItemKeys: [1],
+          removedItemKeys: [],
+          selectedItemKeys: [1],
+          selectedItems: [cardData],
+        };
+
+        // Call the private method directly
+        // @ts-expect-error - accessing private method
+        selectionController.selectionChanged(selectionChangedEvent);
+
+        // Verify that both controllers were updated
+        expect(selectionController.getSelectedCardKeys()).toEqual([1]);
+
+        // Check that the itemsController was updated with the same keys
+        expect(setSelectionStateSpy).toHaveBeenCalledWith([1]);
+
+        // Verify the UI would show correct selection state
+        const items = itemsController.items.peek();
+        expect(items[0].isSelected).toBe(true);
+      });
+
+      it('should update both selectionController and itemsController when selecting multiple cards', () => {
+        const cardsData = [
+          { id: 1, value: 'test1' },
+          { id: 2, value: 'test2' },
+          { id: 3, value: 'test3' },
+        ];
+        const {
+          selectionController,
+          itemsController,
+        } = setup({
+          keyExpr: 'id',
+          dataSource: cardsData,
+          selection: {
+            mode: 'multiple',
+          },
+        });
+
+        // Set up the spy before calling the method
+        const setSelectionStateSpy = jest.spyOn(itemsController, 'setSelectionState');
+
+        // Mock the selectionChanged private method call with test data
+        const selectionChangedEvent = {
+          addedItemKeys: [1, 3],
+          removedItemKeys: [],
+          selectedItemKeys: [1, 3],
+          selectedItems: [cardsData[0], cardsData[2]],
+        };
+
+        // Call the private method directly
+        // @ts-expect-error - accessing private method
+        selectionController.selectionChanged(selectionChangedEvent);
+
+        // Verify that both controllers were updated
+        expect(selectionController.getSelectedCardKeys()).toEqual([1, 3]);
+
+        // Check that the itemsController was updated with the same keys
+        expect(setSelectionStateSpy).toHaveBeenCalledWith([1, 3]);
+
+        // Verify the UI would show correct selection state
+        const items = itemsController.items.peek();
+        expect(items[0].isSelected).toBe(true);
+        expect(items[1].isSelected).toBe(false);
+        expect(items[2].isSelected).toBe(true);
+      });
+
+      it('should update both selectionController and itemsController when deselecting cards', () => {
+        const cardsData = [
+          { id: 1, value: 'test1' },
+          { id: 2, value: 'test2' },
+          { id: 3, value: 'test3' },
+        ];
+        const {
+          selectionController,
+          itemsController,
+        } = setup({
+          keyExpr: 'id',
+          dataSource: cardsData,
+          selection: {
+            mode: 'multiple',
+          },
+          selectedCardKeys: [1, 2, 3],
+        });
+
+        // Initially all cards should be selected
+        expect(itemsController.items.peek()[0].isSelected).toBe(true);
+        expect(itemsController.items.peek()[1].isSelected).toBe(true);
+        expect(itemsController.items.peek()[2].isSelected).toBe(true);
+
+        // Set up the spy before calling the method
+        const setSelectionStateSpy = jest.spyOn(itemsController, 'setSelectionState');
+
+        // Mock the selectionChanged event when deselecting card #2
+        const selectionChangedEvent = {
+          addedItemKeys: [],
+          removedItemKeys: [2],
+          selectedItemKeys: [1, 3],
+          selectedItems: [cardsData[0], cardsData[2]],
+        };
+
+        // Call the private method directly
+        // @ts-expect-error - accessing private method
+        selectionController.selectionChanged(selectionChangedEvent);
+
+        // Verify that both controllers were updated
+        expect(selectionController.getSelectedCardKeys()).toEqual([1, 3]);
+
+        // Check that the itemsController was updated with the same keys
+        expect(setSelectionStateSpy).toHaveBeenCalledWith([1, 3]);
+
+        // Verify the UI would show correct selection state
+        const items = itemsController.items.peek();
+        expect(items[0].isSelected).toBe(true);
+        expect(items[1].isSelected).toBe(false);
+        expect(items[2].isSelected).toBe(true);
+      });
+
+      it('should throw error E1042 if keyExpr is missing and selectionChanged', () => {
+        const cardData = { id: 1, value: 'test' };
+        const {
+          selectionController,
+        } = setup({
+          dataSource: [cardData],
+          selection: {
+            mode: 'multiple',
+          },
+        });
+
+        // Mock the selectionChanged private method call with test data
+        const selectionChangedEvent = {
+          addedItemKeys: [1],
+          removedItemKeys: [],
+          selectedItemKeys: [1],
+          selectedItems: [cardData],
+        };
+
+        expect(() => {
+          // @ts-expect-error - accessing private method
+          selectionController.selectionChanged(selectionChangedEvent);
+        }).toThrowError('E1042');
+      });
+    });
+
     describe('when selecting all cards', () => {
       it('should be called', () => {
         const selectionChangedMockFn = jest.fn();

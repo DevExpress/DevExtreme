@@ -156,10 +156,6 @@ window.config = {
     'externals:': '../../../../bundles/externals/',
   },
   map: {
-    //
-    '@preact/signals-core': '../../../../../../node_modules/.pnpm/@preact+signals-core@1.8.0/node_modules/@preact/signals-core/dist/signals-core.js',
-    //
-
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
@@ -177,7 +173,6 @@ window.config = {
 
     /* devextreme */
     'devextreme': 'npm:devextreme/cjs',
-    'devextreme/bundles/dx.all': 'npm:devextreme/bundles/dx.all.js',
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram',
     'devexpress-gantt': 'npm:devexpress-gantt',
@@ -186,6 +181,19 @@ window.config = {
     'devextreme-angular': 'bundles:devextreme-angular/devextreme-angular.umd.js',
     'devextreme-angular/common/ai-integration': 'bundles:devextreme-angular/devextreme-angular-common-ai-integration.umd.js',
     'devextreme-angular/core': 'bundles:devextreme-angular/devextreme-angular-core.umd.js',
+    'devextreme-angular/common/charts': 'bundles:devextreme-angular/devextreme-angular-common-charts.umd.js',
+    'devextreme-angular/common/core/animation': 'bundles:devextreme-angular/devextreme-angular-common-core-animation.umd.js',
+    'devextreme-angular/common/core/environment': 'bundles:devextreme-angular/devextreme-angular-common-core-environment.umd.js',
+    'devextreme-angular/common/core/events': 'bundles:devextreme-angular/devextreme-angular-common-core-events.umd.js',
+    'devextreme-angular/common/core/localization': 'bundles:devextreme-angular/devextreme-angular-common-core-localization.umd.js',
+    'devextreme-angular/common/core': 'bundles:devextreme-angular/devextreme-angular-common-core.umd.js',
+    'devextreme-angular/common/data/custom-store': 'bundles:devextreme-angular/devextreme-angular-common-data-custom-store.umd.js',
+    'devextreme-angular/common/data': 'bundles:devextreme-angular/devextreme-angular-common-data.umd.js',
+    'devextreme-angular/common/export/excel': 'bundles:devextreme-angular/devextreme-angular-common-export-excel.umd.js',
+    'devextreme-angular/common/export/pdf': 'bundles:devextreme-angular/devextreme-angular-common-export-pdf.umd.js',
+    'devextreme-angular/common/export': 'bundles:devextreme-angular/devextreme-angular-common-export.umd.js',
+    'devextreme-angular/common/grids': 'bundles:devextreme-angular/devextreme-angular-common-grids.umd.js',
+    'devextreme-angular/common': 'bundles:devextreme-angular/devextreme-angular-common.umd.js',
     'devextreme-angular/http': 'bundles:devextreme-angular/devextreme-angular-http.umd.js',
     ...componentNames.reduce((acc, name) => {
       acc[`devextreme-angular/ui/${name}`] = `bundles:devextreme-angular/devextreme-angular-ui-${name}.umd.js`;
@@ -266,6 +274,7 @@ window.config = {
     'inferno-clone-vnode': 'npm:inferno-clone-vnode/dist/inferno-clone-vnode.min.js',
     'inferno-create-class': 'npm:inferno-create-class/dist/inferno-create-class.min.js',
     'inferno-extras': 'npm:inferno-extras/dist/inferno-extras.min.js',
+    '@preact/signals-core': 'npm:@preact/signals-core/dist/signals-core.js',
 
     // Prettier
     'prettier/standalone': 'npm:prettier/standalone.js',

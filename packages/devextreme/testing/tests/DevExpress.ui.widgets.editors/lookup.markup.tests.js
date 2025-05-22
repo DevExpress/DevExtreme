@@ -325,7 +325,7 @@ module('options', {
     test('fieldTemplate should be rendered', function(assert) {
         $('#lookupFieldTemplate').dxLookup({ fieldTemplate: 'field' });
 
-        assert.equal($.trim($('#lookupFieldTemplate').text()), 'test', 'test was be rendered');
+        assert.equal($('#lookupFieldTemplate').text().trim(), 'test', 'test was be rendered');
     });
 
     test('selected item should be passed as first argument if fieldTemplate is a function', function(assert) {

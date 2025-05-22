@@ -8,7 +8,7 @@ import {
   Gantt, Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, Toolbar, Item,
 } from 'devextreme-react/gantt';
 
-import pdfExporter from 'devextreme/pdf_exporter';
+import * as pdfExporter from 'devextreme-react/common/export/pdf';
 
 import { jsPDF } from 'jspdf';
 import {

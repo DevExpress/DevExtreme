@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import 'generic_light.css!';
+import 'gantt.css!';
 import 'ui/gantt';
 
 import './ganttParts/markup.tests.js';

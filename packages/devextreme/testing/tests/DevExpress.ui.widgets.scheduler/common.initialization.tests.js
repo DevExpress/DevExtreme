@@ -2,6 +2,7 @@ import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
 
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
+import { isFunction } from 'core/utils/type';
 import $ from 'jquery';
 import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
 import errors from 'ui/widget/ui.errors';
@@ -92,8 +93,8 @@ QUnit.module('Initialization', {
             'allDay',
             'recurrenceRule',
             'recurrenceException'], function(_, field) {
-            assert.ok($.isFunction(dataAccessors.getter[field]), '\'' + field + '\' getter is OK');
-            assert.ok($.isFunction(dataAccessors.setter[field]), '\'' + field + '\' setter is OK');
+            assert.ok(isFunction(dataAccessors.getter[field]), '\'' + field + '\' getter is OK');
+            assert.ok(isFunction(dataAccessors.setter[field]), '\'' + field + '\' setter is OK');
         });
     });
 

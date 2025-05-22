@@ -211,8 +211,7 @@ export const Card: Story = {
       gender: 'Male',
       birthDate: '1983/11/07',
     },
-    // TODO: Check, template rendered twice on first render
-    showCardFooterTemplate: false,
+    showCardFooterTemplate: true,
   }
 }
 

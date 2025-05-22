@@ -1,5 +1,6 @@
 define(function(require) {
     const $ = require('jquery');
+    const typeUtils = require('core/utils/type');
 
     return function(namespace, parent, excluded) {
         excluded = excluded || [];
@@ -12,7 +13,7 @@ define(function(require) {
                     return;
                 }
 
-                if($.isFunction(excluded) ? !excluded(componentName) : $.inArray(componentName, excluded) > -1) {
+                if(typeUtils.isFunction(excluded) ? !excluded(componentName) : $.inArray(componentName, excluded) > -1) {
                     return;
                 }
 

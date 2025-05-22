@@ -1,6 +1,6 @@
 import React from 'react';
 import { SelectBox } from 'devextreme-react/select-box';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-react/common/data';
 import Group from './Group.js';
 import {
   ungroupedData,

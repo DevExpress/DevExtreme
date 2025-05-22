@@ -25,6 +25,8 @@ import { updateHeaderFilterItemSelectionState } from '@ts/grids/grid_core/header
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 
+import type { HeaderFilterListType } from './types';
+
 export const getHeaderItemText = (
   displayValue,
   column,
@@ -137,10 +139,12 @@ const _processGroupItems = (
 
 export const getDataSourceOptions = (
   storeLoadAdapter,
-  column,
+  popupOptions,
   headerFilterOptions,
   filter,
 ) => {
+  const { column } = popupOptions;
+
   if (!storeLoadAdapter) {
     return undefined;
   }
@@ -154,41 +158,40 @@ export const getDataSourceOptions = (
   if (isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
     // @ts-expect-error
     options.dataSource = oldNormalizeDataSourceOptions(headerFilterDataSource);
-    return options.dataSource;
+  } else {
+    const cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;
+
+    options.dataSource = {
+      filter,
+      group,
+      useDefaultSearch: true,
+      load: (loadOptions) => {
+        // @ts-expect-error Deferred ctor.
+        const d = new Deferred();
+        // NOTE: this marked as deprecated in original code
+        loadOptions.dataField = column.dataField || column.name;
+        storeLoadAdapter.load(loadOptions).done((data) => {
+          const convertUTCDates = remoteGrouping
+              && isUTCFormat(column.serializationFormat)
+              && cutoffLevel > 3;
+
+          if (convertUTCDates) {
+            data = convertDataFromUTCToLocal(data, column);
+          }
+
+          _processGroupItems(data, null, null, {
+            level: cutoffLevel,
+            column,
+            headerFilterOptions,
+          });
+
+          d.resolve(data);
+        }).fail(d.reject);
+
+        return d;
+      },
+    };
   }
-
-  const cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;
-
-  options.dataSource = {
-    filter,
-    group,
-    useDefaultSearch: true,
-    load: (loadOptions) => {
-      // @ts-expect-error Deferred ctor.
-      const d = new Deferred();
-      // NOTE: this marked as deprecated in original code
-      loadOptions.dataField = column.dataField || column.name;
-      storeLoadAdapter.load(loadOptions).done((data) => {
-        const convertUTCDates = remoteGrouping
-            && isUTCFormat(column.serializationFormat)
-            && cutoffLevel > 3;
-
-        if (convertUTCDates) {
-          data = convertDataFromUTCToLocal(data, column);
-        }
-
-        _processGroupItems(data, null, null, {
-          level: cutoffLevel,
-          column,
-          headerFilterOptions,
-        });
-
-        d.resolve(data);
-      }).fail(d.reject);
-
-      return d;
-    },
-  };
 
   if (isFunction(headerFilterDataSource)) {
     headerFilterDataSource.call(column, options);
@@ -199,16 +202,20 @@ export const getDataSourceOptions = (
     let items = data;
 
     items = origPostProcess?.call(this, items) || items;
-    _updateSelectedState(items, column);
+    _updateSelectedState(items, {
+      ...column,
+      filterType: popupOptions.filterType,
+      filterValues: popupOptions.filterValues,
+    });
     return items;
   };
 
   return options.dataSource;
 };
 
-export const getFilterType = (
+export const getHeaderFilterListType = (
   column: Column,
-): 'tree' | 'list' => {
+): HeaderFilterListType => {
   const groupInterval = filteringUtils.getGroupInterval(column);
   return groupInterval && groupInterval.length > 1 ? 'tree' : 'list';
 };

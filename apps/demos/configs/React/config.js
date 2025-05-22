@@ -49,10 +49,6 @@ window.config = {
   },
   defaultExtension: 'js',
   map: {
-    //
-    '@preact/signals-core': '../../../../../../node_modules/.pnpm/@preact+signals-core@1.8.0/node_modules/@preact/signals-core/dist/signals-core.js',
-    //
-
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
@@ -144,6 +140,7 @@ window.config = {
     'inferno-clone-vnode': 'npm:inferno-clone-vnode/dist/inferno-clone-vnode.min.js',
     'inferno-create-class': 'npm:inferno-create-class/dist/inferno-create-class.min.js',
     'inferno-extras': 'npm:inferno-extras/dist/inferno-extras.min.js',
+    '@preact/signals-core': 'npm:@preact/signals-core/dist/signals-core.js',
     'devextreme-cldr-data': 'npm:devextreme-cldr-data',
 
     // SystemJS plugins
