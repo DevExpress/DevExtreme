@@ -92,6 +92,7 @@ type IDataGridOptions<TRowData = any, TKey = any> = React.PropsWithChildren<Repl
   defaultFocusedRowKey?: any | undefined;
   defaultGroupPanel?: Record<string, any>;
   defaultPaging?: Record<string, any>;
+  defaultSearchPanel?: Record<string, any>;
   defaultSelectedRowKeys?: Array<any>;
   defaultSelectionFilter?: Array<any> | (() => any) | string;
   onColumnsChange?: (value: Array<dxDataGridColumn | string>) => void;
@@ -103,6 +104,7 @@ type IDataGridOptions<TRowData = any, TKey = any> = React.PropsWithChildren<Repl
   onFocusedRowKeyChange?: (value: any | undefined) => void;
   onGroupPanelChange?: (value: Record<string, any>) => void;
   onPagingChange?: (value: Record<string, any>) => void;
+  onSearchPanelChange?: (value: Record<string, any>) => void;
   onSelectedRowKeysChange?: (value: Array<any>) => void;
   onSelectionFilterChange?: (value: Array<any> | (() => any) | string) => void;
 }>
@@ -124,7 +126,7 @@ const DataGrid = memo(
         }
       ), [baseRef.current]);
 
-      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","filterPanel","filterPanel.filterEnabled","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","groupPanel","groupPanel.visible","paging","paging.pageIndex","paging.pageSize","selectedRowKeys","selectionFilter"]), []);
+      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","filterPanel","filterPanel.filterEnabled","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","groupPanel","groupPanel.visible","paging","paging.pageIndex","paging.pageSize","searchPanel","searchPanel.text","selectedRowKeys","selectionFilter"]), []);
       const independentEvents = useMemo(() => (["onAdaptiveDetailRowPreparing","onCellClick","onCellDblClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onEditorPrepared","onEditorPreparing","onExporting","onFocusedCellChanging","onFocusedRowChanging","onInitialized","onInitNewRow","onKeyDown","onRowClick","onRowCollapsed","onRowCollapsing","onRowDblClick","onRowExpanded","onRowExpanding","onRowInserted","onRowInserting","onRowPrepared","onRowRemoved","onRowRemoving","onRowUpdated","onRowUpdating","onRowValidating","onSaved","onSaving","onToolbarPreparing"]), []);
 
       const defaults = useMemo(() => ({
@@ -137,6 +139,7 @@ const DataGrid = memo(
         defaultFocusedRowKey: "focusedRowKey",
         defaultGroupPanel: "groupPanel",
         defaultPaging: "paging",
+        defaultSearchPanel: "searchPanel",
         defaultSelectedRowKeys: "selectedRowKeys",
         defaultSelectionFilter: "selectionFilter",
       }), []);

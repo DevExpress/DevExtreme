@@ -88,6 +88,7 @@ type ITreeListOptions<TRowData = any, TKey = any> = React.PropsWithChildren<Repl
   defaultFocusedRowIndex?: number;
   defaultFocusedRowKey?: any | undefined;
   defaultPaging?: Record<string, any>;
+  defaultSearchPanel?: Record<string, any>;
   defaultSelectedRowKeys?: Array<any>;
   onColumnsChange?: (value: Array<dxTreeListColumn | string>) => void;
   onEditingChange?: (value: Record<string, any>) => void;
@@ -98,6 +99,7 @@ type ITreeListOptions<TRowData = any, TKey = any> = React.PropsWithChildren<Repl
   onFocusedRowIndexChange?: (value: number) => void;
   onFocusedRowKeyChange?: (value: any | undefined) => void;
   onPagingChange?: (value: Record<string, any>) => void;
+  onSearchPanelChange?: (value: Record<string, any>) => void;
   onSelectedRowKeysChange?: (value: Array<any>) => void;
 }>
 
@@ -118,7 +120,7 @@ const TreeList = memo(
         }
       ), [baseRef.current]);
 
-      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","expandedRowKeys","filterPanel","filterPanel.filterEnabled","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","paging","paging.pageIndex","paging.pageSize","selectedRowKeys"]), []);
+      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","expandedRowKeys","filterPanel","filterPanel.filterEnabled","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","paging","paging.pageIndex","paging.pageSize","searchPanel","searchPanel.text","selectedRowKeys"]), []);
       const independentEvents = useMemo(() => (["onAdaptiveDetailRowPreparing","onCellClick","onCellDblClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onEditorPrepared","onEditorPreparing","onFocusedCellChanging","onFocusedRowChanging","onInitialized","onInitNewRow","onKeyDown","onNodesInitialized","onRowClick","onRowCollapsed","onRowCollapsing","onRowDblClick","onRowExpanded","onRowExpanding","onRowInserted","onRowInserting","onRowPrepared","onRowRemoved","onRowRemoving","onRowUpdated","onRowUpdating","onRowValidating","onSaved","onSaving","onToolbarPreparing"]), []);
 
       const defaults = useMemo(() => ({
@@ -131,6 +133,7 @@ const TreeList = memo(
         defaultFocusedRowIndex: "focusedRowIndex",
         defaultFocusedRowKey: "focusedRowKey",
         defaultPaging: "paging",
+        defaultSearchPanel: "searchPanel",
         defaultSelectedRowKeys: "selectedRowKeys",
       }), []);
 

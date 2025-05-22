@@ -31,7 +31,7 @@ import { Store } from 'devextreme/data/store';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
 import { dxLoadPanelOptions } from 'devextreme/ui/load_panel';
 import { EventInfo } from 'devextreme/common/core/events';
-import { Pager, SearchPanel } from 'devextreme/common/grids';
+import { Pager } from 'devextreme/common/grids';
 
 import DxCardView from 'devextreme/ui/card_view';
 
@@ -85,7 +85,6 @@ import { DxoCardViewPositionModule } from 'devextreme-angular/ui/card-view/neste
 import { DxiCardViewRangeRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewRemoteOperationsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewRequiredRuleModule } from 'devextreme-angular/ui/card-view/nested';
-import { DxoCardViewSearchPanelModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewSelectionModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewShowModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewStringLengthRuleModule } from 'devextreme-angular/ui/card-view/nested';
@@ -497,10 +496,10 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     
     @Input()
-    get searchPanel(): SearchPanel {
+    get searchPanel(): Record<string, any> {
         return this._getOption('searchPanel');
     }
-    set searchPanel(value: SearchPanel) {
+    set searchPanel(value: Record<string, any>) {
         this._setOption('searchPanel', value);
     }
 
@@ -1093,7 +1092,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() searchPanelChange: EventEmitter<SearchPanel>;
+    @Output() searchPanelChange: EventEmitter<Record<string, any>>;
 
     /**
     
@@ -1339,7 +1338,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxiCardViewRangeRuleModule,
     DxoCardViewRemoteOperationsModule,
     DxiCardViewRequiredRuleModule,
-    DxoCardViewSearchPanelModule,
     DxoCardViewSelectionModule,
     DxoCardViewShowModule,
     DxiCardViewStringLengthRuleModule,
@@ -1390,7 +1388,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxiCardViewRangeRuleModule,
     DxoCardViewRemoteOperationsModule,
     DxiCardViewRequiredRuleModule,
-    DxoCardViewSearchPanelModule,
     DxoCardViewSelectionModule,
     DxoCardViewShowModule,
     DxiCardViewStringLengthRuleModule,

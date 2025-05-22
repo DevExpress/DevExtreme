@@ -103,7 +103,6 @@ import {
 } from "devextreme/core/component";
 import {
  Pager,
- SearchPanel,
  DataChangeType,
  FilterType,
  DataChange,
@@ -295,7 +294,7 @@ const componentConfig = {
     remoteOperations: [Boolean, String, Object] as PropType<boolean | Mode | RemoteOperations | Record<string, any>>,
     rtlEnabled: Boolean,
     scrolling: Object as PropType<Record<string, any>>,
-    searchPanel: Object as PropType<SearchPanel | Record<string, any>>,
+    searchPanel: Object as PropType<Record<string, any>>,
     selectedCardKeys: Array as PropType<Array<any>>,
     selection: Object as PropType<SelectionConfiguration | Record<string, any>>,
     tabIndex: Number,
@@ -404,7 +403,6 @@ const componentConfig = {
       pager: { isCollectionItem: false, optionName: "pager" },
       paging: { isCollectionItem: false, optionName: "paging" },
       remoteOperations: { isCollectionItem: false, optionName: "remoteOperations" },
-      searchPanel: { isCollectionItem: false, optionName: "searchPanel" },
       selection: { isCollectionItem: false, optionName: "selection" },
       toolbar: { isCollectionItem: false, optionName: "toolbar" }
     };
@@ -1696,35 +1694,6 @@ const DxRequiredRule = defineComponent(DxRequiredRuleConfig);
   type: "required"
 };
 
-const DxSearchPanelConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:highlightCaseSensitive": null,
-    "update:highlightSearchText": null,
-    "update:placeholder": null,
-    "update:searchVisibleColumnsOnly": null,
-    "update:text": null,
-    "update:visible": null,
-    "update:width": null,
-  },
-  props: {
-    highlightCaseSensitive: Boolean,
-    highlightSearchText: Boolean,
-    placeholder: String,
-    searchVisibleColumnsOnly: Boolean,
-    text: String,
-    visible: Boolean,
-    width: [Number, String]
-  }
-};
-
-prepareConfigurationComponentConfig(DxSearchPanelConfig);
-
-const DxSearchPanel = defineComponent(DxSearchPanelConfig);
-
-(DxSearchPanel as any).$_optionName = "searchPanel";
-
 const DxSelectionConfig = {
   emits: {
     "update:isActive": null,
@@ -1997,7 +1966,6 @@ export {
   DxRangeRule,
   DxRemoteOperations,
   DxRequiredRule,
-  DxSearchPanel,
   DxSelection,
   DxShow,
   DxStringLengthRule,
