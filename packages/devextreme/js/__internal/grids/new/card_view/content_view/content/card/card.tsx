@@ -5,7 +5,10 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
 import { off, on } from '@js/events/index';
 import type * as dxToolbar from '@js/ui/toolbar';
+import { Guid } from '@ts/core/m_guid';
 import { combineClasses } from '@ts/core/utils/combine_classes';
+import type { Position } from '@ts/grids/new/grid_core/accessibility/types';
+import { getCardDescriptiveLabel, getCardRoleDescription, getCardStateDescription } from '@ts/grids/new/grid_core/accessibility/utils';
 import type { CardInfo, FieldInfo } from '@ts/grids/new/grid_core/columns_controller/types';
 import type { DataObject, Key } from '@ts/grids/new/grid_core/data_controller/types';
 import { KbnFocusTrap } from '@ts/grids/new/grid_core/keyboard_navigation/index';
@@ -109,6 +112,8 @@ export interface CardProps {
   onDelete?: (key: Key) => void;
 
   fieldHintEnabled?: boolean;
+
+  position?: Position;
 }
 
 export class Card extends Component<CardProps> {
@@ -134,10 +139,15 @@ export class Card extends Component<CardProps> {
       [CLASSES.selectCard]: !!card.isSelected,
     });
 
-    const hasCover = cover?.imageExpr;
+    const hasCover = !!cover?.imageExpr;
 
     const imageSrc = cover?.imageExpr?.(this.props.card.data);
     const alt = cover?.altExpr?.(this.props.card.data);
+
+    const cardRole = Template ? 'presentation' : 'application';
+
+    const coverId = new Guid();
+    const contentId = new Guid();
 
     return (
       <KbnFocusTrap
@@ -150,6 +160,19 @@ export class Card extends Component<CardProps> {
         onMouseLeave={this.handleMouseLeave}
         onContextMenu={this.props.onContextMenu}
         onKeyDown={this.props.onKeyDown}
+
+        role={cardRole}
+        aria-roledescription={getCardRoleDescription(this.props.allowUpdating)}
+        aria-label={getCardStateDescription(
+          this.props.position,
+          this.props.isCheckBoxesRendered,
+          this.props.card.isSelected,
+        )}
+        aria-describedby={getCardDescriptiveLabel(
+          hasCover,
+          coverId,
+          contentId,
+        )}
       >
         {
           Template
@@ -169,6 +192,7 @@ export class Card extends Component<CardProps> {
               />
               {hasCover && (
                 <Cover
+                  id={coverId}
                   card={card}
                   template={this.props.cover?.template}
                   imageSrc={imageSrc}
@@ -176,7 +200,7 @@ export class Card extends Component<CardProps> {
                 />
               ) }
               {!!this.props.card.fields.length && (
-                <div className={CLASSES.content}>
+                <div className={CLASSES.content} id={contentId}>
                   {ContentTemplate
                     ? <ContentTemplate card={card}/>
                     : this.props.card.fields.map((field) => (

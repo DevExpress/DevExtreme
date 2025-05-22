@@ -3,6 +3,7 @@
 exports[`Options searchPanel.highlightCaseSensitive = false 1`] = `
 <div
   class="dx-cardview-card-content"
+  id="guidmock"
 >
   <div
     class="dx-cardview-field-caption"
@@ -33,6 +34,7 @@ exports[`Options searchPanel.highlightCaseSensitive = false 1`] = `
 exports[`Options searchPanel.highlightCaseSensitive = true 1`] = `
 <div
   class="dx-cardview-card-content"
+  id="guidmock"
 >
   <div
     class="dx-cardview-field-caption"
@@ -58,6 +60,7 @@ exports[`Options searchPanel.highlightCaseSensitive = true 1`] = `
 exports[`Options searchPanel.highlightSearchText = false 1`] = `
 <div
   class="dx-cardview-card-content"
+  id="guidmock"
 >
   <div
     class="dx-cardview-field-caption"
@@ -76,6 +79,7 @@ exports[`Options searchPanel.highlightSearchText = false 1`] = `
 exports[`Options searchPanel.text (card contains match) 1`] = `
 <div
   class="dx-cardview-card-content"
+  id="guidmock"
 >
   <div
     class="dx-cardview-field-caption"

@@ -39,14 +39,12 @@ export default class Popup extends Overlay {
   // eslint-disable-next-line class-methods-use-this
   getName(): WidgetName { return 'dxPopup'; }
 
-  // eslint-disable-next-line class-methods-use-this
   getToolbar(): Selector {
-    return Selector(`.${CLASS.topToolbar}`);
+    return this.getWrapper().find(`.${CLASS.topToolbar}`);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   getBottomToolbar(): Selector {
-    return Selector(`.${CLASS.bottomToolbar}`);
+    return this.getWrapper().find(`.${CLASS.bottomToolbar}`);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -54,8 +52,8 @@ export default class Popup extends Overlay {
     return Selector(`.${CLASS.viewsWrapper}`);
   }
 
-  getButton(idx = 0): Button {
-    return new Button(this.getWrapper().find(`.${CLASS.button}`).nth(idx));
+  getButton(index = 0): Button {
+    return new Button(this.getWrapper().find(`.${CLASS.button}`).nth(index));
   }
 
   getOkButton(): Button {
