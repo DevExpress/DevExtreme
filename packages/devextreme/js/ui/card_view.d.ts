@@ -1486,7 +1486,6 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     searchPanel?: SearchPanel;
     /**
      * @docid
-     * @type object
      * @public
      */
     headerFilter?: HeaderFilter;

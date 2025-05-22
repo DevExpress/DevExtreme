@@ -1266,45 +1266,44 @@ export type FilterType = 'exclude' | 'include';
  */
 export type HeaderFilter = {
   /**
-   * @docid GridBaseOptions.headerFilter.allowSearch
+   * @docid
    * @default false
    * @deprecated
    */
   allowSearch?: boolean;
   /**
-   * @docid GridBaseOptions.headerFilter.allowSelectAll
+   * @docid
    * @default true
    */
   allowSelectAll?: boolean;
   /**
-   * @docid GridBaseOptions.headerFilter.height
+   * @docid
    * @default 315 &for(Material)
    * @default 315 &for(Fluent)
    * @default 325
    */
   height?: number | string;
   /**
-   * @docid GridBaseOptions.headerFilter.search
+   * @docid
    */
   search?: HeaderFilterSearchConfig;
   /**
-   * @docid GridBaseOptions.headerFilter.searchTimeout
+   * @docid
    * @default 500
    * @deprecated
    */
   searchTimeout?: number;
   /**
-   * @docid GridBaseOptions.headerFilter.texts
-   * @type object
+   * @docid
    */
   texts?: HeaderFilterTexts;
   /**
-   * @docid GridBaseOptions.headerFilter.visible
+   * @docid
    * @default false
    */
   visible?: boolean;
   /**
-   * @docid GridBaseOptions.headerFilter.width
+   * @docid
    * @default 252
    */
   width?: number | string;
@@ -1317,8 +1316,8 @@ export type HeaderFilter = {
 export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year';
 
 /**
+ * @docid 
  * @public
- * @docid
  * @namespace DevExpress.common.grids
  */
 export type HeaderFilterSearchConfig = {
@@ -1351,17 +1350,17 @@ export type HeaderFilterSearchConfig = {
  */
 export type HeaderFilterTexts = {
   /**
-   * @docid GridBaseOptions.headerFilter.texts.cancel
+   * @docid
    * @default "Cancel"
    */
   cancel?: string;
   /**
-   * @docid GridBaseOptions.headerFilter.texts.emptyValue
+   * @docid
    * @default "(Blanks)"
    */
   emptyValue?: string;
   /**
-   * @docid GridBaseOptions.headerFilter.texts.ok
+   * @docid
    * @default "Ok"
    */
   ok?: string;
@@ -1984,7 +1983,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   focusedRowKey?: TKey | undefined;
   /**
    * @docid
-   * @type object
    * @public
    */
   headerFilter?: HeaderFilter;
