@@ -66,7 +66,6 @@ import {
 } from "devextreme/common";
 import {
  ColumnChooser,
- FilterPanel,
  HeaderFilter,
  Pager,
  SearchPanel,
@@ -77,7 +76,6 @@ import {
  ColumnChooserSearchConfig,
  ColumnChooserSelectionConfig,
  DataChange,
- FilterPanelTexts,
  HeaderFilterSearchConfig,
  HeaderFilterTexts,
  PagerPageSize,
@@ -257,7 +255,7 @@ const componentConfig = {
     fieldHintEnabled: Boolean,
     filterBuilder: Object as PropType<dxFilterBuilderOptions | Record<string, any>>,
     filterBuilderPopup: Object as PropType<Record<string, any>>,
-    filterPanel: Object as PropType<FilterPanel>,
+    filterPanel: Object as PropType<Record<string, any>>,
     filterValue: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
     focusStateEnabled: Boolean,
     headerFilter: Object as PropType<HeaderFilter | Record<string, any>>,
@@ -411,7 +409,6 @@ const componentConfig = {
       columnChooser: { isCollectionItem: false, optionName: "columnChooser" },
       editing: { isCollectionItem: false, optionName: "editing" },
       filterBuilder: { isCollectionItem: false, optionName: "filterBuilder" },
-      filterPanel: { isCollectionItem: false, optionName: "filterPanel" },
       headerFilter: { isCollectionItem: false, optionName: "headerFilter" },
       headerPanel: { isCollectionItem: false, optionName: "headerPanel" },
       loadPanel: { isCollectionItem: false, optionName: "loadPanel" },
@@ -1189,54 +1186,6 @@ const DxFilterOperationDescriptions = defineComponent(DxFilterOperationDescripti
 
 (DxFilterOperationDescriptions as any).$_optionName = "filterOperationDescriptions";
 
-const DxFilterPanelConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:customizeText": null,
-    "update:filterEnabled": null,
-    "update:texts": null,
-    "update:visible": null,
-  },
-  props: {
-    customizeText: Function as PropType<((e: { component: FilterPanel, filterValue: Record<string, any>, text: string }) => string)>,
-    filterEnabled: Boolean,
-    texts: Object as PropType<FilterPanelTexts | Record<string, any>>,
-    visible: Boolean
-  }
-};
-
-prepareConfigurationComponentConfig(DxFilterPanelConfig);
-
-const DxFilterPanel = defineComponent(DxFilterPanelConfig);
-
-(DxFilterPanel as any).$_optionName = "filterPanel";
-(DxFilterPanel as any).$_expectedChildren = {
-  filterPanelTexts: { isCollectionItem: false, optionName: "texts" },
-  texts: { isCollectionItem: false, optionName: "texts" }
-};
-
-const DxFilterPanelTextsConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:clearFilter": null,
-    "update:createFilter": null,
-    "update:filterEnabledHint": null,
-  },
-  props: {
-    clearFilter: String,
-    createFilter: String,
-    filterEnabledHint: String
-  }
-};
-
-prepareConfigurationComponentConfig(DxFilterPanelTextsConfig);
-
-const DxFilterPanelTexts = defineComponent(DxFilterPanelTextsConfig);
-
-(DxFilterPanelTexts as any).$_optionName = "texts";
-
 const DxFormatConfig = {
   emits: {
     "update:isActive": null,
@@ -1403,7 +1352,6 @@ const DxHeaderFilter = defineComponent(DxHeaderFilterConfig);
 (DxHeaderFilter as any).$_optionName = "headerFilter";
 (DxHeaderFilter as any).$_expectedChildren = {
   headerFilterSearch: { isCollectionItem: false, optionName: "search" },
-  headerFilterTexts: { isCollectionItem: false, optionName: "texts" },
   search: { isCollectionItem: false, optionName: "search" },
   texts: { isCollectionItem: false, optionName: "texts" }
 };
@@ -1430,27 +1378,6 @@ prepareConfigurationComponentConfig(DxHeaderFilterSearchConfig);
 const DxHeaderFilterSearch = defineComponent(DxHeaderFilterSearchConfig);
 
 (DxHeaderFilterSearch as any).$_optionName = "search";
-
-const DxHeaderFilterTextsConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:cancel": null,
-    "update:emptyValue": null,
-    "update:ok": null,
-  },
-  props: {
-    cancel: String,
-    emptyValue: String,
-    ok: String
-  }
-};
-
-prepareConfigurationComponentConfig(DxHeaderFilterTextsConfig);
-
-const DxHeaderFilterTexts = defineComponent(DxHeaderFilterTextsConfig);
-
-(DxHeaderFilterTexts as any).$_optionName = "texts";
 
 const DxHeaderPanelConfig = {
   emits: {
@@ -2106,18 +2033,12 @@ const DxTextsConfig = {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:cancel": null,
-    "update:clearFilter": null,
-    "update:createFilter": null,
     "update:emptyValue": null,
-    "update:filterEnabledHint": null,
     "update:ok": null,
   },
   props: {
     cancel: String,
-    clearFilter: String,
-    createFilter: String,
     emptyValue: String,
-    filterEnabledHint: String,
     ok: String
   }
 };
@@ -2291,15 +2212,12 @@ export {
   DxField,
   DxFilterBuilder,
   DxFilterOperationDescriptions,
-  DxFilterPanel,
-  DxFilterPanelTexts,
   DxFormat,
   DxFormItem,
   DxFrom,
   DxGroupOperationDescriptions,
   DxHeaderFilter,
   DxHeaderFilterSearch,
-  DxHeaderFilterTexts,
   DxHeaderPanel,
   DxHide,
   DxItem,
