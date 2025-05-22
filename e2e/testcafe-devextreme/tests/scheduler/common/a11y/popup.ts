@@ -48,7 +48,7 @@ test('Scheduler recurrence editor repeat end accessible', async (t) => {
 
   await t
     .expect(getAriaLabel(1))
-    .eql('On 2025-05-22')
+    .eql('On 22 May 2025')
     .expect(getAriaLabel(2))
     .eql('After');
   await t
@@ -68,7 +68,7 @@ test('Scheduler recurrence editor repeat end accessible', async (t) => {
     .typeText(scheduler.appointmentPopup.repeatUntilElement, '2026')
     .click(getItem(1)) // unfocus input
     .expect(getAriaLabel(1))
-    .eql('On 2026-05-22')
+    .eql('On 22 May 2026')
     .expect(getAriaLabel(2))
     .eql('After');
   await t
@@ -89,6 +89,6 @@ test('Scheduler recurrence editor repeat end accessible', async (t) => {
       recurrenceRule: 'FREQ=DAILY;UNTIL=20250522T215959Z',
     }],
     currentView: 'week',
-    currentDate: new Date(2021, 2, 28),
+    currentDate: new Date('2021-03-29T21:30:00.000Z'),
   });
 });

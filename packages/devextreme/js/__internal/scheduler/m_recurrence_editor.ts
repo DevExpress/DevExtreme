@@ -588,13 +588,17 @@ class RecurrenceEditor extends Editor {
   _updateRepeatInputAriaLabel(): void {
     const radioButtons = this.getEditorByField('repeatEnd').itemElements();
     const untilLabel = messageLocalization.format('dxScheduler-recurrenceOn');
-    const untilValue = (document.querySelector(`#${REPEAT_UNTIL_ID} input`) as HTMLInputElement)?.value;
+    const untilValue = this._recurrenceForm.getEditor('until').option('value');
+    const untilValueFormat = `${dateLocalization.format(untilValue, 'd')} ${dateLocalization.format(untilValue, 'monthAndYear')}`;
+    const isUntilVisible = this._recurrenceForm.itemOption('until').visible;
+
     const countLabel = messageLocalization.format('dxScheduler-recurrenceAfter');
     const countPostfix = messageLocalization.format('dxScheduler-recurrenceRepeatCount');
-    const countValue = (document.querySelector(`#${REPEAT_COUNT_ID} input`) as HTMLInputElement)?.value;
+    const countValue = this._recurrenceForm.getEditor('count').option('value');
+    const isCountVisible = this._recurrenceForm.itemOption('count').visible;
 
-    radioButtons[1].setAttribute('aria-label', untilValue ? `${untilLabel} ${untilValue}` : untilLabel);
-    radioButtons[2].setAttribute('aria-label', countValue ? `${countLabel} ${countValue} ${countPostfix}` : countLabel);
+    radioButtons[1].setAttribute('aria-label', isUntilVisible ? `${untilLabel} ${untilValueFormat}` : untilLabel);
+    radioButtons[2].setAttribute('aria-label', isCountVisible ? `${countLabel} ${countValue} ${countPostfix}` : countLabel);
   }
 
   _repeatCountValueChangeHandler(args) {
