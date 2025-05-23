@@ -6617,23 +6617,23 @@ declare module DevExpress.common.grids {
    */
   export type Sorting = {
     /**
-     * [descr:GridBaseOptions.sorting.ascendingText]
+     * [descr:Sorting.ascendingText]
      */
     ascendingText?: string;
     /**
-     * [descr:GridBaseOptions.sorting.clearText]
+     * [descr:Sorting.clearText]
      */
     clearText?: string;
     /**
-     * [descr:GridBaseOptions.sorting.descendingText]
+     * [descr:Sorting.descendingText]
      */
     descendingText?: string;
     /**
-     * [descr:GridBaseOptions.sorting.mode]
+     * [descr:Sorting.mode]
      */
     mode?: SingleMultipleOrNone;
     /**
-     * [descr:GridBaseOptions.sorting.showSortIndexes]
+     * [descr:Sorting.showSortIndexes]
      */
     showSortIndexes?: boolean;
   };
@@ -10804,6 +10804,9 @@ declare module DevExpress.ui {
      */
     toolbar?: DevExpress.ui.dxCardView.Toolbar;
 
+    /**
+     * [descr:dxCardViewOptions.sorting]
+     */
     sorting?: DevExpress.common.grids.Sorting;
 
     /**

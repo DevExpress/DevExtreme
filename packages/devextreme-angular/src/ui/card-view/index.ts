@@ -26,7 +26,7 @@ export { ExplicitTypes } from 'devextreme/ui/card_view';
 import DataSource from 'devextreme/data/data_source';
 import { CardCover, CardHeader, ColumnProperties, dxCardViewEditing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, SelectionChangedEvent, SelectionChangingEvent, Paging, RemoteOperations, SelectionConfiguration, Toolbar } from 'devextreme/ui/card_view';
 import { Mode } from 'devextreme/common';
-import { ColumnChooser, HeaderFilter, Pager, SearchPanel } from 'devextreme/common/grids';
+import { ColumnChooser, HeaderFilter, Pager, SearchPanel, Sorting } from 'devextreme/common/grids';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
@@ -95,6 +95,7 @@ import { DxoCardViewSearchModule } from 'devextreme-angular/ui/card-view/nested'
 import { DxoCardViewSearchPanelModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewSelectionModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewShowModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewSortingModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewStringLengthRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewTextsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewToModule } from 'devextreme-angular/ui/card-view/nested';
@@ -530,6 +531,16 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
     set selection(value: SelectionConfiguration) {
         this._setOption('selection', value);
+    }
+
+
+    
+    @Input()
+    get sorting(): Sorting {
+        return this._getOption('sorting');
+    }
+    set sorting(value: Sorting) {
+        this._setOption('sorting', value);
     }
 
 
@@ -1122,6 +1133,13 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() sortingChange: EventEmitter<Sorting>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
@@ -1249,6 +1267,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { emit: 'searchPanelChange' },
             { emit: 'selectedCardKeysChange' },
             { emit: 'selectionChange' },
+            { emit: 'sortingChange' },
             { emit: 'tabIndexChange' },
             { emit: 'toolbarChange' },
             { emit: 'visibleChange' },
@@ -1357,6 +1376,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewSearchPanelModule,
     DxoCardViewSelectionModule,
     DxoCardViewShowModule,
+    DxoCardViewSortingModule,
     DxiCardViewStringLengthRuleModule,
     DxoCardViewTextsModule,
     DxoCardViewToModule,
@@ -1416,6 +1436,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewSearchPanelModule,
     DxoCardViewSelectionModule,
     DxoCardViewShowModule,
+    DxoCardViewSortingModule,
     DxiCardViewStringLengthRuleModule,
     DxoCardViewTextsModule,
     DxoCardViewToModule,

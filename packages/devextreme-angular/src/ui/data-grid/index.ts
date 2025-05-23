@@ -27,7 +27,7 @@ import DataSource from 'devextreme/data/data_source';
 import dxDataGrid from 'devextreme/ui/data_grid';
 import dxSortable from 'devextreme/ui/sortable';
 import dxDraggable from 'devextreme/ui/draggable';
-import { ColumnChooser, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataChange, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, GridBase, ApplyFilterMode, GroupExpandMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, Pager, DataRenderMode, SearchPanel, SelectionColumnDisplayMode, StateStoreType, SummaryType } from 'devextreme/common/grids';
+import { ColumnChooser, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataChange, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, GridBase, ApplyFilterMode, GroupExpandMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, Pager, DataRenderMode, SearchPanel, SelectionColumnDisplayMode, Sorting, StateStoreType, SummaryType } from 'devextreme/common/grids';
 import { PositionConfig } from 'devextreme/common/core/animation';
 import { SortOrder, Mode, DragDirection, DragHighlight, ScrollbarMode, SingleMultipleOrNone, SelectAllMode, HorizontalAlignment } from 'devextreme/common';
 import { dxDataGridColumn, dxDataGridRowObject, DataGridExportFormat, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, DataGridScrollMode, SelectionSensitivity, dxDataGridToolbar } from 'devextreme/ui/data_grid';
@@ -1084,10 +1084,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get sorting(): { ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean } {
+    get sorting(): Sorting {
         return this._getOption('sorting');
     }
-    set sorting(value: { ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean }) {
+    set sorting(value: Sorting) {
         this._setOption('sorting', value);
     }
 
@@ -1996,7 +1996,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sortingChange: EventEmitter<{ ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean }>;
+    @Output() sortingChange: EventEmitter<Sorting>;
 
     /**
     

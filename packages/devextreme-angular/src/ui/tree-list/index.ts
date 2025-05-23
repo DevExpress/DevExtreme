@@ -27,7 +27,7 @@ import DataSource from 'devextreme/data/data_source';
 import dxTreeList from 'devextreme/ui/tree_list';
 import dxSortable from 'devextreme/ui/sortable';
 import dxDraggable from 'devextreme/ui/draggable';
-import { ColumnChooser, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction, GridBase, ApplyFilterMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, Pager, DataRenderMode, SearchPanel, StateStoreType } from 'devextreme/common/grids';
+import { ColumnChooser, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, ColumnResizeMode, DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction, GridBase, ApplyFilterMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, Pager, DataRenderMode, SearchPanel, Sorting, StateStoreType } from 'devextreme/common/grids';
 import { PositionConfig } from 'devextreme/common/core/animation';
 import { SortOrder, Mode, DataStructure, DragDirection, DragHighlight, ScrollMode, ScrollbarMode, SingleMultipleOrNone } from 'devextreme/common';
 import { dxTreeListColumn, dxTreeListRowObject, TreeListFilterMode, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, dxTreeListToolbar } from 'devextreme/ui/tree_list';
@@ -1071,10 +1071,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get sorting(): { ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean } {
+    get sorting(): Sorting {
         return this._getOption('sorting');
     }
-    set sorting(value: { ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean }) {
+    set sorting(value: Sorting) {
         this._setOption('sorting', value);
     }
 
@@ -1977,7 +1977,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() sortingChange: EventEmitter<{ ascendingText?: string, clearText?: string, descendingText?: string, mode?: SingleMultipleOrNone, showSortIndexes?: boolean }>;
+    @Output() sortingChange: EventEmitter<Sorting>;
 
     /**
     
