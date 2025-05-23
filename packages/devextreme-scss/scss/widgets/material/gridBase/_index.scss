@@ -463,9 +463,8 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
         margin-top: 0;
       }
 
-      &:not(.dx-tagbox):not(:has(.dx-colorbox-input-container)) .dx-texteditor-input {
-        padding-right: $material-grid-base-cell-horizontal-padding;
-        padding-left: $material-grid-base-cell-horizontal-padding;
+      &:not(.dx-tagbox):not(.dx-colorbox) .dx-texteditor-input {
+        padding: 0 $material-grid-base-cell-horizontal-padding;
       }
 
       .dx-placeholder::before {
