@@ -2785,7 +2785,7 @@ test('DataGrid - A new row is added above the existing row if the data source is
     await t.click(dataGrid.getDataCell(0, 0).element);
 
     await t
-      .expect(await takeScreenshot('grid-form-editing-with-color-box', dataGrid.element))
+      .expect(await takeScreenshot(`grid-form-editing-with-color-box_(${theme})`, dataGrid.element))
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -2794,7 +2794,7 @@ test('DataGrid - A new row is added above the existing row if the data source is
       await changeTheme(theme);
       await createWidget('dxDataGrid', {
         dataSource: [
-          { Colour: 'red' },
+          { Color: 'red' },
         ],
         showBorders: true,
         editing: {
@@ -2802,7 +2802,7 @@ test('DataGrid - A new row is added above the existing row if the data source is
           mode: 'cell',
         },
         onEditorPreparing(e) {
-          if (e.dataField === 'Colour') {
+          if (e.dataField === 'Color') {
             e.editorName = 'dxColorBox';
             e.editorOptions.readOnly = false;
           }
