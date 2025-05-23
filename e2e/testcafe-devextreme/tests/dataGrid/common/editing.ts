@@ -2778,7 +2778,7 @@ test('DataGrid - A new row is added above the existing row if the data source is
   Themes.fluentBlue,
   Themes.materialBlue,
 ].forEach((theme) => {
-  test.only('DataGrid - ColorBox in DataGrid causes input value to appear behind color preview', async (t) => {
+  test('DataGrid - ColorBox in DataGrid causes input value to appear behind color preview', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
 
