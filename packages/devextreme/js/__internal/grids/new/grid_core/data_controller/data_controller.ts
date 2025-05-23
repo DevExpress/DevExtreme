@@ -11,7 +11,7 @@ import { createPromise } from '@ts/core/utils/promise';
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { FilterController } from '../filtering/filter_controller';
 import { OptionsController } from '../options_controller/options_controller';
-import { SortingController } from '../sorting_controller/sorting_controller';
+import { SortingController } from '../sorting_controller/index';
 import { StoreLoadAdapter } from './store_load_adapter/index';
 import type { DataObject, Key } from './types';
 import {
@@ -223,6 +223,7 @@ export class DataController {
         const dataSource = this.dataSource.value;
         const pageIndex = this.pageIndex.value;
         const pageSize = this.pageSize.value;
+        const isLoaded = this.isLoaded.value;
         const displayFilter = this.filterController.displayFilter.value;
         const pagingEnabled = this.pagingEnabled.value;
         const sortParameters = this.sortingController.sortParameters.value;
@@ -234,7 +235,13 @@ export class DataController {
         }
 
         if (dataSource.pageSize() !== pageSize) {
+          const newPageIndex = isLoaded
+            ? Math.max(Math.min(this.pageCount.peek() - 1, pageIndex), 0)
+            : pageIndex;
+
           dataSource.pageSize(pageSize);
+          dataSource.pageIndex(newPageIndex);
+
           someParamChanged ||= true;
         }
 
@@ -244,7 +251,7 @@ export class DataController {
         }
 
         if (!equalByValue(
-          dataSource.filter(),
+          dataSource.filter() ?? null,
           displayFilter,
           {
             maxDepth: FILTER_OBJ_COMPARE_DEPTH,

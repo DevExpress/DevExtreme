@@ -432,7 +432,7 @@ QUnit.module('option dependent appearance', moduleSetup, () => {
         });
         const $tagContainer = $element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        assert.equal($.trim($tagContainer.text()), '!one!two', 'selected values are rendered correctly');
+        assert.equal($tagContainer.text().trim(), '!one!two', 'selected values are rendered correctly');
     });
 
     QUnit.test('tagbox should have template classes', function(assert) {

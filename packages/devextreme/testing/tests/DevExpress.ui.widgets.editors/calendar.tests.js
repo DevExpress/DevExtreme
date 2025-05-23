@@ -12,10 +12,10 @@ import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import config from 'core/config';
 import dataUtils from 'core/element_data';
-import devices from 'core/devices.js';
 import dateLocalization from 'common/core/localization/date';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import localization from 'localization';
+import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import 'generic_light.css!';
 
@@ -2255,8 +2255,7 @@ QUnit.module('Options', {
                 }
             ].forEach(({ value, scenario }) => {
                 QUnit.test(`Cells should not have ${CALENDAR_CELL_IN_RANGE_CLASS} class on hover ${scenario}`, function(assert) {
-                    if(devices.real().deviceType !== 'desktop') {
-                        assert.ok(true, 'test does not actual for mobile devices');
+                    if(shouldSkipOnMobile(assert)) {
                         return;
                     }
 
@@ -2273,8 +2272,7 @@ QUnit.module('Options', {
             });
 
             QUnit.test(`Cells should have ${CALENDAR_CELL_RANGE_HOVER_CLASS} class on hover when only startDate is defined`, function(assert) {
-                if(devices.real().deviceType !== 'desktop') {
-                    assert.ok(true, 'test does not actual for mobile devices');
+                if(shouldSkipOnMobile(assert)) {
                     return;
                 }
 
@@ -2307,8 +2305,7 @@ QUnit.module('Options', {
             });
 
             QUnit.test('Hovered range should be cleared after mouseleave on viewsWrapper element', function(assert) {
-                if(devices.real().deviceType !== 'desktop') {
-                    assert.ok(true, 'test does not actual for mobile devices');
+                if(shouldSkipOnMobile(assert)) {
                     return;
                 }
 

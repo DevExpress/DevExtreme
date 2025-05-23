@@ -1,0 +1,35 @@
+<div class="demo-container">
+  <dx-card-view
+    [dataSource]="employees"
+    [keyExpr]="'ID'"
+    [allowColumnReordering]="true"
+    [cardsPerRow]="'auto'"
+    [cardMinWidth]="250"
+    [headerFilter]="headerFilterConfig"
+    [searchPanel]="searchPanelConfig"
+    [columnChooser]="columnChooserConfig"
+  >
+    <!-- Columns -->
+    <dxi-card-view-column
+      dataField="FullName"
+      allowHiding="false"
+    ></dxi-card-view-column>
+    <dxi-card-view-column dataField="Position"></dxi-card-view-column>
+    <dxi-card-view-column dataField="Department"></dxi-card-view-column>
+    <dxi-card-view-column dataField="Phone"></dxi-card-view-column>
+    <dxi-card-view-column dataField="Email"></dxi-card-view-column>
+    <!-- Card cover -->
+    <dxo-card-view-card-cover
+      [imageExpr]="getEmployeeImage"
+      [altExpr]="getEmployeeImageAltText"
+    ></dxo-card-view-card-cover>
+    <!-- Pager -->
+    <dxo-card-view-pager
+      [showInfo]="true"
+      [showNavigationButtons]="true"
+      [showPageSizeSelector]="true"
+    ></dxo-card-view-pager>
+    <!-- Selection -->
+    <dxo-card-view-selection mode="multiple"></dxo-card-view-selection>
+  </dx-card-view>
+</div>

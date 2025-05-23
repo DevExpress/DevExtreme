@@ -6,6 +6,7 @@ import registerComponent from 'core/component_registrator';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { BaseGauge, formatValue, getSampleText } from 'viz/gauges/base_gauge';
 import titleModule from 'viz/core/title';
+import exportModule from 'viz/core/export';
 import loadingIndicatorModule from 'viz/core/loading_indicator';
 import rendererModule from 'viz/core/renderers/renderer';
 import tooltipModule from 'viz/core/tooltip';
@@ -583,4 +584,77 @@ QUnit.test('Should dispose graphic objects on container remove', function(assert
     this.$container.remove();
 
     assert.strictEqual(gauge._graphicObjects, null);
+});
+
+QUnit.module('Render content on LAYOUT change', {
+    beforeEach: function() {
+        environment.beforeEach.apply(this, arguments);
+        const that = this;
+
+        this.export = new vizMocks.ExportMenu();
+        exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
+            return that.export;
+        }));
+
+        this.title.stub('update').returns(true);
+    },
+    createGauge: environment.createGauge,
+    afterEach: function() {
+        this.export = null;
+        delete BaseGauge.prototype._DEBUG_change_title;
+        environment.afterEach.apply(this, arguments);
+    }
+}, function() {
+    [
+        { code: 'EXPORT', optionName: 'export.enabled', optionValue: true },
+        { code: 'DOMAIN', optionName: 'startValue', optionValue: 10 },
+        { code: 'MOSTLY_TOTAL', optionName: 'geometry.startAngle', optionValue: 180 },
+    ].forEach(({ code, optionName, optionValue }) => {
+        QUnit.test(`Should call _renderContent method if '${code}' trigger layout change`, function(assert) {
+            const gauge = this.createGauge();
+
+            const _renderContent = this.abstractMethods._renderContent;
+            const initialRenderCount = _renderContent.callCount;
+
+            gauge.option(optionName, optionValue);
+
+            assert.strictEqual(_renderContent.callCount, initialRenderCount + 1);
+        });
+    });
+
+    const initialTitleBBox = {
+        x: 1,
+        y: 2,
+        width: 20,
+        height: 10,
+        verticalAlignment: 'top',
+    };
+
+    [
+        { update: true, changes: { verticalAlignment: 'bottom' } },
+        { update: true, changes: { y: 5 } },
+        { update: true, changes: { height: 20 } },
+        { update: false, changes: { width: 10 } },
+    ].forEach(({ update, changes }) => {
+        QUnit.test(`Should ${update ? 'call' : 'not call' } _renderContent method if 'TITLE' trigger layout change and '${Object.keys(changes).join(', ')}' changed (T1288122)`, function(assert) {
+            this.title.stub('getLayoutOptions').returns(initialTitleBBox);
+
+            const gauge = this.createGauge();
+
+            BaseGauge.prototype._DEBUG_change_title = ()=> {
+                this.title.stub('getLayoutOptions').returns({
+                    ...initialTitleBBox,
+                    ...changes,
+                });
+            };
+
+            const _renderContent = this.abstractMethods._renderContent;
+            const initialRenderCount = _renderContent.callCount;
+            const expectedRenderCount = update ? initialRenderCount + 1 : initialRenderCount;
+
+            gauge.option('title.text', 'test');
+
+            assert.strictEqual(_renderContent.callCount, expectedRenderCount);
+        });
+    });
 });

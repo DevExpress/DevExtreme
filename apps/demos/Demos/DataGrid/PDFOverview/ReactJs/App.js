@@ -8,7 +8,7 @@ import DataGrid, {
   Pager,
 } from 'devextreme-react/data-grid';
 import { jsPDF } from 'jspdf';
-import { exportDataGrid } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme-react/common/export/pdf';
 import { customers } from './data.js';
 
 const exportFormats = ['pdf'];

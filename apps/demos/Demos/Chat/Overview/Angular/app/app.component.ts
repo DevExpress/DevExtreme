@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { DxChatModule } from 'devextreme-angular';
-import { User, Message, MessageEnteredEvent } from 'devextreme/ui/chat';
+import { DxChatTypes } from 'devextreme-angular/ui/chat';
 import { Observable } from 'rxjs';
 import { AppService } from './app.service';
 
@@ -23,15 +23,15 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
 })
 export class AppComponent {
-  currentUser: User;
+  currentUser: DxChatTypes.User;
 
-  supportAgent: User;
+  supportAgent: DxChatTypes.User;
 
-  messages$: Observable<Message[]>;
+  messages$: Observable<DxChatTypes.Message[]>;
 
-  userChatTypingUsers$: Observable<User[]>;
+  userChatTypingUsers$: Observable<DxChatTypes.User[]>;
 
-  supportChatTypingUsers$: Observable<User[]>;
+  supportChatTypingUsers$: Observable<DxChatTypes.User[]>;
 
   constructor(private readonly appService: AppService) {
     [this.currentUser, this.supportAgent] = this.appService.getUsers();
@@ -40,7 +40,7 @@ export class AppComponent {
     this.supportChatTypingUsers$ = this.appService.supportChatTypingUsers$;
   }
 
-  onMessageEntered(event: MessageEnteredEvent) {
+  onMessageEntered(event: DxChatTypes.MessageEnteredEvent) {
     this.appService.onMessageEntered(event);
   }
 

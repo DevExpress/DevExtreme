@@ -5,11 +5,15 @@
       :data-source="dataSource"
       :user="currentUser"
       :reload-on-change="false"
-      v-model:editing="chatEditing"
       @messageEntered="onMessageEntered"
       @messageDeleted="onMessageDeleted"
       @messageUpdated="onMessageUpdated"
-    />
+    >
+      <DxEditing
+        :allow-deleting="allowDeleting"
+        :allow-updating="allowUpdating"
+      />
+    </DxChat>
   </div>
   <div class="options">
     <div class="caption">Options</div>
@@ -20,8 +24,8 @@
         value-expr="key"
         display-expr="text"
         :input-attr="allowEditingLabel"
-        :value="editingOptions[0].key"
-        @valueChanged="(e) => handleEditingChange(e, 'allowUpdating')"
+        :value="selectedEditingStrategy"
+        @valueChanged="onAllowEditingChange"
       />
     </div>
     <div class="option">
@@ -31,8 +35,8 @@
         value-expr="key"
         display-expr="text"
         :input-attr="allowDeletingLabel"
-        :value="editingOptions[0].key"
-        @valueChanged="(e) => handleEditingChange(e, 'allowDeleting')"
+        :value="selectedDeletingStrategy"
+        @valueChanged="onAllowDeletingChange"
       />
     </div>
   </div>
@@ -40,7 +44,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import DxChat from 'devextreme-vue/chat';
+import DxChat, { DxEditing } from 'devextreme-vue/chat';
 import DxSelectBox from 'devextreme-vue/select-box';
 import CustomStore from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
@@ -52,11 +56,6 @@ import {
   allowEditingLabel,
   allowDeletingLabel,
 } from './data.ts';
-
-const chatEditing = ref<{ allowUpdating?: boolean, allowDeleting?: boolean }>({
-  allowUpdating: true,
-  allowDeleting: true,
-});
 
 const store = [...initialMessages];
 
@@ -124,8 +123,20 @@ const editingStrategy = {
   },
 };
 
-const handleEditingChange = (e, type: 'allowUpdating' | 'allowDeleting') => {
-  chatEditing.value = { [type]: editingStrategy[e.value] };
+const selectedEditingStrategy = ref('enabled');
+const selectedDeletingStrategy = ref('enabled');
+
+const allowUpdating = ref(editingStrategy[selectedEditingStrategy.value]);
+const allowDeleting = ref(editingStrategy[selectedDeletingStrategy.value]);
+
+const onAllowEditingChange = (event) => {
+  selectedEditingStrategy.value = event.value;
+  allowUpdating.value = editingStrategy[event.value];
+};
+
+const onAllowDeletingChange = (event) => {
+  selectedDeletingStrategy.value = event.value;
+  allowDeleting.value = editingStrategy[event.value];
 };
 </script>
 

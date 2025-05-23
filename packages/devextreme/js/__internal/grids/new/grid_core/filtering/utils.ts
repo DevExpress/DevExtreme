@@ -7,10 +7,17 @@ export const getAppliedFilterExpressions = (
   appliedFilters: AppliedFilters,
   columns: Column[],
   customOperations: unknown[],
+  filterSyncEnabled: boolean,
+): unknown[] => {
+  const filters = [
+    getFilterExpression(appliedFilters.filterPanel, columns, customOperations, 'filterBuilder'),
+    // Note: Search filters do not contain filter expressions
+    appliedFilters.search,
+  ];
 
-): unknown[] => [
-  getFilterExpression(appliedFilters.filterPanel, columns, customOperations, 'filterBuilder'),
-  getFilterExpression(appliedFilters.headerFilter, columns, customOperations, 'filterBuilder'),
-  // Note: Search filters do not contain filter expressions
-  appliedFilters.search,
-].filter((filter) => filter);
+  if (!filterSyncEnabled) {
+    filters.push(getFilterExpression(appliedFilters.headerFilter, columns, customOperations, 'filterBuilder'));
+  }
+
+  return filters.filter((filter) => filter);
+};

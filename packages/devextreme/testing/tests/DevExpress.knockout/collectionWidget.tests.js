@@ -242,7 +242,7 @@ QUnit.test('render items with multiple templates, ko scenario', function(assert)
         assert.equal($items.length, testSet.length, 'quantity of a test set items and rendered items are equal');
 
         $items.each(function(index) {
-            assert.equal($.trim($(this).text()), testSet[index]);
+            assert.equal($(this).text().trim(), testSet[index]);
         });
     } finally {
         delete ko.bindingHandlers['dxTestComponent'];
@@ -265,8 +265,8 @@ QUnit.test('$index is available in markup (T542335)', function(assert) {
 
         const $items = $element.find('.item');
 
-        assert.equal($.trim($items.eq(0).text()), '$index: 0');
-        assert.equal($.trim($items.eq(1).text()), '$index: 1');
+        assert.equal($items.eq(0).text().trim(), '$index: 0');
+        assert.equal($items.eq(1).text().trim(), '$index: 1');
 
     } finally {
         delete ko.bindingHandlers['dxTestComponent'];
@@ -324,7 +324,7 @@ QUnit.test('item uses custom template', function(assert) {
     const $component = $('#container-with-items-and-custom-template');
     ko.applyBindings({}, $component.get(0));
 
-    assert.equal($.trim($component.text()), 'custom');
+    assert.equal($component.text().trim(), 'custom');
 });
 
 QUnit.test('option items has higher priority than items in markup', function(assert) {
@@ -348,7 +348,7 @@ QUnit.test('$parent should be correct for collection item', function(assert) {
     ko.applyBindings(vm, $markup.get(0));
 
     const $item = $markup.find('.dx-item');
-    assert.equal($.trim($item.text()), 'parent');
+    assert.equal($item.text().trim(), 'parent');
 });
 
 

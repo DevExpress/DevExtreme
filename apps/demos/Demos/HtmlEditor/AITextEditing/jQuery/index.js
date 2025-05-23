@@ -15,7 +15,10 @@ $(() => {
       temperature: 0.7,
     };
 
-    return aiService.chat.completions.create(params, { signal });
+    const response = await aiService.chat.completions.create(params, { signal });
+    const result = response.choices[0].message?.content;
+
+    return result;
   }
 
   const aiIntegration = new DevExpress.aiIntegration({
@@ -28,16 +31,7 @@ $(() => {
         { role: 'user', content: prompt.user, },
       ];
 
-      const promise = new Promise(async (resolve, reject) => {
-        try {
-          const response = await getAIResponse(aiPrompt, signal);
-          const result = response.choices[0].message?.content;
-  
-          resolve(result);
-        } catch {
-          reject();
-        }
-      });
+      const promise = getAIResponse(aiPrompt, signal);
 
       const result = {
         promise,
@@ -71,7 +65,7 @@ $(() => {
                 name: 'custom',
                 text: 'Extract Keywords',
                 prompt: () => {
-                    return 'Extract a list of keywords from the text and return them as a comma-separated string';
+                    return 'Extract a list of keywords from the text and return it as a comma-separated string';
                 },
             },
           ],

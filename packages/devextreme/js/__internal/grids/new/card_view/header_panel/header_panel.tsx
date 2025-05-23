@@ -2,6 +2,7 @@
   spellcheck/spell-checker
 */
 import messageLocalization from '@js/localization/message';
+import { filterHasField } from '@ts/filter_builder/m_utils';
 import type { Column, VisibleColumn } from '@ts/grids/new/grid_core/columns_controller/types';
 import { Scrollable } from '@ts/grids/new/grid_core/inferno_wrappers/scrollable';
 import type { NavigationStrategyBase } from '@ts/grids/new/grid_core/keyboard_navigation/index';
@@ -9,10 +10,13 @@ import { KbnNavigationContainer, withKbnNavigationItem, withKeyDownHandler } fro
 import type { ComponentType } from 'inferno';
 import { Component } from 'inferno';
 
+import { getColumnIdentifier } from '../../grid_core/filtering/header_filter/utils';
+import type { FilterValue } from '../../grid_core/filtering/types';
 import type { Props as ColumnSortableProps } from './column_sortable';
 import { ColumnSortable } from './column_sortable';
 import { CLASSES as itemClasses, Item } from './item';
 import type { DraggingOptions } from './options';
+import { hasFilterValues } from './utils';
 
 export const CLASSES = {
   link: 'dx-link',
@@ -58,6 +62,8 @@ export interface HeaderPanelProps {
   ) => void;
 
   openColumnChooser: () => void;
+
+  filterSyncValue: FilterValue | null;
 }
 
 const EmptyHeaderPanelText = (props: { openColumnChooser: () => void }): JSX.Element => {
@@ -66,7 +72,7 @@ const EmptyHeaderPanelText = (props: { openColumnChooser: () => void }): JSX.Ele
   const [leftPart, rightPart] = text.split('{0}');
 
   return (
-    <span className={CLASSES.headerPanelTextEmpty}>
+    <span className={CLASSES.headerPanelTextEmpty} role='menuitem'>
       {leftPart}
       <a className={CLASSES.link} onClick={props.openColumnChooser}>{columnChooserText}</a>
       {rightPart}
@@ -117,7 +123,10 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
               enabled={this.props.kbnEnabled}
               navigationStrategy={this.props.navigationStrategy}
             >
-              <div className={CLASSES.content}>
+              <div
+                className={CLASSES.content}
+                role="menubar"
+              >
                 {this.props.visibleColumns.length === 0 && (
                   <EmptyHeaderPanelText openColumnChooser={this.props.openColumnChooser}/>
                 )}
@@ -129,6 +138,7 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
                     column={column}
                     template={this.props.itemTemplate}
                     cssClass={this.props.itemCssClass}
+                    hasFilters={this.itemHasFilters(column, this.props.filterSyncValue)}
                     keyDownConfig={{
                       Enter: (event) => { this.props.onColumnSort(column, event); },
                       'Enter+ctrl': (event) => { this.props.onColumnSort(column, event); },
@@ -167,5 +177,16 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
         </ColumnSortable>
       </div>
     );
+  }
+
+  private itemHasFilters(column: VisibleColumn, filterSyncValue: unknown): boolean {
+    const { filterValues, filterType } = column;
+
+    const columnId = getColumnIdentifier(column);
+
+    const hasHeaderFilterValue = hasFilterValues(filterType, filterValues);
+    const hasFilterSyncValue = filterHasField(filterSyncValue, columnId) as boolean;
+
+    return hasHeaderFilterValue || hasFilterSyncValue;
   }
 }

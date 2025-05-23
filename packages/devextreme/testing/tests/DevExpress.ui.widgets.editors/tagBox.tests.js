@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { DataSource } from 'common/data/data_source/data_source';
-import { isRenderer } from 'core/utils/type';
+import { isFunction, isRenderer } from 'core/utils/type';
 import { createTextElementHiddenCopy } from '__internal/core/utils/m_dom';
 import ajaxMock from '../../helpers/ajaxMock.js';
 import config from 'core/config';
@@ -21,6 +21,7 @@ import { normalizeKeyName } from 'common/core/events/utils/index';
 import { getWidth, getHeight } from 'core/utils/size';
 import Guid from 'core/guid';
 import browser from 'core/utils/browser';
+import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
 
@@ -506,7 +507,7 @@ QUnit.module('tags', moduleSetup, () => {
         $($listItems.eq(0)).trigger('dxclick');
         $($listItems.eq(1)).trigger('dxclick');
 
-        assert.equal($.trim($tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS).text()), '01', 'selected first and second items');
+        assert.equal($tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS).text().trim(), '01', 'selected first and second items');
     });
 
     QUnit.test('tag should have correct value when item value is an empty string', function(assert) {
@@ -1974,7 +1975,7 @@ QUnit.module('tag template', moduleSetup, () => {
 
         const $tagContainer = $element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        assert.equal($.trim($tagContainer.text()), 'onetwo', 'selected values are rendered correctly');
+        assert.equal($tagContainer.text().trim(), 'onetwo', 'selected values are rendered correctly');
     });
 
     QUnit.test('value should be correct if the default tag template is used and the displayExpr is specified', function(assert) {
@@ -2543,8 +2544,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('Value should be correct when not last item is focused and the \'tab\' key pressed', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
         const items = ['first', 'second', 'third'];
@@ -2662,8 +2662,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('tagBox selects item on enter key', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -2683,8 +2682,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('control keys test', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -2706,8 +2704,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('up and down keys should work correctly in dxTagBox', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -2722,8 +2719,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('tagBox selects item on space key', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -2743,8 +2739,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('tagBox didn\'t selects item on space key if it acceptCustomValue', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -2765,8 +2760,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('tagBox didn\'t selects item on space key if search is enabled', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -2787,8 +2781,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('the \'enter\' key should not add/remove tags if the editor is closed (T378292)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
         this.reinit({
@@ -2809,8 +2802,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('onValueChanged shouldn\'t be fired on the \'tab\' key press', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -2827,8 +2819,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('value shouldn\'t be changed on \'tab\' if there is a focused item in the drop down list', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -2844,8 +2835,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('the \'apply\' button should be focused on the \'tab\' key press if the input is focused and showSelectionControls if false (T389453)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -2863,8 +2853,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('toolbar button should be focused on the "tab" key press if the input is focused and showSelectionControls is enabled', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -2928,8 +2917,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.testInActiveWindow('Popup should not close on tab press after search when applyValueMode is "useButtons" (T1230517)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -3676,7 +3664,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         const $listItems = $('.dx-list-item');
-        assert.equal($.trim($listItems.text()), 'test', 'items filtered');
+        assert.equal($listItems.text().trim(), 'test', 'items filtered');
     });
 
     QUnit.test('renders all tags after search', function(assert) {
@@ -3699,7 +3687,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const $tagContainer = $tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
         assert.equal($tagContainer.find('.' + TAGBOX_TAG_CONTENT_CLASS).length, 2, 'selected tags rendered');
-        assert.equal($.trim($tagContainer.text()), 'MoscowLondon', 'selected values are rendered');
+        assert.equal($tagContainer.text().trim(), 'MoscowLondon', 'selected values are rendered');
     });
 
     QUnit.test('input is positioned on the right of last tag', function(assert) {
@@ -3858,8 +3846,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
     });
 
     QUnit.test('list item obtained focus only after press on control key', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -3922,8 +3909,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
     });
 
     QUnit.test('tagBox set focused class with searchEnabled after press \'delete\' key', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -5008,7 +4994,7 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
         assert.deepEqual($tagBox.dxTagBox('option', 'value'), ['item1', 'test'], 'value was added to values');
         this.clock.tick(TIME_TO_WAIT);
 
-        assert.equal($.trim($tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS).text()), 'item1test', 'all tags rendered');
+        assert.equal($tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS).text().trim(), 'item1test', 'all tags rendered');
     });
 
     QUnit.test('acceptCustomValue should not add empty tag', function(assert) {
@@ -6479,8 +6465,7 @@ QUnit.module('single line mode', {
     });
 
     QUnit.test('tags should be scrolled by mouse wheel (T386939)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -6515,8 +6500,7 @@ QUnit.module('single line mode', {
     });
 
     QUnit.test('stopPropagation and preventDefault should be called for the mouse wheel event (T386939)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -6534,8 +6518,7 @@ QUnit.module('single line mode', {
     });
 
     QUnit.test('stopPropagation and preventDefault should not be called for the mouse wheel event at scroll end/start position', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -6565,8 +6548,7 @@ QUnit.module('single line mode', {
 
     ['ctrlKey', 'metaKey'].forEach((commandKey) => {
         QUnit.test(`mousewheel with command key shouldn't prevented (${commandKey} pressed)`, function(assert) {
-            if(devices.real().deviceType !== 'desktop') {
-                assert.ok(true, 'desktop specific test');
+            if(shouldSkipOnMobile(assert)) {
                 return;
             }
 
@@ -6871,8 +6853,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
     });
 
     QUnit.test('the focused tag should be visible during keyboard navigation to the right in the RTL mode', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test is not relevant for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -6905,8 +6886,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
     });
 
     QUnit.test('the focused tag should be visible during keyboard navigation to the left in the RTL mode', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test is not relevant for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -7042,7 +7022,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         $('.dx-item').trigger('dxclick');
 
         $($input).trigger('dxclick');
-        assert.equal($.trim($('.dx-item').first().text()), '0', 'first item loaded');
+        assert.equal($('.dx-item').first().text().trim(), '0', 'first item loaded');
     });
 
     QUnit.test('\'byKey\' should not be called on initialization (T533200)', function(assert) {
@@ -7382,7 +7362,7 @@ QUnit.module('performance', () => {
 
         $item.trigger('dxclick');
         const filter = load.lastCall.args[0].filter;
-        assert.ok($.isFunction(filter[0]), 'filter is function');
+        assert.ok(isFunction(filter[0]), 'filter is function');
     });
 
     QUnit.test('loadOptions.filter should be correct when user filter is also used', function(assert) {
@@ -7908,7 +7888,7 @@ QUnit.module('regression', {
 
         const $tagContainer = tagBox.$element().find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        assert.equal($.trim($tagContainer.text()), 'Item14Item41', 'selected values are rendered correctly');
+        assert.equal($tagContainer.text().trim(), 'Item14Item41', 'selected values are rendered correctly');
     });
 
     QUnit.test('T403756 - dxTagBox treats removing a dxTagBox item for the first time as removing the item', function(assert) {
@@ -7965,8 +7945,7 @@ QUnit.module('regression', {
     });
 
     QUnit.testInActiveWindow('Searching should work correctly in grouped tagBox (T516798)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -8003,7 +7982,7 @@ QUnit.module('regression', {
         const $tagContainer = $tagBox.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
         assert.equal($tagContainer.find('.' + TAGBOX_TAG_CONTENT_CLASS).length, 2, 'selected tags rendered');
-        assert.equal($.trim($tagContainer.text()), 'Item1Item3', 'selected values are rendered');
+        assert.equal($tagContainer.text().trim(), 'Item1Item3', 'selected values are rendered');
     });
 
     QUnit.test('selection should work with pregrouped data without paging and with preloaded datasource', function(assert) {

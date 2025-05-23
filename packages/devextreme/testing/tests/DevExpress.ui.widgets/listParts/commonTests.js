@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { DataSource } from 'common/data/data_source/data_source';
-import { isRenderer } from 'core/utils/type';
+import { isFunction, isRenderer } from 'core/utils/type';
 import { noop } from 'core/utils/common';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
@@ -22,6 +22,7 @@ import { setScrollView } from '__internal/ui/list/m_list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'common/core/events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
+import { shouldSkipOnMobile } from '../../../helpers/device.js';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEMS_CLASS = 'dx-list-items';
@@ -44,14 +45,6 @@ const TOGGLE_DELETE_SWITCH_CLASS = 'dx-list-toggle-delete-switch';
 const SWITCHABLE_DELETE_BUTTON_CLASS = 'dx-list-switchable-delete-button';
 const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
-
-const isDeviceDesktop = function(assert) {
-    if(devices.real().deviceType !== 'desktop') {
-        assert.ok(true, 'skip this test on mobile devices');
-        return false;
-    }
-    return true;
-};
 
 const getListKeyboard = ($list) => {
     return keyboardMock($list.find('[tabindex=0]'));
@@ -94,7 +87,7 @@ const ScrollViewMock = DOMComponent.inherit({
 
     pullDown() {
         const pullDownHandler = this.option('onPullDown');
-        if($.isFunction(pullDownHandler)) {
+        if(isFunction(pullDownHandler)) {
             pullDownHandler();
         }
     },
@@ -102,7 +95,7 @@ const ScrollViewMock = DOMComponent.inherit({
     scrollBottom() {
         const scrollBottomHandler = this.option('onReachBottom');
 
-        if($.isFunction(scrollBottomHandler)) {
+        if(isFunction(scrollBottomHandler)) {
             scrollBottomHandler();
         }
     },
@@ -2100,7 +2093,7 @@ QUnit.module('events', moduleSetup, () => {
     });
 
     QUnit.test('item onClick handler should be fired on "enter" key press', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -2314,7 +2307,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
 
         this.clock.tick(400);
 
-        assert.equal($.trim($list.find('.dx-list-item').text()), '012');
+        assert.equal($list.find('.dx-list-item').text().trim(), '012');
     });
 
     QUnit.test('shared data source', function(assert) {
@@ -2326,7 +2319,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
 
         const widget = this.element.dxList('instance');
         const changedHandler = widget._proxiedDataSourceChangedHandler;
-        assert.ok($.isFunction(changedHandler));
+        assert.ok(isFunction(changedHandler));
         assert.ok(dataSource._eventsStrategy._events['changed'].has(changedHandler));
 
         widget._dispose();
@@ -4074,7 +4067,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('\'enter\'/\'space\' keys pressing on selectAll checkbox', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
         assert.expect(3);
@@ -4108,7 +4101,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('focusing on selectAll checkbox after \'down\'/\'up\' pressing', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
         assert.expect(6);
@@ -4798,7 +4791,7 @@ QUnit.module('Accessibility', () => {
         const itemDeleteMode = buttonClass === STATIC_DELETE_BUTTON_CLASS ? 'static' : 'toggle';
 
         QUnit.test(`List item ${itemDeleteMode} button should have a correct role, aria-label, tabindex`, function(assert) {
-            if(!isDeviceDesktop(assert)) {
+            if(shouldSkipOnMobile(assert)) {
                 return;
             }
 
@@ -4819,7 +4812,7 @@ QUnit.module('Accessibility', () => {
     });
 
     QUnit.test('List item switchable button should have a correct role, aria-label, tabindex', function(assert) {
-        if(!isDeviceDesktop(assert)) {
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 

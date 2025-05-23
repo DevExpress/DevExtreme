@@ -1056,7 +1056,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         if(options) {
             if(options.initDefaultOptions) {
                 $.each(modules, function() {
-                    if($.isFunction(this.defaultOptions)) {
+                    if(typeUtils.isFunction(this.defaultOptions)) {
                         that.option(this.defaultOptions());
                     }
                 });

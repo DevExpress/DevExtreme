@@ -451,6 +451,10 @@ class DateBoxMask extends DateBoxBase {
     }
   }
 
+  _hasMouseWheelHandler(): boolean {
+    return true;
+  }
+
   _onMouseWheel(e): void {
     if (this._useMaskBehavior()) {
       this._partIncrease(e.delta > 0 ? FORWARD : BACKWARD, e);
