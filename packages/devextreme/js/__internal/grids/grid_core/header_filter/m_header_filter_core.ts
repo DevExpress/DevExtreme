@@ -8,12 +8,13 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import type { ChangedOptionInfo } from '@js/events/index';
 import messageLocalization from '@js/localization/message';
+import type dxList from '@js/ui/list';
 import List from '@js/ui/list_light';
 import Popup from '@js/ui/popup/ui.popup';
+import type dxTextBox from '@js/ui/text_box';
 import TreeView from '@js/ui/tree_view';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import type TextBox from '@ts/ui/text_box/m_text_box';
 
 import gridCoreUtils from '../m_utils';
 
@@ -305,7 +306,7 @@ export class HeaderFilterView extends Modules.View {
 
     const onTreeViewOptionChanged = (
       event: ChangedOptionInfo & {
-        component: TreeView & { _searchEditor: TextBox };
+        component: TreeView & { _searchEditor: dxTextBox };
       },
     ): void => {
       switch (true) {
