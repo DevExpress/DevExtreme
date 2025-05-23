@@ -76,7 +76,6 @@ export default class DeferredStrategy extends SelectionStrategy {
 
     const queryParams = this._getQueryParams();
 
-    // @ts-expect-error
     return !!dataQuery([itemData], queryParams).filter(selectionFilter).toArray().length;
   }
 
