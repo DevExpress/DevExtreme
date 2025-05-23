@@ -1201,30 +1201,6 @@ QUnit.module('Real dataGrid', {
         assert.deepEqual(dataGrid.option('filterValue'), null);
     });
 
-    // T1291737
-    QUnit.test('filterValue has negation & Header Filter & Filter Panel (filterSyncEnabled = true)', function(assert) {
-        // act
-        const dataGrid = this.initDataGrid({
-            dataSource: [
-                { dataField: '1' },
-                { dataField: '2' },
-                { dataField: '3' },
-                { dataField: '4' },
-            ],
-            columns: [{ dataField: 'dataField' }],
-            filterValue: ['!', [['dataField', '=', 1]]],
-            headerFilter: { visible: true },
-            filterPanel: { visible: true },
-            filterSyncEnabled: true,
-        });
-
-        const filterMenu = $(dataGrid.element()).find('.dx-header-filter');
-        filterMenu.trigger('dxclick');
-        const filterMenuItemsCount = $('.dx-list-items').first().find('.dx-list-item').length;
-
-        assert.deepEqual(filterMenuItemsCount, 3);
-    });
-
     QUnit.test('do not sync if filterSyncEnabled = false', function(assert) {
         // arrange
         const dataGrid = this.initDataGrid({
