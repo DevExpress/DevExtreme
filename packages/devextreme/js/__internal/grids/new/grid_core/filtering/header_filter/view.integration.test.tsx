@@ -79,5 +79,36 @@ describe('HeaderFilter', () => {
 
       expect(rootQuerySelector(SELECTORS.popupContent)).toMatchSnapshot();
     });
+
+    it('should render popup with tree list if filterValue has negation', () => {
+      const container = document.createElement('div');
+      const popupContainer = document.createElement('div');
+      const { body } = document;
+      body.append(container);
+      body.append(popupContainer);
+
+      const cardView = new CardView(container, {
+        dataSource: [
+          { A: 'A_0' },
+          { A: 'A_1' },
+          { A: 'A_2' },
+          { A: 'A_3' },
+          { A: 'A_4' },
+        ],
+        filterValue: ['!', [['A', '=', 'A_0']]],
+        filterSyncEnabled: true,
+        headerFilter: { visible: true },
+        filterPanel: { visible: true },
+      });
+
+      // @ts-expect-error getting protected field
+      const viewController = cardView.diContext.get(HeaderFilterViewController);
+
+      const column = cardView.getVisibleColumns()[0];
+      viewController.openPopup(popupContainer, column);
+      rerender();
+
+      expect(rootQuerySelector(SELECTORS.popupContent)).toMatchSnapshot();
+    });
   });
 });
