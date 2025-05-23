@@ -7,7 +7,7 @@ import { DxButtonModule } from 'devextreme-angular';
 import { DxChatTypes } from 'devextreme-angular/ui/chat';
 import { Observable } from 'rxjs';
 import { AppService } from './app.service';
-import { loadMessages } from 'devextreme/localization';
+import { loadMessages } from 'devextreme-angular/common/core/localization';
 import { DataSource } from 'devextreme-angular/common/data';
 
 if (!/localhost/.test(document.location.host)) {

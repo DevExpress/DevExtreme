@@ -6,12 +6,7 @@ import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import rehypeMinifyWhitespace from 'rehype-minify-whitespace';
-import {
-  User,
-  Alert,
-  MessageEnteredEvent,
-  DxChatTypes,
-} from 'devextreme/ui/chat';
+import { DxChatTypes } from 'devextreme-angular/ui/chat';
 import { DataSource, CustomStore } from 'devextreme-angular/common/data';
 
 @Injectable({
