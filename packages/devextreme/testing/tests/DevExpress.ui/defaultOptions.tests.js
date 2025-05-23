@@ -7,6 +7,7 @@ import devices from '__internal/core/m_devices';
 import themes from 'ui/themes';
 import support from '__internal/core/utils/m_support';
 import publicComponentUtils from '__internal/core/utils/m_public_component';
+import { isFunction } from 'core/utils/type';
 import { getNestedOptionValue } from 'core/options/utils';
 
 import ActionSheet from 'ui/action_sheet';
@@ -82,7 +83,7 @@ QUnit.module('widgets defaults');
 const testComponentDefaults = function(componentClass, forcedDevices, options, before, after) {
     const componentName = publicComponentUtils.name(componentClass);
 
-    forcedDevices = $.isArray(forcedDevices) ? forcedDevices : [forcedDevices];
+    forcedDevices = Array.isArray(forcedDevices) ? forcedDevices : [forcedDevices];
     before = before || noop;
     after = after || noop;
 
@@ -97,7 +98,7 @@ const testComponentDefaults = function(componentClass, forcedDevices, options, b
             }
             const $container = $('#cmp');
             const component = new componentClass($container);
-            options = $.isFunction(options) ? options.call(component) : options;
+            options = isFunction(options) ? options.call(component) : options;
 
             const defaults = component.option();
             checkOptions.apply(component, [options, defaults, JSON.stringify(device), assert]);
@@ -114,7 +115,7 @@ const checkOptions = function(expectedOptions, resultOptions, deviceString, asse
     $.each(expectedOptions, function(optionName, expectedValue) {
         let resultValue = getNestedOptionValue(resultOptions, optionName);
 
-        resultValue = $.isFunction(resultValue) ? resultValue.call(that) : resultValue;
+        resultValue = isFunction(resultValue) ? resultValue.call(that) : resultValue;
 
         if($.isPlainObject(expectedValue)) {
             checkOptions(expectedValue, resultValue, null, assert);

@@ -12,6 +12,7 @@ export const CLASSES = {
 };
 
 export interface CoverProps {
+  id?: string;
   imageSrc?: string;
   alt?: string;
   card: CardInfo;
@@ -21,7 +22,7 @@ export interface CoverProps {
 export class Cover extends Component<CoverProps> {
   render(): JSX.Element {
     const {
-      imageSrc, alt, template: Template, card,
+      id, imageSrc, alt, template: Template, card,
     } = this.props;
     const src = imageSrc;
 
@@ -31,7 +32,7 @@ export class Cover extends Component<CoverProps> {
     });
 
     return (
-      <div className={containerClasses}>
+      <div className={containerClasses} id={id}>
         {
           Template
             ? <Template card={card} />

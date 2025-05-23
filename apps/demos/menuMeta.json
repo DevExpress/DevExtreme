@@ -1615,6 +1615,7 @@
   {
     "Name": "Card View",
     "Equivalents": "dxCardView, dx-cardview, cardview",
+    "Badge": "New",
     "Groups": [
       {
         "Name": "Overview",
@@ -1624,8 +1625,7 @@
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "CardView",
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           }
         ]
       },
@@ -1641,8 +1641,7 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           },
           {
             "Title": "Web API Service",
@@ -1652,8 +1651,7 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           }
         ]
       },
@@ -1669,8 +1667,7 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           },
           {
             "Title": "Filter Panel",
@@ -1680,8 +1677,7 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           },
           {
             "Title": "Search Panel",
@@ -1691,8 +1687,7 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           }
         ]
       },
@@ -1704,8 +1699,7 @@
             "Title": "Sorting",
             "Name": "Sorting",
             "Widget": "CardView",
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           }
         ]
       },
@@ -1721,8 +1715,7 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           },
           {
             "Title": "Data Validation",
@@ -1732,8 +1725,7 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           }
         ]
       },
@@ -1745,8 +1737,7 @@
             "Title": "Selection",
             "Name": "Selection",
             "Widget": "CardView",
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           }
         ]
       },
@@ -1762,8 +1753,7 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           },
           {
             "Title": "Column Chooser",
@@ -1773,8 +1763,7 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           }
         ]
       },
@@ -1790,8 +1779,7 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           },
           {
             "Title": "Field Template",
@@ -1801,8 +1789,7 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           },
           {
             "Title": "Toolbar Customization",
@@ -1812,8 +1799,7 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web",
-            "Badge": "New"
+            "DemoType": "Web"
           }
         ]
       }
@@ -2301,11 +2287,11 @@
         ]
       },
       {
-        "Name": "Message Editing",
-        "Equivalents": "Editing, Delete, Deleting, Update, Correct, Modify",
+        "Name": "Edit and Delete Messages",
+        "Equivalents": "Editing, Deleting, Update, Correct, Modify",
         "Demos": [
           {
-            "Title": "Message Editing",
+            "Title": "Edit and Delete Messages",
             "Name": "MessageEditing",
             "Widget": "Chat",
             "DemoType": "Web",

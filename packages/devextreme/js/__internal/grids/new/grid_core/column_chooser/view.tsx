@@ -3,7 +3,6 @@ import type { DxElement } from '@js/core/element';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import type dxPopup from '@js/ui/popup';
-import { current, isGeneric, isMaterial } from '@js/ui/themes';
 import type { Properties as TreeViewProperties } from '@js/ui/tree_view';
 import type dxTreeView from '@js/ui/tree_view';
 import type { ReadonlySignal } from '@preact/signals-core';
@@ -56,11 +55,6 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
     const items = [
       { text: title, toolbar: 'top', location: 'before' },
     ] as ToolbarItem[];
-
-    if (!this.isMaterialOrGeneric()) {
-      // @ts-expect-error
-      items.push({ shortcut: 'cancel' });
-    }
 
     return items;
   });
@@ -137,7 +131,6 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
         container: this.options.oneWay('columnChooser.container').value,
         position: this.options.oneWay('columnChooser.position').value,
         toolbarItems: this.popupToolbarItems.value,
-        showCloseButton: this.isMaterialOrGeneric(),
 
         onHidden: () => {
           this.popupVisible.value = false;
@@ -163,9 +156,5 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
         onPlaceholderPrepared: this.columnChooserController.onPlaceholderPrepared,
       } as Partial<ColumnSortableProps>,
     }));
-  }
-
-  private isMaterialOrGeneric(): boolean {
-    return isMaterial(current()) || isGeneric(current());
   }
 }

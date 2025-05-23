@@ -3,7 +3,11 @@
 exports[`Rendering should be rendered correctly 1`] = `
 <div>
   <div
+    aria-describedby="guidmock guidmock"
+    aria-label=""
+    aria-roledescription="Card"
     class="dx-cardview-card"
+    role="application"
   >
     <div
       data-dx-focus-trap-content="false"
@@ -124,6 +128,7 @@ exports[`Rendering should be rendered correctly 1`] = `
       </div>
       <div
         class="dx-card-cover"
+        id="guidmock"
       >
         <img
           alt="Card Cover"
@@ -133,6 +138,7 @@ exports[`Rendering should be rendered correctly 1`] = `
       </div>
       <div
         class="dx-cardview-card-content"
+        id="guidmock"
       >
         <div
           class="dx-cardview-field-caption"

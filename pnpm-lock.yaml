@@ -295,6 +295,9 @@ importers:
       '@aspnet/signalr':
         specifier: 1.0.27
         version: 1.0.27
+      '@preact/signals-core':
+        specifier: ^1.8.0
+        version: 1.8.0
       '@rollup/plugin-commonjs':
         specifier: 19.0.2
         version: 19.0.2(rollup@4.22.4)

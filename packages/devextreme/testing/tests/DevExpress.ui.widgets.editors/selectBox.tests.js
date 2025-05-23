@@ -894,7 +894,7 @@ QUnit.module('functionality', moduleSetup, () => {
         $('.dx-item').trigger('dxclick');
         $($input).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal($.trim($('.dx-item').first().text()), '0', 'filter was cleared after item selected');
+        assert.equal($('.dx-item').first().text().trim(), '0', 'filter was cleared after item selected');
 
         keyboard.press('backspace').type('3');
         this.clock.tick(TIME_TO_WAIT);
@@ -902,14 +902,14 @@ QUnit.module('functionality', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
         $($input).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal($.trim($('.dx-item').first().text()), '3', 'filter was not cleared when no focusout and no item selection happened');
+        assert.equal($('.dx-item').first().text().trim(), '3', 'filter was not cleared when no focusout and no item selection happened');
 
         instance.close();
         $input.focusout();
         this.clock.tick(TIME_TO_WAIT);
         $($input).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal($.trim($('.dx-item').first().text()), '0', 'filter was cleared when focusout even if item was not selected');
+        assert.equal($('.dx-item').first().text().trim(), '0', 'filter was cleared when focusout even if item was not selected');
     });
 
     QUnit.testInActiveWindow('SelectBox drop down should not blink on open after setting value with the help of search', function(assert) {
@@ -1349,7 +1349,7 @@ QUnit.module('widget options', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         const $container = $selectBox.find('.dx-scrollview-content');
-        assert.equal($.trim($container.text()), 'itemTemplate', 'items rendered with item template');
+        assert.equal($container.text().trim(), 'itemTemplate', 'items rendered with item template');
     });
 
     QUnit.test('selectbox loads first page after first opening when paging is enabled', function(assert) {
@@ -1372,7 +1372,7 @@ QUnit.module('widget options', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        assert.equal($.trim($(toSelector(LIST_ITEM_CLASS)).first().text()), '0', 'first item is loaded');
+        assert.equal($(toSelector(LIST_ITEM_CLASS)).first().text().trim(), '0', 'first item is loaded');
     });
 
     QUnit.test('change displayCustomValue', function(assert) {
@@ -6012,13 +6012,13 @@ QUnit.module('focus policy', {
         kb.type('a').press('esc');
         $($input).trigger($.Event('keydown', { key: KEY_DOWN, altKey: true }));
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal($.trim($(toSelector(LIST_ITEM_CLASS)).text()), 'a', 'filter should not be cleared before focusout');
+        assert.equal($(toSelector(LIST_ITEM_CLASS)).text().trim(), 'a', 'filter should not be cleared before focusout');
 
         this.instance.blur();
         this.instance.option('opened', false);
         $($input).trigger($.Event('keydown', { key: KEY_DOWN, altKey: true }));
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal($.trim($(toSelector(LIST_ITEM_CLASS)).text()), 'abc', 'no filtering');
+        assert.equal($(toSelector(LIST_ITEM_CLASS)).text().trim(), 'abc', 'no filtering');
     });
 
     QUnit.test('input keep focus when popup is opened by click on button', function(assert) {
