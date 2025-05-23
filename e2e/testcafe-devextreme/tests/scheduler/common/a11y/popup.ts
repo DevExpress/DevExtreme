@@ -49,6 +49,12 @@ test('Scheduler recurrence editor repeat end accessible', async (t) => {
     .expect(getAriaLabel(1))
     .eql('On 22 May 2025')
     .expect(getAriaLabel(2))
+    .eql('After')
+    .typeText(scheduler.appointmentPopup.repeatUntilElement, '2026')
+    .click(getItem(1)) // unfocus input
+    .expect(getAriaLabel(1))
+    .eql('On 22 May 2026')
+    .expect(getAriaLabel(2))
     .eql('After');
   await t
     .click(getItem(0))
@@ -61,17 +67,7 @@ test('Scheduler recurrence editor repeat end accessible', async (t) => {
     .expect(getAriaLabel(1))
     .eql('On')
     .expect(getAriaLabel(2))
-    .eql('After 1 occurrence(s)');
-  await t
-    .click(getItem(1))
-    .typeText(scheduler.appointmentPopup.repeatUntilElement, '2026')
-    .click(getItem(1)) // unfocus input
-    .expect(getAriaLabel(1))
-    .eql('On 22 May 2026')
-    .expect(getAriaLabel(2))
-    .eql('After');
-  await t
-    .click(getItem(2))
+    .eql('After 1 occurrence(s)')
     .typeText(scheduler.appointmentPopup.repeatCountElement, '3')
     .click(getItem(2)) // unfocus input
     .expect(getAriaLabel(1))
