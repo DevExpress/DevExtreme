@@ -47,7 +47,7 @@ export default {
   },
 
   _removeSearchBox(): void {
-    this._$searchEditorElement?.remove();
+    this._$searchEditorElement && this._$searchEditorElement.remove();
     delete this._$searchEditorElement;
     delete this._searchEditor;
   },
@@ -141,7 +141,7 @@ export default {
 
   focus() {
     if (!this.option('focusedElement') && this.option('searchEnabled')) {
-      this._searchEditor?.focus();
+      this._searchEditor && this._searchEditor.focus();
       return;
     }
 
