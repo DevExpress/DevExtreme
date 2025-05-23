@@ -16,4 +16,4 @@ The pager supports full, compact, and adaptive (default) display modes. In compa
 
 In this demo, you can use the drop-down Display Mode menu to switch between full and compact display modes. You can also use the checkboxes to hide or display different pager elements. Note that when the pager is in compact mode, navigation buttons are always visible.
 
-You can navigate between pages using the on-screen pager controls. You can also jump to the first or last pages of the component by focusing on the data area and using **Ctrl + Home** or **Ctrl + End**. These shortcuts focus the first cell of the first row/last cell of the last row.
+You can navigate between pages using the on-screen pager controls. Jump to the first/last row of each page by focusing on the data area and using **Ctrl+Home** or **Ctrl+End**. These shortcuts focus the first cell of the first row/last cell of the last row.
