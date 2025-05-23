@@ -1446,6 +1446,10 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
 
     // #endregion
 
+    /**
+     * @docid
+     * @public
+     */
     sorting?: Sorting;
 
     /**
