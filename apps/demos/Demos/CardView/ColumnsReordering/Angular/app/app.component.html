@@ -1,17 +1,16 @@
-<dx-card-view id="cardView" [dataSource]="orders" keyExpr="ID" [allowColumnReordering]="true">
+<dx-card-view
+  id="cardView"
+  [dataSource]="orders"
+  keyExpr="ID"
+  [allowColumnReordering]="true"
+>
   <dxi-card-view-column
     dataField="OrderNumber"
     [allowReordering]="false"
   ></dxi-card-view-column>
-  <dxi-card-view-column
-    dataField="SaleAmount"
-  ></dxi-card-view-column>
-  <dxi-card-view-column
-    dataField="Customer"
-  ></dxi-card-view-column>
-  <dxi-card-view-column
-    dataField="Location"
-  ></dxi-card-view-column>
+  <dxi-card-view-column dataField="SaleAmount"></dxi-card-view-column>
+  <dxi-card-view-column dataField="Customer"></dxi-card-view-column>
+  <dxi-card-view-column dataField="Location"></dxi-card-view-column>
   <dxi-card-view-column
     dataField="OrderDate"
     dataType="date"
