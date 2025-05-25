@@ -1,4 +1,5 @@
 import CardView from 'devextreme-testcafe-models/cardView';
+import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { data } from '../helpers/simpleArrayData';
@@ -234,6 +235,224 @@ fixture.disablePageReloads`CardView - Sorting Behavior - Functional`
       .eql(nameSortOrder)
       .expect(cardView.apiColumnOption('name', 'sortIndex'))
       .eql(nameSortIndex);
+  }).before(async () => {
+    await createWidget('dxCardView', {
+      dataSource: data,
+      sorting: {
+        mode,
+      },
+      columns: [
+        {
+          dataField: 'title',
+        },
+        {
+          dataField: 'name',
+        },
+      ],
+    });
+  });
+});
+
+([
+  ['none', 0, [undefined, undefined]],
+  ['none', 1, [undefined, undefined]],
+  ['none', 2, [undefined, undefined]],
+  ['single', 0, ['asc', undefined]],
+  ['single', 1, ['desc', undefined]],
+  ['single', 2, [undefined, undefined]],
+  ['multiple', 0, ['asc', 0]],
+  ['multiple', 1, ['desc', 0]],
+  ['multiple', 2, [undefined, undefined]],
+] as [
+  string,
+  number,
+  [
+    string | undefined,
+    number | undefined,
+  ],
+][]).forEach(([
+  mode,
+  menuItemIndex,
+  [
+    titleSortOrder,
+    titleSortIndex,
+  ]]) => {
+  test(`Change sorting of sorted item in ${mode} mode with ${menuItemIndex} context menu item`, async (t) => {
+    const cardView = new CardView('#container');
+    const titleHeaderItem = cardView.getHeaders().getHeaderItemByText('Title');
+
+    await t
+      .rightClick(titleHeaderItem.element)
+      .click(cardView.getContextMenu().getItemWrapperByIndex(menuItemIndex));
+
+    await t
+      .expect(cardView.apiColumnOption('title', 'sortOrder'))
+      .eql(titleSortOrder)
+      .expect(cardView.apiColumnOption('title', 'sortIndex'))
+      .eql(titleSortIndex);
+
+    // Note: To ensure context menu is closed
+    await t
+      .click(Selector('body'))
+      .expect(cardView.getContextMenu().element.exists)
+      .notOk();
+  }).before(async () => {
+    await createWidget('dxCardView', {
+      dataSource: data,
+      sorting: {
+        mode,
+      },
+      columns: [
+        {
+          dataField: 'title',
+        },
+        {
+          dataField: 'name',
+        },
+      ],
+    });
+  });
+});
+
+([
+  ['none', 0, [undefined, undefined], [undefined, undefined]],
+  ['none', 1, [undefined, undefined], [undefined, undefined]],
+  ['none', 2, [undefined, undefined], [undefined, undefined]],
+  ['single', 0, [undefined, undefined], ['asc', undefined]],
+  ['single', 1, [undefined, undefined], ['desc', undefined]],
+  ['single', 2, ['asc', undefined], [undefined, undefined]],
+  ['multiple', 0, ['asc', 0], ['asc', 1]],
+  ['multiple', 1, ['asc', 0], ['desc', 1]],
+  ['multiple', 2, ['asc', 0], [undefined, undefined]],
+] as [
+  string,
+  number,
+  [
+    string | undefined,
+    number | undefined,
+  ],
+  [
+    string | undefined,
+    number | undefined,
+  ],
+][]).forEach(([
+  mode,
+  menuItemIndex,
+  [
+    titleSortOrder,
+    titleSortIndex,
+  ], [
+    nameSortOrder,
+    nameSortIndex,
+  ]]) => {
+  test(`Change sorting of neighbour non sorted item in ${mode} mode with ${menuItemIndex} context menu item`, async (t) => {
+    const cardView = new CardView('#container');
+    const titleHeaderItem = cardView.getHeaders().getHeaderItemByText('Title');
+    const nameHeaderItem = cardView.getHeaders().getHeaderItemByText('Name');
+
+    await t
+      .click(titleHeaderItem.element);
+
+    await t
+      .rightClick(nameHeaderItem.element)
+      .click(cardView.getContextMenu().getItemWrapperByIndex(menuItemIndex));
+
+    await t
+      .expect(cardView.apiColumnOption('title', 'sortOrder'))
+      .eql(titleSortOrder)
+      .expect(cardView.apiColumnOption('title', 'sortIndex'))
+      .eql(titleSortIndex)
+      .expect(cardView.apiColumnOption('name', 'sortOrder'))
+      .eql(nameSortOrder)
+      .expect(cardView.apiColumnOption('name', 'sortIndex'))
+      .eql(nameSortIndex);
+
+    // Note: Ensure context menu is closed
+    await t
+      .click(Selector('body'))
+      .expect(cardView.getContextMenu().element.exists)
+      .notOk();
+  }).before(async () => {
+    await createWidget('dxCardView', {
+      dataSource: data,
+      sorting: {
+        mode,
+      },
+      columns: [
+        {
+          dataField: 'title',
+        },
+        {
+          dataField: 'name',
+        },
+      ],
+    });
+  });
+});
+
+([
+  ['none', 0, [undefined, undefined], [undefined, undefined]],
+  ['none', 1, [undefined, undefined], [undefined, undefined]],
+  ['none', 2, [undefined, undefined], [undefined, undefined]],
+  ['single', 0, [undefined, undefined], ['asc', undefined]],
+  ['single', 1, [undefined, undefined], ['desc', undefined]],
+  ['single', 2, [undefined, undefined], [undefined, undefined]],
+  ['multiple', 0, ['asc', 0], ['asc', 1]],
+  ['multiple', 1, ['asc', 0], ['desc', 1]],
+  ['multiple', 2, ['asc', 0], [undefined, undefined]],
+] as [
+  string,
+  number,
+  [
+    string | undefined,
+    number | undefined,
+  ],
+  [
+    string | undefined,
+    number | undefined,
+  ],
+][]).forEach(([
+  mode,
+  menuItemIndex,
+  [
+    titleSortOrder,
+    titleSortIndex,
+  ], [
+    nameSortOrder,
+    nameSortIndex,
+  ]]) => {
+  test(`Change sorting of neighbour sorted item in ${mode} mode with ${menuItemIndex} context menu item`, async (t) => {
+    const cardView = new CardView('#container');
+    const titleHeaderItem = cardView.getHeaders().getHeaderItemByText('Title');
+    const nameHeaderItem = cardView.getHeaders().getHeaderItemByText('Name');
+
+    await t
+      .click(titleHeaderItem.element)
+      .click(nameHeaderItem.element, {
+        modifiers: {
+          shift: true,
+        },
+      });
+
+    await t
+      .rightClick(nameHeaderItem.element)
+      .click(cardView.getContextMenu().getItemWrapperByIndex(menuItemIndex));
+
+    await t
+      .expect(cardView.apiColumnOption('title', 'sortOrder'))
+      .eql(titleSortOrder)
+      .expect(cardView.apiColumnOption('title', 'sortIndex'))
+      .eql(titleSortIndex)
+      .expect(cardView.apiColumnOption('name', 'sortOrder'))
+      .eql(nameSortOrder)
+      .expect(cardView.apiColumnOption('name', 'sortIndex'))
+      .eql(nameSortIndex);
+
+    // Note: Ensure context menu is closed
+    await t
+      .click(Selector('body'))
+      .expect(cardView.getContextMenu().element.exists)
+      .notOk();
   }).before(async () => {
     await createWidget('dxCardView', {
       dataSource: data,
