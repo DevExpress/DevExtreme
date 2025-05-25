@@ -11,7 +11,7 @@
     />
     <DxColumn
       data-field="OrderDate"
-      dataType="date"
+      data-type="date"
       :calculate-filter-expression="calculateOrderDateFilterExpression"
       :header-filter="orderDateHeaderFilterConfig"
     />
@@ -34,14 +34,14 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-  import { DxCardView, DxColumn } from 'devextreme-vue/card-view';
-  import { Order, orders } from './data.ts';
+  import { DxCardView, DxColumn, DxCardViewTypes } from 'devextreme-vue/card-view';
+  import { type Order, orders } from './data.ts';
 
   function getOrderDay(rowData: Order) {
     return new Date(rowData.OrderDate).getDay();
   }
 
-  function calculateOrderDateFilterExpression(value, selectedFilterOperations, target) {
+  function calculateOrderDateFilterExpression(this: DxCardViewTypes.Column, value, selectedFilterOperations, target) {
     if (value === 'weekends') {
       return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
     }
@@ -50,7 +50,7 @@
   
   // TODO: make nested
   const headerFilterConfig = {
-    visible: true
+    visible: true,
   };
 
   // TODO: make nested
