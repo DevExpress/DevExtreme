@@ -10,7 +10,6 @@ const headerFilterConfig = {
 // TODO: Nested component does not exist
 const searchPanelConfig = {
   visible: true,
-  text: 'an',
 };
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
