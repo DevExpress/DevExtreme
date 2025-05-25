@@ -1,6 +1,31 @@
-<dx-card-view id="cardView" [dataSource]="customers" keyExpr="ID">
+<dx-card-view
+  id="cardView"
+  [dataSource]="orders"
+  keyExpr="ID"
+  [headerFilter]="headerFilterConfig"
+  [filterPanel]="filterPanelConfig"
+  [filterValue]="filterValue"
+  [filterBuilder]="filterBuilderConfig"
+>
   <dxi-card-view-column
-    *ngFor="let column of columns"
-    [dataField]="column"
+    dataField="OrderNumber"
+    [headerFilter]="orderNumberHeaderFilterConfig"
   ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="OrderDate"
+    dataType="date"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="DeliveryDate"
+    dataType="date"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="SaleAmount"
+    dataType="number"
+    [headerFilter]="saleAmountHeaderFilterConfig"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="CustomerStoreCity"
+  ></dxi-card-view-column>
+  <dxi-card-view-column dataField="Employee"></dxi-card-view-column>
 </dx-card-view>
