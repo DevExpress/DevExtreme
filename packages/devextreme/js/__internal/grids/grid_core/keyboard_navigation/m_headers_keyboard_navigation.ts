@@ -27,13 +27,11 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
       const column = this._getColumnByCellElement($cell, rowIndex);
 
       if (this.canReorderColumn(column, direction, rowIndex)) {
-        this.moveColumn({
+        this.moveColumn(
           column,
-          sourceLocation: 'headers',
-          targetLocation: 'headers',
           direction,
           rowIndex,
-        });
+        );
       }
       originalEvent?.preventDefault();
     }

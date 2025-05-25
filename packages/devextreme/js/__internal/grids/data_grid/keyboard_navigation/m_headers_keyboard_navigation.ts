@@ -1,7 +1,7 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
-import { Direction, KEY_CODES, ViewName } from '@ts/grids/grid_core/keyboard_navigation/const';
+import { Direction, KEY_CODES } from '@ts/grids/grid_core/keyboard_navigation/const';
 import type { HeadersKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
 import { headersKeyboardNavigationModule } from '@ts/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -12,48 +12,67 @@ import { ColumnKeyboardNavigationMixin } from './m_column_keyboard_navigation_mi
 const headersKeyboardNavigation = (
   Base: ModuleType<HeadersKeyboardNavigationController>,
 ) => class HeadersKeyboardNavigationControllerExtender extends ColumnKeyboardNavigationMixin(Base) {
-  private groupColumn(e): void {
+  private getNewFocusedColumnIndexAfterGrouping(
+    column,
+    rowIndex: number,
+  ): number {
+    const visibleColumnIndex = this.getVisibleIndex(column, rowIndex);
+
+    if (column.showWhenGrouped) {
+      return visibleColumnIndex + 1;
+    }
+
+    const focusableColumns = this.getFocusableColumns();
+    const lastFocusableColumn = focusableColumns[focusableColumns.length - 1];
+
+    if (visibleColumnIndex === this._columnsController.getVisibleIndex(lastFocusableColumn.index)) {
+      return focusableColumns.length === 1
+        ? -1
+        : this.getNewVisibleIndex(
+          visibleColumnIndex,
+          Direction.Previous,
+        ) + 1;
+    }
+
+    return this.getNewVisibleIndex(
+      visibleColumnIndex,
+      Direction.Next,
+    ) - 1;
+  }
+
+  private groupColumn(column, rowIndex = 0): void {
+    if (!isDefined(column.groupIndex) && column?.allowGrouping) {
+      const groupColumns = this._columnsController.getGroupColumns();
+      const newFocusedColumnIndex = this.getNewFocusedColumnIndexAfterGrouping(
+        column,
+        rowIndex,
+      );
+      const newFocusedCellPosition = newFocusedColumnIndex >= 0
+        ? { rowIndex, columnIndex: newFocusedColumnIndex }
+        : undefined;
+
+      this.updateViewFocusPosition(newFocusedCellPosition);
+      this._columnsController.columnOption(column.dataField, 'groupIndex', groupColumns.length);
+    }
+  }
+
+  private groupColumnByPressingKey(e): void {
     const $cell = $(e.originalEvent.target).closest('td');
     const rowIndex = this._getRowIndex($cell.parent());
     const column = this._getColumnByCellElement($cell, rowIndex);
-    const contextMenuEnabled = this.option('grouping.contextMenuEnabled');
 
-    if (!isDefined(column.groupIndex) && column?.allowGrouping && contextMenuEnabled) {
-      this.moveColumn({
-        column,
-        sourceLocation: 'headers',
-        targetLocation: 'group',
-        rowIndex,
-      });
-      e.originalEvent?.preventDefault();
-    }
+    this.groupColumn(column, rowIndex);
+    e.originalEvent?.preventDefault();
   }
 
-  private getGroupColumnVisibleIndex(
-    visibleIndex: number,
-    targetLocation: ViewName,
-  ) {
-    const isGrouping = targetLocation === ViewName.Group;
-
-    if (isGrouping) {
-      return visibleIndex + 1;
-    }
-
-    const groupColumns = this._columnsController.getGroupColumns();
-
-    return this.getVisibleIndex(groupColumns[visibleIndex]) - 1;
-  }
-
-  private canGroupColumnByPressingKey(e) {
+  private canGroupColumnByPressingKey(e): boolean {
     return e.which === KEY_CODES.G && isCommandKeyPressed(e.originalEvent);
   }
 
-  protected ungroupColumn(e): void {
-    const column = this.getColumnFromEvent(e);
+  protected getRowIndexFromEvent(e): number {
+    const $cell = $(e.originalEvent.target).closest('td');
 
-    if (isDefined(column?.groupIndex)) {
-      super.ungroupColumn(e);
-    }
+    return this._getRowIndex($cell.parent());
   }
 
   protected getColumnFromEvent(e) {
@@ -71,69 +90,11 @@ const headersKeyboardNavigation = (
     }
 
     if (this.canGroupColumnByPressingKey(e)) {
-      this.groupColumn(e);
+      this.groupColumnByPressingKey(e);
       isHandled = true;
     }
 
     return isHandled;
-  }
-
-  protected getNewVisibleIndex(
-    visibleIndex: number,
-    direction: Direction,
-    sourceLocation?: ViewName,
-    targetLocation?: ViewName,
-  ): number {
-    if (targetLocation === ViewName.Group) {
-      return this._columnsController.getGroupColumns()?.length ?? 0;
-    }
-
-    return super.getNewVisibleIndex(visibleIndex, direction, sourceLocation, targetLocation);
-  }
-
-  protected getNewFocusedColumnIndex(
-    visibleIndex: number,
-    direction: Direction,
-    sourceLocation: ViewName,
-    targetLocation: ViewName,
-    showWhenGrouped?: boolean,
-  ): number {
-    const isGroupOperation = sourceLocation !== targetLocation;
-
-    if (showWhenGrouped && isGroupOperation) {
-      return this.getGroupColumnVisibleIndex(visibleIndex, targetLocation);
-    }
-
-    if (targetLocation === ViewName.Group) {
-      const focusableColumns = this.getFocusableColumns();
-      const lastFocusableColumn = focusableColumns[focusableColumns.length - 1];
-
-      if (visibleIndex === this._columnsController.getVisibleIndex(lastFocusableColumn.index)) {
-        return focusableColumns.length === 1
-          ? -1
-          : this.getNewVisibleIndex(
-            visibleIndex,
-            Direction.Previous,
-            ViewName.Headers,
-            ViewName.Headers,
-          ) + 1;
-      }
-
-      return this.getNewVisibleIndex(
-        visibleIndex,
-        Direction.Next,
-        ViewName.Headers,
-        ViewName.Headers,
-      ) - 1;
-    }
-
-    return super.getNewFocusedColumnIndex(
-      visibleIndex,
-      direction,
-      sourceLocation,
-      targetLocation,
-      showWhenGrouped,
-    );
   }
 
   public ungroupAllColumns(): void {

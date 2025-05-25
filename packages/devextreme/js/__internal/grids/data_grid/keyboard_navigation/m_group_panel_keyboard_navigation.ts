@@ -5,7 +5,7 @@ import {
 } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import { hiddenFocus } from '@js/ui/shared/accessibility';
-import { Direction, ViewName } from '@ts/grids/grid_core/keyboard_navigation/const';
+import { Direction } from '@ts/grids/grid_core/keyboard_navigation/const';
 import { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
 import type { Views } from '@ts/grids/grid_core/m_types';
 
@@ -52,16 +52,15 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
       const direction = this.getDirectionByKeyName(e.keyName);
 
       if (this.canReorderColumn(column, direction)) {
-        this.moveColumn({
-          column,
-          sourceLocation: 'group',
-          targetLocation: 'group',
-          direction,
-        });
+        this.moveColumn(column, direction);
       }
 
       originalEvent?.preventDefault();
     }
+  }
+
+  protected getVisibleIndex(column) {
+    return column.groupIndex as number;
   }
 
   protected getColumnFromEvent(e) {
@@ -71,26 +70,17 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
       .columnOption(`groupIndex:${$groupedColumnElement.index()}`);
   }
 
-  protected getNewFocusedColumnIndex(
-    visibleIndex: number,
-    direction: Direction,
-    sourceLocation: ViewName,
-    targetLocation: ViewName,
-    showWhenGrouped?: boolean,
+  protected getNewFocusedColumnIndexAfterUngrouping(
+    column,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    rowIndex = 0,
   ): number {
-    if (targetLocation === ViewName.Headers) {
-      const groupColumns = this._columnsController.getGroupColumns();
+    const visibleColumnIndex: number = column.groupIndex;
+    const groupColumns = this._columnsController.getGroupColumns();
 
-      return visibleIndex === groupColumns.length - 1 ? visibleIndex - 1 : visibleIndex;
-    }
-
-    return super.getNewFocusedColumnIndex(
-      visibleIndex,
-      direction,
-      sourceLocation,
-      targetLocation,
-      showWhenGrouped,
-    );
+    return visibleColumnIndex === groupColumns.length - 1
+      ? visibleColumnIndex - 1
+      : visibleColumnIndex;
   }
 
   protected _getCell(cellPosition): any {

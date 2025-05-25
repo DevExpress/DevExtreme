@@ -25,7 +25,7 @@ import type { ColumnsResizerViewController, DraggingHeaderViewController } from 
 import type { DataController } from '../data_controller/m_data_controller';
 import type { EditingController } from '../editing/m_editing';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
-import type { Direction, ViewName } from '../keyboard_navigation/const';
+import type { Direction } from '../keyboard_navigation/const';
 import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/m_headers_keyboard_navigation';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import modules from '../m_modules';
@@ -1310,10 +1310,8 @@ const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationCon
   protected getNewVisibleIndex(
     visibleIndex: number,
     direction: Direction,
-    sourceLocation?: ViewName,
-    targetLocation?: ViewName,
   ) {
-    let newVisibleIndex = super.getNewVisibleIndex(visibleIndex, direction, sourceLocation, targetLocation);
+    let newVisibleIndex = super.getNewVisibleIndex(visibleIndex, direction);
     let visibleColumns = this._columnsController.getVisibleColumns();
 
     visibleColumns = direction === 'next'

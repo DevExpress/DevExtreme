@@ -1,6 +1,6 @@
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
 
-import { Direction, ViewName } from './const';
+import { Direction } from './const';
 import type { ColumnFocusDispatcher } from './m_column_focus_dispatcher';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
 
@@ -14,12 +14,7 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
   protected getVisibleIndex(
     column,
     rowIndex?: number,
-    sourceLocation?: ViewName,
   ): number {
-    if (sourceLocation === ViewName.Group) {
-      return column.groupIndex as number;
-    }
-
     const visibleIndex = this._columnsController.getVisibleIndex(column.index, rowIndex);
     const columnIndexOffset = this.getColumnIndexOffset(visibleIndex);
 
@@ -29,16 +24,7 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
   protected getNewVisibleIndex(
     visibleIndex: number,
     direction: Direction,
-    sourceLocation?: ViewName,
-    targetLocation?: ViewName,
   ): number {
-    const isUngroupColumn = sourceLocation === ViewName.Group
-      && targetLocation === ViewName.Headers;
-
-    if (isUngroupColumn) {
-      return -1;
-    }
-
     /*
           We need to add 2 to the index instead of 1,
           because that's how normalization of these indexes works.
@@ -58,10 +44,6 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
   protected getNewFocusedColumnIndex(
     newVisibleIndex: number,
     direction: Direction,
-    sourceLocation: ViewName,
-    targetLocation: ViewName,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    showWhenGrouped = false,
   ): number {
     return direction === Direction.Next ? newVisibleIndex - 1 : newVisibleIndex;
   }
@@ -89,38 +71,21 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
     this.columnFocusDispatcher?.registerKeyboardNavigationController(this);
   }
 
-  public moveColumn({
-    column,
-    sourceLocation,
-    targetLocation,
-    direction = Direction.Next,
-    rowIndex = 0,
-  }) {
-    const isGrouping = sourceLocation === ViewName.Headers && targetLocation === ViewName.Group;
-    const visibleIndex = this.getVisibleIndex(column, rowIndex, sourceLocation);
-    const newVisibleIndex = this.getNewVisibleIndex(
-      visibleIndex,
-      direction,
-      sourceLocation,
-      targetLocation,
-    );
-    const newFocusedColumnIndex = this.getNewFocusedColumnIndex(
-      !isGrouping && newVisibleIndex >= 0 ? newVisibleIndex : visibleIndex,
-      direction,
-      sourceLocation,
-      targetLocation,
-      column.showWhenGrouped,
-    );
+  public moveColumn(column, direction = Direction.Next, rowIndex = 0) {
+    const viewName = this.getFocusedView().getName();
+    const visibleIndex = this.getVisibleIndex(column, rowIndex);
+    const newVisibleIndex = this.getNewVisibleIndex(visibleIndex, direction);
+    const newFocusedColumnIndex = this.getNewFocusedColumnIndex(newVisibleIndex, direction);
 
-    this.updateViewFocusPosition(newFocusedColumnIndex >= 0 ? {
+    this.updateViewFocusPosition({
       rowIndex,
       columnIndex: newFocusedColumnIndex,
-    } : undefined);
+    });
     this._columnsController.moveColumn(
       { columnIndex: visibleIndex, rowIndex },
       { columnIndex: newVisibleIndex, rowIndex },
-      sourceLocation,
-      targetLocation,
+      viewName,
+      viewName,
     );
   }
 
