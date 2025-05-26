@@ -1,22 +1,22 @@
 @use './variables' as *;
 
 .dx-gridcore-nodata-icon-container {
-  height: $cardview-nodata-icon-container-size;
-  width: $cardview-nodata-icon-container-size;
+  height: $cardview-nodata-view__icon-container-size;
+  width: $cardview-nodata-view__icon-container-size;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: $cardview-nodata-icon-container-background-color;
+  background-color: $cardview-nodata-view__icon-bg-color;
   border-radius: 999px;
-  margin: $cardview-nodata-icon-container-margin;
+  margin: $cardview-nodata-view__icon-container-margin;
 
   .dx-icon {
-    font-size: $cardview-nodata-icon-size;
+    font-size: $cardview-nodata-view__icon-size;
   }
 }
 
 .dx-gridcore-nodata-element {
-  color: $cardview-nodata-text-color;
+  color: $cardview-nodata-view-text-color;
   text-align: center;
 }
 

@@ -1,18 +1,18 @@
-$cardview-header-item-background-color: null !default;
-$cardview-header-item-border-color: null !default;
+$cardview-header-panel__item-bg-color: null !default;
+$cardview-header-panel__item-border-color: null !default;
 
-$cardview-header-item-hovered-background-color: null !default;
-$cardview-header-item-hovered-border-color: null !default;
+$cardview-header-panel__item--hovered-bg-color: null !default;
+$cardview-header-panel__item--hovered-border-color: null !default;
 
-$cardview-header-item-border-width: null !default;
-$cardview-header-item-border-radius: null !default;
-$cardview-header-item-padding-horizontal: null !default;
-$cardview-header-item-padding-vertical: null !default;
+$cardview-header-panel__item-border-width: null !default;
+$cardview-header-panel__item-border-radius: null !default;
+$cardview-header-panel__item-padding-horizontal: null !default;
+$cardview-header-panel__item-padding-vertical: null !default;
 
 $cardview-header-item-content-gap: 4px !default;
 $cardview-header-item-line-height: null !default;
-$cardview-header-item-icon-size: null !default;
-$cardview-header-filter-icon-empty-color: null !default;
-$cardview-header-filter-icon-selected-color: null !default;
+$cardview-header-panel__item-icon-size: null !default;
+$cardview-header-panel__item__icon-color: null !default;
+$cardview-header-panel__item__header-filter-icon--selected-color: null !default;
 
-$cardview-header-item-prohibition-icon-color: null;
+$cardview-header-panel__item--dragged__prohibition-icon-color: null;

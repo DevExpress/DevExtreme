@@ -31,19 +31,19 @@ $cardview-fluent-common-text-weight: null !default;
 * $name 105. Gap between header items
 * $type text
 */
-$cardview-fluent-common-header-panel__items-horizontal-gap: null !default;
+$cardview-fluent-common-header-panel-gap: null !default;
 
 /**
 * $name 106. Vertical gap between cards
 * $type text
 */
-$cardview-fluent-common-cards-vertical-gap: null !default;
+$cardview-fluent-common-cards-row-gap: null !default;
 
 /**
 * $name 107. Horizontal gap between cards
 * $type text
 */
-$cardview-fluent-common-cards-horizontal-gap: null !default;
+$cardview-fluent-common-cards-column-gap: null !default;
 
 $cardview-fluent-common-gap: null !default;
 
@@ -253,7 +253,7 @@ $cardview-fluent-card__content__field-value--highlighted-text-weight: null !defa
 
 // #region COLUMN CHOOSER
 
-$cardview-fluent-column-chooser__empty-message-horizontal-padding: null !default;
+$cardview-fluent-column-chooser--empty__message-horizontal-padding: null !default;
 
 $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !default;
 
@@ -262,9 +262,9 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
 @if $size == "default" {
   $cardview-fluent-common-border-radius: 16px !default;
   $cardview-fluent-common-text-weight: 400 !default;
-  $cardview-fluent-common-header-panel__items-horizontal-gap: 8px !default;
-  $cardview-fluent-common-cards-vertical-gap: 16px !default;
-  $cardview-fluent-common-cards-horizontal-gap: 16px !default;
+  $cardview-fluent-common-header-panel-gap: 8px !default;
+  $cardview-fluent-common-cards-row-gap: 16px !default;
+  $cardview-fluent-common-cards-column-gap: 16px !default;
   $cardview-fluent-common-gap: 24px !default;
   $cardview-fluent-common-padding: 24px !default;
 
@@ -321,15 +321,15 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
   $cardview-fluent-card__content__field-value--highlighted-border-padding: .125em 0.2em !default;
   $cardview-fluent-card__content__field-value--highlighted-text-weight: 500 !default;
 
-  $cardview-fluent-column-chooser__empty-message-horizontal-padding: 24px !default;
+  $cardview-fluent-column-chooser--empty__message-horizontal-padding: 24px !default;
   $cardview-fluent-column-chooser__select-all-item-horizontal-padding: 14px !default;
 }
 @else if $size == "compact" {
   $cardview-fluent-common-border-radius: 16px !default;
   $cardview-fluent-common-text-weight: 400 !default;
-  $cardview-fluent-common-header-panel__items-horizontal-gap: 4px !default;
-  $cardview-fluent-common-cards-vertical-gap: 12px !default;
-  $cardview-fluent-common-cards-horizontal-gap: 12px !default;
+  $cardview-fluent-common-header-panel-gap: 4px !default;
+  $cardview-fluent-common-cards-row-gap: 12px !default;
+  $cardview-fluent-common-cards-column-gap: 12px !default;
   $cardview-fluent-common-gap: 16px !default;
   $cardview-fluent-common-padding: 16px !default;
 
@@ -386,7 +386,7 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
   $cardview-fluent-card__content__field-value--highlighted-border-padding: .125em 0.2em !default;
   $cardview-fluent-card__content__field-value--highlighted-text-weight: 500 !default;
 
-  $cardview-fluent-column-chooser__empty-message-horizontal-padding: 16px !default;
+  $cardview-fluent-column-chooser--empty__message-horizontal-padding: 16px !default;
   $cardview-fluent-column-chooser__select-all-item-horizontal-padding: 12px !default;
 }
 
@@ -394,54 +394,55 @@ $cardview-border-radius: $cardview-fluent-common-border-radius !default;
 $cardview-gap: $cardview-fluent-common-gap !default;
 $cardview-padding: $cardview-fluent-common-padding !default;
 
-$cardview-card-header-height: $cardview-fluent-card__header-height !default;
+$cardview-card__header-height: $cardview-fluent-card__header-height !default;
 
-$cardview-headers-container-gap: $cardview-fluent-header-gap !default;
-$cardview-headerpanel-vertical-margin: $cardview-fluent-header-panel-vertical-margin !default;
-$cardview-headerpanel-content-gap: $cardview-fluent-common-header-panel__items-horizontal-gap !default;
-$cardview-headerpanel-text-empty-line-height: $cardview-fluent-header-panel--empty-line-height !default;
+$cardview-header-gap: $cardview-fluent-header-gap !default;
 
-$cardview-headerpanel-dropzone-height: $cardview-fluent-header-panel__dropzone-height;
-$cardview-headerpanel-dropzone-top: $cardview-fluent-header-panel__dropzone-top;
-$cardview-dropzone-border-width: $cardview-fluent-header-panel__dropzone-border-width !default;
-$cardview-dropzone-border-radius: $cardview-fluent-header-panel__dropzone-border-radius !default;
+$cardview-header-panel-vertical-margin: $cardview-fluent-header-panel-vertical-margin !default;
+$cardview-header-panel-gap: $cardview-fluent-common-header-panel-gap !default;
+$cardview-header-panel--empty-line-height: $cardview-fluent-header-panel--empty-line-height !default;
 
-$cardview-header-item-border-width: $cardview-fluent-header-panel__item-border-width !default;
-$cardview-header-item-border-radius: $cardview-fluent-header-panel__item-border-radius !default;
-$cardview-header-item-padding-horizontal: $cardview-fluent-header-panel__item-padding-horizontal !default;
-$cardview-header-item-padding-vertical: $cardview-fluent-header-panel__item-padding-vertical !default;
-$cardview-header-item-icon-size: $cardview-fluent-header-panel__item-icon-size !default;
+$cardview-header-panel__dropzone-height: $cardview-fluent-header-panel__dropzone-height;
+$cardview-header-panel__dropzone-top: $cardview-fluent-header-panel__dropzone-top;
+$cardview-header-panel__dropzone-border-width: $cardview-fluent-header-panel__dropzone-border-width !default;
+$cardview-header-panel__dropzone-border-radius: $cardview-fluent-header-panel__dropzone-border-radius !default;
 
-$cardview-nodata-icon-container-size: $cardview-fluent-nodata-view__icon-container-size !default;
-$cardview-nodata-icon-container-margin: $cardview-fluent-nodata-view__icon-container-margin !default;
-$cardview-nodata-icon-size: $cardview-fluent-nodata-view__icon-size !default;
+$cardview-header-panel__item-border-width: $cardview-fluent-header-panel__item-border-width !default;
+$cardview-header-panel__item-border-radius: $cardview-fluent-header-panel__item-border-radius !default;
+$cardview-header-panel__item-padding-horizontal: $cardview-fluent-header-panel__item-padding-horizontal !default;
+$cardview-header-panel__item-padding-vertical: $cardview-fluent-header-panel__item-padding-vertical !default;
+$cardview-header-panel__item-icon-size: $cardview-fluent-header-panel__item-icon-size !default;
 
-$cardview-content-column-gap: $cardview-fluent-common-cards-horizontal-gap !default;
-$cardview-content-row-gap: $cardview-fluent-common-cards-vertical-gap !default;
+$cardview-nodata-view__icon-container-size: $cardview-fluent-nodata-view__icon-container-size !default;
+$cardview-nodata-view__icon-container-margin: $cardview-fluent-nodata-view__icon-container-margin !default;
+$cardview-nodata-view__icon-size: $cardview-fluent-nodata-view__icon-size !default;
 
-$cardview-card-border-size: $cardview-fluent-card-border-width !default;
+$cardview-cards-column-gap: $cardview-fluent-common-cards-column-gap !default;
+$cardview-cards-row-gap: $cardview-fluent-common-cards-row-gap !default;
+
+$cardview-card-border-width: $cardview-fluent-card-border-width !default;
 $cardview-card-min-width: $cardview-fluent-card-min-width !default;
 $cardview-card-border-radius: $cardview-fluent-card-border-radius !default;
 
-$cardview-card-cover-noimage-icon-size: $cardview-fluent-card__cover--noimage__icon-size !default;
+$cardview-card__cover--noimage__icon-size: $cardview-fluent-card__cover--noimage__icon-size !default;
 
-$cardview-card-content-padding: $cardview-fluent-card__content-padding !default;
-$cardview-card-content-row-gap: $cardview-fluent-card__content-row-gap !default;
-$cardview-card-content-cell-padding-vertical: $cardview-fluent-card__content__cell-padding-vertical !default;
-$cardview-card-content-cell-padding-horizontal: $cardview-fluent-card__content__cell-padding-horizontal !default;
+$cardview-card__content-padding: $cardview-fluent-card__content-padding !default;
+$cardview-card__content-row-gap: $cardview-fluent-card__content-row-gap !default;
+$cardview-card__content__cell-padding-vertical: $cardview-fluent-card__content__cell-padding-vertical !default;
+$cardview-card__content__cell-padding-horizontal: $cardview-fluent-card__content__cell-padding-horizontal !default;
 
-$cardview-card-header-text-size: $cardview-fluent-card__header-text-size !default;
+$cardview-card__header-text-size: $cardview-fluent-card__header-text-size !default;
 $cardview-card-header-border-radius: $cardview-fluent-card-border-radius !default;
 
-$cardview-column-chooser-empty-message-horizontal-padding: $cardview-fluent-column-chooser__empty-message-horizontal-padding !default;
-$cardview-column-chooser-select-all-item-horizontal-padding: $cardview-fluent-column-chooser__select-all-item-horizontal-padding !default;
+$cardview-column-chooser--empty__message-horizontal-padding: $cardview-fluent-column-chooser--empty__message-horizontal-padding !default;
+$cardview-column-chooser__select-all-item-horizontal-padding: $cardview-fluent-column-chooser__select-all-item-horizontal-padding !default;
 
-$cardview-content-card-cover-max-height-default: $cardview-fluent-card__cover-max-height !default;
+$cardview-card__cover-max-height: $cardview-fluent-card__cover-max-height !default;
 
-$cardview-card-header-selection-checkbox-padding-right: $cardview-fluent-card__header__selection-checkbox-padding-right !default;
+$cardview-card__header__selection-checkbox-padding-right: $cardview-fluent-card__header__selection-checkbox-padding-right !default;
 
-$cardview-card-content-field-caption-font-weight: $cardview-fluent-card__field-caption-weight !default;
+$cardview-card__field-caption-weight: $cardview-fluent-card__field-caption-weight !default;
 
-$cardview-card-content-field-value-highlight-border-radius: $cardview-fluent-card__content__field-value--highlighted-border-radius !default;
-$cardview-card-content-field-value-highlight-padding: $cardview-fluent-card__content__field-value--highlighted-border-padding !default;
-$cardview-card-content-field-value-highlight-font-weight: $cardview-fluent-card__content__field-value--highlighted-text-weight !default;
+$cardview-card__content__field-value--highlighted-border-radius: $cardview-fluent-card__content__field-value--highlighted-border-radius !default;
+$cardview-card__content__field-value--highlighted-border-padding: $cardview-fluent-card__content__field-value--highlighted-border-padding !default;
+$cardview-card__content__field-value--highlighted-text-weight: $cardview-fluent-card__content__field-value--highlighted-text-weight !default;

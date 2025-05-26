@@ -421,7 +421,7 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
 
   $cardview-fluent-header-panel__item-bg-color: darken($base-bg, 5.88) !default;
   $cardview-fluent-header-panel__item-border-color: $base-border-color !default;
-  $cardview-fluent-header-panel__item-text-color: $cardview-fluent-common-text-color !default; // TODO
+  $cardview-fluent-header-panel__item-text-color: $cardview-fluent-common-text-color !default;
   $cardview-fluent-header-panel__item__icon-color: $cardview-fluent-common-text-color !default;
   $cardview-fluent-header-panel__item__header-filter-icon--selected-color: $base-accent !default;
   $cardview-fluent-header-panel__item__sort-index-text-color: $cardview-fluent-common-text-color !default;
@@ -441,7 +441,6 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-header-panel__item--disabled__header-filter-icon--selected-color: $cardview-fluent-header-panel__item__header-filter-icon--selected-color !default;
   $cardview-fluent-header-panel__item--disabled__sort-index-text-color: $cardview-fluent-header-panel__item__sort-index-text-color !default;
 
-  // TODO: use $cardview-fluent-common-text-color or $base-text-color
   $cardview-fluent-header-panel__item--dragged-bg-color: $cardview-fluent-header-panel__item-bg-color !default;
   $cardview-fluent-header-panel__item--dragged-border-color: $cardview-fluent-header-panel__item-border-color !default;
   $cardview-fluent-header-panel__item--dragged-text-color: $cardview-fluent-header-panel__item-text-color !default;
@@ -543,37 +542,37 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-columnchooser--empty__message-color: lighten($base-text-color, 26%) !default;
 }
 
-$cardview-background-color: $cardview-fluent-common-bg-color !default;
+$cardview-bg-color: $cardview-fluent-common-bg-color !default;
 $cardview-link-color: $cardview-fluent-common-link-color !default;
 
-$cardview-header-filter-icon-empty-color: $cardview-fluent-header-panel__item__icon-color !default;
-$cardview-header-filter-icon-selected-color: $cardview-fluent-header-panel__item__header-filter-icon--selected-color !default;
+$cardview-header-panel__item__icon-color: $cardview-fluent-header-panel__item__icon-color !default;
+$cardview-header-panel__item__header-filter-icon--selected-color: $cardview-fluent-header-panel__item__header-filter-icon--selected-color !default;
 
-$cardview-dropzone-text-color: $cardview-fluent-header-panel__dropzone-text-color !default;
-$cardview-dropzone-background-color: $cardview-fluent-header-panel__dropzone-bg-color !default;
-$cardview-dropzone-border-color: $cardview-fluent-header-panel__dropzone-border-color !default;
+$cardview-header-panel__dropzone-text-color: $cardview-fluent-header-panel__dropzone-text-color !default;
+$cardview-header-panel__dropzone-bg-color: $cardview-fluent-header-panel__dropzone-bg-color !default;
+$cardview-header-panel__dropzone-border-color: $cardview-fluent-header-panel__dropzone-border-color !default;
 
-$cardview-header-item-border-color: $cardview-fluent-header-panel__item-border-color !default;
-$cardview-header-item-background-color: $cardview-fluent-header-panel__item-bg-color !default;
-$cardview-header-item-hovered-background-color: $cardview-fluent-header-panel__item--hovered-bg-color !default;
-$cardview-header-item-hovered-border-color: $cardview-fluent-header-panel__item--hovered-border-color !default;
+$cardview-header-panel__item-border-color: $cardview-fluent-header-panel__item-border-color !default;
+$cardview-header-panel__item-bg-color: $cardview-fluent-header-panel__item-bg-color !default;
+$cardview-header-panel__item--hovered-bg-color: $cardview-fluent-header-panel__item--hovered-bg-color !default;
+$cardview-header-panel__item--hovered-border-color: $cardview-fluent-header-panel__item--hovered-border-color !default;
 
-$cardview-header-item-prohibition-icon-color: $cardview-fluent-header-panel__item--dragged__prohibition-icon-color !default;
+$cardview-header-panel__item--dragged__prohibition-icon-color: $cardview-fluent-header-panel__item--dragged__prohibition-icon-color !default;
 
-$cardview-nodata-text-color: $cardview-fluent-nodata-view-text-color !default;
-$cardview-nodata-icon-container-background-color: $cardview-fluent-nodata-view__icon-bg-color !default;
+$cardview-nodata-view-text-color: $cardview-fluent-nodata-view-text-color !default;
+$cardview-nodata-view__icon-bg-color: $cardview-fluent-nodata-view__icon-bg-color !default;
 
-$cardview-card-content-field-value-highlight-color: $cardview-fluent-card__content__field-value--highlighted-text-color !default;
-$cardview-card-content-field-value-highlight-background: $cardview-fluent-card__content__field-value--highlighted-bg-color !default;
-$cardview-card-content-field-value-highlight-box-shadow: 0 1px 3px $cardview-fluent-card__content__field-value--highlighted-box-shadow-color !default;
+$cardview-card__content__field-value--highlighted-text-color: $cardview-fluent-card__content__field-value--highlighted-text-color !default;
+$cardview-card__content__field-value--highlighted-bg-color: $cardview-fluent-card__content__field-value--highlighted-bg-color !default;
+$cardview-card__content__field-value--highlighted-box-shadow-color: 0 1px 3px $cardview-fluent-card__content__field-value--highlighted-box-shadow-color !default;
 
-$cardview-card-cover-background-color: $cardview-fluent-card__cover-bg-color !default;
-$cardview-card-cover-noimage-background-color: $cardview-fluent-card__cover--noimage-bg-color !default;
-$cardview-card-cover-noimage-icon-color: $cardview-fluent-card__cover--noimage__icon-color !default;
+$cardview-card__cover-bg-color: $cardview-fluent-card__cover-bg-color !default;
+$cardview-card__cover--noimage-bg-color: $cardview-fluent-card__cover--noimage-bg-color !default;
+$cardview-card__cover--noimage__icon-color: $cardview-fluent-card__cover--noimage__icon-color !default;
 
-$cardview-card-selection-background-color: $cardview-fluent-card--selected-bg-color !default;
+$cardview-card--selected-bg-color: $cardview-fluent-card--selected-bg-color !default;
 
 $cardview-card-border-color: $cardview-fluent-card-border-color !default;
-$cardview-card-background-color: $cardview-fluent-card-bg-color !default;
+$cardview-card-bg-color: $cardview-fluent-card-bg-color !default;
 
-$cardview-columnchooser-message-color: $cardview-fluent-columnchooser--empty__message-color !default;
+$cardview-columnchooser--empty__message-color: $cardview-fluent-columnchooser--empty__message-color !default;

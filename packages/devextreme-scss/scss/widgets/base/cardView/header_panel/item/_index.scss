@@ -4,36 +4,36 @@
 .dx-cardview-header-item {
   display: flex;
   align-items: center;
-  padding: ($cardview-header-item-padding-vertical - $cardview-header-item-border-width) $cardview-header-item-padding-horizontal;
+  padding: ($cardview-header-panel__item-padding-vertical - $cardview-header-panel__item-border-width) $cardview-header-panel__item-padding-horizontal;
   min-width: fit-content;
   user-select: none;
   gap: $cardview-header-item-content-gap;
-  border: solid $cardview-header-item-border-width $cardview-header-item-border-color;
-  border-radius: $cardview-header-item-border-radius;
-  background-color: $cardview-header-item-background-color;
+  border: solid $cardview-header-panel__item-border-width $cardview-header-panel__item-border-color;
+  border-radius: $cardview-header-panel__item-border-radius;
+  background-color: $cardview-header-panel__item-bg-color;
   line-height: $cardview-header-item-line-height;
   cursor: pointer;
 
   &:hover {
-    background-color: $cardview-header-item-hovered-background-color;
-    border: solid $cardview-header-item-border-width $cardview-header-item-hovered-border-color;
+    background-color: $cardview-header-panel__item--hovered-bg-color;
+    border: solid $cardview-header-panel__item-border-width $cardview-header-panel__item--hovered-border-color;
   }
 
   .dx-icon-cursorprohibition {
-    color: $cardview-header-item-prohibition-icon-color;
+    color: $cardview-header-panel__item--dragged__prohibition-icon-color;
   }
 
   .dx-icon {
-    font-size: $cardview-header-item-icon-size;
+    font-size: $cardview-header-panel__item-icon-size;
   }
 }
 
 .dx-cardview {
   .dx-header-filter-icon {
-    color: $cardview-header-filter-icon-empty-color;
+    color: $cardview-header-panel__item__icon-color;
 
     &--selected {
-      color: $cardview-header-filter-icon-selected-color;
+      color: $cardview-header-panel__item__header-filter-icon--selected-color;
     }
   }
 }

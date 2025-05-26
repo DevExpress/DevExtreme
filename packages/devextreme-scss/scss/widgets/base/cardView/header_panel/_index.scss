@@ -4,7 +4,7 @@
 
 .dx-cardview-headerpanel-content {
   display: flex;
-  gap: $cardview-headerpanel-content-gap;
+  gap: $cardview-header-panel-gap;
 }
 
 .dx-cardview-header-item-sorting {
@@ -12,7 +12,7 @@
 }
 
 .dx-cardview-headers {
-  margin: $cardview-headerpanel-vertical-margin 0;
+  margin: $cardview-header-panel-vertical-margin 0;
 
   .dx-sortable {
     position: relative;
@@ -20,17 +20,17 @@
 
     .dx-cardview-dropzone {
       width: 100%;
-      height: $cardview-headerpanel-dropzone-height;
-      background-color: $cardview-dropzone-background-color;
+      height: $cardview-header-panel__dropzone-height;
+      background-color: $cardview-header-panel__dropzone-bg-color;
       text-align: center;
-      color: $cardview-dropzone-text-color;
+      color: $cardview-header-panel__dropzone-text-color;
       position: absolute;
-      top: $cardview-headerpanel-dropzone-top;
+      top: $cardview-header-panel__dropzone-top;
       left: 0;
-      border-width: $cardview-dropzone-border-width;
+      border-width: $cardview-header-panel__dropzone-border-width;
       border-style: dashed;
-      border-color: $cardview-dropzone-border-color;
-      border-radius: $cardview-dropzone-border-radius;
+      border-color: $cardview-header-panel__dropzone-border-color;
+      border-radius: $cardview-header-panel__dropzone-border-radius;
       pointer-events: none;
       opacity: 0.0;
       transition: opacity 0.3s ease-out;
@@ -47,7 +47,7 @@
   }
 
   .dx-cardview-headerpanel-text-empty {
-    line-height: $cardview-headerpanel-text-empty-line-height;
+    line-height: $cardview-header-panel--empty-line-height;
   }
 }
 
