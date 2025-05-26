@@ -3,12 +3,15 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
+import { a11yCheck } from '../../helpers/accessibility/utils';
 
 fixture.disablePageReloads`CardView - HeaderPanel`
   .page(url(__dirname, '../container.html'));
 
+const CARD_VIEW_SELECTOR = '#container';
+
 test('default render', async (t) => {
-  const cardView = new CardView('#container');
+  const cardView = new CardView(CARD_VIEW_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'content-no-data.png', { element: cardView.element });
@@ -16,6 +19,8 @@ test('default render', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   width: 1000,
   height: 600,

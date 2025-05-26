@@ -219,7 +219,13 @@ export class SingleLineStrategy {
       const $item = overflowItems.eq(-1);
       $item.addClass(TOOLBAR_HIDDEN_ITEM);
       itemsWidth = this._getItemsWidth();
-      overflowItems.splice(-1, 1);
+      [].splice.apply(
+        overflowItems,
+        [
+          -1,
+          1,
+        ],
+      );
     }
   }
 

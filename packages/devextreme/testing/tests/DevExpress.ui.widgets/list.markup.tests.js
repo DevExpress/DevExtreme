@@ -45,7 +45,7 @@ QUnit.module('List markup', {}, () => {
         assert.equal(items.length, 2);
         assert.ok(items.eq(0).hasClass(LIST_ITEM_CLASS));
         assert.ok(items.eq(1).hasClass(LIST_ITEM_CLASS));
-        assert.equal($.trim(items.text()), '01', 'all items rendered');
+        assert.equal(items.text().trim(), '01', 'all items rendered');
     });
 
     QUnit.test('itemTemplate default', function(assert) {

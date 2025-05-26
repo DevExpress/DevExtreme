@@ -3,13 +3,13 @@ import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
-fixture('Charts.ZoomingOnAreaSelection')
+fixture('Charts.AreaSelectionZooming')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Charts', 'ZoomingOnAreaSelection', (test) => {
-  test('ZoomingOnAreaSelection. Drag', async (t) => {
+runManualTest('Charts', 'AreaSelectionZooming', (test) => {
+  test('AreaSelectionZooming. Drag', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.drag($('.dxc-series circle').nth(7), 600, 200);

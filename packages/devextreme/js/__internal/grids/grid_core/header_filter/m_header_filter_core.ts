@@ -2,6 +2,7 @@
 import '@ts/ui/list/modules/m_search';
 import '@ts/ui/list/modules/m_selection';
 
+import type { ChangedOptionInfo } from '@js/common/core/events';
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
@@ -15,6 +16,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import TreeView from '@js/ui/tree_view';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import type TextBox from '@ts/ui/text_box/m_text_box';
 
 import gridCoreUtils from '../m_utils';
 
@@ -329,16 +331,44 @@ export class HeaderFilterView extends Modules.View {
       },
     };
 
-    function onOptionChanged(e) {
-      // T835492, T833015
-      if (e.fullName === 'searchValue' && needShowSelectAllCheckbox && that.option('headerFilter.hideSelectAllOnSearch') !== false) {
-        if (options.type === 'tree') {
-          e.component.option('showCheckBoxesMode', e.value ? 'normal' : 'selectAll');
-        } else {
-          e.component.option('selectionMode', e.value ? 'multiple' : 'all');
-        }
+    const shouldChangeSelectAllCheckBoxVisibility = (): boolean => needShowSelectAllCheckbox
+      && that.option('headerFilter.hideSelectAllOnSearch') !== false;
+
+    const onTreeViewOptionChanged = (
+      event: ChangedOptionInfo & {
+        component: TreeView & { _searchEditor: TextBox };
+      },
+    ): void => {
+      switch (true) {
+        case event.fullName === 'searchValue' && shouldChangeSelectAllCheckBoxVisibility():
+          event.component.option('showCheckBoxesMode', event.value ? 'normal' : 'selectAll');
+          break;
+        // TODO TreeView: remove this WA after Navigation squad re-render fix
+        // NOTE: WA for TreeView re-render after changing the "showCheckBoxesMode" option
+        // After this option change the whole TreeView re-render and search input loose the focus
+        case event.fullName === 'showCheckBoxesMode':
+          // NOTE: the TreeView render is async
+          // So we should focus the searchEditor only after render will be completed
+          Promise.resolve()
+            .then(() => {
+              event.component._searchEditor.focus();
+            })
+            .catch(() => {});
+          break;
+        default:
+          break;
       }
-    }
+    };
+
+    const onListOptionChanged = (
+      event: ChangedOptionInfo & {
+        component: dxList;
+      },
+    ): void => {
+      if (event.fullName === 'searchValue' && shouldChangeSelectAllCheckBoxVisibility()) {
+        event.component.option('selectionMode', event.value ? 'multiple' : 'all');
+      }
+    };
 
     if (options.type === 'tree') {
       that._listComponent = that._createComponent(
@@ -346,7 +376,7 @@ export class HeaderFilterView extends Modules.View {
         TreeView,
         extend(widgetOptions, {
           showCheckBoxesMode: needShowSelectAllCheckbox ? 'selectAll' : 'normal',
-          onOptionChanged,
+          onOptionChanged: onTreeViewOptionChanged,
           keyExpr: 'id',
         }),
       );
@@ -359,7 +389,7 @@ export class HeaderFilterView extends Modules.View {
           pageLoadMode: 'scrollBottom',
           showSelectionControls: true,
           selectionMode: needShowSelectAllCheckbox ? 'all' : 'multiple',
-          onOptionChanged,
+          onOptionChanged: onListOptionChanged,
           onSelectionChanged(event) {
             const { component: listComponent } = event;
             const items = listComponent.option('items');

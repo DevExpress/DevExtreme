@@ -4,9 +4,7 @@ import {
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule, DxDataGridComponent, DxButtonModule } from 'devextreme-angular';
-import query from 'devextreme/data/query';
-import 'devextreme/data/odata/store';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { query, DataSourceOptions } from 'devextreme-angular/common/data';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

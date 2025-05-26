@@ -7,7 +7,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxPopupModule, DxTemplateModule, DxDiagramModule, DxDiagramComponent, DxTextBoxModule, DxButtonModule,
 } from 'devextreme-angular';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-angular/common/data';
 import { Service, Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

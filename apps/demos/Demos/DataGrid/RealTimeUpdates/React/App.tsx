@@ -3,7 +3,7 @@ import DataGrid, {
   Column, Summary, TotalItem, MasterDetail, Paging, type DataGridTypes,
 } from 'devextreme-react/data-grid';
 import { Slider, type SliderTypes, Tooltip } from 'devextreme-react/slider';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-react/common/data';
 import {
   productsStore, ordersStore, getOrderCount, addOrder, Product,
 } from './data.ts';

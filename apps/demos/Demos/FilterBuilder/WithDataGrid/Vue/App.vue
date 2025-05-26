@@ -26,8 +26,7 @@ import { ref } from 'vue';
 import DxFilterBuilder from 'devextreme-vue/filter-builder';
 import DxButton from 'devextreme-vue/button';
 import DxDataGrid, { type DxDataGridTypes } from 'devextreme-vue/data-grid';
-import DataSource from 'devextreme/data/data_source';
-import ODataStore from 'devextreme/data/odata/store';
+import { DataSource, ODataStore } from 'devextreme-vue/common/data';
 import { filter, fields } from './data.ts';
 
 const filterValue = ref(filter);

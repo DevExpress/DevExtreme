@@ -1,6 +1,7 @@
 /* global currentTest, createTestContainer */
 
 const $ = require('jquery');
+const typeUtils = require('core/utils/type');
 const vizMocks = require('../../helpers/vizMocks.js');
 const tooltipModule = require('viz/core/tooltip');
 const BaseWidget = require('__internal/viz/core/m_base_widget').default;
@@ -2076,7 +2077,7 @@ QUnit.begin(function() {
     QUnit.test('sparkline contains export methods', function(assert) {
         const sparkline = this.createSparkline({});
 
-        assert.ok($.isFunction(sparkline.exportTo));
+        assert.ok(typeUtils.isFunction(sparkline.exportTo));
     });
 
     QUnit.module('drawn', {

@@ -65,5 +65,10 @@
     "lint-staged",
     "pre-commit"
   ],
+  "pnpm": {
+    "overrides": {
+      "@devexpress/callsite-record@^4.1.6": "4.1.6"
+    }
+  },
   "packageManager": "pnpm@9.15.4"
 }

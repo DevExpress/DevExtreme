@@ -1185,7 +1185,7 @@ module('tooltip integration', {
             this.$tooltip = this.$handle.find(`.${TOOLTIP_CLASS}`);
             this.getTooltip = () => this.$handle.find(`.${TOOLTIP_CLASS}`);
             this.getTooltipContent = () => this.getTooltip().find(`.${TOOLTIP_CONTENT_CLASS}`);
-            this.getTooltipText = () => $.trim(this.getTooltip().text());
+            this.getTooltipText = () => this.getTooltip().text().trim();
         };
         this.reinit = (options) => {
             this.slider.dispose();
@@ -1798,7 +1798,7 @@ module('valueChangeMode option', {
         this.$tooltip = this.$handle.find(`.${TOOLTIP_CLASS}`);
 
         this.getTooltip = () => this.$handle.find(`.${TOOLTIP_CLASS}`);
-        this.getTooltipText = () => $.trim(this.getTooltip().text());
+        this.getTooltipText = () => this.getTooltip().text().trim();
     }
 }, () => {
     test('slider value should not change on swipe with "onHandleRelease" valueChangeMode', function(assert) {
