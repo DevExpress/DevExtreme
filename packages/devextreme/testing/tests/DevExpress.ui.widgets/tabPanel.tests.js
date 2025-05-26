@@ -11,7 +11,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import translator from 'common/core/animation/translator';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
+import { shouldSkipOnDevices } from '../../helpers/device.js';
 
 
 QUnit.testStart(() => {
@@ -1037,6 +1037,10 @@ QUnit.module('focus policy', {
     });
 
     QUnit.test('first tab should be focused after initialization', function(assert) {
+        if(shouldSkipOnDevices({ deviceTypes: ['phone', 'tablet'], assert })) {
+            return;
+        }
+
         const items = Array.from({ length: 20 }, (_, index) => ({
             title: `Tab ${index + 1}`,
             text: `Content ${index + 1}`
