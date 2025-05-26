@@ -9,7 +9,7 @@ import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
 import { getData } from './helpers/generateDataSourceData';
-import { Themes } from '../../../helpers/themes';
+import { Themes } from '../../helpers/themes';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'));
