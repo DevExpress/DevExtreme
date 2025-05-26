@@ -72,7 +72,9 @@ module('Integration: Agenda', moduleConfig, () => {
             height: 600
         });
 
-        await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
     });
 
     test('Scheduler should have a right agenda work space', async function(assert) {
@@ -284,14 +286,16 @@ module('Integration: Agenda', moduleConfig, () => {
             assert.equal(targetedRawAppointment.startDate.getTime(), expectedDate.getTime(), 'Start date is OK');
         });
 
+        const clock = sinon.useFakeTimers();
         for(let i = 0; i < scheduler.appointmentList.length; i++) {
             const appointment = scheduler.appointmentList[i];
             assert.equal(appointment.title.text, 'a', 'Title is OK');
             assert.equal(appointment.marker.color, '#ff0000', 'Appointment color is OK');
-            await appointment.dbClick();
+            await appointment.dbClick(clock);
 
             appointmentIndex++;
         }
+        clock.restore();
     });
 
     test('Particular recurrence appt data calculation', async function(assert) {
@@ -973,7 +977,9 @@ module('Integration: Agenda', moduleConfig, () => {
             ]
         });
 
-        await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
         assert.ok(scheduler.tooltip.isVisible(), 'Tooltip is rendered');
     });
 

@@ -139,7 +139,9 @@ module('Integration: Appointment Day, Week views', {
 
                 apptData.startDate = new Date(2015, 1, 9, 2);
 
-                await appointment.dbClick();
+                const clock = sinon.useFakeTimers();
+                await appointment.dbClick(clock);
+                clock.restore();
 
                 const cell = scheduler.workSpace.getCell(2, 0).get(0);
 
@@ -230,8 +232,10 @@ module('Integration: Appointment Day, Week views', {
 
                 const spy = sinon.spy(scheduler.instance._appointmentPopup, 'show');
 
-                await scheduler.appointments.click();
+                const clock = sinon.useFakeTimers();
+                await scheduler.appointments.click(0, clock);
                 scheduler.tooltip.clickOnItem();
+                clock.restore();
 
                 try {
                     const args = spy.getCall(0).args[0];
@@ -1127,8 +1131,10 @@ module('Integration: Appointment Day, Week views', {
                     }]
                 });
 
-                await scheduler.appointments.click(0);
-                await scheduler.appointments.click(1);
+                const clock = sinon.useFakeTimers();
+                await scheduler.appointments.click(0, clock);
+                await scheduler.appointments.click(1, clock);
+                clock.restore();
 
                 assert.expect(4);
             });

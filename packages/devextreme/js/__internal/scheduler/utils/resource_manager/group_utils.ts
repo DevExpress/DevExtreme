@@ -68,7 +68,7 @@ export const getGroupTexts = (
     const resourceId = leafGroups[resourceIndex];
     const resource = resourceById[resourceIndex];
 
-    return resource.items.find((item) => item.id === resourceId)?.text;
+    return resource?.items.find((item) => item.id === resourceId)?.text;
   }).filter(Boolean);
 
   return textPath as string[];

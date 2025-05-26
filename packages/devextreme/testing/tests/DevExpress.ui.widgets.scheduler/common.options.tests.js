@@ -226,7 +226,7 @@ QUnit.module('Options', () => {
             })
         });
 
-        await waitAsync(200);
+        await waitAsync(110);
 
         assert.equal(counter, 1);
     });

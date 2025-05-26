@@ -633,7 +633,9 @@ QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {
             recurrenceEditMode: 'occurrence'
         });
 
-        await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
         scheduler.tooltip.clickOnDeleteButton();
 
         assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointment was deleted');
@@ -655,7 +657,9 @@ QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {
             recurrenceEditMode: 'occurrence'
         });
 
-        await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
         scheduler.tooltip.clickOnDeleteButton();
 
         assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointment was deleted');

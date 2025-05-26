@@ -741,7 +741,9 @@ QUnit.module('Events', {
             onAppointmentContextMenu,
         });
 
-        await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
 
         let $appointmentItem = scheduler.tooltip.getItemElement();
         $appointmentItem.trigger('dxcontextmenu'); // first call

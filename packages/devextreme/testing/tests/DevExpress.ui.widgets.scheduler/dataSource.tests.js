@@ -91,13 +91,13 @@ module('Events', {
                     args.cancel = $.Deferred();
                     setTimeout(function() {
                         args.cancel.resolve(true);
-                    }, 200);
+                    }, 100);
                 },
                 dataSource: dataSource
             });
 
             scheduler.instance.addAppointment({ startDate: new Date(), text: 'Appointment 1' });
-            await waitAsync(250);
+            await waitAsync(110);
 
             assert.strictEqual(dataSource.items().length, 0, 'Insert operation is canceled');
         });
@@ -106,7 +106,7 @@ module('Events', {
             const promise = new Promise(function(resolve) {
                 setTimeout(function() {
                     resolve(true);
-                }, 200);
+                }, 100);
             });
             const dataSource = new DataSource({
                 store: []
@@ -119,7 +119,7 @@ module('Events', {
             });
 
             scheduler.instance.addAppointment({ startDate: new Date(), text: 'Appointment 1' });
-            await waitAsync(250);
+            await waitAsync(110);
 
             promise.then(function() {
                 assert.strictEqual(dataSource.items().length, 0, 'Insert operation is canceled');
@@ -280,14 +280,14 @@ module('Events', {
                     args.cancel = $.Deferred();
                     setTimeout(function() {
                         args.cancel.resolve(true);
-                    }, 200);
+                    }, 100);
                 },
                 dataSource: dataSource,
                 currentDate: new Date(2015, 1, 9)
             });
 
             scheduler.instance.updateAppointment(appointments[0], { startDate: new Date(), text: 'Appointment 1' });
-            await waitAsync(250);
+            await waitAsync(110);
 
             assert.deepEqual(dataSource.items(), [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }], 'Update operation is canceled');
         });
@@ -299,7 +299,7 @@ module('Events', {
                     args.cancel = d.promise();
                     setTimeout(function() {
                         d.reject();
-                    }, 200);
+                    }, 100);
                 },
                 currentView: 'week',
                 dataSource: [{ startDate: new Date(2015, 1, 11), endDate: new Date(2015, 1, 13), text: 'caption' }],
@@ -315,7 +315,7 @@ module('Events', {
             const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-left').eq(0)).start();
 
             pointer.dragStart().drag(-cellWidth * 2, 0).dragEnd();
-            await waitAsync(250);
+            await waitAsync(110);
             assert.equal(translator.locate(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)).left, initialLeftPosition, 'Left position is OK');
         });
 
@@ -563,8 +563,10 @@ module('Events', {
                 }
             });
 
-            await scheduler.appointmentList[0].click();
+            const clock = sinon.useFakeTimers();
+            await scheduler.appointmentList[0].click(clock);
             scheduler.tooltip.clickOnDeleteButton();
+            clock.restore();
 
             assert.expect(4);
         });
@@ -624,14 +626,14 @@ module('Events', {
                     args.cancel = $.Deferred();
                     setTimeout(function() {
                         args.cancel.resolve(true);
-                    }, 200);
+                    }, 100);
                 },
                 dataSource: dataSource,
                 currentDate: new Date(2015, 1, 9)
             });
 
             scheduler.instance.deleteAppointment(appointments[0]);
-            await waitAsync(250);
+            await waitAsync(110);
 
             assert.deepEqual(dataSource.items(), [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }], 'Delete operation is canceled');
         });
@@ -647,14 +649,14 @@ module('Events', {
                     args.cancel = $.Deferred();
                     setTimeout(function() {
                         args.cancel.resolve(false);
-                    }, 200);
+                    }, 100);
                 },
                 dataSource: dataSource,
                 currentDate: new Date(2015, 1, 9)
             });
 
             scheduler.instance.deleteAppointment(appointments[0]);
-            await waitAsync(250);
+            await waitAsync(110);
 
             assert.equal(dataSource.items().length, 0, 'Delete operation is completed');
         });
@@ -781,8 +783,10 @@ module('ArraySore(auto generated id)', moduleConfig, () => {
             }
         });
 
-        await scheduler.appointmentList[0].click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointmentList[0].click(clock);
         scheduler.tooltip.clickOnDeleteButton();
+        clock.restore();
 
         assert.expect(2);
     });

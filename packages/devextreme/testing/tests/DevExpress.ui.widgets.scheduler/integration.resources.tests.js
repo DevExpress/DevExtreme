@@ -180,8 +180,10 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             currentDate: new Date(2015, 1, 9)
         });
 
-        await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
         scheduler.tooltip.clickOnItem();
+        clock.restore();
 
         assert.equal(scheduler.option('dataSource')[0].ownerId, 1, 'ownerId property shouldn\'t change after show appointment form');
         assert.ok(onAppointmentFormOpeningRaised, 'onAppointmentFormOpening event should be raised');

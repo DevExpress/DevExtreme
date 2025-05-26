@@ -1,7 +1,7 @@
 import dateLocalization from '@js/common/core/localization/date';
 import { equalByValue } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isObject } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
 import {
@@ -24,6 +24,7 @@ import type {
   ViewType,
 } from '../../types';
 import type { ResourceLoader } from '../../utils/loader/resource_loader';
+import type { ResourceId } from '../../utils/loader/types';
 import type { GroupLeaf } from '../../utils/resource_manager/types';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -446,6 +447,10 @@ export const extendGroupItemsForGroupingByDate = (
     ] as GroupRenderItem[];
   }), []) as GroupRenderItem[][];
 
+const stringifyId = (id: ResourceId): string => (isObject(id)
+  ? JSON.stringify(id)
+  : String(id));
+
 export const getGroupPanelData = (
   groupResources: ResourceLoader[],
   columnCountPerGroup: number,
@@ -465,7 +470,7 @@ export const getGroupPanelData = (
           id,
           text,
           color,
-          key: `${iterator}_${resourceIndex}_${id}`,
+          key: `${iterator}_${resourceIndex}_${stringifyId(id)}`,
           resourceName,
           data: data?.[index],
         }) as GroupRenderItem));

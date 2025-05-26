@@ -223,6 +223,12 @@ describe('groups utils', () => {
       ).toEqual(['Samantha Bright', 'Room 1']);
     });
 
+    it('should return empty array for empty resources', () => {
+      expect(
+        getGroupTexts(['assigneeId', 'roomId'], [], {}, 3),
+      ).toEqual([]);
+    });
+
     it('should return groups in order of groups declared', async () => {
       const manager = getResourceManagerMock();
       await manager.loadGroupResources(['assigneeId', 'nested.priorityId', 'roomId']);

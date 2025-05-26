@@ -330,7 +330,9 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
         assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Should render 2 appointments');
         markAppointments(scheduler);
 
-        await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
         scheduler.tooltip.clickOnItem();
         scheduler.appointmentForm.setSubject('new text');
         scheduler.appointmentPopup.clickDoneButton();

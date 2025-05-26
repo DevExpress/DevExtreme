@@ -285,14 +285,22 @@ class Appointment extends ClickElementWrapper {
         };
     }
 
-    async click() {
+    async click(clock, timeout = 300) {
         this.getElement().trigger('dxclick');
-        await waitAsync(300);
+        if(clock) {
+            await clock.tickAsync(timeout);
+        } else {
+            await waitAsync(timeout);
+        }
     }
 
-    async dbClick() {
+    async dbClick(clock, timeout = 300) {
         this.getElement().trigger('dxdblclick');
-        await waitAsync(300);
+        if(clock) {
+            await clock.tickAsync(timeout);
+        } else {
+            await waitAsync(timeout);
+        }
     }
 }
 

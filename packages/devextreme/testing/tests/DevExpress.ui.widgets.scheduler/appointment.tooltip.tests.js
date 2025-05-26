@@ -57,7 +57,9 @@ module('Integration: Appointment tooltip', {
 
             const getAppointmentDisabled = sinon.spy(scheduler.instance._appointmentTooltip._options, 'getAppointmentDisabled');
 
-            await scheduler.appointments.click();
+            const clock = sinon.useFakeTimers();
+            await scheduler.appointments.click(0, clock);
+            clock.restore();
 
             const deleteButton = scheduler.tooltip.getDeleteButton();
             const getAppointmentDisabledResult = getAppointmentDisabled.returnValues[0];

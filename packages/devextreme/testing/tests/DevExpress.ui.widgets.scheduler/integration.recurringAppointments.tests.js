@@ -13,7 +13,6 @@ import {
     isDesktopEnvironment,
     supportedScrollingModes
 } from '../../helpers/scheduler/helpers.js';
-import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import dateUtils from 'core/utils/date';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 
@@ -617,7 +616,9 @@ supportedScrollingModes.forEach(scrollingMode => {
                 firstDayOfWeek: 1
             });
 
-            await scheduler.appointments.click(1);
+            const clock = sinon.useFakeTimers();
+            await scheduler.appointments.click(1, clock);
+            clock.restore();
 
             scheduler.tooltip.clickOnDeleteButton();
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
@@ -648,7 +649,9 @@ supportedScrollingModes.forEach(scrollingMode => {
                 firstDayOfWeek: 1
             });
 
-            await scheduler.appointments.click(2);
+            const clock = sinon.useFakeTimers();
+            await scheduler.appointments.click(2, clock);
+            clock.restore();
             scheduler.tooltip.clickOnItem();
 
             assert.ok($('.dx-dialog').length, 'Dialog was shown');
@@ -680,7 +683,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 firstDayOfWeek: 1
             });
 
-            await scheduler.appointments.click(2);
+            const clock = sinon.useFakeTimers();
+            await scheduler.appointments.click(2, clock);
             scheduler.tooltip.clickOnItem();
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
 
@@ -692,7 +696,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             title.option('value', 'Task 2');
             startDate.option('value', new Date(2015, 1, 11, 3, 0));
             $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
-            await waitAsync(300);
+            await clock.tickAsync(300);
+            clock.restore();
 
             const updatedSingleItem = scheduler.instance.option('dataSource').items()[1];
             const updatedRecurringItem = scheduler.instance.option('dataSource').items()[0];
@@ -727,7 +732,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 firstDayOfWeek: 1
             });
 
-            await scheduler.appointments.click(2);
+            const clock = sinon.useFakeTimers();
+            await scheduler.appointments.click(2, clock);
             scheduler.tooltip.clickOnItem();
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
 
@@ -739,7 +745,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             title.option('value', 'Task 2');
             startDate.option('value', new Date(2015, 1, 11, 3, 0));
             $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
-            await waitAsync(300);
+            await clock.tickAsync(300);
+            clock.restore();
 
             const updatedSingleItem = scheduler.instance.option('dataSource')[1];
             const updatedRecurringItem = scheduler.instance.option('dataSource')[0];
@@ -767,17 +774,19 @@ supportedScrollingModes.forEach(scrollingMode => {
                 firstDayOfWeek: 1
             });
 
+            const clock = sinon.useFakeTimers();
             $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2).trigger('dxclick');
-            await waitAsync(300);
+            await clock.tickAsync(300);
             $('.dx-scheduler-appointment-tooltip-buttons .dx-button').eq(1).trigger('dxclick');
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
             $('.dx-button.dx-popup-cancel').eq(0).trigger('dxclick');
 
             $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2).trigger('dxclick');
-            await waitAsync(300);
+            await clock.tickAsync(300);
             $('.dx-scheduler-appointment-tooltip-buttons .dx-button').eq(1).trigger('dxclick');
             $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
             $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
+            clock.restore();
 
             const items = scheduler.instance.option('dataSource').items();
 
@@ -803,13 +812,15 @@ supportedScrollingModes.forEach(scrollingMode => {
                 firstDayOfWeek: 1
             });
 
+            const clock = sinon.useFakeTimers();
             $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2).trigger('dxclick');
-            await waitAsync(300);
+            await clock.tickAsync(300);
             $('.dx-scheduler-appointment-tooltip-buttons .dx-button').eq(1).trigger('dxclick');
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
 
             $('.dx-button.dx-popup-cancel').eq(0).trigger('dxclick');
-            await waitAsync(300);
+            await clock.tickAsync(300);
+            clock.restore();
 
             const recurrentItem = scheduler.instance.option('dataSource').items()[0];
 
@@ -835,8 +846,10 @@ supportedScrollingModes.forEach(scrollingMode => {
                 firstDayOfWeek: 1
             });
 
+            const clock = sinon.useFakeTimers();
             $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2).trigger(dblclickEvent.name);
-            await waitAsync(300);
+            await clock.tickAsync(300);
+            clock.restore();
 
             assert.ok($('.dx-dialog').length, 'Dialog was shown');
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
@@ -866,9 +879,9 @@ supportedScrollingModes.forEach(scrollingMode => {
                 currentView: 'week',
                 firstDayOfWeek: 1
             });
-
+            const clock = sinon.useFakeTimers();
             $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2).trigger(dblclickEvent.name);
-            await waitAsync(300);
+            await clock.tickAsync(300);
 
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
 
@@ -880,7 +893,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             title.option('value', 'Task 2');
             startDate.option('value', new Date(2015, 1, 11, 3, 0));
             $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
-            await waitAsync(300);
+            await clock.tickAsync(300);
+            clock.restore();
 
             const updatedSingleItem = scheduler.instance.option('dataSource').items()[1];
             const updatedRecurringItem = scheduler.instance.option('dataSource').items()[0];
@@ -1325,6 +1339,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                     width: 800
                 });
 
+                const clock = sinon.useFakeTimers();
                 $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(0).trigger('dxclick').trigger('dxclick');
 
                 $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
@@ -1335,7 +1350,8 @@ supportedScrollingModes.forEach(scrollingMode => {
 
                 startDate.option('value', expectedStartDate);
                 $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
-                await waitAsync(300);
+                await clock.tickAsync(300);
+                clock.restore();
 
                 const actualStartDate = $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(3).dxSchedulerAppointment('instance').option('startDate');
 
@@ -1764,7 +1780,9 @@ supportedScrollingModes.forEach(scrollingMode => {
                     assert.deepEqual(targetedAppointmentData.endDate, new Date(apptEndDate.getTime() + timeShift), `AppointmentTooltipTemplate Model targetedAppointmentData endDate is correct, index=${appTooltipTemplateIndex}`);
                 },
             });
-            await scheduler.appointments.click(2);
+            const clock = sinon.useFakeTimers();
+            await scheduler.appointments.click(2, clock);
+            clock.restore();
         });
 
         $.each(['minutely', 'hourly'], (_, value) => {
@@ -1852,7 +1870,9 @@ supportedScrollingModes.forEach(scrollingMode => {
                     currentDate: new Date(2019, 2, 30)
                 });
 
-                await scheduler.appointments.click(1);
+                const clock = sinon.useFakeTimers();
+                await scheduler.appointments.click(1, clock);
+                clock.restore();
 
                 scheduler.tooltip.clickOnDeleteButton();
                 $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');

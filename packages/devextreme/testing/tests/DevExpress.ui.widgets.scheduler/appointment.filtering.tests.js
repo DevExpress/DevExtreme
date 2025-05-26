@@ -439,7 +439,7 @@ module('Integration: Appointment filtering', {
                         dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                     }
                 ]);
-                await waitAsync(10);
+                await waitAsync(0);
 
                 const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 

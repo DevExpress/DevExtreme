@@ -247,7 +247,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         const scheduler = await createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data });
         const stub = sinon.stub(scheduler.instance, 'showAppointmentTooltip');
 
-        await scheduler.appointments.click(1);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(1, clock);
+        clock.restore();
 
         assert.deepEqual(
             stub.getCall(0).args[0],
@@ -300,7 +302,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 
         const scheduler = await createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, rtlEnabled: true });
 
-        await scheduler.appointments.click(1);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(1, clock);
+        clock.restore();
 
         assert.equal(Tooltip.getInstance($('.dx-tooltip')).option('rtlEnabled'), true, 'rtlEnabled for tooltip was set to true');
     });
@@ -317,7 +321,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 
         const stub = sinon.stub(scheduler.instance._appointmentPopup, 'show');
 
-        await scheduler.appointments.click(1);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(1, clock);
+        clock.restore();
         scheduler.tooltip.clickOnItem();
 
         const args = stub.getCall(0).args;
@@ -341,7 +347,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 
         const scheduler = await createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data });
 
-        await scheduler.appointments.click(1);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(1, clock);
+        clock.restore();
 
         assert.equal(scheduler.tooltip.getContentElement().length, 1, 'one tooltip was shown');
         assert.equal(scheduler.tooltip.getTitleText(), 'Task 2', 'tooltip title is correct');
@@ -364,7 +372,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             }
         });
 
-        await scheduler.appointments.click(1);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(1, clock);
+        clock.restore();
 
         const $tooltip = $('.new-scheduler-tooltip-template');
 
@@ -378,7 +388,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 
         const scheduler = await createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'day' });
 
-        await scheduler.appointments.click(1);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(1, clock);
+        clock.restore();
 
         assert.equal(scheduler.tooltip.getDateText(), '11:00 AM - 12:00 PM', 'dates and time were displayed correctly');
     });
@@ -390,7 +402,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 
         const scheduler = await createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'day' });
 
-        await scheduler.appointments.click(1);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(1, clock);
+        clock.restore();
 
         assert.ok(scheduler.tooltip.isVisible(), 'tooltip is shown');
 
@@ -412,7 +426,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             cellDuration: 60
         });
 
-        await await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
 
         assert.equal(scheduler.tooltip.getDateText(), 'October 5 11:30 PM - October 6 1:00 AM', 'dates and time were displayed correctly');
     });
@@ -431,7 +447,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         const deltaTz = getDeltaTz(5, startDate);
         const scheduler = await createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week', timeZone: 'Etc/GMT-5' });
 
-        await await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
 
         const expectedStartDate = dateLocalization.format(new Date(startDate.getTime() + deltaTz), 'shorttime');
         const expectedEndDate = dateLocalization.format(new Date(endDate.getTime() + deltaTz), 'shorttime');
@@ -454,7 +472,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         const deltaTz = getDeltaTz(5, startDate);
         const scheduler = await createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week', timeZone: 'Asia/Ashkhabad' });
 
-        await await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
 
         const expectedStartDate = dateLocalization.format(new Date(startDate.getTime() + deltaTz), 'shorttime');
         const expectedEndDate = dateLocalization.format(new Date(endDate.getTime() + deltaTz), 'shorttime');
@@ -478,7 +498,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         });
         const expectedDate = scheduler.appointments.getDateText(0);
 
-        await scheduler.appointments.click(0);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
 
         assert.equal(scheduler.tooltip.getDateText(), expectedDate, 'dates and time were displayed correctly');
     });
@@ -501,7 +523,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 
         const expectedDate = scheduler.appointments.getDateText(0);
 
-        await scheduler.appointments.click(0);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
 
         assert.equal(scheduler.tooltip.getDateText(), expectedDate, 'dates and time were displayed correctly');
     });
@@ -513,7 +537,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 
         const scheduler = await createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'month' });
 
-        await scheduler.appointments.click(1);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(1, clock);
+        clock.restore();
 
         assert.equal(scheduler.tooltip.getDateText(), 'February 9 11:00 AM - 12:00 PM', 'dates and time were displayed correctly');
     });
@@ -526,7 +552,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         const scheduler = await createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data });
         const stub = sinon.stub(scheduler.instance, 'processDeleteAppointment');
 
-        await scheduler.appointments.click(1);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(1, clock);
+        clock.restore();
         scheduler.tooltip.clickOnDeleteButton();
 
         assert.deepEqual(stub.getCall(0).args[0],
@@ -559,7 +587,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         });
         const stub = sinon.stub(scheduler.instance, '_updateAppointment');
 
-        await scheduler.appointments.click(1);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(1, clock);
+        clock.restore();
         scheduler.tooltip.clickOnDeleteButton();
 
         const exceptionDate = new Date(2018, 6, 31, 10, 0, 0, 0);
@@ -618,10 +648,12 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         const $appointment = $(scheduler.instance.$element()).find('.dx-scheduler-appointment');
         const $arrowIcon = $appointment.find('.dx-scheduler-appointment-reduced-icon');
 
+        const clock = sinon.useFakeTimers();
         $arrowIcon.trigger('dxpointerenter');
         $arrowIcon.eq(0).trigger('dxclick');
-        await waitAsync(300);
+        await clock.tickAsync(300);
         $arrowIcon.trigger('dxpointerleave');
+        clock.restore();
 
         assert.ok(scheduler.tooltip.isVisible(), 'Appointment tooltip is shown');
     });
@@ -641,7 +673,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             }]
         });
 
-        await await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
 
         assert.equal(scheduler.tooltip.getDateText(), dateLocalization.format(startDate, 'monthAndDay') + ' - ' + dateLocalization.format(endDate, 'monthAndDay'), 'dates were displayed correctly');
     });
@@ -661,7 +695,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             }]
         });
 
-        await await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
 
         assert.equal(scheduler.tooltip.getDateText(), dateLocalization.format(startDate, 'monthAndDay'), 'date was displayed correctly');
     });
@@ -680,7 +716,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             }]
         });
 
-        await scheduler.appointments.click(0);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
 
         const startDateString = dateLocalization.format(startDate, dateFormat) + ' ' + dateLocalization.format(startDate, timeFormat);
         const endDateString = dateLocalization.format(endDate, dateFormat) + ' ' + dateLocalization.format(endDate, timeFormat);
@@ -702,7 +740,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             }]
         });
 
-        await scheduler.appointments.click(0);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
 
         const startDateString = dateLocalization.format(startDate, dateFormat) + ' ' + dateLocalization.format(startDate, timeFormat);
         const endDateString = dateLocalization.format(endDate, dateFormat) + ' ' + dateLocalization.format(endDate, timeFormat);
@@ -724,7 +764,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             }]
         });
 
-        await scheduler.appointments.click(1);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(1, clock);
+        clock.restore();
 
         const startDateString = dateLocalization.format(startDate, dateFormat) + ' ' + dateLocalization.format(startDate, timeFormat);
         const endDateString = dateLocalization.format(endDate, dateFormat) + ' ' + dateLocalization.format(endDate, timeFormat);
@@ -747,7 +789,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             }]
         });
 
-        await scheduler.appointments.click(2);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(2, clock);
+        clock.restore();
 
         assert.equal(scheduler.tooltip.getDateText(), 'May 30 11:00 PM - May 31 1:15 AM', 'dates were displayed correctly');
     });
@@ -768,7 +812,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             }]
         });
 
-        await scheduler.appointments.click(1);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(1, clock);
+        clock.restore();
 
         assert.equal(scheduler.tooltip.getDateText(), 'February 6 11:00 AM - 12:00 PM', 'dates and time were displayed correctly');
     });
@@ -785,7 +831,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             }]
         });
 
-        await await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
 
         assert.ok(scheduler.tooltip.isVisible(), 'tooltip was shown');
         resizeCallbacks.fire();
@@ -829,7 +877,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             currentDate: new Date(2018, 8, 24)
         });
 
-        await scheduler.appointments.click(0);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
 
         const tooltip = Tooltip.getInstance($('.dx-tooltip'));
         const tooltipBoundary = tooltip.option('position').boundary.get(0);
@@ -864,7 +914,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             }
         });
 
-        await scheduler.appointments.click(1);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(1, clock);
+        clock.restore();
     });
 
     test('the targetedAppointmentData parameter appends to arguments of the appointment tooltip template for a non-recurrence rule', async function(assert) {
@@ -889,7 +941,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             }
         });
 
-        await scheduler.appointments.click(0);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
     });
 });
 
@@ -907,7 +961,9 @@ module('Appointment tooltip template', moduleConfig, () => {
             }
         });
 
-        await scheduler.appointments.click(0);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
     };
 
     test('The appointmentData argument of the appointment tooltip template is should be instance of the data source', async function(assert) {
@@ -977,7 +1033,9 @@ module('Appointment tooltip template', moduleConfig, () => {
                 appointmentTooltipTemplate: (model) => assert.notOk(model.isButtonClicked)
             });
 
-            await scheduler.appointments.click(0);
+            const clock = sinon.useFakeTimers();
+            await scheduler.appointments.click(0, clock);
+            clock.restore();
             assert.expect(1);
         });
 
@@ -1050,7 +1108,6 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
         for(let i = 0; i < views.length; i++) {
             const view = views[i];
             scheduler.instance.option('currentView', view);
-            await waitAsync(0);
             const clock = sinon.useFakeTimers();
             for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
                 await scheduler.appointments.click(i, clock);
@@ -1117,7 +1174,9 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
     test('Tooltip should hide after perform action', async function(assert) {
         const scheduler = await createScheduler(undefined, undefined);
 
-        await await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
         assert.ok(scheduler.tooltip.isVisible(), 'Tooltip should visible');
 
         scheduler.tooltip.clickOnItem();
@@ -1182,7 +1241,9 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
             }
         }, undefined);
 
-        await await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
         assert.ok(scheduler.tooltip.checkItemElementHtml(0, `template item index - ${0}`), `Template should render content contains ${0} item index`);
 
         templateCallCount = 0;
@@ -1203,7 +1264,9 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
 
                 const checkFocusedState = index => scheduler.tooltip.getItemElement(index).hasClass(ITEM_FOCUSED_STATE_CLASS_NAME);
 
-                await await scheduler.appointments.click();
+                const clock = sinon.useFakeTimers();
+                await scheduler.appointments.click(0, clock);
+                clock.restore();
 
                 assert.notOk(checkFocusedState(0), 'On first show tooltip, list item shouldn\'t focused');
 
@@ -1227,7 +1290,9 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
             test('focusStateEnabled property should disable or enable navigate in list', async function(assert) {
                 const scheduler = await createScheduler(undefined, undefined);
 
-                await await scheduler.appointments.click();
+                const clock = sinon.useFakeTimers();
+                await scheduler.appointments.click(0, clock);
+                clock.restore();
 
                 const buttonCount = scheduler.appointments.compact.getButtonCount();
                 const keyboard = keyboardMock(scheduler.tooltip.getContentElement().find('[tabindex=0]'));
@@ -1257,7 +1322,9 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
         const stub = sinon.stub(options, 'onAppointmentClick');
         const scheduler = await createScheduler(options, undefined);
 
-        await await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
         stub.reset();
         scheduler.tooltip.clickOnItem();
         assert.equal(stub.callCount, 0, 'onAppointmentClick shouldn\'t raised after click on common tooltip');
@@ -1377,7 +1444,9 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
             height: 600
         }, undefined);
 
-        await await scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
         assert.equal(findButton(0).option('text'), getExpectedText(0), 'dxButton component should placed in item of tooltip');
 
         scheduler.appointments.compact.click();
@@ -1451,7 +1520,9 @@ module('onAppointmentTooltipShowing event', moduleConfig, () => {
             onAppointmentTooltipShowing: (e) => e.cancel = true
         });
 
-        await scheduler.appointments.click(0);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
 
         assert.notOk(scheduler.tooltip.isVisible());
     });
@@ -1475,7 +1546,9 @@ module('onAppointmentTooltipShowing event', moduleConfig, () => {
             }
         });
 
-        await scheduler.appointments.click(0);
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
         assert.expect(2);
     });
 

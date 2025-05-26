@@ -24,6 +24,7 @@ QUnit.test('RenovateRender in workspace should be false on server', async functi
     assert.notOk(workSpace.option('renovateRender', false));
 });
 
-import '../DevExpress.ui.widgets.scheduler/workSpace.markup.tests.js';
+import '../DevExpress.ui.widgets.scheduler/workSpace.markup-0.tests.js';
+import '../DevExpress.ui.widgets.scheduler/workSpace.markup-1.tests.js';
 import '../DevExpress.ui.widgets.scheduler/common.markup.tests.js';
 import '../DevExpress.ui.widgets.scheduler/timeline.markup.tests.js';
