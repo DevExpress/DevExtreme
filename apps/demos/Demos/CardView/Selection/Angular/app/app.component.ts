@@ -1,8 +1,8 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
+import { NgModule, Component, enableProdMode, ViewChild } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxCardViewModule } from 'devextreme-angular';
-import { Customer, Service } from './app.service';
+import { DxCardViewComponent, DxCardViewModule, DxSelectBoxModule } from 'devextreme-angular';
+import { Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,15 +17,37 @@ if (window && window.config?.packageConfigPaths) {
 @Component({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
+  styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
 })
 export class AppComponent {
-  customers: Customer[];
+  @ViewChild(DxCardViewComponent, { static: false }) cardView: DxCardViewComponent;
 
-  columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+  employees: Employee[];
+
+  selectionMode = 'multiple';
+
+  allowSelectAll = true;
+
+  showCheckBoxesMode = 'always';
+
+  selectAllMode = 'allPages';
+
+
+  altExpr({ FullName }: Employee): string {
+    return `Photo of ${FullName}`;
+  }
+
+  imageExpr({ FullName }: Employee): string {
+    return `../../../../images/employees/new/${FullName}.jpg`;
+  }
+
+  clearSelection() {
+    this.cardView.instance.clearSelection();
+  }
 
   constructor(service: Service) {
-    this.customers = service.getCustomers();
+    this.employees = service.getEmployees();
   }
 }
 
@@ -33,6 +55,7 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxCardViewModule,
+    DxSelectBoxModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

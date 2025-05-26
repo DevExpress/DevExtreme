@@ -1,6 +1,58 @@
-<dx-card-view id="cardView" [dataSource]="customers" keyExpr="ID">
-  <dxi-card-view-column
-    *ngFor="let column of columns"
-    [dataField]="column"
-  ></dxi-card-view-column>
+<div class="options">
+  <div class="caption">Options</div>
+  <div class="options-container">
+    <div class="option">
+      <span>Selection Mode</span>
+      <dx-select-box
+        [dataSource]="['single', 'multiple']"
+        [(value)]="selectionMode"
+        (onValueChanged)="clearSelection()"
+      ></dx-select-box>
+    </div>
+    <div class="option">
+      <span>Show Checkboxes Mode</span>
+      <dx-select-box
+        [dataSource]="['always', 'none', 'onClick', 'onLongTap']"
+        [(value)]="showCheckBoxesMode"
+        [disabled]="selectionMode !== 'multiple'"
+      ></dx-select-box>
+    </div>
+    <div class="option">
+      <span>Allow Select All</span>
+      <dx-select-box
+        [dataSource]="[true, false]"
+        [(value)]="allowSelectAll"
+        [disabled]="selectionMode !== 'multiple'"
+      ></dx-select-box>
+    </div>
+    <div class="option">
+      <span>Select All Mode</span>
+      <dx-select-box
+        [dataSource]="['allPages', 'page']"
+        [(value)]="selectAllMode"
+        [disabled]="selectionMode !== 'multiple' || !allowSelectAll"
+      ></dx-select-box>
+    </div>
+  </div>
+</div>
+<dx-card-view
+  id="cardView"
+  [dataSource]="employees"
+  keyExpr="ID"
+  [selectedCardKeys]="[4, 6]"
+>
+  <dxo-card-view-card-cover
+    [altExpr]="altExpr"
+    [imageExpr]="imageExpr"
+  ></dxo-card-view-card-cover>
+  <dxo-card-view-selection
+    [mode]="selectionMode"
+    [showCheckBoxesMode]="showCheckBoxesMode"
+    [allowSelectAll]="allowSelectAll"
+    [selectAllMode]="selectAllMode"
+  ></dxo-card-view-selection>
+  <dxi-card-view-column dataField="FullName"></dxi-card-view-column>
+  <dxi-card-view-column dataField="Position"></dxi-card-view-column>
+  <dxi-card-view-column dataField="Phone"></dxi-card-view-column>
+  <dxi-card-view-column dataField="Email"></dxi-card-view-column>
 </dx-card-view>
