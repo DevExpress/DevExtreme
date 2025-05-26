@@ -13,7 +13,6 @@
 // adduse
 
 // #region COMMON SETTINGS
-// regex for themebuilder: /cardview-common/i
 
 /**
 * $name 101. Border radius
@@ -53,7 +52,6 @@ $cardview-fluent-common-padding: null !default;
 // #endregion
 
 // #region CARD
-// regex for themebuilder: /cardview-card(?!--)/i
 
 $cardview-fluent-card-min-width: null !default;
 
@@ -93,7 +91,6 @@ $cardview-fluent-card__content__cell-padding-horizontal: null !default;
 // #endregion
 
 // #region CARD (SELECTED)
-// regex for themebuilder: /cardview-card--selected/i
 
 /**
 * $name 304. Field name text weight
@@ -121,7 +118,6 @@ $cardview-fluent-header-panel--empty-line-height: null !default;
 // #endregion
 
 // #region HEADER PANEL ITEM
-// regex for themebuilder: /cardview-header-panel__item(?!--)/i
 
 $cardview-fluent-header-panel__item-border-width: null !default;
 
@@ -154,7 +150,6 @@ $cardview-fluent-header-panel__item-icon-size: null !default;
 // #endregion
 
 // #region HEADER PANEL ITEM (HOVERED)
-// regex for themebuilder: /cardview-header-panel__item--hovered/i
 
 /**
 * $name 503. Text weight
@@ -173,7 +168,6 @@ $cardview-fluent-header-panel__item--hovered__sort-index-text-weight: null !defa
 // #endregion
 
 // #region HEADER PANEL ITEM (DISABLED)
-// regex for themebuilder: /cardview-header-panel__item--disabled/i
 
 /**
 * $name 603. Text weight
@@ -203,7 +197,6 @@ $cardview-fluent-header-panel__item--dragged-text-weight: null !default;
 // #endregion
 
 // #region HEADER PANEL DROP ZONE
-// regex for themebuilder: /cardview-header-panel__dropzone/i
 
 $cardview-fluent-header-panel__dropzone-height: null !default;
 
@@ -220,7 +213,6 @@ $cardview-fluent-header-panel__dropzone-border-radius: null !default;
 // #endregion
 
 // #region FILTER PANEL
-// regex for themebuilder: /cardview-filter-panel/i
 
 /**
 * $name 901. Border radius
@@ -241,7 +233,6 @@ $cardview-fluent-nodata-view__icon-size: null !default;
 // #endregion
 
 // #region HIGHLIGHTS IN SEARCH
-// regex for themebuilder: /cardview-card__content__field-value--highlighted/i
 
 /**
 * $name 1101. Border radius
@@ -294,7 +285,7 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
   $cardview-fluent-card--selected__field-caption-weight: $cardview-fluent-card__field-caption-weight !default;
 
   $cardview-fluent-header-gap: 0 !default;
-  
+
   $cardview-fluent-header-panel-vertical-margin: 8px !default;
   $cardview-fluent-header-panel-gap: 8px !default;
   $cardview-fluent-header-panel--empty-line-height: 32px !default;
@@ -306,7 +297,7 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
   $cardview-fluent-header-panel__item-text-weight: $cardview-fluent-common-text-weight !default;
   $cardview-fluent-header-panel__item__sort-index-text-weight: 400 !default;  // TODO: is 400?
   $cardview-fluent-header-panel__item-icon-size: $fluent-base-icon-size !default;
-  
+
   $cardview-fluent-header-panel__item--hovered-text-weight: $cardview-fluent-header-panel__item-text-weight !default;
   $cardview-fluent-header-panel__item--hovered__sort-index-text-weight: $cardview-fluent-header-panel__item__sort-index-text-weight !default;
 

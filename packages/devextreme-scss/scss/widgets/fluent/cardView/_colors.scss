@@ -13,7 +13,6 @@
 // adduse
 
 // #region COMMON SETTINGS
-// regex for themebuilder: /cardview-common/i
 
 /**
 * $name 100. Background color
@@ -36,7 +35,6 @@ $cardview-fluent-common-text-color: null !default;
 // #endregion
 
 // #region CARD
-// regex for themebuilder: /cardview-card(?!--)/i
 
 /**
 * $name 200. Background color
@@ -83,7 +81,6 @@ $cardview-fluent-card__cover--noimage__icon-color: null !default;
 // #endregion
 
 // #region CARD (SELECTED)
-// regex for themebuilder: /cardview-card--selected/i
 
 /**
 * $name 300. Background color
@@ -129,8 +126,7 @@ $cardview-fluent-card--selected__cover--noimage-icon-color: null !default;
 
 // #endregion
 
-// #region HEADER PANEL ITEM 
-// regex for themebuilder: /cardview-header-panel__item(?!--)/i
+// #region HEADER PANEL ITEM
 
 /**
 * $name 400. Background color
@@ -171,7 +167,6 @@ $cardview-fluent-header-panel__item__sort-index-text-color: null !default;
 // #endregion
 
 // #region HEADER PANEL ITEM (HOVERED)
-// regex for themebuilder: /cardview-header-panel__item--hovered/i
 
 /**
 * $name 500. Background color
@@ -212,7 +207,6 @@ $cardview-fluent-header-panel__item--hovered__sort-index-text-color: null !defau
 // #endregion
 
 // #region HEADER PANEL ITEM (DISABLED)
-// regex for themebuilder: /cardview-header-panel__item--disabled/i
 
 /**
 * $name 600. Background color
@@ -253,7 +247,6 @@ $cardview-fluent-header-panel__item--disabled__sort-index-text-color: null !defa
 // #endregion
 
 // #region HEADER PANEL ITEM (ON DRAG)
-// regex for themebuilder: /cardview-header-panel__item--dragged/i
 
 /**
 * $name 700. Background color
@@ -294,7 +287,6 @@ $cardview-fluent-header-panel__item--dragged-box-shadow-color: null !default;
 // #endregion
 
 // #region HEADER PANEL DROP ZONE
-// regex for themebuilder: /cardview-header-panel__dropzone/i
 
 /**
 * $name 800. Background color
@@ -323,7 +315,6 @@ $cardview-fluent-header-panel__dropzone__icon-color: null !default;
 // #endregion
 
 // #region FILTER PANEL
-// regex for themebuilder: /cardview-filter-panel/i
 
 /**
 * $name 900. Background color
@@ -352,7 +343,6 @@ $cardview-fluent-filter-panel__icon-color: null !default;
 // #endregion
 
 // #region EMPTY VIEW
-// regex for themebuilder: /cardview-nodata-view/i
 
 /**
 * $name 1000. Background color
@@ -381,7 +371,6 @@ $cardview-fluent-nodata-view__icon-bg-color: null !default;
 // #endregion
 
 // #region HIGHLIGHTS IN SEARCH
-// regex for themebuilder: /cardview-card__content__field-value--highlighted/i
 
 /**
 * $name 1100. Background color
@@ -482,7 +471,7 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-columnchooser--empty__message-color: lighten($base-text-color, 26%) !default;
 }
 
-@if $mode == "dark" { 
+@if $mode == "dark" {
   $cardview-fluent-common-bg-color: $base-typography-bg !default;
   $cardview-fluent-common-link-color: $base-link-color !default;
   $cardview-fluent-common-text-color: $base-text-color !default;
