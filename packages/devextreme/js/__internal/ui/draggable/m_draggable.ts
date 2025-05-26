@@ -35,8 +35,7 @@ import { value as viewPort } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
 import type { Properties } from '@js/ui/draggable';
 import DOMComponent from '@ts/core/widget/dom_component';
-
-import Animator from './ui/scroll_view/m_animator';
+import Animator from '@ts/ui/scroll_view/m_animator';
 
 const window = getWindow();
 const KEYDOWN_EVENT = 'keydown';
@@ -271,7 +270,7 @@ class ScrollAnimator extends Animator {
   }
 }
 
-class Draggable extends DOMComponent<Draggable, Properties> {
+export class Draggable extends DOMComponent<Draggable, Properties> {
   _$sourceElement?: dxElementWrapper | null;
 
   _initScrollTop!: number;
@@ -1169,5 +1168,3 @@ class Draggable extends DOMComponent<Draggable, Properties> {
 }
 
 registerComponent(DRAGGABLE, Draggable);
-
-export default Draggable;

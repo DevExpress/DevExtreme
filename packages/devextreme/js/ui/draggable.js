@@ -1,4 +1,4 @@
-import Draggable from '../__internal/m_draggable';
+import { Draggable } from '../__internal/ui/draggable/index';
 export default Draggable;
 
 /**
