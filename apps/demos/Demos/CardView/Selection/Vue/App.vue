@@ -73,7 +73,7 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { DxCardView, DxColumn, DxSelection, DxCardCover } from 'devextreme-vue/card-view';
-  import { DxSelectBox, DxSelectBoxTypes} from 'devextreme-vue/select-box';
+  import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
   import { employees, type Employee } from './data.ts';
 
   function altExpr({ FullName }: Employee): string {
