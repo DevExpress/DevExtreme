@@ -41,13 +41,13 @@ fixture.disablePageReloads`HtmlEditor`
     await appendElementTo('#otherContainer', 'div', 'editorWithToolbar');
 
     await createWidget('dxHtmlEditor', {
-      height: '100%',
+      height: 200,
       width: '100%',
       value: Array(100).fill('string').join('\n'),
     }, '#editor');
 
     await createWidget('dxHtmlEditor', {
-      height: '100%',
+      height: 200,
       width: '100%',
       value: Array(100).fill('string').join('\n'),
       toolbar: {
