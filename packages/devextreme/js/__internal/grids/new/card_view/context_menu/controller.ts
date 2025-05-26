@@ -39,7 +39,7 @@ export class ContextMenuController
     super.show(event, view, contextInfo, onMenuCloseCallback);
   }
 
-  protected override getItems(
+  public override getItems(
     view: ContextMenuTarget,
     targetElement: Element,
     contextInfo: ContextInfo = {},
