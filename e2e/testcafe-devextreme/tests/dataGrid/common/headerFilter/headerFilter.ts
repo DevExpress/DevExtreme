@@ -358,3 +358,33 @@ test('Header filter search input loses focus on first key in datetime columns (T
     },
   }],
 }));
+
+test('DataGrid – Header filters show "No data to display" when "not and" or "not or" operations are used in the filter panel (T1291737)', async (t) => {
+  const dataGrid = new DataGrid(GRID_CONTAINER);
+  const headerFilterButton = dataGrid.getHeaders()
+    .getHeaderRow(0)
+    .getHeaderCell(0)
+    .getFilterIcon();
+  const headerFilter = new HeaderFilter();
+  const listCount = headerFilter.getList().getItems();
+
+  await dataGrid.isReady();
+  await t.click(headerFilterButton);
+
+  await t
+    .expect(listCount.count)
+    .eql(9);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 1),
+  keyExpr: 'field_0',
+  filterValue: [
+    '!',
+    [['field_0', '=', 'val_0_0']],
+  ],
+  filterPanel: {
+    visible: true,
+  },
+  headerFilter: {
+    visible: true,
+  },
+}));
