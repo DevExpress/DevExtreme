@@ -480,11 +480,11 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         font-size: $fluent-grid-base-cell-font-size;
         height: $fluent-grid-base-cell-height;
         line-height: $fluent-grid-base-cell-height;
-        padding-right: $fluent-grid-base-cell-horizontal-padding;
-        padding-left: $fluent-grid-base-cell-horizontal-padding;
-        padding-top: 0;
-        padding-bottom: 0;
         margin-top: 0;
+      }
+
+      &:not(.dx-tagbox):not(.dx-colorbox) .dx-texteditor-input {
+        padding: 0 $fluent-grid-base-cell-horizontal-padding;
       }
 
       .dx-placeholder::before {
