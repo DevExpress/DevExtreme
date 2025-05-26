@@ -137,32 +137,6 @@ QUnit.module('rendering', {
         assert.ok($element.hasClass(TABPANEL_TABS_POSITION_CLASS.right));
     });
 
-    QUnit.test('first tab should be focused after initialization', function(assert) {
-        const items = Array.from({ length: 20 }, (_, index) => ({
-            title: `Tab ${index + 1}`,
-            text: `Content ${index + 1}`
-        }));
-
-        new TabPanel(this.$tabPanel, {
-            items,
-        });
-
-        const $tabs = this.$tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`);
-        const $firstTab = $tabs.first();
-        assert.strictEqual($firstTab.hasClass(FOCUS_STATE_CLASS), true, 'first tab is focused');
-        assert.strictEqual($tabs.filter(`.${FOCUS_STATE_CLASS}`).length, 1, 'only one tab is focused');
-    });
-
-    QUnit.test('focused element should be null if there is no items on initialization', function(assert) {
-        new TabPanel(this.$tabPanel, {});
-
-        const $tabs = this.$tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`);
-        assert.strictEqual($tabs.length, 0, 'no tabs were created');
-
-        const tabsInstance = this.$tabPanel.find(`.${TABS_CLASS}`).dxTabs('instance');
-        assert.strictEqual(tabsInstance.option('focusedElement'), null, 'focusedElement is null');
-    });
-
     [true, false].forEach(rtlEnabled => {
         QUnit.test(`rtlEnabled: ${rtlEnabled}, dataSource: { title, icon } -> icon alignment`, function(assert) {
             const $element = $('<div>').appendTo('#qunit-fixture');
@@ -1060,6 +1034,30 @@ QUnit.module('focus policy', {
         tabPanel.option({ showNavButtons: true });
 
         assert.strictEqual($tabPanel.find(`.${MULTIVIEW_WRAPPER_CLASS}`).hasClass(FOCUS_STATE_CLASS), false);
+    });
+
+    QUnit.test('first tab should be focused after initialization', function(assert) {
+        const items = Array.from({ length: 20 }, (_, index) => ({
+            title: `Tab ${index + 1}`,
+            text: `Content ${index + 1}`
+        }));
+
+        const $tabPanel = $('#tabPanel').dxTabPanel({ items });
+
+        const $tabs = $tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`);
+        const $firstTab = $tabs.first();
+        assert.strictEqual($firstTab.hasClass(FOCUS_STATE_CLASS), true, 'first tab is focused');
+        assert.strictEqual($tabs.filter(`.${FOCUS_STATE_CLASS}`).length, 1, 'only one tab is focused');
+    });
+
+    QUnit.test('focused element should be null if there is no items on initialization', function(assert) {
+        const $tabPanel = $('#tabPanel').dxTabPanel({ });
+
+        const $tabs = $tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`);
+        assert.strictEqual($tabs.length, 0, 'no tabs were created');
+
+        const tabsInstance = $tabPanel.find(`.${TABS_CLASS}`).dxTabs('instance');
+        assert.strictEqual(tabsInstance.option('focusedElement'), null, 'focusedElement is null');
     });
 });
 

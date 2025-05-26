@@ -260,10 +260,12 @@ class TabPanel extends MultiView<TabPanelProperties> {
       .appendTo($element);
     this._$container.append(this._$wrapper);
 
-    const { selectedIndex } = this.option();
-    // @ts-expect-error ts-error
-    const selectedItem = this._tabs.itemElements().get(selectedIndex);
-    this._tabs.option({ focusedElement: selectedItem ?? null });
+    const { focusStateEnabled, selectedIndex } = this.option();
+    if (focusStateEnabled) {
+      // @ts-expect-error ts-error
+      const selectedItem = this._tabs.itemElements().get(selectedIndex);
+      this._tabs.option({ focusedElement: selectedItem ?? null });
+    }
   }
 
   _refreshActiveDescendant(): void {
