@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
 import Chat, { type ChatTypes } from 'devextreme-react/chat';
-import { MessageEnteredEvent, TypingEndEvent, TypingStartEvent } from 'devextreme/ui/chat';
-
 import { currentUser, supportAgent, initialMessages } from './data.ts';
 
 export default function App() {
@@ -10,11 +8,11 @@ export default function App() {
   const [supportChatTypingUsers, setSupportChatTypingUsers] = useState<ChatTypes.User[]>([]);
   const [messages, setMessages] = useState<ChatTypes.Message[]>(initialMessages);
 
-  function onMessageEntered({ message }: MessageEnteredEvent) {
+  function onMessageEntered({ message }: ChatTypes.MessageEnteredEvent) {
     setMessages((prevMessages) => [...prevMessages, message]);
   }
 
-  function typingStart({ user }: TypingStartEvent) {
+  function typingStart({ user }: ChatTypes.TypingStartEvent) {
     if (user.id === currentUser.id) {
       setSupportChatTypingUsers([currentUser]);
     } else {
@@ -22,7 +20,7 @@ export default function App() {
     }
   }
 
-  function typingEnd({ user }: TypingEndEvent) {
+  function typingEnd({ user }: ChatTypes.TypingEndEvent) {
     if (user.id === currentUser.id) {
       setSupportChatTypingUsers([]);
     } else {

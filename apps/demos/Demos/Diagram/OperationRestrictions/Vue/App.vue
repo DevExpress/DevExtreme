@@ -69,7 +69,7 @@ import {
   type DxDiagramTypes,
 } from 'devextreme-vue/diagram';
 import notify from 'devextreme/ui/notify';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-vue/common/data';
 import service from './data.ts';
 
 const orgItemsDataSource = new ArrayStore({

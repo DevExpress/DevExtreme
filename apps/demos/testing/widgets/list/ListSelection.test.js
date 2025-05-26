@@ -13,8 +13,8 @@ fixture('List.ListSelection')
     ctx.initialWindowSize = [900, 1200];
   });
 
-runManualTest('List', 'ListSelection', (test) => {
-  test('List Selection', async (t) => {
+runManualTest('List', 'Selection', (test) => {
+  test('Selection', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const optionsContainer = await Selector('.options');

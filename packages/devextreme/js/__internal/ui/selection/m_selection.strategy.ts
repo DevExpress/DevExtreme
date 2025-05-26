@@ -137,13 +137,32 @@ export default class SelectionStrategy {
     return remoteFilter;
   }
 
+  _getQueryParams() {
+    const { sensitivity } = this.options;
+
+    if (!sensitivity) {
+      return;
+    }
+
+    return {
+      langParams: {
+        collatorOptions: {
+          sensitivity,
+        },
+      },
+    };
+  }
+
   _loadFilteredData(remoteFilter, localFilter?: any, select?: any, isSelectAll?: boolean) {
     const filterLength = encodeURI(JSON.stringify(this._removeTemplateProperty(remoteFilter))).length;
     const needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest);
     const deferred = Deferred();
+    const queryParams = this._getQueryParams();
+
     const loadOptions = {
       filter: needLoadAllData ? undefined : remoteFilter,
       select: needLoadAllData ? this.options.dataFields() : select || this.options.dataFields(),
+      ...queryParams,
     };
 
     if (remoteFilter && remoteFilter.length === 0) {

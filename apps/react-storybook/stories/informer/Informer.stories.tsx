@@ -7,10 +7,10 @@ import { wrapDxWithReact } from '../utils';
 const Informer = wrapDxWithReact(dxInformer);
 
 const textOptions = {
-    error: 'error',
-    biggerError: 'bigger error',
-    bigError: 'really really big and huge error that takes really much space',
-    superBigError: 'error that will never be able to fit into one line because it is so big and even if it tried to fit it would still not be able to be displayed properly due to its excessive length',
+    error: 'message',
+    biggerError: 'bigger message',
+    bigError: 'really really big and huge message that takes really much space',
+    superBigError: 'message that will never be able to fit into one line because it is so big and even if it tried to fit it would still not be able to be displayed properly due to its excessive length',
 };
 
 const meta: Meta<typeof Informer> = {
@@ -32,6 +32,7 @@ export const DefaultInformer: Story = {
         contentAlignment: 'center',
         icon: 'errorcircle',
         text: 'error',
+        type: 'error',
         visible: true,
         rtlEnabled: false,
         disabled: false,
@@ -57,6 +58,10 @@ export const DefaultInformer: Story = {
             mapping: textOptions,
             control: { type: 'select' }
         },
+        type: {
+            options: ['error', 'info'],
+            control: { type: 'select' }
+        },
         visible: {
             control: 'boolean'
         },
@@ -73,6 +78,7 @@ export const DefaultInformer: Story = {
         contentAlignment,
         icon,
         text,
+        type,
         visible,
         rtlEnabled,
         disabled,
@@ -85,6 +91,7 @@ export const DefaultInformer: Story = {
                     rtlEnabled={rtlEnabled}
                     visible={visible}
                     text={text}
+                    type={type}
                     icon={icon}
                     showBackground={showBackground}
                     contentAlignment={contentAlignment}

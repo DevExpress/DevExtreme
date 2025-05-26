@@ -35,7 +35,7 @@
 import {
   DxDiagram, DxNodes, DxAutoLayout, DxEdges, DxToolbox, DxGroup,
 } from 'devextreme-vue/diagram';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-vue/common/data';
 import service from './data.ts';
 
 const orgItemsDataSource = new ArrayStore({

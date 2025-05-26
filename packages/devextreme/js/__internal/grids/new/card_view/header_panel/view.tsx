@@ -8,7 +8,7 @@ import { ColumnChooserController, ColumnChooserView } from '../../grid_core/colu
 import type { Column } from '../../grid_core/columns_controller/types';
 import { FilterController } from '../../grid_core/filtering/filter_controller';
 import { HeaderFilterViewController } from '../../grid_core/filtering/header_filter/view_controller';
-import { SortingController } from '../../grid_core/sorting_controller/sorting_controller';
+import { SortingController } from '../../grid_core/sorting_controller/index';
 import { ContextMenuController } from '../context_menu/index';
 import { OptionsController } from '../options_controller';
 import type { Props as ColumnSortableProps } from './column_sortable';

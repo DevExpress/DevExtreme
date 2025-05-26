@@ -47,7 +47,7 @@ test('TabPanel borders with scrolling', async (t) => {
   const tabPanelOptions = {
     dataSource,
     itemTemplate: (itemData, itemIndex, itemElement) => {
-      ($('<div>').css('marginTop', 10) as any)
+      ($('<div>').css('marginTop', '10px') as any)
         .dxTabs({
           items: [
             {
@@ -215,7 +215,7 @@ test('TabPanel borders without scrolling', async (t) => {
   const tabPanelOptions = {
     dataSource,
     itemTemplate: (itemData, itemIndex, itemElement) => {
-      ($('<div>').css('marginTop', 10) as any)
+      ($('<div>').css('marginTop', '10px') as any)
         .dxTabs({
           items: [
             {

@@ -141,6 +141,7 @@ export const findButtonByName = (popup, name) => {
     const $bottomToolbar = popup.bottomToolbar();
     return $($bottomToolbar.find(`.${BUTTON_CLASS}`).eq(buttonIndex));
 };
+export const getButtonInstance = ($button) => $button.dxButton('instance');
 
 export const getCommandSelectBoxInstance = ($container) => getDialogSelectBoxes($container).eq(0).dxSelectBox('instance');
 export const getOptionSelectBoxInstance = ($container) => getDialogSelectBoxes($container).eq(1).dxSelectBox('instance');

@@ -45,7 +45,7 @@ test('Popup should be centered regarding the container even if content dimension
 }).before(async () => createWidget('dxPopup', {
   width: 'auto',
   height: 'auto',
-  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
+  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: '100px', height: '100px' }),
 }, undefined, { disableFxAnimation: false }));
 
 test('Popup should be centered regarding the container even if popup dimension option is changed during animation', async (t) => {
@@ -84,7 +84,7 @@ test('Popup should be centered regarding the container even if popup dimension o
 }).before(async () => createWidget('dxPopup', {
   width: 'auto',
   height: 'auto',
-  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
+  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: '100px', height: '100px' }),
 }, undefined, { disableFxAnimation: false }));
 
 test('Popup should be centered regarding the container even if content dimension is changed', async (t) => {
@@ -123,7 +123,7 @@ test('Popup should be centered regarding the container even if content dimension
 }).before(async () => createWidget('dxPopup', {
   width: 'auto',
   height: 'auto',
-  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
+  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: '100px', height: '100px' }),
   animation: null,
 }, undefined, { disableFxAnimation: false }));
 
@@ -225,7 +225,7 @@ test('Showing and shown events should be raised only once even after resize duri
 }).before(async () => createWidget('dxPopup', {
   width: 'auto',
   height: 'auto',
-  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
+  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: '100px', height: '100px' }),
 }, undefined, { disableFxAnimation: false })).after(async () => {
   await ClientFunction(() => {
     delete (window as any).shownCallCount;

@@ -27,7 +27,7 @@ QUnit.test('innerBox with nested box item', function(assert) {
     const $box = $('#nestedBox');
     ko.applyBindings({}, $box[0]);
 
-    assert.equal($.trim($box.text()), 'Box1', 'inner box rendered');
+    assert.equal($box.text().trim(), 'Box1', 'inner box rendered');
 });
 
 QUnit.test('box item visibility change should fire onItemStateChanged action', function(assert) {

@@ -32,6 +32,10 @@ export class FilterCustomOperationsVisitor {
 
           return getColumnByIndexOrName(columns, columnName);
         },
+        /*
+          Note: Root headerFilter options are used because the legacy code handles retrieving
+          options for specific columns on its own
+        */
         getHeaderFilterOptions: (): HeaderFilterRootOptions => this.options.oneWay('headerFilter').peek(),
         headerFilterController: this.headerFilterController,
       };

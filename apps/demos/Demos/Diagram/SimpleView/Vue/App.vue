@@ -22,7 +22,7 @@
 import {
   DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxPropertiesPanel,
 } from 'devextreme-vue/diagram';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-vue/common/data';
 import service from './data.ts';
 
 const dataSource = new ArrayStore({

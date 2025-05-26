@@ -5,43 +5,51 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../helpers/generateDataSourceData';
+import { changeTheme } from '../../../helpers/changeTheme';
 
 fixture.disablePageReloads`Column chooser`
   .page(url(__dirname, '../../container.html'));
 
-test('Column chooser screenshot', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid('#container');
+['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
+  ['dragAndDrop', 'select'].forEach((mode: any) => {
+    test(`Column chooser screenshot in mode=${mode}, theme=${theme}`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+      const dataGrid = new DataGrid('#container');
 
-  await t
-    .click(dataGrid.getColumnChooserButton())
-    // act
-    .expect(await takeScreenshot('column-chooser.png', dataGrid.element))
-    .ok()
-    // assert
-    .expect(dataGrid.getColumnChooser().element.exists)
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: getData(20, 3),
-  height: 400,
-  showBorders: true,
-  columns: [{
-    dataField: 'field_0',
-    dataType: 'string',
-  }, {
-    dataField: 'field_1',
-    dataType: 'string',
-  }, {
-    dataField: 'field_2',
-    dataType: 'string',
-    visible: false,
-  }],
-  columnChooser: {
-    enabled: true,
-  },
-}));
+      await dataGrid.apiShowColumnChooser();
+
+      await t
+        .expect(await takeScreenshot(`column-chooser-${mode}-mode (${theme}).png`, dataGrid.element))
+        .ok()
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
+      await changeTheme(theme);
+      return createWidget('dxDataGrid', {
+        dataSource: getData(20, 3),
+        height: 400,
+        showBorders: true,
+        columns: [{
+          dataField: 'field_0',
+          dataType: 'string',
+        }, {
+          dataField: 'field_1',
+          dataType: 'string',
+        }, {
+          dataField: 'field_2',
+          dataType: 'string',
+          visible: false,
+        }],
+        columnChooser: {
+          enabled: true,
+          mode,
+        },
+      });
+    }).after(async () => {
+      await changeTheme('generic.light');
+    });
+  });
+});
 
 test('Column chooser checkboxes should be aligned correctly with plain structure', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

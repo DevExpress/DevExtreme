@@ -5,6 +5,7 @@ import messageLocalization from 'common/core/localization/message';
 import errors from 'core/errors';
 import localization from 'localization';
 import config from 'core/config';
+import { isFunction } from 'core/utils/type';
 import { logger } from 'core/utils/console';
 
 import { generateDate } from '../../../helpers/dateHelper.js';
@@ -14,7 +15,7 @@ export default function() {
         const checkModules = function(testName, namespace, methods) {
             QUnit.test(testName, function(assert) {
                 $.each(methods, function(index, method) {
-                    assert.ok($.isFunction(namespace[method]), method + ' method exists');
+                    assert.ok(isFunction(namespace[method]), method + ' method exists');
                 });
             });
         };
