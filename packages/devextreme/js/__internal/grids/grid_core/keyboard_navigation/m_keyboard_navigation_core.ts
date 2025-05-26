@@ -139,6 +139,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   protected getNewVisibleIndex(
     visibleIndex: number,
+    rowIndex: number,
     direction: Direction,
   ): number {
     return direction === 'previous' ? visibleIndex - 1 : visibleIndex + 1;
@@ -157,7 +158,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       columnIndex += this.getColumnIndexOffset(columnIndex);
 
       if (direction) {
-        columnIndex = this.getNewVisibleIndex(columnIndex, direction);
+        columnIndex = this.getNewVisibleIndex(columnIndex, rowIndex, direction);
         columnIndex = this._applyColumnIndexBoundaries(columnIndex);
       }
 

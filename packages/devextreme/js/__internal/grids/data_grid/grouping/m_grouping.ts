@@ -383,16 +383,16 @@ const onGroupingMenuItemClick = function (column, rowIndex, params) {
   switch (params.itemData.value) {
     case 'group': {
       this.isNeedToFocusColumn = true;
-      keyboardNavigationController.groupColumn(column, rowIndex);
+      keyboardNavigationController?.groupColumn?.(column, rowIndex);
       break;
     }
     case 'ungroup':
       this.isNeedToFocusColumn = true;
-      keyboardNavigationController.ungroupColumn(column, rowIndex);
+      keyboardNavigationController?.ungroupColumn?.(column, rowIndex);
       break;
     case 'ungroupAll':
       this.isNeedToFocusColumn = true;
-      keyboardNavigationController.ungroupAllColumns();
+      keyboardNavigationController?.ungroupAllColumns();
       break;
   }
 };

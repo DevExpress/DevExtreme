@@ -70,17 +70,13 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
       .columnOption(`groupIndex:${$groupedColumnElement.index()}`);
   }
 
-  protected getNewFocusedColumnIndexAfterUngrouping(
-    column,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    rowIndex = 0,
-  ): number {
+  protected getNewFocusedColumnBeforeUngrouping(column): any {
     const visibleColumnIndex: number = column.groupIndex;
     const groupColumns = this._columnsController.getGroupColumns();
 
     return visibleColumnIndex === groupColumns.length - 1
-      ? visibleColumnIndex - 1
-      : visibleColumnIndex;
+      ? groupColumns[visibleColumnIndex - 1]
+      : groupColumns[visibleColumnIndex + 1];
   }
 
   protected _getCell(cellPosition): any {

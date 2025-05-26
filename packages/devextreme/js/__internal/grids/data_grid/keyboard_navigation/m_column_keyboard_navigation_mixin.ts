@@ -1,6 +1,7 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils';
 import { isDefined } from '@js/core/utils/type';
-import { Direction, KEY_CODES } from '@ts/grids/grid_core/keyboard_navigation/const';
+import type { FocusedCellPosition } from '@ts/grids/grid_core/keyboard_navigation/const';
+import { KEY_CODES } from '@ts/grids/grid_core/keyboard_navigation/const';
 import type { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
@@ -13,28 +14,21 @@ export const ColumnKeyboardNavigationMixin = <T extends ModuleType<ColumnKeyboar
     e.originalEvent?.preventDefault();
   }
 
-  protected ungroupColumn(column, rowIndex = 0): void {
-    if (isDefined(column?.groupIndex)) {
-      const newFocusedColumnIndex = this.getNewFocusedColumnIndexAfterUngrouping(
-        column,
-        rowIndex,
-      );
-      const newFocusedCellPosition = newFocusedColumnIndex >= 0
-        ? { rowIndex, columnIndex: newFocusedColumnIndex }
-        : undefined;
-
-      this.updateViewFocusPosition(newFocusedCellPosition);
-      this._columnsController.columnOption(column.dataField, 'groupIndex', -1);
+  protected getFocusedCellPositionByColumn(column): FocusedCellPosition | undefined {
+    if (!column) {
+      return undefined;
     }
-  }
 
-  protected getNewFocusedColumnIndexAfterUngrouping(
-    column,
-    rowIndex = 0,
-  ): number {
-    const visibleColumnIndex = this.getVisibleIndex(column, rowIndex);
+    const newRowIndex = this._columnsController
+      .getRowIndex(column.index, true);
 
-    return this.getNewFocusedColumnIndex(visibleColumnIndex, Direction.Next);
+    return {
+      rowIndex: newRowIndex,
+      columnIndex: this.getVisibleIndex(
+        column,
+        newRowIndex,
+      ),
+    };
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -44,6 +38,11 @@ export const ColumnKeyboardNavigationMixin = <T extends ModuleType<ColumnKeyboar
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected getColumnFromEvent(e): any {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected getNewFocusedColumnBeforeUngrouping(column, rowIndex: number): any {
+    return column;
+  }
 
   protected keyDownHandler(e): boolean {
     let isHandled = super.keyDownHandler(e);
@@ -69,6 +68,23 @@ export const ColumnKeyboardNavigationMixin = <T extends ModuleType<ColumnKeyboar
 
   public canUngroupAllColumnByPressingKey(e): boolean {
     return e.which === KEY_CODES.G && e.shift && e.alt;
+  }
+
+  public ungroupColumn(column, rowIndex = 0): void {
+    if (isDefined(column?.groupIndex)) {
+      const newFocusedColumn = this.getNewFocusedColumnBeforeUngrouping(
+        column,
+        rowIndex,
+      );
+
+      this._columnsController.beginUpdate();
+      this._columnsController.columnOption(column.dataField, 'groupIndex', -1);
+
+      const newFocusedCellPosition = this.getFocusedCellPositionByColumn(newFocusedColumn);
+
+      this.updateViewFocusPosition(newFocusedCellPosition);
+      this._columnsController.endUpdate();
+    }
   }
 
   public ungroupAllColumns(): void {
