@@ -453,17 +453,49 @@ QUnit.module('AIDialog', () => {
 
             const promptTextAreaInstance = getPromptTextAreaInstance(this.$element);
             const resultTextAreaInstance = getResultTextAreaInstance(this.$element);
-            const informerInstance = getInformerInstance(this.$element);
 
             const bottomToolbarItems = getBottomToolbarItems(this.aiDialogPopup);
 
             assert.strictEqual(promptTextAreaInstance.option('visible'), true, 'prompt TextArea is visible');
             assert.strictEqual(promptTextAreaInstance.option('readOnly'), false, 'prompt TextArea is not readOnly');
             assert.strictEqual(resultTextAreaInstance.option('visible'), false, 'result TextArea is hidden');
-            assert.strictEqual(informerInstance.option('visible'), false, 'Informer is hidden');
 
             assert.strictEqual(bottomToolbarItems.length, 1, '1 button is rendered');
             assert.strictEqual(bottomToolbarItems[0].name, 'generate', 'generate button is shown');
+        });
+
+        QUnit.test('should show info type Informer after clicking Cancel', function(assert) {
+            showAIDialog(this, {
+                config: { currentCommand: 'askAI' }
+            });
+
+            this.setDialogState('generating');
+
+            const $cancelButton = findButtonByName(this.aiDialogPopup, 'cancel');
+            $cancelButton.trigger('dxclick');
+
+            const informerInstance = getInformerInstance(this.$element);
+
+            assert.strictEqual(informerInstance.option('visible'), true, 'Informer is shown');
+            assert.strictEqual(informerInstance.option('icon'), 'errorcircle', 'Icon is correct');
+            assert.strictEqual(informerInstance.option('text'), 'Generation canceled', 'Text is correct');
+            assert.strictEqual(informerInstance.option('type'), 'info', 'Type is correct');
+        });
+
+        QUnit.test('should hide Informer after switching from canceled state to generate', function(assert) {
+            showAIDialog(this, {
+                config: { currentCommand: 'askAI' }
+            });
+
+            const informerInstance = getInformerInstance(this.$element);
+
+            this.setDialogState('askingCanceled');
+
+            assert.strictEqual(informerInstance.option('visible'), true, 'Informer is shown');
+
+            this.setDialogState('generating');
+
+            assert.strictEqual(informerInstance.option('visible'), false, 'Informer is hidden');
         });
 
         QUnit.test('should reset fields when switching to a basic command', function(assert) {
@@ -781,7 +813,7 @@ QUnit.module('AIDialog', () => {
             });
         });
 
-        QUnit.test('should make Informer visible on reject', function(assert) {
+        QUnit.test('should make Informer with error type visible on reject', function(assert) {
             const done = assert.async();
 
             this.showDialog({ currentCommand: 'translate' });
@@ -796,6 +828,9 @@ QUnit.module('AIDialog', () => {
                 const informerInstance = getInformerInstance(this.$element);
 
                 assert.strictEqual(informerInstance.option('visible'), true, 'Informer is visible on reject');
+                assert.strictEqual(informerInstance.option('icon'), '', 'Icon is correct');
+                assert.strictEqual(informerInstance.option('text'), 'Something went wrong. Please try again.', 'Text is correct');
+                assert.strictEqual(informerInstance.option('type'), 'error', 'Type is correct');
                 done();
             });
         });
@@ -1261,9 +1296,11 @@ QUnit.module('AIDialog', () => {
         beforeEach: function() {
             this.initialLocale = localization.locale();
             this.localizedAIDialogError = 'custom error';
+            this.localizedCanceledInfo = '';
             localization.loadMessages({
                 'ja': {
                     'dxHtmlEditor-aiDialogError': this.localizedAIDialogError,
+                    'dxHtmlEditor-aiDialogCanceled': this.localizedCanceledInfo,
                 }
             });
             localization.locale('ja');
@@ -1274,7 +1311,7 @@ QUnit.module('AIDialog', () => {
             integrationModuleConfig.afterEach.apply(this);
         }
     }, () => {
-        QUnit.test('is correct', function(assert) {
+        QUnit.test('is correct on init', function(assert) {
             showAIDialog(this, {
                 config: { currentCommand: 'askAI' },
             });
@@ -1284,8 +1321,44 @@ QUnit.module('AIDialog', () => {
             assertConfig(assert, informerInstance.option(), {
                 contentAlignment: 'center',
                 showBackground: true,
-                text: this.localizedAIDialogError,
                 visible: false,
+            });
+        });
+
+        QUnit.test('is correct on error', function(assert) {
+            const done = assert.async();
+
+            this.showDialog({ currentCommand: 'summarize' });
+
+            this.reject();
+
+            setTimeout(() => {
+                const informerInstance = getInformerInstance(this.$element);
+
+                assertConfig(assert, informerInstance.option(), {
+                    text: this.localizedAIDialogError,
+                    type: 'error',
+                    icon: '',
+                    visible: true,
+                });
+
+                done();
+            });
+        });
+
+        QUnit.test('is correct on cancel', function(assert) {
+            this.showDialog({ currentCommand: 'summarize' });
+
+            const $cancelButton = findButtonByName(this.aiDialogPopup, 'cancel');
+            $cancelButton.trigger('dxclick');
+
+            const informerInstance = getInformerInstance(this.$element);
+
+            assertConfig(assert, informerInstance.option(), {
+                text: this.localizedCanceledInfo,
+                type: 'info',
+                icon: 'errorcircle',
+                visible: true,
             });
         });
     });

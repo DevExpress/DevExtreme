@@ -6,8 +6,10 @@
 // adduse
 
 @include informer(
-  $informer-color,
-  $informer-background-color,
+  $informer-error-color,
+  $informer-error-background-color,
+  $informer-info-color,
+  $informer-info-background-color,
   $informer-border-radius,
   $informer-icon-size,
   $informer-padding-inline,

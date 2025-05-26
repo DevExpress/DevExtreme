@@ -191,6 +191,7 @@ class RecurrenceEditor extends Editor {
 
     this._prepareEditors();
     this._renderEditors(this._$container);
+    this._updateRepeatInputAriaLabel();
   }
 
   getEditorByField(fieldName) {
@@ -540,6 +541,7 @@ class RecurrenceEditor extends Editor {
     }
 
     this._changeEditorValue();
+    this._updateRepeatInputAriaLabel();
   }
 
   _changeRepeatEndInputsVisibility(value = this._recurrenceRule.getRepeatEndRule()) {
@@ -580,20 +582,29 @@ class RecurrenceEditor extends Editor {
     };
   }
 
+  _updateRepeatInputAriaLabel(): void {
+    const radioButtons = this.getEditorByField('repeatEnd').itemElements();
+    const untilLabel = messageLocalization.format('dxScheduler-recurrenceOn');
+    const untilValue = this._recurrenceForm.getEditor('until').option('value');
+    const untilValueFormat = `${dateLocalization.format(untilValue, 'd')} ${dateLocalization.format(untilValue, 'monthAndYear')}`;
+    const isUntilVisible = this._recurrenceForm.itemOption('until').visible;
+
+    const countLabel = messageLocalization.format('dxScheduler-recurrenceAfter');
+    const countPostfix = messageLocalization.format('dxScheduler-recurrenceRepeatCount');
+    const countValue = this._recurrenceForm.getEditor('count').option('value');
+    const isCountVisible = this._recurrenceForm.itemOption('count').visible;
+
+    radioButtons[1].setAttribute('aria-label', isUntilVisible ? `${untilLabel} ${untilValueFormat}` : untilLabel);
+    radioButtons[2].setAttribute('aria-label', isCountVisible ? `${countLabel} ${countValue} ${countPostfix}` : countLabel);
+  }
+
   _repeatCountValueChangeHandler(args) {
     if (this._recurrenceRule.getRepeatEndRule() === 'count') {
       const { value } = args;
       this._recurrenceRule.makeRule('count', value);
       this._changeEditorValue();
+      this._updateRepeatInputAriaLabel();
     }
-  }
-
-  _formatUntilDate(date) {
-    if (this._recurrenceRule.getRules().until && dateUtils.sameDate(this._recurrenceRule.getRules().until, date)) {
-      return date;
-    }
-
-    return dateUtils.setToDayEnd(date);
   }
 
   _getRepeatUntilEditorOptions() {
@@ -620,6 +631,15 @@ class RecurrenceEditor extends Editor {
     };
   }
 
+  _formatUntilDate(date: Date): Date {
+    const untilDate = this._recurrenceRule.getRules().until;
+    const isSameDate = dateUtils.sameDate(untilDate, date);
+
+    return untilDate && isSameDate
+      ? date
+      : dateUtils.setToDayEnd(date);
+  }
+
   _repeatUntilValueChangeHandler(args) {
     if (this._recurrenceRule.getRepeatEndRule() === 'until') {
       const dateInTimeZone = this._formatUntilDate(new Date(args.value));
@@ -634,6 +654,7 @@ class RecurrenceEditor extends Editor {
 
       this._recurrenceRule.makeRule('until', dateInLocaleTimeZone);
       this._changeEditorValue();
+      this._updateRepeatInputAriaLabel();
     }
   }
 

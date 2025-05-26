@@ -779,6 +779,8 @@ export function removeFieldConditionsFromFilter(filter, dataField) {
 
 function syncConditionIntoGroup(filter, addedFilter, canPush) {
   const result: any[] = [];
+  const isNegation = isNegationGroup(filter);
+
   filter.forEach((item) => {
     if (isCondition(item)) {
       if (isMatchedCondition(item, addedFilter[0])) {
@@ -803,6 +805,10 @@ function syncConditionIntoGroup(filter, addedFilter, canPush) {
   if (canPush) {
     result.push(AND_GROUP_OPERATION);
     result.push(addedFilter);
+  }
+
+  if (isNegation) {
+    return ['!', result.length === 1 ? result[0] : result];
   }
 
   return result.length === 1 ? result[0] : result;

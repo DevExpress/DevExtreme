@@ -546,6 +546,7 @@
         "dxHtmlEditor-borderStyleOutset": "udsat",
         "dxHtmlEditor-aiDialogTitle": "AI Assistant",
         "dxHtmlEditor-aiDialogError": "Something went wrong. Please try again.",
+        "dxHtmlEditor-aiDialogCanceled": "Generation canceled",
         "dxHtmlEditor-aiReplace": "Replace",
         "dxHtmlEditor-aiInsertAbove": "Insert above",
         "dxHtmlEditor-aiInsertBelow": "Insert below",
