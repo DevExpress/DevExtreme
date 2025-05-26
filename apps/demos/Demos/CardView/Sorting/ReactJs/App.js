@@ -21,13 +21,13 @@ const App = () => (
     <Column
       dataField="Price"
       format="currency"
-      sortOrder="asc"
+      defaultSortOrder="asc"
     />
     <Column dataField="HouseSize" />
     <Column dataField="Baths" />
     <Column
       dataField="Beds"
-      sortOrder="desc"
+      defaultSortOrder="desc"
     />
   </CardView>
 );
