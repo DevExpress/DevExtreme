@@ -1,3 +1,8 @@
+@use "../widgets/_design-system/core";
+@use "../widgets/_design-system/fluent/theme-builder";
+@use "../widgets/_design-system/fluent/shadows";
+@use "../widgets/_design-system/fluent/typography1";
+@use "../widgets/_design-system/fluent/utility";
 @use "../widgets/fluent/colors" with ($color: "$COLOR", $mode: "$MODE");
 @use "../widgets/fluent/sizes" with ($size: "$SIZE");
 @use "../widgets/fluent/typography";
