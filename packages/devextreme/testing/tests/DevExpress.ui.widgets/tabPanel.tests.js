@@ -11,7 +11,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import translator from 'common/core/animation/translator';
-import { shouldSkipOnDevices } from '../../helpers/device.js';
+import { shouldSkipOnMobile, shouldSkipOnDevices } from '../../helpers/device.js';
 
 
 QUnit.testStart(() => {
