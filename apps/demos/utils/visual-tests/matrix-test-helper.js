@@ -5,6 +5,7 @@ import { THEME } from './helpers/theme-utils';
 import { gitHubIgnored } from './github-ignored-list';
 
 export const FRAMEWORKS = ['jQuery', 'React', 'Vue', 'Angular'];
+export const WIP_TEST = true;
 
 const settings = {
   concurrency: undefined,
