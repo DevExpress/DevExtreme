@@ -82,9 +82,11 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       }
 
       .dx-texteditor {
-        .dx-texteditor-input,
-        .dx-placeholder::before {
-          padding-left: $material-grid-base-texteditor-input-padding;
+        .dx-texteditor-container {
+          .dx-texteditor-input,
+          .dx-placeholder::before {
+            padding-left: $material-grid-base-texteditor-input-padding;
+          }
         }
       }
     }
