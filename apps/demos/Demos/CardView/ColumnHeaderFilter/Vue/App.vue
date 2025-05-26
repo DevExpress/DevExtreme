@@ -34,7 +34,7 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-  import { DxCardView, DxColumn, DxCardViewTypes } from 'devextreme-vue/card-view';
+  import { DxCardView, DxColumn, type DxCardViewTypes } from 'devextreme-vue/card-view';
   import { type Order, orders } from './data.ts';
 
   function getOrderDay(rowData: Order) {
@@ -45,7 +45,7 @@
     if (value === 'weekends') {
       return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
     }
-    return this.defaultCalculateFilterExpression(value, selectedFilterOperations, target);
+    return this.defaultCalculateFilterExpression(value, selectedFilterOperations, target) as any;
   }
   
   // TODO: make nested
