@@ -12,12 +12,16 @@
 
   .dx-icon {
     font-size: $cardview-nodata-view__icon-size;
+    color: $cardview-nodata-view__icon-color;
   }
 }
 
 .dx-gridcore-nodata-element {
-  color: $cardview-nodata-view-text-color;
   text-align: center;
+
+  .dx-gridcore-nodata-text {
+    color: $cardview-nodata-view-text-color;
+  }
 }
 
 .dx-gridcore-nodata-container {
@@ -25,4 +29,5 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: $cardview-nodata-view-bg-color;
 }

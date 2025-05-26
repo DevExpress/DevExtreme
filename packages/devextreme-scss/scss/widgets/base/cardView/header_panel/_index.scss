@@ -23,7 +23,6 @@
       height: $cardview-header-panel__dropzone-height;
       background-color: $cardview-header-panel__dropzone-bg-color;
       text-align: center;
-      color: $cardview-header-panel__dropzone-text-color;
       position: absolute;
       top: $cardview-header-panel__dropzone-top;
       left: 0;
@@ -38,6 +37,14 @@
       align-items: center;
       justify-content: center;
       gap: 4px;
+
+      .dx-icon {
+        color: $cardview-header-panel__dropzone__icon-color;
+      }
+
+      span {
+        color: $cardview-header-panel__dropzone-text-color;
+      }
     }
 
     .dx-cardview-dropzone-visible {
@@ -51,6 +58,3 @@
   }
 }
 
-.dx-sortable-dragging.dx-cardview-column-sortable {
-  opacity: 1.0;
-}

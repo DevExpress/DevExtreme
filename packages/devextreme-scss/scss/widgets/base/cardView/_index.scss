@@ -10,6 +10,8 @@
   padding: $cardview-padding;
   background-color: $cardview-bg-color;
   border-radius: $cardview-border-radius;
+  color: $cardview-text-color;
+  font-weight: $cardview-text-weight;
 
   .dx-link {
     text-decoration: underline;

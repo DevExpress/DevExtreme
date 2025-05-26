@@ -10,6 +10,7 @@
   border: $cardview-card-border-width solid $cardview-card-border-color;
   border-radius: $cardview-card-border-radius;
   background-color: $cardview-card-bg-color;
+  color: $cardview-card-text-color;
   overflow: hidden;
 
   & > div > :nth-child(2) {
@@ -17,7 +18,8 @@
   }
 }
 
-
 .dx-cardview-card-selection {
   background-color: $cardview-card--selected-bg-color;
+  border-color: $cardview-card--selected-border-color;
+  color: $cardview-card--selected-text-color;
 }
