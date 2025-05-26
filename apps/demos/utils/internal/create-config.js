@@ -56,9 +56,15 @@ class CreateConfig {
   getDemosWithExtraModules() {
     const result = {};
 
-    const handleGroup = (group) => group.Demos && group.Demos.forEach((demo) => {
-      if (demo.Modules) result[this.getKey(demo.Widget, demo.Name)] = demo.Modules;
-    });
+    const handleGroup = (group) => {
+      if (group.Demos) {
+        group.Demos.forEach((demo) => {
+          if (demo.Modules) result[this.getKey(demo.Widget, demo.Name)] = demo.Modules;
+        })
+      } else if(group.Groups) {
+        group.Groups.forEach(handleGroup);
+      }
+    };
 
     this.meta.forEach((section) => {
       if (section.Groups) {
