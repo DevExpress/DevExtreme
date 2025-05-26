@@ -490,6 +490,7 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
     .dx-menu-item {
       &.dx-state-focused {
         background-color: transparent;
+        color: $datagrid-menu-icon-color;
 
         &::after {
           border: 2px solid $datagrid-focused-border-color;

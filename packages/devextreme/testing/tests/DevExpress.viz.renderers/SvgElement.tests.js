@@ -487,20 +487,21 @@ function checkDashStyle(assert, elem, result, style, value) {
 
     QUnit.module('SvgElement markup method');
 
-    QUnit.test('Returns correct namespaces (IE specific problem)', function(assert) {
-        function mapFromStr(str) {
-            const map = {};
-            str.split('>').forEach(function(s) {
-                s.split('<').forEach(function(s) {
-                    s.split(' ').forEach(function(s) {
-                        if(s) {
-                            map[s] = (map[s] || 0) + 1;
-                        }
-                    });
+    function mapFromStr(str) {
+        const map = {};
+        str.split('>').forEach(function(s) {
+            s.split('<').forEach(function(s) {
+                s.split(' ').forEach(function(s) {
+                    if(s) {
+                        map[s] = (map[s] || 0) + 1;
+                    }
                 });
             });
-            return map;
-        }
+        });
+        return map;
+    }
+
+    QUnit.test('Returns correct namespaces (IE specific problem)', function(assert) {
         // arrange
         const parent = { element: document.createElement('div') };
         const svg = (new rendererModule.SvgElement({}, 'svg')).append(parent);
@@ -519,6 +520,31 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         // assert
         assert.deepEqual(mapFromStr(markupString), mapFromStr('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">Some content</svg>'));
+    });
+
+    QUnit.test('Keep all default namespaces (T1292204)', function(assert) {
+        // arrange
+        const parent = { element: document.createElement('div') };
+        const svg = (new rendererModule.SvgElement({}, 'svg')).append(parent);
+        $('#qunit-fixture').append(parent);
+
+        svg.attr({
+            xmlns: 'http://www.w3.org/2000/svg',
+            'xmlns:xlink': 'http://www.w3.org/1999/xlink',
+            version: '1.1'
+        });
+
+        const foreignContent = document.createElement('table');
+        foreignContent.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+
+        svg.element.appendChild(foreignContent);
+
+        // act
+        const markupString = svg.markup();
+        const expectedMarkup = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><table xmlns="http://www.w3.org/1999/xhtml"></table></svg>';
+
+        // assert
+        assert.deepEqual(mapFromStr(markupString), mapFromStr(expectedMarkup));
     });
 
     QUnit.test('Can return markup on detached element', function(assert) {
