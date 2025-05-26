@@ -137,6 +137,22 @@ QUnit.module('rendering', {
         assert.ok($element.hasClass(TABPANEL_TABS_POSITION_CLASS.right));
     });
 
+    QUnit.test('first tab should be focused after initialization', function(assert) {
+        const items = Array.from({ length: 20 }, (_, index) => ({
+            title: `Tab ${index + 1}`,
+            text: `Content ${index + 1}`
+        }));
+
+        new TabPanel(this.$tabPanel, {
+            items,
+        });
+
+        const $tabs = this.$tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`);
+        const $firstTab = $tabs.first();
+        assert.strictEqual($firstTab.hasClass(FOCUS_STATE_CLASS), true, 'first tab is focused');
+        assert.strictEqual($tabs.filter(`.${FOCUS_STATE_CLASS}`).length, 1, 'only one tab is focused');
+    });
+
     [true, false].forEach(rtlEnabled => {
         QUnit.test(`rtlEnabled: ${rtlEnabled}, dataSource: { title, icon } -> icon alignment`, function(assert) {
             const $element = $('<div>').appendTo('#qunit-fixture');
