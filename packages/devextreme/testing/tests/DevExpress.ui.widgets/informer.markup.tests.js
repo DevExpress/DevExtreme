@@ -3,6 +3,8 @@ import $ from 'jquery';
 import Informer from 'ui/informer';
 
 const INFORMER_CLASS = 'dx-informer';
+const INFORMER_ERROR_CLASS = 'dx-informer-error';
+const INFORMER_INFO_CLASS = 'dx-informer-info';
 const INFORMER_ALIGNMENT_START_CLASS = 'dx-informer-alignment-start';
 const INFORMER_ALIGNMENT_CENTER_CLASS = 'dx-informer-alignment-center';
 const INFORMER_ALIGNMENT_END_CLASS = 'dx-informer-alignment-end';
@@ -95,6 +97,38 @@ QUnit.module('Informer', moduleConfig, () => {
 
             assert.strictEqual(this.$element.hasClass(INFORMER_ALIGNMENT_START_CLASS), false, 'previous alignment class is removed');
             assert.strictEqual(this.$element.hasClass(INFORMER_ALIGNMENT_END_CLASS), true, 'new alignment class is added');
+        });
+
+        QUnit.test(`should have ${INFORMER_ERROR_CLASS} class by default`, function(assert) {
+            assert.strictEqual(this.$element.hasClass(INFORMER_ALIGNMENT_CENTER_CLASS), true);
+        });
+
+        [
+            {
+                type: 'error',
+                className: INFORMER_ERROR_CLASS,
+            },
+            {
+                type: 'info',
+                className: INFORMER_INFO_CLASS,
+            },
+        ].forEach(({ type, className }) => {
+            QUnit.test(`should have ${className} class when type=${type}`, function(assert) {
+                this.reinit({ type });
+
+                assert.strictEqual(this.$element.hasClass(className), true);
+            });
+        });
+
+        QUnit.test('should add actual type class and remove the old one on type option runtime change', function(assert) {
+            this.reinit({ type: 'info' });
+
+            assert.strictEqual(this.$element.hasClass(INFORMER_INFO_CLASS), true, 'info type class is added on init');
+
+            this.instance.option('type', 'error');
+
+            assert.strictEqual(this.$element.hasClass(INFORMER_INFO_CLASS), false, 'previous type info class is removed');
+            assert.strictEqual(this.$element.hasClass(INFORMER_ERROR_CLASS), true, 'new type error class is added');
         });
     });
 });
