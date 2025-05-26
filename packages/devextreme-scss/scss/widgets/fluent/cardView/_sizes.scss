@@ -312,7 +312,7 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
   $cardview-fluent-header-panel__dropzone-border-width: 1.5px !default;
   $cardview-fluent-header-panel__dropzone-border-radius: 8px !default;
 
-  $cardview-fluent-filter-panel-border-radius: 0px !default;
+  $cardview-fluent-filter-panel-border-radius: 0 !default;
 
   $cardview-fluent-nodata-view__icon-container-size: 64px !default;
   $cardview-fluent-nodata-view__icon-container-margin: 12px !default;
@@ -377,7 +377,7 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
   $cardview-fluent-header-panel__dropzone-border-width: 1.5px !default;
   $cardview-fluent-header-panel__dropzone-border-radius: 6px !default;
 
-  $cardview-fluent-filter-panel-border-radius: 0px !default;
+  $cardview-fluent-filter-panel-border-radius: 0 !default;
 
   $cardview-fluent-nodata-view__icon-container-size: 48px !default;
   $cardview-fluent-nodata-view__icon-container-margin: 8px !default;
@@ -393,7 +393,6 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
 
 $cardview-border-radius: $cardview-fluent-common-border-radius !default;
 $cardview-text-weight: $cardview-fluent-common-text-weight !default;
-$cardview-header-panel-gap: $cardview-fluent-common-header-panel-gap !default;
 $cardview-cards-row-gap: $cardview-fluent-common-cards-row-gap !default;
 $cardview-cards-column-gap: $cardview-fluent-common-cards-column-gap !default;
 $cardview-gap: $cardview-fluent-common-gap !default;
@@ -417,8 +416,8 @@ $cardview-card--selected__field-caption-weight: $cardview-fluent-card--selected_
 
 $cardview-header-gap: $cardview-fluent-header-gap !default;
 
+$cardview-header-panel-gap: $cardview-fluent-common-header-panel-gap !default;
 $cardview-header-panel-vertical-margin: $cardview-fluent-header-panel-vertical-margin !default;
-$cardview-header-panel-gap: $cardview-fluent-header-panel-gap !default;
 $cardview-header-panel--empty-line-height: $cardview-fluent-header-panel--empty-line-height !default;
 
 $cardview-header-panel__item-border-width: $cardview-fluent-header-panel__item-border-width !default;

@@ -15,21 +15,18 @@
 
   .dx-icon {
     font-size: $cardview-header-panel__item__icon-size;
+    color: $cardview-header-panel__item__icon-color;
   }
-}
 
-.dx-cardview-header-item {
   background-color: $cardview-header-panel__item-bg-color;
   border-color: $cardview-header-panel__item-border-color;
   color: $cardview-header-panel__item-text-color;
   font-weight: $cardview-header-panel__item-text-weight;
 
-  .dx-icon {
-    color: $cardview-header-panel__item__icon-color;
-  }
   .dx-header-filter-icon--selected {
     color: $cardview-header-panel__item__header-filter-icon--selected-color;
   }
+
   .dx-cardview-header-item-sorting-order {
     color: $cardview-header-panel__item__sort-index-text-color;
     font-weight: $cardview-header-panel__item__sort-index-text-weight;
@@ -44,9 +41,11 @@
     .dx-icon {
       color: $cardview-header-panel__item--hovered__icon-color;
     }
+
     .dx-header-filter-icon--selected {
       color: $cardview-header-panel__item--hovered__header-filter-icon--selected-color;
     }
+
     .dx-cardview-header-item-sorting-order {
       color: $cardview-header-panel__item--hovered__sort-index-text-color;
       font-weight: $cardview-header-panel__item--hovered__sort-index-text-weight;
@@ -55,7 +54,6 @@
 
   &.dx-sortable-source {
     opacity: 1.0;
-
     background-color: $cardview-header-panel__item--disabled-bg-color;
     border-color: $cardview-header-panel__item--disabled-border-color;
     color: $cardview-header-panel__item--disabled-text-color;
@@ -64,9 +62,11 @@
     .dx-icon {
       color: $cardview-header-panel__item--disabled__icon-color;
     }
+
     .dx-header-filter-icon--selected {
       color: $cardview-header-panel__item--disabled__header-filter-icon--selected-color;
     }
+
     .dx-cardview-header-item-sorting-order {
       color: $cardview-header-panel__item--disabled__sort-index-text-color;
       font-weight: $cardview-header-panel__item--disabled__sort-index-text-weight;
@@ -78,14 +78,14 @@
     border-color: $cardview-header-panel__item--dragged-border-color;
     color: $cardview-header-panel__item--dragged-text-color;
     font-weight: $cardview-header-panel__item--dragged-text-weight;
-
-    box-shadow: 
-      0 1px 3px $cardview-header-panel__item--dragged-box-shadow, 
+    box-shadow:
+      0 1px 3px $cardview-header-panel__item--dragged-box-shadow,
       0 6px 8px $cardview-header-panel__item--dragged-box-shadow;
 
     .dx-icon {
       color: $cardview-header-panel__item--dragged__allowance-icon-color;
     }
+
     .dx-icon-cursorprohibition {
       color: $cardview-header-panel__item--dragged__prohibition-icon-color;
     }
