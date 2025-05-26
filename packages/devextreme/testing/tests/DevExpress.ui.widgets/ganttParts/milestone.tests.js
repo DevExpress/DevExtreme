@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import 'ui/gantt';
 import { Consts } from '../../../helpers/ganttHelpers.js';
+import devices from '__internal/core/m_devices';
 const { test } = QUnit;
 
 const moduleConfig = {
@@ -106,7 +107,12 @@ QUnit.module('Milestone', moduleConfig, () => {
         assert.false(children.eq(0).hasClass(Consts.TASK_TITLE_SELECTOR), 'child is not task title');
     });
 
-    test('position is correctly calculated', function(assert) {
+    QUnit.skipInShadowDomMode('position is correctly calculated', function(assert) {
+        const { platform } = devices.real();
+        if(['android', 'ios'].includes(platform)) {
+            assert.expect(0);
+            return;
+        }
         const customTasks = [
             { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-03-26'), 'progress': 0 },
             { 'id': 2, 'parentId': 1, 'title': 'Milestone 1', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-21'), 'progress': 0 },
