@@ -593,11 +593,11 @@ class SchedulerAppointments extends CollectionWidget {
 
       this._processVirtualAppointment(settings, element, rawAppointment, deferredColor);
     } else {
-      const { groupsLeafs, resourceById } = this.option('getResourceManager')();
+      const { groups, groupsLeafs, resourceById } = this.option('getResourceManager')();
       const config: any = {
         data: rawAppointment,
         groupIndex: settings.groupIndex,
-        groupTexts: getGroupTexts(groupsLeafs, resourceById, settings.groupIndex),
+        groupTexts: getGroupTexts(groups, groupsLeafs, resourceById, settings.groupIndex),
         observer: this.option('observer'),
         geometry,
         direction: settings.direction || 'vertical',

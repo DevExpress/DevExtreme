@@ -58,12 +58,14 @@ export const getLeafGroupValues = (
 ): GroupLeaf['grouped'] => groupsLeafs.find((group) => group.groupIndex === groupIndex)?.grouped ?? {};
 
 export const getGroupTexts = (
+  groups: string[],
   groupsLeafs: GroupLeaf[],
   resourceById: Record<string, ResourceLoader>,
   groupIndex: GroupLeaf['groupIndex'],
 ): string[] => {
   const leafGroups = getLeafGroupValues(groupsLeafs, groupIndex);
-  const textPath = Object.entries(leafGroups).map(([resourceIndex, resourceId]) => {
+  const textPath = groups.map((resourceIndex) => {
+    const resourceId = leafGroups[resourceIndex];
     const resource = resourceById[resourceIndex];
 
     return resource.items.find((item) => item.id === resourceId)?.text;

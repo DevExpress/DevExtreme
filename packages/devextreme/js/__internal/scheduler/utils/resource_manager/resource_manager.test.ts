@@ -41,6 +41,21 @@ describe('ResourceManager', () => {
       expect(counts.one).toEqual(1);
       expect(counts.two).toEqual(1);
     });
+
+    it('should load all dataSources in different requests', async () => {
+      const manager = new ResourceManager([
+        getResourceConfig('one'),
+        getResourceConfig('two'),
+      ]);
+
+      await Promise.all([
+        manager.loadGroupResources(['one']),
+        manager.loadGroupResources(['two']),
+      ]);
+
+      expect(counts.one).toEqual(1);
+      expect(counts.two).toEqual(1);
+    });
   });
 
   describe('groupCount', () => {

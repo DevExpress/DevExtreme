@@ -1,6 +1,7 @@
 import {
   describe, expect, it,
 } from '@jest/globals';
+import { getResourceManagerMock } from '@ts/scheduler/__mock__/resourceManager.mock';
 
 import {
   getAllGroupValues, getGroupTexts, getLeafGroupValues, getResourcesByGroupIndex, groupResources,
@@ -209,15 +210,25 @@ describe('groups utils', () => {
 
   describe('getGroupTexts', () => {
     it('should return empty array if there is no leaf with groupIndex', () => {
-      expect(getGroupTexts(groupsLeafs, resourceById, 20)).toEqual([]);
+      expect(getGroupTexts(['roomId'], groupsLeafs, resourceById, 20)).toEqual([]);
     });
 
     it('should return groups for single grouping', () => {
-      expect(getGroupTexts(groupsLeafs, resourceById, 2)).toEqual(['Room 1']);
+      expect(getGroupTexts(['roomId'], groupsLeafs, resourceById, 2)).toEqual(['Room 1']);
     });
 
     it('should return groups for multiple grouping', () => {
-      expect(getGroupTexts(groupsLeafs, resourceById, 3)).toEqual(['Samantha Bright', 'Room 1']);
+      expect(
+        getGroupTexts(['assigneeId', 'roomId'], groupsLeafs, resourceById, 3),
+      ).toEqual(['Samantha Bright', 'Room 1']);
+    });
+
+    it('should return groups in order of groups declared', async () => {
+      const manager = getResourceManagerMock();
+      await manager.loadGroupResources(['assigneeId', 'nested.priorityId', 'roomId']);
+      expect(
+        getGroupTexts(manager.groups, manager.groupsLeafs, manager.resourceById, 3),
+      ).toEqual(['Samantha Bright', 'High Priority', 'Room 1']);
     });
   });
 
