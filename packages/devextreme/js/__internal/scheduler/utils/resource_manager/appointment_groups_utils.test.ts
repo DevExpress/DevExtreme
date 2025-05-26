@@ -2,6 +2,7 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 import {
+  complexIdResourceMock,
   getResourceManagerMock, resourceIndexesMock, resourceItemsByIdMock,
 } from '@ts/scheduler/__mock__/resourceManager.mock';
 
@@ -9,13 +10,39 @@ import {
   getAppointmentGroupIndex,
   getAppointmentGroupValues,
   getAppointmentResources,
-  getRawAppointmentGroupValues,
+  getRawAppointmentGroupValues, getResourceItemById,
   getSafeGroupValues,
   groupAppointmentsByGroupLeafs,
   setAppointmentGroupValues,
 } from './appointment_groups_utils';
 
 describe('appointment groups utils', () => {
+  describe('getResourceItemById', () => {
+    it('should return resource item by id', () => {
+      const manager = getResourceManagerMock();
+
+      expect(
+        getResourceItemById(manager.resourceById.assigneeId, 1),
+      ).toEqual(manager.resourceById.assigneeId.items[0]);
+    });
+
+    it('should return undefined for unreached item', () => {
+      const manager = getResourceManagerMock(complexIdResourceMock);
+
+      expect(
+        getResourceItemById(manager.resources[0], { _value: 'guid-2' }),
+      ).toEqual(manager.resources[0].items[1]);
+    });
+
+    it('should return resource item by complex id', () => {
+      const manager = getResourceManagerMock();
+
+      expect(
+        getResourceItemById(manager.resourceById.assigneeId, 10),
+      ).toEqual(undefined);
+    });
+  });
+
   describe('getAppointmentGroupValues', () => {
     it('should return appointment group array values', () => {
       const manager = getResourceManagerMock();
@@ -99,6 +126,19 @@ describe('appointment groups utils', () => {
       expect(
         getAppointmentResources({ roomId: [2, 0] }, manager.resourceById),
       ).toEqual([{ label: undefined, values: ['Room 3', 'Room 1'] }]);
+    });
+
+    it('should return appointment resource texts with complex ids', async () => {
+      const manager = getResourceManagerMock(complexIdResourceMock);
+      await manager.loadGroupResources(['ownerId']);
+
+      expect(
+        getAppointmentResources({
+          ownerId: [{ _value: 'guid-2' }, { _value: 'guid-3' }, { _value: 'guid-1' }],
+        }, manager.resourceById),
+      ).toEqual([
+        { label: undefined, values: ['two', 'three', 'one'] },
+      ]);
     });
   });
 

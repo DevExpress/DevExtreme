@@ -2,6 +2,7 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 import {
+  complexIdResourceMock,
   getResourceManagerMock,
   resourceIndexesMock,
   resourceItemsByIdMock,
@@ -107,6 +108,14 @@ describe('appointment color utils', () => {
       expect(
         getPaintedResource(manager.resources, ['unknown'], []),
       ).toEqual(undefined);
+    });
+
+    it('should return ungrouped resource with complex id', () => {
+      const manager = getResourceManagerMock(complexIdResourceMock);
+
+      expect(
+        getPaintedResource(manager.resources, ['ownerId'], []),
+      ).toEqual(manager.resources[0]);
     });
   });
 
@@ -262,6 +271,51 @@ describe('appointment color utils', () => {
           },
         ),
       ).toEqual(ownerSecondColor);
+    });
+
+    it('should return color of ungrouped resource with complex id', async () => {
+      const manager = getResourceManagerMock(complexIdResourceMock);
+      const { dataSource } = complexIdResourceMock[0];
+
+      expect(
+        await getAppointmentColor(
+          manager.resources,
+          manager.groupsLeafs,
+          manager.groups,
+          {
+            itemData: {
+              ownerId: { _value: 'guid-1' },
+              groupIndex: 0,
+            },
+          } as any,
+        ),
+      ).toEqual(dataSource[0].color);
+      expect(
+        await getAppointmentColor(
+          manager.resources,
+          manager.groupsLeafs,
+          manager.groups,
+          {
+            itemData: {
+              ownerId: { _value: 'guid-2' },
+              groupIndex: 0,
+            },
+          } as any,
+        ),
+      ).toEqual(dataSource[1].color);
+      expect(
+        await getAppointmentColor(
+          manager.resources,
+          manager.groupsLeafs,
+          manager.groups,
+          {
+            itemData: {
+              ownerId: { _value: 'guid-3' },
+              groupIndex: 0,
+            },
+          } as any,
+        ),
+      ).toEqual(dataSource[2].color);
     });
   });
 });

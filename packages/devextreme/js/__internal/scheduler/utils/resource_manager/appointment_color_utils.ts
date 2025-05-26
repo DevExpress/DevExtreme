@@ -2,7 +2,7 @@ import type { SafeAppointment } from '@ts/scheduler/types';
 
 import type { ResourceLoader } from '../loader/resource_loader';
 import type { ResourceId } from '../loader/types';
-import { getAppointmentGroupValues } from './appointment_groups_utils';
+import { getAppointmentGroupValues, getResourceItemById } from './appointment_groups_utils';
 import { getLeafGroupValues } from './group_utils';
 import type { GroupLeaf } from './types';
 
@@ -41,8 +41,7 @@ export const getPaintedResource = (
 const getResourceColor = (
   resource: ResourceLoader,
   resourceId: ResourceId,
-): string | undefined => resource
-  .items.find((item) => item.id === resourceId)?.color;
+): string | undefined => getResourceItemById(resource, resourceId)?.color;
 
 export const getAppointmentColor = async (
   resources: ResourceLoader[],

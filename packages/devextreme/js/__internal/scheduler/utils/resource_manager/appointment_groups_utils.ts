@@ -1,14 +1,21 @@
 import { wrapToArray } from '@ts/core/utils/m_array';
+import { equalByValue } from '@ts/core/utils/m_common';
 import type { SafeAppointment } from '@ts/scheduler/types';
 
 import type { ResourceLoader } from '../loader/resource_loader';
-import type { ResourceId } from '../loader/types';
+import type { ResourceData, ResourceId } from '../loader/types';
 import type { GroupLeaf, GroupValues, RawGroupValues } from './types';
 
 export interface AppointmentResource {
   label?: string;
   values: string[];
 }
+
+export const getResourceItemById = (
+  resource: ResourceLoader,
+  resourceId: ResourceId,
+): ResourceData | undefined => resource
+  .items.find((item) => equalByValue(item.id, resourceId));
 
 export const getAppointmentGroupValues = (
   rawAppointment: SafeAppointment,
@@ -47,18 +54,6 @@ export const getSafeGroupValues = (
     return result;
   }, {});
 
-const getResourceTextMap = (
-  resource: ResourceLoader,
-  resourceIds: ResourceId[],
-): Record<string, string> => resource.items
-  .reduce<Record<string, string>>((result, data) => {
-    if (resourceIds.includes(data.id)) {
-      result[data.id] = data.text;
-    }
-
-    return result;
-  }, {});
-
 export const getAppointmentResources = (
   appointmentGroupValues: GroupValues,
   resourceById: Record<string, ResourceLoader>,
@@ -66,8 +61,9 @@ export const getAppointmentResources = (
   .entries(appointmentGroupValues)
   .reduce<AppointmentResource[]>((result, [resourceIndex, resourceIds]) => {
     const resource = resourceById[resourceIndex];
-    const resourceTextMap = getResourceTextMap(resource, resourceIds);
-    const values = resourceIds.map((id) => resourceTextMap[id]);
+    const values = resourceIds
+      .map((id) => getResourceItemById(resource, id)?.text)
+      .filter(Boolean) as string[];
 
     if (values.length) {
       result.push({

@@ -21,6 +21,26 @@ export const resourceItemsByIdMock = {
     { id: 2, text: 'Room 3', color: '#777' },
   ],
 };
+export const complexIdResourceMock = [{
+  field: 'ownerId',
+  dataSource: [
+    {
+      id: { _value: 'guid-1' },
+      text: 'one',
+      color: 'rgb(255, 0, 0)',
+    },
+    {
+      id: { _value: 'guid-2' },
+      text: 'two',
+      color: 'rgb(0, 128, 0)',
+    },
+    {
+      id: { _value: 'guid-3' },
+      text: 'three',
+      color: 'rgb(255, 255, 0)',
+    },
+  ],
+}];
 
 export const resourceIndexesMock = Object.keys(resourceItemsByIdMock);
 

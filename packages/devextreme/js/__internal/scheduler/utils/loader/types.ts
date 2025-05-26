@@ -1,6 +1,6 @@
 import type { Properties } from '@js/ui/scheduler';
 
-export type ResourceId = string | number;
+export type ResourceId = string | number | object;
 export type AppointmentResourceConfig = ResourceId | ResourceId[];
 
 type ResourcesConfig = Required<Properties>['resources'];
