@@ -153,6 +153,16 @@ QUnit.module('rendering', {
         assert.strictEqual($tabs.filter(`.${FOCUS_STATE_CLASS}`).length, 1, 'only one tab is focused');
     });
 
+    QUnit.test('focused element should be null if there is no items on initialization', function(assert) {
+        new TabPanel(this.$tabPanel, {});
+
+        const $tabs = this.$tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`);
+        assert.strictEqual($tabs.length, 0, 'no tabs were created');
+
+        const tabsInstance = this.$tabPanel.find(`.${TABS_CLASS}`).dxTabs('instance');
+        assert.strictEqual(tabsInstance.option('focusedElement'), null, 'focusedElement is null');
+    });
+
     [true, false].forEach(rtlEnabled => {
         QUnit.test(`rtlEnabled: ${rtlEnabled}, dataSource: { title, icon } -> icon alignment`, function(assert) {
             const $element = $('<div>').appendTo('#qunit-fixture');
