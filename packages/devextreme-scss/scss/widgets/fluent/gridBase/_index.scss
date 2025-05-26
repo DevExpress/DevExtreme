@@ -92,9 +92,11 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       }
 
       .dx-texteditor {
-        .dx-texteditor-input,
-        .dx-placeholder::before {
-          padding-left: $fluent-grid-base-texteditor-input-padding;
+        .dx-texteditor-container {
+          .dx-texteditor-input,
+          .dx-placeholder::before {
+            padding-left: $fluent-grid-base-texteditor-input-padding;
+          }
         }
       }
     }
