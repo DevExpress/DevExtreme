@@ -191,7 +191,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
             />;
           }
 
-          return null;
+          return null; //return
         })
       }
     </>
