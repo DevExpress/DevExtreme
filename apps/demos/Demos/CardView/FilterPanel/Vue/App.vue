@@ -34,7 +34,7 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-  import { DxCardView, DxColumn, DxCardViewTypes } from 'devextreme-vue/card-view';
+  import { DxCardView, DxColumn } from 'devextreme-vue/card-view';
   import { type Order, orders } from './data.ts';
 
   function getDeliveryHours(rowData: Order) {
