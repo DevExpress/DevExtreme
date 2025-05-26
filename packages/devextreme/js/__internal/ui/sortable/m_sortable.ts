@@ -11,10 +11,9 @@ import { getBoundingRect } from '@js/core/utils/position';
 import {
   getHeight, getOuterHeight, getOuterWidth, getWidth,
 } from '@js/core/utils/size';
+import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import Draggable from '@ts/m_draggable';
-
-import { isDefined } from '../core/utils/type';
+import { Draggable } from '@ts/ui/draggable/index';
 
 const window = getWindow();
 
@@ -60,7 +59,8 @@ function getScrollableBoundary($scrollable) {
     bottom: top + height,
   };
 }
-class Sortable extends Draggable {
+
+export class Sortable extends Draggable {
   _$placeholderElement?: dxElementWrapper | null;
 
   _$scrollable?: dxElementWrapper;
@@ -295,7 +295,8 @@ class Sortable extends Draggable {
     const $sourceElement = this._getSourceElement();
     const sourceDraggable = this._getSourceDraggable();
     const isSourceDraggable = sourceDraggable.NAME !== this.NAME;
-    const toIndex = this.option('toIndex');
+    // @ts-expect-error bad option type
+    const toIndex: number = this.option('toIndex');
     const { event } = sourceEvent;
     const allowDrop = this._allowDrop(event);
 
@@ -972,5 +973,3 @@ class Sortable extends Draggable {
 }
 
 registerComponent(SORTABLE, Sortable);
-
-export default Sortable;
