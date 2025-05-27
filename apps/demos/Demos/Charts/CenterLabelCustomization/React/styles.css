@@ -15,3 +15,7 @@
   text-align: center;
   margin-bottom: 20px;
 }
+
+.dxc-hole-template:focus {
+  outline: none;
+}
