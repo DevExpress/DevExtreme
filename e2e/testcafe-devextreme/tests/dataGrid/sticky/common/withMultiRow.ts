@@ -12,11 +12,8 @@ const DATA_GRID_SELECTOR = '#container';
 fixture.disablePageReloads`Sticky columns - Multi Row Header Columns`
   .page(url(__dirname, '../../../container.html'));
 
-// T1282595: DataGrid - Vertical borders disappear from
-// banded/multi-line headers when there
-// are fixed columns
 [Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
-  safeSizeTest(`The multi row header columns should have vertical borders when a column is fixed (${theme} theme)`, async (t) => {
+  safeSizeTest(`The multi row header columns should have vertical borders when a column is fixed (${theme} theme) (T1282595)`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
