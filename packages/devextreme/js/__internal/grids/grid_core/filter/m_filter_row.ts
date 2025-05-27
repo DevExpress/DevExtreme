@@ -76,8 +76,6 @@ const EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
 
 const BETWEEN_OPERATION_DATA_TYPES = ['date', 'datetime', 'number'];
 
-const ARIA_SEARCH_BOX = messageLocalization.format('dxDataGrid-ariaSearchBox');
-
 function isOnClickApplyFilterMode(that) {
   return that.option('filterRow.applyFilter') === 'onClick';
 }
@@ -594,9 +592,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         selectable: false,
         items: that._getFilterOperationMenuItems(column),
       }],
-      onItemRendered: ({ itemElement }) => {
-        this.setAria('label', ARIA_SEARCH_BOX, $(itemElement));
-      },
       onItemClick(properties) {
         // @ts-expect-error
         const selectedFilterOperation = properties.itemData.name;
