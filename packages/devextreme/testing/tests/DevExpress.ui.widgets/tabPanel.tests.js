@@ -1036,22 +1036,23 @@ QUnit.module('focus policy', {
         assert.strictEqual($tabPanel.find(`.${MULTIVIEW_WRAPPER_CLASS}`).hasClass(FOCUS_STATE_CLASS), false);
     });
 
-    QUnit.test('first tab should be focused after initialization', function(assert) {
-        if(shouldSkipOnDevices({ deviceTypes: ['phone', 'tablet'], assert })) {
-            return;
-        }
-
+    QUnit.test('first tab should be focused after initialization (T1277409)', function(assert) {
         const items = Array.from({ length: 20 }, (_, index) => ({
             title: `Tab ${index + 1}`,
             text: `Content ${index + 1}`
         }));
 
-        const $tabPanel = $('#tabPanel').dxTabPanel({ items });
+        const $tabPanel = $('#tabPanel').dxTabPanel({
+            items,
+            focusStateEnabled: true,
+        });
 
-        const $tabs = $tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`);
+        const $tabs = $tabPanel.find(toSelector(TABPANEL_TABS_ITEM_CLASS));
+        const tabsInstance = $tabPanel.find(toSelector(TABS_CLASS)).dxTabs('instance');
         const $firstTab = $tabs.first();
-        assert.strictEqual($firstTab.hasClass(FOCUS_STATE_CLASS), true, 'first tab is focused');
         assert.strictEqual($tabs.filter(`.${FOCUS_STATE_CLASS}`).length, 1, 'only one tab is focused');
+        assert.strictEqual(tabsInstance.option('focusedElement'), $firstTab.get(0), 'focusedElement is correct');
+        assert.strictEqual($firstTab.hasClass(FOCUS_STATE_CLASS), true, 'first tab is focused');
     });
 
     QUnit.test('focused element should be null if there is no items on initialization', function(assert) {
