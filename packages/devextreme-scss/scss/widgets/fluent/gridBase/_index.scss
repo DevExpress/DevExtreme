@@ -760,6 +760,14 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       }
     }
 
+    &.dx-header-multi-row.dx-#{$widget-name}-sticky-columns {
+      .dx-header-row {
+        > td {
+          border-right: 1px solid $fluent-grid-base-border-color;
+        }
+      }
+    }
+
     &.dx-#{$widget-name}-sticky-columns {
       .dx-#{$widget-name}-filter-row > td {
         &.dx-#{$widget-name}-sticky-column,
