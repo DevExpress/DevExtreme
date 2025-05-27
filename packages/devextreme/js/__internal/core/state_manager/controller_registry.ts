@@ -1,25 +1,26 @@
 import { EventEmitter } from './event_emitter';
-import type { IController, IControllerRegistry, ILogger } from './interfaces';
+import type * as StateManagementTypes from './types';
 
-export class ControllerRegistry implements IControllerRegistry {
-  private controllers: Record<string, IController> = {};
+type ControllerEventEmitter = (controller: StateManagementTypes.Controller, id: string) => void;
 
-  private readonly logger: ILogger;
+export class ControllerRegistry implements StateManagementTypes.ControllerRegistry {
+  private controllers: Record<string, StateManagementTypes.Controller> = {};
+
+  private readonly logger: StateManagementTypes.Logger;
 
   private readonly controllerRegisteredEmitter: EventEmitter<
-    (controller: IController, id: string) => void>;
+    (controller: StateManagementTypes.Controller, id: string) => void>;
 
-  constructor(logger: ILogger) {
+  constructor(logger: StateManagementTypes.Logger) {
     this.logger = logger;
-    this.controllerRegisteredEmitter = new EventEmitter<(controller: IController,
-    id: string) => void
-      >(
+
+    this.controllerRegisteredEmitter = new EventEmitter<ControllerEventEmitter>(
       'controllerRegistered',
       logger,
-      );
+    );
   }
 
-  registerController(controller: IController, controllerId: string): string {
+  registerController(controller: StateManagementTypes.Controller, controllerId: string): string {
     if (!controller) {
       this.logger.error('Controller cannot be null or undefined');
 
@@ -38,11 +39,11 @@ export class ControllerRegistry implements IControllerRegistry {
     return controllerId;
   }
 
-  getController(id: string): IController | null {
+  getController(id: string): StateManagementTypes.Controller | undefined {
     if (!id) {
       this.logger.error('Controller ID cannot be null or undefined');
 
-      return null;
+      return undefined;
     }
 
     const controller = this.controllers[id];
@@ -54,12 +55,12 @@ export class ControllerRegistry implements IControllerRegistry {
     return controller;
   }
 
-  getAllControllers(): Record<string, IController> {
+  getAllControllers(): Record<string, StateManagementTypes.Controller> {
     return { ...this.controllers };
   }
 
   onControllerRegistered(
-    callback: (controller: IController, id: string) => void,
+    callback: (controller: StateManagementTypes.Controller, id: string) => void,
   ): void {
     this.controllerRegisteredEmitter.addListener(callback);
   }

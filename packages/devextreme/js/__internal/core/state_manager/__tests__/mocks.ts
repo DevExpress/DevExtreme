@@ -1,26 +1,16 @@
 /* eslint-disable max-classes-per-file */
-import type {
-  IController,
-  IControllerRegistry,
-  IDevToolsActions,
-  IDevToolsConnector,
-  IDevToolsExternalActionCallback,
-  ILogger,
-  IState,
-  IStateChange,
-  IStateContainer,
-  IStateContainerManager,
-  IStateHistory,
-  IStateTracker,
-} from '../interfaces';
+import type * as StateManagementTypes from '../types';
 import { splitStatePath } from '../utils';
 
-export class MockControllerRegistry implements IControllerRegistry {
-  private controllers: Record<string, IController> = {};
+export class MockControllerRegistry implements StateManagementTypes.ControllerRegistry {
+  private controllers: Record<string, StateManagementTypes.Controller> = {};
 
-  private callback: ((controller: IController, id: string) => void) | null = null;
+  private callback: ((
+    controller: StateManagementTypes.Controller,
+    id: string
+  ) => void) | null = null;
 
-  registerController(controller: IController, id: string): string {
+  registerController(controller: StateManagementTypes.Controller, id: string): string {
     const controllerId = id;
     this.controllers[controllerId] = controller;
     if (this.callback) {
@@ -29,31 +19,42 @@ export class MockControllerRegistry implements IControllerRegistry {
     return controllerId;
   }
 
-  getController(id: string): IController | null {
-    return this.controllers[id] || null;
+  getController(id: string): StateManagementTypes.Controller | undefined {
+    return this.controllers[id];
   }
 
-  getAllControllers(): Record<string, IController> {
+  getAllControllers(): Record<string, StateManagementTypes.Controller> {
     return { ...this.controllers };
   }
 
-  onControllerRegistered(callback: (controller: IController, id: string) => void): void {
+  onControllerRegistered(
+    callback: (controller: StateManagementTypes.Controller, id: string) => void,
+  ): void {
     this.callback = callback;
   }
 }
 
-export class MockStateTracker implements IStateTracker {
-  private stateChangeCallback: ((change: IStateChange) => void) | null = null;
+export class MockStateTracker implements StateManagementTypes.StateTracker {
+  private stateChangeCallback: ((
+    change: StateManagementTypes.StateChange
+  ) => void) | undefined;
 
-  private readonly stateContainerManagers: IStateContainerManager[] = [];
+  private readonly stateContainerManagers:
+  StateManagementTypes.StateContainerManager[] = [];
 
-  private state: IState = {};
+  private state: StateManagementTypes.State = {};
 
-  constructor(stateContainerManagers: IStateContainerManager[]) {
+  constructor(
+    stateContainerManagers: StateManagementTypes.StateContainerManager[],
+  ) {
     this.stateContainerManagers = stateContainerManagers;
   }
 
-  trackState(controllerId: string, stateContainer: IStateContainer, stateName: string): void {
+  trackState(
+    controllerId: string,
+    stateContainer: StateManagementTypes.StateContainer,
+    stateName: string,
+  ): void {
     if (!this.state[controllerId]) {
       this.state[controllerId] = {};
     }
@@ -61,55 +62,66 @@ export class MockStateTracker implements IStateTracker {
 
     const currentStateContainerManager = this.findStateContainerManagerFor(stateContainer);
     if (currentStateContainerManager) {
-      currentStateContainerManager.trackChanges(stateContainer, stateName, (change) => {
-        if (this.stateChangeCallback) {
-          const updatedChange = {
-            ...change,
-            payload: {
-              ...change.payload,
-              path: `${controllerId}.${change.payload.path}`,
-            },
-          };
-          this.stateChangeCallback(updatedChange);
-        }
-      });
+      currentStateContainerManager.trackChanges(
+        stateContainer,
+        stateName,
+        (change) => {
+          if (this.stateChangeCallback) {
+            const updatedChange = {
+              ...change,
+              payload: {
+                ...change.payload,
+                path: `${controllerId}.${change.payload.path}`,
+              },
+            };
+            this.stateChangeCallback(updatedChange);
+          }
+        },
+      );
     }
   }
 
-  getState(): IState {
+  getState(): StateManagementTypes.State {
     return { ...this.state };
   }
 
-  onStateChanged(callback: (change: IStateChange) => void): void {
+  onStateChanged(
+    callback: (change: StateManagementTypes.StateChange) => void,
+  ): void {
     this.stateChangeCallback = callback;
   }
 
-  findStateContainerManagerFor(stateContainer: unknown): IStateContainerManager | null {
-    return this.stateContainerManagers
-      .find((currentStateContainerManager) => currentStateContainerManager
-        .canHandle(stateContainer)) ?? null;
+  findStateContainerManagerFor(
+    stateContainer: unknown,
+  ): StateManagementTypes.StateContainerManager | undefined {
+    const result = this.stateContainerManagers
+      .find(
+        (currentStateContainerManager) => currentStateContainerManager.canHandle(stateContainer),
+      );
+
+    return result;
   }
 
-  triggerStateChange(change: IStateChange): void {
+  triggerStateChange(change: StateManagementTypes.StateChange): void {
     if (this.stateChangeCallback) {
       this.stateChangeCallback(change);
     }
   }
 }
 
-export class MockStateHistory implements IStateHistory {
-  private history: IStateChange[] = [];
+export class MockStateHistory implements StateManagementTypes.StateHistory {
+  private history: StateManagementTypes.StateChange[] = [];
 
-  recordChange(change: IStateChange): void {
+  recordChange(change: StateManagementTypes.StateChange): void {
     this.history.push(change);
   }
 
-  getHistory(): IStateChange[] {
+  getHistory(): StateManagementTypes.StateChange[] {
     return [...this.history];
   }
 
-  getStateAt(index: number): IState {
-    const state: IState = {};
+  getStateAt(index: number): StateManagementTypes.State {
+    const state: StateManagementTypes.State = {};
 
     for (let i = 0; i <= index && i < this.history.length; i += 1) {
       const change = this.history[i];
@@ -135,8 +147,9 @@ export class MockStateHistory implements IStateHistory {
   }
 }
 
-export class MockDevToolsConnector implements IDevToolsConnector {
-  private callback: IDevToolsExternalActionCallback | null = null;
+export class MockDevToolsConnector implements StateManagementTypes.DevToolsConnector {
+  private callback:
+    StateManagementTypes.DevToolsExternalActionCallback | null = null;
 
   private isConnected = false;
 
@@ -152,11 +165,16 @@ export class MockDevToolsConnector implements IDevToolsConnector {
 
   }
 
-  onExternalAction(callback: IDevToolsExternalActionCallback): void {
+  onExternalAction(
+    callback: StateManagementTypes.DevToolsExternalActionCallback,
+  ): void {
     this.callback = callback;
   }
 
-  triggerExternalAction(action: IDevToolsActions, payload: IState | null): void {
+  triggerExternalAction(
+    action: StateManagementTypes.DevToolsActions,
+    payload: StateManagementTypes.State | null,
+  ): void {
     if (this.callback) {
       this.callback(action, payload);
     }
@@ -167,7 +185,7 @@ export class MockDevToolsConnector implements IDevToolsConnector {
   }
 }
 
-export class MockLogger implements ILogger {
+export class MockLogger implements StateManagementTypes.Logger {
   logs: { level: string; message: string; args: unknown[] }[] = [];
 
   debug(message: string, ...args: unknown[]): void {
@@ -191,22 +209,33 @@ export class MockLogger implements ILogger {
   }
 }
 
-export class MockObjectStatePlugin implements IStateContainerManager {
-  private readonly changeHandlers: Map<IStateContainer, (change: IStateChange) => void> = new Map();
+export class MockObjectStatePlugin implements StateManagementTypes.StateContainerManager {
+  private readonly changeHandlers: Map<
+    StateManagementTypes.StateContainer,
+    (change: StateManagementTypes.StateChange) => void
+  > = new Map();
 
-  canHandle(stateContainer: unknown): stateContainer is IStateContainer {
-    return typeof stateContainer === 'object' && stateContainer !== null && !Array.isArray(stateContainer);
+  canHandle(
+    stateContainer: unknown,
+  ): stateContainer is StateManagementTypes.StateContainer {
+    return typeof stateContainer === 'object'
+      && stateContainer !== null
+      && !Array.isArray(stateContainer);
   }
 
   trackChanges(
-    stateContainer: IStateContainer,
+    stateContainer: StateManagementTypes.StateContainer,
     stateName: string,
-    onChange: (change: IStateChange) => void,
+    onChange: (change: StateManagementTypes.StateChange) => void,
   ): void {
     this.changeHandlers.set(stateContainer, onChange);
   }
 
-  applyState(stateContainer: IStateContainer, stateName: string, newState: unknown): void {
+  applyState(
+    stateContainer: StateManagementTypes.StateContainer,
+    stateName: string,
+    newState: unknown,
+  ): void {
     const previousValue = { ...stateContainer };
     Object.assign(stateContainer, newState);
 
@@ -225,12 +254,14 @@ export class MockObjectStatePlugin implements IStateContainerManager {
     }
   }
 
-  getState(stateContainer: IStateContainer): unknown {
+  getState(
+    stateContainer: StateManagementTypes.StateContainer,
+  ): unknown {
     return { ...stateContainer };
   }
 
   simulatePropertyChange(
-    stateContainer: IStateContainer,
+    stateContainer: StateManagementTypes.StateContainer,
     stateName: string,
     key: string,
     newValue: unknown,
@@ -255,18 +286,23 @@ export class MockObjectStatePlugin implements IStateContainerManager {
   }
 }
 
-export class MockArrayStatePlugin implements IStateContainerManager {
+export class MockArrayStatePlugin implements StateManagementTypes.StateContainerManager {
   // eslint-disable-next-line no-spaced-func
-  private readonly changeHandlers = new WeakMap<object, (change: IStateChange) => void>();
+  private readonly changeHandlers = new WeakMap<
+    object,
+    (change: StateManagementTypes.StateChange) => void
+  >();
 
-  canHandle(stateContainer: unknown): stateContainer is IStateContainer {
+  canHandle(
+    stateContainer: unknown,
+  ): stateContainer is StateManagementTypes.StateContainer {
     return Array.isArray(stateContainer);
   }
 
   trackChanges(
-    stateContainer: IStateContainer,
+    stateContainer: StateManagementTypes.StateContainer,
     stateName: string,
-    onChange: (change: IStateChange) => void,
+    onChange: (change: StateManagementTypes.StateChange) => void,
   ): void {
     if (!this.changeHandlers.has(stateContainer)) {
       this.changeHandlers.set(stateContainer, onChange);
@@ -277,7 +313,11 @@ export class MockArrayStatePlugin implements IStateContainerManager {
     }
   }
 
-  applyState(stateContainer: IStateContainer, stateName: string, newState: unknown): void {
+  applyState(
+    stateContainer: StateManagementTypes.StateContainer,
+    stateName: string,
+    newState: unknown,
+  ): void {
     if (Array.isArray(stateContainer)) {
       stateContainer.length = 0;
 
@@ -287,12 +327,12 @@ export class MockArrayStatePlugin implements IStateContainerManager {
     }
   }
 
-  getState(stateContainer: IStateContainer): unknown {
+  getState(stateContainer: StateManagementTypes.StateContainer): unknown {
     return Array.isArray(stateContainer) ? [...stateContainer] : stateContainer;
   }
 
   private overrideArrayMethods(
-    stateContainer: IStateContainer & unknown[],
+    stateContainer: StateManagementTypes.StateContainer & unknown[],
     stateName: string,
   ): void {
     const methods = {

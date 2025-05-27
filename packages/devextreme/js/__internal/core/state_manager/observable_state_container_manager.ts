@@ -1,41 +1,32 @@
 // eslint-disable-next-line max-classes-per-file
-import type {
-  ILogger,
-  IMaybeObservableStateContainer,
-  IObservableStateContainer,
-  IStateChange,
-  IStateChangeCallback,
-  IStateChangePayload,
-  IStateContainerManager,
-} from './interfaces';
+import type * as StateManagementTypes from './types';
 import { areEqual, deepCopy } from './utils';
 
-// TODO: remove me
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 class Observable {
 
 }
 
-export class ObservableStateContainerManager implements IStateContainerManager {
-  private readonly logger: ILogger;
+export class ObservableStateContainerManager implements StateManagementTypes.StateContainerManager {
+  private readonly logger: StateManagementTypes.Logger;
 
   private readonly controllerSign: string;
 
-  constructor(logger: ILogger, controllerSign: string) {
+  constructor(logger: StateManagementTypes.Logger, controllerSign: string) {
     this.logger = logger;
     this.controllerSign = controllerSign;
   }
 
   canHandle(
-    stateContainer: IMaybeObservableStateContainer,
-  ): stateContainer is IObservableStateContainer {
+    stateContainer: StateManagementTypes.MaybeObservableStateContainer,
+  ): stateContainer is StateManagementTypes.ObservableStateContainer {
     return stateContainer instanceof Observable;
   }
 
   trackChanges(
-    stateContainer: IMaybeObservableStateContainer,
+    stateContainer: StateManagementTypes.MaybeObservableStateContainer,
     stateName: string,
-    onChange: IStateChangeCallback,
+    onChange: StateManagementTypes.StateChangeCallback,
   ): void {
     if (!this.canHandle(stateContainer)) {
       this.logger.error('State container is not an Observable');
@@ -67,7 +58,7 @@ export class ObservableStateContainerManager implements IStateContainerManager {
           return;
         }
 
-        const payload: IStateChangePayload = {
+        const payload: StateManagementTypes.StateChangePayload = {
           path: stateName,
           previousValue: typeof currentValue === 'object' && currentValue !== null ? deepCopy(currentValue) : currentValue,
           newValue: typeof newValue === 'object' && newValue !== null ? deepCopy(newValue) : newValue,
@@ -75,7 +66,7 @@ export class ObservableStateContainerManager implements IStateContainerManager {
           source: this.captureSource(stateContainer),
         };
 
-        const change: IStateChange = {
+        const change: StateManagementTypes.StateChange = {
           actionType: 'UPDATE',
           payload,
         };
@@ -99,7 +90,7 @@ export class ObservableStateContainerManager implements IStateContainerManager {
             return;
           }
 
-          const payload: IStateChangePayload = {
+          const payload: StateManagementTypes.StateChangePayload = {
             path: stateName,
             previousValue: typeof previousValue === 'object' && previousValue !== null ? deepCopy(previousValue) : previousValue,
             newValue: typeof newValue === 'object' && newValue !== null ? deepCopy(newValue) : newValue,
@@ -107,7 +98,7 @@ export class ObservableStateContainerManager implements IStateContainerManager {
             source: this.captureSource(stateContainer),
           };
 
-          const change: IStateChange = {
+          const change: StateManagementTypes.StateChange = {
             actionType: 'UPDATE',
             payload,
           };
@@ -122,7 +113,7 @@ export class ObservableStateContainerManager implements IStateContainerManager {
     }
 
     try {
-      const payload: IStateChangePayload = {
+      const payload: StateManagementTypes.StateChangePayload = {
         path: stateName,
         previousValue: undefined,
         newValue: typeof previousValue === 'object' && previousValue !== null ? deepCopy(previousValue) : previousValue,
@@ -130,7 +121,7 @@ export class ObservableStateContainerManager implements IStateContainerManager {
         source: this.captureSource(stateContainer),
       };
 
-      const initialChange: IStateChange = {
+      const initialChange: StateManagementTypes.StateChange = {
         actionType: 'INITIALIZE',
         payload,
       };
@@ -144,7 +135,7 @@ export class ObservableStateContainerManager implements IStateContainerManager {
   }
 
   applyState(
-    stateContainer: IMaybeObservableStateContainer,
+    stateContainer: StateManagementTypes.MaybeObservableStateContainer,
     stateName: string,
     newState: unknown,
   ): void {
@@ -165,17 +156,17 @@ export class ObservableStateContainerManager implements IStateContainerManager {
     }
   }
 
-  getState(stateContainer: IMaybeObservableStateContainer): ReturnType<IObservableStateContainer['unreactive_get']> {
+  getState(stateContainer: StateManagementTypes.MaybeObservableStateContainer): ReturnType<StateManagementTypes.ObservableStateContainer['unreactive_get']> {
     if (!this.canHandle(stateContainer)) {
       this.logger.error('State container is not an Observable');
-      return null;
+      return undefined;
     }
 
     // eslint-disable-next-line spellcheck/spell-checker
     return stateContainer.unreactive_get();
   }
 
-  private captureSource(stateContainer?: IObservableStateContainer): string {
+  private captureSource(stateContainer?: StateManagementTypes.ObservableStateContainer): string {
     if (stateContainer?.stack) {
       const { stack } = stateContainer;
 

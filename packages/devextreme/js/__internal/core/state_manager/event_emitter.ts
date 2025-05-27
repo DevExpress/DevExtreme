@@ -1,14 +1,14 @@
-import type { ILogger } from './interfaces';
+import type * as StateManagementTypes from './types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class EventEmitter<T extends (...args: any[]) => void> {
   private readonly listeners: T[] = [];
 
-  private readonly logger: ILogger;
+  private readonly logger: StateManagementTypes.Logger;
 
   private readonly eventName: string;
 
-  constructor(eventName: string, logger: ILogger) {
+  constructor(eventName: string, logger: StateManagementTypes.Logger) {
     this.eventName = eventName;
     this.logger = logger;
   }

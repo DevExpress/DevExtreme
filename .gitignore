@@ -1,5 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# tests
+temp
+
 # compiled output
 npm
 dist
@@ -25,7 +28,6 @@ node_modules
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-
 
 # System Files
 .DS_Store

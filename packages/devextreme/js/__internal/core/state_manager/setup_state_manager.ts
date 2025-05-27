@@ -1,13 +1,12 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { DIContext } from '../di';
-import type { IController, ILogLevel } from './interfaces';
-import { StateManager } from './state_manager';
 import { makeStateManager } from './state_manager_factory';
+import type * as StateManagementTypes from './types';
 
 export type DecoratorFunction<T = unknown> = (instance: T) => T;
 
-export interface IStateManagerInitializerOptions {
-  logLevel?: ILogLevel;
+export interface StateManagerInitializerOptions {
+  logLevel?: StateManagementTypes.LogLevel;
   componentName?: string;
   diContext?: DIContext;
   controllerSign?: string;
@@ -15,7 +14,10 @@ export interface IStateManagerInitializerOptions {
 
 const CONTROLLER_SIGN = 'Controller';
 
-function isController(instance: unknown, controllerSign: string): instance is IController {
+function isController(
+  instance: unknown,
+  controllerSign: string,
+): instance is StateManagementTypes.Controller {
   if (instance) {
     return typeof instance === 'object'
          && 'constructor' in instance
@@ -26,7 +28,7 @@ function isController(instance: unknown, controllerSign: string): instance is IC
   return false;
 }
 
-export const setupStateManager = (options: IStateManagerInitializerOptions): void => {
+export const setupStateManager = (options: StateManagerInitializerOptions): void => {
   const {
     diContext,
     componentName,
@@ -51,18 +53,11 @@ export const setupStateManager = (options: IStateManagerInitializerOptions): voi
         controllerSign,
       });
 
-      diContext.registerInstance(
-        StateManager,
-        stateManager,
-      );
-
       let areAnyControllerInitialized = false;
 
       const registerControllerInStateManager: DecoratorFunction = (instance) => {
         if (isController(instance, controllerSign)) {
-          const injectedStateManager = diContext.get(StateManager);
-
-          injectedStateManager.registerController(instance, instance.constructor.name);
+          stateManager.registerController(instance, instance.constructor.name);
 
           if (!areAnyControllerInitialized && logLevel === 'debug') {
             areAnyControllerInitialized = true;

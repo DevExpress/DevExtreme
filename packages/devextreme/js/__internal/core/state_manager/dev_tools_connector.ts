@@ -1,25 +1,19 @@
 /* eslint-disable spellcheck/spell-checker */
 import { EventEmitter } from './event_emitter';
-import type {
-  IDevToolsConnector,
-  IDevToolsExternalActionCallback,
-  ILogger,
-  IReduxDevToolsExtension,
-  IReduxDevToolsInstance,
-} from './interfaces';
+import type * as StateManagementTypes from './types';
 
-export class ReduxDevToolsConnector implements IDevToolsConnector {
-  private devTools: IReduxDevToolsInstance | null = null;
+export class ReduxDevToolsConnector implements StateManagementTypes.DevToolsConnector {
+  private devTools: StateManagementTypes.ReduxDevToolsInstance | null = null;
 
   private isConnected = false;
 
-  private readonly logger: ILogger;
+  private readonly logger: StateManagementTypes.Logger;
 
   private readonly componentName: string;
 
-  private readonly externalActionEmitter: EventEmitter<Parameters<IDevToolsConnector['onExternalAction']>[0]>;
+  private readonly externalActionEmitter: EventEmitter<Parameters<StateManagementTypes.DevToolsConnector['onExternalAction']>[0]>;
 
-  constructor(componentName: string, logger: ILogger) {
+  constructor(componentName: string, logger: StateManagementTypes.Logger) {
     this.componentName = componentName;
     this.logger = logger;
     this.externalActionEmitter = new EventEmitter(
@@ -80,7 +74,7 @@ export class ReduxDevToolsConnector implements IDevToolsConnector {
     }
   }
 
-  sendAction(...args: Parameters<IDevToolsConnector['sendAction']>): ReturnType<IDevToolsConnector['sendAction']> {
+  sendAction(...args: Parameters<StateManagementTypes.DevToolsConnector['sendAction']>): ReturnType<StateManagementTypes.DevToolsConnector['sendAction']> {
     const [action, payload, state] = args;
 
     if (!action) {
@@ -118,7 +112,7 @@ export class ReduxDevToolsConnector implements IDevToolsConnector {
     }
   }
 
-  onExternalAction(callback: IDevToolsExternalActionCallback): void {
+  onExternalAction(callback: StateManagementTypes.DevToolsExternalActionCallback): void {
     this.externalActionEmitter.addListener(callback);
   }
 
@@ -132,7 +126,7 @@ export class ReduxDevToolsConnector implements IDevToolsConnector {
   }
 
   private hasReduxDevTools(globalEnv: Window): globalEnv is
-  Window & { __REDUX_DEVTOOLS_EXTENSION__: IReduxDevToolsExtension } {
+  Window & { __REDUX_DEVTOOLS_EXTENSION__: StateManagementTypes.ReduxDevToolsExtension } {
     return typeof globalEnv !== 'undefined'
          && '__REDUX_DEVTOOLS_EXTENSION__' in globalEnv
          && globalEnv.__REDUX_DEVTOOLS_EXTENSION__ !== undefined;

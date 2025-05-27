@@ -56,7 +56,7 @@ jobs:
       run: pnpx gulp localization
 
     - name: Jest tests
-      run: pnpx nx test-jest devextreme
+      run: pnpx nx test-jest:all devextreme
 
   notify:
     runs-on: devextreme-shr2

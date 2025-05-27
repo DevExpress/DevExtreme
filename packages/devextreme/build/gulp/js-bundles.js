@@ -15,6 +15,7 @@ const ctx = require('./context.js');
 const headerPipes = require('./header-pipes.js');
 const webpackConfig = require('../../webpack.config.js');
 const env = require('./env-variables.js');
+const { STATE_MANAGER_INDEX_MODULE_PATH, STATE_MANAGER_PRODUCTION_MODULE_PATH } = require('./state_manager/constants');
 
 const namedDebug = lazyPipe()
     .pipe(named, (file) => path.basename(file.path, path.extname(file.path)) + '.debug');
@@ -40,11 +41,11 @@ const getWebpackConfig = (mode = webpackConfig.mode) => env.BUILD_INTERNAL_PACKA
                 [ new webpack.NormalModuleReplacementPlugin(
                     /(.*)\/state_manager/,
                     (resource) => {
-                        if (resource.request.includes('state_manager/production')) {
+                        if (resource.request.includes(STATE_MANAGER_PRODUCTION_MODULE_PATH)) {
                             return;
                         }
 
-                        const newRequest = resource.request.replace('state_manager/index', 'state_manager/production');
+                        const newRequest = resource.request.replace(STATE_MANAGER_INDEX_MODULE_PATH, STATE_MANAGER_PRODUCTION_MODULE_PATH);
 
                         resource.request = newRequest;
                     }

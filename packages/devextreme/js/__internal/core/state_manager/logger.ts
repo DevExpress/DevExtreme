@@ -1,19 +1,17 @@
 /* eslint-disable no-console */
-import type { ILogger } from './interfaces';
+import type * as StateManagementTypes from './types';
 
-export type ILogLevel = 'debug' | 'info' | 'warn' | 'error';
-
-const LOG_TYPE_TO_LEVEL: Record<ILogLevel, number> = {
+const LOG_TYPE_TO_LEVEL: Record<StateManagementTypes.LogLevel, number> = {
   debug: 0, info: 1, warn: 2, error: 3,
 };
 
 export interface ConsoleLoggerOptions {
-  logLevel?: ILogLevel;
+  logLevel?: StateManagementTypes.LogLevel;
   prefix: string;
 }
 
-export class ConsoleLogger implements ILogger {
-  private logLevel: ILogLevel = 'info';
+export class ConsoleLogger implements StateManagementTypes.Logger {
+  private logLevel: StateManagementTypes.LogLevel = 'info';
 
   private prefix;
 
@@ -28,7 +26,7 @@ export class ConsoleLogger implements ILogger {
     }
   }
 
-  setLevel(level: ILogLevel): void {
+  setLevel(level: StateManagementTypes.LogLevel): void {
     this.logLevel = level;
   }
 
@@ -64,7 +62,7 @@ export class ConsoleLogger implements ILogger {
     return this.prefix ? `${this.prefix} ${message}` : message;
   }
 
-  private shouldLog(level: ILogLevel): boolean {
+  private shouldLog(level: StateManagementTypes.LogLevel): boolean {
     return LOG_TYPE_TO_LEVEL[level] >= LOG_TYPE_TO_LEVEL[this.logLevel];
   }
 }
