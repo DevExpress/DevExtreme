@@ -400,7 +400,8 @@ $datagrid-text-stub-background-image-path: null !default;
 
 .dx-datagrid, .dx-rtl .dx-datagrid {
   .dx-datagrid-sticky-columns .dx-datagrid-content .dx-datagrid-table {
-    .dx-header-row.dx-row, .dx-row {
+    .dx-header-row.dx-row,
+    .dx-row {
       td.dx-datagrid-sticky-column-border-right {
         border-right: 2px solid $datagrid-border-color;
       }
