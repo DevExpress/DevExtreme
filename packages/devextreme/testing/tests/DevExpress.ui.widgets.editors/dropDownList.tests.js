@@ -991,6 +991,21 @@ QUnit.module('items & dataSource', moduleConfig, () => {
             assert.strictEqual(this.dropDownList.option('selectedItem'), null, 'byKey result is ignored');
         });
     });
+
+    QUnit.test('_getPlainItems should return correct items when they have nested items field and grouping is disabled (T1292151)', function(assert) {
+        const nestedItems = [{ id: 1, text: 'unexpected text' }];
+        const items = [{ id: 1, text: 'item 1', items: nestedItems }];
+
+        const dropDownList = $('#dropDownList').dxDropDownList({
+            items,
+            displayExpr: 'text',
+            valueExpr: 'id',
+        }).dxDropDownList('instance');
+
+        const plainItems = dropDownList._getPlainItems();
+
+        assert.deepEqual(plainItems, items, 'items are correct');
+    });
 });
 
 QUnit.module('selectedItem', moduleConfig, () => {
