@@ -261,7 +261,7 @@ class TabPanel extends MultiView<TabPanelProperties> {
     this._$container.append(this._$wrapper);
 
     const { focusStateEnabled, selectedIndex } = this.option();
-    if (focusStateEnabled && typeof selectedIndex === 'number' && Number.isFinite(selectedIndex)) {
+    if (focusStateEnabled && isDefined(selectedIndex)) {
       const selectedItem = this._tabs.itemElements().get(selectedIndex);
 
       if (selectedItem) {
