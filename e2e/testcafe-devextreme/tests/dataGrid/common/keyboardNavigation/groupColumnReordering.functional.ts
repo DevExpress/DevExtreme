@@ -205,6 +205,8 @@ test('Group first nested column when pressing Ctrl + G', async (t) => {
     .pressKey('ctrl+g');
 
   await t
+    .expect(dataGrid.getGroupPanel().getHeadersCount())
+    .eql(1)
     .expect(dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0).isFocused)
     .ok();
 }).before(async () => {
@@ -242,6 +244,8 @@ test('Group last nested column when pressing Ctrl + G', async (t) => {
     .pressKey('ctrl+g');
 
   await t
+    .expect(dataGrid.getGroupPanel().getHeadersCount())
+    .eql(1)
     .expect(dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(1).isFocused)
     .ok();
 }).before(async () => {
@@ -279,6 +283,8 @@ test('Group single nested column when pressing Ctrl + G', async (t) => {
     .pressKey('ctrl+g');
 
   await t
+    .expect(dataGrid.getGroupPanel().getHeadersCount())
+    .eql(1)
     .expect(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3).isFocused)
     .ok();
 }).before(async () => {

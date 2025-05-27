@@ -1,5 +1,6 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils';
 import { isDefined } from '@js/core/utils/type';
+import type { Column } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { FocusedCellPosition } from '@ts/grids/grid_core/keyboard_navigation/const';
 import { KEY_CODES } from '@ts/grids/grid_core/keyboard_navigation/const';
 import type { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
@@ -40,7 +41,7 @@ export const ColumnKeyboardNavigationMixin = <T extends ModuleType<ColumnKeyboar
   protected getColumnFromEvent(e): any {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected getNewFocusedColumnBeforeUngrouping(column, rowIndex: number): any {
+  protected getNewFocusedColumnBeforeUngrouping(column, rowIndex: number): Column | undefined {
     return column;
   }
 
@@ -62,6 +63,16 @@ export const ColumnKeyboardNavigationMixin = <T extends ModuleType<ColumnKeyboar
     return isHandled;
   }
 
+  protected changeGroupColumnIndex(groupIndex: number, column, newFocusedColumn): void {
+    this._columnsController.beginUpdate();
+    this._columnsController.columnOption(column.dataField, 'groupIndex', groupIndex);
+
+    const newFocusedCellPosition = this.getFocusedCellPositionByColumn(newFocusedColumn);
+
+    this.updateViewFocusPosition(newFocusedCellPosition);
+    this._columnsController.endUpdate();
+  }
+
   public canUngroupColumnByPressingKey(e): boolean {
     return e.which === KEY_CODES.G && e.shift && isCommandKeyPressed(e.originalEvent);
   }
@@ -77,13 +88,7 @@ export const ColumnKeyboardNavigationMixin = <T extends ModuleType<ColumnKeyboar
         rowIndex,
       );
 
-      this._columnsController.beginUpdate();
-      this._columnsController.columnOption(column.dataField, 'groupIndex', -1);
-
-      const newFocusedCellPosition = this.getFocusedCellPositionByColumn(newFocusedColumn);
-
-      this.updateViewFocusPosition(newFocusedCellPosition);
-      this._columnsController.endUpdate();
+      this.changeGroupColumnIndex(-1, column, newFocusedColumn);
     }
   }
 

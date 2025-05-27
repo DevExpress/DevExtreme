@@ -1,6 +1,7 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils';
 import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
+import type { Column } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import { KEY_CODES } from '@ts/grids/grid_core/keyboard_navigation/const';
 import type { HeadersKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
 import { headersKeyboardNavigationModule } from '@ts/grids/grid_core/keyboard_navigation/m_headers_keyboard_navigation';
@@ -15,7 +16,7 @@ const headersKeyboardNavigation = (
   private getNewFocusedColumnBeforeGrouping(
     column,
     rowIndex: number,
-  ): any {
+  ): Column | undefined {
     if (column.showWhenGrouped) {
       return column;
     }
@@ -32,11 +33,9 @@ const headersKeyboardNavigation = (
 
     const visibleColumnIndex = focusableColumns.findIndex((col) => col.index === column.index);
 
-    if (visibleColumnIndex === focusableColumns.length - 1) {
-      return focusableColumns[visibleColumnIndex - 1];
-    }
-
-    return focusableColumns[visibleColumnIndex + 1];
+    return visibleColumnIndex === focusableColumns.length - 1
+      ? focusableColumns[visibleColumnIndex - 1]
+      : focusableColumns[visibleColumnIndex + 1];
   }
 
   private groupColumnByPressingKey(e): void {
@@ -88,13 +87,7 @@ const headersKeyboardNavigation = (
         rowIndex,
       );
 
-      this._columnsController.beginUpdate();
-      this._columnsController.columnOption(column.dataField, 'groupIndex', newGroupIndex);
-
-      const newFocusedCellPosition = this.getFocusedCellPositionByColumn(newFocusedColumn);
-
-      this.updateViewFocusPosition(newFocusedCellPosition);
-      this._columnsController.endUpdate();
+      this.changeGroupColumnIndex(newGroupIndex, column, newFocusedColumn);
     }
   }
 

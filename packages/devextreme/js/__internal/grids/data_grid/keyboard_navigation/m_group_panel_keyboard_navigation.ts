@@ -5,6 +5,7 @@ import {
 } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import { hiddenFocus } from '@js/ui/shared/accessibility';
+import type { Column } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import { Direction } from '@ts/grids/grid_core/keyboard_navigation/const';
 import { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
 import type { Views } from '@ts/grids/grid_core/m_types';
@@ -70,9 +71,9 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
       .columnOption(`groupIndex:${$groupedColumnElement.index()}`);
   }
 
-  protected getNewFocusedColumnBeforeUngrouping(column): any {
+  protected getNewFocusedColumnBeforeUngrouping(column): Column | undefined {
     const visibleColumnIndex: number = column.groupIndex;
-    const groupColumns = this._columnsController.getGroupColumns();
+    const groupColumns: Column[] = this._columnsController.getGroupColumns();
 
     return visibleColumnIndex === groupColumns.length - 1
       ? groupColumns[visibleColumnIndex - 1]
