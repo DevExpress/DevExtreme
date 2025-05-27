@@ -441,8 +441,8 @@ $cardview-material-columnchooser--empty__message-color: null !default;
   $cardview-material-header-panel__item--hovered__sort-index-text-color: $cardview-material-header-panel__item__sort-index-text-color !default;
 
   // Header panel item - disabled
-  $cardview-material-header-panel__item--disabled-bg-color: $cardview-material-common-bg-color !default;
-  $cardview-material-header-panel__item--disabled-border-color: $cardview-material-header-panel__item-border-color !default;
+  $cardview-material-header-panel__item--disabled-bg-color: $cardview-material-header-panel__item-bg-color !default;
+  $cardview-material-header-panel__item--disabled-border-color: $cardview-material-header-panel__item--disabled-bg-color !default;
   $cardview-material-header-panel__item--disabled-text-color: color.change($cardview-material-header-panel__item-text-color, $alpha: 0.38) !default;
   $cardview-material-header-panel__item--disabled__icon-color: color.change($cardview-material-header-panel__item__icon-color, $alpha: 0.38) !default;
   $cardview-material-header-panel__item--disabled__header-filter-icon--selected-color: color.change($cardview-material-header-panel__item__header-filter-icon--selected-color, $alpha: 0.38) !default;
@@ -450,7 +450,7 @@ $cardview-material-columnchooser--empty__message-color: null !default;
 
   // Header panel item - dragged
   $cardview-material-header-panel__item--dragged-bg-color: $cardview-material-header-panel__item-bg-color !default;
-  $cardview-material-header-panel__item--dragged-border-color: $cardview-material-header-panel__item-border-color !default;
+  $cardview-material-header-panel__item--dragged-border-color: $cardview-material-header-panel__item--dragged-bg-color !default;
   $cardview-material-header-panel__item--dragged-text-color: $cardview-material-header-panel__item-text-color !default;
   $cardview-material-header-panel__item--dragged__allowance-icon-color: $cardview-material-common-text-color !default;
   $cardview-material-header-panel__item--dragged__prohibition-icon-color: darken(saturate(adjust-hue($base-danger, -4), 22.8), 9.61) !default;
@@ -525,8 +525,8 @@ $cardview-material-columnchooser--empty__message-color: null !default;
   $cardview-material-header-panel__item--hovered__sort-index-text-color: $cardview-material-header-panel__item__sort-index-text-color !default;
 
   // Header panel item - disabled
-  $cardview-material-header-panel__item--disabled-bg-color: darken($cardview-material-common-bg-color, 8.24) !default;
-  $cardview-material-header-panel__item--disabled-border-color: $cardview-material-header-panel__item-border-color !default;
+  $cardview-material-header-panel__item--disabled-bg-color: $cardview-material-header-panel__item-bg-color !default;
+  $cardview-material-header-panel__item--disabled-border-color: $cardview-material-header-panel__item--disabled-bg-color !default;
   $cardview-material-header-panel__item--disabled-text-color: color.change($cardview-material-header-panel__item-text-color, $alpha: 0.38) !default;
   $cardview-material-header-panel__item--disabled__icon-color: color.change($cardview-material-header-panel__item__icon-color, $alpha: 0.38) !default;
   $cardview-material-header-panel__item--disabled__header-filter-icon--selected-color: color.change($cardview-material-header-panel__item__header-filter-icon--selected-color, $alpha: 0.38) !default;
@@ -534,7 +534,7 @@ $cardview-material-columnchooser--empty__message-color: null !default;
 
   // Header panel item - dragged
   $cardview-material-header-panel__item--dragged-bg-color: $cardview-material-header-panel__item-bg-color !default;
-  $cardview-material-header-panel__item--dragged-border-color: $cardview-material-header-panel__item-border-color !default;
+  $cardview-material-header-panel__item--dragged-border-color: $cardview-material-header-panel__item--dragged-bg-color !default;
   $cardview-material-header-panel__item--dragged-text-color: $cardview-material-header-panel__item-text-color !default;
   $cardview-material-header-panel__item--dragged__allowance-icon-color: $cardview-material-common-text-color !default;
   $cardview-material-header-panel__item--dragged__prohibition-icon-color: darken(desaturate($base-danger, 0.27), 7.45) !default;
