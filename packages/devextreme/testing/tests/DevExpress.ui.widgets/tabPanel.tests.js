@@ -11,7 +11,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import translator from 'common/core/animation/translator';
-import { shouldSkipOnMobile, shouldSkipOnDevices } from '../../helpers/device.js';
+import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 
 QUnit.testStart(() => {
@@ -1054,16 +1054,6 @@ QUnit.module('focus policy', {
         assert.strictEqual($tabs.filter(`.${FOCUS_STATE_CLASS}`).length, 1, 'only one tab is focused');
         assert.strictEqual($firstTab.hasClass(FOCUS_STATE_CLASS), true, 'first tab is focused');
         assert.strictEqual($(tabsInstance.option('focusedElement')).get(0), $firstTab.get(0), 'focusedElement is correct');
-    });
-
-    QUnit.test('focused element should be null if there is no items on initialization', function(assert) {
-        const $tabPanel = $('#tabPanel').dxTabPanel({ });
-
-        const $tabs = $tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`);
-        assert.strictEqual($tabs.length, 0, 'no tabs were created');
-
-        const tabsInstance = $tabPanel.find(`.${TABS_CLASS}`).dxTabs('instance');
-        assert.strictEqual(tabsInstance.option('focusedElement'), null, 'focusedElement is null');
     });
 });
 
