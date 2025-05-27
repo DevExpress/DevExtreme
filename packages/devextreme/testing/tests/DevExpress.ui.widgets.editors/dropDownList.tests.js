@@ -991,7 +991,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         });
     });
 
-    QUnit.test('_getPlainItems should return correct items when they have nested items field and grouped is disabled (T1292151)', function(assert) {
+    QUnit.test('_getPlainItems should return correct items when they have nested items field and grouping is disabled (T1292151)', function(assert) {
         const nestedItems = [{ id: 1, text: 'unexpected text' }];
         const items = [{ id: 1, text: 'item 1', items: nestedItems }];
 
@@ -1002,7 +1002,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         }).dxDropDownList('instance');
 
         const plainItems = dropDownList._getPlainItems();
-        debugger;
+
         assert.deepEqual(plainItems, items, 'items are correct');
     });
 });

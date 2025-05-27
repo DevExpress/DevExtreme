@@ -2108,7 +2108,7 @@ QUnit.module('options', {
         assert.strictEqual($field.attr('custom'), undefined, 'custom attribute is set correctly');
     });
 
-    QUnit.test('Displayed text should be correct when items have nested items field and group is disabled (T1292151)', function(assert) {
+    QUnit.test('Displayed text should be correct when items have nested items field and grouping is disabled (T1292151)', function(assert) {
         const $lookup = $('#lookup').dxLookup({
             items: [
                 { id: 1, text: 'item 1', items: [{ id: 1, text: 'unexpected text' }] },
