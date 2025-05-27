@@ -32,6 +32,7 @@ import './ganttParts/undo.tests.js';
 import './ganttParts/treeListExpanding.tests.js';
 import './ganttParts/scrolling.tests.js';
 import './ganttParts/selection.tests.js';
+import './ganttParts/milestone.tests.js';
 
 QUnit.testStart(() => {
     const markup = '<div id="gantt"></div>';
