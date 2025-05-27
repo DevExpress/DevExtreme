@@ -61,6 +61,7 @@ const FILTER_RANGE_OVERLAY_CLASS = 'filter-range-overlay';
 const FILTER_RANGE_START_CLASS = 'filter-range-start';
 const FILTER_RANGE_END_CLASS = 'filter-range-end';
 const MENU_CLASS = 'dx-menu';
+const MENU_ITEM_TEXT = 'dx-menu-item-text';
 const EDITOR_WITH_MENU_CLASS = 'dx-editor-with-menu';
 const EDITOR_CONTAINER_CLASS = 'dx-editor-container';
 const EDITOR_CELL_CLASS = 'dx-editor-cell';
@@ -75,6 +76,8 @@ const FILTER_MODIFIED_CLASS = 'dx-filter-modified';
 const EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
 
 const BETWEEN_OPERATION_DATA_TYPES = ['date', 'datetime', 'number'];
+
+const ARIA_SEARCH_BOX = messageLocalization.format('dxDataGrid-ariaSearchBox');
 
 function isOnClickApplyFilterMode(that) {
   return that.option('filterRow.applyFilter') === 'onClick';
@@ -592,6 +595,12 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         selectable: false,
         items: that._getFilterOperationMenuItems(column),
       }],
+      onItemRendered: ({ itemElement }) => {
+        const element = $(itemElement);
+        const labelElement = element.find(`.${MENU_ITEM_TEXT}`);
+        const label = labelElement.length ? labelElement.text() : ARIA_SEARCH_BOX;
+        this.setAria('label', label, $(itemElement));
+      },
       onItemClick(properties) {
         // @ts-expect-error
         const selectedFilterOperation = properties.itemData.name;
