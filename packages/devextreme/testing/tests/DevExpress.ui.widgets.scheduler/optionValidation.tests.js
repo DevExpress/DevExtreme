@@ -220,13 +220,17 @@ module('Initialization', () => {
             test(`Should log option validation errors (options: ${JSON.stringify(options)}, errors: ${JSON.stringify(expectedErrors)}).`, async function(assert) {
                 const [stub, consoleErrors] = setupConsoleSpy();
 
-                if(expectedErrors.length) {
-                    const promise = waitGlobalFailure();
+                try {
+                    if(expectedErrors.length) {
+                        const promise = waitGlobalFailure();
 
-                    await createScheduler(options);
-                    consoleErrors.push(await promise);
-                } else {
-                    await createScheduler(options);
+                        await createScheduler(options);
+                        consoleErrors.push(await promise);
+                    } else {
+                        await createScheduler(options);
+                    }
+                } catch(error) {
+                    consoleErrors.push(error.message);
                 }
 
                 assertConsoleErrors(assert, consoleErrors, expectedErrors);
@@ -295,22 +299,26 @@ module('Runtime', () => {
         const [stub, consoleErrors] = setupConsoleSpy();
         const promise = waitGlobalFailure();
 
-        await createScheduler({
-            views: [
-                'week',
-                {
-                    name: 'myView',
-                    type: 'week',
-                    offset: 1,
-                },
-            ],
-            currentView: 'myView',
-            startDayHour: 9,
-            endDayHour: 10,
-            cellDuration: 30,
-            offset: 120,
-        });
-        consoleErrors.push(await promise);
+        try {
+            await createScheduler({
+                views: [
+                    'week',
+                    {
+                        name: 'myView',
+                        type: 'week',
+                        offset: 1,
+                    },
+                ],
+                currentView: 'myView',
+                startDayHour: 9,
+                endDayHour: 10,
+                cellDuration: 30,
+                offset: 120,
+            });
+            consoleErrors.push(await promise);
+        } catch(error) {
+            consoleErrors.push(error.message);
+        }
 
         assertConsoleErrors(assert, consoleErrors, expectedErrors);
         stub.restore();

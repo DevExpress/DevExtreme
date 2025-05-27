@@ -5,15 +5,25 @@ import { DataAccessor } from './data_accessor';
 import type { DataAccessorGetter, DataAccessorSetter } from './types';
 
 export class ResourceDataAccessor extends DataAccessor<RawResourceData, ResourceData> {
+  public idExpr: string | Function;
+
+  public textExpr: string | Function;
+
+  public colorExpr: string;
+
   constructor(
     config: ResourceConfig,
-    public idExpr = config.valueExpr ?? 'id',
-    public textExpr = config.displayExpr ?? 'text',
-    public colorExpr = config.colorExpr ?? 'color',
   ) {
     super();
 
-    this.updateExpressions({ idExpr, textExpr, colorExpr });
+    this.idExpr = config.valueExpr ?? 'id';
+    this.textExpr = config.displayExpr ?? 'text';
+    this.colorExpr = config.colorExpr ?? 'color';
+    this.updateExpressions({
+      idExpr: this.idExpr,
+      textExpr: this.textExpr,
+      colorExpr: this.colorExpr,
+    });
   }
 
   public updateExpression(field: string, expr: string | undefined): void {

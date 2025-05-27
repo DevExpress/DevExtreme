@@ -29,13 +29,16 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
   }
 
   groupAppointmentByResources(appointments) {
+    const resourceManager = this.options.getResourceManager();
     const grouped = groupAppointmentsByGroupLeafs(
-      this.resourceManager.resourceById,
-      this.resourceManager.groupsLeafs,
+      resourceManager.resourceById,
+      resourceManager.groupsLeafs,
       appointments,
     );
 
     // TODO(9): Get rid of it as soon as you can. Unnecessary copy of appointments
+    // NOTE: one appointment in different groups has the same link,
+    //       and on render it will be removed by link
     return grouped.map((group) => group.map((item) => ({ ...item })));
   }
 

@@ -143,15 +143,22 @@ QUnit.module('Initialization', {
     ].forEach(dayHours => {
         QUnit.test(`Generate error if startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, async function(assert) {
             const promise = waitGlobalFailure();
-            await createWrapper({
-                currentDate: new Date(2015, 4, 24),
-                views: ['day'],
-                currentView: 'day',
-                startDayHour: dayHours.startDayHour,
-                endDayHour: dayHours.endDayHour
-            });
-            const error = await promise;
-            assert.ok(error.message.startsWith('E1062'), 'E1062 Error message');
+            const consoleErrors = [];
+
+            try {
+                await createWrapper({
+                    currentDate: new Date(2015, 4, 24),
+                    views: ['day'],
+                    currentView: 'day',
+                    startDayHour: dayHours.startDayHour,
+                    endDayHour: dayHours.endDayHour
+                });
+                consoleErrors.push(await promise);
+            } catch(error) {
+                consoleErrors.push(error.message);
+            }
+
+            assert.ok(consoleErrors[0].startsWith('E1062'), 'E1062 Error message');
         });
     });
 

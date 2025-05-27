@@ -171,11 +171,6 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         });
     };
 
-    const getAppointmentColor = ($task, checkedProperty) => {
-        checkedProperty = checkedProperty || 'backgroundColor';
-        return new Color($task.css(checkedProperty)).toHex();
-    };
-
     const checkItemDataInDropDownTemplate = async(assert, dataSource, currentDate) => {
         const scheduler = await createInstance({
             dataSource: dataSource,

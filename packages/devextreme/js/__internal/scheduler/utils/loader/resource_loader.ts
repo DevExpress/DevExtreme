@@ -12,23 +12,31 @@ import type {
 } from './types';
 
 export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
-  idsGetter: ResourceIdAccessor['idsGetter'];
+  public idsGetter: ResourceIdAccessor['idsGetter'];
 
-  idsSetter: ResourceIdAccessor['idsSetter'];
+  public idsSetter: ResourceIdAccessor['idsSetter'];
 
-  constructor(
-    config: ResourceConfig,
-    public dataAccessor = new ResourceDataAccessor(config),
-    public allowMultiple = Boolean(config.allowMultiple),
-    public useColorAsDefault = Boolean(config.useColorAsDefault),
-    public resourceIndex = String(getResourceIndex(config)),
-    public resourceName = config.label,
-  ) {
+  public dataAccessor: ResourceDataAccessor;
+
+  public allowMultiple: boolean;
+
+  public useColorAsDefault: boolean;
+
+  public resourceIndex: string;
+
+  public resourceName?: string;
+
+  constructor(config: ResourceConfig) {
     super(config, { pageSize: 0 });
     const accessor = getAppointmentResourceAccessor(config);
 
     this.idsGetter = accessor.idsGetter;
     this.idsSetter = accessor.idsSetter;
+    this.dataAccessor = new ResourceDataAccessor(config);
+    this.allowMultiple = Boolean(config.allowMultiple);
+    this.useColorAsDefault = Boolean(config.useColorAsDefault);
+    this.resourceIndex = String(getResourceIndex(config));
+    this.resourceName = config.label;
     this.onInit();
   }
 
@@ -38,6 +46,10 @@ export class ResourceLoader extends Loader<RawResourceData, ResourceData> {
       text: this.dataAccessor.get('text', item),
       color: this.dataAccessor.get('color', item),
     }));
+  }
+
+  protected applyChanges(items: RawResourceData[]): void {
+    super.applyChanges(items);
   }
 
   protected onLoadError(): void {}

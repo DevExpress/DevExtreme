@@ -1,4 +1,5 @@
 import query from '@js/common/data/query';
+import { equalByValue } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
@@ -9,7 +10,6 @@ import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 import type { ResourceLoader } from '@ts/scheduler/utils/loader/resource_loader';
 import { getAppointmentGroupValues } from '@ts/scheduler/utils/resource_manager/appointment_groups_utils';
-import type { ResourceManager } from '@ts/scheduler/utils/resource_manager/resource_manager';
 import type ViewDataProvider from '@ts/scheduler/workspaces/view_model/m_view_data_provider';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
@@ -37,8 +37,6 @@ export class AppointmentFilterBaseStrategy {
     this.options = options;
     this.dataAccessors = this.options.dataAccessors;
   }
-
-  get resourceManager(): ResourceManager { return this.options.getResourceManager(); }
 
   get timeZoneCalculator() { return this.options.timeZoneCalculator; }
 
@@ -233,7 +231,12 @@ export class AppointmentFilterBaseStrategy {
 
     return groupsResources.every((resource) => {
       const value = appointmentGroupValues[resource.resourceIndex];
-      return resource.items.some((item) => value?.includes(item.id));
+
+      return value?.some(
+        (id) => resource.items.some(
+          (item) => equalByValue(id, item.id),
+        ),
+      );
     });
   }
 

@@ -12,8 +12,10 @@ export class AgendaAppointment extends Appointment {
   }
 
   _renderResourceList(): void {
+    const resourceManager = this.option('getResourceManager')();
+
     // eslint-disable-next-line no-void
-    void this.resourceManager
+    void resourceManager
       .getAppointmentResourcesValues(this.rawAppointment)
       .then((list) => {
         const parent = this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.APPOINTMENT_CONTENT_DETAILS}`);

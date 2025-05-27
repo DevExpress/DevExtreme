@@ -10,7 +10,7 @@ import {
     createWrapper,
     initTestMarkup
 } from '../../helpers/scheduler/helpers.js';
-import { waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import 'generic_light.css!';
 import '__internal/scheduler/m_scheduler';
@@ -62,6 +62,7 @@ module('All day appointments common', config, () => {
                     currentDate: new Date(2015, 2, 4),
                     currentView: 'day',
                     maxAppointmentsPerCell: 'unlimited',
+                    showCurrentTimeIndicator: false,
                     dataSource: new DataSource({
                         store: new CustomStore({
                             load: function(options) {
@@ -73,7 +74,7 @@ module('All day appointments common', config, () => {
                                         startDate: new Date(2015, 2, 5),
                                         endDate: new Date(2015, 2, 5, 0, 30)
                                     }]);
-                                }, 300);
+                                }, 100);
 
                                 return d.promise();
                             }
@@ -81,9 +82,12 @@ module('All day appointments common', config, () => {
                     })
                 });
 
-                await waitForAsync(() => scheduler.appointments.getAppointments().length === 1);
+                const clock = sinon.useFakeTimers();
+                await waitAsync(100, clock);
                 scheduler.instance.option('currentView', 'week');
-                await waitForAsync(() => scheduler.appointments.getAppointments().length === 1);
+                await waitAsync(100, clock);
+                await waitForAsync(() => scheduler.appointments.getAppointments().length === 1, clock);
+                clock.restore();
 
                 const allDayPanelHeight = $(scheduler.instance.$element()).find('.dx-scheduler-all-day-table-cell').eq(0).get(0).getBoundingClientRect().height;
                 const $appointment = $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(0);
@@ -112,7 +116,7 @@ module('All day appointments common', config, () => {
                                         startDate: new Date(2015, 2, 5),
                                         endDate: new Date(2015, 2, 5, 0, 30)
                                     }]);
-                                }, 300);
+                                }, 100);
 
                                 return d.promise();
                             }
@@ -122,7 +126,7 @@ module('All day appointments common', config, () => {
 
                 await waitForAsync(() => scheduler.appointments.getAppointments().length === 1);
                 scheduler.instance.option('currentDate', new Date(2015, 2, 5));
-                await waitForAsync(() => scheduler.appointments.getAppointments().length === 1);
+                await waitAsync(110);
 
                 const allDayPanelHeight = $(scheduler.instance.$element()).find('.dx-scheduler-all-day-table-cell').eq(0).get(0).getBoundingClientRect().height;
                 const $appointment = $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(0);
@@ -314,7 +318,9 @@ module('All day appointments common', config, () => {
                     { text: '9', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
                     { text: '10', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true }
                 ]);
-                await waitForAsync(() => scheduler.appointments.getAppointments().length === 10);
+                const clock = sinon.useFakeTimers();
+                await waitForAsync(() => scheduler.appointments.getAppointments().length === 10, clock);
+                clock.restore();
 
                 const $dropDown = $(scheduler.instance.$element()).find('.dx-scheduler-appointment-collector').eq(0);
 

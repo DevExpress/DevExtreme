@@ -116,9 +116,11 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
   }
 
   _getPrerenderFilterResources(groupIndex) {
+    const resourceManager = this.options.getResourceManager();
+
     return getResourcesByGroupIndex(
-      this.resourceManager.groupsLeafs,
-      this.resourceManager.resourceById,
+      resourceManager.groupsLeafs,
+      resourceManager.resourceById,
       groupIndex,
     );
   }

@@ -1,4 +1,4 @@
-import { ClientFunction, RequestLogger } from 'testcafe';
+import { RequestLogger } from 'testcafe';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
@@ -8,9 +8,6 @@ fixture.disablePageReloads`Scheduler API - request counting`
   .page(url(__dirname, '../../../container.html'));
 
 const requestLogger = RequestLogger(/\/api\/data/);
-const updateOption = ClientFunction((name, value) => {
-  ($('#container') as any).dxScheduler('instance').option(name, value);
-});
 
 test('Request should be requested only once for color appointments (week)', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -107,7 +104,7 @@ test('Request should be requested only once for grouping', async (t) => {
   const initialRequestCount = await requestLogger.count(() => true);
 
   await t.expect(scheduler.workSpace.exists).ok();
-  await updateOption('groups', ['ownerId', 'roomId']);
+  await scheduler.option('groups', ['ownerId', 'roomId']);
   const afterUpdateRequestCount = await requestLogger.count(() => true);
 
   await t.expect(initialRequestCount).eql(1);

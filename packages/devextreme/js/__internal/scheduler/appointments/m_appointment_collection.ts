@@ -616,7 +616,6 @@ class SchedulerAppointments extends CollectionWidget {
 
         dataAccessors: this.dataAccessors,
         timeZoneCalculator: this.option('timeZoneCalculator'),
-        getAppointmentColor: this.option('getAppointmentColor'),
         getResizableStep: this.option('getResizableStep'),
         getResourceManager: this.option('getResourceManager'),
       };

@@ -74,7 +74,6 @@ import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_
 import type { IFieldExpr } from './utils/index';
 import { macroTaskArray } from './utils/index';
 import { isAgendaWorkspaceComponent } from './utils/is_agenda_workpace_component';
-import { promiseToDeferred } from './utils/promise_to_deferred';
 import { setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
 import { getLeafGroupValues } from './utils/resource_manager/group_utils';
 import { createResourceEditorModel } from './utils/resource_manager/popup_utils';
@@ -501,7 +500,7 @@ class Scheduler extends Widget<any> {
     const whenLoaded = this.postponedOperations.add('loadResources', () => {
       const groups = this._getCurrentViewOption('groups');
 
-      return promiseToDeferred(this.resourceManager.loadGroupResources(groups, forceReload));
+      return fromPromise(this.resourceManager.loadGroupResources(groups, forceReload));
     });
 
     // @ts-expect-error
@@ -1327,6 +1326,14 @@ class Scheduler extends Widget<any> {
     this.setAria({ role: 'group' });
   }
 
+  _initMarkupOnResourceLoaded(groupsResources) {
+    if (!(this as any)._disposed) {
+      this.option('loadedResources', groupsResources);
+      this._initMarkupCore(groupsResources);
+      this._reloadDataSource();
+    }
+  }
+
   _initMarkup() {
     // @ts-expect-error
     super._initMarkup();
@@ -1354,14 +1361,13 @@ class Scheduler extends Widget<any> {
       this._fireContentReadyAction();
     } else {
       const groups = this._getCurrentViewOption('groups');
-      this.resourceManager.loadGroupResources(groups, true)
-        .then((groupsResources) => {
-          if (!(this as any)._disposed) {
-            this.option('loadedResources', groupsResources);
-            this._initMarkupCore(groupsResources);
-            this._reloadDataSource();
-          }
-        });
+
+      if (groups?.length) {
+        this.resourceManager.loadGroupResources(groups, true)
+          .then((groupsResources) => this._initMarkupOnResourceLoaded(groupsResources));
+      } else {
+        this._initMarkupOnResourceLoaded([]);
+      }
     }
   }
 
@@ -1524,9 +1530,6 @@ class Scheduler extends Widget<any> {
   }
 
   _render() {
-    // NOTE: remove small class applying after adaptivity implementation
-    this._toggleSmallClass();
-
     this._toggleAdaptiveClass();
 
     this.getWorkSpace()?.updateHeaderEmptyCellWidth();
@@ -1634,7 +1637,14 @@ class Scheduler extends Widget<any> {
   }
 
   _renderWorkSpace(groupsResources) {
-    this._readyToRenderAppointments && this._toggleSmallClass();
+    if (this._readyToRenderAppointments) {
+      this._toggleSmallClass();
+      // TODO(9): Get rid of it as soon as you can. Workspace didn't render
+      Promise.resolve().then(() => {
+        this._toggleSmallClass();
+        this._workSpace?.updateHeaderEmptyCellWidth();
+      });
+    }
     const $workSpace = $('<div>').appendTo(this._mainContainer);
 
     const countConfig = this._getViewCountConfig();
@@ -2405,7 +2415,7 @@ class Scheduler extends Widget<any> {
   }
 
   createGetAppointmentColor() {
-    return (appointmentConfig) => promiseToDeferred(
+    return (appointmentConfig) => fromPromise(
       this.resourceManager.getAppointmentColor(appointmentConfig),
     );
   }

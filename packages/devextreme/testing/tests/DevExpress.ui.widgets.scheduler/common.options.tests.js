@@ -6,11 +6,10 @@ import { DataSource } from 'common/data/data_source/data_source';
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import dxSchedulerWorkSpaceDay from '__internal/scheduler/workspaces/m_work_space_day';
-import errors from 'ui/widget/ui.errors';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
-import { waitAsync, waitForAsync, waitGlobalFailure } from '../../helpers/scheduler/waitForAsync.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -887,8 +886,7 @@ QUnit.module('Options', () => {
             assert.ok(consoleError.startsWith('E1062'), 'E1062 Error message');
         });
 
-        // TODO(9): Fix it as soon as you can. Track global failure here
-        QUnit.test.skip(`Generate error if workSpace option changed to startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, async function(assert) {
+        QUnit.test(`Generate error if workSpace option changed to startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, async function(assert) {
             const scheduler = await createWrapper({
                 currentDate: new Date(2015, 4, 24),
                 views: [{
@@ -981,10 +979,10 @@ QUnit.module('Options', () => {
             'views[2].intervalCount': 2,
             'views[2].startDate': new Date(),
         });
-        await waitForAsync(() => count === 3);
+        await waitForAsync(() => count === 2);
 
-        assert.ok(initMarkupSpy.calledTwice, 'Init markup was called on each dataSource changes');
-        assert.equal(reloadDataSourceSpy.callCount, 3, '_reloadDataSource was called on each changes');
+        assert.equal(initMarkupSpy.callCount, 2, 'Init markup was called on each dataSource changes');
+        assert.equal(reloadDataSourceSpy.callCount, 2, '_reloadDataSource was called on each changes');
     });
 
     QUnit.test('It should be possible to change views option when view names are specified (T995794)', async function(assert) {

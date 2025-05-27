@@ -8,20 +8,29 @@ interface BaseConfig<T> {
   dataSource?: DataSourceLike<T, unknown> | null;
 }
 
+// TODO(9): implement appointmentLoader extends Loader for the mane dataSource of the scheduler
 export abstract class Loader<T, Data, Config extends BaseConfig<T> = BaseConfig<T>> {
-  constructor(
+  public readonly dataSource: DataSource<T, unknown> | undefined;
+
+  public items: Data[] = [];
+
+  public data: T[] = []; // TODO(9): probably we dont need it. Used in getGroupPanelData
+
+  protected readonly isSharedDataSource: boolean;
+
+  protected loadingStatePromise?: Promise<T[]>;
+
+  protected unsubscribe = noop;
+
+  protected constructor(
     config: Config,
     dataSourceOptions: object,
-    public readonly dataSource = normalizeDataSource<T>(
+  ) {
+    this.dataSource = normalizeDataSource<T>(
       config.dataSource,
       dataSourceOptions,
-    ),
-    public items: Data[] = [],
-    public data: T[] = [], // TODO(9): probably we dont need it. Used in getGroupPanelData
-    protected readonly isSharedDataSource = config.dataSource instanceof DataSource,
-    protected loadingStatePromise?: Promise<T[]>,
-    protected unsubscribe = noop,
-  ) {
+    );
+    this.isSharedDataSource = config.dataSource instanceof DataSource;
     this.addDataSourceHandlers();
   }
 

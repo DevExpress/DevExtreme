@@ -1,10 +1,13 @@
-export const waitAsync = (timeout = 0) => new Promise((resolve) => setTimeout(resolve, timeout));
+export const waitAsync = (timeout = 0, clock = undefined) =>
+    clock
+        ? clock.tickAsync(timeout)
+        : new Promise((resolve) => setTimeout(resolve, timeout));
 
-export const waitForAsync = (condition, timeout = 500, step = 10) => {
+export const waitForAsync = (condition, clock = undefined, timeout = 500, step = 10) => {
     const startTime = Date.now();
     const loop = () => {
         if(!condition() && Date.now() - startTime < timeout) {
-            return waitAsync(step).then(loop);
+            return waitAsync(step, clock).then(loop);
         }
     };
 

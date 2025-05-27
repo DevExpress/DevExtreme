@@ -61,20 +61,20 @@ export const getAppointmentColor = async (
     groups,
   );
 
-  if (paintedResource) {
-    await paintedResource.load();
-
-    /*
-     Order:
-     1. resource value of group with groupIndex
-     2. resource value of the last value in appointment
-     */
-    const leafGroupValue = getLeafGroupValues(groupsLeafs, groupIndex);
-    const resourceValues = paintedResource.idsGetter(itemData);
-    const resourceId = leafGroupValue[paintedResource.resourceIndex] ?? resourceValues[0];
-
-    return getResourceColor(paintedResource, resourceId);
+  if (!paintedResource) {
+    return undefined;
   }
 
-  return undefined;
+  await paintedResource.load();
+
+  /*
+   Order:
+   1. resource value of group with groupIndex
+   2. resource value of the last value in appointment
+   */
+  const leafGroupValue = getLeafGroupValues(groupsLeafs, groupIndex);
+  const resourceValues = paintedResource.idsGetter(itemData);
+  const resourceId = leafGroupValue[paintedResource.resourceIndex] ?? resourceValues[0];
+
+  return getResourceColor(paintedResource, resourceId);
 };

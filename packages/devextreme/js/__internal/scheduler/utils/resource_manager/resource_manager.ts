@@ -15,14 +15,17 @@ import { groupResources } from './group_utils';
 import type { GroupLeaf, GroupNode } from './types';
 
 export class ResourceManager {
-  constructor(
-    config: ResourceConfig[],
-    public resources: ResourceLoader[] = [],
-    public resourceById: Record<string, ResourceLoader> = {},
-    public groups: string[] = [],
-    public groupsLeafs: GroupLeaf[] = [],
-    public groupsTree: GroupNode[] = [],
-  ) {
+  public resources: ResourceLoader[] = [];
+
+  public resourceById: Record<string, ResourceLoader> = {};
+
+  public groups: string[] = [];
+
+  public groupsLeafs: GroupLeaf[] = [];
+
+  public groupsTree: GroupNode[] = [];
+
+  constructor(config: ResourceConfig[]) {
     config?.filter(getResourceIndex)
       .forEach((item) => {
         const loader = new ResourceLoader(item);

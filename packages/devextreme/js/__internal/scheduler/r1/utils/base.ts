@@ -1,5 +1,4 @@
 import dateLocalization from '@js/common/core/localization/date';
-import { equalByValue } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { isDefined, isObject } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
@@ -13,7 +12,6 @@ import type {
   AllDayPanelModeType,
   AppointmentGeometry,
   CalculateCellIndex,
-  FilterItemType,
   GetDateForHeaderText,
   GetDateForHeaderTextOptions,
   GroupOrientation,
@@ -90,13 +88,6 @@ export const getAppointmentKey = (geometry: AppointmentGeometry): string => {
 
   return `${left}-${top}-${width}-${height}`;
 };
-
-export const hasResourceValue = (
-  resourceValues: FilterItemType[],
-  itemValue: FilterItemType,
-): boolean => isDefined(resourceValues.find(
-  (value) => equalByValue(value, itemValue),
-));
 
 export const getOverflowIndicatorColor = (color: string, colors: string[]): string | undefined => (
   !colors.length || colors.filter((item) => item !== color).length === 0
@@ -465,12 +456,12 @@ export const getGroupPanelData = (
         resourceName, resourceIndex, items, data,
       } = group;
 
-      for (let iterator = 0; iterator < repeatCount; iterator += 1) {
+      for (let i = 0; i < repeatCount; i += 1) {
         result.push(...items.map(({ id, text, color }, index) => ({
           id,
           text,
           color,
-          key: `${iterator}_${resourceIndex}_${stringifyId(id)}`,
+          key: `${i}_${resourceIndex}_${stringifyId(id)}`,
           resourceName,
           data: data?.[index],
         }) as GroupRenderItem));

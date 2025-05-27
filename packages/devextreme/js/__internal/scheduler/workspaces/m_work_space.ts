@@ -192,10 +192,11 @@ const DEFAULT_WORKSPACE_RENDER_OPTIONS: RenderRWorkspaceOptions = {
   generateNewData: true,
 };
 
-class SchedulerWorkSpace extends WidgetObserver<Omit<dxSchedulerOptions, 'groups'> & {
+type WorkspaceOptionsInternal = Omit<dxSchedulerOptions, 'groups'> & {
   groups: ResourceLoader[];
   getResourceManager: () => ResourceManager;
-}> {
+};
+class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
   _viewDataProvider: any;
 
   _cache: any;

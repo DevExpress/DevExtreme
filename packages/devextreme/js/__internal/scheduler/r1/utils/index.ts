@@ -67,7 +67,6 @@ export {
   getVerticalGroupCountClass,
   getViewStartByOptions,
   getWeekendsCount,
-  hasResourceValue,
   isAppointmentTakesAllDay,
   isDataOnWeekend,
   isDateAndTimeView,

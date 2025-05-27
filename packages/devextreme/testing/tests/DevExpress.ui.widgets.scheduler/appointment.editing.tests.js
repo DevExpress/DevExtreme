@@ -317,7 +317,7 @@ module('Integration: Appointment editing', {
 
                         window.setTimeout(function() {
                             d.resolve();
-                        }, 300);
+                        }, 100);
 
                         e.cancel = d.promise();
                     }
