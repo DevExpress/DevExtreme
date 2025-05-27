@@ -5,11 +5,11 @@ import dxContextMenu from '@js/ui/context_menu';
 
 import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
-import { ContextMenuControllerMock } from './controller.mock';
+import { ContextMenuController } from './controller';
 
 const setup = (options: Options) => {
   const context = getContext(options);
-  const controller = context.get(ContextMenuControllerMock);
+  const controller = context.get(ContextMenuController);
 
   const container = document.createElement('div');
   // eslint-disable-next-line new-cap

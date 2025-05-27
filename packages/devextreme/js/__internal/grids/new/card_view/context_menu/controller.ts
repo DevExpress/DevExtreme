@@ -1,4 +1,5 @@
-import type { Item as ContextMenuItem, ItemClickEvent } from '@js/ui/context_menu';
+import type { SingleMultipleOrNone } from '@js/common';
+import type { Item as ContextMenuItem, ItemClickEvent as ContextMenuItemPressedEvent } from '@js/ui/context_menu';
 
 import { ColumnsController } from '../../grid_core/columns_controller/index';
 import type { CardInfo, Column } from '../../grid_core/columns_controller/types';
@@ -72,44 +73,54 @@ export class ContextMenuController
 
   private getSortingItems(column: Column): ContextMenuItem[] {
     const mode = this.sortingController.mode.value;
-
-    const onItemClick = (e: ItemClickEvent): void => {
-      const sortOrder = e.itemData?.value;
-      switch (mode) {
-        case 'single':
-          this.sortingController.onSingleModeSortCore(column, true, sortOrder);
-          break;
-        case 'multiple':
-          this.sortingController.onMultipleModeSortCore(column, false, sortOrder);
-          break;
-        default:
-          break;
-      }
-    };
-
     const isDisabled = mode === 'none' || !column.allowSorting;
+
     return [
       {
         text: this.options.oneWay('sorting.ascendingText').peek(),
         value: 'asc',
         disabled: isDisabled || column.sortOrder === 'asc',
         icon: 'sortuptext',
-        onItemClick,
+        onItemClick: (event: ContextMenuItemPressedEvent): void => {
+          this.handleSortMenuClick(event, mode, column);
+        },
       },
       {
         text: this.options.oneWay('sorting.descendingText').peek(),
         value: 'desc',
         disabled: isDisabled || column.sortOrder === 'desc',
         icon: 'sortdowntext',
-        onItemClick,
+        onItemClick: (event: ContextMenuItemPressedEvent): void => {
+          this.handleSortMenuClick(event, mode, column);
+        },
       },
       {
         text: this.options.oneWay('sorting.clearText').peek(),
         value: undefined,
         disabled: isDisabled || !column.sortOrder,
         icon: 'none',
-        onItemClick,
+        onItemClick: (event: ContextMenuItemPressedEvent): void => {
+          this.handleSortMenuClick(event, mode, column);
+        },
       },
     ] as ContextMenuItem[];
+  }
+
+  private handleSortMenuClick(
+    e: ContextMenuItemPressedEvent,
+    mode: SingleMultipleOrNone | undefined,
+    column: Column,
+  ): void {
+    const sortOrder = e.itemData?.value;
+    switch (mode) {
+      case 'single':
+        this.sortingController.onSingleModeSortCore(column, true, sortOrder);
+        break;
+      case 'multiple':
+        this.sortingController.onMultipleModeSortCore(column, false, sortOrder);
+        break;
+      default:
+        break;
+    }
   }
 }
