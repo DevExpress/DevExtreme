@@ -1053,11 +1053,7 @@ QUnit.module('focus policy', {
 
         assert.strictEqual($tabs.filter(`.${FOCUS_STATE_CLASS}`).length, 1, 'only one tab is focused');
         assert.strictEqual($firstTab.hasClass(FOCUS_STATE_CLASS), true, 'first tab is focused');
-
-        const actualFocusedElement = tabsInstance.option('focusedElement');
-        const expectedFocusedElement = $firstTab.get(0);
-
-        assert.strictEqual(actualFocusedElement, expectedFocusedElement, 'focusedElement is correct');
+        assert.strictEqual($(tabsInstance.option('focusedElement')).get(0), $firstTab.get(0), 'focusedElement is correct');
     });
 
     QUnit.test('focused element should be null if there is no items on initialization', function(assert) {
