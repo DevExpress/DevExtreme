@@ -718,17 +718,20 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     }
 
     &.dx-header-multi-row {
-      .dx-#{$widget-name}-table {
-        .dx-header-row {
-          .dx-command-select {
-            padding-bottom: math.div($fluent-grid-base-header-height - $fluent-grid-base-checkbox-size, 2);
-          }
+      .dx-#{$widget-name}-content {
+        .dx-#{$widget-name}-table {
+          .dx-row {
+            &.dx-header-row {
+              .dx-command-select {
+                padding-bottom: math.div($fluent-grid-base-header-height - $fluent-grid-base-checkbox-size, 2);
+              }
 
-          > td {
-            padding-top: 12px;
-            padding-bottom: 12px;
-            vertical-align: bottom;
-            border-right: 1px solid $fluent-grid-base-border-color;
+              > td {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                vertical-align: bottom;
+              }
+            }
           }
         }
       }
@@ -751,6 +754,16 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
                 }
               }
             }
+          }
+        }
+      }
+    }
+
+    &.dx-header-multi-row {
+      .dx-row {
+        &.dx-header-row {
+          > td {
+            border-right: 1px solid $fluent-grid-base-border-color;
           }
         }
       }

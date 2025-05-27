@@ -693,17 +693,20 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
     }
 
     &.dx-header-multi-row {
-      .dx-#{$widget-name}-table {
-        .dx-header-row {
-          .dx-command-select {
-            padding-bottom: math.div($material-grid-base-header-height - $material-grid-base-checkbox-size, 2);
-          }
+      .dx-#{$widget-name}-content {
+        .dx-#{$widget-name}-table {
+          .dx-row {
+            &.dx-header-row {
+              .dx-command-select {
+                padding-bottom: math.div($material-grid-base-header-height - $material-grid-base-checkbox-size, 2);
+              }
 
-          > td {
-            padding-top: 12px;
-            padding-bottom: 12px;
-            vertical-align: bottom;
-            border-right: 1px solid $material-grid-base-border-color;
+              > td {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                vertical-align: bottom;
+              }
+            }
           }
         }
       }
@@ -726,6 +729,16 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
                 }
               }
             }
+          }
+        }
+      }
+    }
+
+    &.dx-header-multi-row {
+      .dx-row {
+        &.dx-header-row {
+          > td {
+            border-right: 1px solid $material-grid-base-border-color;
           }
         }
       }
