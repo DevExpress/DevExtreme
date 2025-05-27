@@ -117,8 +117,6 @@ $cardview-material-header-gap: null !default;
 
 $cardview-material-header-panel-vertical-margin: null !default;
 
-$cardview-material-header-panel-gap: null !default;
-
 $cardview-material-header-panel--empty-line-height: null !default;
 
 // #endregion
@@ -299,11 +297,10 @@ $cardview-material-column-chooser__select-all-item-horizontal-padding: null !def
   $cardview-material-card--selected__field-caption-weight: $cardview-material-card__field-caption-weight !default;
 
   // Header
-  $cardview-material-header-gap: 12px !default;
+  $cardview-material-header-gap: 4px !default;
 
   // Header panel
   $cardview-material-header-panel-vertical-margin: 4px !default;
-  $cardview-material-header-panel-gap: 8px !default;
   $cardview-material-header-panel--empty-line-height: 36px !default;
 
   // Header panel item - default
@@ -384,11 +381,10 @@ $cardview-material-column-chooser__select-all-item-horizontal-padding: null !def
   $cardview-material-card--selected__field-caption-weight: $cardview-material-card__field-caption-weight !default;
 
   // Header
-  $cardview-material-header-gap: 12px !default;
+  $cardview-material-header-gap: 4px !default;
 
   // Header panel
   $cardview-material-header-panel-vertical-margin: 4px !default;
-  $cardview-material-header-panel-gap: 8px !default;
   $cardview-material-header-panel--empty-line-height: 32px !default;
 
   // Header panel item - default

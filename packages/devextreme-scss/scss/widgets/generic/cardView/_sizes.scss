@@ -112,8 +112,6 @@ $cardview-generic-header-gap: null !default;
 
 $cardview-generic-header-panel-vertical-margin: null !default;
 
-$cardview-generic-header-panel-gap: null !default;
-
 $cardview-generic-header-panel--empty-line-height: null !default;
 
 // #endregion
@@ -296,7 +294,6 @@ $cardview-generic-column-chooser__select-all-item-horizontal-padding: null !defa
 
   // Header panel
   $cardview-generic-header-panel-vertical-margin: 4px !default;
-  $cardview-generic-header-panel-gap: 8px !default;
   $cardview-generic-header-panel--empty-line-height: 36px !default;
 
   // Header panel item - default
@@ -377,7 +374,6 @@ $cardview-generic-column-chooser__select-all-item-horizontal-padding: null !defa
 
   // Header panel
   $cardview-generic-header-panel-vertical-margin: 0 !default;
-  $cardview-generic-header-panel-gap: 8px !default;
   $cardview-generic-header-panel--empty-line-height: 24px !default;
 
   // Header panel item - default
