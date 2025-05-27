@@ -1,47 +1,47 @@
 import { EventEmitter } from './event_emitter';
-import type {
-  ILogger,
-  IMaybeStateContainer,
-  IState,
-  IStateChange,
-  IStateChangeCallback,
-  IStateContainer,
-  IStateContainerManager,
-  IStateTracker,
-} from './interfaces';
+import type * as StateManagementTypes from './types';
 import { deepCopy } from './utils';
 
-export class StateTracker implements IStateTracker {
-  private controllersToStates: IState = {};
+export class StateTracker implements StateManagementTypes.StateTracker {
+  private controllersToStates: StateManagementTypes.State = {};
 
-  private readonly stateContainerManagers: IStateContainerManager[] = [];
+  private readonly stateContainerManagers: StateManagementTypes.StateContainerManager[] = [];
 
-  private readonly logger: ILogger;
+  private readonly logger: StateManagementTypes.Logger;
 
-  private readonly stateChangedEmitter: EventEmitter<IStateChangeCallback>;
+  private readonly stateChangedEmitter: EventEmitter<
+    StateManagementTypes.StateChangeCallback
+  >;
 
-  constructor(stateContainerManagers: IStateContainerManager[], logger: ILogger) {
+  constructor(
+    stateContainerManagers: StateManagementTypes.StateContainerManager[],
+    logger: StateManagementTypes.Logger,
+  ) {
     this.stateContainerManagers = stateContainerManagers;
     this.logger = logger;
-    this.stateChangedEmitter = new EventEmitter<IStateChangeCallback>(
+    this.stateChangedEmitter = new EventEmitter<StateManagementTypes.StateChangeCallback>(
       'stateChanged',
       logger,
     );
   }
 
-  trackState(controllerId: string, stateContainer: IStateContainer, stateName: string): void {
+  trackState(
+    controllerId: string,
+    stateContainer: StateManagementTypes.StateContainer,
+    stateName: string,
+  ): void {
     if (!controllerId) {
-      this.logger.error('IController ID is required');
+      this.logger.error('Controller ID is required');
       return;
     }
 
     if (!stateContainer) {
-      this.logger.error('IState container is required');
+      this.logger.error('State container is required');
       return;
     }
 
     if (!stateName) {
-      this.logger.error('IState name is required');
+      this.logger.error('State name is required');
       return;
     }
 
@@ -60,15 +60,19 @@ export class StateTracker implements IStateTracker {
       .getState(stateContainer);
 
     try {
-      stateContainerManager.trackChanges(stateContainer, stateName, (change: IStateChange) => {
-        this.controllersToStates[controllerId][stateName] = change.payload.newValue;
+      stateContainerManager.trackChanges(
+        stateContainer,
+        stateName,
+        (change: StateManagementTypes.StateChange) => {
+          this.controllersToStates[controllerId][stateName] = change.payload.newValue;
 
-        const fullPath = `${controllerId}.${stateName}`;
+          const fullPath = `${controllerId}.${stateName}`;
 
-        const fullChange = { ...change, payload: { ...change.payload, path: fullPath } };
+          const fullChange = { ...change, payload: { ...change.payload, path: fullPath } };
 
-        this.stateChangedEmitter.emit(fullChange);
-      });
+          this.stateChangedEmitter.emit(fullChange);
+        },
+      );
 
       this.logger.debug(`Tracking state for ${controllerId}.${stateName}`);
     } catch (error) {
@@ -76,19 +80,19 @@ export class StateTracker implements IStateTracker {
     }
   }
 
-  getState(): IState {
+  getState(): StateManagementTypes.State {
     return deepCopy(this.controllersToStates);
   }
 
-  onStateChanged(callback: IStateChangeCallback): void {
+  onStateChanged(callback: StateManagementTypes.StateChangeCallback): void {
     this.stateChangedEmitter.addListener(callback);
   }
 
   findStateContainerManagerFor(
-    stateContainer: IMaybeStateContainer,
-  ): IStateContainerManager | null {
+    stateContainer: StateManagementTypes.MaybeStateContainer,
+  ): StateManagementTypes.StateContainerManager | undefined {
     return this.stateContainerManagers
       // eslint-disable-next-line @stylistic/max-len
-      .find((currentStateContainerManager) => currentStateContainerManager.canHandle(stateContainer)) ?? null;
+      .find((currentStateContainerManager) => currentStateContainerManager.canHandle(stateContainer));
   }
 }

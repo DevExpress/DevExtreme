@@ -1,19 +1,14 @@
-import type {
-  ILogger,
-  IState,
-  IStateChange,
-  IStateHistory,
-} from './interfaces';
+import type * as StateManagementTypes from './types';
 import { deepCopy, splitStatePath } from './utils';
 
-export class StateHistory implements IStateHistory {
-  private history: IStateChange[] = [];
+export class StateHistory implements StateManagementTypes.StateHistory {
+  private history: StateManagementTypes.StateChange[] = [];
 
   private readonly maxHistorySize: number;
 
-  private readonly logger: ILogger;
+  private readonly logger: StateManagementTypes.Logger;
 
-  constructor(logger: ILogger, maxHistorySize = 1000) {
+  constructor(logger: StateManagementTypes.Logger, maxHistorySize = 1000) {
     this.logger = logger;
     this.maxHistorySize = maxHistorySize;
 
@@ -22,7 +17,7 @@ export class StateHistory implements IStateHistory {
     }
   }
 
-  recordChange(change: IStateChange): void {
+  recordChange(change: StateManagementTypes.StateChange): void {
     if (!change) {
       this.logger.error('Change object is required');
       return;
@@ -37,11 +32,11 @@ export class StateHistory implements IStateHistory {
     this.logger.debug(`Recorded state change: ${change.payload.path}`);
   }
 
-  getHistory(): IStateChange[] {
+  getHistory(): StateManagementTypes.StateChange[] {
     return deepCopy(this.history);
   }
 
-  getStateAt(index: number): IState {
+  getStateAt(index: number): StateManagementTypes.State {
     if (index < 0 || index >= this.history.length) {
       this.logger.error(`Invalid history index: ${index}. Valid range: 0-${this.history.length - 1}`);
 
@@ -50,7 +45,7 @@ export class StateHistory implements IStateHistory {
 
     const result = this.history
       .slice(0, index + 1)
-      .reduce<IState>((state, change) => {
+      .reduce<StateManagementTypes.State>((state, change) => {
         const pathParts = splitStatePath(change.payload.path);
 
         return this.setNestedProperty(

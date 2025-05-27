@@ -1,36 +1,23 @@
-import type {
-  IController,
-  IControllerRegistry,
-  IDevToolsConnector,
-  ILogger,
-  IState,
-  IStateChange,
-  IStateContainer,
-  IStateHistory,
-  IStateManager,
-  IStateManagerActionType,
-  IStateManagerConfig,
-  IStateTracker,
-} from './interfaces';
+import type * as StateManagementTypes from './types';
 import { isValidStatePath, splitStatePath } from './utils';
 
-export class StateManager implements IStateManager {
-  private readonly controllerRegistry: IControllerRegistry;
+export class StateManager implements StateManagementTypes.StateManager {
+  private readonly controllerRegistry: StateManagementTypes.ControllerRegistry;
 
-  private readonly stateTracker: IStateTracker;
+  private readonly stateTracker: StateManagementTypes.StateTracker;
 
-  private readonly stateHistory: IStateHistory;
+  private readonly stateHistory: StateManagementTypes.StateHistory;
 
-  private readonly devToolsConnector: IDevToolsConnector;
+  private readonly devToolsConnector: StateManagementTypes.DevToolsConnector;
 
-  private readonly logger: ILogger;
+  private readonly logger: StateManagementTypes.Logger;
 
   private isRestoring = false;
 
   private isWarnedAboutUnstableJumpToStateFunctionality = false;
 
   constructor(
-    config: IStateManagerConfig,
+    config: StateManagementTypes.StateManagerConfig,
   ) {
     const {
       controllerRegistry, stateTracker, stateHistory, devToolsConnector, logger,
@@ -48,12 +35,12 @@ export class StateManager implements IStateManager {
     this.logger.info('StateManager initialized');
   }
 
-  registerController(...args: Parameters<IControllerRegistry['registerController']>): ReturnType<IControllerRegistry['registerController']> {
+  registerController(...args: Parameters<StateManagementTypes.ControllerRegistry['registerController']>): ReturnType<StateManagementTypes.ControllerRegistry['registerController']> {
     const [controller, id] = args;
     return this.controllerRegistry.registerController(controller, id);
   }
 
-  restoreState(state: IState): void {
+  restoreState(state: StateManagementTypes.State): void {
     try {
       this.isRestoring = true;
       const controllers = this.controllerRegistry.getAllControllers();
@@ -112,7 +99,7 @@ export class StateManager implements IStateManager {
         }
       });
 
-      const state: IState = {};
+      const state: StateManagementTypes.State = {};
 
       Array.from(initialStates.entries()).forEach(([path, value]) => {
         const parts = splitStatePath(path);
@@ -184,15 +171,15 @@ export class StateManager implements IStateManager {
     }
   }
 
-  getState(): IState {
+  getState(): StateManagementTypes.State {
     return this.stateTracker.getState();
   }
 
-  getHistory(): IStateChange[] {
+  getHistory(): StateManagementTypes.StateChange[] {
     return this.stateHistory.getHistory();
   }
 
-  getStateAt(historyIndex: number): IState {
+  getStateAt(historyIndex: number): StateManagementTypes.State {
     return this.stateHistory.getStateAt(historyIndex);
   }
 
@@ -201,7 +188,7 @@ export class StateManager implements IStateManager {
 
     if (this.devToolsConnector) {
       const currentState = this.getState();
-      const actionType: IStateManagerActionType = 'CLEAR_HISTORY';
+      const actionType: StateManagementTypes.StateManagerActionType = 'CLEAR_HISTORY';
       this.devToolsConnector.sendAction(actionType, {
         path: '', newValue: 'History cleared', timestamp: Date.now(), source: '', previousValue: '',
       }, currentState);
@@ -242,7 +229,7 @@ export class StateManager implements IStateManager {
     });
   }
 
-  private discoverState(controller: IController, controllerId: string): void {
+  private discoverState(controller: StateManagementTypes.Controller, controllerId: string): void {
     if (!controller) {
       return;
     }
@@ -264,7 +251,7 @@ export class StateManager implements IStateManager {
     });
   }
 
-  private isStateContainer(value: unknown): value is IStateContainer {
+  private isStateContainer(value: unknown): value is StateManagementTypes.StateContainer {
     return typeof value === 'object';
   }
 }

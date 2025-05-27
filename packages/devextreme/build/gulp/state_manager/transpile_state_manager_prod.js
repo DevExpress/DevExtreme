@@ -5,27 +5,39 @@ const path = require('path');
 const fs = require('fs');
 const babel = require('@babel/core');
 const transpileConfig = require('../transpile-config');
-const { STATE_MANAGER_FOLDER_PATH } = require('./constants');
+const {
+    STATE_MANAGER_FOLDER_PATH,
+    STATE_MANAGER_SETUP_STATE_MANAGER_MODULE_PATH,
+    STATE_MANAGER_PRODUCTION_MODULE_PATH
+} = require('./constants');
 
 const ERROR_PREFIX = 'Error during transpiling the state manager for prod mode:';
-const PRODUCTION_FILE_NAME = 'production.js';
 
 function transpileStateManagerProd(isEsm) {
     return through2.obj(function(file, enc, callback) {
-        if (file.path.includes(path.join(STATE_MANAGER_FOLDER_PATH, 'setup_state_manager.js'))) {
+        if (file.path.includes(STATE_MANAGER_SETUP_STATE_MANAGER_MODULE_PATH)) {
             try {
-                const productionFilePath = path.resolve(
-                    path.dirname(file.path),
-                    PRODUCTION_FILE_NAME
+                const absolutePathToStateManagerFolder = path.dirname(file.path);
+                const replacerFileName = path.basename(STATE_MANAGER_PRODUCTION_MODULE_PATH);
+
+                const replacerFilePath = path.join(
+                    absolutePathToStateManagerFolder,
+                    replacerFileName,
                 );
 
-                if (fs.existsSync(productionFilePath)) {
-                    let productionContent = fs.readFileSync(productionFilePath, 'utf8');
+                const shouldReplaceWithProductionCode = fs.existsSync(replacerFilePath);
 
-                    if (!isEsm) {
+                if (shouldReplaceWithProductionCode) {
+                    let productionContent = fs.readFileSync(replacerFilePath, 'utf8');
+
+                    const isCJS = !isEsm;
+                    if (isCJS) {
                         const babelConfig = {
-                            ...transpileConfig.tsCjs,
-                            filename: productionFilePath
+                            plugins: [
+                                ['@babel/plugin-transform-modules-commonjs']
+                            ],
+                            ignore: ['**/*.json'],
+                            filename: replacerFilePath
                         };
 
                         try {
@@ -35,7 +47,7 @@ function transpileStateManagerProd(isEsm) {
                         } catch (babelError) {
                             console.error(
                                 ERROR_PREFIX,
-                                'transforming ${PRODUCTION_FILE_NAME} to CJS is failed:',
+                                `transforming ${replacerFileName} to CJS is failed:`,
                                 babelError
                             );
                         }
@@ -45,7 +57,7 @@ function transpileStateManagerProd(isEsm) {
                 } else {
                     console.error(
                         ERROR_PREFIX,
-                        `${PRODUCTION_FILE_NAME} file not found at ${productionFilePath}`);
+                        `${productionFileName} file not found at ${productionFilePath}`);
                 }
             } catch (error) {
                 console.error(ERROR_PREFIX, error);
