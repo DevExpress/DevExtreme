@@ -1,7 +1,7 @@
 import type { Item as ContextMenuItem } from '@js/ui/context_menu';
 
-import type { ContextInfo, ContextMenuTarget } from '.';
-import { ContextMenuController } from '.';
+import type { ContextInfo, ContextMenuTarget } from './index';
+import { ContextMenuController } from './index';
 
 export class ContextMenuControllerMock extends ContextMenuController {
   public override getItems(

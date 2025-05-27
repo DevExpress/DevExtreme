@@ -3,7 +3,7 @@ import type { Item as ContextMenuItem, ItemClickEvent } from '@js/ui/context_men
 import { ColumnsController } from '../../grid_core/columns_controller/index';
 import type { CardInfo, Column } from '../../grid_core/columns_controller/types';
 import { BaseContextMenuController } from '../../grid_core/context_menu/controller';
-import { SortingController } from '../../grid_core/sorting_controller';
+import { SortingController } from '../../grid_core/sorting_controller/index';
 import { OptionsController } from '../options_controller';
 import type { ContextMenuPreparingEvent, ContextMenuTarget } from '.';
 
