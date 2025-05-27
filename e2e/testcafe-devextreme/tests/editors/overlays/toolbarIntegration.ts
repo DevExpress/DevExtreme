@@ -8,9 +8,6 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-// TODO Chrome133: skipped during chrome update
-// In material theme borders and shadows always renders different way
-
 fixture`Popup_toolbar`
   .page(url(__dirname, '../../container.html'));
 
