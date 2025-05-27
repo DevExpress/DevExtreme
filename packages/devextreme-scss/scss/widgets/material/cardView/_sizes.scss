@@ -305,13 +305,13 @@ $cardview-material-column-chooser__select-all-item-horizontal-padding: null !def
 
   // Header panel item - default
   $cardview-material-header-panel__item-border-width: 1px !default;
-  $cardview-material-header-panel__item-border-radius: 99px !default; // pill-shape
+  $cardview-material-header-panel__item-border-radius: 99px !default;
   $cardview-material-header-panel__item-padding-horizontal: 16px !default;
   $cardview-material-header-panel__item-padding-vertical: 8px !default;
   $cardview-material-header-panel__item-line-height: 20px !default;
   $cardview-material-header-panel__item-text-weight: $cardview-material-common-text-weight !default;
   $cardview-material-header-panel__item__sort-index-text-weight: 400 !default;
-  $cardview-material-header-panel__item__icon-size: $material-base-icon-size !default;
+  $cardview-material-header-panel__item__icon-size: 20px !default;
 
   // Header panel item - hovered
   $cardview-material-header-panel__item--hovered-text-weight: $cardview-material-header-panel__item-text-weight !default;
@@ -395,7 +395,7 @@ $cardview-material-column-chooser__select-all-item-horizontal-padding: null !def
   $cardview-material-header-panel__item-line-height: 16px !default;
   $cardview-material-header-panel__item-text-weight: $cardview-material-common-text-weight !default;
   $cardview-material-header-panel__item__sort-index-text-weight: 400 !default;
-  $cardview-material-header-panel__item__icon-size: $material-base-icon-size !default;
+  $cardview-material-header-panel__item__icon-size: 16px !default;
 
   // Header panel item - hovered
   $cardview-material-header-panel__item--hovered-text-weight: $cardview-material-header-panel__item-text-weight !default;
