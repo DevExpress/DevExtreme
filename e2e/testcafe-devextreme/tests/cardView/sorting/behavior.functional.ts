@@ -253,16 +253,20 @@ fixture.disablePageReloads`CardView - Sorting Behavior - Functional`
   });
 });
 
+const SORT_ACSENDING_MENUITEM_INDEX = 0;
+const SORT_DESCENDING_MENUITEM_INDEX = 1;
+const CLEAR_SORTING_MENUITEM_INDEX = 2;
+
 ([
-  ['none', 0, [undefined, undefined]],
-  ['none', 1, [undefined, undefined]],
-  ['none', 2, [undefined, undefined]],
-  ['single', 0, ['asc', undefined]],
-  ['single', 1, ['desc', undefined]],
-  ['single', 2, [undefined, undefined]],
-  ['multiple', 0, ['asc', 0]],
-  ['multiple', 1, ['desc', 0]],
-  ['multiple', 2, [undefined, undefined]],
+  ['none', SORT_ACSENDING_MENUITEM_INDEX, [undefined, undefined]],
+  ['none', SORT_DESCENDING_MENUITEM_INDEX, [undefined, undefined]],
+  ['none', CLEAR_SORTING_MENUITEM_INDEX, [undefined, undefined]],
+  ['single', SORT_ACSENDING_MENUITEM_INDEX, ['asc', undefined]],
+  ['single', SORT_DESCENDING_MENUITEM_INDEX, ['desc', undefined]],
+  ['single', CLEAR_SORTING_MENUITEM_INDEX, [undefined, undefined]],
+  ['multiple', SORT_ACSENDING_MENUITEM_INDEX, ['asc', 0]],
+  ['multiple', SORT_DESCENDING_MENUITEM_INDEX, ['desc', 0]],
+  ['multiple', CLEAR_SORTING_MENUITEM_INDEX, [undefined, undefined]],
 ] as [
   string,
   number,
@@ -315,15 +319,15 @@ fixture.disablePageReloads`CardView - Sorting Behavior - Functional`
 });
 
 ([
-  ['none', 0, [undefined, undefined], [undefined, undefined]],
-  ['none', 1, [undefined, undefined], [undefined, undefined]],
-  ['none', 2, [undefined, undefined], [undefined, undefined]],
-  ['single', 0, [undefined, undefined], ['asc', undefined]],
-  ['single', 1, [undefined, undefined], ['desc', undefined]],
-  ['single', 2, ['asc', undefined], [undefined, undefined]],
-  ['multiple', 0, ['asc', 0], ['asc', 1]],
-  ['multiple', 1, ['asc', 0], ['desc', 1]],
-  ['multiple', 2, ['asc', 0], [undefined, undefined]],
+  ['none', SORT_ACSENDING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
+  ['none', SORT_DESCENDING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
+  ['none', CLEAR_SORTING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
+  ['single', SORT_ACSENDING_MENUITEM_INDEX, [undefined, undefined], ['asc', undefined]],
+  ['single', SORT_DESCENDING_MENUITEM_INDEX, [undefined, undefined], ['desc', undefined]],
+  ['single', CLEAR_SORTING_MENUITEM_INDEX, ['asc', undefined], [undefined, undefined]],
+  ['multiple', SORT_ACSENDING_MENUITEM_INDEX, ['asc', 0], ['asc', 1]],
+  ['multiple', SORT_DESCENDING_MENUITEM_INDEX, ['asc', 0], ['desc', 1]],
+  ['multiple', CLEAR_SORTING_MENUITEM_INDEX, ['asc', 0], [undefined, undefined]],
 ] as [
   string,
   number,
@@ -391,15 +395,15 @@ fixture.disablePageReloads`CardView - Sorting Behavior - Functional`
 });
 
 ([
-  ['none', 0, [undefined, undefined], [undefined, undefined]],
-  ['none', 1, [undefined, undefined], [undefined, undefined]],
-  ['none', 2, [undefined, undefined], [undefined, undefined]],
-  ['single', 0, [undefined, undefined], ['asc', undefined]],
-  ['single', 1, [undefined, undefined], ['desc', undefined]],
-  ['single', 2, [undefined, undefined], [undefined, undefined]],
-  ['multiple', 0, ['asc', 0], ['asc', 1]],
-  ['multiple', 1, ['asc', 0], ['desc', 1]],
-  ['multiple', 2, ['asc', 0], [undefined, undefined]],
+  ['none', SORT_ACSENDING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
+  ['none', SORT_DESCENDING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
+  ['none', CLEAR_SORTING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
+  ['single', SORT_ACSENDING_MENUITEM_INDEX, [undefined, undefined], ['asc', undefined]],
+  ['single', SORT_DESCENDING_MENUITEM_INDEX, [undefined, undefined], ['desc', undefined]],
+  ['single', CLEAR_SORTING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
+  ['multiple', SORT_ACSENDING_MENUITEM_INDEX, ['asc', 0], ['asc', 1]],
+  ['multiple', SORT_DESCENDING_MENUITEM_INDEX, ['asc', 0], ['desc', 1]],
+  ['multiple', CLEAR_SORTING_MENUITEM_INDEX, ['asc', 0], [undefined, undefined]],
 ] as [
   string,
   number,
