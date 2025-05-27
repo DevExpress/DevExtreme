@@ -730,6 +730,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
                 padding-top: 12px;
                 padding-bottom: 12px;
                 vertical-align: bottom;
+                border-right: 1px solid $fluent-grid-base-border-color;
               }
             }
           }
@@ -756,14 +757,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
               }
             }
           }
-        }
-      }
-    }
-
-    &.dx-header-multi-row.dx-#{$widget-name}-sticky-columns {
-      .dx-header-row {
-        > td {
-          border-right: 1px solid $fluent-grid-base-border-color;
         }
       }
     }
