@@ -6,6 +6,7 @@
         "Name": "Venza",
         "Modification": "LE FWD",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 28695,
         "MPG City": 20,
         "MPG Highway": 26,
@@ -20,8 +21,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage44",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage44"
     },
     {
         "ID": 2,
@@ -30,6 +30,7 @@
         "Name": "Edge",
         "Modification": "SEL FWD 3.5L V6 6A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 31995,
         "MPG City": 19,
         "MPG Highway": 27,
@@ -44,8 +45,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Vauxford",
-        "Source": "devexpress.com/carimage45",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage45"
     },
     {
         "ID": 3,
@@ -54,6 +54,7 @@
         "Name": "Murano",
         "Modification": "S FWD 3.5L V6 VA",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 29285,
         "MPG City": 18,
         "MPG Highway": 24,
@@ -68,8 +69,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Minseong Kim",
-        "Source": "devexpress.com/carimage46",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage46"
     },
     {
         "ID": 4,
@@ -78,6 +78,7 @@
         "Name": "Crosstour",
         "Modification": "EX 2WD 2.4L I4 5A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 28060,
         "MPG City": 22,
         "MPG Highway": 31,
@@ -92,8 +93,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage47",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage47"
     },
     {
         "ID": 5,
@@ -102,6 +102,7 @@
         "Name": "Q5",
         "Modification": "2.0L I4 8A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 36795,
         "MPG City": 20,
         "MPG Highway": 28,
@@ -116,8 +117,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage76",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage76"
     },
     {
         "ID": 6,
@@ -126,6 +126,7 @@
         "Name": "X3",
         "Modification": "2.0L I4 8A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 39775,
         "MPG City": 21,
         "MPG Highway": 28,
@@ -140,8 +141,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage49",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage49"
     },
     {
         "ID": 7,
@@ -150,6 +150,7 @@
         "Name": "Forester",
         "Modification": "2.5L H4 5M",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 22090,
         "MPG City": 21,
         "MPG Highway": 27,
@@ -164,8 +165,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage50",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage50"
     },
     {
         "ID": 8,
@@ -174,6 +174,7 @@
         "Name": "Tiguan",
         "Modification": "S 2.0L I4 6M",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 23820,
         "MPG City": 18,
         "MPG Highway": 26,
@@ -188,8 +189,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Alexander Migl",
-        "Source": "devexpress.com/carimage51",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage51"
     },
     {
         "ID": 9,
@@ -198,6 +198,7 @@
         "Name": "Outlander",
         "Modification": "GT S-Awc 3.0L V6 6A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 29420,
         "MPG City": 19,
         "MPG Highway": 25,
@@ -212,8 +213,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage52",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage52"
     },
     {
         "ID": 10,
@@ -222,6 +222,7 @@
         "Name": "Ml350",
         "Modification": "3.5L V6 7A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 48175,
         "MPG City": 18,
         "MPG Highway": 23,
@@ -236,8 +237,7 @@
         "InStock": "FALSE",
         "License Name": "Attribution Only",
         "Author": "M 93",
-        "Source": "devexpress.com/carimage53",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage53"
     },
     {
         "ID": 11,
@@ -246,6 +246,7 @@
         "Name": "Cx-5",
         "Modification": "Sport FWD 2.0L I4 6M",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 21790,
         "MPG City": 26,
         "MPG Highway": 35,
@@ -260,8 +261,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage54",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage54"
     },
     {
         "ID": 12,
@@ -270,6 +270,7 @@
         "Name": "Sportage",
         "Modification": "SX AWD 2.0L I4 6A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 29250,
         "MPG City": 20,
         "MPG Highway": 25,
@@ -284,8 +285,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "JustAnotherCarDesigner",
-        "Source": "devexpress.com/carimage55",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage55"
     },
     {
         "ID": 13,
@@ -294,6 +294,7 @@
         "Name": "Range Rover Evoque",
         "Modification": "2.0L I4 6A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 42040,
         "MPG City": 20,
         "MPG Highway": 28,
@@ -308,8 +309,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Alexander Migl",
-        "Source": "devexpress.com/carimage56",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage56"
     },
     {
         "ID": 14,
@@ -318,6 +318,7 @@
         "Name": "Town & Country",
         "Modification": "Limited 3.6L V6 6A",
         "CategoryID": 4,
+        "CategoryName": "Minivan",
         "Price": 42140,
         "MPG City": 17,
         "MPG Highway": 25,
@@ -332,8 +333,7 @@
         "InStock": "FALSE",
         "License Name": "CC0 1.0",
         "Author": "crash71100",
-        "Source": "devexpress.com/carimage71",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage71"
     },
     {
         "ID": 15,
@@ -342,6 +342,7 @@
         "Name": "Durango",
         "Modification": "SXT RWD 3.6L V6 5A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 30790,
         "MPG City": 16,
         "MPG Highway": 23,
@@ -356,8 +357,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "DestinationFearFan",
-        "Source": "devexpress.com/carimage57",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage57"
     },
     {
         "ID": 16,
@@ -366,6 +366,7 @@
         "Name": "LX 570",
         "Modification": "5.7L V8 6A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 82425,
         "MPG City": 12,
         "MPG Highway": 17,
@@ -380,8 +381,7 @@
         "InStock": "FALSE",
         "License Name": "CC0 1.0",
         "Author": "HJUdall",
-        "Source": "devexpress.com/carimage58",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage58"
     },
     {
         "ID": 17,
@@ -390,6 +390,7 @@
         "Name": "Grand Vitara",
         "Modification": "Limited 4WD 2.4L I4 4A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 26799,
         "MPG City": 19,
         "MPG Highway": 23,
@@ -404,8 +405,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage59",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage59"
     },
     {
         "ID": 18,
@@ -414,6 +414,7 @@
         "Name": "Tundra 4x4 Reg. Cab",
         "Modification": "5.7L V8",
         "CategoryID": 3,
+        "CategoryName": "Truck",
         "Price": 31645,
         "MPG City": 13,
         "MPG Highway": 17,
@@ -428,8 +429,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Matti Blume",
-        "Source": "devexpress.com/carimage72",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage72"
     },
     {
         "ID": 19,
@@ -438,6 +438,7 @@
         "Name": "Silverado 1500 Regular CAB 4WD",
         "Modification": "LT Standard Box 4.8L V8 4A",
         "CategoryID": 3,
+        "CategoryName": "Truck",
         "Price": 33650,
         "MPG City": 13,
         "MPG Highway": 18,
@@ -452,8 +453,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "DestinationFearFan",
-        "Source": "devexpress.com/carimage19",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage19"
     },
     {
         "ID": 20,
@@ -462,6 +462,7 @@
         "Name": "F-150 Regular CAB 4X4",
         "Modification": "3.7L V6 6A",
         "CategoryID": 3,
+        "CategoryName": "Truck",
         "Price": 31900,
         "MPG City": 16,
         "MPG Highway": 21,
@@ -476,8 +477,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Alexander-93",
-        "Source": "devexpress.com/carimage73",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage73"
     },
     {
         "ID": 21,
@@ -486,6 +486,7 @@
         "Name": "1500 Regular CAB 4X4",
         "Modification": "SLT SWB 3.6L V6 8A",
         "CategoryID": 3,
+        "CategoryName": "Truck",
         "Price": 32825,
         "MPG City": 16,
         "MPG Highway": 23,
@@ -500,8 +501,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Ruben de Rijcke",
-        "Source": "devexpress.com/carimage74",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage74"
     },
     {
         "ID": 22,
@@ -510,6 +510,7 @@
         "Name": "Camry",
         "Modification": "XLE 3.5L V6 6AT",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 31260,
         "MPG City": 21,
         "MPG Highway": 31,
@@ -524,8 +525,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage25",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage25"
     },
     {
         "ID": 23,
@@ -534,6 +534,7 @@
         "Name": "Altima",
         "Modification": "SL 3.5L V6 VA",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 31350,
         "MPG City": 22,
         "MPG Highway": 31,
@@ -548,8 +549,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage26",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage26"
     },
     {
         "ID": 24,
@@ -558,6 +558,7 @@
         "Name": "Accord",
         "Modification": "Ex-L V-6 6-Spd AT 3.5L V6 6A",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 30860,
         "MPG City": 21,
         "MPG Highway": 34,
@@ -572,8 +573,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY 3.0",
         "Author": "Gold Pony",
-        "Source": "devexpress.com/carimage27",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage27"
     },
     {
         "ID": 25,
@@ -582,6 +582,7 @@
         "Name": "A6",
         "Modification": "2.0L I4 VA",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 43095,
         "MPG City": 25,
         "MPG Highway": 33,
@@ -596,8 +597,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY 4.0",
         "Author": "OWS Photography",
-        "Source": "devexpress.com/carimage28",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage28"
     },
     {
         "ID": 26,
@@ -606,6 +606,7 @@
         "Name": "Sienna",
         "Modification": "LE 8 Passenger 3.5L V6 6A",
         "CategoryID": 4,
+        "CategoryName": "Minivan",
         "Price": 30980,
         "MPG City": 18,
         "MPG Highway": 25,
@@ -620,8 +621,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage15",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage15"
     },
     {
         "ID": 27,
@@ -630,6 +630,7 @@
         "Name": "Odyssey",
         "Modification": "EX 3.5L V6 5A",
         "CategoryID": 4,
+        "CategoryName": "Minivan",
         "Price": 32655,
         "MPG City": 18,
         "MPG Highway": 27,
@@ -644,8 +645,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage16",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage16"
     },
     {
         "ID": 28,
@@ -654,6 +654,7 @@
         "Name": "Grand Caravan",
         "Modification": "SXT 3.6L V6 6A",
         "CategoryID": 4,
+        "CategoryName": "Minivan",
         "Price": 27690,
         "MPG City": 17,
         "MPG Highway": 25,
@@ -668,8 +669,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Christopher Ziemnowicz",
-        "Source": "devexpress.com/carimage17",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage17"
     },
     {
         "ID": 29,
@@ -678,6 +678,7 @@
         "Name": "Taurus",
         "Modification": "SHO AWD 3.5L V6 6A",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 40095,
         "MPG City": 17,
         "MPG Highway": 25,
@@ -692,8 +693,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Anonymousfox36",
-        "Source": "devexpress.com/carimage29",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage29"
     },
     {
         "ID": 30,
@@ -702,6 +702,7 @@
         "Name": "Sequoia",
         "Modification": "2WD 5dr. SR5 5.7L V8",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 43450,
         "MPG City": 13,
         "MPG Highway": 18,
@@ -716,8 +717,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "deathpallie325",
-        "Source": "devexpress.com/carimage60",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage60"
     },
     {
         "ID": 31,
@@ -726,6 +726,7 @@
         "Name": "Tahoe",
         "Modification": "LS 2WD 5.3L V8 6A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 41400,
         "MPG City": 15,
         "MPG Highway": 21,
@@ -740,8 +741,7 @@
         "InStock": "FALSE",
         "License Name": "CC0 1.0",
         "Author": "HJUdall",
-        "Source": "devexpress.com/carimage61",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage61"
     },
     {
         "ID": 32,
@@ -750,6 +750,7 @@
         "Name": "Expedition",
         "Modification": "XLT 4X2 5.4L V8 6A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 41600,
         "MPG City": 14,
         "MPG Highway": 20,
@@ -764,8 +765,7 @@
         "InStock": "FALSE",
         "License Name": "Public Domain",
         "Author": "Bull-Doser",
-        "Source": "devexpress.com/carimage62",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage62"
     },
     {
         "ID": 33,
@@ -774,6 +774,7 @@
         "Name": "G550",
         "Modification": "5.5L V8 7A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 113905,
         "MPG City": 12,
         "MPG Highway": 15,
@@ -788,8 +789,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 3.0",
         "Author": "Alekc2m",
-        "Source": "devexpress.com/carimage75",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage75"
     },
     {
         "ID": 34,
@@ -798,6 +798,7 @@
         "Name": "Avalon",
         "Modification": "XLE 3.5L V6 6AT",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 31785,
         "MPG City": 21,
         "MPG Highway": 31,
@@ -812,8 +813,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage30",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage30"
     },
     {
         "ID": 35,
@@ -822,6 +822,7 @@
         "Name": "S8",
         "Modification": "4.0L V8 8A",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 110895,
         "MPG City": 15,
         "MPG Highway": 26,
@@ -836,8 +837,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Damian B Oh",
-        "Source": "devexpress.com/carimage31",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage31"
     },
     {
         "ID": 36,
@@ -846,6 +846,7 @@
         "Name": "Maxima",
         "Modification": "SV 3.5L V6 VA",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 34030,
         "MPG City": 19,
         "MPG Highway": 26,
@@ -860,8 +861,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage32",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage32"
     },
     {
         "ID": 37,
@@ -870,6 +870,7 @@
         "Name": "760li",
         "Modification": "6.0L V12 8A",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 141625,
         "MPG City": 13,
         "MPG Highway": 20,
@@ -884,8 +885,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage33",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage33"
     },
     {
         "ID": 38,
@@ -894,6 +894,7 @@
         "Name": "TT RS",
         "Modification": "2.5L I5 6M",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 58095,
         "MPG City": 18,
         "MPG Highway": 25,
@@ -908,8 +909,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 2.0 DE",
         "Author": "Lothar Spurzem",
-        "Source": "devexpress.com/carimage02",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage02"
     },
     {
         "ID": 39,
@@ -918,6 +918,7 @@
         "Name": "Allroad",
         "Modification": "2.0L I4 8A",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 40495,
         "MPG City": 20,
         "MPG Highway": 27,
@@ -932,8 +933,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 2.0",
         "Author": "AUDI AG",
-        "Source": "devexpress.com/carimage69",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage69"
     },
     {
         "ID": 40,
@@ -942,6 +942,7 @@
         "Name": "Z4 Sdrive35i",
         "Modification": "3.0L I6 6M",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 56075,
         "MPG City": 19,
         "MPG Highway": 26,
@@ -956,8 +957,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY 2.0",
         "Author": "Milestoned",
-        "Source": "devexpress.com/carimage03",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage03"
     },
     {
         "ID": 41,
@@ -966,6 +966,7 @@
         "Name": "M5",
         "Modification": "4.4L V8 7M",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 91125,
         "MPG City": 14,
         "MPG Highway": 20,
@@ -980,8 +981,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY 2.0",
         "Author": "ilikewaffles11",
-        "Source": "devexpress.com/carimage34",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage34"
     },
     {
         "ID": 42,
@@ -990,6 +990,7 @@
         "Name": "X6",
         "Modification": "4.4L V8 8A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 71325,
         "MPG City": 14,
         "MPG Highway": 20,
@@ -1004,8 +1005,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage64",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage64"
     },
     {
         "ID": 43,
@@ -1014,6 +1014,7 @@
         "Name": "Impreza",
         "Modification": "2.0L H4 5M",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 19165,
         "MPG City": 25,
         "MPG Highway": 33,
@@ -1028,8 +1029,7 @@
         "InStock": "FALSE",
         "License Name": "CC0 1.0",
         "Author": "Guillaume Vachey",
-        "Source": "devexpress.com/carimage11",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage11"
     },
     {
         "ID": 44,
@@ -1038,6 +1038,7 @@
         "Name": "Outback",
         "Modification": "3.6L H6 5A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 29290,
         "MPG City": 18,
         "MPG Highway": 25,
@@ -1052,8 +1053,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage70",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage70"
     },
     {
         "ID": 45,
@@ -1062,6 +1062,7 @@
         "Name": "Jetta",
         "Modification": "SE 2.5L I5 5M",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 19810,
         "MPG City": 23,
         "MPG Highway": 33,
@@ -1076,8 +1077,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage35",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage35"
     },
     {
         "ID": 46,
@@ -1086,6 +1086,7 @@
         "Name": "Touareg",
         "Modification": "TDI Sport 3.0L V6 8A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 48320,
         "MPG City": 20,
         "MPG Highway": 29,
@@ -1100,8 +1101,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage65",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage65"
     },
     {
         "ID": 47,
@@ -1110,6 +1110,7 @@
         "Name": "Golf",
         "Modification": "2.5l 2.5L I5 5M",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 18890,
         "MPG City": 23,
         "MPG Highway": 33,
@@ -1124,8 +1125,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY 2.0",
         "Author": "Allie_Caulfield",
-        "Source": "devexpress.com/carimage12",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage12"
     },
     {
         "ID": 48,
@@ -1134,6 +1134,7 @@
         "Name": "Lancer",
         "Modification": "GT 2.4L I4 5M",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 20790,
         "MPG City": 22,
         "MPG Highway": 31,
@@ -1148,8 +1149,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 3.0",
         "Author": "XD4rkxL1ghtx",
-        "Source": "devexpress.com/carimage36",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage36"
     },
     {
         "ID": 49,
@@ -1158,6 +1158,7 @@
         "Name": "Slk350",
         "Modification": "3.5L V6 7A",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 56305,
         "MPG City": 21,
         "MPG Highway": 29,
@@ -1172,8 +1173,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 2.0",
         "Author": "Shadman Samee",
-        "Source": "devexpress.com/carimage04",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage04"
     },
     {
         "ID": 50,
@@ -1182,6 +1182,7 @@
         "Name": "S600",
         "Modification": "5.5L V12 5A",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 161205,
         "MPG City": 12,
         "MPG Highway": 19,
@@ -1196,8 +1197,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY 4.0",
         "Author": "OWS Photography",
-        "Source": "devexpress.com/carimage37",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage37"
     },
     {
         "ID": 51,
@@ -1206,6 +1206,7 @@
         "Name": "Cls550",
         "Modification": "4.6L V8 7A",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 72905,
         "MPG City": 17,
         "MPG Highway": 25,
@@ -1220,8 +1221,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage38",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage38"
     },
     {
         "ID": 52,
@@ -1230,6 +1230,7 @@
         "Name": "Mazda6",
         "Modification": "2.5L I4 6M",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 21520,
         "MPG City": 21,
         "MPG Highway": 30,
@@ -1244,8 +1245,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY 2.0",
         "Author": "Erik Drost",
-        "Source": "devexpress.com/carimage39",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage39"
     },
     {
         "ID": 53,
@@ -1254,6 +1254,7 @@
         "Name": "Mx-5 Miata",
         "Modification": "2.0L I4 5M",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 24515,
         "MPG City": 22,
         "MPG Highway": 28,
@@ -1268,8 +1269,7 @@
         "InStock": "FALSE",
         "License Name": "Public Domain",
         "Author": "IFCAR",
-        "Source": "devexpress.com/carimage01",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage01"
     },
     {
         "ID": 54,
@@ -1278,6 +1278,7 @@
         "Name": "RIO",
         "Modification": "EX 1.6L I4 6A",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 17300,
         "MPG City": 28,
         "MPG Highway": 36,
@@ -1292,8 +1293,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Jakub CA",
-        "Source": "devexpress.com/carimage40",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage40"
     },
     {
         "ID": 55,
@@ -1302,6 +1302,7 @@
         "Name": "Soul",
         "Modification": "2.0L I4 6A",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 20700,
         "MPG City": 23,
         "MPG Highway": 28,
@@ -1316,8 +1317,7 @@
         "InStock": "FALSE",
         "License Name": "Public Domain",
         "Author": "US NHTSA",
-        "Source": "devexpress.com/carimage13",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage13"
     },
     {
         "ID": 56,
@@ -1326,6 +1326,7 @@
         "Name": "LR4",
         "Modification": "5.0L V8 6A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 49995,
         "MPG City": 12,
         "MPG Highway": 17,
@@ -1340,8 +1341,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY 2.0",
         "Author": "Land Rover MENA",
-        "Source": "devexpress.com/carimage66",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage66"
     },
     {
         "ID": 57,
@@ -1350,6 +1350,7 @@
         "Name": "Range Rover Supercharged",
         "Modification": "5.0L V8 8A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 99995,
         "MPG City": 13,
         "MPG Highway": 19,
@@ -1364,8 +1365,7 @@
         "InStock": "FALSE",
         "License Name": "CC0 1.0",
         "Author": "HJUdall",
-        "Source": "devexpress.com/carimage67",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage67"
     },
     {
         "ID": 58,
@@ -1374,6 +1374,7 @@
         "Name": "200 Convertible",
         "Modification": "S 3.6L V6 6A",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 34015,
         "MPG City": 19,
         "MPG Highway": 29,
@@ -1388,8 +1389,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Damian B Oh",
-        "Source": "devexpress.com/carimage05",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage05"
     },
     {
         "ID": 59,
@@ -1398,6 +1398,7 @@
         "Name": "SRT Viper",
         "Modification": "GTS 8.4L V10 6M",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 122390,
         "MPG City": 13,
         "MPG Highway": 18,
@@ -1412,8 +1413,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY 2.0",
         "Author": "Alden Jewell",
-        "Source": "devexpress.com/carimage07",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage07"
     },
     {
         "ID": 60,
@@ -1422,6 +1422,7 @@
         "Name": "Challenger",
         "Modification": "Srt8 6.4L V8 6M",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 45190,
         "MPG City": 14,
         "MPG Highway": 23,
@@ -1436,8 +1437,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Calreyn88",
-        "Source": "devexpress.com/carimage08",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage08"
     },
     {
         "ID": 61,
@@ -1446,6 +1446,7 @@
         "Name": "Charger",
         "Modification": "SE RWD 3.6L V6 5A",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 27290,
         "MPG City": 18,
         "MPG Highway": 27,
@@ -1460,8 +1461,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Real Liquidstone",
-        "Source": "devexpress.com/carimage41",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage41"
     },
     {
         "ID": 62,
@@ -1470,6 +1470,7 @@
         "Name": "RX 350",
         "Modification": "3.5L V6 6A",
         "CategoryID": 2,
+        "CategoryName": "Crossover & SUV",
         "Price": 41955,
         "MPG City": 18,
         "MPG Highway": 24,
@@ -1484,8 +1485,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage68",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage68"
     },
     {
         "ID": 63,
@@ -1494,6 +1494,7 @@
         "Name": "IS 350",
         "Modification": "3.5L V6 6A",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 43675,
         "MPG City": 19,
         "MPG Highway": 26,
@@ -1508,8 +1509,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Ethan Llamas",
-        "Source": "devexpress.com/carimage42",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage42"
     },
     {
         "ID": 64,
@@ -1518,6 +1518,7 @@
         "Name": "Malibu",
         "Modification": "LS 2.5L I4 6A",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 22805,
         "MPG City": 22,
         "MPG Highway": 34,
@@ -1532,8 +1533,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 4.0",
         "Author": "Dinkun Chen",
-        "Source": "devexpress.com/carimage43",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage43"
     },
     {
         "ID": 65,
@@ -1542,6 +1542,7 @@
         "Name": "Camaro",
         "Modification": "ZL1 6.2L V8 6M",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 55250,
         "MPG City": 14,
         "MPG Highway": 19,
@@ -1556,8 +1557,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 3.0",
         "Author": "Noah Wulf",
-        "Source": "devexpress.com/carimage06",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage06"
     },
     {
         "ID": 66,
@@ -1566,6 +1566,7 @@
         "Name": "Corvette Coupe",
         "Modification": "ZR1 3ZR 6.2L V8 6M",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 122595,
         "MPG City": 14,
         "MPG Highway": 21,
@@ -1580,8 +1581,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY 4.0",
         "Author": "OWS Photography",
-        "Source": "devexpress.com/carimage09",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage09"
     },
     {
         "ID": 67,
@@ -1590,6 +1590,7 @@
         "Name": "3500 Regular CAB 4X4",
         "Modification": "ST LWB 5.7L V8 6A",
         "CategoryID": 3,
+        "CategoryName": "Truck",
         "Price": "34,370.00",
         "MPG City": "",
         "MPG Highway": "",
@@ -1604,8 +1605,7 @@
         "InStock": "FALSE",
         "License Name": "CC0 1.0",
         "Author": "HJUdall",
-        "Source": "devexpress.com/carimage22",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage22"
     },
     {
         "ID": 68,
@@ -1614,6 +1614,7 @@
         "Name": "2500 Mega CAB 4X4",
         "Modification": "SLT SWB 5.7L V8 6A",
         "CategoryID": 3,
+        "CategoryName": "Truck",
         "Price": "42,460.00",
         "MPG City": "",
         "MPG Highway": "",
@@ -1628,8 +1629,7 @@
         "InStock": "FALSE",
         "License Name": "CC0 1.0",
         "Author": "HJUdall",
-        "Source": "devexpress.com/carimage23",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage23"
     },
     {
         "ID": 69,
@@ -1638,6 +1638,7 @@
         "Name": "F-350 SD Supercab 4X4",
         "Modification": "6.2L V8 6A",
         "CategoryID": 3,
+        "CategoryName": "Truck",
         "Price": "48,050.00",
         "MPG City": "",
         "MPG Highway": "",
@@ -1652,8 +1653,7 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 3.0",
         "Author": "Cristianv14",
-        "Source": "devexpress.com/carimage24",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage24"
     },
     {
         "ID": 70,
@@ -1662,6 +1662,7 @@
         "Name": "Mustang GT Coupe",
         "Modification": "5.0L V8 6M",
         "CategoryID": 1,
+        "CategoryName": "Passenger Car",
         "Price": 31545,
         "MPG City": 15,
         "MPG Highway": 26,
@@ -1676,7 +1677,6 @@
         "InStock": "FALSE",
         "License Name": "CC BY-SA 3.0",
         "Author": "Tobias \"\"ToMar\"\" Maier",
-        "Source": "devexpress.com/carimage10",
-        "Edits": "Resize and crop"
+        "Source": "devexpress.com/carimage10"
     }
 ]
