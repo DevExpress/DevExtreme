@@ -20,8 +20,6 @@ fixture.disablePageReloads`HtmlEditor`
   test(`T1025549 - ${baseScreenName}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.wait(3000);
-
     await testScreenshot(t, takeScreenshot, `${baseScreenName}.png`, { element: selector });
 
     await t
