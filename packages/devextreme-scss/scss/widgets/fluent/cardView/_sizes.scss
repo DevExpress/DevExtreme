@@ -261,6 +261,8 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
 // #endregion
 
 @if $size == "default" {
+
+  // Common
   $cardview-fluent-common-border-radius: 16px !default;
   $cardview-fluent-common-text-weight: 400 !default;
   $cardview-fluent-common-header-panel-gap: 8px !default;
@@ -269,6 +271,7 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
   $cardview-fluent-common-gap: 24px !default;
   $cardview-fluent-common-padding: 24px !default;
 
+  // Card
   $cardview-fluent-card-min-width: 250px !default;
   $cardview-fluent-card-border-width: 1px !default;
   $cardview-fluent-card-border-radius: 8px !default;
@@ -283,14 +286,18 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
   $cardview-fluent-card__content__cell-padding-vertical: 6px !default;
   $cardview-fluent-card__content__cell-padding-horizontal: 12px !default;
 
+  // Card - selected
   $cardview-fluent-card--selected__field-caption-weight: $cardview-fluent-card__field-caption-weight !default;
 
+  // Header
   $cardview-fluent-header-gap: 0 !default;
 
+  // Header panel
   $cardview-fluent-header-panel-vertical-margin: 8px !default;
   $cardview-fluent-header-panel-gap: 8px !default;
   $cardview-fluent-header-panel--empty-line-height: 32px !default;
 
+  // Header panel item - default
   $cardview-fluent-header-panel__item-border-width: 1px !default;
   $cardview-fluent-header-panel__item-border-radius: 6px !default;
   $cardview-fluent-header-panel__item-padding-horizontal: 8px !default;
@@ -299,33 +306,43 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
   $cardview-fluent-header-panel__item__sort-index-text-weight: 400 !default;
   $cardview-fluent-header-panel__item__icon-size: $fluent-base-icon-size !default;
 
+  // Header panel item - hovered
   $cardview-fluent-header-panel__item--hovered-text-weight: $cardview-fluent-header-panel__item-text-weight !default;
   $cardview-fluent-header-panel__item--hovered__sort-index-text-weight: $cardview-fluent-header-panel__item__sort-index-text-weight !default;
 
+  // Header panel item - disabled
   $cardview-fluent-header-panel__item--disabled-text-weight: $cardview-fluent-header-panel__item-text-weight !default;
   $cardview-fluent-header-panel__item--disabled__sort-index-text-weight: $cardview-fluent-header-panel__item__sort-index-text-weight !default;
 
+  // Header panel item - dragged
   $cardview-fluent-header-panel__item--dragged-text-weight: $cardview-fluent-header-panel__item-text-weight !default;
 
+  // Header panel Drop-zone
   $cardview-fluent-header-panel__dropzone-height: 44px !default;
   $cardview-fluent-header-panel__dropzone-top: -6px  !default;
   $cardview-fluent-header-panel__dropzone-border-width: 1.5px !default;
   $cardview-fluent-header-panel__dropzone-border-radius: 8px !default;
 
+  // Filter panel
   $cardview-fluent-filter-panel-border-radius: 0 !default;
 
+  // Empty view
   $cardview-fluent-nodata-view__icon-container-size: 64px !default;
   $cardview-fluent-nodata-view__icon-container-margin: 12px !default;
   $cardview-fluent-nodata-view__icon-size: 40px !default;
 
+  // Search highlight
   $cardview-fluent-card__content__field-value--highlighted-border-radius: 5px !default;
   $cardview-fluent-card__content__field-value--highlighted-border-padding: .125em 0.2em !default;
   $cardview-fluent-card__content__field-value--highlighted-text-weight: 500 !default;
 
+  // Column chooser
   $cardview-fluent-column-chooser--empty__message-horizontal-padding: 24px !default;
   $cardview-fluent-column-chooser__select-all-item-horizontal-padding: 14px !default;
 }
 @else if $size == "compact" {
+
+  // Common
   $cardview-fluent-common-border-radius: 16px !default;
   $cardview-fluent-common-text-weight: 400 !default;
   $cardview-fluent-common-header-panel-gap: 4px !default;
@@ -334,6 +351,7 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
   $cardview-fluent-common-gap: 16px !default;
   $cardview-fluent-common-padding: 16px !default;
 
+  // Card
   $cardview-fluent-card-min-width: 250px !default;
   $cardview-fluent-card-border-width: 1px !default;
   $cardview-fluent-card-border-radius: 6px !default;
@@ -348,14 +366,18 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
   $cardview-fluent-card__content__cell-padding-vertical: 4px !default;
   $cardview-fluent-card__content__cell-padding-horizontal: 8px !default;
 
+  // Card - selected
   $cardview-fluent-card--selected__field-caption-weight: $cardview-fluent-card__field-caption-weight !default;
 
+  // Header
   $cardview-fluent-header-gap: 4px !default;
 
+  // Header panel
   $cardview-fluent-header-panel-vertical-margin: 4px !default;
   $cardview-fluent-header-panel-gap: 4px !default;
   $cardview-fluent-header-panel--empty-line-height: 24px !default;
 
+  // Header panel item - default
   $cardview-fluent-header-panel__item-border-width: 1px !default;
   $cardview-fluent-header-panel__item-border-radius: 6px !default;
   $cardview-fluent-header-panel__item-padding-horizontal: 6px !default;
@@ -364,29 +386,37 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
   $cardview-fluent-header-panel__item__sort-index-text-weight: 400 !default;
   $cardview-fluent-header-panel__item__icon-size: $fluent-base-icon-size !default;
 
+  // Header panel item - hovered
   $cardview-fluent-header-panel__item--hovered-text-weight: $cardview-fluent-header-panel__item-text-weight !default;
   $cardview-fluent-header-panel__item--hovered__sort-index-text-weight: $cardview-fluent-header-panel__item__sort-index-text-weight !default;
 
+  // Header panel item - disabled
   $cardview-fluent-header-panel__item--disabled-text-weight: $cardview-fluent-header-panel__item-text-weight !default;
   $cardview-fluent-header-panel__item--disabled__sort-index-text-weight: $cardview-fluent-header-panel__item__sort-index-text-weight !default;
 
+  // Header panel item - dragged
   $cardview-fluent-header-panel__item--dragged-text-weight: $cardview-fluent-header-panel__item-text-weight !default;
 
+  // Header panel Drop-zone
   $cardview-fluent-header-panel__dropzone-height: 32px !default;
   $cardview-fluent-header-panel__dropzone-top: -4px  !default;
   $cardview-fluent-header-panel__dropzone-border-width: 1.5px !default;
   $cardview-fluent-header-panel__dropzone-border-radius: 6px !default;
 
+  // Filter panel
   $cardview-fluent-filter-panel-border-radius: 0 !default;
 
+  // Empty view
   $cardview-fluent-nodata-view__icon-container-size: 48px !default;
   $cardview-fluent-nodata-view__icon-container-margin: 8px !default;
   $cardview-fluent-nodata-view__icon-size: 32px !default;
 
+  // Search highlight
   $cardview-fluent-card__content__field-value--highlighted-border-radius: 5px !default;
   $cardview-fluent-card__content__field-value--highlighted-border-padding: .125em 0.2em !default;
   $cardview-fluent-card__content__field-value--highlighted-text-weight: 500 !default;
 
+  // Column chooser
   $cardview-fluent-column-chooser--empty__message-horizontal-padding: 16px !default;
   $cardview-fluent-column-chooser__select-all-item-horizontal-padding: 12px !default;
 }

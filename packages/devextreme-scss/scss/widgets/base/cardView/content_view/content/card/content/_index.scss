@@ -10,8 +10,8 @@
   border-top: $cardview-card-border-width solid $cardview-card-divider-color;
 
   // NOTE: Override default fonts only in "material-compact"
-  font-size: $cardview-card-content-font-size;
-  line-height: $cardview-card-content-line-height;
+  font-size: $cardview-card__content-font-size;
+  line-height: $cardview-card__content-line-height;
 
   .dx-cardview-card-selection & {
     border-top-color: $cardview-card--selected-divider-color;

@@ -79,8 +79,8 @@
     color: $cardview-header-panel__item--dragged-text-color;
     font-weight: $cardview-header-panel__item--dragged-text-weight;
     box-shadow:
-      0 1px 3px $cardview-header-panel__item--dragged-box-shadow,
-      0 6px 8px $cardview-header-panel__item--dragged-box-shadow;
+      0 1px 3px $cardview-header-panel__item--dragged-box-shadow-color,
+      0 6px 8px $cardview-header-panel__item--dragged-box-shadow-color;
 
     .dx-icon {
       color: $cardview-header-panel__item--dragged__allowance-icon-color;
