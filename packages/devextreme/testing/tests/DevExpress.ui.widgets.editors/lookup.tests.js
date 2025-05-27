@@ -64,7 +64,6 @@ QUnit.testStart(function() {
     $('#widthRootStyle').css('width', '300px');
 });
 
-const OVERLAY_CLASS = 'dx-overlay';
 const OVERLAY_SHADER_CLASS = 'dx-overlay-shader';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
@@ -2108,6 +2107,22 @@ QUnit.module('options', {
         lookup.option({ inputAttr: { custom: null } });
 
         assert.strictEqual($field.attr('custom'), undefined, 'custom attribute is set correctly');
+    });
+
+    QUnit.test('Displayed text should be correct when items have nested items field and grouping is disabled (T1292151)', function(assert) {
+        const $lookup = $('#lookup').dxLookup({
+            items: [
+                { id: 1, text: 'item 1', items: [{ id: 1, text: 'unexpected text' }] },
+            ],
+            value: 1,
+            displayExpr: 'text',
+            valueExpr: 'id',
+        });
+
+        const $input = $lookup.find(`.${LOOKUP_FIELD_CLASS}`);
+        const displayedText = $input.text();
+
+        assert.strictEqual(displayedText, 'item 1', 'input value is correct');
     });
 });
 
