@@ -7,10 +7,10 @@
   padding: ($cardview-header-panel__item-padding-vertical - $cardview-header-panel__item-border-width) $cardview-header-panel__item-padding-horizontal;
   min-width: fit-content;
   user-select: none;
-  gap: $cardview-header-panel__item-gap;
+  gap: 4px;
   border: solid $cardview-header-panel__item-border-width;
   border-radius: $cardview-header-panel__item-border-radius;
-  line-height: $cardview-header-item-line-height;
+  line-height: $cardview-header-panel__item-line-height;
   cursor: pointer;
 
   .dx-icon {
