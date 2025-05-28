@@ -54,6 +54,8 @@ export class EditingController {
 
   private readonly onSaved = this.options.action('onSaved');
 
+  private validateMethod?: () => Promise<boolean>;
+
   public readonly editingCard = computed(() => {
     const editCardKey = this.editCardKey.value;
     const items = this.itemsController.items.value;
@@ -77,6 +79,8 @@ export class EditingController {
       newData,
       this.columnController.columns.peek(),
       oldItem.index,
+      undefined,
+      oldItem.key,
     );
     return newItem;
   });
@@ -95,6 +99,10 @@ export class EditingController {
     private readonly kbn: KeyboardNavigationController,
   ) {}
 
+  public provideValidateMethod(validateMethod: () => Promise<boolean>): void {
+    this.validateMethod = validateMethod;
+  }
+
   public editCard(key: Key): void {
     const eventArgs = {
       cancel: false,
@@ -107,6 +115,10 @@ export class EditingController {
     if (!eventArgs.cancel) {
       this.editCardKey.value = key;
     }
+  }
+
+  public async validate(): Promise<boolean> {
+    return this.validateMethod?.() ?? true;
   }
 
   public async addCard(): Promise<void> {
@@ -203,6 +215,11 @@ export class EditingController {
   }
 
   public async save(): Promise<void> {
+    const validationSuccessful = await this.validate();
+    if (!validationSuccessful) {
+      return;
+    }
+
     const changes = this.changes.peek();
 
     const eventArgs = {

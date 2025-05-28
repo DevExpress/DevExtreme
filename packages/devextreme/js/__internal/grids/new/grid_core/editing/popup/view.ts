@@ -54,11 +54,6 @@ export class EditPopupView extends View<Props> {
     })),
   );
 
-  private readonly formData = computed(() => {
-    const editCard = this.editingController.editingCard.value;
-    return editCard?.data && { ...editCard.data };
-  });
-
   private readonly customizeItems = computed(
     () => (item: dxForm.SimpleItem): void => {
       const editingCard = this.editingController.editingCard.value;
@@ -70,7 +65,9 @@ export class EditPopupView extends View<Props> {
       const column = this.columnsController.columns.peek()
         .find((c) => c.name === item.name)!;
 
-      item.editorOptions ??= {};
+      item.editorOptions = {
+        ...item.editorOptions,
+      };
       item.editorOptions.onValueChanged = async ({ value }): Promise<void> => {
         const newData = {};
         await this.promises.add(
@@ -110,14 +107,27 @@ export class EditPopupView extends View<Props> {
       }),
       this.editingController.allowAdding,
     );
+
+    this.editingController.provideValidateMethod(async (): Promise<boolean> => {
+      const form = this.formRef.current;
+
+      if (!form) {
+        return true;
+      }
+
+      const preValidationResult = form.validate();
+      const validationResult = await (preValidationResult.complete ?? preValidationResult);
+
+      return !!validationResult.isValid;
+    });
   }
 
   protected getProps(): ReadonlySignal<Props> {
     return computed(() => ({
+      visible: !!this.editingController.editingCard.value,
       formProps: this.options.oneWay('editing.form').value,
       popupProps: this.options.oneWay('editing.popup').value,
       formRef: this.formRef,
-      data: this.formData.value,
       onSave: (): void => {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.editingController.save();

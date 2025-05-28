@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -41,7 +42,9 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme-aspnet-data/5.0.0/dx.aspnet.data.js"></script>
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -49,15 +52,76 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="card-view"></div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+            const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
+
+            $(() => {
+                const store = DevExpress.data.AspNet.createStore({
+                    key: 'Task_ID',
+                    loadUrl: `${url}/Tasks`,
+                    insertUrl: `${url}/InsertTask`,
+                    updateUrl: `${url}/UpdateTask`,
+                    deleteUrl: `${url}/DeleteTask`,
+                    onBeforeSend(method, ajaxOptions) {
+                        ajaxOptions.xhrFields = { withCredentials: true };
+                    },
+                });
+
+                $('#card-view').dxCardView({
+                    dataSource: store,
+                    remoteOperations: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        {
+                            caption: 'Subject',
+                            dataField: 'Task_Subject',
+                            validationRules: [
+                                {type: 'async', validationCallback() {
+                                    return Promise.reject('not valid')
+                                }},
+                                {type: 'required', },
+                            ]
+                        },
+                        {
+                            dataField: 'Task_Start_Date',
+                            caption: 'Start Date',
+                            dataType: 'date',
+                        },
+                        {
+                            dataField: 'Task_Due_Date',
+                            caption: 'Due Date',
+                            dataType: 'date',
+                        },
+                        {
+                            caption: 'Priority',
+                            dataField: 'Task_Priority',
+                        },
+                        {
+                            caption: 'Status',
+                            dataField: 'Task_Status',
+                        },
+                    ],
+                    headerFilter: {
+                        visible: true,
+                    },
+                    editing: {
+                        mode: 'popup',
+                        allowAdding: true,
+                        allowUpdating: true,
+                        allowDeleting: true,
+                    },
+                    searchPanel: {
+                        visible: true,
+                    },
+                    onInitialized(e) {
+                        window.grid = e.component;
+                    }
                 });
             });
+
         </script>
     </div>
 </body>
+
 </html>
