@@ -11,6 +11,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import translator from 'common/core/animation/translator';
+import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 
 QUnit.testStart(() => {
@@ -1034,6 +1035,26 @@ QUnit.module('focus policy', {
 
         assert.strictEqual($tabPanel.find(`.${MULTIVIEW_WRAPPER_CLASS}`).hasClass(FOCUS_STATE_CLASS), false);
     });
+
+    QUnit.test('first tab should be focused after initialization (T1277409)', function(assert) {
+        const items = Array.from({ length: 20 }, (_, index) => ({
+            title: `Tab ${index + 1}`,
+            text: `Content ${index + 1}`
+        }));
+
+        const $tabPanel = $('#tabPanel').dxTabPanel({
+            items,
+            focusStateEnabled: true,
+        });
+
+        const $tabs = $tabPanel.find(toSelector(TABPANEL_TABS_ITEM_CLASS));
+        const tabsInstance = $tabPanel.find(toSelector(TABS_CLASS)).dxTabs('instance');
+        const $firstTab = $tabs.first();
+
+        assert.strictEqual($tabs.filter(`.${FOCUS_STATE_CLASS}`).length, 1, 'only one tab is focused');
+        assert.strictEqual($firstTab.hasClass(FOCUS_STATE_CLASS), true, 'first tab is focused');
+        assert.strictEqual($(tabsInstance.option('focusedElement')).get(0), $firstTab.get(0), 'focusedElement is correct');
+    });
 });
 
 QUnit.module('keyboard navigation', {
@@ -1122,8 +1143,7 @@ QUnit.module('keyboard navigation', {
     });
 
     QUnit.test('looping should work on keyboard navigation after loop runtime change to true and swipe', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'no kbn on mobile devices');
+        if(shouldSkipOnMobile(assert, 'there is no keyboard navigation on mobile devices')) {
             return;
         }
 

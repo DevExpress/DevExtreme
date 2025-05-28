@@ -3,13 +3,13 @@ import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
-fixture('Charts.CustomLegendMarkers')
+fixture('Charts.LegendMarkersCustomization')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Charts', 'CustomLegendMarkers', (test) => {
-  test('CustomLegendMarkers', async (t) => {
+runManualTest('Charts', 'LegendMarkersCustomization', (test) => {
+  test('LegendMarkersCustomization', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.hover($('.dxl-marker').nth(1));

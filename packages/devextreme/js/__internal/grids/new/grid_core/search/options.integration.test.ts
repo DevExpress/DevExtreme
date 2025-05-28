@@ -1,7 +1,11 @@
 /* eslint-disable spellcheck/spell-checker */
 import {
+  afterEach,
+  beforeEach,
   describe, expect, it,
+  jest,
 } from '@jest/globals';
+import { Guid } from '@ts/core/m_guid';
 import CardView from '@ts/grids/new/card_view/widget';
 import type { Options as GridCoreOptions } from '@ts/grids/new/grid_core/options';
 import { rerender } from 'inferno';
@@ -28,6 +32,13 @@ function getCardContent(container: Element) {
 }
 
 describe('Options', () => {
+  beforeEach(() => {
+    jest.spyOn(Guid.prototype, '_normalize').mockReturnValue('guidmock');
+  });
+
+  afterEach(() => {
+    jest.spyOn(Guid.prototype, '_normalize').mockRestore();
+  });
   it('searchPanel.text (card contains match)', async () => {
     const { container, cardView } = setup({
       dataSource: [

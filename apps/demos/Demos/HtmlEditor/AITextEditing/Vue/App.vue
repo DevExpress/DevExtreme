@@ -21,7 +21,7 @@ import {
   DxToolbar,
   DxItem,
 } from 'devextreme-vue/html-editor';
-import { AIIntegration } from 'devextreme/common/ai-integration';
+import { AIIntegration } from 'devextreme-vue/common/ai-integration';
 import { AzureOpenAI, OpenAI } from 'openai';
 import { 
   markup,

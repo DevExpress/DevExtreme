@@ -1,4 +1,4 @@
-import { AIIntegration } from 'devextreme/common/ai-integration';
+import { AIIntegration } from 'devextreme-react/common/ai-integration';
 import { AzureOpenAI } from 'openai';
 
 const AzureOpenAIConfig = {

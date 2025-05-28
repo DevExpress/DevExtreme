@@ -3,6 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
+import { a11yCheck } from '../../helpers/accessibility/utils';
 
 async function createCardViewWithPager(config: any = {}): Promise<any> {
   const dataSource = Array.from({ length: 20 }, (_, i) => ({ text: i.toString(), value: i }));
@@ -31,8 +32,10 @@ async function createCardViewWithPager(config: any = {}): Promise<any> {
 fixture.disablePageReloads`Pager`
   .page(url(__dirname, '../container.html'));
 
+const CARD_VIEW_SELECTOR = '#container';
+
 test('Page index interaction', async (t) => {
-  const cardView = new CardView('#container');
+  const cardView = new CardView(CARD_VIEW_SELECTOR);
   const pager = cardView.getPager();
   await t
     .expect(pager.getPageSize(0).selected)
@@ -61,7 +64,7 @@ test('Page index interaction', async (t) => {
 
 [true, false].forEach((remoteOperation) => {
   test(`Runtime filterValue change updates paging when remoteOperations = ${remoteOperation}`, async (t) => {
-    const cardView = new CardView('#container');
+    const cardView = new CardView(CARD_VIEW_SELECTOR);
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await cardView.apiOption('filterValue', [
@@ -76,5 +79,32 @@ test('Page index interaction', async (t) => {
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
+
+    await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
   }).before(async () => createCardViewWithPager({ remoteOperations: remoteOperation }));
 });
+
+test('Paging after resetting filter', async (t) => {
+  const cardView = new CardView(CARD_VIEW_SELECTOR);
+  const pager = cardView.getPager();
+
+  await cardView.apiOption('filterValue', ['text', '=', '0']);
+
+  // only one card should be visible, so Pager is not rendered
+  await t.expect(pager.element.exists).notOk();
+
+  await cardView.apiClearFilter();
+  await t
+    .expect(pager.element.exists).ok()
+    .expect(pager.getInfoText().textContent).eql('Page 1 of 10 (20 items)');
+
+  // navigate to next page
+  await t
+    .click(pager.getNextNavButton().element)
+    .expect(cardView.getCard(1).getFieldValueCell('Text').innerText)
+    .eql('3');
+}).before(async () => createCardViewWithPager({
+  filterPanel: {
+    visible: true,
+  },
+}));

@@ -7,7 +7,9 @@ import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di/index';
 import { infernoRenderer } from '@ts/core/m_inferno_renderer';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';
+import { rerender } from 'inferno';
 
+import { AccessibilityController } from './accessibility/index';
 import * as ColumnChooserModule from './column_chooser/index';
 import { CompatibilityColumnsController } from './columns_controller/compatibility';
 import * as ColumnsControllerModule from './columns_controller/index';
@@ -16,9 +18,11 @@ import * as di from './di';
 import * as EditingModule from './editing/index';
 import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
+import { CompatibilityFilterSyncController, FilterSyncController } from './filtering/filter_sync/index';
 import { ClearFilterVisitor } from './filtering/filter_visitors/clear_filter_visitor';
+import { FilterCustomOperationsVisitor } from './filtering/filter_visitors/filter_custom_operations_visitor';
 import { GetAppliedFilterVisitor } from './filtering/filter_visitors/get_applied_filters_visitor';
-import { HeaderFilterController } from './filtering/header_filter/index';
+import { CompatibilityHeaderFilterController, HeaderFilterController } from './filtering/header_filter/index';
 import { HeaderFilterViewController } from './filtering/header_filter/view_controller';
 import * as FilterControllerModule from './filtering/index';
 import { ItemsController } from './items_controller/items_controller';
@@ -27,8 +31,8 @@ import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
 import * as SearchControllerModule from './search/index';
 import * as SelectionControllerModule from './selection/index';
+import type { SortingController } from './sorting_controller/index';
 import * as SortingControllerModule from './sorting_controller/index';
-import type { SortingController } from './sorting_controller/sorting_controller';
 import { ToolbarController } from './toolbar/controller';
 import { ToolbarView } from './toolbar/view';
 import { WidgetMock } from './widget_mock';
@@ -78,9 +82,15 @@ export class GridCoreNewBase<
 
   private headerFilterController!: HeaderFilterController;
 
+  private filterSyncController!: FilterSyncController;
+
   private clearFilterVisitor!: ClearFilterVisitor;
 
   private getAppliedFiltersVisitor!: GetAppliedFilterVisitor;
+
+  private accessibilityController!: AccessibilityController;
+
+  private filterCustomOperationsVisitor!: FilterCustomOperationsVisitor;
 
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
@@ -92,6 +102,8 @@ export class GridCoreNewBase<
       this,
       this.diContext.get(DataControllerModule.CompatibilityDataController),
       this.diContext.get(CompatibilityColumnsController),
+      this.diContext.get(CompatibilityHeaderFilterController),
+      this.diContext.get(CompatibilityFilterSyncController),
     ));
   }
 
@@ -114,10 +126,13 @@ export class GridCoreNewBase<
     this.headerFilterController = this.diContext.get(HeaderFilterController);
     this.filterPanelView = this.diContext.get(FilterControllerModule.FilterPanelView);
     this.headerFilterViewController = this.diContext.get(HeaderFilterViewController);
+    this.accessibilityController = this.diContext.get(AccessibilityController);
+    this.filterSyncController = this.diContext.get(FilterSyncController);
     this.searchView = this.diContext.get(SearchView);
 
     this.clearFilterVisitor = this.diContext.get(ClearFilterVisitor);
     this.getAppliedFiltersVisitor = this.diContext.get(GetAppliedFilterVisitor);
+    this.filterCustomOperationsVisitor = this.diContext.get(FilterCustomOperationsVisitor);
   }
 
   protected _init(): void {
@@ -148,6 +163,9 @@ export class GridCoreNewBase<
     this.renderSubscription = this.diContext.get(MainView).render(
       this.$element().get(0) as HTMLDivElement,
     );
+    // NOTE: We flush all Inferno async render operations after initial render
+    // Because after component creation markup should be ready
+    rerender();
   }
 
   private _optionChanged(args) {

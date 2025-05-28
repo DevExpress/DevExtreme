@@ -44,7 +44,7 @@ const newRowPositionTestTemplate = ({ newRowPosition, pageNumber }) => async (t)
     .ok(compareResults.errorMessages());
 };
 
-runManualTest('DataGrid', 'CustomNewRecordPosition', (test) => {
+runManualTest('DataGrid', 'NewRecordPosition', (test) => {
   newRowPositionOptions.forEach((newRowPosition) => {
     test(`newRowPosition - ${newRowPosition}`, newRowPositionTestTemplate({
       newRowPosition,

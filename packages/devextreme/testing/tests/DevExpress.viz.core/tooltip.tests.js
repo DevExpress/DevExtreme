@@ -446,7 +446,7 @@ QUnit.test('Update', function(assert) {
         color: 'rgba(147,147,147,0.7)',
         fill: 'rgba(147,147,147,0.7)',
         fontFamily: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana',
-        fontSize: 14,
+        fontSize: '14px',
         fontWeight: 400,
         opacity: null
     });

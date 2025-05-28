@@ -1,4 +1,5 @@
 const $ = require('jquery');
+const typeUtils = require('core/utils/type');
 const commons = require('./chartParts/commons.js');
 const rendererModule = require('viz/core/renderers/renderer');
 const legendModule = require('viz/components/legend');
@@ -1078,7 +1079,7 @@ QUnit.test('Create Horizontal Legend with single named series, position = outsid
     assert.strictEqual(legendCtorArgs.backgroundClass, 'dxc-border', 'background class');
     assert.strictEqual(legendCtorArgs.itemGroupClass, 'dxc-item', 'item group class');
     assert.strictEqual(legendCtorArgs.textField, 'seriesName', 'text field');
-    assert.ok($.isFunction(legendCtorArgs.getFormatObject), 'getFormatObject is function');
+    assert.ok(typeUtils.isFunction(legendCtorArgs.getFormatObject), 'getFormatObject is function');
     assert.deepEqual(legendCtorArgs.getFormatObject({
         id: 'id',
         text: 'text',

@@ -164,6 +164,10 @@ const meta: Meta<typeof CardView> = {
     'filterValue': {
       control: 'object',
     },
+    'filterSyncEnabled': {
+      control: 'radio',
+      options: ['auto', true, false]
+    },
     'filterPanel.visible': {
       control: 'boolean'
     },
@@ -385,6 +389,40 @@ export const SearchCardView: Story = {
   }
 }
 
+export const FilterSyncStory: Story = {
+  ...SearchCardView,
+  args: {
+    ...SearchCardView.args,
+    dataSource: 'local',
+    columns: 'local',
+    'searchPanel.highlightCaseSensitive': false,
+    'searchPanel.highlightSearchText': true,
+    'searchPanel.text': '',
+    'searchPanel.visible': true,
+    'searchPanel.placeholder': 'Search...',
+    'searchPanel.searchVisibleColumnsOnly': false,
+    'searchPanel.width': 160,
+    'headerFilter.visible': true,
+    'paging.pageSize': 6,
+    headerFilter: {
+      width: 252,
+      height: 325,
+      allowSelectAll: true,
+      search: {
+        enabled: false,
+        timeout: 500,
+        mode: 'contains',
+        editorOptions: {},
+      },
+      texts: {
+        emptyValue: 'empty',
+        ok: 'ok',
+        cancel: 'cancel',
+      },
+    }
+  }
+}
+
 export const HeaderFilterStory: Story = {
   ...DefaultMode,
   args: {
@@ -498,3 +536,58 @@ export const ColumnChooserDragAndDropModeStory: Story = {
   }
 }
 
+export const AccessibilityStory: Story = {
+  ...DefaultMode,
+  args: {
+    ...DefaultMode.args,
+
+    // Sorting
+    'sorting.mode': 'multiple',
+
+    // Selection
+    keyExpr: 'id',
+    'selection.mode': 'multiple',
+    'selection.showCheckBoxesMode': 'always',
+    'selection.allowSelectAll': false,
+
+    // Search
+    'searchPanel.highlightCaseSensitive': false,
+    'searchPanel.highlightSearchText': true,
+    'searchPanel.text': '',
+    'searchPanel.visible': true,
+    'searchPanel.placeholder': 'Search...',
+    'searchPanel.searchVisibleColumnsOnly': false,
+    'searchPanel.width': 160,
+
+    // HeaderFilter
+    'headerFilter.visible': true,
+    headerFilter: {
+      width: 252,
+      height: 325,
+      allowSelectAll: true,
+      search: {
+        enabled: false,
+        timeout: 500,
+        mode: 'contains',
+        editorOptions: {},
+      },
+      texts: {
+        emptyValue: 'empty',
+        ok: 'ok',
+        cancel: 'cancel',
+      },
+    },
+
+    // Editing
+    editing: {
+      allowAdding: true,
+      allowEditing: true,
+      allowUpdating: true,
+      allowDeleting: true,
+      popup: {
+        title: 'Employee Info',
+        showTitle: true,
+      },
+    },
+  }
+}

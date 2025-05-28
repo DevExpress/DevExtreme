@@ -77,8 +77,10 @@ export class KbnFocusTrapEnabled extends Component<KbnFocusTrapBaseProps> {
     );
   }
 
+  // TODO: KeyboardEvent
   @eventHandler
-  private onKeyDown(event: KeyboardEvent): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private onKeyDown(event: any): void {
     if (event.key === 'Enter' && !event.shiftKey) {
       this.focusLastChild();
       eventUtils.markHandled(event);
@@ -87,8 +89,10 @@ export class KbnFocusTrapEnabled extends Component<KbnFocusTrapBaseProps> {
     this.props.onKeyDown?.(event);
   }
 
+  // TODO: KeyboardEvent
   @eventHandler
-  private onContentKeyDown(event: KeyboardEvent): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private onContentKeyDown(event: any): void {
     if (event.key === 'Escape') {
       this.getActualRef().current?.focus();
       eventUtils.markHandled(event);

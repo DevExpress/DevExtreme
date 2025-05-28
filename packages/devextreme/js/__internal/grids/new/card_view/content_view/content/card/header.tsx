@@ -1,4 +1,5 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
+import messageLocalization from '@js/localization/message';
 import type { ValueChangedEvent } from '@js/ui/check_box';
 import type * as dxToolbar from '@js/ui/toolbar';
 import { isDefined } from '@ts/core/utils/m_type';
@@ -43,6 +44,9 @@ export class CardHeader extends Component<CardHeaderProps> {
         widget: 'dxCheckBox',
         cssClass: CLASSES.cardSelectCheckBox,
         options: {
+          elementAttr: {
+            'aria-label': messageLocalization.format('dxCardView-ariaSelectCard'),
+          },
           value: card.isSelected,
           onValueChanged: (e: ValueChangedEvent): void => {
             const event = e.event as MouseEvent;

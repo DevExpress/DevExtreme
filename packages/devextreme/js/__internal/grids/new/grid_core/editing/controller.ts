@@ -5,6 +5,7 @@ import { isDefined } from '@js/core/utils/type';
 import { confirm } from '@js/ui/dialog';
 import { computed, type Signal } from '@preact/signals-core';
 import { generateNewRowTempKey } from '@ts/grids/grid_core/editing/m_editing_utils';
+import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/index';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { DataController } from '../data_controller/data_controller';
@@ -66,6 +67,11 @@ export class EditingController {
     }
 
     const oldItem = this.itemsController.findItemByKey(items, editCardKey)!;
+
+    if (!oldItem) {
+      return null;
+    }
+
     const newData = applyChanges(
       [oldItem.data],
       changes,
@@ -89,6 +95,7 @@ export class EditingController {
     OptionsController, ItemsController,
     ColumnsController, DataController,
     KeyboardNavigationController,
+    OptionsValidationController,
   ] as const;
 
   constructor(
@@ -97,6 +104,7 @@ export class EditingController {
     private readonly columnController: ColumnsController,
     private readonly dataController: DataController,
     private readonly kbn: KeyboardNavigationController,
+    private readonly optionsValidationController: OptionsValidationController,
   ) {}
 
   public provideValidateMethod(validateMethod: () => Promise<boolean>): void {
@@ -104,6 +112,8 @@ export class EditingController {
   }
 
   public editCard(key: Key): void {
+    this.optionsValidationController.validateKeyExpr();
+
     const eventArgs = {
       cancel: false,
       key,
@@ -122,6 +132,8 @@ export class EditingController {
   }
 
   public async addCard(): Promise<void> {
+    this.optionsValidationController.validateKeyExpr();
+
     const eventArgs = {
       promise: undefined,
       data: {},
@@ -167,6 +179,8 @@ export class EditingController {
   }
 
   public async deleteCard(key: Key): Promise<void> {
+    this.optionsValidationController.validateKeyExpr();
+
     const confirmStatus = await this.confirmDelete();
 
     if (!confirmStatus) {

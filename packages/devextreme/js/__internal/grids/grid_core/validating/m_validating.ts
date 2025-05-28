@@ -1516,11 +1516,21 @@ export const validatingRowsViewExtender = (Base: ModuleType<RowsView>) => class 
     super.updateFreeSpaceRowHeight($table);
 
     if ($tooltipContent && $tooltipContent.length) {
-      $rowElements = that._getRowElements();
+      $rowElements = that._getRowElements().filter(':visible');
       $freeSpaceRowElements = that._getFreeSpaceRowElements($table);
       $freeSpaceRowElement = $freeSpaceRowElements.first();
 
-      if ($freeSpaceRowElement && $rowElements.length === 1 && (!$freeSpaceRowElement.is(':visible') || getOuterHeight($tooltipContent) > getOuterHeight($freeSpaceRowElement))) {
+      const rowElementsHasFocusInside = $rowElements.find(':focus').length > 0;
+
+      if (
+        $freeSpaceRowElement
+        && $rowElements.length === 1
+        && (
+          !$freeSpaceRowElement.is(':visible')
+          || getOuterHeight($tooltipContent) > getOuterHeight($freeSpaceRowElement)
+        )
+        && rowElementsHasFocusInside
+      ) {
         $freeSpaceRowElements.show();
         setHeight($freeSpaceRowElements, getOuterHeight($tooltipContent));
         return true;

@@ -11,6 +11,7 @@ import fx from 'common/core/animation/fx';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import ajaxMock from '../../helpers/ajaxMock.js';
+import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import 'ui/drop_down_editor/ui.drop_down_list';
 
@@ -72,8 +73,7 @@ QUnit.module('focus policy', {
     }
 }, () => {
     QUnit.test('focus removed from list on type some text', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 
@@ -139,8 +139,7 @@ QUnit.module('focus policy', {
     });
 
     QUnit.test('setFocusPolicy should correctly renew subscription', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
         const setFocusPolicySpy = sinon.spy(this.instance, '_setFocusPolicy');
@@ -531,7 +530,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
 
         this.clock.tick(10);
 
-        assert.equal($.trim($('.dx-list-item').text()), 'test', 'template rendered');
+        assert.equal($('.dx-list-item').text().trim(), 'test', 'template rendered');
     });
 
     QUnit.test('dataSource with Guid key', function(assert) {
@@ -688,7 +687,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         const instance = $element.dxDropDownList('instance');
         instance.option('opened', true);
 
-        assert.equal($.trim($('.dx-list-item').text()), '<None>', 'template rendered');
+        assert.equal($('.dx-list-item').text().trim(), '<None>', 'template rendered');
     });
 
     QUnit.test('searchTimeout should be refreshed after next symbol entered', function(assert) {
@@ -990,6 +989,21 @@ QUnit.module('items & dataSource', moduleConfig, () => {
 
             assert.strictEqual(this.dropDownList.option('selectedItem'), null, 'byKey result is ignored');
         });
+    });
+
+    QUnit.test('_getPlainItems should return correct items when they have nested items field and grouping is disabled (T1292151)', function(assert) {
+        const nestedItems = [{ id: 1, text: 'unexpected text' }];
+        const items = [{ id: 1, text: 'item 1', items: nestedItems }];
+
+        const dropDownList = $('#dropDownList').dxDropDownList({
+            items,
+            displayExpr: 'text',
+            valueExpr: 'id',
+        }).dxDropDownList('instance');
+
+        const plainItems = dropDownList._getPlainItems();
+
+        assert.deepEqual(plainItems, items, 'items are correct');
     });
 });
 

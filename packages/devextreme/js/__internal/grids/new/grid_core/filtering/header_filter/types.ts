@@ -1,12 +1,28 @@
+import type { FilterType } from '@js/common/grids';
 import type { DataSourceLike } from '@js/data/data_source';
+
+import type { Column } from '../../columns_controller/types';
 
 export type HeaderFilterSearchMode = 'contains' | 'startswith' | 'equals';
 export type HeaderFilterType = 'include' | 'exclude';
+export type HeaderFilterListType = 'tree' | 'list';
+
+export interface PopupOptions {
+  type: HeaderFilterListType;
+  column: Column;
+  headerFilter: HeaderFilterColumnOptions;
+  dataSource?: DataSourceLike<unknown>;
+  isFilterBuilder?: boolean;
+  filterType?: FilterType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  filterValues?: any[];
+  apply: () => void;
+  hidePopupCallback: () => void;
+}
 
 export type PopupState = {
   element: Element;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  options: Record<string, any>;
+  options: PopupOptions;
 } | null;
 
 export interface HeaderFilterTextOptions {

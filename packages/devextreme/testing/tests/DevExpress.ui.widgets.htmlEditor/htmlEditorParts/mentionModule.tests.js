@@ -4,10 +4,10 @@ import MentionFormat from '__internal/ui/html_editor/formats/m_mention';
 import Mentions from '__internal/ui/html_editor/modules/m_mentions';
 
 import { noop } from 'core/utils/common';
-import devices from '__internal/core/m_devices';
 import { Event as dxEvent } from 'common/core/events';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import Quill from 'devextreme-quill';
+import { shouldSkipOnMobile } from '../../../helpers/device.js';
 
 const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
@@ -477,8 +477,7 @@ QUnit.module('Mentions module', moduleConfig, () => {
     });
 
     test('list should load next page on reach end of current page', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
+        if(shouldSkipOnMobile(assert)) {
             return;
         }
 

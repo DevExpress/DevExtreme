@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import TagBox from 'devextreme-react/tag-box';
 import Popover from 'devextreme-react/popover';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-react/common/data';
 import Item from './Item.js';
 import Tag from './Tag.js';
 import { simpleProducts, products, productLabel } from './data.js';

@@ -1,9 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import HtmlEditor from 'devextreme-testcafe-models/htmlEditor';
 import { Selector } from 'testcafe';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import { testScreenshot } from '../../helpers/themeUtils';
 import { appendElementTo, setStyleAttribute } from '../../helpers/domUtils';
+
+const MENU_ITEM_CLASS = 'dx-menu-item';
+const SUBMENU_CLASS = 'dx-submenu';
 
 fixture.disablePageReloads`HtmlEditor`
   .page(url(__dirname, '../container.html'));
@@ -13,9 +17,7 @@ fixture.disablePageReloads`HtmlEditor`
   const clickTarget = toolbar ? '#otherContainer .dx-bold-format' : '#container';
   const baseScreenName = toolbar ? 'htmleditor-with-toolbar' : 'htmleditor-without-toolbar';
 
-  // TODO Chrome133: skipped during chrome update
-  // Unstable screenshot size in this test
-  test.skip(`T1025549 - ${baseScreenName}`, async (t) => {
+  test(`T1025549 - ${baseScreenName}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `${baseScreenName}.png`, { element: selector });
@@ -35,18 +37,44 @@ fixture.disablePageReloads`HtmlEditor`
     await appendElementTo('#otherContainer', 'div', 'editorWithToolbar');
 
     await createWidget('dxHtmlEditor', {
-      height: '100%',
+      height: 200,
       width: '100%',
       value: Array(100).fill('string').join('\n'),
     }, '#editor');
 
     await createWidget('dxHtmlEditor', {
-      height: '100%',
+      height: 200,
       width: '100%',
       value: Array(100).fill('string').join('\n'),
       toolbar: {
         items: ['bold', 'color'],
       },
     }, '#editorWithToolbar');
+  });
+});
+
+test('AI toolbar item', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const htmlEditor = new HtmlEditor('#container');
+
+  await testScreenshot(t, takeScreenshot, 'htmleditor-ai-toolbar-item.png', { element: '#container' });
+
+  await t
+    .click(htmlEditor.toolbar.getItemByName('ai'))
+    .click(Selector(`.${SUBMENU_CLASS}`).find(`.${MENU_ITEM_CLASS}`).nth(5));
+
+  await testScreenshot(t, takeScreenshot, 'htmleditor-ai-toolbar-item-expanded.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxHtmlEditor', {
+    height: 500,
+    width: 350,
+    aiIntegration: {},
+    toolbar: {
+      items: ['ai'],
+    },
   });
 });

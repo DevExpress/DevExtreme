@@ -114,7 +114,7 @@ describe('HeaderFilter', () => {
         { popupState } as any,
       );
 
-      popupState.value = { element: {} as any, options: expectedOptions };
+      popupState.value = { element: {} as any, options: expectedOptions as any };
 
       expect(oldHeaderFilterMock.showHeaderFilterMenu)
         .toHaveBeenCalledTimes(1);
@@ -130,7 +130,7 @@ describe('HeaderFilter', () => {
         { popupState } as any,
       );
 
-      popupState.value = { element: {} as any, options: {} };
+      popupState.value = { element: {} as any, options: {} as any };
       popupState.value = null;
 
       expect(oldHeaderFilterMock.showHeaderFilterMenu)

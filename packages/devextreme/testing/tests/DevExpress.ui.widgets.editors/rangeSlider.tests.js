@@ -1404,8 +1404,8 @@ QUnit.module('valueChangeMode option', {
 
         this.range = this.$element.find('.' + SLIDER_RANGE_CLASS);
 
-        this.getLeftTooltipText = () => $.trim(this.leftHandleTooltip.text());
-        this.getRightTooltipText = () => $.trim(this.rightHandleTooltip.text());
+        this.getLeftTooltipText = () => this.leftHandleTooltip.text().trim();
+        this.getRightTooltipText = () => this.rightHandleTooltip.text().trim();
     }
 }, () => {
     QUnit.test('value option should not change on left handle swipe with "onHandleRelease" valueChangeMode', function(assert) {

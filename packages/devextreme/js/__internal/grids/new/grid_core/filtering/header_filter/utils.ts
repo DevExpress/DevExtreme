@@ -3,6 +3,7 @@ import errors from '@js/core/errors';
 import { isDefined } from '@js/core/utils/type';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 
+import type { FilterValue } from '../types';
 import type { HeaderFilterRootOptions } from './types';
 
 export const mergeColumnHeaderFilterOptions = (
@@ -53,27 +54,40 @@ export const getFilterOperator = (values: unknown, filterType?: FilterType): str
   }
 };
 
+const isFilteringAllowed = (column: Column): boolean => column.allowFiltering
+|| column.allowHeaderFiltering;
+
+export const isColumnFilterable = (column: Column): boolean => isFilteringAllowed(column)
+&& !!column.dataField;
+
 export const needCreateHeaderFilter = (column: Column): boolean => {
-  const allowFiltering = column.allowFiltering && column.allowHeaderFiltering;
   const values = column.filterValues;
   const hasSelectedItems = isDefined(values) && values.length > 0;
-  return allowFiltering && hasSelectedItems;
+
+  return isFilteringAllowed(column) && hasSelectedItems;
 };
 
-export const getComposedHeaderFilter = (columns: Column[]): unknown[] => {
-  const filterValue: unknown[] = [];
-  const filterableColumns = columns
-    .filter((col) => needCreateHeaderFilter(col));
-  filterableColumns
-    .forEach((col, index) => {
-      filterValue.push([
-        getColumnName(col),
-        getFilterOperator(col.filterValues, col.filterType),
-        col.filterValues,
-      ]);
-      if (index < filterableColumns.length - 1) {
-        filterValue.push('and');
-      }
-    });
+export const getComposedHeaderFilter = (columns: Column[]): FilterValue => {
+  const filterValue: FilterValue = [];
+  const filterableColumns = columns.filter((col) => needCreateHeaderFilter(col));
+
+  filterableColumns.forEach((column, index) => {
+    const { filterValues } = column;
+    const columnName = getColumnName(column);
+    const hasGroupInterval = !!column.headerFilter?.groupInterval;
+
+    const needNormalizeFilterValues = filterValues?.length === 1 && !hasGroupInterval;
+    const normalizedFilterValues = needNormalizeFilterValues
+      ? filterValues[0]
+      : filterValues;
+    const filterOperator = getFilterOperator(normalizedFilterValues, column.filterType);
+
+    filterValue.push([columnName, filterOperator, normalizedFilterValues]);
+
+    if (index < filterableColumns.length - 1) {
+      filterValue.push('and');
+    }
+  });
+
   return filterValue;
 };

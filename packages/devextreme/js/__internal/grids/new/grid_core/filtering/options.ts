@@ -1,10 +1,9 @@
-import type { Options as FilterPanelOptions } from './filter_panel/options';
+import type { FilterValue } from './types';
 
-export { defaultOptions } from './filter_panel/options';
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Options {
-  filterValue?: any;
+  filterValue?: FilterValue | null;
 }
 
-export type FilterOptions = Options & FilterPanelOptions;
+export const defaultOptions = {
+  filterValue: null,
+} as Options;

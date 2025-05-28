@@ -20,7 +20,7 @@ const App = () => {
     setLimitSubmenuHeight(e.value);
   }, [setLimitSubmenuHeight]);
 
-  const onSubmenuShowing = useCallback(({ submenuContainer }: HTMLElement) => {
+  const onSubmenuShowing = useCallback(({ submenuContainer }: MenuTypes.SubmenuShowingEvent) => {
     submenuContainer.style.maxHeight = limitSubmenuHeight ? `${SUBMENU_HEIGHT}px` : '';
   }, [limitSubmenuHeight]);
 

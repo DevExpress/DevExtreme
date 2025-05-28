@@ -1,7 +1,7 @@
 import React from 'react';
-import 'devextreme/data/odata/store';
+
 import DataGrid, { Column, Paging, Pager } from 'devextreme-react/data-grid';
-import CustomStore from 'devextreme/data/custom_store';
+import { CustomStore } from 'devextreme-react/common/data';
 import 'whatwg-fetch';
 
 function isNotEmpty(value: string | undefined | null) {

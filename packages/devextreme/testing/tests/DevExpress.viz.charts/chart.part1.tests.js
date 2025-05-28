@@ -1,5 +1,6 @@
 const $ = require('jquery');
 const noop = require('core/utils/common').noop;
+const typeUtils = require('core/utils/type');
 const vizMocks = require('../../helpers/vizMocks.js');
 const commons = require('./chartParts/commons.js');
 const DataSource = require('common/data/data_source/data_source').DataSource;
@@ -21,8 +22,8 @@ QUnit.module('dxChart', commons.environment);
 QUnit.test('dxChart creation', function(assert) {
     const chart = this.createChart({});
 
-    assert.ok($.isFunction(chart.showLoadingIndicator));
-    assert.ok($.isFunction(chart.hideLoadingIndicator));
+    assert.ok(typeUtils.isFunction(chart.showLoadingIndicator));
+    assert.ok(typeUtils.isFunction(chart.hideLoadingIndicator));
     assert.strictEqual(rendererModule.Renderer.firstCall.args[0]['cssClass'], 'dxc dxc-chart', 'root class');
 });
 

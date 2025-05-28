@@ -89,6 +89,17 @@ QUnit.module('rendering', () => {
         pointerMock($input).start().down().move(0, 40).scroll(0, 40).up();
         $(document).off('.dxtestns');
     });
+
+    QUnit.test('Wheel event inside focused TextArea should not trigger _onMouseWheel call (T1290309)', function(assert) {
+        const textArea = $('#textarea').dxTextArea({}).dxTextArea('instance');
+        const onMouseWheelSpy = sinon.spy(textArea, '_onMouseWheel');
+        const $input = textArea._input();
+
+        textArea.focus();
+        pointerMock($input).wheel(-10);
+
+        assert.strictEqual(onMouseWheelSpy.callCount, 0, '_onMouseWheel was not called');
+    });
 });
 
 QUnit.module('options changing', () => {

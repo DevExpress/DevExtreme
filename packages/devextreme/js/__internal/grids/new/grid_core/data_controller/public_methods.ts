@@ -33,8 +33,8 @@ export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: 
       return store.byKey(key);
     }
 
-    public getFilter(): FilterDescriptor | FilterDescriptor[] {
-      return this.getDataSource().filter();
+    public getCombinedFilter(): FilterDescriptor | FilterDescriptor[] {
+      return this.dataController.getCombinedFilter();
     }
 
     public keyOf(obj: DataObject) {

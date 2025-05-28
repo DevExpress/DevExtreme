@@ -135,7 +135,7 @@ module('render', {
         });
 
         assert.equal(element.find('.item').length, 3);
-        assert.equal($.trim(element.text()), 'Text is: 0;Text is: 1;Text is: 2;');
+        assert.equal(element.text().trim(), 'Text is: 0;Text is: 1;Text is: 2;');
     });
 
     test('custom render func, returns jquery. Items: [{ prop: 3 }, { prop: 4 }, { prop: 5 }]', function(assert) {
@@ -157,7 +157,7 @@ module('render', {
         });
 
         assert.equal(element.find('.item').length, 3);
-        assert.equal($.trim(element.text()), 'Text is: 3;Text is: 4;Text is: 5;');
+        assert.equal(element.text().trim(), 'Text is: 3;Text is: 4;Text is: 5;');
     });
 
     test('custom render func, returns dom node', function(assert) {
@@ -188,7 +188,7 @@ module('render', {
         });
 
         assert.equal(element.find('.item').length, 3);
-        assert.equal($.trim(element.text()), 'Text is: 3;Text is: 4;Text is: 5;');
+        assert.equal(element.text().trim(), 'Text is: 3;Text is: 4;Text is: 5;');
     });
 
     test('custom render func, returns string', function(assert) {
@@ -209,7 +209,7 @@ module('render', {
         });
 
         assert.equal(element.find('.item').length, 3);
-        assert.equal($.trim(element.text()), 'Text is: 0;Text is: 1;Text is: ;');
+        assert.equal(element.text().trim(), 'Text is: 0;Text is: 1;Text is: ;');
     });
 
     test('custom render func, returns numbers', function(assert) {
@@ -224,7 +224,7 @@ module('render', {
         });
 
         assert.equal(element.find('.item').length, 2);
-        assert.equal($.trim(element.text()), '01');
+        assert.equal(element.text().trim(), '01');
     });
 
     test('itemTemplateProperty option', function(assert) {
@@ -237,7 +237,7 @@ module('render', {
             });
 
         const $item = instance.itemElements().eq(0);
-        assert.equal($.trim($item.text()), 'First Template', 'item has correct template');
+        assert.equal($item.text().trim(), 'First Template', 'item has correct template');
     });
 
     test('useItemTextAsTitle as primitive', function(assert) {
@@ -295,8 +295,8 @@ module('render', {
         });
 
         assert.equal($element.children().length, 2);
-        assert.equal($.trim($element.children().eq(0).text()), 'Test');
-        assert.equal($.trim($element.children().eq(1).text()), 'Test');
+        assert.equal($element.children().eq(0).text().trim(), 'Test');
+        assert.equal($element.children().eq(1).text().trim(), 'Test');
     });
 
     test('\'itemTemplate\' as jQuery element', function(assert) {
@@ -308,8 +308,8 @@ module('render', {
         });
 
         assert.equal($element.children().length, 2);
-        assert.equal($.trim($element.children().eq(0).text()), 'Test');
-        assert.equal($.trim($element.children().eq(1).text()), 'Test');
+        assert.equal($element.children().eq(0).text().trim(), 'Test');
+        assert.equal($element.children().eq(1).text().trim(), 'Test');
     });
 
     test('\'itemTemplate\' as jQuery element with custom template engine', function(assert) {
@@ -329,8 +329,8 @@ module('render', {
             });
 
             assert.equal($element.children().length, 2);
-            assert.equal($.trim($element.children().eq(0).text()), 'custom engine');
-            assert.equal($.trim($element.children().eq(1).text()), 'custom engine');
+            assert.equal($element.children().eq(0).text().trim(), 'custom engine');
+            assert.equal($element.children().eq(1).text().trim(), 'custom engine');
         } finally {
             setTemplateEngine('default');
         }
@@ -347,8 +347,8 @@ module('render', {
         });
 
         assert.equal($element.children().length, 2);
-        assert.equal($.trim($element.children().eq(0).text()), 'First Template');
-        assert.equal($.trim($element.children().eq(1).text()), 'First Template');
+        assert.equal($element.children().eq(0).text().trim(), 'First Template');
+        assert.equal($element.children().eq(1).text().trim(), 'First Template');
     });
 
     test('\'itemTemplate\' as function returning template name that is not string', function(assert) {
@@ -361,7 +361,7 @@ module('render', {
             }
         });
 
-        assert.equal($.trim($element.find('.' + ITEM_CONTENT_CLASS).eq(0).text()), 'zero');
+        assert.equal($element.find('.' + ITEM_CONTENT_CLASS).eq(0).text().trim(), 'zero');
     });
 
     test('\'itemTemplate\' as function returning string', function(assert) {
@@ -374,7 +374,7 @@ module('render', {
             }
         });
 
-        assert.equal($.trim($element.find('.' + ITEM_CONTENT_CLASS).eq(0).text()), '0');
+        assert.equal($element.find('.' + ITEM_CONTENT_CLASS).eq(0).text().trim(), '0');
     });
 
     test('\'itemTemplate\' as function returning template DOM node', function(assert) {
@@ -388,8 +388,8 @@ module('render', {
         });
 
         assert.equal($element.children().length, 2);
-        assert.equal($.trim($element.children().eq(0).text()), 'Test');
-        assert.equal($.trim($element.children().eq(1).text()), 'Test');
+        assert.equal($element.children().eq(0).text().trim(), 'Test');
+        assert.equal($element.children().eq(1).text().trim(), 'Test');
     });
 
     test('\'itemTemplate\' as function returning template jQuery element', function(assert) {
@@ -402,7 +402,7 @@ module('render', {
             }
         });
 
-        assert.equal($.trim($element.find('.' + ITEM_CONTENT_CLASS).children().text()), 'Test');
+        assert.equal($element.find('.' + ITEM_CONTENT_CLASS).children().text().trim(), 'Test');
     });
 
     test('\'itemTemplate\' as script element', function(assert) {
@@ -413,7 +413,7 @@ module('render', {
             itemTemplate: $('#externalTemplate')
         });
 
-        assert.equal($.trim($element.find('.' + ITEM_CONTENT_CLASS).html()), 'Test');
+        assert.equal($element.find('.' + ITEM_CONTENT_CLASS).html().trim(), 'Test');
     });
 
     test('\'itemTemplate\' as script element (no root element)', function(assert) {
@@ -425,8 +425,8 @@ module('render', {
         });
 
         assert.equal($element.children().length, 2);
-        assert.equal($.trim($element.children().eq(0).text()), 'Outer text Test');
-        assert.equal($.trim($element.children().eq(1).text()), 'Outer text Test');
+        assert.equal($element.children().eq(0).text().trim(), 'Outer text Test');
+        assert.equal($element.children().eq(1).text().trim(), 'Outer text Test');
     });
 
     test('\'itemTemplate\' as script element (no root element) with string renderer in template engine (T161432)', function(assert) {
@@ -448,8 +448,8 @@ module('render', {
             });
 
             assert.equal($element.children().length, 2);
-            assert.equal($.trim($element.children().eq(0).text()), 'Outer text Test');
-            assert.equal($.trim($element.children().eq(1).text()), 'Outer text Test');
+            assert.equal($element.children().eq(0).text().trim(), 'Outer text Test');
+            assert.equal($element.children().eq(1).text().trim(), 'Outer text Test');
         } finally {
             setTemplateEngine('default');
         }
@@ -686,7 +686,7 @@ module('render', {
         assert.equal($items.length, testSet.length, 'quantity of a test set items and rendered items are equal');
 
         $items.each(function(index) {
-            assert.equal($.trim($(this).text()), testSet[index]);
+            assert.equal($(this).text().trim(), testSet[index]);
         });
     });
 
@@ -2217,25 +2217,25 @@ module('default template', {
     test('template should be rendered correctly with boolean', function(assert) {
         const $content = this.prepareItemTest(true);
 
-        assert.equal($.trim($content.text()), 'true');
+        assert.equal($content.text().trim(), 'true');
     });
 
     test('template should be rendered correctly with number', function(assert) {
         const $content = this.prepareItemTest(1);
 
-        assert.equal($.trim($content.text()), '1');
+        assert.equal($content.text().trim(), '1');
     });
 
     test('template should be rendered correctly with object that has the text property', function(assert) {
         const $content = this.prepareItemTest({ text: 'custom' });
 
-        assert.equal($.trim($content.text()), 'custom');
+        assert.equal($content.text().trim(), 'custom');
     });
 
     test('template should be rendered correctly with text equals to zero', function(assert) {
         const $content = this.prepareItemTest({ text: 0 });
 
-        assert.strictEqual($.trim($content.text()), '0');
+        assert.strictEqual($content.text().trim(), '0');
     });
 
     test('template should be rendered correctly with html', function(assert) {
@@ -2249,7 +2249,7 @@ module('default template', {
     test('template should be rendered correctly with html equals to an empty string', function(assert) {
         const $content = this.prepareItemTest({ text: 'test', html: '' });
 
-        assert.strictEqual($.trim($content.text()), '');
+        assert.strictEqual($content.text().trim(), '');
     });
 
     test('template should be rendered correctly with htmlstring', function(assert) {

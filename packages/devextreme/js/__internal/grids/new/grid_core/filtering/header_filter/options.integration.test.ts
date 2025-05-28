@@ -3,6 +3,7 @@ import {
   afterEach, describe, expect, it,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
+import type { Filter } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import CardView from '@ts/grids/new/card_view/widget';
 import type {
   HeaderFilterSearchColumnOptions,
@@ -269,6 +270,36 @@ describe('Options', () => {
       const { element: popupContentElement } = getPopup();
 
       expect(popupContentElement).toMatchSnapshot();
+    });
+
+    it.each<{
+      filterValue: Filter; result: number;
+    }>([
+      {
+        filterValue: ['!', [['A', '=', 'A_0']]], result: 4,
+      },
+    ])('should render correct list total count if filterValue has negation', ({ filterValue, result }) => {
+      const cardView = setup({
+        dataSource: [
+          { A: 'A_0' }, { A: 'A_1' }, { A: 'A_2' }, { A: 'A_3' }, { A: 'A_4' },
+        ],
+        columns: [{
+          dataField: 'A',
+        }],
+        filterValue,
+        headerFilter: {
+          visible: true,
+        },
+        filterSyncEnabled: true,
+        filterPanel: { visible: true },
+      });
+
+      openHeaderFilterPopup(cardView);
+      const { element: popupContentElement } = getPopup();
+      const { instance } = getPopupList(popupContentElement);
+      const listCount = instance._selection.options.totalCount();
+
+      expect(listCount).toStrictEqual(result);
     });
   });
 
