@@ -3,15 +3,13 @@ import {
 } from '@jest/globals';
 import dxContextMenu from '@js/ui/context_menu';
 
-import { ColumnsController } from '../../grid_core/columns_controller/index';
+import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
-import { OptionsControllerMock } from '../options_controller.mock';
-import { ContextMenuControllerMock } from './controller.mock';
+import { ContextMenuController } from './controller';
 
 const setup = (options: Options) => {
-  const optionsController = new OptionsControllerMock(options);
-  const columnsController = new ColumnsController(optionsController);
-  const controller = new ContextMenuControllerMock(columnsController, optionsController);
+  const context = getContext(options);
+  const controller = context.get(ContextMenuController);
 
   const container = document.createElement('div');
   // eslint-disable-next-line new-cap

@@ -1,3 +1,4 @@
+import type { SortOrder } from '@js/common';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { batch, computed } from '@preact/signals-core';
 
@@ -134,6 +135,14 @@ export class SortingController {
       || this.sortedColumns.peek().length > 1;
     const nextSortOrder = getNextSortOrder(column.sortOrder, isCtrl);
 
+    this.onSingleModeSortCore(column, isClearSortingRequired, nextSortOrder);
+  }
+
+  public onSingleModeSortCore(
+    column: Column,
+    isClearSortingRequired: boolean,
+    nextSortOrder?: SortOrder,
+  ): void {
     batch(() => {
       if (isClearSortingRequired) {
         this.clearSorting();
@@ -158,6 +167,14 @@ export class SortingController {
     const nextSortOrder = getNextSortOrder(column.sortOrder, isCtrl);
     const isClearSortingRequired = !isCtrl && !e.shiftKey;
 
+    this.onMultipleModeSortCore(column, isClearSortingRequired, nextSortOrder);
+  }
+
+  public onMultipleModeSortCore(
+    column: Column,
+    isClearSortingRequired: boolean,
+    nextSortOrder?: SortOrder,
+  ): void {
     batch(() => {
       if (isClearSortingRequired) {
         this.clearSorting();
@@ -169,7 +186,7 @@ export class SortingController {
     });
   }
 
-  private updateColumnSortOrder(column, nextSortOrder): void {
+  private updateColumnSortOrder(column: Column, nextSortOrder?: SortOrder): void {
     const needChanges = this.mode.peek() === 'multiple';
     if (!needChanges) {
       return;
