@@ -7,10 +7,10 @@ $(() => {
     dataSource: orders,
     keyExpr: 'ID',
     headerFilter: {
-      visible: true
+      visible: true,
     },
     filterPanel: {
-      visible: true
+      visible: true,
     },
     filterValue: [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'beforeNoon']],
     filterBuilder: {
