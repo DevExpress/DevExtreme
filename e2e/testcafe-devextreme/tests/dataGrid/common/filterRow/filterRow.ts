@@ -6,7 +6,6 @@ import { createWidget } from '../../../../helpers/createWidget';
 import { changeTheme } from '../../../../helpers/changeTheme';
 import { getNumberData, getData } from '../../helpers/generateDataSourceData';
 import { Themes } from '../../../../helpers/themes';
-import { a11yCheck } from '../../../../helpers/accessibility/utils';
 
 fixture.disablePageReloads`FilterRow`
   .page(url(__dirname, '../../../container.html'));
