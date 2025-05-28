@@ -74,6 +74,9 @@ export class ContextMenuController
   private getSortingItems(column: Column): ContextMenuItem[] {
     const mode = this.sortingController.mode.value;
     const isDisabled = mode === 'none' || !column.allowSorting;
+    const onItemClick = (event: ContextMenuItemPressedEvent): void => {
+      this.handleSortMenuClick(event, mode, column);
+    };
 
     return [
       {
@@ -81,27 +84,21 @@ export class ContextMenuController
         value: 'asc',
         disabled: isDisabled || column.sortOrder === 'asc',
         icon: 'sortuptext',
-        onItemClick: (event: ContextMenuItemPressedEvent): void => {
-          this.handleSortMenuClick(event, mode, column);
-        },
+        onItemClick,
       },
       {
         text: this.options.oneWay('sorting.descendingText').peek(),
         value: 'desc',
         disabled: isDisabled || column.sortOrder === 'desc',
         icon: 'sortdowntext',
-        onItemClick: (event: ContextMenuItemPressedEvent): void => {
-          this.handleSortMenuClick(event, mode, column);
-        },
+        onItemClick,
       },
       {
         text: this.options.oneWay('sorting.clearText').peek(),
         value: undefined,
         disabled: isDisabled || !column.sortOrder,
         icon: 'none',
-        onItemClick: (event: ContextMenuItemPressedEvent): void => {
-          this.handleSortMenuClick(event, mode, column);
-        },
+        onItemClick,
       },
     ] as ContextMenuItem[];
   }
