@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import CardView, { Column, CardCover, Selection } from 'devextreme-react/card-view';
 import SelectBox from 'devextreme-react/select-box';
+import CheckBox from 'devextreme-react/check-box';
 import { employees } from './data.js';
 
 function altExpr({ FullName }) {
@@ -43,12 +44,11 @@ const App = () => {
           </div>
           <div className="option">
             <span>Allow Select All</span>
-            <SelectBox
-              dataSource={[true, false]}
+            <CheckBox
               value={allowSelectAll}
               onValueChange={setAllowSelectAll}
               disabled={selectionMode !== 'multiple'}
-            ></SelectBox>
+            ></CheckBox>
           </div>
           <div className="option">
             <span>Select All Mode</span>
@@ -62,7 +62,6 @@ const App = () => {
         </div>
       </div>
       <CardView
-        id="cardView"
         dataSource={employees}
         keyExpr="ID"
         defaultSelectedCardKeys={[4, 6]}

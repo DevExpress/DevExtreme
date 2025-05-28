@@ -38,8 +38,7 @@ $(() => {
       disabled: cardView.option('selection.mode') !== 'multiple',
     });
   
-    $("#allow-select-all").dxSelectBox({
-      dataSource: [true, false],
+    $("#allow-select-all").dxCheckBox({
       value: cardView.option('selection.allowSelectAll'),
       onOptionChanged(e) {
         if (e.name === 'value') {

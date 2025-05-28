@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import CardView, { Column, CardCover, Selection } from 'devextreme-react/card-view';
 import SelectBox  from 'devextreme-react/select-box';
+import CheckBox  from 'devextreme-react/check-box';
 import { employees, Employee } from './data.ts';
 
 function altExpr({ FullName }: Employee): string {
@@ -21,7 +22,7 @@ const App = () => {
 
   const onSelectionModeChange = useCallback((value) => {
     setSelectionMode(value);
-    cardViewRef.current.instance().clearSelection();
+    cardViewRef.current!.instance().clearSelection();
   }, []);
 
   return <>
@@ -47,12 +48,11 @@ const App = () => {
         </div>
         <div className="option">
           <span>Allow Select All</span>
-          <SelectBox
-            dataSource={[true, false]}
+          <CheckBox
             value={allowSelectAll}
             onValueChange={setAllowSelectAll}
             disabled={selectionMode !== 'multiple'}
-          ></SelectBox>
+          ></CheckBox>
         </div>
         <div className="option">
           <span>Select All Mode</span>
@@ -66,7 +66,6 @@ const App = () => {
       </div>
     </div>
     <CardView
-      id="cardView"
       dataSource={employees}
       keyExpr="ID"
       defaultSelectedCardKeys={[4, 6]}

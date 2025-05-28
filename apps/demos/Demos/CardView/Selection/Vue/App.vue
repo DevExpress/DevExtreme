@@ -8,34 +8,33 @@
           :data-source="['single', 'multiple']"
           :value="selectionMode"
           @value-changed="onSelectionModeChange"
-        ></DxSelectBox>
+        />
       </div>
       <div className="option">
         <span>Show Checkboxes Mode</span>
         <DxSelectBox
           :data-source="['always', 'none', 'onClick', 'onLongTap']"
           :value="showCheckBoxesMode"
-          @value-changed="e => showCheckBoxesMode = e.value"
+          @value-changed="({ value }) => { showCheckBoxesMode = value; }"
           :disabled="selectionMode !== 'multiple'"
-        ></DxSelectBox>
+        />
       </div>
       <div className="option">
         <span>Allow Select All</span>
-        <DxSelectBox
-          :data-source="[true, false]"
-          :value="allowSelectAll"
-          @value-changed="e => allowSelectAll = e.value"
-          :disabled="selectionMode !== 'multiple'"
-        ></DxSelectBox>
+        <DxCheckBox
+        :value="allowSelectAll"
+        @value-changed="e => allowSelectAll = e.value"
+        :disabled="selectionMode !== 'multiple'"
+        />
       </div>
       <div className="option">
         <span>Select All Mode</span>
         <DxSelectBox
-          :data-source="['allPages', 'page']"
-          :value="selectAllMode"
-          @value-changed="e =>selectAllMode = e.value "
-          :disabled="selectionMode !== 'multiple' || !allowSelectAll"
-        ></DxSelectBox>
+        :data-source="['allPages', 'page']"
+        :value="selectAllMode"
+        @value-changed="e =>selectAllMode = e.value "
+        :disabled="selectionMode !== 'multiple' || !allowSelectAll"
+        />
       </div>
     </div>
   </div>
@@ -71,30 +70,33 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import { DxCardView, DxColumn, DxSelection, DxCardCover } from 'devextreme-vue/card-view';
-  import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
-  import { employees, type Employee } from './data.ts';
+import { ref } from 'vue';
+import {
+  DxCardView, DxColumn, DxSelection, DxCardCover,
+} from 'devextreme-vue/card-view';
+import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
+import { DxCheckBox } from 'devextreme-vue/check-box';
+import { employees, type Employee } from './data.ts';
 
-  function altExpr({ FullName }: Employee): string {
-    return `Photo of ${FullName}`;
-  }
+function altExpr({ FullName }: Employee): string {
+  return `Photo of ${FullName}`;
+}
 
-  function imageExpr({ FullName }: Employee): string {
-    return `../../../../images/employees/new/${FullName}.jpg`;
-  }
+function imageExpr({ FullName }: Employee): string {
+  return `../../../../images/employees/new/${FullName}.jpg`;
+}
 
-  const selectionMode = ref<'single' | 'multiple'>('multiple');
-  const allowSelectAll = ref(true);
-  const showCheckBoxesMode = ref<'always' | 'none' | 'onClick' | 'onLongTap'>('always');
-  const selectAllMode = ref<'allPages' | 'page'>('allPages');
+const selectionMode = ref<'single' | 'multiple'>('multiple');
+const allowSelectAll = ref(true);
+const showCheckBoxesMode = ref<'always' | 'none' | 'onClick' | 'onLongTap'>('always');
+const selectAllMode = ref<'allPages' | 'page'>('allPages');
 
-  const cardViewRef = ref();
+const cardViewRef = ref();
 
-  const onSelectionModeChange = (e: DxSelectBoxTypes.ValueChangedEvent) => {
-    selectionMode.value = e.value;
-    cardViewRef.value.instance.clearSelection();
-  };
+const onSelectionModeChange = ({ value }: DxSelectBoxTypes.ValueChangedEvent): void => {
+  selectionMode.value = value;
+  cardViewRef.value.instance.clearSelection();
+};  
 </script>
 <style>
   .options {
@@ -106,6 +108,7 @@
   .options-container {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
   }
 
   .caption {

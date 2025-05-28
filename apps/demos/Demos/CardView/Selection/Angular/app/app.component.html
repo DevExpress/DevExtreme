@@ -19,11 +19,10 @@
     </div>
     <div class="option">
       <span>Allow Select All</span>
-      <dx-select-box
-        [dataSource]="[true, false]"
+      <dx-check-box
         [(value)]="allowSelectAll"
         [disabled]="selectionMode !== 'multiple'"
-      ></dx-select-box>
+      ></dx-check-box>
     </div>
     <div class="option">
       <span>Select All Mode</span>
@@ -35,12 +34,7 @@
     </div>
   </div>
 </div>
-<dx-card-view
-  id="cardView"
-  [dataSource]="employees"
-  keyExpr="ID"
-  [selectedCardKeys]="[4, 6]"
->
+<dx-card-view [dataSource]="employees" keyExpr="ID" [selectedCardKeys]="[4, 6]">
   <dxo-card-view-card-cover
     [altExpr]="altExpr"
     [imageExpr]="imageExpr"

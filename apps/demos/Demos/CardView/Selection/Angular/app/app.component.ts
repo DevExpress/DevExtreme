@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode, ViewChild } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxCardViewComponent, DxCardViewModule, DxSelectBoxModule } from 'devextreme-angular';
+import { DxCardViewComponent, DxCardViewModule, DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
 import { Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -21,7 +21,7 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
 })
 export class AppComponent {
-  @ViewChild(DxCardViewComponent, { static: false }) cardView: DxCardViewComponent;
+  @ViewChild(DxCardViewComponent, { static: true }) cardView: DxCardViewComponent;
 
   employees: Employee[];
 
@@ -33,6 +33,9 @@ export class AppComponent {
 
   selectAllMode = 'allPages';
 
+  constructor(service: Service) {
+    this.employees = service.getEmployees();
+  }
 
   altExpr({ FullName }: Employee): string {
     return `Photo of ${FullName}`;
@@ -45,10 +48,6 @@ export class AppComponent {
   clearSelection() {
     this.cardView.instance.clearSelection();
   }
-
-  constructor(service: Service) {
-    this.employees = service.getEmployees();
-  }
 }
 
 @NgModule({
@@ -56,6 +55,7 @@ export class AppComponent {
     BrowserModule,
     DxCardViewModule,
     DxSelectBoxModule,
+    DxCheckBoxModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
