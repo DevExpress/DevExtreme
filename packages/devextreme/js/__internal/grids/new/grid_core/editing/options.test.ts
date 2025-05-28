@@ -130,7 +130,7 @@ describe('ColumnProperties', () => {
   describe('validationRules', () => {
     it('should be passed to form item', async () => {
       const { getForm, editingController } = setup({
-        dataSource: [{ field1: 1 }],
+        dataSource: [],
         keyExpr: 'field1',
         columns: [{ dataField: 'field1', validationRules: [{ type: 'required' }] }],
       });
