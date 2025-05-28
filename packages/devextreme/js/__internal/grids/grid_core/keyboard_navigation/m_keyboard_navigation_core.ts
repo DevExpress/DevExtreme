@@ -101,14 +101,16 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   protected initHandlers(): void {
     const focusedView = this.getFocusedView();
+    const resizeController = this.getController('resizing');
+
     this.unsubscribeFromKeyDownEvent();
 
     focusedView?.renderCompleted?.remove(this.renderCompletedWithContext);
-    focusedView?.resizeCompleted?.remove(this.resizeCompletedWithContext);
+    resizeController?.resizeCompleted?.remove(this.resizeCompletedWithContext);
 
     if (this.isKeyboardEnabled()) {
       focusedView?.renderCompleted?.add(this.renderCompletedWithContext);
-      focusedView?.resizeCompleted?.add(this.resizeCompletedWithContext);
+      resizeController?.resizeCompleted?.add(this.resizeCompletedWithContext);
     }
   }
 

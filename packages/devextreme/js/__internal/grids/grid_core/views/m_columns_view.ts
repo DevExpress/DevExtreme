@@ -1072,6 +1072,14 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
+  protected handleScroll(e): void {
+    const scrollLeft = $(e.target).scrollLeft();
+
+    if (scrollLeft !== this._scrollLeft) {
+      this.scrollChanged.fire({ left: scrollLeft }, this.name);
+    }
+  }
+
   /**
    * @extended: column_fixing
    */
@@ -1082,14 +1090,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     if (useNative === false || (useNative === 'auto' && !supportUtils.nativeScrolling)) {
       $scrollContainer.addClass(this.addWidgetPrefix(SCROLLABLE_SIMULATED_CLASS));
     }
-
-    eventsEngine.on($scrollContainer, 'scroll', () => {
-      const scrollLeft = $scrollContainer.scrollLeft();
-
-      if (scrollLeft !== this._scrollLeft) {
-        this.scrollChanged.fire({ left: scrollLeft }, this.name);
-      }
-    });
+    eventsEngine.on($scrollContainer, 'scroll', this.handleScroll.bind(this));
 
     $scrollContainer.addClass(this.addWidgetPrefix(CONTENT_CLASS))
       .addClass(this.addWidgetPrefix(SCROLL_CONTAINER_CLASS))

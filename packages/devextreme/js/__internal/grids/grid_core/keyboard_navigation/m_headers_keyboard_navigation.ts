@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import {
   isCommandKeyPressed,
 } from '@js/common/core/events/utils/index';
@@ -7,7 +8,8 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
 import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
-import type { Views } from '../m_types';
+import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { ModuleType, Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
 import { Direction } from './const';
@@ -193,37 +195,26 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
   protected scrollToColumn($cell: dxElementWrapper): void {
     const scrollable = this.getView('rowsView')?.getScrollable();
 
-    if (scrollable) {
-      const cellIsOutsideVisibleArea = this.isOutsideVisibleArea(
-        $cell,
-        $(this._columnHeadersView.getContent()),
-      );
-
-      if (cellIsOutsideVisibleArea) {
-        const scrollPadding = this.getScrollPadding($(scrollable.container()));
-        const scrollPosition = getElementLocationInternal(
-          $cell[0],
-          'horizontal',
-          $(this._columnHeadersView.getContent())[0],
-          scrollable.scrollOffset(),
-          scrollPadding,
-          this.addWidgetPrefix('table'),
-        );
-
-        const isNeedToRenderVirtualColumns = this._columnsController
-          ?.isNeedToRenderVirtualColumns(scrollPosition);
-
-        if (isNeedToRenderVirtualColumns) {
-          this.needToRestoreFocus = true;
-        }
-
-        scrollable.scrollTo({ x: scrollPosition });
-      }
+    if (!scrollable) {
+      return;
     }
+
+    const scrollPadding = this.getScrollPadding($(scrollable.container()));
+    const scrollPosition = getElementLocationInternal(
+      $cell[0],
+      'horizontal',
+      $(this._columnHeadersView.getContent())[0],
+      scrollable.scrollOffset(),
+      scrollPadding,
+      this.addWidgetPrefix('table'),
+    );
+
+    scrollable.scrollTo({ x: scrollPosition });
   }
 
   public init(): void {
     super.init();
+
     this._columnHeadersView = this.getView('columnHeadersView');
   }
 
@@ -253,18 +244,52 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
 
   public restoreFocus(): void {
     const $focusedCell = this._getFocusedCell();
+    const focusedCellIsOutsideVisibleArea = $focusedCell.length && this.isOutsideVisibleArea(
+      $focusedCell,
+      $(this._columnHeadersView.getContent()),
+    );
 
-    if ($focusedCell?.length) {
+    if (focusedCellIsOutsideVisibleArea) {
       this.scrollToColumn($focusedCell);
+    } else {
+      super.restoreFocus();
     }
+  }
 
-    super.restoreFocus();
+  public needToFocus(): boolean {
+    return this.needToRestoreFocus;
   }
 }
+
+const columnHeadersView = (
+  Base: ModuleType<ColumnHeadersView>,
+) => class ColumnHeadersViewKeyboardNavigationExtender extends Base {
+  protected handleScroll(e): void {
+    super.handleScroll(e);
+
+    const headersKeyboardNavigation = this.getController('headersKeyboardNavigation');
+
+    if (!headersKeyboardNavigation.needToFocus()) {
+      return;
+    }
+
+    const isNeedToRenderVirtualColumns = this._columnsController
+      ?.isNeedToRenderVirtualColumns(e.target.scrollLeft);
+
+    if (!isNeedToRenderVirtualColumns) {
+      headersKeyboardNavigation.restoreFocus();
+    }
+  }
+};
 
 export const headersKeyboardNavigationModule = {
   controllers: {
     headersKeyboardNavigation: HeadersKeyboardNavigationController,
     columnFocusDispatcher: ColumnFocusDispatcher,
+  },
+  extenders: {
+    views: {
+      columnHeadersView,
+    },
   },
 };

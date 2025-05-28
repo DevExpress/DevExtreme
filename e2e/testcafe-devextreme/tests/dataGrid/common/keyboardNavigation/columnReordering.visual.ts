@@ -1472,162 +1472,165 @@ test('reorder column to left when adaptability is enabled and there are hidden c
 });
 
 // Autoscroll
-test('Auto scroll to the right when column reordering via keyboard', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const firstHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+[true, false].forEach((useNative) => {
+  test(`${useNative ? 'Native' : 'Simulated'} scrolling: Auto scroll to the right when column reordering via keyboard`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const firstHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
 
-  await t
-    .click(firstHeaderCell.element)
-    .pressKey('ctrl+right')
-    .pressKey('ctrl+right')
-    .pressKey('ctrl+right')
-    .pressKey('ctrl+right');
+    await t
+      .click(firstHeaderCell.element)
+      .pressKey('ctrl+right')
+      .pressKey('ctrl+right')
+      .pressKey('ctrl+right')
+      .pressKey('ctrl+right');
 
-  await takeScreenshot(
-    'auto_scroll_to_right_when_column_reordering',
-    dataGrid.element,
-  );
+    await takeScreenshot(
+      `${useNative ? 'native' : 'simulated'}_scrolling_-_auto_scroll_to_right_when_column_reordering`,
+      dataGrid.element,
+    );
 
-  await t.expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await createWidget('dxDataGrid', {
-    allowColumnReordering: true,
-    columnWidth: 200,
-    width: 800,
-    dataSource: [{
-      field1: 'test1',
-      field2: 'test2',
-      field3: 'test3',
-      field4: 'test4',
-      field5: 'test5',
-      field6: 'test6',
-      field7: 'test7',
-      field8: 'test8',
-      field9: 'test9',
-      field10: 'test10',
-    }],
-    scrolling: {
-      useNative: false,
-    },
+    await t.expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      allowColumnReordering: true,
+      columnWidth: 200,
+      width: 800,
+      dataSource: [{
+        field1: 'test1',
+        field2: 'test2',
+        field3: 'test3',
+        field4: 'test4',
+        field5: 'test5',
+        field6: 'test6',
+        field7: 'test7',
+        field8: 'test8',
+        field9: 'test9',
+        field10: 'test10',
+      }],
+      scrolling: {
+        useNative,
+      },
+    });
   });
-});
 
-test('Auto scroll to the left when column reordering via keyboard', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const lastHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(9);
+  test(`${useNative ? 'Native' : 'Simulated'} scrolling: Auto scroll to the left when column reordering via keyboard`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const lastHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(9);
 
-  await dataGrid.scrollTo(t, { x: 1200 });
+    await dataGrid.scrollTo(t, { x: 1200 });
 
-  await t
-    .expect(dataGrid.getScrollLeft())
-    .eql(1200);
+    await t
+      .expect(dataGrid.getScrollLeft())
+      .eql(1200);
 
-  await t
-    .click(lastHeaderCell.element)
-    .pressKey('ctrl+left')
-    .pressKey('ctrl+left')
-    .pressKey('ctrl+left')
-    .pressKey('ctrl+left');
+    await t
+      .click(lastHeaderCell.element)
+      .pressKey('ctrl+left')
+      .pressKey('ctrl+left')
+      .pressKey('ctrl+left')
+      .pressKey('ctrl+left');
 
-  await takeScreenshot(
-    'auto_scroll_to_left_when_column_reordering',
-    dataGrid.element,
-  );
+    await takeScreenshot(
+      `${useNative ? 'native' : 'simulated'}_scrolling_-_auto_scroll_to_left_when_column_reordering`,
+      dataGrid.element,
+    );
 
-  await t.expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await createWidget('dxDataGrid', {
-    allowColumnReordering: true,
-    columnWidth: 200,
-    width: 800,
-    dataSource: [{
-      field1: 'test1',
-      field2: 'test2',
-      field3: 'test3',
-      field4: 'test4',
-      field5: 'test5',
-      field6: 'test6',
-      field7: 'test7',
-      field8: 'test8',
-      field9: 'test9',
-      field10: 'test10',
-    }],
-    scrolling: {
-      useNative: false,
-    },
+    await t.expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      allowColumnReordering: true,
+      columnWidth: 200,
+      width: 800,
+      dataSource: [{
+        field1: 'test1',
+        field2: 'test2',
+        field3: 'test3',
+        field4: 'test4',
+        field5: 'test5',
+        field6: 'test6',
+        field7: 'test7',
+        field8: 'test8',
+        field9: 'test9',
+        field10: 'test10',
+      }],
+      scrolling: {
+        useNative,
+      },
+    });
   });
-});
 
-test('Auto scroll to the right when column reordering via keyboard when virtual columns are enabled', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const firstHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+  test(`${useNative ? 'Native' : 'Simulated'} scrolling: Auto scroll to the right when column reordering via keyboard when virtual columns are enabled`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const firstHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
 
-  await t
-    .click(firstHeaderCell.element);
+    await t
+      .debug()
+      .click(firstHeaderCell.element);
 
-  for (let i = 0; i < 30; i += 1) {
-    await t.pressKey('ctrl+right');
-  }
+    for (let i = 0; i < 30; i += 1) {
+      await t.pressKey('ctrl+right');
+    }
 
-  await takeScreenshot(
-    'auto_scroll_to_right_when_column_reordering_when_virtual_columns_are_enabled',
-    dataGrid.element,
-  );
+    await takeScreenshot(
+      `${useNative ? 'native' : 'simulated'}_scrolling_-_auto_scroll_to_right_when_virtual_columns_are_enabled`,
+      dataGrid.element,
+    );
 
-  await t.expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await createWidget('dxDataGrid', {
-    allowColumnReordering: true,
-    columnWidth: 100,
-    width: 800,
-    dataSource: getData(1, 30),
-    scrolling: {
-      useNative: false,
-      columnRenderingMode: 'virtual',
-    },
+    await t.expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      allowColumnReordering: true,
+      columnWidth: 100,
+      width: 800,
+      dataSource: getData(1, 30),
+      scrolling: {
+        useNative,
+        columnRenderingMode: 'virtual',
+      },
+    });
   });
-});
 
-test('Auto scroll to the left when column reordering via keyboard when virtual columns are enabled', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const lastHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(29);
+  test(`${useNative ? 'Native' : 'Simulated'} scrolling: Auto scroll to the left when column reordering via keyboard when virtual columns are enabled`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+    const lastHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(29);
 
-  await dataGrid.scrollTo(t, { x: 2200 });
+    await dataGrid.scrollTo(t, { x: 2200 });
 
-  await t
-    .expect(dataGrid.getScrollLeft())
-    .eql(2200);
+    await t
+      .expect(dataGrid.getScrollLeft())
+      .eql(2200);
 
-  await t
-    .click(lastHeaderCell.element);
+    await t
+      .click(lastHeaderCell.element);
 
-  for (let i = 0; i < 30; i += 1) {
-    await t.pressKey('ctrl+left');
-  }
+    for (let i = 0; i < 30; i += 1) {
+      await t.pressKey('ctrl+left');
+    }
 
-  await takeScreenshot(
-    'auto_scroll_to_left_when_column_reordering_when_virtual_columns_are_enabled',
-    dataGrid.element,
-  );
+    await takeScreenshot(
+      `${useNative ? 'native' : 'simulated'}_scrolling_-_auto_scroll_to_left_when_virtual_columns_are_enabled`,
+      dataGrid.element,
+    );
 
-  await t.expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await createWidget('dxDataGrid', {
-    allowColumnReordering: true,
-    columnWidth: 100,
-    width: 800,
-    dataSource: getData(1, 30),
-    scrolling: {
-      useNative: false,
-      columnRenderingMode: 'virtual',
-    },
+    await t.expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await createWidget('dxDataGrid', {
+      allowColumnReordering: true,
+      columnWidth: 100,
+      width: 800,
+      dataSource: getData(1, 30),
+      scrolling: {
+        useNative,
+        columnRenderingMode: 'virtual',
+      },
+    });
   });
 });
