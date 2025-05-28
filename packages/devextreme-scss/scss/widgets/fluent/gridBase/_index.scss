@@ -735,6 +735,14 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
           }
         }
       }
+
+      .dx-row {
+        &.dx-header-row {
+          > td {
+            border-right: 1px solid $fluent-grid-base-border-color;
+          }
+        }
+      }
     }
 
     &.dx-header-multi-row:not(.dx-#{$widget-name}-sticky-columns) {
@@ -743,7 +751,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
           .dx-row {
             &.dx-header-row {
               > td {
-                border-right: 1px solid $fluent-grid-base-border-color;
                 border-left: 1px solid $fluent-grid-base-border-color;
 
                 &:first-child {
