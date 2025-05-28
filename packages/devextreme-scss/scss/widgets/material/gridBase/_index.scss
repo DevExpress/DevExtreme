@@ -714,7 +714,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       .dx-row {
         &.dx-header-row {
           > td {
-            border-left: 1px solid $material-grid-base-border-color;
             border-right: 1px solid $material-grid-base-border-color;
           }
         }
@@ -727,6 +726,8 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
           .dx-row {
             &.dx-header-row {
               > td {
+                border-left: 1px solid $material-grid-base-border-color;
+
                 &:first-child {
                   border-left: none;
                 }
