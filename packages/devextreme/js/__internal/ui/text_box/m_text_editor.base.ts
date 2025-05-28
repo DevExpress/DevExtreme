@@ -778,7 +778,6 @@ class TextEditorBase<
     if (event.isDefaultPrevented()) {
       return true;
     }
-    // @ts-expect-error ts-error
     let shouldPrevent = this._isNestedTarget(event.relatedTarget);
 
     if (event.type === 'focusin') {

@@ -87,7 +87,7 @@ export default class FormDialog extends BaseDialog {
             onInitialized: this._addEscapeHandler.bind(this),
             text: localizationMessage.format('OK'),
             onClick: (e: ClickEvent): void => {
-              this.callAddButtonAction(e.event);
+              this.callAddButtonAction(e.event?.originalEvent);
             },
             ...getApplyButtonConfig(),
           },

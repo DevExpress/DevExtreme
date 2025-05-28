@@ -6,6 +6,79 @@ export type EventObject = {
    * @docid
    * @public
    */
+  altKey: boolean;
+
+  /**
+   * @docid
+   * @public
+   */
+  bubbles: boolean;
+
+  /**
+   * @docid
+   * @public
+   */
+  button: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  buttons: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  cancelable: boolean;
+
+  /**
+   * @docid
+   * @public
+   * @type object
+   */
+  changedTouches: TouchList;
+
+  /**
+   * @docid
+   * @public
+   */
+  char: any;
+
+  /**
+   * @docid
+   * @public
+   */
+  charCode: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  clientX: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  clientY: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  code: string;
+
+  /**
+   * @docid
+   * @public
+   */
+  ctrlKey: boolean;
+
+  /**
+   * @docid
+   * @public
+   */
   currentTarget: Element;
 
   /**
@@ -24,7 +97,154 @@ export type EventObject = {
    * @docid
    * @public
    */
+  detail: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  eventPhase: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  guid: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  isTrusted: boolean;
+
+  /**
+   * @docid
+   * @public
+   */
+  key: string;
+
+  /**
+   * @docid
+   * @public
+   */
+  keyCode: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  metaKey: boolean;
+
+  /**
+   * @docid
+   * @public
+   */
+  offsetX: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  offsetY: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  pageX: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  pageY: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  pointerId: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  pointerType: string;
+
+  /**
+   * @docid
+   * @public
+   */
+  relatedTarget: Element;
+
+  /**
+   * @docid
+   * @public
+   */
+  screenX: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  screenY: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  shiftKey: boolean;
+
+  /**
+   * @docid
+   * @public
+   */
   target: Element;
+
+  /**
+   * @docid
+   * @public
+   * @type object
+   */
+  targetTouches: TouchList;
+
+  /**
+   * @docid
+   * @public
+   */
+  timeStamp: number;
+
+  /**
+   * @docid
+   * @public
+   */
+  toElement: Element;
+
+  /**
+   * @docid
+   * @public
+   * @type object
+   */
+  touches: TouchList;
+
+  /**
+   * @docid
+   * @public
+   */
+  type: string;
+
+  /**
+   * @docid
+   * @public
+   */
+  view: Window | null;
+
+  /**
+   * @docid
+   * @public
+   */
+  which: number;
+
   /**
    * @docid
    * @publicName isDefaultPrevented()
@@ -77,9 +297,15 @@ export interface EventType { }
 /**
  * @docid
  * @type EventObject|jQuery.Event
- *
  */
-export type DxEvent<TNativeEvent = Event> = {} extends EventType ? (EventObject & TNativeEvent) : EventType;
+export type DxEvent<TNativeEvent extends Event = Event> = ({} extends EventType ? EventObject : EventType) & {
+  /**
+   * @docid
+   * @public
+   * @type event
+   */
+  originalEvent: TNativeEvent;
+};
 
 /** @deprecated EventObject */
 export type dxEvent = EventObject;

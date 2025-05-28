@@ -2873,7 +2873,10 @@ declare module DevExpress.common.core.events {
   /**
    * [descr:NativeEventInfo]
    */
-  export type NativeEventInfo<TComponent, TNativeEvent = Event> = {
+  export type NativeEventInfo<
+    TComponent,
+    TNativeEvent extends Event = Event
+  > = {
     /**
      * [descr:NativeEventInfo.component]
      */
@@ -7784,9 +7787,13 @@ declare module DevExpress.events {
    * [descr:DxEvent]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type DxEvent<TNativeEvent = Event> = {} extends EventType
-    ? EventObject & TNativeEvent
-    : EventType;
+  export type DxEvent<TNativeEvent extends Event = Event> =
+    ({} extends EventType ? EventObject : EventType) & {
+      /**
+       * [descr:DxEvent.originalEvent]
+       */
+      originalEvent: TNativeEvent;
+    };
   /**
    * [descr:event]
    * @deprecated [depNote:event]
@@ -7797,6 +7804,66 @@ declare module DevExpress.events {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type EventObject = {
+    /**
+     * [descr:EventObject.altKey]
+     */
+    altKey: boolean;
+
+    /**
+     * [descr:EventObject.bubbles]
+     */
+    bubbles: boolean;
+
+    /**
+     * [descr:EventObject.button]
+     */
+    button: number;
+
+    /**
+     * [descr:EventObject.buttons]
+     */
+    buttons: number;
+
+    /**
+     * [descr:EventObject.cancelable]
+     */
+    cancelable: boolean;
+
+    /**
+     * [descr:EventObject.changedTouches]
+     */
+    changedTouches: TouchList;
+
+    /**
+     * [descr:EventObject.char]
+     */
+    char: any;
+
+    /**
+     * [descr:EventObject.charCode]
+     */
+    charCode: number;
+
+    /**
+     * [descr:EventObject.clientX]
+     */
+    clientX: number;
+
+    /**
+     * [descr:EventObject.clientY]
+     */
+    clientY: number;
+
+    /**
+     * [descr:EventObject.code]
+     */
+    code: string;
+
+    /**
+     * [descr:EventObject.ctrlKey]
+     */
+    ctrlKey: boolean;
+
     /**
      * [descr:EventObject.currentTarget]
      */
@@ -7813,9 +7880,130 @@ declare module DevExpress.events {
     delegateTarget: Element;
 
     /**
+     * [descr:EventObject.detail]
+     */
+    detail: number;
+
+    /**
+     * [descr:EventObject.eventPhase]
+     */
+    eventPhase: number;
+
+    /**
+     * [descr:EventObject.guid]
+     */
+    guid: number;
+
+    /**
+     * [descr:EventObject.isTrusted]
+     */
+    isTrusted: boolean;
+
+    /**
+     * [descr:EventObject.key]
+     */
+    key: string;
+
+    /**
+     * [descr:EventObject.keyCode]
+     */
+    keyCode: number;
+
+    /**
+     * [descr:EventObject.metaKey]
+     */
+    metaKey: boolean;
+
+    /**
+     * [descr:EventObject.offsetX]
+     */
+    offsetX: number;
+
+    /**
+     * [descr:EventObject.offsetY]
+     */
+    offsetY: number;
+
+    /**
+     * [descr:EventObject.pageX]
+     */
+    pageX: number;
+
+    /**
+     * [descr:EventObject.pageY]
+     */
+    pageY: number;
+
+    /**
+     * [descr:EventObject.pointerId]
+     */
+    pointerId: number;
+
+    /**
+     * [descr:EventObject.pointerType]
+     */
+    pointerType: string;
+
+    /**
+     * [descr:EventObject.relatedTarget]
+     */
+    relatedTarget: Element;
+
+    /**
+     * [descr:EventObject.screenX]
+     */
+    screenX: number;
+
+    /**
+     * [descr:EventObject.screenY]
+     */
+    screenY: number;
+
+    /**
+     * [descr:EventObject.shiftKey]
+     */
+    shiftKey: boolean;
+
+    /**
      * [descr:EventObject.target]
      */
     target: Element;
+
+    /**
+     * [descr:EventObject.targetTouches]
+     */
+    targetTouches: TouchList;
+
+    /**
+     * [descr:EventObject.timeStamp]
+     */
+    timeStamp: number;
+
+    /**
+     * [descr:EventObject.toElement]
+     */
+    toElement: Element;
+
+    /**
+     * [descr:EventObject.touches]
+     */
+    touches: TouchList;
+
+    /**
+     * [descr:EventObject.type]
+     */
+    type: string;
+
+    /**
+     * [descr:EventObject.view]
+     */
+    view: Window | null;
+
+    /**
+     * [descr:EventObject.which]
+     */
+    which: number;
+
     /**
      * [descr:EventObject.isDefaultPrevented()]
      */
