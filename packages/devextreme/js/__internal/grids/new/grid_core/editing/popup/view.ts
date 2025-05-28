@@ -75,6 +75,8 @@ export class EditPopupView extends View<Props> {
       }
 
       (simpleFormItem as any).column = column;
+      simpleFormItem.editorType = EDITOR_TYPES_BY_DATA_TYPE[column.dataType];
+
       extend(simpleFormItem, column.formItem);
 
       simpleFormItem.dataField ??= column.dataField;
@@ -83,7 +85,6 @@ export class EditPopupView extends View<Props> {
         text: column.caption,
         ...column.formItem.label,
       };
-      simpleFormItem.editorType ??= EDITOR_TYPES_BY_DATA_TYPE[column.dataType];
       simpleFormItem.editorOptions = {
         disabled: !column.allowEditing,
         ...column.editorOptions,
@@ -99,7 +100,7 @@ export class EditPopupView extends View<Props> {
         },
         value: editingCard?.fields.find(
           (c) => c.column.name === column.name,
-        )?.value,
+        )?.value ?? null,
       };
     };
   });
