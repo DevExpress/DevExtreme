@@ -6,13 +6,13 @@ import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils'
 const IMAGES_CONTAINER_CLASS = 'images';
 const ITEM_CONTENT_CLASS = 'item-content';
 
-fixture('Common.DialogsAndNotificationsOverview')
+fixture('Common.PopupAndNotificationsOverview')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Common', 'DialogsAndNotificationsOverview', (test) => {
-  test('DialogsAndNotificationsOverview', async (t) => {
+runManualTest('Common', 'PopupAndNotificationsOverview', (test) => {
+  test('PopupAndNotificationsOverview', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.click($(`.${IMAGES_CONTAINER_CLASS} .${ITEM_CONTENT_CLASS}`));

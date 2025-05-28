@@ -28,8 +28,8 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     super.focusinHandler(event);
   }
 
-  protected focusOutHandler(): void {
-    super.focusOutHandler();
+  protected focusOutHandler(e): void {
+    super.focusOutHandler(e);
     this.makeScrollableFocusableIfNeed();
   }
 

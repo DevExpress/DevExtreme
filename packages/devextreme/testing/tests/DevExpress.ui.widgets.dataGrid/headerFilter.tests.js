@@ -9,6 +9,7 @@ import { noop } from 'core/utils/common';
 import ODataStore from 'common/data/odata/store';
 import devices from '__internal/core/m_devices';
 import { DataSource } from 'common/data/data_source/data_source';
+import { isFunction } from 'core/utils/type';
 import { invertFilterExpression } from '__internal/grids/grid_core/header_filter/m_header_filter';
 import dragEvents from 'common/core/events/drag';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
@@ -1765,7 +1766,7 @@ QUnit.module('Header Filter', {
 
         // assert
         assert.ok(list.option('searchEnabled'), 'list with search bar');
-        assert.ok($.isFunction(list.option('searchExpr')), 'expr is correct');
+        assert.ok(isFunction(list.option('searchExpr')), 'expr is correct');
         assert.equal(list.option('searchTimeout'), 300, 'search timeout is assigned');
         assert.equal(list.option('searchMode'), 'contains', 'search mode is default');
     });
@@ -1804,7 +1805,7 @@ QUnit.module('Header Filter', {
 
         // assert
         assert.ok(list.option('searchEnabled'), 'list with search bar');
-        assert.ok($.isFunction(list.option('searchExpr')), 'expr is correct');
+        assert.ok(isFunction(list.option('searchExpr')), 'expr is correct');
         assert.equal(list.option('searchTimeout'), 300, 'search timeout is assigned');
         assert.equal(list.option('searchMode'), 'equals', 'search mode is assigned');
     });

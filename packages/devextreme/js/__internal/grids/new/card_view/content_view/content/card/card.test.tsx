@@ -1,5 +1,8 @@
-import { describe, expect, it } from '@jest/globals';
+import {
+  afterEach, beforeEach, describe, expect, it, jest,
+} from '@jest/globals';
 import { compileGetter } from '@js/common/data';
+import { Guid } from '@ts/core/m_guid';
 import { render } from 'inferno';
 
 import { Card } from './card';
@@ -59,6 +62,13 @@ const props = {
 };
 
 describe('Rendering', () => {
+  beforeEach(() => {
+    jest.spyOn(Guid.prototype, '_normalize').mockReturnValue('guidmock');
+  });
+
+  afterEach(() => {
+    jest.spyOn(Guid.prototype, '_normalize').mockRestore();
+  });
   it('should be rendered correctly', () => {
     const container = document.createElement('div');
     // @ts-expect-error

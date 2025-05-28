@@ -5,11 +5,15 @@
     "mutations": [
         {
             "kind": "remove",
-            "uid": "/card_view"
+            "uid": "/card_view:"
         },
         {
             "kind": "remove",
             "uid": "/scheduler:Toolbar"
+        },
+        {
+            "kind": "remove",
+            "uid": "/stepper:"
         }
     ]
 }

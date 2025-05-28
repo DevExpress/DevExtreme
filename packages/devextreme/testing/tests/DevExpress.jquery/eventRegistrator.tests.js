@@ -1,6 +1,7 @@
 define(function(require) {
     const $ = require('jquery');
     const registerEvent = require('common/core/events/core/event_registrator');
+    const typeUtils = require('core/utils/type');
     const Class = require('core/class');
 
     require('integration/jquery');
@@ -87,7 +88,7 @@ define(function(require) {
         assert.strictEqual(LOG.arguments[0], this.element[0], 'element');
         assert.strictEqual(LOG.arguments[1], data, 'data');
         assert.deepEqual(LOG.arguments[2], ['test1', 'test2'], 'namespaces');
-        assert.ok($.isFunction(LOG.arguments[3]), 'eventHandle');
+        assert.ok(typeUtils.isFunction(LOG.arguments[3]), 'eventHandle');
     });
 
     QUnit.test('\'teardown\' method', function(assert) {
@@ -105,7 +106,7 @@ define(function(require) {
         assert.equal(LOG.arguments.length, 3, 'arguments count');
         assert.strictEqual(LOG.arguments[0], this.element[0], 'element');
         assert.deepEqual(LOG.arguments[1], ['test1', 'test2'], 'namespaces');
-        assert.ok($.isFunction(LOG.arguments[2]), 'eventHandle');
+        assert.ok(typeUtils.isFunction(LOG.arguments[2]), 'eventHandle');
     });
 
     QUnit.test('\'add\' method', function(assert) {

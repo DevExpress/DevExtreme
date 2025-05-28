@@ -9,6 +9,7 @@ import { PagerView } from '@ts/grids/new/grid_core/pager/view';
 import { ToolbarView } from '@ts/grids/new/grid_core/toolbar/view';
 import type { ComponentType, RefObject } from 'inferno';
 
+import { A11yStatusContainer, AccessibilityController } from '../grid_core/accessibility/index';
 import type { Config } from '../grid_core/core/config_context';
 import { ConfigContext } from '../grid_core/core/config_context';
 import { EditPopupView } from '../grid_core/editing/popup/view';
@@ -34,6 +35,8 @@ interface MainViewProps {
   ContextMenu: ComponentType;
   config: Config;
   rootElementRef: RefObject<HTMLDivElement>;
+  accessibilityDescription: string;
+  accessibilityStatus: string;
   onKeyDown: (event: KeyboardEvent) => void;
 }
 
@@ -49,6 +52,8 @@ function MainViewComponent({
   EditPopup,
   config,
   rootElementRef,
+  accessibilityDescription,
+  accessibilityStatus,
   onKeyDown,
 }: MainViewProps): JSX.Element {
   return (<>
@@ -59,8 +64,11 @@ function MainViewComponent({
         >
           <div
             class="dx-cardview-root-container"
+            role='group'
+            aria-label={accessibilityDescription}
             onKeyDown={onKeyDown}
           >
+            <A11yStatusContainer statusText={accessibilityStatus} />
             <div class="dx-cardview-header-container">
               <Toolbar/>
               <HeaderPanel/>
@@ -102,6 +110,7 @@ export class MainView extends View<MainViewProps> {
     ContextMenuView,
     OptionsController,
     KeyboardNavigationController,
+    AccessibilityController,
   ] as const;
 
   constructor(
@@ -116,6 +125,7 @@ export class MainView extends View<MainViewProps> {
     private readonly contextMenu: ContextMenuView,
     private readonly options: OptionsController,
     private readonly keyboardNavigation: KeyboardNavigationController,
+    private readonly accessibility: AccessibilityController,
   ) {
     super();
   }
@@ -142,6 +152,8 @@ export class MainView extends View<MainViewProps> {
       onKeyDown: (event: KeyboardEvent): void => {
         this.keyboardNavigation.onKeyDown(event);
       },
+      accessibilityDescription: this.accessibility.componentDescription.value,
+      accessibilityStatus: this.accessibility.componentStatus.value,
     }));
   }
 }

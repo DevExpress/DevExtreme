@@ -1,5 +1,6 @@
 import '@js/ui/drop_down_button';
 
+import type { EditorStyle } from '@js/common';
 import type { AIIntegration, RequestCallbacks } from '@js/common/ai-integration';
 import localizationMessage from '@js/common/core/localization/message';
 import Guid from '@js/core/guid';
@@ -15,8 +16,8 @@ import type dxSelectBox from '@js/ui/select_box';
 import type { Properties as SelectBoxProperties } from '@js/ui/select_box';
 import SelectBox from '@js/ui/select_box';
 import TextArea from '@js/ui/text_area';
-import { isCompact } from '@js/ui/themes';
-import { currentTheme } from '@js/viz/themes';
+import { current, isCompact, isMaterial } from '@js/ui/themes';
+import BaseDialog from '@ts/ui/html_editor/ui/m_baseDialog';
 import type {
   AICommandExecutor,
   AICommandParamsMap,
@@ -29,13 +30,11 @@ import {
   buildAICommandParams,
   getAICommandName,
 } from '@ts/ui/html_editor/utils/ai';
+import { isSmallScreen } from '@ts/ui/html_editor/utils/small_screen';
 import type { Properties as InformerProperties } from '@ts/ui/informer/informer';
 import type { LoadIndicatorProperties } from '@ts/ui/m_load_indicator';
 import { AnimationType } from '@ts/ui/m_load_indicator';
 import { TEXTEDITOR_INPUT_CONTAINER_CLASS } from '@ts/ui/text_box/m_text_editor.base';
-
-import { isSmallScreen } from '../utils/small_screen';
-import BaseDialog from './m_baseDialog';
 
 export const AI_DIALOG_CLASS = 'dx-aidialog';
 export const AI_DIALOG_CONTROLS_CLASS = 'dx-aidialog-controls';
@@ -52,7 +51,7 @@ const REGENERATE_BUTTON_ICON = 'restore';
 const AI_DIALOG_COMMANDS_WITH_OPTIONS = ['translate', 'changeStyle', 'changeTone'];
 
 const POPUP_MIN_WIDTH = 288;
-const POPUP_MAX_WIDTH = 460;
+const POPUP_MAX_WIDTH = isMaterial(current()) ? 494 : 460;
 const LOADINDICATOR_SIZE = 48;
 
 const INPUT_EVENT = 'input';
@@ -64,7 +63,7 @@ export const ACTION_BUTTON_WIDTH = 110;
 export const COMPACT_ACTION_BUTTON_WIDTH = 100;
 
 function getActionButtonWidth(): number {
-  return isCompact(currentTheme()) ? COMPACT_ACTION_BUTTON_WIDTH : ACTION_BUTTON_WIDTH;
+  return isCompact(current()) ? COMPACT_ACTION_BUTTON_WIDTH : ACTION_BUTTON_WIDTH;
 }
 
 enum DialogState {
@@ -73,6 +72,8 @@ enum DialogState {
   Generating = 'generating',
   ResultReady = 'resultReady',
   Error = 'error',
+  InitialCanceled = 'initialCanceled',
+  AskingCanceled = 'askingCanceled',
 }
 
 enum ReplaceButtonActions {
@@ -176,10 +177,12 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   protected _renderCommandSelectBox($container: dxElementWrapper): void {
     const $commandSelectBox = $('<div>').appendTo($container);
+
     this._commandSelectBox = new SelectBox($commandSelectBox.get(0), {
       value: this._currentCommand,
       displayExpr: 'text',
       valueExpr: 'name',
+      stylingMode: 'outlined',
       onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: (e): void => {
         if (this._commandChangeSuppressed) {
@@ -211,6 +214,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       items: this._commandOptionsList,
       value: this._currentOption ?? this._commandOptionsList?.[0],
       visible: this._isCommandWithOptionsSelected(),
+      stylingMode: 'outlined',
       onInitialized: this._addEscapeHandler.bind(this),
       onValueChanged: ({ value }): void => {
         if (this._commandOptionSuppressed) {
@@ -237,6 +241,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       width: '100%',
       placeholder: localizationMessage.format('dxHtmlEditor-aiAskPlaceholder'),
       _shouldAttachKeyboardEvents: true,
+      stylingMode: 'outlined' as EditorStyle,
       onInitialized: this._addEscapeHandler.bind(this),
       valueChangeEvent: INPUT_EVENT,
       onValueChanged: (e): void => {
@@ -272,6 +277,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       width: '100%',
       readOnly: true,
       _shouldAttachKeyboardEvents: true,
+      stylingMode: 'outlined' as EditorStyle,
       onInitialized: this._addEscapeHandler.bind(this),
       ...screenSpecificOptions,
     };
@@ -317,12 +323,10 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   private _renderInformer($container: dxElementWrapper): void {
     const $informer = $('<div>').appendTo($container);
-    const text = localizationMessage.format('dxHtmlEditor-aiDialogError');
 
     const options: InformerProperties = {
       contentAlignment: 'center',
       showBackground: true,
-      text,
     };
     // @ts-expect-error no .d.ts for private component
     this._informer = new Informer($informer.get(0), options);
@@ -474,10 +478,12 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
     switch (this._dialogState) {
       case DialogState.Initial:
+      case DialogState.InitialCanceled:
       case DialogState.ResultReady:
         items.push(...this._getInitialToolbarItems());
         break;
       case DialogState.Asking:
+      case DialogState.AskingCanceled:
         items.push(this._getGenerateButtonItem());
         break;
       case DialogState.Generating:
@@ -595,7 +601,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   private _cancelAICommandExecution(): void {
-    this._processCommandCompletion(this._getInitialDialogState());
+    this._processCommandCompletion(this._getInitialDialogState(true));
   }
 
   private _isCommandWithOptionsSelected(): boolean {
@@ -668,9 +674,11 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _refreshTextAreas(): void {
     switch (this._dialogState) {
       case DialogState.Initial:
+      case DialogState.InitialCanceled:
         this._setTextAreasInitialState();
         break;
       case DialogState.Asking:
+      case DialogState.AskingCanceled:
         this._setTextAreasAskingState();
         break;
       case DialogState.Generating:
@@ -722,13 +730,41 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   private _refreshInformer(): void {
-    const visible = this._dialogState === DialogState.Error;
+    const errorText = localizationMessage.format('dxHtmlEditor-aiDialogError');
+    const cancelText = localizationMessage.format('dxHtmlEditor-aiDialogCanceled');
 
-    this._informer.option('visible', visible);
+    switch (this._dialogState) {
+      case DialogState.Error:
+        this._informer.option({
+          visible: true,
+          text: errorText,
+          icon: '',
+          type: 'error',
+        });
+        break;
+      case DialogState.InitialCanceled:
+      case DialogState.AskingCanceled:
+        this._informer.option({
+          visible: true,
+          text: cancelText,
+          icon: 'errorcircle',
+          type: 'info',
+        });
+        break;
+      default:
+        this._informer.option('visible', false);
+        break;
+    }
   }
 
-  private _getInitialDialogState(): DialogState {
-    return this._isAskAICommandSelected ? DialogState.Asking : DialogState.Initial;
+  private _getInitialDialogState(canceled?: boolean): DialogState {
+    const isAskingCommand = this._isAskAICommandSelected;
+
+    if (canceled) {
+      return isAskingCommand ? DialogState.AskingCanceled : DialogState.InitialCanceled;
+    }
+
+    return isAskingCommand ? DialogState.Asking : DialogState.Initial;
   }
 
   private _replaceButtonAction(event: AIDialogResult['event']): void {

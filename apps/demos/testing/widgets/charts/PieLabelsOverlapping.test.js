@@ -3,13 +3,13 @@ import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
-fixture('PieWithResolvedLabelOverlapping')
+fixture('PieResolveLabelOverlap')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Charts', 'PieWithResolvedLabelOverlapping', (test) => {
-  test('PieWithResolvedLabelOverlapping', async (t) => {
+runManualTest('Charts', 'PieResolveLabelOverlap', (test) => {
+  test('PieResolveLabelOverlap', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const showSelectBoxItems = () => t.click($('.options .dx-dropdowneditor-input-wrapper input.dx-texteditor-input'));
     const selectItem = (index) => $('.dx-dropdowneditor-overlay .dx-list-item-content').nth(index);
