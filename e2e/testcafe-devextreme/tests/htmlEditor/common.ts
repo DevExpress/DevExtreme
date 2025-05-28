@@ -17,9 +17,7 @@ fixture.disablePageReloads`HtmlEditor`
   const clickTarget = toolbar ? '#otherContainer .dx-bold-format' : '#container';
   const baseScreenName = toolbar ? 'htmleditor-with-toolbar' : 'htmleditor-without-toolbar';
 
-  // TODO Chrome133: skipped during chrome update
-  // Unstable screenshot size in this test
-  test.skip(`T1025549 - ${baseScreenName}`, async (t) => {
+  test(`T1025549 - ${baseScreenName}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `${baseScreenName}.png`, { element: selector });
@@ -39,13 +37,13 @@ fixture.disablePageReloads`HtmlEditor`
     await appendElementTo('#otherContainer', 'div', 'editorWithToolbar');
 
     await createWidget('dxHtmlEditor', {
-      height: '100%',
+      height: 200,
       width: '100%',
       value: Array(100).fill('string').join('\n'),
     }, '#editor');
 
     await createWidget('dxHtmlEditor', {
-      height: '100%',
+      height: 200,
       width: '100%',
       value: Array(100).fill('string').join('\n'),
       toolbar: {
