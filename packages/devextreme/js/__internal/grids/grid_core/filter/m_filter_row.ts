@@ -61,7 +61,6 @@ const FILTER_RANGE_OVERLAY_CLASS = 'filter-range-overlay';
 const FILTER_RANGE_START_CLASS = 'filter-range-start';
 const FILTER_RANGE_END_CLASS = 'filter-range-end';
 const MENU_CLASS = 'dx-menu';
-const MENU_ITEM_TEXT = 'dx-menu-item-text';
 const EDITOR_WITH_MENU_CLASS = 'dx-editor-with-menu';
 const EDITOR_CONTAINER_CLASS = 'dx-editor-container';
 const EDITOR_CELL_CLASS = 'dx-editor-cell';
@@ -590,16 +589,16 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       showFirstSubmenuMode: 'onHover',
       hideSubmenuOnMouseLeave: true,
       items: [{
+        name: ARIA_SEARCH_BOX,
         disabled: !column.filterOperations?.length,
         icon: OPERATION_ICONS[getColumnSelectedFilterOperation(that, column) || 'default'],
         selectable: false,
         items: that._getFilterOperationMenuItems(column),
       }],
-      onItemRendered: ({ itemElement }) => {
-        const element = $(itemElement);
-        const labelElement = element.find(`.${MENU_ITEM_TEXT}`);
-        const label = labelElement.length ? labelElement.text() : ARIA_SEARCH_BOX;
-        this.setAria('label', label, $(itemElement));
+      onItemRendered: ({ itemElement, itemData }) => {
+        if (itemData?.name === ARIA_SEARCH_BOX) {
+          this.setAria('label', ARIA_SEARCH_BOX, $(itemElement));
+        }
       },
       onItemClick(properties) {
         // @ts-expect-error
