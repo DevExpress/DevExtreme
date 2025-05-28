@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /* eslint-disable spellcheck/spell-checker */
 import type { DataType } from '@js/common';
 import type * as dxForm from '@js/ui/form';
@@ -33,52 +34,70 @@ export class EditPopupView extends View<Props> {
 
   protected component = EditPopup;
 
-  private readonly items = computed(
-    () => this.columnsController.columns.value.map((column): dxForm.Item => ({
-      // @ts-expect-error
+  private readonly items = computed((): dxForm.Item[] => {
+    const userItems = this.options.oneWay('editing.form.items').value;
+
+    if (userItems) {
+      return userItems;
+    }
+
+    return this.columnsController.columns.value.map((column) => ({
       column,
       name: column.name,
       dataField: column.dataField,
-      validationRules: column.validationRules,
-      label: {
-        text: column.caption,
-        ...column.formItem.label,
-      },
-      editorType: EDITOR_TYPES_BY_DATA_TYPE[column.dataType],
-      editorOptions: {
-        ...column.editorOptions,
-        disabled: !column.allowEditing,
-        ...column.formItem.editorOptions,
-      },
-      ...column.formItem,
-    })),
-  );
+    }));
+  });
 
   private readonly customizeItems = computed(
-    () => (item: dxForm.SimpleItem): void => {
+    () => (item: dxForm.Item): void => {
       const editingCard = this.editingController.editingCard.value;
 
       if (!editingCard) {
         return;
       }
 
-      const column = this.columnsController.columns.peek()
-        .find((c) => c.name === item.name)!;
+      if (item.itemType !== 'simple') {
+        return;
+      }
 
-      item.editorOptions = {
-        ...item.editorOptions,
+      const simpleFormItem = item as dxForm.SimpleItem;
+      const itemId = simpleFormItem.name ?? simpleFormItem.dataField;
+
+      const column = (simpleFormItem as any).column
+        ?? this.columnsController.columns.peek()
+          .find((c) => c.name === itemId)
+        ?? this.columnsController.columns.peek()
+          .find((c) => c.dataField === itemId);
+
+      if (!column) {
+        return;
+      }
+
+      (simpleFormItem as any).column = column;
+      simpleFormItem.dataField ??= column.dataField;
+      simpleFormItem.validationRules ??= column.validationRules;
+      simpleFormItem.label = {
+        text: column.caption,
+        ...column.formItem.label,
       };
-      item.editorOptions.onValueChanged = async ({ value }): Promise<void> => {
-        const newData = {};
-        await this.promises.add(
-          Promise.resolve(column.setFieldValue.bind(column)(newData, value, editingCard.data)),
-        );
-        this.editingController.addChange(editingCard.key, newData);
-        this.formRef.current?.repaint();
+      simpleFormItem.editorType ??= EDITOR_TYPES_BY_DATA_TYPE[column.dataType];
+      simpleFormItem.editorOptions = {
+        onValueChanged: async ({ value }): Promise<void> => {
+          const newData = {};
+          await this.promises.add(
+            Promise.resolve(column.setFieldValue.bind(column)(newData, value, editingCard.data)),
+          );
+          this.editingController.addChange(editingCard.key, newData);
+          this.formRef.current?.repaint();
+        },
+        value: editingCard?.fields.find(
+          (c) => c.column.name === column.name,
+        )?.value,
+        disabled: !column.allowEditing,
+        ...column.editorOptions,
+        ...column.formItem.editorOptions,
+        ...simpleFormItem.editorOptions,
       };
-      item.editorOptions.value = editingCard?.fields.find(
-        (c) => c.column.name === column.name,
-      )?.value;
     },
   );
 
