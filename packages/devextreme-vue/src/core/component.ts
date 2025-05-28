@@ -62,7 +62,8 @@ function prepareAttrs(attrs, dxClassesSyncedWithClassAttr: string) {
     if (attrValue !== undefined && attrValue !== null) {
       if (attr === 'class') {
         const nonDXClassesFromAttr = attrValue.split(' ')
-          .filter((classFromAttr: string) => !classFromAttr.startsWith(dxClassesPrefix) && !dxClassesSyncedWithClassAttr.includes(classFromAttr))
+          .filter((classFromAttr: string) => !classFromAttr.startsWith(dxClassesPrefix)
+              && !dxClassesSyncedWithClassAttr.split(' ').includes(classFromAttr))
           .join(' ');
 
         attributes[attr] = [nonDXClassesFromAttr, dxClassesSyncedWithClassAttr].filter((item) => item !== '').join(' ');
