@@ -215,7 +215,10 @@ test('DataGrid - NVDA reads filter menu items as "Search box 1 of 8" (T1290386)'
     await t.expect(item.getAttribute('aria-label')).eql(null);
   }
 
-  await a11yCheck(t);
+  await t
+    .click(filterEditor.menu.getItemByText('Equals'))
+    .expect(filterEditor.menuButton.getAttribute('aria-label'))
+    .eql('Equals');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(5, 1),
   keyExpr: 'field_0',
