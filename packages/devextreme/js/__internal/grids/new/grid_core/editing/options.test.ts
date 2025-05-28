@@ -3,7 +3,7 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
-import type * as dxForm from '@js/ui/form';
+import dxCalendar from '@js/ui/calendar';
 import { rerender } from 'inferno';
 
 import type { Column } from '../columns_controller/types';
@@ -25,6 +25,7 @@ const setup = (config: Options) => {
   const editPopupView = context.get(EditPopupView);
 
   editPopupView.render(rootElement);
+
   rerender();
 
   const getForm = () => {
@@ -53,27 +54,31 @@ describe('ColumnProperties', () => {
   describe('allowEditing', () => {
     describe('when it is false', () => {
       it('should make editor disabled', () => {
-        const { editPopupView } = setup({
+        const { getForm } = setup({
+          dataSource: [{ field1: 1 }],
+          keyExpr: 'field1',
+          editing: {
+            editCardKey: 1,
+          },
           columns: [{ dataField: 'field1', allowEditing: false }],
         });
 
-        // @ts-expect-error private field
-        const props = editPopupView.props!;
-
-        expect((props.items[0] as dxForm.SimpleItem).editorOptions?.disabled).toBe(true);
+        expect(getForm().getEditor('field1')!.option('disabled')).toBe(true);
       });
     });
   });
   describe('editorOptions', () => {
     it('should be passed to form item editorOptions', () => {
-      const { editPopupView } = setup({
+      const { getForm } = setup({
+        dataSource: [{ field1: 1 }],
+        keyExpr: 'field1',
+        editing: {
+          editCardKey: 1,
+        },
         columns: [{ dataField: 'field1', editorOptions: { someEditOption: 'someEditOptionValue' } }],
       });
 
-      // @ts-expect-error private field
-      const props = editPopupView.props!;
-
-      expect((props.items[0] as dxForm.SimpleItem).editorOptions?.someEditOption).toBe('someEditOptionValue');
+      expect(getForm().getEditor('field1')!.option('someEditOption')).toBe('someEditOptionValue');
     });
   });
   describe('setFieldValue', () => {
@@ -109,27 +114,31 @@ describe('ColumnProperties', () => {
 
   describe('formItem', () => {
     it('should be passed to form item', () => {
-      const { editPopupView } = setup({
-        columns: [{ dataField: 'field1', formItem: { colSpan: 2 } }],
+      const { getForm } = setup({
+        dataSource: [{ field1: 1 }],
+        keyExpr: 'field1',
+        editing: {
+          editCardKey: 1,
+        },
+        columns: [{ dataField: 'field1', formItem: { editorType: 'dxCalendar' } }],
       });
 
-      // @ts-expect-error private field
-      const props = editPopupView.props!;
-
-      expect((props.items[0] as dxForm.SimpleItem).colSpan).toBe(2);
+      expect(getForm().getEditor('field1')!).toBeInstanceOf(dxCalendar);
     });
   });
 
   describe('validationRules', () => {
-    it('should be passed to form item', () => {
-      const { editPopupView } = setup({
+    it('should be passed to form item', async () => {
+      const { getForm, editingController } = setup({
+        dataSource: [{ field1: 1 }],
+        keyExpr: 'field1',
         columns: [{ dataField: 'field1', validationRules: [{ type: 'required' }] }],
       });
 
-      // @ts-expect-error private field
-      const props = editPopupView.props!;
+      await editingController.addCard();
+      const validationResult = getForm().validate();
 
-      expect((props.items[0] as dxForm.SimpleItem).validationRules?.[0].type).toBe('required');
+      expect(validationResult.isValid).toBe(false);
     });
   });
 });
@@ -152,7 +161,8 @@ describe('Options', () => {
           },
         });
 
-        expect(getForm().option('formData')).toMatchSnapshot();
+        expect(getForm().getEditor('field1')!.option('value')).toBe('value1');
+        expect(getForm().getEditor('id')!.option('value')).toBe(1);
       });
     });
 

@@ -5,9 +5,11 @@ import type { DataType } from '@js/common';
 import type * as dxForm from '@js/ui/form';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, signal } from '@preact/signals-core';
+import { extend } from '@ts/core/utils/m_extend';
 import { createRef } from 'inferno';
 
 import { ColumnsController } from '../../columns_controller/columns_controller';
+import type { Column } from '../../columns_controller/types';
 import { View } from '../../core/view';
 import { ItemsController } from '../../items_controller/items_controller';
 import { KeyboardNavigationController } from '../../keyboard_navigation/index';
@@ -48,10 +50,11 @@ export class EditPopupView extends View<Props> {
     }));
   });
 
-  private readonly customizeItems = computed(
-    () => (item: dxForm.Item): void => {
-      const editingCard = this.editingController.editingCard.value;
+  private readonly customizeItems = computed(() => {
+    const editingCard = this.editingController.editingCard.value;
+    const columns = this.columnsController.columns.value;
 
+    return (item: dxForm.Item): void => {
       if (!editingCard) {
         return;
       }
@@ -63,17 +66,17 @@ export class EditPopupView extends View<Props> {
       const simpleFormItem = item as dxForm.SimpleItem;
       const itemId = simpleFormItem.name ?? simpleFormItem.dataField;
 
-      const column = (simpleFormItem as any).column
-        ?? this.columnsController.columns.peek()
-          .find((c) => c.name === itemId)
-        ?? this.columnsController.columns.peek()
-          .find((c) => c.dataField === itemId);
+      const column: Column = (simpleFormItem as any).column
+        ?? columns.find((c) => c.name === itemId)
+        ?? columns.find((c) => c.dataField === itemId);
 
       if (!column) {
         return;
       }
 
       (simpleFormItem as any).column = column;
+      extend(simpleFormItem, column.formItem);
+
       simpleFormItem.dataField ??= column.dataField;
       simpleFormItem.validationRules ??= column.validationRules;
       simpleFormItem.label = {
@@ -82,6 +85,10 @@ export class EditPopupView extends View<Props> {
       };
       simpleFormItem.editorType ??= EDITOR_TYPES_BY_DATA_TYPE[column.dataType];
       simpleFormItem.editorOptions = {
+        disabled: !column.allowEditing,
+        ...column.editorOptions,
+        ...column.formItem.editorOptions,
+        ...simpleFormItem.editorOptions,
         onValueChanged: async ({ value }): Promise<void> => {
           const newData = {};
           await this.promises.add(
@@ -93,13 +100,9 @@ export class EditPopupView extends View<Props> {
         value: editingCard?.fields.find(
           (c) => c.column.name === column.name,
         )?.value,
-        disabled: !column.allowEditing,
-        ...column.editorOptions,
-        ...column.formItem.editorOptions,
-        ...simpleFormItem.editorOptions,
       };
-    },
-  );
+    };
+  });
 
   public static dependencies = [
     OptionsController, ColumnsController,
