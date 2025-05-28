@@ -1,4 +1,4 @@
-Row templates allow you to display custom content in data rows. In this demo, a [dataRowTemplate](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#dataRowTemplate) adds employee images and extra information to regular data rows.
+Card templates allow you to display custom content in cards. In this demo, a [cardTemplate](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/#cardTemplate) adds cars images and extra components to regular cards.
 
-You should disable or implement certain DataGrid features manually to use row templates. Refer to the [dataRowTemplate](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#dataRowTemplate) article for details.
+You should disable or implement certain CardView features manually to use card templates. Refer to the [cardTemplate](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/#cardTemplate) article for details.
 <!--split-->

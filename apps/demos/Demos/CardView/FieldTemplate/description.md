@@ -1,4 +1,4 @@
-Column templates allow you to display custom content in column cells. Use the [cellTemplate](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#cellTemplate) property ([cellRender](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#cellRender) in React) to configure these templates.
+Field templates allow you to display custom content in field elements. Use the [fieldTemplate](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/#fieldTemplate) property to configure these templates.
 
-In this demo, a custom column template is configured to display employee photos in the `Picture` column.
+In this demo, a custom field templates are configured to customize appearance of the 'Priority', 'Assigned to' and 'Completed' fields.
 <!--split-->
