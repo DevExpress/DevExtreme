@@ -5,26 +5,26 @@ $(() => {
     wordWrapEnabled: true,
     columns: [
       {
-        caption: 'Subject',
         dataField: 'Task_Subject',
+        caption: 'Subject',
       },
       {
         dataField: 'Task_Start_Date',
-        caption: 'Start Date',
         dataType: 'date',
+        caption: 'Start Date',
       },
       {
         dataField: 'Task_Due_Date',
-        caption: 'Due Date',
         dataType: 'date',
+        caption: 'Due Date',
       },
       {
-        caption: 'Priority',
         dataField: 'Task_Priority',
+        caption: 'Priority',
       },
       {
-        caption: 'Status',
         dataField: 'Task_Status',
+        caption: 'Status',
       },
     ],
     headerFilter: {
