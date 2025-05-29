@@ -82,9 +82,11 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       }
 
       .dx-texteditor {
-        .dx-texteditor-input,
-        .dx-placeholder::before {
-          padding-left: $material-grid-base-texteditor-input-padding;
+        .dx-texteditor-container {
+          .dx-texteditor-input,
+          .dx-placeholder::before {
+            padding-left: $material-grid-base-texteditor-input-padding;
+          }
         }
       }
     }
@@ -458,11 +460,13 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
         font-size: $material-grid-base-cell-font-size;
         height: $material-grid-base-cell-height;
         line-height: $material-grid-base-cell-height;
-        padding-right: $material-grid-base-cell-horizontal-padding;
-        padding-left: $material-grid-base-cell-horizontal-padding;
         padding-top: 0;
         padding-bottom: 0;
         margin-top: 0;
+      }
+
+      &:not(.dx-tagbox):not(.dx-colorbox) .dx-texteditor-input {
+        padding: 0 $material-grid-base-cell-horizontal-padding;
       }
 
       .dx-placeholder::before {
@@ -706,6 +710,14 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
           }
         }
       }
+
+      .dx-row {
+        &.dx-header-row {
+          > td {
+            border-right: 1px solid $material-grid-base-border-color;
+          }
+        }
+      }
     }
 
     &.dx-header-multi-row:not(.dx-#{$widget-name}-sticky-columns) {
@@ -714,7 +726,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
           .dx-row {
             &.dx-header-row {
               > td {
-                border-right: 1px solid $material-grid-base-border-color;
                 border-left: 1px solid $material-grid-base-border-color;
 
                 &:first-child {

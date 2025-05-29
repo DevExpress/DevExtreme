@@ -167,7 +167,7 @@ import {
 import { DxPopup } from 'devextreme-vue/popup';
 import DxTextBox from 'devextreme-vue/text-box';
 import DxButton from 'devextreme-vue/button';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-vue/common/data';
 import CustomShapeTemplate from './CustomShapeTemplate.vue';
 import CustomShapeToolboxTemplate from './CustomShapeToolboxTemplate.vue';
 import service from './data.ts';

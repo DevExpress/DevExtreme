@@ -3,6 +3,7 @@
 import $ from 'jquery';
 import { CustomStore } from 'common/data/custom_store';
 import ArrayStore from 'common/data/array_store';
+import { isFunction } from 'core/utils/type';
 
 import 'ui/tree_view';
 
@@ -158,7 +159,7 @@ window.initTree = function(options) {
 window.stripFunctions = function(obj) {
     const result = $.extend(true, {}, obj);
     $.each(result, function(field, value) {
-        if($.isFunction(value)) {
+        if(isFunction(value)) {
             delete result[field];
         }
 

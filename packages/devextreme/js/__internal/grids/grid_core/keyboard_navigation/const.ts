@@ -67,3 +67,8 @@ export enum ViewName {
 export const KEY_CODES = {
   G: 71,
 };
+
+export interface FocusedCellPosition {
+  columnIndex: number;
+  rowIndex: number;
+}

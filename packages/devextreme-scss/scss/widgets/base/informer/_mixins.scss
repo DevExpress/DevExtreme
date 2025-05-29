@@ -1,8 +1,10 @@
 @use "../icons" as *;
 
 @mixin informer(
-  $color,
-  $background-color,
+  $error-color,
+  $error-background-color,
+  $info-color,
+  $info-background-color,
   $border-radius,
   $icon-size,
   $padding-inline,
@@ -10,15 +12,29 @@
   $column-gap,
 ) {
   .dx-informer {
-    color: $color;
     padding-inline: $padding-inline;
     padding-block: $padding-block;
     column-gap: $column-gap;
   }
 
   .dx-informer-bg {
-    background-color: $background-color;
     border-radius: $border-radius;
+  }
+
+  .dx-informer-error {
+    color: $error-color;
+
+    &.dx-informer-bg {
+      background-color: $error-background-color;
+    }
+  }
+
+  .dx-informer-info {
+    color: $info-color;
+
+    &.dx-informer-bg {
+      background-color: $info-background-color;
+    }
   }
 
   .dx-informer-icon {

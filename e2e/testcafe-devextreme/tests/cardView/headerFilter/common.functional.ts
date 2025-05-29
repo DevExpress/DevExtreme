@@ -1,4 +1,5 @@
 import CardView from 'devextreme-testcafe-models/cardView';
+import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { baseConfig } from './helpers/baseConfig';
@@ -256,5 +257,219 @@ test('Filter values should be filtered by SearchPanel', async (t) => {
         visible: true,
       },
     },
+  });
+});
+
+test('The item\'s selection state should be correct if a custom data source is specified', async (t) => {
+  // arrange
+  const cardView = new CardView('#container');
+
+  await t
+    .click(cardView.getHeaderPanel().getHeaderItem(0).getFilterIcon());
+
+  const firstHeaderFilterItem = cardView.getHeaderFilterList().getItem(0);
+
+  // assert
+  await t
+    .expect(cardView.getHeaderFilterList().getItems().count)
+    .eql(2)
+    .expect(firstHeaderFilterItem.text)
+    .eql('Test1')
+    .expect(firstHeaderFilterItem.isSelected)
+    .ok();
+}).before(async () => {
+  await createWidget('dxCardView', {
+    ...baseConfig,
+    columns: [
+      {
+        dataField: 'id',
+        filterValues: [1],
+        headerFilter: {
+          dataSource: [{
+            text: 'Test1',
+            value: 1,
+          }, {
+            text: 'Test2',
+            value: 2,
+          }],
+        },
+      },
+      {
+        dataField: 'title',
+      },
+      {
+        dataField: 'name',
+      },
+      {
+        dataField: 'lastName',
+      },
+    ],
+  });
+});
+
+test('The item\'s selection state should be correct after search', async (t) => {
+  // arrange
+  const cardView = new CardView('#container');
+
+  await t
+    .click(cardView.getHeaderPanel().getHeaderItem(0).getFilterIcon());
+
+  const headerFilterList = cardView.getHeaderFilterList();
+
+  // assert
+  await t
+    .expect(headerFilterList.getItems().count)
+    .eql(4);
+
+  const firstHeaderFilterItem = headerFilterList.getItem(0);
+
+  // act
+  await t
+    .click(firstHeaderFilterItem.element);
+
+  // assert
+  await t
+    .expect(firstHeaderFilterItem.isSelected)
+    .ok();
+
+  // act
+  await t
+    .typeText(headerFilterList.searchInput, '1');
+
+  // assert
+  await t
+    .expect(headerFilterList.getItems().count)
+    .eql(1)
+    .expect(headerFilterList.getItem(0).isSelected)
+    .ok();
+}).before(async () => {
+  await createWidget('dxCardView', {
+    ...baseConfig,
+    headerFilter: {
+      visible: true,
+      search: {
+        enabled: true,
+      },
+    },
+  });
+});
+
+test('The item\'s selection state should be correct after resetting the search', async (t) => {
+  // arrange
+  const cardView = new CardView('#container');
+
+  await t
+    .click(cardView.getHeaderPanel().getHeaderItem(0).getFilterIcon());
+
+  const headerFilterList = cardView.getHeaderFilterList();
+
+  // assert
+  await t
+    .expect(headerFilterList.getItems().count)
+    .eql(4);
+
+  // act
+  await t
+    .typeText(headerFilterList.searchInput, '1');
+
+  // assert
+  await t
+    .expect(headerFilterList.getItems().count)
+    .eql(1);
+
+  const firstHeaderFilterItem = headerFilterList.getItem(0);
+
+  // act
+  await t
+    .click(firstHeaderFilterItem.element);
+
+  // assert
+  await t
+    .expect(firstHeaderFilterItem.isSelected)
+    .ok();
+
+  // act
+  await t
+    .click(headerFilterList.searchInput)
+    .selectText(headerFilterList.searchInput)
+    .pressKey('backspace');
+
+  // assert
+  await t
+    .expect(headerFilterList.getItems().count)
+    .eql(4)
+    .expect(headerFilterList.getItem(0).isSelected)
+    .ok();
+}).before(async () => {
+  await createWidget('dxCardView', {
+    ...baseConfig,
+    headerFilter: {
+      visible: true,
+      search: {
+        enabled: true,
+      },
+    },
+  });
+});
+
+test('FilterBuilder should work with custom headerFilter data source', async (t) => {
+  const cardView = new CardView('#container');
+  const IS_ANY_OPERATION_ITEM_INDEX = 9;
+  const ADD_CONDITION_ITEM_INDEX = 0;
+
+  await t
+    .click(cardView.getHeaderPanel().getHeaderItem(0).getFilterIcon());
+
+  await t
+    .expect(cardView.getHeaderFilterList().getItems().count)
+    .eql(3)
+    .click(cardView.getHeaderFilterPopup().getOkButton().element);
+
+  const filterBuilderPopup = await cardView.getFilterPanel().openFilterBuilderPopup(t);
+  const filterBuilder = filterBuilderPopup.getFilterBuilder();
+  await t
+    .click(filterBuilder.getAddButton())
+    .expect(FilterBuilder.getPopupTreeView().visible).ok()
+    .click(FilterBuilder.getPopupTreeViewNode(ADD_CONDITION_ITEM_INDEX))
+    .click(filterBuilder.getField(0, 'itemOperation').element)
+    .click(FilterBuilder.getPopupTreeViewNode(IS_ANY_OPERATION_ITEM_INDEX))
+    .click(filterBuilder.getField(0, 'itemValue').element)
+    .click(cardView.getHeaderFilterList().getItem(1).element)
+    .click(cardView.getHeaderFilterList().getItem(2).element)
+    .click(cardView.getHeaderFilterPopup().getOkButton().element)
+    .click(filterBuilderPopup.asPopup().getOkButton().element);
+
+  await t
+    .expect(cardView.getCards().count)
+    .eql(2)
+    .expect(cardView.getCard(0).getFieldValueCell('Id').textContent)
+    .eql('2')
+    .expect(cardView.getCard(1).getFieldValueCell('Id').textContent)
+    .eql('3');
+}).before(async () => {
+  await createWidget('dxCardView', {
+    ...baseConfig,
+    columns: [
+      {
+        dataField: 'id',
+        headerFilter: {
+          dataSource: [
+            { value: 1, text: '1' },
+            { value: 2, text: '2' },
+            { value: 3, text: '3' },
+          ],
+        },
+      },
+      {
+        dataField: 'title',
+      },
+      {
+        dataField: 'name',
+      },
+      {
+        dataField: 'lastName',
+      },
+    ],
+    filterPanel: { visible: true },
   });
 });

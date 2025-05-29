@@ -137,6 +137,6 @@ QUnit.module('default template', () => {
     QUnit.test('template should be rendered correctly with text', function(assert) {
         const $content = prepareItemTest({ text: 'custom' });
 
-        assert.equal($.trim($content.text()), 'custom');
+        assert.equal($content.text().trim(), 'custom');
     });
 });

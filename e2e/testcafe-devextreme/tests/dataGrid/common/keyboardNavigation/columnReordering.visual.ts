@@ -258,6 +258,36 @@ safeSizeTest('The context menu should not have items for column reordering when 
   });
 });
 
+test('The cell focus should be correct after column reordering when previously the data cell was focused', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstDataCell = dataGrid.getDataCell(0, 0);
+
+  await t
+    .click(firstDataCell.element)
+    .pressKey('shift+tab')
+    .pressKey('ctrl+left');
+
+  await takeScreenshot(
+    'cell_focus_after_column_reordering_when_data_cell_was_focused.png',
+    dataGrid.element,
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    allowColumnReordering: true,
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+  });
+});
+
 // Fixed columns
 test('reorder fixed left column to right', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

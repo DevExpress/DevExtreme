@@ -522,6 +522,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
     .dx-menu-item {
       &.dx-state-focused {
         background-color: transparent;
+        color: $datagrid-menu-icon-color;
 
         &::after {
           border: 2px solid $datagrid-focused-border-color;

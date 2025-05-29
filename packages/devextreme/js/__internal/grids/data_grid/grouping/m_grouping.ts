@@ -383,25 +383,16 @@ const onGroupingMenuItemClick = function (column, rowIndex, params) {
   switch (params.itemData.value) {
     case 'group': {
       this.isNeedToFocusColumn = true;
-      keyboardNavigationController.moveColumn({
-        column,
-        sourceLocation: 'headers',
-        targetLocation: 'group',
-      });
+      keyboardNavigationController?.groupColumn?.(column, rowIndex);
       break;
     }
     case 'ungroup':
       this.isNeedToFocusColumn = true;
-      keyboardNavigationController.moveColumn({
-        column,
-        sourceLocation: 'group',
-        targetLocation: 'headers',
-        rowIndex,
-      });
+      keyboardNavigationController?.ungroupColumn?.(column, rowIndex);
       break;
     case 'ungroupAll':
       this.isNeedToFocusColumn = true;
-      keyboardNavigationController.ungroupAllColumns();
+      keyboardNavigationController?.ungroupAllColumns();
       break;
   }
 };

@@ -1,4 +1,5 @@
 import { getWidth, getHeight } from '../../core/utils/size';
+import { normalizeStyleProp } from '../../core/utils/style';
 import domAdapter from '../../core/dom_adapter';
 import { getWindow } from '../../core/utils/window';
 import { replaceWith } from '../../core/utils/dom';
@@ -227,7 +228,8 @@ Tooltip.prototype = {
         // text area
         const normalizedCSS = {};
         for(const name in that._textFontStyles) {
-            normalizedCSS[camelize(name)] = that._textFontStyles[name];
+            const normalizedName = camelize(name);
+            normalizedCSS[normalizedName] = normalizeStyleProp(normalizedName, that._textFontStyles[name]);
         }
         that._textGroupHtml.css(normalizedCSS);
         that._text.css(that._textFontStyles);
