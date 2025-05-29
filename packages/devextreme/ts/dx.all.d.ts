@@ -4694,57 +4694,57 @@ declare module DevExpress.common.grids {
    */
   export type ColumnChooser = {
     /**
-     * [descr:GridBaseOptions.columnChooser.allowSearch]
-     * @deprecated [depNote:GridBaseOptions.columnChooser.allowSearch]
+     * [descr:ColumnChooser.allowSearch]
+     * @deprecated [depNote:ColumnChooser.allowSearch]
      */
     allowSearch?: boolean;
     /**
-     * [descr:GridBaseOptions.columnChooser.container]
+     * [descr:ColumnChooser.container]
      */
     container?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
-     * [descr:GridBaseOptions.columnChooser.emptyPanelText]
+     * [descr:ColumnChooser.emptyPanelText]
      */
     emptyPanelText?: string;
     /**
-     * [descr:GridBaseOptions.columnChooser.enabled]
+     * [descr:ColumnChooser.enabled]
      */
     enabled?: boolean;
     /**
-     * [descr:GridBaseOptions.columnChooser.height]
+     * [descr:ColumnChooser.height]
      */
     height?: number | string;
     /**
-     * [descr:GridBaseOptions.columnChooser.mode]
+     * [descr:ColumnChooser.mode]
      */
     mode?: ColumnChooserMode;
     /**
-     * [descr:GridBaseOptions.columnChooser.position]
+     * [descr:ColumnChooser.position]
      */
     position?: DevExpress.common.core.animation.PositionConfig | undefined;
     /**
-     * [descr:GridBaseOptions.columnChooser.search]
+     * [descr:ColumnChooser.search]
      */
     search?: ColumnChooserSearchConfig;
     /**
-     * [descr:GridBaseOptions.columnChooser.searchTimeout]
-     * @deprecated [depNote:GridBaseOptions.columnChooser.searchTimeout]
+     * [descr:ColumnChooser.searchTimeout]
+     * @deprecated [depNote:ColumnChooser.searchTimeout]
      */
     searchTimeout?: number;
     /**
-     * [descr:GridBaseOptions.columnChooser.selection]
+     * [descr:ColumnChooser.selection]
      */
     selection?: ColumnChooserSelectionConfig;
     /**
-     * [descr:GridBaseOptions.columnChooser.title]
+     * [descr:ColumnChooser.title]
      */
     title?: string;
     /**
-     * [descr:GridBaseOptions.columnChooser.width]
+     * [descr:ColumnChooser.width]
      */
     width?: number | string;
     /**
-     * [descr:GridBaseOptions.columnChooser.sortOrder]
+     * [descr:ColumnChooser.sortOrder]
      */
     sortOrder?: SortOrder | undefined;
   };

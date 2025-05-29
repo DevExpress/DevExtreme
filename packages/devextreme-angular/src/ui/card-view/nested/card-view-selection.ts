@@ -25,36 +25,20 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-card-view-selection',
+    selector: 'dxo-card-view-card-view-selection',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoCardViewSelectionComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewCardViewSelectionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');
     }
     set allowSelectAll(value: boolean) {
         this._setOption('allowSelectAll', value);
-    }
-
-    @Input()
-    get recursive(): boolean {
-        return this._getOption('recursive');
-    }
-    set recursive(value: boolean) {
-        this._setOption('recursive', value);
-    }
-
-    @Input()
-    get selectByClick(): boolean {
-        return this._getOption('selectByClick');
-    }
-    set selectByClick(value: boolean) {
-        this._setOption('selectByClick', value);
     }
 
     @Input()
@@ -108,10 +92,10 @@ export class DxoCardViewSelectionComponent extends NestedOption implements OnDes
 
 @NgModule({
   imports: [
-    DxoCardViewSelectionComponent
+    DxoCardViewCardViewSelectionComponent
   ],
   exports: [
-    DxoCardViewSelectionComponent
+    DxoCardViewCardViewSelectionComponent
   ],
 })
-export class DxoCardViewSelectionModule { }
+export class DxoCardViewCardViewSelectionModule { }

@@ -11,10 +11,10 @@ import NestedOption from "./core/nested-option";
 
 import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, SelectionChangingEvent, CardTemplateData, CardHeaderItem as CardViewCardHeaderItem, CardHeaderPredefinedItem, FieldTemplateData, ColumnTemplateData, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
-import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, ToolbarItemLocation, ToolbarItemComponent, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, Direction, PositionAlignment, Mode, DisplayMode, SingleMultipleOrNone, SelectAllMode } from "devextreme/common";
+import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, ToolbarItemLocation, ToolbarItemComponent, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, Direction, PositionAlignment, Mode, DisplayMode } from "devextreme/common";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { DataChangeType, FilterType, DataChange, PagerPageSize, SelectionColumnDisplayMode } from "devextreme/common/grids";
+import type { SelectionColumnDisplayMode, DataChangeType, FilterType, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, DataChange, PagerPageSize } from "devextreme/common/grids";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { dxFormSimpleItem, FormItemComponent, FormItemType, LabelLocation } from "devextreme/ui/form";
 import type { dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
@@ -101,7 +101,9 @@ const CardView = memo(
       const expectedChildren = useMemo(() => ({
         cardCover: { optionName: "cardCover", isCollectionItem: false },
         cardHeader: { optionName: "cardHeader", isCollectionItem: false },
+        cardViewSelection: { optionName: "selection", isCollectionItem: false },
         column: { optionName: "columns", isCollectionItem: true },
+        columnChooser: { optionName: "columnChooser", isCollectionItem: false },
         editing: { optionName: "editing", isCollectionItem: false },
         filterBuilder: { optionName: "filterBuilder", isCollectionItem: false },
         headerPanel: { optionName: "headerPanel", isCollectionItem: false },
@@ -347,6 +349,27 @@ const CardHeaderItem = Object.assign<typeof _componentCardHeaderItem, NestedComp
 });
 
 // owners:
+// CardView
+type ICardViewSelectionProps = React.PropsWithChildren<{
+  allowSelectAll?: boolean;
+  mode?: SingleMultipleOrNone;
+  selectAllMode?: SelectAllMode;
+  showCheckBoxesMode?: SelectionColumnDisplayMode;
+}>
+const _componentCardViewSelection = (props: ICardViewSelectionProps) => {
+  return React.createElement(NestedOption<ICardViewSelectionProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "selection",
+    },
+  });
+};
+
+const CardViewSelection = Object.assign<typeof _componentCardViewSelection, NestedComponentMeta>(_componentCardViewSelection, {
+  componentType: "option",
+});
+
+// owners:
 // Editing
 type IChangeProps = React.PropsWithChildren<{
   data?: any;
@@ -501,6 +524,62 @@ const _componentColumn = (props: IColumnProps) => {
 };
 
 const Column = Object.assign<typeof _componentColumn, NestedComponentMeta>(_componentColumn, {
+  componentType: "option",
+});
+
+// owners:
+// CardView
+type IColumnChooserProps = React.PropsWithChildren<{
+  allowSearch?: boolean;
+  container?: any | string | undefined;
+  emptyPanelText?: string;
+  enabled?: boolean;
+  height?: number | string;
+  mode?: ColumnChooserMode;
+  position?: PositionConfig | undefined;
+  search?: ColumnChooserSearchConfig;
+  searchTimeout?: number;
+  selection?: ColumnChooserSelectionConfig;
+  sortOrder?: SortOrder | undefined;
+  title?: string;
+  width?: number | string;
+}>
+const _componentColumnChooser = (props: IColumnChooserProps) => {
+  return React.createElement(NestedOption<IColumnChooserProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "columnChooser",
+      ExpectedChildren: {
+        columnChooserSelection: { optionName: "selection", isCollectionItem: false },
+        position: { optionName: "position", isCollectionItem: false },
+        search: { optionName: "search", isCollectionItem: false },
+        selection: { optionName: "selection", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const ColumnChooser = Object.assign<typeof _componentColumnChooser, NestedComponentMeta>(_componentColumnChooser, {
+  componentType: "option",
+});
+
+// owners:
+// ColumnChooser
+type IColumnChooserSelectionProps = React.PropsWithChildren<{
+  allowSelectAll?: boolean;
+  recursive?: boolean;
+  selectByClick?: boolean;
+}>
+const _componentColumnChooserSelection = (props: IColumnChooserSelectionProps) => {
+  return React.createElement(NestedOption<IColumnChooserSelectionProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "selection",
+    },
+  });
+};
+
+const ColumnChooserSelection = Object.assign<typeof _componentColumnChooserSelection, NestedComponentMeta>(_componentColumnChooserSelection, {
   componentType: "option",
 });
 
@@ -1290,6 +1369,7 @@ const PatternRule = Object.assign<typeof _componentPatternRule, NestedComponentM
 });
 
 // owners:
+// ColumnChooser
 // From
 // To
 // LoadPanel
@@ -1412,6 +1492,26 @@ const RequiredRule = Object.assign<typeof _componentRequiredRule, NestedComponen
 });
 
 // owners:
+// ColumnChooser
+type ISearchProps = React.PropsWithChildren<{
+  editorOptions?: any;
+  enabled?: boolean;
+  timeout?: number;
+}>
+const _componentSearch = (props: ISearchProps) => {
+  return React.createElement(NestedOption<ISearchProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "search",
+    },
+  });
+};
+
+const Search = Object.assign<typeof _componentSearch, NestedComponentMeta>(_componentSearch, {
+  componentType: "option",
+});
+
+// owners:
 // CardView
 type ISearchPanelProps = React.PropsWithChildren<{
   highlightCaseSensitive?: boolean;
@@ -1441,9 +1541,12 @@ const SearchPanel = Object.assign<typeof _componentSearchPanel, NestedComponentM
 });
 
 // owners:
+// ColumnChooser
 // CardView
 type ISelectionProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
+  recursive?: boolean;
+  selectByClick?: boolean;
   mode?: SingleMultipleOrNone;
   selectAllMode?: SelectAllMode;
   showCheckBoxesMode?: SelectionColumnDisplayMode;
@@ -1667,12 +1770,18 @@ export {
   ICardHeaderProps,
   CardHeaderItem,
   ICardHeaderItemProps,
+  CardViewSelection,
+  ICardViewSelectionProps,
   Change,
   IChangeProps,
   Collision,
   ICollisionProps,
   Column,
   IColumnProps,
+  ColumnChooser,
+  IColumnChooserProps,
+  ColumnChooserSelection,
+  IColumnChooserSelectionProps,
   CompareRule,
   ICompareRuleProps,
   CustomOperation,
@@ -1729,6 +1838,8 @@ export {
   IRemoteOperationsProps,
   RequiredRule,
   IRequiredRuleProps,
+  Search,
+  ISearchProps,
   SearchPanel,
   ISearchPanelProps,
   Selection,

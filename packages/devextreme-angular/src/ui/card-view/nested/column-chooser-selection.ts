@@ -14,8 +14,6 @@ import {
 
 
 
-import { SingleMultipleOrNone, SelectAllMode } from 'devextreme/common';
-import { SelectionColumnDisplayMode } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,
@@ -25,14 +23,14 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-card-view-selection',
+    selector: 'dxo-card-view-column-chooser-selection',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoCardViewSelectionComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewColumnChooserSelectionComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');
@@ -55,30 +53,6 @@ export class DxoCardViewSelectionComponent extends NestedOption implements OnDes
     }
     set selectByClick(value: boolean) {
         this._setOption('selectByClick', value);
-    }
-
-    @Input()
-    get mode(): SingleMultipleOrNone {
-        return this._getOption('mode');
-    }
-    set mode(value: SingleMultipleOrNone) {
-        this._setOption('mode', value);
-    }
-
-    @Input()
-    get selectAllMode(): SelectAllMode {
-        return this._getOption('selectAllMode');
-    }
-    set selectAllMode(value: SelectAllMode) {
-        this._setOption('selectAllMode', value);
-    }
-
-    @Input()
-    get showCheckBoxesMode(): SelectionColumnDisplayMode {
-        return this._getOption('showCheckBoxesMode');
-    }
-    set showCheckBoxesMode(value: SelectionColumnDisplayMode) {
-        this._setOption('showCheckBoxesMode', value);
     }
 
 
@@ -108,10 +82,10 @@ export class DxoCardViewSelectionComponent extends NestedOption implements OnDes
 
 @NgModule({
   imports: [
-    DxoCardViewSelectionComponent
+    DxoCardViewColumnChooserSelectionComponent
   ],
   exports: [
-    DxoCardViewSelectionComponent
+    DxoCardViewColumnChooserSelectionComponent
   ],
 })
-export class DxoCardViewSelectionModule { }
+export class DxoCardViewColumnChooserSelectionModule { }
