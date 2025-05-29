@@ -1,4 +1,4 @@
-The CardView allows you to validate user input. You can apply pre-defined [validation rules](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/#validationRules) or custom rules to individual columns. 
+CardView allows you to validate user input. You can apply pre-defined [validation rules](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/#validationRules) or custom rules to individual columns. 
 <!--split-->
 
 In this demo, the following rules are used:
@@ -11,5 +11,3 @@ Specifies a pattern that field values should match.
 Specifies that field values match the Email pattern.   
 - [async](/Documentation/ApiReference/UI_Components/dxValidator/Validation_Rules/AsyncRule/)   
 Specifies custom validation parameters that are used to validate a value on the server.
-
-For more information on these and other validation rules, refer to the following documentation section: [Validation Rules](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/#validationRules).

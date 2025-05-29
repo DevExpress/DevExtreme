@@ -1,16 +1,16 @@
-To change fields visibility at runtime, set the **columnChooser**.[enabled](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columnChooser/#enabled) property to **true**. To make certain that a given field(s) always stay visible, set the **columns[]**.[allowHiding](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/#allowHiding) property to **false**.
+To change field visibility at runtime, set the **columnChooser**.[enabled](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columnChooser/#enabled) property to `true`. To ensure specific fields remain visible, set the **columns[]**.[allowHiding](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/#allowHiding) property to `false`.
 <!--split-->
 
-To display the column chooser, click the appropriate toolbar button above the CardView. You can specify the column chooser's position via the **columnChooser**.[position](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columnChooser/#position) property. The manner in which users can display/hide columns depends on **columnChooser**.[mode](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columnChooser/#mode):
+To display the column chooser, click the toolbar button above the CardView. You can specify the column chooser's position with the **columnChooser**.[position](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columnChooser/#position) property. Changing how users display or hide columns depends on **columnChooser**.[mode](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columnChooser/#mode):
 
 * *"dragAndDrop"*    
-Users can drag and drop fields inside header panel to and from the column chooser.
+Users drag and drop fields between the header panel and column chooser.
 
 * *"select"*   
-Users can select and deselect check boxes with field names.
+Users toggle check boxes for field names.
 
-If the column chooser contains multiple hidden columns, you can enable the DevExtreme field search UI. Assign **true** to the **search**.[enabled](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columnChooser/search/#enabled) property for this purpose.
+If the column chooser contains multiple hidden columns, you can enable the DevExtreme field search UI. Assign `true` to the **search**.[enabled](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columnChooser/search/#enabled) property for this purpose.
 
 In this demo, use the check boxes above the CardView to toggle search and selection features.
 
-To hide a field in code, set the **columns[]**.[visible](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/#visible) property to **false**.
+To hide a field programmatically, change  **columns[]**.[visible](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/#visible) property to `false`.
