@@ -1,0 +1,1 @@
+export { OptionsValidationController } from './controller';

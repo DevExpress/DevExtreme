@@ -4,6 +4,7 @@ import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
 
 fixture`Selection.Visual`
   .page(url(__dirname, '../../container.html'));
@@ -19,6 +20,8 @@ test('Single mode', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     {
@@ -58,6 +61,8 @@ test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'none
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     {
@@ -98,6 +103,8 @@ test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'alwa
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     {
@@ -149,6 +156,8 @@ test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'onCl
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     {
@@ -189,6 +198,8 @@ test('Multiple mode with a selected card and showCheckBoxesMode = \'onClick\'', 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     {
@@ -230,6 +241,8 @@ test('Multiple mode with selected cards and showCheckBoxesMode = \'onClick\'', a
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     {
@@ -284,6 +297,8 @@ test('Multiple mode with Select All/Deselect All and showCheckBoxesMode = \'onLo
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     {
@@ -324,6 +339,8 @@ test('Multiple mode without Select All/Deselect All', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => createWidget('dxCardView', {
   dataSource: [
     {

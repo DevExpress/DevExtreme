@@ -9,6 +9,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { getData } from '../helpers/generateDataSourceData';
+import { Themes } from '../../../helpers/themes';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../../container.html'));
@@ -2772,3 +2773,42 @@ test('DataGrid - A new row is added above the existing row if the data source is
     },
   ],
 }));
+
+[
+  Themes.genericLight,
+  Themes.fluentBlue,
+  Themes.materialBlue,
+].forEach((theme) => {
+  test('DataGrid - ColorBox in DataGrid causes input value to appear behind color preview (T1280023)', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
+
+    await t.click(dataGrid.getDataCell(0, 0).element);
+
+    await t
+      .expect(await takeScreenshot(`grid-form-editing-with-color-box_(${theme})`, dataGrid.element))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  })
+    .before(async () => {
+      await changeTheme(theme);
+      await createWidget('dxDataGrid', {
+        dataSource: [
+          { Color: 'red' },
+        ],
+        showBorders: true,
+        editing: {
+          allowUpdating: true,
+          mode: 'cell',
+        },
+        onEditorPreparing(e) {
+          if (e.dataField === 'Color') {
+            e.editorName = 'dxColorBox';
+            e.editorOptions.readOnly = false;
+          }
+        },
+      });
+    })
+    .after(async () => changeTheme(Themes.genericLight));
+});

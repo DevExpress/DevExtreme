@@ -13,3 +13,5 @@ Changes the page size. To display this element, enable the [showPageSizeSelector
 Displays the current page number and total record count. To display page information, enable the [showInfo](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/pager/#showInfo) property. You can also use the [infoText](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/pager/#infoText) property to customize the information text string.
 
 The pager supports full, compact, and adaptive (default) display modes. In compact mode, the pager changes the appearance of the page navigator and page selector to use screen space more efficiently. In adaptive mode, the pager automatically chooses between the full and compact modes based on the TreeList's width. Use the [displayMode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/pager/#displayMode) property to switch between modes.
+
+You can navigate between pages using the on-screen pager controls. Jump to the first/last row of each page by focusing on the data area and using **Ctrl+Home** or **Ctrl+End**. These shortcuts focus the first cell of the first row/last cell of the last row.

@@ -72,7 +72,7 @@ const EmptyHeaderPanelText = (props: { openColumnChooser: () => void }): JSX.Ele
   const [leftPart, rightPart] = text.split('{0}');
 
   return (
-    <span className={CLASSES.headerPanelTextEmpty}>
+    <span className={CLASSES.headerPanelTextEmpty} role='menuitem'>
       {leftPart}
       <a className={CLASSES.link} onClick={props.openColumnChooser}>{columnChooserText}</a>
       {rightPart}

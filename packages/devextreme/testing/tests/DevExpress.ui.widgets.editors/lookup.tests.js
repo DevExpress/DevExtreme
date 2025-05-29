@@ -5,7 +5,7 @@ import dataUtils from 'core/element_data';
 import config from 'core/config';
 import browser from 'core/utils/browser';
 import errors from 'core/errors';
-import { isRenderer } from 'core/utils/type';
+import { isFunction, isRenderer } from 'core/utils/type';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import messageLocalization from 'common/core/localization/message';
 
@@ -65,7 +65,6 @@ QUnit.testStart(function() {
     $('#widthRootStyle').css('width', '300px');
 });
 
-const OVERLAY_CLASS = 'dx-overlay';
 const OVERLAY_SHADER_CLASS = 'dx-overlay-shader';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
@@ -1281,7 +1280,7 @@ QUnit.module('Lookup', {
 
         assert.strictEqual($lookup.hasClass(LOOKUP_EMPTY_CLASS), true, 'lookup empty class was added after clearance');
         assert.strictEqual($lookup.hasClass(TEXTEDITOR_EMPTY_CLASS), true, 'lookup empty class was added after clearance');
-        assert.equal($.trim($lookupField.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder')), 'placeholder', 'placeholder is shown');
+        assert.equal($lookupField.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder').trim(), 'placeholder', 'placeholder is shown');
         assert.strictEqual(lookup.option('value'), null, 'value reset');
     });
 
@@ -1568,7 +1567,7 @@ QUnit.module('options', {
         const popup = $lookup.find('.' + POPUP_CLASS).dxPopup('instance');
 
         let initialValue = popup.option('width');
-        if($.isFunction(initialValue)) {
+        if(isFunction(initialValue)) {
             initialValue = initialValue();
         }
 
@@ -1576,7 +1575,7 @@ QUnit.module('options', {
 
         instance.option('dropDownOptions.width', 'auto');
         let autoValue = popup.option('width');
-        if($.isFunction(autoValue)) {
+        if(isFunction(autoValue)) {
             autoValue = autoValue();
         }
 
@@ -1602,7 +1601,7 @@ QUnit.module('options', {
         const popup = $lookup.find('.' + POPUP_CLASS).dxPopup('instance');
 
         let initialValue = popup.option('height');
-        if($.isFunction(initialValue)) {
+        if(isFunction(initialValue)) {
             initialValue = initialValue();
         }
 
@@ -1610,7 +1609,7 @@ QUnit.module('options', {
 
         instance.option('dropDownOptions.height', 'auto');
         let autoValue = popup.option('height');
-        if($.isFunction(autoValue)) {
+        if(isFunction(autoValue)) {
             autoValue = autoValue();
         }
 
@@ -2108,6 +2107,22 @@ QUnit.module('options', {
 
         assert.strictEqual($field.attr('custom'), undefined, 'custom attribute is set correctly');
     });
+
+    QUnit.test('Displayed text should be correct when items have nested items field and grouping is disabled (T1292151)', function(assert) {
+        const $lookup = $('#lookup').dxLookup({
+            items: [
+                { id: 1, text: 'item 1', items: [{ id: 1, text: 'unexpected text' }] },
+            ],
+            value: 1,
+            displayExpr: 'text',
+            valueExpr: 'id',
+        });
+
+        const $input = $lookup.find(`.${LOOKUP_FIELD_CLASS}`);
+        const displayedText = $input.text();
+
+        assert.strictEqual(displayedText, 'item 1', 'input value is correct');
+    });
 });
 
 QUnit.module('popup options', {
@@ -2235,7 +2250,7 @@ QUnit.module('popup options', {
 
         const $title = $(toSelector(POPUP_TITLE_CLASS));
 
-        assert.equal($.trim($title.text()), 'testTitle', 'title text is correct');
+        assert.equal($title.text().trim(), 'testTitle', 'title text is correct');
     });
 
     QUnit.test('custom titleTemplate option is set correctly on init', function(assert) {
@@ -2641,7 +2656,7 @@ QUnit.module('list options', {
         let $title = $(toSelector(LIST_GROUP_HEADER_CLASS));
         assert.equal($title.length, 2, 'there are 2 group titles');
         $title = $title.eq(0);
-        assert.equal($.trim($title.text()), 'testGroupTemplate', 'title text is correct');
+        assert.equal($title.text().trim(), 'testGroupTemplate', 'title text is correct');
 
         instance.option('groupTemplate', function(itemData, itemIndex, itemElement) {
             assert.equal(isRenderer(itemElement), !!config().useJQuery, 'itemElement is correct');
@@ -2649,7 +2664,7 @@ QUnit.module('list options', {
         });
 
         $title = $(toSelector(LIST_GROUP_HEADER_CLASS)).eq(0);
-        assert.equal($.trim($title.text()), 'test', 'title text is correct');
+        assert.equal($title.text().trim(), 'test', 'title text is correct');
     });
 });
 

@@ -3,13 +3,13 @@ import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
-fixture('SelectBox.GroupedItems')
+fixture('SelectBox.Grouping')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('SelectBox', 'GroupedItems', (test) => {
-  test('GroupedItems', async (t) => {
+runManualTest('SelectBox', 'Grouping', (test) => {
+  test('Grouping', async (t) => {
     const SELECT_BOX_CLASS = 'dx-selectbox';
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

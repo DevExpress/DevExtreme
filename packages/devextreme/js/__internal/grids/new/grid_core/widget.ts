@@ -9,6 +9,7 @@ import { infernoRenderer } from '@ts/core/m_inferno_renderer';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';
 import { rerender } from 'inferno';
 
+import { AccessibilityController } from './accessibility/index';
 import * as ColumnChooserModule from './column_chooser/index';
 import { CompatibilityColumnsController } from './columns_controller/compatibility';
 import * as ColumnsControllerModule from './columns_controller/index';
@@ -30,8 +31,8 @@ import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
 import * as SearchControllerModule from './search/index';
 import * as SelectionControllerModule from './selection/index';
+import type { SortingController } from './sorting_controller/index';
 import * as SortingControllerModule from './sorting_controller/index';
-import type { SortingController } from './sorting_controller/sorting_controller';
 import { ToolbarController } from './toolbar/controller';
 import { ToolbarView } from './toolbar/view';
 import { WidgetMock } from './widget_mock';
@@ -87,6 +88,8 @@ export class GridCoreNewBase<
 
   private getAppliedFiltersVisitor!: GetAppliedFilterVisitor;
 
+  private accessibilityController!: AccessibilityController;
+
   private filterCustomOperationsVisitor!: FilterCustomOperationsVisitor;
 
   protected _registerDIContext(): void {
@@ -123,6 +126,7 @@ export class GridCoreNewBase<
     this.headerFilterController = this.diContext.get(HeaderFilterController);
     this.filterPanelView = this.diContext.get(FilterControllerModule.FilterPanelView);
     this.headerFilterViewController = this.diContext.get(HeaderFilterViewController);
+    this.accessibilityController = this.diContext.get(AccessibilityController);
     this.filterSyncController = this.diContext.get(FilterSyncController);
     this.searchView = this.diContext.get(SearchView);
 
