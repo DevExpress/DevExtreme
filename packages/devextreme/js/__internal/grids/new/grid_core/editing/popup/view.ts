@@ -6,6 +6,7 @@ import type * as dxForm from '@js/ui/form';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, signal } from '@preact/signals-core';
 import { extend } from '@ts/core/utils/m_extend';
+import { forEachFormItems } from '@ts/grids/grid_core/editing/m_editing_utils';
 import { createRef } from 'inferno';
 
 import { ColumnsController } from '../../columns_controller/columns_controller';
@@ -50,9 +51,25 @@ export class EditPopupView extends View<Props> {
     }));
   });
 
+  private readonly customEditorItems = computed((): string[] => {
+    const items = this.items.value;
+    const result: string[] = [];
+
+    forEachFormItems(items, (item) => {
+      const itemId = item?.name || item?.dataField;
+
+      if (itemId && !!item.editorType) {
+        result.push(itemId);
+      }
+    });
+
+    return result;
+  });
+
   private readonly customizeItems = computed(() => {
     const editingCard = this.editingController.editingCard.value;
     const columns = this.columnsController.columns.value;
+    const customEditorItems = this.customEditorItems.value;
 
     return (item: dxForm.Item): void => {
       if (!editingCard) {
@@ -75,7 +92,10 @@ export class EditPopupView extends View<Props> {
       }
 
       (simpleFormItem as any).column = column;
-      simpleFormItem.editorType = EDITOR_TYPES_BY_DATA_TYPE[column.dataType];
+
+      if (itemId && !customEditorItems.includes(itemId)) {
+        simpleFormItem.editorType = EDITOR_TYPES_BY_DATA_TYPE[column.dataType];
+      }
 
       extend(simpleFormItem, column.formItem);
 

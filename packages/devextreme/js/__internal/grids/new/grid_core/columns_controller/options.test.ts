@@ -137,6 +137,8 @@ describe('Options', () => {
 
       expect(CardInfo.fields).toHaveLength(1);
       expect(CardInfo.fields[0].value).toBe('a b');
+      expect(CardInfo.fields[0].displayValue).toBe('a b');
+      expect(CardInfo.fields[0].text).toBe('a b');
     });
 
     it('should take priority over dataField', () => {

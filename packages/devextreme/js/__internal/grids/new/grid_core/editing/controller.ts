@@ -72,8 +72,14 @@ export class EditingController {
       return null;
     }
 
+    const insertChange = changes.find(
+      (change) => change.key === editCardKey && change.type === 'insert',
+    );
+
+    const oldData = insertChange?.data ?? oldItem.data;
+
     const newData = applyChanges(
-      [oldItem.data],
+      [oldData],
       changes,
       {
         keyExpr: this.dataController.dataSource.peek().key(),
@@ -189,10 +195,10 @@ export class EditingController {
     }
 
     // @ts-expect-error
-    this.changes.update([...this.changes.peek(), {
+    this.changes.value = [...this.changes.peek(), {
       type: 'remove',
       key,
-    }]);
+    }];
     await this.save();
 
     this.kbn.returnFocus();
