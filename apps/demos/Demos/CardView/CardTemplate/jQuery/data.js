@@ -22,7 +22,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage44'
     },
@@ -49,7 +49,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Vauxford',
         Source: 'devexpress.com/carimage45'
     },
@@ -76,7 +76,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Minseong Kim',
         Source: 'devexpress.com/carimage46'
     },
@@ -103,7 +103,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage47'
     },
@@ -130,7 +130,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage76'
     },
@@ -157,7 +157,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage49'
     },
@@ -184,7 +184,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage50'
     },
@@ -211,7 +211,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Alexander Migl',
         Source: 'devexpress.com/carimage51'
     },
@@ -238,7 +238,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage52'
     },
@@ -265,7 +265,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "Attribution Only",
+        LicenseName: 'Attribution Only',
         Author: 'M 93',
         Source: 'devexpress.com/carimage53'
     },
@@ -292,7 +292,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage54'
     },
@@ -319,7 +319,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'JustAnotherCarDesigner',
         Source: 'devexpress.com/carimage55'
     },
@@ -346,7 +346,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Alexander Migl',
         Source: 'devexpress.com/carimage56'
     },
@@ -373,7 +373,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC0 1.0",
+        LicenseName: 'CC0 1.0',
         Author: 'crash71100',
         Source: 'devexpress.com/carimage71'
     },
@@ -400,7 +400,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'DestinationFearFan',
         Source: 'devexpress.com/carimage57'
     },
@@ -427,7 +427,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC0 1.0",
+        LicenseName: 'CC0 1.0',
         Author: 'HJUdall',
         Source: 'devexpress.com/carimage58'
     },
@@ -454,7 +454,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage59'
     },
@@ -481,7 +481,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Matti Blume',
         Source: 'devexpress.com/carimage72'
     },
@@ -508,7 +508,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'DestinationFearFan',
         Source: 'devexpress.com/carimage19'
     },
@@ -535,7 +535,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Alexander-93',
         Source: 'devexpress.com/carimage73'
     },
@@ -562,7 +562,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Ruben de Rijcke',
         Source: 'devexpress.com/carimage74'
     },
@@ -589,7 +589,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage25'
     },
@@ -616,7 +616,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage26'
     },
@@ -643,7 +643,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY 3.0",
+        LicenseName: 'CC BY 3.0',
         Author: 'Gold Pony',
         Source: 'devexpress.com/carimage27'
     },
@@ -670,7 +670,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY 4.0",
+        LicenseName: 'CC BY 4.0',
         Author: 'OWS Photography',
         Source: 'devexpress.com/carimage28'
     },
@@ -697,7 +697,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage15'
     },
@@ -724,7 +724,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage16'
     },
@@ -751,7 +751,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Christopher Ziemnowicz',
         Source: 'devexpress.com/carimage17'
     },
@@ -778,7 +778,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Anonymousfox36',
         Source: 'devexpress.com/carimage29'
     },
@@ -805,7 +805,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'deathpallie325',
         Source: 'devexpress.com/carimage60'
     },
@@ -832,7 +832,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC0 1.0",
+        LicenseName: 'CC0 1.0',
         Author: 'HJUdall',
         Source: 'devexpress.com/carimage61'
     },
@@ -859,7 +859,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "Public Domain",
+        LicenseName: 'Public Domain',
         Author: 'Bull-Doser',
         Source: 'devexpress.com/carimage62'
     },
@@ -886,7 +886,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 3.0",
+        LicenseName: 'CC BY-SA 3.0',
         Author: 'Alekc2m',
         Source: 'devexpress.com/carimage75'
     },
@@ -913,7 +913,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage30'
     },
@@ -940,7 +940,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Damian B Oh',
         Source: 'devexpress.com/carimage31'
     },
@@ -967,7 +967,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage32'
     },
@@ -994,7 +994,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage33'
     },
@@ -1021,7 +1021,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 2.0 DE",
+        LicenseName: 'CC BY-SA 2.0 DE',
         Author: 'Lothar Spurzem',
         Source: 'devexpress.com/carimage02'
     },
@@ -1048,7 +1048,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 2.0",
+        LicenseName: 'CC BY-SA 2.0',
         Author: 'AUDI AG',
         Source: 'devexpress.com/carimage69'
     },
@@ -1075,7 +1075,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY 2.0",
+        LicenseName: 'CC BY 2.0',
         Author: 'Milestoned',
         Source: 'devexpress.com/carimage03'
     },
@@ -1102,7 +1102,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY 2.0",
+        LicenseName: 'CC BY 2.0',
         Author: 'ilikewaffles11',
         Source: 'devexpress.com/carimage34'
     },
@@ -1129,7 +1129,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage64'
     },
@@ -1156,7 +1156,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC0 1.0",
+        LicenseName: 'CC0 1.0',
         Author: 'Guillaume Vachey',
         Source: 'devexpress.com/carimage11'
     },
@@ -1183,7 +1183,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage70'
     },
@@ -1210,7 +1210,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage35'
     },
@@ -1237,7 +1237,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage65'
     },
@@ -1264,7 +1264,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY 2.0",
+        LicenseName: 'CC BY 2.0',
         Author: 'Allie_Caulfield',
         Source: 'devexpress.com/carimage12'
     },
@@ -1291,7 +1291,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 3.0",
+        LicenseName: 'CC BY-SA 3.0',
         Author: 'XD4rkxL1ghtx',
         Source: 'devexpress.com/carimage36'
     },
@@ -1318,7 +1318,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 2.0",
+        LicenseName: 'CC BY-SA 2.0',
         Author: 'Shadman Samee',
         Source: 'devexpress.com/carimage04'
     },
@@ -1345,7 +1345,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY 4.0",
+        LicenseName: 'CC BY 4.0',
         Author: 'OWS Photography',
         Source: 'devexpress.com/carimage37'
     },
@@ -1372,7 +1372,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage38'
     },
@@ -1399,7 +1399,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY 2.0",
+        LicenseName: 'CC BY 2.0',
         Author: 'Erik Drost',
         Source: 'devexpress.com/carimage39'
     },
@@ -1426,7 +1426,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "Public Domain",
+        LicenseName: 'Public Domain',
         Author: 'IFCAR',
         Source: 'devexpress.com/carimage01'
     },
@@ -1453,7 +1453,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Jakub CA',
         Source: 'devexpress.com/carimage40'
     },
@@ -1480,7 +1480,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "Public Domain",
+        LicenseName: 'Public Domain',
         Author: 'US NHTSA',
         Source: 'devexpress.com/carimage13'
     },
@@ -1507,7 +1507,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY 2.0",
+        LicenseName: 'CC BY 2.0',
         Author: 'Land Rover MENA',
         Source: 'devexpress.com/carimage66'
     },
@@ -1534,7 +1534,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC0 1.0",
+        LicenseName: 'CC0 1.0',
         Author: 'HJUdall',
         Source: 'devexpress.com/carimage67'
     },
@@ -1561,7 +1561,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Damian B Oh',
         Source: 'devexpress.com/carimage05'
     },
@@ -1588,7 +1588,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY 2.0",
+        LicenseName: 'CC BY 2.0',
         Author: 'Alden Jewell',
         Source: 'devexpress.com/carimage07'
     },
@@ -1615,7 +1615,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Calreyn88',
         Source: 'devexpress.com/carimage08'
     },
@@ -1642,7 +1642,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Real Liquidstone',
         Source: 'devexpress.com/carimage41'
     },
@@ -1669,7 +1669,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage68'
     },
@@ -1696,7 +1696,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Ethan Llamas',
         Source: 'devexpress.com/carimage42'
     },
@@ -1723,7 +1723,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 4.0",
+        LicenseName: 'CC BY-SA 4.0',
         Author: 'Dinkun Chen',
         Source: 'devexpress.com/carimage43'
     },
@@ -1750,7 +1750,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 3.0",
+        LicenseName: 'CC BY-SA 3.0',
         Author: 'Noah Wulf',
         Source: 'devexpress.com/carimage06'
     },
@@ -1777,7 +1777,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY 4.0",
+        LicenseName: 'CC BY 4.0',
         Author: 'OWS Photography',
         Source: 'devexpress.com/carimage09'
     },
@@ -1804,7 +1804,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC0 1.0",
+        LicenseName: 'CC0 1.0',
         Author: 'HJUdall',
         Source: 'devexpress.com/carimage22'
     },
@@ -1831,7 +1831,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC0 1.0",
+        LicenseName: 'CC0 1.0',
         Author: 'HJUdall',
         Source: 'devexpress.com/carimage23'
     },
@@ -1858,7 +1858,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 3.0",
+        LicenseName: 'CC BY-SA 3.0',
         Author: 'Cristianv14',
         Source: 'devexpress.com/carimage24'
     },
@@ -1885,7 +1885,7 @@ const vehicles = [
         DeliveryDate: false,
         InStock: false,
         Edits: 'Resize and crop',
-        LicenseName: "CC BY-SA 3.0",
+        LicenseName: 'CC BY-SA 3.0',
         Author: 'Tobias \'\"ToMar\"\" Maier',
         Source: 'devexpress.com/carimage10'
     }
