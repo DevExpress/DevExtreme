@@ -60,6 +60,7 @@ export class EditPopup extends Component<Props> {
           toolbarItems={toolbarItems}
           onHidden={this.props.onHide}
           showTitle={false}
+          wrapperAttr={{ class: CLASSES.editPopup }}
         >
           <Scrollable>
             <Form

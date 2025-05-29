@@ -8,6 +8,7 @@ import * as DataControllerModule from './data_controller/index';
 import { EditingController } from './editing/controller';
 import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
+import { ErrorHandlingController } from './error_handling/controller';
 import { FilterPanelView } from './filtering/filter_panel/view';
 import { ClearFilterVisitor } from './filtering/filter_visitors/clear_filter_visitor';
 import { GetAppliedFilterVisitor } from './filtering/filter_visitors/get_applied_filters_visitor';
@@ -48,6 +49,7 @@ export function register(diContext: DIContext): void {
   diContext.register(HeaderFilterController);
   diContext.register(HeaderFilterPopupView);
   diContext.register(ErrorController);
+  diContext.register(ErrorHandlingController);
   diContext.register(EditingController);
   diContext.register(EditPopupView);
   diContext.register(SearchUIController);

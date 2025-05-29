@@ -34,3 +34,13 @@
 .dx-cardview-exclude-flexbox {
   position: absolute;
 }
+
+// TODO: change to variables
+.dx-cardview-edit-popup .dx-error-message {
+  background-color: #e89895;
+  white-space: normal;
+  word-wrap: break-word;
+  color: #fff;
+  margin-bottom: 20px;
+  padding: 7px;
+}

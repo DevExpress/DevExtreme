@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable spellcheck/spell-checker */
-import { applyChanges } from '@js/common/data';
 import { isDefined } from '@js/core/utils/type';
 import { confirm } from '@js/ui/dialog';
 import { computed, type Signal } from '@preact/signals-core';
@@ -9,6 +8,7 @@ import { generateNewRowTempKey } from '@ts/grids/grid_core/editing/m_editing_uti
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { DataController } from '../data_controller/data_controller';
 import type { DataObject, Key } from '../data_controller/types';
+import { ErrorHandlingController } from '../error_handling/controller';
 import { ItemsController } from '../items_controller/items_controller';
 import { KeyboardNavigationController } from '../keyboard_navigation/index';
 import { OptionsController } from '../options_controller/options_controller';
@@ -64,20 +64,18 @@ export class EditingController {
     }
 
     const oldItem = this.itemsController.findItemByKey(items, editCardKey)!;
-    const newData = applyChanges(
-      [oldItem.data],
-      changes,
-      {
-        keyExpr: this.dataController.dataSource.peek().key(),
-        immutable: true,
-      },
-    )[0];
 
     const newItem = this.itemsController.createCardInfo(
-      newData,
+      {
+        ...oldItem.data,
+        ...changes.find((change) => change.key === editCardKey && change.type === 'update')?.data,
+      },
       this.columnController.columns.peek(),
       oldItem.index,
+      undefined,
+      editCardKey,
     );
+
     return newItem;
   });
 
@@ -85,6 +83,7 @@ export class EditingController {
     OptionsController, ItemsController,
     ColumnsController, DataController,
     KeyboardNavigationController,
+    ErrorHandlingController,
   ] as const;
 
   constructor(
@@ -93,6 +92,7 @@ export class EditingController {
     private readonly columnController: ColumnsController,
     private readonly dataController: DataController,
     private readonly kbn: KeyboardNavigationController,
+    private readonly errorHandlingController: ErrorHandlingController,
   ) {}
 
   public editCard(key: Key): void {
@@ -312,7 +312,12 @@ export class EditingController {
       }
     }
 
-    await Promise.all(promises);
+    try {
+      await Promise.all(promises);
+    } catch (err) {
+      this.errorHandlingController.renderErrorRow(err as string);
+      throw err;
+    }
     await this.dataController.reload();
   }
 
