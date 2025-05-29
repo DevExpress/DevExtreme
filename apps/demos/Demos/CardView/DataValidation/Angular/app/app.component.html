@@ -1,6 +1,67 @@
-<dx-card-view id="cardView" [dataSource]="customers" keyExpr="ID">
+<dx-card-view
+  [dataSource]="employees"
+  keyExpr="id"
+  [searchPanel]="searchPanelConfig"
+>
+  <dxo-card-view-card-cover
+    [imageExpr]="imageExpr"
+    [altExpr]="altExpr"
+  ></dxo-card-view-card-cover>
+  <dxo-card-view-editing
+    [allowAdding]="true"
+    [allowUpdating]="true"
+    [allowDeleting]="true"
+    [popup]="popupConfig"
+    [form]="formConfig"
+  ></dxo-card-view-editing>
   <dxi-card-view-column
-    *ngFor="let column of columns"
-    [dataField]="column"
+    caption="Full Name"
+    [calculateFieldValue]="calculateFullName"
+  ></dxi-card-view-column>
+  <dxi-card-view-column dataField="birthDate" dataType="date">
+    <dxi-card-view-required-rule></dxi-card-view-required-rule>
+  </dxi-card-view-column>
+  <dxi-card-view-column dataField="hireDate" dataType="date">
+    <dxi-card-view-required-rule></dxi-card-view-required-rule>
+  </dxi-card-view-column>
+  <dxi-card-view-column caption="Position" dataField="title">
+    <dxi-card-view-required-rule></dxi-card-view-required-rule>
+  </dxi-card-view-column>
+  <dxi-card-view-column dataField="department"></dxi-card-view-column>
+  <dxi-card-view-column dataField="address"></dxi-card-view-column>
+  <dxi-card-view-column dataField="mobilePhone">
+    <dxi-card-view-required-rule></dxi-card-view-required-rule>
+    <dxi-card-view-pattern-rule
+      message="Your phone must have '(555) 555-5555' format!"
+      [pattern]="phonePattern"
+    ></dxi-card-view-pattern-rule>
+  </dxi-card-view-column>
+  <dxi-card-view-column dataField="email">
+    <dxi-card-view-required-rule></dxi-card-view-required-rule>
+    <dxi-card-view-email-rule></dxi-card-view-email-rule>
+    <dxi-card-view-async-rule
+      message="Email address is not unique"
+      [validationCallback]="emailValidationCallback"
+    ></dxi-card-view-async-rule>
+  </dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="notes"
+    [visible]="false"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="firstName"
+    [visible]="false"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="lastName"
+    [visible]="false"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="city"
+    [visible]="false"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="zipcode"
+    [visible]="false"
   ></dxi-card-view-column>
 </dx-card-view>
