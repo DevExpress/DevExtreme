@@ -1481,7 +1481,6 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     columnChooser?: ColumnChooser;
     /**
      * @docid
-     * @type object
      * @public
      */
     searchPanel?: SearchPanel;

@@ -2282,7 +2282,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   scrolling?: ScrollingBase;
   /**
    * @docid
-   * @type object
    * @public
    */
   searchPanel?: SearchPanel;
@@ -2996,38 +2995,38 @@ export interface ScrollingBase {
  */
 export type SearchPanel = {
   /**
-   * @docid GridBaseOptions.searchPanel.highlightCaseSensitive
+   * @docid
    * @default false
    */
   highlightCaseSensitive?: boolean;
   /**
-   * @docid GridBaseOptions.searchPanel.highlightSearchText
+   * @docid
    * @default true
    */
   highlightSearchText?: boolean;
   /**
-   * @docid GridBaseOptions.searchPanel.placeholder
+   * @docid
    * @default "Search..."
    */
   placeholder?: string;
   /**
-   * @docid GridBaseOptions.searchPanel.searchVisibleColumnsOnly
+   * @docid
    * @default false
    */
   searchVisibleColumnsOnly?: boolean;
   /**
-   * @docid GridBaseOptions.searchPanel.text
+   * @docid
    * @default ""
    * @fires GridBaseOptions.onOptionChanged
    */
   text?: string;
   /**
-   * @docid GridBaseOptions.searchPanel.visible
+   * @docid
    * @default false
    */
   visible?: boolean;
   /**
-   * @docid GridBaseOptions.searchPanel.width
+   * @docid
    * @default 160
    */
   width?: string | number;
