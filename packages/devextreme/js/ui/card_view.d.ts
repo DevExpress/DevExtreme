@@ -1475,7 +1475,6 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     filterPanel?: FilterPanel<dxCardView>;
     /**
      * @docid
-     * @type object
      * @public
      */
     columnChooser?: ColumnChooser;
