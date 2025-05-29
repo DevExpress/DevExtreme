@@ -40,18 +40,18 @@
 }
 
 .vehicle__type {
-    padding: 2px 6px 2px 6px;
+    padding: 2px 6px;
     background-color: var(--dx-color-separator);
     border-radius: 13px;
 }
 
 .vehicle__spec {
-    padding: 2px 12px 2px 12px;
+    padding: 2px 12px;
 }
 
 .vehicle__modification {
     height: 24px;
-    padding: 2px 0px 2px 12px;
+    padding: 2px 0 2px 12px;
 }
 
 .vehicle__footer-container {
