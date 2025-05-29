@@ -36,6 +36,7 @@ $treelist-icon-container-padding-right: $fluent-grid-base-checkbox-size + $fluen
 .dx-treelist-rowsview {
   .dx-treelist-empty-space {
     position: relative;
+    top: 1.2px;
     display: inline-block;
 
     @include dx-icon(chevronup);

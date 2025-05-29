@@ -159,3 +159,29 @@ const tasksT1223168 = [{
     await changeTheme(Themes.genericLight);
   });
 });
+
+test('TreeList – Chevron/Caret toggle icon is misaligned in the Fluent theme (T1291914)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const treeList = new TreeList('#container');
+
+  await treeList.isReady();
+
+  await t
+    .expect(await takeScreenshot('treelist-expand-collapse-caret-center-fluent-theme', treeList.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+})
+  .before(async () => {
+    await changeTheme(Themes.fluentBlue);
+
+    await createWidget('dxTreeList', {
+      dataSource: tasksT1223168,
+      keyExpr: 'Task_ID',
+      parentIdExpr: 'Task_Parent_ID',
+      columns: ['Task_ID'],
+    });
+  })
+  .after(async () => {
+    await changeTheme(Themes.genericLight);
+  });
