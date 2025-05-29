@@ -37,6 +37,7 @@ export const defaultColumnProperties = {
     return data[this.dataField!];
   },
   calculateFilterExpression: filterUtils.defaultCalculateFilterExpression,
+  defaultCalculateFilterExpression: filterUtils.defaultCalculateFilterExpression,
   alignment: 'left',
   visible: true,
   allowReordering: true,
