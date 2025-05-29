@@ -1,6 +1,6 @@
 import React from 'react';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import CardView, { Column, Editing } from 'devextreme-react/card-view';
+import CardView, { Column, Editing, RequiredRule } from 'devextreme-react/card-view';
 // TODO: Nested component does not exist
 const headerFilterConfig = {
   visible: true,
@@ -36,7 +36,9 @@ const App = () => (
     <Column
       dataField="Task_Subject"
       caption="Subject"
-    ></Column>
+    >
+      <RequiredRule/>
+    </Column>
     <Column
       dataField="Task_Start_Date"
       caption="Start Date"

@@ -20,6 +20,7 @@ $(() => {
       {
         caption: 'Subject',
         dataField: 'Task_Subject',
+        validationRules: [{ type: 'required' }]
       },
       {
         dataField: 'Task_Start_Date',

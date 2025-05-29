@@ -14,7 +14,9 @@
     <DxColumn
       data-field="Task_Subject"
       caption="Subject"
-    ></DxColumn>
+    >
+      <DxRequiredRule/>
+    </DxColumn>
     <DxColumn
       data-field="Task_Start_Date"
       caption="Start Date"
@@ -36,7 +38,7 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-  import { DxCardView, DxColumn, DxEditing } from 'devextreme-vue/card-view';
+  import { DxCardView, DxColumn, DxEditing, DxRequiredRule } from 'devextreme-vue/card-view';
   import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
   // TODO: Nested component does not exist
