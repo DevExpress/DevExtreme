@@ -2,6 +2,7 @@
 
 /* eslint-disable spellcheck/spell-checker */
 import type { DataType } from '@js/common';
+import $ from '@js/core/renderer';
 import type * as dxForm from '@js/ui/form';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, signal } from '@preact/signals-core';
@@ -127,7 +128,8 @@ export class EditPopupView extends View<Props> {
         onContentReady: (e): void => {
           // TODO: refactor
           setTimeout(() => {
-            e.element.data('dxValidator')?.option('dataGetter', () => ({
+            // @ts-expect-error
+            $(e.element).data('dxValidator')?.option('dataGetter', () => ({
               data: this.editingController.editingCard.peek()?.data,
               column,
             }));
