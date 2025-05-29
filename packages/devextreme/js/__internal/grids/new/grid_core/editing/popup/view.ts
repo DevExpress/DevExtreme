@@ -138,6 +138,10 @@ export class EditPopupView extends View<Props> {
         originalContentReady?.(e);
       },
     };
+
+    if (simpleFormItem.editorType === 'dxDateBox') {
+      simpleFormItem.editorOptions.type = column.dataType;
+    }
   });
 
   public static dependencies = [
