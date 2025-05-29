@@ -6,7 +6,6 @@
     cards-per-row="auto"
     :card-min-width="250"
     :header-filter="headerFilterConfig"
-    :column-chooser="columnChooserConfig"
   >
     <DxColumn
       data-field="FullName"
@@ -27,13 +26,27 @@
       :show-page-size-selector="true"
     />
     <DxSelection mode="multiple"/>
+    <DxColumnChooser
+        :enabled="true"
+        height="340px"
+        mode="select"
+      >
+      <DxPosition
+        my="right top"
+        at="right bottom"
+        of=".dx-cardview-column-chooser-button"
+      />
+      <DxColumnChooserSelection :select-by-click="true"/>
+    </DxColumnChooser>
     <DxSearchPanel :visible="true" />
   </DxCardView>
 </template>
 
 <script setup lang="ts">
 import DxCardView, {
-  DxColumn, DxCardCover, DxPager, DxSelection, DxSearchPanel
+  DxColumn, DxCardCover, DxPager, DxSelection,
+  DxColumnChooser, DxPosition, DxColumnChooserSelection,
+  DxSearchPanel
 } from 'devextreme-vue/card-view';
 import type { Employee } from './data.ts';
 import { employees } from './data.ts';
@@ -45,21 +58,5 @@ const getEmployeeImageAltText = ({ FullName }: Employee): string => `${FullName}
 // TODO: Nested component does not exist
 const headerFilterConfig = {
   visible: true,
-};
-
-// TODO: Nested component does not exist
-// TODO: Bad position types (strings not allowed)
-const columnChooserConfig = {
-  enabled: true,
-  height: 340,
-  mode: 'select' as const,
-  position: {
-    my: 'right top' as const,
-    at: 'right bottom' as const,
-    of: '.dx-cardview-column-chooser-button',
-  },
-  selection: {
-    selectByClick: true,
-  },
 };
 </script>

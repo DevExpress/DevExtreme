@@ -6,7 +6,6 @@
     [cardsPerRow]="'auto'"
     [cardMinWidth]="250"
     [headerFilter]="headerFilterConfig"
-    [columnChooser]="columnChooserConfig"
   >
     <!-- Columns -->
     <dxi-card-view-column
@@ -30,6 +29,22 @@
     ></dxo-card-view-pager>
     <!-- Selection -->
     <dxo-card-view-selection mode="multiple"></dxo-card-view-selection>
+    <!-- Column chooser -->
+    <dxo-card-view-column-chooser
+      #columnChooser
+      [enabled]="true"
+      height="340px"
+      [mode]="select"
+    >
+      <dxo-position
+        my="right top"
+        at="right bottom"
+        of=".dx-cardview-column-chooser-button"
+      ></dxo-position>
+      <dxo-card-view-column-chooser-selection
+        [selectByClick]="true"
+      ></dxo-card-view-column-chooser-selection>
+    </dxo-card-view-column-chooser>
     <!-- Search panel -->
     <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
   </dx-card-view>

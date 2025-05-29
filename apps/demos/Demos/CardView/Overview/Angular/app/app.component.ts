@@ -30,21 +30,6 @@ export class AppComponent {
     visible: true,
   };
 
-  // TODO: Nested component does not exist
-  columnChooserConfig = {
-    enabled: true,
-    height: 340,
-    mode: 'select',
-    position: {
-      my: 'right top',
-      at: 'right bottom',
-      of: '.dx-cardview-column-chooser-button',
-    },
-    selection: {
-      selectByClick: true,
-    },
-  };
-
   constructor(service: AppService) {
     this.employees = service.getEmployees();
   }

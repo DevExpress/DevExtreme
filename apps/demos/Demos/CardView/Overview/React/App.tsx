@@ -1,6 +1,8 @@
 import React from 'react';
 import CardView, {
-  CardCover, Column, Pager, Selection, SearchPanel,
+  CardCover, Column, Pager, Selection,
+  ColumnChooser, Position, ColumnChooserSelection,
+  SearchPanel,
 } from 'devextreme-react/card-view';
 import { Employee, employees } from './data.ts';
 
@@ -13,22 +15,6 @@ const headerFilterConfig = {
   visible: true,
 };
 
-// TODO: Nested component does not exist
-// TODO: Bad position types (strings not allowed)
-const columnChooserConfig = {
-  enabled: true,
-  height: 340,
-  mode: 'select' as const,
-  position: {
-    my: 'right top' as const,
-    at: 'right bottom' as const,
-    of: '.dx-cardview-column-chooser-button',
-  },
-  selection: {
-    selectByClick: true,
-  },
-};
-
 const App = () => (
   <CardView
     dataSource={employees}
@@ -37,7 +23,6 @@ const App = () => (
     cardsPerRow="auto"
     cardMinWidth={250}
     headerFilter={headerFilterConfig}
-    columnChooser={columnChooserConfig}
   >
     <Column dataField="FullName" allowHiding={false} />
     <Column dataField="Position" />
@@ -51,6 +36,18 @@ const App = () => (
     />
     <Pager showInfo={true} showNavigationButtons={true} showPageSizeSelector={true} />
     <Selection mode="multiple" />
+    <ColumnChooser
+      enabled={true}
+      height="340px"
+      mode="select"
+    >
+      <Position
+        my="right top"
+        at="right bottom"
+        of=".dx-cardview-column-chooser-button"
+      />
+      <ColumnChooserSelection selectByClick={true} />
+    </ColumnChooser>
     <SearchPanel visible={true} />
   </CardView>
 );
