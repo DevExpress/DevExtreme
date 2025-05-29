@@ -24,6 +24,9 @@ export interface Props {
 export class EditPopup extends Component<Props> {
   public render(): JSX.Element {
     if (!this.props.visible) {
+      // TODO: research whether it is good approach
+      // @ts-expect-error
+      this.props.formRef.current = null;
       return <></>;
     }
 
