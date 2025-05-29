@@ -11,6 +11,7 @@ import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ModuleType, Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
+import { GridCoreStickyColumnsDom } from '../sticky_columns/dom';
 import { getColumnFixedPosition } from '../sticky_columns/utils';
 import { Direction } from './const';
 import { ColumnFocusDispatcher } from './m_column_focus_dispatcher';
@@ -244,6 +245,14 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
 
   public restoreFocus(): void {
     const $focusedCell = this._getFocusedCell();
+    const isFixedCell = GridCoreStickyColumnsDom
+      .isFixedCell($focusedCell, this.addWidgetPrefix.bind(this));
+
+    if (isFixedCell) {
+      super.restoreFocus();
+      return;
+    }
+
     const focusedCellIsOutsideVisibleArea = $focusedCell.length && this.isOutsideVisibleArea(
       $focusedCell,
       $(this._columnHeadersView.getContent()),
