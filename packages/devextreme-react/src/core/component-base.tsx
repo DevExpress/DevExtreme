@@ -298,6 +298,12 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       optionsManager.current.update(widgetConfig, dxTemplates);
       scheduleTemplatesUpdate();
+      if (props.style && (
+        !prevPropsRef.current?.style ||
+        JSON.stringify(prevPropsRef.current.style) !== JSON.stringify(props.style)
+      )) {
+        setInlineStyles(props.style);
+      }
 
       prevPropsRef.current = props;
     }, [
