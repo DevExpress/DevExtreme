@@ -1,6 +1,7 @@
 import type { FilterType } from '@js/common/grids';
 import errors from '@js/core/errors';
 import { isDefined } from '@js/core/utils/type';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 
 import type { FilterValue } from '../types';
@@ -67,22 +68,38 @@ export const needCreateHeaderFilter = (column: Column): boolean => {
   return isFilteringAllowed(column) && hasSelectedItems;
 };
 
+const getFilterExpression = (filterValues: FilterValue, column: Column): FilterValue => {
+  const columnName = getColumnName(column);
+  const hasGroupInterval = !!column.headerFilter?.groupInterval;
+
+  const needNormalizeFilterValues = filterValues?.length === 1
+    && !hasGroupInterval;
+  const normalizedFilterValues = needNormalizeFilterValues
+    ? filterValues[0]
+    : filterValues;
+  const filterOperator = getFilterOperator(normalizedFilterValues, column.filterType);
+
+  return [columnName, filterOperator, normalizedFilterValues];
+};
+
 export const getComposedHeaderFilter = (columns: Column[]): FilterValue => {
   const filterValue: FilterValue = [];
   const filterableColumns = columns.filter((col) => needCreateHeaderFilter(col));
 
   filterableColumns.forEach((column, index) => {
-    const { filterValues } = column;
-    const columnName = getColumnName(column);
-    const hasGroupInterval = !!column.headerFilter?.groupInterval;
+    let { filterValues } = column;
+    let filterExpression: FilterValue = [];
 
-    const needNormalizeFilterValues = filterValues?.length === 1 && !hasGroupInterval;
-    const normalizedFilterValues = needNormalizeFilterValues
-      ? filterValues[0]
-      : filterValues;
-    const filterOperator = getFilterOperator(normalizedFilterValues, column.filterType);
+    filterValues = Array.isArray(filterValues) ? filterValues : [filterValues];
 
-    filterValue.push([columnName, filterOperator, normalizedFilterValues]);
+    const filterValuesWithExpressions = filterValues.filter((value) => Array.isArray(value));
+    const filterValuesWithoutExpressions = filterValues.filter((value) => !Array.isArray(value));
+
+    if (filterValuesWithoutExpressions.length) {
+      filterExpression = [getFilterExpression(filterValuesWithoutExpressions, column)];
+    }
+
+    filterValue.push(gridCoreUtils.combineFilters([...filterExpression, ...filterValuesWithExpressions], 'or'));
 
     if (index < filterableColumns.length - 1) {
       filterValue.push('and');

@@ -473,3 +473,52 @@ test('FilterBuilder should work with custom headerFilter data source', async (t)
     filterPanel: { visible: true },
   });
 });
+
+test('Filtering should work when a custom data source is specified as an array of filter expressions', async (t) => {
+  // arrange
+  const cardView = new CardView('#container');
+
+  await t
+    .click(cardView.getHeaderPanel().getHeaderItem(0).getFilterIcon());
+
+  // assert
+  await t
+    .expect(cardView.getHeaderFilterList().getItems().count)
+    .eql(2);
+
+  // act
+  await t
+    .click(cardView.getHeaderFilterList().getItem(0).element)
+    .click(cardView.getHeaderFilterPopup().getOkButton().element);
+
+  // assert
+  await t
+    .expect(cardView.getCards().count)
+    .eql(1)
+    .expect(cardView.apiGetCombinedFilter())
+    .eql(['id', '=', 1]);
+}).before(async () => {
+  await createWidget('dxCardView', {
+    ...baseConfig,
+    columns: [
+      {
+        dataField: 'id',
+        headerFilter: {
+          dataSource: [
+            { value: ['id', '=', 1], text: '1' },
+            { value: ['id', '=', 2], text: '2' },
+          ],
+        },
+      },
+      {
+        dataField: 'title',
+      },
+      {
+        dataField: 'name',
+      },
+      {
+        dataField: 'lastName',
+      },
+    ],
+  });
+});
