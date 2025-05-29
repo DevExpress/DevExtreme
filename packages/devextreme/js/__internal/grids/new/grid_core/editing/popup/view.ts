@@ -110,6 +110,7 @@ export class EditPopupView extends View<Props> {
       const originalContentReady = simpleFormItem?.editorOptions?.onContentReady;
 
       simpleFormItem.editorOptions = {
+        stylingMode: 'outline',
         disabled: !column.allowEditing,
         ...column.editorOptions,
         ...column.formItem.editorOptions,
