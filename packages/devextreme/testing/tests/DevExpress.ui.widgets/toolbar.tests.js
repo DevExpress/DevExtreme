@@ -576,6 +576,30 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
 
         assert.strictEqual($('.dx-state-disabled').length, 0, 'disabled state changed');
     });
+
+    QUnit.test('click on DropDownButton inside the toolbar menu should not close it (T1287462)', function(assert) {
+        this.instance.option('items', [{
+            locateInMenu: 'always',
+            widget: 'dxDropDownButton',
+            displayExpr: 'value',
+            keyExpr: 'id',
+            options: {
+                items: [
+                    { id: 1, value: '1' },
+                    { id: 2, value: '2' },
+                    { id: 3, value: '3' },
+                ],
+                selectedItemKey: 2,
+            },
+        }]);
+
+        this.overflowMenu.click();
+
+        const $dropDownButton = this.overflowMenu.instance()._popup.$content().find('.dx-dropdownbutton');
+        $($dropDownButton.eq(0)).trigger('dxclick');
+
+        assert.strictEqual(this.instance.option('overflowMenuVisible'), true, 'overflow menu remains visible after clicking DropDownButton in it');
+    });
 });
 
 

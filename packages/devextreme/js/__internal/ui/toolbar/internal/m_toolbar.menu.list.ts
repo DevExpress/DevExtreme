@@ -10,13 +10,15 @@ const TOOLBAR_MENU_CUSTOM_CLASS = 'dx-toolbar-menu-custom';
 const TOOLBAR_MENU_LAST_SECTION_CLASS = 'dx-toolbar-menu-last-section';
 const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 export default class ToolbarMenuList extends ListBase {
-  // @ts-expect-error ts-error
-  _activeStateUnit?: string;
+  _activeStateUnit!: string;
+
+  _expandableComponents!: string[];
 
   _init(): void {
     super._init();
 
     this._activeStateUnit = `.${TOOLBAR_MENU_ACTION_CLASS}:not(.${TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS})`;
+    this._expandableComponents = ['dxDropDownButton'];
   }
 
   _initMarkup(): void {
@@ -67,29 +69,44 @@ export default class ToolbarMenuList extends ListBase {
   }
 
   _renderItem(index, item, itemContainer, $after) {
-    const location = item.location ?? 'menu';
-    const $container = this[`_$${location}Section`];
+    const $container = this[`_$${item.location}Section`];
     const itemElement = super._renderItem(index, item, $container, $after);
 
+    const itemElementClasses = this._getItemElementCssClasses(item).join(' ');
+    itemElement.addClass(itemElementClasses);
+
+    return itemElement;
+  }
+
+  _getItemElementCssClasses(item): string[] {
+    const location = item.location ?? 'menu';
+    const cssClasses: string[] = [];
+
+    if (item.cssClass) {
+      cssClasses.push(item.cssClass);
+    }
+
     if (this._getItemTemplateName({ itemData: item })) {
-      itemElement.addClass(TOOLBAR_MENU_CUSTOM_CLASS);
+      cssClasses.push(TOOLBAR_MENU_CUSTOM_CLASS);
+    }
+
+    if (this._expandableComponents.includes(item.widget)) {
+      return cssClasses;
     }
 
     if (location === 'menu' || item.widget === 'dxButton' || item.widget === 'dxButtonGroup' || item.isAction) {
-      itemElement.addClass(TOOLBAR_MENU_ACTION_CLASS);
+      cssClasses.push(TOOLBAR_MENU_ACTION_CLASS);
     }
 
     if (item.widget === 'dxButton') {
-      itemElement.addClass(TOOLBAR_HIDDEN_BUTTON_CLASS);
+      cssClasses.push(TOOLBAR_HIDDEN_BUTTON_CLASS);
     }
 
     if (item.widget === 'dxButtonGroup') {
-      itemElement.addClass(TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS);
+      cssClasses.push(TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS);
     }
 
-    itemElement.addClass(item.cssClass);
-
-    return itemElement;
+    return cssClasses;
   }
 
   _getItemTemplateName(args) {
