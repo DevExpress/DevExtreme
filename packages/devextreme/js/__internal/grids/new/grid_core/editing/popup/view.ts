@@ -105,6 +105,9 @@ export class EditPopupView extends View<Props> {
         text: column.caption,
         ...column.formItem.label,
       };
+
+      const originalContentReady = simpleFormItem?.editorOptions?.onContentReady;
+
       simpleFormItem.editorOptions = {
         disabled: !column.allowEditing,
         ...column.editorOptions,
@@ -121,6 +124,16 @@ export class EditPopupView extends View<Props> {
         value: editingCard?.fields.find(
           (c) => c.column.name === column.name,
         )?.value ?? null,
+        onContentReady: (e): void => {
+          // TODO: refactor
+          setTimeout(() => {
+            e.element.data('dxValidator')?.option('dataGetter', () => ({
+              data: this.editingController.editingCard.peek()?.data,
+              column,
+            }));
+          });
+          originalContentReady?.(e);
+        },
       };
     };
   });
