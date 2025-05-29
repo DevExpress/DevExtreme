@@ -36,6 +36,7 @@ export * from './position';
 export * from './range-rule-dxi';
 export * from './remote-operations';
 export * from './required-rule-dxi';
+export * from './search-panel';
 export * from './selection';
 export * from './show';
 export * from './string-length-rule-dxi';
