@@ -185,7 +185,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         }
       });
       return elementProps;
-    }, [element.current]);
+    }, [element.current, props]);
 
     const scheduleTemplatesUpdate = useCallback(() => {
       if (guardsUpdateScheduled.current) {
@@ -284,12 +284,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       optionsManager.current.update(widgetConfig, dxTemplates);
       scheduleTemplatesUpdate();
-      if (props.style && (
-        !prevPropsRef.current?.style ||
-        JSON.stringify(prevPropsRef.current.style) !== JSON.stringify(props.style)
-      )) {
-        setInlineStyles(props.style);
-      }
 
       prevPropsRef.current = props;
     }, [
