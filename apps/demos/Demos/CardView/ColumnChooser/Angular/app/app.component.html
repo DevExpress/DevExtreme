@@ -1,6 +1,66 @@
-<dx-card-view id="cardView" [dataSource]="customers" keyExpr="ID">
+<div class="options">
+  <div class="caption">Options</div>
+  <div class="options-container">
+    <div class="option">
+      <span>Column Chooser Mode:</span>
+      <dx-select-box
+        [dataSource]="['dragAndDrop', 'select']"
+        [(value)]="columnChooserMode"
+      ></dx-select-box>
+    </div>
+    <div class="option">
+      <span>Search Enabled:</span>
+      <dx-check-box [(value)]="searchEnabled"></dx-check-box>
+    </div>
+    <div class="option">
+      <span>Allow Select All:</span>
+      <dx-check-box
+        [(value)]="allowSelectAll"
+        [disabled]="columnChooserMode !== 'select'"
+      ></dx-check-box>
+    </div>
+    <div class="option">
+      <span>Select By Click On Item:</span>
+      <dx-check-box
+        [(value)]="selectByClick"
+        [disabled]="columnChooserMode !== 'select'"
+      ></dx-check-box>
+    </div>
+  </div>
+</div>
+<dx-card-view
+  [dataSource]="employees"
+  keyExpr="ID"
+  [columnChooser]="getColumnChooserConfig()"
+  [searchPanel]="searchPanelConfig"
+>
+  <dxo-card-view-card-cover
+    [altExpr]="altExpr"
+    [imageExpr]="imageExpr"
+  ></dxo-card-view-card-cover>
   <dxi-card-view-column
-    *ngFor="let column of columns"
-    [dataField]="column"
+    dataField="FullName"
+    [calculateFieldValue]="calculateFullName"
+    [allowHiding]="false"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Birth_Date"
+    dataType="date"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Hire_Date"
+    dataType="date"
+  ></dxi-card-view-column>
+  <dxi-card-view-column dataField="Position"></dxi-card-view-column>
+  <dxi-card-view-column dataField="Department"></dxi-card-view-column>
+  <dxi-card-view-column dataField="State"></dxi-card-view-column>
+  <dxi-card-view-column dataField="City"></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Phone"
+    [allowHiding]="false"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Email"
+    [visible]="false"
   ></dxi-card-view-column>
 </dx-card-view>

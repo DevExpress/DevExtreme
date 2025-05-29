@@ -11,7 +11,7 @@ $(() => {
       selection: {
         allowSelectAll: true,
         selectByClick: true,
-      }
+      },
     },
     searchPanel: {
       visible: true,
@@ -40,7 +40,6 @@ $(() => {
       'Department',
       'State',
       'City',
-      'Phone',
       { 
         dataField: 'Phone',
         allowHiding: false,
