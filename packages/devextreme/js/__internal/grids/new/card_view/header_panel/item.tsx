@@ -92,7 +92,7 @@ export class Item extends Component<ItemProps> {
         ref={this.props.elementRef}
         className={cssClass}
         tabIndex={this.props.tabIndex}
-        role="menuitem"
+        role={this.props.isDragging ? undefined : 'menuitem'}
         aria-label={ariaLabel}
         onClick={this.props.onSortClick}
         onKeyDown={this.props.onKeyDown}

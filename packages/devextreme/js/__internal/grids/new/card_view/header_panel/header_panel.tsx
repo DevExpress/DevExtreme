@@ -2,6 +2,7 @@
   spellcheck/spell-checker
 */
 import messageLocalization from '@js/localization/message';
+import { combineClasses } from '@ts/core/utils/combine_classes';
 import { filterHasField } from '@ts/filter_builder/m_utils';
 import type { Column, VisibleColumn } from '@ts/grids/new/grid_core/columns_controller/types';
 import { Scrollable } from '@ts/grids/new/grid_core/inferno_wrappers/scrollable';
@@ -14,7 +15,7 @@ import { getColumnIdentifier } from '../../grid_core/filtering/header_filter/uti
 import type { FilterValue } from '../../grid_core/filtering/types';
 import type { Props as ColumnSortableProps } from './column_sortable';
 import { ColumnSortable } from './column_sortable';
-import { CLASSES as itemClasses, Item } from './item';
+import { Item } from './item';
 import type { DraggingOptions } from './options';
 import { hasFilterValues } from './utils';
 
@@ -22,7 +23,12 @@ export const CLASSES = {
   link: 'dx-link',
   headers: 'dx-cardview-headers',
   content: 'dx-cardview-headerpanel-content',
+  contentHasHeaderItems: 'dx-cardview-headerpanel-content--with-header-items',
+  contentEmpty: 'dx-cardview-headerpanel-content--empty',
   headerPanelTextEmpty: 'dx-cardview-headerpanel-text-empty',
+  headerItemContainer: 'dx-cardview-header-item-container',
+  sortable: 'dx-cardview-sortable',
+  sortablePlaceholder: 'dx-cardview-header-item-sort-indicator',
 };
 
 const ItemWithKbn = withKbnNavigationItem(withKeyDownHandler(Item));
@@ -91,6 +97,12 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
     }
 
     const { sortableConfig } = this.props;
+    const hasHeaderItems = this.props.visibleColumns.length > 0;
+    const contentClassNames = combineClasses({
+      [CLASSES.content]: true,
+      [CLASSES.contentHasHeaderItems]: hasHeaderItems,
+      [CLASSES.contentEmpty]: !hasHeaderItems,
+    });
 
     return (
       <div
@@ -99,6 +111,7 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
       >
         <ColumnSortable
           {...this.props.draggingOptions}
+          className={CLASSES.sortable}
           source="header-panel-main"
           getColumnByIndex={(index) => this.props.visibleColumns[index]}
           visibleColumns={this.props.visibleColumns}
@@ -106,9 +119,11 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
           onColumnMove={sortableConfig.onColumnMove}
           columnDragTemplate={Item}
           itemOrientation="horizontal"
-          filter={`.${itemClasses.item}`}
+          filter={`.${CLASSES.headerItemContainer}`}
           isColumnDraggable={sortableConfig.isColumnDraggable}
           showDropzone={sortableConfig.showDropzone}
+          placeholderClassName={CLASSES.sortablePlaceholder}
+          placeholderAutoHeight={false}
           onPlaceholderPrepared={sortableConfig.onPlaceholderPrepared}
         >
           <Scrollable
@@ -124,52 +139,54 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
               navigationStrategy={this.props.navigationStrategy}
             >
               <div
-                className={CLASSES.content}
+                className={contentClassNames}
                 role="menubar"
               >
-                {this.props.visibleColumns.length === 0 && (
+                {!hasHeaderItems && (
                   <EmptyHeaderPanelText openColumnChooser={this.props.openColumnChooser}/>
                 )}
                 {this.props.visibleColumns.map((column, idx) => (
-                  <HeaderItem
-                    navigationIdx={idx}
-                    navigationStrategy={this.props.navigationStrategy}
-                    showSortIndexes={this.props.showSortIndexes}
-                    column={column}
-                    template={this.props.itemTemplate}
-                    cssClass={this.props.itemCssClass}
-                    hasFilters={this.itemHasFilters(column, this.props.filterSyncValue)}
-                    keyDownConfig={{
-                      Enter: (event) => { this.props.onColumnSort(column, event); },
-                      'Enter+ctrl': (event) => { this.props.onColumnSort(column, event); },
-                      'Enter+shift': (event) => { this.props.onColumnSort(column, event); },
-                      'ArrowDown+alt': (event, ref) => {
-                        this.props.onHeaderFilterOpen?.(
-                          ref.current,
-                          column,
-                          () => ref.current?.focus(),
-                        );
-                      },
-                      'F10+shift': (event, ref) => {
-                        this.props.showContextMenu(
-                          event,
-                          column,
-                          idx,
-                          () => ref.current?.focus(),
-                        );
-                      },
-                    }}
-                    caughtEventPreventDefault={true}
-                    onSortClick={(event): void => {
-                      this.props.onColumnSort(column, event);
-                    }}
-                    onFilterClick={(element: Element) => {
-                      this.props.onHeaderFilterOpen?.(element, column);
-                    }}
-                    onContextMenu={(event) => {
-                      this.props.showContextMenu(event, column, idx);
-                    }}
-                  />
+                  <div className={CLASSES.headerItemContainer}>
+                    <HeaderItem
+                      navigationIdx={idx}
+                      navigationStrategy={this.props.navigationStrategy}
+                      showSortIndexes={this.props.showSortIndexes}
+                      column={column}
+                      template={this.props.itemTemplate}
+                      cssClass={this.props.itemCssClass}
+                      hasFilters={this.itemHasFilters(column, this.props.filterSyncValue)}
+                      keyDownConfig={{
+                        Enter: (event) => { this.props.onColumnSort(column, event); },
+                        'Enter+ctrl': (event) => { this.props.onColumnSort(column, event); },
+                        'Enter+shift': (event) => { this.props.onColumnSort(column, event); },
+                        'ArrowDown+alt': (event, ref) => {
+                          this.props.onHeaderFilterOpen?.(
+                            ref.current,
+                            column,
+                            () => ref.current?.focus(),
+                          );
+                        },
+                        'F10+shift': (event, ref) => {
+                          this.props.showContextMenu(
+                            event,
+                            column,
+                            idx,
+                            () => ref.current?.focus(),
+                          );
+                        },
+                      }}
+                      caughtEventPreventDefault={true}
+                      onSortClick={(event): void => {
+                        this.props.onColumnSort(column, event);
+                      }}
+                      onFilterClick={(element: Element) => {
+                        this.props.onHeaderFilterOpen?.(element, column);
+                      }}
+                      onContextMenu={(event) => {
+                        this.props.showContextMenu(event, column, idx);
+                      }}
+                    />
+                  </div>
                 ))}
               </div>
             </KbnNavigationContainer>
