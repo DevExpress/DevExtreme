@@ -1,10 +1,8 @@
-@use "sass:color";
 @use "colors" as *;
-@use "../colors" as *;
 @use "sizes" as *;
-@use "../sizes" as *;
 @use "mixins" as *;
 @use "../../base/button";
+@use "../../_design-system/variables/_ds.scss" as *;
 
 // adduse
 
@@ -44,7 +42,7 @@
 }
 
 .dx-button { // stylelint-disable-line no-duplicate-selectors
-  height: $fluent-button-height;
+  height: $ds-fluent-button-height;
   position: relative;
 
   .dx-button-content {
@@ -52,7 +50,7 @@
   }
 
   @include dx-button-styling(
-    $button-normal-bg,
+    $ds-button-normal-bg,
     $button-normal-color,
     $button-normal-hover-bg,
     $button-normal-focused-bg,
@@ -64,7 +62,7 @@
 
   &.dx-button-default {
     @include dx-button-styling(
-      $button-default-bg,
+      $ds-button-default-bg,
       $button-default-color,
       $button-default-hover-bg,
       $button-default-focused-bg,
@@ -77,7 +75,7 @@
 
   &.dx-button-danger {
     @include dx-button-styling(
-      $button-danger-bg,
+      $ds-button-danger-bg,
       $button-danger-color,
       $button-danger-hover-bg,
       $button-danger-focused-bg,
@@ -90,7 +88,7 @@
 
   &.dx-button-success {
     @include dx-button-styling(
-      $button-success-bg,
+      $ds-button-success-bg,
       $button-success-color,
       $button-success-hover-bg,
       $button-success-focused-bg,
@@ -163,7 +161,7 @@
     $button-normal-color,
     $button-normal-color,
     $button-normal-color,
-    $base-border-color,
+    $color-border-neutral-static-rest,
     $button-normal-outlined-bg,
     $button-normal-outlined-hover-bg,
     $button-normal-outlined-focused-bg,

@@ -4,6 +4,7 @@
 
 :root {
   --DS-color-shadow-none: rgba(0, 0, 0, 0);
+  --DS-color-shadow-none-hsl: 0, 0, 0;
   --DS-color-shadow-key-brand: rgba(0, 0, 0, 0.25);
   --DS-color-shadow-key-darker: rgba(0, 0, 0, 0.24);
   --DS-color-shadow-key-lighter: rgba(0, 0, 0, 0.07);
@@ -229,6 +230,9 @@
   --DS-color-surface-success-subdued-rest: var(--DS-success-10);
   --DS-color-surface-success-additional-hovered: var(--DS-success-110);
   --DS-color-surface-success-additional-rest: var(--DS-success-90);
+  --DS-color-surface-success-additional-rest-h: var(--DS-success-90-h);
+  --DS-color-surface-success-additional-rest-s: var(--DS-success-90-s);
+  --DS-color-surface-success-additional-rest-l: var(--DS-success-90-l);
   --DS-color-surface-success-default-selected: var(--DS-success-120);
   --DS-color-surface-success-default-pressed: var(--DS-success-130);
   --DS-color-surface-success-default-hovered: var(--DS-success-110);
