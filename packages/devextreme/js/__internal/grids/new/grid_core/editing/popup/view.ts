@@ -67,77 +67,76 @@ export class EditPopupView extends View<Props> {
     return result;
   });
 
-  private readonly customizeItems = computed(() => {
-    const editingCard = this.editingController.editingCard.value;
-    const columns = this.columnsController.columns.value;
-    const customEditorItems = this.customEditorItems.value;
+  private readonly visible = computed(() => !!this.editingController.editingCard.value);
 
-    return (item: dxForm.Item): void => {
-      if (!editingCard) {
-        return;
-      }
+  private readonly customizeItems = computed(() => (item: dxForm.Item): void => {
+    const editingCard = this.editingController.editingCard.peek();
+    const columns = this.columnsController.columns.peek();
+    const customEditorItems = this.customEditorItems.peek();
 
-      if (item.itemType !== 'simple') {
-        return;
-      }
+    if (!editingCard) {
+      return;
+    }
 
-      const simpleFormItem = item as dxForm.SimpleItem;
-      const itemId = simpleFormItem.name ?? simpleFormItem.dataField;
+    if (item.itemType !== 'simple') {
+      return;
+    }
 
-      const column: Column = (simpleFormItem as any).column
+    const simpleFormItem = item as dxForm.SimpleItem;
+    const itemId = simpleFormItem.name ?? simpleFormItem.dataField;
+
+    const column: Column = (simpleFormItem as any).column
         ?? columns.find((c) => c.name === itemId)
         ?? columns.find((c) => c.dataField === itemId);
 
-      if (!column) {
-        return;
-      }
+    if (!column) {
+      return;
+    }
 
-      (simpleFormItem as any).column = column;
+    (simpleFormItem as any).column = column;
 
-      if (itemId && !customEditorItems.includes(itemId)) {
-        simpleFormItem.editorType = EDITOR_TYPES_BY_DATA_TYPE[column.dataType];
-      }
+    if (itemId && !customEditorItems.includes(itemId)) {
+      simpleFormItem.editorType = EDITOR_TYPES_BY_DATA_TYPE[column.dataType];
+    }
 
-      extend(simpleFormItem, column.formItem);
+    extend(simpleFormItem, column.formItem);
 
-      simpleFormItem.dataField ??= column.dataField;
-      simpleFormItem.validationRules ??= column.validationRules;
-      simpleFormItem.label = {
-        text: column.caption,
-        ...column.formItem.label,
-      };
+    simpleFormItem.dataField ??= column.dataField;
+    simpleFormItem.validationRules ??= column.validationRules;
+    simpleFormItem.label = {
+      text: column.caption,
+      ...column.formItem.label,
+    };
 
-      const originalContentReady = simpleFormItem?.editorOptions?.onContentReady;
+    const originalContentReady = simpleFormItem?.editorOptions?.onContentReady;
 
-      simpleFormItem.editorOptions = {
-        stylingMode: 'outline',
-        disabled: !column.allowEditing,
-        ...column.editorOptions,
-        ...column.formItem.editorOptions,
-        ...simpleFormItem.editorOptions,
-        onValueChanged: async ({ value }): Promise<void> => {
-          const newData = {};
-          await this.promises.add(
-            Promise.resolve(column.setFieldValue.bind(column)(newData, value, editingCard.data)),
-          );
-          this.editingController.addChange(editingCard.key, newData);
-          this.formRef.current?.repaint();
-        },
-        value: editingCard?.fields.find(
-          (c) => c.column.name === column.name,
-        )?.value ?? null,
-        onContentReady: (e): void => {
-          // TODO: refactor
-          setTimeout(() => {
-            // @ts-expect-error
-            $(e.element).data('dxValidator')?.option('dataGetter', () => ({
-              data: this.editingController.editingCard.peek()?.data,
-              column,
-            }));
-          });
-          originalContentReady?.(e);
-        },
-      };
+    simpleFormItem.editorOptions = {
+      stylingMode: 'outline',
+      disabled: !column.allowEditing,
+      ...column.editorOptions,
+      ...column.formItem.editorOptions,
+      ...simpleFormItem.editorOptions,
+      onValueChanged: async ({ value }): Promise<void> => {
+        const newData = {};
+        await this.promises.add(
+          Promise.resolve(column.setFieldValue.bind(column)(newData, value, editingCard.data)),
+        );
+        this.editingController.addChange(editingCard.key, newData);
+      },
+      value: editingCard?.fields.find(
+        (c) => c.column.name === column.name,
+      )?.value ?? null,
+      onContentReady: (e): void => {
+        // TODO: refactor
+        setTimeout(() => {
+          // @ts-expect-error
+          $(e.element).data('dxValidator')?.option('dataGetter', () => ({
+            data: this.editingController.editingCard.peek()?.data,
+            column,
+          }));
+        });
+        originalContentReady?.(e);
+      },
     };
   });
 
@@ -183,7 +182,7 @@ export class EditPopupView extends View<Props> {
 
   protected getProps(): ReadonlySignal<Props> {
     return computed(() => ({
-      visible: !!this.editingController.editingCard.value,
+      visible: this.visible.value,
       formProps: this.options.oneWay('editing.form').value,
       popupProps: this.options.oneWay('editing.popup').value,
       formRef: this.formRef,

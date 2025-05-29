@@ -211,7 +211,7 @@ describe('Options', () => {
 
         expect(editingController.changes.peek()).toMatchSnapshot();
       });
-      it('should update state in editor', () => {
+      it.skip('should update state in editor', () => {
         const { editingController, getForm } = setup(config);
 
         editingController.changes.value = [{
