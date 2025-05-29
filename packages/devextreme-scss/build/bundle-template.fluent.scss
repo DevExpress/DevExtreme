@@ -3,6 +3,8 @@
 @use "../widgets/_design-system/fluent/shadows";
 @use "../widgets/_design-system/fluent/typography1";
 @use "../widgets/_design-system/fluent/utility";
+@use "../widgets/_design-system/fluent/accents/$COLOR";
+@use "../widgets/_design-system/fluent/modes/$MODE";
 @use "../widgets/fluent/colors" with ($color: "$COLOR", $mode: "$MODE");
 @use "../widgets/fluent/sizes" with ($size: "$SIZE");
 @use "../widgets/fluent/typography";

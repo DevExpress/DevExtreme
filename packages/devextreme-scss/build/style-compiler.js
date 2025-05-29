@@ -94,9 +94,9 @@ function createBundles(callback) {
     const getBundleContent = (theme, size, color, mode) => {
         const bundleTemplate = readTemplate(theme);
         const bundleContent = bundleTemplate
-            .replace('$COLOR', color)
-            .replace('$SIZE', size)
-            .replace('$MODE', mode);
+            .replace(/\$COLOR/gm, color)
+            .replace(/\$SIZE/gm, size)
+            .replace(/\$MODE/gm, mode);
         return bundleContent;
     };
 
