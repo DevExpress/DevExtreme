@@ -72,8 +72,8 @@ export default class ToolbarMenuList extends ListBase {
     const $container = this[`_$${item.location}Section`];
     const itemElement = super._renderItem(index, item, $container, $after);
 
-    const itemElementClasses = this._getItemElementCssClasses(item).join(' ');
-    itemElement.addClass(itemElementClasses);
+    const itemElementClasses = this._getItemElementCssClasses(item);
+    itemElement.addClass(itemElementClasses.join(' '));
 
     return itemElement;
   }
