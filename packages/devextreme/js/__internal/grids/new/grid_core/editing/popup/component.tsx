@@ -7,7 +7,7 @@ import { CLASSES } from '../../const';
 import type { FormProperties } from '../../inferno_wrappers/form';
 import { Form } from '../../inferno_wrappers/form';
 import { Popup } from '../../inferno_wrappers/popup';
-import { Scrollable } from '../../inferno_wrappers/scrollable';
+import { getCancelButtonConfig, getSaveButtonConfig } from './buttons';
 
 export interface Props {
   visible: boolean;
@@ -28,28 +28,12 @@ export class EditPopup extends Component<Props> {
     }
 
     const toolbarItems = [
-      {
-        toolbar: 'bottom',
-        location: 'after',
-        widget: 'dxButton',
-        options: {
-          text: 'Save',
-          onClick: this.props.onSave,
-          stylingMode: 'contained',
-          type: 'default',
-        },
-      } as const,
-      {
-        toolbar: 'bottom' as const,
-        location: 'after',
-        widget: 'dxButton',
-        options: {
-          text: 'Cancel',
-          onClick: this.props.onCancel,
-          stylingMode: 'contained',
-          type: 'default',
-        },
-      } as const,
+      getSaveButtonConfig({
+        onSave: this.props.onSave,
+      }),
+      getCancelButtonConfig({
+        onCancel: this.props.onCancel,
+      }),
     ];
 
     return (
@@ -61,15 +45,14 @@ export class EditPopup extends Component<Props> {
           showTitle={false}
           {...this.props.popupProps}
         >
-          <Scrollable>
-            <Form
-              componentRef={this.props.formRef}
-              colCount={2} // TODO: move
-              customizeItem={this.props.customizeItem}
-              items={this.props.items}
-              {...this.props.formProps}
-            />
-          </Scrollable>
+          <Form
+            componentRef={this.props.formRef}
+            colCount={2} // TODO: move
+            labelLocation={'top'}
+            customizeItem={this.props.customizeItem}
+            items={this.props.items}
+            {...this.props.formProps}
+          />
         </Popup>
       </div>
     );
