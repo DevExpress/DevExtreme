@@ -21,7 +21,7 @@ exports[`common initial render should be successfull 1`] = `
         class="dx-cardview-headers"
       >
         <div
-          class="dx-sortable"
+          class="dx-cardview-sortable dx-sortable"
         >
           <div
             class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
@@ -44,7 +44,7 @@ exports[`common initial render should be successfull 1`] = `
                       tabindex="0"
                     />
                     <div
-                      class="dx-cardview-headerpanel-content"
+                      class="dx-cardview-headerpanel-content dx-cardview-headerpanel-content--empty"
                       role="menubar"
                     >
                       <span
