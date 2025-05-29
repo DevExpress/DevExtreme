@@ -1,6 +1,25 @@
-<dx-card-view id="cardView" [dataSource]="customers" keyExpr="ID">
-  <dxi-card-view-column
-    *ngFor="let column of columns"
-    [dataField]="column"
-  ></dxi-card-view-column>
+<dx-card-view
+  id="cardView"
+  [dataSource]="vehicles"
+  cardsPerRow="auto"
+  [cardMinWidth]="260"
+  [cardMaxWidth]="260"
+  [searchPanel]="searchPanelConfig"
+  [paging]="pagingConfig"
+  [headerFilter]="headerFilterConfig"
+  cardTemplate="vehicleCardTemplate"
+>
+  <dxi-card-view-column dataField="TrademarkName"></dxi-card-view-column>
+  <dxi-card-view-column dataField="Name"></dxi-card-view-column>
+  <dxi-card-view-column dataField="Price" format="currency"></dxi-card-view-column>
+  <dxi-card-view-column dataField="CategoryName"></dxi-card-view-column>
+
+  <dxi-card-view-column dataField="Modification"></dxi-card-view-column>
+  <dxi-card-view-column dataField="BodyStyleName"></dxi-card-view-column>
+  <dxi-card-view-column dataField="Horsepower"></dxi-card-view-column>
+
+  <div *dxTemplate="let model of 'vehicleCardTemplate'">
+      <vehicle-card [vehicle]="model.card.data">
+      </vehicle-card>
+  </div>
 </dx-card-view>
