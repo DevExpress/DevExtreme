@@ -606,7 +606,7 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
             }
         }
     ].forEach(({ component, cssClass, options }) => {
-        QUnit.test('click on non-actionable component inside the toolbar menu should not close it (T1287462)', function(assert) {
+        QUnit.test(`click on ${component} inside the toolbar menu should not close it (T1287462)`, function(assert) {
             this.instance.option('items', [{
                 locateInMenu: 'always',
                 widget: component,
