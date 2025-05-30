@@ -6,6 +6,7 @@
         <span>Selection Mode</span>
         <DxSelectBox
           :data-source="['single', 'multiple']"
+          :input-attr="{ 'aria-label': 'Selection Mode'}"
           :value="selectionMode"
           @value-changed="onSelectionModeChange"
         />
@@ -14,26 +15,28 @@
         <span>Show Checkboxes Mode</span>
         <DxSelectBox
           :data-source="['always', 'none', 'onClick', 'onLongTap']"
+          :input-attr="{ 'aria-label': 'Show Checkboxes Mode'}"
           :value="showCheckBoxesMode"
           @value-changed="({ value }) => { showCheckBoxesMode = value; }"
           :disabled="selectionMode !== 'multiple'"
         />
       </div>
       <div className="option">
-        <span>Allow Select All</span>
-        <DxCheckBox
-        :value="allowSelectAll"
-        @value-changed="e => allowSelectAll = e.value"
-        :disabled="selectionMode !== 'multiple'"
+        <span>Select All Mode</span>
+        <DxSelectBox
+          :data-source="['allPages', 'page']"
+          :input-attr="{ 'aria-label': 'Select All Mode'}"
+          :value="selectAllMode"
+          @value-changed="e =>selectAllMode = e.value "
+          :disabled="selectionMode !== 'multiple' || !allowSelectAll"
         />
       </div>
       <div className="option">
-        <span>Select All Mode</span>
-        <DxSelectBox
-        :data-source="['allPages', 'page']"
-        :value="selectAllMode"
-        @value-changed="e =>selectAllMode = e.value "
-        :disabled="selectionMode !== 'multiple' || !allowSelectAll"
+        <DxCheckBox
+          text="Allow Select All"
+          :value="allowSelectAll"
+          @value-changed="e => allowSelectAll = e.value"
+          :disabled="selectionMode !== 'multiple'"
         />
       </div>
     </div>

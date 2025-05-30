@@ -17,6 +17,7 @@ $(() => {
     $("#selection-mode").dxSelectBox({
       dataSource: ['single', 'multiple'],
       value: cardView.option('selection.mode'),
+      inputAttr: { 'aria-label': 'Selection Mode' },
       onOptionChanged(e) {
         if (e.name === 'value') {
           cardView.option('selection.mode', e.value);
@@ -29,6 +30,7 @@ $(() => {
     $("#show-checkboxes-mode").dxSelectBox({
       dataSource: ['always', 'none', 'onClick', 'onLongTap'],
       value: cardView.option('selection.showCheckBoxesMode'),
+      inputAttr: { 'aria-label': 'Show Checkboxes Mode' },
       onOptionChanged(e) {
         if (e.name === 'value') {
           cardView.option('selection.showCheckBoxesMode', e.value);
@@ -40,6 +42,7 @@ $(() => {
   
     $("#allow-select-all").dxCheckBox({
       value: cardView.option('selection.allowSelectAll'),
+      text: 'Allow Select All',
       onOptionChanged(e) {
         if (e.name === 'value') {
           cardView.option('selection.allowSelectAll', e.value);
@@ -52,6 +55,7 @@ $(() => {
     $("#select-all-mode").dxSelectBox({
       dataSource: ['allPages', 'page'],
       value: cardView.option('selection.selectAllMode'),
+      inputAttr: { 'aria-label': 'Select All Mode' },
       onOptionChanged(e) {
         if (e.name === 'value') {
           cardView.option('selection.selectAllMode', e.value);

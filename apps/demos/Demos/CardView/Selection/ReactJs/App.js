@@ -10,6 +10,9 @@ function altExpr({ FullName }) {
 function imageExpr({ FullName }) {
   return `../../../../images/employees/new/${FullName}.jpg`;
 }
+const selectionModeLabel = { 'aria-label': 'Selection Mode' };
+const showCheckBoxesModeLabel = { 'aria-label': 'Show Checkboxes Mode' };
+const selectAllModeLabel = { 'aria-label': 'Select All Mode' };
 const App = () => {
   const [selectionMode, setSelectionMode] = useState('multiple');
   const [allowSelectAll, setAllowSelectAll] = useState(true);
@@ -28,6 +31,7 @@ const App = () => {
           <div className="option">
             <span>Selection Mode</span>
             <SelectBox
+              inputAttr={selectionModeLabel}
               dataSource={['single', 'multiple']}
               value={selectionMode}
               onValueChange={onSelectionModeChange}
@@ -36,6 +40,7 @@ const App = () => {
           <div className="option">
             <span>Show Checkboxes Mode</span>
             <SelectBox
+              inputAttr={showCheckBoxesModeLabel}
               dataSource={['always', 'none', 'onClick', 'onLongTap']}
               value={showCheckBoxesMode}
               onValueChange={setShowCheckBoxesMode}
@@ -43,21 +48,22 @@ const App = () => {
             ></SelectBox>
           </div>
           <div className="option">
-            <span>Allow Select All</span>
-            <CheckBox
-              value={allowSelectAll}
-              onValueChange={setAllowSelectAll}
-              disabled={selectionMode !== 'multiple'}
-            ></CheckBox>
-          </div>
-          <div className="option">
             <span>Select All Mode</span>
             <SelectBox
+              inputAttr={selectAllModeLabel}
               dataSource={['allPages', 'page']}
               value={selectAllMode}
               onValueChange={setSelectAllMode}
               disabled={selectionMode !== 'multiple' || !allowSelectAll}
             ></SelectBox>
+          </div>
+          <div className="option">
+            <CheckBox
+              text="Allow Select All"
+              value={allowSelectAll}
+              onValueChange={setAllowSelectAll}
+              disabled={selectionMode !== 'multiple'}
+            ></CheckBox>
           </div>
         </div>
       </div>
