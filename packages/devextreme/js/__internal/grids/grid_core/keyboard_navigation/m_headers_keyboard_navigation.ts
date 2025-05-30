@@ -27,16 +27,44 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
       const column = this._getColumnByCellElement($cell, rowIndex);
 
       if (this.canReorderColumn(column, direction, rowIndex)) {
-        this.moveColumn({
+        this.moveColumn(
           column,
-          sourceLocation: 'headers',
-          targetLocation: 'headers',
           direction,
           rowIndex,
-        });
+        );
       }
       originalEvent?.preventDefault();
     }
+  }
+
+  protected getColumnVisibleIndexCorrection(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    visibleColumnIndex: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    rowIndex: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    direction: Direction,
+  ): number {
+    return 0;
+  }
+
+  protected getNewVisibleIndex(
+    visibleIndex: number,
+    rowIndex: number,
+    direction: Direction,
+  ): number {
+    const newVisibleIndex = super.getNewVisibleIndex(
+      visibleIndex,
+      rowIndex,
+      direction,
+    );
+    const indexCorrection = this.getColumnVisibleIndexCorrection(
+      visibleIndex,
+      rowIndex,
+      direction,
+    );
+
+    return newVisibleIndex + indexCorrection;
   }
 
   protected getDraggableColumns(
@@ -116,8 +144,8 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     return '.dx-header-row > td';
   }
 
-  protected getFocusableColumns(): any[] {
-    const visibleColumns = this._columnsController.getVisibleColumns();
+  protected getFocusableColumns(rowIndex?: number): any[] {
+    const visibleColumns = this._columnsController.getVisibleColumns(rowIndex);
 
     return visibleColumns.filter(
       (column) => !isDefined(column.type)

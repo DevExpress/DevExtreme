@@ -5,6 +5,7 @@ import FilterPanel from './filter/panel';
 import ColumnChooser from '../dataGrid/columnChooser';
 import type { WidgetName } from '../types';
 import TextBox from '../textBox';
+import ContextMenu from '../contextMenu';
 
 export const CLASS = {
     pager: 'pager',
@@ -13,6 +14,7 @@ export const CLASS = {
     columnChooser: 'column-chooser',
     columnChooserButton: 'column-chooser-button',
     searchBox: 'dx-searchbox',
+    contextMenu: 'dx-context-menu',
 }
 
 export default abstract class GridCore extends Widget {
@@ -83,6 +85,10 @@ export default abstract class GridCore extends Widget {
 
   getSearchBox(): TextBox {
     return new TextBox(this.element.find(`.${CLASS.searchBox}`));
+  }
+
+  getContextMenu(): ContextMenu {
+    return new ContextMenu(this.body.find(`.${CLASS.contextMenu}.${this.addWidgetPrefix()}`));
   }
 
   apiFilter(filter: any[]): Promise<void> {

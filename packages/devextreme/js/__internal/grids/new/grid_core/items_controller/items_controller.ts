@@ -50,7 +50,7 @@ export class ItemsController {
   }
 
   public findItemByKey(items: CardInfo[], key: Key): CardInfo | null {
-    return items.find((item) => item.key === key) ?? null;
+    return items.find((item) => equalByValue(item.key, key)) ?? null;
   }
 
   public createCardInfo(

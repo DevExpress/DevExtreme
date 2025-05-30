@@ -1,19 +1,34 @@
 import React from 'react';
-import CardView, { Column } from 'devextreme-react/card-view';
-import { customers } from './data.js';
+import CardView, { Column, CardCover } from 'devextreme-react/card-view';
+import { houses } from './data.js';
 
-const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+function imageExpr({ ID }) {
+  return `https://demos.devexpress.com/ASPxCardViewDemos/Content/HomesPhoto/${ID}.jpg`;
+}
+function altExpr() {
+  return 'Photo of the house';
+}
 const App = () => (
   <CardView
-    dataSource={customers}
+    dataSource={houses}
     keyExpr="ID"
   >
-    {columns.map((column, index) => (
-      <Column
-        dataField={column}
-        key={index}
-      />
-    ))}
+    <CardCover
+      imageExpr={imageExpr}
+      altExpr={altExpr}
+    />
+    <Column dataField="Address" />
+    <Column
+      dataField="Price"
+      format="currency"
+      defaultSortOrder="asc"
+    />
+    <Column dataField="HouseSize" />
+    <Column dataField="Baths" />
+    <Column
+      dataField="Beds"
+      defaultSortOrder="desc"
+    />
   </CardView>
 );
 export default App;

@@ -3,13 +3,13 @@ import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
-fixture('DataGrid.RowEditingAndEditingEvents')
+fixture('DataGrid.RowEditing')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DataGrid', 'RowEditingAndEditingEvents', (test) => {
-  test('RowEditingAndEditingEvents', async (t) => {
+runManualTest('DataGrid', 'RowEditing', (test) => {
+  test('RowEditing', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.click($('.dx-link-edit').nth(0));

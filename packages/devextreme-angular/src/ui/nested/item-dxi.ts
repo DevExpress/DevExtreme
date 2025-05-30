@@ -120,8 +120,6 @@ import { DxiLocationComponent } from './location-dxi';
         'resizable',
         'size',
         'splitter',
-        'isValid',
-        'optional',
         'heightRatio',
         'widthRatio',
         'expanded',

@@ -55,6 +55,8 @@ export class EditingController {
 
   private readonly onSaved = this.options.action('onSaved');
 
+  private validateMethod?: () => Promise<boolean>;
+
   public readonly editingCard = computed(() => {
     const editCardKey = this.editCardKey.value;
     const items = this.itemsController.items.value;
@@ -70,8 +72,14 @@ export class EditingController {
       return null;
     }
 
+    const insertChange = changes.find(
+      (change) => change.key === editCardKey && change.type === 'insert',
+    );
+
+    const oldData = insertChange?.data ?? oldItem.data;
+
     const newData = applyChanges(
-      [oldItem.data],
+      [oldData],
       changes,
       {
         keyExpr: this.dataController.dataSource.peek().key(),
@@ -83,6 +91,8 @@ export class EditingController {
       newData,
       this.columnController.columns.peek(),
       oldItem.index,
+      undefined,
+      oldItem.key,
     );
     return newItem;
   });
@@ -103,6 +113,10 @@ export class EditingController {
     private readonly optionsValidationController: OptionsValidationController,
   ) {}
 
+  public provideValidateMethod(validateMethod: () => Promise<boolean>): void {
+    this.validateMethod = validateMethod;
+  }
+
   public editCard(key: Key): void {
     this.optionsValidationController.validateKeyExpr();
 
@@ -117,6 +131,10 @@ export class EditingController {
     if (!eventArgs.cancel) {
       this.editCardKey.value = key;
     }
+  }
+
+  public async validate(): Promise<boolean> {
+    return this.validateMethod?.() ?? true;
   }
 
   public async addCard(): Promise<void> {
@@ -177,16 +195,16 @@ export class EditingController {
     }
 
     // @ts-expect-error
-    this.changes.update([...this.changes.peek(), {
+    this.changes.value = [...this.changes.peek(), {
       type: 'remove',
       key,
-    }]);
+    }];
     await this.save();
 
     this.kbn.returnFocus();
   }
 
-  private clear(): void {
+  public clear(): void {
     this.changes.value = [];
     this.editCardKey.value = null;
     this.itemsController.additionalItems.value = [];
@@ -217,6 +235,11 @@ export class EditingController {
   }
 
   public async save(): Promise<void> {
+    const validationSuccessful = await this.validate();
+    if (!validationSuccessful) {
+      return;
+    }
+
     const changes = this.changes.peek();
 
     const eventArgs = {
