@@ -17,7 +17,11 @@ const DRAG_MOVE_X_COEFFICIENT = 1.5;
 const DRAG_MOVE_Y_COEFFICIENT = 1;
 
 const a11yCheckConfig = {
-  rules: { 'color-contrast': { enabled: false } },
+  rules: {
+    'color-contrast': { enabled: false },
+    // NOTE: Draggable template is outside the role="main" landmark
+    region: { enabled: false },
+  },
 };
 
 // NOTE: Main idea of these offsets -> drag header item elements
