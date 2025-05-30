@@ -589,13 +589,17 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       showFirstSubmenuMode: 'onHover',
       hideSubmenuOnMouseLeave: true,
       items: [{
+        name: getColumnSelectedFilterOperation(that, column) || ARIA_SEARCH_BOX,
         disabled: !(column.filterOperations && column.filterOperations.length),
         icon: OPERATION_ICONS[getColumnSelectedFilterOperation(that, column) || 'default'],
         selectable: false,
         items: that._getFilterOperationMenuItems(column),
       }],
-      onItemRendered: ({ itemElement }) => {
-        this.setAria('label', ARIA_SEARCH_BOX, $(itemElement));
+      onItemRendered: ({ itemElement, itemData }) => {
+        if (itemData?.items && itemData?.name) {
+          const labelText = that._getOperationDescriptionFromDescriptor(itemData.name) || ARIA_SEARCH_BOX;
+          this.setAria('label', labelText, $(itemElement));
+        }
       },
       onItemClick(properties) {
         // @ts-expect-error
@@ -688,20 +692,15 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const that = this;
     let result: any = [{}];
     const filterRowOptions = that.option('filterRow');
-    const operationDescriptions = filterRowOptions && filterRowOptions.operationDescriptions || {};
 
     if (column.filterOperations && column.filterOperations.length) {
       const availableFilterOperations = column.filterOperations.filter((value) => isDefined(OPERATION_DESCRIPTORS[value]));
-      result = map(availableFilterOperations, (value) => {
-        const descriptionName = OPERATION_DESCRIPTORS[value];
-
-        return {
-          name: value,
-          selected: (getColumnSelectedFilterOperation(that, column) || column.defaultFilterOperation) === value,
-          text: operationDescriptions[descriptionName],
-          icon: OPERATION_ICONS[value],
-        };
-      });
+      result = map(availableFilterOperations, (value) => ({
+        name: value,
+        selected: (getColumnSelectedFilterOperation(that, column) || column.defaultFilterOperation) === value,
+        text: that._getOperationDescriptionFromDescriptor(value),
+        icon: OPERATION_ICONS[value],
+      }));
 
       result.push({
         name: null,
@@ -711,6 +710,15 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     }
 
     return result;
+  }
+
+  private _getOperationDescriptionFromDescriptor(value) {
+    const filterRowOptions = this.option('filterRow');
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const operationDescriptions = filterRowOptions?.operationDescriptions || {};
+    const descriptionName = OPERATION_DESCRIPTORS[value];
+
+    return operationDescriptions[descriptionName];
   }
 
   protected _handleDataChanged(e) {
