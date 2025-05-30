@@ -13,8 +13,6 @@ fixture.disablePageReloads`CardView - Editing`
 const CARD_VIEW_SELECTOR = '#container';
 
 const baseConfig = {
-  width: 1000,
-  height: 600,
   columns,
   dataSource: data,
   keyExpr: 'id',
