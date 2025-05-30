@@ -812,7 +812,7 @@ export type Editing<TCardData=unknown, TKey=unknown> = { // TODO: sync with impl
     /**
      * @docid dxCardViewEditing.form
      * @public
-     * @type object
+     * @type dxFormOptions
      */
     form?: FormProperties;
     /**

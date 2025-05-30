@@ -896,8 +896,8 @@ export interface DragStartEventInfo<TRowData = any> {
 }
 
 /**
- * @hidden
  * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export interface EditingBase<TRowData = any, TKey = any> {
