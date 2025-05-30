@@ -6,7 +6,7 @@ function altExpr({ fullName }) {
   return `Photo of ${fullName}`;
 }
 function imageExpr({ picture }) {
-  return picture && `../../../../${picture}`;
+  return picture;
 }
 function calculateFullName({ firstName, lastName }) {
   return `${firstName} ${lastName}`;
@@ -43,7 +43,7 @@ const App = () => (
             itemType: 'group',
             colCount: 2,
             colSpan: 2,
-            items: ['firstName', 'lastName', 'birthDate'],
+            items: ['firstName', 'lastName', 'birthDate', 'picture'],
           },
           {
             caption: 'Main Info',
@@ -120,6 +120,10 @@ const App = () => (
     />
     <Column
       dataField="zipcode"
+      visible={false}
+    />
+    <Column
+      dataField="picture"
       visible={false}
     />
   </CardView>

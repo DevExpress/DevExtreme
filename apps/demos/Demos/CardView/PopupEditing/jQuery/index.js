@@ -3,7 +3,7 @@ $(() => {
     dataSource: employees,
     keyExpr: 'id',
     cardCover: {
-      imageExpr: ({ picture }) => picture && `../../../../${picture}`,
+      imageExpr: ({ picture }) => picture,
       altExpr: ({ fullName }) => `Photo of ${fullName}`,
     },
     editing: {
@@ -23,7 +23,7 @@ $(() => {
             itemType: 'group',
             colCount: 2,
             colSpan: 2,
-            items: ['firstName', 'lastName', 'birthDate'],
+            items: ['firstName', 'lastName', 'birthDate', 'picture'],
           }, {
             caption: 'Main Info',
             itemType: 'group',
@@ -96,6 +96,10 @@ $(() => {
       },
       {
         dataField: 'zipcode',
+        visible: false,
+      },
+      {
+        dataField: 'picture',
         visible: false,
       },
     ],

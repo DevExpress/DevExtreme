@@ -43,7 +43,7 @@ export class AppComponent {
         itemType: 'group',
         colCount: 2,
         colSpan: 2,
-        items: ['firstName', 'lastName', 'birthDate'],
+        items: ['firstName', 'lastName', 'birthDate', 'picture'],
       }, {
         caption: 'Main Info',
         itemType: 'group',
@@ -81,7 +81,7 @@ export class AppComponent {
   }
   
   imageExpr({ picture }: Employee) {
-    return picture && `../../../../${picture}`;
+    return picture;
   }
   
   calculateFullName({firstName, lastName}: Employee) {

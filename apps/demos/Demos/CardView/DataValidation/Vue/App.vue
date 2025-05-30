@@ -27,7 +27,7 @@
             itemType: 'group',
             colCount: 2,
             colSpan: 2,
-            items: ['firstName', 'lastName', 'birthDate'],
+            items: ['firstName', 'lastName', 'birthDate', 'picture'],
           }, {
             caption: 'Main Info',
             itemType: 'group',
@@ -96,6 +96,10 @@
       data-field="zipcode"
       :visible="false"
     />
+    <DxColumn
+      data-field="picture"
+      :visible="false"
+    />
   </DxCardView>
 </template>
 <script setup lang="ts">
@@ -107,7 +111,7 @@
   }
 
   function imageExpr({ picture }: Employee) {
-    return picture && `../../../../${picture}`;
+    return picture;
   }
 
   function calculateFullName({firstName, lastName}: Employee) {
