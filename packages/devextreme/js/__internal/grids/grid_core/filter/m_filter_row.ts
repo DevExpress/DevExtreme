@@ -582,7 +582,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const editorFactoryController = this._editorFactoryController;
 
     that._createComponent($menu, Menu, {
-      // @ts-expect-error
       integrationOptions: {},
       activeStateEnabled: false,
       selectionMode: 'single',
@@ -590,6 +589,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       showFirstSubmenuMode: 'onHover',
       hideSubmenuOnMouseLeave: true,
       items: [{
+        // @ts-expect-error
         name: getColumnSelectedFilterOperation(that, column) || ARIA_SEARCH_BOX,
         disabled: !(column.filterOperations && column.filterOperations.length),
         icon: OPERATION_ICONS[getColumnSelectedFilterOperation(that, column) || 'default'],
@@ -597,7 +597,9 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         items: that._getFilterOperationMenuItems(column),
       }],
       onItemRendered: ({ itemElement, itemData }) => {
+        // @ts-expect-error
         if (itemData?.items && itemData?.name) {
+          // @ts-expect-error
           const labelText = that._getOperationDescriptionFromDescriptor(itemData.name) || ARIA_SEARCH_BOX;
           this.setAria('label', labelText, $(itemElement));
         }
