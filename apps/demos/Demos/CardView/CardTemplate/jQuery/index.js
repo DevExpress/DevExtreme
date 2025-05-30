@@ -69,7 +69,7 @@ $(() => {
     const popupContentTemplate = function () {
       const sourceLink = `http://${card.data.Source}`;
       return $('<div>').append(
-        $(`<p><b>Image licensed under:</b> <span>${card.data['License Name']}</span>`),
+        $(`<p><b>Image licensed under:</b> <span>${card.data['License Name']}</span></p>`),
         $(`<p><b>Author:</b> <span>${card.data.Author}</span></p>`),
         $(`<p><b>Source link:</b> <a href='${sourceLink}' class='license__link'>${sourceLink}</a></p>`),
         $(`<p><b>Edits:</b> <span>${card.data.Edits}</span></p>`),

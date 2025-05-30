@@ -1,14 +1,16 @@
 <div class="vehicle__card">
     <div class="vehicle__img-wrapper">
-        <img class="vehicle__img" src="../../../../images/vehicles/image_{{ vehicle.ID }}.png"
-            alt="{{vehicle.TrademarkName}} {{ vehicle.Name }}" />
+        <img class="vehicle__img"
+            src="../../../../images/vehicles/image_{{ vehicle.ID }}.png"
+            alt="{{vehicle.TrademarkName}} {{ vehicle.Name }}"
+        />
     </div>
     <div class="vehicle__info">
         <div class="vehicle__name" title="{{ vehicle.TrademarkName }} {{ vehicle.Name }}">
             {{ vehicle.TrademarkName }} {{ vehicle.Name }}
         </div>
         <div class="vehicle__price">
-            {{ vehicle.Price }}
+            ${{ vehicle.Price }}
         </div>
         <div class="vehicle__type-container">
             <div class="vehicle__type">
@@ -28,7 +30,7 @@
                 text="Image Info"
                 type="default"
                 width="100%"
-                (onClick)="showInfo(vehicle)"
+                (onClick)="showInfo()"
             >
             </dx-button>
             <dx-popup
@@ -43,7 +45,7 @@
             >
                 <dxo-position at="center" my="center" collision="fit">
                 </dxo-position>
-                <div *dxTemplate="let p of 'popupContentTemplate'">
+                <div *dxTemplate="let _ of 'popupContentTemplate'">
                     <license-info [vehicle]="vehicle">
                     </license-info>
                 </div>
