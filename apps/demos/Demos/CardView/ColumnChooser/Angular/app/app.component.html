@@ -4,24 +4,27 @@
     <div class="option">
       <span>Column Chooser Mode:</span>
       <dx-select-box
+        [inputAttr]="{ 'aria-label': 'Column Chooser Mode' }"
         [dataSource]="['dragAndDrop', 'select']"
         [(value)]="columnChooserMode"
       ></dx-select-box>
     </div>
     <div class="option">
-      <span>Search Enabled:</span>
-      <dx-check-box [(value)]="searchEnabled"></dx-check-box>
+      <dx-check-box
+        text="Search Enabled"
+        [(value)]="searchEnabled"
+      ></dx-check-box>
     </div>
     <div class="option">
-      <span>Allow Select All:</span>
       <dx-check-box
+        text="Allow Select All"
         [(value)]="allowSelectAll"
         [disabled]="columnChooserMode !== 'select'"
       ></dx-check-box>
     </div>
     <div class="option">
-      <span>Select By Click On Item:</span>
       <dx-check-box
+        text="Select By Click On Item"
         [(value)]="selectByClick"
         [disabled]="columnChooserMode !== 'select'"
       ></dx-check-box>

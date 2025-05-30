@@ -6,28 +6,29 @@
         <span>Column Chooser Mode:</span>
         <DxSelectBox
           :data-source="['dragAndDrop', 'select']"
+          :input-attr="{ 'aria-label': 'Column Chooser Mode' }"
           :value="columnChooserMode"
           @value-changed="({ value }) => { columnChooserMode = value; }"
         />
       </div>
       <div className="option">
-        <span>Search Enabled:</span>
         <dxCheckBox
+          text="Search Enabled"
           :value="searchEnabled"
           @value-changed="({ value }) => { searchEnabled = value; }"
         />
       </div>
       <div className="option">
-        <span>Allow Select All:</span>
         <DxCheckBox
+          text="Allow Select All"
           :value="allowSelectAll"
           @value-changed="({ value }) => { allowSelectAll = value; }"
           :disabled="columnChooserMode !== 'select'"
         />
       </div>
       <div className="option">
-        <span>Select By Click On Item:</span>
         <dxCheckBox
+          text="Select By Click On Item"
           :value="selectByClick"
           @value-changed="({ value }) => { selectByClick = value; }"
           :disabled="columnChooserMode !== 'select'"

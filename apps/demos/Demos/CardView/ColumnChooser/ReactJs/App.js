@@ -13,6 +13,7 @@ function imageExpr({ First_Name, Last_Name }) {
 function calculateFullName({ First_Name, Last_Name }) {
   return `${First_Name} ${Last_Name}`;
 }
+const columnChooserModeLabel = { 'aria-label': 'Column Chooser Mode' };
 const App = () => {
   const [columnChooserMode, setColumnChooserMode] = useState('select');
   const [searchEnabled, setSearchEnabled] = useState(true);
@@ -27,28 +28,29 @@ const App = () => {
             <span>Column Chooser Mode:</span>
             <SelectBox
               dataSource={['dragAndDrop', 'select']}
+              inputAttr={columnChooserModeLabel}
               value={columnChooserMode}
               onValueChange={setColumnChooserMode}
             ></SelectBox>
           </div>
           <div className="option">
-            <span>Search Enabled:</span>
             <CheckBox
+              text="Search Enabled"
               value={searchEnabled}
               onValueChange={setSearchEnabled}
             ></CheckBox>
           </div>
           <div className="option">
-            <span>Allow Select All:</span>
             <CheckBox
+              text="Allow Select All"
               value={allowSelectAll}
               onValueChange={setAllowSelectAll}
               disabled={columnChooserMode !== 'select'}
             ></CheckBox>
           </div>
           <div className="option">
-            <span>Select By Click On Item:</span>
             <CheckBox
+              text="Select By Click On Item"
               value={selectByClick}
               onValueChange={setSelectByClick}
               disabled={columnChooserMode !== 'select'}

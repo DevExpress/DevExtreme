@@ -59,9 +59,13 @@ $(() => {
         cardView.option('columnChooser.mode', value);
         renderOptions();
       },
+      inputAttr: {
+        'aria-label': 'Column Chooser Mode',
+      },
     });
 
     $('#search-enabled').dxCheckBox({
+      text: 'Search Enabled',
       value: cardView.option('columnChooser.search.enabled') ?? false,
       onValueChanged: ({value}) => {
         cardView.option('columnChooser.search.enabled', value);
@@ -69,6 +73,7 @@ $(() => {
     });
 
     $('#allow-select-all').dxCheckBox({
+      text: 'Allow Select All',
       value: cardView.option('columnChooser.selection.allowSelectAll') ?? false,
       onValueChanged: ({value}) => {
         cardView.option('columnChooser.selection.allowSelectAll', value);
@@ -77,6 +82,7 @@ $(() => {
     });
 
     $('#select-by-click').dxCheckBox({
+      text: 'Select By Click On Item',
       value: cardView.option('columnChooser.selection.selectByClick') ?? false,
       onValueChanged: ({value}) => {
         cardView.option('columnChooser.selection.selectByClick', value);
