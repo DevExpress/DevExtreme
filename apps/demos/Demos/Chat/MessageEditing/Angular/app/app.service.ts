@@ -1,4 +1,4 @@
-import { DxChatTypes } from 'devextreme-angular/ui/chat';
+import { type DxChatTypes } from 'devextreme-angular/ui/chat';
 import { CustomStore, DataSource } from 'devextreme-angular/common/data';
 import Guid from 'devextreme/core/guid';
 

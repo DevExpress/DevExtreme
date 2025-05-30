@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxChatModule, DxSelectBoxModule } from 'devextreme-angular';
-import { DxChatTypes } from 'devextreme-angular/ui/chat';
+import { type DxChatTypes } from 'devextreme-angular/ui/chat';
 import { DataSource } from 'devextreme-angular/common/data';
 import { AppService } from './app.service';
 
