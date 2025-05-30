@@ -51,7 +51,7 @@
 import { ref, onBeforeMount } from 'vue';
 import DxChat, { type DxChatTypes } from 'devextreme-vue/chat';
 import DxButton from 'devextreme-vue/button';
-import { loadMessages } from 'devextreme/localization';
+import { loadMessages } from 'devextreme-vue/common/core/localization';
 import { AzureOpenAI } from 'openai';
 import {
   dictionary,
