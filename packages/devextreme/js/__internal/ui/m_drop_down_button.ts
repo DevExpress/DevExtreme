@@ -26,7 +26,7 @@ import Widget from '@ts/core/widget/widget';
 import { getElementWidth, getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
 import Popup from '@ts/ui/popup/m_popup';
 
-const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
+export const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const DROP_DOWN_BUTTON_CONTENT = 'dx-dropdownbutton-content';
 const DROP_DOWN_BUTTON_ACTION_CLASS = 'dx-dropdownbutton-action';
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';

@@ -12,13 +12,13 @@ const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 export default class ToolbarMenuList extends ListBase {
   _activeStateUnit!: string;
 
-  _expandableComponents!: string[];
+  _nonActionableComponents!: string[];
 
   _init(): void {
     super._init();
 
     this._activeStateUnit = `.${TOOLBAR_MENU_ACTION_CLASS}:not(.${TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS})`;
-    this._expandableComponents = ['dxDropDownButton'];
+    this._nonActionableComponents = ['dxDropDownButton', 'dxSelectBox', 'dxNumberBox', 'dxColorBox'];
   }
 
   _initMarkup(): void {
@@ -72,8 +72,8 @@ export default class ToolbarMenuList extends ListBase {
     const $container = this[`_$${item.location ?? 'menu'}Section`];
     const itemElement = super._renderItem(index, item, $container, $after);
 
-    const itemElementClasses = this._getItemCssClasses(item);
-    itemElement.addClass(itemElementClasses.join(' '));
+    const itemCssClasses = this._getItemCssClasses(item);
+    itemElement.addClass(itemCssClasses.join(' '));
 
     return itemElement;
   }
@@ -90,7 +90,7 @@ export default class ToolbarMenuList extends ListBase {
       cssClasses.push(TOOLBAR_MENU_CUSTOM_CLASS);
     }
 
-    if (this._expandableComponents.includes(item.widget)) {
+    if (this._nonActionableComponents.includes(item.widget)) {
       return cssClasses;
     }
 

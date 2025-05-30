@@ -6,6 +6,8 @@ import fx from 'common/core/animation/fx';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
 import { deferUpdate } from 'core/utils/common';
+import { DROP_DOWN_BUTTON_CLASS } from '__internal/ui/m_drop_down_button';
+import { SELECTBOX_CLASS } from '__internal/ui/m_select_box';
 
 import 'generic_light.css!';
 
@@ -577,28 +579,47 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
         assert.strictEqual($('.dx-state-disabled').length, 0, 'disabled state changed');
     });
 
-    QUnit.test('click on DropDownButton inside the toolbar menu should not close it (T1287462)', function(assert) {
-        this.instance.option('items', [{
-            locateInMenu: 'always',
-            widget: 'dxDropDownButton',
-            displayExpr: 'value',
-            keyExpr: 'id',
+    [
+        {
+            component: 'dxSelectBox',
+            cssClass: `.${SELECTBOX_CLASS}`,
             options: {
+                displayExpr: 'value',
+                keyExpr: 'id',
                 items: [
                     { id: 1, value: '1' },
                     { id: 2, value: '2' },
                     { id: 3, value: '3' },
                 ],
-                selectedItemKey: 2,
             },
-        }]);
+        },
+        {
+            component: 'dxDropDownButton',
+            cssClass: `.${DROP_DOWN_BUTTON_CLASS}`,
+            options: {
+                displayExpr: 'value',
+                items: [
+                    { id: 1, value: '1' },
+                    { id: 2, value: '2' },
+                    { id: 3, value: '3' },
+                ],
+            }
+        }
+    ].forEach(({ component, cssClass, options }) => {
+        QUnit.test('click on non-actionable component inside the toolbar menu should not close it (T1287462)', function(assert) {
+            this.instance.option('items', [{
+                locateInMenu: 'always',
+                widget: component,
+                ...options,
+            }]);
 
-        this.overflowMenu.click();
+            this.overflowMenu.click();
 
-        const $dropDownButton = this.overflowMenu.instance()._popup.$content().find('.dx-dropdownbutton');
-        $($dropDownButton.eq(0)).trigger('dxclick');
+            const $component = this.overflowMenu.instance()._popup.$content().find(cssClass);
+            $($component.eq(0)).trigger('dxclick');
 
-        assert.strictEqual(this.instance.option('overflowMenuVisible'), true, 'overflow menu remains visible after clicking DropDownButton in it');
+            assert.strictEqual(this.instance.option('overflowMenuVisible'), true, `overflow menu remains visible after clicking ${component} in it`);
+        });
     });
 });
 
