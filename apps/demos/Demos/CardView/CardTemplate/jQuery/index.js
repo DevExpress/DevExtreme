@@ -42,34 +42,26 @@ $(() => {
   const createVehicleInfo = (card) => {
     const vehicleInfo = $('<div>').addClass('vehicle__info');
 
-    const trademarkColumn = card.columns.find(col => col.name === 'TrademarkName');
-    const modelColumn = card.columns.find(col => col.name === 'Name');
-    const name = `${card.data[trademarkColumn.name]} ${card.data[modelColumn.name]}`;
+    const name = `${card.data.TrademarkName} ${card.data.Name}`;
     const vehicleName = $('<div>').addClass('vehicle__name').text(name).attr('title', name);
 
-    const priceColumn = card.columns.find(col => col.name === 'Price');
-    const priceInfo = $('<div>').addClass('vehicle__price').text(`$${card.data[priceColumn.name]}`);
+    const priceInfo = $('<div>').addClass('vehicle__price').text(`$${card.data.Price}`);
 
-    const typeColumn = card.columns.find(col => col.name === 'CategoryName');
     const typeContainer = $('<div>').addClass('vehicle__type-container');
-    const typeInfo = $('<div>').addClass('vehicle__type').text(`${card.data[typeColumn.name]}`);
+    const typeInfo = $('<div>').addClass('vehicle__type').text(`${card.data.CategoryName}`);
     typeContainer.append(typeInfo);
 
-    const modificationColumn = card.columns.find(col => col.name === 'Modification');
-    const bodyStyleNameColumn = card.columns.find(col => col.name === 'BodyStyleName');
-    const horsepowerColumn = card.columns.find(col => col.name === 'Horsepower');
-
     const specContainer = $('<div>').addClass('vehicle__spec-container');
-    const modificationInfo = $('<div>').addClass('vehicle__modification').text(`${card.data[modificationColumn.name]}`);
+    const modificationInfo = $('<div>').addClass('vehicle__modification').text(`${card.data.Modification}`);
     const bodyInfo = $('<div>').addClass('vehicle__modification')
-      .text(`${card.data[bodyStyleNameColumn.name]} ${card.data[horsepowerColumn.name]} h.p.`);
+      .text(`${card.data.BodyStyleName} ${card.data.Horsepower} h.p.`);
     specContainer.append(modificationInfo);
     specContainer.append(bodyInfo);
 
     const popupContentTemplate = function () {
       const sourceLink = `http://${card.data.Source}`;
       return $('<div>').append(
-        $(`<p><b>Image licensed under:</b> <span>${card.data['License Name']}</span></p>`),
+        $(`<p><b>Image licensed under:</b> <span>${card.data.LicenseName}</span></p>`),
         $(`<p><b>Author:</b> <span>${card.data.Author}</span></p>`),
         $(`<p><b>Source link:</b> <a href='${sourceLink}' class='license__link'>${sourceLink}</a></p>`),
         $(`<p><b>Edits:</b> <span>${card.data.Edits}</span></p>`),
