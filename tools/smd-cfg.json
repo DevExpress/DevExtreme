@@ -13,6 +13,10 @@
         },
         {
             "kind": "remove",
+            "uid": "/ai-integration:AIIntegration"
+        },
+        {
+            "kind": "remove",
             "uid": "/scheduler:Toolbar"
         }
     ]
