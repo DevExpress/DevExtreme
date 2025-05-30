@@ -3,9 +3,9 @@
 
 // adduse
 
-$button-disabled-background: var(--DS-color-surface-neutral-deep-disabled) !default;
+$button-disabled-background: var(--DS-color-surface-neutral-default-disabled) !default;
 $button-disabled-icon-opacity: var(--DS-opacity-60) !default;
-$button-shadow-color: null !default;
+$button-shadow-color: var(--DS-color-border-neutral-default-rest) !default;
 
 /**
 * $name 10. Text color
