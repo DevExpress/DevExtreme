@@ -1,6 +1,5 @@
 /* tslint:disable:max-line-length */
 
-/* tslint:disable:use-input-property-decorator */
 
 import {
     Component,
@@ -9,6 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
+    Input,
     Output,
     EventEmitter
 } from '@angular/core';
@@ -21,7 +21,7 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoFilterPanel } from './base/filter-panel';
+import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
@@ -30,15 +30,41 @@ import { DxoFilterPanel } from './base/filter-panel';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
-    inputs: [
-        'customizeText',
-        'filterEnabled',
-        'texts',
-        'visible'
-    ]
+    providers: [NestedOptionHost]
 })
-export class DxoFilterPanelComponent extends DxoFilterPanel implements OnDestroy, OnInit  {
+export class DxoFilterPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+    @Input()
+    get customizeText(): Function {
+        return this._getOption('customizeText');
+    }
+    set customizeText(value: Function) {
+        this._setOption('customizeText', value);
+    }
+
+    @Input()
+    get filterEnabled(): boolean {
+        return this._getOption('filterEnabled');
+    }
+    set filterEnabled(value: boolean) {
+        this._setOption('filterEnabled', value);
+    }
+
+    @Input()
+    get texts(): { clearFilter?: string, createFilter?: string, filterEnabledHint?: string } {
+        return this._getOption('texts');
+    }
+    set texts(value: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }) {
+        this._setOption('texts', value);
+    }
+
+    @Input()
+    get visible(): boolean {
+        return this._getOption('visible');
+    }
+    set visible(value: boolean) {
+        this._setOption('visible', value);
+    }
+
 
     /**
     

@@ -13,7 +13,6 @@ import  dxDraggable from "devextreme/ui/draggable";
 import {
  ColumnChooser,
  ColumnResizeMode,
- FilterPanel,
  Pager,
  SearchPanel,
  Sorting,
@@ -34,14 +33,13 @@ import {
  NewRowPosition,
  GridsEditRefreshMode,
  StartEditAction,
- FilterPanelTexts,
+ GridBase,
  ApplyFilterMode,
  GroupExpandMode,
  SummaryType,
  EnterKeyAction,
  EnterKeyDirection,
  PagerPageSize,
- GridBase,
  DataRenderMode,
  StateStoreType,
 } from "devextreme/common/grids";
@@ -346,7 +344,7 @@ const componentConfig = {
     export: Object as PropType<Record<string, any>>,
     filterBuilder: Object as PropType<dxFilterBuilderOptions | Record<string, any>>,
     filterBuilderPopup: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
-    filterPanel: Object as PropType<FilterPanel>,
+    filterPanel: Object as PropType<Record<string, any>>,
     filterRow: Object as PropType<Record<string, any>>,
     filterSyncEnabled: [Boolean, String] as PropType<boolean | Mode>,
     filterValue: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
@@ -1880,9 +1878,9 @@ const DxFilterPanelConfig = {
     "update:visible": null,
   },
   props: {
-    customizeText: Function as PropType<((e: { component: FilterPanel, filterValue: Record<string, any>, text: string }) => string)>,
+    customizeText: Function as PropType<((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string)>,
     filterEnabled: Boolean,
-    texts: Object as PropType<FilterPanelTexts | Record<string, any>>,
+    texts: Object as PropType<Record<string, any>>,
     visible: Boolean
   }
 };
