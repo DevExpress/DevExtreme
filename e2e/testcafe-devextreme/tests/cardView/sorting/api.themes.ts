@@ -11,6 +11,11 @@ fixture.disablePageReloads`CardView - Sorting Behavior`
 
 const CARD_VIEW_SELECTOR = '#container';
 
+const baseConfig = {
+  dataSource: data,
+  height: 500,
+};
+
 test('Sort index API', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
@@ -23,7 +28,7 @@ test('Sort index API', async (t) => {
   await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => {
   await createWidget('dxCardView', {
-    dataSource: data,
+    ...baseConfig,
     columns: [
       {
         dataField: 'id',
@@ -57,7 +62,7 @@ test('ShowSortIndexes API', async (t) => {
   await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => {
   await createWidget('dxCardView', {
-    dataSource: data,
+    ...baseConfig,
     sorting: {
       showSortIndexes: false,
     },
@@ -97,7 +102,7 @@ test('AllowSorting API', async (t) => {
   await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => {
   await createWidget('dxCardView', {
-    dataSource: data,
+    ...baseConfig,
     sorting: {
       showSortIndexes: false,
     },
@@ -141,7 +146,7 @@ test('AllowSorting API', async (t) => {
     await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
   }).before(async () => {
     await createWidget('dxCardView', {
-      dataSource: data,
+      ...baseConfig,
       sorting: {
         showSortIndexes: false,
       },
@@ -177,7 +182,7 @@ test('SortingMethod API', async (t) => {
   await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => {
   await createWidget('dxCardView', {
-    dataSource: data,
+    ...baseConfig,
     sorting: {
       showSortIndexes: false,
     },

@@ -11,6 +11,11 @@ fixture.disablePageReloads`CardView - Sorting Behavior - Themes`
 
 const CARD_VIEW_SELECTOR = '#container';
 
+const baseConfig = {
+  dataSource: data,
+  height: 500,
+};
+
 test('Default render', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
@@ -23,7 +28,7 @@ test('Default render', async (t) => {
   await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => {
   await createWidget('dxCardView', {
-    dataSource: data,
+    ...baseConfig,
     columns: [
       {
         dataField: 'id',
@@ -54,7 +59,7 @@ test('Default multiple sorting render', async (t) => {
   await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => {
   await createWidget('dxCardView', {
-    dataSource: data,
+    ...baseConfig,
     columns: [
       {
         dataField: 'id',
