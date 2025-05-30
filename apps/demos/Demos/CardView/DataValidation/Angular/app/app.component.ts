@@ -92,7 +92,7 @@ export class AppComponent {
     return `${firstName} ${lastName}`;
   }
 
-  async emailValidationCallback(params) {
+  emailValidationCallback = async (params) => {
     const emailValidationUrl = 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
 
     const result = await lastValueFrom(this.httpClient.post(emailValidationUrl, {
@@ -105,7 +105,7 @@ export class AppComponent {
     return result;
   };
 
-  hireDateValidationCallback(params) {
+  hireDateValidationCallback = (params) => {
     return new Date(params.data.hireDate) > new Date(params.data.birthDate);
   };
 }

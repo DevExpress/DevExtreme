@@ -19,42 +19,55 @@
     [calculateFieldValue]="calculateFullName"
   ></dxi-card-view-column>
   <dxi-card-view-column dataField="birthDate" dataType="date">
-    <dxi-card-view-required-rule></dxi-card-view-required-rule>
+    <dxi-card-view-validation-rule
+      type="required"
+    ></dxi-card-view-validation-rule>
   </dxi-card-view-column>
   <dxi-card-view-column dataField="hireDate" dataType="date">
-    <dxi-card-view-required-rule></dxi-card-view-required-rule>
-    <dxi-card-view-custom-rule
+    <dxi-card-view-validation-rule
+      type="required"
+    ></dxi-card-view-validation-rule>
+    <dxi-card-view-validation-rule
+      type="custom"
       message="Hire date cannot be earlier than birth date"
       [validationCallback]="hireDateValidationCallback"
-    ></dxi-card-view-custom-rule>
+    ></dxi-card-view-validation-rule>
   </dxi-card-view-column>
   <dxi-card-view-column caption="Position" dataField="title">
-    <dxi-card-view-required-rule></dxi-card-view-required-rule>
+    <dxi-card-view-validation-rule
+      type="required"
+    ></dxi-card-view-validation-rule>
   </dxi-card-view-column>
   <dxi-card-view-column dataField="department"></dxi-card-view-column>
   <dxi-card-view-column dataField="address"></dxi-card-view-column>
   <dxi-card-view-column dataField="mobilePhone">
-    <dxi-card-view-pattern-rule
+    <dxi-card-view-validation-rule
+      type="pattern"
       message="Your phone must have '(555) 555-5555' format!"
       [pattern]="phonePattern"
-    ></dxi-card-view-pattern-rule>
+    ></dxi-card-view-validation-rule>
   </dxi-card-view-column>
   <dxi-card-view-column dataField="email">
-    <dxi-card-view-email-rule></dxi-card-view-email-rule>
-    <dxi-card-view-async-rule
+    <dxi-card-view-validation-rule type="email"></dxi-card-view-validation-rule>
+    <dxi-card-view-validation-rule
+      type="async"
       message="Email address is not unique"
       [validationCallback]="emailValidationCallback"
-    ></dxi-card-view-async-rule>
+    ></dxi-card-view-validation-rule>
   </dxi-card-view-column>
   <dxi-card-view-column
     dataField="notes"
     [visible]="false"
   ></dxi-card-view-column>
   <dxi-card-view-column dataField="firstName" [visible]="false">
-    <dxi-card-view-required-rule></dxi-card-view-required-rule>
+    <dxi-card-view-validation-rule
+      type="required"
+    ></dxi-card-view-validation-rule>
   </dxi-card-view-column>
   <dxi-card-view-column dataField="lastName" [visible]="false">
-    <dxi-card-view-required-rule></dxi-card-view-required-rule>
+    <dxi-card-view-validation-rule
+      type="required"
+    ></dxi-card-view-validation-rule>
   </dxi-card-view-column>
   <dxi-card-view-column
     dataField="city"
