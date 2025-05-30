@@ -11,9 +11,9 @@
       :alt-expr="altExpr"
     />
     <DxEditing
-      :allowAdding="true"
-      :allowUpdating="true"
-      :allowDeleting="true"
+      :allow-adding="true"
+      :allow-updating="true"
+      :allow-deleting="true"
       :popup="{ // todo: move to nested
         title: 'Employee Info',
         showTitle: true,
@@ -91,7 +91,7 @@
       />
     </DxColumn>
     <DxColumn data-field="email">
-      <DxRequiredRule/>
+      <DxEmailRule/>
       <DxAsyncRule
         message="Email address is not unique"
         :validation-callback="emailValidationCallback"
@@ -128,41 +128,43 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-  import { DxCardView, DxColumn, DxCardCover, DxEditing, DxRequiredRule, DxEmailRule, DxPatternRule, DxAsyncRule, DxCustomRule } from 'devextreme-vue/card-view';
-  import { employees, Employee } from './data.ts';
+import {
+  DxCardView, DxColumn, DxCardCover, DxEditing, DxRequiredRule, DxEmailRule, DxPatternRule, DxAsyncRule, DxCustomRule,
+} from 'devextreme-vue/card-view';
+import { employees, type Employee } from './data.ts';
 
-  function altExpr({ fullName }: Employee) {
-    return `Photo of ${fullName}`;
-  }
+function altExpr({ fullName }: Employee) {
+  return `Photo of ${fullName}`;
+}
 
-  function imageExpr({ picture }: Employee) {
-    return picture;
-  }
+function imageExpr({ picture }: Employee) {
+  return picture;
+}
 
-  function calculateFullName({firstName, lastName}: Employee) {
-    return `${firstName} ${lastName}`;
-  }
+function calculateFullName({ firstName, lastName }: Employee) {
+  return `${firstName} ${lastName}`;
+}
 
-  const emailValidationUrl = 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
+const emailValidationUrl = 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
 
-  async function emailValidationCallback(params) {
-    const response = await fetch(emailValidationUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;',
-      },
-      body: JSON.stringify({
-        id: params.data.id,
-        email: params.value,
-      }),
-    });
+async function emailValidationCallback(params) {
+  const response = await fetch(emailValidationUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;',
+    },
+    body: JSON.stringify({
+      id: params.data.id,
+      email: params.value,
+    }),
+  });
 
-    const result = await response.json();
+  const result = await response.json();
 
-    return result;
-  };
+  return result;
+}
 
-  function hireDateValidationCallback(params) {
-    return new Date(params.data.hireDate) > new Date(params.data.birthDate);
-  };
+function hireDateValidationCallback(params) {
+  return new Date(params.data.hireDate) > new Date(params.data.birthDate);
+}
 </script>

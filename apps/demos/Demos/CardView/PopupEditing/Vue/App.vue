@@ -11,9 +11,9 @@
       :alt-expr="altExpr"
     />
     <DxEditing
-      :allowAdding="true"
-      :allowUpdating="true"
-      :allowDeleting="true"
+      :allow-adding="true"
+      :allow-updating="true"
+      :allow-deleting="true"
       :popup="{ // todo: move to nested
         title: 'Employee Info',
         showTitle: true,
@@ -103,18 +103,20 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-  import { DxCardView, DxColumn, DxCardCover, DxEditing } from 'devextreme-vue/card-view';
-  import { employees, Employee } from './data.ts';
+import {
+  DxCardView, DxColumn, DxCardCover, DxEditing,
+} from 'devextreme-vue/card-view';
+import { employees, type Employee } from './data.ts';
 
-  function altExpr({ fullName }: Employee) {
-    return `Photo of ${fullName}`;
-  }
+function altExpr({ fullName }: Employee) {
+  return `Photo of ${fullName}`;
+}
 
-  function imageExpr({ picture }: Employee) {
-    return picture;
-  }
+function imageExpr({ picture }: Employee) {
+  return picture;
+}
 
-  function calculateFullName({firstName, lastName}: Employee) {
-    return `${firstName} ${lastName}`;
-  }
+function calculateFullName({ firstName, lastName }: Employee) {
+  return `${firstName} ${lastName}`;
+}
 </script>
