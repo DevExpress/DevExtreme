@@ -148,6 +148,9 @@ $cardview-generic-header-panel__item__sort-index-text-weight: null !default;
 
 $cardview-generic-header-panel__item__icon-size: null !default;
 
+$cardview-generic-header-item__left-padding: null !default;
+$cardview-generic-header-item__right-padding: null !default;
+
 // #endregion
 
 // #region HEADER PANEL ITEM (HOVERED)
@@ -194,6 +197,9 @@ $cardview-generic-header-panel__item--disabled__sort-index-text-weight: null !de
 * $type-values 100|200|300|400|500|600|700|800|900
 */
 $cardview-generic-header-panel__item--dragged-text-weight: null !default;
+
+$cardview-generic-header-item__sort-indicator__border-size: null;
+$cardview-generic-header-item__sort-indicator__border-radius: null;
 
 // #endregion
 
@@ -300,7 +306,9 @@ $cardview-generic-column-chooser__select-all-item-horizontal-padding: null !defa
   $cardview-generic-header-panel__item-border-width: 1px !default;
   $cardview-generic-header-panel__item-border-radius: 4px !default;
   $cardview-generic-header-panel__item-padding-horizontal: 12px !default;
-  $cardview-generic-header-panel__item-padding-vertical: 9px !default;
+  $cardview-generic-header-panel__item-padding-vertical: 8px !default;
+  $cardview-generic-header-item__left-padding: 6px !default;
+  $cardview-generic-header-item__right-padding: 2px !default;
   $cardview-generic-header-panel__item-line-height: 18px !default;
   $cardview-generic-header-panel__item-text-weight: $cardview-generic-common-text-weight !default;
   $cardview-generic-header-panel__item__sort-index-text-weight: 400 !default;
@@ -316,6 +324,8 @@ $cardview-generic-column-chooser__select-all-item-horizontal-padding: null !defa
 
   // Header panel item - dragged
   $cardview-generic-header-panel__item--dragged-text-weight: $cardview-generic-header-panel__item-text-weight !default;
+  $cardview-generic-header-item__sort-indicator__border-size: 2px !default;
+  $cardview-generic-header-item__sort-indicator__border-radius: 8px !default;
 
   // Header panel Drop-zone
   $cardview-generic-header-panel__dropzone-height: 36px !default;
@@ -381,6 +391,8 @@ $cardview-generic-column-chooser__select-all-item-horizontal-padding: null !defa
   $cardview-generic-header-panel__item-border-radius: 4px !default;
   $cardview-generic-header-panel__item-padding-horizontal: 8px !default;
   $cardview-generic-header-panel__item-padding-vertical: 5px !default;
+  $cardview-generic-header-item__left-padding: 3px !default;
+  $cardview-generic-header-item__right-padding: 1px !default;
   $cardview-generic-header-panel__item-line-height: 14px !default;
   $cardview-generic-header-panel__item-text-weight: $cardview-generic-common-text-weight !default;
   $cardview-generic-header-panel__item__sort-index-text-weight: 400 !default;
@@ -396,6 +408,8 @@ $cardview-generic-column-chooser__select-all-item-horizontal-padding: null !defa
 
   // Header panel item - dragged
   $cardview-generic-header-panel__item--dragged-text-weight: $cardview-generic-header-panel__item-text-weight !default;
+  $cardview-generic-header-item__sort-indicator__border-size: 1px !default;
+  $cardview-generic-header-item__sort-indicator__border-radius: 4px !default;
 
   // Header panel Drop-zone
   $cardview-generic-header-panel__dropzone-height: 24px !default;
@@ -484,3 +498,8 @@ $cardview-card__content__field-value--highlighted-text-weight: $cardview-generic
 
 $cardview-column-chooser--empty__message-horizontal-padding: $cardview-generic-column-chooser--empty__message-horizontal-padding !default;
 $cardview-column-chooser__select-all-item-horizontal-padding: $cardview-generic-column-chooser__select-all-item-horizontal-padding !default;
+
+$cardview-header-item__left-padding: $cardview-generic-header-item__left-padding !default;
+$cardview-header-item__right-padding: $cardview-generic-header-item__right-padding !default;
+$cardview-header-item__sort-indicator__border-size: $cardview-generic-header-item__sort-indicator__border-size !default;
+$cardview-header-item__sort-indicator__border-radius: $cardview-generic-header-item__sort-indicator__border-radius !default;
