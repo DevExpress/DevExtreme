@@ -138,7 +138,6 @@ const App = () => (
     <Column dataField="department" />
     <Column dataField="address" />
     <Column dataField="mobilePhone">
-      <RequiredRule />
       <PatternRule
         message="Your phone must have '(555) 555-5555' format!"
         pattern={/^\(\d{3}\) \d{3}-\d{4}$/i}

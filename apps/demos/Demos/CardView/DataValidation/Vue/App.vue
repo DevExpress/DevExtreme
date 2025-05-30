@@ -85,7 +85,6 @@
     <DxColumn data-field="department"/>
     <DxColumn data-field="address"/>
     <DxColumn data-field="mobilePhone">
-      <DxRequiredRule/>
       <DxPatternRule
         message="Your phone must have '(555) 555-5555' format!"
         :pattern="/^\(\d{3}\) \d{3}-\d{4}$/i"
