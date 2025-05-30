@@ -112,6 +112,7 @@ $treelist-icon-container-padding-right: $fluent-grid-base-checkbox-size + $fluen
 
 .dx-treelist-icon-container {
   max-height: $fluent-grid-base-cell-line-height;
+  height: $fluent-grid-base-cell-line-height;
 
   &.dx-editor-inline-block {
     position: relative;
