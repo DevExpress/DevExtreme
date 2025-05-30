@@ -14,7 +14,7 @@ import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationSta
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, ToolbarItemLocation, ToolbarItemComponent, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, Direction, PositionAlignment, Mode, DisplayMode } from "devextreme/common";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { SelectionColumnDisplayMode, DataChangeType, FilterType, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, DataChange, PagerPageSize } from "devextreme/common/grids";
+import type { SelectionColumnDisplayMode, DataChangeType, FilterType, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, DataChange, FilterPanel as GridsFilterPanel, FilterPanelTexts, PagerPageSize } from "devextreme/common/grids";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { dxFormSimpleItem, FormItemComponent, FormItemType, LabelLocation } from "devextreme/ui/form";
 import type { dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
@@ -106,6 +106,7 @@ const CardView = memo(
         columnChooser: { optionName: "columnChooser", isCollectionItem: false },
         editing: { optionName: "editing", isCollectionItem: false },
         filterBuilder: { optionName: "filterBuilder", isCollectionItem: false },
+        filterPanel: { optionName: "filterPanel", isCollectionItem: false },
         headerPanel: { optionName: "headerPanel", isCollectionItem: false },
         loadPanel: { optionName: "loadPanel", isCollectionItem: false },
         pager: { optionName: "pager", isCollectionItem: false },
@@ -873,6 +874,35 @@ const _componentFilterOperationDescriptions = (props: IFilterOperationDescriptio
 };
 
 const FilterOperationDescriptions = Object.assign<typeof _componentFilterOperationDescriptions, NestedComponentMeta>(_componentFilterOperationDescriptions, {
+  componentType: "option",
+});
+
+// owners:
+// CardView
+type IFilterPanelProps = React.PropsWithChildren<{
+  customizeText?: ((e: { component: GridsFilterPanel, filterValue: Record<string, any>, text: string }) => string);
+  filterEnabled?: boolean;
+  texts?: FilterPanelTexts;
+  visible?: boolean;
+  defaultFilterEnabled?: boolean;
+  onFilterEnabledChange?: (value: boolean) => void;
+}>
+const _componentFilterPanel = (props: IFilterPanelProps) => {
+  return React.createElement(NestedOption<IFilterPanelProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "filterPanel",
+      DefaultsProps: {
+        defaultFilterEnabled: "filterEnabled"
+      },
+      ExpectedChildren: {
+        texts: { optionName: "texts", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const FilterPanel = Object.assign<typeof _componentFilterPanel, NestedComponentMeta>(_componentFilterPanel, {
   componentType: "option",
 });
 
@@ -1647,6 +1677,26 @@ const StringLengthRule = Object.assign<typeof _componentStringLengthRule, Nested
 });
 
 // owners:
+// FilterPanel
+type ITextsProps = React.PropsWithChildren<{
+  clearFilter?: string;
+  createFilter?: string;
+  filterEnabledHint?: string;
+}>
+const _componentTexts = (props: ITextsProps) => {
+  return React.createElement(NestedOption<ITextsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "texts",
+    },
+  });
+};
+
+const Texts = Object.assign<typeof _componentTexts, NestedComponentMeta>(_componentTexts, {
+  componentType: "option",
+});
+
+// owners:
 // Hide
 // Show
 type IToProps = React.PropsWithChildren<{
@@ -1821,6 +1871,8 @@ export {
   IFilterBuilderProps,
   FilterOperationDescriptions,
   IFilterOperationDescriptionsProps,
+  FilterPanel,
+  IFilterPanelProps,
   Format,
   IFormatProps,
   FormItem,
@@ -1873,6 +1925,8 @@ export {
   ISortingProps,
   StringLengthRule,
   IStringLengthRuleProps,
+  Texts,
+  ITextsProps,
   To,
   IToProps,
   Toolbar,

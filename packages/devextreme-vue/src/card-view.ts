@@ -65,6 +65,7 @@ import {
 } from "devextreme/common";
 import {
  ColumnChooser,
+ FilterPanel,
  Pager,
  SearchPanel,
  Sorting,
@@ -75,6 +76,7 @@ import {
  ColumnChooserSearchConfig,
  ColumnChooserSelectionConfig,
  DataChange,
+ FilterPanelTexts,
  PagerPageSize,
 } from "devextreme/common/grids";
 import {
@@ -253,7 +255,7 @@ const componentConfig = {
     fieldHintEnabled: Boolean,
     filterBuilder: Object as PropType<dxFilterBuilderOptions | Record<string, any>>,
     filterBuilderPopup: Object as PropType<Record<string, any>>,
-    filterPanel: Object as PropType<Record<string, any>>,
+    filterPanel: Object as PropType<FilterPanel>,
     filterValue: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
     focusStateEnabled: Boolean,
     headerFilter: Object as PropType<Record<string, any>>,
@@ -409,6 +411,7 @@ const componentConfig = {
       columnChooser: { isCollectionItem: false, optionName: "columnChooser" },
       editing: { isCollectionItem: false, optionName: "editing" },
       filterBuilder: { isCollectionItem: false, optionName: "filterBuilder" },
+      filterPanel: { isCollectionItem: false, optionName: "filterPanel" },
       headerPanel: { isCollectionItem: false, optionName: "headerPanel" },
       loadPanel: { isCollectionItem: false, optionName: "loadPanel" },
       pager: { isCollectionItem: false, optionName: "pager" },
@@ -1163,6 +1166,32 @@ prepareConfigurationComponentConfig(DxFilterOperationDescriptionsConfig);
 const DxFilterOperationDescriptions = defineComponent(DxFilterOperationDescriptionsConfig);
 
 (DxFilterOperationDescriptions as any).$_optionName = "filterOperationDescriptions";
+
+const DxFilterPanelConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:customizeText": null,
+    "update:filterEnabled": null,
+    "update:texts": null,
+    "update:visible": null,
+  },
+  props: {
+    customizeText: Function as PropType<((e: { component: FilterPanel, filterValue: Record<string, any>, text: string }) => string)>,
+    filterEnabled: Boolean,
+    texts: Object as PropType<FilterPanelTexts | Record<string, any>>,
+    visible: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxFilterPanelConfig);
+
+const DxFilterPanel = defineComponent(DxFilterPanelConfig);
+
+(DxFilterPanel as any).$_optionName = "filterPanel";
+(DxFilterPanel as any).$_expectedChildren = {
+  texts: { isCollectionItem: false, optionName: "texts" }
+};
 
 const DxFormatConfig = {
   emits: {
@@ -1970,6 +1999,27 @@ const DxStringLengthRule = defineComponent(DxStringLengthRuleConfig);
   type: "stringLength"
 };
 
+const DxTextsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:clearFilter": null,
+    "update:createFilter": null,
+    "update:filterEnabledHint": null,
+  },
+  props: {
+    clearFilter: String,
+    createFilter: String,
+    filterEnabledHint: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxTextsConfig);
+
+const DxTexts = defineComponent(DxTextsConfig);
+
+(DxTexts as any).$_optionName = "texts";
+
 const DxToConfig = {
   emits: {
     "update:isActive": null,
@@ -2132,6 +2182,7 @@ export {
   DxField,
   DxFilterBuilder,
   DxFilterOperationDescriptions,
+  DxFilterPanel,
   DxFormat,
   DxFormItem,
   DxFrom,
@@ -2158,6 +2209,7 @@ export {
   DxShow,
   DxSorting,
   DxStringLengthRule,
+  DxTexts,
   DxTo,
   DxToolbar,
   DxToolbarItem,
