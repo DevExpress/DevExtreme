@@ -33,10 +33,10 @@ export const defaultColumnProperties = {
     return parseValue(this, value) ?? value;
   },
   calculateDisplayValue(data): unknown {
-    // @ts-expect-error
-    return data[this.dataField!];
+    return this.calculateFieldValue(data);
   },
   calculateFilterExpression: filterUtils.defaultCalculateFilterExpression,
+  defaultCalculateFilterExpression: filterUtils.defaultCalculateFilterExpression,
   alignment: 'left',
   visible: true,
   allowReordering: true,

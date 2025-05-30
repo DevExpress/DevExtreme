@@ -4,30 +4,30 @@
 .dx-cardview-card-header {
   display: flex;
   align-items: center;
-  height: $cardview-card-header-height;
+  height: $cardview-card__header-height;
 
   .dx-toolbar {
     padding: 0 12px;
-    border-radius: $cardview-card-header-border-radius $cardview-card-header-border-radius 0 0;
+    border-radius: $cardview-card-border-radius $cardview-card-border-radius 0 0;
 
     .dx-toolbar-label {
-      font-size: $cardview-card-header-text-size;
+      font-size: $cardview-card__header-text-size;
     }
 
     .dx-toolbar-items-container {
       /* NOTE: height override set only in material "default" */
-      height: $cardview-card-header-toolbar-override-height;
+      height: $cardview-card__header__toolbar-override-height;
     }
   }
 
   .dx-cardview-select-checkbox {
-    padding-right: $cardview-card-header-selection-checkbox-padding-right;
+    padding-right: $cardview-card__header__selection-checkbox-padding-right;
   }
 }
 
 .dx-cardview-card-selection {
   .dx-toolbar {
-    background-color: $cardview-card-selection-background-color;
+    background-color: $cardview-card--selected-bg-color;
   }
 }
 

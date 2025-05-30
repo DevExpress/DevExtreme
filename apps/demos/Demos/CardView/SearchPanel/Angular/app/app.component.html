@@ -1,6 +1,30 @@
-<dx-card-view id="cardView" [dataSource]="customers" keyExpr="ID">
+<dx-card-view
+  [dataSource]="tasks"
+  keyExpr="Task_ID"
+  [wordWrapEnabled]="true"
+  [headerFilter]="headerFilterConfig"
+  [searchPanel]="searchPanelConfig"
+>
   <dxi-card-view-column
-    *ngFor="let column of columns"
-    [dataField]="column"
+    dataField="Task_Subject"
+    caption="Subject"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Task_Start_Date"
+    caption="Start Date"
+    dataType="date"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Task_Due_Date"
+    caption="Due Date"
+    dataType="date"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Task_Priority"
+    caption="Priority"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Task_Status"
+    caption="Status"
   ></dxi-card-view-column>
 </dx-card-view>

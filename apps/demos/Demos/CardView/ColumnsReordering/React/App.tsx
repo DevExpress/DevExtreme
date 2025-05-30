@@ -1,15 +1,30 @@
 import React from 'react';
 import CardView, { Column } from 'devextreme-react/card-view';
-import { customers } from './data.ts';
-
-const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+import { orders } from './data.ts';
 
 const App = () => (
-  <CardView
-    dataSource={customers}
-    keyExpr="ID"
-  >
-    { columns.map((column, index) => <Column dataField={column} key={index} />) }
+  <CardView id="cardView" dataSource={orders} keyExpr="ID" allowColumnReordering={true}>
+    <Column
+      dataField="OrderNumber"
+      allowReordering={false}
+    />
+    <Column
+      dataField="SaleAmount"
+    />
+    <Column
+      dataField="Customer"
+    />
+    <Column
+      dataField="Location"
+    />
+    <Column
+      dataField="OrderDate"
+      dataType="date"
+    />
+    <Column
+      dataField="DeliveryDate"
+      dataType="date"
+    />
   </CardView>
 );
 

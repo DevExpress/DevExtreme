@@ -1,8 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxCardViewModule } from 'devextreme-angular';
-import { Customer, Service } from './app.service';
+import { DxCardViewModule, DxCardViewTypes } from 'devextreme-angular/ui/card-view';
+import { Order, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -14,18 +14,94 @@ if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
+function getDeliveryHours(rowData) {
+  return (new Date(rowData.DeliveryDate)).getHours();
+}
+
 @Component({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   providers: [Service],
 })
 export class AppComponent {
-  customers: Customer[];
+  // TODO: make nested
+  headerFilterConfig = {
+    visible: true
+  };
 
-  columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+  // TODO: make nested
+  filterPanelConfig = {
+    visible: true
+  };
+
+  filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'beforeNoon']];
+
+  // TODO: make nested
+  filterBuilderConfig = {
+    customOperations: [{
+      name: 'beforeNoon',
+      caption: 'Before noon',
+      dataTypes: ['datetime'],
+      icon: 'check',
+      hasValue: false,
+      calculateFilterExpression() {
+        return [getDeliveryHours, '<', 12];
+      },
+    }, {
+      name: 'afterNoon',
+      caption: 'After noon',
+      dataTypes: ['datetime'],
+      icon: 'check',
+      hasValue: false,
+      calculateFilterExpression() {
+        return [getDeliveryHours, '>=', 12];
+      },
+    }],
+  };
+
+
+  // TODO: make nested
+  saleAmountHeaderFilterConfig = {
+    dataSource: [
+      {
+        text: 'Less than $3000',
+        value: ['SaleAmount', '<', 3000],
+      },
+      {
+        text: '$3000 - $5000',
+        value: [
+          ['SaleAmount', '>=', 3000],
+          ['SaleAmount', '<', 5000],
+        ],
+      },
+      {
+        text: '$5000 - $10000',
+        value: [
+          ['SaleAmount', '>=', 5000],
+          ['SaleAmount', '<', 10000],
+        ],
+      },
+      {
+        text: '$10000 - $20000',
+        value: [
+          ['SaleAmount', '>=', 10000],
+          ['SaleAmount', '<', 20000],
+        ],
+      },
+      {
+        text: 'Greater than $20000',
+        value: ['SaleAmount', '>=', 20000],
+      },
+    ],
+  };
+
+  // TODO: make nested
+  orderNumberHeaderFilterConfig = { groupInterval: 10000 };
+
+  orders: Order[];
 
   constructor(service: Service) {
-    this.customers = service.getCustomers();
+    this.orders = service.getOrders();
   }
 }
 
