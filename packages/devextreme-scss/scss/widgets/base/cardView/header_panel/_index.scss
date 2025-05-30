@@ -29,8 +29,9 @@ $sortable-side-offset: 6px;
   margin: 0 (-$sortable-side-offset);
 
   .dx-cardview-dropzone {
-    width: 100%;
+    width: calc(100% - (2 * $sortable-side-offset));
     height: $cardview-header-panel__dropzone-height;
+    margin: 0 $sortable-side-offset;
     background-color: $cardview-header-panel__dropzone-bg-color;
     text-align: center;
     position: absolute;
