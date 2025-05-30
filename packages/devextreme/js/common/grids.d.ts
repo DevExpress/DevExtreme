@@ -1110,7 +1110,7 @@ export type FilterPanelTexts = {
  * @namespace DevExpress.common.grids
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export interface FilterPanel<TComponent, TRowData = any, TKey = any> {
+export interface FilterPanel<TComponent = any, TRowData = any, TKey = any> {
   /**
    * @docid
    * @type_function_param1 e:object
