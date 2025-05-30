@@ -1,7 +1,27 @@
 $(() => {
   $('#card-view').dxCardView({
-    dataSource: customers,
+    dataSource: houses,
     keyExpr: 'ID',
-    columns: ['CompanyName', 'City', 'State', 'Phone', 'Fax'],
+    cardCover: {
+      imageExpr: ({ ID }) => `https://demos.devexpress.com/ASPxCardViewDemos/Content/HomesPhoto/${ID}.jpg`,
+      altExpr: () => 'Photo of the house',
+    },
+    columns: [
+      'Address',
+      {
+        dataField: 'Price',
+        format: 'currency',
+        sortOrder: 'asc',
+      },
+      'HouseSize',
+      'Baths',
+      {
+        dataField: 'Beds',
+        sortOrder: 'desc',
+      },
+    ],
+    sorting: {
+      mode: 'multiple'
+    },
   });
 });
