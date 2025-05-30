@@ -67,6 +67,7 @@ import {
  ColumnChooser,
  Pager,
  SearchPanel,
+ Sorting,
  SelectionColumnDisplayMode,
  DataChangeType,
  FilterType,
@@ -217,6 +218,7 @@ type AccessibleOptions = Pick<Properties,
   "searchPanel" |
   "selectedCardKeys" |
   "selection" |
+  "sorting" |
   "tabIndex" |
   "toolbar" |
   "visible" |
@@ -302,6 +304,7 @@ const componentConfig = {
     searchPanel: Object as PropType<SearchPanel | Record<string, any>>,
     selectedCardKeys: Array as PropType<Array<any>>,
     selection: Object as PropType<SelectionConfiguration | Record<string, any>>,
+    sorting: Object as PropType<Sorting | Record<string, any>>,
     tabIndex: Number,
     toolbar: Object as PropType<Toolbar | Record<string, any>>,
     visible: Boolean,
@@ -383,6 +386,7 @@ const componentConfig = {
     "update:searchPanel": null,
     "update:selectedCardKeys": null,
     "update:selection": null,
+    "update:sorting": null,
     "update:tabIndex": null,
     "update:toolbar": null,
     "update:visible": null,
@@ -412,6 +416,7 @@ const componentConfig = {
       remoteOperations: { isCollectionItem: false, optionName: "remoteOperations" },
       searchPanel: { isCollectionItem: false, optionName: "searchPanel" },
       selection: { isCollectionItem: false, optionName: "selection" },
+      sorting: { isCollectionItem: false, optionName: "sorting" },
       toolbar: { isCollectionItem: false, optionName: "toolbar" }
     };
   }
@@ -1909,6 +1914,31 @@ const DxShow = defineComponent(DxShowConfig);
   to: { isCollectionItem: false, optionName: "to" }
 };
 
+const DxSortingConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:ascendingText": null,
+    "update:clearText": null,
+    "update:descendingText": null,
+    "update:mode": null,
+    "update:showSortIndexes": null,
+  },
+  props: {
+    ascendingText: String,
+    clearText: String,
+    descendingText: String,
+    mode: String as PropType<SingleMultipleOrNone>,
+    showSortIndexes: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxSortingConfig);
+
+const DxSorting = defineComponent(DxSortingConfig);
+
+(DxSorting as any).$_optionName = "sorting";
+
 const DxStringLengthRuleConfig = {
   emits: {
     "update:isActive": null,
@@ -2126,6 +2156,7 @@ export {
   DxSearchPanel,
   DxSelection,
   DxShow,
+  DxSorting,
   DxStringLengthRule,
   DxTo,
   DxToolbar,

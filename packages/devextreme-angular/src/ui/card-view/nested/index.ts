@@ -43,6 +43,7 @@ export * from './search-panel';
 export * from './search';
 export * from './selection';
 export * from './show';
+export * from './sorting';
 export * from './string-length-rule-dxi';
 export * from './to';
 export * from './toolbar-item-dxi';

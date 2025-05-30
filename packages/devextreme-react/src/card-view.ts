@@ -113,6 +113,7 @@ const CardView = memo(
         remoteOperations: { optionName: "remoteOperations", isCollectionItem: false },
         searchPanel: { optionName: "searchPanel", isCollectionItem: false },
         selection: { optionName: "selection", isCollectionItem: false },
+        sorting: { optionName: "sorting", isCollectionItem: false },
         toolbar: { optionName: "toolbar", isCollectionItem: false }
       }), []);
 
@@ -1596,6 +1597,28 @@ const Show = Object.assign<typeof _componentShow, NestedComponentMeta>(_componen
 });
 
 // owners:
+// CardView
+type ISortingProps = React.PropsWithChildren<{
+  ascendingText?: string;
+  clearText?: string;
+  descendingText?: string;
+  mode?: SingleMultipleOrNone;
+  showSortIndexes?: boolean;
+}>
+const _componentSorting = (props: ISortingProps) => {
+  return React.createElement(NestedOption<ISortingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "sorting",
+    },
+  });
+};
+
+const Sorting = Object.assign<typeof _componentSorting, NestedComponentMeta>(_componentSorting, {
+  componentType: "option",
+});
+
+// owners:
 // FormItem
 // Column
 type IStringLengthRuleProps = React.PropsWithChildren<{
@@ -1846,6 +1869,8 @@ export {
   ISelectionProps,
   Show,
   IShowProps,
+  Sorting,
+  ISortingProps,
   StringLengthRule,
   IStringLengthRuleProps,
   To,
