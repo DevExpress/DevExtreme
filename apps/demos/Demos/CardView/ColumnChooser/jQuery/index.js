@@ -24,7 +24,7 @@ $(() => {
       {
         caption: 'Full Name',
         calculateFieldValue(data) {
-          return `${data.First_Name} ${data.Last_Name}`
+          return `${data.First_Name} ${data.Last_Name}`;
         },
         allowHiding: false,
       },
