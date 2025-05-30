@@ -1,8 +1,8 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
+import { NgModule, Component, enableProdMode, ViewChild } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxCardViewModule } from 'devextreme-angular';
-import { Customer, Service } from './app.service';
+import { DxCardViewComponent, DxCardViewModule, DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
+import { Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,15 +17,54 @@ if (window && window.config?.packageConfigPaths) {
 @Component({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
+  styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
 })
 export class AppComponent {
-  customers: Customer[];
+  employees: Employee[];
 
-  columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+  columnChooserMode = 'select';
+
+  searchEnabled = true;
+
+  allowSelectAll = true;
+
+  selectByClick = true;
+
+  // todo: use nested
+  searchPanelConfig = {
+    visible: true,
+  }
 
   constructor(service: Service) {
-    this.customers = service.getCustomers();
+    this.employees = service.getEmployees();
+  }
+
+  // todo: use nested
+  getColumnChooserConfig() {
+    return {
+      enabled: true,
+      mode: this.columnChooserMode,
+      search: {
+        enabled: this.searchEnabled,
+      },
+      selection: {
+        allowSelectAll: this.allowSelectAll,
+        selectByClick: this.selectByClick,
+      },
+    };
+  }
+
+  altExpr({ First_Name, Last_Name }: Employee): string {
+    return `Photo of ${First_Name} ${Last_Name}`;
+  }
+
+  imageExpr({ First_Name, Last_Name }: Employee): string {
+    return `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`;
+  }
+
+  calculateFullName({ First_Name, Last_Name }: Employee): string {
+    return `${First_Name} ${Last_Name}`
   }
 }
 
@@ -33,6 +72,8 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxCardViewModule,
+    DxSelectBoxModule,
+    DxCheckBoxModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

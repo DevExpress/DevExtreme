@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxCardViewModule } from 'devextreme-angular';
-import { Customer, Service } from './app.service';
+import { Task, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,12 +20,21 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
 })
 export class AppComponent {
-  customers: Customer[];
+  tasks: Task[];
 
-  columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+  // TODO: Nested component does not exist
+  headerFilterConfig = {
+    visible: true,
+  };
+
+  // TODO: Nested component does not exist
+  searchPanelConfig = {
+    visible: true,
+    text: 'an',
+  };
 
   constructor(service: Service) {
-    this.customers = service.getCustomers();
+    this.tasks = service.getTasks();
   }
 }
 

@@ -1,6 +1,18 @@
-<dx-card-view id="cardView" [dataSource]="customers" keyExpr="ID">
+<dx-card-view id="cardView" [dataSource]="houses" keyExpr="ID">
+  <dxo-card-view-card-cover
+    [imageExpr]="imageExpr"
+    [altExpr]="altExpr"
+  ></dxo-card-view-card-cover>
+  <dxi-card-view-column dataField="Address"></dxi-card-view-column>
   <dxi-card-view-column
-    *ngFor="let column of columns"
-    [dataField]="column"
+    dataField="Price"
+    format="currency"
+    sortOrder="asc"
+  ></dxi-card-view-column>
+  <dxi-card-view-column dataField="HouseSize"></dxi-card-view-column>
+  <dxi-card-view-column dataField="Baths"></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Beds"
+    sortOrder="desc"
   ></dxi-card-view-column>
 </dx-card-view>

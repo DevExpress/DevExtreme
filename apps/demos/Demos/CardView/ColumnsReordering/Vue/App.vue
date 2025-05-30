@@ -1,17 +1,28 @@
 <template>
   <DxCardView
-    :data-source="customers"
+    id="cardView"
+    :data-source="orders"
     key-expr="ID"
+    :allow-column-reordering="true"
   >
     <DxColumn
-      v-for="column in columns"        
-      :data-field="column"
+      data-field="OrderNumber"
+      :allow-reordering="false"
+    />
+    <DxColumn data-field="SaleAmount" />
+    <DxColumn data-field="Customer" />
+    <DxColumn data-field="Location" />
+    <DxColumn
+      data-field="OrderDate"
+      data-type="date"
+    />
+    <DxColumn
+      data-field="DeliveryDate"
+      data-type="date"
     />
   </DxCardView>
 </template>
 <script setup lang="ts">
   import { DxCardView, DxColumn } from 'devextreme-vue/card-view';
-  import { customers } from './data.ts';
-
-  const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+  import { orders } from './data.ts';
 </script>

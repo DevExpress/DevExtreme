@@ -1,15 +1,48 @@
 import React from 'react';
 import CardView, { Column } from 'devextreme-react/card-view';
-import { customers } from './data.ts';
+import { tasks } from './data.ts';
 
-const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+// TODO: Nested component does not exist
+const headerFilterConfig = {
+  visible: true,
+};
+
+// TODO: Nested component does not exist
+const searchPanelConfig = {
+  visible: true,
+  text: 'an',
+};
 
 const App = () => (
   <CardView
-    dataSource={customers}
-    keyExpr="ID"
+    dataSource={tasks}
+    keyExpr="Task_ID"
+    wordWrapEnabled={true}
+    headerFilter={headerFilterConfig}
+    searchPanel={searchPanelConfig}
   >
-    { columns.map((column, index) => <Column dataField={column} key={index} />) }
+    <Column
+      dataField="Task_Subject"
+      caption="Subject"
+    />
+    <Column
+      dataField="Task_Start_Date"
+      caption="Start Date"
+      dataType="date"
+    />
+    <Column
+      dataField="Task_Due_Date"
+      caption="Due Date"
+      dataType="date"
+    />
+    <Column
+      dataField="Task_Priority"
+      caption="Priority"
+    />
+    <Column
+      dataField="Task_Status"
+      caption="Status"
+    />
   </CardView>
 );
 
