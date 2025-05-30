@@ -37,15 +37,7 @@ $treelist-icon-container-padding-right: $fluent-grid-base-checkbox-size + $fluen
   .dx-treelist-empty-space {
     position: relative;
     display: inline-block;
-
-    @include dx-icon(chevronup);
-
     width: $treelist-empty-space-width;
-
-    &::before {
-      visibility: hidden;
-      display: none;
-    }
   }
 
   tr:not(.dx-row-focused) .dx-treelist-empty-space {
