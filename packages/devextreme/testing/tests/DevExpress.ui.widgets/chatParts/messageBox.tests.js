@@ -17,6 +17,7 @@ import EditingPreview, {
 import {
     FOCUSED_STATE_CLASS,
 } from '__internal/core/widget/widget';
+import { shouldSkipOnDesktop } from '../../../helpers/device.js';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -305,6 +306,24 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 .type(text)
                 .keyDown('enter')
                 .keyUp('enter');
+        });
+
+        QUnit.test('should not send message on enter key on mobile devices (T1293840)', function(assert) {
+            if(shouldSkipOnDesktop(assert)) {
+                return;
+            }
+
+            const onMessageEnteredStub = sinon.stub();
+
+            this.reinit({ onMessageEntered: onMessageEnteredStub });
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('new text message')
+                .keyDown('enter')
+                .keyUp('enter');
+
+            assert.strictEqual(onMessageEnteredStub.callCount, 0);
         });
     });
 

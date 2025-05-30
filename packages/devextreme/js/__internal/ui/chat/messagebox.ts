@@ -1,5 +1,6 @@
 import type { NativeEventInfo } from '@js/common/core/events';
 import messageLocalization from '@js/common/core/localization/message';
+import devices from '@js/core/devices';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
@@ -160,6 +161,10 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         this._updateTypingEndTimeout();
       },
       onEnterKey: (e: EnterKeyEvent): void => {
+        if (this._isMobile()) {
+          return;
+        }
+
         if (!e.event?.shiftKey) {
           this._sendHandler(e);
         }
@@ -167,7 +172,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     });
 
     this._textArea.registerKeyHandler('enter', (event: KeyboardEvent) => {
-      if (!event.shiftKey && this._isValuableTextEntered()) {
+      if (!event.shiftKey && this._isValuableTextEntered() && !this._isMobile()) {
         event.preventDefault();
       }
     });
@@ -177,6 +182,10 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         this._cancelMessageEdit();
       }
     });
+  }
+
+  _isMobile(): boolean {
+    return devices.current().deviceType !== 'desktop';
   }
 
   _renderButton($parent: dxElementWrapper): void {
