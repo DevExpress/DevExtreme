@@ -2326,7 +2326,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   showRowLines?: boolean;
   /**
    * @docid
-   * @type object
    * @public
    */
   sorting?: Sorting;
@@ -3097,27 +3096,27 @@ export type SelectionColumnDisplayMode = 'always' | 'none' | 'onClick' | 'onLong
  */
 export type Sorting = {
   /**
-   * @docid GridBaseOptions.sorting.ascendingText
+   * @docid
    * @default "Sort Ascending"
    */
   ascendingText?: string;
   /**
-   * @docid GridBaseOptions.sorting.clearText
+   * @docid
    * @default "Clear Sorting"
    */
   clearText?: string;
   /**
-   * @docid GridBaseOptions.sorting.descendingText
+   * @docid
    * @default "Sort Descending"
    */
   descendingText?: string;
   /**
-   * @docid GridBaseOptions.sorting.mode
+   * @docid
    * @default "single"
    */
   mode?: SingleMultipleOrNone;
   /**
-   * @docid GridBaseOptions.sorting.showSortIndexes
+   * @docid
    * @default true
    */
   showSortIndexes?: boolean;
