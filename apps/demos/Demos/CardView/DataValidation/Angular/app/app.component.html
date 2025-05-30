@@ -23,6 +23,10 @@
   </dxi-card-view-column>
   <dxi-card-view-column dataField="hireDate" dataType="date">
     <dxi-card-view-required-rule></dxi-card-view-required-rule>
+    <dxi-card-view-custom-rule
+      message="Hire date cannot be earlier than birth date"
+      [validationCallback]="hireDateValidationCallback"
+    ></dxi-card-view-custom-rule>
   </dxi-card-view-column>
   <dxi-card-view-column caption="Position" dataField="title">
     <dxi-card-view-required-rule></dxi-card-view-required-rule>
@@ -37,7 +41,6 @@
     ></dxi-card-view-pattern-rule>
   </dxi-card-view-column>
   <dxi-card-view-column dataField="email">
-    <dxi-card-view-required-rule></dxi-card-view-required-rule>
     <dxi-card-view-email-rule></dxi-card-view-email-rule>
     <dxi-card-view-async-rule
       message="Email address is not unique"
@@ -48,14 +51,12 @@
     dataField="notes"
     [visible]="false"
   ></dxi-card-view-column>
-  <dxi-card-view-column
-    dataField="firstName"
-    [visible]="false"
-  ></dxi-card-view-column>
-  <dxi-card-view-column
-    dataField="lastName"
-    [visible]="false"
-  ></dxi-card-view-column>
+  <dxi-card-view-column dataField="firstName" [visible]="false">
+    <dxi-card-view-required-rule></dxi-card-view-required-rule>
+  </dxi-card-view-column>
+  <dxi-card-view-column dataField="lastName" [visible]="false">
+    <dxi-card-view-required-rule></dxi-card-view-required-rule>
+  </dxi-card-view-column>
   <dxi-card-view-column
     dataField="city"
     [visible]="false"

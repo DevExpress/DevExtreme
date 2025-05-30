@@ -74,8 +74,8 @@ $(() => {
           {
             type: 'custom',
             message: 'Hire date cannot be earlier than birth date',
-            validationCallback(e) {
-              return new Date(e.data.hireDate) > new Date(e.data.birthDate);
+            validationCallback(params) {
+              return new Date(params.data.hireDate) > new Date(params.data.birthDate);
             },
           }
         ],

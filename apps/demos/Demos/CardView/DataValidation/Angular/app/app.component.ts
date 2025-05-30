@@ -104,6 +104,10 @@ export class AppComponent {
 
     return result;
   };
+
+  hireDateValidationCallback(params) {
+    return new Date(params.data.hireDate) > new Date(params.data.birthDate);
+  };
 }
 
 @NgModule({

@@ -63,19 +63,41 @@
     <DxColumn
       data-field="birthDate"
       data-type="date"
-    />
+    >
+      <DxRequiredRule/>
+    </DxColumn>
     <DxColumn
       data-field="hireDate"
       data-type="date"
-    />
+    >
+      <DxRequiredRule/>
+      <DxCustomRule
+        message="Hire date cannot be earlier than birth date"
+        :validation-callback="hireDateValidationCallback"
+      />
+    </DxColumn>
     <DxColumn
       caption="Position"
       data-field="title"
-    />
+    >
+      <DxRequiredRule/>
+    </DxColumn>
     <DxColumn data-field="department"/>
     <DxColumn data-field="address"/>
-    <DxColumn data-field="mobilePhone"/>
-    <DxColumn data-field="email"/>
+    <DxColumn data-field="mobilePhone">
+      <DxRequiredRule/>
+      <DxPatternRule
+        message="Your phone must have '(555) 555-5555' format!"
+        :pattern="/^\(\d{3}\) \d{3}-\d{4}$/i"
+      />
+    </DxColumn>
+    <DxColumn data-field="email">
+      <DxRequiredRule/>
+      <DxAsyncRule
+        message="Email address is not unique"
+        :validation-callback="emailValidationCallback"
+      />
+    </DxColumn>
     <DxColumn
       data-field="notes"
       :visible="false"
@@ -83,11 +105,15 @@
     <DxColumn
       data-field="firstName"
       :visible="false"
-    />
+    >
+      <DxRequiredRule/>
+    </DxColumn>
     <DxColumn
       data-field="lastName"
       :visible="false"
-    />
+    >
+      <DxRequiredRule/>
+    </DxColumn>
     <DxColumn
       data-field="city"
       :visible="false"
@@ -103,7 +129,7 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-  import { DxCardView, DxColumn, DxCardCover, DxEditing } from 'devextreme-vue/card-view';
+  import { DxCardView, DxColumn, DxCardCover, DxEditing, DxRequiredRule, DxEmailRule, DxPatternRule, DxAsyncRule, DxCustomRule } from 'devextreme-vue/card-view';
   import { employees, Employee } from './data.ts';
 
   function altExpr({ fullName }: Employee) {
@@ -117,4 +143,27 @@
   function calculateFullName({firstName, lastName}: Employee) {
     return `${firstName} ${lastName}`;
   }
+
+  const emailValidationUrl = 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
+
+  async function emailValidationCallback(params) {
+    const response = await fetch(emailValidationUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;',
+      },
+      body: JSON.stringify({
+        id: params.data.id,
+        email: params.value,
+      }),
+    });
+
+    const result = await response.json();
+
+    return result;
+  };
+
+  function hireDateValidationCallback(params) {
+    return new Date(params.data.hireDate) > new Date(params.data.birthDate);
+  };
 </script>

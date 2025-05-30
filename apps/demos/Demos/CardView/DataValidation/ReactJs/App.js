@@ -7,6 +7,7 @@ import CardView, {
   PatternRule,
   EmailRule,
   AsyncRule,
+  CustomRule,
 } from 'devextreme-react/card-view';
 import { employees } from './data.js';
 
@@ -33,6 +34,9 @@ async function emailValidationCallback(params) {
   });
   const result = await response.json();
   return result;
+}
+function hireDateValidationCallback(params) {
+  return new Date(params.data.hireDate) > new Date(params.data.birthDate);
 }
 const App = () => (
   <CardView
@@ -120,6 +124,10 @@ const App = () => (
       dataType="date"
     >
       <RequiredRule />
+      <CustomRule
+        message="Hire date cannot be earlier than birth date"
+        validationCallback={hireDateValidationCallback}
+      />
     </Column>
     <Column
       caption="Position"
@@ -137,7 +145,6 @@ const App = () => (
       />
     </Column>
     <Column dataField="email">
-      <RequiredRule />
       <EmailRule />
       <AsyncRule
         message="Email address is not unique"
@@ -151,11 +158,15 @@ const App = () => (
     <Column
       dataField="firstName"
       visible={false}
-    />
+    >
+      <RequiredRule />
+    </Column>
     <Column
       dataField="lastName"
       visible={false}
-    />
+    >
+      <RequiredRule />
+    </Column>
     <Column
       dataField="city"
       visible={false}
