@@ -1281,7 +1281,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         assert.ok($sections.eq(2).hasClass('dx-toolbar-menu-last-section'), 'border for last section is removed');
     });
 
-    QUnit.test('menu shouldn\'t be closed after click on editors', function(assert) {
+    QUnit.test('menu should not be closed after click on editors', function(assert) {
         const $beforeItem = $('<div>').width(150);
 
         this.instance.option({
@@ -1295,7 +1295,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
 
         $($beforeItem).trigger('dxclick');
 
-        assert.ok(this.overflowMenu.instance().option('opened'), 'dropdown isn\'t closed');
+        assert.ok(this.overflowMenu.instance().option('opened'), 'dropdown is not closed');
     });
 
     QUnit.test('menu should be closed after click on button or menu items', function(assert) {

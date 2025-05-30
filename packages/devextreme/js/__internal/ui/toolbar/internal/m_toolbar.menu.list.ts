@@ -12,13 +12,10 @@ const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 export default class ToolbarMenuList extends ListBase {
   _activeStateUnit!: string;
 
-  _nonActionableComponents!: string[];
-
   _init(): void {
     super._init();
 
     this._activeStateUnit = `.${TOOLBAR_MENU_ACTION_CLASS}:not(.${TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS})`;
-    this._nonActionableComponents = ['dxDropDownButton', 'dxSelectBox', 'dxNumberBox', 'dxColorBox'];
   }
 
   _initMarkup(): void {
@@ -81,20 +78,18 @@ export default class ToolbarMenuList extends ListBase {
   _getItemCssClasses(item): string[] {
     const location = item.location ?? 'menu';
     const cssClasses: string[] = [];
-
-    if (item.cssClass) {
-      cssClasses.push(item.cssClass);
-    }
+    const actionableComponents = this._getActionableComponents();
 
     if (this._getItemTemplateName({ itemData: item })) {
       cssClasses.push(TOOLBAR_MENU_CUSTOM_CLASS);
     }
 
-    if (this._nonActionableComponents.includes(item.widget)) {
+    if (item.widget && !actionableComponents.includes(item.widget)) {
+      cssClasses.push(item.cssClass);
       return cssClasses;
     }
 
-    if (location === 'menu' || item.widget === 'dxButton' || item.widget === 'dxButtonGroup' || item.isAction) {
+    if (location === 'menu' || item.isAction || actionableComponents.includes(item.widget)) {
       cssClasses.push(TOOLBAR_MENU_ACTION_CLASS);
     }
 
@@ -106,7 +101,12 @@ export default class ToolbarMenuList extends ListBase {
       cssClasses.push(TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS);
     }
 
+    cssClasses.push(item.cssClass);
     return cssClasses;
+  }
+
+  _getActionableComponents() {
+    return ['dxButton', 'dxButtonGroup'];
   }
 
   _getItemTemplateName(args) {
