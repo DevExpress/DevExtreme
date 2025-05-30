@@ -1,5 +1,6 @@
-//@use "../colors" as *;
-//@use "../../_design-system/utils/functions" as *;
+// @use "../colors" as *;
+
+// @use "../../_design-system/utils/functions" as *;
 
 // adduse
 
@@ -237,18 +238,18 @@ $button-success-outlined-selected-color: var(--DS-color-content-neutral-default-
 $button-success-outlined-bg: var(--DS-color-surface-neutral-muted-rest) !default;
 $button-success-text-bg: var(--DS-color-surface-neutral-muted-rest) !default;
 
-/*$shadow-base-color: var(--DS-color-shadow-none) !default;
+/* $shadow-base-color: var(--DS-color-shadow-none) !default;
 
 @if $mode == "light" {
-  //$button-success-active-bg: adjust($ds-button-success-bg, 0.95%, 9.22%) !default;
-  //$button-success-selected-bg: adjust($ds-button-success-bg, 0.22%, 12.16%) !default;
+  // $button-success-active-bg: adjust($ds-button-success-bg, 0.95%, 9.22%) !default;
+  // $button-success-selected-bg: adjust($ds-button-success-bg, 0.22%, 12.16%) !default;
 
   $button-shadow-color: alpha(var(--DS-color-shadow-none), 0.24) !default;
 }
 
 @if $mode == "dark" {
   $button-shadow-color: hsla(var(--DS-color-shadow-none-hsl), 0.4) !default;
-}*/
+} */
 
 $button-default-icon-color: var(--DS-color-content-neutral-static-rest) !default;
 $button-normal-icon-color: var(--DS-color-content-neutral-default-rest) !default;
