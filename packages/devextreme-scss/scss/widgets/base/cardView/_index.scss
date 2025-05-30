@@ -8,8 +8,10 @@
 
 .dx-cardview {
   padding: $cardview-padding;
-  background-color: $cardview-background-color;
+  background-color: $cardview-bg-color;
   border-radius: $cardview-border-radius;
+  color: $cardview-text-color;
+  font-weight: $cardview-text-weight;
 
   .dx-link {
     text-decoration: underline;
@@ -28,7 +30,7 @@
 .dx-cardview-header-container {
   display: flex;
   flex-direction: column;
-  gap: $cardview-headers-container-gap;
+  gap: $cardview-header-gap;
 }
 
 .dx-cardview-exclude-flexbox {
