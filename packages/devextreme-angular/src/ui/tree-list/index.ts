@@ -27,7 +27,7 @@ import DataSource from 'devextreme/data/data_source';
 import dxTreeList from 'devextreme/ui/tree_list';
 import dxSortable from 'devextreme/ui/sortable';
 import dxDraggable from 'devextreme/ui/draggable';
-import { ColumnChooser, ColumnResizeMode, DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction, FilterPanel, ApplyFilterMode, HeaderFilterSearchConfig, EnterKeyAction, EnterKeyDirection, Pager, GridBase, DataRenderMode, SearchPanel, Sorting, StateStoreType } from 'devextreme/common/grids';
+import { ColumnChooser, ColumnResizeMode, DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction, FilterPanel, ApplyFilterMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, Pager, GridBase, DataRenderMode, SearchPanel, Sorting, StateStoreType } from 'devextreme/common/grids';
 import { dxTreeListColumn, dxTreeListRowObject, TreeListFilterMode, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, dxTreeListToolbar } from 'devextreme/ui/tree_list';
 import { Mode, DataStructure, DragDirection, DragHighlight, ScrollMode, ScrollbarMode, SingleMultipleOrNone } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
@@ -64,12 +64,12 @@ import { DxoIconsModule } from 'devextreme-angular/ui/nested';
 import { DxoTextsModule } from 'devextreme-angular/ui/nested';
 import { DxiColumnModule } from 'devextreme-angular/ui/nested';
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
-import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
 import { DxoLookupModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoFormItemModule } from 'devextreme-angular/ui/nested';
 import { DxoLabelModule } from 'devextreme-angular/ui/nested';
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
+import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
 import { DxoEditingModule } from 'devextreme-angular/ui/nested';
 import { DxiChangeModule } from 'devextreme-angular/ui/nested';
 import { DxoFormModule } from 'devextreme-angular/ui/nested';
@@ -706,10 +706,10 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string } {
+    get headerFilter(): HeaderFilter {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string }) {
+    set headerFilter(value: HeaderFilter) {
         this._setOption('headerFilter', value);
     }
 
@@ -1780,7 +1780,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() headerFilterChange: EventEmitter<{ allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string }>;
+    @Output() headerFilterChange: EventEmitter<HeaderFilter>;
 
     /**
     
@@ -2252,12 +2252,12 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTextsModule,
     DxiColumnModule,
     DxiButtonModule,
-    DxoHeaderFilterModule,
     DxoLookupModule,
     DxoFormatModule,
     DxoFormItemModule,
     DxoLabelModule,
     DxiValidationRuleModule,
+    DxoHeaderFilterModule,
     DxoEditingModule,
     DxiChangeModule,
     DxoFormModule,
@@ -2387,12 +2387,12 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTextsModule,
     DxiColumnModule,
     DxiButtonModule,
-    DxoHeaderFilterModule,
     DxoLookupModule,
     DxoFormatModule,
     DxoFormItemModule,
     DxoLabelModule,
     DxiValidationRuleModule,
+    DxoHeaderFilterModule,
     DxoEditingModule,
     DxiChangeModule,
     DxoFormModule,

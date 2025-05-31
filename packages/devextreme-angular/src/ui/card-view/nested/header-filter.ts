@@ -27,14 +27,14 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tree-list-header-filter',
+    selector: 'dxo-card-view-header-filter',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoTreeListHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
@@ -150,10 +150,10 @@ export class DxoTreeListHeaderFilterComponent extends NestedOption implements On
 
 @NgModule({
   imports: [
-    DxoTreeListHeaderFilterComponent
+    DxoCardViewHeaderFilterComponent
   ],
   exports: [
-    DxoTreeListHeaderFilterComponent
+    DxoCardViewHeaderFilterComponent
   ],
 })
-export class DxoTreeListHeaderFilterModule { }
+export class DxoCardViewHeaderFilterModule { }

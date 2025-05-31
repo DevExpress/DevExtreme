@@ -16,7 +16,7 @@ import {
 
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig, HeaderFilterTexts } from 'devextreme/common/grids';
+import { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig } from 'devextreme/common/grids';
 import { SearchMode } from 'devextreme/common';
 
 import {
@@ -27,14 +27,14 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-tree-list-header-filter',
+    selector: 'dxo-card-view-column-header-filter',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoTreeListHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewColumnHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
@@ -76,10 +76,10 @@ export class DxoTreeListHeaderFilterComponent extends NestedOption implements On
     }
 
     @Input()
-    get search(): ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig {
+    get search(): ColumnHeaderFilterSearchConfig {
         return this._getOption('search');
     }
-    set search(value: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig) {
+    set search(value: ColumnHeaderFilterSearchConfig) {
         this._setOption('search', value);
     }
 
@@ -97,30 +97,6 @@ export class DxoTreeListHeaderFilterComponent extends NestedOption implements On
     }
     set width(value: number | string | undefined) {
         this._setOption('width', value);
-    }
-
-    @Input()
-    get searchTimeout(): number {
-        return this._getOption('searchTimeout');
-    }
-    set searchTimeout(value: number) {
-        this._setOption('searchTimeout', value);
-    }
-
-    @Input()
-    get texts(): HeaderFilterTexts {
-        return this._getOption('texts');
-    }
-    set texts(value: HeaderFilterTexts) {
-        this._setOption('texts', value);
-    }
-
-    @Input()
-    get visible(): boolean {
-        return this._getOption('visible');
-    }
-    set visible(value: boolean) {
-        this._setOption('visible', value);
     }
 
 
@@ -150,10 +126,10 @@ export class DxoTreeListHeaderFilterComponent extends NestedOption implements On
 
 @NgModule({
   imports: [
-    DxoTreeListHeaderFilterComponent
+    DxoCardViewColumnHeaderFilterComponent
   ],
   exports: [
-    DxoTreeListHeaderFilterComponent
+    DxoCardViewColumnHeaderFilterComponent
   ],
 })
-export class DxoTreeListHeaderFilterModule { }
+export class DxoCardViewColumnHeaderFilterModule { }

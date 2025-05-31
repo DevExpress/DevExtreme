@@ -27,7 +27,7 @@ import DataSource from 'devextreme/data/data_source';
 import dxDataGrid from 'devextreme/ui/data_grid';
 import dxSortable from 'devextreme/ui/sortable';
 import dxDraggable from 'devextreme/ui/draggable';
-import { ColumnChooser, ColumnResizeMode, DataChange, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, FilterPanel, ApplyFilterMode, GroupExpandMode, HeaderFilterSearchConfig, EnterKeyAction, EnterKeyDirection, Pager, GridBase, DataRenderMode, SearchPanel, SelectionColumnDisplayMode, Sorting, StateStoreType, SummaryType } from 'devextreme/common/grids';
+import { ColumnChooser, ColumnResizeMode, DataChange, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, FilterPanel, ApplyFilterMode, GroupExpandMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, Pager, GridBase, DataRenderMode, SearchPanel, SelectionColumnDisplayMode, Sorting, StateStoreType, SummaryType } from 'devextreme/common/grids';
 import { dxDataGridColumn, dxDataGridRowObject, DataGridExportFormat, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, DataGridScrollMode, SelectionSensitivity, dxDataGridToolbar } from 'devextreme/ui/data_grid';
 import { Mode, DragDirection, DragHighlight, ScrollbarMode, SingleMultipleOrNone, SelectAllMode, SortOrder, HorizontalAlignment } from 'devextreme/common';
 import { DataSourceOptions } from 'devextreme/data/data_source';
@@ -65,12 +65,12 @@ import { DxoIconsModule } from 'devextreme-angular/ui/nested';
 import { DxoTextsModule } from 'devextreme-angular/ui/nested';
 import { DxiColumnModule } from 'devextreme-angular/ui/nested';
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
-import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
 import { DxoLookupModule } from 'devextreme-angular/ui/nested';
 import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxoFormItemModule } from 'devextreme-angular/ui/nested';
 import { DxoLabelModule } from 'devextreme-angular/ui/nested';
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
+import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
 import { DxoEditingModule } from 'devextreme-angular/ui/nested';
 import { DxiChangeModule } from 'devextreme-angular/ui/nested';
 import { DxoFormModule } from 'devextreme-angular/ui/nested';
@@ -704,10 +704,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string } {
+    get headerFilter(): HeaderFilter {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string }) {
+    set headerFilter(value: HeaderFilter) {
         this._setOption('headerFilter', value);
     }
 
@@ -1792,7 +1792,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() headerFilterChange: EventEmitter<{ allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string }>;
+    @Output() headerFilterChange: EventEmitter<HeaderFilter>;
 
     /**
     
@@ -2298,12 +2298,12 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTextsModule,
     DxiColumnModule,
     DxiButtonModule,
-    DxoHeaderFilterModule,
     DxoLookupModule,
     DxoFormatModule,
     DxoFormItemModule,
     DxoLabelModule,
     DxiValidationRuleModule,
+    DxoHeaderFilterModule,
     DxoEditingModule,
     DxiChangeModule,
     DxoFormModule,
@@ -2454,12 +2454,12 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTextsModule,
     DxiColumnModule,
     DxiButtonModule,
-    DxoHeaderFilterModule,
     DxoLookupModule,
     DxoFormatModule,
     DxoFormItemModule,
     DxoLabelModule,
     DxiValidationRuleModule,
+    DxoHeaderFilterModule,
     DxoEditingModule,
     DxiChangeModule,
     DxoFormModule,

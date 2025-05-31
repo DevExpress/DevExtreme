@@ -55,6 +55,7 @@ import {
  ButtonType,
  ToolbarItemLocation,
  ToolbarItemComponent,
+ SearchMode,
  SingleMultipleOrNone,
  SelectAllMode,
  DataType,
@@ -71,15 +72,21 @@ import {
 import {
  ColumnChooser,
  FilterPanel,
+ HeaderFilter,
  Pager,
  SearchPanel,
  Sorting,
+ HeaderFilterSearchConfig,
+ HeaderFilterTexts,
  SelectionColumnDisplayMode,
  DataChangeType,
  FilterType,
+ ColumnHeaderFilter,
  ColumnChooserMode,
  ColumnChooserSearchConfig,
  ColumnChooserSelectionConfig,
+ HeaderFilterGroupInterval,
+ ColumnHeaderFilterSearchConfig,
  DataChange,
  FilterPanelTexts,
  PagerPageSize,
@@ -300,7 +307,7 @@ const componentConfig = {
     filterPanel: Object as PropType<FilterPanel>,
     filterValue: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
     focusStateEnabled: Boolean,
-    headerFilter: Object as PropType<Record<string, any>>,
+    headerFilter: Object as PropType<HeaderFilter | Record<string, any>>,
     headerPanel: Object as PropType<HeaderPanel | Record<string, any>>,
     height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hint: String,
@@ -448,12 +455,14 @@ const componentConfig = {
     (this as any).$_expectedChildren = {
       cardCover: { isCollectionItem: false, optionName: "cardCover" },
       cardHeader: { isCollectionItem: false, optionName: "cardHeader" },
+      cardViewHeaderFilter: { isCollectionItem: false, optionName: "headerFilter" },
       cardViewSelection: { isCollectionItem: false, optionName: "selection" },
       column: { isCollectionItem: true, optionName: "columns" },
       columnChooser: { isCollectionItem: false, optionName: "columnChooser" },
       editing: { isCollectionItem: false, optionName: "editing" },
       filterBuilder: { isCollectionItem: false, optionName: "filterBuilder" },
       filterPanel: { isCollectionItem: false, optionName: "filterPanel" },
+      headerFilter: { isCollectionItem: false, optionName: "headerFilter" },
       headerPanel: { isCollectionItem: false, optionName: "headerPanel" },
       loadPanel: { isCollectionItem: false, optionName: "loadPanel" },
       pager: { isCollectionItem: false, optionName: "pager" },
@@ -759,6 +768,87 @@ const DxCardHeaderItem = defineComponent(DxCardHeaderItemConfig);
 (DxCardHeaderItem as any).$_optionName = "items";
 (DxCardHeaderItem as any).$_isCollectionItem = true;
 
+const DxCardViewHeaderFilterConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allowSearch": null,
+    "update:allowSelectAll": null,
+    "update:height": null,
+    "update:search": null,
+    "update:searchTimeout": null,
+    "update:texts": null,
+    "update:visible": null,
+    "update:width": null,
+  },
+  props: {
+    allowSearch: Boolean,
+    allowSelectAll: Boolean,
+    height: [Number, String],
+    search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,
+    searchTimeout: Number,
+    texts: Object as PropType<HeaderFilterTexts | Record<string, any>>,
+    visible: Boolean,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxCardViewHeaderFilterConfig);
+
+const DxCardViewHeaderFilter = defineComponent(DxCardViewHeaderFilterConfig);
+
+(DxCardViewHeaderFilter as any).$_optionName = "headerFilter";
+(DxCardViewHeaderFilter as any).$_expectedChildren = {
+  cardViewHeaderFilterSearch: { isCollectionItem: false, optionName: "search" },
+  cardViewHeaderFilterTexts: { isCollectionItem: false, optionName: "texts" },
+  search: { isCollectionItem: false, optionName: "search" },
+  texts: { isCollectionItem: false, optionName: "texts" }
+};
+
+const DxCardViewHeaderFilterSearchConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:editorOptions": null,
+    "update:enabled": null,
+    "update:mode": null,
+    "update:timeout": null,
+  },
+  props: {
+    editorOptions: {},
+    enabled: Boolean,
+    mode: String as PropType<SearchMode>,
+    timeout: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxCardViewHeaderFilterSearchConfig);
+
+const DxCardViewHeaderFilterSearch = defineComponent(DxCardViewHeaderFilterSearchConfig);
+
+(DxCardViewHeaderFilterSearch as any).$_optionName = "search";
+
+const DxCardViewHeaderFilterTextsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:cancel": null,
+    "update:emptyValue": null,
+    "update:ok": null,
+  },
+  props: {
+    cancel: String,
+    emptyValue: String,
+    ok: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxCardViewHeaderFilterTextsConfig);
+
+const DxCardViewHeaderFilterTexts = defineComponent(DxCardViewHeaderFilterTextsConfig);
+
+(DxCardViewHeaderFilterTexts as any).$_optionName = "texts";
+
 const DxCardViewSelectionConfig = {
   emits: {
     "update:isActive": null,
@@ -919,7 +1009,7 @@ const DxColumnConfig = {
     filterValues: Array as PropType<Array<any>>,
     format: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
     formItem: Object as PropType<dxFormSimpleItem | Record<string, any>>,
-    headerFilter: Object as PropType<Record<string, any>>,
+    headerFilter: Object as PropType<ColumnHeaderFilter | Record<string, any>>,
     headerItemCssClass: String,
     headerItemTemplate: {},
     name: String,
@@ -943,11 +1033,13 @@ const DxColumn = defineComponent(DxColumnConfig);
 (DxColumn as any).$_isCollectionItem = true;
 (DxColumn as any).$_expectedChildren = {
   AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
+  columnHeaderFilter: { isCollectionItem: false, optionName: "headerFilter" },
   CompareRule: { isCollectionItem: true, optionName: "validationRules" },
   CustomRule: { isCollectionItem: true, optionName: "validationRules" },
   EmailRule: { isCollectionItem: true, optionName: "validationRules" },
   format: { isCollectionItem: false, optionName: "format" },
   formItem: { isCollectionItem: false, optionName: "formItem" },
+  headerFilter: { isCollectionItem: false, optionName: "headerFilter" },
   NumericRule: { isCollectionItem: true, optionName: "validationRules" },
   PatternRule: { isCollectionItem: true, optionName: "validationRules" },
   RangeRule: { isCollectionItem: true, optionName: "validationRules" },
@@ -997,11 +1089,33 @@ const DxColumnChooser = defineComponent(DxColumnChooserConfig);
 
 (DxColumnChooser as any).$_optionName = "columnChooser";
 (DxColumnChooser as any).$_expectedChildren = {
+  columnChooserSearch: { isCollectionItem: false, optionName: "search" },
   columnChooserSelection: { isCollectionItem: false, optionName: "selection" },
   position: { isCollectionItem: false, optionName: "position" },
   search: { isCollectionItem: false, optionName: "search" },
   selection: { isCollectionItem: false, optionName: "selection" }
 };
+
+const DxColumnChooserSearchConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:editorOptions": null,
+    "update:enabled": null,
+    "update:timeout": null,
+  },
+  props: {
+    editorOptions: {},
+    enabled: Boolean,
+    timeout: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxColumnChooserSearchConfig);
+
+const DxColumnChooserSearch = defineComponent(DxColumnChooserSearchConfig);
+
+(DxColumnChooserSearch as any).$_optionName = "search";
 
 const DxColumnChooserSelectionConfig = {
   emits: {
@@ -1023,6 +1137,66 @@ prepareConfigurationComponentConfig(DxColumnChooserSelectionConfig);
 const DxColumnChooserSelection = defineComponent(DxColumnChooserSelectionConfig);
 
 (DxColumnChooserSelection as any).$_optionName = "selection";
+
+const DxColumnHeaderFilterConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allowSearch": null,
+    "update:allowSelectAll": null,
+    "update:dataSource": null,
+    "update:groupInterval": null,
+    "update:height": null,
+    "update:search": null,
+    "update:searchMode": null,
+    "update:width": null,
+  },
+  props: {
+    allowSearch: Boolean,
+    allowSelectAll: Boolean,
+    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store | Record<string, any>>,
+    groupInterval: [String, Number] as PropType<HeaderFilterGroupInterval | number>,
+    height: [Number, String],
+    search: Object as PropType<ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig | Record<string, any>>,
+    searchMode: String as PropType<SearchMode>,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxColumnHeaderFilterConfig);
+
+const DxColumnHeaderFilter = defineComponent(DxColumnHeaderFilterConfig);
+
+(DxColumnHeaderFilter as any).$_optionName = "headerFilter";
+(DxColumnHeaderFilter as any).$_expectedChildren = {
+  columnHeaderFilterSearch: { isCollectionItem: false, optionName: "search" },
+  search: { isCollectionItem: false, optionName: "search" }
+};
+
+const DxColumnHeaderFilterSearchConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:editorOptions": null,
+    "update:enabled": null,
+    "update:mode": null,
+    "update:searchExpr": null,
+    "update:timeout": null,
+  },
+  props: {
+    editorOptions: {},
+    enabled: Boolean,
+    mode: String as PropType<SearchMode>,
+    searchExpr: [Array, Function, String] as PropType<(Array<(() => any) | string>) | ((() => any)) | string>,
+    timeout: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxColumnHeaderFilterSearchConfig);
+
+const DxColumnHeaderFilterSearch = defineComponent(DxColumnHeaderFilterSearchConfig);
+
+(DxColumnHeaderFilterSearch as any).$_optionName = "search";
 
 const DxCompareRuleConfig = {
   emits: {
@@ -1392,8 +1566,30 @@ const DxFilterPanel = defineComponent(DxFilterPanelConfig);
 
 (DxFilterPanel as any).$_optionName = "filterPanel";
 (DxFilterPanel as any).$_expectedChildren = {
+  filterPanelTexts: { isCollectionItem: false, optionName: "texts" },
   texts: { isCollectionItem: false, optionName: "texts" }
 };
+
+const DxFilterPanelTextsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:clearFilter": null,
+    "update:createFilter": null,
+    "update:filterEnabledHint": null,
+  },
+  props: {
+    clearFilter: String,
+    createFilter: String,
+    filterEnabledHint: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxFilterPanelTextsConfig);
+
+const DxFilterPanelTexts = defineComponent(DxFilterPanelTextsConfig);
+
+(DxFilterPanelTexts as any).$_optionName = "texts";
 
 const DxFormConfig = {
   emits: {
@@ -1682,6 +1878,49 @@ prepareConfigurationComponentConfig(DxGroupOperationDescriptionsConfig);
 const DxGroupOperationDescriptions = defineComponent(DxGroupOperationDescriptionsConfig);
 
 (DxGroupOperationDescriptions as any).$_optionName = "groupOperationDescriptions";
+
+const DxHeaderFilterConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allowSearch": null,
+    "update:allowSelectAll": null,
+    "update:dataSource": null,
+    "update:groupInterval": null,
+    "update:height": null,
+    "update:search": null,
+    "update:searchMode": null,
+    "update:searchTimeout": null,
+    "update:texts": null,
+    "update:visible": null,
+    "update:width": null,
+  },
+  props: {
+    allowSearch: Boolean,
+    allowSelectAll: Boolean,
+    dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void)) | null | Store | Record<string, any>>,
+    groupInterval: [String, Number] as PropType<HeaderFilterGroupInterval | number>,
+    height: [Number, String],
+    search: Object as PropType<ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig | Record<string, any>>,
+    searchMode: String as PropType<SearchMode>,
+    searchTimeout: Number,
+    texts: Object as PropType<HeaderFilterTexts | Record<string, any>>,
+    visible: Boolean,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxHeaderFilterConfig);
+
+const DxHeaderFilter = defineComponent(DxHeaderFilterConfig);
+
+(DxHeaderFilter as any).$_optionName = "headerFilter";
+(DxHeaderFilter as any).$_expectedChildren = {
+  cardViewHeaderFilterSearch: { isCollectionItem: false, optionName: "search" },
+  cardViewHeaderFilterTexts: { isCollectionItem: false, optionName: "texts" },
+  columnHeaderFilterSearch: { isCollectionItem: false, optionName: "search" },
+  search: { isCollectionItem: false, optionName: "search" }
+};
 
 const DxHeaderPanelConfig = {
   emits: {
@@ -2256,11 +2495,15 @@ const DxSearchConfig = {
     "update:hoveredElement": null,
     "update:editorOptions": null,
     "update:enabled": null,
+    "update:mode": null,
+    "update:searchExpr": null,
     "update:timeout": null,
   },
   props: {
     editorOptions: {},
     enabled: Boolean,
+    mode: String as PropType<SearchMode>,
+    searchExpr: [Array, Function, String] as PropType<(Array<(() => any) | string>) | ((() => any)) | string>,
     timeout: Number
   }
 };
@@ -2707,14 +2950,20 @@ const DxTextsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:cancel": null,
     "update:clearFilter": null,
     "update:createFilter": null,
+    "update:emptyValue": null,
     "update:filterEnabledHint": null,
+    "update:ok": null,
   },
   props: {
+    cancel: String,
     clearFilter: String,
     createFilter: String,
-    filterEnabledHint: String
+    emptyValue: String,
+    filterEnabledHint: String,
+    ok: String
   }
 };
 
@@ -2874,13 +3123,19 @@ export {
   DxCardCover,
   DxCardHeader,
   DxCardHeaderItem,
+  DxCardViewHeaderFilter,
+  DxCardViewHeaderFilterSearch,
+  DxCardViewHeaderFilterTexts,
   DxCardViewSelection,
   DxChange,
   DxColCountByScreen,
   DxCollision,
   DxColumn,
   DxColumnChooser,
+  DxColumnChooserSearch,
   DxColumnChooserSelection,
+  DxColumnHeaderFilter,
+  DxColumnHeaderFilterSearch,
   DxCompareRule,
   DxCustomOperation,
   DxCustomRule,
@@ -2891,12 +3146,14 @@ export {
   DxFilterBuilder,
   DxFilterOperationDescriptions,
   DxFilterPanel,
+  DxFilterPanelTexts,
   DxForm,
   DxFormat,
   DxFormItem,
   DxFrom,
   DxGroupItem,
   DxGroupOperationDescriptions,
+  DxHeaderFilter,
   DxHeaderPanel,
   DxHide,
   DxItem,

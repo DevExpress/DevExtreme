@@ -4856,18 +4856,21 @@ declare module DevExpress.common.grids {
      */
     stickyPosition?: string;
   };
+  /**
+   * [descr:ColumnHeaderFilter]
+   */
   export type ColumnHeaderFilter = {
     /**
-     * [descr:GridBaseColumn.headerFilter.allowSearch]
-     * @deprecated [depNote:GridBaseColumn.headerFilter.allowSearch]
+     * [descr:ColumnHeaderFilter.allowSearch]
+     * @deprecated [depNote:ColumnHeaderFilter.allowSearch]
      */
     allowSearch?: boolean;
     /**
-     * [descr:GridBaseColumn.headerFilter.allowSelectAll]
+     * [descr:ColumnHeaderFilter.allowSelectAll]
      */
     allowSelectAll?: boolean;
     /**
-     * [descr:GridBaseColumn.headerFilter.dataSource]
+     * [descr:ColumnHeaderFilter.dataSource]
      */
     dataSource?:
       | DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>
@@ -4877,24 +4880,24 @@ declare module DevExpress.common.grids {
         }) => void)
       | undefined;
     /**
-     * [descr:GridBaseColumn.headerFilter.groupInterval]
+     * [descr:ColumnHeaderFilter.groupInterval]
      */
     groupInterval?: HeaderFilterGroupInterval | number | undefined;
     /**
-     * [descr:GridBaseColumn.headerFilter.height]
+     * [descr:ColumnHeaderFilter.height]
      */
     height?: number | string | undefined;
     /**
-     * [descr:GridBaseColumn.headerFilter.search]
+     * [descr:ColumnHeaderFilter.search]
      */
     search?: ColumnHeaderFilterSearchConfig;
     /**
-     * [descr:GridBaseColumn.headerFilter.searchMode]
-     * @deprecated [depNote:GridBaseColumn.headerFilter.searchMode]
+     * [descr:ColumnHeaderFilter.searchMode]
+     * @deprecated [depNote:ColumnHeaderFilter.searchMode]
      */
     searchMode?: SearchMode;
     /**
-     * [descr:GridBaseColumn.headerFilter.width]
+     * [descr:ColumnHeaderFilter.width]
      */
     width?: number | string | undefined;
   };
@@ -5942,37 +5945,37 @@ declare module DevExpress.common.grids {
    */
   export type HeaderFilter = {
     /**
-     * [descr:GridBaseOptions.headerFilter.allowSearch]
-     * @deprecated [depNote:GridBaseOptions.headerFilter.allowSearch]
+     * [descr:HeaderFilter.allowSearch]
+     * @deprecated [depNote:HeaderFilter.allowSearch]
      */
     allowSearch?: boolean;
     /**
-     * [descr:GridBaseOptions.headerFilter.allowSelectAll]
+     * [descr:HeaderFilter.allowSelectAll]
      */
     allowSelectAll?: boolean;
     /**
-     * [descr:GridBaseOptions.headerFilter.height]
+     * [descr:HeaderFilter.height]
      */
     height?: number | string;
     /**
-     * [descr:GridBaseOptions.headerFilter.search]
+     * [descr:HeaderFilter.search]
      */
     search?: HeaderFilterSearchConfig;
     /**
-     * [descr:GridBaseOptions.headerFilter.searchTimeout]
-     * @deprecated [depNote:GridBaseOptions.headerFilter.searchTimeout]
+     * [descr:HeaderFilter.searchTimeout]
+     * @deprecated [depNote:HeaderFilter.searchTimeout]
      */
     searchTimeout?: number;
     /**
-     * [descr:GridBaseOptions.headerFilter.texts]
+     * [descr:HeaderFilter.texts]
      */
     texts?: HeaderFilterTexts;
     /**
-     * [descr:GridBaseOptions.headerFilter.visible]
+     * [descr:HeaderFilter.visible]
      */
     visible?: boolean;
     /**
-     * [descr:GridBaseOptions.headerFilter.width]
+     * [descr:HeaderFilter.width]
      */
     width?: number | string;
   };
@@ -6010,15 +6013,15 @@ declare module DevExpress.common.grids {
    */
   export type HeaderFilterTexts = {
     /**
-     * [descr:GridBaseOptions.headerFilter.texts.cancel]
+     * [descr:HeaderFilterTexts.cancel]
      */
     cancel?: string;
     /**
-     * [descr:GridBaseOptions.headerFilter.texts.emptyValue]
+     * [descr:HeaderFilterTexts.emptyValue]
      */
     emptyValue?: string;
     /**
-     * [descr:GridBaseOptions.headerFilter.texts.ok]
+     * [descr:HeaderFilterTexts.ok]
      */
     ok?: string;
   };

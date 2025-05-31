@@ -23,38 +23,14 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-card-view-texts',
+    selector: 'dxo-card-view-card-view-header-filter-texts',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoCardViewTextsComponent extends NestedOption implements OnDestroy, OnInit  {
-    @Input()
-    get clearFilter(): string {
-        return this._getOption('clearFilter');
-    }
-    set clearFilter(value: string) {
-        this._setOption('clearFilter', value);
-    }
-
-    @Input()
-    get createFilter(): string {
-        return this._getOption('createFilter');
-    }
-    set createFilter(value: string) {
-        this._setOption('createFilter', value);
-    }
-
-    @Input()
-    get filterEnabledHint(): string {
-        return this._getOption('filterEnabledHint');
-    }
-    set filterEnabledHint(value: string) {
-        this._setOption('filterEnabledHint', value);
-    }
-
+export class DxoCardViewCardViewHeaderFilterTextsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get cancel(): string {
         return this._getOption('cancel');
@@ -106,10 +82,10 @@ export class DxoCardViewTextsComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   imports: [
-    DxoCardViewTextsComponent
+    DxoCardViewCardViewHeaderFilterTextsComponent
   ],
   exports: [
-    DxoCardViewTextsComponent
+    DxoCardViewCardViewHeaderFilterTextsComponent
   ],
 })
-export class DxoCardViewTextsModule { }
+export class DxoCardViewCardViewHeaderFilterTextsModule { }

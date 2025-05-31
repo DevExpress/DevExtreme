@@ -12,14 +12,14 @@ import NestedOption from "./core/nested-option";
 import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, SelectionChangingEvent, CardTemplateData, CardHeaderItem as CardViewCardHeaderItem, CardHeaderPredefinedItem, FieldTemplateData, ColumnTemplateData, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
 import type { SelectionChangingEvent as TabPanelSelectionChangingEvent, ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
-import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ToolbarItemLocation, ToolbarItemComponent, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, Mode, Direction, PositionAlignment, DisplayMode, TabsIconPosition, TabsStyle, Position as CommonPosition } from "devextreme/common";
+import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ToolbarItemLocation, ToolbarItemComponent, SearchMode, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, Mode, Direction, PositionAlignment, DisplayMode, TabsIconPosition, TabsStyle, Position as CommonPosition } from "devextreme/common";
 import type { dxButtonOptions, ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { FormItemType, ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormOptions, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent } from "devextreme/ui/form";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, InitializedEvent as FilterBuilderInitializedEvent, OptionChangedEvent as FilterBuilderOptionChangedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, EditorPreparedEvent, EditorPreparingEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
 import type { ContentReadyEvent as LoadPanelContentReadyEvent, DisposingEvent as LoadPanelDisposingEvent, InitializedEvent as LoadPanelInitializedEvent, OptionChangedEvent as LoadPanelOptionChangedEvent, HiddenEvent, HidingEvent, ShowingEvent, ShownEvent } from "devextreme/ui/load_panel";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { SelectionColumnDisplayMode, DataChangeType, FilterType, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, DataChange, FilterPanel as GridsFilterPanel, FilterPanelTexts, PagerPageSize } from "devextreme/common/grids";
+import type { HeaderFilterSearchConfig, HeaderFilterTexts, SelectionColumnDisplayMode, DataChangeType, FilterType, ColumnHeaderFilter as GridsColumnHeaderFilter, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, DataChange, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, PagerPageSize } from "devextreme/common/grids";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
@@ -104,12 +104,14 @@ const CardView = memo(
       const expectedChildren = useMemo(() => ({
         cardCover: { optionName: "cardCover", isCollectionItem: false },
         cardHeader: { optionName: "cardHeader", isCollectionItem: false },
+        cardViewHeaderFilter: { optionName: "headerFilter", isCollectionItem: false },
         cardViewSelection: { optionName: "selection", isCollectionItem: false },
         column: { optionName: "columns", isCollectionItem: true },
         columnChooser: { optionName: "columnChooser", isCollectionItem: false },
         editing: { optionName: "editing", isCollectionItem: false },
         filterBuilder: { optionName: "filterBuilder", isCollectionItem: false },
         filterPanel: { optionName: "filterPanel", isCollectionItem: false },
+        headerFilter: { optionName: "headerFilter", isCollectionItem: false },
         headerPanel: { optionName: "headerPanel", isCollectionItem: false },
         loadPanel: { optionName: "loadPanel", isCollectionItem: false },
         pager: { optionName: "pager", isCollectionItem: false },
@@ -438,6 +440,78 @@ const CardHeaderItem = Object.assign<typeof _componentCardHeaderItem, NestedComp
 
 // owners:
 // CardView
+type ICardViewHeaderFilterProps = React.PropsWithChildren<{
+  allowSearch?: boolean;
+  allowSelectAll?: boolean;
+  height?: number | string;
+  search?: HeaderFilterSearchConfig;
+  searchTimeout?: number;
+  texts?: HeaderFilterTexts;
+  visible?: boolean;
+  width?: number | string;
+}>
+const _componentCardViewHeaderFilter = (props: ICardViewHeaderFilterProps) => {
+  return React.createElement(NestedOption<ICardViewHeaderFilterProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "headerFilter",
+      ExpectedChildren: {
+        cardViewHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
+        cardViewHeaderFilterTexts: { optionName: "texts", isCollectionItem: false },
+        search: { optionName: "search", isCollectionItem: false },
+        texts: { optionName: "texts", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const CardViewHeaderFilter = Object.assign<typeof _componentCardViewHeaderFilter, NestedComponentMeta>(_componentCardViewHeaderFilter, {
+  componentType: "option",
+});
+
+// owners:
+// CardViewHeaderFilter
+type ICardViewHeaderFilterSearchProps = React.PropsWithChildren<{
+  editorOptions?: any;
+  enabled?: boolean;
+  mode?: SearchMode;
+  timeout?: number;
+}>
+const _componentCardViewHeaderFilterSearch = (props: ICardViewHeaderFilterSearchProps) => {
+  return React.createElement(NestedOption<ICardViewHeaderFilterSearchProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "search",
+    },
+  });
+};
+
+const CardViewHeaderFilterSearch = Object.assign<typeof _componentCardViewHeaderFilterSearch, NestedComponentMeta>(_componentCardViewHeaderFilterSearch, {
+  componentType: "option",
+});
+
+// owners:
+// CardViewHeaderFilter
+type ICardViewHeaderFilterTextsProps = React.PropsWithChildren<{
+  cancel?: string;
+  emptyValue?: string;
+  ok?: string;
+}>
+const _componentCardViewHeaderFilterTexts = (props: ICardViewHeaderFilterTextsProps) => {
+  return React.createElement(NestedOption<ICardViewHeaderFilterTextsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "texts",
+    },
+  });
+};
+
+const CardViewHeaderFilterTexts = Object.assign<typeof _componentCardViewHeaderFilterTexts, NestedComponentMeta>(_componentCardViewHeaderFilterTexts, {
+  componentType: "option",
+});
+
+// owners:
+// CardView
 type ICardViewSelectionProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
   mode?: SingleMultipleOrNone;
@@ -551,7 +625,7 @@ type IColumnProps = React.PropsWithChildren<{
   filterValues?: Array<any>;
   format?: LocalizationFormat;
   formItem?: dxFormSimpleItem;
-  headerFilter?: Record<string, any>;
+  headerFilter?: GridsColumnHeaderFilter | undefined;
   headerItemCssClass?: string;
   headerItemTemplate?: ((data: ColumnTemplateData, container: any) => string | any) | template;
   name?: string | undefined;
@@ -601,11 +675,13 @@ const _componentColumn = (props: IColumnProps) => {
       },
       ExpectedChildren: {
         AsyncRule: { optionName: "validationRules", isCollectionItem: true },
+        columnHeaderFilter: { optionName: "headerFilter", isCollectionItem: false },
         CompareRule: { optionName: "validationRules", isCollectionItem: true },
         CustomRule: { optionName: "validationRules", isCollectionItem: true },
         EmailRule: { optionName: "validationRules", isCollectionItem: true },
         format: { optionName: "format", isCollectionItem: false },
         formItem: { optionName: "formItem", isCollectionItem: false },
+        headerFilter: { optionName: "headerFilter", isCollectionItem: false },
         NumericRule: { optionName: "validationRules", isCollectionItem: true },
         PatternRule: { optionName: "validationRules", isCollectionItem: true },
         RangeRule: { optionName: "validationRules", isCollectionItem: true },
@@ -661,6 +737,7 @@ const _componentColumnChooser = (props: IColumnChooserProps) => {
     elementDescriptor: {
       OptionName: "columnChooser",
       ExpectedChildren: {
+        columnChooserSearch: { optionName: "search", isCollectionItem: false },
         columnChooserSelection: { optionName: "selection", isCollectionItem: false },
         position: { optionName: "position", isCollectionItem: false },
         search: { optionName: "search", isCollectionItem: false },
@@ -671,6 +748,26 @@ const _componentColumnChooser = (props: IColumnChooserProps) => {
 };
 
 const ColumnChooser = Object.assign<typeof _componentColumnChooser, NestedComponentMeta>(_componentColumnChooser, {
+  componentType: "option",
+});
+
+// owners:
+// ColumnChooser
+type IColumnChooserSearchProps = React.PropsWithChildren<{
+  editorOptions?: any;
+  enabled?: boolean;
+  timeout?: number;
+}>
+const _componentColumnChooserSearch = (props: IColumnChooserSearchProps) => {
+  return React.createElement(NestedOption<IColumnChooserSearchProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "search",
+    },
+  });
+};
+
+const ColumnChooserSearch = Object.assign<typeof _componentColumnChooserSearch, NestedComponentMeta>(_componentColumnChooserSearch, {
   componentType: "option",
 });
 
@@ -691,6 +788,57 @@ const _componentColumnChooserSelection = (props: IColumnChooserSelectionProps) =
 };
 
 const ColumnChooserSelection = Object.assign<typeof _componentColumnChooserSelection, NestedComponentMeta>(_componentColumnChooserSelection, {
+  componentType: "option",
+});
+
+// owners:
+// Column
+type IColumnHeaderFilterProps = React.PropsWithChildren<{
+  allowSearch?: boolean;
+  allowSelectAll?: boolean;
+  dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
+  groupInterval?: HeaderFilterGroupInterval | number | undefined;
+  height?: number | string | undefined;
+  search?: ColumnHeaderFilterSearchConfig;
+  searchMode?: SearchMode;
+  width?: number | string | undefined;
+}>
+const _componentColumnHeaderFilter = (props: IColumnHeaderFilterProps) => {
+  return React.createElement(NestedOption<IColumnHeaderFilterProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "headerFilter",
+      ExpectedChildren: {
+        columnHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
+        search: { optionName: "search", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const ColumnHeaderFilter = Object.assign<typeof _componentColumnHeaderFilter, NestedComponentMeta>(_componentColumnHeaderFilter, {
+  componentType: "option",
+});
+
+// owners:
+// ColumnHeaderFilter
+type IColumnHeaderFilterSearchProps = React.PropsWithChildren<{
+  editorOptions?: any;
+  enabled?: boolean;
+  mode?: SearchMode;
+  searchExpr?: Array<(() => any) | string> | (() => any) | string | undefined;
+  timeout?: number;
+}>
+const _componentColumnHeaderFilterSearch = (props: IColumnHeaderFilterSearchProps) => {
+  return React.createElement(NestedOption<IColumnHeaderFilterSearchProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "search",
+    },
+  });
+};
+
+const ColumnHeaderFilterSearch = Object.assign<typeof _componentColumnHeaderFilterSearch, NestedComponentMeta>(_componentColumnHeaderFilterSearch, {
   componentType: "option",
 });
 
@@ -1022,7 +1170,7 @@ const FilterOperationDescriptions = Object.assign<typeof _componentFilterOperati
 type IFilterPanelProps = React.PropsWithChildren<{
   customizeText?: ((e: { component: GridsFilterPanel, filterValue: Record<string, any>, text: string }) => string);
   filterEnabled?: boolean;
-  texts?: FilterPanelTexts;
+  texts?: GridsFilterPanelTexts;
   visible?: boolean;
   defaultFilterEnabled?: boolean;
   onFilterEnabledChange?: (value: boolean) => void;
@@ -1036,6 +1184,7 @@ const _componentFilterPanel = (props: IFilterPanelProps) => {
         defaultFilterEnabled: "filterEnabled"
       },
       ExpectedChildren: {
+        filterPanelTexts: { optionName: "texts", isCollectionItem: false },
         texts: { optionName: "texts", isCollectionItem: false }
       },
     },
@@ -1043,6 +1192,26 @@ const _componentFilterPanel = (props: IFilterPanelProps) => {
 };
 
 const FilterPanel = Object.assign<typeof _componentFilterPanel, NestedComponentMeta>(_componentFilterPanel, {
+  componentType: "option",
+});
+
+// owners:
+// FilterPanel
+type IFilterPanelTextsProps = React.PropsWithChildren<{
+  clearFilter?: string;
+  createFilter?: string;
+  filterEnabledHint?: string;
+}>
+const _componentFilterPanelTexts = (props: IFilterPanelTextsProps) => {
+  return React.createElement(NestedOption<IFilterPanelTextsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "texts",
+    },
+  });
+};
+
+const FilterPanelTexts = Object.assign<typeof _componentFilterPanelTexts, NestedComponentMeta>(_componentFilterPanelTexts, {
   componentType: "option",
 });
 
@@ -1304,6 +1473,41 @@ const _componentGroupOperationDescriptions = (props: IGroupOperationDescriptions
 };
 
 const GroupOperationDescriptions = Object.assign<typeof _componentGroupOperationDescriptions, NestedComponentMeta>(_componentGroupOperationDescriptions, {
+  componentType: "option",
+});
+
+// owners:
+// Column
+// CardView
+type IHeaderFilterProps = React.PropsWithChildren<{
+  allowSearch?: boolean;
+  allowSelectAll?: boolean;
+  dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
+  groupInterval?: HeaderFilterGroupInterval | number | undefined;
+  height?: number | string | undefined;
+  search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
+  searchMode?: SearchMode;
+  width?: number | string | undefined;
+  searchTimeout?: number;
+  texts?: HeaderFilterTexts;
+  visible?: boolean;
+}>
+const _componentHeaderFilter = (props: IHeaderFilterProps) => {
+  return React.createElement(NestedOption<IHeaderFilterProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "headerFilter",
+      ExpectedChildren: {
+        cardViewHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
+        cardViewHeaderFilterTexts: { optionName: "texts", isCollectionItem: false },
+        columnHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
+        search: { optionName: "search", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const HeaderFilter = Object.assign<typeof _componentHeaderFilter, NestedComponentMeta>(_componentHeaderFilter, {
   componentType: "option",
 });
 
@@ -1885,10 +2089,14 @@ const RequiredRule = Object.assign<typeof _componentRequiredRule, NestedComponen
 
 // owners:
 // ColumnChooser
+// ColumnHeaderFilter
+// CardViewHeaderFilter
 type ISearchProps = React.PropsWithChildren<{
   editorOptions?: any;
   enabled?: boolean;
   timeout?: number;
+  mode?: SearchMode;
+  searchExpr?: Array<(() => any) | string> | (() => any) | string | undefined;
 }>
 const _componentSearch = (props: ISearchProps) => {
   return React.createElement(NestedOption<ISearchProps>, {
@@ -2330,10 +2538,14 @@ const TabPanelOptionsItem = Object.assign<typeof _componentTabPanelOptionsItem, 
 
 // owners:
 // FilterPanel
+// CardViewHeaderFilter
 type ITextsProps = React.PropsWithChildren<{
   clearFilter?: string;
   createFilter?: string;
   filterEnabledHint?: string;
+  cancel?: string;
+  emptyValue?: string;
+  ok?: string;
 }>
 const _componentTexts = (props: ITextsProps) => {
   return React.createElement(NestedOption<ITextsProps>, {
@@ -2500,6 +2712,12 @@ export {
   ICardHeaderProps,
   CardHeaderItem,
   ICardHeaderItemProps,
+  CardViewHeaderFilter,
+  ICardViewHeaderFilterProps,
+  CardViewHeaderFilterSearch,
+  ICardViewHeaderFilterSearchProps,
+  CardViewHeaderFilterTexts,
+  ICardViewHeaderFilterTextsProps,
   CardViewSelection,
   ICardViewSelectionProps,
   Change,
@@ -2512,8 +2730,14 @@ export {
   IColumnProps,
   ColumnChooser,
   IColumnChooserProps,
+  ColumnChooserSearch,
+  IColumnChooserSearchProps,
   ColumnChooserSelection,
   IColumnChooserSelectionProps,
+  ColumnHeaderFilter,
+  IColumnHeaderFilterProps,
+  ColumnHeaderFilterSearch,
+  IColumnHeaderFilterSearchProps,
   CompareRule,
   ICompareRuleProps,
   CustomOperation,
@@ -2534,6 +2758,8 @@ export {
   IFilterOperationDescriptionsProps,
   FilterPanel,
   IFilterPanelProps,
+  FilterPanelTexts,
+  IFilterPanelTextsProps,
   Form,
   IFormProps,
   Format,
@@ -2546,6 +2772,8 @@ export {
   IGroupItemProps,
   GroupOperationDescriptions,
   IGroupOperationDescriptionsProps,
+  HeaderFilter,
+  IHeaderFilterProps,
   HeaderPanel,
   IHeaderPanelProps,
   Hide,
