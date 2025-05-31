@@ -1,17 +1,148 @@
 <template>
+  <div className="options">
+    <div className="caption">Options</div>
+    <div className="options-container">
+      <div className="option">
+        <span>Column Chooser Mode:</span>
+        <DxSelectBox
+          :data-source="['dragAndDrop', 'select']"
+          :input-attr="{ 'aria-label': 'Column Chooser Mode' }"
+          :value="columnChooserMode"
+          @value-changed="({ value }) => { columnChooserMode = value; }"
+        />
+      </div>
+      <div className="option">
+        <dxCheckBox
+          text="Search Enabled"
+          :value="searchEnabled"
+          @value-changed="({ value }) => { searchEnabled = value; }"
+        />
+      </div>
+      <div className="option">
+        <DxCheckBox
+          text="Allow Select All"
+          :value="allowSelectAll"
+          @value-changed="({ value }) => { allowSelectAll = value; }"
+          :disabled="columnChooserMode !== 'select'"
+        />
+      </div>
+      <div className="option">
+        <dxCheckBox
+          text="Select By Click On Item"
+          :value="selectByClick"
+          @value-changed="({ value }) => { selectByClick = value; }"
+          :disabled="columnChooserMode !== 'select'"
+        />
+      </div>
+    </div>
+  </div>
   <DxCardView
-    :data-source="customers"
+    :data-source="employees"
     key-expr="ID"
+    :column-chooser="{
+      enabled: true,
+      mode: columnChooserMode,
+      search: {
+        enabled: searchEnabled,
+      },
+      selection: {
+        allowSelectAll: allowSelectAll,
+        selectByClick: selectByClick,
+      },
+    }"
+    :search-panel="{
+      visible: true,
+    }"
+    :selected-card-keys="[4, 6]"
   >
+    <DxCardCover
+      :alt-expr="altExpr"
+      :image-expr="imageExpr"
+    />
     <DxColumn
-      v-for="column in columns"        
-      :data-field="column"
+      data-field="FullName"
+      :calculate-field-value="calculateFullName"
+      :allow-hiding="false"
+    />
+    <DxColumn
+      data-field="Birth_Date"
+      data-type="date"
+    />
+    <DxColumn
+      data-field="Hire_Date"
+      data-type="date"
+    />
+    <DxColumn data-field="Position"/>
+    <DxColumn data-field="Department"/>
+    <DxColumn data-field="State"/>
+    <DxColumn data-field="City"/>
+    <DxColumn
+      data-field="Phone"
+      :allow-hiding="false"
+    />
+    <DxColumn
+      data-field="Email"
+      :visible="false"
     />
   </DxCardView>
 </template>
 <script setup lang="ts">
-  import { DxCardView, DxColumn } from 'devextreme-vue/card-view';
-  import { customers } from './data.ts';
+import { ref } from 'vue';
+import {
+  DxCardView, DxColumn, DxCardCover,
+} from 'devextreme-vue/card-view';
+import { DxSelectBox } from 'devextreme-vue/select-box';
+import { DxCheckBox } from 'devextreme-vue/check-box';
+import { employees, type Employee } from './data.ts';
 
-  const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+function altExpr({ First_Name, Last_Name }: Employee): string {
+  return `Photo of ${First_Name} ${Last_Name}`;
+}
+
+function imageExpr({ First_Name, Last_Name }: Employee): string {
+  return `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`;
+}
+
+function calculateFullName({ First_Name, Last_Name }: Employee): string {
+  return `${First_Name} ${Last_Name}`
+}
+
+const columnChooserMode = ref<'select' | 'dragAndDrop'>('select');
+const searchEnabled = ref(true);
+const allowSelectAll = ref(true);
+const selectByClick = ref(true);
+
 </script>
+<style>
+  .options {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+  }
+
+  .options-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .caption {
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .option {
+    margin: 10px;
+    width: fit-content;
+  }
+
+  .option > .dx-selectbox {
+    width: 150px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .option > span {
+    margin-right: 10px;
+  }
+</style>

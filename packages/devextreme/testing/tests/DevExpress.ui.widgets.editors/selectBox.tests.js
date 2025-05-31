@@ -1572,6 +1572,22 @@ QUnit.module('widget options', moduleSetup, () => {
             assert.ok(false, 'error is trown');
         }
     });
+
+    QUnit.test('Displayed text should be correct when items have nested items field and grouping is disabled (T1292151)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: [
+                { id: 1, text: 'item 1', items: [{ id: 1, text: 'unexpected text' }] },
+            ],
+            value: 1,
+            displayExpr: 'text',
+            valueExpr: 'id',
+        });
+
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const displayedText = $input.val();
+
+        assert.strictEqual(displayedText, 'item 1', 'input value is correct');
+    });
 });
 
 QUnit.module('clearButton', moduleSetup, () => {

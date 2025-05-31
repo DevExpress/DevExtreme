@@ -1,7 +1,13 @@
-$cardview-card-border-color: null !default;
-
-$cardview-card-border-size: null !default;
+$cardview-card-border-width: null !default;
 $cardview-card-min-width: null !default;
 $cardview-card-border-radius: null !default;
-$cardview-card-background-color: null !default;
-$cardview-card-selection-background-color: null !default;
+
+$cardview-card-bg-color: null !default;
+$cardview-card-border-color: null !default;
+$cardview-card-divider-color: null !default;
+$cardview-card-text-color: null !default;
+
+$cardview-card--selected-bg-color: null !default;
+$cardview-card--selected-border-color: null !default;
+$cardview-card--selected-divider-color: null !default;
+$cardview-card--selected-text-color: null !default;

@@ -17,7 +17,7 @@ exports[`ColumnProperties setFieldValue should be used as callback for setting e
 [
   {
     "data": {
-      "mycustomfield": "value1",
+      "mycustomfield": "qwe",
     },
     "key": 1,
     "type": "update",
@@ -49,11 +49,4 @@ exports[`Options editing changes should contain unsaved changes 1`] = `
     "type": "update",
   },
 ]
-`;
-
-exports[`Options editing editCardKey should open popup with given item 1`] = `
-{
-  "field1": "value1",
-  "id": 1,
-}
 `;

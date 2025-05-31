@@ -193,3 +193,35 @@ test('Focus overlay should be visible in filter row when focusedRowEnabled is en
 }).after(async () => {
   await changeTheme('generic.light');
 });
+
+test('DataGrid - NVDA reads filter menu items as "Search box 1 of 8" (T1290386)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
+
+  await dataGrid.isReady();
+
+  await t
+    .expect(filterEditor.menuButton.getAttribute('aria-label'))
+    .eql('Search box');
+
+  await t
+    .click(filterEditor.menuButton);
+
+  const itemCount = await filterEditor.menu.getItemCount();
+
+  for (let i = 0; i < itemCount; i += 1) {
+    const item = filterEditor.menu.getItemByIndex(i);
+    await t.expect(item.getAttribute('aria-label')).eql(null);
+  }
+
+  await t
+    .click(filterEditor.menu.getItemByText('Equals'))
+    .expect(filterEditor.menuButton.getAttribute('aria-label'))
+    .eql('Equals');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(5, 1),
+  keyExpr: 'field_0',
+  filterRow: {
+    visible: true,
+  },
+}));

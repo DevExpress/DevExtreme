@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxCardViewModule } from 'devextreme-angular';
-import { Customer, Service } from './app.service';
+import { House, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,12 +20,18 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
 })
 export class AppComponent {
-  customers: Customer[];
+  houses: House[];
 
-  columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+  imageExpr({ ID }: House): string {
+    return `https://demos.devexpress.com/ASPxCardViewDemos/Content/HomesPhoto/${ID}.jpg`;
+  }
+
+  altExpr(): string {
+    return 'Photo of the house';
+  }
 
   constructor(service: Service) {
-    this.customers = service.getCustomers();
+    this.houses = service.getHouses();
   }
 }
 

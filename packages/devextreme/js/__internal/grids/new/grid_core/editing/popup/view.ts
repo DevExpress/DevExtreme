@@ -1,12 +1,17 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 /* eslint-disable spellcheck/spell-checker */
 import type { DataType } from '@js/common';
+import $ from '@js/core/renderer';
 import type * as dxForm from '@js/ui/form';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, signal } from '@preact/signals-core';
+import { extend } from '@ts/core/utils/m_extend';
+import { forEachFormItems } from '@ts/grids/grid_core/editing/m_editing_utils';
 import { createRef } from 'inferno';
 
 import { ColumnsController } from '../../columns_controller/columns_controller';
+import type { Column } from '../../columns_controller/types';
 import { View } from '../../core/view';
 import { ItemsController } from '../../items_controller/items_controller';
 import { KeyboardNavigationController } from '../../keyboard_navigation/index';
@@ -33,57 +38,111 @@ export class EditPopupView extends View<Props> {
 
   protected component = EditPopup;
 
-  private readonly items = computed(
-    () => this.columnsController.columns.value.map((column): dxForm.Item => ({
-      // @ts-expect-error
+  private readonly items = computed((): dxForm.Item[] => {
+    const userItems = this.options.oneWay('editing.form.items').value;
+
+    if (userItems) {
+      return userItems;
+    }
+
+    return this.columnsController.columns.value.map((column) => ({
       column,
       name: column.name,
       dataField: column.dataField,
-      validationRules: column.validationRules,
-      label: {
-        text: column.caption,
-        ...column.formItem.label,
-      },
-      editorType: EDITOR_TYPES_BY_DATA_TYPE[column.dataType],
-      editorOptions: {
-        ...column.editorOptions,
-        disabled: !column.allowEditing,
-        ...column.formItem.editorOptions,
-      },
-      ...column.formItem,
-    })),
-  );
-
-  private readonly formData = computed(() => {
-    const editCard = this.editingController.editingCard.value;
-    return editCard?.data && { ...editCard.data };
+    }));
   });
 
-  private readonly customizeItems = computed(
-    () => (item: dxForm.SimpleItem): void => {
-      const editingCard = this.editingController.editingCard.value;
+  private readonly customEditorItems = computed((): string[] => {
+    const items = this.items.value;
+    const result: string[] = [];
 
-      if (!editingCard) {
-        return;
+    forEachFormItems(items, (item) => {
+      const itemId = item?.name || item?.dataField;
+
+      if (itemId && !!item.editorType) {
+        result.push(itemId);
       }
+    });
 
-      const column = this.columnsController.columns.peek()
-        .find((c) => c.name === item.name)!;
+    return result;
+  });
 
-      item.editorOptions ??= {};
-      item.editorOptions.onValueChanged = async ({ value }): Promise<void> => {
+  private readonly visible = computed(() => !!this.editingController.editingCard.value);
+
+  private readonly customizeItems = computed(() => (item: dxForm.Item): void => {
+    const editingCard = this.editingController.editingCard.peek();
+    const columns = this.columnsController.columns.peek();
+    const customEditorItems = this.customEditorItems.peek();
+
+    if (!editingCard) {
+      return;
+    }
+
+    if (item.itemType !== 'simple') {
+      return;
+    }
+
+    const simpleFormItem = item as dxForm.SimpleItem;
+    const itemId = simpleFormItem.name ?? simpleFormItem.dataField;
+
+    const column: Column = (simpleFormItem as any).column
+        ?? columns.find((c) => c.name === itemId)
+        ?? columns.find((c) => c.dataField === itemId);
+
+    if (!column) {
+      return;
+    }
+
+    (simpleFormItem as any).column = column;
+
+    if (itemId && !customEditorItems.includes(itemId)) {
+      simpleFormItem.editorType = EDITOR_TYPES_BY_DATA_TYPE[column.dataType];
+    }
+
+    extend(simpleFormItem, column.formItem);
+
+    simpleFormItem.dataField ??= column.dataField;
+    simpleFormItem.validationRules ??= column.validationRules;
+    simpleFormItem.label = {
+      text: column.caption,
+      ...column.formItem.label,
+    };
+
+    const originalContentReady = simpleFormItem?.editorOptions?.onContentReady;
+
+    simpleFormItem.editorOptions = {
+      stylingMode: 'outline',
+      disabled: !column.allowEditing,
+      ...column.editorOptions,
+      ...column.formItem.editorOptions,
+      ...simpleFormItem.editorOptions,
+      onValueChanged: async ({ value }): Promise<void> => {
         const newData = {};
         await this.promises.add(
           Promise.resolve(column.setFieldValue.bind(column)(newData, value, editingCard.data)),
         );
         this.editingController.addChange(editingCard.key, newData);
-        this.formRef.current?.repaint();
-      };
-      item.editorOptions.value = editingCard?.fields.find(
+      },
+      value: editingCard?.fields.find(
         (c) => c.column.name === column.name,
-      )?.value;
-    },
-  );
+      )?.value ?? null,
+      onContentReady: (e): void => {
+        // TODO: refactor
+        setTimeout(() => {
+          // @ts-expect-error
+          $(e.element).data('dxValidator')?.option('dataGetter', () => ({
+            data: this.editingController.editingCard.peek()?.data,
+            column,
+          }));
+        });
+        originalContentReady?.(e);
+      },
+    };
+
+    if (simpleFormItem.editorType === 'dxDateBox') {
+      simpleFormItem.editorOptions.type = column.dataType;
+    }
+  });
 
   public static dependencies = [
     OptionsController, ColumnsController,
@@ -110,14 +169,27 @@ export class EditPopupView extends View<Props> {
       }),
       this.editingController.allowAdding,
     );
+
+    this.editingController.provideValidateMethod(async (): Promise<boolean> => {
+      const form = this.formRef.current;
+
+      if (!form) {
+        return true;
+      }
+
+      const preValidationResult = form.validate();
+      const validationResult = await (preValidationResult.complete ?? preValidationResult);
+
+      return !!validationResult.isValid;
+    });
   }
 
   protected getProps(): ReadonlySignal<Props> {
     return computed(() => ({
+      visible: this.visible.value,
       formProps: this.options.oneWay('editing.form').value,
       popupProps: this.options.oneWay('editing.popup').value,
       formRef: this.formRef,
-      data: this.formData.value,
       onSave: (): void => {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.editingController.save();

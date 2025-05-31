@@ -144,7 +144,7 @@ window.config = {
     'inferno-clone-vnode': 'npm:inferno-clone-vnode/dist/inferno-clone-vnode.min.js',
     'inferno-create-class': 'npm:inferno-create-class/dist/inferno-create-class.min.js',
     'inferno-extras': 'npm:inferno-extras/dist/inferno-extras.min.js',
-    '@preact/signals-core': 'npm:@preact/signals-core/dist/signals-core.js',
+    '@preact/signals-core': 'npm:@preact/signals-core/dist/signals-core.min.js',
     'devextreme-cldr-data': 'npm:devextreme-cldr-data',
 
     // SystemJS plugins

@@ -1,17 +1,41 @@
 <template>
   <DxCardView
-    :data-source="customers"
+    :data-source=houses
     key-expr="ID"
   >
+    <DxCardCover
+      :image-expr=imageExpr
+      :alt-expr=altExpr
+    />
     <DxColumn
-      v-for="column in columns"        
-      :data-field="column"
+      data-field="Address"
+    />
+    <DxColumn
+      data-field="Price"
+      format="currency"
+      sort-order="asc"
+    />
+    <DxColumn
+      data-field="HouseSize"
+    />
+    <DxColumn
+      data-field="Baths"
+    />
+    <DxColumn
+      data-field="Beds"
+      sort-order="desc"
     />
   </DxCardView>
 </template>
 <script setup lang="ts">
-  import { DxCardView, DxColumn } from 'devextreme-vue/card-view';
-  import { customers } from './data.ts';
+  import { DxCardView, DxColumn, DxCardCover } from 'devextreme-vue/card-view';
+  import { houses, type House } from './data.ts';
 
-  const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+  function imageExpr({ ID }: House): string {
+    return `https://demos.devexpress.com/ASPxCardViewDemos/Content/HomesPhoto/${ID}.jpg`;
+  }
+
+  function altExpr(): string {
+    return 'Photo of the house';
+  }
 </script>

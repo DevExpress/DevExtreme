@@ -50,16 +50,13 @@ export const ColumnContextMenuMixin = <T extends ModuleType<ColumnContextMenuMix
     }
 
     const rtlEnabled = this.option('rtlEnabled');
-    const viewName = this.getName();
     const onItemClick = (e) => {
       this.isNeedToFocusColumn = true;
-      keyboardNavigationController.moveColumn({
+      keyboardNavigationController.moveColumn(
         column,
-        sourceLocation: viewName,
-        targetLocation: viewName,
-        direction: e.itemData?.value,
+        e.itemData?.value,
         rowIndex,
-      });
+      );
     };
 
     return [

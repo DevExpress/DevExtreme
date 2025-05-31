@@ -5,6 +5,9 @@ import HtmlEditor, { Properties } from "devextreme/ui/html_editor";
 import  UploadInfo from "devextreme/file_management/upload_info";
 import  DataSource from "devextreme/data/data_source";
 import {
+ AIIntegration,
+} from "devextreme/common/ai-integration";
+import {
  Converter,
  dxHtmlEditorImageUpload,
  dxHtmlEditorMediaResizing,
@@ -120,7 +123,7 @@ const componentConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    aiIntegration: Object as PropType<Record<string, any>>,
+    aiIntegration: Object as PropType<AIIntegration>,
     allowSoftLineBreak: Boolean,
     converter: Object as PropType<Converter | Record<string, any>>,
     customizeModules: Function as PropType<((config: any) => void)>,
