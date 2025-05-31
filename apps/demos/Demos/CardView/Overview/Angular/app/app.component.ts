@@ -25,11 +25,6 @@ const IMG_URL = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos';
 export class AppComponent {
   employees: Employee[];
 
-  // TODO: Nested component does not exist
-  headerFilterConfig = {
-    visible: true,
-  };
-
   constructor(service: AppService) {
     this.employees = service.getEmployees();
   }

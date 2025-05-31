@@ -5,7 +5,6 @@
     :allow-column-reordering="true"
     cards-per-row="auto"
     :card-min-width="250"
-    :header-filter="headerFilterConfig"
   >
     <DxColumn
       data-field="FullName"
@@ -15,6 +14,8 @@
     <DxColumn data-field="Department"/>
     <DxColumn data-field="Phone"/>
     <DxColumn data-field="Email"/>
+
+    <DxHeaderFilter :visible="true" />
 
     <DxCardCover
       :image-expr="getEmployeeImage"
@@ -45,6 +46,7 @@
 <script setup lang="ts">
 import DxCardView, {
   DxColumn, DxCardCover, DxPager, DxSelection,
+  DxHeaderFilter,
   DxColumnChooser, DxPosition, DxColumnChooserSelection,
   DxSearchPanel
 } from 'devextreme-vue/card-view';
@@ -54,9 +56,4 @@ import { employees } from './data.ts';
 const IMG_URL = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos';
 const getEmployeeImage = ({ Picture }: Employee): string => `${IMG_URL}/${Picture}`;
 const getEmployeeImageAltText = ({ FullName }: Employee): string => `${FullName} picture`;
-
-// TODO: Nested component does not exist
-const headerFilterConfig = {
-  visible: true,
-};
 </script>

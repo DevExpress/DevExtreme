@@ -17,6 +17,9 @@ $(() => {
     allowColumnReordering: true,
     cardsPerRow: 'auto',
     cardMinWidth: 250,
+    headerFilter: {
+      visible: true,
+    },
     cardCover: {
       imageExpr: ({ Picture }) => `${IMG_URL}/${Picture}`,
       altExpr: ({ FullName }) => `${FullName} picture`,
@@ -28,9 +31,6 @@ $(() => {
     },
     selection: {
       mode: 'multiple',
-    },
-    headerFilter: {
-      visible: true,
     },
     columnChooser: {
       enabled: true,

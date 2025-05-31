@@ -1,6 +1,7 @@
 import React from 'react';
 import CardView, {
   CardCover, Column, Pager, Selection,
+  HeaderFilter,
   ColumnChooser, Position, ColumnChooserSelection,
   SearchPanel,
 } from 'devextreme-react/card-view';
@@ -10,11 +11,6 @@ const IMG_URL = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos';
 const getEmployeeImage = ({ Picture }: Employee): string => `${IMG_URL}/${Picture}`;
 const getEmployeeImageAltText = ({ FullName }: Employee): string => `${FullName} picture`;
 
-// TODO: Nested component does not exist
-const headerFilterConfig = {
-  visible: true,
-};
-
 const App = () => (
   <CardView
     dataSource={employees}
@@ -22,13 +18,14 @@ const App = () => (
     allowColumnReordering={true}
     cardsPerRow="auto"
     cardMinWidth={250}
-    headerFilter={headerFilterConfig}
   >
     <Column dataField="FullName" allowHiding={false} />
     <Column dataField="Position" />
     <Column dataField="Department" />
     <Column dataField="Phone" />
     <Column dataField="Email" />
+
+    <HeaderFilter visible={true} />
 
     <CardCover
       imageExpr={getEmployeeImage}
