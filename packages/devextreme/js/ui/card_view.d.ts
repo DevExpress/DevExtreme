@@ -371,7 +371,6 @@ export type ColumnProperties<TCardData = unknown, TKey = unknown> = {
     format?: Format;
     /**
      * @docid
-     * @type object
      * @public
      */
     headerFilter?: ColumnHeaderFilter | undefined;
@@ -1488,7 +1487,6 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     searchPanel?: SearchPanel;
     /**
      * @docid
-     * @type object
      * @public
      */
     headerFilter?: HeaderFilter;

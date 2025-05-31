@@ -307,7 +307,6 @@ export interface ColumnBase<TRowData = any> {
   format?: Format;
   /**
    * @docid GridBaseColumn.headerFilter
-   * @type object
    * @default undefined
    * @public
    */
@@ -699,58 +698,59 @@ export type ColumnFixingIcons = {
 };
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type ColumnHeaderFilter = {
   /**
-   * @docid GridBaseColumn.headerFilter.allowSearch
+   * @docid
    * @default false
    * @deprecated
    */
   allowSearch?: boolean;
   /**
-   * @docid GridBaseColumn.headerFilter.allowSelectAll
+   * @docid
    * @default true
    */
   allowSelectAll?: boolean;
   /**
-   * @docid GridBaseColumn.headerFilter.dataSource
+   * @docid
    * @type_function_param1_field component:object
    * @default undefined
    * @type Array<any>|Store|DataSourceOptions|Function|null|undefined
    */
   dataSource?: FilterLookupDataSource<any> | ((options: { component?: any; dataSource?: DataSourceOptions | null }) => void) | undefined;
   /**
-   * @docid GridBaseColumn.headerFilter.groupInterval
+   * @docid
    * @default undefined
    */
   groupInterval?: HeaderFilterGroupInterval | number | undefined;
   /**
-   * @docid GridBaseColumn.headerFilter.height
+   * @docid
    * @default undefined
    */
   height?: number | string | undefined;
   /**
-   * @docid GridBaseColumn.headerFilter.search
+   * @docid
    */
   search?: ColumnHeaderFilterSearchConfig;
   /**
-   * @docid GridBaseColumn.headerFilter.searchMode
+   * @docid
    * @default 'contains'
    * @deprecated
    */
   searchMode?: SearchMode;
   /**
-   * @docid GridBaseColumn.headerFilter.width
+   * @docid
    * @default undefined
    */
   width?: number | string | undefined;
 };
 
 /**
- * @public
  * @docid
+ * @public
  * @namespace DevExpress.common.grids
  * @inherits HeaderFilterSearchConfig
  */
@@ -1265,45 +1265,44 @@ export type FilterType = 'exclude' | 'include';
  */
 export type HeaderFilter = {
   /**
-   * @docid GridBaseOptions.headerFilter.allowSearch
+   * @docid
    * @default false
    * @deprecated
    */
   allowSearch?: boolean;
   /**
-   * @docid GridBaseOptions.headerFilter.allowSelectAll
+   * @docid
    * @default true
    */
   allowSelectAll?: boolean;
   /**
-   * @docid GridBaseOptions.headerFilter.height
+   * @docid
    * @default 315 &for(Material)
    * @default 315 &for(Fluent)
    * @default 325
    */
   height?: number | string;
   /**
-   * @docid GridBaseOptions.headerFilter.search
+   * @docid
    */
   search?: HeaderFilterSearchConfig;
   /**
-   * @docid GridBaseOptions.headerFilter.searchTimeout
+   * @docid
    * @default 500
    * @deprecated
    */
   searchTimeout?: number;
   /**
-   * @docid GridBaseOptions.headerFilter.texts
-   * @type object
+   * @docid
    */
   texts?: HeaderFilterTexts;
   /**
-   * @docid GridBaseOptions.headerFilter.visible
+   * @docid
    * @default false
    */
   visible?: boolean;
   /**
-   * @docid GridBaseOptions.headerFilter.width
+   * @docid
    * @default 252
    */
   width?: number | string;
@@ -1316,8 +1315,8 @@ export type HeaderFilter = {
 export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year';
 
 /**
- * @public
  * @docid
+ * @public
  * @namespace DevExpress.common.grids
  */
 export type HeaderFilterSearchConfig = {
@@ -1350,17 +1349,17 @@ export type HeaderFilterSearchConfig = {
  */
 export type HeaderFilterTexts = {
   /**
-   * @docid GridBaseOptions.headerFilter.texts.cancel
+   * @docid
    * @default "Cancel"
    */
   cancel?: string;
   /**
-   * @docid GridBaseOptions.headerFilter.texts.emptyValue
+   * @docid
    * @default "(Blanks)"
    */
   emptyValue?: string;
   /**
-   * @docid GridBaseOptions.headerFilter.texts.ok
+   * @docid
    * @default "Ok"
    */
   ok?: string;
@@ -1980,7 +1979,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   focusedRowKey?: TKey | undefined;
   /**
    * @docid
-   * @type object
    * @public
    */
   headerFilter?: HeaderFilter;
