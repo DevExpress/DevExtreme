@@ -522,3 +522,55 @@ test('Filtering should work when a custom data source is specified as an array o
     ],
   });
 });
+
+test('The item\'s selection state should be correct when a custom data source is specified as an array of filter expressions', async (t) => {
+  // arrange
+  const cardView = new CardView('#container');
+
+  // assert
+  await t
+    .expect(cardView.getCards().count)
+    .eql(1)
+    .expect(cardView.apiGetCombinedFilter())
+    .eql(['id', '=', 1]);
+
+  // act
+  await t
+    .click(cardView.getHeaderPanel().getHeaderItem(0).getFilterIcon());
+
+  const firstHeaderFilterItem = cardView.getHeaderFilterList().getItem(0);
+
+  // assert
+  await t
+    .expect(cardView.getHeaderFilterList().getItems().count)
+    .eql(2)
+    .expect(firstHeaderFilterItem.text)
+    .eql('1')
+    .expect(firstHeaderFilterItem.isSelected)
+    .ok();
+}).before(async () => {
+  await createWidget('dxCardView', {
+    ...baseConfig,
+    columns: [
+      {
+        dataField: 'id',
+        filterValues: [['id', '=', 1]],
+        headerFilter: {
+          dataSource: [
+            { value: ['id', '=', 1], text: '1' },
+            { value: ['id', '=', 2], text: '2' },
+          ],
+        },
+      },
+      {
+        dataField: 'title',
+      },
+      {
+        dataField: 'name',
+      },
+      {
+        dataField: 'lastName',
+      },
+    ],
+  });
+});

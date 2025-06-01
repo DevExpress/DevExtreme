@@ -87,17 +87,19 @@ export const getComposedHeaderFilter = (columns: Column[]): FilterValue => {
   const filterableColumns = columns.filter((col) => needCreateHeaderFilter(col));
 
   filterableColumns.forEach((column, index) => {
-    let { filterValues } = column;
-    let filterExpression: FilterValue = [];
+    const { filterValues } = column;
+    const normalizedFilterValues = Array.isArray(filterValues)
+      ? filterValues
+      : [filterValues];
 
-    filterValues = Array.isArray(filterValues) ? filterValues : [filterValues];
+    const filterValuesWithExpressions = normalizedFilterValues
+      .filter((value) => Array.isArray(value));
+    const filterValuesWithoutExpressions = normalizedFilterValues
+      .filter((value) => !Array.isArray(value));
 
-    const filterValuesWithExpressions = filterValues.filter((value) => Array.isArray(value));
-    const filterValuesWithoutExpressions = filterValues.filter((value) => !Array.isArray(value));
-
-    if (filterValuesWithoutExpressions.length) {
-      filterExpression = [getFilterExpression(filterValuesWithoutExpressions, column)];
-    }
+    const filterExpression = filterValuesWithoutExpressions.length
+      ? [getFilterExpression(filterValuesWithoutExpressions, column)]
+      : [];
 
     filterValue.push(gridCoreUtils.combineFilters([...filterExpression, ...filterValuesWithExpressions], 'or'));
 
