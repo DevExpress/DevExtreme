@@ -30,6 +30,18 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   vehicles: Vehicle[];
 
+  popupVisible = false;
+  currentVehicle: Vehicle | null = null;
+
+  showInfo(vehicle: Vehicle) {
+    this.currentVehicle = vehicle;
+    this.popupVisible = true;
+  }
+
+  hideInfo() {
+    this.popupVisible = false;
+  }
+
   // todo: use nested
   searchPanelConfig = {
     visible: true,

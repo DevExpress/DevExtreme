@@ -19,7 +19,24 @@
   <dxi-card-view-column dataField="Horsepower"></dxi-card-view-column>
 
   <div *dxTemplate="let model of 'vehicleCardTemplate'">
-      <vehicle-card [vehicle]="model.card.data">
-      </vehicle-card>
+    <vehicle-card
+      [vehicle]="model.card.data"
+      (showInfo)="showInfo(model.card.data)"
+    ></vehicle-card>
   </div>
 </dx-card-view>
+
+<dx-popup
+  [width]="350"
+  [height]="190"
+  [(visible)]="popupVisible"
+  [dragEnabled]="false"
+  [hideOnOutsideClick]="true"
+  [showCloseButton]="false"
+  [showTitle]="false"
+>
+  <dxo-position at="center" my="center" collision="fit"></dxo-position>
+  <div *dxTemplate="let _ of 'content'">
+    <license-info *ngIf="currentVehicle" [vehicle]="currentVehicle"></license-info>
+  </div>
+</dx-popup>

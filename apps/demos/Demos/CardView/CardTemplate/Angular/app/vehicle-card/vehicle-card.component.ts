@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Vehicle } from '../app.service';
 
 let modulePrefix = '';
@@ -13,11 +13,10 @@ if (window && window.config?.packageConfigPaths) {
 })
 
 export class VehicleCard {
-  @Input() vehicle: Vehicle;
+  @Input() vehicle!: Vehicle;
+  @Output() showInfo = new EventEmitter<void>();
 
-  popupVisible = false;
-
-    showInfo() {
-        this.popupVisible = true;
-    }
+  onShowInfo() {
+    this.showInfo.emit();
+  }
 }
