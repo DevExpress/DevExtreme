@@ -103,6 +103,7 @@ $(() => {
         }, {
           type: 'async',
           message: 'Email address is not unique',
+          ignoreEmptyValue: true,
           validationCallback(params) {
             return $.ajax({
               url: 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress',

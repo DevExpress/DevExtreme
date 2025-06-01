@@ -147,6 +147,7 @@ const App = () => (
       <EmailRule />
       <AsyncRule
         message="Email address is not unique"
+        ignoreEmptyValue={true}
         validationCallback={emailValidationCallback}
       />
     </Column>

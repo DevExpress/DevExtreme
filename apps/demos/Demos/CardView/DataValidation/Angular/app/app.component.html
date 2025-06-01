@@ -52,6 +52,7 @@
     <dxi-card-view-validation-rule
       type="async"
       message="Email address is not unique"
+      [ignoreEmptyValue]="true"
       [validationCallback]="emailValidationCallback"
     ></dxi-card-view-validation-rule>
   </dxi-card-view-column>

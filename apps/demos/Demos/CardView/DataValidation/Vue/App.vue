@@ -94,6 +94,7 @@
       <DxEmailRule/>
       <DxAsyncRule
         message="Email address is not unique"
+        :ignore-empty-value="true"
         :validation-callback="emailValidationCallback"
       />
     </DxColumn>
