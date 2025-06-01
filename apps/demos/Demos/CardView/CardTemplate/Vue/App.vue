@@ -27,44 +27,7 @@
     <DxColumn data-field="BodyStyleName"/>
     <DxColumn data-field="Horsepower"/>
     <template #cardTemplate="{ data: { card: { data: vehicle } } }">
-        <div class="vehicle__card">
-            <div class="vehicle__img-wrapper">
-                <img class="vehicle__img"
-                    :src="`../../../../images/vehicles/image_${vehicle.ID}.png`"
-                    :alt="`${vehicle.TrademarkName} ${vehicle.Name}`"
-                >
-            </div>
-            <div class="vehicle__info">
-                <div class="vehicle__name" :title="`${vehicle.TrademarkName} ${vehicle.Name}`">
-                    {{ vehicle.TrademarkName }} {{ vehicle.Name }}
-                </div>
-                <div class="vehicle__price">
-                    ${{ vehicle.Price }}
-                </div>
-                <div class="vehicle__type-container">
-                    <div class="vehicle__type">
-                        {{ vehicle.CategoryName }}
-                    </div>
-                </div>
-                <div class="vehicle__spec-container">
-                    <div class="vehicle__modification">
-                        {{ vehicle.Modification }}
-                    </div>
-                    <div class="vehicle__modification">
-                        {{ vehicle.BodyStyleName }} {{ vehicle.Horsepower }} h.p.
-                    </div>
-                </div>
-                <div class="vehicle__footer-container">
-                    <DxButton
-                        text="Image Info"
-                        type="default"
-                        width="100%"
-                        @click="showInfo(vehicle)"
-                    >
-                    </DxButton>
-                </div>
-            </div>
-        </div>
+        <VehicleCard :vehicle="vehicle" @show-info="showInfo" />
     </template>
   </DxCardView>
   <DxPopup
@@ -85,9 +48,9 @@
 </template>
 <script setup lang="ts">
 import { DxCardView, DxColumn } from 'devextreme-vue/card-view';
-import { DxButton } from 'devextreme-vue/button';
 import { DxPopup } from 'devextreme-vue/popup';
 import LicenseInfo from './LicenseInfo.vue';
+import VehicleCard from './VehicleCard.vue';
 import { vehicles } from './data.ts';
 import { ref } from 'vue';
 
