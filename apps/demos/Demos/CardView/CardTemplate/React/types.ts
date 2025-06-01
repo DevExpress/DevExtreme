@@ -1,5 +1,9 @@
 import { Vehicle } from "./data";
 
-export interface VehicleCardProps {
+export interface VehicleImageLicenseProps {
   vehicle: Vehicle;
+}
+
+export interface VehicleCardProps extends VehicleImageLicenseProps {
+  onShowInfo: (vehicle: Vehicle) => void;
 }

@@ -1,16 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import Button from 'devextreme-react/button';
-import Popup, { Position } from 'devextreme-react/popup';
 import { VehicleCardProps } from './types';
-import LicenseInfo from './LicenseInfo.tsx';
 
-const VehicleCard = ({ vehicle }: VehicleCardProps) => {
-    const [popupVisible, setPopupVisible] = useState(false);
-
-    const hideInfo = useCallback(() => {
-        setPopupVisible(false);
-    }, [setPopupVisible]);
-
+const VehicleCard = ({ vehicle, onShowInfo }: VehicleCardProps) => {
   return (
     <div className="vehicle__card">
         <div className="vehicle__img-wrapper">
@@ -44,22 +36,9 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
                     text="Image Info"
                     type="default"
                     width="100%"
-                    onClick={() => setPopupVisible(true)}
+                    onClick={() => onShowInfo(vehicle)}
                 >
                 </Button>
-                <Popup
-                    width={350}
-                    height={190}
-                    visible={popupVisible}
-                    dragEnabled={false}
-                    hideOnOutsideClick={true}
-                    showCloseButton={false}
-                    showTitle={false}
-                    onHiding={hideInfo}
-                    contentRender={() => (<LicenseInfo vehicle={vehicle}></LicenseInfo>)}
-                >
-                    <Position at="center" my="center" collision="fit" />
-                </Popup>
             </div>
         </div>
     </div>
