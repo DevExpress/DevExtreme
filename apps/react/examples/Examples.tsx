@@ -27,10 +27,14 @@ import SelectBoxTemplatesExample from './selectbox-templates-example';
 import SelectBoxFieldTemplateExample from './selectbox-fieldtemplate-example';
 import SelectBoxParallelTemplateRenderExample from './selectbox-parallel-template-render-example';
 import TagBoxFieldTemplateCheckBoxesExample from './tagbox-fieldtemplate-checkboxes-example';
+import FormWithNestedExample from './form-with-nested';
+
 
 const Examples = () => {
     return (
         <div>
+            <FormWithNestedExample />
+            
             <AccordionExample />
 
             <BoxExample />
