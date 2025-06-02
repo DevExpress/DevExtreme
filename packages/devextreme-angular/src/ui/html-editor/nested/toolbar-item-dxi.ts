@@ -10,13 +10,16 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
 
 
-import { HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
+import { AICommand, AICommandName, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
@@ -29,6 +32,7 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+import { DxiHtmlEditorCommandComponent } from './command-dxi';
 
 
 @Component({
@@ -47,6 +51,14 @@ export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption im
     }
     set acceptedValues(value: Array<boolean | number | string>) {
         this._setOption('acceptedValues', value);
+    }
+
+    @Input()
+    get commands(): Array<AICommand | AICommandName> {
+        return this._getOption('commands');
+    }
+    set commands(value: Array<AICommand | AICommandName>) {
+        this._setOption('commands', value);
     }
 
     @Input()
@@ -114,10 +126,10 @@ export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption im
     }
 
     @Input()
-    get name(): HtmlEditorPredefinedToolbarItem | string {
+    get name(): string {
         return this._getOption('name');
     }
-    set name(value: HtmlEditorPredefinedToolbarItem | string) {
+    set name(value: string) {
         this._setOption('name', value);
     }
 
@@ -174,6 +186,14 @@ export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption im
         return 'items';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiHtmlEditorCommandComponent))
+    get commandsChildren(): QueryList<DxiHtmlEditorCommandComponent> {
+        return this._getOption('commands');
+    }
+    set commandsChildren(value) {
+        this.setChildren('commands', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

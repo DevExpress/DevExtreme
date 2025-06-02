@@ -16,7 +16,7 @@ import { ItemClickEvent } from 'devextreme/ui/drop_down_button';
 import { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem, FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
 import { ButtonItem, EmptyItem, FormItemComponent, FormItemType, GroupItem, LabelLocation, SimpleItem, TabbedItem } from 'devextreme/ui/form';
 import { GanttPredefinedContextMenuItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
-import { AICommand, AICommandName, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
+import { HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
 import { dxMenuItem } from 'devextreme/ui/menu';
 import { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
 import { Properties as dxTabPanelOptions } from 'devextreme/ui/tab_panel';
@@ -488,13 +488,6 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set formatValues(value: Array<string | number | boolean>) {
         this._setOption('formatValues', value);
-    }
-
-    get commands(): Array<AICommandName | AICommand> {
-        return this._getOption('commands');
-    }
-    set commands(value: Array<AICommandName | AICommand>) {
-        this._setOption('commands', value);
     }
 
     get key(): string {
