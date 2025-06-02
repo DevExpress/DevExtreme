@@ -24,6 +24,7 @@ import {
 } from '@angular/core';
 
 
+import { AIIntegration } from 'devextreme/common/ai-integration';
 import { Converter, dxHtmlEditorImageUpload, dxHtmlEditorMediaResizing, dxHtmlEditorMention, ContentReadyEvent, DisposingEvent, FocusInEvent, FocusOutEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, dxHtmlEditorTableContextMenu, dxHtmlEditorTableResizing, dxHtmlEditorToolbar, dxHtmlEditorVariables } from 'devextreme/ui/html_editor';
 import { EditorStyle, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
@@ -133,10 +134,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get aiIntegration(): Record<string, any> {
+    get aiIntegration(): AIIntegration | undefined {
         return this._getOption('aiIntegration');
     }
-    set aiIntegration(value: Record<string, any>) {
+    set aiIntegration(value: AIIntegration | undefined) {
         this._setOption('aiIntegration', value);
     }
 
@@ -631,7 +632,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() aiIntegrationChange: EventEmitter<Record<string, any>>;
+    @Output() aiIntegrationChange: EventEmitter<AIIntegration | undefined>;
 
     /**
     
