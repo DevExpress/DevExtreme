@@ -1,0 +1,52 @@
+.footer {
+  display: flex;
+  padding: 12px;
+  gap: 8px;
+}
+
+.footer > * {
+  flex-grow: 1;
+}
+
+.indicator {
+  display: inline-block;
+  margin-right: 8px;
+  border-radius: 50%;
+  height: 12px;
+  width: 12px;
+}
+
+.status-ok {
+  color: var(--dx-color-success);
+}
+
+.status-ok > .indicator {
+  background-color: var(--dx-color-success);
+}
+
+.status-warning {
+  color: var(--dx-color-warning);
+}
+
+.status-warning > .indicator {
+  background-color: var(--dx-color-warning);
+}
+
+.card-highlight,
+.card-highlight .dx-toolbar {
+  animation: card-highlight-animation 1s;
+}
+
+@keyframes card-highlight-animation {
+  0% {
+    background-color: color-mix(in srgb, var(--dx-color-text) 8%, white);
+  }
+
+  50% {
+    background-color: color-mix(in srgb, var(--dx-color-text) 8%, white);
+  }
+
+  100% {
+    background-color: unset;
+  }
+}
