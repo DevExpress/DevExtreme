@@ -366,6 +366,37 @@ describe('HeaderFilter', () => {
           }] as unknown[],
           result: [['ID1', 'noneof', [1, 2, 3]], 'and', ['ID2', '<>', 'test1']],
         },
+        {
+          caseName: 'one column has an array of filter expressions',
+          columns: [{
+            ...allowFilteringColumnConfig,
+            dataField: 'ID1',
+            filterValues: [['ID1', '>', 5], ['ID1', '<', 10]],
+          }] as unknown[],
+          result: [[['ID1', '>', 5], 'or', ['ID1', '<', 10]]],
+        },
+        {
+          caseName: 'one column has an array of plain value and filter expressions',
+          columns: [{
+            ...allowFilteringColumnConfig,
+            dataField: 'ID1',
+            filterValues: [5, ['ID1', '=', 10]],
+          }] as unknown[],
+          result: [[['ID1', '=', 5], 'or', ['ID1', '=', 10]]],
+        },
+        {
+          caseName: 'two column have an array of filter expressions',
+          columns: [{
+            ...allowFilteringColumnConfig,
+            dataField: 'ID1',
+            filterValues: [['ID1', '>', 5], ['ID1', '<', 10]],
+          }, {
+            ...allowFilteringColumnConfig,
+            dataField: 'ID2',
+            filterValues: [['ID2', '>', 6], ['ID2', '<', 9]],
+          }] as unknown[],
+          result: [[['ID1', '>', 5], 'or', ['ID1', '<', 10]], 'and', [['ID2', '>', 6], 'or', ['ID2', '<', 9]]],
+        },
       ])('$caseName: should correctly calculate the header filter', ({ columns, result }) => {
         const headerFilter = utils.getComposedHeaderFilter(columns as Column[]);
 
