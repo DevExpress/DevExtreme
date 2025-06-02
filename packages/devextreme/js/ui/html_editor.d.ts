@@ -179,6 +179,7 @@ export type AICommand =
  * @docid
  * @public
  * @namespace DevExpress.ui.dxHtmlEditor
+ * @inherits dxHtmlEditorToolbarItem
  */
 export interface AIToolbarItem extends Omit<dxToolbarItem, 'menuItemTemplate' | 'showText' | 'widget' | 'options' | 'template' | 'html'> {
     /**
@@ -795,7 +796,7 @@ export interface dxHtmlEditorToolbar {
     container?: string | UserDefinedElement;
     /**
      * @docid
-     * @type Array<dxHtmlEditorToolbarItem,AIToolbarItem,Enums.HtmlEditorPredefinedToolbarItem>
+     * @type Array<AIToolbarItem,dxHtmlEditorToolbarItem,Enums.HtmlEditorPredefinedToolbarItem>
      * @public
      */
     items?: Array<ToolbarItem | HtmlEditorPredefinedToolbarItem>;

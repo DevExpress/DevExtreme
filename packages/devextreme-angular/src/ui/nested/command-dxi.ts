@@ -36,9 +36,7 @@ import { DxiItemComponent } from './item-dxi';
         'items',
         'location',
         'name',
-        'text',
-        'options',
-        'prompt'
+        'text'
     ]
 })
 export class DxiCommandComponent extends DxiDiagramCustomCommand {

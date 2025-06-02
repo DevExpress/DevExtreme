@@ -86,10 +86,10 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get name(): HtmlEditorPredefinedContextMenuItem | undefined | HtmlEditorPredefinedToolbarItem | string {
+    get name(): HtmlEditorPredefinedContextMenuItem | undefined | string | HtmlEditorPredefinedToolbarItem {
         return this._getOption('name');
     }
-    set name(value: HtmlEditorPredefinedContextMenuItem | undefined | HtmlEditorPredefinedToolbarItem | string) {
+    set name(value: HtmlEditorPredefinedContextMenuItem | undefined | string | HtmlEditorPredefinedToolbarItem) {
         this._setOption('name', value);
     }
 
@@ -139,6 +139,14 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     }
     set acceptedValues(value: Array<boolean | number | string>) {
         this._setOption('acceptedValues', value);
+    }
+
+    @Input()
+    get commands(): Array<AICommand | AICommandName> {
+        return this._getOption('commands');
+    }
+    set commands(value: Array<AICommand | AICommandName>) {
+        this._setOption('commands', value);
     }
 
     @Input()
@@ -219,14 +227,6 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     }
     set widget(value: ToolbarItemComponent) {
         this._setOption('widget', value);
-    }
-
-    @Input()
-    get commands(): Array<AICommand | AICommandName> {
-        return this._getOption('commands');
-    }
-    set commands(value: Array<AICommand | AICommandName>) {
-        this._setOption('commands', value);
     }
 
 

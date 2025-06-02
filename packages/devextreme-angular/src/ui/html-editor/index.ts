@@ -55,7 +55,6 @@ import { DxoTableContextMenuModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoTableResizingModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
-import { DxiCommandModule } from 'devextreme-angular/ui/nested';
 import { DxoVariablesModule } from 'devextreme-angular/ui/nested';
 
 import { DxiHtmlEditorCommandModule } from 'devextreme-angular/ui/html-editor/nested';
@@ -1025,7 +1024,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     DxiItemModule,
     DxoTableResizingModule,
     DxoToolbarModule,
-    DxiCommandModule,
     DxoVariablesModule,
     DxiHtmlEditorCommandModule,
     DxoHtmlEditorConverterModule,
@@ -1056,7 +1054,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     DxiItemModule,
     DxoTableResizingModule,
     DxoToolbarModule,
-    DxiCommandModule,
     DxoVariablesModule,
     DxiHtmlEditorCommandModule,
     DxoHtmlEditorConverterModule,
