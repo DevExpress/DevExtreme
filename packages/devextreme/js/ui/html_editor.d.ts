@@ -162,6 +162,7 @@ export interface AICustomCommand extends AICommandBase<'custom', string[]> {
  * @docid
  * @public
  * @namespace DevExpress.ui.dxHtmlEditor
+ * @inherits AIChangeStyleCommand,AIChangeToneCommand,AITranslateCommand,AICustomCommand
  */
 export type AICommand =
     | AICommandBase<'summarize', any>
@@ -794,7 +795,7 @@ export interface dxHtmlEditorToolbar {
     container?: string | UserDefinedElement;
     /**
      * @docid
-     * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorPredefinedToolbarItem>
+     * @type Array<dxHtmlEditorToolbarItem,AIToolbarItem,Enums.HtmlEditorPredefinedToolbarItem>
      * @public
      */
     items?: Array<ToolbarItem | HtmlEditorPredefinedToolbarItem>;
