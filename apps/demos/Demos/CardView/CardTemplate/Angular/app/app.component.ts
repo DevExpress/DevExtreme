@@ -42,7 +42,7 @@ export class AppComponent {
     this.popupVisible = false;
   }
 
-  // todo: use nested
+  // todo: use nested properties
   searchPanelConfig = {
     visible: true,
   };
