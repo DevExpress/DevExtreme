@@ -1,3 +1,5 @@
+import type { DxHtmlEditorTypes } from 'devextreme-vue/html-editor';
+
 export const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,
   deployment: 'gpt-4o-mini',
@@ -6,7 +8,7 @@ export const AzureOpenAIConfig = {
   apiKey: 'DEMO',
 };
 
-export const commands = [
+export const commands: Array<DxHtmlEditorTypes.AICommand | DxHtmlEditorTypes.AICommandName> = [
   'summarize',
   'proofread',
   'expand',
