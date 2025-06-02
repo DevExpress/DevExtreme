@@ -11,7 +11,10 @@
 >
   <dxi-card-view-column dataField="TrademarkName"></dxi-card-view-column>
   <dxi-card-view-column dataField="Name"></dxi-card-view-column>
-  <dxi-card-view-column dataField="Price" format="currency"></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Price"
+    format="currency"
+  ></dxi-card-view-column>
   <dxi-card-view-column dataField="CategoryName"></dxi-card-view-column>
 
   <dxi-card-view-column dataField="Modification"></dxi-card-view-column>
@@ -37,6 +40,9 @@
 >
   <dxo-position at="center" my="center" collision="fit"></dxo-position>
   <div *dxTemplate="let _ of 'content'">
-    <license-info *ngIf="currentVehicle" [vehicle]="currentVehicle"></license-info>
+    <license-info
+      *ngIf="currentVehicle"
+      [vehicle]="currentVehicle"
+    ></license-info>
   </div>
 </dx-popup>

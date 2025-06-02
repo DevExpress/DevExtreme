@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { Vehicle } from './data';
+import type { Vehicle } from './data';
 
     const props = withDefaults(defineProps<{
         vehicle?: Vehicle,
