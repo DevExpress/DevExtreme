@@ -3789,6 +3789,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
             isLiveUpdate: true,
             repaintChangesOnly: true,
             needUpdateDimensions: true,
+            isFirstRender: false,
             changeTypes: [
                 'remove',
                 'remove',
@@ -4062,6 +4063,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         assert.deepEqual(this.changedArgs, [{
             changeType: 'refresh',
             isDataChanged: true,
+            isFirstRender: false,
             repaintChangesOnly: false,
             items: this.dataController.items(),
             needUpdateDimensions: true,
@@ -4088,6 +4090,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         assert.deepEqual(this.changedArgs, [{
             changeType: 'refresh',
             isDataChanged: true,
+            isFirstRender: false,
             needUpdateDimensions: true,
             repaintChangesOnly: false,
             items: this.dataController.items(),

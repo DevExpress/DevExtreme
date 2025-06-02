@@ -568,6 +568,21 @@ QUnit.test('dxpointermove over point but out of a canvas (point on the border)',
     assert.equal(this.options.tooltip.stub('show').callCount, 1, 'tooltip showing');
 });
 
+QUnit.test('dxclick on point but out of a canvas (point on the border) (T1289498)', function(assert) {
+    this.tracker._pointerOut = sinon.stub();
+
+    // arrange
+    this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
+
+    // act
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 2, pageY: 1, target: this.pointElement.element, pointerType: 'mouse' }));
+    $(this.renderer.root.element).trigger(getEvent('dxpointerdown', { pageX: 2, pageY: 1, target: this.pointElement.element }));
+    $(this.renderer.root.element).trigger(getEvent('dxpointerup', { pageX: 2, pageY: 1, target: this.pointElement.element }));
+
+    // assert
+    assert.strictEqual(this.tracker._pointerOut.getCalls().length, 0, 'point clicked');
+});
+
 QUnit.test('mouseover on series - mouseout from series', function(assert) {
     // arrange
     this.series.getNeighborPoint.withArgs(99, 40).returns(this.point);

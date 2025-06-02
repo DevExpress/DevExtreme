@@ -9,6 +9,7 @@ import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
 import { getData } from './helpers/generateDataSourceData';
+import { Themes } from '../../helpers/themes';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'));
@@ -2736,3 +2737,73 @@ test('Focus behavior should be correct when editing cells', async (t) => {
     mode: 'batch',
   },
 }));
+
+test('DataGrid - A new row is added above the existing row if the data source is empty or contains only one record and newRowPosition is set to "pageBottom" (T1287287)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .click(addRowButton)
+    .click(addRowButton);
+
+  await t
+    .expect(dataGrid.getDataRow(1).isInserted)
+    .ok()
+    .expect(await takeScreenshot('newRowPosition-pageBottom-add-row-to-bottom.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [],
+  keyExpr: 'ID',
+  editing: {
+    mode: 'batch',
+    allowAdding: true,
+    newRowPosition: 'pageBottom',
+  },
+  columns: [
+    {
+      dataField: 'A',
+    },
+  ],
+}));
+
+[
+  Themes.genericLight,
+  Themes.fluentBlue,
+  Themes.materialBlue,
+].forEach((theme) => {
+  test('DataGrid - ColorBox in DataGrid causes input value to appear behind color preview (T1280023)', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
+
+    await t.click(dataGrid.getDataCell(0, 0).element);
+
+    await t
+      .expect(await takeScreenshot(`grid-form-editing-with-color-box_(${theme})`, dataGrid.element))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  })
+    .before(async () => {
+      await changeTheme(theme);
+      await createWidget('dxDataGrid', {
+        dataSource: [
+          { Color: 'red' },
+        ],
+        showBorders: true,
+        editing: {
+          allowUpdating: true,
+          mode: 'cell',
+        },
+        onEditorPreparing(e) {
+          if (e.dataField === 'Color') {
+            e.editorName = 'dxColorBox';
+            e.editorOptions.readOnly = false;
+          }
+        },
+      });
+    })
+    .after(async () => changeTheme(Themes.genericLight));
+});

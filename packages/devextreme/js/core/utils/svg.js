@@ -16,17 +16,9 @@ function getMarkup(element, backgroundColor) {
 }
 
 function fixNamespaces(markup) {
-    let first = true;
-
     if(markup.indexOf('xmlns:xlink') === -1) {
         markup = markup.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
     }
-
-    markup = markup.replace(/xmlns="[\s\S]*?"/gi, function(match) {
-        if(!first) return '';
-        first = false;
-        return match;
-    });
 
     return markup.replace(/xmlns:NS1="[\s\S]*?"/gi, '')
         .replace(/NS1:xmlns:xlink="([\s\S]*?)"/gi, 'xmlns:xlink="$1"');

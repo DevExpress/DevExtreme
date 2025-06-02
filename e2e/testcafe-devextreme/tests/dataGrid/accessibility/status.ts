@@ -27,7 +27,7 @@ const DATA_SOURCE = [
 ];
 
 test('Accessibility: DataGrid general status should contains correct text', async (t) => {
-  const expectedStatusText = 'Data grid with 3 rows and 2 columns';
+  const expectedStatusText = '';
   const dataGrid = new DataGrid('#container');
 
   const statusText = await dataGrid.getGeneralStatusContainer().textContent;

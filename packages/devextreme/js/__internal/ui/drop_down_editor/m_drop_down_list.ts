@@ -323,11 +323,12 @@ const DropDownList = DropDownEditor.inherit({
 
   _getPlainItems(items) {
     let plainItems: any = [];
+    const grouped = this._getGroupedOption();
 
     items = items || this.option('items') || this._dataSource.items() || [];
 
     for (let i = 0; i < items.length; i++) {
-      if (items[i] && items[i].items) {
+      if (grouped && items[i]?.items) {
         plainItems = plainItems.concat(items[i].items);
       } else {
         plainItems.push(items[i]);

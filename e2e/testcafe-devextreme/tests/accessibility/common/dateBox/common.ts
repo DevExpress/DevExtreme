@@ -1,12 +1,12 @@
 import { ClientFunction } from 'testcafe';
 import { Properties } from 'devextreme/ui/date_box.d';
 import DateBox from 'devextreme-testcafe-models/dateBox';
-import url from '../../../helpers/getPageUrl';
-import { defaultSelector, testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
+import url from '../../../../helpers/getPageUrl';
+import { defaultSelector, testAccessibility, Configuration } from '../../../../helpers/accessibility/test';
+import { Options } from '../../../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const now = new Date();
 
@@ -19,20 +19,6 @@ const options: Options<Properties> = {
   applyValueMode: ['instantly', 'useButtons'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
   deferRendering: [true, false],
-  buttons: [
-    undefined,
-    [
-      {
-        name: 'today',
-        location: 'before',
-        options: {
-          text: 'Today',
-          stylingMode: 'text',
-          onClick: () => {},
-        },
-      },
-    ],
-  ],
 };
 
 const created = async (t: TestController, optionConfiguration): Promise<void> => {

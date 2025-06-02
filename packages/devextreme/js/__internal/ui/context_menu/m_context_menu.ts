@@ -263,6 +263,7 @@ class ContextMenu extends MenuBase {
 
   _setFocusedElement($element) {
     if ($element && $element.length !== 0) {
+      // @ts-expect-error
       this.option('focusedElement', getPublicElement($element));
       this._scrollToElement($element);
     }
@@ -921,6 +922,7 @@ class ContextMenu extends MenuBase {
     const scrollableInstance = $submenu.dxScrollable('instance');
 
     scrollableInstance.scrollTo(0);
+    // @ts-expect-error
     this.option('focusedElement', null);
   }
 
@@ -1115,6 +1117,7 @@ class ContextMenu extends MenuBase {
     }
 
     this._cleanAriaAttributes();
+    // @ts-expect-error
     this.option('focusedElement', null);
 
     return promise || Deferred().reject().promise();

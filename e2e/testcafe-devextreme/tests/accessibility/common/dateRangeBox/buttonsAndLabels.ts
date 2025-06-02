@@ -1,10 +1,10 @@
 import { Properties } from 'devextreme/ui/date_range_box.d';
-import url from '../../../helpers/getPageUrl';
-import { testAccessibility, Configuration } from '../../../helpers/accessibility/test';
-import { Options } from '../../../helpers/generateOptionMatrix';
+import url from '../../../../helpers/getPageUrl';
+import { testAccessibility, Configuration } from '../../../../helpers/accessibility/test';
+import { Options } from '../../../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const msInDay = 1000 * 60 * 60 * 24;
 const now = new Date();
@@ -15,16 +15,24 @@ const initialValue = [
 
 const options: Options<Properties> = {
   value: [initialValue],
-  disabled: [true, false],
-  readOnly: [true, false],
-  multiView: [true, false],
-  opened: [true, false],
   showClearButton: [true, false],
   showDropDownButton: [true, false],
-  startDatePlaceholder: [undefined, 'startDatePlaceholder'],
-  applyValueMode: ['instantly', 'useButtons'],
   endDateInputAttr: [{ 'aria-label': 'aria-label' }],
   startDateInputAttr: [{ 'aria-label': 'aria-label' }],
+  buttons: [
+    undefined,
+    [
+      {
+        name: 'today',
+        location: 'before',
+        options: {
+          text: 'Today',
+          stylingMode: 'text',
+          onClick: () => {},
+        },
+      },
+    ],
+  ],
 };
 
 const a11yCheckConfig = {

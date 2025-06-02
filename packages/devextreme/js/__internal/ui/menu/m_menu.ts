@@ -64,7 +64,7 @@ class Menu extends MenuBase {
 
   _submenus!: Submenu[];
 
-  _visibleSubmenu?: Submenu;
+  _visibleSubmenu?: Submenu | null;
 
   _overlay!: dxOverlay<OverlayProperties>;
 
@@ -183,6 +183,7 @@ class Menu extends MenuBase {
     }
 
     if ($newTarget && $newTarget.length !== 0) {
+      // @ts-expect-error
       this.option('focusedElement', getPublicElement($newTarget));
     }
   }
@@ -266,7 +267,6 @@ class Menu extends MenuBase {
   }
 
   _initMarkup(): void {
-    // @ts-expect-error
     this._visibleSubmenu = null;
     // @ts-expect-error
     this.$element().addClass(DX_MENU_CLASS);
@@ -590,6 +590,7 @@ class Menu extends MenuBase {
 
     const $newItem = $items.eq(itemIndex);
 
+    // @ts-expect-error
     this.option('focusedElement', getPublicElement($newItem));
   }
 
@@ -693,9 +694,20 @@ class Menu extends MenuBase {
 
     this._actions.onSubmenuHiding(eventArgs);
 
+    const { focusedElement } = this.option();
+    const { focusedElement: submenuFocusedElement } = submenu.option();
+
+    const isVisibleSubmenuHiding = this._visibleSubmenu === submenu;
+    const isFocusedElementHiding = focusedElement === submenuFocusedElement;
+
+    if (isVisibleSubmenuHiding && isFocusedElementHiding) {
+      this.option('focusedElement', $menuAnchorItem);
+    }
+
     if (!eventArgs.cancel) {
-      // @ts-expect-error
-      if (this._visibleSubmenu === submenu) this._visibleSubmenu = null;
+      if (isVisibleSubmenuHiding) {
+        this._visibleSubmenu = null;
+      }
       $border.hide();
       $menuAnchorItem.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
     }
@@ -815,6 +827,7 @@ class Menu extends MenuBase {
     const $closestItem = $target.closest(this._itemElements());
 
     if ($closestItem.hasClass('dx-menu-item-has-submenu')) {
+      // @ts-expect-error
       this.option('focusedElement', null);
       return;
     }
@@ -905,7 +918,6 @@ class Menu extends MenuBase {
     }
 
     if (this._visibleSubmenu === submenu) {
-      // @ts-expect-error
       this._visibleSubmenu = null;
     }
     // @ts-expect-error

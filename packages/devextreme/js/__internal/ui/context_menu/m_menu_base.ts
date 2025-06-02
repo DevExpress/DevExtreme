@@ -37,7 +37,9 @@ const DX_MENU_ITEM_CAPTION_URL_CLASS = `${DX_MENU_ITEM_CAPTION_CLASS}-with-url`;
 const DX_ICON_WITH_URL_CLASS = 'dx-icon-with-url';
 const ITEM_URL_CLASS = 'dx-item-url';
 
-export type Properties = dxMenuBaseOptions<MenuBase, Item>;
+export interface Properties extends dxMenuBaseOptions<MenuBase, Item> {
+  focusedElement?: dxElementWrapper;
+}
 
 class MenuBase extends HierarchicalCollectionWidget<Properties> {
   static ItemClass = MenuItem;
@@ -117,6 +119,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
   }
 
   _clean(): void {
+    // @ts-expect-error
     this.option('focusedElement', null);
 
     super._clean();
