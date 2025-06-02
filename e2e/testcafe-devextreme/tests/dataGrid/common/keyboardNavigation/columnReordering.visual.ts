@@ -79,13 +79,14 @@ const DATA_GRID_SELECTOR = '#container';
     const contextMenu = dataGrid.getContextMenu();
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const firstHeaderCell = headerRow.getHeaderCell(0);
+    const contextMenuItemText = `Move to the ${rtlEnabled ? 'left' : 'right'}`;
 
     await t.rightClick(firstHeaderCell.element);
 
     await takeScreenshot(`reorder_column_to_right_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`);
 
     await t
-      .click(contextMenu.getItemByText('Move to the right'));
+      .click(contextMenu.getItemByText(contextMenuItemText));
 
     await takeScreenshot(`reorder_column_to_right_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`);
 
@@ -111,13 +112,14 @@ const DATA_GRID_SELECTOR = '#container';
     const contextMenu = dataGrid.getContextMenu();
     const headerRow = dataGrid.getHeaders().getHeaderRow(0);
     const lastHeaderCell = headerRow.getHeaderCell(3);
+    const contextMenuItemText = `Move to the ${rtlEnabled ? 'right' : 'left'}`;
 
     await t.rightClick(lastHeaderCell.element);
 
     await takeScreenshot(`reorder_column_to_left_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_1`);
 
     await t
-      .click(contextMenu.getItemByText('Move to the left'));
+      .click(contextMenu.getItemByText(contextMenuItemText));
 
     await takeScreenshot(`reorder_column_to_left_via_context_menu_when_rtlEnabled_=_${rtlEnabled}_2`);
 
