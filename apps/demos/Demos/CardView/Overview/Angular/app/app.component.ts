@@ -15,7 +15,7 @@ if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
-const IMG_URL = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos';
+const IMG_URL = 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos';
 
 @Component({
   selector: 'demo-app',
@@ -24,6 +24,31 @@ const IMG_URL = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos';
 })
 export class AppComponent {
   employees: Employee[];
+
+  // TODO: Nested component does not exist
+  headerFilterConfig = {
+    visible: true,
+  };
+
+  // TODO: Nested component does not exist
+  searchPanelConfig = {
+    visible: true,
+  };
+
+  // TODO: Nested component does not exist
+  columnChooserConfig = {
+    enabled: true,
+    height: 340,
+    mode: 'select',
+    position: {
+      my: 'right top',
+      at: 'right bottom',
+      of: '.dx-cardview-column-chooser-button',
+    },
+    selection: {
+      selectByClick: true,
+    },
+  };
 
   constructor(service: AppService) {
     this.employees = service.getEmployees();

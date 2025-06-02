@@ -5,6 +5,9 @@
     [allowColumnReordering]="true"
     [cardsPerRow]="'auto'"
     [cardMinWidth]="250"
+    [headerFilter]="headerFilterConfig"
+    [searchPanel]="searchPanelConfig"
+    [columnChooser]="columnChooserConfig"
   >
     <!-- Columns -->
     <dxi-card-view-column
@@ -15,8 +18,6 @@
     <dxi-card-view-column dataField="Department"></dxi-card-view-column>
     <dxi-card-view-column dataField="Phone"></dxi-card-view-column>
     <dxi-card-view-column dataField="Email"></dxi-card-view-column>
-    <!-- Header filter -->
-    <dxo-card-view-header-filter [visible]="true"></dxo-card-view-header-filter>
     <!-- Card cover -->
     <dxo-card-view-card-cover
       [imageExpr]="getEmployeeImage"
@@ -30,23 +31,5 @@
     ></dxo-card-view-pager>
     <!-- Selection -->
     <dxo-card-view-selection mode="multiple"></dxo-card-view-selection>
-    <!-- Column chooser -->
-    <dxo-card-view-column-chooser
-      #columnChooser
-      [enabled]="true"
-      height="340px"
-      [mode]="select"
-    >
-      <dxo-card-view-position
-        my="right top"
-        at="right bottom"
-        of=".dx-cardview-column-chooser-button"
-      ></dxo-card-view-position>
-      <dxo-card-view-column-chooser-selection
-        [selectByClick]="true"
-      ></dxo-card-view-column-chooser-selection>
-    </dxo-card-view-column-chooser>
-    <!-- Search panel -->
-    <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
   </dx-card-view>
 </div>

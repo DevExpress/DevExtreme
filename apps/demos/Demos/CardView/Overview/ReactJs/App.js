@@ -1,20 +1,35 @@
 import React from 'react';
 import CardView, {
-  CardCover,
-  Column,
-  Pager,
-  Selection,
-  HeaderFilter,
-  ColumnChooser,
-  Position,
-  ColumnChooserSelection,
-  SearchPanel,
+  CardCover, Column, Pager, Selection,
 } from 'devextreme-react/card-view';
 import { employees } from './data.js';
 
-const IMG_URL = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos';
+const IMG_URL = 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos';
 const getEmployeeImage = ({ Picture }) => `${IMG_URL}/${Picture}`;
 const getEmployeeImageAltText = ({ FullName }) => `${FullName} picture`;
+// TODO: Nested component does not exist
+const headerFilterConfig = {
+  visible: true,
+};
+// TODO: Nested component does not exist
+const searchPanelConfig = {
+  visible: true,
+};
+// TODO: Nested component does not exist
+// TODO: Bad position types (strings not allowed)
+const columnChooserConfig = {
+  enabled: true,
+  height: 340,
+  mode: 'select',
+  position: {
+    my: 'right top',
+    at: 'right bottom',
+    of: '.dx-cardview-column-chooser-button',
+  },
+  selection: {
+    selectByClick: true,
+  },
+};
 const App = () => (
   <CardView
     dataSource={employees}
@@ -22,6 +37,9 @@ const App = () => (
     allowColumnReordering={true}
     cardsPerRow="auto"
     cardMinWidth={250}
+    headerFilter={headerFilterConfig}
+    searchPanel={searchPanelConfig}
+    columnChooser={columnChooserConfig}
   >
     <Column
       dataField="FullName"
@@ -31,8 +49,6 @@ const App = () => (
     <Column dataField="Department" />
     <Column dataField="Phone" />
     <Column dataField="Email" />
-
-    <HeaderFilter visible={true} />
 
     <CardCover
       imageExpr={getEmployeeImage}
@@ -44,19 +60,6 @@ const App = () => (
       showPageSizeSelector={true}
     />
     <Selection mode="multiple" />
-    <ColumnChooser
-      enabled={true}
-      height="340px"
-      mode="select"
-    >
-      <Position
-        my="right top"
-        at="right bottom"
-        of=".dx-cardview-column-chooser-button"
-      />
-      <ColumnChooserSelection selectByClick={true} />
-    </ColumnChooser>
-    <SearchPanel visible={true} />
   </CardView>
 );
 export default App;

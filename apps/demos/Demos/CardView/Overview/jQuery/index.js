@@ -1,5 +1,5 @@
 $(() => {
-  const IMG_URL = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos';
+  const IMG_URL = 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos';
 
   $('#card-view').dxCardView({
     dataSource: employees,
@@ -17,9 +17,6 @@ $(() => {
     allowColumnReordering: true,
     cardsPerRow: 'auto',
     cardMinWidth: 250,
-    headerFilter: {
-      visible: true,
-    },
     cardCover: {
       imageExpr: ({ Picture }) => `${IMG_URL}/${Picture}`,
       altExpr: ({ FullName }) => `${FullName} picture`,
@@ -31,6 +28,12 @@ $(() => {
     },
     selection: {
       mode: 'multiple',
+    },
+    headerFilter: {
+      visible: true,
+    },
+    searchPanel: {
+      visible: true,
     },
     columnChooser: {
       enabled: true,
@@ -44,9 +47,6 @@ $(() => {
       selection: {
         selectByClick: true,
       },
-    },
-    searchPanel: {
-      visible: true,
     },
   });
 });
