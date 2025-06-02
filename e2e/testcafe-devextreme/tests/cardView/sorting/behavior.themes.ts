@@ -5,13 +5,19 @@ import { createWidget } from '../../../helpers/createWidget';
 import { data } from '../helpers/simpleArrayData';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
+import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`CardView - Sorting Behavior - Themes`
   .page(url(__dirname, '../../container.html'));
 
 const CARD_VIEW_SELECTOR = '#container';
 
-test('Default render', async (t) => {
+const baseConfig = {
+  dataSource: data,
+  height: 500,
+};
+
+safeSizeTest('Default render', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
 
@@ -23,7 +29,7 @@ test('Default render', async (t) => {
   await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => {
   await createWidget('dxCardView', {
-    dataSource: data,
+    ...baseConfig,
     columns: [
       {
         dataField: 'id',
@@ -42,7 +48,7 @@ test('Default render', async (t) => {
   });
 });
 
-test('Default multiple sorting render', async (t) => {
+safeSizeTest('Default multiple sorting render', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
   await testScreenshot(t, takeScreenshot, 'cardview_headers_with_multiple_sorting_render.png', { element: cardView.element });
@@ -54,7 +60,7 @@ test('Default multiple sorting render', async (t) => {
   await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
 }).before(async () => {
   await createWidget('dxCardView', {
-    dataSource: data,
+    ...baseConfig,
     columns: [
       {
         dataField: 'id',

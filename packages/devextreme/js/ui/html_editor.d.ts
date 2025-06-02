@@ -283,7 +283,6 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
      * @docid
      * @default undefined
      * @public
-     * @type object
      */
     aiIntegration?: AIIntegration | undefined;
     /**
