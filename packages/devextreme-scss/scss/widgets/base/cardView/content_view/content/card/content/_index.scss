@@ -2,16 +2,20 @@
 @use '../variables' as *;
 
 .dx-cardview-card-content {
-  padding: $cardview-card-content-padding;
+  padding: $cardview-card__content-padding;
   display: grid;
   grid-template-columns: auto 1fr;
-  row-gap: $cardview-card-content-row-gap;
+  row-gap: $cardview-card__content-row-gap;
   width: 100%;
-  border-top: $cardview-card-border-size solid $cardview-card-border-color;
+  border-top: $cardview-card-border-width solid $cardview-card-divider-color;
 
   // NOTE: Override default fonts only in "material-compact"
-  font-size: $cardview-card-content-font-size;
-  line-height: $cardview-card-content-line-height;
+  font-size: $cardview-card__content-font-size;
+  line-height: $cardview-card__content-line-height;
+
+  .dx-cardview-card-selection & {
+    border-top-color: $cardview-card--selected-divider-color;
+  }
 }
 
 .dx-cardview-field-template {
@@ -21,7 +25,7 @@
 .dx-cardview-field-caption,
 .dx-cardview-field-value,
 .dx-cardview-field-template {
-  padding: $cardview-card-content-cell-padding-vertical $cardview-card-content-cell-padding-horizontal;
+  padding: $cardview-card__content__cell-padding-vertical $cardview-card__content__cell-padding-horizontal;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -32,7 +36,11 @@
 }
 
 .dx-cardview-field-caption {
-  font-weight: $cardview-card-content-field-caption-font-weight;
+  font-weight: $cardview-card__field-caption-weight;
+
+  .dx-cardview-card-selection & {
+    font-weight: $cardview-card--selected__field-caption-weight;
+  }
 }
 
 .dx-cardview-field-value {
@@ -50,12 +58,12 @@
 
   &__text-part {
     &--highlighted {
-      color: $cardview-card-content-field-value-highlight-color;
-      background: $cardview-card-content-field-value-highlight-background;
-      border-radius: $cardview-card-content-field-value-highlight-border-radius;
-      padding: $cardview-card-content-field-value-highlight-padding;
-      font-weight: $cardview-card-content-field-value-highlight-font-weight;
-      box-shadow: $cardview-card-content-field-value-highlight-box-shadow;
+      color: $cardview-card__content__field-value--highlighted-text-color;
+      background: $cardview-card__content__field-value--highlighted-bg-color;
+      border-radius: $cardview-card__content__field-value--highlighted-border-radius;
+      padding: $cardview-card__content__field-value--highlighted-border-padding;
+      font-weight: $cardview-card__content__field-value--highlighted-text-weight;
+      box-shadow: $cardview-card__content__field-value--highlighted-box-shadow;
     }
   }
 }

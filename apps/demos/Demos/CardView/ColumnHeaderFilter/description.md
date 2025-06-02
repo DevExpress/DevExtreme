@@ -1,0 +1,14 @@
+DevExtreme CardView includes a header filter which allows users to filter cards by field values. Click the header filter icon in the CardView's header panel to open the pop-up menu.
+<!--split-->
+
+### Display Header Filter Icons
+
+Assign `true` to the **headerFilter**.[visible](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/headerFilter/#visible) property to display header filter icons for all CardView fields. To hide the icon for a specific field, set the [allowHeaderFiltering](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/#allowHeaderFiltering) property to `false`.
+
+### Enable Search UI Within Header Filters
+
+CardView offers a text-based search to find specific values in a header filter. Define the [search](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/headerFilter/search/) property in the **headerFilter** object or a **columns**.[headerFilter](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/headerFilter/) object to configure this capability.
+
+The search panel checks for values only within the same data field. To expand the search to additional fields, use **search**.[searchExpr](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/headerFilter/search/#searchExpr) property. For example, this demo allows you to enter a state name in the City column's header filter. You can then see a list of all cities within the specified state and select city names that you want to use as a filter.
+
+To apply a comparison operation used to search header filter values, specify the **search**.[mode](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/headerFilter/search/#mode) property.

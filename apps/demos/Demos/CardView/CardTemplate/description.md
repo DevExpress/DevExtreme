@@ -1,0 +1,2 @@
+Card templates allow you to display custom content in cards. In this demo, a [cardTemplate](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/#cardTemplate) adds car images and additional content (such as badges) to regular cards.
+<!--split-->

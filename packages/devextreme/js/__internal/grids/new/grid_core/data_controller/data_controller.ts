@@ -1,4 +1,5 @@
 import type { DataSource } from '@js/common/data';
+import type { FilterDescriptor } from '@js/common/data.types';
 import ArrayStore from '@js/common/data/array_store';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
@@ -8,6 +9,7 @@ import { equalByValue } from '@ts/core/utils/m_common';
 import type { PromiseWithResolvers } from '@ts/core/utils/promise';
 import { createPromise } from '@ts/core/utils/promise';
 
+import gridCoreUtils from '../../../grid_core/m_utils';
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { FilterController } from '../filtering/filter_controller';
 import { OptionsController } from '../options_controller/options_controller';
@@ -42,6 +44,8 @@ export class DataController {
       this.keyExpr.value,
     ),
   );
+
+  private previousDisplayFilter: FilterDescriptor = undefined;
 
   // TODO
   private readonly cacheEnabled = this.options.oneWay('cacheEnabled');
@@ -131,6 +135,10 @@ export class DataController {
           changedCallback();
         };
         const customizeStoreLoadOptionsCallback = (e): void => {
+          e.storeLoadOptions.filter = this.combineFilterWithDisplayFilter(
+            e.storeLoadOptions.filter,
+          );
+
           const localOptions = this.normalizedLocalOperations.peek();
           this.pendingLocalOperations[e.operationId] = getLocalLoadOptions(
             e.storeLoadOptions,
@@ -211,6 +219,7 @@ export class DataController {
       () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         this.normalizedRemoteOptions.value;
+
         if (this.dataSource.peek().isLoaded()) {
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           this.dataSource.peek().load();
@@ -229,6 +238,7 @@ export class DataController {
         const sortParameters = this.sortingController.sortParameters.value;
 
         let someParamChanged = false;
+
         if (dataSource.pageIndex() !== pageIndex) {
           dataSource.pageIndex(pageIndex);
           someParamChanged ||= true;
@@ -250,17 +260,19 @@ export class DataController {
           someParamChanged ||= true;
         }
 
-        if (!equalByValue(
-          dataSource.filter() ?? null,
+        const filterChanged = !equalByValue(
+          this.previousDisplayFilter,
           displayFilter,
           {
             maxDepth: FILTER_OBJ_COMPARE_DEPTH,
             strict: true,
           },
-        )) {
-          dataSource.filter(displayFilter ?? null);
+        );
+        if (filterChanged && isLoaded) {
+          this.dataSource.peek().pageIndex(0);
           someParamChanged ||= true;
         }
+        this.previousDisplayFilter = displayFilter;
 
         if (!equalByValue(dataSource.paginate(), pagingEnabled)) {
           dataSource.paginate(pagingEnabled);
@@ -278,6 +290,19 @@ export class DataController {
         }
       },
     );
+  }
+
+  public getCombinedFilter(): FilterDescriptor {
+    return this.combineFilterWithDisplayFilter(
+      this.dataSource.peek().filter(),
+    );
+  }
+
+  private combineFilterWithDisplayFilter(filter: FilterDescriptor): FilterDescriptor {
+    return gridCoreUtils.combineFilters([
+      filter,
+      this.filterController.displayFilter.peek(),
+    ]);
   }
 
   private onChanged(dataSource: DataSource, e): void {

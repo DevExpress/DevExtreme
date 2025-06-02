@@ -1,7 +1,24 @@
 $(() => {
   $('#card-view').dxCardView({
-    dataSource: customers,
+    dataSource: orders,
     keyExpr: 'ID',
-    columns: ['CompanyName', 'City', 'State', 'Phone', 'Fax'],
+    allowColumnReordering: true,
+    columns: [
+      {
+        dataField: 'OrderNumber',
+        allowReordering: false,
+      },
+      'SaleAmount',
+      'Customer',
+      'Location',
+      {
+        dataField: 'OrderDate',
+        dataType: 'date',
+      },
+      { 
+        dataField: 'DeliveryDate',
+        dataType: 'date',
+      },
+    ],
   });
 });

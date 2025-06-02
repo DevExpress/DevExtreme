@@ -72,6 +72,8 @@ enum DialogState {
   Generating = 'generating',
   ResultReady = 'resultReady',
   Error = 'error',
+  InitialCanceled = 'initialCanceled',
+  AskingCanceled = 'askingCanceled',
 }
 
 enum ReplaceButtonActions {
@@ -321,12 +323,10 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
   private _renderInformer($container: dxElementWrapper): void {
     const $informer = $('<div>').appendTo($container);
-    const text = localizationMessage.format('dxHtmlEditor-aiDialogError');
 
     const options: InformerProperties = {
       contentAlignment: 'center',
       showBackground: true,
-      text,
     };
     // @ts-expect-error no .d.ts for private component
     this._informer = new Informer($informer.get(0), options);
@@ -478,10 +478,12 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
 
     switch (this._dialogState) {
       case DialogState.Initial:
+      case DialogState.InitialCanceled:
       case DialogState.ResultReady:
         items.push(...this._getInitialToolbarItems());
         break;
       case DialogState.Asking:
+      case DialogState.AskingCanceled:
         items.push(this._getGenerateButtonItem());
         break;
       case DialogState.Generating:
@@ -599,7 +601,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   private _cancelAICommandExecution(): void {
-    this._processCommandCompletion(this._getInitialDialogState());
+    this._processCommandCompletion(this._getInitialDialogState(true));
   }
 
   private _isCommandWithOptionsSelected(): boolean {
@@ -672,9 +674,11 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   private _refreshTextAreas(): void {
     switch (this._dialogState) {
       case DialogState.Initial:
+      case DialogState.InitialCanceled:
         this._setTextAreasInitialState();
         break;
       case DialogState.Asking:
+      case DialogState.AskingCanceled:
         this._setTextAreasAskingState();
         break;
       case DialogState.Generating:
@@ -726,13 +730,41 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
   }
 
   private _refreshInformer(): void {
-    const visible = this._dialogState === DialogState.Error;
+    const errorText = localizationMessage.format('dxHtmlEditor-aiDialogError');
+    const cancelText = localizationMessage.format('dxHtmlEditor-aiDialogCanceled');
 
-    this._informer.option('visible', visible);
+    switch (this._dialogState) {
+      case DialogState.Error:
+        this._informer.option({
+          visible: true,
+          text: errorText,
+          icon: '',
+          type: 'error',
+        });
+        break;
+      case DialogState.InitialCanceled:
+      case DialogState.AskingCanceled:
+        this._informer.option({
+          visible: true,
+          text: cancelText,
+          icon: 'errorcircle',
+          type: 'info',
+        });
+        break;
+      default:
+        this._informer.option('visible', false);
+        break;
+    }
   }
 
-  private _getInitialDialogState(): DialogState {
-    return this._isAskAICommandSelected ? DialogState.Asking : DialogState.Initial;
+  private _getInitialDialogState(canceled?: boolean): DialogState {
+    const isAskingCommand = this._isAskAICommandSelected;
+
+    if (canceled) {
+      return isAskingCommand ? DialogState.AskingCanceled : DialogState.InitialCanceled;
+    }
+
+    return isAskingCommand ? DialogState.Asking : DialogState.Initial;
   }
 
   private _replaceButtonAction(event: AIDialogResult['event']): void {
