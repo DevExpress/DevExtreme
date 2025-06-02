@@ -215,7 +215,6 @@ const SKIPPED_TESTS = {
     ],
   },
   Vue: {
-    CardView: ['Overview'],
     Charts: [
       { demo: 'TilingAlgorithms', themes: [THEME.material] },
       { demo: 'ExportAndPrintingAPI', themes: [THEME.material] },
