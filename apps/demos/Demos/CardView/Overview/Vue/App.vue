@@ -6,10 +6,10 @@
     cards-per-row="auto"
     :header-filter="headerFilterConfig"
     :search-panel="searchPanelConfig"
-    card-footer-template="cardFooterTemplate"
+    card-footer-template="footerTemplate"
     ref="cardView"
   >
-    <DxSelection mode="multiple" />
+    <DxSelection mode="multiple"/>
     <DxCardCover
       :image-expr="imageExpr"
       :alt-expr="altExpr"
@@ -48,14 +48,14 @@
     />
     <template
       #statusTemplate="{ data }"
-    > 
+    >
       <div
         :class="{
           'status-ok': data.field.value === 'Salaried',
           'status-warning': data.field.value !== 'Salaried',
         }"
       >
-        <span class="indicator"></span>
+        <span class="indicator"/>
         <span>{{ data.field.value }}</span>
       </div>
     </template>
@@ -64,7 +64,10 @@
     >
       <div v-if="!data.field.value">{{ data.field.text }}</div>
       <div v-if="data.field.value">
-        <a class="dx-link" @click="navigateToAssignee(data.field.value)">
+        <a
+          class="dx-link"
+          @click="navigateToAssignee(data.field.value)"
+        >
           {{ data.field.text }}
         </a>
       </div>
@@ -77,16 +80,16 @@
           text="Call"
           icon="tel"
           type="default"
-          stylingMode="contained"
+          styling-mode="contained"
           @click="showNotify('Call')"
-        ></DxButton>
+        />
         <DxButton
           text="Send Email"
           icon="send"
           type="default"
-          stylingMode="contained"
+          styling-mode="contained"
           @click="showNotify('Send Email')"
-        ></DxButton>
+        />
       </div>
     </template>
   </DxCardView>
@@ -98,9 +101,9 @@ import DxCardView, {
 } from 'devextreme-vue/card-view';
 import DxButton from 'devextreme-vue/button';
 import notify from 'devextreme/ui/notify';
+import { ref } from 'vue';
 import type { Employee } from './data.ts';
 import { employees } from './data.ts';
-import { ref } from 'vue';
 
 // TODO: Nested component does not exist
 const headerFilterConfig = {
@@ -130,7 +133,7 @@ function calculateAddress({ State, City }: Employee): string {
 
 function calculateAssignedTo({ Head_ID }) {
   const assignedTo = employees
-    .find((employee) => employee.ID === Head_ID)
+    .find((employee) => employee.ID === Head_ID);
 
   if (!assignedTo) {
     return 'None';
@@ -143,9 +146,9 @@ function showNotify(text: string) {
   notify(`The "${text}" button is clicked.`);
 }
 
-const navigateToAssignee = async (value) => {
+const navigateToAssignee = async(value) => {
   const cardViewInstance = cardView.value!.instance!;
-  
+
   document.querySelectorAll('.card-highlight').forEach((card) => {
     card.classList.remove('card-highlight');
   });
@@ -158,12 +161,66 @@ const navigateToAssignee = async (value) => {
   await cardViewInstance.pageIndex(pageIndex);
 
   const cardIndex = cardViewInstance.getCardIndexByKey(value);
-  const cardElement = cardViewInstance.getCardElement(cardIndex)
+  const cardElement = cardViewInstance.getCardElement(cardIndex);
   cardElement.focus();
   cardElement.classList.add('card-highlight');
-}
+};
 
 const cardView = ref<DxCardView>();
 
-
 </script>
+
+<style>
+.footer {
+  display: flex;
+  padding: 12px;
+  gap: 8px;
+}
+
+.footer > * {
+  flex-grow: 1;
+}
+
+.indicator {
+  display: inline-block;
+  margin-right: 8px;
+  border-radius: 50%;
+  height: 12px;
+  width: 12px;
+}
+
+.status-ok {
+  color: var(--dx-color-success);
+}
+
+.status-ok > .indicator {
+  background-color: var(--dx-color-success);
+}
+
+.status-warning {
+  color: var(--dx-color-warning);
+}
+
+.status-warning > .indicator {
+  background-color: var(--dx-color-warning);
+}
+
+.card-highlight,
+.card-highlight .dx-toolbar {
+  animation: card-highlight-animation 1s;
+}
+
+@keyframes card-highlight-animation {
+  0% {
+    background-color: color-mix(in srgb, var(--dx-color-text) 8%, white);
+  }
+
+  50% {
+    background-color: color-mix(in srgb, var(--dx-color-text) 8%, white);
+  }
+
+  100% {
+    background-color: unset;
+  }
+}
+</style>
