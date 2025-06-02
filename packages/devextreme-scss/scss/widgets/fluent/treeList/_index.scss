@@ -113,7 +113,6 @@ $treelist-icon-container-padding-right: $fluent-grid-base-checkbox-size + $fluen
 
 .dx-treelist-icon-container {
   max-height: $fluent-grid-base-cell-line-height;
-  height: $fluent-grid-base-cell-line-height;
 
   &.dx-editor-inline-block {
     position: relative;
@@ -121,7 +120,7 @@ $treelist-icon-container-padding-right: $fluent-grid-base-checkbox-size + $fluen
 
     .dx-checkbox {
       top: 50%;
-      margin-top: math.div(-$fluent-checkbox-icon-font-size, 2);
+      margin-top: math.div(-$fluent-checkbox-icon-font-size, 4);
     }
   }
 }
