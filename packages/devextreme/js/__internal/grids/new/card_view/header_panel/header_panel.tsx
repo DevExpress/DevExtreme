@@ -123,7 +123,6 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
           isColumnDraggable={sortableConfig.isColumnDraggable}
           showDropzone={sortableConfig.showDropzone}
           placeholderClassName={CLASSES.sortablePlaceholder}
-          placeholderAutoHeight={false}
           onPlaceholderPrepared={sortableConfig.onPlaceholderPrepared}
         >
           <Scrollable

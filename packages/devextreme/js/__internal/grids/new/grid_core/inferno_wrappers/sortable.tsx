@@ -8,8 +8,6 @@ export interface Props extends SortableProperties {
   className?: string;
   // NOTE: private option
   placeholderClassName?: string;
-  // NOTE: private option
-  placeholderAutoHeight?: boolean;
 }
 
 export class Sortable extends InfernoWrapper<Props, dxSortable> {
