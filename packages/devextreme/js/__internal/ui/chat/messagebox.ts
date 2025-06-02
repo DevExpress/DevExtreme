@@ -1,6 +1,7 @@
 import type { NativeEventInfo } from '@js/common/core/events';
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
+import devices from '@js/core/devices';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_component';
@@ -21,6 +22,8 @@ export type MessageEnteredEvent =
   { text?: string };
 
 export type TypingStartEvent = NativeEventInfo<MessageBox, UIEvent & { target: HTMLInputElement }>;
+
+const isMobile = (): boolean => devices.current().deviceType !== 'desktop';
 
 export interface Properties extends DOMComponentProperties<MessageBox> {
   activeStateEnabled?: boolean;
@@ -108,6 +111,10 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         this._updateTypingEndTimeout();
       },
       onEnterKey: (e: EnterKeyEvent): void => {
+        if (isMobile()) {
+          return;
+        }
+
         if (!e.event?.shiftKey) {
           this._sendHandler(e);
         }
@@ -115,7 +122,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     });
 
     this._textArea.registerKeyHandler('enter', (event: KeyboardEvent) => {
-      if (!event.shiftKey && this._isValuableTextEntered()) {
+      if (!event.shiftKey && this._isValuableTextEntered() && !isMobile()) {
         event.preventDefault();
       }
     });
