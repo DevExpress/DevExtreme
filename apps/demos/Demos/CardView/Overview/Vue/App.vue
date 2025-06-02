@@ -97,6 +97,7 @@ import DxCardView, {
   DxColumn, DxCardCover, DxSelection,
 } from 'devextreme-vue/card-view';
 import DxButton from 'devextreme-vue/button';
+import notify from 'devextreme/ui/notify';
 import type { Employee } from './data.ts';
 import { employees } from './data.ts';
 import { ref } from 'vue';
@@ -136,6 +137,10 @@ function calculateAssignedTo({ Head_ID }) {
   }
 
   return `${assignedTo.First_Name} ${assignedTo.Last_Name}`;
+}
+
+function showNotify(text: string) {
+  notify(`The "${text}" button is clicked.`);
 }
 
 const navigateToAssignee = async (value) => {
