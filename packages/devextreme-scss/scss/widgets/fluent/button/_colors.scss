@@ -1,66 +1,67 @@
+@use "../../_design-system/variables/_ds.scss" as *;
 // @use "../colors" as *;
 
 // @use "../../_design-system/utils/functions" as *;
 
 // adduse
 
-$button-disabled-background: var(--DS-color-surface-neutral-default-disabled) !default;
-$button-disabled-icon-opacity: var(--DS-opacity-60) !default;
-$button-shadow-color: var(--DS-color-border-neutral-default-rest) !default;
+$button-disabled-background: $color-surface-neutral-default-disabled !default;
+$button-disabled-icon-opacity: $opacity-60 !default;
+$button-shadow-color: $color-border-neutral-default-rest !default;
 
 /**
 * $name 10. Text color
 * $type color
 */
-$button-normal-color: var(--DS-color-content-neutral-default-rest) !default;
+$button-normal-color: $color-content-neutral-default-rest !default;
 
 /**
 * $name 15. Background color (contained)
 * $type color
 */
-$ds-button-normal-bg: var(--DS-color-surface-neutral-default-rest) !default;
+$ds-button-normal-bg: $color-surface-neutral-default-rest !default;
 
 /**
 * $name 16. Background color (outlined)
 * $type color
 */
-$button-normal-outlined-bg: var(--DS-color-surface-neutral-muted-rest) !default;
+$button-normal-outlined-bg: $color-surface-neutral-muted-rest !default;
 
 /**
 * $name 17. Background color (text)
 * $type color
 */
-$button-normal-text-bg: var(--DS-color-surface-neutral-muted-rest) !default;
+$button-normal-text-bg: $color-surface-neutral-muted-rest !default;
 
 /**
 * $name 20. Selected state text color
 * $type color
 */
-$button-normal-selected-color: var(--DS-color-content-neutral-default-pressed) !default;
+$button-normal-selected-color: $color-content-neutral-default-pressed !default;
 
 /**
 * $name 30. Hover state background color
 * $type color
 */
-$button-normal-hover-bg: var(--DS-color-surface-neutral-default-hovered) !default;
+$button-normal-hover-bg: $color-surface-neutral-default-hovered !default;
 
 /**
 * $name 40. Focused state background color
 * $type color
 */
-$button-normal-focused-bg: var(--DS-color-surface-neutral-default-hovered) !default;
+$button-normal-focused-bg: $color-surface-neutral-default-hovered !default;
 
 /**
 * $name 50. Active state background color
 * $type color
 */
-$button-normal-active-bg: var(--DS-color-surface-neutral-default-pressed) !default;
+$button-normal-active-bg: $color-surface-neutral-default-pressed !default;
 
 /**
 * $name 25. Selected state background color
 * $type color
 */
-$button-normal-selected-bg: var(--DS-color-surface-neutral-default-pressed) !default;
+$button-normal-selected-bg: $color-surface-neutral-default-pressed !default;
 
 /**
 * $name 10. Text color (contained)
@@ -252,21 +253,21 @@ $button-success-text-bg: var(--DS-color-surface-neutral-muted-rest) !default;
 } */
 
 $button-default-icon-color: var(--DS-color-content-neutral-static-rest) !default;
-$button-normal-icon-color: var(--DS-color-content-neutral-default-rest) !default;
+$button-normal-icon-color: $color-content-neutral-default-rest !default;
 $button-danger-icon-color: var(--DS-color-content-neutral-static-rest) !default;
 $button-success-icon-color: var(--DS-color-content-neutral-static-rest) !default;
 
 $button-disabled-text-color: var(--DS-color-content-neutral-default-disabled) !default;
 
-$button-normal-outlined-hover-bg: var(--DS-color-surface-neutral-default-hovered) !default;
-$button-normal-outlined-focused-bg: var(--DS-color-surface-neutral-default-hovered) !default;
-$button-normal-outlined-active-bg: var(--DS-color-surface-neutral-default-pressed) !default;
-$button-normal-outlined-selected-bg: var(--DS-color-surface-neutral-default-pressed) !default;
+$button-normal-outlined-hover-bg: $color-surface-neutral-default-hovered !default;
+$button-normal-outlined-focused-bg: $color-surface-neutral-default-hovered !default;
+$button-normal-outlined-active-bg: $color-surface-neutral-default-pressed !default;
+$button-normal-outlined-selected-bg: $color-surface-neutral-default-pressed !default;
 
-$button-normal-text-hover-bg: var(--DS-color-surface-neutral-default-hovered) !default;
-$button-normal-text-focused-bg: var(--DS-color-surface-neutral-default-hovered) !default;
-$button-normal-text-active-bg: var(--DS-color-surface-neutral-muted-pressed) !default;
-$button-normal-text-selected-bg: var(--DS-color-surface-neutral-muted-pressed) !default;
+$button-normal-text-hover-bg: $color-surface-neutral-default-hovered !default;
+$button-normal-text-focused-bg: $color-surface-neutral-default-hovered !default;
+$button-normal-text-active-bg: $color-surface-neutral-default-pressed !default;
+$button-normal-text-selected-bg: $color-surface-neutral-default-pressed !default;
 
 /**
 * $name 12. Hover state text color (text)
