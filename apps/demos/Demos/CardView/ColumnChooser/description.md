@@ -9,8 +9,8 @@ Users drag and drop fields between the header panel and column chooser.
 * *"select"*   
 Users toggle check boxes for field names.
 
-If the column chooser contains multiple hidden columns, you can enable the DevExtreme field search UI. Assign `true` to the **search**.[enabled](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columnChooser/search/#enabled) property for this purpose.
+If the column chooser contains multiple hidden columns, assign `true` to the **search**.[enabled](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columnChooser/search/#enabled) property to enable the DevExtreme field search UI.
 
-In this demo, use the check boxes above the CardView to toggle search and selection features.
+In this demo, use the checkboxes above the CardView to toggle search and selection features.
 
 To hide a field programmatically, change  **columns[]**.[visible](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/#visible) property to `false`.
