@@ -44,7 +44,6 @@ $(() => {
             return 'None';
           }
 
-
           return `${assignedTo.First_Name} ${assignedTo.Last_Name}`;
         },
         fieldValueTemplate({ field: { value, text } }) {
@@ -91,7 +90,7 @@ $(() => {
             type: 'default',
             stylingMode: 'contained',
             onClick() {
-              DevExpress.ui.notify('"Call" button clicked');
+              DevExpress.ui.notify('The "Call" button is clicked.');
             },
           }),
           $('<div>').dxButton({
@@ -100,9 +99,8 @@ $(() => {
             type: 'default',
             stylingMode: 'contained',
             onClick() {
-              DevExpress.ui.notify('"Send email" button clicked');
+              DevExpress.ui.notify('The "Send Email" button is clicked.');
             },
-
           }),
         )
     },

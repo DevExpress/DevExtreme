@@ -1,12 +1,8 @@
-import React from 'react';
-import CardView, {
-  CardCover, Column, Pager, Selection,
-} from 'devextreme-react/card-view';
+import React, { useCallback, useRef } from 'react';
+import CardView, { CardCover, Column, Selection } from 'devextreme-react/card-view';
+import Button from 'devextreme-react/button';
+import notify from 'devextreme/ui/notify';
 import { employees } from './data.js';
-
-const IMG_URL = 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos';
-const getEmployeeImage = ({ Picture }) => `${IMG_URL}/${Picture}`;
-const getEmployeeImageAltText = ({ FullName }) => `${FullName} picture`;
 // TODO: Nested component does not exist
 const headerFilterConfig = {
   visible: true,
@@ -15,51 +11,133 @@ const headerFilterConfig = {
 const searchPanelConfig = {
   visible: true,
 };
-// TODO: Nested component does not exist
-// TODO: Bad position types (strings not allowed)
-const columnChooserConfig = {
-  enabled: true,
-  height: 340,
-  mode: 'select',
-  position: {
-    my: 'right top',
-    at: 'right bottom',
-    of: '.dx-cardview-column-chooser-button',
+function imageExpr({ First_Name, Last_Name }) {
+  return `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`;
+}
+function altExpr({ First_Name, Last_Name }) {
+  return `Photo of ${First_Name} ${Last_Name}`;
+}
+function calculateFullName({ First_Name, Last_Name }) {
+  return `${First_Name} ${Last_Name}`;
+}
+function calculateAddress({ State, City }) {
+  return `${City}, ${State}`;
+}
+function calculateAssignedTo({ Head_ID }) {
+  const assignedTo = employees.find((employee) => employee.ID === Head_ID);
+  if (!assignedTo) {
+    return 'None';
+  }
+  return `${assignedTo.First_Name} ${assignedTo.Last_Name}`;
+}
+function CardFooterComponent() {
+  return (
+    <div className="footer">
+      <Button
+        text="Call"
+        icon="tel"
+        type="default"
+        stylingMode="contained"
+        onClick={() => {
+          notify('The "Call" button is clicked.');
+        }}
+      />
+      <Button
+        text="Send Email"
+        icon="send"
+        type="default"
+        stylingMode="contained"
+        onClick={() => {
+          notify('The "Send Email" button is clicked.');
+        }}
+      />
+    </div>
+  );
+}
+function StatusComponent({
+  data: {
+    field: { value },
   },
-  selection: {
-    selectByClick: true,
-  },
-};
-const App = () => (
-  <CardView
-    dataSource={employees}
-    keyExpr="ID"
-    allowColumnReordering={true}
-    cardsPerRow="auto"
-    cardMinWidth={250}
-    headerFilter={headerFilterConfig}
-    searchPanel={searchPanelConfig}
-    columnChooser={columnChooserConfig}
-  >
-    <Column
-      dataField="FullName"
-      allowHiding={false}
-    />
-    <Column dataField="Position" />
-    <Column dataField="Department" />
-    <Column dataField="Phone" />
-    <Column dataField="Email" />
+}) {
+  const className = value === 'Salaried' ? 'status-ok' : 'status-warning';
+  return (
+    <div className={className}>
+      <span className="indicator"></span>
+      <span>{value}</span>
+    </div>
+  );
+}
+function App() {
+  const cardView = useRef();
+  const navigateToAssignee = useCallback(async(value) => {
+    const cardViewInstance = cardView.current.instance();
+    document.querySelectorAll('.card-highlight').forEach((card) => {
+      card.classList.remove('card-highlight');
+    });
+    const index = employees.findIndex((employee) => employee.ID === value);
+    const pageIndex = Math.floor(index / cardViewInstance.pageSize());
+    await cardViewInstance.pageIndex(pageIndex);
+    const cardIndex = cardViewInstance.getCardIndexByKey(value);
+    const cardElement = cardViewInstance.getCardElement(cardIndex);
+    cardElement.focus();
+    cardElement.classList.add('card-highlight');
+  }, []);
+  const AssignedToComponent = useCallback(
+    ({
+      data: {
+        field: { value, text },
+      },
+    }) => {
+      if (!value) {
+        return text;
+      }
+      return <a onClick={() => navigateToAssignee(value)}>{text}</a>;
+    },
+    [navigateToAssignee],
+  );
+  return (
+    <CardView
+      dataSource={employees}
+      keyExpr="ID"
+      cardMinWidth={250}
+      cardsPerRow="auto"
+      headerFilter={headerFilterConfig}
+      searchPanel={searchPanelConfig}
+      cardFooterComponent={CardFooterComponent}
+      ref={cardView}
+    >
+      <Selection mode="multiple" />
+      <CardCover
+        imageExpr={imageExpr}
+        altExpr={altExpr}
+      />
 
-    <CardCover
-      imageExpr={getEmployeeImage}
-      altExpr={getEmployeeImageAltText}
-    />
-    <Pager
-      showInfo={true}
-      showNavigationButtons={true}
-      showPageSizeSelector={true}
-    />
-    <Selection mode="multiple" />
-  </CardView>
-);
+      <Column
+        dataField="Status"
+        fieldValueComponent={StatusComponent}
+      />
+      <Column
+        caption="Full Name"
+        calculateFieldValue={calculateFullName}
+      />
+      <Column
+        caption="Position"
+        dataField="Title"
+      />
+      <Column dataField="Department" />
+      <Column
+        dataField="Head_ID"
+        caption="Assigned To"
+        calculateDisplayValue={calculateAssignedTo}
+        fieldValueComponent={AssignedToComponent}
+      />
+      <Column dataField="Mobile_Phone" />
+      <Column dataField="Email" />
+      <Column
+        caption="Address"
+        calculateFieldValue={calculateAddress}
+      />
+    </CardView>
+  );
+}
 export default App;

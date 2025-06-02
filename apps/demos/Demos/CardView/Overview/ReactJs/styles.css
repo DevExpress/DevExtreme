@@ -32,8 +32,8 @@
   background-color: var(--dx-color-warning);
 }
 
-::ng-deep .card-highlight,
-::ng-deep .card-highlight .dx-toolbar {
+.card-highlight,
+.card-highlight .dx-toolbar {
   animation: card-highlight-animation 1s;
 }
 
