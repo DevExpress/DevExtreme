@@ -9,6 +9,7 @@
 @use "../gridBase" as *;
 @use "../gridBase/colors" as *;
 @use "../gridBase/sizes" as *;
+@use "../checkBox/sizes" as *;
 @use "../../base/treeList" as baseTreeList with (
   $datagrid-border: $datagrid-border,
   $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
@@ -120,7 +121,7 @@ $treelist-icon-container-padding-right: $fluent-grid-base-checkbox-size + $fluen
 
     .dx-checkbox {
       top: 50%;
-      margin-top: math.div(-$fluent-grid-base-checkbox-size, 2);
+      margin-top: math.div(-$fluent-checkbox-icon-font-size, 2);
     }
   }
 }
