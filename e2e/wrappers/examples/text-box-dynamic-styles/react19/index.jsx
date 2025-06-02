@@ -2,11 +2,11 @@ import React, { useState, useCallback } from "react";
 import { TextBox as DxTextBox } from "devextreme-react/text-box";
 
 const colors = [
-  "rgb(255, 99, 132)",
-  "rgb(54, 162, 235)",
-  "rgb(255, 206, 86)",
-  "rgb(75, 192, 192)",
-  "rgb(153, 102, 255)",
+  'rgb(255, 99, 132)',
+  'rgb(54, 162, 235)',
+  'rgb(255, 206, 86)',
+  'rgb(75, 192, 192)',
+  'rgb(153, 102, 255)',
 ];
 let colorIndex = 0;
 
