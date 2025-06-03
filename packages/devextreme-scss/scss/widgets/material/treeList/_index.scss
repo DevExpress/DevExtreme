@@ -9,6 +9,7 @@
 @use "../gridBase" as *;
 @use "../gridBase/colors" as *;
 @use "../gridBase/sizes" as *;
+@use "../checkBox/sizes" as *;
 @use "../../base/treeList" as baseTreeList with (
   $datagrid-border: $datagrid-border,
   $datagrid-drag-header-border-color: $datagrid-drag-header-border-color,
@@ -28,6 +29,7 @@
 @include grid-base(treelist);
 
 $treelist-empty-space-width: 24px;
+$treelist-empty-space-height: $material-grid-base-cell-line-height;
 $treelist-checkbox-offset-left: $treelist-empty-space-width + $material-grid-base-cell-horizontal-padding;
 $treelist-checkbox-offset-left-rtl: $treelist-checkbox-offset-left + $material-grid-base-checkbox-size;
 $treelist-editor-cell-padding-left: $treelist-checkbox-offset-left-rtl + $material-grid-base-cell-horizontal-padding;
@@ -36,16 +38,9 @@ $treelist-icon-container-padding-right: $material-grid-base-checkbox-size + $mat
 .dx-treelist-rowsview {
   .dx-treelist-empty-space {
     position: relative;
-    top: -2px;
     display: inline-block;
-
-    @include dx-icon(chevronup);
-
     width: $treelist-empty-space-width;
-
-    &::before {
-      visibility: hidden;
-    }
+    height: $treelist-empty-space-height;
   }
 
   tr:not(.dx-row-focused) .dx-treelist-empty-space {
@@ -127,7 +122,7 @@ $treelist-icon-container-padding-right: $material-grid-base-checkbox-size + $mat
 
     .dx-checkbox {
       top: 50%;
-      margin-top: math.div(-$material-grid-base-checkbox-size, 2);
+      margin-top: math.div(-$material-checkbox-icon-font-size, 2);
     }
   }
 }

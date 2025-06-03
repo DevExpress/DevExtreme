@@ -29,6 +29,7 @@
 @include grid-base(treelist);
 
 $treelist-empty-space-width: 24px;
+$treelist-empty-space-height: $fluent-grid-base-cell-line-height;
 $treelist-checkbox-offset-left: $treelist-empty-space-width + $fluent-grid-base-cell-horizontal-padding;
 $treelist-checkbox-offset-left-rtl: $treelist-checkbox-offset-left + $fluent-grid-base-checkbox-size;
 $treelist-editor-cell-padding-left: $treelist-checkbox-offset-left-rtl + $fluent-grid-base-cell-horizontal-padding;
@@ -39,6 +40,7 @@ $treelist-icon-container-padding-right: $fluent-grid-base-checkbox-size + $fluen
     position: relative;
     display: inline-block;
     width: $treelist-empty-space-width;
+    height: $treelist-empty-space-height;
   }
 
   tr:not(.dx-row-focused) .dx-treelist-empty-space {
@@ -120,7 +122,7 @@ $treelist-icon-container-padding-right: $fluent-grid-base-checkbox-size + $fluen
 
     .dx-checkbox {
       top: 50%;
-      margin-top: math.div(-$fluent-checkbox-icon-font-size, 4);
+      margin-top: math.div(-$fluent-checkbox-icon-font-size, 2);
     }
   }
 }
