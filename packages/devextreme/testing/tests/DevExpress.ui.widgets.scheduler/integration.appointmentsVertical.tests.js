@@ -1,9 +1,10 @@
 import { getOuterHeight, getOuterWidth, getWidth, getHeight } from 'core/utils/size';
 import $ from 'jquery';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import pointerMock from '../../helpers/pointerMock.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import translator from 'common/core/animation/translator';
 import fx from 'common/core/animation/fx';
-import pointerMock from '../../helpers/pointerMock.js';
 import { DataSource } from 'common/data/data_source/data_source';
 import dataUtils from 'core/element_data';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
@@ -22,17 +23,15 @@ QUnit.testStart(() => initTestMarkup());
 const config = {
     beforeEach: function() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 };
 
 QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)', config, () => {
-    QUnit.test('Appointments on Day view should have a right height and position if startDate begins day before', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointments on Day view should have a right height and position if startDate begins day before', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: new Date(2016, 9, 5, 23, 30),
                 endDate: new Date(2016, 9, 6, 1),
@@ -51,8 +50,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal(getOuterHeight($appointment), cellHeight, 'Appointment has a right height');
     });
 
-    QUnit.test('Appointments on Week view should have a right position if widget is small', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointments on Week view should have a right position if widget is small', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: new Date(2016, 9, 6, 1),
                 endDate: new Date(2016, 9, 6, 3),
@@ -71,8 +70,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual($appointment.position().left, cellWidth * 4, 2, 'Appointment has a right left position');
     });
 
-    QUnit.test('Appointment with resources should have a right height and position if it ends on the next day', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointment with resources should have a right height and position if it ends on the next day', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: new Date(2017, 6, 22, 20),
                 endDate: new Date(2017, 6, 23, 4),
@@ -104,8 +103,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal(getOuterHeight($appointment), cellHeight * 4, 'Appointment has a right height');
     });
 
-    QUnit.test('Breaking an appointment into parts depends on the timezone', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Breaking an appointment into parts depends on the timezone', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: '2017-05-24T20:15:00+01:00',
                 endDate: '2017-05-25T01:30:00+01:00',
@@ -121,8 +120,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment has 1 part');
     });
 
-    QUnit.test('Breaking an appointment into parts should work correctly when endDate is a midnight', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Breaking an appointment into parts should work correctly when endDate is a midnight', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: '2017-05-24T20:15:00+01:00',
                 endDate: '2017-05-25T08:00:00+01:00',
@@ -138,8 +137,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment has 1 part');
     });
 
-    QUnit.test('The part of the appointment that ends after midnight should be shown on Week view', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('The part of the appointment that ends after midnight should be shown on Week view', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: new Date(2015, 4, 25, 22, 0),
                 endDate: new Date(2015, 4, 26, 2, 15),
@@ -158,8 +157,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal($appointment.eq(1).position().top, 0, 'Appointment has a right top position');
     });
 
-    QUnit.test('The part of the appointment that ends after midnight should have right height when set startDayHour & endDayHour', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('The part of the appointment that ends after midnight should have right height when set startDayHour & endDayHour', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: new Date(2015, 4, 25, 21),
                 endDate: new Date(2015, 4, 26, 2),
@@ -180,8 +179,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal(getOuterHeight($appointment), cellHeight, 'appt part has right height');
     });
 
-    QUnit.test('The parts of recurrence appointment before and after midnight should be shown on Week view', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('The parts of recurrence appointment before and after midnight should be shown on Week view', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: new Date(2015, 4, 27, 23, 0),
                 endDate: new Date(2015, 4, 28, 1, 15),
@@ -201,8 +200,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal(scheduler.appointments.getAppointmentPosition(3).top, 0, 'Second appointment part after midnight has a right top position');
     });
 
-    QUnit.test('The part of recurrence appointment before midnight should be shown on Day view', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('The part of recurrence appointment before midnight should be shown on Day view', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: new Date(2015, 4, 25, 23, 0),
                 endDate: new Date(2015, 4, 26, 1, 15),
@@ -221,8 +220,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal(scheduler.appointments.getAppointmentPosition().top, cellHeight * 23, 'Appointment has a correct top position');
     });
 
-    QUnit.test('The part of recurrence appointment after midnight should be shown on Day view', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('The part of recurrence appointment after midnight should be shown on Day view', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: new Date(2015, 4, 25, 23, 0),
                 endDate: new Date(2015, 4, 26, 1, 15),
@@ -239,13 +238,14 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal(scheduler.appointments.getAppointmentPosition().top, 0, 'Appointment has a correct top position');
 
         scheduler.instance.option('currentDate', new Date(2015, 4, 28));
+        await waitAsync(0);
 
         assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appt part is shown on 2d day');
         assert.equal(scheduler.appointments.getAppointmentPosition().top, 0, 'Appointment has a correct top position');
     });
 
-    QUnit.test('The part of recurrence appointment after midnight should have right height on the first day of week', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('The part of recurrence appointment after midnight should have right height on the first day of week', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: new Date(2015, 4, 25, 22, 0),
                 endDate: new Date(2015, 4, 26, 3, 30),
@@ -268,11 +268,11 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal(getOuterHeight($appointment), cellHeight * 3, 'appt part has right height');
     });
 
-    QUnit.test('Recurring appointments should be rendered correctly with a custom timezone(T385377)', function(assert) {
+    QUnit.test('Recurring appointments should be rendered correctly with a custom timezone(T385377)', async function(assert) {
         const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
 
         try {
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 dataSource: [],
                 currentDate: new Date(2016, 4, 7),
                 timeZone: 'Asia/Ashkhabad',
@@ -298,11 +298,11 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         }
     });
 
-    QUnit.test('Appointments should have correctly height with a custom timezone(T387561)', function(assert) {
+    QUnit.test('Appointments should have correctly height with a custom timezone(T387561)', async function(assert) {
         const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
 
         try {
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 dataSource: [{
                     text: 'Stand-up meeting',
                     startDate: '2015-05-25T17:00:00.000Z',
@@ -333,8 +333,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         }
     });
 
-    QUnit.test('Two vertical neighbor appointments should be placed correctly', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Two vertical neighbor appointments should be placed correctly', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [],
             firstDayOfWeek: 1,
             currentDate: new Date(2015, 1, 24),
@@ -375,13 +375,13 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual(getOuterWidth($allDayAppts.eq(0)), cellWidth, 1.001, 'Width is OK');
     });
 
-    QUnit.test('Appointment size should depend on neighbor appointments', function(assert) {
+    QUnit.test('Appointment size should depend on neighbor appointments', async function(assert) {
         const items = [{ text: 'a', startDate: new Date(2015, 2, 4, 1), endDate: new Date(2015, 2, 4, 2) },
             { text: 'b', startDate: new Date(2015, 2, 4, 2, 30), endDate: new Date(2015, 2, 4, 3) },
             { text: 'c', startDate: new Date(2015, 2, 4, 2, 30), endDate: new Date(2015, 2, 4, 3) },
             { text: 'd', startDate: new Date(2015, 2, 4, 1, 30), endDate: new Date(2015, 2, 4, 3) }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentView: 'week',
             currentDate: new Date(2015, 2, 4),
             dataSource: items,
@@ -392,7 +392,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual(getWidth($appointments.eq(0)), getWidth($appointments.eq(3)), 0.1);
     });
 
-    QUnit.test('Recurrence appointment should be rendered correctly when currentDate was changed: all-day', function(assert) {
+    QUnit.test('Recurrence appointment should be rendered correctly when currentDate was changed: all-day', async function(assert) {
         const appointment = {
             startDate: new Date(2015, 1, 4, 0),
             endDate: new Date(2015, 1, 4, 0, 30),
@@ -401,7 +401,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
             allDay: true
         };
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 1, 4),
             dataSource: [appointment],
             views: ['day'],
@@ -409,13 +409,14 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         });
 
         scheduler.instance.option('currentDate', new Date(2015, 1, 5));
+        await waitAsync(0);
 
         const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
 
         assert.equal($appointment.length, 1, 'Appointment is rendered');
     });
 
-    QUnit.test('Recurrence appointment should be rendered correctly when currentDate was changed: day', function(assert) {
+    QUnit.test('Recurrence appointment should be rendered correctly when currentDate was changed: day', async function(assert) {
         const appointment = {
             startDate: new Date(2015, 1, 4, 0),
             endDate: new Date(2015, 1, 4, 1),
@@ -423,7 +424,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
             recurrenceRule: 'FREQ=DAILY'
         };
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 1, 4),
             dataSource: [appointment],
             views: ['day'],
@@ -431,19 +432,20 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         });
 
         scheduler.instance.option('currentDate', new Date(2015, 1, 5));
+        await waitAsync(0);
 
         const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
 
         assert.roughEqual(getHeight($appointment), 100, 1.001, 'Appointment is rendered correctly');
     });
 
-    QUnit.test('Appointments should have correct position, rtl mode, editing=false', function(assert) {
+    QUnit.test('Appointments should have correct position, rtl mode, editing=false', async function(assert) {
         const appointment = {
             startDate: new Date(2015, 1, 4, 0),
             endDate: new Date(2015, 1, 4, 1)
         };
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             rtlEnabled: true,
             editing: false,
             currentDate: new Date(2015, 1, 4),
@@ -458,8 +460,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual($appointment.position().left, APPOINTMENT_DEFAULT_LEFT_OFFSET, 2, 'Appointment left is correct on init');
     });
 
-    QUnit.test('dropDown appointment should not compact class on vertical view', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('dropDown appointment should not compact class on vertical view', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 4, 25),
             views: [{ type: 'week', name: 'week' }],
             currentView: 'week'
@@ -470,13 +472,14 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
             { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1) },
             { text: '3', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1) }
         ]);
+        await waitAsync(0);
 
         const $dropDown = $(scheduler.instance.$element()).find('.dx-scheduler-appointment-collector').eq(0);
 
         assert.ok($dropDown.hasClass('dx-scheduler-appointment-collector-compact'), 'class is ok');
     });
 
-    QUnit.test('Appointments should be rendered correctly, Day view with intervalCount', function(assert) {
+    QUnit.test('Appointments should be rendered correctly, Day view with intervalCount', async function(assert) {
         const tasks = [
             { text: 'One', startDate: new Date(2015, 2, 16, 7), endDate: new Date(2015, 2, 16, 7, 30) },
             { text: 'Two', startDate: new Date(2015, 2, 16, 11), endDate: new Date(2015, 2, 16, 11, 30) },
@@ -486,7 +489,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const dataSource = new DataSource({
             store: tasks
         });
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 2, 16),
             dataSource: dataSource,
             views: [{
@@ -502,7 +505,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal($appointments.length, 4, 'Appointments were rendered correctly');
     });
 
-    QUnit.test('Appointments should be rendered correctly, Week view with intervalCount', function(assert) {
+    QUnit.test('Appointments should be rendered correctly, Week view with intervalCount', async function(assert) {
         const tasks = [
             { text: 'One', startDate: new Date(2015, 4, 25, 7), endDate: new Date(2015, 4, 25, 7, 30) },
             { text: 'Two', startDate: new Date(2015, 5, 1, 11), endDate: new Date(2015, 5, 1, 11, 30) },
@@ -512,7 +515,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const dataSource = new DataSource({
             store: tasks
         });
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 4, 25),
             dataSource: dataSource,
             views: [{
@@ -528,7 +531,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal($appointments.length, 4, 'Appointments were rendered correctly');
     });
 
-    QUnit.test('Appointments should be rendered correctly, Day view with intervalCount and startDate', function(assert) {
+    QUnit.test('Appointments should be rendered correctly, Day view with intervalCount and startDate', async function(assert) {
         const tasks = [
             { text: 'One', startDate: new Date(2017, 5, 25, 4), endDate: new Date(2017, 5, 25, 4, 30) },
             { text: 'Two', startDate: new Date(2017, 5, 26, 0), endDate: new Date(2017, 5, 26, 0, 30) },
@@ -537,7 +540,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const dataSource = new DataSource({
             store: tasks
         });
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2017, 5, 26),
             dataSource: dataSource,
             views: [{
@@ -554,7 +557,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal($appointments.length, 3, 'Appointments were rendered correctly');
     });
 
-    QUnit.test('Appointments should be rendered correctly, Week view with intervalCount and startDate', function(assert) {
+    QUnit.test('Appointments should be rendered correctly, Week view with intervalCount and startDate', async function(assert) {
         const tasks = [
             { text: 'One', startDate: new Date(2017, 5, 22, 4), endDate: new Date(2017, 5, 22, 4, 30) },
             { text: 'Two', startDate: new Date(2017, 5, 26, 0), endDate: new Date(2017, 5, 26, 0, 30) },
@@ -564,7 +567,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const dataSource = new DataSource({
             store: tasks
         });
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2017, 5, 26),
             dataSource: dataSource,
             views: [{
@@ -582,7 +585,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal($appointments.length, 4, 'Appointments were rendered correctly');
     });
 
-    QUnit.test('Appointments should be rendered correctly after switching Day view with intervalCount and startDate', function(assert) {
+    QUnit.test('Appointments should be rendered correctly after switching Day view with intervalCount and startDate', async function(assert) {
         const tasks = [
             { text: 'One', startDate: new Date(2017, 5, 28, 4), endDate: new Date(2017, 5, 28, 4, 30) },
             { text: 'Two', startDate: new Date(2017, 5, 29, 0), endDate: new Date(2017, 5, 29, 0, 30) },
@@ -591,7 +594,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const dataSource = new DataSource({
             store: tasks
         });
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2017, 5, 26),
             dataSource: dataSource,
             views: [{
@@ -610,7 +613,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal($appointments.length, 3, 'Appointments were rendered correctly');
     });
 
-    QUnit.test('Appointments should be rendered correctly after switching Week view with intervalCount and startDate', function(assert) {
+    QUnit.test('Appointments should be rendered correctly after switching Week view with intervalCount and startDate', async function(assert) {
         const tasks = [
             { text: 'One', startDate: new Date(2017, 6, 10, 4), endDate: new Date(2017, 6, 10, 4, 30) },
             { text: 'Two', startDate: new Date(2017, 6, 18, 0), endDate: new Date(2017, 6, 18, 0, 30) },
@@ -619,7 +622,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         const dataSource = new DataSource({
             store: tasks
         });
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2017, 5, 26),
             dataSource: dataSource,
             views: [{
@@ -639,8 +642,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal($appointments.length, 3, 'Appointments were rendered correctly');
     });
 
-    QUnit.test('Appointment should have right width on mobile devices & desktop in week view', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointment should have right width on mobile devices & desktop in week view', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 text: 'a',
                 startDate: new Date(2018, 2, 13, 1),
@@ -657,8 +660,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual(getOuterWidth($appointments.eq(0)), cellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.001, 'Width is OK');
     });
 
-    QUnit.test('Appointments should be rendered correctly in vertical grouped workspace Day', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointments should be rendered correctly in vertical grouped workspace Day', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 text: 'a',
                 startDate: new Date(2018, 2, 1, 9),
@@ -701,8 +704,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal($appointments.eq(1).position().left, 0, 'correct left position');
     });
 
-    QUnit.test('Appointments should be rendered correctly in vertical grouped workspace Week', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointments should be rendered correctly in vertical grouped workspace Week', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 text: 'a',
                 startDate: new Date(2018, 2, 16, 9),
@@ -746,8 +749,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal($appointments.eq(1).position().left, cellWidth * 5, 'correct left position');
     });
 
-    QUnit.test('Appointments should be rendered correctly in vertical grouped workspace Week, showAllDayPanel = true', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointments should be rendered correctly in vertical grouped workspace Week, showAllDayPanel = true', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: '1',
@@ -799,8 +802,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual($appointments.eq(1).position().left, 256, 1.1, 'correct left position of appointment');
     });
 
-    QUnit.test('Rival allDay appointments from different groups should be rendered correctly in vertical grouped workspace Week', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Rival allDay appointments from different groups should be rendered correctly in vertical grouped workspace Week', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: '1',
@@ -853,8 +856,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual(translator.locate($appointments.eq(1)).left, 114, 1, 'correct left position of allDay appointment');
     });
 
-    QUnit.test('Rival allDay appointments from same groups should be rendered correctly in vertical grouped workspace Week', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Rival allDay appointments from same groups should be rendered correctly in vertical grouped workspace Week', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: '1',
@@ -902,8 +905,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual(translator.locate($appointments.eq(0)).left, 114, 1, 'correct left position of allDay appointment');
     });
 
-    QUnit.test('Rival appointments from one group should be rendered correctly in vertical grouped workspace Week', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Rival appointments from one group should be rendered correctly in vertical grouped workspace Week', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [],
             views: [{
                 type: 'week',
@@ -942,6 +945,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
                 endDate: new Date(2018, 4, 22, 11, 30)
             },
         ]);
+        await waitAsync(0);
 
         const $appointments = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
         assert.equal($appointments.length, 2, 'two appointments are rendered');
@@ -957,8 +961,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual($appointments.eq(1).position().left, 170, 1.1, 'correct left position of appointment');
     });
 
-    QUnit.test('Appointment in bottom cell should be rendered cirrectly in vertical grouped workspace Week', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointment in bottom cell should be rendered cirrectly in vertical grouped workspace Week', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: '1',
@@ -998,8 +1002,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual(getOuterHeight($appointments.eq(0)), 100, 2, 'correct size of appointment');
     });
 
-    QUnit.test('Appointment should be dragged correctly between the groups in vertical grouped workspace Day', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointment should be dragged correctly between the groups in vertical grouped workspace Day', async function(assert) {
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             dataSource: [{
                 text: 'a',
@@ -1031,7 +1035,6 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
         scheduler.appointmentList[0].drag.toCell(10);
 
-        this.clock.tick(10);
         const appointmentData = dataUtils.data(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
         assert.deepEqual(appointmentData.startDate, new Date(2018, 2, 1, 13), 'Start date is correct');
@@ -1039,8 +1042,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.deepEqual(appointmentData.id, 2, 'Group is OK');
     });
 
-    QUnit.test('Appointment should be dragged correctly between the groups in vertical grouped workspace Week', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointment should be dragged correctly between the groups in vertical grouped workspace Week', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 text: 'a',
                 startDate: new Date(2018, 2, 16, 12),
@@ -1072,7 +1075,6 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
 
         scheduler.appointmentList[0].drag.toCell(75);
 
-        this.clock.tick(10);
         const appointmentData = dataUtils.data(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).get(0), 'dxItemData');
 
         assert.deepEqual(appointmentData.startDate, new Date(2018, 2, 16, 13), 'Start date is correct');
@@ -1080,8 +1082,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.deepEqual(appointmentData.id, 2, 'Group is OK');
     });
 
-    QUnit.test('Hourly recurring appt should be rendred in vertical grouped workspace Day', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Hourly recurring appt should be rendred in vertical grouped workspace Day', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 text: 'a',
                 startDate: new Date(2018, 2, 16, 12, 30),
@@ -1115,8 +1117,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal($appointments.length, 4, 'Appointments are rendered');
     });
 
-    QUnit.test('Appt shouldn\'t be resized to the group border in horizontal grouped workspace Day', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appt shouldn\'t be resized to the group border in horizontal grouped workspace Day', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 text: 'a',
                 startDate: new Date(2018, 2, 16, 14),
@@ -1156,8 +1158,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal($appointment.position().top + getOuterHeight($appointment), cellHeight * 8, 'Correct bottom coordinate');
     });
 
-    QUnit.test('Appt shouldn\'t be resized to the group border after scrolling in horizontal grouped workspace Day', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appt shouldn\'t be resized to the group border after scrolling in horizontal grouped workspace Day', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 text: 'a',
                 startDate: new Date(2018, 2, 16, 14),
@@ -1202,8 +1204,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal(getOuterHeight($appointment), cellHeight * 6, 'Correct height');
     });
 
-    QUnit.test('Appointment inside vertical grouped view should have a right resizable area in Day view', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointment inside vertical grouped view should have a right resizable area in Day view', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 text: 'a',
                 startDate: new Date(2018, 2, 16, 14),
@@ -1240,8 +1242,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.equal($appointment.dxResizable('instance').option('area').bottom, initialResizableAreaBottom);
     });
 
-    QUnit.test('Appointment before startDayHour part should be rendered correctly in vertical grouped workspace Week, first group, showAllDayPanel = true', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointment before startDayHour part should be rendered correctly in vertical grouped workspace Week, first group, showAllDayPanel = true', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: '1',
@@ -1294,8 +1296,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual($appointments.eq(1).position().left, cellWidth, 1.1, 'correct left position of appointment part');
     });
 
-    QUnit.test('Appointment after endDayHour part should be rendered correctly in vertical grouped workspace Week, first group, showAllDayPanel = true', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointment after endDayHour part should be rendered correctly in vertical grouped workspace Week, first group, showAllDayPanel = true', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: '1',
@@ -1348,8 +1350,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual($appointments.eq(1).position().left, cellWidth, 1.1, 'correct left position of appointment part');
     });
 
-    QUnit.test('Appointment starting on previous week should be rendered correctly in vertical grouped workspace Week, first group, showAllDayPanel = true', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointment starting on previous week should be rendered correctly in vertical grouped workspace Week, first group, showAllDayPanel = true', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: '1',
@@ -1401,8 +1403,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual($appointments.eq(1).position().left, 0, 1.1, 'correct left position of appointment part');
     });
 
-    QUnit.test('Long appointments should be rendered correctly in vertical grouped workspace Week, first group, showAllDayPanel = true (T714290)', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Long appointments should be rendered correctly in vertical grouped workspace Week, first group, showAllDayPanel = true (T714290)', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: '1',
@@ -1449,8 +1451,8 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual($appointments.eq(1).position().left, cellWidth * 2, 1.1, 'correct left position of appointment part');
     });
 
-    QUnit.test('Long appointments should be rendered correctly in vertical grouped workspace Week, second group, showAllDayPanel = true (T714290)', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Long appointments should be rendered correctly in vertical grouped workspace Week, second group, showAllDayPanel = true (T714290)', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: '1',
@@ -1497,7 +1499,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual($appointments.eq(1).position().left, cellWidth * 2, 1.1, 'correct left position of appointment part');
     });
 
-    QUnit.test('Scheduler recurrent appointments render right if began before startDayHour (T735635)', function(assert) {
+    QUnit.test('Scheduler recurrent appointments render right if began before startDayHour (T735635)', async function(assert) {
         const appointments = [
             {
                 text: 'Website Re-Design Plan',
@@ -1515,7 +1517,7 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
             height: 600,
             currentDate: new Date(2019, 3, 21),
         };
-        const scheduler = createWrapper(options);
+        const scheduler = await createWrapper(options);
 
         const initialAppointmentHeight = scheduler.appointments.getAppointmentHeight(0);
         const recurrentAppointmentHeight = scheduler.appointments.getAppointmentHeight(1);

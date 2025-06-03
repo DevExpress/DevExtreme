@@ -199,7 +199,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         }
       });
       return elementProps;
-    }, [element.current]);
+    }, [element.current, props]);
 
     const scheduleTemplatesUpdate = useCallback(() => {
       if (guardsUpdateScheduled.current) {

@@ -4,6 +4,12 @@ import $ from 'jquery';
 import '__internal/scheduler/workspaces/m_work_space_month';
 import '__internal/scheduler/workspaces/m_work_space_week';
 
+import {
+    applyWorkspaceGroups,
+    getEmptyResourceManager,
+    getWorkspaceResourceConfig
+} from '../../helpers/scheduler/mockResourceManager.js';
+
 const {
     test,
     module,
@@ -20,33 +26,34 @@ module('API', () => {
             this.createInstance = function(type, options) {
                 const workSpace = 'dxSchedulerWorkSpace' + type;
                 this.instance = $('#scheduler-work-space')[workSpace]({
+                    getResourceManager: getEmptyResourceManager,
                     ...options,
                 })[workSpace]('instance');
             };
         }
     }, () => {
-        test('Week view', function(assert) {
+        test('Week view', async function(assert) {
             this.createInstance('Week', { width: 800, height: 800 });
             const index = this.instance.getCellIndexByCoordinates({ left: 0, top: 55 });
 
             assert.equal(index, 7, 'Index is OK');
         });
 
-        test('Week view, fractional value', function(assert) {
+        test('Week view, fractional value', async function(assert) {
             this.createInstance('Week', { width: 800, height: 800 });
             const index = this.instance.getCellIndexByCoordinates({ left: 60.4, top: 55 });
 
             assert.equal(index, 7, 'Index is OK');
         });
 
-        test('Week view: rtl mode', function(assert) {
+        test('Week view: rtl mode', async function(assert) {
             this.createInstance('Week', { width: 800, height: 800, rtlEnabled: true });
             const index = this.instance.getCellIndexByCoordinates({ left: 411, top: 50 });
 
             assert.equal(index, 9, 'Index is OK');
         });
 
-        test('All day row', function(assert) {
+        test('All day row', async function(assert) {
             this.createInstance('Week', { width: 800, height: 800 });
             let index = this.instance.getCellIndexByCoordinates({ left: 298, top: 0 });
 
@@ -59,32 +66,41 @@ module('API', () => {
             assert.equal(index, 10, 'Index is OK');
         });
 
-        test('Horizontal grouped view', function(assert) {
+        test('Horizontal grouped view', async function(assert) {
+            const resourceConfig = await getWorkspaceResourceConfig([{
+                label: 'a',
+                fieldExpr: 'a',
+                dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }],
+            }]);
             this.createInstance('Week', {
                 width: 800,
                 height: 800,
-                groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]
+                ...resourceConfig,
             });
             const index = this.instance.getCellIndexByCoordinates({ left: 100, top: 55 });
 
             assert.equal(index, 16, 'Index is OK');
         });
 
-        test('Vertical grouped view', function(assert) {
+        test('Vertical grouped view', async function(assert) {
             this.createInstance('Week', {
                 width: 800,
                 height: 800,
                 groupOrientation: 'vertical'
             });
 
-            this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+            await applyWorkspaceGroups(this.instance, [{
+                label: 'a',
+                fieldExpr: 'a',
+                dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+            }]);
 
             const index = this.instance.getCellIndexByCoordinates({ left: 0, top: 55 });
 
             assert.equal(index, 7, 'Index is OK');
         });
 
-        test('Month view', function(assert) {
+        test('Month view', async function(assert) {
             this.createInstance('Month', {
                 width: 800,
                 height: 500

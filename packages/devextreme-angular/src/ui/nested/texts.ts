@@ -19,7 +19,7 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoGanttHeaderFilterTexts } from './base/gantt-header-filter-texts';
+import { DxoFilterPanelTexts } from './base/filter-panel-texts';
 
 
 @Component({
@@ -92,7 +92,7 @@ import { DxoGanttHeaderFilterTexts } from './base/gantt-header-filter-texts';
         'addRowToNode'
     ]
 })
-export class DxoTextsComponent extends DxoGanttHeaderFilterTexts implements OnDestroy, OnInit  {
+export class DxoTextsComponent extends DxoFilterPanelTexts implements OnDestroy, OnInit  {
 
     protected get _optionPath() {
         return 'texts';

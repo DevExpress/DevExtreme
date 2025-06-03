@@ -18,9 +18,9 @@ import {
 
 
 import * as CommonTypes from 'devextreme/common';
-import { HorizontalAlignment, DataType, SearchMode, SortOrder } from 'devextreme/common';
+import { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
 import { dxTreeListColumnButton, TreeListPredefinedColumnButton, dxTreeListColumn, TreeListCommandColumnType } from 'devextreme/ui/tree_list';
-import { FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation } from 'devextreme/common/grids';
+import { FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
 import { Format } from 'devextreme/common/core/localization';
 import { dxFormSimpleItem } from 'devextreme/ui/form';
 import { DataSourceOptions } from 'devextreme/data/data_source';
@@ -334,10 +334,10 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
+    get headerFilter(): ColumnHeaderFilter | undefined {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
+    set headerFilter(value: ColumnHeaderFilter | undefined) {
         this._setOption('headerFilter', value);
     }
 

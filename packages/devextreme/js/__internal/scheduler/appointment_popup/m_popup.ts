@@ -13,7 +13,7 @@ import {
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { hide as hideLoading, show as showLoading } from '../m_loading';
-import { getNormalizedResources } from '../resources/m_utils';
+import { getAppointmentGroupValues, getRawAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -152,13 +152,15 @@ export class AppointmentPopup {
 
   _createFormData(rawAppointment) {
     const appointment = this._createAppointmentAdapter(rawAppointment);
-    const dataAccessors = this.scheduler.getDataAccessors();
-    const resources = this.scheduler.getResources();
-    const normalizedResources = getNormalizedResources(rawAppointment, dataAccessors, resources);
+    const resourceManager = this.scheduler.getResourceManager();
+    const rawAppointmentGroupValues = getRawAppointmentGroupValues(
+      rawAppointment,
+      resourceManager.resources,
+    );
 
     return {
       ...rawAppointment,
-      ...normalizedResources,
+      ...rawAppointmentGroupValues,
       repeat: !!appointment.recurrenceRule,
     };
   }
@@ -309,13 +311,13 @@ export class AppointmentPopup {
           const endTime = endDate.getTime();
 
           const inAllDayRow = allDay || (endTime - startTime) >= DAY_IN_MS;
+          const resourceManager = this.scheduler.getResourceManager();
+          const appointmentGroupValues = getAppointmentGroupValues(
+            this.state.lastEditData,
+            resourceManager.resources,
+          );
 
-          const dataAccessors = this.scheduler.getDataAccessors();
-          const resourceList = this.scheduler.getResources();
-
-          const normalizedResources = getNormalizedResources(this.state.lastEditData, dataAccessors, resourceList);
-
-          this.scheduler.updateScrollPosition(startDate, normalizedResources, inAllDayRow);
+          this.scheduler.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
           this.state.lastEditData = null;
         }
 

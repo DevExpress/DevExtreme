@@ -1,8 +1,8 @@
 import type { Appointment, Properties } from '@js/ui/scheduler';
 
-export type ResourcesConfig = Required<Properties>['resources'];
-export type ResourceConfig = ResourcesConfig[number];
+import type { ResourceLoader } from './utils/loader/resource_loader';
 
+export type RawViewType = Required<Properties>['views'][number];
 export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
@@ -149,7 +149,7 @@ export interface ViewDataProviderOptions {
   startCellIndex: number;
   groupOrientation: GroupOrientation;
   groupByDate: boolean;
-  groups: Group[];
+  groups: ResourceLoader[];
   isProvideVirtualCellsWidth: boolean;
   isAllDayPanelVisible: boolean;
   selectedCells?: unknown;

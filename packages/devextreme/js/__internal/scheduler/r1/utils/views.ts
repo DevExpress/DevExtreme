@@ -1,29 +1,23 @@
 import { isObject } from '@js/core/utils/type';
 
 import { VIEW_TYPES } from '../../constants';
-import type { ViewType } from '../../types';
+import type { RawViewType, ViewType } from '../../types';
 
 export const getCurrentView = (
   currentView: string | ViewType,
-  // https://github.com/DevExpress/devextreme-renovation/issues/754
-  views: (ViewType | Partial<unknown>)[],
-): ViewType | Partial<unknown> => {
+  views: RawViewType[],
+): RawViewType => {
   let currentViewProps = views.find((view): boolean => {
     const names = isObject(view)
-      // @ts-expect-error this type was related to R1 TSX
       ? [view.name, view.type]
       : [view];
 
-    if (names.includes(currentView)) {
-      return true;
-    }
-
-    return false;
+    return names.includes(currentView);
   });
 
   if (currentViewProps === undefined) {
     if (VIEW_TYPES.includes(currentView)) {
-      currentViewProps = currentView;
+      currentViewProps = currentView as ViewType;
     } else {
       [currentViewProps] = views;
     }
