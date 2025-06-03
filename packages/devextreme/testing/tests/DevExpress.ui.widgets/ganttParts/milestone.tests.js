@@ -107,12 +107,12 @@ QUnit.module('Milestone', moduleConfig, () => {
         assert.false(children.eq(0).hasClass(Consts.TASK_TITLE_SELECTOR), 'child is not task title');
     });
 
-    QUnit.skipInShadowDomMode('position is correctly calculated', function(assert) {
-        const { platform } = devices.real();
-        if(['android', 'ios'].includes(platform)) {
-            assert.expect(0);
-            return;
-        }
+    test('position is correctly calculated', function(assert) {
+        // const { platform } = devices.real();
+        // if(['android', 'ios'].includes(platform)) {
+        //     assert.expect(0);
+        //     return;
+        // }
         const customTasks = [
             { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-03-26'), 'progress': 0 },
             { 'id': 2, 'parentId': 1, 'title': 'Milestone 1', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-21'), 'progress': 0 },
@@ -131,8 +131,12 @@ QUnit.module('Milestone', moduleConfig, () => {
         this.createInstance(options);
         this.clock.tick(10);
         const milestoneWrapper = this.$element.find(Consts.MILESTONE_WRAPPER_SELECTOR);
-        const firstLeft = parseFloat(milestoneWrapper.eq(0).css('left'));
-        const secondLeft = parseFloat(milestoneWrapper.eq(1).css('left'));
-        assert.equal(firstLeft - secondLeft, 45, 'left position is different');
+        // const firstLeft = parseFloat(milestoneWrapper.eq(0).css('left'));
+        // const secondLeft = parseFloat(milestoneWrapper.eq(1).css('left'));
+        debugger;
+        assert.equal(milestoneWrapper.eq(0).css('left'), '1367.02px');
+        assert.equal(milestoneWrapper.eq(1).css('left'), '1322.02px');
+        assert.equal(milestoneWrapper.eq(0).css('position'), 'absolute');
+        // assert.equal(firstLeft - secondLeft, 45, 'left position is different');
     });
 });
