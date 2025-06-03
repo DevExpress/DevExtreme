@@ -1,12 +1,11 @@
 $(() => {
   const popup = $('#popup').dxPopup({
     width: 350,
-    height: 190,
+    height: 240,
     visible: false,
     dragEnabled: false,
     hideOnOutsideClick: true,
-    showCloseButton: false,
-    showTitle: false,
+    title: 'Image Info',
     position: {
       at: 'center',
       my: 'center',
@@ -96,7 +95,6 @@ $(() => {
       dataSource: vehicles,
       cardsPerRow: 'auto',
       cardMinWidth: 260,
-      cardMaxWidth: 260,
       paging: {
         pageSize: 12,
       },

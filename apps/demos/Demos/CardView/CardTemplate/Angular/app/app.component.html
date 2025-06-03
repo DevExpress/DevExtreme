@@ -3,7 +3,6 @@
   [dataSource]="vehicles"
   cardsPerRow="auto"
   [cardMinWidth]="260"
-  [cardMaxWidth]="260"
   [searchPanel]="searchPanelConfig"
   [paging]="pagingConfig"
   [headerFilter]="headerFilterConfig"
@@ -31,12 +30,11 @@
 
 <dx-popup
   [width]="350"
-  [height]="190"
+  [height]="240"
   [(visible)]="popupVisible"
   [dragEnabled]="false"
   [hideOnOutsideClick]="true"
-  [showCloseButton]="false"
-  [showTitle]="false"
+  title="Image Info"
 >
   <dxo-position at="center" my="center" collision="fit"></dxo-position>
   <div *dxTemplate="let _ of 'content'">

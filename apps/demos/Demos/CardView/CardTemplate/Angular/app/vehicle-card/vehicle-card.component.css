@@ -1,19 +1,20 @@
-::ng-deep .vehicle__img-wrapper {
+.vehicle__img-wrapper {
     height: 146px;
     border-bottom: var(--dx-border-width) solid var(--dx-color-border);
     background-color: #fff;
 }
 
-::ng-deep .vehicle__img {
+.vehicle__img {
     height: 100%;
     width: 100%;
+    object-fit: scale-down;
 }
 
-::ng-deep .vehicle__info {
+.vehicle__info {
     padding: 12px;
 }
 
-::ng-deep .vehicle__name {
+.vehicle__name {
     font-weight: 700;
     font-size: 20px;
     line-height: 28px;
@@ -25,7 +26,7 @@
     white-space: nowrap;
 }
 
-::ng-deep .vehicle__price {
+.vehicle__price {
     padding-left: 12px;
     padding-right: 12px;
     height: 32px;
@@ -34,35 +35,35 @@
     color: #0F6CBD;
 }
 
-::ng-deep .vehicle__type-container {
+.vehicle__type-container {
     padding: 12px;
     display: inline-block;
 }
 
-::ng-deep .vehicle__type {
+.vehicle__type {
     padding: 2px 6px;
     background-color: var(--dx-color-separator);
     border-radius: 13px;
 }
 
-::ng-deep .vehicle__spec {
+.vehicle__spec {
     padding: 2px 12px;
 }
 
-::ng-deep .vehicle__modification {
+.vehicle__modification {
     height: 24px;
     padding: 2px 0 2px 12px;
 }
 
-::ng-deep .vehicle__footer-container {
+.vehicle__footer-container {
     padding: 12px;
     height: 56px;
 }
 
-::ng-deep .vehicle__image-licence-caption {
+.vehicle__image-licence-caption {
     font-weight: 600;
 }
 
-::ng-deep .license__link {
+.license__link {
     color: var(--dx-color-link);
 }

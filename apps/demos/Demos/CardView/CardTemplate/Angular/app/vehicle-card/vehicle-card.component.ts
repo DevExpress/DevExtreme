@@ -10,6 +10,7 @@ if (window && window.config?.packageConfigPaths) {
 @Component({
   selector: 'vehicle-card',
   templateUrl: `.${modulePrefix}/vehicle-card/vehicle-card.component.html`,
+  styleUrls: [`.${modulePrefix}/vehicle-card/vehicle-card.component.css`],
 })
 
 export class VehicleCard {

@@ -3,7 +3,6 @@
     :data-source="vehicles"
     cards-per-row="auto"
     :card-min-width="260"
-    :card-max-width="260"
     card-template="cardTemplate"
     :search-panel="{
       visible: true,
@@ -32,15 +31,14 @@
   </DxCardView>
   <DxPopup
     :width="350"
-    :height="190"
+    :height="240"
     v-model:visible="popupVisible"
     :dragEnabled="false"
     :hideOnOutsideClick="true"
-    :showCloseButton="false"
-    :showTitle="false"
+    title="Image Info"
     :onHiding="hideInfo"
 >
-        <Position at="center" my="center" collision="fit" />
+        <DxPosition at="center" my="center" collision="fit" />
         <template #content>
             <LicenseInfo :vehicle="currentVehicle" />
         </template>
@@ -48,7 +46,7 @@
 </template>
 <script setup lang="ts">
 import { DxCardView, DxColumn } from 'devextreme-vue/card-view';
-import { DxPopup } from 'devextreme-vue/popup';
+import { DxPopup, DxPosition } from 'devextreme-vue/popup';
 import LicenseInfo from './LicenseInfo.vue';
 import VehicleCard from './VehicleCard.vue';
 import { vehicles } from './data.ts';
@@ -76,6 +74,7 @@ function hideInfo() {
   .vehicle__img {
       height: 100%;
       width: 100%;
+      object-fit: scale-down;
   }
 
   .vehicle__info {

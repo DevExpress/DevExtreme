@@ -21,7 +21,6 @@ const App = () => {
         dataSource={vehicles}
         cardsPerRow="auto"
         cardMinWidth={260}
-        cardMaxWidth={260}
         searchPanel={{ visible: true }}
         paging={{ pageSize: 12 }}
         headerFilter={{ visible: true }}
@@ -46,12 +45,11 @@ const App = () => {
 
       <Popup
         width={350}
-        height={190}
+        height={240}
         visible={popupVisible}
         dragEnabled={false}
         hideOnOutsideClick={true}
-        showCloseButton={false}
-        showTitle={false}
+        title="Image Info"
         onHiding={hideInfo}
         contentRender={() => (currentVehicle ? <LicenseInfo vehicle={currentVehicle} /> : null)}
       >
