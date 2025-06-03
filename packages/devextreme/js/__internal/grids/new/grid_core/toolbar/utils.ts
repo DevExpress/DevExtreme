@@ -2,7 +2,7 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined, isString } from '@js/core/utils/type';
 import type { Item as BaseToolbarItem } from '@js/ui/toolbar';
 
-import type { ToolbarItems } from './types';
+import type { DefaultToolbarItem, ToolbarItems } from './types';
 
 export function isVisible(
   visibleConfig: boolean | undefined,
@@ -43,17 +43,17 @@ function normalizeToolbarItem(
 }
 
 export function normalizeToolbarItems(
-  defaultItems: (ToolbarItem & { name: string })[],
+  sortedDefaultItems: DefaultToolbarItem[],
   userItems: (ToolbarItem | string)[] | undefined,
   defaultItemNames: readonly string[],
 ): ToolbarItem[] {
   if (!isDefined(userItems)) {
-    return defaultItems;
+    return sortedDefaultItems;
   }
 
   const defaultButtonsMap = {};
 
-  defaultItems.forEach((button) => {
+  sortedDefaultItems.forEach((button) => {
     defaultButtonsMap[button.name] = button;
   });
 
