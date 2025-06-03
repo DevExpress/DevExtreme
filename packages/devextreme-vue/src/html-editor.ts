@@ -23,12 +23,16 @@ import {
  dxHtmlEditorTableResizing,
  dxHtmlEditorToolbar,
  dxHtmlEditorVariables,
+ AICommandNameExtended,
+ AICommandName,
  HtmlEditorImageUploadMode,
  dxHtmlEditorImageUploadTabItem,
  HtmlEditorImageUploadTab,
  dxHtmlEditorTableContextMenuItem,
  HtmlEditorPredefinedContextMenuItem,
  HtmlEditorPredefinedToolbarItem,
+ AICommand,
+ AIToolbarItem,
  dxHtmlEditorToolbarItem,
 } from "devextreme/ui/html_editor";
 import {
@@ -237,6 +241,30 @@ prepareComponentConfig(componentConfig);
 const DxHtmlEditor = defineComponent(componentConfig);
 
 
+const DxCommandConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:name": null,
+    "update:options": null,
+    "update:prompt": null,
+    "update:text": null,
+  },
+  props: {
+    name: [Object, String] as PropType<AICommandNameExtended | AICommandName | "custom">,
+    options: {},
+    prompt: Function as PropType<((param: string) => string)>,
+    text: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxCommandConfig);
+
+const DxCommand = defineComponent(DxCommandConfig);
+
+(DxCommand as any).$_optionName = "commands";
+(DxCommand as any).$_isCollectionItem = true;
+
 const DxConverterConfig = {
   emits: {
     "update:isActive": null,
@@ -437,6 +465,7 @@ const DxItemConfig = {
     "update:acceptedValues": null,
     "update:beginGroup": null,
     "update:closeMenuOnClick": null,
+    "update:commands": null,
     "update:cssClass": null,
     "update:disabled": null,
     "update:formatName": null,
@@ -461,6 +490,7 @@ const DxItemConfig = {
     acceptedValues: Array as PropType<Array<boolean | number | string>>,
     beginGroup: Boolean,
     closeMenuOnClick: Boolean,
+    commands: Array as PropType<Array<AICommand | AICommandName>>,
     cssClass: String,
     disabled: Boolean,
     formatName: String as PropType<HtmlEditorPredefinedToolbarItem | string>,
@@ -490,6 +520,7 @@ const DxItem = defineComponent(DxItemConfig);
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
 (DxItem as any).$_expectedChildren = {
+  command: { isCollectionItem: true, optionName: "commands" },
   item: { isCollectionItem: true, optionName: "items" }
 };
 
@@ -659,7 +690,7 @@ const DxToolbarConfig = {
   },
   props: {
     container: {},
-    items: Array as PropType<Array<dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem>>,
+    items: Array as PropType<Array<AIToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem>>,
     multiline: Boolean
   }
 };
@@ -744,6 +775,7 @@ const DxVariables = defineComponent(DxVariablesConfig);
 export default DxHtmlEditor;
 export {
   DxHtmlEditor,
+  DxCommand,
   DxConverter,
   DxFileUploaderOptions,
   DxImageUpload,

@@ -1,0 +1,2 @@
+CardView supports single and multiple selection modes. Set the selection [mode](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/selection/#mode) option to either *"single"* or *"multiple"* to enable this capability.
+<!--split-->

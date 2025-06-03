@@ -5,6 +5,10 @@
     "mutations": [
         {
             "kind": "remove",
+            "uid": "/ai-integration:AIIntegration"
+        },
+        {
+            "kind": "remove",
             "uid": "/card_view:CardHeader"
         },
         {
@@ -13,7 +17,7 @@
         },
         {
             "kind": "remove",
-            "uid": "/ai-integration:AIIntegration"
+            "uid": "/html_editor:AICommand"
         },
         {
             "kind": "remove",

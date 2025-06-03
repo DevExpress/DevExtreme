@@ -126,6 +126,7 @@ safeSizeTest('AllowSorting API', async (t) => {
         dataField: 'lastName',
       },
     ],
+    height: 500,
   });
 });
 

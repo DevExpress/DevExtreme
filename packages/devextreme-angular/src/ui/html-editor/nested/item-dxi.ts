@@ -19,7 +19,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
+import { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem, AICommand, AICommandName } from 'devextreme/ui/html_editor';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
@@ -32,6 +32,7 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+import { DxiHtmlEditorCommandComponent } from './command-dxi';
 
 
 @Component({
@@ -220,11 +221,27 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
         this._setOption('widget', value);
     }
 
+    @Input()
+    get commands(): Array<AICommand | AICommandName> {
+        return this._getOption('commands');
+    }
+    set commands(value: Array<AICommand | AICommandName>) {
+        this._setOption('commands', value);
+    }
+
 
     protected get _optionPath() {
         return 'items';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiHtmlEditorCommandComponent))
+    get commandsChildren(): QueryList<DxiHtmlEditorCommandComponent> {
+        return this._getOption('commands');
+    }
+    set commandsChildren(value) {
+        this.setChildren('commands', value);
+    }
 
     @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent))
     get itemsChildren(): QueryList<DxiHtmlEditorItemComponent> {

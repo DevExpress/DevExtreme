@@ -61,7 +61,9 @@ export const ColumnContextMenuMixin = <T extends ModuleType<ColumnContextMenuMix
 
     return [
       {
-        text: messageLocalization.format('dxDataGrid-moveColumnToTheLeft'),
+        text: rtlEnabled
+          ? messageLocalization.format('dxDataGrid-moveColumnToTheRight')
+          : messageLocalization.format('dxDataGrid-moveColumnToTheLeft'),
         value: Direction.Previous,
         beginGroup: true,
         disabled: !keyboardNavigationController.canReorderColumn(
@@ -73,7 +75,9 @@ export const ColumnContextMenuMixin = <T extends ModuleType<ColumnContextMenuMix
         onItemClick,
       },
       {
-        text: messageLocalization.format('dxDataGrid-moveColumnToTheRight'),
+        text: rtlEnabled
+          ? messageLocalization.format('dxDataGrid-moveColumnToTheLeft')
+          : messageLocalization.format('dxDataGrid-moveColumnToTheRight'),
         value: Direction.Next,
         disabled: !keyboardNavigationController.canReorderColumn(
           column,
