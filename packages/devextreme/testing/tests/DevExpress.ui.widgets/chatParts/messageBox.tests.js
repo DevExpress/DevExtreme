@@ -303,8 +303,8 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('should not send message on enter key on mobile devices (T1293840)', function(assert) {
-            if(devices.real().deviceType !== 'desktop') {
-                assert.ok(true, 'test does not actual for mobile devices');
+            if(devices.real().deviceType === 'desktop') {
+                assert.ok(true, 'test does not actual for desktop devices');
                 return;
             }
 
