@@ -2,6 +2,9 @@ import $ from 'jquery';
 import 'ui/gantt';
 import { Consts } from '../../../helpers/ganttHelpers.js';
 import devices from '__internal/core/m_devices';
+
+import 'gantt.css!';
+
 const { test } = QUnit;
 
 const moduleConfig = {
