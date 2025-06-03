@@ -1,17 +1,24 @@
-import { VehicleImageLicenseProps } from "./types"
+import { VehicleImageLicenseProps } from './types'
 import React from 'react';
 
-const LicenseInfo = ({ vehicle }: VehicleImageLicenseProps) => {
+const LicenseInfo = ({ 
+  vehicle: { 
+    LicenseName,
+    Author,
+    Source,
+    Edits,
+   } 
+}: VehicleImageLicenseProps) => {
 
     return (
         <div>
-            <p><b>Image licensed under: </b> <span>{vehicle.LicenseName}</span></p>
-            <p><b>Author: </b> <span>{vehicle.Author}</span></p>
-            <p><b>Source link: </b> <a href={`https://${vehicle.Source}`}>
-                    https://{vehicle.Source}
+            <p><b>Image licensed under: </b> <span>{LicenseName}</span></p>
+            <p><b>Author: </b> <span>{Author}</span></p>
+            <p><b>Source link: </b> <a href={`https://${Source}`}>
+                    https://{Source}
                 </a>
             </p>
-            <p><b>Edits: </b> <span>{vehicle.Edits}</span></p>
+            <p><b>Edits: </b> <span>{Edits}</span></p>
         </div>
     );
 }

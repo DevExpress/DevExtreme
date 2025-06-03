@@ -15,8 +15,4 @@ if (window && window.config?.packageConfigPaths) {
 export class VehicleCard {
   @Input() vehicle!: Vehicle;
   @Output() showInfo = new EventEmitter<void>();
-
-  onShowInfo() {
-    this.showInfo.emit();
-  }
 }

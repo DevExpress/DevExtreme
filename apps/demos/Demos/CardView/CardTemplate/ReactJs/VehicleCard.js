@@ -1,30 +1,43 @@
 import React from 'react';
 import Button from 'devextreme-react/button';
 
-const VehicleCard = ({ vehicle, onShowInfo }) => (
+const VehicleCard = ({
+  vehicle: {
+    ID,
+    TrademarkName,
+    Name,
+    Price,
+    CategoryName,
+    Modification,
+    BodyStyleName,
+    Horsepower,
+  },
+  vehicle,
+  onShowInfo,
+}) => (
   <div className="vehicle__card">
     <div className="vehicle__img-wrapper">
       <img
         className="vehicle__img"
-        src={`../../../../images/vehicles/image_${vehicle.ID}.png`}
-        alt={`${vehicle.TrademarkName} ${vehicle.Name}`}
+        src={`../../../../images/vehicles/image_${ID}.png`}
+        alt={`${TrademarkName} ${Name}`}
       />
     </div>
     <div className="vehicle__info">
       <div
         className="vehicle__name"
-        title={`${vehicle.TrademarkName} ${vehicle.Name}`}
+        title={`${TrademarkName} ${Name}`}
       >
-        {vehicle.TrademarkName} {vehicle.Name}
+        {TrademarkName} {Name}
       </div>
-      <div className="vehicle__price">${vehicle.Price}</div>
+      <div className="vehicle__price">${Price}</div>
       <div className="vehicle__type-container">
-        <div className="vehicle__type">{vehicle.CategoryName}</div>
+        <div className="vehicle__type">{CategoryName}</div>
       </div>
       <div className="vehicle__spec-container">
-        <div className="vehicle__modification">{vehicle.Modification}</div>
-        <div className="vehicle__modification">{vehicle.BodyStyleName}</div>
-        <div className="vehicle__modification">{vehicle.Horsepower} h.p.</div>
+        <div className="vehicle__modification">{Modification}</div>
+        <div className="vehicle__modification">{BodyStyleName}</div>
+        <div className="vehicle__modification">{Horsepower} h.p.</div>
       </div>
       <div className="vehicle__footer-container">
         <Button

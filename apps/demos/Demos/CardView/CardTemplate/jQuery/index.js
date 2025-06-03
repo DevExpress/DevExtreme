@@ -26,11 +26,16 @@ $(() => {
   };
 
   const createVehicleImg = (vehicle) => {
+    const {
+      ID,
+      Name,
+      TrademarkName,
+    } = vehicle;
     const imageWrapper = $('<div>').addClass('vehicle__img-wrapper');
     const img = $('<img>').addClass('vehicle__img');
     img.attr({
-      src: `../../../../images/vehicles/image_${vehicle.ID}.png`,
-      alt: `${vehicle.TrademarkName} ${vehicle.Name}`,
+      src: `../../../../images/vehicles/image_${ID}.png`,
+      alt: `${TrademarkName} ${Name}`,
     });
 
     imageWrapper.append(img);
@@ -39,32 +44,45 @@ $(() => {
   };
 
   const createVehicleInfo = (card) => {
+    const {
+      TrademarkName,
+      Name,
+      Price,
+      CategoryName,
+      Modification,
+      BodyStyleName,
+      Horsepower,
+      Source,
+      LicenseName,
+      Author,
+      Edits,
+    } = card.data;
     const vehicleInfo = $('<div>').addClass('vehicle__info');
 
-    const name = `${card.data.TrademarkName} ${card.data.Name}`;
+    const name = `${TrademarkName} ${Name}`;
     const vehicleName = $('<div>').addClass('vehicle__name').text(name).attr('title', name);
 
-    const priceInfo = $('<div>').addClass('vehicle__price').text(`$${card.data.Price}`);
+    const priceInfo = $('<div>').addClass('vehicle__price').text(`$${Price}`);
 
     const typeContainer = $('<div>').addClass('vehicle__type-container');
-    const typeInfo = $('<div>').addClass('vehicle__type').text(`${card.data.CategoryName}`);
+    const typeInfo = $('<div>').addClass('vehicle__type').text(`${CategoryName}`);
     typeContainer.append(typeInfo);
 
     const specContainer = $('<div>').addClass('vehicle__spec-container');
-    const modificationInfo = $('<div>').addClass('vehicle__modification').text(`${card.data.Modification}`);
-    const bodyInfo = $('<div>').addClass('vehicle__modification').text(`${card.data.BodyStyleName}`);
-    const horsepowerInfo = $('<div>').addClass('vehicle__modification').text(` ${card.data.Horsepower} h.p.`);
+    const modificationInfo = $('<div>').addClass('vehicle__modification').text(`${Modification}`);
+    const bodyInfo = $('<div>').addClass('vehicle__modification').text(`${BodyStyleName}`);
+    const horsepowerInfo = $('<div>').addClass('vehicle__modification').text(` ${Horsepower} h.p.`);
     specContainer.append(modificationInfo);
     specContainer.append(bodyInfo);
     specContainer.append(horsepowerInfo);
 
     const popupContentTemplate = function () {
-      const sourceLink = `https://${card.data.Source}`;
+      const sourceLink = `https://${Source}`;
       return $('<div>').append(
-        $(`<p><b>Image licensed under:</b> <span>${card.data.LicenseName}</span></p>`),
-        $(`<p><b>Author:</b> <span>${card.data.Author}</span></p>`),
+        $(`<p><b>Image licensed under:</b> <span>${LicenseName}</span></p>`),
+        $(`<p><b>Author:</b> <span>${Author}</span></p>`),
         $(`<p><b>Source link:</b> <a href='${sourceLink}'>${sourceLink}</a></p>`),
-        $(`<p><b>Edits:</b> <span>${card.data.Edits}</span></p>`),
+        $(`<p><b>Edits:</b> <span>${Edits}</span></p>`),
       );
     };
 
