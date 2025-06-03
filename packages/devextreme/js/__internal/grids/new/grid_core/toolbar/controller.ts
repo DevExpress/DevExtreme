@@ -2,7 +2,7 @@ import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
 
 import { OptionsController } from '../options_controller/options_controller';
-import { DEFAULT_TOOLBAR_ITEMS } from './defaults';
+import { DEFAULT_TOOLBAR_ITEMS } from './const';
 import type {
   DefaultToolbarItem, DefaultToolbarItemsCollection, ToolbarItem, ToolbarItems,
 } from './types';
