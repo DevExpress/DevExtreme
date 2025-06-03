@@ -1,6 +1,7 @@
-The DevExtreme CardView componen allows you to display business data using a 'card' UI metaphor — a visually engaging alternative to traditional grid views.
+The DevExtreme CardView component allows you to display business data using a 'card' UI metaphor — a visually engaging alternative to traditional grid views. Use it for employee directories, contact lists, product catalogs, or task boards.
 <!--split-->
-It ships with the following built-in data management capabilities:  
+
+CardView ships with the following built-in data management capabilities:  
 
 - Sorting
 - Paging
@@ -13,4 +14,4 @@ It ships with the following built-in data management capabilities:
 
 Each card within the CardView is customizable, with UI elements such as toolbars, covers, and footers (allowing you to adapt layouts as requirements dictate).  
 
-For a complete overview of CardView options, check the [CardView API Reference](/Documentation/ApiReference/UI_Components/dxCardView/).
+For a complete overview of CardView options, refer to the [CardView API Reference](/Documentation/ApiReference/UI_Components/dxCardView/).
