@@ -34,7 +34,7 @@ async function emailValidationCallback(params) {
 };
 
 function hireDateValidationCallback(params) {
-  return new Date(params.data.hireDate) > new Date(params.data.birthDate);
+  return new Date(params.value) > new Date(params.data.birthDate);
 };
 
 const App = () => (
