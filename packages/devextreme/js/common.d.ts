@@ -401,7 +401,6 @@ export type GlobalConfig = {
    * @docid
    * @public
    */
-  // bookmark
   licenseKey?: string;
   buyNowLink?: string;
   licensingDocLink?: string;
