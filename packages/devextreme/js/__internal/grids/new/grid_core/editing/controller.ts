@@ -2,7 +2,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import { applyChanges } from '@js/common/data';
 import { isDefined } from '@js/core/utils/type';
-import { confirm } from '@js/ui/dialog';
 import { computed, type Signal } from '@preact/signals-core';
 import { generateNewRowTempKey } from '@ts/grids/grid_core/editing/m_editing_utils';
 import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/index';
@@ -13,6 +12,7 @@ import type { DataObject, Key } from '../data_controller/types';
 import { ItemsController } from '../items_controller/items_controller';
 import { KeyboardNavigationController } from '../keyboard_navigation/index';
 import { OptionsController } from '../options_controller/options_controller';
+import { ConfirmController } from './confirm_controller';
 import type { Change } from './types';
 
 export class EditingController {
@@ -102,6 +102,7 @@ export class EditingController {
     ColumnsController, DataController,
     KeyboardNavigationController,
     OptionsValidationController,
+    ConfirmController,
   ] as const;
 
   constructor(
@@ -111,6 +112,7 @@ export class EditingController {
     private readonly dataController: DataController,
     private readonly kbn: KeyboardNavigationController,
     private readonly optionsValidationController: OptionsValidationController,
+    private readonly confirmController: ConfirmController,
   ) {}
 
   public provideValidateMethod(validateMethod: () => Promise<boolean>): void {
@@ -174,11 +176,15 @@ export class EditingController {
       return Promise.resolve(true);
     }
 
-    const result = await confirm(
-      // @ts-expect-error wrong typing in optionController
-      this.texts.peek().confirmDeleteMessage,
-      // @ts-expect-error wrong typing in optionController
-      this.texts.peek().confirmDeleteTitle,
+    // @ts-expect-error wrong typing in optionController
+    const { confirmDeleteMessage, confirmDeleteTitle } = this.texts.peek();
+
+    const showDialogTitle = isDefined(confirmDeleteTitle) && confirmDeleteTitle.length > 0;
+
+    const result = await this.confirmController.confirm(
+      confirmDeleteMessage ?? '', // TODO: bad typing
+      confirmDeleteTitle,
+      showDialogTitle,
     );
 
     return result;
