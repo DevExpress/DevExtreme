@@ -80,5 +80,29 @@ describe('ToolbarController', () => {
         { name: 'searchPanel', location: 'after' },
       ]);
     });
+
+    it('should add item with order specified in consts', () => {
+      const { toolbarController } = setup();
+      const needRender = signal(true);
+
+      toolbarController.addDefaultItem(signal({ name: 'addCardButton' }), needRender);
+      toolbarController.addDefaultItem(signal({ name: 'searchPanel' }), signal(true));
+
+      expect(toolbarController.items.peek()).toStrictEqual([
+        { name: 'addCardButton' },
+        { name: 'searchPanel' },
+      ]);
+
+      needRender.value = false;
+      expect(toolbarController.items.peek()).toStrictEqual([
+        { name: 'searchPanel' },
+      ]);
+
+      needRender.value = true;
+      expect(toolbarController.items.peek()).toStrictEqual([
+        { name: 'addCardButton' },
+        { name: 'searchPanel' },
+      ]);
+    });
   });
 });
