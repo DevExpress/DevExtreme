@@ -62,6 +62,7 @@ const DRAG_EVENT_DELTA = 1;
 const DIALOG_TRIGGER_EVENT_NAMESPACE = 'dxFileUploaderDialogTrigger';
 
 const keyUpEventName = 'keyup';
+const nativeClickEvent = 'click';
 
 const ENTER_KEY = 'enter';
 const SPACE_KEY = 'space';
@@ -103,9 +104,9 @@ class FileUploader extends Editor<Properties> {
   _$content?: dxElementWrapper;
 
   _uploadStrategy!: CustomChunksFileUploadStrategy
-  | DefaultChunksFileUploadStrategy
-  | CustomWholeFileUploadStrategy
-  | DefaultWholeFileUploadStrategy;
+    | DefaultChunksFileUploadStrategy
+    | CustomWholeFileUploadStrategy
+    | DefaultWholeFileUploadStrategy;
 
   _preventRecreatingFiles?: any;
 
@@ -871,7 +872,7 @@ class FileUploader extends Editor<Properties> {
 
     const $target = $(target);
 
-    eventsEngine.on($target, addNamespace(clickEventName, DIALOG_TRIGGER_EVENT_NAMESPACE), () => {
+    eventsEngine.on($target, addNamespace(nativeClickEvent, DIALOG_TRIGGER_EVENT_NAMESPACE), () => {
       this._selectFileDialogClickHandler();
     });
     eventsEngine.on($target, addNamespace(keyUpEventName, DIALOG_TRIGGER_EVENT_NAMESPACE), (e: KeyboardEvent) => {
@@ -1033,8 +1034,8 @@ class FileUploader extends Editor<Properties> {
 
   _shouldRaiseDragOver(e, dropZoneElement) {
     return this._activeDropZone === null
-            && this.isMouseOverElement(e, dropZoneElement, false)
-            && e.originalEvent.dataTransfer.types.find((item) => item === 'Files');
+      && this.isMouseOverElement(e, dropZoneElement, false)
+      && e.originalEvent.dataTransfer.types.find((item) => item === 'Files');
   }
 
   _dragOverHandler(isCustomTarget, e) {
