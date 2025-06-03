@@ -16,6 +16,7 @@ import type dxScrollable from './ui/scroll_view/ui.scrollable';
 import type dxSortable from './ui/sortable';
 import type { Properties as ButtonProperties } from './ui/button';
 import { UserDefinedElement } from './core/element';
+import { AssertedVersion } from './__internal/utils/version';
 
 /**
  * @public
@@ -400,9 +401,11 @@ export type GlobalConfig = {
    * @docid
    * @public
    */
+  // bookmark
   licenseKey?: string;
   buyNowLink?: string;
   licensingDocLink?: string;
+  assertDevExtremeVersion?: AssertedVersion[];
 };
 
 /**
