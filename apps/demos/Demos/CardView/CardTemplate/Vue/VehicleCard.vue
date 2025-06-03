@@ -23,7 +23,10 @@
           {{ vehicle.Modification }}
         </div>
         <div class="vehicle__modification">
-          {{ vehicle.BodyStyleName }} {{ vehicle.Horsepower }} h.p.
+          {{ vehicle.BodyStyleName }}
+        </div>
+        <div class="vehicle__modification">
+           {{ vehicle.Horsepower }} h.p.
         </div>
       </div>
       <div class="vehicle__footer-container">
@@ -40,9 +43,10 @@
 
 <script setup lang="ts">
 import { DxButton } from 'devextreme-vue/button';
+import { Vehicle } from './data';
 
 defineProps<{
-  vehicle: any
+  vehicle: Vehicle
 }>();
 
 defineEmits(['show-info']);

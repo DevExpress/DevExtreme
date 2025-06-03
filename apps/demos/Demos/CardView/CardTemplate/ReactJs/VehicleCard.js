@@ -23,9 +23,8 @@ const VehicleCard = ({ vehicle, onShowInfo }) => (
       </div>
       <div className="vehicle__spec-container">
         <div className="vehicle__modification">{vehicle.Modification}</div>
-        <div className="vehicle__modification">
-          {vehicle.BodyStyleName} {vehicle.Horsepower} h.p.
-        </div>
+        <div className="vehicle__modification">{vehicle.BodyStyleName}</div>
+        <div className="vehicle__modification">{vehicle.Horsepower} h.p.</div>
       </div>
       <div className="vehicle__footer-container">
         <Button

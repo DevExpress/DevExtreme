@@ -52,10 +52,11 @@ $(() => {
 
     const specContainer = $('<div>').addClass('vehicle__spec-container');
     const modificationInfo = $('<div>').addClass('vehicle__modification').text(`${card.data.Modification}`);
-    const bodyInfo = $('<div>').addClass('vehicle__modification')
-      .text(`${card.data.BodyStyleName} ${card.data.Horsepower} h.p.`);
+    const bodyInfo = $('<div>').addClass('vehicle__modification').text(`${card.data.BodyStyleName}`);
+    const horsepowerInfo = $('<div>').addClass('vehicle__modification').text(` ${card.data.Horsepower} h.p.`);
     specContainer.append(modificationInfo);
     specContainer.append(bodyInfo);
+    specContainer.append(horsepowerInfo);
 
     const popupContentTemplate = function () {
       const sourceLink = `http://${card.data.Source}`;
