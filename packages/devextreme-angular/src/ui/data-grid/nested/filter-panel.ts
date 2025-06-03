@@ -16,7 +16,7 @@ import {
 
 
 
-import { GridBase } from 'devextreme/common/grids';
+import { FilterPanel, FilterPanelTexts } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,
@@ -35,10 +35,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoDataGridFilterPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get customizeText(): ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string) {
+    get customizeText(): ((e: { component: FilterPanel, filterValue: Record<string, any>, text: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string)) {
+    set customizeText(value: ((e: { component: FilterPanel, filterValue: Record<string, any>, text: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -51,10 +51,10 @@ export class DxoDataGridFilterPanelComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get texts(): { clearFilter?: string, createFilter?: string, filterEnabledHint?: string } {
+    get texts(): FilterPanelTexts {
         return this._getOption('texts');
     }
-    set texts(value: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }) {
+    set texts(value: FilterPanelTexts) {
         this._setOption('texts', value);
     }
 

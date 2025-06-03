@@ -65,6 +65,7 @@ import {
 import {
  FilterOperation,
  FilterType,
+ ColumnHeaderFilter,
  SelectedFilterOperation,
  HeaderFilterGroupInterval,
  ColumnHeaderFilterSearchConfig,
@@ -411,7 +412,7 @@ const DxColumnConfig = {
     filterValues: Array as PropType<Array<any>>,
     format: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
     headerCellTemplate: {},
-    headerFilter: Object as PropType<Record<string, any>>,
+    headerFilter: Object as PropType<ColumnHeaderFilter | Record<string, any>>,
     minWidth: Number,
     selectedFilterOperation: String as PropType<SelectedFilterOperation>,
     sortIndex: Number,

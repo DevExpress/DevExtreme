@@ -14,7 +14,7 @@ import {
 
 
 
-import { HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import { HeaderFilterSearchConfig, HeaderFilterTexts } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,
@@ -73,10 +73,10 @@ export class DxoTreeListTreeListHeaderFilterComponent extends NestedOption imple
     }
 
     @Input()
-    get texts(): { cancel?: string, emptyValue?: string, ok?: string } {
+    get texts(): HeaderFilterTexts {
         return this._getOption('texts');
     }
-    set texts(value: { cancel?: string, emptyValue?: string, ok?: string }) {
+    set texts(value: HeaderFilterTexts) {
         this._setOption('texts', value);
     }
 

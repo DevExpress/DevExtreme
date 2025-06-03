@@ -10,7 +10,7 @@ import { SingleMultipleOrNone } from 'devextreme/common';
 @Component({
     template: ''
 })
-export abstract class DxoGanttSorting extends NestedOption {
+export abstract class DxoSorting extends NestedOption {
     get ascendingText(): string {
         return this._getOption('ascendingText');
     }
