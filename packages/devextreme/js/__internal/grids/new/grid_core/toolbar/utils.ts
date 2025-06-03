@@ -2,7 +2,8 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined, isString } from '@js/core/utils/type';
 import type { Item as BaseToolbarItem } from '@js/ui/toolbar';
 
-import type { DefaultToolbarItem, ToolbarItems } from './types';
+import { DEFAULT_TOOLBAR_ITEMS } from './const';
+import type { DefaultToolbarItem, DefaultToolbarItemsCollection, ToolbarItems } from './types';
 
 export function isVisible(
   visibleConfig: boolean | undefined,
@@ -40,6 +41,17 @@ function normalizeToolbarItem(
   }
 
   return extend(true, {}, defaultProps, button) as ToolbarItem;
+}
+
+export function getSortedToolbarItems(
+  defaultItemsCollection: DefaultToolbarItemsCollection,
+): DefaultToolbarItem[] {
+  return Object.values(defaultItemsCollection)
+    .sort((a, b) => {
+      const aIndex = DEFAULT_TOOLBAR_ITEMS.indexOf(a.name);
+      const bIndex = DEFAULT_TOOLBAR_ITEMS.indexOf(b.name);
+      return aIndex - bIndex;
+    });
 }
 
 export function normalizeToolbarItems(

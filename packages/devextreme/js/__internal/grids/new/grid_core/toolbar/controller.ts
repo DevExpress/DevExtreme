@@ -6,7 +6,7 @@ import { DEFAULT_TOOLBAR_ITEMS } from './const';
 import type {
   DefaultToolbarItem, DefaultToolbarItemsCollection, ToolbarItem, ToolbarItems,
 } from './types';
-import { normalizeToolbarItems } from './utils';
+import { getSortedToolbarItems, normalizeToolbarItems } from './utils';
 
 export class ToolbarController {
   private readonly itemSubscriptions: Record<string, () => void> = {};
@@ -26,7 +26,7 @@ export class ToolbarController {
 
     this.items = computed(
       () => normalizeToolbarItems(
-        Object.values(this.defaultItems.value),
+        getSortedToolbarItems(this.defaultItems.value),
         this.userItems.value,
         DEFAULT_TOOLBAR_ITEMS,
       ),
