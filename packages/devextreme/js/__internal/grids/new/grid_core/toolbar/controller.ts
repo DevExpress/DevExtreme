@@ -4,14 +4,14 @@ import { computed, effect, signal } from '@preact/signals-core';
 import { OptionsController } from '../options_controller/options_controller';
 import { DEFAULT_TOOLBAR_ITEMS } from './defaults';
 import type {
-  DefaultToolbarItem, ToolbarItem, ToolbarItems,
+  DefaultToolbarItem, DefaultToolbarItemsCollection, ToolbarItem, ToolbarItems,
 } from './types';
 import { normalizeToolbarItems } from './utils';
 
 export class ToolbarController {
   private readonly itemSubscriptions: Record<string, () => void> = {};
 
-  private readonly defaultItems = signal<Record<string, DefaultToolbarItem>>({});
+  private readonly defaultItems = signal<DefaultToolbarItemsCollection>({});
 
   private readonly userItems: ReadonlySignal<ToolbarItems | undefined>;
 

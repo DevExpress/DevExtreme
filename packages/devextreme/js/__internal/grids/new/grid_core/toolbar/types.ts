@@ -12,6 +12,8 @@ export type DefaultToolbarItem = ToolbarItem & { name: DefaultToolbarItemName };
 
 export type ToolbarItems = (ToolbarItem | DefaultToolbarItemName)[];
 
+export type DefaultToolbarItemsCollection = Record<string, DefaultToolbarItem>;
+
 export interface ToolbarProps {
   items?: ToolbarItems;
   multiline?: boolean | undefined;
