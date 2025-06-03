@@ -32,6 +32,10 @@ export class AppComponent {
   popupVisible = false;
   currentVehicle: Vehicle | null = null;
 
+  constructor(service: Service) {
+    this.vehicles = service.getVehicles();
+  }
+
   showInfo(vehicle: Vehicle) {
     this.currentVehicle = vehicle;
     this.popupVisible = true;
@@ -39,10 +43,6 @@ export class AppComponent {
 
   hideInfo() {
     this.popupVisible = false;
-  }
-
-  constructor(service: Service) {
-    this.vehicles = service.getVehicles();
   }
 }
 
