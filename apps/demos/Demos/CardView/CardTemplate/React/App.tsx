@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import CardView, { Column } from 'devextreme-react/card-view';
+import CardView, { Column, HeaderFilter, SearchPanel, Paging } from 'devextreme-react/card-view';
 import Popup, { Position } from 'devextreme-react/popup';
 import { Vehicle, vehicles } from './data.ts';
 import VehicleCard from './VehicleCard.tsx';
@@ -24,21 +24,22 @@ const App = () => {
         dataSource={vehicles}
         cardsPerRow="auto"
         cardMinWidth={260}
-        // todo: use nested
-        searchPanel={{ visible: true }}
-        paging={{ pageSize: 12 }}
-        headerFilter={{ visible: true }}
         cardRender={(model) => {
           return <VehicleCard vehicle={model.card.data} onShowInfo={showInfo} />
         }}
       >
+        <HeaderFilter visible={true} />
+        <SearchPanel visible={true} />
+        <Paging pageSize={12} />
+
         <Column dataField="TrademarkName" />
         <Column dataField="Name" />
         <Column
           dataField="Price"
           format="currency"
-          headerFilter={{ groupInterval: 20000 }}
-        />
+        >
+          <HeaderFilter groupInterval={20000} />
+        </Column>
         <Column dataField="CategoryName" />
         <Column dataField="Modification" />
         <Column dataField="BodyStyleName" />

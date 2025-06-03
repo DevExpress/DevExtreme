@@ -4,27 +4,20 @@
     cards-per-row="auto"
     :card-min-width="260"
     card-template="cardTemplate"
-    :search-panel="{
-      visible: true,
-    }"
-    :paging="{
-      pageSize: 12,
-    }"
-    :header-filter="{
-      visible: true,
-    }"
   >
+    <DxHeaderFilter :visible="true" />
+    <DxSearchPanel :visible="true" />
+    <DxPager :pageSize="12" />
+
     <DxColumn data-field="TrademarkName"/>
     <DxColumn data-field="Name"/>
     <DxColumn
       data-field="Price"
       format="currency"
-      :header-filter="{
-        groupInterval: 20000,
-      }"
-    />
+    >
+      <DxHeaderFilter :groupInterval="20000" />
+    </DxColumn>
     <DxColumn data-field="CategoryName"/>
-
     <DxColumn data-field="Modification"/>
     <DxColumn data-field="BodyStyleName"/>
     <DxColumn data-field="Horsepower"/>
@@ -48,7 +41,7 @@
     </DxPopup>
 </template>
 <script setup lang="ts">
-import { DxCardView, DxColumn } from 'devextreme-vue/card-view';
+import { DxCardView, DxColumn, DxHeaderFilter, DxSearchPanel, DxPager } from 'devextreme-vue/card-view';
 import { DxPopup, DxPosition } from 'devextreme-vue/popup';
 import LicenseInfo from './LicenseInfo.vue';
 import VehicleCard from './VehicleCard.vue';

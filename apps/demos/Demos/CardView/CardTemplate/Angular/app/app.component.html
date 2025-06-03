@@ -2,20 +2,21 @@
   [dataSource]="vehicles"
   cardsPerRow="auto"
   [cardMinWidth]="260"
-  [searchPanel]="searchPanelConfig"
-  [paging]="pagingConfig"
-  [headerFilter]="headerFilterConfig"
   cardTemplate="vehicleCardTemplate"
 >
+  <dxo-card-view-header-filter [visible]="true"></dxo-card-view-header-filter>
+  <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
+  <dxo-card-view-paging [pageSize]="12"></dxo-card-view-paging>
+
   <dxi-card-view-column dataField="TrademarkName"></dxi-card-view-column>
   <dxi-card-view-column dataField="Name"></dxi-card-view-column>
   <dxi-card-view-column
     dataField="Price"
     format="currency"
-    [headerFilter]="priceHeaderFilterConfig"
-  ></dxi-card-view-column>
+  >
+     <dxo-card-view-header-filter [groupInterval]="20000"></dxo-card-view-header-filter>
+  </dxi-card-view-column>
   <dxi-card-view-column dataField="CategoryName"></dxi-card-view-column>
-
   <dxi-card-view-column dataField="Modification"></dxi-card-view-column>
   <dxi-card-view-column dataField="BodyStyleName"></dxi-card-view-column>
   <dxi-card-view-column dataField="Horsepower"></dxi-card-view-column>

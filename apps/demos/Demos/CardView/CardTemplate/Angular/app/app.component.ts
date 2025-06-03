@@ -41,20 +41,6 @@ export class AppComponent {
     this.popupVisible = false;
   }
 
-  // todo: use nested
-  searchPanelConfig = {
-    visible: true,
-  };
-  pagingConfig = {
-    pageSize: 12,
-  };
-  headerFilterConfig = {
-    visible: true,
-  };
-  priceHeaderFilterConfig = {
-    groupInterval: 20000,
-  }
-
   constructor(service: Service) {
     this.vehicles = service.getVehicles();
   }
