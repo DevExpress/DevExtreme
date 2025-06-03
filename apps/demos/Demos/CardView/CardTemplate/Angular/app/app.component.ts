@@ -51,6 +51,9 @@ export class AppComponent {
   headerFilterConfig = {
     visible: true,
   };
+  priceHeaderFilterConfig = {
+    groupInterval: 20000,
+  }
 
   constructor(service: Service) {
     this.vehicles = service.getVehicles();

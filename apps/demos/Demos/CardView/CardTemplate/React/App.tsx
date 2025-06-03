@@ -24,6 +24,7 @@ const App = () => {
         dataSource={vehicles}
         cardsPerRow="auto"
         cardMinWidth={260}
+        // todo: use nested
         searchPanel={{ visible: true }}
         paging={{ pageSize: 12 }}
         headerFilter={{ visible: true }}
@@ -36,6 +37,7 @@ const App = () => {
         <Column
           dataField="Price"
           format="currency"
+          headerFilter={{ groupInterval: 20000 }}
         />
         <Column dataField="CategoryName" />
         <Column dataField="Modification" />

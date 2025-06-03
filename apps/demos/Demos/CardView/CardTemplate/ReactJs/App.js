@@ -36,6 +36,7 @@ const App = () => {
         <Column
           dataField="Price"
           format="currency"
+          headerFilter={{ groupInterval: 20000 }}
         />
         <Column dataField="CategoryName" />
         <Column dataField="Modification" />

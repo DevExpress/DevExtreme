@@ -19,6 +19,9 @@
     <DxColumn
       data-field="Price"
       format="currency"
+      :header-filter="{
+        groupInterval: 20000,
+      }"
     />
     <DxColumn data-field="CategoryName"/>
 

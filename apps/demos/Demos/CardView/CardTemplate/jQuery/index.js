@@ -104,6 +104,9 @@ $(() => {
         {
           dataField: "Price",
           format: 'currency',
+          headerFilter: {
+            groupInterval: 20000,
+          }
         },
         "CategoryName",
 

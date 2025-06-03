@@ -1,5 +1,4 @@
 <dx-card-view
-  id="cardView"
   [dataSource]="vehicles"
   cardsPerRow="auto"
   [cardMinWidth]="260"
@@ -13,6 +12,7 @@
   <dxi-card-view-column
     dataField="Price"
     format="currency"
+    [headerFilter]="priceHeaderFilterConfig"
   ></dxi-card-view-column>
   <dxi-card-view-column dataField="CategoryName"></dxi-card-view-column>
 
