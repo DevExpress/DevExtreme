@@ -11,7 +11,6 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'license-info',
   templateUrl: `.${modulePrefix}/license-info/license-info.component.html`,
 })
-
 export class LicenseInfo {
   @Input() vehicle: Vehicle;
 }

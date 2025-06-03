@@ -10,11 +10,8 @@ const LicenseInfo = ({ vehicle }) => (
     </p>
     <p>
       <b>Source link: </b>{' '}
-      <a
-        href={`http://${vehicle.Source}`}
-        className="license__link"
-      >
-          http://{vehicle.Source}
+      <a href={`https://${vehicle.Source}`}>
+          https://{vehicle.Source}
       </a>
     </p>
     <p>

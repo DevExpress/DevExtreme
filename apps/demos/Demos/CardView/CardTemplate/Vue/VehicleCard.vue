@@ -51,3 +51,69 @@ defineProps<{
 
 defineEmits(['show-info']);
 </script>
+
+<style>
+  .vehicle__img-wrapper {
+      height: 146px;
+      border-bottom: var(--dx-border-width) solid var(--dx-color-border);
+      background-color: #fff;
+  }
+
+  .vehicle__img {
+      height: 100%;
+      width: 100%;
+      object-fit: scale-down;
+  }
+
+  .vehicle__info {
+      padding: 12px;
+  }
+
+  .vehicle__name {
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 28px;
+      height: 28px;
+      padding: 0 12px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+  }
+
+  .vehicle__price {
+      padding: 0 12px;
+      height: 32px;
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--dx-color-primary);
+  }
+
+  .vehicle__type-container {
+      padding: 12px;
+      display: inline-block;
+  }
+
+  .vehicle__type {
+      padding: 2px 6px;
+      background-color: var(--dx-color-separator);
+      border-radius: 13px;
+  }
+
+  .vehicle__spec {
+      padding: 2px 12px;
+  }
+
+  .vehicle__modification {
+      height: 24px;
+      padding: 2px 0 2px 12px;
+  }
+
+  .vehicle__footer-container {
+      padding: 12px;
+      height: 56px;
+  }
+
+  .vehicle__image-licence-caption {
+      font-weight: 600;
+  }
+</style>

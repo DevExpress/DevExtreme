@@ -59,11 +59,11 @@ $(() => {
     specContainer.append(horsepowerInfo);
 
     const popupContentTemplate = function () {
-      const sourceLink = `http://${card.data.Source}`;
+      const sourceLink = `https://${card.data.Source}`;
       return $('<div>').append(
         $(`<p><b>Image licensed under:</b> <span>${card.data.LicenseName}</span></p>`),
         $(`<p><b>Author:</b> <span>${card.data.Author}</span></p>`),
-        $(`<p><b>Source link:</b> <a href='${sourceLink}' class='license__link'>${sourceLink}</a></p>`),
+        $(`<p><b>Source link:</b> <a href='${sourceLink}'>${sourceLink}</a></p>`),
         $(`<p><b>Edits:</b> <span>${card.data.Edits}</span></p>`),
       );
     };
@@ -110,7 +110,6 @@ $(() => {
           }
         },
         "CategoryName",
-
         "Modification",
         "BodyStyleName",
         "Horsepower",

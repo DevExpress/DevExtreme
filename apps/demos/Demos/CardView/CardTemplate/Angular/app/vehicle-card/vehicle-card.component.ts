@@ -12,7 +12,6 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/vehicle-card/vehicle-card.component.html`,
   styleUrls: [`.${modulePrefix}/vehicle-card/vehicle-card.component.css`],
 })
-
 export class VehicleCard {
   @Input() vehicle!: Vehicle;
   @Output() showInfo = new EventEmitter<void>();
