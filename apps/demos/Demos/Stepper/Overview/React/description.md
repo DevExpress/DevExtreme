@@ -46,5 +46,5 @@ Deactivates the step.
 - [hint](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#hint)    
 Tooltip text for the step.
 
-- [template](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#template)    
-Allows you to customize the entire step appearance. This property overrides all other step settings.
+- [render](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#render)/[component](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#component)    
+Allow you to customize the entire step appearance. These properties override all other step settings.
