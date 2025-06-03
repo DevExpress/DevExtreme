@@ -15,6 +15,6 @@ To customize the toolbar, add items to the [toolbar](/Documentation/ApiReference
 You can configure a DevExtreme component within a toolbar item element. In this demo, we extended the toolbar with a [Button](/Documentation/Guide/UI_Components/Button/Overview/) and [SelectBox](/Documentation/Guide/UI_Components/SelectBox/Overview/).
 
 - **Custom Controls**    
-Specify **items[]**.[template](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/toolbar/items/#template) to implement custom controls.
+Specify **items[]**.[render](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/toolbar/items/#render) or [component](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/toolbar/items/#component) to implement custom controls.
 
 The default Scheduler toolbar displays the "dateNavigator" and "viewSwitcher" predefined controls. This demo adds the "today" predefined control and two DevExtreme components to the toolbar.
