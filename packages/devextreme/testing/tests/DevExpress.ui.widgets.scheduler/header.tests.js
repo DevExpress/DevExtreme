@@ -6,8 +6,8 @@ import { getCaption } from '__internal/scheduler/header/m_utils';
 
 testStart(() => initTestMarkup());
 
-test('should have navigator and view switcher in basic configuration', function(assert) {
-    const scheduler = createWrapper({
+test('should have navigator and view switcher in basic configuration', async function(assert) {
+    const scheduler = await createWrapper({
         views: ['day'],
         currentView: 'day',
     });
@@ -16,8 +16,8 @@ test('should have navigator and view switcher in basic configuration', function(
     assert.ok(scheduler.header.viewSwitcher, 'View switcher is in DOM');
 });
 
-test('should have correct deafult views', function(assert) {
-    const scheduler = createWrapper({ 'useDropDownViewSwitcher': false });
+test('should have correct deafult views', async function(assert) {
+    const scheduler = await createWrapper({ 'useDropDownViewSwitcher': false });
 
     assert.equal(
         scheduler.header.viewSwitcher.getText(),
@@ -26,8 +26,8 @@ test('should have correct deafult views', function(assert) {
     );
 });
 
-test('should rerender after useDropDownViewSwitcher option changes', function(assert) {
-    const scheduler = createWrapper({
+test('should rerender after useDropDownViewSwitcher option changes', async function(assert) {
+    const scheduler = await createWrapper({
         currentView: 'month',
         views: ['day', 'month'],
     });
@@ -45,15 +45,13 @@ module('Material-based themes', {
     beforeEach: function() {
         this.origIsMaterialBased = themes.isMaterialBased;
         themes.isMaterialBased = function() { return true; };
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        this.clock.restore();
         themes.isMaterialBased = this.origIsMaterialBased;
     }
 }, () => {
-    test('should have navigator, viewSwitcher and dropDown viewSwitcher', function(assert) {
-        const scheduler = createWrapper({
+    test('should have navigator, viewSwitcher and dropDown viewSwitcher', async function(assert) {
+        const scheduler = await createWrapper({
             views: ['day'],
             currentView: 'day',
         });
@@ -69,8 +67,8 @@ module('Material-based themes', {
 });
 
 module('Toolbar config', () => {
-    test('should render default items with swapped positions', function(assert) {
-        const scheduler = createWrapper({
+    test('should render default items with swapped positions', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'month',
             views: ['month'],
             toolbar: {
@@ -88,8 +86,8 @@ module('Toolbar config', () => {
         assert.equal(dateNavigator.length, 1, 'dateNavigator displayed');
     });
 
-    test('should not display viewSwitcher and dateNavigator when visible is false', function(assert) {
-        const scheduler = createWrapper({
+    test('should not display viewSwitcher and dateNavigator when visible is false', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'month',
             views: ['month'],
             toolbar: {
@@ -108,8 +106,8 @@ module('Toolbar config', () => {
         assert.equal(dateNavigatorCount, 0, 'dateNavigator not displayed');
     });
 
-    test('should not display viewSwitcher and dateNavigator', function(assert) {
-        const scheduler = createWrapper({
+    test('should not display viewSwitcher and dateNavigator', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'month',
             views: ['month'],
             toolbar: { items: [] },
@@ -122,8 +120,8 @@ module('Toolbar config', () => {
         assert.equal(dateNavigatorCount, 0, 'dateNavigator not displayed');
     });
 
-    test('should display custom today button', function(assert) {
-        const scheduler = createWrapper({
+    test('should display custom today button', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2020, 6, 7),
             currentView: 'month',
             views: ['month'],

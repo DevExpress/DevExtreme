@@ -51,11 +51,10 @@ test('It should be possible to change the data source of agenda resources', asyn
   await scheduler.option('resources[0].dataSource', [{
     text: 'Todd Hoffman',
     id: 2,
-  },
-  ]);
+  }]);
 
   await t
-    .expect(scheduler.getAppointmentResourceByIndex(0, 'Owner'))
+    .expect(scheduler.getAppointmentByIndex(0).getResourceElement('Owner').exists)
     .notOk()
     .expect(scheduler.getAppointmentResourceByIndex(1, 'Owner'))
     .eql('Todd Hoffman');

@@ -111,6 +111,12 @@ export default class Appointment {
       .innerText;
   }
 
+  getResourceElement(label: string): Selector {
+    return this.resourcesItems
+      .find('div').withText(label)
+      .parent(0).find(`.${CLASS.resources.value}`);
+  }
+
   getRecurrenceElement(): Selector {
     return this.element.find(`.${CLASS.appoinmentRecurrenceIcon}`);
   }

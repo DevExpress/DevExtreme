@@ -1,14 +1,15 @@
 import query from '@js/common/data/query';
-import { wrapToArray } from '@js/core/utils/array';
+import { equalByValue } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
-import { map } from '@js/core/utils/iterator';
-import { isDefined, isFunction } from '@js/core/utils/type';
+import { isDefined } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import {
-  getDatesWithoutTime, hasResourceValue, isAppointmentTakesAllDay, isTimelineView,
+  getDatesWithoutTime, isAppointmentTakesAllDay, isTimelineView,
 } from '@ts/scheduler/r1/utils/index';
 import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
+import type { ResourceLoader } from '@ts/scheduler/utils/loader/resource_loader';
+import { getAppointmentGroupValues } from '@ts/scheduler/utils/resource_manager/appointment_groups_utils';
 import type ViewDataProvider from '@ts/scheduler/workspaces/view_model/m_view_data_provider';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
@@ -225,43 +226,18 @@ export class AppointmentFilterBaseStrategy {
     }]];
   }
 
-  _filterAppointmentByResources(appointment, resources) {
-    const checkAppointmentResourceValues = (resourceName, resourceIndex) => {
-      const resourceGetter = this.dataAccessors.resources.getter[resourceName];
-      let resource;
+  _filterAppointmentByResources(appointment, groupsResources: ResourceLoader[]) {
+    const appointmentGroupValues = getAppointmentGroupValues(appointment, groupsResources);
 
-      if (isFunction(resourceGetter)) {
-        resource = resourceGetter(appointment);
-      }
+    return groupsResources.every((resource) => {
+      const value = appointmentGroupValues[resource.resourceIndex];
 
-      const appointmentResourceValues = wrapToArray(resource);
-      const resourceData: any[] = map(
-        resources[resourceIndex].items,
-        ({ id }) => id,
+      return value?.some(
+        (id) => resource.items.some(
+          (item) => equalByValue(id, item.id),
+        ),
       );
-
-      for (let i = 0; i < appointmentResourceValues.length; i++) {
-        if (hasResourceValue(resourceData, appointmentResourceValues[i])) {
-          return true;
-        }
-      }
-
-      return false;
-    };
-
-    let result = false;
-
-    for (let i = 0; i < resources.length; i++) {
-      const resourceName = resources[i].name;
-
-      result = checkAppointmentResourceValues(resourceName, i);
-
-      if (!result) {
-        return false;
-      }
-    }
-
-    return result;
+    });
   }
 
   _filterAppointmentByRRule(appointment, min, max, startDayHour, endDayHour, firstDayOfWeek) {

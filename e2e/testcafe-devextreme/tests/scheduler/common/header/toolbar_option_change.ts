@@ -1,6 +1,5 @@
 import { compareScreenshot, createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { ClientFunction } from 'testcafe';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
@@ -20,14 +19,11 @@ const buttons = Array.from({ length: 7 }).map((_, index) => ({
   widget: 'dxButton',
   options: { text: `Button ${index}` },
 }));
-const updateOption = ClientFunction((name, value) => {
-  ($('#container') as any).dxScheduler('instance').option(name, value);
-});
 
 test('Scheduler should change toolbar item location', async (t) => {
   const scheduler = new Scheduler('#container');
 
-  await updateOption('toolbar.items[0].location', 'after');
+  await scheduler.option('toolbar.items[0].location', 'after');
   await t.expect(
     await compareScreenshot(t, 'scheduler-toolbar-location-changed.png', scheduler.toolbar.element),
   ).ok();
@@ -36,7 +32,7 @@ test('Scheduler should change toolbar item location', async (t) => {
 test('Scheduler should change toolbar', async (t) => {
   const scheduler = new Scheduler('#container');
 
-  await updateOption('toolbar', { items: [{ template: 'Custom text' }] });
+  await scheduler.option('toolbar', { items: [{ template: 'Custom text' }] });
   await t.expect(
     await compareScreenshot(t, 'scheduler-toolbar-changed.png', scheduler.toolbar.element),
   ).ok();
@@ -45,16 +41,16 @@ test('Scheduler should change toolbar', async (t) => {
 test('Scheduler should hide and show toolbar', async (t) => {
   const scheduler = new Scheduler('#container');
 
-  await updateOption('toolbar.visible', false);
+  await scheduler.option('toolbar.visible', false);
   await t.expect(scheduler.toolbar.isInvisible()).ok();
-  await updateOption('toolbar.visible', true);
+  await scheduler.option('toolbar.visible', true);
   await t.expect(scheduler.toolbar.isInvisible()).notOk();
 }).before(createScheduler);
 
 test('Scheduler should change toolbar items', async (t) => {
   const scheduler = new Scheduler('#container');
 
-  await updateOption('toolbar.items', buttons);
+  await scheduler.option('toolbar.items', buttons);
   await t.expect(
     await compareScreenshot(t, 'scheduler-toolbar-items-changed.png', scheduler.toolbar.element),
   ).ok();
@@ -63,7 +59,7 @@ test('Scheduler should change toolbar items', async (t) => {
 test('Scheduler should change toolbar item option', async (t) => {
   const scheduler = new Scheduler('#container');
 
-  await updateOption('toolbar.items[0].options.text', 'Changed text');
+  await scheduler.option('toolbar.items[0].options.text', 'Changed text');
   await t.expect(
     await compareScreenshot(t, 'scheduler-toolbar-item-option-changed.png', scheduler.toolbar.element),
   ).ok();
@@ -73,13 +69,13 @@ test('Scheduler should change toolbar options / integration', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
 
-  await updateOption('toolbar.items', buttons);
-  await updateOption('toolbar.multiline', true);
+  await scheduler.option('toolbar.items', buttons);
+  await scheduler.option('toolbar.multiline', true);
   await t
     .expect(await takeScreenshot('scheduler-toolbar-property-changed.png', scheduler.toolbar.element))
     .ok();
 
-  await updateOption('toolbar', { multiline: false });
+  await scheduler.option('toolbar', { multiline: false });
   await t
     .expect(await takeScreenshot('scheduler-toolbar-changed-2.png', scheduler.toolbar.element))
     .ok();
