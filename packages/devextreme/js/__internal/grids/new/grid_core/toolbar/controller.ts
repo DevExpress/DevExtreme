@@ -3,13 +3,15 @@ import { computed, effect, signal } from '@preact/signals-core';
 
 import { OptionsController } from '../options_controller/options_controller';
 import { DEFAULT_TOOLBAR_ITEMS } from './defaults';
-import type { PredefinedToolbarItem, ToolbarItem, ToolbarItems } from './types';
+import type {
+  DefaultToolbarItem, ToolbarItem, ToolbarItems,
+} from './types';
 import { normalizeToolbarItems } from './utils';
 
 export class ToolbarController {
   private readonly itemSubscriptions: Record<string, () => void> = {};
 
-  private readonly defaultItems = signal<Record<string, PredefinedToolbarItem>>({});
+  private readonly defaultItems = signal<Record<string, DefaultToolbarItem>>({});
 
   private readonly userItems: ReadonlySignal<ToolbarItems | undefined>;
 
@@ -32,7 +34,7 @@ export class ToolbarController {
   }
 
   public addDefaultItem(
-    item: ReadonlySignal<PredefinedToolbarItem>,
+    item: ReadonlySignal<DefaultToolbarItem>,
     needRender: ReadonlySignal<boolean> = signal(true),
   ): void {
     const { name } = item.peek();
