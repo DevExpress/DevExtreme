@@ -12,6 +12,6 @@ CardView ships with the following built-in data management capabilities:
 - Searching
 - Data selection
 
-Each card within the CardView is customizable, with UI elements such as toolbars, covers, and footers (allowing you to adapt layouts as requirements dictate).  
+Each card within the CardView is customizable, with UI elements such as toolbars, covers, and footers that allow you to adapt layouts. 
 
 For a complete overview of CardView options, refer to the [CardView API Reference](/Documentation/ApiReference/UI_Components/dxCardView/).
