@@ -16,7 +16,6 @@ import type dxScrollable from './ui/scroll_view/ui.scrollable';
 import type dxSortable from './ui/sortable';
 import type { Properties as ButtonProperties } from './ui/button';
 import { UserDefinedElement } from './core/element';
-import { AssertedVersion } from './__internal/utils/version';
 
 /**
  * @public
@@ -272,6 +271,24 @@ export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 export type Format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
 
 /**
+ * @public
+ * @namespace DevExpress.common
+ * @type object
+ */
+export type AssertedVersion = {
+  /**
+   * @docid
+   * @public
+   */
+  packageName: string;
+  /**
+   * @docid
+   * @public
+   */
+  version: string;
+};
+
+/**
  * @docid
  * @section commonObjectStructures
  * @namespace DevExpress.common
@@ -404,7 +421,7 @@ export type GlobalConfig = {
   licenseKey?: string;
   buyNowLink?: string;
   licensingDocLink?: string;
-  assertDevExtremeVersion?: AssertedVersion[];
+  assertedVersions?: AssertedVersion[];
 };
 
 /**

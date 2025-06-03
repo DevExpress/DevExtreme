@@ -2,7 +2,6 @@
 
 import errors from '@js/core/errors';
 import { extend } from '@js/core/utils/extend';
-import { assertDevExtremeVersion } from '@ts/utils/version';
 
 const config = {
   rtlEnabled: false,
@@ -81,10 +80,6 @@ const configMethod = (...args) => {
 if (typeof DevExpress !== 'undefined' && DevExpress.config) {
 // @ts-expect-error typescript cant see global
   configMethod(DevExpress.config);
-  // @ts-expect-error typescript cant see global
-  DevExpress.config.assertedVersions.forEach((version) => {
-    assertDevExtremeVersion(version.packageName, version.version);
-  });
 }
 
 export default configMethod;
