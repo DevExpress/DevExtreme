@@ -1,7 +1,7 @@
 import type { NativeEventInfo } from '@js/common/core/events';
 import messageLocalization from '@js/common/core/localization/message';
-import $ from '@js/core/renderer';
 import devices from '@js/core/devices';
+import $ from '@js/core/renderer';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { Properties as DOMComponentProperties } from '@ts/core/widget/dom_component';
