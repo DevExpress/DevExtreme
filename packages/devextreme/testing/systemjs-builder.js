@@ -133,7 +133,6 @@ const transpileCss = async() => {
     const cssList = [
         ['artifacts/css/dx.light.css', 'generic.light'],
         ['artifacts/css/dx.material.blue.light.css', 'material.blue.light'],
-        ['artifacts/css/dx-gantt.css', 'gantt'],
     ];
 
     // eslint-disable-next-line no-restricted-syntax
