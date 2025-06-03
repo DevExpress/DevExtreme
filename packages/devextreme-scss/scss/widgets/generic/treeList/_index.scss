@@ -41,7 +41,12 @@ $treelist-icon-container-padding-right: $generic-grid-base-checkbox-icon-size + 
     position: relative;
     display: inline-block;
     width: $treelist-empty-space-width;
-    height: $treelist-empty-space-height;
+
+    @include dx-icon(spinright);
+
+    &::before {
+      visibility: hidden;
+    }
   }
 
   tr:not(.dx-row-focused) .dx-treelist-empty-space {
