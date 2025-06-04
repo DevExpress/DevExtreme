@@ -32,6 +32,14 @@ function calculateAddress({ State, City }: Employee): string {
   return `${City}, ${State}`;
 }
 
+function notifyCall() {
+  notify('The "Call" button is clicked.');
+}
+
+function notifySendEmail() {
+  notify('The "Send Email" button is clicked.');
+}
+
 function CardFooterComponent() {
   return <div className='footer'>
     <Button
@@ -39,14 +47,14 @@ function CardFooterComponent() {
       icon="tel"
       type="default"
       stylingMode="contained"
-      onClick={() => { notify('The "Call" button is clicked.'); }}
+      onClick={notifyCall}
     />
     <Button
       text="Send Email"
       icon="send"
       type="default"
       stylingMode="contained"
-      onClick={() => { notify('The "Send Email" button is clicked.'); }}
+      onClick={notifySendEmail}
     />
   </div>
 }
