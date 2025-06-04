@@ -50,12 +50,12 @@ export abstract class View<T extends {}> {
     }
 
     return class InfernoView extends BaseInfernoComponent<{}, State> {
-      private readonly subscription: () => void;
+      private readonly unsubscribe: () => void;
 
       constructor() {
         super();
         const props = view.getProps();
-        this.subscription = effect(() => {
+        this.unsubscribe = effect(() => {
           view.props = props.value;
 
           this.state ??= {
@@ -66,6 +66,10 @@ export abstract class View<T extends {}> {
             this.setState({ props: props.value });
           }
         });
+      }
+
+      public componentWillUnmount(): void {
+        this.unsubscribe();
       }
 
       public render(): JSX.Element | undefined {
