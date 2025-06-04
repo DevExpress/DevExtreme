@@ -76,11 +76,5 @@ export class FilterController {
   constructor(
     private readonly options: OptionsController,
     private readonly columnsController: ColumnsController,
-  ) { }
-
-  public clearFilterCallback = (): void => {};
-
-  public clearFilter(): void {
-    this.clearFilterCallback();
-  }
+  ) {}
 }

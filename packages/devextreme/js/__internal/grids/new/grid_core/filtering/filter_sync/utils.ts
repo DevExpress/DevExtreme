@@ -1,4 +1,7 @@
 import type { FilterType } from '@js/common/grids';
+// 🚨🚨🚨 Use here complex utils func for merging filters
+// TODO filterSync: move these utils to the new grid_core
+import { syncFilters } from '@ts/filter_builder/m_utils';
 
 import type { FilterValue } from '../types';
 
@@ -41,3 +44,18 @@ export const getFilterType = (filterConditions: FilterValue): FilterType | undef
     default: return undefined;
   }
 };
+
+export const mergeFilterPanelWithHeaderFilterValues = (
+  filterPanelValue: FilterValue,
+  composedHeaderFilter: FilterValue,
+): FilterValue => composedHeaderFilter
+  .filter((value) => Array.isArray(value))
+  .reduce<FilterValue>(
+    (
+      result,
+      value,
+      // 🚨🚨🚨 Use here complex utils func for merging filters
+      // TODO filterSync: move these utils to the new grid_core
+    ) => syncFilters(result, value) as FilterValue,
+    filterPanelValue,
+  );
