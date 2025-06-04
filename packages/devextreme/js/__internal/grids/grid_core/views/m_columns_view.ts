@@ -26,6 +26,7 @@ import {
   isRenderer, isString,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import supportUtils from '@ts/core/utils/m_support';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
@@ -1072,7 +1073,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  protected handleScroll(e): void {
+  protected handleScroll(e: DxEvent): void {
     const scrollLeft = $(e.target).scrollLeft();
 
     if (scrollLeft !== this._scrollLeft) {

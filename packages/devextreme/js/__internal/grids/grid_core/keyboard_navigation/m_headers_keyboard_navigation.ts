@@ -6,6 +6,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
 import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
@@ -273,12 +274,10 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
 const columnHeadersView = (
   Base: ModuleType<ColumnHeadersView>,
 ) => class ColumnHeadersViewKeyboardNavigationExtender extends Base {
-  protected handleScroll(e): void {
+  protected handleScroll(e: DxEvent): void {
     super.handleScroll(e);
 
-    const headersKeyboardNavigation = this.getController('headersKeyboardNavigation');
-
-    if (!headersKeyboardNavigation.needToFocus()) {
+    if (!this._headersKeyboardNavigation?.needToFocus()) {
       return;
     }
 
@@ -286,7 +285,7 @@ const columnHeadersView = (
       ?.isNeedToRenderVirtualColumns(e.target.scrollLeft);
 
     if (!isNeedToRenderVirtualColumns) {
-      headersKeyboardNavigation.restoreFocus();
+      this._headersKeyboardNavigation.restoreFocus();
     }
   }
 };

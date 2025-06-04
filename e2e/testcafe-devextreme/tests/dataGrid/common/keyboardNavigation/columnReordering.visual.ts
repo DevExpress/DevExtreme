@@ -1568,9 +1568,7 @@ test('reorder column to left when adaptability is enabled and there are hidden c
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
     const firstHeaderCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
 
-    await t
-      .debug()
-      .click(firstHeaderCell.element);
+    await t.click(firstHeaderCell.element);
 
     for (let i = 0; i < 30; i += 1) {
       await t.pressKey('ctrl+right');
