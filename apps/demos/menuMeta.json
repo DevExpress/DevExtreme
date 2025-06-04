@@ -1591,16 +1591,6 @@
                 "NetCoreDescription": "",
                 "MvcAdditionalFiles": [],
                 "DemoType": "Web"
-              },
-              {
-                "Title": "Toolbar Customization",
-                "Name": "ToolbarCustomization",
-                "DocUrl": "",
-                "Widget": "CardView",
-                "MvcDescription": "",
-                "NetCoreDescription": "",
-                "MvcAdditionalFiles": [],
-                "DemoType": "Web"
               }
             ]
           }
