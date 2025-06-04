@@ -11,7 +11,8 @@ import {
     Input,
     ContentChildren,
     forwardRef,
-    QueryList
+    QueryList,
+    AfterContentInit
 } from '@angular/core';
 
 
@@ -36,7 +37,7 @@ import { DxiSchedulerToolbarItemComponent } from './toolbar-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoSchedulerToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSchedulerToolbarComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -75,21 +76,18 @@ export class DxoSchedulerToolbarComponent extends NestedOption implements OnDest
     }
 
 
-    @ContentChildren(forwardRef(() => DxiSchedulerItemComponent))
-    get itemsChildren(): QueryList<DxiSchedulerItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
+    @ContentChildren(forwardRef(() => DxiSchedulerItemComponent)) itemsChildren!: QueryList<DxiSchedulerItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiSchedulerToolbarItemComponent)) toolbarItemsChildren!: QueryList<DxiSchedulerToolbarItemComponent>
+    
+    setItems() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([...this.itemsChildren.toArray(),...this.toolbarItemsChildren.toArray(),]);
+        this.setChildren('items', q);
     }
 
-    @ContentChildren(forwardRef(() => DxiSchedulerToolbarItemComponent))
-    get toolbarItemsChildren(): QueryList<DxiSchedulerToolbarItemComponent> {
-        return this._getOption('items');
-    }
-    set toolbarItemsChildren(value) {
-        this.setChildren('items', value);
-    }
+
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -108,6 +106,12 @@ export class DxoSchedulerToolbarComponent extends NestedOption implements OnDest
     }
 
 
+    ngAfterContentInit() {
+        this.setItems();
+        
+        this.itemsChildren.changes.subscribe(() => { this.setItems() });
+        this.toolbarItemsChildren.changes.subscribe(() => { this.setItems() });
+    }
 }
 
 @NgModule({

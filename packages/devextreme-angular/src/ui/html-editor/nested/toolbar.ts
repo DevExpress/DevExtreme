@@ -11,7 +11,8 @@ import {
     Input,
     ContentChildren,
     forwardRef,
-    QueryList
+    QueryList,
+    AfterContentInit
 } from '@angular/core';
 
 
@@ -36,7 +37,7 @@ import { DxiHtmlEditorToolbarItemComponent } from './toolbar-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
     @Input()
     get container(): any | string {
         return this._getOption('container');
@@ -67,21 +68,18 @@ export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDes
     }
 
 
-    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent))
-    get itemsChildren(): QueryList<DxiHtmlEditorItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
+    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent)) itemsChildren!: QueryList<DxiHtmlEditorItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiHtmlEditorToolbarItemComponent)) toolbarItemsChildren!: QueryList<DxiHtmlEditorToolbarItemComponent>
+    
+    setItems() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([...this.itemsChildren.toArray(),...this.toolbarItemsChildren.toArray(),]);
+        this.setChildren('items', q);
     }
 
-    @ContentChildren(forwardRef(() => DxiHtmlEditorToolbarItemComponent))
-    get toolbarItemsChildren(): QueryList<DxiHtmlEditorToolbarItemComponent> {
-        return this._getOption('items');
-    }
-    set toolbarItemsChildren(value) {
-        this.setChildren('items', value);
-    }
+
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -100,6 +98,12 @@ export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDes
     }
 
 
+    ngAfterContentInit() {
+        this.setItems();
+        
+        this.itemsChildren.changes.subscribe(() => { this.setItems() });
+        this.toolbarItemsChildren.changes.subscribe(() => { this.setItems() });
+    }
 }
 
 @NgModule({

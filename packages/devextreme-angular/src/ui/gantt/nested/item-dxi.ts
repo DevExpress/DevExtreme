@@ -13,7 +13,8 @@ import {
     Input,
     ContentChildren,
     forwardRef,
-    QueryList
+    QueryList,
+    AfterContentInit
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -45,7 +46,7 @@ import { DxiGanttContextMenuItemItemComponent } from './context-menu-item-item-d
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiGanttItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost, AfterContentInit  {
     @Input()
     get beginGroup(): boolean {
         return this._getOption('beginGroup');
@@ -204,21 +205,18 @@ export class DxiGanttItemComponent extends CollectionNestedOption implements Aft
     }
 
 
-    @ContentChildren(forwardRef(() => DxiGanttContextMenuItemItemComponent))
-    get contextMenuItemItemsChildren(): QueryList<DxiGanttContextMenuItemItemComponent> {
-        return this._getOption('items');
-    }
-    set contextMenuItemItemsChildren(value) {
-        this.setChildren('items', value);
+    @ContentChildren(forwardRef(() => DxiGanttContextMenuItemItemComponent)) contextMenuItemItemsChildren!: QueryList<DxiGanttContextMenuItemItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiGanttItemComponent)) itemsChildren!: QueryList<DxiGanttItemComponent>
+    
+    setItems() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([...this.contextMenuItemItemsChildren.toArray(),...this.itemsChildren.toArray(),]);
+        this.setChildren('items', q);
     }
 
-    @ContentChildren(forwardRef(() => DxiGanttItemComponent))
-    get itemsChildren(): QueryList<DxiGanttItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
+
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
@@ -245,6 +243,12 @@ export class DxiGanttItemComponent extends CollectionNestedOption implements Aft
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
+    ngAfterContentInit() {
+        this.setItems();
+        
+        this.contextMenuItemItemsChildren.changes.subscribe(() => { this.setItems() });
+        this.itemsChildren.changes.subscribe(() => { this.setItems() });
+    }
 }
 
 @NgModule({

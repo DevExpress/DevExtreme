@@ -11,7 +11,8 @@ import {
     Input,
     ContentChildren,
     forwardRef,
-    QueryList
+    QueryList,
+    AfterContentInit
 } from '@angular/core';
 
 
@@ -36,7 +37,7 @@ import { DxiHtmlEditorTableContextMenuItemComponent } from './table-context-menu
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoHtmlEditorTableContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoHtmlEditorTableContextMenuComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');
@@ -59,21 +60,18 @@ export class DxoHtmlEditorTableContextMenuComponent extends NestedOption impleme
     }
 
 
-    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent))
-    get itemsChildren(): QueryList<DxiHtmlEditorItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
+    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent)) itemsChildren!: QueryList<DxiHtmlEditorItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiHtmlEditorTableContextMenuItemComponent)) tableContextMenuItemsChildren!: QueryList<DxiHtmlEditorTableContextMenuItemComponent>
+    
+    setItems() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([...this.itemsChildren.toArray(),...this.tableContextMenuItemsChildren.toArray(),]);
+        this.setChildren('items', q);
     }
 
-    @ContentChildren(forwardRef(() => DxiHtmlEditorTableContextMenuItemComponent))
-    get tableContextMenuItemsChildren(): QueryList<DxiHtmlEditorTableContextMenuItemComponent> {
-        return this._getOption('items');
-    }
-    set tableContextMenuItemsChildren(value) {
-        this.setChildren('items', value);
-    }
+
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -92,6 +90,12 @@ export class DxoHtmlEditorTableContextMenuComponent extends NestedOption impleme
     }
 
 
+    ngAfterContentInit() {
+        this.setItems();
+        
+        this.itemsChildren.changes.subscribe(() => { this.setItems() });
+        this.tableContextMenuItemsChildren.changes.subscribe(() => { this.setItems() });
+    }
 }
 
 @NgModule({

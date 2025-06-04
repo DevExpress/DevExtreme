@@ -9,7 +9,8 @@ import {
     Input,
     ContentChildren,
     forwardRef,
-    QueryList
+    QueryList,
+    AfterContentInit
 } from '@angular/core';
 
 
@@ -66,6 +67,17 @@ export class DxiDiagramTabComponent extends CollectionNestedOption {
     }
 
 
+    @ContentChildren(forwardRef(() => DxiDiagramGroupComponent)) groupsChildren!: QueryList<DxiDiagramGroupComponent>
+    
+    @ContentChildren(forwardRef(() => DxiDiagramTabGroupComponent)) tabGroupsChildren!: QueryList<DxiDiagramTabGroupComponent>
+    
+    setGroups() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([...this.groupsChildren.toArray(),...this.tabGroupsChildren.toArray(),]);
+        this.setChildren('groups', q);
+    }
+
+
     @ContentChildren(forwardRef(() => DxiDiagramCommandComponent))
     get commandsChildren(): QueryList<DxiDiagramCommandComponent> {
         return this._getOption('commands');
@@ -74,21 +86,7 @@ export class DxiDiagramTabComponent extends CollectionNestedOption {
         this.setChildren('commands', value);
     }
 
-    @ContentChildren(forwardRef(() => DxiDiagramGroupComponent))
-    get groupsChildren(): QueryList<DxiDiagramGroupComponent> {
-        return this._getOption('groups');
-    }
-    set groupsChildren(value) {
-        this.setChildren('groups', value);
-    }
 
-    @ContentChildren(forwardRef(() => DxiDiagramTabGroupComponent))
-    get tabGroupsChildren(): QueryList<DxiDiagramTabGroupComponent> {
-        return this._getOption('groups');
-    }
-    set tabGroupsChildren(value) {
-        this.setChildren('groups', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -103,6 +101,12 @@ export class DxiDiagramTabComponent extends CollectionNestedOption {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
+    ngAfterContentInit() {
+        this.setGroups();
+        
+        this.groupsChildren.changes.subscribe(() => { this.setGroups() });
+        this.tabGroupsChildren.changes.subscribe(() => { this.setGroups() });
+    }
 }
 
 @NgModule({

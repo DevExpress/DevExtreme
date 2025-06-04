@@ -13,7 +13,8 @@ import {
     EventEmitter,
     ContentChildren,
     forwardRef,
-    QueryList
+    QueryList,
+    AfterContentInit
 } from '@angular/core';
 
 
@@ -42,7 +43,7 @@ import { DxiFormTabPanelOptionsItemComponent } from './tab-panel-options-item-dx
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -421,21 +422,18 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
     }
 
 
-    @ContentChildren(forwardRef(() => DxiFormItemComponent))
-    get itemsChildren(): QueryList<DxiFormItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
+    @ContentChildren(forwardRef(() => DxiFormItemComponent)) itemsChildren!: QueryList<DxiFormItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiFormTabPanelOptionsItemComponent)) tabPanelOptionsItemsChildren!: QueryList<DxiFormTabPanelOptionsItemComponent>
+    
+    setItems() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([...this.itemsChildren.toArray(),...this.tabPanelOptionsItemsChildren.toArray(),]);
+        this.setChildren('items', q);
     }
 
-    @ContentChildren(forwardRef(() => DxiFormTabPanelOptionsItemComponent))
-    get tabPanelOptionsItemsChildren(): QueryList<DxiFormTabPanelOptionsItemComponent> {
-        return this._getOption('items');
-    }
-    set tabPanelOptionsItemsChildren(value) {
-        this.setChildren('items', value);
-    }
+
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -461,6 +459,12 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
     }
 
 
+    ngAfterContentInit() {
+        this.setItems();
+        
+        this.itemsChildren.changes.subscribe(() => { this.setItems() });
+        this.tabPanelOptionsItemsChildren.changes.subscribe(() => { this.setItems() });
+    }
 }
 
 @NgModule({
