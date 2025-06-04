@@ -43,6 +43,7 @@ import {
  Toolbar,
  CardHeaderItem,
  CardHeaderPredefinedItem,
+ HeaderPanelDragging,
  PredefinedToolbarItem,
  ToolbarItem,
 } from "devextreme/ui/card_view";
@@ -1932,7 +1933,7 @@ const DxHeaderPanelConfig = {
     "update:visible": null,
   },
   props: {
-    dragging: {},
+    dragging: Object as PropType<HeaderPanelDragging | Record<string, any>>,
     itemCssClass: String,
     itemTemplate: {},
     visible: Boolean
