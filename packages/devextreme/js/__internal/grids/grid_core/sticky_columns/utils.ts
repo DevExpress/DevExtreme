@@ -90,6 +90,10 @@ const getStickyOffsetCore = function (
 
       offset += nextOrPrevColumnWidths[colIndex];
 
+      if (!widths.length && isNaN(offset)) {
+        offset = col.visibleWidth;
+      }
+
       if (targetColumnIsSticky && columnIsSticky
         && !areNextOnlyFixedOrHiddenColumns(that, nextOrPrevColumns.slice(colIndex + 1))) {
         if (colIndex !== adjacentStickyColumnIndex) {
