@@ -40,8 +40,9 @@
 
     <div
       *dxTemplate="let params of 'statusTemplate'"
-      [class.status-ok]="params.field.value === 'Salaried'"
-      [class.status-warning]="params.field.value !== 'Salaried'"
+      class="status"
+      [class.status--ok]="params.field.value === 'Salaried'"
+      [class.status--warning]="params.field.value !== 'Salaried'"
     >
       <span class="indicator"></span>
       <span>{{ params.field.value }}</span>

@@ -52,11 +52,11 @@ function StatusComponent({
     field: { value },
   },
 }) {
-  const className = value === 'Salaried' ? 'status-ok' : 'status-warning';
+  const className = value === 'Salaried' ? 'status--ok' : 'status--warning';
   return (
-    <div className={className}>
-      <span className="indicator"></span>
-      <span>{value}</span>
+    <div className={`status ${className}`}>
+      <div className="indicator"></div>
+      <div>{value}</div>
     </div>
   );
 }

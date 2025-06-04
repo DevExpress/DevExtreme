@@ -45,10 +45,10 @@
       #statusTemplate="{ data }"
     >
       <div
-        :class="{
-          'status-ok': data.field.value === 'Salaried',
-          'status-warning': data.field.value !== 'Salaried',
-        }"
+        :class="['status', {
+          'status--ok': data.field.value === 'Salaried',
+          'status--warning': data.field.value !== 'Salaried',
+        }]"
       >
         <span class="indicator"/>
         <span>{{ data.field.value }}</span>
@@ -168,27 +168,24 @@ const cardView = ref<DxCardView>();
   flex-grow: 1;
 }
 
+.status {
+  display: flex;
+  align-items: center;
+}
+
+.status--ok {
+  color: var(--dx-color-success);
+}
+
+.status--warning {
+  color: var(--dx-color-warning);
+}
+
 .indicator {
-  display: inline-block;
+  background-color: currentcolor;
   margin-right: 8px;
   border-radius: 50%;
   height: 12px;
   width: 12px;
-}
-
-.status-ok {
-  color: var(--dx-color-success);
-}
-
-.status-ok > .indicator {
-  background-color: var(--dx-color-success);
-}
-
-.status-warning {
-  color: var(--dx-color-warning);
-}
-
-.status-warning > .indicator {
-  background-color: var(--dx-color-warning);
 }
 </style>
