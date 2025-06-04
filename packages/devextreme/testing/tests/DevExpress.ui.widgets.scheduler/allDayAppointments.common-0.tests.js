@@ -1,21 +1,23 @@
 import { getOuterHeight, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import fx from 'common/core/animation/fx';
-import pointerMock from '../../helpers/pointerMock.js';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import Query from 'common/data/query';
 import dataUtils from 'core/element_data';
+import '__internal/scheduler/m_scheduler';
+
+import pointerMock from '../../helpers/pointerMock.js';
 import {
     CLASSES,
     supportedScrollingModes,
     createWrapper,
     initTestMarkup
 } from '../../helpers/scheduler/helpers.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import 'generic_light.css!';
-import '__internal/scheduler/m_scheduler';
 
 const { module, test, testStart } = QUnit;
 
@@ -26,7 +28,6 @@ const createInstanceBase = options => createWrapper({ _draggingMode: 'default', 
 const config = {
     beforeEach: function() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
         this.tasks = [
             {
                 text: 'Task 1',
@@ -42,7 +43,6 @@ const config = {
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 };
 
@@ -59,7 +59,7 @@ module('All day appointments common', config, () => {
                 }));
             };
 
-            test('AllDay tasks should not be filtered by start day hour', function(assert) {
+            test('AllDay tasks should not be filtered by start day hour', async function(assert) {
                 const tasks = [
                     {
                         text: 'One',
@@ -79,7 +79,7 @@ module('All day appointments common', config, () => {
                     store: tasks
                 });
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 16),
                     dataSource: dataSource,
                     startDayHour: 6,
@@ -93,7 +93,7 @@ module('All day appointments common', config, () => {
                 assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[1], 'The second appointment is OK');
             });
 
-            test('AllDay tasks should not be filtered by end day hour', function(assert) {
+            test('AllDay tasks should not be filtered by end day hour', async function(assert) {
                 const tasks = [
                     { text: 'One', startDate: new Date(2015, 2, 16, 5), allDay: true, endDate: new Date(2015, 2, 16, 5, 30) },
                     { text: 'Two', startDate: new Date(2015, 2, 16, 10), allDay: true, endDate: new Date(2015, 2, 16, 10, 30) }
@@ -101,7 +101,7 @@ module('All day appointments common', config, () => {
                 const dataSource = new DataSource({
                     store: tasks
                 });
-                createInstance({
+                await createInstance({
                     currentDate: new Date(2015, 2, 16),
                     dataSource: dataSource,
                     endDayHour: 8,
@@ -111,7 +111,7 @@ module('All day appointments common', config, () => {
                 assert.deepEqual(dataSource.items(), [tasks[0], tasks[1]], 'Items are OK');
             });
 
-            test('AllDay appointments should not be filtered by start & end day hour (day view)', function(assert) {
+            test('AllDay appointments should not be filtered by start & end day hour (day view)', async function(assert) {
                 const tasks = [
                     {
                         key: 1,
@@ -128,7 +128,7 @@ module('All day appointments common', config, () => {
                     }),
                 });
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 16),
                     dataSource: dataSource,
                     startDayHour: 3,
@@ -139,13 +139,14 @@ module('All day appointments common', config, () => {
                 });
 
                 scheduler.instance.option('currentView', 'day');
-                const $appointments = $(scheduler.instance.$element()).find('.dx-scheduler-appointment');
+                const getAppointments = () => $(scheduler.instance.$element()).find('.dx-scheduler-appointment');
 
-                assert.equal($appointments.length, 1, 'There are one appointment');
+                await waitForAsync(() => getAppointments().length === 1);
+                assert.equal(getAppointments().length, 1, 'There are one appointment');
             });
 
-            test('All-day appointment should be resized correctly', function(assert) {
-                const scheduler = createInstanceBase({
+            test('All-day appointment should be resized correctly', async function(assert) {
+                const scheduler = await createInstanceBase({
                     currentDate: new Date(2015, 1, 9),
                     editing: true,
                     views: ['week'],
@@ -171,8 +172,8 @@ module('All day appointments common', config, () => {
                 assert.deepEqual(scheduler.instance.option('dataSource')[0].endDate, new Date(2015, 1, 10), 'End date is OK');
             });
 
-            test('All-day appointment endDate should not be affected by startDayHour & endDayHour after resize', function(assert) {
-                const scheduler = createInstanceBase({
+            test('All-day appointment endDate should not be affected by startDayHour & endDayHour after resize', async function(assert) {
+                const scheduler = await createInstanceBase({
                     currentDate: new Date(2015, 1, 9),
                     editing: true,
                     views: ['week'],
@@ -200,8 +201,8 @@ module('All day appointments common', config, () => {
                 assert.deepEqual(scheduler.instance.option('dataSource')[0].endDate, new Date(2015, 1, 10, 0), 'End date is OK');
             });
 
-            test('All-day appointment startDate should not be affected by startDayHour & endDayHour after resize', function(assert) {
-                const scheduler = createInstanceBase({
+            test('All-day appointment startDate should not be affected by startDayHour & endDayHour after resize', async function(assert) {
+                const scheduler = await createInstanceBase({
                     currentDate: new Date(2015, 1, 9),
                     editing: true,
                     views: ['week'],
@@ -228,7 +229,7 @@ module('All day appointments common', config, () => {
                 assert.deepEqual(scheduler.instance.option('dataSource')[0].startDate, new Date(2015, 1, 10, 0), 'Start date is OK');
             });
 
-            test('Height of allDay appointment should be correct, 3 appts in cell', function(assert) {
+            test('Height of allDay appointment should be correct, 3 appts in cell', async function(assert) {
                 const data = new DataSource({
                     store: [
                         {
@@ -252,7 +253,7 @@ module('All day appointments common', config, () => {
                     ]
                 });
 
-                const scheduler = createInstanceBase({
+                const scheduler = await createInstanceBase({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: data,
                     currentView: 'week',
@@ -268,8 +269,8 @@ module('All day appointments common', config, () => {
             });
 
 
-            test('Tail of long appointment should have a right width', function(assert) {
-                const scheduler = createInstance({
+            test('Tail of long appointment should have a right width', async function(assert) {
+                const scheduler = await createInstance({
                     dataSource: [
                         { text: 'Task 1', startDate: new Date(2015, 8, 12), endDate: new Date(2015, 8, 22, 10) }
                     ],
@@ -286,8 +287,8 @@ module('All day appointments common', config, () => {
                 assert.roughEqual(getOuterWidth($appointment), getOuterWidth($cell) * 2, 1.001, 'Task has a right width');
             });
 
-            test('AllDay appointment width should be decreased if it greater than work space width (grouped mode, day view)', function(assert) {
-                const scheduler = createInstance({
+            test('AllDay appointment width should be decreased if it greater than work space width (grouped mode, day view)', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 4, 10),
                     views: ['day'],
                     currentView: 'day',
@@ -326,8 +327,8 @@ module('All day appointments common', config, () => {
                 assert.roughEqual(getOuterWidth($appointment2), Math.floor(getOuterWidth($cell)), 1.001, 'Appointment width is OK');
             });
 
-            test('Long AllDay appointment should be separated (grouped mode, week view, groupByDate = true)', function(assert) {
-                const scheduler = createInstance({
+            test('Long AllDay appointment should be separated (grouped mode, week view, groupByDate = true)', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 4, 10),
                     views: ['week'],
                     currentView: 'week',
@@ -366,8 +367,8 @@ module('All day appointments common', config, () => {
                 assert.roughEqual(getOuterWidth($appointment2), Math.floor(getOuterWidth($cell)), 1.001, 'Appointment width is OK');
             });
 
-            test('All-day appointment inside grouped view should have a right resizable area', function(assert) {
-                const scheduler = createInstance({
+            test('All-day appointment inside grouped view should have a right resizable area', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 6, 10),
                     views: ['week'],
                     currentView: 'week',
@@ -423,8 +424,8 @@ module('All day appointments common', config, () => {
                 assert.deepEqual(area3.get(0), scheduler.instance.getWorkSpace().$element().find('.dx-scrollable-content').get(0), 'Area is OK');
             });
 
-            test('All-day appointment inside grouped view should have a right resizable area: rtl mode', function(assert) {
-                const scheduler = createInstance({
+            test('All-day appointment inside grouped view should have a right resizable area: rtl mode', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 6, 10),
                     views: ['week'],
                     currentView: 'week',
@@ -461,8 +462,8 @@ module('All day appointments common', config, () => {
                 assert.roughEqual(area.right, $cells.eq(0).offset().left + 3 * halfOfCellWidth, 1.001);
             });
 
-            test('Many grouped allDay dropDown appts should be grouped correctly (T489535)', function(assert) {
-                const scheduler = createInstanceBase({
+            test('Many grouped allDay dropDown appts should be grouped correctly (T489535)', async function(assert) {
+                const scheduler = await createInstanceBase({
                     currentDate: new Date(2015, 4, 25),
                     views: ['week'],
                     currentView: 'week',
@@ -490,6 +491,7 @@ module('All day appointments common', config, () => {
                     { text: '9', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 2 },
                     { text: '10', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 2 }
                 ]);
+                await waitForAsync(() => scheduler.appointments.getAppointments().length === 10);
 
                 scheduler.appointments.compact.click();
                 assert.equal(scheduler.tooltip.getItemCount(), 3, 'There are 3 drop down appts in 1st group');
@@ -498,8 +500,8 @@ module('All day appointments common', config, () => {
                 assert.equal(scheduler.tooltip.getItemCount(), 3, 'There are 3 drop down appts in 2d group');
             });
 
-            test('DropDown appointment should be removed correctly when needed', function(assert) {
-                const scheduler = createInstance({
+            test('DropDown appointment should be removed correctly when needed', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 4, 25),
                     views: ['week'],
                     currentView: 'week'
@@ -512,6 +514,7 @@ module('All day appointments common', config, () => {
                 ];
 
                 scheduler.instance.option('dataSource', items);
+                await waitForAsync(() => scheduler.appointments.getAppointments().length === 3);
 
                 let $dropDown = scheduler.instance.$element().find('.dx-scheduler-appointment-collector');
                 assert.equal($dropDown.length, 1, 'Dropdown appointment was rendered');
@@ -522,8 +525,8 @@ module('All day appointments common', config, () => {
                 assert.equal($dropDown.length, 0, 'Dropdown appointment was removed');
             });
 
-            test('If there are not groups, ".dx-scrollable-content" should be a resizable area for all-day appointment', function(assert) {
-                const scheduler = createInstance({
+            test('If there are not groups, ".dx-scrollable-content" should be a resizable area for all-day appointment', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 6, 10),
                     views: ['week'],
                     currentView: 'week',
@@ -546,12 +549,12 @@ module('All day appointments common', config, () => {
                 assert.deepEqual($area.get(0), scheduler.instance.getWorkSpace().$element().find('.dx-scrollable-content').get(0), 'Area is OK');
             });
 
-            test('New allDay appointment should have correct height', function(assert) {
+            test('New allDay appointment should have correct height', async function(assert) {
                 const data = new DataSource({
                     store: this.tasks
                 });
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 10),
                     dataSource: data,
                     currentView: 'week',
@@ -570,13 +573,13 @@ module('All day appointments common', config, () => {
                 assert.roughEqual(getOuterHeight($addedAppointment), $allDayCell.get(0).getBoundingClientRect().height, 0.501, 'Appointment has correct height');
             });
 
-            test('showAllDayPanel option of workSpace should be updated after adding allDay appointment', function(assert) {
+            test('showAllDayPanel option of workSpace should be updated after adding allDay appointment', async function(assert) {
                 const data = new DataSource({
                     store: this.tasks
                 });
                 const newItem = { startDate: new Date(2015, 1, 9, 1), allDay: true, text: 'caption' };
 
-                const scheduler = createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
+                const scheduler = await createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
                 scheduler.instance.showAppointmentPopup(newItem);
 
                 $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
@@ -586,8 +589,8 @@ module('All day appointments common', config, () => {
                 assert.equal(workspace.option('showAllDayPanel'), true, 'allDay panel is visible after adding allDay task');
             });
 
-            test('all-day-collapsed class of workSpace should be removed after adding allDay appointment', function(assert) {
-                const scheduler = createInstance({
+            test('all-day-collapsed class of workSpace should be removed after adding allDay appointment', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
                         store: this.tasks
@@ -612,8 +615,8 @@ module('All day appointments common', config, () => {
                 assert.notOk($workspace.hasClass('dx-scheduler-work-space-all-day-collapsed'), 'Work space has not specific class');
             });
 
-            test('AllDay appointment is visible on month view, if showAllDayPanel = false ', function(assert) {
-                const scheduler = createInstance({
+            test('AllDay appointment is visible on month view, if showAllDayPanel = false ', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 10),
                     dataSource: [{
                         startDate: new Date(2015, 2, 10, 1),
@@ -630,11 +633,12 @@ module('All day appointments common', config, () => {
                 assert.equal(scheduler.instance.$element().find('.dx-scheduler-all-day-appointment').length, 0, 'AllDay appointments are not visible on \'week\' view');
 
                 scheduler.instance.option('currentView', 'month');
+                await waitAsync(10);
 
                 assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment').length, 1, 'AllDay appointments are visible on \'month\' view');
             });
 
-            test('AllDay appointment should have correct height', function(assert) {
+            test('AllDay appointment should have correct height', async function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok(true, 'This test is for the standard scrolling mode');
                     return;
@@ -647,7 +651,7 @@ module('All day appointments common', config, () => {
                     text: 'caption'
                 };
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 10),
                     dataSource: [appointment],
                     currentView: 'week',
@@ -667,10 +671,10 @@ module('All day appointments common', config, () => {
                 assert.roughEqual(getOuterHeight(scheduler.instance.$element().find('.dx-scheduler-all-day-appointment')), appointmentHeight, 0.501, 'Appointment height is correct');
             });
 
-            test('Multi-day appointment parts should be displayed correctly in allDay panel', function(assert) {
+            test('Multi-day appointment parts should be displayed correctly in allDay panel', async function(assert) {
                 const appointment = { startDate: new Date(2015, 3, 5, 0), endDate: new Date(2015, 3, 6, 7), text: 'caption' };
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 3, 6),
                     dataSource: [appointment],
                     firstDayOfWeek: 1,
@@ -684,10 +688,10 @@ module('All day appointments common', config, () => {
                 assert.ok($appointments.length, 'Appointment is displayed correctly in right place');
             });
 
-            test('AllDay appointment should have correct height after changing view', function(assert) {
+            test('AllDay appointment should have correct height after changing view', async function(assert) {
                 const appointment = { startDate: new Date(2015, 2, 5, 1), endDate: new Date(2015, 2, 5, 1, 30), allDay: true, text: 'caption' };
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 4),
                     dataSource: [appointment],
                     currentView: 'week',
@@ -699,15 +703,16 @@ module('All day appointments common', config, () => {
 
                 scheduler.instance.option('currentView', 'day');
                 scheduler.instance.option('currentView', 'week');
+                await waitAsync(10);
 
                 assert.roughEqual(getOuterHeight(scheduler.instance.$element().find('.dx-scheduler-all-day-appointment')), allDayPanelHeight, 1, 'Appointment height is correct');
             });
 
-            test('allDay panel should be expanded when there are long appointments without allDay', function(assert) {
+            test('allDay panel should be expanded when there are long appointments without allDay', async function(assert) {
                 const appointment = { startDate: new Date(2015, 2, 5, 1), endDate: new Date(2015, 2, 5, 3), text: 'caption' };
                 const newAppointment = { startDate: new Date(2015, 2, 5, 1), endDate: new Date(2015, 2, 8, 3), text: 'caption' };
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 4),
                     dataSource: [appointment],
                     currentView: 'week',
@@ -720,8 +725,8 @@ module('All day appointments common', config, () => {
                 assert.notOk($workspace.hasClass('dx-scheduler-work-space-all-day-collapsed'), 'AllDay panel is expanded');
             });
 
-            test('allDay panel should be expanded after adding allDay appointment via api', function(assert) {
-                const scheduler = createInstance({
+            test('allDay panel should be expanded after adding allDay appointment via api', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 1, 9),
                     currentView: 'week',
                     firstDayOfWeek: 0,
@@ -747,8 +752,8 @@ module('All day appointments common', config, () => {
                 assert.ok(workspace.option('allDayExpanded'), 'allDay panel is expanded');
             });
 
-            test('allDay panel should be expanded after adding long appointment via api', function(assert) {
-                const scheduler = createInstance({
+            test('allDay panel should be expanded after adding long appointment via api', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 1, 9),
                     currentView: 'week',
                     firstDayOfWeek: 0,
@@ -766,8 +771,8 @@ module('All day appointments common', config, () => {
                 assert.ok(workspace.option('allDayExpanded'), 'allDay panel is expanded');
             });
 
-            test('all-day-appointment should have a correct height when the \'showAllDayPanel\' option was changed', function(assert) {
-                const scheduler = createInstance({
+            test('all-day-appointment should have a correct height when the \'showAllDayPanel\' option was changed', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 1, 9),
                     currentView: 'week',
                     firstDayOfWeek: 0,
@@ -781,8 +786,8 @@ module('All day appointments common', config, () => {
                 assert.roughEqual(getOuterHeight(scheduler.instance.$element().find('.dx-scheduler-appointment').first()), appointmentHeight, 0.501, 'appointment height is correct');
             });
 
-            test('long appointment should not be rendered if "showAllDayPanel" = false', function(assert) {
-                const scheduler = createInstance({
+            test('long appointment should not be rendered if "showAllDayPanel" = false', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 1, 9),
                     currentView: 'week',
                     firstDayOfWeek: 0,
@@ -794,12 +799,12 @@ module('All day appointments common', config, () => {
                 assert.notOk(scheduler.instance.$element().find('.dx-scheduler-appointment').length, 'long appointment was not rendered');
             });
 
-            test('AllDay panel should be displayed correctly on init with custom store', function(assert) {
+            test('AllDay panel should be displayed correctly on init with custom store', async function(assert) {
                 const data = [{
                     text: 'a', allDay: true, startDate: new Date(2015, 3, 16), endDate: new Date(2015, 3, 17)
                 }];
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 3, 16),
                     firstDayOfWeek: 1,
                     currentView: 'week',
@@ -809,7 +814,7 @@ module('All day appointments common', config, () => {
                                 const d = $.Deferred();
                                 setTimeout(function() {
                                     d.resolve(data);
-                                }, 300);
+                                }, 100);
 
                                 return d.promise();
                             }
@@ -817,18 +822,19 @@ module('All day appointments common', config, () => {
                     })
                 });
 
+                await waitAsync(110);
                 const workspace = scheduler.instance.getWorkSpace();
-                this.clock.tick(300);
 
                 assert.ok(workspace.option('allDayExpanded'), 'allDay panel is expanded');
             });
 
-            test('AllDay panel should be displayed correctly after changing view with custom store', function(assert) {
+            test('AllDay panel should be displayed correctly after changing view with custom store', async function(assert) {
                 const data = [{
                     text: 'a', allDay: true, startDate: new Date(2015, 2, 5)
                 }];
+                let counter = 0;
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 4),
                     currentView: 'week',
                     dataSource: new DataSource({
@@ -837,7 +843,8 @@ module('All day appointments common', config, () => {
                                 const d = $.Deferred();
                                 setTimeout(function() {
                                     d.resolve(Query([data[0]]).filter(options.filter).toArray());
-                                }, 300);
+                                    counter++;
+                                }, 100);
 
                                 return d.promise();
                             }
@@ -845,11 +852,10 @@ module('All day appointments common', config, () => {
                     })
                 });
 
-                this.clock.tick(300);
                 scheduler.instance.option('currentView', 'day');
-                this.clock.tick(300);
 
                 const workspace = scheduler.instance.getWorkSpace();
+                await waitForAsync(() => counter === 2);
                 assert.notOk(workspace.option('allDayExpanded'), 'allDay panel is not expanded');
             });
         });

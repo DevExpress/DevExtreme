@@ -46,14 +46,14 @@ module('Recurrence Editor rendering', {
     },
 },
 () => {
-    test('Recurrence editor should be initialized', function(assert) {
+    test('Recurrence editor should be initialized', async function(assert) {
         const instance = createInstance();
         assert.ok(instance instanceof RecurrenceEditor, 'dxRecurrenceEditor was initialized');
 
         assert.ok(instance.$element().hasClass('dx-recurrence-editor'), 'dxRecurrence editor has right class');
     });
 
-    test('Recurrence editor should have correct default options', function(assert) {
+    test('Recurrence editor should have correct default options', async function(assert) {
         const instance = createInstance();
 
         assert.equal(instance.option('value'), null, 'value is right');
@@ -62,7 +62,7 @@ module('Recurrence Editor rendering', {
         assert.ok(instance.option('startDate') instanceof Date, 'startDate is right');
     });
 
-    test('Recurrence editor should correctly process null value and reset inner editors to default values', function(assert) {
+    test('Recurrence editor should correctly process null value and reset inner editors to default values', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
 
         instance.option('value', null);
@@ -71,7 +71,7 @@ module('Recurrence Editor rendering', {
         assert.equal(getFreqEditor(instance).option('value'), 'daily', 'freq editor default value was set');
     });
 
-    test('Parts of recurrence editor should have right readonly option', function(assert) {
+    test('Parts of recurrence editor should have right readonly option', async function(assert) {
         const instance = createInstance({
             value: 'FREQ=DAILY',
             readOnly: true
@@ -81,7 +81,7 @@ module('Recurrence Editor rendering', {
     });
 
     ['WEEKLY', 'MONTHLY', 'YEARLY'].forEach(value => {
-        QUnit.test(`Recurrence editor should not crash when FREQ=${value} is set without startDate`, function(assert) {
+        QUnit.test(`Recurrence editor should not crash when FREQ=${value} is set without startDate`, async function(assert) {
             const instance = createInstance({ value: `FREQ=${value}` });
 
             assert.equal(instance.option('value'), `FREQ=${value}`);
@@ -89,7 +89,7 @@ module('Recurrence Editor rendering', {
         });
     });
 
-    test('The recurrence editor should fire value change only once when the last selected day unselecting (Angular T1154651)', function(assert) {
+    test('The recurrence editor should fire value change only once when the last selected day unselecting (Angular T1154651)', async function(assert) {
         const result = [];
         const expectedResult = ['FREQ=WEEKLY;BYDAY=SU'];
         const instance = createInstance({
@@ -122,7 +122,7 @@ module('GetEditorByField', () => {
     ];
 
     cases.forEach((config) => {
-        QUnit.test(`getEditorByField should return editor if it's visible, field=${config.field}`, function(assert) {
+        QUnit.test(`getEditorByField should return editor if it's visible, field=${config.field}`, async function(assert) {
             const instance = createInstance({ value: 'FREQ=DAILY' });
             let editor = instance.getEditorByField(config.field);
 
@@ -140,26 +140,26 @@ module('GetEditorByField', () => {
 });
 
 module('Frequency editor', () => {
-    test('Recurrence editor should contain select box for select freq', function(assert) {
+    test('Recurrence editor should contain select box for select freq', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
 
         assert.ok(getFreqEditor(instance) instanceof SelectBox, 'Freq editor is SelectBox');
     });
 
-    test('Frequency editor should have right css class', function(assert) {
+    test('Frequency editor should have right css class', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
 
         assert.ok(getFreqEditor(instance).$element().hasClass(FREQUENCY_EDITOR), 'Freq editor class is correct');
     });
 
-    test('Frequency editor should have right defaults', function(assert) {
+    test('Frequency editor should have right defaults', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
 
         assert.equal(getFreqEditor(instance).option('value'), 'weekly', 'Value is right');
         assert.equal(getFreqEditor(instance).option('layout'), 'horizontal', 'Layout is right');
     });
 
-    test('Freq editor should have right items', function(assert) {
+    test('Freq editor should have right items', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
 
         const items = getFreqEditor(instance).option('items');
@@ -176,7 +176,7 @@ module('Frequency editor', () => {
         }
     });
 
-    test('Recurrence editor should correctly process values of the freq selectBox, byday setting', function(assert) {
+    test('Recurrence editor should correctly process values of the freq selectBox, byday setting', async function(assert) {
         const instance = createInstance({ startDate: new Date(2015, 7, 27) });
 
         assert.equal(instance.option('value'), null, 'Recurrence editor has right value');
@@ -185,7 +185,7 @@ module('Frequency editor', () => {
         assert.equal(instance.option('value'), 'FREQ=WEEKLY;BYDAY=TH', 'Recurrence editor has right value');
     });
 
-    test('Recurrence editor should correctly process values of the freq selectBox, bymonthday setting', function(assert) {
+    test('Recurrence editor should correctly process values of the freq selectBox, bymonthday setting', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2015, 2, 10) });
 
         getFreqEditor(instance).option('value', 'monthly');
@@ -193,7 +193,7 @@ module('Frequency editor', () => {
         assert.equal(instance.option('value'), 'FREQ=MONTHLY;BYMONTHDAY=10', 'Recurrence editor has right value');
     });
 
-    test('Recurrence editor should correctly process values of the freq radioGroup, bymonthday and bymonth setting', function(assert) {
+    test('Recurrence editor should correctly process values of the freq radioGroup, bymonthday and bymonth setting', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2015, 2, 10) });
 
         getFreqEditor(instance).option('value', 'yearly');
@@ -201,7 +201,7 @@ module('Frequency editor', () => {
         assert.equal(instance.option('value'), 'FREQ=YEARLY;BYMONTHDAY=10;BYMONTH=3', 'Recurrence editor has right value');
     });
 
-    test('Recurrence editor onValueChanged should be fired after changing value', function(assert) {
+    test('Recurrence editor onValueChanged should be fired after changing value', async function(assert) {
         let fired = 0;
         const instance = createInstance({
             value: 'FREQ=MONTHLY',
@@ -216,7 +216,7 @@ module('Frequency editor', () => {
         assert.equal(fired, 1, 'Recurrence editor onValueChanged is fired');
     });
 
-    test('Recurrence editor should correctly pass values to the freq editor', function(assert) {
+    test('Recurrence editor should correctly pass values to the freq editor', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2019, 1, 1), });
 
         assert.equal(getFreqEditor(instance).option('value'), 'weekly', 'Freq editor has right value');
@@ -226,7 +226,7 @@ module('Frequency editor', () => {
     });
 
     $.each(['minutely', 'hourly'], (_, value) => {
-        test(`Recurrence editor should correctly set frequency on ${value} freq`, function(assert) {
+        test(`Recurrence editor should correctly set frequency on ${value} freq`, async function(assert) {
             const instance = createInstance();
 
             assert.equal(instance.option('value'), null, 'Freq editor has right value');
@@ -234,7 +234,7 @@ module('Frequency editor', () => {
             assert.equal(instance.option('value'), `FREQ=${value.toUpperCase()}`, 'Recurrence editor has right value');
         });
 
-        test(`Recurrence editor should correctly set interval on ${value} freq`, function(assert) {
+        test(`Recurrence editor should correctly set interval on ${value} freq`, async function(assert) {
             const instance = createInstance();
 
             getFreqEditor(instance).option('value', value);
@@ -247,13 +247,13 @@ module('Frequency editor', () => {
 });
 
 module('Repeat-end editor', () => {
-    test('Recurrence editor should contain repeat-type radio group to turn on/of repeat-end', function(assert) {
+    test('Recurrence editor should contain repeat-type radio group to turn on/of repeat-end', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
 
         assert.ok(getRepeatEndEditor(instance) instanceof RadioGroup, 'Repeat-end editor is RadioGroup');
     });
 
-    test('Recurrence repeat-end editor should have right default', function(assert) {
+    test('Recurrence repeat-end editor should have right default', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
         const itemValues = [
             { type: 'never' },
@@ -266,7 +266,7 @@ module('Repeat-end editor', () => {
         assert.deepEqual(getRepeatEndEditor(instance).option('items'), itemValues, 'Repeat-end editor items are correct');
     });
 
-    test('Repeat-end should process rules correctly', function(assert) {
+    test('Repeat-end should process rules correctly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;COUNT=10' });
 
         assert.equal(getRepeatEndEditor(instance).option('value'), 'count', 'value is correct');
@@ -276,7 +276,7 @@ module('Repeat-end editor', () => {
         assert.equal(getRepeatEndEditor(instance).option('value'), 'until', 'value is correct');
     });
 
-    test('Recurrence repeat-type editor should be rendered with right inner editors', function(assert) {
+    test('Recurrence repeat-type editor should be rendered with right inner editors', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;COUNT=10' });
 
         const $repeatCount = instance.$element().find('.' + REPEAT_COUNT_EDITOR);
@@ -286,7 +286,7 @@ module('Repeat-end editor', () => {
         assert.equal($repeatUntilDate.length, 0, 'repeatUntilDate editor was rendered');
     });
 
-    test('Recurrence editor parts should be hidden if needed, recurrenceString changing', function(assert) {
+    test('Recurrence editor parts should be hidden if needed, recurrenceString changing', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
 
         const $repeatCount = () => instance.$element().find('.' + REPEAT_COUNT_EDITOR);
@@ -306,7 +306,7 @@ module('Repeat-end editor', () => {
         assert.equal($repeatUntilDate().length, 1, 'repeat-until editor is visible');
     });
 
-    test('Recurrence editor parts should be hidden if needed, repeat-end editor value changing', function(assert) {
+    test('Recurrence editor parts should be hidden if needed, repeat-end editor value changing', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;COUNT=10' });
 
         const $repeatCount = () => instance.$element().find('.' + REPEAT_COUNT_EDITOR);
@@ -323,7 +323,7 @@ module('Repeat-end editor', () => {
         assert.equal($repeatUntilDate().length, 0, 'repeat-until editor is invisible');
     });
 
-    test('Recurrence editor should correctly process values from repeat-end editor', function(assert) {
+    test('Recurrence editor should correctly process values from repeat-end editor', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;COUNT=10' });
 
         let date = dateUtils.trimTime(new Date());
@@ -335,7 +335,7 @@ module('Repeat-end editor', () => {
         assert.equal(instance.option('value').substring(0, 26), ('FREQ=WEEKLY;UNTIL=' + getRecurrenceProcessor().getAsciiStringByDate(date)).substring(0, 26), 'Recurrence editor have right value');
     });
 
-    test('Recurrence repeat-count editor should be rendered with right defaults', function(assert) {
+    test('Recurrence repeat-count editor should be rendered with right defaults', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
         const count = instance.getEditorByField('count');
 
@@ -346,7 +346,7 @@ module('Repeat-end editor', () => {
         assert.equal(count.option('width'), '100%', 'numberBox has right width');
     });
 
-    test('Recurrence repeat-count editor should process rules correctly', function(assert) {
+    test('Recurrence repeat-count editor should process rules correctly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
         const count = instance.getEditorByField('count');
 
@@ -358,7 +358,7 @@ module('Repeat-end editor', () => {
         });
     });
 
-    test('Recurrence editor should correctly process values from repeat-count editor', function(assert) {
+    test('Recurrence editor should correctly process values from repeat-count editor', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;COUNT=1' });
         const count = instance.getEditorByField('count');
 
@@ -368,7 +368,7 @@ module('Repeat-end editor', () => {
         });
     });
 
-    test('Recurrence repeat-until editor should be rendered with right defaults', function(assert) {
+    test('Recurrence repeat-until editor should be rendered with right defaults', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;UNTIL=20151007', firstDayOfWeek: 2 });
         const untilDate = instance.getEditorByField('until');
 
@@ -377,7 +377,7 @@ module('Repeat-end editor', () => {
         assert.deepEqual(untilDate.option('value'), getRecurrenceProcessor().getDateByAsciiString('20151007'), 'dateBox has right value');
     });
 
-    test('Recurrence repeat-until editor should process rules correctly', function(assert) {
+    test('Recurrence repeat-until editor should process rules correctly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;UNTIL=20151007' });
         const untilDate = instance.getEditorByField('until');
 
@@ -389,7 +389,7 @@ module('Repeat-end editor', () => {
         });
     });
 
-    test('Recurrence editor should correctly process values from until-date editor', function(assert) {
+    test('Recurrence editor should correctly process values from until-date editor', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;UNTIL=20151007' });
         const untilDate = instance.getEditorByField('until');
 
@@ -430,7 +430,7 @@ module('Repeat-end editor', () => {
                 },
             ]
         ].forEach(testCase => {
-            test('Repeat-until dateBox should get date considering scheduler timeZone', function(assert) {
+            test('Repeat-until dateBox should get date considering scheduler timeZone', async function(assert) {
                 const [gridTimeZone, startDateTimeZone] = testCase;
                 const timeZoneCalculator = createTimeZoneCalculator(gridTimeZone);
 
@@ -444,7 +444,7 @@ module('Repeat-end editor', () => {
                 assert.deepEqual(untilDate.option('value'), new Date('2023-06-16 23:59:59'), 'dateBox has right value');
             });
 
-            test('Repeat-until dateBox should apply date considering scheduler timeZone', function(assert) {
+            test('Repeat-until dateBox should apply date considering scheduler timeZone', async function(assert) {
                 const [gridTimeZone, startDateTimeZone, result] = testCase;
 
                 const timeZoneCalculator = createTimeZoneCalculator(gridTimeZone);
@@ -469,7 +469,7 @@ module('Repeat-end editor', () => {
 });
 
 module('Interval editor', () => {
-    test('Recurrence interval numberbox should be rendered with right defaults', function(assert) {
+    test('Recurrence interval numberbox should be rendered with right defaults', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
 
         const $intervalLabel = instance.$element().find(`.${INTERVAL_EDITOR}${LABEL_POSTFIX}`);
@@ -483,13 +483,13 @@ module('Interval editor', () => {
         assert.equal(getIntervalEditor(instance).option('width'), 90, 'Interval editor has right width');
     });
 
-    test('Interval editor should have right css class', function(assert) {
+    test('Interval editor should have right css class', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
 
         assert.ok(getIntervalEditor(instance).$element().hasClass(INTERVAL_EDITOR), 'Interval editor class is correct');
     });
 
-    test('Recurrence interval editor should process value correctly', function(assert) {
+    test('Recurrence interval editor should process value correctly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;INTERVAL=2' });
 
         assert.equal(getIntervalEditor(instance).option('value'), 2, 'Interval editor has right value after init');
@@ -499,7 +499,7 @@ module('Interval editor', () => {
         assert.equal(getIntervalEditor(instance).option('value'), 3, 'Interval editor has right value');
     });
 
-    test('Recurrence editor should correctly process values from interval editor', function(assert) {
+    test('Recurrence editor should correctly process values from interval editor', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;INTERVAL=2' });
 
         getIntervalEditor(instance).option('value', 3);
@@ -515,7 +515,7 @@ module('Interval editor', () => {
     ];
 
     textCases.forEach((config) => {
-        QUnit.test(`Recurrence interval label should have correct text on init, freq=${config.freq}`, function(assert) {
+        QUnit.test(`Recurrence interval label should have correct text on init, freq=${config.freq}`, async function(assert) {
             const instance = createInstance({
                 value: `FREQ=${config.freq}`
             });
@@ -527,7 +527,7 @@ module('Interval editor', () => {
     });
 
     textCases.forEach((config) => {
-        QUnit.test(`Recurrence interval label should have correct text after changing freq, freq=${config.freq}`, function(assert) {
+        QUnit.test(`Recurrence interval label should have correct text after changing freq, freq=${config.freq}`, async function(assert) {
             const instance = createInstance();
 
             instance.option('value', `FREQ=${config.freq}`);
@@ -539,7 +539,7 @@ module('Interval editor', () => {
 });
 
 module('Repeat-on editor', () => {
-    test('Recurrence repeat-on editor should be rendered', function(assert) {
+    test('Recurrence repeat-on editor should be rendered', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
 
         const $repeatOn = instance.$element().find('.' + REPEAT_ON_EDITOR);
@@ -547,7 +547,7 @@ module('Repeat-on editor', () => {
         assert.equal($repeatOn.length, 1, 'repeat-on editor was rendered');
     });
 
-    test('Recurrence repeat-on lablle should have correct css class', function(assert) {
+    test('Recurrence repeat-on lablle should have correct css class', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
 
         const $repeatOnLabel = instance.$element().find(`.${REPEAT_ON_EDITOR}${LABEL_POSTFIX}`);
@@ -555,7 +555,7 @@ module('Repeat-on editor', () => {
         assert.equal($repeatOnLabel.text(), 'Repeat On', 'label text is correct');
     });
 
-    test('Recurrence repeat-on editor should contain repeat-on-week editor, when freq = weekly', function(assert) {
+    test('Recurrence repeat-on editor should contain repeat-on-week editor, when freq = weekly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
 
         const buttonGroup = instance.getEditorByField('byday');
@@ -564,7 +564,7 @@ module('Repeat-on editor', () => {
         assert.ok(buttonGroup.$element().hasClass(RECURRENCE_BUTTON_GROUP), 'repeat-on-week editor has correct class');
     });
 
-    test('Repeat-on-week editor should have right defaults', function(assert) {
+    test('Repeat-on-week editor should have right defaults', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY' });
 
         const buttonGroup = instance.getEditorByField('byday');
@@ -574,7 +574,7 @@ module('Repeat-on editor', () => {
         assert.equal(buttonGroup.option('field'), 'byday', 'Field mode is ok');
     });
 
-    test('Recurrence repeat-on editor should process values correctly, freq = weekly', function(assert) {
+    test('Recurrence repeat-on editor should process values correctly, freq = weekly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU,SU' });
         assert.deepEqual($('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['SU', 'TU'], 'Right button group select item keys');
 
@@ -582,13 +582,13 @@ module('Repeat-on editor', () => {
         assert.deepEqual($('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO'], 'Right button group select item keys');
     });
 
-    test('Recurrence repeat-on editor should process values by startDate correctly, freq = weekly', function(assert) {
+    test('Recurrence repeat-on editor should process values by startDate correctly, freq = weekly', async function(assert) {
         createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2015, 1, 1, 1) });
 
         assert.deepEqual($('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['SU'], 'Right button group select item keys');
     });
 
-    test('Recurrence repeat-on editor should process values by startDate correctly after remove selection, freq = weekly', function(assert) {
+    test('Recurrence repeat-on editor should process values by startDate correctly after remove selection, freq = weekly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY', startDate: new Date(2015, 1, 1, 1) });
 
         const buttonGroup = instance.getEditorByField('byday');
@@ -597,7 +597,7 @@ module('Repeat-on editor', () => {
         assert.deepEqual(buttonGroup.option('selectedItemKeys'), ['SU'], 'Selection should consider startDate day');
     });
 
-    test('Recurrence editor should process values from repeat-on-editor after init correctly, freq=weekly', function(assert) {
+    test('Recurrence editor should process values from repeat-on-editor after init correctly, freq=weekly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU' });
 
         const buttonGroup = $('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance');
@@ -606,7 +606,7 @@ module('Repeat-on editor', () => {
         assert.equal(instance.option('value'), 'FREQ=WEEKLY;BYDAY=TU,WE', 'Recurrence editor value is correct');
     });
 
-    test('Recurrence editor should process values from repeat-on-editor after remove selection, freq=weekly', function(assert) {
+    test('Recurrence editor should process values from repeat-on-editor after remove selection, freq=weekly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU', startDate: new Date(2015, 1, 1, 1) });
 
         const buttonGroup = $('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance');
@@ -615,13 +615,13 @@ module('Repeat-on editor', () => {
         assert.equal(instance.option('value'), 'FREQ=WEEKLY;BYDAY=SU', 'Recurrence editor value is correct');
     });
 
-    test('\'BYDAY\' rule has a higher priority than \'startDate\' rule, freq=weekly', function(assert) {
+    test('\'BYDAY\' rule has a higher priority than \'startDate\' rule, freq=weekly', async function(assert) {
         createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU', startDate: new Date(2015, 1, 1, 1) });
 
         assert.deepEqual($('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['TU'], 'Right button group select item keys');
     });
 
-    test('Recurrence editor should process values from repeat-on-editor correctly, freq=weekly', function(assert) {
+    test('Recurrence editor should process values from repeat-on-editor correctly, freq=weekly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;BYDAY=TU,SU' });
 
         const buttonGroup = $('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance');
@@ -630,7 +630,7 @@ module('Repeat-on editor', () => {
         assert.equal(instance.option('value'), 'FREQ=WEEKLY;BYDAY=SU,MO,TU');
     });
 
-    test('Recurrence repeat-on editor should contain repeat-on-month editor, when freq = monthly', function(assert) {
+    test('Recurrence repeat-on editor should contain repeat-on-month editor, when freq = monthly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=MONTHLY', startDate: new Date(2019, 1, 1) });
         const dayOfMonth = instance.getRecurrenceForm().getEditor('bymonthday');
 
@@ -641,7 +641,7 @@ module('Repeat-on editor', () => {
         assert.equal(dayOfMonth.option('useLargeSpinButtons'), false, 'numberBox have right useLargeSpinButtons');
     });
 
-    test('Recurrence repeat-on editor should should process values correctly, when freq = monthly', function(assert) {
+    test('Recurrence repeat-on editor should should process values correctly, when freq = monthly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=MONTHLY;BYMONTHDAY=5' });
 
         const dayOfMonth = instance.getRecurrenceForm().getEditor('bymonthday');
@@ -653,7 +653,7 @@ module('Repeat-on editor', () => {
         assert.equal(dayOfMonth.option('value'), 6, 'repeat-on-month editor was rendered');
     });
 
-    test('Recurrence repeat-on editor should should process values by startDate correctly, when freq = monthly', function(assert) {
+    test('Recurrence repeat-on editor should should process values by startDate correctly, when freq = monthly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=MONTHLY', startDate: new Date(2015, 1, 10, 1) });
 
         const dayOfMonth = instance.getRecurrenceForm().getEditor('bymonthday');
@@ -661,7 +661,7 @@ module('Repeat-on editor', () => {
         assert.equal(dayOfMonth.option('value'), 10, 'repeat-on-month editor was rendered with right value');
     });
 
-    test('Recurrence editor should process values from repeat-on-editor correctly, freq=monthly', function(assert) {
+    test('Recurrence editor should process values from repeat-on-editor correctly, freq=monthly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=MONTHLY;BYMONTHDAY=5' });
 
         const dayOfMonth = instance.getRecurrenceForm().getEditor('bymonthday');
@@ -670,7 +670,7 @@ module('Repeat-on editor', () => {
         assert.equal(instance.option('value'), 'FREQ=MONTHLY;BYMONTHDAY=12');
     });
 
-    test('\'BYMONTHDAY\' rule has a higher priority than \'startDate\' rule, when freq = monthly', function(assert) {
+    test('\'BYMONTHDAY\' rule has a higher priority than \'startDate\' rule, when freq = monthly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=MONTHLY;BYMONTHDAY=5', startDate: new Date(2015, 1, 10, 1) });
 
         const dayOfMonth = instance.getRecurrenceForm().getEditor('bymonthday');
@@ -678,7 +678,7 @@ module('Repeat-on editor', () => {
         assert.equal(dayOfMonth.option('value'), 5, 'repeat-on-month editor was rendered with right value');
     });
 
-    test('Recurrence repeat-on editor should contain repeat-on-year editor parts, when freq = yearly', function(assert) {
+    test('Recurrence repeat-on editor should contain repeat-on-year editor parts, when freq = yearly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=YEARLY', startDate: new Date(2019, 1, 1) });
 
         const $repeatOn = instance.$element().find('.' + REPEAT_ON_EDITOR);
@@ -689,7 +689,7 @@ module('Repeat-on editor', () => {
         assert.equal($day.length, 1, 'day-of-month editor was rendered');
     });
 
-    test('Recurrence repeat-on editor parts should have right defaults, when freq = yearly', function(assert) {
+    test('Recurrence repeat-on editor parts should have right defaults, when freq = yearly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=YEARLY', startDate: new Date(2019, 1, 1) });
 
         const monthOfYear = instance.getRecurrenceForm().getEditor('bymonth');
@@ -700,7 +700,7 @@ module('Repeat-on editor', () => {
         assert.equal(monthOfYear.option('text'), 'February', 'text is correct');
     });
 
-    test('Recurrence repeat-on editor should should process values correctly, when freq = yearly', function(assert) {
+    test('Recurrence repeat-on editor should should process values correctly, when freq = yearly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=YEARLY;BYMONTH=10;BYMONTHDAY=5' });
 
         const getDayOfMonth = () => instance.getRecurrenceForm().getEditor('bymonthday').option('value');
@@ -715,7 +715,7 @@ module('Repeat-on editor', () => {
         assert.equal(getMonth(), 11, 'month was set correctly');
     });
 
-    test('Recurrence repeat-on editor should process values by startDate correctly, when freq = yearly', function(assert) {
+    test('Recurrence repeat-on editor should process values by startDate correctly, when freq = yearly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=YEARLY', startDate: new Date(2015, 2, 10, 1) });
 
         const dayEditor = instance.getRecurrenceForm().getEditor('bymonthday');
@@ -725,7 +725,7 @@ module('Repeat-on editor', () => {
         assert.equal(monthEditor.option('value'), 3, 'month was set correctly');
     });
 
-    test('Recurrence editor should process values from repeat-on-editor correctly, freq = yearly', function(assert) {
+    test('Recurrence editor should process values from repeat-on-editor correctly, freq = yearly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=YEARLY;BYMONTHDAY=4;BYMONTH=11', startDate: new Date(2015, 7, 4) });
 
         const monthEditor = instance.getRecurrenceForm().getEditor('bymonth');
@@ -740,7 +740,7 @@ module('Repeat-on editor', () => {
         assert.equal(instance.option('value'), 'FREQ=YEARLY;BYMONTHDAY=5;BYMONTH=10', 'recurrence editor value is correct');
     });
 
-    test('\'BYMONTH\' rule should has right default value, when freq = yearly', function(assert) {
+    test('\'BYMONTH\' rule should has right default value, when freq = yearly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=YEARLY', startDate: new Date(2016, 4, 10) });
 
         const monthEditor = instance.getRecurrenceForm().getEditor('bymonth');
@@ -748,7 +748,7 @@ module('Repeat-on editor', () => {
         assert.equal(monthEditor.option('value'), 5, 'month was set correctly');
     });
 
-    test('\'BYMONTH\' rule has a higher priority than \'startDate\' rule, when freq = yearly', function(assert) {
+    test('\'BYMONTH\' rule has a higher priority than \'startDate\' rule, when freq = yearly', async function(assert) {
         const instance = createInstance({ value: 'FREQ=YEARLY;BYMONTH=10;BYMONTHDAY=5', startDate: new Date(2015, 2, 10, 1) });
 
         const monthEditor = instance.getRecurrenceForm().getEditor('bymonth');
@@ -767,7 +767,7 @@ module('Repeat-on editor', () => {
     ];
 
     repeatOnPartsVisibilityCases.forEach((config) => {
-        QUnit.test(`Recurrence repeat-on editor parts visibility on init, freq=${config.freq}`, function(assert) {
+        QUnit.test(`Recurrence repeat-on editor parts visibility on init, freq=${config.freq}`, async function(assert) {
             const instance = createInstance({
                 value: `FREQ=${config.freq}`
             });
@@ -782,7 +782,7 @@ module('Repeat-on editor', () => {
     });
 
     repeatOnPartsVisibilityCases.forEach((config) => {
-        QUnit.test(`Recurrence repeat-on editor parts visibility after changing freq, freq=${config.freq}`, function(assert) {
+        QUnit.test(`Recurrence repeat-on editor parts visibility after changing freq, freq=${config.freq}`, async function(assert) {
             const instance = createInstance();
 
             instance.option('value', `FREQ=${config.freq}`);
@@ -795,7 +795,7 @@ module('Repeat-on editor', () => {
         });
     });
 
-    test('Recurrence editor should process values from repeat-on-editor correctly after freq changing', function(assert) {
+    test('Recurrence editor should process values from repeat-on-editor correctly after freq changing', async function(assert) {
         const instance = createInstance({ value: 'FREQ=YEARLY', startDate: new Date(2015, 2, 10) });
 
         const monthEditor = instance.getRecurrenceForm().getEditor('bymonth');
@@ -818,13 +818,13 @@ module('Repeat-on editor', () => {
 });
 
 module('FirstDayOfWeek setting', () => {
-    test('Recurrence editor should have correct firstDayOfWeek default value', function(assert) {
+    test('Recurrence editor should have correct firstDayOfWeek default value', async function(assert) {
         const instance = createInstance();
 
         assert.strictEqual(instance.option('firstDayOfWeek'), undefined, 'default value is correct');
     });
 
-    test('Recurrence editor should have correct firstDayOfWeek value if this is different in localization', function(assert) {
+    test('Recurrence editor should have correct firstDayOfWeek value if this is different in localization', async function(assert) {
         const spy = sinon.spy(dateLocalization, 'firstDayOfWeekIndex');
 
         createInstance({ firstDayOfWeek: 0 });
@@ -832,14 +832,14 @@ module('FirstDayOfWeek setting', () => {
         assert.notOk(spy.called, 'firstDayOfWeekIndex wasn\'t called');
     });
 
-    test('Repeat-until dateBox should have right firstDayOfWeek', function(assert) {
+    test('Repeat-until dateBox should have right firstDayOfWeek', async function(assert) {
         const instance = createInstance({ firstDayOfWeek: 5, value: 'FREQ=WEEKLY;UNTIL=20151007' });
         const untilDate = instance.getEditorByField('until');
 
         assert.equal(untilDate.option('calendarOptions.firstDayOfWeek'), 5, 'First day of the week is ok');
     });
 
-    test('Repeat-until dateBox should have right firstDayOfWeek after firstDayOfWeek option changing', function(assert) {
+    test('Repeat-until dateBox should have right firstDayOfWeek after firstDayOfWeek option changing', async function(assert) {
         const instance = createInstance({ firstDayOfWeek: 5, value: 'FREQ=WEEKLY;UNTIL=20151007' });
         instance.option('firstDayOfWeek', 1);
         const untilDate = instance.getEditorByField('until');
@@ -849,14 +849,14 @@ module('FirstDayOfWeek setting', () => {
 
     const dayNames = [{ key: 'SU', text: 'Sun' }, { key: 'MO', text: 'Mon' }, { key: 'TU', text: 'Tue' }, { key: 'WE', text: 'Wed' }, { key: 'TH', text: 'Thu' }, { key: 'FR', text: 'Fri' }, { key: 'SA', text: 'Sat' }];
 
-    test('Repeat-on-week editor should be rendered correctly', function(assert) {
+    test('Repeat-on-week editor should be rendered correctly', async function(assert) {
         createInstance({ firstDayOfWeek: 3, value: 'FREQ=WEEKLY;BYDAY=TU' });
 
         const buttonGroup = $('.' + 'dx-buttongroup').eq(0).dxButtonGroup('instance');
         assert.deepEqual(buttonGroup.option('items'), dayNames.slice(3).concat(dayNames.slice(0, 3)));
     });
 
-    test('Repeat-on-week editor should be rendered correctly after firstDayOfWeek option changing', function(assert) {
+    test('Repeat-on-week editor should be rendered correctly after firstDayOfWeek option changing', async function(assert) {
         const instance = createInstance({ firstDayOfWeek: 3, value: 'FREQ=WEEKLY;BYDAY=TU' });
         instance.option('firstDayOfWeek', 5);
 
@@ -864,7 +864,7 @@ module('FirstDayOfWeek setting', () => {
         assert.deepEqual(buttonGroup.option('items'), dayNames.slice(5).concat(dayNames.slice(0, 5)));
     });
 
-    test('Repeat-count editor should have correct value after re-initializing values', function(assert) {
+    test('Repeat-count editor should have correct value after re-initializing values', async function(assert) {
         const instance = createInstance({ value: 'FREQ=WEEKLY;BYDAY=SU,TU;COUNT=3' });
 
         instance.option('value', '');

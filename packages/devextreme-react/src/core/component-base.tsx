@@ -33,6 +33,7 @@ import {
   RestoreTreeContext,
   TemplateRenderingContext,
 } from './contexts';
+import { UNITLESS_NUMBERS_SET } from './const';
 
 const DX_REMOVE_EVENT = 'dxremove';
 
@@ -159,7 +160,11 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
         Object.entries(styles).forEach(
           ([name, value]) => {
-            el.style[name] = value;
+            if (typeof value === 'number' && !UNITLESS_NUMBERS_SET.has(name)) {
+              el.style[name] = `${value}px`;
+            } else {
+              el.style[name] = value;
+            }
           },
         );
       }
@@ -194,7 +199,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         }
       });
       return elementProps;
-    }, [element.current]);
+    }, [element.current, props]);
 
     const scheduleTemplatesUpdate = useCallback(() => {
       if (guardsUpdateScheduled.current) {

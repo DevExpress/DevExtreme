@@ -1304,3 +1304,65 @@ describe('conditional rendering', () => {
     expect(Widget.resetOption.mock.calls[0]).toEqual(['option']);
   });
 });
+
+describe('resetOption behavior', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+    cleanup();
+  });
+
+  it('calls resetOption for regular option', () => {
+    const { rerender } = render(
+      <TestComponent>
+        <NestedComponent a={123} />
+      </TestComponent>,
+    );
+
+    rerender(
+      <TestComponent />
+    );
+
+    expect(Widget.resetOption.mock.calls.length).toBeGreaterThan(0);
+    expect(Widget.resetOption.mock.calls.some(call => call[0] === 'option')).toBeTruthy();
+  });
+
+  it('sets empty array for collection option without calling resetOption', () => {
+    const { rerender } = render(
+      <TestComponent>
+        <CollectionNestedComponent c={123} d="abc" />
+      </TestComponent>,
+    );
+
+    rerender(
+      <TestComponent />
+    );
+
+    expect(Widget.resetOption.mock.calls.some(call => call[0] === 'itemOptions')).toBeFalsy();
+    
+    expect(Widget.option.mock.calls.some(call => 
+      call[0] === 'itemOptions' && Array.isArray(call[1]) && call[1].length === 0
+    )).toBeTruthy();
+  });
+
+  it('resets nested collection options correctly', () => {
+    const { rerender } = render(
+      <TestComponent>
+        <NestedComponent a={123}>
+          <CollectionSubNestedComponent c={456} d="def" />
+        </NestedComponent>
+      </TestComponent>,
+    );
+
+    rerender(
+      <TestComponent>
+        <NestedComponent a={123} />
+      </TestComponent>,
+    );
+
+    expect(Widget.resetOption.mock.calls.some(call => call[0] === 'option.subItemsOptions')).toBeFalsy();
+    
+    expect(Widget.option.mock.calls.some(call => 
+      call[0] === 'option.subItemsOptions' && Array.isArray(call[1]) && call[1].length === 0
+    )).toBeTruthy();
+  });
+});

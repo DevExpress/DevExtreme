@@ -371,7 +371,6 @@ export type ColumnProperties<TCardData = unknown, TKey = unknown> = {
     format?: Format;
     /**
      * @docid
-     * @type object
      * @public
      */
     headerFilter?: ColumnHeaderFilter | undefined;
@@ -812,7 +811,7 @@ export type Editing<TCardData=unknown, TKey=unknown> = { // TODO: sync with impl
     /**
      * @docid dxCardViewEditing.form
      * @public
-     * @type object
+     * @type dxFormOptions
      */
     form?: FormProperties;
     /**
@@ -1446,6 +1445,10 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
 
     // #endregion
 
+    /**
+     * @docid
+     * @public
+     */
     sorting?: Sorting;
 
     /**
@@ -1469,25 +1472,21 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     filterBuilder?: dxFilterBuilderOptions;
     /**
      * @docid
-     * @type object
      * @public
      */
     filterPanel?: FilterPanel<dxCardView>;
     /**
      * @docid
-     * @type object
      * @public
      */
     columnChooser?: ColumnChooser;
     /**
      * @docid
-     * @type object
      * @public
      */
     searchPanel?: SearchPanel;
     /**
      * @docid
-     * @type object
      * @public
      */
     headerFilter?: HeaderFilter;

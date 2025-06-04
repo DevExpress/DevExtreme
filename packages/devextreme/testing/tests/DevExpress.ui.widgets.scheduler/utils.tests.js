@@ -6,7 +6,7 @@ import config from 'core/config';
 const { test, module } = QUnit;
 
 module('Time zone data utils', {}, () => {
-    test('Untils should be pre-processed and cached', function(assert) {
+    test('Untils should be pre-processed and cached', async function(assert) {
         const spyGetUtcOffset = sinon.spy(timeZoneDataUtils, 'getUtcOffset');
         const spyGetTimeZoneDeclarationTupleCore = sinon.spy(timeZoneDataUtils, 'getTimeZoneDeclarationTupleCore');
 
@@ -58,7 +58,7 @@ module('Time zone data utils', {}, () => {
 });
 
 module('Time zone utils', {}, () => {
-    test('hasDSTInLocalTimeZone', function(assert) {
+    test('hasDSTInLocalTimeZone', async function(assert) {
         const hasDST = timeZoneUtils.hasDSTInLocalTimeZone();
 
         const nowDate = new Date(Date.now());
@@ -73,7 +73,7 @@ module('Time zone utils', {}, () => {
 });
 
 module('getTimeZone', {}, () => {
-    test('Old output should be equal new one', function(assert) {
+    test('Old output should be equal new one', async function(assert) {
         const newOutput = timeZoneUtils.getTimeZones(new Date(2024, 3, 16));
         const exceptions = [
             'Pacific/Marquesas', // old: GMT -10:30, actual GMT -9:30 (actual is correct, offset == -9.5 is correct for both)

@@ -3,7 +3,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import { isObject } from '@js/core/utils/type';
 import type { ViewType } from '@js/ui/scheduler';
 
-import type { RawViewType } from '../header/types';
+import type { RawViewType } from '../types';
 
 const KEYS = {
   dateRange: 'dxScheduler-dateRange',

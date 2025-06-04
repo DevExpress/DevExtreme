@@ -67,7 +67,10 @@ export class ColumnChooserController {
         const skip = !canHide && !node.selected;
 
         if (!skip) {
-          columns[columnIndex].visible = node.selected;
+          columns[columnIndex] = {
+            ...columns[columnIndex],
+            visible: node.selected,
+          };
         }
       }
 

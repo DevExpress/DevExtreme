@@ -17,7 +17,7 @@ import {
 
 
 
-import { dxHtmlEditorToolbarItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
+import { AIToolbarItem, dxHtmlEditorToolbarItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
 
 import {
     DxIntegrationModule,
@@ -46,10 +46,10 @@ export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get items(): Array<dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem> {
+    get items(): Array<AIToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem>) {
+    set items(value: Array<AIToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem>) {
         this._setOption('items', value);
     }
 

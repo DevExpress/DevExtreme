@@ -3,9 +3,9 @@ import $ from 'jquery';
 import { Deferred } from 'core/utils/deferred';
 import fx from 'common/core/animation/fx';
 import '__internal/scheduler/m_scheduler';
-import { createExpressions } from '__internal/scheduler/resources/m_utils';
 
 import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
+import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
 
 const { testStart, module, test } = QUnit;
 
@@ -54,23 +54,21 @@ const createInstance = (options = {}) => {
         getResources: () => [],
         getLoadedResources: () => [],
         getAppointmentColor: () => new Deferred(),
-        getResourceDataAccessors: () => createExpressions([])
+        getResourceManager: getEmptyResourceManager,
     }).dxSchedulerAppointments('instance');
 };
 
 const moduleOptions = {
     beforeEach: function() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
-        this.clock.restore();
         fx.off = false;
     }
 };
 
 module('Horizontal Month Strategy', moduleOptions, () => {
-    test('AllDay appointment should be displayed right when endDate > startDate and duration < 24', function(assert) {
+    test('AllDay appointment should be displayed right when endDate > startDate and duration < 24', async function(assert) {
         const items = [{
             itemData: {
                 text: 'Appointment 1',
@@ -90,7 +88,7 @@ module('Horizontal Month Strategy', moduleOptions, () => {
         assert.equal(getOuterWidth($appointment.eq(0)), allDayAppointmentWidth, 'appointment has right width');
     });
 
-    test('Appointment should not be multiweek when its width some more than maxAllowedPosition(ie & ff pixels)', function(assert) {
+    test('Appointment should not be multiweek when its width some more than maxAllowedPosition(ie & ff pixels)', async function(assert) {
         const items = [{
             itemData: {
                 text: 'Appointment 1',
@@ -110,7 +108,7 @@ module('Horizontal Month Strategy', moduleOptions, () => {
         assert.equal($appointment.length, 1, 'appointment is not multiline');
     });
 
-    test('Collapsing appointments should have specific class', function(assert) {
+    test('Collapsing appointments should have specific class', async function(assert) {
         const items = [{
             itemData: {
                 text: 'Appointment 1',
@@ -129,7 +127,7 @@ module('Horizontal Month Strategy', moduleOptions, () => {
         assert.ok($appointment.hasClass('dx-scheduler-appointment-empty'), 'appointment has the class');
     });
 
-    test('Small width appointments should have specific class', function(assert) {
+    test('Small width appointments should have specific class', async function(assert) {
         const items = [{
             itemData: {
                 text: 'Appointment 1',
@@ -148,7 +146,7 @@ module('Horizontal Month Strategy', moduleOptions, () => {
         assert.ok($appointment.eq(0).hasClass('dx-scheduler-appointment-empty'), 'appointment has the class');
     });
 
-    test('Small height appointments should have specific class', function(assert) {
+    test('Small height appointments should have specific class', async function(assert) {
         const items = [{
             itemData: {
                 text: 'Appointment 1',
@@ -169,7 +167,7 @@ module('Horizontal Month Strategy', moduleOptions, () => {
 });
 
 module('Horizontal Strategy', moduleOptions, () => {
-    test('All-day appointment should have a correct css class', function(assert) {
+    test('All-day appointment should have a correct css class', async function(assert) {
         const items = [{
             itemData: {
                 text: 'Appointment 1',
@@ -190,7 +188,7 @@ module('Horizontal Strategy', moduleOptions, () => {
         assert.ok($appointment.eq(0).hasClass('dx-scheduler-all-day-appointment'), 'Appointment has a right css class');
     });
 
-    test('Appointment should have a correct min width', function(assert) {
+    test('Appointment should have a correct min width', async function(assert) {
         const items = [{
             itemData: {
                 text: 'Appointment 1',

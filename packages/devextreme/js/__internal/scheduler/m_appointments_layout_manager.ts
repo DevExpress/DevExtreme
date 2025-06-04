@@ -1,6 +1,6 @@
 import { equalByValue } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
-import { getCellDuration, getGroupCount } from '@ts/scheduler/r1/utils/index';
+import { getCellDuration } from '@ts/scheduler/r1/utils/index';
 import type {
   AppointmentViewModel,
   BaseAppointmentViewModelSettings,
@@ -11,6 +11,7 @@ import type {
 
 import { AppointmentViewModelGenerator } from './appointments/m_view_model_generator';
 import type Scheduler from './m_scheduler';
+import type { ResourceManager } from './utils/resource_manager/resource_manager';
 import { getAllDayHeight, getCellHeight, getCellWidth } from './workspaces/helpers/m_position_helper';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -58,7 +59,7 @@ class AppointmentLayoutManager {
       cellCountInsideLeftVirtualCell,
       cellCountInsideTopVirtualRow,
     } = virtualScrollingDispatcher;
-    const groupCount = getGroupCount(this.instance.option('loadedResources'));
+    const groupCount = this.instance.resourceManager.groupCount();
     const DOMMetaData = workspace.getDOMElementsMetaData();
     const allDayHeight = getAllDayHeight(
       workspace.option('showAllDayPanel'),
@@ -82,6 +83,7 @@ class AppointmentLayoutManager {
     return {
       resources: this.instance.option('resources'),
       loadedResources: this.instance.option('loadedResources'),
+      getResourceManager: (): ResourceManager => this.instance.resourceManager,
       getAppointmentColor: this.instance.createGetAppointmentColor(),
       dataAccessors: this.instance._dataAccessors,
       appointmentRenderingStrategyName: this.appointmentRenderingStrategyName,

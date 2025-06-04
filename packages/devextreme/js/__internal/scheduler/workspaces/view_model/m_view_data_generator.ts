@@ -4,7 +4,7 @@ import {
   calculateCellIndex,
   calculateDayDuration,
   getDisplayedCellCount,
-  getDisplayedRowCount, getGroupCount,
+  getDisplayedRowCount,
   getIsGroupedAllDayPanel,
   getKeyByGroup,
   getStartViewDateWithoutDST,
@@ -12,10 +12,11 @@ import {
   getTotalRowCountByCompleteData,
   isHorizontalView,
 } from '@ts/scheduler/r1/utils/index';
+import { getAllGroupValues } from '@ts/scheduler/utils/resource_manager/group_utils';
 
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
 import timezoneUtils from '../../m_utils_time_zone';
-import { getAllGroups } from '../../resources/m_utils';
+import type { ViewDataProviderExtendedOptions } from './m_types';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -40,9 +41,9 @@ export class ViewDataGenerator {
     return this._calculateStartViewDate(options);
   }
 
-  getCompleteViewDataMap(options: any): any {
+  getCompleteViewDataMap(options: ViewDataProviderExtendedOptions): any {
     const {
-      groups,
+      getResourceManager,
       isGroupedByDate,
       isHorizontalGrouping,
       isVerticalGrouping,
@@ -57,7 +58,7 @@ export class ViewDataGenerator {
     this._setVisibilityDates(options);
     this.setHiddenInterval(startDayHour, endDayHour, hoursInterval);
 
-    const groupsList = getAllGroups(groups);
+    const groupsList = getAllGroupValues(getResourceManager().groupsLeafs);
     const cellCountInGroupRow = this.getCellCount({
       intervalCount,
       currentDate,
@@ -368,21 +369,21 @@ export class ViewDataGenerator {
     return cellsRow;
   }
 
-  getCellData(rowIndex, columnIndex, options, allDay) {
+  getCellData(rowIndex, columnIndex, options: ViewDataProviderExtendedOptions, allDay) {
     return allDay
       ? this.prepareAllDayCellData(options, rowIndex, columnIndex)
       : this.prepareCellData(options, rowIndex, columnIndex);
   }
 
-  prepareCellData(options, rowIndex, columnIndex) {
+  prepareCellData(options: ViewDataProviderExtendedOptions, rowIndex, columnIndex) {
     const {
-      groups,
+      getResourceManager,
       startDayHour,
       endDayHour,
       hoursInterval,
     } = options;
 
-    const groupsList = getAllGroups(groups);
+    const groupsList = getAllGroupValues(getResourceManager().groupsLeafs);
 
     const startDate = this.getDateByCellIndices(
       options,
@@ -407,7 +408,7 @@ export class ViewDataGenerator {
     return data;
   }
 
-  prepareAllDayCellData(options: any, rowIndex: number, columnIndex: number): any {
+  prepareAllDayCellData(options: ViewDataProviderExtendedOptions, rowIndex: number, columnIndex: number): any {
     const data = this.prepareCellData({
       ...options,
       // NOTE: For all-day cells we should shift cell's dates
@@ -556,14 +557,14 @@ export class ViewDataGenerator {
     };
   }
 
-  _isFirstGroupCell(rowIndex, columnIndex, options, rowCount, columnCount) {
+  _isFirstGroupCell(rowIndex, columnIndex, options: ViewDataProviderExtendedOptions, rowCount, columnCount) {
     const {
       groupOrientation,
-      groups,
+      getResourceManager,
       isGroupedByDate,
     } = options;
 
-    const groupCount = getGroupCount(groups);
+    const groupCount = getResourceManager().groupCount();
 
     if (isGroupedByDate) {
       return columnIndex % groupCount === 0;
@@ -576,14 +577,14 @@ export class ViewDataGenerator {
     return rowIndex % rowCount === 0;
   }
 
-  _isLastGroupCell(rowIndex, columnIndex, options, rowCount, columnCount) {
+  _isLastGroupCell(rowIndex, columnIndex, options: ViewDataProviderExtendedOptions, rowCount, columnCount) {
     const {
       groupOrientation,
-      groups,
+      getResourceManager,
       isGroupedByDate,
     } = options;
 
-    const groupCount = getGroupCount(groups);
+    const groupCount = getResourceManager().groupCount();
 
     if (isGroupedByDate) {
       return (columnIndex + 1) % groupCount === 0;

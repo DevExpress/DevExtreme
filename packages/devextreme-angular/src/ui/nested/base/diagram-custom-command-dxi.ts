@@ -7,6 +7,7 @@ import {
 
 import { ToolbarItemLocation } from 'devextreme/common';
 import { Command, CustomCommand } from 'devextreme/ui/diagram';
+import { AICommandNameExtended } from 'devextreme/ui/html_editor';
 
 @Component({
     template: ''
@@ -33,10 +34,10 @@ export abstract class DxiDiagramCustomCommand extends CollectionNestedOption {
         this._setOption('location', value);
     }
 
-    get name(): Command | string {
+    get name(): Command | string | AICommandNameExtended {
         return this._getOption('name');
     }
-    set name(value: Command | string) {
+    set name(value: Command | string | AICommandNameExtended) {
         this._setOption('name', value);
     }
 
@@ -45,5 +46,19 @@ export abstract class DxiDiagramCustomCommand extends CollectionNestedOption {
     }
     set text(value: string) {
         this._setOption('text', value);
+    }
+
+    get options(): any {
+        return this._getOption('options');
+    }
+    set options(value: any) {
+        this._setOption('options', value);
+    }
+
+    get prompt(): Function {
+        return this._getOption('prompt');
+    }
+    set prompt(value: Function) {
+        this._setOption('prompt', value);
     }
 }

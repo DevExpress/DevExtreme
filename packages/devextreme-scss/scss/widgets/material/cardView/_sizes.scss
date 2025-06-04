@@ -153,6 +153,9 @@ $cardview-material-header-panel__item__sort-index-text-weight: null !default;
 
 $cardview-material-header-panel__item__icon-size: null !default;
 
+$cardview-generic-header-item__left-padding: null !default;
+$cardview-generic-header-item__right-padding: null !default;
+
 // #endregion
 
 // #region HEADER PANEL ITEM (HOVERED)
@@ -199,6 +202,9 @@ $cardview-material-header-panel__item--disabled__sort-index-text-weight: null !d
 * $type-values 100|200|300|400|500|600|700|800|900
 */
 $cardview-material-header-panel__item--dragged-text-weight: null !default;
+
+$cardview-generic-header-item__sort-indicator__border-size: null;
+$cardview-generic-header-item__sort-indicator__border-radius: null;
 
 // #endregion
 
@@ -307,7 +313,9 @@ $cardview-material-column-chooser__select-all-item-horizontal-padding: null !def
   $cardview-material-header-panel__item-border-width: 1px !default;
   $cardview-material-header-panel__item-border-radius: 99px !default;
   $cardview-material-header-panel__item-padding-horizontal: 16px !default;
-  $cardview-material-header-panel__item-padding-vertical: 8px !default;
+  $cardview-material-header-panel__item-padding-vertical: 7px !default;
+  $cardview-generic-header-item__left-padding: 6px !default;
+  $cardview-generic-header-item__right-padding: 2px !default;
   $cardview-material-header-panel__item-line-height: 20px !default;
   $cardview-material-header-panel__item-text-weight: $cardview-material-common-text-weight !default;
   $cardview-material-header-panel__item__sort-index-text-weight: 400 !default;
@@ -323,6 +331,8 @@ $cardview-material-column-chooser__select-all-item-horizontal-padding: null !def
 
   // Header panel item - dragged
   $cardview-material-header-panel__item--dragged-text-weight: $cardview-material-header-panel__item-text-weight !default;
+  $cardview-generic-header-item__sort-indicator__border-size: 2px !default;
+  $cardview-generic-header-item__sort-indicator__border-radius: 8px !default;
 
   // Header panel Drop-zone
   $cardview-material-header-panel__dropzone-height: 44px !default;
@@ -391,7 +401,9 @@ $cardview-material-column-chooser__select-all-item-horizontal-padding: null !def
   $cardview-material-header-panel__item-border-width: 1px !default;
   $cardview-material-header-panel__item-border-radius: 99px !default;
   $cardview-material-header-panel__item-padding-horizontal: 12px !default;
-  $cardview-material-header-panel__item-padding-vertical: 8px !default;
+  $cardview-material-header-panel__item-padding-vertical: 5px !default;
+  $cardview-generic-header-item__left-padding: 3px !default;
+  $cardview-generic-header-item__right-padding: 1px !default;
   $cardview-material-header-panel__item-line-height: 16px !default;
   $cardview-material-header-panel__item-text-weight: $cardview-material-common-text-weight !default;
   $cardview-material-header-panel__item__sort-index-text-weight: 400 !default;
@@ -407,6 +419,8 @@ $cardview-material-column-chooser__select-all-item-horizontal-padding: null !def
 
   // Header panel item - dragged
   $cardview-material-header-panel__item--dragged-text-weight: $cardview-material-header-panel__item-text-weight !default;
+  $cardview-generic-header-item__sort-indicator__border-size: 1px !default;
+  $cardview-generic-header-item__sort-indicator__border-radius: 4px !default;
 
   // Header panel Drop-zone
   $cardview-material-header-panel__dropzone-height: 38px !default;
@@ -460,7 +474,6 @@ $cardview-card--selected__field-caption-weight: $cardview-material-card--selecte
 
 $cardview-header-gap: $cardview-material-header-gap !default;
 
-$cardview-header-panel-gap: $cardview-material-common-header-panel-gap !default;
 $cardview-header-panel-vertical-margin: $cardview-material-header-panel-vertical-margin !default;
 $cardview-header-panel--empty-line-height: $cardview-material-header-panel--empty-line-height !default;
 
@@ -498,3 +511,8 @@ $cardview-card__content__field-value--highlighted-text-weight: $cardview-materia
 
 $cardview-column-chooser--empty__message-horizontal-padding: $cardview-material-column-chooser--empty__message-horizontal-padding !default;
 $cardview-column-chooser__select-all-item-horizontal-padding: $cardview-material-column-chooser__select-all-item-horizontal-padding !default;
+
+$cardview-header-item__left-padding: $cardview-generic-header-item__left-padding !default;
+$cardview-header-item__right-padding: $cardview-generic-header-item__right-padding !default;
+$cardview-header-item__sort-indicator__border-size: $cardview-generic-header-item__sort-indicator__border-size !default;
+$cardview-header-item__sort-indicator__border-radius: $cardview-generic-header-item__sort-indicator__border-radius !default;

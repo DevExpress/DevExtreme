@@ -3567,7 +3567,7 @@ exports[`Options HeaderFilter visible: false 1`] = `
   class="dx-cardview-headers"
 >
   <div
-    class="dx-sortable"
+    class="dx-cardview-sortable dx-sortable"
   >
     <div
       class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
@@ -3590,19 +3590,23 @@ exports[`Options HeaderFilter visible: false 1`] = `
                 tabindex="0"
               />
               <div
-                class="dx-cardview-headerpanel-content"
+                class="dx-cardview-headerpanel-content dx-cardview-headerpanel-content--with-header-items"
                 role="menubar"
               >
                 <div
-                  aria-label="Field name A"
-                  class="dx-cardview-header-item  "
-                  role="menuitem"
-                  tabindex="0"
+                  class="dx-cardview-header-item-container"
                 >
-                  A
                   <div
-                    class="dx-icon dx-icon-filter dx-header-filter-icon "
-                  />
+                    aria-label="Field name A"
+                    class="dx-cardview-header-item  "
+                    role="menuitem"
+                    tabindex="0"
+                  >
+                    A
+                    <div
+                      class="dx-icon dx-icon-filter dx-header-filter-icon "
+                    />
+                  </div>
                 </div>
               </div>
               <div
@@ -3646,7 +3650,7 @@ exports[`Options HeaderFilter visible: true 1`] = `
   class="dx-cardview-headers"
 >
   <div
-    class="dx-sortable"
+    class="dx-cardview-sortable dx-sortable"
   >
     <div
       class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
@@ -3669,19 +3673,23 @@ exports[`Options HeaderFilter visible: true 1`] = `
                 tabindex="0"
               />
               <div
-                class="dx-cardview-headerpanel-content"
+                class="dx-cardview-headerpanel-content dx-cardview-headerpanel-content--with-header-items"
                 role="menubar"
               >
                 <div
-                  aria-label="Field name A"
-                  class="dx-cardview-header-item  "
-                  role="menuitem"
-                  tabindex="0"
+                  class="dx-cardview-header-item-container"
                 >
-                  A
                   <div
-                    class="dx-icon dx-icon-filter dx-header-filter-icon "
-                  />
+                    aria-label="Field name A"
+                    class="dx-cardview-header-item  "
+                    role="menuitem"
+                    tabindex="0"
+                  >
+                    A
+                    <div
+                      class="dx-icon dx-icon-filter dx-header-filter-icon "
+                    />
+                  </div>
                 </div>
               </div>
               <div
@@ -3725,7 +3733,7 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
   class="dx-cardview-headers"
 >
   <div
-    class="dx-sortable"
+    class="dx-cardview-sortable dx-sortable"
   >
     <div
       class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
@@ -3748,19 +3756,23 @@ exports[`Options HeaderFilter visible: undefined 1`] = `
                 tabindex="0"
               />
               <div
-                class="dx-cardview-headerpanel-content"
+                class="dx-cardview-headerpanel-content dx-cardview-headerpanel-content--with-header-items"
                 role="menubar"
               >
                 <div
-                  aria-label="Field name A"
-                  class="dx-cardview-header-item  "
-                  role="menuitem"
-                  tabindex="0"
+                  class="dx-cardview-header-item-container"
                 >
-                  A
                   <div
-                    class="dx-icon dx-icon-filter dx-header-filter-icon "
-                  />
+                    aria-label="Field name A"
+                    class="dx-cardview-header-item  "
+                    role="menuitem"
+                    tabindex="0"
+                  >
+                    A
+                    <div
+                      class="dx-icon dx-icon-filter dx-header-filter-icon "
+                    />
+                  </div>
                 </div>
               </div>
               <div

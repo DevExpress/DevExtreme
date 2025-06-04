@@ -2,6 +2,7 @@ import fx from 'common/core/animation/fx';
 import Color from 'color';
 import config from 'core/config';
 import { noop } from 'core/utils/common';
+import { Deferred } from 'core/utils/deferred';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import { DataSource } from 'common/data/data_source/data_source';
@@ -9,28 +10,26 @@ import { DataSource } from 'common/data/data_source/data_source';
 import $ from 'jquery';
 import dxScheduler from '__internal/scheduler/m_scheduler';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
-import { Deferred } from 'core/utils/deferred';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 QUnit.testStart(() => initTestMarkup());
 
 QUnit.module('Events', {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
     afterEach: function() {
-        this.clock.restore();
         fx.off = false;
     }
 }, () => {
-    QUnit.test('onAppointmentRendered', function(assert) {
+    QUnit.test('onAppointmentRendered', async function(assert) {
         const renderedSpy = sinon.spy(noop);
         const appointments = [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }];
         const dataSource = new DataSource({
             store: appointments
         });
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: dataSource,
             onAppointmentRendered: renderedSpy,
             currentDate: new Date(2015, 1, 9)
@@ -45,7 +44,7 @@ QUnit.module('Events', {
         assert.deepEqual($(args.appointmentElement).get(0), scheduler.instance.$element().find('.dx-scheduler-appointment').get(0), 'appointment element is OK');
     });
 
-    QUnit.test('onAppointmentRendered should called on each recurrence', function(assert) {
+    QUnit.test('onAppointmentRendered should called on each recurrence', async function(assert) {
         const renderedSpy = sinon.spy(noop);
         const appointments = [{
             startDate: new Date(2015, 1, 9, 16),
@@ -57,7 +56,7 @@ QUnit.module('Events', {
             store: appointments
         });
 
-        createWrapper({
+        await createWrapper({
             currentView: 'week',
             dataSource: dataSource,
             onAppointmentRendered: renderedSpy,
@@ -67,8 +66,8 @@ QUnit.module('Events', {
         assert.ok(renderedSpy.calledTwice, 'onAppointmentRendered was called twice');
     });
 
-    QUnit.test('onAppointmentRendered should updated correctly', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('onAppointmentRendered should updated correctly', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: new DataSource({
                 store: [{ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'caption' }]
             }),
@@ -82,8 +81,9 @@ QUnit.module('Events', {
         assert.equal(appointmentsCollection.option('onItemRendered')(), 2, 'option is updated correctly');
     });
 
-    QUnit.test('onAppointmentRendered should fires when appointment is completely rendered', function(assert) {
-        createWrapper({
+    QUnit.test('onAppointmentRendered should fires when appointment is completely rendered', async function(assert) {
+        const done = assert.async();
+        await createWrapper({
             editing: {
                 allowResizing: true,
                 allowDragging: true
@@ -109,9 +109,11 @@ QUnit.module('Events', {
                     ]
                 }
             ],
-            onAppointmentRendered: function(args) {
+            onAppointmentRendered: async function(args) {
                 const $appointment = $(args.appointmentElement);
 
+                await waitAsync(10);
+                done();
                 assert.equal(new Color($appointment.css('backgroundColor')).toHex(), '#ff0000', 'Resource color is applied');
                 assert.ok($appointment.attr('data-groupid-1'), 'Resource data attribute is defined');
                 assert.ok($appointment.hasClass('dx-scheduler-appointment-recurrence'), 'Recurrent class is defined');
@@ -121,10 +123,10 @@ QUnit.module('Events', {
         });
     });
 
-    QUnit.test('onAppointmentRendered should fires when appointment is completely rendered(month view)', function(assert) {
+    QUnit.test('onAppointmentRendered should fires when appointment is completely rendered(month view)', async function(assert) {
         assert.expect(2);
 
-        createWrapper({
+        await createWrapper({
             dataSource: new DataSource({
                 store: [{
                     startDate: new Date(2015, 1, 10),
@@ -142,8 +144,8 @@ QUnit.module('Events', {
         });
     });
 
-    QUnit.test('onAppointmentRendered should contain information about all recurring appts', function(assert) {
-        createWrapper({
+    QUnit.test('onAppointmentRendered should contain information about all recurring appts', async function(assert) {
+        await createWrapper({
             dataSource: new DataSource([
                 {
                     startDate: new Date(2015, 1, 9, 16),
@@ -165,10 +167,10 @@ QUnit.module('Events', {
         });
     });
 
-    QUnit.test('onAppointmentRendered should fires only for rerendered appointments', function(assert) {
+    QUnit.test('onAppointmentRendered should fires only for rerendered appointments', async function(assert) {
         assert.expect(2);
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: new DataSource({
                 store: [{
                     startDate: new Date(2015, 1, 10),
@@ -190,13 +192,12 @@ QUnit.module('Events', {
             endDate: new Date(2015, 1, 13, 20),
             text: 'caption2'
         });
-        this.clock.tick(10);
     });
 
-    QUnit.test('All appointments should be rerendered after cellDuration changed', function(assert) {
+    QUnit.test('All appointments should be rerendered after cellDuration changed', async function(assert) {
         assert.expect(6);
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: new DataSource({
                 store: [{
                     startDate: new Date(2015, 1, 10),
@@ -220,7 +221,6 @@ QUnit.module('Events', {
         const initialItems = appointments.option('items');
 
         scheduler.instance.option('cellDuration', 120);
-        this.clock.tick(10);
 
         const changedItems = appointments.option('items');
 
@@ -228,8 +228,8 @@ QUnit.module('Events', {
         assert.notDeepEqual(initialItems[1].settings, changedItems[1].settings, 'Item\'s settings were changed');
     });
 
-    QUnit.test('targetedAppointmentData should return correct allDay appointmentData', function(assert) {
-        createWrapper({
+    QUnit.test('targetedAppointmentData should return correct allDay appointmentData', async function(assert) {
+        await createWrapper({
             dataSource: new DataSource([
                 {
                     startDate: new Date(2015, 1, 9),
@@ -251,8 +251,8 @@ QUnit.module('Events', {
     });
 
 
-    QUnit.test('onAppointmentRendered should contain information about all recurring appts on agenda view', function(assert) {
-        createWrapper({
+    QUnit.test('onAppointmentRendered should contain information about all recurring appts on agenda view', async function(assert) {
+        await createWrapper({
             dataSource: new DataSource([
                 {
                     startDate: new Date(2015, 1, 9, 16),
@@ -274,7 +274,7 @@ QUnit.module('Events', {
         });
     });
 
-    QUnit.test('agenda should be rendered correctly after changing groups on view changing(T847884)', function(assert) {
+    QUnit.test('agenda should be rendered correctly after changing groups on view changing(T847884)', async function(assert) {
         const priorityData = [
             {
                 text: 'Low Priority',
@@ -287,7 +287,7 @@ QUnit.module('Events', {
             }
         ];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: 'Upgrade Personal Computers',
@@ -324,10 +324,10 @@ QUnit.module('Events', {
         assert.ok(true, 'currentView was changed to agenda correctly');
     });
 
-    QUnit.test('onAppointmentRendered should not contain information about particular appt resources if there are not groups(T413561)', function(assert) {
+    QUnit.test('onAppointmentRendered should not contain information about particular appt resources if there are not groups(T413561)', async function(assert) {
         const resourcesSpy = sinon.spy(dxScheduler.prototype, 'setTargetedAppointmentResources');
 
-        createWrapper({
+        await createWrapper({
             dataSource: new DataSource([
                 {
                     startDate: new Date(2015, 1, 9, 16),
@@ -344,7 +344,7 @@ QUnit.module('Events', {
         assert.equal(resourcesSpy.callCount, 2, 'Resources aren\'t required');
     });
 
-    QUnit.test('onAppointmentClick should fires when appointment is clicked', function(assert) {
+    QUnit.test('onAppointmentClick should fires when appointment is clicked', async function(assert) {
         assert.expect(3);
 
         const items = [{
@@ -357,7 +357,7 @@ QUnit.module('Events', {
             text: 'Task caption'
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: new DataSource({
                 store: items
             }),
@@ -376,7 +376,7 @@ QUnit.module('Events', {
         $($item).trigger('dxclick');
     });
 
-    QUnit.test('Args of onAppointmentClick should contain data about particular appt', function(assert) {
+    QUnit.test('Args of onAppointmentClick should contain data about particular appt', async function(assert) {
         assert.expect(2);
 
         const items = [{
@@ -386,7 +386,7 @@ QUnit.module('Events', {
             recurrence: { rule: 'FREQ=DAILY' }
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: new DataSource(items),
             views: ['week'],
             currentView: 'week',
@@ -405,7 +405,7 @@ QUnit.module('Events', {
         $(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(1)).trigger('dxclick');
     });
 
-    QUnit.test('Args of onAppointmentClick/Rendered should contain data about particular grouped appt', function(assert) {
+    QUnit.test('Args of onAppointmentClick/Rendered should contain data about particular grouped appt', async function(assert) {
         assert.expect(6);
 
         const items = [{
@@ -416,7 +416,7 @@ QUnit.module('Events', {
             priority: 1
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: new DataSource(items),
             groups: ['owner.id', 'priority'],
             resources: [{
@@ -463,7 +463,7 @@ QUnit.module('Events', {
         $(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(1)).trigger('dxclick');
     });
 
-    QUnit.test('Args of onAppointmentClick should contain data about particular grouped appt on Agenda view', function(assert) {
+    QUnit.test('Args of onAppointmentClick should contain data about particular grouped appt on Agenda view', async function(assert) {
         assert.expect(6);
 
         const items = [{
@@ -474,7 +474,7 @@ QUnit.module('Events', {
             priority: 1
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: new DataSource(items),
             groups: ['owner.id', 'priority'],
             resources: [{
@@ -521,7 +521,7 @@ QUnit.module('Events', {
         $(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(1)).trigger('dxclick');
     });
 
-    QUnit.test('onAppointmentContextMenu should fires when appointment context menu is triggered', function(assert) {
+    QUnit.test('onAppointmentContextMenu should fires when appointment context menu is triggered', async function(assert) {
         assert.expect(3);
 
         const items = [{
@@ -534,7 +534,7 @@ QUnit.module('Events', {
             text: 'Task caption'
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: new DataSource({
                 store: items
             }),
@@ -553,7 +553,7 @@ QUnit.module('Events', {
         $($item).trigger('dxcontextmenu');
     });
 
-    QUnit.test('Args of onAppointmentContextMenu should contain data about particular appt', function(assert) {
+    QUnit.test('Args of onAppointmentContextMenu should contain data about particular appt', async function(assert) {
         assert.expect(2);
 
         const items = [{
@@ -563,7 +563,7 @@ QUnit.module('Events', {
             recurrence: { rule: 'FREQ=DAILY' }
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: new DataSource(items),
             views: ['week'],
             currentView: 'week',
@@ -582,8 +582,8 @@ QUnit.module('Events', {
         $(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(1)).trigger('dxcontextmenu');
     });
 
-    QUnit.test('Cell click option should be passed to workSpace', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Cell click option should be passed to workSpace', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'month',
             onCellClick: sinon.stub().returns(1)
         });
@@ -595,8 +595,8 @@ QUnit.module('Events', {
         assert.deepEqual(workspaceMonth.option('onCellClick')(), scheduler.instance.option('onCellClick')(), 'scheduler has correct onCellClick after option change');
     });
 
-    QUnit.test('onCellContextMenu option should be passed to workSpace', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('onCellContextMenu option should be passed to workSpace', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'month',
             onCellContextMenu: sinon.stub().returns(1)
         });
@@ -608,8 +608,8 @@ QUnit.module('Events', {
         assert.deepEqual(workspaceMonth.option('onCellContextMenu')(), scheduler.instance.option('onCellContextMenu')(), 'scheduler has correct onCellContextMenu after option change');
     });
 
-    QUnit.test('onAppointmentContextMenu option should be passed to appointments', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('onAppointmentContextMenu option should be passed to appointments', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'month',
             onAppointmentContextMenu: sinon.stub().returns(1)
         });
@@ -621,8 +621,8 @@ QUnit.module('Events', {
         assert.deepEqual(appointments.option('onItemContextMenu')(), scheduler.instance.option('onAppointmentContextMenu')(), 'scheduler has correct onAppointmentContextMenu after option change');
     });
 
-    QUnit.test('onAppointmentDblClick option should be passed to appointments', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('onAppointmentDblClick option should be passed to appointments', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'month',
             onAppointmentDblClick: sinon.stub().returns(1)
         });
@@ -634,13 +634,13 @@ QUnit.module('Events', {
         assert.deepEqual(appointments.option('onAppointmentDblClick')(), scheduler.instance.option('onAppointmentDblClick')(), 'scheduler has correct onAppointmentDblClick after option change');
     });
 
-    QUnit.test('onAppointmentFormOpening event should be fired while details form is opening', function(assert) {
+    QUnit.test('onAppointmentFormOpening event should be fired while details form is opening', async function(assert) {
         const stub = sinon.stub();
         const data = {
             text: 'One',
             location: 'NY'
         };
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentView: 'month',
             onAppointmentFormOpening: stub
         });
@@ -654,8 +654,8 @@ QUnit.module('Events', {
         assert.equal(args.form, scheduler.instance.getAppointmentDetailsForm(), 'Appointment form is OK');
     });
 
-    QUnit.test('Option changed', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('Option changed', async function(assert) {
+        const scheduler = await createWrapper();
 
         scheduler.instance.option({
             'onAppointmentAdding': function() { return true; },
@@ -673,13 +673,13 @@ QUnit.module('Events', {
         });
     });
 
-    QUnit.test('Workspace dimension changing should be called before appointment repainting, when scheduler was resized (T739866)', function(assert) {
+    QUnit.test('Workspace dimension changing should be called before appointment repainting, when scheduler was resized (T739866)', async function(assert) {
         const appointment = {
             startDate: new Date(2016, 2, 15, 1).toString(),
             endDate: new Date(2016, 2, 15, 2).toString()
         };
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2016, 2, 15),
             views: ['day'],
             currentView: 'day',
@@ -695,10 +695,10 @@ QUnit.module('Events', {
         assert.ok(appointmentsSpy.calledAfter(workspaceSpy), 'workSpace dimension changing was called before appointments repainting');
     });
 
-    QUnit.test('ContentReady event should be fired after render completely ready (T902483)', function(assert) {
+    QUnit.test('ContentReady event should be fired after render completely ready (T902483)', async function(assert) {
         let contentReadyFiresCount = 0;
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             onContentReady: () => ++contentReadyFiresCount
         });
 
@@ -719,13 +719,13 @@ QUnit.module('Events', {
         assert.equal(contentReadyFiresCount, 3, 'contentReadyFiresCount === 3');
     });
 
-    QUnit.test('onAppointmentContextMenu should be triggered when items in the appointment tooltip and appointment collector tooltip is right-clicked (T1181442)', function(assert) {
+    QUnit.test('onAppointmentContextMenu should be triggered when items in the appointment tooltip and appointment collector tooltip is right-clicked (T1181442)', async function(assert) {
         let $eventAppointmentElement = null;
         const onAppointmentContextMenu = sinon.spy(({ appointmentElement }) => {
             $eventAppointmentElement = $(appointmentElement);
         });
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             height: 600,
             dataSource: [{
                 text: 'appointment 1',
@@ -739,9 +739,11 @@ QUnit.module('Events', {
             maxAppointmentsPerCell: 1,
             currentDate: new Date(2023, 7, 18),
             onAppointmentContextMenu,
-        }, this.clock);
+        });
 
-        scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
 
         let $appointmentItem = scheduler.tooltip.getItemElement();
         $appointmentItem.trigger('dxcontextmenu'); // first call

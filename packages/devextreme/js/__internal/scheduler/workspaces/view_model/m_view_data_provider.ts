@@ -2,11 +2,14 @@ import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import {
   calculateIsGroupedAllDayPanel,
-  getGroupPanelData, isGroupingByDate,
-  isHorizontalGroupingApplied, isHorizontalView,
+  getGroupPanelData,
+  isGroupingByDate,
+  isHorizontalGroupingApplied,
+  isHorizontalView,
   isVerticalGroupingApplied,
 } from '@ts/scheduler/r1/utils/index';
 import type { ViewCellData, ViewType } from '@ts/scheduler/types';
+import type { ViewDataProviderExtendedOptions, ViewDataProviderOptions } from '@ts/scheduler/workspaces/view_model/m_types';
 
 import timeZoneUtils from '../../m_utils_time_zone';
 import { DateHeaderDataGenerator } from './m_date_header_data_generator';
@@ -124,24 +127,25 @@ export default class ViewDataProvider {
       );
   }
 
-  _transformRenderOptions(renderOptions) {
+  _transformRenderOptions(renderOptions: ViewDataProviderOptions): ViewDataProviderExtendedOptions {
     const {
-      groups,
+      getResourceManager,
       groupOrientation,
       groupByDate,
       isAllDayPanelVisible,
       viewOffset,
       ...restOptions
     } = renderOptions;
+    const resourceManager = getResourceManager();
 
     return {
       ...restOptions,
       startViewDate: this.viewDataGenerator._calculateStartViewDate(renderOptions),
-      isVerticalGrouping: isVerticalGroupingApplied(groups, groupOrientation),
-      isHorizontalGrouping: isHorizontalGroupingApplied(groups, groupOrientation),
-      isGroupedByDate: isGroupingByDate(groups, groupOrientation, groupByDate),
-      isGroupedAllDayPanel: calculateIsGroupedAllDayPanel(groups, groupOrientation, isAllDayPanelVisible),
-      groups,
+      isVerticalGrouping: isVerticalGroupingApplied(resourceManager.groups, groupOrientation),
+      isHorizontalGrouping: isHorizontalGroupingApplied(resourceManager.groups, groupOrientation),
+      isGroupedByDate: isGroupingByDate(resourceManager.groups, groupOrientation, groupByDate),
+      isGroupedAllDayPanel: calculateIsGroupedAllDayPanel(resourceManager.groups, groupOrientation, isAllDayPanelVisible),
+      getResourceManager,
       groupOrientation,
       isAllDayPanelVisible,
       viewOffset,
@@ -150,10 +154,12 @@ export default class ViewDataProvider {
 
   getGroupPanelData(options) {
     const renderOptions = this._transformRenderOptions(options);
-    if (renderOptions.groups.length > 0) {
+    const groupResources = renderOptions.getResourceManager().groupResources();
+
+    if (groupResources.length > 0) {
       const cellCount = this.getCellCount(renderOptions);
       return getGroupPanelData(
-        renderOptions.groups,
+        groupResources,
         cellCount,
         renderOptions.isGroupedByDate,
         renderOptions.isGroupedByDate ? 1 : cellCount,

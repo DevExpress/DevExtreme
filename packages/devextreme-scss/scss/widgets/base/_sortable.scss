@@ -23,7 +23,6 @@ $base-accent: null !default;
 }
 
 .dx-sortable-dragging.dx-sortable-clone * {
-  cursor: pointer;
   cursor: grabbing;
 }
 
@@ -39,8 +38,7 @@ $base-accent: null !default;
   position: absolute;
   top: 0;
   left: 0;
-  border: 1px solid transparent;
-  border-color: $base-accent;
+  border: 1px solid $base-accent;
   box-sizing: border-box;
   z-index: $max-integer;
 }

@@ -7,6 +7,8 @@ import '__internal/scheduler/workspaces/m_work_space_month';
 import '__internal/scheduler/workspaces/m_timeline_day';
 import '__internal/scheduler/workspaces/m_timeline_month';
 
+import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
+
 const MINUTE_MS = 60000;
 
 const SELECTORS = {
@@ -18,7 +20,10 @@ const SELECTORS = {
     cellContent: '.dx-scheduler-date-table-cell .dx-scheduler-date-table-cell-text',
 };
 
-const createWorkspace = (options, workspaceType) => $(SELECTORS.workspace)[workspaceType](options)[workspaceType]('instance');
+const createWorkspace = (options, workspaceType) => $(SELECTORS.workspace)[workspaceType]({
+    getResourceManager: getEmptyResourceManager,
+    ...options,
+})[workspaceType]('instance');
 
 const {
     test,
@@ -515,7 +520,7 @@ currentDate: ${currentDate},
 viewOffset: ${viewOffset / MINUTE_MS},
 start: ${startDayHour},
 end: ${endDayHour}
-)`, function(assert) {
+)`, async function(assert) {
                 const workspace = createWorkspace({
                     currentDate,
                     viewOffset,
@@ -536,7 +541,7 @@ currentDate: ${currentDate},
 viewOffset: ${viewOffset / MINUTE_MS},
 start: ${startDayHour},
 end: ${endDayHour}
-)`, function(assert) {
+)`, async function(assert) {
                 const workspace = createWorkspace({
                     currentDate,
                     viewOffset,
@@ -558,7 +563,7 @@ currentDate: ${currentDate},
 viewOffset: ${viewOffset / MINUTE_MS},
 start: ${startDayHour},
 end: ${endDayHour}
-)`, function(assert) {
+)`, async function(assert) {
                 const workspace = createWorkspace({
                     currentDate,
                     viewOffset,
@@ -587,7 +592,7 @@ currentDate: ${currentDate},
 viewOffset: ${viewOffset / MINUTE_MS},
 start: ${startDayHour},
 end: ${endDayHour}
-)`, function(assert) {
+)`, async function(assert) {
                     const expectedHeaderCellValues = [
                         'Sun',
                         'Mon',
@@ -622,7 +627,7 @@ currentDate: ${currentDate},
 viewOffset: ${viewOffset / MINUTE_MS},
 start: ${startDayHour},
 end: ${endDayHour}
-)`, function(assert) {
+)`, async function(assert) {
                     const workspace = createWorkspace({
                         currentDate,
                         viewOffset,

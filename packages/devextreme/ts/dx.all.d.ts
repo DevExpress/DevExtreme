@@ -4694,57 +4694,57 @@ declare module DevExpress.common.grids {
    */
   export type ColumnChooser = {
     /**
-     * [descr:GridBaseOptions.columnChooser.allowSearch]
-     * @deprecated [depNote:GridBaseOptions.columnChooser.allowSearch]
+     * [descr:ColumnChooser.allowSearch]
+     * @deprecated [depNote:ColumnChooser.allowSearch]
      */
     allowSearch?: boolean;
     /**
-     * [descr:GridBaseOptions.columnChooser.container]
+     * [descr:ColumnChooser.container]
      */
     container?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
-     * [descr:GridBaseOptions.columnChooser.emptyPanelText]
+     * [descr:ColumnChooser.emptyPanelText]
      */
     emptyPanelText?: string;
     /**
-     * [descr:GridBaseOptions.columnChooser.enabled]
+     * [descr:ColumnChooser.enabled]
      */
     enabled?: boolean;
     /**
-     * [descr:GridBaseOptions.columnChooser.height]
+     * [descr:ColumnChooser.height]
      */
     height?: number | string;
     /**
-     * [descr:GridBaseOptions.columnChooser.mode]
+     * [descr:ColumnChooser.mode]
      */
     mode?: ColumnChooserMode;
     /**
-     * [descr:GridBaseOptions.columnChooser.position]
+     * [descr:ColumnChooser.position]
      */
     position?: DevExpress.common.core.animation.PositionConfig | undefined;
     /**
-     * [descr:GridBaseOptions.columnChooser.search]
+     * [descr:ColumnChooser.search]
      */
     search?: ColumnChooserSearchConfig;
     /**
-     * [descr:GridBaseOptions.columnChooser.searchTimeout]
-     * @deprecated [depNote:GridBaseOptions.columnChooser.searchTimeout]
+     * [descr:ColumnChooser.searchTimeout]
+     * @deprecated [depNote:ColumnChooser.searchTimeout]
      */
     searchTimeout?: number;
     /**
-     * [descr:GridBaseOptions.columnChooser.selection]
+     * [descr:ColumnChooser.selection]
      */
     selection?: ColumnChooserSelectionConfig;
     /**
-     * [descr:GridBaseOptions.columnChooser.title]
+     * [descr:ColumnChooser.title]
      */
     title?: string;
     /**
-     * [descr:GridBaseOptions.columnChooser.width]
+     * [descr:ColumnChooser.width]
      */
     width?: number | string;
     /**
-     * [descr:GridBaseOptions.columnChooser.sortOrder]
+     * [descr:ColumnChooser.sortOrder]
      */
     sortOrder?: SortOrder | undefined;
   };
@@ -4856,18 +4856,21 @@ declare module DevExpress.common.grids {
      */
     stickyPosition?: string;
   };
+  /**
+   * [descr:ColumnHeaderFilter]
+   */
   export type ColumnHeaderFilter = {
     /**
-     * [descr:GridBaseColumn.headerFilter.allowSearch]
-     * @deprecated [depNote:GridBaseColumn.headerFilter.allowSearch]
+     * [descr:ColumnHeaderFilter.allowSearch]
+     * @deprecated [depNote:ColumnHeaderFilter.allowSearch]
      */
     allowSearch?: boolean;
     /**
-     * [descr:GridBaseColumn.headerFilter.allowSelectAll]
+     * [descr:ColumnHeaderFilter.allowSelectAll]
      */
     allowSelectAll?: boolean;
     /**
-     * [descr:GridBaseColumn.headerFilter.dataSource]
+     * [descr:ColumnHeaderFilter.dataSource]
      */
     dataSource?:
       | DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>
@@ -4877,24 +4880,24 @@ declare module DevExpress.common.grids {
         }) => void)
       | undefined;
     /**
-     * [descr:GridBaseColumn.headerFilter.groupInterval]
+     * [descr:ColumnHeaderFilter.groupInterval]
      */
     groupInterval?: HeaderFilterGroupInterval | number | undefined;
     /**
-     * [descr:GridBaseColumn.headerFilter.height]
+     * [descr:ColumnHeaderFilter.height]
      */
     height?: number | string | undefined;
     /**
-     * [descr:GridBaseColumn.headerFilter.search]
+     * [descr:ColumnHeaderFilter.search]
      */
     search?: ColumnHeaderFilterSearchConfig;
     /**
-     * [descr:GridBaseColumn.headerFilter.searchMode]
-     * @deprecated [depNote:GridBaseColumn.headerFilter.searchMode]
+     * [descr:ColumnHeaderFilter.searchMode]
+     * @deprecated [depNote:ColumnHeaderFilter.searchMode]
      */
     searchMode?: SearchMode;
     /**
-     * [descr:GridBaseColumn.headerFilter.width]
+     * [descr:ColumnHeaderFilter.width]
      */
     width?: number | string | undefined;
   };
@@ -5132,21 +5135,21 @@ declare module DevExpress.common.grids {
    * [descr:FilterPanel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface FilterPanel<TComponent, TRowData = any, TKey = any> {
+  export interface FilterPanel<TComponent = any, TRowData = any, TKey = any> {
     /**
-     * [descr:GridBaseOptions.filterPanel.customizeText]
+     * [descr:FilterPanel.customizeText]
      */
     customizeText?: (e: FilterPanelCustomizeTextArg<TComponent>) => string;
     /**
-     * [descr:GridBaseOptions.filterPanel.filterEnabled]
+     * [descr:FilterPanel.filterEnabled]
      */
     filterEnabled?: boolean;
     /**
-     * [descr:GridBaseOptions.filterPanel.texts]
+     * [descr:FilterPanel.texts]
      */
     texts?: FilterPanelTexts;
     /**
-     * [descr:GridBaseOptions.filterPanel.visible]
+     * [descr:FilterPanel.visible]
      */
     visible?: boolean;
   }
@@ -5163,15 +5166,15 @@ declare module DevExpress.common.grids {
    */
   export type FilterPanelTexts = {
     /**
-     * [descr:GridBaseOptions.filterPanel.texts.clearFilter]
+     * [descr:FilterPanelTexts.clearFilter]
      */
     clearFilter?: string;
     /**
-     * [descr:GridBaseOptions.filterPanel.texts.createFilter]
+     * [descr:FilterPanelTexts.createFilter]
      */
     createFilter?: string;
     /**
-     * [descr:GridBaseOptions.filterPanel.texts.filterEnabledHint]
+     * [descr:FilterPanelTexts.filterEnabledHint]
      */
     filterEnabledHint?: string;
   };
@@ -5942,37 +5945,37 @@ declare module DevExpress.common.grids {
    */
   export type HeaderFilter = {
     /**
-     * [descr:GridBaseOptions.headerFilter.allowSearch]
-     * @deprecated [depNote:GridBaseOptions.headerFilter.allowSearch]
+     * [descr:HeaderFilter.allowSearch]
+     * @deprecated [depNote:HeaderFilter.allowSearch]
      */
     allowSearch?: boolean;
     /**
-     * [descr:GridBaseOptions.headerFilter.allowSelectAll]
+     * [descr:HeaderFilter.allowSelectAll]
      */
     allowSelectAll?: boolean;
     /**
-     * [descr:GridBaseOptions.headerFilter.height]
+     * [descr:HeaderFilter.height]
      */
     height?: number | string;
     /**
-     * [descr:GridBaseOptions.headerFilter.search]
+     * [descr:HeaderFilter.search]
      */
     search?: HeaderFilterSearchConfig;
     /**
-     * [descr:GridBaseOptions.headerFilter.searchTimeout]
-     * @deprecated [depNote:GridBaseOptions.headerFilter.searchTimeout]
+     * [descr:HeaderFilter.searchTimeout]
+     * @deprecated [depNote:HeaderFilter.searchTimeout]
      */
     searchTimeout?: number;
     /**
-     * [descr:GridBaseOptions.headerFilter.texts]
+     * [descr:HeaderFilter.texts]
      */
     texts?: HeaderFilterTexts;
     /**
-     * [descr:GridBaseOptions.headerFilter.visible]
+     * [descr:HeaderFilter.visible]
      */
     visible?: boolean;
     /**
-     * [descr:GridBaseOptions.headerFilter.width]
+     * [descr:HeaderFilter.width]
      */
     width?: number | string;
   };
@@ -6010,15 +6013,15 @@ declare module DevExpress.common.grids {
    */
   export type HeaderFilterTexts = {
     /**
-     * [descr:GridBaseOptions.headerFilter.texts.cancel]
+     * [descr:HeaderFilterTexts.cancel]
      */
     cancel?: string;
     /**
-     * [descr:GridBaseOptions.headerFilter.texts.emptyValue]
+     * [descr:HeaderFilterTexts.emptyValue]
      */
     emptyValue?: string;
     /**
-     * [descr:GridBaseOptions.headerFilter.texts.ok]
+     * [descr:HeaderFilterTexts.ok]
      */
     ok?: string;
   };
@@ -6531,31 +6534,31 @@ declare module DevExpress.common.grids {
    */
   export type SearchPanel = {
     /**
-     * [descr:GridBaseOptions.searchPanel.highlightCaseSensitive]
+     * [descr:SearchPanel.highlightCaseSensitive]
      */
     highlightCaseSensitive?: boolean;
     /**
-     * [descr:GridBaseOptions.searchPanel.highlightSearchText]
+     * [descr:SearchPanel.highlightSearchText]
      */
     highlightSearchText?: boolean;
     /**
-     * [descr:GridBaseOptions.searchPanel.placeholder]
+     * [descr:SearchPanel.placeholder]
      */
     placeholder?: string;
     /**
-     * [descr:GridBaseOptions.searchPanel.searchVisibleColumnsOnly]
+     * [descr:SearchPanel.searchVisibleColumnsOnly]
      */
     searchVisibleColumnsOnly?: boolean;
     /**
-     * [descr:GridBaseOptions.searchPanel.text]
+     * [descr:SearchPanel.text]
      */
     text?: string;
     /**
-     * [descr:GridBaseOptions.searchPanel.visible]
+     * [descr:SearchPanel.visible]
      */
     visible?: boolean;
     /**
-     * [descr:GridBaseOptions.searchPanel.width]
+     * [descr:SearchPanel.width]
      */
     width?: string | number;
   };
@@ -6617,23 +6620,23 @@ declare module DevExpress.common.grids {
    */
   export type Sorting = {
     /**
-     * [descr:GridBaseOptions.sorting.ascendingText]
+     * [descr:Sorting.ascendingText]
      */
     ascendingText?: string;
     /**
-     * [descr:GridBaseOptions.sorting.clearText]
+     * [descr:Sorting.clearText]
      */
     clearText?: string;
     /**
-     * [descr:GridBaseOptions.sorting.descendingText]
+     * [descr:Sorting.descendingText]
      */
     descendingText?: string;
     /**
-     * [descr:GridBaseOptions.sorting.mode]
+     * [descr:Sorting.mode]
      */
     mode?: SingleMultipleOrNone;
     /**
-     * [descr:GridBaseOptions.sorting.showSortIndexes]
+     * [descr:Sorting.showSortIndexes]
      */
     showSortIndexes?: boolean;
   };
@@ -10804,6 +10807,9 @@ declare module DevExpress.ui {
      */
     toolbar?: DevExpress.ui.dxCardView.Toolbar;
 
+    /**
+     * [descr:dxCardViewOptions.sorting]
+     */
     sorting?: DevExpress.common.grids.Sorting;
 
     /**

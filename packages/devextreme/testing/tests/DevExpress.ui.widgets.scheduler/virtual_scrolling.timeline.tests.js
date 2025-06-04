@@ -30,15 +30,14 @@ testStart(() => initTestMarkup());
 module('Virtual scrolling timelines', () => {
     module('Appointments', () => {
         module('timelineDay', () => {
-            test('multiday appointment should be rendered correctly', function(assert) {
-
+            test('multiday appointment should be rendered correctly', async function(assert) {
                 const data = [{
                     text: 'Appt-001',
                     startDate: new Date(2021, 1, 2, 15, 45),
                     endDate: new Date(2021, 1, 3, 10, 15)
                 }];
 
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     dataSource: data,
                     views: [{
                         type: 'timelineDay',
@@ -135,7 +134,7 @@ module('Virtual scrolling timelines', () => {
 
         module('Vertical grouping', () => {
             module('timelineDay', () => {
-                test('appointments should be rendered correctly', function(assert) {
+                test('appointments should be rendered correctly', async function(assert) {
                     const data = [
                         {
                             text: 'Appt-001',
@@ -167,7 +166,7 @@ module('Virtual scrolling timelines', () => {
                         }
                     ];
 
-                    const scheduler = createWrapper({
+                    const scheduler = await createWrapper({
                         dataSource: data,
                         views: [{
                             type: 'timelineDay',
@@ -447,8 +446,8 @@ module('Virtual scrolling timelines', () => {
             });
 
             module('timelineWeek', () => {
-                test('multiday appointment should be rendered correctly in timelineWeek view with grouping', function(assert) {
-                    const scheduler = createWrapper({
+                test('multiday appointment should be rendered correctly in timelineWeek view with grouping', async function(assert) {
+                    const scheduler = await createWrapper({
                         height: 600,
                         width: 800,
                         dataSource: [{

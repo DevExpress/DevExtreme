@@ -13,7 +13,7 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { TextBoxProperties } from '@ts/ui/text_box/m_text_box';
 
 import type { Column } from '../columns_controller/types';
-import type { PredefinedToolbarItem } from '../toolbar/types';
+import type { DefaultToolbarItem } from '../toolbar/types';
 import { addWidgetPrefix, getName } from '../utils/common';
 import { parseValue } from '../utils/parse_value/index';
 import type { HighlightedTextItem, HighlightTextOptions, SearchFieldProps } from './types';
@@ -122,7 +122,7 @@ let timer;
 export const addSearchTextBox = (
   props: SearchFieldProps,
   setTextBoxRef: (component: TextBoxInstance) => void,
-): PredefinedToolbarItem => ({
+): DefaultToolbarItem => ({
   name: 'searchPanel',
   showText: 'inMenu',
   location: 'after',
