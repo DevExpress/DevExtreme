@@ -17,6 +17,7 @@ const config = {
   useJQuery: undefined,
   editorStylingMode: undefined,
   useLegacyVisibleIndex: false,
+  assertedVersions: [],
 
   floatingActionButtonConfig: {
     icon: 'add',
@@ -33,7 +34,6 @@ const config = {
     maxSpeedDialActionCount: 5,
     shading: false,
     direction: 'auto',
-    assertedVersions: [],
   },
 
   optionsParser: (optionsString) => {

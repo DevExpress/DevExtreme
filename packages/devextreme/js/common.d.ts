@@ -914,7 +914,7 @@ export function config(): GlobalConfig;
  * @public
  */
 
-export function config(config: GlobalConfig): void;
+export function config(config: Partial<GlobalConfig>): void;
 
 /**
  * @docid

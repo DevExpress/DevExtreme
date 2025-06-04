@@ -5,7 +5,11 @@ import config from '@js/core/config';
 import errors from '@js/core/errors';
 
 import { base } from '../../ui/overlay/m_z_index';
-import { assertDevExtremeVersion, clearAssertedVersions } from '../../utils/version';
+import {
+  assertDevExtremeVersion,
+  assertedVersionsCompatible,
+  clearAssertedVersions,
+} from '../../utils/version';
 import {
   parseLicenseKey,
   setLicenseCheckSkipCondition,
@@ -505,5 +509,29 @@ describe('internal license check', () => {
     validateLicense(token, '1.2.1');
     expect(errors.log).toHaveBeenCalledWith('W0022');
     expect(trialPanelSpy).not.toHaveBeenCalled();
+  });
+});
+
+describe('assertedVersions integration', () => {
+  it('assertDevExtremeVersion config().assertedVersions', () => {
+    clearAssertedVersions();
+    assertDevExtremeVersion('test-package', '1.2.3');
+    expect(config().assertedVersions).toEqual([{ packageName: 'test-package', version: '1.2.3' }]);
+  });
+
+  it('clearAssertedVersions config().assertedVersions', () => {
+    assertDevExtremeVersion('test-package', '1.2.3');
+    clearAssertedVersions();
+    expect(config().assertedVersions).toEqual([]);
+  });
+
+  it('assertedVersionsCompatible shoild be false', () => {
+    clearAssertedVersions();
+    assertDevExtremeVersion('test-package', '1.2.3');
+    const logSpy = jest.spyOn(errors, 'log').mockImplementation(() => {});
+    const result = assertedVersionsCompatible({ major: 2, minor: 0, patch: 0 });
+    expect(result).toBe(false);
+    expect(logSpy).toHaveBeenCalled();
+    logSpy.mockRestore();
   });
 });

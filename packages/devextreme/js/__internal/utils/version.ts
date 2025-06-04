@@ -29,14 +29,16 @@ export function parseVersion(version: string): Version {
   };
 }
 
+function getAssertedVersions(): AssertedVersion[] {
+  return config()?.assertedVersions ?? [];
+}
+
 export function assertDevExtremeVersion(packageName: string, version: string): void {
-  config({ assertedVersions: [...config().assertedVersions, { packageName, version }] });
+  config({ assertedVersions: [...getAssertedVersions(), { packageName, version }] });
 }
 
 export function clearAssertedVersions(): void {
-  /// #DEBUG
   config({ assertedVersions: [] });
-  /// #ENDDEBUG
 }
 
 function stringifyVersionList(assertedVersionList: AssertedVersion[]): string {
@@ -68,7 +70,7 @@ export function getPreviousMajorVersion({ major, minor, patch }: Version): Versi
 }
 
 export function assertedVersionsCompatible(currentVersion: Version): boolean {
-  const mismatchingVersions = (config()?.assertedVersions ?? []).filter(
+  const mismatchingVersions = getAssertedVersions().filter(
     (assertedVersion) => !versionsEqual(
       parseVersion(assertedVersion.version),
       currentVersion,
