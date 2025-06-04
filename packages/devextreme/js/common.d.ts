@@ -270,21 +270,8 @@ export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
  */
 export type Format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
 
-/**
- * @public
- * @namespace DevExpress.common
- * @type object
- */
 export type AssertedVersion = {
-  /**
-   * @docid
-   * @public
-   */
   packageName: string;
-  /**
-   * @docid
-   * @public
-   */
   version: string;
 };
 
@@ -296,6 +283,7 @@ export type AssertedVersion = {
  * @type object
  */
 export type GlobalConfig = {
+  assertedVersions: AssertedVersion[];
   /**
    * @docid
    * @default "."
@@ -421,7 +409,6 @@ export type GlobalConfig = {
   licenseKey?: string;
   buyNowLink?: string;
   licensingDocLink?: string;
-  assertedVersions?: AssertedVersion[];
 };
 
 /**

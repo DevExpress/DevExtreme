@@ -30,11 +30,13 @@ export function parseVersion(version: string): Version {
 }
 
 export function assertDevExtremeVersion(packageName: string, version: string): void {
-  config({ assertedVersions: [...config()?.assertedVersions ?? [], { packageName, version }] });
+  config({ assertedVersions: [...config().assertedVersions, { packageName, version }] });
 }
 
 export function clearAssertedVersions(): void {
+  /// #DEBUG
   config({ assertedVersions: [] });
+  /// #ENDDEBUG
 }
 
 function stringifyVersionList(assertedVersionList: AssertedVersion[]): string {

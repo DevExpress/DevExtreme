@@ -33,6 +33,7 @@ const config = {
     maxSpeedDialActionCount: 5,
     shading: false,
     direction: 'auto',
+    assertedVersions: [],
   },
 
   optionsParser: (optionsString) => {
