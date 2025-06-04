@@ -21,8 +21,33 @@
     <DxColumn data-field="Modification"/>
     <DxColumn data-field="BodyStyleName"/>
     <DxColumn data-field="Horsepower"/>
-    <template #cardTemplate="{ data: { card: { data: vehicle } } }">
-        <VehicleCard :vehicle="vehicle" @show-info="showInfo" />
+    <template #cardTemplate="{
+        data: {
+          card: {
+            data: vehicle,
+            data: {
+              ID,
+              TrademarkName,
+              Name,
+              CategoryName,
+              Modification,
+              BodyStyleName,
+              Horsepower,
+            },
+            fields,
+          }
+        }
+      }">
+        <VehicleCard
+          :vehicle="vehicle"
+          :id="ID"
+          :model="`${TrademarkName} ${Name}`"
+          :price="fields?.find(f => f.column?.dataField === 'Price')?.text"
+          :category-name="CategoryName"
+          :modification="Modification"
+          :body-style-name="BodyStyleName"
+          :horsepower="Horsepower"
+          @show-info="showInfo" />
     </template>
   </DxCardView>
   <DxPopup

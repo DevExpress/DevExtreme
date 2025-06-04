@@ -2,31 +2,31 @@
   <div class="vehicle__card">
     <div class="vehicle__img-wrapper">
       <img class="vehicle__img"
-        :src="`../../../../images/vehicles/image_${vehicle.ID}.png`"
-        :alt="`${vehicle.TrademarkName} ${vehicle.Name}`"
+        :src="`../../../../images/vehicles/image_${id}.png`"
+        :alt="`${model}`"
       >
     </div>
     <div class="vehicle__info">
-      <div class="vehicle__name" :title="`${vehicle.TrademarkName} ${vehicle.Name}`">
-        {{ vehicle.TrademarkName }} {{ vehicle.Name }}
+      <div class="vehicle__name" :title="`${model}`">
+        {{ model }}
       </div>
       <div class="vehicle__price">
-        ${{ vehicle.Price }}
+        {{ price }}
       </div>
       <div class="vehicle__type-container">
         <div class="vehicle__type">
-          {{ vehicle.CategoryName }}
+          {{ categoryName }}
         </div>
       </div>
       <div class="vehicle__spec-container">
         <div class="vehicle__modification">
-          {{ vehicle.Modification }}
+          {{ modification }}
         </div>
         <div class="vehicle__modification">
-          {{ vehicle.BodyStyleName }}
+          {{ bodyStyleName }}
         </div>
         <div class="vehicle__modification">
-           {{ vehicle.Horsepower }} h.p.
+           {{ horsepower }} h.p.
         </div>
       </div>
       <div class="vehicle__footer-container">
@@ -46,7 +46,14 @@ import { DxButton } from 'devextreme-vue/button';
 import { Vehicle } from './data';
 
 defineProps<{
-  vehicle: Vehicle
+  vehicle: Vehicle,
+  id: number,
+  model: string,
+  price: string,
+  categoryName: string,
+  modification: string,
+  bodyStyleName: string,
+  horsepower: string,
 }>();
 
 defineEmits(['show-info']);
