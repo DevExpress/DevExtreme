@@ -3,10 +3,10 @@
 @use "../../base/icons" as *;
 @use "../../base/button/mixins" as *;
 
-@mixin dx-button-onlyicon-sizing($icon-size: $ds-fluent-button-icon-size) {
-  min-width: $ds-fluent-button-height;
+@mixin dx-button-onlyicon-sizing($icon-size: $fluent-button-icon-size) {
+  min-width: $fluent-button-height;
 
-  $button-content-padding: calc((#{$ds-fluent-button-height} - #{$icon-size} - #{$fluent-border-width} * 2) / 2);
+  $button-content-padding: calc((#{$fluent-button-height} - #{$icon-size} - #{$fluent-border-width} * 2) / 2);
 
   @include dx-button-sizing(
     $button-content-padding,
@@ -22,8 +22,8 @@
     $fluent-button-vertical-padding,
     $fluent-button-horizontal-padding,
     $fluent-button-horizontal-padding,
-    $ds-fluent-button-icon-size,
-    calc(#{$ds-fluent-button-icon-size} / 2)
+    $fluent-button-icon-size,
+    calc(#{$fluent-button-icon-size} / 2)
   );
 }
 
@@ -32,8 +32,8 @@
     $fluent-button-vertical-padding,
     $fluent-button-icon-text-padding,
     $fluent-button-horizontal-padding,
-    $ds-fluent-button-icon-size,
-    $ds-fluent-button-icon-margin,
+    $fluent-button-icon-size,
+    $fluent-button-icon-margin,
   );
 }
 

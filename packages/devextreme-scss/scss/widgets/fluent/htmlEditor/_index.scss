@@ -5,7 +5,6 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../button/sizes" as *;
-@use "../button/colors" as *;
 @use "../buttonGroup/colors" as *;
 @use "../textEditor/colors" as *;
 @use "../textEditor/index" as *;
@@ -226,13 +225,13 @@
 
   .dx-fix-ratio-container {
     .dx-textbox {
-      width: calc(100% - $fluent-button-height - $fluent-html-editor-add-image-dialog-base-padding);
+      width: calc(100% - $tmp-fluent-button-height - $fluent-html-editor-add-image-dialog-base-padding);
     }
 
     .dx-buttongroup {
       margin-inline-start: $fluent-html-editor-add-image-dialog-base-padding;
-      width: $fluent-button-height;
-      margin-top: math.div($fluent-base-inline-widget-height - $fluent-button-height, 2);
+      width: $tmp-fluent-button-height;
+      margin-top: math.div($fluent-base-inline-widget-height - $tmp-fluent-button-height, 2);
     }
   }
 

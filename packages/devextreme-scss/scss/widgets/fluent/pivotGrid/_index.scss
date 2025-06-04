@@ -7,8 +7,6 @@
 @use "../../base/icons" as *;
 @use "../gridBase/colors" as *;
 @use "../treeView/sizes" as *;
-@use "../button/mixins" as *;
-@use "../button/colors" as *;
 @use "../../base/pivotGrid" as basePivotGrid with (
   $pivotgrid-drag-header-border-color: $pivotgrid-drag-header-border-color,
   $pivotgrid-drag-header-first-shadow-color: $pivotgrid-drag-header-first-shadow-color,
@@ -70,15 +68,15 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
   }
 
   .dx-sort-up {
-    @include dx-icon-sizing($fluent-button-icon-size)
+    @include dx-icon-sizing($tmp-fluent-button-icon-size)
   }
 
   .dx-sort-down {
-    @include dx-icon-sizing($fluent-button-icon-size)
+    @include dx-icon-sizing($tmp-fluent-button-icon-size)
   }
 
   .dx-header-filter {
-    @include dx-icon-sizing($fluent-button-icon-size)
+    @include dx-icon-sizing($tmp-fluent-button-icon-size)
   }
 }
 
@@ -169,9 +167,9 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
 
 .dx-pivotgridfieldchooser {
   .dx-area-icon {
-    width: $fluent-button-icon-size;
-    height: $fluent-button-icon-size;
-    font-size: $fluent-button-icon-size;
+    width: $tmp-fluent-button-icon-size;
+    height: $tmp-fluent-button-icon-size;
+    font-size: $tmp-fluent-button-icon-size;
   }
 
   .dx-area {
@@ -217,7 +215,7 @@ $fluent-pivotgridfieldchooser-field-min-height: 36px;
     .dx-icon {
       margin: 0 5px -1px 0;
 
-      @include dx-icon-sizing($fluent-button-icon-size);
+      @include dx-icon-sizing($tmp-fluent-button-icon-size);
     }
   }
 

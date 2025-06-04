@@ -452,7 +452,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
     padding-inline: $fluent-list-item-vertical-padding;
 
     &.dx-list-static-delete-button-container {
-      width: $item-horizontal-padding + $fluent-button-icon-size;
+      width: $item-horizontal-padding + $tmp-fluent-button-icon-size;
       padding: 0;
     }
 

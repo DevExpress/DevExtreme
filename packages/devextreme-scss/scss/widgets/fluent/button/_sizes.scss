@@ -14,24 +14,29 @@ $fluent-button-box-shadow-size: 0 1px 3px !default;
 
 $button-base-padding: null !default;
 
-$ds-fluent-button-height: null !default;
-$ds-fluent-button-icon-size: null !default;
-$ds-fluent-button-icon-margin: null !default;
+$fluent-button-height: null !default;
+$fluent-button-icon-size: null !default;
+
+/**
+* $name 13. Icon margin
+* $type text
+*/
+$fluent-button-icon-margin: null !default;
 
 @if $size == "default" {
   $button-base-padding: var(--DS-sizing-60) !default;
 
-  $ds-fluent-button-height: var(--DS-sizing-320) !default;
-  $ds-fluent-button-icon-size: var(--DS-sizing-200) !default;
-  $ds-fluent-button-icon-margin: var(--DS-sizing-80) !default;
+  $fluent-button-height: var(--DS-sizing-320) !default;
+  $fluent-button-icon-size: var(--DS-sizing-200) !default;
+  $fluent-button-icon-margin: var(--DS-sizing-80) !default;
 }
 
 @else if $size == "compact" {
   $button-base-padding: var(--DS-sizing-40) !default;
 
-  $ds-fluent-button-height: var(--DS-sizing-240) !default;
-  $ds-fluent-button-icon-size: var(--DS-sizing-160) !default;
-  $ds-fluent-button-icon-margin: var(--DS-sizing-40) !default;
+  $fluent-button-height: var(--DS-sizing-240) !default;
+  $fluent-button-icon-size: var(--DS-sizing-160) !default;
+  $fluent-button-icon-margin: var(--DS-sizing-40) !default;
 }
 
 $fluent-button-horizontal-padding: calc(#{$button-base-padding} * 2) !default;

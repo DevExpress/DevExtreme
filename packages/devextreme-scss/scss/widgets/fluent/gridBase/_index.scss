@@ -55,9 +55,9 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-menu {
       background-color: transparent;
-      margin-top: math.div(($fluent-grid-base-header-height - $fluent-button-height), 2);
+      margin-top: math.div(($fluent-grid-base-header-height - $tmp-fluent-button-height), 2);
       margin-left: 5px !important; // stylelint-disable-line declaration-no-important
-      height: $fluent-button-height;
+      height: $tmp-fluent-button-height;
 
       .dx-menu-item {
         .dx-menu-item-content {
@@ -1221,13 +1221,13 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       border-radius: $button-border-radius;
 
       @include dx-button-styling-variant(
-        $button-danger-bg,
+        $tmp-button-danger-bg,
         $button-danger-color,
         $button-danger-color,
         $button-danger-color,
-        $button-danger-bg,
-        $button-danger-bg,
-        $button-danger-bg,
+                      $tmp-button-danger-bg,
+                      $tmp-button-danger-bg,
+                      $tmp-button-danger-bg,
         $button-danger-color
       );
 

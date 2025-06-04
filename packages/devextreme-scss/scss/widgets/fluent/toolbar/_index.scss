@@ -8,7 +8,6 @@
 @use "../list/sizes" as *;
 @use "../button/mixins" as *;
 @use "../button/colors" as *;
-@use "../button/sizes" as *;
 @use "../checkBox/sizes" as *;
 @use "mixins" as *;
 @use "../../base/toolbar";
@@ -58,15 +57,15 @@
     vertical-align: middle;
 
     .dx-list-item-icon-container {
-      height: $fluent-button-icon-size;
-      width: $fluent-button-icon-size;
+      height: $tmp-fluent-button-icon-size;
+      width: $tmp-fluent-button-icon-size;
 
-      @include dx-icon-margin(math.div($fluent-button-icon-size, 2));
+      @include dx-icon-margin(math.div($tmp-fluent-button-icon-size, 2));
 
       .dx-icon {
-        font-size: $fluent-button-icon-size;
+        font-size: $tmp-fluent-button-icon-size;
 
-        @include dx-icon-sizing($fluent-button-icon-size);
+        @include dx-icon-sizing($tmp-fluent-button-icon-size);
       }
     }
   }
@@ -121,9 +120,9 @@
 
     .dx-button-danger {
       @include dx-button-flat-color-styling(
-        $button-danger-bg,
-        $button-danger-bg,
-        $button-danger-bg,
+        $tmp-button-danger-bg,
+        $tmp-button-danger-bg,
+        $tmp-button-danger-bg,
         $button-danger-text-bg,
         $button-danger-text-hover-bg,
         $button-danger-text-focused-bg,
@@ -133,9 +132,9 @@
 
     .dx-button-success {
       @include dx-button-flat-color-styling(
-        $button-success-bg,
-        $button-success-bg,
-        $button-success-bg,
+        $tmp-button-success-bg,
+        $tmp-button-success-bg,
+        $tmp-button-success-bg,
         $button-success-text-bg,
         $button-success-text-hover-bg,
         $button-success-text-focused-bg,

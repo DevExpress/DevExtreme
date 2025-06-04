@@ -19,7 +19,7 @@ $button-normal-color: $color-content-neutral-default-rest !default;
 * $name 15. Background color (contained)
 * $type color
 */
-$ds-button-normal-bg: $color-surface-neutral-default-rest !default;
+$button-normal-bg: $color-surface-neutral-default-rest !default;
 
 /**
 * $name 16. Background color (outlined)
@@ -73,7 +73,7 @@ $button-default-color: var(--DS-color-content-neutral-static-rest) !default;
 * $name 15. Background color
 * $type color
 */
-$ds-button-default-bg: var(--DS-color-surface-primary-default-rest) !default;
+$button-default-bg: var(--DS-color-surface-primary-default-rest) !default;
 
 /**
 * $name 20. Selected state text color
@@ -149,7 +149,7 @@ $button-danger-color: var(--DS-color-content-neutral-static-rest) !default;
 * $name 15. Background color
 * $type color
 */
-$ds-button-danger-bg: var(--DS-color-surface-danger-default-rest) !default;
+$button-danger-bg: var(--DS-color-surface-danger-default-rest) !default;
 
 /**
 * $name 20. Selected state text color
@@ -199,7 +199,7 @@ $button-success-color: var(--DS-color-content-neutral-static-rest) !default;
 * $name 15. Background color
 * $type color
 */
-$ds-button-success-bg: var(--DS-color-surface-success-default-rest) !default;
+$button-success-bg: var(--DS-color-surface-success-default-rest) !default;
 
 /**
 * $name 20. Selected state text color

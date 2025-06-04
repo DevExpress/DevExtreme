@@ -289,10 +289,10 @@ $base-invalid-color-hover: $base-danger-hover !default;
 $base-invalid-color-active: $base-danger-active !default;
 $base-invalid-color-selected: $base-danger-selected !default;
 
-$button-normal-bg: $base-element-bg !default;
-$button-default-bg: $base-accent !default;
-$button-danger-bg: $base-danger !default;
-$button-success-bg: $base-success !default;
+$tmp-button-normal-bg: $base-element-bg !default;
+$tmp-button-default-bg: $base-accent !default;
+$tmp-button-danger-bg: $base-danger !default;
+$tmp-button-success-bg: $base-success !default;
 
 :root {
   --dx-component-color-bg: #{$base-bg};

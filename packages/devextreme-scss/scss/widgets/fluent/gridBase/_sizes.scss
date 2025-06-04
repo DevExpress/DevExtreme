@@ -39,7 +39,7 @@ $fluent-command-edit-text-margin: 2px !default;
 $fluent-command-edit-icon-size: null !default;
 $fluent-filter-panel-icon-size: null !default;
 
-$fluent-grid-base-filter-icon-size: $fluent-button-icon-size !default;
+$fluent-grid-base-filter-icon-size: $tmp-fluent-button-icon-size !default;
 
 @if $size == "default" {
   $fluent-grid-base-cell-height: 48px !default;

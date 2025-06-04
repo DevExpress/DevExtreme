@@ -4,7 +4,6 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../menu/colors" as *;
-@use "../button/sizes" as *;
 @use "../common/mixins" as *;
 @use "../../base/icons" as *;
 @use "../../base/mixins" as *;
@@ -58,7 +57,7 @@
   }
 
   .dx-icon {
-    @include dx-icon-sizing($fluent-button-icon-size);
+    @include dx-icon-sizing($tmp-fluent-button-icon-size);
   }
 
   .dx-menu-item {
