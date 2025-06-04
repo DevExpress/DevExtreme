@@ -3,7 +3,7 @@
 import { equalByValue } from '@js/core/utils/common';
 import { batch } from '@preact/signals-core';
 import { getMatchedConditions } from '@ts/filter_builder/m_utils';
-import { SearchController } from '@ts/grids/new/grid_core/search';
+import { SearchController } from '@ts/grids/new/grid_core/search/index';
 
 import { ColumnsController } from '../../columns_controller/index';
 import type { Column } from '../../columns_controller/types';

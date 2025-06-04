@@ -1,5 +1,5 @@
 import type { FilterType } from '@js/common/grids';
-// 🚨🚨🚨 Use here complex utils func for merging filters
+// 🚨🚨🚨 Complex util func from grid_core used here for merging filters
 // TODO filterSync: move these utils to the new grid_core
 import { syncFilters } from '@ts/filter_builder/m_utils';
 
@@ -54,7 +54,7 @@ export const mergeFilterPanelWithHeaderFilterValues = (
     (
       result,
       value,
-      // 🚨🚨🚨 Use here complex utils func for merging filters
+      // 🚨🚨🚨 Complex util func from grid_core used here for merging filters
       // TODO filterSync: move these utils to the new grid_core
     ) => syncFilters(result, value) as FilterValue,
     filterPanelValue,
