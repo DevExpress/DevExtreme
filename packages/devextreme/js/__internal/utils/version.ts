@@ -38,7 +38,9 @@ export function assertDevExtremeVersion(packageName: string, version: string): v
 }
 
 export function clearAssertedVersions(): void {
+  /// #DEBUG
   config({ assertedVersions: [] });
+  /// #ENDDEBUG
 }
 
 function stringifyVersionList(assertedVersionList: AssertedVersion[]): string {
