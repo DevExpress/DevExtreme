@@ -1932,7 +1932,7 @@ const DxHeaderPanelConfig = {
     "update:visible": null,
   },
   props: {
-    dragging: Object as PropType<Record<string, any>>,
+    dragging: {},
     itemCssClass: String,
     itemTemplate: {},
     visible: Boolean

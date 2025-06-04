@@ -10435,6 +10435,9 @@ declare module DevExpress.ui {
     export type FocusedCardChanged =
       DevExpress.common.core.events.EventInfo<dxCardView> & WithCardInfo;
 
+    /**
+     * [descr:HeaderPanelDragging]
+     */
     export type HeaderPanelDragging = Pick<
       dxSortableOptions,
       | 'dropFeedbackMode'

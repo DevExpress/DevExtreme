@@ -14,6 +14,7 @@ import {
 
 
 
+import { HeaderPanelDragging } from 'devextreme/ui/card_view';
 
 import {
     DxIntegrationModule,
@@ -32,10 +33,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoCardViewHeaderPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get dragging(): Record<string, any> {
+    get dragging(): HeaderPanelDragging {
         return this._getOption('dragging');
     }
-    set dragging(value: Record<string, any>) {
+    set dragging(value: HeaderPanelDragging) {
         this._setOption('dragging', value);
     }
 
