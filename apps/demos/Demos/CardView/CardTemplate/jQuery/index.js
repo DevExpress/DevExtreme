@@ -47,7 +47,6 @@ $(() => {
     const {
       TrademarkName,
       Name,
-      Price,
       CategoryName,
       Modification,
       BodyStyleName,
@@ -62,7 +61,8 @@ $(() => {
     const name = `${TrademarkName} ${Name}`;
     const vehicleName = $('<div>').addClass('vehicle__name').text(name).attr('title', name);
 
-    const priceInfo = $('<div>').addClass('vehicle__price').text(`$${Price}`);
+    const priceText = card.fields.find(f => f.column.dataField === 'Price')?.text;
+    const priceInfo = $('<div>').addClass('vehicle__price').text(`${priceText}`);
 
     const typeContainer = $('<div>').addClass('vehicle__type-container');
     const typeInfo = $('<div>').addClass('vehicle__type').text(`${CategoryName}`);
