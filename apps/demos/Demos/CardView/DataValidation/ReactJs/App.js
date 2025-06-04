@@ -42,6 +42,8 @@ const App = () => (
   <CardView
     dataSource={employees}
     keyExpr="id"
+    cardMinWidth={100}
+    wordWrapEnabled={true}
     // todo: move to nested components
     searchPanel={{
       visible: true,

@@ -2,6 +2,7 @@
   <DxCardView
     :data-source="tasks"
     key-expr="Task_ID"
+    :card-min-width="100"
     :word-wrap-enabled="true"
     :header-filter="headerFilterConfig"
     :search-panel="searchPanelConfig"
@@ -31,17 +32,17 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-  import { DxCardView, DxColumn } from 'devextreme-vue/card-view';
-  import { tasks } from './data.ts';
+import { DxCardView, DxColumn } from 'devextreme-vue/card-view';
+import { tasks } from './data.ts';
 
-  // TODO: Nested component does not exist
-  const headerFilterConfig = {
-    visible: true,
-  };
+// TODO: Nested component does not exist
+const headerFilterConfig = {
+  visible: true,
+};
 
-  // TODO: Nested component does not exist
-  const searchPanelConfig = {
-    visible: true,
-    text: 'an',
-  };
+// TODO: Nested component does not exist
+const searchPanelConfig = {
+  visible: true,
+  text: 'an',
+};
 </script>

@@ -3,6 +3,8 @@ $(() => {
     dataSource: tasks,
     keyExpr: 'Task_ID',
     wordWrapEnabled: true,
+    cardMinWidth: 100,
+    wordWrapEnabled: true,
     columns: [
       {
         dataField: 'Task_Subject',

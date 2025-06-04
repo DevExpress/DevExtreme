@@ -3,6 +3,8 @@ $(() => {
     dataSource: orders,
     keyExpr: 'ID',
     allowColumnReordering: true,
+    cardMinWidth: 100,
+    wordWrapEnabled: true,
     columns: [
       {
         dataField: 'OrderNumber',

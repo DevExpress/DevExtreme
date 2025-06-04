@@ -6,6 +6,8 @@ const App = () => (
   <CardView
     id="cardView"
     dataSource={orders}
+    cardMinWidth={100}
+    wordWrapEnabled={true}
     keyExpr="ID"
     allowColumnReordering={true}
   >

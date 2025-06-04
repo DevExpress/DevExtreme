@@ -2,6 +2,8 @@
   <DxCardView
     :data-source="employees"
     key-expr="id"
+    :card-min-width="100"
+    :word-wrap-enabled="true"
     :search-panel="{ // todo: move to nested
       visible: true,
     }"

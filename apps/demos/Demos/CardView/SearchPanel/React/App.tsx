@@ -17,9 +17,10 @@ const App = () => (
   <CardView
     dataSource={tasks}
     keyExpr="Task_ID"
-    wordWrapEnabled={true}
     headerFilter={headerFilterConfig}
     searchPanel={searchPanelConfig}
+    cardMinWidth={100}
+    wordWrapEnabled={true}
   >
     <Column
       dataField="Task_Subject"

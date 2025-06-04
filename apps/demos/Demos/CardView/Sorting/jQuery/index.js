@@ -2,6 +2,8 @@ $(() => {
   $('#card-view').dxCardView({
     dataSource: houses,
     keyExpr: 'ID',
+    cardMinWidth: 100,
+    wordWrapEnabled: true,
     cardCover: {
       imageExpr: ({ ID }) => `https://demos.devexpress.com/ASPxCardViewDemos/Content/HomesPhoto/${ID}.jpg`,
       altExpr: () => 'Photo of the house',

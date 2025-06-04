@@ -34,6 +34,8 @@ const App = () => (
   <CardView
     dataSource={orders}
     keyExpr="ID"
+    cardMinWidth={100}
+    wordWrapEnabled={true}
     // TODO: make nested
     headerFilter={{ visible: true }}
     // TODO: make nested
