@@ -1,3 +1,4 @@
+import type { DataErrorOccurredInfo } from '@js/common/grids';
 import type { DataSourceLike } from '@js/data/data_source';
 
 import type { Action } from '../types';
@@ -19,7 +20,7 @@ export interface Options {
   cacheEnabled?: boolean;
   dataSource?: DataSourceLike<unknown>;
   keyExpr?: string | string[];
-  onDataErrorOccurred?: Action<{ error: string }>;
+  onDataErrorOccurred?: Action<DataErrorOccurredInfo>;
   paging?: PagingOptions;
   remoteOperations?: RemoteOperationsOptions | boolean | 'auto';
 }
