@@ -211,7 +211,10 @@ export class DxiGanttItemComponent extends CollectionNestedOption implements Aft
     
     setItems() {
         const q: QueryList<any> = new QueryList();
-        q.reset([...this.contextMenuItemItemsChildren.toArray(),...this.itemsChildren.toArray(),]);
+        q.reset([
+            ...this.contextMenuItemItemsChildren.toArray(),
+            ...this.itemsChildren.toArray(),
+        ]);
         this.setChildren('items', q);
     }
 

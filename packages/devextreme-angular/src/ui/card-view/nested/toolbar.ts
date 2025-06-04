@@ -82,7 +82,10 @@ export class DxoCardViewToolbarComponent extends NestedOption implements OnDestr
     
     setItems() {
         const q: QueryList<any> = new QueryList();
-        q.reset([...this.itemsChildren.toArray(),...this.toolbarItemsChildren.toArray(),]);
+        q.reset([
+            ...this.itemsChildren.toArray(),
+            ...this.toolbarItemsChildren.toArray(),
+        ]);
         this.setChildren('items', q);
     }
 

@@ -73,7 +73,10 @@ export class DxiDiagramTabComponent extends CollectionNestedOption {
     
     setGroups() {
         const q: QueryList<any> = new QueryList();
-        q.reset([...this.groupsChildren.toArray(),...this.tabGroupsChildren.toArray(),]);
+        q.reset([
+            ...this.groupsChildren.toArray(),
+            ...this.tabGroupsChildren.toArray(),
+        ]);
         this.setChildren('groups', q);
     }
 

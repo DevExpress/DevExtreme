@@ -66,7 +66,10 @@ export class DxoGanttContextMenuComponent extends NestedOption implements OnDest
     
     setItems() {
         const q: QueryList<any> = new QueryList();
-        q.reset([...this.contextMenuItemsChildren.toArray(),...this.itemsChildren.toArray(),]);
+        q.reset([
+            ...this.contextMenuItemsChildren.toArray(),
+            ...this.itemsChildren.toArray(),
+        ]);
         this.setChildren('items', q);
     }
 

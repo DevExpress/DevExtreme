@@ -66,7 +66,10 @@ export class DxoHtmlEditorTableContextMenuComponent extends NestedOption impleme
     
     setItems() {
         const q: QueryList<any> = new QueryList();
-        q.reset([...this.itemsChildren.toArray(),...this.tableContextMenuItemsChildren.toArray(),]);
+        q.reset([
+            ...this.itemsChildren.toArray(),
+            ...this.tableContextMenuItemsChildren.toArray(),
+        ]);
         this.setChildren('items', q);
     }
 

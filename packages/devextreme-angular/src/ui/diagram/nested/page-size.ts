@@ -88,7 +88,10 @@ export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestr
     
     setItems() {
         const q: QueryList<any> = new QueryList();
-        q.reset([...this.itemsChildren.toArray(),...this.pageSizeItemsChildren.toArray(),]);
+        q.reset([
+            ...this.itemsChildren.toArray(),
+            ...this.pageSizeItemsChildren.toArray(),
+        ]);
         this.setChildren('items', q);
     }
 

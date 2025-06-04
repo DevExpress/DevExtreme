@@ -67,7 +67,10 @@ export class DxoFileManagerToolbarComponent extends NestedOption implements OnDe
     
     setItems() {
         const q: QueryList<any> = new QueryList();
-        q.reset([...this.itemsChildren.toArray(),...this.toolbarItemsChildren.toArray(),]);
+        q.reset([
+            ...this.itemsChildren.toArray(),
+            ...this.toolbarItemsChildren.toArray(),
+        ]);
         this.setChildren('items', q);
     }
 

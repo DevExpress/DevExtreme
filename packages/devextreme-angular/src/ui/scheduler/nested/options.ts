@@ -267,7 +267,10 @@ export class DxoSchedulerOptionsComponent extends NestedOption implements OnDest
     
     setItems() {
         const q: QueryList<any> = new QueryList();
-        q.reset([...this.itemsChildren.toArray(),...this.optionsItemsChildren.toArray(),]);
+        q.reset([
+            ...this.itemsChildren.toArray(),
+            ...this.optionsItemsChildren.toArray(),
+        ]);
         this.setChildren('items', q);
     }
 

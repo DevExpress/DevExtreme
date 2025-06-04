@@ -428,7 +428,10 @@ export class DxoCardViewTabPanelOptionsComponent extends NestedOption implements
     
     setItems() {
         const q: QueryList<any> = new QueryList();
-        q.reset([...this.itemsChildren.toArray(),...this.tabPanelOptionsItemsChildren.toArray(),]);
+        q.reset([
+            ...this.itemsChildren.toArray(),
+            ...this.tabPanelOptionsItemsChildren.toArray(),
+        ]);
         this.setChildren('items', q);
     }
 

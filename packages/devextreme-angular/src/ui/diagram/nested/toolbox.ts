@@ -90,7 +90,10 @@ export class DxoDiagramToolboxComponent extends NestedOption implements OnDestro
     
     setGroups() {
         const q: QueryList<any> = new QueryList();
-        q.reset([...this.groupsChildren.toArray(),...this.toolboxGroupsChildren.toArray(),]);
+        q.reset([
+            ...this.groupsChildren.toArray(),
+            ...this.toolboxGroupsChildren.toArray(),
+        ]);
         this.setChildren('groups', q);
     }
 

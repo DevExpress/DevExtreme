@@ -391,7 +391,14 @@ export class DxoCardViewFormComponent extends NestedOption implements OnDestroy,
     
     setItems() {
         const q: QueryList<any> = new QueryList();
-        q.reset([...this.buttonItemsChildren.toArray(),...this.emptyItemsChildren.toArray(),...this.groupItemsChildren.toArray(),...this.itemsChildren.toArray(),...this.simpleItemsChildren.toArray(),...this.tabbedItemsChildren.toArray(),]);
+        q.reset([
+            ...this.buttonItemsChildren.toArray(),
+            ...this.emptyItemsChildren.toArray(),
+            ...this.groupItemsChildren.toArray(),
+            ...this.itemsChildren.toArray(),
+            ...this.simpleItemsChildren.toArray(),
+            ...this.tabbedItemsChildren.toArray(),
+        ]);
         this.setChildren('items', q);
     }
 

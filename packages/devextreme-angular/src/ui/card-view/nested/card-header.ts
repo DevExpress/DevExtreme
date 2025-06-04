@@ -83,7 +83,10 @@ export class DxoCardViewCardHeaderComponent extends NestedOption implements Afte
     
     setItems() {
         const q: QueryList<any> = new QueryList();
-        q.reset([...this.cardHeaderItemsChildren.toArray(),...this.itemsChildren.toArray(),]);
+        q.reset([
+            ...this.cardHeaderItemsChildren.toArray(),
+            ...this.itemsChildren.toArray(),
+        ]);
         this.setChildren('items', q);
     }
 

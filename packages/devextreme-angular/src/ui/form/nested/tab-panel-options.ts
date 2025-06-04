@@ -428,7 +428,10 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
     
     setItems() {
         const q: QueryList<any> = new QueryList();
-        q.reset([...this.itemsChildren.toArray(),...this.tabPanelOptionsItemsChildren.toArray(),]);
+        q.reset([
+            ...this.itemsChildren.toArray(),
+            ...this.tabPanelOptionsItemsChildren.toArray(),
+        ]);
         this.setChildren('items', q);
     }
 
