@@ -63,9 +63,9 @@ const setToolbarProps = (
     showSelectionButtons
       && customItems.push('selectAllButton')
       && customItems.push('clearSelectionButton');
+      showAddCardButton && customItems.push('addCardButton');
+      showColumnChooser && customItems.push('columnChooserButton');
     showSearch && customItems.push('searchPanel');
-    showColumnChooser && customItems.push('columnChooserButton');
-    showAddCardButton && customItems.push('addCardButton');
     showCustomToolbarButton && customItems.push(TOOLBAR_CUSTOM_BUTTON_ITEM);
 
     props.toolbar.items = customItems;

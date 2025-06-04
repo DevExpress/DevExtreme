@@ -11,7 +11,7 @@ describe('isVisible', () => {
 
   describe('when visibleConfig = false', () => {
     it('should be equal to false', () => {
-      expect(isVisible(false, [{ name: 'toolbarItem1' }])).toBe(false);
+      expect(isVisible(false, [{ name: 'addCardButton' }])).toBe(false);
     });
   });
 
@@ -24,7 +24,7 @@ describe('isVisible', () => {
   describe('when visibleConfig = undefined and there are no items', () => {
     it('should be equal to true', () => {
       expect(isVisible(undefined, [
-        { name: 'toolbarItem1' },
+        { name: 'addCardButton' },
         { name: 'toolbarItem2' },
       ])).toBe(true);
     });
@@ -35,10 +35,10 @@ describe('normalizeToolbarItems', () => {
   describe('when only default items are specified', () => {
     it('should return default items', () => {
       expect(normalizeToolbarItems(
-        [{ name: 'toolbarItem1' }],
+        [{ name: 'addCardButton' }],
         undefined,
-        ['toolbarItem1'],
-      )).toStrictEqual([{ name: 'toolbarItem1' }]);
+        ['addCardButton'],
+      )).toStrictEqual([{ name: 'addCardButton' }]);
     });
   });
 
@@ -47,7 +47,7 @@ describe('normalizeToolbarItems', () => {
       expect(normalizeToolbarItems(
         [],
         [{ name: 'customToolbarItem1' }],
-        ['toolbarItem1'],
+        ['addCardButton'],
       )).toStrictEqual([{ name: 'customToolbarItem1', location: 'after' }]);
     });
   });
@@ -55,9 +55,9 @@ describe('normalizeToolbarItems', () => {
   describe('when default items and custom items are specified', () => {
     it('should return processed custom items', () => {
       expect(normalizeToolbarItems(
-        [{ name: 'toolbarItem1' }],
+        [{ name: 'addCardButton' }],
         [{ name: 'customToolbarItem1' }],
-        ['toolbarItem1'],
+        ['addCardButton'],
       )).toStrictEqual([{ name: 'customToolbarItem1', location: 'after' }]);
     });
   });
@@ -65,21 +65,21 @@ describe('normalizeToolbarItems', () => {
   describe('when custom items override default items', () => {
     it('should return default items merged with custom items', () => {
       expect(normalizeToolbarItems(
-        [{ name: 'toolbarItem1', location: 'before' }],
-        [{ name: 'toolbarItem1', location: 'after' }],
-        ['toolbarItem1'],
-      )).toStrictEqual([{ name: 'toolbarItem1', location: 'after' }]);
+        [{ name: 'addCardButton', location: 'before' }],
+        [{ name: 'addCardButton', location: 'after' }],
+        ['addCardButton'],
+      )).toStrictEqual([{ name: 'addCardButton', location: 'after' }]);
     });
   });
 
   describe('when default items are set in custom items', () => {
     it('should return both default and custom items', () => {
       expect(normalizeToolbarItems(
-        [{ name: 'toolbarItem1', location: 'before' }],
-        ['toolbarItem1', { name: 'customToolbarItem1' }],
-        ['toolbarItem1'],
+        [{ name: 'addCardButton', location: 'before' }],
+        ['addCardButton', { name: 'customToolbarItem1' }],
+        ['addCardButton'],
       )).toStrictEqual([
-        { name: 'toolbarItem1', location: 'before' },
+        { name: 'addCardButton', location: 'before' },
         { name: 'customToolbarItem1', location: 'after' },
       ]);
     });
@@ -89,9 +89,9 @@ describe('normalizeToolbarItems', () => {
     it('should return processed default items', () => {
       expect(normalizeToolbarItems(
         [],
-        ['toolbarItem1'],
-        ['toolbarItem1'],
-      )).toStrictEqual([{ name: 'toolbarItem1', location: 'after', visible: false }]);
+        ['addCardButton'],
+        ['addCardButton'],
+      )).toStrictEqual([{ name: 'addCardButton', location: 'after', visible: false }]);
     });
   });
 });
