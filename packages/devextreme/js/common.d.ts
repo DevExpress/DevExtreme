@@ -283,7 +283,7 @@ export type AssertedVersion = {
  * @type object
  */
 export type GlobalConfig = {
-  assertedVersions: AssertedVersion[];
+  assertedVersions?: AssertedVersion[];
   /**
    * @docid
    * @default "."

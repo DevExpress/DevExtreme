@@ -1271,7 +1271,7 @@ declare module DevExpress.common {
    * [descr:GlobalConfig]
    */
   export type GlobalConfig = {
-    assertedVersions: AssertedVersion[];
+    assertedVersions?: AssertedVersion[];
     /**
      * [descr:GlobalConfig.decimalSeparator]
      * @deprecated [depNote:GlobalConfig.decimalSeparator]
