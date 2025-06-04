@@ -122,7 +122,7 @@ $treelist-icon-container-padding-right: $generic-grid-base-checkbox-icon-size + 
 
   .dx-checkbox {
     top: 50%;
-    margin-top: math.div(-$generic-grid-base-checkbox-icon-size, 2) - 1px;
+    margin-top: math.div(-$generic-base-icon-size, 2);
   }
 }
 
