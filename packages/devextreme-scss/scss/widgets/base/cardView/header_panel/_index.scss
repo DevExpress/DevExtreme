@@ -89,6 +89,7 @@ $sortable-side-offset: 6px;
   in the middle between elements
  */
 .dx-cardview-header-item-container {
+  min-width: fit-content;
   padding: 0 $cardview-header-item__right-padding 0 $cardview-header-item__left-padding;
 
   &:first-child {
