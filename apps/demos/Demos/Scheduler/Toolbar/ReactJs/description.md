@@ -1,4 +1,4 @@
-The DevExtreme Scheduler displays a toolbar that you can customize. You can populate the toolbar with predefined and custom items in any order. This demo implements an example of toolbar customization.
+The DevExtreme Scheduler displays a toolbar that can be customized. You can populate the toolbar with predefined and custom items in any order. This demo implements an example of toolbar customization.
 <!--split-->
 
 To customize the toolbar, add items to the [toolbar](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/toolbar/).[items[]](/Documentation/25_1/ApiReference/UI_Components/dxScheduler/Configuration/toolbar/items/) array. The Scheduler supports the following types of toolbar items:
