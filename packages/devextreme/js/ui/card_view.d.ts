@@ -488,8 +488,9 @@ export type Column<TCardData = unknown, TKey = unknown> = ColumnProperties<TCard
 // #region HeaderPanel
 
 /**
+ * @docid
  * @public
- * */
+ */
 export type HeaderPanelDragging = Pick<dxSortableOptions, 'dropFeedbackMode' | 'scrollSpeed' | 'scrollSensitivity' | 'onDragChange' | 'onDragEnd' | 'onDragMove' | 'onDragStart' | 'onRemove' | 'onReorder'>;
 
 /**
@@ -501,7 +502,6 @@ export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
     /**
      * @docid
      * @public
-     * @type object
      */
     dragging?: HeaderPanelDragging;
     /**
