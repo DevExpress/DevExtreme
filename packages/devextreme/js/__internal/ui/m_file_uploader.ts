@@ -104,9 +104,9 @@ class FileUploader extends Editor<Properties> {
   _$content?: dxElementWrapper;
 
   _uploadStrategy!: CustomChunksFileUploadStrategy
-    | DefaultChunksFileUploadStrategy
-    | CustomWholeFileUploadStrategy
-    | DefaultWholeFileUploadStrategy;
+  | DefaultChunksFileUploadStrategy
+  | CustomWholeFileUploadStrategy
+  | DefaultWholeFileUploadStrategy;
 
   _preventRecreatingFiles?: any;
 
