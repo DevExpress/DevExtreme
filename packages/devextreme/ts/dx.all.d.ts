@@ -621,7 +621,7 @@ declare module DevExpress {
   /**
     * [descr:config(config)]
     */
-   export function config(config: Partial<DevExpress.common.GlobalConfig>): void;
+   export function config(config: DevExpress.common.GlobalConfig): void;
   /**
    * [descr:DataHelperMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
