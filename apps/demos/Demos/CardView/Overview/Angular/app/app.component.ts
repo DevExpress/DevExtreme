@@ -58,7 +58,10 @@ export class AppComponent {
   }
 
   showNotify(text: string) {
-    notify(`The "${text}" button is clicked.`);
+    notify({
+      message: `The "${text}" button is clicked.`,
+      maxWidth: 560,
+    });
   }
 }
 

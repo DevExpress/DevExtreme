@@ -118,40 +118,13 @@ function calculateAddress({ State, City }: Employee): string {
   return `${City}, ${State}`;
 }
 
-function calculateAssignedTo({ Head_ID }) {
-  const assignedTo = employees
-    .find((employee) => employee.ID === Head_ID);
-
-  if (!assignedTo) {
-    return 'None';
-  }
-
-  return `${assignedTo.First_Name} ${assignedTo.Last_Name}`;
-}
 
 function showNotify(text: string) {
-  notify(`The "${text}" button is clicked.`);
-}
-
-const navigateToAssignee = async(value) => {
-  const cardViewInstance = cardView.value!.instance!;
-
-  document.querySelectorAll('.card-highlight').forEach((card) => {
-    card.classList.remove('card-highlight');
+  notify({
+    message: `The "${text}" button is clicked.`,
+    maxWidth: 560,
   });
-
-  const index = employees.findIndex(
-    (employee) => employee.ID === value,
-  );
-
-  const pageIndex = Math.floor(index / cardViewInstance.pageSize());
-  await cardViewInstance.pageIndex(pageIndex);
-
-  const cardIndex = cardViewInstance.getCardIndexByKey(value);
-  const cardElement = cardViewInstance.getCardElement(cardIndex);
-  cardElement.focus();
-  cardElement.classList.add('card-highlight');
-};
+}
 
 const cardView = ref<DxCardView>();
 

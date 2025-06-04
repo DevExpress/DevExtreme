@@ -33,11 +33,17 @@ function calculateAddress({ State, City }: Employee): string {
 }
 
 function notifyCall() {
-  notify('The "Call" button is clicked.');
+  notify({
+    message: 'The "Call" button is clicked.',
+    maxWidth: 560,
+  });
 }
 
 function notifySendEmail() {
-  notify('The "Send Email" button is clicked.');
+  notify({
+    message: 'The "Send Email" button is clicked.',
+    maxWidth: 560,
+  });
 }
 
 function CardFooterComponent() {

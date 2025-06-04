@@ -23,6 +23,18 @@ function calculateFullName({ First_Name, Last_Name }) {
 function calculateAddress({ State, City }) {
   return `${City}, ${State}`;
 }
+function notifyCall() {
+  notify({
+    message: 'The "Call" button is clicked.',
+    maxWidth: 560,
+  });
+}
+function notifySendEmail() {
+  notify({
+    message: 'The "Send Email" button is clicked.',
+    maxWidth: 560,
+  });
+}
 function CardFooterComponent() {
   return (
     <div className="footer">
@@ -31,18 +43,14 @@ function CardFooterComponent() {
         icon="tel"
         type="default"
         stylingMode="contained"
-        onClick={() => {
-          notify('The "Call" button is clicked.');
-        }}
+        onClick={notifyCall}
       />
       <Button
         text="Send Email"
         icon="send"
         type="default"
         stylingMode="contained"
-        onClick={() => {
-          notify('The "Send Email" button is clicked.');
-        }}
+        onClick={notifySendEmail}
       />
     </div>
   );

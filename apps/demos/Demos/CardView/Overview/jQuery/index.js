@@ -60,7 +60,10 @@ $(() => {
             type: 'default',
             stylingMode: 'contained',
             onClick() {
-              DevExpress.ui.notify('The "Call" button is clicked.');
+              DevExpress.ui.notify({
+                message: 'The "Call" button is clicked.',
+                maxWidth: 560,
+              });
             },
           }),
           $('<div>').dxButton({
@@ -69,7 +72,10 @@ $(() => {
             type: 'default',
             stylingMode: 'contained',
             onClick() {
-              DevExpress.ui.notify('The "Send Email" button is clicked.');
+              DevExpress.ui.notify({
+                message: 'The "Send Email" button is clicked.',
+                maxWidth: 560,
+              });
             },
           }),
         )
