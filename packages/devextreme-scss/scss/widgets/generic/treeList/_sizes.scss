@@ -14,7 +14,7 @@ $treelist-select-all-interaction-area-size: 24px !default;
 @if $size == "default" {
   $treelist-expanded-icon-margin-left: 5px !default;
   $treelist-collapsed-icon-margin-left: 6px !default;
-  $treelist-icon-margin-top: math.div($generic-base-icon-size, 2) !default;
+  $treelist-icon-margin-top: math.div($generic-base-icon-size, 2) - 1 !default;
   $treelist-expanded-collapsed-margin-right: 4px !default;
   $treelist-select-all-interaction-area-left: -4px !default;
   $treelist-select-all-interaction-area-top: -5px !default;

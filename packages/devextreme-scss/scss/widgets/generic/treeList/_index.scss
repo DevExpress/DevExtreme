@@ -29,7 +29,7 @@
 @include grid-base(treelist);
 
 $treelist-empty-space-width: 14px;
-$treelist-empty-space-height: 19px;
+$treelist-empty-space-height: 12px;
 $treelist-select-all-checkbox-margin-top: floor(math.div(round($generic-base-line-height * $generic-base-font-size) - $generic-grid-base-checkbox-icon-size, 2));
 $treelist-checkbox-offset-left: $treelist-empty-space-width + $generic-grid-base-cell-padding;
 $treelist-checkbox-offset-left-rtl: $treelist-checkbox-offset-left + $generic-grid-base-checkbox-icon-size;
