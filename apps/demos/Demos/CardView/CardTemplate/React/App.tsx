@@ -5,6 +5,11 @@ import { Vehicle, vehicles } from './data.ts';
 import VehicleCard from './VehicleCard.tsx';
 import LicenseInfo from './LicenseInfo.tsx';
 
+const getFormattedPrice = (card: any): string => {
+  const priceText = card.fields.find(f => f?.column?.dataField === 'Price');
+  return priceText?.text ?? '';
+};
+
 const App = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [currentVehicle, setCurrentVehicle] = useState<Vehicle | null>(null);
@@ -16,11 +21,6 @@ const App = () => {
 
   const hideInfo = useCallback(() => {
     setPopupVisible(false);
-  }, []);
-
-  const getFormattedPrice = useCallback((card: any): string => {
-    const priceText = card.fields.find(f => f?.column?.dataField === 'Price');
-    return priceText?.text ?? '';
   }, []);
 
   return (

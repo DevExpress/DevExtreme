@@ -7,6 +7,10 @@ import { vehicles } from './data.js';
 import VehicleCard from './VehicleCard.js';
 import LicenseInfo from './LicenseInfo.js';
 
+const getFormattedPrice = (card) => {
+  const priceText = card.fields.find((f) => f?.column?.dataField === 'Price');
+  return priceText?.text ?? '';
+};
 const App = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [currentVehicle, setCurrentVehicle] = useState(null);
@@ -16,10 +20,6 @@ const App = () => {
   }, []);
   const hideInfo = useCallback(() => {
     setPopupVisible(false);
-  }, []);
-  const getFormattedPrice = useCallback((card) => {
-    const priceText = card.fields.find((f) => f?.column?.dataField === 'Price');
-    return priceText?.text ?? '';
   }, []);
   return (
     <React.Fragment>
