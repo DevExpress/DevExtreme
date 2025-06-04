@@ -1,9 +1,7 @@
-The Chat component allows to edit and delete messages sent by the current user.
+The Chat component allows a current user to edit and delete their messages.
 
-Use a [data source](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#dataSource) if you want users to edit and delete messages. Implement [custom CRUD operations](/Documentation/ApiReference/Data_Layer/CustomStore/). Once you configured these operations, enable [editing](/Documentation/ApiReference/UI_Components/dxChat/Configuration/editing/).
+Use a [data source](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#dataSource) to allow users to edit and delete messages. Chat does not update the data source automatically. Implement a [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/) with CRUD operations to handle updates. Once you configured these operations, enable [editing](/Documentation/ApiReference/UI_Components/dxChat/Configuration/editing/).
 <!--split-->
-
-[note] Chat does not update the data source automatically. Implement a [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/) with CRUD operations to handle updates.
 
 The **editing** object includes [allowUpdating](/Documentation/ApiReference/UI_Components/dxChat/Configuration/editing/#allowUpdating) and [allowDeleting](/Documentation/ApiReference/UI_Components/dxChat/Configuration/editing/#allowDeleting) properties. These Boolean options are set to `false` initially. To allow your users to edit and delete their own messages, set these Boolean options to `true` or use functions with custom logic. 
 
