@@ -15,10 +15,10 @@
 
 // adduse
 
-$fluent-base-standard-texteditor-input-horizontal-padding: 0;
+$fluent-base-standard-texteditor-input-horizontal-padding: var(--DS-sizing-0);
 $fluent-texteditor-invalid-badge-size: $fluent-invalid-badge-size + 2 * $fluent-invalid-badge-horizontal-padding;
-$fluent-editor-custom-button-margin: 6px;
-$fluent-editor-border-width: 1px;
+$fluent-editor-custom-button-margin: var(--DS-sizing-60);
+$fluent-editor-border-width: var(--DS-sizing-10);
 
 @mixin texteditor-outlined-styling() {
   background-color: $texteditor-outlined-bg;
@@ -32,15 +32,15 @@ $fluent-editor-border-width: 1px;
     box-sizing: border-box;
     content: "";
     position: absolute;
-    left: -1px;
-    bottom: -1px;
-    right: -1px;
+    left: calc(-1 * var(--DS-sizing-10));
+    bottom: calc(-1 * var(--DS-sizing-10));
+    right: calc(-1 * var(--DS-sizing-10));
     height: $texteditor-input-border-radius;
     width: calc(100% + 2 * $fluent-editor-border-width);
     border-bottom-left-radius: $texteditor-input-border-radius;
     border-bottom-right-radius: $texteditor-input-border-radius;
     border-bottom-color: $texteditor-indicator-border-color;
-    clip-path: inset(calc(100% - 2px) 0 0);
+    clip-path: inset(calc(100% - var(--DS-sizing-20)) 0 0);
     transform: scaleX(0);
     transition-property: transform;
     transition-duration: 50ms;
@@ -51,7 +51,7 @@ $fluent-editor-border-width: 1px;
   &.dx-texteditor-with-floating-label {
     .dx-texteditor-label {
       width: calc(100% + 2 * $fluent-editor-border-width);
-      inset: -1px;
+      inset: calc(-1 * var(--DS-sizing-10));
     }
 
     .dx-datebox {
@@ -117,15 +117,15 @@ $fluent-editor-border-width: 1px;
   }
 
   &::before {
-    left: -1px;
-    bottom: -1px;
-    right: -1px;
+    left: calc(-1 * var(--DS-sizing-10));
+    bottom: calc(-1 * var(--DS-sizing-10));
+    right: calc(-1 * var(--DS-sizing-10));
     height: $texteditor-input-border-radius;
     width: calc(100% + 2 * $fluent-editor-border-width);
     border-bottom-left-radius: $texteditor-input-border-radius;
     border-bottom-right-radius: $texteditor-input-border-radius;
     border-bottom-color: $texteditor-indicator-border-color;
-    clip-path: inset(calc(100% - 2px) 0 0);
+    clip-path: inset(calc(100% - var(--DS-sizing-20)) 0 0);
   }
 
   &.dx-state-hover {
@@ -158,7 +158,7 @@ $fluent-editor-border-width: 1px;
   border-radius: 0;
 
   &::after {
-    border-bottom-width: 1px;
+    border-bottom-width: var(--DS-sizing-10);
     border-bottom-style: solid;
     border-bottom-color: $texteditor-border-bottom-color;
   }
@@ -331,7 +331,7 @@ $fluent-editor-border-width: 1px;
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom-width: 2px;
+      border-bottom-width: var(--DS-sizing-20);
       border-bottom-style: solid;
       border-bottom-color: $texteditor-indicator-border-color;
       transform: scale(1);
@@ -365,7 +365,7 @@ $fluent-editor-border-width: 1px;
   }
 
   .dx-texteditor-input {
-    min-height: $fluent-texteditor-input-height - 2px;
+    min-height: calc(#{$fluent-texteditor-input-height} - var(--DS-sizing-20));
   }
 
   @include validation-icon-position();
@@ -490,7 +490,7 @@ $fluent-editor-border-width: 1px;
       width: auto;
       max-width: 100%;
       display: block;
-      margin-bottom: -1px;
+      margin-bottom: calc(-1 * var(--DS-sizing-10));
     }
   }
 
@@ -507,13 +507,13 @@ $fluent-editor-border-width: 1px;
   solid,
   $fluent-base-inline-block-height,
   $fluent-base-inline-block-height,
-  calc((1px + #{$fluent-texteditor-font-size}) / 2),
+  calc((var(--DS-sizing-10) + #{$fluent-texteditor-font-size}) / 2),
   $fluent-texteditor-label-outside-top-offset,
   0.5px,
   $fluent-filled-texteditor-input-horizontal-padding,
   $fluent-filled-texteditor-input-horizontal-padding,
   $texteditor-outlined-bg,
-  1px solid transparent,
+  var(--DS-sizing-10) solid transparent,
   $texteditor-border-color,
   $texteditor-border-bottom-color,
   $texteditor-border-color-disabled,
@@ -527,7 +527,7 @@ $fluent-editor-border-width: 1px;
   $texteditor-label-transition,
   $fluent-texteditor-font-size,
   $fluent-filled-texteditor-input-top-padding,
-  1px,
+  var(--DS-sizing-0),
   $fluent-texteditor-font-size,
   $fluent-texteditor-label-outside-height,
 );

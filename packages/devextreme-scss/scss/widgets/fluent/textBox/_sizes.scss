@@ -5,9 +5,9 @@
 $textbox-search-icon-size: null !default;
 
 @if $size == "default" {
-  $textbox-search-icon-size: 32px !default;
+  $textbox-search-icon-size: var(--DS-sizing-320) !default;
 }
 
 @else if $size == "compact" {
-  $textbox-search-icon-size: 24px !default;
+  $textbox-search-icon-size: var(--DS-sizing-240) !default;
 }
