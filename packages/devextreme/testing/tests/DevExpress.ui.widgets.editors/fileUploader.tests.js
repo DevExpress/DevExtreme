@@ -4365,8 +4365,8 @@ QUnit.module('readOnly option', moduleConfig, () => {
 });
 
 QUnit.module('integration of dx button components via dialogTrigger', moduleConfig, () => {
-    ['enter', 'space'].forEach(keyName => {
-        ['dxButton', 'dxButtonGroup', 'dxDropDownButton'].forEach(component => {
+    ['dxButton', 'dxButtonGroup', 'dxDropDownButton'].forEach(component => {
+        ['enter', 'space'].forEach(keyName => {
             QUnit.test(`dialog should be shown after press ${keyName} key on ${component} (T1178836, T1256752)`, function(assert) {
                 if(devices.real().deviceType !== 'desktop') {
                     assert.ok(true, 'keyboard is not supported for not generic devices');
@@ -4389,6 +4389,26 @@ QUnit.module('integration of dx button components via dialogTrigger', moduleConf
 
                 assert.strictEqual(fileUploaderInputClickSpy.calledOnce, true, 'click on input fired once');
             });
+        });
+
+        QUnit.test(`dialog should be shown after multiple clicks on ${component} (T1290774)`, function(assert) {
+            const $dialogTrigger = $('<div>')[component]().appendTo('#qunit-fixture');
+
+            $('#fileuploader').dxFileUploader({ dialogTrigger: $dialogTrigger });
+
+            const $fileUploaderInput = $(`.${FILEUPLOADER_INPUT_CLASS}`);
+            const fileUploaderInputClickSpy = sinon.spy();
+
+            $fileUploaderInput.on('click', fileUploaderInputClickSpy);
+
+            $dialogTrigger.trigger('click');
+            assert.strictEqual(fileUploaderInputClickSpy.callCount, 1, 'first click triggers input click');
+
+            $dialogTrigger.trigger('click');
+            assert.strictEqual(fileUploaderInputClickSpy.callCount, 2, 'second click triggers input click');
+
+            $dialogTrigger.trigger('click');
+            assert.strictEqual(fileUploaderInputClickSpy.callCount, 3, 'third click triggers input click');
         });
     });
 });
