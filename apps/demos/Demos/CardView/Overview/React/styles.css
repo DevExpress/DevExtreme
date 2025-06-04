@@ -31,22 +31,3 @@
 .status-warning > .indicator {
   background-color: var(--dx-color-warning);
 }
-
-.card-highlight,
-.card-highlight .dx-toolbar {
-  animation: card-highlight-animation 1s;
-}
-
-@keyframes card-highlight-animation {
-  0% {
-    background-color: color-mix(in srgb, var(--dx-color-text) 8%, white);
-  }
-
-  50% {
-    background-color: color-mix(in srgb, var(--dx-color-text) 8%, white);
-  }
-
-  100% {
-    background-color: unset;
-  }
-}

@@ -33,46 +33,15 @@ $(() => {
         dataField: 'Title',
       },
       'Department',
+      'Mobile_Phone',
       {
-        dataField: 'Head_ID',
-        caption: 'Assigned To',
-        calculateDisplayValue({ Head_ID }) {
-          const assignedTo = employees
-            .find((employee) => employee.ID === Head_ID)
-
-          if (!assignedTo) {
-            return 'None';
-          }
-
-          return `${assignedTo.First_Name} ${assignedTo.Last_Name}`;
-        },
-        fieldValueTemplate({ field: { value, text } }) {
-          if (!value) {
-            return text
-          }
-
+        dataField: 'Email',
+        fieldValueTemplate({ field: { value, text }}) {
           return $('<a>')
-            .text(text)
-            .addClass('dx-link')
-            .on('click', async (e) => {
-              $('.card-highlight').removeClass('card-highlight');
-
-              const index = employees.findIndex(
-                (employee) => employee.ID === value,
-              );
-
-              const pageIndex = Math.floor(index / cardView.pageSize());
-              await cardView.pageIndex(pageIndex);
-
-              const cardIndex = cardView.getCardIndexByKey(value);
-              const cardElement = cardView.getCardElement(cardIndex)
-              cardElement.focus();
-              cardElement.addClass('card-highlight');
-            });
+            .attr('href', `mailto:${value}`)
+            .text(text);
         }
       },
-      'Mobile_Phone',
-      'Email',
       {
         caption: 'Address',
         calculateFieldValue({ State, City }) {

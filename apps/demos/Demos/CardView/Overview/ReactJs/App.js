@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useRef } from 'react';
 import CardView, { CardCover, Column, Selection } from 'devextreme-react/card-view';
 import Button from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
@@ -22,13 +22,6 @@ function calculateFullName({ First_Name, Last_Name }) {
 }
 function calculateAddress({ State, City }) {
   return `${City}, ${State}`;
-}
-function calculateAssignedTo({ Head_ID }) {
-  const assignedTo = employees.find((employee) => employee.ID === Head_ID);
-  if (!assignedTo) {
-    return 'None';
-  }
-  return `${assignedTo.First_Name} ${assignedTo.Last_Name}`;
 }
 function CardFooterComponent() {
   return (
@@ -67,34 +60,15 @@ function StatusComponent({
     </div>
   );
 }
+function EmailComponent({
+  data: {
+    field: { value, text },
+  },
+}) {
+  return <a href={`mailto:${value}`}>{text}</a>;
+}
 function App() {
   const cardView = useRef();
-  const navigateToAssignee = useCallback(async(value) => {
-    const cardViewInstance = cardView.current.instance();
-    document.querySelectorAll('.card-highlight').forEach((card) => {
-      card.classList.remove('card-highlight');
-    });
-    const index = employees.findIndex((employee) => employee.ID === value);
-    const pageIndex = Math.floor(index / cardViewInstance.pageSize());
-    await cardViewInstance.pageIndex(pageIndex);
-    const cardIndex = cardViewInstance.getCardIndexByKey(value);
-    const cardElement = cardViewInstance.getCardElement(cardIndex);
-    cardElement.focus();
-    cardElement.classList.add('card-highlight');
-  }, []);
-  const AssignedToComponent = useCallback(
-    ({
-      data: {
-        field: { value, text },
-      },
-    }) => {
-      if (!value) {
-        return text;
-      }
-      return <a onClick={() => navigateToAssignee(value)}>{text}</a>;
-    },
-    [navigateToAssignee],
-  );
   return (
     <CardView
       dataSource={employees}
@@ -125,14 +99,11 @@ function App() {
         dataField="Title"
       />
       <Column dataField="Department" />
-      <Column
-        dataField="Head_ID"
-        caption="Assigned To"
-        calculateDisplayValue={calculateAssignedTo}
-        fieldValueComponent={AssignedToComponent}
-      />
       <Column dataField="Mobile_Phone" />
-      <Column dataField="Email" />
+      <Column
+        dataField="Email"
+        fieldValueComponent={EmailComponent}
+      />
       <Column
         caption="Address"
         calculateFieldValue={calculateAddress}

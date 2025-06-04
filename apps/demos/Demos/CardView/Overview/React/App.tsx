@@ -32,17 +32,6 @@ function calculateAddress({ State, City }: Employee): string {
   return `${City}, ${State}`;
 }
 
-function calculateAssignedTo({ Head_ID }) {
-  const assignedTo = employees
-    .find((employee) => employee.ID === Head_ID)
-
-  if (!assignedTo) {
-    return 'None';
-  }
-
-  return `${assignedTo.First_Name} ${assignedTo.Last_Name}`;
-}
-
 function CardFooterComponent() {
   return <div className='footer'>
     <Button
@@ -75,42 +64,14 @@ function StatusComponent({ data: { field: { value }}}) {
   );
 }
 
+function EmailComponent({ data: { field: { value, text }}}) {
+  return (
+    <a href={`mailto:${value}`}>{text}</a>
+  );
+}
+
 function App() {
   const cardView = useRef<CardViewRef>();
-
-  const navigateToAssignee = useCallback(async (value) => {
-    const cardViewInstance = cardView.current!.instance();
-    
-    document.querySelectorAll('.card-highlight').forEach((card) => {
-      card.classList.remove('card-highlight');
-    });
-
-    const index = employees.findIndex(
-      (employee) => employee.ID === value,
-    );
-
-    const pageIndex = Math.floor(index / cardViewInstance.pageSize());
-    await cardViewInstance.pageIndex(pageIndex);
-
-    const cardIndex = cardViewInstance.getCardIndexByKey(value);
-    const cardElement = cardViewInstance.getCardElement(cardIndex)
-    cardElement.focus();
-    cardElement.classList.add('card-highlight');
-  }, []);
-
-  const AssignedToComponent = useCallback(({ data: { field: { value, text }}}) => {
-    if (!value) {
-      return text;
-    }
-
-    return (
-      <a
-        onClick={() => navigateToAssignee(value)}
-      >
-        {text}
-      </a>
-    )
-  }, [navigateToAssignee]);
 
   return (
     <CardView
@@ -145,16 +106,11 @@ function App() {
         dataField="Department"
       />
       <Column
-        dataField="Head_ID"
-        caption="Assigned To"
-        calculateDisplayValue={calculateAssignedTo}
-        fieldValueComponent={AssignedToComponent}
-      />
-      <Column
         dataField="Mobile_Phone"
       />
       <Column
         dataField="Email"
+        fieldValueComponent={EmailComponent}
       />
       <Column
         caption="Address"

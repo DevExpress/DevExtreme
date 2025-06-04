@@ -31,16 +31,11 @@
       data-field="Department"
     />
     <DxColumn
-      data-field="Head_ID"
-      caption="Assigned To"
-      :calculate-display-value="calculateAssignedTo"
-      field-value-template="assignedToTemplate"
-    />
-    <DxColumn
       data-field="Mobile_Phone"
     />
     <DxColumn
       data-field="Email"
+      field-value-template="emailTemplate"
     />
     <DxColumn
       caption="Address"
@@ -60,17 +55,9 @@
       </div>
     </template>
     <template
-      #assignedToTemplate="{ data }"
+      #emailTemplate="{ data }"
     >
-      <div v-if="!data.field.value">{{ data.field.text }}</div>
-      <div v-if="data.field.value">
-        <a
-          class="dx-link"
-          @click="navigateToAssignee(data.field.value)"
-        >
-          {{ data.field.text }}
-        </a>
-      </div>
+      <a :href="`mailto:${data.field.value}`">{{ data.field.text }}</a>
     </template>
     <template
       #footerTemplate="{ data }"
@@ -203,24 +190,5 @@ const cardView = ref<DxCardView>();
 
 .status-warning > .indicator {
   background-color: var(--dx-color-warning);
-}
-
-.card-highlight,
-.card-highlight .dx-toolbar {
-  animation: card-highlight-animation 1s;
-}
-
-@keyframes card-highlight-animation {
-  0% {
-    background-color: color-mix(in srgb, var(--dx-color-text) 8%, white);
-  }
-
-  50% {
-    background-color: color-mix(in srgb, var(--dx-color-text) 8%, white);
-  }
-
-  100% {
-    background-color: unset;
-  }
 }
 </style>

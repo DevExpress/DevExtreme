@@ -57,35 +57,6 @@ export class AppComponent {
     return `${City}, ${State}`;
   }
 
-  calculateAssignedTo = ({ Head_ID }) => {
-    const assignedTo = this.employees
-      .find((employee) => employee.ID === Head_ID)
-
-    if (!assignedTo) {
-      return 'None';
-    }
-
-    return `${assignedTo.First_Name} ${assignedTo.Last_Name}`;
-  }
-
-  navigateToAssignee = async (value) => {
-    document.querySelectorAll('.card-highlight').forEach((card) => {
-      card.classList.remove('card-highlight');
-    });
-
-    const index = this.employees.findIndex(
-      (employee) => employee.ID === value,
-    );
-
-    const pageIndex = Math.floor(index / this.cardView.instance.pageSize());
-    await this.cardView.instance.pageIndex(pageIndex);
-
-    const cardIndex = this.cardView.instance.getCardIndexByKey(value);
-    const cardElement = this.cardView.instance.getCardElement(cardIndex)
-    cardElement.focus();
-    cardElement.classList.add('card-highlight');
-  }
-
   showNotify(text: string) {
     notify(`The "${text}" button is clicked.`);
   }
