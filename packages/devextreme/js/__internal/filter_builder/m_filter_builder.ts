@@ -414,8 +414,11 @@ class FilterBuilder extends Widget<any> {
     };
     const position = rtlEnabled ? 'right' : 'left';
     const $button = this._createButton(options.caption);
+    const $guid = new Guid();
+    $button.attr('aria-controls', `${$guid}`);
 
     extend(options.menu, {
+      id: $guid,
       focusStateEnabled: true,
       selectionMode: 'single',
       onItemClick: menuOnItemClickWrapper(options.menu.onItemClick),
@@ -868,6 +871,8 @@ class FilterBuilder extends Widget<any> {
         const $menuContainer = $('<div>').appendTo(contentElement);
         // @ts-expect-error
         that._createComponent($menuContainer, TreeView, options.menu);
+
+        $menuContainer.attr('id', `${options.menu.id}`);
         // T852701
         this.repaint();
       },
