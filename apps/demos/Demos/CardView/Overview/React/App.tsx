@@ -91,9 +91,8 @@ function App() {
     <CardView
       dataSource={employees}
       keyExpr="ID"
-      cardMinWidth={100}
+      cardMinWidth={250}
       cardsPerRow="auto"
-      wordWrapEnabled={true}
       headerFilter={headerFilterConfig}
       searchPanel={searchPanelConfig}
       cardFooterComponent={CardFooterComponent}

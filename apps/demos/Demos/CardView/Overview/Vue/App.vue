@@ -2,9 +2,8 @@
   <DxCardView
     :data-source="employees"
     key-expr="ID"
-    :card-min-width="100"
+    :card-min-width="250"
     cards-per-row="auto"
-    :word-wrap-enabled="true"
     :header-filter="headerFilterConfig"
     :search-panel="searchPanelConfig"
     card-footer-template="footerTemplate"
@@ -118,6 +117,7 @@ function calculateFullName({ First_Name, Last_Name }: Employee): string {
 function calculateAddress({ State, City }: Employee): string {
   return `${City}, ${State}`;
 }
+
 
 function showNotify(text: string) {
   notify({
