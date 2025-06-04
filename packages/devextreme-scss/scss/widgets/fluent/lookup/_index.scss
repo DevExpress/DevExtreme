@@ -38,12 +38,12 @@
   &.dx-editor-underlined {
     .dx-lookup-field {
       padding-inline-start: $fluent-base-standard-texteditor-input-horizontal-padding;
-      padding-inline-end: $fluent-base-standard-texteditor-input-horizontal-padding + $fluent-base-icon-size + $texteditor-spin-button-horizontal-padding;
+      padding-inline-end: calc(#{$fluent-base-standard-texteditor-input-horizontal-padding} + #{$fluent-base-icon-size} + #{$texteditor-spin-button-horizontal-padding});
     }
 
     &.dx-invalid {
       .dx-lookup-field {
-        padding-inline-end: $fluent-base-standard-texteditor-input-horizontal-padding + $fluent-base-icon-size * 2 + $texteditor-spin-button-horizontal-padding;
+        padding-inline-end: calc(#{$fluent-base-standard-texteditor-input-horizontal-padding} + #{$fluent-base-icon-size} * 2 + #{$texteditor-spin-button-horizontal-padding});
       }
     }
   }

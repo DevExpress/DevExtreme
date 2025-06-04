@@ -459,6 +459,10 @@ $fluent-editor-border-width: 1px;
   &.dx-show-invalid-badge .dx-texteditor-input-container {
     &::after {
       @include dx-invalid-fluent-badge();
+
+      background-color: transparent;
+      color: var(--DS-color-content-danger-default-rest);
+      border: 1px solid var(--DS-color-content-danger-default-rest);
     }
   }
 }
@@ -503,7 +507,7 @@ $fluent-editor-border-width: 1px;
   solid,
   $fluent-base-inline-block-height,
   $fluent-base-inline-block-height,
-  math.div(1px + $fluent-texteditor-font-size, 2),
+  calc((1px + #{$fluent-texteditor-font-size}) / 2),
   $fluent-texteditor-label-outside-top-offset,
   0.5px,
   $fluent-filled-texteditor-input-horizontal-padding,

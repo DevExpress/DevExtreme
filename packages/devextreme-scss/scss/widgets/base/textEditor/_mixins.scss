@@ -18,7 +18,7 @@
     border-top-width: 0;
 
     span {
-      transform: translate(0, -$label-offset-y);
+      transform: translate(0, calc(-1 * #{$label-offset-y}));
       font-size: $label-font-size;
       margin-top: 0;
       top: 0;
@@ -181,7 +181,7 @@
         font-size: $texteditor-label-font-size;
         top: 0;
         margin-top: 0;
-        transform: translate(0, -$label-offset-y);
+        transform: translate(0, calc(-1 * #{$label-offset-y}));
         height: $label-active-height;
         line-height: normal;
       }
@@ -313,8 +313,8 @@
           font-size: $texteditor-label-outside-font-size;
           margin-top: 0;
           top: -$label-offset-y-outside;
-          height: #{math.div($texteditor-label-outside-height, $texteditor-label-outside-font-size)}em;
-          line-height: #{math.div($texteditor-label-outside-height, $texteditor-label-outside-font-size)}em;
+          height: #{calc(#{$texteditor-label-outside-height} / #{$texteditor-label-outside-font-size})}em;
+          line-height: #{calc(#{$texteditor-label-outside-height} / #{$texteditor-label-outside-font-size})}em;
         }
       }
     }
@@ -462,7 +462,7 @@
           height: $texteditor-empty-label-height;
           line-height: $texteditor-empty-label-line-height;
           top: 50%;
-          margin-top: math.div(-$texteditor-empty-label-height, 2);
+          margin-top: calc(-1 * #{$texteditor-empty-label-height} / 2);
         }
 
         &.dx-textarea {
@@ -579,7 +579,7 @@
           height: $texteditor-empty-label-height;
           line-height: $texteditor-empty-label-line-height;
           top: 50%;
-          margin-top: math.div(-$texteditor-empty-label-height, 2);
+          margin-top: calc(-1 * #{$texteditor-empty-label-height} / 2);
         }
 
         &.dx-textarea {
