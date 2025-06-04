@@ -1547,8 +1547,8 @@
             "Equivalents": "",
             "Demos": [
               {
-                "Title": "Columns Reordering",
-                "Name": "ColumnsReordering",
+                "Title": "Column Reordering",
+                "Name": "ColumnReordering",
                 "DocUrl": "",
                 "Widget": "CardView",
                 "MvcDescription": "",
