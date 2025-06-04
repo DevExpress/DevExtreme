@@ -4,6 +4,8 @@
 // eslint-disable-next-line max-classes-per-file
 import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
+import type { Signal } from '@preact/signals-core';
+import { signal } from '@preact/signals-core';
 import { DIContext } from '@ts/core/di/index';
 import { infernoRenderer } from '@ts/core/m_inferno_renderer';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';
@@ -19,7 +21,6 @@ import * as EditingModule from './editing/index';
 import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
 import { CompatibilityFilterSyncController, FilterSyncController } from './filtering/filter_sync/index';
-import { ClearFilterVisitor } from './filtering/filter_visitors/clear_filter_visitor';
 import { FilterCustomOperationsVisitor } from './filtering/filter_visitors/filter_custom_operations_visitor';
 import { GetAppliedFilterVisitor } from './filtering/filter_visitors/get_applied_filters_visitor';
 import { CompatibilityHeaderFilterController, HeaderFilterController } from './filtering/header_filter/index';
@@ -82,15 +83,15 @@ export class GridCoreNewBase<
 
   private headerFilterController!: HeaderFilterController;
 
-  private filterSyncController!: FilterSyncController;
-
-  private clearFilterVisitor!: ClearFilterVisitor;
+  public filterSyncController!: FilterSyncController;
 
   private getAppliedFiltersVisitor!: GetAppliedFilterVisitor;
 
   private accessibilityController!: AccessibilityController;
 
   private filterCustomOperationsVisitor!: FilterCustomOperationsVisitor;
+
+  public initialized!: Signal<boolean>;
 
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
@@ -130,7 +131,6 @@ export class GridCoreNewBase<
     this.filterSyncController = this.diContext.get(FilterSyncController);
     this.searchView = this.diContext.get(SearchView);
 
-    this.clearFilterVisitor = this.diContext.get(ClearFilterVisitor);
     this.getAppliedFiltersVisitor = this.diContext.get(GetAppliedFilterVisitor);
     this.filterCustomOperationsVisitor = this.diContext.get(FilterCustomOperationsVisitor);
   }
@@ -138,6 +138,7 @@ export class GridCoreNewBase<
   protected _init(): void {
     // @ts-expect-error
     super._init();
+    this.initialized = signal(false);
     this._registerDIContext();
     this._initWidgetMock();
     this._initDIContext();
@@ -155,6 +156,12 @@ export class GridCoreNewBase<
     // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return super._defaultOptionsRules().concat(defaultOptionsRules);
+  }
+
+  protected _initializeComponent(): void {
+    // @ts-expect-error usage of base method not described in d.ts
+    super._initializeComponent();
+    this.initialized.value = true;
   }
 
   protected _initMarkup(): void {
