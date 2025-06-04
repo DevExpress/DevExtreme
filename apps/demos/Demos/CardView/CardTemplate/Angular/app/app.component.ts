@@ -44,6 +44,11 @@ export class AppComponent {
   hideInfo() {
     this.popupVisible = false;
   }
+
+  getFormattedPrice(card): string {
+    const priceText = card.fields.find(f => f?.column?.dataField === 'Price');
+    return priceText?.text ?? '';
+  }
 }
 
 @NgModule({

@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Vehicle } from '../app.service';
 
 let modulePrefix = '';
 // @ts-ignore
@@ -13,6 +12,12 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/vehicle-card/vehicle-card.component.css`],
 })
 export class VehicleCard {
-  @Input() vehicle!: Vehicle;
+  @Input() id!: number;
+  @Input() model!: string;
+  @Input() price!: string;
+  @Input() categoryName!: string;
+  @Input() modification!: string;
+  @Input() bodyStyleName!: string;
+  @Input() horsepower!: string;
   @Output() showInfo = new EventEmitter<void>();
 }
