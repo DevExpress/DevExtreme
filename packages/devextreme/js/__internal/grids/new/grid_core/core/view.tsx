@@ -6,7 +6,8 @@
 import type { ReadonlySignal } from '@preact/signals-core';
 import { effect } from '@preact/signals-core';
 import { infernoRenderer } from '@ts/core/m_inferno_renderer';
-import { Component, type ComponentType } from 'inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/base_component';
+import { type ComponentType } from 'inferno';
 
 export abstract class View<T extends {}> {
   private inferno: undefined | ComponentType;
@@ -48,7 +49,7 @@ export abstract class View<T extends {}> {
       props: T;
     }
 
-    return class InfernoView extends Component<{}, State> {
+    return class InfernoView extends BaseInfernoComponent<{}, State> {
       private readonly subscription: () => void;
 
       constructor() {

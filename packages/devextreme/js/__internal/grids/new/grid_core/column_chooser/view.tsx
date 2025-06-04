@@ -14,7 +14,7 @@ import { ColumnsController } from '../columns_controller/index';
 import { View } from '../core/view';
 import { OptionsController } from '../options_controller/options_controller';
 import { ToolbarController } from '../toolbar/controller';
-import type { PredefinedToolbarItem } from '../toolbar/types';
+import type { DefaultToolbarItem } from '../toolbar/types';
 import { addWidgetPrefix } from '../utils/common';
 import type { ColumnChooserProps } from './column_chooser';
 import { CLASS, ColumnChooser } from './column_chooser';
@@ -96,7 +96,7 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
         location: 'after',
         locateInMenu: 'auto',
         visible: true,
-      } as PredefinedToolbarItem),
+      } as DefaultToolbarItem),
       this.options.oneWay('columnChooser.enabled'),
     );
   }
