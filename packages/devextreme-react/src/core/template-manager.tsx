@@ -55,6 +55,7 @@ const unwrapElement = (element: any): HTMLElement => (element.get ? element.get(
 const getRandomId = () => `${generateID()}${generateID()}${generateID()}`;
 
 export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRendered }) => {
+  const mounted = useRef(false);
   const [instantiationModels, setInstantiationModels] = useState({
     collection: new TemplateInstantiationModels(),
   });
@@ -148,11 +149,21 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init, onTemplatesRen
     }
 
     function updateTemplates(onUpdated: () => void): void {
-      setUpdateContext({ onUpdated });
+      if (mounted.current) {
+        setUpdateContext({ onUpdated });
+      }
     }
 
     init({ createDXTemplates, clearInstantiationModels, updateTemplates });
   }, [init, getRenderFunc]);
+
+  useEffect(() => {
+    mounted.current = true;
+
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (updateContext) {
