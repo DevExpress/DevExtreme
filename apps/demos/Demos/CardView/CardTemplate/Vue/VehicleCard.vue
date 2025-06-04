@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { DxButton } from 'devextreme-vue/button';
-import { Vehicle } from './data';
+import type { Vehicle } from './data';
 
 defineProps<{
   vehicle: Vehicle,

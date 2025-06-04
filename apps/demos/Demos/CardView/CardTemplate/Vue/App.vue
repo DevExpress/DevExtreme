@@ -7,7 +7,7 @@
   >
     <DxHeaderFilter :visible="true" />
     <DxSearchPanel :visible="true" />
-    <DxPager :pageSize="12" />
+    <DxPaging :pageSize="12" />
 
     <DxColumn data-field="TrademarkName"/>
     <DxColumn data-field="Name"/>
@@ -66,7 +66,7 @@
     </DxPopup>
 </template>
 <script setup lang="ts">
-import { DxCardView, DxColumn, DxHeaderFilter, DxSearchPanel, DxPager } from 'devextreme-vue/card-view';
+import { DxCardView, DxColumn, DxHeaderFilter, DxSearchPanel, DxPaging } from 'devextreme-vue/card-view';
 import { DxPopup, DxPosition } from 'devextreme-vue/popup';
 import LicenseInfo from './LicenseInfo.vue';
 import VehicleCard from './VehicleCard.vue';
