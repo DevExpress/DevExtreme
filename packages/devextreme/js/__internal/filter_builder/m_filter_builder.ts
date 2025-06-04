@@ -255,7 +255,7 @@ class FilterBuilder extends Widget<any> {
     // @ts-expect-error
     super._initMarkup();
 
-    this._addAriaAttributes(this.$element(), messageLocalization.format('dxFilterBuilder-filterAriaRootElement'), 'tree');
+    this._addAriaAttributes(this.$element(), messageLocalization.format('dxFilterBuilder-filterAriaRootElement'), 'group');
     this._createGroupElementByCriteria(this._model)
       .appendTo(this.$element());
   }
@@ -290,9 +290,17 @@ class FilterBuilder extends Widget<any> {
   }
 
   _createConditionElement(condition, parent, groupLevel?) {
-    return $('<div>')
+    const $element = $('<div>')
       .addClass(FILTER_BUILDER_GROUP_CLASS)
       .append(this._createConditionItem(condition, parent, groupLevel));
+
+    this._addAriaAttributes(
+      $element,
+      '',
+      'group',
+    );
+
+    return $element;
   }
 
   _createGroupElementByCriteria(criteria, parent?, groupLevel = 0) {
@@ -327,6 +335,7 @@ class FilterBuilder extends Widget<any> {
       }, 'group').appendTo($groupItem);
     }
 
+    this._addAriaAttributes($group, '', groupLevel === 0 ? 'tree' : 'group');
     this._addAriaAttributes($groupItem, messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'), 'treeitem', null, null, `${groupLevel + 1}`);
     this._addAriaAttributes($groupContent, '', 'group');
     $groupItem.attr('aria-owns', `${$guid}`);
@@ -426,7 +435,8 @@ class FilterBuilder extends Widget<any> {
 
     options.popup = {
       onShown(info) {
-        const treeViewElement = $(info.component.content()).find('.dx-treeview');
+        const treeViewContentElement = $(info.component.content());
+        const treeViewElement = treeViewContentElement.find('.dx-treeview');
         // @ts-expect-error dxElementWrapper doesn't contain widget creation methods types
         const treeView = treeViewElement.dxTreeView('instance');
         eventsEngine.on(treeViewElement, 'keyup keydown', (e) => {
@@ -439,6 +449,9 @@ class FilterBuilder extends Widget<any> {
             eventsEngine.trigger(options.menu.position.of, 'focus');
           }
         });
+
+        const treeViewPopup = treeViewContentElement.closest('.dx-overlay-content');
+        treeViewPopup?.removeAttr('role');
 
         treeView.focus();
         treeView.option('focusedElement', null);
