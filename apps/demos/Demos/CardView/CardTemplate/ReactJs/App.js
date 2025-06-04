@@ -17,18 +17,32 @@ const App = () => {
   const hideInfo = useCallback(() => {
     setPopupVisible(false);
   }, []);
+  const getFormattedPrice = useCallback((card) => {
+    const priceText = card.fields.find((f) => f?.column?.dataField === 'Price');
+    return priceText?.text ?? '';
+  }, []);
   return (
     <React.Fragment>
       <CardView
         dataSource={vehicles}
         cardsPerRow="auto"
         cardMinWidth={260}
-        cardRender={(model) => (
-          <VehicleCard
-            vehicle={model.card.data}
-            onShowInfo={showInfo}
-          />
-        )}
+        cardRender={(model) => {
+          const vehicle = model.card.data;
+          return (
+            <VehicleCard
+              vehicle={vehicle}
+              id={vehicle.ID}
+              model={`${vehicle.TrademarkName} ${vehicle.Name}`}
+              price={getFormattedPrice(model.card)}
+              categoryName={vehicle.CategoryName}
+              modification={vehicle.Modification}
+              bodyStyleName={vehicle.BodyStyleName}
+              horsepower={vehicle.Horsepower}
+              onShowInfo={showInfo}
+            />
+          );
+        }}
       >
         <HeaderFilter visible={true} />
         <SearchPanel visible={true} />

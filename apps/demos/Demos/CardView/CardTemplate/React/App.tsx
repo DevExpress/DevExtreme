@@ -18,6 +18,11 @@ const App = () => {
     setPopupVisible(false);
   }, []);
 
+  const getFormattedPrice = useCallback((card: any): string => {
+    const priceText = card.fields.find(f => f?.column?.dataField === 'Price');
+    return priceText?.text ?? '';
+  }, []);
+
   return (
     <>
       <CardView
@@ -25,7 +30,18 @@ const App = () => {
         cardsPerRow="auto"
         cardMinWidth={260}
         cardRender={(model) => {
-          return <VehicleCard vehicle={model.card.data} onShowInfo={showInfo} />
+          const vehicle = model.card.data;
+          return <VehicleCard
+            vehicle={vehicle}
+            id={vehicle.ID}
+            model={`${vehicle.TrademarkName} ${vehicle.Name}`}
+            price={getFormattedPrice(model.card)}
+            categoryName={vehicle.CategoryName}
+            modification={vehicle.Modification}
+            bodyStyleName={vehicle.BodyStyleName}
+            horsepower={vehicle.Horsepower}
+            onShowInfo={showInfo}
+          />
         }}
       >
         <HeaderFilter visible={true} />

@@ -2,45 +2,46 @@ import React, { useCallback, useState } from 'react';
 import Button from 'devextreme-react/button';
 import { VehicleCardProps } from './types';
 
-const VehicleCard = ({ vehicle: { 
-    ID,
-    TrademarkName,
-    Name,
-    Price,
-    CategoryName,
-    Modification,
-    BodyStyleName,
-    Horsepower,
-   }, vehicle, onShowInfo }: VehicleCardProps) => {
+const VehicleCard = ({
+    vehicle,
+    id,
+    model,
+    price,
+    categoryName,
+    modification,
+    bodyStyleName,
+    horsepower,
+    onShowInfo,
+}: VehicleCardProps) => {
   return (
     <div className="vehicle__card">
         <div className="vehicle__img-wrapper">
             <img className="vehicle__img"
-                src={`../../../../images/vehicles/image_${ID}.png`}
-                alt={`${TrademarkName} ${Name}`}
+                src={`../../../../images/vehicles/image_${id}.png`}
+                alt={model}
             />
         </div>
         <div className="vehicle__info">
-            <div className="vehicle__name" title={`${TrademarkName} ${Name}`}>
-                {TrademarkName} {Name}
+            <div className="vehicle__name" title={model}>
+                {model}
             </div>
             <div className="vehicle__price">
-                ${Price}
+                {price}
             </div>
             <div className="vehicle__type-container">
                 <div className="vehicle__type">
-                    {CategoryName}
+                    {categoryName}
                 </div>
             </div>
             <div className="vehicle__spec-container">
                 <div className="vehicle__modification">
-                    {Modification}
+                    {modification}
                 </div>
                 <div className="vehicle__modification">
-                    {BodyStyleName}
+                    {bodyStyleName}
                 </div>
                 <div className="vehicle__modification">
-                     {Horsepower} h.p.
+                     {horsepower} h.p.
                 </div>
             </div>
             <div className="vehicle__footer-container">
