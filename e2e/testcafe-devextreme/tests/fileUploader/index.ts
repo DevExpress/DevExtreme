@@ -20,7 +20,5 @@ fixture.disablePageReloads`FileUploader - file list visibility`.page(url(__dirna
     });
 
     await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
-  }).before(async () => {
-    await createWidget('dxFileUploader', { showFileList });
-  });
+  }).before(async () => createWidget('dxFileUploader', { showFileList }));
 });
