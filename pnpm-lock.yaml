@@ -10,8 +10,8 @@ catalogs:
       specifier: 2.2.17
       version: 2.2.17
     devexpress-gantt:
-      specifier: 4.1.61
-      version: 4.1.61
+      specifier: 4.1.62
+      version: 4.1.62
 
 overrides:
   '@devexpress/callsite-record@^4.1.6': 4.1.6
@@ -251,7 +251,7 @@ importers:
         version: 2.2.17
       devexpress-gantt:
         specifier: 'catalog:'
-        version: 4.1.61
+        version: 4.1.62
       devextreme:
         specifier: workspace:~
         version: link:../../packages/devextreme/artifacts/npm/devextreme
@@ -870,7 +870,7 @@ importers:
         version: 2.2.17
       devexpress-gantt:
         specifier: 'catalog:'
-        version: 4.1.61
+        version: 4.1.62
       devextreme:
         specifier: workspace:~
         version: link:../../packages/devextreme/artifacts/npm/devextreme
@@ -1018,7 +1018,7 @@ importers:
         version: 2.2.17
       devexpress-gantt:
         specifier: 'catalog:'
-        version: 4.1.61
+        version: 4.1.62
       devextreme-quill:
         specifier: 1.7.2
         version: 1.7.2
@@ -9660,8 +9660,8 @@ packages:
   devexpress-diagram@2.2.17:
     resolution: {integrity: sha512-XWPct6IgJcjsYEwN04hGqG/N7qcrLBe8+kcBU1CFTZznXSMgB7hQccjQy2VtXbDX7kFB/RhY4RLDXNPxwmVr1Q==}
 
-  devexpress-gantt@4.1.61:
-    resolution: {integrity: sha512-Nk//29J6ayDCV/GHvwoLhj19c4qKpVFXYfLaXHfjGHxmT+NUE8V/JKoBaKOv24FJiehfz+jPou36r04alfhhFA==}
+  devexpress-gantt@4.1.62:
+    resolution: {integrity: sha512-8ULKoAyStlFnATNkkYFZWB7eQHrxJPallq04+HHiu9fn1TIRz0SgYlQdZuXoOmEhcRhaNwk5d+38sJ6OMC0HnQ==}
 
   devextreme-aspnet-data-nojquery@5.0.0:
     resolution: {integrity: sha512-WC1JBUocjD7lxy2bMFlUTF0Z3GCUNYveucgarERJ85SO+h7czqAyYwnYCJT845Vyabfw5Ta9mOJ0y0fB/wWzwA==}
@@ -23805,13 +23805,15 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))':
+  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.15)
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
+    transitivePeerDependencies:
+      - '@swc/helpers'
 
   '@parcel/codeframe@2.12.0':
     dependencies:
@@ -23871,7 +23873,7 @@ snapshots:
   '@parcel/core@2.12.0(@swc/helpers@0.5.15)':
     dependencies:
       '@mischnic/json-sourcemap': 0.1.1
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/diagnostic': 2.12.0
       '@parcel/events': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -24286,7 +24288,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -29948,7 +29950,7 @@ snapshots:
       '@devexpress/utils': 1.4.3
       es6-object-assign: 1.1.0
 
-  devexpress-gantt@4.1.61:
+  devexpress-gantt@4.1.62:
     dependencies:
       '@devexpress/utils': 1.4.3
       tslib: 2.3.1
