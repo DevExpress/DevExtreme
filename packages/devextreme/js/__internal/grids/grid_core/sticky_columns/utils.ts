@@ -90,7 +90,9 @@ const getStickyOffsetCore = function (
 
       offset += nextOrPrevColumnWidths[colIndex];
 
-      if (!widths.length && isNaN(offset)) {
+      const hasRelevantRow = !!widths.length;
+
+      if (!hasRelevantRow && isNaN(offset)) {
         offset = col.visibleWidth;
       }
 
