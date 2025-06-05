@@ -5,14 +5,14 @@ import { mockAppointmentDataAccessor } from '@ts/scheduler/__mock__/appointment_
 import { mockTimeZoneCalculator } from '@ts/scheduler/__mock__/timezone_calculator.mock';
 
 import {
-  getAriaDescription, getAriaLabel, getGroupTexts, getReducedIconTooltip,
+  getAriaDescription, getAriaLabel, getReducedIconTooltip,
 } from './text_utils';
 
 const getAppointmentResourcesValues = jest.fn();
 const options = {
   dataAccessors: mockAppointmentDataAccessor,
   timeZoneCalculator: mockTimeZoneCalculator,
-  getResourceProcessor: () => ({
+  getResourceManager: () => ({
     getAppointmentResourcesValues,
   }),
 } as any;
@@ -66,20 +66,6 @@ describe('Appointment text utils', () => {
           endDate: Date.UTC(2025, 2, 11, 10, 30),
         },
       })).toBe('End Date: March 11, 2025');
-    });
-  });
-
-  describe('getGroupTexts', () => {
-    it('should return groups for single grouping', () => {
-      expect(getGroupTexts(1, [
-        { items: [{ text: 'Room 1' }, { text: 'Room 2' }], name: 'roomId' },
-      ] as any)).toEqual(['Room 1']);
-    });
-    it('should return groups for multiple grouping', () => {
-      expect(getGroupTexts(3, [
-        { items: [{ text: 'Samantha Bright' }, { text: 'John Heart' }], name: 'assigneeId' },
-        { items: [{ text: 'Room 1' }, { text: 'Room 2' }], name: 'roomId' },
-      ] as any)).toEqual(['Samantha Bright', 'Room 1']);
     });
   });
 

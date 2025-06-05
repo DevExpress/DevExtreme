@@ -18,6 +18,7 @@ import {
 
 
 import { DataChange } from 'devextreme/common/grids';
+import { dxFormOptions } from 'devextreme/ui/form';
 
 import {
     DxIntegrationModule,
@@ -85,10 +86,10 @@ export class DxoCardViewEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get form(): Record<string, any> {
+    get form(): dxFormOptions {
         return this._getOption('form');
     }
-    set form(value: Record<string, any>) {
+    set form(value: dxFormOptions) {
         this._setOption('form', value);
     }
 

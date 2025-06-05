@@ -10,8 +10,8 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { dxDataGridColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent, dxDataGridColumnButton, DataGridCommandColumnType, SelectionSensitivity, DataGridExportFormat, DataGridPredefinedToolbarItem, DataGridScrollMode, dxDataGridToolbarItem } from "devextreme/ui/data_grid";
-import type { DataChange, DataChangeType, FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterSearchConfig, SelectionColumnDisplayMode, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, GridBase, ApplyFilterMode, GroupExpandMode, SummaryType, EnterKeyAction, EnterKeyDirection, PagerPageSize, DataRenderMode, StateStoreType } from "devextreme/common/grids";
-import type { Mode, ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, DataType, Format as CommonFormat, SearchMode, SortOrder, ComparisonOperator, SingleMultipleOrNone, SelectAllMode, PositionAlignment, Direction, ToolbarItemLocation, ToolbarItemComponent, DisplayMode, DragDirection, DragHighlight, ScrollbarMode } from "devextreme/common";
+import type { DataChange, DataChangeType, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig, HeaderFilterTexts, SelectionColumnDisplayMode, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, ApplyFilterMode, GroupExpandMode, SummaryType, EnterKeyAction, EnterKeyDirection, PagerPageSize, GridBase, DataRenderMode, StateStoreType } from "devextreme/common/grids";
+import type { Mode, ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, DataType, Format as CommonFormat, SortOrder, SearchMode, ComparisonOperator, SingleMultipleOrNone, SelectAllMode, PositionAlignment, Direction, ToolbarItemLocation, ToolbarItemComponent, DisplayMode, DragDirection, DragHighlight, ScrollbarMode } from "devextreme/common";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
 import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, dxFormSimpleItem, dxFormOptions, OptionChangedEvent as FormOptionChangedEvent, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent, FormItemType } from "devextreme/ui/form";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
@@ -85,26 +85,22 @@ type IDataGridOptions<TRowData = any, TKey = any> = React.PropsWithChildren<Repl
   rowComponent?: React.ComponentType<any>;
   defaultColumns?: Array<dxDataGridColumn | string>;
   defaultEditing?: Record<string, any>;
-  defaultFilterPanel?: Record<string, any>;
   defaultFilterValue?: Array<any> | (() => any) | string;
   defaultFocusedColumnIndex?: number;
   defaultFocusedRowIndex?: number;
   defaultFocusedRowKey?: any | undefined;
   defaultGroupPanel?: Record<string, any>;
   defaultPaging?: Record<string, any>;
-  defaultSearchPanel?: Record<string, any>;
   defaultSelectedRowKeys?: Array<any>;
   defaultSelectionFilter?: Array<any> | (() => any) | string;
   onColumnsChange?: (value: Array<dxDataGridColumn | string>) => void;
   onEditingChange?: (value: Record<string, any>) => void;
-  onFilterPanelChange?: (value: Record<string, any>) => void;
   onFilterValueChange?: (value: Array<any> | (() => any) | string) => void;
   onFocusedColumnIndexChange?: (value: number) => void;
   onFocusedRowIndexChange?: (value: number) => void;
   onFocusedRowKeyChange?: (value: any | undefined) => void;
   onGroupPanelChange?: (value: Record<string, any>) => void;
   onPagingChange?: (value: Record<string, any>) => void;
-  onSearchPanelChange?: (value: Record<string, any>) => void;
   onSelectedRowKeysChange?: (value: Array<any>) => void;
   onSelectionFilterChange?: (value: Array<any> | (() => any) | string) => void;
 }>
@@ -126,20 +122,18 @@ const DataGrid = memo(
         }
       ), [baseRef.current]);
 
-      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","filterPanel","filterPanel.filterEnabled","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","groupPanel","groupPanel.visible","paging","paging.pageIndex","paging.pageSize","searchPanel","searchPanel.text","selectedRowKeys","selectionFilter"]), []);
+      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","groupPanel","groupPanel.visible","paging","paging.pageIndex","paging.pageSize","selectedRowKeys","selectionFilter"]), []);
       const independentEvents = useMemo(() => (["onAdaptiveDetailRowPreparing","onCellClick","onCellDblClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onEditorPrepared","onEditorPreparing","onExporting","onFocusedCellChanging","onFocusedRowChanging","onInitialized","onInitNewRow","onKeyDown","onRowClick","onRowCollapsed","onRowCollapsing","onRowDblClick","onRowExpanded","onRowExpanding","onRowInserted","onRowInserting","onRowPrepared","onRowRemoved","onRowRemoving","onRowUpdated","onRowUpdating","onRowValidating","onSaved","onSaving","onToolbarPreparing"]), []);
 
       const defaults = useMemo(() => ({
         defaultColumns: "columns",
         defaultEditing: "editing",
-        defaultFilterPanel: "filterPanel",
         defaultFilterValue: "filterValue",
         defaultFocusedColumnIndex: "focusedColumnIndex",
         defaultFocusedRowIndex: "focusedRowIndex",
         defaultFocusedRowKey: "focusedRowKey",
         defaultGroupPanel: "groupPanel",
         defaultPaging: "paging",
-        defaultSearchPanel: "searchPanel",
         defaultSelectedRowKeys: "selectedRowKeys",
         defaultSelectionFilter: "selectionFilter",
       }), []);
@@ -437,16 +431,7 @@ type IColumnProps = React.PropsWithChildren<{
   groupCellTemplate?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, groupContinuedMessage: string, groupContinuesMessage: string, row: dxDataGridRowObject, rowIndex: number, summaryItems: Array<any>, text: string, value: any }) => any) | template;
   groupIndex?: number | undefined;
   headerCellTemplate?: ((columnHeader: any, headerInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid }) => any) | template;
-  headerFilter?: Record<string, any> | {
-    allowSearch?: boolean;
-    allowSelectAll?: boolean;
-    dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
-    groupInterval?: HeaderFilterGroupInterval | number | undefined;
-    height?: number | string | undefined;
-    search?: ColumnHeaderFilterSearchConfig;
-    searchMode?: SearchMode;
-    width?: number | string | undefined;
-  };
+  headerFilter?: GridsColumnHeaderFilter | undefined;
   hidingPriority?: number | undefined;
   isBand?: boolean | undefined;
   lookup?: Record<string, any> | {
@@ -882,11 +867,7 @@ type IDataGridHeaderFilterProps = React.PropsWithChildren<{
   height?: number | string;
   search?: HeaderFilterSearchConfig;
   searchTimeout?: number;
-  texts?: Record<string, any> | {
-    cancel?: string;
-    emptyValue?: string;
-    ok?: string;
-  };
+  texts?: HeaderFilterTexts;
   visible?: boolean;
   width?: number | string;
 }>
@@ -1417,13 +1398,9 @@ const FilterOperationDescriptions = Object.assign<typeof _componentFilterOperati
 // owners:
 // DataGrid
 type IFilterPanelProps = React.PropsWithChildren<{
-  customizeText?: ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string);
+  customizeText?: ((e: { component: GridsFilterPanel, filterValue: Record<string, any>, text: string }) => string);
   filterEnabled?: boolean;
-  texts?: Record<string, any> | {
-    clearFilter?: string;
-    createFilter?: string;
-    filterEnabledHint?: string;
-  };
+  texts?: GridsFilterPanelTexts;
   visible?: boolean;
   defaultFilterEnabled?: boolean;
   onFilterEnabledChange?: (value: boolean) => void;
@@ -1832,11 +1809,7 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   searchMode?: SearchMode;
   width?: number | string | undefined;
   searchTimeout?: number;
-  texts?: Record<string, any> | {
-    cancel?: string;
-    emptyValue?: string;
-    ok?: string;
-  };
+  texts?: HeaderFilterTexts;
   visible?: boolean;
 }>
 const _componentHeaderFilter = (props: IHeaderFilterProps) => {

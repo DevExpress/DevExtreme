@@ -6,6 +6,8 @@ import $ from 'jquery';
 import '__internal/scheduler/workspaces/m_work_space_month';
 import { getGroupWidth } from '__internal/scheduler/workspaces/helpers/m_position_helper';
 
+import { getEmptyResourceManager, getWorkspaceResourceConfig } from '../../helpers/scheduler/mockResourceManager.js';
+
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 
 const {
@@ -22,11 +24,13 @@ testStart(function() {
 module('Work Space Month', () => {
     module('Default', {
         beforeEach: function() {
-            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({}).dxSchedulerWorkSpaceMonth('instance');
+            this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({
+                getResourceManager: getEmptyResourceManager,
+            }).dxSchedulerWorkSpaceMonth('instance');
         }
     }, () => {
         [true, false].forEach((renovateRender) => {
-            test(`Scheduler all day panel is invisible on month view after switching showAllDayPanel option when renovateRender is ${renovateRender}`, function(assert) {
+            test(`Scheduler all day panel is invisible on month view after switching showAllDayPanel option when renovateRender is ${renovateRender}`, async function(assert) {
                 this.instance.option('renovateRender', renovateRender);
                 this.instance.option('showAllDayPanel', false);
                 this.instance.option('showAllDayPanel', true);
@@ -36,7 +40,7 @@ module('Work Space Month', () => {
                 assert.equal($allDayPanel.length, 0, 'allDay panel is invisible');
             });
 
-            test(`Scheduler all day title is invisible on month view after switching showAllDayPanel option when renovateRender is ${renovateRender}`, function(assert) {
+            test(`Scheduler all day title is invisible on month view after switching showAllDayPanel option when renovateRender is ${renovateRender}`, async function(assert) {
                 this.instance.option('renovateRender', renovateRender);
                 this.instance.option('showAllDayPanel', false);
                 this.instance.option('showAllDayPanel', true);
@@ -47,7 +51,7 @@ module('Work Space Month', () => {
             });
         });
 
-        skip('Work space should find cell coordinates by date', function(assert) {
+        skip('Work space should find cell coordinates by date', async function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('firstDayOfWeek', 1);
@@ -60,7 +64,7 @@ module('Work Space Month', () => {
             assert.roughEqual(coords.left, expectedCoordinates.left, 0.01, 'Cell coordinates are right');
         });
 
-        skip('Work space should find cell coordinates by date depend on start day hour', function(assert) {
+        skip('Work space should find cell coordinates by date depend on start day hour', async function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -72,7 +76,7 @@ module('Work Space Month', () => {
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(4).position().left, 0.01, 'Cell coordinates are right');
         });
 
-        skip('Work space should find cell coordinates by date depend on end day hour', function(assert) {
+        skip('Work space should find cell coordinates by date depend on end day hour', async function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -84,14 +88,14 @@ module('Work Space Month', () => {
             assert.roughEqual(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(4).position().left, 0.01, 'Cell coordinates are right');
         });
 
-        test('Get date range', function(assert) {
+        test('Get date range', async function(assert) {
             this.instance.option('firstDayOfWeek', 1);
             this.instance.option('currentDate', new Date(2018, 8, 5));
 
             assert.deepEqual(this.instance.getDateRange(), [new Date(2018, 7, 27, 0, 0), new Date(2018, 9, 7, 23, 59)], 'Range is OK');
         });
 
-        test('Get date range when startDayHour & endDayHour are specified', function(assert) {
+        test('Get date range when startDayHour & endDayHour are specified', async function(assert) {
             this.instance.option({
                 firstDayOfWeek: 1,
                 currentDate: new Date(2015, 2, 16),
@@ -103,7 +107,7 @@ module('Work Space Month', () => {
             assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 1, 23, 8, 0), new Date(2015, 3, 5, 19, 59)], 'Range is OK');
         });
 
-        test('Each cell should contain jQuery dxCellData depend on start day hour', function(assert) {
+        test('Each cell should contain jQuery dxCellData depend on start day hour', async function(assert) {
             this.instance.option({
                 currentDate: new Date(2015, 2, 16),
                 firstDayOfWeek: 1,
@@ -120,7 +124,7 @@ module('Work Space Month', () => {
             });
         });
 
-        test('Each cell should contain jQuery dxCellData depend on end day hour', function(assert) {
+        test('Each cell should contain jQuery dxCellData depend on end day hour', async function(assert) {
             this.instance.option({
                 currentDate: new Date(2015, 2, 16),
                 firstDayOfWeek: 1,
@@ -137,7 +141,7 @@ module('Work Space Month', () => {
             });
         });
 
-        test('Each cell should contain jQuery dxCellData depend on fractional hoursInterval', function(assert) {
+        test('Each cell should contain jQuery dxCellData depend on fractional hoursInterval', async function(assert) {
             this.instance.option({
                 currentDate: new Date(2015, 2, 16),
                 firstDayOfWeek: 1,
@@ -156,7 +160,7 @@ module('Work Space Month', () => {
         });
 
         [true, false].forEach((renovateRender) => {
-            test(`WorkSpace should calculate max left position when renovateRender is ${renovateRender}`, function(assert) {
+            test(`WorkSpace should calculate max left position when renovateRender is ${renovateRender}`, async function(assert) {
                 this.instance.option({
                     currentDate: new Date(2015, 2, 16),
                     firstDayOfWeek: 1,
@@ -169,18 +173,20 @@ module('Work Space Month', () => {
                     Math.round($lastCell.position().left + getOuterWidth($lastCell)), 'Max left position is correct');
             });
 
-            test(`Grouped work space should calculate max left position when renovateRender is ${renovateRender}`, function(assert) {
+            test(`Grouped work space should calculate max left position when renovateRender is ${renovateRender}`, async function(assert) {
+                const resourceConfig = await getWorkspaceResourceConfig([{
+                    label: 'one',
+                    fieldExpr: 'one',
+                    dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                }, {
+                    label: 'two',
+                    fieldExpr: 'two',
+                    dataSource: [{ id: 1, text: 'c' }, { id: 2, text: 'd' }]
+                }]);
                 this.instance.option({
                     currentDate: new Date(2015, 2, 16),
                     firstDayOfWeek: 1,
-                    groups: [{
-                        name: 'one',
-                        items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-                    },
-                    {
-                        name: 'two',
-                        items: [{ id: 1, text: 'c' }, { id: 2, text: 'd' }]
-                    }],
+                    ...resourceConfig,
                     renovateRender,
                 });
 
@@ -205,8 +211,14 @@ module('Work Space Month', () => {
             });
         });
 
-        test('Group width calculation', function(assert) {
-            this.instance.option('groups', [{ name: 'one', items: [{ id: 1, text: 'a' }] }]);
+        test('Group width calculation', async function(assert) {
+            const resourceConfig = await getWorkspaceResourceConfig([{
+                label: 'one',
+                fieldExpr: 'one',
+                dataSource: [{ id: 1, text: 'a' }]
+            }]);
+            this.instance.option('getResourceManager', resourceConfig.getResourceManager);
+            this.instance.option('groups', resourceConfig.groups);
             this.instance.option('width', 600);
 
             const groupWidth = getGroupWidth(
@@ -228,7 +240,7 @@ module('Work Space Month', () => {
             assert.roughEqual(groupWidth, 597, 1.01, 'Group width is OK');
         });
 
-        test('Get cell count to last view dates', function(assert) {
+        test('Get cell count to last view dates', async function(assert) {
             this.instance.option('renovateRender', false);
 
             this.instance.option({
@@ -246,14 +258,16 @@ module('Work Space Month', () => {
             }, 'data of the cell is right');
         });
 
-        test('Cells have right cellData in horizontal grouped WorkSpace Month view', function(assert) {
+        test('Cells have right cellData in horizontal grouped WorkSpace Month view', async function(assert) {
+            const resourceConfig = await getWorkspaceResourceConfig([{
+                label: 'one',
+                fieldExpr: 'one',
+                dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+            }]);
             this.instance.option({
                 currentDate: new Date(2018, 2, 1),
                 groupOrientation: 'vertical',
-                groups: [{
-                    name: 'one',
-                    items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-                }],
+                ...resourceConfig,
                 renovateRender: false,
             });
 
@@ -270,19 +284,21 @@ module('Work Space Month', () => {
     });
 
     skip('it with grouping by date', {
-        beforeEach: function() {
+        beforeEach: async function() {
+            const resourceConfig = await getWorkspaceResourceConfig([{
+                label: 'one',
+                fieldExpr: 'one',
+                dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+            }]);
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({
                 currentDate: new Date(2018, 2, 1),
                 groupByDate: true,
                 showCurrentTimeIndicator: false,
-                groups: [{
-                    name: 'one',
-                    items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-                }],
+                ...resourceConfig,
             }).dxSchedulerWorkSpaceMonth('instance');
         }
     }, () => {
-        test('Work space should find cell coordinates by date, groupByDate = true', function(assert) {
+        test('Work space should find cell coordinates by date, groupByDate = true', async function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -302,27 +318,35 @@ module('Work Space Month', () => {
     });
 
     module('it with horizontal grouping', {
-        beforeEach: function() {
+        beforeEach: async function() {
+            const resourceConfig = await getWorkspaceResourceConfig([{
+                label: 'one',
+                fieldExpr: 'one',
+                dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+            }]);
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({
                 currentDate: new Date(2018, 2, 1),
                 groupOrientation: 'vertical',
                 crossScrollingEnabled: true,
-                groups: [{
-                    name: 'one',
-                    items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-                }],
+                ...resourceConfig,
             }).dxSchedulerWorkSpaceMonth('instance');
         }
     }, () => {
-        test('Group table content should have right height', function(assert) {
+        test('Group table content should have right height', async function(assert) {
             const $groupHeaderContents = this.instance.$element().find('.dx-scheduler-group-header');
             resizeCallbacks.fire();
             assert.roughEqual(getOuterHeight($groupHeaderContents.eq(0)), 449, 5, 'Group header content height is OK');
             assert.roughEqual(getOuterHeight($groupHeaderContents.eq(1)), 449, 5, 'Group header content height is OK');
         });
 
-        test('Group width calculation', function(assert) {
-            this.instance.option('groups', [{ name: 'one', items: [{ id: 1, text: 'a' }] }]);
+        test('Group width calculation', async function(assert) {
+            const resourceConfig = await getWorkspaceResourceConfig([{
+                label: 'one',
+                fieldExpr: 'one',
+                dataSource: [{ id: 1, text: 'a' }]
+            }]);
+            this.instance.option('getResourceManager', resourceConfig.getResourceManager);
+            this.instance.option('groups', resourceConfig.groups);
             this.instance.option('width', 600);
 
             const groupWidth = getGroupWidth(
@@ -344,7 +368,7 @@ module('Work Space Month', () => {
             assert.equal(groupWidth, 525, 'Group width is OK');
         });
 
-        test('Tables should not be rerendered if dimension was changed and horizontal scrolling is disabled', function(assert) {
+        test('Tables should not be rerendered if dimension was changed and horizontal scrolling is disabled', async function(assert) {
             this.instance.option('crossScrollingEnabled', false);
             const stub = sinon.stub(this.instance, '_setTableSizes');
 
@@ -358,11 +382,16 @@ module('Work Space Month', () => {
     module('it with intervalCount', {
         beforeEach: function() {
             this.createInstance = function(options) {
-                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth(options).dxSchedulerWorkSpaceMonth('instance');
+                this.instance = $('#scheduler-work-space')
+                    .dxSchedulerWorkSpaceMonth({
+                        getResourceManager: getEmptyResourceManager,
+                        ...options,
+                    })
+                    .dxSchedulerWorkSpaceMonth('instance');
             };
         }
     }, () => {
-        test('WorkSpace Month view cells have right cellData with view option intervalCount & startDate < currentDate', function(assert) {
+        test('WorkSpace Month view cells have right cellData with view option intervalCount & startDate < currentDate', async function(assert) {
             this.createInstance({
                 intervalCount: 3,
                 currentDate: new Date(2017, 4, 25),
@@ -384,7 +413,7 @@ module('Work Space Month', () => {
             assert.deepEqual(thirdCellData.endDate, new Date(2017, 6, 2, 0), 'cell has right endtDate');
         });
 
-        test('WorkSpace Month view cells have right cellData with view option intervalCount & startDate > currentDate', function(assert) {
+        test('WorkSpace Month view cells have right cellData with view option intervalCount & startDate > currentDate', async function(assert) {
             this.createInstance({
                 intervalCount: 3,
                 currentDate: new Date(2017, 1, 15),
@@ -406,7 +435,7 @@ module('Work Space Month', () => {
             assert.deepEqual(thirdCellData.endDate, new Date(2017, 2, 5, 0), 'cell has right endtDate');
         });
 
-        test('WorkSpace Month view cells have right cellData with view option intervalCount & startDate = currentDate', function(assert) {
+        test('WorkSpace Month view cells have right cellData with view option intervalCount & startDate = currentDate', async function(assert) {
             this.createInstance({
                 intervalCount: 3,
                 currentDate: new Date(2017, 6, 15),
@@ -428,7 +457,7 @@ module('Work Space Month', () => {
             assert.deepEqual(thirdCellData.endDate, new Date(2017, 8, 3, 0), 'cell has right endtDate');
         });
 
-        test('Get date range', function(assert) {
+        test('Get date range', async function(assert) {
             this.createInstance({
                 intervalCount: 3,
                 currentDate: new Date(2017, 5, 26),

@@ -5,9 +5,9 @@ import {
     Component,
 } from '@angular/core';
 
-import { AsyncRule, CompareRule, CustomRule, DataType, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, SearchMode, SortOrder, StringLengthRule } from 'devextreme/common';
+import { AsyncRule, CompareRule, CustomRule, DataType, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, SortOrder, StringLengthRule } from 'devextreme/common';
 import { Format } from 'devextreme/common/core/localization';
-import { ColumnHeaderFilterSearchConfig, FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, SelectedFilterOperation } from 'devextreme/common/grids';
+import { ColumnHeaderFilter, FilterOperation, FilterType, FixedPosition, SelectedFilterOperation } from 'devextreme/common/grids';
 import { Store } from 'devextreme/data';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { DataGridCommandColumnType, DataGridPredefinedColumnButton, dxDataGridColumn, dxDataGridColumnButton } from 'devextreme/ui/data_grid';
@@ -305,10 +305,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('headerCellTemplate', value);
     }
 
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
+    get headerFilter(): ColumnHeaderFilter | undefined {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
+    set headerFilter(value: ColumnHeaderFilter | undefined) {
         this._setOption('headerFilter', value);
     }
 

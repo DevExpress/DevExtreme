@@ -4,6 +4,8 @@ import $ from 'jquery';
 
 import '__internal/scheduler/workspaces/m_work_space_week';
 
+import { applyWorkspaceGroups, getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
+
 const {
     test,
     module,
@@ -16,10 +18,12 @@ testStart(function() {
 
 module('Work Space cellData Cache', {
     beforeEach: function() {
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({}).dxSchedulerWorkSpaceWeek('instance');
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
+            getResourceManager: getEmptyResourceManager,
+        }).dxSchedulerWorkSpaceWeek('instance');
     }
 }, () => {
-    test('Workspace should be able to cache cellData', function(assert) {
+    test('Workspace should be able to cache cellData', async function(assert) {
         let cache;
         const $cell = { startDate: 2015, endDate: 2016 };
         const getCellDataStub = sinon.stub(this.instance, 'getCellData').returns($cell);
@@ -43,7 +47,7 @@ module('Work Space cellData Cache', {
         }
     });
 
-    test('CellData cache set correct alias', function(assert) {
+    test('CellData cache set correct alias', async function(assert) {
         const $cell = { startDate: 2015, endDate: 2016 };
         const getCellDataStub = sinon.stub(this.instance, 'getCellData').returns($cell);
 
@@ -77,7 +81,7 @@ module('Work Space cellData Cache', {
         }
     });
 
-    test('getCellDataByCoordinates return cached cell data', function(assert) {
+    test('getCellDataByCoordinates return cached cell data', async function(assert) {
         const appointment = {
             rowIndex: 1,
             columnIndex: 0,
@@ -121,7 +125,7 @@ module('Work Space cellData Cache', {
         }
     });
 
-    test('Work space should return correct cell data if option changed (cleanCellDataCache)', function(assert) {
+    test('Work space should return correct cell data if option changed (cleanCellDataCache)', async function(assert) {
         const workSpace = this.instance;
         const $element = this.instance.$element();
         const appointment = {
@@ -162,23 +166,12 @@ module('Work Space cellData Cache', {
                     groupIndex: 0,
                 }
             }, {
-                optionName: 'groups',
-                optionValue: [{ name: 'one', items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }] }],
-                cellDataCompare: {
-                    allDay: false,
-                    startDate: new Date(2016, 4, 11),
-                    endDate: new Date(2016, 4, 11, 0, 18, 0),
-                    groups: { one: 1 },
-                    groupIndex: 0,
-                }
-            }, {
                 optionName: 'startDayHour',
                 optionValue: 2,
                 cellDataCompare: {
                     allDay: false,
                     startDate: new Date(2016, 4, 11, 2),
                     endDate: new Date(2016, 4, 11, 2, 18, 0),
-                    groups: { one: 1 },
                     groupIndex: 0,
                 }
             }, {
@@ -188,7 +181,6 @@ module('Work Space cellData Cache', {
                     allDay: false,
                     startDate: new Date(2016, 4, 11, 2),
                     endDate: new Date(2016, 4, 11, 2, 18),
-                    groups: { one: 1 },
                     groupIndex: 0,
                 }
             }
@@ -210,7 +202,46 @@ module('Work Space cellData Cache', {
         });
     });
 
-    test('Cell data cache should be cleared when dimensions were changed', function(assert) {
+    test('Work space should return correct cell data if groups option changed (cleanCellDataCache)', async function(assert) {
+        const workSpace = this.instance;
+        const $element = this.instance.$element();
+        const appointment = {
+            columnIndex: 0,
+            rowIndex: 0,
+            groupIndex: 0
+        };
+        const geometry = {
+            top: 10,
+            left: 20
+        };
+
+        workSpace.option('currentDate', new Date(2016, 4, 12));
+        workSpace.option('hoursInterval', 0.3);
+        workSpace.option('firstDayOfWeek', 3);
+
+        const $firstCell = $element.find('.dx-scheduler-date-table-cell').first();
+
+        workSpace.setCellDataCache(appointment, 0, $firstCell);
+        workSpace.setCellDataCacheAlias(appointment, geometry);
+
+        await applyWorkspaceGroups(workSpace, [{
+            label: 'one',
+            fieldExpr: 'one',
+            dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+        }]);
+        assert.ok($.isEmptyObject(workSpace.cache.size), 'Cell data cache was cleared after groups option changing');
+
+        const cellData = workSpace.getCellDataByCoordinates(geometry);
+        assert.deepEqual(cellData, {
+            allDay: false,
+            startDate: new Date(2016, 4, 11),
+            endDate: new Date(2016, 4, 11, 0, 18, 0),
+            groups: { one: 1 },
+            groupIndex: 0,
+        }, 'Cell data cache was cleared after groups option changing');
+    });
+
+    test('Cell data cache should be cleared when dimensions were changed', async function(assert) {
         const workSpace = this.instance;
         const $element = this.instance.$element();
         const appointment = {

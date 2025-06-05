@@ -1,4 +1,4 @@
-The DevExtreme Stepper is a UI component that indicates progress in a multi-step process and enables users to navigate between individual steps. You can add Stepper components to lengthy data entry forms such as guest checkouts or credit card applications. 
+The DevExtreme Stepper is a UI component that indicates progress in a multi-step process and enables users to navigate between individual steps. Use Stepper to implement multi-page navigation in lengthy forms such as checkouts and credit card applications.
 
 To get started with DevExtreme Stepper, refer to the following step-by-step tutorial: [Getting Started with Stepper](/Documentation/Guide/UI_Components/Stepper/Getting_Started_with_Stepper/).
 <!--split-->
@@ -7,14 +7,14 @@ To get started with DevExtreme Stepper, refer to the following step-by-step tuto
 
 The following settings are available:
 
-- [orientation](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/#orientation) (default: *'horizontal'*)    
-The Stepper's orientation.
+- [orientation](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/#orientation) (default: `horizontal`)    
+The Stepper's orientation (horizontal or vertical).
 
 - [linear](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/#linear) (default: `true`)    
 Specifies whether users must navigate the Stepper sequentially or can skip steps.
 
 - [selectOnFocus](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/#selectOnFocus) (default: `true`)    
-Specifies whether steps focused with keyboard arrows are selected automatically.
+Specifies whether steps focused with [keyboard navigation](/Documentation/Guide/UI_Components/Stepper/Accessibility/#Keyboard_Navigation) are selected automatically.
 
 - [rtlEnabled](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/#rtlEnabled) (default: `false`)    
 Switches the Stepper to Right-to-Left mode.
@@ -38,7 +38,7 @@ Step caption displayed next to the indicator.
 Adds an *(Optional)* label to the step.
 
 - [isValid](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#isValid)    
-Allows you to indicate that user input on the step results in validation errors.
+Allows you to indicate that user input on the step results in [validation](/Documentation/Guide/UI_Components/Common/UI_Widgets/Data_Validation/) errors.
 
 - [disabled](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#disabled)    
 Deactivates the step.
@@ -47,4 +47,4 @@ Deactivates the step.
 Tooltip text for the step.
 
 - [template](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#template)    
-Allows you to customize the step. This property overrides all other step properties.
+Allows you to customize the entire step appearance. This property overrides all other step settings.

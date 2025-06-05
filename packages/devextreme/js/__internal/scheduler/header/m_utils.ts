@@ -7,8 +7,8 @@ import { isFunction, isObject } from '@js/core/utils/type';
 import type { DateNavigatorTextInfo, Properties } from '@js/ui/scheduler';
 
 import { VIEWS } from '../constants';
+import type { RawViewType } from '../types';
 import type { Direction } from './constants';
-import type { RawViewType } from './types';
 
 const DAY_FORMAT = 'd';
 
