@@ -31,6 +31,7 @@
     />
     <DxColumn
       data-field="CustomerStoreCity"
+      caption="City"
     />
     <DxColumn
       data-field="Employee"
@@ -78,7 +79,7 @@ const filterBuilderConfig = {
   }],
 };
 
-const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'beforeNoon']];
+const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'afterNoon']];
 
 // TODO: make nested
 const saleAmountHeaderFilterConfig = {

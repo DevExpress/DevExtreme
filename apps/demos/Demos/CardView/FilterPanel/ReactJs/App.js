@@ -5,7 +5,7 @@ import { orders } from './data.js';
 function getDeliveryHours(rowData) {
   return new Date(rowData.DeliveryDate).getHours();
 }
-const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'beforeNoon']];
+const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'afterNoon']];
 const filterBuilderConfig = {
   customOperations: [
     {

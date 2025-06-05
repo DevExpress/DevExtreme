@@ -34,7 +34,7 @@ export class AppComponent {
     visible: true
   };
 
-  filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'beforeNoon']];
+  filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'afterNoon']];
 
   // TODO: make nested
   filterBuilderConfig = {

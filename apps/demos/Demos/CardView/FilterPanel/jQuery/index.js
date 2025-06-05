@@ -16,7 +16,7 @@ $(() => {
     filterPanel: {
       visible: true,
     },
-    filterValue: [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'beforeNoon']],
+    filterValue: [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'afterNoon']],
     filterBuilder: {
       customOperations: [{
         name: 'beforeNoon',
@@ -75,6 +75,7 @@ $(() => {
       },
     }, {
       dataField: 'CustomerStoreCity',
+      caption: 'City',
     }, {
       dataField: 'Employee',
     }],

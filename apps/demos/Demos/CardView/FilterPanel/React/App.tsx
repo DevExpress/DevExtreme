@@ -6,7 +6,7 @@ function getDeliveryHours(rowData: Order) {
   return (new Date(rowData.DeliveryDate)).getHours();
 }
 
-const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'beforeNoon']];
+const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'afterNoon']];
 
 const filterBuilderConfig = {
   customOperations: [{
@@ -98,6 +98,7 @@ const App = () => (
     />
     <Column
       dataField="CustomerStoreCity"
+      caption="City"
     />
     <Column
       dataField="Employee"
