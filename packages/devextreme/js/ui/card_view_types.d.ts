@@ -41,7 +41,6 @@ export {
   CardSavedEvent,
   CardSavingEvent,
   SelectionConfiguration,
-  SelectionChangingEvent,
   SelectionChangedEvent,
   ContextMenuTarget,
   ContextMenuPreparingEvent,

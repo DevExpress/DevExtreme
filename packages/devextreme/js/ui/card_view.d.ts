@@ -316,7 +316,7 @@ export type ColumnProperties<TCardData = unknown, TKey = unknown> = {
      * @docid
      * @public
      */
-    customizeText?: ((this: Column, cellInfo: ColumnCustomizeTextArg) => string);
+    customizeText?: ((this: Column, fieldInfo: ColumnCustomizeTextArg) => string);
     /**
      * @docid
      * @public
@@ -528,6 +528,7 @@ export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
 
 /**
  * @docid
+ * @hidden
  */
 type WithCardInfo = {
     /** @docid */
@@ -538,6 +539,7 @@ type WithCardInfo = {
 
 /**
  * @docid
+ * @hidden
  */
 type WithFieldCaptionInfo = {
     /**
@@ -551,6 +553,7 @@ type WithFieldCaptionInfo = {
 
 /**
  * @docid
+ * @hidden
  */
 type WithFieldValueInfo = {
     /**
@@ -761,6 +764,49 @@ export type CardHeader = { // TODO: sync with impl
 // Specified docid similar to other grids
 
 /**
+ * @docid
+ * @namespace DevExpress.ui.dxCardView
+ */
+export interface EditingTexts {
+  /**
+   * @docid
+   * @default "Add a card"
+   * @public
+   */
+  addCard?: string;
+  /**
+   * @docid
+   * @default "Are you sure you want to delete this record?"
+   * @public
+   */
+  confirmDeleteMessage?: string;
+  /**
+   * @docid
+   * @default ""
+   * @public
+   */
+  confirmDeleteTitle?: string;
+  /**
+   * @docid
+   * @default "Delete"
+   * @public
+   */
+  deleteCard?: string;
+  /**
+   * @docid
+   * @default "Edit"
+   * @public
+   */
+  editCard?: string;
+  /**
+   * @docid
+   * @default "Save"
+   * @public
+   */
+  saveCard?: string;
+}
+
+/**
  * @namespace DevExpress.ui
  * @deprecated Use Editing instead
  */
@@ -820,6 +866,11 @@ export type Editing<TCardData=unknown, TKey=unknown> = { // TODO: sync with impl
      * @type object
      */
     popup?: PopupProperties;
+    /**
+     * @docid dxCardViewEditing.texts
+     * @public
+     */
+    texts?: EditingTexts;
 };
 
 /**
@@ -1069,35 +1120,6 @@ export type SelectionConfiguration = {
      * @docid
      */
     showCheckBoxesMode?: SelectionColumnDisplayMode;
-};
-
-/**
- * @docid _ui_card_view_SelectionChangingEvent
- * @public
- * @type object
- * @inherits EventInfo,Cancelable
- */
-export type SelectionChangingEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView> & Cancelable & {
-    /**
-     * @docid _ui_card_view_SelectionChangingEvent.selectedCardsData
-     * @public
-     */
-    selectedCardsData: Array<TCardData>;
-    /**
-     * @docid _ui_card_view_SelectionChangingEvent.selectedCardKeys
-     * @public
-     */
-    selectedCardKeys: Array<TKey>;
-    /**
-     * @docid _ui_card_view_SelectionChangingEvent.currentSelectedCardKeys
-     * @public
-     */
-    currentSelectedCardKeys: Array<TKey>;
-    /**
-     * @docid _ui_card_view_SelectionChangingEvent.currentDeselectedCardKeys
-     * @public
-     */
-    currentDeselectedCardKeys: Array<TKey>;
 };
 
 /**
@@ -1453,6 +1475,12 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
 
     /**
      * @docid
+     * @default "auto"
+     * @public
+     */
+    filterSyncEnabled?: boolean | Mode;
+    /**
+     * @docid
      * @type Filter expression
      * @default null
      * @fires dxCardViewOptions.onOptionChanged
@@ -1601,13 +1629,6 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     selection?: SelectionConfiguration;
     /**
      * @docid
-     * @type_function_param1 e:{ui/card_view:SelectionChangingEvent}
-     * @action
-     * @public
-     */
-    onSelectionChanging?: (e: SelectionChangingEvent) => void;
-    /**
-     * @docid
      * @type_function_param1 e:{ui/card_view:SelectionChangedEvent}
      * @action
      * @public
@@ -1727,7 +1748,7 @@ export default class dxCardView<TCardData = unknown, TKey = unknown> extends Wid
 
     /**
      * @docid
-     * @publicName addRow()
+     * @publicName addCard()
      * @public
      */
     addCard(): void;
