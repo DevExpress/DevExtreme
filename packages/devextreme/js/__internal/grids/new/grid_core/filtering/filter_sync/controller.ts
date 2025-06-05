@@ -77,7 +77,11 @@ export class FilterSyncController {
         filterPanelValue ?? [],
         composedHeaderFilter,
       );
-      if (equalByValue(filterPanelValue, newFilterPanelValue, FILTER_DEEP_COMPARISON_OPTS)) {
+      if (equalByValue(
+        filterPanelValue ?? [],
+        newFilterPanelValue,
+        FILTER_DEEP_COMPARISON_OPTS,
+      )) {
         return;
       }
 
@@ -109,9 +113,9 @@ export class FilterSyncController {
 
       // NOTE: If merged from HeaderFilter values equals current FilterPanel values
       // do nothing
-      const filterPanelValue = this.filterController.filterPanelValue.peek();
+      const filterPanelValue = this.filterController.filterPanelValue.peek() ?? [];
       const newFilterPanelValue = mergeFilterPanelWithHeaderFilterValues(
-        filterPanelValue ?? [],
+        filterPanelValue,
         composedHeaderFilter,
       );
       if (equalByValue(filterPanelValue, newFilterPanelValue, FILTER_DEEP_COMPARISON_OPTS)) {
