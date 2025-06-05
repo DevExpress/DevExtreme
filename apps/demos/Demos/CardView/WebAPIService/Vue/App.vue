@@ -4,9 +4,13 @@
     :remote-operations="true"
     :card-min-width="100"
     :word-wrap-enabled="true"
-    :header-filter="headerFilterConfig"
-    :search-panel="searchPanelConfig"
   >
+    <DxSearchPanel
+      :visible="true"
+    />
+    <DxHeaderFilter
+      :visible="true"
+    />
     <DxEditing
       :allow-adding="true"
       :allow-updating="true"
@@ -44,16 +48,6 @@ import {
   DxCardView, DxColumn, DxEditing, DxRequiredRule,
 } from 'devextreme-vue/card-view';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-
-// TODO: Nested component does not exist
-const headerFilterConfig = {
-  visible: true,
-};
-
-// TODO: Nested component does not exist
-const searchPanelConfig = {
-  visible: true,
-};
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 

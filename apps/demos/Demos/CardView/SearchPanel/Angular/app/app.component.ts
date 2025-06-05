@@ -22,17 +22,6 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   tasks: Task[];
 
-  // TODO: Nested component does not exist
-  headerFilterConfig = {
-    visible: true,
-  };
-
-  // TODO: Nested component does not exist
-  searchPanelConfig = {
-    visible: true,
-    text: 'an',
-  };
-
   constructor(service: Service) {
     this.tasks = service.getTasks();
   }

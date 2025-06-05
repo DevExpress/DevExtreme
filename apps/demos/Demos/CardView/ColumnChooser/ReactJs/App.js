@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import CardView, { Column, CardCover } from 'devextreme-react/card-view';
+import CardView, {
+  Column,
+  CardCover,
+  SearchPanel,
+  ColumnChooser,
+  ColumnChooserSearch,
+  ColumnChooserSelection,
+} from 'devextreme-react/card-view';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 import { employees } from './data.js';
@@ -63,23 +70,18 @@ const App = () => {
         keyExpr="ID"
         cardMinWidth={100}
         wordWrapEnabled={true}
-        // todo: move to nested
-        columnChooser={{
-          enabled: true,
-          mode: columnChooserMode,
-          search: {
-            enabled: searchEnabled,
-          },
-          selection: {
-            allowSelectAll,
-            selectByClick,
-          },
-        }}
-        // todo: move to nested
-        searchPanel={{
-          visible: true,
-        }}
       >
+        <SearchPanel visible={true} />
+        <ColumnChooser
+          enabled={true}
+          mode={columnChooserMode}
+        >
+          <ColumnChooserSearch enabled={searchEnabled} />
+          <ColumnChooserSelection
+            allowSelectAll={allowSelectAll}
+            selectByClick={selectByClick}
+          />
+        </ColumnChooser>
         <CardCover
           altExpr={altExpr}
           imageExpr={imageExpr}

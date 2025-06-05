@@ -5,38 +5,63 @@
     key-expr="OrderNumber"
     :card-min-width="100"
     :word-wrap-enabled="true"
-    :header-filter="headerFilterConfig"
   >
+    <DxColumnHeaderFilter
+      :enabled="true"
+    />
     <DxColumn
       data-field="OrderNumber"
-      :header-filter="orderNumberHeaderFilterConfig"
-    />
+    >
+      <DxColumnHeaderFilter
+        :group-interval="10000"
+      />
+    </DxColumn>
     <DxColumn
       data-field="OrderDate"
       data-type="date"
       :calculate-filter-expression="calculateOrderDateFilterExpression"
-      :header-filter="orderDateHeaderFilterConfig"
-    />
+    >
+      <DxColumnHeaderFilter
+        :data-source="orderDateHeaderFilterDataSource"
+      />
+    </DxColumn>
     <DxColumn
       data-field="SaleAmount"
       data-type="number"
-      :header-filter="saleAmountHeaderFilterConfig"
-    />
+    >
+      <DxColumnHeaderFilter
+        :data-source="saleAmountHeaderFilterDataSource"
+      />
+    </DxColumn>
     <DxColumn
       data-field="StoreCity"
-      :header-filter="storeCityHeaderFilterConfig"
-    />
+    >
+      <DxColumnHeaderFilter>
+        <DxColumnHeaderFilterSearch
+          :enabled="true"
+          :editor-options="{ placeholder: 'Search city or state' }"
+          :search-expr="['StoreCity', 'StoreState']"
+        />
+      </DxColumnHeaderFilter>
+    </DxColumn>
     <DxColumn
       data-field="StoreState"
-      :header-filter="storeStateHeaderFilterConfig"
-    />
+    >
+      <DxColumnHeaderFilter>
+        <DxColumnHeaderFilterSearch
+          :enabled="true"
+          :editor-options="{ placeholder: 'Search state or city' }"
+          :search-expr="['StoreState', 'StoreCity']"
+        />
+      </DxColumnHeaderFilter>
+    </DxColumn>
     <DxColumn
       data-field="Employee"
     />
   </DxCardView>
 </template>
 <script setup lang="ts">
-import { DxCardView, DxColumn, type DxCardViewTypes } from 'devextreme-vue/card-view';
+import { DxCardView, DxColumn, DxColumnHeaderFilter, DxColumnHeaderFilterSearch, type DxCardViewTypes } from 'devextreme-vue/card-view';
 import { type Order, orders } from './data.ts';
 
 function getOrderDay(rowData: Order) {
@@ -50,81 +75,45 @@ function calculateOrderDateFilterExpression(this: DxCardViewTypes.Column, value,
   return this.defaultCalculateFilterExpression(value, selectedFilterOperations, target) as any;
 }
 
-// TODO: make nested
-const headerFilterConfig = {
-  visible: true,
+function orderDateHeaderFilterDataSource(data) {
+  data.dataSource.postProcess = function(results) {
+    results.push({
+      text: 'Weekends',
+      value: 'weekends',
+    });
+    return results;
+  };
 };
 
-// TODO: make nested
-const orderDateHeaderFilterConfig = {
-  dataSource(data) {
-    data.dataSource.postProcess = function(results) {
-      results.push({
-        text: 'Weekends',
-        value: 'weekends',
-      });
-      return results;
-    };
+const saleAmountHeaderFilterDataSource = [
+  {
+    text: 'Less than $3000',
+    value: ['SaleAmount', '<', 3000],
   },
-};
-
-// TODO: make nested
-const saleAmountHeaderFilterConfig = {
-  dataSource: [
-    {
-      text: 'Less than $3000',
-      value: ['SaleAmount', '<', 3000],
-    },
-    {
-      text: '$3000 - $5000',
-      value: [
-        ['SaleAmount', '>=', 3000],
-        ['SaleAmount', '<', 5000],
-      ],
-    },
-    {
-      text: '$5000 - $10000',
-      value: [
-        ['SaleAmount', '>=', 5000],
-        ['SaleAmount', '<', 10000],
-      ],
-    },
-    {
-      text: '$10000 - $20000',
-      value: [
-        ['SaleAmount', '>=', 10000],
-        ['SaleAmount', '<', 20000],
-      ],
-    },
-    {
-      text: 'Greater than $20000',
-      value: ['SaleAmount', '>=', 20000],
-    },
-  ],
-};
-
-// TODO: make nested
-const storeCityHeaderFilterConfig = {
-  search: {
-    enabled: true,
-    editorOptions: {
-      placeholder: 'Search city or state',
-    },
-    searchExpr: ['StoreCity', 'StoreState'],
+  {
+    text: '$3000 - $5000',
+    value: [
+      ['SaleAmount', '>=', 3000],
+      ['SaleAmount', '<', 5000],
+    ],
   },
-};
-
-// TODO: make nested
-const storeStateHeaderFilterConfig = {
-  search: {
-    enabled: true,
-    editorOptions: {
-      placeholder: 'Search state or city',
-    },
-    searchExpr: ['StoreState', 'StoreCity'],
+  {
+    text: '$5000 - $10000',
+    value: [
+      ['SaleAmount', '>=', 5000],
+      ['SaleAmount', '<', 10000],
+    ],
   },
-};
-
-// TODO: make nested
-const orderNumberHeaderFilterConfig = { groupInterval: 10000 };
+  {
+    text: '$10000 - $20000',
+    value: [
+      ['SaleAmount', '>=', 10000],
+      ['SaleAmount', '<', 20000],
+    ],
+  },
+  {
+    text: 'Greater than $20000',
+    value: ['SaleAmount', '>=', 20000],
+  },
+];
 </script>
