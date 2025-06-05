@@ -8,7 +8,7 @@ import type {
   HeaderFilterRootOptions,
 } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import { anyOf, noneOf } from '@ts/grids/new/grid_core/filtering/legacy_filter_custom_operations';
-import { SearchController } from '@ts/grids/new/grid_core/search';
+import { SearchController } from '@ts/grids/new/grid_core/search/index';
 
 import { ColumnsController } from '../columns_controller/index';
 import { OptionsController } from '../options_controller/options_controller';
