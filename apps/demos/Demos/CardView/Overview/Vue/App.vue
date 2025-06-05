@@ -141,6 +141,7 @@ const cardView = ref<DxCardView>();
 
 .footer > * {
   flex-grow: 1;
+  width: 100%
 }
 
 .status {
