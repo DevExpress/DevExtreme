@@ -1,4 +1,10 @@
-<dx-card-view id="cardView" [dataSource]="houses" keyExpr="ID">
+<dx-card-view
+  id="cardView"
+  [dataSource]="houses"
+  keyExpr="ID"
+  [cardMinWidth]="100"
+  [wordWrapEnabled]="true"
+>
   <dxo-card-view-card-cover
     [imageExpr]="imageExpr"
     [altExpr]="altExpr"

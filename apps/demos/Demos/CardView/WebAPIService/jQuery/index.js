@@ -15,6 +15,7 @@ $(() => {
   $('#card-view').dxCardView({
     dataSource: store,
     remoteOperations: true,
+    cardMinWidth: 100,
     wordWrapEnabled: true,
     columns: [
       {

@@ -45,6 +45,8 @@
     id="cardView"
     :data-source="employees"
     key-expr="ID"
+    :card-min-width="100"
+    :word-wrap-enabled="true"
     :selected-card-keys="[4, 6]"
     ref="cardViewRef"
   >
@@ -99,7 +101,7 @@ const cardViewRef = ref();
 const onSelectionModeChange = ({ value }: DxSelectBoxTypes.ValueChangedEvent): void => {
   selectionMode.value = value;
   cardViewRef.value.instance.clearSelection();
-};  
+};
 </script>
 <style>
   .options {

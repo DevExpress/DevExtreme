@@ -2,6 +2,8 @@ $(() => {
   const cardView = $('#card-view').dxCardView({
     dataSource: employees,
     keyExpr: 'ID',
+    cardMinWidth: 100,
+    wordWrapEnabled: true,
     columnChooser: {
       enabled: true,
       mode: 'select',

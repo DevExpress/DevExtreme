@@ -70,6 +70,8 @@ const App = () => {
       <CardView
         dataSource={employees}
         keyExpr="ID"
+        cardMinWidth={100}
+        wordWrapEnabled={true}
         defaultSelectedCardKeys={[4, 6]}
         ref={cardViewRef}
       >
