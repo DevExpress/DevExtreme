@@ -175,12 +175,12 @@ export class DataController {
               e.take = take;
               e.skip = skip;
 
+              if (e.storeLoadOptions.requireTotalCount) {
+                e.extra.totalCount = e.data.length;
+              }
+
               new ArrayStore(e.data).load(loadOptions).done((newData) => {
                 e.data = newData;
-
-                if (e.storeLoadOptions.requireTotalCount) {
-                  e.extra.totalCount = e.data.length;
-                }
               });
             } else {
               e.data = filteredData;

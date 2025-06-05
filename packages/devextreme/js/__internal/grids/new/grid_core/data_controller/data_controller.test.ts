@@ -70,39 +70,25 @@ describe('DataController', () => {
 
   describe('when totalCount is not specified', () => {
     it('works with CustomStore', async () => {
-      try {
-        const { dataController } = setup({
-          dataSource: new CustomStore({
-            load: () => generateData(10),
-          }),
-          paging: {
-            pageSize: 3,
-          },
-        });
+      const { dataController } = setup({
+        dataSource: new CustomStore({
+          load: () => generateData(10),
+        }),
+      });
 
-        await dataController.waitLoaded();
+      await dataController.waitLoaded();
 
-        expect(dataController.dataSource.value.totalCount()).toEqual(3);
-      } catch (err) {
-        expect(false).toBeTruthy();
-      }
+      expect(dataController.dataSource.value.totalCount()).toEqual(10);
     });
 
     it('works with json url', async () => {
-      try {
-        const { dataController } = setup({
-          dataSource: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/data/customers.json',
-          paging: {
-            pageSize: 3,
-          },
-        });
+      const { dataController } = setup({
+        dataSource: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/data/customers.json',
+      });
 
-        await dataController.waitLoaded();
+      await dataController.waitLoaded();
 
-        expect(dataController.dataSource.value.totalCount()).toEqual(3);
-      } catch (err) {
-        expect(false).toBeTruthy();
-      }
+      expect(dataController.dataSource.value.totalCount()).toEqual(12);
     });
   });
 
