@@ -1,30 +1,88 @@
 $(() => {
-  const IMG_URL = 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos';
-
-  $('#card-view').dxCardView({
+  const cardView = $('#card-view').dxCardView({
     dataSource: employees,
+    keyExpr: 'ID',
+    cardMinWidth: 250,
+    cardsPerRow: 'auto',
+    cardCover: {
+      imageExpr: ({ First_Name, Last_Name }) => `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`,
+      altExpr: ({ First_Name, Last_Name }) => `Photo of ${First_Name} ${Last_Name}`,
+    },
     columns: [
       {
-        dataField: 'FullName',
-        allowHiding: false,
+        dataField: 'Status',
+        fieldValueTemplate({ field: { value } }) {
+          return $('<div>')
+            .append(
+              $('<div>').addClass('indicator')
+            )
+            .append(
+              $('<div>').text(value)
+            )
+            .addClass('status')
+            .addClass(
+              value === 'Salaried'
+                ? 'status--ok'
+                : 'status--warning'
+            );
+        }
       },
-      'Position',
+      {
+        caption: 'Full Name',
+        calculateFieldValue({ First_Name, Last_Name }) {
+          return `${First_Name} ${Last_Name}`;
+        },
+      },
+      {
+        caption: 'Position',
+        dataField: 'Title',
+      },
       'Department',
-      'Phone',
-      'Email',
+      'Mobile_Phone',
+      {
+        dataField: 'Email',
+        fieldValueTemplate({ field: { value, text }}) {
+          return $('<a>')
+            .attr('href', `mailto:${value}`)
+            .text(text);
+        }
+      },
+      {
+        caption: 'Address',
+        calculateFieldValue({ State, City }) {
+          return `${City}, ${State}`;
+        }
+      },
     ],
-    keyExpr: 'ID',
-    allowColumnReordering: true,
-    cardsPerRow: 'auto',
-    cardMinWidth: 250,
-    cardCover: {
-      imageExpr: ({ Picture }) => `${IMG_URL}/${Picture}`,
-      altExpr: ({ FullName }) => `${FullName} picture`,
-    },
-    pager: {
-      showInfo: true,
-      showNavigationButtons: true,
-      showPageSizeSelector: true,
+    cardFooterTemplate() {
+      return $('<div>')
+        .addClass('footer')
+        .append(
+          $('<div>').dxButton({
+            text: 'Call',
+            icon: 'tel',
+            type: 'default',
+            stylingMode: 'contained',
+            onClick() {
+              DevExpress.ui.notify({
+                message: 'The "Call" button is clicked.',
+                maxWidth: 560,
+              });
+            },
+          }),
+          $('<div>').dxButton({
+            text: 'Send Email',
+            icon: 'send',
+            type: 'default',
+            stylingMode: 'contained',
+            onClick() {
+              DevExpress.ui.notify({
+                message: 'The "Send Email" button is clicked.',
+                maxWidth: 560,
+              });
+            },
+          }),
+        )
     },
     selection: {
       mode: 'multiple',
@@ -35,18 +93,5 @@ $(() => {
     searchPanel: {
       visible: true,
     },
-    columnChooser: {
-      enabled: true,
-      height: 340,
-      mode: 'select',
-      position: {
-        my: 'right top',
-        at: 'right bottom',
-        of: '.dx-cardview-column-chooser-button',
-      },
-      selection: {
-        selectByClick: true,
-      },
-    },
-  });
+  }).dxCardView('instance');
 });

@@ -1,9 +1,11 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
+import { NgModule, Component, enableProdMode, ViewChild } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { DxCardViewModule } from 'devextreme-angular';
+import { DxCardViewModule, DxCardViewComponent, DxButtonModule } from 'devextreme-angular';
 import { AppService, Employee } from './app.service';
+
+import notify from 'devextreme/ui/notify';
 
 if (!document.location.host.includes('localhost')) {
   enableProdMode();
@@ -15,14 +17,14 @@ if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
-const IMG_URL = 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos';
-
 @Component({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
 })
 export class AppComponent {
+  @ViewChild(DxCardViewComponent, { static: true }) cardView: DxCardViewComponent;
+
   employees: Employee[];
 
   // TODO: Nested component does not exist
@@ -35,31 +37,31 @@ export class AppComponent {
     visible: true,
   };
 
-  // TODO: Nested component does not exist
-  columnChooserConfig = {
-    enabled: true,
-    height: 340,
-    mode: 'select',
-    position: {
-      my: 'right top',
-      at: 'right bottom',
-      of: '.dx-cardview-column-chooser-button',
-    },
-    selection: {
-      selectByClick: true,
-    },
-  };
-
   constructor(service: AppService) {
     this.employees = service.getEmployees();
   }
 
-  getEmployeeImage({ Picture }: Employee): string {
-    return `${IMG_URL}/${Picture}`;
+  imageExpr({ First_Name, Last_Name }: Employee): string {
+    return `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`;
   }
 
-  getEmployeeImageAltText({ FullName }: Employee): string {
-    return `${FullName} picture`;
+  altExpr({ First_Name, Last_Name }: Employee): string {
+    return `Photo of ${First_Name} ${Last_Name}`;
+  }
+
+  calculateFullName({ First_Name, Last_Name }: Employee): string {
+    return `${First_Name} ${Last_Name}`;
+  }
+
+  calculateAddress({ State, City }: Employee): string {
+    return `${City}, ${State}`;
+  }
+
+  showNotify(text: string) {
+    notify({
+      message: `The "${text}" button is clicked.`,
+      maxWidth: 560,
+    });
   }
 }
 
@@ -67,6 +69,7 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxCardViewModule,
+    DxButtonModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
