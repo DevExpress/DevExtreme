@@ -100,7 +100,7 @@ const App = () => (
             ],
           },
         ],
-      }}
+      } as any}
     />
     <Column
       caption="Full Name"
