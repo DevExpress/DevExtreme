@@ -21,8 +21,6 @@ import * as EditingModule from './editing/index';
 import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
 import { CompatibilityFilterSyncController, FilterSyncController } from './filtering/filter_sync/index';
-import { FilterCustomOperationsVisitor } from './filtering/filter_visitors/filter_custom_operations_visitor';
-import { GetAppliedFilterVisitor } from './filtering/filter_visitors/get_applied_filters_visitor';
 import { CompatibilityHeaderFilterController, HeaderFilterController } from './filtering/header_filter/index';
 import { HeaderFilterViewController } from './filtering/header_filter/view_controller';
 import * as FilterControllerModule from './filtering/index';
@@ -85,11 +83,7 @@ export class GridCoreNewBase<
 
   public filterSyncController!: FilterSyncController;
 
-  private getAppliedFiltersVisitor!: GetAppliedFilterVisitor;
-
   private accessibilityController!: AccessibilityController;
-
-  private filterCustomOperationsVisitor!: FilterCustomOperationsVisitor;
 
   public initialized!: Signal<boolean>;
 
@@ -130,9 +124,6 @@ export class GridCoreNewBase<
     this.accessibilityController = this.diContext.get(AccessibilityController);
     this.filterSyncController = this.diContext.get(FilterSyncController);
     this.searchView = this.diContext.get(SearchView);
-
-    this.getAppliedFiltersVisitor = this.diContext.get(GetAppliedFilterVisitor);
-    this.filterCustomOperationsVisitor = this.diContext.get(FilterCustomOperationsVisitor);
   }
 
   protected _init(): void {

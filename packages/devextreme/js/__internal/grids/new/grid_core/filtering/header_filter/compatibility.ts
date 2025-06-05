@@ -18,7 +18,9 @@ export class CompatibilityHeaderFilterController {
     private readonly realHeaderFilterViewController: HeaderFilterViewController,
     private readonly realDataController: DataController,
     private readonly options: OptionsController,
-  ) {}
+  ) {
+    this.realFilterController.headerFilterCompatibilityController = this;
+  }
 
   public getCustomFilterOperations(): unknown[] {
     return this.realFilterController.customOperations.peek();
