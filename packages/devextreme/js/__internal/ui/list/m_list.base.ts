@@ -100,8 +100,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
 
   _groupRenderAction?: () => void;
 
-  _renderingGroupIndex?: unknown;
-
   _itemElementsCache!: dxElementWrapper;
 
   _isLoadIndicationSuppressed?: boolean;
@@ -1016,8 +1014,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     $('<div>')
       .addClass(LIST_GROUP_HEADER_INDICATOR_CLASS)
       .prependTo($groupHeaderElement);
-
-    this._renderingGroupIndex = index;
 
     const groupBodyId = `dx-${new Guid().toString()}`;
 

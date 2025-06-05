@@ -18,14 +18,8 @@ const viewName = {
 const VIEW_NAMES = ['columnHeadersView', 'rowsView', 'footerView', 'headerPanel'] as const;
 
 export class ContextMenuController extends modules.ViewController {
-  public contextMenuHidden: any;
-
   public init() {
     this.createAction('onContextMenuPreparing');
-  }
-
-  protected callbackNames() {
-    return ['contextMenuHidden'];
   }
 
   public getContextMenuItems(dxEvent) {
@@ -67,7 +61,7 @@ export class ContextMenuController extends modules.ViewController {
           column: rowOptions?.cells?.[columnIndex]?.column,
         };
 
-        options.items = view.getContextMenuItems && view.getContextMenuItems(options);
+        options.items = view.getContextMenuItems?.(options);
 
         that.executeAction('onContextMenuPreparing', options);
         that._contextMenuPrepared(options);
@@ -84,10 +78,6 @@ export class ContextMenuController extends modules.ViewController {
     return menuItems;
   }
 
-  public fireContextMenuHidden(e) {
-    this.contextMenuHidden.fire(e);
-  }
-
   /**
    * @extended: selection
    */
@@ -102,10 +92,6 @@ export class ContextMenuView extends modules.View {
     super.init();
 
     this._contextMenuController = this.getController('contextMenu');
-  }
-
-  protected hiddenEventHandler(e) {
-    this._contextMenuController?.fireContextMenuHidden(e);
   }
 
   protected _renderCore() {
@@ -133,7 +119,6 @@ export class ContextMenuView extends modules.View {
         onItemClick(params) {
           params.itemData?.onItemClick?.(params);
         },
-        onHidden: this.hiddenEventHandler.bind(this),
         cssClass: this.getWidgetContainerClass(),
         // @ts-expect-error
         target: this.component.$element(),

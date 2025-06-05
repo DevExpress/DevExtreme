@@ -20,6 +20,8 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   protected _columnsController!: Controllers['columns'];
 
+  protected _resizeController!: Controllers['resizing'];
+
   public _focusedCellPosition: any;
 
   private _applyColumnIndexBoundaries(columnIndex) {
@@ -101,14 +103,15 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   protected initHandlers(): void {
     const focusedView = this.getFocusedView();
+
     this.unsubscribeFromKeyDownEvent();
 
     focusedView?.renderCompleted?.remove(this.renderCompletedWithContext);
-    focusedView?.resizeCompleted?.remove(this.resizeCompletedWithContext);
+    this._resizeController?.resizeCompleted?.remove(this.resizeCompletedWithContext);
 
     if (this.isKeyboardEnabled()) {
       focusedView?.renderCompleted?.add(this.renderCompletedWithContext);
-      focusedView?.resizeCompleted?.add(this.resizeCompletedWithContext);
+      this._resizeController?.resizeCompleted?.add(this.resizeCompletedWithContext);
     }
   }
 
@@ -228,6 +231,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   public init() {
     this._columnsController = this.getController('columns');
+    this._resizeController = this.getController('resizing');
     this._focusedCellPosition = {};
 
     if (this.isKeyboardEnabled()) {

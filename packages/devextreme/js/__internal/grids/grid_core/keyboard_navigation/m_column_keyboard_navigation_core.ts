@@ -52,7 +52,6 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
   protected resizeCompleted(): void {
     if (this.needToRestoreFocus) {
       this.restoreFocus();
-      this.needToRestoreFocus = false;
     }
   }
 
@@ -113,6 +112,8 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
   }
 
   public restoreFocus() {
+    this.needToRestoreFocus = false;
+
     if (isEmptyObject(this._focusedCellPosition)) {
       this.setFocusedCellPosition(0, this.getFirstFocusableVisibleIndex());
     }
