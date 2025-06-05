@@ -25,7 +25,7 @@ const App = () => {
   const [selectByClick, setSelectByClick] = useState(true);
 
   return <>
-    <div className="options">
+    <div className="options-panel">
       <div className="caption">Options</div>
       <div className="options-container">
         <div className="option">
