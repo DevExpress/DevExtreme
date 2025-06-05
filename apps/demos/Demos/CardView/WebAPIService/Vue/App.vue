@@ -11,6 +11,7 @@
       :allow-adding="true"
       :allow-updating="true"
       :allow-deleting="true"
+      :popup="{ width: 700, height: 400 }"
     />
     <DxColumn
       data-field="Task_Subject"

@@ -49,6 +49,10 @@ $(() => {
       allowAdding: true,
       allowUpdating: true,
       allowDeleting: true,
+      popup: {
+        width: 700,
+        height: 400,
+      },
     },
     searchPanel: {
       visible: true,
