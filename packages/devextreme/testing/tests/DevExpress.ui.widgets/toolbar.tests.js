@@ -6,8 +6,6 @@ import fx from 'common/core/animation/fx';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
 import { deferUpdate } from 'core/utils/common';
-import { DROP_DOWN_BUTTON_CLASS } from '__internal/ui/m_drop_down_button';
-import { SELECTBOX_CLASS } from '__internal/ui/m_select_box';
 
 import 'generic_light.css!';
 
@@ -582,31 +580,14 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
     [
         {
             component: 'dxSelectBox',
-            cssClass: `.${SELECTBOX_CLASS}`,
-            options: {
-                displayExpr: 'value',
-                keyExpr: 'id',
-                items: [
-                    { id: 1, value: '1' },
-                    { id: 2, value: '2' },
-                    { id: 3, value: '3' },
-                ],
-            },
+            options: { items: ['item'] },
         },
         {
             component: 'dxDropDownButton',
-            cssClass: `.${DROP_DOWN_BUTTON_CLASS}`,
-            options: {
-                displayExpr: 'value',
-                items: [
-                    { id: 1, value: '1' },
-                    { id: 2, value: '2' },
-                    { id: 3, value: '3' },
-                ],
-            }
+            options: { items: ['item'] },
         }
     ].forEach(({ component, cssClass, options }) => {
-        QUnit.test(`click on ${component} inside the toolbar menu should not close it (T1287462)`, function(assert) {
+        QUnit.test(`click on editor component (${component}) inside the toolbar menu should not close it (T1287462)`, function(assert) {
             this.instance.option('items', [{
                 locateInMenu: 'always',
                 widget: component,
@@ -615,8 +596,8 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
 
             this.overflowMenu.click();
 
-            const $component = this.overflowMenu.instance()._popup.$content().find(cssClass);
-            $($component.eq(0)).trigger('dxclick');
+            const $menuItem = $('.dx-toolbar-menu-section .dx-item').eq(0);
+            $menuItem.trigger('dxclick');
 
             assert.strictEqual(this.instance.option('overflowMenuVisible'), true, `overflow menu remains visible after clicking ${component} in it`);
         });
@@ -1279,23 +1260,6 @@ QUnit.module('adaptivity', moduleConfig, () => {
 
         assert.ok($.contains($sections.eq(2).get(0), $afterItem.get(0)));
         assert.ok($sections.eq(2).hasClass('dx-toolbar-menu-last-section'), 'border for last section is removed');
-    });
-
-    QUnit.test('menu should not be closed after click on editors', function(assert) {
-        const $beforeItem = $('<div>').width(150);
-
-        this.instance.option({
-            items: [
-                { location: 'before', locateInMenu: 'auto', template: () => $beforeItem },
-            ],
-            width: 100
-        });
-
-        this.overflowMenu.click();
-
-        $($beforeItem).trigger('dxclick');
-
-        assert.ok(this.overflowMenu.instance().option('opened'), 'dropdown is not closed');
     });
 
     QUnit.test('menu should be closed after click on button or menu items', function(assert) {

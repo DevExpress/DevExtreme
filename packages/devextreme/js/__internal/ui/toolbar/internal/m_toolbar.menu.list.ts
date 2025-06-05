@@ -76,7 +76,6 @@ export default class ToolbarMenuList extends ListBase {
   }
 
   _getItemCssClasses(item): string[] {
-    const location = item.location ?? 'menu';
     const cssClasses: string[] = [];
     const actionableComponents = this._getActionableComponents();
 
@@ -84,12 +83,11 @@ export default class ToolbarMenuList extends ListBase {
       cssClasses.push(TOOLBAR_MENU_CUSTOM_CLASS);
     }
 
-    if (item.widget && !actionableComponents.includes(item.widget)) {
-      cssClasses.push(item.cssClass);
-      return cssClasses;
-    }
+    const isAction = item.isAction
+      || !(item.location || item.widget)
+      || actionableComponents.includes(item.widget);
 
-    if (location === 'menu' || item.isAction || actionableComponents.includes(item.widget)) {
+    if (isAction) {
       cssClasses.push(TOOLBAR_MENU_ACTION_CLASS);
     }
 
