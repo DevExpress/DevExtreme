@@ -77,14 +77,7 @@ const createStoreFromConfig = (storeConfig) => {
 };
 
 const createCustomStoreFromUrl = (url, normalizationOptions) => new CustomStore({
-  load: () => {
-    const d = ajaxUtils.sendRequest({ url, dataType: 'json' });
-
-    return d.then((res) => ({
-      data: res,
-      totalCount: res.length,
-    }));
-  },
+  load: () => ajaxUtils.sendRequest({ url, dataType: 'json' }),
   loadMode: normalizationOptions?.fromUrlLoadMode,
 });
 

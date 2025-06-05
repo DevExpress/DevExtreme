@@ -2,7 +2,7 @@ import type { DataSource } from '@js/common/data';
 import type { FilterDescriptor } from '@js/common/data.types';
 import ArrayStore from '@js/common/data/array_store';
 import { Deferred } from '@js/core/utils/deferred';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isPlainObject } from '@js/core/utils/type';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
 import { equalByValue } from '@ts/core/utils/m_common';
@@ -168,7 +168,7 @@ export class DataController {
           const tempLoadOptions = getLoadOptionsWithoutLocalPaging(loadOptions);
 
           new ArrayStore(e.data).load(tempLoadOptions).done((filteredData) => {
-            e.extra = e.extra || {};
+            e.extra = isPlainObject(e.extra) ? e.extra : {};
 
             if (hasLocalPaging) {
               this._filteredItemCount.value = filteredData.length;
@@ -177,6 +177,10 @@ export class DataController {
 
               new ArrayStore(e.data).load(loadOptions).done((newData) => {
                 e.data = newData;
+
+                if (e.storeLoadOptions.requireTotalCount) {
+                  e.extra.totalCount = e.data.length;
+                }
               });
             } else {
               e.data = filteredData;
