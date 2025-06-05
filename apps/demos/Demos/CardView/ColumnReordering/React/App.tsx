@@ -1,16 +1,18 @@
 import React from 'react';
-import CardView, { Column } from 'devextreme-react/card-view';
+import CardView, { Column, Paging } from 'devextreme-react/card-view';
 import { orders } from './data.ts';
 
 const App = () => (
   <CardView
     id="cardView"
     dataSource={orders}
-    cardMinWidth={100}
-    wordWrapEnabled={true}
+    cardsPerRow={2}
     keyExpr="ID"
     allowColumnReordering={true}
   >
+    <Paging
+      pageSize={4}
+    />
     <Column
       dataField="OrderNumber"
       allowReordering={false}

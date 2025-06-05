@@ -1,5 +1,5 @@
 import React from 'react';
-import CardView, { Column } from 'devextreme-react/card-view';
+import CardView, { Column, Paging } from 'devextreme-react/card-view';
 import { orders, Order } from './data.ts';
 
 function getDeliveryHours(rowData: Order) {
@@ -34,8 +34,7 @@ const App = () => (
   <CardView
     dataSource={orders}
     keyExpr="ID"
-    cardMinWidth={100}
-    wordWrapEnabled={true}
+    cardsPerRow={2}
     // TODO: make nested
     headerFilter={{ visible: true }}
     // TODO: make nested
@@ -43,6 +42,9 @@ const App = () => (
     defaultFilterValue={filterValue}
     filterBuilder={filterBuilderConfig}
   >
+    <Paging
+      pageSize={4}
+    />
     <Column
       dataField="OrderNumber"
       // TODO: make nested

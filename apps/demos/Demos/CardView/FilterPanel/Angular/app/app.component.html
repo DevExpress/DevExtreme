@@ -6,9 +6,11 @@
   [filterPanel]="filterPanelConfig"
   [filterValue]="filterValue"
   [filterBuilder]="filterBuilderConfig"
-  [cardMinWidth]="100"
-  [wordWrapEnabled]="true"
+  [cardsPerRow]="2"
 >
+  <dxo-card-view-paging
+    [pageSize]="4"
+  ></dxo-card-view-paging>
   <dxi-card-view-column
     dataField="OrderNumber"
     [headerFilter]="orderNumberHeaderFilterConfig"
