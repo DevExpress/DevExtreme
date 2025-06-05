@@ -6,6 +6,6 @@ $(() => {
     paging: {
       pageSize: 4
     },
-    columns: ['CompanyName', 'Address', 'City', 'State', 'Zipcode', 'Phone'],
+    columns: ['Company', 'Address', 'City', 'State', 'Zipcode', 'Phone'],
   });
 });

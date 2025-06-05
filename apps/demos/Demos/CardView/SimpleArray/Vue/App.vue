@@ -17,5 +17,5 @@
 import { DxCardView, DxColumn, DxPaging } from 'devextreme-vue/card-view';
 import { customers } from './data.ts';
 
-const columns = ['CompanyName', 'Address', 'City', 'State', 'Zipcode', 'Phone'];
+const columns = ['Company', 'Address', 'City', 'State', 'Zipcode', 'Phone'];
 </script>
