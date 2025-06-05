@@ -4,7 +4,7 @@ import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 
 const TEST_FILE = './images/test-image-1.png';
-const INPUT_SELECTOR = '.dx-fileuploader input[type=file]';
+const INPUT_SELECTOR = '.dx-fileuploader input';
 
 fixture.disablePageReloads`FileUploader - file list visibility`.page(url(__dirname, '../container.html'));
 
