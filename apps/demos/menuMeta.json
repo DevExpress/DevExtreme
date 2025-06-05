@@ -4147,7 +4147,7 @@
     "Name": "WYSIWYG Editor",
     "Groups": [
       {
-        "Name": "Html Editor",
+        "Name": "HTML Editor",
         "Equivalents": "dxHtmlEditor, dx-htmleditor",
         "Groups": [
           {
