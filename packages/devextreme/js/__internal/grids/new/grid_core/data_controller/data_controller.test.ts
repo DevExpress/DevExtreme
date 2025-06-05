@@ -1,4 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
+import { CustomStore } from '@js/common/data';
 
 import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
@@ -64,6 +65,44 @@ describe('DataController', () => {
       await dataController.waitLoaded();
 
       expect(optionsController.oneWay('paging.pageIndex').peek()).toEqual(0);
+    });
+  });
+
+  describe('when totalCount is not specified', () => {
+    it('works with CustomStore', async () => {
+      try {
+        const { dataController } = setup({
+          dataSource: new CustomStore({
+            load: () => generateData(10),
+          }),
+          paging: {
+            pageSize: 3,
+          },
+        });
+
+        await dataController.waitLoaded();
+
+        expect(dataController.dataSource.value.totalCount()).toEqual(3);
+      } catch (err) {
+        expect(false).toBeTruthy();
+      }
+    });
+
+    it('works with json url', async () => {
+      try {
+        const { dataController } = setup({
+          dataSource: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/data/customers.json',
+          paging: {
+            pageSize: 3,
+          },
+        });
+
+        await dataController.waitLoaded();
+
+        expect(dataController.dataSource.value.totalCount()).toEqual(3);
+      } catch (err) {
+        expect(false).toBeTruthy();
+      }
     });
   });
 
