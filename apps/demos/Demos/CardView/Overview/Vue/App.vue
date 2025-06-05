@@ -2,13 +2,16 @@
   <DxCardView
     :data-source="employees"
     key-expr="ID"
-    :card-min-width="250"
+    :card-min-width="300"
     cards-per-row="auto"
     :header-filter="headerFilterConfig"
     :search-panel="searchPanelConfig"
     card-footer-template="footerTemplate"
     ref="cardView"
   >
+    <DxPaging
+      :page-size="4"
+    />
     <DxSelection mode="multiple"/>
     <DxCardCover
       :image-expr="imageExpr"
@@ -84,7 +87,7 @@
 
 <script setup lang="ts">
 import DxCardView, {
-  DxColumn, DxCardCover, DxSelection,
+  DxColumn, DxCardCover, DxSelection, DxPaging
 } from 'devextreme-vue/card-view';
 import DxButton from 'devextreme-vue/button';
 import notify from 'devextreme/ui/notify';
@@ -117,7 +120,6 @@ function calculateFullName({ First_Name, Last_Name }: Employee): string {
 function calculateAddress({ State, City }: Employee): string {
   return `${City}, ${State}`;
 }
-
 
 function showNotify(text: string) {
   notify({

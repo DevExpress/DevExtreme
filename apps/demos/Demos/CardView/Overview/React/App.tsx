@@ -1,6 +1,6 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useRef } from 'react';
 import CardView, {
-  CardCover, Column, Selection, CardViewRef,
+  CardCover, Column, Selection, Paging, CardViewRef,
 } from 'devextreme-react/card-view';
 import Button from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
@@ -91,13 +91,16 @@ function App() {
     <CardView
       dataSource={employees}
       keyExpr="ID"
-      cardMinWidth={250}
+      cardMinWidth={300}
       cardsPerRow="auto"
       headerFilter={headerFilterConfig}
       searchPanel={searchPanelConfig}
       cardFooterComponent={CardFooterComponent}
       ref={cardView}
     >
+      <Paging
+        pageSize={4}
+      />
       <Selection mode="multiple" />
       <CardCover
         imageExpr={imageExpr}
