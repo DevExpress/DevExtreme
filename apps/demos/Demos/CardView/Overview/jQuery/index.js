@@ -13,8 +13,12 @@ $(() => {
         dataField: 'Status',
         fieldValueTemplate({ field: { value } }) {
           return $('<div>')
-            .append($('<div>').addClass('indicator'))
-            .append($('<div>').text(value))
+            .append(
+              $('<div>').addClass('indicator')
+            )
+            .append(
+              $('<div>').text(value)
+            )
             .addClass('status')
             .addClass(
               value === 'Salaried'
