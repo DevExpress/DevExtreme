@@ -61,6 +61,8 @@ const App = () => {
       <CardView
         dataSource={employees}
         keyExpr="ID"
+        cardMinWidth={100}
+        wordWrapEnabled={true}
         // todo: move to nested
         columnChooser={{
           enabled: true,

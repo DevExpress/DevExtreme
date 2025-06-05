@@ -1,4 +1,10 @@
-<dx-card-view id="cardView" [dataSource]="customers" keyExpr="ID">
+<dx-card-view
+  id="cardView"
+  [dataSource]="customers"
+  keyExpr="ID"
+  [cardMinWidth]="100"
+  [wordWrapEnabled]="true"
+>
   <dxi-card-view-column
     *ngFor="let column of columns"
     [dataField]="column"

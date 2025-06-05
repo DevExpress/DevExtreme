@@ -1547,8 +1547,8 @@
             "Equivalents": "",
             "Demos": [
               {
-                "Title": "Columns Reordering",
-                "Name": "ColumnsReordering",
+                "Title": "Column Reordering",
+                "Name": "ColumnReordering",
                 "DocUrl": "",
                 "Widget": "CardView",
                 "MvcDescription": "",
@@ -1585,16 +1585,6 @@
               {
                 "Title": "Field Template",
                 "Name": "FieldTemplate",
-                "DocUrl": "",
-                "Widget": "CardView",
-                "MvcDescription": "",
-                "NetCoreDescription": "",
-                "MvcAdditionalFiles": [],
-                "DemoType": "Web"
-              },
-              {
-                "Title": "Toolbar Customization",
-                "Name": "ToolbarCustomization",
                 "DocUrl": "",
                 "Widget": "CardView",
                 "MvcDescription": "",

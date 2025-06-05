@@ -29,9 +29,10 @@ const App = () => (
   <CardView
     dataSource={dataSource}
     remoteOperations={true}
-    wordWrapEnabled={true}
     headerFilter={headerFilterConfig}
     searchPanel={searchPanelConfig}
+    cardMinWidth={100}
+    wordWrapEnabled={true}
   >
     <Editing
       allowAdding={true}

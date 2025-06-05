@@ -14,6 +14,8 @@ const App = () => (
   <CardView
     dataSource={houses}
     keyExpr="ID"
+    cardMinWidth={100}
+    wordWrapEnabled={true}
   >
     <CardCover
       imageExpr={imageExpr}

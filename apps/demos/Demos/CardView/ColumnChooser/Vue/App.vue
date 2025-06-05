@@ -12,7 +12,7 @@
         />
       </div>
       <div className="option">
-        <dxCheckBox
+        <DxCheckBox
           text="Search Enabled"
           :value="searchEnabled"
           @value-changed="({ value }) => { searchEnabled = value; }"
@@ -27,7 +27,7 @@
         />
       </div>
       <div className="option">
-        <dxCheckBox
+        <DxCheckBox
           text="Select By Click On Item"
           :value="selectByClick"
           @value-changed="({ value }) => { selectByClick = value; }"
@@ -39,6 +39,8 @@
   <DxCardView
     :data-source="employees"
     key-expr="ID"
+    :card-min-width="100"
+    :word-wrap-enabled="true"
     :column-chooser="{
       enabled: true,
       mode: columnChooserMode,
@@ -104,7 +106,7 @@ function imageExpr({ First_Name, Last_Name }: Employee): string {
 }
 
 function calculateFullName({ First_Name, Last_Name }: Employee): string {
-  return `${First_Name} ${Last_Name}`
+  return `${First_Name} ${Last_Name}`;
 }
 
 const columnChooserMode = ref<'select' | 'dragAndDrop'>('select');

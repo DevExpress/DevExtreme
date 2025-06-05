@@ -3,7 +3,14 @@ import CardView, { Column } from 'devextreme-react/card-view';
 import { orders } from './data.ts';
 
 const App = () => (
-  <CardView id="cardView" dataSource={orders} keyExpr="ID" allowColumnReordering={true}>
+  <CardView
+    id="cardView"
+    dataSource={orders}
+    cardMinWidth={100}
+    wordWrapEnabled={true}
+    keyExpr="ID"
+    allowColumnReordering={true}
+  >
     <Column
       dataField="OrderNumber"
       allowReordering={false}
