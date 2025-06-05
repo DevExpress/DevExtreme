@@ -58,7 +58,7 @@ export default function App() {
           </div>
         </div>
       </div>
-      <div className="options">
+      <div className="options-panel">
         <div className="caption">Options</div>
         <div className="option">
           <span>File types</span>
