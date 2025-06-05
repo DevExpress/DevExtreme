@@ -100,8 +100,9 @@ export class FilterSyncController {
         return;
       }
 
-      // NOTE: If HeaderFilter values is empty -> clear FilterPanel value
-      if (!composedHeaderFilter.length) {
+      // NOTE: If HeaderFilter values is empty & filter panel disabled -> clear FilterPanel value
+      const filterPanelEnabled = this.filterController.filterPanelFilterEnabled.value;
+      if (!composedHeaderFilter.length && filterPanelEnabled) {
         this.filterController.filterValueOption.value = null;
         return;
       }
@@ -156,8 +157,13 @@ export class FilterSyncController {
   }
 
   private handleHeaderFilterSync(headerFilter: FilterValue): void {
-    this.filterController.filterValueOption.value = headerFilter.length === 0
-      ? null
-      : headerFilter;
+    // NOTE: If we update filters from HeaderFilter side
+    // For better UX the filter panel will be enabled
+    batch(() => {
+      this.filterController.filterValueOption.value = headerFilter.length === 0
+        ? null
+        : headerFilter;
+      this.filterController.filterPanelFilterEnabled.value = true;
+    });
   }
 }
