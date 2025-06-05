@@ -32,9 +32,9 @@ $fluent-editor-border-width: var(--DS-sizing-10);
     box-sizing: border-box;
     content: "";
     position: absolute;
-    left: calc(-1 * var(--DS-sizing-10));
-    bottom: calc(-1 * var(--DS-sizing-10));
-    right: calc(-1 * var(--DS-sizing-10));
+    left: var(--DS-sizing-minus-10);
+    bottom: var(--DS-sizing-minus-10);
+    right: var(--DS-sizing-minus-10);
     height: $texteditor-input-border-radius;
     width: calc(100% + 2 * $fluent-editor-border-width);
     border-bottom-left-radius: $texteditor-input-border-radius;
@@ -51,7 +51,7 @@ $fluent-editor-border-width: var(--DS-sizing-10);
   &.dx-texteditor-with-floating-label {
     .dx-texteditor-label {
       width: calc(100% + 2 * $fluent-editor-border-width);
-      inset: calc(-1 * var(--DS-sizing-10));
+      inset: var(--DS-sizing-minus-10);
     }
 
     .dx-datebox {
@@ -117,9 +117,9 @@ $fluent-editor-border-width: var(--DS-sizing-10);
   }
 
   &::before {
-    left: calc(-1 * var(--DS-sizing-10));
-    bottom: calc(-1 * var(--DS-sizing-10));
-    right: calc(-1 * var(--DS-sizing-10));
+    left: var(--DS-sizing-minus-10);
+    bottom: var(--DS-sizing-minus-10);
+    right: var(--DS-sizing-minus-10);
     height: $texteditor-input-border-radius;
     width: calc(100% + 2 * $fluent-editor-border-width);
     border-bottom-left-radius: $texteditor-input-border-radius;
@@ -490,7 +490,7 @@ $fluent-editor-border-width: var(--DS-sizing-10);
       width: auto;
       max-width: 100%;
       display: block;
-      margin-bottom: calc(-1 * var(--DS-sizing-10));
+      margin-bottom: var(--DS-sizing-minus-10);
     }
   }
 

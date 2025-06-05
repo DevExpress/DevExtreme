@@ -171,8 +171,8 @@
       border-style: solid;
       border-top-color: $texteditor-border-color;
       border-bottom-color: $texteditor-border-bottom-color;
-      margin-left: calc(-1 * var(--DS-sizing-20));
-      margin-right: calc(-1 * var(--DS-sizing-20));
+      margin-left: var(--DS-sizing-minus-20);
+      margin-right: var(--DS-sizing-minus-20);
       border-radius: var(--DS-sizing-10);
       clip-path: inset(-$texteditor-label-font-size 1px -1px 1px);
 
@@ -238,7 +238,7 @@
             position: absolute;
             height: var(--DS-sizing-30);
             top: calc(-1 * $label-backdrop-offset-y);
-            margin-inline-start: calc(-1 * var(--DS-sizing-20));
+            margin-inline-start: var(--DS-sizing-minus-20);
             background-color: $label-backdrop-bg;
           }
         }
