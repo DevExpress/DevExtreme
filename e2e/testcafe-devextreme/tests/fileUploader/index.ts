@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Selector } from 'testcafe';
 import { testScreenshot } from '../../helpers/themeUtils';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
@@ -10,6 +11,10 @@ fixture.disablePageReloads`FileUploader - file list visibility`.page(url(__dirna
 [true, false].forEach((showFileList) => {
   test(`FileUploader with showFileList: ${showFileList} - after file selected`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    const container = Selector('#container');
+
+    console.log('Container: ', container);
 
     await testScreenshot(t, takeScreenshot, `fileuploader-show-filelist-${showFileList}.png`, {
       element: '#container',
