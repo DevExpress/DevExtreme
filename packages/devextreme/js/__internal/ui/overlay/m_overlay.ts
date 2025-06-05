@@ -775,7 +775,7 @@ class Overlay<
     const eventName = addNamespace('keydown', this.NAME);
 
     if (_loopFocus || enabled) {
-      eventsEngine.on(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
+      this._destroyTabTerminator();
     } else {
       eventsEngine.off(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
     }
