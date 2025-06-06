@@ -16,7 +16,7 @@ export const getAppliedFilterExpressions = (
   ];
 
   if (!filterSyncEnabled) {
-    filters.push(getFilterExpression(appliedFilters.headerFilter, columns, customOperations, 'filterBuilder'));
+    filters.push(getFilterExpression(appliedFilters.headerFilter, columns, customOperations, 'headerFilter'));
   }
 
   return filters.filter((filter) => filter);

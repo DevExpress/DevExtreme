@@ -198,7 +198,7 @@ describe('PublicMethods', () => {
           dataSourceFilter: undefined,
           columnFilterValues: [1, 2],
         });
-        expect(gridCore.getCombinedFilter()).toBe(undefined);
+        expect(gridCore.getCombinedFilter()).toStrictEqual([['a', '=', 1], 'or', ['a', '=', 2]]);
       });
     });
 
@@ -208,7 +208,7 @@ describe('PublicMethods', () => {
           dataSourceFilter: ['a', '=', 123],
           columnFilterValues: undefined,
         });
-        expect(gridCore.getCombinedFilter()).toEqual(['a', '=', 123]);
+        expect(gridCore.getCombinedFilter()).toStrictEqual(['a', '=', 123]);
       });
     });
 
@@ -218,7 +218,7 @@ describe('PublicMethods', () => {
           dataSourceFilter: ['a', '=', 123],
           columnFilterValues: [1, 2],
         });
-        expect(gridCore.getCombinedFilter()).toEqual(['a', '=', 123]);
+        expect(gridCore.getCombinedFilter()).toStrictEqual([['a', '=', 123], 'and', [['a', '=', 1], 'or', ['a', '=', 2]]]);
       });
     });
   });

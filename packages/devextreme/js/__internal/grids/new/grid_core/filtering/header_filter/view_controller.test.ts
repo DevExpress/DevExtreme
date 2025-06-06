@@ -67,12 +67,12 @@ describe('HeaderFilter', () => {
 
         const { viewController, columnsController } = setup({
           headerFilter: { visible: true },
-          columns: [{ name: 'A' }],
+          columns: [{ dataField: 'A', name: 'A' }],
         });
 
         viewController.openPopup(
           {} as Element,
-          { name: 'A' } as Column,
+          { dataField: 'A', name: 'A' } as Column,
         );
 
         const state = viewController.popupState.peek();
@@ -102,12 +102,12 @@ describe('HeaderFilter', () => {
             ...expectedHeaderFilter,
           },
           filterValues: 'test',
-          columns: [{ name: 'A' }],
+          columns: [{ dataField: 'A' }],
         });
 
         viewController.openPopup(
           {} as Element,
-          { name: 'A', headerFilter: { search: expectedSearch } } as unknown as Column,
+          { dataField: 'A', name: 'A', headerFilter: { search: expectedSearch } } as unknown as Column,
         );
 
         const state = viewController.popupState.peek();

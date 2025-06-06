@@ -1,4 +1,3 @@
-import type { InfernoNode } from 'inferno';
 import { Component } from 'inferno';
 
 import { CLASSES as BASE_CLASSES } from '../const';
@@ -13,7 +12,7 @@ export interface A11yStatusContainerComponentProps {
 }
 
 export class A11yStatusContainer extends Component<A11yStatusContainerComponentProps> {
-  public render(): InfernoNode {
+  public render(): JSX.Element {
     return (
         <div
             className={`${CLASSES.container} ${CLASSES.excludeFlexBox}`}
