@@ -65,6 +65,32 @@ export default function() {
                 assert.strictEqual(instance.option('value'), prepareTableValue(value));
                 assert.strictEqual(markup, value);
             });
+
+            ['MsoListParagraphCxSpFirst', 'MsoListParagraphCxSpMiddle', 'MsoListParagraphCxSpLast'].forEach(className => {
+                test(`editor should not throw error for ${className} class with allowSoftLineBreak (T1292587)`, function(assert) {
+                    const spy = sinon.spy(console, 'error');
+                    const value = `<p class="${className}"><br><br></p>`;
+                    const $element = $('#htmlEditor');
+                    $element.dxHtmlEditor({
+                        value
+                    }).dxHtmlEditor('instance');
+
+                    assert.strictEqual(spy.called, false, 'No console error was thrown');
+                    spy.restore();
+                });
+
+                test(`editor should preserve double <br> in list paragraph for ${className} class (T1292587)`, function(assert) {
+                    const value = `<p class="${className}"><br><br></p>`;
+                    const $element = $('#htmlEditor');
+                    $element.dxHtmlEditor({
+                        value
+                    }).dxHtmlEditor('instance');
+                    const markup = $element.find(`.${CONTENT_CLASS}`).html();
+                    const $markup = $('<div>').html(markup);
+
+                    assert.strictEqual($markup.find('br').length, 2, 'Two soft breaks preserved');
+                });
+            });
         });
 
         testModule('runtime editing', moduleConfig, function() {
