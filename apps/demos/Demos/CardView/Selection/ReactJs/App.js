@@ -25,7 +25,7 @@ const App = () => {
   }, []);
   return (
     <React.Fragment>
-      <div className="options">
+      <div className="options-panel">
         <div className="caption">Options</div>
         <div className="options-container">
           <div className="option">
