@@ -1,0 +1,23 @@
+<template>
+    <div className="task__progress">
+        <DxProgressBar
+            :value="value"
+            :statusFormat="(ratio) => `${ratio * 100}%`"
+        ></DxProgressBar>
+    </div>
+</template>
+
+<script setup lang="ts">
+import { employees } from './data.ts';
+import { DxProgressBar } from 'devextreme-vue/progress-bar';
+
+const props = defineProps<{
+  value: number,
+}>();
+</script>
+
+<style>
+.task__progress {
+  padding-top: 4px;
+}
+</style>
