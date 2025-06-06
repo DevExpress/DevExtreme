@@ -1,7 +1,7 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
-@use "../button/colors" as *;
+@use "../button/colors" as button;
 
 // adduse
 
@@ -11,7 +11,7 @@ $calendar-color: $base-text-color !default;
 * $name 20. Navigator text color
 * $type color
 */
-$calendar-navigator-text-color: $button-normal-color !default;
+$calendar-navigator-text-color: button.$button-normal-color !default;
 
 /**
 * $name 30. Header text color
@@ -45,9 +45,9 @@ $calendar-week-number-cell-bg: null !default;
 $calendar-week-number-border-radius: 0 !default;
 
 @if $mode == "light" {
-  $calendar-hover-bg: $button-default-outlined-selected-bg !default;
+  $calendar-hover-bg: button.$button-default-outlined-selected-bg !default;
   $calendar-cell-hover-border-color: $calendar-hover-bg !default;
-  $calendar-cell-active-bg: $button-default-outlined-active-bg !default;
+  $calendar-cell-active-bg: button.$button-default-outlined-active-bg !default;
   $calendar-cell-other-color: lighten($calendar-color, 23.92) !default;
   $calendar-week-number-cell-color: lighten($calendar-color, 23.92) !default;
   $calendar-cell-contoured-border-color: $calendar-cell-active-bg !default;

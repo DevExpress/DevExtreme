@@ -1,7 +1,7 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
-@use "../button/colors" as *;
+@use "../button/colors" as button;
 
 // adduse
 
@@ -43,7 +43,7 @@ $header-filter-color-empty: null !default;
 * $name 51. Selected row background color
 * $type color
 */
-$datagrid-selection-bg: $button-default-outlined-hover-bg !default;
+$datagrid-selection-bg: button.$button-default-outlined-hover-bg !default;
 
 /**
 * $name 52. Selected row border color
@@ -75,7 +75,7 @@ $datagrid-row-hovered-color: $base-hover-color !default;
 * $name 40. Modified data background color
 * $type color
 */
-$datagrid-cell-modified-border-color: $button-success-text-hover-bg !default;
+$datagrid-cell-modified-border-color: button.$button-success-text-hover-bg !default;
 $datagrid-cell-removed-border-color: $datagrid-border-color !default;
 $datagrid-row-removed-bg: $datagrid-hover-bg !default;
 $datagrid-cell-removed-text-color: null !default;
@@ -84,7 +84,7 @@ $datagrid-cell-removed-text-color: null !default;
 * $name 45. Invalid data faded color
 * $type color
 */
-$datagrid-row-invalid-faded-border-color: $button-danger-text-hover-bg !default;
+$datagrid-row-invalid-faded-border-color: button.$button-danger-text-hover-bg !default;
 $datagrid-nodata-color: $base-label-color !default;
 
 /**
@@ -163,7 +163,7 @@ $datagrid-filter-panel-color: $base-accent !default;
 $datagrid-draggable-column-text-color: null !default;
 
 $datagrid-text-link-disabled-opacity: $base-disabled-opacity;
-$datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
+$datagrid-icon-link-disabled-opacity: button.$button-disabled-icon-opacity;
 
 @if $mode == "light" {
   @if $color == "blue"{

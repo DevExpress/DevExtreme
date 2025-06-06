@@ -6,7 +6,7 @@
 @use "../sizes" as *;
 @use "../../base/diagram";
 @use "../../base/diagram/mixins" as *;
-@use "../button/colors" as *;
+@use "../button/colors" as button;
 @use "../overlay/colors" as *;
 @use "../accordion/colors" as *;
 @use "../popup/colors" as *;
@@ -475,5 +475,5 @@ $diagram-toolbox-title-size: 18px;
 }
 
 .dx-diagram-i-button-properties-panel-open {
-  @include diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/properties-panel-open.svg'), $button-default-color, $fluent-diagram-toolbar-icon-size, $fluent-diagram-toolbar-icon-size);
+  @include diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/properties-panel-open.svg'), button.$button-default-color, $fluent-diagram-toolbar-icon-size, $fluent-diagram-toolbar-icon-size);
 }

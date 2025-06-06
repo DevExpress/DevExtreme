@@ -4,7 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../button/sizes" as *;
-@use "../button/colors" as *;
+@use "../button/colors" as button;
 @use "../../base/buttonGroup";
 @use "../../base/buttonGroup/mixins" as *;
 
@@ -23,7 +23,7 @@
 
 .dx-buttongroup-mode-contained {
   border-radius: $button-border-radius;
-  box-shadow: $fluent-button-box-shadow-size $button-shadow-color;
+  box-shadow: $fluent-button-box-shadow-size button.$button-shadow-color;
 
   .dx-button-mode-contained {
     box-shadow: none;

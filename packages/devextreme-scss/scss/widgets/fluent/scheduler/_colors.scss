@@ -1,7 +1,7 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
-@use "../button/colors" as *;
+@use "../button/colors" as button;
 @use "../color" as extcolor;
 
 // adduse
@@ -39,7 +39,7 @@ $scheduler-appointment-base-color: null !default;
 * $type color
 */
 $scheduler-appointment-start-color: color.change($base-shadow-color, $alpha: 0.3) !default;
-$scheduler-appointment-active-color: $button-default-outlined-active-bg;
+$scheduler-appointment-active-color: button.$button-default-outlined-active-bg;
 
 /**
 * $name 60. Focused cell color

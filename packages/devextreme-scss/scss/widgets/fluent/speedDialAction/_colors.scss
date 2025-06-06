@@ -2,7 +2,7 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../overlay/colors" as *;
-@use "../button/colors" as *;
+@use "../button/colors" as button;
 
 // adduse
 
@@ -12,5 +12,5 @@ $speed-dial-action-label-shadow: 0 2px 6px color.change($base-shadow-color, $alp
 $speed-dial-action-shading-color: $overlay-shader-bg !default;
 
 $speed-dial-action-bg: $tmp-button-normal-bg !default;
-$speed-dial-action-hover-bg: $button-normal-hover-bg !default;
-$speed-dial-action-active-bg: $button-normal-active-bg !default;
+$speed-dial-action-hover-bg: button.$button-normal-hover-bg !default;
+$speed-dial-action-active-bg: button.$button-normal-active-bg !default;

@@ -1,7 +1,7 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
-@use "../button/colors" as *;
+@use "../button/colors" as button;
 
 // adduse
 
@@ -47,7 +47,7 @@ $list-item-active-bg: $base-active-bg !default;
 $list-holdmenu-bg: $base-bg !default;
 $list-holdmenu-border-color: $list-border-color !default;
 $list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.12) !default;
-$list-menu-button-default-color: $button-default-color !default;
+$list-menu-button-default-color: button.$button-default-color !default;
 $list-menu-button-default-bg: $tmp-button-default-bg !default;
 $list-menu-button-delete-bg: $base-danger !default;
 $list-item-ghost-bg: $base-element-bg !default;
