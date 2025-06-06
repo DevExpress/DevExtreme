@@ -66,7 +66,10 @@ export const compareDateWithEndDayHour = (options) => {
   return result;
 };
 
-export const getAppointmentTakesSeveralDays = (adapter) => !dateUtils.sameDate(adapter.startDate, adapter.endDate);
+export const getAppointmentTakesSeveralDays = (dates: {
+  startDate: Date;
+  endDate: Date;
+}) => !dateUtils.sameDate(dates.startDate, dates.endDate);
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const _appointmentPartInInterval = (startDate, endDate, startDayHour, endDayHour) => {
@@ -102,9 +105,7 @@ export const getRecurrenceException = (appointmentAdapter, timeZoneCalculator, t
 export const _convertRecurrenceException = (exceptionString, startDate, timeZoneCalculator, timeZone) => {
   exceptionString = exceptionString.replace(/\s/g, '');
 
-  const getConvertedToTimeZone = (date) => timeZoneCalculator.createDate(date, {
-    path: 'toGrid',
-  });
+  const getConvertedToTimeZone = (date) => timeZoneCalculator.createDate(date, 'toGrid');
 
   const exceptionDate = dateSerialization.deserializeDate(exceptionString);
   const convertedStartDate = getConvertedToTimeZone(startDate);

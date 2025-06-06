@@ -4,8 +4,8 @@ import { roundFloatPart } from '@js/core/utils/math';
 import { isNumeric } from '@js/core/utils/type';
 import { getSkippedHoursInRange, isAppointmentTakesAllDay } from '@ts/scheduler/r1/utils/index';
 
-import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import timeZoneUtils from '../../m_utils_time_zone';
+import { AppointmentAdapter } from '../../utils/index';
 import BaseAppointmentsStrategy from './m_strategy_base';
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
@@ -62,11 +62,13 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     const appointment = super.shiftAppointmentByViewOffset(initialAppointment);
-    const adapter = createAppointmentAdapter(appointment, this.dataAccessors, this.timeZoneCalculator);
-    const isRecurring = !!adapter.recurrenceRule;
+    const adapter = new AppointmentAdapter(appointment, this.dataAccessors);
+    const isRecurring = adapter.isRecurrent;
 
-    const appointmentStartDate = adapter.calculateStartDate('toGrid');
-    const appointmentEndDate = adapter.calculateEndDate('toGrid');
+    const {
+      startDate: appointmentStartDate,
+      endDate: appointmentEndDate,
+    } = adapter.getCalculatedDates(this.timeZoneCalculator, 'toGrid');
     const appointmentDuration = appointmentEndDate.getTime() - appointmentStartDate.getTime();
 
     const appointmentBeginInCurrentView = this.options.startViewDate < appointmentStartDate;
@@ -311,7 +313,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
 
   isAllDay(appointmentData) {
     return isAppointmentTakesAllDay(
-      createAppointmentAdapter(appointmentData, this.dataAccessors, this.timeZoneCalculator),
+      new AppointmentAdapter(appointmentData, this.dataAccessors),
       this.allDayPanelMode,
     );
   }

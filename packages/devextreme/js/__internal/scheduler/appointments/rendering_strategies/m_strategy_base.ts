@@ -6,9 +6,9 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import { isAppointmentTakesAllDay } from '@ts/scheduler/r1/utils/index';
 import type { SafeAppointment } from '@ts/scheduler/types';
 
-import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import timeZoneUtils from '../../m_utils_time_zone';
 import type { AppointmentDataAccessor } from '../../utils';
+import { AppointmentAdapter } from '../../utils/index';
 import { AppointmentSettingsGenerator } from '../m_settings_generator';
 import AdaptivePositioningStrategy from './m_appointments_positioning_strategy_adaptive';
 import AppointmentPositioningStrategy from './m_appointments_positioning_strategy_base';
@@ -290,9 +290,8 @@ class BaseRenderingStrategy {
   }
 
   isAppointmentTakesAllDay(rawAppointment) {
-    const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
     return isAppointmentTakesAllDay(
-      adapter,
+      new AppointmentAdapter(rawAppointment, this.dataAccessors),
       this.allDayPanelMode,
     );
   }

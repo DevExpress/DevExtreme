@@ -3,12 +3,11 @@ import type { Appointment } from '@js/ui/scheduler';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { dateUtils } from '@ts/core/utils/m_date';
 
-import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import type { AppointmentDataItem, SafeAppointment } from '../../types';
-import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
+import type { AppointmentDataAccessor } from '../../utils';
+import { AppointmentAdapter } from '../../utils/index';
 import type { TimeZoneCalculator } from '../timezone_calculator';
 
-const RECURRENCE_FREQ = 'freq';
 const toMs = dateUtils.dateToMilliseconds;
 
 export const replaceIncorrectEndDate = (
@@ -19,6 +18,7 @@ export const replaceIncorrectEndDate = (
   const startDate = new Date(dataAccessors.get('startDate', rawAppointment));
   const endDate = new Date(dataAccessors.get('endDate', rawAppointment));
 
+  // NOTE: error E1032
   if (!dateUtilsTs.isValidDate(startDate)) {
     return false;
   }
@@ -58,19 +58,19 @@ export const getAppointmentDataItems = (
       return;
     }
 
-    const adapter = createAppointmentAdapter(rawAppointment, dataAccessors, timeZoneCalculator);
-    const regex = new RegExp(RECURRENCE_FREQ, 'gi');
+    const adapter = new AppointmentAdapter(rawAppointment, dataAccessors);
+    const { startDate, endDate } = adapter.getCalculatedDates(timeZoneCalculator, 'toGrid');
     const { recurrenceRule } = adapter;
-    const hasRecurrenceRule = Boolean(recurrenceRule?.match(regex)?.length);
+    const hasRecurrenceRule = adapter.isRecurrent;
     const visible = isDefined(rawAppointment.visible)
       ? Boolean(rawAppointment.visible)
       : true;
 
     result.push({
       allDay: Boolean(adapter.allDay),
-      startDate: adapter.calculateStartDate('toGrid'),
+      startDate,
       startDateTimeZone: rawAppointment.startDateTimeZone,
-      endDate: adapter.calculateEndDate('toGrid'),
+      endDate,
       endDateTimeZone: rawAppointment.endDateTimeZone,
       recurrenceRule,
       recurrenceException: adapter.recurrenceException,

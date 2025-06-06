@@ -1,11 +1,10 @@
 import {
   beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
-import { createTimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator';
 
-import { TimeZoneCalculator } from '../calculator';
-import type { PathTimeZoneConversion } from '../const';
-import type { TimeZoneCalculatorOptions } from '../types';
+import { TimeZoneCalculator } from './calculator';
+import type { TimeZoneCalculatorOptions } from './types';
+import { createTimeZoneCalculator } from './utils';
 
 describe('TimeZoneCalculator', () => {
   describe('General tests', () => {
@@ -27,33 +26,31 @@ describe('TimeZoneCalculator', () => {
 
         const convertedDate = calculator.createDate(
           sourceDate,
-          { path: `to${path}` as PathTimeZoneConversion },
-        ) as Date;
+          `to${path}` as any,
+        );
 
         const convertedDateBack = calculator.createDate(
           convertedDate,
-          { path: `from${path}` as PathTimeZoneConversion },
-        ) as Date;
+          `from${path}` as any,
+        );
 
         expect(convertedDate.getTime() !== sourceDate.getTime())
-          // eslint-disable-next-line spellcheck/spell-checker
           .toBeTruthy();
 
         expect(sourceDate.getTime() === convertedDateBack.getTime())
-          // eslint-disable-next-line spellcheck/spell-checker
           .toBeTruthy();
       });
     });
 
     [
-      { path: 'toGrid' as PathTimeZoneConversion, appointmentTimezone: 'America/Los_Angeles', timezone: 'common' },
-      { path: 'toGrid' as PathTimeZoneConversion, appointmentTimezone: undefined, timezone: 'common' },
-      { path: 'fromGrid' as PathTimeZoneConversion, appointmentTimezone: 'America/Los_Angeles', timezone: 'common' },
-      { path: 'fromGrid' as PathTimeZoneConversion, appointmentTimezone: undefined, timezone: 'common' },
-      { path: 'toAppointment' as PathTimeZoneConversion, appointmentTimezone: 'America/Los_Angeles', timezone: 'appointment' },
-      { path: 'toAppointment' as PathTimeZoneConversion, appointmentTimezone: undefined, timezone: 'common' },
-      { path: 'fromAppointment' as PathTimeZoneConversion, appointmentTimezone: 'America/Los_Angeles', timezone: 'appointment' },
-      { path: 'fromAppointment' as PathTimeZoneConversion, appointmentTimezone: undefined, timezone: 'common' },
+      { path: 'toGrid', appointmentTimezone: 'America/Los_Angeles', timezone: 'common' },
+      { path: 'toGrid', appointmentTimezone: undefined, timezone: 'common' },
+      { path: 'fromGrid', appointmentTimezone: 'America/Los_Angeles', timezone: 'common' },
+      { path: 'fromGrid', appointmentTimezone: undefined, timezone: 'common' },
+      { path: 'toAppointment', appointmentTimezone: 'America/Los_Angeles', timezone: 'appointment' },
+      { path: 'toAppointment', appointmentTimezone: undefined, timezone: 'common' },
+      { path: 'fromAppointment', appointmentTimezone: 'America/Los_Angeles', timezone: 'appointment' },
+      { path: 'fromAppointment', appointmentTimezone: undefined, timezone: 'common' },
     ].forEach(({ path, appointmentTimezone, timezone }) => {
       it(`should use ${timezone} timezone [path: ${path}, appointmentTimezone: ${appointmentTimezone}]`, () => {
         const calculator = createTimeZoneCalculator('America/Los_Angeles');
@@ -67,7 +64,7 @@ describe('TimeZoneCalculator', () => {
           get appointment(): number { return appointmentMock() as number; },
         }));
 
-        calculator.createDate(sourceDate, { path, appointmentTimeZone: appointmentTimezone });
+        calculator.createDate(sourceDate, path as any, appointmentTimezone);
 
         expect(clientMock).toHaveBeenCalledTimes(1);
         expect(commonMock).toHaveBeenCalledTimes(timezone === 'common' ? 1 : 0);
@@ -81,10 +78,8 @@ describe('TimeZoneCalculator', () => {
       expect(() => {
         calculator.createDate(
           sourceDate,
-          {
-            path: 'WrongPath' as PathTimeZoneConversion,
-            appointmentTimeZone: 'America/Los_Angeles',
-          },
+          'WrongPath' as any,
+          'America/Los_Angeles',
         );
       })
         .toThrow('not specified pathTimeZoneConversion');

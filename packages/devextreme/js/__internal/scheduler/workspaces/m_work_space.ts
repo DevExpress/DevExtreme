@@ -1439,8 +1439,8 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
     return extend(true, {}, {
       startDate: cellData.startDate,
       endDate: cellData.endDate,
-      startDateUTC: cellData.startDate && this.timeZoneCalculator?.createDate(cellData.startDate, { path: 'fromGrid' }),
-      endDateUTC: cellData.endDate && this.timeZoneCalculator?.createDate(cellData.endDate, { path: 'fromGrid' }),
+      startDateUTC: cellData.startDate && this.timeZoneCalculator?.createDate(cellData.startDate, 'fromGrid'),
+      endDateUTC: cellData.endDate && this.timeZoneCalculator?.createDate(cellData.endDate, 'fromGrid'),
       groups: cellData.groups,
       groupIndex: cellData.groupIndex,
       allDay: cellData.allDay,
@@ -1731,7 +1731,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
   }
 
   updateScrollPosition(date, appointmentGroupValues?: GroupValues, allDay = false) {
-    const newDate = this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+    const newDate = this.timeZoneCalculator.createDate(date, 'toGrid');
     const inAllDayRow = allDay && this.isAllDayPanelVisible;
 
     if (this.needUpdateScrollPosition(newDate, appointmentGroupValues, inAllDayRow)) {
