@@ -21,6 +21,10 @@ function removeNewLineChar(operations) {
   newLineOperation.insert = newLineOperation.insert.trim();
 }
 
+function isTextOp(op): boolean {
+  return typeof op === 'string';
+}
+
 const getMatcher = (quill) => {
   const Delta = quill.import('delta');
   const msStyleAttributeName = quill.MS_LIST_DATA_KEY;
@@ -29,6 +33,11 @@ const getMatcher = (quill) => {
     const ops = delta.ops.slice();
 
     const insertOperation = ops[0];
+
+    if (!isTextOp(insertOperation.insert)) {
+      return delta;
+    }
+
     insertOperation.insert = insertOperation.insert.replace(/^\s+/, '');
     const listDecoratorMatches = insertOperation.insert.match(/^(\S+)\s+/);
     const indent = listDecoratorMatches && getIndent(node, msStyleAttributeName);
