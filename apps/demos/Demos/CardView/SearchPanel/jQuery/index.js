@@ -2,9 +2,10 @@ $(() => {
   $('#card-view').dxCardView({
     dataSource: tasks,
     keyExpr: 'Task_ID',
-    wordWrapEnabled: true,
-    cardMinWidth: 100,
-    wordWrapEnabled: true,
+    cardsPerRow: 2,
+    paging: {
+      pageSize: 4
+    },
     columns: [
       {
         dataField: 'Task_Subject',

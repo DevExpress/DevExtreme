@@ -6,15 +6,17 @@ $(() => {
   $('#card-view').dxCardView({
     dataSource: orders,
     keyExpr: 'ID',
-    cardMinWidth: 100,
-    wordWrapEnabled: true,
+    cardsPerRow: 2,
+    paging: {
+      pageSize: 4
+    },
     headerFilter: {
       visible: true,
     },
     filterPanel: {
       visible: true,
     },
-    filterValue: [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'beforeNoon']],
+    filterValue: [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'afterNoon']],
     filterBuilder: {
       customOperations: [{
         name: 'beforeNoon',
@@ -73,6 +75,7 @@ $(() => {
       },
     }, {
       dataField: 'CustomerStoreCity',
+      caption: 'City',
     }, {
       dataField: 'Employee',
     }],

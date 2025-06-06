@@ -2,8 +2,11 @@ $(() => {
   const cardView = $('#card-view').dxCardView({
     dataSource: employees,
     keyExpr: 'ID',
-    cardMinWidth: 250,
+    cardMinWidth: 300,
     cardsPerRow: 'auto',
+    paging: {
+      pageSize: 4,
+    },
     cardCover: {
       imageExpr: ({ First_Name, Last_Name }) => `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`,
       altExpr: ({ First_Name, Last_Name }) => `Photo of ${First_Name} ${Last_Name}`,

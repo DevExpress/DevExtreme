@@ -33,6 +33,7 @@ const App = () => (
       allowAdding={true}
       allowUpdating={true}
       allowDeleting={true}
+      popup={{ width: 700, height: 400 }}
     ></Editing>
     <Column
       dataField="Task_Subject"

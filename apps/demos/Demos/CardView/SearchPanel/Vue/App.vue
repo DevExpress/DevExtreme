@@ -2,11 +2,13 @@
   <DxCardView
     :data-source="tasks"
     key-expr="Task_ID"
-    :card-min-width="100"
-    :word-wrap-enabled="true"
+    :cards-per-row="2"
     :header-filter="headerFilterConfig"
     :search-panel="searchPanelConfig"
   >
+    <DxPaging
+      :page-size="4"
+    />
     <DxColumn
       data-field="Task_Subject"
       caption="Subject"
@@ -32,7 +34,7 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-import { DxCardView, DxColumn } from 'devextreme-vue/card-view';
+import { DxCardView, DxColumn, DxPaging } from 'devextreme-vue/card-view';
 import { tasks } from './data.ts';
 
 // TODO: Nested component does not exist

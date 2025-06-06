@@ -1,6 +1,6 @@
 export interface Customer {
   ID: number;
-  CompanyName: string;
+  Company: string;
   Address: string;
   City: string;
   State: string;
@@ -11,7 +11,7 @@ export interface Customer {
 
 export const customers: Customer[] = [{
   ID: 1,
-  CompanyName: 'Super Mart of the West',
+  Company: 'Super Mart of the West',
   Address: '702 SW 8th Street',
   City: 'Bentonville',
   State: 'Arkansas',
@@ -20,7 +20,7 @@ export const customers: Customer[] = [{
   Fax: '(800) 555-2171',
 }, {
   ID: 2,
-  CompanyName: 'Electronics Depot',
+  Company: 'Electronics Depot',
   Address: '2455 Paces Ferry Road NW',
   City: 'Atlanta',
   State: 'Georgia',
@@ -29,7 +29,7 @@ export const customers: Customer[] = [{
   Fax: '(800) 595-3231',
 }, {
   ID: 3,
-  CompanyName: 'K&S Music',
+  Company: 'K&S Music',
   Address: '1000 Nicllet Mall',
   City: 'Minneapolis',
   State: 'Minnesota',
@@ -38,7 +38,7 @@ export const customers: Customer[] = [{
   Fax: '(612) 304-6074',
 }, {
   ID: 4,
-  CompanyName: "Tom's Club",
+  Company: "Tom's Club",
   Address: '999 Lake Drive',
   City: 'Issaquah',
   State: 'Washington',
@@ -47,7 +47,7 @@ export const customers: Customer[] = [{
   Fax: '(800) 955-2293',
 }, {
   ID: 5,
-  CompanyName: 'E-Mart',
+  Company: 'E-Mart',
   Address: '3333 Beverly Rd',
   City: 'Hoffman Estates',
   State: 'Illinois',
@@ -56,7 +56,7 @@ export const customers: Customer[] = [{
   Fax: '(847) 286-2501',
 }, {
   ID: 6,
-  CompanyName: 'Walters',
+  Company: 'Walters',
   Address: '200 Wilmot Rd',
   City: 'Deerfield',
   State: 'Illinois',
@@ -65,7 +65,7 @@ export const customers: Customer[] = [{
   Fax: '(847) 940-2501',
 }, {
   ID: 7,
-  CompanyName: 'StereoShack',
+  Company: 'StereoShack',
   Address: '400 Commerce S',
   City: 'Fort Worth',
   State: 'Texas',
@@ -74,7 +74,7 @@ export const customers: Customer[] = [{
   Fax: '(817) 820-0742',
 }, {
   ID: 8,
-  CompanyName: 'Circuit Town',
+  Company: 'Circuit Town',
   Address: '2200 Kensington Court',
   City: 'Oak Brook',
   State: 'Illinois',
@@ -83,7 +83,7 @@ export const customers: Customer[] = [{
   Fax: '(800) 955-9392',
 }, {
   ID: 9,
-  CompanyName: 'Premier Buy',
+  Company: 'Premier Buy',
   Address: '7601 Penn Avenue South',
   City: 'Richfield',
   State: 'Minnesota',
@@ -92,7 +92,7 @@ export const customers: Customer[] = [{
   Fax: '(612) 291-2001',
 }, {
   ID: 10,
-  CompanyName: 'ElectrixMax',
+  Company: 'ElectrixMax',
   Address: '263 Shuman Blvd',
   City: 'Naperville',
   State: 'Illinois',
@@ -101,7 +101,7 @@ export const customers: Customer[] = [{
   Fax: '(630) 438-7801',
 }, {
   ID: 11,
-  CompanyName: 'Video Emporium',
+  Company: 'Video Emporium',
   Address: '1201 Elm Street',
   City: 'Dallas',
   State: 'Texas',
@@ -110,7 +110,7 @@ export const customers: Customer[] = [{
   Fax: '(214) 854-3001',
 }, {
   ID: 12,
-  CompanyName: 'Screen Shop',
+  Company: 'Screen Shop',
   Address: '1000 Lowes Blvd',
   City: 'Mooresville',
   State: 'North Carolina',

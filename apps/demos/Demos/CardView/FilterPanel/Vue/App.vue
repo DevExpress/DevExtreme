@@ -3,13 +3,15 @@
     id="cardView"
     :data-source="orders"
     key-expr="ID"
-    :card-min-width="100"
-    :word-wrap-enabled="true"
+    :cards-per-row="2"
     :header-filter="headerFilterConfig"
     :filter-panel="filterPanelConfig"
     :filter-builder="filterBuilderConfig"
     :filter-value="filterValue"
   >
+    <DxPaging
+      :page-size="4"
+    />
     <DxColumn
       data-field="OrderNumber"
       :header-filter="orderNumberHeaderFilterConfig"
@@ -29,6 +31,7 @@
     />
     <DxColumn
       data-field="CustomerStoreCity"
+      caption="City"
     />
     <DxColumn
       data-field="Employee"
@@ -36,7 +39,7 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-import { DxCardView, DxColumn } from 'devextreme-vue/card-view';
+import { DxCardView, DxColumn, DxPaging } from 'devextreme-vue/card-view';
 import { type Order, orders } from './data.ts';
 
 function getDeliveryHours(rowData: Order) {
@@ -76,7 +79,7 @@ const filterBuilderConfig = {
   }],
 };
 
-const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'beforeNoon']];
+const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'afterNoon']];
 
 // TODO: make nested
 const saleAmountHeaderFilterConfig = {

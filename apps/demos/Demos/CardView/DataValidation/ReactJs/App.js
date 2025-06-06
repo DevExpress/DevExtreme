@@ -3,6 +3,7 @@ import CardView, {
   Column,
   CardCover,
   Editing,
+  Paging,
   RequiredRule,
   PatternRule,
   EmailRule,
@@ -42,13 +43,13 @@ const App = () => (
   <CardView
     dataSource={employees}
     keyExpr="id"
-    cardMinWidth={100}
-    wordWrapEnabled={true}
+    cardsPerRow={2}
     // todo: move to nested components
     searchPanel={{
       visible: true,
     }}
   >
+    <Paging pageSize={4} />
     <CardCover
       imageExpr={imageExpr}
       altExpr={altExpr}
