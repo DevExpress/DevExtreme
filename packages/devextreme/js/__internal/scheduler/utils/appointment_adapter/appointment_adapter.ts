@@ -11,11 +11,18 @@ export class AppointmentAdapter {
     public dataAccessors: AppointmentDataAccessor,
   ) {}
 
-  get startDate(): Date { return this.dataAccessors.get('startDate', this.source); }
+  // TODO: move this transformation to dataAccessor
+  get startDate(): Date {
+    const date = this.dataAccessors.get('startDate', this.source);
+    return date === undefined ? date : new Date(date);
+  }
 
   set startDate(value: Date) { this.dataAccessors.set('startDate', this.source, value); }
 
-  get endDate(): Date { return this.dataAccessors.get('endDate', this.source); }
+  get endDate(): Date {
+    const date = this.dataAccessors.get('endDate', this.source);
+    return date === undefined ? date : new Date(date);
+  }
 
   set endDate(value: Date) { this.dataAccessors.set('endDate', this.source, value); }
 
@@ -76,7 +83,7 @@ export class AppointmentAdapter {
   ): { startDate: Date; endDate: Date } {
     return {
       startDate: timeZoneCalculator.createDate(this.startDate, path, this.startDateTimeZone),
-      endDate: timeZoneCalculator.createDate(this.endDate, path, this.startDateTimeZone),
+      endDate: timeZoneCalculator.createDate(this.endDate, path, this.endDateTimeZone),
     };
   }
 

@@ -4,15 +4,15 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import { dateUtils } from '@ts/core/utils/m_date';
 
 import type { AppointmentDataItem, SafeAppointment } from '../../types';
-import type { AppointmentDataAccessor } from '../../utils';
-import { AppointmentAdapter } from '../../utils/index';
+import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
+import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import type { TimeZoneCalculator } from '../timezone_calculator';
 
 const toMs = dateUtils.dateToMilliseconds;
 
 export const replaceIncorrectEndDate = (
   rawAppointment: Appointment,
-  appointmentDuration: number,
+  appointmentMinDuration: number,
   dataAccessors: AppointmentDataAccessor,
 ): rawAppointment is SafeAppointment => {
   const startDate = new Date(dataAccessors.get('startDate', rawAppointment));
@@ -30,7 +30,7 @@ export const replaceIncorrectEndDate = (
     const isAllDay = Boolean(dataAccessors.get('allDay', rawAppointment));
     const correctedEndDate = isAllDay
       ? dateUtils.setToDayEnd(new Date(startDate))
-      : new Date(startDate.getTime() + appointmentDuration * toMs('minute'));
+      : new Date(startDate.getTime() + appointmentMinDuration * toMs('minute'));
 
     // TODO(4): fixme. serializationFormat auto-detection will not the same as in startDate
     dataAccessors.set('endDate', rawAppointment, correctedEndDate);

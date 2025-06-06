@@ -5,7 +5,7 @@ import { isNumeric } from '@js/core/utils/type';
 import { getSkippedHoursInRange, isAppointmentTakesAllDay } from '@ts/scheduler/r1/utils/index';
 
 import timeZoneUtils from '../../m_utils_time_zone';
-import { AppointmentAdapter } from '../../utils/index';
+import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
 import BaseAppointmentsStrategy from './m_strategy_base';
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;

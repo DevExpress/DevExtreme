@@ -3,15 +3,11 @@ import {
 } from '@jest/globals';
 import { mockFieldExpressions } from '@ts/scheduler/__mock__/appointment_data_accessor.mock';
 
-import { TimeZoneCalculator } from '../../r1/timezone_calculator';
+import { createTimeZoneCalculator } from '../../r1/timezone_calculator';
 import { AppointmentDataAccessor } from '../data_accessor/appointment_data_accessor';
 import { AppointmentAdapter } from './appointment_adapter';
 
-const mockCalculator = new TimeZoneCalculator({
-  getClientOffset: (): number => new Date().getTimezoneOffset() * 60000,
-  tryGetCommonOffset: (): number => 15,
-  tryGetAppointmentOffset: (): number => 7.5,
-});
+const mockCalculator = createTimeZoneCalculator('America/Los_Angeles');
 const mockAppointmentDataAccessor = new AppointmentDataAccessor(mockFieldExpressions, true, 'yyyy/MM/dd HH:mm:ss');
 
 describe('AppointmentAdapter', () => {
@@ -95,14 +91,29 @@ describe('AppointmentAdapter', () => {
   describe('getCalculatedDates', () => {
     it('should return calculate dates', () => {
       const appointment = {
-        startDate: '2000/01/05 12:00:00',
-        endDate: '2000/01/07 09:00:00',
+        startDate: Date.UTC(2000, 1, 5, 12),
+        endDate: Date.UTC(2000, 1, 7, 9),
       } as any;
       const adapter = new AppointmentAdapter(appointment, mockAppointmentDataAccessor);
 
       expect(adapter.getCalculatedDates(mockCalculator, 'toGrid')).toEqual({
-        startDate: new Date('2000-01-06T00:00:00.000Z'),
-        endDate: new Date('2000-01-07T21:00:00.000Z'),
+        startDate: new Date(2000, 1, 5, 4),
+        endDate: new Date(2000, 1, 7, 1),
+      });
+    });
+
+    it('should return calculate dates of different timezones', () => {
+      const appointment = {
+        startDate: Date.UTC(2020, 1, 4, 5),
+        startDateTimeZone: 'Europe/Moscow',
+        endDateTimeZone: 'Asia/Yekaterinburg',
+        endDate: Date.UTC(2020, 1, 4, 6),
+      } as any;
+      const adapter = new AppointmentAdapter(appointment, mockAppointmentDataAccessor);
+
+      expect(adapter.getCalculatedDates(mockCalculator, 'toGrid')).toEqual({
+        startDate: new Date(2020, 1, 3, 21),
+        endDate: new Date(2020, 1, 3, 22),
       });
     });
   });
@@ -110,15 +121,15 @@ describe('AppointmentAdapter', () => {
   describe('calculateDates', () => {
     it('should calculate dates', () => {
       const appointment = {
-        startDate: '2000/01/05 12:00:00',
-        endDate: '2000/01/07 09:00:00',
+        startDate: Date.UTC(2000, 1, 5, 12),
+        endDate: Date.UTC(2000, 1, 7, 9),
       } as any;
       const adapter = new AppointmentAdapter(appointment, mockAppointmentDataAccessor);
       adapter.calculateDates(mockCalculator, 'toGrid');
 
       expect(adapter.source).toEqual({
-        startDate: '2000/01/06 01:00:00',
-        endDate: '2000/01/07 22:00:00',
+        startDate: '2000/02/05 04:00:00',
+        endDate: '2000/02/07 01:00:00',
       });
       expect(appointment).toBe(adapter.source);
     });

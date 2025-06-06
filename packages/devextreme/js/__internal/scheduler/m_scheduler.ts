@@ -69,9 +69,10 @@ import type {
   AppointmentDataItem, AppointmentViewModel, RawViewType,
   SafeAppointment, ViewType,
 } from './types';
+import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
 import type { IFieldExpr } from './utils/index';
-import { AppointmentAdapter, macroTaskArray } from './utils/index';
+import { macroTaskArray } from './utils/index';
 import { isAgendaWorkspaceComponent } from './utils/is_agenda_workpace_component';
 import { setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
 import { getLeafGroupValues } from './utils/resource_manager/group_utils';
@@ -1445,7 +1446,7 @@ class Scheduler extends Widget<any> {
       isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
 
       createFormattedDateText: (appointment, targetedAppointment, format) => (this.fire as any)('getTextAndFormatDate', appointment, targetedAppointment, format),
-      getAppointmentDisabled: (appointment) => this._dataAccessors.get('disabled', appointment),
+      getAppointmentDisabled: (appointment) => Boolean(this._dataAccessors.get('disabled', appointment)),
       onItemContextMenu: that._createActionByOption('onAppointmentContextMenu'),
       createEventArgs: that._createEventArgs.bind(that),
     };
@@ -2308,13 +2309,13 @@ class Scheduler extends Widget<any> {
   }
 
   showAddAppointmentPopup(cellData, cellGroups) {
-    const resultAppointment = {
-      allDay: Boolean(cellData.allDay),
-      startDate: cellData.startDateUTC,
-      endDate: cellData.endDateUTC,
-      ...cellGroups,
-    };
+    const appointmentAdapter = new AppointmentAdapter({}, this._dataAccessors);
 
+    appointmentAdapter.allDay = Boolean(cellData.allDay);
+    appointmentAdapter.startDate = cellData.startDateUTC;
+    appointmentAdapter.endDate = cellData.endDateUTC;
+
+    const resultAppointment = extend(appointmentAdapter.source, cellGroups);
     this.showAppointmentPopup(resultAppointment, true);
   }
 

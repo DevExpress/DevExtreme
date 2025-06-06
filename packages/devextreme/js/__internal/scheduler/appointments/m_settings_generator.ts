@@ -7,8 +7,8 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
 import { isDateAndTimeView } from '../r1/utils/index';
-import type { AppointmentDataAccessor } from '../utils';
-import { AppointmentAdapter } from '../utils/index';
+import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
+import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import {
   getAppointmentGroupIndex,
   getAppointmentGroupValues,

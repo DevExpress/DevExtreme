@@ -29,8 +29,8 @@ import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT
 import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
 import type { AppointmentViewModel } from '../types';
-import type { AppointmentDataAccessor } from '../utils';
-import { AppointmentAdapter } from '../utils/index';
+import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
+import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import { getAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import { getGroupTexts } from '../utils/resource_manager/group_utils';
 import { AgendaAppointment } from './appointment/agenda_appointment';
@@ -1130,10 +1130,8 @@ class SchedulerAppointments extends CollectionWidget {
     const endDayHour = this.invoke('getEndDayHour');
     const timeZoneCalculator = this.option('timeZoneCalculator');
 
-    const appointmentIsLong = getAppointmentTakesSeveralDays({
-      startDate: this.dataAccessors.get('startDate', appointment),
-      endDate: this.dataAccessors.get('startDate', appointment),
-    });
+    const adapter = new AppointmentAdapter(appointment, this.dataAccessors);
+    const appointmentIsLong = getAppointmentTakesSeveralDays(adapter);
     const result: any = [];
 
     startDate = timeZoneCalculator.createDate(startDate, 'toGrid');

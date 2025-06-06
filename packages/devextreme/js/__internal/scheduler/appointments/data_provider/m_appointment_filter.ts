@@ -9,8 +9,8 @@ import {
   getDatesWithoutTime, isAppointmentTakesAllDay, isTimelineView,
 } from '../../r1/utils/index';
 import type { AppointmentDataItem, SafeAppointment } from '../../types';
-import type { AppointmentDataAccessor } from '../../utils';
-import { AppointmentAdapter } from '../../utils/index';
+import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
+import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import type { ResourceLoader } from '../../utils/loader/resource_loader';
 import { getAppointmentGroupValues } from '../../utils/resource_manager/appointment_groups_utils';
 import type ViewDataProvider from '../../workspaces/view_model/m_view_data_provider';

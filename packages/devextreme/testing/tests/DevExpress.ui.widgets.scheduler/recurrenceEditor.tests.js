@@ -455,13 +455,15 @@ module('Repeat-end editor', () => {
                     timeZoneCalculator,
                     getStartDateTimeZone: () => startDateTimeZone
                 });
-                assert.deepEqual(timeZoneCalculatorSpy.getCall(0).args[1], { ...result, path: 'to' + result.path });
+                assert.deepEqual(timeZoneCalculatorSpy.getCall(0).args[1], 'to' + result.path);
+                assert.deepEqual(timeZoneCalculatorSpy.getCall(0).args[2], result.appointmentTimeZone);
 
                 const untilDate = instance.getEditorByField('until');
 
                 untilDate.option('value', new Date('2023-06-16 23:59:59'));
 
-                assert.deepEqual(timeZoneCalculatorSpy.getCall(1).args[1], { ...result, path: 'from' + result.path });
+                assert.deepEqual(timeZoneCalculatorSpy.getCall(1).args[1], 'from' + result.path);
+                assert.deepEqual(timeZoneCalculatorSpy.getCall(1).args[2], result.appointmentTimeZone);
                 assert.equal(instance.option('value'), 'FREQ=WEEKLY;UNTIL=20230617T065959Z', 'Recurrence editor has right value');
             });
         });

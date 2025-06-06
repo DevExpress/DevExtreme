@@ -1,8 +1,8 @@
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
-import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
 import timeZoneUtils from '../../m_utils_time_zone';
+import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 
 const toMs = dateUtils.dateToMilliseconds;
 

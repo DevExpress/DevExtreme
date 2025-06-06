@@ -7,7 +7,7 @@ import { isPlainObject } from '@js/core/utils/type';
 import { formatDates, getFormatType } from './appointments/m_text_utils';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './m_classes';
 import { utils } from './m_utils';
-import { AppointmentAdapter } from './utils/index';
+import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -111,7 +111,10 @@ const subscribes = {
   },
 
   getTextAndFormatDate(appointmentRaw, targetedAppointmentRaw, format) { // TODO: rename to createFormattedDateText
-    const targetedAppointment = targetedAppointmentRaw || appointmentRaw;
+    const targetedAppointment = {
+      ...appointmentRaw,
+      ...targetedAppointmentRaw,
+    };
     // pull out time zone converting from appointment adapter for knockout(T947938)
     const adapter = new AppointmentAdapter(targetedAppointment, this._dataAccessors);
     const { startDate, endDate } = adapter.getCalculatedDates(this.timeZoneCalculator, 'toGrid');
