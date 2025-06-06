@@ -45,7 +45,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxCardView, DxColumn, DxEditing, DxRequiredRule,
+  DxCardView, DxColumn, DxEditing, DxSearchPanel, DxHeaderFilter, DxRequiredRule,
 } from 'devextreme-vue/card-view';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 

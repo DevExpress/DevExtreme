@@ -6,7 +6,7 @@
     :card-min-width="100"
     :word-wrap-enabled="true"
   >
-    <DxColumnHeaderFilter
+    <DxHeaderFilter
       :enabled="true"
     />
     <DxColumn
@@ -61,7 +61,7 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-import { DxCardView, DxColumn, DxColumnHeaderFilter, DxColumnHeaderFilterSearch, type DxCardViewTypes } from 'devextreme-vue/card-view';
+import { DxCardView, DxColumn, DxHeaderFilter, DxColumnHeaderFilter, DxColumnHeaderFilterSearch, type DxCardViewTypes } from 'devextreme-vue/card-view';
 import { type Order, orders } from './data.ts';
 
 function getOrderDay(rowData: Order) {
