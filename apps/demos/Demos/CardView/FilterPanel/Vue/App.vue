@@ -61,7 +61,7 @@ function getDeliveryHours(rowData: Order) {
 const customOperations = [{
   name: 'beforeNoon',
   caption: 'Before noon',
-  dataTypes: ['datetime'],
+  dataTypes: ['datetime' as const],
   icon: 'check',
   hasValue: false,
   calculateFilterExpression() {
@@ -70,7 +70,7 @@ const customOperations = [{
 }, {
   name: 'afterNoon',
   caption: 'After noon',
-  dataTypes: ['datetime'],
+  dataTypes: ['datetime' as const],
   icon: 'check',
   hasValue: false,
   calculateFilterExpression() {
