@@ -83,11 +83,7 @@ export default class ToolbarMenuList extends ListBase {
       cssClasses.push(TOOLBAR_MENU_CUSTOM_CLASS);
     }
 
-    const isAction = item.isAction
-      || !(item.location || item.widget)
-      || actionableComponents.includes(item.widget);
-
-    if (isAction) {
+    if (!item.widget || actionableComponents.includes(item.widget)) {
       cssClasses.push(TOOLBAR_MENU_ACTION_CLASS);
     }
 
