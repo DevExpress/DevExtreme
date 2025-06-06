@@ -7,7 +7,7 @@
     :word-wrap-enabled="true"
   >
     <DxHeaderFilter
-      :enabled="true"
+      :visible="true"
     />
     <DxColumn
       data-field="OrderNumber"
