@@ -14,9 +14,9 @@ const LicenseInfo = ({
         <div>
             <p><b>Image licensed under: </b> <span>{LicenseName}</span></p>
             <p><b>Author: </b> <span>{Author}</span></p>
-            <p><b>Source link: </b> <a href={vehicleLink}>
-                    {vehicleLink}
-                </a>
+            <p>
+                <b>Source link: </b>
+                <a href={vehicleLink}>{vehicleLink}</a>
             </p>
             <p><b>Edits: </b> <span>{Edits}</span></p>
         </div>

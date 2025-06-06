@@ -42,7 +42,7 @@ const VehicleCard = ({
           type="default"
           width="100%"
           onClick={() => onShowInfo(vehicle)}
-        ></Button>
+        />
       </div>
     </div>
   </div>

@@ -41,7 +41,7 @@ const VehicleCard = ({
                     {bodyStyleName}
                 </div>
                 <div className="vehicle__modification">
-                     {horsepower} h.p.
+                    {horsepower} h.p.
                 </div>
             </div>
             <div className="vehicle__footer-container">
@@ -50,8 +50,7 @@ const VehicleCard = ({
                     type="default"
                     width="100%"
                     onClick={() => onShowInfo(vehicle)}
-                >
-                </Button>
+                />
             </div>
         </div>
     </div>

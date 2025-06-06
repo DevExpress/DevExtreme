@@ -58,7 +58,7 @@
     :hideOnOutsideClick="true"
     title="Image Info"
     :onHiding="hideInfo"
->
+  >
         <DxPosition at="center" my="center" collision="fit" />
         <template #content>
             <LicenseInfo :vehicle="currentVehicle" />
