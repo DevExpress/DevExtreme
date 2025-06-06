@@ -19,7 +19,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getOuterHeight } from '@js/core/utils/size';
 import {
-  isDefined, isFunction, isObject, isPlainObject, isRenderer, isWindow,
+  isDefined, isFunction, isObject, isPlainObject, isRenderer,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { Item } from '@js/ui/context_menu';
@@ -74,8 +74,6 @@ class ContextMenu extends MenuBase {
   _overlay!: dxOverlay<OverlayProperties>;
 
   _overlayContentId?: string;
-
-  _showContextMenuEventHandler?: (event: unknown) => any;
 
   getShowEvent(showEventOption: {
     delay?: number;
@@ -445,17 +443,7 @@ class ContextMenu extends MenuBase {
 
     const eventName = addNamespace(showEvent, this.NAME);
 
-    if (this._showContextMenuEventHandler) {
-      eventsEngine.off(
-        domAdapter.getDocument(),
-        eventName,
-        target,
-        // @ts-expect-error
-        this._showContextMenuEventHandler,
-      );
-    } else {
-      eventsEngine.off($(target), eventName);
-    }
+    eventsEngine.off($(target), eventName);
   }
 
   _attachShowContextMenuEvents() {
@@ -483,14 +471,9 @@ class ContextMenu extends MenuBase {
     const handler = (e) => contextMenuAction({ event: e, target: $(e.currentTarget) });
 
     contextMenuAction = this._createAction(contextMenuAction);
+
     // @ts-expect-error
-    if (isRenderer(target) || target.nodeType || isWindow(target)) {
-      this._showContextMenuEventHandler = undefined;
-      eventsEngine.on(target, eventName, handler);
-    } else {
-      this._showContextMenuEventHandler = handler;
-      eventsEngine.on(domAdapter.getDocument(), eventName, target, this._showContextMenuEventHandler);
-    }
+    eventsEngine.on($(target), eventName, handler);
   }
 
   _hoverEndHandler(e): void {
