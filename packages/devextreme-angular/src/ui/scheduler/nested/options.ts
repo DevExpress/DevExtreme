@@ -41,7 +41,7 @@ import { DxiSchedulerOptionsItemComponent } from './options-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoSchedulerOptionsComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
+export class DxoSchedulerOptionsComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');

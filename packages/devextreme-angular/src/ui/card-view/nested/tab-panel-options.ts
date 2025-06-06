@@ -43,7 +43,7 @@ import { DxiCardViewTabPanelOptionsItemComponent } from './tab-panel-options-ite
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoCardViewTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
+export class DxoCardViewTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');

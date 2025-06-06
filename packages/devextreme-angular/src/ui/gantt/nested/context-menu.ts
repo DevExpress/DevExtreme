@@ -37,7 +37,7 @@ import { DxiGanttItemComponent } from './item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoGanttContextMenuComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
+export class DxoGanttContextMenuComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');

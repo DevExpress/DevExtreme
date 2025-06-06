@@ -38,7 +38,7 @@ import { DxiDiagramPageSizeItemComponent } from './page-size-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
+export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get height(): number {
         return this._getOption('height');

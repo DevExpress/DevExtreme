@@ -36,7 +36,7 @@ import { DxiDiagramTabGroupComponent } from './tab-group-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxiDiagramTabComponent extends CollectionNestedOption {
+export class DxiDiagramTabComponent extends CollectionNestedOption implements AfterContentInit  {
     @Input()
     get commands(): Array<Command | CustomCommand> {
         return this._getOption('commands');

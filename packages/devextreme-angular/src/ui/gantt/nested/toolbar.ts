@@ -37,7 +37,7 @@ import { DxiGanttToolbarItemComponent } from './toolbar-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
+export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get items(): Array<dxGanttToolbarItem | GanttPredefinedToolbarItem> {
         return this._getOption('items');

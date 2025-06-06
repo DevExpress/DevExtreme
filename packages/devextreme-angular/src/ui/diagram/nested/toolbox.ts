@@ -37,7 +37,7 @@ import { DxiDiagramToolboxGroupComponent } from './toolbox-group-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoDiagramToolboxComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
+export class DxoDiagramToolboxComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get groups(): { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType>, title?: string }[] {
         return this._getOption('groups');

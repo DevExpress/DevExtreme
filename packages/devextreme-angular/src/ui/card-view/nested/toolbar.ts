@@ -37,7 +37,7 @@ import { DxiCardViewToolbarItemComponent } from './toolbar-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoCardViewToolbarComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
+export class DxoCardViewToolbarComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');

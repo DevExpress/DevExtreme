@@ -44,7 +44,7 @@ import { DxiCardViewTabbedItemComponent } from './tabbed-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoCardViewFormComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
+export class DxoCardViewFormComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');

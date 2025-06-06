@@ -37,7 +37,7 @@ import { DxiHtmlEditorTableContextMenuItemComponent } from './table-context-menu
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoHtmlEditorTableContextMenuComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
+export class DxoHtmlEditorTableContextMenuComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');

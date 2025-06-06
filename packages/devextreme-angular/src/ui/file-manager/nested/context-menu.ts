@@ -37,7 +37,7 @@ import { DxiFileManagerItemComponent } from './item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoFileManagerContextMenuComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
+export class DxoFileManagerContextMenuComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get items(): Array<dxFileManagerContextMenuItem | FileManagerPredefinedContextMenuItem> {
         return this._getOption('items');

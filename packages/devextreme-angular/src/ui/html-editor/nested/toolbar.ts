@@ -37,7 +37,7 @@ import { DxiHtmlEditorToolbarItemComponent } from './toolbar-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
+export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get container(): any | string {
         return this._getOption('container');

@@ -43,7 +43,7 @@ import { DxiFormTabPanelOptionsItemComponent } from './tab-panel-options-item-dx
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
+export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');

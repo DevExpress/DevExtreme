@@ -38,7 +38,7 @@ import { DxiFileManagerToolbarItemComponent } from './toolbar-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoFileManagerToolbarComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit   {
+export class DxoFileManagerToolbarComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get fileSelectionItems(): Array<dxFileManagerToolbarItem | FileManagerPredefinedToolbarItem> {
         return this._getOption('fileSelectionItems');
