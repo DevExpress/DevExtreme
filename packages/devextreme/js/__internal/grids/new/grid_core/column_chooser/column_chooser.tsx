@@ -132,10 +132,10 @@ export class ColumnChooser extends Component<ColumnChooserProps> {
 
     if (this.props.popupConfig.position === undefined) {
       popup.option('position', {
-        my: 'right bottom',
+        my: 'right top',
         at: 'right bottom',
         // TODO: replace with content view element
-        of: '.dx-gridcore-contentview',
+        of: '.dx-cardview-column-chooser-button',
         collision: 'fit',
         offset: '-2 -2',
         boundaryOffset: '2 2',

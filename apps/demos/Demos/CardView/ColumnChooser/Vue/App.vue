@@ -1,5 +1,5 @@
 <template>
-  <div className="options">
+  <div className="options-panel">
     <div className="caption">Options</div>
     <div className="options-container">
       <div className="option">
@@ -12,7 +12,7 @@
         />
       </div>
       <div className="option">
-        <dxCheckBox
+        <DxCheckBox
           text="Search Enabled"
           :value="searchEnabled"
           @value-changed="({ value }) => { searchEnabled = value; }"
@@ -27,7 +27,7 @@
         />
       </div>
       <div className="option">
-        <dxCheckBox
+        <DxCheckBox
           text="Select By Click On Item"
           :value="selectByClick"
           @value-changed="({ value }) => { selectByClick = value; }"
@@ -39,6 +39,8 @@
   <DxCardView
     :data-source="employees"
     key-expr="ID"
+    :card-min-width="100"
+    :word-wrap-enabled="true"
     :column-chooser="{
       enabled: true,
       mode: columnChooserMode,
@@ -104,7 +106,7 @@ function imageExpr({ First_Name, Last_Name }: Employee): string {
 }
 
 function calculateFullName({ First_Name, Last_Name }: Employee): string {
-  return `${First_Name} ${Last_Name}`
+  return `${First_Name} ${Last_Name}`;
 }
 
 const columnChooserMode = ref<'select' | 'dragAndDrop'>('select');
@@ -114,7 +116,7 @@ const selectByClick = ref(true);
 
 </script>
 <style>
-  .options {
+  .options-panel {
     margin-top: 20px;
     padding: 20px;
     background-color: rgba(191, 191, 191, 0.15);

@@ -15,6 +15,7 @@ $(() => {
   $('#card-view').dxCardView({
     dataSource: store,
     remoteOperations: true,
+    cardMinWidth: 100,
     wordWrapEnabled: true,
     columns: [
       {
@@ -48,6 +49,10 @@ $(() => {
       allowAdding: true,
       allowUpdating: true,
       allowDeleting: true,
+      popup: {
+        width: 700,
+        height: 400,
+      },
     },
     searchPanel: {
       visible: true,

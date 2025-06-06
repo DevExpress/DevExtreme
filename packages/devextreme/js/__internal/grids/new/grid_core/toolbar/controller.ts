@@ -2,14 +2,16 @@ import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
 
 import { OptionsController } from '../options_controller/options_controller';
-import { DEFAULT_TOOLBAR_ITEMS } from './defaults';
-import type { PredefinedToolbarItem, ToolbarItem, ToolbarItems } from './types';
-import { normalizeToolbarItems } from './utils';
+import { DEFAULT_TOOLBAR_ITEMS } from './const';
+import type {
+  DefaultToolbarItem, DefaultToolbarItemsCollection, ToolbarItem, ToolbarItems,
+} from './types';
+import { getSortedToolbarItems, normalizeToolbarItems } from './utils';
 
 export class ToolbarController {
   private readonly itemSubscriptions: Record<string, () => void> = {};
 
-  private readonly defaultItems = signal<Record<string, PredefinedToolbarItem>>({});
+  private readonly defaultItems = signal<DefaultToolbarItemsCollection>({});
 
   private readonly userItems: ReadonlySignal<ToolbarItems | undefined>;
 
@@ -24,7 +26,7 @@ export class ToolbarController {
 
     this.items = computed(
       () => normalizeToolbarItems(
-        Object.values(this.defaultItems.value),
+        getSortedToolbarItems(this.defaultItems.value),
         this.userItems.value,
         DEFAULT_TOOLBAR_ITEMS,
       ),
@@ -32,7 +34,7 @@ export class ToolbarController {
   }
 
   public addDefaultItem(
-    item: ReadonlySignal<PredefinedToolbarItem>,
+    item: ReadonlySignal<DefaultToolbarItem>,
     needRender: ReadonlySignal<boolean> = signal(true),
   ): void {
     const { name } = item.peek();

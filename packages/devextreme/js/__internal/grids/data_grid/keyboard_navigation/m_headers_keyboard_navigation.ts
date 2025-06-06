@@ -115,5 +115,8 @@ gridCore.registerModule('headersKeyboardNavigation', {
     controllers: {
       headersKeyboardNavigation,
     },
+    views: {
+      ...headersKeyboardNavigationModule.extenders.views,
+    },
   },
 });

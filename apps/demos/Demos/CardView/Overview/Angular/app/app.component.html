@@ -1,35 +1,71 @@
 <div class="demo-container">
   <dx-card-view
     [dataSource]="employees"
-    [keyExpr]="'ID'"
-    [allowColumnReordering]="true"
-    [cardsPerRow]="'auto'"
-    [cardMinWidth]="250"
+    keyExpr="ID"
+    [cardMinWidth]="300"
+    cardsPerRow="auto"
     [headerFilter]="headerFilterConfig"
     [searchPanel]="searchPanelConfig"
-    [columnChooser]="columnChooserConfig"
+    cardFooterTemplate="footerTemplate"
   >
-    <!-- Columns -->
-    <dxi-card-view-column
-      dataField="FullName"
-      allowHiding="false"
-    ></dxi-card-view-column>
-    <dxi-card-view-column dataField="Position"></dxi-card-view-column>
-    <dxi-card-view-column dataField="Department"></dxi-card-view-column>
-    <dxi-card-view-column dataField="Phone"></dxi-card-view-column>
-    <dxi-card-view-column dataField="Email"></dxi-card-view-column>
-    <!-- Card cover -->
-    <dxo-card-view-card-cover
-      [imageExpr]="getEmployeeImage"
-      [altExpr]="getEmployeeImageAltText"
-    ></dxo-card-view-card-cover>
-    <!-- Pager -->
-    <dxo-card-view-pager
-      [showInfo]="true"
-      [showNavigationButtons]="true"
-      [showPageSizeSelector]="true"
-    ></dxo-card-view-pager>
-    <!-- Selection -->
+    <dxo-card-view-paging [pageSize]="4"></dxo-card-view-paging>
     <dxo-card-view-selection mode="multiple"></dxo-card-view-selection>
+
+    <dxo-card-view-card-cover
+      [imageExpr]="imageExpr"
+      [altExpr]="altExpr"
+    ></dxo-card-view-card-cover>
+
+    <dxi-card-view-column
+      dataField="Status"
+      fieldValueTemplate="statusTemplate"
+    ></dxi-card-view-column>
+    <dxi-card-view-column
+      caption="Full Name"
+      [calculateFieldValue]="calculateFullName"
+    ></dxi-card-view-column>
+    <dxi-card-view-column
+      caption="Position"
+      dataField="Title"
+    ></dxi-card-view-column>
+    <dxi-card-view-column dataField="Department"></dxi-card-view-column>
+    <dxi-card-view-column dataField="Mobile_Phone"></dxi-card-view-column>
+    <dxi-card-view-column
+      dataField="Email"
+      fieldValueTemplate="emailTemplate"
+    ></dxi-card-view-column>
+    <dxi-card-view-column
+      caption="Address"
+      [calculateFieldValue]="calculateAddress"
+    ></dxi-card-view-column>
+
+    <div
+      *dxTemplate="let params of 'statusTemplate'"
+      class="status"
+      [class.status--ok]="params.field.value === 'Salaried'"
+      [class.status--warning]="params.field.value !== 'Salaried'"
+    >
+      <span class="indicator"></span>
+      <span>{{ params.field.value }}</span>
+    </div>
+    <div *dxTemplate="let params of 'emailTemplate'">
+      <a href="mailto:{{ params.field.value }}">{{ params.field.text }}</a>
+    </div>
+    <div *dxTemplate="let params of 'footerTemplate'" class="footer">
+      <dx-button
+        text="Call"
+        icon="tel"
+        type="default"
+        stylingMode="contained"
+        (onClick)="showNotify('Call')"
+      ></dx-button>
+      <dx-button
+        text="Send Email"
+        icon="send"
+        type="default"
+        stylingMode="contained"
+        (onClick)="showNotify('Send Email')"
+      ></dx-button>
+    </div>
   </dx-card-view>
 </div>

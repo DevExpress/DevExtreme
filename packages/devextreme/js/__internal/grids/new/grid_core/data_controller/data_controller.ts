@@ -229,6 +229,7 @@ export class DataController {
 
     effect(
       () => {
+        const initialized = this.options.initialized.value;
         const dataSource = this.dataSource.value;
         const pageIndex = this.pageIndex.value;
         const pageSize = this.pageSize.value;
@@ -236,6 +237,10 @@ export class DataController {
         const displayFilter = this.filterController.displayFilter.value;
         const pagingEnabled = this.pagingEnabled.value;
         const sortParameters = this.sortingController.sortParameters.value;
+
+        if (!initialized) {
+          return;
+        }
 
         let someParamChanged = false;
 
