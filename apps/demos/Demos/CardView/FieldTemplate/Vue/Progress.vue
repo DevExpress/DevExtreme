@@ -9,7 +9,6 @@
 </template>
 
 <script setup lang="ts">
-import { employees } from './data.ts';
 import { DxProgressBar } from 'devextreme-vue/progress-bar';
 
 const props = defineProps<{
