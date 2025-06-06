@@ -11,6 +11,7 @@ import 'generic_light.css!';
 
 import 'ui/text_box';
 import 'ui/drop_down_button';
+import 'ui/select_box';
 import 'ui/tabs';
 import 'ui/toolbar';
 
