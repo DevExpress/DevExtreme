@@ -71,29 +71,41 @@ export default class ToolbarMenuList extends ListBase {
   }
 
   _renderItem(index, item, itemContainer, $after) {
-    const location = item.location ?? 'menu';
-    const $container = this[`_$${location}Section`];
+    const $container = this[`_$${item.location ?? 'menu'}Section`];
     const itemElement = super._renderItem(index, item, $container, $after);
 
+    const itemCssClasses = this._getItemCssClasses(item);
+    itemElement.addClass(itemCssClasses.join(' '));
+
+    return itemElement;
+  }
+
+  _getItemCssClasses(item): string[] {
+    const cssClasses: string[] = [];
+    const actionableComponents = this._getActionableComponents();
+
     if (this._getItemTemplateName({ itemData: item })) {
-      itemElement.addClass(TOOLBAR_MENU_CUSTOM_CLASS);
+      cssClasses.push(TOOLBAR_MENU_CUSTOM_CLASS);
     }
 
-    if (location === 'menu' || item.widget === 'dxButton' || item.widget === 'dxButtonGroup' || item.isAction) {
-      itemElement.addClass(TOOLBAR_MENU_ACTION_CLASS);
+    if (!item.widget || actionableComponents.includes(item.widget)) {
+      cssClasses.push(TOOLBAR_MENU_ACTION_CLASS);
     }
 
     if (item.widget === 'dxButton') {
-      itemElement.addClass(TOOLBAR_HIDDEN_BUTTON_CLASS);
+      cssClasses.push(TOOLBAR_HIDDEN_BUTTON_CLASS);
     }
 
     if (item.widget === 'dxButtonGroup') {
-      itemElement.addClass(TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS);
+      cssClasses.push(TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS);
     }
 
-    itemElement.addClass(item.cssClass);
+    cssClasses.push(item.cssClass);
+    return cssClasses;
+  }
 
-    return itemElement;
+  _getActionableComponents() {
+    return ['dxButton', 'dxButtonGroup'];
   }
 
   _getItemTemplateName(args) {
