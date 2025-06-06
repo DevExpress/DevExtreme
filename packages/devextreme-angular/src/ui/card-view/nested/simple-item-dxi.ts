@@ -220,7 +220,6 @@ export class DxiCardViewSimpleItemComponent extends CollectionNestedOption imple
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,

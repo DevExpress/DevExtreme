@@ -594,7 +594,6 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption implement
     }
 
 
-
     @ContentChildren(forwardRef(() => DxiTreeListButtonComponent))
     get buttonsChildren(): QueryList<DxiTreeListButtonComponent> {
         return this._getOption('buttons');

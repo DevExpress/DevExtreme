@@ -67,7 +67,6 @@ export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy,
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();

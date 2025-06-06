@@ -408,7 +408,6 @@ export class DxoCardViewFormComponent extends NestedOption implements OnDestroy,
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();

@@ -75,7 +75,6 @@ export class DxoGanttContextMenuComponent extends NestedOption implements OnDest
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();

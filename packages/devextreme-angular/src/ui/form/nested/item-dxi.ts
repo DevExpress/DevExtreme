@@ -366,7 +366,6 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
 
 
 
-
     @ContentChildren(forwardRef(() => DxiFormTabComponent))
     get tabsChildren(): QueryList<DxiFormTabComponent> {
         return this._getOption('tabs');

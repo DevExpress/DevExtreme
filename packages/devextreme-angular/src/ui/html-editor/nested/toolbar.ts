@@ -83,7 +83,6 @@ export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDes
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();

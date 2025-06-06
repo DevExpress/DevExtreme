@@ -222,7 +222,6 @@ export class DxoCardViewFormItemComponent extends NestedOption implements AfterV
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,

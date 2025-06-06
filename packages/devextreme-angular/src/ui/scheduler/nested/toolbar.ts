@@ -91,7 +91,6 @@ export class DxoSchedulerToolbarComponent extends NestedOption implements OnDest
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();

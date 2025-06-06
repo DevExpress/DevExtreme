@@ -155,7 +155,6 @@ export class DxiGanttContextMenuItemComponent extends CollectionNestedOption imp
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,

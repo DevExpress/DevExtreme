@@ -92,7 +92,6 @@ export class DxoCardViewCardHeaderComponent extends NestedOption implements Afte
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,

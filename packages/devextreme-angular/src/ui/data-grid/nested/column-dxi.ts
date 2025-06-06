@@ -657,7 +657,6 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption implement
     }
 
 
-
     @ContentChildren(forwardRef(() => DxiDataGridButtonComponent))
     get buttonsChildren(): QueryList<DxiDataGridButtonComponent> {
         return this._getOption('buttons');

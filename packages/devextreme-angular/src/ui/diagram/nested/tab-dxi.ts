@@ -80,7 +80,6 @@ export class DxiDiagramTabComponent extends CollectionNestedOption implements Af
         this.setChildren('groups', q);
     }
 
-
     @ContentChildren(forwardRef(() => DxiDiagramCommandComponent))
     get commandsChildren(): QueryList<DxiDiagramCommandComponent> {
         return this._getOption('commands');

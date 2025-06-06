@@ -437,7 +437,6 @@ export class DxoCardViewTabPanelOptionsComponent extends NestedOption implements
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();

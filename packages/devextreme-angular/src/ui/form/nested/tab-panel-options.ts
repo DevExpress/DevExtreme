@@ -437,7 +437,6 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();

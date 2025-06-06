@@ -75,7 +75,6 @@ export class DxoHtmlEditorTableContextMenuComponent extends NestedOption impleme
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();

@@ -99,7 +99,6 @@ export class DxoDiagramToolboxComponent extends NestedOption implements OnDestro
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();

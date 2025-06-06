@@ -97,7 +97,6 @@ export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestr
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();

@@ -456,7 +456,6 @@ export class DxiCardViewColumnComponent extends CollectionNestedOption implement
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();

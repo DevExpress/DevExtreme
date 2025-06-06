@@ -67,7 +67,6 @@ export class DxoFileManagerContextMenuComponent extends NestedOption implements 
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();

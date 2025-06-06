@@ -74,7 +74,6 @@ export class DxoFileManagerToolbarComponent extends NestedOption implements OnDe
         this.setChildren('items', q);
     }
 
-
     @ContentChildren(forwardRef(() => DxiFileManagerFileSelectionItemComponent))
     get fileSelectionItemsChildren(): QueryList<DxiFileManagerFileSelectionItemComponent> {
         return this._getOption('fileSelectionItems');

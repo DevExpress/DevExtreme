@@ -220,7 +220,6 @@ export class DxiGanttItemComponent extends CollectionNestedOption implements Aft
 
 
 
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,

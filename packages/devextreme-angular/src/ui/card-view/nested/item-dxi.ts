@@ -416,7 +416,6 @@ export class DxiCardViewItemComponent extends CollectionNestedOption implements 
 
 
 
-
     @ContentChildren(forwardRef(() => DxiCardViewTabComponent))
     get tabsChildren(): QueryList<DxiCardViewTabComponent> {
         return this._getOption('tabs');
