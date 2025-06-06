@@ -15,4 +15,4 @@ The "ai" toolbar item includes the following predefined commands:
 - Translate
 - Ask AI assistant
 
-You can also specify which predefined commands you wish to include in the "ai" item and customize default options (for example, by setting a custom list of target languages for translation). Additionally, you can add a new custom command to the AI item by specifying your own prompt. In this demo, the custom command is "Extract Keywords". For more details, check the prompt in the code.
+You can also specify which predefined commands you want to include in the "ai" item and customize the default options (for example, by setting a custom list of target languages for translation). Additionally, you can add a new custom command to the AI item by specifying your own prompt. In this demo, the custom command is "Extract Keywords". For more details, check the prompt in the code.
