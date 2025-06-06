@@ -2,6 +2,7 @@
     <div className="task__progress">
         <DxProgressBar
             :value="value"
+            :element-attr="{ 'aria-label': 'Progress Bar' }"
             :statusFormat="(ratio) => `${ratio * 100}%`"
         ></DxProgressBar>
     </div>
