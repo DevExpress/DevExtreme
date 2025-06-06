@@ -290,7 +290,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
     $content.addClass(DROP_DOWN_MENU_LIST_CLASS);
 
     const { itemTemplate, onItemRendered } = this.option();
-    // @ts-expect-error ts-error
+
     this._list = this._createComponent($content, ToolbarMenuList, {
       dataSource: this._getListDataSource(),
       pageLoadMode: 'scrollBottom',
