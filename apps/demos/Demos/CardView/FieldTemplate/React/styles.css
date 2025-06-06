@@ -1,3 +1,7 @@
+.dx-cardview-card-header > div {
+  width: 100%;
+}
+
 .task__header {
   padding: 18px 24px;
   font-size: 16px;
