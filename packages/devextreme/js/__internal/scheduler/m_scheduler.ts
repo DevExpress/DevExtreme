@@ -1446,7 +1446,7 @@ class Scheduler extends Widget<any> {
       isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
 
       createFormattedDateText: (appointment, targetedAppointment, format) => (this.fire as any)('getTextAndFormatDate', appointment, targetedAppointment, format),
-      getAppointmentDisabled: (appointment) => Boolean(this._dataAccessors.get('disabled', appointment)),
+      getAppointmentDisabled: (appointment) => this._dataAccessors.get('disabled', appointment),
       onItemContextMenu: that._createActionByOption('onAppointmentContextMenu'),
       createEventArgs: that._createEventArgs.bind(that),
     };

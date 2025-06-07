@@ -983,9 +983,9 @@ class SchedulerAppointments extends CollectionWidget {
     if (recurrenceRule) {
       const dates = appointment.settings || appointment;
 
-      const startDate = new Date(this.dataAccessors.get('startDate', dates));
+      const startDate = this.dataAccessors.get('startDate', dates);
       const startDateTimeZone = this.dataAccessors.get('startDateTimeZone', appointment);
-      const endDate = new Date(this.dataAccessors.get('endDate', dates));
+      const endDate = this.dataAccessors.get('endDate', dates);
       const appointmentDuration = endDate.getTime() - startDate.getTime();
       const recurrenceException = this.dataAccessors.get('recurrenceException', appointment);
       const startViewDate = this.invoke('getStartViewDate');
@@ -1122,7 +1122,7 @@ class SchedulerAppointments extends CollectionWidget {
 
   splitAppointmentByDay(appointment) {
     const dates = appointment.settings || appointment;
-    const originalStartDate = new Date(this.dataAccessors.get('startDate', dates));
+    const originalStartDate = this.dataAccessors.get('startDate', dates);
     let startDate = dateUtils.makeDate(originalStartDate);
     let endDate = dateUtils.makeDate(this.dataAccessors.get('endDate', dates));
     const maxAllowedDate = this.invoke('getEndViewDate');

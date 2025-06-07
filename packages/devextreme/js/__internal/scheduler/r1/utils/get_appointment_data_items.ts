@@ -15,8 +15,8 @@ export const replaceIncorrectEndDate = (
   appointmentMinDuration: number,
   dataAccessors: AppointmentDataAccessor,
 ): rawAppointment is SafeAppointment => {
-  const startDate = new Date(dataAccessors.get('startDate', rawAppointment));
-  const endDate = new Date(dataAccessors.get('endDate', rawAppointment));
+  const startDate = dataAccessors.get('startDate', rawAppointment);
+  const endDate = dataAccessors.get('endDate', rawAppointment);
 
   // NOTE: error E1032
   if (!dateUtilsTs.isValidDate(startDate)) {
@@ -27,7 +27,7 @@ export const replaceIncorrectEndDate = (
     || startDate.getTime() > endDate.getTime();
 
   if (isEndDateIncorrect) {
-    const isAllDay = Boolean(dataAccessors.get('allDay', rawAppointment));
+    const isAllDay = dataAccessors.get('allDay', rawAppointment);
     const correctedEndDate = isAllDay
       ? dateUtils.setToDayEnd(new Date(startDate))
       : new Date(startDate.getTime() + appointmentMinDuration * toMs('minute'));

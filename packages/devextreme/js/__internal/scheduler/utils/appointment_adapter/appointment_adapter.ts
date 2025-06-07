@@ -11,22 +11,15 @@ export class AppointmentAdapter {
     public dataAccessors: AppointmentDataAccessor,
   ) {}
 
-  // TODO: move this transformation to dataAccessor
-  get startDate(): Date {
-    const date = this.dataAccessors.get('startDate', this.source);
-    return date === undefined ? date : new Date(date);
-  }
+  get startDate(): Date { return this.dataAccessors.get('startDate', this.source); }
 
   set startDate(value: Date) { this.dataAccessors.set('startDate', this.source, value); }
 
-  get endDate(): Date {
-    const date = this.dataAccessors.get('endDate', this.source);
-    return date === undefined ? date : new Date(date);
-  }
+  get endDate(): Date { return this.dataAccessors.get('endDate', this.source); }
 
   set endDate(value: Date) { this.dataAccessors.set('endDate', this.source, value); }
 
-  get allDay(): boolean { return Boolean(this.dataAccessors.get('allDay', this.source)); }
+  get allDay(): boolean { return this.dataAccessors.get('allDay', this.source); }
 
   set allDay(value: boolean) { this.dataAccessors.set('allDay', this.source, value); }
 
@@ -50,7 +43,7 @@ export class AppointmentAdapter {
 
   set recurrenceException(value: string | undefined) { this.dataAccessors.set('recurrenceException', this.source, value); }
 
-  get disabled(): boolean { return Boolean(this.dataAccessors.get('disabled', this.source)); }
+  get disabled(): boolean { return this.dataAccessors.get('disabled', this.source); }
 
   get duration(): number {
     const { startDate, endDate } = this;

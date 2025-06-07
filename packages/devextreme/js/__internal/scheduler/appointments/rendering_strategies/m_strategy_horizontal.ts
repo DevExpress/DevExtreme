@@ -109,7 +109,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
   }
 
   isAllDay(appointmentData) {
-    return Boolean(this.dataAccessors.get('allDay', appointmentData));
+    return this.dataAccessors.get('allDay', appointmentData);
   }
 
   _isItemsCross(firstItem, secondItem) {

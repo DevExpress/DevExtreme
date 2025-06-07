@@ -28,7 +28,7 @@ const getDateText = (options: AppointmentProperties): string => {
   const endDateText = localizeDate(endDate);
   const startTimeText = localizeTime(startDate);
   const endTimeText = localizeTime(endDate);
-  const isAllDay = Boolean(options.dataAccessors.get('allDay', options.data));
+  const isAllDay = options.dataAccessors.get('allDay', options.data);
   const allDayText = messageLocalization.format('dxScheduler-allDay');
 
   if (startDateText === endDateText) {

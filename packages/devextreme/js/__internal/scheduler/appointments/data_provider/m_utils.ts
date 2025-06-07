@@ -127,8 +127,8 @@ export const sortAppointmentsByStartDate = (
   dataAccessors: AppointmentDataAccessor,
 ) => {
   appointments.sort((a, b) => {
-    const firstDate = new Date(dataAccessors.get('startDate', a.settings || a));
-    const secondDate = new Date(dataAccessors.get('startDate', b.settings || b));
+    const firstDate = dataAccessors.get('startDate', a.settings || a);
+    const secondDate = dataAccessors.get('startDate', b.settings || b);
 
     return Math.sign(firstDate.getTime() - secondDate.getTime());
   });
