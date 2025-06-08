@@ -1,5 +1,6 @@
 import type { FilterType } from '@js/common/grids';
 import type { DataSourceLike } from '@js/data/data_source';
+import type { FilterValue } from '@ts/grids/new/grid_core/filtering/types';
 
 import type { Column } from '../../columns_controller/types';
 
@@ -85,4 +86,14 @@ export interface HeaderFilterRootOptions extends HeaderFilterBaseOptions {
   texts?: HeaderFilterTextOptions;
   // Specifies whether the header filter can be used to filter data by this column
   visible?: boolean;
+}
+
+export type HeaderFilterValuesType = 'single-value' | 'values-or-condition';
+
+export interface HeaderFilterInfo {
+  type: HeaderFilterValuesType;
+  columnId: string;
+  filterType: FilterType;
+  filterValues: FilterValue;
+  composedFilterValues: FilterValue;
 }
