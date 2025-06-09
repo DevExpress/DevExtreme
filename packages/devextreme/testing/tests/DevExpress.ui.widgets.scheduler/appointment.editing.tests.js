@@ -188,6 +188,28 @@ module('Integration: Appointment editing', {
                 }
             });
 
+            test('onAppointmentUpdating should be correct after resizing', function(assert) {
+                const scheduler = this.createInstance({
+                    currentDate: new Date(2015, 1, 9),
+                    dataSource: this.tasks,
+                    editing: true,
+                    onAppointmentUpdating: (e) => {
+                        assert.deepEqual(e.oldData, this.tasks[0], 'Target item is correct');
+                        assert.deepEqual(e.newData, $.extend(true, oldItem, { endDate: new Date(2015, 1, 9, 3, 0) }), 'New data is correct');
+                    }
+                });
+
+                const oldItem = this.tasks[0];
+
+                const cellHeight = getOuterHeight(scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0));
+                const hourHeight = cellHeight * 2;
+
+                const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-bottom').eq(0)).start();
+                pointer.dragStart().drag(0, hourHeight).dragEnd();
+
+                assert.expect(2);
+            });
+
             test('Add new appointment', function(assert) {
                 const data = new DataSource({
                     store: this.tasks

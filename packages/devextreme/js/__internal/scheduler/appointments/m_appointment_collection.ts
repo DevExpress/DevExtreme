@@ -749,7 +749,7 @@ class SchedulerAppointments extends CollectionWidget {
       sourceAppointment,
       dataAccessors,
       timeZoneCalculator,
-    );
+    ).clone();
 
     gridAdapter.startDate = new Date(dateRange.startDate);
     gridAdapter.endDate = new Date(dateRange.endDate);
