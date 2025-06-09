@@ -68,7 +68,7 @@ describe('DataController', () => {
     });
   });
 
-  describe('when totalCount is not specified', () => {
+  describe('totalCount is not specified', () => {
     it('works with CustomStore', async () => {
       const { dataController } = setup({
         dataSource: new CustomStore({
