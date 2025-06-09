@@ -1,5 +1,5 @@
 <template>
-  <div className="options">
+  <div className="options-panel">
     <div className="caption">Options</div>
     <div className="options-container">
       <div className="option">
@@ -116,7 +116,7 @@ const selectByClick = ref(true);
 
 </script>
 <style>
-  .options {
+  .options-panel {
     margin-top: 20px;
     padding: 20px;
     background-color: rgba(191, 191, 191, 0.15);

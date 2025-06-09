@@ -1,5 +1,5 @@
 import React from 'react';
-import CardView, { Column } from 'devextreme-react/card-view';
+import CardView, { Column, Paging } from 'devextreme-react/card-view';
 import { tasks } from './data.ts';
 
 // TODO: Nested component does not exist
@@ -17,11 +17,13 @@ const App = () => (
   <CardView
     dataSource={tasks}
     keyExpr="Task_ID"
+    cardsPerRow={2}
     headerFilter={headerFilterConfig}
     searchPanel={searchPanelConfig}
-    cardMinWidth={100}
-    wordWrapEnabled={true}
   >
+    <Paging
+      pageSize={4}
+    />
     <Column
       dataField="Task_Subject"
       caption="Subject"

@@ -2,9 +2,11 @@
   <DxCardView
     :data-source="houses"
     key-expr="ID"
-    :card-min-width="100"
-    :word-wrap-enabled="true"
+    :cards-per-row="2"
   >
+    <DxPaging
+      :page-size="4"
+    />
     <DxCardCover
       :image-expr="imageExpr"
       :alt-expr="altExpr"
@@ -30,7 +32,7 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-import { DxCardView, DxColumn, DxCardCover } from 'devextreme-vue/card-view';
+import { DxCardView, DxColumn, DxCardCover, DxPaging } from 'devextreme-vue/card-view';
 import { houses, type House } from './data.ts';
 
 function imageExpr({ ID }: House): string {

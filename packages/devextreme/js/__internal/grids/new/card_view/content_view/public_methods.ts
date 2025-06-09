@@ -16,7 +16,7 @@ import * as cardModule from './content/card/card';
 export function PublicMethods<T extends Constructor<CardViewBase>>(GridCore: T) {
   return class CardViewWithContentView extends Base.PublicMethods(GridCore) {
     public getCardElement(cardIndex: number): DxElement {
-      const card = $(this.element()).find(cardModule.CLASSES.card).eq(cardIndex);
+      const card = $(this.element()).find(`.${cardModule.CLASSES.card}`).eq(cardIndex);
 
       return getPublicElement(card);
     }

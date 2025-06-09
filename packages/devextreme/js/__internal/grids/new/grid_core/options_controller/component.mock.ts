@@ -1,4 +1,5 @@
 import { Component } from '@js/core/component';
+import { signal } from '@preact/signals-core';
 import { extend } from '@ts/core/utils/m_extend';
 
 // NOTE: We cannot modify the base "_getDefaultOptions" method with Component base class params
@@ -10,7 +11,10 @@ export const createComponentMock = <
 >(
     options: TProps,
     defaultOptions: TDefaultProps,
+    isInitialized = true,
   ): Component<TProps> => new class ComponentMock extends Component<TProps> {
+    public initialized = signal(isInitialized);
+
     // NOTE: Add default option values to base Component for merging them
     // with Component's algorithms
     public _getDefaultOptions(): TDefaultProps {
