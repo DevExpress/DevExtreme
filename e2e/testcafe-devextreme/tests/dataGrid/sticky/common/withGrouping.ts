@@ -243,12 +243,24 @@ safeSizeTest('The group separator should be visible when dragging a fixed column
 test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled and the grid has a fixed column (T1286077)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
-  const groupPanelToggle = dataGrid.getGroupRow(0).getCell(0).element;
+  const groupRow = dataGrid.getGroupRow(0);
+  const groupPanelToggle = groupRow.getCell(0).element;
 
   await dataGrid.isReady();
 
   await t
-    .doubleClick(groupPanelToggle);
+    .click(groupPanelToggle);
+
+  await t
+    .expect(dataGrid.getGroupRow(0).isExpanded)
+    .ok();
+
+  await t
+    .click(groupPanelToggle);
+
+  await t
+    .expect(dataGrid.getGroupRow(0).isExpanded)
+    .notOk();
 
   await dataGrid.scrollBy({ x: 1000 });
 
