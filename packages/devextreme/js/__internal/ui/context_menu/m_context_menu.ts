@@ -75,6 +75,8 @@ class ContextMenu extends MenuBase {
 
   _overlayContentId?: string;
 
+  _showContextMenuEventHandler?: (event: unknown) => any;
+
   getShowEvent(showEventOption: {
     delay?: number;
     name?: string;
@@ -443,7 +445,11 @@ class ContextMenu extends MenuBase {
 
     const eventName = addNamespace(showEvent, this.NAME);
 
-    eventsEngine.off($(target), eventName);
+    eventsEngine.off(
+      domAdapter.getDocument(),
+      eventName,
+      target,
+    );
   }
 
   _attachShowContextMenuEvents() {
@@ -472,8 +478,8 @@ class ContextMenu extends MenuBase {
 
     contextMenuAction = this._createAction(contextMenuAction);
 
-    // @ts-expect-error
-    eventsEngine.on($(target), eventName, handler);
+    this._showContextMenuEventHandler = handler;
+    eventsEngine.on(domAdapter.getDocument(), eventName, target, this._showContextMenuEventHandler);
   }
 
   _hoverEndHandler(e): void {
