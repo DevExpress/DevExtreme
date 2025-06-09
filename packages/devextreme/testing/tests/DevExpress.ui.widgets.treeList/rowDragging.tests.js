@@ -100,7 +100,7 @@ QUnit.module('Drag and Drop nodes', moduleConfig, () => {
         rowsView.render($testElement);
 
         // act
-        const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 72);
+        const pointer = pointerMock(rowsView.getRowElement(0)).start().down().move(0, 71);
 
         // assert
         const $draggableElement = $('body').children('.dx-sortable-dragging');
