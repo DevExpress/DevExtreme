@@ -3,6 +3,7 @@
 import { equalByValue } from '@js/core/utils/common';
 import { batch } from '@preact/signals-core';
 import { getMatchedConditions } from '@ts/filter_builder/m_utils';
+import type { HeaderFilterInfo } from '@ts/grids/new/grid_core/filtering/header_filter/types';
 import { SearchController } from '@ts/grids/new/grid_core/search/index';
 
 import { ColumnsController } from '../../columns_controller/index';
@@ -30,7 +31,7 @@ export class FilterSyncController {
 
   private previousFilterPanelValue: FilterValue | null = null;
 
-  private previousComposedHeaderFilterValue: FilterValue | null = null;
+  private previousHeaderFilterInfoArray: HeaderFilterInfo[] = [];
 
   // 🚨🚨🚨 This controller was hotfixed during severe issues in filterSync feature.
   // Change logic in ctor very carefully, the order of conditions is important.
@@ -65,8 +66,8 @@ export class FilterSyncController {
 
       // NOTE: If HeaderFilter is empty and FilterPanel isn't
       // sync FilterPanel -> HeaderFilter
-      const composedHeaderFilter = this.headerFilterController.composedHeaderFilter.peek();
-      if (!composedHeaderFilter.length) {
+      const headerFilterInfoArray = this.headerFilterController.headerFilterInfoArray.peek();
+      if (!headerFilterInfoArray.length) {
         this.handleFilterPanelSync(filterPanelValue);
         return;
       }
@@ -75,7 +76,7 @@ export class FilterSyncController {
       // do nothing
       const newFilterPanelValue = mergeFilterPanelWithHeaderFilterValues(
         filterPanelValue ?? [],
-        composedHeaderFilter,
+        headerFilterInfoArray,
       );
       if (equalByValue(
         filterPanelValue ?? [],
@@ -90,13 +91,13 @@ export class FilterSyncController {
     });
 
     // --- HeaderFilter -> FilterPanel ---
-    this.headerFilterController.composedHeaderFilter.subscribe((composedHeaderFilter) => {
+    this.headerFilterController.headerFilterInfoArray.subscribe((headerFilterInfoArray) => {
       // NOTE: Handle first load with empty HeaderFilter values
-      if (!this.previousComposedHeaderFilterValue?.length && !composedHeaderFilter.length) {
+      if (!this.previousHeaderFilterInfoArray?.length && !headerFilterInfoArray.length) {
         return;
       }
 
-      this.previousComposedHeaderFilterValue = composedHeaderFilter;
+      this.previousHeaderFilterInfoArray = headerFilterInfoArray;
 
       // NOTE: If filterSync is disabled -> do nothing
       const isSyncEnabled = this.filterController.filterSyncEnabled.peek();
@@ -106,7 +107,7 @@ export class FilterSyncController {
 
       // NOTE: If HeaderFilter values is empty & filter panel disabled -> clear FilterPanel value
       const filterPanelEnabled = this.filterController.filterPanelFilterEnabled.value;
-      if (!composedHeaderFilter.length && filterPanelEnabled) {
+      if (!headerFilterInfoArray.length && filterPanelEnabled) {
         this.filterController.filterValueOption.value = null;
         return;
       }
@@ -116,7 +117,7 @@ export class FilterSyncController {
       const filterPanelValue = this.filterController.filterPanelValue.peek() ?? [];
       const newFilterPanelValue = mergeFilterPanelWithHeaderFilterValues(
         filterPanelValue,
-        composedHeaderFilter,
+        headerFilterInfoArray,
       );
       if (equalByValue(filterPanelValue, newFilterPanelValue, FILTER_DEEP_COMPARISON_OPTS)) {
         return;
