@@ -2,8 +2,8 @@ import { equalByValue } from '@js/core/utils/common';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isString } from '@js/core/utils/type';
-import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
+import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import { getDatesWithoutTime } from '../utils/index';
 import type {
   CombineRemoteFilterType,

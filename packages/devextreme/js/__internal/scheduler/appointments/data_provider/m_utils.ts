@@ -1,8 +1,8 @@
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
-import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
 import timeZoneUtils from '../../m_utils_time_zone';
+import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -66,7 +66,10 @@ export const compareDateWithEndDayHour = (options) => {
   return result;
 };
 
-export const getAppointmentTakesSeveralDays = (adapter) => !dateUtils.sameDate(adapter.startDate, adapter.endDate);
+export const getAppointmentTakesSeveralDays = (dates: {
+  startDate: Date;
+  endDate: Date;
+}) => !dateUtils.sameDate(dates.startDate, dates.endDate);
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const _appointmentPartInInterval = (startDate, endDate, startDayHour, endDayHour) => {
@@ -102,9 +105,7 @@ export const getRecurrenceException = (appointmentAdapter, timeZoneCalculator, t
 export const _convertRecurrenceException = (exceptionString, startDate, timeZoneCalculator, timeZone) => {
   exceptionString = exceptionString.replace(/\s/g, '');
 
-  const getConvertedToTimeZone = (date) => timeZoneCalculator.createDate(date, {
-    path: 'toGrid',
-  });
+  const getConvertedToTimeZone = (date) => timeZoneCalculator.createDate(date, 'toGrid');
 
   const exceptionDate = dateSerialization.deserializeDate(exceptionString);
   const convertedStartDate = getConvertedToTimeZone(startDate);
@@ -126,8 +127,8 @@ export const sortAppointmentsByStartDate = (
   dataAccessors: AppointmentDataAccessor,
 ) => {
   appointments.sort((a, b) => {
-    const firstDate = new Date(dataAccessors.get('startDate', a.settings || a));
-    const secondDate = new Date(dataAccessors.get('startDate', b.settings || b));
+    const firstDate = dataAccessors.get('startDate', a.settings || a);
+    const secondDate = dataAccessors.get('startDate', b.settings || b);
 
     return Math.sign(firstDate.getTime() - secondDate.getTime());
   });

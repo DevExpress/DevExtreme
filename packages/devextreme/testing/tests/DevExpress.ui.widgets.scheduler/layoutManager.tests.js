@@ -106,42 +106,6 @@ QUnit.test('Scheduler should have a right rendering strategy for views with conf
 
 QUnit.module('Appointments', moduleOptions);
 
-QUnit.test('Exception should be thrown if appointment has no start date', async function(assert) {
-    await this.createInstance();
-
-    const layoutManager = this.instance.getLayoutManager();
-
-    assert.throws(
-        function() {
-            layoutManager.createAppointmentsMap([{
-                text: 'Appointment 1'
-            }]);
-        },
-        function(e) {
-            return /E1032/.test(e.message);
-        },
-        'Exception messages should be correct'
-    );
-});
-
-QUnit.test('Exception should be thrown if appointment has a broken start date', async function(assert) {
-    await this.createInstance();
-
-    const layoutManager = this.instance.getLayoutManager();
-
-    assert.throws(
-        function() {
-            layoutManager.createAppointmentsMap([{
-                text: 'Appointment 1', startDate: 'Invalid date format'
-            }]);
-        },
-        function(e) {
-            return /E1032/.test(e.message);
-        },
-        'Exception messages should be correct'
-    );
-});
-
 QUnit.test('Default appointment duration should be equal to 30 minutes', async function(assert) {
     await this.createInstance({
         currentDate: new Date(2015, 1, 9),

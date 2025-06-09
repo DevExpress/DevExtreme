@@ -1,7 +1,7 @@
 export { TimeZoneCalculator } from './calculator';
-export { PathTimeZoneConversion } from './const';
 export type {
   DateType,
+  PathTimeZoneConversion,
   TimeZoneCalculatorOptions,
   TimeZoneOffsetsType,
 } from './types';

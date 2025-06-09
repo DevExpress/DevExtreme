@@ -3,17 +3,17 @@ import { equalByValue } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
+
+import { getRecurrenceProcessor } from '../../m_recurrence';
 import {
   getDatesWithoutTime, isAppointmentTakesAllDay, isTimelineView,
-} from '@ts/scheduler/r1/utils/index';
-import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/types';
-import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
-import type { ResourceLoader } from '@ts/scheduler/utils/loader/resource_loader';
-import { getAppointmentGroupValues } from '@ts/scheduler/utils/resource_manager/appointment_groups_utils';
-import type ViewDataProvider from '@ts/scheduler/workspaces/view_model/m_view_data_provider';
-
-import { createAppointmentAdapter } from '../../m_appointment_adapter';
-import { getRecurrenceProcessor } from '../../m_recurrence';
+} from '../../r1/utils/index';
+import type { AppointmentDataItem, SafeAppointment } from '../../types';
+import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
+import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
+import type { ResourceLoader } from '../../utils/loader/resource_loader';
+import { getAppointmentGroupValues } from '../../utils/resource_manager/appointment_groups_utils';
+import type ViewDataProvider from '../../workspaces/view_model/m_view_data_provider';
 import {
   _appointmentPartInInterval,
   compareDateWithEndDayHour,
@@ -98,10 +98,9 @@ export class AppointmentFilterBaseStrategy {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   hasAllDayAppointments(filteredItems, preparedItems: AppointmentDataItem[]): boolean {
     return filteredItems
-      .map((item) => createAppointmentAdapter(
+      .map((item) => new AppointmentAdapter(
         item,
         this.dataAccessors,
-        this.timeZoneCalculator,
       ))
       .some((item) => isAppointmentTakesAllDay(item, this.allDayPanelMode));
   }

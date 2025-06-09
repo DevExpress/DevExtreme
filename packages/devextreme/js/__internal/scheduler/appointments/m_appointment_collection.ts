@@ -25,12 +25,12 @@ import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
-import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '../m_classes';
 import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
 import type { AppointmentViewModel } from '../types';
-import type { AppointmentDataAccessor } from '../utils';
+import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
+import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import { getAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import { getGroupTexts } from '../utils/resource_manager/group_utils';
 import { AgendaAppointment } from './appointment/agenda_appointment';
@@ -739,12 +739,10 @@ class SchedulerAppointments extends CollectionWidget {
     timeZoneCalculator,
   ) {
     const sourceAppointment = (this as any)._getItemData($element);
-
-    const gridAdapter = createAppointmentAdapter(
+    const gridAdapter = new AppointmentAdapter(
       sourceAppointment,
       dataAccessors,
-      timeZoneCalculator,
-    );
+    ).clone();
 
     gridAdapter.startDate = new Date(dateRange.startDate);
     gridAdapter.endDate = new Date(dateRange.endDate);
@@ -754,10 +752,10 @@ class SchedulerAppointments extends CollectionWidget {
      * If we transform dates fromGrid and back through DST then we'll lose one hour.
      * TODO(1): refactor computation around DST globally
      */
-    const convertedBackAdapter = gridAdapter.clone();
-    convertedBackAdapter
-      .calculateDates('fromGrid')
-      .calculateDates('toGrid');
+    const convertedBackAdapter = gridAdapter
+      .clone()
+      .calculateDates(timeZoneCalculator, 'fromGrid')
+      .calculateDates(timeZoneCalculator, 'toGrid');
 
     const startDateDelta = gridAdapter.startDate.getTime() - convertedBackAdapter.startDate.getTime();
     const endDateDelta = gridAdapter.endDate.getTime() - convertedBackAdapter.endDate.getTime();
@@ -765,34 +763,33 @@ class SchedulerAppointments extends CollectionWidget {
     gridAdapter.startDate = dateUtilsTs.addOffsets(gridAdapter.startDate, [startDateDelta]);
     gridAdapter.endDate = dateUtilsTs.addOffsets(gridAdapter.endDate, [endDateDelta]);
 
+    const data = gridAdapter
+      .calculateDates(timeZoneCalculator, 'fromGrid')
+      .source;
+
     this.notifyObserver('updateAppointmentAfterResize', {
       target: sourceAppointment,
-      data: gridAdapter.calculateDates('fromGrid').source(),
+      data,
       $appointment: $element,
     });
   }
 
   _getEndResizeAppointmentStartDate(e, rawAppointment, appointmentInfo) {
     const timeZoneCalculator = this.option('timeZoneCalculator');
-    const appointmentAdapter = createAppointmentAdapter(
+    const appointmentAdapter = new AppointmentAdapter(
       rawAppointment,
       this.dataAccessors,
-      timeZoneCalculator,
     );
 
     let { startDate } = appointmentInfo;
-    const recurrenceProcessor = getRecurrenceProcessor();
-    const { recurrenceRule, startDateTimeZone } = appointmentAdapter;
+    const { startDateTimeZone, isRecurrent } = appointmentAdapter;
     const isAllDay = this.invoke('isAllDay', rawAppointment);
-    const isRecurrent = recurrenceProcessor.isValidRecurrenceRule(recurrenceRule);
 
     if (!e.handles.top && !isRecurrent && !isAllDay) {
       startDate = timeZoneCalculator.createDate(
         appointmentAdapter.startDate,
-        {
-          appointmentTimeZone: startDateTimeZone,
-          path: 'toGrid',
-        },
+        'toGrid',
+        startDateTimeZone,
       );
     }
 
@@ -986,9 +983,9 @@ class SchedulerAppointments extends CollectionWidget {
     if (recurrenceRule) {
       const dates = appointment.settings || appointment;
 
-      const startDate = new Date(this.dataAccessors.get('startDate', dates));
+      const startDate = this.dataAccessors.get('startDate', dates);
       const startDateTimeZone = this.dataAccessors.get('startDateTimeZone', appointment);
-      const endDate = new Date(this.dataAccessors.get('endDate', dates));
+      const endDate = this.dataAccessors.get('endDate', dates);
       const appointmentDuration = endDate.getTime() - startDate.getTime();
       const recurrenceException = this.dataAccessors.get('recurrenceException', appointment);
       const startViewDate = this.invoke('getStartViewDate');
@@ -1052,7 +1049,7 @@ class SchedulerAppointments extends CollectionWidget {
 
       for (let i = 1; i < partCount; i++) {
         let startDate = this.dataAccessors.get('startDate', parts[i].settings);
-        startDate = timeZoneCalculator.createDate(startDate.getTime(), { path: 'toGrid' });
+        startDate = timeZoneCalculator.createDate(startDate.getTime(), 'toGrid');
 
         if (startDate < endViewDate && startDate > startViewDate) {
           result.parts.push(parts[i]);
@@ -1125,7 +1122,7 @@ class SchedulerAppointments extends CollectionWidget {
 
   splitAppointmentByDay(appointment) {
     const dates = appointment.settings || appointment;
-    const originalStartDate = new Date(this.dataAccessors.get('startDate', dates));
+    const originalStartDate = this.dataAccessors.get('startDate', dates);
     let startDate = dateUtils.makeDate(originalStartDate);
     let endDate = dateUtils.makeDate(this.dataAccessors.get('endDate', dates));
     const maxAllowedDate = this.invoke('getEndViewDate');
@@ -1133,16 +1130,12 @@ class SchedulerAppointments extends CollectionWidget {
     const endDayHour = this.invoke('getEndDayHour');
     const timeZoneCalculator = this.option('timeZoneCalculator');
 
-    const adapter = createAppointmentAdapter(
-      appointment,
-      this.dataAccessors,
-      timeZoneCalculator,
-    );
+    const adapter = new AppointmentAdapter(appointment, this.dataAccessors);
     const appointmentIsLong = getAppointmentTakesSeveralDays(adapter);
     const result: any = [];
 
-    startDate = timeZoneCalculator.createDate(startDate, { path: 'toGrid' });
-    endDate = timeZoneCalculator.createDate(endDate, { path: 'toGrid' });
+    startDate = timeZoneCalculator.createDate(startDate, 'toGrid');
+    endDate = timeZoneCalculator.createDate(endDate, 'toGrid');
 
     if (startDate.getHours() <= endDayHour && startDate.getHours() >= startDayHour && !appointmentIsLong) {
       result.push(this._applyStartDateToObj(new Date(startDate), {

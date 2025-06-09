@@ -6,7 +6,6 @@ import {
     CLASSES,
     createWrapper
 } from '../../helpers/scheduler/helpers.js';
-import { waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
