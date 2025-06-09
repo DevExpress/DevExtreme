@@ -763,7 +763,7 @@ QUnit.module('dxPivotGrid', {
         fieldChooserPopup.show();
         this.clock.tick(500);
 
-        assert.equal($(fieldChooserPopup._$bottom).find('.dx-toolbar-button').length, 2, '2 buttons in toolbar');
+        assert.equal($(fieldChooserPopup._$bottomToolbar).find('.dx-toolbar-button').length, 2, '2 buttons in toolbar');
     });
 
     QUnit.test('apply changes in fieldchooser on button click in onDemand mode', function(assert) {
@@ -789,7 +789,7 @@ QUnit.module('dxPivotGrid', {
 
         assert.notEqual(pivotGrid.getDataSource().state().fields[0].sortOrder, 'desc', 'ds state is not changed yet');
 
-        const applyButton = $(fieldChooserPopup._$bottom).find('.dx-button').eq(0);
+        const applyButton = $(fieldChooserPopup._$bottomToolbar).find('.dx-button').eq(0);
         applyButton.trigger('dxclick');
         this.clock.tick(500);
 

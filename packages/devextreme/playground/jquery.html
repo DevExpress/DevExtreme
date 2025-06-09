@@ -49,13 +49,77 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="popup"></div>
+        <div id="show-popup-button"></div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+            $(() => {
+                $('#show-popup-button').dxButton({
+                    text: 'Show Popup',
+                    width: 300,
+                    onClick() {
+                        popup.show();
+                    },
                 });
+
+                function rebindItems() {
+                    const popup = $('#popup').dxPopup("instance");
+                    const items = popup.option("toolbarItems");
+
+                    items[items.length - 2].visible = false;
+
+                    popup.option("toolbarItems", [...items]);
+                }
+
+                function getItemConfig(caption, locateInMenu = 'none') {
+                    return {
+                        text: caption,
+                        toolbar: 'top',
+                        location: 'after',
+                        locateInMenu,
+                    }
+                }
+
+                function getCenterItemConfig(caption) {
+                    return {
+                        text: caption,
+                        toolbar: 'top',
+                        location: 'center',
+                        locateInMenu: 'none',
+                    }
+                }
+
+                /**
+                 * There are 4 items in the toolbar in total:
+                 * 1. Title - Title to be trimmed with a multi-point.
+                 * 2. The usual aitem that should go into the overflow menu because the header is long. | Check case when the header is not long.
+                 * 3. A regular atem that will be hidden after rebind. It should go into the overflow menu.
+                 * 4. An ordinary item. It should be included in the overflow menu.
+                 *
+                 * Note: the center item is completely hidden, it has no minimum width.
+                 */
+                const popup = $('#popup').dxPopup({
+                    contentTemplate: function (element) {
+                        const btnDiv = $("<div>");
+
+                        btnDiv.dxButton({
+                            text: "Rebind toolbar items",
+                            onClick: rebindItems,
+                        })
+
+                        element.append(btnDiv);
+                    },
+                    // width: 360,
+                    height: 320,
+                    visible: false,
+                    title: '!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+',
+                    showCloseButton: false,
+                    toolbarItems: [
+                        // getCenterItemConfig("Center Item"),
+                        getItemConfig("First Item"),
+                        getItemConfig("Second Item", "auto"),
+                        getItemConfig("Third Item", "auto"),
+                    ],
+                }).dxPopup('instance');
             });
         </script>
     </div>

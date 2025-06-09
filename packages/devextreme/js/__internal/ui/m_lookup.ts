@@ -577,9 +577,9 @@ class Lookup extends DropDownList<LookupProperties> {
       return this._calculateListHeight(this.option('grouped'))
         + (this._$searchWrapper ? getOuterHeight(this._$searchWrapper) : 0)
         // @ts-expect-error ts-error
-        + (this._popup._$bottom ? getOuterHeight(this._popup._$bottom) : 0)
+        + (this._popup._$bottomToolbar ? getOuterHeight(this._popup._$bottomToolbar) : 0)
         // @ts-expect-error ts-error
-        + (this._popup._$title ? getOuterHeight(this._popup._$title) : 0);
+        + (this._popup._$topToolbar ? getOuterHeight(this._popup._$topToolbar) : 0);
     }
     return 'auto';
   }

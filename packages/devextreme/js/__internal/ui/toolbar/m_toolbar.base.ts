@@ -189,7 +189,7 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     this._updateDimensionsInMaterial();
   }
 
-  _postProcessRenderItems() {
+  _postProcessRenderItems(): void {
     this._arrangeItems();
   }
 
@@ -220,10 +220,10 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     });
   }
 
-  _arrangeItems(width?: number) {
+  _arrangeItems(width?: number): void {
     const elementWidth = width ?? getWidth(this.$element());
-    // @ts-expect-error
-    this._$centerSection.css({
+
+    this._$centerSection?.css({
       margin: '0 auto',
       float: 'none',
     });
@@ -245,8 +245,8 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     const widthAfterSection = $section.hasClass(TOOLBAR_AFTER_CLASS) ? 0 : afterRect.width;
     let elemsAtSectionWidth = 0;
 
-    // @ts-expect-error
-    $section.children().not(`.${TOOLBAR_LABEL_CLASS}`).each((index, element) => {
+    // @ts-expect-error ts error
+    $section.children().not(`.${TOOLBAR_LABEL_CLASS}`).each((_, element) => {
       elemsAtSectionWidth += getOuterWidth(element);
     });
 
@@ -270,8 +270,7 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     const centerRect = getBoundingRect(this._$centerSection?.get(0));
 
     if (leftRect.right > centerRect.left || centerRect.right > rightRect.left) {
-      // @ts-expect-error
-      this._$centerSection.css({
+      this._$centerSection?.css({
         marginLeft: leftRect.width,
         marginRight: rightRect.width,
         float: leftRect.width > rightRect.width ? 'none' : 'right',
@@ -279,18 +278,18 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     }
   }
 
-  _alignSection($section, maxWidth): void {
+  _alignSection($section, maxWidth: number): void {
     const $labels = $section.find(`.${TOOLBAR_LABEL_CLASS}`);
-    let labels = $labels.toArray();
+    const labels = $labels.toArray();
 
-    maxWidth -= this._getCurrentLabelsPaddings(labels);
-
+    const maxWidthWithoutPaddings = maxWidth - this._getCurrentLabelsPaddings(labels);
     const currentWidth = this._getCurrentLabelsWidth(labels);
     const difference = Math.abs(currentWidth - maxWidth);
 
-    if (maxWidth < currentWidth) {
-      labels = labels.reverse();
-      this._alignSectionLabels(labels, difference, false);
+    if (maxWidthWithoutPaddings < currentWidth) {
+      const reversedLabels = labels.reverse();
+
+      this._alignSectionLabels(reversedLabels, difference, false);
     } else {
       this._alignSectionLabels(labels, difference, true);
     }
@@ -299,19 +298,23 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
   _alignSectionLabels(labels, difference, expanding): void {
     const getRealLabelWidth = function (label) { return getBoundingRect(label).width; };
 
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of, no-plusplus
     for (let i = 0; i < labels.length; i++) {
       const $label = $(labels[i]);
       const currentLabelWidth = Math.ceil(getRealLabelWidth(labels[i]));
-      let labelMaxWidth;
+
+      let labelMaxWidth = 0;
 
       if (expanding) {
         $label.css('maxWidth', 'inherit');
       }
 
-      const possibleLabelWidth = Math.ceil(expanding ? getRealLabelWidth(labels[i]) : currentLabelWidth);
+      const width = expanding ? getRealLabelWidth(labels[i]) : currentLabelWidth;
+      const possibleLabelWidth = Math.ceil(width);
 
       if (possibleLabelWidth < difference) {
         labelMaxWidth = expanding ? possibleLabelWidth : 0;
+        // eslint-disable-next-line no-param-reassign
         difference -= possibleLabelWidth;
       } else {
         labelMaxWidth = expanding ? currentLabelWidth + difference : currentLabelWidth - difference;
@@ -372,7 +375,7 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
       const $container = $('<div>').addClass(TOOLBAR_GROUP_CLASS);
       const location = group.location ?? 'center';
 
-      if (!groupItems || !groupItems.length) {
+      if (!groupItems?.length) {
         return;
       }
 
