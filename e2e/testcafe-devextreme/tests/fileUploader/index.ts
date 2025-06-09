@@ -13,6 +13,8 @@ fixture.disablePageReloads`FileUploader - file list visibility`.page(url(__dirna
   test(`FileUploader with showFileList: ${showFileList} - after file selected`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+    console.log(Selector('#container'), Selector(INPUT_SELECTOR));
+
     await t.setFilesToUpload(Selector(INPUT_SELECTOR), [TEST_FILE]);
 
     await testScreenshot(t, takeScreenshot, `fileuploader-show-filelist-${showFileList}.png`, {
