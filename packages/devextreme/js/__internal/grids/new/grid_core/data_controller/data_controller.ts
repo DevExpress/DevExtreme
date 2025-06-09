@@ -139,14 +139,14 @@ export class DataController {
             e.storeLoadOptions.filter,
           );
 
-          const localOptions = this.normalizedLocalOperations.peek();
+          const localOperations = this.normalizedLocalOperations.peek();
           this.pendingLocalOperations[e.operationId] = getLocalLoadOptions(
             e.storeLoadOptions,
-            localOptions,
+            localOperations,
           );
           e.storeLoadOptions = getStoreLoadOptions(
             e.storeLoadOptions,
-            localOptions,
+            localOperations,
           );
         };
 
@@ -161,13 +161,13 @@ export class DataController {
             customizeLoadResult callback does not support async code.
           */
           const { operationId } = e;
-          const loadOptions = { ...this.pendingLocalOperations[operationId] };
-          const { skip, take } = loadOptions;
+          const localLoadOptions = { ...this.pendingLocalOperations[operationId] };
+          const { skip, take } = localLoadOptions;
           const hasLocalPaging = isDefined(skip) && isDefined(take);
 
-          const tempLoadOptions = getLoadOptionsWithoutLocalPaging(loadOptions);
+          const localOptionsWithoutPaging = getLoadOptionsWithoutLocalPaging(localLoadOptions);
 
-          new ArrayStore(e.data).load(tempLoadOptions).done((filteredData) => {
+          new ArrayStore(e.data).load(localOptionsWithoutPaging).done((filteredData) => {
             e.extra = isPlainObject(e.extra) ? e.extra : {};
 
             if (hasLocalPaging) {
@@ -179,7 +179,7 @@ export class DataController {
                 e.extra.totalCount = e.data.length;
               }
 
-              new ArrayStore(e.data).load(loadOptions).done((newData) => {
+              new ArrayStore(e.data).load(localLoadOptions).done((newData) => {
                 e.data = newData;
               });
             } else {
