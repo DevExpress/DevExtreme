@@ -182,11 +182,8 @@
 /packages/devextreme/js/__internal/ui/accordion/**             @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/m_accordion.ts           @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/accordion/**       @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/accordion/**                 @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_accordion.scss    @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/accordion/**     @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/accordion/**    @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/accordion/**   @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/Accordion/**                                 @DevExpress/devextreme-navigation
 
@@ -208,11 +205,8 @@
 /packages/devextreme/js/__internal/ui/action_sheet/**          @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/m_action_sheet.ts        @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/actionSheet/**     @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_actionSheet.scss   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/actionSheet/**   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/actionSheet/**   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/actionSheet/**   @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/actionSheet/**               @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_actionSheet.scss  @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/ActionSheet/**                               @DevExpress/devextreme-navigation
 
@@ -229,11 +223,8 @@
 /packages/devextreme/js/__internal/ui/box/**                   @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/m_box.ts                 @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/box/**             @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/box/**                       @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_box.scss          @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/box/**           @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/box/**          @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/box/**         @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/Box/**                                       @DevExpress/devextreme-navigation
 
@@ -250,10 +241,7 @@
 /packages/devextreme/js/ui/button.js                           @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/button/**                @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/button/**          @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/button/**        @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/button/**       @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/button/**      @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/button/**                    @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/Button/**                                    @DevExpress/devextreme-navigation
 
@@ -272,10 +260,7 @@
 /packages/devextreme/js/__internal/ui/button_group/**          @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/m_button_group.ts        @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/buttonGroup/**     @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/buttonGroup/**   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/buttonGroup/**   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/buttonGroup/**   @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/buttonGroup/**               @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/ButtonGroup/**                               @DevExpress/devextreme-navigation
 
@@ -291,8 +276,8 @@
 /packages/devextreme/js/ui/button_group.d.ts                 @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
 
 ## collection
-/packages/devextreme/js/ui/collection/**                       @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/collection/**            @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/collection/**                     @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/collection/**          @DevExpress/devextreme-navigation
 
 /packages/devextreme/testing/tests/DevExpress.knockout/collectionWidget.tests.js   @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/DevExpress.knockout/collectionWidgetItem.tests.js   @DevExpress/devextreme-navigation
@@ -307,11 +292,8 @@
 /packages/devextreme/js/ui/context_menu/**                     @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/context_menu/**          @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/contextMenu/**     @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/base/_contextMenu.scss   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/contextMenu/**   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/contextMenu/**   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/contextMenu/**   @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/contextMenu/**               @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_contextMenu.scss  @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/ContextMenu/**                               @DevExpress/devextreme-navigation
 
@@ -331,11 +313,8 @@
 /packages/devextreme/js/ui/drawer.js                           @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/drawer/**                @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/drawer/**          @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/drawer/**                    @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_drawer.scss       @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/drawer/**        @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/drawer/**       @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/drawer/**      @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/Drawer/**                                    @DevExpress/devextreme-navigation
 
@@ -353,11 +332,8 @@
 /packages/devextreme/js/ui/form/**                             @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/form/**                  @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/form/**            @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/form/**                      @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_form.scss         @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/form/**          @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/form/**         @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/form/**        @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/Form/**                                      @DevExpress/devextreme-navigation
 
@@ -378,11 +354,8 @@
 /packages/devextreme/js/__internal/ui/gallery/**               @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/m_gallery.ts             @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/gallery/**         @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/gallery/**                   @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_gallery.scss      @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/gallery/**       @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/gallery/**      @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/gallery/**     @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/Gallery/**                                   @DevExpress/devextreme-navigation
 
@@ -408,10 +381,7 @@ packages/devextreme/testing/tests/DevExpress.ui.widgets/gallery.tests.js   @DevE
 /packages/devextreme/js/ui/list.js                             @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/list/**                  @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/list/**            @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/list/**          @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/list/**         @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/list/**        @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/list/**                      @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/List/**                                      @DevExpress/devextreme-navigation
 
@@ -432,11 +402,8 @@ packages/devextreme/testing/tests/DevExpress.ui.widgets/gallery.tests.js   @DevE
 /packages/devextreme/js/__internal/ui/load_indicator/**        @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/m_load_indicator.ts      @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/loadIndicator/**   @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/loadIndicator/**             @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_loadIndicator.scss   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/loadIndicator/**   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/loadIndicator/**   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/loadIndicator/**   @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/LoadIndicator/**                             @DevExpress/devextreme-navigation
 
@@ -454,11 +421,8 @@ packages/devextreme/testing/tests/DevExpress.ui.widgets/gallery.tests.js   @DevE
 /packages/devextreme/js/__internal/ui/menu/**                  @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/m_menu.ts                @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/menu/**            @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/menu/**                      @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_menu.scss         @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/menu/**          @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/menu/**         @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/menu/**        @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/Menu/**                                      @DevExpress/devextreme-navigation
 
@@ -479,11 +443,8 @@ packages/devextreme/testing/tests/DevExpress.ui.widgets/gallery.tests.js   @DevE
 /packages/devextreme/js/__internal/ui/multi_view/**            @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/m_multi_view.ts          @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/multiView/**       @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/multiView/**                 @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_multiView.scss    @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/multiView/**     @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/multiView/**    @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/multiView/**   @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/MultiView/**                                 @DevExpress/devextreme-navigation
 
@@ -502,10 +463,7 @@ packages/devextreme/testing/tests/DevExpress.ui.widgets/gallery.tests.js   @DevE
 /packages/devextreme/js/ui/radio_group/**                      @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/radio_group/**           @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/radioGroup/**      @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/radioGroup/**    @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/radioGroup/**   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/radioGroup/**   @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/radioGroup/**                @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/RadioGroup/**                                @DevExpress/devextreme-navigation
 
@@ -526,7 +484,7 @@ packages/devextreme/testing/tests/DevExpress.ui.widgets/gallery.tests.js   @DevE
 /packages/devextreme/js/ui/resizable.js                        @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/resizable/**             @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/resizable/**       @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/resizable/**                 @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_resizable.scss    @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/Resizable/**                                 @DevExpress/devextreme-navigation
@@ -543,10 +501,7 @@ packages/devextreme/testing/tests/DevExpress.ui.widgets/gallery.tests.js   @DevE
 /packages/devextreme/js/__internal/ui/responsive_box/**        @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/m_responsive_box.ts      @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/responsiveBox/**   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/responsiveBox/**   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/responsiveBox/**   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/responsiveBox/**   @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/responsiveBox/**             @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/ResponsiveBox/**                             @DevExpress/devextreme-navigation
 
@@ -562,11 +517,8 @@ packages/devextreme/testing/tests/DevExpress.ui.widgets/gallery.tests.js   @DevE
 /packages/devextreme/js/ui/scroll_view/**                      @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/scroll_view/**           @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/scrollView/**      @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/scrollView/**                @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_scrollView.scss   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/scrollView/**    @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/scrollView/**   @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/scrollView/**   @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/ScrollView/**                                @DevExpress/devextreme-navigation
 
@@ -591,10 +543,7 @@ packages/devextreme/testing/tests/DevExpress.ui.widgets/gallery.tests.js   @DevE
 /packages/devextreme/js/ui/splitter.js                         @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/splitter/**              @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/splitter/**        @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/splitter/**      @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/splitter/**     @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/splitter/**    @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/splitter/**                  @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/Splitter/**                                  @DevExpress/devextreme-navigation
 
@@ -612,10 +561,7 @@ packages/devextreme/testing/tests/DevExpress.ui.widgets/gallery.tests.js   @DevE
 /packages/devextreme/js/ui/stepper.js                          @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/stepper/**               @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/stepper/**         @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/stepper/**       @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/stepper/**      @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/stepper/**     @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/stepper/**                   @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/Stepper/**                                   @DevExpress/devextreme-navigation
 
@@ -633,11 +579,8 @@ packages/devextreme/testing/tests/DevExpress.ui.widgets/gallery.tests.js   @DevE
 /packages/devextreme/js/ui/tab_panel.js                        @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/tab_panel/**             @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/tabPanel/**        @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/tabPanel/**                  @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_tabPanel.scss     @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/tabPanel/**      @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/tabPanel/**     @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/tabPanel/**    @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/TabPanel/**                                  @DevExpress/devextreme-navigation
 
@@ -656,11 +599,8 @@ packages/devextreme/testing/tests/DevExpress.ui.widgets/gallery.tests.js   @DevE
 /packages/devextreme/js/ui/tabs.js                             @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/tabs/**                  @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/tabs/**            @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/tabs/**                      @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_tabs.scss         @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/tabs/**          @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/tabs/**         @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/tabs/**        @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/Tabs/**                                      @DevExpress/devextreme-navigation
 
@@ -681,11 +621,8 @@ packages/devextreme/testing/tests/DevExpress.ui.widgets/gallery.tests.js   @DevE
 /packages/devextreme/js/__internal/ui/tile_view/**             @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/m_tile_view.ts           @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/tileView/**        @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/tileView/**                  @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_tileView.scss     @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/tileView/**      @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/tileView/**     @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/tileView/**    @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/TileView/**                                  @DevExpress/devextreme-navigation
 
@@ -703,11 +640,8 @@ packages/devextreme/testing/tests/DevExpress.ui.widgets/gallery.tests.js   @DevE
 /packages/devextreme/js/ui/toolbar/**                          @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/toolbar/**               @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/toolbar/**         @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/toolbar/**                   @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_toolbar.scss      @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/toolbar/**       @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/toolbar/**      @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/toolbar/**     @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/Toolbar/**                                   @DevExpress/devextreme-navigation
 
@@ -731,10 +665,7 @@ packages/devextreme/testing/tests/DevExpress.ui.widgets/gallery.tests.js   @DevE
 /packages/devextreme/js/ui/tree_view.js                        @DevExpress/devextreme-navigation
 /packages/devextreme/js/__internal/ui/tree_view/**             @DevExpress/devextreme-navigation
 
-/packages/devextreme-scss/scss/widgets/base/treeView/**        @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/treeView/**      @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/treeView/**     @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/treeView/**    @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/treeView/**                  @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/TreeView/**                                  @DevExpress/devextreme-navigation
 
@@ -754,11 +685,8 @@ packages/devextreme/testing/tests/DevExpress.ui.widgets/gallery.tests.js   @DevE
 
 ## fieldset
 
-/packages/devextreme-scss/scss/widgets/base/fieldset/**         @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/fieldset/**                   @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_fieldset.scss      @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/fluent/fieldset/**       @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/generic/fieldset/**      @DevExpress/devextreme-navigation
-/packages/devextreme-scss/scss/widgets/material/fieldset/**     @DevExpress/devextreme-navigation
 
 /apps/demos/Demos/FieldSet/**                                   @DevExpress/devextreme-navigation
 
