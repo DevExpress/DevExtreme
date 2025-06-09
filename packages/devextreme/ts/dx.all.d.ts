@@ -522,13 +522,6 @@ declare global {
 }
 declare module DevExpress {
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type AssertedVersion = {
-    packageName: string;
-    version: string;
-  };
-  /**
    * [descr:Component]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -869,6 +862,13 @@ declare module DevExpress {
      */
     static validateModel(model: any): any;
   }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type VersionAssertion = {
+    packageName: string;
+    version: string;
+  };
 }
 declare module DevExpress.aiIntegration {
   /**
@@ -1271,7 +1271,7 @@ declare module DevExpress.common {
    * [descr:GlobalConfig]
    */
   export type GlobalConfig = {
-    assertedVersions?: AssertedVersion[];
+    versionAssertions?: VersionAssertion[];
     /**
      * [descr:GlobalConfig.decimalSeparator]
      * @deprecated [depNote:GlobalConfig.decimalSeparator]

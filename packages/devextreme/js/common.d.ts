@@ -270,7 +270,7 @@ export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
  */
 export type Format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
 
-export type AssertedVersion = {
+export type VersionAssertion = {
   packageName: string;
   version: string;
 };
@@ -283,7 +283,7 @@ export type AssertedVersion = {
  * @type object
  */
 export type GlobalConfig = {
-  assertedVersions?: AssertedVersion[];
+  versionAssertions?: VersionAssertion[];
   /**
    * @docid
    * @default "."

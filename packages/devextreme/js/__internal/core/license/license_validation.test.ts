@@ -513,25 +513,53 @@ describe('internal license check', () => {
 });
 
 describe('assertedVersions integration', () => {
-  it('assertDevExtremeVersion config().assertedVersions', () => {
-    clearAssertedVersions();
-    assertDevExtremeVersion('test-package', '1.2.3');
-    expect(config().assertedVersions).toEqual([{ packageName: 'test-package', version: '1.2.3' }]);
+  const packages = [{ packageName: 'test-package', version: '1.2.3' }];
+
+  beforeEach(() => {
+    jest.resetModules();
+    jest.spyOn(errors, 'log').mockImplementation(() => {});
   });
 
-  it('clearAssertedVersions config().assertedVersions', () => {
-    assertDevExtremeVersion('test-package', '1.2.3');
+  afterEach(() => {
+    jest.restoreAllMocks();
+    delete globalThis.DevExpress;
     clearAssertedVersions();
-    expect(config().assertedVersions).toEqual([]);
   });
 
-  it('assertedVersionsCompatible shoild be false', () => {
+  test('reads asserted versions from global DevExpress.config', async () => {
+    globalThis.DevExpress = {
+      config: {
+        versionAssertions: packages,
+      },
+    };
+
+    const { default: configMethod } = await import('@js/__internal/core/m_config');
+
+    expect(configMethod()?.versionAssertions).toEqual(packages);
+  });
+
+  test('clears asserted versions from config', () => {
+    assertDevExtremeVersion('test-package-2', '1.2.3');
     clearAssertedVersions();
+
+    expect(config().versionAssertions).toEqual([]);
+  });
+
+  test('returns false when asserted versions are not compatible and logs error', () => {
     assertDevExtremeVersion('test-package', '1.2.3');
-    const logSpy = jest.spyOn(errors, 'log').mockImplementation(() => {});
+
     const result = assertedVersionsCompatible({ major: 2, minor: 0, patch: 0 });
+
     expect(result).toBe(false);
-    expect(logSpy).toHaveBeenCalled();
-    logSpy.mockRestore();
+    expect(errors.log).toHaveBeenCalledWith('W0023', expect.stringContaining('test-package'));
+  });
+
+  test('returns true when asserted versions are compatible and does not log', () => {
+    assertDevExtremeVersion('test-package', '1.2.3');
+
+    const result = assertedVersionsCompatible({ major: 1, minor: 2, patch: 3 });
+
+    expect(result).toBe(true);
+    expect(errors.log).not.toHaveBeenCalled();
   });
 });

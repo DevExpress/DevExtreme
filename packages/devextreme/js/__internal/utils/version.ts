@@ -1,4 +1,4 @@
-import type { AssertedVersion } from '@js/common';
+import type { VersionAssertion } from '@js/common';
 import config from '@js/core/config';
 import errors from '@js/core/errors';
 
@@ -29,21 +29,21 @@ export function parseVersion(version: string): Version {
   };
 }
 
-function getAssertedVersions(): AssertedVersion[] {
-  return config()?.assertedVersions ?? [];
+export function getAssertedVersions(): VersionAssertion[] {
+  return config()?.versionAssertions ?? [];
 }
 
 export function assertDevExtremeVersion(packageName: string, version: string): void {
-  config({ assertedVersions: [...getAssertedVersions(), { packageName, version }] });
+  config({ versionAssertions: [...getAssertedVersions(), { packageName, version }] });
 }
 
 export function clearAssertedVersions(): void {
   /// #DEBUG
-  config({ assertedVersions: [] });
+  config({ versionAssertions: [] });
   /// #ENDDEBUG
 }
 
-function stringifyVersionList(assertedVersionList: AssertedVersion[]): string {
+function stringifyVersionList(assertedVersionList: VersionAssertion[]): string {
   return assertedVersionList
     .map((assertedVersion) => `${assertedVersion.packageName}: ${assertedVersion.version}`)
     .join('\n');
