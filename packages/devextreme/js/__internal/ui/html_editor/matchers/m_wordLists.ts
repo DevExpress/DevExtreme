@@ -1,3 +1,5 @@
+import { isString } from '@js/core/utils/type';
+
 function getListType(matches) {
   const prefix = matches[1];
   return prefix.match(/\S+\./) ? 'ordered' : 'bullet';
@@ -21,10 +23,6 @@ function removeNewLineChar(operations) {
   newLineOperation.insert = newLineOperation.insert.trim();
 }
 
-function isTextOp(op): boolean {
-  return typeof op === 'string';
-}
-
 const getMatcher = (quill) => {
   const Delta = quill.import('delta');
   const msStyleAttributeName = quill.MS_LIST_DATA_KEY;
@@ -34,7 +32,7 @@ const getMatcher = (quill) => {
 
     const insertOperation = ops[0];
 
-    if (!isTextOp(insertOperation.insert)) {
+    if (!isString(insertOperation.insert)) {
       return delta;
     }
 
