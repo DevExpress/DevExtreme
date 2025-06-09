@@ -131,6 +131,8 @@ $pivotgrid-expand-icon-text-offset: 0;
       margin-right: 10px;
       float: right;
       display: inline-block;
+      position: relative;
+      z-index: 1;
 
       .dx-button {
         margin-top: $pivotgrid-button-top-padding;
