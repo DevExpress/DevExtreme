@@ -449,6 +449,8 @@ class ContextMenu extends MenuBase {
       domAdapter.getDocument(),
       eventName,
       target,
+      // @ts-expect-error
+      this._showContextMenuEventHandler,
     );
   }
 
