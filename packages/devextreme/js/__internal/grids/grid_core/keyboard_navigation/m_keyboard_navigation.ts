@@ -1290,6 +1290,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const $cell = this._getFocusedCell();
 
     this._focusElement($cell, true, e);
+    this._rowsView.getScrollable()?.update();
   }
 
   private navigateToFirstOrLastRow(needNavigateToFirstCell: boolean, e: KeyboardEvent): void {
