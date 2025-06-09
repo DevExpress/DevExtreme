@@ -1,5 +1,5 @@
 <template>
-  <div className="options">
+  <div className="options-panel">
     <div className="caption">Options</div>
     <div className="options-container">
       <div className="option">
@@ -45,6 +45,8 @@
     id="cardView"
     :data-source="employees"
     key-expr="ID"
+    :card-min-width="100"
+    :word-wrap-enabled="true"
     :selected-card-keys="[4, 6]"
     ref="cardViewRef"
   >
@@ -99,10 +101,10 @@ const cardViewRef = ref();
 const onSelectionModeChange = ({ value }: DxSelectBoxTypes.ValueChangedEvent): void => {
   selectionMode.value = value;
   cardViewRef.value.instance.clearSelection();
-};  
+};
 </script>
 <style>
-  .options {
+  .options-panel {
     margin-top: 20px;
     padding: 20px;
     background-color: rgba(191, 191, 191, 0.15);

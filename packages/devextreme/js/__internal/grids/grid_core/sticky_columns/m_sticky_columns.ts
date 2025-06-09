@@ -821,18 +821,29 @@ const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationCon
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
     const scrollable = this.getView('rowsView')?.getScrollable();
 
-    if (hasStickyColumns && scrollable) {
-      const $cell = $(originalEvent.target).closest('td');
-      const $nextCell = GridCoreStickyColumnsDom.getNextHeaderCell(
-        $cell,
-        shift ? 'previous' : 'next',
-      );
-      const isFixedCell = GridCoreStickyColumnsDom
-        .isFixedCell($nextCell, this.addWidgetPrefix.bind(this));
+    if (!hasStickyColumns || !scrollable) {
+      return;
+    }
 
-      if ($nextCell.length && !isFixedCell) {
-        this.scrollToColumn($nextCell);
-      }
+    const $cell = $(originalEvent.target).closest('td');
+    const $nextCell = GridCoreStickyColumnsDom.getNextHeaderCell(
+      $cell,
+      shift ? 'previous' : 'next',
+    );
+    const isFixedCell = GridCoreStickyColumnsDom
+      .isFixedCell($nextCell, this.addWidgetPrefix.bind(this));
+
+    if (isFixedCell) {
+      return;
+    }
+
+    const nextCellIsOutsideVisibleArea = $nextCell.length && this.isOutsideVisibleArea(
+      $nextCell,
+      $(this._columnHeadersView.getContent()),
+    );
+
+    if (nextCellIsOutsideVisibleArea) {
+      this.scrollToColumn($nextCell);
     }
   }
 };

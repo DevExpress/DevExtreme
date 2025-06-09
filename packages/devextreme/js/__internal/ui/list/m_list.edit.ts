@@ -284,15 +284,6 @@ class ListEdit extends ListBase {
     super._itemHoldHandler(...arguments);
   }
 
-  _getItemContainer(changeData) {
-    if (this.option('grouped')) {
-      const groupIndex = this._editStrategy.getIndexByItemData(changeData)?.group;
-      return this._getGroupContainerByIndex(groupIndex);
-    }
-    // @ts-expect-error ts-error
-    return super._getItemContainer(changeData);
-  }
-
   _itemContextMenuHandler(e): void {
     const $itemElement = $(e.currentTarget);
     if ($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
@@ -351,7 +342,6 @@ class ListEdit extends ListBase {
         break;
       case 'grouped':
         this._clearSelectedItems();
-        delete this._renderingGroupIndex;
         this._initEditStrategy();
         super._optionChanged(args);
         break;

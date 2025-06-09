@@ -148,14 +148,19 @@ export function registerKeyboardAction(viewName, instance, $element, selector, a
         }
         isMouseDown = false;
     };
+    const mouseUpHandler = () => {
+        isMouseDown = false;
+    };
 
     eventsEngine.on($element, 'keydown', selector, keyDownHandler);
     eventsEngine.on($element, 'mousedown', selector, mouseDownHandler);
     eventsEngine.on($element, 'focusin', selector, focusinHandler);
+    eventsEngine.on($element, 'mouseup contextmenu', selector, mouseUpHandler);
     return () => {
         eventsEngine.off($element, 'keydown', selector, keyDownHandler);
         eventsEngine.off($element, 'mousedown', selector, mouseDownHandler);
         eventsEngine.off($element, 'focusin', selector, focusinHandler);
+        eventsEngine.off($element, 'mouseup contextmenu', selector, mouseUpHandler);
     };
 }
 

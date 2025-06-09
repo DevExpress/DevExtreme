@@ -1,7 +1,7 @@
 export const customers = [
   {
     ID: 1,
-    CompanyName: 'Super Mart of the West',
+    Company: 'Super Mart of the West',
     Address: '702 SW 8th Street',
     City: 'Bentonville',
     State: 'Arkansas',
@@ -11,7 +11,7 @@ export const customers = [
   },
   {
     ID: 2,
-    CompanyName: 'Electronics Depot',
+    Company: 'Electronics Depot',
     Address: '2455 Paces Ferry Road NW',
     City: 'Atlanta',
     State: 'Georgia',
@@ -21,7 +21,7 @@ export const customers = [
   },
   {
     ID: 3,
-    CompanyName: 'K&S Music',
+    Company: 'K&S Music',
     Address: '1000 Nicllet Mall',
     City: 'Minneapolis',
     State: 'Minnesota',
@@ -31,7 +31,7 @@ export const customers = [
   },
   {
     ID: 4,
-    CompanyName: "Tom's Club",
+    Company: "Tom's Club",
     Address: '999 Lake Drive',
     City: 'Issaquah',
     State: 'Washington',
@@ -41,7 +41,7 @@ export const customers = [
   },
   {
     ID: 5,
-    CompanyName: 'E-Mart',
+    Company: 'E-Mart',
     Address: '3333 Beverly Rd',
     City: 'Hoffman Estates',
     State: 'Illinois',
@@ -51,7 +51,7 @@ export const customers = [
   },
   {
     ID: 6,
-    CompanyName: 'Walters',
+    Company: 'Walters',
     Address: '200 Wilmot Rd',
     City: 'Deerfield',
     State: 'Illinois',
@@ -61,7 +61,7 @@ export const customers = [
   },
   {
     ID: 7,
-    CompanyName: 'StereoShack',
+    Company: 'StereoShack',
     Address: '400 Commerce S',
     City: 'Fort Worth',
     State: 'Texas',
@@ -71,7 +71,7 @@ export const customers = [
   },
   {
     ID: 8,
-    CompanyName: 'Circuit Town',
+    Company: 'Circuit Town',
     Address: '2200 Kensington Court',
     City: 'Oak Brook',
     State: 'Illinois',
@@ -81,7 +81,7 @@ export const customers = [
   },
   {
     ID: 9,
-    CompanyName: 'Premier Buy',
+    Company: 'Premier Buy',
     Address: '7601 Penn Avenue South',
     City: 'Richfield',
     State: 'Minnesota',
@@ -91,7 +91,7 @@ export const customers = [
   },
   {
     ID: 10,
-    CompanyName: 'ElectrixMax',
+    Company: 'ElectrixMax',
     Address: '263 Shuman Blvd',
     City: 'Naperville',
     State: 'Illinois',
@@ -101,7 +101,7 @@ export const customers = [
   },
   {
     ID: 11,
-    CompanyName: 'Video Emporium',
+    Company: 'Video Emporium',
     Address: '1201 Elm Street',
     City: 'Dallas',
     State: 'Texas',
@@ -111,7 +111,7 @@ export const customers = [
   },
   {
     ID: 12,
-    CompanyName: 'Screen Shop',
+    Company: 'Screen Shop',
     Address: '1000 Lowes Blvd',
     City: 'Mooresville',
     State: 'North Carolina',

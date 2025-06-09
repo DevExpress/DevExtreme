@@ -1,5 +1,7 @@
 import React from 'react';
-import CardView, { Column, CardCover, Editing } from 'devextreme-react/card-view';
+import CardView, {
+  Column, CardCover, Editing, Paging,
+} from 'devextreme-react/card-view';
 import { employees } from './data.js';
 
 function altExpr({ fullName }) {
@@ -15,11 +17,13 @@ const App = () => (
   <CardView
     dataSource={employees}
     keyExpr="id"
+    cardsPerRow={2}
     // todo: move to nested components
     searchPanel={{
       visible: true,
     }}
   >
+    <Paging pageSize={4} />
     <CardCover
       imageExpr={imageExpr}
       altExpr={altExpr}

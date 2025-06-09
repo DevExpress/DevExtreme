@@ -24,14 +24,16 @@ const App = () => (
   <CardView
     dataSource={dataSource}
     remoteOperations={true}
-    wordWrapEnabled={true}
     headerFilter={headerFilterConfig}
     searchPanel={searchPanelConfig}
+    cardMinWidth={100}
+    wordWrapEnabled={true}
   >
     <Editing
       allowAdding={true}
       allowUpdating={true}
       allowDeleting={true}
+      popup={{ width: 700, height: 400 }}
     ></Editing>
     <Column
       dataField="Task_Subject"

@@ -1,5 +1,5 @@
 import React from 'react';
-import CardView, { Column, CardCover } from 'devextreme-react/card-view';
+import CardView, { Column, CardCover, Paging } from 'devextreme-react/card-view';
 import { houses, House } from './data.ts';
 
 function imageExpr({ ID }: House): string {
@@ -14,7 +14,11 @@ const App = () => (
   <CardView
     dataSource={houses}
     keyExpr="ID"
+    cardsPerRow={2}
   >
+    <Paging
+      pageSize={4}
+    />
     <CardCover
       imageExpr={imageExpr}
       altExpr={altExpr}

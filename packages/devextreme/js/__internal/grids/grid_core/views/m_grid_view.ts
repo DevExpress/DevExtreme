@@ -4,6 +4,7 @@ import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
+import type { Callback } from '@js/core/utils/callbacks';
 import { deferRender, deferUpdate } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -99,6 +100,12 @@ export class ResizingController extends modules.ViewController {
   private _editorFactoryController!: EditorFactory;
 
   protected _updateScrollableTimeoutID: any;
+
+  public resizeCompleted!: Callback;
+
+  protected callbackNames() {
+    return ['resizeCompleted'];
+  }
 
   public init() {
     this._prevContentMinHeight = null;
@@ -667,7 +674,9 @@ export class ResizingController extends modules.ViewController {
         .fail(d.reject);
     }).fail(d.reject);
 
-    return d.promise();
+    return d.promise().done(() => {
+      this.resizeCompleted.fire();
+    });
   }
 
   public updateDimensions(checkSize?) {
