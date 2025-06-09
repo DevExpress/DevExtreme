@@ -26,6 +26,7 @@ import {
   isRenderer, isString,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import supportUtils from '@ts/core/utils/m_support';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
@@ -1072,6 +1073,14 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
+  protected handleScroll(e: DxEvent): void {
+    const scrollLeft = $(e.target).scrollLeft();
+
+    if (scrollLeft !== this._scrollLeft) {
+      this.scrollChanged.fire({ left: scrollLeft }, this.name);
+    }
+  }
+
   /**
    * @extended: column_fixing
    */
@@ -1082,14 +1091,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     if (useNative === false || (useNative === 'auto' && !supportUtils.nativeScrolling)) {
       $scrollContainer.addClass(this.addWidgetPrefix(SCROLLABLE_SIMULATED_CLASS));
     }
-
-    eventsEngine.on($scrollContainer, 'scroll', () => {
-      const scrollLeft = $scrollContainer.scrollLeft();
-
-      if (scrollLeft !== this._scrollLeft) {
-        this.scrollChanged.fire({ left: scrollLeft }, this.name);
-      }
-    });
+    eventsEngine.on($scrollContainer, 'scroll', this.handleScroll.bind(this));
 
     $scrollContainer.addClass(this.addWidgetPrefix(CONTENT_CLASS))
       .addClass(this.addWidgetPrefix(SCROLL_CONTAINER_CLASS))

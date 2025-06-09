@@ -1,4 +1,10 @@
-<dx-card-view id="cardView" [dataSource]="houses" keyExpr="ID">
+<dx-card-view
+  id="cardView"
+  [dataSource]="houses"
+  keyExpr="ID"
+  [cardsPerRow]="2"
+>
+  <dxo-card-view-paging [pageSize]="4"></dxo-card-view-paging>
   <dxo-card-view-card-cover
     [imageExpr]="imageExpr"
     [altExpr]="altExpr"

@@ -3,11 +3,15 @@
     id="cardView"
     :data-source="orders"
     key-expr="ID"
+    :cards-per-row="2"
     :header-filter="headerFilterConfig"
     :filter-panel="filterPanelConfig"
     :filter-builder="filterBuilderConfig"
     :filter-value="filterValue"
   >
+    <DxPaging
+      :page-size="4"
+    />
     <DxColumn
       data-field="OrderNumber"
       :header-filter="orderNumberHeaderFilterConfig"
@@ -27,6 +31,7 @@
     />
     <DxColumn
       data-field="CustomerStoreCity"
+      caption="City"
     />
     <DxColumn
       data-field="Employee"
@@ -34,83 +39,83 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-  import { DxCardView, DxColumn } from 'devextreme-vue/card-view';
-  import { type Order, orders } from './data.ts';
+import { DxCardView, DxColumn, DxPaging } from 'devextreme-vue/card-view';
+import { type Order, orders } from './data.ts';
 
-  function getDeliveryHours(rowData: Order) {
-    return (new Date(rowData.DeliveryDate)).getHours();
-  }
-  
-  // TODO: make nested
-  const headerFilterConfig = {
-    visible: true,
-  };
+function getDeliveryHours(rowData: Order) {
+  return (new Date(rowData.DeliveryDate)).getHours();
+}
 
-  // TODO: make nested
-  const filterPanelConfig = {
-    visible: true,
-  };
+// TODO: make nested
+const headerFilterConfig = {
+  visible: true,
+};
 
-  // TODO: make nested
-  const filterBuilderConfig = {
-    customOperations: [{
-      name: 'beforeNoon',
-      caption: 'Before noon',
-      dataTypes: ['datetime'],
-      icon: 'check',
-      hasValue: false,
-      calculateFilterExpression() {
-        return [getDeliveryHours, '<', 12];
-      },
-    }, {
-      name: 'afterNoon',
-      caption: 'After noon',
-      dataTypes: ['datetime'],
-      icon: 'check',
-      hasValue: false,
-      calculateFilterExpression() {
-        return [getDeliveryHours, '>=', 12];
-      },
-    }],
-  };
+// TODO: make nested
+const filterPanelConfig = {
+  visible: true,
+};
 
-  const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'beforeNoon']];
+// TODO: make nested
+const filterBuilderConfig = {
+  customOperations: [{
+    name: 'beforeNoon',
+    caption: 'Before noon',
+    dataTypes: ['datetime'],
+    icon: 'check',
+    hasValue: false,
+    calculateFilterExpression() {
+      return [getDeliveryHours, '<', 12];
+    },
+  }, {
+    name: 'afterNoon',
+    caption: 'After noon',
+    dataTypes: ['datetime'],
+    icon: 'check',
+    hasValue: false,
+    calculateFilterExpression() {
+      return [getDeliveryHours, '>=', 12];
+    },
+  }],
+};
 
-  // TODO: make nested
-  const saleAmountHeaderFilterConfig = {
-    dataSource: [
-      {
-        text: 'Less than $3000',
-        value: ['SaleAmount', '<', 3000],
-      },
-      {
-        text: '$3000 - $5000',
-        value: [
-          ['SaleAmount', '>=', 3000],
-          ['SaleAmount', '<', 5000],
-        ],
-      },
-      {
-        text: '$5000 - $10000',
-        value: [
-          ['SaleAmount', '>=', 5000],
-          ['SaleAmount', '<', 10000],
-        ],
-      },
-      {
-        text: '$10000 - $20000',
-        value: [
-          ['SaleAmount', '>=', 10000],
-          ['SaleAmount', '<', 20000],
-        ],
-      },
-      {
-        text: 'Greater than $20000',
-        value: ['SaleAmount', '>=', 20000],
-      },
-    ],
-  };
+const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'afterNoon']];
 
-  // TODO: make nested
-  const orderNumberHeaderFilterConfig = { groupInterval: 10000 };
+// TODO: make nested
+const saleAmountHeaderFilterConfig = {
+  dataSource: [
+    {
+      text: 'Less than $3000',
+      value: ['SaleAmount', '<', 3000],
+    },
+    {
+      text: '$3000 - $5000',
+      value: [
+        ['SaleAmount', '>=', 3000],
+        ['SaleAmount', '<', 5000],
+      ],
+    },
+    {
+      text: '$5000 - $10000',
+      value: [
+        ['SaleAmount', '>=', 5000],
+        ['SaleAmount', '<', 10000],
+      ],
+    },
+    {
+      text: '$10000 - $20000',
+      value: [
+        ['SaleAmount', '>=', 10000],
+        ['SaleAmount', '<', 20000],
+      ],
+    },
+    {
+      text: 'Greater than $20000',
+      value: ['SaleAmount', '>=', 20000],
+    },
+  ],
+};
+
+// TODO: make nested
+const orderNumberHeaderFilterConfig = { groupInterval: 10000 };
 </script>

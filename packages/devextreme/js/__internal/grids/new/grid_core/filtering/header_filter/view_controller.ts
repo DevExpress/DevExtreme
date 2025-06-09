@@ -62,9 +62,6 @@ export class HeaderFilterViewController {
 
             newColumns[index] = {
               ...newColumns[index],
-              headerFilter: {
-                ...newColumns[index].headerFilter,
-              },
               // NOTE: Copy array because of mutations in legacy code
               filterValues: Array.isArray(filterValues)
                 ? [...filterValues]

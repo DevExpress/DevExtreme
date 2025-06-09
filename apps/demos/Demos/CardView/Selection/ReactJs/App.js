@@ -25,7 +25,7 @@ const App = () => {
   }, []);
   return (
     <React.Fragment>
-      <div className="options">
+      <div className="options-panel">
         <div className="caption">Options</div>
         <div className="options-container">
           <div className="option">
@@ -70,6 +70,8 @@ const App = () => {
       <CardView
         dataSource={employees}
         keyExpr="ID"
+        cardMinWidth={100}
+        wordWrapEnabled={true}
         defaultSelectedCardKeys={[4, 6]}
         ref={cardViewRef}
       >

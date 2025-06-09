@@ -13,6 +13,7 @@ import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
+import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/m_headers_keyboard_navigation';
 import { registerKeyboardAction } from '../m_accessibility';
 import { ColumnsView } from '../views/m_columns_view';
 
@@ -77,15 +78,18 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
 
   private _hasRowElements: any;
 
-  protected _headerFilterController!: HeaderFilterController;
-
   private _headerPanelView!: HeaderPanel;
+
+  protected _headersKeyboardNavigation!: HeadersKeyboardNavigationController;
+
+  protected _headerFilterController!: HeaderFilterController;
 
   public init(): void {
     super.init();
     this._headerPanelView = this.getView('headerPanel');
     this._headerFilterController = this.getController('headerFilter');
     this._dataController = this.getController('data');
+    this._headersKeyboardNavigation = this.getController('headersKeyboardNavigation');
   }
 
   protected _createTable() {
@@ -667,7 +671,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   }
 
   public getKeyboardNavigationController() {
-    return this.getController('headersKeyboardNavigation');
+    return this._headersKeyboardNavigation;
   }
 }
 
