@@ -42,10 +42,11 @@ import {
   ROW_CLASS,
 } from '../editing/const';
 import type {
-  Controllers, ModuleType, RowKey, Views,
+  Controllers, KeyDownEvent, ModuleType, RowKey, Views,
 } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type {
+  FocusedCellPosition,
   ScrollOffset,
 } from './const';
 import {
@@ -139,7 +140,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private _columnResizerController!: Controllers['columnsResizer'];
 
-  private needNavigationToCell = false;
+  private needNavigationToCellAfterResize = false;
 
   // #region Initialization
   public init() {
@@ -264,14 +265,11 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   protected resizeCompleted(): void {
-    if (this.needNavigationToCell) {
-      const scrollable = this._rowsView.getScrollable();
+    if (this.needNavigationToCellAfterResize) {
+      const needNavigateToFirstCell = this._focusedCellPosition?.columnIndex === 0;
 
-      this.needNavigationToCell = false;
-      this.navigateToFirstOrLastCell(scrollable.scrollTop() === 0);
-    } else if (this.needToRestoreFocus) {
-      this.needToRestoreFocus = false;
-      this.focusFirstOrLastCell();
+      this.needNavigationToCellAfterResize = false;
+      this.navigateToFirstOrLastCell(needNavigateToFirstCell);
     }
   }
 
@@ -1251,7 +1249,11 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private getFirstOrLastRowIndex(needFirstRow: boolean): number {
-    return needFirstRow ? 0 : this._dataController.totalCount() - 1;
+    const rowCount = this._isVirtualScrolling()
+      ? this._dataController.totalItemsCount()
+      : this._dataController.items(true)?.length;
+
+    return needFirstRow ? 0 : rowCount - 1;
   }
 
   private calculateScrollLeft(needScrollToFirstCell: boolean): number {
@@ -1284,27 +1286,31 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     scrollable?.scrollTo(scrollOffset);
   }
 
-  private focusFirstOrLastCell(e = null): void {
+  private focusFirstOrLastCell(e?: KeyboardEvent): void {
     const $cell = this._getFocusedCell();
 
-    this._focusElement($cell, true, true, e);
+    this._focusElement($cell, true, e);
   }
 
-  private navigateToFirstOrLastRow(needNavigateToFirstCell: boolean, e): void {
+  private navigateToFirstOrLastRow(needNavigateToFirstCell: boolean, e: KeyboardEvent): void {
     const scrollTop = this.calculateScrollTop(needNavigateToFirstCell);
     const firstOrLastRowIndex = this.getFirstOrLastRowIndex(needNavigateToFirstCell);
+    const firstOrLastColumnIndex = this.getFirstOrLastColumnIndex(needNavigateToFirstCell);
 
-    this.setFocusedRowIndex(firstOrLastRowIndex);
+    this.silentUpdateFocusedCellPosition({
+      columnIndex: firstOrLastColumnIndex,
+      rowIndex: firstOrLastRowIndex,
+    });
 
     if (scrollTop >= 0) {
-      this.needNavigationToCell = true;
+      this.needNavigationToCellAfterResize = true;
       this.scrollTo({ top: scrollTop });
     } else {
       this.navigateToFirstOrLastCell(needNavigateToFirstCell, e);
     }
   }
 
-  private navigateToFirstOrLastCell(needNavigateToFirstCell: boolean, e?): void {
+  private navigateToFirstOrLastCell(needNavigateToFirstCell: boolean, e?: KeyboardEvent): void {
     const firstOrLastColumnIndex = this.getFirstOrLastColumnIndex(needNavigateToFirstCell);
 
     if (firstOrLastColumnIndex < 0) {
@@ -1313,29 +1319,30 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     const scrollLeft = this.calculateScrollLeft(needNavigateToFirstCell);
 
-    this.setFocusedColumnIndex(firstOrLastColumnIndex);
+    this.silentUpdateFocusedCellPosition({ columnIndex: firstOrLastColumnIndex });
 
     if (scrollLeft >= 0) {
-      this.needToRestoreFocus = true;
+      this.needNavigationToCellAfterResize = true;
       this.scrollTo({ left: scrollLeft });
     } else {
       this.focusFirstOrLastCell(e);
     }
   }
 
-  private homeOrEndKeyHandler(e): void {
+  private homeOrEndKeyHandler(e: KeyDownEvent): void {
     if (!this.canNavigateQuickly()) {
       return;
     }
 
     const needNavigateToFirstCell = e.keyName === 'home';
+    const { originalEvent } = e;
 
-    if (isCommandKeyPressed(e.originalEvent)) {
-      this.navigateToFirstOrLastRow(needNavigateToFirstCell, e);
+    if (isCommandKeyPressed(originalEvent)) {
+      this.navigateToFirstOrLastRow(needNavigateToFirstCell, originalEvent);
     } else {
-      this.navigateToFirstOrLastCell(needNavigateToFirstCell, e);
+      this.navigateToFirstOrLastCell(needNavigateToFirstCell, originalEvent);
     }
-    e.originalEvent.preventDefault();
+    originalEvent.preventDefault();
   }
   // #endregion Key_Handlers
 
@@ -1466,14 +1473,13 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private _focusElement(
-    $element,
-    isHighlighted,
-    isCellFocusType = false,
-    event = null,
+    $element: dxElementWrapper,
+    isHighlighted: boolean,
+    event?: KeyboardEvent,
   ) {
     const rowsViewElement = $(this._getRowsViewElement());
     const $focusedView = $element.closest(rowsViewElement);
-    const isRowFocusType = !isCellFocusType && this.isRowFocusType();
+    const isRowFocusType = this.isRowFocusType();
     let args: any = {};
 
     if (
@@ -1492,7 +1498,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       args = this._fireFocusChangingEvents(
         event,
         $element,
-        !isCellFocusType,
+        true,
         isHighlighted,
       );
       $element = args.$newCellElement;
@@ -1503,10 +1509,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     if (!args.cancel) {
       this._focus($element, !args.isHighlighted);
-
-      if (!isCellFocusType) {
-        this._focusInteractiveElement($element);
-      }
+      this._focusInteractiveElement($element);
     }
   }
 
@@ -1744,6 +1747,15 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   // #endregion Focusing
   // #region Cell_Position
+  private silentUpdateFocusedCellPosition(
+    newFocusedCellPosition: Partial<FocusedCellPosition>,
+  ): void {
+    this._focusedCellPosition = {
+      ...this._focusedCellPosition ?? {},
+      ...newFocusedCellPosition,
+    };
+  }
+
   private _getNewPositionByCode(cellPosition, elementType, code) {
     let { columnIndex } = cellPosition;
     let { rowIndex } = cellPosition;
@@ -2606,6 +2618,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       this.setFocusedRowIndex(lastVisibleIndex + rowIndexOffset);
     }
   }
+
+  public needToRenderFocusState(): boolean {
+    return !this.needNavigationToCellAfterResize;
+  }
 }
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender extends Base {
@@ -2642,6 +2658,10 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender 
 
   public renderFocusState(params) {
     super.renderFocusState(params);
+
+    if (!this._keyboardNavigationController.needToRenderFocusState()) {
+      return;
+    }
 
     const { preventScroll, pageSizeChanged } = params ?? {};
     const $rowsViewElement = this.element();

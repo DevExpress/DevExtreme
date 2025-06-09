@@ -433,7 +433,7 @@ test('Navigate to first cell in the first row when virtual scrolling is enabled'
   },
 }));
 
-test.skip('Navigate to last cell in the last row when virtual scrolling and columns are enabled', async (t) => {
+test('Navigate to last cell in the last row when virtual scrolling and columns are enabled', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -443,59 +443,63 @@ test.skip('Navigate to last cell in the last row when virtual scrolling and colu
     .click(dataGrid.getDataCell(0, 0).element)
     .pressKey('ctrl+end');
 
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(199, 34).element.focused)
+    .ok();
+
   await takeScreenshot('navigate_to_last_cell_in_last_row_when_virtual_scrolling_and_columns_are_enabled', dataGrid.element);
 
-  // assert
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
-  dataSource: getData(200, 15),
+  dataSource: getData(200, 35),
   columnWidth: 100,
   height: 500,
   width: 800,
-  showBorders: true,
   scrolling: {
     mode: 'virtual',
     columnRenderingMode: 'virtual',
-    useNative: false,
   },
 }));
 
-test.skip('Navigate to first cell in the first row when virtual scrolling and columns are enabled', async (t) => {
+test('Navigate to first cell in the first row when virtual scrolling and columns are enabled', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await dataGrid.scrollTo(t, { x: 700, y: 10000 });
+  await dataGrid.scrollTo(t, { x: 3000, y: 10000 });
 
   // assert
   await t
     .expect(dataGrid.getScrollLeft())
-    .eql(700);
+    .eql(2700);
 
   await takeScreenshot('navigate_to_first_cell_in_first_row_when_virtual_scrolling_and_columns_are_enabled_1', dataGrid.element);
 
   // act
   await t
-    .click(dataGrid.getDataCell(199, 14).element)
+    .click(dataGrid.getDataCell(199, 34).element)
     .pressKey('ctrl+home');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).element.focused)
+    .ok();
 
   await takeScreenshot('navigate_to_first_cell_in_first_row_when_virtual_scrolling_and_columns_are_enabled_2', dataGrid.element);
 
-  // assert
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
-  dataSource: getData(200, 15),
+  dataSource: getData(200, 35),
   columnWidth: 100,
   height: 500,
   width: 800,
-  showBorders: true,
   scrolling: {
     mode: 'virtual',
     columnRenderingMode: 'virtual',
-    useNative: false,
   },
 }));
