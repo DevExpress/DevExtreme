@@ -7,6 +7,7 @@ import {
   DxPopupModule,
   DxTemplateModule,
 } from 'devextreme-angular';
+import { CardInfo } from 'devextreme-angular/ui/card-view';
 import { Service, Vehicle } from './app.service';
 import { VehicleCard } from './vehicle-card/vehicle-card.component';
 import { LicenseInfo } from './license-info/license-info.component';
@@ -45,7 +46,7 @@ export class AppComponent {
     this.popupVisible = false;
   }
 
-  getFormattedPrice(card): string {
+  getFormattedPrice(card: CardInfo): string {
     const priceText = card.fields.find(f => f?.column?.dataField === 'Price');
     return priceText?.text ?? '';
   }
