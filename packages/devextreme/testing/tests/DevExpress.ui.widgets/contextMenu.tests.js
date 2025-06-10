@@ -22,6 +22,7 @@ import 'generic_light.css!';
 QUnit.testStart(() => {
     const markup =
         '<div id="simpleMenu"></div>\
+        <div id="simpleMenu2"></div>\
         <div id="menuTarget"></div>\
         <div id="menuTarget2"></div>\
         <div id="menuShower"></div>';
@@ -2075,7 +2076,7 @@ QUnit.module('Behavior', moduleConfig, () => {
             $('#menuTarget').trigger(holdEvent.name);
 
             const $itemsContainer = instance.itemsContainer();
-            const $rootItem = $itemsContainer.find('.' + DX_SUBMENU_CLASS).eq(0);
+            const $rootItem = $($itemsContainer).find('.' + DX_SUBMENU_CLASS).eq(0);
             const contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse', target: $rootItem.get(0) });
             $('#menuTarget').trigger(contextMenuEvent);
 
@@ -2184,6 +2185,37 @@ QUnit.module('Behavior', moduleConfig, () => {
         } catch(e) {
             assert.ok(false);
         }
+    });
+
+    QUnit.test('multiple context menu if one has no target', function(assert) {
+        const simpleMenuItemText = 'simple menu item 1';
+        new ContextMenu($('#simpleMenu'), {
+            items: [{ text: simpleMenuItemText }],
+            target: '#menuTarget',
+        });
+
+        const documentMenuItemText = 'document menu item 1';
+        new ContextMenu($('#simpleMenu2'), {
+            items: [{ text: documentMenuItemText }],
+        });
+
+
+        $('#menuTarget').trigger('dxcontextmenu');
+
+        assert.strictEqual(
+            $('.' + DX_OVERLAY_WRAPPER_CLASS).find('.' + DX_MENU_ITEM_CONTENT_CLASS).text(),
+            simpleMenuItemText,
+            'firstMenu was shown'
+        );
+
+        $(document).trigger('dxpointerdown');
+        $(document).trigger('dxcontextmenu');
+
+        assert.strictEqual(
+            $('.' + DX_OVERLAY_WRAPPER_CLASS).find('.' + DX_MENU_ITEM_CONTENT_CLASS).text(),
+            documentMenuItemText,
+            'secondMenu was shown'
+        );
     });
 });
 
