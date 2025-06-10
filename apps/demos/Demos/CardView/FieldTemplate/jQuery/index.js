@@ -86,14 +86,14 @@ $(() => {
           return $('<div>')
             .addClass('task__progress')
             .dxProgressBar({
-            value,
-            elementAttr: {
-              'aria-label': 'Progress Bar',
-            },
-            statusFormat(ratio) {
-              return `${ratio * 100}%`;
-            },
-          });
+              value,
+              elementAttr: {
+                'aria-label': 'Progress Bar',
+              },
+              statusFormat(ratio) {
+                return `${ratio * 100}%`;
+              },
+            });
         }
       },
     ],

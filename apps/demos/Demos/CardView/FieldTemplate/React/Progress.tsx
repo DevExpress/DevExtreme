@@ -9,7 +9,7 @@ const Progress = ({value}) => {
             value={value}
             elementAttr={elementAttr}
             statusFormat={(ratio) => `${ratio * 100}%`}
-        ></ProgressBar>
+        />
     </div>;
 }
 

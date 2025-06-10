@@ -4,7 +4,7 @@
             :value="value"
             :element-attr="{ 'aria-label': 'Progress Bar' }"
             :statusFormat="(ratio) => `${ratio * 100}%`"
-        ></DxProgressBar>
+        />
     </div>
 </template>
 
