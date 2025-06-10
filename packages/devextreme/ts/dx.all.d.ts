@@ -44701,11 +44701,6 @@ declare module DevExpress.viz {
      */
     clearSelection(): void;
     /**
-     * [descr:dxVectorMap.convertCoordinates(x, y)]
-     * @deprecated [depNote:dxVectorMap.convertCoordinates(x, y)]
-     */
-    convertCoordinates(x: number, y: number): Array<number>;
-    /**
      * [descr:dxVectorMap.convertToGeo(x, y)]
      */
     convertToGeo(x: number, y: number): Array<number>;
