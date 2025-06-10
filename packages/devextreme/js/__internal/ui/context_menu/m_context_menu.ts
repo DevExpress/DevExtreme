@@ -355,7 +355,7 @@ class ContextMenu extends MenuBase {
     this.$element()
       .addClass(DX_HAS_CONTEXT_MENU_CLASS);
 
-    this._eventNamespace = `${this.NAME}_${Date.now()}`;
+    this._eventNamespace = `${this.NAME}_${new Guid()}`;
 
     super._initMarkup();
   }
