@@ -185,6 +185,7 @@ const tasksT1223168 = [{
         keyExpr: 'Task_ID',
         parentIdExpr: 'Task_Parent_ID',
         columns: ['Task_ID'],
+        width: 100,
       });
     })
     .after(async () => {
