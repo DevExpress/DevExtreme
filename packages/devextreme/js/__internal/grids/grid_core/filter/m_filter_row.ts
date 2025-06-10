@@ -315,7 +315,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         editorOptions = that._getEditorOptions($editor, column);
         editorOptions.sharedData = sharedData;
         that._renderEditor($editor, editorOptions);
-        const scrollable = that.getView('rowsView').getScrollable();
+        const scrollable = that.getView('rowsView')?.getScrollable?.();
 
         if (scrollable) {
           const direction = scrollable._allowedDirection();
