@@ -1,5 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { DIContext } from '../di';
+import { Logger } from './logger';
 import { makeStateManager } from './state_manager_factory';
 import type * as StateManagementTypes from './types';
 
@@ -28,13 +29,16 @@ function isController(
   return false;
 }
 
-export const setupStateManager = (options: StateManagerInitializerOptions): void => {
+export const setupStateManager = (
+  options: StateManagerInitializerOptions,
+): StateManagementTypes.StateManager | undefined => {
   const {
     diContext,
     componentName,
     logLevel = 'warn',
     controllerSign = CONTROLLER_SIGN,
   } = options;
+  const logger = new Logger({ logLevel, prefix: '[StateManager]' });
 
   const isDevelopmentMode = process.env.NODE_ENV === 'development';
 
@@ -49,31 +53,28 @@ export const setupStateManager = (options: StateManagerInitializerOptions): void
       }
       const stateManager = makeStateManager({
         componentName,
-        logLevel,
         controllerSign,
+        logger,
       });
 
-      let areAnyControllerInitialized = false;
-
-      const registerControllerInStateManager: DecoratorFunction = (instance) => {
+      const trackControllerByStateManager: DecoratorFunction = (instance) => {
         if (isController(instance, controllerSign)) {
-          stateManager.registerController(instance, instance.constructor.name);
-
-          if (!areAnyControllerInitialized && logLevel === 'debug') {
-            areAnyControllerInitialized = true;
-          }
+          const controlledId = instance.constructor.name;
+          stateManager.trackControllerState(controlledId, instance);
+        } else {
+          logger.debug(`The '${instance?.constructor?.name}' controller isn't tracked by the state manager because it doesn't match the pattern of a controller with the "${CONTROLLER_SIGN}" sign in its name.`);
         }
 
         return instance;
       };
 
-      if (!areAnyControllerInitialized && logLevel === 'debug') {
-        console.warn(`No controllers have been registered in the state manager. Do controllers have the "${controllerSign}" in their names?`);
-      }
+      diContext.decorator(trackControllerByStateManager);
 
-      diContext.decorator(registerControllerInStateManager);
+      return stateManager;
     } catch (error) {
-      console.error('Unexpected error while setting up state manager:', error);
+      logger.error('Unexpected error while setting up state manager:', error);
     }
   }
+
+  return undefined;
 };

@@ -1,8 +1,8 @@
-export function splitStatePath(statePath: string, separator = '.'): string[] {
-  if (!statePath || typeof statePath !== 'string') {
-    return [];
-  }
+export function joinStatePath(stateId: string, propertyName: string, separator = '.'): string {
+  return [stateId, propertyName].join(separator);
+}
 
+export function splitStatePath(statePath: string, separator = '.'): string[] {
   return statePath.split(separator).filter(Boolean);
 }
 
