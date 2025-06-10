@@ -526,14 +526,15 @@ describe('assertedVersions integration', () => {
     clearAssertedVersions();
   });
 
-  test('reads asserted versions from global DevExpress.config', async () => {
+  test('reads asserted versions from global DevExpress.config', () => {
     globalThis.DevExpress = {
       config: {
         versionAssertions: packages,
       },
     };
 
-    const { default: configMethod } = await import('@js/__internal/core/m_config');
+    // eslint-disable-next-line
+    const configMethod = require('@js/__internal/core/m_config').default;
 
     expect(configMethod()?.versionAssertions).toEqual(packages);
   });
