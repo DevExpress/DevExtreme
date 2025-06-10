@@ -62,15 +62,15 @@ $(() => {
     const vehicleName = $('<div>').addClass('vehicle__name').text(name).attr('title', name);
 
     const priceText = card.fields.find(f => f.column.dataField === 'Price')?.text;
-    const priceInfo = $('<div>').addClass('vehicle__price').text(`${priceText}`);
+    const priceInfo = $('<div>').addClass('vehicle__price').text(priceText);
 
     const typeContainer = $('<div>').addClass('vehicle__type-container');
-    const typeInfo = $('<div>').addClass('vehicle__type').text(`${CategoryName}`);
+    const typeInfo = $('<div>').addClass('vehicle__type').text(CategoryName);
     typeContainer.append(typeInfo);
 
     const specContainer = $('<div>').addClass('vehicle__spec-container');
-    const modificationInfo = $('<div>').addClass('vehicle__modification').text(`${Modification}`);
-    const bodyInfo = $('<div>').addClass('vehicle__modification').text(`${BodyStyleName}`);
+    const modificationInfo = $('<div>').addClass('vehicle__modification').text(Modification);
+    const bodyInfo = $('<div>').addClass('vehicle__modification').text(BodyStyleName);
     const horsepowerInfo = $('<div>').addClass('vehicle__modification').text(`${Horsepower} h.p.`);
     specContainer.append(modificationInfo);
     specContainer.append(bodyInfo);
