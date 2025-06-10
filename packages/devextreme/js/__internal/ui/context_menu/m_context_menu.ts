@@ -19,7 +19,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getOuterHeight } from '@js/core/utils/size';
 import {
-  isDefined, isFunction, isObject, isPlainObject, isRenderer,
+  isDefined, isFunction, isObject, isPlainObject, isRenderer, isWindow,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { Item } from '@js/ui/context_menu';
@@ -74,6 +74,8 @@ class ContextMenu extends MenuBase {
   _overlay!: dxOverlay<OverlayProperties>;
 
   _overlayContentId?: string;
+
+  _eventNamespace!: string;
 
   _showContextMenuEventHandler?: (event: unknown) => any;
 
@@ -353,6 +355,8 @@ class ContextMenu extends MenuBase {
     this.$element()
       .addClass(DX_HAS_CONTEXT_MENU_CLASS);
 
+    this._eventNamespace = `${this.NAME}_${Date.now()}`;
+
     super._initMarkup();
   }
 
@@ -414,7 +418,7 @@ class ContextMenu extends MenuBase {
 
   preventShowingDefaultContextMenuAboveOverlay() {
     const $itemContainer = this._itemContainer();
-    const eventName = addNamespace(contextMenuEventName, this.NAME);
+    const eventName = addNamespace(contextMenuEventName, this._eventNamespace);
 
     eventsEngine.off($itemContainer, eventName, `.${DX_SUBMENU_CLASS}`);
     eventsEngine.on($itemContainer, eventName, `.${DX_SUBMENU_CLASS}`, (e) => {
@@ -443,15 +447,19 @@ class ContextMenu extends MenuBase {
       return;
     }
 
-    const eventName = addNamespace(showEvent, this.NAME);
+    const eventName = addNamespace(showEvent, this._eventNamespace);
 
-    eventsEngine.off(
-      domAdapter.getDocument(),
-      eventName,
-      target,
-      // @ts-expect-error
-      this._showContextMenuEventHandler,
-    );
+    if (this._showContextMenuEventHandler) {
+      eventsEngine.off(
+        domAdapter.getDocument(),
+        eventName,
+        target,
+        // @ts-expect-error
+        this._showContextMenuEventHandler,
+      );
+    } else {
+      eventsEngine.off($(target), eventName);
+    }
   }
 
   _attachShowContextMenuEvents() {
@@ -463,7 +471,8 @@ class ContextMenu extends MenuBase {
       return;
     }
 
-    const eventName = addNamespace(showEvent, this.NAME);
+    const eventName = addNamespace(showEvent, this._eventNamespace);
+
     let contextMenuAction = this._createAction((e) => {
       // @ts-expect-error
       const delay = this.getShowDelay(this.option('showEvent'));
@@ -480,8 +489,19 @@ class ContextMenu extends MenuBase {
 
     contextMenuAction = this._createAction(contextMenuAction);
 
-    this._showContextMenuEventHandler = handler;
-    eventsEngine.on(domAdapter.getDocument(), eventName, target, this._showContextMenuEventHandler);
+    // @ts-expect-error
+    if (isRenderer(target) || target.nodeType || isWindow(target)) {
+      this._showContextMenuEventHandler = undefined;
+      eventsEngine.on(target, eventName, handler);
+    } else {
+      this._showContextMenuEventHandler = handler;
+      eventsEngine.on(
+        domAdapter.getDocument(),
+        eventName,
+        target,
+        this._showContextMenuEventHandler,
+      );
+    }
   }
 
   _hoverEndHandler(e): void {
