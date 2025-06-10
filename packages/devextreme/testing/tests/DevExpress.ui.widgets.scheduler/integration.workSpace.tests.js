@@ -202,6 +202,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
 
             pointerMock(scheduler.instance.$element().find('.dx-scheduler-date-table-cell').eq(22)).start().click().click();
             assert.deepEqual(spy.getCall(0).args[0], {
+                allDay: false,
                 startDate: new Date(2015, 1, 17),
                 endDate: new Date(2015, 1, 18)
             }, 'showAppointmentPopup has a right arguments');
@@ -267,6 +268,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
 
             pointerMock(scheduler.instance.$element().find('.dx-scheduler-date-table-cell').eq(22)).start().click().click();
             assert.deepEqual(spy.getCall(0).args[0], {
+                allDay: false,
                 startDate: new Date(2015, 1, 3),
                 endDate: new Date(2015, 1, 4),
                 ownerId: 2

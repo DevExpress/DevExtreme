@@ -79,7 +79,7 @@ QUnit.module('Options', () => {
             const dataAccessors = scheduler.instance._dataAccessors;
 
             $.each(dataAccessors.getter, function(name, getter) {
-                assert.equal(dataAccessors.getter[name](appointment), data[name], 'getter for ' + name + ' is OK');
+                assert.deepEqual(dataAccessors.getter[name](appointment), data[name], 'getter for ' + name + ' is OK');
             });
 
             $.each(dataAccessors.setter, function(name, getter) {

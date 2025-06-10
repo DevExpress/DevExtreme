@@ -5,9 +5,9 @@ import { each } from '@js/core/utils/iterator';
 import { isPlainObject } from '@js/core/utils/type';
 
 import { formatDates, getFormatType } from './appointments/m_text_utils';
-import { createAppointmentAdapter } from './m_appointment_adapter';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './m_classes';
 import { utils } from './m_utils';
+import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -111,21 +111,18 @@ const subscribes = {
   },
 
   getTextAndFormatDate(appointmentRaw, targetedAppointmentRaw, format) { // TODO: rename to createFormattedDateText
-    const appointmentAdapter = createAppointmentAdapter(appointmentRaw, this._dataAccessors, this.timeZoneCalculator);
-    const targetedAdapter = createAppointmentAdapter(
-      targetedAppointmentRaw || appointmentRaw,
-      this._dataAccessors,
-      this.timeZoneCalculator,
-    );
-
+    const targetedAppointment = {
+      ...appointmentRaw,
+      ...targetedAppointmentRaw,
+    };
     // pull out time zone converting from appointment adapter for knockout(T947938)
-    const startDate = this.timeZoneCalculator.createDate(targetedAdapter.startDate, { path: 'toGrid' });
-    const endDate = this.timeZoneCalculator.createDate(targetedAdapter.endDate, { path: 'toGrid' });
+    const adapter = new AppointmentAdapter(targetedAppointment, this._dataAccessors);
+    const { startDate, endDate } = adapter.getCalculatedDates(this.timeZoneCalculator, 'toGrid');
 
-    const formatType = format || getFormatType(startDate, endDate, targetedAdapter.allDay, this.currentViewType !== 'month');
+    const formatType = format || getFormatType(startDate, endDate, adapter.allDay, this.currentViewType !== 'month');
 
     return {
-      text: targetedAdapter.text || appointmentAdapter.text,
+      text: adapter.text,
       formatDate: formatDates(startDate, endDate, formatType),
     };
   },

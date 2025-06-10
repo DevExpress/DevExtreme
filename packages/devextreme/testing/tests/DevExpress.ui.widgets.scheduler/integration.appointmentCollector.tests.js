@@ -8,7 +8,6 @@ import themes from 'ui/themes';
 import { CompactAppointmentsHelper } from '__internal/scheduler/m_compact_appointments_helper';
 import Widget from 'ui/widget/ui.widget';
 import Color from 'color';
-import AppointmentAdapter from '__internal/scheduler/m_appointment_adapter';
 
 import '__internal/scheduler/m_scheduler';
 import 'generic_light.css!';
@@ -88,12 +87,6 @@ module('Integration: Appointments Collector Base Tests', baseConfig, () => {
                 return this._getTemplateByOption(template);
             },
             _dataAccessors: mockDataAccessor,
-            createAppointmentAdapter(date) {
-                const schedulerMock = {
-                    fire: (methodName, fieldName, appointment) => appointment[fieldName]
-                };
-                return new AppointmentAdapter(schedulerMock, date);
-            }
         }))($('<div>'));
     };
 

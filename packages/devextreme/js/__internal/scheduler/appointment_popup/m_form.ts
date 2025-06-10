@@ -14,7 +14,6 @@ import { extend } from '@js/core/utils/extend';
 import Form from '@js/ui/form';
 import { current, isFluent } from '@js/ui/themes';
 
-import { createAppointmentAdapter } from '../m_appointment_adapter';
 import timeZoneUtils from '../m_utils_time_zone';
 
 const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;
@@ -151,13 +150,6 @@ export class AppointmentForm {
         class: E2E_TEST_CLASSES.form,
       },
     });
-  }
-
-  _createAppointmentAdapter(rawAppointment) {
-    return createAppointmentAdapter(
-      rawAppointment,
-      this.scheduler.getDataAccessors(),
-    );
   }
 
   _dateBoxValueChanged(args, dateExpr, isNeedCorrect) {
@@ -386,7 +378,7 @@ export class AppointmentForm {
       editorOptions: {
         firstDayOfWeek: this.scheduler.getFirstDayOfWeek(),
         timeZoneCalculator: this.scheduler.getTimeZoneCalculator(),
-        getStartDateTimeZone: () => this._createAppointmentAdapter(this.formData).startDateTimeZone,
+        getStartDateTimeZone: () => this.scheduler.getDataAccessors().get('startDateTimeZone', this.formData),
       },
       label: {
         text: ' ',

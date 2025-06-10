@@ -4062,11 +4062,11 @@
             ]
           },
           {
-            "Name": "Message Editing",
-            "Equivalents": "Editing, Delete, Deleting, Update, Correct, Modify",
+            "Name": "Edit and Delete Messages",
+            "Equivalents": "Editing, Deleting, Update, Correct, Modify",
             "Demos": [
               {
-                "Title": "Message Editing",
+                "Title": "Edit and Delete Messages",
                 "Name": "MessageEditing",
                 "Widget": "Chat",
                 "DemoType": "Web",
@@ -4137,7 +4137,7 @@
     "Name": "WYSIWYG Editor",
     "Groups": [
       {
-        "Name": "Html Editor",
+        "Name": "HTML Editor",
         "Equivalents": "dxHtmlEditor, dx-htmleditor",
         "Groups": [
           {

@@ -2,7 +2,7 @@ import dateUtils from '@js/core/utils/date';
 import { each } from '@js/core/utils/iterator';
 import type { SafeAppointment } from '@ts/scheduler/types';
 
-import { createAppointmentAdapter } from '../../m_appointment_adapter';
+import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
 import { groupAppointmentsByGroupLeafs } from '../../utils/resource_manager/appointment_groups_utils';
 import { getAppointmentTakesSeveralDays } from '../data_provider/m_utils';
 import BaseRenderingStrategy from './m_strategy_base';
@@ -222,8 +222,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
 
         for (let j = 0; j < appointmentCount; j++) {
           const appointmentData = currentAppointments[j].settings || currentAppointments[j];
-
-          const adapter = createAppointmentAdapter(currentAppointments[j], this.dataAccessors, this.timeZoneCalculator);
+          const adapter = new AppointmentAdapter(currentAppointments[j], this.dataAccessors);
           const appointmentIsLong = getAppointmentTakesSeveralDays(adapter);
           const appointmentIsRecurrence = this.dataAccessors.get('recurrenceRule', currentAppointments[j]);
 
