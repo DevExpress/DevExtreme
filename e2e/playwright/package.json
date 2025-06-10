@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "http-server ./serve -p 3000",
     "test": "pnpm exec playwright test",
     "test:ui": "pnpm exec playwright test --ui",
     "report": "pnpm exec playwright show-report"
@@ -14,7 +13,6 @@
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.52.0",
-    "@types/node": "^22.15.30",
-    "http-server": "14.1.1"
+    "@types/node": "^22.15.30"
   }
 }
