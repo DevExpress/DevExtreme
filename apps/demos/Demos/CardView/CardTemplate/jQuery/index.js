@@ -71,18 +71,29 @@ $(() => {
     const specContainer = $('<div>').addClass('vehicle__spec-container');
     const modificationInfo = $('<div>').addClass('vehicle__modification').text(`${Modification}`);
     const bodyInfo = $('<div>').addClass('vehicle__modification').text(`${BodyStyleName}`);
-    const horsepowerInfo = $('<div>').addClass('vehicle__modification').text(` ${Horsepower} h.p.`);
+    const horsepowerInfo = $('<div>').addClass('vehicle__modification').text(`${Horsepower} h.p.`);
     specContainer.append(modificationInfo);
     specContainer.append(bodyInfo);
     specContainer.append(horsepowerInfo);
 
-    const popupContentTemplate = function () {
+    const popupContentTemplate = function() {
       const sourceLink = `https://${Source}`;
       return $('<div>').append(
-        $(`<p><b>Image licensed under:</b> <span>${LicenseName}</span></p>`),
-        $(`<p><b>Author:</b> <span>${Author}</span></p>`),
-        $(`<p><b>Source link:</b> <a href='${sourceLink}'>${sourceLink}</a></p>`),
-        $(`<p><b>Edits:</b> <span>${Edits}</span></p>`),
+        $('<p>')
+          .append($('<b>').text('Image licensed under: '))
+          .append($('<span>').text(LicenseName)),
+        $('<p>')
+          .append($('<b>').text('Author: '))
+          .append($('<span>').text(Author)),
+        $('<p>')
+          .append($('<b>').text('Source link: '))
+          .append(
+            $('<a>', { href: sourceLink })
+              .text(sourceLink),
+          ),
+        $('<p>')
+          .append($('<b>').text('Edits: '))
+          .append($('<span>').text(Edits)),
       );
     };
 
