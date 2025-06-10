@@ -59,11 +59,11 @@
     title="Image Info"
     :onHiding="hideInfo"
   >
-        <DxPosition at="center" my="center" collision="fit" />
-        <template #content>
-            <LicenseInfo :vehicle="currentVehicle" />
-        </template>
-    </DxPopup>
+    <DxPosition at="center" my="center" collision="fit" />
+      <template #content>
+        <LicenseInfo :vehicle="currentVehicle" />
+      </template>
+  </DxPopup>
 </template>
 <script setup lang="ts">
 import { DxCardView, DxColumn, DxHeaderFilter, DxSearchPanel, DxPaging } from 'devextreme-vue/card-view';
