@@ -1,5 +1,7 @@
 import React, { useRef } from 'react';
-import CardView, { CardCover, Column, Selection } from 'devextreme-react/card-view';
+import CardView, {
+  CardCover, Column, Selection, Paging,
+} from 'devextreme-react/card-view';
 import Button from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
 import { employees } from './data.js';
@@ -81,13 +83,14 @@ function App() {
     <CardView
       dataSource={employees}
       keyExpr="ID"
-      cardMinWidth={250}
+      cardMinWidth={300}
       cardsPerRow="auto"
       headerFilter={headerFilterConfig}
       searchPanel={searchPanelConfig}
       cardFooterComponent={CardFooterComponent}
       ref={cardView}
     >
+      <Paging pageSize={4} />
       <Selection mode="multiple" />
       <CardCover
         imageExpr={imageExpr}

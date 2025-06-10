@@ -2,9 +2,11 @@
   <DxCardView
     :data-source="customers"
     key-expr="ID"
-    :card-min-width="100"
-    :word-wrap-enabled="true"
+    :cards-per-row="2"
   >
+    <DxPaging
+      :page-size="4"
+    />
     <DxColumn
       v-for="column in columns"
       :data-field="column"
@@ -12,8 +14,8 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-import { DxCardView, DxColumn } from 'devextreme-vue/card-view';
+import { DxCardView, DxColumn, DxPaging } from 'devextreme-vue/card-view';
 import { customers } from './data.ts';
 
-const columns = ['CompanyName', 'Address', 'City', 'State', 'Zipcode', 'Phone'];
+const columns = ['Company', 'Address', 'City', 'State', 'Zipcode', 'Phone'];
 </script>

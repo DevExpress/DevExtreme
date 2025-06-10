@@ -2,12 +2,13 @@
   <dx-card-view
     [dataSource]="employees"
     keyExpr="ID"
-    [cardMinWidth]="250"
+    [cardMinWidth]="300"
     cardsPerRow="auto"
     [headerFilter]="headerFilterConfig"
     [searchPanel]="searchPanelConfig"
     cardFooterTemplate="footerTemplate"
   >
+    <dxo-card-view-paging [pageSize]="4"></dxo-card-view-paging>
     <dxo-card-view-selection mode="multiple"></dxo-card-view-selection>
 
     <dxo-card-view-card-cover

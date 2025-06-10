@@ -1,11 +1,11 @@
 import React from 'react';
-import CardView, { Column } from 'devextreme-react/card-view';
+import CardView, { Column, Paging } from 'devextreme-react/card-view';
 import { orders } from './data.js';
 
 function getDeliveryHours(rowData) {
   return new Date(rowData.DeliveryDate).getHours();
 }
-const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'beforeNoon']];
+const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'afterNoon']];
 const filterBuilderConfig = {
   customOperations: [
     {
@@ -34,8 +34,7 @@ const App = () => (
   <CardView
     dataSource={orders}
     keyExpr="ID"
-    cardMinWidth={100}
-    wordWrapEnabled={true}
+    cardsPerRow={2}
     // TODO: make nested
     headerFilter={{ visible: true }}
     // TODO: make nested
@@ -43,6 +42,7 @@ const App = () => (
     defaultFilterValue={filterValue}
     filterBuilder={filterBuilderConfig}
   >
+    <Paging pageSize={4} />
     <Column
       dataField="OrderNumber"
       // TODO: make nested
@@ -94,7 +94,10 @@ const App = () => (
         ],
       }}
     />
-    <Column dataField="CustomerStoreCity" />
+    <Column
+      dataField="CustomerStoreCity"
+      caption="City"
+    />
     <Column dataField="Employee" />
   </CardView>
 );

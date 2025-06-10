@@ -6,9 +6,9 @@
   [filterPanel]="filterPanelConfig"
   [filterValue]="filterValue"
   [filterBuilder]="filterBuilderConfig"
-  [cardMinWidth]="100"
-  [wordWrapEnabled]="true"
+  [cardsPerRow]="2"
 >
+  <dxo-card-view-paging [pageSize]="4"></dxo-card-view-paging>
   <dxi-card-view-column
     dataField="OrderNumber"
     [headerFilter]="orderNumberHeaderFilterConfig"
@@ -26,6 +26,9 @@
     dataType="number"
     [headerFilter]="saleAmountHeaderFilterConfig"
   ></dxi-card-view-column>
-  <dxi-card-view-column dataField="CustomerStoreCity"></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="CustomerStoreCity"
+    caption="City"
+  ></dxi-card-view-column>
   <dxi-card-view-column dataField="Employee"></dxi-card-view-column>
 </dx-card-view>

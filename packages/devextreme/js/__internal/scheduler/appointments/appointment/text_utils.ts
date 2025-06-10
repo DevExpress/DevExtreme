@@ -1,7 +1,6 @@
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import { isDefined } from '@js/core/utils/type';
-import { PathTimeZoneConversion } from '@ts/scheduler/r1/timezone_calculator/const';
 
 import type { AppointmentProperties } from './m_types';
 
@@ -17,10 +16,7 @@ const getDate = (options: AppointmentProperties, propName: 'endDate' | 'startDat
   }
 
   const date = new Date(result);
-  const gridDate = options.timeZoneCalculator?.createDate(
-    date,
-    { path: PathTimeZoneConversion.fromSourceToGrid },
-  );
+  const gridDate = options.timeZoneCalculator?.createDate(date, 'toGrid');
 
   return gridDate ?? date;
 };
@@ -32,7 +28,7 @@ const getDateText = (options: AppointmentProperties): string => {
   const endDateText = localizeDate(endDate);
   const startTimeText = localizeTime(startDate);
   const endTimeText = localizeTime(endDate);
-  const isAllDay = Boolean(options.dataAccessors.get('allDay', options.data));
+  const isAllDay = options.dataAccessors.get('allDay', options.data);
   const allDayText = messageLocalization.format('dxScheduler-allDay');
 
   if (startDateText === endDateText) {

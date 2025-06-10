@@ -3,22 +3,22 @@ import type { Appointment } from '@js/ui/scheduler';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { dateUtils } from '@ts/core/utils/m_date';
 
-import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import type { AppointmentDataItem, SafeAppointment } from '../../types';
+import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import type { TimeZoneCalculator } from '../timezone_calculator';
 
-const RECURRENCE_FREQ = 'freq';
 const toMs = dateUtils.dateToMilliseconds;
 
 export const replaceIncorrectEndDate = (
   rawAppointment: Appointment,
-  appointmentDuration: number,
+  appointmentMinDuration: number,
   dataAccessors: AppointmentDataAccessor,
 ): rawAppointment is SafeAppointment => {
-  const startDate = new Date(dataAccessors.get('startDate', rawAppointment));
-  const endDate = new Date(dataAccessors.get('endDate', rawAppointment));
+  const startDate = dataAccessors.get('startDate', rawAppointment);
+  const endDate = dataAccessors.get('endDate', rawAppointment);
 
+  // NOTE: error E1032
   if (!dateUtilsTs.isValidDate(startDate)) {
     return false;
   }
@@ -27,10 +27,10 @@ export const replaceIncorrectEndDate = (
     || startDate.getTime() > endDate.getTime();
 
   if (isEndDateIncorrect) {
-    const isAllDay = Boolean(dataAccessors.get('allDay', rawAppointment));
+    const isAllDay = dataAccessors.get('allDay', rawAppointment);
     const correctedEndDate = isAllDay
       ? dateUtils.setToDayEnd(new Date(startDate))
-      : new Date(startDate.getTime() + appointmentDuration * toMs('minute'));
+      : new Date(startDate.getTime() + appointmentMinDuration * toMs('minute'));
 
     // TODO(4): fixme. serializationFormat auto-detection will not the same as in startDate
     dataAccessors.set('endDate', rawAppointment, correctedEndDate);
@@ -58,19 +58,19 @@ export const getAppointmentDataItems = (
       return;
     }
 
-    const adapter = createAppointmentAdapter(rawAppointment, dataAccessors, timeZoneCalculator);
-    const regex = new RegExp(RECURRENCE_FREQ, 'gi');
+    const adapter = new AppointmentAdapter(rawAppointment, dataAccessors);
+    const { startDate, endDate } = adapter.getCalculatedDates(timeZoneCalculator, 'toGrid');
     const { recurrenceRule } = adapter;
-    const hasRecurrenceRule = Boolean(recurrenceRule?.match(regex)?.length);
+    const hasRecurrenceRule = adapter.isRecurrent;
     const visible = isDefined(rawAppointment.visible)
       ? Boolean(rawAppointment.visible)
       : true;
 
     result.push({
       allDay: Boolean(adapter.allDay),
-      startDate: adapter.calculateStartDate('toGrid'),
+      startDate,
       startDateTimeZone: rawAppointment.startDateTimeZone,
-      endDate: adapter.calculateEndDate('toGrid'),
+      endDate,
       endDateTimeZone: rawAppointment.endDateTimeZone,
       recurrenceRule,
       recurrenceException: adapter.recurrenceException,

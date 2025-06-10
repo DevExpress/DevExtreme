@@ -88,7 +88,7 @@ const getStickyOffsetCore = function (
     if (col.fixed && (!isDefined(offsets) || column.ownerBand === col.ownerBand)) {
       const columnIsSticky = col.fixedPosition === StickyPosition.Sticky;
 
-      offset += nextOrPrevColumnWidths[colIndex];
+      offset += nextOrPrevColumnWidths[colIndex] ?? col.visibleWidth;
 
       if (targetColumnIsSticky && columnIsSticky
         && !areNextOnlyFixedOrHiddenColumns(that, nextOrPrevColumns.slice(colIndex + 1))) {
