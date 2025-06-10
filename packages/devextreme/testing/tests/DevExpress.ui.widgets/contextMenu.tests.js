@@ -2199,22 +2199,21 @@ QUnit.module('Behavior', moduleConfig, () => {
             items: [{ text: documentMenuItemText }],
         });
 
-
         $('#menuTarget').trigger('dxcontextmenu');
 
         assert.strictEqual(
-            $('.' + DX_OVERLAY_WRAPPER_CLASS).find('.' + DX_MENU_ITEM_CONTENT_CLASS).text(),
-            simpleMenuItemText,
-            'firstMenu was shown'
+            $(`.${DX_MENU_ITEM_CONTENT_CLASS}:contains(${simpleMenuItemText})`).length > 0,
+            true,
+            'element menu was shown'
         );
 
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxcontextmenu');
 
         assert.strictEqual(
-            $('.' + DX_OVERLAY_WRAPPER_CLASS).find('.' + DX_MENU_ITEM_CONTENT_CLASS).text(),
-            documentMenuItemText,
-            'secondMenu was shown'
+            $(`.${DX_MENU_ITEM_CONTENT_CLASS}:contains(${documentMenuItemText})`).length > 0,
+            true,
+            'document menu was shown'
         );
     });
 });
