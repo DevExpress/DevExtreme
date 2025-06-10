@@ -315,6 +315,16 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         editorOptions = that._getEditorOptions($editor, column);
         editorOptions.sharedData = sharedData;
         that._renderEditor($editor, editorOptions);
+        const scrollable = that.component.getScrollable();
+
+        scrollable.on('scroll', () => {
+          // @ts-expect-error
+          const direction = scrollable._allowedDirectionValue;
+          if (direction === 'horizontal') {
+            this._hideFilterRange();
+          }
+        });
+
         eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), 'keydown', (e) => {
           let $prevElement = $cell.find('[tabindex]').not(e.target).first();
 
