@@ -6,31 +6,25 @@
 // adduse
 
 /**
-* $name 10. Shadow color
-* $type color
-*/
-$stepper-step-shadow-color: $base-typography-bg !default;
-
-/**
-* $name 20. Active color
+* $name 10. Active color
 * $type color
 */
 $stepper-step-accent-bg: $base-accent !default;
 
 /**
-* $name 30. Hover state active color
+* $name 20. Hover state active color
 * $type color
 */
 $stepper-step-accent-hover-bg: $base-accent-hover !default;
 
 /**
-* $name 40. Invalid color
+* $name 30. Invalid color
 * $type color
 */
 $stepper-step-danger-bg: $base-danger !default;
 
 /**
-* $name 50. Hover state invalid color
+* $name 40. Hover state invalid color
 * $type color
 */
 $stepper-step-danger-hover-bg: $base-danger-hover !default;
@@ -173,3 +167,9 @@ $stepper-connector-bg: $base-separator-color !default;
 * $type color
 */
 $stepper-connector-value-bg: $base-accent !default;
+
+/**
+* $name 300. Shadow color
+* $type color
+*/
+$stepper-step-shadow-color: $base-typography-bg !default;
