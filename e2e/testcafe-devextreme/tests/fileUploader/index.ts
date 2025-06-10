@@ -14,13 +14,13 @@ fixture`FileUploader - file list visibility`
   test(`FileUploader with showFileList: ${showFileList} - after file selected`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    console.log(Selector('#container'), Selector(INPUT_SELECTOR));
-
     await t.setFilesToUpload(Selector(INPUT_SELECTOR), [TEST_FILE]);
 
     await testScreenshot(t, takeScreenshot, `fileuploader-show-filelist-${showFileList}.png`, {
       element: '#container',
     });
+
+    await t.clearUpload(Selector(INPUT_SELECTOR));
 
     await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxFileUploader', { showFileList }));
