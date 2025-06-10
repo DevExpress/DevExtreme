@@ -43600,11 +43600,6 @@ declare module DevExpress.viz {
      * [descr:dxSankeyNode.showTooltip()]
      */
     showTooltip(): void;
-    /**
-     * [descr:dxSankeyNode.title]
-     * @deprecated [depNote:dxSankeyNode.title]
-     */
-    title?: string;
   }
   /**
    * [descr:dxSankeyOptions]
