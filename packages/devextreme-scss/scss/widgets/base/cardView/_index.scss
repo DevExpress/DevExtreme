@@ -31,6 +31,10 @@
   display: flex;
   flex-direction: column;
   gap: $cardview-header-gap;
+
+  .dx-toolbar {
+    background-color: transparent;
+  }
 }
 
 .dx-cardview-exclude-flexbox {
