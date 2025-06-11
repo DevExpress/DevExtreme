@@ -27,8 +27,9 @@ const App = () => {
     <>
       <CardView
         dataSource={vehicles}
+        height={1120}
         cardsPerRow="auto"
-        cardMinWidth={260}
+        cardMinWidth={240}
         cardRender={(model) => {
           const vehicle = model.card.data;
           return <VehicleCard
@@ -48,23 +49,35 @@ const App = () => {
         <SearchPanel visible={true} />
         <Paging pageSize={12} />
 
-        <Column dataField="TrademarkName" />
-        <Column dataField="Name" />
+        <Column
+          dataField="TrademarkName"
+          caption="Trademark"
+        />
+        <Column
+          dataField="Name"
+          caption="Model"
+        />
         <Column
           dataField="Price"
           format="currency"
         >
           <HeaderFilter groupInterval={20000} />
         </Column>
-        <Column dataField="CategoryName" />
+        <Column
+          dataField="CategoryName"
+          caption="Category"
+        />
         <Column dataField="Modification" />
-        <Column dataField="BodyStyleName" />
+        <Column
+          dataField="BodyStyleName"
+          caption="BodyStyle"
+        />
         <Column dataField="Horsepower" />
       </CardView>
 
       <Popup
-        width={350}
-        height={240}
+        width={360}
+        height={260}
         visible={popupVisible}
         dragEnabled={false}
         hideOnOutsideClick={true}
