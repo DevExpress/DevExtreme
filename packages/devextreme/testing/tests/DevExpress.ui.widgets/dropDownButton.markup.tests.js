@@ -1098,6 +1098,11 @@ QUnit.module('option change', {}, () => {
 
 QUnit.module('content template', () => {
     QUnit.test('content template render function should be called once (T1294338)', function(assert) {
+        if(!windowUtils.hasWindow()) {
+            assert.ok(true, 'this test is not related to the server side');
+            return;
+        }
+
         const renderSpy = sinon.spy();
 
         const dropDownButton = new DropDownButton($('#dropDownButton'), {
