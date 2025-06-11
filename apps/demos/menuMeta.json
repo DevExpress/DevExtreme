@@ -3731,11 +3731,11 @@
                 "MvcAdditionalFiles": [
                   "/Models/AppointmentWithResources.cs",
                   "/Models/AssigneeResource.cs",
-                  "/Models/SampleData/AppointmentsWithResources.cs",
+                  "/Models/SampleData/AppointmentsDuringTheMonth.cs",
                   "/Models/SampleData/AssigneeResources.cs"
                 ],
                 "DemoType": "Web",
-                "Badge": "Updated"
+                "Badge": "New"
               },
               {
                 "Title": "Individual Views Customization",
