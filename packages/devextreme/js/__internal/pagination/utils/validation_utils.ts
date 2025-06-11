@@ -1,5 +1,5 @@
 function getPageSize(pageSize: number): number {
-  if (pageSize < 1) {
+  if (pageSize < 0) {
     return 1;
   }
   return pageSize;
@@ -39,7 +39,7 @@ export function validateOptions(
   const pageIndex = getPageIndex(oldPageIndex, pageSize, itemCount);
 
   return {
-    pageSize,
+    pageSize: pageSize || itemCount,
     pageIndex,
     itemCount,
     pageCount,

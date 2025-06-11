@@ -261,6 +261,7 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
           <PageSizeSelector
             rootElementRef={allowedPageSizesRef}
             isLargeDisplayMode={this.getIsLargeDisplayMode()}
+            itemCount={itemCount}
             pageSize={pageSize}
             pageSizeChangedInternal={pageSizeChangedInternal}
             allowedPageSizes={allowedPageSizes}
