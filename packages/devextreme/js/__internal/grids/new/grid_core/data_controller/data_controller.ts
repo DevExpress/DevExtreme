@@ -70,10 +70,6 @@ export class DataController {
 
   public readonly isLoading = signal(false);
 
-  private readonly _filteredItemCount = signal<number | null>(0);
-
-  public readonly filteredItemCount: ReadonlySignal<number | null> = this._filteredItemCount;
-
   public readonly pageCount = computed(
     () => Math.ceil(
       this.totalCount.value / this.pageSize.value,
@@ -171,12 +167,11 @@ export class DataController {
             e.extra = isPlainObject(e.extra) ? e.extra : {};
 
             if (hasLocalPaging) {
-              this._filteredItemCount.value = filteredData.length;
               e.take = take;
               e.skip = skip;
 
               if (e.storeLoadOptions.requireTotalCount) {
-                e.extra.totalCount = e.data.length;
+                e.extra.totalCount = filteredData.length;
               }
 
               new ArrayStore(e.data).load(localLoadOptions).done((newData) => {
@@ -184,7 +179,6 @@ export class DataController {
               });
             } else {
               e.data = filteredData;
-              this._filteredItemCount.value = null;
             }
           }).fail((error) => {
             // @ts-expect-error
@@ -331,8 +325,7 @@ export class DataController {
     this._items.value = items;
     this.pageIndex.value = dataSource.pageIndex();
     this.pageSize.value = dataSource.pageSize();
-    const filteredCount = this.filteredItemCount.peek();
-    this._totalCount.value = filteredCount ?? dataSource.totalCount();
+    this._totalCount.value = dataSource.totalCount();
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     Promise.resolve().then(() => {
