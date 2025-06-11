@@ -9,15 +9,8 @@ fixture
 
 const DATA_GRID_SELECTOR = '#container';
 
-const triggerVisibilityChange = ClientFunction((isVisible) => {
-  Object.defineProperty(document, 'visibilityState', {
-    value: isVisible ? 'visible' : 'hidden',
-    writable: true,
-  });
-
-  const event = new Event('visibilitychange');
-
-  document.dispatchEvent(event);
+const triggerVisibilityChange = ClientFunction(() => {
+  document.dispatchEvent(new Event('visibilitychange'));
 });
 
 test('The column should be grouped when pressing Ctrl + G if grouping.contextMenuEnabled is false', async (t) => {
@@ -394,8 +387,7 @@ test('Focus should be restored when ungrouping the column via context menu after
   const firstGroupedHeader = dataGrid.getGroupPanel().getHeader(0);
 
   // Simulate leaving a page and returning back
-  await triggerVisibilityChange(false);
-  await triggerVisibilityChange(true);
+  await triggerVisibilityChange();
 
   // act
   await t
