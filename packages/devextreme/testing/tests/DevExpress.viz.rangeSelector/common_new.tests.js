@@ -126,27 +126,6 @@ QUnit.test('RangeSelector should change the aggregatebycategory value when the v
     assert.strictEqual(axisOptions.aggregateByCategory, false);
 });
 
-QUnit.test('Should show warning if deprecated "behavior.callValueChanged" property is used', function(assert) {
-    sinon.spy(errors, 'log');
-
-    try {
-        this.$container.dxRangeSelector({
-            behavior: {
-                callValueChanged: 'onMoving'
-            }
-        });
-        assert.deepEqual(errors.log.lastCall.args, [
-            'W0001',
-            'dxRangeSelector',
-            'behavior.callValueChanged',
-            '23.1',
-            'Use the "behavior.valueChangeMode" property instead'
-        ]);
-    } finally {
-        errors.log.restore();
-    }
-});
-
 QUnit.test('Should show warning if deprecated "argumentAxis.aggregateByCategory" property is used', function(assert) {
     sinon.spy(errors, 'log');
 
