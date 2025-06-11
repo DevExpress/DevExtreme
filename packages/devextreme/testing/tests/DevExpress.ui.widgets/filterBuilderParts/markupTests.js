@@ -71,25 +71,25 @@ QUnit.test('filter Content init by one condition', function(assert) {
     const itemOperationId = element.find(`.${classLevel} .${CLASSES.FILTER_BUILDER_ITEM_OPERATION_CLASS}`).attr('aria-controls');
 
     const $etalon = $('<div/>').html(
-        '<div class="dx-filterbuilder-group" role="group">' +
-        `<div class="dx-filterbuilder-group-item" role="treeitem" aria-label="Group item" aria-level="2" aria-owns="${groupId}">` +
-            '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove group"></div>' +
-            `<div aria-controls="${operationId}" role="combobox" title="Operation" aria-haspopup="true" aria-expanded="false" class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">Or</div>` +
-            `<div aria-controls="${actionId}" role="combobox" aria-label="Add" aria-haspopup="true" aria-expanded="false" class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>` +
-        '</div>' +
-        `<div class="dx-filterbuilder-group-content" id="${groupId}" role="group">` +
-            '<div class="dx-filterbuilder-group" role="group">' +
-                '<div class="dx-filterbuilder-group-item" role="treeitem" aria-level="2">' +
-                    '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div>' +
-                    `<div aria-controls="${fieldId}" class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="combobox" title="Item field" aria-haspopup="true" aria-expanded="false">Company Name</div>` +
-                    `<div aria-controls="${itemOperationId}" class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="combobox" title="Item operation" aria-haspopup="true" aria-expanded="false">Equals</div>` +
-                    '<div class="dx-filterbuilder-text dx-filterbuilder-item-value">' +
-                        '<div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item value" aria-haspopup="true">K&amp;S Music</div>' +
-                    '</div>' +
-                '</div>' +
-            '</div>' +
-        '</div>' +
-    '</div>'
+        '<div class="dx-filterbuilder-group" role="group">'
+        + `<div class="dx-filterbuilder-group-item" role="treeitem" aria-label="Group item" aria-level="2" aria-owns="${groupId}">`
+            + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove group"></div>'
+            + `<div aria-controls="${operationId}" role="combobox" title="Operation" aria-haspopup="true" aria-expanded="false" class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">Or</div>`
+            + `<div aria-controls="${actionId}" role="combobox" aria-label="Add" aria-haspopup="true" aria-expanded="false" class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>`
+        + '</div>'
+        + `<div class="dx-filterbuilder-group-content" id="${groupId}" role="group">`
+            + '<div class="dx-filterbuilder-group" role="group">'
+                + '<div class="dx-filterbuilder-group-item" role="treeitem" aria-level="2">'
+                    + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div>'
+                    + `<div aria-controls="${fieldId}" class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="combobox" title="Item field" aria-haspopup="true" aria-expanded="false">Company Name</div>`
+                    + `<div aria-controls="${itemOperationId}" class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="combobox" title="Item operation" aria-haspopup="true" aria-expanded="false">Equals</div>`
+                    + '<div class="dx-filterbuilder-text dx-filterbuilder-item-value">'
+                        + '<div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item value" aria-haspopup="true">K&amp;S Music</div>'
+                    + '</div>'
+                + '</div>'
+            + '</div>'
+        + '</div>'
+    + '</div>'
     );
 
     assert.equal(element.find('.' + FILTER_BUILDER_GROUP_CONTENT_CLASS).html(), $etalon.html());
@@ -114,25 +114,25 @@ QUnit.test('filter Content init by several conditions', function(assert) {
 
     const $etalon = $('<div/>').html(
         '<div class="dx-filterbuilder-group" role="group">'
-        + '<div class="dx-filterbuilder-group-item" role="treeitem" aria-level="1">'
-            + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div>'
-            + `<div aria-controls="${fieldId1}" class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="combobox" title="Item field" aria-haspopup="true" aria-expanded="false">Company Name</div>`
-            + `<div aria-controls="${itemOperationId1}" class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="combobox" title="Item operation" aria-haspopup="true" aria-expanded="false">Equals</div>`
-            + '<div class="dx-filterbuilder-text dx-filterbuilder-item-value">'
-                + '<div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item value" aria-haspopup="true">K&amp;S Music</div>'
+            + '<div class="dx-filterbuilder-group-item" role="treeitem" aria-level="1">'
+                + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div>'
+                + `<div aria-controls="${fieldId1}" class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="combobox" title="Item field" aria-haspopup="true" aria-expanded="false">Company Name</div>`
+                + `<div aria-controls="${itemOperationId1}" class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="combobox" title="Item operation" aria-haspopup="true" aria-expanded="false">Equals</div>`
+                + '<div class="dx-filterbuilder-text dx-filterbuilder-item-value">'
+                    + '<div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item value" aria-haspopup="true">K&amp;S Music</div>'
+                + '</div>'
             + '</div>'
         + '</div>'
-    + '</div>'
-    + '<div class="dx-filterbuilder-group" role="group">'
-        + '<div class="dx-filterbuilder-group-item" role="treeitem" aria-level="1">'
-            + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div>'
-            + `<div aria-controls="${fieldId2}" class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="combobox" title="Item field" aria-haspopup="true" aria-expanded="false">Zipcode</div>`
-            + `<div aria-controls="${itemOperationId2}" class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="combobox" title="Item operation" aria-haspopup="true" aria-expanded="false">Equals</div>`
-            + '<div class="dx-filterbuilder-text dx-filterbuilder-item-value">'
-                + '<div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item value" aria-haspopup="true">98027</div>'
+        + '<div class="dx-filterbuilder-group" role="group">'
+            + '<div class="dx-filterbuilder-group-item" role="treeitem" aria-level="1">'
+                + '<div class="dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action" tabindex="0" role="button" aria-label="Remove condition"></div>'
+                + `<div aria-controls="${fieldId2}" class="dx-filterbuilder-text dx-filterbuilder-item-field" tabindex="0" role="combobox" title="Item field" aria-haspopup="true" aria-expanded="false">Zipcode</div>`
+                + `<div aria-controls="${itemOperationId2}" class="dx-filterbuilder-text dx-filterbuilder-item-operation" tabindex="0" role="combobox" title="Item operation" aria-haspopup="true" aria-expanded="false">Equals</div>`
+                + '<div class="dx-filterbuilder-text dx-filterbuilder-item-value">'
+                    + '<div class="dx-filterbuilder-item-value-text" tabindex="0" role="button" title="Item value" aria-haspopup="true">98027</div>'
+                + '</div>'
             + '</div>'
         + '</div>'
-    + '</div>'
     );
 
     assert.equal(element.find('.' + FILTER_BUILDER_GROUP_CONTENT_CLASS).html(), $etalon.html());

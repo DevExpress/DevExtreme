@@ -292,13 +292,8 @@ class FilterBuilder extends Widget<any> {
   _createConditionElement(condition, parent, groupLevel?) {
     const $element = $('<div>')
       .addClass(FILTER_BUILDER_GROUP_CLASS)
-      .append(this._createConditionItem(condition, parent, groupLevel));
-
-    this._addAriaAttributes(
-      $element,
-      '',
-      'group',
-    );
+      .append(this._createConditionItem(condition, parent, groupLevel))
+      .attr('role', 'group');
 
     return $element;
   }
@@ -335,9 +330,11 @@ class FilterBuilder extends Widget<any> {
       }, 'group').appendTo($groupItem);
     }
 
-    this._addAriaAttributes($group, '', groupLevel === 0 ? 'tree' : 'group');
-    this._addAriaAttributes($groupItem, messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'), 'treeitem', null, null, `${groupLevel + 1}`);
-    this._addAriaAttributes($groupContent, '', 'group');
+    if (groupLevel === 0) {
+      this._addAriaAttributes($group, '', 'tree');
+    }
+
+    this._addAriaAttributes($groupItem, messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'), 'treeitem', null, null, `${groupLevel}`);
     $groupItem.attr('aria-owns', `${$guid}`);
 
     this._createGroupOperationButton(criteria).appendTo($groupItem);
@@ -455,6 +452,9 @@ class FilterBuilder extends Widget<any> {
 
         const treeViewPopup = treeViewContentElement.closest('.dx-overlay-content');
         treeViewPopup?.removeAttr('role');
+
+        const treeViewNode = treeView.getScrollable().content().find('> ul.dx-treeview-node-container');
+        treeViewNode?.attr('role', 'presentation');
 
         treeView.focus();
         treeView.option('focusedElement', null);

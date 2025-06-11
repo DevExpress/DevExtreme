@@ -92,6 +92,7 @@ elements.forEach(({
       await t
         .expect(ariaControls)
         .eql(popupId);
+      await a11yCheck(t, {}, '#container');
     }
   }).before(async () => {
     await createWidget('dxFilterBuilder', {
