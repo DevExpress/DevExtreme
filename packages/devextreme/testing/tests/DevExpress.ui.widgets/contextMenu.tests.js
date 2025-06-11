@@ -1415,40 +1415,26 @@ QUnit.module('Options', moduleConfig, () => {
         assert.equal($items.length, 2, 'second level is rendered');
     });
 
-    QUnit.test('target option as string', function(assert) {
-        const instance = new ContextMenu(this.$element, {
-            visible: false,
-            items: [{ text: 'itemA' }],
-            target: '#menuTarget'
+    [
+        { label: 'selector string', target: () => '#menuTarget' },
+        { label: 'jQuery object', target: () => $('#menuTarget') },
+        { label: 'DOM element', target: () => document.getElementById('menuTarget') },
+        { label: 'document', target: () => document },
+        { label: 'window', target: () => window },
+        { label: 'undefined', target: () => undefined },
+        { label: 'null', target: () => null },
+    ].forEach(({ label, target }) => {
+        QUnit.test(`target option as ${label}`, function(assert) {
+            const instance = new ContextMenu(this.$element, {
+                visible: false,
+                items: [{ text: 'itemA' }],
+                target: target(),
+            });
+
+            $('#menuTarget').trigger('dxcontextmenu');
+
+            assert.ok(instance.option('visible'), 'menu was shown');
         });
-
-        $('#menuTarget').trigger('dxcontextmenu');
-
-        assert.ok(instance.option('visible'), 'menu was shown');
-    });
-
-    QUnit.test('target option as jQuery', function(assert) {
-        const instance = new ContextMenu(this.$element, {
-            visible: false,
-            items: [{ text: 'itemA' }],
-            target: $('#menuTarget')
-        });
-
-        $('#menuTarget').trigger('dxcontextmenu');
-
-        assert.ok(instance.option('visible'), 'menu was shown');
-    });
-
-    QUnit.test('target option as DOM element', function(assert) {
-        const instance = new ContextMenu(this.$element, {
-            visible: false,
-            items: [{ text: 'itemA' }],
-            target: document.getElementById('menuTarget')
-        });
-
-        $('#menuTarget').trigger('dxcontextmenu');
-
-        assert.ok(instance.option('visible'), 'menu was shown');
     });
 
     QUnit.test('target option changing should change the target', function(assert) {

@@ -19,7 +19,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getOuterHeight } from '@js/core/utils/size';
 import {
-  isDefined, isFunction, isObject, isPlainObject, isRenderer, isWindow,
+  isDefined, isFunction, isObject, isPlainObject, isRenderer, isString,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { Item } from '@js/ui/context_menu';
@@ -77,7 +77,7 @@ class ContextMenu extends MenuBase {
 
   _eventNamespace!: string;
 
-  _showContextMenuEventHandler?: (event: unknown) => any;
+  _showContextMenuEventHandler?: (event: any) => any;
 
   getShowEvent(showEventOption: {
     delay?: number;
@@ -449,7 +449,9 @@ class ContextMenu extends MenuBase {
 
     const eventName = addNamespace(showEvent, this._eventNamespace);
 
-    if (this._showContextMenuEventHandler) {
+    const isSelector = isString(target);
+
+    if (isSelector) {
       eventsEngine.off(
         domAdapter.getDocument(),
         eventName,
@@ -458,7 +460,7 @@ class ContextMenu extends MenuBase {
         this._showContextMenuEventHandler,
       );
     } else {
-      eventsEngine.off($(target), eventName);
+      eventsEngine.off($(target), eventName, this._showContextMenuEventHandler);
     }
   }
 
@@ -485,22 +487,24 @@ class ContextMenu extends MenuBase {
       }
     }, { validatingTargetName: 'target' });
 
-    const handler = (e) => contextMenuAction({ event: e, target: $(e.currentTarget) });
+    this._showContextMenuEventHandler = (e): void => contextMenuAction({
+      event: e,
+      target: $(e.currentTarget),
+    });
 
     contextMenuAction = this._createAction(contextMenuAction);
 
-    // @ts-expect-error
-    if (isRenderer(target) || target.nodeType || isWindow(target)) {
-      this._showContextMenuEventHandler = undefined;
-      eventsEngine.on(target, eventName, handler);
-    } else {
-      this._showContextMenuEventHandler = handler;
+    const isSelector = isString(target);
+
+    if (isSelector) {
       eventsEngine.on(
         domAdapter.getDocument(),
         eventName,
         target,
         this._showContextMenuEventHandler,
       );
+    } else {
+      eventsEngine.on(target, eventName, this._showContextMenuEventHandler);
     }
   }
 
