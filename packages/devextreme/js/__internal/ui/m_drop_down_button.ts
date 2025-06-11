@@ -375,10 +375,12 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     this._popupContentId = `dx-${new Guid()}`;
     this.setAria('id', this._popupContentId, $content);
 
-    return template.render({
+    const result = template.render({
       container: getPublicElement($content),
       model: this.option('items') || this._dataController.getDataSource(),
     });
+
+    return result;
   }
 
   _popupOptions() {
@@ -412,6 +414,11 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
         at: `${horizontalAlignment} bottom`,
       },
       _wrapperClassExternal: DROP_DOWN_EDITOR_OVERLAY_CLASS,
+      integrationOptions: {
+        templates: {
+          content: undefined,
+        },
+      },
     }, this._options.cache('dropDownOptions'), { visible: this.option('opened') });
   }
 
@@ -477,6 +484,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     const $popup = $('<div>');
     this.$element().append($popup);
     this._popup = this._createComponent($popup, Popup, this._popupOptions());
+    // this._popup.option('integrationOptions.templates.content', undefined);
     this._popup.$content().addClass(DROP_DOWN_BUTTON_CONTENT);
     this._popup.$wrapper().addClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS);
     this._popup.$overlayContent().attr('aria-label', OVERLAY_CONTENT_LABEL);
@@ -583,19 +591,20 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     this.$element().toggleClass(DROP_DOWN_BUTTON_HAS_ARROW_CLASS, hasArrow);
   }
 
-  toggle(visible?: boolean) {
+  toggle(visible?: boolean): Promise<unknown> | undefined {
     if (!this._popup) {
       this._renderPopup();
       this._renderContent();
     }
+
     return this._popup?.toggle(visible);
   }
 
-  open() {
+  open(): Promise<unknown> | undefined {
     return this.toggle(true);
   }
 
-  close() {
+  close(): Promise<unknown> | undefined {
     return this.toggle(false);
   }
 
