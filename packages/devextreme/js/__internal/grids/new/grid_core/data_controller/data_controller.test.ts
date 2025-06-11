@@ -69,7 +69,7 @@ describe('DataController', () => {
   });
 
   describe('totalCount is not specified', () => {
-    it('works with CustomStore', async () => {
+    it('with CustomStore', async () => {
       const { dataController } = setup({
         dataSource: new CustomStore({
           load: () => generateData(10),
@@ -81,7 +81,20 @@ describe('DataController', () => {
       expect(dataController.dataSource.value.totalCount()).toEqual(10);
     });
 
-    it('works with json url', async () => {
+    it('with CustomStore and filter is applied', async () => {
+      const { dataController } = setup({
+        dataSource: new CustomStore({
+          load: () => generateData(10),
+        }),
+        columns: ['field'],
+        filterValue: ['field', 'anyof', ['test_0', 'test_1']],
+      });
+      await dataController.waitLoaded();
+
+      expect(dataController.dataSource.value.totalCount()).toEqual(2);
+    });
+
+    it('with json url', async () => {
       const { dataController } = setup({
         dataSource: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/data/customers.json',
       });
