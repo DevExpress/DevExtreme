@@ -29,19 +29,13 @@ $cardview-fluent-common-border-radius: null !default;
 $cardview-fluent-common-text-weight: null !default;
 
 /**
-* $name 105. Gap between header items
-* $type text
-*/
-$cardview-fluent-common-header-panel-gap: null !default;
-
-/**
-* $name 106. Vertical gap between cards
+* $name 105. Vertical gap between cards
 * $type text
 */
 $cardview-fluent-common-cards-row-gap: null !default;
 
 /**
-* $name 107. Horizontal gap between cards
+* $name 106. Horizontal gap between cards
 * $type text
 */
 $cardview-fluent-common-cards-column-gap: null !default;
@@ -269,7 +263,6 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
   // Common
   $cardview-fluent-common-border-radius: 16px !default;
   $cardview-fluent-common-text-weight: 400 !default;
-  $cardview-fluent-common-header-panel-gap: 8px !default;
   $cardview-fluent-common-cards-row-gap: 16px !default;
   $cardview-fluent-common-cards-column-gap: 16px !default;
   $cardview-fluent-common-gap: 24px !default;
@@ -352,7 +345,6 @@ $cardview-fluent-column-chooser__select-all-item-horizontal-padding: null !defau
   // Common
   $cardview-fluent-common-border-radius: 16px !default;
   $cardview-fluent-common-text-weight: 400 !default;
-  $cardview-fluent-common-header-panel-gap: 4px !default;
   $cardview-fluent-common-cards-row-gap: 12px !default;
   $cardview-fluent-common-cards-column-gap: 12px !default;
   $cardview-fluent-common-gap: 16px !default;
