@@ -805,56 +805,6 @@ QUnit.module('Resizing (T1156890)', {
     });
 });
 
-QUnit.module('Deprecated options', {
-    beforeEach() {
-        sinon.spy(errors, 'log');
-    },
-    afterEach() {
-        errors.log.restore();
-    },
-    createChart(options) {
-        return $('#chart').dxChart(options).dxChart('instance');
-    }
-}, () => {
-    QUnit.test('Should show warning if deprecated "shift" value sets to "valueAxis.visualRangeUpdateMode" option', function(assert) {
-        this.createChart({
-            valueAxis: {
-                visualRangeUpdateMode: 'shift'
-            }
-        });
-
-        assert.strictEqual(errors.log.callCount, 1);
-        assert.deepEqual(errors.log.lastCall.args,
-            [
-                'W0016',
-                'valueAxis.visualRangeUpdateMode',
-                'shift',
-                '23.1',
-                'Specify another value'
-            ]);
-    });
-
-    QUnit.test('Should show one warning when to "valueAxis.visualRangeUpdateMode" option passed deprecated "shift" on options update', function(assert) {
-        const chart = this.createChart({});
-
-        chart.option({
-            valueAxis: {
-                visualRangeUpdateMode: 'shift'
-            }
-        });
-
-        assert.strictEqual(errors.log.callCount, 1);
-        assert.deepEqual(errors.log.lastCall.args,
-            [
-                'W0016',
-                'valueAxis.visualRangeUpdateMode',
-                'shift',
-                '23.1',
-                'Specify another value'
-            ]);
-    });
-});
-
 QUnit.module('Series translation', {
     createChart(options) {
         const hiddenAxisOptions = {
