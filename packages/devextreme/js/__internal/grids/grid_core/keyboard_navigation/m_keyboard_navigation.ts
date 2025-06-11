@@ -269,6 +269,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       const needNavigateToFirstCell = this._focusedCellPosition?.columnIndex === 0;
 
       this.needNavigationToCellAfterResize = false;
+      this._resizeController?.resetLastResizeTime();
       this.navigateToFirstOrLastCell(needNavigateToFirstCell);
     }
   }

@@ -850,6 +850,11 @@ export class ResizingController extends modules.ViewController {
         super.optionChanged(args);
     }
   }
+
+  /**
+   * @extended: virtual_scrolling
+   */
+  public resetLastResizeTime(): void {}
 }
 
 export class SynchronizeScrollingController extends modules.ViewController {
