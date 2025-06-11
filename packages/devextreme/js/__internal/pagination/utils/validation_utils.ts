@@ -39,7 +39,7 @@ export function validateOptions(
   const pageIndex = getPageIndex(oldPageIndex, pageSize, itemCount);
 
   return {
-    pageSize: pageSize || itemCount,
+    pageSize,
     pageIndex,
     itemCount,
     pageCount,

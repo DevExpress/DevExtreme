@@ -41,7 +41,7 @@ describe('page-sizes', () => {
     click(2);
     expect(result).toEqual({ pageIndex: 1, pageSize: 6 });
     click(3);
-    expect(result).toEqual({ pageIndex: 1, pageSize: 51 });
+    expect(result).toEqual({ pageIndex: 1, pageSize: 0 });
   });
 
   it('should change page size by set option', () => {
@@ -67,7 +67,7 @@ describe('page-sizes', () => {
     expect(isSelected(2)).toBe(true);
 
     pagination.option('pageSize', 0);
-    expect(pagination.option('pageSize')).toEqual(51);
+    expect(pagination.option('pageSize')).toEqual(0);
     expect(isSelected(3)).toBe(true);
   });
 });

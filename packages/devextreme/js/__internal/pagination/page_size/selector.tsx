@@ -69,7 +69,7 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
     }
     const mapFunction = (p): FullPageSize => (
       p === 'all' || p === 0
-        ? { text: this.getAllText(), value: this.props.itemCount }
+        ? { text: this.getAllText(), value: 0 }
         : { text: String(p), value: p }
     );
     // eslint-disable-next-line @stylistic/max-len
