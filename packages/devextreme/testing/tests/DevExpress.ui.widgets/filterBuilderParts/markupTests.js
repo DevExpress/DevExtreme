@@ -20,7 +20,7 @@ QUnit.test('markup init', function(assert) {
     const $etalon = $(
         '<div id="container" class="dx-filterbuilder dx-widget">'
             + '<div class="dx-filterbuilder-group" role="tree">'
-                + '<div class="dx-filterbuilder-group-item" role="treeitem" aria-label="Group item" aria-level="0" aria-owns="' + groupId + '">'
+                + '<div class="dx-filterbuilder-group-item" role="treeitem" aria-label="Group item" aria-level="1" aria-owns="' + groupId + '">'
                     + '<div aria-controls="' + operationId + '" role="combobox" title="Operation" aria-haspopup="true" aria-expanded="false" class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">And</div>'
                     + '<div aria-controls="' + actionId + '" role="combobox" aria-label="Add" aria-haspopup="true" aria-expanded="false" class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>'
                 + '</div>'
@@ -63,12 +63,13 @@ QUnit.test('filter Content init by one condition', function(assert) {
         value: [[['CompanyName', '=', 'K&S Music'], 'Or'], 'And']
     });
 
-    const classLevel = 'dx-filterbuilder-group-item[aria-level="1"]';
-    const groupId = element.find(`.${classLevel}`).attr('aria-owns');
-    const operationId = element.find(`.${classLevel} .${CLASSES.FILTER_BUILDER_GROUP_OPERATION_CLASS}`).attr('aria-controls');
-    const actionId = element.find(`.${classLevel} .${CLASSES.FILTER_BUILDER_IMAGE_ADD_CLASS}`).attr('aria-controls');
-    const fieldId = element.find(`.${CLASSES.FILTER_BUILDER_ITEM_FIELD_CLASS}`).attr('aria-controls');
-    const itemOperationId = element.find(`.${CLASSES.FILTER_BUILDER_ITEM_OPERATION_CLASS}`).attr('aria-controls');
+    const groupElement = element.find('.dx-filterbuilder-group-item[aria-level="1"]').eq(1);
+    const groupContent = element.find('.dx-filterbuilder-group-content').eq(1);
+    const groupId = groupElement.attr('aria-owns');
+    const operationId = groupElement.find(`.${CLASSES.FILTER_BUILDER_GROUP_OPERATION_CLASS}`).attr('aria-controls');
+    const actionId = groupElement.find(`.${CLASSES.FILTER_BUILDER_IMAGE_ADD_CLASS}`).attr('aria-controls');
+    const fieldId = groupContent.find(`.${CLASSES.FILTER_BUILDER_ITEM_FIELD_CLASS}`).attr('aria-controls');
+    const itemOperationId = groupContent.find(`.${CLASSES.FILTER_BUILDER_ITEM_OPERATION_CLASS}`).attr('aria-controls');
 
     const $etalon = $('<div/>').html(
         '<div class="dx-filterbuilder-group">'

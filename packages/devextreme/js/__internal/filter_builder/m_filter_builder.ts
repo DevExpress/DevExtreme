@@ -330,11 +330,21 @@ class FilterBuilder extends Widget<any> {
       }, 'group').appendTo($groupItem);
     }
 
+    let groupItemLevel = groupLevel;
+
     if (groupLevel === 0) {
       this._addAriaAttributes($group, '', 'tree');
+      groupItemLevel += 1;
     }
 
-    this._addAriaAttributes($groupItem, messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'), 'treeitem', null, null, `${groupLevel}`);
+    this._addAriaAttributes(
+      $groupItem,
+      messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'),
+      'treeitem',
+      null,
+      null,
+      groupItemLevel,
+    );
     $groupItem.attr('aria-owns', `${$guid}`);
 
     this._createGroupOperationButton(criteria).appendTo($groupItem);
