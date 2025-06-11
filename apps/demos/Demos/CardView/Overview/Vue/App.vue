@@ -4,13 +4,17 @@
     key-expr="ID"
     :card-min-width="300"
     cards-per-row="auto"
-    :header-filter="headerFilterConfig"
-    :search-panel="searchPanelConfig"
     card-footer-template="footerTemplate"
     ref="cardView"
   >
     <DxPaging
       :page-size="4"
+    />
+    <DxHeaderFilter
+      :visible="true"
+    />
+    <DxSearchPanel
+      :visible="true"
     />
     <DxSelection mode="multiple"/>
     <DxCardCover
@@ -87,7 +91,7 @@
 
 <script setup lang="ts">
 import DxCardView, {
-  DxColumn, DxCardCover, DxSelection, DxPaging
+  DxColumn, DxCardCover, DxSelection, DxPaging, DxSearchPanel, DxHeaderFilter,
 } from 'devextreme-vue/card-view';
 import DxButton from 'devextreme-vue/button';
 import notify from 'devextreme/ui/notify';
