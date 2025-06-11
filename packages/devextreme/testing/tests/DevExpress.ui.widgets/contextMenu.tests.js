@@ -22,7 +22,6 @@ import 'generic_light.css!';
 QUnit.testStart(() => {
     const markup =
         '<div id="simpleMenu"></div>\
-        <div id="simpleMenu2"></div>\
         <div id="menuTarget"></div>\
         <div id="menuTarget2"></div>\
         <div id="menuShower"></div>';
@@ -2188,6 +2187,9 @@ QUnit.module('Behavior', moduleConfig, () => {
     });
 
     QUnit.test('multiple context menu if one has no target', function(assert) {
+        const documentMenu = $('<div>', { id: 'documentMenu' });
+        this.$element.parent().append(documentMenu);
+
         const simpleMenuItemText = 'simple menu item 1';
         new ContextMenu($('#simpleMenu'), {
             items: [{ text: simpleMenuItemText }],
@@ -2195,15 +2197,15 @@ QUnit.module('Behavior', moduleConfig, () => {
         });
 
         const documentMenuItemText = 'document menu item 1';
-        new ContextMenu($('#simpleMenu2'), {
+        new ContextMenu($('#documentMenu'), {
             items: [{ text: documentMenuItemText }],
         });
 
         $('#menuTarget').trigger('dxcontextmenu');
 
         assert.strictEqual(
-            $(`.${DX_MENU_ITEM_CONTENT_CLASS}:contains(${simpleMenuItemText})`).length > 0,
-            true,
+            $(`.${DX_MENU_ITEM_CONTENT_CLASS}:contains(${simpleMenuItemText})`).length,
+            1,
             'element menu was shown'
         );
 
@@ -2211,10 +2213,24 @@ QUnit.module('Behavior', moduleConfig, () => {
         $(document).trigger('dxcontextmenu');
 
         assert.strictEqual(
-            $(`.${DX_MENU_ITEM_CONTENT_CLASS}:contains(${documentMenuItemText})`).length > 0,
-            true,
+            $(`.${DX_MENU_ITEM_CONTENT_CLASS}:contains(${documentMenuItemText})`).length,
+            1,
             'document menu was shown'
         );
+    });
+
+    QUnit.test('it should be possible to show menu if stopPropagation on the same event was called', function(assert) {
+        const target = $('#menuTarget');
+        const contextMenu = new ContextMenu(this.$element, {
+            items: [{ text: 1 }],
+            target,
+            showEvent: 'mousedown',
+        });
+
+        target.on('mousedown', e => e.stopPropagation());
+
+        target.trigger('mousedown');
+        assert.strictEqual(contextMenu.option('visible'), true, 'context menu was shown');
     });
 });
 
