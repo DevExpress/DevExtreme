@@ -1,4 +1,5 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import { ClientFunction } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 
@@ -7,6 +8,10 @@ fixture
   .page(url(__dirname, '../../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
+
+const triggerVisibilityChange = ClientFunction(() => {
+  document.dispatchEvent(new Event('visibilitychange'));
+});
 
 test('The column should be grouped when pressing Ctrl + G if grouping.contextMenuEnabled is false', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -145,48 +150,6 @@ test('Group column with showWhenGrouped enabled when pressing Ctrl + G if adapta
     }],
     customizeColumns: (columns) => {
       columns[1].showWhenGrouped = true;
-
-      columns[0].hidingPriority = 0;
-      columns[2].hidingPriority = 1;
-      columns[3].hidingPriority = 2;
-    },
-  });
-});
-
-test('Ungroup column with showWhenGrouped enabled when pressing Ctrl + Shift + G if adaptability is enabled', async (t) => {
-  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const firstVisibleHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2);
-
-  await t
-    .click(firstVisibleHeader.element)
-    .pressKey('ctrl+shift+g');
-
-  await t
-    .expect(dataGrid.getGroupPanel().getHeadersCount())
-    .eql(0)
-    .expect(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).isFocused)
-    .ok();
-}).before(async () => {
-  await createWidget('dxDataGrid', {
-    width: 550,
-    columnWidth: 100,
-    allowColumnReordering: true,
-    groupPanel: {
-      visible: true,
-    },
-    dataSource: [{
-      field1: 'test1',
-      field2: 'test2',
-      field3: 'test3',
-      field4: 'test4',
-      field5: 'test5',
-      field6: 'test6',
-      field7: 'test7',
-      field8: 'test8',
-    }],
-    customizeColumns: (columns) => {
-      columns[1].showWhenGrouped = true;
-      columns[1].groupIndex = 0;
 
       columns[0].hidingPriority = 0;
       columns[2].hidingPriority = 1;
@@ -370,6 +333,98 @@ test('Group nested column when pressing Ctrl + G if adaptability is enabled', as
         ],
       },
       'field9',
+    ],
+  });
+});
+
+// Ungroup columns
+test('Ungroup column with showWhenGrouped enabled when pressing Ctrl + Shift + G if adaptability is enabled', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstVisibleHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2);
+
+  await t
+    .click(firstVisibleHeader.element)
+    .pressKey('ctrl+shift+g');
+
+  await t
+    .expect(dataGrid.getGroupPanel().getHeadersCount())
+    .eql(0)
+    .expect(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).isFocused)
+    .ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    width: 550,
+    columnWidth: 100,
+    allowColumnReordering: true,
+    groupPanel: {
+      visible: true,
+    },
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+      field5: 'test5',
+      field6: 'test6',
+      field7: 'test7',
+      field8: 'test8',
+    }],
+    customizeColumns: (columns) => {
+      columns[1].showWhenGrouped = true;
+      columns[1].groupIndex = 0;
+
+      columns[0].hidingPriority = 0;
+      columns[2].hidingPriority = 1;
+      columns[3].hidingPriority = 2;
+    },
+  });
+});
+
+test('Focus should be restored when ungrouping the column via context menu after leaving the page and returning back', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const contextMenu = dataGrid.getContextMenu();
+  const firstGroupedHeader = dataGrid.getGroupPanel().getHeader(0);
+
+  // Simulate leaving a page and returning back
+  await triggerVisibilityChange();
+
+  // act
+  await t
+    .rightClick(firstGroupedHeader.element)
+    .click(contextMenu.getItemByText('Ungroup'));
+
+  // assert
+  await t
+    .expect(dataGrid.getGroupPanel().getHeadersCount())
+    .eql(2)
+    .expect(dataGrid.getGroupPanel().getHeader(0).element.focused)
+    .ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+    }],
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      {
+        dataField: 'field1',
+        groupIndex: 1,
+      },
+      {
+        dataField: 'field2',
+        groupIndex: 2,
+      },
+      'field3',
+      {
+        dataField: 'field4',
+        groupIndex: 0,
+      },
     ],
   });
 });
