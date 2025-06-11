@@ -1,25 +1,38 @@
 <template>
   <DxCardView
     :data-source="vehicles"
+    :height="1120"
     cards-per-row="auto"
-    :card-min-width="260"
+    :card-min-width="240"
     card-template="cardTemplate"
   >
     <DxHeaderFilter :visible="true" />
     <DxSearchPanel :visible="true" />
     <DxPaging :pageSize="12" />
 
-    <DxColumn data-field="TrademarkName"/>
-    <DxColumn data-field="Name"/>
+    <DxColumn
+      data-field="TrademarkName"
+      caption="Trademark"
+    />
+    <DxColumn
+      data-field="Name"
+      caption="Model"
+    />
     <DxColumn
       data-field="Price"
       format="currency"
     >
       <DxHeaderFilter :groupInterval="20000" />
     </DxColumn>
-    <DxColumn data-field="CategoryName"/>
+    <DxColumn
+      data-field="CategoryName"
+      caption="Category"
+    />
     <DxColumn data-field="Modification"/>
-    <DxColumn data-field="BodyStyleName"/>
+    <DxColumn
+      data-field="BodyStyleName"
+      caption="BodyStyle"
+    />
     <DxColumn data-field="Horsepower"/>
     <template #cardTemplate="{
         data: {
@@ -51,8 +64,8 @@
     </template>
   </DxCardView>
   <DxPopup
-    :width="350"
-    :height="240"
+    :width="360"
+    :height="260"
     v-model:visible="popupVisible"
     :dragEnabled="false"
     :hideOnOutsideClick="true"
