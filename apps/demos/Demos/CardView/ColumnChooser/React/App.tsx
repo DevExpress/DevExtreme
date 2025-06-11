@@ -19,6 +19,7 @@ function calculateFullName({ First_Name, Last_Name }: Employee): string {
 }
 
 const columnChooserModeLabel = { 'aria-label': 'Column Chooser Mode' };
+const columnChooserModes = ['dragAndDrop', 'select'];
 
 const App = () => {
   const [columnChooserMode, setColumnChooserMode] = useState<'select' | 'dragAndDrop'>('select');
@@ -33,7 +34,7 @@ const App = () => {
         <div className="option">
           <span>Column Chooser Mode:</span>
           <SelectBox
-            dataSource={['dragAndDrop', 'select']}
+            dataSource={columnChooserModes}
             inputAttr={columnChooserModeLabel}
             value={columnChooserMode}
             onValueChange={setColumnChooserMode}
