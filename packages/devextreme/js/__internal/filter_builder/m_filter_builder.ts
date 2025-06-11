@@ -453,7 +453,7 @@ class FilterBuilder extends Widget<any> {
         const treeViewPopup = treeViewContentElement.closest('.dx-overlay-content');
         treeViewPopup?.removeAttr('role');
 
-        const treeViewNode = treeView.getScrollable().content().find('> ul.dx-treeview-node-container');
+        const treeViewNode = treeViewPopup?.find?.('ul.dx-treeview-node-container');
         treeViewNode?.attr('role', 'presentation');
 
         treeView.focus();
