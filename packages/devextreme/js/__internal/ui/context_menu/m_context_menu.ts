@@ -388,7 +388,7 @@ class ContextMenu extends MenuBase {
   }
 
   _renderContentImpl(): void {
-    this._createShowContextMenuEventHandler();
+    this._showContextMenuEventHandler = this._createShowContextMenuEventHandler();
     this._detachShowContextMenuEvents(this._getTarget());
     this._attachShowContextMenuEvents();
   }
@@ -440,7 +440,7 @@ class ContextMenu extends MenuBase {
     }
   }
 
-  _createShowContextMenuEventHandler(): void {
+  _createShowContextMenuEventHandler() {
     const showContextMenuAction = this._createAction((e) => {
       // @ts-expect-error
       const { showEvent } = this.option();
@@ -454,7 +454,7 @@ class ContextMenu extends MenuBase {
       }
     }, { validatingTargetName: 'target' });
 
-    this._showContextMenuEventHandler = (e): void => showContextMenuAction({
+    return (e): void => showContextMenuAction({
       event: e,
       target: $(e.currentTarget),
     });
