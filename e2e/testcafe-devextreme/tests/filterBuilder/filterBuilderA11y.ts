@@ -92,6 +92,17 @@ elements.forEach(({
       await t
         .expect(ariaControls)
         .eql(popupId);
+
+      await a11yCheck(
+        t,
+        {
+          rules: {
+          // NOTE: color-contrast issues
+            'color-contrast': { enabled: false },
+          },
+        },
+        '#parentContainer',
+      );
     }
   }).before(async () => {
     await createWidget('dxFilterBuilder', {

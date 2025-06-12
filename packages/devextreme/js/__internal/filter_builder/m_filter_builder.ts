@@ -290,12 +290,10 @@ class FilterBuilder extends Widget<any> {
   }
 
   _createConditionElement(condition, parent, groupLevel?) {
-    const $element = $('<div>')
+    return $('<div>')
       .addClass(FILTER_BUILDER_GROUP_CLASS)
       .append(this._createConditionItem(condition, parent, groupLevel))
       .attr('role', 'group');
-
-    return $element;
   }
 
   _createGroupElementByCriteria(criteria, parent?, groupLevel = 0) {
