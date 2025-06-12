@@ -25,17 +25,31 @@ export const getAppliedFilterExpressions = (
   return filters.filter((filter) => filter);
 };
 
+/**
+ * @param columnMap for internal usage inside util, omit this
+ */
 export const normalizeFilterWithSelectors = (
   filter: FilterDescriptor,
   columns: Column[],
   remoteFiltering: boolean,
+  columnMap?: Map<string, Column>,
 ): FilterDescriptor => {
   if (!Array.isArray(filter)) return filter;
+
+  if (!columnMap) {
+    // eslint-disable-next-line no-param-reassign
+    columnMap = new Map(
+      columns.map((column) => [
+        column.dataField ?? column.name,
+        column,
+      ]),
+    );
+  }
 
   const resultFilter = [...filter];
 
   if (isString(resultFilter[0]) && resultFilter[0] !== '!') {
-    const column = columns.find((c) => (c.dataField ?? c.name) === resultFilter[0]);
+    const column = columnMap.get(resultFilter[0]);
 
     if (column && !remoteFiltering) {
       resultFilter[0] = column.calculateFieldValue.bind(column);
@@ -43,7 +57,12 @@ export const normalizeFilterWithSelectors = (
   }
 
   for (let i = 0; i < resultFilter.length; i += 1) {
-    resultFilter[i] = normalizeFilterWithSelectors(resultFilter[i], columns, remoteFiltering);
+    resultFilter[i] = normalizeFilterWithSelectors(
+      resultFilter[i],
+      columns,
+      remoteFiltering,
+      columnMap,
+    );
   }
 
   return resultFilter;
