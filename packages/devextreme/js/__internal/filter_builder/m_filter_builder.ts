@@ -50,6 +50,8 @@ const ACTIVE_CLASS = 'dx-state-active';
 const FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = `${FILTER_BUILDER_CLASS}-menu-custom-operation`;
 const SOURCE = 'filterBuilder';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const TREEVIEW_NODE_CONTAINER = 'dx-treeview-node-container';
 
 const TAB_KEY = 'tab';
 const ENTER_KEY = 'enter';
@@ -913,10 +915,10 @@ class FilterBuilder extends Widget<any> {
   }
 
   _applyAccessibilityAttributes($element) {
-    const treeViewPopup = $element.closest('.dx-overlay-content');
+    const treeViewPopup = $element.closest(`.${OVERLAY_CONTENT_CLASS}`);
     treeViewPopup?.removeAttr('role');
 
-    const treeViewNode = treeViewPopup?.find?.('ul.dx-treeview-node-container');
+    const treeViewNode = treeViewPopup?.find?.(`.${TREEVIEW_NODE_CONTAINER}`);
     treeViewNode?.attr('role', 'presentation');
   }
 }
