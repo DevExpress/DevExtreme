@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { Priority, PriorityService } from '../priority.service';
 
 let modulePrefix = '';
@@ -12,13 +12,12 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/priority/priority.component.html`,
   styleUrls: [`.${modulePrefix}/priority/priority.component.css`],
 })
-export class PriorityComponent {
+export class PriorityComponent implements OnChanges {
   priorities: Priority[];
   text: string;
   className: string;
 
   @Input() priorityID: number;
-  @Input() field: any;
 
   constructor(service: PriorityService) {
     this.priorities = service.getPriorities();

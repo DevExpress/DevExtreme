@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { Employee, EmployeeService } from '../employee.service';
 
 let modulePrefix = '';
@@ -11,7 +11,7 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'employee',
   templateUrl: `.${modulePrefix}/employee/employee.component.html`,
 })
-export class EmployeeComponent {
+export class EmployeeComponent implements OnChanges {
   employees: Employee[];
   text: string;
 
