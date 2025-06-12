@@ -1,9 +1,9 @@
-DevExtreme CardView includes a header filter which allows users to filter cards by field values. Click the header filter icon in the CardView's header panel to open the pop-up menu.
+DevExtreme CardView includes a header filter that allows users to filter cards by field values. Click the filter icon in a field's header panel to open the pop-up CardView filter.
 <!--split-->
 
 ### Display Header Filter Icons
 
-Assign `true` to the **headerFilter**.[visible](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/headerFilter/#visible) property to display header filter icons for all CardView fields. To hide the icon for a specific field, set the [allowHeaderFiltering](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/#allowHeaderFiltering) property to `false`.
+Assign `true` to the **headerFilter**.[visible](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/headerFilter/#visible) property to allow users to filter CardView fields with header icons. To hide the icon for a specific column, set **columns**.[allowHeaderFiltering](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/#allowHeaderFiltering) to `false`.
 
 ### Enable Search UI Within Header Filters
 
