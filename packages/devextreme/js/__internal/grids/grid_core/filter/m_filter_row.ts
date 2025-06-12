@@ -291,17 +291,16 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const sharedData = {};
     const $editorContainer = $cell.find('.dx-editor-container');
     const filterRangeOverlayClass = that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS);
-    const $columnHeadersScrollable = this.component.getView('columnHeadersView').element().find('.dx-datagrid-scroll-container');
-    const $overlay = $('<div>').addClass(filterRangeOverlayClass).appendTo($columnHeadersScrollable);
+    const $overlay = $('<div>').addClass(filterRangeOverlayClass).appendTo($cell);
 
     return that._createComponent($overlay, Overlay, {
-      container: $overlay,
       height: 'auto',
       shading: false,
       showTitle: false,
       focusStateEnabled: false,
       hideOnOutsideClick: true,
       hideOnParentScroll: true,
+      _hideOnParentScrollTarget: $overlay,
       wrapperAttr: { class: filterRangeOverlayClass },
       animation: false,
       position: {
@@ -351,18 +350,12 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       },
       onShown(e) {
         const $editor = e.component.$content().find(`.${EDITOR_CONTAINER_CLASS}`).first();
-        $columnHeadersScrollable.css({
-          position: 'unset',
-        });
+
         // @ts-expect-error
         eventsEngine.trigger($editor.find(EDITORS_INPUT_SELECTOR), 'focus');
       },
       onHidden() {
         column = that._columnsController.columnOption(column.index);
-
-        $columnHeadersScrollable.css({
-          position: '',
-        });
 
         $cell.find(`.${MENU_CLASS}`).parent().addClass(EDITOR_WITH_MENU_CLASS);
         if (getColumnSelectedFilterOperation(that, column) === 'between') {
