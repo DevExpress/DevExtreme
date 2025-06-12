@@ -102,7 +102,7 @@ QUnit.module('Rendering', moduleConfig, () => {
         $(document).off('click');
     });
 
-    QUnit.test('context menu items with submenu should have \'has-submenu\' class', function(assert) {
+    QUnit.test('context menu items with submenu should have "has-submenu" class', function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 'item1', items: [{ text: 'item11' }] }],
             visible: true
@@ -176,7 +176,7 @@ QUnit.module('Rendering', moduleConfig, () => {
 
         assert.equal(submenus.length, 1, 'empty submenu should not rendered');
         assert.equal($itemsContainer.find('.' + DX_MENU_ITEM_POPOUT_CLASS).length, 0, 'there are no popouts in items');
-        assert.notOk($rootItem.hasClass(DX_HAS_SUBMENU_CLASS), 'root item has no \'has-submenu\' class');
+        assert.notOk($rootItem.hasClass(DX_HAS_SUBMENU_CLASS), 'root item has no "has-submenu" class');
     });
 
     QUnit.test('onSubmenuCreated should be fired after submenu was rendered', function(assert) {
@@ -766,7 +766,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
 });
 
 QUnit.module('Showing and hiding context menu', moduleConfig, () => {
-    QUnit.test('visible option should toggle menu\'s visibility', function(assert) {
+    QUnit.test('visible option should toggle menu visibility', function(assert) {
         const instance = new ContextMenu(this.$element, { items: [{ text: 1, items: [{ text: 11 }] }], visible: true });
         const $itemsContainer = instance.itemsContainer();
 
@@ -787,14 +787,14 @@ QUnit.module('Showing and hiding context menu', moduleConfig, () => {
         assert.equal(this.$element.find('.dx-overlay').length, 1, 'overlays cleaned correctly');
     });
 
-    QUnit.test('show method should toggle menu\'s visibility', function(assert) {
+    QUnit.test('show method should toggle menu visibility', function(assert) {
         const instance = new ContextMenu(this.$element, { items: [{ text: 1 }], visible: false });
 
         instance.show();
         assert.ok(instance.option('visible'), 'option visible was changed to true');
     });
 
-    QUnit.test('hide method should toggle menu\'s visibility', function(assert) {
+    QUnit.test('hide method should toggle menu visibility', function(assert) {
         const instance = new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
 
         instance.hide();
@@ -937,7 +937,7 @@ QUnit.module('Showing and hiding context menu', moduleConfig, () => {
         assert.ok($itemsContainer.is(':visible'), 'menu is rendered again');
     });
 
-    QUnit.test('context menu\'s overlay should have flipfit position as native context menu', function(assert) {
+    QUnit.test('context menu overlay should have flipfit position as native context menu', function(assert) {
         new ContextMenu(this.$element, { items: [{ text: 'item 1' }], visible: true });
 
         const overlay = this.$element.find('.dx-overlay').dxOverlay('instance');
@@ -1415,6 +1415,21 @@ QUnit.module('Options', moduleConfig, () => {
         assert.equal($items.length, 2, 'second level is rendered');
     });
 
+    QUnit.test('it should be possible to change disabled option in runtime', function(assert) {
+        const instance = new ContextMenu(this.$element, {
+            visible: false,
+            items: [{ text: 'itemA' }],
+            target: '#menuTarget',
+        });
+
+        instance.option('disabled', true);
+
+        $('#menuTarget').trigger('dxcontextmenu');
+
+        assert.strictEqual(instance.option('visible'), false, 'menu was not shown');
+        assert.strictEqual(instance.option('disabled'), true, 'disabled option is true');
+    });
+
     [
         { label: 'selector string', target: () => '#menuTarget' },
         { label: 'jQuery object', target: () => $('#menuTarget') },
@@ -1424,7 +1439,7 @@ QUnit.module('Options', moduleConfig, () => {
         { label: 'undefined', target: () => undefined },
         { label: 'null', target: () => null },
     ].forEach(({ label, target }) => {
-        QUnit.test(`target option as ${label}`, function(assert) {
+        QUnit.test(`event should be correctly attached if target is ${label}`, function(assert) {
             const instance = new ContextMenu(this.$element, {
                 visible: false,
                 items: [{ text: 'itemA' }],
@@ -1817,7 +1832,7 @@ QUnit.module('Public api', moduleConfig, () => {
         assert.ok(instance.itemsContainer().hasClass(DX_CONTEXT_MENU_CLASS));
     });
 
-    QUnit.test('Overlay\'s position should be correct when the target option is changed', function(assert) {
+    QUnit.test('Overlay position should be correct when the target option is changed', function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1 }],
         });
@@ -1875,7 +1890,7 @@ QUnit.module('Behavior', moduleConfig, () => {
         assert.notOk(instance.option('visible'), 'menu was hidden');
     });
 
-    QUnit.test('submenu shouldn\'t be hidden after click on item with children (T640708)', function(assert) {
+    QUnit.test('submenu should not be hidden after click on item with children (T640708)', function(assert) {
         const contextMenuItems = [
             {
                 text: 'item',
@@ -2172,7 +2187,7 @@ QUnit.module('Behavior', moduleConfig, () => {
         }
     });
 
-    QUnit.test('multiple context menu if one has no target', function(assert) {
+    QUnit.test('multiple context menu if one has no target should be correctly displayed', function(assert) {
         const documentMenu = $('<div>', { id: 'documentMenu' });
         this.$element.parent().append(documentMenu);
 
@@ -2205,7 +2220,7 @@ QUnit.module('Behavior', moduleConfig, () => {
         );
     });
 
-    QUnit.test('it should be possible to show menu if stopPropagation on the same event was called', function(assert) {
+    QUnit.test('it should be possible to show menu if stopPropagation on the same event was called if target is a node', function(assert) {
         const target = $('#menuTarget');
         const contextMenu = new ContextMenu(this.$element, {
             items: [{ text: 1 }],
@@ -2641,7 +2656,7 @@ QUnit.module('Keyboard navigation', moduleConfig, () => {
         assert.equal(getVisibleSubmenuCount(instance), 2, 'we still see two submenus');
     });
 
-    QUnit.test('don\'t open submenu on right key press when item is disabled', function(assert) {
+    QUnit.test('do not open submenu on right key press when item is disabled', function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 'item 1' }, { text: 'item 2', disabled: true, items: [{ text: 'item 21' }] }],
             focusStateEnabled: true

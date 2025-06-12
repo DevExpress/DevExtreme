@@ -355,7 +355,7 @@ class ContextMenu extends MenuBase {
     this.$element()
       .addClass(DX_HAS_CONTEXT_MENU_CLASS);
 
-    this._eventNamespace = `${this.NAME}_${new Guid()}`;
+    this._eventNamespace = `${this.NAME}${new Guid()}`;
 
     super._initMarkup();
   }
@@ -387,7 +387,8 @@ class ContextMenu extends MenuBase {
     super._focusOutHandler(e);
   }
 
-  _renderContentImpl(): void {
+  _renderContentImpl() {
+    this._createShowContextMenuEventHandler();
     this._detachShowContextMenuEvents(this._getTarget());
     this._attachShowContextMenuEvents();
   }
@@ -439,17 +440,37 @@ class ContextMenu extends MenuBase {
     }
   }
 
+  _createShowContextMenuEventHandler(): void {
+    const showContextMenuAction = this._createAction((e) => {
+      // @ts-expect-error
+      const { showEvent } = this.option();
+      const delay = this.getShowDelay(showEvent);
+
+      if (delay) {
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        setTimeout(() => this._show(e.event), delay);
+      } else {
+        this._show(e.event);
+      }
+    }, { validatingTargetName: 'target' });
+
+    this._showContextMenuEventHandler = (e): void => showContextMenuAction({
+      event: e,
+      target: $(e.currentTarget),
+    });
+  }
+
   _detachShowContextMenuEvents(target): void {
     // @ts-expect-error
-    const showEvent = this.getShowEvent(this.option('showEvent'));
+    const { showEvent: showEventOption } = this.option();
+    const showEvent = this.getShowEvent(showEventOption);
 
     if (!showEvent) {
       return;
     }
 
-    const eventName = addNamespace(showEvent, this._eventNamespace);
-
     const isSelector = isString(target);
+    const eventName = addNamespace(showEvent, this._eventNamespace);
 
     if (isSelector) {
       eventsEngine.off(
@@ -464,37 +485,18 @@ class ContextMenu extends MenuBase {
     }
   }
 
-  _attachShowContextMenuEvents() {
-    const target = this._getTarget();
+  _attachShowContextMenuEvents(): void {
     // @ts-expect-error
-    const showEvent = this.getShowEvent(this.option('showEvent'));
+    const { showEvent: showEventOption, disabled } = this.option();
+    const showEvent = this.getShowEvent(showEventOption);
 
-    if (!showEvent) {
+    if (!showEvent || disabled) {
       return;
     }
 
-    const eventName = addNamespace(showEvent, this._eventNamespace);
-
-    let contextMenuAction = this._createAction((e) => {
-      // @ts-expect-error
-      const delay = this.getShowDelay(this.option('showEvent'));
-
-      if (delay) {
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        setTimeout(() => this._show(e.event), delay);
-      } else {
-        this._show(e.event);
-      }
-    }, { validatingTargetName: 'target' });
-
-    this._showContextMenuEventHandler = (e): void => contextMenuAction({
-      event: e,
-      target: $(e.currentTarget),
-    });
-
-    contextMenuAction = this._createAction(contextMenuAction);
-
+    const target = this._getTarget();
     const isSelector = isString(target);
+    const eventName = addNamespace(showEvent, this._eventNamespace);
 
     if (isSelector) {
       eventsEngine.on(
@@ -983,13 +985,16 @@ class ContextMenu extends MenuBase {
       case 'visible':
         this._renderVisibility(args.value);
         break;
+      case 'disabled':
       case 'showEvent':
       case 'position':
       case 'submenuDirection':
         this._invalidate();
         break;
       case 'target':
-        args.previousValue && this._detachShowContextMenuEvents(args.previousValue);
+        if (args.previousValue) {
+          this._detachShowContextMenuEvents(args.previousValue);
+        }
         this._invalidate();
         break;
       case 'closeOnOutsideClick':
