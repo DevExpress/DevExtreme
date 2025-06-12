@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Employee, EmployeeService } from './employee.service';
+import { Employee, EmployeeService } from '../employee.service';
 
 let modulePrefix = '';
 // @ts-ignore
@@ -10,7 +10,6 @@ if (window && window.config?.packageConfigPaths) {
 @Component({
   selector: 'employee',
   templateUrl: `.${modulePrefix}/employee/employee.component.html`,
-  providers: [EmployeeService],
 })
 export class EmployeeComponent {
   employees: Employee[];

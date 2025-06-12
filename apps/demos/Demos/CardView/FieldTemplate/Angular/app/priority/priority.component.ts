@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Priority, PriorityService } from './priority.service';
+import { Priority, PriorityService } from '../priority.service';
 
 let modulePrefix = '';
 // @ts-ignore
@@ -11,7 +11,6 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'priority',
   templateUrl: `.${modulePrefix}/priority/priority.component.html`,
   styleUrls: [`.${modulePrefix}/priority/priority.component.css`],
-  providers: [PriorityService],
 })
 export class PriorityComponent {
   priorities: Priority[];
