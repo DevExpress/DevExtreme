@@ -16,6 +16,12 @@ export interface Employee {
   Name: string;
 }
 
+export interface Priority {
+  id: number;
+  text: string;
+  postfix: string;
+}
+
 export const tasks: Task[] = [{
   Task_ID: 1,
   Task_Assigned_Employee_ID: 1,
@@ -1502,4 +1508,22 @@ export const employees: Employee[] = [{
 }, {
   ID: 51,
   Name: 'Stu Pizaro',
+}];
+
+export const priorities: Priority[] = [{
+    id: 1,
+    text: 'Low',
+    postfix: 'low',
+  }, {
+    id: 2,
+    text: 'Normal',
+    postfix: 'normal',
+  }, {
+    id: 3,
+    text: 'Urgent',
+    postfix: 'urgent',
+  }, {
+    id: 4,
+    text: 'High',
+    postfix: 'high',
 }];

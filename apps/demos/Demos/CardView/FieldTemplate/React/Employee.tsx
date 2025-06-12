@@ -1,8 +1,15 @@
-import React from 'react';
-import { employees } from './data.ts';
+import React, { useMemo } from 'react';
+import { Employee, employees } from './data.ts';
 
-const Employee = ({employeeID}) => {
-    const employee = employees.find(e => e.ID === employeeID);
+interface EmployeeProps {
+  employeeID: number;
+}
+
+const Employee = ({ employeeID }: EmployeeProps) => {
+    const employee = useMemo<Employee>(() => {
+        return employees.find(e => e.ID === employeeID);
+    }, [employeeID]);
+    
     return <a href="#">{ employee.Name }</a>
 }
 

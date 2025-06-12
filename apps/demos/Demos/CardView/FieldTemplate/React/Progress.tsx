@@ -1,13 +1,15 @@
 import React from 'react';
 import { ProgressBar } from 'devextreme-react/progress-bar';
 
-const elementAttr = { 'aria-label': 'Progress Bar' };
+interface ProgressProps {
+  value: number;
+}
 
-const Progress = ({value}) => {
+const Progress = ({ value }: ProgressProps) => {
     return <div className="task__progress">
         <ProgressBar
             value={value}
-            elementAttr={elementAttr}
+            elementAttr={{ 'aria-label': 'Progress Bar' }}
             statusFormat={(ratio) => `${ratio * 100}%`}
         />
     </div>;
