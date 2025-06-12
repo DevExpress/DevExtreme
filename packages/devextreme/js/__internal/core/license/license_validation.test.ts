@@ -526,41 +526,70 @@ describe('assertedVersions integration', () => {
     clearAssertedVersions();
   });
 
-  test('reads asserted versions from global DevExpress.config', () => {
-    globalThis.DevExpress = {
-      config: {
-        versionAssertions: packages,
-      },
-    };
+  describe('set version in assertDevExtremeVersion', () => {
+    test('returns false and logs error when asserted versions are not compatible', () => {
+      assertDevExtremeVersion('test-package', '1.2.3');
 
-    // eslint-disable-next-line
-    const configMethod = require('@js/__internal/core/m_config').default;
+      const result = assertedVersionsCompatible({ major: 2, minor: 0, patch: 0 });
 
-    expect(configMethod()?.versionAssertions).toEqual(packages);
+      expect(result).toBe(false);
+      expect(errors.log).toHaveBeenCalledWith('W0023', expect.stringContaining('test-package'));
+    });
+
+    test('returns true when asserted versions are compatible', () => {
+      assertDevExtremeVersion('test-package', '1.2.3');
+
+      const result = assertedVersionsCompatible({ major: 1, minor: 2, patch: 3 });
+
+      expect(result).toBe(true);
+      expect(errors.log).not.toHaveBeenCalled();
+    });
+
+    test('clears asserted versions from config', () => {
+      assertDevExtremeVersion('test-package-2', '1.2.3');
+      clearAssertedVersions();
+
+      expect(config().versionAssertions).toEqual([]);
+    });
   });
 
-  test('clears asserted versions from config', () => {
-    assertDevExtremeVersion('test-package-2', '1.2.3');
-    clearAssertedVersions();
+  describe('set version in DevExpress.config', () => {
+    test('returns true when all global version assertions are compatible', () => {
+      globalThis.DevExpress = {
+        config: {
+          versionAssertions: packages,
+        },
+      };
 
-    expect(config().versionAssertions).toEqual([]);
-  });
+      // eslint-disable-next-line
+      const versionUtils = require('@js/__internal/utils/version');
+      // eslint-disable-next-line
+      const errors = require('@js/core/errors').default;
+      jest.spyOn(errors, 'log').mockImplementation(() => {});
 
-  test('returns false when asserted versions are not compatible and logs error', () => {
-    assertDevExtremeVersion('test-package', '1.2.3');
+      const result = versionUtils.assertedVersionsCompatible({ major: 1, minor: 2, patch: 3 });
 
-    const result = assertedVersionsCompatible({ major: 2, minor: 0, patch: 0 });
+      expect(result).toBe(true);
+      expect(errors.log).not.toHaveBeenCalled();
+    });
 
-    expect(result).toBe(false);
-    expect(errors.log).toHaveBeenCalledWith('W0023', expect.stringContaining('test-package'));
-  });
+    test('returns false and log error when any global version assertion is not compatible', () => {
+      globalThis.DevExpress = {
+        config: {
+          versionAssertions: packages,
+        },
+      };
 
-  test('returns true when asserted versions are compatible and does not log', () => {
-    assertDevExtremeVersion('test-package', '1.2.3');
+      // eslint-disable-next-line
+      const versionUtils = require('@js/__internal/utils/version');
+      // eslint-disable-next-line
+      const errors = require('@js/core/errors').default;
+      jest.spyOn(errors, 'log').mockImplementation(() => {});
 
-    const result = assertedVersionsCompatible({ major: 1, minor: 2, patch: 3 });
+      const result = versionUtils.assertedVersionsCompatible({ major: 2, minor: 0, patch: 0 });
 
-    expect(result).toBe(true);
-    expect(errors.log).not.toHaveBeenCalled();
+      expect(result).toBe(false);
+      expect(errors.log).toHaveBeenCalledWith('W0023', expect.stringContaining('test-package'));
+    });
   });
 });
