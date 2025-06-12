@@ -4,7 +4,7 @@ import animationPosition from '@js/common/core/animation/position';
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
@@ -387,7 +387,7 @@ class ContextMenu extends MenuBase {
     super._focusOutHandler(e);
   }
 
-  _renderContentImpl() {
+  _renderContentImpl(): void {
     this._createShowContextMenuEventHandler();
     this._detachShowContextMenuEvents(this._getTarget());
     this._attachShowContextMenuEvents();
@@ -398,7 +398,7 @@ class ContextMenu extends MenuBase {
     !this._keyboardListenerId && this._focusTarget().length && super._attachKeyboardEvents();
   }
 
-  _renderContextMenuOverlay() {
+  _renderContextMenuOverlay(): void {
     if (this._overlay) {
       return;
     }

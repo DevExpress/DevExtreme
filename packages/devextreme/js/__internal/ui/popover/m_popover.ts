@@ -1,7 +1,7 @@
 import positionUtils from '@js/common/core/animation/position';
 import { move } from '@js/common/core/animation/translator';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
@@ -37,82 +37,6 @@ const POSITION_FLIP_MAP = {
   right: 'left',
   bottom: 'top',
   center: 'center',
-};
-
-const getEventNameByOption = function (optionValue) {
-  // @ts-expect-error
-  return isObject(optionValue) ? optionValue.name : optionValue;
-};
-const getEventName = function (that, optionName) {
-  const optionValue = that.option(optionName);
-
-  return getEventNameByOption(optionValue);
-};
-const getEventDelay = function (that, optionName) {
-  const optionValue = that.option(optionName);
-  // @ts-expect-error
-  return isObject(optionValue) && optionValue.delay;
-};
-const attachEvent = function (that, name) {
-  const {
-    target, shading, disabled, hideEvent,
-  } = that.option();
-  const isSelector = isString(target);
-  const shouldIgnoreHideEvent = shading && name === 'hide';
-  const event = shouldIgnoreHideEvent ? null : getEventName(that, `${name}Event`);
-
-  if (shouldIgnoreHideEvent && hideEvent) {
-    errors.log('W1020');
-  }
-
-  if (!event || disabled) {
-    return;
-  }
-
-  const eventName = addNamespace(event, that.NAME);
-  const action = that._createAction(function () {
-    const delay = getEventDelay(that, `${name}Event`);
-    this._clearEventsTimeouts();
-
-    if (delay) {
-      this._timeouts[name] = setTimeout(() => {
-        that[name]();
-      }, delay);
-    } else {
-      that[name]();
-    }
-  }.bind(that), { validatingTargetName: 'target' });
-
-  const handler = function (e) {
-    action({ event: e, target: $(e.currentTarget) });
-  };
-
-  const EVENT_HANDLER_NAME = `_${name}EventHandler`;
-  if (isSelector) {
-    that[EVENT_HANDLER_NAME] = handler;
-    eventsEngine.on(domAdapter.getDocument(), eventName, target, handler);
-  } else {
-    const targetElement = getPublicElement($(target));
-    that[EVENT_HANDLER_NAME] = undefined;
-    eventsEngine.on(targetElement, eventName, handler);
-  }
-};
-const detachEvent = function (that, target, name, event?: unknown) {
-  let eventName = event || getEventName(that, `${name}Event`);
-
-  if (!eventName) {
-    return;
-  }
-
-  eventName = addNamespace(eventName, that.NAME);
-
-  const EVENT_HANDLER_NAME = `_${name}EventHandler`;
-  if (that[EVENT_HANDLER_NAME]) {
-    // @ts-expect-error ts-error
-    eventsEngine.off(domAdapter.getDocument(), eventName, target, that[EVENT_HANDLER_NAME]);
-  } else {
-    eventsEngine.off(getPublicElement($(target)), eventName);
-  }
 };
 
 export interface PopoverProperties extends Omit<Properties,
@@ -238,13 +162,101 @@ TProperties extends PopoverProperties = PopoverProperties,
   }
 
   _detachEvents(target): void {
-    detachEvent(this, target, 'show');
-    detachEvent(this, target, 'hide');
+    this._detachEvent(target, 'show');
+    this._detachEvent(target, 'hide');
   }
 
   _attachEvents(): void {
-    attachEvent(this, 'show');
-    attachEvent(this, 'hide');
+    this._attachEvent('show');
+    this._attachEvent('hide');
+  }
+
+  _createEventHandler(name) {
+    const action = this._createAction(() => {
+      const delay = this._getEventDelay(`${name}Event`);
+      this._clearEventsTimeouts();
+
+      if (delay) {
+        this._timeouts[name] = setTimeout(() => {
+          this[name]();
+        }, delay);
+      } else {
+        this[name]();
+      }
+    }, { validatingTargetName: 'target' });
+
+    return (e): void => {
+      action({ event: e, target: $(e.currentTarget) });
+    };
+  }
+
+  _attachEvent(name): void {
+    const {
+      target, shading, disabled, hideEvent,
+    } = this.option();
+
+    const shouldIgnoreHideEvent = shading && name === 'hide';
+    if (shouldIgnoreHideEvent && hideEvent) {
+      errors.log('W1020');
+    }
+
+    const event = shouldIgnoreHideEvent ? null : this._getEventName(`${name}Event`);
+    if (!event || disabled) {
+      return;
+    }
+
+    const EVENT_HANDLER_NAME = this._getEventHandlerName(name);
+    this[EVENT_HANDLER_NAME] = this._createEventHandler(name);
+
+    const eventName = addNamespace(event, this.NAME!);
+
+    const isSelector = isString(target);
+    if (isSelector) {
+      eventsEngine.on(domAdapter.getDocument(), eventName, target, this[EVENT_HANDLER_NAME]);
+    } else {
+      eventsEngine.on(getPublicElement($(target)), eventName, this[EVENT_HANDLER_NAME]);
+    }
+  }
+
+  _detachEvent(target, name, event?: unknown) {
+    let eventName = event || this._getEventName(`${name}Event`);
+
+    if (!eventName) {
+      return;
+    }
+
+    eventName = addNamespace(eventName, this.NAME!);
+
+    const EVENT_HANDLER_NAME = this._getEventHandlerName(name);
+
+    const isSelector = isString(target);
+    if (isSelector) {
+      // @ts-expect-error ts-error
+      eventsEngine.off(domAdapter.getDocument(), eventName, target, this[EVENT_HANDLER_NAME]);
+    } else {
+      eventsEngine.off(getPublicElement($(target)), eventName, this[EVENT_HANDLER_NAME]);
+    }
+  }
+
+  _getEventHandlerName(name: string): string {
+    return `_${name}EventHandler`;
+  }
+
+  _getEventNameByOption(optionValue) {
+    // @ts-expect-error
+    return isObject(optionValue) ? optionValue.name : optionValue;
+  }
+
+  _getEventName(optionName) {
+    const optionValue = this.option(optionName);
+
+    return this._getEventNameByOption(optionValue);
+  }
+
+  _getEventDelay(optionName) {
+    const optionValue = this.option(optionName);
+    // @ts-expect-error
+    return isObject(optionValue) && optionValue.delay;
   }
 
   _renderArrow(): void {
@@ -485,18 +497,20 @@ TProperties extends PopoverProperties = PopoverProperties,
         }
         break;
       case 'target':
-        args.previousValue && this._detachEvents(args.previousValue);
+        if (args.previousValue) {
+          this._detachEvents(args.previousValue);
+        }
         this._positionController.updateTarget(args.value);
         this._invalidate();
         break;
       case 'showEvent':
       case 'hideEvent': {
         const name = args.name.substring(0, 4);
-        const event = getEventNameByOption(args.previousValue);
+        const event = this._getEventNameByOption(args.previousValue);
 
         this.hide();
-        detachEvent(this, this.option('target'), name, event);
-        attachEvent(this, name);
+        this._detachEvent(this.option('target'), name, event);
+        this._attachEvent(name);
         break;
       }
       case 'visible':
