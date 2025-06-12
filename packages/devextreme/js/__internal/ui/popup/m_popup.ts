@@ -11,7 +11,6 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
-import browser from '@js/core/utils/browser';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { camelize } from '@js/core/utils/inflector';
@@ -27,7 +26,6 @@ import {
   getWidth,
 } from '@js/core/utils/size';
 import { isDefined, isObject } from '@js/core/utils/type';
-import { compare as compareVersions } from '@js/core/utils/version';
 import Button from '@js/ui/button';
 import type { dxPopupAnimation, Properties, ToolbarItem } from '@js/ui/popup';
 import Resizable from '@js/ui/resizable';
@@ -79,8 +77,9 @@ const BUTTON_TEXT_MODE = 'text';
 const BUTTON_CONTAINED_MODE = 'contained';
 const BUTTON_OUTLINED_MODE = 'outlined';
 
-const IS_OLD_SAFARI = browser.safari && compareVersions(browser.version, [11]) < 0;
-const HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS };
+const HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS } as const;
+
+type HeightStrategiesType = typeof HEIGHT_STRATEGIES[keyof typeof HEIGHT_STRATEGIES];
 
 const getButtonPlace = (name) => {
   const device = devices.current();
@@ -889,16 +888,16 @@ class Popup<
     this._setHeightClasses(this.$overlayContent(), currentHeightStrategyClass);
   }
 
-  _heightStrategyChangeOffset(currentHeightStrategyClass, popupVerticalPaddings): number {
+  _heightStrategyChangeOffset(currentHeightStrategyClass: HeightStrategiesType, popupVerticalPaddings): number {
     return currentHeightStrategyClass === HEIGHT_STRATEGIES.flex ? -popupVerticalPaddings : 0;
   }
 
-  _chooseHeightStrategy(overlayContent: HTMLElement): string {
+  _chooseHeightStrategy(overlayContent: HTMLElement): HeightStrategiesType {
     const isAutoWidth = overlayContent.style.width === 'auto' || overlayContent.style.width === '';
-    let currentHeightStrategyClass = HEIGHT_STRATEGIES.static;
+    let currentHeightStrategyClass: HeightStrategiesType = HEIGHT_STRATEGIES.static;
 
     if (this._isAutoHeight() && this.option('autoResizeEnabled')) {
-      if (isAutoWidth || IS_OLD_SAFARI) {
+      if (isAutoWidth) {
         currentHeightStrategyClass = HEIGHT_STRATEGIES.inherit;
       } else {
         currentHeightStrategyClass = HEIGHT_STRATEGIES.flex;
@@ -908,7 +907,7 @@ class Popup<
     return currentHeightStrategyClass;
   }
 
-  _getHeightCssStyles(currentHeightStrategyClass, overlayContent) {
+  _getHeightCssStyles(currentHeightStrategyClass: HeightStrategiesType, overlayContent) {
     let cssStyles = {};
     const contentMaxHeight = this._getOptionValue('maxHeight', overlayContent);
     const contentMinHeight = this._getOptionValue('minHeight', overlayContent);
