@@ -33,7 +33,7 @@ const priorityClassName = `task__priority task__priority--${priority.postfix}`;
 }
 
 .task__priority--urgent {
-  color: var(--dx-color-warning);
+  color: #f7630c;
 }
 
 .task__priority--high {
