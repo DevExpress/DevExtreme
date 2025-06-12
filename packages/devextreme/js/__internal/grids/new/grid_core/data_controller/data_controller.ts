@@ -2,7 +2,7 @@ import type { DataSource } from '@js/common/data';
 import type { FilterDescriptor } from '@js/common/data.types';
 import ArrayStore from '@js/common/data/array_store';
 import { Deferred } from '@js/core/utils/deferred';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isPlainObject } from '@js/core/utils/type';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
 import { equalByValue } from '@ts/core/utils/m_common';
@@ -70,10 +70,6 @@ export class DataController {
 
   public readonly isLoading = signal(false);
 
-  private readonly _filteredItemCount = signal<number | null>(0);
-
-  public readonly filteredItemCount: ReadonlySignal<number | null> = this._filteredItemCount;
-
   public readonly pageCount = computed(
     () => Math.ceil(
       this.totalCount.value / this.pageSize.value,
@@ -139,14 +135,14 @@ export class DataController {
             e.storeLoadOptions.filter,
           );
 
-          const localOptions = this.normalizedLocalOperations.peek();
+          const localOperations = this.normalizedLocalOperations.peek();
           this.pendingLocalOperations[e.operationId] = getLocalLoadOptions(
             e.storeLoadOptions,
-            localOptions,
+            localOperations,
           );
           e.storeLoadOptions = getStoreLoadOptions(
             e.storeLoadOptions,
-            localOptions,
+            localOperations,
           );
         };
 
@@ -161,26 +157,28 @@ export class DataController {
             customizeLoadResult callback does not support async code.
           */
           const { operationId } = e;
-          const loadOptions = { ...this.pendingLocalOperations[operationId] };
-          const { skip, take } = loadOptions;
+          const localLoadOptions = { ...this.pendingLocalOperations[operationId] };
+          const { skip, take } = localLoadOptions;
           const hasLocalPaging = isDefined(skip) && isDefined(take);
 
-          const tempLoadOptions = getLoadOptionsWithoutLocalPaging(loadOptions);
+          const localOptionsWithoutPaging = getLoadOptionsWithoutLocalPaging(localLoadOptions);
 
-          new ArrayStore(e.data).load(tempLoadOptions).done((filteredData) => {
-            e.extra = e.extra || {};
+          new ArrayStore(e.data).load(localOptionsWithoutPaging).done((filteredData) => {
+            e.extra = isPlainObject(e.extra) ? e.extra : {};
 
             if (hasLocalPaging) {
-              this._filteredItemCount.value = filteredData.length;
               e.take = take;
               e.skip = skip;
 
-              new ArrayStore(e.data).load(loadOptions).done((newData) => {
+              if (e.storeLoadOptions.requireTotalCount) {
+                e.extra.totalCount = filteredData.length;
+              }
+
+              new ArrayStore(e.data).load(localLoadOptions).done((newData) => {
                 e.data = newData;
               });
             } else {
               e.data = filteredData;
-              this._filteredItemCount.value = null;
             }
           }).fail((error) => {
             // @ts-expect-error
@@ -327,8 +325,7 @@ export class DataController {
     this._items.value = items;
     this.pageIndex.value = dataSource.pageIndex();
     this.pageSize.value = dataSource.pageSize();
-    const filteredCount = this.filteredItemCount.peek();
-    this._totalCount.value = filteredCount ?? dataSource.totalCount();
+    this._totalCount.value = dataSource.totalCount();
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     Promise.resolve().then(() => {
