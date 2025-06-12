@@ -155,7 +155,7 @@ $(() => {
         'Modification',
         {
           dataField: 'BodyStyleName',
-          caption: 'BodyStyle',
+          caption: 'Body Style',
         },
         'Horsepower',
       ],

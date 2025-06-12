@@ -70,7 +70,7 @@ const App = () => {
         <Column dataField="Modification" />
         <Column
           dataField="BodyStyleName"
-          caption="BodyStyle"
+          caption="Body Style"
         />
         <Column dataField="Horsepower" />
       </CardView>

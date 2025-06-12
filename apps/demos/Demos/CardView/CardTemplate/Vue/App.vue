@@ -31,7 +31,7 @@
     <DxColumn data-field="Modification"/>
     <DxColumn
       data-field="BodyStyleName"
-      caption="BodyStyle"
+      caption="Body Style"
     />
     <DxColumn data-field="Horsepower"/>
     <template #cardTemplate="{
