@@ -1,21 +1,22 @@
 <template>
-    <div>
-        <div :className="priorityClassName">
-            <div className="task__indicator"></div>
-            <div>{{ priority.text }}</div>
-        </div>
-    </div>
+  <div :className="priorityClassName">
+      <div className="task__indicator"></div>
+      <div>{{ priority.text }}</div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { priorities } from './priorities.ts';
+import { computed } from 'vue';
+import { priorities } from './data.ts';
 
 const props = defineProps<{
   priorityID: number,
 }>();
 
-const priority = priorities.find(p => p.id === props.priorityID);
-const priorityClassName = `task__priority task__priority--${priority.postfix}`;
+const priority = computed(() =>
+  priorities.find(p => p.id === props.priorityID)
+);
+const priorityClassName = `task__priority task__priority--${priority.value.postfix}`;
 </script>
 
 <style>
