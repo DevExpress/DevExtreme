@@ -4,7 +4,6 @@ let ownerDocumentStyleSheet = null;
 
 function createConstructedStyleSheet(rootNode) {
   try {
-    // eslint-disable-next-line no-undef
     return new CSSStyleSheet();
   } catch (err) {
     const styleElement = rootNode.ownerDocument.createElement('style');
@@ -50,6 +49,9 @@ export function addShadowDomStyles($element) {
   if (!root?.host) {
     return;
   }
+
+  if (root.__dxStyleInjected) return;
+  root.__dxStyleInjected = true;
 
   if (!ownerDocumentStyleSheet) {
     ownerDocumentStyleSheet = createConstructedStyleSheet(root);
@@ -103,11 +105,9 @@ export function getShadowElementsFromPoint(x, y, root) {
 
     for (let i = 0; i < el.childNodes.length; i++) {
       const childNode = el.childNodes[i];
-
-      // eslint-disable-next-line no-undef
       if (childNode.nodeType === Node.ELEMENT_NODE
                && isPositionInElementRectangle(childNode, x, y)
-               // eslint-disable-next-line no-undef
+
                && getComputedStyle(childNode).pointerEvents !== 'none'
       ) {
         elementQueue.push(childNode);
