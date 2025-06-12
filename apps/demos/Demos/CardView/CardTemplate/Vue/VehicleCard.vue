@@ -117,7 +117,6 @@ defineEmits(['show-info']);
 
   .vehicle__footer-container {
       padding: 12px;
-      height: 56px;
   }
 
   .vehicle__image-licence-caption {
