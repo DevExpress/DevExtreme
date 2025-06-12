@@ -1658,3 +1658,25 @@ export const employees = [
     Name: 'Stu Pizaro',
   },
 ];
+export const priorities = [
+  {
+    id: 1,
+    text: 'Low',
+    postfix: 'low',
+  },
+  {
+    id: 2,
+    text: 'Normal',
+    postfix: 'normal',
+  },
+  {
+    id: 3,
+    text: 'Urgent',
+    postfix: 'urgent',
+  },
+  {
+    id: 4,
+    text: 'High',
+    postfix: 'high',
+  },
+];
