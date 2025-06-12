@@ -113,6 +113,8 @@ function App() {
       />
       <Column
         caption="Full Name"
+        allowFiltering={true}
+        allowSorting={true}
         calculateFieldValue={calculateFullName}
       />
       <Column
@@ -131,6 +133,8 @@ function App() {
       />
       <Column
         caption="Address"
+        allowFiltering={true}
+        allowSorting={true}
         calculateFieldValue={calculateAddress}
       />
     </CardView>
