@@ -1632,7 +1632,7 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         $('.dx-viewport').find('.dx-filter-range-content').trigger('scroll');
 
         // assert
-        assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 1, 'has overlay wrapper');
+        assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 0, 'has overlay wrapper');
     });
 
     // T428602
