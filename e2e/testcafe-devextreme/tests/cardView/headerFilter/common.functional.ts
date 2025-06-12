@@ -527,8 +527,6 @@ test('Filtering should work when a custom data source is specified as an array o
 test('Filtering should work with computed column', async (t) => {
   const cardView = new CardView('#container');
 
-  await t.debug();
-
   await t.click(cardView.getHeaderPanel().getHeaderItem(0).getFilterIcon());
 
   await t
