@@ -445,8 +445,11 @@ class FilterBuilder extends Widget<any> {
       onShown(info) {
         const treeViewContentElement = $(info.component.content());
         const treeViewElement = treeViewContentElement.find('.dx-treeview');
-        // @ts-expect-error dxElementWrapper doesn't contain widget creation methods types
-        const treeView = treeViewElement.dxTreeView('instance');
+
+        if (treeViewElement.length) {
+          that._applyAccessibilityAttributes(treeViewElement);
+        }
+
         eventsEngine.on(treeViewElement, 'keyup keydown', (e) => {
           const keyName = normalizeKeyName(e);
 
@@ -458,11 +461,8 @@ class FilterBuilder extends Widget<any> {
           }
         });
 
-        const treeViewPopup = treeViewContentElement.closest('.dx-overlay-content');
-        treeViewPopup?.removeAttr('role');
-
-        const treeViewNode = treeViewPopup?.find?.('ul.dx-treeview-node-container');
-        treeViewNode?.attr('role', 'presentation');
+        // @ts-expect-error dxElementWrapper doesn't contain widget creation methods types
+        const treeView = treeViewElement.dxTreeView('instance');
 
         treeView.focus();
         treeView.option('focusedElement', null);
@@ -910,6 +910,14 @@ class FilterBuilder extends Widget<any> {
         handler(e);
       }
     });
+  }
+
+  _applyAccessibilityAttributes($element) {
+    const treeViewPopup = $element.closest('.dx-overlay-content');
+    treeViewPopup?.removeAttr('role');
+
+    const treeViewNode = treeViewPopup?.find?.('ul.dx-treeview-node-container');
+    treeViewNode?.attr('role', 'presentation');
   }
 }
 
