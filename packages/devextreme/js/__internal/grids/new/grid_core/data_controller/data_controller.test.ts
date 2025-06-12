@@ -93,16 +93,6 @@ describe('DataController', () => {
 
       expect(dataController.dataSource.value.totalCount()).toEqual(2);
     });
-
-    it('with json url', async () => {
-      const { dataController } = setup({
-        dataSource: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/data/customers.json',
-      });
-
-      await dataController.waitLoaded();
-
-      expect(dataController.dataSource.value.totalCount()).toEqual(12);
-    });
   });
 
   describe('regressions', () => {
