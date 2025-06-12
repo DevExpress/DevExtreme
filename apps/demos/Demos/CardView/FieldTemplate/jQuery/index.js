@@ -1,26 +1,3 @@
-const PRIORITIES = [
-  {
-    id: 1,
-    text: 'Low',
-    postfix: 'low', 
-  },
-  {
-    id: 2,
-    text: 'Normal',
-    postfix: 'normal', 
-  },
-  {
-    id: 3,
-    text: 'Urgent',
-    postfix: 'urgent',
-  },
-  {
-    id: 4,
-    text: 'High',
-    postfix: 'high',
-  },
-];
-
 $(() => {
   $('#card-view').dxCardView({
     dataSource: tasks,
@@ -45,7 +22,7 @@ $(() => {
         dataField: 'Task_Priority',
         caption: 'Priority',
         fieldValueTemplate({ field: { value } }) {
-          const priority = PRIORITIES.find(p => p.id === value);
+          const priority = priorities.find(p => p.id === value);
           return $('<div>').append(
               $('<div>').addClass('task__indicator')
             )
