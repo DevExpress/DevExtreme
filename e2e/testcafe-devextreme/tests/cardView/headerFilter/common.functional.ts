@@ -500,6 +500,7 @@ test('Filtering should work when a custom data source is specified as an array o
 }).before(async () => {
   await createWidget('dxCardView', {
     ...baseConfig,
+    remoteOperations: true, // NOTE: for more easy match of selector. If local, selector is func
     columns: [
       {
         dataField: 'id',
@@ -601,6 +602,7 @@ test('The item\'s selection state should be correct when a custom data source is
 }).before(async () => {
   await createWidget('dxCardView', {
     ...baseConfig,
+    remoteOperations: true, // NOTE: for more easy match of selector. If local, selector is func
     columns: [
       {
         dataField: 'id',
