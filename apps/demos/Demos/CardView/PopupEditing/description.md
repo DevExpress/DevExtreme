@@ -1,4 +1,4 @@
-CardView allows users to edit data in a popup edit form. To start editing any card, click the Edit button in a card header. Only one card can be in the edit state at any time. The popup edit form can include any field from the component data source, regardless of whether the corresponding column is visible in the grid (see the `Notes` field).
+CardView allows users to edit data in a pop-up edit form. To start editing a card, click the Edit button in its header. Only one card can be edited at a time. The pop-up edit form can include any field from the component data source, regardless of whether the corresponding column is visible in the grid (see the `Notes` field).
 <!--split-->
 
 To enable card editing in your application, set the following [editing](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/editing/) properties to `true`:

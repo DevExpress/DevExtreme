@@ -9,7 +9,7 @@ Users drag and drop fields between the header panel and column chooser.
 Users toggle check boxes for field names.
 <!--split-->
 
-To display the column chooser, click the column chooser icon in the CardView toolbar. You can specify column chooser position with the **columnChooser**.[position](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columnChooser/#position) property.
+To display the column chooser, click the column chooser icon in the CardView toolbar. You can specify the column chooser's position with the **columnChooser**.[position](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columnChooser/#position) property.
 
 If the column chooser contains multiple hidden columns, assign `true` to the **search**.[enabled](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columnChooser/search/#enabled) property to enable the DevExtreme field search UI.
 

@@ -1,4 +1,4 @@
-DevExtreme CardView includes a header filter which allows users to filter cards by field values. Click the filter icon in a field's header panel to open the built-in CardView filter pop-up.
+DevExtreme CardView includes a header filter that allows users to filter cards by field values. Click the filter icon in a field's header panel to open the pop-up CardView filter.
 <!--split-->
 
 ### Display Header Filter Icons
