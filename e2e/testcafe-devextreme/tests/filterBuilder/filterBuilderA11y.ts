@@ -13,7 +13,7 @@ fixture`Filter Builder Accessibility Tests`.page(
 const elements = [
   {
     name: 'Root Element',
-    role: 'tree',
+    role: 'group',
     label: 'Filter builder',
     selector: (filterBuilder) => filterBuilder.getRootElement(),
   },
@@ -80,6 +80,30 @@ elements.forEach(({
       .eql(role)
       .expect(elementSelector.getAttribute(`${labelValue}`))
       .eql(label);
+
+    const ariaControls = await elementSelector.getAttribute('aria-controls');
+
+    if (role === 'combobox' && ariaControls) {
+      await t.click(elementSelector);
+
+      const popupTreeView = FilterBuilder.getPopupTreeView();
+      const popupId = await popupTreeView.getAttribute('id');
+
+      await t
+        .expect(ariaControls)
+        .eql(popupId);
+
+      await a11yCheck(
+        t,
+        {
+          rules: {
+          // NOTE: color-contrast issues
+            'color-contrast': { enabled: false },
+          },
+        },
+        '#parentContainer',
+      );
+    }
   }).before(async () => {
     await createWidget('dxFilterBuilder', {
       fields,
