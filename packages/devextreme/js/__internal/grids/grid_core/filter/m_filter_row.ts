@@ -291,14 +291,17 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const sharedData = {};
     const $editorContainer = $cell.find('.dx-editor-container');
     const filterRangeOverlayClass = that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS);
-    const $overlay = $('<div>').addClass(filterRangeOverlayClass).appendTo($cell);
+    const $columnHeadersScrollable = this.component.getView('columnHeadersView').element().find('.dx-datagrid-scroll-container');
+    const $overlay = $('<div>').addClass(filterRangeOverlayClass).appendTo($columnHeadersScrollable);
 
     return that._createComponent($overlay, Overlay, {
+      container: $overlay,
       height: 'auto',
       shading: false,
       showTitle: false,
       focusStateEnabled: false,
       hideOnOutsideClick: true,
+      hideOnParentScroll: true,
       wrapperAttr: { class: filterRangeOverlayClass },
       animation: false,
       position: {
@@ -315,26 +318,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         editorOptions = that._getEditorOptions($editor, column);
         editorOptions.sharedData = sharedData;
         that._renderEditor($editor, editorOptions);
-        const scrollable = that.getView('rowsView')?.getScrollable?.();
-
-        if (scrollable) {
-          const direction = scrollable._allowedDirection();
-          const isHorizontalScroll = direction === 'horizontal' || direction === 'both';
-
-          if (isHorizontalScroll) {
-            let lastScrollLeft = 0;
-
-            scrollable.on('scroll', () => {
-              const scrollLeft = scrollable.scrollLeft();
-
-              if (scrollLeft !== lastScrollLeft) {
-                that._hideFilterRange();
-                lastScrollLeft = scrollLeft;
-              }
-            });
-          }
-        }
-
         eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), 'keydown', (e) => {
           let $prevElement = $cell.find('[tabindex]').not(e.target).first();
 
@@ -368,11 +351,18 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       },
       onShown(e) {
         const $editor = e.component.$content().find(`.${EDITOR_CONTAINER_CLASS}`).first();
+        $columnHeadersScrollable.css({
+          position: 'unset',
+        });
         // @ts-expect-error
         eventsEngine.trigger($editor.find(EDITORS_INPUT_SELECTOR), 'focus');
       },
       onHidden() {
         column = that._columnsController.columnOption(column.index);
+
+        $columnHeadersScrollable.css({
+          position: '',
+        });
 
         $cell.find(`.${MENU_CLASS}`).parent().addClass(EDITOR_WITH_MENU_CLASS);
         if (getColumnSelectedFilterOperation(that, column) === 'between') {
