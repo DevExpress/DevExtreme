@@ -6,6 +6,13 @@ let selectedSpecIdx = null;
 function renderSidebar(suites) {
     const sidebar = document.getElementById('sidebar');
     sidebar.innerHTML = '';
+    // Add sticky header with run button
+    if(!document.getElementById('sidebar-header')) {
+        const header = document.createElement('div');
+        header.id = 'sidebar-header';
+        header.innerHTML = '<button id="run-tests-btn" class="run-tests-btn">Run tests</button>';
+        sidebar.appendChild(header);
+    }
     suites.forEach((suite, suiteIdx) => {
         const suiteDiv = document.createElement('div');
         suiteDiv.className = 'suite-item' + (suiteIdx === selectedSuiteIdx ? ' selected' : '');
@@ -65,13 +72,12 @@ function getSpecDuration(spec) {
 function getApproveButtonHTML(group) {
     const expected = group.find(a => a.name.includes('expected'));
     const actual = group.find(a => a.name.includes('actual'));
+    const expectedPath = encodeURIComponent(relativeTestResultsPath(expected.path));
+    const actualPath = encodeURIComponent(relativeTestResultsPath(actual.path));
 
     if(expected && actual) {
         return `
-        <button 
-            class="copy-screenshot-btn" 
-            data-expected="${encodeURIComponent(expected.path)}" 
-            data-actual="${encodeURIComponent(actual.path)}">
+        <button class="copy-screenshot-btn" data-expected="${expectedPath}" data-actual="${actualPath}">
             Approve
         </button>
         `;
@@ -80,15 +86,23 @@ function getApproveButtonHTML(group) {
     return '';
 }
 
+function renderBreadcrumbs(suite, spec) {
+    const breadcrumbs = document.createElement('div');
+    breadcrumbs.className = 'breadcrumbs';
+    breadcrumbs.innerHTML = `<span class="breadcrumb-suite">${suite.title}</span> → <span class="breadcrumb-spec">${spec.title}</span>`;
+    return breadcrumbs;
+}
+
 function renderMain() {
     const main = document.getElementById('main');
+    const suite = reportData.suites[selectedSuiteIdx];
+    const spec = suite.specs[selectedSpecIdx];
     main.innerHTML = '';
     if(selectedSpecIdx == null) {
         main.innerHTML = '<div class="no-screenshots">Select a spec to view screenshots</div>';
         return;
     }
-    const suite = reportData.suites[selectedSuiteIdx];
-    const spec = suite.specs[selectedSpecIdx];
+
     const allPNG = [];
     spec.tests.forEach(test => {
         test.results.forEach(result => {
@@ -109,7 +123,8 @@ function renderMain() {
         main.innerHTML = '<div class="no-screenshots">No screenshots found for this spec</div>';
         return;
     }
-    main.innerHTML = groupNames.map((groupName) => {
+    main.prepend(renderBreadcrumbs(suite, spec));
+    main.innerHTML += groupNames.map((groupName) => {
         const group = groups[groupName];
         const hasDiff = group.some(a => a.name.includes('diff'));
         let images = [];
@@ -230,4 +245,69 @@ async function renderReport() {
     renderMain();
 }
 
-renderReport();
+function setSidebarDisabled(disabled) {
+    const sidebar = document.getElementById('sidebar');
+    if(!sidebar) return;
+    if(disabled) {
+        sidebar.classList.add('sidebar-disabled');
+    } else {
+        sidebar.classList.remove('sidebar-disabled');
+    }
+}
+
+function showTestProgress() {
+    const main = document.getElementById('main');
+    main.innerHTML = '';
+    let progress = document.getElementById('test-progress');
+    if(!progress) {
+        progress = document.createElement('div');
+        progress.id = 'test-progress';
+        document.getElementById('main').prepend(progress);
+    }
+    progress.classList.add('active');
+    progress.textContent = 'Running tests...';
+}
+
+function updateTestProgress(text) {
+    const progress = document.getElementById('test-progress');
+    if(!progress) return;
+    progress.classList.add('active');
+    progress.textContent = text;
+    progress.scrollTop = progress.scrollHeight;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderReport();
+    document.body.addEventListener('click', function(e) {
+        if(e.target && e.target.id === 'run-tests-btn') {
+            const btn = e.target;
+            btn.disabled = true;
+            showTestProgress();
+            setSidebarDisabled(true);
+            fetch('/run-tests', { method: 'POST' })
+                .then(resp => resp.body.getReader())
+                .then(reader => {
+                    let result = '';
+                    function readChunk() {
+                        return reader.read().then(({ done, value }) => {
+                            if(done) {
+                                btn.disabled = false;
+                                setSidebarDisabled(false);
+                                return;
+                            }
+                            result += new TextDecoder().decode(value);
+                            updateTestProgress(result);
+                            return readChunk();
+                        });
+                    }
+                    return readChunk();
+                })
+                .catch(() => {
+                    updateTestProgress('Failed to start tests.');
+                    btn.disabled = false;
+                    setSidebarDisabled(false);
+                })
+                .then(renderReport);
+        }
+    });
+});
