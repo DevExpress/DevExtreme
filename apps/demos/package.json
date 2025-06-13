@@ -1,6 +1,6 @@
 {
     "name": "devextreme-demos",
-    "version": "24.1.12",
+    "version": "24.1.13",
     "description": "",
     "repository": {
         "type": "git",
@@ -8,11 +8,11 @@
     },
     "author": "Developer Express Inc.",
     "peerDependencies": {
-        "devextreme": "~24.1.12",
-        "devextreme-angular": "~24.1.12",
-        "devextreme-dist": "~24.1.12",
-        "devextreme-react": "~24.1.12",
-        "devextreme-vue": "~24.1.12"
+        "devextreme": "~24.1.13",
+        "devextreme-angular": "~24.1.13",
+        "devextreme-dist": "~24.1.13",
+        "devextreme-react": "~24.1.13",
+        "devextreme-vue": "~24.1.13"
     },
     "dependencies": {
         "@angular-devkit/build-angular": "~16.2.12",
