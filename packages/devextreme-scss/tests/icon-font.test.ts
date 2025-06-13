@@ -80,7 +80,7 @@ interface BBoxMismatch {
     test('Check bbox of glyphs', () => {
       const { xMin: hMinX, yMin: hMinY, xMax: hMaxX, yMax: hMaxY } = font.head;
       const numGlyphs = font.numGlyphs;
-      const charset: number[] = Array.from(font.characterSet); // все codepoints
+      const charset: number[] = Array.from(font.characterSet);
       const mismatches: BBoxMismatch[] = [];
 
       for (let gid = 0; gid < numGlyphs; gid++) {
