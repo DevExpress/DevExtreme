@@ -11,9 +11,9 @@ interface IConfigChanges {
 }
 
 function compareValues(
-  value1: any,
-  value2: any,
-) {
+  value1: unknown,
+  value2: unknown,
+): boolean {
   return value1 === value2;
 }
 
