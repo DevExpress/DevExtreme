@@ -4,15 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "docker:copy-artifacts": "node commands/copy-artifacts.js",
-    "docker:build": "docker build -f docker/Dockerfile -t playwright-tests .",
+    "docker:copy-artifacts": "node src/commands/copy-artifacts.js",
+    "docker:build": "docker build -f src/docker/Dockerfile -t playwright-tests .",
     "docker:test:ci": "docker run --env CI=1 --rm -v %cd%/playwright-report:/app/playwright-report -v %cd%/test-results:/app/test-results -v %cd%/snapshots:/app/snapshots playwright-tests",
     "docker:test": "docker run --rm -v %cd%/playwright-report:/app/playwright-report -v %cd%/test-results:/app/test-results -v %cd%/snapshots:/app/snapshots playwright-tests",
     "test:docker": "pnpm run docker:copy-artifacts && pnpm run docker:build && pnpm run docker:test",
     "test": "pnpm exec playwright test",
     "test:ui": "pnpm exec playwright test --ui",
-    "report": "pnpm exec playwright show-report",
-    "lint": "eslint --ext .js,.ts ./tests"
+    "report": "node src/ui/server.js",
+    "lint": "eslint --ext .js,.ts ./src"
   },
   "keywords": [],
   "author": "",

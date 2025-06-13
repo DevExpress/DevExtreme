@@ -20,7 +20,7 @@
     ],
     "types": ["jquery", "jest", "node"],
     "typeRoots": [
-      "./@types"
+      "./src/@types"
     ]
   },
   "exclude": [

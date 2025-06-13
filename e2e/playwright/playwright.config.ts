@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './tests',
+  testDir: './src/tests',
   timeout: 240_000,
   expect: {
     timeout: 5000,
@@ -15,6 +15,8 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: [
     ['html', { outputFolder: './playwright-report', open: 'never' }],
+    ['json', { outputFile: './test-results/report.json' }],
+    [process.env.CI ? 'github' : 'dot', {}],
   ],
   snapshotPathTemplate: './snapshots/{testFilePath}/{arg}{ext}',
   snapshotDir: './snapshots',

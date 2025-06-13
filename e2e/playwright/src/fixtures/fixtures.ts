@@ -2,8 +2,8 @@ import { test as base } from '@playwright/test';
 import path from 'path';
 
 const htmlPath = process.env.DOCKER
-  ? path.resolve(__dirname, '../artifacts/container.html')
-  : path.resolve(__dirname, '../container.html');
+  ? path.resolve(__dirname, '../../artifacts/container.html')
+  : path.resolve(__dirname, '../../container.html');
 
 interface Fixtures {
   forEachTest: any;
