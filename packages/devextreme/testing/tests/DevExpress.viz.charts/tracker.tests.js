@@ -1020,30 +1020,6 @@ QUnit.test('dxpointermove on series, click', function(assert) {
     assert.deepEqual(this.options.eventTrigger.withArgs('seriesClick').lastCall.args[1], { target: this.point.series, event: clickEvent }, 'series event arg');
 });
 
-QUnit.test('dxpointermove on series, click, pointClick with cancel (DEPRECATED) seriesClick', function(assert) {
-    const clickEvent = getEvent('dxclick', { pageX: 100, pageY: 50, target: this.seriesGroup.element });
-    this.series.getPointByCoord.withArgs(97, 45).returns(this.point);
-
-    // Act
-    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
-    $(this.renderer.root.element).trigger(clickEvent);
-
-    assert.ok(this.options.eventTrigger.withArgs('pointClick').calledOnce);
-    assert.deepEqual(this.options.eventTrigger.withArgs('pointClick').lastCall.args[1], { target: this.point, event: clickEvent });
-    assert.ok(!this.options.eventTrigger.withArgs('seriesClick').calledOnce);
-    clickEvent.cancel = true;
-    this.options.eventTrigger.withArgs('pointClick').lastCall.args[2]();
-
-    assert.ok(!this.options.eventTrigger.withArgs('seriesClick').called);
-    assert.deepEqual(errors.log.lastCall.args, [
-        'W0003',
-        'pointClick handler argument',
-        'event.cancel',
-        '22.1',
-        'Use the \'cancel\' field instead'
-    ], 'args of the log method');
-});
-
 QUnit.test('dxpointermove on series, click, pointClick with cancel seriesClick', function(assert) {
     this.options.eventTrigger = sinon.spy((eventName, eventArgs) => {
         if(eventName === 'pointClick') {
@@ -1411,36 +1387,6 @@ QUnit.test('legendClick', function(assert) {
 
     assert.ok(this.options.eventTrigger.withArgs('seriesClick').calledOnce);
     assert.deepEqual(this.options.eventTrigger.withArgs('seriesClick').lastCall.args[1], { target: this.series, event: event }, 'series event arg');
-});
-
-QUnit.test('click on legend with chancel (DEPRECATED) in legendClick handler', function(assert) {
-    const event = getEvent('dxclick', { pageX: 100, pageY: 50 });
-
-    this.tracker = this.createTracker(this.options, this.canvases);
-    this.legend.coordsIn.withArgs(97, 45).returns(true);
-    this.legend.getItemByCoord.withArgs(97, 45).returns({
-        id: 0
-    });
-
-    $(this.renderer.root.element).trigger(event);
-
-    assert.ok(this.options.eventTrigger.withArgs('legendClick').calledOnce);
-    assert.deepEqual(this.options.eventTrigger.withArgs('legendClick').lastCall.args[1], { target: this.series, event: event });
-
-    assert.ok(!this.options.eventTrigger.withArgs('seriesClick').calledOnce);
-
-    event.cancel = true;
-    this.options.eventTrigger.withArgs('legendClick').lastCall.args[2]();
-
-
-    assert.ok(!this.options.eventTrigger.withArgs('seriesClick').called);
-    assert.deepEqual(errors.log.lastCall.args, [
-        'W0003',
-        'legendClick handler argument',
-        'event.cancel',
-        '22.1',
-        'Use the \'cancel\' field instead'
-    ], 'args of the log method');
 });
 
 QUnit.test('click on legend with chancel in legendClick handler', function(assert) {
