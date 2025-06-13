@@ -1234,7 +1234,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   // ## Quick navigation through grid rows
-  private canNavigateQuickly(): boolean {
+  private isQuickNavigationPossible(): boolean {
     const visibleRowIndex = this.getVisibleRowIndex();
     const $row = this._rowsView?.getRow(visibleRowIndex);
     const dataRowTemplate = this.option('dataRowTemplate');
@@ -1245,8 +1245,12 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private getFirstOrLastColumnIndex(needFirstColumnIndex: boolean): number {
     const allVisibleColumns: any[] = this._columnsController.getVisibleColumns(null, true);
+    const findColumnIndex = (column): boolean => column.type !== DRAG_COLUMN_NAME;
 
-    return allVisibleColumns[needFirstColumnIndex ? 'findIndex' : 'findLastIndex']((column) => column.type !== DRAG_COLUMN_NAME) as number;
+    return needFirstColumnIndex
+      ? allVisibleColumns.findIndex(findColumnIndex)
+      // @ts-expect-error
+      : allVisibleColumns.findLastIndex(findColumnIndex) as number;
   }
 
   private getFirstOrLastRowIndex(needFirstRow: boolean): number {
@@ -1262,11 +1266,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const isNeedToRenderVirtualColumns = this._columnsController
       ?.isNeedToRenderVirtualColumns(result);
 
-    if (isNeedToRenderVirtualColumns) {
-      return result;
-    }
-
-    return -1;
+    return isNeedToRenderVirtualColumns ? result : -1;
   }
 
   private calculateScrollTop(needScrollToFirstCell: boolean): number {
@@ -1332,7 +1332,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private homeOrEndKeyHandler(e: KeyDownEvent): void {
-    if (!this.canNavigateQuickly()) {
+    if (!this.isQuickNavigationPossible()) {
       return;
     }
 
