@@ -765,9 +765,10 @@ export type CardHeader = { // TODO: sync with impl
 
 /**
  * @docid
+ * @public
  * @namespace DevExpress.ui.dxCardView
  */
-export interface EditingTexts {
+export type EditingTexts = {
   /**
    * @docid
    * @default "Add a card"
@@ -804,7 +805,7 @@ export interface EditingTexts {
    * @public
    */
   saveCard?: string;
-}
+};
 
 /**
  * @namespace DevExpress.ui
