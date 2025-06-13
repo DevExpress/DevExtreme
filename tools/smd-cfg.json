@@ -21,10 +21,6 @@
         },
         {
             "kind": "remove",
-            "uid": "/scheduler:DateNavigatorItemProperties"
-        },
-        {
-            "kind": "remove",
             "uid": "ui/form:dxFormSimpleItem\\.(editorOptions|editorType)"
         },
         {
