@@ -88,11 +88,6 @@ jobs:
         working-directory: ./packages/devextreme
         run: 7z x artifacts.zip -aoa
 
-      - name: Setup Chrome
-        uses: ./.github/actions/setup-chrome
-        with:
-          chrome-version: '133.0.6943.53'
-
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
@@ -118,15 +113,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store
 
-      - name: Install Playwright Browsers
-        working-directory: ./e2e/playwright
-        run: |
-          sudo pnpm i
-          sudo pnpm exec playwright install --with-deps
+      - name: Install Dependencies
+        run: pnpm i
 
       - name: Run Playwright tests
         working-directory: ./e2e/playwright
-        run: pnpm run test
+        run: pnpm run docker:copy-artifacts && pnpm run docker:build && pnpm run docker:test:ui
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}

@@ -18,7 +18,10 @@
     "lib": [
       "dom"
     ],
-    "types": ["jquery", "jest", "node"]
+    "types": ["jquery", "jest", "node"],
+    "typeRoots": [
+      "./@types"
+    ]
   },
   "exclude": [
     "node_modules",

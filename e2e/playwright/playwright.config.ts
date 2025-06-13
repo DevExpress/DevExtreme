@@ -2,13 +2,29 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests',
+  timeout: 240_000,
+  expect: {
+    timeout: 5000,
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.0001,
+    },
+  },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  reporter: [
+    ['html', { outputFolder: './playwright-report', open: 'never' }],
+  ],
+  snapshotPathTemplate: './snapshots/{testFilePath}/{arg}{ext}',
+  snapshotDir: './snapshots',
+  outputDir: './test-results',
   use: {
+    actionTimeout: 5000,
     trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    testIdAttribute: 'data-test-id',
+    permissions: ['clipboard-read', 'clipboard-write'],
   },
   projects: [
     {
