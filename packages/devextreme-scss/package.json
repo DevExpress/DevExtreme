@@ -16,7 +16,8 @@
     "stylelint-config-standard-scss": "9.0.0",
     "stylelint-scss": "6.10.0",
     "through2": "2.0.5",
-    "ts-jest": "29.1.2"
+    "ts-jest": "29.1.2",
+    "fontkit": "2.0.4"
   },
   "scripts": {
     "build": "gulp",

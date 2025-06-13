@@ -1,6 +1,7 @@
 import { loadSync } from 'opentype.js';
 import { readdirSync } from 'fs';
 import { join, extname } from 'path';
+import fontkit, { Font } from 'fontkit';
 
 const BASE_PATH = join(__dirname, '..');
 
@@ -53,5 +54,79 @@ describe('Equals svg to font', () => {
 
     expect(differenceMaterial.toString()).toBe(differenceGeneric.toString());
     expect(differenceFluent.toString()).toBe(differenceGeneric.toString());
+  });
+});
+
+interface BBoxMismatch {
+  glyphID: number;
+  declared: string;
+  real: string;
+  name: string;
+  headBounds: string;
+}
+
+[
+  { theme: 'generic', fontname: 'dxicons', expectedErrorsCount: 3 },
+  { theme: 'material', fontname: 'dxiconsmaterial', expectedErrorsCount: 6 },
+  { theme: 'fluent', fontname: 'dxiconsfluent', expectedErrorsCount: 67 },
+].forEach(({ theme, fontname, expectedErrorsCount }) => {
+  describe(`${theme} icons: bbox check`, () => {
+    let font: Font;
+
+    beforeAll(() => {
+      font = fontkit.openSync(`${BASE_PATH}/icons/${fontname}.woff2`);
+    });
+
+    test('Check bbox of glyphs', () => {
+      const { xMin: hMinX, yMin: hMinY, xMax: hMaxX, yMax: hMaxY } = font.head;
+      const numGlyphs = font.numGlyphs;
+      const charset: number[] = Array.from(font.characterSet); // все codepoints
+      const mismatches: BBoxMismatch[] = [];
+
+      for (let gid = 0; gid < numGlyphs; gid++) {
+        const glyph = font.getGlyph(gid);
+
+        const declared = glyph.cbox;
+        const real = glyph.path.cbox;
+
+        const perGlyphBad =
+          declared.minX !== real.minX ||
+          declared.minY !== real.minY ||
+          declared.maxX !== real.maxX ||
+          declared.maxY !== real.maxY;
+
+        const headBad =
+          real.minX < hMinX ||
+          real.minY < hMinY ||
+          real.maxX > hMaxX ||
+          real.maxY > hMaxY;
+
+        if (perGlyphBad || headBad) {
+
+          const codes = charset
+                .filter(cp => font.glyphForCodePoint(cp).id === gid);
+
+          const name = codes.length
+            ? codes.map(cp =>`${cp.toString(16).toUpperCase().padStart(4, '0')}`
+              ).join(', ')
+            : `<gid ${gid}>`;
+
+
+          mismatches.push({
+            glyphID: gid,
+            name,
+            declared: JSON.stringify(declared),
+            real: JSON.stringify(real),
+            headBounds: JSON.stringify({ hMinX, hMinY, hMaxX, hMaxY }),
+          });
+        }
+      }
+
+      if (mismatches.length) {
+        console.table(mismatches);
+      }
+
+      expect(mismatches).toHaveLength(expectedErrorsCount);
+    });
   });
 });
