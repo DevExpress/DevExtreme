@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
 
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
