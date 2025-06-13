@@ -350,7 +350,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       },
       onShown(e) {
         const $editor = e.component.$content().find(`.${EDITOR_CONTAINER_CLASS}`).first();
-
         // @ts-expect-error
         eventsEngine.trigger($editor.find(EDITORS_INPUT_SELECTOR), 'focus');
       },
