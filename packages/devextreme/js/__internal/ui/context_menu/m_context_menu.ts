@@ -403,8 +403,8 @@ class ContextMenu extends MenuBase {
   }
 
   _renderContentImpl(): void {
-    this._showContextMenuEventHandler = this._createShowContextMenuEventHandler();
     this._detachShowContextMenuEvents(this._getTarget());
+    this._showContextMenuEventHandler = this._createShowContextMenuEventHandler();
     this._attachShowContextMenuEvents();
   }
 
