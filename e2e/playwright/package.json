@@ -11,7 +11,7 @@
     "test:docker": "pnpm run docker:copy-artifacts && pnpm run docker:build && pnpm run docker:test",
     "test": "pnpm exec playwright test",
     "test:ui": "pnpm exec playwright test --ui",
-    "report": "node src/ui/server.js",
+    "start": "node src/ui/server.js",
     "lint": "eslint --ext .js,.ts ./src"
   },
   "keywords": [],

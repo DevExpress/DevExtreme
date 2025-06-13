@@ -259,3 +259,36 @@ h1 {
 .breadcrumb-spec {
   color: #1976d2;
 }
+
+.snippet-block {
+  background: #23272e;
+  color: #e6e6e6;
+  border-radius: 6px;
+  padding: 1em;
+  margin: 1em 0 1.5em 0;
+  font-size: 0.98em;
+  overflow-x: auto;
+  line-height: 1.5;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.snippet-block code {
+  font-family: 'Fira Mono', 'Consolas', 'Menlo', 'Monaco', monospace;
+  background: none;
+  color: inherit;
+  font-size: inherit;
+}
+
+.copy-screenshot-btn {
+  background: #43a047;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.35em 1.1em;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 1em;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 4px rgba(67,160,71,0.08);
+  outline: none;
+}

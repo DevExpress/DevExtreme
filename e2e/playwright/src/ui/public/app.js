@@ -92,6 +92,21 @@ function renderBreadcrumbs(suite, spec) {
     breadcrumbs.innerHTML = `<span class="breadcrumb-suite">${suite.title}</span> → <span class="breadcrumb-spec">${spec.title}</span>`;
     return breadcrumbs;
 }
+function renderSnippetHtml(spec) {
+    const snippet = document.createElement('div');
+    // eslint-disable-next-line no-restricted-syntax
+    for(const test of spec.tests) {
+        // eslint-disable-next-line no-restricted-syntax
+        for(const result of test.results) {
+            if(result.error && result.error.snippet) {
+                snippet.innerHTML = `<pre class="snippet-block"><code>${escapeHtml(result.error.snippet)}</code></pre>`;
+                return snippet;
+            }
+        }
+    }
+
+    return snippet;
+}
 
 function renderMain() {
     const main = document.getElementById('main');
@@ -123,7 +138,8 @@ function renderMain() {
         main.innerHTML = '<div class="no-screenshots">No screenshots found for this spec</div>';
         return;
     }
-    main.prepend(renderBreadcrumbs(suite, spec));
+    main.appendChild(renderBreadcrumbs(suite, spec));
+    main.appendChild(renderSnippetHtml(spec));
     main.innerHTML += groupNames.map((groupName) => {
         const group = groups[groupName];
         const hasDiff = group.some(a => a.name.includes('diff'));
@@ -311,3 +327,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+function escapeHtml(str) {
+    return str.replace(/[&<>"']/g, function(tag) {
+        const charsToReplace = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            '\'': '&#39;'
+        };
+        return charsToReplace[tag] || tag;
+    });
+}
+

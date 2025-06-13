@@ -23,6 +23,12 @@ This project is designed for running end-to-end tests using Playwright inside a 
   pnpm run test:docker
   ```
 
+- **start**  
+  Starts a local server for viewing test results and managing snapshots via a web interface.
+  ```bash
+  pnpm run start
+  ```
+
 ## Updating Screenshots
 
 If you want to update all screenshots (snapshots), run:
@@ -36,12 +42,6 @@ pnpm run test -u
   Launches Playwright UI mode for interactive test selection and execution.
   ```bash
   pnpm run test:ui
-  ```
-
-- **report**  
-  Opens the Playwright HTML report after test execution.
-  ```bash
-  pnpm run report
   ```
 
 - **lint**  
