@@ -61,7 +61,7 @@ defineEmits(['show-info']);
 
 <style>
   .vehicle__img-wrapper {
-      height: 146px;
+      height: 135px;
       border-bottom: var(--dx-border-width) solid var(--dx-color-border);
       background-color: #fff;
   }
@@ -117,7 +117,6 @@ defineEmits(['show-info']);
 
   .vehicle__footer-container {
       padding: 12px;
-      height: 56px;
   }
 
   .vehicle__image-licence-caption {

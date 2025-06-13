@@ -3,7 +3,12 @@
     <p><b>Author: </b> <span>{{ Author }}</span></p>
     <p>
         <b>Source link: </b>
-        <a :href="vehicleLink">{{ vehicleLink }}</a>
+        <a
+            :href="vehicleLink"
+            target="_blank"
+        >
+            {{ vehicleLink }}
+        </a>
     </p>
     <p><b>Edits: </b> <span>{{ Edits }}</span></p>
 </template>
