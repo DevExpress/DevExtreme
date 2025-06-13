@@ -4,7 +4,7 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
-import { getPublicElement } from '@js/core/element';
+import { getPublicElement, type UserDefinedElement } from '@js/core/element';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -38,6 +38,8 @@ const POSITION_FLIP_MAP = {
   bottom: 'top',
   center: 'center',
 };
+
+type PopoverTarget = string | UserDefinedElement | undefined;
 
 export interface PopoverProperties extends Omit<Properties,
 'onTitleRendered' | 'onHidden' | 'onHiding' | 'onShowing' | 'onShown'
@@ -190,7 +192,7 @@ TProperties extends PopoverProperties = PopoverProperties,
     };
   }
 
-  _attachEvent(name): void {
+  _attachEvent(name: string): void {
     const {
       target, shading, disabled, hideEvent,
     } = this.option();
@@ -218,8 +220,8 @@ TProperties extends PopoverProperties = PopoverProperties,
     }
   }
 
-  _detachEvent(target, name, event?: unknown) {
-    let eventName = event || this._getEventName(`${name}Event`);
+  _detachEvent(target: PopoverTarget, name: string, event?: unknown) {
+    let eventName: string = event || this._getEventName(`${name}Event`);
 
     if (!eventName) {
       return;
@@ -486,35 +488,37 @@ TProperties extends PopoverProperties = PopoverProperties,
   }
 
   _optionChanged(args: OptionChanged<TProperties>): void {
-    switch (args.name) {
+    const { name, value, previousValue } = args;
+    switch (name) {
       case 'arrowPosition':
       case 'arrowOffset':
         this._renderGeometry();
         break;
       case 'fullScreen':
-        if (args.value) {
+        if (value) {
           this.option('fullScreen', false);
         }
         break;
       case 'target':
-        if (args.previousValue) {
-          this._detachEvents(args.previousValue);
+        if (previousValue) {
+          this._detachEvents(previousValue);
         }
-        this._positionController.updateTarget(args.value);
+        this._positionController.updateTarget(value);
         this._invalidate();
         break;
       case 'showEvent':
       case 'hideEvent': {
-        const name = args.name.substring(0, 4);
-        const event = this._getEventNameByOption(args.previousValue);
+        const eventName = name.substring(0, 4);
+        const event = this._getEventNameByOption(previousValue);
 
         this.hide();
-        this._detachEvent(this.option('target'), name, event);
-        this._attachEvent(name);
+        const { target } = this.option();
+        this._detachEvent(target, eventName, event);
+        this._attachEvent(eventName);
         break;
       }
       case 'visible':
-        this._clearEventTimeout(args.value ? 'show' : 'hide');
+        this._clearEventTimeout(value ? 'show' : 'hide');
         super._optionChanged(args);
         break;
       case 'disabled':

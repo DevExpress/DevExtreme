@@ -2233,6 +2233,27 @@ QUnit.module('Behavior', moduleConfig, () => {
         target.trigger('mousedown');
         assert.strictEqual(contextMenu.option('visible'), true, 'context menu was shown');
     });
+
+    QUnit.test('it should unsubscribe from a previous event on change the showEvent option on runtime', function(assert) {
+        const shownStub = sinon.stub();
+
+        const target = $('#menuTarget');
+        const instance = new ContextMenu(this.$element, {
+            target,
+            showEvent: 'mouseenter',
+            onShown: shownStub,
+        });
+
+        instance.option('showEvent', 'click');
+        target.trigger('mouseenter');
+
+        assert.equal(shownStub.callCount, 0, 'context menu was not shown');
+
+        instance.option('showEvent', undefined);
+        target.trigger('click');
+
+        assert.equal(shownStub.callCount, 0, 'context menu was not shown');
+    });
 });
 
 QUnit.module('Selection', moduleConfig, () => {
