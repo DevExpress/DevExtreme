@@ -48,3 +48,13 @@
 .task__header-container {
     width: 100%;
 }
+
+.task__link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--dx-color-link);
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}

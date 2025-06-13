@@ -47,8 +47,8 @@ $(() => {
         dataField: 'Task_Assigned_Employee_ID',
         caption: 'Assigned to',
         fieldValueTemplate({ field: { value }}) {
-          return $('<a>')
-            .attr('href', `#`)
+          return $('<button>')
+            .addClass('task__link-button')
             .text(employees.find(e => e.ID === value).Name);
         }
       },

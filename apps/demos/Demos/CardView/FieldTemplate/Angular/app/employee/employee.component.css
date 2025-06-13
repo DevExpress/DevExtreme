@@ -1,0 +1,9 @@
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--dx-color-link);
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}
