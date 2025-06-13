@@ -177,6 +177,9 @@ describe('PublicMethods', () => {
         },
         filter: dataSourceFilter,
       }),
+      // if remoteOperations: false, selector are functions instead of dataFields
+      // it's harder to match them in test
+      remoteOperations: true,
       columns: [
         { dataField: 'a', filterValues: columnFilterValues },
       ],

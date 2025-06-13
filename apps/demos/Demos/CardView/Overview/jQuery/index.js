@@ -32,6 +32,8 @@ $(() => {
       },
       {
         caption: 'Full Name',
+        allowFiltering: true,
+        allowSorting: true,
         calculateFieldValue({ First_Name, Last_Name }) {
           return `${First_Name} ${Last_Name}`;
         },
@@ -52,6 +54,8 @@ $(() => {
       },
       {
         caption: 'Address',
+        allowFiltering: true,
+        allowSorting: true,
         calculateFieldValue({ State, City }) {
           return `${City}, ${State}`;
         }

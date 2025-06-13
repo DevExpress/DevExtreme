@@ -12,6 +12,7 @@ import { createPromise } from '@ts/core/utils/promise';
 import gridCoreUtils from '../../../grid_core/m_utils';
 import { ColumnsController } from '../columns_controller/columns_controller';
 import { FilterController } from '../filtering/filter_controller';
+import { normalizeFilterWithSelectors } from '../filtering/utils';
 import { OptionsController } from '../options_controller/options_controller';
 import { SortingController } from '../sorting_controller/index';
 import { StoreLoadAdapter } from './store_load_adapter/index';
@@ -93,6 +94,14 @@ export class DataController {
 
   private readonly normalizedLocalOperations = computed(
     () => normalizeLocalOptions(this.normalizedRemoteOptions.value),
+  );
+
+  private readonly normalizedDisplayFilter = computed(
+    (): FilterDescriptor => normalizeFilterWithSelectors(
+      this.filterController.displayFilter.value,
+      this.columnsController.columns.value,
+      !!this.normalizedRemoteOptions.value.filtering,
+    ),
   );
 
   public static dependencies = [
@@ -232,7 +241,7 @@ export class DataController {
         const pageIndex = this.pageIndex.value;
         const pageSize = this.pageSize.value;
         const isLoaded = this.isLoaded.value;
-        const displayFilter = this.filterController.displayFilter.value;
+        const displayFilter = this.normalizedDisplayFilter.value;
         const pagingEnabled = this.pagingEnabled.value;
         const sortParameters = this.sortingController.sortParameters.value;
 
@@ -304,7 +313,7 @@ export class DataController {
   private combineFilterWithDisplayFilter(filter: FilterDescriptor): FilterDescriptor {
     return gridCoreUtils.combineFilters([
       filter,
-      this.filterController.displayFilter.peek(),
+      this.normalizedDisplayFilter.peek(),
     ]);
   }
 

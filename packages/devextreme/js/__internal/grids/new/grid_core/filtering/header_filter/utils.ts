@@ -59,8 +59,7 @@ export const getFilterOperator = (values: unknown, filterType?: FilterType): str
 const isFilteringAllowed = (column: Column): boolean => column.allowFiltering
 || column.allowHeaderFiltering;
 
-export const isColumnFilterable = (column: Column): boolean => isFilteringAllowed(column)
-&& !!column.dataField;
+export const isColumnFilterable = (column: Column): boolean => isFilteringAllowed(column);
 
 export const needCreateHeaderFilter = (column: Column): boolean => {
   const values = column.filterValues;
