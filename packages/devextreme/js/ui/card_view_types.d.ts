@@ -27,6 +27,7 @@ export {
   CardHeaderPredefinedItem,
   CardHeaderItem,
   CardHeader,
+  EditingTexts,
   Editing,
   EditCanceledEvent,
   EditCancelingEvent,

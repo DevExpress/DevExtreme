@@ -1311,7 +1311,7 @@ const DxEditingConfig = {
     editCardKey: {},
     form: Object as PropType<dxFormOptions | Record<string, any>>,
     popup: Object as PropType<Record<string, any>>,
-    texts: Object as PropType<EditingTexts>
+    texts: Object as PropType<EditingTexts | Record<string, any>>
   }
 };
 
