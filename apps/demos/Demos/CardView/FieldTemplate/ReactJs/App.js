@@ -10,7 +10,7 @@ const App = () => (
   <CardView
     dataSource={tasks}
     cardsPerRow="auto"
-    cardMinWidth={260}
+    cardMinWidth={240}
   >
     <CardHeader
       visible={true}
