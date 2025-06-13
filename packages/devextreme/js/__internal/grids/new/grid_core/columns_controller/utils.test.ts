@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { getVisibleIndexes } from './utils';
+import { getVisibleIndexes, normalizeColumn } from './utils';
 
 describe('getVisibleIndexes', () => {
   it('should create visible indexes if not present', () => {
@@ -25,5 +25,24 @@ describe('getVisibleIndexes', () => {
     ])).toEqual([
       3, 1, 0, 2,
     ]);
+  });
+});
+
+describe('normalizeColumn', () => {
+  describe('when column is unbound', () => {
+    const column = normalizeColumn({
+      name: 'asd',
+      visibleIndex: 0,
+    });
+
+    it('should have allowSorting=false by default', () => {
+      expect(column.allowSorting).toBe(false);
+    });
+    it('should have allowFiltering=false by default', () => {
+      expect(column.allowSorting).toBe(false);
+    });
+    it('should have allowHeaderFiltering=false by default', () => {
+      expect(column.allowSorting).toBe(false);
+    });
   });
 });

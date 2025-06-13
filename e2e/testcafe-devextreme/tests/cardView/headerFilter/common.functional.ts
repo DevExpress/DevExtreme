@@ -500,6 +500,7 @@ test('Filtering should work when a custom data source is specified as an array o
 }).before(async () => {
   await createWidget('dxCardView', {
     ...baseConfig,
+    remoteOperations: true, // NOTE: for more easy match of selector. If local, selector is func
     columns: [
       {
         dataField: 'id',
@@ -518,6 +519,54 @@ test('Filtering should work when a custom data source is specified as an array o
       },
       {
         dataField: 'lastName',
+      },
+    ],
+  });
+});
+
+test('Filtering should work with computed column', async (t) => {
+  const cardView = new CardView('#container');
+
+  await t.click(cardView.getHeaderPanel().getHeaderItem(0).getFilterIcon());
+
+  await t
+    .expect(cardView.getHeaderFilterList().getItems().count)
+    .eql(4);
+
+  await t
+    .click(cardView.getHeaderFilterList().getItem(0).element)
+    .click(cardView.getHeaderFilterPopup().getOkButton().element);
+
+  await t
+    .expect(cardView.getCards().count)
+    .eql(1)
+    .expect(cardView.getCard(0).getFieldValueCell('Computed').textContent)
+    .eql('str_0');
+
+  await t.click(cardView.getHeaderPanel().getHeaderItem(0).getFilterIcon());
+  await t
+    .click(cardView.getHeaderFilterList().getItem(2).element)
+    .click(cardView.getHeaderFilterPopup().getOkButton().element);
+
+  await t
+    .expect(cardView.getCards().count)
+    .eql(2)
+    .expect(cardView.getCard(0).getFieldValueCell('Computed').textContent)
+    .eql('str_0')
+    .expect(cardView.getCard(1).getFieldValueCell('Computed').textContent)
+    .eql('str_2');
+}).before(async () => {
+  await createWidget('dxCardView', {
+    dataSource: [
+      { id: 0 }, { id: 1 }, { id: 2 }, { id: 3 },
+    ],
+    keyExpr: 'id',
+    headerFilter: { visible: true },
+    columns: [
+      {
+        caption: 'Computed',
+        allowFiltering: true,
+        calculateFieldValue: ({ id }) => `str_${id}`,
       },
     ],
   });
@@ -551,6 +600,7 @@ test('The item\'s selection state should be correct when a custom data source is
 }).before(async () => {
   await createWidget('dxCardView', {
     ...baseConfig,
+    remoteOperations: true, // NOTE: for more easy match of selector. If local, selector is func
     columns: [
       {
         dataField: 'id',

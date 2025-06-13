@@ -1,8 +1,18 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxCardViewModule } from 'devextreme-angular';
-import { Customer, Service } from './app.service';
+import {
+  DxCardViewModule,
+  DxTemplateModule,
+  DxProgressBarModule,
+} from 'devextreme-angular';
+import { Task, Service } from './app.service';
+import { EmployeeService } from './employee.service';
+import { PriorityService } from './priority.service';
+import { CardHeader } from './card-header/card-header.component';
+import { PriorityComponent } from './priority/priority.component';
+import { EmployeeComponent } from './employee/employee.component';
+import { ProgressComponent } from './progress-bar/progress-bar.component';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -17,15 +27,14 @@ if (window && window.config?.packageConfigPaths) {
 @Component({
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
+  styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
 })
 export class AppComponent {
-  customers: Customer[];
-
-  columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+  tasks: Task[];
 
   constructor(service: Service) {
-    this.customers = service.getCustomers();
+    this.tasks = service.getTasks();
   }
 }
 
@@ -33,8 +42,17 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxCardViewModule,
+    DxProgressBarModule,
+    DxTemplateModule,
   ],
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    CardHeader,
+    PriorityComponent,
+    EmployeeComponent,
+    ProgressComponent,
+  ],
+  providers: [EmployeeService, PriorityService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
