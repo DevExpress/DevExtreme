@@ -67,8 +67,8 @@ $(() => {
               elementAttr: {
                 'aria-label': 'Progress Bar',
               },
-              statusFormat(ratio) {
-                return `${ratio * 100}%`;
+              statusFormat(_, value) {
+                return `${value}%`;
               },
             });
         }
