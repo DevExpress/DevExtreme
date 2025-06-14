@@ -9998,7 +9998,7 @@ declare module DevExpress.ui {
     searchByText(text: string): void;
 
     /**
-     * [descr:dxCardView.addRow()]
+     * [descr:dxCardView.addCard()]
      */
     addCard(): void;
     /**
@@ -10351,6 +10351,10 @@ declare module DevExpress.ui {
        * [descr:dxCardViewEditing.popup]
        */
       popup?: DevExpress.ui.dxPopup.Properties;
+      /**
+       * [descr:dxCardViewEditing.texts]
+       */
+      texts?: EditingTexts;
     };
     /**
      * [descr:_ui_card_view_EditingStartEvent]
@@ -10496,31 +10500,6 @@ declare module DevExpress.ui {
        */
       currentDeselectedCardKeys: Array<TKey>;
     };
-    /**
-     * [descr:_ui_card_view_SelectionChangingEvent]
-     */
-    export type SelectionChangingEvent<
-      TCardData = unknown,
-      TKey = unknown
-    > = DevExpress.common.core.events.EventInfo<dxCardView> &
-      DevExpress.common.core.events.Cancelable & {
-        /**
-         * [descr:_ui_card_view_SelectionChangingEvent.selectedCardsData]
-         */
-        selectedCardsData: Array<TCardData>;
-        /**
-         * [descr:_ui_card_view_SelectionChangingEvent.selectedCardKeys]
-         */
-        selectedCardKeys: Array<TKey>;
-        /**
-         * [descr:_ui_card_view_SelectionChangingEvent.currentSelectedCardKeys]
-         */
-        currentSelectedCardKeys: Array<TKey>;
-        /**
-         * [descr:_ui_card_view_SelectionChangingEvent.currentDeselectedCardKeys]
-         */
-        currentDeselectedCardKeys: Array<TKey>;
-      };
 
     /**
      * [descr:SelectionConfiguration]
@@ -10587,7 +10566,6 @@ declare module DevExpress.ui {
       readonly fieldValueElement: DevExpress.core.DxElement;
     };
   }
-
   /**
    * @deprecated Use DevExpress.ui.dxCardView.Editing instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -10813,6 +10791,10 @@ declare module DevExpress.ui {
     sorting?: DevExpress.common.grids.Sorting;
 
     /**
+     * [descr:dxCardViewOptions.filterSyncEnabled]
+     */
+    filterSyncEnabled?: boolean | DevExpress.common.Mode;
+    /**
      * [descr:dxCardViewOptions.filterValue]
      */
     filterValue?: string | Array<any> | Function;
@@ -10904,12 +10886,6 @@ declare module DevExpress.ui {
      * [descr:dxCardViewOptions.selection]
      */
     selection?: DevExpress.ui.dxCardView.SelectionConfiguration;
-    /**
-     * [descr:dxCardViewOptions.onSelectionChanging]
-     */
-    onSelectionChanging?: (
-      e: DevExpress.ui.dxCardView.SelectionChangingEvent
-    ) => void;
     /**
      * [descr:dxCardViewOptions.onSelectionChanged]
      */
@@ -33069,7 +33045,7 @@ declare module DevExpress.ui.dxCardView {
      */
     customizeText?: (
       this: Column,
-      cellInfo: DevExpress.common.grids.ColumnCustomizeTextArg
+      fieldInfo: DevExpress.common.grids.ColumnCustomizeTextArg
     ) => string;
     /**
      * [descr:ColumnProperties.dataField]
@@ -33198,6 +33174,36 @@ declare module DevExpress.ui.dxCardView {
      * [descr:ColumnProperties.headerItemCssClass]
      */
     headerItemCssClass?: string;
+  };
+
+  /**
+   * [descr:EditingTexts]
+   */
+  export type EditingTexts = {
+    /**
+     * [descr:EditingTexts.addCard]
+     */
+    addCard?: string;
+    /**
+     * [descr:EditingTexts.confirmDeleteMessage]
+     */
+    confirmDeleteMessage?: string;
+    /**
+     * [descr:EditingTexts.confirmDeleteTitle]
+     */
+    confirmDeleteTitle?: string;
+    /**
+     * [descr:EditingTexts.deleteCard]
+     */
+    deleteCard?: string;
+    /**
+     * [descr:EditingTexts.editCard]
+     */
+    editCard?: string;
+    /**
+     * [descr:EditingTexts.saveCard]
+     */
+    saveCard?: string;
   };
   /**
    * [descr:dxCardViewFieldInfo]
