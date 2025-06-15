@@ -16,6 +16,8 @@ export class DIContext {
 
   private readonly fabrics: Map<unknown, unknown> = new Map();
 
+  private readonly aliases: Map<unknown, unknown> = new Map();
+
   private readonly antiRecursionSet = new Set();
 
   public register<TId, TFabric extends TId, TDeps extends readonly any[]>(
@@ -56,6 +58,9 @@ export class DIContext {
   public tryGet<T>(
     id: AbstractType<T>,
   ): T | null {
+    // eslint-disable-next-line no-param-reassign
+    id = this.resolveAlias(id);
+
     if (this.instances.get(id)) {
       return this.instances.get(id) as T;
     }
@@ -84,5 +89,22 @@ export class DIContext {
 
     // eslint-disable-next-line new-cap
     return new fabric(...args as any);
+  }
+
+  public addAlias<TAlias, TID extends TAlias>(
+    aliasId: AbstractType<TAlias>,
+    id: AbstractType<TID>,
+  ): void {
+    this.aliases.set(aliasId, id);
+  }
+
+  public resolveAlias<T>(aliasId: AbstractType<T>): AbstractType<T> {
+    let result = aliasId;
+
+    while (this.aliases.has(result)) {
+      result = this.aliases.get(result) as AbstractType<T>;
+    }
+
+    return result;
   }
 }
