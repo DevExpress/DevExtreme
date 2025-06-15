@@ -162,6 +162,7 @@ export class EditingController {
         -1,
         [],
         newItemKey,
+        false,
       ),
     ];
 

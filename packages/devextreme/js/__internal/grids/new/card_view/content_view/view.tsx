@@ -56,6 +56,11 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
 
   protected override component = ContentViewComponent;
 
+  private readonly items = computed(
+    () => this.itemsController.items.value
+      .filter((item) => item.visible),
+  );
+
   constructor(...args) {
     // @ts-expect-error
     super(...args);
@@ -69,7 +74,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
     return computed(() => ({
       ...this.getBaseProps(),
       contentProps: {
-        items: this.itemsController.items.value,
+        items: this.items.value,
         kbnEnabled: this.keyboardNavigationController.enabled.value,
         navigationStrategy: this.navigationStrategy,
         isLoading: this.dataController.isReloading.value,
