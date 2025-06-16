@@ -15,7 +15,7 @@
 
 
 .dx-tabs-styling-mode-primary {
-  &.dx-tabs:not(.dx-tabs-vertical) .dx-tabs-scrollable .dx-tab {
+  &.dx-tabs.dx-tabs-horizontal .dx-tabs-scrollable .dx-tab {
     flex-basis: auto;
     min-width: $material-tab-min-width;
   }
