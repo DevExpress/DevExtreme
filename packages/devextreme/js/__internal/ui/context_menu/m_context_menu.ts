@@ -10,7 +10,7 @@ import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
-import { getPublicElement, type UserDefinedElement } from '@js/core/element';
+import { getPublicElement } from '@js/core/element';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -70,7 +70,7 @@ const BORDER_WIDTH = 1;
 
 const window = getWindow();
 
-type ContextMenuTarget = string | UserDefinedElement | undefined;
+type ContextMenuTarget = string | dxElementWrapper | Element | undefined;
 
 type ShowContextMenuEvent = EventInfo<ContextMenu> & {
   target?: ContextMenuTarget;
