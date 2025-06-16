@@ -9,6 +9,7 @@
   .dx-toolbar {
     padding: 0 12px;
     border-radius: $cardview-card-border-radius $cardview-card-border-radius 0 0;
+    background-color: transparent;
 
     .dx-toolbar-label {
       font-size: $cardview-card__header-text-size;

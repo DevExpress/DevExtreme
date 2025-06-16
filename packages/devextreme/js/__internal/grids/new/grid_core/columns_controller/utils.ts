@@ -18,9 +18,9 @@ type TemplateNormalizationFunc = <T>(
   template: Template<T> | undefined
 ) => ComponentType<T> | undefined;
 
-function normalizeColumn(
+export function normalizeColumn(
   column: PreNormalizedColumn,
-  templateNormalizationFunc: TemplateNormalizationFunc,
+  templateNormalizationFunc?: TemplateNormalizationFunc,
   columnFromDataOptions?: ColumnFromDataOptions,
 ): Column {
   const dataType = column.dataType
@@ -39,20 +39,30 @@ function normalizeColumn(
     ...column,
   };
 
-  return {
+  const normalizedColumn: Column = {
     ...colWithDefaults,
     dataType,
     ...!!columnFormat && { format: columnFormat },
     calculateDisplayValue: isString(colWithDefaults.calculateDisplayValue)
       ? compileGetter(colWithDefaults.calculateDisplayValue) as (data: unknown) => string
       : colWithDefaults.calculateDisplayValue,
-    headerItemTemplate: templateNormalizationFunc(colWithDefaults.headerItemTemplate),
-    fieldTemplate: templateNormalizationFunc(colWithDefaults.fieldTemplate),
-    fieldCaptionTemplate: templateNormalizationFunc(colWithDefaults.fieldCaptionTemplate),
-    fieldValueTemplate: templateNormalizationFunc(colWithDefaults.fieldValueTemplate),
+    headerItemTemplate: templateNormalizationFunc?.(colWithDefaults.headerItemTemplate),
+    fieldTemplate: templateNormalizationFunc?.(colWithDefaults.fieldTemplate),
+    fieldCaptionTemplate: templateNormalizationFunc?.(colWithDefaults.fieldCaptionTemplate),
+    fieldValueTemplate: templateNormalizationFunc?.(colWithDefaults.fieldValueTemplate),
     // @ts-expect-error for compatibility
     calculateCellValue: colWithDefaults.calculateFieldValue,
+    allowFiltering: colWithDefaults.allowFiltering ?? !!colWithDefaults.dataField,
+    allowHeaderFiltering:
+      colWithDefaults.allowHeaderFiltering
+      ?? colWithDefaults.allowFiltering
+      ?? !!colWithDefaults.dataField,
+    allowSorting: colWithDefaults.allowSorting ?? !!colWithDefaults.dataField,
   };
+
+  normalizedColumn.selector ??= (data): unknown => normalizedColumn.calculateFieldValue(data);
+
+  return normalizedColumn;
 }
 
 export function getVisibleIndexes(
@@ -260,3 +270,17 @@ export const columnOptionUpdate = (
 
   return normalizeColumnsVisibleIndexes(newSettings, columnIdx);
 };
+
+export function addDataFieldToComputedColumns(columns: Column[]): Column[] {
+  return columns.map((column) => {
+    if (column.dataField) {
+      return column;
+    }
+
+    // NOTE: same logic in datagrid
+    return {
+      ...column,
+      dataField: column.name,
+    };
+  });
+}

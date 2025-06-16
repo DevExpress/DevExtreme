@@ -110,6 +110,7 @@ test('list should contain all values from computed column', async (t) => {
   columns: [
     {
       caption: 'Computed',
+      allowFiltering: true,
       calculateFieldValue: (data) => `${data.A}_${data.B}`,
     },
   ],

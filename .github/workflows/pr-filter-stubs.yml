@@ -705,3 +705,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: exit 1
+  testcafe_tests58:
+    name: 'fileUploader'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests59:
+    name: 'fileUploader - fluent'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+  testcafe_tests60:
+    name: 'fileUploader - material'
+    needs: [ changesSegregation ]
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 1
+
