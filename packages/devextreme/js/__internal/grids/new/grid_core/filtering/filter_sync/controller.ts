@@ -53,6 +53,8 @@ export class FilterSyncController {
         return;
       }
 
+      this.previousFilterPanelValue = filterPanelValue;
+
       // NOTE: If filterSync is disabled -> do nothing
       const isSyncEnabled = this.filterController.filterSyncEnabled.peek();
       if (!isSyncEnabled) {
@@ -78,6 +80,8 @@ export class FilterSyncController {
       )) {
         return;
       }
+
+      this.previousHeaderFilterInfoArray = headerFilterInfoArray;
 
       // NOTE: If filterSync is disabled -> do nothing
       const isSyncEnabled = this.filterController.filterSyncEnabled.peek();
