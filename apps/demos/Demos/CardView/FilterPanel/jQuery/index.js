@@ -6,10 +6,8 @@ $(() => {
   $('#card-view').dxCardView({
     dataSource: orders,
     keyExpr: 'ID',
-    cardsPerRow: 2,
-    paging: {
-      pageSize: 4
-    },
+    cardsPerRow: 'auto',
+    cardMinWidth: 310,
     headerFilter: {
       visible: true,
     },

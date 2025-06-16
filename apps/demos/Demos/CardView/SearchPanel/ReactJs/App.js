@@ -1,16 +1,15 @@
 import React from 'react';
-import CardView, {
-  Column, Paging, HeaderFilter, SearchPanel,
-} from 'devextreme-react/card-view';
+import CardView, { Column, HeaderFilter, SearchPanel } from 'devextreme-react/card-view';
 import { tasks } from './data.js';
 
 const App = () => (
   <CardView
     dataSource={tasks}
     keyExpr="Task_ID"
-    cardsPerRow={2}
+    cardsPerRow="auto"
+    cardMinWidth={310}
+    wordWrapEnabled={true}
   >
-    <Paging pageSize={4} />
     <SearchPanel
       visible={true}
       defaultText="an"

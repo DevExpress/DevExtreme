@@ -1,7 +1,6 @@
 import React from 'react';
 import CardView, {
   Column,
-  Paging,
   HeaderFilter,
   ColumnHeaderFilter,
   FilterPanel,
@@ -70,10 +69,10 @@ const App = () => (
   <CardView
     dataSource={orders}
     keyExpr="ID"
-    cardsPerRow={2}
     defaultFilterValue={filterValue}
+    cardsPerRow="auto"
+    cardMinWidth={310}
   >
-    <Paging pageSize={4} />
     <HeaderFilter visible={true} />
     <FilterPanel visible={true} />
     <FilterBuilder customOperations={customOperations} />
