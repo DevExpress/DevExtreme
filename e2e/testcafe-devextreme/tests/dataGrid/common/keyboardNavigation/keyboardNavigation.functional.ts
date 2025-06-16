@@ -8,6 +8,14 @@ import Pager from 'devextreme-testcafe-models/pagination';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
+import {
+  checkFocusedCellChangedEventArgs,
+  checkFocusedCellChangingEventArgs,
+  checkFocusedRowChangedEventArgs,
+  checkFocusedRowChangingEventArgs,
+  getOrderOfEventCalls,
+  resetFocusedEventsTestData,
+} from '../../helpers/eventUtils';
 
 const CLASS = ClassNames;
 
@@ -5085,110 +5093,7 @@ test('DataGrid - The onKeyDown event should be called once for headers', async (
 });
 
 // # Quick navigation through grid cells
-const getOrderOfEventCalls = ClientFunction(
-  () => (window as any).focusedEventsTestData.map((data) => data.name),
-);
-
-const getFocusedCellChangingEventArgs = ClientFunction(
-  () => {
-    const eventArgs = (window as any).focusedEventsTestData
-      .find((data) => data.name === 'onFocusedCellChanging')
-      .args;
-
-    return {
-      newColumnIndex: eventArgs.newColumnIndex,
-      newRowIndex: eventArgs.newRowIndex,
-      prevColumnIndex: eventArgs.prevColumnIndex,
-      prevRowIndex: eventArgs.prevRowIndex,
-    };
-  },
-);
-
-const getFocusedRowChangingEventArgs = ClientFunction(
-  () => {
-    const eventArgs = (window as any).focusedEventsTestData
-      .find((data) => data.name === 'onFocusedRowChanging')
-      .args;
-
-    return {
-      newRowIndex: eventArgs.newRowIndex,
-      prevRowIndex: eventArgs.prevRowIndex,
-    };
-  },
-);
-
-const getFocusedCellChangedEventArgs = ClientFunction(
-  () => {
-    const eventArgs = (window as any).focusedEventsTestData
-      .find((data) => data.name === 'onFocusedCellChanged')
-      .args;
-
-    return {
-      columnIndex: eventArgs.columnIndex,
-      rowIndex: eventArgs.rowIndex,
-    };
-  },
-);
-
-const getFocusedRowChangedEventArgs = ClientFunction(
-  () => {
-    const eventArgs = (window as any).focusedEventsTestData
-      .find((data) => data.name === 'onFocusedRowChanged')
-      .args;
-
-    return {
-      rowIndex: eventArgs.rowIndex,
-    };
-  },
-);
-
-const resetFocusedEventsTestData = ClientFunction(() => {
-  (window as any).focusedEventsTestData = [];
-});
-
-const checkFocusedCellChangingEventArgs = async (t, expectedArgs) => {
-  const args = await getFocusedCellChangingEventArgs();
-
-  await t
-    .expect(args.newColumnIndex)
-    .eql(expectedArgs.newColumnIndex)
-    .expect(args.newRowIndex)
-    .eql(expectedArgs.newRowIndex)
-    .expect(args.prevColumnIndex)
-    .eql(expectedArgs.prevColumnIndex)
-    .expect(args.prevRowIndex)
-    .eql(expectedArgs.prevRowIndex);
-};
-
-const checkFocusedRowChangingEventArgs = async (t, expectedArgs) => {
-  const args = await getFocusedRowChangingEventArgs();
-
-  await t
-    .expect(args.newRowIndex)
-    .eql(expectedArgs.newRowIndex)
-    .expect(args.prevRowIndex)
-    .eql(expectedArgs.prevRowIndex);
-};
-
-const checkFocusedCellChangedEventArgs = async (t, expectedArgs) => {
-  const args = await getFocusedCellChangedEventArgs();
-
-  await t
-    .expect(args.columnIndex)
-    .eql(expectedArgs.columnIndex)
-    .expect(args.rowIndex)
-    .eql(expectedArgs.rowIndex);
-};
-
-const checkFocusedRowChangedEventArgs = async (t, expectedArgs) => {
-  const args = await getFocusedRowChangedEventArgs();
-
-  await t
-    .expect(args.rowIndex)
-    .eql(expectedArgs.rowIndex);
-};
-
-// ## End keys
+// ## End key
 test('Focus events should be called when pressing the End key', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
@@ -5473,7 +5378,7 @@ test('Focus events should be called when pressing the End key when virtual colum
   })();
 });
 
-// ## Ctrl+End keys
+// ## Ctrl+End key
 test('Focus events should be called when pressing the Ctrl + End key', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
