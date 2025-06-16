@@ -6,9 +6,6 @@
     :card-min-width="350"
     :height="820"
   >
-    <DxPaging
-      :page-size="4"
-    />
     <DxSearchPanel
       :visible="true"
     />
@@ -168,7 +165,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxCardView, DxColumn, DxCardCover, DxEditing, DxPaging, DxForm, DxItem, DxSearchPanel, DxRequiredRule, DxEmailRule, DxPatternRule, DxAsyncRule, DxCustomRule,
+  DxCardView, DxColumn, DxCardCover, DxEditing, DxForm, DxItem, DxSearchPanel, DxRequiredRule, DxEmailRule, DxPatternRule, DxAsyncRule, DxCustomRule,
 } from 'devextreme-vue/card-view';
 import 'devextreme-vue/text-area';
 import { employees, type Employee } from './data.ts';
