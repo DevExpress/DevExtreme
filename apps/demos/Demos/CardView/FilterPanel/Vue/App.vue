@@ -3,12 +3,10 @@
     id="cardView"
     :data-source="orders"
     key-expr="ID"
-    :cards-per-row="2"
     :filter-value="filterValue"
+    cards-per-row="auto"
+    :card-min-width="310"
   >
-    <DxPaging
-      :page-size="4"
-    />
     <DxHeaderFilter
       :visible="true"
     />
@@ -51,7 +49,7 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-import { DxCardView, DxColumn, DxPaging, DxHeaderFilter, DxColumnHeaderFilter, DxFilterBuilder, DxFilterPanel } from 'devextreme-vue/card-view';
+import { DxCardView, DxColumn, DxHeaderFilter, DxColumnHeaderFilter, DxFilterBuilder, DxFilterPanel } from 'devextreme-vue/card-view';
 import { type Order, orders } from './data.ts';
 
 function getDeliveryHours(rowData: Order) {

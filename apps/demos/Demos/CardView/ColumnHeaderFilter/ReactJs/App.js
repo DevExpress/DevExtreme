@@ -60,7 +60,8 @@ const App = () => (
   <CardView
     dataSource={orders}
     keyExpr="OrderNumber"
-    cardMinWidth={100}
+    cardsPerRow="auto"
+    cardMinWidth={280}
     wordWrapEnabled={true}
   >
     <HeaderFilter visible={true} />

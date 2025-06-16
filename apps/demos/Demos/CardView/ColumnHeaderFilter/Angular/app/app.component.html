@@ -2,7 +2,8 @@
   id="cardView"
   [dataSource]="orders"
   keyExpr="OrderNumber"
-  [cardMinWidth]="100"
+  cardsPerRow="auto"
+  [cardMinWidth]="280"
   [wordWrapEnabled]="true"
 >
   <dxo-card-view-header-filter [visible]="true"></dxo-card-view-header-filter>

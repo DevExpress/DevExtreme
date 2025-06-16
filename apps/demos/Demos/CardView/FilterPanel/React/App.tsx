@@ -1,5 +1,5 @@
 import React from 'react';
-import CardView, { Column, Paging, HeaderFilter, ColumnHeaderFilter, FilterPanel, FilterBuilder } from 'devextreme-react/card-view';
+import CardView, { Column, HeaderFilter, ColumnHeaderFilter, FilterPanel, FilterBuilder } from 'devextreme-react/card-view';
 import { orders, Order } from './data.ts';
 
 function getDeliveryHours(rowData: Order) {
@@ -64,12 +64,10 @@ const App = () => (
   <CardView
     dataSource={orders}
     keyExpr="ID"
-    cardsPerRow={2}
     defaultFilterValue={filterValue}
+    cardsPerRow="auto"
+    cardMinWidth={310}
   >
-    <Paging
-      pageSize={4}
-    />
     <HeaderFilter
       visible={true}
     />

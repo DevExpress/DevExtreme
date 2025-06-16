@@ -1,5 +1,10 @@
-<dx-card-view [dataSource]="tasks" keyExpr="Task_ID" [cardsPerRow]="2">
-  <dxo-card-view-paging [pageSize]="4"></dxo-card-view-paging>
+<dx-card-view
+  [dataSource]="tasks"
+  keyExpr="Task_ID"
+  cardsPerRow="auto"
+  [cardMinWidth]="310"
+  [wordWrapEnabled]="true"
+>
   <dxo-card-view-search-panel
     [visible]="true"
     text="an"
