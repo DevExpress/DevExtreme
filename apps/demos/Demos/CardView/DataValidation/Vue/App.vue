@@ -166,7 +166,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxCardView, DxColumn, DxCardCover, DxEditing, DxPaging, DxSearchPanel, DxRequiredRule, DxEmailRule, DxPatternRule, DxAsyncRule, DxCustomRule,
+  DxCardView, DxColumn, DxCardCover, DxEditing, DxPaging, DxForm, DxItem, DxSearchPanel, DxRequiredRule, DxEmailRule, DxPatternRule, DxAsyncRule, DxCustomRule,
 } from 'devextreme-vue/card-view';
 import 'devextreme-vue/text-area';
 import { employees, type Employee } from './data.ts';
