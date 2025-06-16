@@ -30,6 +30,7 @@
 
 $treelist-empty-space-width: 14px;
 $treelist-empty-space-height: 12px;
+$treelist-checkbox-padding-bottom: 1px;
 $treelist-select-all-checkbox-margin-top: floor(math.div(round($generic-base-line-height * $generic-base-font-size) - $generic-grid-base-checkbox-icon-size, 2));
 $treelist-checkbox-offset-left: $treelist-empty-space-width + $generic-grid-base-cell-padding;
 $treelist-checkbox-offset-left-rtl: $treelist-checkbox-offset-left + $generic-grid-base-checkbox-icon-size;
@@ -121,8 +122,8 @@ $treelist-icon-container-padding-right: $generic-grid-base-checkbox-icon-size + 
   padding-right: $treelist-icon-container-padding-right;
 
   .dx-checkbox {
-    top: 50%;
-    margin-top: math.div(-$generic-base-icon-size, 2);
+    bottom: 0;
+    padding-bottom: $treelist-checkbox-padding-bottom;
   }
 }
 
