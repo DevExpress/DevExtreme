@@ -123,6 +123,8 @@ const onSelectionModeChange = ({ value }: DxSelectBoxTypes.ValueChangedEvent): v
 
   .option {
     margin: 10px;
+    display: flex;
+    align-items: center;
     width: fit-content;
   }
 
