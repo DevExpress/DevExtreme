@@ -7,6 +7,7 @@ $(() => {
     columnChooser: {
       enabled: true,
       mode: 'select',
+      height: '340px',
       search: {
         enabled: true,
       },

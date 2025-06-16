@@ -77,6 +77,7 @@ const App = () => {
       <ColumnChooser
         enabled={true}
         mode={columnChooserMode}
+        height="340px"
       >
         <ColumnChooserSearch
           enabled={searchEnabled}
