@@ -2595,7 +2595,7 @@ QUnit.module('item select decorator with single selection mode', () => {
         assert.strictEqual(radioButton.option('value'), true, 'item selected');
     });
 
-    QUnit.test('only one item should be selected after double click on its control and then click on another item control (T1294715)', function(assert) {
+    QUnit.test('only one item should remain selected after double-clicking on its radio control and then clicking on another item control (T1294715)', function(assert) {
         const $list = $('#templated-list').dxList({
             items: [
                 { id: 1, text: 'item 1' },
@@ -2616,8 +2616,8 @@ QUnit.module('item select decorator with single selection mode', () => {
         const firstRadioButtonInstance = $firstRadioButton.dxRadioButton('instance');
         const secondRadioButtonInstance = $secondRadioButton.dxRadioButton('instance');
 
-        assert.strictEqual(firstRadioButtonInstance.option('value'), false, 'first item not selected');
-        assert.strictEqual(secondRadioButtonInstance.option('value'), true, 'second item selected');
+        assert.strictEqual(firstRadioButtonInstance.option('value'), false, 'first item is not selected');
+        assert.strictEqual(secondRadioButtonInstance.option('value'), true, 'second item is selected');
     });
 
     QUnit.test('keyboard navigation should work with without selectAll checkbox', function(assert) {
