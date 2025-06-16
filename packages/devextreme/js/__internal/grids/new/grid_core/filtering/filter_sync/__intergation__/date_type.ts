@@ -186,32 +186,8 @@ export const DATE_HEADER_FILTER: TestCaseHeaderFilter[] = [
 ];
 
 export const DATE_FILTER_PANEL: TestCaseFilterPanel[] = [
-  {
-    caseName: 'equal year',
-    filteredIds: [0, 1, 2, 3],
-    changes: {
-      filterPanel: ['value', '=', 2024],
-    },
-    expected: {
-      headerFilterType: 'include',
-      headerFilter: [2024],
-      // Same filter by meaning as initial one
-      filterPanel: ['value', 'anyof', [2024]],
-    },
-  },
-  {
-    caseName: 'equal month',
-    filteredIds: [2, 3],
-    changes: {
-      filterPanel: ['value', '=', '2024/2'],
-    },
-    expected: {
-      headerFilterType: 'include',
-      headerFilter: ['2024/2'],
-      // Same filter by meaning as initial one
-      filterPanel: ['value', 'anyof', ['2024/2']],
-    },
-  },
+  // NOTE: FilterPanel filter that equal part of date is an incorrect configuration (filter)
+  // E.g: ['value', '=', '2024/2'] or ['value', '=', 2024]
   {
     caseName: 'equal date',
     filteredIds: [4],
@@ -221,8 +197,7 @@ export const DATE_FILTER_PANEL: TestCaseFilterPanel[] = [
     expected: {
       headerFilterType: 'include',
       headerFilter: ['2025/1/1'],
-      // Same filter by meaning as initial one
-      filterPanel: ['value', 'anyof', ['2025/1/1']],
+      filterPanel: ['value', '=', '2025/1/1'],
     },
   },
   {
@@ -297,32 +272,8 @@ export const DATE_FILTER_PANEL: TestCaseFilterPanel[] = [
       filterPanel: ['value', 'anyof', ['2025/1/1', '2026/1/2']],
     },
   },
-  {
-    caseName: 'not equal year',
-    filteredIds: [4, 5, 6, 7],
-    changes: {
-      filterPanel: ['value', '<>', 2024],
-    },
-    expected: {
-      headerFilterType: 'exclude',
-      headerFilter: [2024],
-      // Same filter by meaning as initial one
-      filterPanel: ['value', 'noneof', [2024]],
-    },
-  },
-  {
-    caseName: 'not equal month',
-    filteredIds: [0, 1, 4, 5, 6, 7],
-    changes: {
-      filterPanel: ['value', '<>', '2024/2'],
-    },
-    expected: {
-      headerFilterType: 'exclude',
-      headerFilter: ['2024/2'],
-      // Same filter by meaning as initial one
-      filterPanel: ['value', 'noneof', ['2024/2']],
-    },
-  },
+  // NOTE: FilterPanel filter that not equal part of date is an incorrect configuration (filter)
+  // E.g: ['value', '<>', '2024/2'] or ['value', '<>', 2024]
   {
     caseName: 'not equal date',
     filteredIds: [0, 1, 2, 3, 5, 6, 7],
@@ -333,7 +284,7 @@ export const DATE_FILTER_PANEL: TestCaseFilterPanel[] = [
       headerFilterType: 'exclude',
       headerFilter: ['2025/1/1'],
       // Same filter by meaning as initial one
-      filterPanel: ['value', 'noneof', ['2025/1/1']],
+      filterPanel: ['value', '<>', '2025/1/1'],
     },
   },
   {
