@@ -2,7 +2,7 @@ import { fx } from '@js/common/core/animation';
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { end as swipeEventEnd } from '@js/common/core/events/swipe';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
@@ -20,6 +20,7 @@ import { each } from '@js/core/utils/iterator';
 import { getHeight, getOuterHeight, setHeight } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import Button from '@js/ui/button';
 import type { Item, Properties } from '@js/ui/list';
 import ScrollView from '@js/ui/scroll_view';
@@ -398,11 +399,12 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     return this._itemElementsCache;
   }
 
-  _itemSelectHandler(e) {
+  _itemSelectHandler(e: DxEvent) {
     const { selectionMode } = this.option();
 
     const isSingleSelectedItemClicked = selectionMode === 'single'
       && this.isItemSelected(e.currentTarget);
+
     if (isSingleSelectedItemClicked) {
       return;
     }
@@ -417,7 +419,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     return super._itemSelectHandler(e, isSelectionControlClicked);
   }
 
-  _allowDynamicItemsAppend() {
+  _allowDynamicItemsAppend(): boolean {
     return true;
   }
 

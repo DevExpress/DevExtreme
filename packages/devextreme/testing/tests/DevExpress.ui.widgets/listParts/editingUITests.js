@@ -377,7 +377,7 @@ QUnit.module('switchable button delete decorator', {
         const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.eq(0);
 
-        assert.strictEqual($item.children(`.${SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS}`).length, 0, 'delete button won\'t rendered');
+        assert.strictEqual($item.children(`.${SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS}`).length, 0, 'delete button was not rendered');
     });
 
     QUnit.test('button should be added only when item is ready to delete', function(assert) {
@@ -1474,7 +1474,7 @@ QUnit.module('context menu decorator', {
         list.option('allowItemDeleting', false);
 
         const $menu = list.$element().find(`.${CONTEXTMENU_CLASS}`);
-        assert.ok(!$menu.length, 'overlay won\'t created');
+        assert.ok(!$menu.length, 'overlay was not created');
     });
 
     QUnit.test('item hold should not open overlay if widget is disabled', function(assert) {
@@ -2051,7 +2051,7 @@ QUnit.module('selectAll for all pages', () => {
         assert.strictEqual($list.find('.dx-list-item-selected').length, 1, 'selected items should have selected class');
     });
 
-    QUnit.test('selectAll checkbox should change it\'s state to undefined when one item was deselected', function(assert) {
+    QUnit.test('selectAll checkbox should change its state to undefined when one item was deselected', function(assert) {
         const ds = new DataSource({
             store: [1, 2, 3, 4, 5, 6],
             pageSize: 2,
@@ -2595,6 +2595,31 @@ QUnit.module('item select decorator with single selection mode', () => {
         assert.strictEqual(radioButton.option('value'), true, 'item selected');
     });
 
+    QUnit.test('only one item should be selected after double click on its control and then click on another item control (T1294715)', function(assert) {
+        const $list = $('#templated-list').dxList({
+            items: [
+                { id: 1, text: 'item 1' },
+                { id: 2, text: 'item 2' },
+            ],
+            showSelectionControls: true,
+            selectionMode: 'single'
+        });
+
+        const $radioButtons = $list.find(`.${SELECT_RADIO_BUTTON_CLASS}`);
+        const $firstRadioButton = $radioButtons.eq(0);
+        const $secondRadioButton = $radioButtons.eq(1);
+
+        $firstRadioButton.trigger('dxclick');
+        $firstRadioButton.trigger('dxclick');
+        $secondRadioButton.trigger('dxclick');
+
+        const firstRadioButtonInstance = $firstRadioButton.dxRadioButton('instance');
+        const secondRadioButtonInstance = $secondRadioButton.dxRadioButton('instance');
+
+        assert.strictEqual(firstRadioButtonInstance.option('value'), false, 'first item not selected');
+        assert.strictEqual(secondRadioButtonInstance.option('value'), true, 'second item selected');
+    });
+
     QUnit.test('keyboard navigation should work with without selectAll checkbox', function(assert) {
         const $list = $('#templated-list').dxList({
             focusStateEnabled: true,
@@ -2813,14 +2838,14 @@ QUnit.module('reordering decorator', {
         assert.ok(!$ghostItem.hasClass(REORDERING_ITEM_CLASS), 'reordering class is not present');
 
         assert.equal($ghostItem.css('direction'), 'rtl', 'direction is rtl');
-        assert.ok($ghostItem.parent().hasClass('dx-rtl'), 'ghost\'s parent has dx-rtl class');
+        assert.ok($ghostItem.parent().hasClass('dx-rtl'), 'ghost parent has dx-rtl class');
 
         pointer.dragEnd();
         $ghostItem = $list.find(`.${REORDERING_ITEM_GHOST_CLASS}`);
         assert.strictEqual($items.length, 1, 'duplicate item was removed');
     });
 
-    QUnit.test('cached items doesn\'t contains a ghost item after reordering', function(assert) {
+    QUnit.test('cached items does not contains a ghost item after reordering', function(assert) {
         const $list = $('#list').dxList({
             items: ['0', '1', '2'],
             itemDragging: { allowReordering: true }
@@ -2836,7 +2861,7 @@ QUnit.module('reordering decorator', {
         const cachedItems = list._itemElements();
 
         assert.strictEqual(cachedItems.length, 3, 'Cached items contains 3 items');
-        assert.notOk(cachedItems.hasClass(REORDERING_ITEM_GHOST_CLASS), 'Cached items isn\'t contain a ghost item');
+        assert.notOk(cachedItems.hasClass(REORDERING_ITEM_GHOST_CLASS), 'Cached items does not contain a ghost item');
     });
 
     QUnit.test('ghost item should be moved by drag', function(assert) {
