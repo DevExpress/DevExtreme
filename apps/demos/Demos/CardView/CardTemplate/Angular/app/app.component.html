@@ -1,23 +1,24 @@
 <dx-card-view
   [dataSource]="vehicles"
+  [height]="1120"
   cardsPerRow="auto"
-  [cardMinWidth]="260"
+  [cardMinWidth]="240"
   cardTemplate="vehicleCardTemplate"
 >
   <dxo-card-view-header-filter [visible]="true"></dxo-card-view-header-filter>
   <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
   <dxo-card-view-paging [pageSize]="12"></dxo-card-view-paging>
 
-  <dxi-card-view-column dataField="TrademarkName"></dxi-card-view-column>
-  <dxi-card-view-column dataField="Name"></dxi-card-view-column>
+  <dxi-card-view-column dataField="TrademarkName" caption="Trademark" />
+  <dxi-card-view-column dataField="Name" caption="Model" />
   <dxi-card-view-column dataField="Price" format="currency">
     <dxo-card-view-column-header-filter
       [groupInterval]="20000"
     ></dxo-card-view-column-header-filter>
   </dxi-card-view-column>
-  <dxi-card-view-column dataField="CategoryName"></dxi-card-view-column>
+  <dxi-card-view-column dataField="CategoryName" caption="Category" />
   <dxi-card-view-column dataField="Modification"></dxi-card-view-column>
-  <dxi-card-view-column dataField="BodyStyleName"></dxi-card-view-column>
+  <dxi-card-view-column dataField="BodyStyleName" caption="Body Style" />
   <dxi-card-view-column dataField="Horsepower"></dxi-card-view-column>
 
   <div *dxTemplate="let model of 'vehicleCardTemplate'">
@@ -37,8 +38,8 @@
 </dx-card-view>
 
 <dx-popup
-  [width]="350"
-  [height]="240"
+  [width]="360"
+  [height]="260"
   [(visible)]="popupVisible"
   [dragEnabled]="false"
   [hideOnOutsideClick]="true"

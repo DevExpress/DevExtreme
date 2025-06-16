@@ -36,13 +36,13 @@ import {
  FocusedCardChanged,
  InitNewCardEvent,
  SelectionChangedEvent,
- SelectionChangingEvent,
  Paging,
  RemoteOperations,
  SelectionConfiguration,
  Toolbar,
  CardHeaderItem,
  CardHeaderPredefinedItem,
+ EditingTexts,
  PredefinedToolbarItem,
  ToolbarItem,
 } from "devextreme/ui/card_view";
@@ -185,7 +185,7 @@ import {
  ItemRenderedEvent,
  OptionChangedEvent as TabPanelOptionChangedEvent,
  SelectionChangedEvent as TabPanelSelectionChangedEvent,
- SelectionChangingEvent as TabPanelSelectionChangingEvent,
+ SelectionChangingEvent,
  TitleClickEvent,
  TitleHoldEvent,
  TitleRenderedEvent,
@@ -219,6 +219,7 @@ type AccessibleOptions = Pick<Properties,
   "filterBuilder" |
   "filterBuilderPopup" |
   "filterPanel" |
+  "filterSyncEnabled" |
   "filterValue" |
   "focusStateEnabled" |
   "headerFilter" |
@@ -260,7 +261,6 @@ type AccessibleOptions = Pick<Properties,
   "onInitNewCard" |
   "onOptionChanged" |
   "onSelectionChanged" |
-  "onSelectionChanging" |
   "pager" |
   "paging" |
   "remoteOperations" |
@@ -305,6 +305,7 @@ const componentConfig = {
     filterBuilder: Object as PropType<dxFilterBuilderOptions | Record<string, any>>,
     filterBuilderPopup: Object as PropType<Record<string, any>>,
     filterPanel: Object as PropType<FilterPanel>,
+    filterSyncEnabled: [Boolean, String] as PropType<boolean | Mode>,
     filterValue: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
     focusStateEnabled: Boolean,
     headerFilter: Object as PropType<HeaderFilter | Record<string, any>>,
@@ -346,7 +347,6 @@ const componentConfig = {
     onInitNewCard: Function as PropType<((e: InitNewCardEvent) => void)>,
     onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
     onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
-    onSelectionChanging: Function as PropType<((e: SelectionChangingEvent) => void)>,
     pager: Object as PropType<Pager | Record<string, any> | PagerBase>,
     paging: Object as PropType<Paging | Record<string, any>>,
     remoteOperations: [Boolean, String, Object] as PropType<boolean | Mode | RemoteOperations | Record<string, any>>,
@@ -387,6 +387,7 @@ const componentConfig = {
     "update:filterBuilder": null,
     "update:filterBuilderPopup": null,
     "update:filterPanel": null,
+    "update:filterSyncEnabled": null,
     "update:filterValue": null,
     "update:focusStateEnabled": null,
     "update:headerFilter": null,
@@ -428,7 +429,6 @@ const componentConfig = {
     "update:onInitNewCard": null,
     "update:onOptionChanged": null,
     "update:onSelectionChanged": null,
-    "update:onSelectionChanging": null,
     "update:pager": null,
     "update:paging": null,
     "update:remoteOperations": null,
@@ -996,7 +996,7 @@ const DxColumnConfig = {
     calculateFilterExpression: Function as PropType<((filterValue: any, selectedFilterOperation: string | null, target: string) => string | Array<any> | (() => void))>,
     calculateSortValue: [Function, String] as PropType<(((cardData: any) => any)) | string>,
     caption: String,
-    customizeText: Function as PropType<((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string)>,
+    customizeText: Function as PropType<((fieldInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string)>,
     dataField: String,
     dataType: String as PropType<DataType>,
     editorOptions: {},
@@ -1300,6 +1300,7 @@ const DxEditingConfig = {
     "update:editCardKey": null,
     "update:form": null,
     "update:popup": null,
+    "update:texts": null,
   },
   props: {
     allowAdding: Boolean,
@@ -1309,7 +1310,8 @@ const DxEditingConfig = {
     confirmDelete: Boolean,
     editCardKey: {},
     form: Object as PropType<dxFormOptions | Record<string, any>>,
-    popup: Object as PropType<Record<string, any>>
+    popup: Object as PropType<Record<string, any>>,
+    texts: Object as PropType<EditingTexts | Record<string, any>>
   }
 };
 
@@ -1320,8 +1322,37 @@ const DxEditing = defineComponent(DxEditingConfig);
 (DxEditing as any).$_optionName = "editing";
 (DxEditing as any).$_expectedChildren = {
   change: { isCollectionItem: true, optionName: "changes" },
-  form: { isCollectionItem: false, optionName: "form" }
+  editingTexts: { isCollectionItem: false, optionName: "texts" },
+  form: { isCollectionItem: false, optionName: "form" },
+  texts: { isCollectionItem: false, optionName: "texts" }
 };
+
+const DxEditingTextsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:addCard": null,
+    "update:confirmDeleteMessage": null,
+    "update:confirmDeleteTitle": null,
+    "update:deleteCard": null,
+    "update:editCard": null,
+    "update:saveCard": null,
+  },
+  props: {
+    addCard: String,
+    confirmDeleteMessage: String,
+    confirmDeleteTitle: String,
+    deleteCard: String,
+    editCard: String,
+    saveCard: String
+  }
+};
+
+prepareConfigurationComponentConfig(DxEditingTextsConfig);
+
+const DxEditingTexts = defineComponent(DxEditingTextsConfig);
+
+(DxEditingTexts as any).$_optionName = "texts";
 
 const DxEmailRuleConfig = {
   emits: {
@@ -2882,7 +2913,7 @@ const DxTabPanelOptionsConfig = {
     onItemRendered: Function as PropType<((e: ItemRenderedEvent) => void)>,
     onOptionChanged: Function as PropType<((e: TabPanelOptionChangedEvent) => void)>,
     onSelectionChanged: Function as PropType<((e: TabPanelSelectionChangedEvent) => void)>,
-    onSelectionChanging: Function as PropType<((e: TabPanelSelectionChangingEvent) => void)>,
+    onSelectionChanging: Function as PropType<((e: SelectionChangingEvent) => void)>,
     onTitleClick: Function as PropType<((e: TitleClickEvent) => void)>,
     onTitleHold: Function as PropType<((e: TitleHoldEvent) => void)>,
     onTitleRendered: Function as PropType<((e: TitleRenderedEvent) => void)>,
@@ -2950,20 +2981,32 @@ const DxTextsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:addCard": null,
     "update:cancel": null,
     "update:clearFilter": null,
+    "update:confirmDeleteMessage": null,
+    "update:confirmDeleteTitle": null,
     "update:createFilter": null,
+    "update:deleteCard": null,
+    "update:editCard": null,
     "update:emptyValue": null,
     "update:filterEnabledHint": null,
     "update:ok": null,
+    "update:saveCard": null,
   },
   props: {
+    addCard: String,
     cancel: String,
     clearFilter: String,
+    confirmDeleteMessage: String,
+    confirmDeleteTitle: String,
     createFilter: String,
+    deleteCard: String,
+    editCard: String,
     emptyValue: String,
     filterEnabledHint: String,
-    ok: String
+    ok: String,
+    saveCard: String
   }
 };
 
@@ -3140,6 +3183,7 @@ export {
   DxCustomOperation,
   DxCustomRule,
   DxEditing,
+  DxEditingTexts,
   DxEmailRule,
   DxEmptyItem,
   DxField,

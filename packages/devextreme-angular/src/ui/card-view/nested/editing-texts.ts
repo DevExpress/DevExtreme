@@ -23,14 +23,14 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-card-view-texts',
+    selector: 'dxo-card-view-editing-texts',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoCardViewTextsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewEditingTextsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get addCard(): string {
         return this._getOption('addCard');
@@ -79,54 +79,6 @@ export class DxoCardViewTextsComponent extends NestedOption implements OnDestroy
         this._setOption('saveCard', value);
     }
 
-    @Input()
-    get clearFilter(): string {
-        return this._getOption('clearFilter');
-    }
-    set clearFilter(value: string) {
-        this._setOption('clearFilter', value);
-    }
-
-    @Input()
-    get createFilter(): string {
-        return this._getOption('createFilter');
-    }
-    set createFilter(value: string) {
-        this._setOption('createFilter', value);
-    }
-
-    @Input()
-    get filterEnabledHint(): string {
-        return this._getOption('filterEnabledHint');
-    }
-    set filterEnabledHint(value: string) {
-        this._setOption('filterEnabledHint', value);
-    }
-
-    @Input()
-    get cancel(): string {
-        return this._getOption('cancel');
-    }
-    set cancel(value: string) {
-        this._setOption('cancel', value);
-    }
-
-    @Input()
-    get emptyValue(): string {
-        return this._getOption('emptyValue');
-    }
-    set emptyValue(value: string) {
-        this._setOption('emptyValue', value);
-    }
-
-    @Input()
-    get ok(): string {
-        return this._getOption('ok');
-    }
-    set ok(value: string) {
-        this._setOption('ok', value);
-    }
-
 
     protected get _optionPath() {
         return 'texts';
@@ -154,10 +106,10 @@ export class DxoCardViewTextsComponent extends NestedOption implements OnDestroy
 
 @NgModule({
   imports: [
-    DxoCardViewTextsComponent
+    DxoCardViewEditingTextsComponent
   ],
   exports: [
-    DxoCardViewTextsComponent
+    DxoCardViewEditingTextsComponent
   ],
 })
-export class DxoCardViewTextsModule { }
+export class DxoCardViewEditingTextsModule { }

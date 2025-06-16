@@ -28,6 +28,8 @@
     />
     <DxColumn
       caption="Full Name"
+      :allow-filtering="true"
+      :allow-sorting="true"
       :calculate-field-value="calculateFullName"
     />
     <DxColumn
@@ -46,6 +48,8 @@
     />
     <DxColumn
       caption="Address"
+      :allow-filtering="true"
+      :allow-sorting="true"
       :calculate-field-value="calculateAddress"
     />
     <template
