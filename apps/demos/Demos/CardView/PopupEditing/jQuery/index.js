@@ -20,7 +20,7 @@ $(() => {
         width: 700,
         height: 525,
       },
-      form:  {
+      form: {
         items: [
           {
             caption: 'Personal Data',
