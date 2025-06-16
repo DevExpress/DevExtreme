@@ -35,49 +35,48 @@ import TabsItem from './item';
 
 // STYLE tabs
 
-const TABS_CLASS = 'dx-tabs';
-const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
-const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
-const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
-const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
+export const TABS_CLASS = 'dx-tabs';
+export const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
+export const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
+export const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
+export const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
 const OVERFLOW_HIDDEN_CLASS = 'dx-overflow-hidden';
 
-const TABS_ITEM_CLASS = 'dx-tab';
-const TABS_ITEM_SELECTED_CLASS = 'dx-tab-selected';
-const TABS_SCROLLING_ENABLED_CLASS = 'dx-tabs-scrolling-enabled';
+export const TABS_ITEM_CLASS = 'dx-tab';
+export const TABS_ITEM_SELECTED_CLASS = 'dx-tab-selected';
+export const TABS_SCROLLING_ENABLED_CLASS = 'dx-tabs-scrolling-enabled';
 
-const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
-const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
-const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
+export const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
+export const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
+export const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 
-const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
-const TABS_ITEM_TEXT_SPAN_CLASS = 'dx-tab-text-span';
-const TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS = 'dx-tab-text-span-pseudo';
+export const TABS_ITEM_TEXT_SPAN_CLASS = 'dx-tab-text-span';
+export const TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS = 'dx-tab-text-span-pseudo';
 
 const STATE_DISABLED_CLASS = 'dx-state-disabled';
-const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
-const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
+export const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
+export const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
 
-const TABS_ORIENTATION_CLASS = {
+export const TABS_ORIENTATION_CLASS = {
   vertical: 'dx-tabs-vertical',
   horizontal: 'dx-tabs-horizontal',
 };
 
-const INDICATOR_POSITION_CLASS: Record<Position, string> = {
+export const TABS_INDICATOR_POSITION_CLASS: Record<Position, string> = {
   top: 'dx-tab-indicator-position-top',
   right: 'dx-tab-indicator-position-right',
   bottom: 'dx-tab-indicator-position-bottom',
   left: 'dx-tab-indicator-position-left',
 };
 
-const TABS_ICON_POSITION_CLASS: Record<TabsIconPosition, string> = {
+export const TABS_ICON_POSITION_CLASS: Record<TabsIconPosition, string> = {
   top: 'dx-tabs-icon-position-top',
   end: 'dx-tabs-icon-position-end',
   bottom: 'dx-tabs-icon-position-bottom',
   start: 'dx-tabs-icon-position-start',
 };
 
-const TABS_STYLING_MODE_CLASS: Record<TabsStyle, string> = {
+export const TABS_STYLING_MODE_CLASS: Record<TabsStyle, string> = {
   primary: 'dx-tabs-styling-mode-primary',
   secondary: 'dx-tabs-styling-mode-secondary',
 };
@@ -279,9 +278,9 @@ class Tabs extends CollectionWidget<TabsProperties> {
           $iconElement.prependTo($container);
         }
 
-        const $tabItem = $('<div>').addClass(TABS_ITEM_TEXT_CLASS);
-
-        $container.wrapInner($tabItem);
+        // const $tabItem = $('<div>').addClass(TABS_ITEM_TEXT_CLASS);
+        //
+        // $container.wrapInner($tabItem);
       }, ['text', 'html', 'icon'], this.option('integrationOptions.watchMethod')),
     });
   }
@@ -676,7 +675,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
   }
 
   _getIndicatorPositionClass(indicatorPosition: Position): string {
-    return INDICATOR_POSITION_CLASS[indicatorPosition];
+    return TABS_INDICATOR_POSITION_CLASS[indicatorPosition];
   }
 
   _getIndicatorPosition(): Position {
@@ -698,7 +697,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
   _toggleIndicatorPositionClass(indicatorPosition: Position): void {
     const newClass = this._getIndicatorPositionClass(indicatorPosition);
 
-    this._toggleElementClasses(INDICATOR_POSITION_CLASS, newClass);
+    this._toggleElementClasses(TABS_INDICATOR_POSITION_CLASS, newClass);
   }
 
   _toggleScrollingEnabledClass(scrollingEnabled: boolean | undefined): void {

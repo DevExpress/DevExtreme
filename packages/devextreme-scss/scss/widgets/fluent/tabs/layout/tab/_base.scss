@@ -35,7 +35,7 @@
       color: $tabs-tab-icon-selected-color;
     }
 
-    .dx-tab-text .dx-tab-text-span {
+    .dx-tab-content .dx-tab-text-span {
       visibility: visible;
 
       .dx-tab-text-span-pseudo {
@@ -47,7 +47,7 @@
   &.dx-state-disabled {
     color: $tabs-tab-disabled-color;
 
-    .dx-tab-text .dx-tab-text-span-pseudo {
+    .dx-tab-content .dx-tab-text-span-pseudo {
       color: $tabs-tab-disabled-color;
     }
 
@@ -60,7 +60,7 @@
     background-color: $tabs-active-tab-bg-color;
   }
 
-  .dx-tab-text {
+  .dx-tab-content {
     column-gap: $fluent-base-icon-margin;
     row-gap: $fluent-tabs-item-gap;
     line-height: $fluent-line-height;
@@ -109,20 +109,20 @@
   }
 }
 
-.dx-tabs-icon-position-start .dx-tab-text::after {
+.dx-tabs-icon-position-start .dx-tab-content::after {
   text-align: end;
 }
 
-.dx-tabs-icon-position-end .dx-tab-text::after {
+.dx-tabs-icon-position-end .dx-tab-content::after {
   text-align: start;
 }
 
-.dx-tabs-icon-position-top .dx-tab-text::after {
+.dx-tabs-icon-position-top .dx-tab-content::after {
   text-align: center;
   vertical-align: bottom;
 }
 
-.dx-tabs-icon-position-bottom .dx-tab-text::after {
+.dx-tabs-icon-position-bottom .dx-tab-content::after {
   text-align: center;
   vertical-align: top;
 }
