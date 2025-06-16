@@ -31,6 +31,8 @@ export class FilterSyncController {
 
   private previousFilterPanelValue: FilterValue | null = null;
 
+  private skipSyncFilters = false;
+
   private previousHeaderFilterInfoArray: HeaderFilterInfo[] = [];
 
   // 🚨🚨🚨 This controller was hotfixed during severe issues in filterSync feature.
@@ -45,6 +47,11 @@ export class FilterSyncController {
   ) {
     // --- FilterPanel -> HeaderFilter ---
     this.filterController.filterPanelValue.subscribe((filterPanelValue) => {
+      if (this.skipSyncFilters) {
+        this.skipSyncFilters = false;
+        return;
+      }
+
       // NOTE: Handle first load with empty FilterPanel value
       if (this.previousFilterPanelValue === null && filterPanelValue === null) {
         return;
@@ -61,6 +68,7 @@ export class FilterSyncController {
       // NOTE: If FilterPanel value is empty -> clear HeaderFilter values
       if (filterPanelValue === null) {
         this.headerFilterController.clearHeaderFilters();
+        this.skipSyncFilters = true;
         return;
       }
 
@@ -69,6 +77,7 @@ export class FilterSyncController {
       const headerFilterInfoArray = this.headerFilterController.headerFilterInfoArray.peek();
       if (!headerFilterInfoArray.length) {
         this.handleFilterPanelSync(filterPanelValue);
+        this.skipSyncFilters = true;
         return;
       }
 
@@ -86,12 +95,18 @@ export class FilterSyncController {
         return;
       }
 
-      // NOTE: If all conditions above passed sync FilterPanel -> HeaderFilter values
+      // NOTE: If all conditions  above passed sync FilterPanel -> HeaderFilter values
       this.handleFilterPanelSync(filterPanelValue);
+      this.skipSyncFilters = true;
     });
 
     // --- HeaderFilter -> FilterPanel ---
     this.headerFilterController.headerFilterInfoArray.subscribe((headerFilterInfoArray) => {
+      if (this.skipSyncFilters) {
+        this.skipSyncFilters = false;
+        return;
+      }
+
       // NOTE: Handle first load with empty HeaderFilter values
       if (!this.previousHeaderFilterInfoArray?.length && !headerFilterInfoArray.length) {
         return;
@@ -109,6 +124,7 @@ export class FilterSyncController {
       const filterPanelEnabled = this.filterController.filterPanelFilterEnabled.value;
       if (!headerFilterInfoArray.length && filterPanelEnabled) {
         this.filterController.filterValueOption.value = null;
+        this.skipSyncFilters = true;
         return;
       }
 
@@ -125,6 +141,7 @@ export class FilterSyncController {
 
       // NOTE: If all conditions above passed sync HeaderFilter -> FilterPanel values
       this.handleHeaderFilterSync(newFilterPanelValue);
+      this.skipSyncFilters = true;
     });
   }
 
