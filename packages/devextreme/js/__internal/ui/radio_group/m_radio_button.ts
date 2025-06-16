@@ -108,11 +108,9 @@ class RadioButton extends Editor {
   }
 
   _clickHandler(e): void {
-    const { value } = this.option();
-    if (value === false) {
-      this._saveValueChangeEvent(e);
-    }
+    this._saveValueChangeEvent(e);
     this.option('value', true);
+    this._saveValueChangeEvent(undefined);
   }
 
   _optionChanged(args: OptionChanged<RadioButtonProperties>): void {
