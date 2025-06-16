@@ -76,9 +76,6 @@ class EditDecoratorSelection extends EditDecorator {
         const isUiClick = !!event;
         if (isUiClick) {
           component._valueChangeEventInstance = undefined;
-          if (this._controlClass === SELECT_RADIO_BUTTON_CLASS && value === false) {
-            return;
-          }
           component.option('value', !value);
         }
       },

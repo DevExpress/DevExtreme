@@ -2596,7 +2596,7 @@ QUnit.module('item select decorator with single selection mode', () => {
     });
 
     QUnit.test('only one item should remain selected after double-clicking on its radio control and then clicking on another item control (T1294715)', function(assert) {
-        const $list = $('#templated-list').dxList({
+        const $list = $('#list').dxList({
             items: [
                 { id: 1, text: 'item 1' },
                 { id: 2, text: 'item 2' },
