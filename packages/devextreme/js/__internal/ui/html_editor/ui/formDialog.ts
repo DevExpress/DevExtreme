@@ -10,7 +10,6 @@ import type Popup from '@js/ui/popup';
 import { current, isFluent, isMaterialBased } from '@js/ui/themes';
 import type { FormProperties } from '@ts/ui/form/m_form';
 
-import type { DxEvent } from '../../../../events';
 import BaseDialog from './m_baseDialog';
 
 interface ButtonConfig {
@@ -165,7 +164,7 @@ export default class FormDialog extends BaseDialog {
     };
   }
 
-  public callAddButtonAction(event?: DxEvent): void {
+  public callAddButtonAction(event?: ClickEvent['event']): void {
     if (this.beforeAddButtonAction && !this.beforeAddButtonAction()) {
       return;
     }
@@ -183,7 +182,7 @@ export default class FormDialog extends BaseDialog {
     return super.show();
   }
 
-  public hide(formData: FormProperties, event?: DxEvent): void {
+  public hide(formData: FormProperties, event?: ClickEvent['event']): void {
     this.deferred?.resolve(formData, event);
 
     super.hide();

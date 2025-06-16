@@ -1,12 +1,17 @@
+type PickFromEvent<TNativeEvent extends Event, TTargetEvents extends Event, EventName extends keyof TTargetEvents> =
+  TNativeEvent extends Pick<TTargetEvents, EventName>
+    ? TTargetEvents[EventName]
+    : undefined;
+
 /**
  * @namespace DevExpress.events
  */
-export type EventObject = {
+export type EventObject<TNativeEvent extends Event = Event> = {
   /**
    * @docid
    * @public
    */
-  altKey: boolean;
+  altKey: PickFromEvent<TNativeEvent, MouseEvent | TouchEvent | KeyboardEvent, 'altKey'>;
 
   /**
    * @docid
@@ -18,13 +23,13 @@ export type EventObject = {
    * @docid
    * @public
    */
-  button: number;
+  button: PickFromEvent<TNativeEvent, MouseEvent, 'button'>;
 
   /**
    * @docid
    * @public
    */
-  buttons: number;
+  buttons: PickFromEvent<TNativeEvent, MouseEvent, 'buttons'>;
 
   /**
    * @docid
@@ -37,8 +42,7 @@ export type EventObject = {
    * @public
    * @type object
    */
-  changedTouches: TouchList;
-
+  changedTouches: PickFromEvent<TNativeEvent, TouchEvent, 'changedTouches'>;
   /**
    * @docid
    * @public
@@ -49,31 +53,31 @@ export type EventObject = {
    * @docid
    * @public
    */
-  charCode: number;
+  charCode: PickFromEvent<TNativeEvent, KeyboardEvent, 'charCode'>;
 
   /**
    * @docid
    * @public
    */
-  clientX: number;
+  clientX: PickFromEvent<TNativeEvent, MouseEvent, 'clientX'>;
 
   /**
    * @docid
    * @public
    */
-  clientY: number;
+  clientY: PickFromEvent<TNativeEvent, MouseEvent, 'clientY'>;
 
   /**
    * @docid
    * @public
    */
-  code: string;
+  code: PickFromEvent<TNativeEvent, KeyboardEvent, 'code'>;
 
   /**
    * @docid
    * @public
    */
-  ctrlKey: boolean;
+  ctrlKey: PickFromEvent<TNativeEvent, KeyboardEvent | MouseEvent | TouchEvent, 'ctrlKey'>;
 
   /**
    * @docid
@@ -97,7 +101,7 @@ export type EventObject = {
    * @docid
    * @public
    */
-  detail: number;
+  detail: PickFromEvent<TNativeEvent, UIEvent, 'detail'>;
 
   /**
    * @docid
@@ -121,79 +125,79 @@ export type EventObject = {
    * @docid
    * @public
    */
-  key: string;
+  key: PickFromEvent<TNativeEvent, KeyboardEvent, 'key'>;
 
   /**
    * @docid
    * @public
    */
-  keyCode: number;
+  keyCode: PickFromEvent<TNativeEvent, KeyboardEvent, 'keyCode'>;
 
   /**
    * @docid
    * @public
    */
-  metaKey: boolean;
+  metaKey: PickFromEvent<TNativeEvent, KeyboardEvent | TouchEvent | MouseEvent, 'metaKey'>;
 
   /**
    * @docid
    * @public
    */
-  offsetX: number;
+  offsetX: PickFromEvent<TNativeEvent, MouseEvent, 'offsetX'>;
 
   /**
    * @docid
    * @public
    */
-  offsetY: number;
+  offsetY: PickFromEvent<TNativeEvent, MouseEvent, 'offsetY'>;
 
   /**
    * @docid
    * @public
    */
-  pageX: number;
+  pageX: PickFromEvent<TNativeEvent, MouseEvent, 'pageX'>;
 
   /**
    * @docid
    * @public
    */
-  pageY: number;
+  pageY: PickFromEvent<TNativeEvent, MouseEvent, 'pageY'>;
 
   /**
    * @docid
    * @public
    */
-  pointerId: number;
+  pointerId: PickFromEvent<TNativeEvent, PointerEvent, 'pointerId'>;
 
   /**
    * @docid
    * @public
    */
-  pointerType: string;
+  pointerType: PickFromEvent<TNativeEvent, PointerEvent, 'pointerType'>;
 
   /**
    * @docid
    * @public
    */
-  relatedTarget: Element;
+  relatedTarget: PickFromEvent<TNativeEvent, FocusEvent | MouseEvent, 'relatedTarget'>;
 
   /**
    * @docid
    * @public
    */
-  screenX: number;
+  screenX: PickFromEvent<TNativeEvent, MouseEvent, 'screenX'>;
 
   /**
    * @docid
    * @public
    */
-  screenY: number;
+  screenY: PickFromEvent<TNativeEvent, MouseEvent, 'screenY'>;
 
   /**
    * @docid
    * @public
    */
-  shiftKey: boolean;
+  shiftKey: PickFromEvent<TNativeEvent, MouseEvent | KeyboardEvent | TouchEvent, 'shiftKey'>;
 
   /**
    * @docid
@@ -206,7 +210,7 @@ export type EventObject = {
    * @public
    * @type object
    */
-  targetTouches: TouchList;
+  targetTouches: PickFromEvent<TNativeEvent, TouchEvent, 'targetTouches'>;
 
   /**
    * @docid
@@ -225,7 +229,7 @@ export type EventObject = {
    * @public
    * @type object
    */
-  touches: TouchList;
+  touches: PickFromEvent<TNativeEvent, TouchEvent, 'touches'>;
 
   /**
    * @docid
@@ -237,7 +241,7 @@ export type EventObject = {
    * @docid
    * @public
    */
-  view: Window | null;
+  view: PickFromEvent<TNativeEvent, UIEvent, 'view'>;
 
   /**
    * @docid
@@ -298,7 +302,7 @@ export interface EventType { }
  * @docid
  * @type EventObject|jQuery.Event
  */
-export type DxEvent<TNativeEvent extends Event = Event> = ({} extends EventType ? EventObject : EventType) & {
+export type DxEvent<TNativeEvent extends Event = Event> = ({} extends EventType ? EventObject<TNativeEvent> : EventType) & {
   /**
    * @docid
    * @public

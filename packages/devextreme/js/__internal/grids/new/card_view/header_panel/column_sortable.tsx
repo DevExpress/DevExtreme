@@ -5,6 +5,7 @@ import { combineClasses } from '@ts/core/utils/combine_classes';
 import type { ComponentType, InfernoNode } from 'inferno';
 import { Component, render } from 'inferno';
 
+import type { DxEvent } from '../../../../../events';
 import type { Column, VisibleColumn } from '../../grid_core/columns_controller/types';
 import { Icon } from '../../grid_core/icon';
 import type { Props as SortableProps } from '../../grid_core/inferno_wrappers/sortable';
@@ -192,10 +193,8 @@ export class ColumnSortable extends Component<Props> {
     } = e.itemData as DraggingColumnData;
 
     const containerRect = $(e.element).get(0).getBoundingClientRect();
-    // @ts-expect-error
-    const mouseX = e.event.clientX;
-    // @ts-expect-error
-    const mouseY = e.event.clientY;
+    const mouseX = (e.event as DxEvent<MouseEvent | PointerEvent>).clientX;
+    const mouseY = (e.event as DxEvent<MouseEvent | PointerEvent>).clientY;
 
     const yDistance = Math.min(
       Math.abs(mouseY - containerRect.y),

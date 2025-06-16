@@ -774,11 +774,11 @@ class TextEditorBase<
     return element === this._input().get(0);
   }
 
-  _preventNestedFocusEvent(event: DxEvent): boolean {
+  _preventNestedFocusEvent(event: DxEvent<FocusEvent>): boolean {
     if (event.isDefaultPrevented()) {
       return true;
     }
-    let shouldPrevent = this._isNestedTarget(event.relatedTarget);
+    let shouldPrevent = this._isNestedTarget(event.relatedTarget as Element);
 
     if (event.type === 'focusin') {
       shouldPrevent = shouldPrevent
@@ -804,13 +804,13 @@ class TextEditorBase<
     return this.$element();
   }
 
-  _focusInHandler(event: DxEvent): void {
+  _focusInHandler(event: DxEvent<FocusEvent>): void {
     this._preventNestedFocusEvent(event);
 
     super._focusInHandler(event);
   }
 
-  _focusOutHandler(event: DxEvent): void {
+  _focusOutHandler(event: DxEvent<FocusEvent>): void {
     this._preventNestedFocusEvent(event);
 
     super._focusOutHandler(event);

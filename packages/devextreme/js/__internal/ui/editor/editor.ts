@@ -199,7 +199,7 @@ class Editor<
     this._valueChangeEventInstance = e;
   }
 
-  _focusInHandler(e: DxEvent): void {
+  _focusInHandler(e: DxEvent<FocusEvent>): void {
     const { validationMessageMode } = this.option();
     const isValidationMessageShownOnFocus = validationMessageMode === 'auto';
 

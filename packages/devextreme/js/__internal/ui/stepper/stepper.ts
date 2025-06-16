@@ -361,7 +361,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     super._hover($el, $previous);
   }
 
-  _focusOutHandler(e: DxEvent): void {
+  _focusOutHandler(e: DxEvent<FocusEvent>): void {
     this._clearFocusedItem();
 
     super._focusOutHandler(e);

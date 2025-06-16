@@ -55,7 +55,6 @@ const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
 export type QuillInstance = any;
 
 type ModulesConfig = Record<string, unknown>;
-type FocusEvent = DxEvent & { relatedTarget?: Element };
 
 interface TextSelection {
   index: number;
@@ -180,10 +179,10 @@ class HtmlEditor extends Editor<Properties> {
     return this.$element().find(`.${HTML_EDITOR_CONTENT_CLASS}`);
   }
 
-  _focusInHandler(e: DxEvent): void {
-    const { relatedTarget } = e as FocusEvent;
+  _focusInHandler(e: DxEvent<FocusEvent>): void {
+    const { relatedTarget } = e;
 
-    if (this._shouldSkipFocusEvent(relatedTarget)) {
+    if (this._shouldSkipFocusEvent(relatedTarget as Element)) {
       return;
     }
 
@@ -192,10 +191,10 @@ class HtmlEditor extends Editor<Properties> {
     super._focusInHandler(e);
   }
 
-  _focusOutHandler(e: DxEvent): void {
-    const { relatedTarget } = e as FocusEvent;
+  _focusOutHandler(e: DxEvent<FocusEvent>): void {
+    const { relatedTarget } = e;
 
-    if (this._shouldSkipFocusEvent(relatedTarget)) {
+    if (this._shouldSkipFocusEvent(relatedTarget as Element)) {
       return;
     }
 

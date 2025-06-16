@@ -306,7 +306,7 @@ class Widget<
     return this._focusTarget();
   }
 
-  _focusInHandler(event: DxEvent): void {
+  _focusInHandler(event: DxEvent<FocusEvent>): void {
     if (!event.isDefaultPrevented()) {
       this._createActionByOption('onFocusIn', {
         beforeExecute: () => this._updateFocusState(event, true),
@@ -315,7 +315,7 @@ class Widget<
     }
   }
 
-  _focusOutHandler(event: DxEvent): void {
+  _focusOutHandler(event: DxEvent<FocusEvent>): void {
     if (!event.isDefaultPrevented()) {
       this._createActionByOption('onFocusOut', {
         beforeExecute: () => this._updateFocusState(event, false),
