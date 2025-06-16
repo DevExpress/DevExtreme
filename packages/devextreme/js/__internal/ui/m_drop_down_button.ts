@@ -414,11 +414,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
         at: `${horizontalAlignment} bottom`,
       },
       _wrapperClassExternal: DROP_DOWN_EDITOR_OVERLAY_CLASS,
-      integrationOptions: {
-        templates: {
-          content: undefined,
-        },
-      },
+      contentTemplate: null,
     }, this._options.cache('dropDownOptions'), { visible: this.option('opened') });
   }
 
