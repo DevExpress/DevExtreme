@@ -557,6 +557,41 @@ describe('option control', () => {
     expect(Widget.option.mock.calls.length).toBe(0);
   });
 
+  it('applies option changed twice', () => {
+    const { rerender } = render(
+      <ControlledComponent controlledOption='a' />,
+    );
+
+    fireOptionChange('controlledOption', 'b');
+    fireOptionChange('controlledOption', 'c');
+
+    rerender(
+      <ControlledComponent controlledOption='c' />,
+    );
+
+    jest.runAllTimers();
+
+    expect(Widget.option.mock.calls.length).toBe(0);
+  });
+
+  it('rolls back an option changed one extra time', () => {
+    const { rerender } = render(
+      <ControlledComponent controlledOption='a' />,
+    );
+
+    fireOptionChange('controlledOption', 'b');
+    fireOptionChange('controlledOption', 'c');
+
+    rerender(
+      <ControlledComponent controlledOption='b' />,
+    );
+
+    jest.runAllTimers();
+
+    expect(Widget.option.mock.calls.length).toBe(1);
+    expect(Widget.option.mock.calls[0]).toEqual(['controlledOption', 'b']);
+  });
+
   it('applies option change with async React 18+ update', () => {
     const { rerender } = render(
       <ControlledComponent everyOption={123} />,
