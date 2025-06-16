@@ -1,10 +1,6 @@
-<dx-card-view
-  [dataSource]="employees"
-  keyExpr="id"
-  [searchPanel]="searchPanelConfig"
-  [cardsPerRow]="2"
->
+<dx-card-view [dataSource]="employees" keyExpr="id" [cardsPerRow]="2">
   <dxo-card-view-paging [pageSize]="4"></dxo-card-view-paging>
+  <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
   <dxo-card-view-card-cover
     [imageExpr]="imageExpr"
     [altExpr]="altExpr"
@@ -14,8 +10,58 @@
     [allowUpdating]="true"
     [allowDeleting]="true"
     [popup]="popupConfig"
-    [form]="formConfig"
-  ></dxo-card-view-editing>
+  >
+    <dxo-card-view-form>
+      <dxo-card-view-form-item
+        caption="Personal Data"
+        itemType="group"
+        [colCount]="2"
+        [colSpan]="2"
+      >
+        <dxo-card-view-form-item
+          dataField="firstName"
+        ></dxo-card-view-form-item>
+        <dxo-card-view-form-item dataField="lastName"></dxo-card-view-form-item>
+        <dxo-card-view-form-item
+          dataField="birthDate"
+        ></dxo-card-view-form-item>
+        <dxo-card-view-form-item dataField="picture"></dxo-card-view-form-item>
+      </dxo-card-view-form-item>
+      <dxo-card-view-form-item
+        caption="Main Info"
+        itemType="group"
+        [colCount]="2"
+        [colSpan]="2"
+      >
+        <dxo-card-view-form-item dataField="hireDate"></dxo-card-view-form-item>
+        <dxo-card-view-form-item dataField="title"></dxo-card-view-form-item>
+        <dxo-card-view-form-item
+          dataField="notes"
+          editorType="dxTextArea"
+          [colSpan]="2"
+          [editorOptions]="{ height: 100 }"
+        ></dxo-card-view-form-item>
+        <dxo-card-view-form-item dataField="picture"></dxo-card-view-form-item>
+      </dxo-card-view-form-item>
+      <dxo-card-view-form-item
+        caption="Contacts"
+        itemType="group"
+        [colCount]="2"
+        [colSpan]="2"
+      >
+        <dxo-card-view-form-item
+          dataField="address"
+          [colSpan]="2"
+        ></dxo-card-view-form-item>
+        <dxo-card-view-form-item dataField="city"></dxo-card-view-form-item>
+        <dxo-card-view-form-item dataField="zipcode"></dxo-card-view-form-item>
+        <dxo-card-view-form-item
+          dataField="mobilePhone"
+        ></dxo-card-view-form-item>
+        <dxo-card-view-form-item dataField="email"></dxo-card-view-form-item>
+      </dxo-card-view-form-item>
+    </dxo-card-view-form>
+  </dxo-card-view-editing>
   <dxi-card-view-column
     caption="Full Name"
     [calculateFieldValue]="calculateFullName"
