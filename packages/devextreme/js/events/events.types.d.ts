@@ -10,6 +10,7 @@ export type EventObject<TNativeEvent extends Event = Event> = {
   /**
    * @docid
    * @public
+   * @type boolean
    */
   altKey: PickFromEvent<TNativeEvent, MouseEvent | TouchEvent | KeyboardEvent, 'altKey'>;
 
@@ -22,12 +23,14 @@ export type EventObject<TNativeEvent extends Event = Event> = {
   /**
    * @docid
    * @public
+   * @type number
    */
   button: PickFromEvent<TNativeEvent, MouseEvent, 'button'>;
 
   /**
    * @docid
    * @public
+   * @type number
    */
   buttons: PickFromEvent<TNativeEvent, MouseEvent, 'buttons'>;
 
@@ -52,30 +55,35 @@ export type EventObject<TNativeEvent extends Event = Event> = {
   /**
    * @docid
    * @public
+   * @type number
    */
   charCode: PickFromEvent<TNativeEvent, KeyboardEvent, 'charCode'>;
 
   /**
    * @docid
    * @public
+   * @type number
    */
   clientX: PickFromEvent<TNativeEvent, MouseEvent, 'clientX'>;
 
   /**
    * @docid
    * @public
+   * @type number
    */
   clientY: PickFromEvent<TNativeEvent, MouseEvent, 'clientY'>;
 
   /**
    * @docid
    * @public
+   * @type string
    */
   code: PickFromEvent<TNativeEvent, KeyboardEvent, 'code'>;
 
   /**
    * @docid
    * @public
+   * @type boolean
    */
   ctrlKey: PickFromEvent<TNativeEvent, KeyboardEvent | MouseEvent | TouchEvent, 'ctrlKey'>;
 
@@ -100,6 +108,7 @@ export type EventObject<TNativeEvent extends Event = Event> = {
   /**
    * @docid
    * @public
+   * @type number
    */
   detail: PickFromEvent<TNativeEvent, UIEvent, 'detail'>;
 
@@ -124,78 +133,91 @@ export type EventObject<TNativeEvent extends Event = Event> = {
   /**
    * @docid
    * @public
+   * @type string
    */
   key: PickFromEvent<TNativeEvent, KeyboardEvent, 'key'>;
 
   /**
    * @docid
    * @public
+   * @type number
    */
   keyCode: PickFromEvent<TNativeEvent, KeyboardEvent, 'keyCode'>;
 
   /**
    * @docid
    * @public
+   * @type boolean
    */
   metaKey: PickFromEvent<TNativeEvent, KeyboardEvent | TouchEvent | MouseEvent, 'metaKey'>;
 
   /**
    * @docid
    * @public
+   * @type number
    */
   offsetX: PickFromEvent<TNativeEvent, MouseEvent, 'offsetX'>;
 
   /**
    * @docid
    * @public
+   * @type number
    */
   offsetY: PickFromEvent<TNativeEvent, MouseEvent, 'offsetY'>;
 
   /**
    * @docid
    * @public
+   * @type number
    */
   pageX: PickFromEvent<TNativeEvent, MouseEvent, 'pageX'>;
 
   /**
    * @docid
    * @public
+   * @type number
    */
   pageY: PickFromEvent<TNativeEvent, MouseEvent, 'pageY'>;
 
   /**
    * @docid
    * @public
+   * @type number
    */
   pointerId: PickFromEvent<TNativeEvent, PointerEvent, 'pointerId'>;
 
   /**
    * @docid
    * @public
+   * @type string
    */
   pointerType: PickFromEvent<TNativeEvent, PointerEvent, 'pointerType'>;
 
   /**
    * @docid
    * @public
+   * @type Element
    */
   relatedTarget: PickFromEvent<TNativeEvent, FocusEvent | MouseEvent, 'relatedTarget'>;
 
   /**
    * @docid
    * @public
+   * @type number
    */
   screenX: PickFromEvent<TNativeEvent, MouseEvent, 'screenX'>;
 
   /**
    * @docid
    * @public
+   * @type number
    */
   screenY: PickFromEvent<TNativeEvent, MouseEvent, 'screenY'>;
 
   /**
    * @docid
    * @public
+   * @type boolean
    */
   shiftKey: PickFromEvent<TNativeEvent, MouseEvent | KeyboardEvent | TouchEvent, 'shiftKey'>;
 
@@ -240,6 +262,7 @@ export type EventObject<TNativeEvent extends Event = Event> = {
   /**
    * @docid
    * @public
+   * @type object
    */
   view: PickFromEvent<TNativeEvent, UIEvent, 'view'>;
 
