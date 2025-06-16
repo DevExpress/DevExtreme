@@ -2,9 +2,10 @@
   id="cardView"
   [dataSource]="houses"
   keyExpr="ID"
-  [cardsPerRow]="2"
+  cardsPerRow="auto"
+  [cardMinWidth]="350"
+  [wordWrapEnabled]="true"
 >
-  <dxo-card-view-paging [pageSize]="4"></dxo-card-view-paging>
   <dxo-card-view-sorting mode="multiple"></dxo-card-view-sorting>
   <dxo-card-view-card-cover
     [imageExpr]="imageExpr"

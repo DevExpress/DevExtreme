@@ -1,5 +1,5 @@
 import React from 'react';
-import CardView, { Column, Paging } from 'devextreme-react/card-view';
+import CardView, { Column } from 'devextreme-react/card-view';
 import { customers } from './data.ts';
 
 const columns = ['Company', 'Address', 'City', 'State', 'Zipcode', 'Phone'];
@@ -8,11 +8,9 @@ const App = () => (
   <CardView
     dataSource={customers}
     keyExpr="ID"
-    cardsPerRow={2}
+    cardsPerRow="auto"
+    cardMinWidth={320}
   >
-    <Paging
-      pageSize={4}
-    />
     { columns.map((column, index) => <Column dataField={column} key={index} />) }
   </CardView>
 );

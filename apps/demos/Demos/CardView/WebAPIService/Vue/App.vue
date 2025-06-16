@@ -2,7 +2,8 @@
   <DxCardView
     :data-source="dataSource"
     :remote-operations="true"
-    :card-min-width="100"
+    cards-per-row="auto"
+    :card-min-width="280"
     :word-wrap-enabled="true"
   >
     <DxSearchPanel

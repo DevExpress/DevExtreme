@@ -3,9 +3,9 @@
   [dataSource]="orders"
   keyExpr="ID"
   [filterValue]="filterValue"
-  [cardsPerRow]="2"
+  cardsPerRow="auto"
+  [cardMinWidth]="310"
 >
-  <dxo-card-view-paging [pageSize]="4"></dxo-card-view-paging>
   <dxo-card-view-header-filter [visible]="true"></dxo-card-view-header-filter>
   <dxo-card-view-filter-panel [visible]="true"></dxo-card-view-filter-panel>
   <dxo-card-view-filter-builder

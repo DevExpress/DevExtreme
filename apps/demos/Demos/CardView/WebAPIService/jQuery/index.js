@@ -15,7 +15,8 @@ $(() => {
   $('#card-view').dxCardView({
     dataSource: store,
     remoteOperations: true,
-    cardMinWidth: 100,
+    cardsPerRow: 'auto',
+    cardMinWidth: 280,
     wordWrapEnabled: true,
     columns: [
       {

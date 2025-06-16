@@ -34,8 +34,8 @@
 <dx-card-view
   [dataSource]="employees"
   keyExpr="ID"
-  [cardMinWidth]="100"
-  [wordWrapEnabled]="true"
+  cardsPerRow="auto"
+  [cardMinWidth]="300"
 >
   <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
   <dxo-card-view-column-chooser [enabled]="true" [mode]="columnChooserMode">

@@ -3,12 +3,10 @@
     id="cardView"
     :data-source="orders"
     key-expr="ID"
-    :cards-per-row="2"
     :allow-column-reordering="true"
+    cards-per-row="auto"
+    :card-min-width="300"
   >
-    <DxPaging
-      :page-size="4"
-    />
     <DxColumn
       data-field="OrderNumber"
       :allow-reordering="false"
@@ -27,6 +25,6 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-import { DxCardView, DxColumn, DxPaging } from 'devextreme-vue/card-view';
+import { DxCardView, DxColumn } from 'devextreme-vue/card-view';
 import { orders } from './data.ts';
 </script>

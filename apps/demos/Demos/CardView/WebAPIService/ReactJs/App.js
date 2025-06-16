@@ -23,7 +23,8 @@ const App = () => (
   <CardView
     dataSource={dataSource}
     remoteOperations={true}
-    cardMinWidth={100}
+    cardsPerRow="auto"
+    cardMinWidth={280}
     wordWrapEnabled={true}
   >
     <SearchPanel visible={true} />

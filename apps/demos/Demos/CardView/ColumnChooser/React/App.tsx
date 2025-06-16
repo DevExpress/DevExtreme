@@ -68,8 +68,8 @@ const App = () => {
     <CardView
       dataSource={employees}
       keyExpr="ID"
-      cardMinWidth={100}
-      wordWrapEnabled={true}
+      cardsPerRow="auto"
+      cardMinWidth={300}
     >
       <SearchPanel
         visible={true}

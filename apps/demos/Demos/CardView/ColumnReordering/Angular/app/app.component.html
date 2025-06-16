@@ -3,9 +3,9 @@
   [dataSource]="orders"
   keyExpr="ID"
   [allowColumnReordering]="true"
-  [cardsPerRow]="2"
+  cardsPerRow="auto"
+  [cardMinWidth]="300"
 >
-  <dxo-card-view-paging [pageSize]="4"></dxo-card-view-paging>
   <dxi-card-view-column
     dataField="OrderNumber"
     [allowReordering]="false"
