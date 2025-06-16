@@ -503,3 +503,86 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     columnRenderingMode: 'virtual',
   },
 }));
+
+[true, false].forEach((useNative) => {
+  test(`${useNative ? 'Native' : 'Simulated'} scrolling: Focus should be on the first focusable cell when pressing the Ctrl + Home key when row dragging, virtual scrolling and columns are enabled`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    // act
+    await t
+      .click(dataGrid.getDataCell(0, 1).element)
+      .pressKey('ctrl+end');
+
+    // assert
+    await t
+      .expect(dataGrid.getDataCell(199, 35).element.focused)
+      .ok();
+
+    // act
+    await t
+      .click(dataGrid.getDataCell(199, 35).element)
+      .pressKey('ctrl+home');
+
+    await takeScreenshot(`${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_first_cell_when_row_dragging_and_virtual_scrolling_and_virtual_columns_are_enabled`, dataGrid.element);
+
+    // assert
+    await t
+      .expect(dataGrid.getDataCell(0, 1).element.focused)
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: getData(200, 35),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    scrolling: {
+      mode: 'virtual',
+      columnRenderingMode: 'virtual',
+      useNative,
+    },
+    rowDragging: {
+      allowReordering: true,
+      showDragIcons: true,
+    },
+  }));
+
+  test(`${useNative ? 'Native' : 'Simulated'} scrolling: Focus should be on the last focusable cell when pressing the Ctrl + Home key when row dragging, virtual scrolling and columns are enabled`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    // act
+    await t
+      .click(dataGrid.getDataCell(0, 0).element)
+      .pressKey('ctrl+end');
+
+    await takeScreenshot(`${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_last_cell_when_row_dragging_and_virtual_scrolling_and_virtual_columns_are_enabled`, dataGrid.element);
+
+    // assert
+    await t
+      .expect(dataGrid.getDataCell(199, 34).element.focused)
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: getData(200, 35),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    scrolling: {
+      mode: 'virtual',
+      columnRenderingMode: 'virtual',
+      useNative,
+    },
+    customizeColumns(columns) {
+      columns.push({ type: 'drag' });
+    },
+    rowDragging: {
+      allowReordering: true,
+      showDragIcons: true,
+    },
+  }));
+});
