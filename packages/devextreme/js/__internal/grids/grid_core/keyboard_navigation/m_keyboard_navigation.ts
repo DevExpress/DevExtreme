@@ -1329,6 +1329,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   public navigateToFirstOrLastCell(needNavigateToFirstCell: boolean, e?: KeyboardEvent): void {
     const firstOrLastColumnIndex = this.getFirstOrLastColumnIndex(needNavigateToFirstCell);
 
+    this._needNavigationToCell = false;
+
     if (firstOrLastColumnIndex < 0) {
       return;
     }
