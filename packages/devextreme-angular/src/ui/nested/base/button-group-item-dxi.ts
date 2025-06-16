@@ -469,13 +469,6 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('imageSrc', value);
     }
 
-    get commands(): Array<AICommandName | AICommand> {
-        return this._getOption('commands');
-    }
-    set commands(value: Array<AICommandName | AICommand>) {
-        this._setOption('commands', value);
-    }
-
     get acceptedValues(): Array<string | number | boolean> {
         return this._getOption('acceptedValues');
     }
@@ -495,6 +488,13 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set formatValues(value: Array<string | number | boolean>) {
         this._setOption('formatValues', value);
+    }
+
+    get commands(): Array<AICommandName | AICommand> {
+        return this._getOption('commands');
+    }
+    set commands(value: Array<AICommandName | AICommand>) {
+        this._setOption('commands', value);
     }
 
     get key(): string {
