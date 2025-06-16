@@ -241,7 +241,7 @@ export class DataController {
         const pageIndex = this.pageIndex.value;
         const pageSize = this.pageSize.value;
         const isLoaded = this.isLoaded.value;
-        const displayFilter = this.normalizedDisplayFilter.value;
+        const displayFilter = this.filterController.displayFilter.value;
         const pagingEnabled = this.pagingEnabled.value;
         const sortParameters = this.sortingController.sortParameters.value;
 
@@ -327,9 +327,7 @@ export class DataController {
 
     const firstItem = items[0];
 
-    if (firstItem) {
-      this.columnsController.setColumnOptionsFromDataItem(firstItem);
-    }
+    this.columnsController.setColumnOptionsFromDataItem(firstItem ?? {});
 
     this._items.value = items;
     this.pageIndex.value = dataSource.pageIndex();

@@ -63,8 +63,10 @@ export const getConditionFromHeaderFilter = ({
     case type === 'values-or-condition' && filterType === 'exclude':
       return [columnId, 'noneof', filterValues];
     case type === 'values-or-condition' && filterType === 'include':
-    default:
       return [columnId, 'anyof', filterValues];
+    case type === 'empty':
+    default:
+      return null;
   }
 };
 

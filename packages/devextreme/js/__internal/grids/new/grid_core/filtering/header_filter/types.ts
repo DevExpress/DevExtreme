@@ -88,7 +88,7 @@ export interface HeaderFilterRootOptions extends HeaderFilterBaseOptions {
   visible?: boolean;
 }
 
-export type HeaderFilterValuesType = 'single-value' | 'values-or-condition';
+export type HeaderFilterValuesType = 'single-value' | 'values-or-condition' | 'empty';
 
 export interface HeaderFilterInfo {
   type: HeaderFilterValuesType;
