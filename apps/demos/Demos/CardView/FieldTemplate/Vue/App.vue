@@ -2,7 +2,7 @@
   <DxCardView
     :data-source="tasks"
     cards-per-row="auto"
-    :card-min-width="260"
+    :card-min-width="240"
   >
     <DxCardHeader
       :visible="true"

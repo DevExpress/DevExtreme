@@ -10,6 +10,7 @@ if (window && window.config?.packageConfigPaths) {
 @Component({
   selector: 'employee',
   templateUrl: `.${modulePrefix}/employee/employee.component.html`,
+  styleUrls: [`.${modulePrefix}/employee/employee.component.css`],
 })
 export class EmployeeComponent implements OnChanges {
   employees: Employee[];
