@@ -4,7 +4,7 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
-import { getPublicElement, type UserDefinedElement } from '@js/core/element';
+import { getPublicElement } from '@js/core/element';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -39,7 +39,7 @@ const POSITION_FLIP_MAP = {
   center: 'center',
 };
 
-type PopoverTarget = string | UserDefinedElement | undefined;
+type PopoverTarget = string | dxElementWrapper | Element | undefined;
 
 export interface PopoverProperties extends Omit<Properties,
 'onTitleRendered' | 'onHidden' | 'onHiding' | 'onShowing' | 'onShown'
