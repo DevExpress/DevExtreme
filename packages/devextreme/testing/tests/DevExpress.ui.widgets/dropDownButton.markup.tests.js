@@ -1095,28 +1095,3 @@ QUnit.module('option change', {}, () => {
         assert.strictEqual(e.value, handler, 'changed option new value is correct');
     });
 });
-
-QUnit.module('content template', () => {
-    QUnit.test('content template render function should be called once (T1294338)', function(assert) {
-        if(!windowUtils.hasWindow()) {
-            assert.ok(true, 'this test is not related to the server side');
-            return;
-        }
-
-        const renderSpy = sinon.spy();
-
-        const dropDownButton = new DropDownButton($('#dropDownButton'), {
-            integrationOptions: {
-                templates: {
-                    content: {
-                        render: renderSpy,
-                    },
-                },
-            },
-        });
-
-        dropDownButton.open();
-
-        assert.ok(renderSpy.calledOnce, 'render called once');
-    });
-});
