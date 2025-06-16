@@ -2,10 +2,9 @@ $(() => {
   $('#card-view').dxCardView({
     dataSource: employees,
     keyExpr: 'id',
-    cardsPerRow: 2,
-    paging: {
-      pageSize: 4
-    },
+    cardsPerRow: 'auto',
+    cardMinWidth: 350,
+    height: 820,
     cardCover: {
       imageExpr: ({ picture }) => picture,
       altExpr: ({ fullName }) => `Photo of ${fullName}`,

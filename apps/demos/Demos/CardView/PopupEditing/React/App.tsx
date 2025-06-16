@@ -1,5 +1,5 @@
 import React from 'react';
-import CardView, { Column, CardCover, Editing, SearchPanel, Paging, Form, Item } from 'devextreme-react/card-view';
+import CardView, { Column, CardCover, Editing, SearchPanel, Form, Item } from 'devextreme-react/card-view';
 import 'devextreme-react/text-area';
 import { employees, Employee } from './data.ts';
 
@@ -19,11 +19,10 @@ const App = () => (
   <CardView
     dataSource={employees}
     keyExpr="id"
-    cardsPerRow={2}
+    cardsPerRow="auto"
+    cardMinWidth={350}
+    height={820}
   >
-    <Paging
-      pageSize={4}
-    />
     <SearchPanel
       visible={true}
     />

@@ -2,11 +2,10 @@
   <DxCardView
     :data-source="employees"
     key-expr="id"
-    :cards-per-row="2"
+    cards-per-row="auto"
+    :card-min-width="350"
+    :height="820"
   >
-    <DxPaging
-      :page-size="4"
-    />
     <DxSearchPanel
       :visible="true"
     />
@@ -140,7 +139,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxCardView, DxColumn, DxCardCover, DxSearchPanel, DxEditing, DxPaging, DxForm, DxItem
+  DxCardView, DxColumn, DxCardCover, DxSearchPanel, DxEditing, DxForm, DxItem
 } from 'devextreme-vue/card-view';
 import 'devextreme-vue/text-area';
 import { employees, type Employee } from './data.ts';

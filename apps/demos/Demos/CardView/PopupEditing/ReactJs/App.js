@@ -4,7 +4,6 @@ import CardView, {
   CardCover,
   Editing,
   SearchPanel,
-  Paging,
   Form,
   Item,
 } from 'devextreme-react/card-view';
@@ -24,9 +23,10 @@ const App = () => (
   <CardView
     dataSource={employees}
     keyExpr="id"
-    cardsPerRow={2}
+    cardsPerRow="auto"
+    cardMinWidth={350}
+    height={820}
   >
-    <Paging pageSize={4} />
     <SearchPanel visible={true} />
     <CardCover
       imageExpr={imageExpr}

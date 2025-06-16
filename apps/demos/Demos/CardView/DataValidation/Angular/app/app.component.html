@@ -1,5 +1,10 @@
-<dx-card-view [dataSource]="employees" keyExpr="id" [cardsPerRow]="2">
-  <dxo-card-view-paging [pageSize]="4"></dxo-card-view-paging>
+<dx-card-view
+  [dataSource]="employees"
+  keyExpr="id"
+  cardsPerRow="auto"
+  [cardMinWidth]="350"
+  [height]="820"
+>
   <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
   <dxo-card-view-card-cover
     [imageExpr]="imageExpr"
