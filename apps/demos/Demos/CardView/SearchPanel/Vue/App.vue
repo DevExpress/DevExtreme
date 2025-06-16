@@ -2,11 +2,10 @@
   <DxCardView
     :data-source="tasks"
     key-expr="Task_ID"
-    :cards-per-row="2"
+    cards-per-row="auto"
+    :card-min-width="310"
+    :word-wrap-enabled="true"
   >
-    <DxPaging
-      :page-size="4"
-    />
     <DxSearchPanel
       :visible="true"
       text="an"
@@ -39,6 +38,6 @@
   </DxCardView>
 </template>
 <script setup lang="ts">
-import { DxCardView, DxColumn, DxPaging, DxSearchPanel, DxHeaderFilter } from 'devextreme-vue/card-view';
+import { DxCardView, DxColumn, DxSearchPanel, DxHeaderFilter } from 'devextreme-vue/card-view';
 import { tasks } from './data.ts';
 </script>
