@@ -300,6 +300,8 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       showTitle: false,
       focusStateEnabled: false,
       hideOnOutsideClick: true,
+      hideOnParentScroll: true,
+      _hideOnParentScrollTarget: $overlay,
       wrapperAttr: { class: filterRangeOverlayClass },
       animation: false,
       position: {
