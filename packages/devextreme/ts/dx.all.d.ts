@@ -2377,6 +2377,7 @@ declare module DevExpress.common.charts {
       }
     | TimeInterval
     | undefined;
+  export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
   export type ValueErrorBarDisplayMode = 'auto' | 'high' | 'low' | 'none';
   export type ValueErrorBarType =
     | 'fixed'
@@ -37190,7 +37191,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.visualRangeUpdateMode]
        */
-      visualRangeUpdateMode?: DevExpress.common.charts.VisualRangeUpdateMode;
+      visualRangeUpdateMode?: DevExpress.common.charts.ValueAxisVisualRangeUpdateMode;
       /**
        * [descr:dxChartOptions.valueAxis.wholeRange]
        */
@@ -41763,7 +41764,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.valueAxis.visualRangeUpdateMode]
        */
-      visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode;
+      visualRangeUpdateMode?: DevExpress.common.charts.ValueAxisVisualRangeUpdateMode;
       /**
        * [descr:dxPolarChartOptions.valueAxis.wholeRange]
        */
@@ -41865,7 +41866,6 @@ declare module DevExpress.viz {
        */
       visible?: boolean;
     };
-    export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
     /**
      * [descr:_viz_polar_chart_ZoomEndEvent]
      */

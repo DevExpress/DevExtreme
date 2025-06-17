@@ -70,6 +70,7 @@ import {
  LegendHoverMode,
  PointInteractionMode,
  PointSymbol,
+ ValueAxisVisualRangeUpdateMode,
  ValueErrorBarDisplayMode,
  ValueErrorBarType,
 } from "devextreme/common/charts";
@@ -3454,7 +3455,7 @@ const DxValueAxisConfig = {
     valueType: String as PropType<ChartsDataType>,
     visible: Boolean,
     visualRange: [Array, Object] as PropType<(Array<Date | number | string>) | CommonChartTypes.VisualRange | Record<string, any>>,
-    visualRangeUpdateMode: String as PropType<VisualRangeUpdateMode>,
+    visualRangeUpdateMode: String as PropType<ValueAxisVisualRangeUpdateMode>,
     wholeRange: [Array, Object] as PropType<(Array<Date | number | string>) | CommonChartTypes.VisualRange | Record<string, any>>,
     width: Number
   }
