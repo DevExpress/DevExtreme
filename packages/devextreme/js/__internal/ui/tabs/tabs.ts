@@ -270,7 +270,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
     super._initTemplates();
 
     this._templateManager.addDefaultTemplates({
-      item: new BindableTemplate(($container, data) => {
+      item: new BindableTemplate(($container: dxElementWrapper, data: Item) => {
         this._prepareDefaultItemTemplate(data, $container);
 
         const $iconElement = getImageContainer(data.icon);
