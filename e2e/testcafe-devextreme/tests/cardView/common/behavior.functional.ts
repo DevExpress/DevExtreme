@@ -14,9 +14,9 @@ test('cardHeader.visibility property should change on contentReady', async (t) =
     .ok();
 }).before(async () => {
   await createWidget('dxCardView', {
-    dataSource: [{ID: 1}],
-    onContentReady: function(e) {
-        e.component.option('cardHeader.visible', true);
+    dataSource: [{ ID: 1 }],
+    onContentReady(e) {
+      e.component.option('cardHeader.visible', true);
     },
   });
 });
