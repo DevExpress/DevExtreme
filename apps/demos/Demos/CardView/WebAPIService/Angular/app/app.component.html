@@ -1,11 +1,12 @@
 <dx-card-view
   [dataSource]="dataSource"
   [remoteOperations]="true"
-  [headerFilter]="headerFilterConfig"
-  [searchPanel]="searchPanelConfig"
-  [cardMinWidth]="100"
+  cardsPerRow="auto"
+  [cardMinWidth]="280"
   [wordWrapEnabled]="true"
 >
+  <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
+  <dxo-card-view-header-filter [visible]="true"></dxo-card-view-header-filter>
   <dxo-card-view-editing
     [allowAdding]="true"
     [allowUpdating]="true"

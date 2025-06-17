@@ -32,7 +32,7 @@ function baseOperation(config) {
         const filterExpression = getFilterExpression(value, fields, [], 'headerFilter');
         result.push(filterExpression);
       } else {
-        const filterExpression = getFilterExpression([field.dataField, '=', value], fields, [], 'headerFilter');
+        const filterExpression = getFilterExpression([field.dataField ?? field.name, '=', value], fields, [], 'headerFilter');
         result.push(filterExpression);
       }
       index !== lastIndex && result.push('or');

@@ -39,24 +39,26 @@
   <DxCardView
     :data-source="employees"
     key-expr="ID"
-    :card-min-width="100"
-    :word-wrap-enabled="true"
-    :column-chooser="{
-      enabled: true,
-      mode: columnChooserMode,
-      search: {
-        enabled: searchEnabled,
-      },
-      selection: {
-        allowSelectAll: allowSelectAll,
-        selectByClick: selectByClick,
-      },
-    }"
-    :search-panel="{
-      visible: true,
-    }"
+    cards-per-row="auto"
+    :card-min-width="300"
     :selected-card-keys="[4, 6]"
   >
+    <DxSearchPanel
+      :visible="true"
+    />
+    <DxColumnChooser
+      :enabled="true"
+      :mode="columnChooserMode"
+      height="340px"
+    >
+      <DxColumnChooserSearch
+        :enabled="searchEnabled"
+      />
+      <DxColumnChooserSelection
+        :allow-select-all="allowSelectAll"
+        :select-by-click="selectByClick"
+      />
+    </DxColumnChooser>
     <DxCardCover
       :alt-expr="altExpr"
       :image-expr="imageExpr"
@@ -91,7 +93,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {
-  DxCardView, DxColumn, DxCardCover,
+  DxCardView, DxColumn, DxCardCover, DxSearchPanel, DxColumnChooser, DxColumnChooserSearch, DxColumnChooserSelection,
 } from 'devextreme-vue/card-view';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
@@ -135,6 +137,8 @@ const selectByClick = ref(true);
 
   .option {
     margin: 10px;
+    display: flex;
+    align-items: center;
     width: fit-content;
   }
 

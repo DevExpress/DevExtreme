@@ -15,7 +15,8 @@
                 "Name": "Overview",
                 "DocUrl": "",
                 "Widget": "DataGrid",
-                "DemoType": "Web"
+                "DemoType": "Web",
+                "ShowOnMainPage": true
               }
             ]
           },
@@ -545,8 +546,7 @@
                 "MvcAdditionalFiles": [
                   "/Scripts/data/employeeData.js"
                 ],
-                "DemoType": "Web",
-                "Badge": "New"
+                "DemoType": "Web"
               },
               {
                 "Title": "Column Resizing",
@@ -565,8 +565,7 @@
                   "/Models/DataGrid/Employee.cs",
                   "/Models/SampleData/DataGridEmployees.cs"
                 ],
-                "DemoType": "Web",
-                "Badge": "New"
+                "DemoType": "Web"
               },
               {
                 "Title": "Command Column Configuration",
@@ -1030,7 +1029,8 @@
                   "/Models/TreeList/EmployeeTask.cs",
                   "/Models/SampleData/EmployeeTasks.cs"
                 ],
-                "DemoType": "Web"
+                "DemoType": "Web",
+                "ShowOnMainPage": true
               }
             ]
           },
@@ -1425,7 +1425,8 @@
                 "Title": "Overview",
                 "Name": "Overview",
                 "Widget": "CardView",
-                "DemoType": "Web"
+                "DemoType": "Web",
+                "ShowOnMainPage": true
               }
             ]
           },
@@ -1614,7 +1615,8 @@
                   "/Models/Sale.cs",
                   "/Models/SampleData/Sales.cs"
                 ],
-                "DemoType": "Web"
+                "DemoType": "Web",
+                "ShowOnMainPage": true
               }
             ]
           },
@@ -1659,6 +1661,8 @@
               {
                 "Title": "Standalone Field Chooser",
                 "Name": "StandaloneFieldChooser",
+                "ShowOnMainPage": true,
+                "MainPageTitle": "Pivot Grid Field Chooser",
                 "Widget": "PivotGrid",
                 "MvcAdditionalFiles": [
                   "/Controllers/ApiControllers/PivotGridDataController.cs",
@@ -1869,7 +1873,9 @@
             "Name": "WithDataGrid",
             "DocUrl": "Guide/UI_Components/FilterBuilder/Integrate_with_a_Widget/",
             "Widget": "FilterBuilder",
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "ShowOnMainPage": true,
+            "MainPageTitle": "Filter Builder"
           },
           {
             "Title": "With List",
@@ -1912,7 +1918,9 @@
                   "/Models/SampleData/ParetoChartData.cs",
                   "/Models/ParetoChartData.cs"
                 ],
-                "DemoType": "Viz"
+                "DemoType": "Viz",
+                "ShowOnMainPage": true,
+                "MainPageTitle": "Chart"
               }
             ]
           },
@@ -2398,7 +2406,9 @@
                 "Name": "SimpleBullets",
                 "Widget": "Charts",
                 "DemoType": "Viz",
-                "Equivalents": "scaleValue"
+                "Equivalents": "scaleValue",
+                "ShowOnMainPage": true,
+                "MainPageTitle": "Bullet Chart"
               }
             ]
           },
@@ -2513,7 +2523,8 @@
                 "Name": "FunnelChart",
                 "DocUrl": "Guide/UI_Components/Funnel/Overview/",
                 "Widget": "Charts",
-                "DemoType": "Viz"
+                "DemoType": "Viz",
+                "ShowOnMainPage": true
               },
               {
                 "Title": "Pyramid Chart",
@@ -2620,7 +2631,9 @@
                 "DocUrl": "Guide/UI_Components/PieChart/Series/Overview/",
                 "Credits": "www.wikipedia.org",
                 "Widget": "Charts",
-                "DemoType": "Viz"
+                "DemoType": "Viz",
+                "ShowOnMainPage": true,
+                "MainPageTitle": "Pie Chart"
               },
               {
                 "Title": "Equal Size Pies",
@@ -2742,7 +2755,9 @@
                 "Name": "ContinuousData",
                 "DocUrl": "Guide/UI_Components/PolarChart/Series_Types/#Line",
                 "Widget": "Charts",
-                "DemoType": "Viz"
+                "DemoType": "Viz",
+                "ShowOnMainPage": true,
+                "MainPageTitle": "Polar Chart"
               },
               {
                 "Title": "Discrete Data",
@@ -2838,6 +2853,7 @@
                 "Title": "Overview",
                 "Name": "SankeyChart",
                 "Widget": "Charts",
+                "ShowOnMainPage": true,
                 "DemoType": "Viz"
               }
             ]
@@ -2856,7 +2872,8 @@
                   "/Models/MonthlyPrice.cs",
                   "/Models/SampleData/MonthlyPrices.cs"
                 ],
-                "DemoType": "Viz"
+                "DemoType": "Viz",
+                "ShowOnMainPage": true
               },
               {
                 "Title": "Area Sparklines",
@@ -2903,7 +2920,9 @@
                 "Name": "HierarchicalDataStructure",
                 "Credits": "www.wikipedia.org",
                 "Widget": "Charts",
-                "DemoType": "Viz"
+                "DemoType": "Viz",
+                "ShowOnMainPage": true,
+                "MainPageTitle": "Tree Map"
               },
               {
                 "Title": "Plain Data Structure",
@@ -3012,7 +3031,9 @@
                 "Name": "LabelsCustomization",
                 "DocUrl": "Guide/UI_Components/BarGauge/Visual_Elements/#Labels",
                 "Widget": "Gauges",
-                "DemoType": "Viz"
+                "DemoType": "Viz",
+                "ShowOnMainPage": true,
+                "MainPageTitle": "Bar Gauge"
               },
               {
                 "Title": "Palette",
@@ -3051,7 +3072,9 @@
                 "Name": "PaletteForRanges",
                 "DocUrl": "Guide/UI_Components/CircularGauge/Visual_Elements/#Range_Container",
                 "Widget": "Gauges",
-                "DemoType": "Viz"
+                "DemoType": "Viz",
+                "ShowOnMainPage": true,
+                "MainPageTitle": "Circular Gauge"
               },
               {
                 "Title": "Scale Minor Ticks",
@@ -3134,7 +3157,9 @@
                 "Name": "ScaleCustomTickInterval",
                 "DocUrl": "Guide/UI_Components/LinearGauge/Visual_Elements/#Scale_Ticks",
                 "Widget": "Gauges",
-                "DemoType": "Viz"
+                "DemoType": "Viz",
+                "ShowOnMainPage": true,
+                "MainPageTitle": "Linear Gauge"
               },
               {
                 "Title": "Scale Custom Tick Values",
@@ -3204,7 +3229,9 @@
                 ],
                 "DemoType": "Web",
                 "WideDemo": true,
-                "Modules": "whatwg-fetch"
+                "Modules": "whatwg-fetch",
+                "ShowOnMainPage": true,
+                "MainPageTitle": "Diagram"
               }
             ]
           },
@@ -3438,7 +3465,8 @@
                   "/Models/Workout.cs",
                   "/Models/SampleData/Workouts.cs"
                 ],
-                "DemoType": "Web"
+                "DemoType": "Web",
+                "ShowOnMainPage": true
               }
             ]
           },
@@ -3828,7 +3856,8 @@
                   "/Models/Gantt/Resource.cs",
                   "/Models/Gantt/ResourceAssignment.cs",
                   "/Models/Gantt/Task.cs"
-                ]
+                ],
+                "ShowOnMainPage": true
               }
             ]
           },
@@ -4057,7 +4086,8 @@
                   "/Models/Chat/User.cs",
                   "/Models/Chat/Message.cs",
                   "/ViewModels/ChatViewModel.cs"
-                ]
+                ],
+                "ShowOnMainPage": true
               }
             ]
           },
@@ -4149,7 +4179,8 @@
                 "Name": "Overview",
                 "DocUrl": "Guide/UI_Components/HtmlEditor/Overview/",
                 "Widget": "HtmlEditor",
-                "DemoType": "Web"
+                "DemoType": "Web",
+                "ShowOnMainPage": true
               }
             ]
           },
@@ -4260,7 +4291,8 @@
             "MvcAdditionalFiles": [
               "/Models/ActiveCompany.cs",
               "/Models/SampleData/ActiveCompanies.cs"
-            ]
+            ],
+            "ShowOnMainPage": true
           },
           {
             "Title": "Item Customization",
@@ -4310,7 +4342,8 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "FieldSet"
+            "Widget": "FieldSet",
+            "ShowOnMainPage": true
           }
         ]
       }
@@ -4415,7 +4448,8 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "Calendar"
+            "Widget": "Calendar",
+            "ShowOnMainPage": true
           },
           {
             "Title": "Multiple Selection",
@@ -4435,7 +4469,8 @@
             "Widget": "CheckBox",
             "MvcAdditionalFiles": [
               "/Controllers/CheckBoxController.cs"
-            ]
+            ],
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -4448,7 +4483,8 @@
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "ColorBox",
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -4460,7 +4496,8 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "DateBox"
+            "Widget": "DateBox",
+            "ShowOnMainPage": true
           },
           {
             "Title": "Formatting",
@@ -4478,7 +4515,8 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "DateRangeBox"
+            "Widget": "DateRangeBox",
+            "ShowOnMainPage": true
           },
           {
             "Title": "Formatting",
@@ -4495,7 +4533,8 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "NumberBox"
+            "Widget": "NumberBox",
+            "ShowOnMainPage": true
           },
           {
             "Title": "Formatting",
@@ -4513,7 +4552,8 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "RadioGroup"
+            "Widget": "RadioGroup",
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -4527,7 +4567,9 @@
             "Name": "NumericScaleLightweight",
             "DocUrl": "Guide/UI_Components/RangeSelector/Visual_Elements/#Sliders",
             "Widget": "RangeSelector",
-            "DemoType": "Viz"
+            "DemoType": "Viz",
+            "ShowOnMainPage": true,
+            "MainPageTitle": "Range Selector"
           },
           {
             "Title": "Numeric Scale",
@@ -4649,7 +4691,8 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "RangeSlider"
+            "Widget": "RangeSlider",
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -4661,7 +4704,8 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "Slider"
+            "Widget": "Slider",
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -4673,7 +4717,8 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "Switch"
+            "Widget": "Switch",
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -4685,7 +4730,8 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "TextArea"
+            "Widget": "TextArea",
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -4697,7 +4743,8 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "TextBox"
+            "Widget": "TextBox",
+            "ShowOnMainPage": true
           }
         ]
       }
@@ -4721,7 +4768,8 @@
               "/Models/SampleData/Names.cs",
               "/Models/SampleData/Surnames.cs",
               "/Models/SampleData/Cities.cs"
-            ]
+            ],
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -4742,7 +4790,9 @@
               "/Models/Customer.cs",
               "/Models/SampleData/TreeViewPlainData.cs",
               "/Models/SampleData/Customers.cs"
-            ]
+            ],
+            "ShowOnMainPage": true,
+            "MainPageTitle": "Drop Down Box"
           },
           {
             "Title": "Multiple Selection",
@@ -4773,7 +4823,8 @@
               "/Models/ElectronicsItem.cs",
               "/Models/SampleData/Electronics.cs",
               "/ViewModels/SelectBoxViewModel.cs"
-            ]
+            ],
+            "ShowOnMainPage": true
           },
           {
             "Title": "Search and Editing",
@@ -4824,7 +4875,8 @@
               "/Models/ElectronicsItem.cs",
               "/Models/SampleData/Electronics.cs",
               "/ViewModels/TagBoxViewModel.cs"
-            ]
+            ],
+            "ShowOnMainPage": true
           },
           {
             "Title": "Grouping",
@@ -4861,7 +4913,9 @@
               "/Models/EmployeeTask.cs",
               "/Models/SampleData/EmployeesTasks.cs",
               "/Models/SampleData/EmployeesList.cs"
-            ]
+            ],
+            "ShowOnMainPage": true,
+            "MainPageTitle": "Lookup"
           },
           {
             "Title": "Templates",
@@ -4897,7 +4951,9 @@
           {
             "Title": "Predefined Types",
             "Name": "PredefinedTypes",
-            "Widget": "Button"
+            "Widget": "Button",
+            "ShowOnMainPage": true,
+            "MainPageTitle": "Button"
           },
           {
             "Title": "Icons",
@@ -4915,7 +4971,8 @@
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "ButtonGroup",
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -4936,7 +4993,8 @@
               "/Models/SimpleData.cs",
               "/Models/ExtendedListItemData.cs",
               "/Models/SampleData/DropDownButtonData.cs"
-            ]
+            ],
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -4958,7 +5016,8 @@
               "/Models/State.cs",
               "/Models/SampleData/DataGridEmployees.cs",
               "/Models/SampleData/States.cs"
-            ]
+            ],
+            "ShowOnMainPage": true
           }
         ]
       }
@@ -4988,7 +5047,8 @@
                 ],
                 "BackendFiles": [
                   "FileManagerImagesApiController.cs"
-                ]
+                ],
+                "ShowOnMainPage": true
               }
             ]
           },
@@ -5078,7 +5138,9 @@
             ],
             "BackendFiles": [
               "FileUploaderController.cs"
-            ]
+            ],
+            "ShowOnMainPage": true,
+            "MainPageTitle": "File Uploader"
           },
           {
             "Title": "Async Upload",
@@ -5151,7 +5213,8 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "Popover"
+            "Widget": "Popover",
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -5167,7 +5230,8 @@
             "MvcAdditionalFiles": [
               "/Models/DataGrid/Employee.cs",
               "/Models/SampleData/DataGridEmployees.cs"
-            ]
+            ],
+            "ShowOnMainPage": true
           },
           {
             "Title": "Scrolling",
@@ -5188,7 +5252,8 @@
             "MvcAdditionalFiles": [
               "/Models/ListProduct.cs",
               "/Models/SampleData/ListProducts.cs"
-            ]
+            ],
+            "ShowOnMainPage": true
           },
           {
             "Title": "Stack",
@@ -5206,7 +5271,8 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "Tooltip"
+            "Widget": "Tooltip",
+            "ShowOnMainPage": true
           }
         ]
       }
@@ -5251,7 +5317,8 @@
               "/Models/Company.cs",
               "/Models/SampleData/Companies.cs"
             ],
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -5264,7 +5331,9 @@
             "Title": "Basics",
             "Name": "Basics",
             "Widget": "ActionSheet",
-            "DemoType": "Mobile"
+            "DemoType": "Mobile",
+            "ShowOnMainPage": true,
+            "MainPageTitle": "Action Sheet"
           },
           {
             "Title": "Popover Mode",
@@ -5284,7 +5353,9 @@
             "Name": "Basics",
             "DocUrl": "Guide/UI_Components/ContextMenu/Overview/",
             "Widget": "ContextMenu",
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "ShowOnMainPage": true,
+            "MainPageTitle": "Context Menu"
           },
           {
             "Title": "Scrolling",
@@ -5314,7 +5385,8 @@
               "/Models/MenuItem.cs",
               "/Models/SampleData/MenuData.cs"
             ],
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "ShowOnMainPage": true
           },
           {
             "Title": "Scrolling",
@@ -5336,7 +5408,8 @@
             "MvcAdditionalFiles": [
               "/Models/Store.cs",
               "/Models/SampleData/Stores.cs"
-            ]
+            ],
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -5354,7 +5427,9 @@
               "/Models/NavigationItemWithIcon.cs",
               "/Models/SampleData/NavigationItemsWithIcon.cs"
             ],
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "ShowOnMainPage": true,
+            "MainPageTitle": "Drawer"
           },
           {
             "Title": "Top or Bottom Position",
@@ -5382,7 +5457,8 @@
               "/Models/TabPanelItem.cs",
               "/Models/TaskItem.cs",
               "/Models/SampleData/TabPanelData.cs"
-            ]
+            ],
+            "ShowOnMainPage": true
           },
           {
             "Title": "Drag & Drop",
@@ -5416,7 +5492,8 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "Tabs"
+            "Widget": "Tabs",
+            "ShowOnMainPage": true
           },
           {
             "Title": "Selection",
@@ -5442,7 +5519,8 @@
             "MvcAdditionalFiles": [
               "/Models/Product.cs",
               "/Models/SampleData/Products.cs"
-            ]
+            ],
+            "ShowOnMainPage": true
           },
           {
             "Title": "Adaptability",
@@ -5471,7 +5549,8 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "ShowOnMainPage": true
           },
           {
             "Title": "Form Integration",
@@ -5512,7 +5591,8 @@
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -5530,7 +5610,8 @@
               "/Models/SampleData/Hotels.cs",
               "/Controllers/ApiControllers/ActionsOverviewController.cs"
             ],
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "ShowOnMainPage": true
           },
           {
             "Title": "Item Deletion",
@@ -5633,7 +5714,9 @@
                   "/Models/Product.cs",
                   "/Models/SampleData/TreeViewHierarchicalData.cs"
                 ],
-                "DemoType": "Web"
+                "DemoType": "Web",
+                "ShowOnMainPage": true,
+                "MainPageTitle": "Tree View"
               },
               {
                 "Title": "Plain Data Structure",
@@ -5776,7 +5859,9 @@
             "MvcAdditionalFiles": [
               "/Models/TileViewItem.cs",
               "/Models/SampleData/TileViewItems.cs"
-            ]
+            ],
+            "ShowOnMainPage": true,
+            "MainPageTitle": "Tile View"
           },
           {
             "Title": "Directions",
@@ -5816,7 +5901,8 @@
             "Widget": "Splitter",
             "DemoType": "Web"
           }
-        ]
+        ],
+        "ShowOnMainPage": true
       },
       {
         "Name": "Gallery",
@@ -5830,7 +5916,8 @@
             "Widget": "Gallery",
             "MvcAdditionalFiles": [
               "/ViewModels/GalleryViewModel.cs"
-            ]
+            ],
+            "ShowOnMainPage": true
           },
           {
             "Title": "Item Template",
@@ -5859,7 +5946,8 @@
             "Title": "Overview",
             "Name": "Overview",
             "DocUrl": "Guide/UI_Components/ScrollView/Overview/",
-            "Widget": "ScrollView"
+            "Widget": "ScrollView",
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -5871,7 +5959,8 @@
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "Box",
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -5885,7 +5974,9 @@
             "Name": "Overview",
             "DocUrl": "Guide/UI_Components/ResponsiveBox/Overview/",
             "Widget": "ResponsiveBox",
-            "DemoType": "Adaptivity"
+            "DemoType": "Adaptivity",
+            "ShowOnMainPage": true,
+            "MainPageTitle": "Responsive Box"
           }
         ]
       }
@@ -5913,7 +6004,9 @@
               "/Models/TreeList/InMemoryEmployeesDataContext.cs",
               "/Models/TreeList/InMemoryTasksDataContext.cs",
               "/Models/InMemoryDataContext.cs"
-            ]
+            ],
+            "ShowOnMainPage": true,
+            "MainPageTitle": "Sortable"
           },
           {
             "Title": "Customization",
@@ -5937,7 +6030,8 @@
               "/Models/SampleData/Orders.cs"
             ],
             "DemoType": "Web",
-            "WideDemo": true
+            "WideDemo": true,
+            "ShowOnMainPage": true
           }
         ]
       }
@@ -5955,7 +6049,8 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Widget": "LoadIndicator"
+            "Widget": "LoadIndicator",
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -5970,7 +6065,8 @@
             "Widget": "LoadPanel",
             "MvcAdditionalFiles": [
               "/Scripts/data/employee.js"
-            ]
+            ],
+            "ShowOnMainPage": true
           }
         ]
       },
@@ -5983,7 +6079,8 @@
             "Title": "Overview",
             "Name": "Overview",
             "DocUrl": "Guide/UI_Components/ProgressBar/Overview/",
-            "Widget": "ProgressBar"
+            "Widget": "ProgressBar",
+            "ShowOnMainPage": true
           }
         ]
       }
@@ -6019,7 +6116,9 @@
           {
             "Title": "Providers and Types",
             "Name": "ProvidersAndTypes",
-            "Widget": "Map"
+            "Widget": "Map",
+            "ShowOnMainPage": true,
+            "MainPageTitle": "Map"
           },
           {
             "Title": "Markers",
@@ -6186,7 +6285,9 @@
                 "MvcAdditionalFiles": [
                   "/Scripts/data/countries.js"
                 ],
-                "DemoType": "Viz"
+                "DemoType": "Viz",
+                "ShowOnMainPage": true,
+                "MainPageTitle": "Vector Map"
               },
               {
                 "Title": "Palette",

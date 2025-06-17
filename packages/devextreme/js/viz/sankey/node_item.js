@@ -58,7 +58,7 @@ function Node(widget, params) {
     that.color = params.color;
     that.options = params.options;
     that.rect = params.rect;
-    that.label = that.title = params.rect._name;
+    that.label = params.rect._name;
     that.coords = {
         x: params.rect.x + params.rect.width / 2 + widgetOffset.left,
         y: params.rect.y + params.rect.height / 2 + widgetOffset.top

@@ -20,7 +20,6 @@ import {
  OptionChangedEvent,
  ValueChangedEvent,
  BackgroundImageLocation,
- ValueChangedCallMode,
  AxisScale,
  ChartAxisScale,
 } from "devextreme/viz/range_selector";
@@ -352,7 +351,6 @@ const DxBehaviorConfig = {
     "update:hoveredElement": null,
     "update:allowSlidersSwap": null,
     "update:animationEnabled": null,
-    "update:callValueChanged": null,
     "update:manualRangeSelectionEnabled": null,
     "update:moveSelectedRangeByClick": null,
     "update:snapToTicks": null,
@@ -361,7 +359,6 @@ const DxBehaviorConfig = {
   props: {
     allowSlidersSwap: Boolean,
     animationEnabled: Boolean,
-    callValueChanged: String as PropType<ValueChangedCallMode>,
     manualRangeSelectionEnabled: Boolean,
     moveSelectedRangeByClick: Boolean,
     snapToTicks: Boolean,

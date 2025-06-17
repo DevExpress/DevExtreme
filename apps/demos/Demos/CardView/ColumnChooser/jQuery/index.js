@@ -2,11 +2,12 @@ $(() => {
   const cardView = $('#card-view').dxCardView({
     dataSource: employees,
     keyExpr: 'ID',
-    cardMinWidth: 100,
-    wordWrapEnabled: true,
+    cardsPerRow: 'auto',
+    cardMinWidth: 300,
     columnChooser: {
       enabled: true,
       mode: 'select',
+      height: '340px',
       search: {
         enabled: true,
       },

@@ -2,10 +2,8 @@ $(() => {
   $('#card-view').dxCardView({
     dataSource: customers,
     keyExpr: 'ID',
-    cardsPerRow: 2,
-    paging: {
-      pageSize: 4
-    },
+    cardsPerRow: 'auto',
+    cardMinWidth: 320,
     columns: ['Company', 'Address', 'City', 'State', 'Zipcode', 'Phone'],
   });
 });

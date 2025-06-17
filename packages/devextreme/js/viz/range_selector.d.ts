@@ -193,12 +193,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       animationEnabled?: boolean;
       /**
        * @docid
-       * @default 'onMovingComplete'
-       * @deprecated
-       */
-      callValueChanged?: ValueChangedCallMode;
-      /**
-       * @docid
        * @default true
        */
       manualRangeSelectionEnabled?: boolean;

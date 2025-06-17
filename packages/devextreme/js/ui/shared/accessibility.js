@@ -36,6 +36,7 @@ const viewItemSelectorMap = {
 let isMouseDown = false;
 let isHiddenFocusing = false;
 let focusedElementInfo = null;
+let needToSkipFocusin = false;
 
 function processKeyDown(viewName, instance, event, action, $mainElement, executeKeyDown) {
     const isHandled = fireKeyDownEvent(instance, event.originalEvent, executeKeyDown);
@@ -113,7 +114,9 @@ function fireKeyDownEvent(instance, event, executeAction) {
 }
 
 function onDocumentVisibilityChange() {
-    isHiddenFocusing = domAdapter.getDocument().visibilityState === 'visible';
+    const focusedElement = domAdapter.getActiveElement();
+
+    needToSkipFocusin = focusedElement && !focusedElement.closest(`.${FOCUS_STATE_CLASS}`);
 }
 
 export function subscribeVisibilityChange() {
@@ -142,6 +145,11 @@ export function registerKeyboardAction(viewName, instance, $element, selector, a
         getMainElement().removeClass(FOCUS_STATE_CLASS);
     };
     const focusinHandler = () => {
+        if(needToSkipFocusin) {
+            needToSkipFocusin = false;
+            return;
+        }
+
         const needShowOverlay = !isMouseDown && !isHiddenFocusing;
         if(needShowOverlay) {
             getMainElement().addClass(FOCUS_STATE_CLASS);

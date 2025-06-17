@@ -31,28 +31,8 @@ export class AppComponent {
 
   selectByClick = true;
 
-  // todo: use nested
-  searchPanelConfig = {
-    visible: true,
-  }
-
   constructor(service: Service) {
     this.employees = service.getEmployees();
-  }
-
-  // todo: use nested
-  getColumnChooserConfig() {
-    return {
-      enabled: true,
-      mode: this.columnChooserMode,
-      search: {
-        enabled: this.searchEnabled,
-      },
-      selection: {
-        allowSelectAll: this.allowSelectAll,
-        selectByClick: this.selectByClick,
-      },
-    };
   }
 
   altExpr({ First_Name, Last_Name }: Employee): string {

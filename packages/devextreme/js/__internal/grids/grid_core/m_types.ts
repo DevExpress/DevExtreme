@@ -251,3 +251,8 @@ export interface Module {
   };
   defaultOptions?: () => InternalGridOptions;
 }
+
+export interface KeyDownEvent {
+  originalEvent: KeyboardEvent;
+  keyName: string;
+}
