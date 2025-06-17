@@ -1,4 +1,0 @@
-DevExtreme CardView fields use the same display order as data fields in the component's [dataSource](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/#dataSource). You can specify a different display order with the [columns[]](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/) array. To reorder a field at runtime, change the **columns[]**.[visibleIndex](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/#visibleIndex) property.
-<!--split-->
-
-To allow users to reorder fields, set [allowColumnReordering](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/#allowColumnReordering) to `true`. To disable reordering operations for a specific field, assign `false` to its [allowReordering](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/#allowReordering) property.

@@ -1,16 +1,6 @@
 import React from 'react';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import CardView, { Column, Editing, RequiredRule } from 'devextreme-react/card-view';
-
-// TODO: Nested component does not exist
-const headerFilterConfig = {
-  visible: true,
-};
-
-// TODO: Nested component does not exist
-const searchPanelConfig = {
-  visible: true,
-};
+import CardView, { Column, Editing, RequiredRule, SearchPanel, HeaderFilter } from 'devextreme-react/card-view';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 
@@ -29,14 +19,20 @@ const App = () => (
   <CardView
     dataSource={dataSource}
     remoteOperations={true}
+    cardMinWidth={100}
     wordWrapEnabled={true}
-    headerFilter={headerFilterConfig}
-    searchPanel={searchPanelConfig}
   >
+    <SearchPanel
+      visible={true}
+    />
+    <HeaderFilter
+      visible={true}
+    />
     <Editing
       allowAdding={true}
       allowUpdating={true}
       allowDeleting={true}
+      popup={{ width: 700, height: 400 }}
     ></Editing>
     <Column
       dataField="Task_Subject"

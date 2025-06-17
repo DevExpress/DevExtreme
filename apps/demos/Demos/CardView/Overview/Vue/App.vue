@@ -2,45 +2,106 @@
   <DxCardView
     :data-source="employees"
     key-expr="ID"
-    :allow-column-reordering="true"
+    :card-min-width="300"
     cards-per-row="auto"
-    :card-min-width="250"
-    :header-filter="headerFilterConfig"
-    :search-panel="searchPanelConfig"
-    :column-chooser="columnChooserConfig"
+    card-footer-template="footerTemplate"
+    ref="cardView"
   >
-    <DxColumn
-      data-field="FullName"
-      :allow-hiding="false"
+    <DxPaging
+      :page-size="4"
     />
-    <DxColumn data-field="Position"/>
-    <DxColumn data-field="Department"/>
-    <DxColumn data-field="Phone"/>
-    <DxColumn data-field="Email"/>
-
-    <DxCardCover
-      :image-expr="getEmployeeImage"
-      :alt-expr="getEmployeeImageAltText"
+    <DxHeaderFilter
+      :visible="true"
     />
-    <DxPager
-      :show-info="true"
-      :show-navigation-buttons="true"
-      :show-page-size-selector="true"
+    <DxSearchPanel
+      :visible="true"
     />
     <DxSelection mode="multiple"/>
+    <DxCardCover
+      :image-expr="imageExpr"
+      :alt-expr="altExpr"
+    />
+
+    <DxColumn
+      data-field="Status"
+      field-value-template="statusTemplate"
+    />
+    <DxColumn
+      caption="Full Name"
+      :allow-filtering="true"
+      :allow-sorting="true"
+      :calculate-field-value="calculateFullName"
+    />
+    <DxColumn
+      caption="Position"
+      data-field="Title"
+    />
+    <DxColumn
+      data-field="Department"
+    />
+    <DxColumn
+      data-field="Mobile_Phone"
+    />
+    <DxColumn
+      data-field="Email"
+      field-value-template="emailTemplate"
+    />
+    <DxColumn
+      caption="Address"
+      :allow-filtering="true"
+      :allow-sorting="true"
+      :calculate-field-value="calculateAddress"
+    />
+    <template
+      #statusTemplate="{ data }"
+    >
+      <div
+        :class="['status', {
+          'status--ok': data.field.value === 'Salaried',
+          'status--warning': data.field.value !== 'Salaried',
+        }]"
+      >
+        <span class="indicator"/>
+        <span>{{ data.field.value }}</span>
+      </div>
+    </template>
+    <template
+      #emailTemplate="{ data }"
+    >
+      <a :href="`mailto:${data.field.value}`">{{ data.field.text }}</a>
+    </template>
+    <template
+      #footerTemplate="{ data }"
+    >
+      <div class="footer">
+        <DxButton
+          text="Call"
+          icon="tel"
+          type="default"
+          styling-mode="contained"
+          @click="showNotify('Call')"
+        />
+        <DxButton
+          text="Send Email"
+          icon="send"
+          type="default"
+          styling-mode="contained"
+          @click="showNotify('Send Email')"
+        />
+      </div>
+    </template>
   </DxCardView>
 </template>
 
 <script setup lang="ts">
 import DxCardView, {
-  DxColumn, DxCardCover, DxPager, DxSelection,
+  DxColumn, DxCardCover, DxSelection, DxPaging, DxSearchPanel, DxHeaderFilter,
 } from 'devextreme-vue/card-view';
+import DxButton from 'devextreme-vue/button';
+import notify from 'devextreme/ui/notify';
+import { ref } from 'vue';
 import type { Employee } from './data.ts';
 import { employees } from './data.ts';
-
-const IMG_URL = 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos';
-const getEmployeeImage = ({ Picture }: Employee): string => `${IMG_URL}/${Picture}`;
-const getEmployeeImageAltText = ({ FullName }: Employee): string => `${FullName} picture`;
 
 // TODO: Nested component does not exist
 const headerFilterConfig = {
@@ -52,19 +113,63 @@ const searchPanelConfig = {
   visible: true,
 };
 
-// TODO: Nested component does not exist
-// TODO: Bad position types (strings not allowed)
-const columnChooserConfig = {
-  enabled: true,
-  height: 340,
-  mode: 'select' as const,
-  position: {
-    my: 'right top' as const,
-    at: 'right bottom' as const,
-    of: '.dx-cardview-column-chooser-button',
-  },
-  selection: {
-    selectByClick: true,
-  },
-};
+function imageExpr({ First_Name, Last_Name }: Employee): string {
+  return `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`;
+}
+
+function altExpr({ First_Name, Last_Name }: Employee): string {
+  return `Photo of ${First_Name} ${Last_Name}`;
+}
+
+function calculateFullName({ First_Name, Last_Name }: Employee): string {
+  return `${First_Name} ${Last_Name}`;
+}
+
+function calculateAddress({ State, City }: Employee): string {
+  return `${City}, ${State}`;
+}
+
+function showNotify(text: string) {
+  notify({
+    message: `The "${text}" button is clicked.`,
+    maxWidth: 560,
+  });
+}
+
+const cardView = ref<DxCardView>();
+
 </script>
+
+<style>
+.footer {
+  display: flex;
+  padding: 12px;
+  gap: 8px;
+}
+
+.footer > * {
+  flex-grow: 1;
+  width: 100%
+}
+
+.status {
+  display: flex;
+  align-items: center;
+}
+
+.status--ok {
+  color: var(--dx-color-success);
+}
+
+.status--warning {
+  color: var(--dx-color-warning);
+}
+
+.indicator {
+  background-color: currentcolor;
+  margin-right: 8px;
+  border-radius: 50%;
+  height: 12px;
+  width: 12px;
+}
+</style>

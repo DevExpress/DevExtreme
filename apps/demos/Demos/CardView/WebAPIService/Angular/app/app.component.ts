@@ -31,16 +31,6 @@ export class AppComponent {
       ajaxOptions.xhrFields = { withCredentials: true };
     },
   });
-
-  // TODO: Nested component does not exist
-  headerFilterConfig = {
-    visible: true,
-  };
-
-  // TODO: Nested component does not exist
-  searchPanelConfig = {
-    visible: true,
-  };
 }
 
 @NgModule({

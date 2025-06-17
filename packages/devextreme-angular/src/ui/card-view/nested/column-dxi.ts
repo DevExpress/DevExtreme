@@ -154,10 +154,10 @@ export class DxiCardViewColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get customizeText(): ((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string) {
+    get customizeText(): ((fieldInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: ((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string)) {
+    set customizeText(value: ((fieldInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string)) {
         this._setOption('customizeText', value);
     }
 

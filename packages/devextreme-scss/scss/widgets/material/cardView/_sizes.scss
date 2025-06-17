@@ -9,6 +9,7 @@
 @use '../../base/cardView/content_view/content/variables' as *;
 @use '../../base/cardView/content_view/no_data/variables' as *;
 @use '../../base/cardView/column_chooser/variables' as *;
+@use '../../base/cardView/filter_panel/variables' as *;
 
 // adduse
 
@@ -28,19 +29,13 @@ $cardview-material-common-border-radius: null !default;
 $cardview-material-common-text-weight: null !default;
 
 /**
-* $name 105. Gap between header items
-* $type text
-*/
-$cardview-material-common-header-panel-gap: null !default;
-
-/**
-* $name 106. Vertical gap between cards
+* $name 105. Vertical gap between cards
 * $type text
 */
 $cardview-material-common-cards-row-gap: null !default;
 
 /**
-* $name 107. Horizontal gap between cards
+* $name 106. Horizontal gap between cards
 * $type text
 */
 $cardview-material-common-cards-column-gap: null !default;
@@ -153,8 +148,8 @@ $cardview-material-header-panel__item__sort-index-text-weight: null !default;
 
 $cardview-material-header-panel__item__icon-size: null !default;
 
-$cardview-generic-header-item__left-padding: null !default;
-$cardview-generic-header-item__right-padding: null !default;
+$cardview-material-header-item__left-padding: null !default;
+$cardview-material-header-item__right-padding: null !default;
 
 // #endregion
 
@@ -203,8 +198,8 @@ $cardview-material-header-panel__item--disabled__sort-index-text-weight: null !d
 */
 $cardview-material-header-panel__item--dragged-text-weight: null !default;
 
-$cardview-generic-header-item__sort-indicator__border-size: null;
-$cardview-generic-header-item__sort-indicator__border-radius: null;
+$cardview-material-header-item__sort-indicator__border-size: null;
+$cardview-material-header-item__sort-indicator__border-radius: null;
 
 // #endregion
 
@@ -276,7 +271,6 @@ $cardview-material-column-chooser__select-all-item-horizontal-padding: null !def
   // Common
   $cardview-material-common-border-radius: 16px !default;
   $cardview-material-common-text-weight: 400 !default;
-  $cardview-material-common-header-panel-gap: 8px !default;
   $cardview-material-common-cards-row-gap: 16px !default;
   $cardview-material-common-cards-column-gap: 16px !default;
   $cardview-material-common-gap: 24px !default;
@@ -314,8 +308,8 @@ $cardview-material-column-chooser__select-all-item-horizontal-padding: null !def
   $cardview-material-header-panel__item-border-radius: 99px !default;
   $cardview-material-header-panel__item-padding-horizontal: 16px !default;
   $cardview-material-header-panel__item-padding-vertical: 7px !default;
-  $cardview-generic-header-item__left-padding: 6px !default;
-  $cardview-generic-header-item__right-padding: 2px !default;
+  $cardview-material-header-item__left-padding: 6px !default;
+  $cardview-material-header-item__right-padding: 2px !default;
   $cardview-material-header-panel__item-line-height: 20px !default;
   $cardview-material-header-panel__item-text-weight: $cardview-material-common-text-weight !default;
   $cardview-material-header-panel__item__sort-index-text-weight: 400 !default;
@@ -331,8 +325,8 @@ $cardview-material-column-chooser__select-all-item-horizontal-padding: null !def
 
   // Header panel item - dragged
   $cardview-material-header-panel__item--dragged-text-weight: $cardview-material-header-panel__item-text-weight !default;
-  $cardview-generic-header-item__sort-indicator__border-size: 2px !default;
-  $cardview-generic-header-item__sort-indicator__border-radius: 8px !default;
+  $cardview-material-header-item__sort-indicator__border-size: 2px !default;
+  $cardview-material-header-item__sort-indicator__border-radius: 8px !default;
 
   // Header panel Drop-zone
   $cardview-material-header-panel__dropzone-height: 44px !default;
@@ -363,7 +357,6 @@ $cardview-material-column-chooser__select-all-item-horizontal-padding: null !def
   // Common
   $cardview-material-common-border-radius: 16px !default;
   $cardview-material-common-text-weight: 400 !default;
-  $cardview-material-common-header-panel-gap: 4px !default;
   $cardview-material-common-cards-row-gap: 12px !default;
   $cardview-material-common-cards-column-gap: 12px !default;
   $cardview-material-common-gap: 16px !default;
@@ -402,8 +395,8 @@ $cardview-material-column-chooser__select-all-item-horizontal-padding: null !def
   $cardview-material-header-panel__item-border-radius: 99px !default;
   $cardview-material-header-panel__item-padding-horizontal: 12px !default;
   $cardview-material-header-panel__item-padding-vertical: 5px !default;
-  $cardview-generic-header-item__left-padding: 3px !default;
-  $cardview-generic-header-item__right-padding: 1px !default;
+  $cardview-material-header-item__left-padding: 3px !default;
+  $cardview-material-header-item__right-padding: 1px !default;
   $cardview-material-header-panel__item-line-height: 16px !default;
   $cardview-material-header-panel__item-text-weight: $cardview-material-common-text-weight !default;
   $cardview-material-header-panel__item__sort-index-text-weight: 400 !default;
@@ -419,8 +412,8 @@ $cardview-material-column-chooser__select-all-item-horizontal-padding: null !def
 
   // Header panel item - dragged
   $cardview-material-header-panel__item--dragged-text-weight: $cardview-material-header-panel__item-text-weight !default;
-  $cardview-generic-header-item__sort-indicator__border-size: 1px !default;
-  $cardview-generic-header-item__sort-indicator__border-radius: 4px !default;
+  $cardview-material-header-item__sort-indicator__border-size: 1px !default;
+  $cardview-material-header-item__sort-indicator__border-radius: 4px !default;
 
   // Header panel Drop-zone
   $cardview-material-header-panel__dropzone-height: 38px !default;
@@ -512,7 +505,7 @@ $cardview-card__content__field-value--highlighted-text-weight: $cardview-materia
 $cardview-column-chooser--empty__message-horizontal-padding: $cardview-material-column-chooser--empty__message-horizontal-padding !default;
 $cardview-column-chooser__select-all-item-horizontal-padding: $cardview-material-column-chooser__select-all-item-horizontal-padding !default;
 
-$cardview-header-item__left-padding: $cardview-generic-header-item__left-padding !default;
-$cardview-header-item__right-padding: $cardview-generic-header-item__right-padding !default;
-$cardview-header-item__sort-indicator__border-size: $cardview-generic-header-item__sort-indicator__border-size !default;
-$cardview-header-item__sort-indicator__border-radius: $cardview-generic-header-item__sort-indicator__border-radius !default;
+$cardview-header-item__left-padding: $cardview-material-header-item__left-padding !default;
+$cardview-header-item__right-padding: $cardview-material-header-item__right-padding !default;
+$cardview-header-item__sort-indicator__border-size: $cardview-material-header-item__sort-indicator__border-size !default;
+$cardview-header-item__sort-indicator__border-radius: $cardview-material-header-item__sort-indicator__border-radius !default;

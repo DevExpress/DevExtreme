@@ -1,11 +1,12 @@
 import type { FilterType } from '@js/common/grids';
 import errors from '@js/core/errors';
 import { isDefined } from '@js/core/utils/type';
+import filterUtils from '@js/ui/shared/filtering';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 
 import type { FilterValue } from '../types';
-import type { HeaderFilterRootOptions } from './types';
+import type { HeaderFilterInfo, HeaderFilterRootOptions, HeaderFilterValuesType } from './types';
 
 export const mergeColumnHeaderFilterOptions = (
   column: Column,
@@ -58,8 +59,7 @@ export const getFilterOperator = (values: unknown, filterType?: FilterType): str
 const isFilteringAllowed = (column: Column): boolean => column.allowFiltering
 || column.allowHeaderFiltering;
 
-export const isColumnFilterable = (column: Column): boolean => isFilteringAllowed(column)
-&& !!column.dataField;
+export const isColumnFilterable = (column: Column): boolean => isFilteringAllowed(column);
 
 export const needCreateHeaderFilter = (column: Column): boolean => {
   const values = column.filterValues;
@@ -82,31 +82,86 @@ const getFilterExpression = (filterValues: FilterValue, column: Column): FilterV
   return [columnName, filterOperator, normalizedFilterValues];
 };
 
-export const getComposedHeaderFilter = (columns: Column[]): FilterValue => {
-  const filterValue: FilterValue = [];
-  const filterableColumns = columns.filter((col) => needCreateHeaderFilter(col));
+// NOTE: Logic from util function grid_core/filter/m_filter_sync "getConditionFromHeaderFilter"
+export const getHeaderFilterValuesType = (
+  column: Column,
+): HeaderFilterValuesType => {
+  const { filterValues } = column;
+  const [firstFilterItem] = filterValues;
+  const hasGroupInterval = !!filterUtils.getGroupInterval(column);
+  const hasCustomDataSource = !!column.headerFilter?.dataSource;
 
-  filterableColumns.forEach((column, index) => {
-    const { filterValues } = column;
-    const normalizedFilterValues = Array.isArray(filterValues)
-      ? filterValues
-      : [filterValues];
+  const isSingleValue = filterValues.length === 1
+    && !Array.isArray(firstFilterItem)
+    // NOTE: "canSyncHeaderFilterWithFilterRow" logic part
+    && (
+      (!hasGroupInterval && !hasCustomDataSource)
+      || (filterValues.length === 1 && firstFilterItem === null)
+    );
 
-    const filterValuesWithExpressions = normalizedFilterValues
-      .filter((value) => Array.isArray(value));
-    const filterValuesWithoutExpressions = normalizedFilterValues
-      .filter((value) => !Array.isArray(value));
-
-    const filterExpression = filterValuesWithoutExpressions.length
-      ? [getFilterExpression(filterValuesWithoutExpressions, column)]
-      : [];
-
-    filterValue.push(gridCoreUtils.combineFilters([...filterExpression, ...filterValuesWithExpressions], 'or'));
-
-    if (index < filterableColumns.length - 1) {
-      filterValue.push('and');
-    }
-  });
-
-  return filterValue;
+  return isSingleValue
+    ? 'single-value'
+    : 'values-or-condition';
 };
+
+export const getHeaderFilterInfo = (
+  column: Column,
+): HeaderFilterInfo | null => {
+  if (!needCreateHeaderFilter(column)) {
+    return null;
+  }
+
+  const { filterType, filterValues } = column;
+
+  const normalizedFilterType = filterType ?? 'include';
+  const normalizedFilterValues = Array.isArray(filterValues)
+    ? filterValues
+    : [filterValues];
+
+  const filterValuesWithExpressions = normalizedFilterValues
+    .filter((value) => Array.isArray(value));
+  const filterValuesWithoutExpressions = normalizedFilterValues
+    .filter((value) => !Array.isArray(value));
+
+  const filterExpression = filterValuesWithoutExpressions.length
+    ? [getFilterExpression(filterValuesWithoutExpressions, column)]
+    : [];
+
+  const composedFilterValues = gridCoreUtils.combineFilters(
+    [...filterExpression, ...filterValuesWithExpressions],
+    'or',
+  );
+
+  const columnId = getColumnIdentifier(column);
+  return {
+    type: getHeaderFilterValuesType(column),
+    columnId,
+    filterType: normalizedFilterType,
+    filterValues,
+    composedFilterValues,
+  };
+};
+
+export const getHeaderFilterInfoArray = (
+  columns: Column[],
+): HeaderFilterInfo[] => columns
+  .map((column) => getHeaderFilterInfo(column))
+  .filter((info): info is HeaderFilterInfo => !!info);
+
+export const getComposedHeaderFilter = (
+  headerFilterInfoArray: HeaderFilterInfo[],
+): FilterValue => headerFilterInfoArray
+  .reduce<FilterValue>((
+    result,
+    { composedFilterValues },
+    idx,
+    infoArray,
+  ) => {
+    result.push(composedFilterValues);
+
+    if (idx < infoArray.length - 1) {
+      result.push('and');
+    }
+
+    return result;
+  }, []);

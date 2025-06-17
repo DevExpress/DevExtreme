@@ -2,15 +2,20 @@
   id="cardView"
   [dataSource]="orders"
   keyExpr="ID"
-  [headerFilter]="headerFilterConfig"
-  [filterPanel]="filterPanelConfig"
   [filterValue]="filterValue"
-  [filterBuilder]="filterBuilderConfig"
+  [cardsPerRow]="2"
 >
-  <dxi-card-view-column
-    dataField="OrderNumber"
-    [headerFilter]="orderNumberHeaderFilterConfig"
-  ></dxi-card-view-column>
+  <dxo-card-view-paging [pageSize]="4"></dxo-card-view-paging>
+  <dxo-card-view-header-filter [visible]="true"></dxo-card-view-header-filter>
+  <dxo-card-view-filter-panel [visible]="true"></dxo-card-view-filter-panel>
+  <dxo-card-view-filter-builder
+    [customOperations]="customOperations"
+  ></dxo-card-view-filter-builder>
+  <dxi-card-view-column dataField="OrderNumber">
+    <dxo-card-view-column-header-filter
+      [groupInterval]="10000"
+    ></dxo-card-view-column-header-filter>
+  </dxi-card-view-column>
   <dxi-card-view-column
     dataField="OrderDate"
     dataType="date"
@@ -19,11 +24,14 @@
     dataField="DeliveryDate"
     dataType="datetime"
   ></dxi-card-view-column>
+  <dxi-card-view-column dataField="SaleAmount" dataType="number">
+    <dxo-card-view-column-header-filter
+      [dataSource]="saleAmountHeaderFilterDataSource"
+    ></dxo-card-view-column-header-filter>
+  </dxi-card-view-column>
   <dxi-card-view-column
-    dataField="SaleAmount"
-    dataType="number"
-    [headerFilter]="saleAmountHeaderFilterConfig"
+    dataField="CustomerStoreCity"
+    caption="City"
   ></dxi-card-view-column>
-  <dxi-card-view-column dataField="CustomerStoreCity"></dxi-card-view-column>
   <dxi-card-view-column dataField="Employee"></dxi-card-view-column>
 </dx-card-view>

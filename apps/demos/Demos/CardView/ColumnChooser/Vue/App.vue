@@ -1,5 +1,5 @@
 <template>
-  <div className="options">
+  <div className="options-panel">
     <div className="caption">Options</div>
     <div className="options-container">
       <div className="option">
@@ -12,7 +12,7 @@
         />
       </div>
       <div className="option">
-        <dxCheckBox
+        <DxCheckBox
           text="Search Enabled"
           :value="searchEnabled"
           @value-changed="({ value }) => { searchEnabled = value; }"
@@ -27,7 +27,7 @@
         />
       </div>
       <div className="option">
-        <dxCheckBox
+        <DxCheckBox
           text="Select By Click On Item"
           :value="selectByClick"
           @value-changed="({ value }) => { selectByClick = value; }"
@@ -39,22 +39,25 @@
   <DxCardView
     :data-source="employees"
     key-expr="ID"
-    :column-chooser="{
-      enabled: true,
-      mode: columnChooserMode,
-      search: {
-        enabled: searchEnabled,
-      },
-      selection: {
-        allowSelectAll: allowSelectAll,
-        selectByClick: selectByClick,
-      },
-    }"
-    :search-panel="{
-      visible: true,
-    }"
+    :card-min-width="100"
+    :word-wrap-enabled="true"
     :selected-card-keys="[4, 6]"
   >
+    <DxSearchPanel
+      :visible="true"
+    />
+    <DxColumnChooser
+      :enabled="true"
+      :mode="columnChooserMode"
+    >
+      <DxColumnChooserSearch
+        :enabled="searchEnabled"
+      />
+      <DxColumnChooserSelection
+        :allow-select-all="allowSelectAll"
+        :select-by-click="selectByClick"
+      />
+    </DxColumnChooser>
     <DxCardCover
       :alt-expr="altExpr"
       :image-expr="imageExpr"
@@ -89,7 +92,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {
-  DxCardView, DxColumn, DxCardCover,
+  DxCardView, DxColumn, DxCardCover, DxSearchPanel, DxColumnChooser, DxColumnChooserSearch, DxColumnChooserSelection
 } from 'devextreme-vue/card-view';
 import { DxSelectBox } from 'devextreme-vue/select-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
@@ -104,7 +107,7 @@ function imageExpr({ First_Name, Last_Name }: Employee): string {
 }
 
 function calculateFullName({ First_Name, Last_Name }: Employee): string {
-  return `${First_Name} ${Last_Name}`
+  return `${First_Name} ${Last_Name}`;
 }
 
 const columnChooserMode = ref<'select' | 'dragAndDrop'>('select');
@@ -114,7 +117,7 @@ const selectByClick = ref(true);
 
 </script>
 <style>
-  .options {
+  .options-panel {
     margin-top: 20px;
     padding: 20px;
     background-color: rgba(191, 191, 191, 0.15);

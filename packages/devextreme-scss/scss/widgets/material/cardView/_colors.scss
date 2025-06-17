@@ -9,6 +9,7 @@
 @use '../../base/cardView/content_view/content/variables' as *;
 @use '../../base/cardView/content_view/no_data/variables' as *;
 @use '../../base/cardView/column_chooser/variables' as *;
+@use '../../base/cardView/filter_panel/variables' as *;
 @use "sass:color";
 
 // adduse
@@ -407,7 +408,7 @@ $cardview-material-columnchooser--empty__message-color: null !default;
   $cardview-material-common-text-color: $base-text-color !default;
 
   // Card
-  $cardview-material-card-bg-color: $cardview-material-common-bg-color !default;
+  $cardview-material-card-bg-color: $base-bg !default;
   $cardview-material-card-border-color: $base-border-color !default;
   $cardview-material-card-divider-color: $cardview-material-card-border-color !default;
   $cardview-material-card-text-color: $cardview-material-common-text-color !default;
@@ -491,7 +492,7 @@ $cardview-material-columnchooser--empty__message-color: null !default;
   $cardview-material-common-text-color: $base-text-color !default;
 
   // Card
-  $cardview-material-card-bg-color: $cardview-material-common-bg-color !default;
+  $cardview-material-card-bg-color: $base-bg !default;
   $cardview-material-card-border-color: $base-border-color !default;
   $cardview-material-card-divider-color: $cardview-material-card-border-color !default;
   $cardview-material-card-text-color: $cardview-material-common-text-color !default;

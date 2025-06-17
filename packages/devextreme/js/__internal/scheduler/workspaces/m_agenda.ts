@@ -515,7 +515,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   updateScrollPosition(date) {
-    const newDate = this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+    const newDate = this.timeZoneCalculator.createDate(date, 'toGrid');
 
     const bounds = this.getVisibleBounds();
     const startDateHour = newDate.getHours();

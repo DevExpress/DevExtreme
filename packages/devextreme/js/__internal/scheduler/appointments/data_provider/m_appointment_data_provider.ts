@@ -1,8 +1,8 @@
 import config from '@js/core/config';
-import { combineRemoteFilter } from '@ts/scheduler/r1/filterting/index';
-import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/types';
-import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
+import { combineRemoteFilter } from '../../r1/filterting/index';
+import type { AppointmentDataItem, SafeAppointment } from '../../types';
+import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import { AppointmentDataSource } from './m_appointment_data_source';
 import { AppointmentFilterBaseStrategy } from './m_appointment_filter';
 import { AppointmentFilterVirtualStrategy } from './m_appointment_filter_virtual';

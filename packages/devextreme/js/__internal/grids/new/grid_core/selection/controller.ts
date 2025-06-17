@@ -159,6 +159,8 @@ export class SelectionController {
     effect(() => {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       this.dataController.items.value;
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      this.dataController.isLoaded.value;
       this.updateSelectionToolbarButtons(this.normalizedSelectedCardKeys.value);
     });
   }

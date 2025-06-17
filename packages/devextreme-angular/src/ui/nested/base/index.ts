@@ -43,6 +43,7 @@ export * from './html-editor-table-resizing';
 export * from './html-editor-variables';
 export * from './pager';
 export * from './popup-options';
+export * from './popup-toolbar-item-dxi';
 export * from './position-config';
 export * from './scheduler-scrolling';
 export * from './search-panel';

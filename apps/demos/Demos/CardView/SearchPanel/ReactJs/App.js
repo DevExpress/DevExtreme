@@ -1,23 +1,21 @@
 import React from 'react';
-import CardView, { Column } from 'devextreme-react/card-view';
+import CardView, {
+  Column, Paging, HeaderFilter, SearchPanel,
+} from 'devextreme-react/card-view';
 import { tasks } from './data.js';
-// TODO: Nested component does not exist
-const headerFilterConfig = {
-  visible: true,
-};
-// TODO: Nested component does not exist
-const searchPanelConfig = {
-  visible: true,
-  text: 'an',
-};
+
 const App = () => (
   <CardView
     dataSource={tasks}
     keyExpr="Task_ID"
-    wordWrapEnabled={true}
-    headerFilter={headerFilterConfig}
-    searchPanel={searchPanelConfig}
+    cardsPerRow={2}
   >
+    <Paging pageSize={4} />
+    <SearchPanel
+      visible={true}
+      defaultText="an"
+    />
+    <HeaderFilter visible={true} />
     <Column
       dataField="Task_Subject"
       caption="Subject"

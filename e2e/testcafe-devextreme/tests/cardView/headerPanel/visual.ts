@@ -243,4 +243,7 @@ test('headerPanel column chooser link opens column chooser on click', async (t) 
   columns: [
     { dataField: 'Column 1', visible: false },
   ],
+  columnChooser: {
+    enabled: true,
+  },
 }));

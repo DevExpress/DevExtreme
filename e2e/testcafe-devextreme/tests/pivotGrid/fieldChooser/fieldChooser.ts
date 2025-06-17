@@ -7,7 +7,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import { sales } from '../data.js';
 
 fixture.disablePageReloads`PivotGrid_fieldChooser`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 test('Change dataFiels order with one invisible field (T1079461)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -545,5 +545,28 @@ test('Change dataFiels order when applyChangesMode is "onDemand" (T1097764)', as
       isMeasure: true,
     }],
     store: sales,
+  },
+}));
+
+test('Field chooser can be clicked (T1290333)', async (t) => {
+  const pivotGrid = new PivotGrid('#container');
+
+  await t.click(pivotGrid.getFieldChooserButton());
+  await t
+    .expect(pivotGrid.getFieldChooser().element.exists)
+    .ok();
+}).before(async () => createWidget('dxPivotGrid', {
+  showBorders: true,
+  fieldPanel: {
+    showFilterFields: false,
+    visible: true,
+  },
+  dataSource: {
+    fields: [{
+      dataField: 'date',
+      dataType: 'date',
+      area: 'column',
+    }],
+    store: [],
   },
 }));

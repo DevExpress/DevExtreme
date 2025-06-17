@@ -1,4 +1,4 @@
-<div class="options">
+<div class="options-panel">
   <div class="caption">Options</div>
   <div class="options-container">
     <div class="option">
@@ -37,7 +37,13 @@
     </div>
   </div>
 </div>
-<dx-card-view [dataSource]="employees" keyExpr="ID" [selectedCardKeys]="[4, 6]">
+<dx-card-view
+  [dataSource]="employees"
+  keyExpr="ID"
+  [selectedCardKeys]="[4, 6]"
+  [cardMinWidth]="100"
+  [wordWrapEnabled]="true"
+>
   <dxo-card-view-card-cover
     [altExpr]="altExpr"
     [imageExpr]="imageExpr"

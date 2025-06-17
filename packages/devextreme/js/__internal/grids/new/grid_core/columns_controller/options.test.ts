@@ -50,7 +50,10 @@ describe('Options', () => {
         });
         const columns2 = columnsController2.columns.peek();
 
-        expect(columns1).toEqual(columns2);
+        // selector is newly created func, so it can't be compared
+        const removeSelector = ({ selector, ...column }) => column;
+
+        expect(columns1.map(removeSelector)).toStrictEqual(columns2.map(removeSelector));
       });
     });
     describe('when given as object', () => {

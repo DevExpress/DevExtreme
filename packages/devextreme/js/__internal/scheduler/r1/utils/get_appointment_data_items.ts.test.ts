@@ -215,4 +215,17 @@ describe('replaceIncorrectEndDate', () => {
       expect((item.data.endDate as Date).getMinutes()).toBe(item.expectedEndDate.getMinutes());
     });
   });
+
+  it('should return false for incorrect startDate', () => {
+    [
+      {},
+      { startDate: 'Invalid date format' },
+    ].forEach((data) => {
+      expect(replaceIncorrectEndDate(
+        data,
+        30,
+        mockAppointmentDataAccessor,
+      )).toBe(false);
+    });
+  });
 });

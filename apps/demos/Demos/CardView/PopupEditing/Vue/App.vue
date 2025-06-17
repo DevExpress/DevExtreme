@@ -2,10 +2,14 @@
   <DxCardView
     :data-source="employees"
     key-expr="id"
+    :cards-per-row="2"
     :search-panel="{ // todo: move to nested
       visible: true,
     }"
   >
+    <DxPaging
+      :page-size="4"
+    />
     <DxCardCover
       :image-expr="imageExpr"
       :alt-expr="altExpr"
@@ -104,7 +108,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxCardView, DxColumn, DxCardCover, DxEditing,
+  DxCardView, DxColumn, DxCardCover, DxEditing, DxPaging,
 } from 'devextreme-vue/card-view';
 import { employees, type Employee } from './data.ts';
 

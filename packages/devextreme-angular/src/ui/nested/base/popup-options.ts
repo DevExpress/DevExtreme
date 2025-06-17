@@ -5,12 +5,11 @@ import {
     Component,
 } from '@angular/core';
 
-import { Position, PositionAlignment, ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
+import { Position, PositionAlignment } from 'devextreme/common';
 import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
-import { ToolbarLocation } from 'devextreme/ui/popup';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 @Component({
     template: ''
@@ -331,10 +330,10 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('titleTemplate', value);
     }
 
-    get toolbarItems(): Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, toolbar?: ToolbarLocation, visible?: boolean, widget?: ToolbarItemComponent }> {
+    get toolbarItems(): Array<dxPopupToolbarItem> {
         return this._getOption('toolbarItems');
     }
-    set toolbarItems(value: Array<any | { cssClass?: string | undefined, disabled?: boolean, html?: string, locateInMenu?: LocateInMenuMode, location?: ToolbarItemLocation, menuItemTemplate?: any, options?: any, showText?: ShowTextMode, template?: any, text?: string, toolbar?: ToolbarLocation, visible?: boolean, widget?: ToolbarItemComponent }>) {
+    set toolbarItems(value: Array<dxPopupToolbarItem>) {
         this._setOption('toolbarItems', value);
     }
 
