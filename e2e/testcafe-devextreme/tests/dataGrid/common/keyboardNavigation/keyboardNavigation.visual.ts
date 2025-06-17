@@ -525,7 +525,7 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
       .click(dataGrid.getDataCell(199, 35).element)
       .pressKey('ctrl+home');
 
-    await takeScreenshot(`${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_first_cell_when_row_dragging_and_virtual_scrolling_and_virtual_columns_are_enabled`, dataGrid.element);
+    await takeScreenshot(`${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_first_cell_row_dragging__virtual_scrolling__virtual_columns`, dataGrid.element);
 
     // assert
     await t
@@ -559,7 +559,7 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
       .click(dataGrid.getDataCell(0, 0).element)
       .pressKey('ctrl+end');
 
-    await takeScreenshot(`${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_last_cell_when_row_dragging_and_virtual_scrolling_and_virtual_columns_are_enabled`, dataGrid.element);
+    await takeScreenshot(`${useNative ? 'native' : 'simulated'}_scrolling_-_navigate_to_last_cell_row_dragging__virtual_scrolling__virtual_columns`, dataGrid.element);
 
     // assert
     await t
