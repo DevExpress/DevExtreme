@@ -1,6 +1,6 @@
-type PickFromEvent<TNativeEvent extends Event, TTargetEvents extends Event, EventName extends keyof TTargetEvents> =
-  TNativeEvent extends Pick<TTargetEvents, EventName>
-    ? TTargetEvents[EventName]
+type PickFromEvent<TNativeEvent extends Event, TTargetEvents extends Event, PropName extends keyof TTargetEvents> =
+  TNativeEvent extends Pick<TTargetEvents, PropName>
+    ? TTargetEvents[PropName]
     : undefined;
 
 /**

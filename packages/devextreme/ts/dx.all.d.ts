@@ -8069,9 +8069,9 @@ declare module DevExpress.events {
   type PickFromEvent<
     TNativeEvent extends Event,
     TTargetEvents extends Event,
-    EventName extends keyof TTargetEvents
-  > = TNativeEvent extends Pick<TTargetEvents, EventName>
-    ? TTargetEvents[EventName]
+    PropName extends keyof TTargetEvents
+  > = TNativeEvent extends Pick<TTargetEvents, PropName>
+    ? TTargetEvents[PropName]
     : undefined;
   /**
    * [descr:events.triggerHandler(element, event)]
