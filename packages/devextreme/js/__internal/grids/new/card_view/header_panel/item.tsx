@@ -54,7 +54,7 @@ export interface ItemProps {
   onKeyDown?: (event: KeyboardEvent) => void;
   onSortClick?: (event: MouseEvent) => void;
   onFilterClick?: (element: Element) => void;
-  onContextMenu?: (event: MouseEvent) => void;
+  onContextMenu?: (event: MouseEvent, ref: HTMLDivElement) => void;
 }
 
 export class Item extends Component<ItemProps> {
@@ -96,7 +96,7 @@ export class Item extends Component<ItemProps> {
         aria-label={ariaLabel}
         onClick={this.props.onSortClick}
         onKeyDown={this.props.onKeyDown}
-        onContextMenu={this.props.onContextMenu}
+        onContextMenu={this.onContextMenuHandler}
       >
         {icon}
         {Template && <Template column={this.props.column}/>}
@@ -128,6 +128,14 @@ export class Item extends Component<ItemProps> {
 
     if (this.props.elementRef?.current) {
       this.props.onFilterClick?.(this.props.elementRef.current);
+    }
+  };
+
+  private readonly onContextMenuHandler = (event: MouseEvent): void => {
+    event.stopPropagation();
+
+    if (this.props.elementRef?.current) {
+      this.props.onContextMenu?.(event, this.props.elementRef.current);
     }
   };
 }
