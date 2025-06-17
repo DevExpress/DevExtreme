@@ -44,14 +44,6 @@ import { DxiStripComponent } from './strip-dxi';
 })
 export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get aggregateByCategory(): boolean {
-        return this._getOption('aggregateByCategory');
-    }
-    set aggregateByCategory(value: boolean) {
-        this._setOption('aggregateByCategory', value);
-    }
-
-    @Input()
     get aggregatedPointsPosition(): AggregatedPointsPosition {
         return this._getOption('aggregatedPointsPosition');
     }

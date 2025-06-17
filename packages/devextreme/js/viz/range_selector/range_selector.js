@@ -560,13 +560,6 @@ const dxRangeSelector = baseWidgetModule.inherit({
 
     _fontFields: ['scale.label.font', 'sliderMarker.font'],
 
-    _setDeprecatedOptions() {
-        this.callBase();
-        extend(this._deprecatedOptions, {
-            'scale.aggregateByCategory': { since: '23.1', message: 'Use the aggregation.enabled property' }
-        });
-    },
-
     _initCore: function() {
         const that = this;
         const renderer = that._renderer;

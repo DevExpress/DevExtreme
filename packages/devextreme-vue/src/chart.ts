@@ -609,7 +609,6 @@ const DxArgumentAxisConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:aggregateByCategory": null,
     "update:aggregatedPointsPosition": null,
     "update:aggregationGroupWidth": null,
     "update:aggregationInterval": null,
@@ -661,7 +660,6 @@ const DxArgumentAxisConfig = {
     "update:workWeek": null,
   },
   props: {
-    aggregateByCategory: Boolean,
     aggregatedPointsPosition: String as PropType<AggregatedPointsPosition>,
     aggregationGroupWidth: Number,
     aggregationInterval: [Number, Object, String] as PropType<number | Record<string, any> | TimeInterval>,
