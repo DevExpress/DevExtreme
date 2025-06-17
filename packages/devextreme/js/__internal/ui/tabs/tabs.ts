@@ -277,10 +277,6 @@ class Tabs extends CollectionWidget<TabsProperties> {
         if ($iconElement) {
           $iconElement.prependTo($container);
         }
-
-        // const $tabItem = $('<div>').addClass(TABS_ITEM_TEXT_CLASS);
-        //
-        // $container.wrapInner($tabItem);
       }, ['text', 'html', 'icon'], this.option('integrationOptions.watchMethod')),
     });
   }
