@@ -140,7 +140,7 @@ class FormTestWrapper {
 
     checkTabTitle(tabSelector, expectedTitle) {
         QUnit.assert.strictEqual(
-            this._form.$element().find(`${tabSelector} ${TABS_ITEM_CLASS}`).text(),
+            this._form.$element().find(`${tabSelector} .${TABS_ITEM_CLASS}`).text(),
             `${expectedTitle}${expectedTitle}`,
             'caption of tab',
         );
