@@ -27,6 +27,8 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
 
   private readonly rowHeight = signal(0);
 
+  protected readonly columnGap = signal(0);
+
   private readonly cardsPerRowProp = this.options.oneWay('cardsPerRow');
 
   private readonly cardsPerRow = computed(
@@ -41,7 +43,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
       }
 
       const result = factors(pageSize).reverse().find((cardsPerRow) => {
-        const cardWidth = (width - 6 * (cardsPerRow - 1)) / cardsPerRow;
+        const cardWidth = (width - this.columnGap.value * (cardsPerRow - 1)) / cardsPerRow;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         return cardMinWidth! <= cardWidth;
       });
@@ -83,6 +85,9 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
         onRowHeightChange: (height) => { this.rowHeight.value = height; },
         onFirstElementChange: (firstElement: HTMLDivElement | undefined): void => {
           this.keyboardNavigationController.setFirstCardElement(firstElement);
+        },
+        onColumnGapChange: (gap: number): void => {
+          this.columnGap.value = gap;
         },
         onPageChange: this.onPageChange.bind(this),
         showCardContextMenu: this.showCardContextMenu.bind(this),

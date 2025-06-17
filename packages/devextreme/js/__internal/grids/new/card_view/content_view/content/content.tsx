@@ -41,6 +41,8 @@ export interface ContentProps {
 
   wordWrapEnabled: boolean;
 
+  onColumnGapChange?: (gap: number) => void;
+
   cardProps?: {
     minWidth?: number;
     maxWidth?: number;
@@ -213,9 +215,12 @@ export class Content extends Component<ContentProps> {
     }
 
     const cardHeight = firstCardElement.offsetHeight;
-    const gapHeight = parseFloat(getComputedStyle(this.containerRef.current).rowGap);
-    const rowHeight = cardHeight + gapHeight;
+    const rowGap = parseFloat(getComputedStyle(this.containerRef.current).rowGap);
+    const rowHeight = cardHeight + rowGap;
     this.props.onRowHeightChange?.(rowHeight);
+
+    const columnGap = parseFloat(getComputedStyle(this.containerRef.current).columnGap);
+    this.props.onColumnGapChange?.(columnGap);
   }
 
   componentDidMount(): void {
