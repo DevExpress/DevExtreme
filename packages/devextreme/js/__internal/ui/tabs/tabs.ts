@@ -2,7 +2,7 @@ import type { DefaultOptionsRule, Position } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -50,6 +50,7 @@ export const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
 export const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
 export const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 
+export const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
 export const TABS_ITEM_TEXT_SPAN_CLASS = 'dx-tab-text-span';
 export const TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS = 'dx-tab-text-span-pseudo';
 
@@ -277,6 +278,10 @@ class Tabs extends CollectionWidget<TabsProperties> {
         if ($iconElement) {
           $iconElement.prependTo($container);
         }
+
+        const $tabItem = $('<div>').addClass(TABS_ITEM_TEXT_CLASS);
+
+        $container.wrapInner($tabItem);
       }, ['text', 'html', 'icon'], this.option('integrationOptions.watchMethod')),
     });
   }
@@ -352,11 +357,10 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
   _isItemsSizeExceeded(): boolean {
     const isVertical = this._isVertical();
-    const isItemsSizeExceeded = isVertical
+
+    return isVertical
       ? this._isItemsHeightExceeded()
       : this._isItemsWidthExceeded();
-
-    return isItemsSizeExceeded;
   }
 
   _isItemsWidthExceeded(): boolean {
@@ -368,18 +372,15 @@ class Tabs extends CollectionWidget<TabsProperties> {
       return false;
     }
 
-    const isItemsWidthExceeded = tabItemTotalWidth > elementWidth - 1;
-
-    return isItemsWidthExceeded;
+    return tabItemTotalWidth > elementWidth - 1;
   }
 
   _isItemsHeightExceeded(): boolean {
     const $visibleItems = this._getVisibleItems();
     const itemsHeight = this._getSummaryItemsSize('height', $visibleItems, true);
     const elementHeight = getHeight(this.$element());
-    const isItemsHeightExceeded = itemsHeight - 1 > elementHeight;
 
-    return isItemsHeightExceeded;
+    return itemsHeight - 1 > elementHeight;
   }
 
   _needStretchItems(): boolean {
@@ -394,9 +395,8 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
     const maxTabItemWidth = Math.max.apply(null, itemsWidth);
     const requireWidth = elementWidth / $visibleItems.length;
-    const needStretchItems = maxTabItemWidth > requireWidth + 1;
 
-    return needStretchItems;
+    return maxTabItemWidth > requireWidth + 1;
   }
 
   _cleanNavButtons(): void {
@@ -473,11 +473,10 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
   _getScrollableDirection(): Orientation {
     const isVertical = this._isVertical();
-    const scrollableDirection = isVertical
+
+    return isVertical
       ? SCROLLABLE_DIRECTION.vertical
       : SCROLLABLE_DIRECTION.horizontal;
-
-    return scrollableDirection;
   }
 
   _updateScrollable(): void {

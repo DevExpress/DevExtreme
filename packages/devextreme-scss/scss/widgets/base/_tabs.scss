@@ -29,7 +29,7 @@
     overflow: hidden;
   }
 
-  &.dx-tabs-vertical .dx-tabs-wrapper .dx-tab-content {
+  &.dx-tabs-vertical .dx-tabs-wrapper .dx-tab-text {
     white-space: normal;
   }
 
@@ -109,6 +109,14 @@
   max-width: 100%;
 }
 
+.dx-tab-text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  -webkit-user-drag: none;
+}
+
 .dx-tabs-nav-button {
   align-items: center;
   justify-content: center;
@@ -150,16 +158,16 @@
   }
 }
 
-.dx-tabs-icon-position-end .dx-tab-content {
+.dx-tabs-icon-position-end .dx-tab-text {
   flex-direction: row-reverse;
 }
 
-.dx-tabs-icon-position-top .dx-tab-content {
+.dx-tabs-icon-position-top .dx-tab-text {
   text-align: center;
   flex-direction: column;
 }
 
-.dx-tabs-icon-position-bottom .dx-tab-content {
+.dx-tabs-icon-position-bottom .dx-tab-text {
   text-align: center;
   flex-direction: column-reverse;
 }

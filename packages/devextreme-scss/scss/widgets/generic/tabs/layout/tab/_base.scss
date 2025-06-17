@@ -45,7 +45,7 @@
       $generic-tabs-border-selected-left,
     );
 
-    .dx-tab-content {
+    .dx-tab-text {
       color: $tabs-tab-selected-color;
     }
 
@@ -65,7 +65,7 @@
       $generic-tabs-border-active-left,
     );
 
-    .dx-tab-content {
+    .dx-tab-text {
       color: $tabs-tab-selected-color;
     }
 
@@ -84,7 +84,7 @@
     }
   }
 
-  .dx-tab-content {
+  .dx-tab-text {
     column-gap: $generic-tabs-icon-margin;
     row-gap: $generic-tabs-item-gap;
     color: $tabs-tab-color;

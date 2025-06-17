@@ -32,8 +32,8 @@ class FormTestWrapper {
         this._form.on('contentReady', this._contentReadyStub);
     }
 
-    _getTabsTextsElements() {
-        return this._form.$element().find('.dx-tab-content');
+    _getTabsElements() {
+        return this._form.$element().find(`.${TABS_ITEM_CLASS}`);
     }
 
     _getMultiViewItemsElements() {
@@ -82,12 +82,12 @@ class FormTestWrapper {
     }
 
     checkTabTitle(tabIndex, expectedText) {
-        const $title = this._getTabsTextsElements().eq(tabIndex);
+        const $title = this._getTabsElements().eq(tabIndex);
         assert.strictEqual($title.text(), `${expectedText}${expectedText}`, `${tabIndex} tab title`);
     }
 
     checkTabsElements(expectedTabsCount) {
-        const $tabs = this._getTabsTextsElements();
+        const $tabs = this._getTabsElements();
         assert.equal($tabs.length, expectedTabsCount, 'count of tabs elements');
 
         const $multiViewItems = this._getMultiViewItemsElements();

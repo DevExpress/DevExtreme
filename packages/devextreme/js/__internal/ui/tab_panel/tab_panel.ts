@@ -18,7 +18,11 @@ import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import MultiView from '@ts/ui/m_multi_view';
 import type { TabsProperties } from '@ts/ui/tabs/tabs';
-import Tabs from '@ts/ui/tabs/tabs';
+import Tabs, {
+  TABS_ITEM_TEXT_CLASS,
+  TABS_ITEM_TEXT_SPAN_CLASS,
+  TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS,
+} from '@ts/ui/tabs/tabs';
 
 // eslint-disable-next-line import/no-named-default
 import { default as TabPanelItem } from './item';
@@ -27,9 +31,8 @@ export const TABPANEL_CLASS = 'dx-tabpanel';
 const TABPANEL_TABS_CLASS = 'dx-tabpanel-tabs';
 export const TABPANEL_TABS_ITEM_CLASS = 'dx-tabpanel-tab';
 export const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
+
 export const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
-const TABS_ITEM_TEXT_SPAN_CLASS = 'dx-tab-text-span';
-const TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS = 'dx-tab-text-span-pseudo';
 
 export const TABPANEL_TABS_POSITION_CLASS: Record<Position, string> = {
   top: 'dx-tabpanel-tabs-position-top',
@@ -213,6 +216,10 @@ class TabPanel extends MultiView<TabPanelProperties> {
     this._templateManager.addDefaultTemplates({
       title: new BindableTemplate(($container: dxElementWrapper, data: Item) => {
         this._prepareTabsItemTemplate(data, $container);
+
+        const $tabItem = $('<div>').addClass(TABS_ITEM_TEXT_CLASS);
+
+        $container.wrapInner($tabItem);
       }, ['title', 'icon'], this.option('integrationOptions.watchMethod')),
     });
   }
