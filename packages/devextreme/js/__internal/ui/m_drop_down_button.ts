@@ -375,10 +375,12 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     this._popupContentId = `dx-${new Guid()}`;
     this.setAria('id', this._popupContentId, $content);
 
-    return template.render({
+    const result = template.render({
       container: getPublicElement($content),
       model: this.option('items') || this._dataController.getDataSource(),
     });
+
+    return result;
   }
 
   _popupOptions() {
@@ -412,6 +414,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
         at: `${horizontalAlignment} bottom`,
       },
       _wrapperClassExternal: DROP_DOWN_EDITOR_OVERLAY_CLASS,
+      contentTemplate: null,
     }, this._options.cache('dropDownOptions'), { visible: this.option('opened') });
   }
 
@@ -583,19 +586,20 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     this.$element().toggleClass(DROP_DOWN_BUTTON_HAS_ARROW_CLASS, hasArrow);
   }
 
-  toggle(visible?: boolean) {
+  toggle(visible?: boolean): Promise<unknown> | undefined {
     if (!this._popup) {
       this._renderPopup();
       this._renderContent();
     }
+
     return this._popup?.toggle(visible);
   }
 
-  open() {
+  open(): Promise<unknown> | undefined {
     return this.toggle(true);
   }
 
-  close() {
+  close(): Promise<unknown> | undefined {
     return this.toggle(false);
   }
 

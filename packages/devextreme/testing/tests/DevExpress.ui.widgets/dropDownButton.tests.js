@@ -2618,6 +2618,26 @@ QUnit.module('keyboard navigation', {
     });
 });
 
+QUnit.module('content template', () => {
+    QUnit.test('content template render function should be called once (T1294338)', function(assert) {
+        const renderSpy = sinon.spy();
+
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
+            integrationOptions: {
+                templates: {
+                    content: {
+                        render: renderSpy,
+                    },
+                },
+            },
+        });
+
+        dropDownButton.open();
+
+        assert.ok(renderSpy.calledOnce, 'render called once');
+    });
+});
+
 QUnit.module('custom content template', {}, () => {
     QUnit.test('dropDownContentTemplate option can be used', function(assert) {
         const templateHandler = sinon.stub().returns('Template 1');
@@ -2757,7 +2777,6 @@ QUnit.module('Button template', {}, () => {
         assert.strictEqual($buttonContent.text(), 'New text', 'template is updated');
     });
 });
-
 
 QUnit.module('Accessibility', {
     beforeEach: function() {
