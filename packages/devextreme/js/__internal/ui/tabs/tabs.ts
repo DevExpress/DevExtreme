@@ -7,6 +7,7 @@ import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import resizeObserverSingleton from '@js/core/resize_observer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
@@ -244,6 +245,11 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this._renderMultiple();
 
     this._feedbackHideTimeout = FEEDBACK_HIDE_TIMEOUT;
+  }
+
+  _renderContent(): void {
+    super._renderContent();
+    this._observeContentResize(true);
   }
 
   _prepareDefaultItemTemplate(data: Item, $container: dxElementWrapper): void {
@@ -633,6 +639,18 @@ class Tabs extends CollectionWidget<TabsProperties> {
     }
   }
 
+  _observeContentResize(shouldObserve: boolean): void {
+    if (!this.option('useResizeObserver')) {
+      return;
+    }
+
+    if (shouldObserve) {
+      resizeObserverSingleton.observe(this.$element().get(0), () => { this._dimensionChanged(); });
+    } else {
+      resizeObserverSingleton.unobserve(this.$element().get(0));
+    }
+  }
+
   _dimensionChanged(): void {
     this._renderScrolling();
   }
@@ -659,6 +677,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
   _clean(): void {
     this._cleanScrolling();
     super._clean();
+    this._observeContentResize(false);
   }
 
   _toggleTabsVerticalClass(value: boolean): void {
