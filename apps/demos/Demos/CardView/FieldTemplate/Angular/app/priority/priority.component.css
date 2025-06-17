@@ -1,0 +1,28 @@
+.priority {
+  display: flex;
+  align-items: center;
+}
+
+.priority--low {
+  color: var(--dx-color-success);
+}
+
+.priority--normal {
+  color: var(--dx-color-primary);
+}
+
+.priority--urgent {
+  color: #f7630c;
+}
+
+.priority--high {
+  color: var(--dx-color-danger);
+}
+
+.indicator {
+  background-color: currentcolor;
+  margin-right: 8px;
+  border-radius: 50%;
+  height: 12px;
+  width: 12px;
+}

@@ -336,7 +336,7 @@ export const getToday = (indicatorTime: Date | undefined, timeZoneCalculator: {
 }): Date => {
   const todayDate = indicatorTime ?? new Date();
 
-  return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
+  return timeZoneCalculator?.createDate(todayDate, 'toGrid') || todayDate;
 };
 
 export const getCalculatedFirstDayOfWeek = (

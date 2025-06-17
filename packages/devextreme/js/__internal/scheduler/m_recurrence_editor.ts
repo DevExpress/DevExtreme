@@ -12,7 +12,6 @@ import ButtonGroup from '@js/ui/button_group';
 import Editor from '@js/ui/editor/editor';
 import Form from '@js/ui/form';
 import { current, isFluent } from '@js/ui/themes';
-import { PathTimeZoneConversion } from '@ts/scheduler/r1/timezone_calculator/index';
 
 import { getRecurrenceProcessor } from './m_recurrence';
 
@@ -646,11 +645,9 @@ class RecurrenceEditor extends Editor {
       const getStartDateTimeZone: any = this.option('getStartDateTimeZone');
       const appointmentTimeZone = getStartDateTimeZone();
 
-      const path = appointmentTimeZone
-        ? PathTimeZoneConversion.fromAppointmentToSource : PathTimeZoneConversion.fromGridToSource;
-
+      const path = appointmentTimeZone ? 'fromAppointment' : 'fromGrid';
       const dateInLocaleTimeZone = (this.option('timeZoneCalculator') as any)
-        .createDate(dateInTimeZone, { path, appointmentTimeZone });
+        .createDate(dateInTimeZone, path, appointmentTimeZone);
 
       this._recurrenceRule.makeRule('until', dateInLocaleTimeZone);
       this._changeEditorValue();
@@ -838,10 +835,9 @@ class RecurrenceEditor extends Editor {
     const getStartDateTimeZone: any = this.option('getStartDateTimeZone');
     const appointmentTimeZone = getStartDateTimeZone();
 
-    const path = appointmentTimeZone
-      ? PathTimeZoneConversion.fromSourceToAppointment : PathTimeZoneConversion.fromSourceToGrid;
+    const path = appointmentTimeZone ? 'toAppointment' : 'toGrid';
 
-    return (this.option('timeZoneCalculator') as any).createDate(untilDate, { path, appointmentTimeZone });
+    return (this.option('timeZoneCalculator') as any).createDate(untilDate, path, appointmentTimeZone);
   }
 }
 

@@ -24,7 +24,7 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/card_view';
 
 import DataSource from 'devextreme/data/data_source';
-import { CardCover, CardHeader, ColumnProperties, dxCardViewEditing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, SelectionChangedEvent, SelectionChangingEvent, Paging, RemoteOperations, SelectionConfiguration, Toolbar } from 'devextreme/ui/card_view';
+import { CardCover, CardHeader, ColumnProperties, dxCardViewEditing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, SelectionChangedEvent, Paging, RemoteOperations, SelectionConfiguration, Toolbar } from 'devextreme/ui/card_view';
 import { Mode } from 'devextreme/common';
 import { ColumnChooser, FilterPanel, HeaderFilter, Pager, SearchPanel, Sorting } from 'devextreme/common/grids';
 import { DataSourceOptions } from 'devextreme/data/data_source';
@@ -73,6 +73,7 @@ import { DxiCardViewCompareRuleModule } from 'devextreme-angular/ui/card-view/ne
 import { DxiCardViewCustomOperationModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewCustomRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewEditingModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewEditingTextsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewEmailRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewEmptyItemModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewFieldModule } from 'devextreme-angular/ui/card-view/nested';
@@ -358,6 +359,16 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     }
     set filterPanel(value: FilterPanel) {
         this._setOption('filterPanel', value);
+    }
+
+
+    
+    @Input()
+    get filterSyncEnabled(): boolean | Mode {
+        return this._getOption('filterSyncEnabled');
+    }
+    set filterSyncEnabled(value: boolean | Mode) {
+        this._setOption('filterSyncEnabled', value);
     }
 
 
@@ -852,14 +863,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     /**
     
-     * [descr:undefined]
-    
-    
-     */
-    @Output() onSelectionChanging: EventEmitter<SelectionChangingEvent>;
-
-    /**
-    
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
@@ -1011,6 +1014,13 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     
      */
     @Output() filterPanelChange: EventEmitter<FilterPanel>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() filterSyncEnabledChange: EventEmitter<boolean | Mode>;
 
     /**
     
@@ -1242,7 +1252,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { subscribe: 'initNewCard', emit: 'onInitNewCard' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
             { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-            { subscribe: 'selectionChanging', emit: 'onSelectionChanging' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
             { emit: 'allowColumnReorderingChange' },
@@ -1265,6 +1274,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { emit: 'filterBuilderChange' },
             { emit: 'filterBuilderPopupChange' },
             { emit: 'filterPanelChange' },
+            { emit: 'filterSyncEnabledChange' },
             { emit: 'filterValueChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'headerFilterChange' },
@@ -1371,6 +1381,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxiCardViewCustomOperationModule,
     DxiCardViewCustomRuleModule,
     DxoCardViewEditingModule,
+    DxoCardViewEditingTextsModule,
     DxiCardViewEmailRuleModule,
     DxiCardViewEmptyItemModule,
     DxiCardViewFieldModule,
@@ -1448,6 +1459,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxiCardViewCustomOperationModule,
     DxiCardViewCustomRuleModule,
     DxoCardViewEditingModule,
+    DxoCardViewEditingTextsModule,
     DxiCardViewEmailRuleModule,
     DxiCardViewEmptyItemModule,
     DxiCardViewFieldModule,

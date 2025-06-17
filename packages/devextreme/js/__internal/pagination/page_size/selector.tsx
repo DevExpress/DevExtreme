@@ -19,7 +19,7 @@ export interface PageSizeSelectorProps {
   rootElementRef?: RefObject<HTMLDivElement>;
 }
 
-type PageSizeSelectorPropsType = Pick<PaginationProps, 'pageSize' | 'pageSizeChangedInternal' | 'allowedPageSizes' > & PageSizeSelectorProps;
+type PageSizeSelectorPropsType = Pick<PaginationProps, 'pageSize' | 'pageSizeChangedInternal' | 'allowedPageSizes' | 'itemCount'> & PageSizeSelectorProps;
 
 const PageSizeSelectorDefaultProps: PageSizeSelectorPropsType = {
   isLargeDisplayMode: true,
@@ -67,13 +67,11 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
     if (this.__getterCache.normalizedPageSizes !== undefined) {
       return this.__getterCache.normalizedPageSizes;
     }
-    const mapFunction = (p): FullPageSize => (p === 'all' || p === 0 ? {
-      text: this.getAllText(),
-      value: 0,
-    } : {
-      text: String(p),
-      value: p,
-    });
+    const mapFunction = (p): FullPageSize => (
+      p === 'all' || p === 0
+        ? { text: this.getAllText(), value: 0 }
+        : { text: String(p), value: p }
+    );
     // eslint-disable-next-line @stylistic/max-len
     const result: FullPageSize[] | undefined = this.props.allowedPageSizes.map<FullPageSize>(mapFunction);
     this.__getterCache.normalizedPageSizes = result;
@@ -98,7 +96,7 @@ export class PageSizeSelector extends InfernoComponent<PageSizeSelectorPropsType
       <div ref={this.htmlRef} className={PAGINATION_PAGE_SIZES_CLASS}>
         {isLargeDisplayMode && (
         <PageSizeLarge
-          allowedPageSizes={this.getNormalizedPageSizes()}
+          allowedPageSizes={normalizedPageSizes}
           pageSize={pageSize}
           pageSizeChangedInternal={pageSizeChangedInternal}
         />

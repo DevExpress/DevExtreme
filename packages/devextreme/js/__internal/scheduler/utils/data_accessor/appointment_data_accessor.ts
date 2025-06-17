@@ -14,9 +14,12 @@ interface AccessExpressions {
 interface KnownFields extends Appointment {
   startDate: Date;
   endDate: Date;
+  allDay: boolean;
+  disabled: boolean;
 }
 
 const isDateField = (field: string): boolean => field === 'startDate' || field === 'endDate';
+const isBooleanField = (field: string): boolean => field === 'allDay' || field === 'disabled';
 
 export class AppointmentDataAccessor extends DataAccessor<Appointment, KnownFields> {
   public expr!: IFieldExpr;
@@ -44,9 +47,13 @@ export class AppointmentDataAccessor extends DataAccessor<Appointment, KnownFiel
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let serializationFormatCache: string | undefined;
 
-    const getter = (object: Appointment): unknown => (this.forceIsoDateParsing
-      ? dateSerialization.deserializeDate(commonGetter(object))
-      : commonGetter(object));
+    const getter = (object: Appointment): unknown => {
+      const date = this.forceIsoDateParsing
+        ? dateSerialization.deserializeDate(commonGetter(object))
+        : commonGetter(object);
+
+      return date === undefined ? date : new Date(date);
+    };
 
     const setter = (object: Appointment, value: unknown): void => {
       if (this.dateSerializationFormat) {
@@ -68,10 +75,22 @@ export class AppointmentDataAccessor extends DataAccessor<Appointment, KnownFiel
     return { getter, setter };
   }
 
+  private getBooleanFieldAccessExpressions(expr: string): AccessExpressions {
+    const { getter: commonGetter, setter } = this.getCommonAccessExpressions(expr);
+    const getter = (object: Appointment): unknown => Boolean(commonGetter(object));
+
+    return { getter, setter };
+  }
+
   private getAccessExpressions(name: string, expr: string): AccessExpressions {
-    return isDateField(name)
-      ? this.getDateFieldAccessExpressions(expr)
-      : this.getCommonAccessExpressions(expr);
+    switch (true) {
+      case isBooleanField(name):
+        return this.getBooleanFieldAccessExpressions(expr);
+      case isDateField(name):
+        return this.getDateFieldAccessExpressions(expr);
+      default:
+        return this.getCommonAccessExpressions(expr);
+    }
   }
 
   public updateExpression(field: string, expr: string | undefined): void {

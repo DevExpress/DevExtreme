@@ -6,7 +6,8 @@ $(() => {
   $('#card-view').dxCardView({
     dataSource: orders,
     keyExpr: 'OrderNumber',
-    cardMinWidth: 100,
+    cardsPerRow: 'auto',
+    cardMinWidth: 280,
     wordWrapEnabled: true,
     headerFilter: {
       visible: true

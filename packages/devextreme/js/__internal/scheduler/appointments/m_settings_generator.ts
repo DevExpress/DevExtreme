@@ -4,11 +4,11 @@ import { extend } from '@js/core/utils/extend';
 import { isEmptyObject } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
-import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
 import { isDateAndTimeView } from '../r1/utils/index';
-import type { AppointmentDataAccessor } from '../utils';
+import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
+import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import {
   getAppointmentGroupIndex,
   getAppointmentGroupValues,
@@ -227,8 +227,8 @@ export class DateGeneratorBaseStrategy {
       const newStartDate = new Date(item.startDate.getTime() + diffStartDateOffset * toMs('hour'));
       let newEndDate = new Date(item.endDate.getTime() + diffEndDateOffset * toMs('hour'));
 
-      const testNewStartDate = this.timeZoneCalculator.createDate(newStartDate, { path: 'toGrid' });
-      const testNewEndDate = this.timeZoneCalculator.createDate(newEndDate, { path: 'toGrid' });
+      const testNewStartDate = this.timeZoneCalculator.createDate(newStartDate, 'toGrid');
+      const testNewEndDate = this.timeZoneCalculator.createDate(newEndDate, 'toGrid');
 
       if (appointment.duration > testNewEndDate.getTime() - testNewStartDate.getTime()) {
         newEndDate = new Date(newStartDate.getTime() + appointment.duration);
@@ -325,7 +325,7 @@ export class DateGeneratorBaseStrategy {
       }
 
       const duration = source.endDate.getTime() - source.startDate.getTime();
-      const startDate = this.timeZoneCalculator.createDate(source.startDate, { path: 'toGrid' });
+      const startDate = this.timeZoneCalculator.createDate(source.startDate, 'toGrid');
       const endDate = dateUtilsTs.addOffsets(startDate, [duration]);
 
       return {
@@ -345,8 +345,8 @@ export class DateGeneratorBaseStrategy {
     let endViewDateByEndDayHour = this.dateRange[1];
 
     if (this.timeZone) {
-      startViewDate = this.timeZoneCalculator.createDate(startViewDate, { path: 'fromGrid' });
-      endViewDateByEndDayHour = this.timeZoneCalculator.createDate(endViewDateByEndDayHour, { path: 'fromGrid' });
+      startViewDate = this.timeZoneCalculator.createDate(startViewDate, 'fromGrid');
+      endViewDateByEndDayHour = this.timeZoneCalculator.createDate(endViewDateByEndDayHour, 'fromGrid');
 
       const daylightOffset = timeZoneUtils.getDaylightOffsetInMs(startViewDate, endViewDateByEndDayHour);
       if (daylightOffset) {
@@ -360,7 +360,7 @@ export class DateGeneratorBaseStrategy {
     ];
   }
 
-  _createRecurrenceOptions(appointment, groupIndex?) {
+  _createRecurrenceOptions(appointment: AppointmentAdapter, groupIndex?) {
     const { viewOffset } = this.options;
     // NOTE: For creating a recurrent appointments,
     // we should use original appointment's dates (without view offset).
@@ -385,7 +385,7 @@ export class DateGeneratorBaseStrategy {
       end: originalAppointmentEndDate,
       appointmentTimezoneOffset: this.timeZoneCalculator.getOriginStartDateOffsetInMs(
         originalAppointmentStartDate,
-        appointment.rawAppointment.startDateTimeZone,
+        appointment.startDateTimeZone,
         true,
       ),
 
@@ -394,7 +394,7 @@ export class DateGeneratorBaseStrategy {
 
         const appointmentTimezoneOffset: number = this.timeZoneCalculator.getOriginStartDateOffsetInMs(
           date,
-          appointment.rawAppointment.startDateTimeZone,
+          appointment.startDateTimeZone,
           true,
         );
 
@@ -624,10 +624,9 @@ export class AppointmentSettingsGenerator {
 
   constructor(options) {
     this.options = options;
-    this.appointmentAdapter = createAppointmentAdapter(
+    this.appointmentAdapter = new AppointmentAdapter(
       this.rawAppointment,
       this.dataAccessors,
-      this.timeZoneCalculator,
     );
   }
 

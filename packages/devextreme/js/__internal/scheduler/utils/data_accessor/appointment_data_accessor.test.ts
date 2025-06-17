@@ -73,4 +73,40 @@ describe('AppointmentDataAccessor', () => {
     expect(dataAccessor.has('startDate')).toBe(true);
     expect(dataAccessor.has('endDate')).toBe(false);
   });
+
+  it('should return date', () => {
+    const dataAccessor = new AppointmentDataAccessor({
+      startDateExpr: 'startDate',
+      endDateExpr: 'endDate',
+    } as any, true);
+    const obj = {
+      startDate: '2025-05-30T15:00:00.000Z',
+      endDate: '2025-05-30T15:00:00.000Z',
+    };
+
+    expect(dataAccessor.get('startDate', obj)).toEqual(new Date('2025-05-30T15:00:00.000Z'));
+    expect(dataAccessor.get('endDate', obj)).toEqual(new Date('2025-05-30T15:00:00.000Z'));
+  });
+
+  it('should return undefined for date fields', () => {
+    const dataAccessor = new AppointmentDataAccessor({
+      startDateExpr: 'startDate',
+      endDateExpr: 'endDate',
+    } as any, true);
+    const obj = {};
+
+    expect(dataAccessor.get('startDate', obj)).toBe(undefined);
+    expect(dataAccessor.get('endDate', obj)).toBe(undefined);
+  });
+
+  it('should return boolean', () => {
+    const dataAccessor = new AppointmentDataAccessor({
+      disabledExpr: 'disabled',
+      allDayExpr: 'allDay',
+    } as any, true);
+    const obj: any = {};
+
+    expect(dataAccessor.get('disabled', obj)).toBe(false);
+    expect(dataAccessor.get('allDay', obj)).toBe(false);
+  });
 });

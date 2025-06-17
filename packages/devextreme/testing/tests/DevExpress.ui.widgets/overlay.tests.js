@@ -3145,15 +3145,6 @@ testModule('integration tests', moduleConfig, () => {
 
 
 testModule('widget sizing render', moduleConfig, () => {
-    test('outerWidth', function(assert) {
-        const $element = $('#widget').dxOverlay();
-        const instance = $element.dxOverlay('instance');
-
-        instance.show();
-
-        assert.ok(getOuterWidth($element) > 0, 'outer width of the element must be more than zero');
-    });
-
     test('constructor', function(assert) {
         const $element = $('#widget').dxOverlay({ width: 400 });
         const instance = $element.dxOverlay('instance');

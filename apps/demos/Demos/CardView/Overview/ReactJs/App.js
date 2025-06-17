@@ -1,18 +1,16 @@
 import React, { useRef } from 'react';
 import CardView, {
-  CardCover, Column, Selection, Paging,
+  CardCover,
+  Column,
+  Selection,
+  Paging,
+  HeaderFilter,
+  SearchPanel,
 } from 'devextreme-react/card-view';
 import Button from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
 import { employees } from './data.js';
-// TODO: Nested component does not exist
-const headerFilterConfig = {
-  visible: true,
-};
-// TODO: Nested component does not exist
-const searchPanelConfig = {
-  visible: true,
-};
+
 function imageExpr({ First_Name, Last_Name }) {
   return `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`;
 }
@@ -85,12 +83,12 @@ function App() {
       keyExpr="ID"
       cardMinWidth={300}
       cardsPerRow="auto"
-      headerFilter={headerFilterConfig}
-      searchPanel={searchPanelConfig}
       cardFooterComponent={CardFooterComponent}
       ref={cardView}
     >
       <Paging pageSize={4} />
+      <HeaderFilter visible={true} />
+      <SearchPanel visible={true} />
       <Selection mode="multiple" />
       <CardCover
         imageExpr={imageExpr}
@@ -103,6 +101,8 @@ function App() {
       />
       <Column
         caption="Full Name"
+        allowFiltering={true}
+        allowSorting={true}
         calculateFieldValue={calculateFullName}
       />
       <Column
@@ -117,6 +117,8 @@ function App() {
       />
       <Column
         caption="Address"
+        allowFiltering={true}
+        allowSorting={true}
         calculateFieldValue={calculateAddress}
       />
     </CardView>

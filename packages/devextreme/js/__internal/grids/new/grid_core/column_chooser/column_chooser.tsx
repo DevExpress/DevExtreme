@@ -14,10 +14,12 @@ import type { Props as ColumnSortableProps } from '../../card_view/header_panel/
 import { ColumnSortable } from '../../card_view/header_panel/column_sortable';
 import { Item } from '../../card_view/header_panel/item';
 import type { Column, VisibleColumn } from '../columns_controller/types';
+import { CLASSES as ROOT_CLASSES } from '../const';
 import { Popup } from '../inferno_wrappers/popup';
 import { TreeView } from '../inferno_wrappers/tree_view';
 
 export const CLASS = {
+  excludeFlexBox: ROOT_CLASSES.excludeFlexBox,
   root: 'column-chooser',
   toolbarBtn: 'column-chooser-button',
   list: 'column-chooser-list',
@@ -72,43 +74,45 @@ export class ColumnChooser extends Component<ColumnChooserProps> {
     const treeView = this.getTreeView();
 
     return (
-      <Popup
-        componentRef={popupRef}
-        visible={true}
-        shading={false}
-        dragEnabled={true}
-        resizeEnabled={true}
-        showCloseButton={true}
-        // @ts-expect-error
-        _loopFocus={true}
+      <div className={CLASS.excludeFlexBox}>
+        <Popup
+          componentRef={popupRef}
+          visible={true}
+          shading={false}
+          dragEnabled={true}
+          resizeEnabled={true}
+          showCloseButton={true}
+          // @ts-expect-error
+          _loopFocus={true}
 
-        toolbarItems={popupConfig.toolbarItems}
-        wrapperAttr={{ class: this.getPopupWrapperClass() }}
+          toolbarItems={popupConfig.toolbarItems}
+          wrapperAttr={{ class: this.getPopupWrapperClass() }}
 
-        width={popupConfig.width}
-        height={popupConfig.height}
-        container={popupConfig.container}
-        position={popupConfig.position}
-        onHidden={popupConfig.onHidden}
-        onShowing={this.onShowing}
-      >
-        <ColumnSortable
-          height='100%'
-          source='column-chooser'
-          filter={`.${CLASS.treeviewItem}`}
-          getColumnByIndex={this.getColumnByIndex}
-          isColumnDraggable={sortableConfig.isColumnDraggable}
-          visibleColumns={this.props.visibleColumns}
-          allowDragging={!this.isSelectMode()}
-          columnDragTemplate={Item}
-          onColumnMove={this.props.onColumnMove}
-          onDragStart={sortableConfig.onDragStart}
-          onDragEnd={sortableConfig.onDragEnd}
-          onPlaceholderPrepared={sortableConfig.onPlaceholderPrepared}
+          width={popupConfig.width}
+          height={popupConfig.height}
+          container={popupConfig.container}
+          position={popupConfig.position}
+          onHidden={popupConfig.onHidden}
+          onShowing={this.onShowing}
         >
-          { treeView }
-        </ColumnSortable>
-      </Popup>
+          <ColumnSortable
+            height='100%'
+            source='column-chooser'
+            filter={`.${CLASS.treeviewItem}`}
+            getColumnByIndex={this.getColumnByIndex}
+            isColumnDraggable={sortableConfig.isColumnDraggable}
+            visibleColumns={this.props.visibleColumns}
+            allowDragging={!this.isSelectMode()}
+            columnDragTemplate={Item}
+            onColumnMove={this.props.onColumnMove}
+            onDragStart={sortableConfig.onDragStart}
+            onDragEnd={sortableConfig.onDragEnd}
+            onPlaceholderPrepared={sortableConfig.onPlaceholderPrepared}
+          >
+            { treeView }
+          </ColumnSortable>
+        </Popup>
+      </div>
     );
   }
 

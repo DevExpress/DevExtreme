@@ -79,3 +79,26 @@ test('column chooser in \'dragAndDrop\' mode', async (t) => {
     { dataField: 'Column 4', visible: false },
   ],
 }));
+
+test('cardView with opened columnChooser', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const cardView = new CardView(CARD_VIEW_SELECTOR);
+
+  await cardView.apiShowColumnChooser();
+
+  await testScreenshot(t, takeScreenshot, 'card-view_with_opened_column-chooser.png', { element: cardView.element });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+
+  await a11yCheck(t, {}, CARD_VIEW_SELECTOR);
+}).before(async () => createWidget('dxCardView', {
+  dataSource: Array.from({ length: 50 }, (_, i) => ({ value: `value_${i}` })),
+  columnChooser: {
+    enabled: true,
+  },
+  columns: [
+    { dataField: 'value' },
+  ],
+}));

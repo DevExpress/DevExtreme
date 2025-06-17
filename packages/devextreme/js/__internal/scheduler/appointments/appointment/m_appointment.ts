@@ -24,7 +24,7 @@ import {
   REDUCED_APPOINTMENT_PARTS_CLASSES,
 } from '../../m_classes';
 import { getRecurrenceProcessor } from '../../m_recurrence';
-import type { AppointmentDataAccessor } from '../../utils';
+import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import type { AppointmentProperties } from './m_types';
 import {
   getAriaDescription,

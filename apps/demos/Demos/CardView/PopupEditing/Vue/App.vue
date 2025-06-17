@@ -2,13 +2,12 @@
   <DxCardView
     :data-source="employees"
     key-expr="id"
-    :cards-per-row="2"
-    :search-panel="{ // todo: move to nested
-      visible: true,
-    }"
+    cards-per-row="auto"
+    :card-min-width="350"
+    :height="820"
   >
-    <DxPaging
-      :page-size="4"
+    <DxSearchPanel
+      :visible="true"
     />
     <DxCardCover
       :image-expr="imageExpr"
@@ -24,42 +23,74 @@
         width: 700,
         height: 525,
       }"
-      :form="{ // todo: move to nested
-        items: [
-          {
-            caption: 'Personal Data',
-            itemType: 'group',
-            colCount: 2,
-            colSpan: 2,
-            items: ['firstName', 'lastName', 'birthDate', 'picture'],
-          }, {
-            caption: 'Main Info',
-            itemType: 'group',
-            colCount: 2,
-            colSpan: 2,
-            items: ['hireDate', 'title', {
-              dataField: 'notes',
-              editorType: 'dxTextArea',
-              colSpan: 2,
-              editorOptions: {
-                height: 100,
-              },
-            }],
-          }, {
-            caption: 'Contacts',
-            itemType: 'group',
-            colCount: 2,
-            colSpan: 2,
-            items: [
-              {
-                dataField: 'address',
-                colSpan: 2,
-              }, 'city', 'zipcode', 'mobilePhone', 'email',
-            ],
-          },
-        ],
-      }"
-    />
+    >
+      <DxForm>
+        <DxItem
+          caption="Personal Data"
+          item-type="group"
+          :col-count="2"
+          :col-span="2"
+        >
+          <DxItem
+            data-field="firstName"
+          ></DxItem>
+          <DxItem
+            data-field="lastName"
+          ></DxItem>
+          <DxItem
+            data-field="birthDate"
+          ></DxItem>
+          <DxItem
+            data-field="picture"
+          ></DxItem>
+        </DxItem>
+        <DxItem
+          caption="Main Info"
+          item-type="group"
+          :col-count="2"
+          :col-span="2"
+        >
+          <DxItem
+            data-field="hireDate"
+          ></DxItem>
+          <DxItem
+            data-field="title"
+          ></DxItem>
+          <DxItem
+            data-field="notes"
+            editor-type="dxTextArea"
+            :col-span="2"
+            :editor-options="{ height: 100 }"
+          ></DxItem>
+          <DxItem
+            data-field="picture"
+          ></DxItem>
+        </DxItem>
+        <DxItem
+          caption="Contacts"
+          item-type="group"
+          :col-count="2"
+          :col-span="2"
+        >
+          <DxItem
+            data-field="address"
+            :col-span="2"
+          ></DxItem>
+          <DxItem
+            data-field="city"
+          ></DxItem>
+          <DxItem
+            data-field="zipcode"
+          ></DxItem>
+          <DxItem
+            data-field="mobilePhone"
+          ></DxItem>
+          <DxItem
+            data-field="email"
+          ></DxItem>
+        </DxItem>
+      </DxForm>
+    </DxEditing>
     <DxColumn
       caption="Full Name"
       :calculate-field-value="calculateFullName"
@@ -108,8 +139,9 @@
 </template>
 <script setup lang="ts">
 import {
-  DxCardView, DxColumn, DxCardCover, DxEditing, DxPaging,
+  DxCardView, DxColumn, DxCardCover, DxSearchPanel, DxEditing, DxForm, DxItem
 } from 'devextreme-vue/card-view';
+import 'devextreme-vue/text-area';
 import { employees, type Employee } from './data.ts';
 
 function altExpr({ fullName }: Employee) {

@@ -2,9 +2,9 @@
   id="cardView"
   [dataSource]="customers"
   keyExpr="ID"
-  [cardsPerRow]="2"
+  cardsPerRow="auto"
+  [cardMinWidth]="320"
 >
-  <dxo-card-view-paging [pageSize]="4"></dxo-card-view-paging>
   <dxi-card-view-column
     *ngFor="let column of columns"
     [dataField]="column"

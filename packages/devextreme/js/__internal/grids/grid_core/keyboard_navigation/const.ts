@@ -72,3 +72,8 @@ export interface FocusedCellPosition {
   columnIndex: number;
   rowIndex: number;
 }
+
+export interface ScrollOffset {
+  left?: number;
+  top?: number;
+}

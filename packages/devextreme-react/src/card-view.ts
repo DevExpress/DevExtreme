@@ -9,14 +9,14 @@ import dxCardView, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, SelectionChangingEvent, CardTemplateData, CardHeaderItem as CardViewCardHeaderItem, CardHeaderPredefinedItem, FieldTemplateData, ColumnTemplateData, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
-import type { SelectionChangingEvent as TabPanelSelectionChangingEvent, ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
+import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, CardTemplateData, CardHeaderItem as CardViewCardHeaderItem, CardHeaderPredefinedItem, FieldTemplateData, ColumnTemplateData, EditingTexts as CardViewEditingTexts, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ToolbarItemLocation, ToolbarItemComponent, SearchMode, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, Mode, Direction, PositionAlignment, DisplayMode, TabsIconPosition, TabsStyle, Position as CommonPosition } from "devextreme/common";
 import type { dxButtonOptions, ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { FormItemType, ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormOptions, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent } from "devextreme/ui/form";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, InitializedEvent as FilterBuilderInitializedEvent, OptionChangedEvent as FilterBuilderOptionChangedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, EditorPreparedEvent, EditorPreparingEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
 import type { ContentReadyEvent as LoadPanelContentReadyEvent, DisposingEvent as LoadPanelDisposingEvent, InitializedEvent as LoadPanelInitializedEvent, OptionChangedEvent as LoadPanelOptionChangedEvent, HiddenEvent, HidingEvent, ShowingEvent, ShownEvent } from "devextreme/ui/load_panel";
+import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { HeaderFilterSearchConfig, HeaderFilterTexts, SelectionColumnDisplayMode, DataChangeType, FilterType, ColumnHeaderFilter as GridsColumnHeaderFilter, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, DataChange, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, PagerPageSize } from "devextreme/common/grids";
@@ -57,7 +57,6 @@ type ICardViewOptionsNarrowedEvents<TCardData = any, TKey = any> = {
   onFieldValueDblClick?: ((e: FieldValueDblClickEvent) => void);
   onFieldValuePrepared?: ((e: FieldValuePreparedEvent) => void);
   onInitNewCard?: ((e: InitNewCardEvent<TCardData>) => void);
-  onSelectionChanging?: ((e: SelectionChangingEvent<TCardData, TKey>) => void);
 }
 
 type ICardViewOptions<TCardData = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TCardData, TKey>, ICardViewOptionsNarrowedEvents<TCardData, TKey>> & IHtmlOptions & {
@@ -94,7 +93,7 @@ const CardView = memo(
       ), [baseRef.current]);
 
       const subscribableOptions = useMemo(() => (["filterValue","selectedCardKeys"]), []);
-      const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardInserted","onCardInserting","onCardPrepared","onCardRemoved","onCardRemoving","onCardSaved","onCardSaving","onCardUpdated","onCardUpdating","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onFieldCaptionClick","onFieldCaptionDblClick","onFieldCaptionPrepared","onFieldValueClick","onFieldValueDblClick","onFieldValuePrepared","onInitialized","onInitNewCard","onSelectionChanging"]), []);
+      const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardInserted","onCardInserting","onCardPrepared","onCardRemoved","onCardRemoving","onCardSaved","onCardSaving","onCardUpdated","onCardUpdating","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onFieldCaptionClick","onFieldCaptionDblClick","onFieldCaptionPrepared","onFieldValueClick","onFieldValueDblClick","onFieldValuePrepared","onInitialized","onInitNewCard"]), []);
 
       const defaults = useMemo(() => ({
         defaultFilterValue: "filterValue",
@@ -612,7 +611,7 @@ type IColumnProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | Array<any> | (() => void));
   calculateSortValue?: ((cardData: any) => any) | string;
   caption?: string | undefined;
-  customizeText?: ((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string);
+  customizeText?: ((fieldInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string);
   dataField?: string | undefined;
   dataType?: DataType | undefined;
   editorOptions?: any;
@@ -942,6 +941,7 @@ type IEditingProps = React.PropsWithChildren<{
   editCardKey?: any;
   form?: dxFormOptions;
   popup?: Record<string, any>;
+  texts?: CardViewEditingTexts;
 }>
 const _componentEditing = (props: IEditingProps) => {
   return React.createElement(NestedOption<IEditingProps>, {
@@ -950,13 +950,38 @@ const _componentEditing = (props: IEditingProps) => {
       OptionName: "editing",
       ExpectedChildren: {
         change: { optionName: "changes", isCollectionItem: true },
-        form: { optionName: "form", isCollectionItem: false }
+        editingTexts: { optionName: "texts", isCollectionItem: false },
+        form: { optionName: "form", isCollectionItem: false },
+        texts: { optionName: "texts", isCollectionItem: false }
       },
     },
   });
 };
 
 const Editing = Object.assign<typeof _componentEditing, NestedComponentMeta>(_componentEditing, {
+  componentType: "option",
+});
+
+// owners:
+// Editing
+type IEditingTextsProps = React.PropsWithChildren<{
+  addCard?: string;
+  confirmDeleteMessage?: string;
+  confirmDeleteTitle?: string;
+  deleteCard?: string;
+  editCard?: string;
+  saveCard?: string;
+}>
+const _componentEditingTexts = (props: IEditingTextsProps) => {
+  return React.createElement(NestedOption<IEditingTextsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "texts",
+    },
+  });
+};
+
+const EditingTexts = Object.assign<typeof _componentEditingTexts, NestedComponentMeta>(_componentEditingTexts, {
   componentType: "option",
 });
 
@@ -2437,7 +2462,7 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   onItemRendered?: ((e: ItemRenderedEvent) => void);
   onOptionChanged?: ((e: TabPanelOptionChangedEvent) => void);
   onSelectionChanged?: ((e: SelectionChangedEvent) => void);
-  onSelectionChanging?: ((e: TabPanelSelectionChangingEvent) => void);
+  onSelectionChanging?: ((e: SelectionChangingEvent) => void);
   onTitleClick?: ((e: TitleClickEvent) => void);
   onTitleHold?: ((e: TitleHoldEvent) => void);
   onTitleRendered?: ((e: TitleRenderedEvent) => void);
@@ -2537,9 +2562,16 @@ const TabPanelOptionsItem = Object.assign<typeof _componentTabPanelOptionsItem, 
 });
 
 // owners:
+// Editing
 // FilterPanel
 // CardViewHeaderFilter
 type ITextsProps = React.PropsWithChildren<{
+  addCard?: string;
+  confirmDeleteMessage?: string;
+  confirmDeleteTitle?: string;
+  deleteCard?: string;
+  editCard?: string;
+  saveCard?: string;
   clearFilter?: string;
   createFilter?: string;
   filterEnabledHint?: string;
@@ -2746,6 +2778,8 @@ export {
   ICustomRuleProps,
   Editing,
   IEditingProps,
+  EditingTexts,
+  IEditingTextsProps,
   EmailRule,
   IEmailRuleProps,
   EmptyItem,
