@@ -42883,11 +42883,6 @@ declare module DevExpress.viz {
        */
       animationEnabled?: boolean;
       /**
-       * [descr:dxRangeSelectorOptions.behavior.callValueChanged]
-       * @deprecated [depNote:dxRangeSelectorOptions.behavior.callValueChanged]
-       */
-      callValueChanged?: DevExpress.viz.dxRangeSelector.ValueChangedCallMode;
-      /**
        * [descr:dxRangeSelectorOptions.behavior.manualRangeSelectionEnabled]
        */
       manualRangeSelectionEnabled?: boolean;
