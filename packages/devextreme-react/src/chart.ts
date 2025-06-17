@@ -65,7 +65,7 @@ const Chart = memo(
         }
       ), [baseRef.current]);
 
-      const subscribableOptions = useMemo(() => (["argumentAxis","argumentAxis.categories","argumentAxis.visualRange","loadingIndicator","loadingIndicator.show","valueAxis","valueAxis.categories","valueAxis.visualRange"]), []);
+      const subscribableOptions = useMemo(() => (["argumentAxis","argumentAxis.categories","argumentAxis.visualRange","loadingIndicator","loadingIndicator.show","valueAxis","valueAxis.categories","valueAxis.visualRange","visualRange.endValue","visualRange.startValue","wholeRange.endValue","wholeRange.startValue"]), []);
       const independentEvents = useMemo(() => (["onArgumentAxisClick","onDisposing","onDone","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onLegendClick","onPointClick","onSeriesClick","onTooltipHidden","onTooltipShown","onZoomEnd","onZoomStart"]), []);
 
       const defaults = useMemo(() => ({

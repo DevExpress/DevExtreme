@@ -56,7 +56,7 @@ const RangeSelector = memo(
         }
       ), [baseRef.current]);
 
-      const subscribableOptions = useMemo(() => (["loadingIndicator","loadingIndicator.show","value"]), []);
+      const subscribableOptions = useMemo(() => (["loadingIndicator","loadingIndicator.show","value","value.endValue","value.startValue"]), []);
       const independentEvents = useMemo(() => (["onDisposing","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onValueChanged"]), []);
 
       const defaults = useMemo(() => ({
