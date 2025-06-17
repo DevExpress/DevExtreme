@@ -84,6 +84,9 @@ import {
 
 export interface Column extends ColumnBase {
   parseValue: (text: string) => unknown;
+  index?: number;
+  type?: string;
+  visibleWidth?: string | number;
 }
 
 export class ColumnsController extends modules.Controller {
@@ -1834,11 +1837,12 @@ export class ColumnsController extends modules.Controller {
     return result;
   }
 
-  public getParentColumn(column) {
+  public getParentColumn(column, needDirectParent = false): Column {
     const bandColumnsCache = this.getBandColumnsCache();
-    const bandColumns = getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex);
+    const parentColumns = getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex);
+    const parentColumnIndex = needDirectParent ? -1 : 0;
 
-    return bandColumns[0];
+    return parentColumns.at(parentColumnIndex);
   }
 
   public isFirstColumn(

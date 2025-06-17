@@ -1326,8 +1326,8 @@ const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationCon
     return indexCorrection;
   }
 
-  protected getFocusableColumns(rowIndex?: number): any[] {
-    return super.getFocusableColumns(rowIndex)
+  protected getFocusableColumns(rowIndex?: number, bandColumnId?: number): any[] {
+    return super.getFocusableColumns(rowIndex, bandColumnId)
       .filter((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
   }
 
