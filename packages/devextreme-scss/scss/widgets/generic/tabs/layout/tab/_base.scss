@@ -74,6 +74,16 @@
     }
   }
 
+  &.dx-state-disabled .dx-tab-content {
+    opacity: 0.32;
+  }
+
+  &.dx-state-focused.dx-state-disabled {
+    &::after {
+      z-index: 2;
+    }
+  }
+
   .dx-tab-content {
     column-gap: $generic-tabs-icon-margin;
     row-gap: $generic-tabs-item-gap;
@@ -82,16 +92,6 @@
 
     .dx-tab-text-span-pseudo {
       display: none;
-    }
-  }
-
-  &.dx-state-disabled .dx-tab-content {
-    opacity: 0.32;
-  }
-
-  &.dx-state-focused.dx-state-disabled {
-    &::after {
-      z-index: 2;
     }
   }
 
