@@ -42,16 +42,36 @@ function insertRule(targetStyleSheet, rule, needApplyAllStyles) {
   }
 }
 
+const injectedHashes = new WeakMap();
+
+function computeStyleSheetsHash(...styleSheetLists) {
+  const hashes: string[] = [];
+
+  for (const list of styleSheetLists) {
+    for (const sheet of list) {
+      try {
+        const rules = Array.from(sheet.cssRules).map((r: any) => r.cssText).join(';');
+        hashes.push(rules);
+      } catch (_) {
+        continue;
+      }
+    }
+  }
+
+  return hashes.join('|').length;
+}
+
 export function addShadowDomStyles($element) {
   const el = $element.get(0);
   const root = el.getRootNode?.();
 
-  if (!root?.host) {
-    return;
-  }
+  if (!root?.host) return;
 
-  if (root.__dxStyleInjected) return;
-  root.__dxStyleInjected = true;
+  const allRulesHash = computeStyleSheetsHash(el.ownerDocument.styleSheets, root.styleSheets);
+  const prevHash = injectedHashes.get(root);
+  if (prevHash === allRulesHash) return;
+
+  injectedHashes.set(root, allRulesHash);
 
   if (!ownerDocumentStyleSheet) {
     ownerDocumentStyleSheet = createConstructedStyleSheet(root);
