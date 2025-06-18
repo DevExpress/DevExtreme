@@ -97,7 +97,7 @@ export class CardHeader extends Component<CardHeaderProps> {
       name: 'deleteButton',
       location: 'after',
       widget: 'dxButton',
-      options: { icon: 'remove', onClick: onDelete, stylingMode: 'text' },
+      options: { icon: 'trash', onClick: onDelete, stylingMode: 'text' },
     } satisfies dxToolbar.Item & { name: string };
 
     const items = [checkBoxItem, captionItem, updateButton, deleteButton]
