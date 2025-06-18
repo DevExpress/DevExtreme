@@ -169,8 +169,6 @@ const reset = () => {
   selectedIndex.value = 0;
   steps.value = getInitialSteps();
   formData.value = getInitialFormData();
-  validationEngine.resetGroup(validationGroups[0]);
-  validationEngine.resetGroup(validationGroups[1]);
   isStepperReadonly.value = false;
 };
 
