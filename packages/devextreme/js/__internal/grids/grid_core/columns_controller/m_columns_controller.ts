@@ -1837,7 +1837,7 @@ export class ColumnsController extends modules.Controller {
     return result;
   }
 
-  public getParentColumn(column, needDirectParent = false): Column {
+  public getParentColumn(column: Column, needDirectParent = false): Column {
     const bandColumnsCache = this.getBandColumnsCache();
     const parentColumns = getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex);
     const parentColumnIndex = needDirectParent ? -1 : 0;
