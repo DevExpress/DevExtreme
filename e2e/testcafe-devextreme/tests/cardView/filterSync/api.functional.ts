@@ -2,7 +2,8 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-fixture.disablePageReloads`CardView - FilterSync API`
+// NOTE: Skip tests because FilterSync feature disabled
+fixture.skip`CardView - FilterSync API`
   .page(url(__dirname, '../../container.html'));
 
 const baseConfig = {

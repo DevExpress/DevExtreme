@@ -1,9 +1,10 @@
 import type { Mode } from '@js/common';
 
 export interface Options {
-  filterSyncEnabled?: boolean | Mode;
+  // NOTE: Underscore for option name because FilterSync feature disabled
+  _filterSyncEnabled?: boolean | Mode;
 }
 
 export const defaultOptions: Options = {
-  filterSyncEnabled: 'auto',
+  _filterSyncEnabled: false,
 };

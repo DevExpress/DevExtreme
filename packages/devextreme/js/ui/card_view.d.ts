@@ -1476,12 +1476,6 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
 
     /**
      * @docid
-     * @default "auto"
-     * @public
-     */
-    filterSyncEnabled?: boolean | Mode;
-    /**
-     * @docid
      * @type Filter expression
      * @default null
      * @fires dxCardViewOptions.onOptionChanged

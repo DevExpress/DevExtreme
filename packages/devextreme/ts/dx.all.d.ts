@@ -10792,10 +10792,6 @@ declare module DevExpress.ui {
     sorting?: DevExpress.common.grids.Sorting;
 
     /**
-     * [descr:dxCardViewOptions.filterSyncEnabled]
-     */
-    filterSyncEnabled?: boolean | DevExpress.common.Mode;
-    /**
      * [descr:dxCardViewOptions.filterValue]
      */
     filterValue?: string | Array<any> | Function;

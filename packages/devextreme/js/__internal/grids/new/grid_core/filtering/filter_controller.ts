@@ -29,7 +29,7 @@ export class FilterController {
 
   public readonly filterBuilderOptions = this.options.twoWay('filterBuilder');
 
-  public readonly filterSyncEnabledOption = this.options.oneWay('filterSyncEnabled');
+  public readonly filterSyncEnabledOption = this.options.oneWay('_filterSyncEnabled');
 
   public static dependencies = [
     OptionsController,
