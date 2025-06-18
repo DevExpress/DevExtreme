@@ -1,5 +1,5 @@
 import type dxToast from '@js/ui/toast';
-import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 import { Toast } from '@ts/grids/new/grid_core/inferno_wrappers/toast';
 import { createRef } from 'inferno';
 
