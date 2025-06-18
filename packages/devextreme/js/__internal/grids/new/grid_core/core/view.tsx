@@ -7,6 +7,7 @@ import type { ReadonlySignal } from '@preact/signals-core';
 import { effect } from '@preact/signals-core';
 import { infernoRenderer } from '@ts/core/m_inferno_renderer';
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/base_component';
+import { hasWindow } from '@ts/core/utils/m_window';
 import { type ComponentType } from 'inferno';
 
 export abstract class View<T extends {}> {
@@ -62,7 +63,7 @@ export abstract class View<T extends {}> {
             props: props.value,
           };
 
-          if (this.state.props !== props.value) {
+          if (this.state.props !== props.value && hasWindow()) {
             this.setState({ props: props.value });
           }
         });
