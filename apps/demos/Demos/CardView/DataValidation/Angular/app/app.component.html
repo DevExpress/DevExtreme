@@ -57,7 +57,12 @@
         ></dxi-card-view-item>
         <dxi-card-view-item dataField="city"></dxi-card-view-item>
         <dxi-card-view-item dataField="zipcode"></dxi-card-view-item>
-        <dxi-card-view-item dataField="mobilePhone"></dxi-card-view-item>
+        <dxi-card-view-item
+          dataField="mobilePhone"
+          [editorOptions]="{
+            mask: '+1 (X00) 000-0000'
+          }"
+        ></dxi-card-view-item>
         <dxi-card-view-item dataField="email"></dxi-card-view-item>
       </dxi-card-view-item>
     </dxo-card-view-form>
@@ -88,13 +93,7 @@
   </dxi-card-view-column>
   <dxi-card-view-column dataField="department"></dxi-card-view-column>
   <dxi-card-view-column dataField="address"></dxi-card-view-column>
-  <dxi-card-view-column dataField="mobilePhone">
-    <dxi-card-view-validation-rule
-      type="pattern"
-      message="Your phone must have '(555) 555-5555' format!"
-      [pattern]="phonePattern"
-    ></dxi-card-view-validation-rule>
-  </dxi-card-view-column>
+  <dxi-card-view-column dataField="mobilePhone"></dxi-card-view-column>
   <dxi-card-view-column dataField="email">
     <dxi-card-view-validation-rule type="email"></dxi-card-view-validation-rule>
     <dxi-card-view-validation-rule

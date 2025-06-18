@@ -49,7 +49,12 @@ $(() => {
               {
                 dataField: 'address',
                 colSpan: 2,
-              }, 'city', 'zipcode', 'mobilePhone', 'email',
+              }, 'city', 'zipcode', {
+                dataField: 'mobilePhone',
+                editorOptions: {
+                  mask: '+1 (X00) 000-0000',
+                },
+              }, 'email',
             ],
           },
         ],
@@ -91,14 +96,7 @@ $(() => {
       },
       'department',
       'address',
-      {
-        dataField: 'mobilePhone',
-        validationRules: [{
-          type: 'pattern',
-          message: 'Your phone must have "(555) 555-5555" format!',
-          pattern: /^\(\d{3}\) \d{3}-\d{4}$/i,
-        }],
-      },
+      'mobilePhone',
       {
         dataField: 'email',
         validationRules: [{

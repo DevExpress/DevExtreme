@@ -128,6 +128,7 @@ const App = () => (
           ></Item>
           <Item
             dataField="mobilePhone"
+            editorOptions={{ mask: "+1 (X00) 000-0000" }}
           ></Item>
           <Item
             dataField="email"
@@ -163,12 +164,7 @@ const App = () => (
     </Column>
     <Column dataField="department"/>
     <Column dataField="address"/>
-    <Column dataField="mobilePhone">
-      <PatternRule
-        message="Your phone must have '(555) 555-5555' format!"
-        pattern={/^\(\d{3}\) \d{3}-\d{4}$/i}
-      />
-    </Column>
+    <Column dataField="mobilePhone"/>
     <Column dataField="email">
       <EmailRule/>
       <AsyncRule
