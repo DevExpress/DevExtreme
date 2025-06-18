@@ -12,7 +12,7 @@ import { TestAsyncTabsWrapper, TestTabsWrapper } from '../../helpers/wrappers/ta
 import { getScrollLeftMax } from '__internal/ui/scroll_view/utils/get_scroll_left_max';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import devices from '__internal/core/m_devices';
-import { compare as compareVersions } from '@js/core/utils/version';
+import { compare as compareVersions } from 'core/utils/version';
 import resizeObserverSingleton from 'core/resize_observer';
 import {
     TABS_ITEM_CLASS,
