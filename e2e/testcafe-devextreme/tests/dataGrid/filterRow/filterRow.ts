@@ -233,7 +233,6 @@ test('DataGrid - The `between` filter dropdown sticks to the viewport edge durin
 
   await dataGrid.isReady();
 
-  await t.debug();
   await t
     .click(filterEditor.menuButton)
     .click(filterEditor.menu.getItemByText('Between'));
