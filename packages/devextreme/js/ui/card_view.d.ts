@@ -2,7 +2,7 @@ import { DeepPartial } from '../core';
 import {
     DataType,
     HorizontalAlignment,
- Mode, SelectAllMode, SingleMultipleOrNone, SortOrder, template, ValidationRule,
+ Mode, ScrollbarMode, SelectAllMode, SingleMultipleOrNone, SortOrder, template, ValidationRule,
 } from '../common';
 import { Format } from '../common/core/localization';
 import { UserDefinedElement, DxElement } from '../core/element';
@@ -1304,9 +1304,35 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     /**
      * @docid
      * @public
-     * @type object
      */
-    scrolling?: Pick<ScrollingBase, 'scrollByContent' | 'scrollByThumb' | 'showScrollbar' | 'useNative'>;
+    scrolling?: {
+        /**
+         * @docid
+         * @default true
+         * @default false &for(non-touch_devices)
+         * @public
+         */
+        scrollByContent?: boolean;
+        /**
+         * @docid
+         * @default false
+         * @public
+         */
+        scrollByThumb?: boolean;
+        /**
+         * @docid
+         * @default 'onHover' &for(desktop)
+         * @default 'onScroll'
+         * @public
+         */
+        showScrollbar?: ScrollbarMode;
+        /**
+         * @docid
+         * @default "auto"
+         * @public
+         */
+        useNative?: boolean | Mode;
+    };
     /**
      * @docid
      * @public
@@ -1898,6 +1924,7 @@ export default class dxCardView<TCardData = unknown, TKey = unknown> extends Wid
 // plus, some of these types are already exported with direct declarations
 
 export {
+    ScrollbarMode,
     Sorting,
     Pager,
     DataErrorOccurredInfo,
