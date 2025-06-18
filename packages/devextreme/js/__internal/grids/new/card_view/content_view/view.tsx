@@ -45,8 +45,8 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
 
       const result = factors(pageSize).reverse().find((cardsPerRow) => {
         const cardWidth = (width - this.columnGap.value * (cardsPerRow - 1)) / cardsPerRow;
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return cardMinWidth! <= cardWidth;
+
+        return cardMinWidth <= cardWidth;
       });
 
       return result ?? 1;
