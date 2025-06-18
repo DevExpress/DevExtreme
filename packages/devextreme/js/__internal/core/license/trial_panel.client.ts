@@ -93,12 +93,12 @@ function createImportantStyles(defaultStyles: StylesMap, customStyles?: StylesMa
 
 class DxLicense extends SafeHTMLElement {
   public static customStyles: CustomTrialPanelStyles | undefined = undefined;
+  
   static closed = false;
 
   private _observer: MutationObserver | null = null;
 
   private _inReassign = false;
-
 
   private readonly _spanStyles: string;
 
