@@ -73,7 +73,7 @@ jobs:
   test:
     needs: [build]
     timeout-minutes: 20
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     steps:
       - name: Get sources
         uses: actions/checkout@v4
@@ -118,7 +118,7 @@ jobs:
 
       - name: Run Playwright tests
         working-directory: ./e2e/playwright
-        run: pnpm run docker:copy-artifacts && pnpm run docker:build && pnpm run docker:test:ui
+        run: pnpm run docker:copy-artifacts && pnpm run docker:build && pnpm run docker:test:ci
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
