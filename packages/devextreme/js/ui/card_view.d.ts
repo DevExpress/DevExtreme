@@ -1,6 +1,7 @@
 import { DeepPartial } from '../core';
 import {
     DataType,
+    DragHighlight,
     HorizontalAlignment,
  Mode, ScrollbarMode, SelectAllMode, SingleMultipleOrNone, SortOrder, template, ValidationRule,
 } from '../common';
@@ -13,7 +14,6 @@ import DataSource, { DataSourceLike } from '../data/data_source';
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import { Cancelable, EventInfo, NativeEventInfo } from '../events';
 import { dxToolbarItem, ToolbarItemLocation } from './toolbar';
-import { dxSortableOptions } from './sortable';
 import { dxLoadPanelOptions } from './load_panel';
 import dxScrollable from './scroll_view/ui.scrollable';
 import {
@@ -488,11 +488,6 @@ export type Column<TCardData = unknown, TKey = unknown> = ColumnProperties<TCard
 // #region HeaderPanel
 
 /**
- * @public
- * */
-export type HeaderPanelDragging = Pick<dxSortableOptions, 'dropFeedbackMode' | 'scrollSpeed' | 'scrollSensitivity' | 'onDragChange' | 'onDragEnd' | 'onDragMove' | 'onDragStart' | 'onRemove' | 'onReorder'>;
-
-/**
  * @docid
  * @public
  * @namespace DevExpress.ui.dxCardView
@@ -501,9 +496,63 @@ export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
     /**
      * @docid
      * @public
-     * @type object
      */
-    dragging?: HeaderPanelDragging;
+    dragging?: {
+        /**
+         * @docid
+         * @default "push"
+         * @public
+         */
+        dropFeedbackMode?: DragHighlight;
+        /**
+         * @docid
+         * @default 30
+         * @public
+         */
+        scrollSpeed?: number;
+        /**
+         * @docid
+         * @default 60
+         * @public
+         */
+        scrollSensitivity?: number;
+        /**
+         * @docid
+         * @default null
+         * @public
+         */
+        onDragChange?: ((e: any) => void);
+        /**
+         * @docid
+         * @default null
+         * @public
+         */
+        onDragEnd?: ((e: any) => void);
+        /**
+         * @docid
+         * @default null
+         * @public
+         */
+        onDragMove?: ((e: any) => void);
+        /**
+         * @docid
+         * @default null
+         * @public
+         */
+        onDragStart?: ((e: any) => void);
+        /**
+         * @docid
+         * @default null
+         * @public
+         */
+        onRemove?: ((e: any) => void);
+        /**
+         * @docid
+         * @default null
+         * @public
+         */
+        onReorder?: ((e: any) => void);
+    };
     /**
      * @docid
      * @public
@@ -1925,6 +1974,7 @@ export default class dxCardView<TCardData = unknown, TKey = unknown> extends Wid
 
 export {
     ScrollbarMode,
+    DragHighlight,
     Sorting,
     Pager,
     DataErrorOccurredInfo,
