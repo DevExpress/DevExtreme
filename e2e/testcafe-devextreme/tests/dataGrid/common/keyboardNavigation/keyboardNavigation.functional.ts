@@ -8,12 +8,16 @@ import Pager from 'devextreme-testcafe-models/pagination';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { getData } from '../../helpers/generateDataSourceData';
+import {
+  checkFocusedCellChangedEventArgs,
+  checkFocusedCellChangingEventArgs,
+  checkFocusedRowChangedEventArgs,
+  checkFocusedRowChangingEventArgs,
+  getOrderOfEventCalls,
+  resetFocusedEventsTestData,
+} from '../../helpers/eventUtils';
 
 const CLASS = ClassNames;
-
-const getOrderOfEventCalls = ClientFunction(
-  () => (window as any).focusedEventsTestData.map((data) => data.type),
-);
 
 const getOnKeyDownCallCount = ClientFunction(() => (window as any).onKeyDownCallCount);
 
@@ -5018,92 +5022,6 @@ test('DataGrid with Pagination in master detail - Ctrl+Up on focused standalone 
   });
 });
 
-test('Focus events should be called when pressing the End key', async (t) => {
-  // arrange
-  const dataGrid = new DataGrid('#container');
-
-  await t.click(dataGrid.getDataCell(0, 0).element);
-
-  await ClientFunction(() => {
-    (window as any).focusedEventsTestData = [];
-  })();
-
-  // act
-  await t.pressKey('end');
-
-  // assert
-  await t
-    .expect(dataGrid.getDataCell(0, 14).element.focused)
-    .ok()
-    .expect(getOrderOfEventCalls())
-    .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
-}).before(async () => {
-  await ClientFunction(() => {
-    (window as any).focusedEventsTestData = [];
-  })();
-
-  await createWidget('dxDataGrid', {
-    dataSource: getData(20, 15),
-    columnWidth: 100,
-    height: 500,
-    width: 800,
-    showBorders: true,
-    onFocusedCellChanging: () => {
-      (window as any).focusedEventsTestData.push({ type: 'onFocusedCellChanging' });
-    },
-    onFocusedCellChanged: () => {
-      (window as any).focusedEventsTestData.push({ type: 'onFocusedCellChanged' });
-    },
-  });
-}).after(async () => {
-  await ClientFunction(() => {
-    delete (window as any).focusedEventsTestData;
-  })();
-});
-
-test('Focus events should be called when pressing the Ctrl + End key', async (t) => {
-  // arrange
-  const dataGrid = new DataGrid('#container');
-
-  await t.click(dataGrid.getDataCell(0, 0).element);
-
-  await ClientFunction(() => {
-    (window as any).focusedEventsTestData = [];
-  })();
-
-  // act
-  await t.pressKey('end');
-
-  // assert
-  await t
-    .expect(dataGrid.getDataCell(0, 14).element.focused)
-    .ok()
-    .expect(getOrderOfEventCalls())
-    .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
-}).before(async () => {
-  await ClientFunction(() => {
-    (window as any).focusedEventsTestData = [];
-  })();
-
-  await createWidget('dxDataGrid', {
-    dataSource: getData(20, 15),
-    columnWidth: 100,
-    height: 500,
-    width: 800,
-    showBorders: true,
-    onFocusedCellChanging: () => {
-      (window as any).focusedEventsTestData.push({ type: 'onFocusedCellChanging' });
-    },
-    onFocusedCellChanged: () => {
-      (window as any).focusedEventsTestData.push({ type: 'onFocusedCellChanged' });
-    },
-  });
-}).after(async () => {
-  await ClientFunction(() => {
-    delete (window as any).focusedEventsTestData;
-  })();
-});
-
 test('DataGrid - The onKeyDown event should be called once for group panel', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
@@ -5171,5 +5089,873 @@ test('DataGrid - The onKeyDown event should be called once for headers', async (
 }).after(async () => {
   await ClientFunction(() => {
     delete (window as any).onKeyDownCallCount;
+  })();
+});
+
+// # Quick navigation through grid cells
+// ## End key
+test('Focus events should be called when pressing the End key', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).element.focused)
+    .ok();
+
+  // arrange
+  await resetFocusedEventsTestData();
+
+  // act
+  await t.pressKey('end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 14).element.focused)
+    .ok()
+    .expect(getOrderOfEventCalls())
+    .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
+
+  const expectedFocusedCellChangingEventArgs = {
+    newColumnIndex: 14,
+    newRowIndex: 0,
+    prevColumnIndex: 0,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedCellChangedEventArgs = {
+    columnIndex: 14,
+    rowIndex: 0,
+  };
+
+  await checkFocusedCellChangingEventArgs(t, expectedFocusedCellChangingEventArgs);
+  await checkFocusedCellChangedEventArgs(t, expectedFocusedCellChangedEventArgs);
+}).before(async () => {
+  await resetFocusedEventsTestData();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(20, 15),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    showBorders: true,
+    onFocusedCellChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanging', args: e });
+    },
+    onFocusedRowChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanging', args: e });
+    },
+    onFocusedCellChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanged', args: e });
+    },
+    onFocusedRowChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanged', args: e });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
+  })();
+});
+
+test('Focus events should be called when pressing the End key when virtual columns are enabled', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).element.focused)
+    .ok();
+
+  // arrange
+  await resetFocusedEventsTestData();
+
+  // act
+  await t.pressKey('end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 34).element.focused)
+    .ok()
+    .expect(getOrderOfEventCalls())
+    .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
+
+  const expectedFocusedCellChangingEventArgs = {
+    newColumnIndex: 34,
+    newRowIndex: 0,
+    prevColumnIndex: 0,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedCellChangedEventArgs = {
+    columnIndex: 10,
+    rowIndex: 0,
+  };
+
+  await checkFocusedCellChangingEventArgs(t, expectedFocusedCellChangingEventArgs);
+  await checkFocusedCellChangedEventArgs(t, expectedFocusedCellChangedEventArgs);
+}).before(async () => {
+  await resetFocusedEventsTestData();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(20, 35),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    showBorders: true,
+    scrolling: {
+      columnRenderingMode: 'virtual',
+    },
+    onFocusedCellChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanging', args: e });
+    },
+    onFocusedRowChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanging', args: e });
+    },
+    onFocusedCellChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanged', args: e });
+    },
+    onFocusedRowChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanged', args: e });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
+  })();
+});
+
+test('Focus events should be called when pressing the End key when focusedRowEnabled is true', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(0).element.focused)
+    .ok();
+
+  // arrange
+  await resetFocusedEventsTestData();
+
+  // act
+  await t.pressKey('end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 14).element.focused)
+    .ok()
+    .expect(getOrderOfEventCalls())
+    .eql(['onFocusedCellChanging', 'onFocusedRowChanging', 'onFocusedCellChanged']);
+
+  const expectedFocusedCellChangingEventArgs = {
+    newColumnIndex: 14,
+    newRowIndex: 0,
+    prevColumnIndex: 0,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedRowChangingEventArgs = {
+    newRowIndex: 0,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedCellChangedEventArgs = {
+    columnIndex: 14,
+    rowIndex: 0,
+  };
+
+  await checkFocusedCellChangingEventArgs(t, expectedFocusedCellChangingEventArgs);
+  await checkFocusedRowChangingEventArgs(t, expectedFocusedRowChangingEventArgs);
+  await checkFocusedCellChangedEventArgs(t, expectedFocusedCellChangedEventArgs);
+}).before(async () => {
+  await resetFocusedEventsTestData();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(20, 15),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    showBorders: true,
+    keyExpr: 'field_0',
+    focusedRowEnabled: true,
+    onFocusedCellChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanging', args: e });
+    },
+    onFocusedRowChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanging', args: e });
+    },
+    onFocusedCellChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanged', args: e });
+    },
+    onFocusedRowChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanged', args: e });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
+  })();
+});
+
+test('Focus events should be called when pressing the End key when virtual columns and focusedRowEnabled are enabled', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(0).element.focused)
+    .ok();
+
+  // arrange
+  await resetFocusedEventsTestData();
+
+  // act
+  await t.pressKey('end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 34).element.focused)
+    .ok()
+    .expect(getOrderOfEventCalls())
+    .eql(['onFocusedCellChanging', 'onFocusedRowChanging', 'onFocusedCellChanged']);
+
+  const expectedFocusedCellChangingEventArgs = {
+    newColumnIndex: 34,
+    newRowIndex: 0,
+    prevColumnIndex: 0,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedRowChangingEventArgs = {
+    newRowIndex: 0,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedCellChangedEventArgs = {
+    columnIndex: 10,
+    rowIndex: 0,
+  };
+
+  await checkFocusedCellChangingEventArgs(t, expectedFocusedCellChangingEventArgs);
+  await checkFocusedRowChangingEventArgs(t, expectedFocusedRowChangingEventArgs);
+  await checkFocusedCellChangedEventArgs(t, expectedFocusedCellChangedEventArgs);
+}).before(async () => {
+  await resetFocusedEventsTestData();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(20, 35),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    showBorders: true,
+    keyExpr: 'field_0',
+    focusedRowEnabled: true,
+    scrolling: {
+      columnRenderingMode: 'virtual',
+    },
+    onFocusedCellChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanging', args: e });
+    },
+    onFocusedRowChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanging', args: e });
+    },
+    onFocusedCellChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanged', args: e });
+    },
+    onFocusedRowChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanged', args: e });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
+  })();
+});
+
+// ## Ctrl+End key
+test('Focus events should be called when pressing the Ctrl + End key', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).element.focused)
+    .ok();
+
+  // arrange
+  await resetFocusedEventsTestData();
+
+  // act
+  await t.pressKey('ctrl+end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(19, 14).element.focused)
+    .ok()
+    .expect(getOrderOfEventCalls())
+    .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
+
+  const expectedFocusedCellChangingEventArgs = {
+    newColumnIndex: 14,
+    newRowIndex: 19,
+    prevColumnIndex: 0,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedCellChangedEventArgs = {
+    columnIndex: 14,
+    rowIndex: 19,
+  };
+
+  await checkFocusedCellChangingEventArgs(t, expectedFocusedCellChangingEventArgs);
+  await checkFocusedCellChangedEventArgs(t, expectedFocusedCellChangedEventArgs);
+}).before(async () => {
+  await resetFocusedEventsTestData();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(20, 15),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    showBorders: true,
+    onFocusedCellChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanging', args: e });
+    },
+    onFocusedRowChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanging', args: e });
+    },
+    onFocusedCellChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanged', args: e });
+    },
+    onFocusedRowChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanged', args: e });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
+  })();
+});
+
+test('Focus events should be called when pressing the Ctrl + End key when virtual columns are enabled', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).element.focused)
+    .ok();
+
+  // arrange
+  await resetFocusedEventsTestData();
+
+  // act
+  await t.pressKey('ctrl+end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(19, 34).element.focused)
+    .ok()
+    .expect(getOrderOfEventCalls())
+    .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
+
+  const expectedFocusedCellChangingEventArgs = {
+    newColumnIndex: 34,
+    newRowIndex: 19,
+    prevColumnIndex: 0,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedCellChangedEventArgs = {
+    columnIndex: 10,
+    rowIndex: 19,
+  };
+
+  await checkFocusedCellChangingEventArgs(t, expectedFocusedCellChangingEventArgs);
+  await checkFocusedCellChangedEventArgs(t, expectedFocusedCellChangedEventArgs);
+}).before(async () => {
+  await resetFocusedEventsTestData();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(20, 35),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    showBorders: true,
+    scrolling: {
+      columnRenderingMode: 'virtual',
+    },
+    onFocusedCellChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanging', args: e });
+    },
+    onFocusedRowChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanging', args: e });
+    },
+    onFocusedCellChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanged', args: e });
+    },
+    onFocusedRowChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanged', args: e });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
+  })();
+});
+
+test('Focus events should be called when pressing the Ctrl + End key when virtual scrolling and columns are enabled', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).element.focused)
+    .ok();
+
+  // arrange
+  await resetFocusedEventsTestData();
+
+  // act
+  await t.pressKey('ctrl+end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(199, 34).element.focused)
+    .ok()
+    .expect(getOrderOfEventCalls())
+    .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
+
+  const expectedFocusedCellChangingEventArgs = {
+    newColumnIndex: 34,
+    newRowIndex: 199,
+    prevColumnIndex: 0,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedCellChangedEventArgs = {
+    columnIndex: 10,
+    rowIndex: 199,
+  };
+
+  await checkFocusedCellChangingEventArgs(t, expectedFocusedCellChangingEventArgs);
+  await checkFocusedCellChangedEventArgs(t, expectedFocusedCellChangedEventArgs);
+}).before(async () => {
+  await resetFocusedEventsTestData();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(200, 35),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    showBorders: true,
+    scrolling: {
+      mode: 'virtual',
+      columnRenderingMode: 'virtual',
+    },
+    onFocusedCellChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanging', args: e });
+    },
+    onFocusedRowChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanging', args: e });
+    },
+    onFocusedCellChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanged', args: e });
+    },
+    onFocusedRowChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanged', args: e });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
+  })();
+});
+
+test('Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is \'virtual\'', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).element.focused)
+    .ok();
+
+  // arrange
+  await resetFocusedEventsTestData();
+
+  // act
+  await t.pressKey('ctrl+end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(19, 14).element.focused)
+    .ok()
+    .expect(getOrderOfEventCalls())
+    .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
+
+  const expectedFocusedCellChangingEventArgs = {
+    newColumnIndex: 14,
+    newRowIndex: 19,
+    prevColumnIndex: 0,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedCellChangedEventArgs = {
+    columnIndex: 14,
+    rowIndex: 19,
+  };
+
+  await checkFocusedCellChangingEventArgs(t, expectedFocusedCellChangingEventArgs);
+  await checkFocusedCellChangedEventArgs(t, expectedFocusedCellChangedEventArgs);
+}).before(async () => {
+  await resetFocusedEventsTestData();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(200, 15),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    showBorders: true,
+    scrolling: {
+      rowRenderingMode: 'virtual',
+    },
+    onFocusedCellChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanging', args: e });
+    },
+    onFocusedRowChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanging', args: e });
+    },
+    onFocusedCellChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanged', args: e });
+    },
+    onFocusedRowChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanged', args: e });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
+  })();
+});
+
+test('Focus events should be called when pressing the Ctrl + End key when infinite scrolling is enabled', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).element.focused)
+    .ok();
+
+  // arrange
+  await resetFocusedEventsTestData();
+
+  // act
+  await t.pressKey('ctrl+end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(19, 14).element.focused)
+    .ok()
+    .expect(getOrderOfEventCalls())
+    .eql(['onFocusedCellChanging', 'onFocusedCellChanged']);
+
+  const expectedFocusedCellChangingEventArgs = {
+    newColumnIndex: 14,
+    newRowIndex: 19,
+    prevColumnIndex: 0,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedCellChangedEventArgs = {
+    columnIndex: 14,
+    rowIndex: 19,
+  };
+
+  await checkFocusedCellChangingEventArgs(t, expectedFocusedCellChangingEventArgs);
+  await checkFocusedCellChangedEventArgs(t, expectedFocusedCellChangedEventArgs);
+}).before(async () => {
+  await resetFocusedEventsTestData();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(200, 15),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    showBorders: true,
+    scrolling: {
+      mode: 'infinite',
+    },
+    onFocusedCellChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanging', args: e });
+    },
+    onFocusedRowChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanging', args: e });
+    },
+    onFocusedCellChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanged', args: e });
+    },
+    onFocusedRowChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanged', args: e });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
+  })();
+});
+
+test('Focus events should be called when pressing the Ctrl + End key when focusedRowEnabled is true', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(0).element.focused)
+    .ok();
+
+  // arrange
+  await resetFocusedEventsTestData();
+
+  // act
+  await t.pressKey('ctrl+end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(19, 14).element.focused)
+    .ok()
+    .expect(getOrderOfEventCalls())
+    .eql(['onFocusedCellChanging', 'onFocusedRowChanging', 'onFocusedRowChanged', 'onFocusedCellChanged']);
+
+  const expectedFocusedCellChangingEventArgs = {
+    newColumnIndex: 14,
+    newRowIndex: 19,
+    prevColumnIndex: 0,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedRowChangingEventArgs = {
+    newRowIndex: 19,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedCellChangedEventArgs = {
+    columnIndex: 14,
+    rowIndex: 19,
+  };
+  const expectedFocusedRowChangedEventArgs = {
+    rowIndex: 19,
+  };
+
+  await checkFocusedCellChangingEventArgs(t, expectedFocusedCellChangingEventArgs);
+  await checkFocusedRowChangingEventArgs(t, expectedFocusedRowChangingEventArgs);
+  await checkFocusedRowChangedEventArgs(t, expectedFocusedRowChangedEventArgs);
+  await checkFocusedCellChangedEventArgs(t, expectedFocusedCellChangedEventArgs);
+}).before(async () => {
+  await resetFocusedEventsTestData();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(20, 15),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    showBorders: true,
+    keyExpr: 'field_0',
+    focusedRowEnabled: true,
+    onFocusedCellChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanging', args: e });
+    },
+    onFocusedRowChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanging', args: e });
+    },
+    onFocusedCellChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanged', args: e });
+    },
+    onFocusedRowChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanged', args: e });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
+  })();
+});
+
+test('Focus events should be called when pressing the Ctrl + End key when virtual columns and focusedRowEnabled are enabled', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(0).element.focused)
+    .ok();
+
+  // arrange
+  await resetFocusedEventsTestData();
+
+  // act
+  await t.pressKey('ctrl+end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(19, 34).element.focused)
+    .ok()
+    .expect(getOrderOfEventCalls())
+    .eql(['onFocusedCellChanging', 'onFocusedRowChanging', 'onFocusedRowChanged', 'onFocusedCellChanged']);
+
+  const expectedFocusedCellChangingEventArgs = {
+    newColumnIndex: 34,
+    newRowIndex: 19,
+    prevColumnIndex: 0,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedRowChangingEventArgs = {
+    newRowIndex: 19,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedCellChangedEventArgs = {
+    columnIndex: 10,
+    rowIndex: 19,
+  };
+  const expectedFocusedRowChangedEventArgs = {
+    rowIndex: 19,
+  };
+
+  await checkFocusedCellChangingEventArgs(t, expectedFocusedCellChangingEventArgs);
+  await checkFocusedRowChangingEventArgs(t, expectedFocusedRowChangingEventArgs);
+  await checkFocusedRowChangedEventArgs(t, expectedFocusedRowChangedEventArgs);
+  await checkFocusedCellChangedEventArgs(t, expectedFocusedCellChangedEventArgs);
+}).before(async () => {
+  await resetFocusedEventsTestData();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(20, 35),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    showBorders: true,
+    keyExpr: 'field_0',
+    focusedRowEnabled: true,
+    scrolling: {
+      columnRenderingMode: 'virtual',
+    },
+    onFocusedCellChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanging', args: e });
+    },
+    onFocusedRowChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanging', args: e });
+    },
+    onFocusedCellChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanged', args: e });
+    },
+    onFocusedRowChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanged', args: e });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
+  })();
+});
+
+test('Focus events should be called when pressing the Ctrl + End key when virtual columns, virtual scrolling and focusedRowEnabled are enabled', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(0).element.focused)
+    .ok();
+
+  // arrange
+  await resetFocusedEventsTestData();
+
+  // act
+  await t.pressKey('ctrl+end');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(199, 34).element.focused)
+    .ok()
+    .expect(getOrderOfEventCalls())
+    .eql(['onFocusedCellChanging', 'onFocusedRowChanging', 'onFocusedRowChanged', 'onFocusedCellChanged']);
+
+  const expectedFocusedCellChangingEventArgs = {
+    newColumnIndex: 34,
+    newRowIndex: 199,
+    prevColumnIndex: 0,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedRowChangingEventArgs = {
+    newRowIndex: 199,
+    prevRowIndex: 0,
+  };
+  const expectedFocusedCellChangedEventArgs = {
+    columnIndex: 10,
+    rowIndex: 199,
+  };
+  const expectedFocusedRowChangedEventArgs = {
+    rowIndex: 199,
+  };
+
+  await checkFocusedCellChangingEventArgs(t, expectedFocusedCellChangingEventArgs);
+  await checkFocusedRowChangingEventArgs(t, expectedFocusedRowChangingEventArgs);
+  await checkFocusedRowChangedEventArgs(t, expectedFocusedRowChangedEventArgs);
+  await checkFocusedCellChangedEventArgs(t, expectedFocusedCellChangedEventArgs);
+}).before(async () => {
+  await resetFocusedEventsTestData();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(200, 35),
+    columnWidth: 100,
+    height: 500,
+    width: 800,
+    showBorders: true,
+    keyExpr: 'field_0',
+    focusedRowEnabled: true,
+    scrolling: {
+      mode: 'virtual',
+      columnRenderingMode: 'virtual',
+    },
+    onFocusedCellChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanging', args: e });
+    },
+    onFocusedRowChanging: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanging', args: e });
+    },
+    onFocusedCellChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanged', args: e });
+    },
+    onFocusedRowChanged: (e) => {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedRowChanged', args: e });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
   })();
 });

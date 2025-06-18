@@ -961,10 +961,10 @@ class Overlay<
 
   _renderContentImpl(): Promise<void> {
     const whenContentRendered = Deferred();
-
     const contentTemplateOption = this.option('contentTemplate');
     const contentTemplate = this._getTemplate(contentTemplateOption);
     const transclude = this._templateManager.anonymousTemplateName === contentTemplateOption;
+
     contentTemplate?.render({
       container: getPublicElement(this.$content()),
       noModel: true,
@@ -978,6 +978,7 @@ class Overlay<
         }
       },
     });
+
     const { preventScrollEvents } = this.option();
 
     this._toggleWrapperScrollEventsSubscription(preventScrollEvents);
@@ -987,6 +988,7 @@ class Overlay<
         this._moveToContainer();
       }
     });
+
     // @ts-expect-error ts-error
     return whenContentRendered.promise();
   }

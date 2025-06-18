@@ -1,7 +1,7 @@
 // import type { ReadonlySignal } from '@preact/signals-core';
 // import { computed } from '@preact/signals-core';
 import { equalByValue } from '@js/core/utils/common';
-import { batch } from '@preact/signals-core';
+import { batch, effect } from '@preact/signals-core';
 import { getMatchedConditions } from '@ts/filter_builder/m_utils';
 import type { HeaderFilterInfo } from '@ts/grids/new/grid_core/filtering/header_filter/types';
 import { SearchController } from '@ts/grids/new/grid_core/search/index';
@@ -31,6 +31,10 @@ export class FilterSyncController {
 
   private previousFilterPanelValue: FilterValue | null = null;
 
+  private previousFilterPanelEnabled: boolean = this.filterController
+    .filterPanelFilterEnabled
+    .peek();
+
   private previousHeaderFilterInfoArray: HeaderFilterInfo[] = [];
 
   // 🚨🚨🚨 This controller was hotfixed during severe issues in filterSync feature.
@@ -44,13 +48,20 @@ export class FilterSyncController {
     private readonly searchController: SearchController,
   ) {
     // --- FilterPanel -> HeaderFilter ---
-    this.filterController.filterPanelValue.subscribe((filterPanelValue) => {
-      // NOTE: Handle first load with empty FilterPanel value
-      if (this.previousFilterPanelValue === null && filterPanelValue === null) {
+    effect(() => {
+      const filterPanelValue = this.filterController.filterValueOption.value;
+      const isFilterPanelEnabled = this.filterController.filterPanelFilterEnabled.value;
+
+      if (equalByValue(
+        this.previousFilterPanelValue,
+        filterPanelValue,
+        FILTER_DEEP_COMPARISON_OPTS,
+      ) && this.previousFilterPanelEnabled === isFilterPanelEnabled) {
         return;
       }
 
       this.previousFilterPanelValue = filterPanelValue;
+      this.previousFilterPanelEnabled = isFilterPanelEnabled;
 
       // NOTE: If filterSync is disabled -> do nothing
       const isSyncEnabled = this.filterController.filterSyncEnabled.peek();
@@ -58,42 +69,31 @@ export class FilterSyncController {
         return;
       }
 
-      // NOTE: If FilterPanel value is empty -> clear HeaderFilter values
-      if (filterPanelValue === null) {
+      // NOTE: If FilterPanel value is empty or disabled -> clear HeaderFilter values
+      if (!isFilterPanelEnabled || filterPanelValue === null) {
         this.headerFilterController.clearHeaderFilters();
-        return;
-      }
-
-      // NOTE: If HeaderFilter is empty and FilterPanel isn't
-      // sync FilterPanel -> HeaderFilter
-      const headerFilterInfoArray = this.headerFilterController.headerFilterInfoArray.peek();
-      if (!headerFilterInfoArray.length) {
-        this.handleFilterPanelSync(filterPanelValue);
-        return;
-      }
-
-      // NOTE: If merged from HeaderFilter values equals current FilterPanel values
-      // do nothing
-      const newFilterPanelValue = mergeFilterPanelWithHeaderFilterValues(
-        filterPanelValue ?? [],
-        headerFilterInfoArray,
-      );
-      if (equalByValue(
-        filterPanelValue ?? [],
-        newFilterPanelValue,
-        FILTER_DEEP_COMPARISON_OPTS,
-      )) {
+        this.previousHeaderFilterInfoArray = this.headerFilterController
+          .headerFilterInfoArray
+          .peek();
         return;
       }
 
       // NOTE: If all conditions above passed sync FilterPanel -> HeaderFilter values
       this.handleFilterPanelSync(filterPanelValue);
+      this.previousHeaderFilterInfoArray = this.headerFilterController
+        .headerFilterInfoArray
+        .peek();
     });
 
     // --- HeaderFilter -> FilterPanel ---
-    this.headerFilterController.headerFilterInfoArray.subscribe((headerFilterInfoArray) => {
-      // NOTE: Handle first load with empty HeaderFilter values
-      if (!this.previousHeaderFilterInfoArray?.length && !headerFilterInfoArray.length) {
+    effect(() => {
+      const headerFilterInfoArray = this.headerFilterController.headerFilterInfoArray.value;
+
+      if (equalByValue(
+        this.previousHeaderFilterInfoArray,
+        headerFilterInfoArray,
+        FILTER_DEEP_COMPARISON_OPTS,
+      )) {
         return;
       }
 
@@ -102,13 +102,6 @@ export class FilterSyncController {
       // NOTE: If filterSync is disabled -> do nothing
       const isSyncEnabled = this.filterController.filterSyncEnabled.peek();
       if (!isSyncEnabled) {
-        return;
-      }
-
-      // NOTE: If HeaderFilter values is empty & filter panel disabled -> clear FilterPanel value
-      const filterPanelEnabled = this.filterController.filterPanelFilterEnabled.value;
-      if (!headerFilterInfoArray.length && filterPanelEnabled) {
-        this.filterController.filterValueOption.value = null;
         return;
       }
 
@@ -125,6 +118,7 @@ export class FilterSyncController {
 
       // NOTE: If all conditions above passed sync HeaderFilter -> FilterPanel values
       this.handleHeaderFilterSync(newFilterPanelValue);
+      this.previousFilterPanelValue = newFilterPanelValue;
     });
   }
 
@@ -154,20 +148,22 @@ export class FilterSyncController {
 
         return {
           ...column,
-          filterValues,
           filterType,
+          filterValues,
         };
       }),
     );
   }
 
-  private handleHeaderFilterSync(headerFilter: FilterValue): void {
+  private handleHeaderFilterSync(newFilterPanelValue: FilterValue): void {
+    const normalizedValue = !newFilterPanelValue?.length
+      ? null
+      : newFilterPanelValue;
+
     // NOTE: If we update filters from HeaderFilter side
     // For better UX the filter panel will be enabled
     batch(() => {
-      this.filterController.filterValueOption.value = headerFilter.length === 0
-        ? null
-        : headerFilter;
+      this.filterController.filterValueOption.value = normalizedValue;
       this.filterController.filterPanelFilterEnabled.value = true;
     });
   }

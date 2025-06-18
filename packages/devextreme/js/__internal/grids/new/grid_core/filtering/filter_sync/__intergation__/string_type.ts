@@ -222,8 +222,7 @@ export const STRING_FILTER_PANEL: TestCaseFilterPanel[] = [
     expected: {
       headerFilterType: 'include',
       headerFilter: ['A_0'],
-      // Same filter by meaning as initial one
-      filterPanel: ['value', '=', 'A_0'],
+      filterPanel: ['value', 'anyof', ['A_0']],
     },
   },
   {
@@ -247,8 +246,7 @@ export const STRING_FILTER_PANEL: TestCaseFilterPanel[] = [
     expected: {
       headerFilterType: 'exclude',
       headerFilter: ['A_0'],
-      // Same filter by meaning as initial one
-      filterPanel: ['value', '<>', 'A_0'],
+      filterPanel: ['value', 'noneof', ['A_0']],
     },
   },
   {
@@ -330,8 +328,7 @@ export const STRING_DS_VALUES_FILTER_PANEL: TestCaseFilterPanel[] = [
     expected: {
       headerFilterType: 'include',
       headerFilter: ['A_0'],
-      // anyof here because we select one of custom ds values
-      filterPanel: ['value', 'anyof', ['A_0']],
+      filterPanel: ['value', '=', 'A_0'],
     },
   },
   {
@@ -379,7 +376,7 @@ export const STRING_DS_VALUES_FILTER_PANEL: TestCaseFilterPanel[] = [
     expected: {
       headerFilterType: 'include',
       headerFilter: ['A_200'],
-      filterPanel: ['value', 'anyof', ['A_200']],
+      filterPanel: ['value', '=', 'A_200'],
     },
   },
 ];

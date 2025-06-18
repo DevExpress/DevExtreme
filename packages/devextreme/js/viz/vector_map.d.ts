@@ -905,13 +905,6 @@ export default class dxVectorMap extends BaseWidget<dxVectorMapOptions> {
     clearSelection(): void;
     /**
      * @docid
-     * @publicName convertCoordinates(x, y)
-     * @deprecated dxVectorMap.convertToGeo
-     * @public
-     */
-    convertCoordinates(x: number, y: number): Array<number>;
-    /**
-     * @docid
      * @publicName convertToGeo(x, y)
      * @public
      */

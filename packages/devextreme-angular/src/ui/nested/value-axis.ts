@@ -19,9 +19,8 @@ import {
 
 
 
-import { AxisScaleType, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, TimeInterval, VisualRange } from 'devextreme/common/charts';
+import { AxisScaleType, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, TimeInterval, ValueAxisVisualRangeUpdateMode, VisualRange } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';
-import { ValueAxisVisualRangeUpdateMode } from 'devextreme/viz/polar_chart';
 import { ChartAxisScale } from 'devextreme/viz/range_selector';
 
 import {
