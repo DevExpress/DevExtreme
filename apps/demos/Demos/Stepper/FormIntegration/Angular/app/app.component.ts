@@ -45,6 +45,8 @@ export class AppComponent {
 
   isConfirmed: boolean;
 
+  isStepperReadonly: boolean;
+
   validationGroups = ['dates', 'guests', 'roomAndMealPlan'];
 
   constructor(private readonly appService: AppService) {
@@ -52,8 +54,7 @@ export class AppComponent {
     this.formData = this.appService.getInitialFormData();
     this.selectedIndex = 0;
     this.isConfirmed = false;
-
-    this.getNextButtonText = this.getNextButtonText.bind(this);
+    this.isStepperReadonly = false;
   }
 
   getValidationResult(index: number){
@@ -69,12 +70,6 @@ export class AppComponent {
   }
 
   onSelectionChanging(e: SelectionChangingEvent) {
-    if (this.isConfirmed) {
-      e.cancel = true;
-
-      return;
-    }
-
     const { component, addedItems, removedItems } = e;
     const { items = [] } = component.option();
 
@@ -122,11 +117,13 @@ export class AppComponent {
     this.formData = this.appService.getInitialFormData();
     validationEngine.resetGroup(this.validationGroups[0]);
     validationEngine.resetGroup(this.validationGroups[1]);
+    this.isStepperReadonly = false;
   }
 
   confirm(){
     this.isConfirmed = true;
     this.setStepValidationResult(this.selectedIndex, true);
+    this.isStepperReadonly = true;
   }
 
   onNextButtonClick() {
