@@ -40,7 +40,6 @@ export const defaultColumnProperties = {
   visible: true,
   allowReordering: true,
   allowHiding: true,
-  allowSearch: true,
   trueText: messageLocalization.format('dxDataGrid-trueText'),
   falseText: messageLocalization.format('dxDataGrid-falseText'),
   showInColumnChooser: true,
