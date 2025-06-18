@@ -52,7 +52,7 @@ $(() => {
               }, 'city', 'zipcode', {
                 dataField: 'mobilePhone',
                 editorOptions: {
-                  mask: '+1 (X00) 000-0000',
+                  mask: '+1 (000) 000-0000',
                 },
               }, 'email',
             ],

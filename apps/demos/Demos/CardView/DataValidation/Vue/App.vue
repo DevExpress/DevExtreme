@@ -88,7 +88,7 @@
           <DxItem
             data-field="mobilePhone"
             :editor-options="{
-              mask:'+1 (X00) 000-0000'
+              mask:'+1 (000) 000-0000'
             }"
           />
           <DxItem
