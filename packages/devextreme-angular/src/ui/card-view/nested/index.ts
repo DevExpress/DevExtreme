@@ -55,6 +55,7 @@ export * from './position';
 export * from './range-rule-dxi';
 export * from './remote-operations';
 export * from './required-rule-dxi';
+export * from './scrolling';
 export * from './search-panel';
 export * from './search';
 export * from './selection';

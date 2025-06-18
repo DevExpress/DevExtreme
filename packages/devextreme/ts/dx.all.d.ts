@@ -10641,10 +10641,24 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCardViewOptions.scrolling]
      */
-    scrolling?: Pick<
-      DevExpress.common.grids.ScrollingBase,
-      'scrollByContent' | 'scrollByThumb' | 'showScrollbar' | 'useNative'
-    >;
+    scrolling?: {
+      /**
+       * [descr:dxCardViewOptions.scrolling.scrollByContent]
+       */
+      scrollByContent?: boolean;
+      /**
+       * [descr:dxCardViewOptions.scrolling.scrollByThumb]
+       */
+      scrollByThumb?: boolean;
+      /**
+       * [descr:dxCardViewOptions.scrolling.showScrollbar]
+       */
+      showScrollbar?: DevExpress.common.ScrollbarMode;
+      /**
+       * [descr:dxCardViewOptions.scrolling.useNative]
+       */
+      useNative?: boolean | DevExpress.common.Mode;
+    };
     /**
      * [descr:dxCardViewOptions.errorRowEnabled]
      */

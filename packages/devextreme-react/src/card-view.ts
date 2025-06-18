@@ -11,7 +11,7 @@ import NestedOption from "./core/nested-option";
 
 import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, CardTemplateData, CardHeaderItem as CardViewCardHeaderItem, CardHeaderPredefinedItem, FieldTemplateData, ColumnTemplateData, EditingTexts as CardViewEditingTexts, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
-import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ToolbarItemLocation, ToolbarItemComponent, SearchMode, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, Mode, Direction, PositionAlignment, DisplayMode, TabsIconPosition, TabsStyle, Position as CommonPosition } from "devextreme/common";
+import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ToolbarItemLocation, ToolbarItemComponent, SearchMode, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, Mode, Direction, PositionAlignment, DisplayMode, ScrollbarMode, TabsIconPosition, TabsStyle, Position as CommonPosition } from "devextreme/common";
 import type { dxButtonOptions, ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { FormItemType, ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormOptions, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent } from "devextreme/ui/form";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, InitializedEvent as FilterBuilderInitializedEvent, OptionChangedEvent as FilterBuilderOptionChangedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, EditorPreparedEvent, EditorPreparingEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
@@ -116,6 +116,7 @@ const CardView = memo(
         pager: { optionName: "pager", isCollectionItem: false },
         paging: { optionName: "paging", isCollectionItem: false },
         remoteOperations: { optionName: "remoteOperations", isCollectionItem: false },
+        scrolling: { optionName: "scrolling", isCollectionItem: false },
         searchPanel: { optionName: "searchPanel", isCollectionItem: false },
         selection: { optionName: "selection", isCollectionItem: false },
         sorting: { optionName: "sorting", isCollectionItem: false },
@@ -2113,6 +2114,27 @@ const RequiredRule = Object.assign<typeof _componentRequiredRule, NestedComponen
 });
 
 // owners:
+// CardView
+type IScrollingProps = React.PropsWithChildren<{
+  scrollByContent?: boolean;
+  scrollByThumb?: boolean;
+  showScrollbar?: ScrollbarMode;
+  useNative?: boolean | Mode;
+}>
+const _componentScrolling = (props: IScrollingProps) => {
+  return React.createElement(NestedOption<IScrollingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "scrolling",
+    },
+  });
+};
+
+const Scrolling = Object.assign<typeof _componentScrolling, NestedComponentMeta>(_componentScrolling, {
+  componentType: "option",
+});
+
+// owners:
 // ColumnChooser
 // ColumnHeaderFilter
 // CardViewHeaderFilter
@@ -2840,6 +2862,8 @@ export {
   IRemoteOperationsProps,
   RequiredRule,
   IRequiredRuleProps,
+  Scrolling,
+  IScrollingProps,
   Search,
   ISearchProps,
   SearchPanel,

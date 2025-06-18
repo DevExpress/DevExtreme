@@ -65,6 +65,7 @@ import {
  Direction,
  PositionAlignment,
  DisplayMode,
+ ScrollbarMode,
  TabsIconPosition,
  TabsStyle,
  Position,
@@ -465,6 +466,7 @@ const componentConfig = {
       pager: { isCollectionItem: false, optionName: "pager" },
       paging: { isCollectionItem: false, optionName: "paging" },
       remoteOperations: { isCollectionItem: false, optionName: "remoteOperations" },
+      scrolling: { isCollectionItem: false, optionName: "scrolling" },
       searchPanel: { isCollectionItem: false, optionName: "searchPanel" },
       selection: { isCollectionItem: false, optionName: "selection" },
       sorting: { isCollectionItem: false, optionName: "sorting" },
@@ -2517,6 +2519,29 @@ const DxRequiredRule = defineComponent(DxRequiredRuleConfig);
   type: "required"
 };
 
+const DxScrollingConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:scrollByContent": null,
+    "update:scrollByThumb": null,
+    "update:showScrollbar": null,
+    "update:useNative": null,
+  },
+  props: {
+    scrollByContent: Boolean,
+    scrollByThumb: Boolean,
+    showScrollbar: String as PropType<ScrollbarMode>,
+    useNative: [Boolean, String] as PropType<boolean | Mode>
+  }
+};
+
+prepareConfigurationComponentConfig(DxScrollingConfig);
+
+const DxScrolling = defineComponent(DxScrollingConfig);
+
+(DxScrolling as any).$_optionName = "scrolling";
+
 const DxSearchConfig = {
   emits: {
     "update:isActive": null,
@@ -3211,6 +3236,7 @@ export {
   DxRangeRule,
   DxRemoteOperations,
   DxRequiredRule,
+  DxScrolling,
   DxSearch,
   DxSearchPanel,
   DxSelection,

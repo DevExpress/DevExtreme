@@ -47,6 +47,7 @@ export {
   ContextMenuPreparingEvent,
   FocusedCardChanged,
   dxCardViewOptions,
+  ScrollbarMode,
   Sorting,
   Pager,
   PopupProperties,

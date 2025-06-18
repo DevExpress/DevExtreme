@@ -25,7 +25,7 @@ export { ExplicitTypes } from 'devextreme/ui/card_view';
 
 import DataSource from 'devextreme/data/data_source';
 import { CardCover, CardHeader, ColumnProperties, dxCardViewEditing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, SelectionChangedEvent, Paging, RemoteOperations, SelectionConfiguration, Toolbar } from 'devextreme/ui/card_view';
-import { Mode } from 'devextreme/common';
+import { Mode, ScrollbarMode } from 'devextreme/common';
 import { ColumnChooser, FilterPanel, HeaderFilter, Pager, SearchPanel, Sorting } from 'devextreme/common/grids';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -104,6 +104,7 @@ import { DxoCardViewPositionModule } from 'devextreme-angular/ui/card-view/neste
 import { DxiCardViewRangeRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewRemoteOperationsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewRequiredRuleModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewScrollingModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewSearchModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewSearchPanelModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewSelectionModule } from 'devextreme-angular/ui/card-view/nested';
@@ -514,10 +515,10 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     
     @Input()
-    get scrolling(): Record<string, any> {
+    get scrolling(): { scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode } {
         return this._getOption('scrolling');
     }
-    set scrolling(value: Record<string, any>) {
+    set scrolling(value: { scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode }) {
         this._setOption('scrolling', value);
     }
 
@@ -1115,7 +1116,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scrollingChange: EventEmitter<Record<string, any>>;
+    @Output() scrollingChange: EventEmitter<{ scrollByContent?: boolean, scrollByThumb?: boolean, showScrollbar?: ScrollbarMode, useNative?: boolean | Mode }>;
 
     /**
     
@@ -1394,6 +1395,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxiCardViewRangeRuleModule,
     DxoCardViewRemoteOperationsModule,
     DxiCardViewRequiredRuleModule,
+    DxoCardViewScrollingModule,
     DxoCardViewSearchModule,
     DxoCardViewSearchPanelModule,
     DxoCardViewSelectionModule,
@@ -1472,6 +1474,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxiCardViewRangeRuleModule,
     DxoCardViewRemoteOperationsModule,
     DxiCardViewRequiredRuleModule,
+    DxoCardViewScrollingModule,
     DxoCardViewSearchModule,
     DxoCardViewSearchPanelModule,
     DxoCardViewSelectionModule,
