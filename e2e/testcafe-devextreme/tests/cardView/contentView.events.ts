@@ -94,7 +94,7 @@ function testFactory({
   additionalAssertOnClient,
   eventCount = 1,
 }: TestModel) {
-  test.only(eventName, async (t) => {
+  test(eventName, async (t) => {
     const cardView = new CardView(CARD_VIEW_SELECTOR);
 
     await action(t, cardView);
