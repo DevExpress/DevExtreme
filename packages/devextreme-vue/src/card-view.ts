@@ -219,7 +219,6 @@ type AccessibleOptions = Pick<Properties,
   "filterBuilder" |
   "filterBuilderPopup" |
   "filterPanel" |
-  "filterSyncEnabled" |
   "filterValue" |
   "focusStateEnabled" |
   "headerFilter" |
@@ -305,7 +304,6 @@ const componentConfig = {
     filterBuilder: Object as PropType<dxFilterBuilderOptions | Record<string, any>>,
     filterBuilderPopup: Object as PropType<Record<string, any>>,
     filterPanel: Object as PropType<FilterPanel>,
-    filterSyncEnabled: [Boolean, String] as PropType<boolean | Mode>,
     filterValue: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
     focusStateEnabled: Boolean,
     headerFilter: Object as PropType<HeaderFilter | Record<string, any>>,
@@ -387,7 +385,6 @@ const componentConfig = {
     "update:filterBuilder": null,
     "update:filterBuilderPopup": null,
     "update:filterPanel": null,
-    "update:filterSyncEnabled": null,
     "update:filterValue": null,
     "update:focusStateEnabled": null,
     "update:headerFilter": null,

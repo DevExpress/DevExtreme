@@ -364,16 +364,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     
     @Input()
-    get filterSyncEnabled(): boolean | Mode {
-        return this._getOption('filterSyncEnabled');
-    }
-    set filterSyncEnabled(value: boolean | Mode) {
-        this._setOption('filterSyncEnabled', value);
-    }
-
-
-    
-    @Input()
     get filterValue(): Array<any> | Function | string {
         return this._getOption('filterValue');
     }
@@ -1020,13 +1010,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterSyncEnabledChange: EventEmitter<boolean | Mode>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() filterValueChange: EventEmitter<Array<any> | Function | string>;
 
     /**
@@ -1274,7 +1257,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
             { emit: 'filterBuilderChange' },
             { emit: 'filterBuilderPopupChange' },
             { emit: 'filterPanelChange' },
-            { emit: 'filterSyncEnabledChange' },
             { emit: 'filterValueChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'headerFilterChange' },
