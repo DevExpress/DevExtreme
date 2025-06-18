@@ -23,6 +23,7 @@ export * from './column-header-filter';
 export * from './compare-rule-dxi';
 export * from './custom-operation-dxi';
 export * from './custom-rule-dxi';
+export * from './dragging';
 export * from './editing-texts';
 export * from './editing';
 export * from './email-rule-dxi';

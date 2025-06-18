@@ -11,7 +11,7 @@ import NestedOption from "./core/nested-option";
 
 import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, CardTemplateData, CardHeaderItem as CardViewCardHeaderItem, CardHeaderPredefinedItem, FieldTemplateData, ColumnTemplateData, EditingTexts as CardViewEditingTexts, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
-import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ToolbarItemLocation, ToolbarItemComponent, SearchMode, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, Mode, Direction, PositionAlignment, DisplayMode, ScrollbarMode, TabsIconPosition, TabsStyle, Position as CommonPosition } from "devextreme/common";
+import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ToolbarItemLocation, ToolbarItemComponent, SearchMode, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, DragHighlight, Mode, Direction, PositionAlignment, DisplayMode, ScrollbarMode, TabsIconPosition, TabsStyle, Position as CommonPosition } from "devextreme/common";
 import type { dxButtonOptions, ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { FormItemType, ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormOptions, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent } from "devextreme/ui/form";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, InitializedEvent as FilterBuilderInitializedEvent, OptionChangedEvent as FilterBuilderOptionChangedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, EditorPreparedEvent, EditorPreparingEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
@@ -932,6 +932,32 @@ const CustomRule = Object.assign<typeof _componentCustomRule, NestedComponentMet
 });
 
 // owners:
+// HeaderPanel
+type IDraggingProps = React.PropsWithChildren<{
+  dropFeedbackMode?: DragHighlight;
+  onDragChange?: ((e: any) => void);
+  onDragEnd?: ((e: any) => void);
+  onDragMove?: ((e: any) => void);
+  onDragStart?: ((e: any) => void);
+  onRemove?: ((e: any) => void);
+  onReorder?: ((e: any) => void);
+  scrollSensitivity?: number;
+  scrollSpeed?: number;
+}>
+const _componentDragging = (props: IDraggingProps) => {
+  return React.createElement(NestedOption<IDraggingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "dragging",
+    },
+  });
+};
+
+const Dragging = Object.assign<typeof _componentDragging, NestedComponentMeta>(_componentDragging, {
+  componentType: "option",
+});
+
+// owners:
 // CardView
 type IEditingProps = React.PropsWithChildren<{
   allowAdding?: boolean;
@@ -1540,7 +1566,17 @@ const HeaderFilter = Object.assign<typeof _componentHeaderFilter, NestedComponen
 // owners:
 // CardView
 type IHeaderPanelProps = React.PropsWithChildren<{
-  dragging?: Record<string, any>;
+  dragging?: Record<string, any> | {
+    dropFeedbackMode?: DragHighlight;
+    onDragChange?: ((e: any) => void);
+    onDragEnd?: ((e: any) => void);
+    onDragMove?: ((e: any) => void);
+    onDragStart?: ((e: any) => void);
+    onRemove?: ((e: any) => void);
+    onReorder?: ((e: any) => void);
+    scrollSensitivity?: number;
+    scrollSpeed?: number;
+  };
   itemCssClass?: string;
   itemTemplate?: ((data: ColumnTemplateData, container: any) => string | any) | template;
   visible?: boolean;
@@ -1552,6 +1588,9 @@ const _componentHeaderPanel = (props: IHeaderPanelProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "headerPanel",
+      ExpectedChildren: {
+        dragging: { optionName: "dragging", isCollectionItem: false }
+      },
       TemplateProps: [{
         tmplOption: "itemTemplate",
         render: "itemRender",
@@ -2798,6 +2837,8 @@ export {
   ICustomOperationProps,
   CustomRule,
   ICustomRuleProps,
+  Dragging,
+  IDraggingProps,
   Editing,
   IEditingProps,
   EditingTexts,

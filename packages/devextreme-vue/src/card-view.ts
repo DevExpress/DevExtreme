@@ -62,6 +62,7 @@ import {
  Format as CommonFormat,
  SortOrder,
  ComparisonOperator,
+ DragHighlight,
  Direction,
  PositionAlignment,
  DisplayMode,
@@ -1287,6 +1288,39 @@ const DxCustomRule = defineComponent(DxCustomRuleConfig);
   type: "custom"
 };
 
+const DxDraggingConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:dropFeedbackMode": null,
+    "update:onDragChange": null,
+    "update:onDragEnd": null,
+    "update:onDragMove": null,
+    "update:onDragStart": null,
+    "update:onRemove": null,
+    "update:onReorder": null,
+    "update:scrollSensitivity": null,
+    "update:scrollSpeed": null,
+  },
+  props: {
+    dropFeedbackMode: String as PropType<DragHighlight>,
+    onDragChange: Function as PropType<((e: any) => void)>,
+    onDragEnd: Function as PropType<((e: any) => void)>,
+    onDragMove: Function as PropType<((e: any) => void)>,
+    onDragStart: Function as PropType<((e: any) => void)>,
+    onRemove: Function as PropType<((e: any) => void)>,
+    onReorder: Function as PropType<((e: any) => void)>,
+    scrollSensitivity: Number,
+    scrollSpeed: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxDraggingConfig);
+
+const DxDragging = defineComponent(DxDraggingConfig);
+
+(DxDragging as any).$_optionName = "dragging";
+
 const DxEditingConfig = {
   emits: {
     "update:isActive": null,
@@ -1974,6 +2008,9 @@ prepareConfigurationComponentConfig(DxHeaderPanelConfig);
 const DxHeaderPanel = defineComponent(DxHeaderPanelConfig);
 
 (DxHeaderPanel as any).$_optionName = "headerPanel";
+(DxHeaderPanel as any).$_expectedChildren = {
+  dragging: { isCollectionItem: false, optionName: "dragging" }
+};
 
 const DxHideConfig = {
   emits: {
@@ -3204,6 +3241,7 @@ export {
   DxCompareRule,
   DxCustomOperation,
   DxCustomRule,
+  DxDragging,
   DxEditing,
   DxEditingTexts,
   DxEmailRule,

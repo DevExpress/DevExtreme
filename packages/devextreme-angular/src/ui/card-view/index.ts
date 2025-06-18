@@ -72,6 +72,7 @@ import { DxoCardViewColumnHeaderFilterSearchModule } from 'devextreme-angular/ui
 import { DxiCardViewCompareRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewCustomOperationModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewCustomRuleModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewDraggingModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewEditingModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewEditingTextsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewEmailRuleModule } from 'devextreme-angular/ui/card-view/nested';
@@ -1363,6 +1364,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxiCardViewCompareRuleModule,
     DxiCardViewCustomOperationModule,
     DxiCardViewCustomRuleModule,
+    DxoCardViewDraggingModule,
     DxoCardViewEditingModule,
     DxoCardViewEditingTextsModule,
     DxiCardViewEmailRuleModule,
@@ -1442,6 +1444,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxiCardViewCompareRuleModule,
     DxiCardViewCustomOperationModule,
     DxiCardViewCustomRuleModule,
+    DxoCardViewDraggingModule,
     DxoCardViewEditingModule,
     DxoCardViewEditingTextsModule,
     DxiCardViewEmailRuleModule,

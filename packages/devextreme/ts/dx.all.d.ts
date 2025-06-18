@@ -10439,19 +10439,6 @@ declare module DevExpress.ui {
      */
     export type FocusedCardChanged =
       DevExpress.common.core.events.EventInfo<dxCardView> & WithCardInfo;
-
-    export type HeaderPanelDragging = Pick<
-      dxSortableOptions,
-      | 'dropFeedbackMode'
-      | 'scrollSpeed'
-      | 'scrollSensitivity'
-      | 'onDragChange'
-      | 'onDragEnd'
-      | 'onDragMove'
-      | 'onDragStart'
-      | 'onRemove'
-      | 'onReorder'
-    >;
     /**
      * [descr:_ui_card_view_InitNewCardEvent]
      */
@@ -33245,6 +33232,7 @@ declare module DevExpress.ui.dxCardView {
      */
     card: CardInfo;
   };
+
   /**
    * [descr:HeaderPanel]
    */
@@ -33252,7 +33240,44 @@ declare module DevExpress.ui.dxCardView {
     /**
      * [descr:HeaderPanel.dragging]
      */
-    dragging?: HeaderPanelDragging;
+    dragging?: {
+      /**
+       * [descr:HeaderPanel.dragging.dropFeedbackMode]
+       */
+      dropFeedbackMode?: DevExpress.common.DragHighlight;
+      /**
+       * [descr:HeaderPanel.dragging.scrollSpeed]
+       */
+      scrollSpeed?: number;
+      /**
+       * [descr:HeaderPanel.dragging.scrollSensitivity]
+       */
+      scrollSensitivity?: number;
+      /**
+       * [descr:HeaderPanel.dragging.onDragChange]
+       */
+      onDragChange?: (e: any) => void;
+      /**
+       * [descr:HeaderPanel.dragging.onDragEnd]
+       */
+      onDragEnd?: (e: any) => void;
+      /**
+       * [descr:HeaderPanel.dragging.onDragMove]
+       */
+      onDragMove?: (e: any) => void;
+      /**
+       * [descr:HeaderPanel.dragging.onDragStart]
+       */
+      onDragStart?: (e: any) => void;
+      /**
+       * [descr:HeaderPanel.dragging.onRemove]
+       */
+      onRemove?: (e: any) => void;
+      /**
+       * [descr:HeaderPanel.dragging.onReorder]
+       */
+      onReorder?: (e: any) => void;
+    };
     /**
      * [descr:HeaderPanel.visible]
      */
