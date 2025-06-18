@@ -23,7 +23,7 @@ export class AppComponent {
   houses: House[];
 
   imageExpr({ ID }: House): string {
-    return `https://demos.devexpress.com/ASPxCardViewDemos/Content/HomesPhoto/${ID}.jpg`;
+    return `../../../../images/houses/${ID}.jpg`;
   }
 
   altExpr(): string {
