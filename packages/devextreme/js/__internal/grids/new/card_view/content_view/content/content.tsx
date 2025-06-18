@@ -15,6 +15,7 @@ import {
 import type { RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
+import type { CardProps } from './card/card';
 import { Card } from './card/card';
 
 export interface ContentProps {
@@ -53,6 +54,7 @@ export interface ContentProps {
     onFocusedCardChanged?: (card: CardInfo, cardIdx: number, element: HTMLElement) => void;
     onEdit?: (key: Key, returnFocusTo?: HTMLElement) => void;
     onDelete?: (key: Key, returnFocusTo?: HTMLElement) => void;
+    fieldProps?: CardProps['fieldProps'];
   };
 
   onPageChange?: (value: number) => void;

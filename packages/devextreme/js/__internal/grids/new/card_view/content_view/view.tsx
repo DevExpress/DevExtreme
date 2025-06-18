@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable
   @typescript-eslint/explicit-function-return-type,
   @typescript-eslint/explicit-module-boundary-types,
@@ -103,6 +104,18 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           onDblClick: this.options.action('onCardDblClick').value,
           onHoverChanged: this.options.action('onCardHoverChanged').value,
           onPrepared: this.options.action('onCardPrepared').value,
+          fieldProps: {
+            captionProps: {
+              onClick: this.options.action('onFieldCaptionClick').value as any,
+              onDblClick: this.options.action('onFieldCaptionDblClick').value as any,
+              onPrepared: this.options.action('onFieldCaptionPrepared').value as any,
+            },
+            valueProps: {
+              onClick: this.options.action('onFieldValueClick').value as any,
+              onDblClick: this.options.action('onFieldValueDblClick').value as any,
+              onPrepared: this.options.action('onFieldValuePrepared').value as any,
+            },
+          },
           onEdit: (key: Key, returnFocusTo?: HTMLElement) => {
             this.keyboardNavigationController.setReturnFocusTo(returnFocusTo);
             this.editingController.editCard(key);
@@ -135,7 +148,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
             items: this.options.oneWay('cardHeader.items').value,
             template: this.options.template('cardHeader.template').value,
           },
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
           toolbar: this.options.oneWay('cardHeader.items').value as any,
           selectCard: this.selectCard.bind(this),
           onSelectAllCards: this.onSelectAllCards.bind(this),

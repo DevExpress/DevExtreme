@@ -3,6 +3,8 @@
   spellcheck/spell-checker
 */
 import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
+import { getPublicElement } from '@js/core/element';
+import $ from '@js/core/renderer';
 import { off, on } from '@js/events/index';
 import type * as dxToolbar from '@js/ui/toolbar';
 import { Guid } from '@ts/core/m_guid';
@@ -17,6 +19,7 @@ import { Component, createRef } from 'inferno';
 
 import type { SelectCardOptions } from '../../types';
 import { Cover } from './cover';
+import type { FieldProps } from './field';
 import { Field } from './field';
 import { CardHeader } from './header';
 
@@ -34,12 +37,11 @@ export interface CardClickEvent {
 }
 
 export interface CardHoverEvent {
-  isHovered: boolean;
   card: CardInfo;
 }
 
 export interface CardPreparedEvent {
-  instance: Card;
+  card: CardInfo;
 }
 
 export interface CardProps {
@@ -114,6 +116,9 @@ export interface CardProps {
   fieldHintEnabled?: boolean;
 
   position?: Position;
+
+  // TODO: move other props here
+  fieldProps?: Partial<FieldProps>;
 }
 
 export class Card extends Component<CardProps> {
@@ -155,9 +160,9 @@ export class Card extends Component<CardProps> {
         enabled={this.props.kbnEnabled}
         tabIndex={this.props.tabIndex}
         className={className}
-        onDblClick={this.handleDoubleClick}
-        onMouseEnter={this.handleMouseEnter}
-        onMouseLeave={this.handleMouseLeave}
+        onDblClick={this.onDblClick}
+        onMouseEnter={this.onHoverChanged}
+        onMouseLeave={this.onHoverChanged}
         onContextMenu={this.props.onContextMenu}
         onKeyDown={this.props.onKeyDown}
 
@@ -210,6 +215,8 @@ export class Card extends Component<CardProps> {
                           template={field.column.fieldTemplate}
                           captionTemplate={field.column.fieldCaptionTemplate}
                           valueTemplate={field.column.fieldValueTemplate}
+                          captionProps={this.props.fieldProps?.captionProps}
+                          valueProps={this.props.fieldProps?.valueProps}
                         />
                     ))
                   }
@@ -227,60 +234,69 @@ export class Card extends Component<CardProps> {
   }
 
   componentDidMount(): void {
-    const { onPrepared } = this.props;
+    const onPreparedArgs = {
+      cardElement: getPublicElement($(this.containerRef.current!)),
+      card: this.props.card,
+    };
 
-    if (onPrepared) {
-      onPrepared({ instance: this });
-    }
+    this.props.onPrepared?.(onPreparedArgs);
 
-    on(this.containerRef.current!, 'dxclick', this.handleClick);
+    on(this.containerRef.current!, 'dxclick', this.onClick);
 
     if (this.props.onHold) {
-      on(this.containerRef.current!, 'dxhold', this.handleHold);
+      on(this.containerRef.current!, 'dxhold', this.onHold);
     }
   }
 
   componentWillUnmount(): void {
-    off(this.containerRef.current!, 'dxclick', this.handleClick);
+    off(this.containerRef.current!, 'dxclick', this.onClick);
 
     if (this.props.onHold) {
-      off(this.containerRef.current!, 'dxhold', this.handleHold);
+      off(this.containerRef.current!, 'dxhold', this.onHold);
     }
   }
 
-  handleMouseEnter = (): void => {
-    const { onHoverChanged, card } = this.props;
+  onHoverChanged = (event: Event): void => {
+    const args = {
+      eventType: event.type,
+      card: this.props.card,
+      cardElement: getPublicElement($(this.containerRef.current!)),
+      event,
+    };
 
-    onHoverChanged?.({ isHovered: true, card });
+    this.props.onHoverChanged?.(args);
   };
 
-  handleMouseLeave = (): void => {
-    const { onHoverChanged, card } = this.props;
+  onClick = (event: MouseEvent): void => {
+    const args = {
+      card: this.props.card,
+      cardElement: getPublicElement($(this.containerRef.current!)),
+      event,
+    };
 
-    onHoverChanged?.({ isHovered: false, card });
-  };
+    this.props.onClick?.(args);
 
-  handleClick = (event: MouseEvent): void => {
-    const {
-      allowSelectOnClick,
-      onClick,
-      selectCard,
-      card,
-    } = this.props;
-
-    onClick?.({ event, card });
-
-    if (allowSelectOnClick) {
-      selectCard?.(card, { control: isCommandKeyPressed(event), shift: event.shiftKey });
+    if (this.props.allowSelectOnClick) {
+      this.props.selectCard?.(
+        this.props.card,
+        {
+          control: isCommandKeyPressed(event), shift: event.shiftKey,
+        },
+      );
     }
   };
 
-  handleDoubleClick = (event: MouseEvent): void => {
-    const { onDblClick, card } = this.props;
-    onDblClick?.({ event, card });
+  onDblClick = (event: MouseEvent): void => {
+    const args = {
+      card: this.props.card,
+      cardElement: getPublicElement($(this.containerRef.current!)),
+      event,
+    };
+
+    this.props.onDblClick?.(args);
   };
 
-  handleHold = (event: MouseEvent): void => {
+  onHold = (event: MouseEvent): void => {
     const { onHold, card } = this.props;
 
     onHold?.({ event, card });
