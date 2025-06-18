@@ -2,12 +2,12 @@
 const path = require('path');
 const fs = require('fs');
 
-const BASE_DIR = '../../';
-const ARTIFACTS_DIR = path.resolve(__dirname, BASE_DIR, 'artifacts');
+const BASE_DIR = process.cwd();
+const ARTIFACTS_DIR = path.resolve(BASE_DIR, 'artifacts');
 fs.rmSync(ARTIFACTS_DIR, { recursive: true, force: true });
 fs.mkdirSync(ARTIFACTS_DIR, { recursive: true });
 
-const containerHtmlPath = path.resolve(__dirname, BASE_DIR, 'container.html');
+const containerHtmlPath = path.resolve(BASE_DIR, 'container.html');
 const containerHtml = fs.readFileSync(containerHtmlPath, 'utf-8');
 
 const assetRegex = /(?:href|src)="([^"]+)"/g;
@@ -28,14 +28,14 @@ assets.forEach((relPath) => {
             break;
         default:
             fs.copyFileSync(
-                path.resolve(__dirname, BASE_DIR, relPath),
+                path.resolve(BASE_DIR, relPath),
                 path.join(ARTIFACTS_DIR, path.basename(relPath)),
             );
             newHtml = newHtml.replace(new RegExp(relPath, 'g'), path.basename(relPath));
     }
 });
 
-const SOURCE_DIR = path.resolve(__dirname, BASE_DIR, '../../packages/devextreme/artifacts');
+const SOURCE_DIR = path.resolve(BASE_DIR, '../../packages/devextreme/artifacts');
 fs.cpSync(path.join(SOURCE_DIR, 'css'), path.join(ARTIFACTS_DIR, 'css'), { recursive: true });
 fs.cpSync(path.join(SOURCE_DIR, 'js'), path.join(ARTIFACTS_DIR, 'js'), { recursive: true });
 fs.writeFileSync(path.join(ARTIFACTS_DIR, 'container.html'), newHtml, 'utf-8');

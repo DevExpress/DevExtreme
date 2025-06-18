@@ -6,8 +6,8 @@
   "scripts": {
     "docker:copy-artifacts": "node src/commands/copy-artifacts.js",
     "docker:build": "docker build -f src/docker/Dockerfile -t playwright-tests .",
-    "docker:test:ci": "docker run --env CI=1 --rm -v %cd%/playwright-report:/app/playwright-report -v %cd%/test-results:/app/test-results -v %cd%/snapshots:/app/snapshots playwright-tests",
-    "docker:test": "docker run --rm -v %cd%/playwright-report:/app/playwright-report -v %cd%/test-results:/app/test-results -v %cd%/snapshots:/app/snapshots playwright-tests",
+    "docker:test:ci": "node src/commands/run-n-build-docker.js --env CI=1",
+    "docker:test": "node src/commands/run-n-build-docker.js",
     "test:docker": "pnpm run docker:copy-artifacts && pnpm run docker:build && pnpm run docker:test",
     "test": "pnpm exec playwright test",
     "test:ui": "pnpm exec playwright test --ui",
