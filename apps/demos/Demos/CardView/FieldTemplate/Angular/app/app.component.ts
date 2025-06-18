@@ -7,8 +7,6 @@ import {
   DxProgressBarModule,
 } from 'devextreme-angular';
 import { Task, Service } from './app.service';
-import { EmployeeService } from './employee.service';
-import { PriorityService } from './priority.service';
 import { CardHeader } from './card-header/card-header.component';
 import { PriorityComponent } from './priority/priority.component';
 import { EmployeeComponent } from './employee/employee.component';
@@ -51,7 +49,7 @@ export class AppComponent {
     EmployeeComponent,
     ProgressComponent,
   ],
-  providers: [Service, EmployeeService, PriorityService],
+  providers: [Service],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
