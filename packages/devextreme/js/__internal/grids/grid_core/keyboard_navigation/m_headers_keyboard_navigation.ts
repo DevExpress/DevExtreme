@@ -151,10 +151,15 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
 
   protected getFocusableColumns(rowIndex?: number, bandColumnId?: number): Column[] {
     const visibleColumns = this._columnsController.getVisibleColumns(rowIndex);
-    const filterColumnCallback = (column: Column): boolean => column.ownerBand === bandColumnId
-        && (!isDefined(column.type) || this._columnsController.isCustomCommandColumn(column));
+    const isColumnFocusable = (column: Column): boolean => !isDefined(column.type)
+        || this._columnsController.isCustomCommandColumn(column);
+    const result: Column[] = visibleColumns.filter(isColumnFocusable);
 
-    return visibleColumns.filter(filterColumnCallback) as Column[];
+    if (isDefined(bandColumnId)) {
+      return result.filter((column: Column): boolean => column.ownerBand === bandColumnId);
+    }
+
+    return result;
   }
 
   protected getContainerBoundingRect($container: dxElementWrapper) {
