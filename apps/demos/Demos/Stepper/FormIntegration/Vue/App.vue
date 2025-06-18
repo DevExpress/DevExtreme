@@ -1,5 +1,7 @@
 <template>
   <DxStepper
+    :focus-state-enabled="!isStepperReadonly"
+    :class="{ readonly: isStepperReadonly }"
     v-model:selected-index="selectedIndex"
     @selection-changing="onSelectionChanging"
   >
@@ -61,9 +63,7 @@
     <div class="nav-panel">
       <div class="current-step">
         <span v-if="!isConfirmed">
-          Step <span class="selected-index">{{ selectedIndex + 1 }}</span> of <span class="step-count">{{
-            steps.length
-          }}</span>
+          Step <span class="selected-index">{{ selectedIndex + 1 }}</span> of {{ steps.length }}
         </span>
       </div>
       <div class="nav-buttons">
@@ -105,6 +105,7 @@ import type { BookingFormData } from './types';
 
 const selectedIndex = ref(0);
 const isConfirmed = ref(false);
+const isStepperReadonly = ref(false);
 const steps = ref<IItemProps[]>(getInitialSteps());
 const formData = ref<BookingFormData>(getInitialFormData());
 
@@ -131,12 +132,6 @@ const setStepValidationResult = (index: number, isValid: boolean | undefined) =>
 };
 
 function onSelectionChanging(e: SelectionChangingEvent) {
-  if (isConfirmed.value) {
-    e.cancel = true;
-
-    return;
-  }
-
   const { component, addedItems, removedItems } = e;
   const { items = [] } = component.option();
 
@@ -176,11 +171,13 @@ const reset = () => {
   formData.value = getInitialFormData();
   validationEngine.resetGroup(validationGroups[0]);
   validationEngine.resetGroup(validationGroups[1]);
+  isStepperReadonly.value = false;
 };
 
 const confirm = () => {
   isConfirmed.value = true;
   setStepValidationResult(selectedIndex.value, true);
+  isStepperReadonly.value = true;
 };
 
 function onNextButtonClick() {
@@ -264,5 +261,9 @@ function onNextButtonClick() {
 .nav-buttons {
   display: flex;
   gap: 8px;
+}
+
+.readonly {
+  pointer-events: none;
 }
 </style>

@@ -119,7 +119,7 @@ $(() => {
     if (confirmed) {
       $('.current-step').empty();
     } else if (!$('.current-step').text()) {
-      $('.current-step').append(`Step <span class="selected-index">${index + 1}</span> of <span class="step-count">${steps.length}</span>`);
+      $('.current-step').append(`Step <span class="selected-index">${index + 1}</span> of ${steps.length}`);
     } else {
       $('.selected-index').text(index + 1);
     }
