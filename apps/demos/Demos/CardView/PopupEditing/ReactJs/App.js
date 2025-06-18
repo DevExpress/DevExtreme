@@ -25,7 +25,7 @@ const App = () => (
     keyExpr="id"
     cardsPerRow="auto"
     cardMinWidth={350}
-    height={820}
+    height={840}
   >
     <SearchPanel visible={true} />
     <CardCover

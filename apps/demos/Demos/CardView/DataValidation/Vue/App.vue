@@ -4,7 +4,7 @@
     key-expr="id"
     cards-per-row="auto"
     :card-min-width="350"
-    :height="820"
+    :height="840"
   >
     <DxSearchPanel
       :visible="true"
