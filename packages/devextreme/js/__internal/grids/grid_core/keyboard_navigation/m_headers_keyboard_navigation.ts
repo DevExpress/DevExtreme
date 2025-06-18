@@ -10,6 +10,7 @@ import type { DxEvent } from '@js/events';
 import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { Column } from '../columns_controller/m_columns_controller';
 import type { ModuleType, Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
 import { GridCoreStickyColumnsDom } from '../sticky_columns/dom';
@@ -148,13 +149,17 @@ export class HeadersKeyboardNavigationController extends ColumnKeyboardNavigatio
     return '.dx-header-row > td';
   }
 
-  protected getFocusableColumns(rowIndex?: number): any[] {
+  protected getFocusableColumns(rowIndex?: number, bandColumnId?: number): Column[] {
     const visibleColumns = this._columnsController.getVisibleColumns(rowIndex);
+    const isColumnFocusable = (column: Column): boolean => !isDefined(column.type)
+        || this._columnsController.isCustomCommandColumn(column);
+    const result: Column[] = visibleColumns.filter(isColumnFocusable);
 
-    return visibleColumns.filter(
-      (column) => !isDefined(column.type)
-        || this._columnsController.isCustomCommandColumn(column),
-    );
+    if (isDefined(bandColumnId)) {
+      return result.filter((column: Column): boolean => column.ownerBand === bandColumnId);
+    }
+
+    return result;
   }
 
   protected getContainerBoundingRect($container: dxElementWrapper) {
