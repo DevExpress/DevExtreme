@@ -28,7 +28,8 @@ $(() => {
                 ? 'status--ok'
                 : 'status--warning'
             );
-        }
+        },
+        allowSearch: false,
       },
       {
         caption: 'Full Name',
@@ -50,7 +51,8 @@ $(() => {
           return $('<a>')
             .attr('href', `mailto:${value}`)
             .text(text);
-        }
+        },
+        allowSearch: false,
       },
       {
         caption: 'Address',
@@ -58,7 +60,7 @@ $(() => {
         allowSorting: true,
         calculateFieldValue({ State, City }) {
           return `${City}, ${State}`;
-        }
+        },
       },
     ],
     cardFooterTemplate() {

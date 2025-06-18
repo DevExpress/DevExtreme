@@ -25,6 +25,7 @@
     <DxColumn
       data-field="Status"
       field-value-template="statusTemplate"
+      :allow-search="false"
     />
     <DxColumn
       caption="Full Name"
@@ -45,6 +46,7 @@
     <DxColumn
       data-field="Email"
       field-value-template="emailTemplate"
+      :allow-search="false"
     />
     <DxColumn
       caption="Address"
