@@ -272,7 +272,8 @@ describe('Options', () => {
       expect(popupContentElement).toMatchSnapshot();
     });
 
-    it.each<{
+    // NOTE: Skip test because FilterSync feature disabled
+    it.skip.each<{
       filterValue: Filter; result: number;
     }>([
       {
@@ -290,7 +291,7 @@ describe('Options', () => {
         headerFilter: {
           visible: true,
         },
-        filterSyncEnabled: true,
+        _filterSyncEnabled: true,
         filterPanel: { visible: true },
       });
 
