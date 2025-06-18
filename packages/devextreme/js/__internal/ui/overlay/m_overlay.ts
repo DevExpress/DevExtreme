@@ -864,11 +864,11 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
 
   _renderContentImpl() {
     const whenContentRendered = Deferred();
-
     const contentTemplateOption = this.option('contentTemplate');
     const contentTemplate = this._getTemplate(contentTemplateOption);
     const transclude = this._templateManager.anonymousTemplateName === contentTemplateOption;
-    contentTemplate && contentTemplate.render({
+
+    contentTemplate?.render({
       container: getPublicElement(this.$content()),
       noModel: true,
       transclude,
@@ -882,7 +882,9 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
       },
     });
 
-    this._toggleWrapperScrollEventsSubscription(this.option('preventScrollEvents'));
+    const { preventScrollEvents } = this.option();
+
+    this._toggleWrapperScrollEventsSubscription(preventScrollEvents);
 
     whenContentRendered.done(() => {
       if (this.option('visible')) {
