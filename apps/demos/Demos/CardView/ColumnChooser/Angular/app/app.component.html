@@ -34,11 +34,15 @@
 <dx-card-view
   [dataSource]="employees"
   keyExpr="ID"
-  [cardMinWidth]="100"
-  [wordWrapEnabled]="true"
+  cardsPerRow="auto"
+  [cardMinWidth]="300"
 >
   <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
-  <dxo-card-view-column-chooser [enabled]="true" [mode]="columnChooserMode">
+  <dxo-card-view-column-chooser
+    [enabled]="true"
+    [mode]="columnChooserMode"
+    height="340px"
+  >
     <dxo-card-view-column-chooser-search [enabled]="searchEnabled">
     </dxo-card-view-column-chooser-search>
     <dxo-card-view-column-chooser-selection

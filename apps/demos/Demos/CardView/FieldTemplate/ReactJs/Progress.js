@@ -6,7 +6,7 @@ const Progress = ({ value }) => (
     <ProgressBar
       value={value}
       elementAttr={{ 'aria-label': 'Progress Bar' }}
-      statusFormat={(ratio) => `${ratio * 100}%`}
+      statusFormat={(_, value) => `${value}%`}
     />
   </div>
 );

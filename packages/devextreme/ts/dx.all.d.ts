@@ -2377,6 +2377,7 @@ declare module DevExpress.common.charts {
       }
     | TimeInterval
     | undefined;
+  export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
   export type ValueErrorBarDisplayMode = 'auto' | 'high' | 'low' | 'none';
   export type ValueErrorBarType =
     | 'fixed'
@@ -37190,7 +37191,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.visualRangeUpdateMode]
        */
-      visualRangeUpdateMode?: DevExpress.common.charts.VisualRangeUpdateMode;
+      visualRangeUpdateMode?: DevExpress.common.charts.ValueAxisVisualRangeUpdateMode;
       /**
        * [descr:dxChartOptions.valueAxis.wholeRange]
        */
@@ -41763,7 +41764,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.valueAxis.visualRangeUpdateMode]
        */
-      visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode;
+      visualRangeUpdateMode?: DevExpress.common.charts.ValueAxisVisualRangeUpdateMode;
       /**
        * [descr:dxPolarChartOptions.valueAxis.wholeRange]
        */
@@ -41865,7 +41866,6 @@ declare module DevExpress.viz {
        */
       visible?: boolean;
     };
-    export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
     /**
      * [descr:_viz_polar_chart_ZoomEndEvent]
      */
@@ -42883,11 +42883,6 @@ declare module DevExpress.viz {
        */
       animationEnabled?: boolean;
       /**
-       * [descr:dxRangeSelectorOptions.behavior.callValueChanged]
-       * @deprecated [depNote:dxRangeSelectorOptions.behavior.callValueChanged]
-       */
-      callValueChanged?: DevExpress.viz.dxRangeSelector.ValueChangedCallMode;
-      /**
        * [descr:dxRangeSelectorOptions.behavior.manualRangeSelectionEnabled]
        */
       manualRangeSelectionEnabled?: boolean;
@@ -43606,11 +43601,6 @@ declare module DevExpress.viz {
      * [descr:dxSankeyNode.showTooltip()]
      */
     showTooltip(): void;
-    /**
-     * [descr:dxSankeyNode.title]
-     * @deprecated [depNote:dxSankeyNode.title]
-     */
-    title?: string;
   }
   /**
    * [descr:dxSankeyOptions]
@@ -44706,11 +44696,6 @@ declare module DevExpress.viz {
      * [descr:dxVectorMap.clearSelection()]
      */
     clearSelection(): void;
-    /**
-     * [descr:dxVectorMap.convertCoordinates(x, y)]
-     * @deprecated [depNote:dxVectorMap.convertCoordinates(x, y)]
-     */
-    convertCoordinates(x: number, y: number): Array<number>;
     /**
      * [descr:dxVectorMap.convertToGeo(x, y)]
      */

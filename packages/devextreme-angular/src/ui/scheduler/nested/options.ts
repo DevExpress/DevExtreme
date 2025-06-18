@@ -13,7 +13,8 @@ import {
     EventEmitter,
     ContentChildren,
     forwardRef,
-    QueryList
+    QueryList,
+    AfterContentInit
 } from '@angular/core';
 
 
@@ -40,7 +41,7 @@ import { DxiSchedulerOptionsItemComponent } from './options-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoSchedulerOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSchedulerOptionsComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -260,21 +261,20 @@ export class DxoSchedulerOptionsComponent extends NestedOption implements OnDest
     }
 
 
-    @ContentChildren(forwardRef(() => DxiSchedulerItemComponent))
-    get itemsChildren(): QueryList<DxiSchedulerItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
+    @ContentChildren(forwardRef(() => DxiSchedulerItemComponent)) itemsChildren!: QueryList<DxiSchedulerItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiSchedulerOptionsItemComponent)) optionsItemsChildren!: QueryList<DxiSchedulerOptionsItemComponent>
+    
+    setItems() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([
+            ...this.itemsChildren.toArray(),
+            ...this.optionsItemsChildren.toArray(),
+        ]);
+        this.setChildren('items', q);
     }
 
-    @ContentChildren(forwardRef(() => DxiSchedulerOptionsItemComponent))
-    get optionsItemsChildren(): QueryList<DxiSchedulerOptionsItemComponent> {
-        return this._getOption('items');
-    }
-    set optionsItemsChildren(value) {
-        this.setChildren('items', value);
-    }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -299,6 +299,12 @@ export class DxoSchedulerOptionsComponent extends NestedOption implements OnDest
     }
 
 
+    ngAfterContentInit() {
+        this.setItems();
+        
+        this.itemsChildren.changes.subscribe(() => { this.setItems() });
+        this.optionsItemsChildren.changes.subscribe(() => { this.setItems() });
+    }
 }
 
 @NgModule({

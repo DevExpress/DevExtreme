@@ -13,7 +13,8 @@ import {
     EventEmitter,
     ContentChildren,
     forwardRef,
-    QueryList
+    QueryList,
+    AfterContentInit
 } from '@angular/core';
 
 
@@ -37,7 +38,7 @@ import { DxiDiagramPageSizeItemComponent } from './page-size-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get height(): number {
         return this._getOption('height');
@@ -81,21 +82,20 @@ export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestr
     }
 
 
-    @ContentChildren(forwardRef(() => DxiDiagramItemComponent))
-    get itemsChildren(): QueryList<DxiDiagramItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
+    @ContentChildren(forwardRef(() => DxiDiagramItemComponent)) itemsChildren!: QueryList<DxiDiagramItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiDiagramPageSizeItemComponent)) pageSizeItemsChildren!: QueryList<DxiDiagramPageSizeItemComponent>
+    
+    setItems() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([
+            ...this.itemsChildren.toArray(),
+            ...this.pageSizeItemsChildren.toArray(),
+        ]);
+        this.setChildren('items', q);
     }
 
-    @ContentChildren(forwardRef(() => DxiDiagramPageSizeItemComponent))
-    get pageSizeItemsChildren(): QueryList<DxiDiagramPageSizeItemComponent> {
-        return this._getOption('items');
-    }
-    set pageSizeItemsChildren(value) {
-        this.setChildren('items', value);
-    }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -120,6 +120,12 @@ export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestr
     }
 
 
+    ngAfterContentInit() {
+        this.setItems();
+        
+        this.itemsChildren.changes.subscribe(() => { this.setItems() });
+        this.pageSizeItemsChildren.changes.subscribe(() => { this.setItems() });
+    }
 }
 
 @NgModule({

@@ -241,7 +241,7 @@ export class DataController {
         const pageIndex = this.pageIndex.value;
         const pageSize = this.pageSize.value;
         const isLoaded = this.isLoaded.value;
-        const displayFilter = this.normalizedDisplayFilter.value;
+        const displayFilter = this.filterController.displayFilter.value;
         const pagingEnabled = this.pagingEnabled.value;
         const sortParameters = this.sortingController.sortParameters.value;
 
@@ -317,7 +317,28 @@ export class DataController {
     ]);
   }
 
+  private normalizePageIndex(dataSource: DataSource): 'normalized' | 'require-reload' {
+    const pageIndex = dataSource.pageIndex();
+    const totalCount = dataSource.totalCount();
+    const pageSize = dataSource.pageSize();
+    const pageCount = Math.ceil(totalCount / pageSize);
+
+    if (totalCount > 0 && pageIndex >= pageCount) {
+      dataSource.pageIndex(pageCount - 1);
+      return 'require-reload';
+    }
+
+    return 'normalized';
+  }
+
   private onChanged(dataSource: DataSource, e): void {
+    const normalizePageIndexResult = this.normalizePageIndex(dataSource);
+    if (normalizePageIndexResult === 'require-reload') {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      dataSource.load();
+      return;
+    }
+
     let items = dataSource.items() as DataObject[];
 
     if (e?.changes) {
@@ -327,9 +348,7 @@ export class DataController {
 
     const firstItem = items[0];
 
-    if (firstItem) {
-      this.columnsController.setColumnOptionsFromDataItem(firstItem);
-    }
+    this.columnsController.setColumnOptionsFromDataItem(firstItem ?? {});
 
     this._items.value = items;
     this.pageIndex.value = dataSource.pageIndex();

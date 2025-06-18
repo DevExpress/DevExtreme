@@ -11,7 +11,8 @@ import {
     Input,
     ContentChildren,
     forwardRef,
-    QueryList
+    QueryList,
+    AfterContentInit
 } from '@angular/core';
 
 
@@ -36,7 +37,7 @@ import { DxiFileManagerItemComponent } from './item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoFileManagerContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFileManagerContextMenuComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get items(): Array<dxFileManagerContextMenuItem | FileManagerPredefinedContextMenuItem> {
         return this._getOption('items');
@@ -51,21 +52,20 @@ export class DxoFileManagerContextMenuComponent extends NestedOption implements 
     }
 
 
-    @ContentChildren(forwardRef(() => DxiFileManagerContextMenuItemComponent))
-    get contextMenuItemsChildren(): QueryList<DxiFileManagerContextMenuItemComponent> {
-        return this._getOption('items');
-    }
-    set contextMenuItemsChildren(value) {
-        this.setChildren('items', value);
+    @ContentChildren(forwardRef(() => DxiFileManagerContextMenuItemComponent)) contextMenuItemsChildren!: QueryList<DxiFileManagerContextMenuItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiFileManagerItemComponent)) itemsChildren!: QueryList<DxiFileManagerItemComponent>
+    
+    setItems() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([
+            ...this.contextMenuItemsChildren.toArray(),
+            ...this.itemsChildren.toArray(),
+        ]);
+        this.setChildren('items', q);
     }
 
-    @ContentChildren(forwardRef(() => DxiFileManagerItemComponent))
-    get itemsChildren(): QueryList<DxiFileManagerItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -84,6 +84,12 @@ export class DxoFileManagerContextMenuComponent extends NestedOption implements 
     }
 
 
+    ngAfterContentInit() {
+        this.setItems();
+        
+        this.contextMenuItemsChildren.changes.subscribe(() => { this.setItems() });
+        this.itemsChildren.changes.subscribe(() => { this.setItems() });
+    }
 }
 
 @NgModule({

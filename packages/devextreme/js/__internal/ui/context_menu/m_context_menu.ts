@@ -1,10 +1,11 @@
 import type { PositionConfig } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import animationPosition from '@js/common/core/animation/position';
+import type { EventInfo } from '@js/common/core/events';
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
@@ -19,15 +20,17 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getOuterHeight } from '@js/core/utils/size';
 import {
-  isDefined, isFunction, isObject, isPlainObject, isRenderer, isWindow,
+  isDefined, isFunction, isObject, isPlainObject, isRenderer, isString,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import type { Item } from '@js/ui/context_menu';
+import type { DxEvent } from '@js/events';
+import type { Item, Properties } from '@js/ui/context_menu';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import type dxOverlay from '@js/ui/overlay';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import { current as currentTheme, isGeneric } from '@js/ui/themes';
+import type { OptionChanged } from '@ts/core/widget/types';
 import MenuBase from '@ts/ui/context_menu/m_menu_base';
 
 const DX_MENU_CLASS = 'dx-menu';
@@ -65,6 +68,18 @@ const BORDER_WIDTH = 1;
 
 const window = getWindow();
 
+type ContextMenuTarget = string | dxElementWrapper | Element | undefined;
+
+type ShowContextMenuEvent = EventInfo<ContextMenu> & {
+  target?: ContextMenuTarget;
+  event?: DxEvent;
+};
+
+interface ContextMenuProperties extends Properties {
+  hideOnParentScroll?: boolean;
+  visualContainer?: string | Element | null;
+}
+
 class ContextMenu extends MenuBase {
   // Temporary solution. Move to component level
   public NAME!: string;
@@ -75,7 +90,9 @@ class ContextMenu extends MenuBase {
 
   _overlayContentId?: string;
 
-  _showContextMenuEventHandler?: (event: unknown) => any;
+  _eventNamespace!: string;
+
+  _showContextMenuEventHandler?: (event: DxEvent) => void;
 
   getShowEvent(showEventOption: {
     delay?: number;
@@ -151,7 +168,7 @@ class ContextMenu extends MenuBase {
     });
   }
 
-  _setOptionsByReference() {
+  _setOptionsByReference(): void {
     super._setOptionsByReference();
 
     extend(this._optionsByReference, {
@@ -167,7 +184,7 @@ class ContextMenu extends MenuBase {
     return this._overlay ? this._overlay.$content() : $();
   }
 
-  _eventBindingTarget() {
+  _eventBindingTarget(): dxElementWrapper {
     return this._itemContainer();
   }
 
@@ -262,21 +279,21 @@ class ContextMenu extends MenuBase {
     }
   }
 
-  _setFocusedElement($element) {
+  _setFocusedElement($element): void {
     if ($element && $element.length !== 0) {
       this.option('focusedElement', getPublicElement($element));
       this._scrollToElement($element);
     }
   }
 
-  _scrollToElement($element) {
+  _scrollToElement($element): void {
     const $scrollableElement = $element.closest(`.${SCROLLABLE_CLASS}`);
     const scrollableInstance = $scrollableElement.dxScrollable('instance');
 
     scrollableInstance?.scrollToElement($element);
   }
 
-  _getItemsByLocation(location) {
+  _getItemsByLocation(location): dxElementWrapper {
     const $activeItem = this._getActiveItem(true);
     let $items;
 
@@ -292,7 +309,7 @@ class ContextMenu extends MenuBase {
     return $items;
   }
 
-  _getAriaTarget() {
+  _getAriaTarget(): dxElementWrapper {
     return this.$element();
   }
 
@@ -353,6 +370,8 @@ class ContextMenu extends MenuBase {
     this.$element()
       .addClass(DX_HAS_CONTEXT_MENU_CLASS);
 
+    this._eventNamespace = `${this.NAME}${new Guid()}`;
+
     super._initMarkup();
   }
 
@@ -385,6 +404,7 @@ class ContextMenu extends MenuBase {
 
   _renderContentImpl(): void {
     this._detachShowContextMenuEvents(this._getTarget());
+    this._showContextMenuEventHandler = this._createShowContextMenuEventHandler();
     this._attachShowContextMenuEvents();
   }
 
@@ -393,7 +413,7 @@ class ContextMenu extends MenuBase {
     !this._keyboardListenerId && this._focusTarget().length && super._attachKeyboardEvents();
   }
 
-  _renderContextMenuOverlay() {
+  _renderContextMenuOverlay(): void {
     if (this._overlay) {
       return;
     }
@@ -412,9 +432,9 @@ class ContextMenu extends MenuBase {
     this._attachContextMenuEvent();
   }
 
-  preventShowingDefaultContextMenuAboveOverlay() {
+  preventShowingDefaultContextMenuAboveOverlay(): void {
     const $itemContainer = this._itemContainer();
-    const eventName = addNamespace(contextMenuEventName, this.NAME);
+    const eventName = addNamespace(contextMenuEventName, this._eventNamespace);
 
     eventsEngine.off($itemContainer, eventName, `.${DX_SUBMENU_CLASS}`);
     eventsEngine.on($itemContainer, eventName, `.${DX_SUBMENU_CLASS}`, (e) => {
@@ -435,42 +455,11 @@ class ContextMenu extends MenuBase {
     }
   }
 
-  _detachShowContextMenuEvents(target): void {
-    // @ts-expect-error
-    const showEvent = this.getShowEvent(this.option('showEvent'));
-
-    if (!showEvent) {
-      return;
-    }
-
-    const eventName = addNamespace(showEvent, this.NAME);
-
-    if (this._showContextMenuEventHandler) {
-      eventsEngine.off(
-        domAdapter.getDocument(),
-        eventName,
-        target,
-        // @ts-expect-error
-        this._showContextMenuEventHandler,
-      );
-    } else {
-      eventsEngine.off($(target), eventName);
-    }
-  }
-
-  _attachShowContextMenuEvents() {
-    const target = this._getTarget();
-    // @ts-expect-error
-    const showEvent = this.getShowEvent(this.option('showEvent'));
-
-    if (!showEvent) {
-      return;
-    }
-
-    const eventName = addNamespace(showEvent, this.NAME);
-    let contextMenuAction = this._createAction((e) => {
+  _createShowContextMenuEventHandler(): (e: DxEvent) => void {
+    const showContextMenuAction = this._createAction((e: ShowContextMenuEvent) => {
       // @ts-expect-error
-      const delay = this.getShowDelay(this.option('showEvent'));
+      const { showEvent } = this.option();
+      const delay = this.getShowDelay(showEvent);
 
       if (delay) {
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -480,16 +469,59 @@ class ContextMenu extends MenuBase {
       }
     }, { validatingTargetName: 'target' });
 
-    const handler = (e) => contextMenuAction({ event: e, target: $(e.currentTarget) });
+    return (e: DxEvent): void => showContextMenuAction({
+      event: e,
+      target: $(e.currentTarget),
+    });
+  }
 
-    contextMenuAction = this._createAction(contextMenuAction);
+  _detachShowContextMenuEvents(target: ContextMenuTarget, event?: unknown): void {
     // @ts-expect-error
-    if (isRenderer(target) || target.nodeType || isWindow(target)) {
-      this._showContextMenuEventHandler = undefined;
-      eventsEngine.on(target, eventName, handler);
+    const { showEvent: showEventOption } = this.option();
+    const showEvent = this.getShowEvent(event ?? showEventOption);
+
+    if (!showEvent) {
+      return;
+    }
+
+    const isSelector = isString(target);
+    const eventName = addNamespace(showEvent, this._eventNamespace);
+
+    if (isSelector) {
+      eventsEngine.off(
+        domAdapter.getDocument(),
+        eventName,
+        target,
+        // @ts-expect-error
+        this._showContextMenuEventHandler,
+      );
     } else {
-      this._showContextMenuEventHandler = handler;
-      eventsEngine.on(domAdapter.getDocument(), eventName, target, this._showContextMenuEventHandler);
+      eventsEngine.off($(target), eventName, this._showContextMenuEventHandler);
+    }
+  }
+
+  _attachShowContextMenuEvents(): void {
+    // @ts-expect-error
+    const { showEvent: showEventOption, disabled } = this.option();
+    const showEvent = this.getShowEvent(showEventOption);
+
+    if (!showEvent || disabled) {
+      return;
+    }
+
+    const target = this._getTarget();
+    const isSelector = isString(target);
+    const eventName = addNamespace(showEvent, this._eventNamespace);
+
+    if (isSelector) {
+      eventsEngine.on(
+        domAdapter.getDocument(),
+        eventName,
+        target,
+        this._showContextMenuEventHandler,
+      );
+    } else {
+      eventsEngine.on(target, eventName, this._showContextMenuEventHandler);
     }
   }
 
@@ -581,11 +613,11 @@ class ContextMenu extends MenuBase {
     return overlayOptions;
   }
 
-  _overlayShownActionHandler(arg) {
+  _overlayShownActionHandler(arg): void {
     this._actions.onShown(arg);
   }
 
-  _overlayHidingActionHandler(arg) {
+  _overlayHidingActionHandler(arg): void {
     this._actions.onHiding(arg);
     if (!arg.cancel) {
       this._hideAllShownSubmenus();
@@ -593,7 +625,7 @@ class ContextMenu extends MenuBase {
     }
   }
 
-  _overlayHiddenActionHandler(arg) {
+  _overlayHiddenActionHandler(arg): void {
     this._actions.onHidden(arg);
   }
 
@@ -609,7 +641,7 @@ class ContextMenu extends MenuBase {
     return hideOnOutsideClick || closeOnOutsideClick;
   }
 
-  _hideOnOutsideClickHandler(e) {
+  _hideOnOutsideClickHandler(e): boolean {
     if (!this._shouldHideOnOutsideClick(e)) {
       return false;
     }
@@ -647,7 +679,7 @@ class ContextMenu extends MenuBase {
     return $(target).closest(`.${DX_MENU_ITEM_CLASS}`).eq(0);
   }
 
-  _isIncludeOverlay($activeOverlay, $allOverlays) {
+  _isIncludeOverlay($activeOverlay, $allOverlays): boolean {
     let isSame = false;
 
     each($allOverlays, (index, $overlay) => {
@@ -659,7 +691,7 @@ class ContextMenu extends MenuBase {
     return isSame;
   }
 
-  _hideAllShownChildSubmenus($clickedItem) {
+  _hideAllShownChildSubmenus($clickedItem): void {
     const $submenuElements = $clickedItem.find(`.${DX_SUBMENU_CLASS}`);
     const shownSubmenus = extend([], this._shownSubmenus);
 
@@ -673,7 +705,7 @@ class ContextMenu extends MenuBase {
     }
   }
 
-  _initScrollable($container) {
+  _initScrollable($container): void {
     this._createComponent($container, Scrollable, {
       useKeyboard: false,
       _onVisibilityChanged: (scrollable) => {
@@ -682,7 +714,7 @@ class ContextMenu extends MenuBase {
     });
   }
 
-  _setSubMenuHeight($submenu, anchor, isNestedSubmenu) {
+  _setSubMenuHeight($submenu, anchor, isNestedSubmenu): void {
     const $itemsContainer = $submenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
     const contentHeight = getOuterHeight($itemsContainer);
     const maxHeight = this._getMaxHeight(anchor, !isNestedSubmenu);
@@ -710,7 +742,7 @@ class ContextMenu extends MenuBase {
     return availableHeight - SUBMENU_PADDING;
   }
 
-  _dimensionChanged() {
+  _dimensionChanged(): void {
     if (!this._shownSubmenus) {
       return;
     }
@@ -726,7 +758,7 @@ class ContextMenu extends MenuBase {
     });
   }
 
-  _getSubmenuBorderWidth() {
+  _getSubmenuBorderWidth(): number {
     return isGeneric(currentTheme()) ? BORDER_WIDTH : 0;
   }
 
@@ -750,7 +782,7 @@ class ContextMenu extends MenuBase {
     this._planPostRenderActions($submenu);
   }
 
-  _setSubmenuVisible($submenu?: dxElementWrapper) {
+  _setSubmenuVisible($submenu?: dxElementWrapper): void {
     if (!$submenu) {
       return;
     }
@@ -775,7 +807,7 @@ class ContextMenu extends MenuBase {
     }
   }
 
-  _hideSubmenuGroup($submenu) {
+  _hideSubmenuGroup($submenu): void {
     if (this._isSubmenuVisible($submenu)) {
       this._hideSubmenuCore($submenu);
     }
@@ -952,29 +984,39 @@ class ContextMenu extends MenuBase {
     });
   }
 
-  _visibilityChanged(visible) {
+  _visibilityChanged(visible: boolean): void {
     if (visible) {
       this._renderContentImpl();
     }
   }
 
-  _optionChanged(args) {
-    if (ACTIONS.includes(args.name)) {
+  _optionChanged(args: OptionChanged<ContextMenuProperties>): void {
+    const { name, value, previousValue } = args;
+
+    if (ACTIONS.includes(name)) {
       this._initActions();
       return;
     }
 
-    switch (args.name) {
+    switch (name) {
       case 'visible':
-        this._renderVisibility(args.value);
+        this._renderVisibility(value);
         break;
-      case 'showEvent':
+      case 'disabled':
       case 'position':
       case 'submenuDirection':
         this._invalidate();
         break;
+      case 'showEvent':
+        if (previousValue) {
+          this._detachShowContextMenuEvents(this._getTarget(), previousValue);
+        }
+        this._invalidate();
+        break;
       case 'target':
-        args.previousValue && this._detachShowContextMenuEvents(args.previousValue);
+        if (previousValue) {
+          this._detachShowContextMenuEvents(previousValue);
+        }
         this._invalidate();
         break;
       case 'closeOnOutsideClick':
@@ -1071,7 +1113,7 @@ class ContextMenu extends MenuBase {
     this.setAria('owns', undefined);
   }
 
-  _getTarget() {
+  _getTarget(): ContextMenuTarget {
     // @ts-expect-error
     return this.option('target') || this.option('position').of || $(domAdapter.getDocument());
   }

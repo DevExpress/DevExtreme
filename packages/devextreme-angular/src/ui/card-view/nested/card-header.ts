@@ -15,7 +15,8 @@ import {
     Input,
     ContentChildren,
     forwardRef,
-    QueryList
+    QueryList,
+    AfterContentInit
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -45,7 +46,7 @@ import { DxiCardViewItemComponent } from './item-dxi';
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoCardViewCardHeaderComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost {
+    IDxTemplateHost, AfterContentInit  {
     @Input()
     get items(): Array<CardHeaderItem | CardHeaderPredefinedItem> {
         return this._getOption('items');
@@ -76,21 +77,20 @@ export class DxoCardViewCardHeaderComponent extends NestedOption implements Afte
     }
 
 
-    @ContentChildren(forwardRef(() => DxiCardViewCardHeaderItemComponent))
-    get cardHeaderItemsChildren(): QueryList<DxiCardViewCardHeaderItemComponent> {
-        return this._getOption('items');
-    }
-    set cardHeaderItemsChildren(value) {
-        this.setChildren('items', value);
+    @ContentChildren(forwardRef(() => DxiCardViewCardHeaderItemComponent)) cardHeaderItemsChildren!: QueryList<DxiCardViewCardHeaderItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiCardViewItemComponent)) itemsChildren!: QueryList<DxiCardViewItemComponent>
+    
+    setItems() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([
+            ...this.cardHeaderItemsChildren.toArray(),
+            ...this.itemsChildren.toArray(),
+        ]);
+        this.setChildren('items', q);
     }
 
-    @ContentChildren(forwardRef(() => DxiCardViewItemComponent))
-    get itemsChildren(): QueryList<DxiCardViewItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
@@ -121,6 +121,12 @@ export class DxoCardViewCardHeaderComponent extends NestedOption implements Afte
     }
 
 
+    ngAfterContentInit() {
+        this.setItems();
+        
+        this.cardHeaderItemsChildren.changes.subscribe(() => { this.setItems() });
+        this.itemsChildren.changes.subscribe(() => { this.setItems() });
+    }
 }
 
 @NgModule({

@@ -21,7 +21,6 @@ import { Translator2D } from '../translators/translator2d';
 import { Range } from '../translators/range';
 import { tick } from './tick';
 import { adjust } from '../../core/utils/math';
-import errors from '../../core/errors';
 import dateUtils from '../../core/utils/date';
 import { noop as _noop } from '../../core/utils/common';
 import xyMethods from './xy_axes';
@@ -282,12 +281,6 @@ function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta, 
 
 function getConstantLineSharpDirection(coord, axisCanvas) {
     return Math.max(axisCanvas.start, axisCanvas.end) !== coord ? 1 : -1;
-}
-
-function checkDeprecatedOptions(isValueAxis, options) {
-    if(isValueAxis && options.visualRangeUpdateMode === 'shift') {
-        errors.log('W0016', 'valueAxis.visualRangeUpdateMode', 'shift', '23.1', 'Specify another value');
-    }
 }
 
 export const Axis = function(renderSettings) {
@@ -951,7 +944,6 @@ Axis.prototype = {
         const labelOpt = options.label;
 
         validateAxisOptions(options);
-        checkDeprecatedOptions(!that.isArgumentAxis, options);
         that._options = options;
 
         options.tick = options.tick || {};

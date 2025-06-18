@@ -63,6 +63,7 @@ import {
     SeriesType,
     TextOverflow,
     TimeIntervalConfig,
+    ValueAxisVisualRangeUpdateMode,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
     VisualRange,
@@ -104,6 +105,7 @@ export {
     SeriesSelectionMode,
     SeriesType,
     TextOverflow,
+    ValueAxisVisualRangeUpdateMode,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
     VerticalAlignment,
@@ -2632,7 +2634,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @default 'auto'
      * @public
      */
-    visualRangeUpdateMode?: VisualRangeUpdateMode;
+    visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode;
     /**
      * @docid dxChartOptions.valueAxis.wholeRange
      * @default undefined

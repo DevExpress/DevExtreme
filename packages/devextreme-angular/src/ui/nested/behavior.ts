@@ -15,7 +15,6 @@ import {
 
 
 import { SliderValueChangeMode } from 'devextreme/common';
-import { ValueChangedCallMode } from 'devextreme/viz/range_selector';
 
 import {
     DxIntegrationModule,
@@ -47,14 +46,6 @@ export class DxoBehaviorComponent extends NestedOption implements OnDestroy, OnI
     }
     set animationEnabled(value: boolean) {
         this._setOption('animationEnabled', value);
-    }
-
-    @Input()
-    get callValueChanged(): ValueChangedCallMode {
-        return this._getOption('callValueChanged');
-    }
-    set callValueChanged(value: ValueChangedCallMode) {
-        this._setOption('callValueChanged', value);
     }
 
     @Input()

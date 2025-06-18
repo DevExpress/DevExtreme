@@ -69,13 +69,14 @@ const App = () => {
       <CardView
         dataSource={employees}
         keyExpr="ID"
-        cardMinWidth={100}
-        wordWrapEnabled={true}
+        cardsPerRow="auto"
+        cardMinWidth={300}
       >
         <SearchPanel visible={true} />
         <ColumnChooser
           enabled={true}
           mode={columnChooserMode}
+          height="340px"
         >
           <ColumnChooserSearch enabled={searchEnabled} />
           <ColumnChooserSelection

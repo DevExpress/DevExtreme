@@ -6,9 +6,8 @@ import resizeCallbacks from '__internal/core/utils/m_resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { extend } from 'core/utils/extend';
 import visibilityEventsModule from 'common/core/events/visibility_change';
-import {
-    EDITORS_WITHOUT_LABELS,
-} from '__internal/ui/form/m_form.layout_manager.utils';
+import { EDITORS_WITHOUT_LABELS } from '__internal/ui/form/m_form.layout_manager.utils';
+import { TABS_ITEM_CLASS } from '__internal/ui/tabs/tabs';
 import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
@@ -1342,7 +1341,7 @@ QUnit.test('Update layout inside a tab (T1040296)', function(assert) {
         { title: 'Window' }
     ]);
 
-    assert.deepEqual([...testContainer.find('.dx-tab-text')].map(e => e.textContent), ['GeneralGeneral', 'WindowWindow'], 'dx-tab-text elements');
+    assert.deepEqual([...testContainer.find(`.${TABS_ITEM_CLASS}`)].map(e => e.textContent), ['GeneralGeneral', 'WindowWindow'], 'dx-tab elements');
 });
 
 QUnit.module('Align labels', {

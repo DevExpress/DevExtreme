@@ -275,8 +275,7 @@ export const NUMBER_FILTER_PANEL: TestCaseFilterPanel[] = [
     expected: {
       headerFilterType: 'include',
       headerFilter: [1],
-      // Same filter by meaning as initial one
-      filterPanel: ['value', '=', 1],
+      filterPanel: ['value', 'anyof', [1]],
     },
   },
   {
@@ -300,8 +299,7 @@ export const NUMBER_FILTER_PANEL: TestCaseFilterPanel[] = [
     expected: {
       headerFilterType: 'exclude',
       headerFilter: [1],
-      // Same filter by meaning as initial one
-      filterPanel: ['value', '<>', 1],
+      filterPanel: ['value', 'noneof', [1]],
     },
   },
   {

@@ -3,10 +3,8 @@ $(() => {
     dataSource: orders,
     keyExpr: 'ID',
     allowColumnReordering: true,
-    cardsPerRow: 2,
-    paging: {
-      pageSize: 4
-    },
+    cardsPerRow: 'auto',
+    cardMinWidth: 300,
     columns: [
       {
         dataField: 'OrderNumber',

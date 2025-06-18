@@ -14,7 +14,7 @@ if (window && window.config?.packageConfigPaths) {
 export class ProgressComponent {
   @Input() value: number;
 
-  getStatusFormat(ratio: number): string {
-    return `${ratio * 100}%`;
+  getStatusFormat(_, value: number): string {
+    return `${value}%`;
   }
 }

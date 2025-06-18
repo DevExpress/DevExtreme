@@ -2,7 +2,7 @@ $(() => {
   $('#card-view').dxCardView({
     dataSource: tasks,
     cardsPerRow: 'auto',
-    cardMinWidth: 260,
+    cardMinWidth: 240,
     paging: {
       pageSize: 12,
     },
@@ -47,8 +47,8 @@ $(() => {
         dataField: 'Task_Assigned_Employee_ID',
         caption: 'Assigned to',
         fieldValueTemplate({ field: { value }}) {
-          return $('<a>')
-            .attr('href', `#`)
+          return $('<button>')
+            .addClass('task__link-button')
             .text(employees.find(e => e.ID === value).Name);
         }
       },
@@ -67,8 +67,8 @@ $(() => {
               elementAttr: {
                 'aria-label': 'Progress Bar',
               },
-              statusFormat(ratio) {
-                return `${ratio * 100}%`;
+              statusFormat(_, value) {
+                return `${value}%`;
               },
             });
         }

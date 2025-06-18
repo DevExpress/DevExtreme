@@ -28,7 +28,6 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
-  providers: [Service],
 })
 export class AppComponent {
   tasks: Task[];
@@ -52,7 +51,7 @@ export class AppComponent {
     EmployeeComponent,
     ProgressComponent,
   ],
-  providers: [EmployeeService, PriorityService],
+  providers: [Service, EmployeeService, PriorityService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

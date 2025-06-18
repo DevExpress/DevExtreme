@@ -13,7 +13,8 @@ import {
     EventEmitter,
     ContentChildren,
     forwardRef,
-    QueryList
+    QueryList,
+    AfterContentInit
 } from '@angular/core';
 
 
@@ -43,7 +44,7 @@ import { DxiCardViewTabbedItemComponent } from './tabbed-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoCardViewFormComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewFormComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -376,53 +377,36 @@ export class DxoCardViewFormComponent extends NestedOption implements OnDestroy,
     }
 
 
-    @ContentChildren(forwardRef(() => DxiCardViewButtonItemComponent))
-    get buttonItemsChildren(): QueryList<DxiCardViewButtonItemComponent> {
-        return this._getOption('items');
-    }
-    set buttonItemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiCardViewEmptyItemComponent))
-    get emptyItemsChildren(): QueryList<DxiCardViewEmptyItemComponent> {
-        return this._getOption('items');
-    }
-    set emptyItemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiCardViewGroupItemComponent))
-    get groupItemsChildren(): QueryList<DxiCardViewGroupItemComponent> {
-        return this._getOption('items');
-    }
-    set groupItemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiCardViewItemComponent))
-    get itemsChildren(): QueryList<DxiCardViewItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
+    @ContentChildren(forwardRef(() => DxiCardViewButtonItemComponent)) buttonItemsChildren!: QueryList<DxiCardViewButtonItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiCardViewEmptyItemComponent)) emptyItemsChildren!: QueryList<DxiCardViewEmptyItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiCardViewGroupItemComponent)) groupItemsChildren!: QueryList<DxiCardViewGroupItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiCardViewItemComponent)) itemsChildren!: QueryList<DxiCardViewItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiCardViewSimpleItemComponent)) simpleItemsChildren!: QueryList<DxiCardViewSimpleItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiCardViewTabbedItemComponent)) tabbedItemsChildren!: QueryList<DxiCardViewTabbedItemComponent>
+    
+    setItems() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([
+            ...this.buttonItemsChildren.toArray(),
+            ...this.emptyItemsChildren.toArray(),
+            ...this.groupItemsChildren.toArray(),
+            ...this.itemsChildren.toArray(),
+            ...this.simpleItemsChildren.toArray(),
+            ...this.tabbedItemsChildren.toArray(),
+        ]);
+        this.setChildren('items', q);
     }
 
-    @ContentChildren(forwardRef(() => DxiCardViewSimpleItemComponent))
-    get simpleItemsChildren(): QueryList<DxiCardViewSimpleItemComponent> {
-        return this._getOption('items');
-    }
-    set simpleItemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
-    @ContentChildren(forwardRef(() => DxiCardViewTabbedItemComponent))
-    get tabbedItemsChildren(): QueryList<DxiCardViewTabbedItemComponent> {
-        return this._getOption('items');
-    }
-    set tabbedItemsChildren(value) {
-        this.setChildren('items', value);
-    }
+
+
+
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -446,6 +430,16 @@ export class DxoCardViewFormComponent extends NestedOption implements OnDestroy,
     }
 
 
+    ngAfterContentInit() {
+        this.setItems();
+        
+        this.buttonItemsChildren.changes.subscribe(() => { this.setItems() });
+        this.emptyItemsChildren.changes.subscribe(() => { this.setItems() });
+        this.groupItemsChildren.changes.subscribe(() => { this.setItems() });
+        this.itemsChildren.changes.subscribe(() => { this.setItems() });
+        this.simpleItemsChildren.changes.subscribe(() => { this.setItems() });
+        this.tabbedItemsChildren.changes.subscribe(() => { this.setItems() });
+    }
 }
 
 @NgModule({
