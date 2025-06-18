@@ -408,15 +408,15 @@ QUnit.module('General', () => {
     });
 
     QUnit.test('resize observer should be connected to the tabs', function(assert) {
-        const observeStub = sinon.spy(resizeObserverSingleton, 'observe');
+        const observeSpy = sinon.spy(resizeObserverSingleton, 'observe');
 
         $('#tabs').dxTabs({
             items: [{ text: 'item 1' }],
         });
 
-        assert.strictEqual(observeStub.callCount, 1, 'resize observer is connected');
+        assert.strictEqual(observeSpy.callCount, 1, 'resize observer is connected');
 
-        observeStub.restore();
+        observeSpy.restore();
     });
 });
 
