@@ -98,6 +98,9 @@ const App = () => (
             dataField="title"
           ></Item>
           <Item
+            dataField="department"
+          ></Item>
+          <Item
             dataField="notes"
             editorType="dxTextArea"
             colSpan={2}

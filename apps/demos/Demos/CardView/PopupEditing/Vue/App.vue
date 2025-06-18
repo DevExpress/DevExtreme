@@ -57,6 +57,9 @@
             data-field="title"
           ></DxItem>
           <DxItem
+            data-field="department"
+          ></DxItem>
+          <DxItem
             data-field="notes"
             editor-type="dxTextArea"
             :col-span="2"

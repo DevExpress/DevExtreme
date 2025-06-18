@@ -32,7 +32,7 @@ $(() => {
             itemType: 'group',
             colCount: 2,
             colSpan: 2,
-            items: ['hireDate', 'title', {
+            items: ['hireDate', 'title', 'department', {
               dataField: 'notes',
               editorType: 'dxTextArea',
               colSpan: 2,

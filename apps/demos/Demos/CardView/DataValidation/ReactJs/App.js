@@ -87,6 +87,7 @@ const App = () => (
         >
           <Item dataField="hireDate"></Item>
           <Item dataField="title"></Item>
+          <Item dataField="department"></Item>
           <Item
             dataField="notes"
             editorType="dxTextArea"
