@@ -218,6 +218,7 @@ exports[`Options selectedCardKeys when given should set the select state of the 
       1,
       "test",
     ],
+    "visible": true,
   },
 ]
 `;
@@ -473,6 +474,7 @@ exports[`Options selection mode when it is 'none' and the selectedCardKeys is sp
       1,
       "test",
     ],
+    "visible": true,
   },
 ]
 `;
@@ -695,6 +697,7 @@ exports[`Options selection mode when it is 'none' selection should not work 1`] 
       1,
       "test",
     ],
+    "visible": true,
   },
 ]
 `;

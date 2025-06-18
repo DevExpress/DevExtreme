@@ -187,7 +187,7 @@ export class Card extends Component<CardProps> {
                 template={this.props.header?.template}
                 visible={this.props.header?.visible}
                 card={card}
-                items={this.props.header?.items ?? []}
+                items={this.props.header?.items}
                 isCheckBoxesRendered={this.props.isCheckBoxesRendered}
                 selectCard={this.props.selectCard}
                 onEdit={() => { this.props.onEdit?.(this.props.card.key); }}
