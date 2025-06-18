@@ -855,6 +855,22 @@ QUnit.module('Tab select action', () => {
 QUnit.module('Horizontal scrolling', () => {
     const SCROLLABLE_CLASS = 'dx-scrollable';
 
+    QUnit.test('tabs test', function(assert) {
+        const $element = $('#tabs').dxTabs({
+            items: [{ text: 'item 1' }],
+            width: '100%',
+        });
+        console.log($element.parent().html());
+
+        console.log($($element).width())
+        $element.parent().css('width', '50px');
+        console.log($($element).width())
+
+        console.log($element.parent().html());
+
+        assert.ok(false);
+    });
+
     QUnit.test('tabs should be wrapped into scrollable if scrollingEnabled=true', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],

@@ -640,6 +640,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
   }
 
   _observeContentResize(shouldObserve: boolean): void {
+    return;
     if (!this.option('useResizeObserver')) {
       return;
     }
