@@ -160,6 +160,25 @@ describe('OptionsController', () => {
         expect(result.a.b.wrong_path).toStrictEqual({ extra: undefined });
       });
 
+      it('should correctly create absent nodes and sync their values', () => {
+        const tree = { a: { b: { c: { extra: 'extra_node' } } }, d: { e: 2 } };
+        const updatedTree = { a: { b: { c: { newProperty: 'test' } } }, d: { e: 2 } };
+        const defaultTree = { a: { b: { c: { extra: 'default' } } } };
+
+        const result = mergeOptionTrees(
+          tree,
+          updatedTree,
+          defaultTree,
+          ['a', 'b', 'c', 'newProperty'],
+        );
+
+        expect(result).not.toBe(tree);
+        expect(result.a).not.toBe(tree.a);
+        expect(result.a.b).not.toBe(tree.a.b);
+        expect(result.a.b.c).not.toBe(tree.a.b.c);
+        expect(result.a.b.c.newProperty).toBe(updatedTree.a.b.c.newProperty);
+      });
+
       it('should deep copy applied value from updated tree', () => {
         const tree = { a: { b: { c: { extra: 'extra_node' } } }, d: { e: 2 } };
         const updatedTree = { a: { b: { c: { extra: 'updated' } } }, d: { e: 2 } };
