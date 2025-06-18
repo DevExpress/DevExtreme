@@ -247,11 +247,6 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this._feedbackHideTimeout = FEEDBACK_HIDE_TIMEOUT;
   }
 
-  _renderContent(): void {
-    super._renderContent();
-    this._observeContentResize(true);
-  }
-
   _prepareDefaultItemTemplate(data: Item, $container: dxElementWrapper): void {
     const text = isPlainObject(data) ? data?.text : data;
 
@@ -312,6 +307,8 @@ class Tabs extends CollectionWidget<TabsProperties> {
     }
 
     this.$element().addClass(OVERFLOW_HIDDEN_CLASS);
+
+    this._attachResizeObserverSubscription();
   }
 
   _postProcessRenderItems(): void {
@@ -639,17 +636,9 @@ class Tabs extends CollectionWidget<TabsProperties> {
     }
   }
 
-  _observeContentResize(shouldObserve: boolean): void {
-    return;
-    if (!this.option('useResizeObserver')) {
-      return;
-    }
-
-    if (shouldObserve) {
-      resizeObserverSingleton.observe(this.$element().get(0), () => { this._dimensionChanged(); });
-    } else {
-      resizeObserverSingleton.unobserve(this.$element().get(0));
-    }
+  _attachResizeObserverSubscription(): void {
+    resizeObserverSingleton.unobserve(this.$element().get(0));
+    resizeObserverSingleton.observe(this.$element().get(0), () => { this._dimensionChanged(); });
   }
 
   _dimensionChanged(): void {
@@ -676,9 +665,9 @@ class Tabs extends CollectionWidget<TabsProperties> {
   }
 
   _clean(): void {
+    resizeObserverSingleton.unobserve(this.$element().get(0));
     this._cleanScrolling();
     super._clean();
-    this._observeContentResize(false);
   }
 
   _toggleTabsVerticalClass(value: boolean): void {

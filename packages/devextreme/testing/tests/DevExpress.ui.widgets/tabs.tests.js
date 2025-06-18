@@ -409,12 +409,7 @@ QUnit.module('General', () => {
         assert.strictEqual($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 1, 'scrollable was rendered');
     });
 
-    QUnit.test('resize observer should be connected to the tabs', function(assert) {
-        if(devices.real().platform === 'ios' && compareVersions(devices.real().version, '13.3') <= 0) {
-            assert.ok(true, 'not applicable for ios 13.3 and below');
-            return;
-        }
-
+    QUnit.test('resize observer should be attached to the tabs', function(assert) {
         const observeSpy = sinon.spy(resizeObserverSingleton, 'observe');
 
         $('#tabs').dxTabs({
@@ -854,22 +849,6 @@ QUnit.module('Tab select action', () => {
 
 QUnit.module('Horizontal scrolling', () => {
     const SCROLLABLE_CLASS = 'dx-scrollable';
-
-    QUnit.test('tabs test', function(assert) {
-        const $element = $('#tabs').dxTabs({
-            items: [{ text: 'item 1' }],
-            width: '100%',
-        });
-        console.log($element.parent().html());
-
-        console.log($($element).width())
-        $element.parent().css('width', '50px');
-        console.log($($element).width())
-
-        console.log($element.parent().html());
-
-        assert.ok(false);
-    });
 
     QUnit.test('tabs should be wrapped into scrollable if scrollingEnabled=true', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
