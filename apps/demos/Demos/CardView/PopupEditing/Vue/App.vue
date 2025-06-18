@@ -4,7 +4,7 @@
     key-expr="id"
     cards-per-row="auto"
     :card-min-width="350"
-    :height="820"
+    :height="840"
   >
     <DxSearchPanel
       :visible="true"
@@ -33,16 +33,16 @@
         >
           <DxItem
             data-field="firstName"
-          ></DxItem>
+          />
           <DxItem
             data-field="lastName"
-          ></DxItem>
+          />
           <DxItem
             data-field="birthDate"
-          ></DxItem>
+          />
           <DxItem
             data-field="picture"
-          ></DxItem>
+          />
         </DxItem>
         <DxItem
           caption="Main Info"
@@ -52,22 +52,22 @@
         >
           <DxItem
             data-field="hireDate"
-          ></DxItem>
+          />
           <DxItem
             data-field="title"
-          ></DxItem>
+          />
           <DxItem
             data-field="department"
-          ></DxItem>
+          />
           <DxItem
             data-field="notes"
             editor-type="dxTextArea"
             :col-span="2"
             :editor-options="{ height: 100 }"
-          ></DxItem>
+          />
           <DxItem
             data-field="picture"
-          ></DxItem>
+          />
         </DxItem>
         <DxItem
           caption="Contacts"
@@ -78,19 +78,19 @@
           <DxItem
             data-field="address"
             :col-span="2"
-          ></DxItem>
+          />
           <DxItem
             data-field="city"
-          ></DxItem>
+          />
           <DxItem
             data-field="zipcode"
-          ></DxItem>
+          />
           <DxItem
             data-field="mobilePhone"
-          ></DxItem>
+          />
           <DxItem
             data-field="email"
-          ></DxItem>
+          />
         </DxItem>
       </DxForm>
     </DxEditing>
@@ -142,7 +142,7 @@
 </template>
 <script setup lang="ts">
 import {
-  DxCardView, DxColumn, DxCardCover, DxSearchPanel, DxEditing, DxForm, DxItem
+  DxCardView, DxColumn, DxCardCover, DxSearchPanel, DxEditing, DxForm, DxItem,
 } from 'devextreme-vue/card-view';
 import 'devextreme-vue/text-area';
 import { employees, type Employee } from './data.ts';
