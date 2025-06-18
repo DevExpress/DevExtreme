@@ -280,3 +280,55 @@ safeSizeTest('Menu delimiter appearance when orientation is vertical', async (t)
 
   return createWidget('dxMenu', { items: menuItems, orientation: 'vertical' }, '#container');
 });
+
+safeSizeTest('Menu delimiter appearance when the Menu is used as a toolbar item', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const menu = new Menu();
+
+  await t
+    .click(menu.getItem(1));
+
+  await testScreenshot(t, takeScreenshot, 'Delimiter, menu as toolbar item.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [500, 500]).before(async () => {
+  const toolbarItems = [
+    {
+      location: 'before',
+      widget: 'dxMenu',
+      options: {
+        items: [{
+          text: 'Video Players',
+        }, {
+          text: 'Televisions',
+          items: [{
+            id: '2_1',
+            text: 'SuperLCD 42',
+          }, {
+            id: '2_2',
+            text: 'SuperLED 42',
+          }],
+        }],
+      },
+    }, {
+      location: 'before',
+      widget: 'dxButton',
+      options: {
+        icon: 'undo',
+      },
+    }, {
+      location: 'before',
+      widget: 'dxButton',
+      options: {
+        icon: 'redo',
+      },
+    },
+  ];
+
+  return createWidget('dxToolbar', {
+    items: toolbarItems,
+    width: '100%',
+  }, '#container');
+});
