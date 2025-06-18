@@ -44,13 +44,4 @@ export class ErrorRow extends BaseInfernoComponent<ErrorRowProperties> {
       </div>
     );
   }
-
-  // public componentDidUpdate(): void {
-  //   debugger;
-  //   this.toastRef.current?.option('position', {
-  //     my: 'bottom',
-  //     at: 'bottom',
-  //     of: this.ref.current!,
-  //   });
-  // }
 }
