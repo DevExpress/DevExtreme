@@ -264,20 +264,19 @@ test('TabPanel borders without scrolling', async (t) => {
 
     await t.pressKey(direction);
 
-    // const thirdItem = tabPanel.getItem(2);
     const firstItem = tabPanel.getItem(0);
 
     await t.dispatchEvent(firstItem.element, 'mousedown');
     await testScreenshot(t, takeScreenshot, `TabPanel 1 item active,rtl=${rtlEnabled}.png`, { element: '#container' });
+    await t.dispatchEvent(firstItem.element, 'mouseup');
 
     // TODO: this test is unstable
-    // await t
-    //   .dispatchEvent(thirdItem.element, 'mouseup')
-    //   .click(Selector('body'), { offsetY: -50 })
-    //   .hover(firstItem.element);
-    //
-    // eslint-disable-next-line max-len
-    // await testScreenshot(t, takeScreenshot, `TabPanel 1 item hovered,rtl=${rtlEnabled}.png`, { element: '#container' });
+    await t.click('body', {
+      offsetX: -10,
+      offsetY: -10,
+    });
+    await t.hover(firstItem.element);
+    await testScreenshot(t, takeScreenshot, `TabPanel 1 item hovered,rtl=${rtlEnabled}.png`, { element: '#container' });
     // =
 
     // TODO: this test is unstable
