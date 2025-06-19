@@ -94,7 +94,6 @@ type AccessibleOptions = Pick<Properties,
   "elementAttr" |
   "fieldTemplate" |
   "focusStateEnabled" |
-  "fullScreen" |
   "grouped" |
   "groupTemplate" |
   "height" |
@@ -184,7 +183,6 @@ const componentConfig = {
     elementAttr: Object as PropType<Record<string, any>>,
     fieldTemplate: {},
     focusStateEnabled: Boolean,
-    fullScreen: Boolean,
     grouped: Boolean,
     groupTemplate: {},
     height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
@@ -270,7 +268,6 @@ const componentConfig = {
     "update:elementAttr": null,
     "update:fieldTemplate": null,
     "update:focusStateEnabled": null,
-    "update:fullScreen": null,
     "update:grouped": null,
     "update:groupTemplate": null,
     "update:height": null,

@@ -22287,11 +22287,6 @@ declare module DevExpress.ui {
      */
     focusStateEnabled?: boolean;
     /**
-     * [descr:dxLookupOptions.fullScreen]
-     * @deprecated [depNote:dxLookupOptions.fullScreen]
-     */
-    fullScreen?: boolean;
-    /**
      * [descr:dxLookupOptions.groupTemplate]
      */
     groupTemplate?:

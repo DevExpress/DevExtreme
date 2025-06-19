@@ -336,21 +336,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
 
     /**
-     * [descr:dxLookupOptions.fullScreen]
-    
-     * @deprecated [depNote:dxLookupOptions.fullScreen]
-    
-     */
-    @Input()
-    get fullScreen(): boolean {
-        return this._getOption('fullScreen');
-    }
-    set fullScreen(value: boolean) {
-        this._setOption('fullScreen', value);
-    }
-
-
-    /**
      * [descr:dxLookupOptions.grouped]
     
      */
@@ -1247,13 +1232,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() fullScreenChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() groupedChange: EventEmitter<boolean>;
 
     /**
@@ -1685,7 +1663,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
             { emit: 'elementAttrChange' },
             { emit: 'fieldTemplateChange' },
             { emit: 'focusStateEnabledChange' },
-            { emit: 'fullScreenChange' },
             { emit: 'groupedChange' },
             { emit: 'groupTemplateChange' },
             { emit: 'heightChange' },
