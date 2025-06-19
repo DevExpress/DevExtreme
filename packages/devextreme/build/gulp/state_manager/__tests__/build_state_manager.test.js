@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const through2 = require('through2');
-const transpileStateManagerProd = require('../transpile_state_manager_prod');
+const replaceProductionStateManagerModules = require('../replace_production_state_manager_modules');
 
 const SETUP_STATE_MANAGER_PRODUCTION_CONTENT = `export const setupStateManager = () => {
     // this function body is empty for production build
@@ -16,7 +16,7 @@ const UTILS_FILE_CONTENT = 'console.log("utils file");';
 
 const FILE_OUTSIDE_STATE_MANGER_CONTENT = 'console.log("file outside of state manager");';
 
-describe('transpileStateManagerProd', () => {
+describe('Build the state manager', () => {
     let tempDir;
     let stateManagerDir;
     let setupFilePath;
@@ -30,6 +30,10 @@ describe('transpileStateManagerProd', () => {
         const testDir = __dirname;
         const tempDirName = `temp`;
         tempDir = path.join(testDir, tempDirName);
+
+        if (tempDir && fs.existsSync(tempDir)) {
+            fs.rmSync(tempDir, { recursive: true, force: true });
+        }
 
         stateManagerDir = path.join(tempDir, 'devextreme', 'src', '__internal', 'core', 'state_manager');
         fs.mkdirSync(stateManagerDir, { recursive: true });
@@ -51,14 +55,10 @@ describe('transpileStateManagerProd', () => {
 
     afterEach(() => {
         console.error = originalConsoleError;
-
-        if (tempDir && fs.existsSync(tempDir)) {
-            fs.rmSync(tempDir, { recursive: true, force: true });
-        }
     });
 
-    test('should replace setup_state_manager.js content with production.js content in ESM mode', (done) => {
-        const stream = transpileStateManagerProd(true);
+    test('should replace setup_state_manager.js content with production.js content', (done) => {
+        const stream = replaceProductionStateManagerModules();
 
         const files = [
             {
@@ -110,61 +110,6 @@ describe('transpileStateManagerProd', () => {
 
         files.forEach(file => stream.write(file));
 
-        stream.end();
-    });
-
-    test('should replace setup_state_manager.js content with production.js content in CJS mode', (done) => {
-        const stream = transpileStateManagerProd(false);
-
-        const files = [
-            {
-                path: fileOutsideStateMangerPath,
-                contents: Buffer.from(FILE_OUTSIDE_STATE_MANGER_CONTENT)
-            },
-            {
-                path: setupFilePath,
-                contents: Buffer.from(SETUP_STATE_MANAGER_DEVELOPMENT_CONTENT)
-            },
-            {
-                path: utilsFilePath,
-                contents: Buffer.from(UTILS_FILE_CONTENT)
-            }
-        ];
-
-        const results = [];
-
-        stream.on('data', (file) => {
-            results.push({
-                path: file.path,
-                content: file.contents.toString()
-            });
-        });
-
-        stream.on('end', () => {
-            try {
-                const regularFile = results.find(r => r.path === fileOutsideStateMangerPath);
-                const setupFile = results.find(r => r.path === setupFilePath);
-                const utilsFile = results.find(r => r.path === utilsFilePath);
-
-                expect(regularFile).toBeDefined();
-                expect(regularFile.content).toBe(FILE_OUTSIDE_STATE_MANGER_CONTENT);
-
-                expect(setupFile).toBeDefined();
-                expect(setupFile.content).toMatch(/(exports|module\.exports)/);
-
-                expect(utilsFile).toBeDefined();
-                expect(utilsFile.content).toBe(UTILS_FILE_CONTENT);
-
-                expect(consoleErrorSpy).not.toHaveBeenCalled();
-
-                done();
-            } catch (error) {
-                done(error);
-            }
-        });
-
-        stream.on('error', done);
-        files.forEach(file => stream.write(file));
         stream.end();
     });
 });
