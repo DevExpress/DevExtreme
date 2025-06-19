@@ -55,6 +55,10 @@ function getSpecStatus(spec) {
     const hasFailed = spec.tests.some(test =>
         test.results.some(r => r.status === 'failed')
     );
+    const hasFlaky = spec.tests.some(test =>
+        test.status === 'flaky'
+    );
+    if(hasFlaky) return 'flaky';
     if(hasFailed) return 'failed';
     return 'passed';
 }
@@ -336,8 +340,8 @@ function escapeHtml(str) {
             '>': '&gt;',
             '"': '&quot;',
             '\'': '&#39;'
+
         };
         return charsToReplace[tag] || tag;
     });
 }
-

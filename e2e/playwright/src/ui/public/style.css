@@ -130,6 +130,10 @@ h1 {
   color: #c00;
   font-weight: bold;
 }
+.spec-status.flaky {
+  color: #ff6e00;
+  font-weight: bold;
+}
 .spec-duration {
   margin-left: 0.5em;
   color: #888;

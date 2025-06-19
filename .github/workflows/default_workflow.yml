@@ -66,6 +66,7 @@ jobs:
         devextreme-react-storybook
         devextreme-angular-playground
         devextreme-testcafe-tests
+        devextreme-e2e-playwright
         devextreme-demos
         devextreme-react-playground
         devextreme-vue-playground
