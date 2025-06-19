@@ -175,6 +175,19 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
 
 
     /**
+     * [descr:DOMComponentOptions.elementAttr]
+    
+     */
+    @Input()
+    get elementAttr(): Record<string, any> {
+        return this._getOption('elementAttr');
+    }
+    set elementAttr(value: Record<string, any>) {
+        this._setOption('elementAttr', value);
+    }
+
+
+    /**
      * [descr:dxPopupOptions.enableBodyScroll]
     
      */
@@ -617,6 +630,13 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() enableBodyScrollChange: EventEmitter<boolean>;
 
     /**
@@ -827,6 +847,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
             { emit: 'contentTemplateChange' },
             { emit: 'deferRenderingChange' },
             { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
             { emit: 'enableBodyScrollChange' },
             { emit: 'heightChange' },
             { emit: 'hideEventChange' },

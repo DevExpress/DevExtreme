@@ -47,6 +47,7 @@ import { DxiToolbarItemComponent } from './toolbar-item-dxi';
         'dragAndResizeArea',
         'dragEnabled',
         'dragOutsideBoundary',
+        'elementAttr',
         'enableBodyScroll',
         'focusStateEnabled',
         'fullScreen',

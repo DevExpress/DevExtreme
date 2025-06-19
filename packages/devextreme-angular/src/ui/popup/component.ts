@@ -208,6 +208,19 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
+     * [descr:DOMComponentOptions.elementAttr]
+    
+     */
+    @Input()
+    get elementAttr(): Record<string, any> {
+        return this._getOption('elementAttr');
+    }
+    set elementAttr(value: Record<string, any>) {
+        this._setOption('elementAttr', value);
+    }
+
+
+    /**
      * [descr:dxPopupOptions.enableBodyScroll]
     
      */
@@ -721,6 +734,13 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() enableBodyScrollChange: EventEmitter<boolean>;
 
     /**
@@ -951,6 +971,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
             { emit: 'dragAndResizeAreaChange' },
             { emit: 'dragEnabledChange' },
             { emit: 'dragOutsideBoundaryChange' },
+            { emit: 'elementAttrChange' },
             { emit: 'enableBodyScrollChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'fullScreenChange' },

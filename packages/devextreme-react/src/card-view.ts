@@ -1766,6 +1766,7 @@ type ILoadPanelProps = React.PropsWithChildren<{
   container?: any | string | undefined;
   deferRendering?: boolean;
   delay?: number;
+  elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
   height?: (() => number | string) | number | string;
   hideOnOutsideClick?: boolean | ((event: event) => boolean);

@@ -50,6 +50,7 @@ type AccessibleOptions = Pick<Properties,
   "contentTemplate" |
   "deferRendering" |
   "disabled" |
+  "elementAttr" |
   "enableBodyScroll" |
   "height" |
   "hideEvent" |
@@ -98,6 +99,7 @@ const componentConfig = {
     contentTemplate: {},
     deferRendering: Boolean,
     disabled: Boolean,
+    elementAttr: Object as PropType<Record<string, any>>,
     enableBodyScroll: Boolean,
     height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hideEvent: [Object, String] as PropType<Record<string, any> | string>,
@@ -142,6 +144,7 @@ const componentConfig = {
     "update:contentTemplate": null,
     "update:deferRendering": null,
     "update:disabled": null,
+    "update:elementAttr": null,
     "update:enableBodyScroll": null,
     "update:height": null,
     "update:hideEvent": null,

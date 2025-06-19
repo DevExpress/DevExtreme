@@ -41,6 +41,7 @@ type AccessibleOptions = Pick<Properties,
   "contentTemplate" |
   "deferRendering" |
   "displayTime" |
+  "elementAttr" |
   "focusStateEnabled" |
   "height" |
   "hideOnOutsideClick" |
@@ -85,6 +86,7 @@ const componentConfig = {
     contentTemplate: {},
     deferRendering: Boolean,
     displayTime: Number,
+    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
     height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
@@ -125,6 +127,7 @@ const componentConfig = {
     "update:contentTemplate": null,
     "update:deferRendering": null,
     "update:displayTime": null,
+    "update:elementAttr": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hideOnOutsideClick": null,

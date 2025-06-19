@@ -50,6 +50,7 @@ type AccessibleOptions = Pick<Properties,
   "dragAndResizeArea" |
   "dragEnabled" |
   "dragOutsideBoundary" |
+  "elementAttr" |
   "enableBodyScroll" |
   "focusStateEnabled" |
   "fullScreen" |
@@ -106,6 +107,7 @@ const componentConfig = {
     dragAndResizeArea: {},
     dragEnabled: Boolean,
     dragOutsideBoundary: Boolean,
+    elementAttr: Object as PropType<Record<string, any>>,
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
@@ -158,6 +160,7 @@ const componentConfig = {
     "update:dragAndResizeArea": null,
     "update:dragEnabled": null,
     "update:dragOutsideBoundary": null,
+    "update:elementAttr": null,
     "update:enableBodyScroll": null,
     "update:focusStateEnabled": null,
     "update:fullScreen": null,

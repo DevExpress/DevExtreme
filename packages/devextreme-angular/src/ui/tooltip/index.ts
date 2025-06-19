@@ -165,6 +165,19 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
 
 
     /**
+     * [descr:DOMComponentOptions.elementAttr]
+    
+     */
+    @Input()
+    get elementAttr(): Record<string, any> {
+        return this._getOption('elementAttr');
+    }
+    set elementAttr(value: Record<string, any>) {
+        this._setOption('elementAttr', value);
+    }
+
+
+    /**
      * [descr:dxPopoverOptions.height]
     
      */
@@ -521,6 +534,13 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() elementAttrChange: EventEmitter<Record<string, any>>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
 
     /**
@@ -679,6 +699,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
             { emit: 'contentTemplateChange' },
             { emit: 'deferRenderingChange' },
             { emit: 'disabledChange' },
+            { emit: 'elementAttrChange' },
             { emit: 'heightChange' },
             { emit: 'hideEventChange' },
             { emit: 'hideOnOutsideClickChange' },
