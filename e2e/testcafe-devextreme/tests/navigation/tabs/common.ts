@@ -251,23 +251,18 @@ test('Tabs in contrast theme', async (t) => {
         await testScreenshot(t, takeScreenshot, `Tabs disab focused,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
         const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
-        // const fourthItem = Selector(`.${TAB_CLASS}:nth-child(4)`);
+        const fourthItem = Selector(`.${TAB_CLASS}:nth-child(4)`);
 
         await t
           .pressKey(direction)
           .dispatchEvent(thirdItem, 'mousedown');
-
         await testScreenshot(t, takeScreenshot, `Tabs 3item active,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+        await t.dispatchEvent(thirdItem, 'mouseup');
 
-        // TODO: this test is unstable
-        // await t
-        //   .dispatchEvent(thirdItem, 'mouseup')
-        //   .click(thirdItem)
-        //   .hover(fourthItem);
-        //
-        // eslint-disable-next-line max-len
-        // await testScreenshot(t, takeScreenshot, `Tabs 4item hovered,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
-        // =
+        await t
+          .click(thirdItem)
+          .hover(fourthItem);
+        await testScreenshot(t, takeScreenshot, `Tabs 4item hovered,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
         await t
           .expect(compareResults.isValid())
