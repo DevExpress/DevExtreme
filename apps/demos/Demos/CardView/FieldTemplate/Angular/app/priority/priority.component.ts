@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { Priority, Service } from '../app.service';
+import { Priority, Service } from 'app/app.service';
 
 let modulePrefix = '';
 // @ts-ignore
