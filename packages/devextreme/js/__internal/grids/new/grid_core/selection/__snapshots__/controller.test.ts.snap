@@ -218,6 +218,7 @@ exports[`SelectionController changeCardSelection when the control arg equal to f
       1,
       "test",
     ],
+    "visible": true,
   },
 ]
 `;
@@ -440,6 +441,7 @@ exports[`SelectionController changeCardSelection when the control arg equal to t
       1,
       "test",
     ],
+    "visible": true,
   },
 ]
 `;
@@ -662,6 +664,7 @@ exports[`SelectionController deselectCards should deselect item 1`] = `
       1,
       "test",
     ],
+    "visible": true,
   },
 ]
 `;
@@ -884,6 +887,7 @@ exports[`SelectionController deselectCardsByIndexes should deselect item 1`] = `
       1,
       "test",
     ],
+    "visible": true,
   },
 ]
 `;
@@ -1106,6 +1110,7 @@ exports[`SelectionController selectCards should select item 1`] = `
       1,
       "test",
     ],
+    "visible": true,
   },
 ]
 `;
@@ -1328,6 +1333,7 @@ exports[`SelectionController selectCardsByIndexes should select item 1`] = `
       1,
       "test",
     ],
+    "visible": true,
   },
 ]
 `;

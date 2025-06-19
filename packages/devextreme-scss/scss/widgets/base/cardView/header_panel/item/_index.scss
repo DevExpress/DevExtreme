@@ -51,6 +51,11 @@
     }
   }
 
+  &:focus-visible {
+    outline: 2px $cardview-header-panel__item--focused-outline-color solid;
+    outline-offset: -2px;
+  }
+
   &.dx-sortable-source {
     opacity: 1.0;
     background-color: $cardview-header-panel__item--disabled-bg-color;

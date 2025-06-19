@@ -1,3 +1,3 @@
-import Button from './generated_wrapper';
+import Button from './wrapper';
 
 export default Button;

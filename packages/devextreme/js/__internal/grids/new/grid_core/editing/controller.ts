@@ -29,7 +29,7 @@ export class EditingController {
 
   private readonly needConfirmDelete = this.options.oneWay('editing.confirmDelete');
 
-  private readonly texts = this.options.oneWay('editing.texts');
+  public readonly texts = this.options.oneWay('editing.texts');
 
   private readonly onEditCanceling = this.options.action('onEditCanceling');
 
@@ -162,6 +162,7 @@ export class EditingController {
         -1,
         [],
         newItemKey,
+        false,
       ),
     ];
 
@@ -176,14 +177,13 @@ export class EditingController {
       return Promise.resolve(true);
     }
 
-    // @ts-expect-error wrong typing in optionController
     const { confirmDeleteMessage, confirmDeleteTitle } = this.texts.peek();
 
     const showDialogTitle = isDefined(confirmDeleteTitle) && confirmDeleteTitle.length > 0;
 
     const result = await this.confirmController.confirm(
       confirmDeleteMessage ?? '', // TODO: bad typing
-      confirmDeleteTitle,
+      confirmDeleteTitle ?? '', // TODO: bad typing
       showDialogTitle,
     );
 

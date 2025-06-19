@@ -18,6 +18,7 @@ import { KeyboardNavigationController } from '../../keyboard_navigation/index';
 import { OptionsController } from '../../options_controller/options_controller';
 import { ToolbarController } from '../../toolbar/controller';
 import { EditingController } from '../controller';
+import type { EditingTexts } from '../options';
 import { PendingPromises } from '../utils';
 import type { Props } from './component';
 import { EditPopup } from './component';
@@ -130,6 +131,7 @@ export class EditPopupView extends View<Props> {
       },
       items: this.items.value,
       customizeItem: this.customizeItems,
+      texts: this.editingController.texts.value as EditingTexts, // TODO: bad typing
     }));
   }
 

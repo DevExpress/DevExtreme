@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable
   @typescript-eslint/explicit-function-return-type,
   @typescript-eslint/explicit-module-boundary-types,
@@ -27,6 +28,8 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
 
   private readonly rowHeight = signal(0);
 
+  protected readonly columnGap = signal(0);
+
   private readonly cardsPerRowProp = this.options.oneWay('cardsPerRow');
 
   private readonly cardsPerRow = computed(
@@ -41,9 +44,9 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
       }
 
       const result = factors(pageSize).reverse().find((cardsPerRow) => {
-        const cardWidth = (width - 6 * (cardsPerRow - 1)) / cardsPerRow;
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return cardMinWidth! <= cardWidth;
+        const cardWidth = (width - this.columnGap.value * (cardsPerRow - 1)) / cardsPerRow;
+
+        return cardMinWidth <= cardWidth;
       });
 
       return result ?? 1;
@@ -55,6 +58,11 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
   );
 
   protected override component = ContentViewComponent;
+
+  private readonly items = computed(
+    () => this.itemsController.items.value
+      .filter((item) => item.visible),
+  );
 
   constructor(...args) {
     // @ts-expect-error
@@ -69,7 +77,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
     return computed(() => ({
       ...this.getBaseProps(),
       contentProps: {
-        items: this.itemsController.items.value,
+        items: this.items.value,
         kbnEnabled: this.keyboardNavigationController.enabled.value,
         navigationStrategy: this.navigationStrategy,
         isLoading: this.dataController.isReloading.value,
@@ -78,6 +86,9 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
         onRowHeightChange: (height) => { this.rowHeight.value = height; },
         onFirstElementChange: (firstElement: HTMLDivElement | undefined): void => {
           this.keyboardNavigationController.setFirstCardElement(firstElement);
+        },
+        onColumnGapChange: (gap: number): void => {
+          this.columnGap.value = gap;
         },
         onPageChange: this.onPageChange.bind(this),
         showCardContextMenu: this.showCardContextMenu.bind(this),
@@ -93,6 +104,18 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
           onDblClick: this.options.action('onCardDblClick').value,
           onHoverChanged: this.options.action('onCardHoverChanged').value,
           onPrepared: this.options.action('onCardPrepared').value,
+          fieldProps: {
+            captionProps: {
+              onClick: this.options.action('onFieldCaptionClick').value as any,
+              onDblClick: this.options.action('onFieldCaptionDblClick').value as any,
+              onPrepared: this.options.action('onFieldCaptionPrepared').value as any,
+            },
+            valueProps: {
+              onClick: this.options.action('onFieldValueClick').value as any,
+              onDblClick: this.options.action('onFieldValueDblClick').value as any,
+              onPrepared: this.options.action('onFieldValuePrepared').value as any,
+            },
+          },
           onEdit: (key: Key, returnFocusTo?: HTMLElement) => {
             this.keyboardNavigationController.setReturnFocusTo(returnFocusTo);
             this.editingController.editCard(key);
@@ -125,7 +148,7 @@ export class ContentView extends ContentViewBase<ContentViewProps> {
             items: this.options.oneWay('cardHeader.items').value,
             template: this.options.template('cardHeader.template').value,
           },
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
           toolbar: this.options.oneWay('cardHeader.items').value as any,
           selectCard: this.selectCard.bind(this),
           onSelectAllCards: this.onSelectAllCards.bind(this),

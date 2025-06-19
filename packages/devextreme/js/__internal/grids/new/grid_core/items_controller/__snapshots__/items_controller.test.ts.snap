@@ -214,6 +214,7 @@ exports[`ItemsController createCardInfo should process data object to cardInfo u
     "my a value",
     "my b value",
   ],
+  "visible": true,
 }
 `;
 
@@ -431,6 +432,7 @@ exports[`ItemsController createCardInfo should process data object to cardInfo u
     "my a value",
     "my b value",
   ],
+  "visible": true,
 }
 `;
 
@@ -652,6 +654,7 @@ exports[`ItemsController setSelectionState should update the select state of the
       1,
       "my a value",
     ],
+    "visible": true,
   },
 ]
 `;

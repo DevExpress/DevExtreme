@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { Employee, EmployeeService } from '../employee.service';
+import { Employee, Service } from '../app.service';
 
 let modulePrefix = '';
 // @ts-ignore
@@ -18,7 +18,7 @@ export class EmployeeComponent implements OnChanges {
 
   @Input() employeeID: number;
 
-  constructor(service: EmployeeService) {
+  constructor(service: Service) {
     this.employees = service.getEmployees();
   }
 

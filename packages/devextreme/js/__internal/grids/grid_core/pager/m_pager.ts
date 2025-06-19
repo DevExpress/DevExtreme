@@ -6,7 +6,7 @@ import Pagination from '@ts/pagination/wrappers/pagination';
 import modules from '../m_modules';
 
 const PAGER_CLASS = 'pager';
-const MAX_PAGES_COUNT = 10;
+export const MAX_PAGES_COUNT = 10;
 
 const getPageIndex = function (dataController) {
   // eslint-disable-next-line radix

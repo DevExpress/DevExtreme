@@ -237,6 +237,50 @@ test('Group last nested column when pressing Ctrl + G', async (t) => {
   });
 });
 
+test('Group last nested column when pressing Ctrl + G when there are several band columns', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const nestedSecondHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(1);
+
+  await t
+    .click(nestedSecondHeader.element)
+    .pressKey('ctrl+g');
+
+  await t
+    .expect(dataGrid.getGroupPanel().getHeadersCount())
+    .eql(1)
+    .expect(dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0).isFocused)
+    .ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [{
+      field1: 'test1',
+      field2: 'test2',
+      field3: 'test3',
+      field4: 'test4',
+      field5: 'test5',
+      field6: 'test6',
+    }],
+    grouping: {
+      contextMenuEnabled: true,
+    },
+    groupPanel: {
+      visible: true,
+    },
+    columns: [
+      'field1',
+      {
+        caption: 'Band Column 1',
+        columns: ['field2', 'field3'],
+      },
+      'field4',
+      {
+        caption: 'Band Column 2',
+        columns: ['field5', 'field6'],
+      },
+    ],
+  });
+});
+
 test('Group single nested column when pressing Ctrl + G', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
   const nestedLastHeader = dataGrid.getHeaders().getHeaderRow(1).getHeaderCell(0);
@@ -248,7 +292,7 @@ test('Group single nested column when pressing Ctrl + G', async (t) => {
   await t
     .expect(dataGrid.getGroupPanel().getHeadersCount())
     .eql(1)
-    .expect(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3).isFocused)
+    .expect(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2).isFocused)
     .ok();
 }).before(async () => {
   await createWidget('dxDataGrid', {

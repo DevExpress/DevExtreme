@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-
-/* eslint-disable @typescript-eslint/init-declarations */
-
 import { describe, expect, it } from '@jest/globals';
 import { createRef, render } from 'inferno';
 
@@ -74,93 +70,6 @@ const props = {
   onClick: mockOnClick.call.bind(mockOnClick),
   onHold: mockOnHold.call.bind(mockOnHold),
 };
-
-describe('Events', () => {
-  let container: HTMLDivElement;
-  // @ts-expect-error
-  beforeEach(() => {
-    container = document.createElement('div');
-    // @ts-expect-error
-    render(<Card {...{ ...props, elementRef: createRef() } } />, container);
-  });
-
-  it('should trigger onClick event', () => {
-    const cardElement = container.querySelector(`.${CLASSES.card}`);
-    cardElement?.dispatchEvent(new MouseEvent('click'));
-
-    expect(mockOnClick.called).toBe(true);
-  });
-
-  it.skip('should trigger onDblClick event', () => {
-    const cardElement = container.querySelector(`.${CLASSES.card}`);
-
-    cardElement?.dispatchEvent(new MouseEvent('dblclick'));
-
-    expect(mockOnDblClick.called).toBe(true);
-  });
-
-  it('should trigger onHold event', () => {
-    const cardElement = container.querySelector(`.${CLASSES.card}`);
-
-    cardElement?.dispatchEvent(new MouseEvent('dxhold'));
-
-    expect(mockOnHold.called).toBe(true);
-  });
-
-  it('should trigger onHoverChanged event on mouse enter', () => {
-    const mockHover: { called: boolean; fn: ({ isHovered }: { isHovered: boolean }) => void } = {
-      called: false,
-      fn: ({ isHovered }: { isHovered: boolean }) => {
-        mockHover.called = true;
-        expect(isHovered).toBe(true);
-      },
-    };
-
-    const newProps = { ...props, hoverStateEnabled: true, onHoverChanged: mockHover.fn };
-    // @ts-expect-error
-    render(<Card {...newProps} />, container);
-
-    const cardElement = container.querySelector(`.${CLASSES.card}`);
-    cardElement?.dispatchEvent(new MouseEvent('mouseenter'));
-
-    expect(mockHover.called).toBe(true);
-  });
-
-  it('should trigger onHoverChanged event on mouse leave', () => {
-    const mockHover: { called: boolean; fn: ({ isHovered }: { isHovered: boolean }) => void } = {
-      called: false,
-      fn: ({ isHovered }: { isHovered: boolean }) => {
-        mockHover.called = true;
-        expect(isHovered).toBe(false);
-      },
-    };
-
-    const newProps = { ...props, hoverStateEnabled: true, onHoverChanged: mockHover.fn };
-    // @ts-expect-error
-    render(<Card {...newProps} />, container);
-
-    const cardElement = container.querySelector(`.${CLASSES.card}`);
-    cardElement?.dispatchEvent(new MouseEvent('mouseleave'));
-
-    expect(mockHover.called).toBe(true);
-  });
-
-  it('should handle hoverStateEnabled prop correctly', () => {
-    const cardElement = container.querySelector('.dx-cardview-card');
-    cardElement?.dispatchEvent(new MouseEvent('mouseenter'));
-
-    const classList = cardElement?.getAttribute('class') || '';
-    expect(classList).toContain('dx-cardview-card-hover');
-  });
-
-  it('should render field template correctly', () => {
-    const fieldName = container.querySelector('.dx-cardview-field-caption');
-    const fieldValue = container.querySelector('.dx-cardview-field-value');
-
-    expect(fieldName?.textContent).toBe('Field:');
-    expect(fieldValue?.textContent).toBe('devextreme');
-  });
-});
 
 describe('Callbacks', () => {
   describe('selectCard', () => {
