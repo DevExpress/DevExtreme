@@ -261,8 +261,6 @@ type IItemProps = React.PropsWithChildren<{
   acceptedValues?: Array<boolean | number | string>;
   commands?: Array<AICommand | AICommandName>;
   cssClass?: string | undefined;
-  formatName?: HtmlEditorPredefinedToolbarItem | string;
-  formatValues?: Array<boolean | number | string>;
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
@@ -494,8 +492,6 @@ type IToolbarItemProps = React.PropsWithChildren<{
   commands?: Array<AICommand | AICommandName>;
   cssClass?: string | undefined;
   disabled?: boolean;
-  formatName?: HtmlEditorPredefinedToolbarItem | string;
-  formatValues?: Array<boolean | number | string>;
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;

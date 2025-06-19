@@ -21324,21 +21324,9 @@ declare module DevExpress.ui {
      */
     name?: DevExpress.ui.dxHtmlEditor.HtmlEditorPredefinedToolbarItem | string;
     /**
-     * [descr:dxHtmlEditorToolbarItem.formatName]
-     * @deprecated [depNote:dxHtmlEditorToolbarItem.formatName]
-     */
-    formatName?:
-      | DevExpress.ui.dxHtmlEditor.HtmlEditorPredefinedToolbarItem
-      | string;
-    /**
      * [descr:dxHtmlEditorToolbarItem.acceptedValues]
      */
     acceptedValues?: Array<string | number | boolean>;
-    /**
-     * [descr:dxHtmlEditorToolbarItem.formatValues]
-     * @deprecated [depNote:dxHtmlEditorToolbarItem.formatValues]
-     */
-    formatValues?: Array<string | number | boolean>;
     /**
      * [descr:dxHtmlEditorToolbarItem.location]
      */

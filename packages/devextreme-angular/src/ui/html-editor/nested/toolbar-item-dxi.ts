@@ -78,22 +78,6 @@ export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption im
     }
 
     @Input()
-    get formatName(): HtmlEditorPredefinedToolbarItem | string {
-        return this._getOption('formatName');
-    }
-    set formatName(value: HtmlEditorPredefinedToolbarItem | string) {
-        this._setOption('formatName', value);
-    }
-
-    @Input()
-    get formatValues(): Array<boolean | number | string> {
-        return this._getOption('formatValues');
-    }
-    set formatValues(value: Array<boolean | number | string>) {
-        this._setOption('formatValues', value);
-    }
-
-    @Input()
     get html(): string {
         return this._getOption('html');
     }
