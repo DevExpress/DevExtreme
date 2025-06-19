@@ -93,7 +93,7 @@ function createImportantStyles(defaultStyles: StylesMap, customStyles?: StylesMa
 
 class DxLicense extends SafeHTMLElement {
   public static customStyles: CustomTrialPanelStyles | undefined = undefined;
-  
+
   static closed = false;
 
   private _observer: MutationObserver | null = null;
@@ -228,11 +228,21 @@ class DxLicense extends SafeHTMLElement {
   }
 
   public disconnectedCallback(): void {
-    if (DxLicense.closed) return;
-    const licensePanel = document.getElementsByTagName(componentNames.panel);
-    if (!licensePanel.length) {
-      document.body.prepend(this);
+    if (DxLicense.closed) {
+      return;
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    Promise.resolve().then(() => {
+      if (!document) {
+        return;
+      }
+
+      const licensePanel = document.getElementsByTagName(componentNames.panel);
+      if (!licensePanel.length) {
+        document.body.prepend(this);
+      }
+    });
   }
 }
 class DxLicenseTrigger extends SafeHTMLElement {
