@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { DxFormTypes } from 'devextreme-angular/ui/form';
+import { Component, Input, SimpleChanges, ViewChild } from "@angular/core";
+import { DxFormTypes, DxFormComponent } from 'devextreme-angular/ui/form';
 import { DxNumberBoxTypes } from 'devextreme-angular/ui/number-box';
 import type { BookingFormData } from '../app.types';
 
@@ -14,9 +14,19 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/guests-form/guests-form.component.html`,
 })
 export class GuestsFormComponent {
+  @ViewChild('formComponent', { static: false }) form!: DxFormComponent
+
   @Input() formData: BookingFormData;
 
   @Input() validationGroup: string;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['formData']) {
+      const value = changes['formData'].currentValue;
+
+      this.form?.instance?.reset(value);
+    }
+  }
 
   adultsLabelOptions: DxFormTypes.SimpleItem["label"] = {
     text: 'Adults',

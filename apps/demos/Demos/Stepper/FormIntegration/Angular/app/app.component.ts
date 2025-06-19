@@ -115,8 +115,6 @@ export class AppComponent {
     this.selectedIndex = 0;
     this.steps = this.appService.getInitialSteps();
     this.formData = this.appService.getInitialFormData();
-    validationEngine.resetGroup(this.validationGroups[0]);
-    validationEngine.resetGroup(this.validationGroups[1]);
     this.isStepperReadonly = false;
   }
 
