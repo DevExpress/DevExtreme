@@ -264,16 +264,17 @@ test('TabPanel borders without scrolling', async (t) => {
 
     await t.pressKey(direction);
 
+    await t.click('body', {
+      offsetX: -10,
+      offsetY: -10,
+    });
+
     const firstItem = tabPanel.getItem(0);
 
     await t.dispatchEvent(firstItem.element, 'mousedown');
     await testScreenshot(t, takeScreenshot, `TabPanel 1 item active,rtl=${rtlEnabled}.png`, { element: '#container' });
     await t.dispatchEvent(firstItem.element, 'mouseup');
 
-    await t.click('body', {
-      offsetX: -10,
-      offsetY: -10,
-    });
     await t.hover(firstItem.element);
     await testScreenshot(t, takeScreenshot, `TabPanel 1 item hovered,rtl=${rtlEnabled}.png`, { element: '#container' });
 
@@ -468,21 +469,19 @@ test('TabPanel borders without scrolling', async (t) => {
 
     await t.pressKey('right');
 
+    await t.click('body', {
+      offsetX: -10,
+      offsetY: -10,
+    });
+
     const firstItem = tabPanel.getItem(0);
 
     await t.dispatchEvent(firstItem.element, 'mousedown');
     await testScreenshot(t, takeScreenshot, `TabPanel 1 item active,tabsPosition=${tabsPosition}.png`, { element: '#container' });
     await t.dispatchEvent(firstItem.element, 'mouseup');
 
-    await t.click('body', {
-      offsetX: -10,
-      offsetY: -10,
-    });
-
-    // TODO: this test is unstable
     await t.hover(firstItem.element);
     await testScreenshot(t, takeScreenshot, `TabPanel 1 item hovered,tabsPosition=${tabsPosition}.png`, { element: '#container' });
-    // =
 
     await t
       .expect(compareResults.isValid())
