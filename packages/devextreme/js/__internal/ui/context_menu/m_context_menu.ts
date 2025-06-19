@@ -153,13 +153,6 @@ class ContextMenu extends MenuBase {
     }]);
   }
 
-  _setDeprecatedOptions(): void {
-    super._setDeprecatedOptions();
-    extend(this._deprecatedOptions, {
-      closeOnOutsideClick: { since: '22.2', alias: 'hideOnOutsideClick' },
-    });
-  }
-
   _initActions(): void {
     this._actions = {};
 
@@ -630,15 +623,13 @@ class ContextMenu extends MenuBase {
   }
 
   _shouldHideOnOutsideClick(e) {
-    // @ts-expect-error
-    const { closeOnOutsideClick, hideOnOutsideClick } = this.option();
+    const hideOnOutsideClick = this.option('hideOnOutsideClick');
 
     if (isFunction(hideOnOutsideClick)) {
       return hideOnOutsideClick(e);
-    } if (isFunction(closeOnOutsideClick)) {
-      return closeOnOutsideClick(e);
     }
-    return hideOnOutsideClick || closeOnOutsideClick;
+
+    return hideOnOutsideClick;
   }
 
   _hideOnOutsideClickHandler(e): boolean {
