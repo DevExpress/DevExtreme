@@ -65,14 +65,13 @@ const getThemePalettes = () => {
 const getComponents = () => {
   return ['Button', 'Text Box'].map(component => {
     const name = component.toLowerCase();
-    console.log(`tokens/components/${component}/Fluent.json`);
+    // console.log(`tokens/components/${component}/Fluent.json`);
     return {
       name,
       files: [
         ...getThemeCommonFiles(),
         `semantic/${THEME_NAME}/light`, 
         `base/palettes/${THEME_NAME}-blue`,
-        `base/shadows/${THEME_NAME}-blue`,
         `components/${component}/Fluent`,
       ]
     };
@@ -85,6 +84,22 @@ StyleDictionary.registerFormat({
     return dictionary.allTokens
     .map((token) => `$${token.name.replace('DS-', '')}: var(--${token.name});`)
     .join(`\n`);
+  },
+});
+
+StyleDictionary.registerFormat({
+  name: `scss/component`,
+  format: function ({ dictionary }) {
+    return dictionary.allTokens
+      .map((token) => {
+        const cssVar = token.original.$value
+          .replace(/\./g, '-')
+          .replace('{', 'DS-')
+          .replace('}', '');
+
+        return `$${token.name.replace('DS-', '')}: var(--${cssVar}) !default;`
+      })
+      .join(`\n`);
   },
 });
 
@@ -279,7 +294,7 @@ const createComponentConfig = (component, files) => {
         files: [
           {
             destination: `components/${component}.scss`,
-            format: "scssToCss",
+            format: "scss/component",
             filter: token => {
   //             if(component.toLowerCase().includes('text')) {
   // console.log(token.path[0].toLowerCase(), component.toLowerCase())
