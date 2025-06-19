@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.53.0-jammy
+FROM mcr.microsoft.com/playwright:v1.53.1-jammy
 ENV DOCKER=1
 
 WORKDIR /app
