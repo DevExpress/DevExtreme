@@ -421,7 +421,7 @@ $cardview-material-columnchooser--empty__message-color: null !default;
   $cardview-material-card__cover--noimage__icon-color: color.change($cardview-material-common-text-color, $alpha: 0.38) !default;
 
   $cardview-material-card--focused-outline-color: $base-accent !default;
-  
+
   // Card - selected
   $cardview-material-card--selected-bg-color: color.change($base-accent, $alpha: 0.08) !default;
   $cardview-material-card--selected-border-color: color.change($base-accent, $alpha: 0.32) !default;
