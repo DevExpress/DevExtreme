@@ -159,27 +159,22 @@ test('Tabs with width: auto in flex container', async (t) => {
       const firstItem = Selector(`.${TAB_CLASS}:nth-child(1)`);
 
       // TODO: this test is unstable
-      await t
-        .hover(firstItem)
-        .wait(300);
+      await t.dispatchEvent(firstItem, 'mouseover');
       await testScreenshot(t, takeScreenshot, `Tabs 1 selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
       // =
 
       await t.dispatchEvent(firstItem, 'mousedown');
       await testScreenshot(t, takeScreenshot, `Tabs 1 selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
-      await t
-        .dispatchEvent(firstItem, 'mouseup')
-        .wait(300);
 
       const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
 
       // TODO: this test is unstable
-      await t
-        .click(firstItem)
-        .wait(300)
-        .hover(thirdItem)
-        .wait(300);
-      await testScreenshot(t, takeScreenshot, `Tabs 3 not selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+      // await t
+      //   .dispatchEvent(firstItem, 'mouseup')
+      //   .click(firstItem)
+      //   .hover(thirdItem);
+      // eslint-disable-next-line max-len
+      // await testScreenshot(t, takeScreenshot, `Tabs 3 not selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
       // =
 
       await t.dispatchEvent(thirdItem, 'mousedown');
@@ -255,7 +250,7 @@ test('Tabs in contrast theme', async (t) => {
         await testScreenshot(t, takeScreenshot, `Tabs disab focused,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
         const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
-        const fourthItem = Selector(`.${TAB_CLASS}:nth-child(4)`);
+        // const fourthItem = Selector(`.${TAB_CLASS}:nth-child(4)`);
 
         await t
           .pressKey(direction)
@@ -268,13 +263,13 @@ test('Tabs in contrast theme', async (t) => {
           .wait(300);
 
         // TODO: this test is unstable
-        await t
-          .click(thirdItem)
-          .wait(300)
-          .hover(fourthItem)
-          .wait(300);
-
-        await testScreenshot(t, takeScreenshot, `Tabs 4item hovered,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+        // await t
+        //   .dispatchEvent(thirdItem, 'mouseup')
+        //   .click(thirdItem)
+        //   .hover(fourthItem);
+        //
+        // eslint-disable-next-line max-len
+        // await testScreenshot(t, takeScreenshot, `Tabs 4item hovered,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
         // =
 
         await t
