@@ -141,7 +141,7 @@ export interface dxTileViewOptions<
      * @default 500
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * @docid
      * @default true

@@ -55,10 +55,10 @@ export abstract class DxoBoxOptions extends NestedOption {
         this._setOption('elementAttr', value);
     }
 
-    get height(): number | Function | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -160,10 +160,10 @@ export abstract class DxoBoxOptions extends NestedOption {
         this._setOption('visible', value);
     }
 
-    get width(): number | Function | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 }

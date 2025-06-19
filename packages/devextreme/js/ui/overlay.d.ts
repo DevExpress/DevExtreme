@@ -71,31 +71,31 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @default '80vh'
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * @docid
      * @default null
      * @public
      */
-    maxHeight?: number | string | (() => number | string);
+    maxHeight?: number | string;
     /**
      * @docid
      * @default null
      * @public
      */
-    maxWidth?: number | string | (() => number | string);
+    maxWidth?: number | string;
     /**
      * @docid
      * @default null
      * @public
      */
-    minHeight?: number | string | (() => number | string);
+    minHeight?: number | string;
     /**
      * @docid
      * @default null
      * @public
      */
-    minWidth?: number | string | (() => number | string);
+    minWidth?: number | string;
     /**
      * @docid
      * @default null
@@ -162,7 +162,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @default '80vw'
      * @public
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
     /**
      * @docid
      * @default {}

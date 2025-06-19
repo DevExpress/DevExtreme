@@ -65,7 +65,7 @@ const componentConfig = {
     encodeHtml: Boolean,
     focusStateEnabled: Boolean,
     headerFilter: Object as PropType<Record<string, any>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     layout: Number as PropType<FieldChooserLayout>,
@@ -80,7 +80,7 @@ const componentConfig = {
     tabIndex: Number,
     texts: Object as PropType<Record<string, any>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

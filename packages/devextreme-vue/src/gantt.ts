@@ -184,7 +184,7 @@ const componentConfig = {
     firstDayOfWeek: Number as PropType<FirstDayOfWeek>,
     focusStateEnabled: Boolean,
     headerFilter: Object as PropType<dxGanttHeaderFilter | Record<string, any>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
@@ -241,7 +241,7 @@ const componentConfig = {
     toolbar: Object as PropType<dxGanttToolbar | Record<string, any>>,
     validation: Object as PropType<Record<string, any>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

@@ -207,7 +207,7 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   enableBodyScroll?: boolean;
-  height?: (() => number | string) | number | string;
+  height?: number | string;
   hideEvent?: Record<string, any> | string | undefined | {
     delay?: number | undefined;
     name?: string | undefined;
@@ -216,10 +216,10 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   hideOnParentScroll?: boolean;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
-  maxHeight?: (() => number | string) | number | string;
-  maxWidth?: (() => number | string) | number | string;
-  minHeight?: (() => number | string) | number | string;
-  minWidth?: (() => number | string) | number | string;
+  maxHeight?: number | string;
+  maxWidth?: number | string;
+  minHeight?: number | string;
+  minWidth?: number | string;
   onContentReady?: ((e: PopoverContentReadyEvent) => void);
   onDisposing?: ((e: PopoverDisposingEvent) => void);
   onHidden?: ((e: HiddenEvent) => void);
@@ -244,16 +244,16 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   titleTemplate?: ((titleElement: any) => string | any) | template;
   toolbarItems?: Array<dxPopupToolbarItem>;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: number | string;
   wrapperAttr?: any;
-  defaultHeight?: (() => number | string) | number | string;
-  onHeightChange?: (value: (() => number | string) | number | string) => void;
+  defaultHeight?: number | string;
+  onHeightChange?: (value: number | string) => void;
   defaultPosition?: CommonPosition | PositionConfig;
   onPositionChange?: (value: CommonPosition | PositionConfig) => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
-  defaultWidth?: (() => number | string) | number | string;
-  onWidthChange?: (value: (() => number | string) | number | string) => void;
+  defaultWidth?: number | string;
+  onWidthChange?: (value: number | string) => void;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
   titleRender?: (...params: any) => React.ReactNode;

@@ -106,10 +106,10 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('fullScreen', value);
     }
 
-    get height(): number | Function | string {
+    get height(): number | string {
         return this._getOption('height');
     }
-    set height(value: number | Function | string) {
+    set height(value: number | string) {
         this._setOption('height', value);
     }
 
@@ -141,31 +141,31 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('hoverStateEnabled', value);
     }
 
-    get maxHeight(): number | Function | string {
+    get maxHeight(): number | string {
         return this._getOption('maxHeight');
     }
-    set maxHeight(value: number | Function | string) {
+    set maxHeight(value: number | string) {
         this._setOption('maxHeight', value);
     }
 
-    get maxWidth(): number | Function | string {
+    get maxWidth(): number | string {
         return this._getOption('maxWidth');
     }
-    set maxWidth(value: number | Function | string) {
+    set maxWidth(value: number | string) {
         this._setOption('maxWidth', value);
     }
 
-    get minHeight(): number | Function | string {
+    get minHeight(): number | string {
         return this._getOption('minHeight');
     }
-    set minHeight(value: number | Function | string) {
+    set minHeight(value: number | string) {
         this._setOption('minHeight', value);
     }
 
-    get minWidth(): number | Function | string {
+    get minWidth(): number | string {
         return this._getOption('minWidth');
     }
-    set minWidth(value: number | Function | string) {
+    set minWidth(value: number | string) {
         this._setOption('minWidth', value);
     }
 
@@ -344,10 +344,10 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('visible', value);
     }
 
-    get width(): number | Function | string {
+    get width(): number | string {
         return this._getOption('width');
     }
-    set width(value: number | Function | string) {
+    set width(value: number | string) {
         this._setOption('width', value);
     }
 

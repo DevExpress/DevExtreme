@@ -145,7 +145,7 @@ type IFileUploaderOptionsProps = React.PropsWithChildren<{
   dropZone?: any | string | undefined;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   inputAttr?: any;
@@ -196,7 +196,7 @@ type IFileUploaderOptionsProps = React.PropsWithChildren<{
   validationStatus?: ValidationStatus;
   value?: Array<any>;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   defaultValue?: Array<any>;
   onValueChange?: (value: Array<any>) => void;
 }>

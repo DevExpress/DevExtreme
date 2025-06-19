@@ -724,7 +724,7 @@ declare module DevExpress {
     /**
      * [descr:DOMComponentOptions.height]
      */
-    height?: number | string | (() => number | string) | undefined;
+    height?: number | string | undefined;
     /**
      * [descr:DOMComponentOptions.onDisposing]
      */
@@ -744,7 +744,7 @@ declare module DevExpress {
     /**
      * [descr:DOMComponentOptions.width]
      */
-    width?: number | string | (() => number | string) | undefined;
+    width?: number | string | undefined;
   }
   /**
    * [descr:ExportLoadPanel]
@@ -8979,7 +8979,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxAccordionOptions.height]
      */
-    height?: number | string | (() => number | string) | undefined;
+    height?: number | string | undefined;
     /**
      * [descr:dxAccordionOptions.hoverStateEnabled]
      */
@@ -22114,7 +22114,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxLoadPanelOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxLoadPanelOptions.indicatorSrc]
      */
@@ -22122,11 +22122,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxLoadPanelOptions.maxHeight]
      */
-    maxHeight?: number | string | (() => number | string);
+    maxHeight?: number | string;
     /**
      * [descr:dxLoadPanelOptions.maxWidth]
      */
-    maxWidth?: number | string | (() => number | string);
+    maxWidth?: number | string;
     /**
      * [descr:dxLoadPanelOptions.message]
      */
@@ -22153,7 +22153,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxLoadPanelOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
   }
   /**
    * [descr:dxLookup]
@@ -22539,7 +22539,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMapOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxMapOptions.markerIconSrc]
      */
@@ -22650,7 +22650,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMapOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
     /**
      * [descr:dxMapOptions.zoom]
      */
@@ -23467,23 +23467,23 @@ declare module DevExpress.ui {
     /**
      * [descr:dxOverlayOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxOverlayOptions.maxHeight]
      */
-    maxHeight?: number | string | (() => number | string);
+    maxHeight?: number | string;
     /**
      * [descr:dxOverlayOptions.maxWidth]
      */
-    maxWidth?: number | string | (() => number | string);
+    maxWidth?: number | string;
     /**
      * [descr:dxOverlayOptions.minHeight]
      */
-    minHeight?: number | string | (() => number | string);
+    minHeight?: number | string;
     /**
      * [descr:dxOverlayOptions.minWidth]
      */
-    minWidth?: number | string | (() => number | string);
+    minWidth?: number | string;
     /**
      * [descr:dxOverlayOptions.onHidden]
      */
@@ -23525,7 +23525,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxOverlayOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
     /**
      * [descr:dxOverlayOptions.wrapperAttr]
      */
@@ -23902,7 +23902,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridFieldChooserOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxPivotGridFieldChooserOptions.layout]
      */
@@ -24578,7 +24578,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopoverOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxPopoverOptions.hideEvent]
      */
@@ -24646,7 +24646,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopoverOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
   }
   /**
    * [descr:dxPopup]
@@ -24754,7 +24754,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxPopupOptions.onResize]
      */
@@ -24820,7 +24820,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
   }
   /**
    * [descr:dxProgressBar]
@@ -25177,7 +25177,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResizableOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxResizableOptions.keepAspectRatio]
      */
@@ -25213,7 +25213,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResizableOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
   }
   /**
    * [descr:dxResponsiveBox]
@@ -25394,7 +25394,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResponsiveBoxOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxResponsiveBoxOptions.items]
      */
@@ -25431,7 +25431,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResponsiveBoxOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
   }
   /**
    * [descr:dxScheduler]
@@ -29456,7 +29456,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTileViewOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxTileViewOptions.hoverStateEnabled]
      */
@@ -29581,11 +29581,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxToastOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxToastOptions.maxWidth]
      */
-    maxWidth?: number | string | (() => number | string);
+    maxWidth?: number | string;
     /**
      * [descr:dxToastOptions.message]
      */
@@ -29593,7 +29593,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxToastOptions.minWidth]
      */
-    minWidth?: number | string | (() => number | string);
+    minWidth?: number | string;
     /**
      * [descr:dxToastOptions.position]
      */
@@ -29609,7 +29609,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxToastOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
   }
   /**
    * [descr:dxToolbar]
@@ -35093,7 +35093,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
      */
@@ -35163,7 +35163,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
   }
   /**
    * [descr:BaseWidgetSize]
