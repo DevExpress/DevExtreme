@@ -1,0 +1,26 @@
+{
+  "bar-gauge": {
+    "bar": {
+      "color": {
+        "track": {
+          "$value": "{color.border.neutral.default.rest}",
+          "$type": "color"
+        }
+      }
+    },
+    "bar-gauge": {
+      "inner-box": {
+        "gap": {
+          "$value": "{sizing.400}",
+          "$type": "number"
+        }
+      },
+      "outer-box": {
+        "gap": {
+          "$value": "{sizing.400}",
+          "$type": "number"
+        }
+      }
+    }
+  }
+}

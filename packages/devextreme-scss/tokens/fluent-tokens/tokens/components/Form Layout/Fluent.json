@@ -1,0 +1,578 @@
+{
+  "form-layout": {
+    "caption": {
+      "color": {
+        "normal": {
+          "text": {
+            "$value": "{color.content.neutral.default.rest}",
+            "$type": "color"
+          }
+        },
+        "empty": {
+          "text": {
+            "$value": "{color.content.neutral.muted.rest}",
+            "$type": "color"
+          }
+        }
+      },
+      "typography": {
+        "small": {
+          "font-family": {
+            "$value": "{font-family.sans-serif}",
+            "$type": "text"
+          },
+          "line-height": {
+            "$value": "{line-height.caption-1}",
+            "$type": "number"
+          },
+          "font-weight": {
+            "$value": "{font-weight.caption-1}",
+            "$type": "number"
+          },
+          "font-size": {
+            "$value": "{font-size.caption-1}",
+            "$type": "number"
+          }
+        },
+        "medium": {
+          "font-family": {
+            "$value": "{font-family.sans-serif}",
+            "$type": "text"
+          },
+          "font-size": {
+            "$value": "{font-size.body-1}",
+            "$type": "number"
+          },
+          "font-weight": {
+            "$value": "{font-weight.body-1}",
+            "$type": "number"
+          },
+          "line-height": {
+            "$value": "{line-height.body-1}",
+            "$type": "number"
+          }
+        },
+        "large": {
+          "font-family": {
+            "$value": "{font-family.sans-serif}",
+            "$type": "text"
+          },
+          "font-size": {
+            "$value": "{font-size.subtitle-2}",
+            "$type": "number"
+          },
+          "font-weight": {
+            "$value": "{font-weight.subtitle-2}",
+            "$type": "number"
+          },
+          "line-height": {
+            "$value": "{line-height.subtitle-2}",
+            "$type": "number"
+          }
+        }
+      },
+      "layout": {
+        "text-box": {
+          "small": {
+            "vertical": {
+              "$value": "{sizing.0}",
+              "$type": "number"
+            }
+          },
+          "medium": {
+            "vertical": {
+              "$value": "{sizing.0}",
+              "$type": "number"
+            }
+          },
+          "large": {
+            "vertical": {
+              "$value": "{sizing.10}",
+              "$type": "number"
+            }
+          }
+        }
+      }
+    },
+    "collapse-button": {
+      "color": {
+        "normal": {
+          "bg": {
+            "$value": "{color.surface.neutral.default.rest}",
+            "$type": "color"
+          },
+          "icon": {
+            "$value": "{color.content.neutral.default.rest}",
+            "$type": "color"
+          }
+        },
+        "hover": {
+          "bg": {
+            "$value": "{color.surface.neutral.default.hovered}",
+            "$type": "color"
+          },
+          "icon": {
+            "$value": "{color.content.neutral.default.hovered}",
+            "$type": "color"
+          }
+        },
+        "focused": {
+          "bg": {
+            "$value": "{color.surface.neutral.default.rest}",
+            "$type": "color"
+          },
+          "icon": {
+            "$value": "{color.content.neutral.default.rest}",
+            "$type": "color"
+          },
+          "frame": {
+            "$value": "{color.theme-builder.focus}",
+            "$type": "color"
+          }
+        },
+        "active": {
+          "bg": {
+            "$value": "{color.surface.neutral.default.rest}",
+            "$type": "color"
+          },
+          "icon": {
+            "$value": "{color.content.neutral.default.rest}",
+            "$type": "color"
+          }
+        },
+        "disabled": {
+          "bg": {
+            "$value": "{color.surface.neutral.muted.disabled}",
+            "$type": "color"
+          },
+          "icon": {
+            "$value": "{color.content.neutral.default.disabled}",
+            "$type": "color"
+          }
+        }
+      },
+      "icon": {
+        "style": {
+          "default": {
+            "$value": "{icon.style.regular}",
+            "$type": "text"
+          }
+        },
+        "size": {
+          "small": {
+            "$value": "{icon.size.16px}",
+            "$type": "number"
+          },
+          "medium": {
+            "$value": "{icon.size.20px}",
+            "$type": "number"
+          },
+          "large": {
+            "$value": "{icon.size.24px}",
+            "$type": "number"
+          }
+        }
+      },
+      "layout": {
+        "button": {
+          "small": {
+            "vertical": {
+              "$value": "{sizing.40}",
+              "$type": "number"
+            },
+            "horizontal": {
+              "$value": "{sizing.40}",
+              "$type": "number"
+            }
+          },
+          "medium": {
+            "vertical": {
+              "$value": "{sizing.60}",
+              "$type": "number"
+            },
+            "horizontal": {
+              "$value": "{sizing.60}",
+              "$type": "number"
+            }
+          },
+          "large": {
+            "vertical": {
+              "$value": "{sizing.80}",
+              "$type": "number"
+            },
+            "horizontal": {
+              "$value": "{sizing.80}",
+              "$type": "number"
+            }
+          }
+        },
+        "icon-wrapper": {
+          "small": {
+            "$value": "{sizing.160}",
+            "$type": "number"
+          },
+          "medium": {
+            "$value": "{sizing.200}",
+            "$type": "number"
+          },
+          "large": {
+            "$value": "{sizing.240}",
+            "$type": "number"
+          }
+        }
+      },
+      "border-radius": {
+        "small": {
+          "$value": "{border-radius.circular}",
+          "$type": "number"
+        },
+        "medium": {
+          "$value": "{border-radius.circular}",
+          "$type": "number"
+        },
+        "large": {
+          "$value": "{border-radius.circular}",
+          "$type": "number"
+        }
+      },
+      "border-width": {
+        "focused-frame": {
+          "$value": "{border-width.theme-builder.focus}",
+          "$type": "number"
+        }
+      }
+    },
+    "form-layout-group-header": {
+      "color": {
+        "text": {
+          "$value": "{color.content.neutral.default.rest}",
+          "$type": "color"
+        }
+      },
+      "typography": {
+        "small": {
+          "font-family": {
+            "$value": "{font-family.sans-serif}",
+            "$type": "text"
+          },
+          "font-size": {
+            "$value": "{font-size.caption-1-strong}",
+            "$type": "number"
+          },
+          "font-weight": {
+            "$value": "{font-weight.caption-1-strong}",
+            "$type": "number"
+          },
+          "line-height": {
+            "$value": "{line-height.caption-1-strong}",
+            "$type": "number"
+          }
+        },
+        "medium": {
+          "font-family": {
+            "$value": "{font-family.sans-serif}",
+            "$type": "text"
+          },
+          "font-size": {
+            "$value": "{font-size.body-1-strong}",
+            "$type": "number"
+          },
+          "font-weight": {
+            "$value": "{font-weight.body-1-strong}",
+            "$type": "number"
+          },
+          "line-height": {
+            "$value": "{line-height.body-1-strong}",
+            "$type": "number"
+          }
+        },
+        "large": {
+          "font-family": {
+            "$value": "{font-family.sans-serif}",
+            "$type": "text"
+          },
+          "font-size": {
+            "$value": "{font-size.subtitle-2}",
+            "$type": "number"
+          },
+          "font-weight": {
+            "$value": "{font-weight.subtitle-2}",
+            "$type": "number"
+          },
+          "line-height": {
+            "$value": "{line-height.subtitle-2}",
+            "$type": "number"
+          }
+        }
+      },
+      "layout": {
+        "outer-box": {
+          "small": {
+            "vertical": {
+              "$value": "{sizing.40}",
+              "$type": "number"
+            },
+            "horizontal": {
+              "$value": "{sizing.0}",
+              "$type": "number"
+            },
+            "gap": {
+              "$value": "{sizing.60}",
+              "$type": "number"
+            }
+          },
+          "medium": {
+            "vertical": {
+              "$value": "{sizing.60}",
+              "$type": "number"
+            },
+            "horizontal": {
+              "$value": "{sizing.0}",
+              "$type": "number"
+            },
+            "gap": {
+              "$value": "{sizing.60}",
+              "$type": "number"
+            }
+          },
+          "large": {
+            "vertical": {
+              "$value": "{sizing.80}",
+              "$type": "number"
+            },
+            "horizontal": {
+              "$value": "{sizing.0}",
+              "$type": "number"
+            },
+            "gap": {
+              "$value": "{sizing.60}",
+              "$type": "number"
+            }
+          }
+        },
+        "text-box": {
+          "small": {
+            "vertical": {
+              "$value": "{sizing.0}",
+              "$type": "number"
+            },
+            "horizontal": {
+              "$value": "{sizing.0}",
+              "$type": "number"
+            }
+          },
+          "medium": {
+            "vertical": {
+              "$value": "{sizing.0}",
+              "$type": "number"
+            },
+            "horizontal": {
+              "$value": "{sizing.0}",
+              "$type": "number"
+            }
+          },
+          "large": {
+            "vertical": {
+              "$value": "{sizing.10}",
+              "$type": "number"
+            },
+            "horizontal": {
+              "$value": "{sizing.0}",
+              "$type": "number"
+            }
+          }
+        },
+        "button-box": {
+          "small": {
+            "sizing": {
+              "$value": "{sizing.160}",
+              "$type": "number"
+            }
+          },
+          "medium": {
+            "sizing": {
+              "$value": "{sizing.200}",
+              "$type": "number"
+            }
+          },
+          "large": {
+            "sizing": {
+              "$value": "{sizing.240}",
+              "$type": "number"
+            }
+          }
+        }
+      }
+    },
+    "form-layout": {
+      "color": {
+        "group": {
+          "bg": {
+            "$value": "{color.surface.neutral.muted.rest}",
+            "$type": "color"
+          }
+        }
+      },
+      "layout": {
+        "group": {
+          "body-content": {
+            "small": {
+              "horizontal": {
+                "$value": "{sizing.0}",
+                "$type": "number"
+              },
+              "top": {
+                "$value": "{sizing.80}",
+                "$type": "number"
+              },
+              "bottom": {
+                "$value": "{sizing.0}",
+                "$type": "number"
+              }
+            },
+            "medium": {
+              "horizontal": {
+                "$value": "{sizing.0}",
+                "$type": "number"
+              },
+              "top": {
+                "$value": "{sizing.120}",
+                "$type": "number"
+              },
+              "bottom": {
+                "$value": "{sizing.0}",
+                "$type": "number"
+              }
+            },
+            "large": {
+              "horizontal": {
+                "$value": "{sizing.0}",
+                "$type": "number"
+              },
+              "top": {
+                "$value": "{sizing.160}",
+                "$type": "number"
+              },
+              "bottom": {
+                "$value": "{sizing.0}",
+                "$type": "number"
+              }
+            }
+          },
+          "horizontal-group-spacing": {
+            "small": {
+              "$value": "{sizing.240}",
+              "$type": "number"
+            },
+            "medium": {
+              "$value": "{sizing.320}",
+              "$type": "number"
+            },
+            "large": {
+              "$value": "{sizing.400}",
+              "$type": "number"
+            }
+          },
+          "vertical-group-spacing": {
+            "small": {
+              "$value": "{sizing.160}",
+              "$type": "number"
+            },
+            "medium": {
+              "$value": "{sizing.240}",
+              "$type": "number"
+            },
+            "large": {
+              "$value": "{sizing.320}",
+              "$type": "number"
+            }
+          }
+        }
+      }
+    },
+    "form-layout-item-row": {
+      "layout": {
+        "horizontal-item-spacing": {
+          "small": {
+            "$value": "{sizing.160}",
+            "$type": "number"
+          },
+          "medium": {
+            "$value": "{sizing.240}",
+            "$type": "number"
+          },
+          "large": {
+            "$value": "{sizing.320}",
+            "$type": "number"
+          }
+        },
+        "vertical-item-spacing": {
+          "small": {
+            "$value": "{sizing.120}",
+            "$type": "number"
+          },
+          "medium": {
+            "$value": "{sizing.160}",
+            "$type": "number"
+          },
+          "large": {
+            "$value": "{sizing.200}",
+            "$type": "number"
+          }
+        }
+      }
+    },
+    "form-layout-item": {
+      "opacity": {
+        "empty": {
+          "$value": "{opacity.0}",
+          "$type": "number"
+        }
+      },
+      "layout": {
+        "caption-box": {
+          "vertical": {
+            "small": {
+              "bottom": {
+                "$value": "{sizing.20}",
+                "$type": "number"
+              }
+            },
+            "medium": {
+              "bottom": {
+                "$value": "{sizing.20}",
+                "$type": "number"
+              }
+            },
+            "large": {
+              "bottom": {
+                "$value": "{sizing.20}",
+                "$type": "number"
+              }
+            }
+          },
+          "horizontal": {
+            "small": {
+              "right": {
+                "$value": "{sizing.80}",
+                "$type": "number"
+              }
+            },
+            "medium": {
+              "right": {
+                "$value": "{sizing.120}",
+                "$type": "number"
+              }
+            },
+            "large": {
+              "right": {
+                "$value": "{sizing.160}",
+                "$type": "number"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

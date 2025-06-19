@@ -1,0 +1,88 @@
+{
+  "scroll-bar": {
+    "color": {
+      "normal": {
+        "bg": {
+          "$value": "{color.surface.neutral.muted.rest}",
+          "$type": "color"
+        },
+        "thumb": {
+          "$value": "{color.content.neutral.subdued.rest}",
+          "$type": "color"
+        }
+      },
+      "hovered": {
+        "thumb": {
+          "$value": "{color.content.neutral.subdued.rest}",
+          "$type": "color"
+        },
+        "bg": {
+          "$value": "{color.surface.neutral.muted.rest}",
+          "$type": "color"
+        }
+      }
+    },
+    "opacity": {
+      "hover": {
+        "$value": "{opacity.70}",
+        "$type": "number"
+      },
+      "normal": {
+        "$value": "{opacity.50}",
+        "$type": "number"
+      }
+    },
+    "layout": {
+      "vertical": {
+        "hovered": {
+          "width": {
+            "$value": "{sizing.80}",
+            "$type": "number"
+          },
+          "left": {
+            "$value": "{sizing.0}",
+            "$type": "number"
+          }
+        },
+        "normal": {
+          "width": {
+            "$value": "{sizing.80}",
+            "$type": "number"
+          },
+          "left": {
+            "$value": "{sizing.50}",
+            "$type": "number"
+          }
+        }
+      },
+      "horizontal": {
+        "hovered": {
+          "height": {
+            "$value": "{sizing.80}",
+            "$type": "number"
+          },
+          "top": {
+            "$value": "{sizing.0}",
+            "$type": "number"
+          }
+        },
+        "normal": {
+          "height": {
+            "$value": "{sizing.80}",
+            "$type": "number"
+          },
+          "top": {
+            "$value": "{sizing.50}",
+            "$type": "number"
+          }
+        }
+      }
+    },
+    "border-radius": {
+      "thumb": {
+        "$value": "{border-radius.circular}",
+        "$type": "number"
+      }
+    }
+  }
+}

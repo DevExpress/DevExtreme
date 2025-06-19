@@ -1,0 +1,60 @@
+{
+  "border-radius": {
+    "theme-builder": {
+      "default": {
+        "$type": "borderRadius",
+        "$value": "{border-radius.40}"
+      }
+    }
+  },
+  "color": {
+    "theme-builder": {
+      "focus": {
+        "$type": "color",
+        "$value": "{color.border.focus}"
+      },
+      "focus-inverted": {
+        "$type": "color",
+        "$value": "{color.border.focus-inverted}"
+      },
+      "backdrop": {
+        "$type": "color",
+        "$value": "rgba( {neutral.250} ,0.4)"
+      },
+      "focus-static": {
+        "$type": "color",
+        "$value": "{color.border.focus-static}"
+      },
+      "focus-static-inverted": {
+        "$type": "color",
+        "$value": "{color.border.focus-static-inverted}"
+      }
+    }
+  },
+  "border-width": {
+    "theme-builder": {
+      "focus": {
+        "$type": "borderWidth",
+        "$value": "{border-width.20}"
+      }
+    }
+  },
+  "sizing": {
+    "theme-builder": {
+      "item-gap": {
+        "small": {
+          "$type": "sizing",
+          "$value": "{sizing.80}"
+        },
+        "medium": {
+          "$type": "sizing",
+          "$value": "{sizing.120}"
+        },
+        "large": {
+          "$type": "sizing",
+          "$value": "{sizing.160}"
+        }
+      }
+    }
+  }
+}
