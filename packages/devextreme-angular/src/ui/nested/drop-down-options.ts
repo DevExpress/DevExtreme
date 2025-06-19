@@ -40,7 +40,6 @@ import { DxiToolbarItemComponent } from './toolbar-item-dxi';
     inputs: [
         'accessKey',
         'animation',
-        'closeOnOutsideClick',
         'container',
         'contentTemplate',
         'deferRendering',
@@ -87,6 +86,7 @@ import { DxiToolbarItemComponent } from './toolbar-item-dxi';
         'visible',
         'width',
         'wrapperAttr',
+        'closeOnOutsideClick',
         'hideEvent',
         'showEvent',
         'target'

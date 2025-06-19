@@ -23456,17 +23456,6 @@ declare module DevExpress.ui {
      */
     animation?: dxOverlayAnimation;
     /**
-     * [descr:dxOverlayOptions.closeOnOutsideClick]
-     * @deprecated [depNote:dxOverlayOptions.closeOnOutsideClick]
-     */
-    closeOnOutsideClick?:
-      | boolean
-      | ((
-          event: DevExpress.events.DxEvent<
-            MouseEvent | PointerEvent | TouchEvent
-          >
-        ) => boolean);
-    /**
      * [descr:dxOverlayOptions.contentTemplate]
      */
     contentTemplate?:

@@ -43,7 +43,6 @@ import { prepareConfigurationComponentConfig } from "./core/index";
 type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "animation" |
-  "closeOnOutsideClick" |
   "container" |
   "contentTemplate" |
   "deferRendering" |
@@ -100,7 +99,6 @@ const componentConfig = {
   props: {
     accessKey: String,
     animation: Object as PropType<Record<string, any>>,
-    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -153,7 +151,6 @@ const componentConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:animation": null,
-    "update:closeOnOutsideClick": null,
     "update:container": null,
     "update:contentTemplate": null,
     "update:deferRendering": null,

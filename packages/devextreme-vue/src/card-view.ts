@@ -2154,7 +2154,6 @@ const DxLoadPanelConfig = {
     "update:hoveredElement": null,
     "update:animation": null,
     "update:bindingOptions": null,
-    "update:closeOnOutsideClick": null,
     "update:container": null,
     "update:deferRendering": null,
     "update:delay": null,
@@ -2191,7 +2190,6 @@ const DxLoadPanelConfig = {
   props: {
     animation: Object as PropType<Record<string, any>>,
     bindingOptions: Object as PropType<Record<string, any>>,
-    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     deferRendering: Boolean,
     delay: Number,

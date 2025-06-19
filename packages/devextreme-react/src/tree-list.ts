@@ -1085,7 +1085,6 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
     show?: AnimationConfig;
   };
   bindingOptions?: Record<string, any>;
-  closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
@@ -1909,7 +1908,6 @@ type IPopupProps = React.PropsWithChildren<{
     show?: AnimationConfig;
   };
   bindingOptions?: Record<string, any>;
-  closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;

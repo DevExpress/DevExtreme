@@ -63,14 +63,6 @@ export class DxoTreeListFilterBuilderPopupComponent extends NestedOption impleme
     }
 
     @Input()
-    get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
-        return this._getOption('closeOnOutsideClick');
-    }
-    set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
-        this._setOption('closeOnOutsideClick', value);
-    }
-
-    @Input()
     get container(): any | string | undefined {
         return this._getOption('container');
     }

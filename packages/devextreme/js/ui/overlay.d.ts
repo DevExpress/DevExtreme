@@ -41,14 +41,6 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     animation?: dxOverlayAnimation;
     /**
      * @docid
-     * @deprecated dxOverlayOptions.hideOnOutsideClick
-     * @default false
-     * @type_function_param1 event:event
-     * @public
-     */
-    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
-    /**
-     * @docid
      * @default "content"
      * @type_function_return string|Element|jQuery
      * @public

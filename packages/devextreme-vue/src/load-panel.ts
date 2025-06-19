@@ -33,7 +33,6 @@ import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "animation" |
-  "closeOnOutsideClick" |
   "container" |
   "deferRendering" |
   "delay" |
@@ -75,7 +74,6 @@ interface DxLoadPanel extends AccessibleOptions {
 const componentConfig = {
   props: {
     animation: Object as PropType<Record<string, any>>,
-    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     deferRendering: Boolean,
     delay: Number,
@@ -113,7 +111,6 @@ const componentConfig = {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:animation": null,
-    "update:closeOnOutsideClick": null,
     "update:container": null,
     "update:deferRendering": null,
     "update:delay": null,

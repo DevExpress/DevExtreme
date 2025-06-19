@@ -1763,7 +1763,6 @@ type ILoadPanelProps = React.PropsWithChildren<{
     show?: AnimationConfig;
   };
   bindingOptions?: Record<string, any>;
-  closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string | undefined;
   deferRendering?: boolean;
   delay?: number;

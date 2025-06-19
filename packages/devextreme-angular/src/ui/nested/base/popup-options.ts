@@ -29,13 +29,6 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('animation', value);
     }
 
-    get closeOnOutsideClick(): boolean | Function {
-        return this._getOption('closeOnOutsideClick');
-    }
-    set closeOnOutsideClick(value: boolean | Function) {
-        this._setOption('closeOnOutsideClick', value);
-    }
-
     get container(): UserDefinedElement | string | undefined {
         return this._getOption('container');
     }
@@ -356,6 +349,13 @@ export abstract class DxoPopupOptions extends NestedOption {
     }
     set wrapperAttr(value: any) {
         this._setOption('wrapperAttr', value);
+    }
+
+    get closeOnOutsideClick(): boolean | Function {
+        return this._getOption('closeOnOutsideClick');
+    }
+    set closeOnOutsideClick(value: boolean | Function) {
+        this._setOption('closeOnOutsideClick', value);
     }
 
     get hideEvent(): string | undefined | { delay?: number | undefined, name?: string | undefined } {
