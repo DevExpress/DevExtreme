@@ -79,6 +79,8 @@ $cardview-fluent-card__cover--noimage-bg-color: null !default;
 */
 $cardview-fluent-card__cover--noimage__icon-color: null !default;
 
+$cardview-fluent-card--focused-outline-color: null !default;
+
 // #endregion
 
 // #region CARD (SELECTED)
@@ -164,6 +166,8 @@ $cardview-fluent-header-panel__item__header-filter-icon--selected-color: null !d
 * $type color
 */
 $cardview-fluent-header-panel__item__sort-index-text-color: null !default;
+
+$cardview-fluent-header-panel__item--focused-outline-color: null !default;
 
 // #endregion
 
@@ -415,10 +419,12 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-card__cover--noimage-bg-color: darken($base-bg, 12.16) !default;
   $cardview-fluent-card__cover--noimage__icon-color: lighten($cardview-fluent-common-text-color, 23.92) !default;
 
+  $cardview-fluent-card--focused-outline-color: $base-accent !default;
+
   // Card - selected
   $cardview-fluent-card--selected-bg-color: lighten(desaturate(adjust-hue($base-accent, 4), 11.38), 55.49) !default;
-  $cardview-fluent-card--selected-border-color: $cardview-fluent-card-border-color !default;
-  $cardview-fluent-card--selected-divider-color: $cardview-fluent-card-divider-color !default;
+  $cardview-fluent-card--selected-border-color: lighten(saturate(adjust-hue($base-accent, 3), 2.21), 44.31) !default;
+  $cardview-fluent-card--selected-divider-color: $cardview-fluent-card--selected-border-color !default;
   $cardview-fluent-card--selected-text-color: $cardview-fluent-card-text-color !default;
   $cardview-fluent-card--selected__cover-bg-color: $cardview-fluent-card__cover-bg-color !default;
   $cardview-fluent-card--selected__cover--noimage-bg-color: $cardview-fluent-card__cover--noimage-bg-color !default;
@@ -431,6 +437,8 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-header-panel__item__icon-color: $cardview-fluent-common-text-color !default;
   $cardview-fluent-header-panel__item__header-filter-icon--selected-color: $base-accent !default;
   $cardview-fluent-header-panel__item__sort-index-text-color: $cardview-fluent-common-text-color !default;
+
+  $cardview-fluent-header-panel__item--focused-outline-color: $base-accent !default;
 
   // Header panel item - hovered
   $cardview-fluent-header-panel__item--hovered-bg-color: darken($cardview-fluent-header-panel__item-bg-color, 1.96)  !default;
@@ -499,10 +507,12 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-card__cover--noimage-bg-color: darken($base-bg, 5.88) !default;
   $cardview-fluent-card__cover--noimage__icon-color: darken($base-text-color, 32.16) !default;
 
+  $cardview-fluent-card--focused-outline-color: $base-accent !default;
+
   // Card - selected
   $cardview-fluent-card--selected-bg-color: darken(desaturate(adjust-hue($base-accent, -4), 14.69), 49.41) !default;
-  $cardview-fluent-card--selected-border-color: $cardview-fluent-card-border-color !default;
-  $cardview-fluent-card--selected-divider-color: $cardview-fluent-card-divider-color !default;
+  $cardview-fluent-card--selected-border-color: darken(desaturate(adjust-hue($base-accent, -3), 11.06), 36.27) !default;
+  $cardview-fluent-card--selected-divider-color: $cardview-fluent-card--selected-border-color !default;
   $cardview-fluent-card--selected-text-color: $cardview-fluent-card-text-color !default;
   $cardview-fluent-card--selected__cover-bg-color: $cardview-fluent-card__cover-bg-color !default;
   $cardview-fluent-card--selected__cover--noimage-bg-color: $cardview-fluent-card__cover--noimage-bg-color !default;
@@ -515,6 +525,8 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
   $cardview-fluent-header-panel__item__icon-color: $cardview-fluent-common-text-color !default;
   $cardview-fluent-header-panel__item__header-filter-icon--selected-color: $base-accent !default;
   $cardview-fluent-header-panel__item__sort-index-text-color: $cardview-fluent-common-text-color !default;
+
+  $cardview-fluent-header-panel__item--focused-outline-color: $base-accent !default;
 
   // Header panel item - hovered
   $cardview-fluent-header-panel__item--hovered-bg-color: lighten($cardview-fluent-header-panel__item-bg-color, 18.04)  !default;
@@ -587,12 +599,16 @@ $cardview-card--selected__cover-bg-color: $cardview-fluent-card--selected__cover
 $cardview-card--selected__cover--noimage-bg-color: $cardview-fluent-card--selected__cover--noimage-bg-color !default;
 $cardview-card--selected__cover--noimage__icon-color: $cardview-fluent-card--selected__cover--noimage__icon-color !default;
 
+$cardview-card--focused-outline-color: $cardview-fluent-card--focused-outline-color !default;
+
 $cardview-header-panel__item-bg-color: $cardview-fluent-header-panel__item-bg-color !default;
 $cardview-header-panel__item-border-color: $cardview-fluent-header-panel__item-border-color !default;
 $cardview-header-panel__item-text-color: $cardview-fluent-header-panel__item-text-color !default;
 $cardview-header-panel__item__icon-color: $cardview-fluent-header-panel__item__icon-color !default;
 $cardview-header-panel__item__header-filter-icon--selected-color: $cardview-fluent-header-panel__item__header-filter-icon--selected-color !default;
 $cardview-header-panel__item__sort-index-text-color: $cardview-fluent-header-panel__item__sort-index-text-color !default;
+
+$cardview-header-panel__item--focused-outline-color: $cardview-fluent-header-panel__item--focused-outline-color !default;
 
 $cardview-header-panel__item--hovered-bg-color: $cardview-fluent-header-panel__item--hovered-bg-color !default;
 $cardview-header-panel__item--hovered-border-color: $cardview-fluent-header-panel__item--hovered-border-color !default;

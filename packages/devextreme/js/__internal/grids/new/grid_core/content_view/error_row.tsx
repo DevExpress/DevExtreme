@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type dxToast from '@js/ui/toast';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 import { Toast } from '@ts/grids/new/grid_core/inferno_wrappers/toast';
-import { Component, createRef } from 'inferno';
+import { createRef } from 'inferno';
 
 import type { GridError } from '../error_controller/error_controller';
+import { wrapRef } from '../inferno_wrappers/utils';
 
 export const CLASSES = {
   errorRow: 'dx-gridcore-error-row',
@@ -13,11 +14,9 @@ export interface ErrorRowProperties {
   errors: GridError[];
 
   enabled: boolean;
-
-  onRemoveButtonClicked?: (index: number) => void;
 }
 
-export class ErrorRow extends Component<ErrorRowProperties> {
+export class ErrorRow extends BaseInfernoComponent<ErrorRowProperties> {
   private readonly ref = createRef<HTMLDivElement>();
 
   private readonly toastRef = createRef<dxToast>();
@@ -34,17 +33,15 @@ export class ErrorRow extends Component<ErrorRowProperties> {
             visible={true}
             message={lastError.text}
             type={'error'}
+            position={{
+              my: 'bottom',
+              at: 'bottom',
+              // @ts-expect-error
+              of: wrapRef(this.ref),
+            }}
           />
         )}
       </div>
     );
-  }
-
-  public componentDidUpdate(): void {
-    this.toastRef.current?.option('position', {
-      my: 'bottom',
-      at: 'bottom',
-      of: this.ref.current!,
-    });
   }
 }

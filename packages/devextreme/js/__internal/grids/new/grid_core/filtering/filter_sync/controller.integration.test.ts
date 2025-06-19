@@ -118,7 +118,8 @@ const TEST_CASES_GROUPS: TestCasesGroup[] = [
   },
 ];
 
-describe('FilterSync', () => {
+// NOTE: Skip tests because FilterSync feature disabled
+describe.skip('FilterSync', () => {
   TEST_CASES_GROUPS.forEach(({
     groupName,
     dataSource,

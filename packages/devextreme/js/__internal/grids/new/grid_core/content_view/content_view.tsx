@@ -35,6 +35,8 @@ export interface ContentViewProps {
   scrollableRef?: RefObject<dxScrollable>;
 
   showContextMenu?: (e: MouseEvent) => void;
+
+  onRendered?: () => void;
 }
 
 export class ContentView extends Component<ContentViewProps> {
@@ -94,10 +96,12 @@ export class ContentView extends Component<ContentViewProps> {
         ) as unknown as number;
       },
     );
+    this.props.onRendered?.();
   }
 
   public componentDidUpdate(): void {
     this.updateSizesInfo();
+    this.props.onRendered?.();
   }
 
   public componentWillUnmount(): void {

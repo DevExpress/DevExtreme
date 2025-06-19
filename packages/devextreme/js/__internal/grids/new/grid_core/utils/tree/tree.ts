@@ -129,13 +129,8 @@ export const mergeOptionTrees = (
   pathToMerge: string[],
 ): TreeNodeType => {
   const [lastNodePath] = pathToMerge.slice(-1);
-  const result = shallowCopySubtreePath(internalTree, pathToMerge);
+  const result = createOrShallowCopySubtreePath(internalTree, pathToMerge);
   const targetNodeParent = getTreeNodeParentByPath(result, pathToMerge);
-
-  // NOTE: If we don't find parent of the tree node to update -> do nothing
-  if (!targetNodeParent) {
-    return result;
-  }
 
   const newNodeValue = getTreeNodeByPath(publicTree, pathToMerge);
   const defaultNodeValue = getTreeNodeByPath(defaultTree, pathToMerge);

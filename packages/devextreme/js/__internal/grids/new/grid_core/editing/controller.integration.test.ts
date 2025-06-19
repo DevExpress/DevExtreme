@@ -12,7 +12,7 @@ const SELECTORS = {
   cardView: '.dx-cardview',
   addButton: '[aria-label="add"]',
   editButton: '[aria-label="edit"]',
-  deleteButton: '[aria-label="remove"]',
+  deleteButton: '[aria-label="trash"]',
 };
 
 const setup = (options: GridCoreOptions = {}): CardView => {

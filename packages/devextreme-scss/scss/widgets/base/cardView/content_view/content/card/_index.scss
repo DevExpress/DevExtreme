@@ -16,6 +16,11 @@
   & > div > :nth-child(2) {
     border-top: none;
   }
+
+  &:focus-visible {
+    outline: 2px $cardview-card--focused-outline-color solid;
+    outline-offset: -2px;
+  }
 }
 
 .dx-cardview-card-selection {

@@ -777,8 +777,14 @@ class Overlay<
     if (_loopFocus || enabled) {
       eventsEngine.on(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
     } else {
-      eventsEngine.off(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
+      this._destroyTabTerminator();
     }
+  }
+
+  _destroyTabTerminator(): void {
+    // @ts-expect-error ts-error
+    const eventName = addNamespace('keydown', this.NAME);
+    eventsEngine.off(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
   }
 
   _findTabbableBounds(): { first: dxElementWrapper | null; last: dxElementWrapper | null } {
@@ -1248,7 +1254,6 @@ class Overlay<
     this._toggleViewPortSubscription(false);
     this._toggleSubscriptions(false);
     this._updateZIndexStackPosition(false);
-    this._toggleTabTerminator(false);
 
     this._actions = null;
     this._parentsScrollSubscriptionInfo = null;
@@ -1259,6 +1264,7 @@ class Overlay<
     this.option('visible') && zIndexPool.remove(this._zIndex);
     this._$wrapper.remove();
     this._$content.remove();
+    this._destroyTabTerminator();
   }
 
   _toggleRTLDirection(rtl) {

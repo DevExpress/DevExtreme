@@ -362,7 +362,7 @@ export type ColumnProperties<TCardData = unknown, TKey = unknown> = {
      * @type dxFormSimpleItem
      * @public
      */
-    formItem?: SimpleItem; // TODO: sync with impl
+    formItem?: SimpleItem;
     /**
      * @docid
      * @default ""
@@ -681,7 +681,7 @@ export type ColumnTemplateData<TCardData = unknown, TKey = unknown> = {
  * @public
  * @namespace DevExpress.ui.dxCardView
  */
-export type CardCover<TCardData = unknown> = { // TODO: sync with impl
+export type CardCover<TCardData = unknown> = {
     /**
      * @docid
      * @public
@@ -737,7 +737,7 @@ export type CardHeaderItem = dxToolbarItem & {
  * @public
  * @namespace DevExpress.ui.dxCardView
  */
-export type CardHeader = { // TODO: sync with impl
+export type CardHeader = {
     /**
      * @docid
      * @public
@@ -817,7 +817,7 @@ export type dxCardViewEditing<TCardData=unknown, TKey=unknown> = Editing<TCardDa
  * @docid dxCardViewEditing
  * @public
  */
-export type Editing<TCardData=unknown, TKey=unknown> = { // TODO: sync with impl
+export type Editing<TCardData=unknown, TKey=unknown> = {
     /**
      * @docid dxCardViewEditing.allowAdding
      * @public
@@ -1368,77 +1368,77 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @docid
      * @public
      */
-    fieldHintEnabled?: boolean; // TODO: sync with impl
+    fieldHintEnabled?: boolean;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:CardClickEvent}
      * @action
      */
-    onCardClick?: (e: CardClickEvent) => void; // TODO: sync with impl
+    onCardClick?: (e: CardClickEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:CardDblClickEvent}
      * @action
      */
-    onCardDblClick?: (e: CardDblClickEvent) => void; // TODO: sync with impl
+    onCardDblClick?: (e: CardDblClickEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:CardPreparedEvent}
      * @action
      */
-    onCardPrepared?: (e: CardPreparedEvent) => void; // TODO: sync with impl
+    onCardPrepared?: (e: CardPreparedEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:FieldCaptionClickEvent}
      * @action
      */
-    onFieldCaptionClick?: (e: FieldCaptionClickEvent) => void; // TODO: sync with impl
+    onFieldCaptionClick?: (e: FieldCaptionClickEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:FieldCaptionDblClickEvent}
      * @action
      */
-    onFieldCaptionDblClick?: (e: FieldCaptionDblClickEvent) => void; // TODO: sync with impl
+    onFieldCaptionDblClick?: (e: FieldCaptionDblClickEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:FieldCaptionPreparedEvent}
      * @action
      */
-    onFieldCaptionPrepared?: (e: FieldCaptionPreparedEvent) => void; // TODO: sync with impl
+    onFieldCaptionPrepared?: (e: FieldCaptionPreparedEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:FieldValueClickEvent}
      * @action
      */
-    onFieldValueClick?: (e: FieldValueClickEvent) => void; // TODO: sync with impl
+    onFieldValueClick?: (e: FieldValueClickEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:FieldValueDblClickEvent}
      * @action
      */
-    onFieldValueDblClick?: (e: FieldValueDblClickEvent) => void; // TODO: sync with impl
+    onFieldValueDblClick?: (e: FieldValueDblClickEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:FieldValuePreparedEvent}
      * @action
      */
-    onFieldValuePrepared?: (e: FieldValuePreparedEvent) => void; // TODO: sync with impl
+    onFieldValuePrepared?: (e: FieldValuePreparedEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:CardHoverChangedEvent}
      * @action
      */
-    onCardHoverChanged?: (e: CardHoverChangedEvent) => void; // TODO: sync with impl
+    onCardHoverChanged?: (e: CardHoverChangedEvent) => void;
     /**
      * @docid
      * @public
@@ -1454,7 +1454,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @docid
      * @public
      */
-    hoverStateEnabled?: boolean; // TODO: sync with impl
+    hoverStateEnabled?: boolean;
 
     // #endregion
 
@@ -1474,12 +1474,6 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      */
     sorting?: Sorting;
 
-    /**
-     * @docid
-     * @default "auto"
-     * @public
-     */
-    filterSyncEnabled?: boolean | Mode;
     /**
      * @docid
      * @type Filter expression
@@ -1883,13 +1877,13 @@ export default class dxCardView<TCardData = unknown, TKey = unknown> extends Wid
      * @publicName getSelectedCardsData()
      * @public
      */
-    getSelectedCardsData(): Array<TCardData>; // TODO: sync with impl
+    getSelectedCardsData(): Array<TCardData>;
     /**
      * @docid
      * @publicName getSelectedCardKeys()
      * @public
      */
-    getSelectedCardKeys(): Array<TKey>; // TODO: sync with impl
+    getSelectedCardKeys(): Array<TKey>;
     /**
      * @docid
      * @publicName isCardSelected(key)

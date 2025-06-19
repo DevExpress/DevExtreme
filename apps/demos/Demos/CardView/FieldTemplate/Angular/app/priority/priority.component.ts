@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { Priority, PriorityService } from '../priority.service';
+import { Priority, Service } from '../app.service';
 
 let modulePrefix = '';
 // @ts-ignore
@@ -19,7 +19,7 @@ export class PriorityComponent implements OnChanges {
 
   @Input() priorityID: number;
 
-  constructor(service: PriorityService) {
+  constructor(service: Service) {
     this.priorities = service.getPriorities();
   }
 

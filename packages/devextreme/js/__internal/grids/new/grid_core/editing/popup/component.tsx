@@ -7,12 +7,14 @@ import { CLASSES } from '../../const';
 import type { FormProperties } from '../../inferno_wrappers/form';
 import { Form } from '../../inferno_wrappers/form';
 import { Popup } from '../../inferno_wrappers/popup';
+import type { EditingTexts } from '../options';
 import { getCancelButtonConfig, getSaveButtonConfig } from './buttons';
 
 export interface Props {
   visible: boolean;
   onSave: () => void;
   onCancel: () => void;
+  texts: EditingTexts;
   onHide: () => void;
   customizeItem: NonNullable<FormProperties['customizeItem']>;
   items: NonNullable<FormProperties['items']>;
@@ -33,9 +35,11 @@ export class EditPopup extends Component<Props> {
     const toolbarItems = [
       getSaveButtonConfig({
         onSave: this.props.onSave,
+        text: this.props.texts.saveCard,
       }),
       getCancelButtonConfig({
         onCancel: this.props.onCancel,
+        text: this.props.texts.cancel,
       }),
     ];
 

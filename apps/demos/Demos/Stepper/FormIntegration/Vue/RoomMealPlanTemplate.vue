@@ -6,6 +6,7 @@
     :form-data="formData"
     :validation-group="validationGroup"
     :col-count="2"
+    ref="formRef"
   >
     <DxSimpleItem
       :is-required="true"
@@ -28,15 +29,22 @@
 <script setup lang="ts">
 import DxForm, { DxSimpleItem } from 'devextreme-vue/form';
 import 'devextreme/ui/select_box';
+import { watch, ref } from 'vue';
 import type { BookingFormData } from './types.ts';
-import { roomTypes, mealPlans, initialFormData } from './data.ts';
+import { roomTypes, mealPlans, getInitialFormData } from './data.ts';
+
+const formRef = ref(null);
 
 const props = withDefaults(defineProps<{
   formData: BookingFormData;
   validationGroup?: string;
 }>(), {
-  formData: () => initialFormData,
+  formData: getInitialFormData,
   validationGroup: () => undefined,
+});
+
+watch(() => props.formData, (value) => {
+  formRef.value.instance.reset(value);
 });
 
 const roomLabelOptions = {

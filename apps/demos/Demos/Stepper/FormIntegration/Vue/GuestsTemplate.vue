@@ -6,6 +6,7 @@
     :form-data="formData"
     :validation-group="validationGroup"
     :col-count="3"
+    ref="formRef"
   >
     <DxSimpleItem
       :is-required="true"
@@ -34,15 +35,22 @@
 <script setup lang="ts">
 import DxForm, { DxRangeRule, DxSimpleItem } from 'devextreme-vue/form';
 import 'devextreme/ui/number_box';
+import { watch, ref } from 'vue';
 import type { BookingFormData } from './types.ts';
-import { initialFormData } from './data.ts';
+import { getInitialFormData } from './data.ts';
+
+const formRef = ref(null);
 
 const props = withDefaults(defineProps<{
   formData: BookingFormData;
   validationGroup?: string;
 }>(), {
-  formData: () => initialFormData,
+  formData: getInitialFormData,
   validationGroup: () => undefined,
+});
+
+watch(() => props.formData, (value) => {
+  formRef.value.instance.reset(value);
 });
 
 const adultsLabelOptions = {
