@@ -36,7 +36,6 @@ type AccessibleOptions = Pick<Properties,
   "container" |
   "deferRendering" |
   "delay" |
-  "elementAttr" |
   "focusStateEnabled" |
   "height" |
   "hideOnOutsideClick" |
@@ -78,7 +77,6 @@ const componentConfig = {
     container: {},
     deferRendering: Boolean,
     delay: Number,
-    elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
     height: [Number, String],
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
@@ -116,7 +114,6 @@ const componentConfig = {
     "update:container": null,
     "update:deferRendering": null,
     "update:delay": null,
-    "update:elementAttr": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hideOnOutsideClick": null,

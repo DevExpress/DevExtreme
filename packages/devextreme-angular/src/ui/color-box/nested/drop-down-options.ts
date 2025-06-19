@@ -119,14 +119,6 @@ export class DxoColorBoxDropDownOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get elementAttr(): Record<string, any> {
-        return this._getOption('elementAttr');
-    }
-    set elementAttr(value: Record<string, any>) {
-        this._setOption('elementAttr', value);
-    }
-
-    @Input()
     get enableBodyScroll(): boolean {
         return this._getOption('enableBodyScroll');
     }
