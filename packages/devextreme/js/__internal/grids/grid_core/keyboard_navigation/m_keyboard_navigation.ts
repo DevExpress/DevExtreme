@@ -31,6 +31,7 @@ import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import { memoize } from '@ts/utils/memoize';
 
+import type { Column } from '../columns_controller/m_columns_controller';
 import {
   EDIT_FORM_CLASS,
   EDIT_MODE_BATCH,
@@ -1243,7 +1244,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private getFirstOrLastColumnIndex(needFirstColumnIndex: boolean): number {
     const allVisibleColumns: any[] = this._columnsController.getVisibleColumns(null, true);
-    const findColumnIndex = (column): boolean => column.type !== DRAG_COLUMN_NAME;
+    const findColumnIndex = (column): boolean => this.isFocusableColumn(column);
 
     return needFirstColumnIndex
       ? allVisibleColumns.findIndex(findColumnIndex)
@@ -1324,6 +1325,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       this.navigateToFirstOrLastCell(needNavigateToFirstCell, originalEvent);
     }
     originalEvent.preventDefault();
+  }
+
+  protected isFocusableColumn(column: Column): boolean {
+    return column.type !== DRAG_COLUMN_NAME;
   }
 
   public navigateToFirstOrLastCell(needNavigateToFirstCell: boolean, e?: KeyboardEvent): void {
