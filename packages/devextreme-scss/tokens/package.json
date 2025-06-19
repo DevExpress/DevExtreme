@@ -1,0 +1,16 @@
+{
+  "name": "tokens-builder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "build": "node build-fluent.mjs"
+  },
+  "dependencies": {
+    "@tokens-studio/sd-transforms": "^1.2.3",
+    "style-dictionary": "^4.1.0",
+    "stylelint": "^16.9.0"
+  }
+}

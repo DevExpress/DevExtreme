@@ -1,0 +1,146 @@
+{
+  "badge": {
+    "color": {
+      "selected": {
+        "bg": {
+          "$value": "{color.surface.neutral.static.rest}",
+          "$type": "color"
+        },
+        "text": {
+          "$value": "{color.content.neutral.static-inverted.rest}",
+          "$type": "color"
+        }
+      },
+      "disabled": {
+        "text": {
+          "$value": "{color.content.neutral.subdued.disabled}",
+          "$type": "color"
+        },
+        "bg": {
+          "$value": "{color.surface.neutral.subdued.disabled}",
+          "$type": "color"
+        }
+      },
+      "normal": {
+        "text": {
+          "$value": "{color.content.neutral.static.rest}",
+          "$type": "color"
+        },
+        "bg": {
+          "$value": "{color.surface.primary.default.rest}",
+          "$type": "color"
+        }
+      }
+    },
+    "typography": {
+      "small": {
+        "font-family": {
+          "$value": "{font-family.sans-serif}",
+          "$type": "text"
+        },
+        "font-weight": {
+          "$value": "{font-weight.caption-1-strong}",
+          "$type": "number"
+        },
+        "font-size": {
+          "$value": "{font-size.caption-1-strong}",
+          "$type": "number"
+        },
+        "line-height": {
+          "$value": "{line-height.caption-1-strong}",
+          "$type": "number"
+        }
+      },
+      "medium": {
+        "font-family": {
+          "$value": "{font-family.sans-serif}",
+          "$type": "text"
+        },
+        "font-weight": {
+          "$value": "{font-weight.body-1-strong}",
+          "$type": "number"
+        },
+        "font-size": {
+          "$value": "{font-size.body-1-strong}",
+          "$type": "number"
+        },
+        "line-height": {
+          "$value": "{line-height.body-1-strong}",
+          "$type": "number"
+        }
+      },
+      "large": {
+        "font-family": {
+          "$value": "{font-family.sans-serif}",
+          "$type": "text"
+        },
+        "font-weight": {
+          "$value": "{font-weight.subtitle-2}",
+          "$type": "number"
+        },
+        "font-size": {
+          "$value": "{font-size.subtitle-2}",
+          "$type": "number"
+        },
+        "line-height": {
+          "$value": "{line-height.subtitle-2}",
+          "$type": "number"
+        }
+      }
+    },
+    "layout": {
+      "large": {
+        "horizontal": {
+          "$value": "{sizing.100}",
+          "$type": "number"
+        }
+      },
+      "text-box": {
+        "medium": {
+          "vertical": {
+            "$value": "{sizing.0}",
+            "$type": "number"
+          }
+        },
+        "small": {
+          "vertical": {
+            "$value": "{sizing.0}",
+            "$type": "number"
+          }
+        },
+        "large": {
+          "vertical": {
+            "$value": "{sizing.10}",
+            "$type": "number"
+          }
+        }
+      },
+      "small": {
+        "horizontal": {
+          "$value": "{sizing.60}",
+          "$type": "number"
+        }
+      },
+      "medium": {
+        "horizontal": {
+          "$value": "{sizing.80}",
+          "$type": "number"
+        }
+      }
+    },
+    "border-radius": {
+      "small": {
+        "$value": "{border-radius.circular}",
+        "$type": "number"
+      },
+      "medium": {
+        "$value": "{border-radius.circular}",
+        "$type": "number"
+      },
+      "large": {
+        "$value": "{border-radius.circular}",
+        "$type": "number"
+      }
+    }
+  }
+}

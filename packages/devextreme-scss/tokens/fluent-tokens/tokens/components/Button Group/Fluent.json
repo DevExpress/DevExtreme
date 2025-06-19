@@ -1,0 +1,44 @@
+{
+  "button-group": {
+    "border-radius": {
+      "small": {
+        "inner-corner": {
+          "$value": "{border-radius.0}",
+          "$type": "number"
+        }
+      },
+      "medium": {
+        "inner-corner": {
+          "$value": "{border-radius.0}",
+          "$type": "number"
+        }
+      },
+      "large": {
+        "inner-corner": {
+          "$value": "{border-radius.0}",
+          "$type": "number"
+        }
+      }
+    },
+    "layout": {
+      "small": {
+        "gap": {
+          "$value": "{sizing.minus-10}",
+          "$type": "number"
+        }
+      },
+      "medium": {
+        "gap": {
+          "$value": "{sizing.minus-10}",
+          "$type": "number"
+        }
+      },
+      "large": {
+        "gap": {
+          "$value": "{sizing.minus-10}",
+          "$type": "number"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,342 @@
+{
+  "sizing": {
+    "0": {
+      "$type": "dimension",
+      "$value": "0rem"
+    },
+    "10": {
+      "$type": "dimension",
+      "$value": "0.063rem"
+    },
+    "20": {
+      "$type": "dimension",
+      "$value": "0.125rem"
+    },
+    "30": {
+      "$type": "dimension",
+      "$value": "0.188rem"
+    },
+    "40": {
+      "$type": "dimension",
+      "$value": "0.25rem"
+    },
+    "50": {
+      "$type": "dimension",
+      "$value": "0.313rem"
+    },
+    "60": {
+      "$type": "dimension",
+      "$value": "0.375rem"
+    },
+    "70": {
+      "$type": "dimension",
+      "$value": "0.438rem"
+    },
+    "80": {
+      "$type": "dimension",
+      "$value": "0.5rem"
+    },
+    "90": {
+      "$type": "dimension",
+      "$value": "0.563rem"
+    },
+    "100": {
+      "$type": "dimension",
+      "$value": "0.625rem"
+    },
+    "110": {
+      "$type": "dimension",
+      "$value": "0.688rem"
+    },
+    "120": {
+      "$type": "dimension",
+      "$value": "0.75rem"
+    },
+    "130": {
+      "$type": "dimension",
+      "$value": "0.813rem"
+    },
+    "140": {
+      "$type": "dimension",
+      "$value": "0.875rem"
+    },
+    "150": {
+      "$type": "dimension",
+      "$value": "0.938rem"
+    },
+    "160": {
+      "$type": "dimension",
+      "$value": "1rem"
+    },
+    "170": {
+      "$type": "dimension",
+      "$value": "1.063rem"
+    },
+    "180": {
+      "$type": "dimension",
+      "$value": "1.125rem"
+    },
+    "190": {
+      "$type": "dimension",
+      "$value": "1.188rem"
+    },
+    "200": {
+      "$type": "dimension",
+      "$value": "1.25rem"
+    },
+    "210": {
+      "$type": "dimension",
+      "$value": "1.313rem"
+    },
+    "220": {
+      "$type": "dimension",
+      "$value": "1.375rem"
+    },
+    "230": {
+      "$type": "dimension",
+      "$value": "1.438rem"
+    },
+    "240": {
+      "$type": "dimension",
+      "$value": "1.5rem"
+    },
+    "260": {
+      "$type": "dimension",
+      "$value": "1.625rem"
+    },
+    "280": {
+      "$type": "dimension",
+      "$value": "1.75rem"
+    },
+    "300": {
+      "$type": "dimension",
+      "$value": "1.875rem"
+    },
+    "320": {
+      "$type": "dimension",
+      "$value": "2rem"
+    },
+    "360": {
+      "$type": "dimension",
+      "$value": "2.25rem"
+    },
+    "400": {
+      "$type": "dimension",
+      "$value": "2.5rem"
+    },
+    "440": {
+      "$type": "dimension",
+      "$value": "2.75rem"
+    },
+    "480": {
+      "$type": "dimension",
+      "$value": "3rem"
+    },
+    "520": {
+      "$type": "dimension",
+      "$value": "3.25rem"
+    },
+    "560": {
+      "$type": "dimension",
+      "$value": "3.5rem"
+    },
+    "600": {
+      "$type": "dimension",
+      "$value": "3.75rem"
+    },
+    "640": {
+      "$type": "dimension",
+      "$value": "4rem"
+    },
+    "720": {
+      "$type": "dimension",
+      "$value": "4.5rem"
+    },
+    "800": {
+      "$type": "dimension",
+      "$value": "5rem"
+    },
+    "880": {
+      "$type": "dimension",
+      "$value": "5.5rem"
+    },
+    "960": {
+      "$type": "dimension",
+      "$value": "6rem"
+    },
+    "1200": {
+      "$type": "dimension",
+      "$value": "7.5rem"
+    },
+    "1600": {
+      "$type": "dimension",
+      "$value": "10rem"
+    },
+    "minus-10": {
+      "$type": "dimension",
+      "$value": "-0.063rem"
+    },
+    "minus-20": {
+      "$type": "dimension",
+      "$value": "-0.125rem"
+    },
+    "minus-40": {
+      "$type": "dimension",
+      "$value": "-0.25rem"
+    }
+  },
+  "border-radius": {
+    "0": {
+      "$type": "borderRadius",
+      "$value": "0rem"
+    },
+    "10": {
+      "$type": "borderRadius",
+      "$value": "0.063rem"
+    },
+    "20": {
+      "$type": "borderRadius",
+      "$value": "0.125rem"
+    },
+    "30": {
+      "$type": "borderRadius",
+      "$value": "0.188rem"
+    },
+    "40": {
+      "$type": "borderRadius",
+      "$value": "0.25rem"
+    },
+    "50": {
+      "$type": "borderRadius",
+      "$value": "0.3125rem"
+    },
+    "60": {
+      "$type": "borderRadius",
+      "$value": "0.375rem"
+    },
+    "80": {
+      "$type": "borderRadius",
+      "$value": "0.5rem"
+    },
+    "120": {
+      "$type": "borderRadius",
+      "$value": "0.75rem"
+    },
+    "160": {
+      "$type": "borderRadius",
+      "$value": "1rem"
+    },
+    "circular": {
+      "$type": "borderRadius",
+      "$value": "62rem"
+    }
+  },
+  "border-width": {
+    "0": {
+      "$type": "borderWidth",
+      "$value": "0rem"
+    },
+    "10": {
+      "$type": "borderWidth",
+      "$value": "0.063rem"
+    },
+    "20": {
+      "$type": "borderWidth",
+      "$value": "0.125rem"
+    },
+    "30": {
+      "$type": "borderWidth",
+      "$value": "0.188rem"
+    },
+    "40": {
+      "$type": "borderWidth",
+      "$value": "0.25rem"
+    }
+  },
+  "opacity": {
+    "0": {
+      "$type": "opacity",
+      "$value": "0"
+    },
+    "5": {
+      "$type": "opacity",
+      "$value": "0.05"
+    },
+    "10": {
+      "$type": "opacity",
+      "$value": "0.1"
+    },
+    "15": {
+      "$type": "opacity",
+      "$value": "0.15"
+    },
+    "20": {
+      "$type": "opacity",
+      "$value": "0.2"
+    },
+    "25": {
+      "$type": "opacity",
+      "$value": "0.25"
+    },
+    "30": {
+      "$type": "opacity",
+      "$value": "0.3"
+    },
+    "35": {
+      "$type": "opacity",
+      "$value": "0.35"
+    },
+    "40": {
+      "$type": "opacity",
+      "$value": "0.4"
+    },
+    "45": {
+      "$type": "opacity",
+      "$value": "0.45"
+    },
+    "50": {
+      "$type": "opacity",
+      "$value": "0.5"
+    },
+    "55": {
+      "$type": "opacity",
+      "$value": "0.55"
+    },
+    "60": {
+      "$type": "opacity",
+      "$value": "0.6"
+    },
+    "65": {
+      "$type": "opacity",
+      "$value": "0.65"
+    },
+    "70": {
+      "$type": "opacity",
+      "$value": "0.7"
+    },
+    "75": {
+      "$type": "opacity",
+      "$value": "0.75"
+    },
+    "80": {
+      "$type": "opacity",
+      "$value": "0.8"
+    },
+    "85": {
+      "$type": "opacity",
+      "$value": "0.85"
+    },
+    "90": {
+      "$type": "opacity",
+      "$value": "0.9"
+    },
+    "95": {
+      "$type": "opacity",
+      "$value": "0.95"
+    },
+    "100": {
+      "$type": "opacity",
+      "$value": "1"
+    }
+  }
+}

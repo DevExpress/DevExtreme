@@ -1,0 +1,328 @@
+{
+  "data-visualization-utility": {
+    "title": {
+      "color": {
+        "title": {
+          "$value": "{color.content.neutral.default.rest}",
+          "$type": "color"
+        },
+        "subtitle": {
+          "$value": "{color.content.neutral.subdued.rest}",
+          "$type": "color"
+        }
+      },
+      "typography": {
+        "title": {
+          "font-family": {
+            "$value": "{font-family.sans-serif}",
+            "$type": "text"
+          },
+          "font-weight": {
+            "$value": "{font-weight.title-2}",
+            "$type": "number"
+          },
+          "font-size": {
+            "$value": "{font-size.title-2}",
+            "$type": "number"
+          },
+          "line-height": {
+            "$value": "{line-height.title-2}",
+            "$type": "number"
+          }
+        },
+        "subtitle": {
+          "font-family": {
+            "$value": "{font-family.sans-serif}",
+            "$type": "text"
+          },
+          "font-weight": {
+            "$value": "{font-weight.body-2}",
+            "$type": "number"
+          },
+          "font-size": {
+            "$value": "{font-size.body-2}",
+            "$type": "number"
+          },
+          "line-height": {
+            "$value": "{line-height.body-2}",
+            "$type": "number"
+          }
+        }
+      },
+      "layout": {
+        "outer-box": {
+          "gap": {
+            "$value": "{sizing.40}",
+            "$type": "number"
+          }
+        }
+      }
+    },
+    "series-label": {
+      "color": {
+        "text": {
+          "$value": "{color.content.neutral.static.rest}",
+          "$type": "color"
+        }
+      },
+      "typography": {
+        "font-family": {
+          "$value": "{font-family.sans-serif}",
+          "$type": "text"
+        },
+        "font-weight": {
+          "$value": "{font-weight.caption-1}",
+          "$type": "number"
+        },
+        "font-size": {
+          "$value": "{font-size.caption-1}",
+          "$type": "number"
+        },
+        "line-height": {
+          "$value": "{line-height.caption-1}",
+          "$type": "number"
+        }
+      },
+      "layout": {
+        "outer-box": {
+          "horizontal": {
+            "$value": "{sizing.60}",
+            "$type": "number"
+          },
+          "vertical": {
+            "$value": "{sizing.40}",
+            "$type": "number"
+          }
+        }
+      }
+    },
+    "legend": {
+      "legend-item": {
+        "color": {
+          "text": {
+            "$value": "{color.content.neutral.subdued.rest}",
+            "$type": "color"
+          }
+        },
+        "typography": {
+          "font-family": {
+            "$value": "{font-family.sans-serif}",
+            "$type": "text"
+          },
+          "font-weight": {
+            "$value": "{font-weight.body-1}",
+            "$type": "number"
+          },
+          "font-size": {
+            "$value": "{font-size.body-1}",
+            "$type": "number"
+          },
+          "line-height": {
+            "$value": "{line-height.body-1}",
+            "$type": "number"
+          }
+        },
+        "layout": {
+          "outer-box": {
+            "gap": {
+              "$value": "{sizing.40}",
+              "$type": "number"
+            }
+          },
+          "marker": {
+            "width": {
+              "$value": "{sizing.160}",
+              "$type": "number"
+            },
+            "height": {
+              "$value": "{sizing.160}",
+              "$type": "number"
+            }
+          }
+        }
+      },
+      "legend": {
+        "color": {
+          "transparent": {
+            "bg": {
+              "$value": "{color.surface.neutral.muted.rest}",
+              "$type": "color"
+            }
+          },
+          "contained": {
+            "bg": {
+              "$value": "{color.surface.neutral.default.rest}",
+              "$type": "color"
+            },
+            "border": {
+              "$value": "{color.border.neutral.default.rest}",
+              "$type": "color"
+            }
+          }
+        },
+        "layout": {
+          "inner-box": {
+            "gap": {
+              "$value": "{sizing.200}",
+              "$type": "number"
+            }
+          },
+          "outer-box": {
+            "transparent": {
+              "horizontal": {
+                "$value": "{sizing.0}",
+                "$type": "number"
+              },
+              "vertical": {
+                "$value": "{sizing.0}",
+                "$type": "number"
+              }
+            },
+            "contained": {
+              "horizontal": {
+                "$value": "{sizing.160}",
+                "$type": "number"
+              },
+              "vertical": {
+                "$value": "{sizing.80}",
+                "$type": "number"
+              }
+            }
+          }
+        },
+        "border-width": {
+          "contained": {
+            "$value": "{border-width.10}",
+            "$type": "number"
+          }
+        }
+      }
+    },
+    "axes": {
+      "axis-text": {
+        "color": {
+          "text": {
+            "$value": "{color.content.neutral.subdued.rest}",
+            "$type": "color"
+          }
+        },
+        "typography": {
+          "font-family": {
+            "$value": "{font-family.sans-serif}",
+            "$type": "text"
+          },
+          "font-size": {
+            "$value": "{font-size.caption-1}",
+            "$type": "number"
+          },
+          "font-weight": {
+            "$value": "{font-weight.caption-1}",
+            "$type": "number"
+          },
+          "line-height": {
+            "$value": "{line-height.caption-1}",
+            "$type": "number"
+          }
+        }
+      },
+      "axes-title": {
+        "color": {
+          "text": {
+            "$value": "{color.content.neutral.default.rest}",
+            "$type": "color"
+          }
+        },
+        "typography": {
+          "font-family": {
+            "$value": "{font-family.sans-serif}",
+            "$type": "text"
+          },
+          "font-size": {
+            "$value": "{font-size.body-2}",
+            "$type": "number"
+          },
+          "line-height": {
+            "$value": "{line-height.body-2}",
+            "$type": "number"
+          },
+          "font-weight": {
+            "$value": "{font-weight.body-2}",
+            "$type": "number"
+          }
+        }
+      },
+      "vertical-axis": {
+        "color": {
+          "line": {
+            "$value": "{color.border.neutral.default.rest}",
+            "$type": "color"
+          }
+        },
+        "layout": {
+          "text-box": {
+            "right": {
+              "$value": "{sizing.40}",
+              "$type": "number"
+            }
+          }
+        }
+      },
+      "horizontal-axis": {
+        "color": {
+          "line": {
+            "$value": "{color.border.neutral.default.rest}",
+            "$type": "color"
+          }
+        },
+        "layout": {
+          "outer-box": {
+            "left": {
+              "$value": "{sizing.480}",
+              "$type": "number"
+            }
+          }
+        }
+      },
+      "axis-item": {
+        "color": {
+          "tick": {
+            "$value": "{color.content.neutral.subdued.rest}",
+            "$type": "color"
+          }
+        },
+        "layout": {
+          "horizontal": {
+            "height": {
+              "$value": "{sizing.70}",
+              "$type": "number"
+            }
+          },
+          "vertical": {
+            "width": {
+              "$value": "{sizing.70}",
+              "$type": "number"
+            }
+          }
+        }
+      },
+      "grid-item": {
+        "color": {
+          "line": {
+            "$value": "{color.border.neutral.default.rest}",
+            "$type": "color"
+          }
+        }
+      }
+    },
+    "series-point": {
+      "color": {
+        "hover-selected": {
+          "bg": {
+            "$value": "{color.surface.neutral.default.rest}",
+            "$type": "color"
+          }
+        }
+      }
+    }
+  }
+}

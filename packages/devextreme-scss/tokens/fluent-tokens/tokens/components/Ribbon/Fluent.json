@@ -1,0 +1,62 @@
+{
+  "ribbon": {
+    "layout": {
+      "small": {
+        "horizontal": {
+          "$value": "{sizing.40}",
+          "$type": "number"
+        },
+        "vertical": {
+          "$value": "{sizing.40}",
+          "$type": "number"
+        },
+        "gap": {
+          "$value": "{sizing.40}",
+          "$type": "number"
+        }
+      },
+      "medium": {
+        "horizontal": {
+          "$value": "{sizing.40}",
+          "$type": "number"
+        },
+        "vertical": {
+          "$value": "{sizing.40}",
+          "$type": "number"
+        },
+        "gap": {
+          "$value": "{sizing.60}",
+          "$type": "number"
+        }
+      },
+      "large": {
+        "horizontal": {
+          "$value": "{sizing.40}",
+          "$type": "number"
+        },
+        "vertical": {
+          "$value": "{sizing.40}",
+          "$type": "number"
+        },
+        "gap": {
+          "$value": "{sizing.80}",
+          "$type": "number"
+        }
+      }
+    },
+    "border-radius": {
+      "small": {
+        "$value": "{border-radius.0}",
+        "$type": "number"
+      },
+      "medium": {
+        "$value": "{border-radius.0}",
+        "$type": "number"
+      },
+      "large": {
+        "$value": "{border-radius.0}",
+        "$type": "number"
+      }
+    }
+  }
+}
