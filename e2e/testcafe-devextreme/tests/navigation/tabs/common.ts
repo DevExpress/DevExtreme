@@ -159,20 +159,26 @@ test('Tabs with width: auto in flex container', async (t) => {
       const firstItem = Selector(`.${TAB_CLASS}:nth-child(1)`);
 
       // TODO: this test is unstable
-      await t.hover(firstItem);
+      await t
+        .hover(firstItem)
+        .wait(300);
       await testScreenshot(t, takeScreenshot, `Tabs 1 selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
       // =
 
       await t.dispatchEvent(firstItem, 'mousedown');
       await testScreenshot(t, takeScreenshot, `Tabs 1 selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+      await t
+        .dispatchEvent(firstItem, 'mouseup')
+        .wait(300);
 
       const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
 
       // TODO: this test is unstable
       await t
-        .dispatchEvent(firstItem, 'mouseup')
         .click(firstItem)
-        .hover(thirdItem);
+        .wait(300)
+        .hover(thirdItem)
+        .wait(300);
       await testScreenshot(t, takeScreenshot, `Tabs 3 not selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
       // =
 
@@ -257,11 +263,16 @@ test('Tabs in contrast theme', async (t) => {
 
         await testScreenshot(t, takeScreenshot, `Tabs 3item active,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
-        // TODO: this test is unstable
         await t
           .dispatchEvent(thirdItem, 'mouseup')
+          .wait(300);
+
+        // TODO: this test is unstable
+        await t
           .click(thirdItem)
-          .hover(fourthItem);
+          .wait(300)
+          .hover(fourthItem)
+          .wait(300);
 
         await testScreenshot(t, takeScreenshot, `Tabs 4item hovered,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
         // =
