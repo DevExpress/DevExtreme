@@ -421,11 +421,11 @@ $cardview-material-columnchooser--empty__message-color: null !default;
   $cardview-material-card__cover--noimage__icon-color: color.change($cardview-material-common-text-color, $alpha: 0.38) !default;
 
   $cardview-material-card--focused-outline-color: $base-accent !default;
-
-  // Card Selected
+  
+  // Card - selected
   $cardview-material-card--selected-bg-color: color.change($base-accent, $alpha: 0.08) !default;
-  $cardview-material-card--selected-border-color: $cardview-material-card-border-color !default;
-  $cardview-material-card--selected-divider-color: $cardview-material-card-divider-color !default;
+  $cardview-material-card--selected-border-color: color.change($base-accent, $alpha: 0.32) !default;
+  $cardview-material-card--selected-divider-color: $cardview-material-card--selected-border-color !default;
   $cardview-material-card--selected-text-color: $cardview-material-card-text-color !default;
   $cardview-material-card--selected__cover-bg-color: $cardview-material-card__cover-bg-color !default;
   $cardview-material-card--selected__cover--noimage-bg-color: $cardview-material-card__cover--noimage-bg-color !default;
@@ -512,8 +512,8 @@ $cardview-material-columnchooser--empty__message-color: null !default;
 
   // Card - selected
   $cardview-material-card--selected-bg-color: color.change(lighten($base-accent, 19.22), $alpha: 0.08) !default;
-  $cardview-material-card--selected-border-color: $cardview-material-card-border-color !default;
-  $cardview-material-card--selected-divider-color: $cardview-material-card-divider-color !default;
+  $cardview-material-card--selected-border-color: color.change(lighten($base-accent, 19.22), $alpha: 0.32) !default;
+  $cardview-material-card--selected-divider-color: $cardview-material-card--selected-border-color !default;
   $cardview-material-card--selected-text-color: $cardview-material-card-text-color !default;
   $cardview-material-card--selected__cover-bg-color: $cardview-material-card__cover-bg-color !default;
   $cardview-material-card--selected__cover--noimage-bg-color: $cardview-material-card__cover--noimage-bg-color !default;

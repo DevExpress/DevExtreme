@@ -424,8 +424,8 @@ $cardview-generic-columnchooser--empty__message-color: null !default;
 
   // Card - selected
   $cardview-generic-card--selected-bg-color: lighten(desaturate(adjust-hue($base-accent, 2), 6.41), 48.63) !default;
-  $cardview-generic-card--selected-border-color: $cardview-generic-card-border-color !default;
-  $cardview-generic-card--selected-divider-color: $cardview-generic-card-divider-color !default;
+  $cardview-generic-card--selected-border-color: lighten(desaturate(adjust-hue($base-accent, 2), 6.88), 33.14) !default;
+  $cardview-generic-card--selected-divider-color: $cardview-generic-card--selected-border-color !default;
   $cardview-generic-card--selected-text-color: $cardview-generic-card-text-color !default;
   $cardview-generic-card--selected__cover-bg-color: $cardview-generic-card__cover-bg-color !default;
   $cardview-generic-card--selected__cover--noimage-bg-color: $cardview-generic-card__cover--noimage-bg-color !default;
@@ -512,8 +512,8 @@ $cardview-generic-columnchooser--empty__message-color: null !default;
 
   // Card - selected
   $cardview-generic-card--selected-bg-color: darken(desaturate(adjust-hue($base-accent, 1), 60.34), 29.41) !default;
-  $cardview-generic-card--selected-border-color: $cardview-generic-card-border-color !default;
-  $cardview-generic-card--selected-divider-color: $cardview-generic-card-divider-color !default;
+  $cardview-generic-card--selected-border-color: darken(desaturate(adjust-hue($base-accent, 1), 44.18), 11.76) !default;
+  $cardview-generic-card--selected-divider-color: $cardview-generic-card--selected-border-color !default;
   $cardview-generic-card--selected-text-color: $cardview-generic-card-text-color !default;
   $cardview-generic-card--selected__cover-bg-color: $cardview-generic-card__cover-bg-color !default;
   $cardview-generic-card--selected__cover--noimage-bg-color: $cardview-generic-card__cover--noimage-bg-color !default;

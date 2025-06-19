@@ -423,8 +423,8 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
 
   // Card - selected
   $cardview-fluent-card--selected-bg-color: lighten(desaturate(adjust-hue($base-accent, 4), 11.38), 55.49) !default;
-  $cardview-fluent-card--selected-border-color: $cardview-fluent-card-border-color !default;
-  $cardview-fluent-card--selected-divider-color: $cardview-fluent-card-divider-color !default;
+  $cardview-fluent-card--selected-border-color: lighten(saturate(adjust-hue($base-accent, 3), 2.21), 44.31) !default;
+  $cardview-fluent-card--selected-divider-color: $cardview-fluent-card--selected-border-color !default;
   $cardview-fluent-card--selected-text-color: $cardview-fluent-card-text-color !default;
   $cardview-fluent-card--selected__cover-bg-color: $cardview-fluent-card__cover-bg-color !default;
   $cardview-fluent-card--selected__cover--noimage-bg-color: $cardview-fluent-card__cover--noimage-bg-color !default;
@@ -511,8 +511,8 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
 
   // Card - selected
   $cardview-fluent-card--selected-bg-color: darken(desaturate(adjust-hue($base-accent, -4), 14.69), 49.41) !default;
-  $cardview-fluent-card--selected-border-color: $cardview-fluent-card-border-color !default;
-  $cardview-fluent-card--selected-divider-color: $cardview-fluent-card-divider-color !default;
+  $cardview-fluent-card--selected-border-color: darken(desaturate(adjust-hue($base-accent, -3), 11.06), 36.27) !default;
+  $cardview-fluent-card--selected-divider-color: $cardview-fluent-card--selected-border-color !default;
   $cardview-fluent-card--selected-text-color: $cardview-fluent-card-text-color !default;
   $cardview-fluent-card--selected__cover-bg-color: $cardview-fluent-card__cover-bg-color !default;
   $cardview-fluent-card--selected__cover--noimage-bg-color: $cardview-fluent-card__cover--noimage-bg-color !default;
