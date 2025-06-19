@@ -164,14 +164,6 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
                             () => ref.current?.focus(),
                           );
                         },
-                        'F10+shift': (event, ref) => {
-                          this.props.showContextMenu(
-                            event,
-                            column,
-                            idx,
-                            () => ref.current?.focus(),
-                          );
-                        },
                       }}
                       caughtEventPreventDefault={true}
                       onSortClick={(event): void => {
@@ -180,8 +172,13 @@ export class HeaderPanel extends Component<HeaderPanelProps> {
                       onFilterClick={(element: Element) => {
                         this.props.onHeaderFilterOpen?.(element, column);
                       }}
-                      onContextMenu={(event) => {
-                        this.props.showContextMenu(event, column, idx);
+                      onContextMenu={(event, ref) => {
+                        this.props.showContextMenu(
+                          event,
+                          column,
+                          idx,
+                          () => ref?.focus(),
+                        );
                       }}
                     />
                   </div>
