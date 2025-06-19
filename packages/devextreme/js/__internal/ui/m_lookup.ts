@@ -710,8 +710,7 @@ class Lookup extends DropDownList<LookupProperties> {
       // @ts-expect-error ts-error
       shading: dropDownOptions.shading,
       // @ts-expect-error ts-error
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      hideOnOutsideClick: dropDownOptions.hideOnOutsideClick || dropDownOptions.closeOnOutsideClick,
+      hideOnOutsideClick: dropDownOptions.hideOnOutsideClick,
       _loopFocus: shouldLoopFocusInsidePopup,
     });
 

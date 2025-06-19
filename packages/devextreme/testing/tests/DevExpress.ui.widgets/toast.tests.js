@@ -273,31 +273,29 @@ QUnit.module('regression', moduleConfig, () => {
 });
 
 QUnit.module('overlay integration', moduleConfig, () => {
-    ['closeOnOutsideClick', 'hideOnOutsideClick'].forEach(closeOnOutsideClickOptionName => {
-        QUnit.test(`toast should be closed on outside click if ${closeOnOutsideClickOptionName} is true`, function(assert) {
-            this.instance.option(closeOnOutsideClickOptionName, true);
-            this.instance.show();
+    QUnit.test('toast should be closed on outside click if hideOnOutsideClick is true', function(assert) {
+        this.instance.option('hideOnOutsideClick', true);
+        this.instance.show();
 
-            $('#qunit-fixture').trigger('dxpointerdown');
+        $('#qunit-fixture').trigger('dxpointerdown');
 
-            assert.equal(this.instance.option('visible'), false, 'toast was hidden should be hiding');
-        });
+        assert.equal(this.instance.option('visible'), false, 'toast was hidden should be hiding');
+    });
 
-        QUnit.test(`toast does not prevent ${closeOnOutsideClickOptionName} handler of other overlays`, function(assert) {
-            const $overlay = $('<div>').appendTo(viewPort);
+    QUnit.test('toast does not prevent hideOnOutsideClick handler of other overlays', function(assert) {
+        const $overlay = $('<div>').appendTo(viewPort);
 
-            const overlay = $overlay.dxOverlay({
-                [closeOnOutsideClickOptionName]: true
-            }).dxOverlay('instance');
+        const overlay = $overlay.dxOverlay({
+            hideOnOutsideClick: true
+        }).dxOverlay('instance');
 
 
-            overlay.show();
-            this.instance.show();
+        overlay.show();
+        this.instance.show();
 
-            $('#qunit-fixture').trigger('dxpointerdown');
+        $('#qunit-fixture').trigger('dxpointerdown');
 
-            assert.equal(overlay.option('visible'), false, 'dxOverlay should be hiding');
-        });
+        assert.equal(overlay.option('visible'), false, 'dxOverlay should be hiding');
     });
 
     QUnit.test('it should be possible to select a message in the toast by the mouse', function(assert) {
