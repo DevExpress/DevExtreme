@@ -156,15 +156,19 @@ test('Tabs with width: auto in flex container', async (t) => {
 
       await testScreenshot(t, takeScreenshot, `Tabs 1 selected stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
 
+      await t.click('body', {
+        offsetX: -10,
+        offsetY: -10,
+      });
+
       const firstItem = Selector(`.${TAB_CLASS}:nth-child(1)`);
 
-      // TODO: this test is unstable
-      await t.dispatchEvent(firstItem, 'mouseover');
+      await t.hover(firstItem);
       await testScreenshot(t, takeScreenshot, `Tabs 1 selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
-      // =
 
       await t.dispatchEvent(firstItem, 'mousedown');
       await testScreenshot(t, takeScreenshot, `Tabs 1 selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+      await t.dispatchEvent(firstItem, 'mouseup');
 
       const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
 
@@ -179,6 +183,7 @@ test('Tabs with width: auto in flex container', async (t) => {
 
       await t.dispatchEvent(thirdItem, 'mousedown');
       await testScreenshot(t, takeScreenshot, `Tabs 3 not selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
+      await t.dispatchEvent(thirdItem, 'mouseup');
 
       await t
         .expect(compareResults.isValid())
@@ -257,10 +262,6 @@ test('Tabs in contrast theme', async (t) => {
           .dispatchEvent(thirdItem, 'mousedown');
 
         await testScreenshot(t, takeScreenshot, `Tabs 3item active,sOF=${selectOnFocus},orient=${orientation},rtl=${rtlEnabled}.png`, { element: '#tabs' });
-
-        await t
-          .dispatchEvent(thirdItem, 'mouseup')
-          .wait(300);
 
         // TODO: this test is unstable
         // await t
