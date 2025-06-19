@@ -26,6 +26,7 @@ const App = () => {
   const [searchEnabled, setSearchEnabled] = useState(true);
   const [allowSelectAll, setAllowSelectAll] = useState(true);
   const [selectByClick, setSelectByClick] = useState(true);
+  const [allowColumnReordering, setAllowColumnReordering] = useState(false);
 
   return <>
     <div className="options-panel">
@@ -63,6 +64,13 @@ const App = () => {
             disabled={columnChooserMode !== 'select'}
           ></CheckBox>
         </div>
+        <div className="option">
+          <CheckBox
+            text="Allow Column Reordering"
+            value={allowColumnReordering}
+            onValueChange={setAllowColumnReordering}
+          ></CheckBox>
+        </div>
       </div>
     </div>
     <CardView
@@ -70,6 +78,7 @@ const App = () => {
       keyExpr="ID"
       cardsPerRow="auto"
       cardMinWidth={300}
+      allowColumnReordering={allowColumnReordering}
     >
       <SearchPanel
         visible={true}

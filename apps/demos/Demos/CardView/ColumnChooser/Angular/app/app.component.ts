@@ -25,6 +25,8 @@ export class AppComponent {
 
   columnChooserMode = 'select';
 
+  allowColumnReordering = false;
+
   searchEnabled = true;
 
   allowSelectAll = true;

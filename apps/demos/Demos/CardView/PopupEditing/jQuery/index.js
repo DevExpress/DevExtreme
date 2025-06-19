@@ -4,7 +4,7 @@ $(() => {
     keyExpr: 'id',
     cardsPerRow: 'auto',
     cardMinWidth: 350,
-    height: 820,
+    height: 840,
     cardCover: {
       imageExpr: ({ picture }) => picture,
       altExpr: ({ fullName }) => `Photo of ${fullName}`,
@@ -32,7 +32,7 @@ $(() => {
             itemType: 'group',
             colCount: 2,
             colSpan: 2,
-            items: ['hireDate', 'title', {
+            items: ['hireDate', 'title', 'department', {
               dataField: 'notes',
               editorType: 'dxTextArea',
               colSpan: 2,
