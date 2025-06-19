@@ -101,6 +101,11 @@ export class DIContext {
   public resolveAlias<T>(aliasId: AbstractType<T>): AbstractType<T> {
     let result = aliasId;
 
+    /*
+      NOTE: cycle it here for case when some alias resolves to another alias.
+      e.g. A -> B -> C
+      We need to resolve until we get class without aliases
+    */
     while (this.aliases.has(result)) {
       result = this.aliases.get(result) as AbstractType<T>;
     }
