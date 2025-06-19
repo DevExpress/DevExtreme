@@ -52,7 +52,8 @@ $(() => {
               }, 'city', 'zipcode', {
                 dataField: 'mobilePhone',
                 editorOptions: {
-                  mask: '+1 (000) 000-0000',
+                  mask: '+0 (000) 000-0000',
+                  useMaskedValue: true,
                 },
               }, 'email',
             ],
