@@ -172,12 +172,10 @@ test('Tabs with width: auto in flex container', async (t) => {
 
       const thirdItem = Selector(`.${TAB_CLASS}:nth-child(3)`);
 
-      // TODO: this test is unstable
       await t
         .click(firstItem)
         .hover(thirdItem);
       await testScreenshot(t, takeScreenshot, `Tabs 3 not selected,hovered stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
-      // =
 
       await t.dispatchEvent(thirdItem, 'mousedown');
       await testScreenshot(t, takeScreenshot, `Tabs 3 not selected,active stylingMode=${stylingMode},rtl=${rtlEnabled}.png`, { element: '#tabs' });
