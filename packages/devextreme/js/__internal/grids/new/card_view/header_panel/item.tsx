@@ -132,8 +132,6 @@ export class Item extends Component<ItemProps> {
   };
 
   private readonly onContextMenuHandler = (event: MouseEvent): void => {
-    event.stopPropagation();
-
     if (this.props.elementRef?.current) {
       this.props.onContextMenu?.(event, this.props.elementRef.current);
     }
