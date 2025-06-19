@@ -1,0 +1,15 @@
+{
+  "name": "metadata",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "format:check": "prettier --check .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@types/node": "catalog:tools",
+    "devextreme-internal-tools": "18.0.0-beta.6",
+    "prettier": "catalog:tools",
+    "ts-node": "catalog:tools"
+  }
+}

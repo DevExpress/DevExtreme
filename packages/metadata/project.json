@@ -1,0 +1,97 @@
+{
+  "name": "metadata",
+  "projectType": "application",
+  "targets": {
+    "discover-declarations": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm exec ts-node ./discover-declarations.ts"
+      },
+      "cache": false,
+      "inputs": [
+        "metadataToolsCommonInputs",
+        "{workspaceRoot}/packages/devextreme/js/**/*.ts",
+        "{workspaceRoot}/packages/devextreme/js/**/*.js"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/Declarations.json",
+        "{projectRoot}/artifacts/devextreme-uml.wsd",
+        "{projectRoot}/artifacts/modules-meta.json",
+        "{projectRoot}/artifacts/ts-members-meta.json"
+      ]
+    },
+    "make-angular-metadata": {
+      "dependsOn": ["discover-declarations"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm exec ts-node ./make-angular-metadata.ts"
+      },
+      "cache": false,
+      "inputs": [
+        "metadataToolsCommonInputs",
+        "{projectRoot}/artifacts/Declarations.json"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/NGMetaData.json"
+      ]
+    },
+    "make-aspnet-metadata": {
+      "dependsOn": ["discover-declarations"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm exec ts-node ./make-aspnet-metadata.ts"
+      },
+      "cache": false,
+      "inputs": [
+        "metadataToolsCommonInputs",
+        "{projectRoot}/artifacts/Declarations.json"
+      ],
+      "outputs": [
+        "{projectRoot}/StrongMetaData.json"
+      ]
+    },
+    "make-integration-metadata": {
+      "dependsOn": ["discover-declarations"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm exec ts-node ./make-integration-metadata.ts"
+      },
+      "cache": false,
+      "inputs": [
+        "metadataToolsCommonInputs",
+        "{projectRoot}/artifacts/Declarations.json"
+      ],
+      "outputs": [
+        "{projectRoot}/integration-data.json"
+      ]
+    },
+    "put-metadata-to-angular": {
+      "dependsOn": ["make-angular-metadata"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm exec ts-node ./put-metadata-to-angular.ts"
+      }
+    },
+    "put-metadata-to-react": {
+      "dependsOn": ["make-integration-metadata"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm exec ts-node ./put-metadata-to-react.ts"
+      }
+    },
+    "put-metadata-to-vue": {
+      "dependsOn": ["make-integration-metadata"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm exec ts-node ./put-metadata-to-vue.ts"
+      }
+    }
+  }
+}

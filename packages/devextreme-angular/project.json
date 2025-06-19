@@ -37,7 +37,7 @@
       "options": {
         "script": "regenerate"
       },
-      "dependsOn": ["devextreme-monorepo:\"angular:copy-metadata\""]
+      "dependsOn": ["metadata:\"put-metadata-to-angular\""]
     },
     "test:dev": {
       "executor": "nx:run-script",

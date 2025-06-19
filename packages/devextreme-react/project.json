@@ -36,7 +36,7 @@
       "options": {
         "script": "regenerate"
       },
-      "dependsOn": ["devextreme-monorepo:\"react:copy-metadata\""]
+      "dependsOn": ["metadata:\"put-metadata-to-react\""]
     },
     "test": {
       "executor": "nx:run-script",
