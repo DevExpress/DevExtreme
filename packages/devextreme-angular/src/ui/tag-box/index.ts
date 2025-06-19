@@ -937,9 +937,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
 
 
     /**
-     * [descr:dxSelectBoxOptions.valueChangeEvent]
-    
-     * @deprecated [depNote:dxSelectBoxOptions.valueChangeEvent]
+     * [descr:dxDropDownListOptions.valueChangeEvent]
     
      */
     @Input()

@@ -22377,11 +22377,6 @@ declare module DevExpress.ui {
      */
     usePopover?: boolean;
     /**
-     * [descr:dxLookupOptions.valueChangeEvent]
-     * @deprecated [depNote:dxLookupOptions.valueChangeEvent]
-     */
-    valueChangeEvent?: string;
-    /**
      * [descr:dxLookupOptions.dropDownCentered]
      */
     dropDownCentered?: boolean;
@@ -27007,12 +27002,6 @@ declare module DevExpress.ui {
      * [descr:dxSelectBoxOptions.showSelectionControls]
      */
     showSelectionControls?: boolean;
-    /**
-     * [descr:dxSelectBoxOptions.valueChangeEvent]
-     * @deprecated [depNote:dxSelectBoxOptions.valueChangeEvent]
-     */
-    valueChangeEvent?: string;
-
     /**
      * [descr:dxSelectBoxOptions.customItemCreateEvent]
      */

@@ -339,13 +339,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     usePopover?: boolean;
     /**
      * @docid
-     * @deprecated
-     * @default "input change keyup"
-     * @public
-     */
-    valueChangeEvent?: string;
-    /**
-     * @docid
      * @default false
      * @default true &for(Material)
      * @public

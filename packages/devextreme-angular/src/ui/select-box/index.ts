@@ -846,9 +846,7 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
 
 
     /**
-     * [descr:dxSelectBoxOptions.valueChangeEvent]
-    
-     * @deprecated [depNote:dxSelectBoxOptions.valueChangeEvent]
+     * [descr:dxDropDownListOptions.valueChangeEvent]
     
      */
     @Input()

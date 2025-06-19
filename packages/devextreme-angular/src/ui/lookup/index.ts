@@ -947,9 +947,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
 
     /**
-     * [descr:dxLookupOptions.valueChangeEvent]
-    
-     * @deprecated [depNote:dxLookupOptions.valueChangeEvent]
+     * [descr:dxDropDownListOptions.valueChangeEvent]
     
      */
     @Input()
