@@ -1,5 +1,6 @@
 'use strict';
 
+const gulp = require('gulp');
 const through2 = require('through2');
 const path = require('path');
 const fs = require('fs');
@@ -10,10 +11,11 @@ const {
     STATE_MANAGER_SETUP_STATE_MANAGER_MODULE_PATH,
     STATE_MANAGER_PRODUCTION_MODULE_PATH
 } = require('./constants');
+const ctx = require('../context');
 
-const ERROR_PREFIX = 'Error during transpiling the state manager for prod mode:';
+const ERROR_PREFIX = 'Error during replacing the state manager modules:';
 
-function transpileStateManagerProd(isEsm) {
+function replaceProductionStateManagerModules() {
     return through2.obj(function(file, enc, callback) {
         if (file.path.includes(STATE_MANAGER_SETUP_STATE_MANAGER_MODULE_PATH)) {
             try {
@@ -30,34 +32,12 @@ function transpileStateManagerProd(isEsm) {
                 if (shouldReplaceWithProductionCode) {
                     let productionContent = fs.readFileSync(replacerFilePath, 'utf8');
 
-                    const isCJS = !isEsm;
-                    if (isCJS) {
-                        const babelConfig = {
-                            plugins: [
-                                ['@babel/plugin-transform-modules-commonjs']
-                            ],
-                            ignore: ['**/*.json'],
-                            filename: replacerFilePath
-                        };
-
-                        try {
-                            const transformResult = babel.transformSync(productionContent, babelConfig);
-
-                            productionContent = transformResult.code;
-                        } catch (babelError) {
-                            console.error(
-                                ERROR_PREFIX,
-                                `transforming ${replacerFileName} to CJS is failed:`,
-                                babelError
-                            );
-                        }
-                    }
-
                     file.contents = Buffer.from(productionContent);
+
                 } else {
                     console.error(
                         ERROR_PREFIX,
-                        `${productionFileName} file not found at ${productionFilePath}`);
+                        `${replacerFileName} file not found at ${replacerFilePath}`);
                 }
             } catch (error) {
                 console.error(ERROR_PREFIX, error);
@@ -68,4 +48,13 @@ function transpileStateManagerProd(isEsm) {
     });
 }
 
-module.exports = transpileStateManagerProd;
+const prepareStateManager = (dist) => gulp.series.apply(gulp, [
+    () => gulp
+        .src(`${dist}/**/${STATE_MANAGER_SETUP_STATE_MANAGER_MODULE_PATH}`)
+        .pipe(replaceProductionStateManagerModules())
+        .pipe(gulp.dest(dist)),
+]);
+
+gulp.task('state-manager-replace-production-modules', prepareStateManager(ctx.TRANSPILED_PROD_ESM_PATH));
+
+module.exports = replaceProductionStateManagerModules;

@@ -6,6 +6,7 @@ const multiProcess = require('gulp-multi-process');
 const env = require('./build/gulp/env-variables');
 const cache = require('gulp-cache');
 const shell = require('gulp-shell');
+const { BUILD_FOR_DISTRIBUTION } = require('./build/gulp/context');
 
 gulp.task('clean', function(callback) {
     require('del').sync([
@@ -27,8 +28,6 @@ gulp.task('clean', function(callback) {
     callback();
 });
 
-const ctx = require('./build/gulp/context');
-
 require('./build/gulp/bundler-config');
 require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
@@ -42,8 +41,7 @@ require('./build/gulp/generator/gulpfile');
 require('./build/gulp/check_licenses');
 require('./build/gulp/qunit-in-docker');
 require('./build/gulp/systemjs');
-
-const createRemoveDevelopmentStateManagerModulesTask = require('./build/gulp/state_manager/remove_development_state_manager_modules');
+require('./build/gulp/state_manager');
 
 if(env.TEST_CI) {
     console.warn('Using test CI mode!');
@@ -74,16 +72,17 @@ function createDefaultBatch(dev) {
     tasks.push('localization');
     tasks.push(dev ? 'generate-components-dev' : 'generate-components');
     tasks.push('transpile');
+
+    if(BUILD_FOR_DISTRIBUTION) {
+        tasks.push('state-manager-replace-production-modules');
+        tasks.push('state-manager-remove-development-only-modules');
+    }
+
     tasks.push(dev && !env.BUILD_TESTCAFE ? 'main-batch-dev' : 'main-batch');
     if(!env.TEST_CI && !dev && !env.BUILD_TESTCAFE) {
         tasks.push('npm');
         tasks.push('check-license-notices');
     }
-
-    if(ctx.BUILD_MODE === 'production') {
-        tasks.push(createRemoveDevelopmentStateManagerModulesTask(ctx));
-    }
-
     return gulp.series(tasks);
 }
 

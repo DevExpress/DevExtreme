@@ -22,7 +22,6 @@ const { replaceWidgets, reloadConfig, renovatedComponentsPath } = require('./ren
 const { ifEsmPackage } = require('./utils');
 const testsConfig = require('../../testing/tests.babelrc.json');
 const transpileConfig = require('./transpile-config');
-const transpileStateManagerProd = require('./state_manager/transpile_state_manager_prod');
 
 const createTsCompiler = require('./typescript/compiler');
 
@@ -198,7 +197,6 @@ const transpileProd = (dist, isEsm) => transpile(
         tsPipes: [
             removeDebug(),
             isEsm ? babel(transpileConfig.esm) : babel(transpileConfig.tsCjs),
-            ...(ctx.BUILD_MODE === 'production' ? [transpileStateManagerProd(isEsm)] : []),
         ]
     },
 );

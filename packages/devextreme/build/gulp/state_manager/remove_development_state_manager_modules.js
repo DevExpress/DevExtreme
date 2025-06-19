@@ -2,67 +2,35 @@
 
 const path = require('path');
 const gulp = require('gulp');
-const fs = require('fs');
-const { STATE_MANAGER_FOLDER_PATH } = require('./constants');
+const del = require('del');
+const {
+    STATE_MANAGER_FOLDER_PATH,
+    STATE_MANAGER_SETUP_STATE_MANAGER_MODULE_PATH,
+    STATE_MANAGER_INDEX_MODULE_PATH
+} = require('./constants');
+const ctx = require('../context');
 
-const PRODUCTION_MODULES = [
-    'setup_state_manager.js',
-    'index.js'
-];
+const MODULE_TYPES = ['esm', 'cjs'];
 
-function removeDevelopmentStateManagerFiles(dirPath) {
-    if (!fs.existsSync(dirPath)) {
-        return;
-    }
+const createRemoveDevelopmentStateManagerModulesTask = (targetPath) => (done) => {
+    const patterns = [];
 
-    try {
-        const files = fs.readdirSync(dirPath);
+    MODULE_TYPES.forEach(type => {
+        patterns.push(`${path.join(targetPath, type, STATE_MANAGER_FOLDER_PATH)}/**`);
+    });
 
-        files.forEach(fileName => {
-            const fullPath = path.join(dirPath, fileName);
+    MODULE_TYPES.forEach(type => {
+        patterns.push(`!${path.join(targetPath, type, STATE_MANAGER_FOLDER_PATH)}`);
+        patterns.push(`!${path.join(targetPath, type, STATE_MANAGER_INDEX_MODULE_PATH)}`);
+        patterns.push(`!${path.join(targetPath, type, STATE_MANAGER_SETUP_STATE_MANAGER_MODULE_PATH)}`);
+    });
 
-            if (fs.existsSync(fullPath) && fs.statSync(fullPath).isDirectory()) {
-                return;
-            }
+    del.sync(patterns);
 
-            if (PRODUCTION_MODULES.includes(fileName)) {
-                return;
-            }
-
-            try {
-                fs.unlinkSync(fullPath);
-            } catch (err) {
-                console.error(`Error deleting ${fullPath}: ${err.message}`);
-            }
-        });
-    } catch (err) {
-        console.error(`Error processing directory ${dirPath}: ${err.message}`);
-    }
-}
-
-const removeDevelopmentStateManagerModulesNpmEsm = (npmArtifactsPath, done) => {
-    const stateManagerPath = path.join(npmArtifactsPath, 'devextreme', 'esm', STATE_MANAGER_FOLDER_PATH);
-    removeDevelopmentStateManagerFiles(stateManagerPath);
     done();
 };
 
-const removeDevelopmentStateManagerModulesNpmCjs = (npmArtifactsPath, done) => {
-    const stateManagerPath = path.join(npmArtifactsPath, 'devextreme', 'cjs', STATE_MANAGER_FOLDER_PATH);
-    removeDevelopmentStateManagerFiles(stateManagerPath);
-    done();
-};
+gulp.task('state-manager-remove-development-only-modules', createRemoveDevelopmentStateManagerModulesTask(ctx.TRANSPILED_PROD_ESM_PATH));
 
-const createRemoveDevelopmentStateManagerModulesTask = (ctx) => {
-    const removeDevelopmentStateManagerModulesFromNpmEsmTask = (done) => removeDevelopmentStateManagerModulesNpmEsm(ctx.RESULT_NPM_PATH, done);
-    const removeDevelopmentStateManagerModulesFromCjsTask = (done) => removeDevelopmentStateManagerModulesNpmCjs(ctx.RESULT_NPM_PATH, done);
-
-    const task = gulp.parallel(
-        removeDevelopmentStateManagerModulesFromNpmEsmTask,
-        removeDevelopmentStateManagerModulesFromCjsTask
-    );
-
-    task.displayName = 'remove development state manager modules';
-    return task;
-};
 
 module.exports = createRemoveDevelopmentStateManagerModulesTask;

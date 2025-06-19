@@ -20,5 +20,5 @@ module.exports = {
     TRANSPILED_PROD_ESM_PATH: 'artifacts/transpiled-esm-npm',
     SCSS_PACKAGE_PATH: '../devextreme-scss',
     EULA_URL: 'https://js.devexpress.com/Licensing/',
-    BUILD_MODE: argv.uglify ? 'production' : 'development',
+    BUILD_FOR_DISTRIBUTION: argv.uglify ? true : false,
 };

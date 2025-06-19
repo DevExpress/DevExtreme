@@ -31,44 +31,24 @@ const DEBUG_BUNDLES = BUNDLES.concat([ '/bundles/dx.custom.js' ]);
 
 const processBundles = (bundles, pathPrefix) => bundles.map((bundle) => pathPrefix + bundle);
 const muteWebPack = () => undefined;
-const getWebpackConfig = (mode = webpackConfig.mode) => env.BUILD_INTERNAL_PACKAGE || env.BUILD_TEST_INTERNAL_PACKAGE ?
-    Object.assign({
-        plugins: [
-            new webpack.NormalModuleReplacementPlugin(/(.*)\/license_validation/, resource => {
-                resource.request = resource.request.replace('license_validation', 'license_validation_internal');
-            }),
-            ...(mode === 'production' ?
-                [ new webpack.NormalModuleReplacementPlugin(
-                    /(.*)\/state_manager/,
-                    (resource) => {
-                        if (resource.request.includes(STATE_MANAGER_PRODUCTION_MODULE_PATH)) {
-                            return;
-                        }
+const getWebpackConfig = (watch) => {
+    const plugins = [];
+    const isInternalBuild = env.BUILD_INTERNAL_PACKAGE || env.BUILD_TEST_INTERNAL_PACKAGE;
 
-                        const newRequest = resource.request.replace(STATE_MANAGER_INDEX_MODULE_PATH, STATE_MANAGER_PRODUCTION_MODULE_PATH);
+    if (isInternalBuild) {
+        plugins.push(new webpack.NormalModuleReplacementPlugin(/(.*)\/license_validation/, resource => {
+            resource.request = resource.request.replace('license_validation', 'license_validation_internal');
+        }));
+    }
 
-                        resource.request = newRequest;
-                    }
-                )] : []),
-        ]
-    }, webpackConfig) :
-    Object.assign({
-        plugins: [
-            ...(mode === 'development' ?
-                [ new webpack.NormalModuleReplacementPlugin(
-                    /(.*)\/reactive/,
-                    (resource) => {
-                        if (resource.request.includes('reactive/development')) {
-                            return;
-                        }
+    if (watch) {
+        plugins.push(new webpack.NormalModuleReplacementPlugin(/(.*)\/reactive/,(resource) => {
+            resource.request = resource.request.replace('reactive/index', 'reactive/development');
+        }));
+    }
 
-                        const newRequest = resource.request.replace('reactive/index', 'reactive/development');
-
-                        resource.request = newRequest;
-                    }
-                )] : [])
-        ]
-    }, webpackConfig) ;
+    return Object.assign(webpackConfig, { plugins });
+};
 
 const bundleProdPipe = lazyPipe()
     .pipe(named)
@@ -92,15 +72,14 @@ gulp.task('js-bundles-prod',
 );
 
 function prepareDebugMeta(watch) {
-    const mode = watch ? 'development' : 'production';
-    const debugConfig = Object.assign({ watch }, getWebpackConfig(mode));
+    const debugConfig = Object.assign({ watch }, getWebpackConfig(watch));
     const bundlesPath = ctx.TRANSPILED_PROD_RENOVATION_PATH;
 
     const bundles = processBundles(DEBUG_BUNDLES, bundlesPath);
 
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;
-    debugConfig.mode = mode;
+    debugConfig.mode = watch ? 'development' : 'production';
     debugConfig.optimization.minimize = false;
 
     if(!ctx.uglify) {
