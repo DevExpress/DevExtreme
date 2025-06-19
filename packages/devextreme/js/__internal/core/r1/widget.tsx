@@ -557,7 +557,9 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
   getStyles(): Record<string, string | number> {
     const { width, height } = this.props;
     const style = this.props.style as Record<string, string | number> || {};
+    // @ts-expect-error ts-error
     const computedWidth = normalizeStyleProp('width', isFunction(width) ? width() : width);
+    // @ts-expect-error ts-error
     const computedHeight = normalizeStyleProp('height', isFunction(height) ? height() : height);
 
     return {

@@ -708,6 +708,7 @@ class DropDownEditor<
       // @ts-expect-error ts-error
       showTitle: this.option('dropDownOptions.showTitle'),
       _ignoreFunctionValueDeprecation: true,
+      // @ts-expect-error ts-error
       width: (): number => getElementWidth(this.$element()),
       height: 'auto',
       shading: false,
