@@ -59,6 +59,7 @@ export class ItemsController {
     itemIndex: number,
     selectedCardKeys?: Key[],
     key?: Key,
+    visible = true,
   ): CardInfo {
     const itemKey = key ?? this.dataController.getDataKey(data);
 
@@ -87,7 +88,7 @@ export class ItemsController {
       };
     });
 
-    const card = {
+    const card: CardInfo = {
       fields,
       columns,
       values: fields.map((f) => f.value),
@@ -95,6 +96,7 @@ export class ItemsController {
       index: itemIndex,
       isSelected: !!selectedCardKeys?.includes(itemKey),
       data,
+      visible,
     };
 
     card.fields.forEach((f) => {

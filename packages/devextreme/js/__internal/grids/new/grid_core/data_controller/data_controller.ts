@@ -11,8 +11,10 @@ import { createPromise } from '@ts/core/utils/promise';
 
 import gridCoreUtils from '../../../grid_core/m_utils';
 import { ColumnsController } from '../columns_controller/columns_controller';
+import { ErrorController } from '../error_controller/error_controller';
 import { FilterController } from '../filtering/filter_controller';
 import { normalizeFilterWithSelectors } from '../filtering/utils';
+import { LifeCycleController } from '../lifecycle/controller';
 import { OptionsController } from '../options_controller/options_controller';
 import { SortingController } from '../sorting_controller/index';
 import { StoreLoadAdapter } from './store_load_adapter/index';
@@ -109,6 +111,8 @@ export class DataController {
     OptionsController,
     SortingController,
     FilterController,
+    ErrorController,
+    LifeCycleController,
   ] as const;
 
   constructor(
@@ -116,6 +120,8 @@ export class DataController {
     private readonly options: OptionsController,
     private readonly sortingController: SortingController,
     private readonly filterController: FilterController,
+    private readonly errorController: ErrorController,
+    private readonly lifecycle: LifeCycleController,
   ) {
     effect(() => {
       if (this.dataSource.value) {
@@ -134,9 +140,10 @@ export class DataController {
           this.isLoading.value = dataSource.isLoading();
           this.isReloading.value = true;
         };
-        const loadErrorCallback = (error: string): void => {
+        const loadErrorCallback = (error: Error): void => {
           const callback = this.onDataErrorOccurred.peek();
           callback({ error });
+          this.errorController.showError(error.message ?? error);
           changedCallback();
         };
         const customizeStoreLoadOptionsCallback = (e): void => {
@@ -362,6 +369,10 @@ export class DataController {
 
     this.loadedPromise?.resolve();
     this.loadedPromise = undefined;
+
+    this.lifecycle.contentRendered.schedule(() => {
+      this.lifecycle.fireContentReady();
+    });
   }
 
   public getDataKey(data: DataObject): Key {

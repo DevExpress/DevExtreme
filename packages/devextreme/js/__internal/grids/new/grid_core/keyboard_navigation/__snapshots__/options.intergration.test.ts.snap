@@ -115,5 +115,6 @@ exports[`Options KeyboardNavigation onFocusedCardChanged common API contract tes
   "values": [
     1,
   ],
+  "visible": true,
 }
 `;
