@@ -3,9 +3,7 @@
   @typescript-eslint/no-explicit-any
 */
 
-import {
-  isFunction, isString,
-} from '@js/core/utils/type';
+import { isFunction } from '@js/core/utils/type';
 import type { EventInfo, NativeEventInfo } from '@js/events';
 import messageLocalization from '@js/localization/message';
 import type { TextBoxInstance } from '@js/ui/text_box';
@@ -70,10 +68,9 @@ export const splitHighlightedText = (
 };
 
 export const allowSearch = (column: Column, searchVisibleColumnsOnly: boolean): boolean => {
-  const allowSearchByDataField = !!column.dataField && isString(column.dataField);
   const allowSearchByVisibility = !searchVisibleColumnsOnly || column.visible;
-  const allowSearchByConfig = column.allowSearch ?? column.allowFiltering;
-  return allowSearchByDataField && allowSearchByVisibility && allowSearchByConfig;
+  const allowSearchByConfig = column.allowSearch;
+  return allowSearchByVisibility && allowSearchByConfig;
 };
 
 export const createFilterExpression = (

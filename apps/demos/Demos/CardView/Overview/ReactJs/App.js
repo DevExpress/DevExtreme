@@ -37,7 +37,7 @@ function notifySendEmail() {
 }
 function CardFooterComponent() {
   return (
-    <div className="footer">
+    <div className="card-footer">
       <Button
         text="Call"
         icon="tel"
@@ -47,7 +47,7 @@ function CardFooterComponent() {
       />
       <Button
         text="Send Email"
-        icon="send"
+        icon="message"
         type="default"
         stylingMode="contained"
         onClick={notifySendEmail}
@@ -60,7 +60,12 @@ function StatusComponent({
     field: { value },
   },
 }) {
-  const className = value === 'Salaried' ? 'status--ok' : 'status--warning';
+  const classNameMap = {
+    Salaried: 'status--salaried',
+    Commission: 'status--commission',
+    Terminated: 'status--terminated',
+  };
+  const className = classNameMap[value];
   return (
     <div className={`status ${className}`}>
       <div className="indicator"></div>
@@ -98,6 +103,7 @@ function App() {
       <Column
         dataField="Status"
         fieldValueComponent={StatusComponent}
+        allowSearch={false}
       />
       <Column
         caption="Full Name"
@@ -114,6 +120,7 @@ function App() {
       <Column
         dataField="Email"
         fieldValueComponent={EmailComponent}
+        allowSearch={false}
       />
       <Column
         caption="Address"

@@ -1,7 +1,7 @@
 The HTML Editor supports AI-powered text editing. Users can apply AI requests and insert the results directly into the editor. To enable this feature, follow these steps:
 
-1. Link the HTML Editor to an AI service through the `aiIntegration` option.
-2. Specify the `"ai"` toolbar item in the toolbar configuration.
+1. Link the HTML Editor to an AI service through the [aiIntegration](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/#aiIntegration) option.
+2. Specify the `"ai"` toolbar item in the [toolbar configuration](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/toolbar/).
 
 <!--split-->
 The default `"ai"` toolbar item includes the following predefined commands:

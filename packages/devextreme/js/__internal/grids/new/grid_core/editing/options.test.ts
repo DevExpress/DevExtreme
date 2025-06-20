@@ -328,7 +328,7 @@ describe('Options', () => {
 
             await editingController.deleteCard(1);
 
-            expect(mockConfirmController.confirm.mock.calls[0][1]).toBe(undefined);
+            expect(mockConfirmController.confirm.mock.calls[0][1]).toBe('');
             expect(mockConfirmController.confirm.mock.calls[0][2]).toBe(false);
           });
         });

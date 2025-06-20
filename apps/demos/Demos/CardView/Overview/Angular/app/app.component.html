@@ -20,6 +20,7 @@
     <dxi-card-view-column
       dataField="Status"
       fieldValueTemplate="statusTemplate"
+      [allowSearch]="false"
     ></dxi-card-view-column>
     <dxi-card-view-column
       caption="Full Name"
@@ -36,6 +37,7 @@
     <dxi-card-view-column
       dataField="Email"
       fieldValueTemplate="emailTemplate"
+      [allowSearch]="false"
     ></dxi-card-view-column>
     <dxi-card-view-column
       caption="Address"
@@ -47,8 +49,9 @@
     <div
       *dxTemplate="let params of 'statusTemplate'"
       class="status"
-      [class.status--ok]="params.field.value === 'Salaried'"
-      [class.status--warning]="params.field.value !== 'Salaried'"
+      [class.status--salaried]="params.field.value === 'Salaried'"
+      [class.status--commission]="params.field.value === 'Commission'"
+      [class.status--terminated]="params.field.value === 'Terminated'"
     >
       <span class="indicator"></span>
       <span>{{ params.field.value }}</span>
@@ -56,7 +59,7 @@
     <div *dxTemplate="let params of 'emailTemplate'">
       <a href="mailto:{{ params.field.value }}">{{ params.field.text }}</a>
     </div>
-    <div *dxTemplate="let params of 'footerTemplate'" class="footer">
+    <div *dxTemplate="let params of 'footerTemplate'" class="card-footer">
       <dx-button
         text="Call"
         icon="tel"
@@ -66,7 +69,7 @@
       ></dx-button>
       <dx-button
         text="Send Email"
-        icon="send"
+        icon="message"
         type="default"
         stylingMode="contained"
         (onClick)="showNotify('Send Email')"

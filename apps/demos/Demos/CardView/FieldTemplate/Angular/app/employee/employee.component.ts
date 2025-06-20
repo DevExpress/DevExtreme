@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { Employee, Service } from 'app/app.service';
+import { Employee, Service } from '../app.service';
 
 let modulePrefix = '';
 // @ts-ignore

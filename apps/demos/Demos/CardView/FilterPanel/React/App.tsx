@@ -2,29 +2,21 @@ import React from 'react';
 import CardView, { Column, HeaderFilter, ColumnHeaderFilter, FilterPanel, FilterBuilder } from 'devextreme-react/card-view';
 import { orders, Order } from './data.ts';
 
-function getDeliveryHours(rowData: Order) {
-  return (new Date(rowData.DeliveryDate)).getHours();
-}
 
-const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'afterNoon']];
+function getOrderDay({ OrderDate }: Order): number {
+  return (new Date(OrderDate)).getDay();
+};
+
+const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'weekends']];
 
 const customOperations = [{
-  name: 'beforeNoon',
-  caption: 'Before noon',
-  dataTypes: ['datetime' as const],
+  name: 'weekends',
+  caption: 'Weekends',
+  dataTypes: ['date' as const],
   icon: 'check',
   hasValue: false,
   calculateFilterExpression() {
-    return [getDeliveryHours, '<', 12];
-  },
-}, {
-  name: 'afterNoon',
-  caption: 'After noon',
-  dataTypes: ['datetime' as const],
-  icon: 'check',
-  hasValue: false,
-  calculateFilterExpression() {
-    return [getDeliveryHours, '>=', 12];
+    return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
   },
 }];
 
@@ -90,7 +82,7 @@ const App = () => (
     />
     <Column
       dataField="DeliveryDate"
-      dataType="datetime"
+      dataType="date"
     />
     <Column
       dataField="SaleAmount"

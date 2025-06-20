@@ -3,7 +3,7 @@ import CardView, { Column, CardCover, Sorting } from 'devextreme-react/card-view
 import { houses } from './data.js';
 
 function imageExpr({ ID }) {
-  return `https://demos.devexpress.com/ASPxCardViewDemos/Content/HomesPhoto/${ID}.jpg`;
+  return `../../../../images/houses/${ID}.jpg`;
 }
 function altExpr() {
   return 'Photo of the house';

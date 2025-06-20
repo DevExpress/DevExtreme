@@ -597,7 +597,6 @@ export default {
     },
     argumentAxis: {
       endOnTick: false,
-      aggregateByCategory: true,
       workWeek: [1, 2, 3, 4, 5],
     },
     valueAxis: {

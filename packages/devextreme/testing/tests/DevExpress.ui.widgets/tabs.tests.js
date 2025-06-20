@@ -11,6 +11,9 @@ import pointerMock from '../../helpers/pointerMock.js';
 import { TestAsyncTabsWrapper, TestTabsWrapper } from '../../helpers/wrappers/tabsWrappers.js';
 import { getScrollLeftMax } from '__internal/ui/scroll_view/utils/get_scroll_left_max';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import devices from '__internal/core/m_devices';
+import { compare as compareVersions } from 'core/utils/version';
+import resizeObserverSingleton from 'core/resize_observer';
 import {
     TABS_ITEM_CLASS,
     TABS_ITEM_SELECTED_CLASS,
@@ -404,6 +407,18 @@ QUnit.module('General', () => {
 
         assert.strictEqual($element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, 'nav buttons was rendered');
         assert.strictEqual($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 1, 'scrollable was rendered');
+    });
+
+    QUnit.test('resize observer should be attached to the tabs', function(assert) {
+        const observeSpy = sinon.spy(resizeObserverSingleton, 'observe');
+
+        $('#tabs').dxTabs({
+            items: [{ text: 'item 1' }],
+        });
+
+        assert.strictEqual(observeSpy.callCount, 1, 'resize observer is connected');
+
+        observeSpy.restore();
     });
 });
 

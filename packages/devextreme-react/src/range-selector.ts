@@ -1469,7 +1469,6 @@ const Reduction = Object.assign<typeof _componentReduction, NestedComponentMeta>
 // owners:
 // RangeSelector
 type IScaleProps = React.PropsWithChildren<{
-  aggregateByCategory?: boolean;
   aggregationGroupWidth?: number | undefined;
   aggregationInterval?: number | Record<string, any> | TimeInterval | {
     days?: number;

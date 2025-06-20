@@ -25,6 +25,7 @@ import { CompatibilityHeaderFilterController, HeaderFilterController } from './f
 import { HeaderFilterViewController } from './filtering/header_filter/view_controller';
 import * as FilterControllerModule from './filtering/index';
 import { ItemsController } from './items_controller/items_controller';
+import { LifeCycleController } from './lifecycle/controller';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
@@ -85,6 +86,9 @@ export class GridCoreNewBase<
 
   private accessibilityController!: AccessibilityController;
 
+  private lifeCycleController!: LifeCycleController;
+
+  // TODO: rewrite to lifeCycleController
   public initialized!: Signal<boolean>;
 
   protected _registerDIContext(): void {
@@ -126,6 +130,14 @@ export class GridCoreNewBase<
     this.searchView = this.diContext.get(SearchView);
   }
 
+  private _initLifeCycleController(): void {
+    this.lifeCycleController = this.diContext.get(LifeCycleController);
+    this.lifeCycleController.provideContentReadyCallback(() => {
+      // @ts-expect-error
+      this._fireContentReadyAction();
+    });
+  }
+
   protected _init(): void {
     // @ts-expect-error
     super._init();
@@ -133,6 +145,7 @@ export class GridCoreNewBase<
     this._registerDIContext();
     this._initWidgetMock();
     this._initDIContext();
+    this._initLifeCycleController();
   }
 
   protected _getDefaultOptions() {
@@ -153,6 +166,12 @@ export class GridCoreNewBase<
     // @ts-expect-error usage of base method not described in d.ts
     super._initializeComponent();
     this.initialized.value = true;
+  }
+
+  // NOTE: this disables calling of _fireContentReadyAction on initial render
+  protected _renderContent() {
+    // @ts-expect-error
+    this._renderContentImpl();
   }
 
   protected _initMarkup(): void {

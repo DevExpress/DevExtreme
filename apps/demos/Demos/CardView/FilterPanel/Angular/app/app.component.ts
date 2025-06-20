@@ -14,9 +14,9 @@ if (window && window.config?.packageConfigPaths) {
   modulePrefix = '/app';
 }
 
-function getDeliveryHours(rowData) {
-  return (new Date(rowData.DeliveryDate)).getHours();
-}
+function getOrderDay({ OrderDate }: Order): number {
+  return (new Date(OrderDate)).getDay();
+};
 
 @Component({
   selector: 'demo-app',
@@ -24,28 +24,18 @@ function getDeliveryHours(rowData) {
   providers: [Service],
 })
 export class AppComponent {
-  filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'afterNoon']];
+  filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'weekends']];
 
   customOperations = [{
-    name: 'beforeNoon',
-    caption: 'Before noon',
-    dataTypes: ['datetime'],
+    name: 'weekends',
+    caption: 'Weekends',
+    dataTypes: ['date'],
     icon: 'check',
     hasValue: false,
     calculateFilterExpression() {
-      return [getDeliveryHours, '<', 12];
-    },
-  }, {
-    name: 'afterNoon',
-    caption: 'After noon',
-    dataTypes: ['datetime'],
-    icon: 'check',
-    hasValue: false,
-    calculateFilterExpression() {
-      return [getDeliveryHours, '>=', 12];
+      return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
     },
   }];
-
 
   saleAmountHeaderFilterDataSource = [
     {

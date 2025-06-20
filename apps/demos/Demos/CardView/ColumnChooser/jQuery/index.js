@@ -93,6 +93,14 @@ $(() => {
       disabled: cardView.option('columnChooser.mode') !== 'select',
     });
 
+    $('#allow-column-reordering').dxCheckBox({
+      text: 'Allow Column Reordering',
+      value: cardView.option('allowColumnReordering') ?? false,
+      onValueChanged: ({value}) => {
+        cardView.option('allowColumnReordering', value);
+      },
+    });
+
   }
 
   renderOptions();

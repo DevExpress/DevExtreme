@@ -343,7 +343,6 @@ const AnnotationImage = Object.assign<typeof _componentAnnotationImage, NestedCo
 // owners:
 // Chart
 type IArgumentAxisProps = React.PropsWithChildren<{
-  aggregateByCategory?: boolean;
   aggregatedPointsPosition?: AggregatedPointsPosition;
   aggregationGroupWidth?: number | undefined;
   aggregationInterval?: number | Record<string, any> | TimeInterval | {

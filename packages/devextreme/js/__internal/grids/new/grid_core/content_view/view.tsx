@@ -18,6 +18,7 @@ import { createRef } from 'inferno';
 
 import { EditingController } from '../editing/controller';
 import { ItemsController } from '../items_controller/items_controller';
+import { LifeCycleController } from '../lifecycle/controller';
 import { OptionsController } from '../options_controller/options_controller';
 
 export abstract class ContentView<TProps extends {}> extends View<TProps> {
@@ -52,6 +53,7 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
     BaseContextMenuController,
     SearchUIController,
     KeyboardNavigationController,
+    LifeCycleController,
   ] as const;
 
   constructor(
@@ -65,6 +67,7 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
     protected readonly contextMenuController: BaseContextMenuController,
     protected readonly searchUIController: SearchUIController,
     protected readonly keyboardNavigationController: KeyboardNavigationController,
+    protected readonly lifecycle: LifeCycleController,
   ) {
     super();
   }
@@ -133,6 +136,9 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
         },
       },
       showContextMenu: this.showContextMenu.bind(this),
+      onRendered: () => {
+        this.lifecycle.contentRendered.trigger();
+      },
     };
   }
 

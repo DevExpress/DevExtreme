@@ -57,6 +57,10 @@ export function normalizeColumn(
       colWithDefaults.allowHeaderFiltering
       ?? colWithDefaults.allowFiltering
       ?? !!colWithDefaults.dataField,
+    allowSearch:
+      colWithDefaults.allowSearch
+      ?? colWithDefaults.allowFiltering
+      ?? !!colWithDefaults.dataField,
     allowSorting: colWithDefaults.allowSorting ?? !!colWithDefaults.dataField,
   };
 

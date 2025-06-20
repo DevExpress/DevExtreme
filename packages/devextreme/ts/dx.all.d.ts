@@ -36003,11 +36003,6 @@ declare module DevExpress.viz {
      */
     export type ArgumentAxis = CommonAxisSettings & {
       /**
-       * [descr:dxChartOptions.argumentAxis.aggregateByCategory]
-       * @deprecated [depNote:dxChartOptions.argumentAxis.aggregateByCategory]
-       */
-      aggregateByCategory?: boolean;
-      /**
        * [descr:dxChartOptions.argumentAxis.aggregationGroupWidth]
        */
       aggregationGroupWidth?: number | undefined;
@@ -42742,7 +42737,6 @@ declare module DevExpress.viz {
       DevExpress.common.core.events.EventInfo<dxRangeSelector> &
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxRangeSelectorOptions;
-    export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
     /**
      * [descr:_viz_range_selector_ValueChangedEvent]
      */
@@ -42971,11 +42965,6 @@ declare module DevExpress.viz {
      * [descr:dxRangeSelectorOptions.scale]
      */
     scale?: {
-      /**
-       * [descr:dxRangeSelectorOptions.scale.aggregateByCategory]
-       * @deprecated [depNote:dxRangeSelectorOptions.scale.aggregateByCategory]
-       */
-      aggregateByCategory?: boolean;
       /**
        * [descr:dxRangeSelectorOptions.scale.aggregationGroupWidth]
        */

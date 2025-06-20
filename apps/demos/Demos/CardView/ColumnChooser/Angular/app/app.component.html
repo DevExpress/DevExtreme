@@ -29,6 +29,12 @@
         [disabled]="columnChooserMode !== 'select'"
       ></dx-check-box>
     </div>
+    <div class="option">
+      <dx-check-box
+        text="Allow Column Reordering"
+        [(value)]="allowColumnReordering"
+      ></dx-check-box>
+    </div>
   </div>
 </div>
 <dx-card-view
@@ -36,6 +42,7 @@
   keyExpr="ID"
   cardsPerRow="auto"
   [cardMinWidth]="300"
+  [allowColumnReordering]="allowColumnReordering"
 >
   <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
   <dxo-card-view-column-chooser

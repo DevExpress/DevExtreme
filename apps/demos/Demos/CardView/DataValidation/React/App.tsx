@@ -44,7 +44,7 @@ const App = () => (
     keyExpr="id"
     cardsPerRow="auto"
     cardMinWidth={350}
-    height={820}
+    height={840}
   >
     <SearchPanel
       visible={true}
@@ -98,6 +98,9 @@ const App = () => (
             dataField="title"
           ></Item>
           <Item
+            dataField="department"
+          ></Item>
+          <Item
             dataField="notes"
             editorType="dxTextArea"
             colSpan={2}
@@ -125,6 +128,10 @@ const App = () => (
           ></Item>
           <Item
             dataField="mobilePhone"
+            editorOptions={{
+              mask: "+1 (000) 000-0000",
+              useMaskedValue: true,
+            }}
           ></Item>
           <Item
             dataField="email"
@@ -161,10 +168,7 @@ const App = () => (
     <Column dataField="department"/>
     <Column dataField="address"/>
     <Column dataField="mobilePhone">
-      <PatternRule
-        message="Your phone must have '(555) 555-5555' format!"
-        pattern={/^\(\d{3}\) \d{3}-\d{4}$/i}
-      />
+      <RequiredRule/>
     </Column>
     <Column dataField="email">
       <EmailRule/>

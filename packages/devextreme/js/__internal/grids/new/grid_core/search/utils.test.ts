@@ -1,5 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
+import { normalizeColumn } from '../columns_controller/columns_controller.mock';
+import type { ColumnSettings } from '../columns_controller/options';
 import { defaultColumnProperties } from '../columns_controller/options';
 import type { Column } from '../columns_controller/types';
 import type { HighlightedTextItem } from './types';
@@ -285,7 +287,7 @@ describe('Search', () => {
 describe('allowSearch', () => {
   it.each<{
     caseName: string;
-    column: Partial<Column>;
+    column: ColumnSettings;
     searchVisibleColumnsOnly: boolean;
     expectedResult: boolean;
   }>([
@@ -339,7 +341,7 @@ describe('allowSearch', () => {
     searchVisibleColumnsOnly,
     expectedResult,
   }) => {
-    const result = allowSearch(column as Column, searchVisibleColumnsOnly);
+    const result = allowSearch(normalizeColumn(column), searchVisibleColumnsOnly);
     expect(result).toEqual(expectedResult);
   });
 });
@@ -397,7 +399,7 @@ describe('calculateSearchFilter', () => {
   it.each<{
     caseName: string;
     text: string;
-    columns: Partial<Column>[];
+    columns: ColumnSettings[];
     searchVisibleColumnsOnly: boolean;
     expectedResult: any;
   }>([
@@ -473,7 +475,11 @@ describe('calculateSearchFilter', () => {
     searchVisibleColumnsOnly,
     expectedResult,
   }) => {
-    const result = calculateSearchFilter(text, columns as Column[], searchVisibleColumnsOnly);
+    const result = calculateSearchFilter(
+      text,
+      columns.map(normalizeColumn),
+      searchVisibleColumnsOnly,
+    );
     expect(result).toEqual(expectedResult);
   });
 });
