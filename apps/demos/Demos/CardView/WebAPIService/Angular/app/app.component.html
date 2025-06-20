@@ -14,7 +14,9 @@
     [popup]="{ width: 700, height: 400 }"
   ></dxo-card-view-editing>
   <dxi-card-view-column dataField="Task_Subject" caption="Subject">
-    <dxi-card-view-required-rule></dxi-card-view-required-rule>
+    <dxi-card-view-validation-rule
+      type="required"
+    ></dxi-card-view-validation-rule>
   </dxi-card-view-column>
   <dxi-card-view-column
     dataField="Task_Start_Date"
