@@ -116,14 +116,6 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
     animation?: dxPopoverAnimation;
     /**
      * @docid
-     * @deprecated dxPopoverOptions.hideOnOutsideClick
-     * @type_function_param1 event:event
-     * @default true
-     * @public
-     */
-    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
-    /**
-     * @docid
      * @default "auto"
      * @public
      */

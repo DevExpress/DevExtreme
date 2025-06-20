@@ -36,7 +36,6 @@ type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "animation" |
   "closeOnClick" |
-  "closeOnOutsideClick" |
   "closeOnSwipe" |
   "contentTemplate" |
   "deferRendering" |
@@ -80,7 +79,6 @@ const componentConfig = {
     accessKey: String,
     animation: Object as PropType<Record<string, any>>,
     closeOnClick: Boolean,
-    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     closeOnSwipe: Boolean,
     contentTemplate: {},
     deferRendering: Boolean,
@@ -120,7 +118,6 @@ const componentConfig = {
     "update:accessKey": null,
     "update:animation": null,
     "update:closeOnClick": null,
-    "update:closeOnOutsideClick": null,
     "update:closeOnSwipe": null,
     "update:contentTemplate": null,
     "update:deferRendering": null,

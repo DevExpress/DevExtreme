@@ -108,21 +108,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
 
 
     /**
-     * [descr:dxPopoverOptions.closeOnOutsideClick]
-    
-     * @deprecated [depNote:dxPopoverOptions.closeOnOutsideClick]
-    
-     */
-    @Input()
-    get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
-        return this._getOption('closeOnOutsideClick');
-    }
-    set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
-        this._setOption('closeOnOutsideClick', value);
-    }
-
-
-    /**
      * [descr:dxPopupOptions.container]
     
      */
@@ -582,13 +567,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() closeOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() containerChange: EventEmitter<any | string | undefined>;
 
     /**
@@ -822,7 +800,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
             { subscribe: 'shown', emit: 'onShown' },
             { subscribe: 'titleRendered', emit: 'onTitleRendered' },
             { emit: 'animationChange' },
-            { emit: 'closeOnOutsideClickChange' },
             { emit: 'containerChange' },
             { emit: 'contentTemplateChange' },
             { emit: 'deferRenderingChange' },

@@ -1019,7 +1019,6 @@ class ContextMenu extends MenuBase {
         }
         this._invalidate();
         break;
-      case 'closeOnOutsideClick':
       case 'hideOnOutsideClick':
       case 'hideOnParentScroll':
       case 'visualContainer':

@@ -11601,17 +11601,6 @@ declare module DevExpress.ui {
   export interface dxContextMenuOptions<TKey = any>
     extends dxMenuBaseOptions<dxContextMenu<TKey>, dxContextMenuItem, TKey> {
     /**
-     * [descr:dxContextMenuOptions.closeOnOutsideClick]
-     * @deprecated [depNote:dxContextMenuOptions.closeOnOutsideClick]
-     */
-    closeOnOutsideClick?:
-      | boolean
-      | ((
-          event: DevExpress.events.DxEvent<
-            MouseEvent | PointerEvent | TouchEvent
-          >
-        ) => boolean);
-    /**
      * [descr:dxContextMenuOptions.dataSource]
      */
     dataSource?: DevExpress.data.DataSourceLike<
@@ -24570,17 +24559,6 @@ declare module DevExpress.ui {
      */
     animation?: dxPopoverAnimation;
     /**
-     * [descr:dxPopoverOptions.closeOnOutsideClick]
-     * @deprecated [depNote:dxPopoverOptions.closeOnOutsideClick]
-     */
-    closeOnOutsideClick?:
-      | boolean
-      | ((
-          event: DevExpress.events.DxEvent<
-            MouseEvent | PointerEvent | TouchEvent
-          >
-        ) => boolean);
-    /**
      * [descr:dxPopoverOptions.height]
      */
     height?: number | string;
@@ -29554,17 +29532,6 @@ declare module DevExpress.ui {
      * [descr:dxToastOptions.closeOnClick]
      */
     closeOnClick?: boolean;
-    /**
-     * [descr:dxToastOptions.closeOnOutsideClick]
-     * @deprecated [depNote:dxToastOptions.closeOnOutsideClick]
-     */
-    closeOnOutsideClick?:
-      | boolean
-      | ((
-          event: DevExpress.events.DxEvent<
-            MouseEvent | PointerEvent | TouchEvent
-          >
-        ) => boolean);
     /**
      * [descr:dxToastOptions.closeOnSwipe]
      */

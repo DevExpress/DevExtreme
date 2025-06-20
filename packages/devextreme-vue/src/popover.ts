@@ -45,7 +45,6 @@ import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "animation" |
-  "closeOnOutsideClick" |
   "container" |
   "contentTemplate" |
   "deferRendering" |
@@ -93,7 +92,6 @@ interface DxPopover extends AccessibleOptions {
 const componentConfig = {
   props: {
     animation: Object as PropType<Record<string, any>>,
-    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -137,7 +135,6 @@ const componentConfig = {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:animation": null,
-    "update:closeOnOutsideClick": null,
     "update:container": null,
     "update:contentTemplate": null,
     "update:deferRendering": null,

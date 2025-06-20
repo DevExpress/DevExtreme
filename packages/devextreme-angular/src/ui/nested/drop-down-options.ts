@@ -86,7 +86,6 @@ import { DxiToolbarItemComponent } from './toolbar-item-dxi';
         'visible',
         'width',
         'wrapperAttr',
-        'closeOnOutsideClick',
         'hideEvent',
         'showEvent',
         'target'

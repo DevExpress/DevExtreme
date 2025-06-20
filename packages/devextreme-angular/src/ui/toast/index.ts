@@ -119,21 +119,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
 
 
     /**
-     * [descr:dxToastOptions.closeOnOutsideClick]
-    
-     * @deprecated [depNote:dxToastOptions.closeOnOutsideClick]
-    
-     */
-    @Input()
-    get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
-        return this._getOption('closeOnOutsideClick');
-    }
-    set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
-        this._setOption('closeOnOutsideClick', value);
-    }
-
-
-    /**
      * [descr:dxToastOptions.closeOnSwipe]
     
      */
@@ -534,13 +519,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() closeOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() closeOnSwipeChange: EventEmitter<boolean>;
 
     /**
@@ -731,7 +709,6 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
             { emit: 'accessKeyChange' },
             { emit: 'animationChange' },
             { emit: 'closeOnClickChange' },
-            { emit: 'closeOnOutsideClickChange' },
             { emit: 'closeOnSwipeChange' },
             { emit: 'contentTemplateChange' },
             { emit: 'deferRenderingChange' },
