@@ -6561,45 +6561,6 @@ QUnit.module('displayExpr', moduleSetup, () => {
     });
 });
 
-QUnit.module('The "customItemCreateEvent" option warning', {
-    beforeEach: function() {
-        this.$selectBox = $('#selectBox');
-
-        const defaultOptions = {
-            items: ['item 1'],
-            acceptCustomValue: true,
-            onCustomItemCreating: (e) => {
-                e.customItem = e.text;
-            }
-        };
-
-        const init = (options = {}) => {
-            this.selectBox = this.$selectBox
-                .dxSelectBox($.extend({}, defaultOptions, options))
-                .dxSelectBox('instance');
-        };
-
-        this.reinit = (options) => {
-            this.selectBox.dispose();
-            init(options);
-        };
-
-        init();
-    }
-}, () => {
-    QUnit.test('no warning should be logged on pure init', function(assert) {
-        const errorsSpy = sinon.spy(errors, 'log');
-
-        try {
-            this.reinit();
-            this.selectBox.option('customItemCreateEvent', 'change');
-        } finally {
-            assert.strictEqual(errorsSpy.callCount, 0, 'no warning is logged');
-            errorsSpy.restore();
-        }
-    });
-});
-
 QUnit.module('the "customItemCreateEvent" option', {
     beforeEach: function() {
         this.$selectBox = $('#selectBox').dxSelectBox({

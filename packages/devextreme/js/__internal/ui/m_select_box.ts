@@ -206,7 +206,6 @@ class SelectBox<
       placeholder: messageLocalization.format('Select'),
       fieldTemplate: null,
       customItemCreateEvent: 'change',
-      valueChangeEvent: 'change',
       acceptCustomValue: false,
       onCustomItemCreating(e): void {
         if (!isDefined(e.customItem)) {
