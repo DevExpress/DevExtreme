@@ -247,40 +247,6 @@ testModule('Toolbar module', simpleModuleConfig, () => {
         assert.ok($formatWidgets.first().hasClass('dx-button'), 'Change simple format via Button');
     });
 
-    [{
-        optionName: 'formatName',
-        item: {
-            formatName: 'undo'
-        }
-    }, {
-        optionName: 'formatValues',
-        item: {
-            name: 'size',
-            formatValues: ['10px']
-        }
-    }, {
-        optionName: 'formatValues',
-        item: {
-            name: 'size',
-            formatValues: null
-        }
-    }].forEach(optionInfo => {
-        test(`should show 'W1016' warning if deprecated ${optionInfo.optionName} toolbar item field is used`, function(assert) {
-            const originalLog = errors.log;
-            let warning = null;
-            this.options.items = [optionInfo.item];
-
-            errors.log = (loggedWarning) => warning = loggedWarning;
-
-            try {
-                new Toolbar(this.quillMock, this.options);
-                assert.strictEqual(warning, 'W1016');
-            } finally {
-                errors.log = originalLog;
-            }
-        });
-    });
-
     test('Simple format handling', function(assert) {
         let isHandlerTriggered;
         this.quillMock.getFormat = () => {
