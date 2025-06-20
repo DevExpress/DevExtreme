@@ -4680,43 +4680,24 @@ QUnit.module('searchStartEvent', {
         init();
     }
 }, () => {
-    ['valueChangeEvent', 'searchStartEvent'].forEach((propName) => {
-        QUnit.test(`${propName} specifies event to start search`, function(assert) {
-            this.reinit({ [propName]: 'change' });
+    QUnit.test('searchStartEvent specifies event to start search', function(assert) {
+        this.reinit({ searchStartEvent: 'change' });
 
-            this.keyboard.type('11');
-            assert.strictEqual(this.getItemsCount(), 3, 'items are not filtered');
+        this.keyboard.type('11');
+        assert.strictEqual(this.getItemsCount(), 3, 'items are not filtered');
 
-            this.keyboard.change();
-            assert.strictEqual(this.getItemsCount(), 2, 'items are filtered after search start event is fired');
-        });
-
-        QUnit.test(`${propName} specifies event to start search (runtime change)`, function(assert) {
-            this.lookup.option(propName, 'change');
-
-            this.keyboard.type('11');
-            assert.strictEqual(this.getItemsCount(), 3, 'items are not filtered');
-
-            this.keyboard.change();
-            assert.strictEqual(this.getItemsCount(), 2, 'items are filtered after search start event is fired');
-        });
+        this.keyboard.change();
+        assert.strictEqual(this.getItemsCount(), 2, 'items are filtered after search start event is fired');
     });
 
-    QUnit.test('valueChangeEvent prop using should raise a warning about deprecation', function(assert) {
-        sinon.spy(errors, 'log');
+    QUnit.test('searchStartEvent specifies event to start search (runtime change)', function(assert) {
+        this.lookup.option('searchStartEvent', 'change');
 
-        try {
-            this.lookup.option('valueChangeEvent', 'change');
-            assert.deepEqual(errors.log.lastCall.args, [
-                'W0001',
-                'dxLookup',
-                'valueChangeEvent',
-                '22.1',
-                'Use the \'searchStartEvent\' option instead'
-            ], 'warning is raised with correct parameters');
-        } finally {
-            errors.log.restore();
-        }
+        this.keyboard.type('11');
+        assert.strictEqual(this.getItemsCount(), 3, 'items are not filtered');
+
+        this.keyboard.change();
+        assert.strictEqual(this.getItemsCount(), 2, 'items are filtered after search start event is fired');
     });
 
     QUnit.test('no warning should be logged on pure init', function(assert) {

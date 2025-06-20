@@ -154,13 +154,6 @@ class Lookup extends DropDownList<LookupProperties> {
     };
   }
 
-  _setDeprecatedOptions() {
-    super._setDeprecatedOptions();
-    extend(this._deprecatedOptions, {
-      valueChangeEvent: { since: '22.1', alias: 'searchStartEvent' },
-    });
-  }
-
   _defaultOptionsRules() {
     const themeName = current();
 
@@ -710,8 +703,7 @@ class Lookup extends DropDownList<LookupProperties> {
       // @ts-expect-error ts-error
       shading: dropDownOptions.shading,
       // @ts-expect-error ts-error
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      hideOnOutsideClick: dropDownOptions.hideOnOutsideClick || dropDownOptions.closeOnOutsideClick,
+      hideOnOutsideClick: dropDownOptions.hideOnOutsideClick,
       _loopFocus: shouldLoopFocusInsidePopup,
     });
 

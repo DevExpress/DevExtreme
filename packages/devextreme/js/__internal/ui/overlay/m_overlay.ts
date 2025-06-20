@@ -202,7 +202,6 @@ class Overlay<
           },
         },
       },
-      closeOnOutsideClick: false,
       hideOnOutsideClick: false,
       _ignorePreventScrollEventsDeprecation: false,
       onShowing: null,
@@ -255,13 +254,6 @@ class Overlay<
 
   _eventBindingTarget(): dxElementWrapper {
     return this._$content;
-  }
-
-  _setDeprecatedOptions(): void {
-    super._setDeprecatedOptions();
-    extend(this._deprecatedOptions, {
-      closeOnOutsideClick: { since: '22.1', alias: 'hideOnOutsideClick' },
-    });
   }
 
   ctor(element: Element, options: TProperties): void {
@@ -1350,7 +1342,6 @@ class Overlay<
         this._toggleHideOnParentsScrollSubscription(visible);
         break;
       }
-      case 'closeOnOutsideClick':
       case 'hideOnOutsideClick':
       case 'propagateOutsideClick':
         break;
