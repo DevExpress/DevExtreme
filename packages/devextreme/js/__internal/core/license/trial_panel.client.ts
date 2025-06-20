@@ -20,7 +20,7 @@ const SafeHTMLElement = isClient()
   ? HTMLElement
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-extraneous-class
-  : class {} as any as typeof HTMLElement;
+  : class { } as any as typeof HTMLElement;
 
 const DATA_PERMANENT_ATTRIBUTE = 'data-permanent';
 const componentNames = {
@@ -94,11 +94,11 @@ function createImportantStyles(defaultStyles: StylesMap, customStyles?: StylesMa
 class DxLicense extends SafeHTMLElement {
   public static customStyles: CustomTrialPanelStyles | undefined = undefined;
 
+  static closed = false;
+
   private _observer: MutationObserver | null = null;
 
   private _inReassign = false;
-
-  private _hidden = false;
 
   private readonly _spanStyles: string;
 
@@ -174,7 +174,7 @@ class DxLicense extends SafeHTMLElement {
     button.appendChild(svg);
 
     button.onclick = (): void => {
-      this._hidden = true;
+      DxLicense.closed = true;
       this.style.cssText = createImportantStyles({
         display: 'none',
       });
@@ -208,7 +208,7 @@ class DxLicense extends SafeHTMLElement {
     this._reassignComponent();
     if (!this._observer) {
       this._observer = new MutationObserver(() => {
-        if (this._hidden) {
+        if (DxLicense.closed) {
           this._observer?.disconnect();
           return;
         }
@@ -228,12 +228,21 @@ class DxLicense extends SafeHTMLElement {
   }
 
   public disconnectedCallback(): void {
-    setTimeout(() => {
+    if (DxLicense.closed) {
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    Promise.resolve().then(() => {
+      if (!document) {
+        return;
+      }
+
       const licensePanel = document.getElementsByTagName(componentNames.panel);
       if (!licensePanel.length) {
         document.body.prepend(this);
       }
-    }, 100);
+    });
   }
 }
 class DxLicenseTrigger extends SafeHTMLElement {
@@ -243,7 +252,7 @@ class DxLicenseTrigger extends SafeHTMLElement {
     });
 
     const licensePanel = document.getElementsByTagName(componentNames.panel);
-    if (!licensePanel.length) {
+    if (!licensePanel.length && !DxLicense.closed) {
       const license = document.createElement(componentNames.panel);
 
       license.setAttribute(
@@ -261,7 +270,7 @@ class DxLicenseTrigger extends SafeHTMLElement {
         this.getAttribute(attributeNames.licensingDoc) as string,
       );
 
-      license.setAttribute(DATA_PERMANENT_ATTRIBUTE, 'true');
+      license.setAttribute(DATA_PERMANENT_ATTRIBUTE, '');
 
       document.body.prepend(license);
     }
