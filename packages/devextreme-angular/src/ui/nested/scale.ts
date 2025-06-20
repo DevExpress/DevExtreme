@@ -153,14 +153,6 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get aggregateByCategory(): boolean {
-        return this._getOption('aggregateByCategory');
-    }
-    set aggregateByCategory(value: boolean) {
-        this._setOption('aggregateByCategory', value);
-    }
-
-    @Input()
     get aggregationGroupWidth(): number | undefined {
         return this._getOption('aggregationGroupWidth');
     }

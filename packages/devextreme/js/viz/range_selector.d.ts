@@ -401,12 +401,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     scale?: {
       /**
        * @docid
-       * @default true
-       * @deprecated  dxChartSeriesTypes.CommonSeries.aggregation.enabled
-       */
-      aggregateByCategory?: boolean;
-      /**
-       * @docid
        * @default undefined
        */
       aggregationGroupWidth?: number | undefined;
