@@ -14,7 +14,7 @@ $(() => {
     columns: [
       {
         dataField: 'Status',
-        fieldValueTemplate({ field: { value } }) {
+        fieldValueTemplate({ field: { value } }) {          
           return $('<div>')
             .append(
               $('<div>').addClass('indicator')
@@ -23,11 +23,9 @@ $(() => {
               $('<div>').text(value)
             )
             .addClass('status')
-            .addClass(
-              value === 'Salaried'
-                ? 'status--ok'
-                : 'status--warning'
-            );
+            .toggleClass('status--salaried', value === 'Salaried')
+            .toggleClass('status--commission', value === 'Commission')
+            .toggleClass('status--terminated', value === 'Terminated');
         },
         allowSearch: false,
       },
@@ -65,7 +63,7 @@ $(() => {
     ],
     cardFooterTemplate() {
       return $('<div>')
-        .addClass('footer')
+        .addClass('card-footer')
         .append(
           $('<div>').dxButton({
             text: 'Call',

@@ -152,7 +152,7 @@ const allowColumnReordering = ref(false);
   }
 
   .option > .dx-selectbox {
-    width: 150px;
+    width: 200px;
     display: inline-block;
     vertical-align: middle;
   }
