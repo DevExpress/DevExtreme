@@ -1632,7 +1632,7 @@ QUnit.module('Menu tests', {
         submenu = getSubMenuInstance($itemA);
         assert.ok(submenu._overlay.option('visible'));
 
-        $(document).trigger('dxpointerdown'); // it needs to trigge hideOnOutsideClick
+        $(document).trigger('dxpointerdown'); // it needs to trigger hideOnOutsideClick
         assert.ok(submenu._overlay.option('visible'));
         assert.equal(i, 1, 'event triggered');
     });
