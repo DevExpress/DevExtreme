@@ -254,6 +254,11 @@ test('TabPanel borders without scrolling', async (t) => {
     const tabPanel = new TabPanel('#container');
     const direction = rtlEnabled ? 'left' : 'right';
 
+    await t.click('body', {
+      offsetX: -10,
+      offsetY: -10,
+    });
+
     await testScreenshot(t, takeScreenshot, `TabPanel without focus,rtl=${rtlEnabled}.png`, { element: '#container' });
 
     await t.pressKey('tab');
@@ -277,6 +282,8 @@ test('TabPanel borders without scrolling', async (t) => {
 
     await t.hover(firstItem.element);
     await testScreenshot(t, takeScreenshot, `TabPanel 1 item hovered,rtl=${rtlEnabled}.png`, { element: '#container' });
+
+    await tabPanel.option('showNavButtons', true);
 
     const navigationButton = Selector(`.${rtlEnabled ? TABS_LEFT_NAV_BUTTON_CLASS : TABS_RIGHT_NAV_BUTTON_CLASS}`);
     await t.hover(navigationButton);
@@ -318,7 +325,6 @@ test('TabPanel borders without scrolling', async (t) => {
       dataSource,
       height: 120,
       width: 450,
-      showNavButtons: true,
       rtlEnabled,
       // prevent firing dxinactive event for to avoid failing test
       itemHoldTimeout: 5000,
@@ -458,6 +464,11 @@ test('TabPanel borders without scrolling', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const tabPanel = new TabPanel('#container');
+
+    await t.click('body', {
+      offsetX: -10,
+      offsetY: -10,
+    });
 
     await testScreenshot(t, takeScreenshot, `TabPanel without focus,tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
