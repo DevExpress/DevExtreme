@@ -1,6 +1,7 @@
 import { ExportLoadPanel } from './exporter/export_load_panel';
 import { Cell } from './ui/pivot_grid';
 import { Column } from './ui/data_grid';
+import { CellAddress, CellRange } from './common/export/excel.types';
 
 /**
  * @docid
@@ -68,44 +69,6 @@ export interface ExcelPivotGridCell extends Cell {
 }
 
 /**
- * @docid
- * @namespace DevExpress.excelExporter
- * @type object
- * @public
- */
-export interface CellAddress {
-  /**
-   * @docid
-   * @public
-   */
-  row?: number;
-  /**
-   * @docid
-   * @public
-   */
-  column?: number;
-}
-
-/**
-* @docid
-* @namespace DevExpress.excelExporter
-* @type object
-* @public
-*/
-export interface CellRange {
-  /**
-   * @docid
-   * @public
-   */
-  from?: CellAddress;
-  /**
-   * @docid
-   * @public
-   */
-  to?: CellAddress;
-}
-
-/**
  * @namespace DevExpress.excelExporter
  * @deprecated Use DataGridCell instead
  */
@@ -156,3 +119,8 @@ export interface ExcelDataGridCell {
    */
   value?: any;
 }
+
+export {
+  CellAddress,
+  CellRange,
+};
