@@ -41,7 +41,7 @@ const componentConfig = {
     area: {},
     elementAttr: Object as PropType<Record<string, any>>,
     handles: String as PropType<ResizeHandle | string>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     keepAspectRatio: Boolean,
     maxHeight: Number,
     maxWidth: Number,
@@ -54,7 +54,7 @@ const componentConfig = {
     onResizeEnd: Function as PropType<((e: ResizeEndEvent) => void)>,
     onResizeStart: Function as PropType<((e: ResizeStartEvent) => void)>,
     rtlEnabled: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

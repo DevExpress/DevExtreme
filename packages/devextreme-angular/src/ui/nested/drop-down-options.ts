@@ -40,7 +40,6 @@ import { DxiToolbarItemComponent } from './toolbar-item-dxi';
     inputs: [
         'accessKey',
         'animation',
-        'closeOnOutsideClick',
         'container',
         'contentTemplate',
         'deferRendering',
@@ -99,7 +98,7 @@ export class DxoDropDownOptionsComponent extends DxoPopupOptions implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<number | Function | string>;
+    @Output() heightChange: EventEmitter<number | string>;
 
     /**
     
@@ -120,7 +119,7 @@ export class DxoDropDownOptionsComponent extends DxoPopupOptions implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<number | Function | string>;
+    @Output() widthChange: EventEmitter<number | string>;
     protected get _optionPath() {
         return 'dropDownOptions';
     }

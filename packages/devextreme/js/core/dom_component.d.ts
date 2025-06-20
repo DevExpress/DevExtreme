@@ -50,7 +50,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
      * @default undefined
      * @public
      */
-    height?: number | string | (() => number | string) | undefined;
+    height?: number | string | undefined;
     /**
      * @docid
      * @action
@@ -78,7 +78,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
      * @default undefined
      * @public
      */
-    width?: number | string | (() => number | string) | undefined;
+    width?: number | string | undefined;
 }
 /**
  * @docid

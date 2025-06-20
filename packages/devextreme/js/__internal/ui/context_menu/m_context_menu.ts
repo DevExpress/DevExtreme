@@ -1019,7 +1019,6 @@ class ContextMenu extends MenuBase {
         }
         this._invalidate();
         break;
-      case 'closeOnOutsideClick':
       case 'hideOnOutsideClick':
       case 'hideOnParentScroll':
       case 'visualContainer':
@@ -1062,6 +1061,7 @@ class ContextMenu extends MenuBase {
       const $subMenu = $(this._overlay.content()).children(`.${DX_SUBMENU_CLASS}`);
 
       this._setOptionWithoutOptionChange('visible', true);
+      // @ts-expect-error ts-error
       this._overlay.option({
         height: () => this._getMaxHeight(position.of),
         maxHeight: () => {

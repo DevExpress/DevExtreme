@@ -135,7 +135,7 @@ export interface dxResponsiveBoxOptions<
      * @default '100%'
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * @docid
      * @type Array<string | dxResponsiveBoxItem | any>
@@ -186,7 +186,7 @@ export interface dxResponsiveBoxOptions<
      * @default '100%'
      * @public
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
 }
 /**
  * @docid

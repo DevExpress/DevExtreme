@@ -30,7 +30,7 @@ interface DxLoadIndicator extends AccessibleOptions {
 const componentConfig = {
   props: {
     elementAttr: Object as PropType<Record<string, any>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     indicatorSrc: String,
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
@@ -39,7 +39,7 @@ const componentConfig = {
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     rtlEnabled: Boolean,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,
