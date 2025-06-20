@@ -62,9 +62,11 @@ import {
  Format as CommonFormat,
  SortOrder,
  ComparisonOperator,
+ DragHighlight,
  Direction,
  PositionAlignment,
  DisplayMode,
+ ScrollbarMode,
  TabsIconPosition,
  TabsStyle,
  Position,
@@ -465,6 +467,7 @@ const componentConfig = {
       pager: { isCollectionItem: false, optionName: "pager" },
       paging: { isCollectionItem: false, optionName: "paging" },
       remoteOperations: { isCollectionItem: false, optionName: "remoteOperations" },
+      scrolling: { isCollectionItem: false, optionName: "scrolling" },
       searchPanel: { isCollectionItem: false, optionName: "searchPanel" },
       selection: { isCollectionItem: false, optionName: "selection" },
       sorting: { isCollectionItem: false, optionName: "sorting" },
@@ -1285,6 +1288,39 @@ const DxCustomRule = defineComponent(DxCustomRuleConfig);
   type: "custom"
 };
 
+const DxDraggingConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:dropFeedbackMode": null,
+    "update:onDragChange": null,
+    "update:onDragEnd": null,
+    "update:onDragMove": null,
+    "update:onDragStart": null,
+    "update:onRemove": null,
+    "update:onReorder": null,
+    "update:scrollSensitivity": null,
+    "update:scrollSpeed": null,
+  },
+  props: {
+    dropFeedbackMode: String as PropType<DragHighlight>,
+    onDragChange: Function as PropType<((e: any) => void)>,
+    onDragEnd: Function as PropType<((e: any) => void)>,
+    onDragMove: Function as PropType<((e: any) => void)>,
+    onDragStart: Function as PropType<((e: any) => void)>,
+    onRemove: Function as PropType<((e: any) => void)>,
+    onReorder: Function as PropType<((e: any) => void)>,
+    scrollSensitivity: Number,
+    scrollSpeed: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxDraggingConfig);
+
+const DxDragging = defineComponent(DxDraggingConfig);
+
+(DxDragging as any).$_optionName = "dragging";
+
 const DxEditingConfig = {
   emits: {
     "update:isActive": null,
@@ -1972,6 +2008,9 @@ prepareConfigurationComponentConfig(DxHeaderPanelConfig);
 const DxHeaderPanel = defineComponent(DxHeaderPanelConfig);
 
 (DxHeaderPanel as any).$_optionName = "headerPanel";
+(DxHeaderPanel as any).$_expectedChildren = {
+  dragging: { isCollectionItem: false, optionName: "dragging" }
+};
 
 const DxHideConfig = {
   emits: {
@@ -2514,6 +2553,29 @@ const DxRequiredRule = defineComponent(DxRequiredRuleConfig);
 (DxRequiredRule as any).$_predefinedProps = {
   type: "required"
 };
+
+const DxScrollingConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:scrollByContent": null,
+    "update:scrollByThumb": null,
+    "update:showScrollbar": null,
+    "update:useNative": null,
+  },
+  props: {
+    scrollByContent: Boolean,
+    scrollByThumb: Boolean,
+    showScrollbar: String as PropType<ScrollbarMode>,
+    useNative: [Boolean, String] as PropType<boolean | Mode>
+  }
+};
+
+prepareConfigurationComponentConfig(DxScrollingConfig);
+
+const DxScrolling = defineComponent(DxScrollingConfig);
+
+(DxScrolling as any).$_optionName = "scrolling";
 
 const DxSearchConfig = {
   emits: {
@@ -3177,6 +3239,7 @@ export {
   DxCompareRule,
   DxCustomOperation,
   DxCustomRule,
+  DxDragging,
   DxEditing,
   DxEditingTexts,
   DxEmailRule,
@@ -3209,6 +3272,7 @@ export {
   DxRangeRule,
   DxRemoteOperations,
   DxRequiredRule,
+  DxScrolling,
   DxSearch,
   DxSearchPanel,
   DxSelection,
