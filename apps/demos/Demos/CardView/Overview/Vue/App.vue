@@ -86,7 +86,7 @@
         />
         <DxButton
           text="Send Email"
-          icon="send"
+          icon="message"
           type="default"
           styling-mode="contained"
           @click="showNotify('Send Email')"
