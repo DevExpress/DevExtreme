@@ -438,7 +438,7 @@ class Popup<
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     super._renderContentImpl();
     this._renderResize();
-    this._renderBottom();
+    this._renderBottomToolbar();
   }
 
   _renderTopToolbar(): void {
@@ -453,6 +453,8 @@ class Popup<
     }
 
     if (showTitle || items.length > 0) {
+      const shouldTriggerResizeTwice = Boolean(this._$topToolbar);
+
       if (this._$topToolbar) {
         this._$topToolbar.remove();
       }
@@ -466,6 +468,12 @@ class Popup<
       this._executeTitleRenderAction(this._$topToolbar);
 
       this._$topToolbar.toggleClass(POPUP_HAS_CLOSE_BUTTON_CLASS, this._hasCloseButton());
+
+      triggerResizeEvent(this._$topToolbar);
+
+      if (shouldTriggerResizeTwice) {
+        triggerResizeEvent(this._$topToolbar);
+      }
     } else if (this._$topToolbar) {
       this._$topToolbar.detach();
     }
@@ -699,7 +707,7 @@ class Popup<
     });
   }
 
-  _renderBottom(): void {
+  _renderBottomToolbar(): void {
     const items = this._getToolbarItems('bottom');
 
     if (items.length) {
@@ -1075,7 +1083,7 @@ class Popup<
       case 'disabled':
         super._optionChanged(args);
         this._renderTopToolbar();
-        this._renderBottom();
+        this._renderBottomToolbar();
         break;
       case 'animation':
         this._updateResizeCallbackSkipCondition();
@@ -1094,7 +1102,7 @@ class Popup<
         triggerResizeEvent(this.$overlayContent());
         break;
       case 'bottomTemplate':
-        this._renderBottom();
+        this._renderBottomToolbar();
         this._renderGeometry();
         triggerResizeEvent(this.$overlayContent());
         break;
@@ -1117,13 +1125,15 @@ class Popup<
       case 'toolbarItems':
       case 'useDefaultToolbarButtons':
       case 'useFlatToolbarButtons': {
-        // @ts-expect-error ts-error
-        // NOTE: Geometry rendering after "toolbarItems" runtime change breaks the popup animation first appereance.
-        // But geometry rendering for options connected to the popup position still should be called.
-        const shouldRenderGeometry = !args.fullName.match(/^toolbarItems((\[\d+\])(\.(options|visible).*)?)?$/);
-
         this._renderTopToolbar();
-        this._renderBottom();
+        this._renderBottomToolbar();
+
+        // @ts-expect-error ts-error
+        // NOTE: Geometry rendering after "toolbarItems" runtime change
+        // breaks the popup animation first appereance.
+        // But geometry rendering for options connected to
+        // the popup position still should be called.
+        const shouldRenderGeometry = !args.fullName.match(/^toolbarItems((\[\d+\])(\.(options|visible).*)?)?$/);
 
         if (shouldRenderGeometry) {
           this._renderGeometry();
