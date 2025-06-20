@@ -11,53 +11,6 @@ export function isValidStatePath(statePath: string): boolean {
   return parts.length >= 2;
 }
 
-export function areEqual(inputA: unknown, inputB: unknown): boolean {
-  function iter(a: unknown, b: unknown, visited = new WeakMap()): boolean {
-    if (a === b) return true;
-
-    if (a === null || b === null || a === undefined || b === undefined) {
-      return a === b;
-    }
-
-    if (typeof a !== 'object' || typeof b !== 'object') {
-      return a === b;
-    }
-
-    const visitedA = visited.get(a);
-    if (visitedA) {
-      return visitedA === b;
-    }
-
-    visited.set(a, b);
-
-    if (a instanceof Date && b instanceof Date) {
-      return a.getTime() === b.getTime();
-    }
-
-    if (a instanceof RegExp && b instanceof RegExp) {
-      return a.toString() === b.toString();
-    }
-
-    if (Array.isArray(a) !== Array.isArray(b)) return false;
-
-    if (Array.isArray(a) && Array.isArray(b)) {
-      if (a.length !== b.length) return false;
-
-      return a.every((item, index) => iter(item, b[index], visited));
-    }
-
-    const keysA = Object.keys(a);
-    const keysB = Object.keys(b);
-
-    if (keysA.length !== keysB.length) return false;
-
-    return keysA.every((key) => Object.prototype.hasOwnProperty.call(b, key)
-             && iter(a[key], b[key], visited));
-  }
-
-  return iter(inputA, inputB);
-}
-
 export function deepCopy<T extends object>(inputObject: T): T {
   function iter(value: unknown, visited = new WeakMap<object, unknown>()): unknown {
     if (value === null || typeof value !== 'object') {

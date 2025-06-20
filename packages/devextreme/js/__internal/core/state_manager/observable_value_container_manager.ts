@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import type * as StateManagementTypes from './types';
-import { areEqual, deepCopy } from './utils';
+import { deepCopy } from './utils';
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 class Observable {
@@ -43,16 +43,11 @@ export class ObservableValueContainerManager implements StateManagementTypes.Val
       return;
     }
 
-    // eslint-disable-next-line spellcheck/spell-checker
-    let previousValue = this.valueContainer.unreactive_get();
+    let previousValue = this.getValue();
 
     if (this.valueContainer.subscribe) {
       this.valueContainer.subscribe((newValue) => {
         try {
-          if (areEqual(previousValue, newValue)) {
-            return;
-          }
-
           const payload: StateManagementTypes.ValueContainerChange['payload'] = {
             previousValue: typeof previousValue === 'object' && previousValue !== null ? deepCopy(previousValue) : previousValue,
             newValue: typeof newValue === 'object' && newValue !== null ? deepCopy(newValue) : newValue,
