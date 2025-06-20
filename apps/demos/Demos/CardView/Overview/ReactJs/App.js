@@ -37,7 +37,7 @@ function notifySendEmail() {
 }
 function CardFooterComponent() {
   return (
-    <div className="footer">
+    <div className="card-footer">
       <Button
         text="Call"
         icon="tel"
@@ -60,7 +60,12 @@ function StatusComponent({
     field: { value },
   },
 }) {
-  const className = value === 'Salaried' ? 'status--ok' : 'status--warning';
+  const classNameMap = {
+    Salaried: 'status--salaried',
+    Commission: 'status--commission',
+    Terminated: 'status--terminated',
+  };
+  const className = classNameMap[value];
   return (
     <div className={`status ${className}`}>
       <div className="indicator"></div>

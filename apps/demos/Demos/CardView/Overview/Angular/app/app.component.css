@@ -1,10 +1,10 @@
-.footer {
+.card-footer {
   display: flex;
   padding: 12px;
   gap: 8px;
 }
 
-.footer > * {
+.card-footer > * {
   flex-grow: 1;
   width: 100%
 }
@@ -14,12 +14,16 @@
   align-items: center;
 }
 
-.status--ok {
+.status--salaried {
   color: var(--dx-color-success);
 }
 
-.status--warning {
-  color: var(--dx-color-warning);
+.status--commission {
+  color: #f7630c;
+}
+
+.status--terminated {
+  color: var(--dx-color-danger);
 }
 
 .indicator {
