@@ -121,7 +121,6 @@ import { DxoTreeListColumnChooserSelectionModule } from 'devextreme-angular/ui/t
 import { DxoTreeListColumnFixingModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListColumnFixingTextsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListColumnHeaderFilterModule } from 'devextreme-angular/ui/tree-list/nested';
-import { DxoTreeListColumnHeaderFilterSearchModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListColumnLookupModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListCompareRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListCursorOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -144,6 +143,7 @@ import { DxoTreeListFormItemModule } from 'devextreme-angular/ui/tree-list/neste
 import { DxoTreeListFromModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListGroupOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListHeaderFilterModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListHeaderFilterSearchModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListHideModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListIconsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListItemModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -2308,7 +2308,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListColumnFixingModule,
     DxoTreeListColumnFixingTextsModule,
     DxoTreeListColumnHeaderFilterModule,
-    DxoTreeListColumnHeaderFilterSearchModule,
     DxoTreeListColumnLookupModule,
     DxiTreeListCompareRuleModule,
     DxoTreeListCursorOffsetModule,
@@ -2331,6 +2330,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListFromModule,
     DxoTreeListGroupOperationDescriptionsModule,
     DxoTreeListHeaderFilterModule,
+    DxoTreeListHeaderFilterSearchModule,
     DxoTreeListHideModule,
     DxoTreeListIconsModule,
     DxiTreeListItemModule,
@@ -2443,7 +2443,6 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListColumnFixingModule,
     DxoTreeListColumnFixingTextsModule,
     DxoTreeListColumnHeaderFilterModule,
-    DxoTreeListColumnHeaderFilterSearchModule,
     DxoTreeListColumnLookupModule,
     DxiTreeListCompareRuleModule,
     DxoTreeListCursorOffsetModule,
@@ -2466,6 +2465,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListFromModule,
     DxoTreeListGroupOperationDescriptionsModule,
     DxoTreeListHeaderFilterModule,
+    DxoTreeListHeaderFilterSearchModule,
     DxoTreeListHideModule,
     DxoTreeListIconsModule,
     DxiTreeListItemModule,

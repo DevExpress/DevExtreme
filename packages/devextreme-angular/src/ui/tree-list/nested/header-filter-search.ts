@@ -24,14 +24,14 @@ import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
-    selector: 'dxo-data-grid-column-header-filter-search',
+    selector: 'dxo-tree-list-header-filter-search',
     standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxoDataGridColumnHeaderFilterSearchComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListHeaderFilterSearchComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
     get editorOptions(): any {
         return this._getOption('editorOptions');
@@ -99,10 +99,10 @@ export class DxoDataGridColumnHeaderFilterSearchComponent extends NestedOption i
 
 @NgModule({
   imports: [
-    DxoDataGridColumnHeaderFilterSearchComponent
+    DxoTreeListHeaderFilterSearchComponent
   ],
   exports: [
-    DxoDataGridColumnHeaderFilterSearchComponent
+    DxoTreeListHeaderFilterSearchComponent
   ],
 })
-export class DxoDataGridColumnHeaderFilterSearchModule { }
+export class DxoTreeListHeaderFilterSearchModule { }

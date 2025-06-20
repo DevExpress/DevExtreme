@@ -602,6 +602,14 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption implement
         this.setChildren('buttons', value);
     }
 
+    @ContentChildren(forwardRef(() => DxiTreeListColumnComponent))
+    get columnsChildren(): QueryList<DxiTreeListColumnComponent> {
+        return this._getOption('columns');
+    }
+    set columnsChildren(value) {
+        this.setChildren('columns', value);
+    }
+
 
 
 

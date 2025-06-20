@@ -941,8 +941,7 @@ const DxColumn = defineComponent(DxColumnConfig);
 (DxColumn as any).$_expectedChildren = {
   AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
   button: { isCollectionItem: true, optionName: "buttons" },
-  columnHeaderFilter: { isCollectionItem: false, optionName: "headerFilter" },
-  columnLookup: { isCollectionItem: false, optionName: "lookup" },
+  column: { isCollectionItem: true, optionName: "columns" },
   CompareRule: { isCollectionItem: true, optionName: "validationRules" },
   CustomRule: { isCollectionItem: true, optionName: "validationRules" },
   EmailRule: { isCollectionItem: true, optionName: "validationRules" },
@@ -1130,34 +1129,8 @@ const DxColumnHeaderFilter = defineComponent(DxColumnHeaderFilterConfig);
 
 (DxColumnHeaderFilter as any).$_optionName = "headerFilter";
 (DxColumnHeaderFilter as any).$_expectedChildren = {
-  columnHeaderFilterSearch: { isCollectionItem: false, optionName: "search" },
   search: { isCollectionItem: false, optionName: "search" }
 };
-
-const DxColumnHeaderFilterSearchConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:editorOptions": null,
-    "update:enabled": null,
-    "update:mode": null,
-    "update:searchExpr": null,
-    "update:timeout": null,
-  },
-  props: {
-    editorOptions: {},
-    enabled: Boolean,
-    mode: String as PropType<SearchMode>,
-    searchExpr: [Array, Function, String] as PropType<(Array<(() => any) | string>) | ((() => any)) | string>,
-    timeout: Number
-  }
-};
-
-prepareConfigurationComponentConfig(DxColumnHeaderFilterSearchConfig);
-
-const DxColumnHeaderFilterSearch = defineComponent(DxColumnHeaderFilterSearchConfig);
-
-(DxColumnHeaderFilterSearch as any).$_optionName = "search";
 
 const DxColumnLookupConfig = {
   emits: {
@@ -2342,10 +2315,35 @@ const DxHeaderFilter = defineComponent(DxHeaderFilterConfig);
 
 (DxHeaderFilter as any).$_optionName = "headerFilter";
 (DxHeaderFilter as any).$_expectedChildren = {
-  columnHeaderFilterSearch: { isCollectionItem: false, optionName: "search" },
   dataGridHeaderFilterSearch: { isCollectionItem: false, optionName: "search" },
-  dataGridHeaderFilterTexts: { isCollectionItem: false, optionName: "texts" }
+  dataGridHeaderFilterTexts: { isCollectionItem: false, optionName: "texts" },
+  search: { isCollectionItem: false, optionName: "search" }
 };
+
+const DxHeaderFilterSearchConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:editorOptions": null,
+    "update:enabled": null,
+    "update:mode": null,
+    "update:searchExpr": null,
+    "update:timeout": null,
+  },
+  props: {
+    editorOptions: {},
+    enabled: Boolean,
+    mode: String as PropType<SearchMode>,
+    searchExpr: [Array, Function, String] as PropType<(Array<(() => any) | string>) | ((() => any)) | string>,
+    timeout: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxHeaderFilterSearchConfig);
+
+const DxHeaderFilterSearch = defineComponent(DxHeaderFilterSearchConfig);
+
+(DxHeaderFilterSearch as any).$_optionName = "search";
 
 const DxHideConfig = {
   emits: {
@@ -3704,7 +3702,6 @@ export {
   DxColumnFixing,
   DxColumnFixingTexts,
   DxColumnHeaderFilter,
-  DxColumnHeaderFilterSearch,
   DxColumnLookup,
   DxCompareRule,
   DxCursorOffset,
@@ -3737,6 +3734,7 @@ export {
   DxGroupOperationDescriptions,
   DxGroupPanel,
   DxHeaderFilter,
+  DxHeaderFilterSearch,
   DxHide,
   DxIcons,
   DxItem,

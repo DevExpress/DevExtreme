@@ -361,6 +361,7 @@ const Collision = Object.assign<typeof _componentCollision, NestedComponentMeta>
 
 // owners:
 // TreeList
+// Column
 type IColumnProps = React.PropsWithChildren<{
   alignment?: HorizontalAlignment | undefined;
   allowEditing?: boolean;
@@ -463,8 +464,7 @@ const _componentColumn = (props: IColumnProps) => {
       ExpectedChildren: {
         AsyncRule: { optionName: "validationRules", isCollectionItem: true },
         button: { optionName: "buttons", isCollectionItem: true },
-        columnHeaderFilter: { optionName: "headerFilter", isCollectionItem: false },
-        columnLookup: { optionName: "lookup", isCollectionItem: false },
+        column: { optionName: "columns", isCollectionItem: true },
         CompareRule: { optionName: "validationRules", isCollectionItem: true },
         CustomRule: { optionName: "validationRules", isCollectionItem: true },
         EmailRule: { optionName: "validationRules", isCollectionItem: true },
@@ -654,7 +654,6 @@ const _componentColumnHeaderFilter = (props: IColumnHeaderFilterProps) => {
     elementDescriptor: {
       OptionName: "headerFilter",
       ExpectedChildren: {
-        columnHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
         search: { optionName: "search", isCollectionItem: false }
       },
     },
@@ -662,28 +661,6 @@ const _componentColumnHeaderFilter = (props: IColumnHeaderFilterProps) => {
 };
 
 const ColumnHeaderFilter = Object.assign<typeof _componentColumnHeaderFilter, NestedComponentMeta>(_componentColumnHeaderFilter, {
-  componentType: "option",
-});
-
-// owners:
-// ColumnHeaderFilter
-type IColumnHeaderFilterSearchProps = React.PropsWithChildren<{
-  editorOptions?: any;
-  enabled?: boolean;
-  mode?: SearchMode;
-  searchExpr?: Array<(() => any) | string> | (() => any) | string | undefined;
-  timeout?: number;
-}>
-const _componentColumnHeaderFilterSearch = (props: IColumnHeaderFilterSearchProps) => {
-  return React.createElement(NestedOption<IColumnHeaderFilterSearchProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "search",
-    },
-  });
-};
-
-const ColumnHeaderFilterSearch = Object.assign<typeof _componentColumnHeaderFilterSearch, NestedComponentMeta>(_componentColumnHeaderFilterSearch, {
   componentType: "option",
 });
 
@@ -1521,7 +1498,7 @@ const _componentHeaderFilter = (props: IHeaderFilterProps) => {
     elementDescriptor: {
       OptionName: "headerFilter",
       ExpectedChildren: {
-        columnHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
+        search: { optionName: "search", isCollectionItem: false },
         treeListHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
         treeListHeaderFilterTexts: { optionName: "texts", isCollectionItem: false }
       },
@@ -1530,6 +1507,28 @@ const _componentHeaderFilter = (props: IHeaderFilterProps) => {
 };
 
 const HeaderFilter = Object.assign<typeof _componentHeaderFilter, NestedComponentMeta>(_componentHeaderFilter, {
+  componentType: "option",
+});
+
+// owners:
+// HeaderFilter
+type IHeaderFilterSearchProps = React.PropsWithChildren<{
+  editorOptions?: any;
+  enabled?: boolean;
+  mode?: SearchMode;
+  searchExpr?: Array<(() => any) | string> | (() => any) | string | undefined;
+  timeout?: number;
+}>
+const _componentHeaderFilterSearch = (props: IHeaderFilterSearchProps) => {
+  return React.createElement(NestedOption<IHeaderFilterSearchProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "search",
+    },
+  });
+};
+
+const HeaderFilterSearch = Object.assign<typeof _componentHeaderFilterSearch, NestedComponentMeta>(_componentHeaderFilterSearch, {
   componentType: "option",
 });
 
@@ -2205,7 +2204,7 @@ const Scrolling = Object.assign<typeof _componentScrolling, NestedComponentMeta>
 });
 
 // owners:
-// ColumnHeaderFilter
+// HeaderFilter
 // ColumnChooser
 // TreeListHeaderFilter
 type ISearchProps = React.PropsWithChildren<{
@@ -2680,8 +2679,6 @@ export {
   IColumnFixingTextsProps,
   ColumnHeaderFilter,
   IColumnHeaderFilterProps,
-  ColumnHeaderFilterSearch,
-  IColumnHeaderFilterSearchProps,
   ColumnLookup,
   IColumnLookupProps,
   CompareRule,
@@ -2726,6 +2723,8 @@ export {
   IGroupOperationDescriptionsProps,
   HeaderFilter,
   IHeaderFilterProps,
+  HeaderFilterSearch,
+  IHeaderFilterSearchProps,
   Hide,
   IHideProps,
   Icons,

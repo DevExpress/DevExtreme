@@ -131,7 +131,6 @@ import { DxoDataGridColumnChooserSelectionModule } from 'devextreme-angular/ui/d
 import { DxoDataGridColumnFixingModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridColumnFixingTextsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridColumnHeaderFilterModule } from 'devextreme-angular/ui/data-grid/nested';
-import { DxoDataGridColumnHeaderFilterSearchModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridColumnLookupModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridCompareRuleModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridCursorOffsetModule } from 'devextreme-angular/ui/data-grid/nested';
@@ -164,6 +163,7 @@ import { DxiDataGridGroupItemModule } from 'devextreme-angular/ui/data-grid/nest
 import { DxoDataGridGroupOperationDescriptionsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridGroupPanelModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridHeaderFilterModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridHeaderFilterSearchModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridHideModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridIconsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridItemModule } from 'devextreme-angular/ui/data-grid/nested';
@@ -2363,7 +2363,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridColumnFixingModule,
     DxoDataGridColumnFixingTextsModule,
     DxoDataGridColumnHeaderFilterModule,
-    DxoDataGridColumnHeaderFilterSearchModule,
     DxoDataGridColumnLookupModule,
     DxiDataGridCompareRuleModule,
     DxoDataGridCursorOffsetModule,
@@ -2396,6 +2395,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridGroupOperationDescriptionsModule,
     DxoDataGridGroupPanelModule,
     DxoDataGridHeaderFilterModule,
+    DxoDataGridHeaderFilterSearchModule,
     DxoDataGridHideModule,
     DxoDataGridIconsModule,
     DxiDataGridItemModule,
@@ -2519,7 +2519,6 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridColumnFixingModule,
     DxoDataGridColumnFixingTextsModule,
     DxoDataGridColumnHeaderFilterModule,
-    DxoDataGridColumnHeaderFilterSearchModule,
     DxoDataGridColumnLookupModule,
     DxiDataGridCompareRuleModule,
     DxoDataGridCursorOffsetModule,
@@ -2552,6 +2551,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridGroupOperationDescriptionsModule,
     DxoDataGridGroupPanelModule,
     DxoDataGridHeaderFilterModule,
+    DxoDataGridHeaderFilterSearchModule,
     DxoDataGridHideModule,
     DxoDataGridIconsModule,
     DxiDataGridItemModule,

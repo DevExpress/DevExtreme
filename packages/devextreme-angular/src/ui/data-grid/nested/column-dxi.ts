@@ -665,6 +665,14 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption implement
         this.setChildren('buttons', value);
     }
 
+    @ContentChildren(forwardRef(() => DxiDataGridColumnComponent))
+    get columnsChildren(): QueryList<DxiDataGridColumnComponent> {
+        return this._getOption('columns');
+    }
+    set columnsChildren(value) {
+        this.setChildren('columns', value);
+    }
+
 
 
 
