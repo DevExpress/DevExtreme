@@ -2123,6 +2123,8 @@ QUnit.module('popup integration', () => {
             opened: true
         }).dxDropDownEditor('instance');
 
+        debugger;
+
         assert.equal($('.dx-overlay-content .dx-popup-title').length, 1, 'popup title is rendered');
 
         dropDownEditor.close();

@@ -457,11 +457,10 @@ class Popup<
         this._$topToolbar.remove();
       }
 
-      const $toolbar = $('<div>')
-        .addClass(POPUP_TITLE_CLASS)
-        .insertBefore(this.$content());
+      const $toolbar = $('<div>').insertBefore(this.$content());
 
-      this._$topToolbar = this._renderTemplateByType('titleTemplate', items, $toolbar);
+      this._$topToolbar = this._renderTemplateByType('titleTemplate', items, $toolbar)
+        .addClass(POPUP_TITLE_CLASS);
 
       this._renderDrag();
       this._executeTitleRenderAction(this._$topToolbar);
