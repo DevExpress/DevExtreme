@@ -94,7 +94,11 @@
   </dxi-card-view-column>
   <dxi-card-view-column dataField="department"></dxi-card-view-column>
   <dxi-card-view-column dataField="address"></dxi-card-view-column>
-  <dxi-card-view-column dataField="mobilePhone"></dxi-card-view-column>
+  <dxi-card-view-column dataField="mobilePhone">
+    <dxi-card-view-validation-rule
+      type="required"
+    ></dxi-card-view-validation-rule>
+  </dxi-card-view-column>
   <dxi-card-view-column dataField="email">
     <dxi-card-view-validation-rule type="email"></dxi-card-view-validation-rule>
     <dxi-card-view-validation-rule

@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxCardViewModule } from 'devextreme-angular';
+import { DxCardViewModule, DxSelectBoxModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -37,6 +37,7 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxCardViewModule,
+    DxSelectBoxModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

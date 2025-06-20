@@ -167,7 +167,9 @@ const App = () => (
     </Column>
     <Column dataField="department"/>
     <Column dataField="address"/>
-    <Column dataField="mobilePhone"/>
+    <Column dataField="mobilePhone">
+      <RequiredRule/>
+    </Column>
     <Column dataField="email">
       <EmailRule/>
       <AsyncRule
