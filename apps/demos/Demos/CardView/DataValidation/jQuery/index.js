@@ -97,7 +97,12 @@ $(() => {
       },
       'department',
       'address',
-      'mobilePhone',
+      {
+        dataField: 'mobilePhone',
+        validationRules: [{
+          type: 'required',
+        }],
+      },
       {
         dataField: 'email',
         validationRules: [{
