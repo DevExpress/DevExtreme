@@ -1,4 +1,5 @@
 @use "../sizes" as *;
+@use "../../_design-system/fluent/components/button.scss" as *;
 
 // adduse
 
@@ -7,15 +8,16 @@ $fluent-button-text-line-height: normal !default;
 $fluent-button-text-transform: none !default;
 $fluent-button-text-font-weight: var(--DS-font-weight-display) !default;
 $fluent-button-text-letter-spacing: normal !default;
-$button-border-radius: var(--DS-border-radius-40) !default; // theme base level
-$fluent-border-width: var(--DS-border-width-10) !default; // theme base level
+$button-border-radius: $base-border-radius !default;
 
 $fluent-button-box-shadow-size: 0 1px 3px !default;
 
-$button-base-padding: null !default;
-
 $fluent-button-height: null !default;
 $fluent-button-icon-size: null !default;
+
+$fluent-button-horizontal-padding: null !default;
+$fluent-button-vertical-padding: null !default;
+//$fluent-button-icon-text-padding: null !default;
 
 /**
 * $name 13. Icon margin
@@ -24,23 +26,25 @@ $fluent-button-icon-size: null !default;
 $fluent-button-icon-margin: null !default;
 
 @if $size == "default" {
-  $button-base-padding: var(--DS-sizing-60) !default;
+  $fluent-button-height: var(--DS-sizing-320) !default; // 32px default;
+  $fluent-button-icon-size: $button-layout-icon-wrapper-medium !default; // 20px default;
+  $fluent-button-icon-margin: calc(#{$button-layout-inner-box-medium-gap} + #{$button-layout-text-box-medium-horizontal}) !default; // 8px default; // value changed
 
-  $fluent-button-height: var(--DS-sizing-320) !default;
-  $fluent-button-icon-size: var(--DS-sizing-200) !default;
-  $fluent-button-icon-margin: var(--DS-sizing-80) !default;
+  $fluent-button-horizontal-padding: $button-layout-inner-box-medium-horizontal !default; // 12px !default;
+  $fluent-button-vertical-padding: $button-layout-inner-box-icon-button-medium-vertical !default; // 6px !default; // value changed
+  //$fluent-button-icon-padding: 6px;
 }
 
 @else if $size == "compact" {
-  $button-base-padding: var(--DS-sizing-40) !default;
+  $fluent-button-height: var(--DS-sizing-240) !default; // 24px default;
+  $fluent-button-icon-size: $button-layout-icon-wrapper-small !default; // 16px default;
+  $fluent-button-icon-margin: calc(#{$button-layout-inner-box-small-gap} + #{$button-layout-text-box-small-horizontal}) !default; // 4px default;
 
-  $fluent-button-height: var(--DS-sizing-240) !default;
-  $fluent-button-icon-size: var(--DS-sizing-160) !default;
-  $fluent-button-icon-margin: var(--DS-sizing-40) !default;
+  $fluent-button-horizontal-padding: $button-layout-inner-box-small-horizontal !default; // 8px !default;
+  $fluent-button-vertical-padding: $button-layout-inner-box-icon-button-small-vertical !default; // 4px !default; // value changed
+  //$fluent-button-icon-padding: 4px !default;
 }
 
-$fluent-button-horizontal-padding: calc(#{$button-base-padding} * 2) !default;
-$fluent-button-vertical-padding: $button-base-padding !default;
 $fluent-button-icon-text-padding: $fluent-button-horizontal-padding !default;
 
 :root {
