@@ -42809,7 +42809,6 @@ declare module DevExpress.viz {
       DevExpress.common.core.events.EventInfo<dxRangeSelector> &
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxRangeSelectorOptions;
-    export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
     /**
      * [descr:_viz_range_selector_ValueChangedEvent]
      */
