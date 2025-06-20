@@ -85,8 +85,6 @@ const KEY_SPACE = ' ';
 
 const TIME_TO_WAIT = 500;
 
-const VALUE_CHANGE_EVENT_OPTIONS = ['valueChangeEvent', 'customItemCreateEvent'];
-
 const toSelector = (className) => {
     return '.' + className;
 };
@@ -4277,37 +4275,35 @@ QUnit.module('Scrolling', {
 });
 
 QUnit.module('Async tests', {}, () => {
-    VALUE_CHANGE_EVENT_OPTIONS.forEach(eventOptionName => {
-        QUnit.testInActiveWindow(`Value should be reset after on selectedItem after focusout when ${eventOptionName}='change'`, function(assert) {
-            const done = assert.async();
-            const items = [1, 2];
-            const $selectBox = $('#selectBox').dxSelectBox({
-                searchEnabled: true,
-                items: items,
-                value: items[0],
-                [eventOptionName]: 'change',
-                searchTimeout: 0
-            });
-            const selectBox = $selectBox.dxSelectBox('instance');
-            const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-            const keyboard = keyboardMock($input);
-
-            $input.focus();
-
-            keyboard
-                .press('end')
-                .press('backspace')
-                .type('2');
-
-            $input.blur();
-
-            setTimeout(() => {
-                assert.equal(selectBox.option('value'), items[0], 'value is not changed');
-                assert.equal(selectBox.option('selectedItem'), items[0], 'selectedItem is not changed');
-                assert.equal($input.val(), items[0], 'input is reset');
-                done();
-            }, 0);
+    QUnit.testInActiveWindow('Value should be reset after on selectedItem after focusout when customItemCreateEvent=\'change\'', function(assert) {
+        const done = assert.async();
+        const items = [1, 2];
+        const $selectBox = $('#selectBox').dxSelectBox({
+            searchEnabled: true,
+            items: items,
+            value: items[0],
+            customItemCreateEvent: 'change',
+            searchTimeout: 0
         });
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        $input.focus();
+
+        keyboard
+            .press('end')
+            .press('backspace')
+            .type('2');
+
+        $input.blur();
+
+        setTimeout(() => {
+            assert.equal(selectBox.option('value'), items[0], 'value is not changed');
+            assert.equal(selectBox.option('selectedItem'), items[0], 'selectedItem is not changed');
+            assert.equal($input.val(), items[0], 'input is reset');
+            done();
+        }, 0);
     });
 
     QUnit.test('the selected item should be visible if the data source is loaded after the delay (T386513)', function(assert) {
@@ -6493,18 +6489,16 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.testProgramChange(assert);
     });
 
-    VALUE_CHANGE_EVENT_OPTIONS.forEach(eventOptionName => {
-        QUnit.test(`on input if ${eventOptionName}=input and acceptCustomValue=true`, function(assert) {
-            this.reinit({
-                acceptCustomValue: true,
-                [eventOptionName]: 'input',
-            });
-
-            this.keyboard.type('1');
-
-            this.checkEvent(assert, 'input', this.$input);
-            this.testProgramChange(assert);
+    QUnit.test('on input if customItemCreateEvent=input and acceptCustomValue=true', function(assert) {
+        this.reinit({
+            acceptCustomValue: true,
+            customItemCreateEvent: 'input',
         });
+
+        this.keyboard.type('1');
+
+        this.checkEvent(assert, 'input', this.$input);
+        this.testProgramChange(assert);
     });
 
     ['del', 'backspace'].forEach(key => {
@@ -6593,24 +6587,6 @@ QUnit.module('The "customItemCreateEvent" option warning', {
         init();
     }
 }, () => {
-    QUnit.test('valueChangeEvent prop using should raise a warning about deprecation', function(assert) {
-        const errorsSpy = sinon.spy(errors, 'log');
-
-        try {
-            this.selectBox.option('valueChangeEvent', 'change');
-
-            assert.deepEqual(errorsSpy.lastCall.args, [
-                'W0001',
-                'dxSelectBox',
-                'valueChangeEvent',
-                '22.2',
-                'Use the \'customItemCreateEvent\' option instead'
-            ], 'warning is raised with correct parameters');
-        } finally {
-            errorsSpy.restore();
-        }
-    });
-
     QUnit.test('no warning should be logged on pure init', function(assert) {
         const errorsSpy = sinon.spy(errors, 'log');
 

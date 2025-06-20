@@ -154,13 +154,6 @@ class Lookup extends DropDownList<LookupProperties> {
     };
   }
 
-  _setDeprecatedOptions() {
-    super._setDeprecatedOptions();
-    extend(this._deprecatedOptions, {
-      valueChangeEvent: { since: '22.1', alias: 'searchStartEvent' },
-    });
-  }
-
   _defaultOptionsRules() {
     const themeName = current();
 

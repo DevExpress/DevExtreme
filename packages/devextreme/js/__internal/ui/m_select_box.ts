@@ -248,13 +248,6 @@ class SelectBox<
     return `${super._popupWrapperClass()} ${SELECTBOX_POPUP_WRAPPER_CLASS}`;
   }
 
-  _setDeprecatedOptions(): void {
-    super._setDeprecatedOptions();
-    extend(this._deprecatedOptions, {
-      valueChangeEvent: { since: '22.2', alias: 'customItemCreateEvent' },
-    });
-  }
-
   _cancelEditing(): void {
     if (!this.option('searchEnabled') && this._list) {
       this._focusListElement(null);
