@@ -22,7 +22,6 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   employees: Employee[];
 
-  // todo: move to nested components
   popupConfig = {
     title: 'Employee Info',
     showTitle: true,

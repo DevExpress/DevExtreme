@@ -58,7 +58,6 @@ const App = () => (
       allowAdding={true}
       allowUpdating={true}
       allowDeleting={true}
-      // todo: move to nested components
       popup={{
         title: 'Employee Info',
         showTitle: true,
