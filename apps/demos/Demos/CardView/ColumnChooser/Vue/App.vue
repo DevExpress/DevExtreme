@@ -34,6 +34,13 @@
           :disabled="columnChooserMode !== 'select'"
         />
       </div>
+      <div className="option">
+        <DxCheckBox
+          text="Allow Column Reordering"
+          :value="allowColumnReordering"
+          @value-changed="({ value }) => { allowColumnReordering = value; }"
+        />
+      </div>
     </div>
   </div>
   <DxCardView
@@ -42,6 +49,7 @@
     cards-per-row="auto"
     :card-min-width="300"
     :selected-card-keys="[4, 6]"
+    :allow-column-reordering="allowColumnReordering"
   >
     <DxSearchPanel
       :visible="true"
@@ -115,6 +123,7 @@ const columnChooserMode = ref<'select' | 'dragAndDrop'>('select');
 const searchEnabled = ref(true);
 const allowSelectAll = ref(true);
 const selectByClick = ref(true);
+const allowColumnReordering = ref(false);
 
 </script>
 <style>

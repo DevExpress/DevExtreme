@@ -108,6 +108,7 @@ function App() {
       <Column
         dataField="Status"
         fieldValueComponent={StatusComponent}
+        allowSearch={false}
       />
       <Column
         caption="Full Name"
@@ -128,6 +129,7 @@ function App() {
       <Column
         dataField="Email"
         fieldValueComponent={EmailComponent}
+        allowSearch={false}
       />
       <Column
         caption="Address"

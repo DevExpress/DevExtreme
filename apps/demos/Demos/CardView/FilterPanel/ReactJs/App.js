@@ -8,29 +8,19 @@ import CardView, {
 } from 'devextreme-react/card-view';
 import { orders } from './data.js';
 
-function getDeliveryHours(rowData) {
-  return new Date(rowData.DeliveryDate).getHours();
+function getOrderDay({ OrderDate }) {
+  return new Date(OrderDate).getDay();
 }
-const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'afterNoon']];
+const filterValue = [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'weekends']];
 const customOperations = [
   {
-    name: 'beforeNoon',
-    caption: 'Before noon',
-    dataTypes: ['datetime'],
+    name: 'weekends',
+    caption: 'Weekends',
+    dataTypes: ['date'],
     icon: 'check',
     hasValue: false,
     calculateFilterExpression() {
-      return [getDeliveryHours, '<', 12];
-    },
-  },
-  {
-    name: 'afterNoon',
-    caption: 'After noon',
-    dataTypes: ['datetime'],
-    icon: 'check',
-    hasValue: false,
-    calculateFilterExpression() {
-      return [getDeliveryHours, '>=', 12];
+      return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
     },
   },
 ];
@@ -85,7 +75,7 @@ const App = () => (
     />
     <Column
       dataField="DeliveryDate"
-      dataType="datetime"
+      dataType="date"
     />
     <Column
       dataField="SaleAmount"

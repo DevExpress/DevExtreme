@@ -26,7 +26,8 @@ $(() => {
             .toggleClass('status--salaried', value === 'Salaried')
             .toggleClass('status--commission', value === 'Commission')
             .toggleClass('status--terminated', value === 'Terminated');
-        }
+        },
+        allowSearch: false,
       },
       {
         caption: 'Full Name',
@@ -48,7 +49,8 @@ $(() => {
           return $('<a>')
             .attr('href', `mailto:${value}`)
             .text(text);
-        }
+        },
+        allowSearch: false,
       },
       {
         caption: 'Address',
@@ -56,7 +58,7 @@ $(() => {
         allowSorting: true,
         calculateFieldValue({ State, City }) {
           return `${City}, ${State}`;
-        }
+        },
       },
     ],
     cardFooterTemplate() {
