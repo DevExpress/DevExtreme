@@ -47,7 +47,7 @@ function CardFooterComponent() {
       />
       <Button
         text="Send Email"
-        icon="send"
+        icon="message"
         type="default"
         stylingMode="contained"
         onClick={notifySendEmail}
