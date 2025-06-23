@@ -5830,6 +5830,12 @@ declare module DevExpress.common.grids {
         SavingInfo<TRowData, TKey>
     ) => void;
     /**
+     * [descr:GridBaseOptions.onScroll]
+     */
+    onScroll?: (
+      e: DevExpress.ui.dxScrollable.ScrollEventInfo<TComponent>
+    ) => void;
+    /**
      * [descr:GridBaseOptions.onSelectionChanged]
      */
     onSelectionChanged?: (

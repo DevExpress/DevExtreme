@@ -35,6 +35,7 @@ import { Store } from 'devextreme/data/store';
 import { dxFormOptions } from 'devextreme/ui/form';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
+import { ScrollEventInfo } from 'devextreme/ui/scroll_view/ui.scrollable';
 import { event } from 'devextreme/events/events.types';
 
 import DxTreeList from 'devextreme/ui/tree_list';
@@ -1495,6 +1496,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
     
+     * [descr:GridBaseOptions.onScroll]
+    
+    
+     */
+    @Output() onScroll: EventEmitter<ScrollEventInfo>;
+
+    /**
+    
      * [descr:dxTreeListOptions.onSelectionChanged]
     
     
@@ -2106,6 +2115,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
             { subscribe: 'rowValidating', emit: 'onRowValidating' },
             { subscribe: 'saved', emit: 'onSaved' },
             { subscribe: 'saving', emit: 'onSaving' },
+            { subscribe: 'scroll', emit: 'onScroll' },
             { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
             { subscribe: 'toolbarPreparing', emit: 'onToolbarPreparing' },
             { emit: 'accessKeyChange' },

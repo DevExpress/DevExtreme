@@ -151,6 +151,9 @@ import {
  ToolbarLocation,
 } from "devextreme/ui/popup";
 import {
+ ScrollEventInfo,
+} from "devextreme/ui/scroll_view/ui.scrollable";
+import {
  PagerBase,
 } from "devextreme/ui/pagination";
 import {
@@ -284,6 +287,7 @@ type AccessibleOptions = Pick<Properties,
   "onRowValidating" |
   "onSaved" |
   "onSaving" |
+  "onScroll" |
   "onSelectionChanged" |
   "onToolbarPreparing" |
   "pager" |
@@ -408,6 +412,7 @@ const componentConfig = {
     onRowValidating: Function as PropType<((e: RowValidatingEvent) => void)>,
     onSaved: Function as PropType<((e: SavedEvent) => void)>,
     onSaving: Function as PropType<((e: SavingEvent) => void)>,
+    onScroll: Function as PropType<((e: ScrollEventInfo) => void)>,
     onSelectionChanged: Function as PropType<((e: SelectionChangedEvent) => void)>,
     onToolbarPreparing: Function as PropType<((e: ToolbarPreparingEvent) => void)>,
     pager: Object as PropType<Pager | Record<string, any> | PagerBase>,
@@ -528,6 +533,7 @@ const componentConfig = {
     "update:onRowValidating": null,
     "update:onSaved": null,
     "update:onSaving": null,
+    "update:onScroll": null,
     "update:onSelectionChanged": null,
     "update:onToolbarPreparing": null,
     "update:pager": null,

@@ -35,6 +35,7 @@ import { Store } from 'devextreme/data/store';
 import { dxFormOptions } from 'devextreme/ui/form';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
+import { ScrollEventInfo } from 'devextreme/ui/scroll_view/ui.scrollable';
 import { event } from 'devextreme/events/events.types';
 import { Format } from 'devextreme/common/core/localization';
 
@@ -1521,6 +1522,14 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     /**
     
+     * [descr:GridBaseOptions.onScroll]
+    
+    
+     */
+    @Output() onScroll: EventEmitter<ScrollEventInfo>;
+
+    /**
+    
      * [descr:dxDataGridOptions.onSelectionChanged]
     
     
@@ -2148,6 +2157,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
             { subscribe: 'rowValidating', emit: 'onRowValidating' },
             { subscribe: 'saved', emit: 'onSaved' },
             { subscribe: 'saving', emit: 'onSaving' },
+            { subscribe: 'scroll', emit: 'onScroll' },
             { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
             { subscribe: 'toolbarPreparing', emit: 'onToolbarPreparing' },
             { emit: 'accessKeyChange' },
