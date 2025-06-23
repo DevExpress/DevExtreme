@@ -146,6 +146,7 @@ export class RowsView extends ColumnsView {
     this._scrollRight = 0;
     this._hasHeight = undefined;
     this._contentChanges = [];
+    this.createAction('onScroll');
     this._dataController.loadingChanged.add((isLoading, messageText) => {
       this.setLoading(isLoading, messageText);
     });
@@ -381,6 +382,8 @@ export class RowsView extends ColumnsView {
     const that = this;
     const rtlEnabled = that.option('rtlEnabled');
     const isNativeScrolling = e.component.option('useNative');
+
+    this.executeAction('onScroll', e);
 
     that._scrollTop = e.scrollOffset.top;
     that._scrollLeft = e.scrollOffset.left;
@@ -1271,7 +1274,6 @@ export class RowsView extends ColumnsView {
     this._toggleDraggableSourceColumnClass($rows, this.getColumns(), columnIndex, value);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
     const $cells = super._getCellElementsCore.apply(this, arguments as any);
 
