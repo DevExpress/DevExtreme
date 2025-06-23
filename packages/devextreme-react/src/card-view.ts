@@ -9,20 +9,26 @@ import dxCardView, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, CardTemplateData, CardHeaderItem, CardHeaderPredefinedItem, FieldTemplateData, ColumnTemplateData, EditingTexts as CardViewEditingTexts, PredefinedToolbarItem, ToolbarItem } from "devextreme/ui/card_view";
+import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, CardTemplateData, CardHeaderItem, CardHeaderPredefinedItem, FieldTemplateData, ColumnTemplateData, EditingTexts as CardViewEditingTexts, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
-import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, SearchMode, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, DragHighlight, Mode, Direction, ToolbarItemLocation, ToolbarItemComponent, PositionAlignment, DisplayMode, ScrollbarMode } from "devextreme/common";
+import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, SearchMode, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, DragHighlight, PositionAlignment, Mode, Direction, ToolbarItemLocation, ToolbarItemComponent, DisplayMode, ScrollbarMode } from "devextreme/common";
 import type { HeaderFilterSearchConfig, HeaderFilterTexts, SelectionColumnDisplayMode, DataChangeType, FilterType, ColumnHeaderFilter as GridsColumnHeaderFilter, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, DataChange, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, PagerPageSize } from "devextreme/common/grids";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { dxFormSimpleItem, dxFormOptions, ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, OptionChangedEvent as FormOptionChangedEvent, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent, FormItemType } from "devextreme/ui/form";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
 import type { dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
+import type { dxPopupOptions, dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
 import type { ContentReadyEvent as LoadPanelContentReadyEvent, DisposingEvent as LoadPanelDisposingEvent, InitializedEvent as LoadPanelInitializedEvent, OptionChangedEvent as LoadPanelOptionChangedEvent, HiddenEvent, HidingEvent, ShowingEvent, ShownEvent } from "devextreme/ui/load_panel";
+import type { event } from "devextreme/events/events.types";
+import type { EventInfo } from "devextreme/common/core/events";
+import type { Component } from "devextreme/core/component";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
-import type { event } from "devextreme/events/events.types";
 
+import type dxOverlay from "devextreme/ui/overlay";
+import type DOMComponent from "devextreme/core/dom_component";
+import type dxPopup from "devextreme/ui/popup";
 import type dxForm from "devextreme/ui/form";
 
 import type * as CommonTypes from "devextreme/common";
@@ -89,7 +95,7 @@ const CardView = memo(
         }
       ), [baseRef.current]);
 
-      const subscribableOptions = useMemo(() => (["filterValue","selectedCardKeys","filterBuilder.value","filterPanel.filterEnabled","editing.form.formData","loadPanel.position","loadPanel.visible","paging.pageIndex","paging.pageSize","searchPanel.text"]), []);
+      const subscribableOptions = useMemo(() => (["filterValue","selectedCardKeys","filterBuilder.value","filterBuilderPopup.height","filterBuilderPopup.position","filterBuilderPopup.visible","filterBuilderPopup.width","filterPanel.filterEnabled","editing.form.formData","loadPanel.position","loadPanel.visible","paging.pageIndex","paging.pageSize","editing.popup.height","editing.popup.position","editing.popup.visible","editing.popup.width","searchPanel.text"]), []);
       const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardInserted","onCardInserting","onCardPrepared","onCardRemoved","onCardRemoving","onCardSaved","onCardSaving","onCardUpdated","onCardUpdating","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onFieldCaptionClick","onFieldCaptionDblClick","onFieldCaptionPrepared","onFieldValueClick","onFieldValueDblClick","onFieldValuePrepared","onInitialized","onInitNewCard"]), []);
 
       const defaults = useMemo(() => ({
@@ -106,6 +112,7 @@ const CardView = memo(
         columnChooser: { optionName: "columnChooser", isCollectionItem: false },
         editing: { optionName: "editing", isCollectionItem: false },
         filterBuilder: { optionName: "filterBuilder", isCollectionItem: false },
+        filterBuilderPopup: { optionName: "filterBuilderPopup", isCollectionItem: false },
         filterPanel: { optionName: "filterPanel", isCollectionItem: false },
         headerFilter: { optionName: "headerFilter", isCollectionItem: false },
         headerPanel: { optionName: "headerPanel", isCollectionItem: false },
@@ -161,6 +168,8 @@ const CardView = memo(
 
 
 // owners:
+// Popup
+// FilterBuilderPopup
 // LoadPanel
 type IAnimationProps = React.PropsWithChildren<{
   hide?: AnimationConfig;
@@ -829,7 +838,7 @@ type IEditingProps = React.PropsWithChildren<{
   confirmDelete?: boolean;
   editCardKey?: any;
   form?: dxFormOptions;
-  popup?: Record<string, any>;
+  popup?: dxPopupOptions<any>;
   texts?: CardViewEditingTexts;
 }>
 const _componentEditing = (props: IEditingProps) => {
@@ -841,6 +850,7 @@ const _componentEditing = (props: IEditingProps) => {
         change: { optionName: "changes", isCollectionItem: true },
         editingTexts: { optionName: "texts", isCollectionItem: false },
         form: { optionName: "form", isCollectionItem: false },
+        popup: { optionName: "popup", isCollectionItem: false },
         texts: { optionName: "texts", isCollectionItem: false }
       },
     },
@@ -1018,6 +1028,107 @@ const _componentFilterBuilder = (props: IFilterBuilderProps) => {
 };
 
 const FilterBuilder = Object.assign<typeof _componentFilterBuilder, NestedComponentMeta>(_componentFilterBuilder, {
+  componentType: "option",
+});
+
+// owners:
+// CardView
+type IFilterBuilderPopupProps = React.PropsWithChildren<{
+  accessKey?: string | undefined;
+  animation?: Record<string, any> | {
+    hide?: AnimationConfig;
+    show?: AnimationConfig;
+  };
+  bindingOptions?: Record<string, any>;
+  container?: any | string | undefined;
+  contentTemplate?: ((contentElement: any) => string | any) | template;
+  deferRendering?: boolean;
+  disabled?: boolean;
+  dragAndResizeArea?: any | string | undefined;
+  dragEnabled?: boolean;
+  dragOutsideBoundary?: boolean;
+  enableBodyScroll?: boolean;
+  focusStateEnabled?: boolean;
+  fullScreen?: boolean;
+  height?: number | string;
+  hideOnOutsideClick?: boolean | ((event: event) => boolean);
+  hideOnParentScroll?: boolean;
+  hint?: string | undefined;
+  hoverStateEnabled?: boolean;
+  maxHeight?: number | string;
+  maxWidth?: number | string;
+  minHeight?: number | string;
+  minWidth?: number | string;
+  onContentReady?: ((e: EventInfo<any>) => void);
+  onDisposing?: ((e: EventInfo<any>) => void);
+  onHidden?: ((e: EventInfo<any>) => void);
+  onHiding?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
+  onInitialized?: ((e: { component: Component<any>, element: any }) => void);
+  onOptionChanged?: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void);
+  onResize?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
+  onResizeEnd?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
+  onResizeStart?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
+  onShowing?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
+  onShown?: ((e: EventInfo<any>) => void);
+  onTitleRendered?: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void);
+  position?: (() => void) | PositionAlignment | PositionConfig;
+  resizeEnabled?: boolean;
+  restorePosition?: boolean;
+  rtlEnabled?: boolean;
+  shading?: boolean;
+  shadingColor?: string;
+  showCloseButton?: boolean;
+  showTitle?: boolean;
+  tabIndex?: number;
+  title?: string;
+  titleTemplate?: ((titleElement: any) => string | any) | template;
+  toolbarItems?: Array<dxPopupToolbarItem>;
+  visible?: boolean;
+  width?: number | string;
+  wrapperAttr?: any;
+  defaultHeight?: number | string;
+  onHeightChange?: (value: number | string) => void;
+  defaultPosition?: (() => void) | PositionAlignment | PositionConfig;
+  onPositionChange?: (value: (() => void) | PositionAlignment | PositionConfig) => void;
+  defaultVisible?: boolean;
+  onVisibleChange?: (value: boolean) => void;
+  defaultWidth?: number | string;
+  onWidthChange?: (value: number | string) => void;
+  contentRender?: (...params: any) => React.ReactNode;
+  contentComponent?: React.ComponentType<any>;
+  titleRender?: (...params: any) => React.ReactNode;
+  titleComponent?: React.ComponentType<any>;
+}>
+const _componentFilterBuilderPopup = (props: IFilterBuilderPopupProps) => {
+  return React.createElement(NestedOption<IFilterBuilderPopupProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "filterBuilderPopup",
+      DefaultsProps: {
+        defaultHeight: "height",
+        defaultPosition: "position",
+        defaultVisible: "visible",
+        defaultWidth: "width"
+      },
+      ExpectedChildren: {
+        animation: { optionName: "animation", isCollectionItem: false },
+        position: { optionName: "position", isCollectionItem: false },
+        toolbarItem: { optionName: "toolbarItems", isCollectionItem: true }
+      },
+      TemplateProps: [{
+        tmplOption: "contentTemplate",
+        render: "contentRender",
+        component: "contentComponent"
+      }, {
+        tmplOption: "titleTemplate",
+        render: "titleRender",
+        component: "titleComponent"
+      }],
+    },
+  });
+};
+
+const FilterBuilderPopup = Object.assign<typeof _componentFilterBuilderPopup, NestedComponentMeta>(_componentFilterBuilderPopup, {
   componentType: "option",
 });
 
@@ -1712,9 +1823,112 @@ const PatternRule = Object.assign<typeof _componentPatternRule, NestedComponentM
 });
 
 // owners:
+// Editing
+type IPopupProps = React.PropsWithChildren<{
+  accessKey?: string | undefined;
+  animation?: Record<string, any> | {
+    hide?: AnimationConfig;
+    show?: AnimationConfig;
+  };
+  bindingOptions?: Record<string, any>;
+  container?: any | string | undefined;
+  contentTemplate?: ((contentElement: any) => string | any) | template;
+  deferRendering?: boolean;
+  disabled?: boolean;
+  dragAndResizeArea?: any | string | undefined;
+  dragEnabled?: boolean;
+  dragOutsideBoundary?: boolean;
+  enableBodyScroll?: boolean;
+  focusStateEnabled?: boolean;
+  fullScreen?: boolean;
+  height?: number | string;
+  hideOnOutsideClick?: boolean | ((event: event) => boolean);
+  hideOnParentScroll?: boolean;
+  hint?: string | undefined;
+  hoverStateEnabled?: boolean;
+  maxHeight?: number | string;
+  maxWidth?: number | string;
+  minHeight?: number | string;
+  minWidth?: number | string;
+  onContentReady?: ((e: EventInfo<any>) => void);
+  onDisposing?: ((e: EventInfo<any>) => void);
+  onHidden?: ((e: EventInfo<any>) => void);
+  onHiding?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
+  onInitialized?: ((e: { component: Component<any>, element: any }) => void);
+  onOptionChanged?: ((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void);
+  onResize?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
+  onResizeEnd?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
+  onResizeStart?: ((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void);
+  onShowing?: ((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void);
+  onShown?: ((e: EventInfo<any>) => void);
+  onTitleRendered?: ((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void);
+  position?: (() => void) | PositionAlignment | PositionConfig;
+  resizeEnabled?: boolean;
+  restorePosition?: boolean;
+  rtlEnabled?: boolean;
+  shading?: boolean;
+  shadingColor?: string;
+  showCloseButton?: boolean;
+  showTitle?: boolean;
+  tabIndex?: number;
+  title?: string;
+  titleTemplate?: ((titleElement: any) => string | any) | template;
+  toolbarItems?: Array<dxPopupToolbarItem>;
+  visible?: boolean;
+  width?: number | string;
+  wrapperAttr?: any;
+  defaultHeight?: number | string;
+  onHeightChange?: (value: number | string) => void;
+  defaultPosition?: (() => void) | PositionAlignment | PositionConfig;
+  onPositionChange?: (value: (() => void) | PositionAlignment | PositionConfig) => void;
+  defaultVisible?: boolean;
+  onVisibleChange?: (value: boolean) => void;
+  defaultWidth?: number | string;
+  onWidthChange?: (value: number | string) => void;
+  contentRender?: (...params: any) => React.ReactNode;
+  contentComponent?: React.ComponentType<any>;
+  titleRender?: (...params: any) => React.ReactNode;
+  titleComponent?: React.ComponentType<any>;
+}>
+const _componentPopup = (props: IPopupProps) => {
+  return React.createElement(NestedOption<IPopupProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "popup",
+      DefaultsProps: {
+        defaultHeight: "height",
+        defaultPosition: "position",
+        defaultVisible: "visible",
+        defaultWidth: "width"
+      },
+      ExpectedChildren: {
+        animation: { optionName: "animation", isCollectionItem: false },
+        position: { optionName: "position", isCollectionItem: false },
+        toolbarItem: { optionName: "toolbarItems", isCollectionItem: true }
+      },
+      TemplateProps: [{
+        tmplOption: "contentTemplate",
+        render: "contentRender",
+        component: "contentComponent"
+      }, {
+        tmplOption: "titleTemplate",
+        render: "titleRender",
+        component: "titleComponent"
+      }],
+    },
+  });
+};
+
+const Popup = Object.assign<typeof _componentPopup, NestedComponentMeta>(_componentPopup, {
+  componentType: "option",
+});
+
+// owners:
 // ColumnChooser
 // From
 // To
+// Popup
+// FilterBuilderPopup
 // LoadPanel
 type IPositionProps = React.PropsWithChildren<{
   at?: Record<string, any> | PositionAlignment | {
@@ -2074,7 +2288,7 @@ const To = Object.assign<typeof _componentTo, NestedComponentMeta>(_componentTo,
 // CardView
 type IToolbarProps = React.PropsWithChildren<{
   disabled?: boolean;
-  items?: Array<PredefinedToolbarItem | ToolbarItem>;
+  items?: Array<PredefinedToolbarItem | CardViewToolbarItem>;
   multiline?: boolean;
   visible?: boolean | undefined;
 }>
@@ -2091,6 +2305,51 @@ const _componentToolbar = (props: IToolbarProps) => {
 };
 
 const Toolbar = Object.assign<typeof _componentToolbar, NestedComponentMeta>(_componentToolbar, {
+  componentType: "option",
+});
+
+// owners:
+// Popup
+// FilterBuilderPopup
+type IToolbarItemProps = React.PropsWithChildren<{
+  cssClass?: string | undefined;
+  disabled?: boolean;
+  html?: string;
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
+  menuItemTemplate?: (() => string | any) | template;
+  options?: any;
+  showText?: ShowTextMode;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  text?: string;
+  toolbar?: ToolbarLocation;
+  visible?: boolean;
+  widget?: ToolbarItemComponent;
+  menuItemRender?: (...params: any) => React.ReactNode;
+  menuItemComponent?: React.ComponentType<any>;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentToolbarItem = (props: IToolbarItemProps) => {
+  return React.createElement(NestedOption<IToolbarItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "toolbarItems",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "menuItemTemplate",
+        render: "menuItemRender",
+        component: "menuItemComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
+
+const ToolbarItem = Object.assign<typeof _componentToolbarItem, NestedComponentMeta>(_componentToolbarItem, {
   componentType: "option",
 });
 
@@ -2188,6 +2447,8 @@ export {
   IFieldProps,
   FilterBuilder,
   IFilterBuilderProps,
+  FilterBuilderPopup,
+  IFilterBuilderPopupProps,
   FilterOperationDescriptions,
   IFilterOperationDescriptionsProps,
   FilterPanel,
@@ -2230,6 +2491,8 @@ export {
   IPagingProps,
   PatternRule,
   IPatternRuleProps,
+  Popup,
+  IPopupProps,
   Position,
   IPositionProps,
   RangeRule,
@@ -2258,6 +2521,8 @@ export {
   IToProps,
   Toolbar,
   IToolbarProps,
+  ToolbarItem,
+  IToolbarItemProps,
   ValidationRule,
   IValidationRuleProps
 };
