@@ -51,10 +51,6 @@ import {
  ValidationRuleType,
  HorizontalAlignment,
  VerticalAlignment,
- ButtonStyle,
- ButtonType,
- ToolbarItemLocation,
- ToolbarItemComponent,
  SearchMode,
  SingleMultipleOrNone,
  SelectAllMode,
@@ -64,12 +60,11 @@ import {
  ComparisonOperator,
  DragHighlight,
  Direction,
+ ToolbarItemLocation,
+ ToolbarItemComponent,
  PositionAlignment,
  DisplayMode,
  ScrollbarMode,
- TabsIconPosition,
- TabsStyle,
- Position,
 } from "devextreme/common";
 import {
  ColumnChooser,
@@ -106,12 +101,12 @@ import {
  FilterBuilderOperation,
  dxFilterBuilderCustomOperation,
  GroupOperation,
- ContentReadyEvent as FilterBuilderContentReadyEvent,
- DisposingEvent as FilterBuilderDisposingEvent,
+ ContentReadyEvent,
+ DisposingEvent,
  EditorPreparedEvent,
  EditorPreparingEvent,
- InitializedEvent as FilterBuilderInitializedEvent,
- OptionChangedEvent as FilterBuilderOptionChangedEvent,
+ InitializedEvent,
+ OptionChangedEvent,
  ValueChangedEvent,
 } from "devextreme/ui/filter_builder";
 import {
@@ -143,15 +138,9 @@ import {
  CollisionResolutionCombination,
 } from "devextreme/common/core/animation";
 import {
- dxButtonOptions,
- ClickEvent,
- ContentReadyEvent,
- DisposingEvent,
- InitializedEvent,
- OptionChangedEvent,
-} from "devextreme/ui/button";
+ Format,
+} from "devextreme/common/core/localization";
 import {
- FormItemType,
  dxFormSimpleItem,
  dxFormOptions,
  dxFormGroupItem,
@@ -167,31 +156,12 @@ import {
  InitializedEvent as FormInitializedEvent,
  OptionChangedEvent as FormOptionChangedEvent,
  FormItemComponent,
+ FormItemType,
 } from "devextreme/ui/form";
 import {
  LocateInMenuMode,
  ShowTextMode,
 } from "devextreme/ui/toolbar";
-import {
- Format,
-} from "devextreme/common/core/localization";
-import {
- dxTabPanelOptions,
- dxTabPanelItem,
- ContentReadyEvent as TabPanelContentReadyEvent,
- DisposingEvent as TabPanelDisposingEvent,
- InitializedEvent as TabPanelInitializedEvent,
- ItemClickEvent,
- ItemContextMenuEvent,
- ItemHoldEvent,
- ItemRenderedEvent,
- OptionChangedEvent as TabPanelOptionChangedEvent,
- SelectionChangedEvent as TabPanelSelectionChangedEvent,
- SelectionChangingEvent,
- TitleClickEvent,
- TitleHoldEvent,
- TitleRenderedEvent,
-} from "devextreme/ui/tab_panel";
 import {
  event,
 } from "devextreme/events/events.types";
@@ -571,111 +541,6 @@ const DxBoundaryOffset = defineComponent(DxBoundaryOffsetConfig);
 
 (DxBoundaryOffset as any).$_optionName = "boundaryOffset";
 
-const DxButtonItemConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:buttonOptions": null,
-    "update:colSpan": null,
-    "update:cssClass": null,
-    "update:horizontalAlignment": null,
-    "update:itemType": null,
-    "update:name": null,
-    "update:verticalAlignment": null,
-    "update:visible": null,
-    "update:visibleIndex": null,
-  },
-  props: {
-    buttonOptions: Object as PropType<dxButtonOptions | Record<string, any>>,
-    colSpan: Number,
-    cssClass: String,
-    horizontalAlignment: String as PropType<HorizontalAlignment>,
-    itemType: String as PropType<FormItemType>,
-    name: String,
-    verticalAlignment: String as PropType<VerticalAlignment>,
-    visible: Boolean,
-    visibleIndex: Number
-  }
-};
-
-prepareConfigurationComponentConfig(DxButtonItemConfig);
-
-const DxButtonItem = defineComponent(DxButtonItemConfig);
-
-(DxButtonItem as any).$_optionName = "items";
-(DxButtonItem as any).$_isCollectionItem = true;
-(DxButtonItem as any).$_predefinedProps = {
-  itemType: "button"
-};
-(DxButtonItem as any).$_expectedChildren = {
-  buttonOptions: { isCollectionItem: false, optionName: "buttonOptions" }
-};
-
-const DxButtonOptionsConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:accessKey": null,
-    "update:activeStateEnabled": null,
-    "update:bindingOptions": null,
-    "update:disabled": null,
-    "update:elementAttr": null,
-    "update:focusStateEnabled": null,
-    "update:height": null,
-    "update:hint": null,
-    "update:hoverStateEnabled": null,
-    "update:icon": null,
-    "update:onClick": null,
-    "update:onContentReady": null,
-    "update:onDisposing": null,
-    "update:onInitialized": null,
-    "update:onOptionChanged": null,
-    "update:rtlEnabled": null,
-    "update:stylingMode": null,
-    "update:tabIndex": null,
-    "update:template": null,
-    "update:text": null,
-    "update:type": null,
-    "update:useSubmitBehavior": null,
-    "update:validationGroup": null,
-    "update:visible": null,
-    "update:width": null,
-  },
-  props: {
-    accessKey: String,
-    activeStateEnabled: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
-    disabled: Boolean,
-    elementAttr: Object as PropType<Record<string, any>>,
-    focusStateEnabled: Boolean,
-    height: [Number, String],
-    hint: String,
-    hoverStateEnabled: Boolean,
-    icon: String,
-    onClick: Function as PropType<((e: ClickEvent) => void)>,
-    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
-    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
-    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
-    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
-    rtlEnabled: Boolean,
-    stylingMode: String as PropType<ButtonStyle>,
-    tabIndex: Number,
-    template: {},
-    text: String,
-    type: String as PropType<ButtonType | string>,
-    useSubmitBehavior: Boolean,
-    validationGroup: String,
-    visible: Boolean,
-    width: [Number, String]
-  }
-};
-
-prepareConfigurationComponentConfig(DxButtonOptionsConfig);
-
-const DxButtonOptions = defineComponent(DxButtonOptionsConfig);
-
-(DxButtonOptions as any).$_optionName = "buttonOptions";
-
 const DxCardCoverConfig = {
   emits: {
     "update:isActive": null,
@@ -721,52 +586,6 @@ prepareConfigurationComponentConfig(DxCardHeaderConfig);
 const DxCardHeader = defineComponent(DxCardHeaderConfig);
 
 (DxCardHeader as any).$_optionName = "cardHeader";
-(DxCardHeader as any).$_expectedChildren = {
-  cardHeaderItem: { isCollectionItem: true, optionName: "items" },
-  item: { isCollectionItem: true, optionName: "items" }
-};
-
-const DxCardHeaderItemConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:cssClass": null,
-    "update:disabled": null,
-    "update:html": null,
-    "update:locateInMenu": null,
-    "update:location": null,
-    "update:menuItemTemplate": null,
-    "update:name": null,
-    "update:options": null,
-    "update:showText": null,
-    "update:template": null,
-    "update:text": null,
-    "update:visible": null,
-    "update:widget": null,
-  },
-  props: {
-    cssClass: String,
-    disabled: Boolean,
-    html: String,
-    locateInMenu: String as PropType<LocateInMenuMode>,
-    location: String as PropType<ToolbarItemLocation>,
-    menuItemTemplate: {},
-    name: String as PropType<CardHeaderPredefinedItem | string>,
-    options: {},
-    showText: String as PropType<ShowTextMode>,
-    template: {},
-    text: String,
-    visible: Boolean,
-    widget: String as PropType<ToolbarItemComponent>
-  }
-};
-
-prepareConfigurationComponentConfig(DxCardHeaderItemConfig);
-
-const DxCardHeaderItem = defineComponent(DxCardHeaderItemConfig);
-
-(DxCardHeaderItem as any).$_optionName = "items";
-(DxCardHeaderItem as any).$_isCollectionItem = true;
 
 const DxCardViewHeaderFilterConfig = {
   emits: {
@@ -1412,37 +1231,6 @@ const DxEmailRule = defineComponent(DxEmailRuleConfig);
   type: "email"
 };
 
-const DxEmptyItemConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:colSpan": null,
-    "update:cssClass": null,
-    "update:itemType": null,
-    "update:name": null,
-    "update:visible": null,
-    "update:visibleIndex": null,
-  },
-  props: {
-    colSpan: Number,
-    cssClass: String,
-    itemType: String as PropType<FormItemType>,
-    name: String,
-    visible: Boolean,
-    visibleIndex: Number
-  }
-};
-
-prepareConfigurationComponentConfig(DxEmptyItemConfig);
-
-const DxEmptyItem = defineComponent(DxEmptyItemConfig);
-
-(DxEmptyItem as any).$_optionName = "items";
-(DxEmptyItem as any).$_isCollectionItem = true;
-(DxEmptyItem as any).$_predefinedProps = {
-  itemType: "empty"
-};
-
 const DxFieldConfig = {
   emits: {
     "update:isActive": null,
@@ -1539,12 +1327,12 @@ const DxFilterBuilderConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     maxGroupLevel: Number,
-    onContentReady: Function as PropType<((e: FilterBuilderContentReadyEvent) => void)>,
-    onDisposing: Function as PropType<((e: FilterBuilderDisposingEvent) => void)>,
+    onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onEditorPrepared: Function as PropType<((e: EditorPreparedEvent) => void)>,
     onEditorPreparing: Function as PropType<((e: EditorPreparingEvent) => void)>,
-    onInitialized: Function as PropType<((e: FilterBuilderInitializedEvent) => void)>,
-    onOptionChanged: Function as PropType<((e: FilterBuilderOptionChangedEvent) => void)>,
+    onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     onValueChanged: Function as PropType<((e: ValueChangedEvent) => void)>,
     rtlEnabled: Boolean,
     tabIndex: Number,
@@ -1752,13 +1540,7 @@ const DxForm = defineComponent(DxFormConfig);
 
 (DxForm as any).$_optionName = "form";
 (DxForm as any).$_expectedChildren = {
-  ButtonItem: { isCollectionItem: true, optionName: "items" },
-  colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" },
-  EmptyItem: { isCollectionItem: true, optionName: "items" },
-  GroupItem: { isCollectionItem: true, optionName: "items" },
-  item: { isCollectionItem: true, optionName: "items" },
-  SimpleItem: { isCollectionItem: true, optionName: "items" },
-  TabbedItem: { isCollectionItem: true, optionName: "items" }
+  colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" }
 };
 
 const DxFormatConfig = {
@@ -1870,54 +1652,6 @@ const DxFrom = defineComponent(DxFromConfig);
 (DxFrom as any).$_optionName = "from";
 (DxFrom as any).$_expectedChildren = {
   position: { isCollectionItem: false, optionName: "position" }
-};
-
-const DxGroupItemConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:alignItemLabels": null,
-    "update:caption": null,
-    "update:captionTemplate": null,
-    "update:colCount": null,
-    "update:colCountByScreen": null,
-    "update:colSpan": null,
-    "update:cssClass": null,
-    "update:items": null,
-    "update:itemType": null,
-    "update:name": null,
-    "update:template": null,
-    "update:visible": null,
-    "update:visibleIndex": null,
-  },
-  props: {
-    alignItemLabels: Boolean,
-    caption: String,
-    captionTemplate: {},
-    colCount: Number,
-    colCountByScreen: Object as PropType<Record<string, any>>,
-    colSpan: Number,
-    cssClass: String,
-    items: Array as PropType<Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>>,
-    itemType: String as PropType<FormItemType>,
-    name: String,
-    template: {},
-    visible: Boolean,
-    visibleIndex: Number
-  }
-};
-
-prepareConfigurationComponentConfig(DxGroupItemConfig);
-
-const DxGroupItem = defineComponent(DxGroupItemConfig);
-
-(DxGroupItem as any).$_optionName = "items";
-(DxGroupItem as any).$_isCollectionItem = true;
-(DxGroupItem as any).$_predefinedProps = {
-  itemType: "group"
-};
-(DxGroupItem as any).$_expectedChildren = {
-  colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" }
 };
 
 const DxGroupOperationDescriptionsConfig = {
@@ -2055,83 +1789,33 @@ const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:alignItemLabels": null,
-    "update:badge": null,
-    "update:buttonOptions": null,
-    "update:caption": null,
-    "update:captionTemplate": null,
-    "update:colCount": null,
-    "update:colCountByScreen": null,
-    "update:colSpan": null,
     "update:cssClass": null,
-    "update:dataField": null,
     "update:disabled": null,
-    "update:editorOptions": null,
-    "update:editorType": null,
-    "update:helpText": null,
-    "update:horizontalAlignment": null,
     "update:html": null,
-    "update:icon": null,
-    "update:isRequired": null,
-    "update:items": null,
-    "update:itemType": null,
-    "update:label": null,
     "update:locateInMenu": null,
     "update:location": null,
     "update:menuItemTemplate": null,
     "update:name": null,
     "update:options": null,
     "update:showText": null,
-    "update:tabPanelOptions": null,
-    "update:tabs": null,
-    "update:tabTemplate": null,
     "update:template": null,
     "update:text": null,
-    "update:title": null,
-    "update:validationRules": null,
-    "update:verticalAlignment": null,
     "update:visible": null,
-    "update:visibleIndex": null,
     "update:widget": null,
   },
   props: {
-    alignItemLabels: Boolean,
-    badge: String,
-    buttonOptions: Object as PropType<dxButtonOptions | Record<string, any>>,
-    caption: String,
-    captionTemplate: {},
-    colCount: Number,
-    colCountByScreen: Object as PropType<Record<string, any>>,
-    colSpan: Number,
     cssClass: String,
-    dataField: String,
     disabled: Boolean,
-    editorOptions: {},
-    editorType: String as PropType<FormItemComponent>,
-    helpText: String,
-    horizontalAlignment: String as PropType<HorizontalAlignment>,
     html: String,
-    icon: String,
-    isRequired: Boolean,
-    items: Array as PropType<Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>>,
-    itemType: String as PropType<FormItemType>,
-    label: Object as PropType<Record<string, any>>,
     locateInMenu: String as PropType<LocateInMenuMode>,
     location: String as PropType<ToolbarItemLocation>,
     menuItemTemplate: {},
-    name: String as PropType<CardHeaderPredefinedItem | string | PredefinedToolbarItem>,
+    name: String as PropType<PredefinedToolbarItem | string>,
     options: {},
     showText: String as PropType<ShowTextMode>,
-    tabPanelOptions: Object as PropType<dxTabPanelOptions | Record<string, any>>,
-    tabs: Array as PropType<Array<Record<string, any>>>,
-    tabTemplate: {},
     template: {},
     text: String,
-    title: String,
-    validationRules: Array as PropType<Array<CommonTypes.ValidationRule>>,
-    verticalAlignment: String as PropType<VerticalAlignment>,
     visible: Boolean,
-    visibleIndex: Number,
     widget: String as PropType<ToolbarItemComponent>
   }
 };
@@ -2142,23 +1826,6 @@ const DxItem = defineComponent(DxItemConfig);
 
 (DxItem as any).$_optionName = "items";
 (DxItem as any).$_isCollectionItem = true;
-(DxItem as any).$_expectedChildren = {
-  AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
-  buttonOptions: { isCollectionItem: false, optionName: "buttonOptions" },
-  colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" },
-  CompareRule: { isCollectionItem: true, optionName: "validationRules" },
-  CustomRule: { isCollectionItem: true, optionName: "validationRules" },
-  EmailRule: { isCollectionItem: true, optionName: "validationRules" },
-  label: { isCollectionItem: false, optionName: "label" },
-  NumericRule: { isCollectionItem: true, optionName: "validationRules" },
-  PatternRule: { isCollectionItem: true, optionName: "validationRules" },
-  RangeRule: { isCollectionItem: true, optionName: "validationRules" },
-  RequiredRule: { isCollectionItem: true, optionName: "validationRules" },
-  StringLengthRule: { isCollectionItem: true, optionName: "validationRules" },
-  tab: { isCollectionItem: true, optionName: "tabs" },
-  tabPanelOptions: { isCollectionItem: false, optionName: "tabPanelOptions" },
-  validationRule: { isCollectionItem: true, optionName: "validationRules" }
-};
 
 const DxLabelConfig = {
   emits: {
@@ -2697,66 +2364,6 @@ const DxShow = defineComponent(DxShowConfig);
   to: { isCollectionItem: false, optionName: "to" }
 };
 
-const DxSimpleItemConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:colSpan": null,
-    "update:cssClass": null,
-    "update:dataField": null,
-    "update:editorOptions": null,
-    "update:editorType": null,
-    "update:helpText": null,
-    "update:isRequired": null,
-    "update:itemType": null,
-    "update:label": null,
-    "update:name": null,
-    "update:template": null,
-    "update:validationRules": null,
-    "update:visible": null,
-    "update:visibleIndex": null,
-  },
-  props: {
-    colSpan: Number,
-    cssClass: String,
-    dataField: String,
-    editorOptions: {},
-    editorType: String as PropType<FormItemComponent>,
-    helpText: String,
-    isRequired: Boolean,
-    itemType: String as PropType<FormItemType>,
-    label: Object as PropType<Record<string, any>>,
-    name: String,
-    template: {},
-    validationRules: Array as PropType<Array<CommonTypes.ValidationRule>>,
-    visible: Boolean,
-    visibleIndex: Number
-  }
-};
-
-prepareConfigurationComponentConfig(DxSimpleItemConfig);
-
-const DxSimpleItem = defineComponent(DxSimpleItemConfig);
-
-(DxSimpleItem as any).$_optionName = "items";
-(DxSimpleItem as any).$_isCollectionItem = true;
-(DxSimpleItem as any).$_predefinedProps = {
-  itemType: "simple"
-};
-(DxSimpleItem as any).$_expectedChildren = {
-  AsyncRule: { isCollectionItem: true, optionName: "validationRules" },
-  CompareRule: { isCollectionItem: true, optionName: "validationRules" },
-  CustomRule: { isCollectionItem: true, optionName: "validationRules" },
-  EmailRule: { isCollectionItem: true, optionName: "validationRules" },
-  label: { isCollectionItem: false, optionName: "label" },
-  NumericRule: { isCollectionItem: true, optionName: "validationRules" },
-  PatternRule: { isCollectionItem: true, optionName: "validationRules" },
-  RangeRule: { isCollectionItem: true, optionName: "validationRules" },
-  RequiredRule: { isCollectionItem: true, optionName: "validationRules" },
-  StringLengthRule: { isCollectionItem: true, optionName: "validationRules" },
-  validationRule: { isCollectionItem: true, optionName: "validationRules" }
-};
-
 const DxSortingConfig = {
   emits: {
     "update:isActive": null,
@@ -2812,227 +2419,6 @@ const DxStringLengthRule = defineComponent(DxStringLengthRuleConfig);
 (DxStringLengthRule as any).$_predefinedProps = {
   type: "stringLength"
 };
-
-const DxTabConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:alignItemLabels": null,
-    "update:badge": null,
-    "update:colCount": null,
-    "update:colCountByScreen": null,
-    "update:disabled": null,
-    "update:icon": null,
-    "update:items": null,
-    "update:tabTemplate": null,
-    "update:template": null,
-    "update:title": null,
-  },
-  props: {
-    alignItemLabels: Boolean,
-    badge: String,
-    colCount: Number,
-    colCountByScreen: Object as PropType<Record<string, any>>,
-    disabled: Boolean,
-    icon: String,
-    items: Array as PropType<Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>>,
-    tabTemplate: {},
-    template: {},
-    title: String
-  }
-};
-
-prepareConfigurationComponentConfig(DxTabConfig);
-
-const DxTab = defineComponent(DxTabConfig);
-
-(DxTab as any).$_optionName = "tabs";
-(DxTab as any).$_isCollectionItem = true;
-(DxTab as any).$_expectedChildren = {
-  colCountByScreen: { isCollectionItem: false, optionName: "colCountByScreen" }
-};
-
-const DxTabbedItemConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:colSpan": null,
-    "update:cssClass": null,
-    "update:itemType": null,
-    "update:name": null,
-    "update:tabPanelOptions": null,
-    "update:tabs": null,
-    "update:visible": null,
-    "update:visibleIndex": null,
-  },
-  props: {
-    colSpan: Number,
-    cssClass: String,
-    itemType: String as PropType<FormItemType>,
-    name: String,
-    tabPanelOptions: Object as PropType<dxTabPanelOptions | Record<string, any>>,
-    tabs: Array as PropType<Array<Record<string, any>>>,
-    visible: Boolean,
-    visibleIndex: Number
-  }
-};
-
-prepareConfigurationComponentConfig(DxTabbedItemConfig);
-
-const DxTabbedItem = defineComponent(DxTabbedItemConfig);
-
-(DxTabbedItem as any).$_optionName = "items";
-(DxTabbedItem as any).$_isCollectionItem = true;
-(DxTabbedItem as any).$_predefinedProps = {
-  itemType: "tabbed"
-};
-(DxTabbedItem as any).$_expectedChildren = {
-  tab: { isCollectionItem: true, optionName: "tabs" },
-  tabPanelOptions: { isCollectionItem: false, optionName: "tabPanelOptions" }
-};
-
-const DxTabPanelOptionsConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:accessKey": null,
-    "update:activeStateEnabled": null,
-    "update:animationEnabled": null,
-    "update:bindingOptions": null,
-    "update:dataSource": null,
-    "update:deferRendering": null,
-    "update:disabled": null,
-    "update:elementAttr": null,
-    "update:focusStateEnabled": null,
-    "update:height": null,
-    "update:hint": null,
-    "update:hoverStateEnabled": null,
-    "update:iconPosition": null,
-    "update:itemHoldTimeout": null,
-    "update:items": null,
-    "update:itemTemplate": null,
-    "update:itemTitleTemplate": null,
-    "update:loop": null,
-    "update:noDataText": null,
-    "update:onContentReady": null,
-    "update:onDisposing": null,
-    "update:onInitialized": null,
-    "update:onItemClick": null,
-    "update:onItemContextMenu": null,
-    "update:onItemHold": null,
-    "update:onItemRendered": null,
-    "update:onOptionChanged": null,
-    "update:onSelectionChanged": null,
-    "update:onSelectionChanging": null,
-    "update:onTitleClick": null,
-    "update:onTitleHold": null,
-    "update:onTitleRendered": null,
-    "update:repaintChangesOnly": null,
-    "update:rtlEnabled": null,
-    "update:scrollByContent": null,
-    "update:scrollingEnabled": null,
-    "update:selectedIndex": null,
-    "update:selectedItem": null,
-    "update:showNavButtons": null,
-    "update:stylingMode": null,
-    "update:swipeEnabled": null,
-    "update:tabIndex": null,
-    "update:tabsPosition": null,
-    "update:visible": null,
-    "update:width": null,
-  },
-  props: {
-    accessKey: String,
-    activeStateEnabled: Boolean,
-    animationEnabled: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
-    dataSource: [Array, Object, String] as PropType<(Array<any | dxTabPanelItem | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
-    deferRendering: Boolean,
-    disabled: Boolean,
-    elementAttr: Object as PropType<Record<string, any>>,
-    focusStateEnabled: Boolean,
-    height: [Number, String],
-    hint: String,
-    hoverStateEnabled: Boolean,
-    iconPosition: String as PropType<TabsIconPosition>,
-    itemHoldTimeout: Number,
-    items: Array as PropType<Array<any | dxTabPanelItem | string>>,
-    itemTemplate: {},
-    itemTitleTemplate: {},
-    loop: Boolean,
-    noDataText: String,
-    onContentReady: Function as PropType<((e: TabPanelContentReadyEvent) => void)>,
-    onDisposing: Function as PropType<((e: TabPanelDisposingEvent) => void)>,
-    onInitialized: Function as PropType<((e: TabPanelInitializedEvent) => void)>,
-    onItemClick: Function as PropType<((e: ItemClickEvent) => void)>,
-    onItemContextMenu: Function as PropType<((e: ItemContextMenuEvent) => void)>,
-    onItemHold: Function as PropType<((e: ItemHoldEvent) => void)>,
-    onItemRendered: Function as PropType<((e: ItemRenderedEvent) => void)>,
-    onOptionChanged: Function as PropType<((e: TabPanelOptionChangedEvent) => void)>,
-    onSelectionChanged: Function as PropType<((e: TabPanelSelectionChangedEvent) => void)>,
-    onSelectionChanging: Function as PropType<((e: SelectionChangingEvent) => void)>,
-    onTitleClick: Function as PropType<((e: TitleClickEvent) => void)>,
-    onTitleHold: Function as PropType<((e: TitleHoldEvent) => void)>,
-    onTitleRendered: Function as PropType<((e: TitleRenderedEvent) => void)>,
-    repaintChangesOnly: Boolean,
-    rtlEnabled: Boolean,
-    scrollByContent: Boolean,
-    scrollingEnabled: Boolean,
-    selectedIndex: Number,
-    selectedItem: {},
-    showNavButtons: Boolean,
-    stylingMode: String as PropType<TabsStyle>,
-    swipeEnabled: Boolean,
-    tabIndex: Number,
-    tabsPosition: String as PropType<Position>,
-    visible: Boolean,
-    width: [Number, String]
-  }
-};
-
-prepareConfigurationComponentConfig(DxTabPanelOptionsConfig);
-
-const DxTabPanelOptions = defineComponent(DxTabPanelOptionsConfig);
-
-(DxTabPanelOptions as any).$_optionName = "tabPanelOptions";
-(DxTabPanelOptions as any).$_expectedChildren = {
-  item: { isCollectionItem: true, optionName: "items" },
-  tabPanelOptionsItem: { isCollectionItem: true, optionName: "items" }
-};
-
-const DxTabPanelOptionsItemConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:badge": null,
-    "update:disabled": null,
-    "update:html": null,
-    "update:icon": null,
-    "update:tabTemplate": null,
-    "update:template": null,
-    "update:text": null,
-    "update:title": null,
-    "update:visible": null,
-  },
-  props: {
-    badge: String,
-    disabled: Boolean,
-    html: String,
-    icon: String,
-    tabTemplate: {},
-    template: {},
-    text: String,
-    title: String,
-    visible: Boolean
-  }
-};
-
-prepareConfigurationComponentConfig(DxTabPanelOptionsItemConfig);
-
-const DxTabPanelOptionsItem = defineComponent(DxTabPanelOptionsItemConfig);
-
-(DxTabPanelOptionsItem as any).$_optionName = "items";
-(DxTabPanelOptionsItem as any).$_isCollectionItem = true;
 
 const DxTextsConfig = {
   emits: {
@@ -3124,51 +2510,8 @@ const DxToolbar = defineComponent(DxToolbarConfig);
 
 (DxToolbar as any).$_optionName = "toolbar";
 (DxToolbar as any).$_expectedChildren = {
-  item: { isCollectionItem: true, optionName: "items" },
-  toolbarItem: { isCollectionItem: true, optionName: "items" }
+  item: { isCollectionItem: true, optionName: "items" }
 };
-
-const DxToolbarItemConfig = {
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:cssClass": null,
-    "update:disabled": null,
-    "update:html": null,
-    "update:locateInMenu": null,
-    "update:location": null,
-    "update:menuItemTemplate": null,
-    "update:name": null,
-    "update:options": null,
-    "update:showText": null,
-    "update:template": null,
-    "update:text": null,
-    "update:visible": null,
-    "update:widget": null,
-  },
-  props: {
-    cssClass: String,
-    disabled: Boolean,
-    html: String,
-    locateInMenu: String as PropType<LocateInMenuMode>,
-    location: String as PropType<ToolbarItemLocation>,
-    menuItemTemplate: {},
-    name: String as PropType<PredefinedToolbarItem | string>,
-    options: {},
-    showText: String as PropType<ShowTextMode>,
-    template: {},
-    text: String,
-    visible: Boolean,
-    widget: String as PropType<ToolbarItemComponent>
-  }
-};
-
-prepareConfigurationComponentConfig(DxToolbarItemConfig);
-
-const DxToolbarItem = defineComponent(DxToolbarItemConfig);
-
-(DxToolbarItem as any).$_optionName = "items";
-(DxToolbarItem as any).$_isCollectionItem = true;
 
 const DxValidationRuleConfig = {
   emits: {
@@ -3218,11 +2561,8 @@ export {
   DxAsyncRule,
   DxAt,
   DxBoundaryOffset,
-  DxButtonItem,
-  DxButtonOptions,
   DxCardCover,
   DxCardHeader,
-  DxCardHeaderItem,
   DxCardViewHeaderFilter,
   DxCardViewHeaderFilterSearch,
   DxCardViewHeaderFilterTexts,
@@ -3243,7 +2583,6 @@ export {
   DxEditing,
   DxEditingTexts,
   DxEmailRule,
-  DxEmptyItem,
   DxField,
   DxFilterBuilder,
   DxFilterOperationDescriptions,
@@ -3253,7 +2592,6 @@ export {
   DxFormat,
   DxFormItem,
   DxFrom,
-  DxGroupItem,
   DxGroupOperationDescriptions,
   DxHeaderFilter,
   DxHeaderPanel,
@@ -3277,17 +2615,11 @@ export {
   DxSearchPanel,
   DxSelection,
   DxShow,
-  DxSimpleItem,
   DxSorting,
   DxStringLengthRule,
-  DxTab,
-  DxTabbedItem,
-  DxTabPanelOptions,
-  DxTabPanelOptionsItem,
   DxTexts,
   DxTo,
   DxToolbar,
-  DxToolbarItem,
   DxValidationRule
 };
 import type * as DxCardViewTypes from "devextreme/ui/card_view_types";

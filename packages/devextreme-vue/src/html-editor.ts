@@ -706,7 +706,6 @@ const DxToolbarItemConfig = {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:acceptedValues": null,
-    "update:commands": null,
     "update:cssClass": null,
     "update:disabled": null,
     "update:html": null,
@@ -723,7 +722,6 @@ const DxToolbarItemConfig = {
   },
   props: {
     acceptedValues: Array as PropType<Array<boolean | number | string>>,
-    commands: Array as PropType<Array<AICommand | AICommandName>>,
     cssClass: String,
     disabled: Boolean,
     html: String,
@@ -746,9 +744,6 @@ const DxToolbarItem = defineComponent(DxToolbarItemConfig);
 
 (DxToolbarItem as any).$_optionName = "items";
 (DxToolbarItem as any).$_isCollectionItem = true;
-(DxToolbarItem as any).$_expectedChildren = {
-  command: { isCollectionItem: true, optionName: "commands" }
-};
 
 const DxVariablesConfig = {
   emits: {
