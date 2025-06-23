@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import {
-  // Selector,
+  Selector,
   ClientFunction,
 } from 'testcafe';
 import TabPanel from 'devextreme-testcafe-models/tabPanel';
@@ -10,8 +10,8 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { setAttribute, appendElementTo, insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 
-// const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
-// const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
+const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
+const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
 
 fixture.disablePageReloads`TabPanel_common`
   .page(url(__dirname, '../../container.html'));
@@ -46,7 +46,7 @@ test('TabPanel borders with scrolling', async (t) => {
 
   const tabPanelOptions = {
     dataSource,
-    itemTemplate: (itemData, itemIndex, itemElement) => {
+    itemTemplate: (_, __, itemElement) => {
       ($('<div>').css('marginTop', '10px') as any)
         .dxTabs({
           items: [
@@ -214,7 +214,7 @@ test('TabPanel borders without scrolling', async (t) => {
 
   const tabPanelOptions = {
     dataSource,
-    itemTemplate: (itemData, itemIndex, itemElement) => {
+    itemTemplate: (_, __, itemElement) => {
       ($('<div>').css('marginTop', '10px') as any)
         .dxTabs({
           items: [
@@ -254,6 +254,11 @@ test('TabPanel borders without scrolling', async (t) => {
     const tabPanel = new TabPanel('#container');
     const direction = rtlEnabled ? 'left' : 'right';
 
+    await t.click('body', {
+      offsetX: -10,
+      offsetY: -10,
+    });
+
     await testScreenshot(t, takeScreenshot, `TabPanel without focus,rtl=${rtlEnabled}.png`, { element: '#container' });
 
     await t.pressKey('tab');
@@ -264,29 +269,25 @@ test('TabPanel borders without scrolling', async (t) => {
 
     await t.pressKey(direction);
 
-    // const thirdItem = tabPanel.getItem(2);
     const firstItem = tabPanel.getItem(0);
 
     await t.dispatchEvent(firstItem.element, 'mousedown');
     await testScreenshot(t, takeScreenshot, `TabPanel 1 item active,rtl=${rtlEnabled}.png`, { element: '#container' });
+    await t.dispatchEvent(firstItem.element, 'mouseup');
 
-    // TODO: this test is unstable
-    // await t
-    //   .dispatchEvent(thirdItem.element, 'mouseup')
-    //   .click(Selector('body'), { offsetY: -50 })
-    //   .hover(firstItem.element);
+    await t.click('body', {
+      offsetX: -10,
+      offsetY: -10,
+    });
 
-    // eslint-disable-next-line max-len
-    // await testScreenshot(t, takeScreenshot, `TabPanel 1 item hovered,rtl=${rtlEnabled}.png`, { element: '#container' });
+    await t.hover(firstItem.element);
+    await testScreenshot(t, takeScreenshot, `TabPanel 1 item hovered,rtl=${rtlEnabled}.png`, { element: '#container' });
 
-    // TODO: this test is unstable
-    // await t
-    //   .click(Selector('body'), { offsetY: -50 })
-    // eslint-disable-next-line max-len
-    //   .hover(Selector(`.${rtlEnabled ? TABS_LEFT_NAV_BUTTON_CLASS : TABS_RIGHT_NAV_BUTTON_CLASS}`));
+    await tabPanel.option('showNavButtons', true);
 
-    // eslint-disable-next-line max-len
-    // await testScreenshot(t, takeScreenshot, `TabPanel right navigation button hovered, rtl=${rtlEnabled}.png`, { element: '#container' });
+    const navigationButton = Selector(`.${rtlEnabled ? TABS_LEFT_NAV_BUTTON_CLASS : TABS_RIGHT_NAV_BUTTON_CLASS}`);
+    await t.hover(navigationButton);
+    await testScreenshot(t, takeScreenshot, `TabPanel ${direction} navigation button hovered, rtl=${rtlEnabled}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
@@ -324,7 +325,6 @@ test('TabPanel borders without scrolling', async (t) => {
       dataSource,
       height: 120,
       width: 450,
-      showNavButtons: true,
       rtlEnabled,
       // prevent firing dxinactive event for to avoid failing test
       itemHoldTimeout: 5000,
@@ -465,6 +465,11 @@ test('TabPanel borders without scrolling', async (t) => {
 
     const tabPanel = new TabPanel('#container');
 
+    await t.click('body', {
+      offsetX: -10,
+      offsetY: -10,
+    });
+
     await testScreenshot(t, takeScreenshot, `TabPanel without focus,tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
     await t.pressKey('tab');
@@ -475,19 +480,19 @@ test('TabPanel borders without scrolling', async (t) => {
 
     await t.pressKey('right');
 
-    // const thirdItem = tabPanel.getItem(2);
     const firstItem = tabPanel.getItem(0);
 
     await t.dispatchEvent(firstItem.element, 'mousedown');
     await testScreenshot(t, takeScreenshot, `TabPanel 1 item active,tabsPosition=${tabsPosition}.png`, { element: '#container' });
-    // TODO: this test is unstable
-    // await t
-    //   .dispatchEvent(thirdItem.element, 'mouseup')
-    //   .click(Selector('body'), { offsetY: -50 })
-    //   .hover(firstItem.element);
+    await t.dispatchEvent(firstItem.element, 'mouseup');
 
-    // eslint-disable-next-line max-len
-    // await testScreenshot(t, takeScreenshot, `TabPanel 1 item hovered,tabsPosition=${tabsPosition}.png`, { element: '#container' });
+    await t.click('body', {
+      offsetX: -10,
+      offsetY: -10,
+    });
+
+    await t.hover(firstItem.element);
+    await testScreenshot(t, takeScreenshot, `TabPanel 1 item hovered,tabsPosition=${tabsPosition}.png`, { element: '#container' });
 
     await t
       .expect(compareResults.isValid())
