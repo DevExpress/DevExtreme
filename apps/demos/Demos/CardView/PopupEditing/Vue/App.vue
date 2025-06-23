@@ -17,13 +17,13 @@
       :allow-adding="true"
       :allow-updating="true"
       :allow-deleting="true"
-      :popup="{
-        title: 'Employee Info',
-        showTitle: true,
-        width: 700,
-        height: 525,
-      }"
     >
+      <DxPopup
+        title="Employee Info"  
+        :show-title="true"
+        :width="700"
+        :height="525"
+      />
       <DxForm>
         <DxItem
           caption="Personal Data"
@@ -142,8 +142,11 @@
 </template>
 <script setup lang="ts">
 import {
-  DxCardView, DxColumn, DxCardCover, DxSearchPanel, DxEditing, DxForm, DxItem,
+  DxCardView, DxColumn, DxCardCover, DxSearchPanel, DxEditing, DxPopup, DxForm,
 } from 'devextreme-vue/card-view';
+import {
+  DxItem,
+} from 'devextreme-vue/form';
 import 'devextreme-vue/text-area';
 import { employees, type Employee } from './data.ts';
 

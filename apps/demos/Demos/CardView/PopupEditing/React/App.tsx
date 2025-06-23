@@ -1,5 +1,6 @@
 import React from 'react';
-import CardView, { Column, CardCover, Editing, SearchPanel, Form, Item } from 'devextreme-react/card-view';
+import CardView, { Column, CardCover, Editing, Popup, SearchPanel, Form } from 'devextreme-react/card-view';
+import { Item } from 'devextreme-react/form';
 import 'devextreme-react/text-area';
 import { employees, Employee } from './data.ts';
 
@@ -34,13 +35,13 @@ const App = () => (
       allowAdding={true}
       allowUpdating={true}
       allowDeleting={true}
-      popup={{
-        title: 'Employee Info',
-        showTitle: true,
-        width: 700,
-        height: 525,
-      }}
     >
+      <Popup
+        title="Employee Info"
+        showTitle={true}
+        width={700}
+        height={525}
+      />
       <Form>
         <Item
           caption="Personal Data"

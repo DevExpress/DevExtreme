@@ -14,8 +14,13 @@
     [allowAdding]="true"
     [allowUpdating]="true"
     [allowDeleting]="true"
-    [popup]="popupConfig"
   >
+    <dxo-card-view-popup
+      title="Employee Info"
+      [showTitle]="true"
+      [width]="700"
+      [height]="525"
+    ></dxo-card-view-popup>
     <dxo-card-view-form>
       <dxi-card-view-item dataField="firstName"></dxi-card-view-item>
       <dxi-card-view-item dataField="lastName"></dxi-card-view-item>

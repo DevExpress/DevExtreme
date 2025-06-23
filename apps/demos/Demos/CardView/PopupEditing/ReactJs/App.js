@@ -3,10 +3,11 @@ import CardView, {
   Column,
   CardCover,
   Editing,
+  Popup,
   SearchPanel,
   Form,
-  Item,
 } from 'devextreme-react/card-view';
+import { Item } from 'devextreme-react/form';
 import 'devextreme-react/text-area';
 import { employees } from './data.js';
 
@@ -43,6 +44,12 @@ const App = () => (
         height: 525,
       }}
     >
+      <Popup
+        title="Employee Info"
+        showTitle={true}
+        width={700}
+        height={525}
+      />
       <Form>
         <Item
           caption="Personal Data"
