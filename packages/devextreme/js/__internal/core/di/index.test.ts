@@ -282,30 +282,21 @@ describe('decorators', () => {
     expect((result as ExtendedClass).extraValue).toBe(20);
   });
 
-  it('should automatically apply global decorators to all existing instances', () => {
+  it('should prevent adding decorators after instance creation', () => {
     const ctx = new DIContext();
     ctx.register(MyClass);
     ctx.register(AnotherClass);
 
     const myClassInstance = ctx.get(MyClass);
-    const anotherClassInstance = ctx.get(AnotherClass);
 
-    ctx.decorator((obj) => {
+    expect(() => ctx.decorator((obj) => {
       if (obj instanceof MyClass) {
         obj.value = 42;
         obj.tag = 'decorated';
-      } else if (obj instanceof AnotherClass) {
-        obj.counter = 42;
       }
-      return obj;
-    });
+    })).toThrowError();
 
-    expect(myClassInstance.value).toBe(42);
-    expect(myClassInstance.tag).toBe('decorated');
-    expect(anotherClassInstance.counter).toBe(42);
-
-    expect(ctx.get(MyClass).value).toBe(42);
-    expect(ctx.get(MyClass).tag).toBe('decorated');
-    expect(ctx.get(AnotherClass).counter).toBe(42);
+    expect(myClassInstance.value).toBe(1);
+    expect(myClassInstance.tag).toBe('');
   });
 });
