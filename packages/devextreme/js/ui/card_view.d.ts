@@ -913,7 +913,7 @@ export type Editing<TCardData=unknown, TKey=unknown> = {
     /**
      * @docid dxCardViewEditing.popup
      * @public
-     * @type object
+     * @type dxPopupOptions
      */
     popup?: PopupProperties;
     /**
@@ -1560,7 +1560,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     /**
      * @docid
      * @public
-     * @type object
+     * @type dxPopupOptions
      */
     filterBuilderPopup?: PopupProperties;
     /**
