@@ -17,7 +17,7 @@
       :allow-adding="true"
       :allow-updating="true"
       :allow-deleting="true"
-      :popup="{ // todo: move to nested
+      :popup="{
         title: 'Employee Info',
         showTitle: true,
         width: 700,

@@ -106,16 +106,6 @@ import { ref } from 'vue';
 import type { Employee } from './data.ts';
 import { employees } from './data.ts';
 
-// TODO: Nested component does not exist
-const headerFilterConfig = {
-  visible: true,
-};
-
-// TODO: Nested component does not exist
-const searchPanelConfig = {
-  visible: true,
-};
-
 function imageExpr({ First_Name, Last_Name }: Employee): string {
   return `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`;
 }
