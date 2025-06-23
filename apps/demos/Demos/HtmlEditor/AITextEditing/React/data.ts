@@ -3,7 +3,7 @@ import {
     RequestParams,
     Response,
 } from 'devextreme-react/common/ai-integration';
-import { AICommand, AICommandName } from 'devextreme/ui/html_editor';
+import { AICommand } from 'devextreme/ui/html_editor';
 import { AzureOpenAI, OpenAI } from 'openai';
 
 type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
@@ -90,22 +90,10 @@ export const markup = `
     </ul>
 `;
 
-export const commands: Array<AICommand | AICommandName> = [
-  'summarize',
-  'proofread',
-  'expand',
-  'shorten',
-  'changeStyle',
-  'changeTone',
-  'translate',
-  'askAI',
-  {
-    name: 'custom',
-    text: 'Extract Keywords',
-    prompt: () => {
-      return 'Extract a list of keywords from the text and return it as a comma-separated string';
-    },
+export const extractKeywordsCommand: AICommand = {
+  name: 'custom',
+  text: 'Extract Keywords',
+  prompt: () => {
+    return 'Extract a list of keywords from the text and return it as a comma-separated string';
   },
-];
-
-export const toolbarItems = [{ name: 'ai', commands }, { name: 'separator' }, { name: 'undo' }, { name: 'redo' }];
+};

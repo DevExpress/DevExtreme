@@ -3,12 +3,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxHtmlEditorModule } from 'devextreme-angular';
 import {
-    AIIntegration,
-    RequestParams,
-    Response,
+  AIIntegration,
+  RequestParams,
+  Response,
 } from 'devextreme-angular/common/ai-integration';
 import { AzureOpenAI, OpenAI } from 'openai';
 import { Service } from './app.service';
+import { AICommand } from 'devextreme/ui/html_editor';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -38,13 +39,13 @@ export class AppComponent {
 
   aiIntegration: AIIntegration;
 
-  commands: any[];
+  extractKeywordsCommand: AICommand;
 
   valueContent: string;
 
   constructor(service: Service) {
     this.azureOpenAIConfig = service.getAzureOpenAIConfig();
-    this.commands = service.getCommands();
+    this.extractKeywordsCommand = service.getCustomCommand();
     this.valueContent = service.getMarkup();
 
     this.aiService = new AzureOpenAI(this.azureOpenAIConfig);
@@ -53,7 +54,7 @@ export class AppComponent {
     });
   }
 
-  sendRequest ({ prompt }: RequestParams): Response {
+  sendRequest({ prompt }: RequestParams): Response {
     const controller = new AbortController();
     const signal = controller.signal;
 

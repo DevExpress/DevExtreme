@@ -8,23 +8,13 @@ export const AzureOpenAIConfig = {
   apiKey: 'DEMO',
 };
 
-export const commands: Array<DxHtmlEditorTypes.AICommand | DxHtmlEditorTypes.AICommandName> = [
-  'summarize',
-  'proofread',
-  'expand',
-  'shorten',
-  'changeStyle',
-  'changeTone',
-  'translate',
-  'askAI',
-  {
-    name: 'custom',
-    text: 'Extract Keywords',
-    prompt: () => {
-      return 'Extract a list of keywords from the text and return it as a comma-separated string';
-    },
+export const extractKeywordsCommand: DxHtmlEditorTypes.AICommand = {
+  name: 'custom',
+  text: 'Extract Keywords',
+  prompt: () => {
+    return 'Extract a list of keywords from the text and return it as a comma-separated string';
   },
-];
+};
 
 export const markup = `
     <h2>
