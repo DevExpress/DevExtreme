@@ -1,3 +1,4 @@
+import { ScrollEventInfo } from '../ui/scroll_view/ui.scrollable';
 import {
   DataType,
   DisplayMode,
@@ -2210,6 +2211,13 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    * @public
    */
   onSaving?: ((e: EventInfo<TComponent> & SavingInfo<TRowData, TKey>) => void);
+  /**
+   * @docid
+   * @default null
+   * @action
+   * @public
+   */
+  onScroll?: ((e: ScrollEventInfo<TComponent>) => void);
   /**
    * @docid
    * @type_function_param1 e:object
