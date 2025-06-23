@@ -355,7 +355,7 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     return padding;
   }
 
-  _renderItem(index, item, itemContainer, $after) {
+  _renderItem(index, item, itemContainer, $after): dxElementWrapper {
     const location = item.location ?? 'center';
     const container = itemContainer ?? this[`_$${location}Section`];
     const itemHasText = !!(item.text ?? item.html);
@@ -387,9 +387,14 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     });
   }
 
-  _renderItems(items) {
+  _renderItems(items): void {
     const grouped = this.option('grouped') && items.length && items[0].items;
-    grouped ? this._renderGroupedItems() : super._renderItems(items);
+
+    if (grouped) {
+      this._renderGroupedItems();
+    } else {
+      super._renderItems(items);
+    }
   }
 
   _getToolbarItems(): Item[] {

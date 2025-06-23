@@ -30,6 +30,7 @@ import Button from '@js/ui/button';
 import type { dxPopupAnimation, Properties, ToolbarItem } from '@js/ui/popup';
 import Resizable from '@js/ui/resizable';
 import { isFluent, isMaterial, isMaterialBased } from '@js/ui/themes';
+import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Overlay from '@ts/ui/overlay/m_overlay';
 import * as zIndexPool from '@ts/ui/overlay/m_z_index';
@@ -453,32 +454,89 @@ class Popup<
     }
 
     if (showTitle || items.length > 0) {
-      const shouldTriggerResizeTwice = Boolean(this._$topToolbar);
+      this._$topToolbar?.remove();
+      this._$topToolbar = $('<div>').insertBefore(this.$content());
 
-      if (this._$topToolbar) {
-        this._$topToolbar.remove();
-      }
+      const additionalToolbarOptions = {
+        elementAttr: {
+          class: POPUP_TITLE_CLASS,
+        },
+      };
 
-      const $toolbar = $('<div>').insertBefore(this.$content());
-
-      this._$topToolbar = this._renderTemplateByType('titleTemplate', items, $toolbar)
-        .addClass(POPUP_TITLE_CLASS);
+      this._renderToolbar(
+        items,
+        this._$topToolbar,
+        additionalToolbarOptions,
+      );
 
       this._renderDrag();
       this._executeTitleRenderAction(this._$topToolbar);
 
       this._$topToolbar.toggleClass(POPUP_HAS_CLOSE_BUTTON_CLASS, this._hasCloseButton());
-
-      triggerResizeEvent(this._$topToolbar);
-
-      if (shouldTriggerResizeTwice) {
-        triggerResizeEvent(this._$topToolbar);
-      }
     } else if (this._$topToolbar) {
       this._$topToolbar.detach();
     }
 
     this._toggleAriaLabel();
+  }
+
+  _renderBottomToolbar(): void {
+    const items = this._getToolbarItems('bottom');
+
+    if (!items.length) {
+      this._$bottomToolbar?.detach();
+      return;
+    }
+
+    this._$bottomToolbar?.remove();
+    this._$bottomToolbar = $('<div>').insertAfter(this.$content());
+
+    const additionalToolbarOptions = {
+      compactMode: true,
+      elementAttr: {
+        class: POPUP_BOTTOM_CLASS,
+      },
+    };
+
+    this._renderToolbar(
+      items,
+      this._$bottomToolbar,
+      additionalToolbarOptions,
+    );
+
+    this._toggleClasses();
+  }
+
+  _renderToolbar(
+    items: ToolbarItem[],
+    $element: dxElementWrapper,
+    additionalToolbarOptions: ToolbarProperties,
+  ): dxElementWrapper {
+    const {
+      disabled,
+      rtlEnabled,
+      useDefaultToolbarButtons,
+      useFlatToolbarButtons,
+    } = this.option();
+
+    const integrationOptions = extend(
+      {},
+      this.option('integrationOptions'),
+      { skipTemplates: ['content', 'title'] },
+    );
+
+    const toolbarOptions = extend(additionalToolbarOptions, {
+      disabled,
+      rtlEnabled,
+      items,
+      useDefaultButtons: useDefaultToolbarButtons,
+      useFlatButtons: useFlatToolbarButtons,
+      integrationOptions,
+    });
+
+    this._createComponent($element, this._getToolbarName(), toolbarOptions);
+
+    return $element;
   }
 
   _toggleAriaLabel(): void {
@@ -490,63 +548,6 @@ class Popup<
     this._$topToolbar?.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0).attr('id', titleId);
     // @ts-expect-error ts-error
     this.$overlayContent().attr('aria-labelledby', titleId);
-  }
-
-  _renderTemplateByType(optionName, data, $container, additionalToolbarOptions?): dxElementWrapper {
-    const {
-      disabled,
-      rtlEnabled,
-      useDefaultToolbarButtons,
-      useFlatToolbarButtons,
-    } = this.option();
-
-    const template = this._getTemplateByOption(optionName);
-    const isEmptyTemplate = template instanceof EmptyTemplate;
-
-    if (isEmptyTemplate) {
-      const integrationOptions = extend(
-        {},
-        this.option('integrationOptions'),
-        { skipTemplates: ['content', 'title'] },
-      );
-
-      const toolbarOptions = extend(additionalToolbarOptions, {
-        disabled,
-        rtlEnabled,
-        items: data,
-        useDefaultButtons: useDefaultToolbarButtons,
-        useFlatButtons: useFlatToolbarButtons,
-        integrationOptions,
-      });
-
-      this._getTemplate('dx-polymorph-widget').render({
-        container: $container,
-        model: {
-          widget: this._getToolbarName(),
-          options: toolbarOptions,
-        },
-      });
-
-      const $toolbar = $container.children('div');
-
-      $container.replaceWith($toolbar);
-
-      return $toolbar;
-    }
-
-    const $result = $(template.render({ container: getPublicElement($container) }));
-
-    if ($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {
-      $container.replaceWith($result);
-      $container = $result;
-    }
-
-    return $container;
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  _getToolbarName(): string {
-    return 'dxToolbarBase';
   }
 
   _renderVisibilityAnimate(visible) {
@@ -600,13 +601,12 @@ class Popup<
   }
 
   _getToolbarItems(toolbar) {
-    const toolbarItems = this.option('toolbarItems');
-
+    const { platform: currentPlatform } = devices.current();
+    const { toolbarItems } = this.option();
     const toolbarsItems: ToolbarItem[] = [];
 
     this._toolbarItemClasses = [];
 
-    const currentPlatform = devices.current().platform;
     let index = 0;
 
     each(toolbarItems, (_, data) => {
@@ -707,17 +707,9 @@ class Popup<
     });
   }
 
-  _renderBottomToolbar(): void {
-    const items = this._getToolbarItems('bottom');
-
-    if (items.length) {
-      this._$bottomToolbar?.remove();
-      const $bottom = $('<div>').addClass(POPUP_BOTTOM_CLASS).insertAfter(this.$content());
-      this._$bottomToolbar = this._renderTemplateByType('bottomTemplate', items, $bottom, { compactMode: true }).addClass(POPUP_BOTTOM_CLASS);
-      this._toggleClasses();
-    } else {
-      this._$bottomToolbar?.detach();
-    }
+  // eslint-disable-next-line class-methods-use-this
+  _getToolbarName(): string {
+    return 'dxToolbarBase';
   }
 
   _toggleDisabledState(value: boolean): void {
