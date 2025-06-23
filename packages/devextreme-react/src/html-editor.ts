@@ -89,7 +89,7 @@ const HtmlEditor = memo(
 
 
 // owners:
-// Item
+// ToolbarItem
 type ICommandProps = React.PropsWithChildren<{
   name?: AICommandNameExtended;
   options?: any;
@@ -259,6 +259,7 @@ type IItemProps = React.PropsWithChildren<{
   text?: string;
   visible?: boolean;
   acceptedValues?: Array<boolean | number | string>;
+  commands?: Array<AICommand | AICommandName>;
   cssClass?: string | undefined;
   html?: string;
   locateInMenu?: LocateInMenuMode;
@@ -267,7 +268,6 @@ type IItemProps = React.PropsWithChildren<{
   options?: any;
   showText?: ShowTextMode;
   widget?: ToolbarItemComponent;
-  commands?: Array<AICommand | AICommandName>;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
   menuItemRender?: (...params: any) => React.ReactNode;
@@ -489,13 +489,14 @@ const Toolbar = Object.assign<typeof _componentToolbar, NestedComponentMeta>(_co
 // Toolbar
 type IToolbarItemProps = React.PropsWithChildren<{
   acceptedValues?: Array<boolean | number | string>;
+  commands?: Array<AICommand | AICommandName>;
   cssClass?: string | undefined;
   disabled?: boolean;
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
-  name?: HtmlEditorPredefinedToolbarItem | string;
+  name?: HtmlEditorPredefinedToolbarItem | string | string;
   options?: any;
   showText?: ShowTextMode;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
@@ -513,6 +514,9 @@ const _componentToolbarItem = (props: IToolbarItemProps) => {
     elementDescriptor: {
       OptionName: "items",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        command: { optionName: "commands", isCollectionItem: true }
+      },
       TemplateProps: [{
         tmplOption: "menuItemTemplate",
         render: "menuItemRender",
