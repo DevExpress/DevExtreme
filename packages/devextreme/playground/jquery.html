@@ -52,9 +52,23 @@
         <div id="button"></div>
         <script>
             $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+                $("#button").dxDataGrid({
+                    dataSource: new Array(1000).fill(
+                        Object.fromEntries(
+                            Array(100).fill(null)
+                                .map((_, i) => [`field${i}`, 'some_value'])
+                        )
+                    ),
+                    useNative: true,
+                    height: 500,
+                    columnAutoWidth: true,
+                    columnRenderingMode: 'virtual',
+                    scrolling: {
+                        mode: 'virtual',
+                    },
+                    onScroll(...args) {
+                        console.log(args[0].scrollOffset);
+                    }                    
                 });
             });
         </script>
