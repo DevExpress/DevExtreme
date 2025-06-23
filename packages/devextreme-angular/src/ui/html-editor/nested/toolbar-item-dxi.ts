@@ -10,18 +10,15 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
 
 
-import { AICommand, AICommandName, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
+import { HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
 
 import {
     DxIntegrationModule,
@@ -32,7 +29,6 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiHtmlEditorCommandComponent } from './command-dxi';
 
 
 @Component({
@@ -51,14 +47,6 @@ export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption im
     }
     set acceptedValues(value: Array<boolean | number | string>) {
         this._setOption('acceptedValues', value);
-    }
-
-    @Input()
-    get commands(): Array<AICommand | AICommandName> {
-        return this._getOption('commands');
-    }
-    set commands(value: Array<AICommand | AICommandName>) {
-        this._setOption('commands', value);
     }
 
     @Input()
@@ -110,10 +98,10 @@ export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption im
     }
 
     @Input()
-    get name(): HtmlEditorPredefinedToolbarItem | string | string {
+    get name(): HtmlEditorPredefinedToolbarItem | string {
         return this._getOption('name');
     }
-    set name(value: HtmlEditorPredefinedToolbarItem | string | string) {
+    set name(value: HtmlEditorPredefinedToolbarItem | string) {
         this._setOption('name', value);
     }
 
@@ -170,14 +158,6 @@ export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption im
         return 'items';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiHtmlEditorCommandComponent))
-    get commandsChildren(): QueryList<DxiHtmlEditorCommandComponent> {
-        return this._getOption('commands');
-    }
-    set commandsChildren(value) {
-        this.setChildren('commands', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

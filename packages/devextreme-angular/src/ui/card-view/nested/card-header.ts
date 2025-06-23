@@ -12,11 +12,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -33,8 +29,6 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiCardViewCardHeaderItemComponent } from './card-header-item-dxi';
-import { DxiCardViewItemComponent } from './item-dxi';
 
 
 @Component({
@@ -46,7 +40,7 @@ import { DxiCardViewItemComponent } from './item-dxi';
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoCardViewCardHeaderComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost, AfterContentInit  {
+    IDxTemplateHost {
     @Input()
     get items(): Array<CardHeaderItem | CardHeaderPredefinedItem> {
         return this._getOption('items');
@@ -75,21 +69,6 @@ export class DxoCardViewCardHeaderComponent extends NestedOption implements Afte
     protected get _optionPath() {
         return 'cardHeader';
     }
-
-
-    @ContentChildren(forwardRef(() => DxiCardViewCardHeaderItemComponent)) cardHeaderItemsChildren!: QueryList<DxiCardViewCardHeaderItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewItemComponent)) itemsChildren!: QueryList<DxiCardViewItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.cardHeaderItemsChildren.toArray(),
-            ...this.itemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
 
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
@@ -121,12 +100,6 @@ export class DxoCardViewCardHeaderComponent extends NestedOption implements Afte
     }
 
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.cardHeaderItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({
