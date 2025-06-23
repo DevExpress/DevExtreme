@@ -1167,6 +1167,7 @@ const DxColumnLookupConfig = {
     "update:calculateCellValue": null,
     "update:dataSource": null,
     "update:displayExpr": null,
+    "update:multivalue": null,
     "update:valueExpr": null,
   },
   props: {
@@ -1174,6 +1175,7 @@ const DxColumnLookupConfig = {
     calculateCellValue: Function as PropType<((rowData: any) => any)>,
     dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions)) | null | Store | Record<string, any>>,
     displayExpr: [Function, String] as PropType<(((data: any) => string)) | string>,
+    multivalue: Boolean,
     valueExpr: String
   }
 };
@@ -2542,6 +2544,7 @@ const DxLookupConfig = {
     "update:calculateCellValue": null,
     "update:dataSource": null,
     "update:displayExpr": null,
+    "update:multivalue": null,
     "update:valueExpr": null,
   },
   props: {
@@ -2549,6 +2552,7 @@ const DxLookupConfig = {
     calculateCellValue: Function as PropType<((rowData: any) => any)>,
     dataSource: [Array, Object, Function] as PropType<Array<any> | DataSourceOptions | (((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions)) | null | Store | Record<string, any>>,
     displayExpr: [Function, String] as PropType<(((data: any) => string)) | string>,
+    multivalue: Boolean,
     valueExpr: [String, Function] as PropType<string | (((data: any) => string | number | boolean))>
   }
 };

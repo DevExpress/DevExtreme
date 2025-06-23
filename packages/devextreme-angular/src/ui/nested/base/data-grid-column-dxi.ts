@@ -326,10 +326,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('isBand', value);
     }
 
-    get lookup(): { allowClearing?: boolean, calculateCellValue?: Function, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: string | undefined } {
+    get lookup(): { allowClearing?: boolean, calculateCellValue?: Function, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, displayExpr?: Function | string | undefined, multivalue?: boolean, valueExpr?: string | undefined } {
         return this._getOption('lookup');
     }
-    set lookup(value: { allowClearing?: boolean, calculateCellValue?: Function, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: string | undefined }) {
+    set lookup(value: { allowClearing?: boolean, calculateCellValue?: Function, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, displayExpr?: Function | string | undefined, multivalue?: boolean, valueExpr?: string | undefined }) {
         this._setOption('lookup', value);
     }
 

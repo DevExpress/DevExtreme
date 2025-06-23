@@ -405,6 +405,7 @@ type IColumnProps = React.PropsWithChildren<{
     calculateCellValue?: ((rowData: any) => any);
     dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined;
     displayExpr?: ((data: any) => string) | string | undefined;
+    multivalue?: boolean;
     valueExpr?: string | undefined;
   };
   minWidth?: number | undefined;
@@ -694,6 +695,7 @@ type IColumnLookupProps = React.PropsWithChildren<{
   calculateCellValue?: ((rowData: any) => any);
   dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined;
   displayExpr?: ((data: any) => string) | string | undefined;
+  multivalue?: boolean;
   valueExpr?: string | undefined;
 }>
 const _componentColumnLookup = (props: IColumnLookupProps) => {
@@ -1714,6 +1716,7 @@ type ILookupProps = React.PropsWithChildren<{
   calculateCellValue?: ((rowData: any) => any);
   dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined;
   displayExpr?: ((data: any) => string) | string | undefined;
+  multivalue?: boolean;
   valueExpr?: string | undefined | ((data: any) => string | number | boolean);
 }>
 const _componentLookup = (props: ILookupProps) => {

@@ -4939,6 +4939,10 @@ declare module DevExpress.common.grids {
      * [descr:GridBaseColumn.lookup.calculateCellValue]
      */
     calculateCellValue?: (rowData: any) => any;
+    /**
+     * [descr:GridBaseColumn.lookup.multivalue]
+     */
+    multipleValue?: boolean;
   };
   export type ColumnResizeMode = 'nextColumn' | 'widget';
   /**

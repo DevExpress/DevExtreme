@@ -66,6 +66,14 @@ export class DxoTreeListLookupComponent extends NestedOption implements OnDestro
     }
 
     @Input()
+    get multivalue(): boolean {
+        return this._getOption('multivalue');
+    }
+    set multivalue(value: boolean) {
+        this._setOption('multivalue', value);
+    }
+
+    @Input()
     get valueExpr(): string | undefined | ((data: any) => string | number | boolean) {
         return this._getOption('valueExpr');
     }

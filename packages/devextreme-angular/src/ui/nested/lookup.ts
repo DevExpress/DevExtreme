@@ -66,6 +66,14 @@ export class DxoLookupComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
+    get multivalue(): boolean {
+        return this._getOption('multivalue');
+    }
+    set multivalue(value: boolean) {
+        this._setOption('multivalue', value);
+    }
+
+    @Input()
     get valueExpr(): string | undefined | Function {
         return this._getOption('valueExpr');
     }

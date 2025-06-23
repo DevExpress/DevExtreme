@@ -407,10 +407,10 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get lookup(): { allowClearing?: boolean, calculateCellValue?: ((rowData: any) => any), dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined, displayExpr?: ((data: any) => string) | string | undefined, valueExpr?: string | undefined } {
+    get lookup(): { allowClearing?: boolean, calculateCellValue?: ((rowData: any) => any), dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined, displayExpr?: ((data: any) => string) | string | undefined, multivalue?: boolean, valueExpr?: string | undefined } {
         return this._getOption('lookup');
     }
-    set lookup(value: { allowClearing?: boolean, calculateCellValue?: ((rowData: any) => any), dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined, displayExpr?: ((data: any) => string) | string | undefined, valueExpr?: string | undefined }) {
+    set lookup(value: { allowClearing?: boolean, calculateCellValue?: ((rowData: any) => any), dataSource?: Array<any> | DataSourceOptions | ((options: { data: Record<string, any>, key: any }) => Array<any> | Store | DataSourceOptions) | null | Store | undefined, displayExpr?: ((data: any) => string) | string | undefined, multivalue?: boolean, valueExpr?: string | undefined }) {
         this._setOption('lookup', value);
     }
 

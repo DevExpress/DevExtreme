@@ -66,6 +66,14 @@ export class DxoDataGridColumnLookupComponent extends NestedOption implements On
     }
 
     @Input()
+    get multivalue(): boolean {
+        return this._getOption('multivalue');
+    }
+    set multivalue(value: boolean) {
+        this._setOption('multivalue', value);
+    }
+
+    @Input()
     get valueExpr(): string | undefined {
         return this._getOption('valueExpr');
     }
