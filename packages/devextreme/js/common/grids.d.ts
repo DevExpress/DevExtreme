@@ -798,6 +798,11 @@ export type ColumnLookup = {
    * @public
    */
   calculateCellValue?: ((rowData: any) => any);
+  /**
+   * @docid GridBaseColumn.lookup.multivalue
+   * @public
+   */
+  multipleValue?: boolean;
 };
 
 /**
