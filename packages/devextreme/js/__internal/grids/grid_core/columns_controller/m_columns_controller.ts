@@ -1128,7 +1128,16 @@ export class ColumnsController extends modules.Controller {
       column.alignment = column.alignment || getAlignmentByDataType(dataType, this.option('rtlEnabled'));
       column.format = column.format || gridCoreUtils.getFormatByDataType(dataType);
       column.customizeText = column.customizeText || getCustomizeTextByDataType(dataType);
-      column.defaultFilterOperations = column.defaultFilterOperations || !lookup && DATATYPE_OPERATIONS[dataType] || [];
+
+      if (column.defaultFilterOperations) {
+        // pass
+      } else if (lookup) {
+        if (lookup.multipleValue) {
+          column.defaultFilterOperations = ['contains'];
+        }
+      } else {
+        column.defaultFilterOperations = DATATYPE_OPERATIONS[dataType];
+      }
       if (!isDefined(column.filterOperations)) {
         setFilterOperationsAsDefaultValues(column);
       }
@@ -1667,7 +1676,7 @@ export class ColumnsController extends modules.Controller {
       return filterUtils.defaultCalculateFilterExpression.apply(this, arguments);
     };
 
-    calculatedColumnOptions.defaultFilterOperation = '=';
+    calculatedColumnOptions.defaultFilterOperation = columnOptions.lookup?.multipleValue ? 'contains' : '=';
 
     calculatedColumnOptions.createFilterExpression = function (filterValue, selectedFilterOperation) {
       let result;

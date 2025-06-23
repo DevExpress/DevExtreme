@@ -101,7 +101,6 @@ const MapIterator = WrappedIterator.inherit({
 
 const defaultCompare = function (xValue, yValue, options) {
   if (isString(xValue) && isString(yValue) && (options?.locale || options?.collatorOptions)) {
-    /* eslint-disable-next-line no-undef */
     return new Intl.Collator(options?.locale || undefined, options?.collatorOptions || undefined).compare(xValue, yValue);
   }
 
@@ -342,10 +341,10 @@ const compileCriteria = (function () {
         return (obj) => _toComparable(toString(getter(obj))).endsWith(value);
       case 'contains':
         // @ts-expect-error
-        return (obj) => _toComparable(toString(getter(obj))).includes(value);
+        return (obj) => _toComparable(Array.isArray(obj) ? obj : toString(getter(obj))).includes(value);
       case 'notcontains':
         // @ts-expect-error
-        return (obj) => !_toComparable(toString(getter(obj))).includes(value);
+        return (obj) => !_toComparable(Array.isArray(obj) ? obj : toString(getter(obj))).includes(value);
     }
 
     throw errors.Error('E4003', op);

@@ -351,6 +351,14 @@ export default {
     } if (column.calculateDisplayValue && data && rowType !== 'group') {
       return column.calculateDisplayValue(data);
     } if (column.lookup && !(rowType === 'group' && (column.calculateGroupValue || column.calculateDisplayValue))) {
+      if (column.lookup.multipleValue) {
+        return (
+          Array.isArray(value) ? value : []
+        )
+          .map(
+            (v) => column.lookup.calculateCellValue(v),
+          );
+      }
       return column.lookup.calculateCellValue(value);
     }
     return value;
@@ -372,7 +380,6 @@ export default {
   normalizeSortingInfo,
 
   getFormatByDataType(dataType) {
-    // eslint-disable-next-line default-case
     switch (dataType) {
       case 'date':
         return 'shortDate';

@@ -255,6 +255,8 @@ export const getSerializationFormat = function (dataType, value): any {
 };
 
 export const updateSerializers = function (options, dataType) {
+  const multipleValue = options.lookup?.multipleValue ?? options.multipleValue;
+
   if (!options.deserializeValue) {
     if (gridCoreUtils.isDateType(dataType)) {
       options.deserializeValue = function (value) {
@@ -269,6 +271,14 @@ export const updateSerializers = function (options, dataType) {
         const parsedValue = parseFloat(value);
         return isNaN(parsedValue) ? value : parsedValue;
       };
+
+      if (multipleValue) {
+        const deserializeOneValue = options.deserializeValue;
+        options.deserializeValue = function (value) {
+          return (Array.isArray(value) ? value : []).map((v) => deserializeOneValue(v));
+        };
+      }
+
       options.serializeValue = function (value, target) {
         if (target === 'filter') return value;
         return isDefined(value) && this.serializationFormat === 'string' ? value.toString() : value;
@@ -311,7 +321,6 @@ export const createColumnsFromDataSource = function (that: ColumnsController, da
 
   for (let i = 0; i < firstItems.length; i++) {
     if (firstItems[i]) {
-      // eslint-disable-next-line no-restricted-syntax
       for (fieldName in firstItems[i]) {
         if (!isFunction(firstItems[i][fieldName]) || variableWrapper.isWrapped(firstItems[i][fieldName])) {
           processedFields[fieldName] = true;
@@ -320,7 +329,6 @@ export const createColumnsFromDataSource = function (that: ColumnsController, da
     }
   }
 
-  // eslint-disable-next-line no-restricted-syntax
   for (fieldName in processedFields) {
     if (fieldName.indexOf('__') !== 0) {
       const column = createColumn(that, fieldName);

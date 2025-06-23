@@ -520,7 +520,8 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterRow
               filterValue = column.deserializeValue(filterValue);
             }
 
-            filter = column.createFilterExpression(filterValue, '=', 'headerFilter');
+            const operation = column.lookup?.multipleValue ? 'contains' : '=';
+            filter = column.createFilterExpression(filterValue, operation, 'headerFilter');
           }
           if (filter) {
             filter.columnIndex = column.index;

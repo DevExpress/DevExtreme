@@ -17,6 +17,7 @@ import '../number_box';
 import '../check_box';
 import '../select_box';
 import '../date_box';
+import '../tag_box';
 
 const CHECKBOX_SIZE_CLASS = 'checkbox-size';
 const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
@@ -206,7 +207,9 @@ function prepareLookupEditor(options) {
 
         const allowClearing = Boolean(lookup.allowClearing && !isFilterRow);
 
-        options.editorName = options.editorType ?? 'dxSelectBox';
+        options.editorName = options.editorType ?? (
+            lookup.multipleValue ? 'dxTagBox' : 'dxSelectBox'
+        );
         options.editorOptions = getResultConfig({
             searchEnabled: true,
             value: options.value,
