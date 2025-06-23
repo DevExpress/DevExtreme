@@ -5,6 +5,8 @@ import { prepareComponentConfig } from "./core/index";
 import CardView, { Properties } from "devextreme/ui/card_view";
 import  DataSource from "devextreme/data/data_source";
 import  DOMComponent from "devextreme/core/dom_component";
+import  dxOverlay from "devextreme/ui/overlay";
+import  dxPopup from "devextreme/ui/popup";
 import {
  CardCover,
  CardHeader,
@@ -59,10 +61,10 @@ import {
  SortOrder,
  ComparisonOperator,
  DragHighlight,
+ PositionAlignment,
  Direction,
  ToolbarItemLocation,
  ToolbarItemComponent,
- PositionAlignment,
  DisplayMode,
  ScrollbarMode,
 } from "devextreme/common";
@@ -109,6 +111,11 @@ import {
  OptionChangedEvent,
  ValueChangedEvent,
 } from "devextreme/ui/filter_builder";
+import {
+ dxPopupOptions,
+ dxPopupToolbarItem,
+ ToolbarLocation,
+} from "devextreme/ui/popup";
 import {
  dxLoadPanelOptions,
  ContentReadyEvent as LoadPanelContentReadyEvent,
@@ -159,12 +166,12 @@ import {
  FormItemType,
 } from "devextreme/ui/form";
 import {
+ event,
+} from "devextreme/events/events.types";
+import {
  LocateInMenuMode,
  ShowTextMode,
 } from "devextreme/ui/toolbar";
-import {
- event,
-} from "devextreme/events/events.types";
 import  * as CommonTypes from "devextreme/common";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
@@ -274,7 +281,7 @@ const componentConfig = {
     errorRowEnabled: Boolean,
     fieldHintEnabled: Boolean,
     filterBuilder: Object as PropType<dxFilterBuilderOptions | Record<string, any>>,
-    filterBuilderPopup: Object as PropType<Record<string, any>>,
+    filterBuilderPopup: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
     filterPanel: Object as PropType<FilterPanel>,
     filterValue: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
     focusStateEnabled: Boolean,
@@ -430,6 +437,7 @@ const componentConfig = {
       columnChooser: { isCollectionItem: false, optionName: "columnChooser" },
       editing: { isCollectionItem: false, optionName: "editing" },
       filterBuilder: { isCollectionItem: false, optionName: "filterBuilder" },
+      filterBuilderPopup: { isCollectionItem: false, optionName: "filterBuilderPopup" },
       filterPanel: { isCollectionItem: false, optionName: "filterPanel" },
       headerFilter: { isCollectionItem: false, optionName: "headerFilter" },
       headerPanel: { isCollectionItem: false, optionName: "headerPanel" },
@@ -1162,7 +1170,7 @@ const DxEditingConfig = {
     confirmDelete: Boolean,
     editCardKey: {},
     form: Object as PropType<dxFormOptions | Record<string, any>>,
-    popup: Object as PropType<Record<string, any>>,
+    popup: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
     texts: Object as PropType<EditingTexts | Record<string, any>>
   }
 };
@@ -1176,6 +1184,7 @@ const DxEditing = defineComponent(DxEditingConfig);
   change: { isCollectionItem: true, optionName: "changes" },
   editingTexts: { isCollectionItem: false, optionName: "texts" },
   form: { isCollectionItem: false, optionName: "form" },
+  popup: { isCollectionItem: false, optionName: "popup" },
   texts: { isCollectionItem: false, optionName: "texts" }
 };
 
@@ -1352,6 +1361,124 @@ const DxFilterBuilder = defineComponent(DxFilterBuilderConfig);
   field: { isCollectionItem: true, optionName: "fields" },
   filterOperationDescriptions: { isCollectionItem: false, optionName: "filterOperationDescriptions" },
   groupOperationDescriptions: { isCollectionItem: false, optionName: "groupOperationDescriptions" }
+};
+
+const DxFilterBuilderPopupConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:accessKey": null,
+    "update:animation": null,
+    "update:bindingOptions": null,
+    "update:container": null,
+    "update:contentTemplate": null,
+    "update:deferRendering": null,
+    "update:disabled": null,
+    "update:dragAndResizeArea": null,
+    "update:dragEnabled": null,
+    "update:dragOutsideBoundary": null,
+    "update:enableBodyScroll": null,
+    "update:focusStateEnabled": null,
+    "update:fullScreen": null,
+    "update:height": null,
+    "update:hideOnOutsideClick": null,
+    "update:hideOnParentScroll": null,
+    "update:hint": null,
+    "update:hoverStateEnabled": null,
+    "update:maxHeight": null,
+    "update:maxWidth": null,
+    "update:minHeight": null,
+    "update:minWidth": null,
+    "update:onContentReady": null,
+    "update:onDisposing": null,
+    "update:onHidden": null,
+    "update:onHiding": null,
+    "update:onInitialized": null,
+    "update:onOptionChanged": null,
+    "update:onResize": null,
+    "update:onResizeEnd": null,
+    "update:onResizeStart": null,
+    "update:onShowing": null,
+    "update:onShown": null,
+    "update:onTitleRendered": null,
+    "update:position": null,
+    "update:resizeEnabled": null,
+    "update:restorePosition": null,
+    "update:rtlEnabled": null,
+    "update:shading": null,
+    "update:shadingColor": null,
+    "update:showCloseButton": null,
+    "update:showTitle": null,
+    "update:tabIndex": null,
+    "update:title": null,
+    "update:titleTemplate": null,
+    "update:toolbarItems": null,
+    "update:visible": null,
+    "update:width": null,
+    "update:wrapperAttr": null,
+  },
+  props: {
+    accessKey: String,
+    animation: Object as PropType<Record<string, any>>,
+    bindingOptions: Object as PropType<Record<string, any>>,
+    container: {},
+    contentTemplate: {},
+    deferRendering: Boolean,
+    disabled: Boolean,
+    dragAndResizeArea: {},
+    dragEnabled: Boolean,
+    dragOutsideBoundary: Boolean,
+    enableBodyScroll: Boolean,
+    focusStateEnabled: Boolean,
+    fullScreen: Boolean,
+    height: [Number, String],
+    hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
+    hideOnParentScroll: Boolean,
+    hint: String,
+    hoverStateEnabled: Boolean,
+    maxHeight: [Number, String],
+    maxWidth: [Number, String],
+    minHeight: [Number, String],
+    minWidth: [Number, String],
+    onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
+    onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
+    onHidden: Function as PropType<((e: EventInfo<any>) => void)>,
+    onHiding: Function as PropType<((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void)>,
+    onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
+    onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
+    onResize: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onResizeEnd: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onResizeStart: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onShowing: Function as PropType<((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void)>,
+    onShown: Function as PropType<((e: EventInfo<any>) => void)>,
+    onTitleRendered: Function as PropType<((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void)>,
+    position: [Function, String, Object] as PropType<((() => void)) | PositionAlignment | PositionConfig | Record<string, any>>,
+    resizeEnabled: Boolean,
+    restorePosition: Boolean,
+    rtlEnabled: Boolean,
+    shading: Boolean,
+    shadingColor: String,
+    showCloseButton: Boolean,
+    showTitle: Boolean,
+    tabIndex: Number,
+    title: String,
+    titleTemplate: {},
+    toolbarItems: Array as PropType<Array<dxPopupToolbarItem>>,
+    visible: Boolean,
+    width: [Number, String],
+    wrapperAttr: {}
+  }
+};
+
+prepareConfigurationComponentConfig(DxFilterBuilderPopupConfig);
+
+const DxFilterBuilderPopup = defineComponent(DxFilterBuilderPopupConfig);
+
+(DxFilterBuilderPopup as any).$_optionName = "filterBuilderPopup";
+(DxFilterBuilderPopup as any).$_expectedChildren = {
+  animation: { isCollectionItem: false, optionName: "animation" },
+  position: { isCollectionItem: false, optionName: "position" },
+  toolbarItem: { isCollectionItem: true, optionName: "toolbarItems" }
 };
 
 const DxFilterOperationDescriptionsConfig = {
@@ -2106,6 +2233,124 @@ const DxPatternRule = defineComponent(DxPatternRuleConfig);
   type: "pattern"
 };
 
+const DxPopupConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:accessKey": null,
+    "update:animation": null,
+    "update:bindingOptions": null,
+    "update:container": null,
+    "update:contentTemplate": null,
+    "update:deferRendering": null,
+    "update:disabled": null,
+    "update:dragAndResizeArea": null,
+    "update:dragEnabled": null,
+    "update:dragOutsideBoundary": null,
+    "update:enableBodyScroll": null,
+    "update:focusStateEnabled": null,
+    "update:fullScreen": null,
+    "update:height": null,
+    "update:hideOnOutsideClick": null,
+    "update:hideOnParentScroll": null,
+    "update:hint": null,
+    "update:hoverStateEnabled": null,
+    "update:maxHeight": null,
+    "update:maxWidth": null,
+    "update:minHeight": null,
+    "update:minWidth": null,
+    "update:onContentReady": null,
+    "update:onDisposing": null,
+    "update:onHidden": null,
+    "update:onHiding": null,
+    "update:onInitialized": null,
+    "update:onOptionChanged": null,
+    "update:onResize": null,
+    "update:onResizeEnd": null,
+    "update:onResizeStart": null,
+    "update:onShowing": null,
+    "update:onShown": null,
+    "update:onTitleRendered": null,
+    "update:position": null,
+    "update:resizeEnabled": null,
+    "update:restorePosition": null,
+    "update:rtlEnabled": null,
+    "update:shading": null,
+    "update:shadingColor": null,
+    "update:showCloseButton": null,
+    "update:showTitle": null,
+    "update:tabIndex": null,
+    "update:title": null,
+    "update:titleTemplate": null,
+    "update:toolbarItems": null,
+    "update:visible": null,
+    "update:width": null,
+    "update:wrapperAttr": null,
+  },
+  props: {
+    accessKey: String,
+    animation: Object as PropType<Record<string, any>>,
+    bindingOptions: Object as PropType<Record<string, any>>,
+    container: {},
+    contentTemplate: {},
+    deferRendering: Boolean,
+    disabled: Boolean,
+    dragAndResizeArea: {},
+    dragEnabled: Boolean,
+    dragOutsideBoundary: Boolean,
+    enableBodyScroll: Boolean,
+    focusStateEnabled: Boolean,
+    fullScreen: Boolean,
+    height: [Number, String],
+    hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
+    hideOnParentScroll: Boolean,
+    hint: String,
+    hoverStateEnabled: Boolean,
+    maxHeight: [Number, String],
+    maxWidth: [Number, String],
+    minHeight: [Number, String],
+    minWidth: [Number, String],
+    onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
+    onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
+    onHidden: Function as PropType<((e: EventInfo<any>) => void)>,
+    onHiding: Function as PropType<((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void)>,
+    onInitialized: Function as PropType<((e: { component: Component<any>, element: any }) => void)>,
+    onOptionChanged: Function as PropType<((e: { component: DOMComponent, element: any, fullName: string, model: any, name: string, previousValue: any, value: any }) => void)>,
+    onResize: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onResizeEnd: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onResizeStart: Function as PropType<((e: { component: dxPopup, element: any, event: event, height: number, model: any, width: number }) => void)>,
+    onShowing: Function as PropType<((e: { cancel: boolean | any, component: dxOverlay<any>, element: any, model: any }) => void)>,
+    onShown: Function as PropType<((e: EventInfo<any>) => void)>,
+    onTitleRendered: Function as PropType<((e: { component: dxPopup, element: any, model: any, titleElement: any }) => void)>,
+    position: [Function, String, Object] as PropType<((() => void)) | PositionAlignment | PositionConfig | Record<string, any>>,
+    resizeEnabled: Boolean,
+    restorePosition: Boolean,
+    rtlEnabled: Boolean,
+    shading: Boolean,
+    shadingColor: String,
+    showCloseButton: Boolean,
+    showTitle: Boolean,
+    tabIndex: Number,
+    title: String,
+    titleTemplate: {},
+    toolbarItems: Array as PropType<Array<dxPopupToolbarItem>>,
+    visible: Boolean,
+    width: [Number, String],
+    wrapperAttr: {}
+  }
+};
+
+prepareConfigurationComponentConfig(DxPopupConfig);
+
+const DxPopup = defineComponent(DxPopupConfig);
+
+(DxPopup as any).$_optionName = "popup";
+(DxPopup as any).$_expectedChildren = {
+  animation: { isCollectionItem: false, optionName: "animation" },
+  position: { isCollectionItem: false, optionName: "position" },
+  toolbarItem: { isCollectionItem: true, optionName: "toolbarItems" }
+};
+
 const DxPositionConfig = {
   emits: {
     "update:isActive": null,
@@ -2513,6 +2758,48 @@ const DxToolbar = defineComponent(DxToolbarConfig);
   item: { isCollectionItem: true, optionName: "items" }
 };
 
+const DxToolbarItemConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:cssClass": null,
+    "update:disabled": null,
+    "update:html": null,
+    "update:locateInMenu": null,
+    "update:location": null,
+    "update:menuItemTemplate": null,
+    "update:options": null,
+    "update:showText": null,
+    "update:template": null,
+    "update:text": null,
+    "update:toolbar": null,
+    "update:visible": null,
+    "update:widget": null,
+  },
+  props: {
+    cssClass: String,
+    disabled: Boolean,
+    html: String,
+    locateInMenu: String as PropType<LocateInMenuMode>,
+    location: String as PropType<ToolbarItemLocation>,
+    menuItemTemplate: {},
+    options: {},
+    showText: String as PropType<ShowTextMode>,
+    template: {},
+    text: String,
+    toolbar: String as PropType<ToolbarLocation>,
+    visible: Boolean,
+    widget: String as PropType<ToolbarItemComponent>
+  }
+};
+
+prepareConfigurationComponentConfig(DxToolbarItemConfig);
+
+const DxToolbarItem = defineComponent(DxToolbarItemConfig);
+
+(DxToolbarItem as any).$_optionName = "toolbarItems";
+(DxToolbarItem as any).$_isCollectionItem = true;
+
 const DxValidationRuleConfig = {
   emits: {
     "update:isActive": null,
@@ -2585,6 +2872,7 @@ export {
   DxEmailRule,
   DxField,
   DxFilterBuilder,
+  DxFilterBuilderPopup,
   DxFilterOperationDescriptions,
   DxFilterPanel,
   DxFilterPanelTexts,
@@ -2606,6 +2894,7 @@ export {
   DxPager,
   DxPaging,
   DxPatternRule,
+  DxPopup,
   DxPosition,
   DxRangeRule,
   DxRemoteOperations,
@@ -2620,6 +2909,7 @@ export {
   DxTexts,
   DxTo,
   DxToolbar,
+  DxToolbarItem,
   DxValidationRule
 };
 import type * as DxCardViewTypes from "devextreme/ui/card_view_types";
