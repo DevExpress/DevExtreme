@@ -30,6 +30,7 @@ import { ColumnChooser, FilterPanel, HeaderFilter, Pager, SearchPanel, Sorting }
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
+import { dxPopupOptions } from 'devextreme/ui/popup';
 import { dxLoadPanelOptions } from 'devextreme/ui/load_panel';
 import { EventInfo } from 'devextreme/common/core/events';
 
@@ -75,6 +76,7 @@ import { DxoCardViewEditingTextsModule } from 'devextreme-angular/ui/card-view/n
 import { DxiCardViewEmailRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewFieldModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewFilterBuilderModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewFilterBuilderPopupModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewFilterOperationDescriptionsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewFilterPanelModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewFilterPanelTextsModule } from 'devextreme-angular/ui/card-view/nested';
@@ -96,6 +98,7 @@ import { DxoCardViewOffsetModule } from 'devextreme-angular/ui/card-view/nested'
 import { DxoCardViewPagerModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewPagingModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewPatternRuleModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxoCardViewPopupModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewPositionModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewRangeRuleModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewRemoteOperationsModule } from 'devextreme-angular/ui/card-view/nested';
@@ -110,6 +113,7 @@ import { DxiCardViewStringLengthRuleModule } from 'devextreme-angular/ui/card-vi
 import { DxoCardViewTextsModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewToModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewToolbarModule } from 'devextreme-angular/ui/card-view/nested';
+import { DxiCardViewToolbarItemModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewValidationRuleModule } from 'devextreme-angular/ui/card-view/nested';
 
 
@@ -335,10 +339,10 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
 
     
     @Input()
-    get filterBuilderPopup(): Record<string, any> {
+    get filterBuilderPopup(): dxPopupOptions<any> {
         return this._getOption('filterBuilderPopup');
     }
-    set filterBuilderPopup(value: Record<string, any>) {
+    set filterBuilderPopup(value: dxPopupOptions<any>) {
         this._setOption('filterBuilderPopup', value);
     }
 
@@ -987,7 +991,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() filterBuilderPopupChange: EventEmitter<Record<string, any>>;
+    @Output() filterBuilderPopupChange: EventEmitter<dxPopupOptions<any>>;
 
     /**
     
@@ -1356,6 +1360,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxiCardViewEmailRuleModule,
     DxiCardViewFieldModule,
     DxoCardViewFilterBuilderModule,
+    DxoCardViewFilterBuilderPopupModule,
     DxoCardViewFilterOperationDescriptionsModule,
     DxoCardViewFilterPanelModule,
     DxoCardViewFilterPanelTextsModule,
@@ -1377,6 +1382,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewPagerModule,
     DxoCardViewPagingModule,
     DxiCardViewPatternRuleModule,
+    DxoCardViewPopupModule,
     DxoCardViewPositionModule,
     DxiCardViewRangeRuleModule,
     DxoCardViewRemoteOperationsModule,
@@ -1391,6 +1397,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewTextsModule,
     DxoCardViewToModule,
     DxoCardViewToolbarModule,
+    DxiCardViewToolbarItemModule,
     DxiCardViewValidationRuleModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -1425,6 +1432,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxiCardViewEmailRuleModule,
     DxiCardViewFieldModule,
     DxoCardViewFilterBuilderModule,
+    DxoCardViewFilterBuilderPopupModule,
     DxoCardViewFilterOperationDescriptionsModule,
     DxoCardViewFilterPanelModule,
     DxoCardViewFilterPanelTextsModule,
@@ -1446,6 +1454,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewPagerModule,
     DxoCardViewPagingModule,
     DxiCardViewPatternRuleModule,
+    DxoCardViewPopupModule,
     DxoCardViewPositionModule,
     DxiCardViewRangeRuleModule,
     DxoCardViewRemoteOperationsModule,
@@ -1460,6 +1469,7 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     DxoCardViewTextsModule,
     DxoCardViewToModule,
     DxoCardViewToolbarModule,
+    DxiCardViewToolbarItemModule,
     DxiCardViewValidationRuleModule,
     DxTemplateModule
   ]

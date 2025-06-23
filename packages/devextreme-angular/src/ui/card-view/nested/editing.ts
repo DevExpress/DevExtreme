@@ -19,6 +19,7 @@ import {
 
 import { DataChange } from 'devextreme/common/grids';
 import { dxFormOptions } from 'devextreme/ui/form';
+import { dxPopupOptions } from 'devextreme/ui/popup';
 import { EditingTexts } from 'devextreme/ui/card_view';
 
 import {
@@ -95,10 +96,10 @@ export class DxoCardViewEditingComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get popup(): Record<string, any> {
+    get popup(): dxPopupOptions<any> {
         return this._getOption('popup');
     }
-    set popup(value: Record<string, any>) {
+    set popup(value: dxPopupOptions<any>) {
         this._setOption('popup', value);
     }
 
