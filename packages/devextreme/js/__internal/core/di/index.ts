@@ -44,20 +44,9 @@ export class DIContext {
     id: AbstractType<T>,
     instance: T,
   ): void {
-    const decoratedInstance = this.globalDecorators.reduce(
-      (currentInstance, decoratorFn) => decoratorFn(currentInstance),
-      instance,
-    );
+    const decoratedInstance = this.applyGlobalDecorators(instance);
+
     this.instances.set(id, decoratedInstance);
-  }
-
-  public decorator<T>(decorator: DecoratorFunction<T>): void {
-    this.globalDecorators.push(decorator as DecoratorFunction);
-
-    Array.from(this.instances.entries()).forEach(([id, instance]) => {
-      const decoratedInstance = decorator(instance as any);
-      this.instances.set(id, decoratedInstance);
-    });
   }
 
   public get<T>(
@@ -86,18 +75,33 @@ export class DIContext {
     if (fabric) {
       const instance: T = this.create(fabric as any);
 
-      const decoratedInstance = this.globalDecorators.reduce(
-        (currentInstance, decoratorFn) => decoratorFn(currentInstance),
-        instance,
-      );
+      const decoratedInstance = this.applyGlobalDecorators(instance);
 
       this.instances.set(id, decoratedInstance);
       this.instances.set(fabric, decoratedInstance);
-
       return instance;
     }
 
     return null;
+  }
+
+  public decorator<T>(decoratorFn: DecoratorFunction<T>): void {
+    if (this.hasInitiatedInstances) {
+      throw new Error('Cannot add decorator: decorators must be registered before any instances are created or retrieved from the DI container.');
+    }
+
+    this.globalDecorators.push(decoratorFn);
+  }
+
+  private get hasInitiatedInstances(): boolean {
+    return this.instances.size > 0;
+  }
+
+  private applyGlobalDecorators<T>(instance: T): T {
+    return this.globalDecorators.reduce(
+      (currentInstance, currentDecorator) => currentDecorator(currentInstance),
+      instance,
+    );
   }
 
   private create<T, TDeps extends readonly any[]>(fabric: DIItem<T, TDeps>): T {
