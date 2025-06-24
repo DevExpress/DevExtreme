@@ -18,7 +18,7 @@ import {
 
 
 
-import { PredefinedToolbarItem, ToolbarItem } from 'devextreme/ui/card_view';
+import { dxCardViewToolbarItem, PredefinedToolbarItem } from 'devextreme/ui/card_view';
 
 import {
     DxIntegrationModule,
@@ -47,10 +47,10 @@ export class DxoCardViewToolbarComponent extends NestedOption implements OnDestr
     }
 
     @Input()
-    get items(): Array<PredefinedToolbarItem | ToolbarItem> {
+    get items(): Array<dxCardViewToolbarItem | PredefinedToolbarItem> {
         return this._getOption('items');
     }
-    set items(value: Array<PredefinedToolbarItem | ToolbarItem>) {
+    set items(value: Array<dxCardViewToolbarItem | PredefinedToolbarItem>) {
         this._setOption('items', value);
     }
 
