@@ -9,10 +9,6 @@
         },
         {
             "kind": "remove",
-            "uid": "/card_view:Toolbar"
-        },
-        {
-            "kind": "remove",
             "uid": "/html_editor:AICommand"
         },
         {
@@ -94,7 +90,6 @@
             "ui/accordion:dxAccordionItem",
             "ui/action_sheet:dxActionSheetItem",
             "ui/box:dxBoxItem",
-            "ui/card_view:ToolbarItem",
             "ui/collection/ui.collection_widget.base:CollectionWidgetItem",
             "ui/drop_down_button:dxDropDownButtonItem",
             "ui/gallery:dxGalleryItem",
