@@ -425,6 +425,14 @@ export class DxiCardViewItemComponent extends CollectionNestedOption implements 
     }
 
 
+    @ContentChildren(forwardRef(() => DxiCardViewItemComponent))
+    get itemsChildren(): QueryList<DxiCardViewItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
+
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,

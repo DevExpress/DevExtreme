@@ -6,7 +6,10 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -92,6 +95,14 @@ export class DxiDiagramItemComponent extends CollectionNestedOption {
         return 'items';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiDiagramItemComponent))
+    get itemsChildren(): QueryList<DxiDiagramItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
