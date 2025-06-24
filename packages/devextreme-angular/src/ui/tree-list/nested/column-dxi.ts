@@ -611,6 +611,14 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption implement
 
 
 
+    @ContentChildren(forwardRef(() => DxiTreeListColumnComponent))
+    get columnsChildren(): QueryList<DxiTreeListColumnComponent> {
+        return this._getOption('columns');
+    }
+    set columnsChildren(value) {
+        this.setChildren('columns', value);
+    }
+
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();

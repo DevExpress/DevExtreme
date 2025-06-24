@@ -10,7 +10,11 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList,
+    AfterContentInit
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -27,6 +31,11 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+import { DxiCardViewButtonItemComponent } from './button-item-dxi';
+import { DxiCardViewEmptyItemComponent } from './empty-item-dxi';
+import { DxiCardViewItemComponent } from './item-dxi';
+import { DxiCardViewSimpleItemComponent } from './simple-item-dxi';
+import { DxiCardViewTabbedItemComponent } from './tabbed-item-dxi';
 
 
 @Component({
@@ -38,7 +47,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiCardViewGroupItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost, AfterContentInit  {
     @Input()
     get alignItemLabels(): boolean {
         return this._getOption('alignItemLabels');
@@ -149,6 +158,37 @@ export class DxiCardViewGroupItemComponent extends CollectionNestedOption implem
     }
 
 
+    @ContentChildren(forwardRef(() => DxiCardViewButtonItemComponent)) buttonItemsChildren!: QueryList<DxiCardViewButtonItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiCardViewEmptyItemComponent)) emptyItemsChildren!: QueryList<DxiCardViewEmptyItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiCardViewGroupItemComponent)) groupItemsChildren!: QueryList<DxiCardViewGroupItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiCardViewItemComponent)) itemsChildren!: QueryList<DxiCardViewItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiCardViewSimpleItemComponent)) simpleItemsChildren!: QueryList<DxiCardViewSimpleItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiCardViewTabbedItemComponent)) tabbedItemsChildren!: QueryList<DxiCardViewTabbedItemComponent>
+    
+    setItems() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([
+            ...this.buttonItemsChildren.toArray(),
+            ...this.emptyItemsChildren.toArray(),
+            ...this.groupItemsChildren.toArray(),
+            ...this.itemsChildren.toArray(),
+            ...this.simpleItemsChildren.toArray(),
+            ...this.tabbedItemsChildren.toArray(),
+        ]);
+        this.setChildren('items', q);
+    }
+
+
+
+
+
+
+
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -174,6 +214,16 @@ export class DxiCardViewGroupItemComponent extends CollectionNestedOption implem
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
+    ngAfterContentInit() {
+        this.setItems();
+        
+        this.buttonItemsChildren.changes.subscribe(() => { this.setItems() });
+        this.emptyItemsChildren.changes.subscribe(() => { this.setItems() });
+        this.groupItemsChildren.changes.subscribe(() => { this.setItems() });
+        this.itemsChildren.changes.subscribe(() => { this.setItems() });
+        this.simpleItemsChildren.changes.subscribe(() => { this.setItems() });
+        this.tabbedItemsChildren.changes.subscribe(() => { this.setItems() });
+    }
 }
 
 @NgModule({
