@@ -11,6 +11,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
+import type { TemplateBase } from '@js/core/templates/template_base';
 import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { camelize } from '@js/core/utils/inflector';
@@ -332,6 +333,7 @@ class Popup<
 
     this.$element().addClass(POPUP_CLASS);
     this.$wrapper().addClass(popupWrapperClasses);
+
     this._$popupContent = this._$content
       .wrapInner($('<div>').addClass(POPUP_CONTENT_CLASS))
       .children().eq(0);
@@ -455,17 +457,21 @@ class Popup<
 
     if (showTitle || items.length > 0) {
       this._$topToolbar?.remove();
-      this._$topToolbar = $('<div>').insertBefore(this.$content());
 
-      this._renderToolbar(
+      const $toolbarContainer = $('<div>').insertBefore(this.$content());
+
+      this._$topToolbar = this._renderToolbar(
+        'titleTemplate',
         items,
-        this._$topToolbar,
+        $toolbarContainer,
         {
           elementAttr: {
             class: POPUP_TITLE_CLASS,
           },
         },
       );
+
+      triggerResizeEvent(this._$topToolbar);
 
       this._renderDrag();
       this._executeTitleRenderAction(this._$topToolbar);
@@ -487,7 +493,8 @@ class Popup<
     }
 
     this._$bottomToolbar?.remove();
-    this._$bottomToolbar = $('<div>').insertAfter(this.$content());
+
+    const $toolbarContainer = $('<div>').insertAfter(this.$content());
 
     const additionalToolbarOptions = {
       compactMode: true,
@@ -496,18 +503,37 @@ class Popup<
       },
     };
 
-    this._renderToolbar(
+    this._$bottomToolbar = this._renderToolbar(
+      'bottomTemplate',
       items,
-      this._$bottomToolbar,
+      $toolbarContainer,
       additionalToolbarOptions,
     );
 
     this._toggleClasses();
+
+    triggerResizeEvent(this._$bottomToolbar);
   }
 
   _renderToolbar(
+    optionName: string,
     items: ToolbarItem[],
-    $element: dxElementWrapper,
+    $container: dxElementWrapper,
+    additionalToolbarOptions: ToolbarProperties,
+  ): dxElementWrapper {
+    const template = this._getTemplateByOption(optionName);
+    const isEmptyTemplate = template instanceof EmptyTemplate;
+
+    if (isEmptyTemplate) {
+      return this._renderByPolymorphTemplate(items, $container, additionalToolbarOptions);
+    }
+
+    return this._renderByTemplate(template, $container);
+  }
+
+  _renderByPolymorphTemplate(
+    items: ToolbarItem[],
+    $container: dxElementWrapper,
     additionalToolbarOptions: ToolbarProperties,
   ): dxElementWrapper {
     const {
@@ -532,9 +558,36 @@ class Popup<
       integrationOptions,
     });
 
-    this._createComponent($element, this._getToolbarName(), toolbarOptions);
+    const template = this._getTemplate('dx-polymorph-widget');
 
-    return $element;
+    template.render({
+      container: $container,
+      model: {
+        widget: this._getToolbarName(),
+        options: toolbarOptions,
+      },
+    });
+
+    const $toolbar = $container.children('div');
+
+    $container.replaceWith($toolbar);
+    triggerResizeEvent($toolbar);
+
+    return $toolbar;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _renderByTemplate(
+    template: TemplateBase,
+    $container: dxElementWrapper,
+  ): dxElementWrapper {
+    const $result = $(template.render({ container: getPublicElement($container) }));
+
+    if ($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {
+      $container.replaceWith($result);
+    }
+
+    return $container;
   }
 
   _toggleAriaLabel(): void {
