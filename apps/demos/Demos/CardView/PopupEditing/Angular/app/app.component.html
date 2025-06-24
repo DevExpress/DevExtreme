@@ -17,28 +17,49 @@
     [popup]="popupConfig"
   >
     <dxo-card-view-form>
-      <dxi-card-view-item dataField="firstName"></dxi-card-view-item>
-      <dxi-card-view-item dataField="lastName"></dxi-card-view-item>
-      <dxi-card-view-item dataField="birthDate"></dxi-card-view-item>
-      <dxi-card-view-item dataField="picture"></dxi-card-view-item>
-      <dxi-card-view-item dataField="hireDate"></dxi-card-view-item>
-      <dxi-card-view-item dataField="title"></dxi-card-view-item>
-      <dxi-card-view-item dataField="department"></dxi-card-view-item>
       <dxi-card-view-item
-        dataField="notes"
-        editorType="dxTextArea"
+        caption="Personal Data"
+        itemType="group"
+        [colCount]="2"
         [colSpan]="2"
-        [editorOptions]="{ height: 100 }"
-      ></dxi-card-view-item>
-      <dxi-card-view-item dataField="picture"></dxi-card-view-item>
+      >
+        <dxi-card-view-item dataField="firstName"></dxi-card-view-item>
+        <dxi-card-view-item dataField="lastName"></dxi-card-view-item>
+        <dxi-card-view-item dataField="birthDate"></dxi-card-view-item>
+        <dxi-card-view-item dataField="picture"></dxi-card-view-item>
+      </dxi-card-view-item>
       <dxi-card-view-item
-        dataField="address"
+        caption="Main Info"
+        itemType="group"
+        [colCount]="2"
         [colSpan]="2"
-      ></dxi-card-view-item>
-      <dxi-card-view-item dataField="city"></dxi-card-view-item>
-      <dxi-card-view-item dataField="zipcode"></dxi-card-view-item>
-      <dxi-card-view-item dataField="mobilePhone"></dxi-card-view-item>
-      <dxi-card-view-item dataField="email"></dxi-card-view-item>
+      >
+        <dxi-card-view-item dataField="hireDate"></dxi-card-view-item>
+        <dxi-card-view-item dataField="title"></dxi-card-view-item>
+        <dxi-card-view-item dataField="department"></dxi-card-view-item>
+        <dxi-card-view-item
+          dataField="notes"
+          editorType="dxTextArea"
+          [colSpan]="2"
+          [editorOptions]="{ height: 100 }"
+        ></dxi-card-view-item>
+        <dxi-card-view-item dataField="picture"></dxi-card-view-item>
+      </dxi-card-view-item>
+      <dxi-card-view-item
+        caption="Contacts"
+        itemType="group"
+        [colCount]="2"
+        [colSpan]="2"
+      >
+        <dxi-card-view-item
+          dataField="address"
+          [colSpan]="2"
+        ></dxi-card-view-item>
+        <dxi-card-view-item dataField="city"></dxi-card-view-item>
+        <dxi-card-view-item dataField="zipcode"></dxi-card-view-item>
+        <dxi-card-view-item dataField="mobilePhone"></dxi-card-view-item>
+        <dxi-card-view-item dataField="email"></dxi-card-view-item>
+      </dxi-card-view-item>
     </dxo-card-view-form>
   </dxo-card-view-editing>
   <dxi-card-view-column
