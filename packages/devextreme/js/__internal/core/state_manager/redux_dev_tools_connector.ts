@@ -94,7 +94,6 @@ export class ReduxDevToolsConnector implements StateManagementTypes.DevToolsConn
         actionType = `${action}: ${payload.path}`;
       } else if (action === 'INITIALIZE' && payload?.path) {
         actionType = `${action}: ${payload.path}`;
-        this.logger.debug(`Processing initialization event for: ${payload.path}`);
       }
 
       const currentState = state ?? {};
@@ -105,7 +104,6 @@ export class ReduxDevToolsConnector implements StateManagementTypes.DevToolsConn
       };
 
       this.devTools.send(actionObject, currentState);
-      this.logger.debug(`Sent action to DevTools: ${actionType}`);
     } catch (error) {
       this.logger.error(`Failed to send action to DevTools: ${action}`, error);
       this.logger.debug(`Action details - Type: ${action}, Payload:`, payload);

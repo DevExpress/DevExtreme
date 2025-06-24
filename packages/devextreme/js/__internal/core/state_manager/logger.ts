@@ -10,7 +10,7 @@ export interface ConsoleLoggerOptions {
   prefix: string;
 }
 
-export class ConsoleLogger implements StateManagementTypes.Logger {
+export class Logger implements StateManagementTypes.Logger {
   private logLevel: StateManagementTypes.LogLevel = 'info';
 
   private prefix;

@@ -7,7 +7,7 @@ import {
 import {
   areEqual,
   deepCopy,
-} from '../utils';
+} from './utils';
 
 describe('areEqual', () => {
   it('should compare primitive values', () => {

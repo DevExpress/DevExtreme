@@ -1,30 +1,23 @@
 /* eslint-disable spellcheck/spell-checker */
-import { ControllerRegistry } from './controller_registry';
-import { ReduxDevToolsConnector } from './dev_tools_connector';
-import { ConsoleLogger } from './logger';
-import { ObservableStateContainerManager } from './observable_state_container_manager';
-import { StateHistory } from './state_history';
+import { Logger } from './logger';
+import { ObservableValueContainerManager } from './observable_value_container_manager';
+import { ReduxDevToolsConnector } from './redux_dev_tools_connector';
 import { StateManager } from './state_manager';
-import { StateTracker } from './state_tracker';
 import type * as StateManagementTypes from './types';
 
 export const makeStateManager = (
   options: StateManagementTypes.StateManagerFactoryOptions,
 ): StateManager => {
-  const logger = new ConsoleLogger({ logLevel: options.logLevel, prefix: '[StateManager]' });
+  const logger = options.logger ?? new Logger({ logLevel: options.logLevel, prefix: '[StateManager]' });
 
-  const stateContainerManagers = options.stateContainerManagers
-    ?? [new ObservableStateContainerManager(logger, options.controllerSign)];
-  const stateTracker = options.stateTracker ?? new StateTracker(stateContainerManagers, logger);
+  const stateContainerManagers: StateManagementTypes.StateManagerConfig['valueContainerManagers'] = options.valueContainerManagers ?? [ObservableValueContainerManager];
 
   const preparedConfig: StateManagementTypes.StateManagerConfig = {
-    controllerRegistry: options.controllerRegistry ?? new ControllerRegistry(logger),
-    stateTracker,
-    stateHistory: options.stateHistory
-          ?? new StateHistory(logger, options.maxHistorySize),
+    valueContainerManagers: stateContainerManagers,
     devToolsConnector: options.devToolsConnector
           ?? new ReduxDevToolsConnector(options.componentName, logger),
     logger,
+    controllerSign: options.controllerSign,
   };
 
   return new StateManager(preparedConfig);

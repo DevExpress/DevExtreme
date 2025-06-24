@@ -1,57 +1,25 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 
-export type StateCommands = {
-  restoreState: (state: State) => void;
-  resetState: () => void;
-  updateState: (path: string, value: unknown) => void;
+export type StateManagerCommands = {
+  trackControllerState: (id: string, controller: Controller) => void;
 };
 
-export type StateQueries = {
-  getState: () => State;
-  getStateAt: (historyIndex: number) => State;
-  getHistory: () => StateChange[];
+export type StateManagerQueries = {
+  getComponentState: () => ComponentState;
 };
 
-export interface StateManager extends StateCommands, StateQueries { }
-
-export type StateChangeListener = {
-  onStateChanged: StateChangeCallback;
-};
-
-export interface StateTracker {
-  trackState: (controllerId: string, stateContainer: StateContainer, stateName: string) => void;
-  getState: () => State;
-  onStateChanged: (callback: StateChangeCallback) => void;
-  findStateContainerManagerFor:
-  (stateContainer: MaybeStateContainer) => StateContainerManager | undefined;
-}
-
-export interface StateHistory {
-  recordChange: (change: StateChange) => void;
-  getHistory: () => StateChange[];
-  getStateAt: (index: number) => State;
-  clear: () => void;
-}
+export interface StateManager extends StateManagerCommands, StateManagerQueries { }
 
 export type Controller = Record<string, unknown>;
 
-export interface ControllerRegistry {
-  registerController: (controller: Controller, id: string) => string;
-  getController: (id: string) => Controller | undefined;
-  getAllControllers: () => Record<string, Controller>;
-  onControllerRegistered: (
-    callback: (controller: Controller, id: string) => void) => void;
-}
-
 export interface StateManagerConfig {
-  controllerRegistry: ControllerRegistry;
-  stateTracker: StateTracker;
-  stateHistory: StateHistory;
   devToolsConnector: DevToolsConnector;
   logger: Logger;
+  valueContainerManagers: ValueContainerManagerConstructor[];
+  controllerSign: string;
 }
 
-export interface ObservableStateContainer extends StateContainer {
+export interface ObservableValueContainer extends ValueContainer {
   // eslint-disable-next-line spellcheck/spell-checker
   unreactive_get: () => unknown;
   subscribe: (callback: (newValue: unknown) => void) => void;
@@ -59,34 +27,49 @@ export interface ObservableStateContainer extends StateContainer {
   stack?: string;
 }
 
-export type MaybeObservableStateContainer<T = unknown> = ObservableStateContainer | T;
+export type MaybeObservableValueContainer<T = unknown> = ObservableValueContainer | T;
 
-export type StateChangeCallback = (change: StateChange) => void;
+export type ValueContainerManagerConstructor = (
+  new (
+    logger: Logger,
+    controllerSign: string,
+    valueContainer: MaybeValueContainer
+  ) => ValueContainerManager
+) & {
+  canHandle: (valueContainer: MaybeValueContainer) => valueContainer is ValueContainer;
+};
 
-export interface StateContainerManager {
-  canHandle: (stateContainer: MaybeStateContainer) => stateContainer is StateContainer;
+export type ValueContainerChangeCallback = (change: ValueContainerChange) => void;
+
+export interface ValueContainerManager {
   trackChanges: (
-    stateContainer: StateContainer,
-    stateName: string,
-    onChange: StateChangeCallback
+    onChange: ValueContainerChangeCallback
   ) => void;
-  applyState: (
-    stateContainer: StateContainer,
-    stateName: string,
-    newState: unknown
-  ) => void;
-  getState: (stateContainer: StateContainer) => unknown;
+  getValue: () => unknown;
 }
 
 export interface StateManagerFactoryOptions extends Partial<StateManagerConfig> {
   componentName: string;
-  maxHistorySize?: number;
-  stateContainerManagers?: StateContainerManager[];
+  valueContainerManagers?: ValueContainerManagerConstructor[];
   logLevel?: LogLevel;
   controllerSign: string;
 }
 
-export type StateManagerActionType = 'UPDATE' | 'INITIALIZE' | 'CLEAR_HISTORY';
+export type ValueContainerActionType = 'UPDATE' | 'INITIALIZE';
+
+export type ValueContainerPayload = {
+  previousValue: unknown;
+  newValue: unknown;
+  timestamp: number;
+  source: string;
+};
+
+export type ValueContainerChange = {
+  actionType: ValueContainerActionType;
+  payload: ValueContainerPayload;
+};
+
+export type StateManagerActionType = 'UPDATE' | 'INITIALIZE';
 
 export type StateChangePayload = {
   path: string;
@@ -101,15 +84,15 @@ export type StateChange = {
   payload: StateChangePayload;
 };
 
-export type State = Record<string, Record<string, unknown>>;
+export type ComponentState = Record<string, Record<string, unknown>>;
 
 export interface EventEmitter<T extends (...args: unknown[]) => void> {
   addListener: (callback: T) => void;
   emit: (...args: Parameters<T>) => void;
 }
 
-export type StateContainer = { [key: string]: unknown };
-export type MaybeStateContainer<T = unknown> = StateContainer | T;
+export type ValueContainer = { [key: string]: unknown };
+export type MaybeValueContainer<T = unknown> = ValueContainer | T;
 
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 export type LogMethod = (message: string, ...args: unknown[]) => void;
@@ -124,12 +107,12 @@ export interface Logger {
 export type DevToolsActions = 'DISPATCH' | 'JUMP_TO_STATE' | 'JUMP_TO_ACTION' | 'COMMIT' | 'RESET';
 
 export type DevToolsExternalActionCallback =
-(action: DevToolsActions, payload: State | null) => void;
+(action: DevToolsActions, payload: ComponentState | null) => void;
 
 export interface DevToolsConnector {
   connect: (options?: Record<string, unknown>) => void;
   disconnect: () => void;
-  sendAction: (action: string, payload: StateChangePayload, state?: State) => void;
+  sendAction: (action: string, payload: StateChangePayload, state?: ComponentState) => void;
   onExternalAction: (callback: DevToolsExternalActionCallback) => void;
 }
 
