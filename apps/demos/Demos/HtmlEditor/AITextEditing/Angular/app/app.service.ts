@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AICommand, AICommandName } from 'devextreme/ui/html_editor';
+import { AICustomCommand } from 'devextreme/ui/html_editor';
 
 const AzureOpenAIConfig = {
     dangerouslyAllowBrowser: true,
@@ -9,23 +9,8 @@ const AzureOpenAIConfig = {
     apiKey: 'DEMO',
 };
 
-const commands: Array<AICommand | AICommandName> = [
-    'summarize',
-    'proofread',
-    'expand',
-    'shorten',
-    'changeStyle',
-    'changeTone',
-    'translate',
-    'askAI',
-    {
-        name: 'custom',
-        text: 'Extract Keywords',
-        prompt: () => {
-            return 'Extract a list of keywords from the text and return it as a comma-separated string';
-        },
-    },
-];
+const extractKeywordsPrompt: AICustomCommand['prompt'] = () => 
+  'Extract a list of keywords from the text and return it as a comma-separated string';
 
 const markup = `
     <h2>
@@ -61,18 +46,18 @@ const markup = `
 `;
 
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class Service {
-  getMarkup(): string {
-    return markup;
-  }
+    getMarkup(): string {
+        return markup;
+    }
 
-  getCommands() {
-    return commands;
-  }
+    getPrompt() {
+        return extractKeywordsPrompt;
+    }
 
-  getAzureOpenAIConfig() {
-    return AzureOpenAIConfig;
-  }
+    getAzureOpenAIConfig() {
+        return AzureOpenAIConfig;
+    }
 }

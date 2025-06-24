@@ -70,24 +70,5 @@ export const markup = `
         <li>Tables support</li>
     </ul>
 `;
-export const commands = [
-  'summarize',
-  'proofread',
-  'expand',
-  'shorten',
-  'changeStyle',
-  'changeTone',
-  'translate',
-  'askAI',
-  {
-    name: 'custom',
-    text: 'Extract Keywords',
-    prompt: () => 'Extract a list of keywords from the text and return it as a comma-separated string',
-  },
-];
-export const toolbarItems = [
-  { name: 'ai', commands },
-  { name: 'separator' },
-  { name: 'undo' },
-  { name: 'redo' },
-];
+export const extractKeywordsPrompt = () =>
+  'Extract a list of keywords from the text and return it as a comma-separated string';
