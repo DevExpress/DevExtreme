@@ -144,14 +144,18 @@ export class DxiGanttContextMenuItemComponent extends CollectionNestedOption imp
     
     @ContentChildren(forwardRef(() => DxiGanttItemComponent)) itemsChildren!: QueryList<DxiGanttItemComponent>
     
+    @ContentChildren(forwardRef(() => DxiGanttContextMenuItemComponent)) contextMenuItemsChildren!: QueryList<DxiGanttContextMenuItemComponent>
+    
     setItems() {
         const q: QueryList<any> = new QueryList();
         q.reset([
             ...this.contextMenuItemItemsChildren.toArray(),
             ...this.itemsChildren.toArray(),
+            ...this.contextMenuItemsChildren.toArray(),
         ]);
         this.setChildren('items', q);
     }
+
 
 
 
@@ -185,6 +189,7 @@ export class DxiGanttContextMenuItemComponent extends CollectionNestedOption imp
         
         this.contextMenuItemItemsChildren.changes.subscribe(() => { this.setItems() });
         this.itemsChildren.changes.subscribe(() => { this.setItems() });
+        this.contextMenuItemsChildren.changes.subscribe(() => { this.setItems() });
     }
 }
 

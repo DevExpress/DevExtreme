@@ -10,7 +10,11 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList,
+    AfterContentInit
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -27,6 +31,7 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+import { DxiGanttItemComponent } from './item-dxi';
 
 
 @Component({
@@ -38,7 +43,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiGanttContextMenuItemItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost, AfterContentInit  {
     @Input()
     get beginGroup(): boolean {
         return this._getOption('beginGroup');
@@ -125,6 +130,21 @@ export class DxiGanttContextMenuItemItemComponent extends CollectionNestedOption
     }
 
 
+    @ContentChildren(forwardRef(() => DxiGanttContextMenuItemItemComponent)) contextMenuItemItemsChildren!: QueryList<DxiGanttContextMenuItemItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiGanttItemComponent)) itemsChildren!: QueryList<DxiGanttItemComponent>
+    
+    setItems() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([
+            ...this.contextMenuItemItemsChildren.toArray(),
+            ...this.itemsChildren.toArray(),
+        ]);
+        this.setChildren('items', q);
+    }
+
+
+
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -150,6 +170,12 @@ export class DxiGanttContextMenuItemItemComponent extends CollectionNestedOption
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
+    ngAfterContentInit() {
+        this.setItems();
+        
+        this.contextMenuItemItemsChildren.changes.subscribe(() => { this.setItems() });
+        this.itemsChildren.changes.subscribe(() => { this.setItems() });
+    }
 }
 
 @NgModule({

@@ -10,7 +10,11 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList,
+    AfterContentInit
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -27,6 +31,11 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+import { DxiFormButtonItemComponent } from './button-item-dxi';
+import { DxiFormEmptyItemComponent } from './empty-item-dxi';
+import { DxiFormItemComponent } from './item-dxi';
+import { DxiFormSimpleItemComponent } from './simple-item-dxi';
+import { DxiFormTabbedItemComponent } from './tabbed-item-dxi';
 
 
 @Component({
@@ -38,7 +47,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiFormGroupItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost, AfterContentInit  {
     @Input()
     get alignItemLabels(): boolean {
         return this._getOption('alignItemLabels');
@@ -149,6 +158,37 @@ export class DxiFormGroupItemComponent extends CollectionNestedOption implements
     }
 
 
+    @ContentChildren(forwardRef(() => DxiFormButtonItemComponent)) buttonItemsChildren!: QueryList<DxiFormButtonItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiFormEmptyItemComponent)) emptyItemsChildren!: QueryList<DxiFormEmptyItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiFormGroupItemComponent)) groupItemsChildren!: QueryList<DxiFormGroupItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiFormItemComponent)) itemsChildren!: QueryList<DxiFormItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiFormSimpleItemComponent)) simpleItemsChildren!: QueryList<DxiFormSimpleItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiFormTabbedItemComponent)) tabbedItemsChildren!: QueryList<DxiFormTabbedItemComponent>
+    
+    setItems() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([
+            ...this.buttonItemsChildren.toArray(),
+            ...this.emptyItemsChildren.toArray(),
+            ...this.groupItemsChildren.toArray(),
+            ...this.itemsChildren.toArray(),
+            ...this.simpleItemsChildren.toArray(),
+            ...this.tabbedItemsChildren.toArray(),
+        ]);
+        this.setChildren('items', q);
+    }
+
+
+
+
+
+
+
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -174,6 +214,16 @@ export class DxiFormGroupItemComponent extends CollectionNestedOption implements
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
+    ngAfterContentInit() {
+        this.setItems();
+        
+        this.buttonItemsChildren.changes.subscribe(() => { this.setItems() });
+        this.emptyItemsChildren.changes.subscribe(() => { this.setItems() });
+        this.groupItemsChildren.changes.subscribe(() => { this.setItems() });
+        this.itemsChildren.changes.subscribe(() => { this.setItems() });
+        this.simpleItemsChildren.changes.subscribe(() => { this.setItems() });
+        this.tabbedItemsChildren.changes.subscribe(() => { this.setItems() });
+    }
 }
 
 @NgModule({
