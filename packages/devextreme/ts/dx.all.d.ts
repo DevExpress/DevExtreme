@@ -10906,6 +10906,16 @@ declare module DevExpress.ui {
     ) => void;
   }
   /**
+   * @deprecated Use DevExpress.ui.dxCardView.Toolbar instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type dxCardViewToolbar = DevExpress.ui.dxCardView.Toolbar;
+  /**
+   * @deprecated Use DevExpress.ui.dxCardView.ToolbarItem instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type dxCardViewToolbarItem = DevExpress.ui.dxCardView.ToolbarItem;
+  /**
    * [descr:dxChat]
    */
   export class dxChat extends Widget<DevExpress.ui.dxChat.Properties> {
@@ -33263,36 +33273,36 @@ declare module DevExpress.ui.dxCardView {
     grouping?: boolean;
   };
   /**
-   * [descr:Toolbar]
+   * [descr:dxCardViewToolbar]
    */
   export type Toolbar = {
     /**
-     * [descr:Toolbar.items]
+     * [descr:dxCardViewToolbar.items]
      */
     items?: Array<PredefinedToolbarItem | ToolbarItem>;
     /**
-     * [descr:Toolbar.visible]
+     * [descr:dxCardViewToolbar.visible]
      */
     visible?: boolean | undefined;
     /**
-     * [descr:Toolbar.disabled]
+     * [descr:dxCardViewToolbar.disabled]
      */
     disabled?: boolean;
     /**
-     * [descr:Toolbar.multiline]
+     * [descr:dxCardViewToolbar.multiline]
      */
     multiline?: boolean;
   };
   /**
-   * [descr:ToolbarItem]
+   * [descr:dxCardViewToolbarItem]
    */
   export type ToolbarItem = dxToolbarItem & {
     /**
-     * [descr:ToolbarItem.name]
+     * [descr:dxCardViewToolbarItem.name]
      */
     name?: PredefinedToolbarItem | string;
     /**
-     * [descr:ToolbarItem.location]
+     * [descr:dxCardViewToolbarItem.location]
      */
     location?: DevExpress.common.ToolbarItemLocation;
   };
