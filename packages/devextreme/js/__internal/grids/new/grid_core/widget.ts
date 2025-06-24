@@ -4,8 +4,8 @@
 // eslint-disable-next-line max-classes-per-file
 import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
-import type { Signal } from '@preact/signals-core';
-import { signal } from '@preact/signals-core';
+import type { Signal } from '@ts/core/reactive/index';
+import { signal } from '@ts/core/reactive/index';
 import { DIContext } from '@ts/core/di/index';
 import { infernoRenderer } from '@ts/core/m_inferno_renderer';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';

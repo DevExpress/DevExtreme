@@ -1,5 +1,5 @@
-import type { ReadonlySignal, Signal } from '@preact/signals-core';
-import { computed, effect, signal } from '@preact/signals-core';
+import type { ReadonlySignal, Signal } from '@ts/core/reactive/index';
+import { computed, effect, signal } from '@ts/core/reactive/index';
 import type { DataObject } from '@ts/grids/new/grid_core/data_controller/types';
 import type { HeaderFilterRootOptions } from '@ts/grids/new/grid_core/filtering/header_filter/index';
 import { isColumnFilterable, mergeColumnHeaderFilterOptions } from '@ts/grids/new/grid_core/filtering/header_filter/utils';

@@ -1,13 +1,16 @@
-/* eslint-disable max-classes-per-file */
 import type * as StateManagementTypes from './types';
-import { deepCopy } from './utils';
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
-class Observable {
+function isSignal(value: { brand?: symbol } | unknown):
+  value is StateManagementTypes.ObservableValueContainer {
+  if (value && typeof value === 'object' && 'brand' in value) {
+    return value.brand === Symbol.for('preact-signals');
+  }
 
+  return false;
 }
 
-export class ObservableValueContainerManager implements StateManagementTypes.ValueContainerManager {
+// eslint-disable-next-line @stylistic/max-len
+export class PreactSignalValueContainerManager implements StateManagementTypes.ValueContainerManager {
   private readonly logger: StateManagementTypes.Logger;
 
   private readonly stateSourceSign: string;
@@ -33,58 +36,36 @@ export class ObservableValueContainerManager implements StateManagementTypes.Val
       return;
     }
 
-    let previousValue = this.getValue();
+    const previousValue = this.getValue();
 
     if (this.valueContainer.subscribe) {
       this.valueContainer.subscribe((newValue) => {
         try {
           const payload: StateManagementTypes.ValueContainerChange['payload'] = {
-            previousValue: typeof previousValue === 'object' && previousValue !== null ? deepCopy(previousValue) : previousValue,
-            newValue: typeof newValue === 'object' && newValue !== null ? deepCopy(newValue) : newValue,
+            previousValue,
+            newValue,
             timestamp: Date.now(),
             source: this.captureSource(this.valueContainer),
           };
 
           const change: StateManagementTypes.ValueContainerChange = {
-            actionType: 'UPDATE',
             payload,
           };
 
-          previousValue = typeof newValue === 'object' && newValue !== null ? deepCopy(newValue) : newValue;
-
           onChange(change);
         } catch (error) {
-          this.logger.error('Error in Observable subscription', error);
+          this.logger.error('Error in Preact Signal subscription', error);
         }
       });
     }
-
-    try {
-      const payload: StateManagementTypes.ValueContainerChange['payload'] = {
-        previousValue: undefined,
-        newValue: typeof previousValue === 'object' && previousValue !== null ? deepCopy(previousValue) : previousValue,
-        timestamp: Date.now(),
-        source: this.captureSource(this.valueContainer),
-      };
-
-      const initialChange: StateManagementTypes.ValueContainerChange = {
-        actionType: 'INITIALIZE',
-        payload,
-      };
-
-      onChange(initialChange);
-    } catch (error) {
-      this.logger.error('Error in processing Observable initialization', error);
-    }
   }
 
-  getValue(): ReturnType<StateManagementTypes.ObservableValueContainer['unreactive_get']> {
-    // eslint-disable-next-line spellcheck/spell-checker
-    return this.valueContainer.unreactive_get();
+  getValue(): StateManagementTypes.ObservableValueContainer['value'] {
+    return this.valueContainer.peek();
   }
 
-  private captureSource(valueContainer?: StateManagementTypes.ObservableValueContainer): string {
-    if (valueContainer?.stack) {
+  private captureSource(valueContainer: StateManagementTypes.ObservableValueContainer): string {
+    if (valueContainer.stack) {
       const { stack } = valueContainer;
 
       return this.findStateSourceLine(stack);
@@ -102,18 +83,18 @@ export class ObservableValueContainerManager implements StateManagementTypes.Val
   }
 }
 
-function isObservableValueContainer(
+function isPreactSignalValueContainer(
   valueContainer: StateManagementTypes.MaybeValueContainer,
 ): valueContainer is StateManagementTypes.ObservableValueContainer {
   return isSignal(valueContainer);
 }
 
-export const ReactiveValueContainerManagerFactory:
+export const PreactSignalValueContainerManagerFactory:
 StateManagementTypes.ValueContainerManagerConstructor = {
   canHandle(
     valueContainer: StateManagementTypes.MaybeValueContainer,
   ): valueContainer is StateManagementTypes.ObservableValueContainer {
-    return isObservableValueContainer(valueContainer);
+    return isPreactSignalValueContainer(valueContainer);
   },
 
   create(
@@ -121,10 +102,10 @@ StateManagementTypes.ValueContainerManagerConstructor = {
     stateSourceSign: string,
     valueContainer: StateManagementTypes.MaybeValueContainer,
   ): StateManagementTypes.ValueContainerManager {
-    if (!isObservableValueContainer(valueContainer)) {
-      throw new Error('Invalid value container for ReactiveValueContainerManager');
+    if (!isPreactSignalValueContainer(valueContainer)) {
+      throw new Error('Invalid value container for PreactSignalValueContainerManager');
     }
 
-    return new ReactiveValueContainerManager(logger, stateSourceSign, valueContainer);
+    return new PreactSignalValueContainerManager(logger, stateSourceSign, valueContainer);
   },
 };

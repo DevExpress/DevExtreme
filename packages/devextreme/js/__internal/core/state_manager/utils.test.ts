@@ -85,4 +85,71 @@ describe('deepCopy', () => {
     expect(copy.b?.c).toBe(copy);
     expect(copy.d?.[0]).toBe(copy);
   });
+
+  it('should handle circular references in arrays', () => {
+    interface CircularArrayObj {
+      id: number;
+      items?: CircularArrayObj[];
+    }
+
+    const original: CircularArrayObj = { id: 1 };
+    const child: CircularArrayObj = { id: 2 };
+
+    // Create circular reference: parent -> child -> parent
+    original.items = [child];
+    child.items = [original];
+
+    const copy = deepCopy(original);
+
+    expect(copy).not.toBe(original);
+    expect(copy.id).toBe(1);
+    expect(copy.items).not.toBe(original.items);
+    expect(copy.items?.[0]).not.toBe(original.items[0]);
+    expect(copy.items?.[0].id).toBe(2);
+    expect(copy.items?.[0].items?.[0]).toBe(copy); // Circular reference preserved
+  });
+
+  it('should handle complex nested circular references with arrays and objects', () => {
+    const original = {
+      name: 'root',
+      children: [] as any[],
+      parent: null as any,
+    };
+
+    const child1 = {
+      name: 'child1',
+      parent: original,
+      siblings: [] as any[],
+    };
+
+    const child2 = {
+      name: 'child2',
+      parent: original,
+      siblings: [child1] as any[],
+    };
+
+    child1.siblings = [child2];
+    original.children = [child1, child2];
+
+    const copy = deepCopy(original);
+
+    expect(copy).not.toBe(original);
+    expect(copy.name).toBe('root');
+    expect(copy.children).not.toBe(original.children);
+    expect(copy.children.length).toBe(2);
+
+    // Check first child
+    expect(copy.children[0]).not.toBe(original.children[0]);
+    expect(copy.children[0].name).toBe('child1');
+    expect(copy.children[0].parent).toBe(copy);
+
+    // Check second child
+    expect(copy.children[1]).not.toBe(original.children[1]);
+    expect(copy.children[1].name).toBe('child2');
+    expect(copy.children[1].parent).toBe(copy);
+
+    // Check sibling references
+    expect(copy.children[0].siblings[0]).toBe(copy.children[1]);
+    expect(copy.children[1].siblings[0]).toBe(copy.children[0]);
+  });
 });

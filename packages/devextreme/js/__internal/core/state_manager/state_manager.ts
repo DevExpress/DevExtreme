@@ -86,18 +86,28 @@ export class StateManager implements StateManagementTypes.StateManager {
     try {
       valueContainerManager.trackChanges(
         (valueContainerChange: StateManagementTypes.ValueContainerChange) => {
-          const componentStateChange = {
+          const valueContainerChangeCopy = {
             ...valueContainerChange,
             payload: { ...valueContainerChange.payload, path: fullPathToProperty },
           };
 
-          const currentComponentState = this.getComponentState();
+          const { previousValue, newValue } = valueContainerChange.payload;
+
+          if (typeof previousValue === 'object' && previousValue !== null) {
+            valueContainerChangeCopy.payload.previousValue = deepCopy(previousValue);
+          }
+
+          if (typeof newValue === 'object' && newValue !== null) {
+            valueContainerChangeCopy.payload.newValue = deepCopy(newValue);
+          }
+
+          const updatedComponentState = this.getComponentState();
 
           this.devToolsConnector
             .sendAction(
-              valueContainerChange.actionType,
-              componentStateChange.payload,
-              currentComponentState,
+              'UPDATE',
+              valueContainerChangeCopy.payload,
+              updatedComponentState,
             );
         },
       );

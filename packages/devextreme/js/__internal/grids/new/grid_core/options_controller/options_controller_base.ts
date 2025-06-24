@@ -4,8 +4,8 @@
 import { Component } from '@js/core/component';
 import { getPathParts } from '@js/core/utils/data';
 import type { ChangedOptionInfo } from '@js/events';
-import type { ReadonlySignal, Signal } from '@preact/signals-core';
-import { computed, effect, signal } from '@preact/signals-core';
+import type { ReadonlySignal, Signal } from '@ts/core/reactive/index';
+import { computed, effect, signal } from '@ts/core/reactive/index';
 import { extend } from '@ts/core/utils/m_extend';
 import type { ComponentType } from 'inferno';
 

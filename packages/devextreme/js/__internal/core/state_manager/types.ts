@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 
+import type { Signal } from '@preact/signals-core';
+
 export type StateManagerCommands = {
   trackStateOf: (sourceData: StateSource, id?: string) => void;
 };
@@ -19,11 +21,7 @@ export interface StateManagerConfig {
   stateSourceSign: string;
 }
 
-export interface ObservableValueContainer extends ValueContainer {
-  // eslint-disable-next-line spellcheck/spell-checker
-  unreactive_get: () => unknown;
-  subscribe: (callback: (newValue: unknown) => void) => void;
-  update: (newValue: unknown) => void;
+export interface ObservableValueContainer extends ValueContainer, Signal<unknown> {
   stack?: string;
 }
 
@@ -54,8 +52,6 @@ export interface StateManagerFactoryOptions extends Partial<StateManagerConfig> 
   stateSourceSign: string;
 }
 
-export type ValueContainerActionType = 'UPDATE' | 'INITIALIZE';
-
 export type ValueContainerPayload = {
   previousValue: unknown;
   newValue: unknown;
@@ -64,11 +60,10 @@ export type ValueContainerPayload = {
 };
 
 export type ValueContainerChange = {
-  actionType: ValueContainerActionType;
   payload: ValueContainerPayload;
 };
 
-export type StateManagerActionType = 'UPDATE' | 'INITIALIZE';
+export type StateChangeActionType = 'UPDATE';
 
 export type StateChangePayload = {
   path: string;
@@ -76,11 +71,6 @@ export type StateChangePayload = {
   newValue: unknown;
   timestamp: number;
   source: string;
-};
-
-export type StateChange = {
-  actionType: StateManagerActionType;
-  payload: StateChangePayload;
 };
 
 export type ComponentState = Record<string, Record<string, unknown>>;
@@ -111,7 +101,9 @@ export type DevToolsExternalActionCallback =
 export interface DevToolsConnector {
   connect: (options?: Record<string, unknown>) => void;
   disconnect: () => void;
-  sendAction: (action: string, payload: StateChangePayload, state?: ComponentState) => void;
+  sendAction: (
+    action: StateChangeActionType, payload: StateChangePayload, state?: ComponentState
+  ) => void;
   onExternalAction: (callback: DevToolsExternalActionCallback) => void;
 }
 

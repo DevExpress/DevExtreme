@@ -9,8 +9,8 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import type { Signal } from '@preact/signals-core';
-import { signal } from '@preact/signals-core';
+import type { Signal } from '@ts/core/reactive/index';
+import { signal } from '@ts/core/reactive/index';
 
 import { DIContext } from '../di';
 import { setupStateManager } from './setup_state_manager';
@@ -34,19 +34,19 @@ describe('StateManager', () => {
     let diContext: DIContext;
     let testComponentStateTracker: StateManager;
     let initialPagerConfig: { infinityScrollingEnabled: boolean };
-    let nonReactiveProperty: { text: string };
+    let nonPreactSignalProperty: { text: string };
     let NoSignForIncludingItByStateManager: new () => {
       someField: TrackedSignal<boolean>;
     };
     let DataController: new () => {
       pagesCount: TrackedSignal<number>;
       pagerConfig: TrackedSignal<{ infinityScrollingEnabled: boolean }>;
-      nonReactiveProperty: { text: string };
+      nonPreactSignalProperty: { text: string };
     };
     let ColumnsController: new () => {
       columnsCount: TrackedSignal<number>;
       text: TrackedSignal<string>;
-      nonReactiveProperty: { text: string };
+      nonPreactSignalProperty: { text: string };
     };
     let ignoredInstance: InstanceType<typeof NoSignForIncludingItByStateManager>;
     let columnsControllerInstance: InstanceType<typeof ColumnsController>;
@@ -73,8 +73,8 @@ describe('StateManager', () => {
         infinityScrollingEnabled: true,
       };
 
-      nonReactiveProperty = {
-        text: 'non-reactive property',
+      nonPreactSignalProperty = {
+        text: 'non-preact-signal-property',
       };
 
       NoSignForIncludingItByStateManager = class {
@@ -86,7 +86,7 @@ describe('StateManager', () => {
 
         pagerConfig = signal(initialPagerConfig);
 
-        nonReactiveProperty = nonReactiveProperty;
+        nonPreactSignalProperty = nonPreactSignalProperty;
       };
 
       ColumnsController = class {
@@ -94,7 +94,7 @@ describe('StateManager', () => {
 
         text = signal('initial');
 
-        nonReactiveProperty = nonReactiveProperty;
+        nonPreactSignalProperty = nonPreactSignalProperty;
       };
 
       ignoredInstance = new NoSignForIncludingItByStateManager();
@@ -135,7 +135,7 @@ describe('StateManager', () => {
       expect(dataControllerInstance.pagesCount.peek()).toBe(10);
       expect(dataControllerInstance.pagerConfig.peek())
         .toBe(initialPagerConfig);
-      expect(dataControllerInstance.nonReactiveProperty).toEqual(nonReactiveProperty);
+      expect(dataControllerInstance.nonPreactSignalProperty).toEqual(nonPreactSignalProperty);
     });
 
     it('should track controllers signal updates', () => {
@@ -162,7 +162,7 @@ describe('StateManager', () => {
       expect(dataControllerInstance.pagesCount.peek()).toBe(15);
       expect(dataControllerInstance.pagerConfig.peek())
         .toBe(updatedPagerConfig);
-      expect(dataControllerInstance.nonReactiveProperty).toEqual(nonReactiveProperty);
+      expect(dataControllerInstance.nonPreactSignalProperty).toEqual(nonPreactSignalProperty);
     });
   });
 
@@ -180,7 +180,7 @@ describe('StateManager', () => {
     }
 
     class TestController {
-      testValue = state(42);
+      testValue = signal(42);
     }
 
     let controllerInstance: TestController | null = new TestController();

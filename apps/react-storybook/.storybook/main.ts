@@ -53,11 +53,7 @@ const config: StorybookConfig = {
         new webpack.NormalModuleReplacementPlugin(
           /(.*)\/reactive/,
           (resource) => {
-            if (resource.request.includes('reactive/development')) {
-              return;
-            }
-
-            const newRequest = resource.request.replace('reactive/index', 'reactive/development');
+            const newRequest = resource.request.replace('reactive/index', 'reactive/index.dev');
             resource.request = newRequest;
           }
         )

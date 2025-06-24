@@ -1,5 +1,5 @@
-import type { ReadonlySignal } from '@preact/signals-core';
-import { signal } from '@preact/signals-core';
+import type { ReadonlySignal } from '@ts/core/reactive/index';
+import { signal } from '@ts/core/reactive/index';
 
 export interface GridError {
   text: string;

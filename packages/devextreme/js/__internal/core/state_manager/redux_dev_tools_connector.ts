@@ -105,18 +105,12 @@ export class ReduxDevToolsConnector implements StateManagementTypes.DevToolsConn
     }
 
     try {
-      let actionType: string = action;
-
-      if (action === 'UPDATE' && payload?.path) {
-        actionType = `${action}: ${payload.path}`;
-      } else if (action === 'INITIALIZE' && payload?.path) {
-        actionType = `${action}: ${payload.path}`;
-      }
+      const preparedAction = `${action}: ${payload.path}`;
 
       const currentState = state ?? {};
 
       const actionObject = {
-        type: actionType,
+        type: preparedAction,
         payload: payload || {},
       };
 

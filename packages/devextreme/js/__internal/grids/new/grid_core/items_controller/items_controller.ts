@@ -1,6 +1,6 @@
 import { equalByValue } from '@js/core/utils/common';
 import formatHelper from '@js/format_helper';
-import { computed, signal } from '@preact/signals-core';
+import { computed, signal } from '@ts/core/reactive/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { DataController } from '@ts/grids/new/grid_core/data_controller/data_controller';
 import { SearchController } from '@ts/grids/new/grid_core/search/index';

@@ -39,7 +39,7 @@ export function deepCopy<T extends object>(inputObject: T): T {
       visited.set(value, arrayCopy);
 
       value.forEach((item, index) => {
-        arrayCopy[index] = iter(item);
+        arrayCopy[index] = iter(item, visited);
       });
       return arrayCopy;
     }

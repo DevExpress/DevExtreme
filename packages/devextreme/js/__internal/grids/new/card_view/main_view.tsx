@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { computed } from '@preact/signals-core';
+import { computed } from '@ts/core/reactive/index';
 import { ColumnChooserView } from '@ts/grids/new/grid_core/column_chooser/index';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { FilterPanelView } from '@ts/grids/new/grid_core/filtering/filter_panel/view';

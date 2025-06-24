@@ -1,5 +1,5 @@
-import type { ReadonlySignal } from '@preact/signals-core';
-import { computed, effect, signal } from '@preact/signals-core';
+import type { ReadonlySignal } from '@ts/core/reactive/index';
+import { computed, effect, signal } from '@ts/core/reactive/index';
 
 import { OptionsController } from '../options_controller/options_controller';
 import { DEFAULT_TOOLBAR_ITEMS } from './const';
