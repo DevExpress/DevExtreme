@@ -375,6 +375,14 @@ export class DxiFormItemComponent extends CollectionNestedOption implements Afte
     }
 
 
+    @ContentChildren(forwardRef(() => DxiFormItemComponent))
+    get itemsChildren(): QueryList<DxiFormItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
+
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,

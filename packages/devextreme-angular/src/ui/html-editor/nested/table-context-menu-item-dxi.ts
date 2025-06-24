@@ -13,7 +13,8 @@ import {
     Input,
     ContentChildren,
     forwardRef,
-    QueryList
+    QueryList,
+    AfterContentInit
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -42,7 +43,7 @@ import { DxiHtmlEditorItemComponent } from './item-dxi';
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxiHtmlEditorTableContextMenuItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost, AfterContentInit  {
     @Input()
     get beginGroup(): boolean {
         return this._getOption('beginGroup');
@@ -137,13 +138,20 @@ export class DxiHtmlEditorTableContextMenuItemComponent extends CollectionNested
     }
 
 
-    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent))
-    get itemsChildren(): QueryList<DxiHtmlEditorItemComponent> {
-        return this._getOption('items');
+    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent)) itemsChildren!: QueryList<DxiHtmlEditorItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiHtmlEditorTableContextMenuItemComponent)) tableContextMenuItemsChildren!: QueryList<DxiHtmlEditorTableContextMenuItemComponent>
+    
+    setItems() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([
+            ...this.itemsChildren.toArray(),
+            ...this.tableContextMenuItemsChildren.toArray(),
+        ]);
+        this.setChildren('items', q);
     }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
+
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
@@ -170,6 +178,12 @@ export class DxiHtmlEditorTableContextMenuItemComponent extends CollectionNested
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
+    ngAfterContentInit() {
+        this.setItems();
+        
+        this.itemsChildren.changes.subscribe(() => { this.setItems() });
+        this.tableContextMenuItemsChildren.changes.subscribe(() => { this.setItems() });
+    }
 }
 
 @NgModule({
