@@ -1,0 +1,70 @@
+/* eslint-disable no-console */
+import type { ILogger } from './interfaces';
+
+export type ILogLevel = 'debug' | 'info' | 'warn' | 'error';
+
+const LOG_TYPE_TO_LEVEL: Record<ILogLevel, number> = {
+  debug: 0, info: 1, warn: 2, error: 3,
+};
+
+export interface ConsoleLoggerOptions {
+  logLevel?: ILogLevel;
+  prefix: string;
+}
+
+export class ConsoleLogger implements ILogger {
+  private logLevel: ILogLevel = 'info';
+
+  private prefix;
+
+  constructor(options?: ConsoleLoggerOptions) {
+    if (options) {
+      if (options.logLevel) {
+        this.logLevel = options.logLevel;
+      }
+      if (options.prefix !== undefined) {
+        this.prefix = options.prefix;
+      }
+    }
+  }
+
+  setLevel(level: ILogLevel): void {
+    this.logLevel = level;
+  }
+
+  setPrefix(prefix: string): void {
+    this.prefix = prefix;
+  }
+
+  debug(message: string, ...args: unknown[]): void {
+    if (this.shouldLog('debug')) {
+      console.debug(this.formatMessage(message), ...args);
+    }
+  }
+
+  info(message: string, ...args: unknown[]): void {
+    if (this.shouldLog('info')) {
+      console.info(this.formatMessage(message), ...args);
+    }
+  }
+
+  warn(message: string, ...args: unknown[]): void {
+    if (this.shouldLog('warn')) {
+      console.warn(this.formatMessage(message), ...args);
+    }
+  }
+
+  error(message: string, ...args: unknown[]): void {
+    if (this.shouldLog('error')) {
+      console.error(this.formatMessage(message), ...args);
+    }
+  }
+
+  private formatMessage(message: string): string {
+    return this.prefix ? `${this.prefix} ${message}` : message;
+  }
+
+  private shouldLog(level: ILogLevel): boolean {
+    return LOG_TYPE_TO_LEVEL[level] >= LOG_TYPE_TO_LEVEL[this.logLevel];
+  }
+}

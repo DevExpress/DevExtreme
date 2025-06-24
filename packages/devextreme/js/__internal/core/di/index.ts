@@ -11,6 +11,8 @@ interface DIItem<T, TDeps extends readonly any[]> extends Constructor<T, TDeps> 
   dependencies: readonly [...{ [P in keyof TDeps]: AbstractType<TDeps[P]> }];
 }
 
+export type DecoratorFunction<T = any> = (instance: T) => T;
+
 export class DIContext {
   private readonly instances: Map<unknown, unknown> = new Map();
 
@@ -19,6 +21,8 @@ export class DIContext {
   private readonly aliases: Map<unknown, unknown> = new Map();
 
   private readonly antiRecursionSet = new Set();
+
+  private readonly globalDecorators: DecoratorFunction[] = [];
 
   public register<TId, TFabric extends TId, TDeps extends readonly any[]>(
     id: AbstractType<TId>,
@@ -40,7 +44,20 @@ export class DIContext {
     id: AbstractType<T>,
     instance: T,
   ): void {
-    this.instances.set(id, instance);
+    const decoratedInstance = this.globalDecorators.reduce(
+      (currentInstance, decoratorFn) => decoratorFn(currentInstance),
+      instance,
+    );
+    this.instances.set(id, decoratedInstance);
+  }
+
+  public decorator<T>(decorator: DecoratorFunction<T>): void {
+    this.globalDecorators.push(decorator as DecoratorFunction);
+
+    Array.from(this.instances.entries()).forEach(([id, instance]) => {
+      const decoratedInstance = decorator(instance as any);
+      this.instances.set(id, decoratedInstance);
+    });
   }
 
   public get<T>(
@@ -67,10 +84,17 @@ export class DIContext {
 
     const fabric = this.fabrics.get(id);
     if (fabric) {
-      const res: T = this.create(fabric as any);
-      this.instances.set(id, res);
-      this.instances.set(fabric, res);
-      return res;
+      const instance: T = this.create(fabric as any);
+
+      const decoratedInstance = this.globalDecorators.reduce(
+        (currentInstance, decoratorFn) => decoratorFn(currentInstance),
+        instance,
+      );
+
+      this.instances.set(id, decoratedInstance);
+      this.instances.set(fabric, decoratedInstance);
+
+      return instance;
     }
 
     return null;

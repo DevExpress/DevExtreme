@@ -1,5 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { DIContext } from '@ts/core/di/index';
+import { setupStateManager } from '@ts/core/state_manager/index';
 import { SearchUIController } from '@ts/grids/new/grid_core/search/index';
 
 import { AccessibilityController } from './accessibility/controller';
@@ -31,6 +32,9 @@ import { ToolbarController } from './toolbar/controller';
 import { ToolbarView } from './toolbar/view';
 
 export function register(diContext: DIContext): void {
+  // TODO: use this.constructor.name instead of hardcode
+  setupStateManager({ diContext, componentName: 'CardView' });
+
   diContext.register(DataControllerModule.DataController);
   diContext.register(DataControllerModule.CompatibilityDataController);
   diContext.register(ItemsController);
