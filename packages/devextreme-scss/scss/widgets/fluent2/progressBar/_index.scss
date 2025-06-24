@@ -1,0 +1,126 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/mixins" as *;
+@use "../../base/progressBar";
+
+// adduse
+
+.dx-progressbar-container {
+  height: $progressbar-height;
+  background-color: $progressbar-bg;
+  border-radius: $progressbar-border-radius;
+}
+
+.dx-progressbar-range {
+  position: relative;
+  background-color: $progressbar-range-bg;
+  border-radius: $progressbar-border-radius;
+  box-sizing: content-box;
+}
+
+.dx-progressbar-animating-container {
+  height: $progressbar-height;
+  background-color: $progressbar-bg;
+  background-size: $progressbar-indeterminate-background-width 5px;
+  animation: dx-loader 2s linear infinite;
+  border-radius: $progressbar-border-radius;
+
+  @include gradient-linear($progressbar-interdeterminate-state-gradient);
+
+  background-repeat: repeat;
+}
+
+.dx-invalid {
+  .dx-progressbar-range {
+    background-color: $progressbar-range-invalid-color;
+  }
+
+  .dx-progressbar-animating-container {
+    @include gradient-linear($progressbar-invalid-interdeterminate-state-gradient);
+
+    background-repeat: repeat;
+  }
+}
+
+.dx-state-disabled {
+  &.dx-progressbar {
+    opacity: 1;
+  }
+
+  .dx-progressbar-container {
+    background-color: $progressbar-container-disabled-bg;
+  }
+
+  .dx-progressbar-range {
+    background-color: $progressbar-range-disabled-bg;
+  }
+
+  .dx-progressbar-status {
+    color: $base-foreground-disabled;
+  }
+
+  .dx-progressbar-animating-container {
+    animation: none;
+
+    @include gradient-linear($progressbar-disabled-interdeterminate-state-gradient);
+
+    background-position-x: math.div($progressbar-indeterminate-background-width, 2);
+  }
+}
+
+.dx-progressbar-status {
+  margin-top: $progressbar-status-height;
+  color: $progressbar-label-color;
+  height: $progressbar-status-height;
+
+  .dx-progressbar .dx-position-right & {
+    padding-top: 0;
+  }
+}
+
+.dx-rtl {
+  .dx-progressbar,
+  &.dx-progressbar {
+    .dx-progressbar-animating-container {
+      animation: dx-loader-rtl 2s linear infinite;
+
+      @include gradient-linear($progressbar-interdeterminate-state-gradient);
+
+      background-repeat: repeat;
+    }
+
+    &.dx-state-disabled {
+      .dx-progressbar-animating-container {
+        animation: none;
+
+        @include gradient-linear($progressbar-disabled-interdeterminate-state-gradient);
+
+        background-position-x: math.div($progressbar-indeterminate-background-width, 2);
+      }
+    }
+  }
+}
+
+@keyframes dx-loader {
+  0% {
+    background-position-x: 0;
+  }
+
+  100% {
+    background-position-x: 900%;
+  }
+}
+
+@keyframes dx-loader-rtl {
+  0% {
+    background-position-x: 0;
+  }
+
+  100% {
+    background-position-x: -900%;
+  }
+}

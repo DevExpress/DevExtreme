@@ -1,0 +1,24 @@
+@use "sass:color";
+@use "../../../colors" as *;
+@use "../../../sizes" as *;
+@use "../../../button/colors" as *;
+@use "../../../button/mixins" as *;
+@use "../../../../base/icons" as *;
+@use "../../../../base/tabs";
+@use "../../variables/colors" as *;
+@use "../../variables/sizes" as *;
+@use "../../mixins" as *;
+
+// adduse
+@use "../../../scrollable";
+@use "../../../badge";
+
+
+.dx-tabs {
+  padding: 0;
+  background-color: $tabs-tab-background;
+
+  .dx-scrollable {
+    flex-basis: 100%;
+  }
+}

@@ -1,0 +1,60 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent2-xl-font-size: null !default;
+$fluent2-l-font-size: null !default;
+$fluent2-m-font-size: null !default;
+$fluent2-s-font-size: null !default;
+$fluent2-xs-font-size: null !default;
+$fluent2-h1-font-size: null !default;
+$fluent2-h2-font-size: null !default;
+$fluent2-h3-font-size: null !default;
+$fluent2-h4-font-size: null !default;
+$fluent2-h5-font-size: null !default;
+$fluent2-h6-font-size: null !default;
+
+@if $size == "default" {
+  $fluent2-xl-font-size: 34px !default;
+  $fluent2-l-font-size: 28px !default;
+  $fluent2-m-font-size: 20px !default;
+  $fluent2-s-font-size: 18px !default;
+  $fluent2-xs-font-size: 12px !default;
+
+  $fluent2-h1-font-size: 40px !default;
+  $fluent2-h2-font-size: 36px !default;
+  $fluent2-h3-font-size: 32px !default;
+  $fluent2-h4-font-size: 26px !default;
+  $fluent2-h5-font-size: 22px !default;
+  $fluent2-h6-font-size: 22px !default;
+}
+
+@else if $size == "compact" {
+  $fluent2-xl-font-size: 24px !default;
+  $fluent2-l-font-size: 20px !default;
+  $fluent2-m-font-size: 16px !default;
+  $fluent2-s-font-size: 14px !default;
+  $fluent2-xs-font-size: 12px !default;
+
+  $fluent2-h1-font-size: 32px !default;
+  $fluent2-h2-font-size: 28px !default;
+  $fluent2-h3-font-size: 24px !default;
+  $fluent2-h4-font-size: 20px !default;
+  $fluent2-h5-font-size: 16px !default;
+  $fluent2-h6-font-size: 16px !default;
+}
+
+:root {
+  --dx-font-size-heading-1: #{$fluent2-h1-font-size};
+  --dx-font-size-heading-2: #{$fluent2-h2-font-size};
+  --dx-font-size-heading-3: #{$fluent2-h3-font-size};
+  --dx-font-size-heading-4: #{$fluent2-h4-font-size};
+  --dx-font-size-heading-5: #{$fluent2-h5-font-size};
+  --dx-font-size-heading-6: #{$fluent2-h6-font-size};
+  --dx-font-size-xl: #{$fluent2-xl-font-size};
+  --dx-font-size-lg: #{$fluent2-l-font-size};
+  --dx-font-size-md: #{$fluent2-m-font-size};
+  --dx-font-size-sm: #{$fluent2-s-font-size};
+  --dx-font-size-xs: #{$fluent2-xs-font-size};
+}
+

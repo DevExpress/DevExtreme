@@ -1,0 +1,31 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../button/colors" as *;
+@use "../loadIndicator/colors" as *;
+
+// adduse
+
+$diagram-border-color: $base-border-color !default;
+$diagram-toolbar-border-color: $base-border-color !default;
+$diagram-normal-format-active-bg: darken($button-normal-bg, 10%) !default;
+$diagram-default-format-active-bg: darken($button-default-bg, 10%) !default;
+$diagram-danger-format-active-bg: darken($button-danger-bg, 10%) !default;
+$diagram-success-format-active-bg: darken($button-success-bg, 10%) !default;
+$diagram-image-icon-base-color: null !default;
+$diagram-image-icon-accent-color: null !default;
+$diagram-toolbox-shape-text-opacity: null !default;
+
+
+@if $mode == "light" {
+  $diagram-image-icon-base-color: $base-icon-color !default;
+  $diagram-image-icon-accent-color: $load-indicator-segment-bg-color !default;
+  $diagram-toolbox-shape-text-opacity: 0.25 !default;
+}
+
+@if $mode == "dark" {
+  $diagram-image-icon-base-color: $base-border-color !default;
+  $diagram-image-icon-accent-color: $base-accent !default;
+  $diagram-toolbox-shape-text-opacity: 0.5 !default;
+}
+

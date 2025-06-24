@@ -1,0 +1,153 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+/**
+* $name 10. Text color
+* $type color
+*/
+$texteditor-color: null !default;
+
+/**
+* $name 20. Placeholder text color
+* $type color
+*/
+$texteditor-placeholder-color: null !default;
+
+/**
+* $name 30. Outlined background color
+* $type color
+*/
+$texteditor-outlined-bg: $base-element-bg !default;
+
+/**
+* $name 31. Outlined hovered background color
+* $type color
+*/
+$texteditor-outlined-bg-hover: $texteditor-outlined-bg !default;
+
+/**
+* $name 32. Outlined focused background color
+* $type color
+*/
+$texteditor-outlined-bg-focused: $texteditor-outlined-bg !default;
+
+/**
+* $name 40. Filled background color
+* $type color
+*/
+$texteditor-filled-bg: null !default;
+
+/**
+* $name 50. Underlined background color
+* $type color
+*/
+$texteditor-underlined-bg: transparent !default;
+
+/**
+* $name 51. Underlined hovered background color
+* $type color
+*/
+$texteditor-underlined-bg-hover: $texteditor-underlined-bg !default;
+
+/**
+* $name 52. Underlined focused background color
+* $type color
+*/
+$texteditor-underlined-bg-focused: $texteditor-underlined-bg !default;
+
+/**
+* $name 60. Border color
+* $type color
+*/
+$texteditor-border-color: $base-border-color !default;
+$texteditor-border-color-hover: $base-border-color-hover !default;
+$texteditor-border-color-focused: $base-border-color-focused !default;
+
+/**
+* $name 70. Bottom border color
+* $type color
+*/
+$texteditor-border-bottom-color: $base-border-color-accessible !default;
+$texteditor-border-bottom-color-hover: null !default;
+$texteditor-border-bottom-color-focused: null !default;
+
+/**
+* $name 80. Focused state indicator color
+* $type color
+*/
+$texteditor-indicator-border-color: $base-accent !default;
+
+$texteditor-button-clear-icon-color: $base-icon-color !default;
+$texteditor-invalid-focused-border-color: $base-invalid-color-hover !default;
+$texteditor-invalid-faded-border-color: $base-invalid-color !default;
+$texteditor-border-color-disabled: $base-border-color-disabled !default;
+$texteditor-disabled-text-color: $base-foreground-disabled !default;
+$texteditor-input-border-radius: $base-border-radius !default;
+$texteditor-label-transition:
+  font-size 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
+  transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms,
+  top 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms;
+
+@if $mode == "light" {
+  @if $color == "blue" {
+    $texteditor-color: $base-text-color !default;
+    $texteditor-placeholder-color: lighten($base-text-color, 29.80) !default;
+    $texteditor-outlined-bg: $base-element-bg !default;
+    $texteditor-filled-bg: darken($base-element-bg, 3.9) !default;
+  }
+
+  @if $color == "saas" {
+    $texteditor-color: rgba(66, 81, 118, 1) !default;
+    $texteditor-placeholder-color: rgba(144, 158, 192, 1) !default;
+    $texteditor-outlined-bg: $base-element-bg !default;
+    $texteditor-filled-bg: rgba(243, 245, 248, 1) !default;
+  }
+
+  $texteditor-border-color-hover: darken($texteditor-border-color, 9.8) !default;
+  $texteditor-border-color-focused: darken($texteditor-border-color, 17.65) !default;
+  $texteditor-border-bottom-color-hover: darken($texteditor-border-bottom-color, 3.92) !default;
+  $texteditor-border-bottom-color-focused: darken($texteditor-border-bottom-color-hover, 3.92) !default;
+}
+
+
+@if $mode == "dark" {
+  @if $color == "blue" {
+    $texteditor-outlined-bg: $base-element-bg !default;
+    $texteditor-filled-bg: darken($base-element-bg, 8.2) !default;
+  }
+
+  @if $color == "saas" {
+    $texteditor-outlined-bg: rgba(20, 30, 40, 1) !default;
+    $texteditor-filled-bg: rgba(50, 60, 75, 1) !default;
+  }
+
+  $texteditor-color: $base-text-color !default;
+  $texteditor-placeholder-color: darken($base-text-color, 40.00) !default;
+  $texteditor-border-color-hover: lighten($texteditor-border-color, 7.84) !default;
+  $texteditor-border-color-focused: lighten($texteditor-border-color, 3.92) !default;
+  $texteditor-border-bottom-color-hover: lighten($texteditor-border-bottom-color, 6.27) !default;
+  $texteditor-border-bottom-color-focused: lighten($texteditor-border-bottom-color-hover, 3.92) !default;
+}
+
+/**
+* $name 41. Filled hovered background color
+* $type color
+*/
+$texteditor-filled-bg-hover: $texteditor-filled-bg !default;
+
+/**
+* $name 42. Filled focused background color
+* $type color
+*/
+$texteditor-filled-bg-focused: $texteditor-filled-bg !default;
+
+$texteditor-label-color: $texteditor-placeholder-color;
+$texteditor-label-color-focused: $base-accent;
+
+:root {
+  --dx-texteditor-color-text: #{$texteditor-color};
+  --dx-texteditor-color-label: #{$texteditor-label-color};
+}

@@ -1,0 +1,21 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$treeview-color: $base-text-color !default;
+
+/**
+* $name 80. Focused state background color
+* $type color
+*/
+$treeview-focused-bg: $base-hover-bg !default;
+$treeview-focus-color: $base-text-color !default;
+$treeview-hover-bg: $base-hover-bg !default;
+$treeview-item-hover-color: $base-hover-color !default;
+$treeview-border-color: $base-border-color !default;
+$treeview-item-selected-color: $treeview-color !default;
+$treeview-item-selected-bg: $base-selected-bg !default;
+$treeview-spin-icon-color: $base-spin-icon-color !default;
+$checkbox-border-color-focused: $base-accent-active !default;

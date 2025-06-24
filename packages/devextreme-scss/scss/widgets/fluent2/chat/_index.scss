@@ -1,0 +1,113 @@
+@use "../../base/chat";
+@use "colors" as *;
+@use "sizes" as *;
+@use "../../base/chat/mixins" as *;
+
+// adduse
+
+@include chat(
+  $chat-background-color,
+  $chat-border-color,
+  $chat-border-radius,
+);
+@include chat-avatar(
+  $chat-avatar-size,
+  $chat-avatar-color,
+  $chat-avatar-background-color,
+);
+@include chat-header($chat-header-padding);
+@include chat-alertlist(
+  $chat-alertlist-color,
+  $chat-alerts-padding-block,
+  $chat-alerts-padding-inline,
+  $chat-alert-padding-block,
+  $chat-alerts-row-gap,
+);
+@include chat-messagebox(
+  $chat-messagebox-padding,
+  $chat-messagebox-border-color,
+  $chat-messagebox-gap,
+  $chat-messagebox-textarea-border-radius,
+  $chat-messagebox-buton-gap,
+);
+@include chat-messagebubble(
+  $chat-bubble-padding,
+  $chat-bubble-border-radius,
+  $chat-bubble-color-secondary,
+  $chat-bubble-background-color-secondary,
+  $chat-bubble-color-primary,
+  $chat-bubble-background-color-primary,
+  $chat-bubble-container-gap,
+  $chat-bubble-delete-gap,
+  $chat-bubble-delete-icon-size,
+);
+@include chat-messagegroup(
+  $chat-messagegroup-gap,
+  $chat-messagegroup-alignment-start-template,
+  $chat-messagegroup-alignment-start-gap,
+  $chat-messagegroup-padding,
+  $chat-information-font-size,
+  $chat-information-author-name-color,
+  $chat-information-timestamp-color,
+  $chat-information-gap,
+  $chat-information-icon-size,
+  $chat-information-edited-gap,
+);
+@include chat-messagelist-empty(
+  $chat-messagelist-padding,
+  $chat-messagelist-empty-icon-box-size,
+  $chat-messagelist-empty-icon-size,
+  $chat-messagelist-empty-icon-margin-bottom,
+  $chat-messagelist-empty-row-gap,
+  $chat-messagelist-empty-icon-color,
+  $chat-messagelist-empty-icon-background-color,
+  $chat-messagelist-empty-message-font-size,
+  $chat-messagelist-empty-message-color,
+  $chat-messagelist-empty-prompt-font-size,
+  $chat-messagelist-empty-prompt-color,
+);
+@include chat-messagelist(
+  $chat-messagelist-padding,
+  $chat-messagelist-day-header-color,
+  $chat-messagelist-day-header-padding-bottom,
+  $chat-messagelist-day-header-first-padding-top,
+  $chat-messagelist-day-header-font-size,
+);
+@include chat-messagelist-contextmenu(
+  $chat-messagelist-contextmenu-delete-button-color,
+  $chat-messagelist-contextmenu-delete-button-focused-color,
+  $chat-messagelist-contextmenu-delete-button-focused-bg,
+);
+@include chat-typingindicator(
+  $chat-typingindicator-template,
+  $chat-typingindicator-padding,
+  $chat-typingindicator-row-gap,
+  $chat-typingindicator-font-size,
+  $chat-typingindicator-color,
+  $chat-typingindicator-bubble-padding-block,
+  $chat-typingindicator-bubble-padding-inline,
+  $chat-typingindicator-bubble-border-radius,
+  $chat-typingindicator-bubble-bg-color,
+  $chat-typingindicator-bubble-column-gap,
+  $chat-typingindicator-circle-size,
+  $chat-typingindicator-circle-size-center,
+  $chat-typingindicator-circle-border-radius,
+  $chat-typingindicator-circle-bg-color,
+  $chat-typingindicator-circle-bg-color-center,
+);
+@include message-editing-preview(
+  $chat-message-editing-preview-content-padding-inline,
+  $chat-message-editing-preview-content-row-gap,
+  $chat-message-editing-preview-accent-color,
+  $chat-message-editing-preview-caption-font-size,
+  $chat-messagebox-padding,
+  $chat-message-editing-preview-border-width,
+  $chat-message-editing-preview-cancel-button-color,
+);
+@include chat-confirmation-popup(
+  $chat-border-radius,
+  $chat-confirmation-popup-content-padding,
+  0 $chat-confirmation-popup-toolbar-padding-block,
+  $chat-confirmation-popup-toolbar-padding-inline,
+  $chat-confirmation-popup-toolbar-gap,
+);

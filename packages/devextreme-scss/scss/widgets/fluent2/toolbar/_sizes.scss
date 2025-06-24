@@ -1,0 +1,25 @@
+@use "../sizes" as *;
+@use "../typography/sizes" as *;
+
+// adduse
+
+$fluent2-toolbar-height: null !default;
+
+$fluent2-toolbar-padding: 0 !default;
+$fluent2-toolbar-item-spacing: 4px !default;
+$fluent2-toolbar-label-font-size: $fluent2-m-font-size !default;
+$fluent2-toolbar-section-padding: null !default;
+
+@if $size == "default" {
+  $fluent2-toolbar-height: 48px !default;
+  $fluent2-toolbar-section-padding: 12px !default;
+}
+
+@else if $size == "compact" {
+  $fluent2-toolbar-height: 36px !default;
+  $fluent2-toolbar-section-padding: 8px !default;
+}
+
+:root {
+  --dx-toolbar-height: #{$fluent2-toolbar-height};
+}

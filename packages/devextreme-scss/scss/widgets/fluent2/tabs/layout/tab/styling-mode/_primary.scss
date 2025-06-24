@@ -1,0 +1,121 @@
+@use "sass:color";
+@use "../../../../colors" as *;
+@use "../../../../sizes" as *;
+@use "../../../../button/colors" as *;
+@use "../../../../button/mixins" as *;
+@use "../../../../../base/icons" as *;
+@use "../../../../../base/tabs";
+@use "../../../variables/colors" as *;
+@use "../../../variables/sizes" as *;
+@use "../../../mixins" as *;
+
+// adduse
+@use "../../../../scrollable";
+@use "../../../../badge";
+
+
+.dx-tabs-styling-mode-primary {
+  .dx-tab {
+    &.dx-state-hover {
+      background-color: $tabs-tab-bg-color-hover-primary;
+    }
+
+    &.dx-state-focused {
+      background-color: $tabs-tab-bg-color-focus-primary;
+    }
+
+    &.dx-state-active {
+      background-color: $tabs-tab-bg-color-active-primary;
+    }
+  }
+
+  &.dx-tab-indicator-position-top {
+    .dx-tab {
+      @include dx-tabs-indicator-primary(top);
+    }
+  }
+
+  &.dx-tab-indicator-position-bottom {
+    .dx-tab {
+      @include dx-tabs-indicator-primary(bottom);
+    }
+  }
+
+  &.dx-tab-indicator-position-top,
+  &.dx-tab-indicator-position-bottom {
+    .dx-tab {
+      &.dx-state-hover {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-hover);
+      }
+
+      &.dx-state-active {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-active);
+      }
+    }
+
+    .dx-tab-selected {
+      @include dx-tabs-indicator-background($tabs-tab-border-color-selected-basic);
+
+      &.dx-state-focused {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-focused);
+      }
+
+      &.dx-state-hover {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-hover);
+      }
+
+      &.dx-state-active {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-active);
+      }
+
+      &.dx-state-disabled {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-disabled);
+      }
+    }
+  }
+
+  &.dx-tab-indicator-position-right {
+    .dx-tab {
+      @include dx-tabs-indicator-primary(right);
+    }
+  }
+
+  &.dx-tab-indicator-position-left {
+    .dx-tab {
+      @include dx-tabs-indicator-primary(left);
+    }
+  }
+
+  &.dx-tab-indicator-position-right,
+  &.dx-tab-indicator-position-left {
+    .dx-tab {
+      &.dx-state-hover {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-hover);
+      }
+
+      &.dx-state-active {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-active);
+      }
+    }
+
+    .dx-tab-selected {
+      @include dx-tabs-indicator-background($tabs-tab-border-color-selected-basic);
+
+      &.dx-state-focused {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-focused);
+      }
+
+      &.dx-state-hover {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-hover);
+      }
+
+      &.dx-state-active {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-selected-active);
+      }
+
+      &.dx-state-disabled {
+        @include dx-tabs-indicator-background($tabs-tab-border-color-disabled);
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent2-colorbox-overlay-padding: null !default;
+$fluent2-colorbox-preview-padding: null !default;
+$fluent2-colorbox-preview-icon-size: $fluent2-base-icon-size !default;
+
+@if $size == "default" {
+  $fluent2-colorbox-overlay-padding: 20px !default;
+  $fluent2-colorbox-preview-padding: 12px !default;
+}
+
+@else if $size == "compact" {
+  $fluent2-colorbox-overlay-padding: 16px !default;
+  $fluent2-colorbox-preview-padding: 8px !default;
+}
+
+$fluent2-colorbox-preview-width: $fluent2-colorbox-preview-padding * 2 + $fluent2-colorbox-preview-icon-size !default;

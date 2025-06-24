@@ -1,0 +1,33 @@
+@use "../sizes" as *;
+@use "../common/sizes" as *;
+
+// adduse
+
+$fluent2-fieldset-vertical-margin: null !default;
+$fluent2-fieldset-horizontal-margin: null !default;
+$fluent2-fieldset-header-vertical-margin: null !default;
+$fluent2-field-vertical-margin: null !default;
+$fluent2-field-labelvalue-spacing: null !default;
+
+@if $size == "default" {
+  $fluent2-fieldset-vertical-margin: 30px !default;
+  $fluent2-fieldset-horizontal-margin: 20px !default;
+  $fluent2-fieldset-header-vertical-margin: 20px !default;
+  $fluent2-field-vertical-margin: 30px !default;
+  $fluent2-field-labelvalue-spacing: 15px !default;
+}
+
+@else if $size == "compact" {
+  $fluent2-fieldset-vertical-margin: 20px !default;
+  $fluent2-fieldset-horizontal-margin: 16px !default;
+  $fluent2-fieldset-header-vertical-margin: 16px !default;
+  $fluent2-field-vertical-margin: 20px !default;
+  $fluent2-field-labelvalue-spacing: 12px !default;
+}
+
+$fluent2-field-min-height: $fluent2-base-inline-widget-height !default;
+$fluent2-field-value-top-padding: 21px !default;
+$fluent2-field-value-horizontal-padding: $fluent2-base-inline-horizontal-padding !default;
+$fluent2-field-value-bottom-padding: 20px !default;
+$fluent2-fieldset-attention-icon-offset: $fluent2-base-inline-horizontal-padding + $fluent2-invalid-badge-size !default;
+$fluent2-radiogroup-min-height: 26px !default;

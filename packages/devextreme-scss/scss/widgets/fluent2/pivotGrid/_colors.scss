@@ -1,0 +1,58 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$pivotgrid-area-background: $base-bg !default;
+$pivotgrid-border-color: $base-border-color !default;
+
+/**
+* $name 10. Header text color
+* $type color
+*/
+$pivotgrid-area-color: $base-text-color !default;
+$pivotgrid-field-area-box-text-color: $pivotgrid-area-color !default;
+$pivotgrid-field-area-box-background-color: null !default;
+$pivotgrid-field-area-box-font-weight: 400 !default;
+$pivotgrid-data-area-color: $base-text-color !default;
+
+/**
+* $name 20. Total background color
+* $type color
+*/
+$pivotgrid-totalcolor: $base-bg !default;
+
+/**
+* $name 30. Grand total background color
+* $type color
+*/
+$pivotgrid-grandtotalcolor: null !default;
+
+/**
+* $name 40. Field area text color
+* $type color
+*/
+$pivotgrid-field-area-text-color: color.change(darken($pivotgrid-area-color, 26.2%), $alpha: 0.3) !default;
+$pivotgrid-accent-color: $base-accent !default;
+$pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
+$pivotgrid-drag-header-first-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
+$pivotgrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
+$pivotgrid-position-indicator-color: gray !default;
+$pivotgrid-chevron-icon-color: $pivotgrid-area-color !default;
+
+@if $mode == "light" {
+  @if $color == "blue"{
+    $pivotgrid-grandtotalcolor: $base-hover-bg !default;
+    $pivotgrid-field-area-box-background-color: darken($base-bg, 5.88) !default;
+  }
+
+  @if $color == "saas" {
+    $pivotgrid-grandtotalcolor: color.change($base-hover-bg, $alpha: 0.4) !default;
+    $pivotgrid-field-area-box-background-color: color.change($base-hover-bg, $alpha: 0.4) !default;
+  }
+}
+
+@if $mode == "dark" {
+  $pivotgrid-field-area-box-background-color: darken($base-bg, 12.16) !default;
+}

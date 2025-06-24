@@ -1,0 +1,11 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../button/colors" as *;
+@use "../color" as extcolor;
+
+// adduse
+
+$numberbox-spin-icon-color: $base-spin-icon-color !default;
+$numberbox-spin-icon-background-hover: $base-hover-bg !default;
+$numberbox-spin-icon-background-active: $base-active-bg !default;

@@ -31,6 +31,9 @@ const DEFAULT_DEV_BUNDLE_NAMES = [
     'fluent.blue.light',
     'fluent.blue.light.compact',
     'fluent.blue.dark',
+    'fluent2.blue.light',
+    'fluent2.blue.light.compact',
+    'fluent2.blue.dark',
     'fluent.saas.light',
     'fluent.saas.dark',
 ];
@@ -68,7 +71,7 @@ function saveBundleFile(folder, fileName, content) {
 
 function generateScssBundleName(theme, size, color, mode) {
     return 'dx' +
-        (theme === 'material' || theme === 'fluent'
+        (theme === 'material' || theme === 'fluent' || theme === 'fluent2'
             ? `.${theme}`
             : '')
                 + `.${color}` +

@@ -1,0 +1,67 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../button/colors" as *;
+
+// adduse
+
+$calendar-color: $base-text-color !default;
+
+/**
+* $name 20. Navigator text color
+* $type color
+*/
+$calendar-navigator-text-color: $button-normal-color !default;
+
+/**
+* $name 30. Header text color
+* $type color
+*/
+$calendar-header-color: $calendar-color !default;
+
+/**
+* $name 40. Other month text color
+* $type color
+*/
+$calendar-cell-other-color: null !default;
+$calendar-bg: transparent !default;
+$calendar-hover-bg: null !default;
+$calendar-cell-hover-border-color: null !default;
+$calendar-cell-hover-color: $calendar-color !default;
+
+/**
+* $name 50. Selected cell background color
+* $type color
+*/
+$calendar-cell-selected-bg: $base-accent !default;
+$calendar-cell-selected-color: $base-inverted-text-color !default;
+$calendar-cell-contoured-border-radius: 50% !default;
+$calendar-cell-contoured-border-color: null !default;
+$calendar-cell-active-bg: null !default;
+$calendar-invalid-border-color: $base-invalid-color !default;
+$calendar-invalid-border-color-focused: $base-invalid-color-active !default;
+$calendar-week-number-cell-color: null !default;
+$calendar-week-number-cell-bg: null !default;
+$calendar-week-number-border-radius: 0 !default;
+
+@if $mode == "light" {
+  $calendar-hover-bg: $button-default-outlined-selected-bg !default;
+  $calendar-cell-hover-border-color: $calendar-hover-bg !default;
+  $calendar-cell-active-bg: $button-default-outlined-active-bg !default;
+  $calendar-cell-other-color: lighten($calendar-color, 23.92) !default;
+  $calendar-week-number-cell-color: lighten($calendar-color, 23.92) !default;
+  $calendar-cell-contoured-border-color: $calendar-cell-active-bg !default;
+  $calendar-week-number-cell-bg: $base-background-disabled !default;
+}
+
+@if $mode == "dark" {
+  $calendar-hover-bg: darken(desaturate(adjust-hue($base-accent, 358.4), 8.6), 26.7) !default;
+  $calendar-cell-hover-border-color: $calendar-hover-bg !default;
+  $calendar-cell-active-bg: $base-accent-selected !default;
+  $calendar-cell-other-color: darken($calendar-color, 32.16) !default;
+  $calendar-week-number-cell-color: darken($calendar-color, 32.16) !default;
+  $calendar-cell-contoured-border-color: $base-accent-active !default;
+  $calendar-week-number-cell-bg: $base-hover-bg !default;
+}
+
+$calendar-cell-other-hover-color: $calendar-cell-other-color !default;

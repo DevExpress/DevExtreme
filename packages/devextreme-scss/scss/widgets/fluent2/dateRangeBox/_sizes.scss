@@ -1,0 +1,13 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent2-daterangebox-active-bar-horizontal-margin: null !default;
+
+@if $size == "default" {
+  $fluent2-daterangebox-active-bar-horizontal-margin: 12px !default;
+}
+
+@else if $size == "compact" {
+  $fluent2-daterangebox-active-bar-horizontal-margin: 8px !default;
+}

@@ -1,0 +1,23 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$scrollable-bg: $base-element-bg !default;
+
+/**
+* $name 10. Scroll bar background color
+* $type color
+*/
+$scrollable-scroll-bg: null !default;
+$scrollable-scrollbar-bg: transparent !default;
+
+@if $mode == "light" {
+  $scrollable-scroll-bg: color.change(darken($scrollable-bg, 25%), $alpha: 0.7) !default;
+}
+
+@if $mode == "dark" {
+  $scrollable-scroll-bg: color.change(lighten($scrollable-bg, 25%), $alpha: 0.7) !default;
+}
+

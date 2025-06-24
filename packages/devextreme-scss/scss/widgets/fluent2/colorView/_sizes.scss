@@ -1,0 +1,22 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent2-colorview-container-width: 450px !default;
+$fluent2-colorview-palette-width: 288px !default;
+$fluent2-colorview-palette-height: 299px !default;
+$fluent2-colorview-alpha-margin: 10px !default;
+$fluent2-colorview-hue-scale-width: 18px !default;
+$fluent2-colorview-hue-scale-margin: 19px !default;
+$fluent2-colorview-color-preview-height: 40px !default;
+$fluent2-colorview-preview-container-margin: 34px !default;
+
+$fluent2-colorview-container-line-height: normal !default;
+$fluent2-colorview-container-hex-margin: 20px 0 0 0 !default;
+$fluent2-colorview-container-alpha-label-width: 115px !default;
+$fluent2-colorview-container-alpha-label-margin: 43px !default;
+$fluent2-colorview-container-textbox-width: 69px !default;
+$fluent2-colorview-container-textbox-margin: 0 0 0 10px !default;
+
+$fluent2-colorview-controls-container-width: 90px !default;
+$fluent2-colorview-controls-container-margin: 27px !default;

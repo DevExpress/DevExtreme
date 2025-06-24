@@ -1,0 +1,45 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent2-form-group-caption-bottom-margin: null !default;
+$fluent2-form-group-caption-top-padding: null !default;
+$fluent2-form-group-content-bottom-padding: null !default;
+$fluent2-form-group-caption-font-size: null !default;
+$fluent2-form-top-label-padding: 0 !default;
+$fluent2-form-top-label-bottom-margin: null !default;
+$fluent2-form-default-top-padding: null !default;
+$fluent2-form-help-text-font-size: 12px !default;
+$fluent2-form-layout-manager-horizontal-padding: null !default;
+$fluent2-form-layout-manager-vertical-padding: null !default;
+$fluent2-form-layout-manager-tabpanel-content-padding: null !default;
+
+$fluent2-form-label-font-size: $fluent2-base-font-size !default;
+$fluent2-form-label-icon-size: $fluent2-base-icon-size !default;
+$fluent2-form-group-custom-caption-icon-margin: null !default;
+
+@if $size == "default" {
+  $fluent2-form-group-caption-bottom-margin: 4px !default;
+  $fluent2-form-group-caption-top-padding: 16px !default;
+  $fluent2-form-group-content-bottom-padding: 16px !default;
+  $fluent2-form-group-caption-font-size: 20px !default;
+  $fluent2-form-group-custom-caption-icon-margin: 6px !default;
+  $fluent2-form-default-top-padding: 16px !default;
+  $fluent2-form-top-label-bottom-margin: 4px !default;
+  $fluent2-form-layout-manager-horizontal-padding: 12px !default;
+  $fluent2-form-layout-manager-vertical-padding: 8px !default;
+  $fluent2-form-layout-manager-tabpanel-content-padding: 24px !default;
+}
+
+@else if $size == "compact" {
+  $fluent2-form-group-caption-bottom-margin: 4px !default;
+  $fluent2-form-group-caption-top-padding: 12px !default;
+  $fluent2-form-group-content-bottom-padding: 12px !default;
+  $fluent2-form-group-caption-font-size: 16px !default;
+  $fluent2-form-group-custom-caption-icon-margin: 4px !default;
+  $fluent2-form-default-top-padding: 8px !default;
+  $fluent2-form-top-label-bottom-margin: 2px !default;
+  $fluent2-form-layout-manager-horizontal-padding: 8px !default;
+  $fluent2-form-layout-manager-vertical-padding: 6px !default;
+  $fluent2-form-layout-manager-tabpanel-content-padding: 16px !default;
+}

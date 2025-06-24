@@ -1,0 +1,14 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent2-menu-vertical-padding: null !default;
+
+@if $size == "default" {
+  $fluent2-menu-vertical-padding: 6px !default;
+}
+
+@if $size == "compact" {
+  $fluent2-menu-vertical-padding: 4px !default;
+}
+

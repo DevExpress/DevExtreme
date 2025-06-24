@@ -1,0 +1,17 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent2-dropdowneditor-list-font-size: null !default;
+$fluent2-dropdowneditor-list-line-height: null !default;
+
+
+@if $size == "default" {
+  $fluent2-dropdowneditor-list-font-size: 14px !default;
+  $fluent2-dropdowneditor-list-line-height: 20px !default;
+}
+
+@else if $size == "compact" {
+  $fluent2-dropdowneditor-list-font-size: 13px !default;
+  $fluent2-dropdowneditor-list-line-height: 16px !default;
+}

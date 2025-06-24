@@ -1,0 +1,27 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/icons" as *;
+@use "../../base/splitter";
+@use "../../base/splitter/mixins" as *;
+
+// adduse
+
+.dx-splitter {
+  @include resize-handle-states(
+    $splitter-resize-handle-color,
+    $splitter-resize-handle-bg,
+    $splitter-resize-handle-color-hover,
+    $splitter-resize-handle-bg-hover,
+    $splitter-resize-handle-color-focused,
+    $splitter-resize-handle-bg-focused,
+  );
+}
+
+.dx-resize-handle {
+  .dx-icon {
+    @include dx-icon-sizing($splitter-resize-handle-icon-size);
+  }
+}

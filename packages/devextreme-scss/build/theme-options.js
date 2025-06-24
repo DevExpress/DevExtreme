@@ -4,13 +4,16 @@ const sizes = ['default', 'compact'];
 const materialColors = ['blue', 'lime', 'orange', 'purple', 'teal'];
 const materialModes = ['light', 'dark'];
 const fluentColors = ['blue', 'saas'];
+const fluent2Colors = ['blue'];
 const fluentModes = ['light', 'dark'];
+const fluent2Modes = ['light', 'dark'];
 const genericColors = ['carmine', 'contrast', 'dark', 'darkmoon', 'darkviolet', 'greenmist', 'light', 'softblue'];
 
 const getThemes = () => sizes.flatMap((size) => [
     ...materialModes.flatMap((mode) => materialColors.map((color) => ['material', size, color, mode])),
     ...fluentModes.flatMap((mode) => fluentColors.map((color) => ['fluent', size, color, mode])),
-    ...genericColors.map((color) => ['generic', size, color])
+    ...genericColors.map((color) => ['generic', size, color]),
+     ...fluent2Modes.flatMap((mode) => fluent2Colors.map((color) => ['fluent2', size, color, mode])),
 ]);
 
 module.exports = {

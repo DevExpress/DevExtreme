@@ -1,0 +1,21 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent2-context-menu-horizontal-padding: null !default;
+$fluent2-context-menu-border-radius: $base-border-radius !default;
+$fluent2-context-menu-items-container-padding: 4px !default;
+$fluent2-context-menu-items-container-gap: 2px !default;
+$fluent2-context-menu-item-border-radius: $base-border-radius !default;
+$fluent2-context-menu-item-content-gap: null !default;
+$fluent2-context-menu-item-text-padding-inline: 2px !default;
+
+@if $size == "default" {
+  $fluent2-context-menu-horizontal-padding: 6px !default;
+  $fluent2-context-menu-item-content-gap: 6px !default;
+}
+
+@else if $size == "compact" {
+  $fluent2-context-menu-horizontal-padding: 4px !default;
+  $fluent2-context-menu-item-content-gap: 4px !default;
+}

@@ -1,0 +1,170 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/slider";
+@use "../../base/popover/mixins" as *;
+
+// adduse
+
+.dx-slider-wrapper {
+  height: $fluent2-slider-wrapper-height;
+
+  @include dx-popover-arrow-size(14px, 2px);
+}
+
+.dx-slider-bar {
+  margin-top: math.div($fluent2-slider-wrapper-height - $fluent2-slider-track-height, 2);
+  margin-right: math.div($fluent2-slider-handle-size, 2);
+  margin-left: math.div($fluent2-slider-handle-size, 2);
+  background: $fluent2-slider-bar-bg;
+  height: $fluent2-slider-track-height;
+  border-radius: $fluent2-slider-track-border-radius;
+}
+
+.dx-slider-range {
+  height: $fluent2-slider-track-height;
+  border-radius: $fluent2-slider-track-border-radius;
+
+  &.dx-slider-range-visible {
+    background: $slider-accent-color;
+  }
+}
+
+.dx-slider-handle {
+  margin-top: math.div($fluent2-slider-track-height, 2) - math.div($fluent2-slider-handle-size, 2);
+  margin-inline-end: math.div(-$fluent2-slider-handle-size, 2);
+  width: $fluent2-slider-handle-size;
+  height: $fluent2-slider-handle-size;
+  border-radius: $fluent2-slider-radius;
+  border-width: 1px;
+  border-style: solid;
+  border-color: $base-border-color;
+  background-color: $base-element-bg;
+
+  &::after {
+    position: absolute;
+    display: block;
+    inset: 0;
+    background: $slider-accent-color;
+    content: "";
+    border-radius: $fluent2-slider-radius;
+    border-width: 3px;
+    border-style: solid;
+    border-color: $base-element-bg;
+  }
+
+  &.dx-state-hover {
+    &::after {
+      background: $slider-accent-color-hover;
+    }
+  }
+
+  &.dx-state-focused {
+    border-color: $slider-accent-color-focused;
+
+    &::after {
+      background: $slider-accent-color-focused;
+    }
+  }
+
+  .dx-tooltip-wrapper {
+    .dx-overlay-content {
+      .dx-popup-content {
+        line-height: normal;
+        color: $fluent2-slider-tooltip-color;
+
+        .dx-slider-tooltip-position-top & {
+          padding-top: 6px;
+        }
+      }
+
+      &.dx-state-disabled {
+        .dx-popup-content {
+          padding-top: math.div($fluent2-slider-tooltip-width, 2);
+
+          .dx-slider-tooltip-position-top & {
+            padding-top: 6px;
+            padding-bottom: math.div($fluent2-slider-tooltip-width, 2);
+          }
+        }
+      }
+    }
+  }
+}
+
+.dx-slider-tooltip-position-top {
+  padding-top: $fluent2-slider-tooltip-width + 6;
+}
+
+.dx-slider-tooltip-position-bottom {
+  padding-bottom: $fluent2-slider-tooltip-width + 6;
+}
+
+.dx-slider-label-position-bottom {
+  .dx-slider-label {
+    bottom: -18px;
+  }
+}
+
+.dx-slider-label-position-top {
+  .dx-slider-label {
+    top: -15px;
+  }
+}
+
+.dx-invalid {
+  .dx-slider-handle {
+    &::after {
+      background-color: $base-invalid-color;
+    }
+
+    &.dx-state-hover {
+      &::after {
+        background-color: $slider-invalid-color-hover;
+      }
+    }
+
+    &.dx-state-focused {
+      border-color: $slider-invalid-color-focused;
+
+      &::after {
+        background-color: $slider-invalid-color-focused;
+      }
+    }
+  }
+
+  .dx-slider-range-visible {
+    background-color: $slider-invalid-color;
+    border-color: $slider-invalid-color;
+  }
+}
+
+.dx-state-disabled {
+  &.dx-slider,
+  .dx-slider {
+    opacity: 1;
+
+    .dx-slider-handle {
+      opacity: 1;
+    }
+  }
+
+  &.dx-slider-handle {
+    border-color: $fluent2-slider-disabled-bg;
+
+    &::after {
+      background: $fluent2-slider-disabled-bg;
+    }
+  }
+
+  .dx-slider-bar {
+    background: $fluent2-slider-bar-disabled-bg;
+  }
+
+  .dx-slider-range.dx-slider-range-visible {
+    background: $fluent2-slider-disabled-bg;
+  }
+}

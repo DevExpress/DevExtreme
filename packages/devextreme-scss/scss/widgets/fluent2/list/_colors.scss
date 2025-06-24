@@ -1,0 +1,79 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../button/colors" as *;
+
+// adduse
+
+/**
+* $name 10. Item text color
+* $type color
+*/
+$list-normal-color: null !default;
+
+/**
+* $name 20. Group border color
+* $type color
+*/
+$list-border-color: $base-border-color !default;
+
+/**
+* $name 20. Group header background color
+* $type color
+*/
+$list-group-header-bg: transparent !default;
+
+/**
+* $name 30. Hovered state item background color
+* $type color
+*/
+$list-item-hover-bg: $base-hover-bg !default;
+
+/**
+* $name 30. Selected state item background color
+* $type color
+*/
+$list-item-selected-bg: $base-selected-bg !default;
+$list-item-selected-hover-bg: $list-item-hover-bg !default;
+$list-item-focused-selected-bg: $base-active-bg !default;
+$list-item-hover-color: $base-hover-color !default;
+$list-header-indicator-color: $base-icon-color !default;
+
+/**
+* $name 40. Active state item background color
+* $type color
+*/
+$list-item-active-bg: $base-active-bg !default;
+$list-holdmenu-bg: $base-bg !default;
+$list-holdmenu-border-color: $list-border-color !default;
+$list-holdmenu-shadow-color: color.change($base-shadow-color, $alpha: 0.12) !default;
+$list-menu-button-default-color: $button-default-color !default;
+$list-menu-button-default-bg: $button-default-bg !default;
+$list-menu-button-delete-bg: $base-danger !default;
+$list-item-ghost-bg: $base-element-bg !default;
+$list-item-ghost-color: $base-label-color !default;
+$list-item-ghost-border-color: $base-accent !default;
+$list-icon-color: $base-icon-color !default;
+
+$base-select-all-separator-color: $base-separator-color !default;
+
+@if $mode == "light" {
+  $list-normal-color: lighten($base-text-color, 11.76) !default;
+}
+
+@if $mode == "dark" {
+  $list-normal-color: darken($base-text-color, 16.08) !default;
+}
+
+/**
+* $name 10. Group header text color
+* $type color
+*/
+$list-group-color: $base-text-color !default;
+
+/**
+* $name 25. Expanded group header text color
+* $type color
+*/
+$list-expanded-group-color: $list-group-color !default;
+$list-item-selected-color: $list-normal-color !default;

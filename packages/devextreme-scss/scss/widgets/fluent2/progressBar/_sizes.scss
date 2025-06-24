@@ -1,0 +1,16 @@
+@use "../sizes" as *;
+
+// adduse
+
+$progressbar-height: null !default;
+$progressbar-border-radius: $base-border-radius !default;
+$progressbar-status-height: 16px !default;
+$progressbar-indeterminate-background-width: 90%;
+
+@if $size == "default" {
+  $progressbar-height: 4px !default;
+}
+
+@else if $size == "compact" {
+  $progressbar-height: 2px !default;
+}

@@ -1,0 +1,86 @@
+$size: null !default;
+
+@use "colors" as *;
+
+$fluent2-size-postfix: null !default;
+$fluent2-base-font-size: null !default;
+$fluent2-base-inline-widget-height: null !default;
+$fluent2-base-inline-block-height: null !default;
+$fluent2-base-icon-size: null !default;
+$fluent2-base-icon-margin: 8px !default;
+$fluent2-base-inline-horizontal-padding: null !default;
+$fluent2-base-border-radius: null !default;
+$fluent2-html-editor-add-image-dialog-base-padding: 5px !default;
+
+/**
+* $name 11. Button height
+* $type text
+*/
+$fluent2-button-height: null !default;
+
+/**
+* $name 12. Icon size
+* $type text
+*/
+$fluent2-button-icon-size: null !default;
+
+/**
+* $name 13. Icon margin
+* $type text
+*/
+$fluent2-button-icon-margin: null !default;
+
+@if $size == "default" {
+  $fluent2-size-postfix: "" !default;
+
+  // Font sizes
+  $fluent2-base-font-size: 14px !default;
+
+  // Base sizes
+  $fluent2-base-inline-widget-height: 32px !default;
+  $fluent2-base-inline-block-height: 20px !default;
+  $fluent2-base-icon-size: 20px !default;
+  $fluent2-base-inline-horizontal-padding: 12px !default;
+  $fluent2-base-border-radius: 4px !default;
+  $fluent2-button-height: 32px !default;
+  $fluent2-button-icon-size: 20px !default;
+  $fluent2-button-icon-margin: 8px !default;
+}
+
+@if $size == "compact" {
+  $fluent2-size-postfix: ".compact" !default;
+
+  // Font sizes
+  $fluent2-base-font-size: 12px !default;
+
+  // Base sizes
+  $fluent2-base-inline-widget-height: 24px !default;
+  $fluent2-base-inline-block-height: 16px !default;
+  $fluent2-base-icon-size: 16px !default;
+  $fluent2-base-inline-horizontal-padding: 8px !default;
+  $fluent2-base-border-radius: 4px !default;
+  $fluent2-button-height: 24px !default;
+  $fluent2-button-icon-size: 16px !default;
+  $fluent2-button-icon-margin: 4px !default;
+}
+
+// Base bordered inline widgets sizes
+$fluent2-base-border-width: 1px !default;
+
+
+/**
+* $name 200. Border radius
+* $type text
+*/
+$base-border-radius: $fluent2-base-border-radius !default;
+
+$fluent2-base-standard-texteditor-input-horizontal-padding: 0 !default;
+
+
+:root {
+  --dx-component-height: #{$fluent2-base-inline-widget-height};
+  --dx-font-size: #{$fluent2-base-font-size};
+  --dx-border-width: #{$fluent2-base-border-width};
+  --dx-border-radius: #{$fluent2-base-border-radius};
+  --dx-font-size-icon: #{$fluent2-base-icon-size};
+}

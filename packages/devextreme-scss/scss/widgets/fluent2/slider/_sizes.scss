@@ -1,0 +1,35 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent2-slider-handle-size: null !default;
+$fluent2-slider-wrapper-height: null !default;
+$fluent2-slider-tooltip-width: null !default;
+$fluent2-slider-top-tooltip-margin: null !default;
+
+$fluent2-slider-height: 28px !default; // for fieldset height
+$fluent2-slider-radius: 50% !default;
+$fluent2-slider-track-height: null !default;
+$fluent2-slider-track-border-radius: 2px !default;
+$fluent2-slider-handle-height: null !default;
+$fluent2-slider-handle-inner-size: null !default;
+
+@if $size == "default" {
+  $fluent2-slider-track-height: 4px !default;
+  $fluent2-slider-handle-height: 18px !default;
+  $fluent2-slider-handle-size: 20px !default;
+  $fluent2-slider-handle-inner-size: 18px !default;
+  $fluent2-slider-wrapper-height: 32px !default;
+  $fluent2-slider-tooltip-width: 34px !default;
+  $fluent2-slider-top-tooltip-margin: -5px !default;
+}
+
+@else if $size == "compact" {
+  $fluent2-slider-track-height: 2px !default;
+  $fluent2-slider-handle-height: 14px !default;
+  $fluent2-slider-handle-size: 16px !default;
+  $fluent2-slider-handle-inner-size: 14px !default;
+  $fluent2-slider-wrapper-height: 26px !default;
+  $fluent2-slider-tooltip-width: 28px !default;
+  $fluent2-slider-top-tooltip-margin: -2px !default;
+}

@@ -1,0 +1,35 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent2-list-vertical-padding: 4px !default;
+$fluent2-list-item-margin-inline: 4px !default;
+$fluent2-list-bottom-padding: 4px !default;
+$fluent2-list-searchbox-margin-bottom: 4px !default;
+$fluent2-list-item-height: null !default;
+$fluent2-list-item-vertical-padding: null !default;
+$fluent2-list-item-horizontal-padding: null !default;
+$fluent2-list-item-gap: 2px !default;
+$fluent2-list-group-header-vertical-padding: null !default;
+$fluent2-list-next-button-horizontal-padding: null !default;
+
+@if $size == "default" {
+  $fluent2-list-item-height: 32px !default;
+  $fluent2-list-item-vertical-padding: 6px !default;
+  $fluent2-list-item-horizontal-padding: 12px !default;
+  $fluent2-list-group-header-vertical-padding: 6px !default;
+  $fluent2-list-next-button-horizontal-padding: 32px !default;
+}
+
+@else if $size == "compact" {
+  $fluent2-list-item-height: 24px !default;
+  $fluent2-list-item-vertical-padding: 4px !default;
+  $fluent2-list-item-horizontal-padding: 8px !default;
+  $fluent2-list-group-header-vertical-padding: 8px !default;
+  $fluent2-list-next-button-horizontal-padding: 24px !default;
+}
+
+:root {
+  --dx-list-item-padding-inline: #{$fluent2-list-item-horizontal-padding};
+  --dx-list-item-padding-block: #{$fluent2-list-item-vertical-padding};
+}

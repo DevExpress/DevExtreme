@@ -1,0 +1,43 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+/**
+* $name 10. Indicator color
+* $type color
+*/
+$load-indicator-segment-bg-color: $base-accent !default;
+
+/**
+* $name 20. Indicator background color
+* $type color
+*/
+$load-indicator-inner-segment-border-color: null !default;
+$load-indicator-animation-sparkle-bg-color1: null !default;
+$load-indicator-animation-sparkle-bg-color2: null !default;
+$load-indicator-animation-sparkle-bg-color3: null !default;
+
+@if $mode == "light" {
+  @if $color == "blue" {
+    $load-indicator-inner-segment-border-color: lighten(saturate(adjust-hue($load-indicator-segment-bg-color, 2.9), 2.2), 44.3) !default;
+    $load-indicator-animation-sparkle-bg-color1: lighten(saturate($base-accent, 0.33), 30.00) !default;
+    $load-indicator-animation-sparkle-bg-color2: lighten(desaturate($base-accent, 0.98), 40.00) !default;
+    $load-indicator-animation-sparkle-bg-color3: lighten(desaturate($base-accent, 0.88), 44.90) !default;
+  }
+
+  @if $color == "saas" {
+    $load-indicator-inner-segment-border-color: mix($base-bg, $load-indicator-segment-bg-color, 68.82%) !default;
+    $load-indicator-animation-sparkle-bg-color1: lighten(desaturate(adjust-hue($base-accent, -15), 14.38), 3.53) !default;
+    $load-indicator-animation-sparkle-bg-color2: lighten(desaturate(adjust-hue($base-accent, -15), 15.69), 13.53) !default;
+    $load-indicator-animation-sparkle-bg-color3: lighten(desaturate(adjust-hue($base-accent, -15), 15.58), 18.43) !default;
+  }
+}
+
+@if $mode == "dark" {
+  $load-indicator-inner-segment-border-color: $base-accent-selected !default;
+  $load-indicator-animation-sparkle-bg-color1: lighten(saturate($base-accent, 0.47), 2.16) !default;
+  $load-indicator-animation-sparkle-bg-color2: lighten(saturate(adjust-hue($base-accent, 1), 0.47), 14.12) !default;
+  $load-indicator-animation-sparkle-bg-color3: lighten(desaturate(adjust-hue($base-accent, -2), 9.36), 26.08) !default;
+}

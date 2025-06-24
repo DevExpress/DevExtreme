@@ -1,0 +1,128 @@
+@use "../sizes" as *;
+@use "../button/colors" as *;
+@use "../toolbar/sizes" as *;
+
+
+$fluent2-scheduler-workspace-date-table-cell-height: null !default;
+$fluent2-scheduler-toolbar-item-offset: null !default;
+$fluent2-scheduler-navigator-height: null !default;
+$fluent2-scheduler-header-panel-day-font-size: null !default;
+$fluent2-scheduler-appointment-tooltip-title-font-size: null !default;
+$fluent2-scheduler-appointment-tooltip-date-font-size: null !default;
+$fluent2-scheduler-workspace-month-cell-left-offset: null !default;
+$fluent2-scheduler-appointment-content-padding: null !default;
+$fluent2-scheduler-recurring-appointment-content-padding: null !default;
+$fluent2-scheduler-appointment-content-padding-rtl: null !default;
+$fluent2-scheduler-recurring-appointment-content-padding-rtl: null !default;
+$fluent2-scheduler-dropdown-appointment-margin-top: null !default;
+$fluent2-scheduler-dropdown-button-height: null !default;
+$fluent2-scheduler-dropdown-button-padding: null !default;
+$fluent2-scheduler-dropdown-day-margin: null !default;
+$fluent2-scheduler-appointment-tooltip-content-margin-left: null !default;
+$fluent2-tooltip-marker-dimension: null !default;
+$fluent2-scheduler-appointment-tooltip-title-margin-top: null !default;
+$fluent2-scheduler-appointment-tooltip-remove-padding-top: null !default;
+
+$scheduler-left-column-width: 65px !default;
+$fluent2-scheduler-timeline-date-table-cell-height: 50px !default;
+
+/**
+* $name 15. Border radius
+* $type text
+*/
+$scheduler-border-radius: 0 !default;
+
+$fluent2-scheduler-navigator-icon-font-size: $fluent2-base-icon-size;
+$fluent2-scheduler-appointment-month-text-size: 12px !default;
+$fluent2-scheduler-workspace-info-text-size: 16px !default;
+$fluent2-scheduler-all-day-title-font-size: 12px !default;
+$fluent2-scheduler-time-panel-font-size: 12px !default;
+$fluent2-scheduler-header-panel-margin: 14px !default;
+$fluent2-scheduler-group-header-font-size: 14px !default;
+$fluent2-scheduler-group-header-table-cell-width: 100px !default;
+$fluent2-scheduler-appointment-transparent-left-border: 1px solid transparent !default;
+$fluent2-scheduler-appointment-transparent-right-border: 1px solid transparent !default;
+$fluent2-scheduler-workspace-month-header-height: 22px !default;
+$fluent2-scheduler-workspace-month-timeline--time-height: 34px !default;
+
+$agenda-appointment-title-font-size: null !default;
+$fluent2-scheduler-header-height: null !default;
+$fluent2-scheduler-header-offset: null !default;
+
+$scheduler-timeline-cell-height: 50px !default;
+
+$header-day-element-height: null !default;
+
+$fluent2-scheduler-collapsed-all-day-table-cell-height: null !default;
+
+$header-panel-time-cell-height: 32px !default;
+$header-panel-time-cell-padding: null !default;
+
+
+@if $size == "default" {
+  $fluent2-scheduler-collapsed-all-day-table-cell-height: 32px !default;
+  $header-panel-time-cell-padding: 12px !default;
+
+  $header-day-element-height: 26px;
+  $fluent2-scheduler-workspace-date-table-cell-height: 38px !default;
+
+  $fluent2-scheduler-navigator-height: 36px !default;
+  $fluent2-scheduler-header-panel-day-font-size: 16px !default;
+  $fluent2-scheduler-header-height: 46px !default;
+  $fluent2-scheduler-header-offset: 0 12px !default;
+  $fluent2-scheduler-toolbar-item-offset: 4px !default;
+
+  $fluent2-scheduler-appointment-tooltip-title-font-size: 16px !default;
+  $fluent2-scheduler-appointment-tooltip-date-font-size: 14px !default;
+  $fluent2-scheduler-workspace-month-cell-left-offset: 8px !default;
+
+  $fluent2-scheduler-appointment-content-padding: 6px 8px 6px 12px !default;
+  $fluent2-scheduler-recurring-appointment-content-padding: 6px 20px 6px 12px !default;
+  $fluent2-scheduler-appointment-content-padding-rtl: 6px 12px 6px 8px !default;
+  $fluent2-scheduler-recurring-appointment-content-padding-rtl: 6px 12px 6px 20px !default;
+  $fluent2-scheduler-dropdown-appointment-margin-top: 7px !default;
+  $fluent2-scheduler-dropdown-button-height: 22px !default;
+  $fluent2-scheduler-dropdown-button-padding: 4px !default;
+  $fluent2-scheduler-dropdown-day-margin: 5px !default;
+
+  $fluent2-scheduler-appointment-tooltip-content-margin-left: 6px !default;
+  $fluent2-tooltip-marker-dimension: 12px !default;
+  $fluent2-scheduler-appointment-tooltip-title-margin-top: 0 !default;
+  $fluent2-scheduler-appointment-tooltip-remove-padding-top: 1px !default;
+
+  $agenda-appointment-title-font-size: 14px;
+}
+
+@else if $size == "compact" {
+  $fluent2-scheduler-collapsed-all-day-table-cell-height: 24px !default;
+  $header-panel-time-cell-padding: 8px !default;
+
+  $header-day-element-height: 24px;
+  $fluent2-scheduler-workspace-date-table-cell-height: 28px !default;
+
+  $fluent2-scheduler-navigator-height: 28px !default;
+  $fluent2-scheduler-header-panel-day-font-size: 14px !default;
+  $fluent2-scheduler-header-height: 34px !default;
+  $fluent2-scheduler-header-offset: 2px 8px !default;
+  $fluent2-scheduler-toolbar-item-offset: 4px !default;
+
+  $fluent2-scheduler-appointment-tooltip-title-font-size: 14px !default;
+  $fluent2-scheduler-appointment-tooltip-date-font-size: 11px !default;
+  $fluent2-scheduler-workspace-month-cell-left-offset: 4px !default;
+
+  $fluent2-scheduler-appointment-content-padding: 4px 6px 4px 8px !default;
+  $fluent2-scheduler-recurring-appointment-content-padding: 4px 16px 4px 8px !default;
+  $fluent2-scheduler-appointment-content-padding-rtl: 4px 8px 4px 6px !default;
+  $fluent2-scheduler-recurring-appointment-content-padding-rtl: 4px 8px 4px 16px !default;
+  $fluent2-scheduler-dropdown-appointment-margin-top: 3px !default;
+  $fluent2-scheduler-dropdown-button-height: 18px !default;
+  $fluent2-scheduler-dropdown-button-padding: 2px !default;
+  $fluent2-scheduler-dropdown-day-margin: 2px !default;
+
+  $fluent2-scheduler-appointment-tooltip-content-margin-left: 8px !default;
+  $fluent2-tooltip-marker-dimension: 18px !default;
+  $fluent2-scheduler-appointment-tooltip-title-margin-top: 3px !default;
+  $fluent2-scheduler-appointment-tooltip-remove-padding-top: 2px !default;
+
+  $agenda-appointment-title-font-size: 13px;
+}

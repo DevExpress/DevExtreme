@@ -1,0 +1,20 @@
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common/mixins" as *;
+@use "../common/sizes" as *;
+@use "../../base/dropDownMenu";
+
+// adduse
+
+.dx-dropdownmenu-popup-wrapper {
+  .dx-toolbar-menu-section {
+    display: flex;
+    flex-direction: column;
+    row-gap: $fluent2-dropdownmenu-section-row-gap;
+    margin-inline: $fluent2-dropdownmenu-section-horizontal-margin;
+  }
+
+  .dx-overlay-content {
+    box-shadow: $fluent2-base-dropdown-widgets-shadow;
+  }
+}

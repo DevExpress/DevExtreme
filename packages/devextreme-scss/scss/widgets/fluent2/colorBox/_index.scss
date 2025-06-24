@@ -1,0 +1,67 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../colorView/colors" as *;
+@use "../textEditor/sizes" as *;
+@use "../../base/colorBox";
+@use "../../base/colorBox/mixins" as *;
+
+// adduse
+@use "../colorView";
+@use "../dropDownEditor";
+
+
+.dx-colorbox {
+  .dx-colorbox-input-container {
+    .dx-placeholder::before,
+    .dx-colorbox-input {
+      padding-inline-start: $fluent2-colorbox-preview-width;
+    }
+
+    &.dx-colorbox-color-is-not-defined {
+      .dx-colorbox-color-result-preview {
+        background: $colorbox-preview-empty-bg no-repeat 0 0;
+        background-size: contain;
+      }
+    }
+
+    &::after {
+      left: $fluent2-colorbox-preview-padding + 1;
+    }
+  }
+
+  &.dx-texteditor {
+    .dx-texteditor-label {
+      .dx-label-before {
+        min-width: $fluent2-colorbox-preview-width;
+      }
+    }
+  }
+}
+
+.dx-colorbox-color-result-preview {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: $fluent2-colorbox-preview-icon-size;
+  height: $fluent2-colorbox-preview-icon-size;
+  margin-top: math.div(-$fluent2-colorbox-preview-icon-size, 2);
+  inset-inline-start: $fluent2-colorbox-preview-padding;
+  border: 1px solid;
+  border-color: $colorview-border-color;
+}
+
+.dx-colorbox-overlay {
+  &.dx-overlay-content {
+    background-color: $colorbox-overlay-bg;
+  }
+
+  .dx-popup-content {
+    padding: $fluent2-colorbox-overlay-padding;
+  }
+
+  padding: 0;
+}

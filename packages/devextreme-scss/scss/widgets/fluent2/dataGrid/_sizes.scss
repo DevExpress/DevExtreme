@@ -1,0 +1,19 @@
+@use "../sizes" as *;
+
+// adduse
+
+$fluent2-datagrid-cell-padding: 7px !default;
+$fluent2-datagrid-grouppanel-item-font-weight: 400 !default;
+
+$area-field-border-radius: null !default;
+$area-field-top-bottom-padding: null !default;
+
+@if $size == "default" {
+  $area-field-border-radius: 6px !default;
+  $area-field-top-bottom-padding: 5px !default;
+}
+
+@else if $size == "compact" {
+  $area-field-border-radius: 4px !default;
+  $area-field-top-bottom-padding: 2px !default;
+}

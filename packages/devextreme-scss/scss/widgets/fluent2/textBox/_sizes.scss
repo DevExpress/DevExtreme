@@ -1,0 +1,13 @@
+@use "../sizes" as *;
+
+// adduse
+
+$textbox-search-icon-size: null !default;
+
+@if $size == "default" {
+  $textbox-search-icon-size: 32px !default;
+}
+
+@else if $size == "compact" {
+  $textbox-search-icon-size: 24px !default;
+}

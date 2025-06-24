@@ -1,0 +1,233 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../common/mixins" as *;
+@use "../../base/icons" as *;
+@use "../gridBase/colors" as *;
+@use "../treeView/sizes" as *;
+@use "../button/mixins" as *;
+@use "../button/colors" as *;
+@use "../../base/pivotGrid" as basePivotGrid with (
+  $pivotgrid-drag-header-border-color: $pivotgrid-drag-header-border-color,
+  $pivotgrid-drag-header-first-shadow-color: $pivotgrid-drag-header-first-shadow-color,
+  $pivotgrid-drag-header-second-shadow-color: $pivotgrid-drag-header-second-shadow-color,
+  $pivotgrid-border-color: $pivotgrid-border-color,
+  $pivotgrid-common-left-right-padding: $pivotgrid-common-left-right-padding,
+  $pivotgrid-area-color: $pivotgrid-area-color,
+  $header-filter-color: $header-filter-color,
+  $header-filter-color-empty: $header-filter-color-empty,
+  $pivotgrid-area-background: $pivotgrid-area-background,
+  $pivotgrid-common-top-bottom-padding: $area-field-top-bottom-padding,
+  $pivotgrid-header-top-bottom-padding: $pivotgrid-header-top-bottom-padding,
+  $pivotgrid-field-indicators-offset: $pivotgrid-field-indicators-offset,
+  $pivotgrid-indicators-line-height: $pivotgrid-indicators-line-height,
+  $pivotgrid-totalcolor: $pivotgrid-totalcolor,
+  $pivotgrid-field-area-text-color: $pivotgrid-field-area-text-color,
+  $pivotgrid-data-area-color: $pivotgrid-data-area-color,
+  $pivotgrid-grandtotalcolor: $pivotgrid-grandtotalcolor,
+  $pivotgrid-accent-color: $pivotgrid-accent-color,
+  $pivotgrid-empty-area-text-padding: $pivotgrid-empty-area-text-padding,
+  $pivotgrid-button-top-padding: $pivotgrid-button-top-padding,
+);
+
+// adduse
+
+
+$fluent2-pivotgrid-headers-font-size: 14px;
+$fluent2-pivotgrid-area-font-size: 13px;
+$fluent2-pivotgrid-chevron-icon-size: 20px;
+
+$fluent2-pivotgrid-drag-header-shadow: 0 3px 4px color.change($base-shadow-color, $alpha: 0.15);
+$fluent2-pivotgridfieldchooser-field-min-height: 36px;
+
+.dx-pivotgrid-fields-container {
+  &.dx-drag {
+    .dx-area-field.dx-area-box {
+      background-color: color.change($pivotgrid-field-area-box-background-color, $alpha: 0.9);
+      border: 1px solid $base-border-color-disabled;
+      box-shadow: $fluent2-pivotgrid-drag-header-shadow;
+    }
+  }
+
+  .dx-area-field.dx-area-box {
+    color: $pivotgrid-field-area-box-text-color;
+    background-color: $pivotgrid-field-area-box-background-color;
+    border-radius: $area-field-border-radius;
+    border: 1px solid $base-border-color-disabled;
+    font-size: $fluent2-pivotgrid-headers-font-size;
+    font-weight: $pivotgrid-field-area-box-font-weight;
+    line-height: 20px;
+
+    .dx-header-filter {
+      color: $base-accent;
+
+      &.dx-header-filter-empty {
+        color: $pivotgrid-area-color;
+      }
+    }
+  }
+
+  .dx-sort-up {
+    @include dx-icon-sizing($fluent2-button-icon-size)
+  }
+
+  .dx-sort-down {
+    @include dx-icon-sizing($fluent2-button-icon-size)
+  }
+
+  .dx-header-filter {
+    @include dx-icon-sizing($fluent2-button-icon-size)
+  }
+}
+
+
+.dx-pivotgrid {
+  background-color: $pivotgrid-area-background;
+
+  .dx-pivotgrid-area {
+    &.dx-pivotgrid-area-data {
+      font-size: $fluent2-pivotgrid-area-font-size;
+    }
+
+    &.dx-pivotgrid-vertical-headers,
+    &.dx-pivotgrid-horizontal-headers {
+      font-size: $fluent2-pivotgrid-headers-font-size;
+
+      td {
+        font-weight: 500;
+      }
+
+      .dx-grandtotal,
+      .dx-total {
+        color: $base-text-color;
+      }
+    }
+
+    td {
+      padding: $fluent2-pivotgrid-cell-padding;
+
+      &.dx-pivotgrid-collapsed,
+      &.dx-pivotgrid-expanded {
+        padding: $fluent2-pivotgrid-expanded-cell-padding;
+
+        > span {
+          padding: 0 5px 0 10px;
+        }
+      }
+    }
+  }
+
+
+  .dx-area-description-cell {
+    .dx-pivotgrid-toolbar {
+      padding-left: 8px;
+    }
+  }
+
+  .dx-row-total,
+  .dx-grandtotal {
+    &.dx-last-cell {
+      padding-left: $fluent2-pivotgrid-total-text-left-padding;
+    }
+  }
+
+  .dx-expand-icon-container {
+    margin: 0;
+
+    @include dx-icon(chevronright);
+
+    font-size: $fluent2-pivotgrid-headers-font-size;
+
+    &::before {
+      visibility: hidden;
+    }
+  }
+
+  .dx-pivotgrid-collapsed .dx-expand {
+    @include dx-icon(chevronright);
+    @include dx-icon-font-centered-sizing($fluent2-pivotgrid-chevron-icon-size);
+
+    color: $pivotgrid-chevron-icon-color;
+  }
+
+  .dx-pivotgrid-expanded .dx-expand {
+    @include dx-icon(chevrondown);
+    @include dx-icon-font-centered-sizing($fluent2-pivotgrid-chevron-icon-size);
+
+    color: $pivotgrid-chevron-icon-color;
+  }
+
+  .dx-area-tree-view {
+    td.dx-white-space-column {
+      width: $pivotgrid-empty-column-width;
+      min-width: $pivotgrid-empty-column-width;
+    }
+  }
+}
+
+.dx-pivotgridfieldchooser {
+  .dx-area-icon {
+    width: $fluent2-button-icon-size;
+    height: $fluent2-button-icon-size;
+    font-size: $fluent2-button-icon-size;
+  }
+
+  .dx-area {
+    .dx-area-caption {
+      text-transform: uppercase;
+      font-size: $fluent2-pivotgrid-headers-font-size;
+      font-weight: 500;
+      color: $pivotgrid-area-color;
+      vertical-align: middle;
+    }
+
+    .dx-area-fields {
+      margin-top: 8px;
+    }
+  }
+
+  .dx-treeview-border-visible .dx-scrollable-content > .dx-treeview-node-container {
+    padding-right: 8px;
+  }
+
+  .dx-treeview-item-with-checkbox.dx-treeview-node-is-leaf {
+    padding-left: 0;
+
+    .dx-checkbox {
+      left: 8px;
+    }
+  }
+
+  .dx-treeview-node-container-opened {
+    .dx-treeview-item-with-checkbox.dx-treeview-node-is-leaf {
+      padding-left: $fluent2-treeview-toggle-item-width;
+
+      .dx-checkbox {
+        left: $fluent2-treeview-checkbox-offset;
+      }
+    }
+  }
+
+  .dx-treeview-item {
+    min-height: $fluent2-pivotgridfieldchooser-field-min-height;
+    padding: 9px 8px;
+
+    .dx-icon {
+      margin: 0 5px -1px 0;
+
+      @include dx-icon-sizing($fluent2-button-icon-size);
+    }
+  }
+
+  .dx-treeview-toggle-item-visibility {
+    height: $fluent2-pivotgridfieldchooser-field-min-height;
+  }
+}
+
+.dx-pivotgrid-fields-container { // stylelint-disable-line no-duplicate-selectors
+  .dx-position-indicator {
+    background-color: $pivotgrid-position-indicator-color;
+  }
+}

@@ -1,0 +1,61 @@
+@use "../../sizes" as *;
+
+// adduse
+
+
+$fluent2-tabs-item-gap: 4px !default;
+$fluent2-tabs-item-padding: null !default;
+$fluent2-tabs-item-padding-top-bottom: null !default;
+$fluent2-tabs-item-padding-right-left: null !default;
+$fluent2-tab-height: null !default;
+
+$fluent2-tab-font-weight-basic: 400 !default;
+$fluent2-tab-font-weight-accent: 500 !default;
+$fluent2-base-icon-margin: null !default;
+$fluent2-tabs-icon-size: $fluent2-base-icon-size !default;
+
+$fluent2-tab-nav-button-icon-width: null !default;
+$fluent2-tab-nav-button-icon-height: null !default;
+$fluent2-tab-nav-button-icon-font-size: null !default;
+$fluent2-tab-nav-button-content-padding: null !default;
+
+$fluent2-tab-vertical-nav-button-content-padding: null !default;
+
+$fluent2-indicator-thickness-primary: 2px !default;
+$fluent2-indicator-thickness-secondary: 3px !default;
+
+$fluent2-indicator-length-primary: 100% !default;
+$fluent2-indicator-length-secondary: 100% !default;
+
+$fluent2-tab-item-border-radius-secondary: 4px !default;
+$fluent2-indicator-border-radius-secondary: 4px !default;
+
+$fluent2-badge-min-size: null !default;
+
+@if $size == "default" {
+  $fluent2-tabs-item-padding-top-bottom: 12px !default;
+  $fluent2-tabs-item-padding-right-left: 10px !default;
+  $fluent2-tabs-item-padding: $fluent2-tabs-item-padding-top-bottom $fluent2-tabs-item-padding-right-left !default;
+  $fluent2-tab-height: auto !default;
+  $fluent2-base-icon-margin: 8px !default;
+  $fluent2-tab-nav-button-icon-width: 20px !default;
+  $fluent2-tab-nav-button-icon-height: 20px !default;
+  $fluent2-tab-nav-button-icon-font-size: 20px !default;
+  $fluent2-tab-nav-button-content-padding: 0 4px !default;
+  $fluent2-tab-vertical-nav-button-content-padding: 4px 0 !default;
+  $fluent2-badge-min-size: 20px !default;
+}
+
+@else if $size == "compact" {
+  $fluent2-tabs-item-padding-top-bottom: 8px !default;
+  $fluent2-tabs-item-padding-right-left: 8px !default;
+  $fluent2-tabs-item-padding: $fluent2-tabs-item-padding-top-bottom $fluent2-tabs-item-padding-right-left !default;
+  $fluent2-tab-height: auto !default;
+  $fluent2-base-icon-margin: 8px !default;
+  $fluent2-tab-nav-button-icon-width: 16px !default;
+  $fluent2-tab-nav-button-icon-height: 16px !default;
+  $fluent2-tab-nav-button-icon-font-size: 16px !default;
+  $fluent2-tab-nav-button-content-padding: 0 4px !default;
+  $fluent2-tab-vertical-nav-button-content-padding: 4px 0 !default;
+  $fluent2-badge-min-size: 16px !default;
+}

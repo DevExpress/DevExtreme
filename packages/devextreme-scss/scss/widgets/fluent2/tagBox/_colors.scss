@@ -1,0 +1,44 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+@use "../color" as extcolor;
+@use "../textEditor/colors" as *;
+
+// adduse
+
+/**
+* $name 10. Tag text color
+* $type color
+*/
+$tagbox-tag-color: $base-text-color !default;
+
+/**
+* $name 20. Tag background color
+* $type color
+*/
+$tagbox-tag-bg: null !default;
+$tagbox-tag-hover-bg: $base-typography-bg !default;
+
+/**
+* $name 30. Tag active text color
+* $type color
+*/
+$tagbox-tag-active-color: $base-text-color !default;
+
+/**
+* $name 40. Tag close button color
+* $type color
+*/
+$tagbox-tag-button-remove-bg: $base-icon-color !default;
+$tagbox-tag-border-color-focused: $base-accent-active !default;
+$tagbox-select-all-border-color: $base-border-color !default;
+$tagbox-tag-foreground-disabled: $base-foreground-disabled !default;
+$tagbox-tag-disabled: $base-background-disabled !default;
+
+@if $mode == "light" {
+  $tagbox-tag-bg: darken($base-hover-bg, 1.96) !default;
+}
+
+@if $mode == "dark" {
+  $tagbox-tag-bg: darken($base-element-bg, 12.16) !default;
+}

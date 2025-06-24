@@ -1,0 +1,75 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/treeView" as *;
+@use "../../base/icons" as *;
+@use "../checkBox/colors" as *;
+
+.dx-treeview-custom-expand-icon,
+.dx-treeview-custom-collapse-icon {
+  @include dx-icon-sizing($fluent2-base-icon-size);
+}
+
+.dx-treeview-item-with-checkbox {
+  &.dx-state-focused > .dx-treeview-item {
+    .dx-checkbox {
+      .dx-checkbox-icon {
+        border-color: $checkbox-accent-color-focused;
+      }
+
+      &.dx-checkbox-checked {
+        .dx-checkbox-icon {
+          background-color: $checkbox-accent-color-focused;
+        }
+      }
+
+      &.dx-checkbox-indeterminate {
+        .dx-checkbox-icon::before {
+          background-color: $checkbox-accent-color-focused;
+        }
+      }
+    }
+  }
+}
+
+@include default-expander-icon(
+  'chevrondown',
+  'chevronright',
+  $fluent2-base-icon-size,
+  $fluent2-treeview-toggle-item-width,
+  $treeview-spin-icon-color,
+);
+@include treeview-item(
+  $fluent2-treeview-item-element-gap,
+  $fluent2-treeview-item-padding,
+  $fluent2-base-icon-size,
+  $treeview-hover-bg,
+  $treeview-item-hover-color,
+  $treeview-item-selected-color,
+  $fluent2-treeview-toggle-item-width + $fluent2-treeview-item-element-gap,
+  $fluent2-treeview-item-margin,
+  $fluent2-treeview-item-border-radius,
+);
+@include treeview-checkbox(
+  $fluent2-checkbox-container-size,
+  $base-text-color,
+  $checkbox-border-color-focused,
+  $treeview-item-selected-color,
+  $treeview-item-selected-bg,
+  $treeview-focused-bg,
+  $treeview-focus-color,
+  $fluent2-treeview-item-border-radius
+);
+@include treeview-aux-items(
+  $fluent2-treeview-searchbox-margin-bottom,
+  $fluent2-treeview-search-editor-height,
+  $treeview-border-color,
+  $fluent2-select-all-item-padding,
+  $fluent2-treeview-item-element-gap,
+  $fluent2-select-all-item-border-visible-padding,
+  $fluent2-treeview-container-padding,
+  $fluent2-treeview-load-indicator-size,
+);

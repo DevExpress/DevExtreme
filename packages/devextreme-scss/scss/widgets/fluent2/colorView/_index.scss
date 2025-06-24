@@ -1,0 +1,123 @@
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/colorView/mixins" as *;
+@use "../../base/colorView";
+
+// adduse
+
+
+@include dx-base-colorview-styles($colorview-handle-color, $colorview-handle-border-color);
+
+
+$fluent2-colorview-alpha-width: $fluent2-colorview-palette-width + 4;
+$fluent2-colorview-hue-scale-height: $fluent2-colorview-palette-height;
+
+.dx-colorview-container {
+  width: $fluent2-colorview-container-width;
+
+  label {
+    line-height: $fluent2-colorview-container-line-height;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+    &.dx-colorview-label-hex {
+      margin: $fluent2-colorview-container-hex-margin;
+    }
+
+    &.dx-colorview-alpha-channel-label {
+      margin: 0 0 0 $fluent2-colorview-container-alpha-label-margin;
+      width: $fluent2-colorview-container-alpha-label-width;
+    }
+
+    .dx-texteditor {
+      width: $fluent2-colorview-container-textbox-width;
+      margin: $fluent2-colorview-container-textbox-margin;
+    }
+  }
+}
+
+.dx-colorview-hue-scale-cell {
+  margin-left: $fluent2-colorview-hue-scale-margin;
+}
+
+.dx-colorview-palette {
+  width: $fluent2-colorview-palette-width;
+  height: $fluent2-colorview-palette-height;
+}
+
+.dx-colorview-alpha-channel-scale {
+  width: $fluent2-colorview-palette-width;
+}
+
+.dx-colorview-container-row.dx-colorview-alpha-channel-row {
+  margin-top: $fluent2-colorview-alpha-margin;
+  display: flex;
+  align-items: center;
+}
+
+.dx-colorview-hue-scale {
+  width: $fluent2-colorview-hue-scale-width;
+  height: $fluent2-colorview-hue-scale-height;
+}
+
+.dx-colorview-alpha-channel-cell {
+  width: $fluent2-colorview-alpha-width;
+}
+
+.dx-colorview-hue-scale-wrapper {
+  height: $fluent2-colorview-hue-scale-height + 2;
+}
+
+.dx-colorview-color-preview {
+  width: 100%;
+  height: $fluent2-colorview-color-preview-height;
+}
+
+.dx-colorview-controls-container {
+  width: $fluent2-colorview-controls-container-width;
+  margin-left: $fluent2-colorview-controls-container-margin;
+}
+
+.dx-colorview-container label { // stylelint-disable-line no-duplicate-selectors
+  color: $colorview-label-color;
+}
+
+.dx-colorview-palette-cell,
+.dx-colorview-alpha-channel-border,
+.dx-colorview-hue-scale-wrapper,
+.dx-colorview-color-preview-container {
+  padding: 1px;
+  margin: 1px;
+  margin-top: 0;
+  background-color: $colorbox-palette-cell-bg;
+  box-shadow: 0 0 0 1px $colorview-border-color;
+}
+
+.dx-colorview-color-preview-container {
+  margin-bottom: $fluent2-colorview-preview-container-margin;
+}
+
+.dx-rtl {
+  .dx-colorview-controls-container {
+    margin-left: 0;
+    margin-right: $fluent2-colorview-controls-container-margin;
+  }
+
+  .dx-colorview-hue-scale-cell {
+    margin-left: 0;
+    margin-right: $fluent2-colorview-hue-scale-margin;
+  }
+
+  .dx-colorview-container {
+    label {
+      &.dx-colorview-alpha-channel-label {
+        margin-left: 0;
+        margin-right: $fluent2-colorview-container-alpha-label-margin;
+      }
+    }
+  }
+}

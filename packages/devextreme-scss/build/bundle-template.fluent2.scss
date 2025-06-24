@@ -1,0 +1,12 @@
+@use "../widgets/fluent2/colors" with ($color: "$COLOR", $mode: "$MODE");
+@use "../widgets/fluent2/sizes" with ($size: "$SIZE");
+@use "../widgets/fluent2/typography";
+@use "../widgets/fluent2/icons";
+@use "../widgets/fluent2/widget";
+@use "../widgets/fluent2/card";
+@use "../widgets/fluent2/fieldset";
+@use "../widgets/fluent2/common";
+@use "../widgets/base/resizable";
+@use "../widgets/base/draggable";
+@use "../widgets/base/ui";
+@use "../widgets/fluent2";

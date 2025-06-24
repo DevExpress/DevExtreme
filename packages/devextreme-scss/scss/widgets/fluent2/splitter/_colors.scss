@@ -1,0 +1,57 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+/**
+* $name 10. Icon color
+* $type color
+*/
+$splitter-resize-handle-color: null !default;
+
+/**
+* $name 30. Focused state icon color
+* $type color
+*/
+$splitter-resize-handle-color-focused: null !default;
+
+/**
+* $name 40. Handle background color
+* $type color
+*/
+$splitter-resize-handle-bg: null !default;
+
+/**
+* $name 50. Handle hover state background color
+* $type color
+*/
+$splitter-resize-handle-bg-hover: null !default;
+
+/**
+* $name 60. Handle focused state background color
+* $type color
+*/
+$splitter-resize-handle-bg-focused: $base-accent !default;
+
+@if $mode == 'light' {
+  $splitter-resize-handle-color: $base-icon-color !default;
+  $splitter-resize-handle-color-focused: $base-inverted-text-color !default;
+
+  $splitter-resize-handle-bg: $base-border-color !default;
+  $splitter-resize-handle-bg-hover: $base-border-color-hover !default;
+}
+
+@if $mode == 'dark' {
+  $splitter-resize-handle-color: $base-text-color !default;
+  $splitter-resize-handle-color-focused: $base-inverted-text-color !default;
+
+  $splitter-resize-handle-bg: $base-border-color !default;
+  $splitter-resize-handle-bg-hover: $base-border-color-hover !default;
+}
+
+/**
+* $name 20. Hover state icon color
+* $type color
+*/
+$splitter-resize-handle-color-hover: $splitter-resize-handle-color !default;

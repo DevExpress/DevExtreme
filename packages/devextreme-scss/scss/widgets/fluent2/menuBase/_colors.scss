@@ -1,0 +1,8 @@
+@use "sass:color";
+@use "../sizes" as *;
+@use "../colors" as *;
+
+// adduse
+
+$menu-item-color-disabled: $base-foreground-disabled;
+

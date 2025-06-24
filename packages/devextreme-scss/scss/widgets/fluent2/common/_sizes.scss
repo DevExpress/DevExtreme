@@ -1,0 +1,33 @@
+@use "sass:math";
+@use "../sizes" as *;
+@use "./colors" as *;
+
+// adduse
+
+$fluent2-line-height: null !default;
+
+$fluent2-inline-borderedwidget-inner-size:
+  $fluent2-base-inline-widget-height -
+  $fluent2-base-border-width * 2 !default;
+
+$fluent2-invalid-badge-size: $fluent2-base-icon-size - 2px !default;
+$fluent2-invalid-badge-horizontal-padding: math.div($fluent2-inline-borderedwidget-inner-size - $fluent2-invalid-badge-size, 2) !default;
+$fluent2-invalid-badge-halfhorizontal-padding: math.div($fluent2-invalid-badge-horizontal-padding, 2) !default;
+
+$fluent2-valid-badge-font-size: $fluent2-base-font-size + 6px !default;
+
+$fluent2-base-dropdown-widgets-shadow: null !default;
+
+@if $size == "default" {
+  $fluent2-line-height: 1.428571 !default;
+  $fluent2-base-dropdown-widgets-shadow: 0 0 2px 0 $base-dropdown-shadow-color1, 0 8px 16px 0 $base-dropdown-shadow-color2 !default;
+}
+
+@else if $size == "compact" {
+  $fluent2-line-height: 1.3333 !default;
+  $fluent2-base-dropdown-widgets-shadow: 0 0 2px 0 $base-dropdown-shadow-color1, 0 4px 8px 0 $base-dropdown-shadow-color2 !default;
+}
+
+:root {
+  --dx-line-height: #{$fluent2-line-height};
+}
