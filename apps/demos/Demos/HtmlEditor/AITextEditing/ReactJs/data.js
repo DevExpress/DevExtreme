@@ -70,8 +70,5 @@ export const markup = `
         <li>Tables support</li>
     </ul>
 `;
-export const extractKeywordsCommand = {
-  name: 'custom',
-  text: 'Extract Keywords',
-  prompt: () => 'Extract a list of keywords from the text and return it as a comma-separated string',
-};
+export const extractKeywordsPrompt = () =>
+  'Extract a list of keywords from the text and return it as a comma-separated string';

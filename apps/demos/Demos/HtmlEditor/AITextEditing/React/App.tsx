@@ -1,6 +1,6 @@
 import React from 'react';
 import HtmlEditor, { Toolbar, ToolbarItem, Command } from 'devextreme-react/html-editor';
-import { markup,extractKeywordsCommand, aiIntegration } from './data.ts';
+import { markup, extractKeywordsPrompt, aiIntegration } from './data.ts';
 
 export default function App() {
   return (
@@ -19,7 +19,11 @@ export default function App() {
           <Command name="changeTone" />
           <Command name="translate" />
           <Command name="askAI" />
-          <Command {...extractKeywordsCommand} />
+          <Command
+            name="custom"
+            text="Extract Keywords"
+            prompt={extractKeywordsPrompt}
+          />
         </ToolbarItem>
         <ToolbarItem name="separator" />
         <ToolbarItem name="undo" />

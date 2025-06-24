@@ -9,7 +9,7 @@ import {
 } from 'devextreme-angular/common/ai-integration';
 import { AzureOpenAI, OpenAI } from 'openai';
 import { Service } from './app.service';
-import { AICommand } from 'devextreme/ui/html_editor';
+import { AICustomCommand } from 'devextreme/ui/html_editor';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -39,13 +39,13 @@ export class AppComponent {
 
   aiIntegration: AIIntegration;
 
-  extractKeywordsCommand: AICommand;
+  extractKeywordsPrompt: AICustomCommand['prompt'];
 
   valueContent: string;
 
   constructor(service: Service) {
     this.azureOpenAIConfig = service.getAzureOpenAIConfig();
-    this.extractKeywordsCommand = service.getCustomCommand();
+    this.extractKeywordsPrompt = service.getPrompt();
     this.valueContent = service.getMarkup();
 
     this.aiService = new AzureOpenAI(this.azureOpenAIConfig);

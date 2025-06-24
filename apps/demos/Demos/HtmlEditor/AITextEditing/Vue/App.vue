@@ -14,7 +14,11 @@
         <DxCommand name="changeTone"/>
         <DxCommand name="translate"/>
         <DxCommand name="askAI"/>
-        <DxCommand v-bind="extractKeywordsCommand"/>
+        <DxCommand
+          name="custom"
+          text="Extract Keywords"
+          :prompt="extractKeywordsPrompt"
+        />
       </DxToolbarItem>
       <DxToolbarItem name="separator"/>
       <DxToolbarItem name="undo"/>
@@ -34,7 +38,7 @@ import { AzureOpenAI, OpenAI } from 'openai';
 import {
   markup,
   AzureOpenAIConfig,
-  extractKeywordsCommand,
+  extractKeywordsPrompt,
 } from './data.ts';
 
 type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
