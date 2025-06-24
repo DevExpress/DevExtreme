@@ -39,12 +39,12 @@ import {
  Paging,
  RemoteOperations,
  SelectionConfiguration,
- Toolbar,
+ dxCardViewToolbar,
  CardHeaderItem,
  CardHeaderPredefinedItem,
  EditingTexts,
  PredefinedToolbarItem,
- ToolbarItem,
+ dxCardViewToolbarItem,
 } from "devextreme/ui/card_view";
 import {
  Mode,
@@ -357,7 +357,7 @@ const componentConfig = {
     selection: Object as PropType<SelectionConfiguration | Record<string, any>>,
     sorting: Object as PropType<Sorting | Record<string, any>>,
     tabIndex: Number,
-    toolbar: Object as PropType<Toolbar | Record<string, any>>,
+    toolbar: Object as PropType<dxCardViewToolbar | Record<string, any>>,
     visible: Boolean,
     width: [Number, String],
     wordWrapEnabled: Boolean
@@ -3112,7 +3112,7 @@ const DxToolbarConfig = {
   },
   props: {
     disabled: Boolean,
-    items: Array as PropType<Array<PredefinedToolbarItem | ToolbarItem>>,
+    items: Array as PropType<Array<dxCardViewToolbarItem | PredefinedToolbarItem>>,
     multiline: Boolean,
     visible: Boolean
   }

@@ -86,19 +86,25 @@ export type RemoteOperations = {
 export type PredefinedToolbarItem = 'columnChooserButton' | 'searchPanel' | 'addCardButton' | 'selectAllButton' | 'clearSelectionButton';
 
 /**
- * @docid
+ * @namespace DevExpress.ui
+ * @deprecated Use ToolbarItem instead
+ */
+export type dxCardViewToolbarItem = ToolbarItem;
+
+/**
+ * @docid dxCardViewToolbarItem
  * @inherits dxToolbarItem
  * @public
  * @namespace DevExpress.ui.dxCardView
  */
 export type ToolbarItem = dxToolbarItem & {
     /**
-     * @docid
+     * @docid dxCardViewToolbarItem.name
      * @public
      */
     name?: PredefinedToolbarItem | string;
     /**
-     * @docid
+     * @docid dxCardViewToolbarItem.location
      * @default 'after'
      * @public
      */
@@ -106,30 +112,37 @@ export type ToolbarItem = dxToolbarItem & {
 };
 
 /**
- * @docid
+ * @namespace DevExpress.ui
+ * @deprecated Use Toolbar instead
+ */
+export type dxCardViewToolbar = Toolbar;
+
+/**
+ * @docid dxCardViewToolbar
  * @public
  * @namespace DevExpress.ui.dxCardView
  */
 export type Toolbar = {
     /**
-     * @docid
+     * @docid dxCardViewToolbar.items
+     * @type Array<Enums.PredefinedToolbarItem,dxCardViewToolbarItem>
      * @public
      */
     items?: Array<PredefinedToolbarItem | ToolbarItem>;
     /**
-     * @docid
+     * @docid dxCardViewToolbar.visible
      * @default undefined
      * @public
      */
     visible?: boolean | undefined;
     /**
-     * @docid
+     * @docid dxCardViewToolbar.disabled
      * @default false
      * @public
      */
     disabled?: boolean;
     /**
-     * @docid
+     * @docid dxCardViewToolbar.multiline
      * @default false
      * @public
      */
@@ -1537,6 +1550,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
 
     /**
      * @docid
+     * @type dxCardViewToolbar
      * @public
      */
     toolbar?: Toolbar;
