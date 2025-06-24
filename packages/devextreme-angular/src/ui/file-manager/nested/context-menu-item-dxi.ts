@@ -9,7 +9,8 @@ import {
     Input,
     ContentChildren,
     forwardRef,
-    QueryList
+    QueryList,
+    AfterContentInit
 } from '@angular/core';
 
 
@@ -33,7 +34,7 @@ import { DxiFileManagerItemComponent } from './item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
-export class DxiFileManagerContextMenuItemComponent extends CollectionNestedOption {
+export class DxiFileManagerContextMenuItemComponent extends CollectionNestedOption implements AfterContentInit  {
     @Input()
     get beginGroup(): boolean {
         return this._getOption('beginGroup');
@@ -120,13 +121,20 @@ export class DxiFileManagerContextMenuItemComponent extends CollectionNestedOpti
     }
 
 
-    @ContentChildren(forwardRef(() => DxiFileManagerItemComponent))
-    get itemsChildren(): QueryList<DxiFileManagerItemComponent> {
-        return this._getOption('items');
+    @ContentChildren(forwardRef(() => DxiFileManagerItemComponent)) itemsChildren!: QueryList<DxiFileManagerItemComponent>
+    
+    @ContentChildren(forwardRef(() => DxiFileManagerContextMenuItemComponent)) contextMenuItemsChildren!: QueryList<DxiFileManagerContextMenuItemComponent>
+    
+    setItems() {
+        const q: QueryList<any> = new QueryList();
+        q.reset([
+            ...this.itemsChildren.toArray(),
+            ...this.contextMenuItemsChildren.toArray(),
+        ]);
+        this.setChildren('items', q);
     }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
+
+
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -141,6 +149,12 @@ export class DxiFileManagerContextMenuItemComponent extends CollectionNestedOpti
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
+    ngAfterContentInit() {
+        this.setItems();
+        
+        this.itemsChildren.changes.subscribe(() => { this.setItems() });
+        this.contextMenuItemsChildren.changes.subscribe(() => { this.setItems() });
+    }
 }
 
 @NgModule({

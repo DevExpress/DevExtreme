@@ -674,6 +674,14 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption implement
 
 
 
+    @ContentChildren(forwardRef(() => DxiDataGridColumnComponent))
+    get columnsChildren(): QueryList<DxiDataGridColumnComponent> {
+        return this._getOption('columns');
+    }
+    set columnsChildren(value) {
+        this.setChildren('columns', value);
+    }
+
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
