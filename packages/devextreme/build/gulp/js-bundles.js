@@ -30,15 +30,44 @@ const DEBUG_BUNDLES = BUNDLES.concat([ '/bundles/dx.custom.js' ]);
 
 const processBundles = (bundles, pathPrefix) => bundles.map((bundle) => pathPrefix + bundle);
 const muteWebPack = () => undefined;
-const getWebpackConfig = () => env.BUILD_INTERNAL_PACKAGE || env.BUILD_TEST_INTERNAL_PACKAGE ?
+const getWebpackConfig = (mode = webpackConfig.mode) => env.BUILD_INTERNAL_PACKAGE || env.BUILD_TEST_INTERNAL_PACKAGE ?
     Object.assign({
         plugins: [
             new webpack.NormalModuleReplacementPlugin(/(.*)\/license_validation/, resource => {
                 resource.request = resource.request.replace('license_validation', 'license_validation_internal');
-            })
+            }),
+            ...(mode === 'production' ?
+                [ new webpack.NormalModuleReplacementPlugin(
+                    /(.*)\/state_manager/,
+                    (resource) => {
+                        if (resource.request.includes('state_manager/production')) {
+                            return;
+                        }
+
+                        const newRequest = resource.request.replace('state_manager/index', 'state_manager/production');
+
+                        resource.request = newRequest;
+                    }
+                )] : []),
         ]
     }, webpackConfig) :
-    webpackConfig;
+    Object.assign({
+        plugins: [
+            ...(mode === 'development' ?
+                [ new webpack.NormalModuleReplacementPlugin(
+                    /(.*)\/reactive/,
+                    (resource) => {
+                        if (resource.request.includes('reactive/development')) {
+                            return;
+                        }
+
+                        const newRequest = resource.request.replace('reactive/index', 'reactive/development');
+
+                        resource.request = newRequest;
+                    }
+                )] : [])
+        ]
+    }, webpackConfig) ;
 
 const bundleProdPipe = lazyPipe()
     .pipe(named)
@@ -62,14 +91,15 @@ gulp.task('js-bundles-prod',
 );
 
 function prepareDebugMeta(watch) {
-    const debugConfig = Object.assign({ watch }, getWebpackConfig());
+    const mode = watch ? 'development' : 'production';
+    const debugConfig = Object.assign({ watch }, getWebpackConfig(mode));
     const bundlesPath = ctx.TRANSPILED_PROD_RENOVATION_PATH;
 
     const bundles = processBundles(DEBUG_BUNDLES, bundlesPath);
 
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;
-    debugConfig.mode = watch ? 'development' : 'production';
+    debugConfig.mode = mode;
     debugConfig.optimization.minimize = false;
 
     if(!ctx.uglify) {

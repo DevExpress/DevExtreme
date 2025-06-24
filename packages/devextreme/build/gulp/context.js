@@ -19,5 +19,6 @@ module.exports = {
     TRANSPILED_RENOVATION_PATH: 'artifacts/transpiled-renovation',
     TRANSPILED_PROD_ESM_PATH: 'artifacts/transpiled-esm-npm',
     SCSS_PACKAGE_PATH: '../devextreme-scss',
-    EULA_URL: 'https://js.devexpress.com/Licensing/'
+    EULA_URL: 'https://js.devexpress.com/Licensing/',
+    BUILD_MODE: argv.uglify ? 'production' : 'development',
 };

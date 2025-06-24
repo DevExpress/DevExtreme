@@ -770,6 +770,9 @@ importers:
       '@types/react-dom':
         specifier: 18.0.0
         version: 18.0.0
+      http-server:
+        specifier: 14.1.1
+        version: 14.1.1
       prop-types:
         specifier: 15.8.1
         version: 15.8.1
@@ -785,6 +788,9 @@ importers:
       typescript:
         specifier: 4.9.5
         version: 4.9.5
+      webpack:
+        specifier: 5.96.1
+        version: 5.96.1(@swc/core@1.9.2(@swc/helpers@0.5.15))(esbuild@0.18.20)
 
   apps/vue:
     dependencies:
@@ -17579,22 +17585,6 @@ packages:
   ternary-stream@3.0.0:
     resolution: {integrity: sha512-oIzdi+UL/JdktkT+7KU5tSIQjj8pbShj3OASuvDEhm0NT5lppsm7aXWAmAq4/QMaBIyfuEcNLbAQA+HpaISobQ==}
 
-  terser-webpack-plugin@5.3.10:
-    resolution: {integrity: sha512-BKFPWlPDndPs+NGGCr1U59t0XScL5317Y0UReNrHaw9/FwhPENlq6bfgs+4yPfyP51vqC1bQ4rp1EfXW5ZSH9w==}
-    engines: {node: '>= 10.13.0'}
-    peerDependencies:
-      '@swc/core': '*'
-      esbuild: '*'
-      uglify-js: '*'
-      webpack: ^5.1.0
-    peerDependenciesMeta:
-      '@swc/core':
-        optional: true
-      esbuild:
-        optional: true
-      uglify-js:
-        optional: true
-
   terser-webpack-plugin@5.3.14:
     resolution: {integrity: sha512-vkZjpUjb6OMS7dhV+tILUW6BhpDR7P2L/aQSAv+Uwk+m8KATX9EccViHTJR2qDtACKPIYndLGCyl3FMo+r2LMw==}
     engines: {node: '>= 10.13.0'}
@@ -24389,13 +24379,15 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))':
+  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.15)
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
+    transitivePeerDependencies:
+      - '@swc/helpers'
 
   '@parcel/codeframe@2.12.0':
     dependencies:
@@ -24455,7 +24447,7 @@ snapshots:
   '@parcel/core@2.12.0(@swc/helpers@0.5.15)':
     dependencies:
       '@mischnic/json-sourcemap': 0.1.1
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/diagnostic': 2.12.0
       '@parcel/events': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -24870,7 +24862,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -26631,7 +26623,7 @@ snapshots:
 
   '@types/eslint-scope@3.7.7':
     dependencies:
-      '@types/eslint': 9.6.1
+      '@types/eslint': 8.56.2
       '@types/estree': 1.0.6
 
   '@types/eslint-visitor-keys@1.0.0': {}
@@ -26645,6 +26637,7 @@ snapshots:
     dependencies:
       '@types/estree': 1.0.6
       '@types/json-schema': 7.0.15
+    optional: true
 
   '@types/estree@0.0.38': {}
 
@@ -30611,7 +30604,7 @@ snapshots:
       object-keys: 1.1.1
       object.assign: 4.1.5
       regexp.prototype.flags: 1.5.3
-      side-channel: 1.0.6
+      side-channel: 1.1.0
       which-boxed-primitive: 1.0.2
       which-collection: 1.0.2
       which-typed-array: 1.1.15
@@ -41304,28 +41297,17 @@ snapshots:
       merge-stream: 2.0.0
       through2: 3.0.2
 
-  terser-webpack-plugin@5.3.10(@swc/core@1.9.2(@swc/helpers@0.5.15))(esbuild@0.18.20)(webpack@5.96.1(@swc/core@1.9.2(@swc/helpers@0.5.15))(esbuild@0.18.20)):
+  terser-webpack-plugin@5.3.14(@swc/core@1.9.2(@swc/helpers@0.5.15))(esbuild@0.18.20)(webpack@5.96.1(@swc/core@1.9.2(@swc/helpers@0.5.15))(esbuild@0.18.20)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       jest-worker: 27.5.1
-      schema-utils: 3.3.0
+      schema-utils: 4.3.2
       serialize-javascript: 6.0.2
       terser: 5.39.0
       webpack: 5.96.1(@swc/core@1.9.2(@swc/helpers@0.5.15))(esbuild@0.18.20)
     optionalDependencies:
       '@swc/core': 1.9.2(@swc/helpers@0.5.15)
       esbuild: 0.18.20
-
-  terser-webpack-plugin@5.3.10(@swc/core@1.9.2(@swc/helpers@0.5.15))(webpack@5.96.1(@swc/core@1.9.2(@swc/helpers@0.5.15))):
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.25
-      jest-worker: 27.5.1
-      schema-utils: 3.3.0
-      serialize-javascript: 6.0.2
-      terser: 5.39.0
-      webpack: 5.96.1(@swc/core@1.9.2(@swc/helpers@0.5.15))
-    optionalDependencies:
-      '@swc/core': 1.9.2(@swc/helpers@0.5.15)
 
   terser-webpack-plugin@5.3.14(@swc/core@1.9.2(@swc/helpers@0.5.15))(esbuild@0.20.1)(webpack@5.94.0(@swc/core@1.9.2(@swc/helpers@0.5.15))(esbuild@0.20.1)):
     dependencies:
@@ -41372,6 +41354,17 @@ snapshots:
       serialize-javascript: 6.0.2
       terser: 5.39.0
       webpack: 5.94.0(@swc/core@1.9.2(@swc/helpers@0.5.15))(webpack-cli@5.1.4)
+    optionalDependencies:
+      '@swc/core': 1.9.2(@swc/helpers@0.5.15)
+
+  terser-webpack-plugin@5.3.14(@swc/core@1.9.2(@swc/helpers@0.5.15))(webpack@5.96.1(@swc/core@1.9.2(@swc/helpers@0.5.15))):
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.25
+      jest-worker: 27.5.1
+      schema-utils: 4.3.2
+      serialize-javascript: 6.0.2
+      terser: 5.39.0
+      webpack: 5.96.1(@swc/core@1.9.2(@swc/helpers@0.5.15))
     optionalDependencies:
       '@swc/core': 1.9.2(@swc/helpers@0.5.15)
 
@@ -42699,7 +42692,7 @@ snapshots:
 
   union@0.5.0:
     dependencies:
-      qs: 6.13.1
+      qs: 6.14.0
 
   unique-filename@3.0.0:
     dependencies:
@@ -43691,7 +43684,7 @@ snapshots:
       '@webassemblyjs/wasm-edit': 1.14.1
       '@webassemblyjs/wasm-parser': 1.14.1
       acorn: 8.14.0
-      browserslist: 4.24.2
+      browserslist: 4.24.4
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.17.1
       es-module-lexer: 1.5.4
@@ -43705,7 +43698,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 3.3.0
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.10(@swc/core@1.9.2(@swc/helpers@0.5.15))(webpack@5.96.1(@swc/core@1.9.2(@swc/helpers@0.5.15)))
+      terser-webpack-plugin: 5.3.14(@swc/core@1.9.2(@swc/helpers@0.5.15))(webpack@5.96.1(@swc/core@1.9.2(@swc/helpers@0.5.15)))
       watchpack: 2.4.2
       webpack-sources: 3.2.3
     transitivePeerDependencies:
@@ -43721,7 +43714,7 @@ snapshots:
       '@webassemblyjs/wasm-edit': 1.14.1
       '@webassemblyjs/wasm-parser': 1.14.1
       acorn: 8.14.0
-      browserslist: 4.24.2
+      browserslist: 4.24.4
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.17.1
       es-module-lexer: 1.5.4
@@ -43735,7 +43728,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 3.3.0
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.10(@swc/core@1.9.2(@swc/helpers@0.5.15))(esbuild@0.18.20)(webpack@5.96.1(@swc/core@1.9.2(@swc/helpers@0.5.15))(esbuild@0.18.20))
+      terser-webpack-plugin: 5.3.14(@swc/core@1.9.2(@swc/helpers@0.5.15))(esbuild@0.18.20)(webpack@5.96.1(@swc/core@1.9.2(@swc/helpers@0.5.15))(esbuild@0.18.20))
       watchpack: 2.4.2
       webpack-sources: 3.2.3
     transitivePeerDependencies:
