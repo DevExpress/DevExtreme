@@ -32,13 +32,11 @@ import type { dxPopupAnimation, Properties, ToolbarItem } from '@js/ui/popup';
 import Resizable from '@js/ui/resizable';
 import { isFluent, isMaterial, isMaterialBased } from '@js/ui/themes';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
+import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Overlay from '@ts/ui/overlay/m_overlay';
 import * as zIndexPool from '@ts/ui/overlay/m_z_index';
 
-import windowUtils from '../../core/utils/m_window';
-import Toolbar from '../toolbar/m_toolbar';
-import ToolbarBase from '../toolbar/m_toolbar.base';
 import PopupDrag from './m_popup_drag';
 import type { OverflowManager } from './m_popup_overflow_manager';
 import { createBodyOverflowManager } from './m_popup_overflow_manager';
@@ -619,8 +617,9 @@ class Popup<
   }
 
   _updateToolbarOptions(toolbar: string, options: Partial<ToolbarProperties>): void {
-    const toolbarClass = this._getToolbarName() === TOOLBAR_NAME_BASE ? ToolbarBase : Toolbar;
-    const toolbarInstance = toolbarClass.getInstance(toolbar === 'top' ? this._$topToolbar : this._$bottomToolbar);
+    const $element = toolbar === 'top' ? this._$topToolbar : this._$bottomToolbar;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const toolbarInstance = $element![this._getToolbarName()]('instance');
 
     toolbarInstance?.option(options);
   }
