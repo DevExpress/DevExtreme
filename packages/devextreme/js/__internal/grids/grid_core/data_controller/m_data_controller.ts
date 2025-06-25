@@ -1007,7 +1007,12 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       return false;
     }
 
-    const compareFields = ['modified', 'isNewRow', 'removed', 'isEditing', 'rowIndex'];
+    const compareFields = ['modified', 'isNewRow', 'removed', 'isEditing'];
+
+    if (this.option('rowAlternationEnabled')) {
+      compareFields.push('rowIndex');
+    }
+
     if (compareFields.some((field) => item1[field] !== item2[field])) {
       return false;
     }
