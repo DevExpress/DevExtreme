@@ -285,15 +285,13 @@ class MessageList extends Widget<Properties> {
 
     const buttons: ContextMenuItem[] = [];
 
-    if (allowUpdating(message) && message.type !== 'image') {
+    if (allowUpdating(message)) {
       buttons.push({
         icon: 'edit',
         text: editText,
         disabled: isEditActionDisabled(message),
         onClick: (e: ItemClick): void => {
-          const onMessageEditStarted = onMessageEditingStart?.({
-            event: e.event, message: message as TextMessage,
-          });
+          const onMessageEditStarted = onMessageEditingStart?.({ event: e.event, message });
 
           const onContextMenuHidden = (): void => {
             this._contextMenu.off('hidden', onContextMenuHidden);
@@ -621,13 +619,10 @@ class MessageList extends Widget<Properties> {
       const bubble = MessageBubble.getInstance($targetMessage);
       bubble.option(data);
 
-      if (data.type !== 'image') {
-        const $currentMessageGroup = $targetMessage.closest(`.${CHAT_MESSAGEGROUP_CLASS}`);
-        const group: MessageGroup = MessageGroup.getInstance($currentMessageGroup);
-        const isEdited = (data as TextMessage).isEdited === true && !data.isDeleted;
+      const isEdited = data.isEdited === true && !data.isDeleted;
+      const group = this._getMessageGroupByBubbleElement($targetMessage);
 
-        group._updateMessageEditedText($targetMessage, isEdited);
-      }
+      group._updateMessageEditedText($targetMessage, isEdited);
     }
   }
 

@@ -5,7 +5,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { isDate, isDefined } from '@js/core/utils/type';
-import type { ImageMessage, Message, TextMessage } from '@js/ui/chat';
+import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -128,16 +128,9 @@ class MessageGroup extends Widget<Properties> {
 
     const { messageTemplate } = this.option();
 
-    if (message.type === 'image') {
-      options.alt = (message as ImageMessage).alt;
-      options.src = (message as ImageMessage).src;
-    } else {
-      options.text = (message as TextMessage).text;
-    }
-
     if (messageTemplate) {
       options.template = (messageData, container): void => {
-        messageTemplate({ ...message, ...messageData }, container);
+        messageTemplate({ ...message, messageData }, container);
       };
     }
 
@@ -148,9 +141,7 @@ class MessageGroup extends Widget<Properties> {
     this._$messageBubbleContainer = $('<div>').addClass(CHAT_MESSAGEGROUP_CONTENT_CLASS);
 
     items.forEach((message, index) => {
-      const shouldCreateEditedElement = index !== 0 && message.type !== 'image' && (message as TextMessage).isEdited === true && !message.isDeleted;
-
-      if (shouldCreateEditedElement) {
+      if (index !== 0 && message.isEdited === true && !message.isDeleted) {
         const $edited = this._createEditedElement();
 
         $edited.appendTo(this._$messageBubbleContainer);
@@ -167,7 +158,7 @@ class MessageGroup extends Widget<Properties> {
     const { timestamp, author } = message;
     const isEdited = isDefined(shouldRenderEditedMessage)
       ? shouldRenderEditedMessage
-      : message.type !== 'image' && (message as TextMessage).isEdited;
+      : message.isEdited;
     const isAlignmentStart = this._isAlignmentStart();
 
     this.$element().find(`.${CHAT_MESSAGEGROUP_INFORMATION_CLASS}`).remove();

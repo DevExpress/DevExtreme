@@ -75,13 +75,3 @@ export const generateMessages = (
 
   return messages;
 };
-
-export const generateImageMessage = (
-  user: User,
-  src: string,
-): Message => ({
-  timestamp,
-  author: user,
-  type: 'image',
-  src,
-});

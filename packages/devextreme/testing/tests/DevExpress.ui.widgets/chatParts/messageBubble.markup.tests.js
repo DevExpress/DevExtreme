@@ -5,8 +5,6 @@ import MessageBubble, {
     CHAT_MESSAGEBUBBLE_CLASS,
     CHAT_MESSAGEBUBBLE_CONTENT_CLASS,
     CHAT_MESSAGEBUBBLE_DELETED_CLASS,
-    CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS,
-    CHAT_MESSAGEBUBBLE_IMAGE_CLASS
 } from '__internal/ui/chat/messagebubble';
 
 const moduleConfig = {
@@ -45,16 +43,6 @@ QUnit.module('MessageBubble', moduleConfig, () => {
 
             this.instance.option('isDeleted', false);
             assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBUBBLE_DELETED_CLASS), false, 'root element does not have deleted class');
-        });
-
-        QUnit.test('should have correct classes for image message', function(assert) {
-            this.reinit({ type: 'image', src: '', alt: '' });
-
-            const $content = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CONTENT_CLASS}`);
-            const $img = $content.find('img');
-
-            assert.strictEqual(this.$element.hasClass(CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS), true, 'root has image class');
-            assert.strictEqual($img.hasClass(CHAT_MESSAGEBUBBLE_IMAGE_CLASS), true, 'img has correct class');
         });
     });
 

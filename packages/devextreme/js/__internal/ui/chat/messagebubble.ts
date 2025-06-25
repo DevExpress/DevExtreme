@@ -1,7 +1,6 @@
 import messageLocalization from '@js/common/core/localization/message';
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
-import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import { ICON_CLASS } from '@ts/core/utils/m_icon';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -11,8 +10,6 @@ export const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
 export const CHAT_MESSAGEBUBBLE_DELETED_CLASS = 'dx-chat-messagebubble-deleted';
 export const CHAT_MESSAGEBUBBLE_CONTENT_CLASS = 'dx-chat-messagebubble-content';
 export const CHAT_MESSAGEBUBBLE_ICON_PROHIBITION_CLASS = `${ICON_CLASS}-cursorprohibition`;
-export const CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS = 'dx-has-image';
-export const CHAT_MESSAGEBUBBLE_IMAGE_CLASS = 'dx-chat-messagebubble-image';
 
 export const MESSAGE_DATA_KEY = 'dxMessageData';
 
@@ -21,9 +18,7 @@ export interface Properties extends WidgetOptions<MessageBubble> {
   text?: string;
   isDeleted?: boolean;
   isEdited?: boolean;
-  src?: string;
-  alt?: string;
-  template?: ((message: Message, container: Element) => void) | null;
+  template?: ((message: string, container: Element) => void) | null;
 }
 
 class MessageBubble extends Widget<Properties> {
@@ -54,10 +49,7 @@ class MessageBubble extends Widget<Properties> {
   _updateContent(): void {
     const {
       template,
-      type,
-      text,
-      src,
-      alt,
+      text = '',
       isDeleted = false,
     } = this.option();
 
@@ -67,9 +59,7 @@ class MessageBubble extends Widget<Properties> {
     $bubbleContainer.empty();
 
     if (template) {
-      template({
-        type, text, src, alt,
-      }, getPublicElement($bubbleContainer));
+      template(text, getPublicElement($bubbleContainer));
 
       return;
     }
@@ -91,19 +81,7 @@ class MessageBubble extends Widget<Properties> {
       return;
     }
 
-    switch (type) {
-      case 'image':
-        this.$element().addClass(CHAT_MESSAGEBUBBLE_HAS_IMAGE_CLASS);
-        $('<img>')
-          .attr('src', src ?? '')
-          .attr('alt', alt ?? messageLocalization.format('dxChat-defaultImageAlt'))
-          .addClass(CHAT_MESSAGEBUBBLE_IMAGE_CLASS)
-          .appendTo($bubbleContainer);
-        break;
-      case 'text':
-      default:
-        $bubbleContainer.text(text ?? '');
-    }
+    $bubbleContainer.text(text);
   }
 
   _updateMessageData(property: string, value: string | boolean | undefined): void {
@@ -118,8 +96,6 @@ class MessageBubble extends Widget<Properties> {
 
     switch (name) {
       case 'text':
-      case 'src':
-      case 'alt':
       case 'isDeleted':
         this._updateMessageData(name, value);
         this._updateContent();
