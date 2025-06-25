@@ -12,7 +12,7 @@ export function isValidStatePath(statePath: string): boolean {
 }
 
 export function deepCopy<T extends object>(inputObject: T): T {
-  function iter(value: unknown, visited = new WeakMap<object, unknown>()): unknown {
+  function iter(value: unknown, visited: Map<unknown, unknown>): unknown {
     if (value === null || typeof value !== 'object') {
       return value;
     }
@@ -55,7 +55,7 @@ export function deepCopy<T extends object>(inputObject: T): T {
     return objectCopy;
   }
 
-  const result = iter(inputObject);
+  const result = iter(inputObject, new Map<unknown, unknown>());
 
   return result as T;
 }

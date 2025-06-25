@@ -18,7 +18,7 @@ const CONTROLLER_SIGN = 'Controller';
 function isController(
   instance: unknown,
   controllerSign: string,
-): instance is StateManagementTypes.Controller {
+): instance is StateManagementTypes.StateSource {
   if (instance) {
     return typeof instance === 'object'
          && 'constructor' in instance
@@ -42,38 +42,39 @@ export const setupStateManager = (
 
   const isDevelopmentMode = process.env.NODE_ENV === 'development';
 
-  if (isDevelopmentMode) {
-    try {
-      if (!diContext) {
-        throw new Error('DI context not provided');
-      }
+  if (!isDevelopmentMode) {
+    return undefined;
+  }
 
-      if (!componentName) {
-        throw new Error('Component name not provided');
-      }
-      const stateManager = makeStateManager({
-        componentName,
-        controllerSign,
-        logger,
-      });
-
-      const trackControllerByStateManager: DecoratorFunction = (instance) => {
-        if (isController(instance, controllerSign)) {
-          const controlledId = instance.constructor.name;
-          stateManager.trackControllerState(controlledId, instance);
-        } else {
-          logger.debug(`The '${instance?.constructor?.name}' controller isn't tracked by the state manager because it doesn't match the pattern of a controller with the "${CONTROLLER_SIGN}" sign in its name.`);
-        }
-
-        return instance;
-      };
-
-      diContext.decorator(trackControllerByStateManager);
-
-      return stateManager;
-    } catch (error) {
-      logger.error('Unexpected error while setting up state manager:', error);
+  try {
+    if (!diContext) {
+      throw new Error('DI context not provided');
     }
+
+    if (!componentName) {
+      throw new Error('Component name not provided');
+    }
+    const stateManager = makeStateManager({
+      componentName,
+      stateSourceSign: controllerSign,
+      logger,
+    });
+
+    const trackControllerByStateManager: DecoratorFunction = (instance) => {
+      if (isController(instance, controllerSign)) {
+        stateManager.trackStateOf(instance);
+      } else {
+        logger.debug(`The '${instance?.constructor?.name}' controller isn't tracked by the state manager because it doesn't match the pattern of a controller with the "${CONTROLLER_SIGN}" sign in its name.`);
+      }
+
+      return instance;
+    };
+
+    diContext.decorator(trackControllerByStateManager);
+
+    return stateManager;
+  } catch (error) {
+    logger.error('Unexpected error while setting up state manager:', error);
   }
 
   return undefined;

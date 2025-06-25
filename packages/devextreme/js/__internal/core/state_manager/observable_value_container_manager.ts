@@ -10,29 +10,19 @@ class Observable {
 export class ObservableValueContainerManager implements StateManagementTypes.ValueContainerManager {
   private readonly logger: StateManagementTypes.Logger;
 
-  private readonly controllerSign: string;
+  private readonly stateSourceSign: string;
 
   private readonly valueContainer: StateManagementTypes.ObservableValueContainer;
 
   constructor(
     logger: StateManagementTypes.Logger,
-    controllerSign: string,
-    valueContainer: StateManagementTypes.MaybeObservableValueContainer,
+    stateSourceSign: string,
+    valueContainer: StateManagementTypes.ObservableValueContainer,
   ) {
     this.logger = logger;
-    this.controllerSign = controllerSign;
 
-    if (ObservableValueContainerManager.canHandle(valueContainer)) {
-      this.valueContainer = valueContainer;
-    } else {
-      throw new Error('Invalid value container');
-    }
-  }
-
-  static canHandle(
-    valueContainer: StateManagementTypes.MaybeObservableValueContainer,
-  ): valueContainer is StateManagementTypes.ObservableValueContainer {
-    return valueContainer instanceof Observable;
+    this.stateSourceSign = stateSourceSign;
+    this.valueContainer = valueContainer;
   }
 
   trackChanges(
@@ -97,17 +87,44 @@ export class ObservableValueContainerManager implements StateManagementTypes.Val
     if (valueContainer?.stack) {
       const { stack } = valueContainer;
 
-      return this.findControllerLine(stack);
+      return this.findStateSourceLine(stack);
     }
 
     return 'The source is not tracked';
   }
 
-  private findControllerLine(stack: string): string {
+  private findStateSourceLine(stack: string): string {
     const lines = stack.split('\n');
 
-    const controllerLine = lines.find((line) => line.includes(this.controllerSign));
+    const controllerLine = lines.find((line) => line.includes(this.stateSourceSign));
 
     return controllerLine ?? (lines.length > 1 ? lines[1] : '');
   }
 }
+
+function isObservableValueContainer(
+  valueContainer: StateManagementTypes.MaybeValueContainer,
+): valueContainer is StateManagementTypes.ObservableValueContainer {
+  return isSignal(valueContainer);
+}
+
+export const ReactiveValueContainerManagerFactory:
+StateManagementTypes.ValueContainerManagerConstructor = {
+  canHandle(
+    valueContainer: StateManagementTypes.MaybeValueContainer,
+  ): valueContainer is StateManagementTypes.ObservableValueContainer {
+    return isObservableValueContainer(valueContainer);
+  },
+
+  create(
+    logger: StateManagementTypes.Logger,
+    stateSourceSign: string,
+    valueContainer: StateManagementTypes.MaybeValueContainer,
+  ): StateManagementTypes.ValueContainerManager {
+    if (!isObservableValueContainer(valueContainer)) {
+      throw new Error('Invalid value container for ReactiveValueContainerManager');
+    }
+
+    return new ReactiveValueContainerManager(logger, stateSourceSign, valueContainer);
+  },
+};

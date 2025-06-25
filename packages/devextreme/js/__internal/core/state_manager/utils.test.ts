@@ -69,11 +69,13 @@ describe('deepCopy', () => {
       b?: {
         c: ComplexCircularObj;
       };
+      d?: ComplexCircularObj[];
     }
 
     const original: ComplexCircularObj = { a: 1 };
     original.self = original;
     original.b = { c: original };
+    original.d = [original];
 
     const copy = deepCopy(original);
 
@@ -81,5 +83,6 @@ describe('deepCopy', () => {
     expect(copy.a).toBe(1);
     expect(copy.self).toBe(copy);
     expect(copy.b?.c).toBe(copy);
+    expect(copy.d?.[0]).toBe(copy);
   });
 });
