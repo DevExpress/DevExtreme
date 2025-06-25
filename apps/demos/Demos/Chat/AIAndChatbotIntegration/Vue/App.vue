@@ -3,7 +3,7 @@
     class="chat-container"
   >
     <DxChat
-      :class="{'dx-chat-disabled' : isDisabled == true }"
+      :class="{'chat-disabled' : isDisabled == true }"
       ref="chatElement"
       :height="710"
       :data-source="dataSource"
@@ -25,9 +25,9 @@
         <template v-else>
           <div
             v-html="convertToHtml(data.message.text)"
-            class="dx-chat-messagebubble-text"
+            class="chat-messagebubble-text"
           />
-          <div class="dx-bubble-button-container">
+          <div class="bubble-button-container">
             <DxButton
               :icon="copyButtonIcon"
               styling-mode="text"
@@ -216,12 +216,12 @@ function onRegenerateButtonClick() {
 }
 
 .dx-chat-messagebubble-content,
-.dx-chat-messagebubble-text {
+.chat-messagebubble-text {
   display: flex;
   flex-direction: column;
 }
 
-.dx-bubble-button-container {
+.bubble-button-container {
   display: none;
 }
 
@@ -230,7 +230,7 @@ function onRegenerateButtonClick() {
   color: var(--dx-color-icon);
 }
 
-.dx-chat-messagegroup-alignment-start:last-child .dx-chat-messagebubble:last-child .dx-bubble-button-container {
+.dx-chat-messagegroup-alignment-start:last-child .dx-chat-messagebubble:last-child .bubble-button-container {
   display: flex;
   gap: 4px;
   margin-top: 8px;
@@ -254,7 +254,7 @@ function onRegenerateButtonClick() {
   font-weight: revert;
 }
 
-.dx-chat-disabled .dx-chat-messagebox {
+.chat-disabled .dx-chat-messagebox {
   opacity: 0.5;
   pointer-events: none;
 }
