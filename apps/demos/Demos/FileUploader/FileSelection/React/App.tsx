@@ -12,7 +12,7 @@ export default function App() {
   const formElement = useRef(null);
 
   const onClick = useCallback(() => {
-    notify('Uncomment the line to enable sending a form to the server.');
+    notify('This demo only illustrates the form upload interface. Uploading to a server is not available.');
     // formElement.current.submit();
   }, []);
 
