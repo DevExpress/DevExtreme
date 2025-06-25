@@ -1288,7 +1288,7 @@ class CollectionWidget<
     elementClasses?: string,
   ): void {
     element
-      .addClass([ITEM_CLASS, this._itemClass(), elementClasses].join(' '))
+      .addClass([ITEM_CLASS, this._itemClass()].join(' '))
       .data(this._itemDataKey(), data)
       .data(this._itemIndexKey(), index);
   }
