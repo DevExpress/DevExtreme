@@ -11,7 +11,8 @@ export class ReduxDevToolsConnector implements StateManagementTypes.DevToolsConn
 
   private readonly componentName: string;
 
-  private readonly externalActionEmitter: EventEmitter<Parameters<StateManagementTypes.DevToolsConnector['onExternalAction']>[0]>;
+  private readonly externalActionEmitter:
+  EventEmitter<StateManagementTypes.DevToolsExternalActionCallback>;
 
   constructor(componentName: string, logger: StateManagementTypes.Logger) {
     this.componentName = componentName;

@@ -8,22 +8,19 @@ export class StateManager implements StateManagementTypes.StateManager {
 
   private componentState: StateManagementTypes.ComponentState;
 
-  private readonly controllerSign: string;
+  private readonly stateSourceSign: string;
 
   private readonly valueContainerManagers: StateManagementTypes.ValueContainerManagerConstructor[];
 
   constructor(
     config: StateManagementTypes.StateManagerConfig,
   ) {
-    const {
-      devToolsConnector, logger, valueContainerManagers, controllerSign,
-    } = config;
     this.componentState = {};
 
-    this.valueContainerManagers = valueContainerManagers;
-    this.devToolsConnector = devToolsConnector;
-    this.logger = logger;
-    this.controllerSign = controllerSign;
+    this.valueContainerManagers = config.valueContainerManagers;
+    this.devToolsConnector = config.devToolsConnector;
+    this.logger = config.logger;
+    this.stateSourceSign = config.stateSourceSign;
 
     this.init();
   }
@@ -38,36 +35,38 @@ export class StateManager implements StateManagementTypes.StateManager {
     this.logger.info('StateManager initialized');
   }
 
-  trackControllerState(controlledId: string, controller: StateManagementTypes.Controller): void {
-    if (!controller) {
-      this.logger.error('Controller cannot be null or undefined');
+  trackStateOf(sourceData: StateManagementTypes.StateSource, sourceDataId?: string): void {
+    const preparedSourceDataId = sourceDataId ?? sourceData?.constructor?.name;
+
+    if (!sourceData) {
+      this.logger.error('State source cannot be null or undefined');
       return;
     }
 
-    if (this.componentState[controlledId]) {
-      this.logger.debug(`Controller with ID '${controlledId}' is already tracked. Overwriting.`);
+    if (this.componentState[preparedSourceDataId]) {
+      this.logger.debug(`State source with ID '${preparedSourceDataId}' is already tracked. Overwriting.`);
     }
 
-    Object.entries(controller).forEach(([controllerPropertyName, controllerPropertyValue]) => {
-      if (this.findValueContainerManagerFor(controllerPropertyValue)) {
-        if (!this.componentState[controlledId]) {
-          this.componentState[controlledId] = {};
+    Object.entries(sourceData).forEach(([propertyName, propertyValue]) => {
+      if (this.hasValueContainerManagerFor(propertyValue)) {
+        if (!this.componentState[preparedSourceDataId]) {
+          this.componentState[preparedSourceDataId] = {};
         }
 
-        this.componentState[controlledId][controllerPropertyName] = controllerPropertyValue;
+        this.componentState[preparedSourceDataId][propertyName] = propertyValue;
 
-        this.trackControllerStateChanges(
-          controlledId,
-          controllerPropertyName,
-          controllerPropertyValue,
+        this.trackStateSourceChanges(
+          preparedSourceDataId,
+          propertyName,
+          propertyValue,
         );
       } else {
-        this.logger.debug(`No value container manager found for the '${controllerPropertyName}' property of the '${controlledId}' controller`);
+        this.logger.debug(`No value container manager found for the '${propertyName}' property of the '${preparedSourceDataId}' state source`);
       }
     });
   }
 
-  private trackControllerStateChanges(
+  private trackStateSourceChanges(
     stateId: string,
     propertyName: string,
     propertyValue: StateManagementTypes.MaybeValueContainer,
@@ -104,18 +103,26 @@ export class StateManager implements StateManagementTypes.StateManager {
     }
   }
 
+  private hasValueContainerManagerFor(
+    valueContainer: StateManagementTypes.MaybeValueContainer,
+  ): boolean {
+    return this.valueContainerManagers
+      // eslint-disable-next-line @stylistic/max-len
+      .some((currentStateContainerManager) => currentStateContainerManager.canHandle(valueContainer));
+  }
+
   private findValueContainerManagerFor(
     valueContainer: StateManagementTypes.MaybeValueContainer,
   ): StateManagementTypes.ValueContainerManager | undefined {
-    const ValueContainerManager = this.valueContainerManagers
+    const valueContainerManagerFactory = this.valueContainerManagers
       // eslint-disable-next-line @stylistic/max-len
       .find((currentStateContainerManager) => currentStateContainerManager.canHandle(valueContainer));
 
-    if (!ValueContainerManager) {
+    if (!valueContainerManagerFactory) {
       return undefined;
     }
 
-    return new ValueContainerManager(this.logger, this.controllerSign, valueContainer);
+    return valueContainerManagerFactory.create(this.logger, this.stateSourceSign, valueContainer);
   }
 
   getComponentState(): StateManagementTypes.ComponentState {

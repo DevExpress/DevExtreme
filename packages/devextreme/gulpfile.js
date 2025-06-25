@@ -6,7 +6,7 @@ const multiProcess = require('gulp-multi-process');
 const env = require('./build/gulp/env-variables');
 const cache = require('gulp-cache');
 const shell = require('gulp-shell');
-const { BUILD_FOR_DISTRIBUTION } = require('./build/gulp/context');
+const { REMOVE_NON_PRODUCTION_MODULE } = require('./build/gulp/context');
 
 gulp.task('clean', function(callback) {
     require('del').sync([
@@ -73,7 +73,7 @@ function createDefaultBatch(dev) {
     tasks.push(dev ? 'generate-components-dev' : 'generate-components');
     tasks.push('transpile');
 
-    if(BUILD_FOR_DISTRIBUTION) {
+    if(REMOVE_NON_PRODUCTION_MODULE) {
         tasks.push('state-manager-replace-production-modules');
         tasks.push('state-manager-remove-development-only-modules');
     }

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 
 export type StateManagerCommands = {
-  trackControllerState: (id: string, controller: Controller) => void;
+  trackStateOf: (sourceData: StateSource, id?: string) => void;
 };
 
 export type StateManagerQueries = {
@@ -10,13 +10,13 @@ export type StateManagerQueries = {
 
 export interface StateManager extends StateManagerCommands, StateManagerQueries { }
 
-export type Controller = Record<string, unknown>;
+export type StateSource = Record<string, unknown>;
 
 export interface StateManagerConfig {
   devToolsConnector: DevToolsConnector;
   logger: Logger;
   valueContainerManagers: ValueContainerManagerConstructor[];
-  controllerSign: string;
+  stateSourceSign: string;
 }
 
 export interface ObservableValueContainer extends ValueContainer {
@@ -29,15 +29,14 @@ export interface ObservableValueContainer extends ValueContainer {
 
 export type MaybeObservableValueContainer<T = unknown> = ObservableValueContainer | T;
 
-export type ValueContainerManagerConstructor = (
-  new (
-    logger: Logger,
-    controllerSign: string,
-    valueContainer: MaybeValueContainer
-  ) => ValueContainerManager
-) & {
+export interface ValueContainerManagerConstructor {
   canHandle: (valueContainer: MaybeValueContainer) => valueContainer is ValueContainer;
-};
+  create: (
+    logger: Logger,
+    stateSourceSign: string,
+    valueContainer: MaybeValueContainer
+  ) => ValueContainerManager;
+}
 
 export type ValueContainerChangeCallback = (change: ValueContainerChange) => void;
 
@@ -52,7 +51,7 @@ export interface StateManagerFactoryOptions extends Partial<StateManagerConfig> 
   componentName: string;
   valueContainerManagers?: ValueContainerManagerConstructor[];
   logLevel?: LogLevel;
-  controllerSign: string;
+  stateSourceSign: string;
 }
 
 export type ValueContainerActionType = 'UPDATE' | 'INITIALIZE';

@@ -37,11 +37,11 @@ const config: StorybookConfig = {
         new webpack.NormalModuleReplacementPlugin(
           /(.*)\/state_manager/,
           (resource) => {
-            if (resource.request.includes('state_manager/production')) {
+            if (resource.request.includes('state_manager/index.prod')) {
               return;
             }
 
-            const newRequest = resource.request.replace('state_manager/index', 'state_manager/production');
+            const newRequest = resource.request.replace('state_manager/index', 'state_manager/index.prod');
             resource.request = newRequest;
           }
         )

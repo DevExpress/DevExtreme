@@ -1,15 +1,19 @@
 const fs = require('fs');
 const path = require('path');
 const through2 = require('through2');
-const replaceProductionStateManagerModules = require('../replace_production_state_manager_modules');
+const replaceStateManagerModulesForProduction = require('../replace_state_manager_modules_for_production');
 
 const SETUP_STATE_MANAGER_PRODUCTION_CONTENT = `export const setupStateManager = () => {
     // this function body is empty for production build
 }
 `;
 
+const INDEX_PRODUCTION_CONTENT = SETUP_STATE_MANAGER_PRODUCTION_CONTENT;
+
+const INDEX_DEVELOPMENT_CONTENT = `export { setupStateManager } from './setup_state_manager';`;
+
 const SETUP_STATE_MANAGER_DEVELOPMENT_CONTENT = `export const setupStateManager = () => {
-    const isDevelopment = true;
+    // this function body is for development build
 }`;
 
 const UTILS_FILE_CONTENT = 'console.log("utils file");';
@@ -20,7 +24,8 @@ describe('Build the state manager', () => {
     let tempDir;
     let stateManagerDir;
     let setupFilePath;
-    let productionFilePath;
+    let indexProductionFilePath;
+    let indexFilePath;
     let utilsFilePath;
     let fileOutsideStateMangerPath;
     let originalConsoleError;
@@ -39,12 +44,14 @@ describe('Build the state manager', () => {
         fs.mkdirSync(stateManagerDir, { recursive: true });
 
         setupFilePath = path.join(stateManagerDir, 'setup_state_manager.js');
-        productionFilePath = path.join(stateManagerDir, 'production.js');
+        indexFilePath = path.join(stateManagerDir, 'index.js');
+        indexProductionFilePath = path.join(stateManagerDir, 'index.prod.js');
         utilsFilePath = path.join(stateManagerDir, 'utils.js');
         fileOutsideStateMangerPath = path.join(tempDir, 'other_file.js');
 
         fs.writeFileSync(setupFilePath, SETUP_STATE_MANAGER_DEVELOPMENT_CONTENT);
-        fs.writeFileSync(productionFilePath, SETUP_STATE_MANAGER_PRODUCTION_CONTENT);
+        fs.writeFileSync(indexFilePath, INDEX_DEVELOPMENT_CONTENT);
+        fs.writeFileSync(indexProductionFilePath, INDEX_PRODUCTION_CONTENT);
         fs.writeFileSync(utilsFilePath, UTILS_FILE_CONTENT);
         fs.writeFileSync(fileOutsideStateMangerPath, FILE_OUTSIDE_STATE_MANGER_CONTENT);
 
@@ -57,8 +64,8 @@ describe('Build the state manager', () => {
         console.error = originalConsoleError;
     });
 
-    test('should replace setup_state_manager.js content with production.js content', (done) => {
-        const stream = replaceProductionStateManagerModules();
+    test('should replace index.js content with index.prod.js content', (done) => {
+        const stream = replaceStateManagerModulesForProduction();
 
         const files = [
             {
@@ -72,32 +79,34 @@ describe('Build the state manager', () => {
             {
                 path: utilsFilePath,
                 contents: Buffer.from(UTILS_FILE_CONTENT)
-            }
+            },
+            {
+                path: indexFilePath,
+                contents: Buffer.from(INDEX_DEVELOPMENT_CONTENT)
+            },
+            {
+                path: indexProductionFilePath,
+                contents: Buffer.from(INDEX_PRODUCTION_CONTENT)
+            },
         ];
 
-        const results = [];
-
         stream.on('data', (file) => {
-            results.push({
-                path: file.path,
-                content: file.contents.toString()
-            });
+            fs.writeFileSync(file.path, file.contents.toString());
         });
 
         stream.on('end', () => {
             try {
-                const regularFile = results.find(r => r.path === fileOutsideStateMangerPath);
-                const setupFile = results.find(r => r.path === setupFilePath);
-                const utilsFile = results.find(r => r.path === utilsFilePath);
+                const fileOutsideStateMangerPathContent = fs.readFileSync(fileOutsideStateMangerPath, 'utf8');
+                const setupFileContent = fs.readFileSync(setupFilePath, 'utf8');
+                const utilsFileContent = fs.readFileSync(utilsFilePath, 'utf8');
+                const indexFileContent = fs.readFileSync(indexFilePath, 'utf8');
+                const indexProductionFileContent = fs.readFileSync(indexProductionFilePath, 'utf8');
 
-                expect(regularFile).toBeDefined();
-                expect(regularFile.content).toBe(FILE_OUTSIDE_STATE_MANGER_CONTENT);
-
-                expect(setupFile).toBeDefined();
-                expect(setupFile.content).toBe(SETUP_STATE_MANAGER_PRODUCTION_CONTENT);
-
-                expect(utilsFile).toBeDefined();
-                expect(utilsFile.content).toBe(UTILS_FILE_CONTENT);
+                expect(fileOutsideStateMangerPathContent).toBe(FILE_OUTSIDE_STATE_MANGER_CONTENT);
+                expect(setupFileContent).toBe(SETUP_STATE_MANAGER_DEVELOPMENT_CONTENT);
+                expect(utilsFileContent).toBe(UTILS_FILE_CONTENT);
+                expect(indexProductionFileContent).toBe(INDEX_PRODUCTION_CONTENT);
+                expect(indexFileContent).toBe(INDEX_PRODUCTION_CONTENT);
 
                 expect(consoleErrorSpy).not.toHaveBeenCalled();
                 done();

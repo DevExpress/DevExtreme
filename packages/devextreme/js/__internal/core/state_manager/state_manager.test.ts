@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/init-declarations */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable spellcheck/spell-checker */
 import {
-  afterEach,
-  beforeEach,
+  afterAll,
+  beforeAll,
   describe,
   expect,
   it,
@@ -10,118 +11,156 @@ import {
 } from '@jest/globals';
 
 import { DIContext } from '../di';
+import type { TrackedState } from '../reactive/development';
 import { state } from '../reactive/development';
 import { setupStateManager } from './setup_state_manager';
+import type { StateManager } from './types';
 
 describe('StateManager', () => {
   const originalEnv = { ...process.env };
 
-  beforeEach(() => {
+  beforeAll(() => {
     jest.resetModules();
     process.env = { ...originalEnv, NODE_ENV: 'development' };
   });
 
-  afterEach(() => {
+  afterAll(() => {
     process.env = originalEnv;
   });
 
-  it('Tracks a component state', () => {
-    const diContext = new DIContext();
-
-    const testComponentStateTracker = setupStateManager({
-      diContext,
-      componentName: 'TestComponent',
-      logLevel: 'error',
-    });
-
-    if (!testComponentStateTracker) {
-      throw Error('StateManager not initialized');
-    }
-
-    const initialPagerConfig = {
-      infinityScrollingEnabled: true,
+  describe('Component state tracking', () => {
+    let diContext: DIContext;
+    let testComponentStateTracker: StateManager;
+    let initialPagerConfig: { infinityScrollingEnabled: boolean };
+    let nonReactiveProperty: { text: string };
+    let NoSignForIncludingItByStateManager: new () => {
+      someField: TrackedState<boolean>;
     };
-
-    const nonReactiveProperty = {
-      text: 'non-reactive property',
+    let DataController: new () => {
+      pagesCount: TrackedState<number>;
+      pagerConfig: TrackedState<{ infinityScrollingEnabled: boolean }>;
+      nonReactiveProperty: { text: string };
     };
-
-    class NoSignForIncludingItByStateManager {
-      someField = state(true);
-    }
-
-    class DataController {
-      pagesCount = state(10);
-
-      pagerConfig = state(initialPagerConfig);
-
-      nonReactiveProperty = nonReactiveProperty;
-    }
-
-    class ColumnsController {
-      columnsCount = state(5);
-
-      text = state('initial');
-
-      nonReactiveProperty = nonReactiveProperty;
-    }
-
-    const ignoredInstance = new NoSignForIncludingItByStateManager();
-    const columnsControllerInstance = new ColumnsController();
-    const dataControllerInstance = new DataController();
-
-    diContext.registerInstance(ColumnsController, columnsControllerInstance);
-    diContext.registerInstance(DataController, dataControllerInstance);
-    diContext.registerInstance(NoSignForIncludingItByStateManager, ignoredInstance);
-
-    expect(testComponentStateTracker.getComponentState()).not.toMatchObject({
-      NoSignForIncludingItByStateManagerController: expect.anything(),
-    });
-
-    expect(testComponentStateTracker.getComponentState().ColumnsController).toEqual({
-      columnsCount: 5,
-      text: 'initial',
-    });
-
-    expect(testComponentStateTracker.getComponentState().DataController).toEqual({
-      pagesCount: 10,
-      pagerConfig: initialPagerConfig,
-    });
-
-    expect(testComponentStateTracker.getComponentState().DataController.pagerConfig)
-      .not.toBe(initialPagerConfig);
-
-    expect(columnsControllerInstance.columnsCount.unreactive_get()).toBe(5);
-    expect(columnsControllerInstance.text.unreactive_get()).toBe('initial');
-    expect(dataControllerInstance.pagesCount.unreactive_get()).toBe(10);
-    expect(dataControllerInstance.pagerConfig.unreactive_get())
-      .toBe(initialPagerConfig);
-    expect(dataControllerInstance.nonReactiveProperty).toEqual(nonReactiveProperty);
+    let ColumnsController: new () => {
+      columnsCount: TrackedState<number>;
+      text: TrackedState<string>;
+      nonReactiveProperty: { text: string };
+    };
+    let ignoredInstance: InstanceType<typeof NoSignForIncludingItByStateManager>;
+    let columnsControllerInstance: InstanceType<typeof ColumnsController>;
+    let dataControllerInstance: InstanceType<typeof DataController>;
 
     const updatedPagerConfig = { infinityScrollingEnabled: false };
 
-    columnsControllerInstance.columnsCount.update(10);
-    dataControllerInstance.pagesCount.update(15);
-    dataControllerInstance.pagerConfig.update(updatedPagerConfig);
+    beforeAll(() => {
+      diContext = new DIContext();
 
-    expect(testComponentStateTracker.getComponentState().ColumnsController).toEqual({
-      columnsCount: 10,
-      text: 'initial',
+      const stateManager = setupStateManager({
+        diContext,
+        componentName: 'TestComponent',
+        logLevel: 'error',
+      });
+
+      if (!stateManager) {
+        throw Error('StateManager not initialized');
+      }
+
+      testComponentStateTracker = stateManager;
+
+      initialPagerConfig = {
+        infinityScrollingEnabled: true,
+      };
+
+      nonReactiveProperty = {
+        text: 'non-reactive property',
+      };
+
+      NoSignForIncludingItByStateManager = class {
+        someField = state(true);
+      };
+
+      DataController = class {
+        pagesCount = state(10);
+
+        pagerConfig = state(initialPagerConfig);
+
+        nonReactiveProperty = nonReactiveProperty;
+      };
+
+      ColumnsController = class {
+        columnsCount = state(5);
+
+        text = state('initial');
+
+        nonReactiveProperty = nonReactiveProperty;
+      };
+
+      ignoredInstance = new NoSignForIncludingItByStateManager();
+      columnsControllerInstance = new ColumnsController();
+      dataControllerInstance = new DataController();
+
+      diContext.registerInstance(ColumnsController, columnsControllerInstance);
+      diContext.registerInstance(DataController, dataControllerInstance);
+      diContext.registerInstance(NoSignForIncludingItByStateManager, ignoredInstance);
     });
 
-    expect(testComponentStateTracker.getComponentState().DataController).toEqual({
-      pagesCount: 15,
-      pagerConfig: updatedPagerConfig,
+    it('should ignore non-controllers', () => {
+      expect(testComponentStateTracker.getComponentState()).not.toMatchObject({
+        NoSignForIncludingItByStateManagerController: expect.anything(),
+      });
     });
 
-    expect(testComponentStateTracker.getComponentState().DataController.pagerConfig)
-      .not.toBe(updatedPagerConfig);
+    it('should get component state after controllers registration', () => {
+      expect(testComponentStateTracker.getComponentState().ColumnsController).toEqual({
+        columnsCount: 5,
+        text: 'initial',
+      });
 
-    expect(columnsControllerInstance.text.unreactive_get()).toBe('initial');
-    expect(columnsControllerInstance.columnsCount.unreactive_get()).toBe(10);
-    expect(dataControllerInstance.pagesCount.unreactive_get()).toBe(15);
-    expect(dataControllerInstance.pagerConfig.unreactive_get())
-      .toBe(updatedPagerConfig);
-    expect(dataControllerInstance.nonReactiveProperty).toEqual(nonReactiveProperty);
+      expect(testComponentStateTracker.getComponentState().DataController).toEqual({
+        pagesCount: 10,
+        pagerConfig: initialPagerConfig,
+      });
+    });
+
+    it('should get deep copies of state values', () => {
+      expect(testComponentStateTracker.getComponentState().DataController.pagerConfig)
+        .not.toBe(initialPagerConfig);
+    });
+
+    it('should preserve original controller state values after state tracker initialization', () => {
+      expect(columnsControllerInstance.columnsCount.unreactive_get()).toBe(5);
+      expect(columnsControllerInstance.text.unreactive_get()).toBe('initial');
+      expect(dataControllerInstance.pagesCount.unreactive_get()).toBe(10);
+      expect(dataControllerInstance.pagerConfig.unreactive_get())
+        .toBe(initialPagerConfig);
+      expect(dataControllerInstance.nonReactiveProperty).toEqual(nonReactiveProperty);
+    });
+
+    it('should track controllers state updates', () => {
+      columnsControllerInstance.columnsCount.update(10);
+      dataControllerInstance.pagesCount.update(15);
+      dataControllerInstance.pagerConfig.update(updatedPagerConfig);
+
+      expect(testComponentStateTracker.getComponentState().ColumnsController).toEqual({
+        columnsCount: 10,
+        text: 'initial',
+      });
+
+      expect(testComponentStateTracker.getComponentState().DataController).toEqual({
+        pagesCount: 15,
+        pagerConfig: updatedPagerConfig,
+      });
+    });
+
+    it('should preserve original controller state values after tracking controllers state updates', () => {
+      expect(testComponentStateTracker.getComponentState().DataController.pagerConfig)
+        .not.toBe(updatedPagerConfig);
+      expect(columnsControllerInstance.text.unreactive_get()).toBe('initial');
+      expect(columnsControllerInstance.columnsCount.unreactive_get()).toBe(10);
+      expect(dataControllerInstance.pagesCount.unreactive_get()).toBe(15);
+      expect(dataControllerInstance.pagerConfig.unreactive_get())
+        .toBe(updatedPagerConfig);
+      expect(dataControllerInstance.nonReactiveProperty).toEqual(nonReactiveProperty);
+    });
   });
 });
