@@ -29,7 +29,8 @@
   }
 
   .dx-treelist-icon-container {
-    display: inline-block;
+    display: flex;
+    align-items: center;
     white-space: nowrap;
     vertical-align: top;
     line-height: 1;

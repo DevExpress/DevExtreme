@@ -159,3 +159,36 @@ const tasksT1223168 = [{
     await changeTheme(Themes.genericLight);
   });
 });
+
+[
+  Themes.genericLight,
+  Themes.materialBlue,
+  Themes.fluentBlue,
+].forEach((theme) => {
+  test(`TreeList – Chevron/Caret toggle icon is misaligned in the ${theme} theme (T1291914)`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const treeList = new TreeList('#container');
+
+    await treeList.isReady();
+
+    await t
+      .expect(await takeScreenshot(`treelist-expand-collapse-caret-center-(${theme}).png`, treeList.element))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  })
+    .before(async () => {
+      await changeTheme(theme);
+
+      await createWidget('dxTreeList', {
+        dataSource: tasksT1223168,
+        keyExpr: 'Task_ID',
+        parentIdExpr: 'Task_Parent_ID',
+        columns: ['Task_ID'],
+        width: 100,
+      });
+    })
+    .after(async () => {
+      await changeTheme(Themes.genericLight);
+    });
+});

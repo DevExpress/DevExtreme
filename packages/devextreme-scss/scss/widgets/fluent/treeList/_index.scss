@@ -111,8 +111,6 @@ $treelist-icon-container-padding-right: $fluent-grid-base-cell-horizontal-paddin
 
   &.dx-editor-inline-block {
     position: relative;
-    display: flex;
-    align-items: center;
     padding-right: $treelist-icon-container-padding-right;
   }
 }
