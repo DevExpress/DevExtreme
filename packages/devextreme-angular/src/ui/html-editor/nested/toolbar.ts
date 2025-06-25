@@ -9,7 +9,7 @@ import {
     Host,
     SkipSelf,
     Input,
-    ContentChildren,
+    // ContentChildren,
     forwardRef,
     QueryList,
     AfterContentInit
@@ -25,8 +25,10 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiHtmlEditorItemComponent } from './item-dxi';
-import { DxiHtmlEditorToolbarItemComponent } from './toolbar-item-dxi';
+// import { DxiHtmlEditorItemComponent } from './item-dxi';
+// import { DxiHtmlEditorToolbarItemComponent } from './toolbar-item-dxi';
+import { ParentTracker, ParentTrackerToken } from './parent-tracker';
+import { ChildRegistry } from './child-registry';
 
 
 @Component({
@@ -35,9 +37,12 @@ import { DxiHtmlEditorToolbarItemComponent } from './toolbar-item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+        { provide: ParentTrackerToken, useExisting: forwardRef(() => DxoHtmlEditorToolbarComponent) }
+    ]
 })
-export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
+export class DxoHtmlEditorToolbarComponent extends NestedOption implements ParentTracker<any>, OnDestroy, OnInit, AfterContentInit  {
     @Input()
     get container(): any | string {
         return this._getOption('container');
@@ -67,17 +72,37 @@ export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDes
         return 'toolbar';
     }
 
+    registry = new ChildRegistry<any>();
 
-    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent)) itemsChildren!: QueryList<DxiHtmlEditorItemComponent>
+    logChildren() {
+        console.log(this.registry.getChildren());
+    }
+
+    register(child: any): void {
+        console.log('Registering:', child);
+        this.registry.register(child);
+    }
+
+    unregister(child: any): void {
+        console.log('Unregistering:', child);
+        this.registry.unregister(child);
+    }
+
+
+    // @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent)) itemsChildren!: QueryList<DxiHtmlEditorItemComponent>
     
-    @ContentChildren(forwardRef(() => DxiHtmlEditorToolbarItemComponent)) toolbarItemsChildren!: QueryList<DxiHtmlEditorToolbarItemComponent>
+    // @ContentChildren(forwardRef(() => DxiHtmlEditorToolbarItemComponent)) toolbarItemsChildren!: QueryList<DxiHtmlEditorToolbarItemComponent>
     
     setItems() {
+        console.log("Logging children");
+        this.logChildren();
         const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.itemsChildren.toArray(),
-            ...this.toolbarItemsChildren.toArray(),
-        ]);
+        // q.reset([
+        //     ...this.itemsChildren.toArray(),
+        //     ...this.toolbarItemsChildren.toArray(),
+        // ]);
+        q.reset([...this.registry.getChildren()])
+
         this.setChildren('items', q);
     }
 
@@ -102,9 +127,11 @@ export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDes
 
     ngAfterContentInit() {
         this.setItems();
+
+        this.registry.children$.subscribe(() => { this.setItems() });
         
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-        this.toolbarItemsChildren.changes.subscribe(() => { this.setItems() });
+        // this.itemsChildren.changes.subscribe(() => { this.setItems() });
+        // this.toolbarItemsChildren.changes.subscribe(() => { this.setItems() });
     }
 }
 
