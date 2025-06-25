@@ -37,6 +37,8 @@ import Overlay from '@ts/ui/overlay/m_overlay';
 import * as zIndexPool from '@ts/ui/overlay/m_z_index';
 
 import windowUtils from '../../core/utils/m_window';
+import Toolbar from '../toolbar/m_toolbar';
+import ToolbarBase from '../toolbar/m_toolbar.base';
 import PopupDrag from './m_popup_drag';
 import type { OverflowManager } from './m_popup_overflow_manager';
 import { createBodyOverflowManager } from './m_popup_overflow_manager';
@@ -78,6 +80,8 @@ const BUTTON_NORMAL_TYPE = 'normal';
 const BUTTON_TEXT_MODE = 'text';
 const BUTTON_CONTAINED_MODE = 'contained';
 const BUTTON_OUTLINED_MODE = 'outlined';
+
+const TOOLBAR_NAME_BASE = 'dxToolbarBase';
 
 const HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS } as const;
 
@@ -456,32 +460,40 @@ class Popup<
     }
 
     if (showTitle || items.length > 0) {
-      this._$topToolbar?.remove();
+      if (!this._$topToolbar) {
+        const $toolbarContainer = $('<div>').insertBefore(this.$content());
 
-      const $toolbarContainer = $('<div>').insertBefore(this.$content());
-
-      this._$topToolbar = this._renderToolbar(
-        'titleTemplate',
-        items,
-        $toolbarContainer,
-        {
-          elementAttr: {
-            class: POPUP_TITLE_CLASS,
+        this._$topToolbar = this._renderToolbar(
+          'titleTemplate',
+          items,
+          $toolbarContainer,
+          {
+            elementAttr: {
+              class: POPUP_TITLE_CLASS,
+            },
           },
-        },
-      );
+        );
 
-      triggerResizeEvent(this._$topToolbar);
-
-      this._renderDrag();
-      this._executeTitleRenderAction(this._$topToolbar);
+        this._renderDrag();
+        this._executeTitleRenderAction(this._$topToolbar);
+      } else {
+        this._updateToolbarOptions('top', { items });
+      }
 
       this._$topToolbar.toggleClass(POPUP_HAS_CLOSE_BUTTON_CLASS, this._hasCloseButton());
+      // this._$topToolbar?.remove();
     } else if (this._$topToolbar) {
       this._$topToolbar.detach();
     }
 
     this._toggleAriaLabel();
+  }
+
+  _updateToolbarOptions(toolbar: string, options: Partial<ToolbarProperties>): void {
+    const toolbarClass = this._getToolbarName() === TOOLBAR_NAME_BASE ? ToolbarBase : Toolbar;
+    const toolbarInstance = toolbarClass.getInstance(toolbar === 'top' ? this._$topToolbar : this._$bottomToolbar);
+
+    toolbarInstance.option(options);
   }
 
   _renderBottomToolbar(): void {
@@ -492,7 +504,12 @@ class Popup<
       return;
     }
 
-    this._$bottomToolbar?.remove();
+    // this._$bottomToolbar?.remove();
+
+    if (this._$bottomToolbar) {
+      this._updateToolbarOptions('bottom', { items });
+      return;
+    }
 
     const $toolbarContainer = $('<div>').insertAfter(this.$content());
 
@@ -511,8 +528,6 @@ class Popup<
     );
 
     this._toggleClasses();
-
-    triggerResizeEvent(this._$bottomToolbar);
   }
 
   _renderToolbar(
@@ -571,6 +586,8 @@ class Popup<
     const $toolbar = $container.children('div');
 
     $container.replaceWith($toolbar);
+
+    /** First fix for initial rendering */
     triggerResizeEvent($toolbar);
 
     return $toolbar;
@@ -760,7 +777,7 @@ class Popup<
 
   // eslint-disable-next-line class-methods-use-this
   _getToolbarName(): string {
-    return 'dxToolbarBase';
+    return TOOLBAR_NAME_BASE;
   }
 
   _toggleDisabledState(value: boolean): void {
@@ -1123,11 +1140,17 @@ class Popup<
     const { value, name } = args;
 
     switch (name) {
-      case 'disabled':
+      case 'disabled': {
         super._optionChanged(args);
-        this._renderTopToolbar();
-        this._renderBottomToolbar();
+        // this._renderTopToolbar();
+        const options = { disabled: value };
+        // @ts-expect-error ts-error
+        this._updateToolbarOptions('top', options);
+        // @ts-expect-error ts-error
+        this._updateToolbarOptions('bottom', options);
+        // this._renderBottomToolbar();
         break;
+      }
       case 'animation':
         this._updateResizeCallbackSkipCondition();
         break;
