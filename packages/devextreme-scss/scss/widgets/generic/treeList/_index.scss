@@ -109,12 +109,6 @@ $treelist-icon-container-padding-right: $generic-grid-base-cell-padding;
   line-height: 0;
 }
 
-.dx-treelist-select-all {
-  .dx-select-checkbox {
-    position: absolute;
-  }
-}
-
 .dx-treelist-icon-container {
   max-height: $generic-grid-base-cell-line-height;
   height: $generic-grid-base-cell-line-height;
@@ -131,6 +125,7 @@ $treelist-icon-container-padding-right: $generic-grid-base-cell-padding;
   position: relative;
 
   .dx-checkbox {
+    position: absolute;
     left: $treelist-checkbox-offset-left;
     margin-top: $treelist-select-all-checkbox-margin-top;
   }
