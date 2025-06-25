@@ -448,7 +448,7 @@ class Popup<
     this._renderBottomToolbar();
   }
 
-  _renderTopToolbar(): void {
+  _getTopToolbarItems(): ToolbarItem[] {
     const items = this._getToolbarItems('top');
     const { title, showTitle } = this.option();
 
@@ -459,29 +459,21 @@ class Popup<
       });
     }
 
+    return items;
+  }
+
+  _renderTopToolbar(): void {
+    const { showTitle } = this.option();
+    const items = this._getTopToolbarItems();
+
     if (showTitle || items.length > 0) {
       if (!this._$topToolbar) {
-        const $toolbarContainer = $('<div>').insertBefore(this.$content());
-
-        this._$topToolbar = this._renderToolbar(
-          'titleTemplate',
-          items,
-          $toolbarContainer,
-          {
-            elementAttr: {
-              class: POPUP_TITLE_CLASS,
-            },
-          },
-        );
-
-        this._renderDrag();
-        this._executeTitleRenderAction(this._$topToolbar);
+        this._renderTopToolbarImpl();
       } else {
         this._updateToolbarOptions('top', { items });
       }
 
-      this._$topToolbar.toggleClass(POPUP_HAS_CLOSE_BUTTON_CLASS, this._hasCloseButton());
-      // this._$topToolbar?.remove();
+      this._$topToolbar?.toggleClass(POPUP_HAS_CLOSE_BUTTON_CLASS, this._hasCloseButton());
     } else if (this._$topToolbar) {
       this._$topToolbar.detach();
     }
@@ -489,11 +481,25 @@ class Popup<
     this._toggleAriaLabel();
   }
 
-  _updateToolbarOptions(toolbar: string, options: Partial<ToolbarProperties>): void {
-    const toolbarClass = this._getToolbarName() === TOOLBAR_NAME_BASE ? ToolbarBase : Toolbar;
-    const toolbarInstance = toolbarClass.getInstance(toolbar === 'top' ? this._$topToolbar : this._$bottomToolbar);
+  _renderTopToolbarImpl(): void {
+    this._$topToolbar?.remove();
 
-    toolbarInstance.option(options);
+    const items = this._getTopToolbarItems();
+    const $toolbarContainer = $('<div>').insertBefore(this.$content());
+
+    this._$topToolbar = this._renderToolbar(
+      'titleTemplate',
+      items,
+      $toolbarContainer,
+      {
+        elementAttr: {
+          class: POPUP_TITLE_CLASS,
+        },
+      },
+    );
+
+    this._renderDrag();
+    this._executeTitleRenderAction(this._$topToolbar);
   }
 
   _renderBottomToolbar(): void {
@@ -504,13 +510,18 @@ class Popup<
       return;
     }
 
-    // this._$bottomToolbar?.remove();
-
     if (this._$bottomToolbar) {
       this._updateToolbarOptions('bottom', { items });
       return;
     }
 
+    this._renderBottomToolbarImpl();
+  }
+
+  _renderBottomToolbarImpl(): void {
+    this._$bottomToolbar?.remove();
+
+    const items = this._getToolbarItems('bottom');
     const $toolbarContainer = $('<div>').insertAfter(this.$content());
 
     const additionalToolbarOptions = {
@@ -605,6 +616,13 @@ class Popup<
     }
 
     return $container;
+  }
+
+  _updateToolbarOptions(toolbar: string, options: Partial<ToolbarProperties>): void {
+    const toolbarClass = this._getToolbarName() === TOOLBAR_NAME_BASE ? ToolbarBase : Toolbar;
+    const toolbarInstance = toolbarClass.getInstance(toolbar === 'top' ? this._$topToolbar : this._$bottomToolbar);
+
+    toolbarInstance.option(options);
   }
 
   _toggleAriaLabel(): void {
@@ -1162,13 +1180,18 @@ class Popup<
         break;
       case 'showTitle':
       case 'title':
-      case 'titleTemplate':
         this._renderTopToolbar();
         this._renderGeometry();
         triggerResizeEvent(this.$overlayContent());
         break;
+      case 'titleTemplate': {
+        this._renderTopToolbarImpl();
+        this._renderGeometry();
+        triggerResizeEvent(this.$overlayContent());
+        break;
+      }
       case 'bottomTemplate':
-        this._renderBottomToolbar();
+        this._renderBottomToolbarImpl();
         this._renderGeometry();
         triggerResizeEvent(this.$overlayContent());
         break;
