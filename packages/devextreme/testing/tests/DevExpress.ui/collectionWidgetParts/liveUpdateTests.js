@@ -245,4 +245,26 @@ module('live update', {
         assert.strictEqual(items[2].id, 2, '2 item');
         assert.strictEqual(items[3].id, 3, '3 item');
     });
+
+    test('items of collection should have all classes on rerender if repaintChangesOnly is set to true and dataSource is updated (T1190407)', function(assert) {
+        const data = [...helper.data];
+        data[0].text = 'text 0 updated';
+
+        const newDataSource = new DataSource({
+            load: (e) => data.sort((a, b) => a.index - b.index),
+            loadMode: 'raw',
+            pageSize: 2,
+            pushAggregationTimeout: 0,
+            reshapeOnPush: true,
+            key: 'id'
+        });
+
+        const testClass = 'testClass';
+
+        $($.find('.dx-item')).eq(0).addClass(testClass);
+
+        helper.instance.option('dataSource', newDataSource);
+
+        assert.strictEqual($($.find('.dx-item')).eq(0).hasClass(testClass), true, 'item has not lost its class after update');
+    });
 });

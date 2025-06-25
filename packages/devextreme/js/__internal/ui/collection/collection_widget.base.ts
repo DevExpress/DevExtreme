@@ -1128,7 +1128,8 @@ class CollectionWidget<
       $containerToRender,
       $itemToReplace,
     );
-    this._setElementData($itemFrame, itemData, itemIndex);
+    const elementClasses = $itemToReplace?.attr('class');
+    this._setElementData($itemFrame, itemData, itemIndex, elementClasses);
     this._setAttributes($itemFrame);
     this._attachItemClickEvent(itemData, $itemFrame);
     const $itemContent = this._getItemContent($itemFrame);
@@ -1284,9 +1285,10 @@ class CollectionWidget<
     element: dxElementWrapper,
     data: TItem,
     index: number,
+    elementClasses?: string,
   ): void {
     element
-      .addClass([ITEM_CLASS, this._itemClass()].join(' '))
+      .addClass([ITEM_CLASS, this._itemClass(), elementClasses].join(' '))
       .data(this._itemDataKey(), data)
       .data(this._itemIndexKey(), index);
   }
