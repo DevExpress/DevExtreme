@@ -350,7 +350,7 @@ class Popup<
   _render(): void {
     const isFullscreen = this.option('fullScreen');
 
-    this._toggleFullScreenClass(isFullscreen);
+    this._toggleFullScreenClass(Boolean(isFullscreen));
     super._render();
   }
 
@@ -358,7 +358,7 @@ class Popup<
     this._bodyOverflowManager = createBodyOverflowManager();
   }
 
-  _toggleFullScreenClass(value): void {
+  _toggleFullScreenClass(value: boolean): void {
     this.$overlayContent()
       .toggleClass(POPUP_FULL_SCREEN_CLASS, value)
       .toggleClass(POPUP_NORMAL_CLASS, !value);
@@ -622,7 +622,7 @@ class Popup<
     const toolbarClass = this._getToolbarName() === TOOLBAR_NAME_BASE ? ToolbarBase : Toolbar;
     const toolbarInstance = toolbarClass.getInstance(toolbar === 'top' ? this._$topToolbar : this._$bottomToolbar);
 
-    toolbarInstance.option(options);
+    toolbarInstance?.option(options);
   }
 
   _toggleAriaLabel(): void {
@@ -686,7 +686,7 @@ class Popup<
     };
   }
 
-  _getToolbarItems(toolbar) {
+  _getToolbarItems(toolbar: 'bottom' | 'top'): ToolbarItem[] {
     const { platform: currentPlatform } = devices.current();
     const { toolbarItems } = this.option();
     const toolbarsItems: ToolbarItem[] = [];
@@ -701,6 +701,7 @@ class Popup<
 
       if (isShortcut && currentPlatform === 'ios' && index < 2) {
         item.toolbar = 'top';
+        // eslint-disable-next-line no-plusplus
         index++;
       }
 
@@ -734,12 +735,13 @@ class Popup<
     return showCloseButton && showTitle;
   }
 
-  _getLocalizationKey(itemType) {
+  // eslint-disable-next-line class-methods-use-this
+  _getLocalizationKey(itemType: string): string {
     return itemType.toLowerCase() === 'done' ? 'OK' : camelize(itemType, true);
   }
 
-  _getToolbarButtonStylingMode(shortcut) {
-    // @ts-expect-error
+  _getToolbarButtonStylingMode(shortcut: string) {
+    // @ts-expect-error ts-error
     if (isFluent()) {
       return shortcut === 'done' ? BUTTON_CONTAINED_MODE : BUTTON_OUTLINED_MODE;
     }
@@ -747,8 +749,8 @@ class Popup<
     return this.option('useFlatToolbarButtons') ? BUTTON_TEXT_MODE : BUTTON_CONTAINED_MODE;
   }
 
-  _getToolbarButtonType(shortcut) {
-    // @ts-expect-error
+  _getToolbarButtonType(shortcut: string): typeof BUTTON_DEFAULT_TYPE | typeof BUTTON_NORMAL_TYPE {
+    // @ts-expect-error ts-error
     if ((isFluent() && shortcut === 'done') || this.option('useDefaultToolbarButtons')) {
       return BUTTON_DEFAULT_TYPE;
     }
@@ -865,7 +867,7 @@ class Popup<
     );
   }
 
-  _getDragTarget() {
+  _getDragTarget(): dxElementWrapper | undefined {
     return this.topToolbar();
   }
 
@@ -892,7 +894,7 @@ class Popup<
     }
   }
 
-  _cacheDimensions() {
+  _cacheDimensions(): void {
     if (!this.option('useResizeObserver')) {
       return;
     }
@@ -976,6 +978,7 @@ class Popup<
 
     width && this._setOptionWithoutOptionChange('width', width);
     height && this._setOptionWithoutOptionChange('height', height);
+
     this._cacheDimensions();
 
     this._positionController.resizeHandled();
@@ -1052,7 +1055,7 @@ class Popup<
     return cssStyles;
   }
 
-  _setHeightClasses($container: dxElementWrapper, currentClass): void {
+  _setHeightClasses($container: dxElementWrapper, currentClass: string): void {
     let excessClasses = '';
 
     // eslint-disable-next-line no-restricted-syntax
@@ -1262,7 +1265,7 @@ class Popup<
       case 'fullScreen':
         this._positionController.fullScreen = value;
 
-        this._toggleFullScreenClass(value);
+        this._toggleFullScreenClass(Boolean(value));
         this._toggleSafariScrolling();
 
         this._renderGeometry();
