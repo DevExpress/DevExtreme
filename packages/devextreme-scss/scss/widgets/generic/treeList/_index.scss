@@ -33,19 +33,13 @@ $treelist-select-all-checkbox-margin-top: floor(math.div(round($generic-base-lin
 $treelist-checkbox-offset-left: $treelist-empty-space-width + $generic-grid-base-cell-padding;
 $treelist-checkbox-offset-left-rtl: $treelist-checkbox-offset-left + $generic-grid-base-checkbox-icon-size;
 $treelist-editor-cell-padding-left: $treelist-checkbox-offset-left-rtl + $generic-grid-base-cell-padding;
-$treelist-icon-container-padding-right: $generic-grid-base-checkbox-icon-size + $generic-grid-base-cell-padding;
+$treelist-icon-container-padding-right: $generic-grid-base-cell-padding;
 
 .dx-treelist-rowsview {
   .dx-treelist-empty-space {
     position: relative;
-    display: inline-block;
+    display: flex;
     width: $treelist-empty-space-width;
-
-    @include dx-icon(spinright);
-
-    &::before {
-      visibility: hidden;
-    }
   }
 
   tr:not(.dx-row-focused) .dx-treelist-empty-space {
@@ -54,27 +48,29 @@ $treelist-icon-container-padding-right: $generic-grid-base-checkbox-icon-size + 
 
   .dx-treelist-expanded span {
     @include dx-icon(spindown);
-    @include dx-icon-font-centered-sizing($generic-base-icon-size);
+    @include dx-icon-font-centered-sizing($generic-base-icon-size, relative);
 
     cursor: pointer;
 
     &::before {
       left: 0;
       margin-left: -$treelist-expanded-icon-margin-left;
-      margin-top: -$treelist-icon-margin-top;
+      top: auto;
+      margin-top: auto;
     }
   }
 
   .dx-treelist-collapsed span {
     @include dx-icon(spinright);
-    @include dx-icon-font-centered-sizing($generic-base-icon-size);
+    @include dx-icon-font-centered-sizing($generic-base-icon-size, relative);
 
     cursor: pointer;
 
     &::before {
       left: 0;
       margin-left: -$treelist-collapsed-icon-margin-left;
-      margin-top: -$treelist-icon-margin-top;
+      top: auto;
+      margin-top: auto;
     }
   }
 
@@ -113,20 +109,21 @@ $treelist-icon-container-padding-right: $generic-grid-base-checkbox-icon-size + 
   line-height: 0;
 }
 
-.dx-treelist-cell-expandable,
 .dx-treelist-select-all {
   .dx-select-checkbox {
     position: absolute;
   }
 }
 
-.dx-treelist-icon-container.dx-editor-inline-block {
-  position: relative;
-  padding-right: $treelist-icon-container-padding-right;
+.dx-treelist-icon-container {
+  max-height: $generic-grid-base-cell-line-height;
+  height: $generic-grid-base-cell-line-height;
 
-  .dx-checkbox {
-    top: 50%;
-    margin-top: math.div(-$generic-grid-base-checkbox-icon-size, 2);
+  &.dx-editor-inline-block {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-right: $treelist-icon-container-padding-right;
   }
 }
 
