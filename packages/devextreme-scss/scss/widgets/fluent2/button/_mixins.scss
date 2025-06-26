@@ -7,10 +7,10 @@
 @use "../../base/icons" as *;
 @use "../../base/button/mixins" as *;
 
-@mixin dx-button-onlyicon-sizing($icon-size: $fluent2-button-icon-size) {
-  min-width: $fluent2-button-height;
+@mixin dx-button-onlyicon-sizing($icon-size: $button-icon-size) {
+  min-width: $button-height;
 
-  $button-content-padding: math.div($fluent2-button-height - $icon-size - $fluent2-base-border-width * 2, 2);
+  $button-content-padding: calc(($button-height - $icon-size - $button-border-width * 2) / 2);
 
   @include dx-button-sizing(
     $button-content-padding,
@@ -26,8 +26,8 @@
     $fluent2-button-vertical-padding,
     $fluent2-button-horizontal-padding,
     $fluent2-button-horizontal-padding,
-    $fluent2-button-icon-size,
-    math.div($fluent2-button-icon-size, 2)
+    $button-icon-size,
+    calc($button-icon-size / 2),
   );
 }
 
@@ -36,11 +36,10 @@
     $fluent2-button-vertical-padding,
     $fluent2-button-icon-text-padding,
     $fluent2-button-horizontal-padding,
-    $fluent2-button-icon-size,
-    $fluent2-button-icon-margin,
+    $button-icon-size,
+    calc($button-icon-margin + $button-text-box-horizontal-padding),
   );
 }
-
 
 @mixin dx-button-styling-variant(
   $background-color,
@@ -182,7 +181,7 @@
   $button-selected-bg,
   $button-selected-color: $button-color-active,
 ) {
-  border-width: 1px;
+  border-width: $button-border-width;
   border-style: solid;
   border-color: $border-color;
 

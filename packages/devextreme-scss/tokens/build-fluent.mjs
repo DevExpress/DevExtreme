@@ -1,6 +1,5 @@
 import StyleDictionary from 'style-dictionary';
 import { registerTransforms } from './transforms.mjs';
-import { usesReferences, getReferences } from 'style-dictionary/utils';
 import fs from 'fs';
 import path from 'path';
 import * as url from 'url';
@@ -63,7 +62,7 @@ const getThemePalettes = () => {
 }
 
 const getComponents = () => {
-  return ['Button', 'Text Box'].map(component => {
+  return ['Button', 'Button Group' /*'Text Box'*/].map(component => {
     const name = component.toLowerCase();
     console.log(`tokens/components/${component}/Fluent.json`);
     return {
@@ -86,6 +85,62 @@ StyleDictionary.registerFormat({
     .map((token) => `$${token.name.replace('DS-', '')}: var(--${token.name});`)
     .join(`\n`);
   },
+});
+
+StyleDictionary.registerFormat({
+  name: 'css/variables-with-size-alias',
+  format({ dictionary, options }) {
+    const sizes = [
+      { name: 'medium', selector: '.dx-button-md, .dx-size-medium, [data-size="medium"]' },
+      { name: 'small',  selector: '.dx-button-sm, .dx-size-small, [data-size="small"]'  },
+      { name: 'large',  selector: '.dx-button-lg, .dx-size-large, [data-size="large"]'  }
+    ];
+
+       return sizes.map(({ name: size, selector }) => {
+
+      const lines = dictionary.allTokens
+        .filter(token => new RegExp(`-${size}\\b`).test(token.name))
+        .map(token => {
+          const aliasName = token.name.replace(new RegExp(`-${size}\\b`), '');
+          return `  --${aliasName}: var(--${token.name});`;
+        });
+
+      return `${selector} {\n${lines.join('\n')}\n}`;
+    }).join('\n\n');
+  }
+});
+
+StyleDictionary.registerFormat({
+  name: 'css/variables-with-size-alias-skip-one',
+  format({ dictionary, options }) {
+    const sizes = [
+      { name: 'medium', selector: options.selector || ':root, .dx-size-medium, [data-size="medium"]' },
+      { name: 'small',  selector: '.dx-size-small, [data-size="small"]'  },
+      { name: 'large',  selector: '.dx-size-large, [data-size="large"]'  }
+    ];
+
+    return sizes.map(({ name: size, selector }) => {
+      const tokensForSize = dictionary.allTokens.filter(token =>
+        new RegExp(`-${size}\\b`).test(token.name)
+      );
+
+      const lines = tokensForSize.map(token => {
+        const aliasName = token.name.replace(new RegExp(`-${size}\\b`), '');
+        const raw = token.original.value;
+
+        let refTokenName;
+        if (typeof raw === 'string' && raw.startsWith('{') && raw.endsWith('}')) {
+          refTokenName = raw.slice(1, -1).replace(/\./g, '-');
+        } else {
+          refTokenName = token.name;
+        }
+
+        return `  --${aliasName}: var(--${refTokenName});`;
+      });
+
+      return `${selector} {\n${lines.join('\n')}\n}`;
+    }).join('\n\n');
+  }
 });
 
 const FILE_OPTIONS = {
@@ -113,7 +168,7 @@ const createPalettesConfig = (palette, files) => {
     platforms: {
       'scss/category': {
         transformGroup: 'css',
-        buildPath: path.resolve(__dirname, `../scss/_design-system/${THEME_NAME}`) + '/',
+        buildPath: path.resolve(__dirname, `../scss/widgets/_design-system/${THEME_NAME}`) + '/',
         transforms: [
           "attribute/cti",
           "color/css",
@@ -257,7 +312,6 @@ const createComponentConfig = (component, files) => {
       'scss/category': {
         transformGroup: 'css',
         buildPath: path.resolve(__dirname, `../scss/_design-system/${THEME_NAME}`) + '/',
-        // transformGroup: 'css',
         transforms: [
           "attribute/cti",
           "color/css",
@@ -279,20 +333,54 @@ const createComponentConfig = (component, files) => {
         files: [
           {
             destination: `components/${component}.scss`,
-            format: "scssToCss",
+            format: "css/variables",
             filter: token => {
-  //             if(component.toLowerCase().includes('text')) {
-  // console.log(token.path[0].toLowerCase(), component.toLowerCase())
-  //             }
               if(token.filePath.includes('Fluent.json')) {
                 return true;
               }
-              // if(token.path[0].toLowerCase() === component.toLowerCase()) {
-              //   return true;
-              // }
+
               return false;
             },
             options: FILE_OPTIONS
+          },
+          {
+            destination: `components/${component}-colors.scss`,
+            format: "css/variables",
+            filter: token => {
+              const hasSizeSuffix = /-(?:small|medium|large)\b/.test(token.name);
+              return token.filePath.includes('Fluent.json') && !hasSizeSuffix;
+            },
+            options: FILE_OPTIONS
+          },
+          {
+            destination: `components/${component}-sizes.scss`,
+            format: "css/variables-with-size-alias",
+            options: { 
+              ...FILE_OPTIONS,
+              selector: '.dx-size-medium',
+            },
+            filter: token => {
+              if(token.filePath.includes('Fluent.json')) {
+                return true;
+              }
+
+              return false;
+            },
+          },
+          {
+            destination: `components/${component}-sizes-skip-one.scss`,
+            format: "css/variables-with-size-alias-skip-one",
+            options: { 
+              ...FILE_OPTIONS,
+              selector: '.dx-size-medium',
+            },
+            filter: token => {
+              if(token.filePath.includes('Fluent.json')) {
+                return true;
+              }
+
+              return false;
+            },
           }
         ]
       }

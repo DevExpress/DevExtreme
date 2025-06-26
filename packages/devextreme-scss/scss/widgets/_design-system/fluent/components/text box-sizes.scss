@@ -1,0 +1,86 @@
+:root, .dx-size-medium {
+  --DS-text-box-text-content-typography-font-family: var(--DS-text-box-text-content-typography-medium-font-family);
+  --DS-text-box-text-content-typography-font-weight: var(--DS-text-box-text-content-typography-medium-font-weight);
+  --DS-text-box-text-content-typography-font-size: var(--DS-text-box-text-content-typography-medium-font-size);
+  --DS-text-box-text-content-typography-line-height: var(--DS-text-box-text-content-typography-medium-line-height);
+  --DS-text-box-text-content-layout-vertical: var(--DS-text-box-text-content-layout-medium-vertical);
+  --DS-text-box-text-input-layout-content-box-horizontal: var(--DS-text-box-text-input-layout-content-box-medium-horizontal);
+  --DS-text-box-text-input-layout-content-box-vertical: var(--DS-text-box-text-input-layout-content-box-medium-vertical);
+  --DS-text-box-text-input-layout-content-box-gap: var(--DS-text-box-text-input-layout-content-box-medium-gap);
+  --DS-text-box-text-input-layout-icon-wrapper-input: var(--DS-text-box-text-input-layout-icon-wrapper-input-medium);
+  --DS-text-box-text-input-layout-icon-wrapper-icon-validate: var(--DS-text-box-text-input-layout-icon-wrapper-icon-validate-medium);
+  --DS-text-box-text-input-layout-inner-box-horizontal: var(--DS-text-box-text-input-layout-inner-box-medium-horizontal);
+  --DS-text-box-text-input-layout-inner-box-vertical: var(--DS-text-box-text-input-layout-inner-box-medium-vertical);
+  --DS-text-box-text-input-border-width: var(--DS-text-box-text-input-border-width-medium);
+  --DS-text-box-text-input-border-radius-outer-corner: var(--DS-text-box-text-input-border-radius-medium-outer-corner);
+  --DS-text-box-text-input-border-radius-inner-corner: var(--DS-text-box-text-input-border-radius-medium-inner-corner);
+  --DS-text-box-text-box-typography-caption-font-family: var(--DS-text-box-text-box-typography-caption-medium-font-family);
+  --DS-text-box-text-box-typography-caption-font-weight: var(--DS-text-box-text-box-typography-caption-medium-font-weight);
+  --DS-text-box-text-box-typography-caption-font-size: var(--DS-text-box-text-box-typography-caption-medium-font-size);
+  --DS-text-box-text-box-typography-caption-line-height: var(--DS-text-box-text-box-typography-caption-medium-line-height);
+  --DS-text-box-text-box-typography-validation-text-font-family: var(--DS-text-box-text-box-typography-validation-text-medium-font-family);
+  --DS-text-box-text-box-typography-validation-text-font-weight: var(--DS-text-box-text-box-typography-validation-text-medium-font-weight);
+  --DS-text-box-text-box-typography-validation-text-font-size: var(--DS-text-box-text-box-typography-validation-text-medium-font-size);
+  --DS-text-box-text-box-typography-validation-text-line-height: var(--DS-text-box-text-box-typography-validation-text-medium-line-height);
+  --DS-text-box-text-box-layout-inner-box-gap: var(--DS-text-box-text-box-layout-inner-box-medium-gap);
+  --DS-text-box-text-box-layout-caption-bottom: var(--DS-text-box-text-box-layout-caption-medium-bottom);
+  --DS-text-box-text-box-layout-validation-text-top: var(--DS-text-box-text-box-layout-validation-text-medium-top);
+}
+
+.dx-size-small {
+  --DS-text-box-text-content-typography-font-family: var(--DS-text-box-text-content-typography-small-font-family);
+  --DS-text-box-text-content-typography-font-weight: var(--DS-text-box-text-content-typography-small-font-weight);
+  --DS-text-box-text-content-typography-font-size: var(--DS-text-box-text-content-typography-small-font-size);
+  --DS-text-box-text-content-typography-line-height: var(--DS-text-box-text-content-typography-small-line-height);
+  --DS-text-box-text-content-layout-vertical: var(--DS-text-box-text-content-layout-small-vertical);
+  --DS-text-box-text-input-layout-content-box-horizontal: var(--DS-text-box-text-input-layout-content-box-small-horizontal);
+  --DS-text-box-text-input-layout-content-box-vertical: var(--DS-text-box-text-input-layout-content-box-small-vertical);
+  --DS-text-box-text-input-layout-content-box-gap: var(--DS-text-box-text-input-layout-content-box-small-gap);
+  --DS-text-box-text-input-layout-icon-wrapper-input: var(--DS-text-box-text-input-layout-icon-wrapper-input-small);
+  --DS-text-box-text-input-layout-icon-wrapper-icon-validate: var(--DS-text-box-text-input-layout-icon-wrapper-icon-validate-small);
+  --DS-text-box-text-input-layout-inner-box-horizontal: var(--DS-text-box-text-input-layout-inner-box-small-horizontal);
+  --DS-text-box-text-input-layout-inner-box-vertical: var(--DS-text-box-text-input-layout-inner-box-small-vertical);
+  --DS-text-box-text-input-border-width: var(--DS-text-box-text-input-border-width-small);
+  --DS-text-box-text-input-border-radius-outer-corner: var(--DS-text-box-text-input-border-radius-small-outer-corner);
+  --DS-text-box-text-input-border-radius-inner-corner: var(--DS-text-box-text-input-border-radius-small-inner-corner);
+  --DS-text-box-text-box-typography-caption-font-family: var(--DS-text-box-text-box-typography-caption-small-font-family);
+  --DS-text-box-text-box-typography-caption-font-weight: var(--DS-text-box-text-box-typography-caption-small-font-weight);
+  --DS-text-box-text-box-typography-caption-font-size: var(--DS-text-box-text-box-typography-caption-small-font-size);
+  --DS-text-box-text-box-typography-caption-line-height: var(--DS-text-box-text-box-typography-caption-small-line-height);
+  --DS-text-box-text-box-typography-validation-text-font-family: var(--DS-text-box-text-box-typography-validation-text-small-font-family);
+  --DS-text-box-text-box-typography-validation-text-font-weight: var(--DS-text-box-text-box-typography-validation-text-small-font-weight);
+  --DS-text-box-text-box-typography-validation-text-font-size: var(--DS-text-box-text-box-typography-validation-text-small-font-size);
+  --DS-text-box-text-box-typography-validation-text-line-height: var(--DS-text-box-text-box-typography-validation-text-small-line-height);
+  --DS-text-box-text-box-layout-inner-box-gap: var(--DS-text-box-text-box-layout-inner-box-small-gap);
+  --DS-text-box-text-box-layout-caption-bottom: var(--DS-text-box-text-box-layout-caption-small-bottom);
+  --DS-text-box-text-box-layout-validation-text-top: var(--DS-text-box-text-box-layout-validation-text-small-top);
+}
+
+.dx-size-large {
+  --DS-text-box-text-content-typography-font-family: var(--DS-text-box-text-content-typography-large-font-family);
+  --DS-text-box-text-content-typography-font-weight: var(--DS-text-box-text-content-typography-large-font-weight);
+  --DS-text-box-text-content-typography-font-size: var(--DS-text-box-text-content-typography-large-font-size);
+  --DS-text-box-text-content-typography-line-height: var(--DS-text-box-text-content-typography-large-line-height);
+  --DS-text-box-text-content-layout-vertical: var(--DS-text-box-text-content-layout-large-vertical);
+  --DS-text-box-text-input-layout-content-box-horizontal: var(--DS-text-box-text-input-layout-content-box-large-horizontal);
+  --DS-text-box-text-input-layout-content-box-vertical: var(--DS-text-box-text-input-layout-content-box-large-vertical);
+  --DS-text-box-text-input-layout-content-box-gap: var(--DS-text-box-text-input-layout-content-box-large-gap);
+  --DS-text-box-text-input-layout-icon-wrapper-input: var(--DS-text-box-text-input-layout-icon-wrapper-input-large);
+  --DS-text-box-text-input-layout-icon-wrapper-icon-validate: var(--DS-text-box-text-input-layout-icon-wrapper-icon-validate-large);
+  --DS-text-box-text-input-layout-inner-box-horizontal: var(--DS-text-box-text-input-layout-inner-box-large-horizontal);
+  --DS-text-box-text-input-layout-inner-box-vertical: var(--DS-text-box-text-input-layout-inner-box-large-vertical);
+  --DS-text-box-text-input-border-width: var(--DS-text-box-text-input-border-width-large);
+  --DS-text-box-text-input-border-radius-outer-corner: var(--DS-text-box-text-input-border-radius-large-outer-corner);
+  --DS-text-box-text-input-border-radius-inner-corner: var(--DS-text-box-text-input-border-radius-large-inner-corner);
+  --DS-text-box-text-box-typography-caption-font-family: var(--DS-text-box-text-box-typography-caption-large-font-family);
+  --DS-text-box-text-box-typography-caption-font-weight: var(--DS-text-box-text-box-typography-caption-large-font-weight);
+  --DS-text-box-text-box-typography-caption-font-size: var(--DS-text-box-text-box-typography-caption-large-font-size);
+  --DS-text-box-text-box-typography-caption-line-height: var(--DS-text-box-text-box-typography-caption-large-line-height);
+  --DS-text-box-text-box-typography-validation-text-font-family: var(--DS-text-box-text-box-typography-validation-text-large-font-family);
+  --DS-text-box-text-box-typography-validation-text-font-weight: var(--DS-text-box-text-box-typography-validation-text-large-font-weight);
+  --DS-text-box-text-box-typography-validation-text-font-size: var(--DS-text-box-text-box-typography-validation-text-large-font-size);
+  --DS-text-box-text-box-typography-validation-text-line-height: var(--DS-text-box-text-box-typography-validation-text-large-line-height);
+  --DS-text-box-text-box-layout-inner-box-gap: var(--DS-text-box-text-box-layout-inner-box-large-gap);
+  --DS-text-box-text-box-layout-caption-bottom: var(--DS-text-box-text-box-layout-caption-large-bottom);
+  --DS-text-box-text-box-layout-validation-text-top: var(--DS-text-box-text-box-layout-validation-text-large-top);
+}

@@ -1,0 +1,14 @@
+.dx-button-md, .dx-size-medium, [data-size="medium"] {
+  --DS-button-group-border-radius-inner-corner: var(--DS-button-group-border-radius-medium-inner-corner);
+  --DS-button-group-layout-gap: var(--DS-button-group-layout-medium-gap);
+}
+
+.dx-button-sm, .dx-size-small, [data-size="small"] {
+  --DS-button-group-border-radius-inner-corner: var(--DS-button-group-border-radius-small-inner-corner);
+  --DS-button-group-layout-gap: var(--DS-button-group-layout-small-gap);
+}
+
+.dx-button-lg, .dx-size-large, [data-size="large"] {
+  --DS-button-group-border-radius-inner-corner: var(--DS-button-group-border-radius-large-inner-corner);
+  --DS-button-group-layout-gap: var(--DS-button-group-layout-large-gap);
+}

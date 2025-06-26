@@ -64,6 +64,13 @@
         "scss/operator-no-newline-after": null,
 
         "devextreme/at-use-no-public-components": true,
-        "devextreme/no-division-slash": true
+        "devextreme/no-division-slash": true,
+        "custom-property-pattern": [
+            "^(DS-)?([a-z][a-z0-9]*)(-[a-z0-9]+)*$",
+            {
+                "message": "Expected custom property name \"%s\" to be kebab-case or start with \"--DS-\""
+            }
+        ],
+        "color-hex-length": null
     }
 }

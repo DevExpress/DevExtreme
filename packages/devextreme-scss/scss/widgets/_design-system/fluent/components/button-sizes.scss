@@ -1,0 +1,65 @@
+.dx-button-md, .dx-size-medium, [data-size="medium"] {
+  --DS-button-typography-default-font-family: var(--DS-button-typography-default-medium-font-family);
+  --DS-button-typography-default-font-size: var(--DS-button-typography-default-medium-font-size);
+  --DS-button-typography-default-font-weight: var(--DS-button-typography-default-medium-font-weight);
+  --DS-button-typography-default-line-height: var(--DS-button-typography-default-medium-line-height);
+  --DS-button-typography-link-font-family: var(--DS-button-typography-link-medium-font-family);
+  --DS-button-typography-link-font-size: var(--DS-button-typography-link-medium-font-size);
+  --DS-button-typography-link-font-weight: var(--DS-button-typography-link-medium-font-weight);
+  --DS-button-typography-link-line-height: var(--DS-button-typography-link-medium-line-height);
+  --DS-button-border-radius: var(--DS-button-border-radius-medium);
+  --DS-button-border-width: var(--DS-button-border-width-medium);
+  --DS-button-layout-inner-box-horizontal: var(--DS-button-layout-inner-box-medium-horizontal);
+  --DS-button-layout-inner-box-vertical: var(--DS-button-layout-inner-box-medium-vertical);
+  --DS-button-layout-inner-box-gap: var(--DS-button-layout-inner-box-medium-gap);
+  --DS-button-layout-inner-box-icon-button-horizontal: var(--DS-button-layout-inner-box-icon-button-medium-horizontal);
+  --DS-button-layout-inner-box-icon-button-vertical: var(--DS-button-layout-inner-box-icon-button-medium-vertical);
+  --DS-button-layout-inner-box-icon-button-gap: var(--DS-button-layout-inner-box-icon-button-medium-gap);
+  --DS-button-layout-icon-wrapper: var(--DS-button-layout-icon-wrapper-medium);
+  --DS-button-layout-text-box-vertical: var(--DS-button-layout-text-box-medium-vertical);
+  --DS-button-layout-text-box-horizontal: var(--DS-button-layout-text-box-medium-horizontal);
+}
+
+.dx-button-sm, .dx-size-small, [data-size="small"] {
+  --DS-button-typography-default-font-family: var(--DS-button-typography-default-small-font-family);
+  --DS-button-typography-default-font-size: var(--DS-button-typography-default-small-font-size);
+  --DS-button-typography-default-font-weight: var(--DS-button-typography-default-small-font-weight);
+  --DS-button-typography-default-line-height: var(--DS-button-typography-default-small-line-height);
+  --DS-button-typography-link-font-family: var(--DS-button-typography-link-small-font-family);
+  --DS-button-typography-link-font-size: var(--DS-button-typography-link-small-font-size);
+  --DS-button-typography-link-font-weight: var(--DS-button-typography-link-small-font-weight);
+  --DS-button-typography-link-line-height: var(--DS-button-typography-link-small-line-height);
+  --DS-button-border-radius: var(--DS-button-border-radius-small);
+  --DS-button-border-width: var(--DS-button-border-width-small);
+  --DS-button-layout-inner-box-horizontal: var(--DS-button-layout-inner-box-small-horizontal);
+  --DS-button-layout-inner-box-vertical: var(--DS-button-layout-inner-box-small-vertical);
+  --DS-button-layout-inner-box-gap: var(--DS-button-layout-inner-box-small-gap);
+  --DS-button-layout-inner-box-icon-button-horizontal: var(--DS-button-layout-inner-box-icon-button-small-horizontal);
+  --DS-button-layout-inner-box-icon-button-vertical: var(--DS-button-layout-inner-box-icon-button-small-vertical);
+  --DS-button-layout-inner-box-icon-button-gap: var(--DS-button-layout-inner-box-icon-button-small-gap);
+  --DS-button-layout-icon-wrapper: var(--DS-button-layout-icon-wrapper-small);
+  --DS-button-layout-text-box-vertical: var(--DS-button-layout-text-box-small-vertical);
+  --DS-button-layout-text-box-horizontal: var(--DS-button-layout-text-box-small-horizontal);
+}
+
+.dx-button-lg, .dx-size-large, [data-size="large"] {
+  --DS-button-typography-default-font-family: var(--DS-button-typography-default-large-font-family);
+  --DS-button-typography-default-font-size: var(--DS-button-typography-default-large-font-size);
+  --DS-button-typography-default-font-weight: var(--DS-button-typography-default-large-font-weight);
+  --DS-button-typography-default-line-height: var(--DS-button-typography-default-large-line-height);
+  --DS-button-typography-link-font-family: var(--DS-button-typography-link-large-font-family);
+  --DS-button-typography-link-font-size: var(--DS-button-typography-link-large-font-size);
+  --DS-button-typography-link-font-weight: var(--DS-button-typography-link-large-font-weight);
+  --DS-button-typography-link-line-height: var(--DS-button-typography-link-large-line-height);
+  --DS-button-border-radius: var(--DS-button-border-radius-large);
+  --DS-button-border-width: var(--DS-button-border-width-large);
+  --DS-button-layout-inner-box-horizontal: var(--DS-button-layout-inner-box-large-horizontal);
+  --DS-button-layout-inner-box-vertical: var(--DS-button-layout-inner-box-large-vertical);
+  --DS-button-layout-inner-box-gap: var(--DS-button-layout-inner-box-large-gap);
+  --DS-button-layout-inner-box-icon-button-horizontal: var(--DS-button-layout-inner-box-icon-button-large-horizontal);
+  --DS-button-layout-inner-box-icon-button-vertical: var(--DS-button-layout-inner-box-icon-button-large-vertical);
+  --DS-button-layout-inner-box-icon-button-gap: var(--DS-button-layout-inner-box-icon-button-large-gap);
+  --DS-button-layout-icon-wrapper: var(--DS-button-layout-icon-wrapper-large);
+  --DS-button-layout-text-box-vertical: var(--DS-button-layout-text-box-large-vertical);
+  --DS-button-layout-text-box-horizontal: var(--DS-button-layout-text-box-large-horizontal);
+}

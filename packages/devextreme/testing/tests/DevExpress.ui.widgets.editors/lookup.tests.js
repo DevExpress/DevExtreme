@@ -18,6 +18,7 @@ import themes from 'ui/themes';
 import Lookup from 'ui/lookup';
 import Popup from 'ui/popup/ui.popup';
 import PopupFull from 'ui/popup/ui.popup.full';
+
 import List from 'ui/list';
 import Popover from 'ui/popover/ui.popover';
 import PopoverFull from 'ui/popover/ui.popover.full';
@@ -2249,6 +2250,7 @@ QUnit.module('popup options', {
         openPopupWithList($lookup.dxLookup('instance'));
 
         const $title = $(toSelector(POPUP_TITLE_CLASS));
+        debugger;
 
         assert.equal($title.text().trim(), 'testTitle', 'title text is correct');
     });

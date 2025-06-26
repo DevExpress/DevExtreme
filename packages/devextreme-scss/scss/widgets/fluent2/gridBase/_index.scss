@@ -1218,7 +1218,7 @@ $fluent2-grid-base-group-panel-message-line-height: $fluent2-button-text-line-he
     .dx-revert-button {
       @include dx-button-sizing(2px, 2px, 2px, 18px, 0);
 
-      border-radius: $button-border-radius;
+      border-radius: $base-border-radius;
 
       @include dx-button-styling-variant(
         $button-danger-bg,
