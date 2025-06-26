@@ -1839,6 +1839,60 @@ QUnit.test('Synchronization two axis with paddins, inverted axis, non zero paddi
     });
 });
 
+QUnit.test('Synchronization two axis with synchronizedValue and not overlapped values for 2 axis, not correct zero value (T1295525)', function(assert) {
+    checkAxesSynchronization(assert, {
+        axesOptions: [
+            {
+                range: {
+                    axisType: 'continuous',
+                    max: 425000,
+                    maxVisible: 425000,
+                    min: 0,
+                    minVisible: 280000
+                },
+                tickValues: [250000, 300000, 325000, 350000, 375000, 400000, 425000],
+                tickInterval: 25000,
+                synchronizedValue: 0,
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    max: 28,
+                    maxVisible: 28,
+                    min: 0,
+                    minVisible: 0
+                },
+                tickValues: [0, 5, 10, 15, 20, 25, 30],
+                tickInterval: 5,
+                synchronizedValue: 0,
+            }
+        ],
+        axesOptionsAfterSync: [
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: 0,
+                    minVisible: 0,
+                    max: 425000,
+                    maxVisible: 425000
+                },
+                tickValues: [0, 25000, 50000, 75000, 100000, 125000, 150000, 175000, 200000, 225000, 250000, 275000, 300000, 325000, 350000, 375000, 400000, 425000]
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: 0,
+                    minVisible: 0,
+                    max: 85,
+                    maxVisible: 85,
+                },
+                tickValues: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85]
+            }
+        ],
+        syncIndexes: [[0, 0]]
+    });
+});
+
 QUnit.test('Synchronization two continuous axis. B250542', function(assert) {
     const tickValues1 = [-2, -1, 0, 1, 2, 3];
     const tickValue2 = [10, 20, 30, 40, 50, 60, 70, 80, 90];
