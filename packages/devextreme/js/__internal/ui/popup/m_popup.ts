@@ -1211,10 +1211,11 @@ class Popup<
     const { value, name } = args;
 
     switch (name) {
+      case 'rtlEnabled':
       case 'disabled': {
         super._optionChanged(args);
 
-        const options = { disabled: Boolean(value) };
+        const options = { [name]: Boolean(value) };
 
         this._updateToolbarOptions('top', options);
         this._updateToolbarOptions('bottom', options);
