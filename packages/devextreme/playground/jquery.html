@@ -130,24 +130,26 @@
                     width: 360,
                     height: 320,
                     title: '!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+',
-                    showCloseButton: false,
-                    toolbarItems: [
-                        // getCenterItemConfig("Center Item"),
-                        getItemConfig("First Item"),
-                        getItemConfig("Second Item", "auto"),
-                        getItemConfig("Third Item", "auto"),
-                        {
-                            toolbar: 'bottom',
-                            location: "before",
-                            text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
-                        },
-                        getBottomItemConfig("First Item"),
-                        getBottomItemConfig("Second Item", "auto"),
-                        getBottomItemConfig("Third Item", "auto"),
-                    ],
+                    showCloseButton: true,
+                    // showCloseButton: true,
+                    // toolbarItems: [
+                    //     // getCenterItemConfig("Center Item"),
+                    //     getItemConfig("First Item"),
+                    //     getItemConfig("Second Item", "auto"),
+                    //     getItemConfig("Third Item", "auto"),
+                    //     {
+                    //         toolbar: 'bottom',
+                    //         location: "before",
+                    //         text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
+                    //     },
+                    //     getBottomItemConfig("First Item"),
+                    //     getBottomItemConfig("Second Item", "auto"),
+                    //     getBottomItemConfig("Third Item", "auto"),
+                    // ],
                 }).dxPopup('instance');
 
-                // popup.option({ disabled: true });
+                // popup.option({ showCloseButton: true });
+                // popup.option({ showCloseButton: false });
 
                 // $('#toolbar').dxToolbar({
                 //     width: 312,

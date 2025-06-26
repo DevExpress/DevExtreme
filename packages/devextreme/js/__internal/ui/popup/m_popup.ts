@@ -619,8 +619,6 @@ class Popup<
     const $toolbar = $container.children('div');
 
     $container.replaceWith($toolbar);
-
-    /** First fix for initial rendering */
     triggerResizeEvent($toolbar);
 
     return $toolbar;
