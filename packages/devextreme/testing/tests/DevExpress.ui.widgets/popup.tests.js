@@ -29,6 +29,7 @@ import {
     TEMPLATE_WRAPPER_CLASS,
     POPUP_CONTENT_SCROLLABLE_CLASS,
 } from '__internal/ui/popup/m_popup';
+import { BUTTON_CLASS } from '__internal/ui/button/button';
 import { shouldSkipOnMobile } from '../../helpers/device.js';
 
 import 'generic_light.css!';
@@ -1319,17 +1320,19 @@ QUnit.module('options changed callbacks', {
         });
     });
 
-    QUnit.test('buttons close button', function(assert) {
-        const $popup = $('#popup').dxPopup({ visible: true, showCloseButton: true });
-        const instance = $popup.dxPopup('instance');
-        const $title = $(`.${POPUP_TITLE_CLASS}`, viewport());
-        const $closeButton = $(`.${POPUP_TITLE_CLOSEBUTTON_CLASS}`, viewport());
+    QUnit.test('close button', function(assert) {
+        const getTitle = () => $(`.${POPUP_TITLE_CLASS}`, viewport());
 
-        assert.equal($title.find('.dx-button').length, 1, 'title has close button');
-        assert.equal($closeButton.length, 1, 'close button element');
+        const instance = $('#popup').dxPopup({
+            visible: true,
+            showCloseButton: true,
+        }).dxPopup('instance');
+
+        assert.strictEqual(getTitle().find(`.${BUTTON_CLASS}`).length, 1, 'title has close button');
 
         instance.option('toolbarItems', []);
-        assert.equal($title.find('.dx-button').length, 0, 'close button is removed');
+
+        assert.strictEqual(getTitle().find(`.${BUTTON_CLASS}`).length, 1, 'title still has close button');
     });
 
     QUnit.test('close button options', function(assert) {
@@ -1428,23 +1431,28 @@ QUnit.module('options changed callbacks', {
     QUnit.test('buttons aliases change affects container classes', function(assert) {
         const popup = $('#popup').dxPopup({
             visible: true,
-            toolbarItems: [{ shortcut: 'cancel' }]
+            toolbarItems: [
+                { shortcut: 'cancel' },
+            ],
         }).dxPopup('instance');
 
-        let $popupBottom = this.instance.$content().parent().find('.' + POPUP_BOTTOM_CLASS);
-        assert.ok($popupBottom.hasClass('dx-popup-cancel'), 'popup bottom has cancel class');
+        assert.ok(popup.bottomToolbar().hasClass('dx-popup-cancel'), 'bottom toolbar has cancel class');
 
-        popup.option('toolbarItems', [{ shortcut: 'done' }]);
-        $popupBottom = this.instance.$content().parent().find('.dx-popup-bottom');
-        assert.ok($popupBottom.hasClass('dx-popup-done'), 'popup bottom has done class');
-        assert.ok(!$popupBottom.hasClass('dx-popup-cancel'), 'popup bottom has not cancel class');
+        popup.option({
+            toolbarItems: [
+                { shortcut: 'done' },
+            ],
+        });
+
+        assert.ok(popup.bottomToolbar().hasClass('dx-popup-done'), 'bottom toolbar has done class');
+        assert.notOk(popup.bottomToolbar().hasClass('dx-popup-cancel'), 'bottom toolbar has not cancel class');
     });
 
     QUnit.test('empty item should not be rendered in top toolbar', function(assert) {
         $('#popup').dxPopup({
             visible: true,
             showTitle: true,
-            showCloseButton: false
+            showCloseButton: false,
         });
 
         const $toolbarItems = $('.' + POPUP_TITLE_CLASS).find('.dx-item');
@@ -1461,7 +1469,8 @@ QUnit.module('options changed callbacks', {
                 toolbarItems: [{ widget: 'dxButton', options: { text: 'test 2 top' }, toolbar: 'bottom', location: 'after' }]
             });
 
-            assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
+            assert.strictEqual(resizeEventSpy.callCount, 1, 'resize event is triggered after option change');
+            // assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
         } finally {
             resizeEventSpy.restore();
         }

@@ -535,10 +535,11 @@ class Popup<
 
     if (this._$bottomToolbar) {
       this._updateToolbarOptions('bottom', { items });
-      return;
+    } else {
+      this._renderBottomToolbarImpl();
     }
 
-    this._renderBottomToolbarImpl();
+    this._toggleClasses();
   }
 
   _renderBottomToolbarImpl(): void {
@@ -559,8 +560,6 @@ class Popup<
     );
 
     this._$bottomToolbar.addClass(POPUP_BOTTOM_CLASS);
-
-    this._toggleClasses();
   }
 
   _renderToolbar(
