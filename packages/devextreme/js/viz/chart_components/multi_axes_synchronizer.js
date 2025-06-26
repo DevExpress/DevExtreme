@@ -192,30 +192,33 @@ function getMainAxisInfo(axesInfo) {
 
 function correctMinMaxValues(axesInfo) {
     const mainAxisInfo = getMainAxisInfo(axesInfo);
-    const mainAxisInfoTickInterval = mainAxisInfo.tickInterval;
+    const mainAxisRange = getAxisRange(mainAxisInfo);
 
     axesInfo.forEach(axisInfo => {
-        let scale;
-        let move;
-        let mainAxisBaseValueOffset;
-        let valueFromAxisInfo;
-
         if(axisInfo !== mainAxisInfo) {
-            if(mainAxisInfoTickInterval && axisInfo.tickInterval) {
+            if(mainAxisInfo.tickInterval && axisInfo.tickInterval) {
+                const tickIntervalScale = axisInfo.tickInterval / mainAxisInfo.tickInterval;
+
                 if(axisInfo.stubData && isDefined(axisInfo.synchronizedValue)) {
-                    axisInfo.oldMinValue = axisInfo.minValue = axisInfo.baseTickValue - (mainAxisInfo.baseTickValue - mainAxisInfo.minValue) / mainAxisInfoTickInterval * axisInfo.tickInterval;
-                    axisInfo.oldMaxValue = axisInfo.maxValue = axisInfo.baseTickValue - (mainAxisInfo.baseTickValue - mainAxisInfo.maxValue) / mainAxisInfoTickInterval * axisInfo.tickInterval;
+                    axisInfo.oldMinValue = axisInfo.minValue = axisInfo.baseTickValue - (mainAxisInfo.baseTickValue - mainAxisInfo.minValue) * tickIntervalScale;
+                    axisInfo.oldMaxValue = axisInfo.maxValue = axisInfo.baseTickValue - (mainAxisInfo.baseTickValue - mainAxisInfo.maxValue) * tickIntervalScale;
                 }
-                scale = mainAxisInfoTickInterval / getAxisRange(mainAxisInfo) / axisInfo.tickInterval * getAxisRange(axisInfo);
-                axisInfo.maxValue = axisInfo.minValue + getAxisRange(axisInfo) / scale;
+
+                axisInfo.maxValue = axisInfo.minValue + tickIntervalScale * mainAxisRange;
             }
-            if((mainAxisInfo.inverted && !axisInfo.inverted) || (!mainAxisInfo.inverted && axisInfo.inverted)) {
+
+            let mainAxisBaseValueOffset;
+
+            if(!!mainAxisInfo.inverted !== !!axisInfo.inverted) {
                 mainAxisBaseValueOffset = mainAxisInfo.maxValue - mainAxisInfo.invertedBaseTickValue;
             } else {
                 mainAxisBaseValueOffset = mainAxisInfo.baseTickValue - mainAxisInfo.minValue;
             }
-            valueFromAxisInfo = getAxisRange(axisInfo);
-            move = (mainAxisBaseValueOffset / getAxisRange(mainAxisInfo) - (axisInfo.baseTickValue - axisInfo.minValue) / valueFromAxisInfo) * valueFromAxisInfo;
+
+            const axisBaseValueOffset = axisInfo.baseTickValue - axisInfo.minValue;
+            const scaledMainAxisBaseValueOffset = mainAxisBaseValueOffset * getAxisRange(axisInfo) / mainAxisRange;
+            const move = scaledMainAxisBaseValueOffset - axisBaseValueOffset;
+
             axisInfo.minValue -= move;
             axisInfo.maxValue -= move;
         }
@@ -365,18 +368,8 @@ function updateMinorTicks(axesInfo) {
 }
 
 function allAxesValuesOnSameSideFromZero(axesInfo) {
-    let allPositive = true;
-    let allNegative = true;
-
-    axesInfo.forEach((axis) => {
-        if(axis.oldMinValue > 0 || axis.oldMaxValue > 0) {
-            allNegative = false;
-        }
-
-        if(axis.oldMinValue < 0 || axis.oldMaxValue < 0) {
-            allPositive = false;
-        }
-    });
+    const allPositive = axesInfo.every(({ oldMinValue, oldMaxValue }) => oldMinValue >= 0 && oldMaxValue >= 0);
+    const allNegative = axesInfo.every(({ oldMinValue, oldMaxValue }) => oldMinValue <= 0 && oldMaxValue <= 0);
 
     return allPositive || allNegative;
 }
@@ -387,8 +380,9 @@ function correctPaddings(axesInfo, paddings) {
     }
 
     return axesInfo.reduce((prev, info) => {
-        const inverted = info.inverted;
-        const { start, end } = info.axis.getCorrectedValuesToZero(info.minValue, info.maxValue);
+        const { inverted, minValue, maxValue } = info;
+        const { start, end } = info.axis.getCorrectedValuesToZero(minValue, maxValue);
+
         if(isDefined(start) || isDefined(end)) {
             return inverted ? {
                 start: prev.start,
@@ -398,6 +392,7 @@ function correctPaddings(axesInfo, paddings) {
                 end: prev.end
             };
         }
+
         return prev;
     }, paddings);
 }
@@ -405,31 +400,36 @@ function correctPaddings(axesInfo, paddings) {
 const multiAxesSynchronizer = {
     synchronize: function(valueAxes) {
         each(getValueAxesPerPanes(valueAxes), function(_, axes) {
-            let axesInfo;
-            let paddings;
-            if(axes.length > 1) {
-                axesInfo = populateAxesInfo(axes);
-                if(axesInfo.length < 2 || !getMainAxisInfo(axesInfo)) return;
-                updateTickValues(axesInfo);
-
-                correctMinMaxValues(axesInfo);
-
-                paddings = calculatePaddings(axesInfo);
-                paddings = correctPaddings(axesInfo, paddings);
-
-                correctMinMaxValuesByPaddings(axesInfo, paddings);
-
-                correctAfterSynchronize(axesInfo);
-
-                updateTickValuesIfSynchronizedValueUsed(axesInfo);
-
-                updateMinorTicks(axesInfo);
-
-                axesInfo.forEach(info => {
-                    convertAxisInfo(info, logConverter(info.axis.getTranslator().getBusinessRange()));
-                });
-                applyMinMaxValues(axesInfo);
+            if(axes.length <= 1) {
+                return;
             }
+
+            const axesInfo = populateAxesInfo(axes);
+
+            if(axesInfo.length < 2 || !getMainAxisInfo(axesInfo)) {
+                return;
+            }
+
+            updateTickValues(axesInfo);
+
+            correctMinMaxValues(axesInfo);
+
+            let paddings = calculatePaddings(axesInfo);
+            paddings = correctPaddings(axesInfo, paddings);
+
+            correctMinMaxValuesByPaddings(axesInfo, paddings);
+
+            correctAfterSynchronize(axesInfo);
+
+            updateTickValuesIfSynchronizedValueUsed(axesInfo);
+
+            updateMinorTicks(axesInfo);
+
+            axesInfo.forEach(info => {
+                convertAxisInfo(info, logConverter(info.axis.getTranslator().getBusinessRange()));
+            });
+
+            applyMinMaxValues(axesInfo);
         });
     }
 };
