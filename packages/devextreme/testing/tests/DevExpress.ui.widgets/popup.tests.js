@@ -1468,7 +1468,7 @@ QUnit.module('options changed callbacks', {
 
             this.instance.option({ visible: true });
 
-            // 1st from popup visibility changing, 2nd from toolbar rendering
+            // 1st from toolbar rendering, 2nd from popup visibility changing
             assert.strictEqual(resizeEventSpy.callCount, 2, 'resize event is triggered twice after visible change in runtime to true');
 
             this.instance.option({
@@ -1490,6 +1490,7 @@ QUnit.module('options changed callbacks', {
 
     QUnit.test('titleTemplate option change should trigger resize event for content correct geometry rendering', function(assert) {
         this.instance.option('visible', true);
+
         const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
 
         try {
@@ -2642,42 +2643,51 @@ QUnit.module('rendering', {
 });
 
 QUnit.module('templates', () => {
-    QUnit.test('titleTemplate test', function(assert) {
+    QUnit.test('titleTemplate', function(assert) {
         assert.expect(6);
 
         const $element = $('#popup').dxPopup({
             visible: true,
-            titleTemplate: function(titleElement) {
-                let result = '<div class=\'test-title-renderer\'>';
-                result += '<h1>Title</h1>';
-                result += '</div>';
+            titleTemplate: (titleElement) => {
+                const markup = `
+                    <div class="test-title-renderer">
+                        <h1>Title</h1>
+                    </div>
+                `;
 
-                assert.equal(isRenderer(titleElement), !!config().useJQuery, 'titleElement is correct');
+                assert.strictEqual(isRenderer(titleElement), !!config().useJQuery, 'titleElement is correct');
 
-                return result;
+                return markup;
             }
         });
+
         const instance = $element.dxPopup('instance');
         const $popupContent = instance.$content().parent();
 
-        assert.equal($popupContent.find(`.${'test-title-renderer'}`).length, 1, 'option \'titleTemplate\'  was set successfully');
+        assert.strictEqual($popupContent.find('.test-title-renderer').length, 1, 'titleTemplate was set successfully');
 
-        instance.option('onTitleRendered', function(e) {
-            assert.equal(e.element, e.component.element(), 'element is correct');
-            assert.ok(true, 'option \'onTitleRendered\' successfully passed to the popup widget raised on titleTemplate');
+        instance.option({
+            onTitleRendered: (e) => {
+                assert.strictEqual(e.element, e.component.element(), 'element is correct');
+                assert.ok(true, 'onTitleRendered successfully passed to the popup widget raised on titleTemplate');
+            },
         });
 
-        instance.option('titleTemplate', function(titleElement) {
-            assert.equal($(titleElement).get(0), $popupContent.find('.' + POPUP_TITLE_CLASS).get(0));
+        instance.option({
+            titleTemplate: (titleElement) => {
+                assert.strictEqual($(titleElement).get(0), $popupContent.children().get(1));
 
-            let result = '<div class=\'changed-test-title-renderer\'>';
-            result += '<h1>Title</h1>';
-            result += '</div>';
+                const markup = `
+                    <div class="changed-test-title-renderer">
+                        <h1>Title</h1>
+                    </div>
+                `;
 
-            return result;
+                return markup;
+            },
         });
 
-        assert.equal($popupContent.find(`.${'changed-test-title-renderer'}`).length, 1, 'option \'titleTemplate\' successfully passed to the popup widget');
+        assert.strictEqual($popupContent.find('.changed-test-title-renderer').length, 1, 'titleTemplate successfully passed to the popup widget');
     });
 
     QUnit.test('titleRendered event should be fired if was set thought method', function(assert) {
@@ -2697,34 +2707,41 @@ QUnit.module('templates', () => {
         instance.show();
     });
 
-    QUnit.test('\'bottomTemplate\' options test', function(assert) {
+    QUnit.test('bottomTemplate', function(assert) {
         const $element = $('#popup').dxPopup({
             visible: true,
-            toolbarItems: [{ text: 'bottom text', toolbar: 'bottom', location: 'center' }],
-            bottomTemplate: function(titleElement) {
-                let result = '<div class=\'test-bottom-renderer\'>';
-                result += '<h1>bottom</h1>';
-                result += '</div>';
-
-                return result;
-            }
+            toolbarItems: [
+                {
+                    text: 'bottom text',
+                    toolbar: 'bottom',
+                    location: 'center',
+                },
+            ],
+            bottomTemplate: () => `
+                <div class="test-bottom-renderer">
+                    <h1>bottom</h1>
+                </div>
+            `,
         });
+
         const instance = $element.dxPopup('instance');
         const $popupContent = instance.$content().parent();
 
-        assert.equal($popupContent.find('.test-bottom-renderer').length, 1, 'option \'bottomTemplate\'  was set successfully');
+        assert.strictEqual($popupContent.find('.test-bottom-renderer').length, 1, 'bottomTemplate was set successfully');
 
-        instance.option('bottomTemplate', function(titleElement) {
-            assert.equal($(titleElement).get(0), $popupContent.find('.' + POPUP_BOTTOM_CLASS).get(0));
+        instance.option({
+            bottomTemplate: (element) => {
+                assert.strictEqual($(element).get(0), $popupContent.children().get(2));
 
-            let result = '<div class=\'changed-test-bottom-renderer\'>';
-            result += '<h1>bottom</h1>';
-            result += '</div>';
-
-            return result;
+                return `
+                    <div class="changed-test-bottom-renderer">
+                        <h1>bottom</h1>
+                    </div>
+                `;
+            }
         });
 
-        assert.equal($popupContent.find('.changed-test-bottom-renderer').length, 1, 'option \'bottomTemplate\' successfully passed to the popup widget');
+        assert.strictEqual($popupContent.find('.changed-test-bottom-renderer').length, 1, 'bottomTemplate successfully passed to the popup widget');
     });
 
     QUnit.test('title should be rendered if custom \'titleTemplate\' is specified and \'title\' is not set', function(assert) {
