@@ -39,6 +39,12 @@
         "./*"
       ],
     },
+    "lib": [
+      "es2020",
+      "es2021.weakref",
+      "dom",
+      "dom.iterable"
+    ],
     "types": []
   },
   "tsc-alias": {
