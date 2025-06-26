@@ -165,4 +165,43 @@ describe('StateManager', () => {
       expect(dataControllerInstance.nonReactiveProperty).toEqual(nonReactiveProperty);
     });
   });
+
+  it('Should allow garbage collection of controllers when a component is destroyed', async () => {
+    let diContext: DIContext | null = new DIContext();
+
+    const testComponentStateTracker = setupStateManager({
+      diContext,
+      componentName: 'TestComponent',
+      logLevel: 'error',
+    });
+
+    if (!testComponentStateTracker) {
+      throw Error('StateManager not initialized');
+    }
+
+    class TestController {
+      testValue = state(42);
+    }
+
+    let controllerInstance: TestController | null = new TestController();
+    const controllerInstanceWeakRef = new WeakRef(controllerInstance);
+
+    diContext.registerInstance(TestController, controllerInstance);
+
+    controllerInstance = null;
+    diContext = null;
+
+    if (global.gc) {
+      for (let i = 0; i < 2; i += 1) {
+        global.gc();
+        // eslint-disable-next-line @stylistic/max-len
+        // eslint-disable-next-line no-await-in-loop, no-promise-executor-return, no-restricted-globals
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      }
+    }
+
+    const isGarbageCollected = controllerInstanceWeakRef.deref() === undefined;
+
+    expect(isGarbageCollected).toBe(true);
+  });
 });

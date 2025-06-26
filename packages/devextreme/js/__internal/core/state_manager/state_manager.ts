@@ -53,7 +53,10 @@ export class StateManager implements StateManagementTypes.StateManager {
           this.componentState[preparedSourceDataId] = {};
         }
 
-        this.componentState[preparedSourceDataId][propertyName] = propertyValue;
+        const isObject = propertyValue !== undefined && propertyValue !== null
+          && typeof propertyValue === 'object';
+        this.componentState[preparedSourceDataId][propertyName] = isObject
+          ? new WeakRef(propertyValue) : propertyValue;
 
         this.trackStateSourceChanges(
           preparedSourceDataId,
@@ -129,7 +132,15 @@ export class StateManager implements StateManagementTypes.StateManager {
     const result = Object.entries(this.componentState)
       .reduce((acc, [stateId, stateValue]) => {
         Object.entries(stateValue).forEach(([propertyName, propertyValue]) => {
-          const valueContainerManager = this.findValueContainerManagerFor(propertyValue);
+          const preparedPropertyValue = propertyValue instanceof WeakRef
+            // eslint-disable-next-line spellcheck/spell-checker
+            ? propertyValue.deref() : propertyValue;
+
+          if (!preparedPropertyValue) {
+            return acc;
+          }
+
+          const valueContainerManager = this.findValueContainerManagerFor(preparedPropertyValue);
 
           if (!valueContainerManager) {
             return acc;
