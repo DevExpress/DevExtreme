@@ -397,7 +397,7 @@ class Popup<
     }
   }
 
-  _doesShowAnimationChangeDimensions() {
+  _doesShowAnimationChangeDimensions(): boolean {
     const animation = this.option('animation');
 
     return ['to', 'from'].some((prop) => {
@@ -412,7 +412,7 @@ class Popup<
 
     this._shouldSkipContentResize = (
       entry: ResizeObserverEntry,
-    ) => doesShowAnimationChangeDimensions
+    ): boolean => doesShowAnimationChangeDimensions
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       && this._showAnimationProcessing || this._areContentDimensionsRendered(entry);
   }
@@ -828,14 +828,10 @@ class Popup<
 
     each(aliases, (_, alias) => {
       const className = `${POPUP_CLASS}-${alias}`;
+      const isVisible = this._toolbarItemClasses.includes(className);
 
-      if (this._toolbarItemClasses.includes(className)) {
-        this.$wrapper().addClass(`${className}-visible`);
-        this._$bottomToolbar?.addClass(className);
-      } else {
-        this.$wrapper().removeClass(`${className}-visible`);
-        this._$bottomToolbar?.removeClass(className);
-      }
+      this.$wrapper().toggleClass(`${className}-visible`, isVisible);
+      this._$bottomToolbar?.toggleClass(className, isVisible);
     });
   }
 
@@ -844,7 +840,9 @@ class Popup<
 
     if (isFocused && !zIndexPool.isLastZIndexInStack(this._zIndex)) {
       const zIndex = zIndexPool.create(this._zIndexInitValue());
+
       zIndexPool.remove(this._zIndex);
+
       this._zIndex = zIndex;
 
       this._$wrapper.css('zIndex', zIndex);
@@ -893,10 +891,11 @@ class Popup<
     if (visible && windowUtils.hasWindow()) {
       const isAnimated = this._showAnimationProcessing;
       const shouldRepeatAnimation = isAnimated && !options?.forceStopAnimation && useResizeObserver;
+
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       this._isAnimationPaused = shouldRepeatAnimation || undefined;
-
       this._stopAnimation();
+
       if (options?.shouldOnlyReposition) {
         this._renderPosition(false);
       } else {
