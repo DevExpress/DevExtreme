@@ -38,6 +38,7 @@ import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Overlay from '@ts/ui/overlay/m_overlay';
 import * as zIndexPool from '@ts/ui/overlay/m_z_index';
+import type { ToolbarBaseProperties } from '@ts/ui/toolbar/m_toolbar.base';
 
 import PopupDrag from './m_popup_drag';
 import type { OverflowManager } from './m_popup_overflow_manager';
@@ -516,12 +517,9 @@ class Popup<
       'titleTemplate',
       items,
       $toolbarContainer,
-      {
-        elementAttr: {
-          class: POPUP_TITLE_CLASS,
-        },
-      },
     );
+
+    this._$topToolbar.addClass(POPUP_TITLE_CLASS);
 
     this._renderDrag();
     this._executeTitleRenderAction(this._$topToolbar);
@@ -551,9 +549,6 @@ class Popup<
 
     const additionalToolbarOptions = {
       compactMode: true,
-      elementAttr: {
-        class: POPUP_BOTTOM_CLASS,
-      },
     };
 
     this._$bottomToolbar = this._renderToolbar(
@@ -563,6 +558,8 @@ class Popup<
       additionalToolbarOptions,
     );
 
+    this._$bottomToolbar.addClass(POPUP_BOTTOM_CLASS);
+
     this._toggleClasses();
   }
 
@@ -570,7 +567,7 @@ class Popup<
     optionName: string,
     items: ToolbarItem[],
     $container: dxElementWrapper,
-    additionalToolbarOptions: ToolbarProperties,
+    additionalToolbarOptions: Partial<ToolbarBaseProperties> = {},
   ): dxElementWrapper {
     const template = this._getTemplateByOption(optionName);
     const isEmptyTemplate = template instanceof EmptyTemplate;
@@ -585,7 +582,7 @@ class Popup<
   _renderByPolymorphTemplate(
     items: ToolbarItem[],
     $container: dxElementWrapper,
-    additionalToolbarOptions: ToolbarProperties,
+    additionalToolbarOptions: Partial<ToolbarBaseProperties>,
   ): dxElementWrapper {
     const {
       disabled,
@@ -640,7 +637,7 @@ class Popup<
       $container.replaceWith($result);
     }
 
-    return $container;
+    return $result;
   }
 
   _updateToolbarOptions(toolbar: string, options: Partial<ToolbarProperties>): void {
