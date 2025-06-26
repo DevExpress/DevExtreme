@@ -5,7 +5,6 @@ import dateUtils from '@js/core/utils/date';
 import type { Properties } from '@js/ui/scheduler';
 import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import type { SafeAppointment } from '@ts/scheduler/types';
-import type { DxElement } from 'devextreme/core/element';
 
 import type { SchedulerInternalOptions, SchedulerOptionsRule } from './types';
 
@@ -19,8 +18,6 @@ export const DEFAULT_SCHEDULER_INTERNAL_OPTIONS: SchedulerInternalOptions = {
   renovateRender: true,
   _draggingMode: 'outlook',
   _appointmentTooltipOffset: { x: 0, y: 0 },
-  _appointmentTooltipButtonsPosition: 'bottom',
-  _appointmentTooltipOpenButtonText: messageLocalization.format('dxScheduler-openAppointment'),
   _appointmentCountPerCell: 2,
   _collectorOffset: 0,
   _appointmentOffset: 26,
@@ -151,7 +148,7 @@ export const DEFAULT_SCHEDULER_OPTIONS_RULES: SchedulerOptionsRule[] = [
     },
     options: {
       useDropDownViewSwitcher: true,
-      dateCellTemplate: (data: SafeAppointment, _: number, element: DxElement): void => {
+      dateCellTemplate: (data: SafeAppointment, _: number, element: Element): void => {
         const { text = '' } = data;
 
         text.split(' ').forEach((word, wordIndex) => {
@@ -160,11 +157,9 @@ export const DEFAULT_SCHEDULER_OPTIONS_RULES: SchedulerOptionsRule[] = [
             .addClass('dx-scheduler-header-panel-cell-date');
 
           $(element).append(span);
-          if (!wordIndex) $(element).append(' ' as unknown as DxElement);
+          if (!wordIndex) $(element).append(' ' as unknown as Element);
         });
       },
-      _appointmentTooltipButtonsPosition: 'top',
-      _appointmentTooltipOpenButtonText: undefined,
       _appointmentCountPerCell: 1,
       _collectorOffset: 20,
       _appointmentOffset: 30,

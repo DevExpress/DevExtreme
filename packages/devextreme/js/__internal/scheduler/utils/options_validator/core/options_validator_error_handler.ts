@@ -1,4 +1,6 @@
-import type { GlobalErrorHandler, OptionsValidatorResult, ValidatorErrors } from './types';
+import type {
+  GlobalErrorHandler, OptionsValidatorResult, ValidatorErrors, ValidatorRuleError,
+} from './types';
 
 export abstract class OptionsValidatorErrorHandler<TValidators extends string> {
   protected constructor(
@@ -19,17 +21,32 @@ export abstract class OptionsValidatorErrorHandler<TValidators extends string> {
 
         if (errorCode) {
           const results = Object.values(result as ValidatorErrors);
-          const lastArgs = results[results.length - 1];
-          set.set(errorCode, typeof lastArgs === 'object' ? lastArgs.arguments : []);
+          results.forEach((item) => {
+            const args = (item as ValidatorRuleError).arguments ?? [];
+            const key = `${errorCode}${JSON.stringify(args)}`;
+            set.set(key, {
+              errorCode,
+              args,
+            });
+          });
         }
 
         return set;
-      }, new Map<string, string[] | undefined>());
+      }, new Map<string, {
+        errorCode: string;
+        args: string[];
+      }>());
 
     const resultArray = [...uniqErrorCodes.entries()];
-    resultArray.forEach((value, idx) => {
-      const [errorCode, args = []] = value;
-      const isLastErrorCode = idx === resultArray.length - 1;
+    const errors = resultArray.filter(([code]) => code.startsWith('E'));
+    const warnings = resultArray.filter(([code]) => code.startsWith('W'));
+    warnings.forEach((value) => {
+      const [, { errorCode, args }] = value;
+      this.globalErrorHandler.logError(errorCode, ...args);
+    });
+    errors.forEach((value, idx) => {
+      const [, { errorCode, args }] = value;
+      const isLastErrorCode = idx === errors.length - 1;
 
       // NOTE: For stopping code stack execution and not creating
       // the special error code for this case,

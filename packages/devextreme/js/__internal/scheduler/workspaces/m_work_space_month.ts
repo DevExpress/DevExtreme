@@ -7,8 +7,8 @@ import { hasWindow } from '@js/core/utils/window';
 import { DateTableMonthComponent } from '@ts/scheduler/r1/components/index';
 import { formatWeekday, monthUtils } from '@ts/scheduler/r1/utils/index';
 
-import { VIEWS } from '../constants';
 import { utils } from '../m_utils';
+import { VIEWS } from '../utils/options/constants_view';
 import SchedulerWorkSpace from './m_work_space_indicator';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';

@@ -11,7 +11,7 @@ export class Validator<TWidgetOptions, TOption> {
     const value = this.valueSelector(options);
 
     const errors = this.rules
-      .reduce<Record<string, string | ValidatorRuleError>>((result, rule) => {
+      .reduce<Record<string, boolean | ValidatorRuleError>>((result, rule) => {
         const validationResult = rule(value);
 
         if (validationResult !== true) {

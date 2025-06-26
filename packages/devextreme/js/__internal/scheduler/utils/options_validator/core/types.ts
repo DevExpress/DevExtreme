@@ -1,8 +1,7 @@
 export interface ValidatorRuleError {
-  message: string;
   arguments?: string[];
 }
-export type ValidatorRuleResult = true | string | ValidatorRuleError;
+export type ValidatorRuleResult = boolean | ValidatorRuleError;
 export type ValidatorRule<TValue> = (value: TValue) => ValidatorRuleResult;
 
 export type ValidatorErrors = Record<string, ValidatorRuleResult>;

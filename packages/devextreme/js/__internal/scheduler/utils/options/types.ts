@@ -9,17 +9,14 @@ export type ViewObject = Extract<RawViewType, object>;
 export type View = ViewObject & Required<Pick<ViewObject,
   'groupOrientation'
   | 'intervalCount'
-  | 'maxAppointmentsPerCell'
   | 'name'
   | 'type'
-  | 'allDayPanelMode'
 >>;
 export type AgendaView = ViewObject & Required<Pick<ViewObject,
   'agendaDuration'
   | 'intervalCount'
   | 'name'
   | 'type'
-  | 'allDayPanelMode'
 >>;
 export type NormalizedView = View | AgendaView;
 
@@ -29,8 +26,6 @@ export interface SchedulerInternalOptions {
   renovateRender: boolean;
   _draggingMode: 'outlook' | 'default';
   _appointmentTooltipOffset: { x: number; y: number };
-  _appointmentTooltipButtonsPosition: 'bottom' | 'top';
-  _appointmentTooltipOpenButtonText: string;
   _appointmentCountPerCell: number;
   _collectorOffset: number;
   _appointmentOffset: number;

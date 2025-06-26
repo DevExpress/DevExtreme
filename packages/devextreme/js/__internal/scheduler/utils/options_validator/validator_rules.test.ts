@@ -3,7 +3,7 @@ import {
   describe, expect, it, jest,
 } from '@jest/globals';
 
-import type { SafeSchedulerOptions } from '../types';
+import type { SafeSchedulerOptions } from '../options/types';
 import * as validationFunctions from './common/validation_functions';
 import {
   allViewsHasCorrectType,
@@ -45,7 +45,7 @@ describe('validator rules', () => {
         { startDayHour: 10, endDayHour: 9 } as SafeSchedulerOptions,
       );
 
-      expect(result).toBe('endDayHour: 9 must be greater that startDayHour: 10.');
+      expect(result).toBe(false);
     });
 
     it('should be the function with the correct name', () => {
@@ -88,9 +88,7 @@ describe('validator rules', () => {
         { cellDuration: 31, startDayHour: 9, endDayHour: 10 } as SafeSchedulerOptions,
       );
 
-      expect(result).toBe(
-        'endDayHour - startDayHour: 60 (minutes), must be divisible by cellDuration: 31 (minutes).',
-      );
+      expect(result).toBe(false);
     });
 
     it('should be the function with the correct name', () => {
@@ -133,9 +131,7 @@ describe('validator rules', () => {
         { cellDuration: 120, startDayHour: 9, endDayHour: 10 } as SafeSchedulerOptions,
       );
 
-      expect(result).toBe(
-        'endDayHour - startDayHour: 60 (minutes), must be greater or equal the cellDuration: 120 (minutes).',
-      );
+      expect(result).toBe(false);
     });
 
     it('should be the function with the correct name', () => {
@@ -163,7 +159,6 @@ describe('validator rules', () => {
         { type: 'orange' },
         { type: 'week' },
       ] as SafeSchedulerOptions['views'])).toEqual({
-        message: 'The view type "orange" is not supported. Supported types: day, week, workWeek, month, timelineDay, timelineWeek, timelineWorkWeek, timelineMonth, agenda.',
         arguments: ['orange'],
       });
     });

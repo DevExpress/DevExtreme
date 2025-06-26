@@ -38,7 +38,6 @@ import { AppointmentForm } from './appointment_popup/m_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
 import { AppointmentDataProvider } from './appointments/data_provider/m_appointment_data_provider';
 import AppointmentCollection from './appointments/m_appointment_collection';
-import { VIEWS } from './constants';
 import { SchedulerHeader } from './header/m_header';
 import type { HeaderOptions } from './header/types';
 import AppointmentLayoutManager from './m_appointments_layout_manager';
@@ -58,6 +57,7 @@ import {
   isDateAndTimeView,
   isTimelineView,
 } from './r1/utils/index';
+import { SchedulerOptionsBaseWidget } from './scheduler_options_base_widget';
 import { DesktopTooltipStrategy } from './tooltip_strategies/m_desktop_tooltip_strategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_strategy';
 import type {
@@ -70,7 +70,7 @@ import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_
 import type { IFieldExpr } from './utils/index';
 import { macroTaskArray } from './utils/index';
 import { isAgendaWorkspaceComponent } from './utils/is_agenda_workpace_component';
-import { SchedulerBaseWidgetOptions } from './utils/options/scheduler_options';
+import { VIEWS } from './utils/options/constants_view';
 import type { NormalizedView } from './utils/options/types';
 import { setAppointmentGroupValues } from './utils/resource_manager/appointment_groups_utils';
 import { getLeafGroupValues } from './utils/resource_manager/group_utils';
@@ -153,7 +153,7 @@ const RECURRENCE_EDITING_MODE = {
   CANCEL: 'cancel',
 };
 
-class Scheduler extends SchedulerBaseWidgetOptions {
+class Scheduler extends SchedulerOptionsBaseWidget {
   // NOTE: Do not initialize variables here, because `_initMarkup` function runs before constructor,
   // and initialization in constructor will erase the data
   filteredItems!: SafeAppointment[];
@@ -251,7 +251,7 @@ class Scheduler extends SchedulerBaseWidgetOptions {
   }
 
   _optionChanged(args) {
-    this._schedulerOptionChanged(args);
+    this.schedulerOptionChanged(args);
 
     const { value, name } = args;
 
@@ -296,11 +296,11 @@ class Scheduler extends SchedulerBaseWidgetOptions {
         if (this.currentView) {
           this.repaint();
         } else {
-          this._header?.option(name, value);
+          this._updateOption('header', 'views', this.views);
         }
         break;
       case 'useDropDownViewSwitcher':
-        this._header?.option(name, value);
+        this._updateOption('header', name, value);
         break;
       case 'currentView':
         this._appointments.option({
@@ -470,7 +470,7 @@ class Scheduler extends SchedulerBaseWidgetOptions {
         break;
       case 'indicatorTime':
         this._updateOption('workSpace', name, value);
-        this._header?.option(name, value);
+        this._updateOption('header', name, value);
         this.repaint();
         break;
       case 'appointmentDragging':
@@ -485,8 +485,6 @@ class Scheduler extends SchedulerBaseWidgetOptions {
       case 'dropDownAppointmentTemplate':
       case 'appointmentCollectorTemplate':
       case '_appointmentTooltipOffset':
-      case '_appointmentTooltipButtonsPosition':
-      case '_appointmentTooltipOpenButtonText':
       case '_appointmentCountPerCell':
       case '_collectorOffset':
       case '_appointmentOffset':
@@ -576,8 +574,7 @@ class Scheduler extends SchedulerBaseWidgetOptions {
   }
 
   _supportAllDayResizing() {
-    // @ts-expect-error
-    return this.currentViewType !== 'day' || this.currentView.intervalCount > 1;
+    return this.currentView.type !== 'day' || this.currentView.intervalCount > 1;
   }
 
   _isAllDayExpanded() {
@@ -1022,8 +1019,7 @@ class Scheduler extends SchedulerBaseWidgetOptions {
     }
   }
 
-  _initMarkup() {
-    // @ts-expect-error
+  _initMarkup(): void {
     super._initMarkup();
 
     this._renderA11yStatus();
@@ -1229,8 +1225,9 @@ class Scheduler extends SchedulerBaseWidgetOptions {
 
     if (isHeaderShown) {
       const $header = $('<div>').appendTo(this._mainContainer);
+      const headerOptions = this._headerConfig();
       // @ts-expect-error
-      this._header = this._createComponent($header, SchedulerHeader, this._headerConfig());
+      this._header = this._createComponent($header, SchedulerHeader, headerOptions);
     }
   }
 
@@ -1332,7 +1329,7 @@ class Scheduler extends SchedulerBaseWidgetOptions {
 
     this._recalculateWorkspace();
     if (currentViewOptions.startDate) {
-      this._header?.option('currentDate', this._workSpace._getHeaderDate());
+      this._updateOption('header', 'currentDate', this._workSpace._getHeaderDate());
     }
 
     this._appointments.option('_collectorOffset', this.getCollectorOffset());
@@ -2191,8 +2188,8 @@ class Scheduler extends SchedulerBaseWidgetOptions {
   }
 
   getFirstDayOfWeek() {
-    return isDefined(this.option('firstDayOfWeek'))
-      ? this.option('firstDayOfWeek')
+    return isDefined(this.getViewOption('firstDayOfWeek'))
+      ? this.getViewOption('firstDayOfWeek')
       : dateLocalization.firstDayOfWeekIndex();
   }
 

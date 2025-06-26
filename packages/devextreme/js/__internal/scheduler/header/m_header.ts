@@ -215,10 +215,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
   }
 
   _updateCurrentView(view) {
-    const onCurrentViewChange = this.option('onCurrentViewChange') as any;
-    onCurrentViewChange(view.name);
-
-    this._callEvent('currentView', view);
+    this.option('onCurrentViewChange')(view.name);
   }
 
   _updateCalendarValueAndCurrentDate(date) {
@@ -227,9 +224,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
   }
 
   _updateCurrentDate(date) {
-    const onCurrentDateChange = this.option('onCurrentDateChange') as any;
-    onCurrentDateChange(date);
-
+    this.option('onCurrentDateChange')(date);
     this._callEvent('currentDate', date);
   }
 

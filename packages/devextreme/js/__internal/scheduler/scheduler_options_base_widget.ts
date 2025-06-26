@@ -7,20 +7,14 @@ import {
   DEFAULT_SCHEDULER_OPTIONS,
   DEFAULT_SCHEDULER_OPTIONS_RULES,
   DEPRECATED_SCHEDULER_OPTIONS,
-} from './constants';
-import { SchedulerOptionsValidator, SchedulerOptionsValidatorErrorsHandler } from './options_validator';
+} from './utils/options/constants';
 import type {
-  DateOption, NormalizedView, SafeSchedulerOptions, SchedulerOptionsRule, View,
-} from './types';
-import {
-  getCurrentView, getViews, parseCurrentDate, parseDateOption,
-} from './utils';
+  NormalizedView, SafeSchedulerOptions, SchedulerOptionsRule, View,
+} from './utils/options/types';
+import { getCurrentView, getViewOption, getViews } from './utils/options/utils';
+import { SchedulerOptionsValidator, SchedulerOptionsValidatorErrorsHandler } from './utils/options_validator/index';
 
-const isDateOption = (
-  optionName: string,
-): optionName is DateOption => ['currentDate', 'min', 'max'].includes(optionName);
-
-export class SchedulerBaseWidgetOptions extends Widget<SafeSchedulerOptions> {
+export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
   protected views: NormalizedView[] = [];
 
   public currentView!: NormalizedView;
@@ -29,27 +23,22 @@ export class SchedulerBaseWidgetOptions extends Widget<SafeSchedulerOptions> {
 
   private _optionsValidatorErrorHandler!: SchedulerOptionsValidatorErrorsHandler;
 
-  _init(): void {
+  protected _init(): void {
     // @ts-expect-error
     super._init();
-    this._updateViews();
     this._optionsValidator = new SchedulerOptionsValidator();
     this._optionsValidatorErrorHandler = new SchedulerOptionsValidatorErrorsHandler();
   }
 
-  _getDefaultOptions(): SafeSchedulerOptions {
+  protected _getDefaultOptions(): SafeSchedulerOptions {
     // @ts-expect-error
     const options = super._getDefaultOptions();
 
-    return {
-      ...options,
+    return extend(true, options, {
       ...DEFAULT_SCHEDULER_OPTIONS,
       ...DEFAULT_SCHEDULER_INTERNAL_OPTIONS,
-      integrationOptions: {
-        ...options.integrationOptions,
-        ...DEFAULT_SCHEDULER_INTEGRATION_OPTIONS.integrationOptions,
-      },
-    } as SafeSchedulerOptions;
+      ...DEFAULT_SCHEDULER_INTEGRATION_OPTIONS,
+    }) as SafeSchedulerOptions;
   }
 
   _setDeprecatedOptions(): void {
@@ -60,33 +49,41 @@ export class SchedulerBaseWidgetOptions extends Widget<SafeSchedulerOptions> {
     extend(this._deprecatedOptions, DEPRECATED_SCHEDULER_OPTIONS);
   }
 
-  _defaultOptionsRules(): SchedulerOptionsRule[] {
+  protected _defaultOptionsRules(): SchedulerOptionsRule[] {
     // @ts-expect-error
     const rules: SchedulerOptionsRule[] = super._defaultOptionsRules();
 
     return rules.concat(DEFAULT_SCHEDULER_OPTIONS_RULES);
   }
 
-  _updateViews(): void {
-    this.views = getViews(this.option('views') ?? []);
+  protected _updateViews(): void {
+    const views = this.option('views') ?? [];
+    this.views = getViews(views);
     this.currentView = getCurrentView(
       this.option('currentView') ?? '',
-      this.option('views') ?? [],
+      views,
     );
   }
 
-  _schedulerOptionChanged<K extends keyof SafeSchedulerOptions>(args: {
+  protected _initMarkup(): void {
+    // @ts-expect-error
+    super._initMarkup();
+    this._updateViews();
+  }
+
+  protected schedulerOptionChanged<K extends keyof SafeSchedulerOptions>(args: {
     name: K;
     value: SafeSchedulerOptions[K];
   }): void {
-    this.validateOptions();
     switch (args.name) {
       case 'currentView':
       case 'views':
         this._updateViews();
         break;
       default:
+        break;
     }
+    this.validateOptions();
   }
 
   private validateOptions(): void {
@@ -105,20 +102,10 @@ export class SchedulerBaseWidgetOptions extends Widget<SafeSchedulerOptions> {
   }
 
   getViewOption<K extends keyof SafeSchedulerOptions>(optionName: K): SafeSchedulerOptions[K] {
-    if (optionName === 'currentDate') {
-      const currentDate = parseCurrentDate(this.option('currentDate'));
-      return currentDate as SafeSchedulerOptions[K];
-    }
-
     const viewOptionValue = this.currentView?.[optionName as keyof View];
     const optionValue = (viewOptionValue ?? this.option(optionName)) as SafeSchedulerOptions[K];
 
-    if (isDateOption(optionName)) {
-      const dateValue = optionValue as SafeSchedulerOptions[DateOption];
-      return parseDateOption(dateValue) as SafeSchedulerOptions[K];
-    }
-
-    return optionValue;
+    return getViewOption(optionName, optionValue);
   }
 
   hasAgendaView(): boolean {

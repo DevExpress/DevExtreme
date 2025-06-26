@@ -1,4 +1,4 @@
-import type { SafeSchedulerOptions } from '../types';
+import type { SafeSchedulerOptions } from '../options/types';
 import {
   mustBeDivisibleBy,
   mustBeGreaterThan,

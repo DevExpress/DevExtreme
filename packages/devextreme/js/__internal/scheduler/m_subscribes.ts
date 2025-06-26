@@ -13,7 +13,7 @@ const toMs = dateUtils.dateToMilliseconds;
 
 const subscribes = {
   isCurrentViewAgenda() {
-    return this.currentViewType === 'agenda';
+    return this.currentView.type === 'agenda';
   },
   currentViewUpdated(currentView) {
     this.option('currentView', currentView);
@@ -115,7 +115,7 @@ const subscribes = {
     const adapter = new AppointmentAdapter(targetedAppointment, this._dataAccessors);
     const { startDate, endDate } = adapter.getCalculatedDates(this.timeZoneCalculator, 'toGrid');
 
-    const formatType = format || getFormatType(startDate, endDate, adapter.allDay, this.currentViewType !== 'month');
+    const formatType = format || getFormatType(startDate, endDate, adapter.allDay, this.currentView.type !== 'month');
 
     return {
       text: adapter.text,
@@ -180,7 +180,7 @@ const subscribes = {
     return this.getLayoutManager()
       .getRenderingStrategyInstance()
       .getDropDownAppointmentWidth(
-        this.getCurrentView().intervalCount,
+        this.currentView.intervalCount,
         isAllDay,
       );
   },

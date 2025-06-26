@@ -45,15 +45,12 @@ describe('Validator', () => {
   it('should return object with errors if some rules return errors', () => {
     const expectedResult = {
       rule_1: {
-        message: 'error_1',
         arguments: ['A'],
       },
-      rule_2: {
-        message: 'error_2',
-      },
+      rule_2: false,
     };
     const firstFailedRule = (): ValidatorRuleError => expectedResult.rule_1;
-    const secondFailedRule = (): ValidatorRuleError => expectedResult.rule_2;
+    const secondFailedRule = (): boolean => expectedResult.rule_2;
 
     Object.defineProperty(firstFailedRule, 'name', { value: 'rule_1', writable: false });
     Object.defineProperty(secondFailedRule, 'name', { value: 'rule_2', writable: false });

@@ -1,3 +1,6 @@
+import messageLocalization from '@js/common/core/localization/message';
+import { camelize } from '@ts/core/utils/m_inflector';
+
 import type { AgendaView, View, ViewType } from './types';
 
 export const VIEWS: Record<string, ViewType> = {
@@ -11,21 +14,14 @@ export const VIEWS: Record<string, ViewType> = {
   TIMELINE_MONTH: 'timelineMonth',
   AGENDA: 'agenda',
 };
-export const VIEW_TYPES = Object.values(VIEWS);
-export const TIMELINE_VIEWS = [
-  VIEWS.TIMELINE_DAY,
-  VIEWS.TIMELINE_WEEK,
-  VIEWS.TIMELINE_WORK_WEEK,
-  VIEWS.TIMELINE_MONTH,
-];
+export const VIEW_TYPES: ViewType[] = Object.values(VIEWS);
 
-const getView = (name: ViewType, groupOrientation: View['groupOrientation']): View => ({
+const getName = (type: ViewType): string => messageLocalization.format(`dxScheduler-switcher${camelize(type, true)}`);
+const getView = (type: ViewType, groupOrientation: View['groupOrientation']): View => ({
   groupOrientation,
   intervalCount: 1,
-  maxAppointmentsPerCell: 'auto',
-  name,
-  type: name,
-  allDayPanelMode: 'all',
+  name: getName(type),
+  type,
 });
 
 export const DEFAULT_VIEW_OPTIONS: Record<Exclude<ViewType, 'agenda'>, View> & {
@@ -42,8 +38,7 @@ export const DEFAULT_VIEW_OPTIONS: Record<Exclude<ViewType, 'agenda'>, View> & {
   agenda: {
     agendaDuration: 7,
     intervalCount: 1,
-    name: 'agenda',
+    name: getName('agenda'),
     type: 'agenda',
-    allDayPanelMode: 'all',
   },
 };

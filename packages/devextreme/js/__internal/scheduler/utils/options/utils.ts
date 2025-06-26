@@ -1,23 +1,26 @@
 import { isObject } from '@js/core/utils/type';
 import { dateUtils } from '@ts/core/utils/m_date';
 import { dateSerialization } from '@ts/core/utils/m_date_serialization';
+import { extend } from '@ts/core/utils/m_extend';
 
-import { DEFAULT_VIEW_OPTIONS } from './constants_view';
+import { DEFAULT_VIEW_OPTIONS, VIEW_TYPES } from './constants_view';
 import type {
-  AgendaView, NormalizedView, RawViewType, View, ViewType,
+  DateOption, NormalizedView, RawViewType, SafeSchedulerOptions, ViewType,
 } from './types';
 
-export const getViews = (views: RawViewType[]): NormalizedView[] => views.map(
-  (view) => (isObject(view)
-    ? {
-      ...view,
-      ...DEFAULT_VIEW_OPTIONS[view.type as ViewType],
-    } as NormalizedView
-    : DEFAULT_VIEW_OPTIONS[view]),
-).filter(Boolean);
+const isKnownView = (view: RawViewType): boolean => VIEW_TYPES
+  .includes((isObject(view) ? view.type : view) as ViewType);
+const isExistedView = (view: NormalizedView | undefined): view is NormalizedView => Boolean(view);
 
-export function getCurrentView(currentView: 'agenda', views: RawViewType[]): AgendaView;
-export function getCurrentView(currentView: string | ViewType, views: RawViewType[]): View;
+const normalizeView = (view: RawViewType): NormalizedView | undefined => (isObject(view)
+  ? extend({}, DEFAULT_VIEW_OPTIONS[view.type as string], view) as NormalizedView
+  : DEFAULT_VIEW_OPTIONS[view]);
+
+export const getViews = (views: RawViewType[]): NormalizedView[] => views
+  .filter(isKnownView)
+  .map(normalizeView)
+  .filter(isExistedView);
+
 export function getCurrentView(
   currentView: string | ViewType,
   views: RawViewType[],
@@ -27,16 +30,32 @@ export function getCurrentView(
     (view) => [view.name, view.type].includes(currentView),
   );
 
-  return currentViewProps ?? DEFAULT_VIEW_OPTIONS[currentView as ViewType];
+  return currentViewProps ?? DEFAULT_VIEW_OPTIONS[currentView as ViewType] ?? viewsProps[0];
 }
 
 export const parseDateOption = (date?: Date | number | string): Date | undefined => (date
   ? new Date(dateSerialization.deserializeDate(date))
   : undefined);
 
-export const parseCurrentDate = (date?: Date | number | string): Date | undefined => {
-  const deserialized = parseDateOption(date);
-  return deserialized
-    ? dateUtils.trimTime(deserialized) as Date
-    : undefined;
+export const parseCurrentDate = (date: Date | number | string): Date => {
+  const deserialized = parseDateOption(date) as Date;
+  return dateUtils.trimTime(deserialized) as Date;
+};
+
+const isDateOption = (
+  optionName: string,
+): optionName is DateOption => ['currentDate', 'min', 'max'].includes(optionName);
+
+export const getViewOption = <K extends keyof SafeSchedulerOptions>(
+  optionName: K,
+  currentOptionValue: SafeSchedulerOptions[K],
+): SafeSchedulerOptions[K] => {
+  if (!isDateOption(optionName)) {
+    return currentOptionValue;
+  }
+
+  const date = optionName === 'currentDate'
+    ? parseCurrentDate(currentOptionValue as SafeSchedulerOptions['currentDate'])
+    : parseDateOption(currentOptionValue as SafeSchedulerOptions[DateOption]);
+  return date as SafeSchedulerOptions[K];
 };

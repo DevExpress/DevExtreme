@@ -782,14 +782,14 @@ module('Subscribes', {
             dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
         });
 
-        let countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
+        let countPerCell = this.instance.getViewOption('maxAppointmentsPerCell');
 
         assert.equal(countPerCell, 5, 'overlappingMode is OK');
 
         this.instance.option('currentView', 'WEEK');
         await waitAsync(0);
 
-        countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
+        countPerCell = this.instance.getViewOption('maxAppointmentsPerCell');
 
         assert.equal(countPerCell, 'auto', 'overlappingMode is OK');
     });
@@ -809,14 +809,14 @@ module('Subscribes', {
             dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
         });
 
-        let countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
+        let countPerCell = this.instance.getViewOption('maxAppointmentsPerCell');
 
         assert.equal(countPerCell, 5, 'overlappingMode is OK');
 
         this.instance.option('currentView', 'WEEK');
         await waitAsync(0);
 
-        countPerCell = this.instance._getCurrentViewOption('maxAppointmentsPerCell');
+        countPerCell = this.instance.getViewOption('maxAppointmentsPerCell');
 
         assert.equal(countPerCell, 'unlimited', 'overlappingMode is OK');
     });
@@ -851,7 +851,7 @@ module('Subscribes', {
     test('\'supportCompactDropDownAppointments\' should return true for some views', async function(assert) {
         await this.createInstance({
             dataSource: [],
-            views: ['motnh', 'week'],
+            views: ['month', 'week'],
             currentView: 'week'
         });
 
