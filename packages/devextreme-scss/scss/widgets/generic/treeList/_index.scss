@@ -117,6 +117,10 @@ $treelist-icon-container-padding-right: $generic-grid-base-cell-padding;
     position: relative;
     padding-right: $treelist-icon-container-padding-right;
   }
+
+  .dx-checkbox {
+    padding-bottom: $treelist-checkbox-padding-bottom;
+  }
 }
 
 .dx-treelist-select-all {
