@@ -107,6 +107,7 @@ $treelist-icon-container-padding-right: $generic-grid-base-cell-padding;
 
 .dx-treelist-checkbox-size {
   line-height: 0;
+  padding-bottom: $treelist-checkbox-padding-bottom;
 }
 
 .dx-treelist-icon-container {
@@ -116,10 +117,6 @@ $treelist-icon-container-padding-right: $generic-grid-base-cell-padding;
   &.dx-editor-inline-block {
     position: relative;
     padding-right: $treelist-icon-container-padding-right;
-  }
-
-  .dx-checkbox {
-    padding-bottom: $treelist-checkbox-padding-bottom;
   }
 }
 
