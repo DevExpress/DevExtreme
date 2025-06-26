@@ -95,6 +95,12 @@ interface HeightCssStyles {
   maxHeight: number | string;
 }
 
+interface GeometryOptions {
+  forceStopAnimation?: boolean;
+  shouldOnlyReposition?: boolean;
+  isDimensionChange?: boolean;
+}
+
 const getButtonPlace = (name: string): { toolbar: string; location: string } => {
   const device = devices.current();
   const { platform } = device;
@@ -639,20 +645,20 @@ class Popup<
 
   _updateToolbarOptions(toolbar: string, options: Partial<ToolbarProperties>): void {
     const $element = toolbar === 'top' ? this._$topToolbar : this._$bottomToolbar;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const toolbarInstance = $element![this._getToolbarName()]('instance');
 
-    toolbarInstance?.option(options);
+    if ($element) {
+      const toolbarInstance = $element[this._getToolbarName()]('instance');
+
+      toolbarInstance?.option(options);
+    }
   }
 
   _toggleAriaLabel(): void {
     const { title, showTitle } = this.option();
     const shouldSetAriaLabel = showTitle && !!title;
-    const titleId = shouldSetAriaLabel ? new Guid() : null;
+    const titleId = shouldSetAriaLabel ? new Guid().toString() : null;
 
-    // @ts-expect-error ts-error
     this._$topToolbar?.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0).attr('id', titleId);
-    // @ts-expect-error ts-error
     this.$overlayContent().attr('aria-labelledby', titleId);
   }
 
@@ -885,21 +891,22 @@ class Popup<
     return this.topToolbar();
   }
 
-  _renderGeometry(options?): void {
+  _renderGeometry(options: GeometryOptions = {}): void {
     const { visible, useResizeObserver } = this.option();
+    const { forceStopAnimation, shouldOnlyReposition, isDimensionChange } = options;
 
     if (visible && windowUtils.hasWindow()) {
       const isAnimated = this._showAnimationProcessing;
-      const shouldRepeatAnimation = isAnimated && !options?.forceStopAnimation && useResizeObserver;
+      const shouldRepeatAnimation = isAnimated && !forceStopAnimation && useResizeObserver;
 
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       this._isAnimationPaused = shouldRepeatAnimation || undefined;
       this._stopAnimation();
 
-      if (options?.shouldOnlyReposition) {
+      if (shouldOnlyReposition) {
         this._renderPosition(false);
       } else {
-        this._renderGeometryImpl(options?.isDimensionChange);
+        this._renderGeometryImpl(isDimensionChange);
       }
 
       if (shouldRepeatAnimation) {
@@ -1206,13 +1213,12 @@ class Popup<
     switch (name) {
       case 'disabled': {
         super._optionChanged(args);
-        // this._renderTopToolbar();
-        const options = { disabled: value };
-        // @ts-expect-error ts-error
+
+        const options = { disabled: Boolean(value) };
+
         this._updateToolbarOptions('top', options);
-        // @ts-expect-error ts-error
         this._updateToolbarOptions('bottom', options);
-        // this._renderBottomToolbar();
+
         break;
       }
       case 'animation':
