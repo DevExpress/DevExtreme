@@ -1,3 +1,4 @@
+import type { SafeSchedulerOptions } from '../types';
 import {
   mustBeDivisibleBy,
   mustBeGreaterThan,
@@ -8,15 +9,16 @@ import {
   OptionsValidator,
   Validator,
 } from './core/index';
-import type { SchedulerOptions, SchedulerValidatorNames } from './types';
+import type { SchedulerValidatorNames } from './types';
 import {
+  allViewsHasCorrectType,
   cellDurationMustBeLessThanVisibleInterval,
   endDayHourMustBeGreaterThanStartDayHour,
   visibleIntervalMustBeDivisibleByCellDuration,
 } from './validator_rules';
 
 export class SchedulerOptionsValidator
-  extends OptionsValidator<SchedulerValidatorNames, SchedulerOptions> {
+  extends OptionsValidator<SchedulerValidatorNames, SafeSchedulerOptions> {
   constructor() {
     super({
       startDayHour: new Validator(
@@ -58,6 +60,10 @@ export class SchedulerOptionsValidator
           visibleIntervalMustBeDivisibleByCellDuration,
           cellDurationMustBeLessThanVisibleInterval,
         ],
+      ),
+      views: new Validator(
+        (options) => options.views,
+        [allViewsHasCorrectType],
       ),
     });
   }

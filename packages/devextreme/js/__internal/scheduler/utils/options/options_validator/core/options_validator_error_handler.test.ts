@@ -1,8 +1,9 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
-import { OptionsValidatorErrorHandler } from '@ts/scheduler/options_validator/core/options_validator_error_handler';
-import type { GlobalErrorHandler } from '@ts/scheduler/options_validator/core/types';
+
+import { OptionsValidatorErrorHandler } from './options_validator_error_handler';
+import type { GlobalErrorHandler } from './types';
 
 type TestValidators = 'A' | 'B' | 'C' | 'D';
 
@@ -143,5 +144,27 @@ describe('OptionsValidatorErrorHandler', () => {
     expect(globalErrorHandler.throwError).toHaveBeenCalledWith('E1');
     expect(globalErrorHandler.logError).toHaveBeenCalledTimes(1);
     expect(globalErrorHandler.throwError).toHaveBeenCalledTimes(1);
+  });
+
+  it('should log error with arguments', () => {
+    const globalErrorHandler = createGlobalErrorHandlerMock();
+    const handler = new TestErrorHandler({
+      A: 'E0',
+      B: 'E1',
+      C: 'E2',
+    }, globalErrorHandler);
+
+    handler.handleValidationResult({
+      A: {
+        fist: { message: '', arguments: ['A1'] },
+        second: { message: '', arguments: ['A2'] },
+      },
+      B: { some: { message: '', arguments: ['B'] } },
+      C: { some: { message: '' } },
+    });
+
+    expect(globalErrorHandler.logError).toHaveBeenCalledWith('E0', 'A2');
+    expect(globalErrorHandler.logError).toHaveBeenCalledWith('E1', 'B');
+    expect(globalErrorHandler.throwError).toHaveBeenCalledWith('E2');
   });
 });

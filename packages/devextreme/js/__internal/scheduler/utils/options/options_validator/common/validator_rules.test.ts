@@ -2,15 +2,15 @@ import {
   afterEach, beforeEach,
   describe, expect, it, jest,
 } from '@jest/globals';
+
+import * as validationFunctions from './validation_functions';
 import {
   mustBeDivisibleBy,
   mustBeGreaterThan,
   mustBeInRange,
   mustBeInteger,
   mustBeLessThan,
-} from '@ts/scheduler/options_validator/common/validator_rules';
-
-import * as validationFunctions from './validation_functions';
+} from './validator_rules';
 
 describe('mustBeInteger', () => {
   const mock = jest.spyOn(validationFunctions, 'isInteger');

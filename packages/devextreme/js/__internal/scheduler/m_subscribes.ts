@@ -133,7 +133,7 @@ const subscribes = {
 
   getResizableAppointmentArea(options) {
     const { allDay } = options;
-    const groups = this._getCurrentViewOption('groups');
+    const groups = this.getViewOption('groups');
 
     if (groups?.length) {
       if (allDay || this.getLayoutManager().getRenderingStrategyInstance()._needHorizontalGroupBounds()) {
@@ -177,7 +177,12 @@ const subscribes = {
   },
 
   getDropDownAppointmentWidth(isAllDay) {
-    return this.getLayoutManager().getRenderingStrategyInstance().getDropDownAppointmentWidth(this._getViewCountConfig().intervalCount, isAllDay);
+    return this.getLayoutManager()
+      .getRenderingStrategyInstance()
+      .getDropDownAppointmentWidth(
+        this.getCurrentView().intervalCount,
+        isAllDay,
+      );
   },
 
   getDropDownAppointmentHeight() {
@@ -206,8 +211,8 @@ const subscribes = {
 
   updateAppointmentEndDate(options) {
     const { endDate } = options;
-    const endDayHour = this._getCurrentViewOption('endDayHour');
-    const startDayHour = this._getCurrentViewOption('startDayHour');
+    const endDayHour = this.getViewOption('endDayHour');
+    const startDayHour = this.getViewOption('startDayHour');
 
     let updatedEndDate = endDate;
 
@@ -260,7 +265,7 @@ const subscribes = {
   },
 
   getAgendaDuration() {
-    return this._getCurrentViewOption('agendaDuration');
+    return this.getViewOption('agendaDuration');
   },
 
   getStartViewDate() {
@@ -288,10 +293,6 @@ const subscribes = {
     for (let i = 0; i < rows.length; i++) {
       each(rows[i], applyClass);
     }
-  },
-
-  getTimezone() {
-    return this._getTimezoneOffsetByOption();
   },
 
   getTargetedAppointmentData(appointment, element) {

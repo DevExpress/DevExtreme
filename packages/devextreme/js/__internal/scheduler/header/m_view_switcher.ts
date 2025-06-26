@@ -15,14 +15,16 @@ const ClASS = {
 };
 
 const getViewsAndSelectedView = (header: SchedulerHeader) => {
-  const views = formatViews(header.views);
-  let selectedView = getViewName(header.currentView);
+  const currentViews = header.option('views');
+  const views = formatViews(currentViews);
+  let selectedView = getViewName(header.option('currentView'));
+  const isOnlyOneView = isOneView(currentViews, selectedView);
 
   const isSelectedViewInViews = views.some((view) => view.name === selectedView);
 
   selectedView = isSelectedViewInViews ? selectedView : undefined;
 
-  return { selectedView, views };
+  return { selectedView, views, isOnlyOneView };
 };
 
 export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem => {
@@ -60,9 +62,7 @@ export const getTabViewSwitcher = (header: SchedulerHeader, item): ToolbarItem =
 };
 
 export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarItem => {
-  const { selectedView, views } = getViewsAndSelectedView(header);
-
-  const oneView = isOneView(views, selectedView);
+  const { selectedView, views, isOnlyOneView } = getViewsAndSelectedView(header);
 
   return {
     widget: 'dxDropDownButton',
@@ -76,7 +76,7 @@ export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarI
       keyExpr: 'name',
       selectedItemKey: selectedView,
       displayExpr: 'text',
-      showArrowIcon: !oneView,
+      showArrowIcon: !isOnlyOneView,
       elementAttr: {
         class: ClASS.dropDownButton,
       },
@@ -89,7 +89,7 @@ export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarI
         const viewSwitcher = e.component;
 
         header._addEvent('currentView', (view) => {
-          const currentViews = formatViews(header.views);
+          const currentViews = header.option('views');
 
           viewSwitcher.option('showArrowIcon', !isOneView(currentViews, view));
           viewSwitcher.option('selectedItemKey', getViewName(view));
@@ -97,7 +97,7 @@ export const getDropDownViewSwitcher = (header: SchedulerHeader, item): ToolbarI
       },
       dropDownOptions: {
         onShowing: (e) => {
-          if (oneView) {
+          if (isOnlyOneView) {
             e.cancel = true;
           }
         },

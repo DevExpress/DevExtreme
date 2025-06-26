@@ -88,7 +88,7 @@ describe('OptionsValidator', () => {
     };
     const secondValidateResult = true;
     const thirdValidateResult = {
-      someError: 'some message',
+      someError: { message: 'some message' },
     };
     const expectedResult = {
       A: firstValidateResult,

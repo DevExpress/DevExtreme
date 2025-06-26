@@ -1,7 +1,11 @@
-export type ValidatorRuleResult = true | string;
+export interface ValidatorRuleError {
+  message: string;
+  arguments?: string[];
+}
+export type ValidatorRuleResult = true | string | ValidatorRuleError;
 export type ValidatorRule<TValue> = (value: TValue) => ValidatorRuleResult;
 
-export type ValidatorErrors = Record<string, string>;
+export type ValidatorErrors = Record<string, ValidatorRuleResult>;
 export type ValidatorResult = true | ValidatorErrors;
 
 export type OptionsValidatorErrors<TValidators extends string> =
@@ -10,8 +14,8 @@ export type OptionsValidatorResult<TValidators extends string> =
   true | OptionsValidatorErrors<TValidators>;
 
 export interface GlobalErrorHandler {
-  logError: (errorCode: string) => void;
-  throwError: (errorCode: string) => void;
+  logError: (errorCode: string, ...args: string[]) => void;
+  throwError: (errorCode: string, ...args: string[]) => void;
 }
 
 // This export just a workaround for SystemJS issue
