@@ -1460,17 +1460,29 @@ QUnit.module('options changed callbacks', {
         assert.equal($toolbarItems.length, 0, 'no items are rendered inside top toolbar');
     });
 
-    QUnit.test('toolbarItems option change should trigger resize event for content correct geometry rendering (T934380)', function(assert) {
+    QUnit.test('toolbarItems option change should trigger resize event for content correct geometry rendering (T934380, T1245421)', function(assert) {
         const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
 
         try {
+            assert.strictEqual(resizeEventSpy.callCount, 0, 'resize event is not triggered if visible is false');
+
+            this.instance.option({ visible: true });
+
+            // 1st from popup visibility changing, 2nd from toolbar rendering
+            assert.strictEqual(resizeEventSpy.callCount, 2, 'resize event is triggered twice after visible change in runtime to true');
+
             this.instance.option({
-                visible: true,
-                toolbarItems: [{ widget: 'dxButton', options: { text: 'test 2 top' }, toolbar: 'bottom', location: 'after' }]
+                toolbarItems: [
+                    {
+                        widget: 'dxButton',
+                        options: { text: 'test 2 top' },
+                        toolbar: 'bottom',
+                        location: 'after',
+                    },
+                ],
             });
 
-            assert.strictEqual(resizeEventSpy.callCount, 1, 'resize event is triggered after option change');
-            // assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
+            assert.strictEqual(resizeEventSpy.callCount, 3, 'resize event is triggered one more time after toolbarItems runtime changing');
         } finally {
             resizeEventSpy.restore();
         }
