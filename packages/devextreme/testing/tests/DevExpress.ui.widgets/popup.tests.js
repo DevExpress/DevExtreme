@@ -3238,8 +3238,11 @@ QUnit.module('positioning', {
                             },
                         });
 
+                        debugger;
                         this[moveMethodName]();
+                        // debugger;
                         const position = this.getPosition();
+                        // debugger;
 
                         $('#content')
                             .width(300)
@@ -3247,6 +3250,9 @@ QUnit.module('positioning', {
 
                         setTimeout(() => {
                             const newPosition = this.getPosition();
+
+                            debugger;
+
                             assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
                             assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
 
