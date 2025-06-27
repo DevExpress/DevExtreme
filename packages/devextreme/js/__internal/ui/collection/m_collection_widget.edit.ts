@@ -17,7 +17,6 @@ import {
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
-import type DataController from '@js/data_controller';
 import type { DxEvent } from '@js/events/events.types';
 import type { ItemLike, SelectionChangeInfo } from '@js/ui/collection/ui.collection_widget.base';
 import errors from '@js/ui/widget/ui.errors';
@@ -30,6 +29,7 @@ import Selection from '@ts/ui/selection/m_selection';
 
 import type MenuBaseEditStrategy from '../context_menu/m_menu_base.edit.strategy';
 import type GroupedEditStrategy from '../list/m_list.edit.strategy.grouped';
+import type DataController from './m_data_controller';
 
 const ITEM_DELETING_DATA_KEY = 'dxItemDeleting';
 const SELECTED_ITEM_CLASS = 'dx-item-selected';
@@ -127,7 +127,7 @@ class CollectionWidget<
   _initKeyGetter(): void {
     const { keyExpr } = this.option();
 
-    // @ts-expect-error bad typings in compileGetter
+    // @ts-expect-error compileGetter
     this._keyGetter = compileGetter(keyExpr);
   }
 
@@ -177,6 +177,7 @@ class CollectionWidget<
   }
 
   _getCombinedFilter() {
+    // @ts-expect-error arguments
     return this._dataController.filter();
   }
 
@@ -249,17 +250,15 @@ class CollectionWidget<
       keyOf: this.keyOf.bind(this),
       load(options): DeferredObj<unknown> {
         const dataController = that._dataController;
-        // @ts-expect-error bad typings in data controller
         options.customQueryParams = dataController.loadOptions()?.customQueryParams;
         options.userData = dataController.userData();
 
         if (dataController.store()) {
-          // @ts-expect-error bad typings in data controller
           return dataController.loadFromStore(options).done((loadResult) => {
             if (that._disposed) {
               return;
             }
-            // @ts-expect-error bad typings in data source
+            // @ts-expect-error arguments
             const items = normalizeLoadResult(loadResult).data;
 
             dataController.applyMapFunction(items);
@@ -274,7 +273,7 @@ class CollectionWidget<
 
   _getItemsCount(items: TItem[]): number {
     return items.reduce((itemsCount, item) => {
-      // @ts-expect-error issue in Item types - does not have subitems
+      // @ts-expect-error subItems
       const subItemsCount = item.items ? this._getItemsCount(item.items) : 1;
 
       return itemsCount + subItemsCount;
@@ -452,9 +451,8 @@ class CollectionWidget<
       // eslint-disable-next-line no-mixed-operators
       if (newSelection.length > 1 || !newSelection.length && this.option('selectionRequired') && items && items.length) {
         const currentSelection = this._selection.getSelectedItems();
-        let normalizedSelection = newSelection[0] === undefined
-          ? currentSelection[0]
-          : newSelection[0];
+
+        let normalizedSelection = newSelection[0] ?? currentSelection[0];
 
         if (normalizedSelection === undefined) {
           // eslint-disable-next-line prefer-destructuring
@@ -519,7 +517,7 @@ class CollectionWidget<
     } else {
       const itemSelectPromise = this.selectItem(e.currentTarget);
 
-      // @ts-expect-error type conflict between Promise and DefferedObj
+      // @ts-expect-error Promise DefferedObj
       // eslint-disable-next-line consistent-return
       return itemSelectPromise?.promise();
     }
@@ -617,7 +615,7 @@ class CollectionWidget<
 
     if (indexExists(normalizedIndex)) {
       this._processSelectableItem($itemElement, false);
-      // @ts-expect-error issue in triggerHandler types, missed extra parameters
+      // @ts-expect-error arguments
       eventsEngine.triggerHandler($itemElement, 'stateChanged', false);
     }
   }
@@ -627,7 +625,7 @@ class CollectionWidget<
 
     if (indexExists(normalizedIndex)) {
       this._processSelectableItem($itemElement, true);
-      // @ts-expect-error issue in triggerHandler types, missed extra parameters
+      // @ts-expect-error arguments
       eventsEngine.triggerHandler($itemElement, 'stateChanged', true);
     }
   }
@@ -699,9 +697,9 @@ class CollectionWidget<
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises, func-names
     when(deletePromise).always(function (value) {
-      // @ts-expect-error requires return type of action in base _itemEventHandlerImpl be defined
+      // @ts-expect-error ts-error
       const deletePromiseExists = !deletePromise;
-      // @ts-expect-error requires return type of action in base _itemEventHandlerImpl be defined
+      // @ts-expect-error ts-error
       const deletePromiseResolved = !deletePromiseExists && deletePromise.state() === 'resolved';
       const argumentsSpecified = !!arguments.length;
 
@@ -743,14 +741,12 @@ class CollectionWidget<
       return Deferred().resolve().promise();
     }
 
-    // @ts-expect-error bad typings in data controller
     if (!dataStore.remove) {
       throw errors.Error('E1011');
     }
 
     this.option('disabled', true);
 
-    // @ts-expect-error bad typings in data controller
     dataStore.remove(dataController.keyOf(this._getItemData($item)))
       .done((key) => {
         if (key !== undefined) {
@@ -776,7 +772,7 @@ class CollectionWidget<
 
   _tryRefreshLastPage(): Promise<unknown> {
     const deferred = Deferred();
-    // @ts-expect-error fix typings to see mixin methods
+    // @ts-expect-error mixin method
     if (this._isLastPage() || this.option('grouped')) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       deferred.resolve();
@@ -793,7 +789,6 @@ class CollectionWidget<
 
   _refreshLastPage(): DeferredObj<unknown> {
     this._expectLastItemLoading();
-    // @ts-expect-error type conflict between Promise and DefferedObj
 
     return this._dataController.load();
   }
@@ -903,15 +898,15 @@ class CollectionWidget<
     const itemResponseWaitClass = this._itemResponseWaitClass();
 
     if (indexExists(index)) {
-      // @ts-expect-error type conflict between Promise and DefferedObj
+      // @ts-expect-error Promise DefferedObj
       this._waitDeletingPrepare($item).done(() => {
         $item.addClass(itemResponseWaitClass);
         const deletedActionArgs = this._extendActionArgs($item);
-        // @ts-expect-error type conflict between Promise and DefferedObj
+        // @ts-expect-error Promise DefferedObj
         this._deleteItemFromDS($item).done(() => {
           this._deleteItemElementByIndex(index);
           this._afterItemElementDeleted($item, deletedActionArgs);
-          // @ts-expect-error type conflict between Promise and DefferedObj
+          // @ts-expect-error Promise DefferedObj
           this._tryRefreshLastPage().done(() => {
             // @ts-expect-error ts-error
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -961,7 +956,7 @@ class CollectionWidget<
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       deferred.rejectWith(this);
     }
-    // @ts-expect-error type conflict between Promise and DefferedObj
+    // @ts-expect-error Promise DefferedObj
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return deferred.promise().done(() => {
       $destinationItem[strategy.itemPlacementFunc(movingIndex, destinationIndex)]($movingItem);
