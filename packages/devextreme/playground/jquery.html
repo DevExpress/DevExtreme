@@ -116,35 +116,49 @@
                  * Note: the center item is completely hidden, it has no minimum width.
                  */
                 const popup = $('#popup').dxPopup({
-                    contentTemplate: function (element) {
-                        const btnDiv = $("<div>");
-
-                        btnDiv.dxButton({
-                            text: "Rebind popup toolbar items",
-                            onClick: rebindItems,
-                        })
-
-                        element.append(btnDiv);
-                    },
+                    /** start test */
                     visible: true,
-                    width: 360,
-                    height: 320,
-                    title: '!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+',
-                    showCloseButton: true,
-                    // showCloseButton: true,
+                    toolbarItems: [
+                        {
+                            text: 'bottom text',
+                            toolbar: 'bottom',
+                            location: 'center',
+                        },
+                    ],
+                    bottomTemplate: () => `
+                        <div class="test-bottom-renderer">
+                            <h1>bottom</h1>
+                        </div>
+                    `,
+                    /** end test */
+                    // contentTemplate: function (element) {
+                    //     const btnDiv = $("<div>");
+
+                    //     btnDiv.dxButton({
+                    //         text: "Rebind popup toolbar items",
+                    //         onClick: rebindItems,
+                    //     })
+
+                    //     element.append(btnDiv);
+                    // },
+                    // visible: true,
+                    // width: 360,
+                    // height: 320,
+                    // title: '!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+',
+                    // showCloseButton: false,
                     // toolbarItems: [
                     //     // getCenterItemConfig("Center Item"),
                     //     getItemConfig("First Item"),
                     //     getItemConfig("Second Item", "auto"),
                     //     getItemConfig("Third Item", "auto"),
-                    //     {
-                    //         toolbar: 'bottom',
-                    //         location: "before",
-                    //         text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
-                    //     },
-                    //     getBottomItemConfig("First Item"),
-                    //     getBottomItemConfig("Second Item", "auto"),
-                    //     getBottomItemConfig("Third Item", "auto"),
+                    //     // {
+                    //     //     toolbar: 'bottom',
+                    //     //     location: "before",
+                    //     //     text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
+                    //     // },
+                    //     // getBottomItemConfig("First Item"),
+                    //     // getBottomItemConfig("Second Item", "auto"),
+                    //     // getBottomItemConfig("Third Item", "auto"),
                     // ],
                 }).dxPopup('instance');
 

@@ -2727,6 +2727,10 @@ QUnit.module('templates', () => {
         const instance = $element.dxPopup('instance');
         const $popupContent = instance.$content().parent();
 
+        /**
+         * HERE YOU NEED TO CHECK why the class at the bottom or the heading is not hung on the toolbar div. Is it supposed to be like this or not.
+         */
+
         assert.strictEqual($popupContent.find('.test-bottom-renderer').length, 1, 'bottomTemplate was set successfully');
 
         instance.option({
