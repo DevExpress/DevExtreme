@@ -4114,20 +4114,6 @@
             ]
           },
           {
-            "Name": "Image Rendering",
-            "Equivalents": "",
-            "Demos": [
-              {
-                "Title": "Image Rendering",
-                "Name": "ImageRendering",
-                "Widget": "Chat",
-                "DemoType": "Web",
-                "Badge": "Roadmap",
-                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-image-rendering.xml"
-              }
-            ]
-          },
-          {
             "Name": "Customization",
             "Equivalents": "Settings, Options",
             "Demos": [
