@@ -760,10 +760,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._appendRow($table, $wrappedRow);
     let rowOptions = extend({ columns: options.columns }, options.row);
 
-    if (this.option('columnFixing.legacyMode')) {
-      rowOptions = options.row;
-      rowOptions.columns = options.columns;
-    }
+    rowOptions = this._mergeRowOptionsIfNeed(rowOptions, options);
 
     this._addWatchMethod(rowOptions, options.row);
 
@@ -772,6 +769,15 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected _needRenderCell(columnIndex, columnIndices) {
     return !columnIndices || columnIndices.indexOf(columnIndex) >= 0;
+  }
+
+  private _mergeRowOptionsIfNeed(rowOptions, options) {
+    if (this.option('columnFixing.legacyMode') && this.option('rowAlternationEnabled')) {
+      rowOptions = options.row;
+      rowOptions.columns = options.columns;
+    }
+
+    return rowOptions;
   }
 
   protected _renderCells($row, options) {
