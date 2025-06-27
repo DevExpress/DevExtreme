@@ -3248,9 +3248,10 @@ QUnit.module('positioning', {
 
                         setTimeout(() => {
                             const newPosition = this.getPosition();
+                            const offset = moveMethodName === 'drag' ? 100 : 0;
 
-                            assert.strictEqual(newPosition.left, position.left - 100, 'left coordinate is correct');
-                            assert.strictEqual(newPosition.top, position.top - 100, 'top coordinate is correct');
+                            assert.strictEqual(newPosition.left, position.left - offset, 'left coordinate is correct');
+                            assert.strictEqual(newPosition.top, position.top - offset, 'top coordinate is correct');
 
                             done();
                         }, 250);
