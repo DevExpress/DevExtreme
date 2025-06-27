@@ -3228,6 +3228,7 @@ QUnit.module('positioning', {
                         const done = assert.async();
 
                         this.popup.option({
+                            dragAndResizeArea: null,
                             width: 'auto',
                             height: 'auto',
                             contentTemplate: () => {
