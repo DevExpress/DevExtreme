@@ -380,7 +380,7 @@ exports[`HeaderFilter View integration should render popup with list by default 
       </div>
     </div>
     <div
-      class="dx-toolbar dx-widget dx-popup-bottom dx-visibility-change-handler dx-collection"
+      class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection dx-popup-bottom"
       role="toolbar"
     >
       <div
@@ -858,7 +858,7 @@ exports[`HeaderFilter View integration should render popup with tree list if dat
       </div>
     </div>
     <div
-      class="dx-toolbar dx-widget dx-popup-bottom dx-visibility-change-handler dx-collection"
+      class="dx-toolbar dx-widget dx-visibility-change-handler dx-collection dx-popup-bottom"
       role="toolbar"
     >
       <div
