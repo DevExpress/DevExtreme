@@ -3235,7 +3235,7 @@ QUnit.module('positioning', {
                                     .attr('id', 'content')
                                     .width(100)
                                     .height(100);
-                            }
+                            },
                         });
 
                         this[moveMethodName]();

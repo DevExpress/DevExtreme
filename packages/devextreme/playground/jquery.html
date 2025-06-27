@@ -117,19 +117,19 @@
                  */
                 const popup = $('#popup').dxPopup({
                     /** start test */
-                    visible: true,
-                    toolbarItems: [
-                        {
-                            text: 'bottom text',
-                            toolbar: 'bottom',
-                            location: 'center',
-                        },
-                    ],
-                    titleTemplate: () => `
-                        <div class="test-title-renderer">
-                            <h1>Title</h1>
-                        </div>
-                    `,
+                    // visible: true,
+                    // toolbarItems: [
+                    //     {
+                    //         text: 'bottom text',
+                    //         toolbar: 'bottom',
+                    //         location: 'center',
+                    //     },
+                    // ],
+                    // titleTemplate: () => `
+                    //     <div class="test-title-renderer">
+                    //         <h1>Title</h1>
+                    //     </div>
+                    // `,
                     /** end test */
                     // contentTemplate: function (element) {
                     //     const btnDiv = $("<div>");
@@ -141,9 +141,11 @@
 
                     //     element.append(btnDiv);
                     // },
-                    // visible: true,
+                    visible: true,
                     // width: 360,
                     // height: 320,
+                    width: 'auto',
+                    height: 'auto',
                     // title: '!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+',
                     // showCloseButton: false,
                     // toolbarItems: [
@@ -160,6 +162,27 @@
                     //     // getBottomItemConfig("Second Item", "auto"),
                     //     // getBottomItemConfig("Third Item", "auto"),
                     // ],
+                    contentTemplate: () => {
+                        const $content = $('<div>')
+                            .attr('id', 'content')
+                            .width(100)
+                            .height(100)
+
+                        const $btnDiv = $("<div>");
+
+                        $btnDiv.dxButton({
+                            text: "+",
+                            onClick: () => {
+                                $('#content')
+                                    .width(300)
+                                    .height(300);
+                            },
+                        });
+
+                        $content.append($btnDiv);
+
+                        return $content;
+                    },
                 }).dxPopup('instance');
 
                 // popup.option({ showCloseButton: true });
