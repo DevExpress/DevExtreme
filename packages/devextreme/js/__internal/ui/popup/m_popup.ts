@@ -548,15 +548,13 @@ class Popup<
     const items = this._getToolbarItems('bottom');
     const $toolbarContainer = $('<div>').insertAfter(this.$content());
 
-    const additionalToolbarOptions = {
-      compactMode: true,
-    };
-
     this._$bottomToolbar = this._renderToolbar(
       'bottomTemplate',
       items,
       $toolbarContainer,
-      additionalToolbarOptions,
+      {
+        compactMode: true,
+      },
     );
 
     this._$bottomToolbar.addClass(POPUP_BOTTOM_CLASS);
@@ -632,9 +630,11 @@ class Popup<
 
     if ($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {
       $container.replaceWith($result);
+      // eslint-disable-next-line no-param-reassign
+      $container = $result;
     }
 
-    return $result;
+    return $container;
   }
 
   _updateToolbarOptions(toolbar: string, options: Partial<ToolbarProperties>): void {

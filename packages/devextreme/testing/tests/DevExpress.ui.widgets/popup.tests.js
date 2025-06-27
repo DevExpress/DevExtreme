@@ -2675,6 +2675,10 @@ QUnit.module('templates', () => {
 
         instance.option({
             titleTemplate: (titleElement) => {
+                /**
+                 * Нужно ТАКЖЕ проверить, как должно работать в случае с TOPTEMPLATE.
+                 * Так быть не должно.
+                 */
                 assert.strictEqual($(titleElement).get(0), $popupContent.children().get(1));
 
                 const markup = `
@@ -2728,7 +2732,7 @@ QUnit.module('templates', () => {
         const $popupContent = instance.$content().parent();
 
         /**
-         * HERE YOU NEED TO CHECK why the class at the bottom or the heading is not hung on the toolbar div. Is it supposed to be like this or not.
+         * Так быть не должно.
          */
 
         assert.strictEqual($popupContent.find('.test-bottom-renderer').length, 1, 'bottomTemplate was set successfully');
