@@ -758,9 +758,12 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       this._renderCells($row, options);
     }
     this._appendRow($table, $wrappedRow);
+    let rowOptions = extend({ columns: options.columns }, options.row);
 
-    const rowOptions = options.row;
-    rowOptions.columns = options.columns;
+    if (this.option('columnFixing.legacyMode')) {
+      rowOptions = options.row;
+      rowOptions.columns = options.columns;
+    }
 
     this._addWatchMethod(rowOptions, options.row);
 
