@@ -23,7 +23,6 @@ export type Options<
 
 /**
  * @docid
- * @hidden
  * @type Store|DataSource|DataSourceOptions|string|Array<any>|null
  */
 export type DataSourceLike<TItem, TKey = any> =

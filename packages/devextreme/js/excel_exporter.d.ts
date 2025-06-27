@@ -5,12 +5,12 @@ export {
   PivotGridExportOptions as ExcelExportPivotGridProps,
   exportDataGrid,
   exportPivotGrid,
-  CellAddress,
-  CellRange,
 } from './common/export/excel';
 
 export {
   ExcelExportBaseOptions as ExcelExportBaseProps,
   ExcelPivotGridCell,
+  CellAddress,
+  CellRange,
   ExcelDataGridCell,
 } from './excel_exporter.types';
