@@ -1008,7 +1008,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
 
     const compareFields = ['modified', 'isNewRow', 'removed', 'isEditing'];
-
     if (compareFields.some((field) => item1[field] !== item2[field])) {
       return false;
     }
