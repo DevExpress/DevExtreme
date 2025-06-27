@@ -88,7 +88,19 @@ export const findChanges = function (oldItems, newItems, getKey, isItemEquals) {
           });
         }
       } else {
-        return;
+        result.push({
+          type: 'remove',
+          key: getKey(oldItem),
+          index: oldIndex,
+          oldItem,
+        });
+        result.push({
+          type: 'insert',
+          data: newItem,
+          index,
+        });
+        addedCount++;
+        removeCount++;
       }
     }
   }

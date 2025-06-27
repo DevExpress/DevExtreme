@@ -14,9 +14,9 @@ QUnit.module('findChanges', {
 
         const changes = this.findChanges();
 
-        assert.equal(changes.length, 1);
-        assert.equal(changes[0].type, 'insert');
-        assert.equal(changes[0].data.id, 2);
+        assert.strictEqual(changes.length, 1);
+        assert.strictEqual(changes[0].type, 'insert');
+        assert.strictEqual(changes[0].data.id, 2);
     });
 
     QUnit.test('remove item from the beginning', function(assert) {
@@ -24,9 +24,9 @@ QUnit.module('findChanges', {
 
         const changes = this.findChanges();
 
-        assert.equal(changes.length, 1);
-        assert.equal(changes[0].type, 'remove');
-        assert.equal(changes[0].key, 0);
+        assert.strictEqual(changes.length, 1);
+        assert.strictEqual(changes[0].type, 'remove');
+        assert.strictEqual(changes[0].key, 0);
     });
 
     QUnit.test('remove(beginning), insert(end), update', function(assert) {
@@ -36,13 +36,13 @@ QUnit.module('findChanges', {
 
         const changes = this.findChanges();
 
-        assert.equal(changes.length, 3);
-        assert.equal(changes[0].type, 'remove');
-        assert.equal(changes[0].key, 0);
-        assert.equal(changes[1].type, 'update');
-        assert.equal(changes[1].data.id, 1);
-        assert.equal(changes[2].type, 'insert');
-        assert.equal(changes[2].data.id, 2);
+        assert.strictEqual(changes.length, 3);
+        assert.strictEqual(changes[0].type, 'remove');
+        assert.strictEqual(changes[0].key, 0);
+        assert.strictEqual(changes[1].type, 'update');
+        assert.strictEqual(changes[1].data.id, 1);
+        assert.strictEqual(changes[2].type, 'insert');
+        assert.strictEqual(changes[2].data.id, 2);
     });
 
     QUnit.test('remove(end), insert(beginning), update', function(assert) {
@@ -52,12 +52,12 @@ QUnit.module('findChanges', {
 
         const changes = this.findChanges();
 
-        assert.equal(changes[0].type, 'insert');
-        assert.equal(changes[0].data.id, 2);
-        assert.equal(changes[1].type, 'update');
-        assert.equal(changes[1].data.id, 0);
-        assert.equal(changes[2].type, 'remove');
-        assert.equal(changes[2].key, 1);
+        assert.strictEqual(changes[0].type, 'insert');
+        assert.strictEqual(changes[0].data.id, 2);
+        assert.strictEqual(changes[1].type, 'update');
+        assert.strictEqual(changes[1].data.id, 0);
+        assert.strictEqual(changes[2].type, 'remove');
+        assert.strictEqual(changes[2].key, 1);
     });
 
     QUnit.test('remove(end), update(beginning)', function(assert) {
@@ -66,9 +66,30 @@ QUnit.module('findChanges', {
 
         const changes = this.findChanges();
 
-        assert.equal(changes[0].type, 'update');
-        assert.equal(changes[0].data.id, 0);
-        assert.equal(changes[1].type, 'remove');
-        assert.equal(changes[1].key, 1);
+        assert.strictEqual(changes[0].type, 'update');
+        assert.strictEqual(changes[0].data.id, 0);
+        assert.strictEqual(changes[1].type, 'remove');
+        assert.strictEqual(changes[1].key, 1);
+    });
+
+    QUnit.test('reorder items', function(assert) {
+        const movedItem = this.newItems.shift();
+        this.newItems.push(movedItem);
+
+        const changes = this.findChanges();
+
+        assert.strictEqual(changes.length, 4);
+        assert.strictEqual(changes[0].type, 'remove');
+        assert.strictEqual(changes[0].key, 1);
+        assert.strictEqual(changes[0].index, 1);
+        assert.strictEqual(changes[1].type, 'insert');
+        assert.strictEqual(changes[1].data.id, 1);
+        assert.strictEqual(changes[1].index, 0);
+        assert.strictEqual(changes[2].type, 'remove');
+        assert.strictEqual(changes[2].key, 0);
+        assert.strictEqual(changes[2].index, 0);
+        assert.strictEqual(changes[3].type, 'insert');
+        assert.strictEqual(changes[3].data.id, 0);
+        assert.strictEqual(changes[3].index, 1);
     });
 });
