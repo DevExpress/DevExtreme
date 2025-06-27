@@ -33,9 +33,8 @@ class CollectionWidgetLiveUpdate<
   }
 
   _customizeStoreLoadOptions(e) {
-    // @ts-expect-error ts-error
     const dataController = this._dataController;
-    // @ts-expect-error ts-error
+
     if (dataController.getDataSource() && !this._dataController.isLoaded()) {
       this._correctionIndex = 0;
     }
@@ -239,9 +238,9 @@ class CollectionWidgetLiveUpdate<
   _modifyByChanges(changes, isPartialRefresh?): void {
     const items = this._editStrategy.itemsGetter();
     const keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) };
-    // @ts-expect-error
     const dataController = this._dataController;
     const paginate = dataController.paginate();
+    // @ts-expect-error missing argument
     const group = dataController.group();
 
     if (paginate || group) {
@@ -260,17 +259,14 @@ class CollectionWidgetLiveUpdate<
   }
 
   _subscribeLoadOptionsCustomization(enable: boolean): void {
-    // @ts-expect-error ts-error
     if (!this._dataController) {
       return;
     }
 
     if (enable) {
       this._correctionIndex = 0;
-      // @ts-expect-error ts-error
       this._dataController.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions.bind(this));
     } else {
-      // @ts-expect-error ts-error
       this._dataController.off('customizeStoreLoadOptions', this._customizeStoreLoadOptions.bind(this));
     }
   }
@@ -278,7 +274,7 @@ class CollectionWidgetLiveUpdate<
   _optionChanged(args: OptionChanged<TProperties>): void {
     switch (args.name) {
       case 'items': {
-        // @ts-expect-error excess argument
+        // @ts-expect-error arguments
         const isItemsUpdated = this._partialRefresh(args.value);
         if (!isItemsUpdated) {
           super._optionChanged(args);
