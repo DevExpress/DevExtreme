@@ -511,7 +511,9 @@ class Popup<
     this._$topToolbar?.remove();
 
     const items = this._getTopToolbarItems();
-    const $toolbarContainer = $('<div>').insertBefore(this.$content());
+    const $toolbarContainer = $('<div>')
+      .addClass(POPUP_TITLE_CLASS)
+      .insertBefore(this.$content());
 
     this._$topToolbar = this._renderToolbar(
       'titleTemplate',
@@ -546,7 +548,9 @@ class Popup<
     this._$bottomToolbar?.remove();
 
     const items = this._getToolbarItems('bottom');
-    const $toolbarContainer = $('<div>').insertAfter(this.$content());
+    const $toolbarContainer = $('<div>')
+      .addClass(POPUP_BOTTOM_CLASS)
+      .insertAfter(this.$content());
 
     this._$bottomToolbar = this._renderToolbar(
       'bottomTemplate',

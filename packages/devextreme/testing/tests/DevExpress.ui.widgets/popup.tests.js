@@ -2675,11 +2675,7 @@ QUnit.module('templates', () => {
 
         instance.option({
             titleTemplate: (titleElement) => {
-                /**
-                 * Нужно ТАКЖЕ проверить, как должно работать в случае с TOPTEMPLATE.
-                 * Так быть не должно.
-                 */
-                assert.strictEqual($(titleElement).get(0), $popupContent.children().get(1));
+                assert.strictEqual($(titleElement).get(0), $popupContent.find(`.${POPUP_TITLE_CLASS}`).get(0));
 
                 const markup = `
                     <div class="changed-test-title-renderer">
@@ -2731,15 +2727,11 @@ QUnit.module('templates', () => {
         const instance = $element.dxPopup('instance');
         const $popupContent = instance.$content().parent();
 
-        /**
-         * Так быть не должно.
-         */
-
         assert.strictEqual($popupContent.find('.test-bottom-renderer').length, 1, 'bottomTemplate was set successfully');
 
         instance.option({
-            bottomTemplate: (element) => {
-                assert.strictEqual($(element).get(0), $popupContent.children().get(2));
+            bottomTemplate: (bottomElement) => {
+                assert.strictEqual($(bottomElement).get(0), $popupContent.find(`.${POPUP_BOTTOM_CLASS}`).get(0));
 
                 return `
                     <div class="changed-test-bottom-renderer">
