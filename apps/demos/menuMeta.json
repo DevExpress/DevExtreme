@@ -1,6 +1,6 @@
 [
   {
-    "Name": "Data Management",
+    "Name": "Data Grids / Data Management",
     "Groups": [
       {
         "Name": "Data Grid",
@@ -3446,7 +3446,7 @@
     ]
   },
   {
-    "Name": "Scheduling",
+    "Name": "Scheduling / Planning",
     "Groups": [
       {
         "Name": "Scheduler",
@@ -4336,7 +4336,7 @@
     ]
   },
   {
-    "Name": "Editors",
+    "Name": "Data Editors",
     "Equivalents": "",
     "Groups": [
       {
@@ -5010,7 +5010,7 @@
     ]
   },
   {
-    "Name": "File Management and Upload",
+    "Name": "File Upload / File Management",
     "Equivalents": "",
     "Groups": [
       {
