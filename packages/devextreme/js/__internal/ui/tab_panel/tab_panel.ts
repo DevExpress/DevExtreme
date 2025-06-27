@@ -330,6 +330,7 @@ class TabPanel extends MultiView<TabPanelProperties> {
         const newTabsSelectedItemData = e.addedItems[0];
         const newTabsSelectedIndex = this._getIndexByItemData(newTabsSelectedItemData);
 
+        // @ts-expect-error ts-error
         const selectingResult = this.selectItem(newTabsSelectedIndex);
         // @ts-expect-error ts-error
         const promiseState = selectingResult.state();

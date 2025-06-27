@@ -218,7 +218,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   _defaultOptionsRules() {
-    // @ts-expect-error
     return super._defaultOptionsRules().concat([
       {
         device: () => devices.real().deviceType === 'desktop' && !devices.isSimulator(),
@@ -239,19 +238,16 @@ class FileUploader extends Editor<FileUploaderProperties> {
       {
         device: () => devices.real().deviceType !== 'desktop',
         options: {
+          // @ts-expect-error
           useDragOver: false,
+          nativeDropSupported: false,
+          labelText: '',
         },
       },
       {
         device: () => !isFormDataSupported(),
         options: {
           uploadMode: 'useForm',
-        },
-      },
-      {
-        device: () => devices.real().deviceType !== 'desktop',
-        options: {
-          nativeDropSupported: false,
         },
       },
       {

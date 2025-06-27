@@ -1,6 +1,6 @@
 <div class="demo-container">
   <dx-chat
-    [class.dx-chat-disabled]="isDisabled"
+    [class.chat-disabled]="isDisabled"
     [dataSource]="dataSource"
     [reloadOnChange]="false"
     [showAvatar]="false"
@@ -18,11 +18,11 @@
       </ng-container>
       <ng-container *ngIf="data.message.text !== regenerationText">
         <div
-          class="dx-chat-messagebubble-text"
+          class="chat-messagebubble-text"
           [innerHTML]="convertToHtml(data.message)"
         >
         </div>
-        <div class="dx-bubble-button-container">
+        <div class="bubble-button-container">
           <dx-button
             [icon]="copyButtonIcon"
             stylingMode="text"

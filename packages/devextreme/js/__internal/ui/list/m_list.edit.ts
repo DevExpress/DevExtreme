@@ -36,7 +36,6 @@ class ListEdit extends ListBase {
       // @ts-expect-error ts-error
       const focusedItemIndex = editStrategy.getNormalizedIndex(focusedElement);
       const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
-      // @ts-expect-error ts-error
       if (isLastIndexFocused && this._dataController.isLoading()) {
         return;
       }
@@ -335,9 +334,7 @@ class ListEdit extends ListBase {
     switch (args.name) {
       case 'selectAllMode':
         this._initDataSource();
-        // @ts-expect-error ts-error
         this._dataController.pageIndex(0);
-        // @ts-expect-error ts-error
         this._dataController.load();
         break;
       case 'grouped':
