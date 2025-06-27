@@ -265,24 +265,16 @@ class CollectionWidgetLiveUpdate<
 
     if (enable) {
       this._correctionIndex = 0;
-      this._dataController.on(
-        'customizeStoreLoadOptions',
-        // @ts-expect-error ts-error
-        this._customizeStoreLoadOptions.bind(this),
-      );
+      this._dataController.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions.bind(this));
     } else {
-      this._dataController.off(
-        'customizeStoreLoadOptions',
-        // @ts-expect-error ts-error
-        this._customizeStoreLoadOptions.bind(this),
-      );
+      this._dataController.off('customizeStoreLoadOptions', this._customizeStoreLoadOptions.bind(this));
     }
   }
 
   _optionChanged(args: OptionChanged<TProperties>): void {
     switch (args.name) {
       case 'items': {
-        // @ts-expect-error excessive argument
+        // @ts-expect-error arguments
         const isItemsUpdated = this._partialRefresh(args.value);
         if (!isItemsUpdated) {
           super._optionChanged(args);
