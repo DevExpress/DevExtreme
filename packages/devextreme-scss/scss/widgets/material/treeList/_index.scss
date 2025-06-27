@@ -52,7 +52,7 @@ $treelist-icon-container-padding-right: $material-grid-base-cell-horizontal-padd
 
     &::before {
       left: 0;
-      margin-left: -$treelist-expanded-icon-margin-left;
+      margin-left: 0;
       top: auto;
       margin-top: auto;
     }
@@ -66,7 +66,7 @@ $treelist-icon-container-padding-right: $material-grid-base-cell-horizontal-padd
 
     &::before {
       left: 0;
-      margin-left: -$treelist-collapsed-icon-margin-left;
+      margin-left: 0;
       top: auto;
       margin-top: auto;
     }

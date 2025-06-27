@@ -54,7 +54,7 @@ $treelist-icon-container-padding-right: $generic-grid-base-cell-padding;
 
     &::before {
       left: 0;
-      margin-left: -$treelist-expanded-icon-margin-left;
+      margin-left: 0;
       top: auto;
       margin-top: auto;
     }
@@ -68,7 +68,7 @@ $treelist-icon-container-padding-right: $generic-grid-base-cell-padding;
 
     &::before {
       left: 0;
-      margin-left: -$treelist-collapsed-icon-margin-left;
+      margin-left: 0;
       top: auto;
       margin-top: auto;
     }
