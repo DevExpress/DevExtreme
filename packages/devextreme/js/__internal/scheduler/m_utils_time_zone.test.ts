@@ -3,12 +3,17 @@ import {
 } from '@jest/globals';
 import { macroTaskArray } from '@ts/scheduler/utils/index';
 
+import { globalCache } from './global_cache';
 import timeZoneUtils from './m_utils_time_zone';
 import timeZoneList from './timezones/timezone_list';
 
 const defaultTimeZones = timeZoneList.value;
 
 describe('timezone utils', () => {
+  beforeAll(() => {
+    globalCache.timezones.clear();
+  });
+
   describe('cacheTimeZones / getTimeZonesCache', () => {
     beforeAll(() => {
       timeZoneList.value = [

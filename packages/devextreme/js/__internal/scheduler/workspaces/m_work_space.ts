@@ -53,6 +53,7 @@ import type { SafeAppointment, ViewType } from '@ts/scheduler/types';
 
 import WidgetObserver from '../base/m_widget_observer';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
+import { Cache } from '../global_cache';
 import AppointmentDragBehavior from '../m_appointment_drag_behavior';
 import {
   APPOINTMENT_DRAG_SOURCE_CLASS,
@@ -83,7 +84,6 @@ import {
   getMaxAllowedPosition,
   PositionHelper,
 } from './helpers/m_position_helper';
-import { Cache } from './m_cache';
 import { CellsSelectionController } from './m_cells_selection_controller';
 import CellsSelectionState from './m_cells_selection_state';
 import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './m_virtual_scrolling';
