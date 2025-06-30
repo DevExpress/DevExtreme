@@ -1,9 +1,9 @@
+import { type HtmlEditorTypes } from 'devextreme-react/html-editor';
 import {
     AIIntegration,
     RequestParams,
     Response,
 } from 'devextreme-react/common/ai-integration';
-import { AICustomCommand } from 'devextreme/ui/html_editor';
 import { AzureOpenAI, OpenAI } from 'openai';
 
 type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
@@ -90,5 +90,5 @@ export const markup = `
     </ul>
 `;
 
-export const extractKeywordsPrompt: AICustomCommand['prompt'] = () => 
+export const extractKeywordsPrompt: HtmlEditorTypes.AICustomCommand['prompt'] = () => 
   'Extract a list of keywords from the text and return it as a comma-separated string';
