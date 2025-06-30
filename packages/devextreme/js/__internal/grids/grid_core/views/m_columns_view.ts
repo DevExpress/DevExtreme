@@ -760,8 +760,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._appendRow($table, $wrappedRow);
     const rowOptions = extend({ columns: options.columns }, options.row);
 
-    this._addWatchMethod(options.row);
-
     this._rowPrepared($wrappedRow, rowOptions, options.row);
   }
 
@@ -975,7 +973,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   protected _rowPrepared($row, options, row?) {
-    this._addWatchMethod(options);
+    this._addWatchMethod(options, row);
     elementData($row.get(0), 'options', options);
 
     options.rowElement = getPublicElement($row);

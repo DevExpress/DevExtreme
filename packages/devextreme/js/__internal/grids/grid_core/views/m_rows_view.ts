@@ -275,6 +275,7 @@ export class RowsView extends ColumnsView {
     if (rowOptions.rowType === 'data') {
       if (this.option('rowAlternationEnabled')) {
         this._isAltRow(row) && $row.addClass(ROW_ALTERNATION_CLASS);
+        this._addWatchMethod(row);
 
         setWatcher({
           element: $row.get(0),
@@ -290,9 +291,9 @@ export class RowsView extends ColumnsView {
 
       setWatcher({
         element: $row.get(0),
-        watch: rowOptions.watch,
-        getter: () => rowOptions.rowIndex,
-        callBack: () => this._setAriaRowIndex(rowOptions, $row),
+        watch: row.watch,
+        getter: () => row.rowIndex,
+        callBack: () => this._setAriaRowIndex(row, $row),
       });
     }
 
