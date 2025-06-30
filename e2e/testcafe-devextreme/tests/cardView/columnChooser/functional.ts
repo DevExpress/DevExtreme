@@ -16,8 +16,6 @@ function testsFactory(testModel: {
   test(`column chooser in ${testModel.name} mode should work after multiple hide/show actions`, async (t) => {
     const cardView = new CardView('#container');
 
-    await t.debug();
-
     await cardView.apiShowColumnChooser();
 
     await testModel.hideFirstColumn(t, cardView);
@@ -75,8 +73,6 @@ testsFactory({
   },
 });
 
-// TODO: unskip
-/*
 testsFactory({
   name: 'dragAndDrop',
   config: {
@@ -88,7 +84,7 @@ testsFactory({
   async hideFirstColumn(t: TestController, cardView: CardView) {
     await t.dragToElement(
       cardView.getHeaderPanel().getHeaderItem(0).element,
-      cardView.getColumnChooser().element,
+      cardView.getColumnChooser().content,
     );
   },
   async showFirstColumn(t: TestController, cardView: CardView) {
@@ -99,19 +95,12 @@ testsFactory({
   },
   async assertFirstColumnVisible(t: TestController, cardView: CardView) {
     await t.expect(
-      cardView.getHeaderPanel().getHeaderItem(0).element.count,
-    ).eql(1);
-    await t.expect(
-      cardView.getColumnChooser().getColumn(0).count,
-    ).eql(0);
+      cardView.getHeaderPanel().getHeaderItem(0).element.textContent,
+    ).eql('A');
   },
   async assertFirstColumnHidden(t: TestController, cardView: CardView) {
     await t.expect(
-      cardView.getHeaderPanel().getHeaderItem(0).element.count,
-    ).eql(0);
-    await t.expect(
-      cardView.getColumnChooser().getColumn(0).count,
-    ).eql(1);
+      cardView.getColumnChooser().getColumn(0).textContent,
+    ).eql('A');
   },
 });
-*/
