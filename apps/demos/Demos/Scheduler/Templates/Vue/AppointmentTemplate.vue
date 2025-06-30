@@ -11,7 +11,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { formatDate } from 'devextreme/localization';
+import { formatDate } from 'devextreme-vue/common/core/localization';
 import { query as Query } from 'devextreme-vue/common/data';
 
 import DxScheduler, { type DxSchedulerTypes } from 'devextreme-vue/scheduler';

@@ -1881,17 +1881,35 @@ Axis.prototype = {
         };
     },
 
+    _shouldCorrectValuesToZero(minValue, maxValue) {
+        if(this.isArgumentAxis || this._options.dataType === 'datetime') {
+            return false;
+        }
+
+        const dataRange = this._getViewportRange();
+
+        if(minValue > dataRange.max || minValue > dataRange.maxVisible) {
+            return false;
+        }
+
+        if(maxValue < dataRange.min || maxValue < dataRange.minVisible) {
+            return false;
+        }
+
+        return true;
+    },
     getCorrectedValuesToZero(minValue, maxValue) {
         const that = this;
         const translator = that._translator;
         const canvasStartEnd = that._getCanvasStartEnd();
         const dataRange = that._getViewportRange();
         const screenDelta = that._getScreenDelta();
-        const options = that._options;
+
         let start;
         let end;
         let correctedMin;
         let correctedMax;
+
         const correctZeroLevel = (minPoint, maxPoint) => {
             const minExpectedPadding = _abs(canvasStartEnd.start - minPoint);
             const maxExpectedPadding = _abs(canvasStartEnd.end - maxPoint);
@@ -1901,7 +1919,8 @@ Axis.prototype = {
             start = minExpectedPadding / coeff;
             end = maxExpectedPadding / coeff;
         };
-        if(!that.isArgumentAxis && options.dataType !== 'datetime') {
+
+        if(that._shouldCorrectValuesToZero(minValue, maxValue)) {
             if(minValue * dataRange.min <= 0 && minValue * dataRange.minVisible <= 0) {
                 correctZeroLevel(translator.translate(0), translator.translate(maxValue));
                 correctedMin = 0;
@@ -1912,6 +1931,7 @@ Axis.prototype = {
                 correctedMax = 0;
             }
         }
+
         return {
             start: isFinite(start) ? start : null,
             end: isFinite(end) ? end : null,

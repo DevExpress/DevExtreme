@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Chat from 'devextreme-react/chat';
-import { loadMessages } from 'devextreme/localization';
+import { loadMessages } from 'devextreme-react/common/core/localization';
 import { user, assistant, CHAT_DISABLED_CLASS } from './data.js';
 import Message from './Message.js';
 import { dataSource, useApi } from './useApi.js';
