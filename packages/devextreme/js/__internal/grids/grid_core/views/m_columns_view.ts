@@ -759,8 +759,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
     this._appendRow($table, $wrappedRow);
     const rowOptions = extend({ columns: options.columns }, options.row);
+    options.row.columns = options.columns;
 
-    this._addWatchMethod(options.row, options.row);
+    this._addWatchMethod(options.row);
     this._addWatchMethod(rowOptions, options.row);
 
     this._rowPrepared($wrappedRow, rowOptions, options.row);

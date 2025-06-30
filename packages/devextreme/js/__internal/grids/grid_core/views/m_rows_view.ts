@@ -290,9 +290,9 @@ export class RowsView extends ColumnsView {
 
       setWatcher({
         element: $row.get(0),
-        watch: row.watch,
-        getter: () => row.rowIndex,
-        callBack: () => this._setAriaRowIndex(row, $row),
+        watch: rowOptions.watch,
+        getter: () => rowOptions.rowIndex,
+        callBack: () => this._setAriaRowIndex(rowOptions, $row),
       });
     }
 
