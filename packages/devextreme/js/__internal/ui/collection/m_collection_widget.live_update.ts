@@ -125,7 +125,12 @@ class CollectionWidgetLiveUpdate<
         }
         return this.keyOf(data);
       };
-      const result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), keyOf, this._isItemStrictEquals.bind(this));
+      const result = findChanges(
+        this._itemsCache,
+        this._editStrategy.itemsGetter(),
+        keyOf,
+        this._isItemStrictEquals.bind(this),
+      );
       if (result && this._itemsCache.length && !this._shouldAddNewGroup(result, this._itemsCache)) {
         this._modifyByChanges(result, true);
         this._renderEmptyMessage();
