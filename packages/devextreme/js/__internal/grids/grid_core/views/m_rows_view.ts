@@ -278,8 +278,8 @@ export class RowsView extends ColumnsView {
 
         setWatcher({
           element: $row.get(0),
-          watch: rowOptions.watch,
-          getter: () => this._isAltRow(rowOptions),
+          watch: row.watch,
+          getter: () => this._isAltRow(row),
           callBack: (value) => {
             $row.toggleClass(ROW_ALTERNATION_CLASS, value);
           },
