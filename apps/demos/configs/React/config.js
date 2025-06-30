@@ -161,19 +161,19 @@ window.config = {
     'devextreme-react/common': {
       main: 'index.js',
     },
-    'devextreme/common/core/events/utils': {
+    'devextreme/events/utils': {
       main: 'index',
     },
-    'devextreme/events': {
-      main: 'index',
-    }/** globalize */,
-    'devextreme/events/utils': {
+    'devextreme/common/core/events/utils': {
       main: 'index',
     },
     'devextreme/localization/messages': {
       format: 'json',
       defaultExtension: 'json',
     },
+    'devextreme/events': {
+      main: 'index',
+    }/** globalize */,
     'devextreme-cldr-data': {
       format: 'json',
       defaultExtension: 'json',

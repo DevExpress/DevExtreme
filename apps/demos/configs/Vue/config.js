@@ -149,14 +149,17 @@ window.config = {
     'prettier/parser-html': 'npm:prettier/parser-html.js',
   },
   packages: {
-    'devextreme': {
-      defaultExtension: 'js',
-    },
     'devextreme-vue': {
       main: 'index.js',
     },
     'devextreme-vue/common': {
       main: 'index.js',
+    },
+    'devextreme': {
+      defaultExtension: 'js',
+    },
+    'devextreme/events/utils': {
+      main: 'index',
     },
     'devextreme/common/core/events/utils': {
       main: 'index',
@@ -164,9 +167,6 @@ window.config = {
     'devextreme/events': {
       main: 'index',
     }/** globalize */,
-    'devextreme/events/utils': {
-      main: 'index',
-    },
     'devextreme-cldr-data': {
       format: 'json',
       defaultExtension: 'json',
