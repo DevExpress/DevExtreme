@@ -758,24 +758,17 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       this._renderCells($row, options);
     }
     this._appendRow($table, $wrappedRow);
-    const rowOptions = extend({ columns: options.columns }, options.row);
+    const rowOptions = extend({}, options.row);
 
-    this._addWatchMethod(options.row, options.row);
+    this._addWatchMethod(rowOptions, options.row);
+
+    rowOptions.columns = options.columns;
 
     this._rowPrepared($wrappedRow, rowOptions, options.row);
   }
 
   protected _needRenderCell(columnIndex, columnIndices) {
     return !columnIndices || columnIndices.indexOf(columnIndex) >= 0;
-  }
-
-  private _mergeRowOptionsIfNeed(rowOptions, options) {
-    if (this.option('columnFixing.legacyMode') && this.option('rowAlternationEnabled')) {
-      rowOptions = options.row;
-      rowOptions.columns = options.columns;
-    }
-
-    return rowOptions;
   }
 
   protected _renderCells($row, options) {
