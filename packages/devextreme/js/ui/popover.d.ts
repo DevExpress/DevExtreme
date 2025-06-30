@@ -53,7 +53,7 @@ export type DisposingEvent = EventInfo<dxPopover>;
  * @docid _ui_popover_HidingEvent
  * @public
  * @type object
- * @inherits Cancelable,EventInfo
+ * @inherits AsyncCancelable,EventInfo
  */
 export type HidingEvent = AsyncCancelable & EventInfo<dxPopover>;
 
