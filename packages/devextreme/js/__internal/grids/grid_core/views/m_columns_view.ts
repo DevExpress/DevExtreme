@@ -973,11 +973,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   protected _rowPrepared($row, options, row?) {
-    this._addWatchMethod(options, row);
-    elementData($row.get(0), 'options', options);
+    elementData($row.get(0), 'options', row);
 
-    options.rowElement = getPublicElement($row);
-    this.executeAction('onRowPrepared', options);
+    row.rowElement = getPublicElement($row);
+    this.executeAction('onRowPrepared', row);
   }
 
   protected _columnOptionChanged(e) {
