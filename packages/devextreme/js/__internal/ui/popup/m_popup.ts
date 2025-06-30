@@ -880,6 +880,10 @@ class Popup<
   }
 
   _initPositionController(): void {
+    if (this._positionController) {
+      return;
+    }
+
     this._positionController = new PopupPositionController(
       this._getPositionControllerConfig(),
     );
