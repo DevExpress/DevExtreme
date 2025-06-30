@@ -3066,7 +3066,7 @@ QUnit.module('positioning', {
                 this.resizePointer = pointerMock(this.$resizeHandle);
 
                 this.getPosition = () => this.$overlayContent.position();
-                this.drag = ({ x = 100, y = 100 } = {}) => { this.dragPointer.start().down().move(x, y).up(); };
+                this.drag = () => { this.dragPointer.start().down().move(100, 100).up(); };
                 this.resize = () => { this.resizePointer.start().down().move(-100, -100).up(); };
             };
 
@@ -3224,6 +3224,37 @@ QUnit.module('positioning', {
                         assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
                     });
 
+                    QUnit.test('should not be changed after content dimension change', function(assert) {
+                        const done = assert.async();
+
+                        this.popup.option({
+                            width: 'auto',
+                            height: 'auto',
+                            contentTemplate: () => {
+                                return $('<div>')
+                                    .attr('id', 'content')
+                                    .width(100)
+                                    .height(100);
+                            }
+                        });
+
+                        this[moveMethodName]();
+
+                        const position = this.getPosition();
+
+                        $('#content')
+                            .width(300)
+                            .height(300);
+
+                        setTimeout(() => {
+                            const newPosition = this.getPosition();
+                            assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
+                            assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
+
+                            done();
+                        }, 250);
+                    });
+
                     QUnit.test('should be restored to position from option after repaint', function(assert) {
                         const position = this.getPosition();
 
@@ -3274,89 +3305,6 @@ QUnit.module('positioning', {
                         assert.strictEqual(newPosition.left, visualPosition.left, 'left coordinate is correct');
                         assert.strictEqual(newPosition.top, visualPosition.top, 'top coordinate is correct');
                     });
-                });
-            });
-
-            QUnit.module('drag', () => {
-                QUnit.test('should be changed after content dimension change', function(assert) {
-                    const done = assert.async();
-
-                    const isDesktop = devices.current().deviceType === 'desktop';
-                    const positionAt = isDesktop ? 'center' : 'left top';
-                    const move = isDesktop ? { x: 0, y: 0 } : { x: 5, y: 5 };
-
-                    this.popup.option({
-                        position: positionAt,
-                        width: 'auto',
-                        height: 'auto',
-                        contentTemplate: () => {
-                            return $('<div>')
-                                .attr('id', 'content')
-                                .width(100)
-                                .height(100);
-                        },
-                    });
-
-                    debugger;
-
-                    this.drag(move);
-
-                    debugger;
-
-                    const position = this.getPosition();
-
-                    $('#content')
-                        .width(300)
-                        .height(300);
-
-                    debugger;
-
-                    setTimeout(() => {
-                        const newPosition = this.getPosition();
-
-                        assert.strictEqual(newPosition.left, position.left - move.y, 'left coordinate is correct');
-                        assert.strictEqual(newPosition.top, position.top - move.x, 'top coordinate is correct');
-
-                        done();
-                    }, 250);
-                });
-            });
-
-            QUnit.module('resize', () => {
-                QUnit.test('should be changed after content dimension change', function(assert) {
-                    const done = assert.async();
-
-                    // const isDesktop = devices.current().deviceType === 'desktop';
-                    // const positionAt = isDesktop ? 'center' : 'left top';
-
-                    this.popup.option({
-                        // position: positionAt,
-                        width: 'auto',
-                        height: 'auto',
-                        contentTemplate: () => {
-                            return $('<div>')
-                                .attr('id', 'content')
-                                .width(100)
-                                .height(100);
-                        },
-                    });
-
-                    this.resize();
-
-                    const position = this.getPosition();
-
-                    $('#content')
-                        .width(300)
-                        .height(300);
-
-                    setTimeout(() => {
-                        const newPosition = this.getPosition();
-
-                        assert.strictEqual(newPosition.left, position.left, 'left coordinate is correct');
-                        assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
-
-                        done();
-                    }, 250);
                 });
             });
         });
