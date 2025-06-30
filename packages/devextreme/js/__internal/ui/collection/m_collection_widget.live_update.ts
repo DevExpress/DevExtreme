@@ -213,9 +213,9 @@ class CollectionWidgetLiveUpdate<
   _modifyByChanges(changes, isPartialRefresh?): void {
     const items = this._editStrategy.itemsGetter();
     const keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) };
-    // @ts-expect-error
     const dataController = this._dataController;
     const paginate = dataController.paginate();
+    // @ts-expect-error missing argument
     const group = dataController.group();
 
     if (paginate || group) {
@@ -236,7 +236,7 @@ class CollectionWidgetLiveUpdate<
   _optionChanged(args: OptionChanged<TProperties>): void {
     switch (args.name) {
       case 'items': {
-        // @ts-expect-error excess argument
+        // @ts-expect-error arguments
         const isItemsUpdated = this._partialRefresh(args.value);
         if (!isItemsUpdated) {
           super._optionChanged(args);
