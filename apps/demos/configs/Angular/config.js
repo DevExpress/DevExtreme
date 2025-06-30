@@ -288,15 +288,15 @@ window.config = {
     'devextreme': {
       defaultExtension: 'js',
     },
-    'devextreme/events/utils': {
-      main: 'index',
-    },
     'devextreme/common/core/events/utils': {
       main: 'index',
     },
     'devextreme/events': {
       main: 'index',
     }/** globalize */,
+    'devextreme/events/utils': {
+      main: 'index',
+    },
     'globalize': {
       main: '../globalize.js',
       defaultExtension: 'js',

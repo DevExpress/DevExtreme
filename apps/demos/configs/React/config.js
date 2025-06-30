@@ -51,7 +51,6 @@ window.config = {
   map: {
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
-    'jszip': 'npm:jszip/dist/jszip.min.js',
     'react': 'npm:react/umd/react.development.js',
     'react-dom': 'npm:react-dom/umd/react-dom.development.js',
     'prop-types': 'npm:prop-types/prop-types.js',
@@ -114,6 +113,10 @@ window.config = {
     'devextreme': 'npm:devextreme/cjs',
     'devextreme-react': 'npm:devextreme-react/cjs',
 
+    /** jszip */
+    'jszip': 'npm:jszip/dist/jszip.min.js',
+    /**/
+
     /** unified */
     'unified': 'externals:unified/unified.bundle.js',
     'remark-parse': 'externals:unified/remark-parse.bundle.js',
@@ -158,19 +161,22 @@ window.config = {
     'devextreme-react': {
       main: 'index.js',
     },
-    'devextreme/events/utils': {
-      main: 'index',
+    'devextreme-react/common': {
+      main: 'index.js',
     },
     'devextreme/common/core/events/utils': {
+      main: 'index',
+    },
+    'devextreme/events': {
+      main: 'index',
+    }/** globalize */,
+    'devextreme/events/utils': {
       main: 'index',
     },
     'devextreme/localization/messages': {
       format: 'json',
       defaultExtension: 'json',
     },
-    'devextreme/events': {
-      main: 'index',
-    }/** globalize */,
     'devextreme-cldr-data': {
       format: 'json',
       defaultExtension: 'json',

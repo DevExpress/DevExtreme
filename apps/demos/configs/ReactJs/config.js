@@ -43,7 +43,7 @@ window.config = {
     },
   },
   paths: {
-    'npm:': '../../../node_modules/',
+    'npm:': '../../../../node_modules/',
     'bundles:': '../../../../bundles/',
     'externals:': '../../../../bundles/externals/',
   },
@@ -54,7 +54,6 @@ window.config = {
     'react': 'npm:react/umd/react.development.js',
     'react-dom': 'npm:react-dom/umd/react-dom.development.js',
     'prop-types': 'npm:prop-types/prop-types.js',
-    'sha-1': 'npm:sha-1/dist/sha1.cjs.js',
 
     /** signalr */
     '@aspnet/signalr': 'npm:@aspnet/signalr/dist/cjs',
@@ -162,22 +161,25 @@ window.config = {
     'devextreme-react': {
       main: 'index.js',
     },
-    'devextreme/events/utils': {
-      main: 'index',
+    'devextreme-react/common': {
+      main: 'index.js',
     },
     'devextreme/common/core/events/utils': {
       main: 'index',
     },
-    'devextreme/localization/messages': {
-      format: 'json',
-      defaultExtension: '',
-    },
     'devextreme/events': {
       main: 'index',
     }/** globalize */,
+    'devextreme/events/utils': {
+      main: 'index',
+    },
+    'devextreme/localization/messages': {
+      format: 'json',
+      defaultExtension: 'json',
+    },
     'devextreme-cldr-data': {
       format: 'json',
-      defaultExtension: '',
+      defaultExtension: 'json',
     }/**//** globalize */,
     'globalize': {
       main: '../globalize.js',
