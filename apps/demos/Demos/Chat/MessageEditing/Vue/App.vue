@@ -46,8 +46,7 @@
 import { ref, computed } from 'vue';
 import { DxChat, DxEditing } from 'devextreme-vue/chat';
 import { DxSelectBox } from 'devextreme-vue/select-box';
-// import { Guid } from 'devextreme-vue/common';
-import Guid from 'devextreme/core/guid';
+import { Guid } from 'devextreme-vue/common';
 import { CustomStore, DataSource } from 'devextreme-vue/common/data';
 import {
   messages as initialMessages,

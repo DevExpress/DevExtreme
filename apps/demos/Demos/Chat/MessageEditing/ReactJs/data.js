@@ -1,5 +1,4 @@
-// import { Guid } from 'devextreme-react/common';
-import Guid from 'devextreme/core/guid';
+import { Guid } from 'devextreme-react/common';
 
 function getTimestamp(date, offsetMinutes = 0) {
   return date.getTime() + offsetMinutes * 60000;
