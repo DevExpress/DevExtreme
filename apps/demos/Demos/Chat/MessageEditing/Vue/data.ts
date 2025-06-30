@@ -1,4 +1,5 @@
-import { Guid } from 'devextreme-vue/common';
+// import { Guid } from 'devextreme-vue/common';
+import Guid from 'devextreme/core/guid';
 
 function getTimestamp(date, offsetMinutes = 0): number {
   return date.getTime() + offsetMinutes * 60000;
