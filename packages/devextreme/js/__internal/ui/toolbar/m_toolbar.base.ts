@@ -254,7 +254,9 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     const sectionMaxWidth = Math.max(freeSpace - widthBeforeSection - widthAfterSection, 0);
 
     if ($section.hasClass(TOOLBAR_BEFORE_CLASS)) {
-      this._alignSection(this._$beforeSection, sectionMaxWidth);
+      if (this._$beforeSection) {
+        this._alignSection(this._$beforeSection, sectionMaxWidth);
+      }
     } else {
       const labelPaddings = getOuterWidth($label) - getWidth($label);
       $label.css('maxWidth', sectionMaxWidth - labelPaddings);
@@ -262,15 +264,19 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
   }
 
   _alignCenterSection(beforeRect, afterRect, elementWidth): void {
+    if (!this._$centerSection) {
+      return;
+    }
+
     this._alignSection(this._$centerSection, elementWidth - beforeRect.width - afterRect.width);
 
     const isRTL = this.option('rtlEnabled');
     const leftRect = isRTL ? afterRect : beforeRect;
     const rightRect = isRTL ? beforeRect : afterRect;
-    const centerRect = getBoundingRect(this._$centerSection?.get(0));
+    const centerRect = getBoundingRect(this._$centerSection.get(0));
 
     if (leftRect.right > centerRect.left || centerRect.right > rightRect.left) {
-      this._$centerSection?.css({
+      this._$centerSection.css({
         marginLeft: leftRect.width,
         marginRight: rightRect.width,
         float: leftRect.width > rightRect.width ? 'none' : 'right',
@@ -278,13 +284,13 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     }
   }
 
-  _alignSection($section, maxWidth: number): void {
+  _alignSection($section: dxElementWrapper, maxWidth: number): void {
     const $labels = $section.find(`.${TOOLBAR_LABEL_CLASS}`);
     const labels = $labels.toArray();
 
     const maxWidthWithoutPaddings = maxWidth - this._getCurrentLabelsPaddings(labels);
     const currentWidth = this._getCurrentLabelsWidth(labels);
-    const difference = Math.abs(currentWidth - maxWidth);
+    const difference = Math.abs(currentWidth - maxWidthWithoutPaddings);
 
     if (maxWidthWithoutPaddings < currentWidth) {
       const reversedLabels = labels.reverse();
