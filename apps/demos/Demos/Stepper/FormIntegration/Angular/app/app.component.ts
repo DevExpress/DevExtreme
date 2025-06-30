@@ -2,16 +2,15 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
-  DxStepperModule,
   DxButtonModule,
-  DxMultiViewModule,
-  DxFormModule,
   DxDateRangeBoxModule,
+  DxFormModule,
+  DxMultiViewModule,
   DxNumberBoxModule,
   DxSelectBoxModule,
   DxTextAreaModule,
 } from 'devextreme-angular';
-import type { Item, SelectionChangingEvent } from 'devextreme/ui/stepper';
+import { DxStepperModule, type DxStepperTypes } from 'devextreme-angular/ui/stepper';
 import validationEngine from 'devextreme/ui/validation_engine';
 import { AppService } from './app.service';
 import { BookingFormData } from './app.types';
@@ -37,7 +36,7 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
 })
 export class AppComponent {
-  steps: Item[];
+  steps: DxStepperTypes.Item[];
 
   formData: BookingFormData;
 
@@ -69,12 +68,12 @@ export class AppComponent {
     this.steps[index].isValid = isValid;
   }
 
-  onSelectionChanging(e: SelectionChangingEvent) {
+  onSelectionChanging(e: DxStepperTypes.SelectionChangingEvent) {
     const { component, addedItems, removedItems } = e;
     const { items = [] } = component.option();
 
-    const addedIndex = items.findIndex((item: Item) => item === addedItems[0]);
-    const removedIndex = items.findIndex((item: Item) => item === removedItems[0]);
+    const addedIndex = items.findIndex((item: DxStepperTypes.Item) => item === addedItems[0]);
+    const removedIndex = items.findIndex((item: DxStepperTypes.Item) => item === removedItems[0]);
     const isMoveForward = removedIndex > -1 && addedIndex > removedIndex;
 
     if (isMoveForward) {
@@ -138,13 +137,13 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxStepperModule,
     DxButtonModule,
-    DxMultiViewModule,
-    DxFormModule,
     DxDateRangeBoxModule,
+    DxFormModule,
+    DxMultiViewModule,
     DxNumberBoxModule,
     DxSelectBoxModule,
+    DxStepperModule,
     DxTextAreaModule,
   ],
   declarations: [
