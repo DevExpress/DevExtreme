@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import Button from 'devextreme-react/button';
+import { Button } from 'devextreme-react/button';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
