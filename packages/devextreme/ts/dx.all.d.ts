@@ -22473,7 +22473,7 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_popover_HidingEvent]
      */
-    export type HidingEvent = DevExpress.events.Cancelable &
+    export type HidingEvent = DevExpress.events.AsyncCancelable &
       DevExpress.events.EventInfo<dxPopover>;
     /**
      * [descr:_ui_popover_InitializedEvent]
