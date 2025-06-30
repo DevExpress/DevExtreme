@@ -641,24 +641,6 @@ QUnit.test('viewport - setter', function(assert) {
     assert.deepEqual(this.projection.setViewport.lastCall.args, ['test-viewport']);
 });
 
-QUnit.test('convertCoordinates / array arguments', function(assert) {
-    const coords = { tag: 'coords' };
-    this.createMap();
-    this.projection.stub('fromScreenPoint').returns(coords);
-
-    assert.deepEqual(this.map.convertCoordinates([10, 20]), coords, 'result');
-    assert.deepEqual(this.projection.fromScreenPoint.lastCall.args, [[10, 20]], 'projection is called');
-});
-
-QUnit.test('convertCoordinates / scalar arguments', function(assert) {
-    const coords = { tag: 'coords' };
-    this.createMap();
-    this.projection.stub('fromScreenPoint').returns(coords);
-
-    assert.deepEqual(this.map.convertCoordinates(10, 20), coords, 'result');
-    assert.deepEqual(this.projection.fromScreenPoint.lastCall.args, [[10, 20]], 'projection is called');
-});
-
 QUnit.test('convertToGeo', function(assert) {
     const coords = { tag: 'coords' };
     this.createMap();

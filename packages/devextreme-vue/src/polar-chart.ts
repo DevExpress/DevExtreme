@@ -29,7 +29,6 @@ import {
  ZoomStartEvent,
  PolarChartSeries,
  PolarChartSeriesType,
- ValueAxisVisualRangeUpdateMode,
 } from "devextreme/viz/polar_chart";
 import {
  SeriesLabel,
@@ -58,6 +57,7 @@ import {
  LegendHoverMode,
  PointInteractionMode,
  PointSymbol,
+ ValueAxisVisualRangeUpdateMode,
  ValueErrorBarDisplayMode,
  ValueErrorBarType,
 } from "devextreme/common/charts";

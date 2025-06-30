@@ -21,10 +21,10 @@ const headersKeyboardNavigation = (
       return column;
     }
 
-    let focusableColumns = this.getFocusableColumns(rowIndex);
+    const focusableColumns = this.getFocusableColumns(rowIndex, column.ownerBand);
 
     if (focusableColumns.length === 1 && isDefined(column.ownerBand)) {
-      focusableColumns = this.getFocusableColumns();
+      return this._columnsController.getParentColumn(column, true);
     }
 
     if (focusableColumns.length === 1) {

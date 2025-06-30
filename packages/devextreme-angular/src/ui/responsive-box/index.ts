@@ -137,10 +137,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get height(): (() => number | string) | number | string {
+    get height(): number | string {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string) {
+    set height(value: number | string) {
         this._setOption('height', value);
     }
 
@@ -267,10 +267,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get width(): (() => number | string) | number | string {
+    get width(): number | string {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string) {
+    set width(value: number | string) {
         this._setOption('width', value);
     }
 
@@ -371,7 +371,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() heightChange: EventEmitter<number | string>;
 
     /**
     
@@ -441,7 +441,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() widthChange: EventEmitter<number | string>;
 
 
 

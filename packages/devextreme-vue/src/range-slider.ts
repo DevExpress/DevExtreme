@@ -77,7 +77,7 @@ const componentConfig = {
     end: Number,
     endName: String,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
@@ -107,7 +107,7 @@ const componentConfig = {
     value: Array as PropType<Array<number>>,
     valueChangeMode: String as PropType<SliderValueChangeMode>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

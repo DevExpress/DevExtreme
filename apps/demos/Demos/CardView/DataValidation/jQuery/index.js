@@ -2,10 +2,9 @@ $(() => {
   $('#card-view').dxCardView({
     dataSource: employees,
     keyExpr: 'id',
-    cardsPerRow: 2,
-    paging: {
-      pageSize: 4
-    },
+    cardsPerRow: 'auto',
+    cardMinWidth: 350,
+    height: 840,
     cardCover: {
       imageExpr: ({ picture }) => picture,
       altExpr: ({ fullName }) => `Photo of ${fullName}`,
@@ -33,7 +32,7 @@ $(() => {
             itemType: 'group',
             colCount: 2,
             colSpan: 2,
-            items: ['hireDate', 'title', {
+            items: ['hireDate', 'title', 'department', {
               dataField: 'notes',
               editorType: 'dxTextArea',
               colSpan: 2,
@@ -50,7 +49,13 @@ $(() => {
               {
                 dataField: 'address',
                 colSpan: 2,
-              }, 'city', 'zipcode', 'mobilePhone', 'email',
+              }, 'city', 'zipcode', {
+                dataField: 'mobilePhone',
+                editorOptions: {
+                  mask: '+0 (000) 000-0000',
+                  useMaskedValue: true,
+                },
+              }, 'email',
             ],
           },
         ],
@@ -95,9 +100,7 @@ $(() => {
       {
         dataField: 'mobilePhone',
         validationRules: [{
-          type: 'pattern',
-          message: 'Your phone must have "(555) 555-5555" format!',
-          pattern: /^\(\d{3}\) \d{3}-\d{4}$/i,
+          type: 'required',
         }],
       },
       {

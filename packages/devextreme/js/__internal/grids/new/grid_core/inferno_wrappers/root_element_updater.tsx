@@ -15,9 +15,8 @@ export class RootElementUpdater extends Component<Properties> {
   private previousAttributes: Record<string, unknown> = {};
 
   public render(): JSX.Element {
-    return <>
-      {this.props.children}
-    </>;
+    // @ts-expect-error
+    return this.props.children;
   }
 
   private updateClasses(element: HTMLDivElement): void {

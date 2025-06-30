@@ -52,6 +52,8 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   ) => unknown;
   defaultCalculateFilterExpression: Column['calculateFilterExpression'];
 
+  selector: (this: Column, data: unknown) => unknown;
+
   format?: Format;
 
   customizeText?: (this: Column, info: {
@@ -101,6 +103,8 @@ export interface FieldInfo {
 }
 
 export interface CardInfo {
+  visible: boolean;
+
   columns: Column[];
 
   fields: FieldInfo[];

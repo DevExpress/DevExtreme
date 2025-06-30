@@ -94,7 +94,7 @@ const componentConfig = {
     fieldChooser: Object as PropType<Record<string, any>>,
     fieldPanel: Object as PropType<Record<string, any>>,
     headerFilter: Object as PropType<Record<string, any>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hideEmptySummaryCells: Boolean,
     hint: String,
     loadPanel: Object as PropType<Record<string, any>>,
@@ -119,7 +119,7 @@ const componentConfig = {
     tabIndex: Number,
     texts: Object as PropType<Record<string, any>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    width: [Number, String],
     wordWrapEnabled: Boolean
   },
   emits: {

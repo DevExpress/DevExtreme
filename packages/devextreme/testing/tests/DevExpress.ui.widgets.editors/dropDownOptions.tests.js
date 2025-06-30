@@ -103,7 +103,7 @@ const optionComparer = {
         assert.strictEqual(getPopupInstance(editor).option('position.of').get(0), expectedPosition.of.get(0), 'popup position.of is correct');
     },
     contentTemplate: function(assert, editor) {
-        if(editor.NAME === 'dxDropDownBox' || editor.NAME === 'dxDropDownButton') {
+        if(editor.NAME === 'dxDropDownBox') {
             assert.strictEqual(editor.option('dropDownOptions.contentTemplate'), 'content', 'dropDownOptions.contentTemplate is correct');
             assert.strictEqual(getPopupInstance(editor).option('contentTemplate'), 'content', 'popup contentTemplate is correct');
             return;
@@ -154,8 +154,10 @@ dropDownEditorsNames.forEach(widgetName => {
         QUnit.module('dropDownOptions on pure init', () => {
             dropDownOptionsKeys.forEach(option => {
                 // TODO: fix this cases
-                if(widgetName === 'dxDropDownBox' && (option === 'focusStateEnabled' || option === 'tabIndex')
-                    || widgetName === 'dxDropDownButton' && (option === 'showCloseButton' || option === '_ignorePreventScrollEventsDeprecation')) {
+                if(
+                    widgetName === 'dxDropDownBox' && (option === 'focusStateEnabled' || option === 'tabIndex')
+                    || widgetName === 'dxDropDownButton' && (option === 'showCloseButton' || option === '_ignorePreventScrollEventsDeprecation')
+                ) {
                     return;
                 }
                 QUnit.test(`${option} is correct`, function(assert) {

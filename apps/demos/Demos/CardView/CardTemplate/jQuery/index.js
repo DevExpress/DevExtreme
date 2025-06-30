@@ -1,7 +1,7 @@
 $(() => {
   const popup = $('#popup').dxPopup({
-    width: 350,
-    height: 240,
+    width: 360,
+    height: 260,
     visible: false,
     dragEnabled: false,
     hideOnOutsideClick: true,
@@ -88,7 +88,10 @@ $(() => {
         $('<p>')
           .append($('<b>').text('Source link: '))
           .append(
-            $('<a>', { href: sourceLink })
+            $('<a>', {
+                href: sourceLink,
+                target: '_blank',
+              })
               .text(sourceLink),
           ),
         $('<p>')
@@ -121,27 +124,40 @@ $(() => {
   };
 
   $(function () {
-    $("#card-view").dxCardView({
+    $('#card-view').dxCardView({
       dataSource: vehicles,
+      height: 1120,
       cardsPerRow: 'auto',
-      cardMinWidth: 260,
+      cardMinWidth: 240,
       paging: {
         pageSize: 12,
       },
       columns: [
-        "TrademarkName",
-        "Name",
         {
-          dataField: "Price",
+          dataField: 'TrademarkName',
+          caption: 'Trademark',
+        },
+        {
+          dataField: 'Name',
+          caption: 'Model',
+        },
+        {
+          dataField: 'Price',
           format: 'currency',
           headerFilter: {
             groupInterval: 20000,
           }
         },
-        "CategoryName",
-        "Modification",
-        "BodyStyleName",
-        "Horsepower",
+        {
+          dataField: 'CategoryName',
+          caption: 'Category',
+        },
+        'Modification',
+        {
+          dataField: 'BodyStyleName',
+          caption: 'Body Style',
+        },
+        'Horsepower',
       ],
       headerFilter: {
         visible: true,

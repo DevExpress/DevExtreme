@@ -2,11 +2,12 @@ import type { DefaultOptionsRule, Position } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import resizeObserverSingleton from '@js/core/resize_observer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
@@ -35,49 +36,49 @@ import TabsItem from './item';
 
 // STYLE tabs
 
-const TABS_CLASS = 'dx-tabs';
-const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
-const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
-const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
-const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
+export const TABS_CLASS = 'dx-tabs';
+export const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
+export const TABS_STRETCHED_CLASS = 'dx-tabs-stretched';
+export const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
+export const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
 const OVERFLOW_HIDDEN_CLASS = 'dx-overflow-hidden';
 
-const TABS_ITEM_CLASS = 'dx-tab';
-const TABS_ITEM_SELECTED_CLASS = 'dx-tab-selected';
-const TABS_SCROLLING_ENABLED_CLASS = 'dx-tabs-scrolling-enabled';
+export const TABS_ITEM_CLASS = 'dx-tab';
+export const TABS_ITEM_SELECTED_CLASS = 'dx-tab-selected';
+export const TABS_SCROLLING_ENABLED_CLASS = 'dx-tabs-scrolling-enabled';
 
-const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
-const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
-const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
+export const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
+export const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
+export const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 
-const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
-const TABS_ITEM_TEXT_SPAN_CLASS = 'dx-tab-text-span';
-const TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS = 'dx-tab-text-span-pseudo';
+export const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
+export const TABS_ITEM_TEXT_SPAN_CLASS = 'dx-tab-text-span';
+export const TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS = 'dx-tab-text-span-pseudo';
 
 const STATE_DISABLED_CLASS = 'dx-state-disabled';
-const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
-const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
+export const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
+export const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
 
-const TABS_ORIENTATION_CLASS = {
+export const TABS_ORIENTATION_CLASS = {
   vertical: 'dx-tabs-vertical',
   horizontal: 'dx-tabs-horizontal',
 };
 
-const INDICATOR_POSITION_CLASS: Record<Position, string> = {
+export const TABS_INDICATOR_POSITION_CLASS: Record<Position, string> = {
   top: 'dx-tab-indicator-position-top',
   right: 'dx-tab-indicator-position-right',
   bottom: 'dx-tab-indicator-position-bottom',
   left: 'dx-tab-indicator-position-left',
 };
 
-const TABS_ICON_POSITION_CLASS: Record<TabsIconPosition, string> = {
+export const TABS_ICON_POSITION_CLASS: Record<TabsIconPosition, string> = {
   top: 'dx-tabs-icon-position-top',
   end: 'dx-tabs-icon-position-end',
   bottom: 'dx-tabs-icon-position-bottom',
   start: 'dx-tabs-icon-position-start',
 };
 
-const TABS_STYLING_MODE_CLASS: Record<TabsStyle, string> = {
+export const TABS_STYLING_MODE_CLASS: Record<TabsStyle, string> = {
   primary: 'dx-tabs-styling-mode-primary',
   secondary: 'dx-tabs-styling-mode-secondary',
 };
@@ -271,7 +272,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
     super._initTemplates();
 
     this._templateManager.addDefaultTemplates({
-      item: new BindableTemplate(($container, data) => {
+      item: new BindableTemplate(($container: dxElementWrapper, data: Item) => {
         this._prepareDefaultItemTemplate(data, $container);
 
         const $iconElement = getImageContainer(data.icon);
@@ -306,6 +307,8 @@ class Tabs extends CollectionWidget<TabsProperties> {
     }
 
     this.$element().addClass(OVERFLOW_HIDDEN_CLASS);
+
+    this._attachResizeObserverSubscription();
   }
 
   _postProcessRenderItems(): void {
@@ -357,11 +360,10 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
   _isItemsSizeExceeded(): boolean {
     const isVertical = this._isVertical();
-    const isItemsSizeExceeded = isVertical
+
+    return isVertical
       ? this._isItemsHeightExceeded()
       : this._isItemsWidthExceeded();
-
-    return isItemsSizeExceeded;
   }
 
   _isItemsWidthExceeded(): boolean {
@@ -373,18 +375,15 @@ class Tabs extends CollectionWidget<TabsProperties> {
       return false;
     }
 
-    const isItemsWidthExceeded = tabItemTotalWidth > elementWidth - 1;
-
-    return isItemsWidthExceeded;
+    return tabItemTotalWidth > elementWidth - 1;
   }
 
   _isItemsHeightExceeded(): boolean {
     const $visibleItems = this._getVisibleItems();
     const itemsHeight = this._getSummaryItemsSize('height', $visibleItems, true);
     const elementHeight = getHeight(this.$element());
-    const isItemsHeightExceeded = itemsHeight - 1 > elementHeight;
 
-    return isItemsHeightExceeded;
+    return itemsHeight - 1 > elementHeight;
   }
 
   _needStretchItems(): boolean {
@@ -399,9 +398,8 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
     const maxTabItemWidth = Math.max.apply(null, itemsWidth);
     const requireWidth = elementWidth / $visibleItems.length;
-    const needStretchItems = maxTabItemWidth > requireWidth + 1;
 
-    return needStretchItems;
+    return maxTabItemWidth > requireWidth + 1;
   }
 
   _cleanNavButtons(): void {
@@ -478,11 +476,10 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
   _getScrollableDirection(): Orientation {
     const isVertical = this._isVertical();
-    const scrollableDirection = isVertical
+
+    return isVertical
       ? SCROLLABLE_DIRECTION.vertical
       : SCROLLABLE_DIRECTION.horizontal;
-
-    return scrollableDirection;
   }
 
   _updateScrollable(): void {
@@ -639,6 +636,11 @@ class Tabs extends CollectionWidget<TabsProperties> {
     }
   }
 
+  _attachResizeObserverSubscription(): void {
+    resizeObserverSingleton.unobserve(this.$element().get(0));
+    resizeObserverSingleton.observe(this.$element().get(0), () => { this._dimensionChanged(); });
+  }
+
   _dimensionChanged(): void {
     this._renderScrolling();
   }
@@ -663,6 +665,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
   }
 
   _clean(): void {
+    resizeObserverSingleton.unobserve(this.$element().get(0));
     this._cleanScrolling();
     super._clean();
   }
@@ -676,7 +679,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
   }
 
   _getIndicatorPositionClass(indicatorPosition: Position): string {
-    return INDICATOR_POSITION_CLASS[indicatorPosition];
+    return TABS_INDICATOR_POSITION_CLASS[indicatorPosition];
   }
 
   _getIndicatorPosition(): Position {
@@ -698,7 +701,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
   _toggleIndicatorPositionClass(indicatorPosition: Position): void {
     const newClass = this._getIndicatorPositionClass(indicatorPosition);
 
-    this._toggleElementClasses(INDICATOR_POSITION_CLASS, newClass);
+    this._toggleElementClasses(TABS_INDICATOR_POSITION_CLASS, newClass);
   }
 
   _toggleScrollingEnabledClass(scrollingEnabled: boolean | undefined): void {

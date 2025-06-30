@@ -134,7 +134,7 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     imageUpload: Object as PropType<dxHtmlEditorImageUpload | Record<string, any>>,
@@ -166,7 +166,7 @@ const componentConfig = {
     value: {},
     variables: Object as PropType<dxHtmlEditorVariables | Record<string, any>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,
@@ -368,7 +368,7 @@ const DxFileUploaderOptionsConfig = {
     dropZone: {},
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
@@ -419,7 +419,7 @@ const DxFileUploaderOptionsConfig = {
     validationStatus: String as PropType<ValidationStatus>,
     value: Array as PropType<Array<any>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   }
 };
 
@@ -468,8 +468,6 @@ const DxItemConfig = {
     "update:commands": null,
     "update:cssClass": null,
     "update:disabled": null,
-    "update:formatName": null,
-    "update:formatValues": null,
     "update:html": null,
     "update:icon": null,
     "update:items": null,
@@ -493,8 +491,6 @@ const DxItemConfig = {
     commands: Array as PropType<Array<AICommand | AICommandName>>,
     cssClass: String,
     disabled: Boolean,
-    formatName: String as PropType<HtmlEditorPredefinedToolbarItem | string>,
-    formatValues: Array as PropType<Array<boolean | number | string>>,
     html: String,
     icon: String,
     items: Array as PropType<Array<dxHtmlEditorTableContextMenuItem | HtmlEditorPredefinedContextMenuItem>>,
@@ -710,10 +706,9 @@ const DxToolbarItemConfig = {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:acceptedValues": null,
+    "update:commands": null,
     "update:cssClass": null,
     "update:disabled": null,
-    "update:formatName": null,
-    "update:formatValues": null,
     "update:html": null,
     "update:locateInMenu": null,
     "update:location": null,
@@ -728,10 +723,9 @@ const DxToolbarItemConfig = {
   },
   props: {
     acceptedValues: Array as PropType<Array<boolean | number | string>>,
+    commands: Array as PropType<Array<AICommand | AICommandName>>,
     cssClass: String,
     disabled: Boolean,
-    formatName: String as PropType<HtmlEditorPredefinedToolbarItem | string>,
-    formatValues: Array as PropType<Array<boolean | number | string>>,
     html: String,
     locateInMenu: String as PropType<LocateInMenuMode>,
     location: String as PropType<ToolbarItemLocation>,
@@ -752,6 +746,9 @@ const DxToolbarItem = defineComponent(DxToolbarItemConfig);
 
 (DxToolbarItem as any).$_optionName = "items";
 (DxToolbarItem as any).$_isCollectionItem = true;
+(DxToolbarItem as any).$_expectedChildren = {
+  command: { isCollectionItem: true, optionName: "commands" }
+};
 
 const DxVariablesConfig = {
   emits: {

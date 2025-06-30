@@ -120,7 +120,7 @@ describe('OptionsController', () => {
     });
 
     describe('mergeOptionTrees', () => {
-      it('should only shallow copy root if path contains error at first place', () => {
+      it('should create absent nodes if path contains error at first place', () => {
         const tree = { a: { b: { c: { extra: 'extra_node' } } }, d: { e: 2 } };
         const updatedTree = { a: { b: { c: { extra: 'update' } } }, d: { e: 2 } };
         const defaultTree = { a: { b: { c: { extra: 'default' } } } };
@@ -137,9 +137,10 @@ describe('OptionsController', () => {
         expect(result.a.b).toBe(tree.a.b);
         expect(result.a.b.c).toBe(tree.a.b.c);
         expect(result.a.b.c.extra).toBe(tree.a.b.c.extra);
+        expect(result.wrong_path).toStrictEqual({ c: undefined });
       });
 
-      it('should shallow copy subtree path until faced the wrong node path', () => {
+      it('should shallow copy subtree path and create absent nodes if faced the wrong node path', () => {
         const tree = { a: { b: { c: { extra: 'extra_node' } } }, d: { e: 2 } };
         const updatedTree = { a: { b: { c: { extra: 'update' } } }, d: { e: 2 } };
         const defaultTree = { a: { b: { c: { extra: 'default' } } } };
@@ -156,6 +157,41 @@ describe('OptionsController', () => {
         expect(result.a.b).not.toBe(tree.a.b);
         expect(result.a.b.c).toBe(tree.a.b.c);
         expect(result.a.b.c.extra).toBe(tree.a.b.c.extra);
+        expect(result.a.b.wrong_path).toStrictEqual({ extra: undefined });
+      });
+
+      it('should correctly create absent last nodes and sync their values', () => {
+        const tree = { a: { b: { c: { extra: 'extra_node' } } }, d: { e: 2 } };
+        const updatedTree = { a: { b: { c: { newProperty: 'test' } } }, d: { e: 2 } };
+        const defaultTree = { a: { b: { c: { extra: 'default' } } } };
+
+        const result = mergeOptionTrees(
+          tree,
+          updatedTree,
+          defaultTree,
+          ['a', 'b', 'c', 'newProperty'],
+        );
+
+        expect(result).not.toBe(tree);
+        expect(result.a).not.toBe(tree.a);
+        expect(result.a.b).not.toBe(tree.a.b);
+        expect(result.a.b.c).not.toBe(tree.a.b.c);
+        expect(result.a.b.c.newProperty).toBe(updatedTree.a.b.c.newProperty);
+      });
+
+      it('should correctly create absent middle nodes and sync their values', () => {
+        const tree = { a: { b: { c: { extra: 'extra_node' } } }, d: { e: 2 } };
+        const updatedTree = { a: { newB: { c: { newProperty: 'test' } } }, d: { e: 2 } };
+        const defaultTree = { a: { b: { c: { extra: 'default' } } } };
+
+        const result = mergeOptionTrees(
+          tree,
+          updatedTree,
+          defaultTree,
+          ['a', 'newB', 'c', 'newProperty'],
+        );
+
+        expect(result.a.newB.c.newProperty).toBe(updatedTree.a.newB.c.newProperty);
       });
 
       it('should deep copy applied value from updated tree', () => {

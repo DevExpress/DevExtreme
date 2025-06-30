@@ -1,40 +1,29 @@
 $(() => {
-  function getDeliveryHours(rowData) {
-    return (new Date(rowData.DeliveryDate)).getHours();
+  function getOrderDay(rowData) {
+    return (new Date(rowData.OrderDate)).getDay();
   }
 
   $('#card-view').dxCardView({
     dataSource: orders,
     keyExpr: 'ID',
-    cardsPerRow: 2,
-    paging: {
-      pageSize: 4
-    },
+    cardsPerRow: 'auto',
+    cardMinWidth: 310,
     headerFilter: {
       visible: true,
     },
     filterPanel: {
       visible: true,
     },
-    filterValue: [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'afterNoon']],
+    filterValue: [['Employee', '=', 'Clark Morgan'], 'and', ['DeliveryDate', 'weekends']],
     filterBuilder: {
       customOperations: [{
-        name: 'beforeNoon',
-        caption: 'Before noon',
-        dataTypes: ['datetime'],
+        name: 'weekends',
+        caption: 'Weekends',
+        dataTypes: ['date'],
         icon: 'check',
         hasValue: false,
         calculateFilterExpression() {
-          return [getDeliveryHours, '<', 12];
-        },
-      }, {
-        name: 'afterNoon',
-        caption: 'After noon',
-        dataTypes: ['datetime'],
-        icon: 'check',
-        hasValue: false,
-        calculateFilterExpression() {
-          return [getDeliveryHours, '>=', 12];
+          return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
         },
       }],
     },
@@ -48,7 +37,7 @@ $(() => {
       dataType: 'date',
     }, {
       dataField: 'DeliveryDate',
-      dataType: 'datetime',
+      dataType: 'date',
     }, {
       dataField: 'SaleAmount',
       dataType: 'number',
@@ -70,7 +59,7 @@ $(() => {
           value: [['SaleAmount', '>=', 10000], ['SaleAmount', '<', 20000]],
         }, {
           text: 'Greater than $20000',
-          value: ['SaleAmount', '>=', 20000], 
+          value: ['SaleAmount', '>=', 20000],
         }],
       },
     }, {

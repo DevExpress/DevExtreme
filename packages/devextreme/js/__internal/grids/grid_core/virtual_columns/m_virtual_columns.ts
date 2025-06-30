@@ -42,6 +42,8 @@ const rowsView = (Base: ModuleType<RowsView>) => class VirtualColumnsRowsViewExt
     const scrollable = this.getScrollable();
     let { left } = e.scrollOffset;
 
+    this._scrollLeft = left;
+
     // @ts-expect-error
     super._handleScroll.apply(that, arguments);
 

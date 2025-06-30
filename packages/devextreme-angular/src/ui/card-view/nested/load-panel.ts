@@ -46,14 +46,6 @@ export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
-        return this._getOption('closeOnOutsideClick');
-    }
-    set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
-        this._setOption('closeOnOutsideClick', value);
-    }
-
-    @Input()
     get container(): any | string | undefined {
         return this._getOption('container');
     }
@@ -86,10 +78,10 @@ export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get height(): (() => number | string) | number | string {
+    get height(): number | string {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string) {
+    set height(value: number | string) {
         this._setOption('height', value);
     }
 
@@ -134,18 +126,18 @@ export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get maxHeight(): (() => number | string) | number | string {
+    get maxHeight(): number | string {
         return this._getOption('maxHeight');
     }
-    set maxHeight(value: (() => number | string) | number | string) {
+    set maxHeight(value: number | string) {
         this._setOption('maxHeight', value);
     }
 
     @Input()
-    get maxWidth(): (() => number | string) | number | string {
+    get maxWidth(): number | string {
         return this._getOption('maxWidth');
     }
-    set maxWidth(value: (() => number | string) | number | string) {
+    set maxWidth(value: number | string) {
         this._setOption('maxWidth', value);
     }
 
@@ -158,18 +150,18 @@ export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get minHeight(): (() => number | string) | number | string {
+    get minHeight(): number | string {
         return this._getOption('minHeight');
     }
-    set minHeight(value: (() => number | string) | number | string) {
+    set minHeight(value: number | string) {
         this._setOption('minHeight', value);
     }
 
     @Input()
-    get minWidth(): (() => number | string) | number | string {
+    get minWidth(): number | string {
         return this._getOption('minWidth');
     }
-    set minWidth(value: (() => number | string) | number | string) {
+    set minWidth(value: number | string) {
         this._setOption('minWidth', value);
     }
 
@@ -294,10 +286,10 @@ export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get width(): (() => number | string) | number | string {
+    get width(): number | string {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string) {
+    set width(value: number | string) {
         this._setOption('width', value);
     }
 

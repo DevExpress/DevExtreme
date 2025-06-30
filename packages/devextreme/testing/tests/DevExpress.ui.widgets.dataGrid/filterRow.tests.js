@@ -1599,7 +1599,6 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 0, 'no overlay wrapper');
     });
 
-    // T619045
     QUnit.test('Overlay of between operation does not hide after scroll event', function(assert) {
     // arrange
         const that = this;
@@ -1632,7 +1631,8 @@ QUnit.module('Filter Row with real dataController and columnsController', {
         $('.dx-viewport').find('.dx-filter-range-content').trigger('scroll');
 
         // assert
-        assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 1, 'has overlay wrapper');
+        // T1280071
+        assert.equal($('.dx-viewport').children('.dx-datagrid-filter-range-overlay').length, 0, 'overlay wrapper is removed');
     });
 
     // T428602

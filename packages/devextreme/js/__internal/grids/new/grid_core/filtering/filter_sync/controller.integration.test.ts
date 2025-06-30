@@ -69,16 +69,15 @@ const TEST_CASES_GROUPS: TestCasesGroup[] = [
       filterPanel: NUMBER_FILTER_PANEL,
     },
   },
-  // TODO computed columns: uncomment after fix
-  // {
-  //   groupName: 'Simple cases | number - string',
-  //   data: NUMBER_DATA_CONFIGS.number,
-  //   dataType: 'number',
-  //   cases: {
-  //     headerFilter: NUMBER_HEADER_FILTER,
-  //     filterPanel: NUMBER_FILTER_PANEL,
-  //   },
-  // },
+  {
+    groupName: 'Simple cases | number - string',
+    dataSource: NUMBER_DATA_CONFIGS.number,
+    dataType: 'number',
+    cases: {
+      headerFilter: NUMBER_HEADER_FILTER,
+      filterPanel: NUMBER_FILTER_PANEL,
+    },
+  },
   {
     groupName: 'Simple cases | date - native',
     dataSource: DATE_DATA_CONFIG.date,
@@ -88,16 +87,15 @@ const TEST_CASES_GROUPS: TestCasesGroup[] = [
       filterPanel: DATE_FILTER_PANEL,
     },
   },
-  // TODO computed columns: uncomment after fix
-  // {
-  //   groupName: 'Simple cases | date - string',
-  //   data: DATE_DATA_CONFIG.string,
-  //   dataType: 'date',
-  //   cases: {
-  //     headerFilter: DATE_HEADER_FILTER,
-  //     filterPanel: DATE_FILTER_PANEL,
-  //   },
-  // },
+  {
+    groupName: 'Simple cases | date - string',
+    dataSource: DATE_DATA_CONFIG.string,
+    dataType: 'date',
+    cases: {
+      headerFilter: DATE_HEADER_FILTER,
+      filterPanel: DATE_FILTER_PANEL,
+    },
+  },
   {
     groupName: 'Filter DS | string - values',
     dataSource: STRING_DATA_CONFIGS.string,
@@ -120,7 +118,8 @@ const TEST_CASES_GROUPS: TestCasesGroup[] = [
   },
 ];
 
-describe('FilterSync', () => {
+// NOTE: Skip tests because FilterSync feature disabled
+describe.skip('FilterSync', () => {
   TEST_CASES_GROUPS.forEach(({
     groupName,
     dataSource,

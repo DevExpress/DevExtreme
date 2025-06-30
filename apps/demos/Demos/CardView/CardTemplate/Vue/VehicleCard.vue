@@ -61,8 +61,11 @@ defineEmits(['show-info']);
 
 <style>
   .vehicle__img-wrapper {
-      height: 146px;
-      border-bottom: var(--dx-border-width) solid var(--dx-color-border);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      aspect-ratio: 16 / 9;
+      width: 100%;
       background-color: #fff;
   }
 
@@ -74,6 +77,7 @@ defineEmits(['show-info']);
 
   .vehicle__info {
       padding: 12px;
+      border-top: var(--dx-border-width) solid var(--dx-color-border);
   }
 
   .vehicle__name {
@@ -117,7 +121,6 @@ defineEmits(['show-info']);
 
   .vehicle__footer-container {
       padding: 12px;
-      height: 56px;
   }
 
   .vehicle__image-licence-caption {

@@ -17,11 +17,13 @@
 
 .option {
   margin: 10px;
+  display: flex;
+  align-items: center;
   width: fit-content;
 }
 
 .option > .dx-selectbox {
-  width: 150px;
+  width: 200px;
   display: inline-block;
   vertical-align: middle;
 }

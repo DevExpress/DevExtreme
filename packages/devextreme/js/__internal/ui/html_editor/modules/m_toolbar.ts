@@ -241,24 +241,6 @@ if (Quill) {
       return $container;
     }
 
-    _detectRenamedOptions(item) {
-      const optionsInfo = [{
-        newName: 'name',
-        oldName: 'formatName',
-      }, {
-        newName: 'acceptedValues',
-        oldName: 'formatValues',
-      }];
-
-      if (isObject(item)) {
-        each(optionsInfo, (index, optionName) => {
-          if (Object.prototype.hasOwnProperty.call(item, optionName.oldName)) {
-            errors.log('W1016', optionName.oldName, optionName.newName);
-          }
-        });
-      }
-    }
-
     _subscribeFormatHotKeys() {
       this.quill.keyboard.addBinding({
         which: KEY_CODES.b,
@@ -299,7 +281,6 @@ if (Quill) {
 
       each(this.options.items, (index, item) => {
         let newItem;
-        this._detectRenamedOptions(item);
         if (isObject(item)) {
           newItem = this._handleObjectItem(item);
         } else if (item === TOOLBAR_AI_ITEM_NAME) {

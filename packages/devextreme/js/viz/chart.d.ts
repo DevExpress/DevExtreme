@@ -63,6 +63,7 @@ import {
     SeriesType,
     TextOverflow,
     TimeIntervalConfig,
+    ValueAxisVisualRangeUpdateMode,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
     VisualRange,
@@ -104,6 +105,7 @@ export {
     SeriesSelectionMode,
     SeriesType,
     TextOverflow,
+    ValueAxisVisualRangeUpdateMode,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
     VerticalAlignment,
@@ -1326,12 +1328,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
  * @type object
  */
 export type ArgumentAxis = CommonAxisSettings & {
-    /**
-     * @docid dxChartOptions.argumentAxis.aggregateByCategory
-     * @default true
-     * @deprecated dxChartSeriesTypes.CommonSeries.aggregation.enabled
-     */
-    aggregateByCategory?: boolean;
     /**
      * @docid dxChartOptions.argumentAxis.aggregationGroupWidth
      * @default undefined
@@ -2632,7 +2628,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @default 'auto'
      * @public
      */
-    visualRangeUpdateMode?: VisualRangeUpdateMode;
+    visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode;
     /**
      * @docid dxChartOptions.valueAxis.wholeRange
      * @default undefined

@@ -45,8 +45,8 @@
     id="cardView"
     :data-source="employees"
     key-expr="ID"
-    :card-min-width="100"
-    :word-wrap-enabled="true"
+    cards-per-row="auto"
+    :card-min-width="300"
     :selected-card-keys="[4, 6]"
     ref="cardViewRef"
   >
@@ -123,6 +123,8 @@ const onSelectionModeChange = ({ value }: DxSelectBoxTypes.ValueChangedEvent): v
 
   .option {
     margin: 10px;
+    display: flex;
+    align-items: center;
     width: fit-content;
   }
 

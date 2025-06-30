@@ -2,13 +2,12 @@
   <DxCardView
     :data-source="employees"
     key-expr="id"
-    :cards-per-row="2"
-    :search-panel="{ // todo: move to nested
-      visible: true,
-    }"
+    cards-per-row="auto"
+    :card-min-width="350"
+    :height="840"
   >
-    <DxPaging
-      :page-size="4"
+    <DxSearchPanel
+      :visible="true"
     />
     <DxCardCover
       :image-expr="imageExpr"
@@ -18,48 +17,87 @@
       :allow-adding="true"
       :allow-updating="true"
       :allow-deleting="true"
-      :popup="{ // todo: move to nested
+      :popup="{
         title: 'Employee Info',
         showTitle: true,
         width: 700,
         height: 525,
       }"
-      :form="{ // todo: move to nested
-        items: [
-          {
-            caption: 'Personal Data',
-            itemType: 'group',
-            colCount: 2,
-            colSpan: 2,
-            items: ['firstName', 'lastName', 'birthDate', 'picture'],
-          }, {
-            caption: 'Main Info',
-            itemType: 'group',
-            colCount: 2,
-            colSpan: 2,
-            items: ['hireDate', 'title', {
-              dataField: 'notes',
-              editorType: 'dxTextArea',
-              colSpan: 2,
-              editorOptions: {
-                height: 100,
-              },
-            }],
-          }, {
-            caption: 'Contacts',
-            itemType: 'group',
-            colCount: 2,
-            colSpan: 2,
-            items: [
-              {
-                dataField: 'address',
-                colSpan: 2,
-              }, 'city', 'zipcode', 'mobilePhone', 'email',
-            ],
-          },
-        ],
-      }"
-    />
+    >
+      <DxForm>
+        <DxItem
+          caption="Personal Data"
+          item-type="group"
+          :col-count="2"
+          :col-span="2"
+        >
+          <DxItem
+            data-field="firstName"
+          />
+          <DxItem
+            data-field="lastName"
+          />
+          <DxItem
+            data-field="birthDate"
+          />
+          <DxItem
+            data-field="picture"
+          />
+        </DxItem>
+        <DxItem
+          caption="Main Info"
+          item-type="group"
+          :col-count="2"
+          :col-span="2"
+        >
+          <DxItem
+            data-field="hireDate"
+          />
+          <DxItem
+            data-field="title"
+          />
+          <DxItem
+            data-field="department"
+          />
+          <DxItem
+            data-field="notes"
+            editor-type="dxTextArea"
+            :col-span="2"
+            :editor-options="{ height: 100 }"
+          />
+          <DxItem
+            data-field="picture"
+          />
+        </DxItem>
+        <DxItem
+          caption="Contacts"
+          item-type="group"
+          :col-count="2"
+          :col-span="2"
+        >
+          <DxItem
+            data-field="address"
+            :col-span="2"
+          />
+          <DxItem
+            data-field="city"
+          />
+          <DxItem
+            data-field="zipcode"
+          />
+          <DxItem
+            data-field="mobilePhone"
+            :editor-options="{
+              mask:'+1 (000) 000-0000',
+              useMaskedValue: true,
+            }"
+          />
+          <DxItem
+            data-field="email"
+          />
+        </DxItem>
+      </DxForm>
+    </DxEditing>
     <DxColumn
       caption="Full Name"
       :calculate-field-value="calculateFullName"
@@ -89,10 +127,7 @@
     <DxColumn data-field="department"/>
     <DxColumn data-field="address"/>
     <DxColumn data-field="mobilePhone">
-      <DxPatternRule
-        message="Your phone must have '(555) 555-5555' format!"
-        :pattern="/^\(\d{3}\) \d{3}-\d{4}$/i"
-      />
+      <DxRequiredRule/>
     </DxColumn>
     <DxColumn data-field="email">
       <DxEmailRule/>
@@ -134,8 +169,9 @@
 </template>
 <script setup lang="ts">
 import {
-  DxCardView, DxColumn, DxCardCover, DxEditing, DxPaging, DxRequiredRule, DxEmailRule, DxPatternRule, DxAsyncRule, DxCustomRule,
+  DxCardView, DxColumn, DxCardCover, DxEditing, DxForm, DxItem, DxSearchPanel, DxRequiredRule, DxEmailRule, DxPatternRule, DxAsyncRule, DxCustomRule,
 } from 'devextreme-vue/card-view';
+import 'devextreme-vue/text-area';
 import { employees, type Employee } from './data.ts';
 
 function altExpr({ fullName }: Employee) {

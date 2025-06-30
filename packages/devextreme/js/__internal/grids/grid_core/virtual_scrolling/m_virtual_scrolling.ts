@@ -1320,6 +1320,10 @@ export const resizing = (Base: ModuleType<ResizingController>) => class VirtualS
     return isDefined(this._resizeTimeout);
   }
 
+  public resetLastResizeTime(): void {
+    this._lastTime = undefined;
+  }
+
   public resize(): DeferredObj<unknown> {
     let result;
 

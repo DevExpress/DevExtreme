@@ -88,10 +88,10 @@ export class DxoListSearchEditorOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -472,10 +472,10 @@ export class DxoListSearchEditorOptionsComponent extends NestedOption implements
     }
 
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 

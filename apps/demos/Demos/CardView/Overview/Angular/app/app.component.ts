@@ -27,16 +27,6 @@ export class AppComponent {
 
   employees: Employee[];
 
-  // TODO: Nested component does not exist
-  headerFilterConfig = {
-    visible: true,
-  };
-
-  // TODO: Nested component does not exist
-  searchPanelConfig = {
-    visible: true,
-  };
-
   constructor(service: AppService) {
     this.employees = service.getEmployees();
   }

@@ -5,6 +5,7 @@
   <DxForm
     :form-data="formData"
     :validation-group="validationGroup"
+    ref="formRef"
   >
     <DxSimpleItem
       :is-required="true"
@@ -19,15 +20,22 @@
 <script setup lang="ts">
 import DxForm, { DxSimpleItem } from 'devextreme-vue/form';
 import 'devextreme/ui/date_range_box';
+import { ref, watch } from 'vue';
 import type { BookingFormData } from './types.ts';
-import { initialFormData } from './data.ts';
+import { getInitialFormData } from './data.ts';
+
+const formRef = ref(null);
 
 const props = withDefaults(defineProps<{
   formData: BookingFormData;
   validationGroup?: string;
 }>(), {
-  formData: () => initialFormData,
+  formData: getInitialFormData,
   validationGroup: () => undefined,
+});
+
+watch(() => props.formData, (value) => {
+  formRef.value.instance.reset(value);
 });
 
 const labelOptions = {

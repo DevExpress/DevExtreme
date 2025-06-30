@@ -1,7 +1,13 @@
 import React from 'react';
 import CardView, {
-  Column, CardCover, Editing, Paging,
+  Column,
+  CardCover,
+  Editing,
+  SearchPanel,
+  Form,
+  Item,
 } from 'devextreme-react/card-view';
+import 'devextreme-react/text-area';
 import { employees } from './data.js';
 
 function altExpr({ fullName }) {
@@ -17,13 +23,11 @@ const App = () => (
   <CardView
     dataSource={employees}
     keyExpr="id"
-    cardsPerRow={2}
-    // todo: move to nested components
-    searchPanel={{
-      visible: true,
-    }}
+    cardsPerRow="auto"
+    cardMinWidth={350}
+    height={840}
   >
-    <Paging pageSize={4} />
+    <SearchPanel visible={true} />
     <CardCover
       imageExpr={imageExpr}
       altExpr={altExpr}
@@ -32,60 +36,59 @@ const App = () => (
       allowAdding={true}
       allowUpdating={true}
       allowDeleting={true}
-      // todo: move to nested components
       popup={{
         title: 'Employee Info',
         showTitle: true,
         width: 700,
         height: 525,
       }}
-      // todo: move to nested components
-      form={{
-        items: [
-          {
-            caption: 'Personal Data',
-            itemType: 'group',
-            colCount: 2,
-            colSpan: 2,
-            items: ['firstName', 'lastName', 'birthDate', 'picture'],
-          },
-          {
-            caption: 'Main Info',
-            itemType: 'group',
-            colCount: 2,
-            colSpan: 2,
-            items: [
-              'hireDate',
-              'title',
-              {
-                dataField: 'notes',
-                editorType: 'dxTextArea',
-                colSpan: 2,
-                editorOptions: {
-                  height: 100,
-                },
-              },
-            ],
-          },
-          {
-            caption: 'Contacts',
-            itemType: 'group',
-            colCount: 2,
-            colSpan: 2,
-            items: [
-              {
-                dataField: 'address',
-                colSpan: 2,
-              },
-              'city',
-              'zipcode',
-              'mobilePhone',
-              'email',
-            ],
-          },
-        ],
-      }}
-    />
+    >
+      <Form>
+        <Item
+          caption="Personal Data"
+          itemType="group"
+          colCount={2}
+          colSpan={2}
+        >
+          <Item dataField="firstName"></Item>
+          <Item dataField="lastName"></Item>
+          <Item dataField="birthDate"></Item>
+          <Item dataField="picture"></Item>
+        </Item>
+        <Item
+          caption="Main Info"
+          itemType="group"
+          colCount={2}
+          colSpan={2}
+        >
+          <Item dataField="hireDate"></Item>
+          <Item dataField="title"></Item>
+          <Item dataField="department"></Item>
+          <Item
+            dataField="notes"
+            editorType="dxTextArea"
+            colSpan={2}
+            editorOptions={{ height: 100 }}
+          ></Item>
+          <Item dataField="picture"></Item>
+        </Item>
+        <Item
+          caption="Contacts"
+          itemType="group"
+          colCount={2}
+          colSpan={2}
+        >
+          <Item
+            dataField="address"
+            colSpan={2}
+          ></Item>
+          <Item dataField="city"></Item>
+          <Item dataField="zipcode"></Item>
+          <Item dataField="mobilePhone"></Item>
+          <Item dataField="email"></Item>
+        </Item>
+      </Form>
+    </Editing>
     <Column
       caption="Full Name"
       calculateFieldValue={calculateFullName}

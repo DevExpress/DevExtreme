@@ -16,7 +16,12 @@ const LicenseInfo = ({
       </p>
       <p>
         <b>Source link: </b>
-        <a href={vehicleLink}>{vehicleLink}</a>
+        <a
+          href={vehicleLink}
+          target="_blank"
+        >
+          {vehicleLink}
+        </a>
       </p>
       <p>
         <b>Edits: </b> <span>{Edits}</span>

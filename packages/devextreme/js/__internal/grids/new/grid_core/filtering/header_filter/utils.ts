@@ -59,8 +59,7 @@ export const getFilterOperator = (values: unknown, filterType?: FilterType): str
 const isFilteringAllowed = (column: Column): boolean => column.allowFiltering
 || column.allowHeaderFiltering;
 
-export const isColumnFilterable = (column: Column): boolean => isFilteringAllowed(column)
-&& !!column.dataField;
+export const isColumnFilterable = (column: Column): boolean => isFilteringAllowed(column);
 
 export const needCreateHeaderFilter = (column: Column): boolean => {
   const values = column.filterValues;
@@ -88,6 +87,12 @@ export const getHeaderFilterValuesType = (
   column: Column,
 ): HeaderFilterValuesType => {
   const { filterValues } = column;
+
+  // NOTE: if empty or an empty array
+  if (!filterValues?.length) {
+    return 'empty';
+  }
+
   const [firstFilterItem] = filterValues;
   const hasGroupInterval = !!filterUtils.getGroupInterval(column);
   const hasCustomDataSource = !!column.headerFilter?.dataSource;
@@ -108,12 +113,24 @@ export const getHeaderFilterValuesType = (
 export const getHeaderFilterInfo = (
   column: Column,
 ): HeaderFilterInfo | null => {
-  if (!needCreateHeaderFilter(column)) {
+  if (!isFilteringAllowed(column)) {
     return null;
   }
 
-  const { filterType, filterValues } = column;
+  const columnId = getColumnIdentifier(column);
+  const headerFilterValueType = getHeaderFilterValuesType(column);
 
+  if (headerFilterValueType === 'empty') {
+    return {
+      type: 'empty',
+      columnId,
+      filterType: 'include',
+      filterValues: [],
+      composedFilterValues: [],
+    };
+  }
+
+  const { filterType, filterValues } = column;
   const normalizedFilterType = filterType ?? 'include';
   const normalizedFilterValues = Array.isArray(filterValues)
     ? filterValues
@@ -133,9 +150,8 @@ export const getHeaderFilterInfo = (
     'or',
   );
 
-  const columnId = getColumnIdentifier(column);
   return {
-    type: getHeaderFilterValuesType(column),
+    type: headerFilterValueType,
     columnId,
     filterType: normalizedFilterType,
     filterValues,
@@ -152,6 +168,8 @@ export const getHeaderFilterInfoArray = (
 export const getComposedHeaderFilter = (
   headerFilterInfoArray: HeaderFilterInfo[],
 ): FilterValue => headerFilterInfoArray
+  // NOTE: Exclude empty header filters from the composed header filter value
+  .filter(({ type }) => type !== 'empty')
   .reduce<FilterValue>((
     result,
     { composedFilterValues },

@@ -1,18 +1,16 @@
 import React, { useRef } from 'react';
 import CardView, {
-  CardCover, Column, Selection, Paging,
+  CardCover,
+  Column,
+  Selection,
+  Paging,
+  HeaderFilter,
+  SearchPanel,
 } from 'devextreme-react/card-view';
 import Button from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
 import { employees } from './data.js';
-// TODO: Nested component does not exist
-const headerFilterConfig = {
-  visible: true,
-};
-// TODO: Nested component does not exist
-const searchPanelConfig = {
-  visible: true,
-};
+
 function imageExpr({ First_Name, Last_Name }) {
   return `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`;
 }
@@ -39,7 +37,7 @@ function notifySendEmail() {
 }
 function CardFooterComponent() {
   return (
-    <div className="footer">
+    <div className="card-footer">
       <Button
         text="Call"
         icon="tel"
@@ -49,7 +47,7 @@ function CardFooterComponent() {
       />
       <Button
         text="Send Email"
-        icon="send"
+        icon="message"
         type="default"
         stylingMode="contained"
         onClick={notifySendEmail}
@@ -62,7 +60,12 @@ function StatusComponent({
     field: { value },
   },
 }) {
-  const className = value === 'Salaried' ? 'status--ok' : 'status--warning';
+  const classNameMap = {
+    Salaried: 'status--salaried',
+    Commission: 'status--commission',
+    Terminated: 'status--terminated',
+  };
+  const className = classNameMap[value];
   return (
     <div className={`status ${className}`}>
       <div className="indicator"></div>
@@ -85,12 +88,12 @@ function App() {
       keyExpr="ID"
       cardMinWidth={300}
       cardsPerRow="auto"
-      headerFilter={headerFilterConfig}
-      searchPanel={searchPanelConfig}
       cardFooterComponent={CardFooterComponent}
       ref={cardView}
     >
       <Paging pageSize={4} />
+      <HeaderFilter visible={true} />
+      <SearchPanel visible={true} />
       <Selection mode="multiple" />
       <CardCover
         imageExpr={imageExpr}
@@ -100,9 +103,12 @@ function App() {
       <Column
         dataField="Status"
         fieldValueComponent={StatusComponent}
+        allowSearch={false}
       />
       <Column
         caption="Full Name"
+        allowFiltering={true}
+        allowSorting={true}
         calculateFieldValue={calculateFullName}
       />
       <Column
@@ -114,9 +120,12 @@ function App() {
       <Column
         dataField="Email"
         fieldValueComponent={EmailComponent}
+        allowSearch={false}
       />
       <Column
         caption="Address"
+        allowFiltering={true}
+        allowSorting={true}
         calculateFieldValue={calculateAddress}
       />
     </CardView>

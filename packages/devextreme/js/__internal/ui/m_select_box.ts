@@ -206,7 +206,6 @@ class SelectBox<
       placeholder: messageLocalization.format('Select'),
       fieldTemplate: null,
       customItemCreateEvent: 'change',
-      valueChangeEvent: 'change',
       acceptCustomValue: false,
       onCustomItemCreating(e): void {
         if (!isDefined(e.customItem)) {
@@ -246,13 +245,6 @@ class SelectBox<
 
   _popupWrapperClass(): string {
     return `${super._popupWrapperClass()} ${SELECTBOX_POPUP_WRAPPER_CLASS}`;
-  }
-
-  _setDeprecatedOptions(): void {
-    super._setDeprecatedOptions();
-    extend(this._deprecatedOptions, {
-      valueChangeEvent: { since: '22.2', alias: 'customItemCreateEvent' },
-    });
   }
 
   _cancelEditing(): void {

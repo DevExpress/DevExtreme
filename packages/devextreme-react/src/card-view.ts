@@ -9,14 +9,14 @@ import dxCardView, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, SelectionChangingEvent, CardTemplateData, CardHeaderItem as CardViewCardHeaderItem, CardHeaderPredefinedItem, FieldTemplateData, ColumnTemplateData, PredefinedToolbarItem, ToolbarItem as CardViewToolbarItem } from "devextreme/ui/card_view";
-import type { SelectionChangingEvent as TabPanelSelectionChangingEvent, ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
+import type { CardClickEvent, CardDblClickEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardSavedEvent, CardSavingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, InitNewCardEvent, CardTemplateData, CardHeaderItem as CardViewCardHeaderItem, CardHeaderPredefinedItem, FieldTemplateData, ColumnTemplateData, EditingTexts as CardViewEditingTexts, PredefinedToolbarItem, dxCardViewToolbarItem } from "devextreme/ui/card_view";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
-import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ToolbarItemLocation, ToolbarItemComponent, SearchMode, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, Mode, Direction, PositionAlignment, DisplayMode, TabsIconPosition, TabsStyle, Position as CommonPosition } from "devextreme/common";
+import type { ValidationRuleType, HorizontalAlignment, VerticalAlignment, ButtonStyle, template, ButtonType, ToolbarItemLocation, ToolbarItemComponent, SearchMode, SingleMultipleOrNone, SelectAllMode, DataType, Format as CommonFormat, SortOrder, ComparisonOperator, DragHighlight, Mode, Direction, PositionAlignment, DisplayMode, ScrollbarMode, TabsIconPosition, TabsStyle, Position as CommonPosition } from "devextreme/common";
 import type { dxButtonOptions, ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from "devextreme/ui/button";
 import type { FormItemType, ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormOptions, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent } from "devextreme/ui/form";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, InitializedEvent as FilterBuilderInitializedEvent, OptionChangedEvent as FilterBuilderOptionChangedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, EditorPreparedEvent, EditorPreparingEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
 import type { ContentReadyEvent as LoadPanelContentReadyEvent, DisposingEvent as LoadPanelDisposingEvent, InitializedEvent as LoadPanelInitializedEvent, OptionChangedEvent as LoadPanelOptionChangedEvent, HiddenEvent, HidingEvent, ShowingEvent, ShownEvent } from "devextreme/ui/load_panel";
+import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
 import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { HeaderFilterSearchConfig, HeaderFilterTexts, SelectionColumnDisplayMode, DataChangeType, FilterType, ColumnHeaderFilter as GridsColumnHeaderFilter, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, DataChange, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, PagerPageSize } from "devextreme/common/grids";
@@ -57,7 +57,6 @@ type ICardViewOptionsNarrowedEvents<TCardData = any, TKey = any> = {
   onFieldValueDblClick?: ((e: FieldValueDblClickEvent) => void);
   onFieldValuePrepared?: ((e: FieldValuePreparedEvent) => void);
   onInitNewCard?: ((e: InitNewCardEvent<TCardData>) => void);
-  onSelectionChanging?: ((e: SelectionChangingEvent<TCardData, TKey>) => void);
 }
 
 type ICardViewOptions<TCardData = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TCardData, TKey>, ICardViewOptionsNarrowedEvents<TCardData, TKey>> & IHtmlOptions & {
@@ -93,8 +92,8 @@ const CardView = memo(
         }
       ), [baseRef.current]);
 
-      const subscribableOptions = useMemo(() => (["filterValue","selectedCardKeys"]), []);
-      const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardInserted","onCardInserting","onCardPrepared","onCardRemoved","onCardRemoving","onCardSaved","onCardSaving","onCardUpdated","onCardUpdating","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onFieldCaptionClick","onFieldCaptionDblClick","onFieldCaptionPrepared","onFieldValueClick","onFieldValueDblClick","onFieldValuePrepared","onInitialized","onInitNewCard","onSelectionChanging"]), []);
+      const subscribableOptions = useMemo(() => (["filterValue","selectedCardKeys","filterBuilder.value","filterPanel.filterEnabled","editing.form.formData","loadPanel.position","loadPanel.visible","paging.pageIndex","paging.pageSize","searchPanel.text"]), []);
+      const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardInserted","onCardInserting","onCardPrepared","onCardRemoved","onCardRemoving","onCardSaved","onCardSaving","onCardUpdated","onCardUpdating","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onFieldCaptionClick","onFieldCaptionDblClick","onFieldCaptionPrepared","onFieldValueClick","onFieldValueDblClick","onFieldValuePrepared","onInitialized","onInitNewCard"]), []);
 
       const defaults = useMemo(() => ({
         defaultFilterValue: "filterValue",
@@ -117,6 +116,7 @@ const CardView = memo(
         pager: { optionName: "pager", isCollectionItem: false },
         paging: { optionName: "paging", isCollectionItem: false },
         remoteOperations: { optionName: "remoteOperations", isCollectionItem: false },
+        scrolling: { optionName: "scrolling", isCollectionItem: false },
         searchPanel: { optionName: "searchPanel", isCollectionItem: false },
         selection: { optionName: "selection", isCollectionItem: false },
         sorting: { optionName: "sorting", isCollectionItem: false },
@@ -294,7 +294,7 @@ type IButtonOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
@@ -312,7 +312,7 @@ type IButtonOptionsProps = React.PropsWithChildren<{
   useSubmitBehavior?: boolean;
   validationGroup?: string | undefined;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
@@ -612,7 +612,7 @@ type IColumnProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string | null, target: string) => string | Array<any> | (() => void));
   calculateSortValue?: ((cardData: any) => any) | string;
   caption?: string | undefined;
-  customizeText?: ((cellInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string);
+  customizeText?: ((fieldInfo: { groupInterval: string | number, target: string, value: any, valueText: string }) => string);
   dataField?: string | undefined;
   dataType?: DataType | undefined;
   editorOptions?: any;
@@ -932,6 +932,32 @@ const CustomRule = Object.assign<typeof _componentCustomRule, NestedComponentMet
 });
 
 // owners:
+// HeaderPanel
+type IDraggingProps = React.PropsWithChildren<{
+  dropFeedbackMode?: DragHighlight;
+  onDragChange?: ((e: any) => void);
+  onDragEnd?: ((e: any) => void);
+  onDragMove?: ((e: any) => void);
+  onDragStart?: ((e: any) => void);
+  onRemove?: ((e: any) => void);
+  onReorder?: ((e: any) => void);
+  scrollSensitivity?: number;
+  scrollSpeed?: number;
+}>
+const _componentDragging = (props: IDraggingProps) => {
+  return React.createElement(NestedOption<IDraggingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "dragging",
+    },
+  });
+};
+
+const Dragging = Object.assign<typeof _componentDragging, NestedComponentMeta>(_componentDragging, {
+  componentType: "option",
+});
+
+// owners:
 // CardView
 type IEditingProps = React.PropsWithChildren<{
   allowAdding?: boolean;
@@ -942,6 +968,7 @@ type IEditingProps = React.PropsWithChildren<{
   editCardKey?: any;
   form?: dxFormOptions;
   popup?: Record<string, any>;
+  texts?: CardViewEditingTexts;
 }>
 const _componentEditing = (props: IEditingProps) => {
   return React.createElement(NestedOption<IEditingProps>, {
@@ -950,13 +977,38 @@ const _componentEditing = (props: IEditingProps) => {
       OptionName: "editing",
       ExpectedChildren: {
         change: { optionName: "changes", isCollectionItem: true },
-        form: { optionName: "form", isCollectionItem: false }
+        editingTexts: { optionName: "texts", isCollectionItem: false },
+        form: { optionName: "form", isCollectionItem: false },
+        texts: { optionName: "texts", isCollectionItem: false }
       },
     },
   });
 };
 
 const Editing = Object.assign<typeof _componentEditing, NestedComponentMeta>(_componentEditing, {
+  componentType: "option",
+});
+
+// owners:
+// Editing
+type IEditingTextsProps = React.PropsWithChildren<{
+  addCard?: string;
+  confirmDeleteMessage?: string;
+  confirmDeleteTitle?: string;
+  deleteCard?: string;
+  editCard?: string;
+  saveCard?: string;
+}>
+const _componentEditingTexts = (props: IEditingTextsProps) => {
+  return React.createElement(NestedOption<IEditingTextsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "texts",
+    },
+  });
+};
+
+const EditingTexts = Object.assign<typeof _componentEditingTexts, NestedComponentMeta>(_componentEditingTexts, {
   componentType: "option",
 });
 
@@ -1094,7 +1146,7 @@ type IFilterBuilderProps = React.PropsWithChildren<{
     or?: string;
   };
   groupOperations?: Array<GroupOperation>;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   maxGroupLevel?: number | undefined;
@@ -1109,7 +1161,7 @@ type IFilterBuilderProps = React.PropsWithChildren<{
   tabIndex?: number;
   value?: Array<any> | (() => any) | string;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   defaultValue?: Array<any> | (() => any) | string;
   onValueChange?: (value: Array<any> | (() => any) | string) => void;
 }>
@@ -1235,7 +1287,7 @@ type IFormProps = React.PropsWithChildren<{
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
   formData?: any;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   isDirty?: boolean;
@@ -1263,7 +1315,7 @@ type IFormProps = React.PropsWithChildren<{
   tabIndex?: number;
   validationGroup?: string | undefined;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   defaultFormData?: any;
   onFormDataChange?: (value: any) => void;
 }>
@@ -1514,7 +1566,17 @@ const HeaderFilter = Object.assign<typeof _componentHeaderFilter, NestedComponen
 // owners:
 // CardView
 type IHeaderPanelProps = React.PropsWithChildren<{
-  dragging?: Record<string, any>;
+  dragging?: Record<string, any> | {
+    dropFeedbackMode?: DragHighlight;
+    onDragChange?: ((e: any) => void);
+    onDragEnd?: ((e: any) => void);
+    onDragMove?: ((e: any) => void);
+    onDragStart?: ((e: any) => void);
+    onRemove?: ((e: any) => void);
+    onReorder?: ((e: any) => void);
+    scrollSensitivity?: number;
+    scrollSpeed?: number;
+  };
   itemCssClass?: string;
   itemTemplate?: ((data: ColumnTemplateData, container: any) => string | any) | template;
   visible?: boolean;
@@ -1526,6 +1588,9 @@ const _componentHeaderPanel = (props: IHeaderPanelProps) => {
     ...props,
     elementDescriptor: {
       OptionName: "headerPanel",
+      ExpectedChildren: {
+        dragging: { optionName: "dragging", isCollectionItem: false }
+      },
       TemplateProps: [{
         tmplOption: "itemTemplate",
         render: "itemRender",
@@ -1738,22 +1803,21 @@ type ILoadPanelProps = React.PropsWithChildren<{
     show?: AnimationConfig;
   };
   bindingOptions?: Record<string, any>;
-  closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string | undefined;
   deferRendering?: boolean;
   delay?: number;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string;
+  height?: number | string;
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
   hideOnParentScroll?: boolean;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   indicatorSrc?: string;
-  maxHeight?: (() => number | string) | number | string;
-  maxWidth?: (() => number | string) | number | string;
+  maxHeight?: number | string;
+  maxWidth?: number | string;
   message?: string;
-  minHeight?: (() => number | string) | number | string;
-  minWidth?: (() => number | string) | number | string;
+  minHeight?: number | string;
+  minWidth?: number | string;
   onContentReady?: ((e: LoadPanelContentReadyEvent) => void);
   onDisposing?: ((e: LoadPanelDisposingEvent) => void);
   onHidden?: ((e: HiddenEvent) => void);
@@ -1769,7 +1833,7 @@ type ILoadPanelProps = React.PropsWithChildren<{
   showIndicator?: boolean;
   showPane?: boolean;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: number | string;
   wrapperAttr?: any;
   defaultPosition?: (() => void) | PositionAlignment | PositionConfig;
   onPositionChange?: (value: (() => void) | PositionAlignment | PositionConfig) => void;
@@ -2084,6 +2148,27 @@ const _componentRequiredRule = (props: IRequiredRuleProps) => {
 };
 
 const RequiredRule = Object.assign<typeof _componentRequiredRule, NestedComponentMeta>(_componentRequiredRule, {
+  componentType: "option",
+});
+
+// owners:
+// CardView
+type IScrollingProps = React.PropsWithChildren<{
+  scrollByContent?: boolean;
+  scrollByThumb?: boolean;
+  showScrollbar?: ScrollbarMode;
+  useNative?: boolean | Mode;
+}>
+const _componentScrolling = (props: IScrollingProps) => {
+  return React.createElement(NestedOption<IScrollingProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "scrolling",
+    },
+  });
+};
+
+const Scrolling = Object.assign<typeof _componentScrolling, NestedComponentMeta>(_componentScrolling, {
   componentType: "option",
 });
 
@@ -2418,7 +2503,7 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   iconPosition?: TabsIconPosition;
@@ -2437,7 +2522,7 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   onItemRendered?: ((e: ItemRenderedEvent) => void);
   onOptionChanged?: ((e: TabPanelOptionChangedEvent) => void);
   onSelectionChanged?: ((e: SelectionChangedEvent) => void);
-  onSelectionChanging?: ((e: TabPanelSelectionChangingEvent) => void);
+  onSelectionChanging?: ((e: SelectionChangingEvent) => void);
   onTitleClick?: ((e: TitleClickEvent) => void);
   onTitleHold?: ((e: TitleHoldEvent) => void);
   onTitleRendered?: ((e: TitleRenderedEvent) => void);
@@ -2453,7 +2538,7 @@ type ITabPanelOptionsProps = React.PropsWithChildren<{
   tabIndex?: number;
   tabsPosition?: CommonPosition;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   defaultItems?: Array<any | dxTabPanelItem | string>;
   onItemsChange?: (value: Array<any | dxTabPanelItem | string>) => void;
   defaultSelectedIndex?: number;
@@ -2537,9 +2622,16 @@ const TabPanelOptionsItem = Object.assign<typeof _componentTabPanelOptionsItem, 
 });
 
 // owners:
+// Editing
 // FilterPanel
 // CardViewHeaderFilter
 type ITextsProps = React.PropsWithChildren<{
+  addCard?: string;
+  confirmDeleteMessage?: string;
+  confirmDeleteTitle?: string;
+  deleteCard?: string;
+  editCard?: string;
+  saveCard?: string;
   clearFilter?: string;
   createFilter?: string;
   filterEnabledHint?: string;
@@ -2590,7 +2682,7 @@ const To = Object.assign<typeof _componentTo, NestedComponentMeta>(_componentTo,
 // CardView
 type IToolbarProps = React.PropsWithChildren<{
   disabled?: boolean;
-  items?: Array<PredefinedToolbarItem | CardViewToolbarItem>;
+  items?: Array<dxCardViewToolbarItem | PredefinedToolbarItem>;
   multiline?: boolean;
   visible?: boolean | undefined;
 }>
@@ -2744,8 +2836,12 @@ export {
   ICustomOperationProps,
   CustomRule,
   ICustomRuleProps,
+  Dragging,
+  IDraggingProps,
   Editing,
   IEditingProps,
+  EditingTexts,
+  IEditingTextsProps,
   EmailRule,
   IEmailRuleProps,
   EmptyItem,
@@ -2806,6 +2902,8 @@ export {
   IRemoteOperationsProps,
   RequiredRule,
   IRequiredRuleProps,
+  Scrolling,
+  IScrollingProps,
   Search,
   ISearchProps,
   SearchPanel,

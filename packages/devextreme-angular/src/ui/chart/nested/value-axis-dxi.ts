@@ -19,7 +19,7 @@ import {
 
 import * as CommonChartTypes from 'devextreme/common/charts';
 import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
-import { ScaleBreak, ScaleBreakLineStyle, DashStyle, Font, RelativePosition, DiscreteAxisDivisionMode, ChartsAxisLabelOverlap, TextOverflow, WordWrap, TimeInterval, AxisScaleType, ChartsDataType, VisualRangeUpdateMode } from 'devextreme/common/charts';
+import { ScaleBreak, ScaleBreakLineStyle, DashStyle, Font, RelativePosition, DiscreteAxisDivisionMode, ChartsAxisLabelOverlap, TextOverflow, WordWrap, TimeInterval, AxisScaleType, ChartsDataType, ValueAxisVisualRangeUpdateMode } from 'devextreme/common/charts';
 import { HorizontalAlignment, VerticalAlignment, Position } from 'devextreme/common';
 import { Format } from 'devextreme/common/core/localization';
 
@@ -403,10 +403,10 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get visualRangeUpdateMode(): VisualRangeUpdateMode {
+    get visualRangeUpdateMode(): ValueAxisVisualRangeUpdateMode {
         return this._getOption('visualRangeUpdateMode');
     }
-    set visualRangeUpdateMode(value: VisualRangeUpdateMode) {
+    set visualRangeUpdateMode(value: ValueAxisVisualRangeUpdateMode) {
         this._setOption('visualRangeUpdateMode', value);
     }
 

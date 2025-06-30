@@ -32,6 +32,54 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoCardViewTextsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
+    get addCard(): string {
+        return this._getOption('addCard');
+    }
+    set addCard(value: string) {
+        this._setOption('addCard', value);
+    }
+
+    @Input()
+    get confirmDeleteMessage(): string {
+        return this._getOption('confirmDeleteMessage');
+    }
+    set confirmDeleteMessage(value: string) {
+        this._setOption('confirmDeleteMessage', value);
+    }
+
+    @Input()
+    get confirmDeleteTitle(): string {
+        return this._getOption('confirmDeleteTitle');
+    }
+    set confirmDeleteTitle(value: string) {
+        this._setOption('confirmDeleteTitle', value);
+    }
+
+    @Input()
+    get deleteCard(): string {
+        return this._getOption('deleteCard');
+    }
+    set deleteCard(value: string) {
+        this._setOption('deleteCard', value);
+    }
+
+    @Input()
+    get editCard(): string {
+        return this._getOption('editCard');
+    }
+    set editCard(value: string) {
+        this._setOption('editCard', value);
+    }
+
+    @Input()
+    get saveCard(): string {
+        return this._getOption('saveCard');
+    }
+    set saveCard(value: string) {
+        this._setOption('saveCard', value);
+    }
+
+    @Input()
     get clearFilter(): string {
         return this._getOption('clearFilter');
     }

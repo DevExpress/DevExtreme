@@ -274,7 +274,7 @@ type IOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   items?: Array<dxButtonGroupItem | SchedulerPredefinedDateNavigatorItem>;
@@ -292,7 +292,7 @@ type IOptionsProps = React.PropsWithChildren<{
   stylingMode?: ButtonStyle;
   tabIndex?: number;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   defaultSelectedItemKeys?: Array<any>;
   onSelectedItemKeysChange?: (value: Array<any>) => void;
   defaultSelectedItems?: Array<any>;

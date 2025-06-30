@@ -2,17 +2,42 @@
   <DxCardView
     :data-source="dataSource"
     :remote-operations="true"
-    :card-min-width="100"
+    cards-per-row="auto"
+    :card-min-width="280"
     :word-wrap-enabled="true"
-    :header-filter="headerFilterConfig"
-    :search-panel="searchPanelConfig"
   >
+    <DxSearchPanel
+      :visible="true"
+    />
+    <DxHeaderFilter
+      :visible="true"
+    />
     <DxEditing
       :allow-adding="true"
       :allow-updating="true"
       :allow-deleting="true"
       :popup="{ width: 700, height: 400 }"
-    />
+    >
+      <DxForm>
+        <DxItem
+          dataField="Task_Subject"
+        ></DxItem>
+        <DxItem
+          dataField="Task_Start_Date"
+        ></DxItem>
+        <DxItem
+          dataField="Task_Due_Date"
+        ></DxItem>
+        <DxItem
+          data-field="Task_Priority"
+          editor-type="dxSelectBox"
+          :editor-options="{ dataSource: ['Low', 'Normal', 'High', 'Urgent'] }"
+        ></DxItem>
+        <DxItem
+          dataField="Task_Status"
+        ></DxItem>
+      </DxForm>
+    </DxEditing>
     <DxColumn
       data-field="Task_Subject"
       caption="Subject"
@@ -41,19 +66,10 @@
 </template>
 <script setup lang="ts">
 import {
-  DxCardView, DxColumn, DxEditing, DxRequiredRule,
+  DxCardView, DxColumn, DxEditing, DxSearchPanel, DxHeaderFilter, DxRequiredRule, DxForm, DxItem,
 } from 'devextreme-vue/card-view';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-
-// TODO: Nested component does not exist
-const headerFilterConfig = {
-  visible: true,
-};
-
-// TODO: Nested component does not exist
-const searchPanelConfig = {
-  visible: true,
-};
+import 'devextreme-vue/text-area';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 

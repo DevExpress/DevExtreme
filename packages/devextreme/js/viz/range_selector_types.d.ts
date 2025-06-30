@@ -7,7 +7,6 @@ export {
   ScaleBreakLineStyle,
   VisualRangeUpdateMode,
   BackgroundImageLocation,
-  ValueChangedCallMode,
   AxisScale,
   ChartAxisScale,
   DisposingEvent,

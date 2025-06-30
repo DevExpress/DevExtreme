@@ -94,7 +94,9 @@ export function getLocalLoadOptions(
   originOptions: InternalLoadOptions,
   localOperations: InternalOperationOptions,
 ): InternalLoadOptions {
-  const localLoadOptions: InternalLoadOptions = {};
+  const localLoadOptions: InternalLoadOptions = {
+    langParams: originOptions.langParams,
+  };
 
   if (localOperations.sorting) {
     localLoadOptions.sort = originOptions.sort;

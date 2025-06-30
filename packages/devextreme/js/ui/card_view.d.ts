@@ -1,19 +1,19 @@
 import { DeepPartial } from '../core';
 import {
     DataType,
+    DragHighlight,
     HorizontalAlignment,
- Mode, SelectAllMode, SingleMultipleOrNone, SortOrder, template, ValidationRule,
+ Mode, ScrollbarMode, SelectAllMode, SingleMultipleOrNone, SortOrder, template, ValidationRule,
 } from '../common';
 import { Format } from '../common/core/localization';
 import { UserDefinedElement, DxElement } from '../core/element';
 import {
- ColumnChooser, ColumnCustomizeTextArg, ColumnHeaderFilter, DataChange, DataErrorOccurredInfo, FilterPanel, FilterType, HeaderFilter, Pager, ScrollingBase, SearchPanel, SelectionColumnDisplayMode, Sorting,
+ ColumnChooser, ColumnCustomizeTextArg, ColumnHeaderFilter, DataChange, DataErrorOccurredInfo, FilterPanel, FilterType, HeaderFilter, Pager, SearchPanel, SelectionColumnDisplayMode, Sorting,
 } from '../common/grids';
 import DataSource, { DataSourceLike } from '../data/data_source';
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import { Cancelable, EventInfo, NativeEventInfo } from '../events';
 import { dxToolbarItem, ToolbarItemLocation } from './toolbar';
-import { dxSortableOptions } from './sortable';
 import { dxLoadPanelOptions } from './load_panel';
 import dxScrollable from './scroll_view/ui.scrollable';
 import {
@@ -86,19 +86,25 @@ export type RemoteOperations = {
 export type PredefinedToolbarItem = 'columnChooserButton' | 'searchPanel' | 'addCardButton' | 'selectAllButton' | 'clearSelectionButton';
 
 /**
- * @docid
+ * @namespace DevExpress.ui
+ * @deprecated Use ToolbarItem instead
+ */
+export type dxCardViewToolbarItem = ToolbarItem;
+
+/**
+ * @docid dxCardViewToolbarItem
  * @inherits dxToolbarItem
  * @public
  * @namespace DevExpress.ui.dxCardView
  */
 export type ToolbarItem = dxToolbarItem & {
     /**
-     * @docid
+     * @docid dxCardViewToolbarItem.name
      * @public
      */
     name?: PredefinedToolbarItem | string;
     /**
-     * @docid
+     * @docid dxCardViewToolbarItem.location
      * @default 'after'
      * @public
      */
@@ -106,30 +112,37 @@ export type ToolbarItem = dxToolbarItem & {
 };
 
 /**
- * @docid
+ * @namespace DevExpress.ui
+ * @deprecated Use Toolbar instead
+ */
+export type dxCardViewToolbar = Toolbar;
+
+/**
+ * @docid dxCardViewToolbar
  * @public
  * @namespace DevExpress.ui.dxCardView
  */
 export type Toolbar = {
     /**
-     * @docid
+     * @docid dxCardViewToolbar.items
+     * @type Array<Enums.PredefinedToolbarItem,dxCardViewToolbarItem>
      * @public
      */
     items?: Array<PredefinedToolbarItem | ToolbarItem>;
     /**
-     * @docid
+     * @docid dxCardViewToolbar.visible
      * @default undefined
      * @public
      */
     visible?: boolean | undefined;
     /**
-     * @docid
+     * @docid dxCardViewToolbar.disabled
      * @default false
      * @public
      */
     disabled?: boolean;
     /**
-     * @docid
+     * @docid dxCardViewToolbar.multiline
      * @default false
      * @public
      */
@@ -316,7 +329,7 @@ export type ColumnProperties<TCardData = unknown, TKey = unknown> = {
      * @docid
      * @public
      */
-    customizeText?: ((this: Column, cellInfo: ColumnCustomizeTextArg) => string);
+    customizeText?: ((this: Column, fieldInfo: ColumnCustomizeTextArg) => string);
     /**
      * @docid
      * @public
@@ -362,7 +375,7 @@ export type ColumnProperties<TCardData = unknown, TKey = unknown> = {
      * @type dxFormSimpleItem
      * @public
      */
-    formItem?: SimpleItem; // TODO: sync with impl
+    formItem?: SimpleItem;
     /**
      * @docid
      * @default ""
@@ -488,11 +501,6 @@ export type Column<TCardData = unknown, TKey = unknown> = ColumnProperties<TCard
 // #region HeaderPanel
 
 /**
- * @public
- * */
-export type HeaderPanelDragging = Pick<dxSortableOptions, 'dropFeedbackMode' | 'scrollSpeed' | 'scrollSensitivity' | 'onDragChange' | 'onDragEnd' | 'onDragMove' | 'onDragStart' | 'onRemove' | 'onReorder'>;
-
-/**
  * @docid
  * @public
  * @namespace DevExpress.ui.dxCardView
@@ -501,9 +509,63 @@ export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
     /**
      * @docid
      * @public
-     * @type object
      */
-    dragging?: HeaderPanelDragging;
+    dragging?: {
+        /**
+         * @docid
+         * @default "push"
+         * @public
+         */
+        dropFeedbackMode?: DragHighlight;
+        /**
+         * @docid
+         * @default 30
+         * @public
+         */
+        scrollSpeed?: number;
+        /**
+         * @docid
+         * @default 60
+         * @public
+         */
+        scrollSensitivity?: number;
+        /**
+         * @docid
+         * @default null
+         * @public
+         */
+        onDragChange?: ((e: any) => void);
+        /**
+         * @docid
+         * @default null
+         * @public
+         */
+        onDragEnd?: ((e: any) => void);
+        /**
+         * @docid
+         * @default null
+         * @public
+         */
+        onDragMove?: ((e: any) => void);
+        /**
+         * @docid
+         * @default null
+         * @public
+         */
+        onDragStart?: ((e: any) => void);
+        /**
+         * @docid
+         * @default null
+         * @public
+         */
+        onRemove?: ((e: any) => void);
+        /**
+         * @docid
+         * @default null
+         * @public
+         */
+        onReorder?: ((e: any) => void);
+    };
     /**
      * @docid
      * @public
@@ -528,6 +590,7 @@ export type HeaderPanel<TCardData = unknown, TKey = unknown> = {
 
 /**
  * @docid
+ * @hidden
  */
 type WithCardInfo = {
     /** @docid */
@@ -538,6 +601,7 @@ type WithCardInfo = {
 
 /**
  * @docid
+ * @hidden
  */
 type WithFieldCaptionInfo = {
     /**
@@ -551,6 +615,7 @@ type WithFieldCaptionInfo = {
 
 /**
  * @docid
+ * @hidden
  */
 type WithFieldValueInfo = {
     /**
@@ -678,7 +743,7 @@ export type ColumnTemplateData<TCardData = unknown, TKey = unknown> = {
  * @public
  * @namespace DevExpress.ui.dxCardView
  */
-export type CardCover<TCardData = unknown> = { // TODO: sync with impl
+export type CardCover<TCardData = unknown> = {
     /**
      * @docid
      * @public
@@ -734,7 +799,7 @@ export type CardHeaderItem = dxToolbarItem & {
  * @public
  * @namespace DevExpress.ui.dxCardView
  */
-export type CardHeader = { // TODO: sync with impl
+export type CardHeader = {
     /**
      * @docid
      * @public
@@ -761,6 +826,50 @@ export type CardHeader = { // TODO: sync with impl
 // Specified docid similar to other grids
 
 /**
+ * @docid
+ * @public
+ * @namespace DevExpress.ui.dxCardView
+ */
+export type EditingTexts = {
+  /**
+   * @docid
+   * @default "Add a card"
+   * @public
+   */
+  addCard?: string;
+  /**
+   * @docid
+   * @default "Are you sure you want to delete this record?"
+   * @public
+   */
+  confirmDeleteMessage?: string;
+  /**
+   * @docid
+   * @default ""
+   * @public
+   */
+  confirmDeleteTitle?: string;
+  /**
+   * @docid
+   * @default "Delete"
+   * @public
+   */
+  deleteCard?: string;
+  /**
+   * @docid
+   * @default "Edit"
+   * @public
+   */
+  editCard?: string;
+  /**
+   * @docid
+   * @default "Save"
+   * @public
+   */
+  saveCard?: string;
+};
+
+/**
  * @namespace DevExpress.ui
  * @deprecated Use Editing instead
  */
@@ -770,7 +879,7 @@ export type dxCardViewEditing<TCardData=unknown, TKey=unknown> = Editing<TCardDa
  * @docid dxCardViewEditing
  * @public
  */
-export type Editing<TCardData=unknown, TKey=unknown> = { // TODO: sync with impl
+export type Editing<TCardData=unknown, TKey=unknown> = {
     /**
      * @docid dxCardViewEditing.allowAdding
      * @public
@@ -817,9 +926,14 @@ export type Editing<TCardData=unknown, TKey=unknown> = { // TODO: sync with impl
     /**
      * @docid dxCardViewEditing.popup
      * @public
-     * @type object
+     * @type dxPopupOptions
      */
     popup?: PopupProperties;
+    /**
+     * @docid dxCardViewEditing.texts
+     * @public
+     */
+    texts?: EditingTexts;
 };
 
 /**
@@ -1072,35 +1186,6 @@ export type SelectionConfiguration = {
 };
 
 /**
- * @docid _ui_card_view_SelectionChangingEvent
- * @public
- * @type object
- * @inherits EventInfo,Cancelable
- */
-export type SelectionChangingEvent<TCardData = unknown, TKey = unknown> = EventInfo<dxCardView> & Cancelable & {
-    /**
-     * @docid _ui_card_view_SelectionChangingEvent.selectedCardsData
-     * @public
-     */
-    selectedCardsData: Array<TCardData>;
-    /**
-     * @docid _ui_card_view_SelectionChangingEvent.selectedCardKeys
-     * @public
-     */
-    selectedCardKeys: Array<TKey>;
-    /**
-     * @docid _ui_card_view_SelectionChangingEvent.currentSelectedCardKeys
-     * @public
-     */
-    currentSelectedCardKeys: Array<TKey>;
-    /**
-     * @docid _ui_card_view_SelectionChangingEvent.currentDeselectedCardKeys
-     * @public
-     */
-    currentDeselectedCardKeys: Array<TKey>;
-};
-
-/**
  * @docid _ui_card_view_SelectionChangedEvent
  * @public
  * @type object
@@ -1281,9 +1366,35 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     /**
      * @docid
      * @public
-     * @type object
      */
-    scrolling?: Pick<ScrollingBase, 'scrollByContent' | 'scrollByThumb' | 'showScrollbar' | 'useNative'>;
+    scrolling?: {
+        /**
+         * @docid
+         * @default true
+         * @default false &for(non-touch_devices)
+         * @public
+         */
+        scrollByContent?: boolean;
+        /**
+         * @docid
+         * @default false
+         * @public
+         */
+        scrollByThumb?: boolean;
+        /**
+         * @docid
+         * @default 'onHover' &for(desktop)
+         * @default 'onScroll'
+         * @public
+         */
+        showScrollbar?: ScrollbarMode;
+        /**
+         * @docid
+         * @default "auto"
+         * @public
+         */
+        useNative?: boolean | Mode;
+    };
     /**
      * @docid
      * @public
@@ -1345,77 +1456,77 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @docid
      * @public
      */
-    fieldHintEnabled?: boolean; // TODO: sync with impl
+    fieldHintEnabled?: boolean;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:CardClickEvent}
      * @action
      */
-    onCardClick?: (e: CardClickEvent) => void; // TODO: sync with impl
+    onCardClick?: (e: CardClickEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:CardDblClickEvent}
      * @action
      */
-    onCardDblClick?: (e: CardDblClickEvent) => void; // TODO: sync with impl
+    onCardDblClick?: (e: CardDblClickEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:CardPreparedEvent}
      * @action
      */
-    onCardPrepared?: (e: CardPreparedEvent) => void; // TODO: sync with impl
+    onCardPrepared?: (e: CardPreparedEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:FieldCaptionClickEvent}
      * @action
      */
-    onFieldCaptionClick?: (e: FieldCaptionClickEvent) => void; // TODO: sync with impl
+    onFieldCaptionClick?: (e: FieldCaptionClickEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:FieldCaptionDblClickEvent}
      * @action
      */
-    onFieldCaptionDblClick?: (e: FieldCaptionDblClickEvent) => void; // TODO: sync with impl
+    onFieldCaptionDblClick?: (e: FieldCaptionDblClickEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:FieldCaptionPreparedEvent}
      * @action
      */
-    onFieldCaptionPrepared?: (e: FieldCaptionPreparedEvent) => void; // TODO: sync with impl
+    onFieldCaptionPrepared?: (e: FieldCaptionPreparedEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:FieldValueClickEvent}
      * @action
      */
-    onFieldValueClick?: (e: FieldValueClickEvent) => void; // TODO: sync with impl
+    onFieldValueClick?: (e: FieldValueClickEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:FieldValueDblClickEvent}
      * @action
      */
-    onFieldValueDblClick?: (e: FieldValueDblClickEvent) => void; // TODO: sync with impl
+    onFieldValueDblClick?: (e: FieldValueDblClickEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:FieldValuePreparedEvent}
      * @action
      */
-    onFieldValuePrepared?: (e: FieldValuePreparedEvent) => void; // TODO: sync with impl
+    onFieldValuePrepared?: (e: FieldValuePreparedEvent) => void;
     /**
      * @docid
      * @public
      * @type_function_param1 e:{ui/card_view:CardHoverChangedEvent}
      * @action
      */
-    onCardHoverChanged?: (e: CardHoverChangedEvent) => void; // TODO: sync with impl
+    onCardHoverChanged?: (e: CardHoverChangedEvent) => void;
     /**
      * @docid
      * @public
@@ -1431,7 +1542,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
      * @docid
      * @public
      */
-    hoverStateEnabled?: boolean; // TODO: sync with impl
+    hoverStateEnabled?: boolean;
 
     // #endregion
 
@@ -1439,6 +1550,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
 
     /**
      * @docid
+     * @type dxCardViewToolbar
      * @public
      */
     toolbar?: Toolbar;
@@ -1462,7 +1574,7 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     /**
      * @docid
      * @public
-     * @type object
+     * @type dxPopupOptions
      */
     filterBuilderPopup?: PopupProperties;
     /**
@@ -1601,13 +1713,6 @@ export interface dxCardViewOptions<TCardData = unknown, TKey = unknown> extends 
     selection?: SelectionConfiguration;
     /**
      * @docid
-     * @type_function_param1 e:{ui/card_view:SelectionChangingEvent}
-     * @action
-     * @public
-     */
-    onSelectionChanging?: (e: SelectionChangingEvent) => void;
-    /**
-     * @docid
      * @type_function_param1 e:{ui/card_view:SelectionChangedEvent}
      * @action
      * @public
@@ -1727,7 +1832,7 @@ export default class dxCardView<TCardData = unknown, TKey = unknown> extends Wid
 
     /**
      * @docid
-     * @publicName addRow()
+     * @publicName addCard()
      * @public
      */
     addCard(): void;
@@ -1861,13 +1966,13 @@ export default class dxCardView<TCardData = unknown, TKey = unknown> extends Wid
      * @publicName getSelectedCardsData()
      * @public
      */
-    getSelectedCardsData(): Array<TCardData>; // TODO: sync with impl
+    getSelectedCardsData(): Array<TCardData>;
     /**
      * @docid
      * @publicName getSelectedCardKeys()
      * @public
      */
-    getSelectedCardKeys(): Array<TKey>; // TODO: sync with impl
+    getSelectedCardKeys(): Array<TKey>;
     /**
      * @docid
      * @publicName isCardSelected(key)
@@ -1882,6 +1987,8 @@ export default class dxCardView<TCardData = unknown, TKey = unknown> extends Wid
 // plus, some of these types are already exported with direct declarations
 
 export {
+    ScrollbarMode,
+    DragHighlight,
     Sorting,
     Pager,
     DataErrorOccurredInfo,

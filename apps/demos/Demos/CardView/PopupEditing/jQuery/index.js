@@ -2,10 +2,9 @@ $(() => {
   $('#card-view').dxCardView({
     dataSource: employees,
     keyExpr: 'id',
-    cardsPerRow: 2,
-    paging: {
-      pageSize: 4
-    },
+    cardsPerRow: 'auto',
+    cardMinWidth: 350,
+    height: 840,
     cardCover: {
       imageExpr: ({ picture }) => picture,
       altExpr: ({ fullName }) => `Photo of ${fullName}`,
@@ -20,7 +19,7 @@ $(() => {
         width: 700,
         height: 525,
       },
-      form:  {
+      form: {
         items: [
           {
             caption: 'Personal Data',
@@ -33,7 +32,7 @@ $(() => {
             itemType: 'group',
             colCount: 2,
             colSpan: 2,
-            items: ['hireDate', 'title', {
+            items: ['hireDate', 'title', 'department', {
               dataField: 'notes',
               editorType: 'dxTextArea',
               colSpan: 2,

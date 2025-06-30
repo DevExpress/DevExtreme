@@ -80,6 +80,8 @@ $cardview-material-card__cover--noimage-bg-color: null !default;
 */
 $cardview-material-card__cover--noimage__icon-color: null !default;
 
+$cardview-material-card--focused-outline-color: null !default;
+
 // #endregion
 
 // #region CARD (SELECTED)
@@ -165,6 +167,8 @@ $cardview-material-header-panel__item__header-filter-icon--selected-color: null 
 * $type color
 */
 $cardview-material-header-panel__item__sort-index-text-color: null !default;
+
+$cardview-material-header-panel__item--focused-outline-color: null !default;
 
 // #endregion
 
@@ -416,10 +420,12 @@ $cardview-material-columnchooser--empty__message-color: null !default;
   $cardview-material-card__cover--noimage-bg-color: darken($base-bg, 7.84) !default;
   $cardview-material-card__cover--noimage__icon-color: color.change($cardview-material-common-text-color, $alpha: 0.38) !default;
 
-  // Card Selected
+  $cardview-material-card--focused-outline-color: $base-accent !default;
+
+  // Card - selected
   $cardview-material-card--selected-bg-color: color.change($base-accent, $alpha: 0.08) !default;
-  $cardview-material-card--selected-border-color: $cardview-material-card-border-color !default;
-  $cardview-material-card--selected-divider-color: $cardview-material-card-divider-color !default;
+  $cardview-material-card--selected-border-color: color.change($base-accent, $alpha: 0.32) !default;
+  $cardview-material-card--selected-divider-color: $cardview-material-card--selected-border-color !default;
   $cardview-material-card--selected-text-color: $cardview-material-card-text-color !default;
   $cardview-material-card--selected__cover-bg-color: $cardview-material-card__cover-bg-color !default;
   $cardview-material-card--selected__cover--noimage-bg-color: $cardview-material-card__cover--noimage-bg-color !default;
@@ -432,6 +438,8 @@ $cardview-material-columnchooser--empty__message-color: null !default;
   $cardview-material-header-panel__item__icon-color: $cardview-material-common-text-color !default;
   $cardview-material-header-panel__item__header-filter-icon--selected-color: $base-accent !default;
   $cardview-material-header-panel__item__sort-index-text-color: $cardview-material-common-text-color !default;
+
+  $cardview-material-header-panel__item--focused-outline-color: $base-accent !default;
 
   // Header panel item - hovered
   $cardview-material-header-panel__item--hovered-bg-color: darken($cardview-material-header-panel__item-bg-color, 4.31) !default;
@@ -500,10 +508,12 @@ $cardview-material-columnchooser--empty__message-color: null !default;
   $cardview-material-card__cover--noimage-bg-color: lighten(desaturate($base-bg, 0.3), 8.04) !default;
   $cardview-material-card__cover--noimage__icon-color: color.change($cardview-material-common-text-color, $alpha: 0.38) !default;
 
+  $cardview-material-card--focused-outline-color: $base-accent !default;
+
   // Card - selected
   $cardview-material-card--selected-bg-color: color.change(lighten($base-accent, 19.22), $alpha: 0.08) !default;
-  $cardview-material-card--selected-border-color: $cardview-material-card-border-color !default;
-  $cardview-material-card--selected-divider-color: $cardview-material-card-divider-color !default;
+  $cardview-material-card--selected-border-color: color.change(lighten($base-accent, 19.22), $alpha: 0.32) !default;
+  $cardview-material-card--selected-divider-color: $cardview-material-card--selected-border-color !default;
   $cardview-material-card--selected-text-color: $cardview-material-card-text-color !default;
   $cardview-material-card--selected__cover-bg-color: $cardview-material-card__cover-bg-color !default;
   $cardview-material-card--selected__cover--noimage-bg-color: $cardview-material-card__cover--noimage-bg-color !default;
@@ -516,6 +526,8 @@ $cardview-material-columnchooser--empty__message-color: null !default;
   $cardview-material-header-panel__item__icon-color: $cardview-material-common-text-color !default;
   $cardview-material-header-panel__item__header-filter-icon--selected-color: $base-accent !default;
   $cardview-material-header-panel__item__sort-index-text-color: $cardview-material-common-text-color !default;
+
+  $cardview-material-header-panel__item--focused-outline-color: $base-accent !default;
 
   // Header panel item - hovered
   $cardview-material-header-panel__item--hovered-bg-color: lighten(desaturate($cardview-material-header-panel__item-bg-color, 3.47), 2.16) !default;
@@ -580,6 +592,8 @@ $cardview-card__cover-bg-color: $cardview-material-card__cover-bg-color !default
 $cardview-card__cover--noimage-bg-color: $cardview-material-card__cover--noimage-bg-color !default;
 $cardview-card__cover--noimage__icon-color: $cardview-material-card__cover--noimage__icon-color !default;
 
+$cardview-card--focused-outline-color: $cardview-material-card--focused-outline-color !default;
+
 $cardview-card--selected-bg-color: $cardview-material-card--selected-bg-color !default;
 $cardview-card--selected-border-color: $cardview-material-card--selected-border-color !default;
 $cardview-card--selected-divider-color: $cardview-material-card--selected-divider-color !default;
@@ -594,6 +608,8 @@ $cardview-header-panel__item-text-color: $cardview-material-header-panel__item-t
 $cardview-header-panel__item__icon-color: $cardview-material-header-panel__item__icon-color !default;
 $cardview-header-panel__item__header-filter-icon--selected-color: $cardview-material-header-panel__item__header-filter-icon--selected-color !default;
 $cardview-header-panel__item__sort-index-text-color: $cardview-material-header-panel__item__sort-index-text-color !default;
+
+$cardview-header-panel__item--focused-outline-color: $cardview-material-header-panel__item--focused-outline-color !default;
 
 $cardview-header-panel__item--hovered-bg-color: $cardview-material-header-panel__item--hovered-bg-color !default;
 $cardview-header-panel__item--hovered-border-color: $cardview-material-header-panel__item--hovered-border-color !default;

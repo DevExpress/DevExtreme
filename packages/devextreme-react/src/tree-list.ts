@@ -116,7 +116,7 @@ const TreeList = memo(
         }
       ), [baseRef.current]);
 
-      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","expandedRowKeys","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","paging","paging.pageIndex","paging.pageSize","selectedRowKeys"]), []);
+      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","expandedRowKeys","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","paging","paging.pageIndex","paging.pageSize","selectedRowKeys","filterBuilder.value","filterBuilderPopup.height","filterBuilderPopup.position","filterBuilderPopup.visible","filterBuilderPopup.width","filterPanel.filterEnabled","editing.form.formData","editing.popup.height","editing.popup.position","editing.popup.visible","editing.popup.width","searchPanel.text"]), []);
       const independentEvents = useMemo(() => (["onAdaptiveDetailRowPreparing","onCellClick","onCellDblClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onEditorPrepared","onEditorPreparing","onFocusedCellChanging","onFocusedRowChanging","onInitialized","onInitNewRow","onKeyDown","onNodesInitialized","onRowClick","onRowCollapsed","onRowCollapsing","onRowDblClick","onRowExpanded","onRowExpanding","onRowInserted","onRowInserting","onRowPrepared","onRowRemoved","onRowRemoving","onRowUpdated","onRowUpdating","onRowValidating","onSaved","onSaving","onToolbarPreparing"]), []);
 
       const defaults = useMemo(() => ({
@@ -1035,7 +1035,7 @@ type IFilterBuilderProps = React.PropsWithChildren<{
     or?: string;
   };
   groupOperations?: Array<GroupOperation>;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   maxGroupLevel?: number | undefined;
@@ -1050,7 +1050,7 @@ type IFilterBuilderProps = React.PropsWithChildren<{
   tabIndex?: number;
   value?: Array<any> | (() => any) | string;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   defaultValue?: Array<any> | (() => any) | string;
   onValueChange?: (value: Array<any> | (() => any) | string) => void;
 }>
@@ -1085,7 +1085,6 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
     show?: AnimationConfig;
   };
   bindingOptions?: Record<string, any>;
-  closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
@@ -1096,15 +1095,15 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   enableBodyScroll?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;
-  height?: (() => number | string) | number | string;
+  height?: number | string;
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
   hideOnParentScroll?: boolean;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
-  maxHeight?: (() => number | string) | number | string;
-  maxWidth?: (() => number | string) | number | string;
-  minHeight?: (() => number | string) | number | string;
-  minWidth?: (() => number | string) | number | string;
+  maxHeight?: number | string;
+  maxWidth?: number | string;
+  minHeight?: number | string;
+  minWidth?: number | string;
   onContentReady?: ((e: EventInfo<any>) => void);
   onDisposing?: ((e: EventInfo<any>) => void);
   onHidden?: ((e: EventInfo<any>) => void);
@@ -1130,16 +1129,16 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   titleTemplate?: ((titleElement: any) => string | any) | template;
   toolbarItems?: Array<dxPopupToolbarItem>;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: number | string;
   wrapperAttr?: any;
-  defaultHeight?: (() => number | string) | number | string;
-  onHeightChange?: (value: (() => number | string) | number | string) => void;
+  defaultHeight?: number | string;
+  onHeightChange?: (value: number | string) => void;
   defaultPosition?: (() => void) | PositionAlignment | PositionConfig;
   onPositionChange?: (value: (() => void) | PositionAlignment | PositionConfig) => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
-  defaultWidth?: (() => number | string) | number | string;
-  onWidthChange?: (value: (() => number | string) | number | string) => void;
+  defaultWidth?: number | string;
+  onWidthChange?: (value: number | string) => void;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
   titleRender?: (...params: any) => React.ReactNode;
@@ -1319,7 +1318,7 @@ type IFormProps = React.PropsWithChildren<{
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
   formData?: any;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   isDirty?: boolean;
@@ -1347,7 +1346,7 @@ type IFormProps = React.PropsWithChildren<{
   tabIndex?: number;
   validationGroup?: string | undefined;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   defaultFormData?: any;
   onFormDataChange?: (value: any) => void;
 }>
@@ -1909,7 +1908,6 @@ type IPopupProps = React.PropsWithChildren<{
     show?: AnimationConfig;
   };
   bindingOptions?: Record<string, any>;
-  closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
@@ -1920,15 +1918,15 @@ type IPopupProps = React.PropsWithChildren<{
   enableBodyScroll?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;
-  height?: (() => number | string) | number | string;
+  height?: number | string;
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
   hideOnParentScroll?: boolean;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
-  maxHeight?: (() => number | string) | number | string;
-  maxWidth?: (() => number | string) | number | string;
-  minHeight?: (() => number | string) | number | string;
-  minWidth?: (() => number | string) | number | string;
+  maxHeight?: number | string;
+  maxWidth?: number | string;
+  minHeight?: number | string;
+  minWidth?: number | string;
   onContentReady?: ((e: EventInfo<any>) => void);
   onDisposing?: ((e: EventInfo<any>) => void);
   onHidden?: ((e: EventInfo<any>) => void);
@@ -1954,16 +1952,16 @@ type IPopupProps = React.PropsWithChildren<{
   titleTemplate?: ((titleElement: any) => string | any) | template;
   toolbarItems?: Array<dxPopupToolbarItem>;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: number | string;
   wrapperAttr?: any;
-  defaultHeight?: (() => number | string) | number | string;
-  onHeightChange?: (value: (() => number | string) | number | string) => void;
+  defaultHeight?: number | string;
+  onHeightChange?: (value: number | string) => void;
   defaultPosition?: (() => void) | PositionAlignment | PositionConfig;
   onPositionChange?: (value: (() => void) | PositionAlignment | PositionConfig) => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
-  defaultWidth?: (() => number | string) | number | string;
-  onWidthChange?: (value: (() => number | string) | number | string) => void;
+  defaultWidth?: number | string;
+  onWidthChange?: (value: number | string) => void;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
   titleRender?: (...params: any) => React.ReactNode;

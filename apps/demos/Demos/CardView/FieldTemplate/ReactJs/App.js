@@ -1,19 +1,52 @@
 import React from 'react';
-import CardView, { Column } from 'devextreme-react/card-view';
-import { customers } from './data.js';
+import CardView, { CardHeader, Column, Paging } from 'devextreme-react/card-view';
+import { tasks } from './data.js';
+import HeaderTemplate from './HeaderTemplate.js';
+import Priority from './Priority.js';
+import Employee from './Employee.js';
+import Progress from './Progress.js';
 
-const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
 const App = () => (
   <CardView
-    dataSource={customers}
-    keyExpr="ID"
+    dataSource={tasks}
+    cardsPerRow="auto"
+    cardMinWidth={240}
   >
-    {columns.map((column, index) => (
-      <Column
-        dataField={column}
-        key={index}
-      />
-    ))}
+    <CardHeader
+      visible={true}
+      render={(model) => <HeaderTemplate text={model.card.data.Task_Subject} />}
+    />
+    <Paging pageSize={12} />
+
+    <Column
+      dataField="Task_Priority"
+      caption="Priority"
+      fieldValueRender={(model) => <Priority priorityID={model.field.value} />}
+    />
+    <Column
+      dataField="Task_Start_Date"
+      caption="Start Date"
+      dataType="date"
+    />
+    <Column
+      dataField="Task_Due_Date"
+      caption="End Date"
+      dataType="date"
+    />
+    <Column
+      dataField="Task_Assigned_Employee_ID"
+      caption="Assigned to"
+      fieldValueRender={(model) => <Employee employeeID={model.field.value} />}
+    />
+    <Column
+      dataField="Task_Status"
+      caption="Status"
+    />
+    <Column
+      dataField="Task_Completion"
+      caption="Completed"
+      fieldRender={(model) => <Progress value={model.field.value} />}
+    />
   </CardView>
 );
 export default App;

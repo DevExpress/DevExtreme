@@ -2037,282 +2037,263 @@ testModule('defer rendering', moduleConfig, () => {
 });
 
 
-testModule('close on outside click', moduleConfig, () => {
-    ['closeOnOutsideClick', 'hideOnOutsideClick'].forEach(closeOnOutsideClickOptionName => {
-        test('overlay should be hidden after click outside was present', function(assert) {
-            const overlay = $('#overlay').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true
-            }).dxOverlay('instance');
-            const $content = overlay.$content();
+testModule('hide on outside click', moduleConfig, () => {
+    test('overlay should be hidden after click outside was present', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true
+        }).dxOverlay('instance');
+        const $content = overlay.$content();
 
-            $($content).trigger('dxpointerdown');
-            assert.strictEqual(overlay.option('visible'), true, 'overlay is not hidden');
+        $($content).trigger('dxpointerdown');
+        assert.strictEqual(overlay.option('visible'), true, 'overlay is not hidden');
 
-            $(document).trigger('dxpointerdown');
-            assert.strictEqual(overlay.option('visible'), false, 'overlay is hidden');
-        });
-
-        test('overlay should be hidden after click outside was present if a function is passed to the property', function(assert) {
-            const overlay = $('#overlay').dxOverlay({
-                [closeOnOutsideClickOptionName]: () => true,
-                visible: true
-            }).dxOverlay('instance');
-            const $content = overlay.$content();
-
-            $($content).trigger('dxpointerdown');
-            assert.strictEqual(overlay.option('visible'), true, 'overlay is not hidden');
-
-            $(document).trigger('dxpointerdown');
-            assert.strictEqual(overlay.option('visible'), false, 'overlay is hidden');
-        });
-
-        test('overlay should not be hidden after click inside was present', function(assert) {
-            const $overlay = $('#overlay');
-            $('<div id=\'innerContent\'>').appendTo($overlay);
-            const overlay = $overlay.dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true
-            }).dxOverlay('instance');
-
-            pointerMock($('#innerContent', $overlay))
-                .start()
-                .wait(600)
-                .click();
-
-            assert.strictEqual(overlay.option('visible'), true, 'overlay is not hidden');
-        });
-
-        test('click in the inner overlay should not be an outside click', function(assert) {
-            const overlay1 = $('#overlay').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true
-            }).dxOverlay('instance');
-            const overlay2 = $('#overlay2').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                innerOverlay: true,
-                visible: true,
-                propagateOutsideClick: true
-            }).dxOverlay('instance');
-            $(overlay2.$content()).trigger('dxpointerdown');
-
-            assert.equal(overlay1.option('visible'), true, 'Bottom overlay should not get outside click when inner overlay clicked');
-        });
-
-        // T494814
-        test('overlay should not be hidden after click in detached element', function(assert) {
-            const overlay = $('#overlayWithAnonymousTmpl').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true
-            })
-                .dxOverlay('instance');
-
-            $('#content').on('dxpointerdown', function(e) {
-                $('#content').replaceWith($('<div>').attr('id', 'content'));
-            });
-
-            // act
-            $('#content').trigger('dxpointerdown');
-
-            // assert
-            assert.strictEqual(overlay.option('visible'), true, 'overlay is not hidden');
-        });
-
-        test('overlay should not propagate events after click outside was present', function(assert) {
-            $('#overlay').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true,
-                shading: true
-            });
-
-            const downEvent = $.Event('dxpointerdown', { pointerType: 'mouse' });
-            $(document).trigger(downEvent);
-            assert.ok(downEvent.isDefaultPrevented(), 'default prevented');
-
-        });
-
-        test('overlay should propagate events when shading is false (T181002)', function(assert) {
-            $('#overlay').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true,
-                shading: false
-            });
-
-            const downEvent = $.Event('dxpointerdown', { pointerType: 'mouse' });
-            $(document).trigger(downEvent);
-            assert.ok(!downEvent.isDefaultPrevented(), 'default is not prevented');
-        });
-
-        test('outside click should close several overlays if propagateOutsideClick option of top overlay is true', function(assert) {
-            const overlay1 = $('#overlay').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true
-            }).dxOverlay('instance');
-            const overlay2 = $('#overlay2').dxOverlay({
-                [closeOnOutsideClickOptionName]: false,
-                visible: true,
-                propagateOutsideClick: true
-            }).dxOverlay('instance');
-
-            $('body').trigger('dxpointerdown');
-
-            assert.strictEqual(overlay1.option('visible'), false, 'First overlay is hidden');
-            assert.strictEqual(overlay2.option('visible'), true, 'Second overlay is visible');
-        });
-
-        test('customer should control closing of other overlays when some overlay content clicked', function(assert) {
-            // note: T668816, T655391 and click menu item when menu is inside of dxPopup with closeOnOutsideClick true
-            const overlay1 = $('#overlay').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true
-            }).dxOverlay('instance');
-            const overlay2 = $('#overlay2').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true,
-                propagateOutsideClick: true
-            }).dxOverlay('instance');
-
-            $(overlay2.$content()).trigger('dxpointerdown');
-
-            assert.strictEqual(overlay1.option('visible'), false, 'Bottom overlay should get outside click when other overlay clicked');
-            assert.strictEqual(overlay2.option('visible'), true, 'Second overlay is visible');
-
-            overlay1.show();
-            overlay2.option(closeOnOutsideClickOptionName, function(e) {
-                return !e.target.closest(toSelector(OVERLAY_CONTENT_CLASS));
-            });
-            $(overlay1.$content()).trigger('dxpointerdown');
-
-            assert.strictEqual(overlay1.option('visible'), true, 'First overlay is visible');
-            assert.strictEqual(overlay2.option('visible'), true, 'Closing should be prevented by a user-defined function');
-        });
-
-        test('overlays\' priority', function(assert) {
-            const $overlay1 = $('#overlay').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true
-            });
-            const overlay1 = $overlay1.dxOverlay('instance');
-            const $overlay2 = $('#overlay2').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true
-            });
-            const overlay2 = $overlay2.dxOverlay('instance');
-
-            $(overlay2.$content()).trigger('dxpointerdown');
-
-            assert.strictEqual(overlay1.option('visible'), true, 'First overlay is NOT hidden, because it\'s NOT active');
-            assert.strictEqual(overlay2.option('visible'), true, 'Second overlay is visible');
-
-            $('body').trigger('dxpointerdown');
-
-            assert.strictEqual(overlay1.option('visible'), true, 'First overlay is NOT hidden, because it\'s NOT active');
-            assert.strictEqual(overlay2.option('visible'), false, 'Second overlay is hidden, because it is active');
-
-            $('body').trigger('dxpointerdown');
-
-            assert.strictEqual(overlay1.option('visible'), false, 'First overlay is now hidden, because it has become active');
-        });
-
-
-        test('closeOnOutsideClick works after first overlay hiding', function(assert) {
-            const $overlay1 = $('#overlay').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true
-            });
-            const overlay1 = $overlay1.dxOverlay('instance');
-            const $overlay2 = $('#overlay2').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true
-            });
-            const overlay2 = $overlay2.dxOverlay('instance');
-
-            overlay1.hide();
-
-            $('body').trigger('dxpointerdown');
-
-            assert.strictEqual(overlay1.option('visible'), false, 'First overlay is hidden, because of calling hide');
-            assert.strictEqual(overlay2.option('visible'), false, 'Second overlay is hidden, because of outsideclick');
-        });
-
-        test('document events should be unsubscribed at each overlay hiding', function(assert) {
-            const $overlay1 = $('#overlay').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true
-            });
-            const instance1 = $overlay1.dxOverlay('instance');
-            const $overlay2 = $('#overlay2').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true
-            });
-            const instance2 = $overlay2.dxOverlay('instance');
-
-            assert.ok(instance1.option('visible'), 'overlay1 is shown');
-            assert.ok(instance2.option('visible'), 'overlay2 is shown');
-
-            $('body').trigger('dxpointerdown');
-            assert.ok(instance1.option('visible'), 'overlay1 is shown');
-            assert.ok(!instance2.option('visible'), 'overlay2 is hidden');
-
-            $('body').trigger('dxpointerdown');
-            assert.ok(!instance1.option('visible'), 'overlay1 is hidden');
-            assert.ok(!instance2.option('visible'), 'overlay2 is hidden');
-        });
-
-        test(`${closeOnOutsideClickOptionName} does not close back widget while front widget is still animated`, function(assert) {
-            const $overlay1 = $('#overlay').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true
-            });
-            const instance1 = $overlay1.dxOverlay('instance');
-            const $overlay2 = $('#overlay2').dxOverlay({
-                [closeOnOutsideClickOptionName]: true,
-                visible: true
-            });
-            const instance2 = $overlay2.dxOverlay('instance');
-
-            try {
-                fx.off = false;
-
-                $('body').trigger('dxpointerdown');
-                $(instance2.$content()).trigger('dxpointerdown');
-                assert.ok(!instance2.option('visible'), 'second overlay is hidden');
-                assert.ok(instance1.option('visible'), 'first overlay is not hidden');
-            } finally {
-                fx.off = true;
-            }
-        });
-
-        test('click on overlay during the start animation should end the animation (T273294)', function(assert) {
-            const $overlay = $('#overlay').dxOverlay({ [closeOnOutsideClickOptionName]: true });
-            const overlay = $overlay.dxOverlay('instance');
-
-            try {
-                fx.off = false;
-                overlay.show();
-
-                $(overlay.$content()).trigger('dxpointerdown');
-                assert.ok(overlay.option('visible'), 'overlay is stay visible');
-            } finally {
-                fx.off = true;
-            }
-        });
+        $(document).trigger('dxpointerdown');
+        assert.strictEqual(overlay.option('visible'), false, 'overlay is hidden');
     });
 
-    test('closeOnOutsideClick option using should raise a warning about deprecation', function(assert) {
-        sinon.spy(errors, 'log');
+    test('overlay should be hidden after click outside was present if a function is passed to the property', function(assert) {
+        const overlay = $('#overlay').dxOverlay({
+            hideOnOutsideClick: () => true,
+            visible: true
+        }).dxOverlay('instance');
+        const $content = overlay.$content();
+
+        $($content).trigger('dxpointerdown');
+        assert.strictEqual(overlay.option('visible'), true, 'overlay is not hidden');
+
+        $(document).trigger('dxpointerdown');
+        assert.strictEqual(overlay.option('visible'), false, 'overlay is hidden');
+    });
+
+    test('overlay should not be hidden after click inside was present', function(assert) {
+        const $overlay = $('#overlay');
+        $('<div id=\'innerContent\'>').appendTo($overlay);
+        const overlay = $overlay.dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true
+        }).dxOverlay('instance');
+
+        pointerMock($('#innerContent', $overlay))
+            .start()
+            .wait(600)
+            .click();
+
+        assert.strictEqual(overlay.option('visible'), true, 'overlay is not hidden');
+    });
+
+    test('click in the inner overlay should not be an outside click', function(assert) {
+        const overlay1 = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true
+        }).dxOverlay('instance');
+        const overlay2 = $('#overlay2').dxOverlay({
+            hideOnOutsideClick: true,
+            innerOverlay: true,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay('instance');
+        $(overlay2.$content()).trigger('dxpointerdown');
+
+        assert.equal(overlay1.option('visible'), true, 'Bottom overlay should not get outside click when inner overlay clicked');
+    });
+
+    // T494814
+    test('overlay should not be hidden after click in detached element', function(assert) {
+        const overlay = $('#overlayWithAnonymousTmpl').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true
+        })
+            .dxOverlay('instance');
+
+        $('#content').on('dxpointerdown', function(e) {
+            $('#content').replaceWith($('<div>').attr('id', 'content'));
+        });
+
+        // act
+        $('#content').trigger('dxpointerdown');
+
+        // assert
+        assert.strictEqual(overlay.option('visible'), true, 'overlay is not hidden');
+    });
+
+    test('overlay should not propagate events after click outside was present', function(assert) {
+        $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true,
+            shading: true
+        });
+
+        const downEvent = $.Event('dxpointerdown', { pointerType: 'mouse' });
+        $(document).trigger(downEvent);
+        assert.ok(downEvent.isDefaultPrevented(), 'default prevented');
+
+    });
+
+    test('overlay should propagate events when shading is false (T181002)', function(assert) {
+        $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true,
+            shading: false
+        });
+
+        const downEvent = $.Event('dxpointerdown', { pointerType: 'mouse' });
+        $(document).trigger(downEvent);
+        assert.ok(!downEvent.isDefaultPrevented(), 'default is not prevented');
+    });
+
+    test('outside click should close several overlays if propagateOutsideClick option of top overlay is true', function(assert) {
+        const overlay1 = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true
+        }).dxOverlay('instance');
+        const overlay2 = $('#overlay2').dxOverlay({
+            hideOnOutsideClick: false,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay('instance');
+
+        $('body').trigger('dxpointerdown');
+
+        assert.strictEqual(overlay1.option('visible'), false, 'First overlay is hidden');
+        assert.strictEqual(overlay2.option('visible'), true, 'Second overlay is visible');
+    });
+
+    test('customer should control closing of other overlays when some overlay content clicked', function(assert) {
+        // note: T668816, T655391 and click menu item when menu is inside of dxPopup with hideOnOutsideClick true
+        const overlay1 = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true
+        }).dxOverlay('instance');
+        const overlay2 = $('#overlay2').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true,
+            propagateOutsideClick: true
+        }).dxOverlay('instance');
+
+        $(overlay2.$content()).trigger('dxpointerdown');
+
+        assert.strictEqual(overlay1.option('visible'), false, 'Bottom overlay should get outside click when other overlay clicked');
+        assert.strictEqual(overlay2.option('visible'), true, 'Second overlay is visible');
+
+        overlay1.show();
+        overlay2.option('hideOnOutsideClick', function(e) {
+            return !e.target.closest(toSelector(OVERLAY_CONTENT_CLASS));
+        });
+        $(overlay1.$content()).trigger('dxpointerdown');
+
+        assert.strictEqual(overlay1.option('visible'), true, 'First overlay is visible');
+        assert.strictEqual(overlay2.option('visible'), true, 'Closing should be prevented by a user-defined function');
+    });
+
+    test('overlays\' priority', function(assert) {
+        const $overlay1 = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true
+        });
+        const overlay1 = $overlay1.dxOverlay('instance');
+        const $overlay2 = $('#overlay2').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true
+        });
+        const overlay2 = $overlay2.dxOverlay('instance');
+
+        $(overlay2.$content()).trigger('dxpointerdown');
+
+        assert.strictEqual(overlay1.option('visible'), true, 'First overlay is NOT hidden, because it\'s NOT active');
+        assert.strictEqual(overlay2.option('visible'), true, 'Second overlay is visible');
+
+        $('body').trigger('dxpointerdown');
+
+        assert.strictEqual(overlay1.option('visible'), true, 'First overlay is NOT hidden, because it\'s NOT active');
+        assert.strictEqual(overlay2.option('visible'), false, 'Second overlay is hidden, because it is active');
+
+        $('body').trigger('dxpointerdown');
+
+        assert.strictEqual(overlay1.option('visible'), false, 'First overlay is now hidden, because it has become active');
+    });
+
+
+    test('hideOnOutsideClick works after first overlay hiding', function(assert) {
+        const $overlay1 = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true
+        });
+        const overlay1 = $overlay1.dxOverlay('instance');
+        const $overlay2 = $('#overlay2').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true
+        });
+        const overlay2 = $overlay2.dxOverlay('instance');
+
+        overlay1.hide();
+
+        $('body').trigger('dxpointerdown');
+
+        assert.strictEqual(overlay1.option('visible'), false, 'First overlay is hidden, because of calling hide');
+        assert.strictEqual(overlay2.option('visible'), false, 'Second overlay is hidden, because of outsideclick');
+    });
+
+    test('document events should be unsubscribed at each overlay hiding', function(assert) {
+        const $overlay1 = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true
+        });
+        const instance1 = $overlay1.dxOverlay('instance');
+        const $overlay2 = $('#overlay2').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true
+        });
+        const instance2 = $overlay2.dxOverlay('instance');
+
+        assert.ok(instance1.option('visible'), 'overlay1 is shown');
+        assert.ok(instance2.option('visible'), 'overlay2 is shown');
+
+        $('body').trigger('dxpointerdown');
+        assert.ok(instance1.option('visible'), 'overlay1 is shown');
+        assert.ok(!instance2.option('visible'), 'overlay2 is hidden');
+
+        $('body').trigger('dxpointerdown');
+        assert.ok(!instance1.option('visible'), 'overlay1 is hidden');
+        assert.ok(!instance2.option('visible'), 'overlay2 is hidden');
+    });
+
+    test('hideOnOutsideClick does not close back widget while front widget is still animated', function(assert) {
+        const $overlay1 = $('#overlay').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true
+        });
+        const instance1 = $overlay1.dxOverlay('instance');
+        const $overlay2 = $('#overlay2').dxOverlay({
+            hideOnOutsideClick: true,
+            visible: true
+        });
+        const instance2 = $overlay2.dxOverlay('instance');
 
         try {
-            $('#overlay').dxOverlay({ closeOnOutsideClick: true });
-            assert.deepEqual(errors.log.lastCall.args, [
-                'W0001',
-                'dxOverlay',
-                'closeOnOutsideClick',
-                '22.1',
-                'Use the \'hideOnOutsideClick\' option instead'
-            ], 'warning is raised with correct parameters');
+            fx.off = false;
+
+            $('body').trigger('dxpointerdown');
+            $(instance2.$content()).trigger('dxpointerdown');
+            assert.ok(!instance2.option('visible'), 'second overlay is hidden');
+            assert.ok(instance1.option('visible'), 'first overlay is not hidden');
         } finally {
-            errors.log.restore();
+            fx.off = true;
+        }
+    });
+
+    test('click on overlay during the start animation should end the animation (T273294)', function(assert) {
+        const $overlay = $('#overlay').dxOverlay({ hideOnOutsideClick: true });
+        const overlay = $overlay.dxOverlay('instance');
+
+        try {
+            fx.off = false;
+            overlay.show();
+
+            $(overlay.$content()).trigger('dxpointerdown');
+            assert.ok(overlay.option('visible'), 'overlay is stay visible');
+        } finally {
+            fx.off = true;
         }
     });
 });
@@ -2366,7 +2347,7 @@ testModule('reset focus', moduleConfig, () => {
     });
 });
 
-testModule('close on target scroll', moduleConfig, () => {
+testModule('hide on target scroll', moduleConfig, () => {
     test('overlay should be hidden if any of target\'s parents were scrolled', function(assert) {
         const $overlay = $('#overlay').dxOverlay({
             hideOnParentScroll: true,
@@ -3145,15 +3126,6 @@ testModule('integration tests', moduleConfig, () => {
 
 
 testModule('widget sizing render', moduleConfig, () => {
-    test('outerWidth', function(assert) {
-        const $element = $('#widget').dxOverlay();
-        const instance = $element.dxOverlay('instance');
-
-        instance.show();
-
-        assert.ok(getOuterWidth($element) > 0, 'outer width of the element must be more than zero');
-    });
-
     test('constructor', function(assert) {
         const $element = $('#widget').dxOverlay({ width: 400 });
         const instance = $element.dxOverlay('instance');

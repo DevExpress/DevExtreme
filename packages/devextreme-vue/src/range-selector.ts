@@ -20,7 +20,6 @@ import {
  OptionChangedEvent,
  ValueChangedEvent,
  BackgroundImageLocation,
- ValueChangedCallMode,
  AxisScale,
  ChartAxisScale,
 } from "devextreme/viz/range_selector";
@@ -352,7 +351,6 @@ const DxBehaviorConfig = {
     "update:hoveredElement": null,
     "update:allowSlidersSwap": null,
     "update:animationEnabled": null,
-    "update:callValueChanged": null,
     "update:manualRangeSelectionEnabled": null,
     "update:moveSelectedRangeByClick": null,
     "update:snapToTicks": null,
@@ -361,7 +359,6 @@ const DxBehaviorConfig = {
   props: {
     allowSlidersSwap: Boolean,
     animationEnabled: Boolean,
-    callValueChanged: String as PropType<ValueChangedCallMode>,
     manualRangeSelectionEnabled: Boolean,
     moveSelectedRangeByClick: Boolean,
     snapToTicks: Boolean,
@@ -1507,7 +1504,6 @@ const DxScaleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:aggregateByCategory": null,
     "update:aggregationGroupWidth": null,
     "update:aggregationInterval": null,
     "update:allowDecimals": null,
@@ -1539,7 +1535,6 @@ const DxScaleConfig = {
     "update:workWeek": null,
   },
   props: {
-    aggregateByCategory: Boolean,
     aggregationGroupWidth: Number,
     aggregationInterval: [Number, Object, String] as PropType<number | Record<string, any> | TimeInterval>,
     allowDecimals: Boolean,

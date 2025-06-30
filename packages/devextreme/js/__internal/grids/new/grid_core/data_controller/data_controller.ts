@@ -2,7 +2,7 @@ import type { DataSource } from '@js/common/data';
 import type { FilterDescriptor } from '@js/common/data.types';
 import ArrayStore from '@js/common/data/array_store';
 import { Deferred } from '@js/core/utils/deferred';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isPlainObject } from '@js/core/utils/type';
 import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
 import { equalByValue } from '@ts/core/utils/m_common';
@@ -11,7 +11,10 @@ import { createPromise } from '@ts/core/utils/promise';
 
 import gridCoreUtils from '../../../grid_core/m_utils';
 import { ColumnsController } from '../columns_controller/columns_controller';
+import { ErrorController } from '../error_controller/error_controller';
 import { FilterController } from '../filtering/filter_controller';
+import { normalizeFilterWithSelectors } from '../filtering/utils';
+import { LifeCycleController } from '../lifecycle/controller';
 import { OptionsController } from '../options_controller/options_controller';
 import { SortingController } from '../sorting_controller/index';
 import { StoreLoadAdapter } from './store_load_adapter/index';
@@ -70,10 +73,6 @@ export class DataController {
 
   public readonly isLoading = signal(false);
 
-  private readonly _filteredItemCount = signal<number | null>(0);
-
-  public readonly filteredItemCount: ReadonlySignal<number | null> = this._filteredItemCount;
-
   public readonly pageCount = computed(
     () => Math.ceil(
       this.totalCount.value / this.pageSize.value,
@@ -99,11 +98,21 @@ export class DataController {
     () => normalizeLocalOptions(this.normalizedRemoteOptions.value),
   );
 
+  private readonly normalizedDisplayFilter = computed(
+    (): FilterDescriptor => normalizeFilterWithSelectors(
+      this.filterController.displayFilter.value,
+      this.columnsController.columns.value,
+      !!this.normalizedRemoteOptions.value.filtering,
+    ),
+  );
+
   public static dependencies = [
     ColumnsController,
     OptionsController,
     SortingController,
     FilterController,
+    ErrorController,
+    LifeCycleController,
   ] as const;
 
   constructor(
@@ -111,6 +120,8 @@ export class DataController {
     private readonly options: OptionsController,
     private readonly sortingController: SortingController,
     private readonly filterController: FilterController,
+    private readonly errorController: ErrorController,
+    private readonly lifecycle: LifeCycleController,
   ) {
     effect(() => {
       if (this.dataSource.value) {
@@ -129,9 +140,10 @@ export class DataController {
           this.isLoading.value = dataSource.isLoading();
           this.isReloading.value = true;
         };
-        const loadErrorCallback = (error: string): void => {
+        const loadErrorCallback = (error: Error): void => {
           const callback = this.onDataErrorOccurred.peek();
           callback({ error });
+          this.errorController.showError(error.message ?? error);
           changedCallback();
         };
         const customizeStoreLoadOptionsCallback = (e): void => {
@@ -139,14 +151,14 @@ export class DataController {
             e.storeLoadOptions.filter,
           );
 
-          const localOptions = this.normalizedLocalOperations.peek();
+          const localOperations = this.normalizedLocalOperations.peek();
           this.pendingLocalOperations[e.operationId] = getLocalLoadOptions(
             e.storeLoadOptions,
-            localOptions,
+            localOperations,
           );
           e.storeLoadOptions = getStoreLoadOptions(
             e.storeLoadOptions,
-            localOptions,
+            localOperations,
           );
         };
 
@@ -161,26 +173,28 @@ export class DataController {
             customizeLoadResult callback does not support async code.
           */
           const { operationId } = e;
-          const loadOptions = { ...this.pendingLocalOperations[operationId] };
-          const { skip, take } = loadOptions;
+          const localLoadOptions = { ...this.pendingLocalOperations[operationId] };
+          const { skip, take } = localLoadOptions;
           const hasLocalPaging = isDefined(skip) && isDefined(take);
 
-          const tempLoadOptions = getLoadOptionsWithoutLocalPaging(loadOptions);
+          const localOptionsWithoutPaging = getLoadOptionsWithoutLocalPaging(localLoadOptions);
 
-          new ArrayStore(e.data).load(tempLoadOptions).done((filteredData) => {
-            e.extra = e.extra || {};
+          new ArrayStore(e.data).load(localOptionsWithoutPaging).done((filteredData) => {
+            e.extra = isPlainObject(e.extra) ? e.extra : {};
 
             if (hasLocalPaging) {
-              this._filteredItemCount.value = filteredData.length;
               e.take = take;
               e.skip = skip;
 
-              new ArrayStore(e.data).load(loadOptions).done((newData) => {
+              if (e.storeLoadOptions.requireTotalCount) {
+                e.extra.totalCount = filteredData.length;
+              }
+
+              new ArrayStore(e.data).load(localLoadOptions).done((newData) => {
                 e.data = newData;
               });
             } else {
               e.data = filteredData;
-              this._filteredItemCount.value = null;
             }
           }).fail((error) => {
             // @ts-expect-error
@@ -306,11 +320,32 @@ export class DataController {
   private combineFilterWithDisplayFilter(filter: FilterDescriptor): FilterDescriptor {
     return gridCoreUtils.combineFilters([
       filter,
-      this.filterController.displayFilter.peek(),
+      this.normalizedDisplayFilter.peek(),
     ]);
   }
 
+  private normalizePageIndex(dataSource: DataSource): 'normalized' | 'require-reload' {
+    const pageIndex = dataSource.pageIndex();
+    const totalCount = dataSource.totalCount();
+    const pageSize = dataSource.pageSize();
+    const pageCount = Math.ceil(totalCount / pageSize);
+
+    if (totalCount > 0 && pageIndex >= pageCount) {
+      dataSource.pageIndex(pageCount - 1);
+      return 'require-reload';
+    }
+
+    return 'normalized';
+  }
+
   private onChanged(dataSource: DataSource, e): void {
+    const normalizePageIndexResult = this.normalizePageIndex(dataSource);
+    if (normalizePageIndexResult === 'require-reload') {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      dataSource.load();
+      return;
+    }
+
     let items = dataSource.items() as DataObject[];
 
     if (e?.changes) {
@@ -320,15 +355,12 @@ export class DataController {
 
     const firstItem = items[0];
 
-    if (firstItem) {
-      this.columnsController.setColumnOptionsFromDataItem(firstItem);
-    }
+    this.columnsController.setColumnOptionsFromDataItem(firstItem ?? {});
 
     this._items.value = items;
     this.pageIndex.value = dataSource.pageIndex();
     this.pageSize.value = dataSource.pageSize();
-    const filteredCount = this.filteredItemCount.peek();
-    this._totalCount.value = filteredCount ?? dataSource.totalCount();
+    this._totalCount.value = dataSource.totalCount();
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     Promise.resolve().then(() => {
@@ -337,6 +369,10 @@ export class DataController {
 
     this.loadedPromise?.resolve();
     this.loadedPromise = undefined;
+
+    this.lifecycle.contentRendered.schedule(() => {
+      this.lifecycle.fireContentReady();
+    });
   }
 
   public getDataKey(data: DataObject): Key {
