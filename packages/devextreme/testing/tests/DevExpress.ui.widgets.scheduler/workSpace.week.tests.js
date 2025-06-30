@@ -254,11 +254,12 @@ module('Work Space Week', () => {
                 startDate: new Date(2015, 5, 29, 1, 0),
                 groupIndex: 0,
             };
-
-            assert.deepEqual(this.instance.getCellDataByCoordinates({
+            const $cell = this.instance.getCellByCoordinates({
                 top: 100,
-                left: 100
-            }, false), cellData, 'Cell data is OK');
+                left: 100,
+            }, false);
+
+            assert.deepEqual(this.instance.getCellData($cell), cellData, 'Cell data is OK');
         });
 
         test('Cell data should be correct if DST makes sense (T442904)', async function(assert) {
@@ -290,11 +291,12 @@ module('Work Space Week', () => {
                 startDate: new Date(2015, 5, 29, 0),
                 groupIndex: 0,
             };
-
-            assert.deepEqual(this.instance.getCellDataByCoordinates({
+            const $cell = this.instance.getCellByCoordinates({
                 top: 51,
-                left: 100
-            }, true), cellData, 'Cell data is OK');
+                left: 100,
+            }, true);
+
+            assert.deepEqual(this.instance.getCellData($cell), cellData, 'Cell data is OK');
         });
 
         test('Get last view date', async function(assert) {

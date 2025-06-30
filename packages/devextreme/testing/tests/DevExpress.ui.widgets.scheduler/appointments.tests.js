@@ -607,50 +607,6 @@ QUnit.module('Appointments', moduleOptions, () => {
 });
 
 QUnit.module('Appointments Actions', moduleOptions, () => {
-    QUnit.test('Appointments should set alias key to cellCache', async function(assert) {
-        const item = {
-            itemData: {
-                text: 'Appointment 1',
-                startDate: new Date(2015, 10, 3, 9),
-                endDate: new Date(2015, 10, 3, 11)
-            },
-            settings: [
-                { top: 0, left: 0, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0, allDay: false, appointmentReduced: null },
-                { top: 10, left: 10, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0 },
-                { top: 20, left: 20, height: 10, sortedIndex: 0, width: 10, count: 1, index: 0 }
-            ],
-            needRepaint: true,
-            needRemove: false,
-        };
-
-        const instance = createInstance({}, testConfig);
-
-        const setCacheAliasSpy = sinon.spy(instance, 'invoke').withArgs('setCellDataCacheAlias');
-
-        instance.option('items', [item]);
-
-        assert.equal(setCacheAliasSpy.callCount, 3, 'setCacheAlias was called');
-        assert.deepEqual(setCacheAliasSpy.getCall(0).args[1], {
-            allDay: false,
-            appointmentReduced: null,
-            count: 1,
-            height: 10,
-            index: 0,
-            left: 0,
-            sortedIndex: 0,
-            top: 0,
-            width: 10
-        }, 'setCacheAlias was called with correct appointment appointmentSettings');
-
-        assert.deepEqual(setCacheAliasSpy.getCall(0).args[2], {
-            height: 10,
-            left: 0,
-            top: 0,
-            width: 10
-        }, 'setCacheAlias was called with correct geometry');
-
-    });
-
     QUnit.test('Default behavior of item click should prevented when set e.cancel', async function(assert) {
         const item = {
             itemData: {

@@ -507,13 +507,6 @@ class SchedulerAgenda extends WorkSpace {
     return this.getEndViewDate();
   }
 
-  getCellDataByCoordinates() {
-    return {
-      startDate: null,
-      endDate: null,
-    };
-  }
-
   updateScrollPosition(date) {
     const newDate = this.timeZoneCalculator.createDate(date, 'toGrid');
 

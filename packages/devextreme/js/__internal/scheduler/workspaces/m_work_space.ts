@@ -1396,37 +1396,6 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
     return isOutsideVerticalScrollable || isOutsideHorizontalScrollable;
   }
 
-  setCellDataCache(cellCoordinates, groupIndex, $cell) {
-    const key = JSON.stringify({
-      rowIndex: cellCoordinates.rowIndex,
-      columnIndex: cellCoordinates.columnIndex,
-      groupIndex,
-    });
-
-    this.cache.set(
-      key,
-      this.getCellData($cell),
-    );
-  }
-
-  setCellDataCacheAlias(appointment, geometry) {
-    const key = JSON.stringify({
-      rowIndex: appointment.rowIndex,
-      columnIndex: appointment.columnIndex,
-      groupIndex: appointment.groupIndex,
-    });
-
-    const aliasKey = JSON.stringify({
-      top: geometry.top,
-      left: geometry.left,
-    });
-
-    this.cache.set(
-      aliasKey,
-      this.cache.get(key),
-    );
-  }
-
   supportAllDayRow() {
     return true;
   }
@@ -1699,15 +1668,6 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
     const cellIndex = this.getCellIndexByCoordinates(coordinates, allDay);
 
     return $cells.eq(cellIndex);
-  }
-
-  getCellDataByCoordinates(coordinates, allDay) {
-    const key = JSON.stringify({ top: coordinates.top, left: coordinates.left });
-    return this.cache.get(key, () => {
-      const $cell = this.getCellByCoordinates(coordinates, allDay);
-
-      return this.getCellData($cell);
-    });
   }
 
   getVisibleBounds() { // TODO - this method is only used by the Agenda

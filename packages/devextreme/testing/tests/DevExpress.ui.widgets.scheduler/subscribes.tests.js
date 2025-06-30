@@ -83,41 +83,6 @@ module('Subscribes', {
         });
     });
 
-    test('\'setCellDataCacheAlias\' should call workSpace method with right arguments', async function(assert) {
-        await this.createInstance({
-            currentView: 'week'
-        });
-
-        const setCacheAliasStub = sinon.stub(this.instance.getWorkSpace(), 'setCellDataCacheAlias');
-        try {
-            this.instance.fire('setCellDataCacheAlias', {
-                rowIndex: 1,
-                columnIndex: 2,
-                groupIndex: 3,
-                left: 4,
-                top: 5
-            }, {
-                left: 4,
-                top: 5
-            });
-
-            assert.ok(setCacheAliasStub.calledOnce, 'setCellDataCacheAlias workSpace method called once');
-            assert.deepEqual(setCacheAliasStub.getCall(0).args[0], {
-                rowIndex: 1,
-                columnIndex: 2,
-                groupIndex: 3,
-                left: 4,
-                top: 5
-            }, 'setCellDataCacheAlias workSpace method called with correct appointmentSettings');
-            assert.deepEqual(setCacheAliasStub.getCall(0).args[1], {
-                left: 4,
-                top: 5
-            }, 'setCellDataCacheAlias workSpace method called with correct geometry');
-        } finally {
-            setCacheAliasStub.restore();
-        }
-    });
-
     test('\'createAppointmentSettings\' should return workSpace date table scrollable', async function(assert) {
         await this.createInstance({
             currentView: 'day',
