@@ -1,5 +1,5 @@
-import { exportDataGrid } from 'exporter/jspdf/export_data_grid';
-import { normalizeBoundaryValue } from 'exporter/jspdf/common/normalizeOptions';
+import { exportDataGrid } from '__internal/exporter/jspdf/export_data_grid';
+import { normalizeBoundaryValue } from '__internal/exporter/jspdf/common/normalizeOptions';
 import { moduleConfig, createMockPdfDoc, createDataGrid } from './jspdf.dataGrid_utils.js';
 
 function initMargin(doc, { pageWidth, pageHeight, customMargin }) {
