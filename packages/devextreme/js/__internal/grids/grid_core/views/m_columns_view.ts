@@ -758,12 +758,11 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       this._renderCells($row, options);
     }
     this._appendRow($table, $wrappedRow);
-    const { row } = options;
-    row.columns = options.columns;
+    const rowOptions = extend({ columns: options.columns }, options.row);
 
-    this._addWatchMethod(row);
+    this._addWatchMethod(options.row);
 
-    this._rowPrepared($wrappedRow, row, row);
+    this._rowPrepared($wrappedRow, rowOptions, options.row);
   }
 
   protected _needRenderCell(columnIndex, columnIndices) {
@@ -976,6 +975,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   protected _rowPrepared($row, options, row?) {
+    this._addWatchMethod(options);
     elementData($row.get(0), 'options', options);
 
     options.rowElement = getPublicElement($row);
