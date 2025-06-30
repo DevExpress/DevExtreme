@@ -13,6 +13,7 @@ import {
 
 import {
     Cancelable,
+    AsyncCancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
@@ -52,7 +53,7 @@ export type DisposingEvent = EventInfo<dxPopover>;
  * @type object
  * @inherits Cancelable,EventInfo
  */
-export type HidingEvent = Cancelable & EventInfo<dxPopover>;
+export type HidingEvent = AsyncCancelable & EventInfo<dxPopover>;
 
 /**
  * @docid _ui_popover_HiddenEvent
