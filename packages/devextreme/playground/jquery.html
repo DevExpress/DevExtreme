@@ -192,6 +192,14 @@
                     // },
                 }).dxPopup('instance');
 
+                const getPosition = () => {
+                    setTimeout(() => {
+                        const a = popup.$overlayContent().position();
+
+                        console.log(a);
+                    }, 0);
+                }
+
                 popup.option({
                     width: 'auto',
                     height: 'auto',
@@ -206,9 +214,13 @@
                         $btnDiv.dxButton({
                             text: "+",
                             onClick: () => {
+                                getPosition();
+
                                 $('#content')
                                     .width(300)
                                     .height(300);
+
+                                getPosition();
                             },
                         });
 
@@ -217,6 +229,8 @@
                         return $content;
                     },
                 });
+
+                getPosition();
 
                 // popup.option({ showCloseButton: true });
                 // popup.option({ showCloseButton: false });
