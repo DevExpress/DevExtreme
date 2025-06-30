@@ -5,7 +5,7 @@ import { isFunction } from '../core/utils/type';
 import { errors } from '../common/data/errors';
 import { Deferred } from '../core/utils/deferred';
 import { getWindow } from '../core/utils/window';
-import { fileSaver } from '../exporter/file_saver';
+import { fileSaver } from '../__internal/exporter/file_saver';
 import Errors from '../ui/widget/ui.errors';
 import JSZip from 'jszip';
 

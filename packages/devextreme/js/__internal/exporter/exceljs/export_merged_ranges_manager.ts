@@ -1,76 +1,91 @@
+/* eslint-disable consistent-return */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 class MergedRangesManager {
-    constructor(dataProvider, worksheet) {
-        this.dataProvider = dataProvider;
-        this.worksheet = worksheet;
+  dataProvider: any;
 
-        this.mergedCells = [];
-        this.mergedRanges = [];
-    }
+  worksheet: any;
 
-    updateMergedRanges(excelCell, rowIndex, cellIndex, helpers) {
-        if(helpers._isHeaderCell(rowIndex, cellIndex) && !this.isCellInMergedRanges(rowIndex, cellIndex)) {
-            const { rowspan, colspan } = this.dataProvider.getCellMerging(rowIndex, cellIndex);
-            const isMasterCellOfMergedRange = colspan || rowspan;
+  mergedCells: any;
 
-            if(isMasterCellOfMergedRange) {
-                const allowToMergeRange = helpers._allowToMergeRange(rowIndex, cellIndex, rowspan, colspan);
+  mergedRanges: any;
 
-                this.updateMergedCells(excelCell, rowIndex, cellIndex, rowspan, colspan);
+  constructor(dataProvider, worksheet) {
+    this.dataProvider = dataProvider;
+    this.worksheet = worksheet;
 
-                if(allowToMergeRange) {
-                    const shouldReduceInfoRange = helpers._isInfoCell(rowIndex, cellIndex) && helpers._allowExportRowFieldHeaders();
+    this.mergedCells = [];
+    this.mergedRanges = [];
+  }
 
-                    this.mergedRanges.push({
-                        masterCell: excelCell,
-                        rowspan: rowspan - (shouldReduceInfoRange && rowspan > 0),
-                        colspan,
-                    });
-                }
-            }
-        }
-    }
+  updateMergedRanges(excelCell, rowIndex, cellIndex, helpers) {
+    // eslint-disable-next-line @stylistic/max-len
+    if (helpers._isHeaderCell(rowIndex, cellIndex) && !this.isCellInMergedRanges(rowIndex, cellIndex)) {
+      const { rowspan, colspan } = this.dataProvider.getCellMerging(rowIndex, cellIndex);
+      const isMasterCellOfMergedRange = colspan || rowspan;
 
-    isCellInMergedRanges(rowIndex, cellIndex) {
-        return this.mergedCells[rowIndex] && this.mergedCells[rowIndex][cellIndex];
-    }
+      if (isMasterCellOfMergedRange) {
+        const allowToMergeRange = helpers._allowToMergeRange(rowIndex, cellIndex, rowspan, colspan);
 
-    findMergedCellInfo(rowIndex, cellIndex, isHeaderCell) {
-        if(isHeaderCell && this.isCellInMergedRanges(rowIndex, cellIndex)) {
-            return this.mergedCells[rowIndex][cellIndex];
-        }
-    }
+        this.updateMergedCells(excelCell, rowIndex, cellIndex, rowspan, colspan);
 
-    updateMergedCells(excelCell, rowIndex, cellIndex, rowspan, colspan) {
-        for(let i = rowIndex; i <= rowIndex + rowspan; i++) {
-            for(let j = cellIndex; j <= cellIndex + colspan; j++) {
-                if(!this.mergedCells[i]) {
-                    this.mergedCells[i] = [];
-                }
-                this.mergedCells[i][j] = {
-                    masterCell: excelCell,
-                };
-            }
-        }
-    }
+        if (allowToMergeRange) {
+          // eslint-disable-next-line @stylistic/max-len
+          const shouldReduceInfoRange = helpers._isInfoCell(rowIndex, cellIndex) && helpers._allowExportRowFieldHeaders();
 
-    addMergedRange(masterCell, rowspan, colspan) {
-        this.mergedRanges.push({
-            masterCell,
-            rowspan,
+          this.mergedRanges.push({
+            masterCell: excelCell,
+            rowspan: rowspan - (shouldReduceInfoRange && rowspan > 0),
             colspan,
-        });
+          });
+        }
+      }
     }
+  }
 
-    applyMergedRages() {
-        this.mergedRanges.forEach((range) => {
-            const startRowIndex = range.masterCell.fullAddress.row;
-            const startColumnIndex = range.masterCell.fullAddress.col;
-            const endRowIndex = startRowIndex + range.rowspan;
-            const endColumnIndex = startColumnIndex + range.colspan;
+  isCellInMergedRanges(rowIndex, cellIndex) {
+    return this.mergedCells[rowIndex]?.[cellIndex];
+  }
 
-            this.worksheet.mergeCells(startRowIndex, startColumnIndex, endRowIndex, endColumnIndex);
-        });
+  findMergedCellInfo(rowIndex, cellIndex, isHeaderCell) {
+    if (isHeaderCell && this.isCellInMergedRanges(rowIndex, cellIndex)) {
+      return this.mergedCells[rowIndex][cellIndex];
     }
+  }
+
+  updateMergedCells(excelCell, rowIndex, cellIndex, rowspan, colspan) {
+    for (let i = rowIndex; i <= rowIndex + rowspan; i += 1) {
+      for (let j = cellIndex; j <= cellIndex + colspan; j += 1) {
+        if (!this.mergedCells[i]) {
+          this.mergedCells[i] = [];
+        }
+        this.mergedCells[i][j] = {
+          masterCell: excelCell,
+        };
+      }
+    }
+  }
+
+  addMergedRange(masterCell, rowspan, colspan) {
+    this.mergedRanges.push({
+      masterCell,
+      rowspan,
+      colspan,
+    });
+  }
+
+  applyMergedRages() {
+    this.mergedRanges.forEach((range) => {
+      const startRowIndex = range.masterCell.fullAddress.row;
+      const startColumnIndex = range.masterCell.fullAddress.col;
+      const endRowIndex = startRowIndex + range.rowspan;
+      const endColumnIndex = startColumnIndex + range.colspan;
+
+      this.worksheet.mergeCells(startRowIndex, startColumnIndex, endRowIndex, endColumnIndex);
+    });
+  }
 }
 
 export { MergedRangesManager };
