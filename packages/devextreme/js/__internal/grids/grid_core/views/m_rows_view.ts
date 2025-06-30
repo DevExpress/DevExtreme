@@ -275,7 +275,6 @@ export class RowsView extends ColumnsView {
     if (rowOptions.rowType === 'data') {
       if (this.option('rowAlternationEnabled')) {
         this._isAltRow(row) && $row.addClass(ROW_ALTERNATION_CLASS);
-        this._addWatchMethod(row);
 
         setWatcher({
           element: $row.get(0),
