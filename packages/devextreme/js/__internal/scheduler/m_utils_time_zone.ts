@@ -125,7 +125,7 @@ const calculateTimezoneByValue = (timeZone: string | undefined, date = new Date(
 const getStringOffset = (timeZone: string, date = new Date()): string | undefined => {
   let result = '';
   try {
-    const dateTimeFormat = globalCache.timezones.get(`intl${timeZone}`, () => new Intl.DateTimeFormat('en-US', {
+    const dateTimeFormat = globalCache.timezones.memo(`intl${timeZone}`, () => new Intl.DateTimeFormat('en-US', {
       timeZone,
       timeZoneName: 'longOffset',
     }));
@@ -227,12 +227,12 @@ const getClientTimezoneOffset = (date = new Date()) => date.getTimezoneOffset() 
 
 const getDiffBetweenClientTimezoneOffsets = (firstDate = new Date(), secondDate = new Date()) => getClientTimezoneOffset(firstDate) - getClientTimezoneOffset(secondDate);
 
+const getMachineTimezoneName = () => globalCache.timezones.memo('localTimezone', () => dateUtils.getMachineTimezoneName());
+
 const isEqualLocalTimeZone = (timeZoneName, date = new Date()) => {
-  if (Intl) {
-    const localTimeZoneName = globalCache.timezones.get('localTimezone', () => Intl.DateTimeFormat().resolvedOptions().timeZone);
-    if (localTimeZoneName === timeZoneName) {
-      return true;
-    }
+  const localTimeZoneName = getMachineTimezoneName();
+  if (localTimeZoneName && localTimeZoneName === timeZoneName) {
+    return true;
   }
 
   return isEqualLocalTimeZoneByDeclaration(timeZoneName, date);
@@ -344,23 +344,21 @@ const getTimeZones = (
 }));
 
 const GET_TIMEZONES_BATCH_SIZE = 10;
-const cacheTimeZones = async (
-  date = new Date(),
-): Promise<TimezoneLabel[]> => globalCache.timezones.get(
+const cacheTimeZones = async (): Promise<TimezoneLabel[]> => globalCache.timezones.memo(
   'timeZonesCachePromise',
   () => macroTaskArray
     .map(
       timeZoneList.value,
       (timezoneId) => ({
         id: timezoneId,
-        title: getTimezoneTitle(timezoneId, date),
+        title: getTimezoneTitle(timezoneId, new Date()),
       }),
       GET_TIMEZONES_BATCH_SIZE,
     )
-    .then((data) => globalCache.timezones.set('timeZonesCache', data)),
+    .then((data) => globalCache.timezones.memo('timeZonesCache', () => data)),
 );
 
-const getTimeZonesCache = (): TimezoneLabel[] => globalCache.timezones.get('timeZonesCache', () => []);
+const getTimeZonesCache = (): TimezoneLabel[] => globalCache.timezones.memo('timeZonesCache', () => []);
 
 const utils = {
   getDaylightOffset,
@@ -381,6 +379,7 @@ const utils = {
   isTimezoneChangeInDate,
   getDateWithoutTimezoneChange,
   hasDSTInLocalTimeZone,
+  getMachineTimezoneName,
   isEqualLocalTimeZone,
   isEqualLocalTimeZoneByDeclaration,
 

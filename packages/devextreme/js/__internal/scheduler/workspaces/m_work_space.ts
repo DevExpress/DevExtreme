@@ -1279,7 +1279,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
   }
 
   _getWorkSpaceWidth() {
-    return this.cache.get('workspaceWidth', () => {
+    return this.cache.memo('workspaceWidth', () => {
       if (this._needCreateCrossScrolling()) {
         return getBoundingRect(this._$dateTable.get(0)).width;
       }
@@ -1918,7 +1918,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
 
   // Must replace all DOM manipulations
   getDOMElementsMetaData() {
-    return this.cache.get('cellElementsMeta', () => ({
+    return this.cache.memo('cellElementsMeta', () => ({
       dateTableCellsMeta: this._getDateTableDOMElementsInfo(),
       allDayPanelCellsMeta: this._getAllDayPanelDOMElementsInfo(),
     }));

@@ -1,35 +1,51 @@
 import {
-  describe, expect, it,
+  describe, expect, it, jest,
 } from '@jest/globals';
 
 import { Cache } from './global_cache';
 
 describe('global cache', () => {
-  it('Initialization: should be empty', () => {
+  it('should be empty at initialization', () => {
     const cache = new Cache();
     expect(cache.size).toBe(0);
   });
 
-  it('API: should get and set', () => {
+  it('should memo value', () => {
     const cache = new Cache();
-    cache.set('test', 'value');
+    const valueCallback = jest.fn().mockReturnValue(1).mockReturnValueOnce(2);
+    const memoValue = cache.memo('test', valueCallback);
 
+    expect(cache.memo('test', valueCallback)).toBe(memoValue);
     expect(cache.size).toBe(1);
-    expect(cache.get('test')).toBe('value');
   });
 
-  it('API: get with callback', () => {
+  it('should delete memo value', () => {
     const cache = new Cache();
-    cache.get('test', () => 'callbackValue');
+    const valueCallback1 = jest.fn().mockReturnValue(1).mockReturnValueOnce(2);
+    const valueCallback2 = jest.fn().mockReturnValue(1).mockReturnValueOnce(2);
+    const memoValue1 = cache.memo('test1', valueCallback1);
+    const memoValue2 = cache.memo('test2', valueCallback2);
+    cache.delete('test1');
 
     expect(cache.size).toBe(1);
-    expect(cache.get('test')).toBe('callbackValue');
+    expect(cache.memo('test1', valueCallback1)).not.toBe(memoValue1);
+    expect(cache.memo('test2', valueCallback2)).toBe(memoValue2);
+    expect(cache.size).toBe(2);
   });
 
-  it('API: clear', () => {
+  it('should delete unexisted value', () => {
     const cache = new Cache();
-    cache.set('test0', () => 'callbackValue');
-    cache.set('test1', 'value');
+    cache.memo('test1', () => 'callbackValue1');
+    cache.memo('test2', () => 'callbackValue2');
+    cache.delete('unexisted');
+
+    expect(cache.size).toBe(2);
+  });
+
+  it('should clear all values', () => {
+    const cache = new Cache();
+    cache.memo('test0', () => 'callbackValue');
+    cache.memo('test1', () => 'callbackValue');
     cache.clear();
 
     expect(cache.size).toBe(0);

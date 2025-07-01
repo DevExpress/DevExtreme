@@ -51,7 +51,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
    *   when changing the layout, the test will also be useless
    */
   getCellWidth() {
-    return this.cache.get('cellWidth', () => {
+    return this.cache.memo('cellWidth', () => {
       const DAYS_IN_WEEK = 7;
 
       let averageWidth = 0;

@@ -84,7 +84,7 @@ class VerticalGroupedStrategy {
   }
 
   getGroupBoundsOffset(groupIndex, [$firstCell, $lastCell]) {
-    return this.cache.get(`groupBoundsOffset${groupIndex}`, () => {
+    return this.cache.memo(`groupBoundsOffset${groupIndex}`, () => {
       const startDayHour = this._workSpace.option('startDayHour');
       const endDayHour = this._workSpace.option('endDayHour');
       const hoursInterval = this._workSpace.option('hoursInterval');
