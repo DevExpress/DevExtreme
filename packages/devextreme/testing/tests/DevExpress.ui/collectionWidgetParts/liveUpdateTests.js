@@ -60,7 +60,7 @@ class LiveUpdateTestHelper {
 
         return new TestComponent(this.$element, options || {
             dataSource: new DataSource({
-                load: (e) => this.data.sort((a, b) => a.index - b.index),
+                load: () => this.data.sort((a, b) => a.index - b.index),
                 loadMode: 'raw',
                 pageSize: 2,
                 pushAggregationTimeout: 0,
