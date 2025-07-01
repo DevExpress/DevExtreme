@@ -37,6 +37,7 @@ export const findChanges = function (oldItems, newItems, getKey, isItemEquals) {
   let addedCount = 0;
   let removeCount = 0;
   const result: any[] = [];
+  let isReordered = false;
 
   oldItems.forEach(function (item, index) {
     const key = getKeyWrapper(item, getKey);
@@ -88,6 +89,7 @@ export const findChanges = function (oldItems, newItems, getKey, isItemEquals) {
           });
         }
       } else {
+        isReordered = true;
         result.push({
           type: 'remove',
           key: getKey(oldItem),
@@ -103,6 +105,10 @@ export const findChanges = function (oldItems, newItems, getKey, isItemEquals) {
         removeCount++;
       }
     }
+  }
+
+  if (!isReordered) {
+    return result;
   }
 
   const removes = result.filter((r) => r.type === 'remove').sort((a, b) => b.index - a.index);
