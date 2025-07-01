@@ -50,25 +50,31 @@
         </select>
         <br /> -->
         <div id="popup"></div>
-        <div id="show-popup-button"></div>
+        <!-- <div id="show-popup-button"></div> -->
 
-        <!-- <br />
         <br />
         <br />
+        <br />
 
-        <div id="button"></div>
-        <div id="toolbar"></div> -->
+        <!-- <div id="button"></div> -->
+
+        <!-- <div style="display: block; width: 100%; height: 100%; position: fixed; left: 0; top: 0;">
+            <div style="display: block; width: auto; position: absolute; left: 0; top: 0;">
+                <div id="toolbar"></div>
+                <div>DIV TO SETTING WIDTH</div>
+            </div>
+        </div> -->
         <script>
             $(() => {
-                // window.DevExpress.fx.off = true;
+                window.DevExpress.fx.off = true;
 
-                $('#show-popup-button').dxButton({
-                    text: 'Show Popup',
-                    width: 300,
-                    onClick() {
-                        popup.show();
-                    },
-                });
+                // $('#show-popup-button').dxButton({
+                //     text: 'Show Popup',
+                //     width: 300,
+                //     onClick() {
+                //         popup.show();
+                //     },
+                // });
 
                 function rebindItems() {
                     const popup = $('#popup').dxPopup("instance");
@@ -118,12 +124,11 @@
                 const popup = $('#popup').dxPopup({
                     // width: 100,
                     // height: 100,
-                    // animation: null,
+                    animation: null,
                     // position: { my: 'top left', at: 'center', of: window },
                     // resizeEnabled: true,
                     // dragAndResizeArea: window,
                     /** start test */
-                    // visible: true,
                     // toolbarItems: [
                     //     {
                     //         text: 'bottom text',
@@ -148,11 +153,11 @@
                         element.append(btnDiv);
                     },
                     dragEnabled: true,
-                    // visible: true,
-                    width: 360,
-                    height: 320,
-                    // width: 'auto',
-                    // height: 'auto',
+                    visible: true,
+                    // width: 360,
+                    // height: 320,
+                    width: 'auto',
+                    height: 'auto',
                     title: '!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+',
                     showCloseButton: false,
                     toolbarItems: [
@@ -160,14 +165,14 @@
                         getItemConfig("First Item"),
                         getItemConfig("Second Item", "auto"),
                         getItemConfig("Third Item", "auto"),
-                        {
-                            toolbar: 'bottom',
-                            location: "before",
-                            text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
-                        },
-                        getBottomItemConfig("First Item"),
-                        getBottomItemConfig("Second Item", "auto"),
-                        getBottomItemConfig("Third Item", "auto"),
+                        // {
+                        //     toolbar: 'bottom',
+                        //     location: "before",
+                        //     text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
+                        // },
+                        // getBottomItemConfig("First Item"),
+                        // getBottomItemConfig("Second Item", "auto"),
+                        // getBottomItemConfig("Third Item", "auto"),
                     ],
                     // contentTemplate: () => {
                     //     const $content = $('<div>')
@@ -236,12 +241,14 @@
                 // popup.option({ showCloseButton: false });
 
                 // $('#toolbar').dxToolbar({
-                //     width: 312,
+                //     // width: 312,
+                //     // width: 'auto',
                 //     items: [
                 //         {
                 //             location: "before",
                 //             text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
                 //         },
+                //         getCenterItemConfig("Center Item"),
                 //         getItemConfig("First Item"),
                 //         getItemConfig("Second Item", "auto"),
                 //         getItemConfig("Third Item", "auto")
