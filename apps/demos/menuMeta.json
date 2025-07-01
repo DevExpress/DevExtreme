@@ -466,6 +466,13 @@
                   "/Models/User.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "Pager at the Top",
+                "Name": "PagerAtTheTop",
+                "Widget": "DataGrid",
+                "MvcAdditionalFiles": [],
+                "DemoType": "Web"
               }
             ]
           },
