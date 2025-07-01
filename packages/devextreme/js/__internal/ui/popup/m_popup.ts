@@ -468,9 +468,6 @@ class Popup<
     super._renderContentImpl();
     this._renderResize();
     this._renderBottomToolbar();
-
-    // To trigger toolbar width reset when center element is set (T1245421)
-    triggerResizeEvent(this.$overlayContent());
   }
 
   _getTopToolbarItems(): ToolbarItem[] {
@@ -623,8 +620,14 @@ class Popup<
     const $toolbar = $container.children('div');
 
     $container.replaceWith($toolbar);
+
     // To trigger toolbar width reset in initial rendering to set menu button width (T1245421)
     triggerResizeEvent($toolbar);
+
+    // To trigger toolbar width reset if center element is set (T1245421)
+    if (items.some((item: ToolbarItem): boolean => item.location === 'center')) {
+      triggerResizeEvent($toolbar);
+    }
 
     return $toolbar;
   }
