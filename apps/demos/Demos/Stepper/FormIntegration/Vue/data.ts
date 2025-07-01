@@ -1,7 +1,7 @@
-import type { IItemProps } from 'devextreme-react/stepper'
+import { DxStepperTypes } from 'devextreme-vue/stepper'
 import type { BookingFormData } from './types';
 
-export const initialSteps: IItemProps[] = [
+export const initialSteps: DxStepperTypes.Item[] = [
   {
     label: 'Dates', hint: 'Dates', icon: 'daterangepicker',
   },

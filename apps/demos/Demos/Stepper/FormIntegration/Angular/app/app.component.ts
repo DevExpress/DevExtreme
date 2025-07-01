@@ -11,7 +11,6 @@ import {
   DxTextAreaModule,
 } from 'devextreme-angular';
 import { DxStepperModule, type DxStepperTypes } from 'devextreme-angular/ui/stepper';
-import validationEngine from 'devextreme/ui/validation_engine';
 import { AppService } from './app.service';
 import { BookingFormData } from './app.types';
 import { DatesFormComponent } from "./dates-form/dates-form.component";
@@ -19,6 +18,8 @@ import { GuestsFormComponent } from "./guests-form/guests-form.component";
 import { RoomMealPlanFormComponent } from "./room-meal-plan-form/room-meal-plan-form.component";
 import { AdditionalFormComponent } from "./additional-form/additional-form.component";
 import { ConfirmationComponent } from "./confirmation/confirmation.component";
+
+import validationEngine from 'devextreme/ui/validation_engine';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

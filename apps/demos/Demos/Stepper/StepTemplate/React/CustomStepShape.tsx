@@ -1,6 +1,7 @@
 import React from 'react';
+import { type IItemProps } from 'devextreme-react/stepper'
 
-export default function CustomStepShape(data) {
+export default function CustomStepShape(data: IItemProps) {
   return (
     <>
       <div className="dx-step-indicator">

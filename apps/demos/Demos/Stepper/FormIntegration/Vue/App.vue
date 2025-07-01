@@ -89,12 +89,10 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import DxButton from 'devextreme-vue/button';
-import DxMultiView, { DxItem as DxMultiViewItem } from 'devextreme-vue/multi-view';
-import DxStepper, { DxItem as DxStepperItem } from 'devextreme-vue/stepper';
-import type { IItemProps } from 'devextreme-react/cjs/stepper';
-import type { SelectionChangingEvent } from 'devextreme/ui/stepper';
-import validationEngine from 'devextreme/ui/validation_engine';
+import { DxButton } from 'devextreme-vue/button';
+import { DxMultiView, DxItem as DxMultiViewItem } from 'devextreme-vue/multi-view';
+import { DxStepper, DxItem as DxStepperItem, DxStepperTypes } from 'devextreme-vue/stepper';
+import validationEngine from 'devextreme/ui/validation_engine';;
 import DatesTemplate from './DatesTemplate.vue';
 import GuestsTemplate from './GuestsTemplate.vue';
 import RoomMealPlanTemplate from './RoomMealPlanTemplate.vue';
@@ -106,7 +104,7 @@ import type { BookingFormData } from './types';
 const selectedIndex = ref(0);
 const isConfirmed = ref(false);
 const isStepperReadonly = ref(false);
-const steps = ref<IItemProps[]>(getInitialSteps());
+const steps = ref<DxStepperTypes.Item[]>(getInitialSteps());
 const formData = ref<BookingFormData>(getInitialFormData());
 
 const validationGroups = ['dates', 'guests', 'roomAndMealPlan'];
@@ -131,12 +129,12 @@ const setStepValidationResult = (index: number, isValid: boolean | undefined) =>
   steps.value[index].isValid = isValid;
 };
 
-function onSelectionChanging(e: SelectionChangingEvent) {
+function onSelectionChanging(e: DxStepperTypes.SelectionChangingEvent) {
   const { component, addedItems, removedItems } = e;
   const { items = [] } = component.option();
 
-  const addedIndex = items.findIndex((item: IItemProps) => item === addedItems[0]);
-  const removedIndex = items.findIndex((item: IItemProps) => item === removedItems[0]);
+  const addedIndex = items.findIndex((item: DxStepperTypes.Item) => item === addedItems[0]);
+  const removedIndex = items.findIndex((item: DxStepperTypes.Item) => item === removedItems[0]);
   const isMoveForward = addedIndex > removedIndex;
 
   if (isMoveForward) {

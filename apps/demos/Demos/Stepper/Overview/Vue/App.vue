@@ -73,9 +73,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { DxStepper, DxItem } from 'devextreme-vue/stepper';
-import DxButtonGroup, { type DxButtonGroupTypes } from 'devextreme-vue/button-group';
-import DxCheckBox from 'devextreme-vue/check-box';
-import { type Orientation } from 'devextreme-react/common';
+import { DxButtonGroup, type DxButtonGroupTypes } from 'devextreme-vue/button-group';
+import { DxCheckBox } from 'devextreme-vue/check-box';
+import { type Orientation } from 'devextreme-vue/common';
 import { steps, orientations, navigationModes } from './data.ts';
 
 const orientation = ref(orientations[0].value);
