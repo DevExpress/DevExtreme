@@ -1,5 +1,5 @@
-import type { SchedulerTypes } from 'devextreme-react/scheduler';
-import DataSource from 'devextreme/data/data_source';
+import { type SchedulerTypes } from 'devextreme-react/scheduler';
+import { DataSource } from 'devextreme-react/common/data';
 
 type Appointment = SchedulerTypes.Appointment & {
   assigneeId: number[];
