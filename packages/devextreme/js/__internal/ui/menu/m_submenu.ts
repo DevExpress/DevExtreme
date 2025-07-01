@@ -24,6 +24,10 @@ class Submenu extends ContextMenu {
 
   _dataAdapter: any;
 
+  _getMaxUsableSpace(offsetTop: number, windowHeight: number, anchorHeight: number): number {
+    return Math.max(offsetTop, windowHeight - offsetTop - anchorHeight);
+  }
+
   _getDefaultOptions() {
     return extend(super._getDefaultOptions(), {
       orientation: 'horizontal',
