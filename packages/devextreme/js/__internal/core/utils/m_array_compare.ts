@@ -105,5 +105,9 @@ export const findChanges = function (oldItems, newItems, getKey, isItemEquals) {
     }
   }
 
-  return result;
+  const removes = result.filter((r) => r.type === 'remove').sort((a, b) => b.index - a.index);
+  const inserts = result.filter((i) => i.type === 'insert').sort((a, b) => a.index - b.index);
+  const updates = result.filter((u) => u.type === 'update');
+
+  return [...removes, ...inserts, ...updates];
 };

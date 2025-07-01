@@ -1,35 +1,45 @@
 import { findChanges } from 'core/utils/array_compare';
 import { extend } from 'core/utils/extend';
+import { applyBatch } from 'common/data/array_utils';
 
 const ITEMS_ARRAY_LENGTH = 4;
 const createItems = (length = ITEMS_ARRAY_LENGTH) => Array.from({ length }, (_, i) => ({ a: `Item ${i}`, id: i }));
 
 QUnit.module('findChanges', {
     beforeEach: function() {
-        const isItemEquals = (item1, item2) => JSON.stringify(item1) === JSON.stringify(item2);
+        this.isItemEquals = (item1, item2) => JSON.stringify(item1) === JSON.stringify(item2);
         this.oldItems = createItems();
         this.newItems = extend(true, [], this.oldItems);
-        this.findChanges = () => findChanges(this.oldItems, this.newItems, item => item.id, isItemEquals);
+        const keyOf = item => item.id;
+        const keyInfo = {
+            key: () => 'id',
+            keyOf,
+        };
+        this.findChanges = () => findChanges(this.oldItems, this.newItems, item => item.id, this.isItemEquals);
+
+        this.checkChanges = (assert) => {
+            const changes = this.findChanges();
+
+            const output = applyBatch({
+                keyInfo,
+                useInsertIndex: true,
+                immutable: true,
+                data: this.oldItems,
+                changes,
+            });
+
+            assert.deepEqual(this.newItems, output, 'changes applied correctly');
+        };
     }
 }, function() {
     QUnit.test('add item in the beginning', function(assert) {
         this.newItems.unshift({ a: 'Item 4', id: 4 });
-
-        const changes = this.findChanges();
-
-        assert.strictEqual(changes.length, 1);
-        assert.strictEqual(changes[0].type, 'insert');
-        assert.strictEqual(changes[0].data.id, 4);
+        this.checkChanges(assert);
     });
 
     QUnit.test('remove item from the beginning', function(assert) {
         this.newItems.shift();
-
-        const changes = this.findChanges();
-
-        assert.strictEqual(changes.length, 1);
-        assert.strictEqual(changes[0].type, 'remove');
-        assert.strictEqual(changes[0].key, 0);
+        this.checkChanges(assert);
     });
 
     QUnit.test('remove(beginning), insert(end), update', function(assert) {
@@ -37,15 +47,7 @@ QUnit.module('findChanges', {
         this.newItems.push({ a: 'Item 4', id: 4 });
         this.newItems[0].a = 'Item 1 updated';
 
-        const changes = this.findChanges();
-
-        assert.strictEqual(changes.length, 3);
-        assert.strictEqual(changes[0].type, 'remove');
-        assert.strictEqual(changes[0].key, 0);
-        assert.strictEqual(changes[1].type, 'update');
-        assert.strictEqual(changes[1].data.id, 1);
-        assert.strictEqual(changes[2].type, 'insert');
-        assert.strictEqual(changes[2].data.id, 4);
+        this.checkChanges(assert);
     });
 
     QUnit.test('remove(end), insert(beginning), update', function(assert) {
@@ -53,29 +55,17 @@ QUnit.module('findChanges', {
         this.newItems.unshift({ a: 'Item 4', id: 4 });
         this.newItems[1].a = 'Item 0 updated';
 
-        const changes = this.findChanges();
-
-        assert.strictEqual(changes[0].type, 'insert');
-        assert.strictEqual(changes[0].data.id, 4);
-        assert.strictEqual(changes[1].type, 'update');
-        assert.strictEqual(changes[1].data.id, 0);
-        assert.strictEqual(changes[2].type, 'remove');
-        assert.strictEqual(changes[2].key, 3);
+        this.checkChanges(assert);
     });
 
     QUnit.test('remove(end), update(beginning)', function(assert) {
         this.newItems.pop();
         this.newItems[0].a = 'Item 0 updated';
 
-        const changes = this.findChanges();
-
-        assert.strictEqual(changes[0].type, 'update');
-        assert.strictEqual(changes[0].data.id, 0);
-        assert.strictEqual(changes[1].type, 'remove');
-        assert.strictEqual(changes[1].key, 3);
+        this.checkChanges(assert);
     });
 
-    QUnit.module('reorder', function() {
+    QUnit.module('reorder 1-1', function() {
         for(let from = 0; from < ITEMS_ARRAY_LENGTH; from++) {
             for(let to = 0; to < ITEMS_ARRAY_LENGTH; to++) {
                 if(from === to) continue;
@@ -84,33 +74,40 @@ QUnit.module('findChanges', {
                     const [itemToMove] = this.newItems.splice(from, 1);
                     this.newItems.splice(to, 0, itemToMove);
 
-                    const changes = this.findChanges();
-
-                    const affectedItems = this.oldItems.filter((oldItem, oldIndex) => {
-                        const newIndex = this.newItems.findIndex(newItem => newItem.id === oldItem.id);
-                        return newIndex !== oldIndex;
-                    });
-
-                    assert.strictEqual(
-                        changes.length,
-                        affectedItems.length * 2,
-                        `${affectedItems.length * 2} changes (reorder = remove + insert)`
-                    );
-
-                    affectedItems.forEach(item => {
-                        const remove = changes.find(c => c.type === 'remove' && c.key === item.id);
-                        const insert = changes.find(c => c.type === 'insert' && c.data.id === item.id);
-                        const oldIndex = this.oldItems.findIndex(i => i.id === item.id);
-                        const newIndex = this.newItems.findIndex(i => i.id === item.id);
-
-                        assert.strictEqual(!!remove, true, `remove operation exists for item with id=${item.id}`);
-                        assert.strictEqual(remove.index, oldIndex, 'remove index is correct');
-
-                        assert.strictEqual(!!insert, true, `insert operation exists for item with id=${item.id}`);
-                        assert.strictEqual(insert.index, newIndex, 'insert index is correct');
-                    });
+                    this.checkChanges(assert);
                 });
             }
         }
+    });
+
+    QUnit.test('reorder of several elements', function(assert) {
+        this.oldItems = createItems(5);
+        this.newItems = [...this.oldItems].reverse();
+
+        this.checkChanges(assert);
+    });
+
+    QUnit.test('reorder + insert', function(assert) {
+        const [itemToMove] = this.newItems.splice(3, 1);
+        this.newItems.splice(2, 0, itemToMove);
+        this.newItems.push({ a: 'Item 4', id: 4 });
+
+        this.checkChanges(assert);
+    });
+
+    QUnit.test('reorder + remove', function(assert) {
+        const [itemToMove] = this.newItems.splice(3, 1);
+        this.newItems.splice(2, 0, itemToMove);
+        this.newItems.shift();
+
+        this.checkChanges(assert);
+    });
+
+    QUnit.test('reorder + update', function(assert) {
+        const [itemToMove] = this.newItems.splice(3, 1);
+        this.newItems.splice(2, 0, itemToMove);
+        this.newItems[0].a = 'Item 0 updated';
+
+        this.checkChanges(assert);
     });
 });
