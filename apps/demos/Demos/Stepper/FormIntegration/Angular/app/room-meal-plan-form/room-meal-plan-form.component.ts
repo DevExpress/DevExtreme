@@ -1,6 +1,6 @@
 import { Component, Input, SimpleChanges, ViewChild } from "@angular/core";
-import { DxFormTypes, DxFormComponent } from 'devextreme-angular/ui/form';
-import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import { DxFormComponent, type DxFormTypes } from 'devextreme-angular/ui/form';
+import { type DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import type { BookingFormData } from '../app.types';
 
 let modulePrefix = '';

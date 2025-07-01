@@ -1,6 +1,6 @@
 import { Component, Input, SimpleChanges, ViewChild } from '@angular/core';
-import { DxFormTypes, DxFormComponent } from 'devextreme-angular/ui/form';
-import { DxDateRangeBoxTypes } from 'devextreme-angular/ui/date-range-box';
+import { DxFormComponent, type DxFormTypes } from 'devextreme-angular/ui/form';
+import { type DxDateRangeBoxTypes } from 'devextreme-angular/ui/date-range-box';
 import type { BookingFormData } from '../app.types';
 
 let modulePrefix = '';
