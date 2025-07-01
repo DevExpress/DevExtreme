@@ -6358,6 +6358,13 @@ QUnit.module('valueChanged handler should receive correct event', {
     });
 
     QUnit.test('should display custom text on today button from todayButtonText option', function(assert) {
+        this.instance.option({ calendarOptions: { showTodayButton: true }, todayButtonText: 'today button text' });
+        const $todayButton = $(this.instance.content()).parent().find(`.${CALENDAR_TODAY_BUTTON_CLASS}`);
+
+        assert.equal($todayButton.text().trim(), 'today button text');
+    });
+
+    QUnit.test('should display custom text on today button from todayButtonText option initialize', function(assert) {
         this.reinit({ calendarOptions: { showTodayButton: true }, todayButtonText: 'today button text' });
         const $todayButton = $(this.instance.content()).parent().find(`.${CALENDAR_TODAY_BUTTON_CLASS}`);
 

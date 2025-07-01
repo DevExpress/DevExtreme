@@ -82,7 +82,7 @@ export interface CalendarProperties extends Properties {
 
   currentDate?: Date;
 
-  todayButtonText: string | null;
+  todayButtonText?: string;
 }
 
 class Calendar<
@@ -148,7 +148,7 @@ class Calendar<
       selectionMode: 'single',
       selectWeekOnClick: true,
       showTodayButton: false,
-      todayButtonText: null,
+      todayButtonText: messageLocalization.format('dxCalendar-todayButtonText'),
       showWeekNumbers: false,
       weekNumberRule: 'auto',
       cellTemplate: 'cell',
@@ -1200,8 +1200,7 @@ class Calendar<
   }
 
   _renderFooter() {
-    const showTodayButton = this.option('showTodayButton');
-    const todayButtonText = this.option('todayButtonText') || messageLocalization.format('dxCalendar-todayButtonText');
+    const { showTodayButton, todayButtonText: text } = this.option();
 
     if (showTodayButton) {
       const $todayButton = this._createComponent(
@@ -1209,7 +1208,7 @@ class Calendar<
         Button,
         {
           focusStateEnabled: this.option('focusStateEnabled'),
-          text: todayButtonText,
+          text,
           onClick: (args) => {
             this._toTodayView(args);
           },
@@ -1228,7 +1227,7 @@ class Calendar<
 
       this.$element().append(this._$footer);
     }
-    // @ts-expect-error ts-error
+
     this.$element().toggleClass(CALENDAR_HAS_FOOTER_CLASS, showTodayButton);
   }
 
