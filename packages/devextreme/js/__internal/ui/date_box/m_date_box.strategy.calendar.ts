@@ -112,6 +112,7 @@ class CalendarStrategy extends DateBoxStrategy {
       disabledDates: isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this.dateBox)) : disabledDates,
       onContouredChanged: this._refreshActiveDescendant.bind(this),
       skipFocusCheck: true,
+      todayButtonText: this.dateBox.option('todayButtonText'),
     });
   }
 
