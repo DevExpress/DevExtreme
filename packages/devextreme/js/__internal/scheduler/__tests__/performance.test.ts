@@ -3,7 +3,6 @@ import {
   describe, expect, it, jest,
 } from '@jest/globals';
 
-import { globalCache } from '../global_cache';
 import Scheduler from '../m_scheduler';
 import timezoneUtils from '../m_utils_time_zone';
 
