@@ -358,7 +358,7 @@ const cacheTimeZones = async (): Promise<TimezoneLabel[]> => globalCache.timezon
     .then((data) => globalCache.timezones.memo('timeZonesCache', () => data)),
 );
 
-const getTimeZonesCache = (): TimezoneLabel[] => globalCache.timezones.memo('timeZonesCache', () => []);
+const getTimeZonesCache = (): TimezoneLabel[] => globalCache.timezones.get('timeZonesCache') ?? [];
 
 const utils = {
   getDaylightOffset,

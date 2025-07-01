@@ -9,6 +9,10 @@ export class Cache {
     this.cache.clear();
   }
 
+  get<R>(name: string): R | undefined {
+    return this.cache.get(name) as R | undefined;
+  }
+
   memo<R>(name: string, valueCallback: () => R): R {
     if (!this.cache.has(name)) {
       const value = valueCallback();

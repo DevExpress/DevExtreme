@@ -10,16 +10,29 @@ describe('global cache', () => {
     expect(cache.size).toBe(0);
   });
 
+  it('should get non-existed value', () => {
+    const cache = new Cache();
+
+    expect(cache.get('test0')).toBe(undefined);
+  });
+
+  it('should get existed value', () => {
+    const cache = new Cache();
+    cache.memo('test0', () => 'callbackValue');
+
+    expect(cache.get('test0')).toBe('callbackValue');
+  });
+
   it('should memo value', () => {
     const cache = new Cache();
     const valueCallback = jest.fn().mockReturnValue(1).mockReturnValueOnce(2);
     const memoValue = cache.memo('test', valueCallback);
 
-    expect(cache.memo('test', valueCallback)).toBe(memoValue);
+    expect(cache.get('test')).toBe(memoValue);
     expect(cache.size).toBe(1);
   });
 
-  it('should delete memo value', () => {
+  it('should memo twice for deleted value', () => {
     const cache = new Cache();
     const valueCallback1 = jest.fn().mockReturnValue(1).mockReturnValueOnce(2);
     const valueCallback2 = jest.fn().mockReturnValue(1).mockReturnValueOnce(2);
@@ -33,11 +46,20 @@ describe('global cache', () => {
     expect(cache.size).toBe(2);
   });
 
-  it('should delete unexisted value', () => {
+  it('should delete existed value', () => {
+    const cache = new Cache();
+    cache.memo('test1', () => 'callbackValue1');
+    cache.delete('test1');
+
+    expect(cache.get('test1')).toBe(undefined);
+    expect(cache.size).toBe(0);
+  });
+
+  it('should delete non-existed value', () => {
     const cache = new Cache();
     cache.memo('test1', () => 'callbackValue1');
     cache.memo('test2', () => 'callbackValue2');
-    cache.delete('unexisted');
+    cache.delete('non-existed');
 
     expect(cache.size).toBe(2);
   });
