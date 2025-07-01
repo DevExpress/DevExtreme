@@ -85,6 +85,8 @@ const Calendar = Editor.inherit({
 
       currentDate: new Date(),
 
+      todayButtonText: null,
+
       value: null,
 
       dateSerializationFormat: undefined,
@@ -1124,6 +1126,7 @@ const Calendar = Editor.inherit({
 
   _renderFooter() {
     const showTodayButton = this.option('showTodayButton');
+    const todayButtonText = this.option('todayButtonText') || messageLocalization.format('dxCalendar-todayButtonText');
 
     if (showTodayButton) {
       const $todayButton = this._createComponent(
@@ -1131,7 +1134,7 @@ const Calendar = Editor.inherit({
         Button,
         {
           focusStateEnabled: this.option('focusStateEnabled'),
-          text: messageLocalization.format('dxCalendar-todayButtonText'),
+          text: todayButtonText,
           onClick: (args) => {
             this._toTodayView(args);
           },
@@ -1546,6 +1549,7 @@ const Calendar = Editor.inherit({
       case 'dateSerializationFormat':
       case 'cellTemplate':
       case 'showTodayButton':
+      case 'todayButtonText':
         this._invalidate();
         break;
       case 'skipFocusCheck':

@@ -685,6 +685,7 @@ const DateBox = DropDownEditor.inherit({
       case 'interval':
       case 'disabledDates':
       case 'calendarOptions':
+      case 'todayButtonText':
         this._invalidate();
         break;
       case 'displayFormat':
@@ -706,9 +707,6 @@ const DateBox = DropDownEditor.inherit({
       case 'readOnly':
         this.callBase.apply(this, arguments);
         this._formatValidationIcon();
-        break;
-      case 'todayButtonText':
-        this._setPopupOption('toolbarItems', this._getPopupToolbarItems());
         break;
       case 'invalidDateMessage':
       case 'dateOutOfRangeMessage':

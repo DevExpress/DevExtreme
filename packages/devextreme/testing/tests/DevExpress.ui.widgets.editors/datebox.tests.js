@@ -6376,6 +6376,13 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.checkEvent(assert, 'dxclick', $todayButton);
         this.testProgramChange(assert);
     });
+
+    QUnit.test('should display custom text on today button from todayButtonText option', function(assert) {
+        this.reinit({ calendarOptions: { showTodayButton: true }, todayButtonText: 'today button text' });
+        const $todayButton = $(this.instance.content()).parent().find(`.${CALENDAR_TODAY_BUTTON_CLASS}`);
+
+        assert.equal($todayButton.text().trim(), 'today button text');
+    });
 });
 
 QUnit.module('validation', {
