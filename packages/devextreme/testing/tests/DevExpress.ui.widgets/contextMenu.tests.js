@@ -789,8 +789,8 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
             const $itemsContainer = $('.dx-scrollable-container');
 
             assert.roughEqual(
-                $(window).height() - 2 * BORDER_WIDTH - SUBMENU_PADDING,
                 $itemsContainer.height(),
+                $(window).height() - 2 * BORDER_WIDTH - SUBMENU_PADDING,
                 1,
                 'height window vs container',
             );
