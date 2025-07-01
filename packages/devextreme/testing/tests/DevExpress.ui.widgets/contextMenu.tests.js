@@ -769,6 +769,33 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
                 'expanded item still visible'
             );
         });
+
+        QUnit.test('Context menu height should fit viewport minus borders and padding', function(assert) {
+            new ContextMenu(this.$element, {
+                target: $('#menuTarget'),
+                items: Array.from({ length: 1000 }, (_, i) => ({
+                    text: `item ${i + 1}`,
+                })),
+                visible: false,
+                position: {
+                    at: 'bottom center',
+                    my: 'top center',
+                    of: $('#menuShower'),
+                },
+            });
+
+            $('#menuTarget').trigger('dxcontextmenu');
+
+            const $itemsContainer = $('.dx-scrollable-container');
+
+            assert.roughEqual(
+                $itemsContainer.height(),
+                $(window).height() - 2 * BORDER_WIDTH - SUBMENU_PADDING,
+                1,
+                'height window vs container',
+            );
+        });
+
     });
 });
 
