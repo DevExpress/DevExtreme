@@ -602,7 +602,6 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     const oldValue = this.dateOption('value');
 
     const oldTime = oldValue && oldValue.getTime();
-
     const newTime = newValue && newValue.getTime();
 
     return oldTime !== newTime;
