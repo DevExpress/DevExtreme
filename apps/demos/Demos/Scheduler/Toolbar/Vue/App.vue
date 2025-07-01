@@ -53,11 +53,11 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxScheduler, {
-  DxResource, DxToolbar, DxItem, type DxSchedulerTypes,
+import { DxScheduler, DxResource,
+  DxToolbar, DxItem, type DxSchedulerTypes,
 } from 'devextreme-vue/scheduler';
 import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
-import type DataSource from 'devextreme/data/data_source';
+import { type DataSource } from 'devextreme-vue/common/data';
 import { assignees, currentDate, schedulerDataSource } from './data.ts';
 
 const MS_IN_HOUR = 60 * 1000;

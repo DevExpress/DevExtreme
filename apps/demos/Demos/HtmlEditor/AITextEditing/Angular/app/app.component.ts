@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxHtmlEditorModule } from 'devextreme-angular';
+import { DxHtmlEditorModule, type DxHtmlEditorTypes } from 'devextreme-angular/ui/html-editor';
 import {
   AIIntegration,
   RequestParams,
@@ -9,7 +9,6 @@ import {
 } from 'devextreme-angular/common/ai-integration';
 import { AzureOpenAI, OpenAI } from 'openai';
 import { Service } from './app.service';
-import { AICustomCommand } from 'devextreme/ui/html_editor';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -39,7 +38,7 @@ export class AppComponent {
 
   aiIntegration: AIIntegration;
 
-  extractKeywordsPrompt: AICustomCommand['prompt'];
+  extractKeywordsPrompt: DxHtmlEditorTypes.AICustomCommand['prompt'];
 
   valueContent: string;
 

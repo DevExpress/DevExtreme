@@ -1,4 +1,4 @@
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-react/common/data';
 
 const ONE_MONTH_DAYS = 30;
 const addDays = (date, days) => new Date(new Date(date).setUTCDate(date.getUTCDate() + days));

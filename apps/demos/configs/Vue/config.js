@@ -152,6 +152,9 @@ window.config = {
     'devextreme-vue': {
       main: 'index.js',
     },
+    'devextreme-vue/common': {
+      main: 'index.js',
+    },
     'devextreme': {
       defaultExtension: 'js',
     },

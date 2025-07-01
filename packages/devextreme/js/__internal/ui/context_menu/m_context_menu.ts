@@ -714,6 +714,11 @@ class ContextMenu extends MenuBase {
     $submenu.css('height', isNestedSubmenu ? menuHeight : '100%');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _getMaxUsableSpace(offsetTop: number, windowHeight: number, anchorHeight: number): number {
+    return windowHeight;
+  }
+
   _getMaxHeight(anchor, considerAnchorHeight = true) {
     const windowHeight = getOuterHeight(window);
     const isAnchorRenderer = isRenderer(anchor);
@@ -727,7 +732,7 @@ class ContextMenu extends MenuBase {
     const offsetTop = anchor[0].getBoundingClientRect().top;
     const anchorHeight = getOuterHeight(anchor);
     const availableHeight = considerAnchorHeight
-      ? Math.max(offsetTop, windowHeight - offsetTop - anchorHeight)
+      ? this._getMaxUsableSpace(offsetTop, windowHeight, anchorHeight)
       : Math.max(offsetTop + anchorHeight, windowHeight - offsetTop);
 
     return availableHeight - SUBMENU_PADDING;

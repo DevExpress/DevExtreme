@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AICustomCommand } from 'devextreme/ui/html_editor';
+import { type DxHtmlEditorTypes } from 'devextreme-angular/ui/html_editor';
 
 const AzureOpenAIConfig = {
     dangerouslyAllowBrowser: true,
@@ -9,7 +9,7 @@ const AzureOpenAIConfig = {
     apiKey: 'DEMO',
 };
 
-const extractKeywordsPrompt: AICustomCommand['prompt'] = () => 
+const extractKeywordsPrompt: DxHtmlEditorTypes.AICustomCommand['prompt'] = () => 
   'Extract a list of keywords from the text and return it as a comma-separated string';
 
 const markup = `

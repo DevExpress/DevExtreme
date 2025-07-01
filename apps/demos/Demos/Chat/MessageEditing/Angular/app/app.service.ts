@@ -1,6 +1,6 @@
 import { type DxChatTypes } from 'devextreme-angular/ui/chat';
+import { Guid } from 'devextreme-angular/common';
 import { CustomStore, DataSource } from 'devextreme-angular/common/data';
-import Guid from 'devextreme/core/guid';
 
 export class AppService {
   date: Date;
