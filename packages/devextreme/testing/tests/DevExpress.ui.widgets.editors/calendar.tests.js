@@ -1857,6 +1857,16 @@ QUnit.module('Options', {
         assert.strictEqual($todayButton, undefined, 'todayButton is not rendered after showTodayButton runtime change to false');
     });
 
+    QUnit.test('todayButtonText option', function(assert) {
+        const getTodayButton = () => this.$element.find(toSelector(CALENDAR_TODAY_BUTTON_CLASS)).get(0);
+
+        this.calendar.option('showTodayButton', true);
+        this.calendar.option('todayButtonText', 'Custom text');
+
+        const $todayButton = getTodayButton();
+        assert.strictEqual($($todayButton).text(), 'Custom text', 'todayButton text matches the todayButtonText option');
+    });
+
     QUnit.test('onCellClick option runtime change', function(assert) {
         const getCellElement = () => this.$element.find(toSelector(CALENDAR_CELL_CLASS)).eq(4);
 

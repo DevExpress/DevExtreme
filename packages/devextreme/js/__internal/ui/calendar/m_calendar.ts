@@ -81,6 +81,8 @@ export interface CalendarProperties extends Properties {
   viewsCount: number;
 
   currentDate?: Date;
+
+  todayButtonText: string | null;
 }
 
 class Calendar<
@@ -146,6 +148,7 @@ class Calendar<
       selectionMode: 'single',
       selectWeekOnClick: true,
       showTodayButton: false,
+      todayButtonText: null,
       showWeekNumbers: false,
       weekNumberRule: 'auto',
       cellTemplate: 'cell',
@@ -1198,6 +1201,7 @@ class Calendar<
 
   _renderFooter() {
     const showTodayButton = this.option('showTodayButton');
+    const todayButtonText = this.option('todayButtonText') || messageLocalization.format('dxCalendar-todayButtonText');
 
     if (showTodayButton) {
       const $todayButton = this._createComponent(
@@ -1205,7 +1209,7 @@ class Calendar<
         Button,
         {
           focusStateEnabled: this.option('focusStateEnabled'),
-          text: messageLocalization.format('dxCalendar-todayButtonText'),
+          text: todayButtonText,
           onClick: (args) => {
             this._toTodayView(args);
           },
@@ -1633,6 +1637,7 @@ class Calendar<
       case 'dateSerializationFormat':
       case 'cellTemplate':
       case 'showTodayButton':
+      case 'todayButtonText':
         this._invalidate();
         break;
       case 'readOnly':
