@@ -7,15 +7,15 @@ const createItems = (length = ITEMS_ARRAY_LENGTH) => Array.from({ length }, (_, 
 
 QUnit.module('findChanges', {
     beforeEach: function() {
-        this.isItemEquals = (item1, item2) => JSON.stringify(item1) === JSON.stringify(item2);
-        this.oldItems = createItems();
-        this.newItems = extend(true, [], this.oldItems);
+        const isItemEquals = (item1, item2) => JSON.stringify(item1) === JSON.stringify(item2);
         const keyOf = item => item.id;
         const keyInfo = {
             key: () => 'id',
             keyOf,
         };
-        this.findChanges = () => findChanges(this.oldItems, this.newItems, item => item.id, this.isItemEquals);
+        this.oldItems = createItems();
+        this.newItems = extend(true, [], this.oldItems);
+        this.findChanges = () => findChanges(this.oldItems, this.newItems, item => item.id, isItemEquals);
 
         this.checkChanges = (assert) => {
             const changes = this.findChanges();
