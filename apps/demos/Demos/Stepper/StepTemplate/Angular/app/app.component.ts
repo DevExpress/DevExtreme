@@ -1,8 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import { DxStepperModule, type DxStepperTypes } from 'devextreme-angular/ui/stepper';
+import { DxStepperModule } from 'devextreme-angular';
+import { type DxStepperTypes } from 'devextreme-angular/ui/stepper';
 import { AppService } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
