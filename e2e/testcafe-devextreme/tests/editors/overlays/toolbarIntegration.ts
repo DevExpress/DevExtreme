@@ -14,6 +14,20 @@ fixture.skip`Popup_toolbar`
 const COMPONENT_SELECTOR = '#container';
 const CLOSE_BUTTON_SELECTOR = '.dx-closebutton';
 
+function getItemConfig(
+  text: string,
+  toolbar: 'top' | 'bottom' = 'top',
+  location: 'before' | 'center' | 'after' = 'after',
+  locateInMenu: 'auto' | 'none' = 'none',
+) {
+  return {
+    text,
+    toolbar,
+    locateInMenu,
+    location,
+  };
+}
+
 [
   { name: 'dxPopup', Class: Popup },
   { name: 'dxPopover', Class: Popover },
@@ -126,3 +140,26 @@ const CLOSE_BUTTON_SELECTOR = '.dx-closebutton';
     });
   });
 });
+
+safeSizeTest('Popup Toolbars with wide elements and overflow menu', async (t) => {
+
+}, [600, 400]).before(async () => createWidget('dxPopup', {
+  contentTemplate: () => $('<div>')
+    .width(300)
+    .height(300),
+  visible: true,
+  width: 'auto',
+  height: 'auto',
+  showCloseButton: false,
+  title: '!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+',
+  toolbarItems: [
+    // getCenterItemConfig("Center Item"),
+    getItemConfig('First Item'),
+    getItemConfig('Second Item', 'top', 'after', 'auto'),
+    getItemConfig('Third Item', 'top', 'after', 'auto'),
+    getItemConfig('!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+', 'bottom', 'before'),
+    getItemConfig('First Item', 'bottom'),
+    getItemConfig('Second Item', 'bottom', 'after', 'auto'),
+    getItemConfig('Third Item', 'bottom', 'after', 'auto'),
+  ],
+}));

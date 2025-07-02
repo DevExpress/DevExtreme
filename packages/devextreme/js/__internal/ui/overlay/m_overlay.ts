@@ -1199,9 +1199,11 @@ class Overlay<
   _visibilityChanged(visible: boolean): void {
     if (visible) {
       if (this.option('visible')) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._renderVisibilityAnimate(visible);
       }
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._renderVisibilityAnimate(visible);
     }
   }

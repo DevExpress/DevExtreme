@@ -34,6 +34,7 @@ import type { ResizeEndEvent, ResizeEvent, ResizeStartEvent } from '@js/ui/resiz
 import Resizable from '@js/ui/resizable';
 import { isFluent, isMaterial, isMaterialBased } from '@js/ui/themes';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
+import type Toolbar from '@js/ui/toolbar';
 import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Overlay from '@ts/ui/overlay/m_overlay';
@@ -172,7 +173,11 @@ class Popup<
 
   _$topToolbar?: dxElementWrapper;
 
+  _topToolbar?: Toolbar;
+
   _$bottomToolbar?: dxElementWrapper;
+
+  _bottomToolbar?: Toolbar;
 
   _$popupContent!: dxElementWrapper;
 
@@ -470,6 +475,15 @@ class Popup<
     this._renderBottomToolbar();
   }
 
+  _fireContentReadyAction(): Promise<void> | DeferredObj<void> | void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    super._fireContentReadyAction();
+
+    // To trigger toolbars width set in initial rendering.
+    // Needs to wait while content will be rendered (T1245421)
+    triggerResizeEvent(this.$overlayContent());
+  }
+
   _getTopToolbarItems(): ToolbarItem[] {
     const { showTitle, title } = this.option();
     const { ios: isIOS } = devices.current();
@@ -519,6 +533,11 @@ class Popup<
       'titleTemplate',
       items,
       $toolbarContainer,
+      {
+        onInitialized: (e): void => {
+          this._topToolbar = e.component;
+        },
+      },
     );
 
     this._$topToolbar.addClass(POPUP_TITLE_CLASS);
@@ -558,6 +577,9 @@ class Popup<
       $toolbarContainer,
       {
         compactMode: true,
+        onInitialized: (e): void => {
+          this._bottomToolbar = e.component;
+        },
       },
     );
 
@@ -621,14 +643,6 @@ class Popup<
 
     $container.replaceWith($toolbar);
 
-    // To trigger toolbar width reset in initial rendering to set menu button width (T1245421)
-    triggerResizeEvent($toolbar);
-
-    // To trigger toolbar width reset if center element is set (T1245421)
-    if (items.some((item: ToolbarItem): boolean => item.location === 'center')) {
-      triggerResizeEvent($toolbar);
-    }
-
     return $toolbar;
   }
 
@@ -649,13 +663,9 @@ class Popup<
   }
 
   _updateToolbarOptions(toolbar: string, options: Partial<ToolbarProperties>): void {
-    const $element = toolbar === 'top' ? this._$topToolbar : this._$bottomToolbar;
+    const instance = toolbar === 'top' ? this._topToolbar : this._bottomToolbar;
 
-    if ($element) {
-      const toolbarInstance = $element[this._getToolbarName()]('instance');
-
-      toolbarInstance?.option(options);
-    }
+    instance?.option(options);
   }
 
   _toggleAriaLabel(): void {

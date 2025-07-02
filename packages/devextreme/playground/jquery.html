@@ -49,8 +49,8 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br /> -->
-        <!-- <div id="popup"></div> -->
-        <div id="popup2"></div>
+        <div id="popup"></div>
+        <!-- <div id="popup2"></div> -->
         <!-- <div id="show-popup-button"></div> -->
 
         <br />
@@ -143,16 +143,16 @@
                     //     </div>
                     // `,
                     /** end test */
-                    contentTemplate: function (element) {
-                        const btnDiv = $("<div>");
+                    // contentTemplate: function (element) {
+                    //     const btnDiv = $("<div>");
 
-                        btnDiv.dxButton({
-                            text: "Rebind popup toolbar items",
-                            onClick: rebindItems,
-                        })
+                    //     btnDiv.dxButton({
+                    //         text: "Rebind popup toolbar items",
+                    //         onClick: rebindItems,
+                    //     })
 
-                        element.append(btnDiv);
-                    },
+                    //     element.append(btnDiv);
+                    // },
                     dragEnabled: true,
                     visible: true,
                     // width: 360,
@@ -166,36 +166,36 @@
                         getItemConfig("First Item"),
                         getItemConfig("Second Item", "auto"),
                         getItemConfig("Third Item", "auto"),
-                        // {
-                        //     toolbar: 'bottom',
-                        //     location: "before",
-                        //     text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
-                        // },
-                        // getBottomItemConfig("First Item"),
-                        // getBottomItemConfig("Second Item", "auto"),
-                        // getBottomItemConfig("Third Item", "auto"),
+                        {
+                            toolbar: 'bottom',
+                            location: "before",
+                            text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
+                        },
+                        getBottomItemConfig("First Item"),
+                        getBottomItemConfig("Second Item", "auto"),
+                        getBottomItemConfig("Third Item", "auto"),
                     ],
-                    // contentTemplate: () => {
-                    //     const $content = $('<div>')
-                    //         .attr('id', 'content')
-                    //         .width(100)
-                    //         .height(100)
+                    contentTemplate: () => {
+                        const $content = $('<div>')
+                            .width(300)
+                            .height(300)
+                            .text('CUSTOM TEXT');
 
-                    //     const $btnDiv = $("<div>");
+                        // const $btnDiv = $("<div>");
 
-                    //     $btnDiv.dxButton({
-                    //         text: "+",
-                    //         onClick: () => {
-                    //             $('#content')
-                    //                 .width(300)
-                    //                 .height(300);
-                    //         },
-                    //     });
+                        // $btnDiv.dxButton({
+                        //     text: "+",
+                        //     onClick: () => {
+                        //         $('#content')
+                        //             .width(300)
+                        //             .height(300);
+                        //     },
+                        // });
 
-                    //     $content.append($btnDiv);
+                        // $content.append($btnDiv);
 
-                    //     return $content;
-                    // },
+                        return $content;
+                    },
                 }).dxPopup('instance');
 
                 // const getPosition = () => {
@@ -238,7 +238,7 @@
 
                 // getPosition();
 
-                // popup.option({ showCloseButton: true });
+                // popup.option({ visible: true });
                 // popup.option({ showCloseButton: false });
 
                 // $('#toolbar').dxToolbar({
@@ -284,18 +284,18 @@
                 //     ],
                 // }).appendTo('body');
 
-                $('#popup2').dxPopup({
-                    visible: true,
-                    toolbarItems: [],
-                    showCloseButton: false,
-                    showTitle: true,
-                    contentTemplate: () => {
-                        return $('<div>')
-                            .text('CUSTOM')
-                            .width(300)
-                            .height(300)
-                    },
-                });
+                // $('#popup2').dxPopup({
+                //     visible: true,
+                //     toolbarItems: [],
+                //     showCloseButton: false,
+                //     showTitle: true,
+                //     contentTemplate: () => {
+                //         return $('<div>')
+                //             .text('CUSTOM')
+                //             .width(300)
+                //             .height(300)
+                //     },
+                // });
             });
         </script>
     </div>
