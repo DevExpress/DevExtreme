@@ -6,7 +6,7 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { getRecurrenceProcessor } from '../../m_recurrence';
 import {
-  getDatesWithoutTime, isAppointmentTakesAllDay, isTimelineView,
+  getDatesWithoutTime, isAppointmentTakesAllDay, isDateAndTimeView, isTimelineView,
 } from '../../r1/utils/index';
 import type { AppointmentDataItem, SafeAppointment } from '../../types';
 import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
@@ -16,8 +16,8 @@ import { getAppointmentGroupValues } from '../../utils/resource_manager/appointm
 import type ViewDataProvider from '../../workspaces/view_model/m_view_data_provider';
 import {
   _appointmentPartInInterval,
-  compareDateWithEndDayHour,
   compareDateWithStartDayHour,
+  compareDateWithTime,
   getAppointmentTakesSeveralDays,
   getRecurrenceException,
 } from './m_utils';
@@ -40,15 +40,13 @@ export class AppointmentFilterBaseStrategy {
 
   get timeZoneCalculator() { return this.options.timeZoneCalculator; }
 
-  get viewStartDayHour() { return this.options.startDayHour; }
+  get viewStartDayHour() { return this._resolveOption('startDayHour'); }
 
-  get viewEndDayHour() { return this.options.endDayHour; }
+  get viewEndDayHour() { return this._resolveOption('endDayHour'); }
 
-  get timezone() { return this.options.timezone; }
+  get firstDayOfWeek() { return this._resolveOption('firstDayOfWeek'); }
 
-  get firstDayOfWeek() { return this.options.firstDayOfWeek; }
-
-  get showAllDayPanel() { return this.options.showAllDayPanel; }
+  get showAllDayPanel() { return this._resolveOption('showAllDayPanel'); }
 
   get loadedResources() { return this._resolveOption('loadedResources'); }
 
@@ -75,7 +73,7 @@ export class AppointmentFilterBaseStrategy {
 
   filter(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
     const [min, max] = this.dateRange;
-    const { viewOffset } = this.options;
+    const viewOffset = this._resolveOption('viewOffset');
     const allDay = !this.showAllDayPanel && this.supportAllDayRow
       ? false
       : undefined;
@@ -84,8 +82,6 @@ export class AppointmentFilterBaseStrategy {
       startDayHour: this.viewStartDayHour,
       endDayHour: this.viewEndDayHour,
       viewOffset,
-      viewStartDayHour: this.viewStartDayHour,
-      viewEndDayHour: this.viewEndDayHour,
       min,
       max,
       resources: this.loadedResources,
@@ -121,11 +117,8 @@ export class AppointmentFilterBaseStrategy {
       startDayHour,
       endDayHour,
       viewOffset,
-      viewStartDayHour,
-      viewEndDayHour,
       resources,
       firstDayOfWeek,
-      checkIntersectViewport,
       supportMultiDayAppointments,
     } = filterOptions;
 
@@ -173,7 +166,7 @@ export class AppointmentFilterBaseStrategy {
       }
 
       if (hasRecurrenceRule) {
-        const recurrenceException = getRecurrenceException(appointment, this.timeZoneCalculator, this.timezone);
+        const recurrenceException = getRecurrenceException(appointment, this.timeZoneCalculator);
 
         if (!this._filterAppointmentByRRule({
           ...appointment,
@@ -191,25 +184,27 @@ export class AppointmentFilterBaseStrategy {
       }
 
       if (!isAllDay && isDefined(startDayHour) && (!useRecurrence || !filterOptions.isVirtualScrolling)) {
-        if (!compareDateWithStartDayHour(startDate, endDate, startDayHour, appointmentTakesAllDay, appointmentTakesSeveralDays)) {
+        if (!compareDateWithStartDayHour({
+          startDate,
+          endDate,
+          startDayHour,
+          isAllDay: appointmentTakesAllDay,
+          isSeveralDays: appointmentTakesSeveralDays,
+        })) {
           return false;
         }
       }
 
       if (!isAllDay && isDefined(endDayHour)) {
-        if (!compareDateWithEndDayHour({
+        if (!compareDateWithTime({
           startDate,
           endDate,
           startDayHour,
           endDayHour,
-          viewOffset,
-          viewStartDayHour,
-          viewEndDayHour,
-          allDay: appointmentTakesAllDay,
-          severalDays: appointmentTakesSeveralDays,
-          min,
-          max,
-          checkIntersectViewport,
+          min: trimMin,
+          max: trimMax,
+          isTimeDateView: isDateAndTimeView(this.viewType),
+          isAllDay: appointmentTakesAllDay,
         })) {
           return false;
         }
@@ -260,7 +255,7 @@ export class AppointmentFilterBaseStrategy {
     }
 
     if (result && recurrenceProcessor.isValidRecurrenceRule(recurrenceRule)) {
-      const { viewOffset } = this.options;
+      const viewOffset = this._resolveOption('viewOffset');
       result = recurrenceProcessor.hasRecurrence({
         rule: recurrenceRule,
         exception: recurrenceException,

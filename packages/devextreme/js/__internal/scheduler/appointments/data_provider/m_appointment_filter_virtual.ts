@@ -17,10 +17,9 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
   get resources() { return this.options.resources; }
 
   filter(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
-    const { viewOffset } = this.options;
+    const viewOffset = this._resolveOption('viewOffset');
     const hourMs = toMs('hour');
     const isCalculateStartAndEndDayHour = isDateAndTimeView(this.viewType);
-    const checkIntersectViewport = isCalculateStartAndEndDayHour && this.viewDirection === 'horizontal';
 
     const isAllDayWorkspace = !this.supportAllDayRow;
     const showAllDayAppointments = this.showAllDayPanel || isAllDayWorkspace;
@@ -58,15 +57,12 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         startDayHour,
         endDayHour,
         viewOffset,
-        viewStartDayHour: this.viewStartDayHour,
-        viewEndDayHour: this.viewEndDayHour,
         min: dateUtilsTs.addOffsets(groupStartDate, [-viewOffset]),
         max: dateUtilsTs.addOffsets(groupEndDate, [-viewOffset]),
         supportMultiDayAppointments: isTimelineView(this.viewType),
         allDay: supportAllDayAppointment,
         resources,
         firstDayOfWeek: this.firstDayOfWeek,
-        checkIntersectViewport,
       });
     });
 
