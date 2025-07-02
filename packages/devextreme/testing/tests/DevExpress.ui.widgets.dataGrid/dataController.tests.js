@@ -13692,7 +13692,7 @@ QUnit.module('Refresh changesOnly', {
         // assert
         const items = this.dataController.items();
         assert.deepEqual(items[2].values, [1, 'Alex', 30]);
-        assert.strictEqual(changedArgs.changeType, 'update', 'partial update is occurred');
+        assert.strictEqual(changedArgs.changeType, 'refresh', 'full refresh is occured');
         assert.strictEqual(changedArgs.repaintChangesOnly, true);
     });
 
