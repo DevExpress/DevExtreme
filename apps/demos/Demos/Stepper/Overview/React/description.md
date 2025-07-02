@@ -1,14 +1,14 @@
-The DevExtreme Stepper is a UI component that indicates progress in a multi-step process and enables users to navigate between individual steps. Use Stepper to implement multi-page navigation in lengthy forms such as checkouts and credit card applications.
+The DevExtreme Stepper allows you to indicate progress within a multi-step process and allows users to navigate between individual steps. Use our Stepper UI component to implement multi-page navigation in lengthy forms such as store/cart checkout.
 
 To get started with DevExtreme Stepper, refer to the following step-by-step tutorial: [Getting Started with Stepper](/Documentation/Guide/UI_Components/Stepper/Getting_Started_with_Stepper/).
 <!--split-->
 
 ## Component Configuration
 
-The following settings are available:
+The following settings are available to you:
 
 - [orientation](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/#orientation) (default: `horizontal`)    
-The Stepper's orientation (horizontal or vertical).
+Stepper orientation (horizontal or vertical).
 
 - [linear](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/#linear) (default: `true`)    
 Specifies whether users must navigate the Stepper sequentially or can skip steps.
@@ -38,7 +38,7 @@ Step caption displayed next to the indicator.
 Adds an *(Optional)* label to the step.
 
 - [isValid](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#isValid)    
-Allows you to indicate that user input on the step results in [validation](/Documentation/Guide/UI_Components/Common/UI_Widgets/Data_Validation/) errors.
+Allows you to indicate step-related [validation](/Documentation/Guide/UI_Components/Common/UI_Widgets/Data_Validation/) errors.
 
 - [disabled](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#disabled)    
 Deactivates the step.
@@ -47,4 +47,4 @@ Deactivates the step.
 Tooltip text for the step.
 
 - [render](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#render)/[component](/Documentation/ApiReference/UI_Components/dxStepper/Configuration/items/#component)    
-Allow you to customize the entire step appearance. These properties override all other step settings.
+Allow you to customize step-related appearance. These properties override all other step settings.

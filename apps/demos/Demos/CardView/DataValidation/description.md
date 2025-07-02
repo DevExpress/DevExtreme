@@ -1,4 +1,4 @@
-CardView allows you to validate user input. You can apply pre-defined [validation rules](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/#validationRules) or custom rules to individual columns. 
+DevExtreme CardView allows you to validate user input as necessary. You can apply pre-defined [validation rules](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/#validationRules) or custom rules to individual columns. 
 <!--split-->
 
 In this demo, the following rules are used:
