@@ -466,22 +466,17 @@ class Popup<
     this._observeContentResize(true);
   }
 
-  // @ts-expect-error ts-error
-  _renderContentImpl(): void {
-    this._renderTopToolbar();
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    super._renderContentImpl();
-    this._renderResize();
-    this._renderBottomToolbar();
-  }
+  _renderContentImpl(): Promise<void> {
+    const promise = super._renderContentImpl();
 
-  _fireContentReadyAction(): Promise<void> | DeferredObj<void> | void {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    super._fireContentReadyAction();
+    // @ts-expect-error always does not exist
+    promise.always(() => {
+      this._renderResize();
+      this._renderTopToolbar();
+      this._renderBottomToolbar();
+    });
 
-    // To trigger toolbars width set in initial rendering.
-    // Needs to wait while content will be rendered (T1245421)
-    triggerResizeEvent(this.$overlayContent());
+    return promise;
   }
 
   _getTopToolbarItems(): ToolbarItem[] {
@@ -512,7 +507,10 @@ class Popup<
       } else {
         this._renderTopToolbarImpl();
       }
-
+      this._dimensionChanged();
+      // To trigger toolbar width set in initial rendering to set menu button width (T1245421)
+      // And to trigger with animation in runtime items update
+      this._triggerToolbarResizeEvent();
       this._$topToolbar?.toggleClass(POPUP_HAS_CLOSE_BUTTON_CLASS, this._hasCloseButton());
     } else {
       this._$topToolbar?.detach();
@@ -527,6 +525,7 @@ class Popup<
     const items = this._getTopToolbarItems();
     const $toolbarContainer = $('<div>')
       .addClass(POPUP_TITLE_CLASS)
+      .addClass('dx-toolbar')
       .insertBefore(this.$content());
 
     this._$topToolbar = this._renderToolbar(
@@ -559,7 +558,10 @@ class Popup<
     } else {
       this._renderBottomToolbarImpl();
     }
-
+    this._dimensionChanged();
+    // To trigger toolbar width set in initial rendering to set menu button width (T1245421)
+    // And to trigger with animation in runtime items update
+    this._triggerToolbarResizeEvent();
     this._toggleClasses();
   }
 
@@ -569,6 +571,7 @@ class Popup<
     const items = this._getToolbarItems('bottom');
     const $toolbarContainer = $('<div>')
       .addClass(POPUP_BOTTOM_CLASS)
+      .addClass('dx-toolbar')
       .insertAfter(this.$content());
 
     this._$bottomToolbar = this._renderToolbar(
@@ -584,6 +587,11 @@ class Popup<
     );
 
     this._$bottomToolbar.addClass(POPUP_BOTTOM_CLASS);
+  }
+
+  _triggerToolbarResizeEvent(): void {
+    triggerResizeEvent(this.$overlayContent());
+    triggerResizeEvent(this.$overlayContent());
   }
 
   _renderToolbar(
@@ -1288,6 +1296,9 @@ class Popup<
       case 'useFlatToolbarButtons': {
         this._renderTopToolbar();
         this._renderBottomToolbar();
+        // It is necessary to call resize a second time because
+        // the menu button did not appear after the first time
+        this._triggerToolbarResizeEvent();
 
         // @ts-expect-error ts-error
         // NOTE: Geometry rendering after "toolbarItems" runtime change
@@ -1351,6 +1362,22 @@ class Popup<
       default:
         super._optionChanged(args);
     }
+  }
+
+  _show(): DeferredObj<unknown> | Promise<unknown> {
+    const result = super._show();
+
+    // this._renderGeometry();
+    // triggerResizeEvent(this.$overlayContent());
+    // triggerResizeEvent(this.$overlayContent());
+
+    // // @ts-expect-error always does not exist
+    // result.always(() => {
+    //   // To reset toolbar section width after animation is finished (T1245421)
+    //   triggerResizeEvent(this.$overlayContent());
+    // });
+
+    return result;
   }
 
   bottomToolbar(): dxElementWrapper | undefined {

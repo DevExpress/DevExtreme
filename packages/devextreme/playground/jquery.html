@@ -51,7 +51,7 @@
         <br /> -->
         <div id="popup"></div>
         <!-- <div id="popup2"></div> -->
-        <!-- <div id="show-popup-button"></div> -->
+        <div id="show-popup-button"></div>
 
         <br />
         <br />
@@ -67,15 +67,15 @@
         </div> -->
         <script>
             $(() => {
-                window.DevExpress.fx.off = true;
+                // window.DevExpress.fx.off = true;
 
-                // $('#show-popup-button').dxButton({
-                //     text: 'Show Popup',
-                //     width: 300,
-                //     onClick() {
-                //         popup.show();
-                //     },
-                // });
+                $('#show-popup-button').dxButton({
+                    text: 'Show Popup',
+                    width: 300,
+                    onClick() {
+                        popup.show();
+                    },
+                });
 
                 function rebindItems() {
                     const popup = $('#popup').dxPopup("instance");
@@ -125,7 +125,7 @@
                 const popup = $('#popup').dxPopup({
                     // width: 100,
                     // height: 100,
-                    animation: null,
+                    // animation: null,
                     // position: { my: 'top left', at: 'center', of: window },
                     // resizeEnabled: true,
                     // dragAndResizeArea: window,
@@ -154,45 +154,52 @@
                     //     element.append(btnDiv);
                     // },
                     dragEnabled: true,
-                    visible: true,
+                    // visible: true,
+                    // showTitle: false,
                     // width: 360,
                     // height: 320,
                     width: 'auto',
                     height: 'auto',
                     title: '!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+',
                     showCloseButton: false,
-                    toolbarItems: [
-                        // getCenterItemConfig("Center Item"),
-                        getItemConfig("First Item"),
-                        getItemConfig("Second Item", "auto"),
-                        getItemConfig("Third Item", "auto"),
-                        {
-                            toolbar: 'bottom',
-                            location: "before",
-                            text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
-                        },
-                        getBottomItemConfig("First Item"),
-                        getBottomItemConfig("Second Item", "auto"),
-                        getBottomItemConfig("Third Item", "auto"),
-                    ],
+                    // toolbarItems: [
+                    //     // getCenterItemConfig("Center Item"),
+                    //     // {
+                    //     //     toolbar: 'top',
+                    //     //     location: "before",
+                    //     //     text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
+                    //     // },
+                    //     getItemConfig("First Item"),
+                    //     getItemConfig("Second Item", "auto"),
+                    //     getItemConfig("Third Item", "auto"),
+                    //     {
+                    //         toolbar: 'bottom',
+                    //         location: "before",
+                    //         text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
+                    //     },
+                    //     getBottomItemConfig("First Item"),
+                    //     getBottomItemConfig("Second Item", "auto"),
+                    //     getBottomItemConfig("Third Item", "auto"),
+                    // ],
                     contentTemplate: () => {
                         const $content = $('<div>')
                             .width(300)
                             .height(300)
                             .text('CUSTOM TEXT');
 
-                        // const $btnDiv = $("<div>");
+                        const $btnDiv = $("<div>");
 
-                        // $btnDiv.dxButton({
-                        //     text: "+",
-                        //     onClick: () => {
-                        //         $('#content')
-                        //             .width(300)
-                        //             .height(300);
-                        //     },
-                        // });
+                        $btnDiv.dxButton({
+                            text: "Rebind",
+                            // onClick: () => {
+                            //     $('#content')
+                            //         .width(300)
+                            //         .height(300);
+                            // },
+                            onClick: rebindItems,
+                        });
 
-                        // $content.append($btnDiv);
+                        $content.append($btnDiv);
 
                         return $content;
                     },
@@ -238,7 +245,52 @@
 
                 // getPosition();
 
-                // popup.option({ visible: true });
+                setTimeout(() => {
+                    popup.option({
+                        toolbarItems: [
+                            // {
+                            //     toolbar: 'top',
+                            //     location: "before",
+                            //     text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
+                            // },
+                            // getCenterItemConfig("Center Item"),
+                            getItemConfig("First Item"),
+                            getItemConfig("Second Item", "auto"),
+                            getItemConfig("Third Item", "auto"),
+                            {
+                                toolbar: 'bottom',
+                                location: "before",
+                                text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
+                            },
+                            getBottomItemConfig("First Item"),
+                            getBottomItemConfig("Second Item", "auto"),
+                            getBottomItemConfig("Third Item", "auto"),
+                        ],
+                    });
+                }, 2000);
+
+                // popup.option({
+                //     toolbarItems: [
+                //         {
+                //             toolbar: 'top',
+                //             location: "before",
+                //             text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
+                //         },
+                //         // getCenterItemConfig("Center Item"),
+                //         getItemConfig("First Item"),
+                //         getItemConfig("Second Item", "auto"),
+                //         getItemConfig("Third Item", "auto"),
+                //         {
+                //             toolbar: 'bottom',
+                //             location: "before",
+                //             text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
+                //         },
+                //         getBottomItemConfig("First Item"),
+                //         getBottomItemConfig("Second Item", "auto"),
+                //         getBottomItemConfig("Third Item", "auto"),
+                //     ],
+                //     // showTitle: true,
+                // });
                 // popup.option({ showCloseButton: false });
 
                 // $('#toolbar').dxToolbar({

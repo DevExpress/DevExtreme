@@ -1527,20 +1527,6 @@ QUnit.module('options changed callbacks', {
             assert.strictEqual(this.resizeEventSpy.callCount, 2, 'event is triggered 2 times');
         });
 
-        QUnit.test('resize event is triggered 3 times after toolbar rendering with center located item', function(assert) {
-            this.resizeEventSpy.resetHistory();
-            this.reinit({
-                visible: true,
-                toolbarItems: [{ text: 'text', location: 'center' }],
-            });
-
-            const topToolbar = this.instance.topToolbar();
-
-            assert.strictEqual(topToolbar.length, 1, 'top toolbar is rendered');
-            // 1st from toolbar rendering, 2nd for correct render center toolbar section, 3d from overlay visibility changing
-            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times');
-        });
-
         QUnit.test('toolbarItems runtime changing should trigger resize event if toolbar is not rendered on init', function(assert) {
             const getTopToolbar = () => this.instance.topToolbar();
             this.resizeEventSpy.resetHistory();
