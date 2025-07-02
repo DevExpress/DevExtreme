@@ -31,13 +31,18 @@ export const isKeysEqual = function (oldKeys, newKeys) {
   return true;
 };
 
-export const findChanges = function (oldItems, newItems, getKey, isItemEquals) {
+export const findChanges = function ({
+  oldItems,
+  newItems,
+  getKey,
+  isItemEquals,
+  detectReorders = false,
+}): any[] | undefined {
   const oldIndexByKey = {};
   const newIndexByKey = {};
   let addedCount = 0;
   let removeCount = 0;
   const result: any[] = [];
-  let isReordered = false;
 
   oldItems.forEach(function (item, index) {
     const key = getKeyWrapper(item, getKey);
@@ -89,7 +94,10 @@ export const findChanges = function (oldItems, newItems, getKey, isItemEquals) {
           });
         }
       } else {
-        isReordered = true;
+        if (!detectReorders) {
+          return;
+        }
+
         result.push({
           type: 'remove',
           key: getKey(oldItem),
@@ -107,13 +115,12 @@ export const findChanges = function (oldItems, newItems, getKey, isItemEquals) {
     }
   }
 
-  if (!isReordered) {
-    return result;
+  if (detectReorders) {
+    const removes = result.filter((r) => r.type === 'remove').sort((a, b) => b.index - a.index);
+    const inserts = result.filter((i) => i.type === 'insert').sort((a, b) => a.index - b.index);
+    const updates = result.filter((u) => u.type === 'update');
+    return [...removes, ...inserts, ...updates];
   }
 
-  const removes = result.filter((r) => r.type === 'remove').sort((a, b) => b.index - a.index);
-  const inserts = result.filter((i) => i.type === 'insert').sort((a, b) => a.index - b.index);
-  const updates = result.filter((u) => u.type === 'update');
-
-  return [...removes, ...inserts, ...updates];
+  return result;
 };

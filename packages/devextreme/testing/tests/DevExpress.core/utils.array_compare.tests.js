@@ -15,7 +15,13 @@ QUnit.module('findChanges', {
         };
         this.oldItems = createItems();
         this.newItems = extend(true, [], this.oldItems);
-        this.findChanges = () => findChanges(this.oldItems, this.newItems, item => item.id, isItemEquals);
+        this.findChanges = () => findChanges({
+            oldItems: this.oldItems,
+            newItems: this.newItems,
+            getKey: item => item.id,
+            isItemEquals,
+            detectReorders: true,
+        });
 
         this.checkChanges = (assert) => {
             const changes = this.findChanges();
@@ -109,5 +115,23 @@ QUnit.module('findChanges', {
         this.newItems[0].a = 'Item 0 updated';
 
         this.checkChanges(assert);
+    });
+
+    QUnit.test('should return undefined when reordering if detectReorders=false', function(assert) {
+        const isItemEquals = (item1, item2) => JSON.stringify(item1) === JSON.stringify(item2);
+        const findChangesWithoutReorders = () => findChanges({
+            oldItems: this.oldItems,
+            newItems: this.newItems,
+            getKey: item => item.id,
+            isItemEquals,
+            detectReorders: false,
+        });
+
+        this.oldItems = createItems(5);
+        this.newItems = [...this.oldItems].reverse();
+
+        const result = findChangesWithoutReorders();
+
+        assert.strictEqual(result, undefined);
     });
 });
