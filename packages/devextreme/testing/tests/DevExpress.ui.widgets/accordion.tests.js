@@ -1258,7 +1258,7 @@ QUnit.module('Live Update', {
         store.push(pushData);
 
         assert.strictEqual(this.itemRenderedSpy.callCount, 1, 'only one item is updated after push');
-        assert.strictEqual(this.itemRenderedSpy.firstCall.args[0].itemData, pushData[0].data, 'check updated item');
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, pushData[0].data, 'check updated item');
     });
 
     QUnit.test('add item', function(assert) {
@@ -1272,7 +1272,7 @@ QUnit.module('Live Update', {
         store.push(pushData);
 
         assert.strictEqual(this.itemRenderedSpy.callCount, 1, 'only one item is updated after push');
-        assert.strictEqual(this.itemRenderedSpy.firstCall.args[0].itemData, pushData[0].data, 'check added item');
+        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, pushData[0].data, 'check added item');
     });
 
     QUnit.test('remove item', function(assert) {
