@@ -3114,6 +3114,69 @@ QUnit.module('reordering decorator', {
         assert.ok(updateSpy.lastCall.calledAfter(onItemRenderedSpy.lastCall), 'update is called after items change');
         assert.deepEqual(onItemRenderedSpy.callCount, 4, 'rendered item count');
     });
+
+    const ITEMS_ARRAY_LENGTH = 4;
+    QUnit.module('reorder rerenders', {
+        beforeEach: function() {
+            this.itemRenderedSpy = sinon.spy();
+
+            const items = Array.from({ length: ITEMS_ARRAY_LENGTH }, (_, i) => ({ id: i, text: `Item ${i}` }));
+
+            this.createList = () => {
+                return $('#list').dxList({
+                    dataSource: items,
+                    repaintChangesOnly: true,
+                    itemTemplate: (data) => {
+                        this.itemRenderedSpy();
+                        return data.text;
+                    },
+                    itemDragging: {
+                        allowReordering: true,
+                        data: items,
+                        onReorder({ fromIndex, toIndex, fromData, component }) {
+                            const [item] = fromData.splice(fromIndex, 1);
+                            fromData.splice(toIndex, 0, item);
+                            component.reload();
+                        }
+                    }
+                });
+            };
+
+            this.performReorder = (list, fromIndex, toIndex) => {
+                const $items = list.find(`.${LIST_ITEM_CLASS}`);
+                const pointer = reorderingPointerMock($items.eq(fromIndex), this.clock);
+
+                const offset = toIndex - fromIndex;
+                const adjustment = offset >= 0 ? 0 : -0.1;
+
+                pointer.dragStart(0.5).drag(offset + adjustment);
+                this.clock.tick();
+                pointer.dragEnd();
+            };
+        },
+    }, () => {
+        for(let from = 0; from < ITEMS_ARRAY_LENGTH; from++) {
+            for(let to = 0; to < ITEMS_ARRAY_LENGTH; to++) {
+                if(from === to) continue;
+
+                QUnit.test(`reorder from ${from} to ${to} should rerender only affected items if repaintChangesOnly=true`, function(assert) {
+                    const list = this.createList();
+
+                    this.itemRenderedSpy.resetHistory();
+
+                    this.performReorder(list, from, to);
+
+                    const affectedItemsCount = Math.abs(to - from) + 1;
+
+                    assert.strictEqual(
+                        this.itemRenderedSpy.callCount,
+                        affectedItemsCount,
+                        `reordered from ${from} to ${to} - expected ${affectedItemsCount} rerenders`
+                    );
+                });
+            }
+        }
+    });
 });
 
 if(QUnit.urlParams['nojquery'] && QUnit.urlParams['shadowDom']) {

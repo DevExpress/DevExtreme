@@ -1069,7 +1069,12 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       item.rowIndex = index;
     });
 
-    const result = findChanges(oldItems, change.items, getRowKey, isItemEquals);
+    const result = findChanges({
+      oldItems,
+      newItems: change.items,
+      getKey: getRowKey,
+      isItemEquals,
+    });
 
     if (!result) {
       this._applyChangeFull(change);
