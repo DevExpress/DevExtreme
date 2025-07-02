@@ -37,7 +37,7 @@ export const findChanges = function ({
   getKey,
   isItemEquals,
   detectReorders = false,
-}): any[] | undefined {
+}) {
   const oldIndexByKey = {};
   const newIndexByKey = {};
   let addedCount = 0;
