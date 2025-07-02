@@ -42,45 +42,65 @@ function insertRule(targetStyleSheet, rule, needApplyAllStyles) {
   }
 }
 
-const injectedHashes = new WeakMap();
+const sheetHashes = new WeakMap();
+function computeStyleSheetsHash(styleSheets) {
+  let hash = 2166136261;
 
-function computeStyleSheetsHash(...styleSheetLists) {
-  const hashes: string[] = [];
-
-  for (const list of styleSheetLists) {
-    for (const sheet of list) {
-      try {
-        const rules = Array.from(sheet.cssRules).map((r: any) => r.cssText).join(';');
-        hashes.push(rules);
-      } catch (_) {
-        continue;
-      }
+  for (const sheet of styleSheets) {
+    if (sheetHashes.has(sheet)) {
+      hash ^= sheetHashes.get(sheet);
+      continue;
     }
+
+    let localHash = 2166136261;
+    try {
+      for (const rule of sheet.cssRules) {
+        const text = rule.cssText;
+        for (let i = 0; i < text.length; i++) {
+          localHash ^= text.charCodeAt(i);
+          localHash += (localHash << 1) + (localHash << 4) + (localHash << 7) + (localHash << 8) + (localHash << 24);
+        }
+      }
+    } catch (_) {
+      // ignore
+    }
+
+    localHash >>>= 0;
+    sheetHashes.set(sheet, localHash);
+    hash ^= localHash;
   }
 
-  return hashes.join('|').length;
+  return hash >>> 0;
 }
+
+const injectedRootStates = new WeakMap();
 
 export function addShadowDomStyles($element) {
   const el = $element.get(0);
   const root = el.getRootNode?.();
-
   if (!root?.host) return;
 
-  const allRulesHash = computeStyleSheetsHash(el.ownerDocument.styleSheets, root.styleSheets);
-  const prevHash = injectedHashes.get(root);
-  if (prevHash === allRulesHash) return;
-
-  injectedHashes.set(root, allRulesHash);
-
-  if (!ownerDocumentStyleSheet) {
-    ownerDocumentStyleSheet = createConstructedStyleSheet(root);
-
-    processRules(ownerDocumentStyleSheet, el.ownerDocument.styleSheets, false);
+  let state = injectedRootStates.get(root);
+  if (!state) {
+    state = {
+      injectedGlobal: false,
+      lastLocalHash: null,
+    };
+    injectedRootStates.set(root, state);
   }
 
-  const currentShadowDomStyleSheet = createConstructedStyleSheet(root);
+  if (!ownerDocumentStyleSheet && !state.injectedGlobal) {
+    ownerDocumentStyleSheet = createConstructedStyleSheet(root);
+    processRules(ownerDocumentStyleSheet, el.ownerDocument.styleSheets, false);
+    state.injectedGlobal = true;
+  }
 
+  const localHash = computeStyleSheetsHash(root.styleSheets);
+  if (state.lastLocalHash === localHash) return;
+
+  state.lastLocalHash = localHash;
+
+  const currentShadowDomStyleSheet = createConstructedStyleSheet(root);
   processRules(currentShadowDomStyleSheet, root.styleSheets, true);
 
   root.adoptedStyleSheets = [ownerDocumentStyleSheet, currentShadowDomStyleSheet];
