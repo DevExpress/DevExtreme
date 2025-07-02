@@ -21,7 +21,8 @@ $(() => {
         onReorder({
           fromIndex, toIndex, fromData, component,
         }) {
-          [fromData[fromIndex], fromData[toIndex]] = [fromData[toIndex], fromData[fromIndex]];
+          const item = fromData.splice(fromIndex, 1)[0];
+          fromData.splice(toIndex, 0, item);
           component.reload();
         },
       },
