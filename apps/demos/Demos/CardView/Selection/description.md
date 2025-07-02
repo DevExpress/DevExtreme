@@ -1,4 +1,4 @@
-DevExtreme CardView supports single and multi select modes. Set [selection](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/selection/).[mode](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/selection/#mode) to either *"single"* or *"multiple"* to enable this capability.
+DevExtreme CardView supports single select and multiselect modes. Set [selection](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/selection/).[mode](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/selection/#mode) to either *"single"* or *"multiple"* to enable this capability.
 <!--split-->
 
 Use the following properties to configure CardView selection:

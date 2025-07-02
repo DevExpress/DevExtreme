@@ -1,7 +1,7 @@
 The DevExtreme Scheduler ships with a customizable toolbar UI element. You can populate the toolbar with predefined and custom items—in any display order. This demo adds the "today" predefined control and two DevExtreme components to the toolbar.
 <!--split-->
 
-To customize the Scheduler toolbar in your DevExtreme-powered app, add items to the [toolbar](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/toolbar/).[items[]](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/toolbar/items/) array. DevExtreme Scheduler supports the following  toolbar item types:
+To customize the Scheduler toolbar in your DevExtreme-powered app, add items to the [toolbar](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/toolbar/).[items[]](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/toolbar/items/) array. DevExtreme Scheduler supports the following toolbar item types:
 
 - **Predefined Controls**    
     * "dateNavigator"    
