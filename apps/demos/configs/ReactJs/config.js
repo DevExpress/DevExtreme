@@ -158,9 +158,6 @@ window.config = {
     'devextreme-react': {
       main: 'index.js',
     },
-    'devextreme-react/common': {
-      main: 'index.js',
-    },
     'devextreme/events/utils': {
       main: 'index',
     },
