@@ -23216,7 +23216,7 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_popover_HidingEvent]
      */
-    export type HidingEvent = DevExpress.common.core.events.Cancelable &
+    export type HidingEvent = DevExpress.common.core.events.AsyncCancelable &
       DevExpress.common.core.events.EventInfo<dxPopover>;
     /**
      * [descr:_ui_popover_InitializedEvent]
