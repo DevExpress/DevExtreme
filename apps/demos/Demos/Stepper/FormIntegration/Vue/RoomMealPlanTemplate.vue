@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import DxForm, { DxSimpleItem } from 'devextreme-vue/form';
-import 'devextreme/ui/select_box';
+import 'devextreme-vue/select-box';
 import { watch, ref } from 'vue';
 import type { BookingFormData } from './types.ts';
 import { roomTypes, mealPlans, getInitialFormData } from './data.ts';

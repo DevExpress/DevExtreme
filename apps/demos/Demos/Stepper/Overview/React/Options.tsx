@@ -1,6 +1,6 @@
 import React from 'react';
-import ButtonGroup, { type ButtonGroupTypes } from 'devextreme-react/button-group';
-import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
+import { ButtonGroup, type ButtonGroupTypes } from 'devextreme-react/button-group';
+import { CheckBox, type CheckBoxTypes } from 'devextreme-react/check-box';
 import { type Orientation } from 'devextreme-react/common';
 
 import { navigationModes, orientations } from './data.ts';
