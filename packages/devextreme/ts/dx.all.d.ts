@@ -28240,6 +28240,10 @@ declare module DevExpress.ui {
        * [descr:TabPanelItemInfo.itemElement]
        */
       readonly itemElement?: DevExpress.core.DxElement;
+      /**
+       * [descr:TabPanelItemInfo.itemIndex]
+       */
+      readonly itemIndex: number;
     }
     /**
      * [descr:_ui_tab_panel_TitleClickEvent]
