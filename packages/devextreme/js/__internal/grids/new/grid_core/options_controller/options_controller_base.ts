@@ -49,6 +49,9 @@ export class OptionsController<
 
   private readonly internalOptions: Signal<InternalOptionsState<TProps>>;
 
+  // @ts-expect-error Component type doesn't have fields from widget.ts
+  public initialized: ReadonlySignal<boolean> = this.component.initialized;
+
   constructor(
     private readonly component: Component<TProps>,
   ) {
@@ -74,8 +77,14 @@ export class OptionsController<
     const { fullName } = optionChanges;
 
     this.updateIsControlledMode();
+    this.updateInternalOptionsState(fullName, optionChanges);
+  }
 
-    const pathParts = getPathParts(fullName);
+  private updateInternalOptionsState(
+    optionFullName: string,
+    changes: ChangedOptionInfo | null = null,
+  ): void {
+    const pathParts = getPathParts(optionFullName);
 
     this.internalOptions.value = {
       options: mergeOptionTrees(
@@ -84,7 +93,7 @@ export class OptionsController<
         this.defaults,
         pathParts,
       ),
-      changes: optionChanges,
+      changes,
     };
   }
 
@@ -137,15 +146,28 @@ export class OptionsController<
           return obs.value;
         },
         set value(value: any) {
+          const isInitialized = that.initialized.peek();
           const callbackName = `on${name}Change`;
           const callback = that.component.option(callbackName) as any;
           const isControlled = that.isControlledMode && that.component.option(name) !== undefined;
+
           if (isControlled) {
             callback?.(value);
-          } else {
-            that.component.option(name, value);
-            callback?.(value);
+            return;
           }
+
+          that.component.option(name, value);
+
+          // 🚨🚨🚨 Hotfix for filterSync
+          // Unit widget is initialized, the optionChange callback doesn't fire
+          // So, in this case we sync our internal options state with option manager manually
+          // TODO filterSync: refactor filter and get rid of set values to twoWay bindings
+          //   before the widget/optionManager is initialized
+          if (!isInitialized) {
+            that.updateInternalOptionsState(name);
+          }
+
+          callback?.(value);
         },
         peek(): any {
           return obs.peek();

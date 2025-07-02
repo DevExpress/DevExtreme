@@ -18,6 +18,7 @@ import { KeyboardNavigationController } from '../../keyboard_navigation/index';
 import { OptionsController } from '../../options_controller/options_controller';
 import { ToolbarController } from '../../toolbar/controller';
 import { EditingController } from '../controller';
+import type { EditingTexts } from '../options';
 import { PendingPromises } from '../utils';
 import type { Props } from './component';
 import { EditPopup } from './component';
@@ -68,81 +69,6 @@ export class EditPopupView extends View<Props> {
   });
 
   private readonly visible = computed(() => !!this.editingController.editingCard.value);
-
-  private readonly customizeItems = computed(() => (item: dxForm.Item): void => {
-    const editingCard = this.editingController.editingCard.peek();
-    const columns = this.columnsController.columns.peek();
-    const customEditorItems = this.customEditorItems.peek();
-
-    if (!editingCard) {
-      return;
-    }
-
-    if (item.itemType !== 'simple') {
-      return;
-    }
-
-    const simpleFormItem = item as dxForm.SimpleItem;
-    const itemId = simpleFormItem.name ?? simpleFormItem.dataField;
-
-    const column: Column = (simpleFormItem as any).column
-        ?? columns.find((c) => c.name === itemId)
-        ?? columns.find((c) => c.dataField === itemId);
-
-    if (!column) {
-      return;
-    }
-
-    (simpleFormItem as any).column = column;
-
-    if (itemId && !customEditorItems.includes(itemId)) {
-      simpleFormItem.editorType = EDITOR_TYPES_BY_DATA_TYPE[column.dataType];
-    }
-
-    extend(simpleFormItem, column.formItem);
-
-    simpleFormItem.dataField ??= column.dataField;
-    simpleFormItem.validationRules ??= column.validationRules;
-    simpleFormItem.label = {
-      text: column.caption,
-      ...column.formItem.label,
-    };
-
-    const originalContentReady = simpleFormItem?.editorOptions?.onContentReady;
-
-    simpleFormItem.editorOptions = {
-      stylingMode: 'outline',
-      disabled: !column.allowEditing,
-      ...column.editorOptions,
-      ...column.formItem.editorOptions,
-      ...simpleFormItem.editorOptions,
-      onValueChanged: async ({ value }): Promise<void> => {
-        const newData = {};
-        await this.promises.add(
-          Promise.resolve(column.setFieldValue.bind(column)(newData, value, editingCard.data)),
-        );
-        this.editingController.addChange(editingCard.key, newData);
-      },
-      value: editingCard?.fields.find(
-        (c) => c.column.name === column.name,
-      )?.value ?? null,
-      onContentReady: (e): void => {
-        // TODO: refactor
-        setTimeout(() => {
-          // @ts-expect-error
-          $(e.element).data('dxValidator')?.option('dataGetter', () => ({
-            data: this.editingController.editingCard.peek()?.data,
-            column,
-          }));
-        });
-        originalContentReady?.(e);
-      },
-    };
-
-    if (simpleFormItem.editorType === 'dxDateBox') {
-      simpleFormItem.editorOptions.type = column.dataType;
-    }
-  });
 
   public static dependencies = [
     OptionsController, ColumnsController,
@@ -204,7 +130,83 @@ export class EditPopupView extends View<Props> {
         this.kbn.returnFocus();
       },
       items: this.items.value,
-      customizeItem: this.customizeItems.value,
+      customizeItem: this.customizeItems,
+      texts: this.editingController.texts.value as EditingTexts, // TODO: bad typing
     }));
   }
+
+  private readonly customizeItems = (item: dxForm.Item): void => {
+    const editingCard = this.editingController.editingCard.peek();
+    const columns = this.columnsController.columns.peek();
+    const customEditorItems = this.customEditorItems.peek();
+
+    if (!editingCard) {
+      return;
+    }
+
+    if (item.itemType !== 'simple') {
+      return;
+    }
+
+    const simpleFormItem = item as dxForm.SimpleItem;
+    const itemId = simpleFormItem.name ?? simpleFormItem.dataField;
+
+    const column: Column = (simpleFormItem as any).column
+        ?? columns.find((c) => c.name === itemId)
+        ?? columns.find((c) => c.dataField === itemId);
+
+    if (!column) {
+      return;
+    }
+
+    (simpleFormItem as any).column = column;
+
+    if (itemId && !customEditorItems.includes(itemId)) {
+      simpleFormItem.editorType = EDITOR_TYPES_BY_DATA_TYPE[column.dataType];
+    }
+
+    extend(simpleFormItem, column.formItem);
+
+    simpleFormItem.dataField ??= column.dataField;
+    simpleFormItem.validationRules ??= column.validationRules;
+    simpleFormItem.label = {
+      text: column.caption,
+      ...column.formItem.label,
+    };
+
+    const originalContentReady = simpleFormItem?.editorOptions?.onContentReady;
+
+    simpleFormItem.editorOptions = {
+      stylingMode: 'outlined',
+      disabled: !column.allowEditing,
+      ...column.editorOptions,
+      ...column.formItem.editorOptions,
+      ...simpleFormItem.editorOptions,
+      onValueChanged: async ({ value }): Promise<void> => {
+        const newData = {};
+        await this.promises.add(
+          Promise.resolve(column.setFieldValue.bind(column)(newData, value, editingCard.data)),
+        );
+        this.editingController.addChange(editingCard.key, newData);
+      },
+      value: editingCard?.fields.find(
+        (c) => c.column.name === column.name,
+      )?.value ?? null,
+      onContentReady: (e): void => {
+        // TODO: refactor
+        setTimeout(() => {
+          // @ts-expect-error
+          $(e.element).data('dxValidator')?.option('dataGetter', () => ({
+            data: this.editingController.editingCard.peek()?.data,
+            column,
+          }));
+        });
+        originalContentReady?.(e);
+      },
+    };
+
+    if (simpleFormItem.editorType === 'dxDateBox') {
+      simpleFormItem.editorOptions.type = column.dataType;
+    }
+  };
 }

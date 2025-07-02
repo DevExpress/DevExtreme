@@ -5,13 +5,24 @@
     :ai-integration="aiIntegration"
   >
     <DxToolbar>
-      <DxItem
-        name="ai"
-        :commands="commands"
-      />
-      <DxItem name="separator"/>
-      <DxItem name="undo"/>
-      <DxItem name="redo"/>
+      <DxToolbarItem name="ai">
+        <DxCommand name="summarize"/>
+        <DxCommand name="proofread"/>
+        <DxCommand name="expand"/>
+        <DxCommand name="shorten"/>
+        <DxCommand name="changeStyle"/>
+        <DxCommand name="changeTone"/>
+        <DxCommand name="translate"/>
+        <DxCommand name="askAI"/>
+        <DxCommand
+          name="custom"
+          text="Extract Keywords"
+          :prompt="extractKeywordsPrompt"
+        />
+      </DxToolbarItem>
+      <DxToolbarItem name="separator"/>
+      <DxToolbarItem name="undo"/>
+      <DxToolbarItem name="redo"/>
     </DxToolbar>
   </DxHtmlEditor>
 </template>
@@ -19,14 +30,15 @@
 import {
   DxHtmlEditor,
   DxToolbar,
-  DxItem,
+  DxToolbarItem,
+  DxCommand,
 } from 'devextreme-vue/html-editor';
 import { AIIntegration } from 'devextreme-vue/common/ai-integration';
 import { AzureOpenAI, OpenAI } from 'openai';
-import { 
+import {
   markup,
-  commands,
-  AzureOpenAIConfig,  
+  AzureOpenAIConfig,
+  extractKeywordsPrompt,
 } from './data.ts';
 
 type AIMessage = (OpenAI.ChatCompletionUserMessageParam | OpenAI.ChatCompletionSystemMessageParam) & {
@@ -42,7 +54,7 @@ async function getAIResponse(messages: AIMessage[], signal: AbortSignal) {
     max_tokens: 1000,
     temperature: 0.7,
   };
-  
+
   const response = await aiService.chat.completions.create(params, { signal });
   const result = response.choices[0].message?.content;
 
@@ -55,8 +67,8 @@ const aiIntegration = new AIIntegration({
     const signal = controller.signal;
 
     const aiPrompt: AIMessage[] = [
-      { role: 'system', content: prompt.system, },
-      { role: 'user', content: prompt.user, },
+      { role: 'system', content: prompt.system },
+      { role: 'user', content: prompt.user },
     ];
 
     const promise = getAIResponse(aiPrompt, signal);

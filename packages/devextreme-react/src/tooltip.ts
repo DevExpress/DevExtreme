@@ -29,14 +29,14 @@ type ITooltipOptionsNarrowedEvents = {
 type ITooltipOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ITooltipOptionsNarrowedEvents> & IHtmlOptions & {
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
-  defaultHeight?: (() => number | string) | number | string;
+  defaultHeight?: number | string;
   defaultPosition?: CommonPosition | PositionConfig;
   defaultVisible?: boolean;
-  defaultWidth?: (() => number | string) | number | string;
-  onHeightChange?: (value: (() => number | string) | number | string) => void;
+  defaultWidth?: number | string;
+  onHeightChange?: (value: number | string) => void;
   onPositionChange?: (value: CommonPosition | PositionConfig) => void;
   onVisibleChange?: (value: boolean) => void;
-  onWidthChange?: (value: (() => number | string) | number | string) => void;
+  onWidthChange?: (value: number | string) => void;
 }>
 
 interface TooltipRef {

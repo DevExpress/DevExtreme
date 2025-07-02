@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxCardViewModule } from 'devextreme-angular';
+import { DxCardViewModule, DxSelectBoxModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -31,22 +31,13 @@ export class AppComponent {
       ajaxOptions.xhrFields = { withCredentials: true };
     },
   });
-
-  // TODO: Nested component does not exist
-  headerFilterConfig = {
-    visible: true,
-  };
-
-  // TODO: Nested component does not exist
-  searchPanelConfig = {
-    visible: true,
-  };
 }
 
 @NgModule({
   imports: [
     BrowserModule,
     DxCardViewModule,
+    DxSelectBoxModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

@@ -3,15 +3,18 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { isEmptyObject } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import { getGroupCount, isDateAndTimeView } from '@ts/scheduler/r1/utils/index';
 
-import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { getRecurrenceProcessor } from '../m_recurrence';
 import timeZoneUtils from '../m_utils_time_zone';
+import { isDateAndTimeView } from '../r1/utils/index';
+import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
+import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import {
-  createResourcesTree, getDataAccessors, getResourceTreeLeaves,
-} from '../resources/m_utils';
-import type { AppointmentDataAccessor } from '../utils';
+  getAppointmentGroupIndex,
+  getAppointmentGroupValues,
+} from '../utils/resource_manager/appointment_groups_utils';
+import type { ResourceManager } from '../utils/resource_manager/resource_manager';
+import type ViewDataProvider from '../workspaces/view_model/m_view_data_provider';
 import { CellPositionCalculator } from './m_cell_position_calculator';
 import { createFormattedDateText } from './m_text_utils';
 
@@ -26,12 +29,14 @@ export class DateGeneratorBaseStrategy {
     this.options = options;
   }
 
+  get resourceManager(): ResourceManager { return this.options.getResourceManager(); }
+
   // TODO Vinogradov: Remove these getters.
   get rawAppointment() { return this.options.rawAppointment; }
 
   get timeZoneCalculator() { return this.options.timeZoneCalculator; }
 
-  get viewDataProvider() { return this.options.viewDataProvider; }
+  get viewDataProvider(): ViewDataProvider { return this.options.viewDataProvider; }
 
   get appointmentTakesAllDay() { return this.options.appointmentTakesAllDay; }
 
@@ -60,8 +65,6 @@ export class DateGeneratorBaseStrategy {
   get isVerticalOrientation() { return this.options.isVerticalGroupOrientation; }
 
   get dataAccessors(): AppointmentDataAccessor { return this.options.dataAccessors; }
-
-  get loadedResources() { return this.options.loadedResources; }
 
   get isDateAppointment() { return !isDateAndTimeView(this.viewType) && this.appointmentTakesAllDay; }
 
@@ -224,8 +227,8 @@ export class DateGeneratorBaseStrategy {
       const newStartDate = new Date(item.startDate.getTime() + diffStartDateOffset * toMs('hour'));
       let newEndDate = new Date(item.endDate.getTime() + diffEndDateOffset * toMs('hour'));
 
-      const testNewStartDate = this.timeZoneCalculator.createDate(newStartDate, { path: 'toGrid' });
-      const testNewEndDate = this.timeZoneCalculator.createDate(newEndDate, { path: 'toGrid' });
+      const testNewStartDate = this.timeZoneCalculator.createDate(newStartDate, 'toGrid');
+      const testNewEndDate = this.timeZoneCalculator.createDate(newEndDate, 'toGrid');
 
       if (appointment.duration > testNewEndDate.getTime() - testNewStartDate.getTime()) {
         newEndDate = new Date(newStartDate.getTime() + appointment.duration);
@@ -322,7 +325,7 @@ export class DateGeneratorBaseStrategy {
       }
 
       const duration = source.endDate.getTime() - source.startDate.getTime();
-      const startDate = this.timeZoneCalculator.createDate(source.startDate, { path: 'toGrid' });
+      const startDate = this.timeZoneCalculator.createDate(source.startDate, 'toGrid');
       const endDate = dateUtilsTs.addOffsets(startDate, [duration]);
 
       return {
@@ -342,8 +345,8 @@ export class DateGeneratorBaseStrategy {
     let endViewDateByEndDayHour = this.dateRange[1];
 
     if (this.timeZone) {
-      startViewDate = this.timeZoneCalculator.createDate(startViewDate, { path: 'fromGrid' });
-      endViewDateByEndDayHour = this.timeZoneCalculator.createDate(endViewDateByEndDayHour, { path: 'fromGrid' });
+      startViewDate = this.timeZoneCalculator.createDate(startViewDate, 'fromGrid');
+      endViewDateByEndDayHour = this.timeZoneCalculator.createDate(endViewDateByEndDayHour, 'fromGrid');
 
       const daylightOffset = timeZoneUtils.getDaylightOffsetInMs(startViewDate, endViewDateByEndDayHour);
       if (daylightOffset) {
@@ -357,7 +360,7 @@ export class DateGeneratorBaseStrategy {
     ];
   }
 
-  _createRecurrenceOptions(appointment, groupIndex?) {
+  _createRecurrenceOptions(appointment: AppointmentAdapter, groupIndex?) {
     const { viewOffset } = this.options;
     // NOTE: For creating a recurrent appointments,
     // we should use original appointment's dates (without view offset).
@@ -382,7 +385,7 @@ export class DateGeneratorBaseStrategy {
       end: originalAppointmentEndDate,
       appointmentTimezoneOffset: this.timeZoneCalculator.getOriginStartDateOffsetInMs(
         originalAppointmentStartDate,
-        appointment.rawAppointment.startDateTimeZone,
+        appointment.startDateTimeZone,
         true,
       ),
 
@@ -391,7 +394,7 @@ export class DateGeneratorBaseStrategy {
 
         const appointmentTimezoneOffset: number = this.timeZoneCalculator.getOriginStartDateOffsetInMs(
           date,
-          appointment.rawAppointment.startDateTimeZone,
+          appointment.startDateTimeZone,
           true,
         );
 
@@ -531,23 +534,17 @@ export class DateGeneratorBaseStrategy {
   }
 
   _getGroupIndices(rawAppointment) {
-    let result = [];
-    if (rawAppointment && this.loadedResources.length) {
-      const tree = createResourcesTree(this.loadedResources);
+    const appointmentGroupValues = getAppointmentGroupValues(
+      rawAppointment,
+      this.resourceManager.resources,
+    );
 
-      result = getResourceTreeLeaves(
-        (field, action) => getDataAccessors(this.options.dataAccessors.resources, field, action),
-        tree,
-        rawAppointment,
-      );
-    }
-
-    return result;
+    return getAppointmentGroupIndex(appointmentGroupValues, this.resourceManager.groupsLeafs);
   }
 }
 
 export class DateGeneratorVirtualStrategy extends DateGeneratorBaseStrategy {
-  get groupCount() { return getGroupCount(this.loadedResources); }
+  get groupCount() { return this.resourceManager.groupCount(); }
 
   _createRecurrenceAppointments(appointment, groupIndices) {
     const { duration } = appointment;
@@ -597,8 +594,8 @@ export class DateGeneratorVirtualStrategy extends DateGeneratorBaseStrategy {
     return result;
   }
 
-  _getGroupIndices(resources) {
-    let groupIndices: any = super._getGroupIndices(resources);
+  _getGroupIndices(rawAppointment) {
+    let groupIndices: any = super._getGroupIndices(rawAppointment);
     const viewDataGroupIndices = this.viewDataProvider.getGroupIndices();
 
     if (!groupIndices?.length) {
@@ -627,10 +624,9 @@ export class AppointmentSettingsGenerator {
 
   constructor(options) {
     this.options = options;
-    this.appointmentAdapter = createAppointmentAdapter(
+    this.appointmentAdapter = new AppointmentAdapter(
       this.rawAppointment,
       this.dataAccessors,
-      this.timeZoneCalculator,
     );
   }
 

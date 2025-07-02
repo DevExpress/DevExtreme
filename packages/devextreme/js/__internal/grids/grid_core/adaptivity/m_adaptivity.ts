@@ -20,7 +20,7 @@ import { isMaterial } from '@js/ui/themes';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import type { ExportController } from '../../data_grid/export/m_export';
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
 import type { ColumnsResizerViewController, DraggingHeaderViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { DataController } from '../data_controller/m_data_controller';
 import type { EditingController } from '../editing/m_editing';
@@ -851,6 +851,10 @@ const keyboardNavigation = (
     }
   }
 
+  protected isFocusableColumn(column: Column): boolean {
+    return super.isFocusableColumn(column) && column.visibleWidth !== HIDDEN_COLUMNS_WIDTH;
+  }
+
   public _isCellElement($cell) {
     return super._isCellElement($cell) || $cell.hasClass(ADAPTIVE_ITEM_TEXT_CLASS);
   }
@@ -1326,8 +1330,8 @@ const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationCon
     return indexCorrection;
   }
 
-  protected getFocusableColumns(rowIndex?: number): any[] {
-    return super.getFocusableColumns(rowIndex)
+  protected getFocusableColumns(rowIndex?: number, bandColumnId?: number): Column[] {
+    return super.getFocusableColumns(rowIndex, bandColumnId)
       .filter((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
   }
 

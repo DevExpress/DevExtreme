@@ -12,6 +12,7 @@ import {
     asyncScrollTest,
     asyncWrapper,
 } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 const supportedViews = ['day', 'week', 'workWeek', 'month']; // TODO: add timelines
 
@@ -31,8 +32,8 @@ testStart(() => initTestMarkup());
 module('Virtual scrolling integration', () => {
     module('Initialization', () => {
         supportedViews.forEach(viewName => {
-            test(`Virtual scrolling should have default cell sizes in "${viewName}" view`, function(assert) {
-                const instance = createWrapper({
+            test(`Virtual scrolling should have default cell sizes in "${viewName}" view`, async function(assert) {
+                const { instance } = await createWrapper({
                     views: [{
                         type: viewName,
                     }],
@@ -43,7 +44,7 @@ module('Virtual scrolling integration', () => {
                     },
                     height: 400,
                     width: 600
-                }).instance;
+                });
 
                 const { virtualScrollingDispatcher } = instance.getWorkSpace();
 
@@ -52,8 +53,8 @@ module('Virtual scrolling integration', () => {
             });
 
             module('Options', () => {
-                test(`viewport sizes should be correct if height and width are not set in "${viewName}" view`, function(assert) {
-                    const { instance } = createWrapper({
+                test(`viewport sizes should be correct if height and width are not set in "${viewName}" view`, async function(assert) {
+                    const { instance } = await createWrapper({
                         views: [{
                             type: viewName,
                         }],
@@ -74,8 +75,8 @@ module('Virtual scrolling integration', () => {
                     assert.equal(viewportWidth, window.innerWidth, 'viewportWidth is correct');
                 });
 
-                test(`pageSize should be correct if height and width are not set in "${viewName}" view`, function(assert) {
-                    const { instance } = createWrapper({
+                test(`pageSize should be correct if height and width are not set in "${viewName}" view`, async function(assert) {
+                    const { instance } = await createWrapper({
                         views: [{
                             type: viewName,
                         }],
@@ -123,8 +124,8 @@ module('Virtual scrolling integration', () => {
                     orientation: 'both',
                     crossScrollingEnabled: true
                 }].forEach(({ orientation, crossScrollingEnabled }) => {
-                    test(`crossScrollingEnabled should be set correctly if scrolling orientation is "${orientation}" in "${viewName}" view`, function(assert) {
-                        const { instance } = createWrapper({
+                    test(`crossScrollingEnabled should be set correctly if scrolling orientation is "${orientation}" in "${viewName}" view`, async function(assert) {
+                        const { instance } = await createWrapper({
                             views: [{
                                 type: viewName,
                             }],
@@ -141,8 +142,8 @@ module('Virtual scrolling integration', () => {
                     });
                 });
 
-                test(`scheduler should correctly change scrolling orientation in "${viewName}"`, function(assert) {
-                    const scheduler = createWrapper({
+                test(`scheduler should correctly change scrolling orientation in "${viewName}"`, async function(assert) {
+                    const scheduler = await createWrapper({
                         views: [viewName],
                         scrolling: {
                             mode: 'virtual',
@@ -152,6 +153,7 @@ module('Virtual scrolling integration', () => {
                     });
 
                     scheduler.instance.option('scrolling', { mode: 'virtual', orientation: 'both' });
+                    await waitAsync(0);
 
                     const headerScrollable = scheduler.workSpace.getHeaderScrollable();
                     const sideBarScrollable = scheduler.workSpace.getSideBarScrollable();
@@ -160,8 +162,8 @@ module('Virtual scrolling integration', () => {
                     assert.equal(sideBarScrollable.length, 1, 'Header scrollable exists');
                 });
 
-                test(`scheduler should correctly change scrolling orientation in "${viewName}" when changing a view's option`, function(assert) {
-                    const scheduler = createWrapper({
+                test(`scheduler should correctly change scrolling orientation in "${viewName}" when changing a view's option`, async function(assert) {
+                    const scheduler = await createWrapper({
                         views: [{
                             type: viewName,
                         }],
@@ -173,6 +175,7 @@ module('Virtual scrolling integration', () => {
                     });
 
                     scheduler.instance.option('views[0].scrolling', { mode: 'virtual', orientation: 'both' });
+                    await waitAsync(0);
 
                     const headerScrollable = scheduler.workSpace.getHeaderScrollable();
                     const sideBarScrollable = scheduler.workSpace.getSideBarScrollable();
@@ -183,14 +186,14 @@ module('Virtual scrolling integration', () => {
             });
         });
 
-        test('appointment render timeout should be initialized correctly', function(assert) {
-            const instance = createWrapper({
+        test('appointment render timeout should be initialized correctly', async function(assert) {
+            const { instance } = await createWrapper({
                 views: supportedViews,
                 currentView: 'day',
                 dataSource: [],
                 scrolling: { mode: 'virtual' },
                 height: 400,
-            }).instance;
+            });
 
             const workspace = instance.getWorkSpace();
 
@@ -204,8 +207,8 @@ module('Virtual scrolling integration', () => {
 
     module('AppointmentSettings', {
         beforeEach: function() {
-            this.createInstance = function(options) {
-                this.scheduler = createWrapper(options);
+            this.createInstance = async function(options) {
+                this.scheduler = await createWrapper(options);
                 this.scheduler.instance
                     .getWorkSpace()
                     .renderer.getRenderTimeout = () => -1;
@@ -275,7 +278,7 @@ module('Virtual scrolling integration', () => {
                         }]
                     }
                 ].forEach(option => {
-                    test(`Long appointment should be rendered correctly if horizontal grouping, and showAllDayPanel is ${option.showAllDayPanel}`, function(assert) {
+                    test(`Long appointment should be rendered correctly if horizontal grouping, and showAllDayPanel is ${option.showAllDayPanel}`, async function(assert) {
                         const data = [{
                             startDate: new Date(2020, 9, 12, 1, 30),
                             endDate: new Date(2020, 9, 13, 0, 30),
@@ -286,7 +289,7 @@ module('Virtual scrolling integration', () => {
                             priorityId: 2,
                         }];
 
-                        this.createInstance({
+                        await this.createInstance({
                             dataSource: data,
                             currentView: 'week',
                             currentDate: new Date(2020, 9, 12),
@@ -400,7 +403,7 @@ module('Virtual scrolling integration', () => {
                         ]
                     }
                 ].forEach(option => {
-                    test(`Long appointment part should be rendered correctly without render the main part if horizontal grouping and showAllDayPanel is ${option.showAllDayPanel}`, function(assert) {
+                    test(`Long appointment part should be rendered correctly without render the main part if horizontal grouping and showAllDayPanel is ${option.showAllDayPanel}`, async function(assert) {
                         const data = [{
                             startDate: new Date(2020, 9, 12, 11, 30),
                             endDate: new Date(2020, 9, 13, 10, 30),
@@ -411,7 +414,7 @@ module('Virtual scrolling integration', () => {
                             endDate: new Date(2020, 9, 13, 10, 30),
                             priorityId: 2,
                         }];
-                        this.createInstance({
+                        await this.createInstance({
                             dataSource: data,
                             currentView: 'week',
                             currentDate: new Date(2020, 9, 12),
@@ -465,14 +468,14 @@ module('Virtual scrolling integration', () => {
                     });
                 });
 
-                test('Appointment with multiple resources should be rendered correctly if vertical grouping', function(assert) {
+                test('Appointment with multiple resources should be rendered correctly if vertical grouping', async function(assert) {
                     const data = [{
                         startDate: new Date(2020, 9, 12, 1, 30),
                         endDate: new Date(2020, 9, 12, 22, 30),
                         priorityId: [1, 2],
                     }];
 
-                    this.createInstance({
+                    await this.createInstance({
                         dataSource: data,
                         views: [{
                             type: 'week',
@@ -554,13 +557,13 @@ module('Virtual scrolling integration', () => {
                     });
                 });
 
-                test('Appointment with multiple resources should be rendered correctly if horizontal grouping', function(assert) {
+                test('Appointment with multiple resources should be rendered correctly if horizontal grouping', async function(assert) {
                     const data = [{
                         startDate: new Date(2020, 9, 12, 1, 30),
                         endDate: new Date(2020, 9, 12, 22, 30),
                         priorityId: [1, 2],
                     }];
-                    this.createInstance({
+                    await this.createInstance({
                         dataSource: data,
                         currentView: 'week',
                         currentDate: new Date(2020, 9, 12),
@@ -636,8 +639,8 @@ module('Virtual scrolling integration', () => {
                 });
 
                 [undefined, 'FREQ=DAILY'].forEach(recurrenceRule => {
-                    test(`Appointments should contains groupIndex if recurrenceRule: ${recurrenceRule}`, function(assert) {
-                        this.createInstance({
+                    test(`Appointments should contains groupIndex if recurrenceRule: ${recurrenceRule}`, async function(assert) {
+                        await this.createInstance({
                             currentDate: new Date(2015, 2, 2),
                             currentView: 'week',
                             scrolling: {
@@ -703,7 +706,7 @@ module('Virtual scrolling integration', () => {
                         ]
                     }
                 ].forEach(({ showAllDayPanel, steps }) => {
-                    test(`Long appointment should be rendered correctly if vertical grouping and showAllDayPanel is ${showAllDayPanel}`, function(assert) {
+                    test(`Long appointment should be rendered correctly if vertical grouping and showAllDayPanel is ${showAllDayPanel}`, async function(assert) {
                         const data = [{
                             startDate: new Date(2020, 9, 12, 1, 30),
                             endDate: new Date(2020, 9, 13, 0, 30),
@@ -714,7 +717,7 @@ module('Virtual scrolling integration', () => {
                             priorityId: 2,
                         }];
 
-                        this.createInstance({
+                        await this.createInstance({
                             dataSource: data,
                             views: [{
                                 type: 'week',
@@ -831,7 +834,7 @@ module('Virtual scrolling integration', () => {
                         ]
                     }
                 ].forEach(option => {
-                    test(`Long appointment part should be rendered correctly without render main part if vertical grouping and showAllDayPanel is ${option.showAllDayPanel}`, function(assert) {
+                    test(`Long appointment part should be rendered correctly without render main part if vertical grouping and showAllDayPanel is ${option.showAllDayPanel}`, async function(assert) {
                         const data = [{
                             startDate: new Date(2020, 9, 12, 11, 30),
                             endDate: new Date(2020, 9, 13, 10, 30),
@@ -842,7 +845,7 @@ module('Virtual scrolling integration', () => {
                             endDate: new Date(2020, 9, 13, 10, 30),
                             priorityId: 2,
                         }];
-                        this.createInstance({
+                        await this.createInstance({
                             dataSource: data,
                             views: [{
                                 type: 'week',
@@ -985,7 +988,7 @@ module('Virtual scrolling integration', () => {
                         }]
                     }
                 ].forEach(({ showAllDayPanel, steps }) => {
-                    test(`Long appointment should be rendered correctly if horizontal grouping, and showAllDayPanel is ${showAllDayPanel}`, function(assert) {
+                    test(`Long appointment should be rendered correctly if horizontal grouping, and showAllDayPanel is ${showAllDayPanel}`, async function(assert) {
                         const data = [{
                             startDate: new Date(2020, 9, 12, 1, 30),
                             endDate: new Date(2020, 9, 13, 0, 30),
@@ -996,7 +999,7 @@ module('Virtual scrolling integration', () => {
                             priorityId: 2,
                         }];
 
-                        this.createInstance({
+                        await this.createInstance({
                             dataSource: data,
                             currentView: 'week',
                             currentDate: new Date(2020, 9, 12),
@@ -1054,13 +1057,13 @@ module('Virtual scrolling integration', () => {
                     });
                 });
 
-                test('Appointment with multiple resources should be rendered correctly if horizontal grouping', function(assert) {
+                test('Appointment with multiple resources should be rendered correctly if horizontal grouping', async function(assert) {
                     const data = [{
                         startDate: new Date(2020, 9, 12, 1, 30),
                         endDate: new Date(2020, 9, 12, 22, 30),
                         priorityId: [1, 2],
                     }];
-                    this.createInstance({
+                    await this.createInstance({
                         dataSource: data,
                         currentView: 'week',
                         currentDate: new Date(2020, 9, 12),
@@ -1156,12 +1159,12 @@ module('Virtual scrolling integration', () => {
 
 
             ['horizontal', 'vertical'].forEach(groupOrientation => {
-                test(`A long appointment should be correctly croped if Week view  and "${groupOrientation}" group orientation`, function(assert) {
+                test(`A long appointment should be correctly croped if Week view  and "${groupOrientation}" group orientation`, async function(assert) {
                     const longAppointment = {
                         startDate: new Date(2015, 2, 4, 0, 10),
                         endDate: new Date(2015, 2, 4, 23, 50)
                     };
-                    this.createInstance({
+                    await this.createInstance({
                         currentDate: new Date(2015, 2, 4),
                         scrolling: {
                             mode: 'virtual'
@@ -1225,8 +1228,8 @@ module('Virtual scrolling integration', () => {
 
         module('Supported views', () => {
             supportedViews.forEach(viewName => {
-                test(`Grouped appointment should contains correct groupIndex if "${viewName}" view has vertical group orientation`, function(assert) {
-                    this.createInstance({
+                test(`Grouped appointment should contains correct groupIndex if "${viewName}" view has vertical group orientation`, async function(assert) {
+                    await this.createInstance({
                         currentDate: new Date(2015, 2, 2),
                         views: [{
                             type: viewName,
@@ -1258,8 +1261,8 @@ module('Virtual scrolling integration', () => {
                     assert.equal(settings.groupIndex, 0, 'groupIndex is correct');
                 });
 
-                test(`Grouped appointment should contains correct groupIndex if "${viewName}" view has horizontal group orientation`, function(assert) {
-                    this.createInstance({
+                test(`Grouped appointment should contains correct groupIndex if "${viewName}" view has horizontal group orientation`, async function(assert) {
+                    await this.createInstance({
                         currentDate: new Date(2015, 2, 2),
                         views: [{
                             type: viewName,
@@ -1294,8 +1297,8 @@ module('Virtual scrolling integration', () => {
                     assert.equal(settings.groupIndex, 1, 'groupIndex is correct');
                 });
 
-                test(`Grouped allDay appointment should contains correct groupIndex if "${viewName}" view has vertical group orientation`, function(assert) {
-                    this.createInstance({
+                test(`Grouped allDay appointment should contains correct groupIndex if "${viewName}" view has vertical group orientation`, async function(assert) {
+                    await this.createInstance({
                         currentDate: new Date(2015, 2, 2),
                         scrolling: {
                             mode: 'virtual'
@@ -1330,7 +1333,7 @@ module('Virtual scrolling integration', () => {
         });
 
         module('Recurrent appoitnments', () => {
-            test('it should have correct settings in vertical group orientation', function(assert) {
+            test('it should have correct settings in vertical group orientation', async function(assert) {
                 const data = [{
                     text: 'Test0',
                     priorityId: 1,
@@ -1345,7 +1348,7 @@ module('Virtual scrolling integration', () => {
                     recurrenceRule: 'FREQ=HOURLY'
                 }];
 
-                const instance = createWrapper({
+                const { instance } = await createWrapper({
                     dataSource: data,
                     views: [{
                         type: 'day',
@@ -1365,7 +1368,7 @@ module('Virtual scrolling integration', () => {
                         ]
                     }],
                     height: 600
-                }).instance;
+                });
 
                 instance.getWorkSpace().renderer.getRenderTimeout = () => -1;
 
@@ -1433,7 +1436,7 @@ module('Virtual scrolling integration', () => {
                 });
             });
 
-            test('it should not have duplicates in horizontal group orientation', function(assert) {
+            test('it should not have duplicates in horizontal group orientation', async function(assert) {
                 const data = [{
                     text: 'Test0',
                     priorityId: [1, 2],
@@ -1448,7 +1451,7 @@ module('Virtual scrolling integration', () => {
                     recurrenceRule: 'FREQ=DAILY',
                 }];
 
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     dataSource: data,
                     views: [{
                         type: 'day',
@@ -1664,8 +1667,8 @@ module('Virtual scrolling integration', () => {
                 });
             });
 
-            test('Recurrent all day appoitment with multiple resources should be rendered correctly if horizontal grouping', function(assert) {
-                this.createInstance({
+            test('Recurrent all day appoitment with multiple resources should be rendered correctly if horizontal grouping', async function(assert) {
+                await this.createInstance({
                     dataSource: [{
                         text: 'allDay recurrent',
                         startDate: new Date(2021, 8, 6, 9, 30),
@@ -1832,7 +1835,7 @@ module('Virtual scrolling integration', () => {
             });
         });
 
-        test('A vertically grouped long recurrent appointment should not have duplicates', function(assert) {
+        test('A vertically grouped long recurrent appointment should not have duplicates', async function(assert) {
             const data = [{
                 text: 'Website Re-Design Plan',
                 priorityId: [1, 2],
@@ -1840,7 +1843,7 @@ module('Virtual scrolling integration', () => {
                 endDate: new Date(2020, 10, 2, 11, 45),
                 recurrenceRule: 'FREQ=DAILY',
             }];
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 dataSource: data,
                 views: [{
                     type: 'day',
@@ -1979,7 +1982,7 @@ module('Virtual scrolling integration', () => {
     module('Appointment filtering', function() {
         module('Init', function() {
             ['vertical', 'horizontal'].forEach(groupOrientation => {
-                test(`Should be filtered correctly when groupOrientation: ${groupOrientation}`, function(assert) {
+                test(`Should be filtered correctly when groupOrientation: ${groupOrientation}`, async function(assert) {
                     const data = [
                         {
                             startDate: new Date(2016, 9, 5, 0, 0),
@@ -2008,7 +2011,7 @@ module('Virtual scrolling integration', () => {
                         }
                     ];
 
-                    const { instance } = createWrapper({
+                    const { instance } = await createWrapper({
                         dataSource: data,
                         currentDate: new Date(2016, 9, 5),
                         views: [{
@@ -2031,7 +2034,7 @@ module('Virtual scrolling integration', () => {
                     assert.deepEqual(filteredItems[2], data[2], 'Filtered item 2 is correct');
                 });
 
-                test(`Should be filtered correctly with resources when groupOrientation: ${groupOrientation}`, function(assert) {
+                test(`Should be filtered correctly with resources when groupOrientation: ${groupOrientation}`, async function(assert) {
                     const data = [
                         {
                             startDate: new Date(2016, 9, 5, 0, 0),
@@ -2065,7 +2068,7 @@ module('Virtual scrolling integration', () => {
                         }
                     ];
 
-                    const { instance } = createWrapper({
+                    const { instance } = await createWrapper({
                         dataSource: data,
                         currentDate: new Date(2016, 9, 5),
                         views: [{
@@ -2096,7 +2099,7 @@ module('Virtual scrolling integration', () => {
                 });
             });
 
-            test('Grouped appointments should be filtered correctly when groupOrientation: "vertical"', function(assert) {
+            test('Grouped appointments should be filtered correctly when groupOrientation: "vertical"', async function(assert) {
                 const data = [
                     {
                         startDate: new Date(2016, 9, 5, 0, 0),
@@ -2130,7 +2133,7 @@ module('Virtual scrolling integration', () => {
                     }
                 ];
 
-                const { instance } = createWrapper({
+                const { instance } = await createWrapper({
                     dataSource: data,
                     currentDate: new Date(2016, 9, 5),
                     views: [{
@@ -2161,7 +2164,7 @@ module('Virtual scrolling integration', () => {
                 assert.deepEqual(filteredItems[1], data[2], 'Filtered item 1 is correct');
             });
 
-            test('Grouped appointments should be filtered correctly when groupOrientation: "horizontal"', function(assert) {
+            test('Grouped appointments should be filtered correctly when groupOrientation: "horizontal"', async function(assert) {
                 const data = [
                     {
                         startDate: new Date(2016, 9, 5, 0, 0),
@@ -2195,7 +2198,7 @@ module('Virtual scrolling integration', () => {
                     }
                 ];
 
-                const { instance } = createWrapper({
+                const { instance } = await createWrapper({
                     dataSource: data,
                     currentDate: new Date(2016, 9, 5),
                     views: [{
@@ -2227,7 +2230,7 @@ module('Virtual scrolling integration', () => {
                 assert.deepEqual(filteredItems[2], data[2], 'Filtered item 2 is correct');
             });
 
-            test('Recurrent appointments should be filtered correctly in vertical group orientation', function(assert) {
+            test('Recurrent appointments should be filtered correctly in vertical group orientation', async function(assert) {
                 const data = [{
                     text: 'Test0',
                     priorityId: 1,
@@ -2242,7 +2245,7 @@ module('Virtual scrolling integration', () => {
                     recurrenceRule: 'FREQ=HOURLY'
                 }];
 
-                const { instance } = createWrapper({
+                const { instance } = await createWrapper({
                     dataSource: data,
                     views: [{
                         type: 'day',
@@ -2342,7 +2345,7 @@ module('Virtual scrolling integration', () => {
                     }
                 ];
 
-                this.createInstance = function(options) {
+                this.createInstance = async function(options) {
 
                     options = options || {};
 
@@ -2361,7 +2364,8 @@ module('Virtual scrolling integration', () => {
                         height: 400
                     }, options);
 
-                    this.instance = createWrapper(options).instance;
+                    const scheduler = await createWrapper(options);
+                    this.instance = scheduler.instance;
 
                     this.instance
                         .getWorkSpace()
@@ -2370,8 +2374,8 @@ module('Virtual scrolling integration', () => {
             }
         }, function() {
             module('Vertical grouping', () => {
-                test('Scroll Down', function(assert) {
-                    this.createInstance();
+                test('Scroll Down', async function(assert) {
+                    await this.createInstance();
 
                     const { instance } = this;
 
@@ -2407,8 +2411,8 @@ module('Virtual scrolling integration', () => {
                     });
                 });
 
-                test('Scroll Up', function(assert) {
-                    this.createInstance();
+                test('Scroll Up', async function(assert) {
+                    await this.createInstance();
 
                     const { instance } = this;
 
@@ -2445,8 +2449,8 @@ module('Virtual scrolling integration', () => {
                     });
                 });
 
-                test('Scroll Down if groups and resources', function(assert) {
-                    this.createInstance({
+                test('Scroll Down if groups and resources', async function(assert) {
+                    await this.createInstance({
                         groups: ['resourceId0'],
                         resources: [{
                             fieldExpr: 'resourceId0',
@@ -2498,8 +2502,8 @@ module('Virtual scrolling integration', () => {
                     });
                 });
 
-                test('Next day appointments should be filtered', function(assert) {
-                    this.createInstance({
+                test('Next day appointments should be filtered', async function(assert) {
+                    await this.createInstance({
                         groups: ['resourceId0'],
                         dataSource: [{
                             startDate: new Date(2016, 9, 6, 23),
@@ -2549,7 +2553,7 @@ module('Virtual scrolling integration', () => {
                     });
                 });
 
-                test('All day appointment should be rendered correctly on the next page', function(assert) {
+                test('All day appointment should be rendered correctly on the next page', async function(assert) {
                     const data = [{
                         startDate: new Date(2020, 9, 12, 9, 30),
                         endDate: new Date(2020, 9, 12, 10, 30),
@@ -2557,7 +2561,7 @@ module('Virtual scrolling integration', () => {
                         priorityId: 2,
                     }];
 
-                    this.createInstance({
+                    await this.createInstance({
                         dataSource: data,
                         views: [{
                             type: 'week',
@@ -2667,7 +2671,7 @@ module('Virtual scrolling integration', () => {
                         }
                     ];
 
-                    this.createInstance = function(options) {
+                    this.createInstance = async function(options) {
 
                         options = options || {};
 
@@ -2703,7 +2707,7 @@ module('Virtual scrolling integration', () => {
                             width: 600
                         }, options);
 
-                        this.scheduler = createWrapper(options);
+                        this.scheduler = await createWrapper(options);
                         this.instance = this.scheduler.instance;
 
                         this.instance
@@ -2713,13 +2717,13 @@ module('Virtual scrolling integration', () => {
                 }
             }, () => {
                 module('Regular appointmens', () => {
-                    test('Scroll Right', function(assert) {
+                    test('Scroll Right', async function(assert) {
                         const $style = $('<style nonce="qunit-test">').text('#scheduler .dx-scheduler-cell-sizes-horizontal { width: 200px } ');
                         const styleBefore = $style.text();
 
                         $('#qunit-fixture').prepend($style);
 
-                        this.createInstance();
+                        await this.createInstance();
 
                         const { instance } = this;
 
@@ -2815,8 +2819,8 @@ module('Virtual scrolling integration', () => {
 
                 module('Recurrent appointments', () => {
                     module('Multiple resources', () => {
-                        test('Scroll Right recurrent appointment with multiple resources', function(assert) {
-                            const scheduler = createWrapper({
+                        test('Scroll Right recurrent appointment with multiple resources', async function(assert) {
+                            const scheduler = await createWrapper({
                                 height: 600,
                                 width: 600,
                                 dataSource: [{
@@ -2939,8 +2943,8 @@ module('Virtual scrolling integration', () => {
 
     module('Appointment rendering', {
         before: function() {
-            this.createInstance = function(options) {
-                this.scheduler = createWrapper(options);
+            this.createInstance = async function(options) {
+                this.scheduler = await createWrapper(options);
 
                 this.instance = this.scheduler.instance;
 
@@ -2959,8 +2963,8 @@ module('Virtual scrolling integration', () => {
                 expectedReducers: ['head', 'tail', 'head']
             }
         ].forEach(option => {
-            test(`Reccurrent appointment should not have a reducer icon if ${option.groupOrientation} group orientation`, function(assert) {
-                this.createInstance({
+            test(`Reccurrent appointment should not have a reducer icon if ${option.groupOrientation} group orientation`, async function(assert) {
+                await this.createInstance({
                     dataSource: [{
                         text: 'Appointment 1',
                         startDate: new Date(2020, 10, 6, 9, 30),
@@ -3008,8 +3012,8 @@ module('Virtual scrolling integration', () => {
 
         ['vertical', 'horizontal'].forEach(groupOrientation => {
             ['vertical', 'horizontal', 'both'].forEach(scrollOrientation => {
-                test(`Created appointments should be fully repainted in "${groupOrientation}" group orientation and "${scrollOrientation}" scroll orientation`, function(assert) {
-                    this.createInstance({
+                test(`Created appointments should be fully repainted in "${groupOrientation}" group orientation and "${scrollOrientation}" scroll orientation`, async function(assert) {
+                    await this.createInstance({
                         currentDate: new Date(2015, 2, 2),
                         dataSource: [],
                         views: [{
@@ -3053,7 +3057,7 @@ module('Virtual scrolling integration', () => {
             });
         });
 
-        QUnit.test('DataSource items should be passed to the appointments collection after wrap by layout manager', function(assert) {
+        QUnit.test('DataSource items should be passed to the appointments collection after wrap by layout manager', async function(assert) {
             const data = new DataSource({
                 store: [
                     {
@@ -3069,7 +3073,7 @@ module('Virtual scrolling integration', () => {
                 ]
             });
 
-            this.createInstance({
+            await this.createInstance({
                 currentView: 'day',
                 dataSource: data,
                 currentDate: new Date(2015, 1, 9),
@@ -3153,7 +3157,7 @@ module('Virtual scrolling integration', () => {
             }
         ].forEach(({ appointment, groupByDate, scrollCoordinates, expectedAppointmentCount }) => {
             test(`After scrolling appointment count in DOM should be ${expectedAppointmentCount}
-            when groupByDate is ${groupByDate}`, function(assert) {
+            when groupByDate is ${groupByDate}`, async function(assert) {
                 const resources = [
                     { id: 0 }, { id: 1 },
                     { id: 2 }, { id: 3 },
@@ -3167,7 +3171,7 @@ module('Virtual scrolling integration', () => {
                     { id: 18 }, { id: 19 }
                 ];
 
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     height: 600,
                     width: 600,
                     currentDate: new Date(2021, 1, 2),
@@ -3215,13 +3219,13 @@ module('Virtual scrolling integration', () => {
     module('CSS customization', () => {
         module('Vertical orientation', () => {
             supportedViews.forEach(viewName => {
-                test(`Cell height should be correct in "${viewName}" view`, function(assert) {
+                test(`Cell height should be correct in "${viewName}" view`, async function(assert) {
                     const $style = $('<style nonce="qunit-test">').text('#scheduler .dx-scheduler-cell-sizes-vertical { height: 80px } ');
                     const styleBefore = $style.text();
 
                     $('#qunit-fixture').prepend($style);
 
-                    const instance = createWrapper({
+                    const { instance } = await createWrapper({
                         views: [{
                             type: viewName,
                         }],
@@ -3231,7 +3235,7 @@ module('Virtual scrolling integration', () => {
                             orientation: 'vertical'
                         },
                         height: 400
-                    }).instance;
+                    });
 
                     const { virtualScrollingDispatcher } = instance.getWorkSpace();
 
@@ -3244,13 +3248,13 @@ module('Virtual scrolling integration', () => {
 
         module('Horizontal orientation', () => {
             supportedViews.forEach(viewName => {
-                test(`Cell width should be correct in "${viewName}" view`, function(assert) {
+                test(`Cell width should be correct in "${viewName}" view`, async function(assert) {
                     const $style = $('<style nonce="qunit-test">').text('#scheduler .dx-scheduler-cell-sizes-horizontal { width: 120px } ');
                     const styleBefore = $style.text();
 
                     $('#qunit-fixture').prepend($style);
 
-                    const instance = createWrapper({
+                    const { instance } = await createWrapper({
                         views: [{
                             type: viewName,
                             intervalCount: 10
@@ -3263,7 +3267,7 @@ module('Virtual scrolling integration', () => {
                         crossScrollingEnabled: true,
                         height: 400,
                         width: 600
-                    }).instance;
+                    });
 
                     const { virtualScrollingDispatcher } = instance.getWorkSpace();
 
@@ -3277,8 +3281,8 @@ module('Virtual scrolling integration', () => {
 
     module('Markup', () => {
         [true, false].forEach((showAllDayPanel) => {
-            test(`MonthView's groupPanel and dateTable should have correct height when showAllDayPanel: "${showAllDayPanel}" and vertical grouping is used`, function(assert) {
-                const { workSpace } = createWrapper({
+            test(`MonthView's groupPanel and dateTable should have correct height when showAllDayPanel: "${showAllDayPanel}" and vertical grouping is used`, async function(assert) {
+                const { workSpace } = await createWrapper({
                     views: [{
                         type: 'month',
                         groupOrientation: 'vertical',
@@ -3306,8 +3310,8 @@ module('Virtual scrolling integration', () => {
             });
         });
 
-        test('AllDayPanel should have correct height if all day appointments out of viewport', function(assert) {
-            const { workSpace } = createWrapper({
+        test('AllDayPanel should have correct height if all day appointments out of viewport', async function(assert) {
+            const { workSpace } = await createWrapper({
                 height: 600,
                 width: 800,
                 currentDate: new Date(2021, 8, 6),
@@ -3334,8 +3338,8 @@ module('Virtual scrolling integration', () => {
             assert.equal(workSpace.getAllDayCellHeight(), 75, 'AllDayPanel height is correct');
         });
 
-        QUnit.test('WorkSpace elements should have correct height when there are a log of groups in timeline month', function(assert) {
-            const scheduler = createWrapper({
+        QUnit.test('WorkSpace elements should have correct height when there are a log of groups in timeline month', async function(assert) {
+            const scheduler = await createWrapper({
                 views: ['timelineMonth'],
                 currentView: 'timelineMonth',
                 currentDate: new Date(2021, 2, 6),

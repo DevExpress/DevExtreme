@@ -825,19 +825,9 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     name?: HtmlEditorPredefinedToolbarItem | string;
     /**
      * @docid
-     * @deprecated dxHtmlEditorToolbarItem.name
-     */
-    formatName?: HtmlEditorPredefinedToolbarItem | string;
-    /**
-     * @docid
      * @public
      */
     acceptedValues?: Array<string | number | boolean>;
-    /**
-     * @docid
-     * @deprecated dxHtmlEditorToolbarItem.acceptedValues
-     */
-    formatValues?: Array<string | number | boolean>;
     /**
      * @docid
      * @default "before"

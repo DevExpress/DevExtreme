@@ -1,11 +1,12 @@
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DxEvent } from '@js/events';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { EditorProperties } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
@@ -16,9 +17,7 @@ const RADIO_BUTTON_ICON_DOT_CLASS = 'dx-radiobutton-icon-dot';
 const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
 const RADIO_BUTTON_ICON_CHECKED_CLASS = 'dx-radiobutton-icon-checked';
 
-export interface RadioButtonProperties extends EditorProperties {
-
-}
+export interface RadioButtonProperties extends EditorProperties {}
 
 class RadioButton extends Editor {
   _$icon?: dxElementWrapper;
@@ -98,12 +97,12 @@ class RadioButton extends Editor {
     // @ts-expect-error ts-error
     const eventName = addNamespace(clickEventName, this.NAME);
 
-    this._clickAction = this._createAction((args) => {
+    this._clickAction = this._createAction((args): void => {
       this._clickHandler(args.event);
     });
 
     eventsEngine.off(this.$element(), eventName);
-    eventsEngine.on(this.$element(), eventName, (e) => {
+    eventsEngine.on(this.$element(), eventName, (e: DxEvent): void => {
       this._clickAction?.({ event: e });
     });
   }
@@ -111,12 +110,15 @@ class RadioButton extends Editor {
   _clickHandler(e): void {
     this._saveValueChangeEvent(e);
     this.option('value', true);
+    this._saveValueChangeEvent(undefined);
   }
 
   _optionChanged(args: OptionChanged<RadioButtonProperties>): void {
-    switch (args.name) {
+    const { name, value } = args;
+
+    switch (name) {
       case 'value':
-        this._renderCheckedState(args.value);
+        this._renderCheckedState(value);
         super._optionChanged(args);
         break;
       default:

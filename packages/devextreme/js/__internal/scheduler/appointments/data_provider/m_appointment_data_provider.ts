@@ -1,8 +1,8 @@
 import config from '@js/core/config';
-import { combineRemoteFilter } from '@ts/scheduler/r1/filterting/index';
-import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/types';
-import type { AppointmentDataAccessor } from '@ts/scheduler/utils';
 
+import { combineRemoteFilter } from '../../r1/filterting/index';
+import type { AppointmentDataItem, SafeAppointment } from '../../types';
+import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import { AppointmentDataSource } from './m_appointment_data_source';
 import { AppointmentFilterBaseStrategy } from './m_appointment_filter';
 import { AppointmentFilterVirtualStrategy } from './m_appointment_filter_virtual';
@@ -69,6 +69,7 @@ export class AppointmentDataProvider {
   initFilterStrategy(): void {
     const filterOptions = {
       resources: this.options.resources,
+      getResourceManager: this.options.getResourceManager,
       dataAccessors: this.dataAccessors,
       startDayHour: this.options.startDayHour,
       endDayHour: this.options.endDayHour,
@@ -76,7 +77,7 @@ export class AppointmentDataProvider {
       showAllDayPanel: this.options.showAllDayPanel,
       timeZoneCalculator: this.options.timeZoneCalculator,
       //
-      loadedResources: this.options.getLoadedResources,
+      loadedResources: this.options.getLoadedResources(),
       supportAllDayRow: this.options.getSupportAllDayRow,
       viewType: this.options.getViewType,
       viewDirection: this.options.getViewDirection,

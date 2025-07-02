@@ -1,5 +1,6 @@
 import ViewDataProvider from '__internal/scheduler/workspaces/view_model/m_view_data_provider';
 import { supportedViews } from '../../helpers/scheduler/helpers.js';
+import { getEmptyResourceManager, getWorkspaceResourceConfig } from '../../helpers/scheduler/mockResourceManager.js';
 
 const {
     test,
@@ -164,23 +165,28 @@ const testHeaderDataMap = {
     verticalGrouping: [testViewDataMap.verticalGrouping[1]],
 };
 
-const verticalGroupingRenderOptions = {
-    startRowIndex: 0,
-    startCellIndex: 0,
-    rowCount: 4,
-    cellCount: 2,
-    topVirtualRowHeight: undefined,
-    bottomVirtualRowHeight: undefined,
-    groupOrientation: 'vertical',
-    isProvideVirtualCellsWidth: true,
-    isAllDayPanelVisible: true,
-    isGenerateTimePanelData: true,
-    viewType: 'day',
-    groups: [{
-        name: 'groupId',
-        items: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
-    }],
-    viewOffset: 0,
+const getVerticalGroupingRenderOptions = async() => {
+    const { getResourceManager } = await getWorkspaceResourceConfig([{
+        label: 'groupId',
+        fieldExpr: 'groupId',
+        dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
+    }]);
+
+    return {
+        startRowIndex: 0,
+        startCellIndex: 0,
+        rowCount: 4,
+        cellCount: 2,
+        topVirtualRowHeight: undefined,
+        bottomVirtualRowHeight: undefined,
+        groupOrientation: 'vertical',
+        isProvideVirtualCellsWidth: true,
+        isAllDayPanelVisible: true,
+        isGenerateTimePanelData: true,
+        viewType: 'day',
+        getResourceManager,
+        viewOffset: 0,
+    };
 };
 const horizontalGroupingRenderOptions = {
     startRowIndex: 0,
@@ -193,12 +199,12 @@ const horizontalGroupingRenderOptions = {
     isAllDayPanelVisible: true,
     isGenerateTimePanelData: true,
     viewType: 'day',
-    groups: [],
+    getResourceManager: getEmptyResourceManager,
     viewOffset: 0,
 };
 
 const createViewDataProvider = ({
-    renderOptions = verticalGroupingRenderOptions,
+    renderOptions,
     completeViewDataMap = testViewDataMap.verticalGrouping,
     completeDateHeaderMap = testHeaderDataMap.verticalGrouping,
     completeTimePanelMap = [],
@@ -216,10 +222,10 @@ const createViewDataProvider = ({
 
 module('View Data Provider', {
     beforeEach: function() {
-        this.init = groupOrientation => {
+        this.init = async(groupOrientation) => {
             if(groupOrientation === 'vertical') {
                 this.viewDataProvider = createViewDataProvider({
-                    renderOptions: verticalGroupingRenderOptions,
+                    renderOptions: await getVerticalGroupingRenderOptions(),
                     completeViewDataMap: testViewDataMap.verticalGrouping,
                     completeDateHeaderMap: testHeaderDataMap.verticalGrouping,
                     completeTimePanelMap: [],
@@ -239,11 +245,11 @@ module('View Data Provider', {
 }, () => {
     module('API', () => {
         module('Vertical grouping', {
-            beforeEach: function() {
-                this.init('vertical');
+            beforeEach: async function() {
+                await this.init('vertical');
             }
         }, () => {
-            test('getGroupStartDate', function(assert) {
+            test('getGroupStartDate', async function(assert) {
                 const group2StartDate = this.viewDataProvider.getGroupStartDate(2);
 
                 assert.deepEqual(group2StartDate, new Date(2020, 7, 24), 'Group 2 start date is correct');
@@ -253,7 +259,7 @@ module('View Data Provider', {
                 assert.deepEqual(group3StartDate, new Date(2020, 7, 24, 1), 'Group 3 start date is correct');
             });
 
-            test('getGroupEndDate', function(assert) {
+            test('getGroupEndDate', async function(assert) {
                 const group2EndDate = this.viewDataProvider.getGroupEndDate(2);
 
                 assert.deepEqual(group2EndDate, new Date(2020, 7, 25, 0, 30), 'Group 2 end date is correct');
@@ -263,7 +269,7 @@ module('View Data Provider', {
                 assert.deepEqual(group3EndDate, new Date(2020, 7, 25, 1, 30), 'Group 3 end date is correct');
             });
 
-            test('getCellsGroup', function(assert) {
+            test('getCellsGroup', async function(assert) {
                 const group2Info = this.viewDataProvider.getCellsGroup(2);
 
                 assert.deepEqual(group2Info, 'group_2', 'Group 2 cells group is correct');
@@ -273,13 +279,13 @@ module('View Data Provider', {
                 assert.deepEqual(group3Info, 'group_3', 'Group 3 cells group is correct');
             });
 
-            test('getGroupIndices', function(assert) {
+            test('getGroupIndices', async function(assert) {
                 const groupIndices = this.viewDataProvider.getGroupIndices();
 
                 assert.deepEqual(groupIndices, [2, 3], 'Indices are correct');
             });
 
-            test('getLastGroupCellPosition', function(assert) {
+            test('getLastGroupCellPosition', async function(assert) {
                 assert.deepEqual(
                     this.viewDataProvider.getLastGroupCellPosition(2),
                     { rowIndex: 1, columnIndex: 1 },
@@ -293,7 +299,7 @@ module('View Data Provider', {
                 );
             });
 
-            test('getRowCountInGroup', function(assert) {
+            test('getRowCountInGroup', async function(assert) {
                 assert.deepEqual(
                     this.viewDataProvider.getRowCountInGroup(2),
                     1,
@@ -307,7 +313,7 @@ module('View Data Provider', {
                 );
             });
 
-            test('getCompletedGroupsInfo', function(assert) {
+            test('getCompletedGroupsInfo', async function(assert) {
                 const completeViewDataMap = [
                     [
                         {
@@ -403,7 +409,7 @@ module('View Data Provider', {
 
                 const completeDateHeaderMap = [completeViewDataMap[3]];
                 const renderOptions = {
-                    ...verticalGroupingRenderOptions,
+                    ...(await getVerticalGroupingRenderOptions()),
                     rowCount: 5,
                 };
                 const viewDataProvider = createViewDataProvider({
@@ -437,25 +443,25 @@ module('View Data Provider', {
         });
 
         module('hasGroupAllDayPanel', () => {
-            test('it should work with vertical grouping', function(assert) {
-                this.init('vertical');
+            test('it should work with vertical grouping', async function(assert) {
+                await this.init('vertical');
                 this.viewDataProvider.createGroupedDataMapProvider();
 
                 assert.equal(this.viewDataProvider.hasGroupAllDayPanel(2), true, 'Correct value');
                 assert.equal(this.viewDataProvider.hasGroupAllDayPanel(3), true, 'Correct value');
             });
 
-            test('it should work with horizontal grouping', function(assert) {
-                this.init('horizontal');
+            test('it should work with horizontal grouping', async function(assert) {
+                await this.init('horizontal');
                 this.viewDataProvider.createGroupedDataMapProvider();
 
                 assert.equal(this.viewDataProvider.hasGroupAllDayPanel(2), true, 'Correct value');
                 assert.equal(this.viewDataProvider.hasGroupAllDayPanel(3), true, 'Correct value');
             });
 
-            test('it should work with vertical grouping when all-day panel is not visible', function(assert) {
+            test('it should work with vertical grouping when all-day panel is not visible', async function(assert) {
                 const viewDataProvider = createViewDataProvider({
-                    renderOptions: { ...verticalGroupingRenderOptions, isAllDayPanelVisible: false },
+                    renderOptions: { ...(await getVerticalGroupingRenderOptions()), isAllDayPanelVisible: false },
                     completeViewDataMap: [testViewDataMap.verticalGrouping[1], testViewDataMap.verticalGrouping[3]],
                 });
                 viewDataProvider.createGroupedDataMapProvider();
@@ -464,7 +470,7 @@ module('View Data Provider', {
                 assert.equal(viewDataProvider.hasGroupAllDayPanel(3), false, 'Correct value');
             });
 
-            test('it should work with horizontal grouping all-day panel is not visible', function(assert) {
+            test('it should work with horizontal grouping all-day panel is not visible', async function(assert) {
                 const viewDataProvider = createViewDataProvider({
                     renderOptions: { ...horizontalGroupingRenderOptions, isAllDayPanelVisible: false },
                     completeViewDataMap: testViewDataMap.verticalGrouping.slice(1),
@@ -477,12 +483,12 @@ module('View Data Provider', {
         });
 
         module('findGroupCellStartDate', {
-            beforeEach: function() {
-                this.init('vertical');
+            beforeEach: async function() {
+                await this.init('vertical');
             }
         }, () => {
             module('Date and time views', () => {
-                test('it should return correct cell start date', function(assert) {
+                test('it should return correct cell start date', async function(assert) {
                     assert.deepEqual(
                         this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10)),
                         new Date(2020, 7, 24),
@@ -508,7 +514,7 @@ module('View Data Provider', {
                     );
                 });
 
-                test('it should return correct cell start date if find by date', function(assert) {
+                test('it should return correct cell start date if find by date', async function(assert) {
                     assert.deepEqual(
                         this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10), true),
                         new Date(2020, 7, 24),
@@ -536,12 +542,11 @@ module('View Data Provider', {
             });
 
             module('Date views', () => {
-                const renderOptions = {
-                    ...verticalGroupingRenderOptions,
-                    viewType: 'month',
-                };
-
-                test('it should return correct cell start date', function(assert) {
+                test('it should return correct cell start date', async function(assert) {
+                    const renderOptions = {
+                        ...await getVerticalGroupingRenderOptions(),
+                        viewType: 'month',
+                    };
                     const viewDataProvider = createViewDataProvider({
                         renderOptions,
                         completeViewDataMap: testViewDataMap.verticalGrouping,
@@ -576,13 +581,13 @@ module('View Data Provider', {
         });
 
         module('findAllDayGroupCellStartDate', {
-            beforeEach: function() {
-                this.init('vertical');
+            beforeEach: async function() {
+                await this.init('vertical');
             }
         }, () => {
             module('Date and time views', () => {
-                test('it should return correct all day cell start date', function(assert) {
-                    this.init('vertical');
+                test('it should return correct all day cell start date', async function(assert) {
+                    await this.init('vertical');
 
                     assert.deepEqual(
                         this.viewDataProvider.findAllDayGroupCellStartDate(2),
@@ -599,12 +604,11 @@ module('View Data Provider', {
             });
 
             module('Date views', () => {
-                const renderOptions = {
-                    ...verticalGroupingRenderOptions,
-                    viewType: 'month',
-                };
-
-                test('it should return correct cell start date', function(assert) {
+                test('it should return correct cell start date', async function(assert) {
+                    const renderOptions = {
+                        ...await getVerticalGroupingRenderOptions(),
+                        viewType: 'month',
+                    };
                     const viewDataProvider = createViewDataProvider({
                         renderOptions,
                         completeViewDataMap: testViewDataMap.verticalGrouping,
@@ -627,11 +631,11 @@ module('View Data Provider', {
         });
 
         module('getCellData', {
-            beforeEach: function() {
-                this.init('vertical');
+            beforeEach: async function() {
+                await this.init('vertical');
             }
         }, function() {
-            test('Cell data of the allDayPanel', function(assert) {
+            test('Cell data of the allDayPanel', async function(assert) {
                 assert.deepEqual(
                     this.viewDataProvider.getCellData(0, 0),
                     testViewDataMap.verticalGrouping[0][0],
@@ -657,7 +661,7 @@ module('View Data Provider', {
                 );
             });
 
-            test('Cell data of the dateTable', function(assert) {
+            test('Cell data of the dateTable', async function(assert) {
                 assert.deepEqual(
                     this.viewDataProvider.getCellData(1, 0),
                     testViewDataMap.verticalGrouping[1][0],
@@ -683,7 +687,7 @@ module('View Data Provider', {
                 );
             });
 
-            test('isGroupIntersectDateInterval', function(assert) {
+            test('isGroupIntersectDateInterval', async function(assert) {
                 assert.ok(
                     this.viewDataProvider.isGroupIntersectDateInterval(2, new Date(2020, 7, 24), new Date(2020, 7, 24, 15)),
                     'View date interval intersected'
@@ -702,13 +706,13 @@ module('View Data Provider', {
         });
 
         module('findCellPositionInMap', {
-            beforeEach: function() {
-                this.init('vertical');
+            beforeEach: async function() {
+                await this.init('vertical');
             }
         }, function() {
             module('Date and time views', () => {
                 module('Vertical Grouping', function() {
-                    test('Should return correct cell position for the allDay cell date', function(assert) {
+                    test('Should return correct cell position for the allDay cell date', async function(assert) {
                         const { viewDataProvider } = this;
 
                         const firstCellInfo = createCellInfo(2, new Date(2020, 7, 24), true);
@@ -720,7 +724,7 @@ module('View Data Provider', {
                         assert.deepEqual(position, { rowIndex: 2, columnIndex: 0 }, '2nd allDayPanel cell position is correct');
                     });
 
-                    test('Should return correct cell position for the not allDay cell date', function(assert) {
+                    test('Should return correct cell position for the not allDay cell date', async function(assert) {
                         const { viewDataProvider } = this;
 
                         let cellInfo = createCellInfo(2, new Date(2020, 7, 24));
@@ -752,7 +756,7 @@ module('View Data Provider', {
                         );
                     });
 
-                    test('Should return correct cell position if index is provided', function(assert) {
+                    test('Should return correct cell position if index is provided', async function(assert) {
                         const { viewDataProvider } = this;
 
                         let cellInfo = createCellInfo(2, new Date(2020, 7, 24, 0, 29), false, 0);
@@ -786,11 +790,11 @@ module('View Data Provider', {
                 });
 
                 module('Horizontal Grouping', {
-                    beforeEach: function() {
-                        this.init('horizontal');
+                    beforeEach: async function() {
+                        await this.init('horizontal');
                     }
                 }, function() {
-                    test('Should return correct cell position for the allDay cell date', function(assert) {
+                    test('Should return correct cell position for the allDay cell date', async function(assert) {
                         const { viewDataProvider } = this;
 
                         const firstCellInfo = createCellInfo(2, new Date(2020, 7, 24), true);
@@ -802,7 +806,7 @@ module('View Data Provider', {
                         assert.deepEqual(position, { rowIndex: 0, columnIndex: 2 }, '2nd allDayPanel cell position is correct');
                     });
 
-                    test('Should return correct cell position for the not allDay cell date', function(assert) {
+                    test('Should return correct cell position for the not allDay cell date', async function(assert) {
                         const { viewDataProvider } = this;
 
                         let cellInfo = createCellInfo(2, new Date(2020, 7, 24), false);
@@ -838,12 +842,11 @@ module('View Data Provider', {
 
             module('Date views', () => {
                 module('Vertical Grouping', function() {
-                    const renderOptions = {
-                        ...verticalGroupingRenderOptions,
-                        viewType: 'month',
-                    };
-
-                    test('Should return correct cell position for the allDay cell date', function(assert) {
+                    test('Should return correct cell position for the allDay cell date', async function(assert) {
+                        const renderOptions = {
+                            ...await getVerticalGroupingRenderOptions(),
+                            viewType: 'month',
+                        };
                         const viewDataProvider = createViewDataProvider({
                             renderOptions,
                             completeViewDataMap: testViewDataMap.verticalGrouping,
@@ -859,7 +862,11 @@ module('View Data Provider', {
                         assert.deepEqual(position, { rowIndex: 2, columnIndex: 0 }, '2nd allDayPanel cell position is correct');
                     });
 
-                    test('Should return correct cell position for the not allDay cell date', function(assert) {
+                    test('Should return correct cell position for the not allDay cell date', async function(assert) {
+                        const renderOptions = {
+                            ...await getVerticalGroupingRenderOptions(),
+                            viewType: 'month',
+                        };
                         const viewDataProvider = createViewDataProvider({
                             renderOptions,
                             completeViewDataMap: testViewDataMap.verticalGrouping,
@@ -902,7 +909,7 @@ module('View Data Provider', {
                         viewType: 'month',
                     };
 
-                    test('Should return correct cell position for the allDay cell date', function(assert) {
+                    test('Should return correct cell position for the allDay cell date', async function(assert) {
                         const viewDataProvider = createViewDataProvider({
                             renderOptions,
                             completeViewDataMap: testViewDataMap.horizontalGrouping,
@@ -918,7 +925,7 @@ module('View Data Provider', {
                         assert.deepEqual(position, { rowIndex: 0, columnIndex: 2 }, '2nd allDayPanel cell position is correct');
                     });
 
-                    test('Should return correct cell position for the not allDay cell date', function(assert) {
+                    test('Should return correct cell position for the not allDay cell date', async function(assert) {
                         const { viewDataProvider } = this;
 
                         let cellInfo = createCellInfo(2, new Date(2020, 7, 24), false);
@@ -954,7 +961,7 @@ module('View Data Provider', {
         });
 
         module('isSkippedDate', () => {
-            test('it should return correct value for the weekend', function(assert) {
+            test('it should return correct value for the weekend', async function(assert) {
                 [
                     { viewType: 'day', expected: false },
                     { viewType: 'week', expected: false },
@@ -972,7 +979,7 @@ module('View Data Provider', {
                 });
             });
 
-            test('it should return correct value for the week day', function(assert) {
+            test('it should return correct value for the week day', async function(assert) {
                 supportedViews.forEach((viewType) => {
                     const viewDataProvider = new ViewDataProvider(viewType);
                     const result = viewDataProvider.isSkippedDate(new Date(2021, 8, 3));
@@ -983,14 +990,14 @@ module('View Data Provider', {
         });
 
         module('createGroupedDataMapProvider', () => {
-            test('it should create groupedDataMapProvider', function(assert) {
+            test('it should create groupedDataMapProvider', async function(assert) {
                 const viewDataProvider = new ViewDataProvider('day');
 
                 viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
 
                 viewDataProvider.viewDataMap = viewDataProvider.viewDataGenerator
-                    .generateViewDataMap(testViewDataMap.verticalGrouping, verticalGroupingRenderOptions);
-                viewDataProvider.setViewOptions(verticalGroupingRenderOptions);
+                    .generateViewDataMap(testViewDataMap.verticalGrouping, await getVerticalGroupingRenderOptions());
+                viewDataProvider.setViewOptions(await getVerticalGroupingRenderOptions());
 
                 viewDataProvider.createGroupedDataMapProvider();
 
@@ -999,21 +1006,21 @@ module('View Data Provider', {
         });
 
         module('getViewPortGroupCount', () => {
-            test('it should return correct value if vertical grouping', function(assert) {
+            test('it should return correct value if vertical grouping', async function(assert) {
                 const viewDataProvider = new ViewDataProvider('day');
 
                 viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
 
                 viewDataProvider.viewDataMap = viewDataProvider.viewDataGenerator
-                    .generateViewDataMap(testViewDataMap.verticalGrouping, verticalGroupingRenderOptions);
-                viewDataProvider.setViewOptions(verticalGroupingRenderOptions);
+                    .generateViewDataMap(testViewDataMap.verticalGrouping, await getVerticalGroupingRenderOptions());
+                viewDataProvider.setViewOptions(await getVerticalGroupingRenderOptions());
 
                 viewDataProvider.createGroupedDataMapProvider();
 
                 assert.equal(viewDataProvider.getViewPortGroupCount(), 4, 'Viewport group cout is correct');
             });
 
-            test('it should return correct value if horizontal grouping', function(assert) {
+            test('it should return correct value if horizontal grouping', async function(assert) {
                 const viewDataProvider = new ViewDataProvider('day');
 
                 viewDataProvider.completeViewDataMap = testViewDataMap.horizontalGrouping;
@@ -1035,15 +1042,12 @@ module('View Data Provider', {
 
     module('Data generation', () => {
         module('Standard scrolling', () => {
-            const baseStartDate = new Date(2021, 0, 10, 5);
-            const dataGenerationRenderOptions = {
-                ...horizontalGroupingRenderOptions,
-                verticalGroupCount: 1,
-                today: baseStartDate,
-                groupByDate: false,
-                groups: [{
-                    name: 'groupId',
-                    items: [{
+            const getRenderOptions = async function() {
+                const baseStartDate = new Date(2021, 0, 10, 5);
+                const { getResourceManager } = await getWorkspaceResourceConfig([{
+                    label: 'groupId',
+                    fieldExpr: 'groupId',
+                    dataSource: [{
                         id: 1,
                         color: 'red',
                         text: 'First group',
@@ -1052,23 +1056,31 @@ module('View Data Provider', {
                         color: 'green',
                         text: 'Second group',
                     }]
-                }],
-                isAllDayPanelVisible: false,
-                isGroupedByDate: false,
-                headerCellTextFormat: 'shorttime',
-                getDateForHeaderText: (_, date) => date,
-                isGenerateTimePanelData: true,
-                startDayHour: 5,
-                endDayHour: 7,
-                hoursInterval: 1,
-                currentDate: new Date(baseStartDate),
-                firstDayOfWeek: 0,
-                intervalCount: 2,
+                }]);
+
+                return {
+                    ...horizontalGroupingRenderOptions,
+                    verticalGroupCount: 1,
+                    today: baseStartDate,
+                    groupByDate: false,
+                    getResourceManager,
+                    isAllDayPanelVisible: false,
+                    isGroupedByDate: false,
+                    headerCellTextFormat: 'shorttime',
+                    getDateForHeaderText: (_, date) => date,
+                    isGenerateTimePanelData: true,
+                    startDayHour: 5,
+                    endDayHour: 7,
+                    hoursInterval: 1,
+                    currentDate: new Date(baseStartDate),
+                    firstDayOfWeek: 0,
+                    intervalCount: 2,
+                };
             };
 
             module('groupedDataMap', () => {
-                test('it should be generated correctly in vertical group orientation', function(assert) {
-                    const viewDataProvider = this.init('vertical');
+                test('it should be generated correctly in vertical group orientation', async function(assert) {
+                    const viewDataProvider = await this.init('vertical');
 
                     const viewDataMap = testViewDataMap.verticalGrouping;
 
@@ -1151,8 +1163,8 @@ module('View Data Provider', {
                     );
                 });
 
-                test('it should be generated correctly in horizontal group orientation', function(assert) {
-                    this.init('horizontal');
+                test('it should be generated correctly in horizontal group orientation', async function(assert) {
+                    await this.init('horizontal');
 
                     const viewDataMap = testViewDataMap.horizontalGrouping;
 
@@ -1239,10 +1251,10 @@ module('View Data Provider', {
                 });
             });
 
-            test('completeDateHeaderMap should be generated correctly', function(assert) {
+            test('completeDateHeaderMap should be generated correctly', async function(assert) {
                 const viewDataProvider = new ViewDataProvider();
 
-                viewDataProvider.update(dataGenerationRenderOptions, true);
+                viewDataProvider.update(await getRenderOptions(), true);
 
                 const expectedDateHeaderMap = [[{
                     colSpan: 1,
@@ -1299,9 +1311,9 @@ module('View Data Provider', {
                 assert.deepEqual(completeDateHeaderMap, expectedDateHeaderMap, 'Correct Date Header map');
             });
 
-            test('completeDateHeaderMap should be generated correctly when grouping by date is used', function(assert) {
+            test('completeDateHeaderMap should be generated correctly when grouping by date is used', async function(assert) {
                 const completeDateHeaderMapRenderOptions = {
-                    ...dataGenerationRenderOptions,
+                    ...(await getRenderOptions()),
                     groupByDate: true,
                 };
                 const viewDataProvider = new ViewDataProvider();
@@ -1339,9 +1351,9 @@ module('View Data Provider', {
                 assert.deepEqual(completeDateHeaderMap, expectedDateHeaderMap, 'Correct Date Header map');
             });
 
-            test('completeDateHeaderMap should be generated correctly when it is necessary to generate week days header', function(assert) {
+            test('completeDateHeaderMap should be generated correctly when it is necessary to generate week days header', async function(assert) {
                 const completeDateHeaderMapRenderOptions = {
-                    ...dataGenerationRenderOptions,
+                    ...(await getRenderOptions()),
                     isGenerateWeekDaysHeaderData: true,
                     getWeekDaysHeaderText: () => 'week header text',
                     intervalCount: 2,
@@ -1502,9 +1514,9 @@ module('View Data Provider', {
                 assert.deepEqual(completeDateHeaderMap, expectedDateHeaderMap, 'Correct Date Header map');
             });
 
-            test('completeDateHeaderMap should be generated correctly when it is necessary to generate week days header and groupByDate is true', function(assert) {
+            test('completeDateHeaderMap should be generated correctly when it is necessary to generate week days header and groupByDate is true', async function(assert) {
                 const completeDateHeaderMapRenderOptions = {
-                    ...dataGenerationRenderOptions,
+                    ...(await getRenderOptions()),
                     isGenerateWeekDaysHeaderData: true,
                     getWeekDaysHeaderText: () => 'week header text',
                     groupByDate: true,
@@ -1595,8 +1607,8 @@ module('View Data Provider', {
             });
 
 
-            test('dateHeaderMap should be generated correctly', function(assert) {
-                const viewDataProvider = this.init('horizontal');
+            test('dateHeaderMap should be generated correctly', async function(assert) {
+                const viewDataProvider = await this.init('horizontal');
 
                 const dateHeaderMap = testHeaderDataMap.horizontalGrouping;
                 const dateHeaderData = {
@@ -1615,10 +1627,10 @@ module('View Data Provider', {
                 assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
             });
 
-            test('completeTimePanelMap should be generated correctly', function(assert) {
+            test('completeTimePanelMap should be generated correctly', async function(assert) {
                 const viewDataProvider = new ViewDataProvider();
 
-                viewDataProvider.update(dataGenerationRenderOptions, true);
+                viewDataProvider.update(await getRenderOptions(), true);
 
                 const expectedCompleteTimePanelMap = [{
                     startDate: new Date(2021, 0, 10, 5),
@@ -1649,9 +1661,9 @@ module('View Data Provider', {
                 assert.deepEqual(completeTimePanelMap, expectedCompleteTimePanelMap, 'Correct Time Panel map');
             });
 
-            test('completeTimePanelMap should be generated correctly when all-day panel is enabled', function(assert) {
+            test('completeTimePanelMap should be generated correctly when all-day panel is enabled', async function(assert) {
                 const completeTimePanelMapRenderOptions = {
-                    ...dataGenerationRenderOptions,
+                    ...(await getRenderOptions()),
                     isAllDayPanelVisible: true,
                 };
                 const viewDataProvider = new ViewDataProvider();
@@ -1698,14 +1710,16 @@ module('View Data Provider', {
                 assert.deepEqual(completeTimePanelMap, expectedCompleteTimePanelMap, 'Correct Time Panel map');
             });
 
-            test('completeTimePanelMap should be generated correctly when vertical grouping is enabled', function(assert) {
+            test('completeTimePanelMap should be generated correctly when vertical grouping is enabled', async function(assert) {
+                const { getResourceManager } = await getWorkspaceResourceConfig([{
+                    label: 'groupId',
+                    fieldExpr: 'groupId',
+                    dataSource: [{ id: 1 }, { id: 2 }]
+                }]);
                 const completeTimePanelMapRenderOptions = {
-                    ...dataGenerationRenderOptions,
+                    ...(await getRenderOptions()),
                     groupOrientation: 'vertical',
-                    groups: [{
-                        name: 'groupId',
-                        items: [{ id: 1 }, { id: 2 }],
-                    }],
+                    getResourceManager,
                     isAllDayPanelVisible: true,
                 };
                 const viewDataProvider = new ViewDataProvider();
@@ -1785,14 +1799,16 @@ module('View Data Provider', {
                 assert.deepEqual(completeTimePanelMap, expectedCompleteTimePanelMap, 'Correct Time Panel map');
             });
 
-            test('completeTimePanelMap should be generated correctly when vertical grouping is enabled and all-day panel is absent', function(assert) {
+            test('completeTimePanelMap should be generated correctly when vertical grouping is enabled and all-day panel is absent', async function(assert) {
+                const { getResourceManager } = await getWorkspaceResourceConfig([{
+                    label: 'groupId',
+                    fieldExpr: 'groupId',
+                    dataSource: [{ id: 1 }, { id: 2 }]
+                }]);
                 const completeTimePanelMapRenderOptions = {
-                    ...dataGenerationRenderOptions,
+                    ...(await getRenderOptions()),
                     groupOrientation: 'vertical',
-                    groups: [{
-                        name: 'groupId',
-                        items: [{ id: 1 }, { id: 2 }],
-                    }],
+                    getResourceManager,
                     isAllDayPanelVisible: false,
                 };
                 const viewDataProvider = new ViewDataProvider();
@@ -1850,7 +1866,7 @@ module('View Data Provider', {
                 assert.deepEqual(completeTimePanelMap, expectedCompleteTimePanelMap, 'Correct Time Panel map');
             });
 
-            test('timePanelData should be generated correctly', function(assert) {
+            test('timePanelData should be generated correctly', async function(assert) {
                 const completeTimePanelMap = [{
                     startDate: new Date(2021, 1, 2, 0),
                     edDate: new Date(2021, 1, 2, 1),
@@ -1870,6 +1886,7 @@ module('View Data Provider', {
                 }];
 
                 const viewDataProvider = createViewDataProvider({
+                    renderOptions: await getVerticalGroupingRenderOptions(),
                     completeTimePanelMap,
                 });
 
@@ -1899,7 +1916,7 @@ module('View Data Provider', {
                 assert.deepEqual(viewDataProvider.timePanelData, expectedTimePanelMap, 'Correct time panel data');
             });
 
-            test('timePanelData should be generated correctly when all-day panel is present', function(assert) {
+            test('timePanelData should be generated correctly when all-day panel is present', async function(assert) {
                 const completeTimePanelMap = [{
                     startDate: new Date(2021, 1, 2, 0),
                     edDate: new Date(2021, 1, 2, 1),
@@ -1912,6 +1929,7 @@ module('View Data Provider', {
                 }];
 
                 const viewDataProvider = createViewDataProvider({
+                    renderOptions: await getVerticalGroupingRenderOptions(),
                     completeTimePanelMap,
                 });
 
@@ -1933,23 +1951,31 @@ module('View Data Provider', {
                 assert.deepEqual(viewDataProvider.timePanelData, expectedTimePanelMap, 'Correct time panel data');
             });
 
-            test('groupPanelData should be generated correctly', function(assert) {
+            test('groupPanelData should be generated correctly', async function(assert) {
                 const viewDataProvider = createViewDataProvider({
-                    renderOptions: dataGenerationRenderOptions,
+                    renderOptions: await getRenderOptions(),
                 });
 
                 const expectedGroupPanelData = {
                     baseColSpan: 2,
                     groupPanelItems: [[{
                         color: 'red',
-                        data: undefined,
+                        data: {
+                            id: 1,
+                            color: 'red',
+                            text: 'First group'
+                        },
                         id: 1,
                         key: '0_groupId_1',
                         resourceName: 'groupId',
                         text: 'First group'
                     }, {
                         color: 'green',
-                        data: undefined,
+                        data: {
+                            id: 2,
+                            color: 'green',
+                            text: 'Second group'
+                        },
                         id: 2,
                         key: '0_groupId_2',
                         resourceName: 'groupId',
@@ -1957,45 +1983,50 @@ module('View Data Provider', {
                     }]]
                 };
 
-                const groupPanelData = viewDataProvider.getGroupPanelData(dataGenerationRenderOptions);
+                const groupPanelData = viewDataProvider.getGroupPanelData(await getRenderOptions());
 
                 assert.deepEqual(groupPanelData, expectedGroupPanelData, 'Correct group panel data');
             });
         });
 
         module('Vertical virtual scrolling', () => {
-            const virtualVerticalGroupingRenderOptions = {
-                startCellIndex: 0,
-                startRowIndex: 1,
-                cellCount: 2,
-                rowCount: 2,
-                topVirtualRowHeight: 50,
-                bottomVirtualRowHeight: 50,
-                groupOrientation: 'vertical',
-                isProvideVirtualCellsWidth: true,
-                isAllDayPanelVisible: true,
-                isGenerateTimePanelData: true,
-                viewType: 'day',
-                groups: [{
-                    name: 'groupId',
-                    items: [{ id: 1 }, { id: 2 }],
-                }],
-            };
-            const virtualHorizontalGroupingRenderOptions = {
-                startCellIndex: 0,
-                startRowIndex: 1,
-                rowCount: 1,
-                cellCount: 2,
-                topVirtualRowHeight: 50,
-                bottomVirtualRowHeight: 50,
-                groupOrientation: 'horizontal',
-                isProvideVirtualCellsWidth: true,
-                isAllDayPanelVisible: true,
-                viewType: 'day',
-                groups: [{
-                    name: 'groupId',
-                    items: [{ id: 1 }, { id: 2 }],
-                }],
+            const getRenderOptions = async(type) => {
+                const { getResourceManager } = await getWorkspaceResourceConfig([{
+                    label: 'groupId',
+                    fieldExpr: 'groupId',
+                    dataSource: [{ id: 1 }]
+                }]);
+                const virtualVerticalGroupingRenderOptions = {
+                    startCellIndex: 0,
+                    startRowIndex: 1,
+                    cellCount: 2,
+                    rowCount: 2,
+                    topVirtualRowHeight: 50,
+                    bottomVirtualRowHeight: 50,
+                    groupOrientation: 'vertical',
+                    isProvideVirtualCellsWidth: true,
+                    isAllDayPanelVisible: true,
+                    isGenerateTimePanelData: true,
+                    viewType: 'day',
+                    getResourceManager,
+                };
+                const virtualHorizontalGroupingRenderOptions = {
+                    startCellIndex: 0,
+                    startRowIndex: 1,
+                    rowCount: 1,
+                    cellCount: 2,
+                    topVirtualRowHeight: 50,
+                    bottomVirtualRowHeight: 50,
+                    groupOrientation: 'horizontal',
+                    isProvideVirtualCellsWidth: true,
+                    isAllDayPanelVisible: true,
+                    viewType: 'day',
+                    getResourceManager,
+                };
+
+                return type === 'vertical'
+                    ? virtualVerticalGroupingRenderOptions
+                    : virtualHorizontalGroupingRenderOptions;
             };
             const horizontalDataMap = [[
                 {
@@ -2060,9 +2091,9 @@ module('View Data Provider', {
             const horizontalDateHeaderMap = [horizontalDataMap[1]];
 
             module('viewData', () => {
-                test('viewData should be generated correctly if vertical grouping', function(assert) {
+                test('viewData should be generated correctly if vertical grouping', async function(assert) {
                     const viewDataProvider = createViewDataProvider({
-                        renderOptions: virtualVerticalGroupingRenderOptions,
+                        renderOptions: await getRenderOptions('vertical'),
                         completeViewDataMap: testViewDataMap.verticalGrouping,
                         completeDateHeaderMap: testHeaderDataMap.verticalGrouping,
                     });
@@ -2101,9 +2132,9 @@ module('View Data Provider', {
                     assert.deepEqual(viewData, expectedViewData, 'View data is correct');
                 });
 
-                test('viewData should be generated correctly if horizontal grouping', function(assert) {
+                test('viewData should be generated correctly if horizontal grouping', async function(assert) {
                     const viewDataProvider = createViewDataProvider({
-                        renderOptions: virtualHorizontalGroupingRenderOptions,
+                        renderOptions: await getRenderOptions('horizontal'),
                         completeViewDataMap: horizontalDataMap,
                         completeDateHeaderMap: horizontalDateHeaderMap,
                     });
@@ -2137,11 +2168,11 @@ module('View Data Provider', {
                     assert.deepEqual(viewData, expectedViewData, 'View data is correct');
                 });
 
-                test('selected and focused cells should be marked in viewData', function(assert) {
+                test('selected and focused cells should be marked in viewData', async function(assert) {
                     const completeViewDataMap = horizontalDataMap;
                     const viewDataProvider = createViewDataProvider({
                         renderOptions: {
-                            ...virtualHorizontalGroupingRenderOptions,
+                            ...(await getRenderOptions('horizontal')),
                             selectedCells: [completeViewDataMap[2][0], completeViewDataMap[2][1]],
                             focusedCell: {
                                 cellData: completeViewDataMap[2][0],
@@ -2188,9 +2219,9 @@ module('View Data Provider', {
             });
 
             module('viewDataMap', () => {
-                test('viewDataMap should be generated correctly if vertical grouping', function(assert) {
+                test('viewDataMap should be generated correctly if vertical grouping', async function(assert) {
                     const viewDataProvider = createViewDataProvider({
-                        renderOptions: virtualVerticalGroupingRenderOptions,
+                        renderOptions: await getRenderOptions('vertical'),
                         completeViewDataMap: testViewDataMap.verticalGrouping,
                         completeDateHeaderMap: testHeaderDataMap.verticalGrouping,
                     });
@@ -2223,9 +2254,9 @@ module('View Data Provider', {
                     );
                 });
 
-                test('viewDataMap should be generated correctly if horizontal grouping', function(assert) {
+                test('viewDataMap should be generated correctly if horizontal grouping', async function(assert) {
                     const viewDataProvider = createViewDataProvider({
-                        renderOptions: virtualHorizontalGroupingRenderOptions,
+                        renderOptions: await getRenderOptions('horizontal'),
                         completeViewDataMap: horizontalDataMap,
                         completeDateHeaderMap: horizontalDateHeaderMap,
                     });
@@ -2260,9 +2291,9 @@ module('View Data Provider', {
             });
 
             module('groupedDataMap', () => {
-                test('groupedDataMap should be generated correctly if vertical grouping', function(assert) {
+                test('groupedDataMap should be generated correctly if vertical grouping', async function(assert) {
                     const viewDataProvider = createViewDataProvider({
-                        renderOptions: virtualVerticalGroupingRenderOptions,
+                        renderOptions: await getRenderOptions('vertical'),
                         completeViewDataMap: testViewDataMap.verticalGrouping,
                         completeDateHeaderMap: testHeaderDataMap.verticalGrouping,
                     });
@@ -2298,9 +2329,9 @@ module('View Data Provider', {
                     );
                 });
 
-                test('groupedDataMap should be generated correctly if horizontal grouping', function(assert) {
+                test('groupedDataMap should be generated correctly if horizontal grouping', async function(assert) {
                     const viewDataProvider = createViewDataProvider({
-                        renderOptions: virtualHorizontalGroupingRenderOptions,
+                        renderOptions: await getRenderOptions('horizontal'),
                         completeViewDataMap: horizontalDataMap,
                         completeDateHeaderMap: horizontalDateHeaderMap,
                     });
@@ -2347,7 +2378,7 @@ module('View Data Provider', {
                 });
             });
 
-            test('timePanelData should be generated correctly when virtual scrolling is used', function(assert) {
+            test('timePanelData should be generated correctly when virtual scrolling is used', async function(assert) {
                 const completeTimePanelMap = [{
                     startDate: new Date(2021, 1, 2, 0),
                     edDate: new Date(2021, 1, 2, 1),
@@ -2368,7 +2399,7 @@ module('View Data Provider', {
 
                 const viewDataProvider = createViewDataProvider({
                     completeTimePanelMap,
-                    renderOptions: virtualVerticalGroupingRenderOptions,
+                    renderOptions: await getRenderOptions('vertical'),
                 });
 
                 const expectedTimePanelMap = {
@@ -2397,42 +2428,46 @@ module('View Data Provider', {
         });
 
         module('Horizontal virtual scrolling', () => {
-            const virtualVerticalGroupingRenderOptions = {
-                startCellIndex: 1,
-                cellCount: 1,
-                startRowIndex: 0,
-                rowCount: 2,
-                leftVirtualCellWidth: 20,
-                rightVirtualCellWidth: 30,
-                topVirtualRowHeight: 50,
-                bottomVirtualRowHeight: 50,
-                groupOrientation: 'vertical',
-                isProvideVirtualCellsWidth: true,
-                isAllDayPanelVisible: true,
-                viewType: 'day',
-                groups: [{
-                    name: 'groupId',
-                    items: [{ id: 1 }, { id: 2 }],
-                }],
-            };
+            const getRenderOptions = async(type) => {
+                const { getResourceManager } = await getWorkspaceResourceConfig([{
+                    label: 'groupId',
+                    fieldExpr: 'groupId',
+                    dataSource: [{ id: 1 }, { id: 2 }]
+                }]);
+                const virtualVerticalGroupingRenderOptions = {
+                    startCellIndex: 1,
+                    cellCount: 1,
+                    startRowIndex: 0,
+                    rowCount: 2,
+                    leftVirtualCellWidth: 20,
+                    rightVirtualCellWidth: 30,
+                    topVirtualRowHeight: 50,
+                    bottomVirtualRowHeight: 50,
+                    groupOrientation: 'vertical',
+                    isProvideVirtualCellsWidth: true,
+                    isAllDayPanelVisible: true,
+                    viewType: 'day',
+                    getResourceManager,
+                };
+                const virtualHorizontalGroupingRenderOptions = {
+                    startCellIndex: 1,
+                    cellCount: 1,
+                    startRowIndex: 0,
+                    rowCount: 2,
+                    leftVirtualCellWidth: 20,
+                    rightVirtualCellWidth: 30,
+                    topVirtualRowHeight: 50,
+                    bottomVirtualRowHeight: 50,
+                    groupOrientation: 'horizontal',
+                    isProvideVirtualCellsWidth: true,
+                    isAllDayPanelVisible: true,
+                    viewType: 'day',
+                    getResourceManager,
+                };
 
-            const virtualHorizontalGroupingRenderOptions = {
-                startCellIndex: 1,
-                cellCount: 1,
-                startRowIndex: 0,
-                rowCount: 2,
-                leftVirtualCellWidth: 20,
-                rightVirtualCellWidth: 30,
-                topVirtualRowHeight: 50,
-                bottomVirtualRowHeight: 50,
-                groupOrientation: 'horizontal',
-                isProvideVirtualCellsWidth: true,
-                isAllDayPanelVisible: true,
-                viewType: 'day',
-                groups: [{
-                    name: 'groupId',
-                    items: [{ id: 1 }, { id: 2 }],
-                }],
+                return type === 'vertical'
+                    ? virtualVerticalGroupingRenderOptions
+                    : virtualHorizontalGroupingRenderOptions;
             };
             const horizontalDataMap = [[
                 {
@@ -2561,9 +2596,9 @@ module('View Data Provider', {
             }]];
 
             module('viewData', () => {
-                test('viewData should be generated correctly if vertical grouping', function(assert) {
+                test('viewData should be generated correctly if vertical grouping', async function(assert) {
                     const viewDataProvider = createViewDataProvider({
-                        renderOptions: virtualVerticalGroupingRenderOptions,
+                        renderOptions: await getRenderOptions('vertical'),
                         completeViewDataMap: testViewDataMap.verticalGrouping,
                         completeDateHeaderMap: testHeaderDataMap.verticalGrouping,
                     });
@@ -2597,9 +2632,9 @@ module('View Data Provider', {
                     assert.deepEqual(viewData, expectedViewData, 'View data is correct');
                 });
 
-                test('viewData should be generated correctly if horizontal grouping', function(assert) {
+                test('viewData should be generated correctly if horizontal grouping', async function(assert) {
                     const viewDataProvider = createViewDataProvider({
-                        renderOptions: virtualHorizontalGroupingRenderOptions,
+                        renderOptions: await getRenderOptions('horizontal'),
                         completeViewDataMap: horizontalDataMap,
                         completeDateHeaderMap: horizontalDateHeaderMap,
                     });
@@ -2636,10 +2671,10 @@ module('View Data Provider', {
                     assert.deepEqual(viewData, expectedViewData, 'View data is correct');
                 });
 
-                test('viewData should be generated correctly when virtual widths should not be passed', function(assert) {
+                test('viewData should be generated correctly when virtual widths should not be passed', async function(assert) {
                     const viewDataProvider = createViewDataProvider({
                         renderOptions: {
-                            ...virtualHorizontalGroupingRenderOptions,
+                            ...(await getRenderOptions('horizontal')),
                             isProvideVirtualCellsWidth: false,
                         },
                         completeViewDataMap: horizontalDataMap,
@@ -2680,9 +2715,9 @@ module('View Data Provider', {
             });
 
             module('viewDataMap', () => {
-                test('viewDataMap should be generated correctly if vertical grouping', function(assert) {
+                test('viewDataMap should be generated correctly if vertical grouping', async function(assert) {
                     const viewDataProvider = createViewDataProvider({
-                        renderOptions: virtualVerticalGroupingRenderOptions,
+                        renderOptions: await getRenderOptions('vertical'),
                         completeViewDataMap: testViewDataMap.verticalGrouping,
                         completeDateHeaderMap: testHeaderDataMap.verticalGrouping,
                     });
@@ -2711,9 +2746,9 @@ module('View Data Provider', {
                     );
                 });
 
-                test('viewDataMap should be generated correctly if horizontal grouping', function(assert) {
+                test('viewDataMap should be generated correctly if horizontal grouping', async function(assert) {
                     const viewDataProvider = createViewDataProvider({
-                        renderOptions: virtualHorizontalGroupingRenderOptions,
+                        renderOptions: await getRenderOptions('horizontal'),
                         completeViewDataMap: horizontalDataMap,
                         completeDateHeaderMap: horizontalDateHeaderMap,
                     });
@@ -2746,9 +2781,9 @@ module('View Data Provider', {
             });
 
             module('groupedDataMap', () => {
-                test('groupedDataMap should be generated correctly if vertical grouping', function(assert) {
+                test('groupedDataMap should be generated correctly if vertical grouping', async function(assert) {
                     const viewDataProvider = createViewDataProvider({
-                        renderOptions: virtualVerticalGroupingRenderOptions,
+                        renderOptions: await getRenderOptions('vertical'),
                         completeViewDataMap: testViewDataMap.verticalGrouping,
                         completeDateHeaderMap: testHeaderDataMap.verticalGrouping,
                     });
@@ -2782,9 +2817,9 @@ module('View Data Provider', {
                     );
                 });
 
-                test('groupedDataMap should be generated correctly if horizontal grouping', function(assert) {
+                test('groupedDataMap should be generated correctly if horizontal grouping', async function(assert) {
                     const viewDataProvider = createViewDataProvider({
-                        renderOptions: virtualHorizontalGroupingRenderOptions,
+                        renderOptions: await getRenderOptions('horizontal'),
                         completeViewDataMap: horizontalDataMap,
                         completeDateHeaderMap: horizontalDateHeaderMap,
                     });
@@ -2828,10 +2863,10 @@ module('View Data Provider', {
                 });
             });
 
-            test('dateHeaderMap should be generated correctly', function(assert) {
+            test('dateHeaderMap should be generated correctly', async function(assert) {
                 const viewDataProvider = createViewDataProvider({
                     renderOptions: {
-                        ...virtualHorizontalGroupingRenderOptions,
+                        ...(await getRenderOptions('horizontal')),
                         cellWidth: 100,
                     },
                     completeViewDataMap: horizontalDataMap,
@@ -2855,10 +2890,10 @@ module('View Data Provider', {
                 assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
             });
 
-            test('dateHeaderMap should be generated correctly when width should not be provided', function(assert) {
+            test('dateHeaderMap should be generated correctly when width should not be provided', async function(assert) {
                 const viewDataProvider = createViewDataProvider({
                     renderOptions: {
-                        ...virtualHorizontalGroupingRenderOptions,
+                        ...(await getRenderOptions('horizontal')),
                         cellWidth: 100,
                         isProvideVirtualCellsWidth: false,
                     },
@@ -2883,12 +2918,16 @@ module('View Data Provider', {
                 assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
             });
 
-            test('dateHeaderMap should be generated correctly in timelines when one week-day cell is visible', function(assert) {
+            test('dateHeaderMap should be generated correctly in timelines when one week-day cell is visible', async function(assert) {
                 const completeViewDataMap = [timelineCompleteDateHeaderMap[1], timelineCompleteDateHeaderMap[1]];
-
+                const { getResourceManager } = await getWorkspaceResourceConfig([{
+                    label: 'groupId',
+                    fieldExpr: 'groupId',
+                    dataSource: [{ id: 1 }]
+                }]);
                 const viewDataProvider = createViewDataProvider({
                     renderOptions: {
-                        ...virtualHorizontalGroupingRenderOptions,
+                        ...(await getRenderOptions('horizontal')),
                         isGenerateWeekDaysHeaderData: true,
                         startCellIndex: 2,
                         cellCount: 2,
@@ -2896,10 +2935,7 @@ module('View Data Provider', {
                         rowCount: 1,
                         leftVirtualCellWidth: 200,
                         rightVirtualCellWidth: 800,
-                        groups: [{
-                            name: 'groupId',
-                            items: [{ id: 1 }],
-                        }],
+                        getResourceManager,
                         groupByDate: false,
                         cellWidth: 100,
                         startDayHour: 0,
@@ -2930,12 +2966,16 @@ module('View Data Provider', {
                 assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
             });
 
-            test('dateHeaderMap should be generated correctly in timelines when several week-day cells are visible', function(assert) {
+            test('dateHeaderMap should be generated correctly in timelines when several week-day cells are visible', async function(assert) {
                 const completeViewDataMap = [timelineCompleteDateHeaderMap[1], timelineCompleteDateHeaderMap[1]];
-
+                const { getResourceManager } = await getWorkspaceResourceConfig([{
+                    label: 'groupId',
+                    fieldExpr: 'groupId',
+                    dataSource: [{ id: 1 }]
+                }]);
                 const viewDataProvider = createViewDataProvider({
                     renderOptions: {
-                        ...virtualHorizontalGroupingRenderOptions,
+                        ...(await getRenderOptions('horizontal')),
                         isGenerateWeekDaysHeaderData: true,
                         startCellIndex: 2,
                         cellCount: 4,
@@ -2943,10 +2983,7 @@ module('View Data Provider', {
                         rowCount: 1,
                         leftVirtualCellWidth: 200,
                         rightVirtualCellWidth: 600,
-                        groups: [{
-                            name: 'groupId',
-                            items: [{ id: 1 }],
-                        }],
+                        getResourceManager,
                         groupByDate: false,
                         cellWidth: 100,
                         startDayHour: 0,
@@ -2980,7 +3017,7 @@ module('View Data Provider', {
                 assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
             });
 
-            test('dateHeaderMap should be generated correctly in timelines when grouping by date is used', function(assert) {
+            test('dateHeaderMap should be generated correctly in timelines when grouping by date is used', async function(assert) {
                 const validTimelineCompleteDateHeaderMap = [[
                     ...timelineCompleteDateHeaderMap[0],
                     {
@@ -3030,10 +3067,14 @@ module('View Data Provider', {
                     validTimelineCompleteDateHeaderMap[1],
                     validTimelineCompleteDateHeaderMap[1],
                 ];
-
+                const { getResourceManager } = await getWorkspaceResourceConfig([{
+                    label: 'groupId',
+                    fieldExpr: 'groupId',
+                    dataSource: [{ id: 1 }, { id: 2 }]
+                }]);
                 const viewDataProvider = createViewDataProvider({
                     renderOptions: {
-                        ...virtualHorizontalGroupingRenderOptions,
+                        ...(await getRenderOptions('horizontal')),
                         isGenerateWeekDaysHeaderData: true,
                         startCellIndex: 5,
                         cellCount: 10,
@@ -3041,10 +3082,7 @@ module('View Data Provider', {
                         rowCount: 1,
                         leftVirtualCellWidth: 500,
                         rightVirtualCellWidth: 900,
-                        groups: [{
-                            name: 'groupId',
-                            items: [{ id: 1 }, { id: 2 }],
-                        }],
+                        getResourceManager,
                         groupByDate: true,
                         cellWidth: 100,
                         startDayHour: 0,

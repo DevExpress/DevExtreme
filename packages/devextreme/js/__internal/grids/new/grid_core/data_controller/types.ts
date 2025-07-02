@@ -19,4 +19,6 @@ export type RemoteOperations = boolean | OperationOptions | 'auto';
 
 export interface InternalLoadOptions extends LoadOptions {
   summary?: unknown;
+
+  langParams?: unknown;
 }

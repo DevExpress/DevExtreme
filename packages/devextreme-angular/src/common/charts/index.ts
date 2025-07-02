@@ -37,6 +37,7 @@ export {
     Theme,
     TimeInterval,
     TimeIntervalConfig,
+    ValueAxisVisualRangeUpdateMode,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
     VisualRange,

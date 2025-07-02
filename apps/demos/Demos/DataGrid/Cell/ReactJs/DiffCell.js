@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatNumber } from 'devextreme/localization';
+import { formatNumber } from 'devextreme-react/common/core/localization';
 
 const getGridCellData = (gridData) => gridData.data[gridData.column.caption.toLowerCase()];
 const DiffCell = (cellData) => {

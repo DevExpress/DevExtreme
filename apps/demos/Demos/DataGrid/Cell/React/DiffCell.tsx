@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatNumber } from 'devextreme/localization';
+import { formatNumber } from 'devextreme-react/common/core/localization';
 import { type DataGridTypes } from 'devextreme-react/data-grid';
 
 const getGridCellData = (gridData: DataGridTypes.ColumnCellTemplateData) => gridData.data[gridData.column.caption.toLowerCase()];

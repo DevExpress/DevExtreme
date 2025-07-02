@@ -28,6 +28,7 @@ import {
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import type { dxSchedulerOptions } from '@js/ui/scheduler';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import errors from '@js/ui/widget/ui.errors';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
@@ -42,7 +43,9 @@ import {
 import type { ViewContext } from '@ts/scheduler/r1/components/types';
 import {
   calculateIsGroupedAllDayPanel,
-  calculateViewStartDate, getCellDuration, getGroupCount, getStartViewDateTimeOffset,
+  calculateViewStartDate,
+  getCellDuration,
+  getStartViewDateTimeOffset,
   getViewStartByOptions,
   isDateAndTimeView,
 } from '@ts/scheduler/r1/utils/index';
@@ -50,6 +53,7 @@ import type { SafeAppointment, ViewType } from '@ts/scheduler/types';
 
 import WidgetObserver from '../base/m_widget_observer';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
+import { Cache } from '../global_cache';
 import AppointmentDragBehavior from '../m_appointment_drag_behavior';
 import {
   APPOINTMENT_DRAG_SOURCE_CLASS,
@@ -64,10 +68,15 @@ import {
 } from '../m_classes';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
-import {
-  createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray,
-} from '../resources/m_utils';
 import VerticalShader from '../shaders/m_current_time_shader_vertical';
+import type { ResourceLoader } from '../utils/loader/resource_loader';
+import {
+  getAppointmentGroupIndex,
+  getSafeGroupValues,
+} from '../utils/resource_manager/appointment_groups_utils';
+import { getLeafGroupValues } from '../utils/resource_manager/group_utils';
+import type { ResourceManager } from '../utils/resource_manager/resource_manager';
+import type { GroupValues, RawGroupValues } from '../utils/resource_manager/types';
 import {
   getAllDayHeight,
   getCellHeight,
@@ -75,12 +84,12 @@ import {
   getMaxAllowedPosition,
   PositionHelper,
 } from './helpers/m_position_helper';
-import { Cache } from './m_cache';
 import { CellsSelectionController } from './m_cells_selection_controller';
 import CellsSelectionState from './m_cells_selection_state';
 import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './m_virtual_scrolling';
 import HorizontalGroupedStrategy from './m_work_space_grouped_strategy_horizontal';
 import VerticalGroupedStrategy from './m_work_space_grouped_strategy_vertical';
+import type { ViewDataProviderOptions } from './view_model/m_types';
 import ViewDataProvider from './view_model/m_view_data_provider';
 
 interface RenderComponentOptions {
@@ -183,7 +192,11 @@ const DEFAULT_WORKSPACE_RENDER_OPTIONS: RenderRWorkspaceOptions = {
   generateNewData: true,
 };
 
-class SchedulerWorkSpace extends WidgetObserver {
+type WorkspaceOptionsInternal = Omit<dxSchedulerOptions, 'groups'> & {
+  groups: ResourceLoader[];
+  getResourceManager: () => ResourceManager;
+};
+class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
   _viewDataProvider: any;
 
   _cache: any;
@@ -312,6 +325,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     return this._cache;
   }
 
+  get resourceManager(): ResourceManager {
+    return this.option('getResourceManager')();
+  }
+
   get cellsSelectionState() {
     if (!this._cellsSelectionState) {
       this._cellsSelectionState = new CellsSelectionState(this.viewDataProvider);
@@ -329,7 +346,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             };
           }
 
-          const groupIndex = this._getGroupIndexByResourceId(groups);
+          const groupIndex = this._getGroupIndexByGroupValues(groups);
 
           return {
             ...selectedCell,
@@ -800,13 +817,13 @@ class SchedulerWorkSpace extends WidgetObserver {
 
   isGroupedAllDayPanel() {
     return calculateIsGroupedAllDayPanel(
-      this.option('groups') as any,
+      this.option('groups'),
       this.option('groupOrientation') as any,
       this.isAllDayPanelVisible as any,
     );
   }
 
-  generateRenderOptions(isProvideVirtualCellsWidth?: any) {
+  generateRenderOptions(isProvideVirtualCellsWidth?: any): ViewDataProviderOptions {
     const groupCount = this._getGroupCount();
 
     const groupOrientation = groupCount > 0
@@ -819,7 +836,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       startCellIndex: 0,
       groupOrientation,
       today: this._getToday?.(),
-      groups: this.option('groups'),
+      getResourceManager: this.option('getResourceManager'),
       isProvideVirtualCellsWidth,
       isAllDayPanelVisible: this.isAllDayPanelVisible,
       selectedCells: this.cellsSelectionState.getSelectedCells(),
@@ -861,34 +878,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
   }
 
-  _isGroupsSpecified(resources) {
-    return this.option('groups')?.length && resources;
+  _isGroupsSpecified(groupValues?: GroupValues) {
+    return this.option('groups')?.length && groupValues;
   }
 
-  _getGroupIndexByResourceId(id) {
-    const groups = this.option('groups');
-    const resourceTree = createResourcesTree(groups);
-
-    if (!resourceTree.length) return 0;
-
-    return this._getGroupIndexRecursively(resourceTree, id);
-  }
-
-  _getGroupIndexRecursively(resourceTree, id) {
-    const currentKey = resourceTree[0].name;
-    const currentValue = id[currentKey];
-
-    return resourceTree.reduce((prevIndex, { leafIndex, value, children }) => {
-      const areValuesEqual = currentValue === value;
-      if (areValuesEqual && leafIndex !== undefined) {
-        return leafIndex;
-      }
-      if (areValuesEqual) {
-        return this._getGroupIndexRecursively(children, id);
-      }
-
-      return prevIndex;
-    }, 0);
+  _getGroupIndexByGroupValues(groupValues?: RawGroupValues | GroupValues) {
+    return groupValues && getAppointmentGroupIndex(
+      getSafeGroupValues(groupValues),
+      this.resourceManager.groupsLeafs,
+    )[0];
   }
 
   _getViewStartByOptions() {
@@ -1088,7 +1086,7 @@ class SchedulerWorkSpace extends WidgetObserver {
   }
 
   _getGroupCount() {
-    return getGroupCount(this.option('groups') as any);
+    return this.resourceManager.groupCount();
   }
 
   _attachTablesEvents() {
@@ -1281,7 +1279,7 @@ class SchedulerWorkSpace extends WidgetObserver {
   }
 
   _getWorkSpaceWidth() {
-    return this.cache.get('workspaceWidth', () => {
+    return this.cache.memo('workspaceWidth', () => {
       if (this._needCreateCrossScrolling()) {
         return getBoundingRect(this._$dateTable.get(0)).width;
       }
@@ -1398,37 +1396,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     return isOutsideVerticalScrollable || isOutsideHorizontalScrollable;
   }
 
-  setCellDataCache(cellCoordinates, groupIndex, $cell) {
-    const key = JSON.stringify({
-      rowIndex: cellCoordinates.rowIndex,
-      columnIndex: cellCoordinates.columnIndex,
-      groupIndex,
-    });
-
-    this.cache.set(
-      key,
-      this.getCellData($cell),
-    );
-  }
-
-  setCellDataCacheAlias(appointment, geometry) {
-    const key = JSON.stringify({
-      rowIndex: appointment.rowIndex,
-      columnIndex: appointment.columnIndex,
-      groupIndex: appointment.groupIndex,
-    });
-
-    const aliasKey = JSON.stringify({
-      top: geometry.top,
-      left: geometry.left,
-    });
-
-    this.cache.set(
-      aliasKey,
-      this.cache.get(key),
-    );
-  }
-
   supportAllDayRow() {
     return true;
   }
@@ -1441,8 +1408,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     return extend(true, {}, {
       startDate: cellData.startDate,
       endDate: cellData.endDate,
-      startDateUTC: cellData.startDate && this.timeZoneCalculator?.createDate(cellData.startDate, { path: 'fromGrid' }),
-      endDateUTC: cellData.endDate && this.timeZoneCalculator?.createDate(cellData.endDate, { path: 'fromGrid' }),
+      startDateUTC: cellData.startDate && this.timeZoneCalculator?.createDate(cellData.startDate, 'fromGrid'),
+      endDateUTC: cellData.endDate && this.timeZoneCalculator?.createDate(cellData.endDate, 'fromGrid'),
       groups: cellData.groups,
       groupIndex: cellData.groupIndex,
       allDay: cellData.allDay,
@@ -1703,15 +1670,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     return $cells.eq(cellIndex);
   }
 
-  getCellDataByCoordinates(coordinates, allDay) {
-    const key = JSON.stringify({ top: coordinates.top, left: coordinates.left });
-    return this.cache.get(key, () => {
-      const $cell = this.getCellByCoordinates(coordinates, allDay);
-
-      return this.getCellData($cell);
-    });
-  }
-
   getVisibleBounds() { // TODO - this method is only used by the Agenda
     const result: any = {};
     const $scrollable = this.getScrollable().$element();
@@ -1732,19 +1690,19 @@ class SchedulerWorkSpace extends WidgetObserver {
     return result;
   }
 
-  updateScrollPosition(date, groups, allDay = false) {
-    const newDate = this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+  updateScrollPosition(date, appointmentGroupValues?: GroupValues, allDay = false) {
+    const newDate = this.timeZoneCalculator.createDate(date, 'toGrid');
     const inAllDayRow = allDay && this.isAllDayPanelVisible;
 
-    if (this.needUpdateScrollPosition(newDate, groups, inAllDayRow)) {
-      this.scrollTo(newDate, groups, inAllDayRow, false);
+    if (this.needUpdateScrollPosition(newDate, appointmentGroupValues, inAllDayRow)) {
+      this.scrollTo(newDate, appointmentGroupValues, inAllDayRow, false);
     }
   }
 
-  needUpdateScrollPosition(date, groups, inAllDayRow) {
+  needUpdateScrollPosition(date, appointmentGroupValues?: GroupValues, inAllDayRow = false) {
     const cells = this._getCellsInViewport(inAllDayRow);
-    const groupIndex = this._isGroupsSpecified(groups)
-      ? this._getGroupIndexByResourceId(groups)
+    const groupIndex = this._isGroupsSpecified(appointmentGroupValues)
+      ? this._getGroupIndexByGroupValues(appointmentGroupValues)
       : 0;
     const time = date.getTime();
     const trimmedTime = dateUtils.trimTime(date).getTime();
@@ -1828,13 +1786,13 @@ class SchedulerWorkSpace extends WidgetObserver {
     });
   }
 
-  scrollTo(date, groups, allDay = false, throwWarning = true) {
+  scrollTo(date, groupValues?: RawGroupValues | GroupValues, allDay = false, throwWarning = true) {
     if (!this._isValidScrollDate(date, throwWarning)) {
       return;
     }
 
-    const groupIndex = this._getGroupCount() && groups
-      ? this._getGroupIndexByResourceId(groups)
+    const groupIndex = this._getGroupCount() && groupValues
+      ? this._getGroupIndexByGroupValues(groupValues)
       : 0;
     const isScrollToAllDay = allDay && this.isAllDayPanelVisible;
 
@@ -1960,7 +1918,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
   // Must replace all DOM manipulations
   getDOMElementsMetaData() {
-    return this.cache.get('cellElementsMeta', () => ({
+    return this.cache.memo('cellElementsMeta', () => ({
       dateTableCellsMeta: this._getDateTableDOMElementsInfo(),
       allDayPanelCellsMeta: this._getAllDayPanelDOMElementsInfo(),
     }));
@@ -2047,13 +2005,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         endDate: startDate,
         allDay: true,
         groupIndex: validGroupIndex,
+        groups: getLeafGroupValues(this.resourceManager.groupsLeafs, validGroupIndex),
       };
-
-      const groupsArray = getCellGroups(validGroupIndex, this.option('groups'));
-
-      if (groupsArray.length) {
-        data.groups = getGroupsObjectFromGroupsArray(groupsArray);
-      }
 
       return {
         key: CELL_DATA,
@@ -3081,20 +3034,17 @@ class SchedulerWorkSpace extends WidgetObserver {
   }
 
   _getGroupsForDateHeaderTemplate(templateIndex, indexMultiplier = 1) {
-    let groupIndex;
-    let groups;
-
     if (this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()) {
-      groupIndex = this._getGroupIndex(0, templateIndex * indexMultiplier);
-      const groupsArray = getCellGroups(
-        groupIndex,
-        this.option('groups'),
-      );
+      const groupIndex = this._getGroupIndex(0, templateIndex * indexMultiplier);
+      const groups = getLeafGroupValues(this.resourceManager.groupsLeafs, groupIndex);
 
-      groups = getGroupsObjectFromGroupsArray(groupsArray);
+      return {
+        groups,
+        groupIndex,
+      };
     }
 
-    return { groups, groupIndex };
+    return {};
   }
 
   _getHeaderPanelCellClass(i) {
@@ -3152,13 +3102,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       }
 
       const groupIndex = this._getGroupIndex(rowIndex, 0);
-
-      const groupsArray = getCellGroups(
-        groupIndex,
-        this.option('groups'),
-      );
-
-      const groups = getGroupsObjectFromGroupsArray(groupsArray);
+      const groups = getLeafGroupValues(this.resourceManager.groupsLeafs, groupIndex);
 
       return { groupIndex, groups };
     };

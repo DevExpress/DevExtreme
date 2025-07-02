@@ -9,6 +9,11 @@ export const COMPONENTS = [
     name: 'InputsListInForm',
     component: import('@external/inputs-list-in-form/angular19/inputs-list-in-form.component').then((m) => m.InputsListInFormComponent),
   },
+  {
+    path: 'text-box-dynamic-styles',
+    name: 'TextBoxDynamicStyles',
+    component: import('@external/text-box-dynamic-styles/angular19/text-box-dynamic-styles.component').then((m) => m.TextBoxDynamicStylesComponent),
+  },
 ];
 
 export function findComponentByPath(path: string) {

@@ -1,6 +1,6 @@
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -49,7 +49,9 @@ class EditDecoratorSelection extends EditDecorator {
     const selectionMode = this._list.option('selectionMode');
 
     this._singleStrategy = selectionMode === 'single';
-    this._containerClass = this._singleStrategy ? SELECT_RADIO_BUTTON_CONTAINER_CLASS : SELECT_CHECKBOX_CONTAINER_CLASS;
+    this._containerClass = this._singleStrategy
+      ? SELECT_RADIO_BUTTON_CONTAINER_CLASS
+      : SELECT_CHECKBOX_CONTAINER_CLASS;
     this._controlClass = this._singleStrategy ? SELECT_RADIO_BUTTON_CLASS : SELECT_CHECKBOX_CLASS;
 
     this._controlWidget = this._singleStrategy ? RadioButton : CheckBox;

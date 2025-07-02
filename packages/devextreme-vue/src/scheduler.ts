@@ -189,7 +189,7 @@ const componentConfig = {
     focusStateEnabled: Boolean,
     groupByDate: Boolean,
     groups: Array as PropType<Array<string>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     indicatorUpdateInterval: Number,
     max: [Date, Number, String],
@@ -238,7 +238,7 @@ const componentConfig = {
     useDropDownViewSwitcher: Boolean,
     views: Array as PropType<Array<Record<string, any> | string>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,
@@ -501,7 +501,7 @@ const DxOptionsConfig = {
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     items: Array as PropType<Array<dxButtonGroupItem | SchedulerPredefinedDateNavigatorItem>>,
@@ -519,7 +519,7 @@ const DxOptionsConfig = {
     stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   }
 };
 

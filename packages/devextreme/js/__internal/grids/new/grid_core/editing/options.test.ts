@@ -11,13 +11,24 @@ import { getContext } from '../di.test_utils';
 import type { Options } from '../options';
 import { OptionsControllerMock } from '../options_controller/options_controller.mock';
 import { ToolbarController } from '../toolbar/controller';
+import { ConfirmController } from './confirm_controller';
 import { EditingController } from './controller';
 import { EditPopupView } from './popup/view';
+
+class MockConfirmController implements ConfirmController {
+  public static dependencies = [] as const;
+
+  public confirm = jest.fn<ConfirmController['confirm']>()
+    .mockImplementation(() => Promise.resolve(true));
+}
 
 const setup = (config: Options) => {
   const rootElement = document.createElement('div');
 
   const context = getContext(config);
+
+  const mockConfirmController = new MockConfirmController();
+  context.registerInstance(ConfirmController, mockConfirmController);
 
   const optionsController = context.get(OptionsControllerMock);
   const editingController = context.get(EditingController);
@@ -47,6 +58,7 @@ const setup = (config: Options) => {
     toolbarController,
     context,
     getForm,
+    mockConfirmController,
   };
 };
 
@@ -239,6 +251,87 @@ describe('Options', () => {
         });
 
         expect(getForm().option('disabled')).toBe(true);
+      });
+    });
+
+    describe('texts', () => {
+      describe('confirmDeleteMessage', () => {
+        it('should be used to show confirm delete dialog', async () => {
+          const myCustomMessage = 'my custom title';
+
+          const { editingController, mockConfirmController } = setup({
+            columns: [{
+              dataField: 'field1',
+            }, 'id'],
+            dataSource: [{
+              id: 1,
+              field1: 'value1',
+            }],
+            keyExpr: 'id',
+            editing: {
+              texts: {
+                confirmDeleteMessage: myCustomMessage,
+              },
+            },
+          });
+
+          await editingController.deleteCard(1);
+
+          expect(mockConfirmController.confirm.mock.calls[0][0]).toBe(myCustomMessage);
+        });
+      });
+
+      describe('confirmDeleteTitle', () => {
+        it('should be used to show confirm delete dialog', async () => {
+          const myCustomTitle = 'my custom title';
+
+          const { editingController, mockConfirmController } = setup({
+            columns: [{
+              dataField: 'field1',
+            }, 'id'],
+            dataSource: [{
+              id: 1,
+              field1: 'value1',
+            }],
+            keyExpr: 'id',
+            editing: {
+              texts: {
+                confirmDeleteTitle: myCustomTitle,
+              },
+            },
+          });
+
+          await editingController.deleteCard(1);
+
+          expect(mockConfirmController.confirm.mock.calls[0][1]).toBe(myCustomTitle);
+        });
+
+        describe('when it is undefined', () => {
+          it('should hide title', async () => {
+            const myCustomTitle = undefined;
+
+            const { editingController, mockConfirmController } = setup({
+              columns: [{
+                dataField: 'field1',
+              }, 'id'],
+              dataSource: [{
+                id: 1,
+                field1: 'value1',
+              }],
+              keyExpr: 'id',
+              editing: {
+                texts: {
+                  confirmDeleteTitle: myCustomTitle,
+                },
+              },
+            });
+
+            await editingController.deleteCard(1);
+
+            expect(mockConfirmController.confirm.mock.calls[0][1]).toBe('');
+            expect(mockConfirmController.confirm.mock.calls[0][2]).toBe(false);
+          });
+        });
       });
     });
   });

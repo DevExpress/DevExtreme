@@ -220,7 +220,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @default 300
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * @docid
      * @public
@@ -382,7 +382,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @default 300
      * @public
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
     /**
      * @docid
      * @default 1

@@ -468,7 +468,7 @@ QUnit.test('Returning correct nodes[].linksIn and nodes[].linksOut data in getAl
 
     assert.equal(nodes.length, 5);
     ['A', 'B', 'C', 'M', 'Y'].forEach(function(nodeName) {
-        const node = find(nodes, function(node) { return node.title === nodeName; });
+        const node = find(nodes, function(node) { return node.label === nodeName; });
         assert.equal(node.linksIn.length, expected[nodeName][0]);
         assert.equal(node.linksOut.length, expected[nodeName][1]);
     });
@@ -630,7 +630,7 @@ QUnit.test('Largest cascade occupies full chart height', function(assert) {
     let cascadeHeight = 0;
 
     ['A', 'B', 'C'].forEach(function(nodeName) {
-        const node = find(nodes, function(node) { return node.title === nodeName; });
+        const node = find(nodes, function(node) { return node.label === nodeName; });
         cascadeHeight += node.rect.height + (nodeName !== 'C' ? 30 : 0);
     });
 
@@ -645,7 +645,7 @@ QUnit.test('Default align option', function(assert) {
     const nodes = sankey.getAllNodes();
 
     ['M', 'Y'].forEach(function(nodeName) {
-        const node = find(nodes, function(node) { return node.title === nodeName; });
+        const node = find(nodes, function(node) { return node.label === nodeName; });
         assert.equal(node.rect.y + node.rect.height / 2, size.height / 2, nodeName + ' aligned to middle');
     });
 });
@@ -659,7 +659,7 @@ QUnit.test('Align option as <String>', function(assert) {
     const nodes = sankey.getAllNodes();
 
     ['C', 'M', 'Y'].forEach(function(nodeName) {
-        const node = find(nodes, function(node) { return node.title === nodeName; });
+        const node = find(nodes, function(node) { return node.label === nodeName; });
         assert.equal(node.rect.y + node.rect.height, size.height, nodeName + ' aligned to bottom');
     });
 });
@@ -672,7 +672,7 @@ QUnit.test('Align option as <Array>', function(assert) {
     const nodes = sankey.getAllNodes();
 
     ['A', 'M', 'Y'].forEach(function(nodeName) {
-        const node = find(nodes, function(node) { return node.title === nodeName; });
+        const node = find(nodes, function(node) { return node.label === nodeName; });
         assert.equal(node.rect.y, 0, nodeName + ' aligned to top');
     });
 
@@ -687,7 +687,7 @@ QUnit.test('Default alignment value for cascade which is not mentioned in option
         alignment: ['top']
     });
     const nodes = sankey.getAllNodes();
-    const node = find(nodes, function(node) { return node.title === 'Z'; });
+    const node = find(nodes, function(node) { return node.label === 'Z'; });
 
     // 'Z' is expected to be centered
     assert.equal(node.rect.y, 15, 'Z aligned to center');
@@ -786,8 +786,8 @@ QUnit.test('SortData option', function(assert) {
     sankey.option({ sortData: { A: 2, B: 1 } });
     const nodesSorted = sankey.getAllNodes();
 
-    assert.equal(nodesSorted[0].title, 'B');
-    assert.equal(nodesSorted[1].title, 'A');
+    assert.equal(nodesSorted[0].label, 'B');
+    assert.equal(nodesSorted[1].label, 'A');
 });
 
 QUnit.test('Align option updated as <String>', function(assert) {
@@ -801,7 +801,7 @@ QUnit.test('Align option updated as <String>', function(assert) {
     const nodes = sankey.getAllNodes();
 
     ['C', 'M', 'Y'].forEach(function(nodeName) {
-        const node = find(nodes, function(node) { return node.title === nodeName; });
+        const node = find(nodes, function(node) { return node.label === nodeName; });
         assert.equal(node.rect.y + node.rect.height, size.height, 'aligned to bottom');
     });
 });
@@ -816,7 +816,7 @@ QUnit.test('Align option updated as <Array>', function(assert) {
     const nodes = sankey.getAllNodes();
 
     ['A', 'M', 'Y'].forEach(function(nodeName) {
-        const node = find(nodes, function(node) { return node.title === nodeName; });
+        const node = find(nodes, function(node) { return node.label === nodeName; });
         assert.equal(node.rect.y, 0, 'aligned to top');
     });
 });

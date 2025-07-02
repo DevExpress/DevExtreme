@@ -11,12 +11,18 @@ import  dxPopup from "devextreme/ui/popup";
 import  dxSortable from "devextreme/ui/sortable";
 import  dxDraggable from "devextreme/ui/draggable";
 import {
+ ColumnChooser,
  ColumnResizeMode,
+ FilterPanel,
+ HeaderFilter,
  Pager,
+ SearchPanel,
+ Sorting,
  DataChangeType,
  FilterOperation,
  FilterType,
  FixedPosition,
+ ColumnHeaderFilter,
  SelectedFilterOperation,
  ColumnChooserMode,
  ColumnChooserSearchConfig,
@@ -24,19 +30,21 @@ import {
  HeaderFilterGroupInterval,
  ColumnHeaderFilterSearchConfig,
  HeaderFilterSearchConfig,
+ HeaderFilterTexts,
  SelectionColumnDisplayMode,
  DataChange,
  GridsEditMode,
  NewRowPosition,
  GridsEditRefreshMode,
  StartEditAction,
- GridBase,
+ FilterPanelTexts,
  ApplyFilterMode,
  GroupExpandMode,
  SummaryType,
  EnterKeyAction,
  EnterKeyDirection,
  PagerPageSize,
+ GridBase,
  DataRenderMode,
  StateStoreType,
 } from "devextreme/common/grids";
@@ -323,7 +331,7 @@ const componentConfig = {
     cacheEnabled: Boolean,
     cellHintEnabled: Boolean,
     columnAutoWidth: Boolean,
-    columnChooser: Object as PropType<Record<string, any>>,
+    columnChooser: Object as PropType<ColumnChooser | Record<string, any>>,
     columnFixing: Object as PropType<Record<string, any>>,
     columnHidingEnabled: Boolean,
     columnMinWidth: Number,
@@ -341,7 +349,7 @@ const componentConfig = {
     export: Object as PropType<Record<string, any>>,
     filterBuilder: Object as PropType<dxFilterBuilderOptions | Record<string, any>>,
     filterBuilderPopup: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
-    filterPanel: Object as PropType<Record<string, any>>,
+    filterPanel: Object as PropType<FilterPanel>,
     filterRow: Object as PropType<Record<string, any>>,
     filterSyncEnabled: [Boolean, String] as PropType<boolean | Mode>,
     filterValue: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
@@ -351,8 +359,8 @@ const componentConfig = {
     focusedRowKey: {},
     grouping: Object as PropType<Record<string, any>>,
     groupPanel: Object as PropType<Record<string, any>>,
-    headerFilter: Object as PropType<Record<string, any>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    headerFilter: Object as PropType<HeaderFilter | Record<string, any>>,
+    height: [Number, String],
     highlightChanges: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
@@ -412,7 +420,7 @@ const componentConfig = {
     rowTemplate: {},
     rtlEnabled: Boolean,
     scrolling: Object as PropType<Record<string, any>>,
-    searchPanel: Object as PropType<Record<string, any>>,
+    searchPanel: Object as PropType<SearchPanel | Record<string, any>>,
     selectedRowKeys: Array as PropType<Array<any>>,
     selection: Object as PropType<Record<string, any>>,
     selectionFilter: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
@@ -421,7 +429,7 @@ const componentConfig = {
     showColumnLines: Boolean,
     showRowLines: Boolean,
     sortByGroupSummaryInfo: Array as PropType<Array<Record<string, any>>>,
-    sorting: Object as PropType<Record<string, any>>,
+    sorting: Object as PropType<Sorting | Record<string, any>>,
     stateStoring: Object as PropType<Record<string, any>>,
     summary: Object as PropType<Record<string, any>>,
     syncLookupFilterValues: Boolean,
@@ -429,7 +437,7 @@ const componentConfig = {
     toolbar: Object as PropType<dxDataGridToolbar | Record<string, any>>,
     twoWayBindingEnabled: Boolean,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    width: [Number, String],
     wordWrapEnabled: Boolean
   },
   emits: {
@@ -899,7 +907,7 @@ const DxColumnConfig = {
     groupCellTemplate: {},
     groupIndex: Number,
     headerCellTemplate: {},
-    headerFilter: Object as PropType<Record<string, any>>,
+    headerFilter: Object as PropType<ColumnHeaderFilter | Record<string, any>>,
     hidingPriority: Number,
     isBand: Boolean,
     lookup: Object as PropType<Record<string, any>>,
@@ -1304,7 +1312,7 @@ const DxDataGridHeaderFilterConfig = {
     height: [Number, String],
     search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,
     searchTimeout: Number,
-    texts: Object as PropType<Record<string, any>>,
+    texts: Object as PropType<HeaderFilterTexts | Record<string, any>>,
     visible: Boolean,
     width: [Number, String]
   }
@@ -1673,7 +1681,7 @@ const DxFilterBuilderConfig = {
     focusStateEnabled: Boolean,
     groupOperationDescriptions: Object as PropType<Record<string, any>>,
     groupOperations: Array as PropType<Array<GroupOperation>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     maxGroupLevel: Number,
@@ -1688,7 +1696,7 @@ const DxFilterBuilderConfig = {
     tabIndex: Number,
     value: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   }
 };
 
@@ -1711,7 +1719,6 @@ const DxFilterBuilderPopupConfig = {
     "update:accessKey": null,
     "update:animation": null,
     "update:bindingOptions": null,
-    "update:closeOnOutsideClick": null,
     "update:container": null,
     "update:contentTemplate": null,
     "update:deferRendering": null,
@@ -1763,7 +1770,6 @@ const DxFilterBuilderPopupConfig = {
     accessKey: String,
     animation: Object as PropType<Record<string, any>>,
     bindingOptions: Object as PropType<Record<string, any>>,
-    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -1774,15 +1780,15 @@ const DxFilterBuilderPopupConfig = {
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    maxWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    minHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    minWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    maxHeight: [Number, String],
+    maxWidth: [Number, String],
+    minHeight: [Number, String],
+    minWidth: [Number, String],
     onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
     onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
     onHidden: Function as PropType<((e: EventInfo<any>) => void)>,
@@ -1808,7 +1814,7 @@ const DxFilterBuilderPopupConfig = {
     titleTemplate: {},
     toolbarItems: Array as PropType<Array<dxPopupToolbarItem>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    width: [Number, String],
     wrapperAttr: {}
   }
 };
@@ -1875,9 +1881,9 @@ const DxFilterPanelConfig = {
     "update:visible": null,
   },
   props: {
-    customizeText: Function as PropType<((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string)>,
+    customizeText: Function as PropType<((e: { component: FilterPanel, filterValue: Record<string, any>, text: string }) => string)>,
     filterEnabled: Boolean,
-    texts: Object as PropType<Record<string, any>>,
+    texts: Object as PropType<FilterPanelTexts | Record<string, any>>,
     visible: Boolean
   }
 };
@@ -2008,7 +2014,7 @@ const DxFormConfig = {
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
     formData: {},
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
@@ -2036,7 +2042,7 @@ const DxFormConfig = {
     tabIndex: Number,
     validationGroup: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   }
 };
 
@@ -2322,7 +2328,7 @@ const DxHeaderFilterConfig = {
     search: Object as PropType<ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig | Record<string, any>>,
     searchMode: String as PropType<SearchMode>,
     searchTimeout: Number,
-    texts: Object as PropType<Record<string, any>>,
+    texts: Object as PropType<HeaderFilterTexts | Record<string, any>>,
     visible: Boolean,
     width: [Number, String]
   }
@@ -2760,7 +2766,6 @@ const DxPopupConfig = {
     "update:accessKey": null,
     "update:animation": null,
     "update:bindingOptions": null,
-    "update:closeOnOutsideClick": null,
     "update:container": null,
     "update:contentTemplate": null,
     "update:deferRendering": null,
@@ -2812,7 +2817,6 @@ const DxPopupConfig = {
     accessKey: String,
     animation: Object as PropType<Record<string, any>>,
     bindingOptions: Object as PropType<Record<string, any>>,
-    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -2823,15 +2827,15 @@ const DxPopupConfig = {
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    maxWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    minHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    minWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    maxHeight: [Number, String],
+    maxWidth: [Number, String],
+    minHeight: [Number, String],
+    minWidth: [Number, String],
     onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
     onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
     onHidden: Function as PropType<((e: EventInfo<any>) => void)>,
@@ -2857,7 +2861,7 @@ const DxPopupConfig = {
     titleTemplate: {},
     toolbarItems: Array as PropType<Array<dxPopupToolbarItem>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    width: [Number, String],
     wrapperAttr: {}
   }
 };

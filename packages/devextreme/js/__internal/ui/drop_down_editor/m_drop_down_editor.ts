@@ -635,7 +635,6 @@ class DropDownEditor<
   _renderPopup(): void {
     const popupConfig = extend(this._popupConfig(), this._options.cache('dropDownOptions'));
 
-    delete popupConfig.closeOnOutsideClick;
     // @ts-expect-error ts-error
     this._popup = this._createComponent(this._$popup, Popup, popupConfig);
 
@@ -708,6 +707,7 @@ class DropDownEditor<
       // @ts-expect-error ts-error
       showTitle: this.option('dropDownOptions.showTitle'),
       _ignoreFunctionValueDeprecation: true,
+      // @ts-expect-error ts-error
       width: (): number => getElementWidth(this.$element()),
       height: 'auto',
       shading: false,

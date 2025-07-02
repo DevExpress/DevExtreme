@@ -504,9 +504,9 @@ class DropDownList<
   _popupConfig(): PopupProperties {
     return {
       ...super._popupConfig(),
-      // @ts-expect-error ts-error
       templatesRenderAsynchronously: false,
       autoResizeEnabled: false,
+      // @ts-expect-error ts-error
       maxHeight: this._getMaxHeight.bind(this),
     };
   }

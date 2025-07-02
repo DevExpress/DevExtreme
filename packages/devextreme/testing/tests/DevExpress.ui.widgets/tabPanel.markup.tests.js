@@ -1,6 +1,13 @@
 import $ from 'jquery';
 import TabPanel from 'ui/tab_panel';
 import themes from 'ui/themes';
+import { TABPANEL_CLASS } from '__internal/ui/tab_panel/tab_panel';
+import {
+    TABS_CLASS,
+    TABS_ITEM_CLASS,
+    TABS_ITEM_TEXT_SPAN_CLASS,
+    TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS,
+} from '__internal/ui/tabs/tabs';
 
 QUnit.testStart(() => {
     const markup =
@@ -19,34 +26,32 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-const TABPANEL_CLASS = 'dx-tabpanel';
 const MULTIVIEW_CLASS = 'dx-multiview';
-const TABS_CLASS = 'dx-tabs';
 const MULTIVIEW_ITEM_CLASS = 'dx-multiview-item';
-const TABS_ITEM_CLASS = 'dx-tab';
 const MUTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
-const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
-const TABS_ITEM_TEXT_SPAN_CLASS = 'dx-tab-text-span';
-const TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS = 'dx-tab-text-span-pseudo';
-
-const toSelector = cssClass => '.' + cssClass;
 
 const nestedElementsCount = function($element, cssClass) {
-    return $element.find(toSelector(cssClass)).length;
+    return $element.find(`.${cssClass}`).length;
 };
 
-QUnit.module('TabPanel markup', () => {
+QUnit.module('TabPanel markup', {
+    beforeEach: function() {
+        this.init = (options) => {
+            this.$element = $('#tabPanel').dxTabPanel(options);
+        };
+    },
+}, () => {
     QUnit.test('tabPanel should have correct class', function(assert) {
-        const $tabPanel = $('#tabPanel').dxTabPanel();
-        assert.ok($tabPanel.hasClass(TABPANEL_CLASS), 'widget class added');
+        this.init();
+        assert.ok(this.$element.hasClass(TABPANEL_CLASS), 'widget class added');
     });
 
     [[{ title: '1' }], [1]].forEach(items => {
         QUnit.test(`TabPanel tab item should have a correct span element when items is ${items}`, function(assert) {
             const $tabPanel = $('<div>').appendTo('#qunit-fixture').dxTabPanel({ items });
-            const $tabsTextSpan = $tabPanel.find(`.${TABS_ITEM_TEXT_CLASS}`).children();
+            const $tabsTextSpan = $tabPanel.find(`.${TABS_ITEM_TEXT_SPAN_CLASS}`);
 
-            assert.strictEqual($tabsTextSpan.hasClass(TABS_ITEM_TEXT_SPAN_CLASS), true);
+            assert.strictEqual($tabsTextSpan.length, 1, 'span element added');
         });
 
         QUnit.test(`TabPanel tab item should have a correct span element in Fluent when items is ${items}`, function(assert) {
@@ -55,9 +60,9 @@ QUnit.module('TabPanel markup', () => {
 
             try {
                 const $tabPanel = $('<div>').appendTo('#qunit-fixture').dxTabPanel({ items });
-                const $tabsTextSpanPseudo = $tabPanel.find(`.${TABS_ITEM_TEXT_SPAN_CLASS}`).children();
+                const $tabsTextSpanPseudo = $tabPanel.find(`.${TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS}`);
 
-                assert.strictEqual($tabsTextSpanPseudo.hasClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS), true);
+                assert.strictEqual($tabsTextSpanPseudo.length, 1, 'span element added');
             } finally {
                 themes.isFluent = origIsFluent;
             }
@@ -65,27 +70,23 @@ QUnit.module('TabPanel markup', () => {
     });
 
     QUnit.test('rendering tabs widget test', function(assert) {
-        const $tabPanel = $('#tabPanel').dxTabPanel();
-        assert.ok($tabPanel.find('.' + TABS_CLASS), 'tabs widget added');
+        this.init();
+        assert.ok(this.$element.find(`.${TABS_CLASS}`), 'tabs widget added');
     });
 
     QUnit.test('rendering multiview widget test', function(assert) {
-        const $tabPanel = $('#tabPanel').dxTabPanel();
-        assert.ok($tabPanel.hasClass(MULTIVIEW_CLASS), 'multiview widget added');
+        this.init();
+        assert.ok(this.$element.hasClass(MULTIVIEW_CLASS), 'multiview widget added');
     });
 
     QUnit.test('count of nested widget elements test', function(assert) {
-        assert.expect(1);
-
         const items = [{ text: 'user', icon: 'user', title: 'Personal Data', firstName: 'John', lastName: 'Smith' },
             { text: 'comment', icon: 'comment', title: 'Contacts', phone: '(555)555-5555', email: 'John.Smith@example.com' }];
 
-        const $tabPanel = $('#tabPanel').dxTabPanel({
-            dataSource: items
-        });
+        this.init({ dataSource: items });
 
-        const tabsCount = nestedElementsCount($tabPanel.find('.' + TABS_CLASS), TABS_ITEM_CLASS);
-        const multiViewItemsCount = nestedElementsCount($tabPanel.find('.' + MUTIVIEW_WRAPPER_CLASS), MULTIVIEW_ITEM_CLASS);
+        const tabsCount = nestedElementsCount(this.$element.find(`.${TABS_CLASS}`), TABS_ITEM_CLASS);
+        const multiViewItemsCount = nestedElementsCount(this.$element.find('.' + MUTIVIEW_WRAPPER_CLASS), MULTIVIEW_ITEM_CLASS);
 
         assert.equal(tabsCount, multiViewItemsCount, 'tab widget items count and multiview widget items count is equal');
     });
@@ -105,7 +106,7 @@ QUnit.module('TabPanel items', () => {
 
         tabPanel.option('items[0].title', 'test');
 
-        assert.strictEqual($tabPanel.find(toSelector(TABS_ITEM_CLASS)).eq(0).text(),
+        assert.strictEqual($tabPanel.find(`.${TABS_ITEM_CLASS}`).eq(0).text(),
             'testtest', 'option <items> of nested tabs widget successfully changed - tabs were rerendered');
     });
 
@@ -120,7 +121,7 @@ QUnit.module('TabPanel items', () => {
             itemTitleTemplate: $('<span>Template</span>')
         });
         const tabPanelInstance = $tabPanel.dxTabPanel('instance');
-        const tabWidgetInstance = $tabPanel.find(toSelector(TABS_CLASS)).dxTabs('instance');
+        const tabWidgetInstance = $tabPanel.find(`.${TABS_CLASS}`).dxTabs('instance');
 
         assert.deepEqual(tabWidgetInstance.itemElements().eq(0).text(),
             'Template',
@@ -169,9 +170,9 @@ QUnit.module('TabPanel items', () => {
 
             new TabPanel($element, { items: [ { title: value.title }] });
 
-            const $itemElements = $element.find(toSelector(TABS_CLASS)).dxTabs('instance').itemElements();
+            const $itemElements = $element.find(`.${TABS_CLASS}`).dxTabs('instance').itemElements();
 
-            assert.strictEqual($itemElements.eq(0).find('.dx-tab-text').text(), value.expected, 'item.title');
+            assert.strictEqual($itemElements.eq(0).text(), value.expected, 'item.title');
         });
 
         QUnit.test(`DefaultTemplate: items["${value.title}"] as primitive`, function(assert) {
@@ -179,9 +180,9 @@ QUnit.module('TabPanel items', () => {
 
             new TabPanel($element, { items: [ value.title ] });
 
-            const $itemElements = $element.find(toSelector(TABS_CLASS)).dxTabs('instance').itemElements();
+            const $itemElements = $element.find(`.${TABS_CLASS}`).dxTabs('instance').itemElements();
 
-            assert.strictEqual($itemElements.eq(0).find('.dx-tab-text').text(), value.expected, 'item.title');
+            assert.strictEqual($itemElements.eq(0).text(), value.expected, 'item.title');
         });
     });
 });

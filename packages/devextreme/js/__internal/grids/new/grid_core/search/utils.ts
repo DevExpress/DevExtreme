@@ -3,9 +3,7 @@
   @typescript-eslint/no-explicit-any
 */
 
-import {
-  isFunction, isString,
-} from '@js/core/utils/type';
+import { isFunction } from '@js/core/utils/type';
 import type { EventInfo, NativeEventInfo } from '@js/events';
 import messageLocalization from '@js/localization/message';
 import type { TextBoxInstance } from '@js/ui/text_box';
@@ -13,7 +11,7 @@ import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { TextBoxProperties } from '@ts/ui/text_box/m_text_box';
 
 import type { Column } from '../columns_controller/types';
-import type { PredefinedToolbarItem } from '../toolbar/types';
+import type { DefaultToolbarItem } from '../toolbar/types';
 import { addWidgetPrefix, getName } from '../utils/common';
 import { parseValue } from '../utils/parse_value/index';
 import type { HighlightedTextItem, HighlightTextOptions, SearchFieldProps } from './types';
@@ -70,10 +68,9 @@ export const splitHighlightedText = (
 };
 
 export const allowSearch = (column: Column, searchVisibleColumnsOnly: boolean): boolean => {
-  const allowSearchByDataField = !!column.dataField && isString(column.dataField);
   const allowSearchByVisibility = !searchVisibleColumnsOnly || column.visible;
-  const allowSearchByConfig = column.allowSearch ?? column.allowFiltering;
-  return allowSearchByDataField && allowSearchByVisibility && allowSearchByConfig;
+  const allowSearchByConfig = column.allowSearch;
+  return allowSearchByVisibility && allowSearchByConfig;
 };
 
 export const createFilterExpression = (
@@ -122,7 +119,7 @@ let timer;
 export const addSearchTextBox = (
   props: SearchFieldProps,
   setTextBoxRef: (component: TextBoxInstance) => void,
-): PredefinedToolbarItem => ({
+): DefaultToolbarItem => ({
   name: 'searchPanel',
   showText: 'inMenu',
   location: 'after',

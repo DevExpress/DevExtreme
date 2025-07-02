@@ -75,7 +75,7 @@ const componentConfig = {
     filter: String,
     group: String,
     handle: String,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     itemOrientation: String as PropType<Orientation>,
     moveItemOnDrop: Boolean,
     onAdd: Function as PropType<((e: AddEvent) => void)>,
@@ -91,7 +91,7 @@ const componentConfig = {
     rtlEnabled: Boolean,
     scrollSensitivity: Number,
     scrollSpeed: Number,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

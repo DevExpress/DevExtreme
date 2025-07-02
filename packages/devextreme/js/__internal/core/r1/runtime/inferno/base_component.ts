@@ -104,7 +104,7 @@ export class InfernoWrapperComponent<
 
   vDomUpdateClasses(): void {
     const el = this.vDomElement as ElementWithCustomClassesData;
-    const currentClasses = el.className.length
+    const currentClasses = el.className?.length
       ? el.className.split(' ')
       : [];
     const addedClasses = currentClasses.filter(
@@ -140,7 +140,7 @@ export class InfernoWrapperComponent<
     el.dxClasses = el.dxClasses || {
       removed: [], added: [], previous: [],
     };
-    el.dxClasses.previous = el?.className.length
+    el.dxClasses.previous = el?.className?.length
       ? el.className.split(' ')
       : [];
   }
@@ -153,7 +153,7 @@ export class InfernoWrapperComponent<
     if (el !== null) {
       el.dxClasses.added.forEach((className: string): void => el.classList.add(className));
       el.dxClasses.removed.forEach((className: string): void => el.classList.remove(className));
-      el.dxClasses.previous = el.className.length
+      el.dxClasses.previous = el.className?.length
         ? el.className.split(' ')
         : [];
     }

@@ -1,0 +1,24 @@
+<dx-card-view
+  id="cardView"
+  [dataSource]="orders"
+  keyExpr="ID"
+  [allowColumnReordering]="true"
+  cardsPerRow="auto"
+  [cardMinWidth]="300"
+>
+  <dxi-card-view-column
+    dataField="OrderNumber"
+    [allowReordering]="false"
+  ></dxi-card-view-column>
+  <dxi-card-view-column dataField="SaleAmount"></dxi-card-view-column>
+  <dxi-card-view-column dataField="Customer"></dxi-card-view-column>
+  <dxi-card-view-column dataField="Location"></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="OrderDate"
+    dataType="date"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="DeliveryDate"
+    dataType="date"
+  ></dxi-card-view-column>
+</dx-card-view>

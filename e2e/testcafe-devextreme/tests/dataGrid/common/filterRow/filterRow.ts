@@ -225,3 +225,37 @@ test('DataGrid - NVDA reads filter menu items as "Search box 1 of 8" (T1290386)'
     visible: true,
   },
 }));
+
+test('DataGrid - The `between` filter dropdown sticks to the viewport edge during horizontal scrolling (T1280071)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
+
+  await dataGrid.isReady();
+
+  await t
+    .click(filterEditor.menuButton)
+    .click(filterEditor.menu.getItemByText('Between'));
+
+  await dataGrid.scrollBy({ x: 999 });
+  await t
+    .expect(await takeScreenshot('filter-row-filter-range-hide-on-scroll.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { ID: 1, Text: 'Item 1' },
+    { ID: 2, Text: '' },
+    { ID: 3, Text: 'Item 3' },
+  ],
+  keyExpr: 'ID',
+  filterRow: {
+    visible: true,
+  },
+  scrolling: {
+    useNative: true,
+  },
+  columnWidth: 400,
+  width: 500,
+}));

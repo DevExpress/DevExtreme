@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { DxFormTypes } from 'devextreme-angular/ui/form';
-import { DxTextAreaTypes } from 'devextreme-angular/ui/text-area';
+import { type DxFormTypes } from 'devextreme-angular/ui/form';
+import { type DxTextAreaTypes } from 'devextreme-angular/ui/text-area';
 import type { BookingFormData } from '../app.types';
 
 let modulePrefix = '';

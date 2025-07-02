@@ -244,8 +244,8 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
         visible={visible}
         aria={this.getAria()}
         style={style as Record<string, string | number> | undefined}
-        width={width as string | number | undefined}
-        height={height as string | number | undefined}
+        width={width}
+        height={height}
 
         hint={hint}
         disabled={disabled}
@@ -261,6 +261,7 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
           <PageSizeSelector
             rootElementRef={allowedPageSizesRef}
             isLargeDisplayMode={this.getIsLargeDisplayMode()}
+            itemCount={itemCount}
             pageSize={pageSize}
             pageSizeChangedInternal={pageSizeChangedInternal}
             allowedPageSizes={allowedPageSizes}

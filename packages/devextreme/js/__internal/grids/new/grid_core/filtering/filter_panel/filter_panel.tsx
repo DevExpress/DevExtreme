@@ -15,8 +15,8 @@ export interface FilterPanelProps {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filterValue?: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  filterPanel?: FilterPanel<any>;
+
+  filterPanel?: FilterPanel;
   filterBuilder?: FilterBuilderProperties;
   filterBuilderPopup?: PopupProperties;
 }

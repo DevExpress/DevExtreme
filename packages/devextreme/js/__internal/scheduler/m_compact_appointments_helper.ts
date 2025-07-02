@@ -6,7 +6,6 @@ import { FunctionTemplate } from '@js/core/templates/function_template';
 import Button from '@js/ui/button';
 
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
-import { createAppointmentAdapter } from './m_appointment_adapter';
 import { AppointmentTooltipInfo } from './m_data_structures';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
@@ -45,19 +44,15 @@ export class CompactAppointmentsHelper {
 
   _createTooltipInfos(items) {
     return items.data.map((appointment, index) => {
-      const targetedAdapter = createAppointmentAdapter(
-        appointment,
-        this.instance._dataAccessors,
-        this.instance.timeZoneCalculator,
-      ).clone();
+      const targeted = { ...appointment };
 
       if (items.settings?.length > 0) {
         const { info } = items.settings[index];
-        targetedAdapter.startDate = info.sourceAppointment.startDate;
-        targetedAdapter.endDate = info.sourceAppointment.endDate;
+        this.instance._dataAccessors.set('startDate', targeted, info.sourceAppointment.startDate);
+        this.instance._dataAccessors.set('endDate', targeted, info.sourceAppointment.endDate);
       }
 
-      return new AppointmentTooltipInfo(appointment, targetedAdapter.source(), items.colors[index], items.settings[index]);
+      return new AppointmentTooltipInfo(appointment, targeted, items.colors[index], items.settings[index]);
     });
   }
 
@@ -202,13 +197,10 @@ export class CompactAppointmentsHelper {
   }
 
   _getDateText(appointment) {
-    const adapter = createAppointmentAdapter(
-      appointment,
-      this.instance._dataAccessors,
-      this.instance.timeZoneCalculator,
-    );
-    const startDateText = adapter.startDate ? this._localizeDate(adapter.startDate) : '';
-    const endDateText = adapter.endDate ? this._localizeDate(adapter.endDate) : '';
+    const startDate = this.instance._dataAccessors.get('startDate', appointment);
+    const endDate = this.instance._dataAccessors.get('endDate', appointment);
+    const startDateText = startDate ? this._localizeDate(startDate) : '';
+    const endDateText = endDate ? this._localizeDate(endDate) : '';
 
     const dateText = startDateText === endDateText
       ? `${startDateText}`

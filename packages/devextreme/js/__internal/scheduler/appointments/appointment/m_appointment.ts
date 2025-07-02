@@ -9,7 +9,6 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import Resizable from '@js/ui/resizable';
-import type { ResourceProcessor } from '@ts/scheduler/resources/resource_processor';
 import { hide, show } from '@ts/ui/tooltip/m_tooltip';
 
 import {
@@ -25,7 +24,7 @@ import {
   REDUCED_APPOINTMENT_PARTS_CLASSES,
 } from '../../m_classes';
 import { getRecurrenceProcessor } from '../../m_recurrence';
-import type { AppointmentDataAccessor } from '../../utils';
+import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import type { AppointmentProperties } from './m_types';
 import {
   getAriaDescription,
@@ -46,10 +45,6 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
 
   get rawAppointment(): any {
     return this.option('data');
-  }
-
-  get resourceProcessor(): ResourceProcessor {
-    return this.option('getResourceProcessor')();
   }
 
   get dataAccessors(): AppointmentDataAccessor {
@@ -173,17 +168,17 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
   _setResourceColor() {
     const appointmentConfig = {
       itemData: this.rawAppointment,
-      groupIndex: this.option('groupIndex'),
-      groups: this.option('groups'),
+      groupIndex: this.option('groupIndex') ?? 0,
     };
-    const deferredColor = this.option('getAppointmentColor')(appointmentConfig);
+    const resourceManager = this.option('getResourceManager')();
 
-    deferredColor.done((color) => {
-      if (color) {
-        this.coloredElement.css('backgroundColor', color);
-        this.coloredElement.addClass(APPOINTMENT_HAS_RESOURCE_COLOR_CLASS);
-      }
-    });
+    resourceManager.getAppointmentColor(appointmentConfig)
+      .then((color) => {
+        if (color) {
+          this.coloredElement.css('backgroundColor', color);
+          this.coloredElement.addClass(APPOINTMENT_HAS_RESOURCE_COLOR_CLASS);
+        }
+      });
   }
 
   _renderAriaLabel(): void {

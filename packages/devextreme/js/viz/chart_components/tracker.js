@@ -9,7 +9,6 @@ import pointerEvents from '../../common/core/events/pointer';
 import { addNamespace } from '../../common/core/events/utils/index';
 import { isDefined } from '../../core/utils/type';
 import { noop as _noop } from '../../core/utils/common';
-import errors from '../../core/errors';
 const _floor = Math.floor;
 const eventsConsts = consts.events;
 const statesConsts = consts.states;
@@ -57,15 +56,8 @@ function getData(event, dataKey, tryCheckParent) {
     return data;
 }
 
-function eventCanceled({ event, cancel }, target, clickTarget) {
-    const deprecatedCancel = event.cancel; // DEPRECATED_22_1
-    const eventCanceled = cancel || deprecatedCancel;
-
-    if(deprecatedCancel) {
-        errors.log('W0003', `${clickTarget}Click handler argument`, 'event.cancel', '22.1', 'Use the \'cancel\' field instead');
-    }
-
-    return eventCanceled || !target.getOptions();
+function eventCanceled({ cancel }, target) {
+    return cancel || !target.getOptions();
 }
 
 function correctLegendHoverMode(mode) {

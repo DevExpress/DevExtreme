@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { DataType } from '@js/common';
 import messageLocalization from '@js/localization/message';
 import filterUtils from '@js/ui/shared/filtering';
@@ -40,11 +39,7 @@ export const defaultColumnProperties = {
   alignment: 'left',
   visible: true,
   allowReordering: true,
-  allowSorting: true,
   allowHiding: true,
-  allowFiltering: true,
-  allowHeaderFiltering: true,
-  allowSearch: true,
   trueText: messageLocalization.format('dxDataGrid-trueText'),
   falseText: messageLocalization.format('dxDataGrid-falseText'),
   showInColumnChooser: true,

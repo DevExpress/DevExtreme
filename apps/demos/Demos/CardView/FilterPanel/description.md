@@ -1,6 +1,8 @@
-The [filter panel](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/filterPanel/) is a UI element that displays the combined filter. This filter is stored in the [filterValue](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/#filterValue) property and includes filters that users apply in other UI elements ([header filter](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/headerFilter/), [filterBuilder](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/#filterBuilder)).
+The [filter panel](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/filterPanel/) UI element displays combined filter information on-screen. This filter is stored in the [filterValue](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/#filterValue) property and includes filters applied in other UI elements ([header filter](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/headerFilter/), [filterBuilder](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/#filterBuilder)).
+<!--split-->
 
 To display the filter panel, set the **filterPanel**.[visible](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/filterPanel/#visible) property to `true`. 
 
-A click on the combined filter calls the integrated filter builder. You can configure it in the [filterBuilder](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/#filterBuilder) object. In this demo, this object is used to add the `weekends` [custom filter operation](/Documentation/ApiReference/UI_Components/dxFilterBuilder/Configuration/customOperations).
-<!--split-->
+A click within the combined filter calls the integrated filter builder. You can configure its settings in the [filterBuilder](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/#filterBuilder) object. In this demo, this object is used to add `beforeNoon` and `afterNoon` [custom filter operations](/Documentation/ApiReference/UI_Components/dxFilterBuilder/Configuration/customOperations).
+
+The integrated filter builder displays in a DevExtreme [Popup](/Documentation/ApiReference/UI_Components/dxPopup/) component. You can configure the filter builder popup with the [filterBuilderPopup](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/#filterBuilderPopup) object.

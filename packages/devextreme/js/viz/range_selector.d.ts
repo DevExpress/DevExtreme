@@ -56,8 +56,6 @@ export {
 /** @public */
 export type BackgroundImageLocation = 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop';
 /** @public */
-export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
-/** @public */
 export type AxisScale = 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete';
 /** @public */
 export type ChartAxisScale = 'continuous' | 'logarithmic';
@@ -191,12 +189,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @default true
        */
       animationEnabled?: boolean;
-      /**
-       * @docid
-       * @default 'onMovingComplete'
-       * @deprecated
-       */
-      callValueChanged?: ValueChangedCallMode;
       /**
        * @docid
        * @default true
@@ -405,12 +397,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @public
      */
     scale?: {
-      /**
-       * @docid
-       * @default true
-       * @deprecated  dxChartSeriesTypes.CommonSeries.aggregation.enabled
-       */
-      aggregateByCategory?: boolean;
       /**
        * @docid
        * @default undefined

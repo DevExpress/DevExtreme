@@ -2,17 +2,15 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
-  DxStepperModule,
   DxButtonModule,
-  DxMultiViewModule,
-  DxFormModule,
   DxDateRangeBoxModule,
+  DxFormModule,
+  DxMultiViewModule,
   DxNumberBoxModule,
   DxSelectBoxModule,
   DxTextAreaModule,
 } from 'devextreme-angular';
-import type { Item, SelectionChangingEvent } from 'devextreme/ui/stepper';
-import validationEngine from 'devextreme/ui/validation_engine';
+import { DxStepperModule, type DxStepperTypes } from 'devextreme-angular/ui/stepper';
 import { AppService } from './app.service';
 import { BookingFormData } from './app.types';
 import { DatesFormComponent } from "./dates-form/dates-form.component";
@@ -20,6 +18,8 @@ import { GuestsFormComponent } from "./guests-form/guests-form.component";
 import { RoomMealPlanFormComponent } from "./room-meal-plan-form/room-meal-plan-form.component";
 import { AdditionalFormComponent } from "./additional-form/additional-form.component";
 import { ConfirmationComponent } from "./confirmation/confirmation.component";
+
+import validationEngine from 'devextreme/ui/validation_engine';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -37,13 +37,15 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
 })
 export class AppComponent {
-  steps: Item[];
+  steps: DxStepperTypes.Item[];
 
   formData: BookingFormData;
 
   selectedIndex: number;
 
   isConfirmed: boolean;
+
+  isStepperReadonly: boolean;
 
   validationGroups = ['dates', 'guests', 'roomAndMealPlan'];
 
@@ -52,8 +54,7 @@ export class AppComponent {
     this.formData = this.appService.getInitialFormData();
     this.selectedIndex = 0;
     this.isConfirmed = false;
-
-    this.getNextButtonText = this.getNextButtonText.bind(this);
+    this.isStepperReadonly = false;
   }
 
   getValidationResult(index: number){
@@ -68,18 +69,12 @@ export class AppComponent {
     this.steps[index].isValid = isValid;
   }
 
-  onSelectionChanging(e: SelectionChangingEvent) {
-    if (this.isConfirmed) {
-      e.cancel = true;
-
-      return;
-    }
-
+  onSelectionChanging(e: DxStepperTypes.SelectionChangingEvent) {
     const { component, addedItems, removedItems } = e;
     const { items = [] } = component.option();
 
-    const addedIndex = items.findIndex((item: Item) => item === addedItems[0]);
-    const removedIndex = items.findIndex((item: Item) => item === removedItems[0]);
+    const addedIndex = items.findIndex((item: DxStepperTypes.Item) => item === addedItems[0]);
+    const removedIndex = items.findIndex((item: DxStepperTypes.Item) => item === removedItems[0]);
     const isMoveForward = removedIndex > -1 && addedIndex > removedIndex;
 
     if (isMoveForward) {
@@ -120,13 +115,13 @@ export class AppComponent {
     this.selectedIndex = 0;
     this.steps = this.appService.getInitialSteps();
     this.formData = this.appService.getInitialFormData();
-    validationEngine.resetGroup(this.validationGroups[0]);
-    validationEngine.resetGroup(this.validationGroups[1]);
+    this.isStepperReadonly = false;
   }
 
   confirm(){
     this.isConfirmed = true;
     this.setStepValidationResult(this.selectedIndex, true);
+    this.isStepperReadonly = true;
   }
 
   onNextButtonClick() {
@@ -143,13 +138,13 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxStepperModule,
     DxButtonModule,
-    DxMultiViewModule,
-    DxFormModule,
     DxDateRangeBoxModule,
+    DxFormModule,
+    DxMultiViewModule,
     DxNumberBoxModule,
     DxSelectBoxModule,
+    DxStepperModule,
     DxTextAreaModule,
   ],
   declarations: [

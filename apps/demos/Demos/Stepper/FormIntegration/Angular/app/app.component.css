@@ -33,3 +33,7 @@
   display: flex;
   gap: 8px;
 }
+
+::ng-deep .readonly {
+  pointer-events: none;
+}

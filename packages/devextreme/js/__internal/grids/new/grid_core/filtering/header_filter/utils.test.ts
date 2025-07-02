@@ -398,7 +398,8 @@ describe('HeaderFilter', () => {
           result: [[['ID1', '>', 5], 'or', ['ID1', '<', 10]], 'and', [['ID2', '>', 6], 'or', ['ID2', '<', 9]]],
         },
       ])('$caseName: should correctly calculate the header filter', ({ columns, result }) => {
-        const headerFilter = utils.getComposedHeaderFilter(columns as Column[]);
+        const headerFilterInfoArray = utils.getHeaderFilterInfoArray(columns as Column[]);
+        const headerFilter = utils.getComposedHeaderFilter(headerFilterInfoArray);
 
         expect(headerFilter).toStrictEqual(result);
       });

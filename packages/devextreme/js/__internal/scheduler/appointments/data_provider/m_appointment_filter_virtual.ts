@@ -3,10 +3,8 @@ import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { isDateAndTimeView, isTimelineView } from '@ts/scheduler/r1/utils/index';
 import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/types';
+import { getResourcesByGroupIndex } from '@ts/scheduler/utils/resource_manager/group_utils';
 
-import {
-  getResourcesDataByGroups,
-} from '../../resources/m_utils';
 import { AppointmentFilterBaseStrategy } from './m_appointment_filter';
 
 // TODO Vinogradov refactoring: this module should be refactored :)
@@ -118,12 +116,12 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
   }
 
   _getPrerenderFilterResources(groupIndex) {
-    const cellGroup = this.viewDataProvider.getCellsGroup(groupIndex);
+    const resourceManager = this.options.getResourceManager();
 
-    return getResourcesDataByGroups(
-      this.loadedResources,
-      this.resources,
-      [cellGroup],
+    return getResourcesByGroupIndex(
+      resourceManager.groupsLeafs,
+      resourceManager.resourceById,
+      groupIndex,
     );
   }
 }

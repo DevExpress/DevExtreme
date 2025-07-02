@@ -1,5 +1,7 @@
 <template>
   <DxStepper
+    :focus-state-enabled="!isStepperReadonly"
+    :class="{ readonly: isStepperReadonly }"
     v-model:selected-index="selectedIndex"
     @selection-changing="onSelectionChanging"
   >
@@ -61,9 +63,7 @@
     <div class="nav-panel">
       <div class="current-step">
         <span v-if="!isConfirmed">
-          Step <span class="selected-index">{{ selectedIndex + 1 }}</span> of <span class="step-count">{{
-            steps.length
-          }}</span>
+          Step <span class="selected-index">{{ selectedIndex + 1 }}</span> of {{ steps.length }}
         </span>
       </div>
       <div class="nav-buttons">
@@ -89,12 +89,10 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import DxButton from 'devextreme-vue/button';
-import DxMultiView, { DxItem as DxMultiViewItem } from 'devextreme-vue/multi-view';
-import DxStepper, { DxItem as DxStepperItem } from 'devextreme-vue/stepper';
-import type { IItemProps } from 'devextreme-react/cjs/stepper';
-import type { SelectionChangingEvent } from 'devextreme/ui/stepper';
-import validationEngine from 'devextreme/ui/validation_engine';
+import { DxButton } from 'devextreme-vue/button';
+import { DxMultiView, DxItem as DxMultiViewItem } from 'devextreme-vue/multi-view';
+import { DxStepper, DxItem as DxStepperItem, type DxStepperTypes } from 'devextreme-vue/stepper';
+import validationEngine from 'devextreme/ui/validation_engine';;
 import DatesTemplate from './DatesTemplate.vue';
 import GuestsTemplate from './GuestsTemplate.vue';
 import RoomMealPlanTemplate from './RoomMealPlanTemplate.vue';
@@ -105,7 +103,8 @@ import type { BookingFormData } from './types';
 
 const selectedIndex = ref(0);
 const isConfirmed = ref(false);
-const steps = ref<IItemProps[]>(getInitialSteps());
+const isStepperReadonly = ref(false);
+const steps = ref<DxStepperTypes.Item[]>(getInitialSteps());
 const formData = ref<BookingFormData>(getInitialFormData());
 
 const validationGroups = ['dates', 'guests', 'roomAndMealPlan'];
@@ -130,18 +129,12 @@ const setStepValidationResult = (index: number, isValid: boolean | undefined) =>
   steps.value[index].isValid = isValid;
 };
 
-function onSelectionChanging(e: SelectionChangingEvent) {
-  if (isConfirmed.value) {
-    e.cancel = true;
-
-    return;
-  }
-
+function onSelectionChanging(e: DxStepperTypes.SelectionChangingEvent) {
   const { component, addedItems, removedItems } = e;
   const { items = [] } = component.option();
 
-  const addedIndex = items.findIndex((item: IItemProps) => item === addedItems[0]);
-  const removedIndex = items.findIndex((item: IItemProps) => item === removedItems[0]);
+  const addedIndex = items.findIndex((item: DxStepperTypes.Item) => item === addedItems[0]);
+  const removedIndex = items.findIndex((item: DxStepperTypes.Item) => item === removedItems[0]);
   const isMoveForward = addedIndex > removedIndex;
 
   if (isMoveForward) {
@@ -174,13 +167,13 @@ const reset = () => {
   selectedIndex.value = 0;
   steps.value = getInitialSteps();
   formData.value = getInitialFormData();
-  validationEngine.resetGroup(validationGroups[0]);
-  validationEngine.resetGroup(validationGroups[1]);
+  isStepperReadonly.value = false;
 };
 
 const confirm = () => {
   isConfirmed.value = true;
   setStepValidationResult(selectedIndex.value, true);
+  isStepperReadonly.value = true;
 };
 
 function onNextButtonClick() {
@@ -264,5 +257,9 @@ function onNextButtonClick() {
 .nav-buttons {
   display: flex;
   gap: 8px;
+}
+
+.readonly {
+  pointer-events: none;
 }
 </style>

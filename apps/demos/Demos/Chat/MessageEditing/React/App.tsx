@@ -1,9 +1,8 @@
 import React, { useState, useCallback } from 'react';
-import Chat, { type ChatTypes, Editing } from 'devextreme-react/chat';
-import SelectBox from 'devextreme-react/select-box';
-import CustomStore from 'devextreme/data/custom_store';
-import DataSource from 'devextreme/data/data_source';
-import Guid from 'devextreme/core/guid';
+import { Chat, Editing, type ChatTypes } from 'devextreme-react/chat';
+import { SelectBox } from 'devextreme-react/select-box';
+import { Guid } from 'devextreme-react/common';
+import { CustomStore, DataSource } from 'devextreme-react/common/data';
 
 import {
   currentUser,

@@ -476,20 +476,6 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('acceptedValues', value);
     }
 
-    get formatName(): HtmlEditorPredefinedToolbarItem | string {
-        return this._getOption('formatName');
-    }
-    set formatName(value: HtmlEditorPredefinedToolbarItem | string) {
-        this._setOption('formatName', value);
-    }
-
-    get formatValues(): Array<string | number | boolean> {
-        return this._getOption('formatValues');
-    }
-    set formatValues(value: Array<string | number | boolean>) {
-        this._setOption('formatValues', value);
-    }
-
     get commands(): Array<AICommandName | AICommand> {
         return this._getOption('commands');
     }

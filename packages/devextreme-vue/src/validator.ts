@@ -37,7 +37,7 @@ const componentConfig = {
   props: {
     adapter: Object as PropType<Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     name: String,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
@@ -45,7 +45,7 @@ const componentConfig = {
     onValidated: Function as PropType<((validatedInfo: ValidatedEvent) => void)>,
     validationGroup: String,
     validationRules: Array as PropType<Array<CommonTypes.ValidationRule>>,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

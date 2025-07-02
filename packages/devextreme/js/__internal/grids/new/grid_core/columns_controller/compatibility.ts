@@ -1,5 +1,6 @@
 import { ColumnsController } from './columns_controller';
 import type { Column } from './types';
+import { addDataFieldToComputedColumns } from './utils';
 
 export class CompatibilityColumnsController {
   public static dependencies = [ColumnsController] as const;
@@ -13,6 +14,8 @@ export class CompatibilityColumnsController {
   }
 
   public getFilteringColumns(): Column[] {
-    return this.realColumnsController.filterableColumns.peek();
+    return addDataFieldToComputedColumns(
+      this.realColumnsController.filterableColumns.peek(),
+    );
   }
 }

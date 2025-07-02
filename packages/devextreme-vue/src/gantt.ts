@@ -65,6 +65,7 @@ import {
 import {
  FilterOperation,
  FilterType,
+ ColumnHeaderFilter,
  SelectedFilterOperation,
  HeaderFilterGroupInterval,
  ColumnHeaderFilterSearchConfig,
@@ -183,7 +184,7 @@ const componentConfig = {
     firstDayOfWeek: Number as PropType<FirstDayOfWeek>,
     focusStateEnabled: Boolean,
     headerFilter: Object as PropType<dxGanttHeaderFilter | Record<string, any>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
@@ -240,7 +241,7 @@ const componentConfig = {
     toolbar: Object as PropType<dxGanttToolbar | Record<string, any>>,
     validation: Object as PropType<Record<string, any>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,
@@ -411,7 +412,7 @@ const DxColumnConfig = {
     filterValues: Array as PropType<Array<any>>,
     format: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
     headerCellTemplate: {},
-    headerFilter: Object as PropType<Record<string, any>>,
+    headerFilter: Object as PropType<ColumnHeaderFilter | Record<string, any>>,
     minWidth: Number,
     selectedFilterOperation: String as PropType<SelectedFilterOperation>,
     sortIndex: Number,

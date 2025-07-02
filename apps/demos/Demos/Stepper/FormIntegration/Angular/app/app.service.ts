@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Item } from 'devextreme/ui/stepper';
+import { type DxStepperTypes } from 'devextreme-angular/ui/stepper';
 import { BookingFormData } from "./app.types";
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppService {
-  initialSteps: Item[];
+  initialSteps: DxStepperTypes.Item[];
 
   initialFormData: BookingFormData;
 
@@ -44,7 +44,7 @@ export class AppService {
     };
   }
 
-  getInitialSteps(): Item[] {
+  getInitialSteps(): DxStepperTypes.Item[] {
     return this.initialSteps.map((item) => ({ ...item }));
   }
 

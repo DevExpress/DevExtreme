@@ -6,6 +6,16 @@ import type { DataObject, Key } from '../data_controller/types';
 import type { Action } from '../types';
 import type { Change } from './types';
 
+export interface EditingTexts {
+  confirmDeleteMessage: string;
+  confirmDeleteTitle: string;
+  deleteCard: string;
+  editCard: string;
+  saveCard: string;
+  addCard: string;
+  cancel: string;
+}
+
 export interface Options {
   editing?: {
     editCardKey?: Key;
@@ -21,12 +31,7 @@ export interface Options {
     form?: dxForm.Options;
     popup?: dxPopup.Options;
 
-    texts?: {
-      addCard?: string;
-      confirmDeleteMessage?: string;
-      confirmDeleteTitle?: string;
-    };
-
+    texts?: Partial<EditingTexts>;
   };
 
   onEditCanceled?: Action<{
@@ -83,6 +88,12 @@ export const defaultOptions = {
 
     texts: {
       confirmDeleteMessage: messageLocalization.format('dxDataGrid-editingConfirmDeleteMessage'),
+      confirmDeleteTitle: '',
+      deleteCard: messageLocalization.format('dxDataGrid-editingDeleteRow'),
+      editCard: messageLocalization.format('dxDataGrid-editingEditRow'),
+      saveCard: messageLocalization.format('dxDataGrid-editingSaveRowChanges'),
+      addCard: messageLocalization.format('dxDataGrid-editingAddRow'),
+      cancel: messageLocalization.format('dxDataGrid-editingCancelRowChanges'),
     },
   },
 } satisfies Options;

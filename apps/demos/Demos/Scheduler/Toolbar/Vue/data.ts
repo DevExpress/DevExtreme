@@ -1,7 +1,7 @@
-import type { Appointment } from 'devextreme/ui/scheduler';
-import DataSource from 'devextreme/data/data_source';
+import { type SchedulerTypes } from 'devextreme-react/scheduler';
+import { DataSource } from 'devextreme-vue/common/data';
 
-type CustomAppointment = Appointment & {
+type CustomAppointment = SchedulerTypes.Appointment & {
   assigneeId: number[];
 };
 

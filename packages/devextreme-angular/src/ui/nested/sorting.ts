@@ -19,7 +19,7 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoGanttSorting } from './base/gantt-sorting';
+import { DxoSorting } from './base/sorting';
 
 
 @Component({
@@ -37,7 +37,7 @@ import { DxoGanttSorting } from './base/gantt-sorting';
         'showSortIndexes'
     ]
 })
-export class DxoSortingComponent extends DxoGanttSorting implements OnDestroy, OnInit  {
+export class DxoSortingComponent extends DxoSorting implements OnDestroy, OnInit  {
 
     protected get _optionPath() {
         return 'sorting';

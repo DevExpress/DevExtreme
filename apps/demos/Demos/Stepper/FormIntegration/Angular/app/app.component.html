@@ -1,4 +1,6 @@
 <dx-stepper
+  [focusStateEnabled]="!isStepperReadonly"
+  [class.readonly]="isStepperReadonly"
   [(selectedIndex)]="selectedIndex"
   (onSelectionChanging)="onSelectionChanging($event)"
 >
@@ -61,7 +63,7 @@
     <div class="current-step">
       <span *ngIf="!isConfirmed">
         Step <span class="selected-index">{{ selectedIndex + 1 }}</span> of
-        <span class="step-count">{{ steps.length }}</span>
+        {{ steps.length }}
       </span>
     </div>
     <div class="nav-buttons">

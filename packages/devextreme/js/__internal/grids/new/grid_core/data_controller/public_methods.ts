@@ -55,13 +55,15 @@ export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: 
     }
 
     public pageIndex(): number;
-    public pageIndex(newIndex: number): void;
-    public pageIndex(newIndex?: number): number | void {
+    public pageIndex(newIndex: number): Promise<void>;
+    public pageIndex(newIndex?: number): number | Promise<void> {
       if (newIndex === undefined) {
         return this.dataController.pageIndex.peek();
       }
-      // TODO: Promise<void> (jQuery or native)
+
       this.dataController.pageIndex.value = newIndex;
+
+      return this.dataController.waitLoaded();
     }
 
     public totalCount(): number {

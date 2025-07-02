@@ -66,6 +66,7 @@ const SKIPPED_TESTS = {
   jQuery: {
     Charts: [
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
+      { demo: 'SpiderWeb', themes: [THEME.material] }, // NOTE: Requires preload font, which not work in testcafe
     ],
     Gantt: [
       { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -103,6 +104,7 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleSeriesSelection', themes: [THEME.material] },
       { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
       { demo: 'PointSelectionAPI', themes: [THEME.material] },
+      { demo: 'SpiderWeb', themes: [THEME.material] }, // NOTE: Requires preload font, which not work in testcafe
     ],
     Map: [
       { demo: 'ProvidersAndTypes', themes: [THEME.generic, THEME.material, THEME.fluent] },
@@ -158,6 +160,7 @@ const SKIPPED_TESTS = {
       { demo: 'ClientSideDataProcessing', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
+      { demo: 'SpiderWeb', themes: [THEME.material] }, // NOTE: Requires preload font, which not work in testcafe
     ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },
@@ -230,6 +233,7 @@ const SKIPPED_TESTS = {
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'EqualSizePies', themes: [THEME.material] },
       { demo: 'Palette', themes: [THEME.material] },
+      { demo: 'SpiderWeb', themes: [THEME.material] }, // NOTE: Requires preload font, which not work in testcafe
     ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },

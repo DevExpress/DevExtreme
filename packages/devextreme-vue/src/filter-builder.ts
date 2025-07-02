@@ -78,7 +78,7 @@ const componentConfig = {
     focusStateEnabled: Boolean,
     groupOperationDescriptions: Object as PropType<Record<string, any>>,
     groupOperations: Array as PropType<Array<GroupOperation>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     maxGroupLevel: Number,
@@ -93,7 +93,7 @@ const componentConfig = {
     tabIndex: Number,
     value: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

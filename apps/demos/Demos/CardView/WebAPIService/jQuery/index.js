@@ -15,6 +15,8 @@ $(() => {
   $('#card-view').dxCardView({
     dataSource: store,
     remoteOperations: true,
+    cardsPerRow: 'auto',
+    cardMinWidth: 280,
     wordWrapEnabled: true,
     columns: [
       {
@@ -48,6 +50,19 @@ $(() => {
       allowAdding: true,
       allowUpdating: true,
       allowDeleting: true,
+      popup: {
+        width: 700,
+        height: 400,
+      },
+      form: {
+        items: ['Task_Subject', 'Task_Start_Date', 'Task_Due_Date', {
+          dataField: 'Task_Priority',
+          editorType: 'dxSelectBox',
+          editorOptions: {
+            dataSource: ['Low', 'Normal', 'High', 'Urgent'],
+          },
+        }, 'Task_Status']
+      },
     },
     searchPanel: {
       visible: true,

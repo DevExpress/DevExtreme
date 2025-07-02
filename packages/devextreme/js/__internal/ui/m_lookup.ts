@@ -130,9 +130,11 @@ class Lookup extends DropDownList<LookupProperties> {
       focusStateEnabled: false,
       dropDownOptions: {
         showTitle: true,
+        // @ts-expect-error ts-error
         width() {
           return getSize('width');
         },
+        // @ts-expect-error ts-error
         height() {
           return getSize('height');
         },
@@ -152,16 +154,10 @@ class Lookup extends DropDownList<LookupProperties> {
     };
   }
 
-  _setDeprecatedOptions() {
-    super._setDeprecatedOptions();
-    extend(this._deprecatedOptions, {
-      valueChangeEvent: { since: '22.1', alias: 'searchStartEvent' },
-    });
-  }
-
   _defaultOptionsRules() {
     const themeName = current();
 
+    // @ts-expect-error ts-error
     return super._defaultOptionsRules().concat([
       {
         device() {
@@ -221,7 +217,6 @@ class Lookup extends DropDownList<LookupProperties> {
           dropDownCentered: true,
           _scrollToSelectedItemEnabled: true,
           dropDownOptions: {
-            // @ts-expect-error ts-error
             _ignoreFunctionValueDeprecation: true,
 
             width: () => getElementWidth(this.$element()),
@@ -708,8 +703,7 @@ class Lookup extends DropDownList<LookupProperties> {
       // @ts-expect-error ts-error
       shading: dropDownOptions.shading,
       // @ts-expect-error ts-error
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      hideOnOutsideClick: dropDownOptions.hideOnOutsideClick || dropDownOptions.closeOnOutsideClick,
+      hideOnOutsideClick: dropDownOptions.hideOnOutsideClick,
       _loopFocus: shouldLoopFocusInsidePopup,
     });
 

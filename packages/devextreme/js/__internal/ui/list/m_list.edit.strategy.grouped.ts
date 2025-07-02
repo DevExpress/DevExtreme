@@ -147,8 +147,8 @@ class GroupedEditStrategy extends EditStrategy {
   }
 
   _getGroups(items) {
-    // @ts-expect-error
     const dataController = this._collectionWidget._dataController;
+    // @ts-expect-error arguments
     const group = dataController.group();
 
     if (group) {
