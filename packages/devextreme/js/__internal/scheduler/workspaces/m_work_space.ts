@@ -53,6 +53,7 @@ import type { SafeAppointment, ViewType } from '@ts/scheduler/types';
 
 import WidgetObserver from '../base/m_widget_observer';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
+import { Cache } from '../global_cache';
 import AppointmentDragBehavior from '../m_appointment_drag_behavior';
 import {
   APPOINTMENT_DRAG_SOURCE_CLASS,
@@ -83,7 +84,6 @@ import {
   getMaxAllowedPosition,
   PositionHelper,
 } from './helpers/m_position_helper';
-import { Cache } from './m_cache';
 import { CellsSelectionController } from './m_cells_selection_controller';
 import CellsSelectionState from './m_cells_selection_state';
 import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './m_virtual_scrolling';
@@ -1279,7 +1279,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
   }
 
   _getWorkSpaceWidth() {
-    return this.cache.get('workspaceWidth', () => {
+    return this.cache.memo('workspaceWidth', () => {
       if (this._needCreateCrossScrolling()) {
         return getBoundingRect(this._$dateTable.get(0)).width;
       }
@@ -1394,37 +1394,6 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
     }
 
     return isOutsideVerticalScrollable || isOutsideHorizontalScrollable;
-  }
-
-  setCellDataCache(cellCoordinates, groupIndex, $cell) {
-    const key = JSON.stringify({
-      rowIndex: cellCoordinates.rowIndex,
-      columnIndex: cellCoordinates.columnIndex,
-      groupIndex,
-    });
-
-    this.cache.set(
-      key,
-      this.getCellData($cell),
-    );
-  }
-
-  setCellDataCacheAlias(appointment, geometry) {
-    const key = JSON.stringify({
-      rowIndex: appointment.rowIndex,
-      columnIndex: appointment.columnIndex,
-      groupIndex: appointment.groupIndex,
-    });
-
-    const aliasKey = JSON.stringify({
-      top: geometry.top,
-      left: geometry.left,
-    });
-
-    this.cache.set(
-      aliasKey,
-      this.cache.get(key),
-    );
   }
 
   supportAllDayRow() {
@@ -1701,15 +1670,6 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
     return $cells.eq(cellIndex);
   }
 
-  getCellDataByCoordinates(coordinates, allDay) {
-    const key = JSON.stringify({ top: coordinates.top, left: coordinates.left });
-    return this.cache.get(key, () => {
-      const $cell = this.getCellByCoordinates(coordinates, allDay);
-
-      return this.getCellData($cell);
-    });
-  }
-
   getVisibleBounds() { // TODO - this method is only used by the Agenda
     const result: any = {};
     const $scrollable = this.getScrollable().$element();
@@ -1958,7 +1918,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
 
   // Must replace all DOM manipulations
   getDOMElementsMetaData() {
-    return this.cache.get('cellElementsMeta', () => ({
+    return this.cache.memo('cellElementsMeta', () => ({
       dateTableCellsMeta: this._getDateTableDOMElementsInfo(),
       allDayPanelCellsMeta: this._getAllDayPanelDOMElementsInfo(),
     }));

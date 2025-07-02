@@ -150,32 +150,6 @@ module('Work Space Base', {
 
                 dateUtils.getTimezonesDifference.restore();
             });
-
-            test('Global cache should be cleared on dimension changed', async function(assert) {
-                const spy = sinon.spy(this.instance.cache, 'clear');
-
-                this.instance.cache.set('test', 'value');
-
-                this.instance._dimensionChanged();
-
-                assert.ok(spy.callCount > 0, 'Cache clear was invoked');
-
-                spy.restore();
-            });
-
-            test('Global cache should be cleared on _cleanView', async function(assert) {
-                const spy = sinon.spy(this.instance.cache, 'clear');
-
-                this.instance.cache.set('test', 'value');
-
-                this.instance._cleanView();
-
-                assert.ok(spy.callCount > 0, 'Cache clear was invoked');
-
-                assert.notOk(this.instance.cache.size, 'Global cache is empty');
-
-                spy.restore();
-            });
         });
     });
 });
