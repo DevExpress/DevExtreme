@@ -4,66 +4,93 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import timeZoneUtils from '../../m_utils_time_zone';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 
-const toMs = dateUtils.dateToMilliseconds;
+interface StartHoursCompareOptions {
+  startDate: Date;
+  endDate: Date;
+  startDayHour: number;
+  isAllDay?: boolean;
+  isSeveralDays?: boolean;
+}
+
+interface CompareOptions extends StartHoursCompareOptions {
+  endDayHour: number;
+  min: Date;
+  max: Date;
+  isTimeDateView: boolean;
+}
 
 const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
 
-export const compareDateWithStartDayHour = (startDate, endDate, startDayHour, allDay, severalDays) => {
+export const compareDateWithStartDayHour = ({
+  startDate,
+  endDate,
+  startDayHour,
+  isAllDay = false,
+  isSeveralDays = false,
+}: StartHoursCompareOptions): boolean => {
   const startTime = dateUtils.dateTimeFromDecimal(startDayHour);
+  const appointmentStart = {
+    hours: startDate.getHours(),
+    minutes: startDate.getMinutes(),
+  };
+  const appointmentEnd = {
+    hours: endDate.getHours(),
+    minutes: endDate.getMinutes(),
+  };
 
-  const result = (startDate.getHours() >= startTime.hours && startDate.getMinutes() >= startTime.minutes)
-        || (endDate.getHours() === startTime.hours && endDate.getMinutes() > startTime.minutes)
-        || (endDate.getHours() > startTime.hours)
-        || severalDays
-        || allDay;
+  const isStartAfterOrEqual = appointmentStart.hours >= startTime.hours && appointmentStart.minutes >= startTime.minutes;
+  const isEndAfterStartTime = appointmentEnd.hours > startTime.hours
+    || (appointmentEnd.hours === startTime.hours && appointmentEnd.minutes > startTime.minutes);
 
-  return result;
+  return isStartAfterOrEqual
+    || isEndAfterStartTime
+    || isSeveralDays
+    || isAllDay;
 };
 
-export const compareDateWithEndDayHour = (options) => {
-  const {
-    startDate,
-    endDate,
-    startDayHour,
-    endDayHour,
-    viewStartDayHour,
-    viewEndDayHour,
-    allDay,
-    severalDays,
-    min,
-    max,
-    checkIntersectViewport,
-  } = options;
+export const compareDateWithTime = ({
+  startDate,
+  endDate,
+  startDayHour,
+  endDayHour,
+  min,
+  max,
+  isTimeDateView,
+  isAllDay = false,
+}: CompareOptions): boolean => {
+  const appointmentStart = {
+    hours: startDate.getHours(),
+    minutes: startDate.getMinutes(),
+  };
+  const appointmentEnd = {
+    hours: endDate.getHours(),
+    minutes: endDate.getMinutes(),
+  };
 
-  const hiddenInterval = (24 - viewEndDayHour + viewStartDayHour) * toMs('hour');
-  const apptDuration = endDate.getTime() - startDate.getTime();
-  const delta = (hiddenInterval - apptDuration) / toMs('hour');
-  const apptStartHour = startDate.getHours();
-  const apptStartMinutes = startDate.getMinutes();
-  let result;
+  const trimMin = dateUtils.trimTime(min);
+  const trimMax = dateUtils.trimTime(max);
+  const trimStartDate = dateUtils.trimTime(startDate);
+  const trimEndDate = dateUtils.trimTime(endDate);
+  const isBetween = trimEndDate > trimMin && trimStartDate < trimMax;
+  const isStartDateBorder = Boolean(dateUtils.sameDate(trimEndDate, trimMin));
+  const isEndDateBorder = Boolean(dateUtils.sameDate(trimStartDate, trimMax));
+
+  if (!isTimeDateView || isAllDay) {
+    return isBetween || isStartDateBorder || isEndDateBorder;
+  }
 
   const endTime = dateUtils.dateTimeFromDecimal(endDayHour);
   const startTime = dateUtils.dateTimeFromDecimal(startDayHour);
-  const apptIntersectViewport = startDate < max && endDate > min;
+  const isAfterMinHours = isStartDateBorder && (
+    appointmentEnd.hours > startTime.hours
+    || (appointmentEnd.hours === startTime.hours && appointmentEnd.minutes > startTime.minutes)
+  );
+  const isBeforeMinHours = isEndDateBorder && (
+    appointmentStart.hours < endTime.hours
+    || (appointmentStart.hours === endTime.hours && appointmentStart.minutes < endTime.minutes)
+  );
 
-  result = (checkIntersectViewport
-            && apptIntersectViewport)
-        || (apptStartHour < endTime.hours)
-        || (apptStartHour === endTime.hours && apptStartMinutes < endTime.minutes)
-        || (allDay
-            && startDate <= max)
-        || (severalDays
-            && apptIntersectViewport
-                && (apptStartHour < endTime.hours || (endDate.getHours() * 60 + endDate.getMinutes()) > startTime.hours * 60)
-        );
-
-  if (apptDuration < hiddenInterval) {
-    if ((apptStartHour > endTime.hours && apptStartMinutes > endTime.minutes) && (delta <= apptStartHour - endDayHour)) {
-      result = false;
-    }
-  }
-
-  return result;
+  return isBetween || isAfterMinHours || isBeforeMinHours;
 };
 
 export const getAppointmentTakesSeveralDays = (dates: {
@@ -80,7 +107,7 @@ export const _appointmentPartInInterval = (startDate, endDate, startDayHour, end
         || (apptEndDayHour >= endDayHour && apptStartDayHour <= endDayHour && apptStartDayHour >= startDayHour);
 };
 
-export const getRecurrenceException = (appointmentAdapter, timeZoneCalculator, timeZone) => {
+export const getRecurrenceException = (appointmentAdapter, timeZoneCalculator) => {
   const { recurrenceException } = appointmentAdapter;
 
   if (recurrenceException) {
@@ -91,7 +118,6 @@ export const getRecurrenceException = (appointmentAdapter, timeZoneCalculator, t
         exceptions[i],
         appointmentAdapter.startDate,
         timeZoneCalculator,
-        timeZone,
       );
     }
 
@@ -102,7 +128,7 @@ export const getRecurrenceException = (appointmentAdapter, timeZoneCalculator, t
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export const _convertRecurrenceException = (exceptionString, startDate, timeZoneCalculator, timeZone) => {
+export const _convertRecurrenceException = (exceptionString, startDate, timeZoneCalculator) => {
   exceptionString = exceptionString.replace(/\s/g, '');
 
   const getConvertedToTimeZone = (date) => timeZoneCalculator.createDate(date, 'toGrid');
@@ -114,7 +140,6 @@ export const _convertRecurrenceException = (exceptionString, startDate, timeZone
   convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(
     convertedExceptionDate,
     convertedStartDate,
-    timeZone,
   );
 
   exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
