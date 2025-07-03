@@ -502,7 +502,7 @@ class Popup<
       } else {
         this._renderTopToolbarImpl();
       }
-      // this._dimensionChanged();
+      this._dimensionChanged();
       // To trigger toolbar width set in initial rendering to set menu button width (T1245421)
       // And to trigger with animation in runtime items update
       this._triggerToolbarResizeEvent();
@@ -553,7 +553,7 @@ class Popup<
     } else {
       this._renderBottomToolbarImpl();
     }
-    // this._dimensionChanged();
+    this._dimensionChanged();
     // To trigger toolbar width set in initial rendering to set menu button width (T1245421)
     // And to trigger with animation in runtime items update
     this._triggerToolbarResizeEvent();
@@ -1292,10 +1292,6 @@ class Popup<
       case 'useFlatToolbarButtons': {
         this._renderTopToolbar();
         this._renderBottomToolbar();
-        this._renderGeometry();
-
-        triggerResizeEvent(this.$overlayContent());
-
         break;
       }
       case 'dragEnabled':
