@@ -21,8 +21,6 @@ class CollectionWidgetLiveUpdate<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey = any,
 > extends CollectionWidgetAsync<TProperties> {
-  _correctionIndex!: number;
-
   _itemsCache!: TItem[];
 
   _getDefaultOptions(): TProperties {
@@ -32,26 +30,11 @@ class CollectionWidgetLiveUpdate<
     };
   }
 
-  _customizeStoreLoadOptions(e) {
-    const dataController = this._dataController;
-
-    if (dataController.getDataSource() && !this._dataController.isLoaded()) {
-      this._correctionIndex = 0;
-    }
-    if (this._correctionIndex && e.storeLoadOptions) {
-      e.storeLoadOptions.skip += this._correctionIndex;
-    }
-  }
-
-  reload(): void {
-    this._correctionIndex = 0;
-  }
+  reload(): void { }
 
   _init(): void {
     super._init();
     this._refreshItemsCache();
-    this._correctionIndex = 0;
-    this._subscribeLoadOptionsCustomization(true);
   }
 
   _findItemElementByKey(key) {
@@ -160,11 +143,6 @@ class CollectionWidgetLiveUpdate<
     }
   }
 
-  _dispose(): void {
-    this._subscribeLoadOptionsCustomization(false);
-    super._dispose();
-  }
-
   _updateByChange(keyInfo, items, change, isPartialRefresh): void {
     if (isPartialRefresh) {
       this._renderItem(change.index, change.data, null, this._findItemElementByKey(change.key));
@@ -187,7 +165,6 @@ class CollectionWidgetLiveUpdate<
       this._renderItem(change.index ?? items.length, change.data);
 
       this._afterItemElementInserted();
-      this._correctionIndex++;
     });
   }
 
@@ -236,8 +213,6 @@ class CollectionWidgetLiveUpdate<
           this._afterItemElementDeleted($removedItemElement, deletedActionArgs);
         }
       });
-
-      this._correctionIndex--;
     }
   }
 
@@ -264,19 +239,6 @@ class CollectionWidgetLiveUpdate<
     domAdapter.insertElement($container.get(0), $itemFrame.get(0), nextSiblingElement);
   }
 
-  _subscribeLoadOptionsCustomization(enable: boolean): void {
-    if (!this._dataController) {
-      return;
-    }
-
-    if (enable) {
-      this._correctionIndex = 0;
-      this._dataController.on('customizeStoreLoadOptions', this._customizeStoreLoadOptions.bind(this));
-    } else {
-      this._dataController.off('customizeStoreLoadOptions', this._customizeStoreLoadOptions.bind(this));
-    }
-  }
-
   _optionChanged(args: OptionChanged<TProperties>): void {
     switch (args.name) {
       case 'items': {
@@ -292,9 +254,7 @@ class CollectionWidgetLiveUpdate<
           this.option('items', []);
         }
 
-        this._subscribeLoadOptionsCustomization(false);
         super._optionChanged(args);
-        this._subscribeLoadOptionsCustomization(true);
         break;
       case 'repaintChangesOnly':
         break;
