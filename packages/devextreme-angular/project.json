@@ -53,7 +53,7 @@
   },
   "namedInputs": {
     "default": [
-      "{projectRoot}/metadata/**/*",
+      "{projectRoot}/devextreme-metadata/**/*",
       "{projectRoot}/src/**/*",
       "{projectRoot}/build.config.js",
       "{projectRoot}/gulpfile.js",

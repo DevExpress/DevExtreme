@@ -38,7 +38,7 @@
   },
   "namedInputs": {
     "default": [
-      "{projectRoot}/metadata/**/*",
+      "{projectRoot}/devextreme-metadata/**/*",
       "{projectRoot}/src/**/*",
       "!{projectRoot}/src/**/__tests__/*",
       "{projectRoot}/build.config.js",
