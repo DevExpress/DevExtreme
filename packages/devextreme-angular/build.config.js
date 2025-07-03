@@ -3,8 +3,8 @@ const unifiedConfig = require('../../tools/generators-config').angularConfig;
 module.exports = {
   tools: {
     metadataGenerator: {
-      sourceMetadataFilePath: require.resolve('metadata/NGMetaData.json'),
-      imdMetadataFilePath: require.resolve('metadata/integration-data.json'),
+      sourceMetadataFilePath: require.resolve('devextreme-metadata/NGMetaData.json'),
+      imdMetadataFilePath: require.resolve('devextreme-metadata/integration-data.json'),
       outputFolderPath: './metadata/generated',
       nestedPathPart: 'nested',
       basePathPart: 'base',
@@ -61,7 +61,7 @@ module.exports = {
       outputFileName: 'tests/src/server/component-names.ts',
     },
     commonReexportsGenerator: {
-      imdMetadataFilePath: require.resolve('metadata/integration-data.json'),
+      imdMetadataFilePath: require.resolve('devextreme-metadata/integration-data.json'),
       outputPath: './src/',
     },
   },

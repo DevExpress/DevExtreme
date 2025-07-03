@@ -85,7 +85,8 @@
     "eslint-plugin-import": "catalog:eslint8",
     "@typescript-eslint/eslint-plugin": "catalog:eslint8",
     "@typescript-eslint/parser": "catalog:eslint8",
-    "metadata": "workspace:*"
+    "metadata": "workspace:*",
+    "devextreme-metadata": "workspace:*"
   },
   "publishConfig": {
     "directory": "npm",

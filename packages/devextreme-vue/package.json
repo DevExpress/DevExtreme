@@ -84,7 +84,7 @@
     "@babel/eslint-parser": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
-    "metadata": "workspace:*"
+    "devextreme-metadata": "workspace:*"
   },
   "publishConfig": {
     "directory": "npm",
