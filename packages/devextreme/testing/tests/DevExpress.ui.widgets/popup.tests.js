@@ -1537,13 +1537,11 @@ QUnit.module('options changed callbacks', {
             // From overlay visibility changing
             assert.strictEqual(this.resizeEventSpy.callCount, 1, 'event is triggered once');
 
-            debugger;
-
             this.instance.option({ toolbarItems: [{ text: 'text' }] });
 
             assert.strictEqual(getTopToolbar().length, 1, 'top toolbar is rendered');
-            // 2, 3 from top toolbar rendering, 4, 5 from optionChanged
-            assert.strictEqual(this.resizeEventSpy.callCount, 5, 'event is triggered 5 times');
+            // 2, 3 from top toolbar rendering, 4 from optionChanged
+            assert.strictEqual(this.resizeEventSpy.callCount, 4, 'event is triggered 4 times');
         });
 
         QUnit.test('toolbarItems runtime changing should trigger resize event if toolbar is rendered on init', function(assert) {
@@ -1561,7 +1559,7 @@ QUnit.module('options changed callbacks', {
             const $toolbar2 = getTopToolbar();
 
             assert.strictEqual($toolbar2.length, 1, 'top toolbar is rendered');
-            assert.strictEqual(this.resizeEventSpy.callCount, 7, 'event is triggered additional times');
+            assert.strictEqual(this.resizeEventSpy.callCount, 6, 'event is triggered additional times');
 
             assert.strictEqual($toolbar1, $toolbar2, 'toolbar is not rendered twice after toolbarItems update in runtime');
         });
@@ -2954,35 +2952,53 @@ QUnit.module('renderGeometry', {
 
     }
 }, () => {
-    QUnit.test('toolBar should not update geometry after toolbarItems visibility option change', function(assert) {
+    QUnit.test('toolbar should update geometry after toolbarItems visibility option change', function(assert) {
         this.popup.option('toolbarItems[0].visible', true);
-        assert.ok(this.renderGeometrySpy.notCalled, 'renderGeometry is not called for visibility option');
 
-        this.popup.option('toolbarItems', [{
-            widget: 'dxButton',
-            options: { text: 'Supprimer', type: 'danger' }
-        }]);
-        assert.ok(this.renderGeometrySpy.notCalled, 'renderGeometry is not called for toolbarItems option fully change');
+        assert.strictEqual(this.renderGeometrySpy.callCount, 1, 'renderGeometry is called for visibility option');
+
+        this.popup.option({
+            toolbarItems: [
+                {
+                    widget: 'dxButton',
+                    options: { text: 'Supprimer', type: 'danger' },
+                },
+            ]
+        });
+
+        assert.strictEqual(this.renderGeometrySpy.callCount, 2, 'renderGeometry is called for toolbarItems option fully change');
 
         this.popup.option('toolbarItems[0]', {
             widget: 'dxButton',
-            options: { text: 'Supprimer', type: 'danger' }
+            options: { text: 'Supprimer', type: 'danger' },
         });
 
-        assert.ok(this.renderGeometrySpy.notCalled, 'renderGeometry is not called for toolbarItems option partial change');
+        assert.strictEqual(this.renderGeometrySpy.callCount, 3, 'renderGeometry is called for toolbarItems option partial change');
     });
 
-    QUnit.test('toolBar should not update geometry after partial update of its items', function(assert) {
+    QUnit.test('toolbar should update geometry after partial update of its items', function(assert) {
         this.reinit({
             visible: true,
-            toolbarItems: [{ widget: 'dxButton', options: { text: 'test 2 top' }, toolbar: 'bottom', location: 'after' }]
+            toolbarItems: [
+                {
+                    widget: 'dxButton',
+                    toolbar: 'bottom',
+                    location: 'after',
+                    options: { text: 'test 2 top' },
+                },
+            ],
         });
 
-        this.popup.option('toolbarItems[0].options', { text: 'test', disabled: true });
-        assert.ok(this.renderGeometrySpy.notCalled, 'renderGeometry is not called on partial update of a widget');
+        this.popup.option('toolbarItems[0].options', {
+            text: 'test',
+            disabled: true,
+        });
+
+        assert.strictEqual(this.renderGeometrySpy.callCount, 1, 'renderGeometry is called on partial update of a widget');
 
         this.popup.option('toolbarItems[0].toolbar', 'top');
-        assert.ok(this.renderGeometrySpy.calledOnce, 'renderGeometry is called on item location changing');
+
+        assert.strictEqual(this.renderGeometrySpy.callCount, 2, 'renderGeometry is called on item location changing');
     });
 
     QUnit.test('option change', function(assert) {

@@ -1292,21 +1292,10 @@ class Popup<
       case 'useFlatToolbarButtons': {
         this._renderTopToolbar();
         this._renderBottomToolbar();
-        // It is necessary to call resize a second time because
-        // the menu button did not appear after the first time
-        this._triggerToolbarResizeEvent();
-
-        // // @ts-expect-error ts-error
-        // NOTE: Geometry rendering after "toolbarItems" runtime change
-        // breaks the popup animation first appereance.
-        // But geometry rendering for options connected to
-        // the popup position still should be called.
-        // const shouldRenderGeometry = !args.fullName.match(/^toolbarItems((\[\d+\])(\.(options|visible).*)?)?$/);
-
-        // if (shouldRenderGeometry) {
         this._renderGeometry();
+
         triggerResizeEvent(this.$overlayContent());
-        // }
+
         break;
       }
       case 'dragEnabled':
