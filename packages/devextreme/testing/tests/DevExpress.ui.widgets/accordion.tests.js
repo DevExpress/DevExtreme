@@ -1300,7 +1300,7 @@ QUnit.module('Live Update', {
 
         assert.strictEqual(this.itemRenderedSpy.callCount, 1, 'only one item is updated after reload');
         assert.strictEqual(this.itemRenderedSpy.firstCall.args[0].itemData.text, '0 Updated', 'check updated item');
-        assert.strictEqual($(`.${ACCORDION_ITEM_OPENED_CLASS}`)[0].style.height, false, 'opened item has no additional inline height adjustments');
+        assert.strictEqual($(`.${ACCORDION_ITEM_OPENED_CLASS}`)[0].style.height, '', 'opened item has no additional inline height adjustments');
     });
 
     QUnit.test('repaintChangesOnly, update several items, visual states should be restored correctly after update items (T1190407)', function(assert) {
@@ -1308,6 +1308,10 @@ QUnit.module('Live Update', {
 
         const accordion = this.createAccordion({}, true);
         const dataSource = accordion.getDataSource();
+
+        accordion.option('multiple', true);
+        accordion.expandItem(0);
+        accordion.expandItem(2);
 
         this.data[0] = {
             id: 0,
@@ -1321,12 +1325,10 @@ QUnit.module('Live Update', {
         };
         dataSource.load();
 
-        accordion.option('multiple', true);
-        accordion.expandItem(0);
-        accordion.expandItem(2);
-
         const $openedItems = $('#accordion').find(`.${ACCORDION_ITEM_OPENED_CLASS}`);
-        const haveNoInlineHeights = !$openedItems.map((_, el) => el.style.height).get().some(height => height);
+        const haveNoInlineHeights = $openedItems
+            .toArray()
+            .every(el => !el.style.height);
 
         assert.strictEqual($openedItems.length, 2, 'two items are opened');
         assert.strictEqual(haveNoInlineHeights, true, 'opened items has no additional inline height adjustments');
