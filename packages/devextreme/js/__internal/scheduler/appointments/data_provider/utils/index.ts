@@ -1,0 +1,1 @@
+export { getAppointmentFilter } from './getAppointmentFilter';

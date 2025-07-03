@@ -1,11 +1,12 @@
 import query from '@js/common/data/query';
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import { isDateAndTimeView, isTimelineView } from '@ts/scheduler/r1/utils/index';
-import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/types';
-import { getResourcesByGroupIndex } from '@ts/scheduler/utils/resource_manager/group_utils';
 
+import { isDateAndTimeView } from '../../r1/utils/index';
+import type { AppointmentDataItem, SafeAppointment } from '../../types';
+import { getResourcesByGroupIndex } from '../../utils/resource_manager/group_utils';
 import { AppointmentFilterBaseStrategy } from './m_appointment_filter';
+import { isAppointmentMatchedResources } from './utils/isAppointmentMatchedResources';
 
 // TODO Vinogradov refactoring: this module should be refactored :)
 
@@ -59,7 +60,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         viewOffset,
         min: dateUtilsTs.addOffsets(groupStartDate, [-viewOffset]),
         max: dateUtilsTs.addOffsets(groupEndDate, [-viewOffset]),
-        supportMultiDayAppointments: isTimelineView(this.viewType),
+        isTimeDateView: isDateAndTimeView(this.viewType),
         allDay: supportAllDayAppointment,
         resources,
         firstDayOfWeek: this.firstDayOfWeek,
@@ -85,7 +86,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
       itemsToFilter = itemsToFilter.filter(({ rawAppointment }) => {
         for (let i = 0; i < filterOptions.length; ++i) {
           const { resources } = filterOptions[i];
-          if (this._filterAppointmentByResources(rawAppointment, resources)) {
+          if (isAppointmentMatchedResources(rawAppointment, resources)) {
             return true;
           }
         }
