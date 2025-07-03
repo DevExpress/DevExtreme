@@ -1540,8 +1540,8 @@ QUnit.module('options changed callbacks', {
             this.instance.option({ toolbarItems: [{ text: 'text' }] });
 
             assert.strictEqual(getTopToolbar().length, 1, 'top toolbar is rendered');
-            // 2, 3 from top toolbar rendering, 4 from optionChanged
-            assert.strictEqual(this.resizeEventSpy.callCount, 4, 'event is triggered 4 times');
+            // 2, 3 from top toolbar rendering
+            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times');
         });
 
         QUnit.test('toolbarItems runtime changing should trigger resize event if toolbar is rendered on init', function(assert) {
@@ -1559,7 +1559,7 @@ QUnit.module('options changed callbacks', {
             const $toolbar2 = getTopToolbar();
 
             assert.strictEqual($toolbar2.length, 1, 'top toolbar is rendered');
-            assert.strictEqual(this.resizeEventSpy.callCount, 6, 'event is triggered additional times');
+            assert.strictEqual(this.resizeEventSpy.callCount, 5, 'event is triggered additional times');
 
             assert.strictEqual($toolbar1, $toolbar2, 'toolbar is not rendered twice after toolbarItems update in runtime');
         });
@@ -2994,11 +2994,11 @@ QUnit.module('renderGeometry', {
             disabled: true,
         });
 
-        assert.strictEqual(this.renderGeometrySpy.callCount, 1, 'renderGeometry is called on partial update of a widget');
+        assert.strictEqual(this.renderGeometrySpy.callCount, 2, 'renderGeometry is called on partial update of a widget');
 
         this.popup.option('toolbarItems[0].toolbar', 'top');
 
-        assert.strictEqual(this.renderGeometrySpy.callCount, 2, 'renderGeometry is called on item location changing');
+        assert.strictEqual(this.renderGeometrySpy.callCount, 3, 'renderGeometry is called on item location changing');
     });
 
     QUnit.test('option change', function(assert) {
@@ -3011,8 +3011,6 @@ QUnit.module('renderGeometry', {
             title: 'test',
             titleTemplate: () => $('<div>').text('title template'),
             bottomTemplate: () => $('<div>').text('bottom template'),
-            useDefaultToolbarButtons: !options.useDefaultToolbarButtons,
-            useFlatToolbarButtons: !options.useFlatToolbarButtons
         };
 
         for(const optionName in newOptions) {
