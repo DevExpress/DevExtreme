@@ -15,10 +15,10 @@
         "{workspaceRoot}/packages/devextreme/js/**/*.js"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/Declarations.json",
-        "{projectRoot}/artifacts/devextreme-uml.wsd",
-        "{projectRoot}/artifacts/modules-meta.json",
-        "{projectRoot}/artifacts/ts-members-meta.json"
+        "{projectRoot}/dist/Declarations.json",
+        "{projectRoot}/dist/devextreme-uml.wsd",
+        "{projectRoot}/dist/modules-meta.json",
+        "{projectRoot}/dist/ts-members-meta.json"
       ]
     },
     "make-angular-metadata": {
@@ -31,10 +31,10 @@
       "cache": false,
       "inputs": [
         "metadataToolsCommonInputs",
-        "{projectRoot}/artifacts/Declarations.json"
+        "{projectRoot}/dist/Declarations.json"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/NGMetaData.json"
+        "{projectRoot}/dist/NGMetaData.json"
       ]
     },
     "make-aspnet-metadata": {
@@ -47,10 +47,10 @@
       "cache": false,
       "inputs": [
         "metadataToolsCommonInputs",
-        "{projectRoot}/artifacts/Declarations.json"
+        "{projectRoot}/dist/Declarations.json"
       ],
       "outputs": [
-        "{projectRoot}/StrongMetaData.json"
+        "{projectRoot}/dist/StrongMetaData.json"
       ]
     },
     "make-integration-metadata": {
@@ -63,10 +63,10 @@
       "cache": false,
       "inputs": [
         "metadataToolsCommonInputs",
-        "{projectRoot}/artifacts/Declarations.json"
+        "{projectRoot}/dist/Declarations.json"
       ],
       "outputs": [
-        "{projectRoot}/integration-data.json"
+        "{projectRoot}/dist/integration-data.json"
       ]
     },
     "build": {
@@ -78,10 +78,10 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "{projectRoot}",
-        "command": "pnpm exec ts-node ./build.ts"
+        "command": "true"
       },
       "inputs": [
-        "{projectRoot}/artifacts/**"
+        "{projectRoot}/dist/**"
       ],
       "outputs": [
         "{projectRoot}/dist"
@@ -97,9 +97,6 @@
       "inputs": [
         "{projectRoot}/dist/**",
         "{projectRoot}/package.json"
-      ],
-      "outputs": [
-        "{projectRoot}/*.tgz"
       ]
     }
   }

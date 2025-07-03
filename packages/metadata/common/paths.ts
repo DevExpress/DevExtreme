@@ -2,7 +2,7 @@ import { join, resolve } from 'path';
 
 const PACKAGES = resolve('..');
 export const PATHS = {
-  artifactsDir: resolve('./artifacts'),
+  artifactsDir: resolve('./dist'),
   packagesDir: PACKAGES,
   packages: {
     react: join(PACKAGES, 'devextreme-react'),
