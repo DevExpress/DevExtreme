@@ -63,6 +63,7 @@
     "@vue/compiler-sfc": "3.3.4",
     "@vue/test-utils": "2.0.0-beta.7",
     "del": "3.0.0",
+    "devextreme-metadata": "workspace:*",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-devextreme": "1.1.5",
     "eslint-plugin-spellcheck": "0.0.20",
@@ -83,8 +84,7 @@
     "eslint-plugin-no-only-tests": "catalog:",
     "@babel/eslint-parser": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
-    "@typescript-eslint/parser": "catalog:",
-    "devextreme-metadata": "workspace:*"
+    "@typescript-eslint/parser": "catalog:"
   },
   "publishConfig": {
     "directory": "npm",

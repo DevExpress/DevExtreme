@@ -69,6 +69,7 @@
     "@types/react": "~18.0.0",
     "@types/react-dom": "~18.0.0",
     "del": "3.0.0",
+    "devextreme-metadata": "workspace:*",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-devextreme": "1.1.5",
     "gulp": "4.0.2",
@@ -84,9 +85,7 @@
     "eslint-config-airbnb-typescript": "catalog:eslint8",
     "eslint-plugin-import": "catalog:eslint8",
     "@typescript-eslint/eslint-plugin": "catalog:eslint8",
-    "@typescript-eslint/parser": "catalog:eslint8",
-    "metadata": "workspace:*",
-    "devextreme-metadata": "workspace:*"
+    "@typescript-eslint/parser": "catalog:eslint8"
   },
   "publishConfig": {
     "directory": "npm",
