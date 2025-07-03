@@ -276,7 +276,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     const selectAllExists = this._$selectAllItem && this._$selectAllItem.length;
 
     // eslint-disable-next-line default-case
@@ -381,7 +380,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
   _initDataSource(): void {
     if (this._useCustomChildrenLoader()) {
       this._loadChildrenByCustomLoader(null).done((newItems) => {
-        // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
         if (newItems && newItems.length) {
           this.option('items', newItems);
         }
@@ -425,7 +423,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
 
   _combineFilter() {
     // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (!this._filter.custom || !this._filter.custom.length) {
       return this._filter.internal;
     }
@@ -500,7 +497,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     this._dataSource && this._dataSource.store()
       .on('inserted', (newItem) => {
         // @ts-expect-error ts-error
@@ -624,7 +620,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
   _setAriaRole(): void {
     const { items } = this.option();
 
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (items && items.length) {
       this.setAria({ role: 'tree' });
     }
@@ -635,7 +630,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
 
     $(this.getScrollable().content()).append($nodeContainer);
     // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (!this.option('items') || !this.option('items').length) {
       return;
     }
@@ -1142,7 +1136,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     this._loadNestedItems(node).done((items) => {
       const actualNodeData = this._getActualNode(node);
       this._renderSublevel($node, actualNodeData, this._dataAdapter.getNodesByItems(items));
-      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
       if (!items || !items.length) {
         completionCallback.resolve();
         return;
@@ -1270,7 +1264,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
 
   _renderContent() {
     const { items } = this.option();
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
     if (items && items.length) {
       this._contentAlreadyRendered = true;
     }
@@ -1707,7 +1701,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     });
 
     const $items = this._nodeElements();
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
     if (!$items || !$items.length) {
       return;
     }
@@ -1956,7 +1950,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     // @ts-expect-error ts-error
     this._expandNodes(nodeKeysToExpand.reverse()).always(() => {
       const $element = this._getNodeElement(node);
-      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
       if ($element && $element.length) {
         this.scrollToElementTopLeft($element.get(0));
         scrollCallback.resolve();

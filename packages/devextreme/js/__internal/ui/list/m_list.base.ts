@@ -62,7 +62,7 @@ const groupItemsGetter = compileGetter('items');
 // eslint-disable-next-line @typescript-eslint/naming-convention
 let _scrollView;
 
-export interface ListBaseProperties extends Properties<ListBase> {
+export interface ListBaseProperties extends Properties<Item> {
   validationGroup?: string;
 
   _onItemsRendered?: () => void;

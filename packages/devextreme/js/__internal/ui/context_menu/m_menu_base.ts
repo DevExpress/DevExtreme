@@ -45,6 +45,8 @@ export interface Properties extends dxMenuBaseOptions<MenuBase, Item> {
 class MenuBase extends HierarchicalCollectionWidget<Properties> {
   static ItemClass = MenuItem;
 
+  _editStrategy!: MenuBaseEditStrategy;
+
   hasIcons?: boolean;
 
   _showSubmenusTimeout?: ReturnType<typeof setTimeout>;
@@ -106,7 +108,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     return DX_MENU_BASE_CLASS;
   }
 
-  _focusTarget() {
+  _focusTarget(): dxElementWrapper {
     return this._itemContainer();
   }
 
@@ -290,16 +292,14 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     return this._isDesktopDevice() ? showMode : defaultValue;
   }
 
-  _initSelectedItems() {}
+  _initSelectedItems(): void {}
 
-  _isDesktopDevice() {
+  _isDesktopDevice(): boolean {
     return devices.real().deviceType === 'desktop';
   }
 
-  _initEditStrategy() {
-    const Strategy = MenuBaseEditStrategy;
-
-    this._editStrategy = new Strategy(this);
+  _initEditStrategy(): void {
+    this._editStrategy = new MenuBaseEditStrategy(this);
   }
 
   _addCustomCssClass($element: dxElementWrapper): void {
@@ -556,7 +556,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
       .addClass(DX_MENU_SEPARATOR_CLASS);
   }
 
-  _itemClickHandler(e) {
+  _itemClickHandler(e): void {
     if (e._skipHandling) return;
 
     const itemClickActionHandler = this._createAction(this._updateSubmenuVisibilityOnClick.bind(this));

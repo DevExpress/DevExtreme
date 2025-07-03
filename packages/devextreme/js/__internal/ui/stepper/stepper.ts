@@ -215,7 +215,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     return $itemFrame;
   }
 
-  _postprocessRenderItem(args: PostprocessRenderItemInfo<StepperItem>): void {
+  _postprocessRenderItem(args: PostprocessRenderItemInfo<Item>): void {
     super._postprocessRenderItem(args);
 
     const { selectedIndex = 0 } = this.option();
@@ -323,7 +323,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   }
 
   _shouldPreventItemEvent(itemElement: Element | dxElementWrapper): boolean {
-    const itemIndex = this._editStrategy.getIndex(itemElement);
+    const itemIndex = this._editStrategy.getIndex(itemElement) as number;
     const { linear, selectedIndex = 0 } = this.option();
 
     return !!linear && Math.abs(selectedIndex - itemIndex) > 1;
@@ -379,7 +379,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     }
 
     const $lastCompletedElement = itemElements.filter(`.${STEP_COMPLETED_CLASS}`).last();
-    const lastCompletedIndex = this._editStrategy.getIndex($lastCompletedElement);
+    const lastCompletedIndex = this._editStrategy.getIndex($lastCompletedElement) as number;
     const { selectedIndex = 0 } = this.option();
 
     const startIndex = Math.min(lastCompletedIndex + 1, selectedIndex);
