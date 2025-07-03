@@ -100,8 +100,8 @@ QUnit.module('widget rendering', moduleSetup, () => {
 
         instance.expandItem(1);
 
-        assert.ok(!$items.eq(0).hasClass(ACCORDION_ITEM_OPENED_CLASS), 'closed item has no \'item opened\' class');
-        assert.ok($items.eq(1).hasClass(ACCORDION_ITEM_OPENED_CLASS), 'opened item has \'item opened\' class');
+        assert.ok(!$items.eq(0).hasClass(ACCORDION_ITEM_OPENED_CLASS), 'closed item has no "item opened" class');
+        assert.ok($items.eq(1).hasClass(ACCORDION_ITEM_OPENED_CLASS), 'opened item has "item opened" class');
     });
 
     QUnit.test('height should be correctly updated on dxshown event', function(assert) {
@@ -127,7 +127,7 @@ QUnit.module('widget rendering', moduleSetup, () => {
         }
     });
 
-    QUnit.test('animation shouldn\'t change transform property (T354912)', function(assert) {
+    QUnit.test('animation should not change transform property (T354912)', function(assert) {
         const origAnimate = fx.animate;
 
         const $element = $('<div>').appendTo('#qunit-fixture').dxAccordion({
@@ -148,7 +148,7 @@ QUnit.module('widget rendering', moduleSetup, () => {
         }
     });
 
-    QUnit.test('Item body should be rendered on item opening when the \'deferRendering\' option is true', function(assert) {
+    QUnit.test('Item body should be rendered on item opening when the deferRendering option is true', function(assert) {
         const $element = this.$element.dxAccordion({
             items: this.items,
             selectedIndex: 0,
@@ -161,7 +161,7 @@ QUnit.module('widget rendering', moduleSetup, () => {
         assert.equal($element.find('.' + ACCORDION_ITEM_BODY_CLASS).length, 2, 'body is rendered for just opened item');
     });
 
-    QUnit.test('Item body should be rendered on item changing when the \'deferRendering\' option is true (T586536)', function(assert) {
+    QUnit.test('Item body should be rendered on item changing when the deferRendering option is true (T586536)', function(assert) {
         const $element = this.$element.dxAccordion({
             items: this.items,
             selectedIndex: 0,
@@ -174,7 +174,7 @@ QUnit.module('widget rendering', moduleSetup, () => {
         assert.equal($element.find('.' + ACCORDION_ITEM_BODY_CLASS).length, 1, 'body is rendered');
     });
 
-    QUnit.test('Item body should be rendered on item changing and selectionChanging when the \'deferRendering\' option is true (T586536)', function(assert) {
+    QUnit.test('Item body should be rendered on item changing and selectionChanging when the deferRendering option is true (T586536)', function(assert) {
         const $element = this.$element.dxAccordion({
             items: this.items,
             selectedIndex: 0,
@@ -189,7 +189,7 @@ QUnit.module('widget rendering', moduleSetup, () => {
         assert.equal($element.find('.' + ACCORDION_ITEM_BODY_CLASS).length, 2, 'bodies were rendered');
     });
 
-    QUnit.test('Widget should be rerendered on the \'deferRendering\' option change', function(assert) {
+    QUnit.test('Widget should be rerendered on the deferRendering option change', function(assert) {
         let renderCount = 0;
         let prevRenderCount;
 
@@ -294,7 +294,7 @@ QUnit.module('nested accordion', moduleSetup, () => {
 });
 
 QUnit.module('widget options', moduleSetup, () => {
-    QUnit.test('\'onItemTitleClick\' option', function(assert) {
+    QUnit.test('onItemTitleClick option', function(assert) {
         let actionFiredValue = 0;
 
         this.$element.dxAccordion({
@@ -313,7 +313,7 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.equal(actionFiredValue, 2, 'second item was clicked');
     });
 
-    QUnit.test('\'onItemHold\' option', function(assert) {
+    QUnit.test('onItemHold option', function(assert) {
         let actionFiredValue = 0;
 
         this.$element.dxAccordion({
@@ -328,7 +328,7 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.equal(actionFiredValue, 1, 'action is fired');
     });
 
-    QUnit.test('\'itemHoldTimeout\' option', function(assert) {
+    QUnit.test('itemHoldTimeout option', function(assert) {
         let actionFiredValue = 0;
 
         this.$element.dxAccordion({
@@ -347,7 +347,7 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.equal(actionFiredValue, 1, 'action is fired');
     });
 
-    QUnit.test('\'onSelectionChanged\' option', function(assert) {
+    QUnit.test('onSelectionChanged option', function(assert) {
         let actionFiredValue = 0;
 
         this.$element.dxAccordion({
@@ -473,7 +473,7 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.ok(!this.$element.is(':visible'), 'widget is hidden');
     });
 
-    QUnit.test('height option in \'auto\' mode', function(assert) {
+    QUnit.test('height option in auto mode', function(assert) {
         const $element = $('#html-template-accordion');
         const instance = $element.dxAccordion({
             items: [
@@ -519,7 +519,7 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.notEqual(instance.itemElements().eq(1).get(0).style.height, '', 'auto height not set');
     });
 
-    QUnit.test('height option in \'auto\' mode when widget is multiple', function(assert) {
+    QUnit.test('height option in auto mode when widget is multiple', function(assert) {
         const $element = $('#html-template-accordion');
         const instance = $element.dxAccordion({
             items: [
@@ -668,15 +668,15 @@ QUnit.module('widget options changed', moduleSetup, () => {
         assert.ok(this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1).hasClass(ACCORDION_ITEM_OPENED_CLASS), 'second item is opened');
 
         instance.option('selectedIndex', -1);
-        assert.equal(instance.option('selectedIndex'), 1, '\'selectedIndex\' option set to first when trying to set index which is out of range (-1)');
+        assert.equal(instance.option('selectedIndex'), 1, 'selectedIndex option set to first when trying to set index which is out of range (-1)');
         assert.ok(this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1).hasClass(ACCORDION_ITEM_OPENED_CLASS), 'first item is opened when index is out of range (-1)');
 
         instance.option('selectedIndex', 5);
-        assert.equal(instance.option('selectedIndex'), 1, '\'selectedIndex\' option set to first when trying to set index which is out of range (5)');
+        assert.equal(instance.option('selectedIndex'), 1, 'selectedIndex option set to first when trying to set index which is out of range (5)');
         assert.ok(this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1).hasClass(ACCORDION_ITEM_OPENED_CLASS), 'first item is opened when index is out of range (5)');
     });
 
-    QUnit.test('\'onItemTitleClick\' option changed', function(assert) {
+    QUnit.test('onItemTitleClick option changed', function(assert) {
         let firstActionFired;
         let secondActionFired;
 
@@ -860,7 +860,7 @@ QUnit.module('widget options changed', moduleSetup, () => {
         }
     });
 
-    QUnit.test('\'itemHoldTimeout\' option changed', function(assert) {
+    QUnit.test('itemHoldTimeout option changed', function(assert) {
         let actionFiredValue = 0;
 
         const instance = this.$element.dxAccordion({
@@ -887,13 +887,13 @@ QUnit.module('widget options changed', moduleSetup, () => {
         }).dxAccordion('instance');
 
         instance.option('disabled', true);
-        assert.ok(this.$element.hasClass('dx-state-disabled'), 'widget has \'disabled\' class');
+        assert.ok(this.$element.hasClass('dx-state-disabled'), 'widget has disabled class');
         $(this.$element.find('.' + ACCORDION_ITEM_TITLE_CLASS).eq(1)).trigger('dxclick');
         assert.ok(this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(0).hasClass(ACCORDION_ITEM_OPENED_CLASS), 'no reaction after clicking on disabled widget');
         assert.ok(!this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1).hasClass(ACCORDION_ITEM_OPENED_CLASS), 'no reaction after clicking on disabled widget');
 
         instance.option('disabled', false);
-        assert.ok(!this.$element.hasClass('dx-state-disabled'), 'widget has no \'disabled\' class');
+        assert.ok(!this.$element.hasClass('dx-state-disabled'), 'widget has no disabled class');
         $(this.$element.find('.' + ACCORDION_ITEM_TITLE_CLASS).eq(1)).trigger('dxclick');
         assert.ok(!this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(0).hasClass(ACCORDION_ITEM_OPENED_CLASS), 'item is unselected after clicking on the other title on enabled widget');
         assert.ok(this.$element.find('.' + ACCORDION_ITEM_CLASS).eq(1).hasClass(ACCORDION_ITEM_OPENED_CLASS), 'item is selected after clicking on enabled widget');
@@ -910,7 +910,7 @@ QUnit.module('widget options changed', moduleSetup, () => {
         assert.ok(this.$element.is(':visible'), 'widget is shown');
     });
 
-    QUnit.test('\'onItemRendered\' option', function(assert) {
+    QUnit.test('onItemRendered option', function(assert) {
         let actionValue = 0;
 
         this.$element.dxAccordion({
@@ -920,7 +920,7 @@ QUnit.module('widget options changed', moduleSetup, () => {
             }
         });
 
-        assert.equal(actionValue, this.items.length, '\'onItemRendered\' fired once for each item');
+        assert.equal(actionValue, this.items.length, 'onItemRendered fired once for each item');
     });
 
     QUnit.test('subscribe on the itemClick event when a title of item is changed', function(assert) {
@@ -970,7 +970,7 @@ QUnit.module('widget behavior', moduleSetup, () => {
         $(this.$element.find('.' + ACCORDION_ITEM_TITLE_CLASS).eq(1)).trigger('dxclick');
 
         assert.equal(instance.option('selectedIndex'), 1, 'second item is selected');
-        assert.notEqual(this.$element.find('.' + ACCORDION_ITEM_BODY_CLASS).eq(1).css('display'), 'none', 'selected item\'s content is shown');
+        assert.notEqual(this.$element.find('.' + ACCORDION_ITEM_BODY_CLASS).eq(1).css('display'), 'none', 'selected item content is shown');
     });
 
     QUnit.test('only clicked item is opened', function(assert) {
@@ -998,7 +998,7 @@ QUnit.module('widget behavior', moduleSetup, () => {
 
         assert.ok($items.eq(2).hasClass(ACCORDION_ITEM_OPENED_CLASS), 'specified item is opened');
         assert.equal(this.$element.find('.' + ACCORDION_ITEM_OPENED_CLASS).length, 1, 'only one item is opened');
-        assert.equal(instance.option('selectedIndex'), 2, '\'selectedIndex\' is correct');
+        assert.equal(instance.option('selectedIndex'), 2, 'selectedIndex is correct');
 
         instance.option('multiple', true);
         instance.expandItem(0);
@@ -1070,7 +1070,7 @@ QUnit.module('widget behavior', moduleSetup, () => {
         assert.equal(actionValue, 1, 'method executed after animation completed');
     });
 
-    QUnit.test('\'onItemClick\' firing conditions', function(assert) {
+    QUnit.test('onItemClick firing conditions', function(assert) {
         let titleActionFired = 0;
         let itemActionFired = 0;
 
@@ -1089,11 +1089,11 @@ QUnit.module('widget behavior', moduleSetup, () => {
 
         $($items.eq(0).find('.' + ACCORDION_ITEM_TITLE_CLASS)).trigger('dxclick');
         assert.equal(titleActionFired, 1, 'onItemTitleClick was fired on itemTitle click');
-        assert.equal(itemActionFired, 1, '\'onItemClick\' was fired on itemTitle click');
+        assert.equal(itemActionFired, 1, 'onItemClick was fired on itemTitle click');
 
         $($items.eq(0).find('.' + ACCORDION_ITEM_BODY_CLASS)).trigger('dxclick');
         assert.equal(titleActionFired, 1, 'onItemTitleClick was not fired on itemContent click');
-        assert.equal(itemActionFired, 2, '\'onItemClick\' was fired on itemContent click');
+        assert.equal(itemActionFired, 2, 'onItemClick was fired on itemContent click');
     });
 });
 
@@ -1257,7 +1257,7 @@ QUnit.module('Live Update', {
         }, key: 1 }];
         store.push(pushData);
 
-        assert.equal(this.itemRenderedSpy.callCount, 1, 'only one item is updated after push');
+        assert.strictEqual(this.itemRenderedSpy.callCount, 1, 'only one item is updated after push');
         assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, pushData[0].data, 'check updated item');
     });
 
@@ -1271,7 +1271,7 @@ QUnit.module('Live Update', {
         } }];
         store.push(pushData);
 
-        assert.equal(this.itemRenderedSpy.callCount, 1, 'only one item is updated after push');
+        assert.strictEqual(this.itemRenderedSpy.callCount, 1, 'only one item is updated after push');
         assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData, pushData[0].data, 'check added item');
     });
 
@@ -1282,10 +1282,10 @@ QUnit.module('Live Update', {
         const pushData = [{ type: 'remove', key: 1 }];
         store.push(pushData);
 
-        assert.equal(this.itemRenderedSpy.callCount, 0, 'items are not refreshed after remove');
-        assert.equal(this.itemDeletedSpy.callCount, 1, 'removed items count');
-        assert.deepEqual(this.itemDeletedSpy.firstCall.args[0].itemData.text, '1', 'check removed item');
-        assert.equal(accordion.option('items').length, 2, ' items count');
+        assert.strictEqual(this.itemRenderedSpy.callCount, 0, 'items are not refreshed after remove');
+        assert.strictEqual(this.itemDeletedSpy.callCount, 1, 'removed items count');
+        assert.strictEqual(this.itemDeletedSpy.firstCall.args[0].itemData.text, '1', 'check removed item');
+        assert.strictEqual(accordion.option('items').length, 2, ' items count');
     });
 
     QUnit.test('repaintChangesOnly, update item instance', function(assert) {
@@ -1298,8 +1298,42 @@ QUnit.module('Live Update', {
         };
         dataSource.load();
 
-        assert.equal(this.itemRenderedSpy.callCount, 1, 'only one item is updated after reload');
-        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData.text, '0 Updated', 'check updated item');
+        assert.strictEqual(this.itemRenderedSpy.callCount, 1, 'only one item is updated after reload');
+        assert.strictEqual(this.itemRenderedSpy.firstCall.args[0].itemData.text, '0 Updated', 'check updated item');
+        assert.strictEqual($(`.${ACCORDION_ITEM_OPENED_CLASS}`)[0].style.height, '', 'opened item has no additional inline height adjustments');
+    });
+
+    QUnit.test('repaintChangesOnly, update several items, visual states should be restored correctly after update items (T1190407)', function(assert) {
+        fx.off = true;
+
+        const accordion = this.createAccordion({}, true);
+        const dataSource = accordion.getDataSource();
+
+        accordion.option('multiple', true);
+        accordion.expandItem(0);
+        accordion.expandItem(2);
+
+        this.data[0] = {
+            id: 0,
+            text: '0 Updated',
+            content: '0 content'
+        };
+        this.data[2] = {
+            id: 2,
+            text: '2 Updated',
+            content: '2 content'
+        };
+        dataSource.load();
+
+        const $openedItems = $('#accordion').find(`.${ACCORDION_ITEM_OPENED_CLASS}`);
+        const haveNoInlineHeights = $openedItems
+            .toArray()
+            .every(el => !el.style.height);
+
+        assert.strictEqual($openedItems.length, 2, 'two items are opened');
+        assert.strictEqual(haveNoInlineHeights, true, 'opened items has no additional inline height adjustments');
+
+        fx.off = false;
     });
 
     QUnit.test('repaintChangesOnly, add item', function(assert) {
@@ -1312,8 +1346,8 @@ QUnit.module('Live Update', {
         });
         dataSource.load();
 
-        assert.equal(this.itemRenderedSpy.callCount, 1, 'only one item is updated after push');
-        assert.deepEqual(this.itemRenderedSpy.firstCall.args[0].itemData.text, '3 Inserted', 'check added item');
+        assert.strictEqual(this.itemRenderedSpy.callCount, 1, 'only one item is updated after push');
+        assert.strictEqual(this.itemRenderedSpy.firstCall.args[0].itemData.text, '3 Inserted', 'check added item');
     });
 
     QUnit.test('repaintChangesOnly, remove item', function(assert) {
@@ -1323,10 +1357,10 @@ QUnit.module('Live Update', {
         this.data.splice(1, 1);
         dataSource.load();
 
-        assert.equal(this.itemRenderedSpy.callCount, 0, 'items are not refreshed after remove');
-        assert.equal(this.itemDeletedSpy.callCount, 1, 'removed items count');
-        assert.equal(accordion.option('items').length, 2, ' items count');
-        assert.deepEqual(this.itemDeletedSpy.firstCall.args[0].itemData.text, '1', 'check removed item');
+        assert.strictEqual(this.itemRenderedSpy.callCount, 0, 'items are not refreshed after remove');
+        assert.strictEqual(this.itemDeletedSpy.callCount, 1, 'removed items count');
+        assert.strictEqual(accordion.option('items').length, 2, ' items count');
+        assert.strictEqual(this.itemDeletedSpy.firstCall.args[0].itemData.text, '1', 'check removed item');
     });
 
     QUnit.test('repaintChangesOnly, double remove the same item', function(assert) {
@@ -1340,9 +1374,9 @@ QUnit.module('Live Update', {
         store.remove(1);
         dataSource.load();
 
-        assert.equal(this.itemRenderedSpy.callCount, 0, 'items are not refreshed after remove');
-        assert.equal(this.itemDeletedSpy.callCount, 1, 'removed items count');
-        assert.equal(this.itemDeletedSpy.firstCall.args[0].itemData.text, '1', 'check removed item');
+        assert.strictEqual(this.itemRenderedSpy.callCount, 0, 'items are not refreshed after remove');
+        assert.strictEqual(this.itemDeletedSpy.callCount, 1, 'removed items count');
+        assert.strictEqual(this.itemDeletedSpy.firstCall.args[0].itemData.text, '1', 'check removed item');
     });
 
     QUnit.test('repaintChangesOnly, change selected index after remove', function(assert) {
@@ -1353,7 +1387,7 @@ QUnit.module('Live Update', {
         dataSource.load();
 
         accordion.option('selectedIndex', 1);
-        assert.equal(accordion.itemElements().find('.' + ACCORDION_ITEM_BODY_CLASS).length, 2);
+        assert.strictEqual(accordion.itemElements().find('.' + ACCORDION_ITEM_BODY_CLASS).length, 2);
     });
 
     QUnit.test('repaintChangesOnly, remove selected item', function(assert) {
@@ -1373,7 +1407,7 @@ QUnit.module('Live Update', {
 
         accordion.isItemSelected(accordion.itemElements()[1]);
 
-        assert.equal(accordion.itemElements().find('.' + ACCORDION_ITEM_BODY_CLASS).length, 2);
+        assert.strictEqual(accordion.itemElements().find('.' + ACCORDION_ITEM_BODY_CLASS).length, 2);
         clock.restore();
     });
 });

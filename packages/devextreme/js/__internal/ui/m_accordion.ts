@@ -414,8 +414,8 @@ class Accordion extends CollectionWidget<AccordionProperties> {
         const { repaintChangesOnly } = this.option();
 
         if (repaintChangesOnly === true && args.fullName === 'items') {
-          this._updateItemHeightsWrapper(true);
           this._renderSelection(this._getSelectedItemIndices(), []);
+          this._updateItemHeightsWrapper(true);
         }
         break;
       }
