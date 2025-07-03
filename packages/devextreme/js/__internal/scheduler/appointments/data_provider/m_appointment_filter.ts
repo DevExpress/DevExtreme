@@ -1,30 +1,15 @@
 import query from '@js/common/data/query';
-import { equalByValue } from '@js/core/utils/common';
-import dateUtils from '@js/core/utils/date';
-import { isDefined } from '@js/core/utils/type';
-import { dateUtilsTs } from '@ts/core/utils/date';
 
-import { getRecurrenceProcessor } from '../../m_recurrence';
 import {
-  getDatesWithoutTime, isAppointmentTakesAllDay, isDateAndTimeView, isTimelineView,
+  isAppointmentTakesAllDay, isDateAndTimeView,
 } from '../../r1/utils/index';
 import type { AppointmentDataItem, SafeAppointment } from '../../types';
 import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
-import type { ResourceLoader } from '../../utils/loader/resource_loader';
-import { getAppointmentGroupValues } from '../../utils/resource_manager/appointment_groups_utils';
 import type ViewDataProvider from '../../workspaces/view_model/m_view_data_provider';
-import {
-  _appointmentPartInInterval,
-  compareDateWithStartDayHour,
-  compareDateWithTime,
-  getAppointmentTakesSeveralDays,
-  getRecurrenceException,
-} from './m_utils';
+import { getAppointmentFilter } from './utils/index';
 
 // TODO Vinogradov refactoring: this module should be refactored :)
-
-const toMs = dateUtils.dateToMilliseconds;
 
 export class AppointmentFilterBaseStrategy {
   public static readonly strategyName: string = 'standard';
@@ -48,7 +33,7 @@ export class AppointmentFilterBaseStrategy {
 
   get showAllDayPanel() { return this._resolveOption('showAllDayPanel'); }
 
-  get loadedResources() { return this._resolveOption('loadedResources'); }
+  get loadedResources() { return this.options.getResourceManager().groupResources(); }
 
   get supportAllDayRow() { return this._resolveOption('supportAllDayRow'); }
 
@@ -86,7 +71,7 @@ export class AppointmentFilterBaseStrategy {
       max,
       resources: this.loadedResources,
       allDay,
-      supportMultiDayAppointments: isTimelineView(this.viewType),
+      isTimeDateView: isDateAndTimeView(this.viewType),
       firstDayOfWeek: this.firstDayOfWeek,
     }, preparedItems);
   }
@@ -111,168 +96,10 @@ export class AppointmentFilterBaseStrategy {
   }
 
   _createCombinedFilter(filterOptions) {
-    const min = new Date(filterOptions.min);
-    const max = new Date(filterOptions.max);
-    const {
-      startDayHour,
-      endDayHour,
-      viewOffset,
-      resources,
-      firstDayOfWeek,
-      supportMultiDayAppointments,
-    } = filterOptions;
-
-    const [trimMin, trimMax] = getDatesWithoutTime(min, max);
-    const useRecurrence = this.dataAccessors.has('recurrenceRule');
-
-    return [[(appointment) => {
-      const appointmentVisible = appointment.visible ?? true;
-
-      if (!appointmentVisible) {
-        return false;
-      }
-
-      const {
-        allDay: isAllDay,
-        hasRecurrenceRule,
-      } = appointment;
-
-      const startDate = dateUtilsTs.addOffsets(appointment.startDate, [-viewOffset]);
-      const endDate = dateUtilsTs.addOffsets(appointment.endDate, [-viewOffset]);
-
-      const appointmentTakesAllDay = isAppointmentTakesAllDay(
-        appointment,
-        this.allDayPanelMode,
-      );
-
-      if (!hasRecurrenceRule) {
-        if (!(endDate >= trimMin && startDate < trimMax
-                    || dateUtils.sameDate(endDate, trimMin)
-                    && dateUtils.sameDate(startDate, trimMin))
-        ) {
-          return false;
-        }
-      }
-
-      const appointmentTakesSeveralDays = getAppointmentTakesSeveralDays(appointment);
-      const isLongAppointment = appointmentTakesSeveralDays || appointmentTakesAllDay;
-
-      if (resources?.length && !this._filterAppointmentByResources(appointment.rawAppointment, resources)) {
-        return false;
-      }
-
-      if (appointmentTakesAllDay && filterOptions.allDay === false) {
-        return false;
-      }
-
-      if (hasRecurrenceRule) {
-        const recurrenceException = getRecurrenceException(appointment, this.timeZoneCalculator);
-
-        if (!this._filterAppointmentByRRule({
-          ...appointment,
-          recurrenceException,
-          allDay: appointmentTakesAllDay,
-        }, min, max, startDayHour, endDayHour, firstDayOfWeek)) {
-          return false;
-        }
-      }
-
-      if (!isAllDay && supportMultiDayAppointments && isLongAppointment) {
-        if (endDate < min && (!useRecurrence || (useRecurrence && !hasRecurrenceRule))) {
-          return false;
-        }
-      }
-
-      if (!isAllDay && isDefined(startDayHour) && (!useRecurrence || !filterOptions.isVirtualScrolling)) {
-        if (!compareDateWithStartDayHour({
-          startDate,
-          endDate,
-          startDayHour,
-          isAllDay: appointmentTakesAllDay,
-          isSeveralDays: appointmentTakesSeveralDays,
-        })) {
-          return false;
-        }
-      }
-
-      if (!isAllDay && isDefined(endDayHour)) {
-        if (!compareDateWithTime({
-          startDate,
-          endDate,
-          startDayHour,
-          endDayHour,
-          min: trimMin,
-          max: trimMax,
-          isTimeDateView: isDateAndTimeView(this.viewType),
-          isAllDay: appointmentTakesAllDay,
-        })) {
-          return false;
-        }
-      }
-
-      if (!isAllDay && (!isLongAppointment || supportMultiDayAppointments)) {
-        if (endDate < min && useRecurrence && !hasRecurrenceRule) {
-          return false;
-        }
-      }
-
-      return true;
-    }]];
-  }
-
-  _filterAppointmentByResources(appointment, groupsResources: ResourceLoader[]) {
-    const appointmentGroupValues = getAppointmentGroupValues(appointment, groupsResources);
-
-    return groupsResources.every((resource) => {
-      const value = appointmentGroupValues[resource.resourceIndex];
-
-      return value?.some(
-        (id) => resource.items.some(
-          (item) => equalByValue(id, item.id),
-        ),
-      );
-    });
-  }
-
-  _filterAppointmentByRRule(appointment, min, max, startDayHour, endDayHour, firstDayOfWeek) {
-    const { recurrenceRule } = appointment;
-    const { recurrenceException } = appointment;
-    const { allDay } = appointment;
-    let result = true;
-    const appointmentStartDate = appointment.startDate;
-    const appointmentEndDate = appointment.endDate;
-    const recurrenceProcessor = getRecurrenceProcessor();
-
-    if (allDay || _appointmentPartInInterval(appointmentStartDate, appointmentEndDate, startDayHour, endDayHour)) {
-      const [trimMin, trimMax] = getDatesWithoutTime(min, max);
-
-      min = trimMin;
-      max = new Date(trimMax.getTime() - toMs('minute'));
-    }
-
-    if (recurrenceRule && !recurrenceProcessor.isValidRecurrenceRule(recurrenceRule)) {
-      result = (appointmentEndDate > min) && (appointmentStartDate <= max);
-    }
-
-    if (result && recurrenceProcessor.isValidRecurrenceRule(recurrenceRule)) {
-      const viewOffset = this._resolveOption('viewOffset');
-      result = recurrenceProcessor.hasRecurrence({
-        rule: recurrenceRule,
-        exception: recurrenceException,
-        start: appointmentStartDate,
-        end: appointmentEndDate,
-        min: dateUtilsTs.addOffsets(min, [viewOffset]),
-        max: dateUtilsTs.addOffsets(max, [viewOffset]),
-        firstDayOfWeek,
-        appointmentTimezoneOffset: this.timeZoneCalculator.getOriginStartDateOffsetInMs(
-          appointmentStartDate,
-          appointment.startDateTimeZone,
-          false,
-        ),
-      });
-    }
-
-    return result;
+    return [[getAppointmentFilter({
+      ...filterOptions,
+      allDayPanelMode: this.allDayPanelMode,
+    }, this.timeZoneCalculator)]];
   }
 
   filterLoadedAppointments(filterOptions, preparedItems: AppointmentDataItem[]): SafeAppointment[] {
