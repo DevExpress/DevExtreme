@@ -972,13 +972,17 @@ class Overlay<
     this._toggleWrapperScrollEventsSubscription(preventScrollEvents);
 
     whenContentRendered.done(() => {
-      if (this.option('visible')) {
-        this._moveToContainer();
-      }
+      this._processContentRendering();
     });
 
     // @ts-expect-error ts-error
     return whenContentRendered.promise();
+  }
+
+  _processContentRendering(): void {
+    if (this.option('visible')) {
+      this._moveToContainer();
+    }
   }
 
   _getPositionControllerConfig() {

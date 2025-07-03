@@ -5,9 +5,6 @@ const triggerVisibilityChangeEvent = function (eventName) {
   const VISIBILITY_CHANGE_SELECTOR = '.dx-visibility-change-handler';
 
   return function (element) {
-    if (eventName === 'dxresize') {
-      debugger;
-    }
     const $element = $(element || 'body');
 
     const changeHandlers = $element.filter(VISIBILITY_CHANGE_SELECTOR)

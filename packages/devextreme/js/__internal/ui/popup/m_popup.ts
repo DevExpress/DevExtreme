@@ -467,17 +467,11 @@ class Popup<
     this._observeContentResize(true);
   }
 
-  _renderContentImpl(): Promise<void> {
-    const promise = super._renderContentImpl();
-
-    // @ts-expect-error always does not exist
-    promise.always(() => {
-      this._renderResize();
-      this._renderTopToolbar();
-      this._renderBottomToolbar();
-    });
-
-    return promise;
+  _processContentRendering(): void {
+    this._renderTopToolbar();
+    this._renderBottomToolbar();
+    this._renderResize();
+    super._processContentRendering();
   }
 
   _getTopToolbarItems(): ToolbarItem[] {
@@ -508,7 +502,7 @@ class Popup<
       } else {
         this._renderTopToolbarImpl();
       }
-      this._dimensionChanged();
+      // this._dimensionChanged();
       // To trigger toolbar width set in initial rendering to set menu button width (T1245421)
       // And to trigger with animation in runtime items update
       this._triggerToolbarResizeEvent();
@@ -559,7 +553,7 @@ class Popup<
     } else {
       this._renderBottomToolbarImpl();
     }
-    this._dimensionChanged();
+    // this._dimensionChanged();
     // To trigger toolbar width set in initial rendering to set menu button width (T1245421)
     // And to trigger with animation in runtime items update
     this._triggerToolbarResizeEvent();
@@ -1184,6 +1178,7 @@ class Popup<
     } else {
       super._renderDimensions();
     }
+
     if (windowUtils.hasWindow()) {
       this._renderFullscreenWidthClass();
     }
@@ -1301,17 +1296,17 @@ class Popup<
         // the menu button did not appear after the first time
         this._triggerToolbarResizeEvent();
 
-        // @ts-expect-error ts-error
+        // // @ts-expect-error ts-error
         // NOTE: Geometry rendering after "toolbarItems" runtime change
         // breaks the popup animation first appereance.
         // But geometry rendering for options connected to
         // the popup position still should be called.
-        const shouldRenderGeometry = !args.fullName.match(/^toolbarItems((\[\d+\])(\.(options|visible).*)?)?$/);
+        // const shouldRenderGeometry = !args.fullName.match(/^toolbarItems((\[\d+\])(\.(options|visible).*)?)?$/);
 
-        if (shouldRenderGeometry) {
-          this._renderGeometry();
-          triggerResizeEvent(this.$overlayContent());
-        }
+        // if (shouldRenderGeometry) {
+        this._renderGeometry();
+        triggerResizeEvent(this.$overlayContent());
+        // }
         break;
       }
       case 'dragEnabled':

@@ -50,15 +50,20 @@
         </select>
         <br /> -->
         <!-- <div id="popup"></div> -->
-        <div id="popupWithTitleTemplate">
+        <!-- <div id="popupWithTitleTemplate">
             <div data-options="dxTemplate: { name: 'customTitle' }">testTitle</div>
             <div data-options="dxTemplate: { name: 'content' }"></div>
-        </div>
+        </div> -->
         <!-- <div id="show-popup-button"></div> -->
 
         <br />
         <br />
         <br />
+
+        <div id="button"></div>
+        <div id="popup3">
+            popupcontent
+        </div>
 
         <!-- <div id="button"></div> -->
 
@@ -339,14 +344,27 @@
                 //     ],
                 // }).appendTo('body');
 
-                $('#popupWithTitleTemplate').dxPopup({
-                    deferRendering: false,
-                    visible: false,
-                    titleTemplate: (container) => {
-                        const $wrapper = $('#popupWithTitleTemplate');
-                        const closest = (container).closest($wrapper);
-                        const hasParentContainer = Boolean(closest.length);
-                        debugger
+                // $('#popupWithTitleTemplate').dxPopup({
+                //     deferRendering: true,
+                //     visible: true,
+                //     titleTemplate: (container) => {
+                //         const $wrapper = $('#popupWithTitleTemplate');
+                //         const closest = $(container).closest($wrapper);
+                //         const hasParentContainer = Boolean(closest.length);
+                //         debugger;
+                //     },
+                // });
+
+                const popup3 = $("#popup3").dxPopup({}).dxPopup("instance");
+            
+                $("#button").dxButton({
+                    text: "Open",
+                    onClick: () => {
+                        popup3.option("visible", true);
+                        popup3.option("toolbarItems", [{
+                            widget: "dxButton",
+                            options: { text: 'Supprimer', type:'danger' },
+                        }]);
                     }
                 });
             });
