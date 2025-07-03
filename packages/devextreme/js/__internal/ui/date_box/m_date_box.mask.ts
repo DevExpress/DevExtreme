@@ -482,6 +482,7 @@ const DateBoxMask = DateBoxBase.inherit({
     const limits = this._getActivePartLimits();
     const maxLimitLength = String(limits.max).length;
 
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return ((zeroes && zeroes[0] || '') + String(value)).substr(-maxLimitLength);
   },
 
@@ -514,12 +515,17 @@ const DateBoxMask = DateBoxBase.inherit({
 
   _saveMaskValue() {
     const value = this._maskValue && new Date(this._maskValue);
-    if (value && this.option('type') === 'date') {
+    const { type } = this.option();
+
+    if (value && type === 'date') {
       value.setHours(0, 0, 0, 0);
     }
 
     this._initialMaskValue = new Date(value);
-    this.dateOption('value', value);
+
+    if (this._applyInternalValidation(value).isValid) {
+      this.dateOption('value', value);
+    }
   },
 
   _revertChanges() {
