@@ -7,7 +7,7 @@ interface CompareOptions {
   endDayHour: number;
   min: Date;
   max: Date;
-  isTimeDateView: boolean;
+  isOnlyDateCheck: boolean;
 }
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -17,7 +17,7 @@ export const isAppointmentMatchedDateTime = (appointment: AppointmentDataItem, {
   endDayHour,
   min,
   max,
-  isTimeDateView,
+  isOnlyDateCheck,
 }: CompareOptions): boolean => {
   const appointmentStart = {
     hours: appointment.startDate.getHours(),
@@ -36,7 +36,7 @@ export const isAppointmentMatchedDateTime = (appointment: AppointmentDataItem, {
   const isStartDateBorder = Boolean(dateUtils.sameDate(trimEndDate, trimMin));
   const isEndDateBorder = Boolean(dateUtils.sameDate(trimStartDate, trimMax));
 
-  if (!isTimeDateView || appointment.allDay) {
+  if (isOnlyDateCheck) {
     return isBetweenOrBiggerThenView || isStartDateBorder || isEndDateBorder;
   }
 

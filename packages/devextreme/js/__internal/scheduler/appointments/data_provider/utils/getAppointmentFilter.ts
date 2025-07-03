@@ -64,6 +64,7 @@ export const getAppointmentFilter = (
       endDate,
       allDay: isAppointmentOccupiesAllDayPanel,
     };
+    const isOnlyDateCheck = !isTimeDateView || appointmentToCompare.allDay;
 
     if (appointment.hasRecurrenceRule) {
       return isRecurrenceAppointmentMatchedDateTime(
@@ -74,7 +75,7 @@ export const getAppointmentFilter = (
           endDayHour,
           min,
           max,
-          isTimeDateView,
+          isOnlyDateCheck,
         },
         timeZoneCalculator,
       );
@@ -85,7 +86,7 @@ export const getAppointmentFilter = (
       endDayHour,
       min,
       max,
-      isTimeDateView,
+      isOnlyDateCheck,
     });
   };
 };
