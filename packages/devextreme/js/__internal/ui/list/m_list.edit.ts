@@ -8,6 +8,7 @@ import { isNumeric, isObject } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { NOT_EXISTING_INDEX } from '@ts/ui/collection/m_collection_widget.edit';
 
+import type PlainEditStrategy from '../collection/m_collection_widget.edit.strategy.plain';
 import type { ListBaseProperties } from './m_list.base';
 import { ListBase } from './m_list.base';
 import EditProvider from './m_list.edit.provider';
@@ -17,6 +18,8 @@ const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const LIST_ITEM_RESPONSE_WAIT_CLASS = 'dx-list-item-response-wait';
 
 class ListEdit extends ListBase {
+  _editStrategy!: PlainEditStrategy | GroupedEditStrategy;
+
   _editProvider!: EditProvider;
 
   _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
@@ -90,11 +93,11 @@ class ListEdit extends ListBase {
     super._updateSelection();
   }
 
-  _getLastItemIndex() {
+  _getLastItemIndex(): number {
     return this._itemElements().length - 1;
   }
 
-  _refreshItemElements() {
+  _refreshItemElements(): void {
     super._refreshItemElements();
 
     const excludedSelectors = this._editProvider.getExcludedItemSelectors();
@@ -156,7 +159,7 @@ class ListEdit extends ListBase {
     ]);
   }
 
-  _init() {
+  _init(): void {
     super._init();
     this._initEditProvider();
   }
@@ -195,7 +198,6 @@ class ListEdit extends ListBase {
 
   _initEditStrategy(): void {
     if (this.option('grouped')) {
-      // @ts-expect-error ts-error
       this._editStrategy = new GroupedEditStrategy(this);
     } else {
       super._initEditStrategy();
@@ -248,7 +250,7 @@ class ListEdit extends ListBase {
     return LIST_ITEM_RESPONSE_WAIT_CLASS;
   }
 
-  _itemClickHandler(e) {
+  _itemClickHandler(e): void {
     const $itemElement = $(e.currentTarget);
     if ($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
       return;
@@ -268,7 +270,7 @@ class ListEdit extends ListBase {
     return super._shouldFireContextMenuEvent(...args) || this._editProvider.contextMenuHandlerExists();
   }
 
-  _itemHoldHandler(e) {
+  _itemHoldHandler(e): void {
     const $itemElement = $(e.currentTarget);
     if ($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
       return;

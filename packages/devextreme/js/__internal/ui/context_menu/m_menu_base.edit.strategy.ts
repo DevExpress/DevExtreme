@@ -1,35 +1,35 @@
 import $ from '@js/core/renderer';
 import { map } from '@js/core/utils/iterator';
-import type { Item } from '@js/ui/context_menu';
+import type { Item } from '@js/ui/menu';
 import PlainEditStrategy from '@ts/ui/collection/m_collection_widget.edit.strategy.plain';
-import type MenuBase from '@ts/ui/context_menu/m_menu_base';
 
-class MenuBaseEditStrategy extends PlainEditStrategy<MenuBase> {
-  _getPlainItems(): Item {
-    return map(this._collectionWidget.option('items'), function getMenuItems(item) {
+class MenuBaseEditStrategy extends PlainEditStrategy<Item> {
+  _getPlainItems(): Item[] {
+    const items = this._getItems();
+
+    const result = map(items, function getMenuItems(item: Item): Item | Item[] {
       return item.items ? [item].concat(map(item.items, getMenuItems)) : item;
     });
+
+    return result.flat() as Item[];
   }
 
-  _stringifyItem(item) {
-    return JSON.stringify(item, (key, value) => {
+  static _stringifyItem(item: Item): string {
+    return JSON.stringify(item, (key: string, value: unknown) => {
       if (key === 'template') {
-        return this._getTemplateString(value);
+        return MenuBaseEditStrategy._getTemplateString(value);
       }
       return value;
     });
   }
 
-  _getTemplateString(template) {
-    let result;
-
-    if (typeof template === 'object') {
-      result = $(template).text();
-    } else {
-      result = template.toString();
+  static _getTemplateString(template: unknown): string {
+    if (typeof template === 'object' && template !== null) {
+      // @ts-expect-error ts-error
+      return $(template).text();
     }
 
-    return result;
+    return String(template);
   }
 }
 

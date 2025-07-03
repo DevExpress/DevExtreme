@@ -17,7 +17,7 @@ class ListItem extends CollectionWidgetItem<Item> {
     this._startWatcher('showChevron', this._renderShowChevron.bind(this));
   }
 
-  _renderBadge(badge): void {
+  _renderBadge(badge: string | undefined): void {
     this._$element.children(`.${LIST_ITEM_BADGE_CONTAINER_CLASS}`).remove();
 
     if (!badge) {
@@ -32,10 +32,14 @@ class ListItem extends CollectionWidgetItem<Item> {
         .text(badge));
 
     const $chevron = this._$element.children(`.${LIST_ITEM_CHEVRON_CONTAINER_CLASS}`).first();
-    $chevron.length > 0 ? $badge.insertBefore($chevron) : $badge.appendTo(this._$element);
+    if ($chevron.length > 0) {
+      $badge.insertBefore($chevron);
+    } else {
+      $badge.appendTo(this._$element);
+    }
   }
 
-  _renderShowChevron(showChevron): void {
+  _renderShowChevron(showChevron: boolean | undefined): void {
     this._$element.children(`.${LIST_ITEM_CHEVRON_CONTAINER_CLASS}`).remove();
 
     if (!showChevron) {

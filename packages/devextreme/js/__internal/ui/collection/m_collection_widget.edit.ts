@@ -25,11 +25,8 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { CollectionWidgetBaseProperties, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import BaseCollectionWidget from '@ts/ui/collection/collection_widget.base';
 import PlainEditStrategy from '@ts/ui/collection/m_collection_widget.edit.strategy.plain';
+import type DataController from '@ts/ui/collection/m_data_controller';
 import Selection from '@ts/ui/selection/m_selection';
-
-import type MenuBaseEditStrategy from '../context_menu/m_menu_base.edit.strategy';
-import type GroupedEditStrategy from '../list/m_list.edit.strategy.grouped';
-import type DataController from './m_data_controller';
 
 const ITEM_DELETING_DATA_KEY = 'dxItemDeleting';
 const SELECTED_ITEM_CLASS = 'dx-item-selected';
@@ -56,7 +53,6 @@ export interface CollectionWidgetEditProperties<
 class CollectionWidget<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TProperties extends CollectionWidgetEditProperties<any, TItem, TKey>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey = any,
@@ -65,7 +61,7 @@ class CollectionWidget<
 
   _selection!: Selection;
 
-  _editStrategy!: PlainEditStrategy<this> | MenuBaseEditStrategy | GroupedEditStrategy;
+  _editStrategy!: PlainEditStrategy;
 
   _actions!: Record<string, (args: Record<string, unknown>) => void>;
 
@@ -165,10 +161,11 @@ class CollectionWidget<
   }
 
   _getIndexByKey(key: unknown): number {
+    // @ts-expect-error
     return this._editStrategy.getIndexByKey(key);
   }
 
-  _getIndexByItemData(itemData): number {
+  _getIndexByItemData(itemData: TItem): number {
     return this._editStrategy.getIndexByItemData(itemData);
   }
 
@@ -191,7 +188,7 @@ class CollectionWidget<
     return this._dataController.key();
   }
 
-  keyOf(item: TItem) {
+  keyOf(item) {
     if (this.option('keyExpr')) {
       return this._keyGetter(item);
     }
@@ -280,6 +277,7 @@ class CollectionWidget<
   }
 
   _initEditStrategy(): void {
+    // @ts-expect-error Type assertion needed for polymorphic edit strategy constructor
     this._editStrategy = new PlainEditStrategy(this);
   }
 
@@ -329,15 +327,11 @@ class CollectionWidget<
   _syncSelectionOptions(byOption?: string) {
     byOption = byOption ?? this._chooseSelectOption();
 
-    let selectedItem;
-    let selectedIndex;
-    let selectedItemKeys;
-    let selectedItems;
-
     // eslint-disable-next-line default-case
     switch (byOption) {
-      case 'selectedIndex':
-        selectedItem = this._editStrategy.getItemDataByIndex(this.option('selectedIndex'));
+      case 'selectedIndex': {
+        const { selectedIndex } = this.option();
+        const selectedItem = this._editStrategy.getItemDataByIndex(selectedIndex ?? NOT_EXISTING_INDEX);
 
         if (isDefined(selectedItem)) {
           this._setOptionWithoutOptionChange('selectedItems', [selectedItem]);
@@ -349,10 +343,10 @@ class CollectionWidget<
           this._setOptionWithoutOptionChange('selectedItem', null);
         }
         break;
-
-      case 'selectedItems':
-        selectedItems = this.option('selectedItems') || [];
-        selectedIndex = selectedItems.length ? this._editStrategy.getIndexByItemData(selectedItems[0]) : NOT_EXISTING_INDEX;
+      }
+      case 'selectedItems': {
+        const { selectedItems = [] } = this.option();
+        const selectedIndex = selectedItems.length ? this._editStrategy.getIndexByItemData(selectedItems[0]) : NOT_EXISTING_INDEX;
 
         if (this.option('selectionRequired') && !indexExists(selectedIndex)) {
           return this._syncSelectionOptions('selectedIndex');
@@ -362,10 +356,10 @@ class CollectionWidget<
         this._setOptionWithoutOptionChange('selectedIndex', selectedIndex);
         this._setOptionWithoutOptionChange('selectedItemKeys', this._editStrategy.getKeysByItems(selectedItems));
         break;
-
-      case 'selectedItem':
-        selectedItem = this.option('selectedItem');
-        selectedIndex = this._editStrategy.getIndexByItemData(selectedItem);
+      }
+      case 'selectedItem': {
+        const { selectedItem = {} as TItem } = this.option();
+        const selectedIndex = this._editStrategy.getIndexByItemData(selectedItem);
 
         if (this.option('selectionRequired') && !indexExists(selectedIndex)) {
           return this._syncSelectionOptions('selectedIndex');
@@ -381,9 +375,9 @@ class CollectionWidget<
           this._setOptionWithoutOptionChange('selectedIndex', NOT_EXISTING_INDEX);
         }
         break;
-
-      case 'selectedItemKeys':
-        selectedItemKeys = this.option('selectedItemKeys');
+      }
+      case 'selectedItemKeys': {
+        const { selectedItemKeys = [] } = this.option();
 
         if (this.option('selectionRequired')) {
           const selectedItemIndex = this._getIndexByKey(selectedItemKeys[0]);
@@ -394,6 +388,7 @@ class CollectionWidget<
         }
 
         return this._selection.setSelection(selectedItemKeys);
+      }
     }
 
     return Deferred().resolve().promise();
@@ -530,7 +525,6 @@ class CollectionWidget<
 
     if (selectionMode !== 'none') {
       const $itemElement = $(args.itemElement);
-      // @ts-expect-error ts-error
       const normalizedItemIndex = this._editStrategy.getNormalizedIndex($itemElement);
       const isItemSelected = this._isItemSelected(normalizedItemIndex);
 

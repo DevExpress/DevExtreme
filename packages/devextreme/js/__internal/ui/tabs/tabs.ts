@@ -509,7 +509,6 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
   _scrollToItem(item: dxElementWrapper | undefined): void {
     if (!this._scrollable) return;
-    // @ts-expect-error ts-error
     const $item = this._editStrategy.getItemElement(item);
     this._scrollable.scrollToElement($item);
   }
