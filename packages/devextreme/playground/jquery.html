@@ -49,9 +49,12 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br /> -->
-        <div id="popup"></div>
-        <!-- <div id="popup2"></div> -->
-        <div id="show-popup-button"></div>
+        <!-- <div id="popup"></div> -->
+        <div id="popupWithTitleTemplate">
+            <div data-options="dxTemplate: { name: 'customTitle' }">testTitle</div>
+            <div data-options="dxTemplate: { name: 'content' }"></div>
+        </div>
+        <!-- <div id="show-popup-button"></div> -->
 
         <br />
         <br />
@@ -69,13 +72,13 @@
             $(() => {
                 // window.DevExpress.fx.off = true;
 
-                $('#show-popup-button').dxButton({
-                    text: 'Show Popup',
-                    width: 300,
-                    onClick() {
-                        popup.show();
-                    },
-                });
+                // $('#show-popup-button').dxButton({
+                //     text: 'Show Popup',
+                //     width: 300,
+                //     onClick() {
+                //         popup2.show();
+                //     },
+                // });
 
                 function rebindItems() {
                     const popup = $('#popup').dxPopup("instance");
@@ -336,18 +339,16 @@
                 //     ],
                 // }).appendTo('body');
 
-                // $('#popup2').dxPopup({
-                //     visible: true,
-                //     toolbarItems: [],
-                //     showCloseButton: false,
-                //     showTitle: true,
-                //     contentTemplate: () => {
-                //         return $('<div>')
-                //             .text('CUSTOM')
-                //             .width(300)
-                //             .height(300)
-                //     },
-                // });
+                $('#popupWithTitleTemplate').dxPopup({
+                    deferRendering: false,
+                    visible: false,
+                    titleTemplate: (container) => {
+                        const $wrapper = $('#popupWithTitleTemplate');
+                        const closest = (container).closest($wrapper);
+                        const hasParentContainer = Boolean(closest.length);
+                        debugger
+                    }
+                });
             });
         </script>
     </div>

@@ -39,6 +39,7 @@ import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Overlay from '@ts/ui/overlay/m_overlay';
 import * as zIndexPool from '@ts/ui/overlay/m_z_index';
+import { TOOLBAR_CLASS } from '@ts/ui/toolbar/m_constants';
 import type { ToolbarBaseProperties } from '@ts/ui/toolbar/m_toolbar.base';
 
 import PopupDrag from './m_popup_drag';
@@ -525,7 +526,7 @@ class Popup<
     const items = this._getTopToolbarItems();
     const $toolbarContainer = $('<div>')
       .addClass(POPUP_TITLE_CLASS)
-      .addClass('dx-toolbar')
+      .addClass(TOOLBAR_CLASS)
       .insertBefore(this.$content());
 
     this._$topToolbar = this._renderToolbar(
@@ -571,7 +572,7 @@ class Popup<
     const items = this._getToolbarItems('bottom');
     const $toolbarContainer = $('<div>')
       .addClass(POPUP_BOTTOM_CLASS)
-      .addClass('dx-toolbar')
+      .addClass(TOOLBAR_CLASS)
       .insertAfter(this.$content());
 
     this._$bottomToolbar = this._renderToolbar(
@@ -1362,22 +1363,6 @@ class Popup<
       default:
         super._optionChanged(args);
     }
-  }
-
-  _show(): DeferredObj<unknown> | Promise<unknown> {
-    const result = super._show();
-
-    // this._renderGeometry();
-    // triggerResizeEvent(this.$overlayContent());
-    // triggerResizeEvent(this.$overlayContent());
-
-    // // @ts-expect-error always does not exist
-    // result.always(() => {
-    //   // To reset toolbar section width after animation is finished (T1245421)
-    //   triggerResizeEvent(this.$overlayContent());
-    // });
-
-    return result;
   }
 
   bottomToolbar(): dxElementWrapper | undefined {
