@@ -16,13 +16,12 @@ import { each } from '@js/core/utils/iterator';
 import {
   getOuterHeight, getOuterWidth, getWidth, setHeight,
 } from '@js/core/utils/size';
-import { encodeHtml } from '@js/core/utils/string';
 import { isDefined, isEmptyObject, isObject } from '@js/core/utils/type';
 import Button from '@js/ui/button';
 import LoadIndicator from '@js/ui/load_indicator';
-import Overlay from '@js/ui/overlay/ui.overlay';
 import { current, isFluent } from '@js/ui/themes';
 import ValidationEngine from '@js/ui/validation_engine';
+import ValidationMessage from '@js/ui/validation_message';
 import Validator from '@js/ui/validator';
 import { focused } from '@js/ui/widget/selectors';
 import errors from '@js/ui/widget/ui.errors';
@@ -1177,52 +1176,37 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   private _showValidationMessage($cell, messages, alignment) {
     const editorPopup = $cell.find('.dx-dropdowneditor-overlay').data('dxPopup');
     const isOverlayVisible = editorPopup && editorPopup.option('visible');
-    const myPosition = isOverlayVisible ? 'top right' : `top ${alignment}`;
-    const atPosition = isOverlayVisible ? 'top left' : `bottom ${alignment}`;
+    const positionSide = isOverlayVisible ? alignment : 'bottom';
 
-    const $overlayContainer = this.getValidationMessageContainer($cell);
+    const $container = this.getValidationMessageContainer($cell);
 
     let errorMessageText = '';
     messages && messages.forEach((message) => {
-      errorMessageText += (errorMessageText.length ? '<br/>' : '') + encodeHtml(message);
+      errorMessageText += (errorMessageText.length ? '\n' : '') + message;
     });
 
     const invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS);
 
     this._rowsView.element().find(`.${invalidMessageClass}`).remove();
 
-    const $overlayElement = $('<div>')
-      .addClass(INVALID_MESSAGE_CLASS)
-      .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
+    const $validationMessageElement = $('<div>')
       .addClass(invalidMessageClass)
-      .html(errorMessageText)
       .appendTo($cell);
 
-    const overlayOptions = {
-      container: $overlayContainer,
-      shading: false,
-      width: 'auto',
-      height: 'auto',
-      visible: true,
-      animation: false,
-      propagateOutsideClick: true,
-      hideOnOutsideClick: false,
+    const validationMessageOptions = {
+      mode: 'always',
+      positionSide,
+      validationErrors: [{ message: errorMessageText }],
+      maxWidth: undefined,
+      target: $cell,
+      boundary: this._rowsView.element(),
+      container: $container,
       wrapperAttr: {
         id: INVALID_MESSAGE_ID,
-        class: `${INVALID_MESSAGE_CLASS} ${INVALID_MESSAGE_ALWAYS_CLASS} ${invalidMessageClass}`,
+        class: `${invalidMessageClass}`,
       },
       position: {
         collision: 'flip',
-        boundary: this._rowsView.element(),
-        boundaryOffset: '0 0',
-        offset: {
-          x: 0,
-          // Firefox consider the top row/cell border when calculating a cell offset.
-          y: !isOverlayVisible && browser.mozilla ? -1 : 0,
-        },
-        my: myPosition,
-        at: atPosition,
-        of: $cell,
       },
       onPositioned: (e) => {
         this.overlayPositionedHandler(e, isOverlayVisible);
@@ -1230,11 +1214,11 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
       },
     };
 
-    this._hideFixedGroupCell($cell, overlayOptions);
+    this._hideFixedGroupCell($cell, validationMessageOptions);
 
     // @ts-expect-error
     // eslint-disable-next-line no-new
-    new Overlay($overlayElement, overlayOptions);
+    new ValidationMessage($validationMessageElement, validationMessageOptions);
   }
 
   private getValidationMessages(): dxElementWrapper {

@@ -5,6 +5,7 @@ import { getDefaultAlignment } from '@js/core/utils/position';
 import { getOuterWidth } from '@js/core/utils/size';
 import { encodeHtml } from '@js/core/utils/string';
 import type { Properties } from '@js/ui/validation_message';
+import { isDefined } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Overlay from '@ts/ui/overlay/m_overlay';
 
@@ -123,15 +124,20 @@ class ValidationMessage extends Overlay<ValidationMessageProperties> {
   }
 
   updateMaxWidth(): void {
-    const target = this.option('target');
-    const targetWidth = getOuterWidth(target);
-    let maxWidth = '100%';
-    if (targetWidth) {
-      // @ts-expect-error ts-error
-      maxWidth = Math.max(targetWidth, VALIDATION_MESSAGE_MIN_WIDTH);
+    const { target, maxWidth } = this.option();
+
+    if (!isDefined(maxWidth)) {
+      return;
     }
 
-    this.option({ maxWidth });
+    const targetWidth = getOuterWidth(target);
+    let newMaxWidth = '100%';
+    if (targetWidth) {
+      // @ts-expect-error ts-error
+      newMaxWidth = Math.max(targetWidth, VALIDATION_MESSAGE_MIN_WIDTH);
+    }
+
+    this.option('maxWidth', newMaxWidth);
   }
 
   _getPositionsArray(positionSide, rtlSide): string[] {
