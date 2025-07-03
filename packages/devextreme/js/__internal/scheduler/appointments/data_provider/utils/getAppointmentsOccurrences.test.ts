@@ -10,6 +10,7 @@ const options = {
   min: new Date(2000, 0, 10),
   max: new Date(2000, 0, 15),
   firstDayOfWeek: 3,
+  isOnlyDateCheck: false,
 };
 const mockTimeZoneCalculator = createTimeZoneCalculator(
   Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -23,6 +24,59 @@ describe('getAppointmentsOccurrences', () => {
       options,
       mockTimeZoneCalculator,
     )).toEqual([appointment]);
+  });
+
+  it('should crop appointment occurrences by hours', () => {
+    const appointment: any = {
+      startDate: new Date(2000, 0, 9, 20),
+      endDate: new Date(2000, 0, 9, 21),
+      recurrenceRule: 'FREQ=DAILY',
+    };
+    expect(getAppointmentsOccurrences(
+      appointment,
+      {
+        min: new Date(2000, 0, 14, 10),
+        max: new Date(2000, 0, 15, 15),
+        firstDayOfWeek: 3,
+        isOnlyDateCheck: false,
+      },
+      mockTimeZoneCalculator,
+    )).toEqual([
+      {
+        ...appointment,
+        startDate: new Date(2000, 0, 14, 20),
+        endDate: new Date(2000, 0, 14, 21),
+      },
+    ]);
+  });
+
+  it('should not crop appointment occurrences by hours for isOnlyDateCheck=true', () => {
+    const appointment: any = {
+      startDate: new Date(2000, 0, 9, 20),
+      endDate: new Date(2000, 0, 9, 21),
+      recurrenceRule: 'FREQ=DAILY',
+    };
+    expect(getAppointmentsOccurrences(
+      appointment,
+      {
+        min: new Date(2000, 0, 14, 10),
+        max: new Date(2000, 0, 15, 15),
+        firstDayOfWeek: 3,
+        isOnlyDateCheck: true,
+      },
+      mockTimeZoneCalculator,
+    )).toEqual([
+      {
+        ...appointment,
+        startDate: new Date(2000, 0, 14, 20),
+        endDate: new Date(2000, 0, 14, 21),
+      },
+      {
+        ...appointment,
+        startDate: new Date(2000, 0, 15, 20),
+        endDate: new Date(2000, 0, 15, 21),
+      },
+    ]);
   });
 
   it('should return appointment occurrences for appointment starts before view interval', () => {

@@ -10,7 +10,7 @@ interface Options {
   firstDayOfWeek: number;
   min: Date;
   max: Date;
-  isTimeDateView: boolean;
+  isOnlyDateCheck: boolean;
 }
 
 const correctDateTime = (min: Date, max: Date): Date[] => {
@@ -28,7 +28,7 @@ export const getAppointmentsOccurrences = (
     firstDayOfWeek,
     min,
     max,
-    isTimeDateView,
+    isOnlyDateCheck,
   }: Options,
   timeZoneCalculator: TimeZoneCalculator,
 ): AppointmentDataItem[] => {
@@ -38,7 +38,7 @@ export const getAppointmentsOccurrences = (
     return [appointment];
   }
 
-  const [fixedMin, fixedMax] = !isTimeDateView || appointment.allDay
+  const [fixedMin, fixedMax] = isOnlyDateCheck
     ? correctDateTime(min, max)
     : [min, max];
   const recurrenceException = getRecurrenceException(

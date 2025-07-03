@@ -13,7 +13,7 @@ const viewportOptions = {
   endDayHour,
   min: new Date(2000, 0, minDay),
   max: new Date(2000, 0, maxDay),
-  isTimeDateView: true,
+  isOnlyDateCheck: false,
 };
 const yearMs = new Date(2001, 0).getTime() - new Date(2000, 0).getTime();
 
@@ -46,7 +46,7 @@ describe('isAppointmentMatchedDateTime', () => {
       startDate: new Date(2000, 0, minDay + 1, endDayHour + 1),
       endDate: new Date(2000, 0, maxDay + 3, startDayHour - 1),
       allDay,
-    } as any, viewportOptions)).toBe(true);
+    } as any, { ...viewportOptions, isOnlyDateCheck: allDay })).toBe(true);
   });
 
   describe.each([
@@ -102,7 +102,7 @@ describe('isAppointmentMatchedDateTime', () => {
         endDate: new Date(appointment.endDate.getTime() - yearMs),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       })).toBe(false);
     });
 
@@ -113,14 +113,14 @@ describe('isAppointmentMatchedDateTime', () => {
         endDate: new Date(appointment.endDate.getTime() + yearMs),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       })).toBe(false);
     });
 
     it(`should compare ${title} between start and date`, () => {
       expect(isAppointmentMatchedDateTime(appointment, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       })).toBe(true);
     });
 
@@ -131,7 +131,7 @@ describe('isAppointmentMatchedDateTime', () => {
         endDate: new Date(2000, 0, minDay, startDayHour + 1, 30),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       })).toBe(true);
     });
 
@@ -142,7 +142,7 @@ describe('isAppointmentMatchedDateTime', () => {
         endDate: new Date(2000, 0, maxDay + daysDuration, endDayHour + 1),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       })).toBe(true);
     });
 
@@ -153,7 +153,7 @@ describe('isAppointmentMatchedDateTime', () => {
         endDate: new Date(2000, 0, minDay, startDayHour, 30),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       })).toBe(true);
     });
 
@@ -165,7 +165,7 @@ describe('isAppointmentMatchedDateTime', () => {
       }, {
         ...viewportOptions,
         endDayHour: endDayHour + 0.5,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       })).toBe(true);
     });
 
@@ -176,7 +176,7 @@ describe('isAppointmentMatchedDateTime', () => {
         endDate: new Date(2000, 0, minDay, startDayHour - 1),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       })).toBe(ignoreHours);
     });
 
@@ -187,7 +187,7 @@ describe('isAppointmentMatchedDateTime', () => {
         endDate: new Date(2000, 0, maxDay + daysDuration, endDayHour + 2),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       })).toBe(ignoreHours);
     });
 
@@ -199,7 +199,7 @@ describe('isAppointmentMatchedDateTime', () => {
       }, {
         ...viewportOptions,
         startDayHour: startDayHour + 0.5,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       })).toBe(ignoreHours);
     });
 
@@ -210,7 +210,7 @@ describe('isAppointmentMatchedDateTime', () => {
         endDate: new Date(2000, 0, maxDay + daysDuration, endDayHour + 1),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       })).toBe(ignoreHours);
     });
   });
@@ -253,7 +253,7 @@ describe('isAppointmentMatchedDateTime', () => {
         endDate: new Date(2000, 0, maxDay + 1, startDayHour + 2),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       })).toBe(true);
     });
   });

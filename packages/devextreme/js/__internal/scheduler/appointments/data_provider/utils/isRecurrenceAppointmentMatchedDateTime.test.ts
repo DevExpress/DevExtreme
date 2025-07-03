@@ -15,7 +15,7 @@ const viewportOptions = {
   endDayHour,
   min: new Date(2000, 0, minDay, startDayHour),
   max: new Date(2000, 0, maxDay, endDayHour),
-  isTimeDateView: true,
+  isOnlyDateCheck: false,
 };
 const yearMs = new Date(2001, 0).getTime() - new Date(2000, 0).getTime();
 const mockTimeZoneCalculator = createTimeZoneCalculator(
@@ -54,7 +54,7 @@ describe('isRecurrenceAppointmentMatchedDateTime', () => {
       startDate: new Date(2000, 0, minDay - 3, endDayHour + 1),
       endDate: new Date(2000, 0, maxDay - 1, startDayHour - 1),
       allDay,
-    } as any, viewportOptions, mockTimeZoneCalculator)).toBe(true);
+    } as any, { ...viewportOptions, isOnlyDateCheck: allDay }, mockTimeZoneCalculator)).toBe(true);
   });
 
   describe.each([
@@ -111,7 +111,7 @@ describe('isRecurrenceAppointmentMatchedDateTime', () => {
         endDate: new Date(appointment.endDate.getTime() - yearMs),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       }, mockTimeZoneCalculator)).toBe(false);
     });
 
@@ -123,7 +123,7 @@ describe('isRecurrenceAppointmentMatchedDateTime', () => {
         endDate: new Date(appointment.endDate.getTime() + yearMs),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       }, mockTimeZoneCalculator)).toBe(false);
     });
 
@@ -135,7 +135,7 @@ describe('isRecurrenceAppointmentMatchedDateTime', () => {
         endDate: new Date(2000, 0, minDay + daysDuration - 4, startDayHour + 1, 30),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       }, mockTimeZoneCalculator)).toBe(true);
     });
 
@@ -147,7 +147,7 @@ describe('isRecurrenceAppointmentMatchedDateTime', () => {
         endDate: new Date(2000, 0, minDay - 5, startDayHour + 1, 30),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       }, mockTimeZoneCalculator)).toBe(true);
     });
 
@@ -159,7 +159,7 @@ describe('isRecurrenceAppointmentMatchedDateTime', () => {
         endDate: new Date(2000, 0, maxDay + daysDuration - 30, endDayHour + 1),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       }, mockTimeZoneCalculator)).toBe(true);
     });
 
@@ -171,7 +171,7 @@ describe('isRecurrenceAppointmentMatchedDateTime', () => {
         endDate: new Date(2000, 0, minDay - 30, startDayHour, 30),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       }, mockTimeZoneCalculator)).toBe(true);
     });
 
@@ -185,7 +185,7 @@ describe('isRecurrenceAppointmentMatchedDateTime', () => {
         ...viewportOptions,
         endDayHour: endDayHour + 0.5,
         max: new Date(2000, 0, maxDay, endDayHour, 30),
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       }, mockTimeZoneCalculator)).toBe(true);
     });
 
@@ -197,7 +197,7 @@ describe('isRecurrenceAppointmentMatchedDateTime', () => {
         endDate: new Date(2000, 0, minDay - 30, startDayHour - 1),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       }, mockTimeZoneCalculator)).toBe(ignoreHours);
     });
 
@@ -209,7 +209,7 @@ describe('isRecurrenceAppointmentMatchedDateTime', () => {
         endDate: new Date(2000, 0, maxDay + daysDuration - 30, endDayHour + 2),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       }, mockTimeZoneCalculator)).toBe(ignoreHours);
     });
 
@@ -223,7 +223,7 @@ describe('isRecurrenceAppointmentMatchedDateTime', () => {
         ...viewportOptions,
         startDayHour: startDayHour + 0.5,
         min: new Date(2000, 0, minDay, startDayHour, 30),
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       }, mockTimeZoneCalculator)).toBe(ignoreHours);
     });
 
@@ -235,7 +235,7 @@ describe('isRecurrenceAppointmentMatchedDateTime', () => {
         endDate: new Date(2000, 0, maxDay + daysDuration - 30, endDayHour + 1),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       }, mockTimeZoneCalculator)).toBe(ignoreHours);
     });
   });
@@ -279,7 +279,7 @@ describe('isRecurrenceAppointmentMatchedDateTime', () => {
         endDate: new Date(2000, 0, maxDay + 1 - 30, startDayHour + 2),
       }, {
         ...viewportOptions,
-        isTimeDateView,
+        isOnlyDateCheck: !isTimeDateView || appointment.allDay,
       }, mockTimeZoneCalculator)).toBe(true);
     });
   });

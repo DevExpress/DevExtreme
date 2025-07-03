@@ -11,7 +11,7 @@ interface CompareOptions {
   endDayHour: number;
   min: Date;
   max: Date;
-  isTimeDateView: boolean;
+  isOnlyDateCheck: boolean;
 }
 
 export const isRecurrenceAppointmentMatchedDateTime = (
@@ -22,7 +22,7 @@ export const isRecurrenceAppointmentMatchedDateTime = (
     endDayHour,
     min,
     max,
-    isTimeDateView,
+    isOnlyDateCheck,
   }: CompareOptions,
   timeZoneCalculator: TimeZoneCalculator,
 ): boolean => {
@@ -32,7 +32,7 @@ export const isRecurrenceAppointmentMatchedDateTime = (
       min,
       max,
       firstDayOfWeek,
-      isTimeDateView,
+      isOnlyDateCheck,
     },
     timeZoneCalculator,
   );
@@ -46,6 +46,6 @@ export const isRecurrenceAppointmentMatchedDateTime = (
     endDayHour,
     min,
     max,
-    isTimeDateView,
+    isOnlyDateCheck,
   }));
 };
