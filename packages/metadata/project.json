@@ -1,6 +1,6 @@
 {
   "name": "metadata",
-  "projectType": "application",
+  "projectType": "library",
   "targets": {
     "discover-declarations": {
       "executor": "nx:run-commands",
@@ -92,6 +92,39 @@
         "cwd": "{projectRoot}",
         "command": "pnpm exec ts-node ./put-metadata-to-vue.ts"
       }
+    },
+    "build": {
+      "dependsOn": [
+        "make-angular-metadata",
+        "make-aspnet-metadata",
+        "make-integration-metadata"
+      ],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm exec ts-node ./build.ts"
+      },
+      "inputs": [
+        "{projectRoot}/artifacts/**"
+      ],
+      "outputs": [
+        "{projectRoot}/dist"
+      ]
+    },
+    "pack": {
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm pack"
+      },
+      "inputs": [
+        "{projectRoot}/dist/**",
+        "{projectRoot}/package.json"
+      ],
+      "outputs": [
+        "{projectRoot}/*.tgz"
+      ]
     }
   }
 }

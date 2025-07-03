@@ -11,5 +11,8 @@
     "devextreme-internal-tools": "18.0.0-beta.6",
     "prettier": "catalog:tools",
     "ts-node": "catalog:tools"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }
