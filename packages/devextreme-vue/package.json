@@ -83,7 +83,8 @@
     "eslint-plugin-no-only-tests": "catalog:",
     "@babel/eslint-parser": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
-    "@typescript-eslint/parser": "catalog:"
+    "@typescript-eslint/parser": "catalog:",
+    "metadata": "workspace:*"
   },
   "publishConfig": {
     "directory": "npm",

@@ -34,10 +34,10 @@
     },
     "regenerate": {
       "executor": "nx:run-script",
+      "dependsOn": ["metadata:build"],
       "options": {
         "script": "regenerate"
-      },
-      "dependsOn": ["metadata:\"put-metadata-to-angular\""]
+      }
     },
     "test:dev": {
       "executor": "nx:run-script",

@@ -84,7 +84,8 @@
     "eslint-config-airbnb-typescript": "catalog:eslint8",
     "eslint-plugin-import": "catalog:eslint8",
     "@typescript-eslint/eslint-plugin": "catalog:eslint8",
-    "@typescript-eslint/parser": "catalog:eslint8"
+    "@typescript-eslint/parser": "catalog:eslint8",
+    "metadata": "workspace:*"
   },
   "publishConfig": {
     "directory": "npm",

@@ -69,30 +69,6 @@
         "{projectRoot}/integration-data.json"
       ]
     },
-    "put-metadata-to-angular": {
-      "dependsOn": ["make-angular-metadata"],
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "{projectRoot}",
-        "command": "pnpm exec ts-node ./put-metadata-to-angular.ts"
-      }
-    },
-    "put-metadata-to-react": {
-      "dependsOn": ["make-integration-metadata"],
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "{projectRoot}",
-        "command": "pnpm exec ts-node ./put-metadata-to-react.ts"
-      }
-    },
-    "put-metadata-to-vue": {
-      "dependsOn": ["make-integration-metadata"],
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "{projectRoot}",
-        "command": "pnpm exec ts-node ./put-metadata-to-vue.ts"
-      }
-    },
     "build": {
       "dependsOn": [
         "make-angular-metadata",

@@ -19,10 +19,10 @@
     },
     "regenerate": {
       "executor": "nx:run-script",
+      "dependsOn": ["metadata:build"],
       "options": {
         "script": "regenerate"
-      },
-      "dependsOn": ["metadata:\"put-metadata-to-vue\""]
+      }
     },
     "test": {
       "executor": "nx:run-script",

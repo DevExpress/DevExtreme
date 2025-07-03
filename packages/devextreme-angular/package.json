@@ -76,7 +76,8 @@
     "typescript": "5.4.5",
     "webpack": "5.96.1",
     "yargs": "17.7.2",
-    "zone.js": "0.14.10"
+    "zone.js": "0.14.10",
+    "metadata": "workspace:*"
   },
   "main": "./src/index.ts",
   "keywords": [
