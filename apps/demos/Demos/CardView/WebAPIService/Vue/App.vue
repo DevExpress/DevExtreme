@@ -17,7 +17,27 @@
       :allow-updating="true"
       :allow-deleting="true"
       :popup="{ width: 700, height: 400 }"
-    />
+    >
+      <DxForm>
+        <DxItem
+          dataField="Task_Subject"
+        ></DxItem>
+        <DxItem
+          dataField="Task_Start_Date"
+        ></DxItem>
+        <DxItem
+          dataField="Task_Due_Date"
+        ></DxItem>
+        <DxItem
+          data-field="Task_Priority"
+          editor-type="dxSelectBox"
+          :editor-options="{ dataSource: ['Low', 'Normal', 'High', 'Urgent'] }"
+        ></DxItem>
+        <DxItem
+          dataField="Task_Status"
+        ></DxItem>
+      </DxForm>
+    </DxEditing>
     <DxColumn
       data-field="Task_Subject"
       caption="Subject"
@@ -46,9 +66,10 @@
 </template>
 <script setup lang="ts">
 import {
-  DxCardView, DxColumn, DxEditing, DxSearchPanel, DxHeaderFilter, DxRequiredRule,
+  DxCardView, DxColumn, DxEditing, DxSearchPanel, DxHeaderFilter, DxRequiredRule, DxForm, DxItem,
 } from 'devextreme-vue/card-view';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import 'devextreme-vue/text-area';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 

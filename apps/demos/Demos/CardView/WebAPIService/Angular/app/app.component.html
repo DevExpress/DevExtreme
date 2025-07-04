@@ -12,9 +12,23 @@
     [allowUpdating]="true"
     [allowDeleting]="true"
     [popup]="{ width: 700, height: 400 }"
-  ></dxo-card-view-editing>
+  >
+    <dxo-card-view-form>
+      <dxi-card-view-item dataField="Task_Subject"></dxi-card-view-item>
+      <dxi-card-view-item dataField="Task_Start_Date"></dxi-card-view-item>
+      <dxi-card-view-item dataField="Task_Due_Date"></dxi-card-view-item>
+      <dxi-card-view-item
+        dataField="Task_Priority"
+        editorType="dxSelectBox"
+        [editorOptions]="{ dataSource: ['Low', 'Normal', 'High', 'Urgent'] }"
+      ></dxi-card-view-item>
+      <dxi-card-view-item dataField="Task_Status"></dxi-card-view-item>
+    </dxo-card-view-form>
+  </dxo-card-view-editing>
   <dxi-card-view-column dataField="Task_Subject" caption="Subject">
-    <dxi-card-view-required-rule></dxi-card-view-required-rule>
+    <dxi-card-view-validation-rule
+      type="required"
+    ></dxi-card-view-validation-rule>
   </dxi-card-view-column>
   <dxi-card-view-column
     dataField="Task_Start_Date"

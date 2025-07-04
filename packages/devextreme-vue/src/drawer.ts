@@ -52,7 +52,7 @@ const componentConfig = {
     closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     maxSize: Number,
@@ -68,7 +68,7 @@ const componentConfig = {
     shading: Boolean,
     template: {},
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

@@ -1,13 +1,9 @@
 import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import {
-  DxSchedulerModule,
-  DxSchedulerComponent,
-  DxTemplateModule,
-  DxButtonModule,
-} from 'devextreme-angular';
-import type { DxButtonTypes } from 'devextreme-angular/ui/button';
+import { DxTemplateModule } from 'devextreme-angular';
+import { DxButtonModule, type DxButtonTypes } from 'devextreme-angular/ui/button';
+import { DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular/ui/scheduler';
 import { DxSelectBoxModule, type DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Service } from './app.service';
 
@@ -88,10 +84,10 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxSchedulerModule,
     DxTemplateModule,
-    DxSelectBoxModule,
     DxButtonModule,
+    DxSchedulerModule,
+    DxSelectBoxModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

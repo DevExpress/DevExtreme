@@ -851,6 +851,10 @@ const keyboardNavigation = (
     }
   }
 
+  protected isFocusableColumn(column: Column): boolean {
+    return super.isFocusableColumn(column) && column.visibleWidth !== HIDDEN_COLUMNS_WIDTH;
+  }
+
   public _isCellElement($cell) {
     return super._isCellElement($cell) || $cell.hasClass(ADAPTIVE_ITEM_TEXT_CLASS);
   }

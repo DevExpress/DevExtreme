@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import DxForm, { DxSimpleItem } from 'devextreme-vue/form';
-import 'devextreme/ui/text_area';
+import { DxForm, DxSimpleItem } from 'devextreme-vue/form';
+import 'devextreme-vue/text-area';
 import type { BookingFormData } from './types.ts';
 import { initialFormData } from './data.ts';
 

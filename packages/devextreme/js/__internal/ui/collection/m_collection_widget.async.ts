@@ -36,9 +36,7 @@ class CollectionWidgetAsync<
     this._asyncTemplateItemsMap[uniqueKey] = itemDeferred;
     const $itemContent = super._renderItemContent({ ...args, uniqueKey });
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     itemDeferred.done(() => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       renderContentDeferred.resolve($itemContent);
     });
     // @ts-expect-error ts-error
@@ -53,7 +51,6 @@ class CollectionWidgetAsync<
       const { uniqueKey } = renderArgs;
 
       if (uniqueKey) {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._asyncTemplateItemsMap[uniqueKey]?.resolve();
       }
     };
@@ -66,12 +63,10 @@ class CollectionWidgetAsync<
     const d = Deferred();
     const asyncTemplateItems = Object.values<DeferredObj<unknown>>(this._asyncTemplateItemsMap);
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     when.apply(this, asyncTemplateItems).done(() => {
       // @ts-expect-error ts-error
       this._postProcessRenderItems(...args);
 
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       d.resolve().done(() => {
         this._asyncTemplateItemsMap = {};
       });
@@ -86,7 +81,6 @@ class CollectionWidgetAsync<
     const asyncTemplateItems = Object.values<DeferredObj<unknown>>(this._asyncTemplateItemsMap);
 
     asyncTemplateItems.forEach((item) => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       item.reject();
     });
 

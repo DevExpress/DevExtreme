@@ -580,7 +580,6 @@ class SchedulerAppointments extends CollectionWidget {
     const allowResize = this.option('allowResize') && (!isDefined(settings.skipResizing) || isString(settings.skipResizing));
     const allowDrag = this.option('allowDrag');
     const { allDay } = settings;
-    this.invoke('setCellDataCacheAlias', this._currentAppointmentSettings, geometry);
 
     if (settings.virtual) {
       const appointmentConfig = {

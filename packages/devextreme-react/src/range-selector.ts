@@ -56,7 +56,7 @@ const RangeSelector = memo(
         }
       ), [baseRef.current]);
 
-      const subscribableOptions = useMemo(() => (["loadingIndicator","loadingIndicator.show","value"]), []);
+      const subscribableOptions = useMemo(() => (["loadingIndicator","loadingIndicator.show","value","value.endValue","value.startValue"]), []);
       const independentEvents = useMemo(() => (["onDisposing","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onValueChanged"]), []);
 
       const defaults = useMemo(() => ({
@@ -1469,7 +1469,6 @@ const Reduction = Object.assign<typeof _componentReduction, NestedComponentMeta>
 // owners:
 // RangeSelector
 type IScaleProps = React.PropsWithChildren<{
-  aggregateByCategory?: boolean;
   aggregationGroupWidth?: number | undefined;
   aggregationInterval?: number | Record<string, any> | TimeInterval | {
     days?: number;

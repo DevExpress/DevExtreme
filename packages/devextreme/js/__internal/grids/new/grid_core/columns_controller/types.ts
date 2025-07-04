@@ -103,6 +103,8 @@ export interface FieldInfo {
 }
 
 export interface CardInfo {
+  visible: boolean;
+
   columns: Column[];
 
   fields: FieldInfo[];

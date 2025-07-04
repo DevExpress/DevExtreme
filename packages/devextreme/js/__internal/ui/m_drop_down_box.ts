@@ -293,6 +293,7 @@ class DropDownBox<
         of: this.$element(),
       }),
       _ignoreFunctionValueDeprecation: true,
+      // @ts-expect-error ts-error
       maxHeight: function () {
         const popupLocation = this._popupPosition?.v.location;
 

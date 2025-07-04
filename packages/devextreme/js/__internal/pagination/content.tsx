@@ -244,8 +244,8 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
         visible={visible}
         aria={this.getAria()}
         style={style as Record<string, string | number> | undefined}
-        width={width as string | number | undefined}
-        height={height as string | number | undefined}
+        width={width}
+        height={height}
 
         hint={hint}
         disabled={disabled}

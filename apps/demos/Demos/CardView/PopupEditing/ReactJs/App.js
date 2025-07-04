@@ -25,7 +25,7 @@ const App = () => (
     keyExpr="id"
     cardsPerRow="auto"
     cardMinWidth={350}
-    height={820}
+    height={840}
   >
     <SearchPanel visible={true} />
     <CardCover
@@ -36,7 +36,6 @@ const App = () => (
       allowAdding={true}
       allowUpdating={true}
       allowDeleting={true}
-      // todo: move to nested components
       popup={{
         title: 'Employee Info',
         showTitle: true,
@@ -64,6 +63,7 @@ const App = () => (
         >
           <Item dataField="hireDate"></Item>
           <Item dataField="title"></Item>
+          <Item dataField="department"></Item>
           <Item
             dataField="notes"
             editorType="dxTextArea"

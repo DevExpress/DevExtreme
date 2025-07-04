@@ -3,7 +3,7 @@
   keyExpr="id"
   cardsPerRow="auto"
   [cardMinWidth]="350"
-  [height]="820"
+  [height]="840"
 >
   <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
   <dxo-card-view-card-cover
@@ -17,54 +17,55 @@
     [popup]="popupConfig"
   >
     <dxo-card-view-form>
-      <dxo-card-view-form-item
+      <dxi-card-view-item
         caption="Personal Data"
         itemType="group"
         [colCount]="2"
         [colSpan]="2"
       >
-        <dxo-card-view-form-item
-          dataField="firstName"
-        ></dxo-card-view-form-item>
-        <dxo-card-view-form-item dataField="lastName"></dxo-card-view-form-item>
-        <dxo-card-view-form-item
-          dataField="birthDate"
-        ></dxo-card-view-form-item>
-        <dxo-card-view-form-item dataField="picture"></dxo-card-view-form-item>
-      </dxo-card-view-form-item>
-      <dxo-card-view-form-item
+        <dxi-card-view-item dataField="firstName"></dxi-card-view-item>
+        <dxi-card-view-item dataField="lastName"></dxi-card-view-item>
+        <dxi-card-view-item dataField="birthDate"></dxi-card-view-item>
+        <dxi-card-view-item dataField="picture"></dxi-card-view-item>
+      </dxi-card-view-item>
+      <dxi-card-view-item
         caption="Main Info"
         itemType="group"
         [colCount]="2"
         [colSpan]="2"
       >
-        <dxo-card-view-form-item dataField="hireDate"></dxo-card-view-form-item>
-        <dxo-card-view-form-item dataField="title"></dxo-card-view-form-item>
-        <dxo-card-view-form-item
+        <dxi-card-view-item dataField="hireDate"></dxi-card-view-item>
+        <dxi-card-view-item dataField="title"></dxi-card-view-item>
+        <dxi-card-view-item dataField="department"></dxi-card-view-item>
+        <dxi-card-view-item
           dataField="notes"
           editorType="dxTextArea"
           [colSpan]="2"
           [editorOptions]="{ height: 100 }"
-        ></dxo-card-view-form-item>
-        <dxo-card-view-form-item dataField="picture"></dxo-card-view-form-item>
-      </dxo-card-view-form-item>
-      <dxo-card-view-form-item
+        ></dxi-card-view-item>
+        <dxi-card-view-item dataField="picture"></dxi-card-view-item>
+      </dxi-card-view-item>
+      <dxi-card-view-item
         caption="Contacts"
         itemType="group"
         [colCount]="2"
         [colSpan]="2"
       >
-        <dxo-card-view-form-item
+        <dxi-card-view-item
           dataField="address"
           [colSpan]="2"
-        ></dxo-card-view-form-item>
-        <dxo-card-view-form-item dataField="city"></dxo-card-view-form-item>
-        <dxo-card-view-form-item dataField="zipcode"></dxo-card-view-form-item>
-        <dxo-card-view-form-item
+        ></dxi-card-view-item>
+        <dxi-card-view-item dataField="city"></dxi-card-view-item>
+        <dxi-card-view-item dataField="zipcode"></dxi-card-view-item>
+        <dxi-card-view-item
           dataField="mobilePhone"
-        ></dxo-card-view-form-item>
-        <dxo-card-view-form-item dataField="email"></dxo-card-view-form-item>
-      </dxo-card-view-form-item>
+          [editorOptions]="{
+            mask: '+1 (000) 000-0000',
+            useMaskedValue: true,
+          }"
+        ></dxi-card-view-item>
+        <dxi-card-view-item dataField="email"></dxi-card-view-item>
+      </dxi-card-view-item>
     </dxo-card-view-form>
   </dxo-card-view-editing>
   <dxi-card-view-column
@@ -95,9 +96,7 @@
   <dxi-card-view-column dataField="address"></dxi-card-view-column>
   <dxi-card-view-column dataField="mobilePhone">
     <dxi-card-view-validation-rule
-      type="pattern"
-      message="Your phone must have '(555) 555-5555' format!"
-      [pattern]="phonePattern"
+      type="required"
     ></dxi-card-view-validation-rule>
   </dxi-card-view-column>
   <dxi-card-view-column dataField="email">

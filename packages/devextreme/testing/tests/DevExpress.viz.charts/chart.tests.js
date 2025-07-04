@@ -141,59 +141,6 @@ QUnit.test('Create', function(assert) {
     assert.ok(this.LayoutManager.calledWithNew());
 });
 
-QUnit.test('Chart should have default value of the aggregateByCategory = true', function(assert) {
-    this.createChart();
-    const argumentAxisOptions = this.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0];
-
-    assert.strictEqual(argumentAxisOptions.aggregateByCategory, true);
-});
-
-QUnit.test('Chart should be able to change the aggregateByCategory setting', function(assert) {
-    this.options = {
-        argumentAxis: {
-            aggregateByCategory: false
-        }
-    };
-    this.createChart();
-    const axisOptions = this.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0];
-
-    assert.strictEqual(axisOptions.aggregateByCategory, false);
-});
-
-QUnit.test('Chart should change the aggregateByCategory value when the value was updated', function(assert) {
-    const chart = this.createChart();
-
-    chart.option('argumentAxis', { aggregateByCategory: false });
-
-    const axisOptions = this.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0];
-
-    assert.strictEqual(axisOptions.aggregateByCategory, false);
-});
-
-QUnit.test('Should show warning if deprecated "argumentAxis.aggregateByCategory" option is used', function(assert) {
-    sinon.spy(errors, 'log');
-
-    try {
-        this.options = {
-            argumentAxis: {
-                aggregateByCategory: true
-            }
-        };
-        this.createChart();
-
-        assert.deepEqual(errors.log.lastCall.args,
-            [
-                'W0001',
-                'dxChart',
-                'argumentAxis.aggregateByCategory',
-                '23.1',
-                'Use the aggregation.enabled property'
-            ]);
-    } finally {
-        errors.log.restore();
-    }
-});
-
 QUnit.test('Set adaptive layout options', function(assert) {
     this.createChart();
 

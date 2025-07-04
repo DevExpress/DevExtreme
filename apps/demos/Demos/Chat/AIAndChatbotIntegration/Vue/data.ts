@@ -1,5 +1,4 @@
-import CustomStore from 'devextreme/data/custom_store';
-import DataSource from 'devextreme/data/data_source';
+import { CustomStore, DataSource } from 'devextreme-vue/common/data';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
@@ -23,7 +22,7 @@ export const AzureOpenAIConfig = {
 };
 
 export const REGENERATION_TEXT = 'Regeneration...';
-export const CHAT_DISABLED_CLASS = 'dx-chat-disabled';
+export const CHAT_DISABLED_CLASS = 'chat-disabled';
 export const ALERT_TIMEOUT = 1000 * 60;
 
 export const user = {

@@ -145,7 +145,7 @@ type IFileUploaderOptionsProps = React.PropsWithChildren<{
   dropZone?: any | string | undefined;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   inputAttr?: any;
@@ -196,7 +196,7 @@ type IFileUploaderOptionsProps = React.PropsWithChildren<{
   validationStatus?: ValidationStatus;
   value?: Array<any>;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   defaultValue?: Array<any>;
   onValueChange?: (value: Array<any>) => void;
 }>
@@ -261,8 +261,6 @@ type IItemProps = React.PropsWithChildren<{
   acceptedValues?: Array<boolean | number | string>;
   commands?: Array<AICommand | AICommandName>;
   cssClass?: string | undefined;
-  formatName?: HtmlEditorPredefinedToolbarItem | string;
-  formatValues?: Array<boolean | number | string>;
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
@@ -494,8 +492,6 @@ type IToolbarItemProps = React.PropsWithChildren<{
   commands?: Array<AICommand | AICommandName>;
   cssClass?: string | undefined;
   disabled?: boolean;
-  formatName?: HtmlEditorPredefinedToolbarItem | string;
-  formatValues?: Array<boolean | number | string>;
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;

@@ -107,8 +107,6 @@ import { DxiLocationComponent } from './location-dxi';
         'imageAlt',
         'imageSrc',
         'acceptedValues',
-        'formatName',
-        'formatValues',
         'commands',
         'key',
         'showChevron',

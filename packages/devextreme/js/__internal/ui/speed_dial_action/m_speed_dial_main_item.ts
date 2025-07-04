@@ -73,8 +73,6 @@ const modifyActionOptions = (action) => {
 
 export interface SpeedDialMainItemProperties extends SpeedDialItemProperties {
   maxSpeedDialActionCount: number;
-
-  closeOnOutsideClick?: boolean;
 }
 
 class SpeedDialMainItem extends SpeedDialItem {
@@ -218,8 +216,6 @@ class SpeedDialMainItem extends SpeedDialItem {
     const visibleActions = speedDialMainItem?._getVisibleActions(actions);
 
     const defaultOptions = this._getDefaultOptions();
-
-    delete defaultOptions.closeOnOutsideClick;
 
     return visibleActions.length === 1
       ? extend(modifyActionOptions(visibleActions[0]), { position: this._getPosition() })

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { Stepper, Item } from 'devextreme-react/stepper';
-import Button from 'devextreme-react/button';
+import { Button } from 'devextreme-react/button';
 import { MultiView } from 'devextreme-react/multi-view';
 import validationEngine from 'devextreme/ui/validation_engine';
 import DatesForm from './DatesForm.js';

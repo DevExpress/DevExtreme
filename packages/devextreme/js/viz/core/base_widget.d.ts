@@ -99,7 +99,7 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
      * @docid
      * @hidden
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * @docid
      * @type object
@@ -203,7 +203,7 @@ export interface BaseWidgetOptions<TComponent> extends DOMComponentOptions<TComp
      * @docid
      * @hidden
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
 }
 /**
  * @hidden

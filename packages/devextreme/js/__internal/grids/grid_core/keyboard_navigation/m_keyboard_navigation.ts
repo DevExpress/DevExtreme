@@ -31,6 +31,7 @@ import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import { memoize } from '@ts/utils/memoize';
 
+import type { Column } from '../columns_controller/m_columns_controller';
 import {
   EDIT_FORM_CLASS,
   EDIT_MODE_BATCH,
@@ -266,7 +267,17 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   protected resizeCompleted(): void {
-    if (this.needToRestoreFocus) {
+    if (this.navigationToCellInProgress()) {
+      this._resizeController.resetLastResizeTime(); // disable asynchronous resize
+    }
+
+    if (!this.needToRestoreFocus) {
+      return;
+    }
+
+    const scrollLeft = this._rowsView?.getScrollable()?.scrollLeft() ?? 0;
+
+    if (!this._columnsController.isNeedToRenderVirtualColumns(scrollLeft)) {
       this.needToRestoreFocus = false;
       this.focusFirstOrLastCell();
     }
@@ -1243,7 +1254,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private getFirstOrLastColumnIndex(needFirstColumnIndex: boolean): number {
     const allVisibleColumns: any[] = this._columnsController.getVisibleColumns(null, true);
-    const findColumnIndex = (column): boolean => column.type !== DRAG_COLUMN_NAME;
+    const findColumnIndex = (column): boolean => this.isFocusableColumn(column);
 
     return needFirstColumnIndex
       ? allVisibleColumns.findIndex(findColumnIndex)
@@ -1324,6 +1335,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       this.navigateToFirstOrLastCell(needNavigateToFirstCell, originalEvent);
     }
     originalEvent.preventDefault();
+  }
+
+  protected isFocusableColumn(column: Column): boolean {
+    return column.type !== DRAG_COLUMN_NAME;
   }
 
   public navigateToFirstOrLastCell(needNavigateToFirstCell: boolean, e?: KeyboardEvent): void {
@@ -2631,7 +2646,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return this._needNavigationToCell;
   }
 
-  public needToSkipRenderingFocusState(): boolean {
+  public navigationToCellInProgress(): boolean {
     return this.needToRestoreFocus || this.needNavigationToCell();
   }
 }
@@ -2673,7 +2688,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender 
   public renderFocusState(params) {
     super.renderFocusState(params);
 
-    if (this._keyboardNavigationController.needToSkipRenderingFocusState()) {
+    if (this._keyboardNavigationController.navigationToCellInProgress()) {
       return;
     }
 
@@ -2815,7 +2830,6 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender 
     super._handleScroll(e);
 
     if (this._keyboardNavigationController.needNavigationToCell()) {
-      this._resizeController.resetLastResizeTime();
       this._keyboardNavigationController
         .navigateToFirstOrLastCell(this._keyboardNavigationController.isQuickNavigationToFirstCell());
     }

@@ -62,7 +62,7 @@ const groupItemsGetter = compileGetter('items');
 // eslint-disable-next-line @typescript-eslint/naming-convention
 let _scrollView;
 
-export interface ListBaseProperties extends Properties<ListBase> {
+export interface ListBaseProperties extends Properties<Item> {
   validationGroup?: string;
 
   _onItemsRendered?: () => void;
@@ -442,7 +442,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     super._init();
 
     this._updateActiveStateUnit();
-    // @ts-expect-error ts-error
     this._dataController.resetDataSourcePageIndex();
     this._$container = this.$element();
 
@@ -489,7 +488,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
   _initScrollView(): void {
     const scrollingEnabled = this.option('scrollingEnabled');
     const pullRefreshEnabled = scrollingEnabled && this.option('pullRefreshEnabled');
-    // @ts-expect-error ts-error
     const autoPagingEnabled = scrollingEnabled && this._scrollBottomMode() && !!this._dataController.getDataSource();
 
     this._scrollView = this._createComponent(this.$element(), getScrollView(), {
@@ -568,7 +566,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
   }
 
   _updateLoadingState(tryLoadMore?): void {
-    // @ts-expect-error ts-error
     const dataController = this._dataController;
     // @ts-expect-error ts-error
     const shouldLoadNextPage = this._scrollBottomMode() && tryLoadMore && !dataController.isLoading() && !this._isLastPage();
@@ -584,7 +581,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
   }
 
   _shouldRenderNextButton(): boolean {
-    // @ts-expect-error ts-error
     return this._nextButtonMode() && this._dataController.isLoaded();
   }
 
@@ -654,7 +650,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
 
   _pullDownHandler(e?): void {
     this._pullRefreshAction?.(e);
-    // @ts-expect-error ts-error
     const dataController = this._dataController;
 
     if (dataController.getDataSource() && !dataController.isLoading()) {
@@ -686,7 +681,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
 
   _scrollBottomHandler(e): void {
     this._pageLoadingAction?.(e);
-    // @ts-expect-error ts-error
     const dataController = this._dataController;
     // @ts-expect-error ts-error
     if (!dataController.isLoading() && !this._isLastPage()) {
@@ -933,7 +927,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
 
   _nextButtonHandler(e): void {
     this._pageLoadingAction?.(e);
-    // @ts-expect-error ts-error
     const dataController = this._dataController;
     if (dataController.getDataSource() && !dataController.isLoading()) {
       this._scrollView.toggleLoading(true);
@@ -1097,7 +1090,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
   }
 
   _toggleNextButton(value): void {
-    // @ts-expect-error ts-error
     const dataController = this._dataController;
     const $nextButton = this._getNextButton();
 

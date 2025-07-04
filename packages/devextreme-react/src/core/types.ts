@@ -26,6 +26,11 @@ export interface RenderArgs {
 
 export type DXTemplateCollection = Record<string, DXTemplate>;
 
+export interface GuardObject {
+  handler: () => void;
+  latestValue: unknown;
+}
+
 export interface TemplateWrapperProps {
   templateFactory: TemplateFunc;
   data: any;

@@ -35,10 +35,6 @@ const subscribes = {
     return this.isVirtualScrolling();
   },
 
-  setCellDataCacheAlias(appointment, geometry) {
-    this._workSpace.setCellDataCacheAlias(appointment, geometry);
-  },
-
   isGroupedByDate() {
     return this.getWorkSpace().isGroupedByDate();
   },

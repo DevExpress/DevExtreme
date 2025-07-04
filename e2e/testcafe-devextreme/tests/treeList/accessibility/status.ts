@@ -156,7 +156,7 @@ test('Accessibility: TreeList general status should contains correct text after 
   await t.click(columnChooserBtn);
 
   const columnChooser = treeList.getColumnChooser();
-  const checkbox = columnChooser.getCheckboxIcon(1);
+  const checkbox = columnChooser.getCheckbox(1);
   await t.click(checkbox);
 
   const statusText = await treeList.getGeneralStatusContainer().textContent;

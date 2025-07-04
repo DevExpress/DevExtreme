@@ -7,6 +7,7 @@ import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import resizeObserverSingleton from '@js/core/resize_observer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
@@ -306,6 +307,8 @@ class Tabs extends CollectionWidget<TabsProperties> {
     }
 
     this.$element().addClass(OVERFLOW_HIDDEN_CLASS);
+
+    this._attachResizeObserverSubscription();
   }
 
   _postProcessRenderItems(): void {
@@ -506,7 +509,6 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
   _scrollToItem(item: dxElementWrapper | undefined): void {
     if (!this._scrollable) return;
-    // @ts-expect-error ts-error
     const $item = this._editStrategy.getItemElement(item);
     this._scrollable.scrollToElement($item);
   }
@@ -633,6 +635,11 @@ class Tabs extends CollectionWidget<TabsProperties> {
     }
   }
 
+  _attachResizeObserverSubscription(): void {
+    resizeObserverSingleton.unobserve(this.$element().get(0));
+    resizeObserverSingleton.observe(this.$element().get(0), () => { this._dimensionChanged(); });
+  }
+
   _dimensionChanged(): void {
     this._renderScrolling();
   }
@@ -657,6 +664,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
   }
 
   _clean(): void {
+    resizeObserverSingleton.unobserve(this.$element().get(0));
     this._cleanScrolling();
     super._clean();
   }

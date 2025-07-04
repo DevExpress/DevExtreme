@@ -38,7 +38,7 @@ import { DxCardView, DxColumn, DxCardCover, DxSorting } from 'devextreme-vue/car
 import { houses, type House } from './data.ts';
 
 function imageExpr({ ID }: House): string {
-  return `https://demos.devexpress.com/ASPxCardViewDemos/Content/HomesPhoto/${ID}.jpg`;
+  return `../../../../images/houses/${ID}.jpg`;
 }
 
 function altExpr(): string {

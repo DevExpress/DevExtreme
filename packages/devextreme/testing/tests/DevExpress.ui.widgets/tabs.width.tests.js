@@ -114,12 +114,25 @@ QUnit.module('Width', () => {
                     break;
                 case 'container':
                     this.setContainerWidth(width);
-                    this.tabs.repaint();
                     break;
                 case 'resizeBrowser':
                     this.setContainerWidth(width);
                     triggerResizeEvent(this.$container);
                     break;
+            }
+        }
+
+        delayedCheckIfRequired(fn) {
+            const done = this.assert.async();
+            const resizeTimeout = 40;
+            if(this.setWidthApproach === 'container') {
+                setTimeout(() => {
+                    fn();
+                    done();
+                }, resizeTimeout);
+            } else {
+                fn();
+                done();
             }
         }
     }
@@ -130,44 +143,44 @@ QUnit.module('Width', () => {
 
             QUnit.test('Show fixed tabs, resize to show stretched tabs' + config, function(assert) {
                 const helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
-                helper.createFixedTabs(400);
+                helper.createFixedTabs();
                 helper.setWidth(200);
-                helper.checkStretchedTabs();
+                helper.delayedCheckIfRequired(() => helper.checkStretchedTabs());
             });
 
             QUnit.test('Show fixed tabs, resize to show navigation buttons' + config, function(assert) {
                 const helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
-                helper.createFixedTabs(400);
+                helper.createFixedTabs();
                 helper.setWidth(100);
-                helper.checkNavigationButtonsTabs();
+                helper.delayedCheckIfRequired(() => helper.checkNavigationButtonsTabs());
             });
 
             QUnit.test('Show stretched tabs, resize to show navigation buttons' + config, function(assert) {
                 const helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
                 helper.createStretchedTabs();
                 helper.setWidth(100);
-                helper.checkNavigationButtonsTabs();
+                helper.delayedCheckIfRequired(() => helper.checkNavigationButtonsTabs());
             });
 
             QUnit.test('Show stretched tabs, resize to show fixed tabs' + config, function(assert) {
                 const helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
                 helper.createStretchedTabs();
                 helper.setWidth(400);
-                helper.checkFixedTabs();
+                helper.delayedCheckIfRequired(() => helper.checkFixedTabs());
             });
 
             QUnit.test('Show navigation buttons, resize to show stretched tabs' + config, function(assert) {
                 const helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
                 helper.createNavigationButtonsTabs();
                 helper.setWidth(200);
-                helper.checkStretchedTabs();
+                helper.delayedCheckIfRequired(() => helper.checkStretchedTabs());
             });
 
             QUnit.test('Show navigation buttons, resize to show fixed tabs' + config, function(assert) {
                 const helper = new TabsWidthTestHelper(assert, scrollingEnabled, setWidthApproach);
                 helper.createFixedTabs();
                 helper.setWidth(400);
-                helper.checkFixedTabs();
+                helper.delayedCheckIfRequired(() => helper.checkFixedTabs());
             });
         });
     });

@@ -673,10 +673,12 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         await waitAsync(0);
 
         const workSpace = scheduler.instance.getWorkSpace();
-        assert.deepEqual(workSpace.getCellDataByCoordinates({
+        const $cell = workSpace.getCellByCoordinates({
             top: 10,
             left: 100,
-        }), {
+        }, false);
+
+        assert.deepEqual(workSpace.getCellData($cell), {
             allDay: false,
             startDate: new Date(2016, 8, 4),
             endDate: new Date(2016, 8, 4, 0, 30),
@@ -697,10 +699,12 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         });
 
         const workSpace = scheduler.instance.getWorkSpace();
-        assert.deepEqual(workSpace.getCellDataByCoordinates({
+        const $cell = workSpace.getCellByCoordinates({
             top: 10,
             left: 100,
-        }), {
+        }, false);
+
+        assert.deepEqual(workSpace.getCellData($cell), {
             allDay: false,
             startDate: new Date(2016, 8, 4),
             endDate: new Date(2016, 8, 4, 0, 30),

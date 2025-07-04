@@ -1491,66 +1491,21 @@ Axis.prototype = {
     getAggregationInfo(useAllAggregatedPoints, range) {
         const that = this;
         const options = that._options;
-        const marginOptions = that._marginOptions;
+
         const businessRange = new Range(that.getTranslator().getBusinessRange()).addRange(range);
         const visualRange = that.getViewport();
+
         const minVisible = visualRange?.startValue ?? businessRange.minVisible;
         const maxVisible = visualRange?.endValue ?? businessRange.maxVisible;
-        let ticks = [];
-
-        if(options.type === constants.discrete && options.aggregateByCategory) {
-            return {
-                aggregateByCategory: true
-            };
-        }
 
         const aggregationInterval = options.aggregationInterval;
-        let aggregationGroupWidth = options.aggregationGroupWidth;
-
-        if(!aggregationGroupWidth && marginOptions) {
-            if(marginOptions.checkInterval) {
-                aggregationGroupWidth = options.axisDivisionFactor;
-            }
-            if(marginOptions.sizePointNormalState) {
-                aggregationGroupWidth = Math.min(marginOptions.sizePointNormalState, options.axisDivisionFactor);
-            }
-        }
+        const aggregationGroupWidth = that._getAggregationGroupWidth();
 
         const minInterval = !options.aggregationGroupWidth && !aggregationInterval && range.interval;
-
         const generateTicks = configureGenerator(options, aggregationGroupWidth, businessRange, that._getScreenDelta(), minInterval);
+
         const tickInterval = generateTicks(aggregationInterval, true, minVisible, maxVisible, that._seriesData?.breaks).tickInterval;
-
-        if(options.type !== constants.discrete) {
-            const min = useAllAggregatedPoints ? businessRange.min : minVisible;
-            const max = useAllAggregatedPoints ? businessRange.max : maxVisible;
-            if(isDefined(min) && isDefined(max)) {
-                const add = getAddFunction({
-                    base: options.logarithmBase,
-                    axisType: options.type,
-                    dataType: options.dataType
-                }, false);
-
-                let start = min;
-                let end = max;
-                if(!useAllAggregatedPoints && isDefined(tickInterval)) {
-                    const maxMinDistance = Math.max(that.calculateInterval(max, min), options.dataType === 'datetime' ? dateUtils.dateToMilliseconds(tickInterval) : tickInterval);
-                    start = add(min, maxMinDistance, -1);
-                    end = add(max, maxMinDistance);
-                }
-                start = start < businessRange.min ? businessRange.min : start;
-                end = end > businessRange.max ? businessRange.max : end;
-                const breaks = that._getScaleBreaks(options, {
-                    minVisible: start,
-                    maxVisible: end
-                }, that._series, that.isArgumentAxis);
-                const filteredBreaks = that._filterBreaks(breaks, {
-                    minVisible: start,
-                    maxVisible: end
-                }, options.breakStyle);
-                ticks = generateTicks(tickInterval, false, start, end, filteredBreaks).ticks;
-            }
-        }
+        const ticks = that._generateTick(useAllAggregatedPoints, businessRange, minVisible, maxVisible, tickInterval, generateTicks);
 
         that._aggregationInterval = tickInterval;
 
@@ -1558,6 +1513,68 @@ Axis.prototype = {
             interval: tickInterval,
             ticks: ticks
         };
+    },
+
+    _getAggregationGroupWidth() {
+        const { checkInterval, sizePointNormalState } = this._marginOptions || {};
+        const { aggregationGroupWidth, axisDivisionFactor } = this._options;
+
+        if(aggregationGroupWidth) {
+            return aggregationGroupWidth;
+        }
+
+        if(sizePointNormalState) {
+            return Math.min(sizePointNormalState, axisDivisionFactor);
+        }
+
+        if(checkInterval) {
+            return axisDivisionFactor;
+        }
+
+        return aggregationGroupWidth;
+    },
+
+    _generateTick(useAllAggregatedPoints, businessRange, minVisible, maxVisible, tickInterval, generateTicks) {
+        const min = useAllAggregatedPoints ? businessRange.min : minVisible;
+        const max = useAllAggregatedPoints ? businessRange.max : maxVisible;
+
+
+        if(!isDefined(min) || !isDefined(max)) {
+            return [];
+        }
+
+        const that = this;
+        const options = that._options;
+
+        const add = getAddFunction({
+            base: options.logarithmBase,
+            axisType: options.type,
+            dataType: options.dataType
+        }, false);
+
+        let start = min;
+        let end = max;
+
+        if(!useAllAggregatedPoints && isDefined(tickInterval)) {
+            const maxMinDistance = Math.max(that.calculateInterval(max, min), options.dataType === 'datetime' ? dateUtils.dateToMilliseconds(tickInterval) : tickInterval);
+            start = add(min, maxMinDistance, -1);
+            end = add(max, maxMinDistance);
+        }
+
+        start = start < businessRange.min ? businessRange.min : start;
+        end = end > businessRange.max ? businessRange.max : end;
+
+        const breaks = that._getScaleBreaks(options, {
+            minVisible: start,
+            maxVisible: end
+        }, that._series, that.isArgumentAxis);
+
+        const filteredBreaks = that._filterBreaks(breaks, {
+            minVisible: start,
+            maxVisible: end
+        }, options.breakStyle);
+
+        return generateTicks(tickInterval, false, start, end, filteredBreaks).ticks;
     },
 
     getTickInterval() {
@@ -1864,17 +1881,35 @@ Axis.prototype = {
         };
     },
 
+    _shouldCorrectValuesToZero(minValue, maxValue) {
+        if(this.isArgumentAxis || this._options.dataType === 'datetime') {
+            return false;
+        }
+
+        const dataRange = this._getViewportRange();
+
+        if(minValue > dataRange.max || minValue > dataRange.maxVisible) {
+            return false;
+        }
+
+        if(maxValue < dataRange.min || maxValue < dataRange.minVisible) {
+            return false;
+        }
+
+        return true;
+    },
     getCorrectedValuesToZero(minValue, maxValue) {
         const that = this;
         const translator = that._translator;
         const canvasStartEnd = that._getCanvasStartEnd();
         const dataRange = that._getViewportRange();
         const screenDelta = that._getScreenDelta();
-        const options = that._options;
+
         let start;
         let end;
         let correctedMin;
         let correctedMax;
+
         const correctZeroLevel = (minPoint, maxPoint) => {
             const minExpectedPadding = _abs(canvasStartEnd.start - minPoint);
             const maxExpectedPadding = _abs(canvasStartEnd.end - maxPoint);
@@ -1884,7 +1919,8 @@ Axis.prototype = {
             start = minExpectedPadding / coeff;
             end = maxExpectedPadding / coeff;
         };
-        if(!that.isArgumentAxis && options.dataType !== 'datetime') {
+
+        if(that._shouldCorrectValuesToZero(minValue, maxValue)) {
             if(minValue * dataRange.min <= 0 && minValue * dataRange.minVisible <= 0) {
                 correctZeroLevel(translator.translate(0), translator.translate(maxValue));
                 correctedMin = 0;
@@ -1895,6 +1931,7 @@ Axis.prototype = {
                 correctedMax = 0;
             }
         }
+
         return {
             start: isFinite(start) ? start : null,
             end: isFinite(end) ? end : null,

@@ -14,7 +14,7 @@ $(() => {
     columns: [
       {
         dataField: 'Status',
-        fieldValueTemplate({ field: { value } }) {
+        fieldValueTemplate({ field: { value } }) {          
           return $('<div>')
             .append(
               $('<div>').addClass('indicator')
@@ -23,12 +23,11 @@ $(() => {
               $('<div>').text(value)
             )
             .addClass('status')
-            .addClass(
-              value === 'Salaried'
-                ? 'status--ok'
-                : 'status--warning'
-            );
-        }
+            .toggleClass('status--salaried', value === 'Salaried')
+            .toggleClass('status--commission', value === 'Commission')
+            .toggleClass('status--terminated', value === 'Terminated');
+        },
+        allowSearch: false,
       },
       {
         caption: 'Full Name',
@@ -50,7 +49,8 @@ $(() => {
           return $('<a>')
             .attr('href', `mailto:${value}`)
             .text(text);
-        }
+        },
+        allowSearch: false,
       },
       {
         caption: 'Address',
@@ -58,12 +58,12 @@ $(() => {
         allowSorting: true,
         calculateFieldValue({ State, City }) {
           return `${City}, ${State}`;
-        }
+        },
       },
     ],
     cardFooterTemplate() {
       return $('<div>')
-        .addClass('footer')
+        .addClass('card-footer')
         .append(
           $('<div>').dxButton({
             text: 'Call',
@@ -79,7 +79,7 @@ $(() => {
           }),
           $('<div>').dxButton({
             text: 'Send Email',
-            icon: 'send',
+            icon: 'message',
             type: 'default',
             stylingMode: 'contained',
             onClick() {

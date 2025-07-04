@@ -13,6 +13,7 @@ import {
 
 import {
     Cancelable,
+    AsyncCancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
@@ -50,9 +51,9 @@ export type DisposingEvent = EventInfo<dxPopover>;
  * @docid _ui_popover_HidingEvent
  * @public
  * @type object
- * @inherits Cancelable,EventInfo
+ * @inherits AsyncCancelable,EventInfo
  */
-export type HidingEvent = Cancelable & EventInfo<dxPopover>;
+export type HidingEvent = AsyncCancelable & EventInfo<dxPopover>;
 
 /**
  * @docid _ui_popover_HiddenEvent
@@ -116,18 +117,10 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
     animation?: dxPopoverAnimation;
     /**
      * @docid
-     * @deprecated dxPopoverOptions.hideOnOutsideClick
-     * @type_function_param1 event:event
-     * @default true
-     * @public
-     */
-    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
-    /**
-     * @docid
      * @default "auto"
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * @docid
      * @default undefined
@@ -205,7 +198,7 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
      * @default "auto"
      * @public
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
 }
 /**
  * @docid

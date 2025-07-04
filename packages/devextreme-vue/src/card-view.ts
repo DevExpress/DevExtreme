@@ -39,12 +39,12 @@ import {
  Paging,
  RemoteOperations,
  SelectionConfiguration,
- Toolbar,
+ dxCardViewToolbar,
  CardHeaderItem,
  CardHeaderPredefinedItem,
  EditingTexts,
  PredefinedToolbarItem,
- ToolbarItem,
+ dxCardViewToolbarItem,
 } from "devextreme/ui/card_view";
 import {
  Mode,
@@ -62,9 +62,11 @@ import {
  Format as CommonFormat,
  SortOrder,
  ComparisonOperator,
+ DragHighlight,
  Direction,
  PositionAlignment,
  DisplayMode,
+ ScrollbarMode,
  TabsIconPosition,
  TabsStyle,
  Position,
@@ -308,7 +310,7 @@ const componentConfig = {
     focusStateEnabled: Boolean,
     headerFilter: Object as PropType<HeaderFilter | Record<string, any>>,
     headerPanel: Object as PropType<HeaderPanel | Record<string, any>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     keyExpr: [Array, String] as PropType<Array<string> | string>,
@@ -355,9 +357,9 @@ const componentConfig = {
     selection: Object as PropType<SelectionConfiguration | Record<string, any>>,
     sorting: Object as PropType<Sorting | Record<string, any>>,
     tabIndex: Number,
-    toolbar: Object as PropType<Toolbar | Record<string, any>>,
+    toolbar: Object as PropType<dxCardViewToolbar | Record<string, any>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    width: [Number, String],
     wordWrapEnabled: Boolean
   },
   emits: {
@@ -465,6 +467,7 @@ const componentConfig = {
       pager: { isCollectionItem: false, optionName: "pager" },
       paging: { isCollectionItem: false, optionName: "paging" },
       remoteOperations: { isCollectionItem: false, optionName: "remoteOperations" },
+      scrolling: { isCollectionItem: false, optionName: "scrolling" },
       searchPanel: { isCollectionItem: false, optionName: "searchPanel" },
       selection: { isCollectionItem: false, optionName: "selection" },
       sorting: { isCollectionItem: false, optionName: "sorting" },
@@ -645,7 +648,7 @@ const DxButtonOptionsConfig = {
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
@@ -663,7 +666,7 @@ const DxButtonOptionsConfig = {
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   }
 };
 
@@ -1285,6 +1288,39 @@ const DxCustomRule = defineComponent(DxCustomRuleConfig);
   type: "custom"
 };
 
+const DxDraggingConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:dropFeedbackMode": null,
+    "update:onDragChange": null,
+    "update:onDragEnd": null,
+    "update:onDragMove": null,
+    "update:onDragStart": null,
+    "update:onRemove": null,
+    "update:onReorder": null,
+    "update:scrollSensitivity": null,
+    "update:scrollSpeed": null,
+  },
+  props: {
+    dropFeedbackMode: String as PropType<DragHighlight>,
+    onDragChange: Function as PropType<((e: any) => void)>,
+    onDragEnd: Function as PropType<((e: any) => void)>,
+    onDragMove: Function as PropType<((e: any) => void)>,
+    onDragStart: Function as PropType<((e: any) => void)>,
+    onRemove: Function as PropType<((e: any) => void)>,
+    onReorder: Function as PropType<((e: any) => void)>,
+    scrollSensitivity: Number,
+    scrollSpeed: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxDraggingConfig);
+
+const DxDragging = defineComponent(DxDraggingConfig);
+
+(DxDragging as any).$_optionName = "dragging";
+
 const DxEditingConfig = {
   emits: {
     "update:isActive": null,
@@ -1499,7 +1535,7 @@ const DxFilterBuilderConfig = {
     focusStateEnabled: Boolean,
     groupOperationDescriptions: Object as PropType<Record<string, any>>,
     groupOperations: Array as PropType<Array<GroupOperation>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     maxGroupLevel: Number,
@@ -1514,7 +1550,7 @@ const DxFilterBuilderConfig = {
     tabIndex: Number,
     value: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   }
 };
 
@@ -1678,7 +1714,7 @@ const DxFormConfig = {
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
     formData: {},
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
@@ -1706,7 +1742,7 @@ const DxFormConfig = {
     tabIndex: Number,
     validationGroup: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   }
 };
 
@@ -1972,6 +2008,9 @@ prepareConfigurationComponentConfig(DxHeaderPanelConfig);
 const DxHeaderPanel = defineComponent(DxHeaderPanelConfig);
 
 (DxHeaderPanel as any).$_optionName = "headerPanel";
+(DxHeaderPanel as any).$_expectedChildren = {
+  dragging: { isCollectionItem: false, optionName: "dragging" }
+};
 
 const DxHideConfig = {
   emits: {
@@ -2154,7 +2193,6 @@ const DxLoadPanelConfig = {
     "update:hoveredElement": null,
     "update:animation": null,
     "update:bindingOptions": null,
-    "update:closeOnOutsideClick": null,
     "update:container": null,
     "update:deferRendering": null,
     "update:delay": null,
@@ -2191,22 +2229,21 @@ const DxLoadPanelConfig = {
   props: {
     animation: Object as PropType<Record<string, any>>,
     bindingOptions: Object as PropType<Record<string, any>>,
-    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     deferRendering: Boolean,
     delay: Number,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
     indicatorSrc: String,
-    maxHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    maxWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    maxHeight: [Number, String],
+    maxWidth: [Number, String],
     message: String,
-    minHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    minWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    minHeight: [Number, String],
+    minWidth: [Number, String],
     onContentReady: Function as PropType<((e: LoadPanelContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: LoadPanelDisposingEvent) => void)>,
     onHidden: Function as PropType<((e: HiddenEvent) => void)>,
@@ -2222,7 +2259,7 @@ const DxLoadPanelConfig = {
     showIndicator: Boolean,
     showPane: Boolean,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    width: [Number, String],
     wrapperAttr: {}
   }
 };
@@ -2516,6 +2553,29 @@ const DxRequiredRule = defineComponent(DxRequiredRuleConfig);
 (DxRequiredRule as any).$_predefinedProps = {
   type: "required"
 };
+
+const DxScrollingConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:scrollByContent": null,
+    "update:scrollByThumb": null,
+    "update:showScrollbar": null,
+    "update:useNative": null,
+  },
+  props: {
+    scrollByContent: Boolean,
+    scrollByThumb: Boolean,
+    showScrollbar: String as PropType<ScrollbarMode>,
+    useNative: [Boolean, String] as PropType<boolean | Mode>
+  }
+};
+
+prepareConfigurationComponentConfig(DxScrollingConfig);
+
+const DxScrolling = defineComponent(DxScrollingConfig);
+
+(DxScrolling as any).$_optionName = "scrolling";
 
 const DxSearchConfig = {
   emits: {
@@ -2891,7 +2951,7 @@ const DxTabPanelOptionsConfig = {
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     iconPosition: String as PropType<TabsIconPosition>,
@@ -2926,7 +2986,7 @@ const DxTabPanelOptionsConfig = {
     tabIndex: Number,
     tabsPosition: String as PropType<Position>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   }
 };
 
@@ -3052,7 +3112,7 @@ const DxToolbarConfig = {
   },
   props: {
     disabled: Boolean,
-    items: Array as PropType<Array<PredefinedToolbarItem | ToolbarItem>>,
+    items: Array as PropType<Array<dxCardViewToolbarItem | PredefinedToolbarItem>>,
     multiline: Boolean,
     visible: Boolean
   }
@@ -3179,6 +3239,7 @@ export {
   DxCompareRule,
   DxCustomOperation,
   DxCustomRule,
+  DxDragging,
   DxEditing,
   DxEditingTexts,
   DxEmailRule,
@@ -3211,6 +3272,7 @@ export {
   DxRangeRule,
   DxRemoteOperations,
   DxRequiredRule,
+  DxScrolling,
   DxSearch,
   DxSearchPanel,
   DxSelection,

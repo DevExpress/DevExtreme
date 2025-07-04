@@ -1,18 +1,17 @@
 import type { dxElementWrapper } from '@js/core/renderer';
-import type CollectionWidget from '@ts/ui/collection/m_collection_widget.edit';
-import type { CollectionWidgetEditProperties } from '@ts/ui/collection/m_collection_widget.edit';
-
-import EditStrategy from './m_collection_widget.edit.strategy';
+import type { CollectionWidgetItem } from '@js/ui/collection/ui.collection_widget.base';
+import type { CollectionItemIndex } from '@ts/ui/collection/m_collection_widget.edit.strategy';
+import EditStrategy from '@ts/ui/collection/m_collection_widget.edit.strategy';
 
 class PlainEditStrategy<
-  // @ts-expect-error
-  TComponent extends CollectionWidget<CollectionWidgetEditProperties> = CollectionWidget<CollectionWidgetEditProperties>,
-> extends EditStrategy<TComponent> {
-  _getPlainItems() {
-    return this._collectionWidget.option('items') || [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TItem extends CollectionWidgetItem = any,
+> extends EditStrategy<TItem> {
+  _getPlainItems(): TItem[] {
+    return this._getItems() ?? [];
   }
 
-  getIndexByItemData(itemData) {
+  getIndexByItemData(itemData: TItem): number {
     const keyOf = this._collectionWidget.keyOf.bind(this._collectionWidget);
     if (keyOf) {
       return this.getIndexByKey(keyOf(itemData));
@@ -20,7 +19,7 @@ class PlainEditStrategy<
     return this._getPlainItems().indexOf(itemData);
   }
 
-  getItemDataByIndex(index) {
+  getItemDataByIndex(index: number): TItem {
     return this._getPlainItems()[index];
   }
 
@@ -28,32 +27,29 @@ class PlainEditStrategy<
     this._getPlainItems().splice(index, 1);
   }
 
-  itemsGetter() {
+  itemsGetter(): TItem[] {
     return this._getPlainItems();
   }
 
-  getKeysByItems(items) {
+  getKeysByItems(items: TItem[]): (string | number)[] {
     const keyOf = this._collectionWidget.keyOf.bind(this._collectionWidget);
-    let result = items;
+    let result: (string | number | TItem)[] = items;
     if (keyOf) {
-      result = [];
-      for (let i = 0; i < items.length; i++) {
-        result.push(keyOf(items[i]));
-      }
+      result = items.map((item) => keyOf(item) as string | number);
     }
-    return result;
+    return result as (string | number)[];
   }
 
-  getIndexByKey(key): number {
+  getIndexByKey(key: string | number): number {
     const cache = this._cache;
-    const keys = cache && cache.keys || this.getKeysByItems(this._getPlainItems());
+    const keys = cache?.keys ?? this.getKeysByItems(this._getPlainItems());
 
     if (cache && !cache.keys) {
       cache.keys = keys;
     }
 
     if (typeof key === 'object') {
-      for (let i = 0, { length } = keys; i < length; i++) {
+      for (let i = 0; i < keys.length; i += 1) {
         if (this._equalKeys(key, keys[i])) return i;
       }
     } else {
@@ -63,11 +59,15 @@ class PlainEditStrategy<
     return -1;
   }
 
-  getItemsByKeys(keys, items) {
-    return (items || keys).slice();
+  // eslint-disable-next-line class-methods-use-this
+  getItemsByKeys(keys: (string | number)[], items?: TItem[]): TItem[] {
+    return (items ?? keys).slice() as TItem[];
   }
 
-  moveItemAtIndexToIndex(movingIndex, destinationIndex): void {
+  moveItemAtIndexToIndex(
+    movingIndex: number,
+    destinationIndex: number,
+  ): void {
     const items = this._getPlainItems();
     const movedItemData = items[movingIndex];
 
@@ -76,7 +76,7 @@ class PlainEditStrategy<
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _isItemIndex(index: Element | number): boolean {
+  _isItemIndex(index: number | Element | TItem): boolean {
     return (typeof index === 'number') && Math.round(index) === index;
   }
 
@@ -84,21 +84,32 @@ class PlainEditStrategy<
     return this._collectionWidget._itemElements().index(itemElement);
   }
 
-  _normalizeItemIndex(index) {
-    return index;
+  // eslint-disable-next-line class-methods-use-this
+  _normalizeItemIndex(
+    index: CollectionItemIndex,
+  ): number {
+    return index as number;
   }
 
-  _denormalizeItemIndex(index) {
+  // eslint-disable-next-line class-methods-use-this
+  _denormalizeItemIndex(
+    index: number,
+  ): CollectionItemIndex {
     return index;
   }
 
   _getItemByNormalizedIndex(index: number): dxElementWrapper {
-    // @ts-expect-error ts-error
+    // @ts-expect-error - eq() can return null but we handle it appropriately
     return index > -1 ? this._collectionWidget._itemElements().eq(index) : null;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _itemsFromSameParent(firstIndex, secondIndex): boolean {
+  // eslint-disable-next-line class-methods-use-this
+  _itemsFromSameParent(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _firstIndex: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _secondIndex: number,
+  ): boolean {
     return true;
   }
 }

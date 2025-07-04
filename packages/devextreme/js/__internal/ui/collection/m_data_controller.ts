@@ -186,11 +186,11 @@ class DataController {
     return this._dataSource.reload();
   }
 
-  on(event, handler) {
+  on(event, handler): void {
     this._dataSource.on(event, handler);
   }
 
-  off(event, handler) {
+  off(event, handler): void {
     this._dataSource.off(event, handler);
   }
 }

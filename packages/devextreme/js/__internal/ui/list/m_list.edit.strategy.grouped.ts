@@ -4,24 +4,37 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { isNumeric } from '@js/core/utils/type';
+import type { Item } from '@js/ui/list';
+import type { CollectionItemIndex } from '@ts/ui/collection/m_collection_widget.edit.strategy';
 import EditStrategy from '@ts/ui/collection/m_collection_widget.edit.strategy.plain';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_GROUP_CLASS = 'dx-list-group';
 
 const SELECTION_SHIFT = 20;
+// eslint-disable-next-line no-bitwise
 const SELECTION_MASK = (1 << SELECTION_SHIFT) - 1;
+
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+type GroupedItem = {
+  [key: string]: unknown;
+  key?: unknown;
+  items?: unknown[];
+};
 
 const combineIndex = (
   indices: { group: number; item: number },
+// eslint-disable-next-line no-bitwise
 ): number => (indices.group << SELECTION_SHIFT) + indices.item;
 
 const splitIndex = (combinedIndex: number): { group: number; item: number } => ({
+  // eslint-disable-next-line no-bitwise
   group: combinedIndex >> SELECTION_SHIFT,
+  // eslint-disable-next-line no-bitwise
   item: combinedIndex & SELECTION_MASK,
 });
-class GroupedEditStrategy extends EditStrategy {
-  _groupElements() {
+class GroupedEditStrategy extends EditStrategy<Item> {
+  _groupElements(): dxElementWrapper {
     return this._collectionWidget._itemContainer().find(`.${LIST_GROUP_CLASS}`);
   }
 
@@ -30,17 +43,19 @@ class GroupedEditStrategy extends EditStrategy {
     return $group.find(`.${LIST_ITEM_CLASS}`);
   }
 
-  getIndexByItemData(itemData) {
-    const groups = this._collectionWidget.option('items');
+  getIndexByItemData(itemData: Item): number {
+    const groups = this._getItems();
     let index = false;
-
+    // @ts-expect-error ts-error
     if (!itemData) return false;
-
+    // @ts-expect-error ts-error
     if (itemData.items?.length) {
-      // eslint-disable-next-line prefer-destructuring
+      // @ts-expect-error ts-error
+      // eslint-disable-next-line prefer-destructuring, no-param-reassign
       itemData = itemData.items[0];
     }
-    // @ts-expect-error
+    // @ts-expect-error ts-error
+    // eslint-disable-next-line consistent-return
     each(groups, (groupIndex, group) => {
       if (!group.items) return false;
 
@@ -48,7 +63,7 @@ class GroupedEditStrategy extends EditStrategy {
         if (item !== itemData) {
           return true;
         }
-        // @ts-expect-error
+        // @ts-expect-error ts-error
         index = {
           group: groupIndex,
           item: itemIndex,
@@ -61,28 +76,29 @@ class GroupedEditStrategy extends EditStrategy {
         return false;
       }
     });
-
+    // @ts-expect-error ts-error
     return index;
   }
 
-  getItemDataByIndex(index) {
-    const items = this._collectionWidget.option('items');
+  getItemDataByIndex(index: CollectionItemIndex): Item {
+    const items = this._getItems();
 
     if (isNumeric(index)) {
       return this.itemsGetter()[index];
     }
-    return (index && items[index.group]?.items[index.item]) || null;
+    // @ts-expect-error ts-error
+    return ((index && items[index.group]?.items[index.item]) || null) as Item;
   }
 
-  itemsGetter() {
-    let resultItems = [];
-    const { items } = this._collectionWidget.option();
+  itemsGetter(): Item[] {
+    let resultItems: Item[] = [];
+    const items = this._getItems();
 
-    for (let i = 0; i < items.length; i++) {
-      if (items[i]?.items) {
-        resultItems = resultItems.concat(items[i].items);
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    for (let i = 0; i < items.length; i += 1) {
+      if ((items[i] as GroupedItem)?.items) {
+        resultItems = resultItems.concat((items[i] as GroupedItem).items as Item[]);
       } else {
-        // @ts-expect-error
         resultItems.push(items[i]);
       }
     }
@@ -96,111 +112,99 @@ class GroupedEditStrategy extends EditStrategy {
     itemGroup.splice(indices.item, 1);
   }
 
-  getKeysByItems(items) {
-    let plainItems = [];
-    let i;
-    for (i = 0; i < items.length; i++) {
-      if (items[i]?.items) {
-        plainItems = plainItems.concat(items[i].items);
-      } else {
-        // @ts-expect-error
-        plainItems.push(items[i]);
+  getKeysByItems(items: unknown[]): (string | number)[] {
+    const plainItems = items.reduce((counter: unknown[], item) => {
+      if ((item as GroupedItem)?.items) {
+        return counter.concat((item as GroupedItem).items as unknown[]);
       }
-    }
+      counter.push(item);
+      return counter;
+    }, []);
 
-    const result = [];
-
-    for (i = 0; i < plainItems.length; i++) {
-      // @ts-expect-error
-      result.push(this._collectionWidget.keyOf(plainItems[i]));
-    }
-
-    return result;
+    return plainItems.map(
+      (plainItem) => this._collectionWidget.keyOf(plainItem) as string | number,
+    );
   }
 
-  getIndexByKey(key, items?) {
-    const groups = items || this._collectionWidget.option('items');
-    let index = -1;
-    const that = this;
-    // @ts-expect-error
-    each(groups, (groupIndex, group) => {
-      if (!group.items) return;
-      // @ts-expect-error
-      each(group.items, (itemIndex, item) => {
-        const itemKey = that._collectionWidget.keyOf(item);
-        if (that._equalKeys(itemKey, key)) {
-          // @ts-expect-error
+  getIndexByKey(key: string | number, items?: unknown[]): number {
+    const groups = items ?? this._collectionWidget.option('items');
+    let index: CollectionItemIndex = -1;
+    each(groups, (groupIndex: number, group: GroupedItem) => {
+      if (!group.items) return undefined;
+      each(group.items, (itemIndex: number, item: unknown) => {
+        const itemKey = this._collectionWidget.keyOf(item);
+        if (this._equalKeys(itemKey, key)) {
           index = {
             group: groupIndex,
             item: itemIndex,
           };
           return false;
         }
+        return undefined;
       });
 
       if (index !== -1) {
         return false;
       }
+      return undefined;
     });
 
-    return index;
+    return typeof index === 'object' ? combineIndex(index) : index;
   }
 
-  _getGroups(items) {
-    // @ts-expect-error
+  _getGroups(items: unknown): unknown {
     const dataController = this._collectionWidget._dataController;
-    const group = dataController.group();
+    const group = (dataController as unknown as { group: () => unknown }).group();
 
     if (group) {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       return storeHelper.queryByOptions(query(items), { group }).toArray();
     }
 
     return this._collectionWidget.option('items');
   }
 
-  getItemsByKeys(keys, items) {
-    const result = [];
-    const groups = this._getGroups(items);
-    const groupItemByKeyMap = {};
+  getItemsByKeys(keys: (string | number)[], items?: Item[]): Item[] {
+    const result: Item[] = [];
+    const groups = this._getGroups(items) as Item[];
+    const groupItemByKeyMap: Record<string, Item> = {};
 
-    const getItemMeta = (key) => {
+    const getItemMeta = (key: string | number): { groupKey: string; item: Item } | undefined => {
       const index = this.getIndexByKey(key, groups);
-      // @ts-expect-error
-      const group = index && groups[index.group];
+      const splitIdx = splitIndex(index);
+      const group = splitIdx && groups[splitIdx.group];
 
-      if (!group) return;
+      if (!group) return undefined;
 
       return {
-        groupKey: group.key,
-        // @ts-expect-error
-        item: group.items[index.item],
+        groupKey: String((group as GroupedItem).key),
+        item: ((group as GroupedItem).items as Item[])[splitIdx.item],
       };
     };
 
     each(keys, (_, key) => {
       const itemMeta = getItemMeta(key);
 
-      if (!itemMeta) return;
+      if (!itemMeta) return undefined;
 
       const { groupKey } = itemMeta;
       const { item } = itemMeta;
 
       let selectedGroup = groupItemByKeyMap[groupKey];
       if (!selectedGroup) {
-        selectedGroup = { key: groupKey, items: [] };
+        selectedGroup = { key: groupKey, items: [] } as Item;
         groupItemByKeyMap[groupKey] = selectedGroup;
-        // @ts-expect-error
         result.push(selectedGroup);
       }
 
-      selectedGroup.items.push(item);
+      ((selectedGroup as unknown as GroupedItem).items as Item[]).push(item);
+      return undefined;
     });
 
     return result;
   }
 
-  moveItemAtIndexToIndex(movingIndex, destinationIndex) {
+  moveItemAtIndexToIndex(movingIndex: number, destinationIndex: number): void {
     const items = this._collectionWidget.option('items');
 
     const movingIndices = splitIndex(movingIndex);
@@ -214,14 +218,13 @@ class GroupedEditStrategy extends EditStrategy {
     destinationItemGroup.splice(destinationIndices.item, 0, movedItemData);
   }
 
-  // @ts-expect-error
   // eslint-disable-next-line class-methods-use-this
-  _isItemIndex(index: { group: number; item: number }): boolean {
-    return index && isNumeric(index.group) && isNumeric(index.item);
+  _isItemIndex(index: unknown): boolean {
+    const idx = index as { group?: number; item?: number };
+    return Boolean(index && isNumeric(idx.group) && isNumeric(idx.item));
   }
 
-  // @ts-expect-error
-  _getNormalizedItemIndex(itemElement: Element): number | { group: number; index: number } {
+  _getNormalizedItemIndex(itemElement: Element): number {
     const $item = $(itemElement);
     const $group = $item.closest(`.${LIST_GROUP_CLASS}`);
 
@@ -252,7 +255,8 @@ class GroupedEditStrategy extends EditStrategy {
     return this._groupItemElements($group).eq(indices.item);
   }
 
-  _itemsFromSameParent(firstIndex, secondIndex): boolean {
+  // eslint-disable-next-line class-methods-use-this
+  _itemsFromSameParent(firstIndex: number, secondIndex: number): boolean {
     return splitIndex(firstIndex).group === splitIndex(secondIndex).group;
   }
 }

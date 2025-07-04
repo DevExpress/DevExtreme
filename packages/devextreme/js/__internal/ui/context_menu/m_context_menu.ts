@@ -153,13 +153,6 @@ class ContextMenu extends MenuBase {
     }]);
   }
 
-  _setDeprecatedOptions(): void {
-    super._setDeprecatedOptions();
-    extend(this._deprecatedOptions, {
-      closeOnOutsideClick: { since: '22.2', alias: 'hideOnOutsideClick' },
-    });
-  }
-
   _initActions(): void {
     this._actions = {};
 
@@ -630,15 +623,13 @@ class ContextMenu extends MenuBase {
   }
 
   _shouldHideOnOutsideClick(e) {
-    // @ts-expect-error
-    const { closeOnOutsideClick, hideOnOutsideClick } = this.option();
+    const hideOnOutsideClick = this.option('hideOnOutsideClick');
 
     if (isFunction(hideOnOutsideClick)) {
       return hideOnOutsideClick(e);
-    } if (isFunction(closeOnOutsideClick)) {
-      return closeOnOutsideClick(e);
     }
-    return hideOnOutsideClick || closeOnOutsideClick;
+
+    return hideOnOutsideClick;
   }
 
   _hideOnOutsideClickHandler(e): boolean {
@@ -723,6 +714,11 @@ class ContextMenu extends MenuBase {
     $submenu.css('height', isNestedSubmenu ? menuHeight : '100%');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _getMaxUsableSpace(offsetTop: number, windowHeight: number, anchorHeight: number): number {
+    return windowHeight;
+  }
+
   _getMaxHeight(anchor, considerAnchorHeight = true) {
     const windowHeight = getOuterHeight(window);
     const isAnchorRenderer = isRenderer(anchor);
@@ -736,7 +732,7 @@ class ContextMenu extends MenuBase {
     const offsetTop = anchor[0].getBoundingClientRect().top;
     const anchorHeight = getOuterHeight(anchor);
     const availableHeight = considerAnchorHeight
-      ? Math.max(offsetTop, windowHeight - offsetTop - anchorHeight)
+      ? this._getMaxUsableSpace(offsetTop, windowHeight, anchorHeight)
       : Math.max(offsetTop + anchorHeight, windowHeight - offsetTop);
 
     return availableHeight - SUBMENU_PADDING;
@@ -1019,7 +1015,6 @@ class ContextMenu extends MenuBase {
         }
         this._invalidate();
         break;
-      case 'closeOnOutsideClick':
       case 'hideOnOutsideClick':
       case 'hideOnParentScroll':
       case 'visualContainer':
@@ -1062,6 +1057,7 @@ class ContextMenu extends MenuBase {
       const $subMenu = $(this._overlay.content()).children(`.${DX_SUBMENU_CLASS}`);
 
       this._setOptionWithoutOptionChange('visible', true);
+      // @ts-expect-error ts-error
       this._overlay.option({
         height: () => this._getMaxHeight(position.of),
         maxHeight: () => {

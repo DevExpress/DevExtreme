@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { query as Query } from 'devextreme-react/common/data';
-import { formatDate } from 'devextreme/localization';
+import { formatDate } from 'devextreme-react/common/core/localization';
 import { moviesData } from './data.js';
 
 const getMovieById = (id) => Query(moviesData).filter(['id', id]).toArray()[0];

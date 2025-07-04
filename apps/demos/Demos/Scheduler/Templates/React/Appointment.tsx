@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { query as Query } from 'devextreme-react/common/data';
-import { formatDate } from 'devextreme/localization';
+import { formatDate } from 'devextreme-react/common/core/localization';
 import { type SchedulerTypes } from 'devextreme-react/scheduler';
 import { moviesData } from './data.ts';
 

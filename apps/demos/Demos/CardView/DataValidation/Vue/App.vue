@@ -4,7 +4,7 @@
     key-expr="id"
     cards-per-row="auto"
     :card-min-width="350"
-    :height="820"
+    :height="840"
   >
     <DxSearchPanel
       :visible="true"
@@ -17,7 +17,7 @@
       :allow-adding="true"
       :allow-updating="true"
       :allow-deleting="true"
-      :popup="{ // todo: move to nested
+      :popup="{
         title: 'Employee Info',
         showTitle: true,
         width: 700,
@@ -57,6 +57,9 @@
             data-field="title"
           />
           <DxItem
+            data-field="department"
+          />
+          <DxItem
             data-field="notes"
             editor-type="dxTextArea"
             :col-span="2"
@@ -84,6 +87,10 @@
           />
           <DxItem
             data-field="mobilePhone"
+            :editor-options="{
+              mask:'+1 (000) 000-0000',
+              useMaskedValue: true,
+            }"
           />
           <DxItem
             data-field="email"
@@ -120,10 +127,7 @@
     <DxColumn data-field="department"/>
     <DxColumn data-field="address"/>
     <DxColumn data-field="mobilePhone">
-      <DxPatternRule
-        message="Your phone must have '(555) 555-5555' format!"
-        :pattern="/^\(\d{3}\) \d{3}-\d{4}$/i"
-      />
+      <DxRequiredRule/>
     </DxColumn>
     <DxColumn data-field="email">
       <DxEmailRule/>

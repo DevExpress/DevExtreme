@@ -49,6 +49,8 @@ export interface TabPanelItemInfo<TItem extends ItemLike> {
     readonly itemData?: TItem;
     /** @docid */
     readonly itemElement?: DxElement;
+    /** @docid */
+    readonly itemIndex: number;
 }
 
 /**

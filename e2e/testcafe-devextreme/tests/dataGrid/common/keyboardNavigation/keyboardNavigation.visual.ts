@@ -262,6 +262,69 @@ test('Navigate to first cell in the row that contains focus when virtual columns
   },
 }));
 
+test('Navigate to last cell in the row that contains focus when adaptivity is enabled', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .pressKey('end');
+
+  await takeScreenshot('navigate_to_last_cell_in_row_that_contains_focus_when_adaptivity_is_enabled', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 50),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+  customizeColumns(columns) {
+    columns[columns.length - 1].hidingPriority = 0;
+    columns.splice(columns.length - 2, 0, { type: 'adaptive', width: 100 });
+  },
+}));
+
+test('Navigate to first cell in the row that contains focus when adaptivity is enabled', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await dataGrid.scrollTo(t, { x: 4200 });
+
+  // assert
+  await t
+    .expect(dataGrid.getScrollLeft())
+    .eql(4200);
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 50).element)
+    .pressKey('home');
+
+  await takeScreenshot('navigate_to_first_cell_in_row_that_contains_focus_when_adaptivity_is_enabled', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 50),
+  columnWidth: 100,
+  height: 500,
+  width: 800,
+  showBorders: true,
+  customizeColumns(columns) {
+    columns[0].hidingPriority = 0;
+    columns.push({ type: 'adaptive', width: 100 });
+  },
+}));
+
 // Quick navigation through grid rows via Ctrl+Home and Ctrl+End keys
 test('Focus the last cell in the last row when pressing the Ctrl+End key', async (t) => {
   // arrange

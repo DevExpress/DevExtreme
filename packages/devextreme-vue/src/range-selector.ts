@@ -1504,7 +1504,6 @@ const DxScaleConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:aggregateByCategory": null,
     "update:aggregationGroupWidth": null,
     "update:aggregationInterval": null,
     "update:allowDecimals": null,
@@ -1536,7 +1535,6 @@ const DxScaleConfig = {
     "update:workWeek": null,
   },
   props: {
-    aggregateByCategory: Boolean,
     aggregationGroupWidth: Number,
     aggregationInterval: [Number, Object, String] as PropType<number | Record<string, any> | TimeInterval>,
     allowDecimals: Boolean,

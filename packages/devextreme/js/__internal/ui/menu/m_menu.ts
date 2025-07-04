@@ -381,6 +381,7 @@ class Menu extends MenuBase {
 
     return {
       _ignoreFunctionValueDeprecation: true,
+      // @ts-expect-error ts-error
       maxHeight: () => getElementMaxHeightByWindow(this.$element()),
       deferRendering: false,
       shading: false,

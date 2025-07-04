@@ -26,7 +26,6 @@ export class AppComponent {
 
   phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/i;
 
-  // todo: move to nested components
   popupConfig = {
     title: 'Employee Info',
     showTitle: true,

@@ -25,6 +25,7 @@
     <DxColumn
       data-field="Status"
       field-value-template="statusTemplate"
+      :allow-search="false"
     />
     <DxColumn
       caption="Full Name"
@@ -45,6 +46,7 @@
     <DxColumn
       data-field="Email"
       field-value-template="emailTemplate"
+      :allow-search="false"
     />
     <DxColumn
       caption="Address"
@@ -57,8 +59,9 @@
     >
       <div
         :class="['status', {
-          'status--ok': data.field.value === 'Salaried',
-          'status--warning': data.field.value !== 'Salaried',
+          'status--salaried': data.field.value === 'Salaried',
+          'status--commission': data.field.value === 'Commission',
+          'status--terminated': data.field.value === 'Terminated',
         }]"
       >
         <span class="indicator"/>
@@ -73,7 +76,7 @@
     <template
       #footerTemplate="{ data }"
     >
-      <div class="footer">
+      <div class="card-footer">
         <DxButton
           text="Call"
           icon="tel"
@@ -83,7 +86,7 @@
         />
         <DxButton
           text="Send Email"
-          icon="send"
+          icon="message"
           type="default"
           styling-mode="contained"
           @click="showNotify('Send Email')"
@@ -102,16 +105,6 @@ import notify from 'devextreme/ui/notify';
 import { ref } from 'vue';
 import type { Employee } from './data.ts';
 import { employees } from './data.ts';
-
-// TODO: Nested component does not exist
-const headerFilterConfig = {
-  visible: true,
-};
-
-// TODO: Nested component does not exist
-const searchPanelConfig = {
-  visible: true,
-};
 
 function imageExpr({ First_Name, Last_Name }: Employee): string {
   return `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`;
@@ -141,13 +134,13 @@ const cardView = ref<DxCardView>();
 </script>
 
 <style>
-.footer {
+.card-footer {
   display: flex;
   padding: 12px;
   gap: 8px;
 }
 
-.footer > * {
+.card-footer > * {
   flex-grow: 1;
   width: 100%
 }
@@ -157,12 +150,16 @@ const cardView = ref<DxCardView>();
   align-items: center;
 }
 
-.status--ok {
+.status--salaried {
   color: var(--dx-color-success);
 }
 
-.status--warning {
-  color: var(--dx-color-warning);
+.status--commission {
+  color: #f7630c;
+}
+
+.status--terminated {
+  color: var(--dx-color-danger);
 }
 
 .indicator {

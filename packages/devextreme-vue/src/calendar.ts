@@ -77,7 +77,7 @@ const componentConfig = {
     elementAttr: Object as PropType<Record<string, any>>,
     firstDayOfWeek: Number as PropType<FirstDayOfWeek>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
@@ -106,7 +106,7 @@ const componentConfig = {
     value: [Array, Date, Number, String] as PropType<(Array<Date | null | number | string>) | Date | null | number | string>,
     visible: Boolean,
     weekNumberRule: String as PropType<WeekNumberRule>,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    width: [Number, String],
     zoomLevel: String as PropType<CalendarZoomLevel>
   },
   emits: {

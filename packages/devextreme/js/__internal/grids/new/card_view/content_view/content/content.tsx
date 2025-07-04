@@ -15,6 +15,7 @@ import {
 import type { RefObject } from 'inferno';
 import { Component, createRef } from 'inferno';
 
+import type { CardProps } from './card/card';
 import { Card } from './card/card';
 
 export interface ContentProps {
@@ -41,6 +42,8 @@ export interface ContentProps {
 
   wordWrapEnabled: boolean;
 
+  onColumnGapChange?: (gap: number) => void;
+
   cardProps?: {
     minWidth?: number;
     maxWidth?: number;
@@ -51,6 +54,7 @@ export interface ContentProps {
     onFocusedCardChanged?: (card: CardInfo, cardIdx: number, element: HTMLElement) => void;
     onEdit?: (key: Key, returnFocusTo?: HTMLElement) => void;
     onDelete?: (key: Key, returnFocusTo?: HTMLElement) => void;
+    fieldProps?: CardProps['fieldProps'];
   };
 
   onPageChange?: (value: number) => void;
@@ -213,9 +217,12 @@ export class Content extends Component<ContentProps> {
     }
 
     const cardHeight = firstCardElement.offsetHeight;
-    const gapHeight = parseFloat(getComputedStyle(this.containerRef.current).rowGap);
-    const rowHeight = cardHeight + gapHeight;
+    const rowGap = parseFloat(getComputedStyle(this.containerRef.current).rowGap);
+    const rowHeight = cardHeight + rowGap;
     this.props.onRowHeightChange?.(rowHeight);
+
+    const columnGap = parseFloat(getComputedStyle(this.containerRef.current).columnGap);
+    this.props.onColumnGapChange?.(columnGap);
   }
 
   componentDidMount(): void {
