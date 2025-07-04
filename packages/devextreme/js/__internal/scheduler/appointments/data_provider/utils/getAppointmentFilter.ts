@@ -1,4 +1,5 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
+import { dateUtils } from '@ts/core/utils/m_date';
 
 import type { TimeZoneCalculator } from '../../../r1/timezone_calculator/calculator';
 import { isAppointmentTakesAllDay } from '../../../r1/utils/index';
@@ -58,14 +59,23 @@ export const getAppointmentFilter = (
       return false;
     }
 
-    const startDate = dateUtilsTs.addOffsets(appointment.startDate, [-viewOffset]);
-    const endDate = dateUtilsTs.addOffsets(appointment.endDate, [-viewOffset]);
     const appointmentToCompare: AppointmentDataItem = {
       ...appointment,
-      startDate,
-      endDate,
       allDay: isAppointmentOccupiesAllDayPanel,
     };
+    if (appointmentToCompare.allDay) {
+      appointmentToCompare.startDate = dateUtils.trimTime(appointmentToCompare.startDate);
+      appointmentToCompare.endDate = dateUtils.trimTime(appointmentToCompare.endDate);
+      appointmentToCompare.endDate.setHours(23, 59, 59, 999);
+    }
+    appointmentToCompare.startDate = dateUtilsTs.addOffsets(
+      appointmentToCompare.startDate,
+      [-viewOffset],
+    );
+    appointmentToCompare.endDate = dateUtilsTs.addOffsets(
+      appointmentToCompare.endDate,
+      [-viewOffset],
+    );
     const isOnlyDateCheck = !isTimeDateView || appointmentToCompare.allDay;
 
     const compareOptions = {
