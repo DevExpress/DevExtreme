@@ -10,7 +10,7 @@ export const getVisibleRecurrenceInterval = ({
   max,
   isOnlyDateCheck,
 }: CompareOptions): DateInterval => {
-  if (isOnlyDateCheck) {
+  if (isOnlyDateCheck || (startDayHour === 0 && endDayHour === 24)) {
     const [trimMin, trimMax] = getDatesWithoutTime(min, max);
 
     return { min: trimMin, max: trimMax };

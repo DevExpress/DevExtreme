@@ -33,6 +33,20 @@ const timeIntervals = [
 ];
 
 describe('isAppointmentMatchedIntervals', () => {
+  it('should compare zero-duration appointment on start of the time interval', () => {
+    expect(isAppointmentMatchedIntervals({
+      startDate: timeIntervals[1].min,
+      endDate: timeIntervals[1].min,
+    }, timeIntervals)).toBe(true);
+  });
+
+  it('should compare zero-duration appointment on start of the view interval', () => {
+    expect(isAppointmentMatchedIntervals({
+      startDate: viewIntervals[0].min,
+      endDate: viewIntervals[0].min,
+    }, viewIntervals)).toBe(true);
+  });
+
   describe.each([
     {
       title: 'one view interval',
