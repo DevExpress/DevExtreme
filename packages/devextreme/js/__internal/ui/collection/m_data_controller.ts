@@ -95,7 +95,7 @@ class DataController {
     this._dataSource._addSearchFilter(storeLoadOptions);
   }
 
-  group(group) {
+  group(group?) {
     return this._dataSource.group(group);
   }
 

@@ -4,16 +4,18 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { isRenderer } from '@js/core/utils/type';
-import type { CollectionWidgetItem } from '@js/ui/collection/ui.collection_widget.base';
+import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import type CollectionWidget from '@ts/ui/collection/m_collection_widget.edit';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/m_collection_widget.edit';
 
 export type CollectionItemIndex = number | { group: number; item: number };
 
 export type EditStrategyComponent<
-  TItem extends CollectionWidgetItem = CollectionWidgetItem,
+  TItem extends ItemLike = ItemLike,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey = any,
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-> = Pick<CollectionWidget<CollectionWidgetEditProperties<any, TItem>, TItem>,
+> = Pick<CollectionWidget<CollectionWidgetEditProperties<any, TItem, TKey>, TItem, TKey>,
   'keyOf'
   | '_isKeySpecified'
   | '_itemElements'
@@ -22,19 +24,22 @@ export type EditStrategyComponent<
   | '_dataController'
 >;
 
-interface KeysCache {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+interface KeysCache<TKey = any> {
   [key: string]: unknown;
-  keys?: (string | number)[];
+  keys?: TKey[];
 }
 class EditStrategy<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TItem extends CollectionWidgetItem = any,
+  TItem extends ItemLike = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey = any,
 > {
-  _collectionWidget!: EditStrategyComponent<TItem>;
+  _collectionWidget!: EditStrategyComponent<TItem, TKey>;
 
-  _cache?: KeysCache | null;
+  _cache?: KeysCache<TKey> | null;
 
-  constructor(collectionWidget: EditStrategyComponent<TItem>) {
+  constructor(collectionWidget: EditStrategyComponent<TItem, TKey>) {
     this._collectionWidget = collectionWidget;
   }
 
@@ -54,12 +59,12 @@ class EditStrategy<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
-  getKeysByItems(items: TItem[]): (string | number)[] {
+  getKeysByItems(items: TItem[]): TKey[] {
     return Class.abstract();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
-  getItemsByKeys(keys: (string | number)[], items?: TItem[]): TItem[] {
+  getItemsByKeys(keys: TKey[], items?: TItem[]): TItem[] {
     return Class.abstract();
   }
 
@@ -68,13 +73,13 @@ class EditStrategy<
     return Class.abstract();
   }
 
-  getKeyByIndex(index: number): string | number {
+  getKeyByIndex(index: number): TKey {
     const resultIndex = this._denormalizeItemIndex(index);
 
     return this.getKeysByItems([this.getItemDataByIndex(resultIndex as number)])[0];
   }
 
-  _equalKeys(key1: string | number, key2: string | number): boolean {
+  _equalKeys(key1: TKey, key2: TKey): boolean {
     if (this._collectionWidget._isKeySpecified()) {
       return equalByValue(key1, key2);
     }
@@ -90,7 +95,7 @@ class EditStrategy<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
-  getIndexByKey(key: string | number): number {
+  getIndexByKey(key: TKey): number {
     return Class.abstract();
   }
 
@@ -147,8 +152,7 @@ class EditStrategy<
 
   // eslint-disable-next-line class-methods-use-this
   _isNode(el: unknown): el is Element {
-    // @ts-expect-error Property 'get' does not exist on type 'unknown'
-    return domAdapter.isNode(el && isRenderer(el) ? el.get(0) : el);
+    return domAdapter.isNode(el && isRenderer(el) ? (el as dxElementWrapper).get(0) : el);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this

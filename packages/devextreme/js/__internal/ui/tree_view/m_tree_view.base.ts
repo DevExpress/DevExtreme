@@ -243,9 +243,9 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     ]);
   }
 
-  // TODO: implement these functions
   _initSelectedItems(): void {}
 
+  // @ts-expect-error ts-error
   _syncSelectionOptions(): Promise<unknown> { return Deferred().resolve().promise(); }
 
   _fireSelectionChanged(): void {

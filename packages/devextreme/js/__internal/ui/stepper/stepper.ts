@@ -3,7 +3,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import type { DxElement } from '@js/core/element';
 import $, { type dxElementWrapper } from '@js/core/renderer';
-import { Deferred } from '@js/core/utils/deferred';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { Item, Properties } from '@js/ui/stepper';
@@ -398,12 +398,14 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     this._processChangeCompletedItems();
   }
 
-  _syncSelectionOptions(byOption?: string): Promise<unknown> {
-    super._syncSelectionOptions(byOption).done(() => {
+  _syncSelectionOptions(byOption?: string): DeferredObj<unknown> {
+    const parentDeferred = super._syncSelectionOptions(byOption);
+
+    parentDeferred.done(() => {
       this._postProcessSyncSelection();
     });
 
-    return Deferred().resolve().promise();
+    return parentDeferred;
   }
 
   _itemOptionChanged(

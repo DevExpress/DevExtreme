@@ -72,6 +72,7 @@ export interface DataChange<TItem = CollectionItem, TKey = number | string> {
   key: TKey;
   type: DataChangeType;
   data: DeepPartial<TItem>;
+  index: number;
 }
 
 type ItemTemplate<TItem> = template | (
@@ -99,8 +100,7 @@ export interface CollectionWidgetBaseProperties<
     TComponent extends CollectionWidget<any, TItem, TKey> | any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TItem extends ItemLike = any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    TKey = any,
+    TKey = string | number,
 > extends CollectionWidgetOptions<TComponent, TItem, TKey> {
   focusedElement?: dxElementWrapper;
 
@@ -1405,7 +1405,7 @@ class CollectionWidget<
     initiator: dxElementWrapper | Element,
     handler: () => void,
     actionArgs: Record<string, unknown>,
-    actionConfig: ActionConfig,
+    actionConfig?: ActionConfig,
   ): void {
     const action = this._createAction(handler, extend({
       validatingTargetName: 'itemElement',
@@ -1437,8 +1437,7 @@ class CollectionWidget<
   }
 
   _getItemData(itemElement: Element | dxElementWrapper): TItem {
-    // @ts-expect-error ts-error
-    return $(itemElement).data(this._itemDataKey());
+    return $(itemElement).data(this._itemDataKey()) as TItem;
   }
 
   _getSummaryItemsSize(

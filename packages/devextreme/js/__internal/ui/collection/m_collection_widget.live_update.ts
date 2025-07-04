@@ -1,6 +1,7 @@
 import { indexByKey, insert, update } from '@js/common/data/array_utils';
 import { keysEqual } from '@js/common/data/utils';
 import domAdapter from '@js/core/dom_adapter';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { findChanges } from '@js/core/utils/array_compare';
 import { when } from '@js/core/utils/deferred';
@@ -11,17 +12,46 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import CollectionWidgetAsync from '@ts/ui/collection/m_collection_widget.async';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/m_collection_widget.edit';
 
+import type { DataChange } from './collection_widget.base';
+
 const PRIVATE_KEY_FIELD = '__dx_key__';
+
+type CachedItem<TItem> = TItem | {
+  [PRIVATE_KEY_FIELD]: TItem;
+  data: TItem;
+};
+
+export interface KeyInfo<TItem = unknown, TKey = string | number> {
+  key: () => string | Function | undefined;
+  keyOf: (item: TItem) => TKey;
+}
+
+export interface ChangeHandlerParams<TItem, TKey> {
+  keyInfo: KeyInfo<TItem, TKey>;
+  items: TItem[];
+  change: DataChange<TItem, TKey>;
+  isPartialRefresh?: boolean;
+}
+
+export interface CollectionWidgetLiveUpdateProperties<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TComponent extends CollectionWidgetLiveUpdate<any, TItem, TKey> | any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TItem extends ItemLike = any,
+  TKey = string | number,
+> extends CollectionWidgetEditProperties<TComponent, TItem, TKey> {
+  repaintChangesOnly?: boolean;
+}
 
 class CollectionWidgetLiveUpdate<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TProperties extends CollectionWidgetEditProperties<any, TItem, TKey>,
+  TProperties extends CollectionWidgetLiveUpdateProperties<any, TItem, TKey>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey = any,
 > extends CollectionWidgetAsync<TProperties> {
-  _itemsCache!: TItem[];
+  _itemsCache!: CachedItem<TItem>[];
 
   _getDefaultOptions(): TProperties {
     return {
@@ -30,29 +60,35 @@ class CollectionWidgetLiveUpdate<
     };
   }
 
-  reload(): void { }
+  // eslint-disable-next-line class-methods-use-this
+  reload(): void {}
 
   _init(): void {
     super._init();
     this._refreshItemsCache();
   }
 
-  _findItemElementByKey(key) {
+  _findItemElementByKey(key: TKey): dxElementWrapper {
     let result = $();
     const keyExpr = this.key();
-    // @ts-expect-error
     this.itemElements().each((_, item) => {
       const $item = $(item);
       const itemData = this._getItemData($item);
-      if (keyExpr ? keysEqual(keyExpr, this.keyOf(itemData), key) : this._isItemEquals(itemData, key)) {
+      if (keyExpr
+        ? keysEqual(keyExpr, this.keyOf(itemData), key)
+        : this._isItemEquals(itemData, key)) {
         result = $item;
         return false;
       }
+      return true;
     });
     return result;
   }
 
-  _dataSourceChangedHandler(newItems, e) {
+  _dataSourceChangedHandler(
+    newItems: TItem[],
+    e?: { changes?: DataChange<TItem>[] },
+  ): void {
     if (e?.changes) {
       this._modifyByChanges(e.changes);
     } else {
@@ -61,23 +97,28 @@ class CollectionWidgetLiveUpdate<
     }
   }
 
-  _isItemEquals(item1, item2) {
-    if (item1 && item1[PRIVATE_KEY_FIELD]) {
-      item1 = item1.data;
+  // eslint-disable-next-line class-methods-use-this
+  _isItemEquals(item1: unknown, item2: unknown): boolean {
+    let itemToCompare = item1;
+    if (item1 && typeof item1 === 'object' && item1[PRIVATE_KEY_FIELD]) {
+      itemToCompare = (item1 as Record<string, unknown>).data;
     }
 
     try {
-      return JSON.stringify(item1) === JSON.stringify(item2);
+      return JSON.stringify(itemToCompare) === JSON.stringify(item2);
     } catch (e) {
-      return item1 === item2;
+      return itemToCompare === item2;
     }
   }
 
-  _isItemStrictEquals(item1, item2) {
+  _isItemStrictEquals(item1: unknown, item2: unknown): boolean {
     return this._isItemEquals(item1, item2);
   }
 
-  _shouldAddNewGroup(changes, items) {
+  _shouldAddNewGroup(
+    changes: DataChange<TItem>[],
+    items: CachedItem<TItem>[],
+  ): boolean {
     let result = false;
     if (this.option('grouped')) {
       if (!changes.length) {
@@ -86,12 +127,12 @@ class CollectionWidgetLiveUpdate<
       each(changes, (i, change) => {
         if (change.type === 'insert') {
           result = true;
-          // @ts-expect-error
           each(items, (_, item) => {
             if (change.data.key !== undefined && change.data.key === item.key) {
               result = false;
               return false;
             }
+            return true;
           });
         }
       });
@@ -100,12 +141,15 @@ class CollectionWidgetLiveUpdate<
     return result;
   }
 
-  _partialRefresh() {
-    if (this.option('repaintChangesOnly')) {
-      const keyOf = (data) => {
+  _partialRefresh(): boolean {
+    const { repaintChangesOnly } = this.option();
+    if (repaintChangesOnly) {
+      const keyOf = (data): TKey => {
         if (data && data[PRIVATE_KEY_FIELD] !== undefined) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return data[PRIVATE_KEY_FIELD];
         }
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return this.keyOf(data);
       };
       const result = findChanges({
@@ -126,15 +170,15 @@ class CollectionWidgetLiveUpdate<
   }
 
   _refreshItemsCache(): void {
-    if (this.option('repaintChangesOnly')) {
-      const items = this._editStrategy.itemsGetter();
+    const { repaintChangesOnly } = this.option();
+    if (repaintChangesOnly) {
+      const items: TItem[] = this._editStrategy.itemsGetter();
       try {
         this._itemsCache = extend(true, [], items);
         if (!this.key()) {
-          // @ts-expect-error
           this._itemsCache = this._itemsCache.map((itemCache, index) => ({
             [PRIVATE_KEY_FIELD]: items[index],
-            data: itemCache,
+            data: itemCache as TItem,
           }));
         }
       } catch (e) {
@@ -143,23 +187,45 @@ class CollectionWidgetLiveUpdate<
     }
   }
 
-  _updateByChange(keyInfo, items, change, isPartialRefresh): void {
+  _updateByChange(
+    keyInfo: KeyInfo<TItem, TKey>,
+    items: TItem[],
+    change: DataChange<TItem>,
+    isPartialRefresh?: boolean,
+  ): void {
     if (isPartialRefresh) {
-      this._renderItem(change.index, change.data, null, this._findItemElementByKey(change.key));
+      this._renderItem(
+        change.index,
+        change.data,
+        null,
+        this._findItemElementByKey(change.key as TKey),
+      );
     } else {
       const changedItem = items[indexByKey(keyInfo, items, change.key)];
       if (changedItem) {
-        // @ts-expect-error
+        // @ts-expect-error ts-error
         update(keyInfo, items, change.key, change.data).done(() => {
-          this._renderItem(items.indexOf(changedItem), changedItem, null, this._findItemElementByKey(change.key));
+          this._renderItem(
+            items.indexOf(changedItem),
+            changedItem,
+            null,
+            this._findItemElementByKey(change.key as TKey),
+          );
         });
       }
     }
   }
 
-  _insertByChange(keyInfo, items, change, isPartialRefresh): void {
-    // @ts-expect-error
-    when(isPartialRefresh || insert(keyInfo, items, change.data, change.index)).done(() => {
+  _insertByChange(
+    keyInfo: KeyInfo<TItem, TKey>,
+    items: TItem[],
+    change: DataChange<TItem>,
+    isPartialRefresh?: boolean,
+  ): void {
+    when(
+      // @ts-expect-error ts-error
+      isPartialRefresh ?? insert(keyInfo, items, change.data, change.index),
+    ).done(() => {
       this._beforeItemElementInserted(change);
 
       this._renderItem(change.index ?? items.length, change.data);
@@ -168,27 +234,25 @@ class CollectionWidgetLiveUpdate<
     });
   }
 
-  _updateSelectionAfterRemoveByChange(removeIndex): void {
-    const { selectedIndex, selectedItems } = this.option();
-    // @ts-expect-error
-    if (selectedIndex > removeIndex) {
-      // @ts-expect-error
-      this.option('selectedIndex', selectedIndex - 1);
-      // @ts-expect-error
-    } else if (selectedIndex === removeIndex && selectedItems.length === 1) {
+  _updateSelectionAfterRemoveByChange(removeIndex: number): void {
+    const { selectedIndex, selectedItems = [] } = this.option();
+    const index = selectedIndex as number;
+
+    if (index > removeIndex) {
+      this.option('selectedIndex', index - 1);
+    } else if (index === removeIndex && selectedItems.length === 1) {
       this.option('selectedItems', []);
     } else {
       this._normalizeSelectedItems();
     }
   }
 
-  _beforeItemElementInserted(change): void {
+  _beforeItemElementInserted(change: DataChange<TItem>): void {
     const { selectedIndex } = this.option();
+    const index = selectedIndex as number;
 
-    // @ts-expect-error
-    if (change.index <= selectedIndex) {
-      // @ts-expect-error
-      this.option('selectedIndex', selectedIndex + 1);
+    if (change.index <= index) {
+      this.option('selectedIndex', index + 1);
     }
   }
 
@@ -196,13 +260,18 @@ class CollectionWidgetLiveUpdate<
     this._renderEmptyMessage();
   }
 
-  _removeByChange(keyInfo, items, change, isPartialRefresh): void {
+  _removeByChange(
+    keyInfo: KeyInfo<TItem, TKey>,
+    items: TItem[],
+    change: DataChange<TItem> & { oldItem?: TItem },
+    isPartialRefresh?: boolean,
+  ): void {
     const index = isPartialRefresh ? change.index : indexByKey(keyInfo, items, change.key);
     const removedItem = isPartialRefresh ? change.oldItem : items[index];
     if (removedItem) {
-      const $removedItemElement = this._findItemElementByKey(change.key);
+      const $removedItemElement = this._findItemElementByKey(change.key as TKey);
       const deletedActionArgs = this._extendActionArgs($removedItemElement);
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       this._waitDeletingPrepare($removedItemElement).done(() => {
         if (isPartialRefresh) {
           this._updateIndicesAfterIndex(index - 1);
@@ -216,46 +285,57 @@ class CollectionWidgetLiveUpdate<
     }
   }
 
-  _modifyByChanges(changes, isPartialRefresh?): void {
+  _modifyByChanges(changes: DataChange<TItem>[], isPartialRefresh?: boolean): void {
     const items = this._editStrategy.itemsGetter();
-    const keyInfo = { key: this.key.bind(this), keyOf: this.keyOf.bind(this) };
+    const keyInfo: KeyInfo<TItem, TKey> = {
+      key: this.key.bind(this),
+      keyOf: this.keyOf.bind(this),
+    };
     const dataController = this._dataController;
     const paginate = dataController.paginate();
-    // @ts-expect-error missing argument
     const group = dataController.group();
 
+    let filteredChanges = changes;
     if (paginate || group) {
-      changes = changes.filter((item) => item.type !== 'insert' || item.index !== undefined);
+      filteredChanges = changes.filter((
+        item: DataChange<TItem>,
+      ) => item.type !== 'insert' || item.index !== undefined);
     }
 
-    changes.forEach((change) => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
+    filteredChanges.forEach((change: DataChange<TItem>) => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
     this._renderedItemsCount = items.length;
     this._refreshItemsCache();
     this._fireContentReadyAction();
   }
 
-  _appendItemToContainer($container, $itemFrame, index) {
-    const nextSiblingElement = $container.children(this._itemSelector()).get(index);
-    domAdapter.insertElement($container.get(0), $itemFrame.get(0), nextSiblingElement);
+  _appendItemToContainer(
+    $container: dxElementWrapper,
+    $itemFrame: dxElementWrapper,
+    index: number,
+  ): void {
+    const nextSiblingElement = $container.children(this._itemSelector())[index];
+    domAdapter.insertElement($container[0], $itemFrame[0], nextSiblingElement);
   }
 
   _optionChanged(args: OptionChanged<TProperties>): void {
-    switch (args.name) {
+    const { name, value } = args;
+    switch (name) {
       case 'items': {
-        // @ts-expect-error arguments
-        const isItemsUpdated = this._partialRefresh(args.value);
+        const isItemsUpdated = this._partialRefresh();
         if (!isItemsUpdated) {
           super._optionChanged(args);
         }
         break;
       }
-      case 'dataSource':
-        if (!this.option('repaintChangesOnly') || !args.value) {
+      case 'dataSource': {
+        const { repaintChangesOnly } = this.option();
+        if (!repaintChangesOnly || !value) {
           this.option('items', []);
         }
 
         super._optionChanged(args);
         break;
+      }
       case 'repaintChangesOnly':
         break;
       default:
