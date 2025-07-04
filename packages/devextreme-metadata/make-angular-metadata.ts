@@ -15,6 +15,6 @@ Ng.makeMetadata({
     removeMembers(/\/stepper:/),
   ],
   variables: {
-    collectionItems: commonSmdCollectionItems,
+    collectionItems: [...commonSmdCollectionItems],
   },
 });

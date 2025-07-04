@@ -12,7 +12,6 @@ AspNet.makeMetadata({
   },
   mutations: [
     removeMembers(/\/ai-integration:AIIntegration/),
-    removeMembers(/\/card_view:Toolbar/),
     removeMembers(/\/html_editor:AICommand/),
     ...replaceWithWidgetFactory({
       uid: 'ui/form:dxFormSimpleItem',
@@ -58,7 +57,7 @@ AspNet.makeMetadata({
         name: 'ToolbarItemWidget',
       },
     ],
-    collectionItems: [...commonSmdCollectionItems, 'ui/card_view:ToolbarItem'],
+    collectionItems: [...commonSmdCollectionItems],
   },
 });
 

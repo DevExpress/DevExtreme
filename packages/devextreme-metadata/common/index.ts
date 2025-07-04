@@ -1,4 +1,9 @@
-import { AddMutation, ArrayDataType, MemberRefDataType, RemoveMutation } from 'devextreme-internal-tools/metadata';
+import {
+  AddMutation,
+  ArrayDataType,
+  MemberRefDataType,
+  RemoveMutation,
+} from 'devextreme-internal-tools/metadata';
 import { existsSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { PATHS } from './paths';
@@ -28,4 +33,8 @@ export function array(...itemTypes: ArrayDataType['itemTypes']): ArrayDataType {
 
 export function memberRef(uid: string): MemberRefDataType {
   return { kind: 'memberRef', uid };
+}
+
+export function object(): any {
+  return { kind: 'object' };
 }
