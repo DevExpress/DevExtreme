@@ -31,6 +31,19 @@ describe('getVisibleDateIntervals', () => {
     }]);
   });
 
+  it('should return one interval for hours [0, 24]', () => {
+    expect(getVisibleDateIntervals({
+      startDayHour: 0,
+      endDayHour: 24,
+      min: new Date(2000, 0, 10),
+      max: new Date(2000, 0, 15),
+      isOnlyDateCheck: false,
+    })).toEqual([{
+      min: new Date(2000, 0, 10),
+      max: new Date(2000, 0, 16),
+    }]);
+  });
+
   it('should return day by day intervals', () => {
     expect(getVisibleDateIntervals({
       startDayHour: 3,
@@ -57,6 +70,30 @@ describe('getVisibleDateIntervals', () => {
       }, {
         min: new Date(2000, 0, 15, 3),
         max: new Date(2000, 0, 15, 10),
+      },
+    ]);
+  });
+
+  it('should return day by day intervals for [0.1, 23.9]', () => {
+    expect(getVisibleDateIntervals({
+      startDayHour: 0.1,
+      endDayHour: 23.9,
+      min: new Date(2000, 0, 10),
+      max: new Date(2000, 0, 13),
+      isOnlyDateCheck: false,
+    })).toEqual([
+      {
+        min: new Date(2000, 0, 10, 0, 6),
+        max: new Date(2000, 0, 10, 23, 53),
+      }, {
+        min: new Date(2000, 0, 11, 0, 6),
+        max: new Date(2000, 0, 11, 23, 53),
+      }, {
+        min: new Date(2000, 0, 12, 0, 6),
+        max: new Date(2000, 0, 12, 23, 53),
+      }, {
+        min: new Date(2000, 0, 13, 0, 6),
+        max: new Date(2000, 0, 13, 23, 53),
       },
     ]);
   });

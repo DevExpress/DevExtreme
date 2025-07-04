@@ -77,7 +77,7 @@ export const getAppointmentFilter = (
     };
     const recurrenceInterval = getVisibleRecurrenceInterval(compareOptions);
     const appointmentOccurrences = getAppointmentsOccurrences(
-      appointment,
+      appointmentToCompare,
       { firstDayOfWeek, interval: recurrenceInterval },
       timeZoneCalculator,
     );

@@ -16,5 +16,5 @@ export const isAppointmentMatchedIntervals = (
     }
   }
 
-  return i < intervals.length && endDate > intervals[i].min;
+  return i < intervals.length && (startDate >= intervals[i].min || endDate > intervals[i].min);
 };

@@ -1,35 +1,29 @@
 import { dateUtils } from '@ts/core/utils/m_date';
 
-import { getDatesWithoutTime } from '../../../r1/utils/index';
+import { getVisibleRecurrenceInterval } from './getVisibleRecurrenceInterval';
 import type { CompareOptions, DateInterval } from './type';
 
 const toMs = dateUtils.dateToMilliseconds;
 
-export const getVisibleDateIntervals = ({
-  startDayHour,
-  endDayHour,
-  min,
-  max,
-  isOnlyDateCheck,
-}: CompareOptions): DateInterval[] => {
-  if (isOnlyDateCheck) {
-    const [trimMin, trimMax] = getDatesWithoutTime(min, max);
+export const getVisibleDateIntervals = (options: CompareOptions): DateInterval[] => {
+  const { min, max } = getVisibleRecurrenceInterval(options);
+  const {
+    startDayHour,
+    endDayHour,
+    isOnlyDateCheck,
+  } = options;
 
-    return [{ min: trimMin, max: trimMax }];
+  if (isOnlyDateCheck || (startDayHour === 0 && endDayHour === 24)) {
+    return [{ min, max }];
   }
 
   if (startDayHour >= endDayHour) {
     return [];
   }
 
-  const startTime = dateUtils.dateTimeFromDecimal(startDayHour);
+  let time = min.getTime();
+  const maxTime = max.getTime();
   const endTime = dateUtils.dateTimeFromDecimal(endDayHour);
-  const normalizedMin = dateUtils.trimTime(min) as Date;
-  normalizedMin.setHours(startTime.hours, startTime.minutes, 0, 0);
-  const normalizedMax = dateUtils.trimTime(max) as Date;
-  normalizedMax.setHours(endTime.hours, endTime.minutes, 0, 0);
-  let time = normalizedMin.getTime();
-  const maxTime = normalizedMax.getTime();
   const result: DateInterval[] = [];
 
   while (time < maxTime) {
