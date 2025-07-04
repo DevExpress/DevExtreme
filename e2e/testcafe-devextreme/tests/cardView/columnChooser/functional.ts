@@ -62,14 +62,30 @@ testsFactory({
     );
   },
   async assertFirstColumnVisible(t: TestController, cardView: CardView) {
+    await t.expect(cardView.getColumnChooser().getColumnsCount()).eql(3);
+
     await t.expect(
       cardView.getColumnChooser().isCheckboxChecked(0),
     ).ok();
+    await t.expect(
+      cardView.getColumnChooser().isCheckboxChecked(1),
+    ).ok();
+    await t.expect(
+      cardView.getColumnChooser().isCheckboxChecked(2),
+    ).ok();
   },
   async assertFirstColumnHidden(t: TestController, cardView: CardView) {
+    await t.expect(cardView.getColumnChooser().getColumnsCount()).eql(3);
+
     await t.expect(
       cardView.getColumnChooser().isCheckboxChecked(0),
     ).notOk();
+    await t.expect(
+      cardView.getColumnChooser().isCheckboxChecked(1),
+    ).ok();
+    await t.expect(
+      cardView.getColumnChooser().isCheckboxChecked(2),
+    ).ok();
   },
 });
 
@@ -95,10 +111,35 @@ testsFactory({
   },
   async assertFirstColumnVisible(t: TestController, cardView: CardView) {
     await t.expect(
+      cardView.getHeaderPanel().getHeaderItemsCount(),
+    ).eql(3);
+
+    await t.expect(
       cardView.getHeaderPanel().getHeaderItem(0).element.textContent,
     ).eql('A');
+    await t.expect(
+      cardView.getHeaderPanel().getHeaderItem(1).element.textContent,
+    ).eql('B');
+    await t.expect(
+      cardView.getHeaderPanel().getHeaderItem(2).element.textContent,
+    ).eql('C');
   },
   async assertFirstColumnHidden(t: TestController, cardView: CardView) {
+    await t.expect(
+      cardView.getHeaderPanel().getHeaderItemsCount(),
+    ).eql(2);
+
+    await t.expect(
+      cardView.getHeaderPanel().getHeaderItem(0).element.textContent,
+    ).eql('B');
+    await t.expect(
+      cardView.getHeaderPanel().getHeaderItem(1).element.textContent,
+    ).eql('C');
+
+    await t.expect(
+      cardView.getColumnChooser().getColumnsCount(),
+    ).eql(1);
+
     await t.expect(
       cardView.getColumnChooser().getColumn(0).textContent,
     ).eql('A');

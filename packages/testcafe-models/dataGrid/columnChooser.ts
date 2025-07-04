@@ -49,6 +49,10 @@ export default class ColumnChooser extends FocusableElement {
     return this.getCheckbox(nth).hasClass(CLASS.checkboxChecked);
   }
 
+  getColumnsCount(): Promise<number> {
+    return this.content.find(`.${CLASS.treeViewItem}`).count;
+  }
+
   getColumn(index = 0): Selector {
     return this.content.find(`.${CLASS.treeViewItem}`).nth(index);
   }
