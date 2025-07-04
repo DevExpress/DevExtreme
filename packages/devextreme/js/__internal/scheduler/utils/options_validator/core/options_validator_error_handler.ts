@@ -1,6 +1,25 @@
 import type {
-  GlobalErrorHandler, OptionsValidatorResult, ValidatorErrors, ValidatorRuleError,
+  GlobalErrorHandler, OptionsValidatorResult, ValidatorErrors, ValidatorRuleResult,
 } from './types';
+
+interface LogData { errorCode: string; args: string[] }
+
+const getValidatorErrorUniqueKey = (
+  errorCode: string,
+  validatorError: ValidatorRuleResult,
+): string => {
+  if (typeof validatorError === 'boolean' || !Array.isArray(validatorError.arguments)) {
+    return errorCode;
+  }
+
+  return `${errorCode}${JSON.stringify(validatorError.arguments)}`;
+};
+
+const getValidatorErrorArguments = (
+  validatorError: ValidatorRuleResult,
+): string[] => (typeof validatorError === 'boolean' || !Array.isArray(validatorError.arguments)
+  ? []
+  : validatorError.arguments);
 
 export abstract class OptionsValidatorErrorHandler<TValidators extends string> {
   protected constructor(
@@ -15,38 +34,37 @@ export abstract class OptionsValidatorErrorHandler<TValidators extends string> {
       return;
     }
 
-    const uniqErrorCodes = Object.entries(optionsValidatorResult)
-      .reduce((set, [validatorName, result]) => {
+    const warningsMap = new Map<string, LogData>();
+    const errorsMap = new Map<string, LogData>();
+
+    Object.entries(optionsValidatorResult)
+      .forEach(([validatorName, validatorErrorRecord]) => {
         const errorCode: string | undefined = this.validatorNameToErrorCodeMap[validatorName];
 
-        if (errorCode) {
-          const results = Object.values(result as ValidatorErrors);
-          results.forEach((item) => {
-            const args = (item as ValidatorRuleError).arguments ?? [];
-            const key = `${errorCode}${JSON.stringify(args)}`;
-            set.set(key, {
-              errorCode,
-              args,
-            });
-          });
+        if (!errorCode) {
+          return;
         }
 
-        return set;
-      }, new Map<string, {
-        errorCode: string;
-        args: string[];
-      }>());
+        const logMap = errorCode.startsWith('E')
+          ? errorsMap
+          : warningsMap;
 
-    const resultArray = [...uniqErrorCodes.entries()];
-    const errors = resultArray.filter(([code]) => code.startsWith('E'));
-    const warnings = resultArray.filter(([code]) => code.startsWith('W'));
-    warnings.forEach((value) => {
+        Object.values(validatorErrorRecord as ValidatorErrors)
+          .forEach((validatorError) => {
+            const uniqueKey = getValidatorErrorUniqueKey(errorCode, validatorError);
+            const args = getValidatorErrorArguments(validatorError);
+            logMap.set(uniqueKey, { errorCode, args });
+          });
+      });
+
+    Array.from(warningsMap).forEach((value) => {
       const [, { errorCode, args }] = value;
       this.globalErrorHandler.logError(errorCode, ...args);
     });
-    errors.forEach((value, idx) => {
+
+    Array.from(errorsMap).forEach((value, idx) => {
       const [, { errorCode, args }] = value;
-      const isLastErrorCode = idx === errors.length - 1;
+      const isLastErrorCode = idx === errorsMap.size - 1;
 
       // NOTE: For stopping code stack execution and not creating
       // the special error code for this case,

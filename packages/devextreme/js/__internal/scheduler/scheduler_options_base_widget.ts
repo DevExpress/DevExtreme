@@ -19,15 +19,15 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
 
   public currentView!: NormalizedView;
 
-  private _optionsValidator!: SchedulerOptionsValidator;
+  private optionsValidator!: SchedulerOptionsValidator;
 
-  private _optionsValidatorErrorHandler!: SchedulerOptionsValidatorErrorsHandler;
+  private optionsValidatorErrorHandler!: SchedulerOptionsValidatorErrorsHandler;
 
   protected _init(): void {
     // @ts-expect-error
     super._init();
-    this._optionsValidator = new SchedulerOptionsValidator();
-    this._optionsValidatorErrorHandler = new SchedulerOptionsValidatorErrorsHandler();
+    this.optionsValidator = new SchedulerOptionsValidator();
+    this.optionsValidatorErrorHandler = new SchedulerOptionsValidatorErrorsHandler();
   }
 
   protected _getDefaultOptions(): SafeSchedulerOptions {
@@ -56,7 +56,7 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
     return rules.concat(DEFAULT_SCHEDULER_OPTIONS_RULES);
   }
 
-  protected _updateViews(): void {
+  protected updateViews(): void {
     const views = this.option('views') ?? [];
     this.views = getViews(views);
     this.currentView = getCurrentView(
@@ -68,7 +68,7 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
   protected _initMarkup(): void {
     // @ts-expect-error
     super._initMarkup();
-    this._updateViews();
+    this.updateViews();
   }
 
   protected schedulerOptionChanged<K extends keyof SafeSchedulerOptions>(args: {
@@ -78,7 +78,7 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
     switch (args.name) {
       case 'currentView':
       case 'views':
-        this._updateViews();
+        this.updateViews();
         break;
       default:
         break;
@@ -97,8 +97,8 @@ export class SchedulerOptionsBaseWidget extends Widget<SafeSchedulerOptions> {
       offset: this.getViewOption('offset'),
       cellDuration: this.getViewOption('cellDuration'),
     };
-    const validationResult = this._optionsValidator.validate(currentViewOptions);
-    this._optionsValidatorErrorHandler.handleValidationResult(validationResult);
+    const validationResult = this.optionsValidator.validate(currentViewOptions);
+    this.optionsValidatorErrorHandler.handleValidationResult(validationResult);
   }
 
   getViewOption<K extends keyof SafeSchedulerOptions>(optionName: K): SafeSchedulerOptions[K] {

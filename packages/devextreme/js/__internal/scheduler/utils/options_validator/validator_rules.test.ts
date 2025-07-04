@@ -3,6 +3,7 @@ import {
   describe, expect, it, jest,
 } from '@jest/globals';
 
+import { VIEW_TYPES } from '../options/constants_view';
 import type { SafeSchedulerOptions } from '../options/types';
 import * as validationFunctions from './common/validation_functions';
 import {
@@ -146,10 +147,11 @@ describe('validator rules', () => {
       expect(allViewsHasCorrectType([])).toBe(true);
     });
 
-    it('should return true for views with correct types', () => {
+    it.each(VIEW_TYPES)('should return true for %s view', (viewType) => {
       expect(allViewsHasCorrectType([
         { type: 'day' },
         { type: 'week' },
+        { type: viewType },
       ])).toBe(true);
     });
 
@@ -163,10 +165,21 @@ describe('validator rules', () => {
       });
     });
 
+    it('should return first error for views with incorrect types', () => {
+      expect(allViewsHasCorrectType([
+        { type: 'day' },
+        { type: 'orange' },
+        { type: 'apple' },
+        { type: 'week' },
+      ] as SafeSchedulerOptions['views'])).toEqual({
+        arguments: ['orange'],
+      });
+    });
+
     it('should be the function with the correct name', () => {
       const func = allViewsHasCorrectType;
 
-      expect(func.name).toBe('views');
+      expect(func.name).toBe('allViewsHasCorrectType');
     });
   });
 });

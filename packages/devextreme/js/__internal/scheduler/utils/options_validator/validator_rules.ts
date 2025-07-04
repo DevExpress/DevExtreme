@@ -37,7 +37,7 @@ export const cellDurationMustBeLessThanVisibleInterval = createValidatorRule(
 );
 
 export const allViewsHasCorrectType = createValidatorRule(
-  'views',
+  'allViewsHasCorrectType',
   (views: SafeSchedulerOptions['views']) => {
     // eslint-disable-next-line no-restricted-syntax
     for (const view of views) {

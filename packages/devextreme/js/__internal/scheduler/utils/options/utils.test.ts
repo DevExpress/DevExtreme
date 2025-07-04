@@ -169,6 +169,19 @@ describe('views utils', () => {
         type: 'month',
       });
     });
+
+    it('should return first known view if wrong current view requested', () => {
+      expect(getCurrentView('blabla', [{
+        type: 'blabla',
+        name: 'blabla',
+        unknown: 'incorrect view',
+      } as any])).toEqual({
+        groupOrientation: 'horizontal',
+        intervalCount: 1,
+        name: 'Day',
+        type: 'day',
+      });
+    });
   });
 
   describe('parseDateOption', () => {

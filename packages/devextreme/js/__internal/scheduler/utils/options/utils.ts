@@ -30,7 +30,10 @@ export function getCurrentView(
     (view) => [view.name, view.type].includes(currentView),
   );
 
-  return currentViewProps ?? DEFAULT_VIEW_OPTIONS[currentView as ViewType] ?? viewsProps[0];
+  return currentViewProps
+    ?? DEFAULT_VIEW_OPTIONS[currentView as ViewType]
+    ?? viewsProps[0]
+    ?? DEFAULT_VIEW_OPTIONS[VIEW_TYPES[0]];
 }
 
 export const parseDateOption = (date?: Date | number | string): Date | undefined => (date
