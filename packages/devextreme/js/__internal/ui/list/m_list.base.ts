@@ -692,8 +692,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     const $element = this.$element();
     const isElementVisible = $element.is(':visible');
 
-    // debugger;
-
     if (isElementVisible) {
       clearTimeout(this._loadNextPageTimer);
 
