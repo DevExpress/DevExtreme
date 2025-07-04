@@ -1,7 +1,7 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
 
-import type { TimeZoneCalculator } from '../../../r1/timezone_calculator';
-import { isAppointmentTakesAllDay } from '../../../r1/utils';
+import type { TimeZoneCalculator } from '../../../r1/timezone_calculator/calculator';
+import { isAppointmentTakesAllDay } from '../../../r1/utils/index';
 import type { AllDayPanelModeType, AppointmentDataItem } from '../../../types';
 import type { ResourceLoader } from '../../../utils/loader/resource_loader';
 import { getAppointmentsOccurrences } from './getAppointmentsOccurrences';
