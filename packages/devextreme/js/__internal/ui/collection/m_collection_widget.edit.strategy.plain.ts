@@ -1,12 +1,14 @@
 import type { dxElementWrapper } from '@js/core/renderer';
-import type { CollectionWidgetItem } from '@js/ui/collection/ui.collection_widget.base';
+import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import type { CollectionItemIndex } from '@ts/ui/collection/m_collection_widget.edit.strategy';
 import EditStrategy from '@ts/ui/collection/m_collection_widget.edit.strategy';
 
 class PlainEditStrategy<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TItem extends CollectionWidgetItem = any,
-> extends EditStrategy<TItem> {
+  TItem extends ItemLike = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey = any,
+> extends EditStrategy<TItem, TKey> {
   _getPlainItems(): TItem[] {
     return this._getItems() ?? [];
   }
@@ -31,16 +33,16 @@ class PlainEditStrategy<
     return this._getPlainItems();
   }
 
-  getKeysByItems(items: TItem[]): (string | number)[] {
+  getKeysByItems(items: TItem[]): TKey[] {
     const keyOf = this._collectionWidget.keyOf.bind(this._collectionWidget);
-    let result: (string | number | TItem)[] = items;
+    let result: (TKey | TItem)[] = items;
     if (keyOf) {
-      result = items.map((item) => keyOf(item) as string | number);
+      result = items.map((item) => keyOf(item));
     }
-    return result as (string | number)[];
+    return result as TKey[];
   }
 
-  getIndexByKey(key: string | number): number {
+  getIndexByKey(key: TKey): number {
     const cache = this._cache;
     const keys = cache?.keys ?? this.getKeysByItems(this._getPlainItems());
 
@@ -60,7 +62,7 @@ class PlainEditStrategy<
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getItemsByKeys(keys: (string | number)[], items?: TItem[]): TItem[] {
+  getItemsByKeys(keys: TKey[], items?: TItem[]): TItem[] {
     return (items ?? keys).slice() as TItem[];
   }
 
@@ -99,7 +101,7 @@ class PlainEditStrategy<
   }
 
   _getItemByNormalizedIndex(index: number): dxElementWrapper {
-    // @ts-expect-error - eq() can return null but we handle it appropriately
+    // @ts-expect-error ts-error
     return index > -1 ? this._collectionWidget._itemElements().eq(index) : null;
   }
 

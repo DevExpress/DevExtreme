@@ -35,13 +35,18 @@ export const NOT_EXISTING_INDEX = -1;
 
 const indexExists = (index): boolean => index !== NOT_EXISTING_INDEX;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SelectionInfo<TItem, TKey = any> = SelectionChangeInfo<TItem> & {
+  addedItemKeys: TKey[];
+  removedItemKeys: TKey[];
+};
+
 export interface CollectionWidgetEditProperties<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TComponent extends CollectionWidget<any, TItem, TKey> | any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
+  TKey = string | number,
 > extends CollectionWidgetBaseProperties<TComponent, TItem, TKey> {
   selectionMode?: SingleMultipleOrNone | SingleMultipleAllOrNone;
 
@@ -53,6 +58,7 @@ export interface CollectionWidgetEditProperties<
 class CollectionWidget<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TProperties extends CollectionWidgetEditProperties<any, TItem, TKey>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey = any,
@@ -61,7 +67,7 @@ class CollectionWidget<
 
   _selection!: Selection;
 
-  _editStrategy!: PlainEditStrategy;
+  _editStrategy!: PlainEditStrategy<TItem, TKey>;
 
   _actions!: Record<string, (args: Record<string, unknown>) => void>;
 
@@ -148,11 +154,11 @@ class CollectionWidget<
     });
   }
 
-  _getKeysByItems(selectedItems: TItem[]) {
+  _getKeysByItems(selectedItems: TItem[]): TKey[] {
     return this._editStrategy.getKeysByItems(selectedItems);
   }
 
-  _getItemsByKeys(selectedItemKeys, selectedItems) {
+  _getItemsByKeys(selectedItemKeys: TKey[], selectedItems: TItem[]): TItem[] {
     return this._editStrategy.getItemsByKeys(selectedItemKeys, selectedItems);
   }
 
@@ -160,8 +166,7 @@ class CollectionWidget<
     return this._editStrategy.getKeyByIndex(index);
   }
 
-  _getIndexByKey(key: unknown): number {
-    // @ts-expect-error
+  _getIndexByKey(key: TKey): number {
     return this._editStrategy.getIndexByKey(key);
   }
 
@@ -173,7 +178,7 @@ class CollectionWidget<
     return !!this._dataController.key();
   }
 
-  _getCombinedFilter() {
+  _getCombinedFilter(): unknown {
     // @ts-expect-error arguments
     return this._dataController.filter();
   }
@@ -185,19 +190,19 @@ class CollectionWidget<
       return keyExpr;
     }
 
-    return this._dataController.key();
+    return this._dataController.key() as string | Function | undefined;
   }
 
-  keyOf(item) {
+  keyOf(item: TItem): TKey {
     if (this.option('keyExpr')) {
       return this._keyGetter(item);
     }
 
     if (this._dataController.store()) {
-      return this._dataController.keyOf(item);
+      return this._dataController.keyOf(item) as TKey;
     }
 
-    return item;
+    return item as unknown as TKey;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -206,6 +211,7 @@ class CollectionWidget<
   }
 
   _initSelectionModule(): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
     const { itemsGetter } = this._editStrategy;
 
@@ -250,6 +256,7 @@ class CollectionWidget<
         options.userData = dataController.userData();
 
         if (dataController.store()) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return dataController.loadFromStore(options).done((loadResult) => {
             if (that._disposed) {
               return;
@@ -262,6 +269,8 @@ class CollectionWidget<
         }
         return Deferred().resolve(this.plainItems());
       },
+      // eslint-disable-next-line @stylistic/max-len
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/explicit-function-return-type
       dataFields: () => this._dataController.select(),
       plainItems: itemsGetter.bind(this._editStrategy),
     });
@@ -277,18 +286,17 @@ class CollectionWidget<
   }
 
   _initEditStrategy(): void {
-    // @ts-expect-error Type assertion needed for polymorphic edit strategy constructor
-    this._editStrategy = new PlainEditStrategy(this);
+    this._editStrategy = new PlainEditStrategy<TItem, TKey>(this);
   }
 
-  _getSelectedItemIndices(keys?): number[] {
+  _getSelectedItemIndices(keys?: TKey[]): number[] {
     const indices: number[] = [];
 
-    keys = keys || this._selection.getSelectedItemKeys();
+    const selectedKeys = keys ?? this._selection.getSelectedItemKeys();
 
     this._editStrategy.beginCache();
 
-    each(keys, (_, key) => {
+    each(selectedKeys, (_, key) => {
       const selectedIndex = this._getIndexByKey(key);
 
       if (indexExists(selectedIndex)) {
@@ -304,7 +312,9 @@ class CollectionWidget<
   _initMarkup(): void {
     this._rendering = true;
     if (!this._dataController.isLoading()) {
-      this._syncSelectionOptions().done(() => this._normalizeSelectedItems());
+      this._syncSelectionOptions().done(() => {
+        this._normalizeSelectedItems();
+      });
     }
 
     super._initMarkup();
@@ -324,14 +334,16 @@ class CollectionWidget<
     super._fireContentReadyAction();
   }
 
-  _syncSelectionOptions(byOption?: string) {
-    byOption = byOption ?? this._chooseSelectOption();
+  _syncSelectionOptions(byOption?: string): DeferredObj<unknown> {
+    const selectedByOption = byOption ?? this._chooseSelectOption();
 
     // eslint-disable-next-line default-case
-    switch (byOption) {
+    switch (selectedByOption) {
       case 'selectedIndex': {
         const { selectedIndex } = this.option();
-        const selectedItem = this._editStrategy.getItemDataByIndex(selectedIndex ?? NOT_EXISTING_INDEX);
+        const selectedItem = this._editStrategy.getItemDataByIndex(
+          selectedIndex ?? NOT_EXISTING_INDEX,
+        );
 
         if (isDefined(selectedItem)) {
           this._setOptionWithoutOptionChange('selectedItems', [selectedItem]);
@@ -346,7 +358,9 @@ class CollectionWidget<
       }
       case 'selectedItems': {
         const { selectedItems = [] } = this.option();
-        const selectedIndex = selectedItems.length ? this._editStrategy.getIndexByItemData(selectedItems[0]) : NOT_EXISTING_INDEX;
+        const selectedIndex = selectedItems.length
+          ? this._editStrategy.getIndexByItemData(selectedItems[0])
+          : NOT_EXISTING_INDEX;
 
         if (this.option('selectionRequired') && !indexExists(selectedIndex)) {
           return this._syncSelectionOptions('selectedIndex');
@@ -377,9 +391,9 @@ class CollectionWidget<
         break;
       }
       case 'selectedItemKeys': {
-        const { selectedItemKeys = [] } = this.option();
+        const { selectedItemKeys = [], selectionRequired } = this.option();
 
-        if (this.option('selectionRequired')) {
+        if (selectionRequired) {
           const selectedItemIndex = this._getIndexByKey(selectedItemKeys[0]);
 
           if (!indexExists(selectedItemIndex)) {
@@ -391,7 +405,7 @@ class CollectionWidget<
       }
     }
 
-    return Deferred().resolve().promise();
+    return Deferred().resolve();
   }
 
   _chooseSelectOption(): string {
@@ -419,12 +433,16 @@ class CollectionWidget<
     return optionName;
   }
 
-  _compareKeys(oldKeys, newKeys): boolean {
+  // eslint-disable-next-line class-methods-use-this
+  _compareKeys(
+    oldKeys: TKey[],
+    newKeys: TKey[],
+  ): boolean {
     if (oldKeys.length !== newKeys.length) {
       return false;
     }
 
-    for (let i = 0; i < newKeys.length; i++) {
+    for (let i = 0; i < newKeys.length; i += 1) {
       if (oldKeys[i] !== newKeys[i]) {
         return false;
       }
@@ -433,7 +451,7 @@ class CollectionWidget<
     return true;
   }
 
-  _normalizeSelectedItems(): Promise<unknown> {
+  _normalizeSelectedItems(): DeferredObj<unknown> {
     const { selectionMode, selectedItems = [], items } = this.option();
 
     if (selectionMode === 'none') {
@@ -442,7 +460,7 @@ class CollectionWidget<
     } else if (selectionMode === 'single') {
       const newSelection = selectedItems ?? [];
 
-      if (newSelection.length > 1 || !newSelection.length && this.option('selectionRequired') && items?.length) {
+      if (newSelection.length > 1 || (!newSelection.length && this.option('selectionRequired') && items?.length)) {
         const currentSelection = this._selection.getSelectedItems();
 
         let normalizedSelection = newSelection[0] ?? currentSelection[0];
@@ -471,7 +489,7 @@ class CollectionWidget<
       }
     }
 
-    return Deferred().resolve().promise();
+    return Deferred().resolve();
   }
 
   _itemClickHandler(
@@ -480,8 +498,8 @@ class CollectionWidget<
     config?: ActionConfig,
   ): void {
     let itemSelectPromise = Deferred().resolve();
-    this._createAction((e) => {
-      itemSelectPromise = this._itemSelectHandler(e.event) ?? itemSelectPromise;
+    this._createAction((event) => {
+      itemSelectPromise = this._itemSelectHandler(event.event) ?? itemSelectPromise;
     }, {
       validatingTargetName: 'itemElement',
     })({
@@ -525,7 +543,7 @@ class CollectionWidget<
 
     if (selectionMode !== 'none') {
       const $itemElement = $(args.itemElement);
-      const normalizedItemIndex = this._editStrategy.getNormalizedIndex($itemElement);
+      const normalizedItemIndex = this._editStrategy.getNormalizedIndex($itemElement.get(0));
       const isItemSelected = this._isItemSelected(normalizedItemIndex);
 
       this._processSelectableItem($itemElement, isItemSelected);
@@ -540,10 +558,7 @@ class CollectionWidget<
     this._setAriaSelectionAttribute($itemElement, String(isSelected));
   }
 
-  _updateSelectedItems(args: SelectionChangeInfo<TItem> & {
-    addedItemKeys: unknown[];
-    removedItemKeys: unknown[];
-  }): void {
+  _updateSelectedItems(args: SelectionInfo<TItem, TKey>): void {
     const { addedItemKeys, removedItemKeys } = args;
 
     if (this._rendered && (addedItemKeys.length || removedItemKeys.length)) {
@@ -645,13 +660,14 @@ class CollectionWidget<
       case 'selectedItem':
       case 'selectedItems':
       case 'selectedItemKeys':
-        this._syncSelectionOptions(args.name).done(() => this._normalizeSelectedItems());
+        this._syncSelectionOptions(args.name).done(() => {
+          this._normalizeSelectedItems();
+        });
         break;
       case 'keyExpr':
         this._initKeyGetter();
         break;
       case 'selectionRequired':
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._normalizeSelectedItems();
         break;
       case 'onSelectionChanging':
@@ -695,11 +711,13 @@ class CollectionWidget<
       const deletePromiseResolved = !deletePromiseExists && deletePromise.state() === 'resolved';
       const argumentsSpecified = !!arguments.length;
 
-      const shouldDelete = deletePromiseExists || deletePromiseResolved
+      const shouldDeleteImmediately = deletePromiseExists;
+      const shouldDeleteWhenNoArgs = deletePromiseResolved && !argumentsSpecified;
+      const shouldDeleteWithValue = deletePromiseResolved && value;
 
-        && !argumentsSpecified || deletePromiseResolved
-
-        && value;
+      const shouldDelete = shouldDeleteImmediately
+        || shouldDeleteWhenNoArgs
+        || shouldDeleteWithValue;
 
       when(fromPromise(deletingActionArgs.cancel))
         .always(() => {
@@ -771,6 +789,7 @@ class CollectionWidget<
   _refreshLastPage(): DeferredObj<unknown> {
     this._expectLastItemLoading();
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._dataController.load();
   }
 
@@ -889,30 +908,29 @@ class CollectionWidget<
           // @ts-expect-error Promise DefferedObj
           this._tryRefreshLastPage().done(() => {
             // @ts-expect-error ts-error
-
             deferred.resolveWith(this);
           });
         }).fail(() => {
           $item.removeClass(itemResponseWaitClass);
           // @ts-expect-error ts-error
-
           deferred.rejectWith(this);
         });
       }).fail(() => {
         // @ts-expect-error ts-error
-
         deferred.rejectWith(this);
       });
     } else {
       // @ts-expect-error ts-error
-
       deferred.rejectWith(this);
     }
 
     return deferred.promise();
   }
 
-  reorderItem(itemElement: Element, toItemElement: Element): DeferredObj<unknown> {
+  reorderItem(
+    itemElement: Element,
+    toItemElement: Element,
+  ): DeferredObj<unknown> {
     const deferred = Deferred();
     const strategy = this._editStrategy;
 
@@ -929,14 +947,12 @@ class CollectionWidget<
       && movingIndex !== destinationIndex;
     if (canMoveItems) {
       // @ts-expect-error ts-error
-
       deferred.resolveWith(this);
     } else {
       // @ts-expect-error ts-error
-
       deferred.rejectWith(this);
     }
-    // @ts-expect-error Promise DefferedObj
+    // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return deferred.promise().done(() => {
       $destinationItem[strategy.itemPlacementFunc(movingIndex, destinationIndex)]($movingItem);

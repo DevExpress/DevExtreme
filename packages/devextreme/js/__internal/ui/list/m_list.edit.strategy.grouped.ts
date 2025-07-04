@@ -122,6 +122,7 @@ class GroupedEditStrategy extends EditStrategy<Item> {
     }, []);
 
     return plainItems.map(
+      // @ts-expect-error ts-error
       (plainItem) => this._collectionWidget.keyOf(plainItem) as string | number,
     );
   }
@@ -132,6 +133,7 @@ class GroupedEditStrategy extends EditStrategy<Item> {
     each(groups, (groupIndex: number, group: GroupedItem) => {
       if (!group.items) return undefined;
       each(group.items, (itemIndex: number, item: unknown) => {
+        // @ts-expect-error ts-error
         const itemKey = this._collectionWidget.keyOf(item);
         if (this._equalKeys(itemKey, key)) {
           index = {
