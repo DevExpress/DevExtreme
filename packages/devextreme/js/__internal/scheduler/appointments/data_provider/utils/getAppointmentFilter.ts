@@ -4,9 +4,11 @@ import type { TimeZoneCalculator } from '../../../r1/timezone_calculator';
 import { isAppointmentTakesAllDay } from '../../../r1/utils';
 import type { AllDayPanelModeType, AppointmentDataItem } from '../../../types';
 import type { ResourceLoader } from '../../../utils/loader/resource_loader';
-import { isAppointmentMatchedDateTime } from './isAppointmentMatchedDateTime';
+import { getAppointmentsOccurrences } from './getAppointmentsOccurrences';
+import { getVisibleDateIntervals } from './getVisibleDateIntervals';
+import { getVisibleRecurrenceInterval } from './getVisibleRecurrenceInterval';
+import { isAppointmentMatchedIntervals } from './isAppointmentMatchedIntervals';
 import { isAppointmentMatchedResources } from './isAppointmentMatchedResources';
-import { isRecurrenceAppointmentMatchedDateTime } from './isRecurrenceAppointmentMatchedDateTime';
 
 interface Options {
   startDayHour: number;
@@ -66,27 +68,26 @@ export const getAppointmentFilter = (
     };
     const isOnlyDateCheck = !isTimeDateView || appointmentToCompare.allDay;
 
-    if (appointment.hasRecurrenceRule) {
-      return isRecurrenceAppointmentMatchedDateTime(
-        appointmentToCompare,
-        {
-          firstDayOfWeek,
-          startDayHour,
-          endDayHour,
-          min,
-          max,
-          isOnlyDateCheck,
-        },
-        timeZoneCalculator,
-      );
-    }
-
-    return isAppointmentMatchedDateTime(appointmentToCompare, {
+    const compareOptions = {
       startDayHour,
       endDayHour,
       min,
       max,
       isOnlyDateCheck,
-    });
+    };
+    const recurrenceInterval = getVisibleRecurrenceInterval(compareOptions);
+    const appointmentOccurrences = getAppointmentsOccurrences(
+      appointment,
+      { firstDayOfWeek, interval: recurrenceInterval },
+      timeZoneCalculator,
+    );
+    const viewIntervals = getVisibleDateIntervals(compareOptions);
+
+    return appointmentOccurrences.some(
+      (appointmentOccurrence) => isAppointmentMatchedIntervals(
+        appointmentOccurrence,
+        viewIntervals,
+      ),
+    );
   };
 };

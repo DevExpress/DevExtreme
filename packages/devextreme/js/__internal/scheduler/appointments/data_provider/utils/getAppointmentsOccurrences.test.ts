@@ -7,16 +7,26 @@ import { createTimeZoneCalculator } from '../../../r1/timezone_calculator';
 import { getAppointmentsOccurrences } from './getAppointmentsOccurrences';
 
 const options = {
-  min: new Date(2000, 0, 10),
-  max: new Date(2000, 0, 15),
   firstDayOfWeek: 3,
-  isOnlyDateCheck: false,
+  interval: {
+    min: new Date(2000, 0, 10),
+    max: new Date(2000, 0, 15),
+  },
 };
 const mockTimeZoneCalculator = createTimeZoneCalculator(
   Intl.DateTimeFormat().resolvedOptions().timeZone,
 );
 
 describe('getAppointmentsOccurrences', () => {
+  it('should return input appointment for not existed recurrence rule', () => {
+    const appointment: any = {};
+    expect(getAppointmentsOccurrences(
+      appointment,
+      options,
+      mockTimeZoneCalculator,
+    )).toEqual([appointment]);
+  });
+
   it('should return input appointment for invalid recurrence rule', () => {
     const appointment: any = { recurrenceRule: 'invalidRecurrenceRule' };
     expect(getAppointmentsOccurrences(
@@ -35,10 +45,11 @@ describe('getAppointmentsOccurrences', () => {
     expect(getAppointmentsOccurrences(
       appointment,
       {
-        min: new Date(2000, 0, 14, 10),
-        max: new Date(2000, 0, 15, 15),
         firstDayOfWeek: 3,
-        isOnlyDateCheck: false,
+        interval: {
+          min: new Date(2000, 0, 14, 10),
+          max: new Date(2000, 0, 15, 15),
+        },
       },
       mockTimeZoneCalculator,
     )).toEqual([
@@ -50,7 +61,7 @@ describe('getAppointmentsOccurrences', () => {
     ]);
   });
 
-  it('should not crop appointment occurrences by hours for isOnlyDateCheck=true', () => {
+  it('should not crop appointment occurrences by hours for full day interval', () => {
     const appointment: any = {
       startDate: new Date(2000, 0, 9, 20),
       endDate: new Date(2000, 0, 9, 21),
@@ -59,10 +70,11 @@ describe('getAppointmentsOccurrences', () => {
     expect(getAppointmentsOccurrences(
       appointment,
       {
-        min: new Date(2000, 0, 14, 10),
-        max: new Date(2000, 0, 15, 15),
         firstDayOfWeek: 3,
-        isOnlyDateCheck: true,
+        interval: {
+          min: new Date(2000, 0, 14, 0),
+          max: new Date(2000, 0, 15, 24),
+        },
       },
       mockTimeZoneCalculator,
     )).toEqual([
