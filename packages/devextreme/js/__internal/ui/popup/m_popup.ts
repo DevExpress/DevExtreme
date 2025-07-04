@@ -502,7 +502,8 @@ class Popup<
       } else {
         this._renderTopToolbarImpl();
       }
-      this._dimensionChanged();
+      // this._dimensionChanged();
+      // this._renderGeometry();
       // To trigger toolbar width set in initial rendering to set menu button width (T1245421)
       // And to trigger with animation in runtime items update
       this._triggerToolbarResizeEvent();
@@ -553,7 +554,8 @@ class Popup<
     } else {
       this._renderBottomToolbarImpl();
     }
-    this._dimensionChanged();
+    // this._dimensionChanged();
+    // this._renderGeometry();
     // To trigger toolbar width set in initial rendering to set menu button width (T1245421)
     // And to trigger with animation in runtime items update
     this._triggerToolbarResizeEvent();
@@ -1045,6 +1047,8 @@ class Popup<
 
     const overlayContent = this.$overlayContent().get(0) as HTMLElement;
     const currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent);
+
+    // debugger;
 
     this.$content().css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent));
     this._setHeightClasses(this.$overlayContent(), currentHeightStrategyClass);
