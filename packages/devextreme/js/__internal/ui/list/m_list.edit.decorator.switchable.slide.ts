@@ -3,7 +3,7 @@ import { locate, move } from '@js/common/core/animation/translator';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { active } from '@js/common/core/events/core/emitter.feedback';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -13,7 +13,6 @@ import { isMaterialBased } from '@js/ui/themes';
 import ActionSheet from '@ts/ui/m_action_sheet';
 
 import SwitchableEditDecorator from './m_list.edit.decorator.switchable';
-import EditDecoratorMenuHelperMixin from './m_list.edit.decorator_menu_helper';
 import { register as registerDecorator } from './m_list.edit.decorator_registry';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
@@ -71,12 +70,10 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
   }
 
   _renderMenu(): void {
-    // @ts-expect-error ts-error
-    if (!this._menuEnabled()) {
+    const { menuItems } = this._list.option();
+    if (!menuItems) {
       return;
     }
-    // @ts-expect-error ts-error
-    const menuItems = this._menuItems();
 
     if (menuItems.length === 1) {
       const menuItem = menuItems[0];
@@ -118,8 +115,8 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
   }
 
   _renderDeleteButton(): void {
-    // @ts-expect-error ts-error
-    if (!this._deleteEnabled()) {
+    const { allowItemDeleting } = this._list.option();
+    if (!allowItemDeleting) {
       return;
     }
 
@@ -140,8 +137,12 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
   }
 
   _fireAction(menuItem): void {
-    // @ts-expect-error ts-error
-    this._fireMenuAction($(this._cachedNode), menuItem.action);
+    this._list._itemEventHandlerByHandler(
+      $(this._cachedNode),
+      menuItem.action,
+      {},
+      { excludeValidators: ['disabled', 'readOnly'] },
+    );
     this._cancelDeleteReadyItem();
   }
 
@@ -297,7 +298,10 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
     const that = this;
 
     const currentPosition = this._getCurrentPositions();
-    const durationTimePart = Math.min(Math.abs(currentPosition.content - positions.content) / this._cachedButtonWidth, 1);
+    const durationTimePart = Math.min(
+      Math.abs(currentPosition.content - positions.content) / this._cachedButtonWidth,
+      1,
+    );
     // @ts-expect-error ts-error
     return fx.animate(this._$cachedContent, {
       from: currentPosition,
@@ -326,6 +330,5 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
 registerDecorator(
   'menu',
   'slide',
-  // @ts-expect-error ts-error
-  SwitchableEditDecoratorSlide.include(EditDecoratorMenuHelperMixin),
+  SwitchableEditDecoratorSlide,
 );
