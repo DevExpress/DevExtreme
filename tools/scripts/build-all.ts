@@ -47,7 +47,7 @@ sh.cd(ROOT_DIR);
 
 if (!devMode) {
     // aspnet metadata will be used in Build custom-tasks to inject aspnet descriptions
-    sh.exec(`pnpx nx run metadata:make-aspnet-metadata`);
+    sh.exec(`pnpx nx run devextreme-metadata:make-aspnet-metadata`);
 
     injectDescriptions();
 }
