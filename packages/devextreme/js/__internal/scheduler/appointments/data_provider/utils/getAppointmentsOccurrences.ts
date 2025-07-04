@@ -2,33 +2,20 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { getRecurrenceProcessor } from '../../../m_recurrence';
 import type { TimeZoneCalculator } from '../../../r1/timezone_calculator';
-import { getDatesWithoutTime } from '../../../r1/utils';
 import type { AppointmentDataItem } from '../../../types';
 import { getRecurrenceException } from './getRecurrenceException';
+import type { DateInterval } from './type';
 
 interface Options {
   firstDayOfWeek: number;
-  min: Date;
-  max: Date;
-  isOnlyDateCheck: boolean;
+  interval: DateInterval;
 }
-
-const correctDateTime = (min: Date, max: Date): Date[] => {
-  const [trimMin, trimMax] = getDatesWithoutTime(min, max);
-
-  return [
-    trimMin,
-    new Date(trimMax.getTime() - 1000),
-  ];
-};
 
 export const getAppointmentsOccurrences = (
   appointment: AppointmentDataItem,
   {
     firstDayOfWeek,
-    min,
-    max,
-    isOnlyDateCheck,
+    interval,
   }: Options,
   timeZoneCalculator: TimeZoneCalculator,
 ): AppointmentDataItem[] => {
@@ -38,9 +25,6 @@ export const getAppointmentsOccurrences = (
     return [appointment];
   }
 
-  const [fixedMin, fixedMax] = isOnlyDateCheck
-    ? correctDateTime(min, max)
-    : [min, max];
   const recurrenceException = getRecurrenceException(
     appointment.recurrenceException,
     appointment.startDate,
@@ -51,8 +35,8 @@ export const getAppointmentsOccurrences = (
     exception: recurrenceException,
     start: appointment.startDate,
     end: appointment.endDate,
-    min: fixedMin,
-    max: fixedMax,
+    min: interval.min,
+    max: interval.max,
     firstDayOfWeek,
     appointmentTimezoneOffset: timeZoneCalculator.getOriginStartDateOffsetInMs(
       appointment.startDate,
