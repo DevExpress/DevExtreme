@@ -71,7 +71,7 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
 
   _renderMenu(): void {
     const { menuItems } = this._list.option();
-    if (!menuItems) {
+    if (!menuItems.length) {
       return;
     }
 
