@@ -84,16 +84,16 @@ describe('getVisibleDateIntervals', () => {
     })).toEqual([
       {
         min: new Date(2000, 0, 10, 0, 6),
-        max: new Date(2000, 0, 10, 23, 53),
+        max: new Date(2000, 0, 10, 23, 54),
       }, {
         min: new Date(2000, 0, 11, 0, 6),
-        max: new Date(2000, 0, 11, 23, 53),
+        max: new Date(2000, 0, 11, 23, 54),
       }, {
         min: new Date(2000, 0, 12, 0, 6),
-        max: new Date(2000, 0, 12, 23, 53),
+        max: new Date(2000, 0, 12, 23, 54),
       }, {
         min: new Date(2000, 0, 13, 0, 6),
-        max: new Date(2000, 0, 13, 23, 53),
+        max: new Date(2000, 0, 13, 23, 54),
       },
     ]);
   });
