@@ -1131,7 +1131,7 @@ QUnit.module('dxPivotGrid', {
 
     QUnit.test('changing rtlEnabled for all children widgets', function(assert) {
         const pivotGrid = createPivotGrid({
-            rtlEnabled: true
+            rtlEnabled: true,
         });
 
         this.clock.tick(10);
@@ -1141,7 +1141,6 @@ QUnit.module('dxPivotGrid', {
         this.clock.tick(500);
 
         pivotGrid.option('rtlEnabled', false);
-
         pivotGrid._fieldChooserPopup.show();
 
         this.clock.tick(500);
@@ -1152,9 +1151,13 @@ QUnit.module('dxPivotGrid', {
             const $widget = $(this);
             const componentNames = dataUtils.data($widget[0], 'dxComponents');
 
-            $.each(componentNames, function(index, componentName) {
+            $.each(componentNames, function(_, componentName) {
                 if(componentName !== 'dxCheckBox' && componentName !== 'dxButton') {
-                    assert.ok(!dataUtils.data($widget[0], componentName).option('rtlEnabled'), 'rtlEnabled disabled for ' + componentName);
+                    const component = dataUtils.data($widget[0], componentName);
+                    const rtlEnabled = component.option('rtlEnabled');
+                    const result = !rtlEnabled;
+
+                    assert.ok(result, `rtlEnabled disabled for ${componentName}`);
                 }
             });
         });
