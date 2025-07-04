@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "@types/node": "catalog:tools",
-    "devextreme-internal-tools": "18.0.0-beta.6",
+    "devextreme-internal-tools": "catalog:tools",
     "prettier": "catalog:tools",
     "ts-node": "catalog:tools"
   },
