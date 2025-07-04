@@ -8,16 +8,19 @@ const CLASS = {
 }
 
 export default class HeaderPanel {
+    private itemSelector = `.${Widget.addClassPrefix(this.widgetName, CLASS.headerItem)}`;
+    
     constructor(
         public element: Selector,
         public widgetName: string,
-    ) {
+    ) {}
+
+    getHeaderItemsCount(): Promise<number> {
+        return this.element.find(this.itemSelector).count;
     }
 
     getHeaderItem(idx = 0): HeaderItem {
-        const itemElement = this.element.find(
-            `.${Widget.addClassPrefix(this.widgetName, CLASS.headerItem)}`,
-        ).nth(idx);
+        const itemElement = this.element.find(this.itemSelector).nth(idx);
         return new HeaderItem(itemElement);
     }
 
