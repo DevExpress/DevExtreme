@@ -15,8 +15,6 @@ const toMs = dateUtils.dateToMilliseconds;
 export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrategy {
   public static readonly strategyName = 'virtual';
 
-  get resources() { return this.options.resources; }
-
   filter(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
     const viewOffset = this._resolveOption('viewOffset');
     const hourMs = toMs('hour');
@@ -54,7 +52,6 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
       const supportAllDayAppointment = isAllDayWorkspace || (!!showAllDayAppointments && hasAllDayPanel);
 
       filterOptions.push({
-        isVirtualScrolling: true,
         startDayHour,
         endDayHour,
         viewOffset,

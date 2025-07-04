@@ -129,10 +129,6 @@ export class AppointmentDataProvider {
     return this.getFilterStrategy().hasAllDayAppointments(filteredItems, preparedItems);
   }
 
-  filterLoadedAppointments(filterOption, preparedItems) {
-    return this.getFilterStrategy().filterLoadedAppointments(filterOption, preparedItems);
-  }
-
   // Appointment data source mappings
   cleanState() { this.appointmentDataSource.cleanState(); }
 
