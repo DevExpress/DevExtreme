@@ -1048,8 +1048,6 @@ class Popup<
     const overlayContent = this.$overlayContent().get(0) as HTMLElement;
     const currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent);
 
-    // debugger;
-
     this.$content().css(this._getHeightCssStyles(currentHeightStrategyClass, overlayContent));
     this._setHeightClasses(this.$overlayContent(), currentHeightStrategyClass);
   }
@@ -1296,6 +1294,8 @@ class Popup<
       case 'useFlatToolbarButtons': {
         this._renderTopToolbar();
         this._renderBottomToolbar();
+        this._renderGeometry();
+        this._triggerToolbarResizeEvent();
         break;
       }
       case 'dragEnabled':
