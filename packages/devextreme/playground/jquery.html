@@ -84,6 +84,7 @@
                     width: 300,
                     onClick() {
                         popup.show();
+                        // setPopupToolbarItems();
                     },
                 });
 
@@ -165,12 +166,12 @@
                     // },
                     // dragEnabled: true,
                     visible: false,
-                    showTitle: false,
-                    width: 360,
-                    height: 320,
+                    // showTitle: false,
+                    // width: 360,
+                    // height: 320,
                     width: 'auto',
                     height: 'auto',
-                    // title: '!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+',
+                    title: '!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+',
                     showCloseButton: false,
                     // hideOnOutsideClick: true,
                     // toolbarItems: [
@@ -196,21 +197,21 @@
                         const $content = $('<div>')
                             .width(300)
                             .height(300)
-                            // .text('CUSTOM TEXT');
+                            .text('CUSTOM TEXT');
 
-                        // const $btnDiv = $("<div>");
+                        const $btnDiv = $("<div>");
 
-                        // $btnDiv.dxButton({
-                        //     text: "Rebind",
-                        //     // onClick: () => {
-                        //     //     $('#content')
-                        //     //         .width(300)
-                        //     //         .height(300);
-                        //     // },
-                        //     onClick: rebindItems,
-                        // });
+                        $btnDiv.dxButton({
+                            text: "Rebind",
+                            // onClick: () => {
+                            //     $('#content')
+                            //         .width(300)
+                            //         .height(300);
+                            // },
+                            onClick: rebindItems,
+                        });
 
-                        // $content.append($btnDiv);
+                        $content.append($btnDiv);
 
                         return $content;
                     },
@@ -280,29 +281,31 @@
                 //     });
                 // }, 2000);
 
-                popup.option({ visible: true });
-                popup.option({
-                    toolbarItems: [
-                        {
-                            toolbar: 'top',
-                            location: "before",
-                            text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
-                        },
-                        // getCenterItemConfig("Center Item"),
-                        getItemConfig("First Item"),
-                        getItemConfig("Second Item", "auto"),
-                        getItemConfig("Third Item", "auto"),
-                        {
-                            toolbar: 'bottom',
-                            location: "before",
-                            text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
-                        },
-                        getBottomItemConfig("First Item"),
-                        getBottomItemConfig("Second Item", "auto"),
-                        getBottomItemConfig("Third Item", "auto"),
-                    ],
-                    // showTitle: true,
-                });
+                // popup.option({ visible: true });
+                function setPopupToolbarItems () {
+                    popup.option({
+                        toolbarItems: [
+                            {
+                                toolbar: 'top',
+                                location: "before",
+                                text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
+                            },
+                            // getCenterItemConfig("Center Item"),
+                            getItemConfig("First Item"),
+                            getItemConfig("Second Item", "auto"),
+                            getItemConfig("Third Item", "auto"),
+                            {
+                                toolbar: 'bottom',
+                                location: "before",
+                                text: "!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+",
+                            },
+                            getBottomItemConfig("First Item"),
+                            getBottomItemConfig("Second Item", "auto"),
+                            getBottomItemConfig("Third Item", "auto"),
+                        ],
+                        // showTitle: true,
+                    });
+                }
                 // popup.option({ showCloseButton: true });
 
                 // $('#toolbar').dxToolbar({
