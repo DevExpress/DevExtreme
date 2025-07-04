@@ -1,5 +1,5 @@
 import { AspNet, Mutation } from 'devextreme-internal-tools/metadata';
-import { addMember, array, cleanArtifacts, memberRef, removeMembers } from './common';
+import { addMember, cleanArtifacts, removeMembers, types } from './common';
 import { commonSmdCollectionItems } from './common/smd';
 import { PATHS } from './common/paths';
 
@@ -42,7 +42,7 @@ AspNet.makeMetadata({
     }),
     addMember({
       uid: 'ui/popover:dxPopoverOptions.toolbarItems',
-      types: [array(memberRef('ui/popover:ToolbarItem'))],
+      types: [types.array(types.memberRef('ui/popover:ToolbarItem'))],
     }),
     removeMembers(/ui\/scheduler:ToolbarItem\.options/),
   ],

@@ -1,7 +1,9 @@
 import {
   AddMutation,
   ArrayDataType,
+  DataType,
   MemberRefDataType,
+  Mutation,
   RemoveMutation,
 } from 'devextreme-internal-tools/metadata';
 import { existsSync, unlinkSync } from 'fs';
@@ -27,14 +29,21 @@ export function addMember({ uid, name, parent, types }: Omit<AddMutation, 'kind'
   return { kind: 'add', uid, name, parent, types };
 }
 
-export function array(...itemTypes: ArrayDataType['itemTypes']): ArrayDataType {
-  return { kind: 'array', itemTypes };
+export function replaceTypes({ uid, types }: { uid: string; types: DataType[] }): Mutation[] {
+  return [
+    { kind: 'remove', uid: new RegExp(uid) },
+    { kind: 'add', uid, types },
+  ];
 }
 
-export function memberRef(uid: string): MemberRefDataType {
-  return { kind: 'memberRef', uid };
-}
+export const types = {
+  array(...itemTypes: ArrayDataType['itemTypes']): ArrayDataType {
+    return { kind: 'array', itemTypes };
+  },
 
-export function object(): any {
-  return { kind: 'object' };
-}
+  memberRef(uid: string): MemberRefDataType {
+    return { kind: 'memberRef', uid };
+  },
+
+  object: { kind: 'object' } as any,
+};
