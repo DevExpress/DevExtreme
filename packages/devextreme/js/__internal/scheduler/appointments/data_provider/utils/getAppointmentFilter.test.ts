@@ -108,6 +108,22 @@ describe('getAppointmentFilter', () => {
     })).toBe(true);
   });
 
+  it('should pass correct all day appointment with zero hours', () => {
+    expect(getAppointmentFilter(
+      {
+        ...viewportOptions,
+        viewOffset: 0,
+        min: new Date(2000, 0, 16, startDayHour),
+        max: new Date(2000, 0, 16, endDayHour),
+      },
+      mockTimeZoneCalculator,
+    )({
+      ...correctAllDayAppointment,
+      startDate: new Date(2000, 0, 15),
+      endDate: new Date(2000, 0, 16),
+    })).toBe(true);
+  });
+
   it('should pass correct several days appointment', () => {
     expect(getAppointmentFilter(
       viewportOptions,
