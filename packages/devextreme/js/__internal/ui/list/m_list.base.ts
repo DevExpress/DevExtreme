@@ -28,12 +28,12 @@ import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
-import CollectionWidget from '@ts/ui/collection/m_collection_widget.live_update';
+import CollectionWidget from '@ts/ui/collection/collection_widget.live_update';
 import { deviceDependentOptions } from '@ts/ui/scroll_view/m_scrollable.device';
 import { getElementMargin } from '@ts/ui/scroll_view/utils/get_element_style';
 import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
 
-import ListItem from './m_item';
+import ListItem from './item';
 
 const LIST_CLASS = 'dx-list';
 const LIST_ITEMS_CLASS = 'dx-list-items';

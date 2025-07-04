@@ -14,7 +14,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
 import type { ItemRenderInfo } from './collection/collection_widget.base';
-import type { CollectionWidgetEditProperties } from './collection/m_collection_widget.edit';
+import type { CollectionWidgetEditProperties } from './collection/collection_widget.edit';
 
 export const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const BUTTON_GROUP_WRAPPER_CLASS = `${BUTTON_GROUP_CLASS}-wrapper`;

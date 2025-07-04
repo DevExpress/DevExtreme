@@ -4,8 +4,8 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import type { ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
-import type { CollectionWidgetEditProperties } from '@ts/ui/collection/m_collection_widget.edit';
-import CollectionWidgetEdit from '@ts/ui/collection/m_collection_widget.edit';
+import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
+import CollectionWidgetEdit from '@ts/ui/collection/collection_widget.edit';
 
 class CollectionWidgetAsync<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,7 +56,6 @@ class CollectionWidgetAsync<
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _postProcessRenderItems(): void {}
 
   _planPostRenderActions(...args: unknown[]): Promise<unknown> {

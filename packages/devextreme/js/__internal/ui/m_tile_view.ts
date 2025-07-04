@@ -17,7 +17,7 @@ import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { Orientation, Properties } from '@js/ui/tile_view';
 import type { OptionChanged } from '@ts/core/widget/types';
-import CollectionWidget from '@ts/ui/collection/m_collection_widget.edit';
+import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 import type {
   ScrollView as ScrollViewType,
   ScrollViewServerSide as ScrollViewServerSideType,

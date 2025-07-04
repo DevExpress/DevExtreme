@@ -6,13 +6,13 @@ import { extend } from '@js/core/utils/extend';
 import type { Item } from '@js/ui/list';
 import { isNumeric, isObject } from '@ts/core/utils/m_type';
 import type { OptionChanged } from '@ts/core/widget/types';
-import { NOT_EXISTING_INDEX } from '@ts/ui/collection/m_collection_widget.edit';
+import { NOT_EXISTING_INDEX } from '@ts/ui/collection/collection_widget.edit';
 
-import type PlainEditStrategy from '../collection/m_collection_widget.edit.strategy.plain';
+import type PlainEditStrategy from '../collection/collection_widget.edit.strategy.plain';
+import GroupedEditStrategy from './list.edit.strategy.grouped';
 import type { ListBaseProperties } from './m_list.base';
 import { ListBase } from './m_list.base';
 import EditProvider from './m_list.edit.provider';
-import GroupedEditStrategy from './m_list.edit.strategy.grouped';
 
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const LIST_ITEM_RESPONSE_WAIT_CLASS = 'dx-list-item-response-wait';

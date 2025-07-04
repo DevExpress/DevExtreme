@@ -1,7 +1,7 @@
 import $ from '@js/core/renderer';
 import { map } from '@js/core/utils/iterator';
 import type { Item } from '@js/ui/menu';
-import PlainEditStrategy from '@ts/ui/collection/m_collection_widget.edit.strategy.plain';
+import PlainEditStrategy from '@ts/ui/collection/collection_widget.edit.strategy.plain';
 
 class MenuBaseEditStrategy extends PlainEditStrategy<Item> {
   _getPlainItems(): Item[] {

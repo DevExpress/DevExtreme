@@ -5,8 +5,8 @@ import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { isRenderer } from '@js/core/utils/type';
 import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
-import type CollectionWidget from '@ts/ui/collection/m_collection_widget.edit';
-import type { CollectionWidgetEditProperties } from '@ts/ui/collection/m_collection_widget.edit';
+import type CollectionWidget from '@ts/ui/collection/collection_widget.edit';
+import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 
 export type CollectionItemIndex = number | { group: number; item: number };
 
@@ -48,27 +48,26 @@ class EditStrategy<
     return items;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getIndexByItemData(value: TItem): number {
     return Class.abstract();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getItemDataByIndex(index: number): TItem {
     return Class.abstract();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getKeysByItems(items: TItem[]): TKey[] {
     return Class.abstract();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getItemsByKeys(keys: TKey[], items?: TItem[]): TItem[] {
     return Class.abstract();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   itemsGetter(): TItem[] {
     return Class.abstract();
   }
@@ -94,7 +93,7 @@ class EditStrategy<
     this._cache = null;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getIndexByKey(key: TKey): number {
     return Class.abstract();
   }
@@ -150,12 +149,11 @@ class EditStrategy<
     return this._getItemByNormalizedIndex(normalizedItemIndex);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isNode(el: unknown): el is Element {
     return domAdapter.isNode(el && isRenderer(el) ? (el as dxElementWrapper).get(0) : el);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   deleteItemAtIndex(index: number): void {
     return Class.abstract();
   }
@@ -164,22 +162,20 @@ class EditStrategy<
     return this._itemsFromSameParent(movingIndex, destinationIndex) && movingIndex < destinationIndex ? 'after' : 'before';
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   moveItemAtIndexToIndex(movingIndex: number, destinationIndex: number): void {
     return Class.abstract();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isNormalizedItemIndex(index: number | Element | TItem): boolean {
     return (typeof index === 'number') && Math.round(index) === index;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _isItemIndex(index: number | Element | TItem): boolean {
     return Class.abstract();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getNormalizedItemIndex(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     value: Element,
@@ -187,22 +183,22 @@ class EditStrategy<
     return Class.abstract();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _normalizeItemIndex(index: number): number {
     return Class.abstract();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _denormalizeItemIndex(index: number): CollectionItemIndex {
     return Class.abstract();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _getItemByNormalizedIndex(index: number): dxElementWrapper {
     return Class.abstract();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _itemsFromSameParent(movingIndex: number, destinationIndex: number): boolean {
     return Class.abstract();
   }

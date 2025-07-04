@@ -12,7 +12,7 @@ import { isFunction, isObject } from '@js/core/utils/type';
 import CollectionWidgetAsync from '@js/ui/collection/ui.collection_widget.async';
 import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { CollectionWidgetEditProperties } from '@ts/ui/collection/m_collection_widget.edit';
+import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 
 import HierarchicalDataAdapter from './m_data_adapter';
 

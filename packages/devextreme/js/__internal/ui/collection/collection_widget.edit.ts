@@ -24,7 +24,7 @@ import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { CollectionWidgetBaseProperties, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import BaseCollectionWidget from '@ts/ui/collection/collection_widget.base';
-import PlainEditStrategy from '@ts/ui/collection/m_collection_widget.edit.strategy.plain';
+import PlainEditStrategy from '@ts/ui/collection/collection_widget.edit.strategy.plain';
 import type DataController from '@ts/ui/collection/m_data_controller';
 import Selection from '@ts/ui/selection/m_selection';
 
@@ -133,12 +133,10 @@ class CollectionWidget<
     this._keyGetter = compileGetter(keyExpr);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _selectedItemClass(): string {
     return SELECTED_ITEM_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getActionsList(): ('onSelectionChanging' | 'onSelectionChanged')[] {
     return ['onSelectionChanging', 'onSelectionChanged'];
   }
@@ -205,7 +203,6 @@ class CollectionWidget<
     return item as unknown as TKey;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _nullValueSelectionSupported(): boolean {
     return false;
   }
@@ -433,7 +430,6 @@ class CollectionWidget<
     return optionName;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _compareKeys(
     oldKeys: TKey[],
     newKeys: TKey[],
@@ -593,7 +589,7 @@ class CollectionWidget<
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _updateSelection(addedSelection?: unknown[], removedSelection?: unknown[]): void {}
 
   _setAriaSelectionAttribute(
