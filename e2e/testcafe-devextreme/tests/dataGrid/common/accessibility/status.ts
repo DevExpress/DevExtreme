@@ -127,7 +127,7 @@ test('Accessibility: DataGrid general status should contains correct text after 
   await t.click(columnChooserBtn);
 
   const columnChooser = dataGrid.getColumnChooser();
-  const checkbox = columnChooser.getCheckboxIcon(1);
+  const checkbox = columnChooser.getCheckbox(1);
   await t.click(checkbox);
 
   const statusText = await dataGrid.getGeneralStatusContainer().textContent;
