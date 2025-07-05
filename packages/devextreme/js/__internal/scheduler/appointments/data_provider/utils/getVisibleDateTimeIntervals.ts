@@ -42,7 +42,7 @@ export const getVisibleDateTimeIntervals = ({
       min: new Date(time),
       max: intervalMax,
     });
-    time += 24 * toMs('hour');
+    time += toMs('day');
   }
 
   return result;
