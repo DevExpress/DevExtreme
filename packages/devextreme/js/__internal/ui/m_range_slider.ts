@@ -218,8 +218,6 @@ class RangeSlider extends Slider<RangeSliderProperties> {
     const newValue = newRatio * (max - min) + min;
 
     this._updateSelectedRangePosition(newRatio, newRatio);
-    SliderHandle.getInstance(this._activeHandle()).fitTooltipPosition;
-
     this._changeValueOnSwipe(newRatio);
 
     const [startValue, endValue] = this._getActualValue();
