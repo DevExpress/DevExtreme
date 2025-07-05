@@ -8,5 +8,5 @@ export interface CompareOptions {
   endDayHour: number;
   min: Date;
   max: Date;
-  isOnlyDateCheck: boolean;
+  isDateViewOnly: boolean;
 }

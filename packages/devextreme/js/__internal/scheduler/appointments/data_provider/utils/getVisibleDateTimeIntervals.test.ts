@@ -2,16 +2,16 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
-import { getVisibleDateIntervals } from './getVisibleDateIntervals';
+import { getVisibleDateTimeIntervals } from './getVisibleDateTimeIntervals';
 
-describe('getVisibleDateIntervals', () => {
+describe('getVisibleDateTimeIntervals', () => {
   it('should return only one interval for date only view', () => {
-    expect(getVisibleDateIntervals({
+    expect(getVisibleDateTimeIntervals({
       startDayHour: 3,
       endDayHour: 10,
       min: new Date(2000, 0, 10, 3),
       max: new Date(2000, 0, 15, 10),
-      isOnlyDateCheck: true,
+      isDateViewOnly: true,
     })).toEqual([{
       min: new Date(2000, 0, 10),
       max: new Date(2000, 0, 16),
@@ -19,12 +19,12 @@ describe('getVisibleDateIntervals', () => {
   });
 
   it('should return only one interval for date only view (wrong hours)', () => {
-    expect(getVisibleDateIntervals({
+    expect(getVisibleDateTimeIntervals({
       startDayHour: 10,
       endDayHour: 3,
       min: new Date(2000, 0, 10, 10),
       max: new Date(2000, 0, 15, 3),
-      isOnlyDateCheck: true,
+      isDateViewOnly: true,
     })).toEqual([{
       min: new Date(2000, 0, 10),
       max: new Date(2000, 0, 16),
@@ -32,25 +32,25 @@ describe('getVisibleDateIntervals', () => {
   });
 
   it('should return one interval for hours [0, 24]', () => {
-    expect(getVisibleDateIntervals({
+    expect(getVisibleDateTimeIntervals({
       startDayHour: 0,
       endDayHour: 24,
       min: new Date(2000, 0, 10),
       max: new Date(2000, 0, 15),
-      isOnlyDateCheck: false,
+      isDateViewOnly: false,
     })).toEqual([{
       min: new Date(2000, 0, 10),
       max: new Date(2000, 0, 16),
     }]);
   });
 
-  it('should return day by day intervals', () => {
-    expect(getVisibleDateIntervals({
+  it('should return day by day intervals for [3, 10]', () => {
+    expect(getVisibleDateTimeIntervals({
       startDayHour: 3,
       endDayHour: 10,
       min: new Date(2000, 0, 10, 10),
       max: new Date(2000, 0, 15, 5),
-      isOnlyDateCheck: false,
+      isDateViewOnly: false,
     })).toEqual([
       {
         min: new Date(2000, 0, 10, 3),
@@ -75,12 +75,12 @@ describe('getVisibleDateIntervals', () => {
   });
 
   it('should return day by day intervals for [0.1, 23.9]', () => {
-    expect(getVisibleDateIntervals({
+    expect(getVisibleDateTimeIntervals({
       startDayHour: 0.1,
       endDayHour: 23.9,
       min: new Date(2000, 0, 10),
       max: new Date(2000, 0, 13),
-      isOnlyDateCheck: false,
+      isDateViewOnly: false,
     })).toEqual([
       {
         min: new Date(2000, 0, 10, 0, 6),
@@ -99,12 +99,12 @@ describe('getVisibleDateIntervals', () => {
   });
 
   it('should return zero intervals for interacted hours', () => {
-    expect(getVisibleDateIntervals({
+    expect(getVisibleDateTimeIntervals({
       startDayHour: 20,
       endDayHour: 10,
       min: new Date(2000, 0, 10, 10),
       max: new Date(2000, 0, 15, 5),
-      isOnlyDateCheck: false,
+      isDateViewOnly: false,
     })).toEqual([]);
   });
 });
