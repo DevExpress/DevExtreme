@@ -13,9 +13,9 @@ import { hasWindow } from '@js/core/utils/window';
 import type { Item, Properties } from '@js/ui/box';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { ItemRenderInfo, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 import type { ItemExtraOption } from '@ts/ui/collection/item';
 import CollectionWidgetItem from '@ts/ui/collection/item';
-import CollectionWidget from '@ts/ui/collection/m_collection_widget.edit';
 
 // STYLE box
 
@@ -171,7 +171,7 @@ class LayoutStrategy {
     const flexPropPrefix = stylePropPrefix('flexDirection');
     const direction = this._option('direction') ?? 'row';
 
-    each($items, function renderEachItem() {
+    each($items, function renderEachItem(this: Element): void {
       const $item = $(this);
       const item = $item.data(BOX_ITEM_DATA_KEY) as unknown as BoxItemData;
 
@@ -329,7 +329,7 @@ class Box extends CollectionWidget<BoxProperties> {
   _renderItemContent(
     args: ItemRenderInfo<BoxItemData>,
   ): dxElementWrapper | DeferredObj<dxElementWrapper> {
-    const $itemNode = args.itemData && args.itemData.node;
+    const $itemNode = args.itemData?.node;
     if ($itemNode) {
       return this._renderItemContentByNode(args, $itemNode);
     }

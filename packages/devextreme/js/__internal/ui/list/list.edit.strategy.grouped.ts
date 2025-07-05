@@ -5,8 +5,8 @@ import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { isNumeric } from '@js/core/utils/type';
 import type { Item } from '@js/ui/list';
-import type { CollectionItemIndex } from '@ts/ui/collection/m_collection_widget.edit.strategy';
-import EditStrategy from '@ts/ui/collection/m_collection_widget.edit.strategy.plain';
+import type { CollectionItemIndex } from '@ts/ui/collection/collection_widget.edit.strategy';
+import EditStrategy from '@ts/ui/collection/collection_widget.edit.strategy.plain';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_GROUP_CLASS = 'dx-list-group';
@@ -38,7 +38,6 @@ class GroupedEditStrategy extends EditStrategy<Item> {
     return this._collectionWidget._itemContainer().find(`.${LIST_GROUP_CLASS}`);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _groupItemElements($group: dxElementWrapper): dxElementWrapper {
     return $group.find(`.${LIST_ITEM_CLASS}`);
   }
@@ -220,7 +219,6 @@ class GroupedEditStrategy extends EditStrategy<Item> {
     destinationItemGroup.splice(destinationIndices.item, 0, movedItemData);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isItemIndex(index: unknown): boolean {
     const idx = index as { group?: number; item?: number };
     return Boolean(index && isNumeric(idx.group) && isNumeric(idx.item));
@@ -240,12 +238,10 @@ class GroupedEditStrategy extends EditStrategy<Item> {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _normalizeItemIndex(index: { group: number; item: number }): number {
     return combineIndex(index);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _denormalizeItemIndex(index: number): { group: number; item: number } {
     return splitIndex(index);
   }
@@ -257,7 +253,6 @@ class GroupedEditStrategy extends EditStrategy<Item> {
     return this._groupItemElements($group).eq(indices.item);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemsFromSameParent(firstIndex: number, secondIndex: number): boolean {
     return splitIndex(firstIndex).group === splitIndex(secondIndex).group;
   }

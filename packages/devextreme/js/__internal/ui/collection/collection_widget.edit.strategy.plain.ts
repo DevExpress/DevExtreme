@@ -1,7 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
-import type { CollectionItemIndex } from '@ts/ui/collection/m_collection_widget.edit.strategy';
-import EditStrategy from '@ts/ui/collection/m_collection_widget.edit.strategy';
+import type { CollectionItemIndex } from '@ts/ui/collection/collection_widget.edit.strategy';
+import EditStrategy from '@ts/ui/collection/collection_widget.edit.strategy';
 
 class PlainEditStrategy<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,7 +61,6 @@ class PlainEditStrategy<
     return -1;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   getItemsByKeys(keys: TKey[], items?: TItem[]): TItem[] {
     return (items ?? keys).slice() as TItem[];
   }
@@ -77,7 +76,6 @@ class PlainEditStrategy<
     items.splice(destinationIndex, 0, movedItemData);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isItemIndex(index: number | Element | TItem): boolean {
     return (typeof index === 'number') && Math.round(index) === index;
   }
@@ -86,14 +84,12 @@ class PlainEditStrategy<
     return this._collectionWidget._itemElements().index(itemElement);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _normalizeItemIndex(
     index: CollectionItemIndex,
   ): number {
     return index as number;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _denormalizeItemIndex(
     index: number,
   ): CollectionItemIndex {
@@ -105,7 +101,6 @@ class PlainEditStrategy<
     return index > -1 ? this._collectionWidget._itemElements().eq(index) : null;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemsFromSameParent(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _firstIndex: number,

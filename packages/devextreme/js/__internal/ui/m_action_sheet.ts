@@ -11,7 +11,7 @@ import { getWindow } from '@js/core/utils/window';
 import type { Properties } from '@js/ui/action_sheet';
 import Button from '@js/ui/button';
 import type { OptionChanged } from '@ts/core/widget/types';
-import CollectionWidget from '@ts/ui/collection/m_collection_widget.edit';
+import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 import Popover from '@ts/ui/popover/m_popover';
 import Popup from '@ts/ui/popup/m_popup';
 

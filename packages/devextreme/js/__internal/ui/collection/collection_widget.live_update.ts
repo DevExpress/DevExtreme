@@ -9,8 +9,8 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import type { OptionChanged } from '@ts/core/widget/types';
-import CollectionWidgetAsync from '@ts/ui/collection/m_collection_widget.async';
-import type { CollectionWidgetEditProperties } from '@ts/ui/collection/m_collection_widget.edit';
+import CollectionWidgetAsync from '@ts/ui/collection/collection_widget.async';
+import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 
 import type { DataChange } from './collection_widget.base';
 
@@ -60,7 +60,6 @@ class CollectionWidgetLiveUpdate<
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   reload(): void {}
 
   _init(): void {
@@ -97,7 +96,6 @@ class CollectionWidgetLiveUpdate<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isItemEquals(item1: unknown, item2: unknown): boolean {
     let itemToCompare = item1;
     if (item1 && typeof item1 === 'object' && item1[PRIVATE_KEY_FIELD]) {
