@@ -4,7 +4,7 @@ import {
 
 import { getRecurrenceProcessor } from '../../../m_recurrence';
 import { createTimeZoneCalculator } from '../../../r1/timezone_calculator';
-import { getAppointmentsOccurrences } from './getAppointmentsOccurrences';
+import { getAppointmentsOccurrences } from './get_appointments_occurrences';
 
 const options = {
   firstDayOfWeek: 3,

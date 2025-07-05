@@ -4,7 +4,7 @@ import {
 
 import {
   isAppointmentMatchedIntervals,
-} from './isAppointmentMatchedIntervals';
+} from './is_appointment_matched_intervals';
 
 const viewIntervals = [{
   min: new Date(2000, 0, 10),

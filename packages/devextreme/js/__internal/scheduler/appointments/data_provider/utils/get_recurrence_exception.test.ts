@@ -3,7 +3,7 @@ import {
 } from '@jest/globals';
 
 import { createTimeZoneCalculator } from '../../../r1/timezone_calculator';
-import { getRecurrenceException } from './getRecurrenceException';
+import { getRecurrenceException } from './get_recurrence_exception';
 
 describe('getRecurrenceException', () => {
   it.each([

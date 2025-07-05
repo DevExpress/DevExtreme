@@ -2,7 +2,7 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
-import { getVisibleDateTimeIntervals } from './getVisibleDateTimeIntervals';
+import { getVisibleDateTimeIntervals } from './get_visible_date_time_intervals';
 
 describe('getVisibleDateTimeIntervals', () => {
   it('should return only one interval for date only view', () => {
