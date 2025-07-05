@@ -4,7 +4,7 @@ import {
 
 import { createTimeZoneCalculator } from '../../../r1/timezone_calculator';
 import { ResourceLoader } from '../../../utils/loader/resource_loader';
-import { getAppointmentFilter } from './getAppointmentFilter';
+import { getAppointmentFilter } from './get_appointment_filter';
 
 const minDay = 10;
 const maxDay = 20;

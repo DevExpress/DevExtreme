@@ -5,7 +5,7 @@ import {
 import { ResourceLoader } from '../../../utils/loader/resource_loader';
 import {
   isAppointmentMatchedResources,
-} from './isAppointmentMatchedResources';
+} from './is_appointment_matched_resources';
 
 const assignee = new ResourceLoader({
   fieldExpr: 'assigneeId',

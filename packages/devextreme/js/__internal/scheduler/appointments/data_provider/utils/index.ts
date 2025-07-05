@@ -1,1 +1,1 @@
-export { getAppointmentFilter } from './getAppointmentFilter';
+export { getAppointmentFilter } from './get_appointment_filter';

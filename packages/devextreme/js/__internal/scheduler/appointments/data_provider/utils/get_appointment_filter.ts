@@ -5,10 +5,10 @@ import type { TimeZoneCalculator } from '../../../r1/timezone_calculator/calcula
 import { isAppointmentTakesAllDay } from '../../../r1/utils/index';
 import type { AllDayPanelModeType, AppointmentDataItem } from '../../../types';
 import type { ResourceLoader } from '../../../utils/loader/resource_loader';
-import { getAppointmentsOccurrences } from './getAppointmentsOccurrences';
-import { getVisibleDateTimeIntervals } from './getVisibleDateTimeIntervals';
-import { isAppointmentMatchedIntervals } from './isAppointmentMatchedIntervals';
-import { isAppointmentMatchedResources } from './isAppointmentMatchedResources';
+import { getAppointmentsOccurrences } from './get_appointments_occurrences';
+import { getVisibleDateTimeIntervals } from './get_visible_date_time_intervals';
+import { isAppointmentMatchedIntervals } from './is_appointment_matched_intervals';
+import { isAppointmentMatchedResources } from './is_appointment_matched_resources';
 
 interface Options {
   startDayHour: number;

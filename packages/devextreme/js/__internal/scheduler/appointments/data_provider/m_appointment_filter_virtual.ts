@@ -6,7 +6,7 @@ import { isDateAndTimeView } from '../../r1/utils/index';
 import type { AppointmentDataItem, SafeAppointment } from '../../types';
 import { getResourcesByGroupIndex } from '../../utils/resource_manager/group_utils';
 import { AppointmentFilterBaseStrategy } from './m_appointment_filter';
-import { isAppointmentMatchedResources } from './utils/isAppointmentMatchedResources';
+import { isAppointmentMatchedResources } from './utils/is_appointment_matched_resources';
 
 // TODO Vinogradov refactoring: this module should be refactored :)
 
