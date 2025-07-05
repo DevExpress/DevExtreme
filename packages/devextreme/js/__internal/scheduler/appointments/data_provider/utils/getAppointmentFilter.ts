@@ -6,8 +6,7 @@ import { isAppointmentTakesAllDay } from '../../../r1/utils/index';
 import type { AllDayPanelModeType, AppointmentDataItem } from '../../../types';
 import type { ResourceLoader } from '../../../utils/loader/resource_loader';
 import { getAppointmentsOccurrences } from './getAppointmentsOccurrences';
-import { getVisibleDateIntervals } from './getVisibleDateIntervals';
-import { getVisibleRecurrenceInterval } from './getVisibleRecurrenceInterval';
+import { getVisibleDateTimeIntervals } from './getVisibleDateTimeIntervals';
 import { isAppointmentMatchedIntervals } from './isAppointmentMatchedIntervals';
 import { isAppointmentMatchedResources } from './isAppointmentMatchedResources';
 
@@ -40,6 +39,17 @@ export const getAppointmentFilter = (
     allDay,
     allDayPanelMode,
   } = filterOptions;
+  const baseCompareOptions = {
+    startDayHour, endDayHour, min, max,
+  };
+  const visibleDateIntervals = getVisibleDateTimeIntervals({
+    ...baseCompareOptions,
+    isDateViewOnly: true,
+  });
+  const visibleTimeIntervals = getVisibleDateTimeIntervals({
+    ...baseCompareOptions,
+    isDateViewOnly: false,
+  });
 
   return (appointment: AppointmentDataItem): boolean => {
     const appointmentVisible = appointment.visible ?? true;
@@ -52,6 +62,12 @@ export const getAppointmentFilter = (
       allDayPanelMode,
     );
     if (isAppointmentOccupiesAllDayPanel && allDay === false) {
+      return false;
+    }
+
+    const isDateViewOnly = !isTimeDateView || isAppointmentOccupiesAllDayPanel;
+    const viewIntervals = isDateViewOnly ? visibleDateIntervals : visibleTimeIntervals;
+    if (viewIntervals.length === 0) {
       return false;
     }
 
@@ -76,22 +92,16 @@ export const getAppointmentFilter = (
       appointmentToCompare.endDate,
       [-viewOffset],
     );
-    const isOnlyDateCheck = !isTimeDateView || appointmentToCompare.allDay;
 
-    const compareOptions = {
-      startDayHour,
-      endDayHour,
-      min,
-      max,
-      isOnlyDateCheck,
+    const recurrenceInterval = {
+      min: viewIntervals[0].min,
+      max: viewIntervals[viewIntervals.length - 1].max,
     };
-    const recurrenceInterval = getVisibleRecurrenceInterval(compareOptions);
     const appointmentOccurrences = getAppointmentsOccurrences(
       appointmentToCompare,
       { firstDayOfWeek, interval: recurrenceInterval },
       timeZoneCalculator,
     );
-    const viewIntervals = getVisibleDateIntervals(compareOptions);
 
     return appointmentOccurrences.some(
       (appointmentOccurrence) => isAppointmentMatchedIntervals(

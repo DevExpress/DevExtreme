@@ -78,6 +78,20 @@ const assignee = new ResourceLoader({
 const yearMs = new Date(2001, 0).getTime() - new Date(2000, 0).getTime();
 
 describe('getAppointmentFilter', () => {
+  it('should filter out appointment for zero hours duration', () => {
+    expect(getAppointmentFilter(
+      { ...viewportOptions, startDayHour: 20, endDayHour: 10 },
+      mockTimeZoneCalculator,
+    )(correctAppointment)).toBe(false);
+  });
+
+  it('should ignore zero hours duration for all day appointment', () => {
+    expect(getAppointmentFilter(
+      { ...viewportOptions, startDayHour: 20, endDayHour: 10 },
+      mockTimeZoneCalculator,
+    )(correctAllDayAppointment)).toBe(true);
+  });
+
   it('should pass correct appointment', () => {
     expect(getAppointmentFilter(
       viewportOptions,
