@@ -25,13 +25,13 @@ import LoadIndicator from '@js/ui/load_indicator';
 import type { Properties } from '@js/ui/tree_view';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
-import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/m_hierarchical_collection_widget';
+import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/hierarchical_collection_widget';
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, SCROLLABLE_CONTENT_CLASS } from '@ts/ui/scroll_view/consts';
 import Scrollable from '@ts/ui/scroll_view/m_scrollable';
 import { getRelativeOffset } from '@ts/ui/scroll_view/utils/get_relative_offset';
 
-import type { DataAdapterOptions } from '../hierarchical_collection/m_data_adapter';
-import type { InternalNode } from '../hierarchical_collection/m_data_converter';
+import type { DataAdapterOptions } from '../hierarchical_collection/data_adapter';
+import type { InternalNode } from '../hierarchical_collection/data_converter';
 
 const WIDGET_CLASS = 'dx-treeview';
 

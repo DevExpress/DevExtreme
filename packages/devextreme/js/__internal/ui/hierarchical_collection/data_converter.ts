@@ -120,7 +120,7 @@ class DataConverter {
       return false;
     }
     const items = this._dataAccessors.getters.items(item);
-    return Boolean(items && items.length);
+    return Boolean(items?.length);
   }
 
   _getUniqueKey(item: ItemData): ItemKey {
@@ -245,7 +245,6 @@ class DataConverter {
     return this._getByKey(node.internalFields.parentKey);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   getByKey(data: InternalNode[], key: ItemKey): InternalNode | null {
     if (!isDefined(key)) {
       return null;
