@@ -38,3 +38,8 @@ catalogs:
     "@babel/eslint-parser": 7.23.10
     "@typescript-eslint/eslint-plugin": 5.62.0
     "@typescript-eslint/parser": 5.62.0
+  tools:
+    "devextreme-internal-tools": 18.0.0-beta.12
+    "prettier": 3.5.3
+    "ts-node": 10.9.2
+    "@types/node": 20.12.8

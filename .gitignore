@@ -6,6 +6,7 @@ dist
 bin
 obj
 /artifacts
+/packages/metadata/artifacts
 
 # dependencies
 node_modules
