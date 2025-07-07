@@ -17,13 +17,13 @@ const { AngularFacadeGenerator } = require('devextreme-internal-tools');
 const { AngularModuleFacadeGenerator } = require('devextreme-internal-tools');
 const { AngularCommonReexportsGenerator } = require('devextreme-internal-tools');
 const { AngularComponentNamesGenerator } = require('devextreme-internal-tools');
-const { NG_METADATA_PATH, INTEGRATION_METADATA_PATH, angularConfig } = require('../../tools/generators-config');
 
 const argv = require('yargs')
   .option('with-descriptions', { type: 'boolean', default: false })
   .parseSync();
 
 const buildConfig = require('./build.config');
+const { NG_METADATA_PATH, INTEGRATION_METADATA_PATH, angularConfig } = require('../../tools/generators-config');
 
 // ------------Components------------
 
