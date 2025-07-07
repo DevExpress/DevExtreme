@@ -914,6 +914,14 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
     return super.getDataIndex.apply(this, arguments as any);
   }
 
+  protected _getGlobalDataIndexOffset() {
+    if (isVirtualMode(this)) {
+      return 0;
+    }
+
+    return super._getGlobalDataIndexOffset();
+  }
+
   private viewportSize() {
     const rowsScrollController = this._rowsScrollController;
     const dataSource = this._dataSource;

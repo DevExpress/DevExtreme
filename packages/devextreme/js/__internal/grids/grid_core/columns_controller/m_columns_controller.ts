@@ -154,6 +154,29 @@ export class ColumnsController extends modules.Controller {
     }
 
     addExpandColumn(this);
+    this.addCommandColumn({
+      type: 'number',
+      command: 'number',
+      visible: true,
+      alignment: 'center',
+      width: 'auto',
+      cellTemplate: (container, options) => {
+        const $container = $(container);
+        const dataIndexGetter = this._dataController.dataSource().getDataIndexGetter();
+        const dataIndex = dataIndexGetter(options.data);
+
+        if (options.rowType === 'data') {
+          $container.text(
+            `index: ${options.row.dataIndex}, `
+            + `global index: ${options.row.globalDataIndex}, `
+            + `dataIndexGetter: ${dataIndex}`,
+          );
+        } else {
+          gridCoreUtils.setEmptyText($container);
+        }
+      },
+      fixedPosition: 'left',
+    });
 
     if (this._dataSourceApplied) {
       this.applyDataSource(this._dataSource, true, isApplyingUserState);
@@ -189,7 +212,7 @@ export class ColumnsController extends modules.Controller {
       }
       for (let i = 0; i < items.length; i++) {
         const childItems = getFirstItemsCore(items[i].items || items[i].collapsedItems, groupsCount - 1);
-        if (childItems && childItems.length) {
+        if (childItems?.length) {
           return childItems;
         }
       }
@@ -223,7 +246,7 @@ export class ColumnsController extends modules.Controller {
 
     if (columnIndexes.length) {
       if (columns) {
-        column = columnIndexes.reduce((column, index) => column && column.columns && column.columns[index], { columns });
+        column = columnIndexes.reduce((column, index) => column?.columns?.[index], { columns });
       } else {
         column = getColumnByIndexes(that, columnIndexes);
       }
@@ -322,7 +345,7 @@ export class ColumnsController extends modules.Controller {
 
   public applyDataSource(dataSource, forceApplying?, isApplyingUserState?) {
     const that = this;
-    const isDataSourceLoaded = dataSource && dataSource.isLoaded();
+    const isDataSourceLoaded = dataSource?.isLoaded();
 
     that._dataSource = dataSource;
 
@@ -386,7 +409,7 @@ export class ColumnsController extends modules.Controller {
   }
 
   public getCommonSettings(column?) {
-    const commonColumnSettings = (!column || !column.type) && this.option('commonColumnSettings') || {};
+    const commonColumnSettings = !column?.type && this.option('commonColumnSettings') || {};
     const groupingOptions: any = this.option('grouping') ?? {};
     const groupPanelOptions: any = this.option('groupPanel') ?? {};
 
@@ -547,7 +570,7 @@ export class ColumnsController extends modules.Controller {
             if (!isDefined(transparentColumnIndex)) {
               transparentColumnIndex = j;
             }
-          } else if (prevColumn && prevColumn.fixed && getFixedPosition(that, prevColumn) !== getFixedPosition(that, column)) {
+          } else if (prevColumn?.fixed && getFixedPosition(that, prevColumn) !== getFixedPosition(that, column)) {
             if (!isDefined(transparentColumnIndex)) {
               transparentColumnIndex = j;
             }
@@ -605,7 +628,7 @@ export class ColumnsController extends modules.Controller {
     let expandColumns = this._getExpandColumnsCore();
     let expandColumn;
     const firstGroupColumn = expandColumns.filter((column) => column.groupIndex === 0)[0];
-    const isFixedFirstGroupColumn = firstGroupColumn && firstGroupColumn.fixed;
+    const isFixedFirstGroupColumn = firstGroupColumn?.fixed;
     const isColumnFixing = this._isColumnFixing();
     const rtlEnabled = this.option('rtlEnabled');
 
@@ -890,9 +913,9 @@ export class ColumnsController extends modules.Controller {
 
         return fromVisibleIndex !== toVisibleIndex && fromVisibleIndex + 1 !== toVisibleIndex;
       } if ((sourceLocation === GROUP_LOCATION && targetLocation !== COLUMN_CHOOSER_LOCATION) || targetLocation === GROUP_LOCATION) {
-        return sourceColumn && sourceColumn.allowGrouping;
+        return sourceColumn?.allowGrouping;
       } if (sourceLocation === COLUMN_CHOOSER_LOCATION || targetLocation === COLUMN_CHOOSER_LOCATION) {
-        return sourceColumn && sourceColumn.allowHiding;
+        return sourceColumn?.allowHiding;
       }
       return true;
     }
@@ -1132,7 +1155,7 @@ export class ColumnsController extends modules.Controller {
       if (!isDefined(column.filterOperations)) {
         setFilterOperationsAsDefaultValues(column);
       }
-      column.defaultFilterOperation = column.filterOperations && column.filterOperations[0] || '=';
+      column.defaultFilterOperation = column.filterOperations?.[0] || '=';
       column.showEditorAlways = isDefined(column.showEditorAlways) ? column.showEditorAlways : dataType === 'boolean' && !column.cellTemplate && !column.lookup;
     }
   }
@@ -1379,10 +1402,10 @@ export class ColumnsController extends modules.Controller {
       const column = that.columnOption(filter[0]);
 
       if (remoteFiltering) {
-        if (config().forceIsoDateParsing && column && column.serializeValue && filter.length > 1) {
+        if (config().forceIsoDateParsing && column?.serializeValue && filter.length > 1) {
           filter[filter.length - 1] = column.serializeValue(filter[filter.length - 1], 'filter');
         }
-      } else if (column && column.selector) {
+      } else if (column?.selector) {
         filter[0] = column.selector;
         filter[0].columnIndex = column.index;
       }
@@ -1708,7 +1731,7 @@ export class ColumnsController extends modules.Controller {
       calculatedColumnOptions.lookup = {
         calculateCellValue(value, skipDeserialization) {
           if (this.valueExpr) {
-            value = this.valueMap && this.valueMap[value];
+            value = this.valueMap?.[value];
           }
           return this.deserializeValue && !skipDeserialization ? this.deserializeValue(value) : value;
         },
@@ -1742,14 +1765,14 @@ export class ColumnsController extends modules.Controller {
                 dataSource = new DataSource(dataSourceOptions);
                 return dataSource.load().done((data) => {
                   that.items = data;
-                  that.updateValueMap && that.updateValueMap();
+                  that.updateValueMap?.();
                 });
               }
             } else {
               errors.log('E1016');
             }
           } else {
-            that.updateValueMap && that.updateValueMap();
+            that.updateValueMap?.();
           }
         },
       };

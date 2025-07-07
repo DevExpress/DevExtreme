@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/method-signature-style */
+
 import ArrayStore from '@js/common/data/array_store';
 import { CustomStore } from '@js/common/data/custom_store';
 import $ from '@js/core/renderer';
@@ -377,7 +377,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
         break;
       case 'columns':
         dataSource = that.dataSource();
-        if (dataSource && dataSource.isLoading() && args.name === args.fullName) {
+        if (dataSource?.isLoading() && args.name === args.fullName) {
           this._useSortingGroupingFromColumns = true;
           dataSource.load();
         }
@@ -392,7 +392,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   public getDataSource() {
-    return this._dataSource && this._dataSource._dataSource;
+    return this._dataSource?._dataSource;
   }
 
   public getCombinedFilter(returnDataField?) {
@@ -558,7 +558,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
           that._handleLoadingChanged(false);
         }
 
-        if (isAsyncDataSourceApplying && e && e.isDelayed) {
+        if (isAsyncDataSourceApplying && e?.isDelayed) {
           e.isDelayed = false;
         }
 
@@ -566,7 +566,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
         const hasAdditionalFilter = () => {
           const additionalFilter = that._calculateAdditionalFilter();
-          return additionalFilter && additionalFilter.length;
+          return additionalFilter?.length;
         };
         const needApplyFilter = that._needApplyFilter;
 
@@ -607,7 +607,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this.pushed.fire(changes);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public fireError(...args: any[]) {
     this.dataErrorOccurred.fire(errors.Error.apply(errors, args));
   }
@@ -766,7 +765,12 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     item = this._generateDataItem(item, options);
     item = this._processDataItem(item, options);
     item.dataIndex = options.dataIndex++;
+    item.globalDataIndex = item.dataIndex + this._getGlobalDataIndexOffset();
     return item;
+  }
+
+  protected _getGlobalDataIndexOffset() {
+    return this.pageIndex() * this.pageSize();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -981,9 +985,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     }
 
     if (changedColumnIndices) {
-      oldItem.cells && oldItem.cells.forEach((cell, columnIndex) => {
+      oldItem.cells?.forEach((cell, columnIndex) => {
         const isCellChanged = changedColumnIndices.indexOf(columnIndex) >= 0;
-        if (!isCellChanged && cell && cell.update) {
+        if (!isCellChanged && cell?.update) {
           cell.update(newItem);
         }
       });
@@ -996,7 +1000,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
         newItem.oldValues = oldItem.values;
       }
 
-      oldItem.update && oldItem.update(newItem);
+      oldItem.update?.(newItem);
     }
 
     return changedColumnIndices;
@@ -1049,9 +1053,9 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       }
 
       if (item1.cells) {
-        item1.update && item1.update(item2);
+        item1.update?.(item2);
         item1.cells.forEach((cell) => {
-          if (cell && cell.update) {
+          if (cell?.update) {
             cell.update(item2, true);
           }
         });
@@ -1255,7 +1259,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   public loadingOperationTypes() {
     const dataSource = this.dataSource();
 
-    return dataSource && dataSource.loadingOperationTypes() || {};
+    return dataSource?.loadingOperationTypes() || {};
   }
 
   /**
@@ -1495,7 +1499,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   public store() {
     const dataSource = this._dataSource;
-    return dataSource && dataSource.store();
+    return dataSource?.store();
   }
 
   public loadAll(data, skipFilter = false) {
@@ -1526,7 +1530,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
         dataSource.load(loadOptions).done((items, extra) => {
           items = that._beforeProcessItems(items);
           items = that._processItems(items, { changeType: 'loadingAll' });
-          d.resolve(items, extra && extra.summary);
+          d.resolve(items, extra?.summary);
         }).fail(d.reject);
       } else {
         d.reject();
@@ -1651,10 +1655,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
     when(!options.lookup || that._columnsController.refresh()).always(() => {
       if (options.load || options.reload) {
-        dataSource && dataSource.on('customizeLoadResult', customizeLoadResult);
+        dataSource?.on('customizeLoadResult', customizeLoadResult);
 
         when(that.reload(options.reload, changesOnly)).always(() => {
-          dataSource && dataSource.off('customizeLoadResult', customizeLoadResult);
+          dataSource?.off('customizeLoadResult', customizeLoadResult);
           that._repaintChangesOnly = undefined;
         }).done(d.resolve).fail(d.reject);
       } else {
@@ -1671,7 +1675,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   protected _disposeDataSource() {
-    if (this._dataSource && this._dataSource._eventsStrategy) {
+    if (this._dataSource?._eventsStrategy) {
       this._dataSource._eventsStrategy.off('loadingChanged', this.readyWatcher);
     }
     this.setDataSource(null);
@@ -1709,7 +1713,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   public getCachedStoreData() {
-    return this._dataSource && this._dataSource.getCachedStoreData();
+    return this._dataSource?.getCachedStoreData();
   }
 
   /**
@@ -1728,7 +1732,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: editing, virtual_scrolling
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   public reload(reload?, changesOnly?): any {
     return this._dataSource?.reload(reload, changesOnly);
   }
