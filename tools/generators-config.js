@@ -1,8 +1,3 @@
-const paths = {
-  ngMetadata: () => require.resolve('devextreme-metadata/NGMetaData.json'),
-  integrationMetadata: () => require.resolve('devextreme-metadata/integration-data.json'),
-};
-
 function commonConfig() {
   return {
     variables: {
@@ -146,5 +141,4 @@ module.exports = {
   reactConfig,
   angularConfig,
   vueConfig,
-  paths,
 }

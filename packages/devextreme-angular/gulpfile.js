@@ -23,7 +23,7 @@ const argv = require('yargs')
   .parseSync();
 
 const buildConfig = require('./build.config');
-const { paths, angularConfig } = require('../../tools/generators-config');
+const { angularConfig } = require('../../tools/generators-config');
 
 // ------------Components------------
 
@@ -39,8 +39,8 @@ gulp.task('generate.metadata', gulp.series('clean.metadata', (done) => {
   generator.generate({
     ...buildConfig.tools.metadataGenerator,
     unifiedConfig: angularConfig,
-    sourceMetadataFilePath: paths.ngMetadata(),
-    imdMetadataFilePath: paths.integrationMetadata(),
+    sourceMetadataFilePath: require.resolve('devextreme-metadata/NGMetaData.json'),
+    imdMetadataFilePath: require.resolve('devextreme-metadata/integration-data.json'),
   });
   done();
 }));
@@ -128,7 +128,7 @@ gulp.task('generate.common-reexports', (done) => {
 
   AngularCommonReexportsGenerator.generate({
     outputPath,
-    metadata: JSON.parse(fs.readFileSync(paths.integrationMetadata()).toString()),
+    metadata: JSON.parse(fs.readFileSync(require.resolve('devextreme-metadata/integration-data.json')).toString()),
     templatingOptions: {
       quotes: 'single',
       excplicitIndexInImports: true,
