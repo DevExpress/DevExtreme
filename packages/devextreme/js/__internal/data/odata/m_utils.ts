@@ -61,7 +61,7 @@ const formatISO8601 = (date, skipZeroTime, skipTimezone) => {
     }
 
     if (!skipTimezone) {
-      bag.push('Z');
+      // bag.push('Z');
     }
   }
 
