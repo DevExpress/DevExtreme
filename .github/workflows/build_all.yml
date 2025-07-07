@@ -5,7 +5,7 @@ on:
     paths-ignore:
       - 'apps/**/*.md'
   push:
-    branches: [25_1]
+    branches: [25_2]
 
 jobs:
   build:
