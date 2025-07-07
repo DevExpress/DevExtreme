@@ -17,6 +17,7 @@ const { AngularFacadeGenerator } = require('devextreme-internal-tools');
 const { AngularModuleFacadeGenerator } = require('devextreme-internal-tools');
 const { AngularCommonReexportsGenerator } = require('devextreme-internal-tools');
 const { AngularComponentNamesGenerator } = require('devextreme-internal-tools');
+const { NG_METADATA_PATH, INTEGRATION_METADATA_PATH, angularConfig } = require('../../tools/generators-config');
 
 const argv = require('yargs')
   .option('with-descriptions', { type: 'boolean', default: false })
@@ -35,7 +36,12 @@ gulp.task('clean.metadata', gulp.series(() => {
 gulp.task('generate.metadata', gulp.series('clean.metadata', (done) => {
   const generator = new AngularMetadataGenerator();
 
-  generator.generate(buildConfig.tools.metadataGenerator);
+  generator.generate({
+    ...buildConfig.tools.metadataGenerator,
+    unifiedConfig: angularConfig,
+    sourceMetadataFilePath: NG_METADATA_PATH,
+    imdMetadataFilePath: INTEGRATION_METADATA_PATH,
+  });
   done();
 }));
 
@@ -118,11 +124,11 @@ gulp.task('generate.facades', gulp.series('generate.moduleFacades', (done) => {
 }));
 
 gulp.task('generate.common-reexports', (done) => {
-  const { outputPath, imdMetadataFilePath } = buildConfig.tools.commonReexportsGenerator;
+  const { outputPath } = buildConfig.tools.commonReexportsGenerator;
 
   AngularCommonReexportsGenerator.generate({
     outputPath,
-    metadata: JSON.parse(fs.readFileSync(imdMetadataFilePath).toString()),
+    metadata: JSON.parse(fs.readFileSync(INTEGRATION_METADATA_PATH).toString()),
     templatingOptions: {
       quotes: 'single',
       excplicitIndexInImports: true,

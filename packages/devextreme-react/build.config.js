@@ -7,7 +7,6 @@ module.exports = {
     license: 'LICENSE',
     readme: 'README.md'
   },
-  metadataPath: require.resolve('devextreme-metadata/integration-data.json'),
   generatedComponentsDir: './src',
   coreComponentsDir: './src/core',
   indexFileName: './src/index.ts',
