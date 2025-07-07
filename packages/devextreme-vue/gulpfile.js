@@ -7,7 +7,7 @@ const ts = require('gulp-typescript');
 const config = require('./build.config');
 const generateVueComponents = require('devextreme-internal-tools').generateVueComponents;
 const path = require('path');
-const { vueConfig } = require('../../tools/generators-config');
+const { paths, vueConfig } = require('../../tools/generators-config');
 
 const GENERATE = 'generate';
 const CLEAN = 'clean';
@@ -36,9 +36,8 @@ gulp.task(CLEAN, gulp.parallel(OUTPUTDIR_CLEAN, NPM_CLEAN));
 
 gulp.task(GENERATE,
     (done) => {
-        const { INTEGRATION_METADATA_PATH } = require('../../tools/generators-config');
         generateVueComponents(
-            JSON.parse(fs.readFileSync(INTEGRATION_METADATA_PATH).toString()),
+            JSON.parse(fs.readFileSync(paths.integrationMetadata()).toString()),
             config.componentGeneratorTplConfig,
             {
                 componentsDir: config.generatedComponentsDir,

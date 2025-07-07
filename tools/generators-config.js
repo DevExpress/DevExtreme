@@ -1,5 +1,7 @@
-const NG_METADATA_PATH = require.resolve('devextreme-metadata/NGMetaData.json');
-const INTEGRATION_METADATA_PATH = require.resolve('devextreme-metadata/integration-data.json');
+const paths = {
+  ngMetadata: () => require.resolve('devextreme-metadata/NGMetaData.json'),
+  integrationMetadata: () => require.resolve('devextreme-metadata/integration-data.json'),
+};
 
 function commonConfig() {
   return {
@@ -144,6 +146,5 @@ module.exports = {
   reactConfig,
   angularConfig,
   vueConfig,
-  NG_METADATA_PATH,
-  INTEGRATION_METADATA_PATH,
+  paths,
 }
