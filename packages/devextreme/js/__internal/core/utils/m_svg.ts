@@ -6,13 +6,14 @@ import { getWindow } from '@js/core/utils/window';
 const window = getWindow();
 
 function getMarkup(element, backgroundColor) {
-  const temp = domAdapter.createElement('div');
   const clone = element.cloneNode(true);
+  const serializer = new XMLSerializer();
+
   if (backgroundColor) {
     $(clone).css('backgroundColor', backgroundColor);
   }
-  temp.appendChild(clone);
-  return temp.innerHTML;
+
+  return serializer.serializeToString(clone);
 }
 
 function fixNamespaces(markup) {
@@ -33,7 +34,9 @@ function decodeHtmlEntities(markup) {
     .replace(/&lt;/gi, '&#60;')
     .replace(/&gt;/gi, '&#62;')
     .replace(/&nbsp;/gi, '&#160;')
-    .replace(/&shy;/gi, '&#173;');
+    .replace(/\u00A0/g, '&#160;')
+    .replace(/&shy;/gi, '&#173;')
+    .replace(/\u00AD/g, '&#173;');
 }
 
 export const HIDDEN_FOR_EXPORT = 'hidden-for-export';
