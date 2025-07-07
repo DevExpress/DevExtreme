@@ -55,7 +55,7 @@ class ConfirmationPopup {
   _getPopupConfig(): PopupProperties {
     const messageId = new Guid().toString();
     const $message = $('<div>')
-      .html(messageLocalization.format('dxChat-editingDeleteConfirmText'))
+      .text(messageLocalization.format('dxChat-editingDeleteConfirmText'))
       .attr('id', messageId);
 
     return extend({
