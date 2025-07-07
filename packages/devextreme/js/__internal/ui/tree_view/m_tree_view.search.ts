@@ -3,7 +3,7 @@ import $ from '@js/core/renderer';
 import TextBox from '@js/ui/text_box';
 import searchBoxMixin from '@js/ui/widget/ui.search_box_mixin';
 
-import type { DataAdapterOptions } from '../hierarchical_collection/m_data_adapter';
+import type { DataAdapterOptions } from '../hierarchical_collection/data_adapter';
 import TreeViewBase from './m_tree_view.base';
 
 // @ts-expect-error

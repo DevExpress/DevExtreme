@@ -16,7 +16,7 @@ import HierarchicalDataConverter, {
   type ItemData,
   type ItemKey,
   type PublicNode,
-} from './m_data_converter';
+} from './data_converter';
 
 const EXPANDED = 'expanded';
 const SELECTED = 'selected';
@@ -90,7 +90,6 @@ class DataAdapter {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _defaultOptions(): DataAdapterOptions {
     return {
       dataAccessors: {} as DataAccessors,
@@ -172,7 +171,6 @@ class DataAdapter {
     return this.options.multipleSelection ? this.getData() : this.getFullData();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isNodeVisible(node: InternalNode): boolean {
     return node.internalFields.item.visible !== false;
   }
@@ -449,7 +447,6 @@ class DataAdapter {
     return this.options.dataConverter.getVisibleItemsCount();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   getPublicNode(node: InternalNode): PublicNode | undefined {
     return node.internalFields.publicNode;
   }
@@ -607,10 +604,12 @@ class DataAdapter {
             errors.log('W1007', node.internalFields.parentKey, node.internalFields.key);
             index += 1;
           } else {
+            // eslint-disable-next-line max-depth
             if (!parent.internalFields.expanded) {
               this._setFieldState(parent, EXPANDED, true);
             }
 
+            // eslint-disable-next-line max-depth
             if (matchesArray.includes(parent)) {
               index += 1;
             } else {
