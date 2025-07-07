@@ -18,9 +18,9 @@ import {
 } from '../utils/visual-tests/matrix-test-helper';
 import { getThemePostfix } from '../utils/visual-tests/helpers/theme-utils';
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
-import accessibilityUnsupportedComponents from './accessibility-unsupported-components.json';
-import knownWarnings from './known-warnings.json';
-import skipJsErrorsComponents from './skip-js-errors-components.json';
+import { accessibilityUnsupportedComponents } from './accessibility-unsupported-components';
+import { knownWarnings } from './known-warnings';
+import { skipJsErrorsComponents } from './skip-js-errors-components';
 import { skippedTests } from './skipped-tests';
 
 import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list';
