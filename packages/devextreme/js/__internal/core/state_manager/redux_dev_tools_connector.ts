@@ -35,6 +35,22 @@ export class ReduxDevToolsConnector implements StateManagementTypes.DevToolsConn
             skip: false,
             dispatch: true,
           },
+          shouldCatchErrors: true,
+          serialize: {
+            options: {
+              circular: '[CIRCULAR]',
+              date: true,
+            },
+            replacer: (key, value) => {
+              // replaced because this property contains a reference to the component instance
+              // which causes "heap out of memory"
+              if (key === 'changes' && (value !== undefined && value !== null) && typeof value === 'object' && 'component' in value && 'element' in value) {
+                return '[REPLACED]';
+              }
+
+              return value;
+            },
+          },
         });
 
         this.devTools.subscribe(

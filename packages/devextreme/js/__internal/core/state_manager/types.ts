@@ -140,6 +140,16 @@ export type ReduxDevToolsExtension = {
       skip?: boolean;
       dispatch?: boolean;
     };
+    shouldCatchErrors?: boolean;
+    serialize?: boolean | {
+      options?: boolean | {
+        undefined?: boolean;
+        date?: boolean;
+        circular?: string;
+      };
+      // eslint-disable-next-line spellcheck/spell-checker
+      replacer?: (key: string, value: unknown) => unknown;
+    };
   // eslint-disable-next-line spellcheck/spell-checker
   }) => ReduxDevToolsInstance;
 };
