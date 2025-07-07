@@ -1,6 +1,6 @@
 import { AspNet, Mutation } from 'devextreme-internal-tools/metadata';
 import { addMember, cleanArtifacts, removeMembers, types } from './common';
-import { commonSmdCollectionItems } from './common/smd';
+import { commonSmdCollectionItems, enums, enumAliases, enumItemRenamings } from './common/smd';
 import { PATHS } from './common/paths';
 
 cleanArtifacts('StrongMetaData.json', 'StrongMetaDataGenerator.cfg.json');
@@ -58,6 +58,9 @@ AspNet.makeMetadata({
       },
     ],
     collectionItems: [...commonSmdCollectionItems],
+    enums,
+    enumAliases,
+    enumItemRenamings
   },
 });
 
