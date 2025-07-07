@@ -1,0 +1,2 @@
+You can customize the appearance of TileView visual elements with templates. Specify custom HTML markup in [itemRender](/Documentation/ApiReference/UI_Components/dxTileView/Configuration/#itemRender) to customize all tiles or **items[]**.[render](/Documentation/ApiReference/UI_Components/dxTileView/Configuration/items/#render) to change the appearance of a specific tile. This demo customizes all TileView items with the **itemRender** property.
+<!--split-->

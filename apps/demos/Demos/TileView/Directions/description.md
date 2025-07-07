@@ -1,2 +1,2 @@
-By&nbsp;default, the TileView component is&nbsp;oriented horizontally, but you can orient it&nbsp;vertically using the **direction** property.
+The default orientation of TileView is horizontal. In this orientation, the component overflows content to the right (or to the left if [rtlEnabled](/Documentation/ApiReference/UI_Components/dxTileView/Configuration/#rtlEnabled) is `true`). To apply vertical orientation, set the [direction](/Documentation/ApiReference/UI_Components/dxTileView/Configuration/#direction) property to *"vertical"*.
 <!--split-->
