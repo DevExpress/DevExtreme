@@ -955,7 +955,7 @@ class Menu extends MenuBase {
     if (submenu) {
       return submenu;
     }
-    itemData = itemData ?? this._getItemData($itemElement);
+    itemData = itemData ?? this._getItemData($itemElement) as Item;
 
     const node = this._dataAdapter.getNodeByItem(itemData);
     // @ts-expect-error
