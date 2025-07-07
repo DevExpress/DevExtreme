@@ -80,11 +80,9 @@
         "cwd": "{projectRoot}",
         "command": "true"
       },
+      "cache": false,
       "inputs": [
         "{projectRoot}/dist/**"
-      ],
-      "outputs": [
-        "{projectRoot}/dist"
       ]
     },
     "pack": {
@@ -94,6 +92,7 @@
         "cwd": "{projectRoot}",
         "command": "pnpm pack"
       },
+      "cache": false,
       "inputs": [
         "{projectRoot}/dist/**",
         "{projectRoot}/package.json"
