@@ -73,11 +73,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { DxStepper, DxItem } from 'devextreme-vue/stepper';
+import { type Orientation } from "devextreme-vue/common";
 import { DxButtonGroup, type DxButtonGroupTypes } from 'devextreme-vue/button-group';
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { steps, orientations, navigationModes } from './data.ts';
 
-const orientation = ref(orientations[0].value);
+const orientation = ref<Orientation>(orientations[0].value);
 const navigationMode = ref(navigationModes[0].value);
 const selectOnFocus = ref(true);
 const rtlMode = ref(false);
