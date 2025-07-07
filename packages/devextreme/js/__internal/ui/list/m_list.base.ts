@@ -81,6 +81,8 @@ export interface ListBaseProperties extends Properties<Item> {
 }
 
 export class ListBase extends CollectionWidget<ListBaseProperties> {
+  static ItemClass = ListItem;
+
   _$listContainer!: dxElementWrapper;
 
   _$container!: dxElementWrapper;
@@ -1329,8 +1331,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
 }
 // @ts-expect-error ts-error
 ListBase.include(DataConverterMixin);
-// @ts-expect-error ts-error
-ListBase.ItemClass = ListItem;
 
 function getScrollView() {
   return _scrollView || ScrollView;

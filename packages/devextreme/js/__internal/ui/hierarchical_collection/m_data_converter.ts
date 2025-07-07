@@ -1,119 +1,193 @@
-import Class from '@js/core/class';
-import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isPrimitive } from '@js/core/utils/type';
+import type { DataStructure } from '@js/ui/tree_view';
 import errors from '@js/ui/widget/ui.errors';
 
-const DataConverter = Class.inherit({
+export type DataType = DataStructure | undefined;
+export type ItemKey = string | number;
 
-  ctor() {
+export interface BaseItemData {
+  visible?: boolean;
+  key?: ItemKey;
+  parentKey?: ItemKey;
+  disabled?: boolean;
+  expanded?: boolean;
+  selected?: boolean;
+  items?: ItemData[];
+}
+
+export type ItemData = BaseItemData;
+
+export interface InternalFields {
+  disabled: boolean;
+  expanded: boolean;
+  selected: boolean;
+  key: ItemKey;
+  parentKey: ItemKey | undefined;
+  item: ItemData;
+  childrenKeys: ItemKey[];
+  publicNode?: PublicNode;
+}
+
+export interface InternalNode extends ItemData {
+  internalFields: InternalFields;
+}
+
+export interface PublicNode {
+  text: string;
+  key: ItemKey;
+  selected: boolean;
+  expanded: boolean;
+  disabled: boolean;
+  parent: PublicNode | null;
+  itemData: ItemData;
+  children: PublicNode[];
+  items: PublicNode[];
+}
+
+export interface DataAccessorGetters {
+  key: (item: ItemData) => ItemKey;
+  parentKey: (item: ItemData) => ItemKey | undefined;
+  items: (item: ItemData) => ItemData[];
+  disabled: (item: ItemData, options?: { defaultValue?: boolean }) => boolean;
+  expanded: (item: ItemData, options?: { defaultValue?: boolean }) => boolean;
+  selected: (item: ItemData, options?: { defaultValue?: boolean }) => boolean;
+  display: (item: ItemData) => string;
+}
+
+export interface DataAccessorSetters {
+  key: (item: ItemData, value: ItemKey) => void;
+  disabled: (item: ItemData, value: boolean) => void;
+  expanded: (item: ItemData, value: boolean) => void;
+  selected: (item: ItemData, value: boolean) => void;
+}
+
+export interface DataAccessors {
+  getters: DataAccessorGetters;
+  setters: DataAccessorSetters;
+}
+
+class DataConverter {
+  _dataStructure: InternalNode[];
+
+  private _itemsCount: number;
+
+  private _visibleItemsCount: number;
+
+  _indexByKey: Record<string, number>;
+
+  private _dataAccessors!: DataAccessors;
+
+  private _rootValue: ItemKey | undefined;
+
+  private _dataType?: DataStructure;
+
+  constructor() {
     this._dataStructure = [];
     this._itemsCount = 0;
     this._visibleItemsCount = 0;
-  },
+    this._indexByKey = {};
+  }
 
-  _indexByKey: {},
-
-  _convertItemsToNodes(items, parentKey) {
-    const that = this;
-
+  _convertItemsToNodes(items: ItemData[], parentKey?: ItemKey): void {
     each(items, (_, item) => {
-      const parentId = isDefined(parentKey) ? parentKey : that._getParentId(item);
-      const node = that._convertItemToNode(item, parentId);
+      const parentId = isDefined(parentKey) ? parentKey : this._getParentId(item);
+      const node = this._convertItemToNode(item, parentId);
 
-      that._dataStructure.push(node);
+      this._dataStructure.push(node);
 
-      that._checkForDuplicateId(node.internalFields.key);
-      that._indexByKey[node.internalFields.key] = that._dataStructure.length - 1;
+      this._checkForDuplicateId(node.internalFields.key);
+      this._indexByKey[String(node.internalFields.key)] = this._dataStructure.length - 1;
 
-      if (that._itemHasChildren(item)) {
-        that._convertItemsToNodes(that._dataAccessors.getters.items(item), node.internalFields.key);
+      if (this._itemHasChildren(item)) {
+        this._convertItemsToNodes(this._dataAccessors.getters.items(item), node.internalFields.key);
       }
     });
-  },
+  }
 
-  _checkForDuplicateId(key) {
-    if (isDefined(this._indexByKey[key])) {
+  _checkForDuplicateId(key: ItemKey): void {
+    if (isDefined(this._indexByKey[String(key)])) {
       throw errors.Error('E1040', key);
     }
-  },
+  }
 
-  _getParentId(item) {
+  _getParentId(item: ItemData): ItemKey | undefined {
     return this._dataType === 'plain' ? this._dataAccessors.getters.parentKey(item) : undefined;
-  },
+  }
 
-  _itemHasChildren(item) {
+  _itemHasChildren(item: ItemData): boolean {
     if (this._dataType === 'plain') {
-      return;
+      return false;
     }
     const items = this._dataAccessors.getters.items(item);
-    return items && items.length;
-  },
+    return Boolean(items && items.length);
+  }
 
-  _getUniqueKey(item) {
+  _getUniqueKey(item: ItemData): ItemKey {
     const keyGetter = this._dataAccessors.getters.key;
     const itemKey = keyGetter(item);
-    const isCorrectKey = keyGetter && (itemKey || itemKey === 0) && isPrimitive(itemKey);
+    const isCorrectKey = (itemKey || itemKey === 0) && isPrimitive(itemKey);
 
     return isCorrectKey ? itemKey : this.getItemsCount();
-  },
+  }
 
-  _convertItemToNode(item, parentKey) {
-    this._itemsCount++;
-    item.visible !== false && this._visibleItemsCount++;
+  _convertItemToNode(item: ItemData, parentKey?: ItemKey): InternalNode {
+    this._itemsCount += 1;
+    if (item.visible !== false) {
+      this._visibleItemsCount += 1;
+    }
 
-    const that = this;
-    const node = {
+    const node: InternalNode = {
       internalFields: {
-        disabled: that._dataAccessors.getters.disabled(item, { defaultValue: false }),
-        expanded: that._dataAccessors.getters.expanded(item, { defaultValue: false }),
-        selected: that._dataAccessors.getters.selected(item, { defaultValue: false }),
-        key: that._getUniqueKey(item),
-        parentKey: isDefined(parentKey) ? parentKey : that._rootValue,
-        item: that._makeObjectFromPrimitive(item),
+        disabled: this._dataAccessors.getters.disabled(item, { defaultValue: false }),
+        expanded: this._dataAccessors.getters.expanded(item, { defaultValue: false }),
+        selected: this._dataAccessors.getters.selected(item, { defaultValue: false }),
+        key: this._getUniqueKey(item),
+        parentKey: isDefined(parentKey) ? parentKey : this._rootValue,
+        item: this._makeObjectFromPrimitive(item),
         childrenKeys: [],
       },
+      ...item,
     };
 
-    extend(node, item);
-    // @ts-expect-error
     delete node.items;
 
     return node;
-  },
+  }
 
-  setChildrenKeys() {
-    const that = this;
-
+  setChildrenKeys(): void {
     each(this._dataStructure, (_, node) => {
-      if (node.internalFields.parentKey === that._rootValue) return;
+      if (node.internalFields.parentKey === this._rootValue) return;
 
-      const parent = that.getParentNode(node);
-      parent && parent.internalFields.childrenKeys.push(node.internalFields.key);
+      const parent = this.getParentNode(node);
+      if (parent) {
+        parent.internalFields.childrenKeys.push(node.internalFields.key);
+      }
     });
-  },
+  }
 
-  _makeObjectFromPrimitive(item) {
+  _makeObjectFromPrimitive(item: ItemData | string | number | boolean): ItemData {
     if (isPrimitive(item)) {
-      const key = item;
-      item = {};
-      this._dataAccessors.setters.key(item, key);
+      const key = item as ItemKey;
+      const newItem: ItemData = {};
+      this._dataAccessors.setters.key(newItem, key);
+      return newItem;
     }
     return item;
-  },
+  }
 
-  _convertToPublicNode(node, parent) {
+  _convertToPublicNode(node: InternalNode | null, parent: PublicNode | null): PublicNode | null {
     if (!node) {
       return null;
     }
 
-    const publicNode = {
+    const publicNode: PublicNode = {
       text: this._dataAccessors.getters.display(node),
       key: node.internalFields.key,
       selected: node.internalFields.selected,
       expanded: node.internalFields.expanded,
       disabled: node.internalFields.disabled,
-      parent: parent || null,
+      parent: parent ?? null,
       itemData: node.internalFields.item,
       children: [],
       items: [],
@@ -125,101 +199,118 @@ const DataConverter = Class.inherit({
     }
 
     return publicNode;
-  },
+  }
 
-  convertToPublicNodes(data, parent) {
+  convertToPublicNodes(data: ItemKey[], parent: PublicNode | null): PublicNode[] {
     if (!data.length) return [];
 
-    const that = this;
-    const publicNodes = [];
+    const publicNodes: PublicNode[] = [];
 
-    each(data, (_, node) => {
-      node = isPrimitive(node) ? that._getByKey(node) : node;
+    each(data, (_, node: ItemKey) => {
+      const internalNode = isPrimitive(node) ? this._getByKey(node) : node;
 
-      const publicNode = that._convertToPublicNode(node, parent);
+      if (!internalNode) {
+        return;
+      }
 
-      publicNode.children = that.convertToPublicNodes(node.internalFields.childrenKeys, publicNode);
-      // @ts-expect-error
+      const publicNode = this._convertToPublicNode(internalNode, parent);
+
+      if (!publicNode) {
+        return;
+      }
+
+      publicNode.children = this.convertToPublicNodes(
+        internalNode.internalFields.childrenKeys,
+        publicNode,
+      );
+
       publicNodes.push(publicNode);
 
-      node.internalFields.publicNode = publicNode;
+      internalNode.internalFields.publicNode = publicNode;
     });
 
     return publicNodes;
-  },
+  }
 
-  setDataAccessors(accessors) {
+  setDataAccessors(accessors: DataAccessors): void {
     this._dataAccessors = accessors;
-  },
+  }
 
-  _getByKey(key) {
+  _getByKey(key: ItemKey): InternalNode | null {
     return this._dataStructure[this.getIndexByKey(key)] || null;
-  },
+  }
 
-  getParentNode(node) {
+  getParentNode(node: InternalNode): InternalNode | null {
+    // @ts-expect-error ts-error
     return this._getByKey(node.internalFields.parentKey);
-  },
+  }
 
-  getByKey(data, key) {
-    if (key === null || key === undefined) {
+  // eslint-disable-next-line class-methods-use-this
+  getByKey(data: InternalNode[], key: ItemKey): InternalNode | null {
+    if (!isDefined(key)) {
       return null;
     }
 
-    let result = null;
-    const that = this;
+    const findByKey = function findByKey(
+      searchData: InternalNode[],
+      searchKey: ItemKey,
+    ): InternalNode | null {
+      let result: InternalNode | null = null;
 
-    const getByKey = function (data, key) {
-      // @ts-expect-error
-      each(data, (_, element) => {
-        const currentElementKey = element.internalFields && element.internalFields.key || that._dataAccessors.getters.key(element);
-        if (currentElementKey.toString() === key.toString()) {
+      each(searchData, (_, element) => {
+        const currentElementKey = element.internalFields?.key ?? element.key;
+        if (currentElementKey?.toString() === searchKey.toString()) {
           result = element;
           return false;
         }
+        return true;
       });
 
       return result;
     };
 
-    return getByKey(data, key);
-  },
+    return findByKey(data, key);
+  }
 
-  getItemsCount() {
+  getItemsCount(): number {
     return this._itemsCount;
-  },
+  }
 
-  getVisibleItemsCount() {
+  getVisibleItemsCount(): number {
     return this._visibleItemsCount;
-  },
+  }
 
-  updateIndexByKey() {
-    const that = this;
+  updateIndexByKey(): void {
     this._indexByKey = {};
     each(this._dataStructure, (index, node) => {
-      that._checkForDuplicateId(node.internalFields.key);
-      that._indexByKey[node.internalFields.key] = index;
+      this._checkForDuplicateId(node.internalFields.key);
+      this._indexByKey[node.internalFields.key] = index;
     });
-  },
+  }
 
-  updateChildrenKeys() {
+  updateChildrenKeys(): void {
     this._indexByKey = {};
     this.removeChildrenKeys();
     this.updateIndexByKey();
     this.setChildrenKeys();
-  },
+  }
 
-  removeChildrenKeys() {
+  removeChildrenKeys(): void {
     this._indexByKey = {};
     each(this._dataStructure, (index, node) => {
       node.internalFields.childrenKeys = [];
     });
-  },
+  }
 
-  getIndexByKey(key) {
+  getIndexByKey(key: ItemKey): number {
     return this._indexByKey[key];
-  },
+  }
 
-  createPlainStructure(items, rootValue, dataType) {
+  createPlainStructure(
+    items: ItemData[],
+    rootValue: ItemKey | undefined,
+    dataType: DataType,
+  ): InternalNode[] {
     this._itemsCount = 0;
     this._visibleItemsCount = 0;
     this._rootValue = rootValue;
@@ -229,8 +320,7 @@ const DataConverter = Class.inherit({
     this.setChildrenKeys();
 
     return this._dataStructure;
-  },
-
-});
+  }
+}
 
 export default DataConverter;

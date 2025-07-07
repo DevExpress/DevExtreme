@@ -12,6 +12,7 @@ import type { Item, SubmenuShowMode } from '@js/ui/menu';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import MenuItem from '@ts/ui/collection/item';
 import MenuBaseEditStrategy from '@ts/ui/context_menu/menu_base.edit.strategy';
+import type { BaseDataAdapterOptions } from '@ts/ui/hierarchical_collection/m_data_adapter';
 import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/m_hierarchical_collection_widget';
 
 const DX_MENU_CLASS = 'dx-menu';
@@ -210,7 +211,8 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     return $popOutContainer;
   }
 
-  _getDataAdapterOptions() {
+  // eslint-disable-next-line class-methods-use-this
+  _getDataAdapterOptions(): BaseDataAdapterOptions {
     return {
       rootValue: 0,
       multipleSelection: false,
@@ -224,6 +226,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     if (!selectedItem) return;
 
     const nodeToSelect = this._dataAdapter.getNodeByItem(selectedItem);
+    // @ts-expect-error ts-error
     this._dataAdapter.toggleSelection(nodeToSelect.internalFields.key, true);
   }
 
@@ -237,7 +240,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
       return;
     }
 
-    const node = this._dataAdapter.getNodeByKey(selectedKey);
+    const node = this._dataAdapter.getNodeByKey(selectedKey) as Item;
 
     if (node.selectable === false) return;
 
@@ -492,7 +495,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
   }
 
   _refreshItem($item: dxElementWrapper, item: Item): void {
-    const node = this._dataAdapter.getNodeByItem(item);
+    const node = this._dataAdapter.getNodeByItem(item) as Item;
 
     // @ts-expect-error
     const index: number = $item.data(this._itemIndexKey());
@@ -536,7 +539,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
       return;
     }
 
-    const node = this._dataAdapter.getNodeByItem(args.itemData);
+    const node = this._dataAdapter.getNodeByItem(args.itemData) as Item;
 
     if (node.internalFields.key === selectedIndex[0]) {
       $itemElement.addClass(this._selectedItemClass());
@@ -635,6 +638,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
         const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
 
         if (node && node.internalFields.key !== selectedKey) {
+          // @ts-expect-error ts-error
           if (node.selectable === false) break;
 
           if (selectedKey) {
@@ -699,7 +703,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     const itemData = itemElement.nodeType ? this._getItemData(itemElement) : itemElement;
     const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
     const selectedItem = this.option('selectedItem');
-    const node = this._dataAdapter.getNodeByItem(itemData);
+    const node = this._dataAdapter.getNodeByItem(itemData) as Item;
 
     if (node.internalFields.key !== selectedKey) {
       if (selectedKey) {
@@ -713,7 +717,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
 
   unselectItem(itemElement: Element): void {
     const itemData = itemElement.nodeType ? this._getItemData(itemElement) : itemElement;
-    const node = this._dataAdapter.getNodeByItem(itemData);
+    const node = this._dataAdapter.getNodeByItem(itemData) as Item;
     const selectedItem = this.option('selectedItem');
 
     if (node.internalFields.selected) {

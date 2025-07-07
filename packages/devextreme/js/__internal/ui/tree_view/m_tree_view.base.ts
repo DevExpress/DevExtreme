@@ -30,6 +30,9 @@ import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, SCROLLABLE_CONTENT_CLASS } fr
 import Scrollable from '@ts/ui/scroll_view/m_scrollable';
 import { getRelativeOffset } from '@ts/ui/scroll_view/utils/get_relative_offset';
 
+import type { DataAdapterOptions } from '../hierarchical_collection/m_data_adapter';
+import type { InternalNode } from '../hierarchical_collection/m_data_converter';
+
 const WIDGET_CLASS = 'dx-treeview';
 
 const NODE_CLASS = `${WIDGET_CLASS}-node`;
@@ -71,12 +74,15 @@ export interface TreeViewBaseProperties extends Properties {
 
   deferRendering?: boolean;
 
+  selectionRequired?: boolean;
+
   _supportItemUrl?: boolean;
 }
 
 class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> {
   _dataSource!: any;
 
+  // eslint-disable-next-line no-restricted-globals
   _setFocusedItemTimeout?: ReturnType<typeof setTimeout>;
 
   _$selectAllItem?: dxElementWrapper;
@@ -595,14 +601,22 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     return accessors;
   }
 
-  _getDataAdapterOptions() {
+  _getDataAdapterOptions(): Partial<DataAdapterOptions> {
+    const {
+      rootValue,
+      expandNodesRecursive,
+      selectionRequired,
+      dataStructure,
+    } = this.option();
+
     return {
-      rootValue: this.option('rootValue'),
+      rootValue,
       multipleSelection: !this._isSingleSelection(),
       recursiveSelection: this._isRecursiveSelection(),
-      recursiveExpansion: this.option('expandNodesRecursive'),
-      selectionRequired: this.option('selectionRequired'),
-      dataType: this.option('dataStructure'),
+      recursiveExpansion: expandNodesRecursive,
+      searchValue: '',
+      selectionRequired,
+      dataType: dataStructure,
       sort: this._dataSource?.sort(),
       langParams: this._dataSource?.loadOptions?.()?.langParams,
     };
@@ -820,7 +834,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     return this._dataAdapter.getNodeByKey(cachedNode.internalFields.key);
   }
 
-  _hasChildren(node): number | boolean | undefined {
+  _hasChildren(node): boolean {
     if (this._isVirtualMode() || this._useCustomChildrenLoader()) {
       // @ts-expect-error ts-error
       return this._hasItemsGetter(node.internalFields.item) !== false;
@@ -943,6 +957,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     }
 
     if (isPrimitive(identifier)) {
+      // @ts-expect-error ts-error
       return this._dataAdapter.getNodeByKey(identifier);
     }
 
@@ -954,7 +969,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     if (domAdapter.isElementNode(itemElement)) {
       return this._getNodeByElement(itemElement);
     }
-
+    // @ts-expect-error ts-error
     return this._dataAdapter.getNodeByItem(itemElement);
   }
 
@@ -1500,7 +1515,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
       return;
     }
 
-    const parentNode = this._dataAdapter.getNodeByKey(node.internalFields.parentKey);
+    const parentNode = this._dataAdapter.getNodeByKey(node.internalFields.parentKey) as InternalNode;
     const $parentNode = $($node.parents(`.${NODE_CLASS}`)[0]);
 
     if (this._showCheckboxes()) {
@@ -1529,7 +1544,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
   }
 
   _createEventHandler(eventName, e) {
-    const node = this._getNodeByElement(e.currentTarget);
+    const node = this._getNodeByElement(e.currentTarget) as InternalNode;
 
     this._itemDXEventHandler(e, eventName, { node: this._dataAdapter.getPublicNode(node) });
   }
@@ -1599,7 +1614,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
 
   _itemClickHandler(e, $item) {
     const itemData = this._getItemData($item);
-    const node = this._getNodeByElement($item);
+    const node = this._getNodeByElement($item) as InternalNode;
     this._itemDXEventHandler(e, 'onItemClick', {
       node: this._dataAdapter.getPublicNode(node),
     }, {
@@ -1879,7 +1894,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
 
   getSelectedNodes() {
     return this.getSelectedNodeKeys().map((key) => {
-      const node = this._dataAdapter.getNodeByKey(key);
+      const node = this._dataAdapter.getNodeByKey(key) as InternalNode;
       return this._dataAdapter.getPublicNode(node);
     });
   }

@@ -14,7 +14,12 @@ import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 
-import HierarchicalDataAdapter from './m_data_adapter';
+import DataAdapter, {
+  type DataAdapterOptions,
+} from './m_data_adapter';
+import {
+  type DataAccessors,
+} from './m_data_converter';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const ITEM_URL_CLASS = 'dx-item-url';
@@ -27,7 +32,7 @@ TItem extends ItemLike = any,
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 TKey = any,
 > extends CollectionWidgetAsync<TProperties> {
-  _dataAdapter?: any;
+  _dataAdapter!: DataAdapter;
 
   _getDefaultOptions(): TProperties {
     return {
@@ -75,7 +80,7 @@ TKey = any,
   _initDataAdapter(): void {
     const accessors = this._createDataAdapterAccessors();
 
-    this._dataAdapter = new HierarchicalDataAdapter(
+    this._dataAdapter = new DataAdapter(
       extend({
         dataAccessors: {
           getters: accessors.getters,
@@ -86,12 +91,17 @@ TKey = any,
     );
   }
 
-  _getDataAdapterOptions(): void {}
+  // eslint-disable-next-line class-methods-use-this
+  _getDataAdapterOptions(): Partial<DataAdapterOptions> {
+    return {};
+  }
 
-  // @ts-expect-error ts-error
-  _getItemExtraPropNames(): string[] {}
+  // eslint-disable-next-line class-methods-use-this
+  _getItemExtraPropNames(): string[] {
+    return [];
+  }
 
-  _initDynamicTemplates() {
+  _initDynamicTemplates(): void {
     const fields = ['text', 'html', 'items', 'icon'].concat(this._getItemExtraPropNames());
 
     this._templateManager.addDefaultTemplates({
@@ -112,6 +122,7 @@ TKey = any,
       .append(this._getTextContainer(itemData));
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _getLinkContainer(
     iconContainer: dxElementWrapper | undefined | null,
     textContainer: dxElementWrapper,
@@ -149,42 +160,42 @@ TKey = any,
     return $imageContainer;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _getTextContainer(itemData: TItem): dxElementWrapper {
     // @ts-expect-error ts-error
     return $('<span>').text(itemData.text);
   }
 
   _initAccessors(): void {
-    const that = this;
     each(this._getAccessors(), (_, accessor) => {
-      that._compileAccessor(accessor);
+      this._compileAccessor(accessor);
     });
 
     this._compileDisplayGetter();
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _getAccessors(): string[] {
     return ['key', 'selected', 'items', 'disabled', 'parentId', 'expanded'];
   }
 
   _getChildNodes(node: TItem): TItem[] {
-    const that = this;
-    const arr = [];
-    // @ts-expect-error
+    const arr: TItem[] = [];
+    // @ts-expect-error ts-error
     each(node.internalFields.childrenKeys, (_, key) => {
-      const childNode = that._dataAdapter.getNodeByKey(key);
-      // @ts-expect-error
-      arr.push(childNode);
+      const childNode = this._dataAdapter?.getNodeByKey(key);
+      arr.push(childNode as TItem);
     });
     return arr;
   }
 
-  _hasChildren(node: TItem): number | boolean | undefined {
+  // eslint-disable-next-line class-methods-use-this
+  _hasChildren(node: TItem): boolean {
     // @ts-expect-error ts-error
-    return node && node.internalFields.childrenKeys.length;
+    return Boolean(node?.internalFields?.childrenKeys?.length);
   }
 
-  _compileAccessor(optionName): void {
+  _compileAccessor(optionName: string): void {
     const getter = `_${optionName}Getter`;
     const setter = `_${optionName}Setter`;
     const optionExpr = this.option(`${optionName}Expr`);
@@ -194,8 +205,9 @@ TKey = any,
       this[setter] = noop;
       return;
     } if (isFunction(optionExpr)) {
-      this[setter] = function (obj, value) { obj[optionExpr()] = value; };
-      this[getter] = function (obj) { return obj[optionExpr()]; };
+      this[setter] = (obj, value): void => { obj[optionExpr()] = value; };
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      this[getter] = (obj): unknown => obj[optionExpr()];
       return;
     }
     // @ts-expect-error ts-error
@@ -204,11 +216,10 @@ TKey = any,
     this[setter] = compileSetter(optionExpr);
   }
 
-  _createDataAdapterAccessors() {
-    const that = this;
-    const accessors = {
-      getters: {},
-      setters: {},
+  _createDataAdapterAccessors(): DataAccessors {
+    const accessors: DataAccessors = {
+      getters: {} as DataAccessors['getters'],
+      setters: {} as DataAccessors['setters'],
     };
 
     each(this._getAccessors(), (_, accessor) => {
@@ -216,11 +227,14 @@ TKey = any,
       const setterName = `_${accessor}Setter`;
       const newAccessor = accessor === 'parentId' ? 'parentKey' : accessor;
 
-      accessors.getters[newAccessor] = that[getterName];
-      accessors.setters[newAccessor] = that[setterName];
+      accessors.getters[newAccessor] = this[getterName];
+      accessors.setters[newAccessor] = this[setterName];
     });
-    // @ts-expect-error
-    accessors.getters.display = !this._displayGetter ? (itemData) => itemData.text : this._displayGetter;
+    // @ts-expect-error ts-error
+    accessors.getters.display = !this._displayGetter
+      // @ts-expect-error ts-error
+      ? (itemData): string => itemData.text as string
+      : this._displayGetter;
 
     return accessors;
   }
@@ -234,18 +248,17 @@ TKey = any,
     this._focusTarget().addClass(this._widgetClass());
   }
 
-  // @ts-expect-error ts-error
   // eslint-disable-next-line class-methods-use-this
-  _widgetClass(): string {}
+  _widgetClass(): string {
+    return '';
+  }
 
   _renderItemFrame(
     index: number,
     itemData: TItem,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     $itemContainer: dxElementWrapper,
   ): dxElementWrapper {
-    // @ts-expect-error ts-error
-    const $itemFrame = super._renderItemFrame.apply(this, arguments);
+    const $itemFrame = super._renderItemFrame(index, itemData, $itemContainer);
     // @ts-expect-error ts-error
     $itemFrame.toggleClass(DISABLED_STATE_CLASS, !!this._disabledGetter(itemData));
     return $itemFrame;

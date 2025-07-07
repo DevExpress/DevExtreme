@@ -1,9 +1,9 @@
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
 import TextBox from '@js/ui/text_box';
 import searchBoxMixin from '@js/ui/widget/ui.search_box_mixin';
 
+import type { DataAdapterOptions } from '../hierarchical_collection/m_data_adapter';
 import TreeViewBase from './m_tree_view.base';
 
 // @ts-expect-error
@@ -50,12 +50,13 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
     this._setOptionWithoutOptionChange('expandNodesRecursive', true);
   },
 
-  _getDataAdapterOptions() {
-    return extend(this.callBase(), {
+  _getDataAdapterOptions(): Partial<DataAdapterOptions> {
+    return {
+      ...this.callBase(),
       searchValue: this.option('searchValue'),
       searchMode: this.option('searchMode') || 'contains',
       searchExpr: this.option('searchExpr'),
-    });
+    };
   },
 
   _getNodeContainer() {
