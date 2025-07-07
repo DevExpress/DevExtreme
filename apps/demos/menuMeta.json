@@ -1415,7 +1415,6 @@
       {
         "Name": "Card View",
         "Equivalents": "dxCardView, dx-cardview, cardview",
-        "Badge": "New",
         "Groups": [
           {
             "Name": "Overview",
@@ -3762,8 +3761,7 @@
                   "/Models/SampleData/AppointmentsDuringTheMonth.cs",
                   "/Models/SampleData/AssigneeResources.cs"
                 ],
-                "DemoType": "Web",
-                "Badge": "New"
+                "DemoType": "Web"
               },
               {
                 "Title": "Individual Views Customization",
@@ -4069,7 +4067,6 @@
         "Name": "Chat",
         "Breadcrumb": true,
         "Equivalents": "dxChat, dx-chat, chat",
-        "Badge": "Updated",
         "Groups": [
           {
             "Name": "Overview",
@@ -4100,7 +4097,6 @@
                 "Name": "MessageEditing",
                 "Widget": "Chat",
                 "DemoType": "Web",
-                "Badge": "New",
                 "DocUrl": "",
                 "MvcDescription": "",
                 "NetCoreDescription": "",
@@ -4210,7 +4206,6 @@
                 "Name": "AITextEditing",
                 "Widget": "HtmlEditor",
                 "DemoType": "Web",
-                "Badge": "New",
                 "Modules": "openai"
               }
             ]
@@ -5267,7 +5262,6 @@
   {
     "Name": "Navigation",
     "Equivalents": "",
-    "Badge": "Updated",
     "Groups": [
       {
         "Name": "Overview",
@@ -5523,7 +5517,6 @@
       {
         "Name": "Stepper",
         "Breadcrumb": true,
-        "Badge": "New",
         "Equivalents": "dxStepper, dx-stepper, stepper",
         "Demos": [
           {
