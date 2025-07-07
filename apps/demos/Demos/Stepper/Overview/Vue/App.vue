@@ -78,7 +78,7 @@ import { DxButtonGroup, type DxButtonGroupTypes } from 'devextreme-vue/button-gr
 import { DxCheckBox } from 'devextreme-vue/check-box';
 import { steps, orientations, navigationModes } from './data.ts';
 
-const orientation = ref<Orientation>(orientations[0].value);
+const orientation = ref(<Orientation>orientations[0].value);
 const navigationMode = ref(navigationModes[0].value);
 const selectOnFocus = ref(true);
 const rtlMode = ref(false);
