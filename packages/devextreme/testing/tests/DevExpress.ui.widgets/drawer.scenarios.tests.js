@@ -492,7 +492,9 @@ configs.forEach(config => {
                     templates: {
                         template1: {
                             render(data) {
-                                drawer.getOverlay()._viewPortChangeHandler();
+                                Promise.resolve().then(() => {
+                                    drawer.getOverlay()._viewPortChangeHandler();
+                                });
                                 $(data.container).append($(drawerTesters[config.position].template()));
                                 data.onRendered();
                             }
