@@ -1,57 +1,94 @@
+import type { Direction } from '@js/common';
+import type { AnimationConfig, AnimationState, AnimationType } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
+import type { dxElementWrapper } from '@js/core/renderer';
 import { camelize } from '@js/core/utils/inflector';
 
-export const animation = {
-  moveTo(config) {
-    const { $element } = config;
-    const { position } = config;
-    const direction = config.direction || 'left';
-    const toConfig = {};
-    let animationType;
+interface DrawerAnimationConfig {
+  $element: dxElementWrapper;
+  complete: AnimationConfig['complete'];
+  direction?: Direction;
+  duration?: number;
+}
 
-    // eslint-disable-next-line default-case
+interface DrawerMoveAnimationConfig extends DrawerAnimationConfig {
+  position: number;
+}
+
+interface DrawerMarginAnimationConfig extends DrawerAnimationConfig {
+  margin?: number;
+}
+interface DrawerSizeAnimationConfig extends DrawerAnimationConfig {
+  size?: number;
+  marginTop?: number;
+}
+
+export interface FadeConfig {
+  from: number;
+  to: number;
+}
+
+export const animation = {
+  moveTo(config: DrawerMoveAnimationConfig): void {
+    const {
+      $element, position, direction = 'left', duration, complete,
+    } = config;
+    // eslint-disable-next-line no-undef-init
+    let toConfig: AnimationState | undefined = undefined;
+    // eslint-disable-next-line no-undef-init
+    let animationType: AnimationType | undefined = undefined;
+
     switch (direction) {
       case 'right':
-        // @ts-expect-error
-        toConfig.transform = `translate(${position}px, 0px)`;
+        // @ts-expect-error ts-error
+        toConfig = { transform: `translate(${position}px, 0px)` };
+        // @ts-expect-error ts-error
         animationType = 'custom';
         break;
       case 'left':
-        // @ts-expect-error
-        toConfig.left = position;
+        toConfig = { left: position };
         animationType = 'slide';
         break;
       case 'top':
       case 'bottom':
-        // @ts-expect-error
-        toConfig.top = position;
+        toConfig = { top: position };
         animationType = 'slide';
+        break;
+      default:
+        break;
     }
 
+    // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fx.animate($element, {
       type: animationType,
-      // @ts-expect-error
       to: toConfig,
-      duration: config.duration,
-      complete: config.complete,
+      duration,
+      complete,
     });
   },
-  margin(config) {
-    const { $element } = config;
-    const { margin } = config;
-    const direction = config.direction || 'left';
-    const toConfig = {};
 
-    toConfig[`margin${camelize(direction, true)}`] = margin;
+  margin(config: DrawerMarginAnimationConfig): void {
+    const {
+      $element, margin, direction = 'left', duration, complete,
+    } = config;
+    const marginName = `margin${camelize(direction, true)}`;
 
+    const toConfig: AnimationState = {
+      [marginName]: margin,
+    } as AnimationState;
+
+    // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fx.animate($element, {
-      // @ts-expect-error
       to: toConfig,
-      duration: config.duration,
-      complete: config.complete,
+      duration,
+      complete,
     });
   },
-  fade($element, config, duration, completeAction) {
+  fade($element: dxElementWrapper, config: FadeConfig, duration: number | undefined, completeAction: AnimationConfig['complete']): void {
+    // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fx.animate($element, {
       type: 'fade',
       to: config.to,
@@ -61,36 +98,36 @@ export const animation = {
     });
   },
 
-  size(config) {
-    const { $element } = config;
-    const { size } = config;
-    const direction = config.direction || 'left';
-    const marginTop = config.marginTop || 0;
-    const { duration } = config;
-    const toConfig = {};
+  size(config: DrawerSizeAnimationConfig): void {
+    const {
+      $element, size, direction = 'left', marginTop = 0, duration, complete,
+    } = config;
+    const toConfig: AnimationState = {} as AnimationState;
 
     if (direction === 'right' || direction === 'left') {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       toConfig.width = size;
     } else {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       toConfig.height = size;
     }
 
     if (direction === 'bottom') {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       toConfig.marginTop = marginTop;
     }
 
+    // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fx.animate($element, {
-      // @ts-expect-error
       to: toConfig,
       duration,
-      complete: config.complete,
+      complete,
     });
   },
 
-  complete($element) {
+  complete($element: dxElementWrapper): void {
+    // @ts-expect-error ts-error
     fx.stop($element, true);
   },
 };

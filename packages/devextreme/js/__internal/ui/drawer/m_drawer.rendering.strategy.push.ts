@@ -11,7 +11,7 @@ class PushStrategy extends DrawerStrategy {
     whenAnimationCompleted: Drawer['_whenAnimationCompleted'],
   ): void {
     const drawer = this.getDrawerInstance();
-    const { opened: isDrawerOpened } = drawer.option();
+    const { opened: isDrawerOpened, animationDuration } = drawer.option();
 
     const openedPanelSize = this._getPanelSize(true);
     // @ts-expect-error ts-error
@@ -38,7 +38,7 @@ class PushStrategy extends DrawerStrategy {
         $element: $(drawer.viewContent()),
         position: contentPosition,
         direction: drawer.calcTargetPosition(),
-        duration: drawer.option('animationDuration'),
+        duration: animationDuration,
         complete: () => {
           whenAnimationCompleted?.resolve();
         },

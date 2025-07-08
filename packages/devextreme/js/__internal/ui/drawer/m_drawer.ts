@@ -422,17 +422,17 @@ class Drawer extends Widget<DrawerProperties> {
     return position === 'left' || position === 'right';
   }
 
-  stopAnimations(jumpToEnd?): void {
+  stopAnimations(jumpToEnd?: boolean): void {
     // @ts-expect-error ts-error
     fx.stop(this._$shader, jumpToEnd);
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     fx.stop($(this.content()), jumpToEnd);
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     fx.stop($(this.viewContent()), jumpToEnd);
 
     const overlay = this.getOverlay();
     if (overlay) {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       fx.stop($(overlay.$content()), jumpToEnd);
     }
   }

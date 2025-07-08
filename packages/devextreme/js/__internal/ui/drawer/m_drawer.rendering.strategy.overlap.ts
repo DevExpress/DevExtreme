@@ -147,7 +147,7 @@ class OverlapStrategy extends DrawerStrategy {
   ): void {
     const drawer = this.getDrawerInstance();
     const $panel = $(drawer.content());
-    const { opened: isDrawerOpened, revealMode } = drawer.option();
+    const { opened: isDrawerOpened, revealMode, animationDuration } = drawer.option();
 
     // @ts-expect-error ts-error
     const $panelOverlayContent = drawer.getOverlay().$content();
@@ -169,7 +169,7 @@ class OverlapStrategy extends DrawerStrategy {
           complete: () => {
             whenAnimationCompleted?.resolve();
           },
-          duration: drawer.option('animationDuration'),
+          duration: animationDuration,
           direction: targetPanelPosition,
           $element: $panel,
           position: panelOffset,
@@ -182,7 +182,7 @@ class OverlapStrategy extends DrawerStrategy {
           complete: () => {
             whenAnimationCompleted?.resolve();
           },
-          duration: drawer.option('animationDuration'),
+          duration: animationDuration,
           direction: targetPanelPosition,
           $element: $panelOverlayContent,
           size: panelSize,

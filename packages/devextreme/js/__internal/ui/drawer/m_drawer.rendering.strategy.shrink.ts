@@ -12,7 +12,7 @@ class ShrinkStrategy extends DrawerStrategy {
     whenAnimationCompleted: Drawer['_whenAnimationCompleted'],
   ): void {
     const drawer = this.getDrawerInstance();
-    const { opened: isDrawerOpened, revealMode } = drawer.option();
+    const { opened: isDrawerOpened, revealMode, animationDuration } = drawer.option();
 
     const direction = drawer.calcTargetPosition();
     const $panel = $(drawer.content());
@@ -26,7 +26,7 @@ class ShrinkStrategy extends DrawerStrategy {
             whenAnimationCompleted?.resolve();
           },
           $element: $panel,
-          duration: drawer.option('animationDuration'),
+          duration: animationDuration,
           direction,
           margin: panelOffset,
         });
@@ -36,7 +36,7 @@ class ShrinkStrategy extends DrawerStrategy {
             whenAnimationCompleted?.resolve();
           },
           $element: $panel,
-          duration: drawer.option('animationDuration'),
+          duration: animationDuration,
           direction,
           size: panelSize,
         });
