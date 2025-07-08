@@ -5,8 +5,8 @@ import { OptionsValidatorErrorHandler } from './core/index';
 import type { SchedulerValidatorNames } from './types';
 
 const GLOBAL_ERROR_HANDLER: GlobalErrorHandler = {
-  logError: (errorCode: string) => { errors.log(errorCode); },
-  throwError: (errorCode: string) => { throw errors.Error(errorCode); },
+  logError: (errorCode: string, ...args) => { errors.log(errorCode, ...args); },
+  throwError: (errorCode: string, ...args) => { throw errors.Error(errorCode, ...args); },
 };
 
 export class SchedulerOptionsValidatorErrorsHandler
@@ -20,6 +20,7 @@ export class SchedulerOptionsValidatorErrorsHandler
         offset: 'E1061',
         cellDuration: 'E1062',
         cellDurationAndVisibleInterval: 'E1062',
+        views: 'W0008',
       },
       GLOBAL_ERROR_HANDLER,
     );

@@ -310,7 +310,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
     return '';
   }
 
-  get viewDataProvider() {
+  get viewDataProvider(): ViewDataProvider {
     if (!this._viewDataProvider) {
       this._viewDataProvider = new ViewDataProvider(this.type as ViewType);
     }
@@ -407,7 +407,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
       e.preventDefault();
       e.stopPropagation();
 
-      const focusedCellData = this.cellsSelectionState.focusedCell?.cellData;
+      const focusedCellData = this.cellsSelectionState.getFocusedCell()?.cellData;
 
       if (focusedCellData) {
         const isAllDayPanelCell = focusedCellData.allDay && !this._isVerticalGroupedWorkSpace();
@@ -479,7 +479,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
 
     const isMultiSelectionAllowed = this.option('allowMultipleCellSelection');
     const currentCellData = this._getFullCellData($cell);
-    const focusedCellData = this.cellsSelectionState.focusedCell.cellData;
+    const focusedCellData = this.cellsSelectionState.getFocusedCell().cellData;
 
     const nextFocusedCellData = this.cellsSelectionController.moveToCell({
       isMultiSelection,
@@ -552,7 +552,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
 
       this.cellsSelectionState.restoreSelectedAndFocusedCells();
 
-      if (!this.cellsSelectionState.focusedCell) {
+      if (!this.cellsSelectionState.getFocusedCell()) {
         const cellCoordinates = {
           columnIndex: 0,
           rowIndex: 0,
@@ -840,7 +840,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
       isProvideVirtualCellsWidth,
       isAllDayPanelVisible: this.isAllDayPanelVisible,
       selectedCells: this.cellsSelectionState.getSelectedCells(),
-      focusedCell: this.cellsSelectionState.focusedCell,
+      focusedCell: this.cellsSelectionState.getFocusedCell(),
       headerCellTextFormat: this._getFormat(),
       getDateForHeaderText: (_, date) => date,
       viewOffset: this.option('viewOffset'),
@@ -1370,11 +1370,10 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
     currentDate.setHours(hours, minutes, 0, 0);
 
     const cell = this.viewDataProvider.findGlobalCellPosition(currentDate, groupIndex, allDay);
-    const { position, cellData } = cell;
 
     return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(
-      cellData,
-      position,
+      cell?.cellData,
+      cell?.position,
       currentDate,
       isDateAndTimeView(this.type as any),
       this.viewDirection === 'vertical',

@@ -1,8 +1,9 @@
 import {
   describe, expect, it, jest,
 } from '@jest/globals';
-import { OptionsValidatorErrorHandler } from '@ts/scheduler/options_validator/core/options_validator_error_handler';
-import type { GlobalErrorHandler } from '@ts/scheduler/options_validator/core/types';
+
+import { OptionsValidatorErrorHandler } from './options_validator_error_handler';
+import type { GlobalErrorHandler } from './types';
 
 type TestValidators = 'A' | 'B' | 'C' | 'D';
 
@@ -46,9 +47,9 @@ describe('OptionsValidatorErrorHandler', () => {
     }, globalErrorHandler);
 
     handler.handleValidationResult({
-      A: { fist: 'error', second: 'error' },
-      C: { first: 'error' },
-      D: { some: 'error' },
+      A: { fist: false, second: false },
+      C: { first: false },
+      D: { some: false },
     });
 
     expect(globalErrorHandler.logError).not.toHaveBeenCalled();
@@ -60,10 +61,10 @@ describe('OptionsValidatorErrorHandler', () => {
     const handler = new TestErrorHandler(errorMap, globalErrorHandler);
 
     handler.handleValidationResult({
-      A: { fist: 'error', second: 'error' },
-      B: { some: 'error' },
-      C: { first: 'error' },
-      D: { error: 'error' },
+      A: { fist: false, second: false },
+      B: { some: false },
+      C: { first: false },
+      D: { error: false },
     });
 
     expect(globalErrorHandler.logError).toHaveBeenCalledWith('E0');
@@ -82,10 +83,10 @@ describe('OptionsValidatorErrorHandler', () => {
     }, globalErrorHandler);
 
     handler.handleValidationResult({
-      A: { fist: 'error', second: 'error' },
-      B: { some: 'error' },
-      C: { first: 'error' },
-      D: { error: 'error' },
+      A: { fist: false, second: false },
+      B: { some: false },
+      C: { first: false },
+      D: { error: false },
     });
 
     expect(globalErrorHandler.logError).toHaveBeenCalledWith('E0');
@@ -99,7 +100,7 @@ describe('OptionsValidatorErrorHandler', () => {
     const handler = new TestErrorHandler(errorMap, globalErrorHandler);
 
     handler.handleValidationResult({
-      B: { some: 'error' },
+      B: { some: false },
     });
 
     expect(globalErrorHandler.logError).not.toHaveBeenCalled();
@@ -112,10 +113,10 @@ describe('OptionsValidatorErrorHandler', () => {
     const handler = new TestErrorHandler({ B: 'E1' }, globalErrorHandler);
 
     handler.handleValidationResult({
-      A: { fist: 'error', second: 'error' },
-      B: { some: 'error' },
-      C: { first: 'error' },
-      D: { error: 'error' },
+      A: { fist: false, second: false },
+      B: { some: false },
+      C: { first: false },
+      D: { error: false },
     });
 
     expect(globalErrorHandler.logError).not.toHaveBeenCalled();
@@ -133,15 +134,40 @@ describe('OptionsValidatorErrorHandler', () => {
     }, globalErrorHandler);
 
     handler.handleValidationResult({
-      A: { fist: 'error', second: 'error' },
-      B: { some: 'error' },
-      C: { first: 'error' },
-      D: { error: 'error' },
+      A: { fist: false, second: false },
+      B: { some: false },
+      C: { first: false },
+      D: { error: false },
     });
 
     expect(globalErrorHandler.logError).toHaveBeenCalledWith('E0');
     expect(globalErrorHandler.throwError).toHaveBeenCalledWith('E1');
     expect(globalErrorHandler.logError).toHaveBeenCalledTimes(1);
     expect(globalErrorHandler.throwError).toHaveBeenCalledTimes(1);
+  });
+
+  it('should log error with arguments and avoid duplications', () => {
+    const globalErrorHandler = createGlobalErrorHandlerMock();
+    const handler = new TestErrorHandler({
+      A: 'E0',
+      B: 'E1',
+      C: 'W2',
+      D: 'W2',
+    }, globalErrorHandler);
+
+    handler.handleValidationResult({
+      A: {
+        fist: { arguments: ['A1'] },
+        second: { arguments: ['A2'] },
+      },
+      B: { some: { arguments: ['B'] } },
+      C: { some: false },
+      D: { some1: { arguments: ['D1', 'D2'] }, some2: false },
+    });
+
+    expect(globalErrorHandler.logError).toHaveBeenCalledWith('W2');
+    expect(globalErrorHandler.logError).toHaveBeenCalledWith('W2', 'D1', 'D2');
+    expect(globalErrorHandler.logError).toHaveBeenCalledWith('E0', 'A2');
+    expect(globalErrorHandler.throwError).toHaveBeenCalledWith('E1', 'B');
   });
 });

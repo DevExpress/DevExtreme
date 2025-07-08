@@ -767,7 +767,7 @@ QUnit.module('View with configuration', () => {
                 });
 
                 [true, false].forEach((renovateRender) => {
-                    QUnit.test(`Workspace vertical scroll should be equal to the dataTable height if grouping, view: '${viewName}', view.intervalCount=${intervalCount}, height: ${height}`, async function(assert) {
+                    QUnit.test(`Workspace vertical scroll should be equal to the dataTable height if grouping, view: '${viewName}', view.intervalCount=${intervalCount}, height: ${height}, renovateRender: ${renovateRender}`, async function(assert) {
                         const scheduler = await createWrapper({
                             height: height,
                             views: [{

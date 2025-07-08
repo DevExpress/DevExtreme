@@ -83,12 +83,12 @@ describe('OptionsValidator', () => {
 
   it('should return object with errors if some validators validates with errors', () => {
     const firstValidateResult = {
-      required: 'false',
-      isInteger: 'false',
+      required: false,
+      isInteger: false,
     };
     const secondValidateResult = true;
     const thirdValidateResult = {
-      someError: 'some message',
+      someError: { arguments: ['A'] },
     };
     const expectedResult = {
       A: firstValidateResult,
