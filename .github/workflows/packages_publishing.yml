@@ -118,6 +118,7 @@ jobs:
             /tools
             /packages/devextreme-monorepo-tools
             package.json
+            pnpm-workspace.yaml
           sparse-checkout-cone-mode: false
 
       - name: Download artifacts
