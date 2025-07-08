@@ -1,7 +1,6 @@
-import { compareScreenshot, createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
-import { Selector } from 'testcafe';
-import { insertStylesheetRulesToPage } from '../../helpers/domUtils';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../helpers/domUtils';
 import { isMaterialBased, testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
@@ -149,16 +148,18 @@ testFixture()`PivotGrid_scrolling`
     { useNative: false },
   ].forEach(({ useNative }) => {
     test(`Rows content dont hide under vertical scrollbar when scrolling{useNative=${useNative}},height=100% (${height}px) (T1290313)`, async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+      await testScreenshot(
+        t,
+        takeScreenshot,
+        `PivotGrid rows content height=100%(${height}px),useNative=${useNative}.png`,
+        { element: '#container' },
+      );
       await t
-        .expect(await compareScreenshot(
-          t,
-          `PivotGrid rows content height=100%(${height}px),useNative=${useNative}.png`,
-          Selector('#container'),
-        ))
-        .ok();
-    }).before(async (t) => {
+        .expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    }).before(async () => {
       await insertStylesheetRulesToPage(`#parentContainer { height: ${height}px; }`);
-      await t.resizeWindow(600, 600);
 
       return createWidget('dxPivotGrid', {
         height: '100%',
@@ -185,6 +186,8 @@ testFixture()`PivotGrid_scrolling`
           })),
         },
       });
+    }).after(async () => {
+      await removeStylesheetRulesFromPage();
     });
   });
 });
