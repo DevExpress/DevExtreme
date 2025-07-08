@@ -3,6 +3,7 @@ $(() => {
     $(selector).dxList({
       dataSource: tasks,
       keyExpr: 'id',
+      repaintChangesOnly: true,
       itemDragging: {
         allowReordering: true,
         data: tasks,

@@ -60,7 +60,9 @@ const App = () => {
     <div className="widget-container">
       <List
         dataSource={plannedTasksState}
-        keyExpr="id">
+        keyExpr="id"
+        repaintChangesOnly={true}
+      >
         <ItemDragging
           allowReordering={true}
           group="tasks"
@@ -73,7 +75,9 @@ const App = () => {
       </List>
       <List
         dataSource={doingTasksState}
-        keyExpr="id">
+        keyExpr="id"
+        repaintChangesOnly={true}
+      >
         <ItemDragging
           allowReordering={true}
           group="tasks"
