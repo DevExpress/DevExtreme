@@ -1149,9 +1149,7 @@ export class RowsView extends ColumnsView {
       // @ts-expect-error
       scrollable.update();
 
-      if (scrollable.option('useNative')) {
-        this._updateHorizontalScrollPosition();
-      }
+      this._updateHorizontalScrollPosition();
     }
   }
 

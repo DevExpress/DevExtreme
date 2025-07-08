@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import ko from 'knockout';
 
-import scrollView from 'ui/scroll_view';
+import 'ui/scroll_view';
 import 'integration/knockout';
 
 if(QUnit.urlParams['nocsp']) {

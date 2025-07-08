@@ -7,6 +7,7 @@ import config from 'core/config';
 import pointerMock from '../../../helpers/pointerMock.js';
 import { isRenderer } from 'core/utils/type';
 import browser from 'core/utils/browser';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'generic_light.css!';
 
@@ -65,6 +66,8 @@ const getScrollOffset = function($scrollable) {
         left: location.left - $container.scrollLeft()
     };
 };
+
+const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('api', moduleConfig);
 
@@ -1215,10 +1218,10 @@ class ScrollableTestHelper {
 
                 helper.$scrollable.find('.content1').css('width', '200px');
                 helper.checkScrollOffset({ left: useNative ? 150 : 50, top: 0, maxScrollOffset: 150 });
-                helper.checkScrollTranslateValues({ vertical: 0, horizontal: !useNative ? 25 : 35 });
+                helper.checkScrollTranslateValues({ vertical: 0, horizontal: useNative ? 35 : 25 });
 
                 helper.scrollable.update();
-                helper.checkScrollOffset({ left: useNative || 50, top: 0, maxScrollOffset: 150 });
+                helper.checkScrollOffset({ left: useNative ? 150 : 50, top: 0, maxScrollOffset: 150 });
                 helper.checkScrollTranslateValues({ vertical: 0, horizontal: useNative ? 35 : 12 });
             });
         });

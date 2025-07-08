@@ -10,6 +10,7 @@ import themes from 'ui/themes';
 import pointerMock from '../../helpers/pointerMock.js';
 
 import 'generic_light.css!';
+import 'ui/scroll_view';
 
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';

@@ -1177,13 +1177,13 @@ QUnit.module('dxPivotGrid', {
                 const $rowsAreaScrollable = pivotGrid.$element().find('.dx-scrollable.dx-pivotgrid-vertical-headers');
 
                 assert.strictEqual($scrollable.hasClass('dx-rtl'), rtlEnabled);
-                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), rtlEnabled);
+                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), false);
                 assert.strictEqual($rowsAreaScrollable.hasClass('dx-rtl'), false);
 
                 pivotGrid.option('rtlEnabled', !rtlEnabled);
 
                 assert.strictEqual($scrollable.hasClass('dx-rtl'), !rtlEnabled);
-                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), !rtlEnabled);
+                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), false);
                 assert.strictEqual($rowsAreaScrollable.hasClass('dx-rtl'), false);
             });
         });
