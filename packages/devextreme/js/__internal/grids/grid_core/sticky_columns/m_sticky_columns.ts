@@ -17,7 +17,6 @@ import type {
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import {
   isAdaptiveItem,
-  isDetailRow,
   isGroupFooterRow,
   isGroupRow as isGroupRowElement,
 } from '../keyboard_navigation/m_keyboard_navigation_utils';
