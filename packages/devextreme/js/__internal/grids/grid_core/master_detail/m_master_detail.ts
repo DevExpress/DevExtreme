@@ -18,6 +18,7 @@ import gridCoreUtils from '../m_utils';
 
 const MASTER_DETAIL_CELL_CLASS = 'dx-master-detail-cell';
 const MASTER_DETAIL_ROW_CLASS = 'dx-master-detail-row';
+const MASTER_DETAIL_CONTAINER_CLASS = 'dx-master-detail-container';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 const ROW_LINES_CLASS = 'dx-row-lines';
 
@@ -316,7 +317,7 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
       const $rowsTable = this._rowsView.getTableElement();
       if ($rowsTable) {
         $rowsTable
-          .find('.dx-master-detail-cell')
+          .find(`.${MASTER_DETAIL_CONTAINER_CLASS}`)
           .css('maxWidth', isBestFit ? 0 : '');
       }
     }
@@ -393,6 +394,19 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
     }
 
     return $detailCell;
+  }
+
+  protected _renderCellContent($cell, options, renderOptions): void {
+    if (options.rowType === 'detail') {
+      const $container = $('<div>')
+        .addClass(MASTER_DETAIL_CONTAINER_CLASS)
+        .appendTo($cell);
+
+      super._renderCellContent.call(this, $container, options, renderOptions);
+      return;
+    }
+
+    super._renderCellContent.call(this, $cell, options, renderOptions);
   }
 };
 
