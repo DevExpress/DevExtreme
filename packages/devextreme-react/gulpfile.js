@@ -7,6 +7,7 @@ const ts = require('gulp-typescript');
 const config = require('./build.config');
 const path = require('path');
 const generateReactComponents = require('devextreme-internal-tools').generateReactComponents;
+const { reactConfig } = require('../../tools/generators-config');
 
 const GENERATE = 'generate';
 const CLEAN = 'clean';
@@ -22,15 +23,13 @@ const NPM_BUILD_CJS = 'npm.build-cjs';
 const NPM_PREPARE_MODULES = 'npm.prepare-modules';
 const NPM_PACK = 'npm.pack';
 
-const unifiedConfig = require('../../tools/generators-config').reactConfig;
-
 gulp.task(CLEAN, (c) =>
     del([`${config.generatedComponentsDir}\\*`, `!${config.coreComponentsDir}`], c)
 );
 
 gulp.task(GEN_RUN, (done) => {
     generateReactComponents({
-        metaData: JSON.parse(fs.readFileSync(config.metadataPath).toString()),
+        metaData: JSON.parse(fs.readFileSync(require.resolve('devextreme-metadata/integration-data.json')).toString()),
         components: {
             baseComponent: config.baseComponent,
             extensionComponent: config.extensionComponent,
@@ -49,7 +48,7 @@ gulp.task(GEN_RUN, (done) => {
             quotes: 'double',
             excplicitIndexInImports: true,
         },
-        unifiedConfig,
+        unifiedConfig: reactConfig,
     });
 
     done();

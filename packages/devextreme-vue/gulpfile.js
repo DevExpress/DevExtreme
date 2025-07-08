@@ -7,6 +7,7 @@ const ts = require('gulp-typescript');
 const config = require('./build.config');
 const generateVueComponents = require('devextreme-internal-tools').generateVueComponents;
 const path = require('path');
+const { vueConfig } = require('../../tools/generators-config');
 
 const GENERATE = 'generate';
 const CLEAN = 'clean';
@@ -23,8 +24,6 @@ const NPM_PREPARE_MODULES = 'npm.prepare-modules';
 const NPM_PACK = 'npm.pack';
 const VUE_VERSION = 3;
 
-const unifiedConfig = require('../../tools/generators-config').vueConfig;
-
 gulp.task(OUTPUTDIR_CLEAN, (c) =>
     del([`${config.generatedComponentsDir}\\*`, `!${config.coreComponentsDir}`], c)
 );
@@ -38,7 +37,7 @@ gulp.task(CLEAN, gulp.parallel(OUTPUTDIR_CLEAN, NPM_CLEAN));
 gulp.task(GENERATE,
     (done) => {
         generateVueComponents(
-            JSON.parse(fs.readFileSync(config.metadataPath).toString()),
+            JSON.parse(fs.readFileSync(require.resolve('devextreme-metadata/integration-data.json')).toString()),
             config.componentGeneratorTplConfig,
             {
                 componentsDir: config.generatedComponentsDir,
@@ -51,7 +50,7 @@ gulp.task(GENERATE,
               quotes: 'double',
               excplicitIndexInImports: true,
             },
-            unifiedConfig,
+            vueConfig,
         );
 
         done();

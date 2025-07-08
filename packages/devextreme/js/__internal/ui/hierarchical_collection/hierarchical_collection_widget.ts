@@ -16,10 +16,10 @@ import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collectio
 
 import DataAdapter, {
   type DataAdapterOptions,
-} from './m_data_adapter';
+} from './data_adapter';
 import {
   type DataAccessors,
-} from './m_data_converter';
+} from './data_converter';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const ITEM_URL_CLASS = 'dx-item-url';
@@ -91,12 +91,10 @@ TKey = any,
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getDataAdapterOptions(): Partial<DataAdapterOptions> {
     return {};
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getItemExtraPropNames(): string[] {
     return [];
   }
@@ -122,7 +120,6 @@ TKey = any,
       .append(this._getTextContainer(itemData));
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getLinkContainer(
     iconContainer: dxElementWrapper | undefined | null,
     textContainer: dxElementWrapper,
@@ -160,7 +157,6 @@ TKey = any,
     return $imageContainer;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getTextContainer(itemData: TItem): dxElementWrapper {
     // @ts-expect-error ts-error
     return $('<span>').text(itemData.text);
@@ -174,7 +170,6 @@ TKey = any,
     this._compileDisplayGetter();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getAccessors(): string[] {
     return ['key', 'selected', 'items', 'disabled', 'parentId', 'expanded'];
   }
@@ -189,7 +184,6 @@ TKey = any,
     return arr;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _hasChildren(node: TItem): boolean {
     // @ts-expect-error ts-error
     return Boolean(node?.internalFields?.childrenKeys?.length);
@@ -248,7 +242,6 @@ TKey = any,
     this._focusTarget().addClass(this._widgetClass());
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _widgetClass(): string {
     return '';
   }

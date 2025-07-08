@@ -10,9 +10,6 @@ function NavigationList() {
     >
       <List
         dataSource={navigation}
-        hoverStateEnabled={false}
-        activeStateEnabled={false}
-        focusStateEnabled={false}
         className="panel-list"
       />
     </div>
