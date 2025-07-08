@@ -2,6 +2,7 @@ import {
   describe, expect, it, jest,
 } from '@jest/globals';
 
+import type { ValidatorRuleError } from './types';
 import { Validator } from './validator';
 
 interface TestWidgetOptions {
@@ -42,16 +43,17 @@ describe('Validator', () => {
   });
 
   it('should return object with errors if some rules return errors', () => {
-    const firstFailedRule = (): string => 'error_1';
-    const secondFailedRule = (): string => 'error_2';
+    const expectedResult = {
+      rule_1: {
+        arguments: ['A'],
+      },
+      rule_2: false,
+    };
+    const firstFailedRule = (): ValidatorRuleError => expectedResult.rule_1;
+    const secondFailedRule = (): boolean => expectedResult.rule_2;
 
     Object.defineProperty(firstFailedRule, 'name', { value: 'rule_1', writable: false });
     Object.defineProperty(secondFailedRule, 'name', { value: 'rule_2', writable: false });
-
-    const expectedResult = {
-      rule_1: 'error_1',
-      rule_2: 'error_2',
-    };
 
     const validator = new Validator<TestWidgetOptions, number>(
       ({ A }) => A,

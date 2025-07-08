@@ -30,7 +30,7 @@ describe('scheduler', () => {
       startDayHour: 8,
       firstDayOfWeek: 1,
       height: 600,
-    });
+    } as any);
     await timezoneUtils.cacheTimeZones();
 
     expect(container.classList).toContain('dx-scheduler');

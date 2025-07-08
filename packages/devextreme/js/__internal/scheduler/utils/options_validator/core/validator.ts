@@ -1,4 +1,4 @@
-import type { ValidatorResult, ValidatorRule } from './types';
+import type { ValidatorResult, ValidatorRule, ValidatorRuleError } from './types';
 
 export class Validator<TWidgetOptions, TOption> {
   constructor(
@@ -11,7 +11,7 @@ export class Validator<TWidgetOptions, TOption> {
     const value = this.valueSelector(options);
 
     const errors = this.rules
-      .reduce<Record<string, string>>((result, rule) => {
+      .reduce<Record<string, boolean | ValidatorRuleError>>((result, rule) => {
         const validationResult = rule(value);
 
         if (validationResult !== true) {

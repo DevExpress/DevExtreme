@@ -10,7 +10,7 @@ import {
 
 export const mustBeInteger: ValidatorRule<number> = createValidatorRule(
   'mustBeInteger',
-  (value: number) => isInteger(value) || `${value} must be an integer.`,
+  (value: number) => isInteger(value),
 );
 
 export const mustBeGreaterThan = (
@@ -18,8 +18,7 @@ export const mustBeGreaterThan = (
   strict = true,
 ): ValidatorRule<number> => createValidatorRule(
   'mustBeGreaterThan',
-  (value: number) => greaterThan(value, minimalValue, strict)
-    || `${value} must be ${strict ? '>' : '>='} than ${minimalValue}.`,
+  (value: number) => greaterThan(value, minimalValue, strict),
 );
 
 export const mustBeLessThan = (
@@ -27,21 +26,19 @@ export const mustBeLessThan = (
   strict = true,
 ): ValidatorRule<number> => createValidatorRule(
   'mustBeLessThan',
-  (value: number) => lessThan(value, maximalValue, strict)
-  || `${value} must be ${strict ? '<' : '<='} than ${maximalValue}.`,
+  (value: number) => lessThan(value, maximalValue, strict),
 );
 
 export const mustBeInRange = (
   range: [from: number, to: number],
 ): ValidatorRule<number> => createValidatorRule(
   'mustBeInRange',
-  (value: number) => inRange(value, range)
-  || `${value} must be in range [${range[0]}, ${range[1]}].`,
+  (value: number) => inRange(value, range),
 );
 
 export const mustBeDivisibleBy = (
   divider: number,
 ): ValidatorRule<number> => createValidatorRule(
   'mustBeDivisibleBy',
-  (value: number) => divisibleBy(value, divider) || `${value} must be divisible by ${divider}.`,
+  (value: number) => divisibleBy(value, divider),
 );

@@ -9,7 +9,6 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { setHeight, setOuterHeight } from '@js/core/utils/size';
 
-import { VIEWS } from '../constants';
 import {
   DATE_TABLE_CLASS,
   DATE_TABLE_ROW_CLASS,
@@ -20,6 +19,7 @@ import {
 import tableCreatorModule from '../m_table_creator';
 import { agendaUtils, formatWeekday, getVerticalGroupCountClass } from '../r1/utils/index';
 import type { SafeAppointment } from '../types';
+import { VIEWS } from '../utils/options/constants_view';
 import { convertToOldTree, reduceResourcesTree } from '../utils/resource_manager/agenda_group_utils';
 import WorkSpace from './m_work_space';
 
