@@ -1,14 +1,17 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { setHeight, setWidth } from '@js/core/utils/size';
-import type Drawer from '@js/ui/drawer';
+import type { PanelLocation } from '@js/ui/drawer';
+import type Drawer from '@ts/ui/drawer/m_drawer';
 
+import type { FadeConfig } from './m_drawer.animation';
 import { animation } from './m_drawer.animation';
 
 class DrawerStrategy {
   _drawer: Drawer;
 
-  constructor(drawer) {
+  constructor(drawer: Drawer) {
     this._drawer = drawer;
   }
 
@@ -16,21 +19,23 @@ class DrawerStrategy {
     return this._drawer;
   }
 
-  renderPanelContent(whenPanelContentRendered) {
+  renderPanelContent(whenPanelContentRendered: Drawer['_whenPanelContentRendered']): void {
     const drawer = this.getDrawerInstance();
     const template = drawer._getTemplate(drawer.option('template'));
     if (template) {
       template.render({
         container: drawer.content(),
-        // @ts-expect-error
         onRendered: () => {
-          whenPanelContentRendered.resolve();
+          whenPanelContentRendered?.resolve();
         },
       });
     }
   }
 
-  renderPosition(changePositionUsingFxAnimation, animationDuration) {
+  renderPosition(
+    changePositionUsingFxAnimation: boolean | undefined,
+    animationDuration: number | undefined,
+  ): void {
     const whenPositionAnimationCompleted = Deferred();
     const whenShaderAnimationCompleted = Deferred();
 
@@ -38,94 +43,99 @@ class DrawerStrategy {
 
     if (changePositionUsingFxAnimation) {
       when.apply($, [whenPositionAnimationCompleted, whenShaderAnimationCompleted]).done(() => {
-        // @ts-expect-error
         drawer._animationCompleteHandler();
       });
     }
-    // @ts-expect-error
     this._internalRenderPosition(changePositionUsingFxAnimation, whenPositionAnimationCompleted);
 
     if (!changePositionUsingFxAnimation) {
-      // @ts-expect-error
       drawer.resizeViewContent();
     }
 
-    this.renderShaderVisibility(changePositionUsingFxAnimation, animationDuration, whenShaderAnimationCompleted);
+    this.renderShaderVisibility(
+      changePositionUsingFxAnimation,
+      animationDuration,
+      whenShaderAnimationCompleted,
+    );
   }
 
-  _getPanelOffset(isDrawerOpened) {
+  _getPanelOffset(isDrawerOpened: boolean | undefined): number {
     const drawer = this.getDrawerInstance();
-    // @ts-expect-error
-    const size = drawer.isHorizontalDirection() ? drawer.getRealPanelWidth() : drawer.getRealPanelHeight();
+    const size = drawer.isHorizontalDirection()
+      ? drawer.getRealPanelWidth()
+      : drawer.getRealPanelHeight();
+    const panelSize = this._getPanelSize(isDrawerOpened) ?? 0;
 
-    if (isDrawerOpened) {
-      // @ts-expect-error
-      return -(size - drawer.getMaxSize());
-    }
-    // @ts-expect-error
-    return -(size - drawer.getMinSize());
+    return panelSize - size;
   }
 
-  _getPanelSize(isDrawerOpened) {
+  _getPanelSize(isDrawerOpened: boolean | undefined): number | undefined {
     return isDrawerOpened
-      // @ts-expect-error
       ? this.getDrawerInstance().getMaxSize()
-      // @ts-expect-error
       : this.getDrawerInstance().getMinSize();
   }
 
-  renderShaderVisibility(changePositionUsingFxAnimation, duration, whenAnimationCompleted) {
+  renderShaderVisibility(
+    changePositionUsingFxAnimation: boolean | undefined,
+    duration: number | undefined,
+    whenAnimationCompleted: Drawer['_whenAnimationCompleted'],
+  ): void {
     const drawer = this.getDrawerInstance();
-    const isShaderVisible = drawer.option('opened');
-    const fadeConfig = isShaderVisible ? { from: 0, to: 1 } : { from: 1, to: 0 };
+    const { opened: isShaderVisible } = drawer.option();
+    const fadeConfig: FadeConfig = isShaderVisible ? { from: 0, to: 1 } : { from: 1, to: 0 };
 
     if (changePositionUsingFxAnimation) {
-      // @ts-expect-error
       animation.fade($(drawer._$shader), fadeConfig, duration, () => {
-        // @ts-expect-error
         this._drawer._toggleShaderVisibility(isShaderVisible);
-        whenAnimationCompleted.resolve();
+        whenAnimationCompleted?.resolve();
       });
     } else {
-      // @ts-expect-error
       drawer._toggleShaderVisibility(isShaderVisible);
-      // @ts-expect-error
       drawer._$shader.css('opacity', fadeConfig.to);
     }
   }
 
-  getPanelContent() {
+  getPanelContent(): dxElementWrapper {
     return $(this.getDrawerInstance().content());
   }
 
-  setPanelSize(calcFromRealPanelSize) { // TODO: keep for ui.file_manager.adaptivity.js
+  setPanelSize(calcFromRealPanelSize: boolean): void { // TODO: for ui.file_manager.adaptivity.js
     this.refreshPanelElementSize(calcFromRealPanelSize);
   }
 
-  refreshPanelElementSize(calcFromRealPanelSize) {
+  refreshPanelElementSize(calcFromRealPanelSize: boolean): void {
     const drawer = this.getDrawerInstance();
-    const panelSize = this._getPanelSize(drawer.option('opened'));
-    // @ts-expect-error
+    const { opened: isDrawerOpened } = drawer.option();
+    const panelSize = this._getPanelSize(isDrawerOpened);
+
     if (drawer.isHorizontalDirection()) {
       setWidth(
         $(drawer.content()),
-        // @ts-expect-error
         calcFromRealPanelSize ? drawer.getRealPanelWidth() : panelSize,
       );
     } else {
       setHeight(
         $(drawer.content()),
-        // @ts-expect-error
         calcFromRealPanelSize ? drawer.getRealPanelHeight() : panelSize,
       );
     }
   }
 
-  isViewContentFirst(): boolean {
+  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
+  isViewContentFirst(position: PanelLocation | undefined, isRtl?: boolean): boolean {
     return false;
   }
 
-  onPanelContentRendered(): void { }
+  // eslint-disable-next-line class-methods-use-this
+  onPanelContentRendered(): void {}
+
+  // eslint-disable-next-line class-methods-use-this
+  _internalRenderPosition(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    changePositionUsingFxAnimation: boolean | undefined,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    whenPositionAnimationCompleted: Drawer['_whenAnimationCompleted'],
+  ): void {}
 }
 
 export default DrawerStrategy;
