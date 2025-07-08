@@ -65,6 +65,7 @@ const App = () => {
       <List
         dataSource={plannedTasksState}
         keyExpr="id"
+        repaintChangesOnly={true}
       >
         <ItemDragging
           allowReordering={true}
@@ -79,6 +80,7 @@ const App = () => {
       <List
         dataSource={doingTasksState}
         keyExpr="id"
+        repaintChangesOnly={true}
       >
         <ItemDragging
           allowReordering={true}
