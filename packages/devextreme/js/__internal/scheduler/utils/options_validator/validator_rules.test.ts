@@ -155,13 +155,17 @@ describe('validator rules', () => {
       ])).toBe(true);
     });
 
+    it.each(VIEW_TYPES)('should return true for %s string view configuration', (viewType) => {
+      expect(allViewsHasCorrectType([viewType])).toBe(true);
+    });
+
     it('should return error for views with incorrect types', () => {
       expect(allViewsHasCorrectType([
         { type: 'day' },
         { type: 'orange' },
         { type: 'week' },
       ] as SafeSchedulerOptions['views'])).toEqual({
-        arguments: ['orange'],
+        arguments: ['\'orange\''],
       });
     });
 
@@ -172,7 +176,7 @@ describe('validator rules', () => {
         { type: 'apple' },
         { type: 'week' },
       ] as SafeSchedulerOptions['views'])).toEqual({
-        arguments: ['orange'],
+        arguments: ['\'orange\', \'apple\''],
       });
     });
 

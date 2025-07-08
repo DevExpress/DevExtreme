@@ -39,16 +39,19 @@ export const cellDurationMustBeLessThanVisibleInterval = createValidatorRule(
 export const allViewsHasCorrectType = createValidatorRule(
   'allViewsHasCorrectType',
   (views: SafeSchedulerOptions['views']) => {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const view of views) {
+    const incorrectViewTypes = views.reduce<string[]>((result, view) => {
       const viewType = isObject(view) ? view.type : view;
       const isValidView = Boolean(viewType && VIEW_TYPES.includes(viewType));
 
       if (!isValidView) {
-        return { arguments: [String(viewType)] };
+        result.push(`'${viewType}'`);
       }
-    }
 
-    return true;
+      return result;
+    }, []);
+
+    return incorrectViewTypes.length ? {
+      arguments: [incorrectViewTypes.join(', ')],
+    } : true;
   },
 );

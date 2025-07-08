@@ -80,7 +80,7 @@ export default errorUtils({
 
   W0007: '\'{0}\' Globalize culture is not defined',
 
-  W0008: 'Invalid view type: \'{0}\'',
+  W0008: 'Invalid view type: {0}',
 
   W0009: 'Invalid time zone name: \'{0}\'',
 
