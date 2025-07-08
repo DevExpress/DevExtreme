@@ -136,8 +136,6 @@ class Overlay<
 
   _zIndex!: number;
 
-  _asyncShowTimeout?: ReturnType<typeof setTimeout> | null;
-
   _actions?: any;
 
   _isHidingActionCanceled?: boolean;
@@ -570,13 +568,7 @@ class Overlay<
         this._processShowingHidingCancel(showingArgs.cancel, applyShow, cancelShow);
       };
 
-      if (this.option('templatesRenderAsynchronously')) {
-        this._stopShowTimer();
-        // NOTE: T390360, T386038
-        this._asyncShowTimeout = setTimeout(show);
-      } else {
-        show();
-      }
+      show();
     }
 
     return this._showingDeferred.promise();
@@ -656,7 +648,6 @@ class Overlay<
         this._forceFocusLost();
         this._toggleShading(false);
         this._toggleSubscriptions(false);
-        this._stopShowTimer();
         this._animateHiding();
       };
 
@@ -1227,16 +1218,7 @@ class Overlay<
     }
 
     this._renderVisibility(false);
-    this._stopShowTimer();
     this._cleanFocusState();
-  }
-
-  _stopShowTimer(): void {
-    if (this._asyncShowTimeout) {
-      clearTimeout(this._asyncShowTimeout);
-    }
-
-    this._asyncShowTimeout = null;
   }
 
   _dispose(): void {
