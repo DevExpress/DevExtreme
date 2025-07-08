@@ -974,7 +974,7 @@
         outline: 0;
       }
 
-      .dx-master-detail-container.dx-#{$widget-name}-sticky-column-left {
+      .dx-master-detail-container {
         overflow: hidden;
         position: sticky;
         z-index: 2;
