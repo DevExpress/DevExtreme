@@ -1,2 +1,2 @@
-When [direction](/Documentation/ApiReference/UI_Components/dxTileView/Configuration/#direction) is set to *"horizontal"* (default), TileView overflows content to the right (or to the left if [rtlEnabled](/Documentation/ApiReference/UI_Components/dxTileView/Configuration/#rtlEnabled) is `true`). When **direction** is *"vertical"*, the component overflows content downwards.
+When [direction](/Documentation/ApiReference/UI_Components/dxTileView/Configuration/#direction) is set to *"horizontal"* (default), TileView overflows content to the right (or to the left if [rtlEnabled](/Documentation/ApiReference/UI_Components/dxTileView/Configuration/#rtlEnabled) is `true`). When **direction** is *"vertical"*, this component overflows content downwards.
 <!--split-->
