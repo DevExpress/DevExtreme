@@ -44,8 +44,6 @@ import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import pointerMock from '../../helpers/pointerMock.js';
 
-const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
-
 const DATA_AREA_CELL_CLASS = 'dx-area-data-cell';
 
 function sumArray(array) {
@@ -1179,13 +1177,13 @@ QUnit.module('dxPivotGrid', {
                 const $rowsAreaScrollable = pivotGrid.$element().find('.dx-scrollable.dx-pivotgrid-vertical-headers');
 
                 assert.strictEqual($scrollable.hasClass('dx-rtl'), rtlEnabled);
-                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), isRenovatedScrollable && rtlEnabled);
+                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), rtlEnabled);
                 assert.strictEqual($rowsAreaScrollable.hasClass('dx-rtl'), false);
 
                 pivotGrid.option('rtlEnabled', !rtlEnabled);
 
                 assert.strictEqual($scrollable.hasClass('dx-rtl'), !rtlEnabled);
-                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), isRenovatedScrollable && !rtlEnabled);
+                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), !rtlEnabled);
                 assert.strictEqual($rowsAreaScrollable.hasClass('dx-rtl'), false);
             });
         });
@@ -4095,7 +4093,7 @@ QUnit.module('T984139, T1010175', {
                 QUnit.assert.roughEqual(rowsAreaRect.top, expectedRowCellRect.top, 2, `expected row position ${errorMessageDetails}`);
                 // the rendered widget in native mode does not take into account the width of the dataArea scrollbar for the test Render -> scrollTo() -> filter -> clearFilter
                 // however, on the test page everything works as expected
-                QUnit.assert.roughEqual(columnsAreaRect.left, expectedColumnCellRect.left, isRenovatedScrollable ? 12 : 2, `expected column position ${errorMessageDetails}`);
+                QUnit.assert.roughEqual(columnsAreaRect.left, expectedColumnCellRect.left, 2, `expected column position ${errorMessageDetails}`);
             }
 
             function triggerScrollEvent(scrollable) {

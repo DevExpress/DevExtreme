@@ -10,12 +10,9 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import { getTimeZones } from 'time_zone_utils';
 import themes from 'ui/themes';
-import Scrollable from 'ui/scroll_view/ui.scrollable.js';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
-
-const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -798,12 +795,6 @@ QUnit.module('View with configuration', () => {
     });
 
     QUnit.test('Scrollable content should have correct height when native scrolling is used and a cell\'s height is greater than default', async function(assert) {
-        if(isRenovatedScrollable) {
-            // this scenario doesn't relevant for renovated widget
-            assert.ok(true, 'skip test');
-            return;
-        }
-
         const scheduler = await createWrapper({
             height: 1500,
             views: ['month'],
@@ -822,12 +813,6 @@ QUnit.module('View with configuration', () => {
     });
 
     QUnit.test('Scrollable content should have correct height when native scrolling is used and a cell\'s height is equal to default', async function(assert) {
-        if(isRenovatedScrollable) {
-            // this scenario doesn't relevant for renovated widget
-            assert.ok(true, 'skip test');
-            return;
-        }
-
         const scheduler = await createWrapper({
             height: 500,
             views: [{

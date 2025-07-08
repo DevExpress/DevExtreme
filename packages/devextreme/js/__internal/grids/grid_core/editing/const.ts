@@ -1,5 +1,3 @@
-import Scrollable from '@js/ui/scroll_view/ui.scrollable';
-
 export const EDITOR_CELL_CLASS = 'dx-editor-cell';
 export const ROW_CLASS = 'dx-row';
 export const CELL_MODIFIED_CLASS = 'dx-cell-modified';
@@ -99,13 +97,10 @@ export const DATA_ROW_CLASS = 'dx-data-row';
 export const ROW_REMOVED = 'dx-row-removed';
 export const FILTER_ROW_CLASS = 'filter-row';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const isRenovatedScrollable = !!(Scrollable as any).IS_RENOVATED_WIDGET;
-
 export const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
 export const EDIT_POPUP_CLASS = 'edit-popup';
 export const EDIT_POPUP_FORM_CLASS = 'edit-popup-form';
-export const FOCUSABLE_ELEMENT_CLASS = isRenovatedScrollable ? 'dx-scrollable' : 'dx-scrollable-container';
+export const FOCUSABLE_ELEMENT_CLASS = 'dx-scrollable-container';
 export const BUTTON_CLASS = 'dx-button';
 
 export const FORM_BUTTONS_CONTAINER_CLASS = 'form-buttons-container';

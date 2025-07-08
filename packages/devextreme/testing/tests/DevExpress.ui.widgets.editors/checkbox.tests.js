@@ -25,8 +25,6 @@ const CHECKBOX_CHECKED_CLASS = 'dx-checkbox-checked';
 const ICON_SELECTOR = '.dx-checkbox-icon';
 
 QUnit.module('Checkbox', function() {
-    const isRenovation = !!dxCheckBox.IS_RENOVATED_WIDGET;
-
     QUnit.test('checkBox is checked if any non-nullable data is passed as value (T1044062)', function(assert) {
         const $checkBox = $('#checkBox').dxCheckBox({});
         const checkBox = $checkBox.dxCheckBox('instance');
@@ -387,129 +385,127 @@ QUnit.module('Checkbox', function() {
     });
 
     QUnit.module('Renovated Checkbox', function() {
-        if(isRenovation) {
-            QUnit.module('renovated options', {
-                beforeEach: function() {
-                    this.$element = $('#checkBox').dxCheckBox();
-                    this.instance = this.$element.dxCheckBox('instance');
-                }
-            }, () => {
-                QUnit.test('checkbox icon must resize according to the "iconSize" option', function(assert) {
-                    const iconSize = 50;
+        QUnit.module('renovated options', {
+            beforeEach: function() {
+                this.$element = $('#checkBox').dxCheckBox();
+                this.instance = this.$element.dxCheckBox('instance');
+            }
+        }, () => {
+            QUnit.test('checkbox icon must resize according to the "iconSize" option', function(assert) {
+                const iconSize = 50;
 
-                    this.instance.option({ iconSize });
+                this.instance.option({ iconSize });
 
-                    assert.strictEqual(this.$element.find(ICON_SELECTOR).outerWidth(), iconSize, 'icon width is resized');
-                    assert.strictEqual(this.$element.find(ICON_SELECTOR).outerHeight(), iconSize, 'icon height is resized');
-                });
+                assert.strictEqual(this.$element.find(ICON_SELECTOR).outerWidth(), iconSize, 'icon width is resized');
+                assert.strictEqual(this.$element.find(ICON_SELECTOR).outerHeight(), iconSize, 'icon height is resized');
+            });
 
-                QUnit.test('checkbox icon\'s font-size should be equal to the checkbox\'s iconSize', function(assert) {
-                    const iconSize = 25;
+            QUnit.test('checkbox icon\'s font-size should be equal to the checkbox\'s iconSize', function(assert) {
+                const iconSize = 25;
 
-                    this.instance.option({ iconSize, value: true });
+                this.instance.option({ iconSize, value: true });
 
-                    assert.strictEqual(this.$element.find(ICON_SELECTOR).css('font-size'), `${iconSize}px`, 'font-size equals iconSize');
-                });
+                assert.strictEqual(this.$element.find(ICON_SELECTOR).css('font-size'), `${iconSize}px`, 'font-size equals iconSize');
+            });
 
-                QUnit.test('checkbox root element size should adjust to "iconSize" options if "width"/"height" options are not specified', function(assert) {
-                    const iconSize = 45;
-                    this.instance.option({ iconSize });
+            QUnit.test('checkbox root element size should adjust to "iconSize" options if "width"/"height" options are not specified', function(assert) {
+                const iconSize = 45;
+                this.instance.option({ iconSize });
 
-                    assert.strictEqual(this.$element.css('width'), `${iconSize}px`, 'root element width equals icon width');
-                    assert.strictEqual(this.$element.css('height'), `${iconSize}px`, 'root element height equals icon height');
-                });
+                assert.strictEqual(this.$element.css('width'), `${iconSize}px`, 'root element width equals icon width');
+                assert.strictEqual(this.$element.css('height'), `${iconSize}px`, 'root element height equals icon height');
+            });
 
-                QUnit.test('checkbox root element size should not adjust to "iconSize" options if "widht"/"height" options not defined', function(assert) {
-                    const iconSize = 45;
-                    const width = 30;
-                    const height = 30;
+            QUnit.test('checkbox root element size should not adjust to "iconSize" options if "widht"/"height" options not defined', function(assert) {
+                const iconSize = 45;
+                const width = 30;
+                const height = 30;
 
-                    this.instance.option({ iconSize, width, height });
+                this.instance.option({ iconSize, width, height });
 
-                    assert.strictEqual(this.$element.css('width'), `${width}px`, 'root element width not equals icon width');
-                    assert.strictEqual(this.$element.css('height'), `${height}px`, 'root element height not equals icon height');
-                });
+                assert.strictEqual(this.$element.css('width'), `${width}px`, 'root element width not equals icon width');
+                assert.strictEqual(this.$element.css('height'), `${height}px`, 'root element height not equals icon height');
+            });
 
-                [true, false, null].forEach((value) => {
-                    [14, '14', '14px', '100%'].forEach((iconSize) => {
-                        QUnit.test(`checkbox "iconSize" option should correctly apply ${iconSize} as iconSize with ${value} value`, function(assert) {
-                            this.instance.option({ width: 28, height: 28, iconSize: iconSize, value: value });
-                            assert.strictEqual(this.$element.find(ICON_SELECTOR).outerWidth(), 14, `icon got expected width from ${iconSize} option value`);
-                        });
+            [true, false, null].forEach((value) => {
+                [14, '14', '14px', '100%'].forEach((iconSize) => {
+                    QUnit.test(`checkbox "iconSize" option should correctly apply ${iconSize} as iconSize with ${value} value`, function(assert) {
+                        this.instance.option({ width: 28, height: 28, iconSize: iconSize, value: value });
+                        assert.strictEqual(this.$element.find(ICON_SELECTOR).outerWidth(), 14, `icon got expected width from ${iconSize} option value`);
                     });
                 });
             });
+        });
 
-            QUnit.testInActiveWindow('blur method', function(assert) {
-                const blurSpy = sinon.spy();
+        QUnit.testInActiveWindow('blur method', function(assert) {
+            const blurSpy = sinon.spy();
+            const $element = $('#checkBox').dxCheckBox({ focusStateEnabled: true });
+            const instance = $element.dxCheckBox('instance');
+            $element.on('blur', blurSpy);
+
+            instance.focus();
+            instance.blur();
+
+            assert.ok(blurSpy.calledOnce, 'element was blurred');
+        });
+
+        QUnit.module('_isFocused method', () => {
+            QUnit.test('should return true if element has dx-state-focused class', function(assert) {
                 const $element = $('#checkBox').dxCheckBox({ focusStateEnabled: true });
                 const instance = $element.dxCheckBox('instance');
-                $element.on('blur', blurSpy);
 
-                instance.focus();
-                instance.blur();
+                $element.addClass('dx-state-focused');
 
-                assert.ok(blurSpy.calledOnce, 'element was blurred');
+                assert.ok(instance._isFocused(), 'checkBox is focused');
             });
 
-            QUnit.module('_isFocused method', () => {
-                QUnit.test('should return true if element has dx-state-focused class', function(assert) {
-                    const $element = $('#checkBox').dxCheckBox({ focusStateEnabled: true });
+            QUnit.test('should return false if element does not have dx-state-focused class', function(assert) {
+                const $element = $('#checkBox').dxCheckBox({ focusStateEnabled: true });
+                const instance = $element.dxCheckBox('instance');
+
+                assert.notOk(instance._isFocused(), 'checkBox is not focused');
+            });
+        });
+
+        QUnit.module('indeterminate state', function() {
+            [
+                { initial: 'string', expected: false },
+                { initial: '', expected: null },
+                { initial: 0, expected: null },
+                { initial: 1, expected: false },
+                { initial: true, expected: false },
+                { initial: false, expected: null },
+                { initial: undefined, expected: true },
+                { initial: null, expected: true },
+            ].forEach(({ initial, expected }) => {
+                QUnit.test(`click should change value from "${initial}" to "${expected}"`, function(assert) {
+                    const $element = $('#checkBox').dxCheckBox({
+                        enableThreeStateBehavior: true,
+                        focusStateEnabled: true,
+                        value: initial
+                    });
                     const instance = $element.dxCheckBox('instance');
 
-                    $element.addClass('dx-state-focused');
-
-                    assert.ok(instance._isFocused(), 'checkBox is focused');
+                    $element.trigger('dxclick');
+                    assert.strictEqual(instance.option('value'), expected, 'value has been changed');
                 });
 
-                QUnit.test('should return false if element does not have dx-state-focused class', function(assert) {
-                    const $element = $('#checkBox').dxCheckBox({ focusStateEnabled: true });
+                QUnit.test(`space press should change value from "${initial}" to "${expected}"`, function(assert) {
+                    const $element = $('#checkBox').dxCheckBox({
+                        enableThreeStateBehavior: true,
+                        focusStateEnabled: true,
+                        value: initial
+                    });
                     const instance = $element.dxCheckBox('instance');
+                    const keyboard = keyboardMock($element);
 
-                    assert.notOk(instance._isFocused(), 'checkBox is not focused');
+                    $element.trigger('focusin');
+
+                    keyboard.keyDown('space');
+                    assert.strictEqual(instance.option('value'), expected, 'value has been changed');
                 });
             });
-
-            QUnit.module('indeterminate state', function() {
-                [
-                    { initial: 'string', expected: false },
-                    { initial: '', expected: null },
-                    { initial: 0, expected: null },
-                    { initial: 1, expected: false },
-                    { initial: true, expected: false },
-                    { initial: false, expected: null },
-                    { initial: undefined, expected: true },
-                    { initial: null, expected: true },
-                ].forEach(({ initial, expected }) => {
-                    QUnit.test(`click should change value from "${initial}" to "${expected}"`, function(assert) {
-                        const $element = $('#checkBox').dxCheckBox({
-                            enableThreeStateBehavior: true,
-                            focusStateEnabled: true,
-                            value: initial
-                        });
-                        const instance = $element.dxCheckBox('instance');
-
-                        $element.trigger('dxclick');
-                        assert.strictEqual(instance.option('value'), expected, 'value has been changed');
-                    });
-
-                    QUnit.test(`space press should change value from "${initial}" to "${expected}"`, function(assert) {
-                        const $element = $('#checkBox').dxCheckBox({
-                            enableThreeStateBehavior: true,
-                            focusStateEnabled: true,
-                            value: initial
-                        });
-                        const instance = $element.dxCheckBox('instance');
-                        const keyboard = keyboardMock($element);
-
-                        $element.trigger('focusin');
-
-                        keyboard.keyDown('space');
-                        assert.strictEqual(instance.option('value'), expected, 'value has been changed');
-                    });
-                });
-            });
-        }
+        });
     });
 });
 

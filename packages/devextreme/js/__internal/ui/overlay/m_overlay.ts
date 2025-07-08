@@ -99,8 +99,6 @@ interface OverlayProperties extends Properties {
   container?: string | dxElementWrapper | Element;
 
   preventScrollEvents?: boolean;
-
-  isRenovated?: boolean;
 }
 
 class Overlay<
@@ -1221,8 +1219,7 @@ class Overlay<
   }
 
   _clean(): void {
-    const { isRenovated } = this.option();
-    if (!this._contentAlreadyRendered && !isRenovated) {
+    if (!this._contentAlreadyRendered) {
       this.$content().empty();
     }
 

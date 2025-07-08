@@ -31,28 +31,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-const isRenovatedScrollView = !!scrollView.IS_RENOVATED_WIDGET;
-QUnit[isRenovatedScrollView ? 'test' : 'skip']('Scrollview content is not recreated on initializing', function(assert) {
-    const contentInit = $('#text').get(0);
-    const contentInitJq = $('#textJquery').get(0);
-
-    const viewModel = {
-        scrollViewOptions: {
-            useNative: false,
-            width: 100,
-            height: 100
-        }
-    };
-
-    ko.applyBindings({ scrollViewOptions: viewModel.scrollViewOptions }, $('#scrollview')[0]);
-
-    $('#scrollviewJquery').dxScrollView({ ...viewModel.scrollViewOptions });
-
-    assert.strictEqual(contentInit, $('#text').get(0));
-    assert.strictEqual(contentInitJq, $('#textJquery').get(0));
-
-});
-
 QUnit.test('Scrollview content apply binding', function(assert) {
     ko.applyBindings({ content: 'ScrollViewContent' }, $('#scrollviewWithBinding')[0]);
 

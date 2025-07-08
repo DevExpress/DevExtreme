@@ -867,7 +867,7 @@ testComponentDefaults(Scrollable,
     {
         useNative: false,
         // NOTE: useSimulatedScrollbar setting value doesn't affect on simulated strategy
-        useSimulatedScrollbar: Scrollable.IS_RENOVATED_WIDGET ? false : true
+        useSimulatedScrollbar: true,
     },
     function() {
         this._supportNativeScrolling = support.nativeScrolling;
@@ -969,19 +969,18 @@ testComponentDefaults(Scrollable,
     }
 );
 
-if(!Scrollable.IS_RENOVATED_WIDGET) {
-    testComponentDefaults(ScrollView,
-        {},
-        { refreshStrategy: 'swipeDown' },
-        function() {
-            this._originalRealDevice = devices.real();
-            devices.real({ platform: 'android' });
-        },
-        function() {
-            devices.real(this._originalRealDevice);
-        }
-    );
-}
+
+testComponentDefaults(ScrollView,
+    {},
+    { refreshStrategy: 'swipeDown' },
+    function() {
+        this._originalRealDevice = devices.real();
+        devices.real({ platform: 'android' });
+    },
+    function() {
+        devices.real(this._originalRealDevice);
+    }
+);
 
 testComponentDefaults(ScrollView,
     {},
