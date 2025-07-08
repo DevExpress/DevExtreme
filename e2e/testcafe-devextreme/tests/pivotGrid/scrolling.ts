@@ -147,7 +147,7 @@ testFixture()`PivotGrid_scrolling`
     { useNative: true },
     { useNative: false },
   ].forEach(({ useNative }) => {
-    test.only(`Rows content dont hide under vertical scrollbar when scrolling{useNative=${useNative}},height=100% (${height}px) (T1290313)`, async (t) => {
+    test(`Rows content dont hide under vertical scrollbar when scrolling{useNative=${useNative}},height=100% (${height}px) (T1290313)`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       await testScreenshot(
         t,
