@@ -43,7 +43,7 @@ function insertRule(targetStyleSheet, rule, needApplyAllStyles) {
 }
 
 const sheetHashes = new WeakMap();
-function computeStyleSheetsHash(styleSheets) {
+export function computeStyleSheetsHash(styleSheets) {
   let hash = 2166136261;
 
   for (const sheet of styleSheets) {
