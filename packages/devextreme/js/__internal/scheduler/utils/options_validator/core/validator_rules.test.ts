@@ -1,5 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
-import { createValidatorRule } from '@ts/scheduler/options_validator/core/validator_rules';
+
+import { createValidatorRule } from './validator_rules';
 
 describe('createValidatorRule', () => {
   it('should add the "name" property to the passed function', () => {

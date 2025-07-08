@@ -1804,8 +1804,6 @@ testComponentDefaults(Scheduler,
     {},
     {
         useDropDownViewSwitcher: true,
-        _appointmentTooltipButtonsPosition: 'top',
-        _appointmentTooltipOpenButtonText: null,
         _appointmentCountPerCell: 1,
         _collectorOffset: 20,
         _appointmentOffset: 30

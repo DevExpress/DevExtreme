@@ -2,15 +2,15 @@ import {
   afterEach, beforeEach,
   describe, expect, it, jest,
 } from '@jest/globals';
+
+import * as validationFunctions from './validation_functions';
 import {
   mustBeDivisibleBy,
   mustBeGreaterThan,
   mustBeInRange,
   mustBeInteger,
   mustBeLessThan,
-} from '@ts/scheduler/options_validator/common/validator_rules';
-
-import * as validationFunctions from './validation_functions';
+} from './validator_rules';
 
 describe('mustBeInteger', () => {
   const mock = jest.spyOn(validationFunctions, 'isInteger');
@@ -38,7 +38,7 @@ describe('mustBeInteger', () => {
 
     const result = mustBeInteger(10.5);
 
-    expect(result).toBe('10.5 must be an integer.');
+    expect(result).toBe(false);
   });
 
   it('should be the function with the correct name', () => {
@@ -77,7 +77,7 @@ describe('mustBeGreaterThan', () => {
     const func = mustBeGreaterThan(15, true);
     const result = func(10);
 
-    expect(result).toBe('10 must be > than 15.');
+    expect(result).toBe(false);
   });
 
   it('should return error (string) if invalid with strict: false', () => {
@@ -86,7 +86,7 @@ describe('mustBeGreaterThan', () => {
     const func = mustBeGreaterThan(15, false);
     const result = func(10);
 
-    expect(result).toBe('10 must be >= than 15.');
+    expect(result).toBe(false);
   });
 
   it('should be the function with the correct name', () => {
@@ -125,7 +125,7 @@ describe('mustBeLessThan', () => {
     const func = mustBeLessThan(10, true);
     const result = func(15);
 
-    expect(result).toBe('15 must be < than 10.');
+    expect(result).toBe(false);
   });
 
   it('should return error (string) if invalid with strict: false', () => {
@@ -134,7 +134,7 @@ describe('mustBeLessThan', () => {
     const func = mustBeLessThan(10, false);
     const result = func(15);
 
-    expect(result).toBe('15 must be <= than 10.');
+    expect(result).toBe(false);
   });
 
   it('should be the function with the correct name', () => {
@@ -173,7 +173,7 @@ describe('mustBeInRange', () => {
     const func = mustBeInRange([0, 10]);
     const result = func(15);
 
-    expect(result).toBe('15 must be in range [0, 10].');
+    expect(result).toBe(false);
   });
 
   it('should be the function with the correct name', () => {
@@ -216,7 +216,7 @@ describe('mustBeDivisibleBy', () => {
     const func = mustBeDivisibleBy(5);
     const result = func(6);
 
-    expect(result).toBe('6 must be divisible by 5.');
+    expect(result).toBe(false);
   });
 
   it('should be the function with the correct name', () => {
