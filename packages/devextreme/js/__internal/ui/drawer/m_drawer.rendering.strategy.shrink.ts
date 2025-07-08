@@ -1,24 +1,29 @@
 import $ from '@js/core/renderer';
 import { camelize } from '@js/core/utils/inflector';
+import type { PanelLocation } from '@js/ui/drawer';
 
+import type Drawer from './m_drawer';
 import { animation } from './m_drawer.animation';
 import DrawerStrategy from './m_drawer.rendering.strategy';
 
 class ShrinkStrategy extends DrawerStrategy {
-  _internalRenderPosition(changePositionUsingFxAnimation, whenAnimationCompleted) {
+  _internalRenderPosition(
+    changePositionUsingFxAnimation: boolean | undefined,
+    whenAnimationCompleted: Drawer['_whenAnimationCompleted'],
+  ): void {
     const drawer = this.getDrawerInstance();
-    // @ts-expect-error
+    const { opened: isDrawerOpened, revealMode } = drawer.option();
+
     const direction = drawer.calcTargetPosition();
     const $panel = $(drawer.content());
-    const panelSize = this._getPanelSize(drawer.option('opened'));
-    const panelOffset = this._getPanelOffset(drawer.option('opened'));
-    const revealMode = drawer.option('revealMode');
+    const panelSize = this._getPanelSize(isDrawerOpened);
+    const panelOffset = this._getPanelOffset(isDrawerOpened);
 
     if (changePositionUsingFxAnimation) {
       if (revealMode === 'slide') {
         animation.margin({
           complete: () => {
-            whenAnimationCompleted.resolve();
+            whenAnimationCompleted?.resolve();
           },
           $element: $panel,
           duration: drawer.option('animationDuration'),
@@ -28,7 +33,7 @@ class ShrinkStrategy extends DrawerStrategy {
       } else if (revealMode === 'expand') {
         animation.size({
           complete: () => {
-            whenAnimationCompleted.resolve();
+            whenAnimationCompleted?.resolve();
           },
           $element: $panel,
           duration: drawer.option('animationDuration'),
@@ -39,13 +44,13 @@ class ShrinkStrategy extends DrawerStrategy {
     } else if (revealMode === 'slide') {
       $panel.css(`margin${camelize(direction, true)}`, panelOffset);
     } else if (revealMode === 'expand') {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       $panel.css(drawer.isHorizontalDirection() ? 'width' : 'height', panelSize);
     }
   }
 
-  // @ts-expect-error
-  isViewContentFirst(position, isRtl): boolean {
+  // eslint-disable-next-line class-methods-use-this
+  isViewContentFirst(position: PanelLocation | undefined, isRtl: boolean | undefined): boolean {
     return (isRtl ? position === 'left' : position === 'right') || position === 'bottom';
   }
 }

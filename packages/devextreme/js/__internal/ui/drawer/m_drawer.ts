@@ -32,6 +32,8 @@ const OPENED_STATE_CLASS = 'dx-drawer-opened';
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 const PANEL_TEMPLATE_NAME = 'panel';
 
+type TargetPosition = Exclude<PanelLocation, 'before' | 'after'>;
+
 export interface DrawerProperties extends Properties {
   contentTemplate: string;
 
@@ -277,7 +279,9 @@ class Drawer extends Widget<DrawerProperties> {
 
   _refreshWrapperChildrenOrder(): void {
     const position = this.calcTargetPosition();
-    if (this._strategy.isViewContentFirst(position, this.option('rtlEnabled'))) {
+    const { rtlEnabled } = this.option();
+
+    if (this._strategy.isViewContentFirst(position, rtlEnabled)) {
       this._$wrapper.prepend(this._$viewContentWrapper);
     } else {
       this._$wrapper.prepend(this._$panelContentWrapper);
@@ -338,7 +342,7 @@ class Drawer extends Widget<DrawerProperties> {
     this._minSize = minSize || 0;
   }
 
-  calcTargetPosition(): PanelLocation | undefined {
+  calcTargetPosition(): TargetPosition | undefined {
     const { position, rtlEnabled } = this.option();
 
     if (position === 'before') {
@@ -456,6 +460,7 @@ class Drawer extends Widget<DrawerProperties> {
     this.stopAnimations(jumpToEnd);
     this._whenAnimationCompleted = Deferred();
 
+    const { animationDuration } = this.option();
     let { animationEnabled } = this.option();
 
     if (disableAnimation === true) {
@@ -480,7 +485,7 @@ class Drawer extends Widget<DrawerProperties> {
       this._toggleShaderVisibility(isDrawerOpened);
     }
 
-    this._strategy.renderPosition(animationEnabled, this.option('animationDuration'));
+    this._strategy.renderPosition(animationEnabled, animationDuration);
   }
 
   _animationCompleteHandler(): void {
