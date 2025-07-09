@@ -579,11 +579,6 @@ class Scrollable<
   _useTemplates(): boolean {
     return false;
   }
-
-  isRenovated(): boolean {
-    // @ts-expect-error ts-error
-    return !!Scrollable.IS_RENOVATED_WIDGET;
-  }
 }
 
 registerComponent(SCROLLABLE, Scrollable);
