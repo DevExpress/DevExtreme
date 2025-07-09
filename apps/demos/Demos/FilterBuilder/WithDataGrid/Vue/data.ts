@@ -1,4 +1,5 @@
 import { type DxFilterBuilderTypes } from 'devextreme-vue/filter-builder';
+import { type DxDataGridTypes } from 'devextreme-vue/data-grid';
 
 export const filter = [
   ['Product_Current_Inventory', '<>', 0],
@@ -10,7 +11,7 @@ export const filter = [
   ],
 ];
 
-export const fields: DxFilterBuilderTypes.Field[] = [
+export const fields: (DxFilterBuilderTypes.Field & DxDataGridTypes.Column)[] = [
   {
     caption: 'ID',
     dataField: 'Product_ID',
