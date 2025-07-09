@@ -29,6 +29,7 @@ const userAgents = {
         firefox: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15',
     },
     android_9: 'Mozilla/5.0 (Linux; Android 9; Mi A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.143 Mobile Safari/537.36',
+    ipad_11_desktop_mode: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15',
     android_tablet_7_1_1: 'Mozilla/5.0 (Linux; Android 7.1.1; SM-T555 Build/NMF26X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.158 Safari/537.36',
     win_phone_10: 'Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; NOKIA; Lumia 920) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Mobile Safari/537.36 Edge/12.0',
 };
@@ -64,6 +65,7 @@ QUnit.module('devices', {
     // others
     // platform: generic, because win is deprecated
     ['winphone 10', userAgents.win_phone_10, 'generic', null, 'phone', null],
+    ['ipdad 11 with dedctop mode', userAgents.ipad_11_desktop_mode, 'ios', '10.15.7', 'desctop', { maxTouchPoints: 5 }],
 ].forEach(([
     name,
     userAgent,
