@@ -128,4 +128,10 @@ export default errorUtils({
   W0023: 'DevExtreme: the following \'devextreme\' package version does not match versions of other DevExpress products used in this application:\n\n'
         + '{0}\n\n'
         + 'Interoperability between different versions of the products listed herein cannot be guaranteed.\n\n',
+
+  W0024: 'DevExtreme: License Key Misassigned with Another Product Key\n\n'
+       + 'Your license key is invalid. It may be a DevExpress .NET key instead of DevExtreme-specific. Ensure you have the correct DevExtreme license key \n\n'
+       + 'Go to https://www.devexpress.com/ClientCenter/DownloadManager (the DevExtreme Subscription section) to obtain a valid DevExtreme license key. To verify your license, specify the correct key in the GlobalConfig.\n\n'
+       + 'For detailed license/registration information, visit https://js.devexpress.com/Documentation/Licensing/.\n\n'
+       + 'If you have a valid license and the issue persists, submit a support ticket via the DevExpress Support Center. We will be happy to follow-up: https://supportcenter.devexpress.com/ticket/create.\n\n',
 });
