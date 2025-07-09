@@ -1249,6 +1249,7 @@ const PivotGrid = (Widget as any).inherit({
       const descriptionCellHeight = getOuterHeight(descriptionCell[0], true)
         + (needSynchronizeFieldPanel ? rowHeights[0] : 0);
 
+      const dataAreaHeadHeight = getHeight(that._dataArea.headElement());
       let filterAreaHeight = 0;
       let dataAreaHeight = 0;
       if (that._hasHeight) {
@@ -1262,7 +1263,7 @@ const PivotGrid = (Widget as any).inherit({
           that.$element(),
         ) - filterAreaHeight - dataHeaderHeight
           - (Math.max(
-            getHeight(that._dataArea.headElement()),
+            dataAreaHeadHeight,
             getHeight(columnAreaCell),
             descriptionCellHeight,
           )
@@ -1271,7 +1272,12 @@ const PivotGrid = (Widget as any).inherit({
       }
 
       const scrollBarWidth = that._dataArea.getScrollbarWidth();
-      const correctDataTableHeight = getHeight(that._dataArea.tableElement()) - getHeight(that._dataArea.headElement());
+      const rowsAreaTableHeight = getHeight(that._rowsArea.tableElement());
+      const dataAreaTableHeight = getHeight(that._dataArea.tableElement());
+      const correctDataTableHeight = Math.max(
+        rowsAreaTableHeight,
+        dataAreaTableHeight - dataAreaHeadHeight,
+      );
       const hasVerticalScrollbar = calculateHasScroll(dataAreaHeight, correctDataTableHeight);
 
       that._dataArea.tableElement().css({
