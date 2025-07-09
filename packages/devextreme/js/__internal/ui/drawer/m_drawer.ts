@@ -48,7 +48,7 @@ class Drawer extends Widget<DrawerProperties> {
 
   _overlay?: Overlay;
 
-  _$panelContentWrapper!: dxElementWrapper;
+  _$panelContentWrapper?: dxElementWrapper;
 
   _$wrapper!: dxElementWrapper;
 
@@ -212,7 +212,7 @@ class Drawer extends Widget<DrawerProperties> {
   }
 
   _removePanelManualPosition(): void {
-    if (this._$panelContentWrapper.attr('manualposition')) {
+    if (this._$panelContentWrapper && this._$panelContentWrapper.attr('manualposition')) {
       this._$panelContentWrapper.removeAttr('manualPosition');
       this._$panelContentWrapper.css({
         position: '', top: '', left: '', right: '', bottom: '',
@@ -225,7 +225,7 @@ class Drawer extends Widget<DrawerProperties> {
       const { minSize, opened } = this.option();
       const shouldBeSet = minSize ? false : !opened;
 
-      this._$panelContentWrapper.toggleClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS, shouldBeSet);
+      this._$panelContentWrapper?.toggleClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS, shouldBeSet);
     };
 
     if (this._whenAnimationCompleted && !this.option('opened')) {
@@ -285,7 +285,7 @@ class Drawer extends Widget<DrawerProperties> {
 
     if (this._strategy.isViewContentFirst(position, rtlEnabled)) {
       this._$wrapper.prepend(this._$viewContentWrapper);
-    } else {
+    } else if (this._$panelContentWrapper) {
       this._$wrapper.prepend(this._$panelContentWrapper);
     }
   }
@@ -445,7 +445,7 @@ class Drawer extends Widget<DrawerProperties> {
 
   setZIndex(zIndex: number): void {
     this._$shader.css('zIndex', zIndex - 1);
-    this._$panelContentWrapper.css('zIndex', zIndex);
+    this._$panelContentWrapper?.css('zIndex', zIndex);
   }
 
   resizeContent(): void { // TODO: keep for ui.file_manager.adaptivity.js
@@ -580,7 +580,6 @@ class Drawer extends Widget<DrawerProperties> {
     if (this._overlay) {
       this._overlay.dispose();
       delete this._overlay;
-      // @ts-expect-error ts-error
       delete this._$panelContentWrapper; // TODO: move to _removePanelContentWrapper?
     }
   }
@@ -640,8 +639,8 @@ class Drawer extends Widget<DrawerProperties> {
     }
   }
 
-  content(): Element {
-    return getPublicElement(this._$panelContentWrapper);
+  content(): Element | undefined {
+    return this._$panelContentWrapper ? getPublicElement(this._$panelContentWrapper) : undefined;
   }
 
   viewContent(): Element {
