@@ -1,5 +1,5 @@
 import {
-  beforeAll, describe, expect, it,
+  beforeAll, describe, expect, it, jest,
 } from '@jest/globals';
 
 import { globalCache } from './global_cache';
