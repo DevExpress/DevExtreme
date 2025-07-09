@@ -15,20 +15,18 @@ describe('timezone utils', () => {
   });
 
   describe('calculateTimezoneByValue', () => {
-    it('should work faster after first run', () => {
-      let now = Date.now();
+    it('should cache the results', () => {
       timeZoneList.value.forEach((timezone) => {
         timeZoneUtils.calculateTimezoneByValue(timezone);
       });
-      const delta1 = Date.now() - now; // 41
-      now = Date.now();
+
+      jest.spyOn(Intl, 'DateTimeFormat');
       timeZoneList.value.forEach((timezone) => {
         timeZoneUtils.calculateTimezoneByValue(timezone);
       });
-      const delta2 = Date.now() - now; // 6
 
       expect(globalCache.timezones.size).toBe(timeZoneList.value.length);
-      expect(delta2).toBeLessThan(delta1 / 5);
+      expect(Intl.DateTimeFormat).toHaveBeenCalledTimes(0);
     });
   });
 
