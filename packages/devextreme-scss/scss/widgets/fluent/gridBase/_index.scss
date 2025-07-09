@@ -952,8 +952,13 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-master-detail-row {
       > .dx-master-detail-cell {
-        padding: $grid-masterdetail-padding;
+        padding: 0;
+
+        > .dx-master-detail-container {
+          padding: $grid-masterdetail-padding;
+        }
       }
+
       > .dx-#{$widget-name}-group-space,
       .dx-master-detail-cell:not(.dx-row-lines) {
         border-top: $datagrid-border;

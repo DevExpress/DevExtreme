@@ -39,8 +39,6 @@ import {
   processFixedColumns,
 } from './utils';
 
-const MASTER_DETAIL_CONTAINER_CLASS = 'dx-master-detail-container'; // TODO: move to another place
-
 const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class BaseStickyColumnsExtender extends Base {
   private _addStickyColumnBorderLeftClass(
     $cell: dxElementWrapper,
@@ -372,14 +370,6 @@ const rowsView = (
     const componentWidth = getWidth(this.component.$element()) ?? 0;
     const borderWidth = gridCoreUtils.getComponentBorderWidth(this, this._$element);
 
-    // TODO: refactor. Better to move paddings from dx-master-detail-cell to dx-master-detail-container in SCSS
-    if ($('.dx-master-detail-cell').get(0)) {
-      const style = getComputedStyle($('.dx-master-detail-cell').get(0));
-      const totalHorizontalPadding = style ? parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) : 0;
-
-      return componentWidth - borderWidth - this.getScrollbarWidth() - totalHorizontalPadding;
-    }
-
     return componentWidth - borderWidth - this.getScrollbarWidth();
   }
 
@@ -388,7 +378,7 @@ const rowsView = (
     const $detailCell: dxElementWrapper = super._renderMasterDetailCell($row, row, options);
 
     if (this.hasStickyColumns()) {
-      const $detailContainer = $detailCell.find(`.${MASTER_DETAIL_CONTAINER_CLASS}`);
+      const $detailContainer = $detailCell.find(`.${MASTER_DETAIL_CLASSES.detailContainer}`);
 
       setWidth($detailContainer, this._getMasterDetailWidth());
     }
@@ -398,10 +388,10 @@ const rowsView = (
 
   private _updateMasterDetailWidths() {
     const width = this._getMasterDetailWidth();
-    const $masterDetailCells = this._getRowElements().find(`.${MASTER_DETAIL_CONTAINER_CLASS}`);
+    const $masterDetailContainers = this._getRowElements().find(`.${MASTER_DETAIL_CLASSES.detailContainer}`);
 
     setWidth(
-      $masterDetailCells,
+      $masterDetailContainers,
       `${width}px`,
     );
   }
