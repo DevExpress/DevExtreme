@@ -709,8 +709,13 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
     .dx-master-detail-row {
       > .dx-master-detail-cell {
-        padding: $grid-masterdetail-padding;
+        padding: 0;
+
+        > .dx-master-detail-container {
+          padding: $grid-masterdetail-padding;
+        }
       }
+
       > .dx-#{$widget-name}-group-space,
       .dx-master-detail-cell:not(.dx-row-lines) {
         border-top: $datagrid-border;
