@@ -16,7 +16,7 @@
       :data-source="dataSource"
       :filter-value="gridFilterValue"
       :show-borders="true"
-      :columns="fields"
+      :columns="gridColumns"
       :height="300"
     />
   </div>
@@ -25,11 +25,12 @@
 import { ref } from 'vue';
 import DxFilterBuilder from 'devextreme-vue/filter-builder';
 import DxButton from 'devextreme-vue/button';
-import DxDataGrid from 'devextreme-vue/data-grid';
+import DxDataGrid, { type DxDataGridTypes } from 'devextreme-vue/data-grid';
 import { DataSource, ODataStore } from 'devextreme-vue/common/data';
 import { filter, fields } from './data.ts';
 
 const filterValue = ref(filter);
+const gridColumns = fields as DxDataGridTypes.Column[];
 const gridFilterValue = ref(filter);
 const dataSource = new DataSource({
   store: new ODataStore({
