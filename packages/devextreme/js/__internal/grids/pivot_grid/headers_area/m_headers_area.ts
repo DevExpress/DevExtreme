@@ -3,7 +3,6 @@ import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { setHeight, setWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 
 import { AreaItem } from '../area_item/m_area_item';
 
@@ -18,8 +17,6 @@ const PIVOTGRID_COLLAPSED_CLASS = 'dx-pivotgrid-collapsed';
 const PIVOTGRID_LAST_CELL_CLASS = 'dx-last-cell';
 const PIVOTGRID_VERTICAL_SCROLL_CLASS = 'dx-vertical-scroll';
 const PIVOTGRID_EXPAND_BORDER = 'dx-expand-border';
-
-const isRenovatedScrollable = !!(Scrollable as any).IS_RENOVATED_WIDGET;
 
 function getCellPath(tableElement, cell) {
   if (cell) {
@@ -122,15 +119,9 @@ const HorizontalHeadersArea = AreaItem.inherit({
       showScrollbar: 'never',
       bounceEnabled: false,
       direction: 'horizontal',
-      rtlEnabled: isRenovatedScrollable ? this.component.option('rtlEnabled') : false,
+      rtlEnabled: false,
       updateManually: true,
     });
-  },
-
-  updateScrollableOptions({ rtlEnabled }) {
-    const scrollable = this._getScrollable();
-
-    isRenovatedScrollable && scrollable.option({ rtlEnabled });
   },
 
   processScrollBarSpacing(scrollBarWidth) {
