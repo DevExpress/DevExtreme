@@ -1365,10 +1365,6 @@ class Form extends Widget<FormProperties> {
     this._clear();
   }
 
-  resetValues() {
-    this._clear();
-  }
-
   reset(editorsData) {
     this.updateRunTimeInfoForEachEditor((editor) => {
       const editorName = editor.option('name');

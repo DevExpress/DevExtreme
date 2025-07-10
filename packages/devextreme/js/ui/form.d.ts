@@ -360,13 +360,6 @@ export default class dxForm extends Widget<dxFormOptions> {
     clear(): void;
     /**
      * @docid
-     * @publicName resetValues()
-     * @public
-     * @deprecated dxForm.clear
-     */
-    resetValues(): void;
-    /**
-     * @docid
      * @publicName reset(editorsData)
      * @param1 editorsData:object
      * @public
