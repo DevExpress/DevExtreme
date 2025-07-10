@@ -7,8 +7,11 @@ import Callbacks from '@js/core/utils/callbacks';
 import { Deferred } from '@js/core/utils/deferred';
 import { getOuterHeight } from '@js/core/utils/size';
 import LoadIndicator from '@js/ui/load_indicator';
+import type { ScrollEvent } from '@js/ui/scroll_view';
 
+import type { ScrollView, ScrollViewProperties } from './m_scroll_view';
 import NativeStrategy from './m_scrollable.native';
+import type { AllowedDirections, DxMouseEvent } from './types';
 
 const SCROLLVIEW_PULLDOWN_DOWN_LOADING_CLASS = 'dx-scrollview-pull-down-loading';
 const SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = 'dx-scrollview-pull-down-indicator';
@@ -20,7 +23,9 @@ const STATE_READY = 1;
 const STATE_REFRESHING = 2;
 const STATE_TOUCHED = 4;
 const STATE_PULLED = 5;
-class SwipeDownNativeScrollViewStrategy extends NativeStrategy {
+class SwipeDownNativeScrollViewStrategy<
+  TProperties extends ScrollViewProperties = ScrollViewProperties,
+> extends NativeStrategy<TProperties> {
   pullDownCallbacks!: Callback;
 
   releaseCallbacks!: Callback;
@@ -41,11 +46,13 @@ class SwipeDownNativeScrollViewStrategy extends NativeStrategy {
 
   _topPocketSize!: number;
 
+  // eslint-disable-next-line no-restricted-globals
   _releaseTimeout?: ReturnType<typeof setTimeout>;
 
+  // eslint-disable-next-line no-restricted-globals
   _pullDownRefreshTimeout?: ReturnType<typeof setTimeout>;
 
-  _reachBottomEnabled?: boolean;
+  _reachBottomEnabled!: boolean;
 
   _pullDownEnabled!: boolean;
 
@@ -57,7 +64,9 @@ class SwipeDownNativeScrollViewStrategy extends NativeStrategy {
 
   _deltaY!: number;
 
-  _init(scrollView): void {
+  // @ts-expect-error ts-error
+  _init(scrollView: ScrollView): void {
+    // @ts-expect-error ts-error
     super._init(scrollView);
     this._$topPocket = scrollView._$topPocket;
     this._$pullDown = scrollView._$pullDown;
@@ -82,8 +91,8 @@ class SwipeDownNativeScrollViewStrategy extends NativeStrategy {
 
   _renderPullDown(): void {
     const $loadContainer = $('<div>').addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS);
-    // @ts-expect-error
-    const $loadIndicator = new LoadIndicator($('<div>')).$element();
+    const loadIndicatorElement = $('<div>')[0];
+    const $loadIndicator = new LoadIndicator(loadIndicatorElement).$element();
 
     this._$icon = $('<div>')
       .addClass(PULLDOWN_ICON_CLASS);
@@ -115,22 +124,23 @@ class SwipeDownNativeScrollViewStrategy extends NativeStrategy {
     this._bottomBoundary = Math.max(contentEl.clientHeight - containerEl.clientHeight, 0);
   }
 
-  _allowedDirections() {
+  _allowedDirections(): AllowedDirections {
     const allowedDirections = super._allowedDirections();
     allowedDirections.vertical = allowedDirections.vertical || this._pullDownEnabled;
     return allowedDirections;
   }
 
-  handleInit(e): void {
+  handleInit(e: ScrollEvent): void {
     super.handleInit(e);
 
     if (this._state === STATE_RELEASED && this._location === 0) {
+      // @ts-expect-error ts-error
       this._startClientY = eventData(e.originalEvent).y;
       this._state = STATE_TOUCHED;
     }
   }
 
-  handleMove(e): void {
+  handleMove(e: DxMouseEvent): void {
     super.handleMove(e);
     this._deltaY = eventData(e.originalEvent).y - this._startClientY;
 
@@ -151,7 +161,7 @@ class SwipeDownNativeScrollViewStrategy extends NativeStrategy {
   _movePullDown(): void {
     const pullDownHeight = this._getPullDownHeight();
     const top = Math.min(pullDownHeight * 3, this._deltaY + this._getPullDownStartPosition());
-    const angle = 180 * top / pullDownHeight / 3;
+    const angle = (180 * top) / (pullDownHeight * 3);
 
     this._$pullDown
       .css({
@@ -166,15 +176,17 @@ class SwipeDownNativeScrollViewStrategy extends NativeStrategy {
     });
   }
 
-  _isPullDown() {
-    return this._pullDownEnabled && this._state === STATE_PULLED && this._deltaY >= this._getPullDownHeight() - this._getPullDownStartPosition();
+  _isPullDown(): boolean {
+    return this._pullDownEnabled
+      && this._state === STATE_PULLED
+      && this._deltaY >= this._getPullDownHeight() - this._getPullDownStartPosition();
   }
 
-  _getPullDownHeight() {
+  _getPullDownHeight(): number {
     return Math.round(getOuterHeight(this._$element) * 0.05);
   }
 
-  _getPullDownStartPosition() {
+  _getPullDownStartPosition(): number {
     return -Math.round(getOuterHeight(this._$pullDown) * 1.5);
   }
 
@@ -196,7 +208,7 @@ class SwipeDownNativeScrollViewStrategy extends NativeStrategy {
     }
   }
 
-  handleScroll(e): void {
+  handleScroll(e: ScrollEvent): void {
     super.handleScroll(e);
 
     // TODO: replace with disabled check
@@ -216,11 +228,11 @@ class SwipeDownNativeScrollViewStrategy extends NativeStrategy {
     }
   }
 
-  _isReachBottom() {
+  _isReachBottom(): boolean {
     return this._reachBottomEnabled && this.isBottomReached();
   }
 
-  isBottomReached() {
+  isBottomReached(): boolean {
     return Math.round(this._bottomBoundary + Math.floor(this._location)) <= 1;
   }
 
@@ -252,12 +264,13 @@ class SwipeDownNativeScrollViewStrategy extends NativeStrategy {
     move(this._$pullDown, { top: this._getPullDownHeight() });
   }
 
-  pullDownEnable(enabled): void {
+  pullDownEnable(enabled: boolean): void {
+    // @ts-expect-error ts-error
     this._$topPocket.toggle(enabled);
     this._pullDownEnabled = enabled;
   }
 
-  reachBottomEnable(enabled): void {
+  reachBottomEnable(enabled: boolean): void {
     this._reachBottomEnabled = enabled;
   }
 
@@ -265,11 +278,12 @@ class SwipeDownNativeScrollViewStrategy extends NativeStrategy {
     this._state = STATE_READY;
   }
 
-  release() {
+  release(): PromiseLike<unknown> {
     const deferred = Deferred();
 
     this._updateDimensions();
     clearTimeout(this._releaseTimeout);
+    // eslint-disable-next-line no-restricted-globals
     this._releaseTimeout = setTimeout(() => {
       this._stateReleased();
       this.releaseCallbacks.fire();

@@ -6,8 +6,11 @@ import Callbacks from '@js/core/utils/callbacks';
 import { Deferred } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import LoadIndicator from '@js/ui/load_indicator';
+import type { ScrollEvent } from '@js/ui/scroll_view';
 
+import type { ScrollView, ScrollViewProperties } from './m_scroll_view';
 import NativeStrategy from './m_scrollable.native';
+import type { AllowedDirections } from './types';
 
 const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';
 const SCROLLVIEW_PULLDOWN_READY_CLASS = 'dx-scrollview-pull-down-ready';
@@ -21,7 +24,9 @@ const STATE_READY = 1;
 const STATE_REFRESHING = 2;
 const STATE_LOADING = 3;
 const PULLDOWN_RELEASE_TIME = 400;
-class PullDownNativeScrollViewStrategy extends NativeStrategy {
+class PullDownNativeScrollViewStrategy<
+  TProperties extends ScrollViewProperties = ScrollViewProperties,
+> extends NativeStrategy<TProperties> {
   pullDownCallbacks!: Callback;
 
   releaseCallbacks!: Callback;
@@ -46,11 +51,13 @@ class PullDownNativeScrollViewStrategy extends NativeStrategy {
 
   _topPocketSize!: number;
 
+  // eslint-disable-next-line no-restricted-globals
   _releaseTimeout?: ReturnType<typeof setTimeout>;
 
+  // eslint-disable-next-line no-restricted-globals
   _pullDownRefreshTimeout?: ReturnType<typeof setTimeout>;
 
-  _reachBottomEnabled?: boolean;
+  _reachBottomEnabled!: boolean;
 
   _pullDownEnabled!: boolean;
 
@@ -58,10 +65,13 @@ class PullDownNativeScrollViewStrategy extends NativeStrategy {
 
   _location!: number;
 
-  _init(scrollView): void {
+  // @ts-expect-error ts-error
+  _init(scrollView: ScrollView): void {
+    // @ts-expect-error ts-error
     super._init(scrollView);
     this._$topPocket = scrollView._$topPocket;
     this._$pullDown = scrollView._$pullDown;
+    // @ts-expect-error ts-error
     this._$refreshingText = scrollView._$refreshingText;
     this._$scrollViewContent = $(scrollView.content());
     this._$container = $(scrollView.container());
@@ -84,19 +94,31 @@ class PullDownNativeScrollViewStrategy extends NativeStrategy {
   _renderPullDown(): void {
     const $image = $('<div>').addClass(SCROLLVIEW_PULLDOWN_IMAGE_CLASS);
     const $loadContainer = $('<div>').addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS);
-    // @ts-expect-error ts-error
-    const $loadIndicator = new LoadIndicator($('<div>')).$element();
-    const $text = this._$pullDownText = $('<div>').addClass(SCROLLVIEW_PULLDOWN_TEXT_CLASS);
+    const loadIndicatorElement = $('<div>')[0];
+    const $loadIndicator = new LoadIndicator(loadIndicatorElement).$element();
+    this._$pullDownText = $('<div>').addClass(SCROLLVIEW_PULLDOWN_TEXT_CLASS);
 
-    this._$pullingDownText = $('<div>').text(this.option('pullingDownText')).appendTo($text);
-    this._$pulledDownText = $('<div>').text(this.option('pulledDownText')).appendTo($text);
-    this._$refreshingText = $('<div>').text(this.option('refreshingText')).appendTo($text);
+    const {
+      pullingDownText = '',
+      pulledDownText = '',
+      refreshingText = '',
+    } = this.option();
+
+    this._$pullingDownText = $('<div>')
+      .text(pullingDownText)
+      .appendTo(this._$pullDownText);
+    this._$pulledDownText = $('<div>')
+      .text(pulledDownText)
+      .appendTo(this._$pullDownText);
+    this._$refreshingText = $('<div>')
+      .text(refreshingText)
+      .appendTo(this._$pullDownText);
 
     this._$pullDown
       .empty()
       .append($image)
       .append($loadContainer.append($loadIndicator))
-      .append($text);
+      .append(this._$pullDownText);
   }
 
   _releaseState(): void {
@@ -105,7 +127,6 @@ class PullDownNativeScrollViewStrategy extends NativeStrategy {
   }
 
   _refreshPullDownText(): void {
-    const that = this;
     const pullDownTextItems = [{
       element: this._$pullingDownText,
       visibleState: STATE_RELEASED,
@@ -118,7 +139,7 @@ class PullDownNativeScrollViewStrategy extends NativeStrategy {
     }];
 
     each(pullDownTextItems, (_, item) => {
-      const action = that._state === item.visibleState ? 'addClass' : 'removeClass';
+      const action = this._state === item.visibleState ? 'addClass' : 'removeClass';
       item.element[action](SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS);
     });
   }
@@ -137,7 +158,7 @@ class PullDownNativeScrollViewStrategy extends NativeStrategy {
     this._bottomBoundary = Math.max(contentEl.clientHeight - containerEl.clientHeight, 0);
   }
 
-  _allowedDirections() {
+  _allowedDirections(): AllowedDirections {
     const allowedDirections = super._allowedDirections();
     allowedDirections.vertical = allowedDirections.vertical || this._pullDownEnabled;
     return allowedDirections;
@@ -163,18 +184,19 @@ class PullDownNativeScrollViewStrategy extends NativeStrategy {
     if (this._state === STATE_READY) {
       this._setPullDownOffset(this._topPocketSize);
       clearTimeout(this._pullDownRefreshTimeout);
+      // eslint-disable-next-line no-restricted-globals
       this._pullDownRefreshTimeout = setTimeout(() => {
         this._pullDownRefreshing();
       }, 400);
     }
   }
 
-  _setPullDownOffset(offset): void {
+  _setPullDownOffset(offset: number): void {
     move(this._$topPocket, { top: offset });
     move(this._$scrollViewContent, { top: offset });
   }
 
-  handleScroll(e): void {
+  handleScroll(e: ScrollEvent): void {
     super.handleScroll(e);
 
     // TODO: replace with disabled check
@@ -196,19 +218,19 @@ class PullDownNativeScrollViewStrategy extends NativeStrategy {
     }
   }
 
-  _isPullDown() {
+  _isPullDown(): boolean {
     return this._pullDownEnabled && this._location >= this._topPocketSize;
   }
 
-  _isReachBottom() {
+  _isReachBottom(): boolean {
     return this._reachBottomEnabled && this.isBottomReached();
   }
 
-  isBottomReached() {
+  isBottomReached(): boolean {
     return Math.round(this._bottomBoundary + Math.floor(this._location)) <= 1;
   }
 
-  _reachBottom() {
+  _reachBottom(): void {
     if (this._state === STATE_LOADING) {
       return;
     }
@@ -216,7 +238,7 @@ class PullDownNativeScrollViewStrategy extends NativeStrategy {
     this.reachBottomCallbacks.fire();
   }
 
-  _pullDownReady() {
+  _pullDownReady(): void {
     if (this._state === STATE_READY) {
       return;
     }
@@ -225,7 +247,7 @@ class PullDownNativeScrollViewStrategy extends NativeStrategy {
     this._refreshPullDownText();
   }
 
-  _stateReleased() {
+  _stateReleased(): void {
     if (this._state === STATE_RELEASED) {
       return;
     }
@@ -251,7 +273,7 @@ class PullDownNativeScrollViewStrategy extends NativeStrategy {
     this.pullDownCallbacks.fire();
   }
 
-  pullDownEnable(enabled): void {
+  pullDownEnable(enabled: boolean): void {
     if (enabled) {
       this._updateDimensions();
       this._setTopPocketOffset();
@@ -259,7 +281,7 @@ class PullDownNativeScrollViewStrategy extends NativeStrategy {
     this._pullDownEnabled = enabled;
   }
 
-  reachBottomEnable(enabled): void {
+  reachBottomEnable(enabled: boolean): void {
     this._reachBottomEnabled = enabled;
   }
 
@@ -267,7 +289,7 @@ class PullDownNativeScrollViewStrategy extends NativeStrategy {
     this._state = STATE_READY;
   }
 
-  release() {
+  release(): PromiseLike<unknown> {
     const deferred = Deferred();
 
     this._updateDimensions();
@@ -277,6 +299,7 @@ class PullDownNativeScrollViewStrategy extends NativeStrategy {
       this._state = STATE_RELEASED;
     }
 
+    // eslint-disable-next-line no-restricted-globals
     this._releaseTimeout = setTimeout(() => {
       this._setPullDownOffset(0);
       this._stateReleased();

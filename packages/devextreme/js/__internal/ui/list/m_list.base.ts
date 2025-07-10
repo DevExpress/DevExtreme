@@ -241,7 +241,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
 
   _defaultOptionsRules(): DefaultOptionsRule<ListBaseProperties>[] {
     const themeName = current();
-    // @ts-expect-error ts-error
+
     return super._defaultOptionsRules().concat(deviceDependentOptions(), [
       {
         device(): boolean {

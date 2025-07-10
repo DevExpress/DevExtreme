@@ -9,6 +9,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
+import type { OptionChanged } from '@ts/core/widget/types';
 import { convertToLocation } from '@ts/ui/scroll_view/utils/convert_location';
 
 import type { ScrollableProperties } from '../scroll_view/m_scrollable';
@@ -229,11 +230,13 @@ class DateViewRoller extends Scrollable {
           to: { top: Math.floor(delta.y) },
           complete() {
             resetPosition($(that.content()));
+            // @ts-expect-error
             that.handleMove({ delta });
           },
         });
         delete this._animation;
       } else {
+        // @ts-expect-error
         this.handleMove({ delta });
       }
     }
@@ -345,7 +348,7 @@ class DateViewRoller extends Scrollable {
     }
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<DateViewRollerProperties>): void {
     switch (args.name) {
       case 'selectedIndex':
         this._fireSelectedIndexChanged(args.value, args.previousValue);
@@ -359,6 +362,7 @@ class DateViewRoller extends Scrollable {
       case 'showOnClick':
         this._renderContainerClick();
         break;
+      // @ts-expect-error ts-error
       case 'onSelectedIndexChanged':
         this._renderSelectedIndexChanged();
         break;

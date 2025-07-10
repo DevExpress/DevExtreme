@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import type { Orientation, ScrollDirection } from '@js/common';
 import { locate, move, resetPosition } from '@js/common/core/animation/translator';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
@@ -7,7 +8,6 @@ import {
   isDxMouseWheelEvent,
   normalizeKeyName,
 } from '@js/common/core/events/utils/index';
-import Class from '@js/core/class';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -28,11 +28,22 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import type { ScrollEvent } from '@js/ui/scroll_view';
+import type { ActionConfig } from '@ts/core/widget/component';
+import Animator from '@ts/ui/scroll_view/m_animator';
 
-import Animator from './m_animator';
 import type { ScrollViewScroller } from './m_scroll_view.simulated';
 import type Scrollable from './m_scrollable';
+import type { ScrollableProperties } from './m_scrollable';
 import Scrollbar from './m_scrollbar';
+import type {
+  AllowedDirections, DxMouseEvent, DxMouseWheelEvent, ScrollEventArgs, ScrollOffset,
+} from './types';
+
+interface ScrollVelocity {
+  x: number;
+  y: number;
+}
 
 const SCROLLABLE_SIMULATED = 'dxSimulatedScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
@@ -71,6 +82,27 @@ const KEY_CODES = {
 
 interface ScrollByDelta { x: number; y: number }
 
+export interface ScrollerOptions {
+  direction: string;
+  $content: dxElementWrapper;
+  $container: dxElementWrapper;
+  $wrapper: dxElementWrapper;
+  $element: dxElementWrapper;
+  scrollByThumb?: boolean;
+  scrollbarVisible?: boolean | string;
+  bounceEnabled?: boolean;
+  inertiaEnabled?: boolean;
+  isAnyThumbScrolling: (target: dxElementWrapper) => boolean;
+
+  $topPocket?: dxElementWrapper;
+  $bottomPocket?: dxElementWrapper;
+  $pullDown?: dxElementWrapper;
+  $pullDownText?: dxElementWrapper;
+  $pullingDownText?: dxElementWrapper;
+  $pulledDownText?: dxElementWrapper;
+  $refreshingText?: dxElementWrapper;
+}
+
 class InertiaAnimator extends Animator {
   InertiaAnimator?: Scroller;
 
@@ -78,8 +110,8 @@ class InertiaAnimator extends Animator {
 
   VELOCITY_LIMIT: number = MIN_VELOCITY_LIMIT;
 
-  ctor(scroller): void {
-    super.ctor();
+  constructor(scroller: Scroller) {
+    super();
     this.scroller = scroller;
   }
 
@@ -119,7 +151,7 @@ class BounceAnimator extends InertiaAnimator {
   }
 }
 
-export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
+export class Scroller {
   _scrollbar!: Scrollbar;
 
   _direction?: string;
@@ -144,7 +176,7 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
 
   _scrollProp!: 'scrollLeft' | 'scrollTop';
 
-  _dimension?: 'width' | 'height';
+  _dimension!: 'width' | 'height';
 
   _prop!: 'left' | 'top';
 
@@ -164,7 +196,7 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
 
   _maxOffset!: number;
 
-  _scrollByThumb?: boolean;
+  _scrollByThumb!: boolean;
 
   _scrollbarVisible?: boolean;
 
@@ -182,13 +214,15 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
 
   _bounceEnabled?: boolean;
 
-  ctor(options): void {
+  _isAnyThumbScrolling!: (target: dxElementWrapper) => boolean;
+
+  constructor(options: ScrollerOptions) {
     this._initOptions(options);
     this._initAnimators();
     this._initScrollbar();
   }
 
-  _initOptions(options): void {
+  _initOptions(options: ScrollerOptions): void {
     this._location = 0;
     this._topReached = false;
     this._bottomReached = false;
@@ -203,9 +237,7 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
   }
 
   _initAnimators(): void {
-    // @ts-expect-error ts-error
     this._inertiaAnimator = new InertiaAnimator(this);
-    // @ts-expect-error ts-error
     this._bounceAnimator = new BounceAnimator(this);
   }
 
@@ -220,11 +252,14 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
     this._$scrollbar = this._scrollbar.$element();
   }
 
-  _visibilityModeNormalize(mode) {
-    return mode === true ? 'onScroll' : mode === false ? 'never' : mode;
+  // eslint-disable-next-line class-methods-use-this
+  _visibilityModeNormalize(mode: boolean | string | undefined): string {
+    if (mode === true) return 'onScroll';
+    if (mode === false) return 'never';
+    return mode ?? 'never';
   }
 
-  _scrollStep(delta): void {
+  _scrollStep(delta: number): void {
     const prevLocation = this._location;
 
     this._location += delta;
@@ -247,12 +282,12 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
     this._location = this._boundLocation();
   }
 
-  _boundLocation(location?) {
-    location = location !== undefined ? location : this._location;
-    return Math.max(Math.min(location, this._maxOffset), this._minOffset);
+  _boundLocation(location?: number): number {
+    const actualLocation = location ?? this._location;
+    return Math.max(Math.min(actualLocation, this._maxOffset), this._minOffset);
   }
 
-  _move(location?): void {
+  _move(location?: number): void {
     this._location = location !== undefined ? location * this._getScaleRatio() : this._location;
     this._moveContent();
     this._moveScrollbar();
@@ -267,30 +302,37 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
 
   _getScaleRatio(): number {
     if (hasWindow() && !this._scaleRatio) {
-      const element = this._$element.get(0);
-      const realDimension = this._getRealDimension(element, this._dimension);
-      const baseDimension = this._getBaseDimension(element, this._dimension);
+      const element = this._$element[0];
+      const dimension = this._dimension;
+      const realDimension = this._getRealDimension(element, dimension);
+      const baseDimension = this._getBaseDimension(element, dimension);
 
-      // NOTE: Ratio can be a fractional number, which leads to inaccuracy in the calculation of sizes.
-      //       We should round it to hundredths in order to reduce the inaccuracy and prevent the unexpected appearance of a scrollbar.
-      this._scaleRatio = Math.round(realDimension / baseDimension * 100) / 100;
+      // NOTE: Ratio can be a fractional number,
+      // which leads to inaccuracy in the calculation of sizes.
+      // We should round it to hundredths in order to reduce the inaccuracy
+      // and prevent the unexpected appearance of a scrollbar.
+      this._scaleRatio = Math.round((realDimension / baseDimension) * 100) / 100;
     }
 
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return this._scaleRatio || 1;
   }
 
-  _getRealDimension(element, dimension) {
+  // eslint-disable-next-line class-methods-use-this
+  _getRealDimension(element: Element, dimension: string): number {
     return Math.round(getBoundingRect(element)[dimension]);
   }
 
-  _getBaseDimension(element, dimension) {
-    const dimensionName = `offset${titleize(dimension)}`;
+  // eslint-disable-next-line class-methods-use-this
+  _getBaseDimension(element: HTMLElement, dimension: string): number {
+    // @ts-expect-error ts-error
+    const dimensionName: 'offsetWidth' | 'offsetHeight' = `offset${titleize(dimension)}`;
 
     return element[dimensionName];
   }
 
-  _moveContentByTranslator(location) {
+  _moveContentByTranslator(location: number): void {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
     let translateOffset;
     const minOffset = -this._maxScrollPropValue;
 
@@ -342,18 +384,18 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
   }
 
   _setupBounce(): void {
-    const boundLocation = this._bounceLocation = this._boundLocation();
-    const bounceDistance = boundLocation - this._location;
+    this._bounceLocation = this._boundLocation();
+    const bounceDistance = this._bounceLocation - this._location;
 
     this._velocity = bounceDistance / BOUNCE_ACCELERATION_SUM;
   }
 
-  _inBounds(location?): boolean {
-    location = location !== undefined ? location : this._location;
-    return this._boundLocation(location) === location;
+  _inBounds(location?: number): boolean {
+    const currentLocation = location ?? this._location;
+    return this._boundLocation(currentLocation) === currentLocation;
   }
 
-  _crossBoundOnNextStep() {
+  _crossBoundOnNextStep(): boolean {
     const location = this._location;
     const nextLocation = location + this._velocity;
 
@@ -361,7 +403,7 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
       || (location > this._maxOffset && nextLocation <= this._maxOffset);
   }
 
-  _initHandler(e) {
+  _initHandler(e: DxMouseEvent): void {
     this._stopScrolling();
     this._prepareThumbScrolling(e);
   }
@@ -374,12 +416,12 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
     })();
   }
 
-  _prepareThumbScrolling(e): void {
+  _prepareThumbScrolling(e: DxMouseEvent): void {
     if (isDxMouseWheelEvent(e.originalEvent)) {
       return;
     }
 
-    const $target = $(e.originalEvent.target);
+    const $target = $(e.originalEvent.target as Element);
     const scrollbarClicked = this._isScrollbar($target);
 
     if (scrollbarClicked) {
@@ -387,7 +429,6 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
     }
 
     this._thumbScrolling = scrollbarClicked || this._isThumb($target);
-    // @ts-expect-error ts-error
     this._crossThumbScrolling = !this._thumbScrolling && this._isAnyThumbScrolling($target);
 
     if (this._thumbScrolling) {
@@ -395,14 +436,15 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
     }
   }
 
-  _isThumbScrollingHandler($target) {
+  _isThumbScrollingHandler($target: dxElementWrapper): boolean {
     return this._isThumb($target);
   }
 
-  _moveToMouseLocation(e): void {
+  _moveToMouseLocation(e: DxMouseEvent): void {
     // @ts-expect-error ts-error
     const mouseLocation = e[`page${this._axis.toUpperCase()}`] - this._$element.offset()[this._prop];
-    const location = this._location + mouseLocation / this._containerToContentRatio() - getHeight(this._$container) / 2;
+    const location = this._location
+      + mouseLocation / this._containerToContentRatio() - getHeight(this._$container) / 2;
 
     this._scrollStep(-Math.round(location));
   }
@@ -411,7 +453,7 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
     this._showScrollbar();
   }
 
-  _moveHandler(delta): void {
+  _moveHandler(delta: ScrollByDelta): void {
     if (this._crossThumbScrolling) {
       return;
     }
@@ -423,12 +465,12 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
     this._scrollBy(delta);
   }
 
-  _scrollBy(delta): void {
-    delta = delta[this._axis];
+  _scrollBy(delta: ScrollByDelta): void {
+    let scrollDelta = delta[this._axis];
     if (!this._inBounds()) {
-      delta *= OUT_BOUNDS_ACCELERATION;
+      scrollDelta *= OUT_BOUNDS_ACCELERATION;
     }
-    this._scrollStep(delta);
+    this._scrollStep(scrollDelta);
   }
 
   _scrollByHandler(delta: ScrollByDelta): void {
@@ -443,7 +485,7 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
     return this._scrollbar.containerToContentRatio();
   }
 
-  _endHandler(velocity) {
+  _endHandler(velocity: ScrollVelocity): Promise<unknown> {
     this._completeDeferred = Deferred();
     this._velocity = velocity[this._axis];
     this._inertiaHandler();
@@ -485,14 +527,14 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
     this._moveToBounds();
   }
 
-  _update() {
+  _update(): unknown {
     this._stopScrolling();
     return deferUpdate(() => {
       this._resetScaleRatio();
       this._updateLocation();
       this._updateBounds();
       this._updateScrollbar();
-      deferRender(() => {
+      return deferRender(() => {
         this._moveScrollbar();
         this._scrollbar.update();
       });
@@ -504,8 +546,9 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
   }
 
   _updateLocation(): void {
-    // @ts-expect-error
-    this._location = (locate(this._$content)[this._prop] - this._$container[this._scrollProp]()) * this._getScaleRatio();
+    // @ts-expect-error ts-error
+    this._location = (locate(this._$content)[this._prop] - this._$container[this._scrollProp]())
+      * this._getScaleRatio();
   }
 
   _updateBounds(): void {
@@ -518,7 +561,7 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
     return 0;
   }
 
-  _getMinOffset() {
+  _getMinOffset(): number {
     this._maxScrollPropValue = Math.max(this._contentSize() - this._containerSize(), 0);
     return -this._maxScrollPropValue;
   }
@@ -532,9 +575,11 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
       //       Let's save sizes when scale = 100% to decide whether it is necessary to show
       //       the scrollbar based on by more precise numbers. We can do it because the container
       //       size to content size ratio should remain approximately the same at any zoom.
-      const baseContainerSize = this._getBaseDimension(this._$container.get(0), this._dimension);
-      const baseContentSize = this._getBaseDimension(this._$content.get(0), this._dimension);
+      const dimension = this._dimension;
+      const baseContainerSize = this._getBaseDimension(this._$container[0], dimension);
+      const baseContentSize = this._getBaseDimension(this._$content[0], dimension);
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       deferRender(() => {
         this._scrollbar.option({
           containerSize,
@@ -561,6 +606,7 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
     })))();
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _createActionsHandler(actions): void {
     this._scrollAction = actions.scroll;
     this._bounceAction = actions.bounce;
@@ -574,12 +620,12 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
     this._scrollbar.option('visible', false);
   }
 
-  _containerSize() {
+  _containerSize(): number {
     return this._getRealDimension(this._$container.get(0), this._dimension);
   }
 
-  _contentSize() {
-    // @ts-expect-error ts-error
+  _contentSize(): number {
+    // @ts-expect-error CSS method access
     const isOverflowHidden = this._$content.css(`overflow${this._axis.toUpperCase()}`) === 'hidden';
     let contentSize = this._getRealDimension(this._$content.get(0), this._dimension);
 
@@ -592,19 +638,18 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
     return contentSize;
   }
 
-  _validateEvent(e) {
-    const $target = $(e.originalEvent.target);
+  _validateEvent(e: DxMouseEvent): boolean {
+    const $target = $(e.originalEvent.target as Element);
 
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return this._isThumb($target) || this._isScrollbar($target);
   }
 
-  _isThumb($element) {
+  _isThumb($element: dxElementWrapper): boolean {
     return this._scrollByThumb && this._scrollbar.isThumb($element);
   }
 
-  _isScrollbar($element) {
-    return this._scrollByThumb && $element?.is(this._$scrollbar);
+  _isScrollbar($element: dxElementWrapper | null): boolean {
+    return Boolean(this._scrollByThumb && $element?.is(this._$scrollbar));
   }
 
   _reachedMin(): boolean {
@@ -626,14 +671,24 @@ export class Scroller extends (Class.inherit({}) as unknown as new() => {}) {
     this._scrollbar.cursorLeave();
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  isBottomReached(): boolean {
+    return false;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
   dispose(): void {}
 }
 
-let hoveredScrollable;
-let activeScrollable;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let hoveredScrollable: SimulatedStrategy<any> | null = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let activeScrollable: SimulatedStrategy<any> | null = null;
 
-export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() => {}) {
-  _component!: Scrollable;
+export class SimulatedStrategy<
+  TProperties extends ScrollableProperties = ScrollableProperties,
+> {
+  _component!: Scrollable<TProperties>;
 
   _$element!: dxElementWrapper;
 
@@ -643,20 +698,23 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
 
   _$content!: dxElementWrapper;
 
+  // eslint-disable-next-line no-restricted-globals
   _updateHandlerTimeout?: ReturnType<typeof setTimeout>;
 
+  // eslint-disable-next-line no-restricted-globals
   _validateWheelTimer?: ReturnType<typeof setTimeout>;
 
   _eventForUserAction?: unknown;
 
-  _allowedDirection!: () => string | null;
+  _allowedDirection!: () => ScrollDirection | null;
 
-  option?: any;
-
-  _scrollers!: {
-    vertical: Scroller | ScrollViewScroller;
-    horizontal: Scroller | ScrollViewScroller;
+  option!: {
+    (): TProperties;
+    <K extends keyof TProperties>(name: K): TProperties[K];
+    <K extends keyof TProperties>(name: K, value: TProperties[K]): void;
   };
+
+  _scrollers!: Record<Orientation, Scroller | ScrollViewScroller>;
 
   _startAction?: (event?: Record<string, unknown>) => void;
 
@@ -673,13 +731,16 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     skipUpdating?: boolean;
   };
 
-  _isDirection!: (direction: string) => boolean;
+  _isDirection!: (direction: ScrollDirection) => boolean;
 
-  _getMaxOffset!: () => { top: number; left: number };
+  _getMaxOffset!: () => ScrollOffset;
 
-  _scrollOffset?: { top: number; left: number };
+  _scrollOffset?: ScrollOffset;
 
-  _createActionByOption!: (event?: any) => (e?: Record<string, unknown>) => void;
+  _createActionByOption!: (
+    optionName: string,
+    config?: ActionConfig,
+  ) => (event?: Record<string, unknown>) => void;
 
   _scrollAction?: () => void;
 
@@ -687,11 +748,11 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
 
   _validDirections!: Record<string, boolean>;
 
-  ctor(scrollable): void {
+  constructor(scrollable: Scrollable<TProperties>) {
     this._init(scrollable);
   }
 
-  _init(scrollable): void {
+  _init(scrollable: Scrollable<TProperties>): void {
     this._component = scrollable;
     this._$element = scrollable.$element();
     this._$container = $(scrollable.container());
@@ -730,12 +791,11 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     this._$element.toggleClass(SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE, this.option('showScrollbar') === 'always');
   }
 
-  _createScroller(direction) {
-    // @ts-expect-error ts-error
+  _createScroller(direction: Orientation): void {
     this._scrollers[direction] = new Scroller(this._scrollerOptions(direction));
   }
 
-  _scrollerOptions(direction) {
+  _scrollerOptions(direction: Orientation): ScrollerOptions {
     return {
       direction,
       $content: this._$content,
@@ -750,21 +810,23 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     };
   }
 
-  _applyScaleRatio(targetLocation) {
+  _applyScaleRatio(targetLocation: Partial<ScrollOffset>): Partial<ScrollOffset> {
     // eslint-disable-next-line guard-for-in, no-restricted-syntax
     for (const direction in this._scrollers) {
       const prop = this._getPropByDirection(direction);
 
       if (isDefined(targetLocation[prop])) {
         const scroller = this._scrollers[direction];
-
-        targetLocation[prop] *= scroller._getScaleRatio();
+        const currentValue = targetLocation[prop];
+        if (currentValue !== undefined) {
+          targetLocation[prop] = currentValue * scroller._getScaleRatio();
+        }
       }
     }
     return targetLocation;
   }
 
-  _isAnyThumbScrolling($target) {
+  _isAnyThumbScrolling($target: dxElementWrapper): boolean {
     let result = false;
     // @ts-expect-error ts-error
     this._eventHandler('isThumbScrolling', $target).done((isThumbScrollingVertical, isThumbScrollingHorizontal) => {
@@ -773,52 +835,62 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     return result;
   }
 
-  handleInit(e): void {
+  handleInit(e: ScrollEvent): void {
+    // @ts-expect-error ts-error
     this._suppressDirections(e);
     this._eventForUserAction = e;
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._eventHandler('init', e);
   }
 
-  _suppressDirections(e): void {
+  _suppressDirections(e: DxMouseEvent): void {
     if (isDxMouseWheelEvent(e.originalEvent)) {
       this._prepareDirections(true);
       return;
     }
 
     this._prepareDirections();
-    this._eachScroller(function (scroller, direction) {
-      const $target = $(e.originalEvent.target);
+    this._eachScroller(function suppressDirections(scroller, direction) {
+      const $target = $(e.originalEvent.target as Element);
 
+      // eslint-disable-next-line @typescript-eslint/no-invalid-this
       const isValid = scroller._validateEvent(e) || (this.option('scrollByContent') && this._isContent($target));
+      // eslint-disable-next-line @typescript-eslint/no-invalid-this
       this._validDirections[direction] = isValid;
     });
   }
 
-  _isContent($element): boolean {
+  _isContent($element: dxElementWrapper): boolean {
     return !!$element.closest(this._$element).length;
   }
 
-  _prepareDirections(value?): void {
-    value = value || false;
+  _prepareDirections(value = false): void {
     this._validDirections = {};
     this._validDirections[HORIZONTAL] = value;
     this._validDirections[VERTICAL] = value;
   }
 
-  _eachScroller(callback): void {
-    callback = callback.bind(this);
-    each(this._scrollers, (direction, scroller) => {
-      callback(scroller, direction);
+  _eachScroller(
+    callback: (
+      this: SimulatedStrategy<TProperties>,
+      scroller: Scroller | ScrollViewScroller,
+      direction: Orientation,
+    ) => void,
+  ): void {
+    const boundCallback = callback.bind(this);
+    each(this._scrollers, (direction: Orientation, scroller: Scroller | ScrollViewScroller) => {
+      boundCallback(scroller, direction);
     });
   }
 
-  handleStart(e): void {
+  handleStart(e: DxMouseEvent): void {
     this._eventForUserAction = e;
     // @ts-expect-error ts-error
     this._eventHandler('start').done(this._startAction);
   }
 
   _saveActive(): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     activeScrollable = this;
   }
 
@@ -828,7 +900,7 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     }
   }
 
-  handleMove(e): void {
+  handleMove(e: DxMouseEvent): void {
     if (this._isLocked()) {
       e.cancel = true;
       this._resetActive();
@@ -839,10 +911,11 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
 
     this._adjustDistance(e, e.delta);
     this._eventForUserAction = e;
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._eventHandler('move', e.delta);
   }
 
-  _adjustDistance(e, distance) {
+  _adjustDistance(e: DxMouseEvent, distance: { x: number; y: number }): void {
     // @ts-expect-error ts-error
     distance.x *= this._validDirections[HORIZONTAL];
     // @ts-expect-error ts-error
@@ -850,29 +923,31 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
 
     const devicePixelRatio = this._tryGetDevicePixelRatio();
     if (devicePixelRatio && isDxMouseWheelEvent(e.originalEvent)) {
-      distance.x = Math.round(distance.x / devicePixelRatio * 100) / 100;
-      distance.y = Math.round(distance.y / devicePixelRatio * 100) / 100;
+      distance.x = Math.round((distance.x / devicePixelRatio) * 100) / 100;
+      distance.y = Math.round((distance.y / devicePixelRatio) * 100) / 100;
     }
   }
 
-  // @ts-expect-error
-  _tryGetDevicePixelRatio() {
+  // eslint-disable-next-line class-methods-use-this
+  _tryGetDevicePixelRatio(): number | undefined {
     if (hasWindow()) {
       return getWindow().devicePixelRatio;
     }
+    return undefined;
   }
 
-  handleEnd(e) {
+  handleEnd(e: DxMouseEvent): Promise<unknown> {
     this._resetActive();
-    this._refreshCursorState(e.originalEvent?.target);
+    this._refreshCursorState(e.originalEvent?.target ?? undefined);
 
     this._adjustDistance(e, e.velocity);
     this._eventForUserAction = e;
     // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._eventHandler('end', e.velocity).done(this._endAction);
   }
 
-  handleCancel(e) {
+  handleCancel(e: DxMouseEvent): Promise<unknown> {
     this._resetActive();
     this._eventForUserAction = e;
     return this._eventHandler('end', { x: 0, y: 0 });
@@ -880,6 +955,7 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
 
   handleStop(): void {
     this._resetActive();
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._eventHandler('stop');
   }
 
@@ -896,8 +972,9 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     }
   }
 
-  _keyDownHandler(e) {
+  _keyDownHandler(e: KeyboardEvent): void {
     clearTimeout(this._updateHandlerTimeout);
+    // eslint-disable-next-line no-restricted-globals
     this._updateHandlerTimeout = setTimeout(() => {
       if (normalizeKeyName(e) === KEY_CODES.TAB) {
         this._eachScroller((scroller) => {
@@ -948,19 +1025,19 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     }
   }
 
-  _scrollByLine(lines) {
+  _scrollByLine(lines: { x?: number; y?: number }): void {
     const devicePixelRatio = this._tryGetDevicePixelRatio();
     let scrollOffset = SCROLL_LINE_HEIGHT;
     if (devicePixelRatio) {
-      scrollOffset = Math.abs(scrollOffset / devicePixelRatio * 100) / 100;
+      scrollOffset = Math.abs((scrollOffset / devicePixelRatio) * 100) / 100;
     }
     this.scrollBy({
-      top: (lines.y || 0) * -scrollOffset,
-      left: (lines.x || 0) * -scrollOffset,
+      top: (lines.y ?? 0) * -scrollOffset,
+      left: (lines.x ?? 0) * -scrollOffset,
     });
   }
 
-  _scrollByPage(page) {
+  _scrollByPage(page: number): void {
     const prop = this._wheelProp();
     const dimension = this._dimensionByProp(prop);
 
@@ -970,15 +1047,17 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     this.scrollBy(distance);
   }
 
-  _dimensionByProp(prop) {
+  // eslint-disable-next-line class-methods-use-this
+  _dimensionByProp(prop: 'top' | 'left'): 'width' | 'height' {
     return prop === 'left' ? 'width' : 'height';
   }
 
-  _getPropByDirection(direction) {
+  // eslint-disable-next-line class-methods-use-this
+  _getPropByDirection(direction: string): 'left' | 'top' {
     return direction === HORIZONTAL ? 'left' : 'top';
   }
 
-  _scrollToHome() {
+  _scrollToHome(): void {
     const prop = this._wheelProp();
     const distance = {};
 
@@ -986,7 +1065,7 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     this._component.scrollTo(distance);
   }
 
-  _scrollToEnd() {
+  _scrollToEnd(): void {
     const prop = this._wheelProp();
     const dimension = this._dimensionByProp(prop);
 
@@ -996,7 +1075,7 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     this._component.scrollTo(distance);
   }
 
-  createActions() {
+  createActions(): void {
     this._startAction = this._createActionHandler('onStart');
     this._endAction = this._createActionHandler('onEnd');
     this._updateAction = this._createActionHandler('onUpdated');
@@ -1004,24 +1083,25 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     this._createScrollerActions();
   }
 
-  _createScrollerActions() {
+  _createScrollerActions(): void {
     this._scrollAction = this._createActionHandler('onScroll');
     this._bounceAction = this._createActionHandler('onBounce');
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._eventHandler('createActions', {
       scroll: this._scrollAction,
       bounce: this._bounceAction,
     });
   }
 
-  _createActionHandler(optionName): () => void {
+  _createActionHandler(optionName: string): () => void {
     const actionHandler = this._createActionByOption(optionName);
 
-    return () => {
-      actionHandler(extend(this._createActionArgs(), arguments));
+    return (...args: unknown[]) => {
+      actionHandler(extend(this._createActionArgs(), args));
     };
   }
 
-  _createActionArgs() {
+  _createActionArgs(): ScrollEventArgs {
     const { horizontal: scrollerX, vertical: scrollerY } = this._scrollers;
 
     const offset = this._getScrollOffset();
@@ -1032,6 +1112,7 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     };
 
     return {
+      // @ts-expect-error ts-error
       event: this._eventForUserAction,
       scrollOffset: this._scrollOffset,
       reachedLeft: scrollerX?._reachedMax(),
@@ -1041,22 +1122,25 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     };
   }
 
-  _getScrollOffset() {
+  _getScrollOffset(): ScrollOffset {
     return {
       top: -this.location().top,
       left: -this.location().left,
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-unused-vars
-  _eventHandler(eventName, location?) {
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-function-return-type
+  _eventHandler(eventName: string, location?: unknown) {
+    // eslint-disable-next-line prefer-rest-params
     const args = [].slice.call(arguments).slice(1);
+    // eslint-disable-next-line prefer-spread, @typescript-eslint/no-unsafe-return
     const deferreds = map(this._scrollers, (scroller) => scroller[`_${eventName}Handler`].apply(scroller, args));
 
     return when.apply($, deferreds).promise();
   }
 
-  location() {
+  location(): ScrollOffset {
     const location = locate(this._$content);
     // @ts-expect-error ts-error
     location.top -= this._$container.scrollTop();
@@ -1065,14 +1149,16 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     return location;
   }
 
-  disabledChanged() {
+  disabledChanged(): void {
     this._attachCursorHandlers();
   }
 
-  _attachCursorHandlers() {
+  _attachCursorHandlers(): void {
     eventsEngine.off(this._$element, `.${SCROLLABLE_SIMULATED_CURSOR}`);
 
-    if (!this.option('disabled') && this._isHoverMode()) {
+    const { disabled } = this.option();
+
+    if (!disabled && this._isHoverMode()) {
       eventsEngine.on(this._$element, addEventNamespace('mouseenter', SCROLLABLE_SIMULATED_CURSOR), this._cursorEnterHandler.bind(this));
       eventsEngine.on(this._$element, addEventNamespace('mouseleave', SCROLLABLE_SIMULATED_CURSOR), this._cursorLeaveHandler.bind(this));
     }
@@ -1082,11 +1168,11 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     return this.option('showScrollbar') === 'onHover';
   }
 
-  _cursorEnterHandler(e): void {
-    e = e || {};
-    e.originalEvent = e.originalEvent || {};
-
-    if (activeScrollable || e.originalEvent._hoverHandled) {
+  _cursorEnterHandler(e: DxMouseEvent): void {
+    const event = e || {};
+    event.originalEvent = event.originalEvent || {};
+    // @ts-expect-error ts-error
+    if (activeScrollable || event.originalEvent._hoverHandled) {
       return;
     }
 
@@ -1094,30 +1180,34 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
       hoveredScrollable._cursorLeaveHandler();
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     hoveredScrollable = this;
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._eventHandler('cursorEnter');
-    e.originalEvent._hoverHandled = true;
+    // @ts-expect-error ts-error
+    event.originalEvent._hoverHandled = true;
   }
 
-  _cursorLeaveHandler(e): void {
+  _cursorLeaveHandler(e?: DxMouseEvent): void {
     if (hoveredScrollable !== this || activeScrollable === hoveredScrollable) {
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._eventHandler('cursorLeave');
     hoveredScrollable = null;
     this._refreshCursorState(e?.relatedTarget);
   }
 
-  _refreshCursorState(target): void {
+  _refreshCursorState(target?: EventTarget | null): void {
     if (!this._isHoverMode() && (!target || activeScrollable)) {
       return;
     }
 
-    const $target = $(target);
+    const $target = $(target as Element);
     const $scrollable = $target.closest(`.${SCROLLABLE_SIMULATED_CLASS}:not(.dx-state-disabled)`);
     const targetScrollable = $scrollable.length && $scrollable.data(SCROLLABLE_STRATEGY);
-
+    // @ts-expect-error ts-error
     if (hoveredScrollable && hoveredScrollable !== targetScrollable) {
       hoveredScrollable._cursorLeaveHandler();
     }
@@ -1128,12 +1218,13 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     }
   }
 
-  update() {
+  update(): unknown {
     // @ts-expect-error ts-error
     const result = this._eventHandler('update').done(this._updateAction);
 
     return when(result, deferUpdate(() => {
       const allowedDirections = this._allowedDirections();
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       deferRender(() => {
         let touchDirection = allowedDirections.vertical ? 'pan-x' : '';
         touchDirection = allowedDirections.horizontal ? 'pan-y' : touchDirection;
@@ -1144,26 +1235,29 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     }));
   }
 
-  _allowedDirections() {
-    const bounceEnabled = this.option('bounceEnabled');
+  _allowedDirections(): AllowedDirections {
+    const { bounceEnabled } = this.option();
     const verticalScroller = this._scrollers[VERTICAL];
     const horizontalScroller = this._scrollers[HORIZONTAL];
 
     return {
-      vertical: verticalScroller && (verticalScroller._minOffset < 0 || bounceEnabled),
-      horizontal: horizontalScroller && (horizontalScroller._minOffset < 0 || bounceEnabled),
+      vertical: Boolean(verticalScroller
+        && (verticalScroller._minOffset < 0 || bounceEnabled)),
+      horizontal: Boolean(horizontalScroller
+        && (horizontalScroller._minOffset < 0 || bounceEnabled)),
     };
   }
 
-  _updateBounds() {
+  _updateBounds(): void {
     this._scrollers[HORIZONTAL]?._updateBounds();
   }
 
-  _isHorizontalAndRtlEnabled() {
-    return this.option('rtlEnabled') && this.option('direction') !== VERTICAL;
+  _isHorizontalAndRtlEnabled(): boolean {
+    return this.option('rtlEnabled')
+      && this.option('direction') !== VERTICAL;
   }
 
-  updateRtlPosition(needInitializeRtlConfig) {
+  updateRtlPosition(needInitializeRtlConfig?: boolean): void {
     if (needInitializeRtlConfig) {
       this._rtlConfig = {
         scrollRight: 0,
@@ -1193,7 +1287,8 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     if (this._isHorizontalAndRtlEnabled() && !this._rtlConfig.skipUpdating) {
       const { clientWidth, scrollLeft } = this._$container.get(0);
       const windowPixelRatio = this._getWindowDevicePixelRatio();
-      if (this._rtlConfig.windowPixelRatio === windowPixelRatio && this._rtlConfig.clientWidth === clientWidth) {
+      if (this._rtlConfig.windowPixelRatio === windowPixelRatio
+        && this._rtlConfig.clientWidth === clientWidth) {
         this._rtlConfig.scrollRight = this._getMaxOffset().left - scrollLeft;
       }
       this._rtlConfig.clientWidth = clientWidth;
@@ -1208,26 +1303,33 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
       : 1;
   }
 
-  scrollBy(distance): void {
+  scrollBy(distance: Partial<ScrollOffset>): void {
     const verticalScroller = this._scrollers[VERTICAL];
     const horizontalScroller = this._scrollers[HORIZONTAL];
 
     if (verticalScroller) {
-      distance.top = verticalScroller._boundLocation(distance.top + verticalScroller._location) - verticalScroller._location;
+      distance.top = verticalScroller._boundLocation(
+        // @ts-expect-error ts-error
+        distance.top + verticalScroller._location,
+      ) - verticalScroller._location;
     }
     if (horizontalScroller) {
-      distance.left = horizontalScroller._boundLocation(distance.left + horizontalScroller._location) - horizontalScroller._location;
+      distance.left = horizontalScroller._boundLocation(
+        // @ts-expect-error ts-error
+        distance.left + horizontalScroller._location,
+      ) - horizontalScroller._location;
     }
 
     this._prepareDirections(true);
     this._startAction?.();
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._eventHandler('scrollBy', { x: distance.left, y: distance.top });
     this._endAction?.();
 
     this._updateRtlConfig();
   }
 
-  validate(e): boolean | string | null {
+  validate(e: DxMouseEvent | DxMouseWheelEvent): boolean | string | null {
     if (isDxMouseWheelEvent(e) && isCommandKeyPressed(e)) {
       return false;
     }
@@ -1240,10 +1342,12 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
       return true;
     }
 
-    return isDxMouseWheelEvent(e) ? this._validateWheel(e) : this._validateMove(e);
+    return isDxMouseWheelEvent(e)
+      ? this._validateWheel(e as DxMouseWheelEvent)
+      : this._validateMove(e as DxMouseEvent);
   }
 
-  _validateWheel(e): boolean {
+  _validateWheel(e: DxMouseWheelEvent): boolean {
     const scroller = this._scrollers[this._wheelDirection(e)];
     const reachedMin = scroller._reachedMin();
     const reachedMax = scroller._reachedMax();
@@ -1253,11 +1357,13 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     const scrollFromMin = reachedMin && e.delta > 0;
     const scrollFromMax = reachedMax && e.delta < 0;
 
-    let validated = contentGreaterThanContainer && (locatedNotAtBound || scrollFromMin || scrollFromMax);
+    let validated = contentGreaterThanContainer
+      && (locatedNotAtBound || scrollFromMin || scrollFromMax);
     validated = validated || this._validateWheelTimer !== undefined;
 
     if (validated) {
       clearTimeout(this._validateWheelTimer);
+      // eslint-disable-next-line no-restricted-globals
       this._validateWheelTimer = setTimeout(() => {
         this._validateWheelTimer = undefined;
       }, VALIDATE_WHEEL_TIMEOUT);
@@ -1266,24 +1372,29 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
     return validated;
   }
 
-  _validateMove(e): boolean | string | null {
-    if (!this.option('scrollByContent') && !$(e.target).closest(`.${SCROLLABLE_SCROLLBAR_CLASS}`).length) {
+  _validateMove(e: DxMouseEvent): boolean | string | null {
+    const { scrollByContent } = this.option();
+    if (!scrollByContent && !$(e.target as Element).closest(`.${SCROLLABLE_SCROLLBAR_CLASS}`).length) {
       return false;
     }
 
     return this._allowedDirection();
   }
 
-  getDirection(e) {
-    return isDxMouseWheelEvent(e) ? this._wheelDirection(e) : this._allowedDirection();
+  getDirection(e: DxMouseEvent | DxMouseWheelEvent): ScrollDirection | null {
+    return isDxMouseWheelEvent(e)
+      ? this._wheelDirection(e as DxMouseWheelEvent)
+      : this._allowedDirection();
   }
 
-  _wheelProp(): string {
+  _wheelProp(): 'left' | 'top' {
     return this._wheelDirection() === HORIZONTAL ? 'left' : 'top';
   }
 
-  _wheelDirection(e?) {
-    switch (this.option('direction')) {
+  _wheelDirection(e?: DxMouseWheelEvent): Orientation {
+    const { direction } = this.option();
+
+    switch (direction) {
       case HORIZONTAL:
         return HORIZONTAL;
       case VERTICAL:
@@ -1300,10 +1411,11 @@ export class SimulatedStrategy extends (Class.inherit({}) as unknown as new() =>
       hoveredScrollable = null;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._eventHandler('dispose');
     this._detachEventHandlers();
     this._$element.removeClass(SCROLLABLE_SIMULATED_CLASS);
-    this._eventForUserAction = null;
+    this._eventForUserAction = undefined;
     clearTimeout(this._validateWheelTimer);
     clearTimeout(this._updateHandlerTimeout);
   }
