@@ -65,7 +65,7 @@ QUnit.module('devices', {
     // others
     // platform: generic, because win is deprecated
     ['winphone 10', userAgents.win_phone_10, 'generic', null, 'phone', null],
-    ['ipdad 11 with dedctop mode', userAgents.ipad_16.safari_desktop_mode, 'ios', '10.15.7', 'desctop', { maxTouchPoints: 5 }],
+    ['ipdad 11 with dedctop mode', userAgents.ipad_16.safari_desktop_mode, 'ios', '10.15.7', 'desktop', { maxTouchPoints: 5 }],
 ].forEach(([
     name,
     userAgent,
