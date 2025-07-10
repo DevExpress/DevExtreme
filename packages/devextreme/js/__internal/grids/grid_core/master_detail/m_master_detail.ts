@@ -398,7 +398,9 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
   }
 
   protected _renderCellContent($cell, options, renderOptions): void {
-    if (options.rowType === 'detail') {
+    const isDetailRow = options.rowType === 'detail' || options.rowType === 'detailAdaptive';
+
+    if (isDetailRow) {
       const $container = $('<div>')
         .addClass(MASTER_DETAIL_CONTAINER_CLASS)
         .appendTo($cell);

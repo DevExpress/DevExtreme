@@ -380,6 +380,8 @@ const rowsView = (
     if (this.hasStickyColumns()) {
       const $detailContainer = $detailCell.find(`.${MASTER_DETAIL_CLASSES.detailContainer}`);
 
+      $detailContainer.addClass(this.addWidgetPrefix(CLASSES.stickyColumnLeft));
+
       setWidth($detailContainer, this._getMasterDetailWidth());
     }
 
