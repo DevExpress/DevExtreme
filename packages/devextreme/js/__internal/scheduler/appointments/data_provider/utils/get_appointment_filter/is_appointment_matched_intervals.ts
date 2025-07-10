@@ -1,20 +1,18 @@
 import type { DateInterval } from '../type';
 
 export const isAppointmentMatchedIntervals = (
-  appointment: {
+  { startDate, endDate }: {
     startDate: Date;
     endDate: Date;
   },
   intervals: DateInterval[],
 ): boolean => {
-  const { startDate, endDate } = appointment;
-  let i = 0;
+  const intersectionIntervalIndex = intervals.findIndex(({ max }) => startDate < max);
 
-  for (; i < intervals.length; i += 1) {
-    if (startDate < intervals[i].max) {
-      break;
-    }
+  if (intersectionIntervalIndex === -1) {
+    return false;
   }
 
-  return i < intervals.length && (startDate >= intervals[i].min || endDate > intervals[i].min);
+  const intervalStartDate = intervals[intersectionIntervalIndex].min;
+  return startDate >= intervalStartDate || endDate > intervalStartDate;
 };
