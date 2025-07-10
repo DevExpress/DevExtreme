@@ -19,7 +19,6 @@ export interface FilterOptions {
   viewOffset: number;
   resources: ResourceLoader[];
   firstDayOfWeek: number;
-  isTimeDateView: boolean;
   min: Date;
   max: Date;
   supportAllDayPanel?: boolean;
