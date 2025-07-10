@@ -2,7 +2,7 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import { dateUtils } from '@ts/core/utils/m_date';
 
 import type { TimeZoneCalculator } from '../../../../r1/timezone_calculator/calculator';
-import { isAppointmentTakesAllDay } from '../../../../r1/utils';
+import { isAppointmentTakesAllDay } from '../../../../r1/utils/index';
 import type { AppointmentDataItem } from '../../../../types';
 import type { FilterOptions } from '../type';
 import { getAppointmentsOccurrences } from './get_appointments_occurrences';
