@@ -1278,6 +1278,10 @@ declare module DevExpress.common {
      */
     defaultUseCurrencyAccountingStyle?: boolean;
     /**
+     * [descr:GlobalConfig.noCopyStylesToShadowDom]
+     */
+    noCopyStylesToShadowDom: false;
+    /**
      * [descr:GlobalConfig.editorStylingMode]
      */
     editorStylingMode?: EditorStyle | undefined;
