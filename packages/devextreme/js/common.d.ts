@@ -301,10 +301,10 @@ export type GlobalConfig = {
   /**
    * @docid
    * @type boolean
-   * @default false
+   * @default true
    * @public
    */
-  noCopyStylesToShadowDom: false;
+  copyStylesToShadowDom: true;
   /**
    * @docid
    * @default undefined
