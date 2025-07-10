@@ -1,5 +1,5 @@
 import {
-  isAppointmentTakesAllDay, isDateAndTimeView,
+  isAppointmentTakesAllDay,
 } from '../../r1/utils/index';
 import type { AppointmentDataItem, SafeAppointment } from '../../types';
 import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
@@ -77,7 +77,6 @@ export class AppointmentFilterBaseStrategy {
       viewOffset,
       resources: this.loadedResources,
       supportAllDayPanel,
-      isTimeDateView: isDateAndTimeView(this.viewType),
       firstDayOfWeek: this.firstDayOfWeek,
       allDayPanelMode: this.allDayPanelMode,
       visibleDateIntervals: getVisibleDateTimeIntervals(compareOptions, true),

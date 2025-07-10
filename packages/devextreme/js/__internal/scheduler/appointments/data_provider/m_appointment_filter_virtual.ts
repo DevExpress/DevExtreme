@@ -70,7 +70,6 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
       filterOptions.push({
         ...compareOptions,
         viewOffset,
-        isTimeDateView: isDateAndTimeView(this.viewType),
         supportAllDayPanel,
         resources,
         firstDayOfWeek: this.firstDayOfWeek,

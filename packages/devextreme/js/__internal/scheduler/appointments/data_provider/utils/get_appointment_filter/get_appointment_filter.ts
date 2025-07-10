@@ -17,7 +17,6 @@ export const getAppointmentFilter = (
     viewOffset,
     firstDayOfWeek,
     resources,
-    isTimeDateView,
     supportAllDayPanel,
     allDayPanelMode,
     visibleDateIntervals,
@@ -38,8 +37,9 @@ export const getAppointmentFilter = (
       return false;
     }
 
-    const isDateViewOnly = !isTimeDateView || isAppointmentOccupiesAllDayPanel;
-    const viewIntervals = isDateViewOnly ? visibleDateIntervals : visibleTimeIntervals;
+    const viewIntervals = isAppointmentOccupiesAllDayPanel
+      ? visibleDateIntervals
+      : visibleTimeIntervals;
     if (viewIntervals.length === 0) {
       return false;
     }
