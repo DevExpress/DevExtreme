@@ -1,4 +1,4 @@
-import type { DateInterval } from './type';
+import type { DateInterval } from '../type';
 
 export const isAppointmentMatchedIntervals = (
   appointment: {

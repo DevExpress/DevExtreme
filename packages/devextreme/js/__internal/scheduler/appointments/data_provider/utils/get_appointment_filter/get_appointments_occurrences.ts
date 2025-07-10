@@ -1,10 +1,10 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
 
-import { getRecurrenceProcessor } from '../../../m_recurrence';
-import type { TimeZoneCalculator } from '../../../r1/timezone_calculator';
-import type { AppointmentDataItem } from '../../../types';
+import { getRecurrenceProcessor } from '../../../../m_recurrence';
+import type { TimeZoneCalculator } from '../../../../r1/timezone_calculator';
+import type { AppointmentDataItem } from '../../../../types';
+import type { DateInterval } from '../type';
 import { getRecurrenceException } from './get_recurrence_exception';
-import type { DateInterval } from './type';
 
 interface Options {
   firstDayOfWeek: number;

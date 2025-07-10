@@ -1,12 +1,17 @@
-import query from '@js/common/data/query';
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import {
+  filterArray,
+  getRawAppointments,
+  getVisibleDateTimeIntervals,
+} from '@ts/scheduler/appointments/data_provider/utils';
 
-import { isDateAndTimeView } from '../../r1/utils/index';
+import { isAppointmentTakesAllDay, isDateAndTimeView } from '../../r1/utils/index';
 import type { AppointmentDataItem, SafeAppointment } from '../../types';
 import { getResourcesByGroupIndex } from '../../utils/resource_manager/group_utils';
 import { AppointmentFilterBaseStrategy } from './m_appointment_filter';
-import { isAppointmentMatchedResources } from './utils/is_appointment_matched_resources';
+import { isAppointmentMatchedResources } from './utils/get_appointment_filter/is_appointment_matched_resources';
+import type { CompareOptions, FilterOptions } from './utils/type';
 
 // TODO Vinogradov refactoring: this module should be refactored :)
 
@@ -25,7 +30,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
 
     const endViewDate = this.viewDataProvider.getLastViewDateByEndDayHour(this.viewEndDayHour);
     const shiftedEndViewDate = dateUtilsTs.addOffsets(endViewDate, [viewOffset]);
-    const filterOptions: any = [];
+    const filterOptions: FilterOptions[] = [];
 
     const groupsInfo = this.viewDataProvider.getCompletedGroupsInfo();
     groupsInfo.forEach((item) => {
@@ -42,80 +47,86 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         ? groupStartDate.getHours()
         : this.viewStartDayHour;
       const endDayHour = isCalculateStartAndEndDayHour
-        ? startDayHour + groupStartDate.getMinutes() / 60 + (groupEndDate.getTime() - groupStartDate.getTime()) / hourMs
+        ? startDayHour
+          + groupStartDate.getMinutes() / 60
+          + (groupEndDate.getTime() - groupStartDate.getTime()) / hourMs
         : this.viewEndDayHour;
 
-      const resources = this._getPrerenderFilterResources(groupIndex);
-
+      const resourceManager = this.options.getResourceManager();
+      const resources = getResourcesByGroupIndex(
+        resourceManager.groupsLeafs,
+        resourceManager.resourceById,
+        groupIndex,
+      );
       const hasAllDayPanel = this.viewDataProvider.hasGroupAllDayPanel(groupIndex);
-
-      const supportAllDayAppointment = isAllDayWorkspace || (!!showAllDayAppointments && hasAllDayPanel);
-
-      filterOptions.push({
+      const supportAllDayPanel = isAllDayWorkspace || (!!showAllDayAppointments && hasAllDayPanel);
+      const compareOptions: CompareOptions = {
         startDayHour,
         endDayHour,
-        viewOffset,
         min: dateUtilsTs.addOffsets(groupStartDate, [-viewOffset]),
         max: dateUtilsTs.addOffsets(groupEndDate, [-viewOffset]),
+      };
+
+      filterOptions.push({
+        ...compareOptions,
+        viewOffset,
         isTimeDateView: isDateAndTimeView(this.viewType),
-        allDay: supportAllDayAppointment,
+        supportAllDayPanel,
         resources,
         firstDayOfWeek: this.firstDayOfWeek,
+        allDayPanelMode: this.allDayPanelMode,
+        visibleDateIntervals: getVisibleDateTimeIntervals(compareOptions, true),
+        visibleTimeIntervals: getVisibleDateTimeIntervals(compareOptions, false),
       });
     });
+    const filteredItems = this.filterPreparedItems(filterOptions, this.groupCount, preparedItems);
 
-    return this.filterLoadedAppointments({
-      filterOptions,
-      groupCount: this.groupCount,
-    }, preparedItems);
+    return getRawAppointments(filteredItems);
   }
 
   filterPreparedItems(
-    { filterOptions, groupCount },
+    filterOptions: FilterOptions[],
+    groupCount: number,
     preparedItems: AppointmentDataItem[],
   ): AppointmentDataItem[] {
-    const combinedFilters: any = [];
+    const combinedFilters: any[] = [];
 
     let itemsToFilter = preparedItems;
-    const needPreFilter = groupCount > 0;
-    if (needPreFilter) {
-      // @ts-expect-error
-      itemsToFilter = itemsToFilter.filter(({ rawAppointment }) => {
-        for (let i = 0; i < filterOptions.length; ++i) {
-          const { resources } = filterOptions[i];
-          if (isAppointmentMatchedResources(rawAppointment, resources)) {
-            return true;
-          }
-        }
-      });
+    if (groupCount > 0) {
+      itemsToFilter = itemsToFilter.filter(({ rawAppointment }) => filterOptions.some(
+        ({ resources }) => isAppointmentMatchedResources(rawAppointment, resources),
+      ));
     }
 
     filterOptions.forEach((option) => {
-      combinedFilters.length && combinedFilters.push('or');
+      if (combinedFilters.length) {
+        combinedFilters.push('or');
+      }
 
-      const filter = this._createCombinedFilter(option);
-
+      const filter = this.createCombinedFilter(option);
       combinedFilters.push(filter);
     });
 
-    // @ts-expect-error
-    return query(itemsToFilter)
-      // @ts-expect-error
-      .filter(combinedFilters)
-      .toArray();
+    return filterArray(itemsToFilter, combinedFilters);
   }
 
-  hasAllDayAppointments(filteredItems, preparedItems: AppointmentDataItem[]): boolean {
+  hasAllDayAppointments(_, preparedItems: AppointmentDataItem[]): boolean {
     return this.filterAllDayAppointments(preparedItems).length > 0;
   }
 
-  _getPrerenderFilterResources(groupIndex) {
-    const resourceManager = this.options.getResourceManager();
+  protected filterAllDayAppointments(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
+    const combinedFilter = this.createAllDayAppointmentFilter();
+    const filteredItems = filterArray(preparedItems, combinedFilter);
 
-    return getResourcesByGroupIndex(
-      resourceManager.groupsLeafs,
-      resourceManager.resourceById,
-      groupIndex,
-    );
+    return getRawAppointments(filteredItems);
+  }
+
+  protected createAllDayAppointmentFilter(): ((appointment: AppointmentDataItem) => boolean)[][] {
+    return [[
+      (appointment: AppointmentDataItem): boolean => isAppointmentTakesAllDay(
+        appointment,
+        this.allDayPanelMode,
+      ),
+    ]];
   }
 }

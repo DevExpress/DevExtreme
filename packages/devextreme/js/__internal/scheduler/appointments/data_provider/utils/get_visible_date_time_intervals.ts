@@ -10,8 +10,7 @@ export const getVisibleDateTimeIntervals = ({
   endDayHour,
   min,
   max,
-  isDateViewOnly,
-}: CompareOptions): DateInterval[] => {
+}: CompareOptions, isDateViewOnly: boolean): DateInterval[] => {
   if (isDateViewOnly || (startDayHour === 0 && endDayHour === 24)) {
     const [trimMin, trimMax] = getDatesWithoutTime(min, max);
 
