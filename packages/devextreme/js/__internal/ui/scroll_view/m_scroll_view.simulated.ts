@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import type { Orientation } from '@js/common';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Callback } from '@js/core/utils/callbacks';
@@ -9,8 +10,10 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
 import LoadIndicator from '@js/ui/load_indicator';
+import { Scroller, type ScrollerOptions, SimulatedStrategy } from '@ts/ui/scroll_view/m_scrollable.simulated';
+import type { ScrollOffset } from '@ts/ui/scroll_view/types';
 
-import { Scroller, SimulatedStrategy } from './m_scrollable.simulated';
+import type { ScrollView, ScrollViewProperties } from './m_scroll_view';
 
 const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';
 const SCROLLVIEW_PULLDOWN_READY_CLASS = 'dx-scrollview-pull-down-ready';
@@ -28,9 +31,9 @@ export class ScrollViewScroller extends Scroller {
 
   _state?: number;
 
-  _topPocketSize!: number;
+  _topPocketSize = 0;
 
-  _bottomPocketSize!: number;
+  _bottomPocketSize = 0;
 
   _$topPocket!: dxElementWrapper;
 
@@ -56,11 +59,9 @@ export class ScrollViewScroller extends Scroller {
 
   reachBottomCallbacks!: Callback;
 
-  ctor(): void {
-    this._topPocketSize = 0;
-    this._bottomPocketSize = 0;
-    // @ts-expect-error ts-error
-    super.ctor.apply(this, arguments);
+  constructor(options: ScrollerOptions) {
+    super(options);
+
     this._initCallbacks();
     this._releaseState();
   }
@@ -71,7 +72,6 @@ export class ScrollViewScroller extends Scroller {
   }
 
   _refreshPullDownText(): void {
-    const that = this;
     const pullDownTextItems = [{
       element: this._$pullingDownText,
       visibleState: STATE_RELEASED,
@@ -84,7 +84,7 @@ export class ScrollViewScroller extends Scroller {
     }];
 
     each(pullDownTextItems, (_, item) => {
-      const action = that._state === item.visibleState ? 'addClass' : 'removeClass';
+      const action = this._state === item.visibleState ? 'addClass' : 'removeClass';
       item.element[action](SCROLLVIEW_PULLDOWN_VISIBLE_TEXT_CLASS);
     });
   }
@@ -104,7 +104,10 @@ export class ScrollViewScroller extends Scroller {
 
       const containerEl = this._$container.get(0);
       const contentEl = this._$content.get(0);
-      this._bottomBoundary = Math.max(contentEl.clientHeight - this._bottomPocketSize - containerEl.clientHeight, 0);
+      this._bottomBoundary = Math.max(
+        contentEl.clientHeight - this._bottomPocketSize - containerEl.clientHeight,
+        0,
+      );
     }
 
     super._updateBounds();
@@ -142,7 +145,7 @@ export class ScrollViewScroller extends Scroller {
     return this._reachBottomEnabled && this.isBottomReached();
   }
 
-  isBottomReached() {
+  isBottomReached(): boolean {
     const containerEl = this._$container.get(0);
 
     return Math.round(this._bottomBoundary - Math.ceil(containerEl.scrollTop)) <= 1;
@@ -221,10 +224,11 @@ export class ScrollViewScroller extends Scroller {
     this.pullDownCallbacks.fire();
   }
 
-  _releaseHandler() {
+  _releaseHandler(): PromiseLike<unknown> {
     if (this._state === STATE_RELEASED) {
       this._moveToBounds();
     }
+
     this._update();
 
     if (this._releaseTask) {
@@ -233,6 +237,7 @@ export class ScrollViewScroller extends Scroller {
     }
 
     this._releaseTask = executeAsync(this._release.bind(this));
+    // @ts-expect-error ts-error
     return this._releaseTask?.promise;
   }
 
@@ -241,7 +246,7 @@ export class ScrollViewScroller extends Scroller {
     this._scrollComplete();
   }
 
-  _reachBottomEnablingHandler(enabled) {
+  _reachBottomEnablingHandler(enabled: boolean): void {
     if (this._reachBottomEnabled === enabled) {
       return;
     }
@@ -250,7 +255,7 @@ export class ScrollViewScroller extends Scroller {
     this._updateBounds();
   }
 
-  _pullDownEnablingHandler(enabled): void {
+  _pullDownEnablingHandler(enabled: boolean): void {
     if (this._pullDownEnabled === enabled) {
       return;
     }
@@ -279,7 +284,7 @@ export class ScrollViewScroller extends Scroller {
   }
 }
 
-class SimulatedScrollViewStrategy extends SimulatedStrategy {
+class SimulatedScrollViewStrategy extends SimulatedStrategy<ScrollViewProperties> {
   pullDownCallbacks!: Callback;
 
   releaseCallbacks!: Callback;
@@ -300,7 +305,9 @@ class SimulatedScrollViewStrategy extends SimulatedStrategy {
 
   _$refreshingText?: dxElementWrapper;
 
-  _init(scrollView): void {
+  // @ts-expect-error ts-error
+  _init(scrollView: ScrollView): void {
+    // @ts-expect-error ts-error
     super._init(scrollView);
     this._$pullDown = scrollView._$pullDown;
     this._$topPocket = scrollView._$topPocket;
@@ -322,39 +329,54 @@ class SimulatedScrollViewStrategy extends SimulatedStrategy {
   _renderPullDown(): void {
     const $image = $('<div>').addClass(SCROLLVIEW_PULLDOWN_IMAGE_CLASS);
     const $loadContainer = $('<div>').addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS);
-    // @ts-expect-error
-    const $loadIndicator = new LoadIndicator($('<div>')).$element();
-    const $text = this._$pullDownText = $('<div>').addClass(SCROLLVIEW_PULLDOWN_TEXT_CLASS);
 
-    this._$pullingDownText = $('<div>').text(this.option('pullingDownText')).appendTo($text);
-    this._$pulledDownText = $('<div>').text(this.option('pulledDownText')).appendTo($text);
-    this._$refreshingText = $('<div>').text(this.option('refreshingText')).appendTo($text);
+    const loadIndicatorElement = $('<div>')[0];
+
+    const $loadIndicator = new LoadIndicator(loadIndicatorElement).$element();
+    this._$pullDownText = $('<div>').addClass(SCROLLVIEW_PULLDOWN_TEXT_CLASS);
+
+    const {
+      pullingDownText = '',
+      pulledDownText = '',
+      refreshingText = '',
+    } = this.option();
+
+    this._$pullingDownText = $('<div>')
+      .text(pullingDownText)
+      .appendTo(this._$pullDownText);
+    this._$pulledDownText = $('<div>')
+      .text(pulledDownText)
+      .appendTo(this._$pullDownText);
+    this._$refreshingText = $('<div>')
+      .text(refreshingText)
+      .appendTo(this._$pullDownText);
 
     this._$pullDown
       .empty()
       .append($image)
       .append($loadContainer.append($loadIndicator))
-      .append($text);
+      .append(this._$pullDownText);
   }
 
-  pullDownEnable(enabled): void {
+  pullDownEnable(enabled: boolean): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._eventHandler('pullDownEnabling', enabled);
   }
 
-  reachBottomEnable(enabled): void {
+  reachBottomEnable(enabled: boolean): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._eventHandler('reachBottomEnabling', enabled);
   }
 
-  _createScroller(direction): void {
-    const that = this;
-    // @ts-expect-error ts-error
-    const scroller = that._scrollers[direction] = new ScrollViewScroller(that._scrollerOptions(direction));
-    scroller.pullDownCallbacks.add(() => { that.pullDownCallbacks.fire(); });
-    scroller.releaseCallbacks.add(() => { that.releaseCallbacks.fire(); });
-    scroller.reachBottomCallbacks.add(() => { that.reachBottomCallbacks.fire(); });
+  _createScroller(direction: Orientation): void {
+    const scroller = new ScrollViewScroller(this._scrollerOptions(direction));
+    this._scrollers[direction] = scroller;
+    scroller.pullDownCallbacks.add(() => { this.pullDownCallbacks.fire(); });
+    scroller.releaseCallbacks.add(() => { this.releaseCallbacks.fire(); });
+    scroller.reachBottomCallbacks.add(() => { this.reachBottomCallbacks.fire(); });
   }
 
-  _scrollerOptions(direction) {
+  _scrollerOptions(direction: Orientation): ScrollerOptions {
     return {
       ...super._scrollerOptions(direction),
       $topPocket: this._$topPocket,
@@ -368,27 +390,29 @@ class SimulatedScrollViewStrategy extends SimulatedStrategy {
   }
 
   pendingRelease(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._eventHandler('pendingRelease');
   }
 
-  release() {
+  release(): PromiseLike<unknown> {
     // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._eventHandler('release').done(this._updateAction);
   }
 
-  location() {
+  location(): ScrollOffset {
     const location = super.location();
     location.top += getHeight(this._$topPocket);
     return location;
   }
 
-  isBottomReached() {
-    // @ts-expect-error ts-error
+  isBottomReached(): boolean {
     return this._scrollers.vertical.isBottomReached();
   }
 
-  dispose() {
-    each(this._scrollers, function () {
+  dispose(): void {
+    each(this._scrollers, function disposeScroller() {
+      // eslint-disable-next-line @typescript-eslint/no-invalid-this
       this.dispose();
     });
     super.dispose();

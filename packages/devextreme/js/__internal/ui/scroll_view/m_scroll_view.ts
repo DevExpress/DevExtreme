@@ -46,42 +46,48 @@ export interface ScrollViewProperties extends Omit<Properties, 'onScroll' | 'onU
 }
 
 export class ScrollViewServerSide extends Scrollable<ScrollViewProperties> {
+  // eslint-disable-next-line class-methods-use-this
   finishLoading(): void {}
 
+  // eslint-disable-next-line class-methods-use-this
   release(): void {}
 
+  // eslint-disable-next-line class-methods-use-this
   refresh(): void {}
 
+  // eslint-disable-next-line class-methods-use-this
   scrollOffset(): ScrollOffset {
     return { top: 0, left: 0 };
   }
 
+  // eslint-disable-next-line class-methods-use-this
   isBottomReached(): boolean {
     return false;
   }
 
+  // eslint-disable-next-line consistent-return
   _optionChanged(args: OptionChanged<ScrollViewProperties>): void {
     const { name } = args;
     // @ts-expect-error ts-error
     if (name !== 'onUpdated') {
-      // @ts-expect-error ts-error
-      return super._optionChanged.apply(this, arguments);
+      return super._optionChanged(args);
     }
   }
 }
 
 export class ScrollView extends Scrollable<ScrollViewProperties> {
+  // @ts-expect-error ts-error
   _strategy!: PullDownStrategy | SwipeDownStrategy | SimulatedStrategy;
 
   _loadPanel!: LoadPanel;
 
-  _pullDownEnabled?: boolean;
+  _pullDownEnabled!: boolean;
 
   _loadingIndicatorEnabled?: boolean;
 
-  _$topPocket?: dxElementWrapper;
+  _$topPocket!: dxElementWrapper;
 
-  _$pullDown?: dxElementWrapper;
+  _$pullDown!: dxElementWrapper;
 
   _$bottomPocket?: dxElementWrapper;
 
@@ -128,11 +134,8 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
         },
         options: {
           pullingDownText: '',
-
           pulledDownText: '',
-
           refreshingText: '',
-
           reachBottomText: '',
         },
       },
@@ -176,8 +179,9 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
       .addClass(SCROLLVIEW_REACHBOTTOM_CLASS);
     const $loadContainer = $('<div>')
       .addClass(SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS);
-    // @ts-expect-error ts-error
-    const $loadIndicator = new LoadIndicator($('<div>')).$element();
+
+    const loadIndicatorElement = $('<div>')[0];
+    const $loadIndicator = new LoadIndicator(loadIndicatorElement).$element();
     this._$reachBottomText = $('<div>')
       .addClass(SCROLLVIEW_REACHBOTTOM_TEXT_CLASS);
 
@@ -243,9 +247,9 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
     this._reachBottomEnable(this.hasActionSubscription('onReachBottom'));
   }
 
-  on(eventName): this {
+  on(eventName: string, ...args: unknown[]): this {
     // @ts-expect-error ts-error
-    const result = super.on.apply(this, arguments);
+    const result = super.on.apply(this, [eventName, ...args]);
 
     if (eventName === 'pullDown' || eventName === 'reachBottom') {
       this._tryRefreshPocketState();
@@ -254,26 +258,28 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
     return result;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-  _pullDownEnable(enabled): boolean | void {
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type, consistent-return
+  _pullDownEnable(enabled: boolean): boolean | void {
     if (arguments.length === 0) {
       return this._pullDownEnabled;
     }
 
     if (this._$pullDown && this._strategy) {
+      // @ts-expect-error ts-error
       this._$pullDown.toggle(enabled);
       this._strategy.pullDownEnable(enabled);
       this._pullDownEnabled = enabled;
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-  _reachBottomEnable(enabled): boolean | void {
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type, consistent-return
+  _reachBottomEnable(enabled: boolean): boolean | void {
     if (arguments.length === 0) {
       return this._reachBottomEnabled;
     }
 
     if (this._$reachBottom && this._strategy) {
+      // @ts-expect-error ts-error
       this._$reachBottom.toggle(enabled);
       this._strategy.reachBottomEnable(enabled);
       this._reachBottomEnabled = enabled;
@@ -285,7 +291,7 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
     this._pullDownLoading();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type, consistent-return
   _loadingIndicator(value?: boolean): boolean | void {
     if (arguments.length < 1) {
       return this._loadingIndicatorEnabled;
@@ -333,18 +339,18 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
     }
   }
 
-  content() {
+  content(): HTMLElement {
     return getPublicElement(this._$content.children().eq(1));
   }
 
-  release(preventReachBottom?) {
+  release(preventReachBottom?: boolean): PromiseLike<unknown> {
     if (preventReachBottom !== undefined) {
       this.toggleLoading(!preventReachBottom);
     }
     return this._strategy.release();
   }
 
-  toggleLoading(showOrHide): void {
+  toggleLoading(showOrHide: boolean): void {
     this._reachBottomEnable(showOrHide);
   }
 
@@ -359,17 +365,19 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
 
   startLoading(): void {
     if (this._loadingIndicator() && this.$element().is(':visible')) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._loadPanel.show();
     }
     this._lock();
   }
 
   finishLoading(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._loadPanel.hide();
     this._unlock();
   }
 
-  isBottomReached() {
+  isBottomReached(): boolean {
     return this._strategy.isBottomReached();
   }
 

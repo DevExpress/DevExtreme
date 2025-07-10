@@ -1,3 +1,4 @@
+import type { Orientation } from '@js/common';
 import { move } from '@js/common/core/animation/translator';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
@@ -9,8 +10,12 @@ import $ from '@js/core/renderer';
 import { deferRenderer } from '@js/core/utils/common';
 import readyCallback from '@js/core/utils/ready_callbacks';
 import { isPlainObject } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
+import type { OptionChanged } from '@ts/core/widget/types';
 import type { Properties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+
+import type { ScrollableShowScrollbar } from './types';
 
 const SCROLLBAR = 'dxScrollbar';
 const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
@@ -20,32 +25,28 @@ const SCROLLABLE_SCROLL_CONTENT_CLASS = 'dx-scrollable-scroll-content';
 const HOVER_ENABLED_STATE = 'dx-scrollbar-hoverable';
 const HORIZONTAL = 'horizontal';
 const THUMB_MIN_SIZE = 15;
-
-const SCROLLBAR_VISIBLE = {
-  onScroll: 'onScroll',
-  onHover: 'onHover',
-  always: 'always',
-  never: 'never',
-};
+const DEFAULT_SCALE_RATIO = 1;
+const DEFAULT_SIZE = 0;
+const MIN_CONTAINER_TO_CONTENT_RATIO = 1;
 
 let activeScrollbar: Scrollbar | null = null;
 
 export interface ScrollbarProperties extends Properties {
-  visibilityMode: string;
+  visibilityMode: ScrollableShowScrollbar;
 
   expandable?: boolean;
 
   scaleRatio: number;
 
-  containerSize?: number;
+  containerSize: number;
 
-  contentSize?: number;
+  contentSize: number;
 
-  baseContainerSize?: number;
+  baseContainerSize: number;
 
-  baseContentSize?: number;
+  baseContentSize: number;
 
-  direction?: string;
+  direction: Orientation;
 }
 
 class Scrollbar extends Widget<ScrollbarProperties> {
@@ -66,15 +67,13 @@ class Scrollbar extends Widget<ScrollbarProperties> {
   _getDefaultOptions(): ScrollbarProperties {
     return {
       ...super._getDefaultOptions(),
-      // @ts-expect-error ts-error
-      direction: null,
       visible: false,
       activeStateEnabled: false,
-      visibilityMode: SCROLLBAR_VISIBLE.onScroll,
-      containerSize: 0,
-      contentSize: 0,
+      visibilityMode: 'onScroll',
+      containerSize: DEFAULT_SIZE,
+      contentSize: DEFAULT_SIZE,
       expandable: true,
-      scaleRatio: 1,
+      scaleRatio: DEFAULT_SCALE_RATIO,
     };
   }
 
@@ -115,7 +114,8 @@ class Scrollbar extends Widget<ScrollbarProperties> {
 
   _isHoverMode(): boolean | undefined {
     const { visibilityMode, expandable } = this.option();
-    return (visibilityMode === SCROLLBAR_VISIBLE.onHover || visibilityMode === SCROLLBAR_VISIBLE.always) && expandable;
+    return (visibilityMode === 'onHover'
+      || visibilityMode === 'always') && expandable;
   }
 
   _renderDirection(): void {
@@ -126,13 +126,18 @@ class Scrollbar extends Widget<ScrollbarProperties> {
   }
 
   _attachPointerDownHandler(): void {
-    eventsEngine.on(this._$thumb, addNamespace(pointerEvents.down, SCROLLBAR), this.feedbackOn.bind(this));
+    eventsEngine.on(
+      this._$thumb,
+      addNamespace(pointerEvents.down, SCROLLBAR),
+      this.feedbackOn.bind(this),
+    );
   }
 
-  feedbackOn(e?): void {
+  feedbackOn(e?: DxEvent): void {
     e?.preventDefault();
 
     this.$element().addClass(SCROLLABLE_SCROLLBAR_ACTIVE_CLASS);
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     activeScrollbar = this;
   }
 
@@ -160,72 +165,91 @@ class Scrollbar extends Widget<ScrollbarProperties> {
     });
   }
 
-  _toggleVisibility(visible): void {
+  _toggleVisibility(visible: boolean): void {
     const { visibilityMode } = this.option();
-    if (visibilityMode === SCROLLBAR_VISIBLE.onScroll) {
-      // @ts-expect-error ts-error
+    if (visibilityMode === 'onScroll') {
       // NOTE: need to relayout thumb and show it instantly
+      // @ts-expect-error ts-error
       this._$thumb.css('opacity');
     }
 
-    visible = this._adjustVisibility(visible);
+    const adjustedVisible = this._adjustVisibility(visible);
 
-    this.option().visible = visible;
-    this._$thumb.toggleClass('dx-state-invisible', !visible);
+    this.option().visible = adjustedVisible;
+    this._$thumb.toggleClass('dx-state-invisible', !adjustedVisible);
   }
 
-  _adjustVisibility(visible?): boolean {
+  _adjustVisibility(visible?: boolean): boolean {
     if (this._baseContainerToContentRatio && !this._needScrollbar()) {
       return false;
     }
 
     const { visibilityMode } = this.option();
+    let adjustedVisible = visible;
 
-    // eslint-disable-next-line default-case
     switch (visibilityMode) {
-      case SCROLLBAR_VISIBLE.onScroll:
+      case 'onScroll':
         break;
-      case SCROLLBAR_VISIBLE.onHover:
-        visible = visible || !!this._isHovered;
+      case 'onHover':
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        adjustedVisible = adjustedVisible || !!this._isHovered;
         break;
-      case SCROLLBAR_VISIBLE.never:
-        visible = false;
+      case 'never':
+        adjustedVisible = false;
         break;
-      case SCROLLBAR_VISIBLE.always:
-        visible = true;
+      case 'always':
+        adjustedVisible = true;
+        break;
+      default:
         break;
     }
-
-    return visible;
+    // @ts-expect-error ts-error
+    return adjustedVisible;
   }
 
-  moveTo(location): void {
-    if (this._isHidden()) {
+  moveTo(location: number | Record<string, number>): void {
+    if (this._isAlwaysHidden()) {
       return;
     }
 
+    let normalizedLocation: number = location as number;
     if (isPlainObject(location)) {
-      location = location[this._prop] || 0;
+      normalizedLocation = location[this._prop] || 0;
     }
 
-    const scrollBarLocation = {};
-    scrollBarLocation[this._prop] = this._calculateScrollBarPosition(location);
+    const scrollBarLocation: Record<string, number> = {};
+    scrollBarLocation[this._prop] = this._calculateScrollBarPosition(normalizedLocation);
     move(this._$thumb, scrollBarLocation);
   }
 
-  _calculateScrollBarPosition(location) {
+  _calculateScrollBarPosition(location: number): number {
     return -location * this._thumbRatio;
   }
 
+  _getSizes(): Record<string, number> {
+    const {
+      containerSize,
+      contentSize,
+      baseContainerSize,
+      baseContentSize,
+    } = this.option();
+    return {
+      containerSize: Math.round(containerSize),
+      contentSize: Math.round(contentSize),
+      baseContainerSize: Math.round(baseContainerSize),
+      baseContentSize: Math.round(baseContentSize),
+    };
+  }
+
   _update(): void {
-    // @ts-expect-error ts-error
-    const containerSize = Math.round(this.option('containerSize'));
-    // @ts-expect-error ts-error
-    const contentSize = Math.round(this.option('contentSize'));
-    // @ts-expect-error ts-error
-    let baseContainerSize = Math.round(this.option('baseContainerSize'));
-    // @ts-expect-error ts-error
-    let baseContentSize = Math.round(this.option('baseContentSize'));
+    const {
+      containerSize,
+      contentSize,
+    } = this._getSizes();
+    let {
+      baseContainerSize,
+      baseContentSize,
+    } = this._getSizes();
 
     // NOTE: if current scrollbar's using outside of scrollable
     if (isNaN(baseContainerSize)) {
@@ -235,31 +259,37 @@ class Scrollbar extends Widget<ScrollbarProperties> {
 
     const { scaleRatio } = this.option();
 
-    this._baseContainerToContentRatio = baseContentSize ? baseContainerSize / baseContentSize : baseContainerSize;
+    this._baseContainerToContentRatio = baseContentSize
+      ? baseContainerSize / baseContentSize
+      : baseContainerSize;
     this._realContainerToContentRatio = contentSize ? containerSize / contentSize : containerSize;
-    const thumbSize = Math.round(Math.max(Math.round(containerSize * this._realContainerToContentRatio), THUMB_MIN_SIZE));
+    const thumbSize = Math.round(
+      Math.max(Math.round(containerSize * this._realContainerToContentRatio), THUMB_MIN_SIZE),
+    );
     this._thumbRatio = (containerSize - thumbSize) / (scaleRatio * (contentSize - containerSize));
 
     this.option(this._dimension, thumbSize / scaleRatio);
     this.$element().css('display', this._needScrollbar() ? '' : 'none');
   }
 
-  // @ts-expect-error ts-error
-  _isHidden(): boolean {
+  _isAlwaysHidden(): boolean {
     const { visibilityMode } = this.option();
-    return visibilityMode === SCROLLBAR_VISIBLE.never;
+    return visibilityMode === 'never';
   }
 
   _needScrollbar(): boolean {
-    return !this._isHidden() && (this._baseContainerToContentRatio < 1);
+    return !this._isAlwaysHidden()
+      && (this._baseContainerToContentRatio < MIN_CONTAINER_TO_CONTENT_RATIO);
   }
 
   containerToContentRatio(): number {
     return this._realContainerToContentRatio;
   }
 
-  _normalizeSize(size): number {
-    return isPlainObject(size) ? size[this._dimension] || 0 : size;
+  _normalizeSize(size: number | Record<string, number>): number {
+    return isPlainObject(size)
+      ? size[this._dimension] || 0
+      : size;
   }
 
   _clean(): void {
@@ -271,17 +301,24 @@ class Scrollbar extends Widget<ScrollbarProperties> {
     eventsEngine.off(this._$thumb, `.${SCROLLBAR}`);
   }
 
-  _optionChanged(args): void {
-    if (this._isHidden()) {
+  _optionChanged(args: OptionChanged<ScrollbarProperties>): void {
+    if (this._isAlwaysHidden()) {
       return;
     }
 
-    switch (args.name) {
+    const { name, value } = args;
+
+    switch (name) {
       case 'containerSize':
-      case 'contentSize':
-        this.option()[args.name] = this._normalizeSize(args.value);
+      case 'contentSize': {
+        type PropertyType = ScrollbarProperties[typeof name];
+
+        this.option()[name] = this._normalizeSize(
+          value as PropertyType,
+        );
         this._update();
         break;
+      }
       case 'baseContentSize':
       case 'baseContainerSize':
         this._update();
@@ -294,25 +331,30 @@ class Scrollbar extends Widget<ScrollbarProperties> {
         this._update();
         break;
       default:
-        // @ts-expect-error ts-error
-        super._optionChanged.apply(this, arguments);
+        super._optionChanged(args);
     }
   }
 
-  update() {
+  update(): void {
     deferRenderer(() => {
-      this._adjustVisibility() && this.option('visible', true);
+      if (this._adjustVisibility()) {
+        this.option('visible', true);
+      }
     })();
   }
 }
 
 readyCallback.add(() => {
-  // @ts-expect-error
-  eventsEngine.subscribeGlobal(domAdapter.getDocument(), addNamespace(pointerEvents.up, SCROLLBAR), () => {
-    if (activeScrollbar) {
-      activeScrollbar.feedbackOff();
-    }
-  });
+  // @ts-expect-error ts-error
+  eventsEngine.subscribeGlobal(
+    domAdapter.getDocument(),
+    addNamespace(pointerEvents.up, SCROLLBAR),
+    () => {
+      if (activeScrollbar) {
+        activeScrollbar.feedbackOff();
+      }
+    },
+  );
 });
 
 export default Scrollbar;

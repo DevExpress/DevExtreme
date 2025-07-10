@@ -1,14 +1,13 @@
+import type { ScrollDirection as Direction } from '@js/common';
+
 import {
   DIRECTION_BOTH,
   DIRECTION_HORIZONTAL,
   DIRECTION_VERTICAL,
 } from '../consts';
-import type {
-  ScrollableDirection,
-} from '../types';
 
 export class ScrollDirection {
-  direction: ScrollableDirection;
+  direction: Direction;
 
   readonly DIRECTION_HORIZONTAL = 'horizontal';
 
@@ -16,7 +15,7 @@ export class ScrollDirection {
 
   readonly DIRECTION_BOTH = 'both';
 
-  constructor(direction?: ScrollableDirection) {
+  constructor(direction?: Direction) {
     this.direction = direction ?? DIRECTION_VERTICAL;
   }
 

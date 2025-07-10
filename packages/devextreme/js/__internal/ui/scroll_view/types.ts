@@ -1,3 +1,7 @@
+import type { Orientation } from '@js/common';
+import type { DxEvent } from '@js/events';
+import type { ScrollEvent } from '@js/ui/scroll_view';
+
 export interface ScrollableBoundary {
   reachedBottom: boolean;
   reachedLeft: boolean;
@@ -6,7 +10,7 @@ export interface ScrollableBoundary {
 }
 
 export interface ScrollEventArgs extends Partial<ScrollableBoundary> {
-  event?: Event;
+  event?: ScrollEvent | DxMouseEvent | DxEvent;
   scrollOffset: ScrollOffset;
 }
 
@@ -17,13 +21,13 @@ export interface ScrollLocationChangeArgs {
 
 export type ScrollableShowScrollbar = 'onScroll' | 'onHover' | 'always' | 'never';
 
-export type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
-
 export type RefreshStrategy = 'pullDown' | 'swipeDown' | 'simulated';
 export interface ScrollOffset {
   top: number;
   left: number;
 }
+
+export type AllowedDirections = Record<Orientation, boolean>;
 
 export interface DxMouseEvent extends MouseEvent {
   originalEvent: MouseEvent;
