@@ -16,7 +16,8 @@
     "noUnusedParameters": true,
     "strictNullChecks": true,
     "lib": [
-      "dom"
+      "dom",
+      "es2015"
     ],
     "types": ["jquery", "jest", "node"],
     "typeRoots": [
