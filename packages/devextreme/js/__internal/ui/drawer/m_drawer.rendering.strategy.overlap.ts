@@ -1,3 +1,4 @@
+import type { PositionConfig } from '@js/common/core/animation';
 import { move } from '@js/common/core/animation/translator';
 import type { EventInfo } from '@js/common/core/events';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -6,21 +7,15 @@ import { ensureDefined } from '@js/core/utils/common';
 import { camelize } from '@js/core/utils/inflector';
 import { getWidth } from '@js/core/utils/size';
 import type { PanelLocation } from '@js/ui/drawer';
+import type Drawer from '@ts/ui/drawer/m_drawer';
 import Overlay from '@ts/ui/overlay/m_overlay';
 
-import type Drawer from './m_drawer';
 import { animation } from './m_drawer.animation';
 import DrawerStrategy from './m_drawer.rendering.strategy';
 
 interface InitialPosition {
   left?: number;
   top?: number;
-}
-
-interface DrawerOverlayPosition {
-  my?: string;
-  at?: string;
-  of?: dxElementWrapper;
 }
 
 class OverlapStrategy extends DrawerStrategy {
@@ -72,23 +67,27 @@ class OverlapStrategy extends DrawerStrategy {
     }
   }
 
-  _getOverlayPosition(): DrawerOverlayPosition {
+  _getOverlayPosition(): PositionConfig {
     const drawer = this.getDrawerInstance();
     const panelPosition = drawer.calcTargetPosition();
 
-    let result: DrawerOverlayPosition = {};
+    let result: PositionConfig = {};
 
     switch (panelPosition) {
       case 'left': {
         result = {
+          // @ts-expect-error ts-error
           my: 'top left',
+          // @ts-expect-error ts-error
           at: 'top left',
         };
         break;
       }
       case 'right': {
         result = {
+          // @ts-expect-error ts-error
           my: drawer.option('rtlEnabled') ? 'top left' : 'top right',
+          // @ts-expect-error ts-error
           at: 'top right',
         };
         break;
@@ -105,7 +104,7 @@ class OverlapStrategy extends DrawerStrategy {
         break;
     }
 
-    result.of = drawer.getOverlayTarget();
+    result.of = drawer.getOverlayTarget().get(0);
 
     return result;
   }

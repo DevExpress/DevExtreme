@@ -432,18 +432,14 @@ class Drawer extends Widget<DrawerProperties> {
     return position === 'left' || position === 'right';
   }
 
-  stopAnimations(jumpToEnd?: boolean): void {
-    // @ts-expect-error ts-error
-    fx.stop(this._$shader, jumpToEnd);
-    // @ts-expect-error ts-error
-    fx.stop($(this.content()), jumpToEnd);
-    // @ts-expect-error ts-error
-    fx.stop($(this.viewContent()), jumpToEnd);
+  stopAnimations(jumpToEnd = false): void {
+    fx.stop(this._$shader.get(0), jumpToEnd);
+    fx.stop($(this.content()).get(0), jumpToEnd);
+    fx.stop($(this.viewContent()).get(0), jumpToEnd);
 
     const overlay = this.getOverlay();
     if (overlay) {
-      // @ts-expect-error ts-error
-      fx.stop($(overlay.$content()), jumpToEnd);
+      fx.stop($(overlay.$content()).get(0), jumpToEnd);
     }
   }
 
@@ -453,7 +449,7 @@ class Drawer extends Widget<DrawerProperties> {
   }
 
   resizeContent(): void { // TODO: keep for ui.file_manager.adaptivity.js
-    this.resizeViewContent();
+    this.resizeViewContent;
   }
 
   resizeViewContent(): void {

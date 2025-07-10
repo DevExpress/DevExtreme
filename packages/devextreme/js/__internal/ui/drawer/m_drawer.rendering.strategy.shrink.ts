@@ -1,8 +1,8 @@
 import $ from '@js/core/renderer';
 import { camelize } from '@js/core/utils/inflector';
 import type { PanelLocation } from '@js/ui/drawer';
+import type Drawer from '@ts/ui/drawer/m_drawer';
 
-import type Drawer from './m_drawer';
 import { animation } from './m_drawer.animation';
 import DrawerStrategy from './m_drawer.rendering.strategy';
 

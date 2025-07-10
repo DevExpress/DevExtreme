@@ -1,14 +1,10 @@
-import type { Direction } from '@js/common';
 import type { AnimationConfig, AnimationState, AnimationType } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import type { dxElementWrapper } from '@js/core/renderer';
 import { camelize } from '@js/core/utils/inflector';
 
-interface DrawerAnimationConfig {
+interface DrawerAnimationConfig extends AnimationConfig {
   $element: dxElementWrapper;
-  complete: AnimationConfig['complete'];
-  direction?: Direction;
-  duration?: number;
 }
 
 interface DrawerMoveAnimationConfig extends DrawerAnimationConfig {
@@ -33,8 +29,7 @@ export const animation = {
     const {
       $element, position, direction = 'left', duration, complete,
     } = config;
-    // eslint-disable-next-line no-undef-init
-    let toConfig: AnimationState | undefined = undefined;
+    let toConfig = {} as AnimationState;
     // eslint-disable-next-line no-undef-init
     let animationType: AnimationType | undefined = undefined;
 
@@ -58,9 +53,8 @@ export const animation = {
         break;
     }
 
-    // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fx.animate($element, {
+    fx.animate($element.get(0), {
       type: animationType,
       to: toConfig,
       duration,
@@ -78,18 +72,16 @@ export const animation = {
       [marginName]: margin,
     } as AnimationState;
 
-    // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fx.animate($element, {
+    fx.animate($element.get(0), {
       to: toConfig,
       duration,
       complete,
     });
   },
   fade($element: dxElementWrapper, config: FadeConfig, duration: number | undefined, completeAction: AnimationConfig['complete']): void {
-    // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fx.animate($element, {
+    fx.animate($element.get(0), {
       type: 'fade',
       to: config.to,
       from: config.from,
@@ -117,9 +109,8 @@ export const animation = {
       toConfig.marginTop = marginTop;
     }
 
-    // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fx.animate($element, {
+    fx.animate($element.get(0), {
       to: toConfig,
       duration,
       complete,
@@ -127,7 +118,6 @@ export const animation = {
   },
 
   complete($element: dxElementWrapper): void {
-    // @ts-expect-error ts-error
-    fx.stop($element, true);
+    fx.stop($element.get(0), true);
   },
 };

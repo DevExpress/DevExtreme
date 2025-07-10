@@ -1,7 +1,7 @@
 import { move } from '@js/common/core/animation/translator';
 import $ from '@js/core/renderer';
+import type Drawer from '@ts/ui/drawer/m_drawer';
 
-import type Drawer from './m_drawer';
 import { animation } from './m_drawer.animation';
 import DrawerStrategy from './m_drawer.rendering.strategy';
 
