@@ -383,6 +383,7 @@ class Drawer extends Widget<DrawerProperties> {
       if (isDefined(templateSize)) {
         return templateSize; // number is expected
       }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return getBoundingRect(this._getPanelTemplateElement()).width;
     }
     return 0;
@@ -395,6 +396,7 @@ class Drawer extends Widget<DrawerProperties> {
       if (isDefined(templateSize)) {
         return templateSize; // number is expected
       }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return getBoundingRect(this._getPanelTemplateElement()).height;
     }
     return 0;
@@ -414,9 +416,11 @@ class Drawer extends Widget<DrawerProperties> {
     return $result.get(0);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   getElementHeight($element: dxElementWrapper): number {
     const $children = $element.children();
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return $children.length
       ? getBoundingRect($children.eq(0).get(0)).height
       : getBoundingRect($element.get(0)).height;
@@ -449,7 +453,7 @@ class Drawer extends Widget<DrawerProperties> {
   }
 
   resizeContent(): void { // TODO: keep for ui.file_manager.adaptivity.js
-    this.resizeViewContent;
+    this.resizeViewContent();
   }
 
   resizeViewContent(): void {

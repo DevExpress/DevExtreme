@@ -99,7 +99,7 @@ class DrawerStrategy {
     return $(this.getDrawerInstance().content());
   }
 
-  setPanelSize(calcFromRealPanelSize: boolean): void { // TODO: keep for ui.file_manager.adaptivity.js
+  setPanelSize(calcFromRealPanelSize: boolean): void { // TODO: for ui.file_manager.adaptivity.js
     this.refreshPanelElementSize(calcFromRealPanelSize);
   }
 
