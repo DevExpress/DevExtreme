@@ -1,16 +1,16 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import {
-  filterArray,
-  getRawAppointments,
-  getVisibleDateTimeIntervals,
-} from '@ts/scheduler/appointments/data_provider/utils';
 
 import { isAppointmentTakesAllDay, isDateAndTimeView } from '../../r1/utils/index';
 import type { AppointmentDataItem, SafeAppointment } from '../../types';
 import { getResourcesByGroupIndex } from '../../utils/resource_manager/group_utils';
 import { AppointmentFilterBaseStrategy } from './m_appointment_filter';
 import { isAppointmentMatchedResources } from './utils/get_appointment_filter/is_appointment_matched_resources';
+import {
+  filterArray,
+  getRawAppointments,
+  getVisibleDateTimeIntervals,
+} from './utils/index';
 import type { CompareOptions, FilterOptions } from './utils/type';
 
 // TODO Vinogradov refactoring: this module should be refactored :)
