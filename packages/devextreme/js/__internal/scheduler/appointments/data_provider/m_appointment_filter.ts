@@ -1,5 +1,3 @@
-import query from '@js/common/data/query';
-
 import {
   isAppointmentTakesAllDay, isDateAndTimeView,
 } from '../../r1/utils/index';
@@ -7,7 +5,13 @@ import type { AppointmentDataItem, SafeAppointment } from '../../types';
 import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import type ViewDataProvider from '../../workspaces/view_model/m_view_data_provider';
-import { getAppointmentFilter } from './utils/index';
+import {
+  filterArray,
+  getAppointmentFilter,
+  getRawAppointments,
+  getVisibleDateTimeIntervals,
+} from './utils/index';
+import type { CompareOptions, FilterOptions } from './utils/type';
 
 // TODO Vinogradov refactoring: this module should be refactored :)
 
@@ -59,21 +63,30 @@ export class AppointmentFilterBaseStrategy {
   filter(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
     const [min, max] = this.dateRange;
     const viewOffset = this._resolveOption('viewOffset');
-    const allDay = !this.showAllDayPanel && this.supportAllDayRow
+    const supportAllDayPanel = !this.showAllDayPanel && this.supportAllDayRow
       ? false
       : undefined;
-
-    return this.filterLoadedAppointments({
+    const compareOptions: CompareOptions = {
       startDayHour: this.viewStartDayHour,
       endDayHour: this.viewEndDayHour,
+      min: new Date(min),
+      max: new Date(max),
+    };
+    const filterOptions: FilterOptions = {
+      ...compareOptions,
       viewOffset,
-      min,
-      max,
       resources: this.loadedResources,
-      allDay,
+      supportAllDayPanel,
       isTimeDateView: isDateAndTimeView(this.viewType),
       firstDayOfWeek: this.firstDayOfWeek,
-    }, preparedItems);
+      allDayPanelMode: this.allDayPanelMode,
+      visibleDateIntervals: getVisibleDateTimeIntervals(compareOptions, true),
+      visibleTimeIntervals: getVisibleDateTimeIntervals(compareOptions, false),
+    };
+    const combinedFilter = this.createCombinedFilter(filterOptions);
+    const filteredItems = filterArray(preparedItems, combinedFilter);
+
+    return getRawAppointments(filteredItems);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -86,44 +99,9 @@ export class AppointmentFilterBaseStrategy {
       .some((item) => isAppointmentTakesAllDay(item, this.allDayPanelMode));
   }
 
-  private _createAllDayAppointmentFilter() {
-    return [[
-      (appointment) => isAppointmentTakesAllDay(
-        appointment,
-        this.allDayPanelMode,
-      ),
-    ]];
-  }
-
-  _createCombinedFilter(filterOptions) {
-    return [[getAppointmentFilter({
-      ...filterOptions,
-      allDayPanelMode: this.allDayPanelMode,
-    }, this.timeZoneCalculator)]];
-  }
-
-  filterLoadedAppointments(filterOptions, preparedItems: AppointmentDataItem[]): SafeAppointment[] {
-    const filteredItems = this.filterPreparedItems(filterOptions, preparedItems);
-    return filteredItems.map(({ rawAppointment }) => rawAppointment);
-  }
-
-  filterPreparedItems(filterOptions, preparedItems: AppointmentDataItem[]): AppointmentDataItem[] {
-    const combinedFilter = this._createCombinedFilter(filterOptions);
-
-    // @ts-expect-error
-    return query(preparedItems)
-      // @ts-expect-error
-      .filter(combinedFilter)
-      .toArray();
-  }
-
-  filterAllDayAppointments(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
-    const combinedFilter = this._createAllDayAppointmentFilter();
-    // @ts-expect-error
-    return query(preparedItems)
-      // @ts-expect-error
-      .filter(combinedFilter)
-      .toArray()
-      .map(({ rawAppointment }) => rawAppointment);
+  protected createCombinedFilter(
+    filterOptions: FilterOptions,
+  ): ((appointment: AppointmentDataItem) => boolean)[][] {
+    return [[getAppointmentFilter(filterOptions, this.timeZoneCalculator)]];
   }
 }

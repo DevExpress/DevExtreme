@@ -2,25 +2,44 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
-import { createTimeZoneCalculator } from '../../../r1/timezone_calculator';
-import { ResourceLoader } from '../../../utils/loader/resource_loader';
+import { createTimeZoneCalculator } from '../../../../r1/timezone_calculator';
+import { ResourceLoader } from '../../../../utils/loader/resource_loader';
+import { getVisibleDateTimeIntervals } from '../get_visible_date_time_intervals';
+import type { FilterOptions } from '../type';
 import { getAppointmentFilter } from './get_appointment_filter';
 
 const minDay = 10;
 const maxDay = 20;
 const startDayHour = 10;
 const endDayHour = 20;
-const viewportOptions = {
+const compareOptions = {
   startDayHour,
   endDayHour,
   min: new Date(2000, 0, minDay, startDayHour),
   max: new Date(2000, 0, maxDay, endDayHour),
+};
+const viewportOptions = {
+  ...compareOptions,
   isTimeDateView: true,
   viewOffset: 600,
   resources: [],
   firstDayOfWeek: 3,
   allDayPanelMode: 'all' as any,
+  visibleDateIntervals: getVisibleDateTimeIntervals(compareOptions, true),
+  visibleTimeIntervals: getVisibleDateTimeIntervals(compareOptions, false),
 };
+const getViewportOptions = (options: Partial<FilterOptions>): FilterOptions => ({
+  ...viewportOptions,
+  ...options,
+  visibleDateIntervals: getVisibleDateTimeIntervals({
+    ...compareOptions,
+    ...options,
+  }, true),
+  visibleTimeIntervals: getVisibleDateTimeIntervals({
+    ...compareOptions,
+    ...options,
+  }, false),
+});
 const correctAppointment = {
   startDate: new Date(2000, 0, 15, 10),
   endDate: new Date(2000, 0, 15, 11),
@@ -80,14 +99,14 @@ const yearMs = new Date(2001, 0).getTime() - new Date(2000, 0).getTime();
 describe('getAppointmentFilter', () => {
   it('should filter out appointment for zero hours duration', () => {
     expect(getAppointmentFilter(
-      { ...viewportOptions, startDayHour: 20, endDayHour: 10 },
+      getViewportOptions({ startDayHour: 20, endDayHour: 10 }),
       mockTimeZoneCalculator,
     )(correctAppointment)).toBe(false);
   });
 
   it('should ignore zero hours duration for all day appointment', () => {
     expect(getAppointmentFilter(
-      { ...viewportOptions, startDayHour: 20, endDayHour: 10 },
+      getViewportOptions({ startDayHour: 20, endDayHour: 10 }),
       mockTimeZoneCalculator,
     )(correctAllDayAppointment)).toBe(true);
   });
@@ -108,12 +127,11 @@ describe('getAppointmentFilter', () => {
 
   it('should pass correct all day appointment with zero duration in day view', () => {
     expect(getAppointmentFilter(
-      {
-        ...viewportOptions,
+      getViewportOptions({
         viewOffset: 0,
         min: new Date(2000, 0, 15, startDayHour),
         max: new Date(2000, 0, 15, endDayHour),
-      },
+      }),
       mockTimeZoneCalculator,
     )({
       ...correctAllDayAppointment,
@@ -124,12 +142,11 @@ describe('getAppointmentFilter', () => {
 
   it('should pass correct all day appointment with zero hours', () => {
     expect(getAppointmentFilter(
-      {
-        ...viewportOptions,
+      getViewportOptions({
         viewOffset: 0,
         min: new Date(2000, 0, 16, startDayHour),
         max: new Date(2000, 0, 16, endDayHour),
-      },
+      }),
       mockTimeZoneCalculator,
     )({
       ...correctAllDayAppointment,
@@ -173,7 +190,7 @@ describe('getAppointmentFilter', () => {
   ] as const)('should filter out hidden all day appointments ($title)', ({ allDayPanelMode, appointment }) => {
     expect(getAppointmentFilter({
       ...viewportOptions,
-      allDay: false,
+      supportAllDayPanel: false,
       allDayPanelMode,
     }, mockTimeZoneCalculator)(appointment as any)).toBe(false);
   });
@@ -182,7 +199,7 @@ describe('getAppointmentFilter', () => {
     expect(getAppointmentFilter({
       ...viewportOptions,
       resources: [assignee],
-      allDay: false,
+      supportAllDayPanel: false,
       allDayPanelMode: 'hidden',
     }, mockTimeZoneCalculator)(correctAllDayAppointment)).toBe(false);
   });
@@ -208,12 +225,11 @@ describe('getAppointmentFilter', () => {
     title, allDay, isTimeDateView, result,
   }) => {
     it(`should filter out ${title} recurrence appointment`, () => {
-      expect(getAppointmentFilter({
-        ...viewportOptions,
+      expect(getAppointmentFilter(getViewportOptions({
         min: new Date(2000, 0, maxDay, startDayHour),
         max: new Date(2000, 0, maxDay, endDayHour),
         isTimeDateView,
-      }, mockTimeZoneCalculator)({
+      }), mockTimeZoneCalculator)({
         ...correctRecurrenceAppointment,
         recurrenceRule: 'FREQ=DAILY',
         startDate: new Date(2000, 0, 1, endDayHour + 1),
@@ -223,12 +239,11 @@ describe('getAppointmentFilter', () => {
     });
 
     it(`should filter out ${title} appointment`, () => {
-      expect(getAppointmentFilter({
-        ...viewportOptions,
+      expect(getAppointmentFilter(getViewportOptions({
         min: new Date(2000, 0, maxDay, startDayHour),
         max: new Date(2000, 0, maxDay, endDayHour),
         isTimeDateView,
-      }, mockTimeZoneCalculator)({
+      }), mockTimeZoneCalculator)({
         ...correctAppointment,
         startDate: new Date(2000, 0, maxDay, endDayHour + 1),
         endDate: new Date(2000, 0, maxDay, endDayHour + 2),
@@ -248,12 +263,11 @@ describe('getAppointmentFilter', () => {
     },
   ])('$title', ({ appointmentConfig, dayShift }) => {
     it('should compare tiny appointment on one day view', () => {
-      expect(getAppointmentFilter({
-        ...viewportOptions,
+      expect(getAppointmentFilter(getViewportOptions({
         min: new Date(2000, 0, maxDay),
         max: new Date(2000, 0, maxDay),
         isTimeDateView: true,
-      }, mockTimeZoneCalculator)({
+      }), mockTimeZoneCalculator)({
         ...appointmentConfig,
         startDate: new Date(2000, 0, maxDay + dayShift, startDayHour + 1),
         endDate: new Date(2000, 0, maxDay + dayShift, endDayHour - 1),
@@ -430,11 +444,10 @@ describe('getAppointmentFilter', () => {
       });
 
       it('should compare appointment starts in end date (same hours)', () => {
-        expect(getAppointmentFilter({
-          ...viewportOptions,
+        expect(getAppointmentFilter(getViewportOptions({
           endDayHour: endDayHour + 0.5,
           isTimeDateView,
-        }, mockTimeZoneCalculator)({
+        }), mockTimeZoneCalculator)({
           ...appointment,
           startDate: new Date(2000, 0, maxDay + dayShift, endDayHour, 10),
           endDate: new Date(2000, 0, maxDay + daysDuration + dayShift, endDayHour + 1),
@@ -466,12 +479,11 @@ describe('getAppointmentFilter', () => {
       });
 
       it('should compare appointment ends in start date (same hours, out of minutes)', () => {
-        expect(getAppointmentFilter({
-          ...viewportOptions,
+        expect(getAppointmentFilter(getViewportOptions({
           startDayHour: startDayHour + 0.5,
           allDayPanelMode: 'allDay',
           isTimeDateView,
-        }, mockTimeZoneCalculator)({
+        }), mockTimeZoneCalculator)({
           ...appointment,
           startDate: new Date(2000, 0, minDay - daysDuration + dayShift, startDayHour - 1),
           endDate: new Date(2000, 0, minDay + dayShift, startDayHour, 10),

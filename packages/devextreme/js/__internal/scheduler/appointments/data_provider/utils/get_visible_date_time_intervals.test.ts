@@ -11,8 +11,7 @@ describe('getVisibleDateTimeIntervals', () => {
       endDayHour: 10,
       min: new Date(2000, 0, 10, 3),
       max: new Date(2000, 0, 15, 10),
-      isDateViewOnly: true,
-    })).toEqual([{
+    }, true)).toEqual([{
       min: new Date(2000, 0, 10),
       max: new Date(2000, 0, 16),
     }]);
@@ -24,8 +23,7 @@ describe('getVisibleDateTimeIntervals', () => {
       endDayHour: 3,
       min: new Date(2000, 0, 10, 10),
       max: new Date(2000, 0, 15, 3),
-      isDateViewOnly: true,
-    })).toEqual([{
+    }, true)).toEqual([{
       min: new Date(2000, 0, 10),
       max: new Date(2000, 0, 16),
     }]);
@@ -37,8 +35,7 @@ describe('getVisibleDateTimeIntervals', () => {
       endDayHour: 24,
       min: new Date(2000, 0, 10),
       max: new Date(2000, 0, 15),
-      isDateViewOnly: false,
-    })).toEqual([{
+    }, false)).toEqual([{
       min: new Date(2000, 0, 10),
       max: new Date(2000, 0, 16),
     }]);
@@ -50,8 +47,7 @@ describe('getVisibleDateTimeIntervals', () => {
       endDayHour: 10,
       min: new Date(2000, 0, 10, 10),
       max: new Date(2000, 0, 15, 5),
-      isDateViewOnly: false,
-    })).toEqual([
+    }, false)).toEqual([
       {
         min: new Date(2000, 0, 10, 3),
         max: new Date(2000, 0, 10, 10),
@@ -80,8 +76,7 @@ describe('getVisibleDateTimeIntervals', () => {
       endDayHour: 23.9,
       min: new Date(2000, 0, 10),
       max: new Date(2000, 0, 13),
-      isDateViewOnly: false,
-    })).toEqual([
+    }, false)).toEqual([
       {
         min: new Date(2000, 0, 10, 0, 6),
         max: new Date(2000, 0, 10, 23, 54),
@@ -104,7 +99,6 @@ describe('getVisibleDateTimeIntervals', () => {
       endDayHour: 10,
       min: new Date(2000, 0, 10, 10),
       max: new Date(2000, 0, 15, 5),
-      isDateViewOnly: false,
-    })).toEqual([]);
+    }, false)).toEqual([]);
   });
 });

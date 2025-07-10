@@ -2,8 +2,8 @@ import {
   describe, expect, it,
 } from '@jest/globals';
 
-import { getRecurrenceProcessor } from '../../../m_recurrence';
-import { createTimeZoneCalculator } from '../../../r1/timezone_calculator';
+import { getRecurrenceProcessor } from '../../../../m_recurrence';
+import { createTimeZoneCalculator } from '../../../../r1/timezone_calculator';
 import { getAppointmentsOccurrences } from './get_appointments_occurrences';
 
 const options = {

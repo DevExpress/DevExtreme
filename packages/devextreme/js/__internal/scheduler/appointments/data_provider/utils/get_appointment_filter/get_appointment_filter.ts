@@ -1,59 +1,32 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { dateUtils } from '@ts/core/utils/m_date';
 
-import type { TimeZoneCalculator } from '../../../r1/timezone_calculator/calculator';
-import { isAppointmentTakesAllDay } from '../../../r1/utils/index';
-import type { AllDayPanelModeType, AppointmentDataItem } from '../../../types';
-import type { ResourceLoader } from '../../../utils/loader/resource_loader';
+import type { TimeZoneCalculator } from '../../../../r1/timezone_calculator/calculator';
+import { isAppointmentTakesAllDay } from '../../../../r1/utils';
+import type { AppointmentDataItem } from '../../../../types';
+import type { FilterOptions } from '../type';
 import { getAppointmentsOccurrences } from './get_appointments_occurrences';
-import { getVisibleDateTimeIntervals } from './get_visible_date_time_intervals';
 import { isAppointmentMatchedIntervals } from './is_appointment_matched_intervals';
 import { isAppointmentMatchedResources } from './is_appointment_matched_resources';
 
-interface Options {
-  startDayHour: number;
-  endDayHour: number;
-  viewOffset: number;
-  resources: ResourceLoader[];
-  firstDayOfWeek: number;
-  isTimeDateView: boolean;
-  min: Date | number | string;
-  max: Date | number | string;
-  allDay?: boolean;
-  allDayPanelMode: AllDayPanelModeType;
-}
-
 export const getAppointmentFilter = (
-  filterOptions: Options,
+  filterOptions: FilterOptions,
   timeZoneCalculator: TimeZoneCalculator,
 ) => {
-  const min = new Date(filterOptions.min);
-  const max = new Date(filterOptions.max);
   const {
-    startDayHour,
-    endDayHour,
     viewOffset,
-    resources,
     firstDayOfWeek,
+    resources,
     isTimeDateView,
-    allDay,
+    supportAllDayPanel,
     allDayPanelMode,
+    visibleDateIntervals,
+    visibleTimeIntervals,
   } = filterOptions;
-  const baseCompareOptions = {
-    startDayHour, endDayHour, min, max,
-  };
-  const visibleDateIntervals = getVisibleDateTimeIntervals({
-    ...baseCompareOptions,
-    isDateViewOnly: true,
-  });
-  const visibleTimeIntervals = getVisibleDateTimeIntervals({
-    ...baseCompareOptions,
-    isDateViewOnly: false,
-  });
 
   return (appointment: AppointmentDataItem): boolean => {
-    const appointmentVisible = appointment.visible ?? true;
-    if (!appointmentVisible) {
+    const isAppointmentVisible = appointment.visible ?? true;
+    if (!isAppointmentVisible) {
       return false;
     }
 
@@ -61,7 +34,7 @@ export const getAppointmentFilter = (
       appointment,
       allDayPanelMode,
     );
-    if (isAppointmentOccupiesAllDayPanel && allDay === false) {
+    if (isAppointmentOccupiesAllDayPanel && supportAllDayPanel === false) {
       return false;
     }
 
