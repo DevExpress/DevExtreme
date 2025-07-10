@@ -34,9 +34,13 @@
   position: relative;
 }
 
+.brush {
+  color: #f05b41;
+}
+
 .superhero,
 .dx-color-scheme-greenmist .superhero {
-  fill: #404041;
+  color: #404041;
 }
 
 .dx-color-scheme-dark .superhero,
@@ -47,9 +51,9 @@
 .dx-color-scheme-teal-dark .superhero,
 .dx-color-scheme-lime-dark .superhero,
 .dx-color-scheme-purple-dark .superhero {
-  fill: #a8a8a8;
+  color: #a8a8a8;
 }
 
 .dx-color-scheme-contrast .superhero {
-  fill: #fff;
+  color: #fff;
 }

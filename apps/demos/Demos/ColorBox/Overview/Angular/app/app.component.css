@@ -34,9 +34,13 @@
   position: relative;
 }
 
+.brush {
+  color: #f05b41;
+}
+
 .superhero,
 ::ng-deep .dx-color-scheme-greenmist .superhero {
-  fill: #404041;
+  color: #404041;
 }
 
 ::ng-deep .dx-color-scheme-dark .superhero,
@@ -47,9 +51,9 @@
 ::ng-deep .dx-color-scheme-teal-dark .superhero,
 ::ng-deep .dx-color-scheme-lime-dark .superhero,
 ::ng-deep .dx-color-scheme-purple-dark .superhero {
-  fill: #a8a8a8;
+  color: #a8a8a8;
 }
 
 ::ng-deep .dx-color-scheme-contrast .superhero {
-  fill: #fff;
+  color: #fff;
 }
