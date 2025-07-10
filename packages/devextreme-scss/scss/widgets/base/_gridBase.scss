@@ -976,10 +976,13 @@
 
       .dx-master-detail-container {
         overflow: hidden;
-        position: sticky;
-        z-index: 2;
-        left: 0;
-        right: 0;
+
+        &.dx-#{$widget-name}-sticky-column-left {
+          position: sticky;
+          z-index: 2;
+          left: 0;
+          right: 0;
+        }
       }
     }
 
