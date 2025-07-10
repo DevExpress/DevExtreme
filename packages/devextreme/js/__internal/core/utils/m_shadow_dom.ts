@@ -1,3 +1,5 @@
+import config from '@js/core/config';
+
 const DX_RULE_PREFIX = 'dx-';
 
 let ownerDocumentStyleSheet = null;
@@ -76,6 +78,10 @@ export function computeStyleSheetsHash(styleSheets) {
 const injectedRootStates = new WeakMap();
 
 export function addShadowDomStyles($element) {
+  if (config().noCopyStylesToShadowDom) {
+    return;
+  }
+
   const el = $element.get(0);
   const root = el.getRootNode?.();
   if (!root?.host) return;
