@@ -63,6 +63,7 @@ import { DxoCalendarOptions } from './base/calendar-options';
         'showTodayButton',
         'showWeekNumbers',
         'tabIndex',
+        'todayButtonText',
         'validationError',
         'validationErrors',
         'validationMessageMode',
