@@ -46,10 +46,10 @@ $(() => {
       'aria-label': 'Event Handling',
     },
     onValueChanged(e) {
-      $('.color-block').css('background-color', e.component.option('value'));
+      $('.brush').css('fill', e.component.option('value'));
     },
     onInput(e) {
-      $('.color-block').css('background-color', e.event.target.value);
+      $('.brush').css('fill', e.event.target.value);
     },
   });
 });
