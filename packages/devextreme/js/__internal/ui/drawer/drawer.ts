@@ -123,7 +123,6 @@ class Drawer extends Widget<DrawerProperties> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getAnonymousTemplateName(): string {
     return ANONYMOUS_TEMPLATE_NAME;
   }
@@ -212,6 +211,7 @@ class Drawer extends Widget<DrawerProperties> {
   }
 
   _removePanelManualPosition(): void {
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (this._$panelContentWrapper && this._$panelContentWrapper.attr('manualposition')) {
       this._$panelContentWrapper.removeAttr('manualPosition');
       this._$panelContentWrapper.css({
@@ -416,7 +416,6 @@ class Drawer extends Widget<DrawerProperties> {
     return $result.get(0);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   getElementHeight($element: dxElementWrapper): number {
     const $children = $element.children();
 
