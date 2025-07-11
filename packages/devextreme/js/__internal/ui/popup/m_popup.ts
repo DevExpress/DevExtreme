@@ -11,7 +11,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
+import type { TemplateBase } from '@js/core/templates/template_base';
 import { noop } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { camelize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
@@ -28,13 +30,23 @@ import {
 import { isDefined, isObject } from '@js/core/utils/type';
 import Button from '@js/ui/button';
 import type { dxPopupAnimation, Properties, ToolbarItem } from '@js/ui/popup';
+import type { ResizeEndEvent, ResizeEvent, ResizeStartEvent } from '@js/ui/resizable';
 import Resizable from '@js/ui/resizable';
-import { isFluent, isMaterial, isMaterialBased } from '@js/ui/themes';
+import {
+  current,
+  isFluent,
+  isMaterial,
+  isMaterialBased,
+} from '@js/ui/themes';
+import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
+import type Toolbar from '@js/ui/toolbar';
+import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Overlay from '@ts/ui/overlay/m_overlay';
 import * as zIndexPool from '@ts/ui/overlay/m_z_index';
+import { TOOLBAR_CLASS } from '@ts/ui/toolbar/m_constants';
+import type { ToolbarBaseProperties } from '@ts/ui/toolbar/m_toolbar.base';
 
-import windowUtils from '../../core/utils/m_window';
 import PopupDrag from './m_popup_drag';
 import type { OverflowManager } from './m_popup_overflow_manager';
 import { createBodyOverflowManager } from './m_popup_overflow_manager';
@@ -77,11 +89,27 @@ const BUTTON_TEXT_MODE = 'text';
 const BUTTON_CONTAINED_MODE = 'contained';
 const BUTTON_OUTLINED_MODE = 'outlined';
 
+const TOOLBAR_NAME_BASE = 'dxToolbarBase';
+
 const HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS } as const;
 
 type HeightStrategiesType = typeof HEIGHT_STRATEGIES[keyof typeof HEIGHT_STRATEGIES];
 
-const getButtonPlace = (name) => {
+type TitleRenderAction = (event?: Record<string, unknown>) => void;
+
+interface HeightCssStyles {
+  height: number | string;
+  minHeight: number | string;
+  maxHeight: number | string;
+}
+
+interface GeometryOptions {
+  forceStopAnimation?: boolean;
+  shouldOnlyReposition?: boolean;
+  isDimensionChange?: boolean;
+}
+
+const getButtonPlace = (name: string): { toolbar: string; location: string } => {
   const device = devices.current();
   const { platform } = device;
   let toolbar = 'bottom';
@@ -119,10 +147,17 @@ const getButtonPlace = (name) => {
   };
 };
 
+const getLocalizationKey = (itemType: string): string => (itemType.toLowerCase() === 'done' ? 'OK' : camelize(itemType, true));
+
+const getHeightStrategyChangeOffset = (
+  currentHeightStrategyClass: HeightStrategiesType,
+  popupVerticalPaddings: number,
+): number => (currentHeightStrategyClass === HEIGHT_STRATEGIES.flex ? -popupVerticalPaddings : 0);
+
 export interface PopupProperties extends Properties {
   outsideDragFactor?: number;
 
-  forceApplyBindings?: any;
+  forceApplyBindings?: () => void;
 
   preventScrollEvents?: boolean;
 
@@ -142,9 +177,13 @@ class Popup<
 
   _bodyOverflowManager?: OverflowManager;
 
-  _$title?: dxElementWrapper;
+  _$topToolbar?: dxElementWrapper;
 
-  _$bottom?: dxElementWrapper;
+  _topToolbar?: Toolbar;
+
+  _$bottomToolbar?: dxElementWrapper;
+
+  _bottomToolbar?: Toolbar;
 
   _$popupContent!: dxElementWrapper;
 
@@ -161,15 +200,15 @@ class Popup<
 
   _shouldSkipContentResize!: (entry: ResizeObserverEntry) => boolean;
 
-  _titleRenderAction?: (event?: Record<string, unknown>) => void;
+  _titleRenderAction?: TitleRenderAction;
 
   _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
     return {
       ...super._supportedKeys(),
-      upArrow: (e) => { this._drag?.moveUp(e); },
-      downArrow: (e) => { this._drag?.moveDown(e); },
-      leftArrow: (e) => { this._drag?.moveLeft(e); },
-      rightArrow: (e) => { this._drag?.moveRight(e); },
+      upArrow: (e): void => { this._drag?.moveUp(e); },
+      downArrow: (e): void => { this._drag?.moveDown(e); },
+      leftArrow: (e): void => { this._drag?.moveLeft(e); },
+      rightArrow: (e): void => { this._drag?.moveRight(e); },
     };
   }
 
@@ -237,8 +276,7 @@ class Popup<
       },
       {
         device(): boolean {
-          // @ts-expect-error ts-error
-          return isMaterialBased();
+          return isMaterialBased(current());
         },
         options: {
           useFlatToolbarButtons: true,
@@ -246,8 +284,7 @@ class Popup<
       },
       {
         device(): boolean {
-          // @ts-expect-error ts-error
-          return isMaterial();
+          return isMaterial(current());
         },
         options: {
           useDefaultToolbarButtons: true,
@@ -331,6 +368,7 @@ class Popup<
 
     this.$element().addClass(POPUP_CLASS);
     this.$wrapper().addClass(popupWrapperClasses);
+
     this._$popupContent = this._$content
       .wrapInner($('<div>').addClass(POPUP_CONTENT_CLASS))
       .children().eq(0);
@@ -341,7 +379,7 @@ class Popup<
   }
 
   _render(): void {
-    const isFullscreen = this.option('fullScreen');
+    const isFullscreen = Boolean(this.option('fullScreen'));
 
     this._toggleFullScreenClass(isFullscreen);
     super._render();
@@ -351,7 +389,7 @@ class Popup<
     this._bodyOverflowManager = createBodyOverflowManager();
   }
 
-  _toggleFullScreenClass(value): void {
+  _toggleFullScreenClass(value: boolean): void {
     this.$overlayContent()
       .toggleClass(POPUP_FULL_SCREEN_CLASS, value)
       .toggleClass(POPUP_NORMAL_CLASS, !value);
@@ -375,7 +413,7 @@ class Popup<
     }
   }
 
-  _doesShowAnimationChangeDimensions() {
+  _isShowAnimationResizing(): boolean {
     const animation = this.option('animation');
 
     return ['to', 'from'].some((prop) => {
@@ -386,11 +424,11 @@ class Popup<
   }
 
   _updateResizeCallbackSkipCondition(): void {
-    const doesShowAnimationChangeDimensions = this._doesShowAnimationChangeDimensions();
+    const isShowAnimationResizing = this._isShowAnimationResizing();
 
     this._shouldSkipContentResize = (
       entry: ResizeObserverEntry,
-    ) => doesShowAnimationChangeDimensions
+    ): boolean => isShowAnimationResizing
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       && this._showAnimationProcessing || this._areContentDimensionsRendered(entry);
   }
@@ -432,121 +470,242 @@ class Popup<
     this._observeContentResize(true);
   }
 
-  // @ts-expect-error ts-error
-  _renderContentImpl(): void {
-    this._renderTitle();
-    super._renderContentImpl();
+  _processContentRendering(): void {
+    this._renderTopToolbar();
+    this._renderBottomToolbar();
     this._renderResize();
-    this._renderBottom();
+    super._processContentRendering();
   }
 
-  _renderTitle(): void {
-    const items = this._getToolbarItems('top');
-    const { title, showTitle } = this.option();
+  _getTopToolbarItems(): ToolbarItem[] {
+    const { showTitle, title } = this.option();
+    const { ios: isIOS } = devices.current();
 
-    if (showTitle && !!title) {
+    const items = this._getToolbarItems('top');
+
+    if (showTitle && Boolean(title)) {
       items.unshift({
-        location: devices.current().ios ? 'center' : 'before',
+        location: isIOS ? 'center' : 'before',
         text: title,
       });
     }
 
-    if (showTitle || items.length > 0) {
-      if (this._$title) {
-        this._$title.remove();
+    return items;
+  }
+
+  _renderTopToolbar(): void {
+    const { showTitle } = this.option();
+    const items = this._getTopToolbarItems();
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const shouldBeShown = showTitle || items.length > 0;
+
+    if (shouldBeShown) {
+      if (this._$topToolbar) {
+        this._updateToolbarOptions('top', { items });
+      } else {
+        this._renderTopToolbarImpl();
       }
-      const $title = $('<div>').addClass(POPUP_TITLE_CLASS).insertBefore(this.$content());
-      this._$title = this._renderTemplateByType('titleTemplate', items, $title).addClass(POPUP_TITLE_CLASS);
-      this._renderDrag();
-      this._executeTitleRenderAction(this._$title);
-      this._$title.toggleClass(POPUP_HAS_CLOSE_BUTTON_CLASS, this._hasCloseButton());
-    } else if (this._$title) {
-      this._$title.detach();
+      this._triggerToolbarResizeEvent();
+      this._$topToolbar?.toggleClass(POPUP_HAS_CLOSE_BUTTON_CLASS, this._hasCloseButton());
+    } else {
+      this._$topToolbar?.detach();
     }
 
     this._toggleAriaLabel();
   }
 
-  _toggleAriaLabel(): void {
-    const { title, showTitle } = this.option();
-    const shouldSetAriaLabel = showTitle && !!title;
-    const titleId = shouldSetAriaLabel ? new Guid() : null;
+  _renderTopToolbarImpl(): void {
+    this._$topToolbar?.remove();
 
-    // @ts-expect-error ts-error
-    this._$title?.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0).attr('id', titleId);
-    // @ts-expect-error ts-error
-    this.$overlayContent().attr('aria-labelledby', titleId);
+    const items = this._getTopToolbarItems();
+    const $toolbarContainer = $('<div>')
+      .addClass(POPUP_TITLE_CLASS)
+      .addClass(TOOLBAR_CLASS)
+      .insertBefore(this.$content());
+
+    this._$topToolbar = this._renderToolbar(
+      'titleTemplate',
+      items,
+      $toolbarContainer,
+      {
+        onInitialized: (e): void => {
+          this._topToolbar = e.component;
+        },
+      },
+    );
+
+    this._$topToolbar.addClass(POPUP_TITLE_CLASS);
+
+    this._renderDrag();
+    this._executeTitleRenderAction(this._$topToolbar);
   }
 
-  _renderTemplateByType(optionName, data, $container, additionalToolbarOptions?): dxElementWrapper {
-    const {
-      rtlEnabled, useDefaultToolbarButtons, useFlatToolbarButtons, disabled,
-    } = this.option();
-    const template = this._getTemplateByOption(optionName);
-    const toolbarTemplate = template instanceof EmptyTemplate;
+  _renderBottomToolbar(): void {
+    const items = this._getToolbarItems('bottom');
 
-    if (toolbarTemplate) {
-      const integrationOptions = extend({}, this.option('integrationOptions'), { skipTemplates: ['content', 'title'] });
-      const toolbarOptions = extend(additionalToolbarOptions, {
-        items: data,
-        rtlEnabled,
-        useDefaultButtons: useDefaultToolbarButtons,
-        useFlatButtons: useFlatToolbarButtons,
-        disabled,
-        integrationOptions,
-      });
+    if (!items.length) {
+      this._$bottomToolbar?.detach();
+      return;
+    }
 
-      this._getTemplate('dx-polymorph-widget').render({
-        container: $container,
-        model: {
-          widget: this._getToolbarName(),
-          options: toolbarOptions,
+    if (this._$bottomToolbar) {
+      this._updateToolbarOptions('bottom', { items });
+    } else {
+      this._renderBottomToolbarImpl();
+    }
+    this._triggerToolbarResizeEvent();
+    this._toggleClasses();
+  }
+
+  _renderBottomToolbarImpl(): void {
+    this._$bottomToolbar?.remove();
+
+    const items = this._getToolbarItems('bottom');
+    const $toolbarContainer = $('<div>')
+      .addClass(POPUP_BOTTOM_CLASS)
+      .addClass(TOOLBAR_CLASS)
+      .insertAfter(this.$content());
+
+    this._$bottomToolbar = this._renderToolbar(
+      'bottomTemplate',
+      items,
+      $toolbarContainer,
+      {
+        compactMode: true,
+        onInitialized: (e): void => {
+          this._bottomToolbar = e.component;
         },
-      });
-      const $toolbar = $container.children('div');
-      $container.replaceWith($toolbar);
-      return $toolbar;
+      },
+    );
+
+    this._$bottomToolbar.addClass(POPUP_BOTTOM_CLASS);
+  }
+
+  _triggerToolbarResizeEvent(): void {
+    // To trigger toolbar width set in initial rendering to set menu button width (T1245421)
+    // And to trigger with animation in runtime items update
+    triggerResizeEvent(this.$overlayContent());
+    triggerResizeEvent(this.$overlayContent());
+  }
+
+  _renderToolbar(
+    optionName: string,
+    items: ToolbarItem[],
+    $container: dxElementWrapper,
+    additionalToolbarOptions: Partial<ToolbarBaseProperties> = {},
+  ): dxElementWrapper {
+    const template = this._getTemplateByOption(optionName);
+    const isEmptyTemplate = template instanceof EmptyTemplate;
+
+    if (isEmptyTemplate) {
+      return this._renderByPolymorphicTemplate(items, $container, additionalToolbarOptions);
     }
-    const $result = $(template.render({ container: getPublicElement($container) }));
-    if ($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {
-      $container.replaceWith($result);
-      $container = $result;
-    }
-    return $container;
+
+    return this._renderByTemplate(template, $container);
+  }
+
+  _renderByPolymorphicTemplate(
+    items: ToolbarItem[],
+    $container: dxElementWrapper,
+    additionalToolbarOptions: Partial<ToolbarBaseProperties>,
+  ): dxElementWrapper {
+    const {
+      disabled,
+      rtlEnabled,
+      useDefaultToolbarButtons,
+      useFlatToolbarButtons,
+    } = this.option();
+
+    const integrationOptions = extend(
+      {},
+      this.option('integrationOptions'),
+      { skipTemplates: ['content', 'title'] },
+    );
+
+    const toolbarOptions = extend(additionalToolbarOptions, {
+      disabled,
+      rtlEnabled,
+      items,
+      useDefaultButtons: useDefaultToolbarButtons,
+      useFlatButtons: useFlatToolbarButtons,
+      integrationOptions,
+    });
+
+    const template = this._getTemplate('dx-polymorph-widget');
+
+    template.render({
+      container: $container,
+      model: {
+        widget: this._getToolbarName(),
+        options: toolbarOptions,
+      },
+    });
+
+    const $toolbar = $container.children('div');
+
+    $container.replaceWith($toolbar);
+
+    return $toolbar;
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _getToolbarName(): string {
-    return 'dxToolbarBase';
+  _renderByTemplate(
+    template: TemplateBase,
+    $container: dxElementWrapper,
+  ): dxElementWrapper {
+    const $result = $(template.render({ container: getPublicElement($container) }));
+
+    if ($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {
+      $container.replaceWith($result);
+      // eslint-disable-next-line no-param-reassign
+      $container = $result;
+    }
+
+    return $container;
   }
 
-  _renderVisibilityAnimate(visible) {
+  _updateToolbarOptions(toolbar: string, options: Partial<ToolbarProperties>): void {
+    const instance = toolbar === 'top' ? this._topToolbar : this._bottomToolbar;
+
+    instance?.option(options);
+  }
+
+  _toggleAriaLabel(): void {
+    const { title, showTitle } = this.option();
+    const shouldSetAriaLabel = showTitle && Boolean(title);
+    const titleId = shouldSetAriaLabel ? new Guid().toString() : null;
+
+    this._$topToolbar?.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0).attr('id', titleId);
+    this.$overlayContent().attr('aria-labelledby', titleId);
+  }
+
+  _renderVisibilityAnimate(visible: boolean): DeferredObj<unknown> | Promise<unknown> {
     return super._renderVisibilityAnimate(visible);
   }
 
-  _hide() {
+  _hide(): Promise<unknown> {
     this._observeContentResize(false);
 
     return super._hide();
   }
 
-  _executeTitleRenderAction($titleElement) {
+  _executeTitleRenderAction($titleElement: dxElementWrapper): void {
     this._getTitleRenderAction()({
       titleElement: getPublicElement($titleElement),
     });
   }
 
-  _getTitleRenderAction() {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return this._titleRenderAction || this._createTitleRenderAction();
+  _getTitleRenderAction(): TitleRenderAction {
+    return this._titleRenderAction ?? this._createTitleRenderAction();
   }
 
-  _createTitleRenderAction() {
-    // eslint-disable-next-line no-return-assign
-    return (this._titleRenderAction = this._createActionByOption('onTitleRendered', {
+  _createTitleRenderAction(): TitleRenderAction {
+    this._titleRenderAction = this._createActionByOption('onTitleRendered', {
       element: this.element(),
       excludeValidators: ['disabled', 'readOnly'],
-    }));
+    });
+
+    return this._titleRenderAction;
   }
 
   _getCloseButton(): ToolbarItem {
@@ -557,27 +716,28 @@ class Popup<
     };
   }
 
-  _getCloseButtonRenderer() {
-    return (_, __, container) => {
+  _getCloseButtonRenderer(): (_, __, container: dxElementWrapper) => void {
+    return (_, __, container): void => {
       const $button = $('<div>').addClass(POPUP_TITLE_CLOSEBUTTON_CLASS);
+
       this._createComponent($button, Button, {
         icon: 'close',
         onClick: this._createToolbarItemAction(undefined),
         stylingMode: 'text',
         integrationOptions: {},
       });
+
       $(container).append($button);
     };
   }
 
-  _getToolbarItems(toolbar) {
-    const toolbarItems = this.option('toolbarItems');
-
+  _getToolbarItems(toolbar: 'bottom' | 'top'): ToolbarItem[] {
+    const { platform: currentPlatform } = devices.current();
+    const { toolbarItems } = this.option();
     const toolbarsItems: ToolbarItem[] = [];
 
     this._toolbarItemClasses = [];
 
-    const currentPlatform = devices.current().platform;
     let index = 0;
 
     each(toolbarItems, (_, data) => {
@@ -586,6 +746,7 @@ class Popup<
 
       if (isShortcut && currentPlatform === 'ios' && index < 2) {
         item.toolbar = 'top';
+        // eslint-disable-next-line no-plusplus
         index++;
       }
 
@@ -619,22 +780,16 @@ class Popup<
     return showCloseButton && showTitle;
   }
 
-  _getLocalizationKey(itemType) {
-    return itemType.toLowerCase() === 'done' ? 'OK' : camelize(itemType, true);
-  }
-
-  _getToolbarButtonStylingMode(shortcut) {
-    // @ts-expect-error
-    if (isFluent()) {
+  _getToolbarButtonStylingMode(shortcut: string): string {
+    if (isFluent(current())) {
       return shortcut === 'done' ? BUTTON_CONTAINED_MODE : BUTTON_OUTLINED_MODE;
     }
 
     return this.option('useFlatToolbarButtons') ? BUTTON_TEXT_MODE : BUTTON_CONTAINED_MODE;
   }
 
-  _getToolbarButtonType(shortcut) {
-    // @ts-expect-error
-    if ((isFluent() && shortcut === 'done') || this.option('useDefaultToolbarButtons')) {
+  _getToolbarButtonType(shortcut: string): typeof BUTTON_DEFAULT_TYPE | typeof BUTTON_NORMAL_TYPE {
+    if ((isFluent(current()) && shortcut === 'done') || this.option('useDefaultToolbarButtons')) {
       return BUTTON_DEFAULT_TYPE;
     }
 
@@ -642,7 +797,6 @@ class Popup<
   }
 
   _getToolbarItemByAlias(data) {
-    const that = this;
     const itemType = data.shortcut;
 
     if (!ALLOWED_TOOLBAR_ITEM_ALIASES.includes(itemType)) {
@@ -650,7 +804,7 @@ class Popup<
     }
 
     const itemConfig = extend({
-      text: messageLocalization.format(this._getLocalizationKey(itemType)),
+      text: messageLocalization.format(getLocalizationKey(itemType)),
       onClick: this._createToolbarItemAction(data.onClick),
       integrationOptions: {},
       type: this._getToolbarButtonType(itemType),
@@ -662,9 +816,9 @@ class Popup<
     this._toolbarItemClasses.push(itemClass);
 
     return {
-      template(_, __, container) {
+      template: (_, __, container: dxElementWrapper): void => {
         const $toolbarItem = $('<div>').addClass(itemClass).appendTo(container);
-        that._createComponent($toolbarItem, Button, itemConfig);
+        this._createComponent($toolbarItem, Button, itemConfig);
       },
     };
   }
@@ -678,17 +832,9 @@ class Popup<
     });
   }
 
-  _renderBottom(): void {
-    const items = this._getToolbarItems('bottom');
-
-    if (items.length) {
-      this._$bottom?.remove();
-      const $bottom = $('<div>').addClass(POPUP_BOTTOM_CLASS).insertAfter(this.$content());
-      this._$bottom = this._renderTemplateByType('bottomTemplate', items, $bottom, { compactMode: true }).addClass(POPUP_BOTTOM_CLASS);
-      this._toggleClasses();
-    } else {
-      this._$bottom?.detach();
-    }
+  // eslint-disable-next-line class-methods-use-this
+  _getToolbarName(): string {
+    return TOOLBAR_NAME_BASE;
   }
 
   _toggleDisabledState(value: boolean): void {
@@ -703,14 +849,10 @@ class Popup<
 
     each(aliases, (_, alias) => {
       const className = `${POPUP_CLASS}-${alias}`;
+      const isVisible = this._toolbarItemClasses.includes(className);
 
-      if (this._toolbarItemClasses.includes(className)) {
-        this.$wrapper().addClass(`${className}-visible`);
-        this._$bottom?.addClass(className);
-      } else {
-        this.$wrapper().removeClass(`${className}-visible`);
-        this._$bottom?.removeClass(className);
-      }
+      this.$wrapper().toggleClass(`${className}-visible`, isVisible);
+      this._$bottomToolbar?.toggleClass(className, isVisible);
     });
   }
 
@@ -719,7 +861,9 @@ class Popup<
 
     if (isFocused && !zIndexPool.isLastZIndexInStack(this._zIndex)) {
       const zIndex = zIndexPool.create(this._zIndexInitValue());
+
       zIndexPool.remove(this._zIndex);
+
       this._zIndex = zIndex;
 
       this._$wrapper.css('zIndex', zIndex);
@@ -753,29 +897,35 @@ class Popup<
   }
 
   _initPositionController(): void {
+    if (this._positionController) {
+      return;
+    }
+
     this._positionController = new PopupPositionController(
       this._getPositionControllerConfig(),
     );
   }
 
-  _getDragTarget() {
+  _getDragTarget(): dxElementWrapper | undefined {
     return this.topToolbar();
   }
 
-  _renderGeometry(options?): void {
+  _renderGeometry(options: GeometryOptions = {}): void {
     const { visible, useResizeObserver } = this.option();
+    const { forceStopAnimation, shouldOnlyReposition, isDimensionChange } = options;
 
     if (visible && windowUtils.hasWindow()) {
       const isAnimated = this._showAnimationProcessing;
-      const shouldRepeatAnimation = isAnimated && !options?.forceStopAnimation && useResizeObserver;
+      const shouldRepeatAnimation = isAnimated && !forceStopAnimation && useResizeObserver;
+
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       this._isAnimationPaused = shouldRepeatAnimation || undefined;
-
       this._stopAnimation();
-      if (options?.shouldOnlyReposition) {
+
+      if (shouldOnlyReposition) {
         this._renderPosition(false);
       } else {
-        this._renderGeometryImpl(options?.isDimensionChange);
+        this._renderGeometryImpl(isDimensionChange);
       }
 
       if (shouldRepeatAnimation) {
@@ -785,7 +935,7 @@ class Popup<
     }
   }
 
-  _cacheDimensions() {
+  _cacheDimensions(): void {
     if (!this.option('useResizeObserver')) {
       return;
     }
@@ -801,7 +951,9 @@ class Popup<
       // NOTE: for correct new position calculation
       this._resetContentHeight();
     }
+
     super._renderGeometryImpl();
+
     this._cacheDimensions();
     this._setContentHeight();
   }
@@ -844,17 +996,17 @@ class Popup<
   _renderResize(): void {
     this._resizable = this._createComponent(this._$content, Resizable, {
       handles: this.option('resizeEnabled') ? 'all' : 'none',
-      onResizeEnd: (e) => {
-        this._resizeEndHandler(e);
-        this._observeContentResize(true);
+      onResizeStart: (e: ResizeStartEvent) => {
+        this._observeContentResize(false);
+        this._actions.onResizeStart(e);
       },
-      onResize: (e) => {
+      onResize: (e: ResizeEvent) => {
         this._setContentHeight();
         this._actions.onResize(e);
       },
-      onResizeStart: (e) => {
-        this._observeContentResize(false);
-        this._actions.onResizeStart(e);
+      onResizeEnd: (e: ResizeEndEvent) => {
+        this._resizeEndHandler(e);
+        this._observeContentResize(true);
       },
       minHeight: 100,
       minWidth: 100,
@@ -863,12 +1015,18 @@ class Popup<
     });
   }
 
-  _resizeEndHandler(e): void {
+  _resizeEndHandler(e: ResizeEndEvent): void {
     const width = this._resizable.option('width');
     const height = this._resizable.option('height');
 
-    width && this._setOptionWithoutOptionChange('width', width);
-    height && this._setOptionWithoutOptionChange('height', height);
+    if (width) {
+      this._setOptionWithoutOptionChange('width', width);
+    }
+
+    if (height) {
+      this._setOptionWithoutOptionChange('height', height);
+    }
+
     this._cacheDimensions();
 
     this._positionController.resizeHandled();
@@ -879,7 +1037,8 @@ class Popup<
 
   _setContentHeight(): void {
     const { forceApplyBindings } = this.option();
-    (forceApplyBindings || noop)();
+
+    (forceApplyBindings ?? noop)();
 
     const overlayContent = this.$overlayContent().get(0) as HTMLElement;
     const currentHeightStrategyClass = this._chooseHeightStrategy(overlayContent);
@@ -888,12 +1047,9 @@ class Popup<
     this._setHeightClasses(this.$overlayContent(), currentHeightStrategyClass);
   }
 
-  _heightStrategyChangeOffset(currentHeightStrategyClass: HeightStrategiesType, popupVerticalPaddings): number {
-    return currentHeightStrategyClass === HEIGHT_STRATEGIES.flex ? -popupVerticalPaddings : 0;
-  }
-
   _chooseHeightStrategy(overlayContent: HTMLElement): HeightStrategiesType {
     const isAutoWidth = overlayContent.style.width === 'auto' || overlayContent.style.width === '';
+
     let currentHeightStrategyClass: HeightStrategiesType = HEIGHT_STRATEGIES.static;
 
     if (this._isAutoHeight() && this.option('autoResizeEnabled')) {
@@ -907,23 +1063,35 @@ class Popup<
     return currentHeightStrategyClass;
   }
 
-  _getHeightCssStyles(currentHeightStrategyClass: HeightStrategiesType, overlayContent) {
-    let cssStyles = {};
+  _getHeightCssStyles(
+    currentHeightStrategyClass: HeightStrategiesType,
+    overlayContent: HTMLElement,
+  ): HeightCssStyles {
+    let cssStyles = {} as HeightCssStyles;
+
     const contentMaxHeight = this._getOptionValue('maxHeight', overlayContent);
     const contentMinHeight = this._getOptionValue('minHeight', overlayContent);
     const popupHeightParts = this._splitPopupHeight();
+
+    const heightStrategyChangeOffset = getHeightStrategyChangeOffset(
+      currentHeightStrategyClass,
+      popupHeightParts.popupVerticalPaddings,
+    );
+
     const toolbarsAndVerticalOffsetsHeight = popupHeightParts.header
-                + popupHeightParts.footer
-                + popupHeightParts.contentVerticalOffsets
-                + popupHeightParts.popupVerticalOffsets
-                + this._heightStrategyChangeOffset(currentHeightStrategyClass, popupHeightParts.popupVerticalPaddings);
+      + popupHeightParts.footer
+      + popupHeightParts.contentVerticalOffsets
+      + popupHeightParts.popupVerticalOffsets
+      + heightStrategyChangeOffset;
 
     if (currentHeightStrategyClass === HEIGHT_STRATEGIES.static) {
       if (!this._isAutoHeight() || contentMaxHeight || contentMinHeight) {
         const overlayHeight = this.option('fullScreen')
           ? Math.min(getBoundingRect(overlayContent).height, windowUtils.getWindow().innerHeight)
           : getBoundingRect(overlayContent).height;
+
         const contentHeight = overlayHeight - toolbarsAndVerticalOffsetsHeight;
+
         cssStyles = {
           height: Math.max(0, contentHeight),
           minHeight: 'auto',
@@ -932,8 +1100,18 @@ class Popup<
       }
     } else {
       const container = $(this._positionController.$visualContainer).get(0);
-      const maxHeightValue = addOffsetToMaxHeight(contentMaxHeight, -toolbarsAndVerticalOffsetsHeight, container);
-      const minHeightValue = addOffsetToMinHeight(contentMinHeight, -toolbarsAndVerticalOffsetsHeight, container);
+
+      const maxHeightValue = addOffsetToMaxHeight(
+        contentMaxHeight,
+        -toolbarsAndVerticalOffsetsHeight,
+        container,
+      );
+
+      const minHeightValue = addOffsetToMinHeight(
+        contentMinHeight,
+        -toolbarsAndVerticalOffsetsHeight,
+        container,
+      );
 
       cssStyles = {
         height: 'auto',
@@ -945,7 +1123,8 @@ class Popup<
     return cssStyles;
   }
 
-  _setHeightClasses($container: dxElementWrapper, currentClass): void {
+  // eslint-disable-next-line class-methods-use-this
+  _setHeightClasses($container: dxElementWrapper, currentClass: string): void {
     let excessClasses = '';
 
     // eslint-disable-next-line no-restricted-syntax
@@ -963,7 +1142,7 @@ class Popup<
     return this.$overlayContent().get(0).style.height === 'auto';
   }
 
-  _splitPopupHeight() {
+  _splitPopupHeight(): Record<string, number> {
     const topToolbar = this.topToolbar();
     const bottomToolbar = this.bottomToolbar();
 
@@ -996,6 +1175,7 @@ class Popup<
     } else {
       super._renderDimensions();
     }
+
     if (windowUtils.hasWindow()) {
       this._renderFullscreenWidthClass();
     }
@@ -1051,11 +1231,17 @@ class Popup<
     const { value, name } = args;
 
     switch (name) {
-      case 'disabled':
+      case 'rtlEnabled':
+      case 'disabled': {
         super._optionChanged(args);
-        this._renderTitle();
-        this._renderBottom();
+
+        const options = { [name]: Boolean(value) };
+
+        this._updateToolbarOptions('top', options);
+        this._updateToolbarOptions('bottom', options);
+
         break;
+      }
       case 'animation':
         this._updateResizeCallbackSkipCondition();
         break;
@@ -1067,13 +1253,18 @@ class Popup<
         break;
       case 'showTitle':
       case 'title':
-      case 'titleTemplate':
-        this._renderTitle();
+        this._renderTopToolbar();
         this._renderGeometry();
         triggerResizeEvent(this.$overlayContent());
         break;
+      case 'titleTemplate': {
+        this._renderTopToolbarImpl();
+        this._renderGeometry();
+        triggerResizeEvent(this.$overlayContent());
+        break;
+      }
       case 'bottomTemplate':
-        this._renderBottom();
+        this._renderBottomToolbarImpl();
         this._renderGeometry();
         triggerResizeEvent(this.$overlayContent());
         break;
@@ -1096,18 +1287,10 @@ class Popup<
       case 'toolbarItems':
       case 'useDefaultToolbarButtons':
       case 'useFlatToolbarButtons': {
-        // @ts-expect-error ts-error
-        // NOTE: Geometry rendering after "toolbarItems" runtime change breaks the popup animation first appereance.
-        // But geometry rendering for options connected to the popup position still should be called.
-        const shouldRenderGeometry = !args.fullName.match(/^toolbarItems((\[\d+\])(\.(options|visible).*)?)?$/);
-
-        this._renderTitle();
-        this._renderBottom();
-
-        if (shouldRenderGeometry) {
-          this._renderGeometry();
-          triggerResizeEvent(this.$overlayContent());
-        }
+        this._renderTopToolbar();
+        this._renderBottomToolbar();
+        this._renderGeometry();
+        this._triggerToolbarResizeEvent();
         break;
       }
       case 'dragEnabled':
@@ -1142,14 +1325,14 @@ class Popup<
       case 'fullScreen':
         this._positionController.fullScreen = value;
 
-        this._toggleFullScreenClass(value);
+        this._toggleFullScreenClass(Boolean(value));
         this._toggleSafariScrolling();
 
         this._renderGeometry();
         triggerResizeEvent(this.$overlayContent());
         break;
       case 'showCloseButton':
-        this._renderTitle();
+        this._renderTopToolbar();
         break;
       case 'preventScrollEvents':
         super._optionChanged(args);
@@ -1162,18 +1345,18 @@ class Popup<
   }
 
   bottomToolbar(): dxElementWrapper | undefined {
-    return this._$bottom;
+    return this._$bottomToolbar;
   }
 
   topToolbar(): dxElementWrapper | undefined {
-    return this._$title;
+    return this._$topToolbar;
   }
 
   $content(): dxElementWrapper {
     return this._$popupContent;
   }
 
-  content() {
+  content(): HTMLElement {
     return getPublicElement(this.$content());
   }
 
@@ -1182,8 +1365,10 @@ class Popup<
   }
 
   getFocusableElements(): dxElementWrapper {
-    // @ts-expect-error ts-error
-    return this.$wrapper().find('[tabindex]').filter((index, item) => item.getAttribute('tabindex') >= 0);
+    return this.$wrapper()
+      .find('[tabindex]')
+      // @ts-expect-error ts-error
+      .filter((_, item) => item.getAttribute('tabindex') >= 0);
   }
 }
 

@@ -13,6 +13,7 @@ const CLASS = {
   doneButton: 'dx-popup-done',
   cancelButton: 'dx-popup-cancel',
   todayButton: 'dx-button-today',
+  overflowButton: 'dx-dropdownmenu-button',
   navigatorNextView: 'dx-calendar-navigator-next-view',
   navigatorPrevView: 'dx-calendar-navigator-previous-view',
   navigatorCaption: 'dx-calendar-caption-button',
@@ -58,6 +59,10 @@ export default class Popup extends Overlay {
 
   getOkButton(): Button {
     return new Button(this.getWrapper().find(SELECTORS.okButton));
+  }
+
+  getOverflowButton(): Button {
+    return new Button(this.getWrapper().find(`.${CLASS.overflowButton}`));
   }
 
   getCloseButton(): Button {
