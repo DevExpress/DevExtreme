@@ -1189,7 +1189,7 @@ QUnit.module('dateView integration', {
         }, this.instance);
 
         this.popupTitle = function() {
-            return this.popup()._$topToolbar.find('.dx-toolbar-label').text();
+            return this.popup().topToolbar().find('.dx-toolbar-label').text();
         };
 
         this.instance.open();

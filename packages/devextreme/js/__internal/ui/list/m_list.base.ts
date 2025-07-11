@@ -671,26 +671,24 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
   }
 
   _shouldContinueLoading(shouldLoadNextPage: boolean): boolean {
+    if (!shouldLoadNextPage) {
+      return false;
+    }
+
     const $content = this._scrollView.content();
     const $container = this._scrollView.container();
-
     const contentHeight = getHeight($content);
     const containerHeight = getHeight($container);
-    const offsetTop = this._scrollView.scrollOffset()?.top;
-    const offsetTopFinal = offsetTop ?? 0;
-
-    const isBottomReached = contentHeight - containerHeight < offsetTopFinal;
-
+    const offsetTop = this._scrollView.scrollOffset()?.top ?? 0;
+    const isBottomReached = contentHeight - containerHeight < offsetTop;
     const isFull = this._scrollViewIsFull();
-    const isNotFullOrIsBottomReached = !isFull || isBottomReached;
-    const shouldContinueLoading = shouldLoadNextPage && isNotFullOrIsBottomReached;
+    const shouldContinueLoading = shouldLoadNextPage && !isFull || isBottomReached;
 
     return shouldContinueLoading;
   }
 
-  _infiniteDataLoading() {
-    const $element = this.$element();
-    const isElementVisible = $element.is(':visible');
+  _infiniteDataLoading(): void {
+    const isElementVisible = this.$element().is(':visible');
 
     if (isElementVisible) {
       clearTimeout(this._loadNextPageTimer);

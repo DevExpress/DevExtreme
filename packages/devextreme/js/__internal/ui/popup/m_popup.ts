@@ -32,7 +32,12 @@ import Button from '@js/ui/button';
 import type { dxPopupAnimation, Properties, ToolbarItem } from '@js/ui/popup';
 import type { ResizeEndEvent, ResizeEvent, ResizeStartEvent } from '@js/ui/resizable';
 import Resizable from '@js/ui/resizable';
-import { isFluent, isMaterial, isMaterialBased } from '@js/ui/themes';
+import {
+  current,
+  isFluent,
+  isMaterial,
+  isMaterialBased,
+} from '@js/ui/themes';
 import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import type Toolbar from '@js/ui/toolbar';
 import windowUtils from '@ts/core/utils/m_window';
@@ -271,8 +276,7 @@ class Popup<
       },
       {
         device(): boolean {
-          // @ts-expect-error ts-error
-          return isMaterialBased();
+          return isMaterialBased(current());
         },
         options: {
           useFlatToolbarButtons: true,
@@ -280,8 +284,7 @@ class Popup<
       },
       {
         device(): boolean {
-          // @ts-expect-error ts-error
-          return isMaterial();
+          return isMaterial(current());
         },
         options: {
           useDefaultToolbarButtons: true,
@@ -410,7 +413,7 @@ class Popup<
     }
   }
 
-  _doesShowAnimationChangeDimensions(): boolean {
+  _isShowAnimationResizing(): boolean {
     const animation = this.option('animation');
 
     return ['to', 'from'].some((prop) => {
@@ -421,11 +424,11 @@ class Popup<
   }
 
   _updateResizeCallbackSkipCondition(): void {
-    const doesShowAnimationChangeDimensions = this._doesShowAnimationChangeDimensions();
+    const isShowAnimationResizing = this._isShowAnimationResizing();
 
     this._shouldSkipContentResize = (
       entry: ResizeObserverEntry,
-    ): boolean => doesShowAnimationChangeDimensions
+    ): boolean => isShowAnimationResizing
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       && this._showAnimationProcessing || this._areContentDimensionsRendered(entry);
   }
@@ -502,8 +505,6 @@ class Popup<
       } else {
         this._renderTopToolbarImpl();
       }
-      // To trigger toolbar width set in initial rendering to set menu button width (T1245421)
-      // And to trigger with animation in runtime items update
       this._triggerToolbarResizeEvent();
       this._$topToolbar?.toggleClass(POPUP_HAS_CLOSE_BUTTON_CLASS, this._hasCloseButton());
     } else {
@@ -552,8 +553,6 @@ class Popup<
     } else {
       this._renderBottomToolbarImpl();
     }
-    // To trigger toolbar width set in initial rendering to set menu button width (T1245421)
-    // And to trigger with animation in runtime items update
     this._triggerToolbarResizeEvent();
     this._toggleClasses();
   }
@@ -583,6 +582,8 @@ class Popup<
   }
 
   _triggerToolbarResizeEvent(): void {
+    // To trigger toolbar width set in initial rendering to set menu button width (T1245421)
+    // And to trigger with animation in runtime items update
     triggerResizeEvent(this.$overlayContent());
     triggerResizeEvent(this.$overlayContent());
   }
@@ -597,13 +598,13 @@ class Popup<
     const isEmptyTemplate = template instanceof EmptyTemplate;
 
     if (isEmptyTemplate) {
-      return this._renderByPolymorphTemplate(items, $container, additionalToolbarOptions);
+      return this._renderByPolymorphicTemplate(items, $container, additionalToolbarOptions);
     }
 
     return this._renderByTemplate(template, $container);
   }
 
-  _renderByPolymorphTemplate(
+  _renderByPolymorphicTemplate(
     items: ToolbarItem[],
     $container: dxElementWrapper,
     additionalToolbarOptions: Partial<ToolbarBaseProperties>,
@@ -671,7 +672,7 @@ class Popup<
 
   _toggleAriaLabel(): void {
     const { title, showTitle } = this.option();
-    const shouldSetAriaLabel = showTitle && !!title;
+    const shouldSetAriaLabel = showTitle && Boolean(title);
     const titleId = shouldSetAriaLabel ? new Guid().toString() : null;
 
     this._$topToolbar?.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0).attr('id', titleId);
@@ -780,8 +781,7 @@ class Popup<
   }
 
   _getToolbarButtonStylingMode(shortcut: string): string {
-    // @ts-expect-error ts-error
-    if (isFluent()) {
+    if (isFluent(current())) {
       return shortcut === 'done' ? BUTTON_CONTAINED_MODE : BUTTON_OUTLINED_MODE;
     }
 
@@ -789,8 +789,7 @@ class Popup<
   }
 
   _getToolbarButtonType(shortcut: string): typeof BUTTON_DEFAULT_TYPE | typeof BUTTON_NORMAL_TYPE {
-    // @ts-expect-error ts-error
-    if ((isFluent() && shortcut === 'done') || this.option('useDefaultToolbarButtons')) {
+    if ((isFluent(current()) && shortcut === 'done') || this.option('useDefaultToolbarButtons')) {
       return BUTTON_DEFAULT_TYPE;
     }
 

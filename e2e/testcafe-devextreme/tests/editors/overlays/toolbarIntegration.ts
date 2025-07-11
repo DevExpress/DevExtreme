@@ -13,6 +13,7 @@ fixture.skip`Popup_toolbar`
 
 const COMPONENT_SELECTOR = '#container';
 const CLOSE_BUTTON_SELECTOR = '.dx-closebutton';
+const ANIMATION_DELAY = 500;
 
 [
   { name: 'dxPopup', Class: Popup },
@@ -167,7 +168,7 @@ safeSizeTest('Popup toolbars with wide elements and overflow menu if hidden on i
   await instance.option({ visible: true });
 
   await t
-    .wait(500)
+    .wait(ANIMATION_DELAY)
     .click(instance.getOverflowButton().element);
 
   await testScreenshot(t, takeScreenshot, 'Popup toolbars with wide elements and overflow menu before items rebinding.png');
@@ -194,10 +195,8 @@ safeSizeTest('Popup toolbars with wide elements and overflow menu if hidden on i
   const instance = new Popup(COMPONENT_SELECTOR);
   await instance.option({ visible: true, toolbarItems });
 
-  await t.wait(500);
-
   await t
-    .wait(500)
+    .wait(ANIMATION_DELAY)
     .click(instance.getOverflowButton().element);
 
   await testScreenshot(t, takeScreenshot, 'Toolbar before items rebinding if it was hidden without items on init.png');

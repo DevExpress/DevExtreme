@@ -2834,7 +2834,7 @@ QUnit.module('templates', () => {
         assert.equal($title.text(), 'testTitle', 'title template is rendered correctly');
     });
 
-    QUnit.test('the title render should be called after the content is rendered to ensure the correct content sizes', function(assert) {
+    QUnit.test('title render should be called after the content is rendered to ensure the correct content sizes', function(assert) {
         let contentIsRendered = false;
 
         $('#popupWithTitleTemplate').dxPopup({
@@ -3009,6 +3009,8 @@ QUnit.module('renderGeometry', {
             autoResizeEnabled: !options.autoResizeEnabled,
             showTitle: !options.showTitle,
             title: 'test',
+            useDefaultToolbarButtons: !options.useDefaultToolbarButtons,
+            useFlatToolbarButtons: !options.useFlatToolbarButtons,
             titleTemplate: () => $('<div>').text('title template'),
             bottomTemplate: () => $('<div>').text('bottom template'),
         };
