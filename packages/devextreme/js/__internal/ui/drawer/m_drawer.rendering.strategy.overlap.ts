@@ -1,29 +1,38 @@
+import type { PositionConfig } from '@js/common/core/animation';
 import { move } from '@js/common/core/animation/translator';
+import type { EventInfo } from '@js/common/core/events';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { ensureDefined } from '@js/core/utils/common';
 import { camelize } from '@js/core/utils/inflector';
 import { getWidth } from '@js/core/utils/size';
+import type { PanelLocation } from '@js/ui/drawer';
+import type Drawer from '@ts/ui/drawer/m_drawer';
 import Overlay from '@ts/ui/overlay/m_overlay';
 
 import { animation } from './m_drawer.animation';
 import DrawerStrategy from './m_drawer.rendering.strategy';
 
+interface InitialPosition {
+  left?: number;
+  top?: number;
+}
+
 class OverlapStrategy extends DrawerStrategy {
-  renderPanelContent(whenPanelContentRendered) {
-    // @ts-expect-error
+  _initialPosition?: InitialPosition;
+
+  renderPanelContent(whenPanelContentRendered: Drawer['_whenPanelContentRendered']): void {
     delete this._initialPosition;
 
     const drawer = this.getDrawerInstance();
-    const { opened, minSize } = drawer.option();
-    // @ts-expect-error
-    drawer._overlay = drawer._createComponent(drawer.content(), Overlay, {
+    const { opened, minSize, template: contentTemplate } = drawer.option();
+    drawer._overlay = drawer._createComponent($(drawer.content()), Overlay, {
       shading: false,
       container: drawer.content(),
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       visualContainer: drawer.getOverlayTarget(),
       position: this._getOverlayPosition(),
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      width: opened ? 'auto' : minSize || 0,
+      width: opened ? 'auto' : minSize ?? 0,
       height: '100%',
       templatesRenderAsynchronously: drawer.option('templatesRenderAsynchronously'),
       animation: {
@@ -31,12 +40,13 @@ class OverlapStrategy extends DrawerStrategy {
           duration: 0,
         },
       },
-      onPositioned: function (e) {
+      // eslint-disable-next-line func-names
+      onPositioned: function (e: EventInfo<Overlay>): void {
         this._fixOverlayPosition(e.component.$content());
       }.bind(this),
-      contentTemplate: drawer.option('template'),
+      contentTemplate,
       onContentReady: (args) => {
-        whenPanelContentRendered.resolve();
+        whenPanelContentRendered?.resolve();
         this._processOverlayZIndex(args.component.content());
       },
       visible: true,
@@ -44,41 +54,40 @@ class OverlapStrategy extends DrawerStrategy {
     });
   }
 
-  _fixOverlayPosition($overlayContent) {
+  _fixOverlayPosition($overlayContent: dxElementWrapper): void {
     // NOTE: overlay should be positioned in extended wrapper
-    // @ts-expect-error
     const position = ensureDefined(this._initialPosition, { left: 0, top: 0 });
     move($overlayContent, position);
-    // @ts-expect-error
     if (this.getDrawerInstance().calcTargetPosition() === 'right') {
       $overlayContent.css('left', 'auto');
     }
-    // @ts-expect-error
     if (this.getDrawerInstance().calcTargetPosition() === 'bottom') {
       $overlayContent.css('top', 'auto');
       $overlayContent.css('bottom', '0px');
     }
   }
 
-  _getOverlayPosition() {
+  _getOverlayPosition(): PositionConfig {
     const drawer = this.getDrawerInstance();
-    // @ts-expect-error
     const panelPosition = drawer.calcTargetPosition();
 
-    let result = {};
+    let result: PositionConfig = {};
 
-    // eslint-disable-next-line default-case
     switch (panelPosition) {
       case 'left': {
         result = {
+          // @ts-expect-error ts-error
           my: 'top left',
+          // @ts-expect-error ts-error
           at: 'top left',
         };
         break;
       }
       case 'right': {
         result = {
+          // @ts-expect-error ts-error
           my: drawer.option('rtlEnabled') ? 'top left' : 'top right',
+          // @ts-expect-error ts-error
           at: 'top right',
         };
         break;
@@ -91,27 +100,30 @@ class OverlapStrategy extends DrawerStrategy {
         };
         break;
       }
+      default:
+        break;
     }
-    // @ts-expect-error
-    result.of = drawer.getOverlayTarget();
+
+    result.of = drawer.getOverlayTarget().get(0);
 
     return result;
   }
 
-  refreshPanelElementSize(calcFromRealPanelSize) {
+  refreshPanelElementSize(calcFromRealPanelSize: boolean): void {
     const drawer = this.getDrawerInstance();
-    // @ts-expect-error
     const overlay = drawer.getOverlay();
-    // @ts-expect-error
+    const { opened: isDrawerOpened } = drawer.option();
+
+    if (!overlay) {
+      return;
+    }
+
     if (drawer.isHorizontalDirection()) {
       overlay.option('height', '100%');
-      // @ts-expect-error
-      overlay.option('width', calcFromRealPanelSize ? drawer.getRealPanelWidth() : this._getPanelSize(drawer.option('opened')));
+      overlay.option('width', calcFromRealPanelSize ? drawer.getRealPanelWidth() : this._getPanelSize(isDrawerOpened));
     } else {
-      // @ts-expect-error
       overlay.option('width', getWidth(drawer.getOverlayTarget()));
-      // @ts-expect-error
-      overlay.option('height', calcFromRealPanelSize ? drawer.getRealPanelHeight() : this._getPanelSize(drawer.option('opened')));
+      overlay.option('height', calcFromRealPanelSize ? drawer.getRealPanelHeight() : this._getPanelSize(isDrawerOpened));
     }
   }
 
@@ -119,56 +131,57 @@ class OverlapStrategy extends DrawerStrategy {
     this._updateViewContentStyles();
   }
 
-  _updateViewContentStyles() {
+  _updateViewContentStyles(): void {
     const drawer = this.getDrawerInstance();
-    // @ts-expect-error
-    $(drawer.viewContent()).css(`padding${camelize(drawer.calcTargetPosition(), true)}`, drawer.option('minSize'));
-    // @ts-expect-error
+    const { minSize } = drawer.option();
+
+    // @ts-expect-error ts-error
+    $(drawer.viewContent()).css(`padding${camelize(drawer.calcTargetPosition(), true)}`, minSize);
     $(drawer.viewContent()).css('transform', 'inherit');
   }
 
-  _internalRenderPosition(changePositionUsingFxAnimation, whenAnimationCompleted) {
+  _internalRenderPosition(
+    changePositionUsingFxAnimation: boolean | undefined,
+    whenAnimationCompleted: Drawer['_whenAnimationCompleted'],
+  ): void {
     const drawer = this.getDrawerInstance();
     const $panel = $(drawer.content());
-    // @ts-expect-error
+    const { opened: isDrawerOpened, revealMode, animationDuration } = drawer.option();
+
+    // @ts-expect-error ts-error
     const $panelOverlayContent = drawer.getOverlay().$content();
-    const revealMode = drawer.option('revealMode');
-    // @ts-expect-error
     const targetPanelPosition = drawer.calcTargetPosition();
 
-    const panelSize = this._getPanelSize(drawer.option('opened'));
-    // @ts-expect-error
-    const panelOffset = this._getPanelOffset(drawer.option('opened')) * drawer._getPositionCorrection();
-    // @ts-expect-error
+    const panelSize = this._getPanelSize(isDrawerOpened) ?? 0;
+    const panelOffset = this._getPanelOffset(isDrawerOpened) * drawer._getPositionCorrection();
     const marginTop = drawer.getRealPanelHeight() - panelSize;
 
     this._updateViewContentStyles();
 
     if (changePositionUsingFxAnimation) {
       if (revealMode === 'slide') {
-        // @ts-expect-error
-        this._initialPosition = drawer.isHorizontalDirection() ? { left: panelOffset } : { top: panelOffset };
+        this._initialPosition = drawer.isHorizontalDirection()
+          ? { left: panelOffset }
+          : { top: panelOffset };
 
         animation.moveTo({
           complete: () => {
-            whenAnimationCompleted.resolve();
+            whenAnimationCompleted?.resolve();
           },
-          duration: drawer.option('animationDuration'),
+          duration: animationDuration,
           direction: targetPanelPosition,
           $element: $panel,
           position: panelOffset,
         });
       } else if (revealMode === 'expand') {
-        // @ts-expect-error
         this._initialPosition = drawer.isHorizontalDirection() ? { left: 0 } : { top: 0 };
-        // @ts-expect-error
         move($panelOverlayContent, this._initialPosition);
 
         animation.size({
           complete: () => {
-            whenAnimationCompleted.resolve();
+            whenAnimationCompleted?.resolve();
           },
-          duration: drawer.option('animationDuration'),
+          duration: animationDuration,
           direction: targetPanelPosition,
           $element: $panelOverlayContent,
           size: panelSize,
@@ -176,16 +189,13 @@ class OverlapStrategy extends DrawerStrategy {
         });
       }
     } else if (revealMode === 'slide') {
-      // @ts-expect-error
-      this._initialPosition = drawer.isHorizontalDirection() ? { left: panelOffset } : { top: panelOffset };
-      // @ts-expect-error
+      this._initialPosition = drawer.isHorizontalDirection()
+        ? { left: panelOffset }
+        : { top: panelOffset };
       move($panel, this._initialPosition);
     } else if (revealMode === 'expand') {
-      // @ts-expect-error
       this._initialPosition = drawer.isHorizontalDirection() ? { left: 0 } : { top: 0 };
-      // @ts-expect-error
       move($panelOverlayContent, this._initialPosition);
-      // @ts-expect-error
       if (drawer.isHorizontalDirection()) {
         $($panelOverlayContent).css('width', panelSize);
       } else {
@@ -198,21 +208,20 @@ class OverlapStrategy extends DrawerStrategy {
     }
   }
 
-  getPanelContent() {
-    // @ts-expect-error
+  getPanelContent(): dxElementWrapper {
+    // @ts-expect-error ts-error
     return $(this.getDrawerInstance().getOverlay().content());
   }
 
-  _processOverlayZIndex($element) {
-    // @ts-expect-error
-    const styles = $($element).get(0).style;
+  _processOverlayZIndex(element: Element): void {
+    // @ts-expect-error ts-error
+    const styles = $(element).get(0).style;
     const zIndex = styles.zIndex || 1;
-    // @ts-expect-error
     this.getDrawerInstance().setZIndex(zIndex);
   }
 
-  // @ts-expect-error
-  isViewContentFirst(position): boolean {
+  // eslint-disable-next-line class-methods-use-this
+  isViewContentFirst(position: PanelLocation | undefined): boolean {
     return position === 'right' || position === 'bottom';
   }
 }
