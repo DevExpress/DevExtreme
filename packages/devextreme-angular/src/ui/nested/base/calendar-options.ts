@@ -222,13 +222,6 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('tabIndex', value);
     }
 
-    get todayButtonText(): string {
-        return this._getOption('todayButtonText');
-    }
-    set todayButtonText(value: string) {
-        this._setOption('todayButtonText', value);
-    }
-
     get validationError(): any {
         return this._getOption('validationError');
     }

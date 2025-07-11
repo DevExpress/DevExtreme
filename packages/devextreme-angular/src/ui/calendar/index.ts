@@ -412,10 +412,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     }
 
 
-    /**
-     * [descr:dxCalendarOptions.todayButtonText]
     
-     */
     @Input()
     get todayButtonText(): string {
         return this._getOption('todayButtonText');

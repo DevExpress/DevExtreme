@@ -11,6 +11,7 @@ Ng.makeMetadata({
   },
   mutations: [
     removeMembers(/\/card_view:/),
+    removeMembers(/\/calendar:dxCalendarOptions.todayButtonText/),
     removeMembers(/\/scheduler:Toolbar/),
     removeMembers(/\/stepper:/),
   ],
