@@ -256,9 +256,8 @@ class ScrollHelper {
 class ScrollAnimator extends Animator {
   _strategy: any;
 
-  ctor(strategy): void {
-    super.ctor();
-
+  constructor(strategy) {
+    super();
     this._strategy = strategy;
   }
 
@@ -356,7 +355,6 @@ class Draggable extends DOMComponent<Draggable, Properties> {
   _init() {
     super._init();
     this._attachEventHandlers();
-    // @ts-expect-error ts-error
     this._scrollAnimator = new ScrollAnimator(this);
 
     this._horizontalScrollHelper = new ScrollHelper('horizontal', this);
