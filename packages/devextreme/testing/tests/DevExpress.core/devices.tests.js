@@ -74,7 +74,7 @@ QUnit.module('devices', {
     ['ipad 10', userAgents.ipad_10, 'ios', '10.3.3', 'tablet', { maxTouchPoints: 5 }],
     ['ipad 16 safari', userAgents.ipad_16.safari, 'ios', '16.5.0', 'tablet', { maxTouchPoints: 5 }],
     ['ipad 16 chrome', userAgents.ipad_16.chrome, 'ios', '16.5.0', 'tablet', { maxTouchPoints: 5 }],
-    ['ipad 16 firefox', userAgents.ipad_16.firefox, 'ios', '10.15.7', 'tablet', { maxTouchPoints: 5 }],
+    ['ipad 16 firefox', userAgents.ipad_16.firefox, 'ios', '10.15.7', 'desktop', { maxTouchPoints: 5 }],
     ['ipad 17 safari', userAgents.ipad_17.safari, 'ios', '17.5.0', 'tablet', { maxTouchPoints: 5 }],
     ['ipad 17 with desktop mode', userAgents.ipad_17.safari_desktop_mode, 'ios', '10.15.7', 'desktop', { maxTouchPoints: 5 }],
     // android tablet
