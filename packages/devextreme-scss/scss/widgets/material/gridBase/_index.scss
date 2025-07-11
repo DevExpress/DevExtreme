@@ -929,7 +929,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       > .dx-master-detail-cell {
         padding: 0;
 
-        > .dx-master-detail-container {
+        > .dx-#{$widget-name}-master-detail-container {
           padding: $grid-masterdetail-padding;
         }
       }
