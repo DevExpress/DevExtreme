@@ -1,4 +1,4 @@
-import type { AllDayPanelModeType } from '../../../types';
+import type { AllDayPanelModeType, AppointmentDataItem } from '../../../types';
 import type { ResourceLoader } from '../../../utils/loader/resource_loader';
 
 export interface DateInterval {
@@ -21,8 +21,10 @@ export interface FilterOptions {
   firstDayOfWeek: number;
   min: Date;
   max: Date;
-  supportAllDayPanel?: boolean;
+  allDayPanelFilter?: boolean;
   allDayPanelMode: AllDayPanelModeType;
   visibleDateIntervals: DateInterval[];
   visibleTimeIntervals: DateInterval[];
 }
+
+export type CombinedFilter<T = AppointmentDataItem> = ((appointment: T) => boolean)[][];

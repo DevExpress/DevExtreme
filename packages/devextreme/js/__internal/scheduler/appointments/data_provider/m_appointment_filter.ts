@@ -11,7 +11,7 @@ import {
   getRawAppointments,
   getVisibleDateTimeIntervals,
 } from './utils/index';
-import type { CompareOptions, FilterOptions } from './utils/type';
+import type { CombinedFilter, CompareOptions, FilterOptions } from './utils/type';
 
 // TODO Vinogradov refactoring: this module should be refactored :)
 
@@ -60,10 +60,10 @@ export class AppointmentFilterBaseStrategy {
       : result;
   }
 
-  filter(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
+  protected getFilterOptions(): FilterOptions {
     const [min, max] = this.dateRange;
     const viewOffset = this._resolveOption('viewOffset');
-    const supportAllDayPanel = !this.showAllDayPanel && this.supportAllDayRow
+    const allDayPanelFilter = !this.showAllDayPanel && this.supportAllDayRow
       ? false
       : undefined;
     const compareOptions: CompareOptions = {
@@ -72,16 +72,21 @@ export class AppointmentFilterBaseStrategy {
       min: new Date(min),
       max: new Date(max),
     };
-    const filterOptions: FilterOptions = {
+
+    return {
       ...compareOptions,
       viewOffset,
       resources: this.loadedResources,
-      supportAllDayPanel,
+      allDayPanelFilter,
       firstDayOfWeek: this.firstDayOfWeek,
       allDayPanelMode: this.allDayPanelMode,
       visibleDateIntervals: getVisibleDateTimeIntervals(compareOptions, true),
       visibleTimeIntervals: getVisibleDateTimeIntervals(compareOptions, false),
     };
+  }
+
+  filter(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
+    const filterOptions = this.getFilterOptions();
     const combinedFilter = this.createCombinedFilter(filterOptions);
     const filteredItems = filterArray(preparedItems, combinedFilter);
 
@@ -100,7 +105,7 @@ export class AppointmentFilterBaseStrategy {
 
   protected createCombinedFilter(
     filterOptions: FilterOptions,
-  ): ((appointment: AppointmentDataItem) => boolean)[][] {
+  ): CombinedFilter {
     return [[getAppointmentFilter(filterOptions, this.timeZoneCalculator)]];
   }
 }

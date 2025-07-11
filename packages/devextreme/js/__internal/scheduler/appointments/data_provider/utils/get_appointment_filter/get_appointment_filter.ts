@@ -17,7 +17,7 @@ export const getAppointmentFilter = (
     viewOffset,
     firstDayOfWeek,
     resources,
-    supportAllDayPanel,
+    allDayPanelFilter,
     allDayPanelMode,
     visibleDateIntervals,
     visibleTimeIntervals,
@@ -33,7 +33,8 @@ export const getAppointmentFilter = (
       appointment,
       allDayPanelMode,
     );
-    if (isAppointmentOccupiesAllDayPanel && supportAllDayPanel === false) {
+    if (allDayPanelFilter !== undefined
+      && isAppointmentOccupiesAllDayPanel !== allDayPanelFilter) {
       return false;
     }
 

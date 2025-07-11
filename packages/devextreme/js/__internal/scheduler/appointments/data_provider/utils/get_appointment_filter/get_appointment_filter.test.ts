@@ -179,6 +179,29 @@ describe('getAppointmentFilter', () => {
     )(correctRecurrenceAppointment)).toBe(true);
   });
 
+  describe.each([true, false])('allDayPanelFilter: %s', (allDayPanelFilter) => {
+    it(`should filter all day appointment with allDayPanelFilter=${allDayPanelFilter}`, () => {
+      expect(getAppointmentFilter(
+        getViewportOptions({ allDayPanelFilter }),
+        mockTimeZoneCalculator,
+      )(correctAllDayAppointment)).toBe(allDayPanelFilter);
+    });
+
+    it(`should filter long appointment with allDayPanelFilter=${allDayPanelFilter}`, () => {
+      expect(getAppointmentFilter(
+        getViewportOptions({ allDayPanelFilter }),
+        mockTimeZoneCalculator,
+      )(correctSeveralDaysAppointment)).toBe(allDayPanelFilter);
+    });
+
+    it(`should filter appointment with allDayPanelFilter=${allDayPanelFilter}`, () => {
+      expect(getAppointmentFilter(
+        getViewportOptions({ allDayPanelFilter }),
+        mockTimeZoneCalculator,
+      )(correctAppointment)).toBe(!allDayPanelFilter);
+    });
+  });
+
   it('should filter out invisible appointments', () => {
     expect(getAppointmentFilter(viewportOptions, mockTimeZoneCalculator)({
       visible: false,
@@ -200,7 +223,7 @@ describe('getAppointmentFilter', () => {
   ] as const)('should filter out hidden all day appointments ($title)', ({ allDayPanelMode, appointment }) => {
     expect(getAppointmentFilter({
       ...viewportOptions,
-      supportAllDayPanel: false,
+      allDayPanelFilter: false,
       allDayPanelMode,
     }, mockTimeZoneCalculator)(appointment as any)).toBe(false);
   });
@@ -209,7 +232,7 @@ describe('getAppointmentFilter', () => {
     expect(getAppointmentFilter({
       ...viewportOptions,
       resources: [assignee],
-      supportAllDayPanel: false,
+      allDayPanelFilter: false,
       allDayPanelMode: 'hidden',
     }, mockTimeZoneCalculator)(correctAllDayAppointment)).toBe(false);
   });

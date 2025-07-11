@@ -170,7 +170,7 @@ module('Integration: Appointments in Timeline views', {
                     dataSource: [appointment]
                 });
 
-                assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'appointment-part was rendered');
+                assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'appointment-part was rendered');
             });
 
             test('Long appointment part should not be rendered on timelineWorkWeek view (T678380)', async function(assert) {

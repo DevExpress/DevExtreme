@@ -163,6 +163,46 @@ describe('getAppointmentsOccurrences', () => {
     )).toEqual([]);
   });
 
+  it.each([
+    { title: 'appointment', delta: 0 },
+    { title: 'appointment occurrence', delta: -20 },
+  ])('should return $title is hagging view interval', ({ delta }) => {
+    const appointment: any = {
+      startDate: new Date(2000, 0, 9 + delta),
+      endDate: new Date(2000, 0, 16 + delta),
+      recurrenceRule: 'FREQ=DAILY;INTERVAL=20',
+    };
+    expect(getAppointmentsOccurrences(
+      appointment,
+      options,
+      mockTimeZoneCalculator,
+    )).toEqual([{
+      startDate: new Date(2000, 0, 9),
+      endDate: new Date(2000, 0, 16),
+      recurrenceRule: 'FREQ=DAILY;INTERVAL=20',
+    }]);
+  });
+
+  it.each([
+    { title: 'appointment', delta: 0 },
+    { title: 'appointment occurrence', delta: -10 },
+  ])('should return $title starts before view interval', ({ delta }) => {
+    const appointment: any = {
+      startDate: new Date(2000, 0, 9 + delta, 20),
+      endDate: new Date(2000, 0, 10 + delta, 10),
+      recurrenceRule: 'FREQ=DAILY;INTERVAL=10',
+    };
+    expect(getAppointmentsOccurrences(
+      appointment,
+      options,
+      mockTimeZoneCalculator,
+    )).toEqual([{
+      startDate: new Date(2000, 0, 9, 20),
+      endDate: new Date(2000, 0, 10, 10),
+      recurrenceRule: 'FREQ=DAILY;INTERVAL=10',
+    }]);
+  });
+
   it('should return appointment occurrences for appointment with exceptions', () => {
     const exception1 = getRecurrenceProcessor().getAsciiStringByDate(new Date(2000, 0, 11, 10));
     const exception2 = getRecurrenceProcessor().getAsciiStringByDate(new Date(2000, 0, 12, 10));
