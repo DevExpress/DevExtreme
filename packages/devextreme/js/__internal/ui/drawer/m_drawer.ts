@@ -449,7 +449,7 @@ class Drawer extends Widget<DrawerProperties> {
   }
 
   resizeContent(): void { // TODO: keep for ui.file_manager.adaptivity.js
-    this.resizeViewContent;
+    this.resizeViewContent();
   }
 
   resizeViewContent(): void {

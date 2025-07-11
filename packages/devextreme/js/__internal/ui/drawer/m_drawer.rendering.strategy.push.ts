@@ -2,8 +2,8 @@ import { move } from '@js/common/core/animation/translator';
 import $ from '@js/core/renderer';
 import type Drawer from '@ts/ui/drawer/m_drawer';
 
+import DrawerStrategy from './drawer.rendering.strategy';
 import { animation } from './m_drawer.animation';
-import DrawerStrategy from './m_drawer.rendering.strategy';
 
 class PushStrategy extends DrawerStrategy {
   _internalRenderPosition(
