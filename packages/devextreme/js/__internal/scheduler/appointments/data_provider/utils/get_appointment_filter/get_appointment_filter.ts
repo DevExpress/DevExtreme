@@ -37,7 +37,7 @@ export const getAppointmentFilter = (
       return false;
     }
 
-    const viewIntervals = isAppointmentOccupiesAllDayPanel
+    const viewIntervals = appointment.allDay
       ? visibleDateIntervals
       : visibleTimeIntervals;
     if (viewIntervals.length === 0) {
@@ -50,7 +50,6 @@ export const getAppointmentFilter = (
 
     const appointmentToCompare: AppointmentDataItem = {
       ...appointment,
-      allDay: isAppointmentOccupiesAllDayPanel,
     };
     if (appointmentToCompare.allDay) {
       appointmentToCompare.startDate = dateUtils.trimTime(appointmentToCompare.startDate);
