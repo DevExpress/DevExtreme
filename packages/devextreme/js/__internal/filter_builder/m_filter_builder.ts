@@ -23,7 +23,7 @@ import {
   getItems,
   getMergedOperations, getNormalizedFields, getNormalizedFilter,
   getOperationFromAvailable,
-  getOperationValue, isCondition, isGroup, removeItem, renderValueText, setGroupValue,
+  getOperationValue, isCondition, isGroup, normalizeValue, removeItem, renderValueText, setGroupValue,
   updateConditionByOperation,
 } from './m_utils';
 
@@ -675,7 +675,8 @@ class FilterBuilder extends Widget<any> {
       .attr('tabindex', 0)
       .appendTo($container);
     this._addAriaAttributes($text, messageLocalization.format('dxFilterBuilder-filterAriaItemValue'), 'button', true);
-    const value = item[2];
+
+    const value = normalizeValue(item[2], field.dataType);
 
     const customOperation = getCustomOperation(that._customOperations, item[1]);
     if (!customOperation && field.lookup) {
@@ -777,7 +778,8 @@ class FilterBuilder extends Widget<any> {
   }
 
   _createValueEditorWithEvents(item, field, $container) {
-    let value = item[2];
+    let value = normalizeValue(item[2], field.dataType);
+
     const createValueText = () => {
       $container.empty();
       this._removeEvents();
