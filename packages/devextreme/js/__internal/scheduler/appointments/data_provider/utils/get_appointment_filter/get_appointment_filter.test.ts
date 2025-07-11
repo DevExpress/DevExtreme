@@ -96,6 +96,17 @@ const assignee = new ResourceLoader({
 const yearMs = new Date(2001, 0).getTime() - new Date(2000, 0).getTime();
 
 describe('getAppointmentFilter', () => {
+  it('should filter out long appointment ends before start day hour', () => {
+    expect(getAppointmentFilter(
+      getViewportOptions({ startDayHour: 10, endDayHour: 20 }),
+      mockTimeZoneCalculator,
+    )({
+      ...correctAppointment,
+      startDate: new Date(2000, 0, minDay - 1, 4),
+      endDate: new Date(2000, 0, minDay, 8),
+    })).toBe(false);
+  });
+
   it('should filter out appointment for zero hours duration', () => {
     expect(getAppointmentFilter(
       getViewportOptions({ startDayHour: 20, endDayHour: 10 }),
