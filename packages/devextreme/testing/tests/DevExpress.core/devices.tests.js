@@ -64,15 +64,15 @@ QUnit.module('devices', {
     ['iphone 14 chrome', userAgents.iphone_14.chrome, 'ios', '16.5.0', 'phone', { maxTouchPoints: 5 }],
     ['iphone 14 firefox', userAgents.iphone_14.firefox, 'ios', '16.5.1', 'phone', { maxTouchPoints: 5 }],
 
-    ['iphone 16 safari', userAgents.iphone_16.safari, 'ios', '19.0', 'phone', { maxTouchPoints: 5 }],
+    ['iphone 16 safari', userAgents.iphone_16.safari, 'ios', '19.0.0', 'phone', { maxTouchPoints: 5 }],
     ['iphone 16 safari with desktop mode', userAgents.iphone_16.safari_desktop_mode, 'ios', '10.15.7', 'desktop', { maxTouchPoints: 5 }],
     ['iphone 16 chrome', userAgents.iphone_16.chrome, 'ios', '19.0.0', 'phone', { maxTouchPoints: 5 }],
-    ['iphone 16 firefox', userAgents.iphone_16.firefox, 'ios', '19.0', 'phone', { maxTouchPoints: 5 }],
+    ['iphone 16 firefox', userAgents.iphone_16.firefox, 'ios', '19.0.0', 'phone', { maxTouchPoints: 5 }],
     // android phone
     ['android phone 9', userAgents.android_9, 'android', '9.0.0', 'phone', null],
     // ipad
     ['ipad 10', userAgents.ipad_10, 'ios', '10.3.3', 'tablet', { maxTouchPoints: 5 }],
-    ['ipad 16 safari', userAgents.ipad_16.safari, 'ios', '10.15.7', 'tablet', { maxTouchPoints: 5 }],
+    ['ipad 16 safari', userAgents.ipad_16.safari, 'ios', '16.5.0', 'tablet', { maxTouchPoints: 5 }],
     ['ipad 16 chrome', userAgents.ipad_16.chrome, 'ios', '16.5.0', 'tablet', { maxTouchPoints: 5 }],
     ['ipad 16 firefox', userAgents.ipad_16.firefox, 'ios', '10.15.7', 'tablet', { maxTouchPoints: 5 }],
     ['ipad 17 safari', userAgents.ipad_17.safari, 'ios', '17.5.0', 'tablet', { maxTouchPoints: 5 }],
