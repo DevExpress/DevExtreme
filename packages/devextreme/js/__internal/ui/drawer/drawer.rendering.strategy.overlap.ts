@@ -7,7 +7,7 @@ import { ensureDefined } from '@js/core/utils/common';
 import { camelize } from '@js/core/utils/inflector';
 import { getWidth } from '@js/core/utils/size';
 import type { PanelLocation } from '@js/ui/drawer';
-import type Drawer from '@ts/ui/drawer/m_drawer';
+import type Drawer from '@ts/ui/drawer/drawer';
 import Overlay from '@ts/ui/overlay/m_overlay';
 
 import { animation } from './drawer.animation';
