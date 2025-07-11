@@ -22,8 +22,8 @@ import ContextMenu from '@ts/ui/context_menu/m_context_menu';
 import type {
   ScrollView as ScrollViewType,
   ScrollViewServerSide as ScrollViewServerSideType,
-} from '@ts/ui/scroll_view/m_scroll_view';
-import ScrollView from '@ts/ui/scroll_view/m_scroll_view';
+} from '@ts/ui/scroll_view/scroll_view';
+import ScrollView from '@ts/ui/scroll_view/scroll_view';
 import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
 
 import type { DataChange } from '../collection/collection_widget.base';

@@ -29,7 +29,7 @@ import { render } from '@js/ui/widget/utils.ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import CollectionWidget from '@ts/ui/collection/collection_widget.live_update';
-import { deviceDependentOptions } from '@ts/ui/scroll_view/m_scrollable.device';
+import { deviceDependentOptions } from '@ts/ui/scroll_view/scrollable.device';
 import { getElementMargin } from '@ts/ui/scroll_view/utils/get_element_style';
 import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
 

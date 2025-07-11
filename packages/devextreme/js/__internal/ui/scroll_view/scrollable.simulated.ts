@@ -30,12 +30,12 @@ import { isDefined } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import type { ActionConfig } from '@ts/core/widget/component';
-import Animator from '@ts/ui/scroll_view/m_animator';
+import Animator from '@ts/ui/scroll_view/animator';
 
-import type { ScrollViewScroller } from './m_scroll_view.simulated';
-import type Scrollable from './m_scrollable';
-import type { ScrollableProperties } from './m_scrollable';
-import Scrollbar from './m_scrollbar';
+import type { ScrollViewScroller } from './scroll_view.simulated';
+import type Scrollable from './scrollable';
+import type { ScrollableProperties } from './scrollable';
+import Scrollbar from './scrollbar';
 import type {
   AllowedDirections, DxMouseEvent, DxMouseWheelEvent, ScrollEventArgs, ScrollOffset,
 } from './types';
@@ -140,7 +140,6 @@ class BounceAnimator extends InertiaAnimator {
     return this.scroller._crossBoundOnNextStep() || super._isFinished();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _acceleration(): number {
     return ACCELERATION;
   }
@@ -252,7 +251,6 @@ export class Scroller {
     this._$scrollbar = this._scrollbar.$element();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _visibilityModeNormalize(mode: boolean | string | undefined): string {
     if (mode === true) return 'onScroll';
     if (mode === false) return 'never';
@@ -318,12 +316,10 @@ export class Scroller {
     return this._scaleRatio || 1;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getRealDimension(element: Element, dimension: string): number {
     return Math.round(getBoundingRect(element)[dimension]);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getBaseDimension(element: HTMLElement, dimension: string): number {
     // @ts-expect-error ts-error
     const dimensionName: 'offsetWidth' | 'offsetHeight' = `offset${titleize(dimension)}`;
@@ -556,7 +552,6 @@ export class Scroller {
     this._minOffset = this._getMinOffset();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getMaxOffset(): number {
     return 0;
   }
@@ -671,12 +666,10 @@ export class Scroller {
     this._scrollbar.cursorLeave();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   isBottomReached(): boolean {
     return false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   dispose(): void {}
 }
 
@@ -928,7 +921,6 @@ export class SimulatedStrategy<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _tryGetDevicePixelRatio(): number | undefined {
     if (hasWindow()) {
       return getWindow().devicePixelRatio;
@@ -1047,12 +1039,10 @@ export class SimulatedStrategy<
     this.scrollBy(distance);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _dimensionByProp(prop: 'top' | 'left'): 'width' | 'height' {
     return prop === 'left' ? 'width' : 'height';
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getPropByDirection(direction: string): 'left' | 'top' {
     return direction === HORIZONTAL ? 'left' : 'top';
   }
@@ -1296,7 +1286,6 @@ export class SimulatedStrategy<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getWindowDevicePixelRatio(): number {
     return hasWindow()
       ? getWindow().devicePixelRatio

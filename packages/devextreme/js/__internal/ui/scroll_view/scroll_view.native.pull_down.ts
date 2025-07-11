@@ -8,8 +8,8 @@ import { each } from '@js/core/utils/iterator';
 import LoadIndicator from '@js/ui/load_indicator';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 
-import type { ScrollView, ScrollViewProperties } from './m_scroll_view';
-import NativeStrategy from './m_scrollable.native';
+import type { ScrollView, ScrollViewProperties } from './scroll_view';
+import NativeStrategy from './scrollable.native';
 import type { AllowedDirections } from './types';
 
 const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';

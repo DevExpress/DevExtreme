@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import animationFrame from 'common/core/animation/frame';
-import Scrollbar from '__internal/ui/scroll_view/m_scrollbar';
+import Scrollbar from '__internal/ui/scroll_view/scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 
 import 'generic_light.css!';

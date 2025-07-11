@@ -25,7 +25,7 @@ import type {
 import { current as currentTheme, isFluent, isMaterial } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
-import Scrollable from '@ts/ui/scroll_view/m_scrollable';
+import Scrollable from '@ts/ui/scroll_view/scrollable';
 import {
   isReachedBottom, isReachedLeft, isReachedRight, isReachedTop,
 } from '@ts/ui/scroll_view/utils/get_boundary_props';
