@@ -60,12 +60,12 @@ QUnit.module('devices', {
     ['ipad 16 safari', userAgents.ipad_16.safari, 'ios', '10.15.7', 'tablet', { maxTouchPoints: 5 }],
     ['ipad 16 chrome', userAgents.ipad_16.chrome, 'ios', '16.5.0', 'tablet', { maxTouchPoints: 5 }],
     ['ipad 16 firefox', userAgents.ipad_16.firefox, 'ios', '10.15.7', 'tablet', { maxTouchPoints: 5 }],
+    ['ipdad 11 with dedctop mode', userAgents.ipad_16.safari_desktop_mode, 'ios', '10.15.7', 'desktop', { maxTouchPoints: 5 }],
     // android tablet
     ['android tablet 7.1.1', userAgents.android_tablet_7_1_1, 'android', '7.1.1', 'tablet', null],
     // others
     // platform: generic, because win is deprecated
     ['winphone 10', userAgents.win_phone_10, 'generic', null, 'phone', null],
-    ['ipdad 11 with dedctop mode', userAgents.ipad_16.safari_desktop_mode, 'ios', '10.15.7', 'desktop', { maxTouchPoints: 5 }],
 ].forEach(([
     name,
     userAgent,
@@ -79,6 +79,7 @@ QUnit.module('devices', {
             setWindow({ navigator: navigatorMock }, true);
         }
 
+        devices._currentDevice = undefined;
         const device = fromUA(userAgent);
         assert.equal(device.platform, platform, 'correct platform');
         assert.equal(device.version.join('.') || null, version, 'correct version');
