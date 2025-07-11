@@ -446,7 +446,7 @@ class Overlay<
     this._customWrapperClass = classNames;
   }
 
-  _renderVisibilityAnimate(visible) {
+  _renderVisibilityAnimate(visible: boolean): DeferredObj<unknown> | Promise<unknown> {
     this._stopAnimation();
 
     return visible ? this._show() : this._hide();
@@ -889,7 +889,8 @@ class Overlay<
     super._render();
 
     this._appendContentToElement();
-    this._renderVisibilityAnimate(this.option('visible'));
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this._renderVisibilityAnimate(Boolean(this.option('visible')));
   }
 
   _appendContentToElement(): void {
@@ -971,13 +972,17 @@ class Overlay<
     this._toggleWrapperScrollEventsSubscription(preventScrollEvents);
 
     whenContentRendered.done(() => {
-      if (this.option('visible')) {
-        this._moveToContainer();
-      }
+      this._processContentRendering();
     });
 
     // @ts-expect-error ts-error
     return whenContentRendered.promise();
+  }
+
+  _processContentRendering(): void {
+    if (this.option('visible')) {
+      this._moveToContainer();
+    }
   }
 
   _getPositionControllerConfig() {
@@ -1198,9 +1203,11 @@ class Overlay<
   _visibilityChanged(visible: boolean): void {
     if (visible) {
       if (this.option('visible')) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._renderVisibilityAnimate(visible);
       }
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._renderVisibilityAnimate(visible);
     }
   }
@@ -1284,7 +1291,7 @@ class Overlay<
         this._toggleSafariScrolling();
         break;
       case 'visible':
-        this._renderVisibilityAnimate(value)
+        this._renderVisibilityAnimate(Boolean(value))
           // @ts-expect-error ts-error
           .done(() => this._animateDeferred?.resolveWith(this))
           .fail(() => this._animateDeferred?.reject());
