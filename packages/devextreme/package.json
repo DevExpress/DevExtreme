@@ -126,7 +126,7 @@
     "eslint-plugin-simple-import-sort": "10.0.0",
     "eslint-plugin-spellcheck": "0.0.20",
     "eslint-plugin-testcafe": "0.2.1",
-    "exceljs": "4.4.0",
+    "exceljs": "file:../../exceljs-4.4.0.tgz",
     "fancy-log": "2.0.0",
     "file-saver": "2.0.5",
     "glob": "10.4.5",
