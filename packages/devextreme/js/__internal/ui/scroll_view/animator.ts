@@ -43,7 +43,6 @@ abstract class Animator {
     this._stepAnimationFrame = requestAnimationFrame(this._proxiedStepCore);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _step(): void {
     Class.abstract();
   }
@@ -52,11 +51,9 @@ abstract class Animator {
     return this._finished;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _stop(): void {
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _complete(): void {
   }
 

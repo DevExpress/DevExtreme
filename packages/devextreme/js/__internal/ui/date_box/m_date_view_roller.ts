@@ -12,8 +12,8 @@ import { getHeight } from '@js/core/utils/size';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { convertToLocation } from '@ts/ui/scroll_view/utils/convert_location';
 
-import type { ScrollableProperties } from '../scroll_view/m_scrollable';
-import Scrollable from '../scroll_view/m_scrollable';
+import type { ScrollableProperties } from '../scroll_view/scrollable';
+import Scrollable from '../scroll_view/scrollable';
 
 const DATEVIEW_ROLLER_CLASS = 'dx-dateviewroller';
 const DATEVIEW_ROLLER_ACTIVE_CLASS = 'dx-state-active';

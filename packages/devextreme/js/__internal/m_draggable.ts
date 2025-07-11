@@ -36,7 +36,7 @@ import { getWindow } from '@js/core/utils/window';
 import type { Properties } from '@js/ui/draggable';
 import DOMComponent from '@ts/core/widget/dom_component';
 
-import Animator from './ui/scroll_view/m_animator';
+import Animator from './ui/scroll_view/animator';
 
 const window = getWindow();
 const KEYDOWN_EVENT = 'keydown';
