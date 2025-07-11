@@ -10,8 +10,8 @@ Ng.makeMetadata({
     artifacts: PATHS.artifactsDir,
   },
   mutations: [
-    removeMembers(/\/card_view:/),
     removeMembers(/\/calendar:dxCalendarOptions.todayButtonText/),
+    removeMembers(/\/card_view:/),
     removeMembers(/\/scheduler:Toolbar/),
     removeMembers(/\/stepper:/),
   ],
