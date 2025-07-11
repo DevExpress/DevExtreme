@@ -567,10 +567,17 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     return ['text', 'html', 'icon'];
   }
 
-  _updateLoadingState(tryLoadMore?): void {
+  _updateLoadingState(tryLoadMore?: boolean): void {
     const dataController = this._dataController;
+    const scrollBottomMode = this._scrollBottomMode();
+    const isDataControllerLoading = dataController.isLoading();
     // @ts-expect-error ts-error
-    const shouldLoadNextPage = this._scrollBottomMode() && tryLoadMore && !dataController.isLoading() && !this._isLastPage();
+    const isLastPage = this._isLastPage();
+
+    const shouldLoadNextPage = scrollBottomMode
+      && Boolean(tryLoadMore)
+      && !isDataControllerLoading
+      && !isLastPage;
 
     if (this._shouldContinueLoading(shouldLoadNextPage)) {
       this._infiniteDataLoading();
@@ -645,7 +652,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     this._isLoadIndicationSuppressed = value;
   }
 
-  _scrollViewIsFull() {
+  _scrollViewIsFull(): boolean {
     const scrollView = this._scrollView;
     return !scrollView || getHeight(scrollView.content()) > getHeight(scrollView.container());
   }
@@ -663,13 +670,24 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     }
   }
 
-  _shouldContinueLoading(shouldLoadNextPage) {
-    const isBottomReached = getHeight(this._scrollView.content()) - getHeight(this._scrollView.container()) < (this._scrollView.scrollOffset()?.top ?? 0);
+  _shouldContinueLoading(shouldLoadNextPage: boolean): boolean {
+    if (!shouldLoadNextPage) {
+      return false;
+    }
 
-    return shouldLoadNextPage && (!this._scrollViewIsFull() || isBottomReached);
+    const $content = this._scrollView.content();
+    const $container = this._scrollView.container();
+    const contentHeight = getHeight($content);
+    const containerHeight = getHeight($container);
+    const offsetTop = this._scrollView.scrollOffset()?.top ?? 0;
+    const isBottomReached = contentHeight - containerHeight < offsetTop;
+    const isFull = this._scrollViewIsFull();
+    const shouldContinueLoading = shouldLoadNextPage && !isFull || isBottomReached;
+
+    return shouldContinueLoading;
   }
 
-  _infiniteDataLoading() {
+  _infiniteDataLoading(): void {
     const isElementVisible = this.$element().is(':visible');
 
     if (isElementVisible) {
