@@ -1,3 +1,4 @@
+import type { Position } from '@js/common';
 import { locate, move } from '@js/common/core/animation/translator';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/common/core/events/drag';
@@ -16,8 +17,9 @@ import {
 } from '@js/core/utils/size';
 import { isFunction, isPlainObject, isWindow } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { Cancelable, DxEvent } from '@js/events';
 import type {
-  Properties,
+  Properties, ResizeEvent, ResizeStartEvent,
 } from '@js/ui/resizable';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -38,11 +40,46 @@ const DRAGSTART_START_EVENT_NAME = addNamespace(dragEventStart, RESIZABLE);
 const DRAGSTART_EVENT_NAME = addNamespace(dragEventMove, RESIZABLE);
 const DRAGSTART_END_EVENT_NAME = addNamespace(dragEventEnd, RESIZABLE);
 
-const SIDE_BORDER_WIDTH_STYLES = {
+const SIDE_BORDER_WIDTH_STYLES: Record<Position, string> = {
   left: 'borderLeftWidth',
   top: 'borderTopWidth',
   right: 'borderRightWidth',
   bottom: 'borderBottomWidth',
+};
+
+interface MovingSides { top: boolean; left: boolean; bottom: boolean; right: boolean }
+interface ElementLocation { top: number; left: number }
+interface ElementSize { width: number; height: number }
+type Axis = 'x' | 'y';
+interface Coordinates {
+  left: number;
+  top: number;
+}
+
+interface DragOffset {
+  x: number;
+  y: number;
+}
+
+interface StepDelta {
+  h: number;
+  v: number;
+}
+interface AreaResult {
+  width: number;
+  height: number;
+  offset: { left: number; top: number };
+}
+interface ScrollOffset {
+  scrollX: number;
+  scrollY: number;
+}
+
+type DragStartEvent = ResizeStartEvent & {
+  handles: MovingSides;
+};
+type DragEvent = ResizeEvent & {
+  offset: DragOffset;
 };
 
 export interface ResizableProperties extends Properties {
@@ -56,26 +93,23 @@ export interface ResizableProperties extends Properties {
 }
 
 class Resizable extends DOMComponent<Resizable, ResizableProperties> {
-  _movingSides!: {
-    top: boolean;
-    left: boolean;
-    bottom: boolean;
-    right: boolean;
-  };
+  _movingSides!: MovingSides;
 
-  _elementLocation!: {
-    top: number;
-    left: number;
-  };
+  _elementLocation!: ElementLocation;
 
-  _elementSize!: {
-    width: number;
-    height: number;
-  };
+  _elementSize!: ElementSize;
 
   _handles!: dxElementWrapper[];
 
-  _resizeStartAction?: (e: Record<string, unknown>) => void;
+  _leftMaxOffset?: number;
+
+  _rightMaxOffset?: number;
+
+  _topMaxOffset?: number;
+
+  _bottomMaxOffset?: number;
+
+  _resizeStartAction?: (e: Partial<DragStartEvent>) => void;
 
   _resizeEndAction?: (e: Record<string, unknown>) => void;
 
@@ -92,12 +126,6 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
       maxWidth: Infinity,
       minHeight: 30,
       maxHeight: Infinity,
-      // @ts-expect-error ts-error
-      onResizeStart: null,
-      // @ts-expect-error ts-error
-      onResize: null,
-      // @ts-expect-error ts-error
-      onResizeEnd: null,
       roundStepValue: true,
       keepAspectRatio: true,
     };
@@ -133,21 +161,26 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     }
 
     const directions = handles === 'all' ? ['top', 'bottom', 'left', 'right'] : handles.split(' ');
-    const activeHandlesMap = {};
+    const activeHandlesMap: Partial<MovingSides> = {};
 
     each(directions, (index, handleName) => {
       activeHandlesMap[handleName] = true;
       this._renderHandle(handleName);
     });
 
-    // @ts-expect-error ts-error
-    activeHandlesMap.bottom && activeHandlesMap.right && this._renderHandle('corner-bottom-right');
-    // @ts-expect-error ts-error
-    activeHandlesMap.bottom && activeHandlesMap.left && this._renderHandle('corner-bottom-left');
-    // @ts-expect-error ts-error
-    activeHandlesMap.top && activeHandlesMap.right && this._renderHandle('corner-top-right');
-    // @ts-expect-error ts-error
-    activeHandlesMap.top && activeHandlesMap.left && this._renderHandle('corner-top-left');
+    if (activeHandlesMap.bottom && activeHandlesMap.right) {
+      this._renderHandle('corner-bottom-right');
+    }
+    if (activeHandlesMap.bottom && activeHandlesMap.left) {
+      this._renderHandle('corner-bottom-left');
+    }
+    if (activeHandlesMap.top && activeHandlesMap.right) {
+      this._renderHandle('corner-top-right');
+    }
+    if (activeHandlesMap.top && activeHandlesMap.left) {
+      this._renderHandle('corner-top-left');
+    }
+
     this._attachEventHandlers();
   }
 
@@ -184,11 +217,15 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     });
   }
 
-  _toggleEventHandlers(shouldAttachEvents): void {
-    shouldAttachEvents ? this._attachEventHandlers() : this._detachEventHandlers();
+  _toggleEventHandlers(shouldAttachEvents: boolean | undefined): void {
+    if (shouldAttachEvents) {
+      this._attachEventHandlers();
+    } else {
+      this._detachEventHandlers();
+    }
   }
 
-  _getElementSize() {
+  _getElementSize(): ElementSize {
     const $element = this.$element();
     // @ts-expect-error ts-error
     return $element.css('boxSizing') === 'border-box'
@@ -202,7 +239,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
       };
   }
 
-  _dragStartHandler(e) {
+  _dragStartHandler(e: Cancelable & DxEvent<MouseEvent | TouchEvent>): void {
     const $element = this.$element();
     if ($element.is('.dx-state-disabled, .dx-state-disabled *')) {
       e.cancel = true;
@@ -224,15 +261,20 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
       height: this._elementSize.height,
       handles: this._movingSides,
     });
-
+    // @ts-expect-error ts-error
     e.targetElements = null;
   }
 
-  _toggleResizingClass(value): void {
+  _toggleResizingClass(value: boolean): void {
     this.$element().toggleClass(RESIZABLE_RESIZING_CLASS, value);
   }
 
-  _renderDragOffsets(e): void {
+  _renderDragOffsets(e: Cancelable & DxEvent<MouseEvent | TouchEvent> & {
+    maxLeftOffset?: number;
+    maxRightOffset?: number;
+    maxTopOffset?: number;
+    maxBottomOffset?: number;
+  }): void {
     const area = this._getArea();
 
     if (!area) {
@@ -242,27 +284,36 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     const $handle = $(e.target).closest(`.${RESIZABLE_HANDLE_CLASS}`);
     const handleWidth = getOuterWidth($handle);
     const handleHeight = getOuterHeight($handle);
-    const handleOffset = $handle.offset();
+    const handleOffset = $handle.offset() as Coordinates;
     const areaOffset = area.offset;
     const scrollOffset = this._getAreaScrollOffset();
-    // @ts-expect-error ts-error
-    e.maxLeftOffset = this._leftMaxOffset = handleOffset.left - areaOffset.left - scrollOffset.scrollX;
-    // @ts-expect-error ts-error
-    e.maxRightOffset = this._rightMaxOffset = areaOffset.left + area.width - handleOffset.left - handleWidth + scrollOffset.scrollX;
-    // @ts-expect-error ts-error
-    e.maxTopOffset = this._topMaxOffset = handleOffset.top - areaOffset.top - scrollOffset.scrollY;
-    // @ts-expect-error ts-error
-    e.maxBottomOffset = this._bottomMaxOffset = areaOffset.top + area.height - handleOffset.top - handleHeight + scrollOffset.scrollY;
+
+    this._leftMaxOffset = handleOffset.left - areaOffset.left - scrollOffset.scrollX;
+    e.maxLeftOffset = this._leftMaxOffset;
+
+    this._rightMaxOffset = areaOffset.left
+      + area.width - handleOffset.left - handleWidth + scrollOffset.scrollX;
+    e.maxRightOffset = this._rightMaxOffset;
+
+    this._topMaxOffset = handleOffset.top - areaOffset.top - scrollOffset.scrollY;
+    e.maxTopOffset = this._topMaxOffset;
+
+    this._bottomMaxOffset = areaOffset.top
+      + area.height - handleOffset.top - handleHeight + scrollOffset.scrollY;
+    e.maxBottomOffset = this._bottomMaxOffset;
   }
 
-  _getBorderWidth($element, direction) {
+  // eslint-disable-next-line class-methods-use-this
+  _getBorderWidth($element: dxElementWrapper, direction: Position): number {
     if (isWindow($element.get(0))) return 0;
+    // @ts-expect-error ts-error
     const borderWidth = $element.css(SIDE_BORDER_WIDTH_STYLES[direction]);
+    // @ts-expect-error ts-error
     // eslint-disable-next-line radix
     return parseInt(borderWidth) || 0;
   }
 
-  _proportionate(direction, value) {
+  _proportionate(direction: Axis, value: number): number {
     const size = this._elementSize;
     const factor = direction === 'x'
       ? size.width / size.height
@@ -271,7 +322,8 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     return value * factor;
   }
 
-  _getProportionalDelta({ x, y }) {
+  _getProportionalDelta(delta: DragOffset): DragOffset {
+    const { x, y } = delta;
     const proportionalY = this._proportionate('y', x);
     if (proportionalY >= y) {
       return {
@@ -294,7 +346,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     };
   }
 
-  _getDirectionName(axis) {
+  _getDirectionName(axis: Axis): Position {
     const sides = this._movingSides;
 
     if (axis === 'x') {
@@ -303,25 +355,27 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     return sides.top ? 'top' : 'bottom';
   }
 
-  _fitIntoArea(axis, value) {
+  _fitIntoArea(axis: Axis, value: number): number {
     const directionName = this._getDirectionName(axis);
     return Math.min(value, this[`_${directionName}MaxOffset`] ?? Infinity);
   }
 
-  _fitDeltaProportionally(delta) {
+  _fitDeltaProportionally(delta: DragOffset): DragOffset {
     let fittedDelta = { ...delta };
     const size = this._elementSize;
     const {
       minWidth, minHeight, maxWidth, maxHeight,
     } = this.option();
 
-    const getWidth = () => size.width + fittedDelta.x;
-    const getHeight = () => size.height + fittedDelta.y;
-    const getFittedWidth = () => fitIntoRange(getWidth(), minWidth, maxWidth);
-    const getFittedHeight = () => fitIntoRange(getHeight(), minHeight, maxHeight);
-    const isInArea = (axis) => fittedDelta[axis] === this._fitIntoArea(axis, fittedDelta[axis]);
-    const isFittedX = () => inRange(getWidth(), minWidth, maxWidth) && isInArea('x');
-    const isFittedY = () => inRange(getHeight(), minHeight, maxHeight) && isInArea('y');
+    const calculateWidth = (): number => size.width + fittedDelta.x;
+    const calculateHeight = (): number => size.height + fittedDelta.y;
+    const getFittedWidth = (): number => fitIntoRange(calculateWidth(), minWidth, maxWidth);
+    const getFittedHeight = (): number => fitIntoRange(calculateHeight(), minHeight, maxHeight);
+    const isInArea = (
+      axis: Axis,
+    ): boolean => fittedDelta[axis] === this._fitIntoArea(axis, fittedDelta[axis]);
+    const isFittedX = (): boolean => inRange(calculateWidth(), minWidth, maxWidth) && isInArea('x');
+    const isFittedY = (): boolean => inRange(calculateHeight(), minHeight, maxHeight) && isInArea('y');
 
     if (!isFittedX()) {
       const x = this._fitIntoArea('x', getFittedWidth() - size.width);
@@ -337,7 +391,8 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
       : { x: 0, y: 0 };
   }
 
-  _fitDelta({ x, y }) {
+  _fitDelta(delta: DragOffset): DragOffset {
+    const { x, y } = delta;
     const size = this._elementSize;
     const {
       minWidth, minHeight, maxWidth, maxHeight,
@@ -349,7 +404,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     };
   }
 
-  _getDeltaByOffset(offset) {
+  _getDeltaByOffset(offset: DragOffset): DragOffset {
     const sides = this._movingSides;
     const shouldKeepAspectRatio = this._isCornerHandler(sides) && this.option('keepAspectRatio');
 
@@ -373,7 +428,8 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     return delta;
   }
 
-  _updatePosition(delta, { width, height }): void {
+  _updatePosition(delta: DragOffset, elementDimensions: ElementSize): void {
+    const { width, height } = elementDimensions;
     const location = this._elementLocation;
     const sides = this._movingSides;
     const $element = this.$element();
@@ -388,7 +444,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     });
   }
 
-  _dragHandler(e) {
+  _dragHandler(e: DragEvent): void {
     const offset = this._getOffset(e);
     const delta = this._getDeltaByOffset(offset);
 
@@ -398,8 +454,8 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     this._triggerResizeAction(e, dimensions);
   }
 
-  _updateDimensions(delta) {
-    const isAbsoluteSize = (size) => size.substring(size.length - 2) === 'px';
+  _updateDimensions(delta: DragOffset): ElementSize {
+    const isAbsoluteSize = (size): boolean => size.substring(size.length - 2) === 'px';
 
     const { stepPrecision } = this.option();
 
@@ -408,10 +464,14 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
 
     const width = size.width + delta.x;
     const height = size.height + delta.y;
-    // @ts-expect-error ts-error
-    const elementStyle = this.$element().get(0).style;
-    const shouldRenderWidth = delta.x || isStepPrecisionStrict || isAbsoluteSize(elementStyle.width);
-    const shouldRenderHeight = delta.y || isStepPrecisionStrict || isAbsoluteSize(elementStyle.height);
+
+    const elementStyle = this.$element()[0].style;
+    const shouldRenderWidth = delta.x
+      || isStepPrecisionStrict
+      || isAbsoluteSize(elementStyle.width);
+    const shouldRenderHeight = delta.y
+      || isStepPrecisionStrict
+      || isAbsoluteSize(elementStyle.height);
 
     if (shouldRenderWidth) this.option({ width });
     if (shouldRenderHeight) this.option({ height });
@@ -422,7 +482,8 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     };
   }
 
-  _triggerResizeAction(e, { width, height }): void {
+  _triggerResizeAction(e: DragEvent, elementDimensions: ElementSize): void {
+    const { width, height } = elementDimensions;
     this._resizeAction?.({
       event: e,
       width: this.option('width') || width,
@@ -433,13 +494,13 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     triggerResizeEvent(this.$element());
   }
 
-  _isCornerHandler(sides) {
-    // @ts-expect-error
-
+  // eslint-disable-next-line class-methods-use-this
+  _isCornerHandler(sides: MovingSides): boolean {
+    // eslint-disable-next-line no-bitwise
     return Object.values(sides).reduce((xor, value) => xor ^ value, 0) === 0;
   }
 
-  _getOffset(e) {
+  _getOffset(e: DragEvent): DragOffset {
     const { offset } = e;
     const sides = this._movingSides;
 
@@ -449,7 +510,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     return offset;
   }
 
-  _roundByStep(delta) {
+  _roundByStep(delta: DragOffset): DragOffset {
     const { stepPrecision } = this.option();
 
     return stepPrecision === 'strict'
@@ -457,20 +518,22 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
       : this._roundNotStrict(delta);
   }
 
-  _getSteps() {
-    return pairToObject(this.option('step'), !this.option('roundStepValue'));
+  _getSteps(): StepDelta {
+    const { step, roundStepValue } = this.option();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return pairToObject(step, !roundStepValue);
   }
 
-  _roundNotStrict(delta) {
-    const steps = this._getSteps();
+  _roundNotStrict(delta: DragOffset): DragOffset {
+    const { h, v } = this._getSteps();
 
     return {
-      x: delta.x - delta.x % steps.h,
-      y: delta.y - delta.y % steps.v,
+      x: delta.x - (delta.x % h),
+      y: delta.y - (delta.y % v),
     };
   }
 
-  _roundStrict(delta) {
+  _roundStrict(delta: DragOffset): DragOffset {
     const sides = this._movingSides;
     const offset = {
       x: delta.x * (sides.left ? -1 : 1),
@@ -483,15 +546,21 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     const yPos = sides.top ? location.top : location.top + size.height;
     const newXShift = (xPos + offset.x) % steps.h;
     const newYShift = (yPos + offset.y) % steps.v;
-    const sign = Math.sign || ((x) => {
-      x = +x;
-      if (x === 0 || isNaN(x)) {
-        return x;
+    const sign = Math.sign || ((x): number => {
+      const offsetX = +x;
+      if (offsetX === 0 || isNaN(offsetX)) {
+        return offsetX;
       }
-      return x > 0 ? 1 : -1;
+      return offsetX > 0 ? 1 : -1;
     });
-    const separatorOffset = (steps, offset) => (1 + sign(offset) * 0.2) % 1 * steps;
-    const isSmallOffset = (offset, steps) => Math.abs(offset) < 0.2 * steps;
+    const separatorOffset = (
+      stepValue: number,
+      offsetValue: number,
+    ): number => ((1 + sign(offsetValue) * 0.2) % 1) * stepValue;
+    const isSmallOffset = (
+      offsetValue: number,
+      stepValue: number,
+    ): boolean => Math.abs(offsetValue) < 0.2 * stepValue;
 
     let newOffsetX = offset.x - newXShift;
     let newOffsetY = offset.y - newYShift;
@@ -515,7 +584,8 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     };
   }
 
-  _getMovingSides(e) {
+  // eslint-disable-next-line class-methods-use-this
+  _getMovingSides(e: DxEvent<MouseEvent | TouchEvent>): MovingSides {
     const $target = $(e.target);
     const hasCornerTopLeftClass = $target.hasClass(`${RESIZABLE_HANDLE_CORNER_CLASS}-top-left`);
     const hasCornerTopRightClass = $target.hasClass(`${RESIZABLE_HANDLE_CORNER_CLASS}-top-right`);
@@ -523,15 +593,21 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     const hasCornerBottomRightClass = $target.hasClass(`${RESIZABLE_HANDLE_CORNER_CLASS}-bottom-right`);
 
     return {
-      top: $target.hasClass(RESIZABLE_HANDLE_TOP_CLASS) || hasCornerTopLeftClass || hasCornerTopRightClass,
-      left: $target.hasClass(RESIZABLE_HANDLE_LEFT_CLASS) || hasCornerTopLeftClass || hasCornerBottomLeftClass,
-      bottom: $target.hasClass(RESIZABLE_HANDLE_BOTTOM_CLASS) || hasCornerBottomLeftClass || hasCornerBottomRightClass,
-      right: $target.hasClass(RESIZABLE_HANDLE_RIGHT_CLASS) || hasCornerTopRightClass || hasCornerBottomRightClass,
+      top: $target.hasClass(RESIZABLE_HANDLE_TOP_CLASS)
+        || hasCornerTopLeftClass
+        || hasCornerTopRightClass,
+      left: $target.hasClass(RESIZABLE_HANDLE_LEFT_CLASS)
+        || hasCornerTopLeftClass
+        || hasCornerBottomLeftClass,
+      bottom: $target.hasClass(RESIZABLE_HANDLE_BOTTOM_CLASS)
+        || hasCornerBottomLeftClass || hasCornerBottomRightClass,
+      right: $target.hasClass(RESIZABLE_HANDLE_RIGHT_CLASS)
+        || hasCornerTopRightClass || hasCornerBottomRightClass,
     };
   }
 
-  _getArea() {
-    let area = this.option('area');
+  _getArea(): AreaResult | undefined {
+    let { area } = this.option();
 
     if (isFunction(area)) {
       area = area.call(this);
@@ -544,8 +620,8 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     return this._getAreaFromElement(area);
   }
 
-  _getAreaScrollOffset() {
-    const area = this.option('area');
+  _getAreaScrollOffset(): ScrollOffset {
+    const { area } = this.option();
     const isElement = !isFunction(area) && !isPlainObject(area);
     const scrollOffset = { scrollY: 0, scrollX: 0 };
     if (isElement) {
@@ -559,8 +635,9 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     return scrollOffset;
   }
 
-  _getAreaFromObject(area) {
-    const result = {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _getAreaFromObject(area): AreaResult {
+    const result: AreaResult = {
       width: area.right - area.left,
       height: area.bottom - area.top,
       offset: {
@@ -574,27 +651,27 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     return result;
   }
 
-  _getAreaFromElement(area) {
+  _getAreaFromElement(area: string | Element | undefined): AreaResult | undefined {
     const $area = $(area);
-    let result;
-
-    if ($area.length) {
-      result = {
-        width: getInnerWidth($area),
-        height: getInnerHeight($area),
-        offset: extend({
-          top: 0,
-          left: 0,
-        }, isWindow($area[0]) ? {} : $area.offset()),
-      };
-
-      this._correctAreaGeometry(result, $area);
+    if (!$area.length) {
+      return undefined;
     }
+
+    const result: AreaResult = {
+      width: getInnerWidth($area),
+      height: getInnerHeight($area),
+      offset: extend({
+        top: 0,
+        left: 0,
+      }, isWindow($area[0]) ? {} : $area.offset()),
+    };
+
+    this._correctAreaGeometry(result, $area);
 
     return result;
   }
 
-  _correctAreaGeometry(result, $area?): void {
+  _correctAreaGeometry(result: AreaResult, $area?: dxElementWrapper): void {
     const areaBorderLeft = $area ? this._getBorderWidth($area, 'left') : 0;
     const areaBorderTop = $area ? this._getBorderWidth($area, 'top') : 0;
 
@@ -605,7 +682,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     result.height -= getOuterHeight(this.$element()) - getInnerHeight(this.$element());
   }
 
-  _dragEndHandler(e): void {
+  _dragEndHandler(e: DxEvent): void {
     const $element = this.$element();
 
     this._resizeEndAction?.({
@@ -618,18 +695,22 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     this._toggleResizingClass(false);
   }
 
-  _renderWidth(width): void {
-    this.option('width', fitIntoRange(width, this.option('minWidth'), this.option('maxWidth')));
+  _renderWidth(width: number): void {
+    const { minWidth, maxWidth } = this.option();
+    this.option('width', fitIntoRange(width, minWidth, maxWidth));
   }
 
-  _renderHeight(height): void {
-    this.option('height', fitIntoRange(height, this.option('minHeight'), this.option('maxHeight')));
+  _renderHeight(height: number): void {
+    const { minHeight, maxHeight } = this.option();
+    this.option('height', fitIntoRange(height, minHeight, maxHeight));
   }
 
   _optionChanged(args: OptionChanged<ResizableProperties>): void {
-    switch (args.name) {
+    const { name, value } = args;
+
+    switch (name) {
       case 'disabled':
-        this._toggleEventHandlers(!args.value);
+        this._toggleEventHandlers(!value);
         super._optionChanged(args);
         break;
       case 'handles':
@@ -637,11 +718,15 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
         break;
       case 'minWidth':
       case 'maxWidth':
-        hasWindow() && this._renderWidth(getOuterWidth(this.$element()));
+        if (hasWindow()) {
+          this._renderWidth(getOuterWidth(this.$element()));
+        }
         break;
       case 'minHeight':
       case 'maxHeight':
-        hasWindow() && this._renderHeight(getOuterHeight(this.$element()));
+        if (hasWindow()) {
+          this._renderHeight(getOuterHeight(this.$element()));
+        }
         break;
       case 'onResize':
       case 'onResizeStart':
@@ -664,6 +749,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     this.$element().find(`.${RESIZABLE_HANDLE_CLASS}`).remove();
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _useTemplates(): boolean {
     return false;
   }
