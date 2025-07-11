@@ -689,9 +689,11 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
   }
 
   _renderScrollableContainer(): void {
+    const { useNativeScrolling, scrollDirection } = this.option();
+
     this._scrollable = this._createComponent($('<div>').appendTo(this.$element()), Scrollable, {
-      useNative: this.option('useNativeScrolling'),
-      direction: this.option('scrollDirection'),
+      useNative: useNativeScrolling,
+      direction: scrollDirection,
       useKeyboard: false,
     });
   }

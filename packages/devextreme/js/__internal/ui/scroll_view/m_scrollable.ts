@@ -1,3 +1,4 @@
+import type { ScrollDirection } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import scrollEvents from '@js/common/core/events/gesture/emitter.gesture.scroll';
 import { addNamespace } from '@js/common/core/events/utils/index';
@@ -15,14 +16,21 @@ import {
 } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { ScrollEvent } from '@js/ui/scroll_view';
 import type { Properties } from '@js/ui/scroll_view/ui.scrollable';
 import DOMComponent from '@ts/core/widget/dom_component';
+import type { OptionChanged } from '@ts/core/widget/types';
 import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
 import supportUtils from '../../core/utils/m_support';
 import { deviceDependentOptions } from './m_scrollable.device';
 import NativeStrategy from './m_scrollable.native';
 import { SimulatedStrategy } from './m_scrollable.simulated';
+import type {
+  DxMouseEvent,
+  ElementOffset,
+  ScrollOffset,
+} from './types';
 
 const SCROLLABLE = 'dxScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
@@ -37,14 +45,16 @@ const BOTH = 'both';
 
 export interface ScrollableProperties extends Properties {
   _onVisibilityChanged?: (data: unknown) => void;
-
   useSimulatedScrollbar?: boolean;
+  useKeyboard?: boolean;
+  updateManually?: boolean;
+  inertiaEnabled?: boolean;
 }
 
 class Scrollable<
   TProperties extends ScrollableProperties = ScrollableProperties,
 > extends DOMComponent<Scrollable<TProperties>, TProperties> {
-  _locked?: boolean;
+  _locked!: boolean;
 
   _$container!: dxElementWrapper;
 
@@ -52,7 +62,7 @@ class Scrollable<
 
   _$content!: dxElementWrapper;
 
-  _allowedDirectionValue!: string | null;
+  _allowedDirectionValue!: ScrollDirection | null;
 
   _strategy!: NativeStrategy | SimulatedStrategy;
 
@@ -85,22 +95,25 @@ class Scrollable<
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
-    // @ts-expect-error ts-error
-    return super._defaultOptionsRules().concat(deviceDependentOptions(), [
-      {
-        device(): boolean {
-          return supportUtils.nativeScrolling
-            && devices.real().platform === 'android'
-            && !browser.mozilla;
+    return super._defaultOptionsRules().concat(
+      deviceDependentOptions() as DefaultOptionsRule<TProperties>[],
+      [
+        {
+          device(): boolean {
+            return !!(supportUtils.nativeScrolling
+              && devices.real().platform === 'android'
+              && !browser.mozilla);
+          },
+          // @ts-expect-error ts-error
+          options: {
+            useSimulatedScrollbar: true,
+          },
         },
-        options: {
-          useSimulatedScrollbar: true,
-        },
-      },
-    ]);
+      ],
+    );
   }
 
-  _initOptions(options): void {
+  _initOptions(options: TProperties): void {
     super._initOptions(options);
     if (!('useSimulatedScrollbar' in options)) {
       this._setUseSimulatedScrollbar();
@@ -119,11 +132,13 @@ class Scrollable<
     this._locked = false;
   }
 
-  _visibilityChanged(visible): void {
+  _visibilityChanged(visible: boolean): void {
     if (visible) {
       this.update();
       this._updateRtlPosition();
-      this._savedScrollOffset && this.scrollTo(this._savedScrollOffset);
+      if (this._savedScrollOffset) {
+        this.scrollTo(this._savedScrollOffset);
+      }
       delete this._savedScrollOffset;
 
       const { _onVisibilityChanged: onVisibilityChanged } = this.option();
@@ -174,7 +189,7 @@ class Scrollable<
     this._updateRtlPosition(true);
   }
 
-  _updateRtlPosition(needInitializeRtlConfig?): void {
+  _updateRtlPosition(needInitializeRtlConfig?: boolean): void {
     this._strategy.updateRtlPosition(needInitializeRtlConfig);
   }
 
@@ -236,7 +251,7 @@ class Scrollable<
     eventsEngine.on(this._$container, addNamespace('scroll', SCROLLABLE), strategy.handleScroll.bind(strategy));
   }
 
-  _validate(e) {
+  _validate(e: DxMouseEvent): boolean {
     if (this._isLocked()) {
       return false;
     }
@@ -246,23 +261,21 @@ class Scrollable<
     return this._moveIsAllowed(e);
   }
 
-  _moveIsAllowed(e) {
-    return this._strategy.validate(e);
+  _moveIsAllowed(e: DxMouseEvent): boolean {
+    const result = this._strategy.validate(e);
+    return Boolean(result);
   }
 
-  handleMove(e): void {
+  handleMove(e: DxMouseEvent): void {
     this._strategy.handleMove(e);
   }
 
-  _prepareDirections(value): void {
-    // @ts-expect-error ts-error
+  _prepareDirections(value: boolean): void {
     this._strategy._prepareDirections(value);
   }
 
-  _initHandler(): void {
-    const strategy = this._strategy;
-    // @ts-expect-error ts-error
-    strategy.handleInit.apply(strategy, arguments);
+  _initHandler(e: ScrollEvent): void {
+    this._strategy.handleInit(e);
   }
 
   _renderDisabledState(): void {
@@ -293,22 +306,22 @@ class Scrollable<
   }
 
   _createStrategy(): void {
-    this._strategy = this.option('useNative')
+    const { useNative } = this.option();
     // @ts-expect-error ts-error
+    this._strategy = useNative
       ? new NativeStrategy(this)
-      // @ts-expect-error ts-error
       : new SimulatedStrategy(this);
   }
 
-  _createActions() {
+  _createActions(): void {
     this._strategy?.createActions();
   }
 
-  _clean() {
+  _clean(): void {
     this._strategy?.dispose();
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     switch (args.name) {
       case 'onStart':
       case 'onEnd':
@@ -350,7 +363,7 @@ class Scrollable<
     }
   }
 
-  _resetInactiveDirection() {
+  _resetInactiveDirection(): void {
     const inactiveProp = this._getInactiveProp();
     if (!inactiveProp || !hasWindow()) {
       return;
@@ -361,22 +374,22 @@ class Scrollable<
     this.scrollTo(scrollOffset);
   }
 
-  // @ts-expect-error ts-error
-  _getInactiveProp(): string {
+  _getInactiveProp(): 'left' | 'top' {
     const { direction } = this.option();
     if (direction === VERTICAL) {
       return 'left';
     }
-    if (direction === HORIZONTAL) {
-      return 'top';
-    }
+    return 'top';
   }
 
-  _location() {
+  _location(): ScrollOffset {
     return this._strategy.location();
   }
 
-  _normalizeLocation(location) {
+  _normalizeLocation(location: Partial<ScrollOffset & {
+    x?: number;
+    y?: number;
+  }> | number): Partial<ScrollOffset> {
     if (isPlainObject(location)) {
       const left = ensureDefined(location.left, location.x);
       const top = ensureDefined(location.top, location.y);
@@ -392,21 +405,21 @@ class Scrollable<
     };
   }
 
-  _isLocked(): boolean | undefined {
+  _isLocked(): boolean {
     return this._locked;
   }
 
-  _lock() {
+  _lock(): void {
     this._locked = true;
   }
 
-  _unlock() {
+  _unlock(): void {
     if (!this.option('disabled')) {
       this._locked = false;
     }
   }
 
-  _isDirection(direction): boolean {
+  _isDirection(direction: ScrollDirection): boolean {
     const { direction: current } = this.option();
     if (direction === VERTICAL) {
       return current !== HORIZONTAL;
@@ -431,7 +444,7 @@ class Scrollable<
     }
   }
 
-  _allowedDirection(): string | null {
+  _allowedDirection(): ScrollDirection | null {
     return this._allowedDirectionValue;
   }
 
@@ -439,15 +452,15 @@ class Scrollable<
     return this._$content;
   }
 
-  content() {
+  content(): Element {
     return getPublicElement(this._$content);
   }
 
-  container() {
+  container(): Element {
     return getPublicElement(this._$container);
   }
 
-  scrollOffset() {
+  scrollOffset(): ScrollOffset {
     return this._strategy._getScrollOffset();
   }
 
@@ -457,56 +470,62 @@ class Scrollable<
     return useNative && rtlEnabled;
   }
 
-  scrollTop() {
+  scrollTop(): number {
     return this.scrollOffset().top;
   }
 
-  scrollLeft() {
+  scrollLeft(): number {
     return this.scrollOffset().left;
   }
 
-  clientHeight() {
+  clientHeight(): number {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return getHeight(this._$container);
   }
 
-  scrollHeight() {
+  scrollHeight(): number {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return getOuterHeight(this.$content());
   }
 
-  clientWidth() {
+  clientWidth(): number {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return getWidth(this._$container);
   }
 
-  scrollWidth() {
+  scrollWidth(): number {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return getOuterWidth(this.$content());
   }
 
-  update() {
+  update(): void {
     if (!this._strategy) {
       return;
     }
+    // @ts-expect-error ts-error
+    // eslint-disable-next-line consistent-return
     return when(this._strategy.update()).done(() => {
       this._updateAllowedDirection();
     });
   }
 
-  scrollBy(distance) {
-    distance = this._normalizeLocation(distance);
+  scrollBy(distance: Partial<ScrollOffset> | number): void {
+    const normalizedDistance = this._normalizeLocation(distance);
 
-    if (!distance.top && !distance.left) {
+    if (!normalizedDistance.top && !normalizedDistance.left) {
       return;
     }
 
     this._updateIfNeed();
-    this._strategy.scrollBy(distance);
+    this._strategy.scrollBy(normalizedDistance);
   }
 
-  scrollTo(targetLocation): void {
+  scrollTo(targetLocation: Partial<ScrollOffset>): void {
     if (!hasWindow()) {
       return;
     }
 
-    targetLocation = this._normalizeLocation(targetLocation);
+    let normalizedLocation = this._normalizeLocation(targetLocation);
 
     this._updateIfNeed();
 
@@ -516,8 +535,8 @@ class Scrollable<
     if (!useNative) {
       const strategy = this._strategy as SimulatedStrategy;
 
-      targetLocation = strategy._applyScaleRatio(targetLocation);
-      location = strategy._applyScaleRatio(location);
+      normalizedLocation = strategy._applyScaleRatio(normalizedLocation);
+      location = strategy._applyScaleRatio(location) as ScrollOffset;
     }
 
     if (this._isRtlNativeStrategy()) {
@@ -525,8 +544,8 @@ class Scrollable<
     }
 
     const distance = this._normalizeLocation({
-      left: location.left - ensureDefined(targetLocation.left, location.left),
-      top: location.top - ensureDefined(targetLocation.top, location.top),
+      left: location.left - ensureDefined(normalizedLocation.left, location.left),
+      top: location.top - ensureDefined(normalizedLocation.top, location.top),
     });
 
     if (!distance.top && !distance.left) {
@@ -536,7 +555,7 @@ class Scrollable<
     this._strategy.scrollBy(distance);
   }
 
-  scrollToElement(element, offset?): void {
+  scrollToElement(element: Element | dxElementWrapper, offset?: ElementOffset): void {
     const $element = $(element);
     const elementInsideContent = this.$content().find(element).length;
     const elementIsInsideContent = ($element.parents(`.${SCROLLABLE_CLASS}`).length - $element.parents(`.${SCROLLABLE_CONTENT_CLASS}`).length) === 0;
@@ -557,14 +576,17 @@ class Scrollable<
     this.scrollTo(scrollPosition);
   }
 
-  getScrollElementPosition($element, direction, offset): number {
+  getScrollElementPosition(
+    $element: dxElementWrapper,
+    direction: ScrollDirection,
+    offset?: ElementOffset,
+  ): number {
     const scrollOffset = this.scrollOffset();
 
     return getElementLocationInternal(
-      $element.get(0),
+      $element[0],
       direction,
-      // @ts-expect-error ts-error
-      $(this.container()).get(0),
+      $(this.container())[0],
       scrollOffset,
       offset,
     );
@@ -576,6 +598,7 @@ class Scrollable<
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _useTemplates(): boolean {
     return false;
   }

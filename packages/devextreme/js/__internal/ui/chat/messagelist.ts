@@ -378,7 +378,7 @@ class MessageList extends Widget<Properties> {
   _renderScrollView(): void {
     const $scrollable = $('<div>')
       .appendTo(this.$element());
-
+    // @ts-expect-error ts-error
     this._scrollView = this._createComponent($scrollable, ScrollView, {
       useKeyboard: false,
       bounceEnabled: false,
@@ -434,6 +434,7 @@ class MessageList extends Widget<Properties> {
 
     this.$element().toggleClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS, this._isEmpty() && isLoading);
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._scrollView.release(!isLoading);
   }
 

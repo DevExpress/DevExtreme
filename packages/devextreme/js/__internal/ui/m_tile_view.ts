@@ -161,7 +161,7 @@ class TileView extends CollectionWidget<TileViewProperties> {
     const {
       width, height, direction, showScrollbar,
     } = this.option();
-
+    // @ts-expect-error ts-error
     this._scrollView = this._createComponent(this.$element(), ScrollView, {
       direction,
       width,
