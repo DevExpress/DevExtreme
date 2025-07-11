@@ -3,7 +3,7 @@ import devices from '@js/core/devices';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 
 import supportUtils from '../../core/utils/m_support';
-import type { ScrollableProperties } from './m_scrollable';
+import type { ScrollableProperties } from './scrollable';
 
 type DeviceDependentOptions = Pick<ScrollableProperties, 'useNative' | 'bounceEnabled' | 'scrollByThumb' | 'scrollByContent' | 'showScrollbar'>;
 

@@ -23,9 +23,9 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
 import supportUtils from '../../core/utils/m_support';
-import { deviceDependentOptions } from './m_scrollable.device';
-import NativeStrategy from './m_scrollable.native';
-import { SimulatedStrategy } from './m_scrollable.simulated';
+import { deviceDependentOptions } from './scrollable.device';
+import NativeStrategy from './scrollable.native';
+import { SimulatedStrategy } from './scrollable.simulated';
 import type {
   DxMouseEvent,
   ElementOffset,
@@ -598,7 +598,6 @@ class Scrollable<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _useTemplates(): boolean {
     return false;
   }

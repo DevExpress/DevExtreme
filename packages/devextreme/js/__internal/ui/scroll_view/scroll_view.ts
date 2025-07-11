@@ -13,10 +13,10 @@ import { isMaterialBased } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
 import LoadPanel from '@ts/ui/m_load_panel';
 
-import PullDownStrategy from './m_scroll_view.native.pull_down';
-import SwipeDownStrategy from './m_scroll_view.native.swipe_down';
-import SimulatedStrategy from './m_scroll_view.simulated';
-import Scrollable from './m_scrollable';
+import PullDownStrategy from './scroll_view.native.pull_down';
+import SwipeDownStrategy from './scroll_view.native.swipe_down';
+import SimulatedStrategy from './scroll_view.simulated';
+import Scrollable from './scrollable';
 import type { RefreshStrategy, ScrollOffset } from './types';
 
 // STYLE scrollView
@@ -46,21 +46,16 @@ export interface ScrollViewProperties extends Omit<Properties, 'onScroll' | 'onU
 }
 
 export class ScrollViewServerSide extends Scrollable<ScrollViewProperties> {
-  // eslint-disable-next-line class-methods-use-this
   finishLoading(): void {}
 
-  // eslint-disable-next-line class-methods-use-this
   release(): void {}
 
-  // eslint-disable-next-line class-methods-use-this
   refresh(): void {}
 
-  // eslint-disable-next-line class-methods-use-this
   scrollOffset(): ScrollOffset {
     return { top: 0, left: 0 };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   isBottomReached(): boolean {
     return false;
   }
