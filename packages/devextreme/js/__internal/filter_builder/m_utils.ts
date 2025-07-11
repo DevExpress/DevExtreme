@@ -66,6 +66,21 @@ function isNegationGroup(group) {
     && !isCondition(group);
 }
 
+export function normalizeValue(value, dataType) {
+  if (dataType === 'boolean') {
+    return !!value;
+  } if (dataType === 'date' || dataType === 'datetime') {
+    return new Date(value);
+  } if (dataType === 'string') {
+    return String(value);
+  } if (dataType === 'number') {
+    return Number(value);
+  }
+
+  // field.dataType is not specified or it's 'object'
+  return value;
+}
+
 export function getGroupCriteria(group) {
   return isNegationGroup(group) ? group[1] : group;
 }
@@ -563,13 +578,25 @@ export function getCurrentLookupValueText(field, value, handler) {
 
 function getPrimitiveValueText(field, value, customOperation, target, options?) {
   let valueText;
-  if (value === true) {
-    valueText = field.trueText || messageLocalization.format('dxDataGrid-trueText');
-  } else if (value === false) {
-    valueText = field.falseText || messageLocalization.format('dxDataGrid-falseText');
+  // if (value === true) {
+  //   valueText = field.trueText || messageLocalization.format('dxDataGrid-trueText');
+  // } else if (value === false) {
+  //   valueText = field.falseText || messageLocalization.format('dxDataGrid-falseText');
+  // } else {
+  //   valueText = getFormattedValueText(field, value);
+  // }
+
+  // console.log(field, valueText);
+
+  if (field.dataType === 'boolean') {
+    const trueText = field.trueText || messageLocalization.format('dxDataGrid-trueText');
+    const falseText = field.falseText || messageLocalization.format('dxDataGrid-falseText');
+
+    valueText = value ? trueText : falseText;
   } else {
     valueText = getFormattedValueText(field, value);
   }
+
   if (field.customizeText) {
     valueText = field.customizeText.call(field, {
       value,
