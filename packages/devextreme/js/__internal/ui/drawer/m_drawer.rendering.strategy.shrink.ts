@@ -3,8 +3,8 @@ import { camelize } from '@js/core/utils/inflector';
 import type { PanelLocation } from '@js/ui/drawer';
 import type Drawer from '@ts/ui/drawer/m_drawer';
 
+import DrawerStrategy from './drawer.rendering.strategy';
 import { animation } from './m_drawer.animation';
-import DrawerStrategy from './m_drawer.rendering.strategy';
 
 class ShrinkStrategy extends DrawerStrategy {
   _internalRenderPosition(
