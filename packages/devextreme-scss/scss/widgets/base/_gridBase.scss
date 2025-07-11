@@ -976,6 +976,7 @@
 
       .dx-master-detail-container {
         overflow: hidden;
+        text-overflow: ellipsis;
 
         &.dx-#{$widget-name}-sticky-column-left {
           position: sticky;
