@@ -1,3 +1,4 @@
+import type { Direction } from '@js/common';
 import type { AnimationConfig, AnimationState, AnimationType } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -25,33 +26,26 @@ export interface FadeConfig {
 }
 
 export const animation = {
+  getMoveToConfig(direction: Direction, position: number): AnimationState | undefined {
+    switch (direction) {
+      case 'right':
+        return { transform: `translate(${position}px, 0px)` } as unknown as AnimationState;
+      case 'left':
+        return { left: position };
+      case 'top':
+      case 'bottom':
+        return { top: position };
+      default:
+        return undefined;
+    }
+  },
+
   moveTo(config: DrawerMoveAnimationConfig): void {
     const {
       $element, position, direction = 'left', duration, complete,
     } = config;
-    let toConfig = {} as AnimationState;
-    // eslint-disable-next-line no-undef-init
-    let animationType: AnimationType | undefined = undefined;
-
-    switch (direction) {
-      case 'right':
-        // @ts-expect-error ts-error
-        toConfig = { transform: `translate(${position}px, 0px)` };
-        // @ts-expect-error ts-error
-        animationType = 'custom';
-        break;
-      case 'left':
-        toConfig = { left: position };
-        animationType = 'slide';
-        break;
-      case 'top':
-      case 'bottom':
-        toConfig = { top: position };
-        animationType = 'slide';
-        break;
-      default:
-        break;
-    }
+    const toConfig = this.getMoveToConfig(direction, position);
+    const animationType: AnimationType = direction === 'right' ? ('custom' as unknown as AnimationType) : 'slide';
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fx.animate($element.get(0), {

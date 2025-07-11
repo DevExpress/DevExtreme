@@ -71,10 +71,8 @@ class Drawer extends Widget<DrawerProperties> {
       ...super._getDefaultOptions(),
       position: 'left',
       opened: false,
-      // @ts-expect-error ts-error
-      minSize: null,
-      // @ts-expect-error ts-error
-      maxSize: null,
+      minSize: undefined,
+      maxSize: undefined,
       shading: false,
       template: PANEL_TEMPLATE_NAME,
       openedStateMode: 'shrink',
@@ -201,11 +199,11 @@ class Drawer extends Widget<DrawerProperties> {
       /// #ENDDEBUG
 
       this._initMinMaxSize();
-      const { revealMode, opened } = this.option();
+      const { revealMode } = this.option();
 
       this._strategy.refreshPanelElementSize(revealMode === 'slide');
 
-      this._renderPosition(opened, true);
+      this._renderPosition(true);
       this._removePanelManualPosition();
     });
   }
@@ -416,15 +414,6 @@ class Drawer extends Widget<DrawerProperties> {
     return $result.get(0);
   }
 
-  getElementHeight($element: dxElementWrapper): number {
-    const $children = $element.children();
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return $children.length
-      ? getBoundingRect($children.eq(0).get(0)).height
-      : getBoundingRect($element.get(0)).height;
-  }
-
   isHorizontalDirection(): boolean {
     const position = this.calcTargetPosition();
 
@@ -462,14 +451,13 @@ class Drawer extends Widget<DrawerProperties> {
   }
 
   _renderPosition(
-    isDrawerOpened: boolean | undefined,
     disableAnimation?: boolean,
     jumpToEnd?: boolean,
   ): void {
     this.stopAnimations(jumpToEnd);
     this._whenAnimationCompleted = Deferred();
 
-    const { animationDuration, animationEnabled: optionAnimationEnabled } = this.option();
+    const { animationDuration, animationEnabled: optionAnimationEnabled, opened } = this.option();
     const animationEnabled = !disableAnimation && optionAnimationEnabled;
 
     if (!animationEnabled) {
@@ -486,8 +474,8 @@ class Drawer extends Widget<DrawerProperties> {
     $(this.viewContent()).css('paddingTop', 0);
     $(this.viewContent()).css('paddingBottom', 0);
 
-    if (isDrawerOpened) {
-      this._toggleShaderVisibility(isDrawerOpened);
+    if (opened) {
+      this._toggleShaderVisibility(opened);
     }
 
     this._strategy.renderPosition(animationEnabled, animationDuration);
@@ -517,10 +505,10 @@ class Drawer extends Widget<DrawerProperties> {
   _dimensionChanged(): void {
     this._initMinMaxSize();
 
-    const { revealMode, opened } = this.option();
+    const { revealMode } = this.option();
 
     this._strategy.refreshPanelElementSize(revealMode === 'slide');
-    this._renderPosition(opened, true);
+    this._renderPosition(true);
   }
 
   _toggleShaderVisibility(visible: boolean | undefined): void {
@@ -553,10 +541,10 @@ class Drawer extends Widget<DrawerProperties> {
 
     if (hasWindow()) {
       this._whenPanelContentRefreshed.always(() => {
-        const { revealMode, opened } = this.option();
+        const { revealMode } = this.option();
 
         this._strategy.refreshPanelElementSize(revealMode === 'slide');
-        this._renderPosition(opened, true, true);
+        this._renderPosition(true, true);
         this._removePanelManualPosition();
       });
     }
@@ -584,15 +572,13 @@ class Drawer extends Widget<DrawerProperties> {
   }
 
   _optionChanged(args: OptionChanged<DrawerProperties>): void {
-    const { opened } = this.option();
-
     switch (args.name) {
       case 'width':
         super._optionChanged(args);
         this._dimensionChanged();
         break;
       case 'opened':
-        this._renderPosition(opened);
+        this._renderPosition();
         this._toggleOpenedStateClass(args.value);
         this._togglePanelContentHiddenClass();
         break;
@@ -613,12 +599,12 @@ class Drawer extends Widget<DrawerProperties> {
         break;
       case 'minSize':
         this._initMinMaxSize();
-        this._renderPosition(opened, true);
+        this._renderPosition(true);
         this._togglePanelContentHiddenClass();
         break;
       case 'maxSize':
         this._initMinMaxSize();
-        this._renderPosition(opened, true);
+        this._renderPosition(true);
         break;
       case 'revealMode':
         this._refreshRevealModeClass(args.previousValue);
@@ -626,6 +612,8 @@ class Drawer extends Widget<DrawerProperties> {
         this._refreshPanel();
         break;
       case 'shading': {
+        const { opened } = this.option();
+
         this._toggleShaderVisibility(opened);
         break;
       }
