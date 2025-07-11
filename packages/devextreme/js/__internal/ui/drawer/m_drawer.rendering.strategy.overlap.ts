@@ -10,8 +10,8 @@ import type { PanelLocation } from '@js/ui/drawer';
 import type Drawer from '@ts/ui/drawer/m_drawer';
 import Overlay from '@ts/ui/overlay/m_overlay';
 
+import DrawerStrategy from './drawer.rendering.strategy';
 import { animation } from './m_drawer.animation';
-import DrawerStrategy from './m_drawer.rendering.strategy';
 
 interface InitialPosition {
   left?: number;
