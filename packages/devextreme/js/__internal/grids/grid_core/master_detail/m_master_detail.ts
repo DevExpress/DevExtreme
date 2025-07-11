@@ -312,6 +312,7 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingMasterD
 
   protected _toggleBestFitMode(isBestFit) {
     super._toggleBestFitMode.apply(this, arguments as any);
+
     if (this.option('masterDetail.template')) {
       const $rowsTable = this._rowsView.getTableElement();
       if ($rowsTable) {
