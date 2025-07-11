@@ -22,6 +22,12 @@ const userAgents = {
         chrome: 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/98.0.4758.85 Mobile/15E148 Safari/604.1',
         firefox: 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/115.0 Mobile/15E148 Safari/605.1.15',
     },
+    iphone_16: {
+        safari: 'Mozilla/5.0 (iPhone; CPU iPhone OS 19_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Mobile/15E148 Safari/604.1',
+        safari_desktop_mode: '',
+        chrome: 'Mozilla/5.0 (iPhone; CPU iPhone OS 19_0_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/138.0.7204.119 Mobile/15E148 Safari/604.1',
+        firefox: 'Mozilla/5.0 (iPhone; CPU iPhone OS 19_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/140.3 Mobile/15E148 Safari/605.1.15',
+    },
     ipad_10: 'Mozilla/5.0 (iPad; CPU OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.0 Mobile/14G60 Safari/602.1',
     ipad_16: {
         safari: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.1 Safari/605.1.15', // Expected: "tablet" Result: "desktop"
@@ -53,9 +59,14 @@ QUnit.module('devices', {
 [
     // iphone
     ['iphone 12', userAgents.iphone_12, 'ios', '12.3.1', 'phone', null],
+
     ['iphone 14 safari', userAgents.iphone_14.safari, 'ios', '16.5.1', 'phone', null],
     ['iphone 14 chrome', userAgents.iphone_14.chrome, 'ios', '16.5.0', 'phone', null],
     ['iphone 14 firefox', userAgents.iphone_14.firefox, 'ios', '16.5.1', 'phone', null],
+
+    ['iphone 16 safari', userAgents.iphone_16.safari, 'ios', '19.0', 'phone', null],
+    ['iphone 16 chrome', userAgents.iphone_16.chrome, 'ios', '19.0.0', 'phone', null],
+    ['iphone 16 firefox', userAgents.iphone_16.firefox, 'ios', '19.0', 'phone', null],
     // android phone
     ['android phone 9', userAgents.android_9, 'android', '9.0.0', 'phone', null],
     // ipad
@@ -63,7 +74,7 @@ QUnit.module('devices', {
     ['ipad 16 safari', userAgents.ipad_16.safari, 'ios', '10.15.7', 'tablet', { maxTouchPoints: 5 }],
     ['ipad 16 chrome', userAgents.ipad_16.chrome, 'ios', '16.5.0', 'tablet', { maxTouchPoints: 5 }],
     ['ipad 16 firefox', userAgents.ipad_16.firefox, 'ios', '10.15.7', 'tablet', { maxTouchPoints: 5 }],
-    ['ipad 17 safari', userAgents.ipad_17.safari, 'ios', '10.15.7', 'tablet', { maxTouchPoints: 5 }],
+    ['ipad 17 safari', userAgents.ipad_17.safari, 'ios', '17.5.0', 'tablet', { maxTouchPoints: 5 }],
     ['ipad 17 with desktop mode', userAgents.ipad_17.safari_desktop_mode, 'ios', '10.15.7', 'desktop', { maxTouchPoints: 5 }],
     // android tablet
     ['android tablet 7.1.1', userAgents.android_tablet_7_1_1, 'android', '7.1.1', 'tablet', null],
