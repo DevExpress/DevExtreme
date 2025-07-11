@@ -10,10 +10,10 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
 import LoadIndicator from '@js/ui/load_indicator';
-import { Scroller, type ScrollerOptions, SimulatedStrategy } from '@ts/ui/scroll_view/m_scrollable.simulated';
+import { Scroller, type ScrollerOptions, SimulatedStrategy } from '@ts/ui/scroll_view/scrollable.simulated';
 import type { ScrollOffset } from '@ts/ui/scroll_view/types';
 
-import type { ScrollView, ScrollViewProperties } from './m_scroll_view';
+import type { ScrollView, ScrollViewProperties } from './scroll_view';
 
 const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';
 const SCROLLVIEW_PULLDOWN_READY_CLASS = 'dx-scrollview-pull-down-ready';

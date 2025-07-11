@@ -8,9 +8,9 @@ import { each } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import type { ActionConfig } from '@ts/core/widget/component';
-import type Scrollable from '@ts/ui/scroll_view/m_scrollable';
-import type { ScrollableProperties } from '@ts/ui/scroll_view/m_scrollable';
-import Scrollbar from '@ts/ui/scroll_view/m_scrollbar';
+import type Scrollable from '@ts/ui/scroll_view/scrollable';
+import type { ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
+import Scrollbar from '@ts/ui/scroll_view/scrollbar';
 import type {
   AllowedDirections, DxMouseEvent, DxMouseWheelEvent, ScrollEventArgs, ScrollOffset,
 } from '@ts/ui/scroll_view/types';
@@ -152,10 +152,9 @@ class NativeStrategy<
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   handleInit(e: ScrollEvent): void {}
 
-  // eslint-disable-next-line class-methods-use-this
   handleStart(): void {}
 
   handleMove(e: DxMouseEvent): void {
@@ -170,13 +169,10 @@ class NativeStrategy<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   handleEnd(): void {}
 
-  // eslint-disable-next-line class-methods-use-this
   handleCancel(): void {}
 
-  // eslint-disable-next-line class-methods-use-this
   handleStop(): void {}
 
   _eachScrollbar(callback: (scrollbar: Scrollbar, direction: Orientation) => void): void {
@@ -277,7 +273,6 @@ class NativeStrategy<
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   disabledChanged(): void {}
 
   update(): void {
@@ -316,7 +311,6 @@ class NativeStrategy<
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _prepareDirections(): void {}
 
   _allowedDirections(): AllowedDirections {

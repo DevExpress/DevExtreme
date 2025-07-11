@@ -1,4 +1,4 @@
-import Animator from '__internal/ui/scroll_view/m_animator';
+import Animator from '__internal/ui/scroll_view/animator';
 import animationFrame from 'common/core/animation/frame';
 
 const REQEST_ANIMATION_FRAME_TIMEOUT = 10;
