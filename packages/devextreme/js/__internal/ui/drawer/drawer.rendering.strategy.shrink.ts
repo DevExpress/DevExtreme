@@ -3,8 +3,8 @@ import { camelize } from '@js/core/utils/inflector';
 import type { PanelLocation } from '@js/ui/drawer';
 import type Drawer from '@ts/ui/drawer/m_drawer';
 
+import { animation } from './drawer.animation';
 import DrawerStrategy from './drawer.rendering.strategy';
-import { animation } from './m_drawer.animation';
 
 class ShrinkStrategy extends DrawerStrategy {
   _internalRenderPosition(
@@ -49,7 +49,6 @@ class ShrinkStrategy extends DrawerStrategy {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   isViewContentFirst(position: PanelLocation | undefined, isRtl: boolean | undefined): boolean {
     return (isRtl ? position === 'left' : position === 'right') || position === 'bottom';
   }

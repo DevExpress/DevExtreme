@@ -10,8 +10,8 @@ import type { PanelLocation } from '@js/ui/drawer';
 import type Drawer from '@ts/ui/drawer/m_drawer';
 import Overlay from '@ts/ui/overlay/m_overlay';
 
+import { animation } from './drawer.animation';
 import DrawerStrategy from './drawer.rendering.strategy';
-import { animation } from './m_drawer.animation';
 
 interface InitialPosition {
   left?: number;
@@ -220,7 +220,6 @@ class OverlapStrategy extends DrawerStrategy {
     this.getDrawerInstance().setZIndex(zIndex);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   isViewContentFirst(position: PanelLocation | undefined): boolean {
     return position === 'right' || position === 'bottom';
   }
