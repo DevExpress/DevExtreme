@@ -11,7 +11,7 @@ import {
   getRawAppointments,
   getVisibleDateTimeIntervals,
 } from './utils/index';
-import type { CompareOptions, FilterOptions } from './utils/type';
+import type { CombinedFilter, CompareOptions, FilterOptions } from './utils/type';
 
 // TODO Vinogradov refactoring: this module should be refactored :)
 
@@ -20,14 +20,10 @@ const toMs = dateUtils.dateToMilliseconds;
 export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrategy {
   public static readonly strategyName = 'virtual';
 
-  filter(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
+  protected getBasePanelFilterOptions(): FilterOptions[] {
     const viewOffset = this._resolveOption('viewOffset');
     const hourMs = toMs('hour');
     const isCalculateStartAndEndDayHour = isDateAndTimeView(this.viewType);
-
-    const isAllDayWorkspace = !this.supportAllDayRow;
-    const showAllDayAppointments = this.showAllDayPanel || isAllDayWorkspace;
-
     const endViewDate = this.viewDataProvider.getLastViewDateByEndDayHour(this.viewEndDayHour);
     const shiftedEndViewDate = dateUtilsTs.addOffsets(endViewDate, [viewOffset]);
     const filterOptions: FilterOptions[] = [];
@@ -48,8 +44,8 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         : this.viewStartDayHour;
       const endDayHour = isCalculateStartAndEndDayHour
         ? startDayHour
-          + groupStartDate.getMinutes() / 60
-          + (groupEndDate.getTime() - groupStartDate.getTime()) / hourMs
+        + groupStartDate.getMinutes() / 60
+        + (groupEndDate.getTime() - groupStartDate.getTime()) / hourMs
         : this.viewEndDayHour;
 
       const resourceManager = this.options.getResourceManager();
@@ -58,19 +54,17 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         resourceManager.resourceById,
         groupIndex,
       );
-      const hasAllDayPanel = this.viewDataProvider.hasGroupAllDayPanel(groupIndex);
-      const supportAllDayPanel = isAllDayWorkspace || (!!showAllDayAppointments && hasAllDayPanel);
       const compareOptions: CompareOptions = {
         startDayHour,
         endDayHour,
-        min: dateUtilsTs.addOffsets(groupStartDate, [-viewOffset]),
-        max: dateUtilsTs.addOffsets(groupEndDate, [-viewOffset]),
+        min: groupStartDate,
+        max: groupEndDate,
       };
 
       filterOptions.push({
         ...compareOptions,
         viewOffset,
-        supportAllDayPanel,
+        allDayPanelFilter: false,
         resources,
         firstDayOfWeek: this.firstDayOfWeek,
         allDayPanelMode: this.allDayPanelMode,
@@ -78,26 +72,27 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         visibleTimeIntervals: getVisibleDateTimeIntervals(compareOptions, false),
       });
     });
-    const filteredItems = this.filterPreparedItems(filterOptions, this.groupCount, preparedItems);
 
-    return getRawAppointments(filteredItems);
+    return filterOptions;
   }
 
-  filterPreparedItems(
-    filterOptions: FilterOptions[],
-    groupCount: number,
+  protected filterByResources(
     preparedItems: AppointmentDataItem[],
+    filterOptions: FilterOptions[],
   ): AppointmentDataItem[] {
-    const combinedFilters: any[] = [];
-
-    let itemsToFilter = preparedItems;
-    if (groupCount > 0) {
-      itemsToFilter = itemsToFilter.filter(({ rawAppointment }) => filterOptions.some(
-        ({ resources }) => isAppointmentMatchedResources(rawAppointment, resources),
-      ));
+    if (!this.groupCount) {
+      return preparedItems;
     }
 
-    filterOptions.forEach((option) => {
+    return preparedItems.filter(({ rawAppointment }) => filterOptions.some(
+      ({ resources }) => isAppointmentMatchedResources(rawAppointment, resources),
+    ));
+  }
+
+  protected getCombinedFilterOptions(basePanelFilterOptions: FilterOptions[]): (CombinedFilter | 'or')[] {
+    const combinedFilters: (CombinedFilter | 'or')[] = [];
+
+    basePanelFilterOptions.forEach((option) => {
       if (combinedFilters.length) {
         combinedFilters.push('or');
       }
@@ -106,7 +101,25 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
       combinedFilters.push(filter);
     });
 
-    return filterArray(itemsToFilter, combinedFilters);
+    const filterOptions = this.getFilterOptions();
+    if (filterOptions.allDayPanelFilter === undefined) {
+      combinedFilters.push('or');
+      combinedFilters.push(this.createCombinedFilter({
+        ...filterOptions,
+        allDayPanelFilter: true,
+      }));
+    }
+
+    return combinedFilters;
+  }
+
+  filter(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
+    const basePanelFilterOptions = this.getBasePanelFilterOptions();
+    const itemsToFilter = this.filterByResources(preparedItems, basePanelFilterOptions);
+    const combinedFilters = this.getCombinedFilterOptions(basePanelFilterOptions);
+    const filteredItems = filterArray(itemsToFilter, combinedFilters);
+
+    return getRawAppointments(filteredItems);
   }
 
   hasAllDayAppointments(_, preparedItems: AppointmentDataItem[]): boolean {
@@ -120,7 +133,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
     return getRawAppointments(filteredItems);
   }
 
-  protected createAllDayAppointmentFilter(): ((appointment: AppointmentDataItem) => boolean)[][] {
+  protected createAllDayAppointmentFilter(): CombinedFilter {
     return [[
       (appointment: AppointmentDataItem): boolean => isAppointmentTakesAllDay(
         appointment,
