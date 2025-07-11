@@ -5,8 +5,8 @@ import { setHeight, setWidth } from '@js/core/utils/size';
 import type { PanelLocation } from '@js/ui/drawer';
 import type Drawer from '@ts/ui/drawer/m_drawer';
 
-import type { FadeConfig } from './m_drawer.animation';
-import { animation } from './m_drawer.animation';
+import type { FadeConfig } from './drawer.animation';
+import { animation } from './drawer.animation';
 
 class DrawerStrategy {
   _drawer: Drawer;
@@ -121,15 +121,13 @@ class DrawerStrategy {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isViewContentFirst(position: PanelLocation | undefined, isRtl?: boolean): boolean {
     return false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   onPanelContentRendered(): void {}
 
-  // eslint-disable-next-line class-methods-use-this
   _internalRenderPosition(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     changePositionUsingFxAnimation: boolean | undefined,
