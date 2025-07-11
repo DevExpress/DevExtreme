@@ -3,7 +3,7 @@ import $ from '@js/core/renderer';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { setHeight, setWidth } from '@js/core/utils/size';
 import type { PanelLocation } from '@js/ui/drawer';
-import type Drawer from '@ts/ui/drawer/m_drawer';
+import type Drawer from '@ts/ui/drawer/drawer';
 
 import type { FadeConfig } from './drawer.animation';
 import { animation } from './drawer.animation';

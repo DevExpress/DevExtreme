@@ -1,6 +1,6 @@
 import { move } from '@js/common/core/animation/translator';
 import $ from '@js/core/renderer';
-import type Drawer from '@ts/ui/drawer/m_drawer';
+import type Drawer from '@ts/ui/drawer/drawer';
 
 import { animation } from './drawer.animation';
 import DrawerStrategy from './drawer.rendering.strategy';
