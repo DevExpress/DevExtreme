@@ -26,6 +26,8 @@ node_modules
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# Copilot
+.github/copilot-instructions.md
 
 # System Files
 .DS_Store
