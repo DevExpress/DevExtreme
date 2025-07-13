@@ -1,10 +1,11 @@
+import type { DefaultOptionsRule } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferRender } from '@js/core/utils/common';
-import { each, map } from '@js/core/utils/iterator';
+import { each } from '@js/core/utils/iterator';
 import {
   getHeight,
   getOuterHeight,
@@ -15,12 +16,11 @@ import {
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import type { Orientation, Properties } from '@js/ui/tile_view';
+import type { Item, Orientation, Properties } from '@js/ui/tile_view';
 import type { OptionChanged } from '@ts/core/widget/types';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 import type {
   ScrollView as ScrollViewType,
-  ScrollViewServerSide as ScrollViewServerSideType,
 } from '@ts/ui/scroll_view/scroll_view';
 import ScrollView from '@ts/ui/scroll_view/scroll_view';
 
@@ -33,7 +33,7 @@ const TILEVIEW_ITEM_SELECTOR = `.${TILEVIEW_ITEM_CLASS}`;
 
 const TILEVIEW_ITEM_DATA_KEY = 'dxTileData';
 
-const CONFIGS: Record<Orientation, Record<string, string>> = {
+const CONFIGS = {
   horizontal: {
     itemMainRatio: 'widthRatio',
     itemCrossRatio: 'heightRatio',
@@ -54,7 +54,14 @@ const CONFIGS: Record<Orientation, Record<string, string>> = {
     mainPosition: 'top',
     crossPosition: 'left',
   },
-};
+} as const;
+
+interface ItemPosition {
+  top: number;
+  left: number;
+}
+type OrientationConfigMap = typeof CONFIGS;
+type OrientationConfig<T extends Orientation> = OrientationConfigMap[T];
 
 export interface TileViewProperties extends Properties {
   focusedElement?: dxElementWrapper;
@@ -65,21 +72,19 @@ export interface TileViewProperties extends Properties {
 class TileView extends CollectionWidget<TileViewProperties> {
   _$container!: dxElementWrapper;
 
-  _scrollView!: ScrollViewType | ScrollViewServerSideType;
+  _scrollView!: ScrollViewType;
 
   _cellsPerDimension!: number;
 
-  _itemsPositions!: Record<string, unknown>[];
+  _itemsPositions!: ItemPosition[];
 
-  _config!: Record<string, string>;
+  _config!: OrientationConfig<Orientation>;
 
-  _cells!: number[];
+  _cells!: number[][];
 
   _getDefaultOptions(): TileViewProperties {
     return {
       ...super._getDefaultOptions(),
-      // @ts-expect-error ts-error
-      items: null,
       direction: 'horizontal',
       hoverStateEnabled: true,
       showScrollbar: 'never',
@@ -92,10 +97,10 @@ class TileView extends CollectionWidget<TileViewProperties> {
     };
   }
 
-  _defaultOptionsRules() {
+  _defaultOptionsRules(): DefaultOptionsRule<TileViewProperties>[] {
     return super._defaultOptionsRules().concat([
       {
-        device() {
+        device(): boolean {
           return devices.real().deviceType === 'desktop' && !devices.isSimulator();
         },
         options: {
@@ -103,7 +108,8 @@ class TileView extends CollectionWidget<TileViewProperties> {
         },
       },
       {
-        device() {
+        device(): boolean {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return supportUtils.nativeScrolling;
         },
         options: {
@@ -136,23 +142,25 @@ class TileView extends CollectionWidget<TileViewProperties> {
     this._initScrollView();
   }
 
-  _dataSourceLoadingChangedHandler(isLoading): void {
+  _dataSourceLoadingChangedHandler(isLoading: boolean): void {
     const scrollView = this._scrollView;
-    // @ts-expect-error ts-error
+
     if (!scrollView?.startLoading) {
       return;
     }
 
-    if (isLoading && this.option('indicateLoading')) {
-      // @ts-expect-error ts-error
+    const { indicateLoading } = this.option();
+
+    if (isLoading && indicateLoading) {
       scrollView.startLoading();
     } else {
       scrollView.finishLoading();
     }
   }
 
-  _hideLoadingIfLoadIndicationOff() {
-    if (!this.option('indicateLoading')) {
+  _hideLoadingIfLoadIndicationOff(): void {
+    const { indicateLoading } = this.option();
+    if (!indicateLoading) {
       this._dataSourceLoadingChangedHandler(false);
     }
   }
@@ -161,7 +169,7 @@ class TileView extends CollectionWidget<TileViewProperties> {
     const {
       width, height, direction, showScrollbar,
     } = this.option();
-    // @ts-expect-error ts-error
+
     this._scrollView = this._createComponent(this.$element(), ScrollView, {
       direction,
       width,
@@ -180,6 +188,7 @@ class TileView extends CollectionWidget<TileViewProperties> {
   _initMarkup(): void {
     super._initMarkup();
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     deferRender(() => {
       this._cellsPerDimension = 1;
 
@@ -203,48 +212,61 @@ class TileView extends CollectionWidget<TileViewProperties> {
   }
 
   _renderGeometry(): void {
-    const { direction } = this.option();
-    // @ts-expect-error ts-error
+    const { direction = 'horizontal' } = this.option();
+
     this._config = CONFIGS[direction];
 
-    const items = this.option('items') || [];
-    const config = this._config;
-    const itemMargin = this.option('itemMargin');
-    const maxItemCrossRatio = Math.max.apply(Math, map(items || [], (item) => Math.round(item[config.itemCrossRatio] || 1)));
+    const { items = [], itemMargin = 0 } = this.option();
+    const config: OrientationConfig<Orientation> = this._config;
 
+    const maxItemCrossRatio = items.reduce(
+      (max, item) => {
+        const ratio = Math.round(item[config.itemCrossRatio] ?? 1);
+        return Math.max(max, ratio);
+      },
+      1,
+    );
+
+    // eslint-disable-next-line @typescript-eslint/init-declarations
     let crossDimensionValue;
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     if (hasWindow) {
       crossDimensionValue = (config.crossDimension === 'width' ? getWidth : getHeight)(this.$element());
     } else {
-      // @ts-expect-error ts-error
-      // eslint-disable-next-line radix
-      crossDimensionValue = parseInt(this.$element().get(0).style[config.crossDimension]);
+      crossDimensionValue = parseInt(this.$element()[0].style[config.crossDimension], 10);
     }
-    // @ts-expect-error ts-error
-    this._cellsPerDimension = Math.floor(crossDimensionValue / (this.option(config.baseItemCrossDimension) + itemMargin));
+
+    const options = this.option();
+    const baseItemCrossDimension = options[config.baseItemCrossDimension] ?? 0;
+
+    this._cellsPerDimension = Math.floor(
+      crossDimensionValue / (baseItemCrossDimension + itemMargin),
+    );
     this._cellsPerDimension = Math.max(this._cellsPerDimension, maxItemCrossRatio);
     this._cells = [];
-    // @ts-expect-error ts-error
+
     this._cells.push(new Array(this._cellsPerDimension));
 
     this._arrangeItems(items);
     this._renderContentSize(config, itemMargin);
   }
 
-  _renderContentSize(config, itemMargin): void {
+  _renderContentSize(
+    config: OrientationConfig<Orientation>,
+    itemMargin: number | undefined = 0,
+  ): void {
     const { mainDimension, baseItemMainDimension } = config;
 
     if (hasWindow()) {
-      // @ts-expect-error ts-error
-      const actualContentSize = this._cells.length * this.option(baseItemMainDimension) + (this._cells.length + 1) * itemMargin;
+      const actualContentSize = this._cells.length * (this.option()[baseItemMainDimension] ?? 0)
+        + (this._cells.length + 1) * itemMargin;
       const elementSize = (mainDimension === 'width' ? getWidth : getHeight)(this.$element());
 
       (mainDimension === 'width' ? setWidth : setHeight)(this._$container, Math.max(actualContentSize, elementSize));
     }
   }
 
-  _arrangeItems(items): void {
+  _arrangeItems(items: Item[]): void {
     const config = this._config;
     const { itemMainRatio } = config;
     const { itemCrossRatio } = config;
@@ -252,20 +274,28 @@ class TileView extends CollectionWidget<TileViewProperties> {
 
     this._itemsPositions = [];
 
-    each(items, (index, item) => {
-      const currentItem = {};
-      currentItem[itemMainRatio] = item[itemMainRatio] || 1;
-      currentItem[itemCrossRatio] = item[itemCrossRatio] || 1;
+    each(items, (index: number, item: Item) => {
+      const currentItem: Item & {
+        index: number;
+      } = {
+        index,
+      };
+      currentItem[itemMainRatio] = item[itemMainRatio] ?? 1;
+      currentItem[itemCrossRatio] = item[itemCrossRatio] ?? 1;
       // @ts-expect-error ts-error
-      currentItem.index = index;
-
-      currentItem[itemMainRatio] = currentItem[itemMainRatio] <= 0 ? 0 : Math.round(currentItem[config.itemMainRatio]);
-      currentItem[itemCrossRatio] = currentItem[itemCrossRatio] <= 0 ? 0 : Math.round(currentItem[config.itemCrossRatio]);
+      currentItem[itemMainRatio] = currentItem[itemMainRatio] <= 0
+        ? 0
+        // @ts-expect-error ts-error
+        : Math.round(currentItem[config.itemMainRatio]);
+      // @ts-expect-error ts-error
+      currentItem[itemCrossRatio] = currentItem[itemCrossRatio] <= 0
+        ? 0
+        // @ts-expect-error ts-error
+        : Math.round(currentItem[config.itemCrossRatio]);
 
       const itemPosition = this._getItemPosition(currentItem);
 
       if (itemPosition[mainPosition] === -1) {
-        // @ts-expect-error ts-error
         itemPosition[mainPosition] = this._cells.push(new Array(this._cellsPerDimension)) - 1;
       }
 
@@ -277,19 +307,22 @@ class TileView extends CollectionWidget<TileViewProperties> {
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _refreshActiveDescendant(): void {}
 
-  _getItemPosition(item) {
+  _getItemPosition(item: Item): ItemPosition {
     const config = this._config;
     const { mainPosition } = config;
     const { crossPosition } = config;
 
-    const position = {};
-    position[mainPosition] = -1;
-    position[crossPosition] = 0;
+    // @ts-expect-error ts-error
+    const position: ItemPosition = {
+      [mainPosition]: -1,
+      [crossPosition]: 0,
+    };
 
-    for (let main = 0; main < this._cells.length; main++) {
-      for (let cross = 0; cross < this._cellsPerDimension; cross++) {
+    for (let main = 0; main < this._cells.length; main += 1) {
+      for (let cross = 0; cross < this._cellsPerDimension; cross += 1) {
         if (this._itemFit(main, cross, item)) {
           position[mainPosition] = main;
           position[crossPosition] = cross;
@@ -305,21 +338,24 @@ class TileView extends CollectionWidget<TileViewProperties> {
     return position;
   }
 
-  _itemFit(mainPosition, crossPosition, item) {
+  _itemFit(
+    mainPosition: number,
+    crossPosition: number,
+    item: Item,
+  ): boolean {
     let result = true;
 
     const config = this._config;
-    const itemRatioMain = item[config.itemMainRatio];
-    const itemRatioCross = item[config.itemCrossRatio];
+    const itemRatioMain = item[config.itemMainRatio] ?? 0;
+    const itemRatioCross = item[config.itemCrossRatio] ?? 0;
 
     if (crossPosition + itemRatioCross > this._cellsPerDimension) {
       return false;
     }
 
-    for (let main = mainPosition; main < mainPosition + itemRatioMain; main++) {
-      for (let cross = crossPosition; cross < crossPosition + itemRatioCross; cross++) {
+    for (let main = mainPosition; main < mainPosition + itemRatioMain; main += 1) {
+      for (let cross = crossPosition; cross < crossPosition + itemRatioCross; cross += 1) {
         if (this._cells.length - 1 < main) {
-          // @ts-expect-error ts-error
           this._cells.push(new Array(this._cellsPerDimension));
         } else if (this._cells[main][cross] !== undefined) {
           result = false;
@@ -331,61 +367,57 @@ class TileView extends CollectionWidget<TileViewProperties> {
     return result;
   }
 
-  _occupyCells(item, itemPosition) {
+  _occupyCells(item: Item & { index: number }, itemPosition: ItemPosition): void {
     const config = this._config;
     const itemPositionMain = itemPosition[config.mainPosition];
     const itemPositionCross = itemPosition[config.crossPosition];
-    const itemRatioMain = item[config.itemMainRatio];
-    const itemRatioCross = item[config.itemCrossRatio];
+    const itemRatioMain = item[config.itemMainRatio] ?? 0;
+    const itemRatioCross = item[config.itemCrossRatio] ?? 0;
 
-    for (let main = itemPositionMain; main < itemPositionMain + itemRatioMain; main++) {
-      for (let cross = itemPositionCross; cross < itemPositionCross + itemRatioCross; cross++) {
+    for (let main = itemPositionMain; main < itemPositionMain + itemRatioMain; main += 1) {
+      for (let cross = itemPositionCross; cross < itemPositionCross + itemRatioCross; cross += 1) {
         this._cells[main][cross] = item.index;
       }
     }
   }
 
-  _arrangeItem(item, itemPosition) {
+  _arrangeItem(item: Item, itemPosition: ItemPosition): void {
     const config = this._config;
     const itemPositionMain = itemPosition[config.mainPosition];
     const itemPositionCross = itemPosition[config.crossPosition];
-    const itemRatioMain = item[config.itemMainRatio];
-    const itemRatioCross = item[config.itemCrossRatio];
-    const baseItemCross = this.option(config.baseItemCrossDimension);
-    const baseItemMain = this.option(config.baseItemMainDimension);
-    const itemMargin = this.option('itemMargin');
-
+    const itemRatioMain = item[config.itemMainRatio] ?? 0;
+    const itemRatioCross = item[config.itemCrossRatio] ?? 0;
+    const baseItemCross = this.option()[config.baseItemCrossDimension] ?? 0;
+    const baseItemMain = this.option()[config.baseItemMainDimension] ?? 0;
+    const { itemMargin = 0, rtlEnabled } = this.option();
     const cssProps = { display: itemRatioMain <= 0 || itemRatioCross <= 0 ? 'none' : '' };
-    // @ts-expect-error ts-error
+
     const mainDimension = itemRatioMain * baseItemMain + (itemRatioMain - 1) * itemMargin;
-    // @ts-expect-error ts-error
     const crossDimension = itemRatioCross * baseItemCross + (itemRatioCross - 1) * itemMargin;
     cssProps[config.mainDimension] = mainDimension < 0 ? 0 : mainDimension;
     cssProps[config.crossDimension] = crossDimension < 0 ? 0 : crossDimension;
-    // @ts-expect-error ts-error
-    cssProps[config.mainPosition] = itemPositionMain * baseItemMain + (itemPositionMain + 1) * itemMargin;
-    // @ts-expect-error ts-error
-    cssProps[config.crossPosition] = itemPositionCross * baseItemCross + (itemPositionCross + 1) * itemMargin;
+    cssProps[config.mainPosition] = itemPositionMain * baseItemMain
+      + (itemPositionMain + 1) * itemMargin;
+    cssProps[config.crossPosition] = itemPositionCross * baseItemCross
+      + (itemPositionCross + 1) * itemMargin;
 
-    if (this.option('rtlEnabled')) {
+    if (rtlEnabled) {
       const offsetCorrection = getWidth(this._$container);
-      const baseItemWidth = this.option('baseItemWidth');
+      const { baseItemWidth = 0 } = this.option();
       const itemPositionX = itemPosition.left;
-      // @ts-expect-error ts-error
       const offsetPosition = itemPositionX * baseItemWidth;
-      // @ts-expect-error ts-error
       const itemBaseOffset = baseItemWidth + itemMargin;
-      const itemWidth = itemBaseOffset * item.widthRatio;
       // @ts-expect-error ts-error
+      const itemWidth = itemBaseOffset * item.widthRatio;
       const subItemMargins = itemPositionX * itemMargin;
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       cssProps.left = offsetCorrection - (offsetPosition + itemWidth + subItemMargins);
     }
-
+    // @ts-expect-error ts-error
     this._itemElements().eq(item.index).css(cssProps);
   }
 
-  _moveFocus(location) {
+  _moveFocus(location: string): void {
     const FOCUS_UP = 'up';
     const FOCUS_DOWN = 'down';
     const FOCUS_LEFT = this.option('rtlEnabled') ? 'right' : 'left';
@@ -400,11 +432,10 @@ class TileView extends CollectionWidget<TileViewProperties> {
     const index = $(focusedElement).index();
     let targetCol = this._itemsPositions[index].left;
     let targetRow = this._itemsPositions[index].top;
-    // @ts-expect-error ts-error
+
     const colCount = (horizontalDirection ? cells : cells[0]).length;
-    // @ts-expect-error ts-error
     const rowCount = (horizontalDirection ? cells[0] : cells).length;
-    const getCell = function (col, row) {
+    const getCell = (col: number, row: number): number => {
       if (horizontalDirection) {
         return cells[col][row];
       }
@@ -414,22 +445,17 @@ class TileView extends CollectionWidget<TileViewProperties> {
     switch (location) {
       case FOCUS_PAGE_UP:
       case FOCUS_UP:
-        // @ts-expect-error ts-error
         while (targetRow > 0 && index === getCell(targetCol, targetRow)) {
-          // @ts-expect-error ts-error
-          targetRow--;
+          targetRow -= 1;
         }
-        // @ts-expect-error ts-error
         if (targetRow < 0) {
           targetRow = 0;
         }
         break;
       case FOCUS_PAGE_DOWN:
       case FOCUS_DOWN:
-        // @ts-expect-error ts-error
         while (targetRow < rowCount && index === getCell(targetCol, targetRow)) {
-          // @ts-expect-error ts-error
-          targetRow++;
+          targetRow += 1;
         }
 
         if (targetRow === rowCount) {
@@ -437,10 +463,8 @@ class TileView extends CollectionWidget<TileViewProperties> {
         }
         break;
       case FOCUS_RIGHT:
-        // @ts-expect-error ts-error
         while (targetCol < colCount && index === getCell(targetCol, targetRow)) {
-          // @ts-expect-error ts-error
-          targetCol++;
+          targetCol += 1;
         }
 
         if (targetCol === colCount) {
@@ -448,19 +472,15 @@ class TileView extends CollectionWidget<TileViewProperties> {
         }
         break;
       case FOCUS_LEFT:
-        // @ts-expect-error ts-error
         while (targetCol >= 0 && index === getCell(targetCol, targetRow)) {
-          // @ts-expect-error ts-error
-          targetCol--;
+          targetCol -= 1;
         }
-        // @ts-expect-error ts-error
         if (targetCol < 0) {
           targetCol = 0;
         }
         break;
       default:
-        // @ts-expect-error ts-error
-        super._moveFocus.apply(this, arguments);
+        super._moveFocus(location);
         return;
     }
 
@@ -474,14 +494,15 @@ class TileView extends CollectionWidget<TileViewProperties> {
     this._scrollToItem($newTarget);
   }
 
-  _scrollToItem($itemElement): void {
+  _scrollToItem($itemElement: dxElementWrapper): void {
     if (!$itemElement.length) {
       return;
     }
 
     const config = this._config;
     const outerMainGetter = config.mainDimension === 'width' ? getOuterWidth : getOuterHeight;
-    const itemMargin = this.option('itemMargin');
+    const { itemMargin = 0 } = this.option();
+    // @ts-expect-error ts-error
     const itemPosition = $itemElement.position()[config.mainPosition];
     const itemDimension = outerMainGetter($itemElement);
     const itemTail = itemPosition + itemDimension;
@@ -493,16 +514,16 @@ class TileView extends CollectionWidget<TileViewProperties> {
     }
 
     if (scrollPosition > itemPosition) {
-      // @ts-expect-error ts-error
       this._scrollView.scrollTo(itemPosition - itemMargin);
     } else {
-      // @ts-expect-error ts-error
       this._scrollView.scrollTo(itemPosition + itemDimension - clientWidth + itemMargin);
     }
   }
 
   _optionChanged(args: OptionChanged<TileViewProperties>): void {
-    switch (args.name) {
+    const { name, value } = args;
+
+    switch (name) {
       case 'items':
         super._optionChanged(args);
         this._renderGeometry();
@@ -512,7 +533,7 @@ class TileView extends CollectionWidget<TileViewProperties> {
         this._initScrollView();
         break;
       case 'disabled':
-        this._scrollView.option('disabled', args.value);
+        this._scrollView.option('disabled', value);
         super._optionChanged(args);
         break;
       case 'baseItemWidth':
@@ -524,7 +545,7 @@ class TileView extends CollectionWidget<TileViewProperties> {
       case 'height':
         super._optionChanged(args);
         this._renderGeometry();
-        this._scrollView.option(args.name, args.value);
+        this._scrollView.option(name, value);
         this._updateScrollView();
         break;
       case 'direction':

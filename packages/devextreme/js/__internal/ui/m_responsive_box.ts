@@ -7,14 +7,19 @@ import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { getWidth } from '@js/core/utils/size';
 import { isDefined, isEmptyObject, isPlainObject } from '@js/core/utils/type';
-// @ts-expect-error ts-error
-import { defaultScreenFactorFunc, getWindow, hasWindow } from '@js/core/utils/window';
-import type { BoxDirection, Properties as BoxProperties } from '@js/ui/box';
-import Box from '@js/ui/box';
+import {
+  // @ts-expect-error ts-error
+  defaultScreenFactorFunc,
+  getWindow,
+  hasWindow,
+} from '@js/core/utils/window';
+import type { BoxDirection } from '@js/ui/box';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
-import type { Properties } from '@js/ui/responsive_box';
+import type { Item, Properties } from '@js/ui/responsive_box';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { BoxItemData, BoxProperties } from '@ts/ui/box';
+import Box from '@ts/ui/box';
 
 // STYLE responsiveBox
 
@@ -25,18 +30,44 @@ const BOX_ITEM_DATA_KEY = 'dxBoxItemData';
 
 const HD_SCREEN_WIDTH = 1920;
 
-interface SizeConfig {
-  ratio?: number;
-  baseSize?: number;
-  shrink?: number;
-  minSize?: number;
-  maxSize?: number;
+type SizeQualifier = 'xs' | 'sm' | 'md' | 'lg';
+
+interface BlockRange { start: number; end: number }
+type BoxOptions = BoxProperties<BoxItemData, string | number>;
+
+type ResponsiveBoxItem = BoxItemData & {
+  location?: Item['location'];
+  item?: ResponsiveBoxItem;
+};
+
+interface BlockOptions {
+  direction: BoxDirection;
+  row: BlockRange;
+  col: BlockRange;
+  prevBlockOptions?: BlockOptions;
 }
 
-export interface ResponsiveBoxProperties extends Properties {
+export interface GridCell {
+  item: ResponsiveBoxItem;
+  location: {
+    row?: number;
+    col?: number;
+    rowspan: number;
+    colspan: number;
+  };
+  spanningCell?: GridCell;
+}
+
+export interface ResponsiveBoxProperties extends Properties<Item> {
   onLayoutChanged?: (() => void) | null;
 
   currentScreenFactor?: string;
+
+  onItemStateChanged?: (args: {
+    name: string;
+    state: unknown;
+    oldState: unknown;
+  }) => void;
 }
 
 class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
@@ -44,34 +75,24 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
 
   _layoutChangedAction?: () => void;
 
-  _screenItems?: Record<string, unknown>[];
+  _screenItems?: ResponsiveBoxItem[];
 
   _$root?: dxElementWrapper;
 
-  _rows!: {
-    baseSize?: number | string;
-    ratio?: number;
-    screen?: string;
-    shrink?: number;
-  }[];
+  _rows!: ResponsiveBoxItem[];
 
-  _cols!: {
-    baseSize?: number | string;
-    ratio?: number;
-    screen?: string;
-    shrink?: number;
-  }[];
+  _cols!: ResponsiveBoxItem[];
 
-  _grid!: Record<string, unknown>[][];
+  _grid!: GridCell[][];
 
   _getDefaultOptions(): ResponsiveBoxProperties {
     return {
       ...super._getDefaultOptions(),
       rows: [],
       cols: [],
+      singleColumnScreen: '',
       // @ts-expect-error ts-error
       screenByWidth: null,
-      singleColumnScreen: '',
       height: '100%',
       width: '100%',
       activeStateEnabled: false,
@@ -81,7 +102,8 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
   }
 
   _init(): void {
-    if (!this.option('screenByWidth')) {
+    const { screenByWidth } = this.option();
+    if (!screenByWidth) {
       this._options.silent('screenByWidth', defaultScreenFactorFunc);
     }
 
@@ -121,7 +143,7 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     this._linkNodeToItem();
   }
 
-  _itemOptionChanged(item): void {
+  _itemOptionChanged(item: Item): void {
     const $item = this._findItemElementByItem(item);
     if (!$item.length) {
       return;
@@ -150,38 +172,34 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
   }
 
   _prepareGrid(): void {
-    const grid = this._grid = [];
+    this._grid = [];
 
     this._prepareRowsAndCols();
 
     each(this._rows, () => {
-      const row = [];
-      // @ts-expect-error
-      grid.push(row);
+      const row: GridCell[] = [];
+      this._grid.push(row);
 
       each(this._cols, () => {
-        // @ts-expect-error
         row.push(this._createEmptyCell());
       });
     });
   }
 
-  getSingleColumnRows() {
+  getSingleColumnRows(): BoxItemData[] {
     const { rows } = this.option();
     // @ts-expect-error ts-error
     const screenItemsLength = this._screenItems.length;
 
     if (rows?.length) {
       const filteredRows = this._filterByScreen(rows);
-      const result = [];
+      const result: BoxItemData[] = [];
 
-      for (let i = 0; i < screenItemsLength; i++) {
+      for (let i = 0; i < screenItemsLength; i += 1) {
         const sizeConfig = this._defaultSizeConfig();
         if (i < filteredRows.length && isDefined(filteredRows[i].shrink)) {
-          // @ts-expect-error ts-error
           sizeConfig.shrink = filteredRows[i].shrink;
         }
-        // @ts-expect-error ts-error
         result.push(sizeConfig);
       }
       return result;
@@ -192,13 +210,14 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
   _prepareRowsAndCols(): void {
     if (this._isSingleColumnScreen()) {
       this._prepareSingleColumnScreenItems();
-      // @ts-expect-error ts-error
+
       this._rows = this.getSingleColumnRows();
-      // @ts-expect-error ts-error
       this._cols = this._defaultSizeConfig(1);
     } else {
-      this._rows = this._sizesByScreen(this.option('rows'));
-      this._cols = this._sizesByScreen(this.option('cols'));
+      const { rows, cols } = this.option();
+
+      this._rows = this._sizesByScreen(rows);
+      this._cols = this._sizesByScreen(cols);
     }
   }
 
@@ -209,45 +228,60 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
       || !rows?.length || !cols?.length;
   }
 
-  _prepareSingleColumnScreenItems() {
+  _prepareSingleColumnScreenItems(): void {
     // @ts-expect-error ts-error
-    this._screenItems.sort((item1, item2) => (item1.location.row - item2.location.row) || (item1.location.col - item2.location.col));
+    this._screenItems.sort((
+      item1,
+      item2,
+      // @ts-expect-error ts-error
+    ) => (item1.location.row - item2.location.row) || (item1.location.col - item2.location.col));
 
     each(this._screenItems, (index, item) => {
-      extend(item.location, {
-        row: index, col: 0, rowspan: 1, colspan: 1,
+      Object.assign(item.location, {
+        row: index,
+        col: 0,
+        rowspan: 1,
+        colspan: 1,
       });
     });
   }
 
-  _sizesByScreen(sizeConfigs) {
-    return map(this._filterByScreen(sizeConfigs), (sizeConfig) => extend(this._defaultSizeConfig(), sizeConfig));
+  _sizesByScreen(sizeConfigs: ResponsiveBoxItem[] | undefined): ResponsiveBoxItem[] {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return map(
+      this._filterByScreen(sizeConfigs),
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      (sizeConfig) => extend(this._defaultSizeConfig(), sizeConfig),
+    );
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _createDefaultSizeConfig(): SizeConfig {
+  _createDefaultSizeConfig(): ResponsiveBoxItem {
     return {
       ratio: 1, baseSize: 0, minSize: 0, maxSize: 0,
     };
   }
 
-  _defaultSizeConfig(size?: number): SizeConfig | SizeConfig[] {
+  _defaultSizeConfig(): ResponsiveBoxItem;
+  _defaultSizeConfig(size: number): ResponsiveBoxItem[];
+  _defaultSizeConfig(size?: number): ResponsiveBoxItem | ResponsiveBoxItem[] {
     const defaultSizeConfig = this._createDefaultSizeConfig();
     if (!arguments.length) {
       return defaultSizeConfig;
     }
 
-    const result: SizeConfig[] = [];
+    const result: ResponsiveBoxItem[] = [];
     // @ts-expect-error ts-error
-    for (let i = 0; i < size; i++) {
+    for (let i = 0; i < size; i += 1) {
       result.push(defaultSizeConfig);
     }
     return result;
   }
 
-  _filterByScreen(items) {
+  _filterByScreen(items: ResponsiveBoxItem[] | undefined): ResponsiveBoxItem[] {
     const screenRegExp = this._screenRegExp();
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return grep(items, (item) => !item.screen || screenRegExp.test(item.screen));
   }
 
@@ -256,25 +290,32 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     return new RegExp(`(^|\\s)${screen}($|\\s)`, 'i');
   }
 
-  _getCurrentScreen() {
+  _getCurrentScreen(): SizeQualifier {
     const width = this._screenWidth();
     const { screenByWidth } = this.option();
 
-    return screenByWidth?.(width);
+    return screenByWidth?.(width) as SizeQualifier;
   }
 
-  _screenWidth() {
-    return hasWindow() ? getWidth(getWindow()) : HD_SCREEN_WIDTH;
+  // eslint-disable-next-line class-methods-use-this
+  _screenWidth(): number {
+    if (hasWindow()) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return getWidth(getWindow());
+    }
+
+    return HD_SCREEN_WIDTH;
   }
 
-  _createEmptyCell() {
+  // eslint-disable-next-line class-methods-use-this
+  _createEmptyCell(): GridCell {
     return {
       item: {},
       location: { colspan: 1, rowspan: 1 },
     };
   }
 
-  _spreadItems() {
+  _spreadItems(): void {
     each(this._screenItems, (_, itemInfo) => {
       const location = itemInfo.location || {};
       const itemCol = location.col;
@@ -286,17 +327,25 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     });
   }
 
-  _itemsByScreen(): Record<string, unknown>[] {
-    const { items } = this.option();
+  _itemsByScreen(): Item[] {
+    const { items = [] } = this.option();
 
-    return items?.reduce((result, item) => {
-      let locations = item.location || {};
-      locations = isPlainObject(locations) ? [locations] : locations;
+    return items.reduce<Item[]>((result: Item[], item: ResponsiveBoxItem) => {
+      let locations = (item.location ?? {}) as ResponsiveBoxItem[];
+
+      locations = isPlainObject(locations)
+        ? [locations] as ResponsiveBoxItem[]
+        : locations;
 
       this._filterByScreen(locations).forEach((location) => {
         result.push({
+          // @ts-expect-error ts-error
           item,
-          location: extend({ rowspan: 1, colspan: 1 }, location),
+          location: {
+            rowspan: 1,
+            colspan: 1,
+            ...location,
+          },
         });
       });
 
@@ -304,7 +353,7 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     }, []);
   }
 
-  _occupyCells(itemCell, itemInfo) {
+  _occupyCells(itemCell: GridCell, itemInfo: ResponsiveBoxItem): void {
     if (!itemCell || this._isItemCellOccupied(itemCell, itemInfo)) {
       return;
     }
@@ -313,7 +362,7 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     this._markSpanningCell(itemCell);
   }
 
-  _isItemCellOccupied(itemCell, itemInfo) {
+  _isItemCellOccupied(itemCell: GridCell, itemInfo: ResponsiveBoxItem): boolean {
     if (!isEmptyObject(itemCell.item)) {
       return true;
     }
@@ -325,7 +374,11 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     return result;
   }
 
-  _loopOverSpanning(location, callback) {
+  _loopOverSpanning(
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    location,
+    callback: (cell: GridCell) => void,
+  ): void {
     const rowEnd = location.row + location.rowspan - 1;
     const colEnd = location.col + location.colspan - 1;
     const boundRowEnd = Math.min(rowEnd, this._rows.length - 1);
@@ -333,8 +386,8 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     location.rowspan -= rowEnd - boundRowEnd;
     location.colspan -= colEnd - boundColEnd;
 
-    for (let rowIndex = location.row; rowIndex <= boundRowEnd; rowIndex++) {
-      for (let colIndex = location.col; colIndex <= boundColEnd; colIndex++) {
+    for (let rowIndex = location.row; rowIndex <= boundRowEnd; rowIndex += 1) {
+      for (let colIndex = location.col; colIndex <= boundColEnd; colIndex += 1) {
         if ((rowIndex !== location.row) || (colIndex !== location.col)) {
           callback(this._grid[rowIndex][colIndex]);
         }
@@ -342,22 +395,19 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     }
   }
 
-  _markSpanningCell(itemCell) {
+  _markSpanningCell(itemCell: GridCell): void {
     this._loopOverSpanning(itemCell.location, (cell) => {
-      extend(cell, {
-        item: itemCell.item,
-        spanningCell: itemCell,
-      });
+      cell.item = itemCell.item;
+      cell.spanningCell = itemCell;
     });
   }
 
-  _linkNodeToItem() {
+  _linkNodeToItem(): void {
     each(this._itemElements(), (_, itemNode) => {
       const $item = $(itemNode);
-      const item = $item.data(BOX_ITEM_DATA_KEY);
-      // @ts-expect-error
+      // @ts-expect-error ts-error
+      const item: BoxItemData = $item.data(BOX_ITEM_DATA_KEY);
       if (!item.box) {
-        // @ts-expect-error
         item.node = $item.children();
       }
     });
@@ -376,17 +426,20 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
       row: { start: 0, end: rowsCount - 1 },
       col: { start: 0, end: colsCount - 1 },
     });
-    // @ts-expect-error ts-error
-    const rootBox = this._prepareBoxConfig(result.box || { direction: 'row', items: [extend(result, { ratio: 1 })] });
+
+    const rootBox = this._prepareBoxConfig(result?.box ?? { direction: 'row', items: [extend(result, { ratio: 1 })] });
     extend(rootBox, this._rootBoxConfig(rootBox.items));
 
     this._$root = $('<div>').appendTo(this._itemContainer());
+
     this._createComponent(this._$root, Box, rootBox);
   }
 
-  _rootBoxConfig(items): BoxProperties {
+  _rootBoxConfig(items: BoxItemData[] | undefined): BoxOptions {
     const rootItems = each(items, (index, item) => {
-      this._needApplyAutoBaseSize(item) && extend(item, { baseSize: 'auto' });
+      if (this._needApplyAutoBaseSize(item)) {
+        item.baseSize = 'auto';
+      }
     });
 
     const { itemHoldTimeout } = this.option();
@@ -404,18 +457,21 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     };
   }
 
-  _needApplyAutoBaseSize(item) {
+  // eslint-disable-next-line class-methods-use-this
+  _needApplyAutoBaseSize(item: BoxItemData): boolean {
     return !item.baseSize && (!item.minSize || item.minSize === 'auto') && (!item.maxSize || item.maxSize === 'auto');
   }
 
-  _prepareBoxConfig(config) {
+  _prepareBoxConfig(config: BoxOptions): BoxOptions {
+    const { onItemStateChanged } = this.option();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(config || {}, {
       crossAlign: 'stretch',
-      onItemStateChanged: this.option('onItemStateChanged'),
+      onItemStateChanged,
     });
   }
 
-  _layoutBlock(options) {
+  _layoutBlock(options: BlockOptions): ResponsiveBoxItem | null {
     if (this._isSingleItem(options)) {
       return this._itemByCell(options.row.start, options.col.start);
     }
@@ -423,34 +479,33 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     return this._layoutDirection(options);
   }
 
-  _isSingleItem(options): boolean {
-    const firstCellLocation = this._grid[options.row.start][options.col.start].location;
-    // @ts-expect-error ts-error
-    const isItemRowSpanned = (options.row.end - options.row.start) === (firstCellLocation.rowspan - 1);
-    // @ts-expect-error ts-error
-    const isItemColSpanned = (options.col.end - options.col.start) === (firstCellLocation.colspan - 1);
+  _isSingleItem(options: BlockOptions): boolean {
+    const { row, col } = options;
+    const firstCellLocation = this._grid[row.start][col.start].location;
+    const isItemRowSpanned = (row.end - row.start) === (firstCellLocation.rowspan - 1);
+    const isItemColSpanned = (col.end - col.start) === (firstCellLocation.colspan - 1);
 
     return isItemRowSpanned && isItemColSpanned;
   }
 
-  _itemByCell(rowIndex, colIndex) {
+  _itemByCell(rowIndex: number, colIndex: number): ResponsiveBoxItem | null {
     const itemCell = this._grid[rowIndex][colIndex];
     return itemCell.spanningCell ? null : itemCell.item;
   }
 
-  _layoutDirection(options) {
-    const items = [];
+  _layoutDirection(options: BlockOptions): BoxItemData {
+    const items: BoxItemData[] = [];
     const { direction } = options;
     const crossDirection = this._crossDirection(direction);
 
-    let block;
+    let block: BlockOptions | null = null;
     // eslint-disable-next-line no-cond-assign
     while (block = this._nextBlock(options)) {
       if (this._isBlockIndivisible(options.prevBlockOptions, block)) {
         throw errors.Error('E1025');
       }
 
-      const item = this._layoutBlock({
+      const item: ResponsiveBoxItem | null = this._layoutBlock({
         direction: crossDirection,
         row: block.row,
         col: block.col,
@@ -459,7 +514,6 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
 
       if (item) {
         extend(item, this._blockSize(block, crossDirection));
-        // @ts-expect-error
         items.push(item);
       }
 
@@ -471,8 +525,9 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     };
   }
 
-  _isBlockIndivisible(options, block): boolean {
-    return options
+  // eslint-disable-next-line class-methods-use-this
+  _isBlockIndivisible(options: BlockOptions | undefined, block: BlockOptions): boolean {
+    return !!options
         && options.col.start === block.col.start
         && options.col.end === block.col.end
         && options.row.start === block.row.start
@@ -484,7 +539,7 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     return direction === 'col' ? 'row' : 'col';
   }
 
-  _nextBlock(options) {
+  _nextBlock(options: BlockOptions): BlockOptions | null {
     const { direction } = options;
     const crossDirection = this._crossDirection(direction);
     const startIndex = options[direction].start;
@@ -496,11 +551,15 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     }
 
     let crossSpan = 1;
-    for (let crossIndex = crossStartIndex; crossIndex < crossStartIndex + crossSpan; crossIndex++) {
+    for (
+      let crossIndex = crossStartIndex;
+      crossIndex < crossStartIndex + crossSpan;
+      crossIndex += 1
+    ) {
       let lineCrossSpan = 1;
-      for (let index = startIndex; index <= endIndex; index++) {
+      for (let index = startIndex; index <= endIndex; index += 1) {
         const cell = this._cellByDirection(direction, index, crossIndex);
-        // @ts-expect-error ts-error
+
         lineCrossSpan = Math.max(lineCrossSpan, cell.location[`${crossDirection}span`]);
       }
 
@@ -510,27 +569,36 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
         crossSpan += lineCrossEndIndex - crossEndIndex;
       }
     }
-
-    const result = {};
+    // @ts-expect-error ts-error
+    const result: BlockOptions = {};
     result[direction] = { start: startIndex, end: endIndex };
     result[crossDirection] = { start: crossStartIndex, end: crossStartIndex + crossSpan - 1 };
     return result;
   }
 
-  _cellByDirection(direction, index, crossIndex) {
+  _cellByDirection(
+    direction: BoxDirection,
+    index: number,
+    crossIndex: number,
+  ): GridCell {
     return direction === 'col'
       ? this._grid[crossIndex][index]
       : this._grid[index][crossIndex];
   }
 
-  _blockSize(block, direction) {
+  _blockSize(block: BlockOptions, direction: BoxDirection): BoxItemData {
     const defaultMinSize = direction === 'row' ? 'auto' : 0;
     const sizeConfigs = direction === 'row' ? this._rows : this._cols;
-    const result = extend(this._createDefaultSizeConfig(), { ratio: 0 });
+    const result: BoxItemData = {
+      ...this._createDefaultSizeConfig(),
+      ratio: 0,
+    };
 
-    for (let index = block[direction].start; index <= block[direction].end; index++) {
+    for (let index = block[direction].start; index <= block[direction].end; index += 1) {
       const sizeConfig = sizeConfigs[index];
+      // @ts-expect-error ts-error
       result.ratio += sizeConfig.ratio;
+      // @ts-expect-error ts-error
       result.baseSize += sizeConfig.baseSize;
       // @ts-expect-error ts-error
       result.minSize += sizeConfig.minSize;
@@ -542,10 +610,17 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
       }
     }
 
-    result.minSize = result.minSize ? result.minSize : defaultMinSize;
-    result.maxSize = result.maxSize ? result.maxSize : 'auto';
+    if (!result.minSize) {
+      result.minSize = defaultMinSize;
+    }
 
-    this._isSingleColumnScreen() && (result.baseSize = 'auto');
+    if (!result.maxSize) {
+      result.maxSize = 'auto';
+    }
+
+    if (this._isSingleColumnScreen()) {
+      result.baseSize = 'auto';
+    }
 
     return result;
   }
@@ -567,16 +642,15 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
   }
 
   _saveAssistantRoot($root: dxElementWrapper): void {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    this._assistantRoots = this._assistantRoots || [];
+    this._assistantRoots = this._assistantRoots ?? [];
     this._assistantRoots.push($root);
   }
 
   _dispose(): void {
     this._clearItemNodeTemplates();
     this._cleanUnusedRoots();
-    // @ts-expect-error ts-error
-    super._dispose.apply(this, arguments);
+
+    super._dispose();
   }
 
   _cleanUnusedRoots(): void {
@@ -590,7 +664,9 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
   }
 
   _clearItemNodeTemplates(): void {
-    each(this.option('items'), function () {
+    const { items } = this.option();
+    each(items, function clearTemplates() {
+      // eslint-disable-next-line @typescript-eslint/no-invalid-this
       delete this.node;
     });
   }
@@ -599,7 +675,8 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
   _attachClickEvent(): void {}
 
   _optionChanged(args: OptionChanged<ResponsiveBoxProperties>): void {
-    switch (args.name) {
+    const { name } = args;
+    switch (name) {
       case 'rows':
       case 'cols':
       case 'screenByWidth':
@@ -627,7 +704,8 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
   }
 
   _dimensionChanged(): void {
-    if (this._getCurrentScreen() !== this.option('currentScreenFactor')) {
+    const { currentScreenFactor } = this.option();
+    if (this._getCurrentScreen() !== currentScreenFactor) {
       this._update();
     }
   }

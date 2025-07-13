@@ -21,7 +21,7 @@ import CollectionWidgetItem from '@ts/ui/collection/item';
 
 type BoxOptionKey = keyof BoxProperties;
 
-interface BoxItemData extends Item {
+export interface BoxItemData extends Item {
   maxSize?: string | number;
   minSize?: string | number;
   node?: dxElementWrapper;
@@ -262,7 +262,7 @@ class Box extends CollectionWidget<BoxProperties> {
 
   _pushItemToQueue(
     $item: dxElementWrapper,
-    config: BoxProperties,
+    config: BoxProperties<BoxItemData>,
   ): void {
     this._queue.push({ $item, config });
   }
