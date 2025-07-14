@@ -10,7 +10,7 @@ import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { getOuterWidth, setWidth } from '@js/core/utils/size';
 import { isMaterialBased } from '@js/ui/themes';
-import ActionSheet from '@ts/ui/m_action_sheet';
+import ActionSheet from '@ts/ui/action_sheet';
 
 import SwitchableEditDecorator from './m_list.edit.decorator.switchable';
 import { register as registerDecorator } from './m_list.edit.decorator_registry';

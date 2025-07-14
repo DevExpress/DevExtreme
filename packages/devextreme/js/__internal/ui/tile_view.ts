@@ -119,12 +119,10 @@ class TileView extends CollectionWidget<TileViewProperties> {
     ]);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return TILEVIEW_ITEM_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return TILEVIEW_ITEM_DATA_KEY;
   }
@@ -307,7 +305,6 @@ class TileView extends CollectionWidget<TileViewProperties> {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _refreshActiveDescendant(): void {}
 
   _getItemPosition(item: Item): ItemPosition {

@@ -63,7 +63,7 @@ import TagBox from 'ui/tag_box';
 import Toast from 'ui/toast';
 import TreeList from 'ui/tree_list';
 import TreeView from 'ui/tree_view';
-import TileView from '__internal/ui/m_tile_view';
+import TileView from '__internal/ui/tile_view';
 import FileUploader from 'ui/file_uploader';
 import Form from 'ui/form';
 import ValidationMessage from 'ui/validation_message';

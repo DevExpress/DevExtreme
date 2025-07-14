@@ -88,20 +88,16 @@ class ActionSheet extends CollectionWidget<Properties> {
     return this._$itemContainer;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return ACTION_SHEET_ITEM_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return ACTION_SHEET_ITEM_DATA_KEY;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _toggleVisibility(): void {}
 
-  // eslint-disable-next-line class-methods-use-this
   _renderDimensions(): void {}
 
   _initMarkup(): void {
@@ -290,7 +286,6 @@ class ActionSheet extends CollectionWidget<Properties> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _attachItemClickEvent(): void {}
 
   _itemClickHandler(e: DxEvent): void {
