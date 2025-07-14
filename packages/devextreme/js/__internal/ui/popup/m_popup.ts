@@ -582,10 +582,8 @@ class Popup<
   }
 
   _triggerToolbarResizeEvent(): void {
-    // To trigger toolbar width set in initial rendering to set menu button width (T1245421)
-    // And to trigger with animation in runtime items update
     triggerResizeEvent(this.$overlayContent());
-    triggerResizeEvent(this.$overlayContent());
+    // triggerResizeEvent(this.$overlayContent());
   }
 
   _renderToolbar(
@@ -677,6 +675,11 @@ class Popup<
 
     this._$topToolbar?.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0).attr('id', titleId);
     this.$overlayContent().attr('aria-labelledby', titleId);
+  }
+
+  _animateShowing(): void {
+    this._triggerToolbarResizeEvent();
+    super._animateShowing();
   }
 
   _renderVisibilityAnimate(visible: boolean): DeferredObj<unknown> | Promise<unknown> {
