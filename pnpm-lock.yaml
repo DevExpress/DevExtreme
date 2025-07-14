@@ -55,17 +55,17 @@ catalogs:
       specifier: 2.4.0
       version: 2.4.0
     inferno:
-      specifier: ^8.2.3
-      version: 8.2.3
+      specifier: ^9.0.3
+      version: 9.0.3
     inferno-create-element:
-      specifier: ^8.2.3
-      version: 8.2.3
+      specifier: ^9.0.3
+      version: 9.0.3
     inferno-hydrate:
-      specifier: ^8.2.3
-      version: 8.2.3
+      specifier: ^9.0.3
+      version: 9.0.3
     inferno-server:
-      specifier: ^8.2.3
-      version: 8.2.3
+      specifier: ^9.0.3
+      version: 9.0.3
   eslint8:
     '@babel/eslint-parser':
       specifier: 7.23.10
@@ -406,10 +406,10 @@ importers:
         version: 1.4.14(react@17.0.2)
       inferno:
         specifier: 'catalog:'
-        version: 8.2.3
+        version: 9.0.3
       inferno-create-element:
         specifier: 'catalog:'
-        version: 8.2.3
+        version: 9.0.3
       jquery:
         specifier: 3.6.3
         version: 3.6.3
@@ -738,7 +738,7 @@ importers:
         version: 5.2.2(@types/react@18.0.0)(react@18.0.0)
       inferno:
         specifier: 'catalog:'
-        version: 8.2.3
+        version: 9.0.3
     devDependencies:
       '@storybook/addon-essentials':
         specifier: 7.6.19
@@ -1039,11 +1039,11 @@ importers:
         specifier: 4.21.1
         version: 4.21.1
       inferno:
-        specifier: ^8.2.0
-        version: 8.2.3
+        specifier: 'catalog:'
+        version: 9.0.3
       inferno-create-element:
-        specifier: ^8.2.0
-        version: 8.2.3
+        specifier: 'catalog:'
+        version: 9.0.3
       jszip:
         specifier: ^3.10.1
         version: 3.10.1
@@ -1170,13 +1170,13 @@ importers:
         version: 1.7.3
       inferno:
         specifier: 'catalog:'
-        version: 8.2.3
+        version: 9.0.3
       inferno-create-element:
         specifier: 'catalog:'
-        version: 8.2.3
+        version: 9.0.3
       inferno-hydrate:
         specifier: 'catalog:'
-        version: 8.2.3
+        version: 9.0.3
       jszip:
         specifier: ^3.10.1
         version: 3.10.1
@@ -1637,7 +1637,7 @@ importers:
         version: 1.7.1
       inferno-server:
         specifier: 'catalog:'
-        version: 8.2.3
+        version: 9.0.3
     devDependencies:
       '@angular-devkit/architect':
         specifier: 0.1900.2
@@ -11593,7 +11593,7 @@ packages:
     resolution: {integrity: sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==}
     engines: {node: '>= 4.0'}
     os: [darwin]
-    deprecated: The v1 package contains DANGEROUS / INSECURE binaries. Upgrade to safe fsevents v2
+    deprecated: Upgrade to fsevents v2 to mitigate potential security issues
 
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
@@ -12539,21 +12539,21 @@ packages:
     resolution: {integrity: sha512-m6FAo/spmsW2Ab2fU35JTYwtOKa2yAwXSwgjSv1TJzh4Mh7mC3lzAOVLBprb72XsTrgkEIsl7YrFNAiDiRhIGg==}
     engines: {node: '>=12'}
 
-  inferno-create-element@8.2.3:
-    resolution: {integrity: sha512-YEwX4OiFlgeTutvE16uCGxkaSVwZ1DklpAPX8okjVsGaLIWQrM8QIQFxn3mTLWSu70Uea+afQfKL5wE4hxn39Q==}
+  inferno-create-element@9.0.3:
+    resolution: {integrity: sha512-NIUTvcGaR7d1el1uraUrDBUJ2/de6T2wsjmaFAbZfjspMx6y5336mMRknAJsi/ZYgjaaxyCDJ3KImUdwG2Nmsg==}
 
-  inferno-hydrate@8.2.3:
-    resolution: {integrity: sha512-AyCiswnjYg7D9veJdjiQg06Npp0/iXKhwOm2hjoY3cjadT3fIdz2XtDElLB7imU4icuJ3xOmXA8FgIfnSJfHrQ==}
+  inferno-hydrate@9.0.3:
+    resolution: {integrity: sha512-XvWgoxOFTuXIhBftNoLbKsaHtlC9p5iwzabp62bSwWFHQCikG9suEn87G+4s9C0ieeYLP+jaibcJYg/VGEmIow==}
 
-  inferno-server@8.2.3:
-    resolution: {integrity: sha512-swaDCaTYPplKwcBDbveu7xKIAooLXOOdfRoETTCIZwKyfKBGR3JnqsrwcL6miFR8TG6CNibvYKG8eSYHzkoA4Q==}
+  inferno-server@9.0.3:
+    resolution: {integrity: sha512-gLdNcOfqfio5CTW1Ssyn2uvw46IDhKlvkMxtK7dyW5ek3iIpQibtuqG8fKqh01VmhsJaQUkccQvRZ1CGgBdswg==}
     engines: {node: '>=8'}
 
-  inferno-vnode-flags@8.2.3:
-    resolution: {integrity: sha512-dfC0MIwFv9PCbZCUsuk9ISejFS3fKJODC0rZ/LjxxzE+OrCk+PMwPLsUnGU6O9/jbBnPACVz1BkACDf5LWgU5Q==}
+  inferno-vnode-flags@9.0.3:
+    resolution: {integrity: sha512-YCvln+7fcDNDKmcv6teXmcIslzYf8wqkPbg27cvtxKoSAN1wq9JyotJpsmpoqnbqLPzYe900Ir//M5xrOxsTFw==}
 
-  inferno@8.2.3:
-    resolution: {integrity: sha512-LMeRlCe+RlXw8kHCLyOWRk2PsZ3Fo4jkESyAR1g4FfPT48N78i11YhTVXW2ukCx5MFjv+qrfa73JzJWU9sg4CQ==}
+  inferno@9.0.3:
+    resolution: {integrity: sha512-qW48Uan8UGtVTxKt04IJB2QkYnNo/Zqh/myxH5wlfZM8QNexHzgIOVnCvzAdFerXpIDrIDUiHgrOZR9ONMIHgg==}
 
   inflector-js@1.0.1:
     resolution: {integrity: sha512-GYvCqr8mGKPoYH+08e76PV8JoIygIVC9Jxw2jA5QjBm/mK+mJqGdzEcs3L5nugnvP03yHajXpBRMRgHx0e770A==}
@@ -24356,13 +24356,15 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))':
+  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.15)
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
+    transitivePeerDependencies:
+      - '@swc/helpers'
 
   '@parcel/codeframe@2.12.0':
     dependencies:
@@ -24422,7 +24424,7 @@ snapshots:
   '@parcel/core@2.12.0(@swc/helpers@0.5.15)':
     dependencies:
       '@mischnic/json-sourcemap': 0.1.1
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/diagnostic': 2.12.0
       '@parcel/events': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -24837,7 +24839,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.15))(@swc/helpers@0.5.15)
@@ -34698,24 +34700,24 @@ snapshots:
 
   indent-string@5.0.0: {}
 
-  inferno-create-element@8.2.3:
+  inferno-create-element@9.0.3:
     dependencies:
-      inferno: 8.2.3
+      inferno: 9.0.3
 
-  inferno-hydrate@8.2.3:
+  inferno-hydrate@9.0.3:
     dependencies:
-      inferno: 8.2.3
+      inferno: 9.0.3
 
-  inferno-server@8.2.3:
+  inferno-server@9.0.3:
     dependencies:
-      inferno: 8.2.3
+      inferno: 9.0.3
 
-  inferno-vnode-flags@8.2.3: {}
+  inferno-vnode-flags@9.0.3: {}
 
-  inferno@8.2.3:
+  inferno@9.0.3:
     dependencies:
       csstype: 3.1.3
-      inferno-vnode-flags: 8.2.3
+      inferno-vnode-flags: 9.0.3
       opencollective-postinstall: 2.0.3
 
   inflector-js@1.0.1: {}

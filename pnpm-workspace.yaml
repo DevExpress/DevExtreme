@@ -5,10 +5,10 @@ packages:
   - 'packages/devextreme/artifacts/npm/devextreme-dist'
 
 catalog:
-  inferno: ^8.2.3
-  inferno-hydrate: ^8.2.3
-  inferno-create-element: ^8.2.3
-  inferno-server: ^8.2.3
+  inferno: ^9.0.3
+  inferno-hydrate: ^9.0.3
+  inferno-create-element: ^9.0.3
+  inferno-server: ^9.0.3
   devexpress-diagram: 2.2.19
   devexpress-gantt: 4.1.62
   eslint: 9.18.0
