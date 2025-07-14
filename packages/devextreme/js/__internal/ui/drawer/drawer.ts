@@ -71,8 +71,10 @@ class Drawer extends Widget<DrawerProperties> {
       ...super._getDefaultOptions(),
       position: 'left',
       opened: false,
-      minSize: undefined,
-      maxSize: undefined,
+      // @ts-expect-error ts-error
+      minSize: null,
+      // @ts-expect-error ts-error
+      maxSize: null,
       shading: false,
       template: PANEL_TEMPLATE_NAME,
       openedStateMode: 'shrink',

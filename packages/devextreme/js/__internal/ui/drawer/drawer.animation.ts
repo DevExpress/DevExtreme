@@ -45,7 +45,8 @@ export const animation = {
       $element, position, direction = 'left', duration, complete,
     } = config;
     const toConfig = this.getMoveToConfig(direction, position);
-    const animationType: AnimationType = direction === 'right' ? ('custom' as unknown as AnimationType) : 'slide';
+    // @ts-expect-error ts-error
+    const animationType: AnimationType = direction === 'right' ? 'custom' : 'slide';
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fx.animate($element.get(0), {

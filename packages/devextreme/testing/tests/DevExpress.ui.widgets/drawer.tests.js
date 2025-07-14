@@ -107,8 +107,8 @@ QUnit.module('Drawer behavior', () => {
         assert.equal(instance.option('openedStateMode'), 'shrink', 'mode is OK');
         assert.equal(instance.option('position'), 'left', 'position is OK');
         assert.equal(instance.option('shading'), false, 'shading is OK');
-        assert.strictEqual(instance.option('minSize'), undefined, 'minSize is OK');
-        assert.strictEqual(instance.option('maxSize'), undefined, 'maxSize is OK');
+        assert.strictEqual(instance.option('minSize'), null, 'minSize is OK');
+        assert.strictEqual(instance.option('maxSize'), null, 'maxSize is OK');
         assert.equal(instance.option('animationEnabled'), true, 'animationEnabled is OK');
         assert.equal(instance.option('animationDuration'), 400, 'animationDuration is OK');
     });
