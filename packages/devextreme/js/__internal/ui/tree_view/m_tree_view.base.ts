@@ -27,7 +27,7 @@ import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/hierarchical_collection_widget';
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, SCROLLABLE_CONTENT_CLASS } from '@ts/ui/scroll_view/consts';
-import Scrollable from '@ts/ui/scroll_view/m_scrollable';
+import Scrollable from '@ts/ui/scroll_view/scrollable';
 import { getRelativeOffset } from '@ts/ui/scroll_view/utils/get_relative_offset';
 
 import type { DataAdapterOptions } from '../hierarchical_collection/data_adapter';
@@ -689,9 +689,11 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
   }
 
   _renderScrollableContainer(): void {
+    const { useNativeScrolling, scrollDirection } = this.option();
+
     this._scrollable = this._createComponent($('<div>').appendTo(this.$element()), Scrollable, {
-      useNative: this.option('useNativeScrolling'),
-      direction: this.option('scrollDirection'),
+      useNative: useNativeScrolling,
+      direction: scrollDirection,
       useKeyboard: false,
     });
   }

@@ -216,7 +216,7 @@ export default class ViewDataProvider {
     return this._groupedDataMapProvider.getRowCountInGroup(groupIndex);
   }
 
-  getCellData(rowIndex, columnIndex, isAllDay, rtlEnabled) {
+  getCellData(rowIndex, columnIndex, isAllDay, rtlEnabled = false) {
     const row = isAllDay && !this._options.isVerticalGrouping
       ? this.viewDataMap.allDayPanelMap
       : this.viewDataMap.dateTableMap[rowIndex];

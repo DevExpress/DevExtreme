@@ -1149,10 +1149,7 @@ export class RowsView extends ColumnsView {
       // @ts-expect-error
       scrollable.update();
 
-      // @ts-expect-error
-      if (scrollable.option('useNative') || !scrollable?.isRenovated()) {
-        this._updateHorizontalScrollPosition();
-      }
+      this._updateHorizontalScrollPosition();
     }
   }
 
@@ -1271,7 +1268,6 @@ export class RowsView extends ColumnsView {
     this._toggleDraggableSourceColumnClass($rows, this.getColumns(), columnIndex, value);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
     const $cells = super._getCellElementsCore.apply(this, arguments as any);
 

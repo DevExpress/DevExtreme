@@ -9,7 +9,10 @@
       @item-context-menu="treeViewItemContextMenu"
     />
     <div class="log-container">
-      <div><i class="icon dx-icon-clock"/>&nbsp;Operations log:</div>
+      <div>
+        <i class="icon dx-icon-clock"/>
+        <span>&nbsp;Operations log:</span>
+      </div>
       <DxList
         id="log"
         show-scrollbar="always"
@@ -97,19 +100,18 @@ function contextMenuItemClick(e) {
   padding: 20px;
   margin-left: 20px;
   background-color: rgba(191, 191, 191, 0.15);
-  font-size: 115%;
-  font-weight: bold;
+  font-weight: 600;
   position: relative;
-  height: 100%;
+}
+
+.log-container > div:first-child {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .log-container .dx-icon-clock {
-  position: relative;
-  top: 1px;
-}
-
-#log {
-  margin-top: 10px;
+  font-size: var(--dx-font-size-icon);
 }
 
 #log .dx-empty-message {

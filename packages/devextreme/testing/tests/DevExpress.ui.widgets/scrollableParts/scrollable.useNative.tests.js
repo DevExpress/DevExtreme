@@ -2,7 +2,6 @@ import $ from 'jquery';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import animationFrame from 'common/core/animation/frame';
 import pointerMock from '../../../helpers/pointerMock.js';
-import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'generic_light.css!';
 
@@ -57,8 +56,6 @@ const getScrollOffset = function($scrollable) {
         left: location.left - $container.scrollLeft()
     };
 };
-
-const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('useNative', moduleConfig);
 
@@ -227,8 +224,7 @@ QUnit.test('simulatedScrollbar visibility', function(assert) {
         .start()
         .wheel(10);
 
-    // in renovated widget thumb hides after scroll immediately using CSS animation
-    assert.equal($scroll.hasClass('dx-state-invisible'), isRenovatedScrollable ? true : false, 'after move thumb is visible');
+    assert.equal($scroll.hasClass('dx-state-invisible'), false, 'after move thumb is visible');
 });
 
 QUnit.test('scrollbar height calculated correctly when simulatedScrollbar is true', function(assert) {

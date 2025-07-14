@@ -1,5 +1,6 @@
 import { type DxDataGridTypes } from "devextreme-vue/data-grid";
 import { type DxFilterBuilderTypes } from 'devextreme-vue/filter-builder';
+import { type DxDataGridTypes } from "devextreme-vue/cjs/data-grid";
 
 export const filter = [
   ['Product_Current_Inventory', '<>', 0],

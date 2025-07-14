@@ -22,8 +22,8 @@ import ContextMenu from '@ts/ui/context_menu/m_context_menu';
 import type {
   ScrollView as ScrollViewType,
   ScrollViewServerSide as ScrollViewServerSideType,
-} from '@ts/ui/scroll_view/m_scroll_view';
-import ScrollView from '@ts/ui/scroll_view/m_scroll_view';
+} from '@ts/ui/scroll_view/scroll_view';
+import ScrollView from '@ts/ui/scroll_view/scroll_view';
 import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
 
 import type { DataChange } from '../collection/collection_widget.base';
@@ -378,7 +378,7 @@ class MessageList extends Widget<Properties> {
   _renderScrollView(): void {
     const $scrollable = $('<div>')
       .appendTo(this.$element());
-
+    // @ts-expect-error ts-error
     this._scrollView = this._createComponent($scrollable, ScrollView, {
       useKeyboard: false,
       bounceEnabled: false,
@@ -434,6 +434,7 @@ class MessageList extends Widget<Properties> {
 
     this.$element().toggleClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS, this._isEmpty() && isLoading);
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._scrollView.release(!isLoading);
   }
 

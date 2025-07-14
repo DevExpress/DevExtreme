@@ -295,9 +295,9 @@ TProperties extends PopoverProperties = PopoverProperties,
     super._stopAnimation.apply(this, arguments);
   }
 
-  _renderTitle(): void {
+  _renderTopToolbar(): void {
     this.$wrapper().toggleClass(POPOVER_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
-    super._renderTitle();
+    super._renderTopToolbar();
   }
 
   _renderPosition(shouldUpdateDimensions = true): void {

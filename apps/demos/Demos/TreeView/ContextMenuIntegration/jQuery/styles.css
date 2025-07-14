@@ -11,19 +11,18 @@
 .log-container {
   padding: 20px;
   margin-left: 20px;
-  font-size: 115%;
-  font-weight: bold;
+  font-weight: 600;
   background-color: rgba(191, 191, 191, 0.15);
-  height: 100%;
+}
+
+.log-container > div:first-child {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .log-container .dx-icon-clock {
-  position: relative;
-  top: 1px;
-}
-
-#log {
-  margin-top: 10px;
+  font-size: var(--dx-font-size-icon);
 }
 
 #log .dx-empty-message {
