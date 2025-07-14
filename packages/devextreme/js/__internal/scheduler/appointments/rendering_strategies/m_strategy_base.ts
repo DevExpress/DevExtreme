@@ -900,15 +900,23 @@ class BaseRenderingStrategy {
     };
   }
 
-  protected shiftAppointmentByViewOffset(appointment: any): any {
+  protected shiftAppointmentByViewOffset(appointment: SafeAppointment): any {
     const { viewOffset } = this.options;
 
     const startDateField = this.dataAccessors.expr.startDateExpr;
     const endDateField = this.dataAccessors.expr.endDateExpr;
 
+    const isAllDay = this.dataAccessors.get('allDay', appointment);
     let startDate = this.dataAccessors.get('startDate', appointment);
-    startDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
     let endDate = this.dataAccessors.get('endDate', appointment);
+
+    if (isAllDay) {
+      startDate = dateUtils.trimTime(startDate);
+      endDate = dateUtils.trimTime(endDate);
+      endDate.setHours(23, 59, 59, 999);
+    }
+
+    startDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
     endDate = dateUtilsTs.addOffsets(endDate, [-viewOffset]);
 
     return {

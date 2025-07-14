@@ -58,18 +58,14 @@ export const getAppointmentFilter = (
       appointmentToCompare.endDate = dateUtils.trimTime(appointmentToCompare.endDate);
       appointmentToCompare.endDate.setHours(23, 59, 59, 999);
     }
-    appointmentToCompare.startDate = dateUtilsTs.addOffsets(
-      appointmentToCompare.startDate,
-      [-viewOffset],
-    );
-    appointmentToCompare.endDate = dateUtilsTs.addOffsets(
-      appointmentToCompare.endDate,
-      [-viewOffset],
-    );
 
+    const shiftedIntervals = viewIntervals.map((interval) => ({
+      min: dateUtilsTs.addOffsets(interval.min, [viewOffset]),
+      max: dateUtilsTs.addOffsets(interval.max, [viewOffset]),
+    }));
     const recurrenceInterval = {
-      min: viewIntervals[0].min,
-      max: viewIntervals[viewIntervals.length - 1].max,
+      min: shiftedIntervals[0].min,
+      max: shiftedIntervals[shiftedIntervals.length - 1].max,
     };
     const appointmentOccurrences = getAppointmentsOccurrences(
       appointmentToCompare,
@@ -80,7 +76,7 @@ export const getAppointmentFilter = (
     return appointmentOccurrences.some(
       (appointmentOccurrence) => isAppointmentMatchedIntervals(
         appointmentOccurrence,
-        viewIntervals,
+        shiftedIntervals,
       ),
     );
   };
