@@ -520,7 +520,7 @@ class Scrollable<
     this._strategy.scrollBy(normalizedDistance);
   }
 
-  scrollTo(targetLocation: Partial<ScrollOffset>): void {
+  scrollTo(targetLocation: Partial<ScrollOffset> | number): void {
     if (!hasWindow()) {
       return;
     }
