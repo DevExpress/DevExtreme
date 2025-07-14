@@ -294,6 +294,14 @@ module.exports = {
     'no-only-tests/no-only-tests': 'error',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          "devextreme-*/cjs/*",
+        ]
+      }
+    ]
   },
   extends: [
     'eslint:recommended',

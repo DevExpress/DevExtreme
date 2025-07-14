@@ -1,4 +1,4 @@
-import { type DxDataGridTypes } from "devextreme-vue/data-grid";
+import { type DxDataGridTypes } from "devextreme-vue/cjs/data-grid";
 import { type DxFilterBuilderTypes } from 'devextreme-vue/filter-builder';
 
 export const filter = [
