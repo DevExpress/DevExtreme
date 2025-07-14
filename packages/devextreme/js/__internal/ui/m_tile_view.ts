@@ -21,8 +21,8 @@ import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 import type {
   ScrollView as ScrollViewType,
   ScrollViewServerSide as ScrollViewServerSideType,
-} from '@ts/ui/scroll_view/m_scroll_view';
-import ScrollView from '@ts/ui/scroll_view/m_scroll_view';
+} from '@ts/ui/scroll_view/scroll_view';
+import ScrollView from '@ts/ui/scroll_view/scroll_view';
 
 import supportUtils from '../core/utils/m_support';
 
@@ -161,7 +161,7 @@ class TileView extends CollectionWidget<TileViewProperties> {
     const {
       width, height, direction, showScrollbar,
     } = this.option();
-
+    // @ts-expect-error ts-error
     this._scrollView = this._createComponent(this.$element(), ScrollView, {
       direction,
       width,

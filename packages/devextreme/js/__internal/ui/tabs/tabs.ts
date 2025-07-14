@@ -25,7 +25,7 @@ import type {
 import { current as currentTheme, isFluent, isMaterial } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
-import Scrollable from '@ts/ui/scroll_view/m_scrollable';
+import Scrollable from '@ts/ui/scroll_view/scrollable';
 import {
   isReachedBottom, isReachedLeft, isReachedRight, isReachedTop,
 } from '@ts/ui/scroll_view/utils/get_boundary_props';
@@ -492,13 +492,13 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
   _renderScrollable(): void {
     const $itemContainer = this.$element().wrapInner($('<div>').addClass(TABS_SCROLLABLE_CLASS)).children();
-
+    const { scrollByContent } = this.option();
     this._scrollable = this._createComponent($itemContainer, Scrollable, {
       direction: this._getScrollableDirection(),
       showScrollbar: 'never',
       useKeyboard: false,
       useNative: false,
-      scrollByContent: this.option('scrollByContent'),
+      scrollByContent,
       onScroll: () => {
         this._updateNavButtonsState();
       },

@@ -204,25 +204,6 @@ testModule('render', moduleConfig, () => {
             }).remove();
     });
 
-    test('overlay created with templatesRenderAsynchronously option should be shown with delay', function(assert) {
-        const clock = sinon.useFakeTimers();
-        try {
-            const onShowingSpy = sinon.spy();
-
-            $('#overlay').dxOverlay({
-                templatesRenderAsynchronously: true,
-                visible: true,
-                onShowing: onShowingSpy
-            });
-
-            assert.strictEqual(onShowingSpy.called, false);
-            clock.tick(10);
-            assert.strictEqual(onShowingSpy.called, true);
-        } finally {
-            clock.restore();
-        }
-    });
-
     test('overlay should be positioned correctly after async template is rendered (T1114344)', function(assert) {
         // NOTE: React 18 renders templates asynchronously. It cannot be changed in our react wrappers.
 
@@ -1862,20 +1843,6 @@ testModule('content', moduleConfig, () => {
         $container.show();
         instance.repaint();
         assert.ok(contentReadyStub.calledOnce);
-    });
-
-    test('content shouldn`t clean when component is renovated', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
-            isRenovated: true,
-            contentTemplate: 'template',
-            visible: true
-        });
-        const instance = $overlay.dxOverlay('instance');
-        const $content = instance.$content();
-        const contentRenderSpy = sinon.spy($content, 'empty');
-
-        instance.option({ visible: false, contentTemplate: 'template1' });
-        assert.equal(contentRenderSpy.callCount, 0);
     });
 
     test('content should be rendered only once after resize', function(assert) {

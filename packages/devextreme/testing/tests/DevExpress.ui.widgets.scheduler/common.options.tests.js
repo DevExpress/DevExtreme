@@ -453,7 +453,7 @@ QUnit.module('Options', () => {
         const header = scheduler.instance.getHeader();
 
         assert.equal(workSpaceWeek.option('intervalCount'), 3, 'workspace has correct count');
-        assert.equal(header.option('intervalCount'), 3, 'header has correct count');
+        assert.equal(header.option('currentView').intervalCount, 3, 'header has correct count');
     });
 
     QUnit.test('view.intervalCount is passed to workspace & header, currentView is set by view.name', async function(assert) {
@@ -474,7 +474,7 @@ QUnit.module('Options', () => {
         const header = scheduler.instance.getHeader();
 
         assert.equal(workSpaceWeek.option('intervalCount'), 3, 'workspace has correct count');
-        assert.equal(header.option('intervalCount'), 3, 'header has correct count');
+        assert.equal(header.option('currentView').intervalCount, 3, 'header has correct count');
     });
 
     QUnit.test('view.intervalCount is passed to workspace & header, currentView is set by view.type', async function(assert) {
@@ -498,7 +498,7 @@ QUnit.module('Options', () => {
         const header = scheduler.instance.getHeader();
 
         assert.equal(workSpaceWeek.option('intervalCount'), 3, 'workspace has correct count');
-        assert.equal(header.option('intervalCount'), 3, 'header has correct count');
+        assert.equal(header.option('currentView').intervalCount, 3, 'header has correct count');
     });
 
     QUnit.test('view.startDate is passed to workspace & header', async function(assert) {
@@ -519,7 +519,7 @@ QUnit.module('Options', () => {
         const header = scheduler.instance.getHeader();
 
         assert.deepEqual(workSpaceWeek.option('startDate'), date, 'workspace has correct startDate');
-        assert.deepEqual(header.option('startDate'), date, 'header has correct startDate');
+        assert.deepEqual(header.option('currentView').startDate, date, 'header has correct startDate');
     });
 
     QUnit.test('view.groupByDate is passed to workspace', async function(assert) {

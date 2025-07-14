@@ -4,7 +4,7 @@ import { isDefined, isObject } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
 import {
-  HORIZONTAL_GROUP_ORIENTATION, TIMELINE_VIEWS, VERTICAL_GROUP_ORIENTATION, VIEWS,
+  HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION,
 } from '../../constants';
 import { VERTICAL_GROUP_COUNT_CLASSES } from '../../m_classes';
 import timeZoneUtils from '../../m_utils_time_zone';
@@ -23,6 +23,7 @@ import type {
 } from '../../types';
 import type { ResourceLoader } from '../../utils/loader/resource_loader';
 import type { ResourceId } from '../../utils/loader/types';
+import { VIEWS } from '../../utils/options/constants_view';
 import type { GroupLeaf } from '../../utils/resource_manager/types';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -209,6 +210,12 @@ export const getHorizontalGroupCount = (
   return isVerticalGrouping ? 1 : groupLeafs.length;
 };
 
+const TIMELINE_VIEWS = [
+  VIEWS.TIMELINE_DAY,
+  VIEWS.TIMELINE_WEEK,
+  VIEWS.TIMELINE_WORK_WEEK,
+  VIEWS.TIMELINE_MONTH,
+];
 export const isTimelineView = (
   viewType?: ViewType,
 ): boolean => Boolean(viewType && TIMELINE_VIEWS.includes(viewType));

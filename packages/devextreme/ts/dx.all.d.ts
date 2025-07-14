@@ -18476,11 +18476,6 @@ declare module DevExpress.ui {
      */
     clear(): void;
     /**
-     * [descr:dxForm.resetValues()]
-     * @deprecated [depNote:dxForm.resetValues()]
-     */
-    resetValues(): void;
-    /**
      * [descr:dxForm.reset(editorsData)]
      */
     reset(editorsData?: Record<string, any>): void;

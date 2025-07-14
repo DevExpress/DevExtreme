@@ -75,11 +75,7 @@
         "make-aspnet-metadata",
         "make-integration-metadata"
       ],
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "{projectRoot}",
-        "command": "true"
-      },
+      "executor": "nx:noop",
       "cache": false,
       "inputs": [
         "{projectRoot}/dist/**"

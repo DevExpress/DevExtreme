@@ -2,7 +2,7 @@ import {
     FRAME_DURATION,
     ACCELERATION,
     MIN_VELOCITY_LIMIT,
-} from '__internal/ui/scroll_view/m_scrollable.simulated';
+} from '__internal/ui/scroll_view/scrollable.simulated';
 
 export const SCROLLABLE_CLASS = 'dx-scrollable';
 export const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';

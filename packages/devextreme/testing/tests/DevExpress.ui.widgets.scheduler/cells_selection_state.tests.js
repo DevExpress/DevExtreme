@@ -204,7 +204,7 @@ module('Cells Selection State', () => {
 
         cellsSelectionState.setFocusedCell(1, 1, false);
 
-        const focusedCell = cellsSelectionState.focusedCell;
+        const focusedCell = cellsSelectionState.getFocusedCell();
 
         assert.deepEqual(
             focusedCell,
@@ -406,7 +406,7 @@ module('Cells Selection State', () => {
         cellsSelectionState.restoreSelectedAndFocusedCells();
 
         assert.deepEqual(
-            cellsSelectionState.focusedCell.cellData,
+            cellsSelectionState.getFocusedCell().cellData,
             testViewDataMap.horizontalGrouping[1][1].cellData,
             'Correct focused cell data',
         );
@@ -447,7 +447,7 @@ module('Cells Selection State', () => {
         cellsSelectionState.restoreSelectedAndFocusedCells();
 
         assert.deepEqual(
-            cellsSelectionState.focusedCell.cellData,
+            cellsSelectionState.getFocusedCell().cellData,
             testViewDataMap.horizontalGrouping[1][1].cellData,
             'Correct focused cell data',
         );

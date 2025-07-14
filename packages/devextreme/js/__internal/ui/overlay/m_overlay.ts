@@ -99,8 +99,6 @@ interface OverlayProperties extends Properties {
   container?: string | dxElementWrapper | Element;
 
   preventScrollEvents?: boolean;
-
-  isRenovated?: boolean;
 }
 
 class Overlay<
@@ -135,8 +133,6 @@ class Overlay<
   _proxiedTabTerminatorHandler?: any;
 
   _zIndex!: number;
-
-  _asyncShowTimeout?: ReturnType<typeof setTimeout> | null;
 
   _actions?: any;
 
@@ -450,7 +446,7 @@ class Overlay<
     this._customWrapperClass = classNames;
   }
 
-  _renderVisibilityAnimate(visible) {
+  _renderVisibilityAnimate(visible: boolean): DeferredObj<unknown> | Promise<unknown> {
     this._stopAnimation();
 
     return visible ? this._show() : this._hide();
@@ -570,13 +566,7 @@ class Overlay<
         this._processShowingHidingCancel(showingArgs.cancel, applyShow, cancelShow);
       };
 
-      if (this.option('templatesRenderAsynchronously')) {
-        this._stopShowTimer();
-        // NOTE: T390360, T386038
-        this._asyncShowTimeout = setTimeout(show);
-      } else {
-        show();
-      }
+      show();
     }
 
     return this._showingDeferred.promise();
@@ -656,7 +646,6 @@ class Overlay<
         this._forceFocusLost();
         this._toggleShading(false);
         this._toggleSubscriptions(false);
-        this._stopShowTimer();
         this._animateHiding();
       };
 
@@ -900,7 +889,8 @@ class Overlay<
     super._render();
 
     this._appendContentToElement();
-    this._renderVisibilityAnimate(this.option('visible'));
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this._renderVisibilityAnimate(Boolean(this.option('visible')));
   }
 
   _appendContentToElement(): void {
@@ -982,13 +972,17 @@ class Overlay<
     this._toggleWrapperScrollEventsSubscription(preventScrollEvents);
 
     whenContentRendered.done(() => {
-      if (this.option('visible')) {
-        this._moveToContainer();
-      }
+      this._processContentRendering();
     });
 
     // @ts-expect-error ts-error
     return whenContentRendered.promise();
+  }
+
+  _processContentRendering(): void {
+    if (this.option('visible')) {
+      this._moveToContainer();
+    }
   }
 
   _getPositionControllerConfig() {
@@ -1209,9 +1203,11 @@ class Overlay<
   _visibilityChanged(visible: boolean): void {
     if (visible) {
       if (this.option('visible')) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._renderVisibilityAnimate(visible);
       }
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._renderVisibilityAnimate(visible);
     }
   }
@@ -1221,22 +1217,12 @@ class Overlay<
   }
 
   _clean(): void {
-    const { isRenovated } = this.option();
-    if (!this._contentAlreadyRendered && !isRenovated) {
+    if (!this._contentAlreadyRendered) {
       this.$content().empty();
     }
 
     this._renderVisibility(false);
-    this._stopShowTimer();
     this._cleanFocusState();
-  }
-
-  _stopShowTimer(): void {
-    if (this._asyncShowTimeout) {
-      clearTimeout(this._asyncShowTimeout);
-    }
-
-    this._asyncShowTimeout = null;
   }
 
   _dispose(): void {
@@ -1305,7 +1291,7 @@ class Overlay<
         this._toggleSafariScrolling();
         break;
       case 'visible':
-        this._renderVisibilityAnimate(value)
+        this._renderVisibilityAnimate(Boolean(value))
           // @ts-expect-error ts-error
           .done(() => this._animateDeferred?.resolveWith(this))
           .fail(() => this._animateDeferred?.reject());
