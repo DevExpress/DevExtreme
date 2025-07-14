@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import type { template } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -6,10 +7,12 @@ import { BindableTemplate } from '@js/core/templates/bindable_template';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isFunction } from '@js/core/utils/type';
+import type { DxEvent, EventInfo, ItemInfo } from '@js/events';
 import type { ButtonStyle, Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { Item, Properties } from '@js/ui/button_group';
-import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
+import type { SelectionChangeInfo } from '@js/ui/collection/ui.collection_widget.base';
+import CollectionWidgetEdit from '@js/ui/collection/ui.collection_widget.edit';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
@@ -30,28 +33,36 @@ const BUTTON_GROUP_STYLING_MODE_CLASS = {
   text: 'dx-buttongroup-mode-text',
 };
 
+export type ItemRenderedEvent = EventInfo<ButtonCollection> & ItemInfo<Button>;
+export type SelectionChangedEvent = EventInfo<ButtonCollection> & SelectionChangeInfo<Item>;
+
 export interface ButtonCollectionProperties extends CollectionWidgetEditProperties<
  ButtonCollection
 > {
-  itemTemplateProperty: string | null;
+  itemTemplateProperty?: string | null;
+
+  buttonTemplate?: template | (
+    (buttonData: Item, buttonContent: Element) => dxElementWrapper
+  );
 
   stylingMode?: ButtonStyle;
 }
 
-class ButtonCollection extends CollectionWidget<ButtonCollectionProperties> {
+class ButtonCollection extends CollectionWidgetEdit<ButtonCollectionProperties> {
   _initTemplates(): void {
     super._initTemplates();
 
     this._templateManager.addDefaultTemplates({
       item: new BindableTemplate(($container, data, model) => {
         this._prepareItemStyles($container);
-        const template = this.option('buttonTemplate');
+        const { buttonTemplate } = this.option();
+
         this._createComponent(
           $container,
           Button,
           extend({}, model, data, this._getBasicButtonOptions(), {
-            _templateData: this._hasCustomTemplate(template) ? model : {},
-            template: model.template || template,
+            _templateData: this._hasCustomTemplate(buttonTemplate) ? model : {},
+            template: model.template || buttonTemplate,
           }),
         );
       }, ['text', 'type', 'icon', 'disabled', 'visible', 'hint'], this.option('integrationOptions.watchMethod')),
@@ -79,6 +90,7 @@ class ButtonCollection extends CollectionWidget<ButtonCollectionProperties> {
   }
 
   _hasCustomTemplate(template): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return isFunction(template) || this.option('integrationOptions.templates')[template];
   }
 
@@ -87,14 +99,17 @@ class ButtonCollection extends CollectionWidget<ButtonCollectionProperties> {
     return 'dx-item-selected dx-state-selected';
   }
 
-  _prepareItemStyles($item): void {
-    const itemIndex = $item.data('dxItemIndex');
+  _prepareItemStyles($item: dxElementWrapper): void {
+    // @ts-expect-error ts-error
+    const itemIndex: number = $item.data('dxItemIndex');
     if (itemIndex === 0) {
       $item.addClass(BUTTON_GROUP_FIRST_ITEM_CLASS);
     }
 
     const { items } = this.option();
-    items && itemIndex === items.length - 1 && $item.addClass(BUTTON_GROUP_LAST_ITEM_CLASS);
+    if (items && itemIndex === items.length - 1) {
+      $item.addClass(BUTTON_GROUP_LAST_ITEM_CLASS);
+    }
 
     $item.addClass(SHAPE_STANDARD_CLASS);
   }
@@ -131,11 +146,12 @@ class ButtonCollection extends CollectionWidget<ButtonCollectionProperties> {
     this._renderContent();
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return BUTTON_GROUP_ITEM_CLASS;
   }
 
-  _itemSelectHandler(e): void {
+  _itemSelectHandler(e: DxEvent): void {
     const { selectionMode } = this.option();
 
     if (selectionMode === 'single' && this.isItemSelected(e.currentTarget)) {
@@ -199,7 +215,10 @@ class ButtonGroup extends Widget<Properties> {
     this.$element().addClass(BUTTON_GROUP_STYLING_MODE_CLASS[stylingMode ?? 'contained']);
   }
 
-  _fireSelectionChangeEvent(addedItems, removedItems): void {
+  _fireSelectionChangeEvent(
+    addedItems: Item[],
+    removedItems: Item[],
+  ): void {
     this._createActionByOption('onSelectionChanged', {
       excludeValidators: ['disabled', 'readOnly'],
     })({ addedItems, removedItems });
@@ -210,37 +229,49 @@ class ButtonGroup extends Widget<Properties> {
       .addClass(BUTTON_GROUP_WRAPPER_CLASS)
       .appendTo(this.$element());
 
-    const { selectedItems } = this.option();
+    const {
+      selectedItems,
+      selectionMode,
+      items,
+      keyExpr,
+      buttonTemplate,
+      selectedItemKeys,
+      focusStateEnabled,
+      hoverStateEnabled,
+      activeStateEnabled,
+      stylingMode,
+      accessKey,
+      tabIndex,
+    } = this.option();
 
-    const options = {
-      selectionMode: this.option('selectionMode'),
-      items: this.option('items'),
-      keyExpr: this.option('keyExpr'),
-      buttonTemplate: this.option('buttonTemplate'),
-      scrollingEnabled: false,
-      selectedItemKeys: this.option('selectedItemKeys'),
-      focusStateEnabled: this.option('focusStateEnabled'),
-      hoverStateEnabled: this.option('hoverStateEnabled'),
-      activeStateEnabled: this.option('activeStateEnabled'),
-      stylingMode: this.option('stylingMode'),
-      accessKey: this.option('accessKey'),
-      tabIndex: this.option('tabIndex'),
+    const options: ButtonCollectionProperties = {
+      selectionMode,
+      items,
+      keyExpr,
+      buttonTemplate,
+      selectedItemKeys,
+      focusStateEnabled,
+      hoverStateEnabled,
+      activeStateEnabled,
+      stylingMode,
+      accessKey,
+      tabIndex,
       noDataText: '',
       selectionRequired: false,
-      onItemRendered: (e) => {
-        const width = this.option('width');
+      onItemRendered: (e: ItemRenderedEvent): void => {
+        const { width } = this.option();
         if (isDefined(width)) {
           $(e.itemElement).addClass(BUTTON_GROUP_ITEM_HAS_WIDTH);
         }
       },
-      onSelectionChanged: (e) => {
+      onSelectionChanged: (e: SelectionChangedEvent): void => {
         this._syncSelectionOptions();
         this._fireSelectionChangeEvent(e.addedItems, e.removedItems);
       },
       onItemClick: (e) => {
         this._itemClickAction(e);
       },
-    } as any;
+    };
 
     if (isDefined(selectedItems) && selectedItems.length) {
       options.selectedItems = selectedItems;
@@ -254,7 +285,8 @@ class ButtonGroup extends Widget<Properties> {
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
-    switch (args.name) {
+    const { name, value } = args;
+    switch (name) {
       case 'stylingMode':
       case 'selectionMode':
       case 'keyExpr':
@@ -268,7 +300,7 @@ class ButtonGroup extends Widget<Properties> {
         break;
       case 'selectedItemKeys':
       case 'selectedItems':
-        this._buttonsCollection.option(args.name, args.value);
+        this._buttonsCollection.option(name, value);
         break;
       case 'onItemClick':
         this._createItemClickAction();
@@ -279,7 +311,7 @@ class ButtonGroup extends Widget<Properties> {
         super._optionChanged(args);
         this._buttonsCollection
           .itemElements()
-          .toggleClass(BUTTON_GROUP_ITEM_HAS_WIDTH, !!args.value);
+          .toggleClass(BUTTON_GROUP_ITEM_HAS_WIDTH, !!value);
         break;
       default:
         super._optionChanged(args);
