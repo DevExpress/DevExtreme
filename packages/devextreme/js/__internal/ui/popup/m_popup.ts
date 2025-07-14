@@ -583,7 +583,7 @@ class Popup<
 
   _triggerToolbarResizeEvent(): void {
     triggerResizeEvent(this.$overlayContent());
-    // triggerResizeEvent(this.$overlayContent());
+    triggerResizeEvent(this.$overlayContent());
   }
 
   _renderToolbar(
