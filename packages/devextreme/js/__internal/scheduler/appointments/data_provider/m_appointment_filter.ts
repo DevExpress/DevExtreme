@@ -10,8 +10,11 @@ import {
   getAppointmentFilter,
   getRawAppointments,
   getVisibleDateTimeIntervals,
+  shiftIntervals,
 } from './utils/index';
-import type { CombinedFilter, CompareOptions, FilterOptions } from './utils/type';
+import type {
+  CombinedFilter, CompareOptions, DateInterval, FilterOptions,
+} from './utils/type';
 
 // TODO Vinogradov refactoring: this module should be refactored :)
 
@@ -60,9 +63,22 @@ export class AppointmentFilterBaseStrategy {
       : result;
   }
 
+  protected getIntervals(compareOptions: CompareOptions): {
+    visibleDateIntervals: DateInterval[];
+    visibleTimeIntervals: DateInterval[];
+  } {
+    const viewOffset = this._resolveOption('viewOffset');
+    const intervals = {
+      visibleDateIntervals: getVisibleDateTimeIntervals(compareOptions, true),
+      visibleTimeIntervals: getVisibleDateTimeIntervals(compareOptions, false),
+    };
+    intervals.visibleDateIntervals = shiftIntervals(intervals.visibleDateIntervals, viewOffset);
+    intervals.visibleTimeIntervals = shiftIntervals(intervals.visibleTimeIntervals, viewOffset);
+    return intervals;
+  }
+
   protected getFilterOptions(): FilterOptions {
     const [min, max] = this.dateRange;
-    const viewOffset = this._resolveOption('viewOffset');
     const allDayPanelFilter = !this.showAllDayPanel && this.supportAllDayRow
       ? false
       : undefined;
@@ -75,13 +91,11 @@ export class AppointmentFilterBaseStrategy {
 
     return {
       ...compareOptions,
-      viewOffset,
+      ...this.getIntervals(compareOptions),
       resources: this.loadedResources,
       allDayPanelFilter,
       firstDayOfWeek: this.firstDayOfWeek,
       allDayPanelMode: this.allDayPanelMode,
-      visibleDateIntervals: getVisibleDateTimeIntervals(compareOptions, true),
-      visibleTimeIntervals: getVisibleDateTimeIntervals(compareOptions, false),
     };
   }
 
