@@ -9926,6 +9926,10 @@ declare module DevExpress.ui {
      */
     showWeekNumbers?: boolean;
     /**
+     * [descr:dxCalendarOptions.todayButtonText]
+     */
+    todayButtonText?: string;
+    /**
      * [descr:dxCalendarOptions.weekNumberRule]
      */
     weekNumberRule?: DevExpress.ui.dxCalendar.WeekNumberRule;

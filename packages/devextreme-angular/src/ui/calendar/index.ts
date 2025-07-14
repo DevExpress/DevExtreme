@@ -412,6 +412,16 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     }
 
 
+    
+    @Input()
+    get todayButtonText(): string {
+        return this._getOption('todayButtonText');
+    }
+    set todayButtonText(value: string) {
+        this._setOption('todayButtonText', value);
+    }
+
+
     /**
      * [descr:EditorOptions.validationError]
     
@@ -760,6 +770,13 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() todayButtonTextChange: EventEmitter<string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() validationErrorChange: EventEmitter<any>;
 
     /**
@@ -882,6 +899,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
             { emit: 'showTodayButtonChange' },
             { emit: 'showWeekNumbersChange' },
             { emit: 'tabIndexChange' },
+            { emit: 'todayButtonTextChange' },
             { emit: 'validationErrorChange' },
             { emit: 'validationErrorsChange' },
             { emit: 'validationMessageModeChange' },

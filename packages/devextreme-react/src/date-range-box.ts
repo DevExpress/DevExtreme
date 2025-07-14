@@ -238,6 +238,7 @@ type ICalendarOptionsProps = React.PropsWithChildren<{
   showTodayButton?: boolean;
   showWeekNumbers?: boolean;
   tabIndex?: number;
+  todayButtonText?: string;
   validationError?: any;
   validationErrors?: Array<any>;
   validationMessageMode?: ValidationMessageMode;
