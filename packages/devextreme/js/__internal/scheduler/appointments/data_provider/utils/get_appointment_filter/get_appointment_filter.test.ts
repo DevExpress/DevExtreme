@@ -20,7 +20,6 @@ const compareOptions = {
 };
 const viewportOptions = {
   ...compareOptions,
-  viewOffset: 600,
   resources: [],
   firstDayOfWeek: 3,
   allDayPanelMode: 'all' as any,
@@ -138,7 +137,6 @@ describe('getAppointmentFilter', () => {
   it('should pass correct all day appointment with zero duration in day view', () => {
     expect(getAppointmentFilter(
       getViewportOptions({
-        viewOffset: 0,
         min: new Date(2000, 0, 15, startDayHour),
         max: new Date(2000, 0, 15, endDayHour),
       }),
@@ -153,7 +151,6 @@ describe('getAppointmentFilter', () => {
   it('should pass correct all day appointment with zero hours', () => {
     expect(getAppointmentFilter(
       getViewportOptions({
-        viewOffset: 0,
         min: new Date(2000, 0, 16, startDayHour),
         max: new Date(2000, 0, 16, endDayHour),
       }),

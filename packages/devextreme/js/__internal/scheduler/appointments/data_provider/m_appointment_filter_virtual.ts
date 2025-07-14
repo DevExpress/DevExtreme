@@ -9,7 +9,6 @@ import { isAppointmentMatchedResources } from './utils/get_appointment_filter/is
 import {
   filterArray,
   getRawAppointments,
-  getVisibleDateTimeIntervals,
 } from './utils/index';
 import type { CombinedFilter, CompareOptions, FilterOptions } from './utils/type';
 
@@ -63,13 +62,11 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
 
       filterOptions.push({
         ...compareOptions,
-        viewOffset,
+        ...this.getIntervals(compareOptions),
         allDayPanelFilter: false,
         resources,
         firstDayOfWeek: this.firstDayOfWeek,
         allDayPanelMode: this.allDayPanelMode,
-        visibleDateIntervals: getVisibleDateTimeIntervals(compareOptions, true),
-        visibleTimeIntervals: getVisibleDateTimeIntervals(compareOptions, false),
       });
     });
 

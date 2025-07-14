@@ -1,4 +1,3 @@
-import { dateUtilsTs } from '@ts/core/utils/date';
 import { dateUtils } from '@ts/core/utils/m_date';
 
 import type { TimeZoneCalculator } from '../../../../r1/timezone_calculator/calculator';
@@ -14,7 +13,6 @@ export const getAppointmentFilter = (
   timeZoneCalculator: TimeZoneCalculator,
 ) => {
   const {
-    viewOffset,
     firstDayOfWeek,
     resources,
     allDayPanelFilter,
@@ -59,13 +57,9 @@ export const getAppointmentFilter = (
       appointmentToCompare.endDate.setHours(23, 59, 59, 999);
     }
 
-    const shiftedIntervals = viewIntervals.map((interval) => ({
-      min: dateUtilsTs.addOffsets(interval.min, [viewOffset]),
-      max: dateUtilsTs.addOffsets(interval.max, [viewOffset]),
-    }));
     const recurrenceInterval = {
-      min: shiftedIntervals[0].min,
-      max: shiftedIntervals[shiftedIntervals.length - 1].max,
+      min: viewIntervals[0].min,
+      max: viewIntervals[viewIntervals.length - 1].max,
     };
     const appointmentOccurrences = getAppointmentsOccurrences(
       appointmentToCompare,
@@ -76,7 +70,7 @@ export const getAppointmentFilter = (
     return appointmentOccurrences.some(
       (appointmentOccurrence) => isAppointmentMatchedIntervals(
         appointmentOccurrence,
-        shiftedIntervals,
+        viewIntervals,
       ),
     );
   };
