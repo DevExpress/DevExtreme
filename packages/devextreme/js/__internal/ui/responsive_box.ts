@@ -117,12 +117,10 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return BOX_ITEM_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return BOX_ITEM_DATA_KEY;
   }
@@ -255,7 +253,6 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _createDefaultSizeConfig(): ResponsiveBoxItem {
     return {
       ratio: 1, baseSize: 0, minSize: 0, maxSize: 0,
@@ -297,7 +294,6 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     return screenByWidth?.(width) as SizeQualifier;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _screenWidth(): number {
     if (hasWindow()) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -307,7 +303,6 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     return HD_SCREEN_WIDTH;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _createEmptyCell(): GridCell {
     return {
       item: {},
@@ -457,7 +452,6 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _needApplyAutoBaseSize(item: BoxItemData): boolean {
     return !item.baseSize && (!item.minSize || item.minSize === 'auto') && (!item.maxSize || item.maxSize === 'auto');
   }
@@ -525,7 +519,6 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isBlockIndivisible(options: BlockOptions | undefined, block: BlockOptions): boolean {
     return !!options
         && options.col.start === block.col.start
@@ -534,7 +527,6 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
         && options.row.end === block.row.end;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _crossDirection(direction: BoxDirection): BoxDirection {
     return direction === 'col' ? 'row' : 'col';
   }
@@ -671,7 +663,6 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _attachClickEvent(): void {}
 
   _optionChanged(args: OptionChanged<ResponsiveBoxProperties>): void {

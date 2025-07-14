@@ -22,7 +22,7 @@ import variableWrapper from '@js/core/utils/variable_wrapper';
 import { getCurrentScreenFactor, hasWindow } from '@js/core/utils/window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-import ResponsiveBox from '@ts/ui/m_responsive_box';
+import ResponsiveBox from '@ts/ui/responsive_box';
 
 import { renderButtonItem } from './components/m_button_item';
 import { renderEmptyItem } from './components/m_empty_item';
@@ -342,7 +342,6 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     const that = this;
     const templatesInfo = [];
 
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (that._items && that._items.length) {
       const colCount = that._getColCount();
       const $container = $('<div>').appendTo(that.$element());
@@ -397,7 +396,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     const that = this;
     const colCountByScreen = that.option('colCountByScreen');
     // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
     const xsColCount = colCountByScreen && colCountByScreen.xs;
 
     return {
@@ -764,7 +763,6 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     if (!isDefined(this._watch)) {
       const { form: formInstance } = this.option();
 
-      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
       this._watch = formInstance && formInstance.option('integrationOptions.watchMethod');
     }
 

@@ -94,7 +94,6 @@ class ButtonCollection extends CollectionWidgetEdit<ButtonCollectionProperties> 
     return isFunction(template) || this.option('integrationOptions.templates')[template];
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _selectedItemClass(): string {
     return 'dx-item-selected dx-state-selected';
   }
@@ -146,7 +145,6 @@ class ButtonCollection extends CollectionWidgetEdit<ButtonCollectionProperties> 
     this._renderContent();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return BUTTON_GROUP_ITEM_CLASS;
   }
