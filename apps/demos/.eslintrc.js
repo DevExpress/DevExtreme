@@ -299,9 +299,9 @@ module.exports = {
       {
         'patterns': [
           'devextreme-*/cjs/*',
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
   extends: [
     'eslint:recommended',
