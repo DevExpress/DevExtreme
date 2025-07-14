@@ -8,11 +8,14 @@ import { noop } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import type { Properties } from '@js/ui/action_sheet';
 import Button from '@js/ui/button';
 import type { OptionChanged } from '@ts/core/widget/types';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
+import type { PopoverProperties } from '@ts/ui/popover/m_popover';
 import Popover from '@ts/ui/popover/m_popover';
+import type { PopupProperties } from '@ts/ui/popup/m_popup';
 import Popup from '@ts/ui/popup/m_popup';
 
 // STYLE actionSheet
@@ -32,7 +35,7 @@ const ACTION_SHEET_BUTTON_DEFAULT_STYLING_MODE = 'outlined';
 class ActionSheet extends CollectionWidget<Properties> {
   _$itemContainer!: dxElementWrapper;
 
-  _popup!: Popup;
+  _popup!: Popup | Popover;
 
   _$popup!: dxElementWrapper;
 
@@ -85,16 +88,20 @@ class ActionSheet extends CollectionWidget<Properties> {
     return this._$itemContainer;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return ACTION_SHEET_ITEM_CLASS;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return ACTION_SHEET_ITEM_DATA_KEY;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _toggleVisibility(): void {}
 
+  // eslint-disable-next-line class-methods-use-this
   _renderDimensions(): void {}
 
   _initMarkup(): void {
@@ -120,19 +127,24 @@ class ActionSheet extends CollectionWidget<Properties> {
 
   _renderPopup(): void {
     this._$popup = $('<div>').appendTo(this.$element());
-    this._isPopoverMode() ? this._createPopover() : this._createPopup();
+    if (this._isPopoverMode()) {
+      this._createPopover();
+    } else {
+      this._createPopup();
+    }
+
     this._renderPopupTitle();
     this._mapPopupOption('visible');
   }
 
-  _mapPopupOption(optionName): void {
+  _mapPopupOption(optionName: keyof Properties): void {
     this._popup?.option(optionName, this.option(optionName));
   }
 
   _isPopoverMode(): boolean {
     const { usePopover, target } = this.option();
-    // @ts-expect-error ts-error
-    return usePopover && target;
+
+    return !!(usePopover && target);
   }
 
   _renderPopupTitle(): void {
@@ -140,7 +152,7 @@ class ActionSheet extends CollectionWidget<Properties> {
     this._popup?.$wrapper().toggleClass(ACTION_SHEET_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
   }
 
-  _clean() {
+  _clean(): void {
     if (this._$popup) {
       this._$popup.remove();
     }
@@ -148,17 +160,21 @@ class ActionSheet extends CollectionWidget<Properties> {
     super._clean();
   }
 
-  _overlayConfig() {
+  _overlayConfig(): PopoverProperties | PopupProperties {
+    const { title } = this.option();
     return {
-      onInitialized: function (args) {
+      onInitialized: (args): void => {
+        // @ts-expect-error ts-error
         this._popup = args.component;
-      }.bind(this),
+      },
       disabled: false,
       showTitle: true,
-      title: this.option('title'),
+      title,
       deferRendering: true,
       onContentReady: this._popupContentReadyAction.bind(this),
-      onHidden: this.hide.bind(this),
+      onHidden: (): void => {
+        this.hide();
+      },
     };
   }
 
@@ -239,7 +255,7 @@ class ActionSheet extends CollectionWidget<Properties> {
     this._renderCancelButton();
   }
 
-  _renderCancelButton() {
+  _renderCancelButton(): void {
     if (this._isPopoverMode()) {
       return;
     }
@@ -248,22 +264,25 @@ class ActionSheet extends CollectionWidget<Properties> {
       this._$cancelButton.remove();
     }
 
-    if (this.option('showCancelButton')) {
-      const cancelClickAction = this._createActionByOption('onCancelClick') || noop;
-      const that = this;
+    const { showCancelButton, cancelText } = this.option();
 
-      this._$cancelButton = $('<div>').addClass(ACTION_SHEET_CANCEL_BUTTON_CLASS)
+    if (showCancelButton) {
+      const cancelClickAction = this._createActionByOption('onCancelClick') || noop;
+
+      this._$cancelButton = $('<div>')
+        .addClass(ACTION_SHEET_CANCEL_BUTTON_CLASS)
         .appendTo(this._popup?.$content());
+
       this._createComponent(this._$cancelButton, Button, {
         disabled: false,
         stylingMode: ACTION_SHEET_BUTTON_DEFAULT_STYLING_MODE,
-        text: this.option('cancelText'),
-        onClick(e) {
+        text: cancelText,
+        onClick: (e) => {
           const hidingArgs = { event: e, cancel: false };
           cancelClickAction(hidingArgs);
 
           if (!hidingArgs.cancel) {
-            that.hide();
+            this.hide();
           }
         },
         integrationOptions: {},
@@ -271,9 +290,10 @@ class ActionSheet extends CollectionWidget<Properties> {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _attachItemClickEvent(): void {}
 
-  _itemClickHandler(e): void {
+  _itemClickHandler(e: DxEvent): void {
     super._itemClickHandler(e);
 
     if (!$(e.target).is('.dx-state-disabled, .dx-state-disabled *')) {
@@ -281,7 +301,7 @@ class ActionSheet extends CollectionWidget<Properties> {
     }
   }
 
-  _itemHoldHandler(e): void {
+  _itemHoldHandler(e: DxEvent): void {
     super._itemHoldHandler(e);
 
     if (!$(e.target).is('.dx-state-disabled, .dx-state-disabled *')) {
@@ -290,12 +310,14 @@ class ActionSheet extends CollectionWidget<Properties> {
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
-    switch (args.name) {
+    const { name } = args;
+
+    switch (name) {
       case 'width':
       case 'height':
       case 'visible':
       case 'title':
-        this._mapPopupOption(args.name);
+        this._mapPopupOption(name);
         break;
       case 'disabled':
         this._renderDisabled();
@@ -318,25 +340,23 @@ class ActionSheet extends CollectionWidget<Properties> {
     }
   }
 
-  toggle(showing) {
-    const that = this;
+  toggle(showing: boolean): PromiseLike<unknown> {
     const d = Deferred();
-
     // @ts-expect-error ts-error
-    that._popup.toggle(showing).done(() => {
-      that.option('visible', showing);
+    this._popup.toggle(showing).done(() => {
+      this.option('visible', showing);
       // @ts-expect-error ts-error
-      d.resolveWith(that);
+      d.resolveWith(this);
     });
 
     return d.promise();
   }
 
-  show() {
+  show(): PromiseLike<unknown> {
     return this.toggle(true);
   }
 
-  hide() {
+  hide(): PromiseLike<unknown> {
     return this.toggle(false);
   }
 }

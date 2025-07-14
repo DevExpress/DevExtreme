@@ -388,4 +388,4 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
 
 registerComponent('dxScrollView', isServerSide ? ScrollViewServerSide : ScrollView);
 
-export default isServerSide ? ScrollViewServerSide : ScrollView;
+export default (isServerSide ? ScrollViewServerSide : ScrollView) as unknown as typeof ScrollView;
