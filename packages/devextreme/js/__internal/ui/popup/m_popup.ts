@@ -582,6 +582,8 @@ class Popup<
   }
 
   _triggerToolbarResizeEvent(): void {
+    // To trigger toolbar width set in initial rendering to set menu button width (T1245421)
+    // And to trigger with animation in runtime items update
     triggerResizeEvent(this.$overlayContent());
     triggerResizeEvent(this.$overlayContent());
   }
