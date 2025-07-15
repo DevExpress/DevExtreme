@@ -75,7 +75,7 @@ export interface DataChange<TItem = CollectionItem, TKey = number | string> {
   index: number;
 }
 
-type ItemTemplate<TItem> = template | (
+export type ItemTemplate<TItem> = template | (
   (itemData: TItem, itemIndex: number, itemElement: Element) => string | dxElementWrapper
 );
 export interface ItemRenderInfo<TItem> {
@@ -1442,7 +1442,7 @@ class CollectionWidget<
 
   _getSummaryItemsSize(
     dimension: string,
-    items: dxElementWrapper,
+    items: dxElementWrapper | dxElementWrapper[],
     includeMargin?: boolean,
   ): number {
     let result = 0;

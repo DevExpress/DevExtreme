@@ -2,15 +2,13 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import {
   deferRender,
-  // @ts-expect-error ts-error
-  grep,
 } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
-import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getWidth } from '@js/core/utils/size';
 import type { Item } from '@js/ui/toolbar';
 import DropDownMenu from '@ts/ui/toolbar/internal/m_toolbar.menu';
+import type { Properties } from '@ts/ui/toolbar/m_toolbar';
 import type Toolbar from '@ts/ui/toolbar/m_toolbar';
 
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
@@ -24,20 +22,21 @@ const TOOLBAR_HIDDEN_ITEM = 'dx-toolbar-item-invisible';
 export class SingleLineStrategy {
   _toolbar: Toolbar;
 
-  _restoreItems?: {
+  _restoreItems: {
     container: dxElementWrapper;
     item: dxElementWrapper;
-  }[];
+  }[] = [];
 
-  _menu?: DropDownMenu;
+  _menu!: DropDownMenu;
 
   _$overflowMenuContainer!: dxElementWrapper;
 
-  constructor(toolbar) {
+  constructor(toolbar: Toolbar) {
     this._toolbar = toolbar;
   }
 
   _initMarkup(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     deferRender(() => {
       this._renderOverflowMenu();
       this._renderMenuItems();
@@ -58,12 +57,12 @@ export class SingleLineStrategy {
 
     const {
       disabled,
-      // @ts-expect-error
       menuContainer,
     } = this._toolbar.option();
 
     this._menu = this._toolbar._createComponent($menu, DropDownMenu, {
       disabled,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       itemTemplate: () => menuItemTemplate,
       onItemClick: (e) => { itemClickAction(e); },
       container: menuContainer,
@@ -83,15 +82,18 @@ export class SingleLineStrategy {
       this._renderOverflowMenu();
     }
 
-    this._menu?.option('items', this._getMenuItems());
-    // @ts-expect-error
-    if (this._menu && !this._menu.option('items').length) {
-      this._menu.option('opened', false);
+    if (this._menu) {
+      this._menu.option('items', this._getMenuItems());
+
+      const { items = [] } = this._menu.option();
+
+      if (!items.length) {
+        this._menu.option('opened', false);
+      }
     }
   }
 
   _renderMenuButtonContainer(): void {
-    // @ts-expect-error
     this._$overflowMenuContainer = $('<div>').appendTo(this._toolbar._$afterSection)
       .addClass(TOOLBAR_BUTTON_CLASS)
       .addClass(TOOLBAR_DROP_DOWN_MENU_CONTAINER_CLASS);
@@ -104,10 +106,10 @@ export class SingleLineStrategy {
   _updateMenuVisibility(menuItems?: Item[]): void {
     const items = menuItems ?? this._getMenuItems();
     const isMenuVisible = items.length && this._hasVisibleMenuItems(items);
-    this._toggleMenuVisibility(isMenuVisible);
+    this._toggleMenuVisibility(!!isMenuVisible);
   }
 
-  _toggleMenuVisibility(value) {
+  _toggleMenuVisibility(value: boolean): void {
     if (!this._overflowMenuContainer()) {
       return;
     }
@@ -116,6 +118,7 @@ export class SingleLineStrategy {
   }
 
   _renderMenuItems(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     deferRender(() => {
       this.renderMenuItems();
     });
@@ -125,31 +128,33 @@ export class SingleLineStrategy {
     this.renderMenuItems();
   }
 
-  _getToolbarItems() {
-    return grep(this._toolbar.option('items') ?? [], (item) => !this._toolbar._isMenuItem(item));
+  _getToolbarItems(): Item[] {
+    const { items = [] } = this._toolbar.option();
+
+    return items.filter((item) => !this._toolbar._isMenuItem(item));
   }
 
-  _getHiddenItems() {
+  _getHiddenItems(): dxElementWrapper {
     return this._toolbar._itemContainer()
       .children(`.${TOOLBAR_AUTO_HIDE_ITEM_CLASS}.${TOOLBAR_HIDDEN_ITEM}`)
       .not(`.${INVISIBLE_STATE_CLASS}`);
   }
 
-  _getMenuItems() {
-    const menuItems = grep(this._toolbar.option('items') ?? [], (item) => this._toolbar._isMenuItem(item));
+  _getMenuItems(): Item[] {
+    const { items = [] } = this._toolbar.option();
+    const menuItems = items.filter((item) => this._toolbar._isMenuItem(item));
 
     const $hiddenItems = this._getHiddenItems();
 
     this._restoreItems = this._restoreItems ?? [];
 
     const overflowItems = [].slice.call($hiddenItems).map((hiddenItem) => {
-      const itemData = this._toolbar._getItemData(hiddenItem);
+      const itemData: Item = this._toolbar._getItemData(hiddenItem);
       const $itemContainer = $(hiddenItem);
       const $itemMarkup = $itemContainer.children();
 
-      return extend({
-        menuItemTemplate: () => {
-          // @ts-expect-error
+      return {
+        menuItemTemplate: (): dxElementWrapper => {
           this._restoreItems.push({
             container: $itemContainer,
             item: $itemMarkup,
@@ -158,13 +163,14 @@ export class SingleLineStrategy {
           const $container = $('<div>').addClass(TOOLBAR_AUTO_HIDE_ITEM_CLASS);
           return $container.append($itemMarkup);
         },
-      }, itemData);
+        ...itemData,
+      };
     });
 
     return [...overflowItems, ...menuItems];
   }
 
-  _hasVisibleMenuItems(items?: any) {
+  _hasVisibleMenuItems(items?: Item[]): boolean {
     const menuItems = items ?? this._toolbar.option('items');
     let result = false;
 
@@ -172,9 +178,9 @@ export class SingleLineStrategy {
     const overflowGetter = compileGetter('locateInMenu');
 
     each(menuItems, (index, item) => {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       const itemVisible = optionGetter(item, { functionsAsIs: true });
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       const itemOverflow = overflowGetter(item, { functionsAsIs: true });
 
       if (itemVisible !== false && (itemOverflow === 'auto' || itemOverflow === 'always')) {
@@ -186,7 +192,6 @@ export class SingleLineStrategy {
   }
 
   _arrangeItems(): number {
-    // @ts-expect-error
     this._toolbar._$centerSection.css({
       margin: '0 auto',
       float: 'none',
@@ -197,7 +202,7 @@ export class SingleLineStrategy {
     });
     this._restoreItems = [];
 
-    const elementWidth = getWidth(this._toolbar.$element());
+    const elementWidth: number = getWidth(this._toolbar.$element());
     this._hideOverflowItems(elementWidth);
 
     return elementWidth;
@@ -230,11 +235,15 @@ export class SingleLineStrategy {
   }
 
   _getItemsWidth(): number {
-    // @ts-expect-error
     return this._toolbar._getSummaryItemsSize('width', [this._toolbar._$beforeSection, this._toolbar._$centerSection, this._toolbar._$afterSection]);
   }
 
-  _itemOptionChanged(item, property, value): void {
+  _itemOptionChanged(
+    item: Item,
+    property: keyof Item,
+    value: unknown,
+  ): void {
+    // @ts-expect-error ts-error
     if (property === 'disabled' || property === 'options.disabled') {
       if (this._toolbar._isMenuItem(item)) {
         this._menu?._itemOptionChanged(item, property, value);
@@ -245,14 +254,17 @@ export class SingleLineStrategy {
     this.renderMenuItems();
   }
 
-  _renderItem(item, itemElement): void {
+  // eslint-disable-next-line class-methods-use-this
+  _renderItem(item: Item, $itemElement: dxElementWrapper): void {
     if (item.locateInMenu === 'auto') {
-      itemElement.addClass(TOOLBAR_AUTO_HIDE_ITEM_CLASS);
+      $itemElement.addClass(TOOLBAR_AUTO_HIDE_ITEM_CLASS);
     }
   }
 
-  _optionChanged(name, value): void {
-    // eslint-disable-next-line default-case
+  _optionChanged<K extends keyof Properties>(
+    name: K,
+    value: Properties[K],
+  ): void {
     switch (name) {
       case 'disabled':
         this._menu?.option(name, value);
@@ -268,6 +280,8 @@ export class SingleLineStrategy {
         break;
       case 'menuItemTemplate':
         this._menu?.option('itemTemplate', value);
+        break;
+      default:
         break;
     }
   }
