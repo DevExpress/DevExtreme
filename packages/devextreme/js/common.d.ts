@@ -304,7 +304,7 @@ export type GlobalConfig = {
    * @default true
    * @public
    */
-  copyStylesToShadowDom: true;
+  copyStylesToShadowDom: boolean;
   /**
    * @docid
    * @default undefined

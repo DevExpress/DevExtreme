@@ -1280,7 +1280,7 @@ declare module DevExpress.common {
     /**
      * [descr:GlobalConfig.copyStylesToShadowDom]
      */
-    copyStylesToShadowDom: false;
+    copyStylesToShadowDom: boolean;
     /**
      * [descr:GlobalConfig.editorStylingMode]
      */
