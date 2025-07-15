@@ -123,4 +123,8 @@ const eventHandlingLabel = { 'aria-label': 'Event Handling' };
 .hero-block {
   position: relative;
 }
+
+.brush {
+  color: #f05b41;
+}
 </style>
