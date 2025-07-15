@@ -505,7 +505,7 @@ class Popup<
       } else {
         this._renderTopToolbarImpl();
       }
-      this._triggerToolbarResizeEvent();
+
       this._$topToolbar?.toggleClass(POPUP_HAS_CLOSE_BUTTON_CLASS, this._hasCloseButton());
     } else {
       this._$topToolbar?.detach();
@@ -553,7 +553,7 @@ class Popup<
     } else {
       this._renderBottomToolbarImpl();
     }
-    this._triggerToolbarResizeEvent();
+
     this._toggleClasses();
   }
 
