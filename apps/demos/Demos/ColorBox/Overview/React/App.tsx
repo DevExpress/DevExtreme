@@ -76,7 +76,7 @@ function App() {
             <svg className="brush" width="360" height="254" style={{ color }}>
                 <use href="../../../../images/Brush.svg#brush"></use>
               </svg>
-              <svg className="superhero" width="360" height="254">
+              <svg className="superhero dx-color-icon" width="360" height="254">
                 <use href="../../../../images/Hero.svg#hero"></use>
               </svg>
           </div>
