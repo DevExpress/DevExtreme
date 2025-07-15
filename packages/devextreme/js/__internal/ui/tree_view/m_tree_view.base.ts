@@ -1593,13 +1593,13 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     };
   }
 
-  _itemClick(actionArgs) {
-    const args = actionArgs.args[0];
-    const target = args.event.target[0] || args.event.target;
+  _itemClick(actionArgs): void {
+    const { event, itemData } = actionArgs.args[0];
+    const target = event.target[0] || event.target;
     const link = target.getElementsByClassName(ITEM_URL_CLASS)[0];
 
-    if (args.itemData.url && link) {
-      link.click();
+    if (itemData.url && link) {
+      this._clickByLink(link);
     }
   }
 
