@@ -34,10 +34,13 @@ QUnit.module('addShadowDomStyles', () => {
         document.body.appendChild(container);
         const shadow = container.attachShadow({ mode: 'open' });
 
-        const styleSheet = new CSSStyleSheet();
+        const styleEl = document.createElement('style');
+        styleEl.textContent = '.dx-widget-host { background: red; }';
+        document.head.appendChild(styleEl);
 
-        await styleSheet.replace(':host { background: red; }');
-        shadow.adoptedStyleSheets = [styleSheet];
+        const shadowStyle = document.createElement('style');
+        shadowStyle.textContent = '.dx-widget-shadow { background: red; }';
+        shadow.appendChild(shadowStyle);
 
         const div = document.createElement('div');
         shadow.appendChild(div);
@@ -45,9 +48,11 @@ QUnit.module('addShadowDomStyles', () => {
         const $div = $(div);
         addShadowDomStyles($div);
 
-        assert.equal(shadow.adoptedStyleSheets.length, 2, 'Two stylesheets were adopted (global + shadow)');
-        assert.ok(shadow.adoptedStyleSheets[0], 'Global sheet exists');
-        assert.ok(shadow.adoptedStyleSheets[1], 'Local computed sheet exists');
+        const sheets = shadow.adoptedStyleSheets;
+
+        assert.equal(sheets.length, 2, 'Two stylesheets were adopted (global + shadow)');
+        assert.ok(sheets[0].cssRules.length > 0, 'Global sheet has rules');
+        assert.ok(sheets[1].cssRules.length > 0, 'Local computed sheet has rules');
 
         done();
     });
