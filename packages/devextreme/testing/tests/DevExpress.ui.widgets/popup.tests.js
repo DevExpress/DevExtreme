@@ -1509,8 +1509,8 @@ QUnit.module('options changed callbacks', {
             const topToolbar = this.instance.topToolbar();
 
             assert.strictEqual(topToolbar.length, 1, 'top toolbar is rendered');
-            // 1st and 2nd from toolbar rendering on init, 3rd from overlay visibility changing
-            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times');
+            // 1st from overlay visibility changing, 2nd and 3rd from _animateShowing
+            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 2 times');
         });
 
         QUnit.test('resize event is triggered 3 times after toolbar rendering by toolbarItems', function(assert) {
@@ -1524,8 +1524,8 @@ QUnit.module('options changed callbacks', {
             const topToolbar = this.instance.topToolbar();
 
             assert.strictEqual(topToolbar.length, 1, 'top toolbar is rendered');
-            // 1st and 2nd from toolbar rendering on init, 3rd from overlay visibility changing
-            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times');
+            // 1st from overlay visibility changing, 2nd and 3rd from _animateShowing
+            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 2 times');
         });
 
         QUnit.test('toolbarItems runtime changing should trigger resize event if toolbar is not rendered on init', function(assert) {
@@ -1540,8 +1540,8 @@ QUnit.module('options changed callbacks', {
             this.instance.option({ toolbarItems: [{ text: 'text' }] });
 
             assert.strictEqual(getTopToolbar().length, 1, 'top toolbar is rendered');
-            // 2, 3 from top toolbar rendering, 4, 5 from optionChanged
-            assert.strictEqual(this.resizeEventSpy.callCount, 5, 'event is triggered 5 times');
+            // 2nd and 3rd from optionChanged
+            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 5 times');
         });
 
         QUnit.test('toolbarItems runtime changing should trigger resize event if toolbar is rendered on init', function(assert) {
@@ -1559,9 +1559,28 @@ QUnit.module('options changed callbacks', {
             const $toolbar2 = getTopToolbar();
 
             assert.strictEqual($toolbar2.length, 1, 'top toolbar is rendered');
-            assert.strictEqual(this.resizeEventSpy.callCount, 7, 'event is triggered additional times');
+            assert.strictEqual(this.resizeEventSpy.callCount, 5, 'event is triggered additional times');
 
             assert.strictEqual($toolbar1, $toolbar2, 'toolbar is not rendered twice after toolbarItems update in runtime');
+        });
+
+        QUnit.test('resize event is triggered during animation showing when toolbar is present', function(assert) {
+            this.resizeEventSpy.resetHistory();
+            this.reinit({
+                visible: false,
+                showTitle: true,
+                showCloseButton: true,
+            });
+
+            assert.strictEqual(this.resizeEventSpy.callCount, 0, 'event is not triggered when popup is hidden');
+
+            this.instance.show();
+
+            const topToolbar = this.instance.topToolbar();
+
+            assert.strictEqual(topToolbar.length, 1, 'top toolbar is rendered');
+            // 1st from overlay visibility changing, 2nd and 3rd from _animateShowing
+            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 2 times during show animation');
         });
     });
 

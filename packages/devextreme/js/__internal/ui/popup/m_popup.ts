@@ -678,7 +678,9 @@ class Popup<
   }
 
   _animateShowing(): void {
-    this._triggerToolbarResizeEvent();
+    if (this._$topToolbar || this._$bottomToolbar) {
+      this._triggerToolbarResizeEvent();
+    }
     super._animateShowing();
   }
 
