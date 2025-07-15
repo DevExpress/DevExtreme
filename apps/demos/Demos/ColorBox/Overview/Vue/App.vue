@@ -59,7 +59,7 @@
           <svg class="brush" width="360" height="254" :style="{ color }">
             <use :href='"../../../../images/Brush.svg#brush"'></use>
           </svg>
-          <svg class="superhero" width="360" height="254">
+          <svg class="superhero dx-color-icon" width="360" height="254">
             <use :href='"../../../../images/Hero.svg#hero"'></use>
           </svg>
         </div>
@@ -122,29 +122,5 @@ const eventHandlingLabel = { 'aria-label': 'Event Handling' };
 
 .hero-block {
   position: relative;
-}
-
-.brush {
-  color: #f05b41;
-}
-
-.superhero,
-.dx-color-scheme-greenmist .superhero {
-  color: #404041;
-}
-
-.dx-color-scheme-dark .superhero,
-.dx-color-scheme-darkmoon .superhero,
-.dx-color-scheme-darkviolet .superhero,
-.dx-color-scheme-blue-dark .superhero,
-.dx-color-scheme-orange-dark .superhero,
-.dx-color-scheme-teal-dark .superhero,
-.dx-color-scheme-lime-dark .superhero,
-.dx-color-scheme-purple-dark .superhero {
-  color: #a8a8a8;
-}
-
-.dx-color-scheme-contrast .superhero {
-  color: #fff;
 }
 </style>
