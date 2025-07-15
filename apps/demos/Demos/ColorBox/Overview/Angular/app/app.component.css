@@ -37,23 +37,3 @@
 .brush {
   color: #f05b41;
 }
-
-.superhero,
-::ng-deep .dx-color-scheme-greenmist .superhero {
-  color: #404041;
-}
-
-::ng-deep .dx-color-scheme-dark .superhero,
-::ng-deep .dx-color-scheme-darkmoon .superhero,
-::ng-deep .dx-color-scheme-darkviolet .superhero,
-::ng-deep .dx-color-scheme-blue-dark .superhero,
-::ng-deep .dx-color-scheme-orange-dark .superhero,
-::ng-deep .dx-color-scheme-teal-dark .superhero,
-::ng-deep .dx-color-scheme-lime-dark .superhero,
-::ng-deep .dx-color-scheme-purple-dark .superhero {
-  color: #a8a8a8;
-}
-
-::ng-deep .dx-color-scheme-contrast .superhero {
-  color: #fff;
-}
