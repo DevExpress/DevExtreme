@@ -44,9 +44,10 @@ function insertRule(targetStyleSheet, rule, needApplyAllStyles) {
   }
 }
 
+const FNV_OFFSET_BASIS = 2166136261;
 const sheetHashes = new WeakMap();
 export function computeStyleSheetsHash(styleSheets) {
-  let hash = 2166136261;
+  let hash = FNV_OFFSET_BASIS;
 
   for (const sheet of styleSheets) {
     if (sheetHashes.has(sheet)) {
@@ -54,7 +55,7 @@ export function computeStyleSheetsHash(styleSheets) {
       continue;
     }
 
-    let localHash = 2166136261;
+    let localHash = FNV_OFFSET_BASIS;
     try {
       for (const rule of sheet.cssRules) {
         const text = rule.cssText;
@@ -75,10 +76,10 @@ export function computeStyleSheetsHash(styleSheets) {
   return hash >>> 0;
 }
 
-const injectedRootStates = new WeakMap();
+const styleSheetHashes = new WeakMap();
 
 export function addShadowDomStyles($element) {
-  if (config().noCopyStylesToShadowDom) {
+  if (config().copyStylesToShadowDom) {
     return;
   }
 
@@ -86,25 +87,15 @@ export function addShadowDomStyles($element) {
   const root = el.getRootNode?.();
   if (!root?.host) return;
 
-  let state = injectedRootStates.get(root);
-  if (!state) {
-    state = {
-      injectedGlobal: false,
-      lastLocalHash: null,
-    };
-    injectedRootStates.set(root, state);
-  }
-
-  if (!ownerDocumentStyleSheet && !state.injectedGlobal) {
+  if (!ownerDocumentStyleSheet) {
     ownerDocumentStyleSheet = createConstructedStyleSheet(root);
     processRules(ownerDocumentStyleSheet, el.ownerDocument.styleSheets, false);
-    state.injectedGlobal = true;
   }
 
   const localHash = computeStyleSheetsHash(root.styleSheets);
-  if (state.lastLocalHash === localHash) return;
+  if (styleSheetHashes.get(root) === localHash) return;
 
-  state.lastLocalHash = localHash;
+  styleSheetHashes.set(root, localHash);
 
   const currentShadowDomStyleSheet = createConstructedStyleSheet(root);
   processRules(currentShadowDomStyleSheet, root.styleSheets, true);

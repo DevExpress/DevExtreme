@@ -1,4 +1,4 @@
-import { computeStyleSheetsHash, addShadowDomStyles } from '__internal/core/utils/shadow_dom';
+import { computeStyleSheetsHash, addShadowDomStyles } from '__internal/core/utils/m_shadow_dom';
 
 QUnit.module('computeStyleSheetsHash', () => {
     QUnit.test('Returns consistent hash for same content', function(assert) {
@@ -63,13 +63,18 @@ QUnit.module('addShadowDomStyles', () => {
         const $div = $(div);
 
         addShadowDomStyles($div);
-        const firstCount = shadow.adoptedStyleSheets.length;
+        const firstSheets = [...shadow.adoptedStyleSheets];
+        const firstRules = firstSheets.map(sheet => sheet.cssRules.length);
 
         addShadowDomStyles($div);
-        const secondCount = shadow.adoptedStyleSheets.length;
+        const secondSheets = [...shadow.adoptedStyleSheets];
+        const secondRules = secondSheets.map(sheet => sheet.cssRules.length);
 
-        assert.equal(firstCount, secondCount, 'Stylesheets count unchanged after repeated call');
+        assert.equal(firstSheets.length, secondSheets.length, 'Stylesheets count unchanged after repeated call');
 
+        for(let i = 0; i < firstRules.length; i++) {
+            assert.equal(firstRules[i], secondRules[i], `Sheet[${i}] cssRules count unchanged`);
+        }
         done();
     });
 });
