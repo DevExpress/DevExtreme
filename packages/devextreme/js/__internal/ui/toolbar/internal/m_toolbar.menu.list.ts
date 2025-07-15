@@ -1,5 +1,7 @@
+import type { ToolbarItemComponent } from '@js/common';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
+import type { Item } from '@js/ui/toolbar';
 import { ListBase } from '@ts/ui/list/m_list.base';
 
 const TOOLBAR_MENU_ACTION_CLASS = 'dx-toolbar-menu-action';
@@ -10,6 +12,7 @@ const TOOLBAR_MENU_CUSTOM_CLASS = 'dx-toolbar-menu-custom';
 const TOOLBAR_MENU_LAST_SECTION_CLASS = 'dx-toolbar-menu-last-section';
 const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
+type ActionableComponents = Extract<ToolbarItemComponent, 'dxButton' | 'dxButtonGroup'>;
 export default class ToolbarMenuList extends ListBase {
   _activeStateUnit?: string;
 
@@ -80,7 +83,7 @@ export default class ToolbarMenuList extends ListBase {
     return itemElement;
   }
 
-  _getItemCssClasses(item): string[] {
+  _getItemCssClasses(item: Item): string[] {
     const cssClasses: string[] = [];
     const actionableComponents = this._getActionableComponents();
 
@@ -88,7 +91,8 @@ export default class ToolbarMenuList extends ListBase {
       cssClasses.push(TOOLBAR_MENU_CUSTOM_CLASS);
     }
 
-    if (!item.widget || actionableComponents.includes(item.widget)) {
+    if ((!item.location && !item.widget)
+      || actionableComponents.some((component) => component === item.widget)) {
       cssClasses.push(TOOLBAR_MENU_ACTION_CLASS);
     }
 
@@ -100,11 +104,15 @@ export default class ToolbarMenuList extends ListBase {
       cssClasses.push(TOOLBAR_HIDDEN_BUTTON_GROUP_CLASS);
     }
 
-    cssClasses.push(item.cssClass);
+    if (item.cssClass) {
+      cssClasses.push(item.cssClass);
+    }
+
     return cssClasses;
   }
 
-  _getActionableComponents() {
+  // eslint-disable-next-line class-methods-use-this
+  _getActionableComponents(): ActionableComponents[] {
     return ['dxButton', 'dxButtonGroup'];
   }
 
