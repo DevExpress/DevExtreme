@@ -79,7 +79,7 @@ export function computeStyleSheetsHash(styleSheets) {
 const styleSheetHashes = new WeakMap();
 
 export function addShadowDomStyles($element) {
-  if (config().copyStylesToShadowDom) {
+  if (!config().copyStylesToShadowDom) {
     return;
   }
 
