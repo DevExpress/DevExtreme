@@ -1583,7 +1583,7 @@ QUnit.module('options changed callbacks', {
             assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times during show animation');
         });
 
-        QUnit.test('resize event is triggered on toolbar elements only', function(assert) {
+        QUnit.test('additional resize events are triggered only on toolbar elements', function(assert) {
             this.resizeEventSpy.resetHistory();
             this.reinit({
                 visible: true,
@@ -1606,9 +1606,9 @@ QUnit.module('options changed callbacks', {
             const callsForBottomToolbar = this.resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === bottomToolbar[0]);
             const callsForOverlayContent = this.resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === overlayContent[0]);
 
-            assert.strictEqual(callsForTopToolbar.length, 2, 'resize event is triggered on top toolbar');
-            assert.strictEqual(callsForBottomToolbar.length, 2, 'resize event is triggered on bottom toolbar');
-            assert.strictEqual(callsForOverlayContent.length, 1, 'resize event is still triggered on overlay content for geometry rendering');
+            assert.strictEqual(callsForTopToolbar.length, 2, 'additional resize events are triggered on top toolbar');
+            assert.strictEqual(callsForBottomToolbar.length, 2, 'additional resize events are triggered on bottom toolbar');
+            assert.strictEqual(callsForOverlayContent.length, 1, 'resize event is triggered on overlay content for geometry rendering');
         });
     });
 
