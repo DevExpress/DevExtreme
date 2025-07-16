@@ -1,4 +1,5 @@
 import dateUtils from '@js/core/utils/date';
+import type { DateHeaderData } from '@ts/scheduler/types';
 
 import timeZoneUtils from '../../m_utils_time_zone';
 import {
@@ -160,7 +161,7 @@ export class DateHeaderDataGenerator {
     });
   }
 
-  generateDateHeaderData(completeDateHeaderMap, completeViewDataMap, options) {
+  generateDateHeaderData(completeDateHeaderMap, completeViewDataMap, options): DateHeaderData {
     const {
       isGenerateWeekDaysHeaderData,
       cellWidth,

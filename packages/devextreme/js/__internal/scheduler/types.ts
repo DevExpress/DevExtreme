@@ -104,7 +104,7 @@ export interface ViewCellData {
   isFirstGroupCell: boolean;
   isLastGroupCell: boolean;
   key: number;
-  firstDayOfMonth?: boolean;
+  isFirstDayMonthHighlighting?: boolean;
   isSelected?: boolean;
   isFocused?: boolean;
   highlighted?: boolean;
@@ -167,8 +167,8 @@ export interface ViewDataProviderOptions {
   firstDayOfWeek: number;
   today: Date;
 
-  isGenerateTimePanelData: boolean;
-  isGenerateWeekDaysHeaderData: boolean;
+  isGenerateTimePanelData?: boolean;
+  isGenerateWeekDaysHeaderData?: boolean;
 }
 
 export interface CellInfo {
@@ -187,8 +187,8 @@ export interface DateHeaderCellData extends ViewCellData {
 
 export interface DateHeaderData {
   dataMap: DateHeaderCellData[][];
-  leftVirtualCellWidth: number;
-  rightVirtualCellWidth: number;
+  leftVirtualCellWidth?: number;
+  rightVirtualCellWidth?: number;
   leftVirtualCellCount: number;
   rightVirtualCellCount: number;
   weekDayLeftVirtualCellWidth?: number;

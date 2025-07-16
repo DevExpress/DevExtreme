@@ -1,13 +1,14 @@
 import dateLocalization from '@js/common/core/localization/date';
 import dateUtils from '@js/core/utils/date';
+import { dateUtilsTs } from '@ts/core/utils/date';
 import {
   getToday, isFirstCellInMonthWithIntervalCount, monthUtils, setOptionHour,
 } from '@ts/scheduler/r1/utils/index';
 
 import timezoneUtils from '../../m_utils_time_zone';
-// eslint-disable-next-line import/no-cycle
-import { calculateAlignedWeeksBetweenDates } from './m_utils';
+import type { MonthViewCellDataSimple, ViewDataProviderExtendedOptions } from './m_types';
 import { ViewDataGenerator } from './m_view_data_generator';
+import { calculateAlignedWeeksBetweenDates } from './utils/view_generator_utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -20,8 +21,11 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
 
   tableAllDay: any = undefined;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getCellData(rowIndex, columnIndex, options, allDay) {
+  getCellData(
+    rowIndex: number,
+    columnIndex: number,
+    options: ViewDataProviderExtendedOptions,
+  ): MonthViewCellDataSimple {
     const {
       indicatorTime,
       timeZoneCalculator,
@@ -29,15 +33,30 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
       viewOffset,
     } = options;
 
-    const data = super.getCellData(rowIndex, columnIndex, options, false);
+    const data = super.getCellData(rowIndex, columnIndex, options, false) as MonthViewCellDataSimple;
     const startDate = timezoneUtils.addOffsetsWithoutDST(data.startDate, -viewOffset);
 
     data.today = this.isCurrentDate(startDate, indicatorTime, timeZoneCalculator);
     data.otherMonth = this.isOtherMonth(startDate, this._minVisibleDate, this._maxVisibleDate);
-    data.firstDayOfMonth = isFirstCellInMonthWithIntervalCount(startDate, intervalCount);
+    data.isFirstDayMonthHighlighting = isFirstCellInMonthWithIntervalCount(startDate, intervalCount);
     data.text = monthUtils.getCellText(startDate, intervalCount);
 
     return data;
+  }
+
+  getDateByCellIndices(
+    options: ViewDataProviderExtendedOptions,
+    rowIndex: number,
+    columnIndex: number,
+  ): Date {
+    const cellDate = new Date(this.getStartViewDate(options));
+    const { viewOffset } = options;
+
+    const columnCount = this.getCellCount();
+    const daysDelta = rowIndex * columnCount + columnIndex;
+    cellDate.setDate(cellDate.getDate() + daysDelta);
+
+    return dateUtilsTs.addOffsets(cellDate, [viewOffset]);
   }
 
   isCurrentDate(date, indicatorTime, timeZoneCalculator) {
@@ -46,10 +65,6 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
 
   isOtherMonth(cellDate, minDate, maxDate) {
     return !dateUtils.dateInRange(cellDate, minDate, maxDate, 'date');
-  }
-
-  _calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
-    return monthUtils.calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
   }
 
   calculateEndDate(startDate, interval, endDayHour) {
