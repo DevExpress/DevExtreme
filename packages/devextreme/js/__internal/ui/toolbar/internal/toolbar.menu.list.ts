@@ -116,7 +116,6 @@ export default class ToolbarMenuList extends ListBase {
     return cssClasses;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getActionableComponents(): ActionableComponents[] {
     return ['dxButton', 'dxButtonGroup'];
   }
@@ -129,7 +128,6 @@ export default class ToolbarMenuList extends ListBase {
     return menuTemplate ?? template;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _dataSourceOptions(): DataSourceOptions {
     return {
       paginate: false,

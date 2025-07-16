@@ -44,8 +44,8 @@ import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Overlay from '@ts/ui/overlay/m_overlay';
 import * as zIndexPool from '@ts/ui/overlay/m_z_index';
-import { TOOLBAR_CLASS } from '@ts/ui/toolbar/m_constants';
-import type { ToolbarBaseProperties } from '@ts/ui/toolbar/m_toolbar.base';
+import { TOOLBAR_CLASS } from '@ts/ui/toolbar/constants';
+import type { ToolbarBaseProperties } from '@ts/ui/toolbar/toolbar.base';
 
 import PopupDrag from './m_popup_drag';
 import type { OverflowManager } from './m_popup_overflow_manager';

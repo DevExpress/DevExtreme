@@ -20,9 +20,8 @@ import type { Properties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import Button from '@ts/ui/button/wrapper';
 import type { ListBase } from '@ts/ui/list/m_list.base';
-
-import { toggleItemFocusableElementTabIndex } from '../m_toolbar.utils';
-import ToolbarMenuList from './m_toolbar.menu.list';
+import ToolbarMenuList from '@ts/ui/toolbar/internal/toolbar.menu.list';
+import { toggleItemFocusableElementTabIndex } from '@ts/ui/toolbar/toolbar.utils';
 
 const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
 const DROP_DOWN_MENU_POPUP_CLASS = 'dx-dropdownmenu-popup';

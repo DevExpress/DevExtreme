@@ -70,7 +70,7 @@ import {
 } from '@ts/ui/form/m_form.utils';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import { TEXTEDITOR_CLASS, TEXTEDITOR_INPUT_CLASS } from '@ts/ui/text_box/m_text_editor.base';
-import { TOOLBAR_CLASS } from '@ts/ui/toolbar/m_constants';
+import { TOOLBAR_CLASS } from '@ts/ui/toolbar/constants';
 
 import type ValidationSummary from '../m_validation_summary';
 import type LayoutManager from './m_form.layout_manager';
