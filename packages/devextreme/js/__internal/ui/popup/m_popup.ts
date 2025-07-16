@@ -583,10 +583,10 @@ class Popup<
 
   _triggerToolbarResizeEvent(): void {
     // To trigger toolbar width to set overflow menu button width (T1245421)
-    [this._$topToolbar, this._$bottomToolbar].forEach((toolbar) => {
-      if (toolbar) {
-        triggerResizeEvent(toolbar);
-        triggerResizeEvent(toolbar);
+    [this._$topToolbar, this._$bottomToolbar].forEach(($toolbar) => {
+      if ($toolbar) {
+        triggerResizeEvent($toolbar);
+        triggerResizeEvent($toolbar);
       }
     });
   }
