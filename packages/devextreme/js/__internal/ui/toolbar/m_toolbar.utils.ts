@@ -1,17 +1,28 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { Item } from '@js/ui/toolbar';
+import type Widget from '@ts/core/widget/widget';
+
+import type { ListBase } from '../list/m_list.base';
+import type Toolbar from './m_toolbar';
 
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const TOOLBAR_ITEMS = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
 
-const getItemInstance = function ($element) {
+const getItemInstance = ($element: dxElementWrapper): Widget => {
+  // @ts-expect-error ts-error
   const itemData = $element.data && $element.data();
+  // @ts-expect-error ts-error
   const dxComponents = itemData && itemData.dxComponents;
   const widgetName = dxComponents && dxComponents[0];
 
-  return widgetName && itemData[widgetName];
+  return (widgetName && itemData[widgetName]) as Widget;
 };
 
-export function toggleItemFocusableElementTabIndex(context, item) {
+export function toggleItemFocusableElementTabIndex(
+  context: Toolbar | ListBase | undefined,
+  item: Item,
+): void {
   if (!context) return;
 
   const $item = context._findItemElementByItem(item);

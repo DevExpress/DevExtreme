@@ -5,16 +5,20 @@ import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { ChildDefaultTemplate } from '@js/core/templates/child_default_template';
-import { extend } from '@js/core/utils/extend';
 import { getOuterHeight } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
-import Button from '@js/ui/button';
+import type { DataSourceLike } from '@js/data/data_source';
+import type { DxEvent } from '@js/events';
+import type { ClickEvent } from '@js/ui/button';
+import type { Item as ListItem, ItemClickEvent } from '@js/ui/list';
 import type { dxPopupAnimation } from '@js/ui/popup';
 import type Popup from '@js/ui/popup';
-import { isFluent, isMaterialBased } from '@js/ui/themes';
+import { current, isFluent, isMaterialBased } from '@js/ui/themes';
 import type { Item } from '@js/ui/toolbar';
-import type { WidgetOptions } from '@js/ui/widget/ui.widget';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { Properties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
+import Button from '@ts/ui/button/wrapper';
 import type { ListBase } from '@ts/ui/list/m_list.base';
 
 import { toggleItemFocusableElementTabIndex } from '../m_toolbar.utils';
@@ -28,7 +32,7 @@ const DROP_DOWN_MENU_BUTTON_CLASS = 'dx-dropdownmenu-button';
 const POPUP_BOUNDARY_VERTICAL_OFFSET = 10;
 const POPUP_VERTICAL_OFFSET = 3;
 
-export interface DropDownMenuProperties extends WidgetOptions<DropDownMenu> {
+export interface DropDownMenuProperties extends Properties<DropDownMenu> {
   opened?: boolean;
 
   container: string | Element | undefined;
@@ -37,15 +41,23 @@ export interface DropDownMenuProperties extends WidgetOptions<DropDownMenu> {
 
   items?: Item[];
 
+  dataSource?: DataSourceLike<Item, string | number> | null;
+
   itemTemplate?: string | (() => void);
 
   onItemRendered?: (e: Record<string, unknown>) => void;
 
   onItemClick?: (e) => void;
+
+  onButtonClick?: (e: ClickEvent) => void;
+
+  useInkRipple?: boolean;
+
+  closeOnClick?: boolean;
 }
 
 export default class DropDownMenu extends Widget<DropDownMenuProperties> {
-  _button?: Button;
+  _button!: Button;
 
   _popup?: Popup;
 
@@ -55,39 +67,36 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
 
   _deferRendering?: boolean;
 
-  _itemClickAction?: any;
+  _itemClickAction?: (e: Partial<ItemClickEvent<ListItem>>) => void;
 
-  _buttonClickAction?: any;
+  _buttonClickAction?: (e: ClickEvent) => void;
 
-  _supportedKeys() {
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | void> {
     let extension = {};
 
     if (!this.option('opened') || !this._list?.option('focusedElement')) {
-      // @ts-expect-error
       extension = this._button._supportedKeys();
     }
 
-    return extend(super._supportedKeys(), extension, {
-      tab() {
+    return {
+      ...super._supportedKeys(),
+      ...extension,
+      tab(): void {
         this._popup?.hide();
       },
-    });
+    };
   }
 
   _getDefaultOptions(): DropDownMenuProperties {
     return {
       ...super._getDefaultOptions(),
       items: [],
-      // @ts-expect-error ts-error
-      onItemClick: null,
       dataSource: null,
       itemTemplate: 'item',
-      onButtonClick: null,
       activeStateEnabled: true,
       hoverStateEnabled: true,
       opened: false,
-      // @ts-expect-error ts-error
-      onItemRendered: null,
       closeOnClick: true,
       useInkRipple: false,
       container: undefined,
@@ -101,7 +110,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
   _defaultOptionsRules(): DefaultOptionsRule<DropDownMenuProperties>[] {
     return super._defaultOptionsRules().concat([
       {
-        device() {
+        device(): boolean {
           return devices.real().deviceType === 'desktop' && !devices.isSimulator();
         },
         options: {
@@ -109,12 +118,10 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
         },
       },
       {
-        device() {
-          // @ts-expect-error
-          return isMaterialBased();
+        device(): boolean {
+          return isMaterialBased(current());
         },
         options: {
-          // @ts-expect-error
           useInkRipple: true,
           animation: {
             show: {
@@ -166,14 +173,18 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
 
   _render(): void {
     super._render();
+
+    const { opened } = this.option();
+
     this.setAria({
       haspopup: true,
-      expanded: this.option('opened'),
+      expanded: opened,
     });
   }
 
   _renderContentImpl(): void {
-    if (this.option('opened')) {
+    const { opened } = this.option();
+    if (opened) {
       this._renderPopup();
     }
   }
@@ -191,33 +202,39 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
   _renderButton(): void {
     const $button = this.$element().addClass(DROP_DOWN_MENU_BUTTON_CLASS);
 
+    const { useInkRipple } = this.option();
+
     this._button = this._createComponent($button, Button, {
       icon: 'overflow',
       template: 'content',
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       stylingMode: isFluent() ? 'text' : 'contained',
-      useInkRipple: this.option('useInkRipple'),
+      useInkRipple,
       hoverStateEnabled: false,
       focusStateEnabled: false,
-      onClick: (e) => {
+      onClick: (e: ClickEvent) => {
         this.option('opened', !this.option('opened'));
-        this._buttonClickAction(e);
+        this._buttonClickAction?.(e);
       },
     });
   }
 
-  _toggleActiveState($element, value, e): void {
-    // @ts-expect-error
-    this._button._toggleActiveState($element, value, e);
+  _toggleActiveState(
+    $element: dxElementWrapper,
+    value: boolean,
+  ): void {
+    // @ts-expect-error ts-error
+    this._button._toggleActiveState($element, value);
   }
 
-  _toggleMenuVisibility(opened) {
+  _toggleMenuVisibility(opened: boolean | undefined): void {
     const state = opened ?? !this._popup?.option('visible');
 
     if (opened) {
       this._renderPopup();
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._popup?.toggle(state);
     this.setAria('expanded', state);
   }
@@ -258,7 +275,9 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       autoResizeEnabled: false,
       height: 'auto',
       width: 'auto',
-      hideOnOutsideClick: (e) => this._closeOutsideDropDownHandler(e),
+      hideOnOutsideClick: (
+        e: DxEvent<MouseEvent | PointerEvent | TouchEvent>,
+      ) => this._closeOutsideDropDownHandler(e),
       hideOnParentScroll: true,
       shading: false,
       dragEnabled: false,
@@ -268,18 +287,25 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
     });
   }
 
-  _getMaxHeight() {
+  _getMaxHeight(): number {
     const $element = this.$element();
 
-    // @ts-expect-error
-    const offsetTop = $element.offset().top;
+    const offsetTop = $element.offset()?.top ?? 0;
     const windowHeight = getOuterHeight(getWindow());
-    const maxHeight = Math.max(offsetTop, windowHeight - offsetTop - getOuterHeight($element));
+    const maxHeight = Math.max(
+      offsetTop,
+      windowHeight - offsetTop - getOuterHeight($element),
+    );
 
-    return Math.min(windowHeight, maxHeight - POPUP_VERTICAL_OFFSET - POPUP_BOUNDARY_VERTICAL_OFFSET);
+    return Math.min(
+      windowHeight,
+      maxHeight - POPUP_VERTICAL_OFFSET - POPUP_BOUNDARY_VERTICAL_OFFSET,
+    );
   }
 
-  _closeOutsideDropDownHandler(e): boolean {
+  _closeOutsideDropDownHandler(
+    e: DxEvent<MouseEvent | PointerEvent | TouchEvent>,
+  ): boolean {
     const isOutsideClick = !$(e.target).closest(this.$element()).length;
 
     return isOutsideClick;
@@ -297,11 +323,12 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       indicateLoading: false,
       noDataText: '',
       itemTemplate,
-      onItemClick: (e) => {
-        if (this.option('closeOnClick')) {
+      onItemClick: (e: ItemClickEvent<ListItem>): void => {
+        const { closeOnClick } = this.option();
+        if (closeOnClick) {
           this.option('opened', false);
         }
-        this._itemClickAction(e);
+        this._itemClickAction?.(e);
       },
       tabIndex: -1,
       focusStateEnabled: false,
@@ -312,13 +339,18 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
     });
   }
 
-  _itemOptionChanged(item, property, value): void {
+  _itemOptionChanged(
+    item: Item,
+    property: keyof Item,
+    value: unknown,
+  ): void {
     this._list?._itemOptionChanged(item, property, value);
     toggleItemFocusableElementTabIndex(this._list, item);
   }
 
-  _getListDataSource(): any {
-    return this.option('dataSource') ?? this.option('items');
+  _getListDataSource(): DataSourceLike<Item, string | number> | Item[] {
+    const { dataSource, items = [] } = this.option();
+    return dataSource ?? items;
   }
 
   _setListDataSource(): void {
@@ -327,16 +359,17 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
     delete this._deferRendering;
   }
 
-  _getKeyboardListeners() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _getKeyboardListeners(): any[] {
     return super._getKeyboardListeners().concat([this._list]);
   }
 
-  _toggleVisibility(visible): void {
+  _toggleVisibility(visible: boolean): void {
     super._toggleVisibility(visible);
     this._button?.option('visible', visible);
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<DropDownMenuProperties>): void {
     const { name, value } = args;
 
     switch (name) {
@@ -355,7 +388,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
         this._initItemClickAction();
         break;
       case 'onButtonClick':
-        this._buttonClickAction();
+        this._initButtonClickAction();
         break;
       case 'useInkRipple':
         this._invalidate();
@@ -371,14 +404,13 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
         if (this._deferRendering) {
           this._setListDataSource();
         }
-
         this._toggleMenuVisibility(value);
         this._updateFocusableItemsTabIndex();
         break;
       case 'closeOnClick':
         break;
       case 'container':
-        this._popup && this._popup.option(name, value);
+        this._popup?.option(name, value);
         break;
       case 'disabled':
         if (this._list) {
@@ -391,7 +423,8 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
   }
 
   _updateFocusableItemsTabIndex(): void {
-    // @ts-expect-error
-    this.option('items').forEach((item) => toggleItemFocusableElementTabIndex(this._list, item));
+    const { items = [] } = this.option();
+
+    items.forEach((item) => toggleItemFocusableElementTabIndex(this._list, item));
   }
 }
