@@ -1,7 +1,12 @@
 import type { ToolbarItemComponent } from '@js/common';
+import type { DataSourceOptions } from '@js/common/data';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
+import type { DxEvent } from '@js/events';
 import type { Item } from '@js/ui/toolbar';
+import type { ActionConfig } from '@ts/core/widget/component';
+import type { ItemRenderInfo, ItemTemplate } from '@ts/ui/collection/collection_widget.base';
 import { ListBase } from '@ts/ui/list/m_list.base';
 
 const TOOLBAR_MENU_ACTION_CLASS = 'dx-toolbar-menu-action';
@@ -28,11 +33,11 @@ export default class ToolbarMenuList extends ListBase {
     this._setMenuRole();
   }
 
-  _getSections() {
+  _getSections(): dxElementWrapper {
     return this._itemContainer().children();
   }
 
-  _itemElements() {
+  _itemElements(): dxElementWrapper {
     return this._getSections().children(this._itemSelector());
   }
 
@@ -51,9 +56,8 @@ export default class ToolbarMenuList extends ListBase {
     });
   }
 
-  _renderItems(): void {
-    // @ts-expect-error ts-error
-    super._renderItems.apply(this, arguments);
+  _renderItems(items: Item): void {
+    super._renderItems(items);
     this._updateSections();
   }
 
@@ -69,20 +73,25 @@ export default class ToolbarMenuList extends ListBase {
     $sections.not(':empty').eq(-1).addClass(TOOLBAR_MENU_LAST_SECTION_CLASS);
   }
 
-  _renderItem(index, item, itemContainer, $after) {
+  _renderItem(
+    index: number,
+    item: Item,
+    _$container: dxElementWrapper,
+    $itemToReplace: dxElementWrapper,
+  ): dxElementWrapper {
     const $container = this[`_$${item.location ?? 'menu'}Section`];
-    const itemElement = super._renderItem(index, item, $container, $after);
+    const $itemElement = super._renderItem(index, item, $container, $itemToReplace);
 
     const itemCssClasses = this._getItemCssClasses(item);
-    itemElement.addClass(itemCssClasses.join(' '));
+    $itemElement.addClass(itemCssClasses.join(' '));
 
-    return itemElement;
+    return $itemElement;
   }
 
   _getItemCssClasses(item: Item): string[] {
     const cssClasses: string[] = [];
     const actionableComponents = this._getActionableComponents();
-
+    // @ts-expect-error ts-error
     if (this._getItemTemplateName({ itemData: item })) {
       cssClasses.push(TOOLBAR_MENU_CUSTOM_CLASS);
     }
@@ -112,22 +121,26 @@ export default class ToolbarMenuList extends ListBase {
     return ['dxButton', 'dxButtonGroup'];
   }
 
-  _getItemTemplateName(args) {
+  _getItemTemplateName(args: ItemRenderInfo<Item>): ItemTemplate<Item> {
     const template = super._getItemTemplateName(args);
-
     const data = args.itemData;
     const menuTemplate = data?.menuItemTemplate;
 
-    return menuTemplate || template;
+    return menuTemplate ?? template;
   }
 
-  _dataSourceOptions() {
+  // eslint-disable-next-line class-methods-use-this
+  _dataSourceOptions(): DataSourceOptions {
     return {
       paginate: false,
     };
   }
 
-  _itemClickHandler(e, args, config): void {
+  _itemClickHandler(
+    e: DxEvent,
+    args?: Record<string, unknown>,
+    config?: ActionConfig,
+  ): void {
     if ($(e.target).closest(`.${TOOLBAR_MENU_ACTION_CLASS}`).length) {
       super._itemClickHandler(e, args, config);
     }

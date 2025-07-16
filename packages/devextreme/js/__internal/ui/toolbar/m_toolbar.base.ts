@@ -1,3 +1,4 @@
+import type { DefaultOptionsRule } from '@js/common';
 import { fx } from '@js/common/core/animation';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -8,9 +9,10 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { getHeight, getOuterWidth, getWidth } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import {
+  current,
   isMaterial,
   isMaterialBased,
-  // @ts-expect-error
+  // @ts-expect-error ts-error
   waitWebFont,
 } from '@js/ui/themes';
 import type { Item, Properties } from '@js/ui/toolbar';
@@ -38,11 +40,10 @@ const DEFAULT_DROPDOWNBUTTON_STYLING_MODE = 'contained';
 const TOOLBAR_ITEM_DATA_KEY = 'dxToolbarItemDataKey';
 const ANIMATION_TIMEOUT = 15;
 
-type ItemLike = string | Item | any;
+type ItemLike = string | Item;
 
 export interface ToolbarBaseProperties<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TItem extends ItemLike = any,
+  TItem extends ItemLike = Item,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey = any,
 > extends Properties<TItem, TKey>,
@@ -57,19 +58,21 @@ export interface ToolbarBaseProperties<
   compactMode: boolean;
 }
 
-class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
-  _$toolbarItemsContainer?: any;
+class ToolbarBase<
+  TProperties extends ToolbarBaseProperties = ToolbarBaseProperties,
+> extends CollectionWidgetAsync<TProperties> {
+  _$toolbarItemsContainer!: dxElementWrapper;
 
-  _$beforeSection?: dxElementWrapper;
+  _$beforeSection!: dxElementWrapper;
 
-  _$centerSection?: dxElementWrapper;
+  _$centerSection!: dxElementWrapper;
 
-  _$afterSection?: dxElementWrapper;
+  _$afterSection!: dxElementWrapper;
 
-  _waitParentAnimationTimeout?: any;
+  // eslint-disable-next-line no-restricted-globals
+  _waitParentAnimationTimeout?: ReturnType<typeof setTimeout>;
 
-  // @ts-expect-error
-  _getSynchronizableOptionsForCreateComponent(): string[] {
+  _getSynchronizableOptionsForCreateComponent(): (keyof TProperties)[] {
     return super._getSynchronizableOptionsForCreateComponent().filter((item) => item !== 'disabled');
   }
 
@@ -126,7 +129,7 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     });
   }
 
-  _getDefaultOptions(): ToolbarBaseProperties {
+  _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
       renderAs: 'topToolbar',
@@ -136,13 +139,13 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     };
   }
 
-  _defaultOptionsRules() {
+  _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
     return super._defaultOptionsRules().concat([
       {
-        device() {
-          // @ts-expect-error
-          return isMaterialBased();
+        device(): boolean {
+          return isMaterialBased(current());
         },
+        // @ts-expect-error ts-error
         options: {
           useFlatButtons: true,
         },
@@ -150,7 +153,7 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     ]);
   }
 
-  _itemContainer() {
+  _itemContainer(): dxElementWrapper {
     return this._$toolbarItemsContainer.find([
       `.${TOOLBAR_BEFORE_CLASS}`,
       `.${TOOLBAR_CENTER_CLASS}`,
@@ -158,10 +161,12 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     ].join(','));
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return TOOLBAR_ITEM_CLASS;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return TOOLBAR_ITEM_DATA_KEY;
   }
@@ -240,7 +245,7 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
       return;
     }
 
-    const labelOffset = beforeRect.width ? beforeRect.width : $label.position().left;
+    const labelOffset = beforeRect.width ? beforeRect.width : $label.position()?.left;
     const widthBeforeSection = $section.hasClass(TOOLBAR_BEFORE_CLASS) ? 0 : labelOffset;
     const widthAfterSection = $section.hasClass(TOOLBAR_AFTER_CLASS) ? 0 : afterRect.width;
     let elemsAtSectionWidth = 0;
@@ -263,7 +268,11 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     }
   }
 
-  _alignCenterSection(beforeRect, afterRect, elementWidth): void {
+  _alignCenterSection(
+    beforeRect: DOMRect,
+    afterRect: DOMRect,
+    elementWidth: number,
+  ): void {
     if (!this._$centerSection) {
       return;
     }
@@ -301,8 +310,13 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     }
   }
 
-  _alignSectionLabels(labels, difference, expanding): void {
-    const getRealLabelWidth = function (label) { return getBoundingRect(label).width; };
+  // eslint-disable-next-line class-methods-use-this
+  _alignSectionLabels(
+    labels: Element[],
+    difference: number,
+    expanding: boolean,
+  ): void {
+    const getRealLabelWidth = (label: Element): number => (getBoundingRect(label) as DOMRect).width;
 
     // eslint-disable-next-line @typescript-eslint/prefer-for-of, no-plusplus
     for (let i = 0; i < labels.length; i++) {
@@ -341,7 +355,8 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     }
   }
 
-  _getCurrentLabelsWidth(labels) {
+  // eslint-disable-next-line class-methods-use-this
+  _getCurrentLabelsWidth(labels: Element[]): number {
     let width = 0;
 
     labels.forEach((label) => {
@@ -351,7 +366,8 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     return width;
   }
 
-  _getCurrentLabelsPaddings(labels) {
+  // eslint-disable-next-line class-methods-use-this
+  _getCurrentLabelsPaddings(labels: Element[]): number {
     let padding = 0;
 
     labels.forEach((label) => {
@@ -361,18 +377,23 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     return padding;
   }
 
-  _renderItem(index, item, itemContainer, $after): dxElementWrapper {
-    const location = item.location ?? 'center';
-    const container = itemContainer ?? this[`_$${location}Section`];
-    const itemHasText = !!(item.text ?? item.html);
-    const itemElement = super._renderItem(index, item, container, $after);
+  _renderItem(
+    index: number,
+    itemData: Item,
+    $container: dxElementWrapper,
+    $itemToReplace?: dxElementWrapper,
+  ): dxElementWrapper {
+    const location = itemData.location ?? 'center';
+    const container = $container ?? this[`_$${location}Section`];
+    const itemHasText = !!(itemData.text ?? itemData.html);
+    const $itemElement = super._renderItem(index, itemData, container, $itemToReplace);
 
-    itemElement
+    $itemElement
       .toggleClass(TOOLBAR_BUTTON_CLASS, !itemHasText)
       .toggleClass(TOOLBAR_LABEL_CLASS, itemHasText)
-      .addClass(item.cssClass);
+      .addClass(itemData.cssClass ?? '');
 
-    return itemElement;
+    return $itemElement;
   }
 
   _renderGroupedItems(): void {
@@ -386,14 +407,15 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
       }
 
       each(groupItems, (itemIndex, item) => {
-        this._renderItem(itemIndex, item, $container, null);
+        this._renderItem(itemIndex, item, $container);
       });
 
       this._$toolbarItemsContainer.find(`.dx-toolbar-${location}`).append($container);
     });
   }
 
-  _renderItems(items): void {
+  _renderItems(items: Item[]): void {
+    // @ts-expect-error ts-error
     const grouped = this.option('grouped') && items.length && items[0].items;
 
     if (grouped) {
@@ -404,8 +426,8 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
   }
 
   _getToolbarItems(): Item[] {
-    // @ts-expect-error
-    return this.option('items') ?? [];
+    const { items = [] } = this.option();
+    return items;
   }
 
   _renderContentImpl(): void {
@@ -422,19 +444,22 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     this._applyCompactMode();
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _renderEmptyMessage(): void {}
 
   _clean(): void {
     this._$toolbarItemsContainer.children().empty();
 
     this.$element().empty();
-
+    // @ts-expect-error ts-error
     delete this._$beforeSection;
+    // @ts-expect-error ts-error
     delete this._$centerSection;
+    // @ts-expect-error ts-error
     delete this._$afterSection;
   }
 
-  _visibilityChanged(visible): void {
+  _visibilityChanged(visible: boolean): void {
     if (visible) {
       this._arrangeItems();
     }
@@ -444,7 +469,7 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     return getWidth(this.$element()) > 0 && getHeight(this.$element()) > 0;
   }
 
-  _getIndexByItem(item): number {
+  _getIndexByItem(item: Item): number {
     return this._getToolbarItems().indexOf(item);
   }
 
@@ -458,7 +483,7 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     this._arrangeItems();
   }
 
-  _optionChanged(args: OptionChanged<ToolbarBaseProperties>): void {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     const { name } = args;
 
     switch (name) {
@@ -486,49 +511,51 @@ class ToolbarBase extends CollectionWidgetAsync<ToolbarBaseProperties> {
     clearTimeout(this._waitParentAnimationTimeout);
   }
 
-  _updateDimensionsInMaterial() {
-    // @ts-expect-error
-    if (isMaterial()) {
+  _updateDimensionsInMaterial(): void {
+    if (isMaterial(current())) {
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      const _waitParentAnimationFinished = () => new Promise((resolve) => {
-        const check = () => {
+      const _waitParentAnimationFinished = (): Promise<void> => new Promise((resolve) => {
+        const check = (): boolean => {
           let readyToResolve = true;
-          // @ts-expect-error
-          this.$element().parents().each((_, parent) => {
-            // @ts-expect-error
+          this.$element().parents().each((_, parent: Element): boolean => {
+            // @ts-expect-error ts-error
             if (fx.isAnimating($(parent))) {
               readyToResolve = false;
               return false;
             }
+            return true;
           });
           if (readyToResolve) {
-            // @ts-expect-error
             resolve();
           }
           return readyToResolve;
         };
-        const runCheck = () => {
+        const runCheck = (): void => {
           clearTimeout(this._waitParentAnimationTimeout);
-          this._waitParentAnimationTimeout = setTimeout(() => check() || runCheck(), ANIMATION_TIMEOUT);
+          // eslint-disable-next-line no-restricted-globals
+          this._waitParentAnimationTimeout = setTimeout(
+            () => check() || runCheck(),
+            ANIMATION_TIMEOUT,
+          );
         };
         runCheck();
       });
 
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      const _checkWebFontForLabelsLoaded = () => {
+      const _checkWebFontForLabelsLoaded = (): Promise<unknown[]> => {
         const $labels = this.$element().find(`.${TOOLBAR_LABEL_CLASS}`);
-        const promises = [];
-        // @ts-expect-error
-        $labels.each((_, label) => {
+        const promises: Promise<unknown>[] = [];
+        $labels.each((_, label): boolean => {
           const text = $(label).text();
-          // @ts-expect-error
+          // @ts-expect-error ts-error
           const fontWeight = $(label).css('fontWeight');
-          // @ts-expect-error
           promises.push(waitWebFont(text, fontWeight));
+          return true;
         });
         return Promise.all(promises);
       };
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       Promise.all([
         _waitParentAnimationFinished(),
         _checkWebFontForLabelsLoaded(),

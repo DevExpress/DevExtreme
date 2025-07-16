@@ -1,5 +1,6 @@
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
+import type { Item } from '@js/ui/toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 import type { ToolbarBaseProperties } from './m_toolbar.base';
@@ -12,24 +13,24 @@ const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 const TOOLBAR_AUTO_HIDE_TEXT_CLASS = 'dx-toolbar-text-auto-hide';
 
 export interface Properties extends ToolbarBaseProperties {
-  menuContainer?: dxElementWrapper;
+  menuContainer?: string | Element | undefined;
   overflowMenuVisible?: boolean;
 }
-class Toolbar extends ToolbarBase {
+class Toolbar extends ToolbarBase<Properties> {
   _layoutStrategy!: MultiLineStrategy | SingleLineStrategy;
 
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       menuItemTemplate: 'menuItem',
-      menuContainer: undefined,
       overflowMenuVisible: false,
       multiline: false,
     };
   }
 
-  _isMultiline() {
-    return this.option('multiline');
+  _isMultiline(): boolean | undefined {
+    const { multiline } = this.option();
+    return multiline;
   }
 
   _dimensionChanged(dimension?: 'height' | 'width'): void {
@@ -56,7 +57,7 @@ class Toolbar extends ToolbarBase {
     this._renderLayoutStrategy();
   }
 
-  _itemContainer() {
+  _itemContainer(): dxElementWrapper {
     if (this._isMultiline()) {
       return this._$toolbarItemsContainer;
     }
@@ -65,7 +66,6 @@ class Toolbar extends ToolbarBase {
   }
 
   _renderLayoutStrategy(): void {
-    // @ts-expect-error
     this.$element().toggleClass(TOOLBAR_MULTILINE_CLASS, this._isMultiline());
 
     this._layoutStrategy = this._isMultiline()
@@ -73,12 +73,12 @@ class Toolbar extends ToolbarBase {
       : new SingleLineStrategy(this);
   }
 
-  _renderSections() {
+  _renderSections(): void {
     if (this._isMultiline()) {
       return;
     }
 
-    return super._renderSections();
+    super._renderSections();
   }
 
   _postProcessRenderItems(): void {
@@ -90,31 +90,36 @@ class Toolbar extends ToolbarBase {
     this._layoutStrategy._renderMenuItems();
   }
 
-  _renderItem(index, item, itemContainer, $after) {
-    const itemElement = super._renderItem(index, item, itemContainer, $after);
+  _renderItem(
+    index: number,
+    itemData: Item,
+    $container: dxElementWrapper,
+    $itemToReplace: dxElementWrapper,
+  ): dxElementWrapper {
+    const $itemElement = super._renderItem(index, itemData, $container, $itemToReplace);
 
-    this._layoutStrategy._renderItem(item, itemElement);
+    this._layoutStrategy._renderItem(itemData, $itemElement);
 
-    const { widget, showText } = item;
+    const { widget, showText } = itemData;
 
     if (widget === 'dxButton' && showText === 'inMenu') {
-      itemElement.toggleClass(TOOLBAR_AUTO_HIDE_TEXT_CLASS);
+      $itemElement.toggleClass(TOOLBAR_AUTO_HIDE_TEXT_CLASS);
     }
 
-    return itemElement;
+    return $itemElement;
   }
 
   // for filemanager
-  _getItemsWidth() {
+  _getItemsWidth(): number {
     return this._layoutStrategy._getItemsWidth();
   }
 
   // for filemanager
-  _getMenuItems() {
+  _getMenuItems(): Item[] {
     return this._layoutStrategy._getMenuItems();
   }
 
-  _getToolbarItems() {
+  _getToolbarItems(): Item[] {
     return this._layoutStrategy._getToolbarItems();
   }
 
@@ -130,13 +135,18 @@ class Toolbar extends ToolbarBase {
     }
   }
 
-  _itemOptionChanged(item, property, value, prevValue): void {
+  _itemOptionChanged(
+    item: Item,
+    property: keyof Item,
+    value: unknown,
+    prevValue: unknown,
+  ): void {
     if (!this._isMenuItem(item)) {
       super._itemOptionChanged(item, property, value, prevValue);
     }
 
     this._layoutStrategy._itemOptionChanged(item, property, value);
-
+    // @ts-expect-error ts-error
     if (property === 'disabled' || property === 'options.disabled') {
       toggleItemFocusableElementTabIndex(this, item);
     }
@@ -150,11 +160,13 @@ class Toolbar extends ToolbarBase {
     this._getToolbarItems().forEach((item) => toggleItemFocusableElementTabIndex(this, item));
   }
 
-  _isMenuItem(itemData): boolean {
+  // eslint-disable-next-line class-methods-use-this
+  _isMenuItem(itemData: Item): boolean {
     return itemData.locateInMenu === 'always';
   }
 
-  _isToolbarItem(itemData): boolean {
+  // eslint-disable-next-line class-methods-use-this
+  _isToolbarItem(itemData: Item): boolean {
     return itemData.location === undefined || itemData.locateInMenu === 'never';
   }
 
