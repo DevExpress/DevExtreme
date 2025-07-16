@@ -216,7 +216,7 @@ safeSizeTest('Popup toolbars with wide elements and overflow menu if hidden on i
   ...baseConfiguration,
   toolbarItems: [],
   visible: false,
-}, undefined, { disableFxAnimation: true }));
+}, undefined, { disableFxAnimation: false }));
 
 safeSizeTest('Popup toolbars with wide elements and overflow menu if shown on init with toolbar items', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
