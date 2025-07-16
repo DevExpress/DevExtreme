@@ -28,7 +28,7 @@ QUnit.module('computeStyleSheetsHash', () => {
 });
 
 QUnit.module('addShadowDomStyles', () => {
-    QUnit.test('Applies styles to ShadowRoot via adoptedStyleSheets', function(assert) {
+    QUnit.test('Applies styles to ShadowRoot via adoptedStyleSheets', async function(assert) {
         const done = assert.async();
 
         const container = document.createElement('div');
@@ -47,16 +47,19 @@ QUnit.module('addShadowDomStyles', () => {
         shadow.appendChild(div);
         const $div = $(div);
 
+        await new Promise(requestAnimationFrame);
+
         addShadowDomStyles($div);
 
         const sheets = shadow.adoptedStyleSheets;
 
         assert.equal(sheets.length, 2, 'Two stylesheets were adopted (global + shadow)');
-        assert.ok(sheets[0].cssRules.length > 0, 'Global sheet has rules');
-        assert.ok(sheets[1].cssRules.length > 0, 'Local computed sheet has rules');
+        assert.ok(sheets[0]?.cssRules?.length > 0, 'Global sheet has rules');
+        assert.ok(sheets[1]?.cssRules?.length > 0, 'Local computed sheet has rules');
 
         done();
     });
+
 
     QUnit.test('Does not duplicate stylesheets on repeated calls', async function(assert) {
         const done = assert.async();
