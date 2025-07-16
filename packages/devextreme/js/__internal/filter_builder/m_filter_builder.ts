@@ -675,7 +675,6 @@ class FilterBuilder extends Widget<any> {
       .attr('tabindex', 0)
       .appendTo($container);
     this._addAriaAttributes($text, messageLocalization.format('dxFilterBuilder-filterAriaItemValue'), 'button', true);
-
     const value = item[2];
 
     const customOperation = getCustomOperation(that._customOperations, item[1]);
@@ -779,7 +778,6 @@ class FilterBuilder extends Widget<any> {
 
   _createValueEditorWithEvents(item, field, $container) {
     let value = item[2];
-
     const createValueText = () => {
       $container.empty();
       this._removeEvents();
