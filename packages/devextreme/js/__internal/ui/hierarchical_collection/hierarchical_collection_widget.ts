@@ -138,6 +138,14 @@ TKey = any,
       .append(textContainer);
   }
 
+  _clickByLink(link: HTMLElement): void {
+    link.addEventListener('click', (e: MouseEvent): void => {
+      e.stopPropagation();
+    }, { once: true });
+
+    link.click();
+  }
+
   _getIconContainer(itemData: TItem): dxElementWrapper | undefined | null {
     // @ts-expect-error ts-error
     if (!itemData.icon) {
