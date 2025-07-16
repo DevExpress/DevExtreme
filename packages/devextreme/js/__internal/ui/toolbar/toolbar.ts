@@ -3,11 +3,11 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import type { Item } from '@js/ui/toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
 
-import type { ToolbarBaseProperties } from './m_toolbar.base';
-import ToolbarBase from './m_toolbar.base';
-import { toggleItemFocusableElementTabIndex } from './m_toolbar.utils';
-import { MultiLineStrategy } from './strategy/m_toolbar.multiline';
-import { SingleLineStrategy } from './strategy/m_toolbar.singleline';
+import { MultiLineStrategy } from './strategy/toolbar.multiline';
+import { SingleLineStrategy } from './strategy/toolbar.singleline';
+import type { ToolbarBaseProperties } from './toolbar.base';
+import ToolbarBase from './toolbar.base';
+import { toggleItemFocusableElementTabIndex } from './toolbar.utils';
 
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 const TOOLBAR_AUTO_HIDE_TEXT_CLASS = 'dx-toolbar-text-auto-hide';
@@ -160,12 +160,10 @@ class Toolbar extends ToolbarBase<Properties> {
     this._getToolbarItems().forEach((item) => toggleItemFocusableElementTabIndex(this, item));
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isMenuItem(itemData: Item): boolean {
     return itemData.locateInMenu === 'always';
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isToolbarItem(itemData: Item): boolean {
     return itemData.location === undefined || itemData.locateInMenu === 'never';
   }
