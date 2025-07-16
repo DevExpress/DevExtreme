@@ -3678,6 +3678,27 @@ QUnit.module('adaptivity: behavior', {
         assert.ok(clickSpy.calledOnce);
     });
 
+    QUnit.test('onItemClick should be raised once if item.url is set', function(assert) {
+        const onItemClickSpy = sinon.spy();
+
+        new Menu(this.$element, {
+            items: this.items,
+            onItemClick: onItemClickSpy,
+            adaptivityEnabled: true
+        });
+
+        const parentTreeviewItem = $(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(1);
+
+        parentTreeviewItem.trigger('dxclick');
+        onItemClickSpy.resetHistory();
+
+        const treeviewItem = $(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(2);
+
+        treeviewItem.trigger('dxclick');
+
+        assert.strictEqual(onItemClickSpy.calledOnce, true, 'onItemClick was called once');
+    });
+
     QUnit.test('link should be clicked programmatically with enter key if item.url is set', function(assert) {
         if(!isDeviceDesktop(assert)) {
             assert.ok(true);
