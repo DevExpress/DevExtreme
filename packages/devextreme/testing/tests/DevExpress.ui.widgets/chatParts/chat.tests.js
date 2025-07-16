@@ -169,7 +169,7 @@ QUnit.module('Chat', () => {
             const $deleteButton = this.getContextMenuItems().eq(0);
             $deleteButton.trigger('dxclick');
 
-            const $popup = this.$element.find(`.${POPUP_CLASS}.${WIDGET_CLASS}`);
+            const $popup = $(`.${POPUP_CLASS}.${WIDGET_CLASS}`);
             const popup = $popup.dxPopup('instance');
 
             assert.propContains(popup.option(), {
