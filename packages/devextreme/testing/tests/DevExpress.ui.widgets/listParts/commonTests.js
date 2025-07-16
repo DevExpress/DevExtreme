@@ -4344,6 +4344,7 @@ QUnit.module('keyboard navigation', {
 
                 const $list = $('#list').dxList({
                     useNativeScrolling,
+                    focusStateEnabled: true,
                     items: [0, 1, 2, 3, 4],
                 });
 

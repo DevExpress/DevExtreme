@@ -80,7 +80,7 @@ export interface ListBaseProperties extends Properties<Item> {
   focusedElement?: dxElementWrapper;
 }
 
-type ScrollDirection = 'prev' | 'next';
+type Direction = 'prev' | 'next';
 
 export class ListBase extends CollectionWidget<ListBaseProperties> {
   static ItemClass = ListItem;
@@ -135,7 +135,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     };
   }
 
-  _moveFocusPerPage(e: KeyboardEvent, direction: ScrollDirection): void {
+  _moveFocusPerPage(e: KeyboardEvent, direction: Direction): void {
     if (this._isLastItemFocused(direction)) {
       return;
     }
@@ -146,8 +146,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     let $item = this._getEdgeVisibleItem(direction);
     const { focusedElement } = this.option();
 
-    // @ts-expect-error ts-error
-    const isFocusedItem = $item.is(focusedElement);
+    const isFocusedItem = $item.is($(focusedElement));
 
     if (isFocusedItem) {
       this.scrollTo(this._getItemLocation($item, direction));
@@ -158,15 +157,14 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     this.scrollToItem($item);
   }
 
-  _isLastItemFocused(direction: ScrollDirection): boolean {
+  _isLastItemFocused(direction: Direction): boolean {
     const lastItemInDirection = direction === 'prev' ? this._itemElements().first() : this._itemElements().last();
     const { focusedElement } = this.option();
 
-    // @ts-expect-error ts-error
-    return lastItemInDirection.is(focusedElement);
+    return lastItemInDirection.is($(focusedElement));
   }
 
-  _getEdgeVisibleItem(direction: ScrollDirection): dxElementWrapper {
+  _getEdgeVisibleItem(direction: Direction): dxElementWrapper {
     const scrollTop = this.scrollTop();
     const containerHeight = getHeight(this.$element());
 
@@ -197,7 +195,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     return $item;
   }
 
-  _getItemLocation($item: dxElementWrapper, direction: ScrollDirection): number {
+  _getItemLocation($item: dxElementWrapper, direction: Direction): number {
     if (direction === 'prev') {
       // @ts-expect-error ts-error
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
