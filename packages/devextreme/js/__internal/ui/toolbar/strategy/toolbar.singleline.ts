@@ -7,9 +7,9 @@ import { compileGetter } from '@js/core/utils/data';
 import { each } from '@js/core/utils/iterator';
 import { getWidth } from '@js/core/utils/size';
 import type { Item } from '@js/ui/toolbar';
-import DropDownMenu from '@ts/ui/toolbar/internal/m_toolbar.menu';
-import type { Properties } from '@ts/ui/toolbar/m_toolbar';
-import type Toolbar from '@ts/ui/toolbar/m_toolbar';
+import DropDownMenu from '@ts/ui/toolbar/internal/toolbar.menu';
+import type { Properties } from '@ts/ui/toolbar/toolbar';
+import type Toolbar from '@ts/ui/toolbar/toolbar';
 
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const TOOLBAR_DROP_DOWN_MENU_CONTAINER_CLASS = 'dx-toolbar-menu-container';
@@ -254,7 +254,6 @@ export class SingleLineStrategy {
     this.renderMenuItems();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderItem(item: Item, $itemElement: dxElementWrapper): void {
     if (item.locateInMenu === 'auto') {
       $itemElement.addClass(TOOLBAR_AUTO_HIDE_ITEM_CLASS);

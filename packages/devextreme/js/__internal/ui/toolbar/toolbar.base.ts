@@ -20,7 +20,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import CollectionWidgetAsync from '@ts/ui/collection/collection_widget.async';
 import type { CollectionWidgetBaseProperties } from '@ts/ui/collection/collection_widget.base';
 
-import { TOOLBAR_CLASS } from './m_constants';
+import { TOOLBAR_CLASS } from './constants';
 
 const TOOLBAR_BEFORE_CLASS = 'dx-toolbar-before';
 const TOOLBAR_CENTER_CLASS = 'dx-toolbar-center';
@@ -161,12 +161,10 @@ class ToolbarBase<
     ].join(','));
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return TOOLBAR_ITEM_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return TOOLBAR_ITEM_DATA_KEY;
   }
@@ -310,7 +308,6 @@ class ToolbarBase<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _alignSectionLabels(
     labels: Element[],
     difference: number,
@@ -355,7 +352,6 @@ class ToolbarBase<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getCurrentLabelsWidth(labels: Element[]): number {
     let width = 0;
 
@@ -366,7 +362,6 @@ class ToolbarBase<
     return width;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getCurrentLabelsPaddings(labels: Element[]): number {
     let padding = 0;
 
@@ -444,7 +439,6 @@ class ToolbarBase<
     this._applyCompactMode();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderEmptyMessage(): void {}
 
   _clean(): void {

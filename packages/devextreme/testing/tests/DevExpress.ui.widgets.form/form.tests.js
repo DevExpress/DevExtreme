@@ -47,7 +47,7 @@ import {
     renderLabel,
 } from '__internal/ui/form/components/m_label';
 
-import { TOOLBAR_CLASS } from '__internal/ui/toolbar/m_constants';
+import { TOOLBAR_CLASS } from '__internal/ui/toolbar/constants';
 
 import 'ui/html_editor';
 import '../../helpers/ignoreQuillTimers.js';
