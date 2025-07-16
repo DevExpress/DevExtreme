@@ -1,4 +1,4 @@
-// import config from '@js/core/config';
+import config from '@js/core/config';
 
 const DX_RULE_PREFIX = 'dx-';
 
@@ -79,10 +79,9 @@ export function computeStyleSheetsHash(styleSheets) {
 const styleSheetHashes = new WeakMap();
 
 export function addShadowDomStyles($element) {
-  // TODO: Need to return
-  // if (!config().copyStylesToShadowDom) {
-  //   return;
-  // }
+  if (!config().copyStylesToShadowDom) {
+    return;
+  }
 
   const el = $element.get(0);
   const root = el.getRootNode?.();

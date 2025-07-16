@@ -34,13 +34,13 @@ QUnit.module('addShadowDomStyles', () => {
         document.body.appendChild(container);
         const shadow = container.attachShadow({ mode: 'open' });
 
-        const styleEl = document.createElement('style');
-        styleEl.textContent = '.dx-widget-host { background: red; }';
-        document.head.appendChild(styleEl);
+        const globalStyleSheet = new CSSStyleSheet();
+        globalStyleSheet.replaceSync('.dx-widget-host { background: red; }');
+        document.adoptedStyleSheets = [...document.adoptedStyleSheets, globalStyleSheet];
 
-        const shadowStyle = document.createElement('style');
-        shadowStyle.textContent = '.dx-widget-shadow { background: red; }';
-        shadow.appendChild(shadowStyle);
+        const preexistingShadowStyle = new CSSStyleSheet();
+        preexistingShadowStyle.replaceSync('.dx-widget-shadow { background: red; }');
+        shadow.adoptedStyleSheets = [preexistingShadowStyle];
 
         const div = document.createElement('div');
         shadow.appendChild(div);
