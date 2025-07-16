@@ -643,18 +643,19 @@ function getTablePropertiesFormConfig(module, { $element, formats, tableBlot }) 
 function getCellPropertiesFormConfig(module, {
   $element, formats, tableBlot, rowBlot,
 }) {
-  const window = getWindow();
   let alignmentEditorInstance;
   let verticalAlignmentEditorInstance;
   let borderColorEditorInstance;
   let backgroundColorEditorInstance;
 
-  const $cell = $element;
-  // eslint-disable-next-line radix
-  const startCellWidth = isDefined(formats.cellWidth) ? parseInt(formats.cellWidth) : getOuterWidth($cell);
   const { editorInstance } = module;
+  const window = getWindow();
+
+  const $cell = $element;
+  const startCellWidth = formats.cellWidth ?? getOuterWidth($cell);
   const cellStyles = window.getComputedStyle($cell.get(0));
   const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
+  const borderWidth = Math.round(parseFloat(formats.cellBorderWidth ?? cellStyles.borderTopWidth));
 
   const formOptions = {
     colCount: 2,
@@ -662,17 +663,17 @@ function getCellPropertiesFormConfig(module, {
       width: startCellWidth,
       // eslint-disable-next-line radix
       height: isDefined(formats.cellHeight) ? parseInt(formats.cellHeight) : getOuterHeight($cell),
-      backgroundColor: getColorFromFormat(formats.cellBackgroundColor) || cellStyles.backgroundColor,
+      backgroundColor: getColorFromFormat(formats.cellBackgroundColor)
+        || cellStyles.backgroundColor,
       borderStyle: formats.cellBorderStyle || cellStyles.borderTopStyle,
       borderColor: getColorFromFormat(formats.cellBorderColor) || cellStyles.borderTopColor,
-      // eslint-disable-next-line radix
-      borderWidth: parseInt(isDefined(formats.cellBorderWidth) ? formats.cellBorderWidth : cellStyles.borderTopWidth),
+      borderWidth,
       alignment: formats.cellTextAlign || startTextAlign,
       verticalAlignment: formats.cellVerticalAlign || cellStyles.verticalAlign,
       // eslint-disable-next-line radix
-      verticalPadding: parseInt(isDefined(formats.cellPaddingTop) ? formats.cellPaddingTop : cellStyles.paddingTop),
+      verticalPadding: parseInt(formats.cellPaddingTop ?? cellStyles.paddingTop),
       // eslint-disable-next-line radix
-      horizontalPadding: parseInt(isDefined(formats.cellPaddingLeft) ? formats.cellPaddingLeft : cellStyles.paddingLeft),
+      horizontalPadding: parseInt(formats.cellPaddingLeft ?? cellStyles.paddingLeft),
     },
     items: [{
       itemType: 'group',
@@ -829,7 +830,7 @@ function getCellPropertiesFormConfig(module, {
       $cell, newHeight, newWidth, tableBlot, rowBlot,
     });
 
-    module.editorInstance.format('cellBorderWidth', `${formData.borderWidth}px`);
+    module.editorInstance.format('cellBorderWidth', `${Math.round(formData.borderWidth)}px`);
     module.editorInstance.format('cellBorderColor', borderColorEditorInstance.option('value'));
     module.editorInstance.format('cellBorderStyle', formData.borderStyle);
     module.editorInstance.format('cellBackgroundColor', backgroundColorEditorInstance.option('value'));
