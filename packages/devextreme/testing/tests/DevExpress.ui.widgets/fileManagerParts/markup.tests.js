@@ -1,5 +1,7 @@
 const { test } = QUnit;
 import $ from 'jquery';
+import { extend } from 'core/utils/extend';
+import consoleUtils from '__internal/core/utils/m_console';
 import 'ui/file_manager';
 import fx from 'common/core/animation/fx';
 import windowUtils from 'core/utils/window';
@@ -32,17 +34,51 @@ const prepareFileManager = (context, isPure, options) => {
     context.clock.tick(400);
 };
 
+const moduleConfig_T1297188 = {
+    beforeEach: function() {
+        const markup = '<div id="fileManagerPopup"></div>';
+        $('#qunit-fixture').html(markup);
 
-QUnit.testStart(function() {
-    const markup =
-        '<div id="fileManager"></div>';
+        this.clock = sinon.useFakeTimers();
+        fx.off = true;
+        this.clock.tick(400);
+    },
+    afterEach: function() {
+        this.clock.tick(5000);
+        this.clock.restore();
+        fx.off = false;
+    }
+};
 
-    $('#qunit-fixture').html(markup);
-});
+const createFileManagerInsidePopup = (context, useThumbnailViewMode, extOptions) => {
+    const viewMode = useThumbnailViewMode ? 'thumbnails' : 'details';
+    extOptions = extOptions || {};
+    const options = extend({
+        fileSystemProvider: createTestFileSystem(),
+        itemView: {
+            mode: viewMode
+        }
+    }, extOptions);
+    let fileManager;
+    const fileManagerPopup = $('#fileManagerPopup').dxPopup({
+        visible: true,
+        contentTemplate: function(contentElement) {
+            fileManager = $('<div id="fileManager"></div>')
+                .appendTo(contentElement)
+                .dxFileManager(options)
+                .dxFileManager('instance');
+        }
+    });
+    context.clock.tick(400);
+    return { fileManager, fileManagerPopup };
+};
 
 const moduleConfig = {
 
     beforeEach: function() {
+        const markup = '<div id="fileManager"></div>';
+        $('#qunit-fixture').html(markup);
+
         this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
@@ -207,3 +243,31 @@ QUnit.module('Markup rendering', moduleConfig, () => {
     });
 
 });
+
+QUnit.module('fileManager inside popup not causing any warnings in console (T1297188)', moduleConfig_T1297188, () => {
+    test('height applies to the details view (T1297188)', function(assert) {
+        const originalWarn = consoleUtils.logger.warn;
+        const warnings = [];
+        consoleUtils.logger.warn = function(message) {
+            warnings.push(message);
+            originalWarn.apply(consoleUtils.logger, arguments);
+        };
+
+        try {
+            createFileManagerInsidePopup(this, false, { width: '100%', height: '100%' });
+
+            this.clock.tick(400);
+
+            const w1025Warning = warnings.find(warning =>
+                typeof warning === 'string' &&
+                warning.includes('W1025 - \'scrolling.mode\' is set to \'virtual\' or \'infinite\'')
+            );
+
+            assert.ok(!w1025Warning, 'W1025 scrolling.mode warning should not appear in console');
+
+        } finally {
+            consoleUtils.logger.warn = originalWarn;
+        }
+    });
+});
+
