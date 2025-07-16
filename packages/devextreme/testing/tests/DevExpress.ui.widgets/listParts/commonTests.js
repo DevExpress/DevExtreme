@@ -4335,6 +4335,41 @@ QUnit.module('keyboard navigation', {
         assert.ok(secondItemIsFocused, 'focused item change to last visible item on new page');
     });
 
+    ['pageUp', 'pageDown'].forEach((key) => {
+        const moveDown = key === 'pageDown';
+
+        [true, false].forEach((useNativeScrolling) => {
+            QUnit.test(`on list scroll with ${key} pressed original event prevented and propagation stopped if not ${moveDown ? 'last' : 'first'} item was focused, useNativeScrolling=${useNativeScrolling} (T1298074)`, function(assert) {
+                assert.expect(4);
+
+                const $list = $('#list').dxList({
+                    useNativeScrolling,
+                    focusStateEnabled: true,
+                    items: [0, 1, 2, 3, 4],
+                });
+
+                const instance = $list.dxList('instance');
+                const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+                const keyboard = getListKeyboard($list);
+                const itemHeight = $items.first().outerHeight();
+
+                instance.option('height', itemHeight * 3);
+                instance.option('focusedElement', $items.eq(3));
+                instance.scrollToItem(moveDown ? $items.last() : $items.first());
+
+                keyboard.keyDown(key);
+
+                assert.strictEqual(keyboard.event.isDefaultPrevented(), true, 'event is prevented');
+                assert.strictEqual(keyboard.event.isPropagationStopped(), true, 'propogation is stopped');
+
+                keyboard.keyDown(key);
+
+                assert.strictEqual(keyboard.event.isDefaultPrevented(), false, `event is not prevented when ${moveDown ? 'last' : 'first'} item is focused`);
+                assert.strictEqual(keyboard.event.isPropagationStopped(), false, `propogation is not stopped when ${moveDown ? 'last' : 'first'} item is focused`);
+            });
+        });
+    });
+
     QUnit.test('focus should be moved to selectedItem after focusing of grouped list (T1278005)', function(assert) {
         const list = $('#list').dxList({
             selectedItemKeys: [5],
