@@ -427,6 +427,37 @@ module('Table properties forms', {
             assert.strictEqual($targetCell.css('verticalAlign'), 'bottom', 'vertical align is applied');
         });
 
+        test('cell border width with decimal values is rounded correctly', function(assert) {
+            const markup = `
+                <table>
+                    <tr>
+                        <td style="border-width: 2.7px;">Cell 1</td>
+                    </tr>
+                </table>
+            `;
+            this.createWidget({ value: markup });
+            this.quillInstance.setSelection(50, 1);
+
+            const $tableElement = this.$element.find('table').eq(0);
+            const $targetCell = $tableElement.find('td').eq(0);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+
+            this.clock.tick(10);
+
+            const formInstance = this.getFormInstance();
+            const borderWidthEditor = formInstance.getEditor('borderWidth');
+            const borderWidthValue = borderWidthEditor.option('value');
+
+            borderWidthEditor.option({ value: 1.2 });
+            this.applyFormChanges();
+
+            const inlineBorderWidth = $targetCell.get(0).style.borderWidth;
+
+            assert.strictEqual(borderWidthValue, 3, 'border width 2.7px is rounded to 3');
+            assert.strictEqual(inlineBorderWidth, '1px', 'border width 1.2px is rounded to 1');
+        });
+
         test('Check cell width and height editor options', function(assert) {
             this.createWidget();
 
