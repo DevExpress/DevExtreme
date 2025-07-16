@@ -1580,7 +1580,35 @@ QUnit.module('options changed callbacks', {
             assert.strictEqual(beforeShow, 0, 'event is not triggered when popup is hidden');
             assert.strictEqual(topToolbar.length, 1, 'top toolbar is rendered');
             // 1st from overlay visibility changing, 2nd and 3rd from _animateShowing
-            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 2 times during show animation');
+            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times during show animation');
+        });
+
+        QUnit.test('resize event is triggered on toolbar elements only', function(assert) {
+            this.resizeEventSpy.resetHistory();
+            this.reinit({
+                visible: true,
+                showTitle: true,
+                showCloseButton: true,
+                toolbarItems: [
+                    {
+                        text: 'bottom text',
+                        toolbar: 'bottom',
+                        location: 'center',
+                    },
+                ],
+            });
+
+            const topToolbar = this.instance.topToolbar();
+            const bottomToolbar = this.instance.bottomToolbar();
+            const overlayContent = this.instance.$overlayContent();
+
+            const callsForTopToolbar = this.resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === topToolbar[0]);
+            const callsForBottomToolbar = this.resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === bottomToolbar[0]);
+            const callsForOverlayContent = this.resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === overlayContent[0]);
+
+            assert.strictEqual(callsForTopToolbar.length, 2, 'resize event is triggered on top toolbar');
+            assert.strictEqual(callsForBottomToolbar.length, 2, 'resize event is triggered on bottom toolbar');
+            assert.strictEqual(callsForOverlayContent.length, 1, 'resize event is still triggered on overlay content for geometry rendering');
         });
     });
 
