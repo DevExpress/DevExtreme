@@ -4,17 +4,17 @@ import type { Item } from '@js/ui/toolbar';
 import type Widget from '@ts/core/widget/widget';
 
 import type { ListBase } from '../list/m_list.base';
-import type Toolbar from './m_toolbar';
+import type Toolbar from './toolbar';
 
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const TOOLBAR_ITEMS = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
 
 const getItemInstance = ($element: dxElementWrapper): Widget => {
   // @ts-expect-error ts-error
-  const itemData = $element.data && $element.data();
+  const itemData = $element?.data();
   // @ts-expect-error ts-error
-  const dxComponents = itemData && itemData.dxComponents;
-  const widgetName = dxComponents && dxComponents[0];
+  const dxComponents = itemData?.dxComponents;
+  const widgetName = dxComponents?.[0];
 
   return (widgetName && itemData[widgetName]) as Widget;
 };
@@ -47,7 +47,7 @@ export function toggleItemFocusableElementTabIndex(
       let $focusTarget = itemInstance._focusTarget?.();
 
       if (widget === 'dxDropDownButton') {
-        $focusTarget = $focusTarget && $focusTarget.find(`.${BUTTON_GROUP_CLASS}`);
+        $focusTarget = $focusTarget?.find(`.${BUTTON_GROUP_CLASS}`);
       } else {
         $focusTarget = $focusTarget ?? $(itemInstance.element());
       }
