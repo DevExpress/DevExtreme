@@ -1571,13 +1571,13 @@ QUnit.module('options changed callbacks', {
                 showTitle: true,
                 showCloseButton: true,
             });
-
-            assert.strictEqual(this.resizeEventSpy.callCount, 0, 'event is not triggered when popup is hidden');
+            const beforeShow = this.resizeEventSpy.callCount;
 
             this.instance.show();
 
             const topToolbar = this.instance.topToolbar();
 
+            assert.strictEqual(beforeShow, 0, 'event is not triggered when popup is hidden');
             assert.strictEqual(topToolbar.length, 1, 'top toolbar is rendered');
             // 1st from overlay visibility changing, 2nd and 3rd from _animateShowing
             assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 2 times during show animation');
