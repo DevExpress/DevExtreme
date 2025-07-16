@@ -30,32 +30,34 @@ QUnit.module('computeStyleSheetsHash', () => {
 QUnit.module('addShadowDomStyles', () => {
     QUnit.test('Applies styles to ShadowRoot via adoptedStyleSheets', async function(assert) {
         const done = assert.async();
+
         const container = document.createElement('div');
         document.body.appendChild(container);
         const shadow = container.attachShadow({ mode: 'open' });
 
-        const globalStyleSheet = new CSSStyleSheet();
-        globalStyleSheet.replaceSync('.dx-widget-host { background: red; }');
-        document.adoptedStyleSheets = [...document.adoptedStyleSheets, globalStyleSheet];
+        const globalStyle = document.createElement('style');
+        globalStyle.textContent = '.dx-widget-host { background: red; }';
+        document.head.appendChild(globalStyle);
 
-        const preexistingShadowStyle = new CSSStyleSheet();
-        preexistingShadowStyle.replaceSync('.dx-widget-shadow { background: red; }');
-        shadow.adoptedStyleSheets = [preexistingShadowStyle];
+        const shadowStyle = document.createElement('style');
+        shadowStyle.textContent = '.dx-widget-shadow { background: red; }';
+        shadow.appendChild(shadowStyle);
 
         const div = document.createElement('div');
         shadow.appendChild(div);
-
         const $div = $(div);
+
         addShadowDomStyles($div);
 
         const sheets = shadow.adoptedStyleSheets;
 
         assert.equal(sheets.length, 2, 'Two stylesheets were adopted (global + shadow)');
-        assert.ok(sheets[0].cssRules.length > 0, 'Global sheet has rules');
-        assert.ok(sheets[1].cssRules.length > 0, 'Local computed sheet has rules');
+        assert.ok(sheets[0]?.cssRules?.length > 0, 'Global sheet has rules');
+        assert.ok(sheets[1]?.cssRules?.length > 0, 'Local computed sheet has rules');
 
         done();
     });
+
 
     QUnit.test('Does not duplicate stylesheets on repeated calls', async function(assert) {
         const done = assert.async();
