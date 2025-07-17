@@ -1,5 +1,4 @@
 import { computeStyleSheetsHash, addShadowDomStyles } from '__internal/core/utils/m_shadow_dom';
-// import { computeStyleSheetsHash, addShadowDomStyles } from '../../../../devextreme/js/__internal/core/utils/m_shadow_dom';
 
 QUnit.module('computeStyleSheetsHash', () => {
     QUnit.test('Returns consistent hash for same content', function(assert) {
@@ -38,7 +37,7 @@ QUnit.module('addShadowDomStyles', () => {
 
         const globalStyleEl = document.createElement('style');
         globalStyleEl.textContent = '.dx-widget-host { background: red; }';
-        document.head.appendChild(globalStyleEl);
+        document.body.appendChild(globalStyleEl);
 
         const shadowStyleEl = document.createElement('style');
         shadowStyleEl.textContent = '.dx-widget-shadow { color: blue; }';
