@@ -15,7 +15,7 @@
 $fluent-editor-custom-button-margin: 6px;
 
 .dx-daterangebox {
-  @include dx-dropdowneditor-button-icon-styling(eventall);
+  @include dx-dropdowneditor-button-icon-styling(daterangepicker);
 
   &.dx-editor-outlined,
   &.dx-editor-filled {
