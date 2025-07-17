@@ -53,6 +53,8 @@ QUnit.module('addShadowDomStyles', () => {
 
         const sheets = shadow.adoptedStyleSheets;
 
+        assert.equal(sheets, {}, 'test log sheets');
+
         assert.equal(document.getElementsByTagName('style')[0].textContent, {}, 'test log document style[0]');
         assert.equal(document.getElementsByTagName('style')[1].textContent, {}, 'test log document style[0]');
 
