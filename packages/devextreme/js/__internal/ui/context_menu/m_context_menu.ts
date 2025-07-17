@@ -24,7 +24,7 @@ import {
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
-import type { Item, Properties } from '@js/ui/context_menu';
+import type { Properties } from '@js/ui/context_menu';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import type dxOverlay from '@js/ui/overlay';
 import Overlay from '@js/ui/overlay/ui.overlay';
@@ -32,6 +32,7 @@ import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import { current as currentTheme, isGeneric } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
 import MenuBase from '@ts/ui/context_menu/m_menu_base';
+import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
 
 const DX_MENU_CLASS = 'dx-menu';
 export const DX_MENU_ITEM_CLASS = `${DX_MENU_CLASS}-item`;
@@ -986,6 +987,7 @@ class ContextMenu extends MenuBase {
     }
   }
 
+  // @ts-expect-error
   _optionChanged(args: OptionChanged<ContextMenuProperties>): void {
     const { name, value, previousValue } = args;
 
@@ -1020,6 +1022,7 @@ class ContextMenu extends MenuBase {
       case 'visualContainer':
         break;
       default:
+        // @ts-expect-error
         super._optionChanged(args);
     }
   }
@@ -1086,7 +1089,7 @@ class ContextMenu extends MenuBase {
     return promise;
   }
 
-  _renderItems(nodes: Item[], submenuContainer?: dxElementWrapper): void {
+  _renderItems(nodes: InternalNode[], submenuContainer?: dxElementWrapper): void {
     super._renderItems(nodes, submenuContainer);
 
     const $submenu = $(this._overlay.content()).children(`.${DX_SUBMENU_CLASS}`);
