@@ -58,7 +58,7 @@ class Widget<
 
   _contentReadyAction?: ((event?: Record<string, unknown>) => void) | null;
 
-  private _keyboardListenerId?: string | null;
+  protected _keyboardListenerId?: string | null;
 
   private _isReady?: boolean;
 
