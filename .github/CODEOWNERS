@@ -624,6 +624,157 @@
 
 /packages/devextreme/js/viz/**/*.d.ts                          @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
 
+# Editors
+
+/packages/devextreme/js/ui/color_box/**                                  @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/date_box/**                                   @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/drop_down_editor/**                           @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/editor/**                                     @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/html_editor/**                                @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/popover/**                                    @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/popup/**                                      @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/text_box/**                                   @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/toast/**                                      @DevExpress/devextreme-editors
+
+/packages/devextreme/js/__internal/ui/calendar/**                        @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/core/ai_integration/**                @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/chat/**                            @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/check_box/**                       @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/color_box/**                       @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/date_box/**                        @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/date_range_box/**                  @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/drop_down_editor/**                @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/editor/**                          @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/html_editor/**                     @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/informer/informer.ts               @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/informer/**                        @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/map/**                             @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/number_box/**                      @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/overlay/**                         @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/popover/**                         @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/popup/**                           @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/slider/**                          @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/text_box/**                        @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/toast/**                           @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/tooltip/**                         @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_autocomplete.ts                  @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_drop_down_box.ts                 @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_drop_down_button.ts              @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_lookup.ts                        @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_progress_bar.ts                  @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_range_slider.ts                  @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_select_box.ts                    @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_switch.ts                        @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_tooltip.ts                       @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_tag_box.ts                       @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_load_panel.ts                    @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_text_area.ts                     @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_track_bar.ts                     @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_validation_engine.ts             @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_validation_group.ts              @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_validation_message.ts            @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_validation_summary.ts            @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_validator.ts                     @DevExpress/devextreme-editors
+
+/packages/devextreme/testing/tests/DevExpress.ui.widgets.editors/**      @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets.htmlEditor/**   @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/chatParts/**    @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/fileManagerParts/** @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/mapParts/**     @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/toolbarParts/** @DevExpress/devextreme-editors
+
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/chat.markup.tests.js  @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/chat.tests.js         @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/contextMenu.async.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/contextMenu.markup.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/contextMenu.tests.js       @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/dropDownButton.markup.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/dropDownButton.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/map.tests.js            @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/menu.markup.tests.js    @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/menu.tests.js           @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/menuBase.markup.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/menuBase.tests.js       @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/overlay.tests.js        @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/popover.tests.js        @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/popup.materialTheme.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/popup.tests.js          @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/popupDrag.tests.js      @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/progressBar.markup.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/progressBar.tests.js    @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/tooltip.tests.js        @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui/tooltip.tests.js                @DevExpress/devextreme-editors
+
+/apps/demos/Demos/Autocomplete/**                                      @DevExpress/devextreme-editors
+/apps/demos/Demos/Calendar/**                                         @DevExpress/devextreme-editors
+/apps/demos/Demos/Chat/**                                             @DevExpress/devextreme-editors
+/apps/demos/Demos/CheckBox/**                                         @DevExpress/devextreme-editors
+/apps/demos/Demos/ColorBox/**                                         @DevExpress/devextreme-editors
+/apps/demos/Demos/Common/EditorsOverview/**                          @DevExpress/devextreme-editors
+/apps/demos/Demos/Common/CustomTextEditorButtons/**                  @DevExpress/devextreme-editors
+/apps/demos/Demos/Common/EditorAppearanceVariants/**                 @DevExpress/devextreme-editors
+/apps/demos/Demos/Common/EditorsRightToLeftSupport/**                @DevExpress/devextreme-editors
+/apps/demos/Demos/Common/PopupAndNotificationsOverview/**            @DevExpress/devextreme-editors
+/apps/demos/Demos/DateBox/**                                         @DevExpress/devextreme-editors
+/apps/demos/Demos/DateRangeBox/**                                    @DevExpress/devextreme-editors
+/apps/demos/Demos/DropDownBox/**                                     @DevExpress/devextreme-editors
+/apps/demos/Demos/DropDownButton/**                                  @DevExpress/devextreme-editors
+/apps/demos/Demos/FileUploader/**                                    @DevExpress/devextreme-editors
+/apps/demos/Demos/LoadPanel/**                                       @DevExpress/devextreme-editors
+/apps/demos/Demos/Lookup/**                                          @DevExpress/devextreme-editors
+/apps/demos/Demos/Map/**                                             @DevExpress/devextreme-editors
+/apps/demos/Demos/NumberBox/**                                       @DevExpress/devextreme-editors
+/apps/demos/Demos/Popover/**                                         @DevExpress/devextreme-editors
+/apps/demos/Demos/Popup/**                                           @DevExpress/devextreme-editors
+/apps/demos/Demos/ProgressBar/**                                     @DevExpress/devextreme-editors
+/apps/demos/Demos/RangeSlider/**                                     @DevExpress/devextreme-editors
+/apps/demos/Demos/Switch/**                                          @DevExpress/devextreme-editors
+/apps/demos/Demos/TagBox/**                                          @DevExpress/devextreme-editors
+/apps/demos/Demos/TextArea/**                                        @DevExpress/devextreme-editors
+/apps/demos/Demos/TextBox/**                                         @DevExpress/devextreme-editors
+/apps/demos/Demos/Toast/**                                           @DevExpress/devextreme-editors
+/apps/demos/Demos/Tooltip/**                                         @DevExpress/devextreme-editors
+/apps/demos/Demos/Validation/**                                      @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/chat/**                               @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/editors/**                            @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/fileUploader/**                       @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/htmlEditor/**                         @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/base/calendar/**              @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/chat/**                  @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/checkBox/**              @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/colorBox/**              @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/dateRangeBox/**          @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/dropDownButton/**        @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/dropDownEditor/**        @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/popover/**               @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/radioButton/**           @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/radioGroup/**            @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/switch/**                @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/textArea/**              @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/textEditor/**            @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_dateBox.scss            @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_dateView.scss           @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_dropDownList.scss       @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_dropDownMenu.scss       @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_fileUploader.scss       @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_htmlEditor.scss         @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_loadPanel.scss          @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_map.scss                @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_numberBox.scss          @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_overlay.scss            @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_popup.scss              @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_progressBar.scss        @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_rangeSlider.scss        @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_tagBox.scss             @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_toast.scss              @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_tooltip.scss            @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_validation.scss         @DevExpress/devextreme-editors
+
+
 # DevOps
 
 /.github/**             @DevExpress/devextreme-devops
+
+/e2e/testcafe-devextreme/tests/cardView/** @DevExpress/devextreme-editors
