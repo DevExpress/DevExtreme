@@ -31,13 +31,15 @@ QUnit.module('addShadowDomStyles', () => {
     QUnit.test('Applies styles to ShadowRoot via adoptedStyleSheets', async function(assert) {
         const done = assert.async();
 
+        const root = document.getElementById('qunit-fixture');
+
         const container = document.createElement('div');
-        document.body.appendChild(container);
+        root.appendChild(container);
         const shadow = container.attachShadow({ mode: 'open' });
 
         const globalStyleEl = document.createElement('style');
         globalStyleEl.textContent = '.dx-widget-host { background: red; }';
-        document.body.appendChild(globalStyleEl);
+        root.appendChild(globalStyleEl);
 
         const shadowStyleEl = document.createElement('style');
         shadowStyleEl.textContent = '.dx-widget-shadow { color: blue; }';
@@ -54,10 +56,8 @@ QUnit.module('addShadowDomStyles', () => {
         const sheets = shadow.adoptedStyleSheets;
 
         assert.equal(sheets, {}, 'test log sheets');
-
         assert.equal(document.getElementsByTagName('style')[0].textContent, {}, 'test log document style[0]');
         assert.equal(document.getElementsByTagName('style')[1].textContent, {}, 'test log document style[0]');
-
         assert.equal(document.getElementsByTagName('html'), {}, 'test log document html');
         assert.equal(document.getElementsByTagName('div'), {}, 'test log document style');
 
@@ -68,7 +68,6 @@ QUnit.module('addShadowDomStyles', () => {
 
         done();
     });
-
 
     QUnit.test('Does not duplicate stylesheets on repeated calls', async function(assert) {
         const done = assert.async();
