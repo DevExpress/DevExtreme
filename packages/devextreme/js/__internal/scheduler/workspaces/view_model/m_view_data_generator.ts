@@ -1,5 +1,6 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import timeZoneUtils from '@ts/scheduler/m_utils_time_zone';
 import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
 
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
@@ -10,7 +11,7 @@ import {
   getDisplayedCellCount,
   getDisplayedRowCount,
   getIsGroupedAllDayPanel,
-  getKeyByGroup,
+  getKeyByGroup, getStartViewDateWithoutDST,
   getTotalCellCountByCompleteData,
   getTotalRowCountByCompleteData,
   isHorizontalView,
@@ -24,7 +25,6 @@ import type {
   ViewCellIndex,
   ViewDataProviderExtendedOptions,
 } from './m_types';
-import { getWorkWeekDaysDelta } from './utils/view_generator_utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -501,45 +501,71 @@ export class ViewDataGenerator {
 
   // TODO: make it protected with old render
   public getDateByCellIndices(
-    options: Pick<ViewDataProviderExtendedOptions,
-      | 'startDayHour'
-      | 'endDayHour'
-      | 'hoursInterval'
-      | 'viewOffset'
-      | 'cellDuration'
-    >,
+    options: any,
     rowIndex: number,
     columnIndex: number,
   ): Date {
+    let { startViewDate } = options;
     const {
       startDayHour,
       endDayHour,
       hoursInterval,
+      interval,
+      firstDayOfWeek,
+      intervalCount,
       viewOffset,
-      cellDuration,
     } = options;
-    const startViewDate = this.getStartViewDate(options);
-    let dayIndex = columnIndex;
-    let timeIndex = rowIndex;
+    const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
 
-    if (this.isTimelineView()) {
-      const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
-      dayIndex = Math.floor(columnIndex / cellCountInDay);
-      timeIndex = columnIndex % cellCountInDay;
+    const machineTimezoneName = timeZoneUtils.getMachineTimezoneName();
+    const isSantiagoTimezoneChange = machineTimezoneName === 'America/Santiago';
+    const isStartViewDateDuringDST = startViewDate.getHours() !== Math.floor(startDayHour);
+
+    if (!isSantiagoTimezoneChange && isStartViewDateDuringDST) {
+      const dateWithCorrectHours = getStartViewDateWithoutDST(startViewDate, startDayHour);
+      startViewDate = new Date(dateWithCorrectHours.getTime() - toMs('day'));
     }
 
-    const daysDelta = this.isWorkWeekView()
-      ? getWorkWeekDaysDelta(dayIndex, startViewDate.getDay())
-      : dayIndex;
+    const columnCountBase = this.getCellCount(options);
+    const rowCountBase = this.getRowCount(options);
+    const cellIndex = this._calculateCellIndex(rowIndex, columnIndex, rowCountBase, columnCountBase);
+    const millisecondsOffset = this.getMillisecondsOffset(cellIndex, interval, cellCountInDay);
 
-    const cellDate = new Date(startViewDate);
-    const hoursDelta = (timeIndex * cellDuration) / dateUtils.dateToMilliseconds('hour');
-    const minutesDelta = Math.round((hoursDelta % 1) * 60);
-    const hoursDeltaInteger = Math.floor(hoursDelta);
-    cellDate.setDate(cellDate.getDate() + daysDelta);
-    cellDate.setHours(startDayHour + hoursDeltaInteger, minutesDelta, 0, 0);
+    const offsetByCount = this.isWorkWeekView()
+      ? this.getTimeOffsetByColumnIndex(
+        columnIndex,
+        this.getFirstDayOfWeek(firstDayOfWeek),
+        columnCountBase,
+        intervalCount,
+      ) : 0;
 
-    return dateUtilsTs.addOffsets(cellDate, [viewOffset]);
+    const startViewDateTime = startViewDate.getTime();
+    const currentDate = new Date(
+      startViewDateTime + millisecondsOffset + offsetByCount + viewOffset,
+    );
+
+    const timeZoneDifference = isStartViewDateDuringDST || isSantiagoTimezoneChange
+      ? 0
+      : dateUtils.getTimezonesDifference(startViewDate, currentDate);
+
+    currentDate.setTime(currentDate.getTime() + timeZoneDifference);
+
+    return currentDate;
+  }
+
+  getMillisecondsOffset(cellIndex, interval, cellCountInDay) {
+    const dayIndex = Math.floor(cellIndex / cellCountInDay);
+    const realHiddenInterval = dayIndex * this.hiddenInterval;
+
+    return interval * cellIndex + realHiddenInterval;
+  }
+
+  getTimeOffsetByColumnIndex(columnIndex, firstDayOfWeek, columnCount, intervalCount) {
+    const firstDayOfWeekDiff = Math.max(0, firstDayOfWeek - 1);
+    const columnsInWeek = columnCount / intervalCount;
+    const weekendCount = Math.floor((columnIndex + firstDayOfWeekDiff) / columnsInWeek);
+
+    return weekendCount * 2 * toMs('day');
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

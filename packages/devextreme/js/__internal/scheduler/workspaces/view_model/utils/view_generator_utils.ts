@@ -3,15 +3,6 @@ import dateUtils from '@js/core/utils/date';
 const DAYS_IN_WEEK = 7;
 const MS_IN_DAY = 24 * 60 * 60 * 1000;
 
-export const getWorkWeekDaysDelta = (dayColumnIndex: number, firstDayView: number): number => {
-  const skippedDays = 2;
-  const weekLength = 7;
-  const columnsInWeek = weekLength - skippedDays;
-  const weekendCount = Math.floor((dayColumnIndex + firstDayView - 1) / columnsInWeek);
-
-  return dayColumnIndex + weekendCount * skippedDays;
-};
-
 export const alignToFirstDayOfWeek = (date: Date, firstDayOfWeek: number): Date => {
   const newDate = new Date(date);
   let dayDiff = newDate.getDay() - firstDayOfWeek;

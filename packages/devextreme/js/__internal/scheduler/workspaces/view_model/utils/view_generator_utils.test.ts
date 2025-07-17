@@ -1,33 +1,14 @@
-import { describe, expect, it } from '@jest/globals';
+import { describe, expect } from '@jest/globals';
 import each from 'jest-each';
 
 import {
   alignToFirstDayOfWeek,
   alignToLastDayOfWeek,
   calculateAlignedWeeksBetweenDates,
-  calculateDaysBetweenDates, getWorkWeekDaysDelta,
+  calculateDaysBetweenDates,
 } from './view_generator_utils';
 
 describe('view generator utils', () => {
-  describe('getWorkWeekDaysDelta', () => {
-    it.each([
-      { dayIndex: 1, firstDay: 1, result: 1 },
-      { dayIndex: 4, firstDay: 1, result: 4 },
-      { dayIndex: 5, firstDay: 1, result: 7 },
-      { dayIndex: 6, firstDay: 1, result: 8 },
-      { dayIndex: 7, firstDay: 1, result: 9 },
-      { dayIndex: 14, firstDay: 1, result: 18 },
-      { dayIndex: 1, firstDay: 4, result: 1 },
-      { dayIndex: 2, firstDay: 4, result: 4 },
-      { dayIndex: 3, firstDay: 4, result: 5 },
-      { dayIndex: 14, firstDay: 4, result: 20 },
-    ])('should return correct days delta for dayIndex=$dayIndex, firstDay=$firstDay', ({
-      dayIndex, firstDay, result,
-    }) => {
-      expect(getWorkWeekDaysDelta(dayIndex, firstDay)).toBe(result);
-    });
-  });
-
   /*
 
   Calendar for 2023-06 for easier test cases understanding:
