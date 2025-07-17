@@ -168,7 +168,7 @@ test('The shading should alternate correctly after expanding the node when repai
   await treeList.apiExpandRow(4);
   await treeList.apiExpandRow(2);
 
-  await takeScreenshot('row_alternation_after_expanding_node_when_repaintChangesOnly_=_true', treeList.element);
+  await takeScreenshot('T1291705-row-alternation-after-expanding-node-when-repaintChangesOnly=true', treeList.element);
 
   await t
     .expect(compareResults.isValid())
@@ -195,7 +195,7 @@ test('The shading should alternate correctly after expanding the node when repai
   await treeList.apiExpandRow(4);
   await treeList.apiExpandRow(2);
 
-  await takeScreenshot('row_alternation_after_expanding_node_when_there_is_fixed_column_and_repaintChangesOnly_=_true', treeList.element);
+  await takeScreenshot('T1291705-row-alternation-after-expanding-node-when-there-is-fixed-column-and-repaintChangesOnly=true', treeList.element);
 
   await t
     .expect(compareResults.isValid())
