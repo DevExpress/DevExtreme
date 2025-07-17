@@ -473,7 +473,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     };
 
     eventsEngine.on($table, 'mouseover', '.dx-row > td', (e) => {
-      if (!gridCoreUtils.isElementInCurrentGrid(this, $(e.event.target))) {
+      // NOTE: checking for `target` only because of mock event calls in qunits
+      if (e?.event?.target && !gridCoreUtils.isElementInCurrentGrid(this, $(e.event.target))) {
         return;
       }
 
