@@ -532,6 +532,7 @@ class DropDownList<
       .appendTo(this._popup.$content());
     this._$list = $list;
 
+    // @ts-expect-error
     this._list = this._createComponent($list, List, this._listConfig());
     this._refreshList();
 

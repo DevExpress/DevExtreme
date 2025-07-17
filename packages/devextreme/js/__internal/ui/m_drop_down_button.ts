@@ -146,11 +146,16 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       content: new FunctionTemplate((options) => {
         const $popupContent = $(options.container);
         const $listContainer = $('<div>').appendTo($popupContent);
+        // @ts-expect-error
         this._list = this._createComponent($listContainer, List, this._listOptions());
 
+        // @ts-expect-error
         this._list.registerKeyHandler('escape', this._escHandler.bind(this));
+        // @ts-expect-error
         this._list.registerKeyHandler('tab', this._escHandler.bind(this));
+        // @ts-expect-error
         this._list.registerKeyHandler('leftArrow', this._escHandler.bind(this));
+        // @ts-expect-error
         this._list.registerKeyHandler('rightArrow', this._escHandler.bind(this));
       }),
     });

@@ -51,12 +51,3 @@ export interface SearchBoxMixinOptions {
      */
     searchValue?: string;
 }
-/**
- * @docid
- * @hidden
- * @options SearchBoxMixinOptions
- */
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
-export default class SearchBoxMixin {
-    constructor(options?: SearchBoxMixinOptions);
-}
