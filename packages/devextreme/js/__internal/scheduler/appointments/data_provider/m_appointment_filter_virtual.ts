@@ -63,10 +63,12 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
       filterOptions.push({
         ...compareOptions,
         ...this.getIntervals(compareOptions),
-        allDayPanelFilter: false,
         resources,
         firstDayOfWeek: this.firstDayOfWeek,
+        allDayPanelFilter: false,
         allDayPanelMode: this.allDayPanelMode,
+        supportAllDayRow: this.supportAllDayRow,
+        viewOffset: this._resolveOption('viewOffset'),
       });
     });
 

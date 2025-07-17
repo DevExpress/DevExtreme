@@ -16,12 +16,14 @@ export interface CompareOptions {
 export interface FilterOptions {
   startDayHour: number;
   endDayHour: number;
+  viewOffset: number;
   resources: ResourceLoader[];
   firstDayOfWeek: number;
   min: Date;
   max: Date;
   allDayPanelFilter?: boolean;
   allDayPanelMode: AllDayPanelModeType;
+  supportAllDayRow: boolean;
   visibleDateIntervals: DateInterval[];
   visibleTimeIntervals: DateInterval[];
 }
