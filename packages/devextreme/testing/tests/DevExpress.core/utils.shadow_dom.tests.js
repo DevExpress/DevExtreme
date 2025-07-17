@@ -53,6 +53,13 @@ QUnit.module('addShadowDomStyles', () => {
 
         const sheets = shadow.adoptedStyleSheets;
 
+        assert.equal(document.getElementsByTagName('style')[0].textContent, {}, 'test log document style[0]');
+        assert.equal(document.getElementsByTagName('style')[1].textContent, {}, 'test log document style[0]');
+
+        assert.equal(document.getElementsByTagName('html'), {}, 'test log document html');
+        assert.equal(document.getElementsByTagName('div'), {}, 'test log document style');
+
+        assert.equal(sheets, {}, 'test log sheets');
         assert.equal(sheets.length, 2, 'Two stylesheets were adopted (global + shadow)');
         assert.ok(sheets[0].cssRules.length > 0, 'Global sheet has rules');
         assert.ok(sheets[1].cssRules.length > 0, 'Local computed sheet has rules');
