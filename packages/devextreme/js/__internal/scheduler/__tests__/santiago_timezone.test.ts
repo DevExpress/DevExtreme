@@ -8,88 +8,132 @@ import {
 } from '@jest/globals';
 
 import Scheduler from '../m_scheduler';
+import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 
 const dataSource = [
   {
-    priorityId: 2,
     startDate: new Date(2024, 8, 7, 0, 0),
     endDate: new Date(2024, 8, 7, 8, 0),
     text: 'Install New Database',
   },
   {
-    priorityId: 2,
     startDate: new Date(2024, 8, 8, 1, 30),
     endDate: new Date(2024, 8, 8, 9, 30),
     text: 'Approve New Online Marketing Strategy',
   },
-  {
-    priorityId: 1,
-    startDate: new Date(2024, 8, 7, 0, 0),
-    endDate: new Date(2024, 8, 7, 8, 0),
-    text: 'Install New Database 2',
-  },
-  {
-    priorityId: 1,
-    startDate: new Date(2024, 8, 8, 1, 30),
-    endDate: new Date(2024, 8, 8, 9, 30),
-    text: 'Approve New Online Marketing Strategy 2',
-  },
-];
-const priorities = [
-  {
-    text: 'High',
-    id: 1,
-    color: '#cc5c53',
-  }, {
-    text: 'Low',
-    id: 2,
-    color: '#ff9747',
-  },
 ];
 const views = [
-  { name: 'Month', type: 'month', intervalCount: 1 },
-  { name: 'Month 2 interval', type: 'month', intervalCount: 2 },
-  { name: 'Timeline  Month', type: 'timelineMonth', intervalCount: 1 },
   {
-    name: 'Work Week started at Wed', type: 'workWeek', intervalCount: 2, firstDayOfWeek: 3,
+    view: { name: 'Month', type: 'month', intervalCount: 1 },
+    result: {
+      hasTimePanel: false, hasHeaderPanel: true, hasCellContent: true, appointmentAmount: 2,
+    },
   },
   {
-    name: 'Timeline Work Week at Tue', type: 'timelineWorkWeek', intervalCount: 1, firstDayOfWeek: 2,
-  },
-  { name: 'Week', type: 'week', intervalCount: 1 },
-  { name: 'Week started at Sun', type: 'week', firstDayOfWeek: 0 },
-  {
-    name: 'Month', type: 'timelineWeek', intervalCount: 1, cellDuration: 60,
+    view: { name: 'Month 2 interval', type: 'month', intervalCount: 2 },
+    result: {
+      hasTimePanel: false, hasHeaderPanel: true, hasCellContent: true, appointmentAmount: 2,
+    },
   },
   {
-    name: 'Timeline Week 8 hour cell duration', type: 'timelineWeek', firstDayOfWeek: 0, cellDuration: 8 * 60,
+    view: { name: 'Timeline  Month', type: 'timelineMonth', intervalCount: 1 },
+    result: {
+      hasTimePanel: false, hasHeaderPanel: true, hasCellContent: false, appointmentAmount: 2,
+    },
   },
-  { name: 'Timeline Day', type: 'timelineDay', intervalCount: 1 },
-  { name: 'Day', type: 'day' },
+  {
+    view: {
+      name: 'Work Week started at Wed', type: 'workWeek', intervalCount: 2, firstDayOfWeek: 3,
+    },
+    result: {
+      hasTimePanel: true, hasHeaderPanel: true, hasCellContent: false, appointmentAmount: 0,
+    },
+  },
+  {
+    view: {
+      name: 'Timeline Work Week at Tue', type: 'timelineWorkWeek', intervalCount: 1, firstDayOfWeek: 2, cellDuration: 6 * 60,
+    },
+    result: {
+      hasTimePanel: false, hasHeaderPanel: true, hasCellContent: false, appointmentAmount: 0,
+    },
+  },
+  {
+    view: { name: 'Week', type: 'week', intervalCount: 1 },
+    result: {
+      hasTimePanel: true, hasHeaderPanel: true, hasCellContent: false, appointmentAmount: 2,
+    },
+  },
+  {
+    view: { name: 'Week started at Sun', type: 'week', firstDayOfWeek: 0 },
+    result: {
+      hasTimePanel: true, hasHeaderPanel: true, hasCellContent: false, appointmentAmount: 1,
+    },
+  },
+  {
+    view: {
+      name: 'Timeline Week at Sun', type: 'timelineWeek', firstDayOfWeek: 0, cellDuration: 6 * 60,
+    },
+    result: {
+      hasTimePanel: false, hasHeaderPanel: true, hasCellContent: false, appointmentAmount: 1,
+    },
+  },
+  {
+    view: { name: 'Timeline Day', type: 'timelineDay', intervalCount: 1 },
+    result: {
+      hasTimePanel: false, hasHeaderPanel: true, hasCellContent: false, appointmentAmount: 1,
+    },
+  },
+  {
+    view: { name: 'Day before DST', type: 'day', currentDate: new Date(2024, 8, 7) },
+    result: {
+      hasTimePanel: true, hasHeaderPanel: false, hasCellContent: false, appointmentAmount: 1,
+    },
+  },
+  {
+    view: { name: 'Day DST', type: 'day' },
+    result: {
+      hasTimePanel: true, hasHeaderPanel: false, hasCellContent: false, appointmentAmount: 1,
+    },
+  },
 ];
-const viewsNames = views.map((view) => view.name);
+
+const getAppointments = (container: HTMLElement) => container.querySelectorAll('.dx-scheduler-appointment');
+const getTexts = (
+  cells: NodeListOf<Element>,
+) => Array.from(cells).map((cell) => cell.textContent?.trim());
 
 describe('scheduler', () => {
-  it.each(viewsNames)('should render correct workspace in Santiago DST for view: %s', async () => {
+  it.each(views)('should render correct workspace in Santiago DST for view: $view.name', async ({ view, result }) => {
+    setupSchedulerTestEnvironment({
+      cellWidth: 250,
+      cellHeight: view.name.includes('Timeline') ? 450 : 80,
+    });
+
     const container = document.createElement('div');
     const scheduler = new Scheduler(container, {
-      views,
-      groups: ['priorityId'],
-      currentView: 'week',
+      views: [view],
+      currentView: view.name,
       currentDate: new Date(2024, 8, 8),
       height: 600,
+      cellDuration: 60,
       firstDayOfWeek: 1,
-      resources: [{
-        fieldExpr: 'priorityId',
-        dataSource: priorities,
-        label: 'Priority',
-      }],
       dataSource,
     } as any);
     await new Promise(process.nextTick);
 
-    const workspace = container.querySelector('.dx-scheduler-work-space') as HTMLDivElement;
+    if (result.hasCellContent) {
+      const cells = container.querySelectorAll('.dx-scheduler-date-table-cell');
+      expect(getTexts(cells)).toMatchSnapshot();
+    }
+    if (result.hasHeaderPanel) {
+      const cells = container.querySelectorAll('.dx-scheduler-header-panel-cell');
+      expect(getTexts(cells)).toMatchSnapshot();
+    }
+    if (result.hasTimePanel) {
+      const cells = container.querySelectorAll('.dx-scheduler-time-panel-cell');
+      expect(getTexts(cells)).toMatchSnapshot();
+    }
 
-    expect(workspace).toMatchSnapshot();
+    expect(getAppointments(container)).toHaveLength(result.appointmentAmount);
   });
 });

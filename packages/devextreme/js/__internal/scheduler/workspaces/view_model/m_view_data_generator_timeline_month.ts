@@ -1,29 +1,12 @@
 import dateUtils from '@js/core/utils/date';
-import { dateUtilsTs } from '@ts/core/utils/date';
 import { setOptionHour, timelineMonthUtils } from '@ts/scheduler/r1/utils/index';
 
 import timezoneUtils from '../../m_utils_time_zone';
-import type { ViewDataProviderExtendedOptions } from './m_types';
 import { ViewDataGenerator } from './m_view_data_generator';
 
 const toMs = dateUtils.dateToMilliseconds;
 
 export class ViewDataGeneratorTimelineMonth extends ViewDataGenerator {
-  getDateByCellIndices(
-    options: ViewDataProviderExtendedOptions,
-    rowIndex: number,
-    columnIndex: number,
-  ): Date {
-    const cellDate = new Date(this.getStartViewDate(options));
-    const { viewOffset } = options;
-
-    const columnCount = this.getCellCount(options);
-    const daysDelta = rowIndex * columnCount + columnIndex;
-    cellDate.setDate(cellDate.getDate() + daysDelta);
-
-    return dateUtilsTs.addOffsets(cellDate, [viewOffset]);
-  }
-
   calculateEndDate(startDate, interval, endDayHour) {
     return setOptionHour(startDate, endDayHour);
   }

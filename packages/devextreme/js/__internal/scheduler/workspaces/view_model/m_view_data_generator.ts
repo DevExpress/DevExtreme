@@ -1,6 +1,5 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import timeZoneUtils from '@ts/scheduler/m_utils_time_zone';
 import type { GroupLeaf } from '@ts/scheduler/utils/resource_manager/types';
 
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../constants';
@@ -25,6 +24,7 @@ import type {
   ViewCellIndex,
   ViewDataProviderExtendedOptions,
 } from './m_types';
+import { isLocalTimeMidnightDST } from './utils/view_generator_utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -36,15 +36,6 @@ export class ViewDataGenerator {
   public hiddenInterval = 0;
 
   constructor(public readonly viewType: ViewType) {}
-
-  public isTimelineView(): boolean {
-    return [
-      VIEWS.TIMELINE_DAY,
-      VIEWS.TIMELINE_WEEK,
-      VIEWS.TIMELINE_WORK_WEEK,
-      VIEWS.TIMELINE_MONTH,
-    ].includes(this.viewType);
-  }
 
   public isWorkWeekView(): boolean {
     return [
@@ -505,7 +496,7 @@ export class ViewDataGenerator {
     rowIndex: number,
     columnIndex: number,
   ): Date {
-    let { startViewDate } = options;
+    const { startViewDate } = options;
     const {
       startDayHour,
       endDayHour,
@@ -516,15 +507,6 @@ export class ViewDataGenerator {
       viewOffset,
     } = options;
     const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
-
-    const machineTimezoneName = timeZoneUtils.getMachineTimezoneName();
-    const isSantiagoTimezoneChange = machineTimezoneName === 'America/Santiago';
-    const isStartViewDateDuringDST = startViewDate.getHours() !== Math.floor(startDayHour);
-
-    if (!isSantiagoTimezoneChange && isStartViewDateDuringDST) {
-      const dateWithCorrectHours = getStartViewDateWithoutDST(startViewDate, startDayHour);
-      startViewDate = new Date(dateWithCorrectHours.getTime() - toMs('day'));
-    }
 
     const columnCountBase = this.getCellCount(options);
     const rowCountBase = this.getRowCount(options);
@@ -539,16 +521,34 @@ export class ViewDataGenerator {
         intervalCount,
       ) : 0;
 
-    const startViewDateTime = startViewDate.getTime();
-    const currentDate = new Date(
+    const isStartViewDateDuringDST = startViewDate.getHours() !== Math.floor(startDayHour);
+    let startViewDateTime = startViewDate.getTime();
+    let currentDate = new Date(
       startViewDateTime + millisecondsOffset + offsetByCount + viewOffset,
     );
+    const isMidnightDSTViewStart = isLocalTimeMidnightDST(startViewDate);
+    const isMidnightDST = isLocalTimeMidnightDST(currentDate);
 
-    const timeZoneDifference = isStartViewDateDuringDST || isSantiagoTimezoneChange
-      ? 0
-      : dateUtils.getTimezonesDifference(startViewDate, currentDate);
-
-    currentDate.setTime(currentDate.getTime() + timeZoneDifference);
+    if (!isMidnightDSTViewStart && !isMidnightDST) {
+      if (isStartViewDateDuringDST) {
+        const dateWithCorrectHours = getStartViewDateWithoutDST(startViewDate, startDayHour);
+        startViewDateTime = dateWithCorrectHours.getTime() - toMs('day');
+        currentDate = new Date(
+          startViewDateTime + millisecondsOffset + offsetByCount + viewOffset,
+        );
+      } else {
+        const timeZoneDifference = dateUtils.getTimezonesDifference(startViewDate, currentDate);
+        currentDate.setTime(currentDate.getTime() + timeZoneDifference);
+      }
+    } else {
+      currentDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        currentDate.getDate(),
+        currentDate.getHours(),
+        currentDate.getMinutes(),
+      );
+    }
 
     return currentDate;
   }

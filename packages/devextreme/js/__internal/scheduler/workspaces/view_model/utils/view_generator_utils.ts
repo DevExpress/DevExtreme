@@ -2,6 +2,7 @@ import dateUtils from '@js/core/utils/date';
 
 const DAYS_IN_WEEK = 7;
 const MS_IN_DAY = 24 * 60 * 60 * 1000;
+const MAX_WEEKS_IN_MONTH = 6;
 
 export const alignToFirstDayOfWeek = (date: Date, firstDayOfWeek: number): Date => {
   const newDate = new Date(date);
@@ -36,5 +37,11 @@ export const calculateAlignedWeeksBetweenDates = (
   const alignedToDate = alignToLastDayOfWeek(toDate, firstDayOfWeek);
 
   const weekCount = calculateDaysBetweenDates(alignedFromDate, alignedToDate) / DAYS_IN_WEEK;
-  return Math.max(weekCount, 6);
+  return Math.max(weekCount, MAX_WEEKS_IN_MONTH);
+};
+
+export const isLocalTimeMidnightDST = (date: Date): boolean => {
+  const startDayDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+  return startDayDate.getHours() === 1;
 };
