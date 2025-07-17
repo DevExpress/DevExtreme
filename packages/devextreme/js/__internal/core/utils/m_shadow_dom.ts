@@ -76,32 +76,9 @@ export function computeStyleSheetsHash(styleSheets) {
   return hash >>> 0;
 }
 
-// TODO: need to remove
+const styleSheetHashes = new WeakMap();
+
 export function addShadowDomStyles($element) {
-  const el = $element.get(0);
-  const root = el.getRootNode?.();
-
-  if (!root?.host) {
-    return;
-  }
-
-  if (!ownerDocumentStyleSheet) {
-    ownerDocumentStyleSheet = createConstructedStyleSheet(root);
-
-    processRules(ownerDocumentStyleSheet, el.ownerDocument.styleSheets, false);
-  }
-
-  const currentShadowDomStyleSheet = createConstructedStyleSheet(root);
-
-  processRules(currentShadowDomStyleSheet, root.styleSheets, true);
-
-  root.adoptedStyleSheets = [ownerDocumentStyleSheet, currentShadowDomStyleSheet];
-}
-
-// const styleSheetHashes = new WeakMap();
-
-// TODO: need to rename to addShadowDomStyles
-export function addShadowDomStylesNew($element) {
   if (!config().copyStylesToShadowDom) {
     return;
   }
@@ -115,10 +92,10 @@ export function addShadowDomStylesNew($element) {
     processRules(ownerDocumentStyleSheet, el.ownerDocument.styleSheets, false);
   }
 
-  // const localHash = computeStyleSheetsHash(root.styleSheets);
-  // if (styleSheetHashes.get(root) === localHash) return;
+  const localHash = computeStyleSheetsHash(root.styleSheets);
+  if (styleSheetHashes.get(root) === localHash) return;
 
-  // styleSheetHashes.set(root, localHash);
+  styleSheetHashes.set(root, localHash);
 
   const currentShadowDomStyleSheet = createConstructedStyleSheet(root);
   processRules(currentShadowDomStyleSheet, root.styleSheets, true);
