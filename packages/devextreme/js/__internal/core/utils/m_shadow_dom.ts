@@ -76,9 +76,32 @@ export function computeStyleSheetsHash(styleSheets) {
   return hash >>> 0;
 }
 
+// TODO: need to remove
+export function addShadowDomStyles($element) {
+  const el = $element.get(0);
+  const root = el.getRootNode?.();
+
+  if (!root?.host) {
+    return;
+  }
+
+  if (!ownerDocumentStyleSheet) {
+    ownerDocumentStyleSheet = createConstructedStyleSheet(root);
+
+    processRules(ownerDocumentStyleSheet, el.ownerDocument.styleSheets, false);
+  }
+
+  const currentShadowDomStyleSheet = createConstructedStyleSheet(root);
+
+  processRules(currentShadowDomStyleSheet, root.styleSheets, true);
+
+  root.adoptedStyleSheets = [ownerDocumentStyleSheet, currentShadowDomStyleSheet];
+}
+
 // const styleSheetHashes = new WeakMap();
 
-export function addShadowDomStyles($element) {
+// TODO: need to rename to addShadowDomStyles
+export function addShadowDomStylesNew($element) {
   if (!config().copyStylesToShadowDom) {
     return;
   }
