@@ -79,6 +79,10 @@ const subscribeToRowEvents = function (that, $table) {
   }
 
   eventsEngine.on($table, 'touchstart touchend', '.dx-row', (e) => {
+    if (!gridCoreUtils.isElementInCurrentGrid(that, $(e.event.target))) {
+      return;
+    }
+
     clearTimeout(timeoutId);
     if (e.type === 'touchstart') {
       touchTarget = e.target;
@@ -91,6 +95,10 @@ const subscribeToRowEvents = function (that, $table) {
 
   eventsEngine.on($table, [clickEventName, dblclickEvent, pointerEvents.down].join(' '), '.dx-row', that.createAction((e) => {
     const { event } = e;
+
+    if (!gridCoreUtils.isElementInCurrentGrid(that, $(event.target))) {
+      return;
+    }
 
     if (touchTarget) {
       event.target = touchTarget;
@@ -389,12 +397,17 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       eventsEngine.on($table, 'mousemove', '.dx-row > td', this.createAction((args) => {
         const e = args.event;
         const $element = $(e.target);
+
+        if (!gridCoreUtils.isElementInCurrentGrid(this, $element)) {
+          return;
+        }
+
         const $cell = $(e.currentTarget);
         const $row = $cell.parent();
         const visibleColumns = this._columnsController.getVisibleColumns();
         const rowOptions: any = $row.data('options');
         const columnIndex = $cell.index();
-        // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
         const cellOptions = rowOptions && rowOptions.cells && rowOptions.cells[columnIndex];
         const column = cellOptions ? cellOptions.column : visibleColumns[columnIndex];
 
@@ -460,21 +473,36 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     };
 
     eventsEngine.on($table, 'mouseover', '.dx-row > td', (e) => {
+      if (!gridCoreUtils.isElementInCurrentGrid(this, $(e.event.target))) {
+        return;
+      }
+
       const options = getOptions(e);
       options && this.executeAction('onCellHoverChanged', options);
     });
 
     eventsEngine.on($table, 'mouseout', '.dx-row > td', (e) => {
+      if (!gridCoreUtils.isElementInCurrentGrid(this, $(e.event.target))) {
+        return;
+      }
+
       const options = getOptions(e);
       options && this.executeAction('onCellHoverChanged', options);
     });
 
     eventsEngine.on($table, clickEventName, '.dx-row > td', (e) => {
+      if (!gridCoreUtils.isElementInCurrentGrid(this, $(e.event.target))) {
+        return;
+      }
+
       const options = getOptions(e);
       options && this.executeAction('onCellClick', options);
     });
 
     eventsEngine.on($table, dblclickEvent, '.dx-row > td', (e) => {
+      if (!gridCoreUtils.isElementInCurrentGrid(this, $(e.event.target))) {
+        return;
+      }
       const options = getOptions(e);
       options && this.executeAction('onCellDblClick', options);
     });
@@ -1104,7 +1132,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   private needWaitAsyncTemplates() {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
     return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
   }
 
@@ -1154,11 +1181,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const result: number[] = [];
     const cellElements = $cellElements.toArray();
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     (cellElements as HTMLElement[]).forEach((cell) => {
       let width = cell.offsetWidth;
 
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       if ((cell as any).getBoundingClientRect) {
         const rect = getBoundingRect(cell);
 

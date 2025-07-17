@@ -12,6 +12,7 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isElementInDom } from '@js/core/utils/dom';
 import { isDefined, isString } from '@js/core/utils/type';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ModuleType } from '../m_types';
@@ -419,7 +420,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _prepareChange(options, value, text) {
     const $cellElement = $(options.cellElement);
 
@@ -516,7 +516,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _allowRowAdding(params) {
     if (this.isBatchEditMode()) {
       return true;
@@ -694,7 +693,11 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingCellBasedE
     const editingController = this._editingController;
 
     if (editingController.isCellOrBatchEditMode() && this.option('editing.allowUpdating')) {
-      eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), `td:not(.${EDITOR_CELL_CLASS})`, this.createAction(() => {
+      eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), `td:not(.${EDITOR_CELL_CLASS})`, this.createAction((e) => {
+        if (!gridCoreUtils.isElementInCurrentGrid(this, $(e.event.target))) {
+          return;
+        }
+
         if (editingController.isEditing()) {
           editingController.closeEditCell();
         }

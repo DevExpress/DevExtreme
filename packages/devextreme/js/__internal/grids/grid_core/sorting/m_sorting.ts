@@ -8,6 +8,7 @@ import { isDefined } from '@js/core/utils/type';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import sortingMixin from './m_sorting_mixin';
 
@@ -35,6 +36,10 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
     if (row.rowType === 'header') {
       eventsEngine.on($row, addNamespace(clickEventName, COLUMN_HEADERS_VIEW_NAMESPACE), 'td', this.createAction((e) => {
+        if (!gridCoreUtils.isElementInCurrentGrid(this, $(e.event.target))) {
+          return;
+        }
+
         this._processHeaderAction(e.event, $row);
       }));
     }
@@ -51,7 +56,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const $cellElementFromEvent = $(event.currentTarget);
     const rowIndex = $cellElementFromEvent.parent().index();
     let columnIndex = -1;
-    // eslint-disable-next-line array-callback-return
+
     [].slice.call(that.getCellElements(rowIndex)).some(($cellElement, index) => {
       if ($cellElement === $cellElementFromEvent.get(0)) {
         columnIndex = index;

@@ -894,6 +894,10 @@ export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => cl
       if (that.option(SHOW_CHECKBOXES_MODE) === 'onLongTap' || !supportUtils.touch) {
         // TODO Not working timeout by hold when it is larger than other timeouts by hold
         eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), `.${DATA_ROW_CLASS}`, that.createAction((e) => {
+          if (!gridCoreUtils.isElementInCurrentGrid(that, $(e.event.target))) {
+            return;
+          }
+
           processLongTap(that.component, e.event);
 
           e.event.stopPropagation();
