@@ -270,10 +270,6 @@ test('DataGrid - filter row\'s search-box\'s aria-label should be customizable v
   await t
     .expect(filterEditor.menuButton.getAttribute('aria-label'))
     .eql('custom text');
-
-  // To reset localization messages
-  await t
-    .eval(() => location.reload());
 }).before(async (t) => {
   await t.eval(() => {
     (window as any).DevExpress.localization.loadMessages({
@@ -293,4 +289,8 @@ test('DataGrid - filter row\'s search-box\'s aria-label should be customizable v
       visible: true,
     },
   });
+}).after(async (t) => {
+  // To reset localization messages
+  await t
+    .eval(() => location.reload());
 });
