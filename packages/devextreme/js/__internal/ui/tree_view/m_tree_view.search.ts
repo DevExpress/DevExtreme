@@ -67,6 +67,13 @@ class TreeViewSearch extends TreeViewBase {
     super._initMarkup();
   }
 
+  _getAriaTarget(): dxElementWrapper {
+    if (this.option('searchEnabled')) {
+      return this._itemContainer();
+    }
+    return super._getAriaTarget();
+  }
+
   _optionChanged(args: OptionChanged<TreeViewSearchProperties>): void {
     switch (args.name) {
       case 'searchEnabled':
