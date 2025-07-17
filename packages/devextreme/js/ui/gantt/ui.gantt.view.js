@@ -255,9 +255,7 @@ export class GanttView extends Widget {
                 this._ganttViewCore.setViewTypeRange(this._getViewTypeByScaleType(args.value.min), this._getViewTypeByScaleType(args.value.max));
                 break;
             case 'stripLines':
-                const stripLines = this.option('stripLines');
-                this._ganttViewCore.setStripLines({ stripLines: stripLines });
-
+                this._ganttViewCore.setStripLines({ stripLines: this.option('stripLines') });
                 break;
             case 'taskTooltipContentTemplate':
                 this._ganttViewCore.setTaskTooltipContentTemplate(args.value);
