@@ -14,7 +14,7 @@
 // adduse
 
 .dx-daterangebox {
-  @include dx-dropdowneditor-button-icon-styling(eventall);
+  @include dx-dropdowneditor-button-icon-styling(daterangepicker);
 
   .dx-dropdowneditor-button {
     min-width: $generic-dropdowneditor-container-button-size - 2px;
