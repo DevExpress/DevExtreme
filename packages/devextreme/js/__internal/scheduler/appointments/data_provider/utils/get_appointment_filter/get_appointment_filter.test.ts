@@ -21,8 +21,10 @@ const compareOptions = {
 const viewportOptions = {
   ...compareOptions,
   resources: [],
+  viewOffset: 0,
   firstDayOfWeek: 3,
   allDayPanelMode: 'all' as any,
+  supportAllDayRow: true,
   visibleDateIntervals: getVisibleDateTimeIntervals(compareOptions, true),
   visibleTimeIntervals: getVisibleDateTimeIntervals(compareOptions, false),
 };

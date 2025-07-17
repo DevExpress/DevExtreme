@@ -93,9 +93,11 @@ export class AppointmentFilterBaseStrategy {
       ...compareOptions,
       ...this.getIntervals(compareOptions),
       resources: this.loadedResources,
-      allDayPanelFilter,
       firstDayOfWeek: this.firstDayOfWeek,
+      allDayPanelFilter,
       allDayPanelMode: this.allDayPanelMode,
+      supportAllDayRow: this.supportAllDayRow,
+      viewOffset: this._resolveOption('viewOffset'),
     };
   }
 
