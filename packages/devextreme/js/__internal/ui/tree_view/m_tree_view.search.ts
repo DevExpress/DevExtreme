@@ -175,6 +175,7 @@ class TreeViewSearch extends TreeViewBase {
   }
 
   _cleanItemContainer(): void {
+    this._searchController?.remove();
     this.$element().empty();
   }
 
