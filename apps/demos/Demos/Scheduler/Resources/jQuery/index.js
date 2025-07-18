@@ -36,7 +36,7 @@ $(() => {
         resources[i].useColorAsDefault = resources[i].label === e.value;
       }
 
-      scheduler.repaint();
+      scheduler.option('resources', resources);
     },
   });
 });

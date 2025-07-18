@@ -85,6 +85,7 @@ export async function createWrapper(options, selector = `#${SCHEDULER_ID}`) {
     const instance = $(selector).dxScheduler(options).dxScheduler('instance');
     const scheduler = new SchedulerTestWrapper(instance);
     await waitForAsync(() => instance._workSpace);
+    await waitAsync(0); // wait for coloring appointments
     return scheduler;
 }
 

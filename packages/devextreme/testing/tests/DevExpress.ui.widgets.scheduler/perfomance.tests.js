@@ -402,7 +402,10 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
         assert.notEqual(appointmentFirst.css('backgroundColor'), 'rgb(0, 255, 0)', 'Appointment background color is not changed');
 
         const resources = this.instance.option('resources');
-        resources[0].dataSource[0].color = '#00ff00';
+        resources[0].dataSource = [
+            { ...resourcesData[0], color: '#00ff00' },
+            resourcesData[1],
+        ];
         this.instance.option('resources', resources);
         await waitAsync(0);
 
