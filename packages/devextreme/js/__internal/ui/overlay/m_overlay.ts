@@ -500,7 +500,7 @@ class Overlay<
     );
   }
 
-  _processShowingHidingCancel(cancelArg, applyFunction, cancelFunction) {
+  _processShowingHidingCancel(cancelArg, applyFunction, cancelFunction): void {
     if (isPromise(cancelArg)) {
       cancelArg
         .then((shouldCancel) => {
@@ -596,7 +596,7 @@ class Overlay<
     return showHideConfig;
   }
 
-  _animateHiding() {
+  _animateHiding(): void {
     const animation = this._getAnimationConfig() ?? {};
     const hideAnimation = this._normalizeAnimation(animation.hide, 'from');
     const startHideAnimation = hideAnimation?.start ?? noop;
@@ -1032,13 +1032,13 @@ class Overlay<
 
     if (enabled) {
       eventsEngine.on(this._$wrapper, eventName, {
-        validate() {
+        validate(): boolean {
           return true;
         },
-        getDirection() {
+        getDirection(): string {
           return 'both';
         },
-        _toggleGestureCover(toggle) {
+        _toggleGestureCover(toggle): void {
           if (!toggle) {
             this._toggleGestureCoverImpl(toggle);
           }
@@ -1060,12 +1060,12 @@ class Overlay<
     }
   }
 
-  _moveFromContainer() {
+  _moveFromContainer(): void {
     this._$content.appendTo(this.$element());
     this._$wrapper.detach();
   }
 
-  _checkContainerExists() {
+  _checkContainerExists(): void {
     const $wrapperContainer = this._positionController.$container;
 
     // NOTE: The container is undefined when DOM is not ready yet. See T1143527
@@ -1251,7 +1251,7 @@ class Overlay<
     this._destroyTabTerminator();
   }
 
-  _toggleRTLDirection(rtl) {
+  _toggleRTLDirection(rtl): void {
     this._$content.toggleClass(RTL_DIRECTION_CLASS, rtl);
   }
 
