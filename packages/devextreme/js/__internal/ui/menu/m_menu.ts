@@ -127,6 +127,7 @@ class Menu extends MenuBase {
     const currentSubmenu = this._submenus.length && this._submenus[0];
 
     if (currentSubmenu && currentSubmenu.itemsContainer()) {
+      // @ts-expect-error
       elements = currentSubmenu.itemsContainer().find(itemSelector);
     }
 

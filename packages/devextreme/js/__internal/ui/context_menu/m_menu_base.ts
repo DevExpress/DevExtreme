@@ -747,7 +747,7 @@ class MenuBase<
   _getElementByItem(itemData: Item): dxElementWrapper {
     let result: dxElementWrapper = $();
 
-    each(this._itemElements(), (_: number, $itemElement: dxElementWrapper) => {
+    each(this._itemElements(), (_index: number, $itemElement: dxElementWrapper) => {
       // @ts-expect-error ts-error
       if ($($itemElement).data(this._itemDataKey()) !== itemData) {
         return true;
