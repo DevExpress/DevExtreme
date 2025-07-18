@@ -664,7 +664,7 @@ function getCellPropertiesFormConfig(
   const startCellWidth = formats.cellWidth ?? getOuterWidth($cell);
   const cellStyles = window.getComputedStyle($cell.get(0));
   const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
-  const borderWidth = Math.round(parseFloat(formats.cellBorderWidth ?? cellStyles.borderTopWidth));
+  const borderWidth = parseFloat(formats.cellBorderWidth ?? cellStyles.borderTopWidth);
 
   const formData = {
     width: startCellWidth,
