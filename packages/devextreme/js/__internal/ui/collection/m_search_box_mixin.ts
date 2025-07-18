@@ -7,7 +7,6 @@ import { Deferred } from '@js/core/utils/deferred';
 import type { ValueChangedEvent } from '@js/ui/text_box';
 import TextBox from '@js/ui/text_box';
 import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
-import { extend } from '@ts/core/utils/m_extend';
 
 export type SearchBoxControllerOptions = SearchBoxMixinOptions & {
   tabIndex?: number;
@@ -88,7 +87,7 @@ class SearchBoxController {
     } = options;
     const placeholder = messageLocalization.format('Search');
 
-    return extend({
+    return {
       mode: 'search',
       placeholder,
       tabIndex,
@@ -96,7 +95,8 @@ class SearchBoxController {
       valueChangeEvent: 'input',
       inputAttr: { 'aria-label': placeholder },
       onValueChanged: (e: ValueChangedEvent): void => this._onValueChanged(e, searchTimeout),
-    }, searchEditorOptions);
+      ...searchEditorOptions,
+    };
   }
 
   _onValueChanged(e: ValueChangedEvent, searchTimeout = 0): void {

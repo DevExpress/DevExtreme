@@ -95,7 +95,6 @@ new ListBase(newElement('context'), {
     ]
 });
 
-import 'devextreme/__internal/ui/list/modules/m_search';
 new ListBase(newElement('search'), {
     dataSource: [ 1, 2, 3 ],
     searchEnabled: true
