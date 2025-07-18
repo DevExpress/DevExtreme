@@ -115,7 +115,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             });
             const appointments = $(scheduler.instance.$element()).find('.dx-scheduler-appointment');
 
-            await waitForAsync(() => getAppointmentColor($(appointments[0])) === '#ff0000');
+            await waitForAsync(() => getAppointmentColor($(appointments).last()) === '#ff0000');
             appointments.each(function() {
                 assert.equal(getAppointmentColor($(this)), '#ff0000', 'Color is OK');
             });
