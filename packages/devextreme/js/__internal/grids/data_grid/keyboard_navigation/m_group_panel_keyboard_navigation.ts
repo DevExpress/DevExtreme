@@ -23,10 +23,6 @@ export class GroupPanelKeyboardNavigationController extends ColumnKeyboardNaviga
 
   private groupItemClickHandler(e) {
     const $groupedColumnElement = $(e.originalEvent.target);
-    if (!gridCore.isElementInCurrentGrid(this, $groupedColumnElement)) {
-      return;
-    }
-
     const groupColumn = this._columnsController.columnOption(`groupIndex:${$groupedColumnElement.index()}`);
 
     this.isNeedToHiddenFocusAfterClick = this._columnsController?.allowColumnSorting(groupColumn);

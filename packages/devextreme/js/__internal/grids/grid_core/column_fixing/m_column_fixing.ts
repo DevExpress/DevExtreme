@@ -408,6 +408,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     return cellElements;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public getColumnWidths(fixedTableElement?: any, rowIndex?: number) {
     const result = super.getColumnWidths(fixedTableElement, rowIndex);
     const fixedColumns = this.getFixedColumns();
@@ -702,11 +703,6 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     if (this._fixedTableElement && this._tableElement) {
       eventsEngine.on(this.element(), 'mouseover mouseout', '.dx-data-row', this.createAction((args) => {
         const { event } = args;
-
-        if (!gridCoreUtils.isElementInCurrentGrid(this, $(event.target))) {
-          return;
-        }
-
         const rowIndex = this.getRowIndex($(event.target).closest('.dx-row'));
         const isHover = event.type === 'mouseover';
 

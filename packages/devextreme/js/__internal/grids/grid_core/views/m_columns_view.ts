@@ -397,11 +397,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       eventsEngine.on($table, 'mousemove', '.dx-row > td', this.createAction((args) => {
         const e = args.event;
         const $element = $(e.target);
-
-        if (!gridCoreUtils.isElementInCurrentGrid(this, $element)) {
-          return;
-        }
-
         const $cell = $(e.currentTarget);
         const $row = $cell.parent();
         const visibleColumns = this._columnsController.getVisibleColumns();
@@ -473,37 +468,21 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     };
 
     eventsEngine.on($table, 'mouseover', '.dx-row > td', (e) => {
-      // NOTE: checking for `target` only because of mock event calls in qunits
-      if (e?.event?.target && !gridCoreUtils.isElementInCurrentGrid(this, $(e.event.target))) {
-        return;
-      }
-
       const options = getOptions(e);
       options && this.executeAction('onCellHoverChanged', options);
     });
 
     eventsEngine.on($table, 'mouseout', '.dx-row > td', (e) => {
-      if (!gridCoreUtils.isElementInCurrentGrid(this, $(e.event.target))) {
-        return;
-      }
-
       const options = getOptions(e);
       options && this.executeAction('onCellHoverChanged', options);
     });
 
     eventsEngine.on($table, clickEventName, '.dx-row > td', (e) => {
-      if (!gridCoreUtils.isElementInCurrentGrid(this, $(e.event.target))) {
-        return;
-      }
-
       const options = getOptions(e);
       options && this.executeAction('onCellClick', options);
     });
 
     eventsEngine.on($table, dblclickEvent, '.dx-row > td', (e) => {
-      if (!gridCoreUtils.isElementInCurrentGrid(this, $(e.event.target))) {
-        return;
-      }
       const options = getOptions(e);
       options && this.executeAction('onCellDblClick', options);
     });
