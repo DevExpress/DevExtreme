@@ -16,7 +16,6 @@ import { isEmpty } from '@js/core/utils/string';
 import { setHeight } from '@js/core/utils/style';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import type { Row } from '@js/ui/data_grid';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type {
@@ -887,8 +886,8 @@ export class RowsView extends ColumnsView {
     return deferred;
   }
 
-  protected _getRows(change?): Row[] {
-    return change?.items || this._dataController.items();
+  protected _getRows(change) {
+    return change && change.items || this._dataController.items();
   }
 
   /**
