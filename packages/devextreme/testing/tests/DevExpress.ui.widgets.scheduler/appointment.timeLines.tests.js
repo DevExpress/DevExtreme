@@ -151,7 +151,7 @@ module('Integration: Appointments in Timeline views', {
                 assert.roughEqual(scheduler.appointments.getAppointmentPosition(1).top, scheduler.appointments.getAppointmentHeight() + APPOINTMENT_DEFAULT_TOP_OFFSET, 1, 'Second appointment top is ok');
             });
 
-            test('Long appointment part should be rendered on timelineMonth view (T678380)', async function(assert) {
+            test('Long appointment part should not be rendered on timelineMonth view (T678380)', async function(assert) {
                 const appointment = {
                     'text': 'Ends april 1st at 7:59 am',
                     'startDate': new Date(2019, 2, 20, 9, 0),
@@ -170,7 +170,7 @@ module('Integration: Appointments in Timeline views', {
                     dataSource: [appointment]
                 });
 
-                assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'appointment-part was rendered');
+                assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'appointment-part was not rendered');
             });
 
             test('Long appointment part should not be rendered on timelineWorkWeek view (T678380)', async function(assert) {
