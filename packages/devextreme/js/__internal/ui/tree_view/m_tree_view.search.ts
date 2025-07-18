@@ -106,6 +106,8 @@ class TreeViewSearch extends TreeViewBase {
         this.repaint();
         break;
       }
+      case 'searchTimeout':
+        break;
       default:
         super._optionChanged(args);
     }
@@ -161,7 +163,7 @@ class TreeViewSearch extends TreeViewBase {
 
   _focusTarget(): dxElementWrapper {
     const { searchEnabled } = this.option();
-    return searchEnabled ? this._itemContainer(true) : super._focusTarget();
+    return this._itemContainer(searchEnabled);
   }
 
   focus(): void {
@@ -203,6 +205,11 @@ class TreeViewSearch extends TreeViewBase {
     }, $element);
 
     $element.attr('tabIndex', null);
+  }
+
+  _refresh(): void {
+    this._searchController?.resolveValueChange();
+    super._refresh();
   }
 
   _clean(): void {
