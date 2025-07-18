@@ -488,13 +488,14 @@ QUnit.test('searchEditorOptions', function(assert) {
             placeholder: 'Search'
         }
     });
-    const searchEditorInstance = $treeView.children().first().dxTextBox('instance');
+    let searchEditorInstance = $treeView.children().first().dxTextBox('instance');
     const instance = $treeView.dxTreeView('instance');
 
     assert.strictEqual(searchEditorInstance.option('placeholder'), 'Search', 'placeholder of the search editor');
 
     instance.option('searchEditorOptions', { placeholder: 'Test' });
 
+    searchEditorInstance = $treeView.children().first().dxTextBox('instance');
     assert.strictEqual(searchEditorInstance.option('placeholder'), 'Test', 'placeholder of the search editor');
 });
 
