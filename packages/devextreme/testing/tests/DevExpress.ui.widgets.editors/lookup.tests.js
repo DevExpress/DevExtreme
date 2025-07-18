@@ -2535,6 +2535,19 @@ QUnit.module('popup options', {
         assert.roughEqual(getOuterHeight($overlayContent), getOuterHeight($container) / 2, 0.1, 'popup height is correct');
     });
 
+    QUnit.test('_userDropDownOptions cache should be updated correctly after partial dropDownOptions update', function(assert) {
+        const lookup = $('#lookup').dxLookup({
+            opened: true,
+        }).dxLookup('instance');
+        const { dropDownOptions } = lookup.option();
+
+        lookup.option('dropDownOptions.width', 123);
+
+        const { _userDropDownOptions } = lookup.option();
+
+        assert.deepEqual(_userDropDownOptions, { ...dropDownOptions, width: 123 }, 'updated part of dropDownOptions is cached in _userDropDownOptions');
+    });
+
     [
         {
             component: PopupFull,
