@@ -69,7 +69,7 @@ class TreeViewSearch extends TreeViewBase {
 
   _getAriaTarget(): dxElementWrapper {
     if (this.option('searchEnabled')) {
-      return this._itemContainer();
+      return this._itemContainer(true);
     }
     return super._getAriaTarget();
   }
