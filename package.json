@@ -41,6 +41,8 @@
     "devextreme-metadata": "workspace:*",
     "http-server": "14.1.1",
     "husky": "8.0.3",
+    "inquirer": "^8.2.6",
+    "inquirer-tree-prompt": "^1.1.2",
     "jest": "29.7.0",
     "jspdf-autotable": "3.8.3",
     "lint-staged": "14.0.1",
