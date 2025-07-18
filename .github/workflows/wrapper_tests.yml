@@ -11,6 +11,7 @@ env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
   BUILD_TEST_INTERNAL_PACKAGE: true
+  ALLOW_WRAPPER_DIFF: ${{ contains(github.head_ref || github.ref_name, 'test-regenerate-label') }}
 
 jobs:
   test:
@@ -70,9 +71,15 @@ jobs:
           changes=$(git diff --name-status HEAD -- packages/devextreme-angular/src packages/devextreme-react/src packages/devextreme-vue/src)
           if [ -n "$changes" ]; then
             echo "Generated code is outdated. The following files have uncommitted changes:"
-            echo "$changes";
-            echo "To update generated code, use "pnpm run regenerate-all" and commit changes."
-            exit 1
+            echo "$changes"
+            echo "To update generated code, use \"pnpm run regenerate-all\" and commit changes."
+
+            if [ "${ALLOW_WRAPPER_DIFF}" != "true" ]; then
+              echo "Failing because wrapper diff is not allowed (missing 'allow-wrapper-diff' label)"
+              exit 1
+            fi
+          else
+            echo "Generated code is up to date."
           fi
 
       - name: Angular - Download Browser
