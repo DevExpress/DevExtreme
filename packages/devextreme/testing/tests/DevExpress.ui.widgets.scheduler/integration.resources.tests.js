@@ -14,6 +14,8 @@ import '__internal/scheduler/m_scheduler';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
+const getHexColor = ($appointment) => new Color($appointment.css('backgroundColor')).toHex();
+
 QUnit.testStart(() => initTestMarkup());
 
 const moduleConfig = {
@@ -463,7 +465,6 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         });
 
         const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
-        const getHexColor = (appointment) => new Color(appointment.css('backgroundColor')).toHex();
 
         await waitForAsync(() => getHexColor($appointments.eq(0)) === '#ff0000');
         assert.equal(getHexColor($appointments.eq(0)), '#ff0000', 'Color is OK');
@@ -562,7 +563,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         await waitAsync(0);
 
         const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
-        assert.equal(new Color($appointments.eq(0).css('backgroundColor')).toHex(), '#ff0000', 'Color is OK');
+        await waitForAsync(() => getHexColor($appointments.eq(0)) === '#ff0000');
+        assert.equal(getHexColor($appointments.eq(0)), '#ff0000', 'Color is OK');
     });
 });
 
