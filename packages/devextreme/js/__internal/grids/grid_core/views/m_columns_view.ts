@@ -96,9 +96,9 @@ const subscribeToRowEvents = function (that, $table) {
   eventsEngine.on($table, [clickEventName, dblclickEvent, pointerEvents.down].join(' '), '.dx-row', that.createAction((e) => {
     const { event } = e;
 
-    if (!gridCoreUtils.isElementInCurrentGrid(that, $(event.target))) {
-      return;
-    }
+    // if (!gridCoreUtils.isElementInCurrentGrid(that, $(event.target))) {
+    //   return;
+    // }
 
     if (touchTarget) {
       event.target = touchTarget;
@@ -473,7 +473,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     };
 
     eventsEngine.on($table, 'mouseover', '.dx-row > td', (e) => {
-      if (!gridCoreUtils.isElementInCurrentGrid(this, $(e.event.target))) {
+      // NOTE: checking for `target` only because of mock event calls in qunits
+      if (e?.event?.target && !gridCoreUtils.isElementInCurrentGrid(this, $(e.event.target))) {
         return;
       }
 

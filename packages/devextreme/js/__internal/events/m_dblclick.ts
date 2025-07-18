@@ -23,14 +23,15 @@ const DblClick = Class.inherit({
 
   add() {
     if (this._handlerCount <= 0) {
-      eventsEngine.on(
+      const myEventsEngine = eventsEngine;
+
+      myEventsEngine.on(
         domAdapter.getDocument(),
         NAMESPACED_CLICK_EVENT,
         this._clickHandler.bind(this),
       );
     }
 
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     this._handlerCount += 1;
   },
 
