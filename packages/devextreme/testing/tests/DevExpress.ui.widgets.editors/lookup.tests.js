@@ -2536,16 +2536,15 @@ QUnit.module('popup options', {
     });
 
     QUnit.test('_userDropDownOptions cache should be updated correctly after partial dropDownOptions update', function(assert) {
-        const lookup = $('#lookup').dxLookup({
-            opened: true,
-        }).dxLookup('instance');
-        const { dropDownOptions } = lookup.option();
+        const lookup = $('#lookup').dxLookup({ }).dxLookup('instance');
+        const dropDownOptionsAfterInit = { ... lookup.option('dropDownOptions') };
 
+        lookup.open();
         lookup.option('dropDownOptions.width', 123);
 
         const { _userDropDownOptions } = lookup.option();
 
-        assert.deepEqual(_userDropDownOptions, { ...dropDownOptions, width: 123 }, 'updated part of dropDownOptions is cached in _userDropDownOptions');
+        assert.deepEqual(_userDropDownOptions, { ...dropDownOptionsAfterInit, width: 123 }, 'updated part of dropDownOptions is cached in _userDropDownOptions');
     });
 
     [
