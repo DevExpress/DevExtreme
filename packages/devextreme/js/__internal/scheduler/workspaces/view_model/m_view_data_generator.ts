@@ -24,7 +24,6 @@ import type {
   ViewCellIndex,
   ViewDataProviderExtendedOptions,
 } from './m_types';
-import { isLocalTimeMidnightDST } from './utils/view_generator_utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -526,8 +525,8 @@ export class ViewDataGenerator {
     let currentDate = new Date(
       startViewDateTime + millisecondsOffset + offsetByCount + viewOffset,
     );
-    const isMidnightDSTViewStart = isLocalTimeMidnightDST(startViewDate);
-    const isMidnightDST = isLocalTimeMidnightDST(currentDate);
+    const isMidnightDSTViewStart = timezoneUtils.isLocalTimeMidnightDST(startViewDate);
+    const isMidnightDST = timezoneUtils.isLocalTimeMidnightDST(currentDate);
 
     if (!isMidnightDSTViewStart && !isMidnightDST) {
       if (isStartViewDateDuringDST) {

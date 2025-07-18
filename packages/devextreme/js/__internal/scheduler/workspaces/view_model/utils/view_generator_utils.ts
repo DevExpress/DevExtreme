@@ -39,9 +39,3 @@ export const calculateAlignedWeeksBetweenDates = (
   const weekCount = calculateDaysBetweenDates(alignedFromDate, alignedToDate) / DAYS_IN_WEEK;
   return Math.max(weekCount, MAX_WEEKS_IN_MONTH);
 };
-
-export const isLocalTimeMidnightDST = (date: Date): boolean => {
-  const startDayDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
-  return startDayDate.getHours() === 1;
-};
