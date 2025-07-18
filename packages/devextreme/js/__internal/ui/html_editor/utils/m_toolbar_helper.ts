@@ -47,6 +47,8 @@ const DIALOG_LINK_FIELD_TARGET_CLASS = 'dx-formdialog-field-target';
 const DIALOG_TABLE_FIELD_COLUMNS = 'dxHtmlEditor-dialogInsertTableRowsField';
 const DIALOG_TABLE_FIELD_ROWS = 'dxHtmlEditor-dialogInsertTableColumnsField';
 
+const DEFAULT_BORDER_WIDTH = 1;
+
 const ICON_MAP = {
   insertHeaderRow: 'header',
   clear: 'clearformat',
@@ -661,25 +663,39 @@ function getCellPropertiesFormConfig(
   const { editorInstance } = module;
   const window = getWindow();
 
-  const startCellWidth = formats.cellWidth ?? getOuterWidth($cell);
   const cellStyles = window.getComputedStyle($cell.get(0));
-  const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
-  const borderWidth = parseFloat(formats.cellBorderWidth ?? cellStyles.borderTopWidth);
+  // const cellWidth = formats.cellWidth ?? getOuterWidth($cell);
+  const cellWidth = formats.cellWidth ? parseFloat(formats.cellWidth) : null;
+  // const cellHeight = isDefined(formats.cellHeight)
+  //   ? parseInt(formats.cellHeight, 10)
+  //   : getOuterHeight($cell);
+  const cellHeight = formats.cellHeight ? parseFloat(formats.cellHeight) : null;
+  const textAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
+  // const borderWidth = parseFloat(formats.cellBorderWidth ?? cellStyles.borderTopWidth);
+  const borderWidth = formats.cellBorderWidth
+    ? parseFloat(formats.cellBorderWidth) : DEFAULT_BORDER_WIDTH;
+  const backgroundColor = getColorFromFormat(formats.cellBackgroundColor)
+    || cellStyles.backgroundColor;
+  const borderStyle = formats.cellBorderStyle || cellStyles.borderTopStyle;
+  const borderColor = getColorFromFormat(formats.cellBorderColor) || cellStyles.borderTopColor;
+  const alignment = formats.cellTextAlign || textAlign;
+  const verticalAlignment = formats.cellVerticalAlign || cellStyles.verticalAlign;
+  // const verticalPadding = parseInt(formats.cellPaddingTop ?? cellStyles.paddingTop, 10);
+  const verticalPadding = formats.cellPaddingTop ? parseFloat(formats.cellPaddingTop) : null;
+  // const horizontalPadding = parseInt(formats.cellPaddingLeft ?? cellStyles.paddingLeft, 10);
+  const horizontalPadding = formats.cellPaddingLeft ? parseFloat(formats.cellPaddingLeft) : null;
 
   const formData = {
-    width: startCellWidth,
-    height: isDefined(formats.cellHeight)
-      ? parseInt(formats.cellHeight, 10)
-      : getOuterHeight($cell),
-    backgroundColor: getColorFromFormat(formats.cellBackgroundColor)
-        || cellStyles.backgroundColor,
-    borderStyle: formats.cellBorderStyle || cellStyles.borderTopStyle,
-    borderColor: getColorFromFormat(formats.cellBorderColor) || cellStyles.borderTopColor,
+    width: cellWidth,
+    height: cellHeight,
+    backgroundColor,
+    borderStyle,
+    borderColor,
     borderWidth,
-    alignment: formats.cellTextAlign || startTextAlign,
-    verticalAlignment: formats.cellVerticalAlign || cellStyles.verticalAlign,
-    verticalPadding: parseInt(formats.cellPaddingTop ?? cellStyles.paddingTop, 10),
-    horizontalPadding: parseInt(formats.cellPaddingLeft ?? cellStyles.paddingLeft, 10),
+    alignment,
+    verticalAlignment,
+    verticalPadding,
+    horizontalPadding,
   };
 
   const items = [
@@ -809,7 +825,7 @@ function getCellPropertiesFormConfig(
                 { value: 'justify', icon: 'alignjustify' },
               ],
               keyExpr: 'value',
-              selectedItemKeys: [startTextAlign],
+              selectedItemKeys: [textAlign],
               onInitialized: (event: InitializedColorBoxEvent): void => {
                 alignmentEditorInstance = event.component;
               },
@@ -853,7 +869,8 @@ function getCellPropertiesFormConfig(
   const applyHandler = (formInstance: Form): void => {
     const { formData: data } = formInstance.option();
 
-    const newWidth = data.width === parseInt(startCellWidth, 10) ? undefined : data.width;
+    // Strange point. Needs to check
+    const newWidth = data.width === cellWidth ? null : data.width;
     const newHeight = data.height;
 
     applyCellDimensionChanges(
@@ -867,7 +884,7 @@ function getCellPropertiesFormConfig(
       },
     );
 
-    module.editorInstance.format('cellBorderWidth', `${Math.round(data.borderWidth)}px`);
+    module.editorInstance.format('cellBorderWidth', `${data.borderWidth}px`);
     module.editorInstance.format('cellBorderColor', borderColorEditorInstance.option('value'));
     module.editorInstance.format('cellBorderStyle', data.borderStyle);
     module.editorInstance.format('cellBackgroundColor', backgroundColorEditorInstance.option('value'));
