@@ -1233,7 +1233,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     return {
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
-      isWorkView: this.viewDataProvider.viewDataGenerator.isWorkView,
       interval: this.viewDataProvider.viewDataGenerator?.getInterval(this.option('hoursInterval')),
       startViewDate: this.getStartViewDate(),
       firstDayOfWeek: this._firstDayOfWeek(),
@@ -1446,7 +1445,7 @@ class SchedulerWorkSpace extends WidgetObserver {
   }
 
   getCellData($cell) {
-    const cellData = this._getFullCellData($cell) || {};
+    const cellData = this._getFullCellData($cell) ?? {};
 
     return this._filterCellDataFields(cellData);
   }
@@ -2034,7 +2033,11 @@ class SchedulerWorkSpace extends WidgetObserver {
     return (cell, rowIndex, columnIndex) => {
       const validColumnIndex = columnIndex % this._getCellCount();
       const options = this._getDateGenerationOptions(true);
-      let startDate = this.viewDataProvider.viewDataGenerator.getDateByCellIndices(options, rowIndex, validColumnIndex, this._getCellCountInDay());
+      let startDate = this.viewDataProvider.viewDataGenerator.getDateByCellIndices(
+        options as any,
+        rowIndex,
+        validColumnIndex,
+      );
 
       startDate = dateUtils.trimTime(startDate);
 

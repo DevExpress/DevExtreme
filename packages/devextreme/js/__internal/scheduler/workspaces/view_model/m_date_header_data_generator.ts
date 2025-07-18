@@ -1,13 +1,14 @@
 import dateUtils from '@js/core/utils/date';
-import { VIEWS } from '@ts/scheduler/constants';
+
+import { VIEWS } from '../../constants';
+import timeZoneUtils from '../../m_utils_time_zone';
 import {
   formatWeekdayAndDay, getDisplayedCellCount, getGroupCount,
   getHeaderCellText,
   getHorizontalGroupCount, getTotalCellCountByCompleteData,
   isTimelineView,
-} from '@ts/scheduler/r1/utils/index';
-
-import timeZoneUtils from '../../m_utils_time_zone';
+} from '../../r1/utils/index';
+import type { DateHeaderData } from '../../types';
 
 export class DateHeaderDataGenerator {
   constructor(public _viewDataGenerator) {
@@ -156,7 +157,7 @@ export class DateHeaderDataGenerator {
     });
   }
 
-  generateDateHeaderData(completeDateHeaderMap, completeViewDataMap, options) {
+  generateDateHeaderData(completeDateHeaderMap, completeViewDataMap, options): DateHeaderData {
     const {
       isGenerateWeekDaysHeaderData,
       cellWidth,

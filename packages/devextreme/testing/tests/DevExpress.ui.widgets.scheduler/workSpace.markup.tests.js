@@ -1263,7 +1263,7 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
         assert.equal(rows.length, 7 * 10, 'view has right cells count');
     });
 
-    QUnit.test('WorkSpace Month view with option intervalCount has cells with special firstDayOfMonth class', function(assert) {
+    QUnit.test('WorkSpace Month view with option intervalCount has cells with special isFirstDayMonthHighlighting class', function(assert) {
         this.instance.option({
             intervalCount: 2,
             currentDate: new Date(2017, 5, 25)

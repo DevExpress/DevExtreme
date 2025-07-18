@@ -123,7 +123,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   _getRowCount() {
-    return this.option('agendaDuration');
+    return this.option('agendaDuration') as number;
   }
 
   _getCellCount() {
@@ -131,7 +131,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   _getTimePanelRowCount() {
-    return this.option('agendaDuration');
+    return this.option('agendaDuration') as number;
   }
 
   _renderAllDayPanel() { return noop(); }
