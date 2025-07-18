@@ -17,7 +17,6 @@ import { isDefined, isFunction, isString } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
 import { getWindow } from '@js/core/utils/window';
 import formatHelper from '@js/format_helper';
-import type { Row } from '@js/ui/data_grid';
 import LoadPanel from '@js/ui/load_panel';
 import sharedFiltering from '@js/ui/shared/filtering';
 import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
@@ -276,10 +275,6 @@ export default {
     }
 
     return index;
-  },
-
-  getItemByKey(key: unknown, items: Row[], keyName = 'key') {
-    return items?.[this.getIndexByKey(key, items, keyName)];
   },
 
   combineFilters(filters, operation?): any {

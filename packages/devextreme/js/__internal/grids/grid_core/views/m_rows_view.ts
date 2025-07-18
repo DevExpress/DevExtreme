@@ -281,7 +281,8 @@ export class RowsView extends ColumnsView {
           element: $row.get(0),
           watch: rowOptions.watch,
           getter: () => this._isAltRow(
-            gridCoreUtils.getItemByKey(row.key, this._getRows()),
+            // The row needs to be obtained again because the current row is out of date.
+            this._dataController.getRowByKey(row.key),
           ),
           callBack: (value) => {
             $row.toggleClass(ROW_ALTERNATION_CLASS, value);
