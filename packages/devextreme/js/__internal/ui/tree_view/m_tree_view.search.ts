@@ -127,7 +127,7 @@ class TreeViewSearch extends TreeViewBase {
       ...super._getDataAdapterOptions(),
       searchValue,
       searchMode: searchMode ?? 'contains',
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       searchExpr,
     };
   }
@@ -180,9 +180,10 @@ class TreeViewSearch extends TreeViewBase {
   }
 
   _itemContainer(isSearchMode?: boolean, selectAllEnabled?: boolean): dxElementWrapper {
-    const isSelectAllEnabled = selectAllEnabled ?? this._selectAllEnabled();
+    // eslint-disable-next-line
+    selectAllEnabled ??= this._selectAllEnabled();
 
-    if (isSelectAllEnabled) {
+    if (selectAllEnabled) {
       return this._getNodeContainer();
     }
 
