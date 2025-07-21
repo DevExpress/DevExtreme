@@ -244,7 +244,7 @@ QUnit.module('Markup rendering', moduleConfig, () => {
 });
 
 QUnit.module('fileManager inside popup not causing any warnings in console (T1297188)', moduleConfig_T1297188, () => {
-    test('height applies to the details view (T1297188)', function(assert) {
+    test('details view height option set correctly and no console warnings displayed (T1297188)', function(assert) {
         const loggerSpy = sinon.spy(consoleUtils.logger, 'warn');
 
         try {
@@ -255,8 +255,7 @@ QUnit.module('fileManager inside popup not causing any warnings in console (T129
             assert.strictEqual(fileManager._itemView._filesView.option('height'), '100%', 'height is applied to the details view');
 
             const w1025Warning = loggerSpy.args.find(([warning, ...rest]) =>
-                typeof warning === 'string' &&
-                warning.includes('W1025 - \'scrolling.mode\' is set to \'virtual\' or \'infinite\'')
+                typeof warning === 'string' && warning.includes('W1025')
             );
 
             assert.ok(!w1025Warning, 'W1025 scrolling.mode warning should not appear in console');
