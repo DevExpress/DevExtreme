@@ -85,10 +85,6 @@ const KEY_SPACE = ' ';
 
 const TIME_TO_WAIT = 500;
 
-const toSelector = (className) => {
-    return '.' + className;
-};
-
 const moduleSetup = {
     beforeEach: function() {
         SelectBox.defaultOptions({ options: { deferRendering: false } });
@@ -161,7 +157,7 @@ QUnit.module('functionality', moduleSetup, () => {
             placeholder: 'test'
         });
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.strictEqual(instance.option('value'), 'first', 'value set correct');
         assert.strictEqual($input.val(), 'first', 'value displayed correct');
@@ -203,9 +199,9 @@ QUnit.module('functionality', moduleSetup, () => {
         assert.ok(!instance.option('value'));
 
         this.clock.tick(TIME_TO_WAIT);
-        assert.strictEqual($element.find(toSelector(LIST_ITEM_CLASS)).length, 3, 'found 3 items');
+        assert.strictEqual($element.find(`.${LIST_ITEM_CLASS}`).length, 3, 'found 3 items');
 
-        $($element.find(toSelector(LIST_ITEM_CLASS)).first()).trigger('dxclick');
+        $($element.find(`.${LIST_ITEM_CLASS}`).first()).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
         assert.strictEqual(instance.option('value'), 'first', 'widget value was set');
 
@@ -219,14 +215,14 @@ QUnit.module('functionality', moduleSetup, () => {
         const $list = $element.find('.dx-list');
 
         this.clock.tick(TIME_TO_WAIT);
-        $($list.find(toSelector(LIST_ITEM_CLASS)).eq(1)).trigger('dxclick');
+        $($list.find(`.${LIST_ITEM_CLASS}`).eq(1)).trigger('dxclick');
 
-        assert.ok($list.find(toSelector(LIST_ITEM_CLASS)).eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), 'selected item has selected class, after click on it');
+        assert.ok($list.find(`.${LIST_ITEM_CLASS}`).eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), 'selected item has selected class, after click on it');
 
-        $($list.find(toSelector(LIST_ITEM_CLASS)).eq(2)).trigger('dxclick');
+        $($list.find(`.${LIST_ITEM_CLASS}`).eq(2)).trigger('dxclick');
 
-        assert.ok(!$list.find(toSelector(LIST_ITEM_CLASS)).eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), 'previously selected item has no selected class, after click on other');
-        assert.ok($list.find(toSelector(LIST_ITEM_CLASS)).eq(2).hasClass(LIST_ITEM_SELECTED_CLASS), 'selected item has selected class, after click on it');
+        assert.ok(!$list.find(`.${LIST_ITEM_CLASS}`).eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), 'previously selected item has no selected class, after click on other');
+        assert.ok($list.find(`.${LIST_ITEM_CLASS}`).eq(2).hasClass(LIST_ITEM_SELECTED_CLASS), 'selected item has selected class, after click on it');
     });
 
     QUnit.test('changing the "value" option must invoke the "onValueChanged" action', function(assert) {
@@ -249,11 +245,11 @@ QUnit.module('functionality', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        assert.ok(!$list.find(toSelector(LIST_ITEM_CLASS)).eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), 'second item has no selected class');
+        assert.ok(!$list.find(`.${LIST_ITEM_CLASS}`).eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), 'second item has no selected class');
         instance.option('value', 'second');
 
-        assert.ok(!$list.find(toSelector(LIST_ITEM_CLASS)).eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), 'first item has no selected class, after change value');
-        assert.ok($list.find(toSelector(LIST_ITEM_CLASS)).eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), 'second item has selected class, after change value on it');
+        assert.ok(!$list.find(`.${LIST_ITEM_CLASS}`).eq(0).hasClass(LIST_ITEM_SELECTED_CLASS), 'first item has no selected class, after change value');
+        assert.ok($list.find(`.${LIST_ITEM_CLASS}`).eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), 'second item has selected class, after change value on it');
     });
 
     QUnit.test('click on 0 in list ["", 0] sets value 0', function(assert) {
@@ -262,7 +258,7 @@ QUnit.module('functionality', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        $($element.find(toSelector(LIST_ITEM_CLASS)).last()).trigger('dxclick');
+        $($element.find(`.${LIST_ITEM_CLASS}`).last()).trigger('dxclick');
 
         assert.strictEqual(instance.option('value'), 0, 'click on list item, and its value replaces widget value');
     });
@@ -270,7 +266,7 @@ QUnit.module('functionality', moduleSetup, () => {
     QUnit.test('click on textbox toggle popup visibility', function(assert) {
         const $element = $('#selectBox').dxSelectBox({ items: [0, 1, 2] });
         const $list = $element.find('.dx-list');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.ok($list.is(':hidden'), 'when start list is hidden');
         pointerMock($input).start().click();
@@ -296,7 +292,7 @@ QUnit.module('functionality', moduleSetup, () => {
     QUnit.test('click on disabled selectbox doesn\'t toggle popup visibility', function(assert) {
         const $element = $('#selectBox').dxSelectBox({ items: [0, 1, 2], disabled: true });
         const $list = $element.find('.dx-dropdowneditor-overlay');
-        const $textBox = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $textBox = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.ok($list.is(':hidden'), 'when start list is hidden');
 
@@ -307,7 +303,7 @@ QUnit.module('functionality', moduleSetup, () => {
     QUnit.test('click on disabled selectbox arrow doesn\'t toggle popup visibility', function(assert) {
         const $element = $('#selectBox').dxSelectBox({ items: [0, 1, 2], disabled: true });
         const $list = $element.find('.dx-dropdowneditor-overlay');
-        const $arrow = $element.find(toSelector(TEXTEDITOR_BUTTONS_CONTAINER_CLASS));
+        const $arrow = $element.find(`.${TEXTEDITOR_BUTTONS_CONTAINER_CLASS}`);
 
         assert.ok($list.is(':hidden'), 'when start list is hidden');
 
@@ -318,7 +314,7 @@ QUnit.module('functionality', moduleSetup, () => {
     QUnit.test('click on readOnly selectbox doesn\'t toggle popup visibility', function(assert) {
         const $element = $('#selectBox').dxSelectBox({ items: [0, 1, 2], readOnly: true });
         const $list = $element.find('.dx-dropdowneditor-overlay');
-        const $textBox = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $textBox = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.ok($list.is(':hidden'), 'when start list is hidden');
 
@@ -329,7 +325,7 @@ QUnit.module('functionality', moduleSetup, () => {
     QUnit.test('click on readOnly selectbox arrow doesn\'t toggle popup visibility', function(assert) {
         const $element = $('#selectBox').dxSelectBox({ items: [0, 1, 2], readOnly: true });
         const $list = $element.find('.dx-dropdowneditor-overlay');
-        const $arrow = $element.find(toSelector(TEXTEDITOR_BUTTONS_CONTAINER_CLASS));
+        const $arrow = $element.find(`.${TEXTEDITOR_BUTTONS_CONTAINER_CLASS}`);
 
         assert.ok($list.is(':hidden'), 'when start list is hidden');
 
@@ -340,7 +336,7 @@ QUnit.module('functionality', moduleSetup, () => {
     QUnit.test('select box should not hide popup after focusout', function(assert) {
         const $element = $('#selectBox').dxSelectBox({ items: [0, 1, 2] });
         const $list = $element.find('.dx-list');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.ok($list.is(':hidden'), 'when start list is hidden');
 
@@ -402,7 +398,7 @@ QUnit.module('functionality', moduleSetup, () => {
             value: 'longer than first'
         });
 
-        $($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS))).trigger('dxclick');
+        $($selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
 
         assert.equal($selectBox.dxSelectBox('option', 'opened'), true, 'selectbox is opened');
@@ -414,10 +410,10 @@ QUnit.module('functionality', moduleSetup, () => {
         }
 
         const $selectBox = $('#selectBox').dxSelectBox({});
-        const $dropDownButton = $selectBox.find(toSelector(DX_DROP_DOWN_BUTTON));
+        const $dropDownButton = $selectBox.find(`.${DX_DROP_DOWN_BUTTON}`);
 
         $($dropDownButton).trigger('dxclick');
-        assert.ok($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).is(':focus'), 'input focused');
+        assert.ok($selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`).is(':focus'), 'input focused');
     });
 
     QUnit.test('dataSource loaded after create dxSelectBox', function(assert) {
@@ -441,7 +437,7 @@ QUnit.module('functionality', moduleSetup, () => {
         this.clock.tick(timeout);
 
         $selectBox.dxSelectBox('option', 'opened', true);
-        const listItems = $(toSelector(POPUP_CONTENT_CLASS) + ' ' + toSelector(LIST_ITEM_CLASS));
+        const listItems = $(`.${POPUP_CONTENT_CLASS} .${LIST_ITEM_CLASS}`);
 
         assert.equal(listItems.length, 0, 'items is not yet loaded');
     });
@@ -457,7 +453,7 @@ QUnit.module('functionality', moduleSetup, () => {
 
         assert.deepEqual(selectBox._list.option('items'), data);
 
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input)
             .focus()
@@ -481,7 +477,7 @@ QUnit.module('functionality', moduleSetup, () => {
                 searchEnabled: true
             }).dxSelectBox('instance');
 
-            const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             const keyboard = keyboardMock($input);
 
             keyboard
@@ -512,10 +508,10 @@ QUnit.module('functionality', moduleSetup, () => {
         const selectBox = $('#selectBox').dxSelectBox('instance');
 
         this.clock.tick(TIME_TO_WAIT);
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input).press('down');
-        const $firstItemList = $(toSelector(LIST_ITEM_CLASS)).eq(0);
+        const $firstItemList = $(`.${LIST_ITEM_CLASS}`).eq(0);
         assert.equal(isRenderer(selectBox._list.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.ok($firstItemList.hasClass(STATE_FOCUSED_CLASS), 'first list item obtained focus');
     });
@@ -528,7 +524,7 @@ QUnit.module('functionality', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const $listItems = $(toSelector(LIST_ITEM_CLASS));
+        const $listItems = $(`.${LIST_ITEM_CLASS}`);
 
         $($listItems.eq(0)).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
@@ -557,7 +553,7 @@ QUnit.module('functionality', moduleSetup, () => {
         selectBox.option('opened', true);
 
         const $popupContent = $(selectBox.content());
-        const $selectedItem = $popupContent.find(toSelector(LIST_ITEM_SELECTED_CLASS));
+        const $selectedItem = $popupContent.find(`.${LIST_ITEM_SELECTED_CLASS}`);
 
         assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, 'selected item is visible');
     });
@@ -575,7 +571,7 @@ QUnit.module('functionality', moduleSetup, () => {
         });
 
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         selectBox.option('opened', true);
         const $popupContent = $(selectBox.content());
 
@@ -583,10 +579,10 @@ QUnit.module('functionality', moduleSetup, () => {
             .focus()
             .type('50')
             .change();
-        $popupContent.find(toSelector(LIST_ITEM_CLASS)).eq(0).trigger('dxclick');
+        $popupContent.find(`.${LIST_ITEM_CLASS}`).eq(0).trigger('dxclick');
         selectBox.option('opened', true);
 
-        const $selectedItem = $popupContent.find(toSelector(LIST_ITEM_SELECTED_CLASS));
+        const $selectedItem = $popupContent.find(`.${LIST_ITEM_SELECTED_CLASS}`);
         assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, 'selected item is visible after search');
     });
 
@@ -620,7 +616,7 @@ QUnit.module('functionality', moduleSetup, () => {
 
             selectBox.open();
             this.clock.tick(TIME_TO_WAIT);
-            const list = $(selectBox.content()).find(toSelector(LIST_CLASS)).dxList('instance');
+            const list = $(selectBox.content()).find(`.${LIST_CLASS}`).dxList('instance');
 
             assert.strictEqual(list.option('selectedItem'), 1, 'list item is selected');
         });
@@ -647,7 +643,7 @@ QUnit.module('functionality', moduleSetup, () => {
         selectBox.option('opened', true);
 
         const $popupContent = $(selectBox.content());
-        const $firstItem = $popupContent.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        const $firstItem = $popupContent.find(`.${LIST_ITEM_CLASS}`).eq(0);
 
         assert.ok($popupContent.offset().top <= $firstItem.offset().top, 'first item is visible');
     });
@@ -674,7 +670,7 @@ QUnit.module('functionality', moduleSetup, () => {
         selectBox.option('opened', true);
 
         const $popupContent = $(selectBox.content());
-        const $selectedItem = $popupContent.find(toSelector(LIST_ITEM_CLASS)).eq(98);
+        const $selectedItem = $popupContent.find(`.${LIST_ITEM_CLASS}`).eq(98);
         const itemBottom = $selectedItem.offset().top + $selectedItem.outerHeight();
         const contentBottom = $popupContent.offset().top + $popupContent.outerHeight();
 
@@ -697,7 +693,7 @@ QUnit.module('functionality', moduleSetup, () => {
 
         this.clock.tick(10);
 
-        assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), '', 'selected item');
+        assert.equal($selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`).val(), '', 'selected item');
         assert.strictEqual(selectBox.option('selectedItem'), null, 'selected item');
     });
 
@@ -722,7 +718,7 @@ QUnit.module('functionality', moduleSetup, () => {
             }
         });
 
-        assert.strictEqual($(toSelector(LIST_ITEM_CLASS)).length, 1, 'dropDown is shown in fullScreen mode');
+        assert.strictEqual($(`.${LIST_ITEM_CLASS}`).length, 1, 'dropDown is shown in fullScreen mode');
     });
 
     QUnit.test('selectBox should display value when item is 0 or boolean false', function(assert) {
@@ -740,19 +736,19 @@ QUnit.module('functionality', moduleSetup, () => {
                 }
             }
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         this.clock.tick(TIME_TO_WAIT);
 
-        $($selectBox.find(toSelector(LIST_ITEM_CLASS) + ':eq(1)')).trigger('dxclick');
+        $($selectBox.find(`.${LIST_ITEM_CLASS}:eq(1)`)).trigger('dxclick');
         assert.equal($input.val(), 'Zero', '0 value is shown correctly');
 
-        $($selectBox.find(toSelector(LIST_ITEM_CLASS) + ':eq(2)')).trigger('dxclick');
+        $($selectBox.find(`.${LIST_ITEM_CLASS}:eq(2)`)).trigger('dxclick');
         assert.equal($input.val(), 'True', 'True value is shown correctly');
 
-        $($selectBox.find(toSelector(LIST_ITEM_CLASS) + ':eq(3)')).trigger('dxclick');
+        $($selectBox.find(`.${LIST_ITEM_CLASS}:eq(3)`)).trigger('dxclick');
         assert.equal($input.val(), 'False', 'False value is shown correctly');
 
-        $($selectBox.find(toSelector(LIST_ITEM_CLASS) + ':eq(0)')).trigger('dxclick');
+        $($selectBox.find(`.${LIST_ITEM_CLASS}:eq(0)`)).trigger('dxclick');
         assert.equal($input.val(), 'None', 'Null value is shown correctly');
     });
 
@@ -778,7 +774,7 @@ QUnit.module('functionality', moduleSetup, () => {
             searchTimeout: 0
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard
@@ -804,7 +800,7 @@ QUnit.module('functionality', moduleSetup, () => {
             encodeNoDataText: true,
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard
@@ -824,7 +820,7 @@ QUnit.module('functionality', moduleSetup, () => {
             deferRendering: false
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('b');
@@ -842,7 +838,7 @@ QUnit.module('functionality', moduleSetup, () => {
 
         const loadSpy = sinon.spy(DataSource.prototype, 'load');
         try {
-            $($selectBox.find(toSelector(DX_DROP_DOWN_BUTTON))).trigger('dxclick');
+            $($selectBox.find(`.${DX_DROP_DOWN_BUTTON}`)).trigger('dxclick');
 
             assert.ok(!loadSpy.called, 'data source load was not fired on open');
         } finally {
@@ -884,7 +880,7 @@ QUnit.module('functionality', moduleSetup, () => {
             searchTimeout: 0
         });
         const instance = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('2');
@@ -918,7 +914,7 @@ QUnit.module('functionality', moduleSetup, () => {
             opened: true
         });
         const instance = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('4');
@@ -939,12 +935,12 @@ QUnit.module('functionality', moduleSetup, () => {
         }).dxSelectBox('instance');
         const $list = $(selectBox._list.$element());
 
-        assert.ok($list.find(toSelector(LIST_ITEM_CLASS)).eq(1).hasClass(STATE_FOCUSED_CLASS), 'the selected item is focused');
+        assert.ok($list.find(`.${LIST_ITEM_CLASS}`).eq(1).hasClass(STATE_FOCUSED_CLASS), 'the selected item is focused');
 
-        $($list.find(toSelector(LIST_ITEM_CLASS)).eq(0)).trigger('dxclick');
+        $($list.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
         selectBox.open();
 
-        assert.ok($list.find(toSelector(LIST_ITEM_CLASS)).eq(0).hasClass(STATE_FOCUSED_CLASS), 'the selected item is focused after popup is opened second time');
+        assert.ok($list.find(`.${LIST_ITEM_CLASS}`).eq(0).hasClass(STATE_FOCUSED_CLASS), 'the selected item is focused after popup is opened second time');
     });
 
     QUnit.test('no items should be focused if input value is changed', function(assert) {
@@ -959,16 +955,16 @@ QUnit.module('functionality', moduleSetup, () => {
             searchTimeout: 0
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $list = $(selectBox._list.$element());
 
         keyboardMock($input)
             .focus()
             .type('aa');
 
-        $($selectBox.find(toSelector(DX_DROP_DOWN_BUTTON))).trigger('dxclick');
+        $($selectBox.find(`.${DX_DROP_DOWN_BUTTON}`)).trigger('dxclick');
 
-        assert.equal($list.find(toSelector(STATE_FOCUSED_CLASS)).length, 0, 'no items are focused');
+        assert.equal($list.find(`.${STATE_FOCUSED_CLASS}`).length, 0, 'no items are focused');
     });
 });
 
@@ -1085,9 +1081,9 @@ QUnit.module('widget options', moduleSetup, () => {
         const instance = $element.dxSelectBox('instance');
 
         this.clock.tick(TIME_TO_WAIT);
-        assert.strictEqual($element.find(toSelector(LIST_ITEM_CLASS)).length, 2);
+        assert.strictEqual($element.find(`.${LIST_ITEM_CLASS}`).length, 2);
 
-        $($element.find(toSelector(LIST_ITEM_CLASS)).first()).trigger('dxclick');
+        $($element.find(`.${LIST_ITEM_CLASS}`).first()).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
 
         assert.equal(instance._input().val(), 'one');
@@ -1120,9 +1116,9 @@ QUnit.module('widget options', moduleSetup, () => {
         const instance = $element.dxSelectBox('instance');
 
         this.clock.tick(TIME_TO_WAIT);
-        assert.strictEqual($element.find(toSelector(LIST_ITEM_CLASS)).length, 2);
+        assert.strictEqual($element.find(`.${LIST_ITEM_CLASS}`).length, 2);
 
-        $($element.find(toSelector(LIST_ITEM_CLASS)).first()).trigger('dxclick');
+        $($element.find(`.${LIST_ITEM_CLASS}`).first()).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
 
         assert.equal(instance._input().val(), 'number 1');
@@ -1197,10 +1193,10 @@ QUnit.module('widget options', moduleSetup, () => {
             });
         const instance = $element.dxSelectBox('instance');
 
-        assert.equal($element.find(toSelector(PLACEHOLDER_CLASS)).attr('data-dx_placeholder'), 'John Doe');
+        assert.equal($element.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), 'John Doe');
 
         instance.option('placeholder', 'John Jr. Doe');
-        assert.equal($element.find(toSelector(PLACEHOLDER_CLASS)).attr('data-dx_placeholder'), 'John Jr. Doe');
+        assert.equal($element.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), 'John Jr. Doe');
     });
 
     QUnit.test('the "fieldTemplate" function should be called only once on init and value change', function(assert) {
@@ -1233,7 +1229,7 @@ QUnit.module('widget options', moduleSetup, () => {
             opened: true
         });
         const instance = $selectBox.dxSelectBox('instance');
-        const $dropDownButton = $selectBox.find(toSelector(DX_DROP_DOWN_BUTTON));
+        const $dropDownButton = $selectBox.find(`.${DX_DROP_DOWN_BUTTON}`);
         const $inputWrapper = $selectBox.find('.dx-dropdowneditor-input-wrapper');
 
         $dropDownButton.trigger('dxpointerdown');
@@ -1270,22 +1266,22 @@ QUnit.module('widget options', moduleSetup, () => {
             opened: true
         });
 
-        $(toSelector(LIST_ITEM_CLASS)).eq(0).trigger('dxclick');
+        $(`.${LIST_ITEM_CLASS}`).eq(0).trigger('dxclick');
 
-        const $input = $(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.equal($input.val(), '1 - First', 'value is correct');
 
         $input.triggerHandler('focusout');
 
-        assert.equal($(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), '1 - First', 'value is correct');
+        assert.equal($(`.${TEXTEDITOR_INPUT_CLASS}`).val(), '1 - First', 'value is correct');
 
         const instance = $element.dxSelectBox('instance');
         instance.option('opened', true);
 
-        $(toSelector(LIST_ITEM_CLASS)).eq(0).trigger('dxclick');
+        $(`.${LIST_ITEM_CLASS}`).eq(0).trigger('dxclick');
 
-        assert.equal($(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), '1 - First', 'value is correct');
+        assert.equal($(`.${TEXTEDITOR_INPUT_CLASS}`).val(), '1 - First', 'value is correct');
 
     });
 
@@ -1306,9 +1302,9 @@ QUnit.module('widget options', moduleSetup, () => {
             opened: true
         });
 
-        $(toSelector(LIST_ITEM_CLASS)).eq(1).trigger('dxclick');
+        $(`.${LIST_ITEM_CLASS}`).eq(1).trigger('dxclick');
 
-        const $input = $(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.equal($input.val(), 'Second', 'value is correct');
 
@@ -1316,7 +1312,7 @@ QUnit.module('widget options', moduleSetup, () => {
 
         instance.option('value', 'First');
 
-        assert.equal($(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), 'First', 'value is correct');
+        assert.equal($(`.${TEXTEDITOR_INPUT_CLASS}`).val(), 'First', 'value is correct');
     });
 
     QUnit.test('dropdown button should not be hidden after the focusout when fieldTemplate and searchEnabled is used', function(assert) {
@@ -1332,12 +1328,12 @@ QUnit.module('widget options', moduleSetup, () => {
             },
             searchEnabled: true
         });
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.focus();
         $input.triggerHandler('focusout');
 
-        assert.equal($element.find(toSelector(DX_DROP_DOWN_BUTTON)).length, 1, 'dropdown button was not hidden');
+        assert.equal($element.find(`.${DX_DROP_DOWN_BUTTON}`).length, 1, 'dropdown button was not hidden');
     });
 
     QUnit.test('item template', function(assert) {
@@ -1366,11 +1362,11 @@ QUnit.module('widget options', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        $($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS))).trigger('dxclick');
+        $($selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('dxclick');
 
         this.clock.tick(TIME_TO_WAIT);
 
-        assert.equal($(toSelector(LIST_ITEM_CLASS)).first().text().trim(), '0', 'first item is loaded');
+        assert.equal($(`.${LIST_ITEM_CLASS}`).first().text().trim(), '0', 'first item is loaded');
     });
 
     QUnit.test('change displayCustomValue', function(assert) {
@@ -1384,7 +1380,7 @@ QUnit.module('widget options', moduleSetup, () => {
         $selectBox.dxSelectBox('option', 'value', 'test2');
         this.clock.tick(TIME_TO_WAIT);
 
-        assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), 'test2', 'custom value displayed after value changed');
+        assert.equal($selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`).val(), 'test2', 'custom value displayed after value changed');
     });
 
     QUnit.test('displayCustomValue should not reset selected value on dataSource change', function(assert) {
@@ -1410,7 +1406,7 @@ QUnit.module('widget options', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         assert.equal($input.val(), '', 'input value is reset');
     });
 
@@ -1425,7 +1421,7 @@ QUnit.module('widget options', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         assert.equal($input.val(), '', 'input value is reset');
     });
 
@@ -1436,7 +1432,7 @@ QUnit.module('widget options', moduleSetup, () => {
             value: 1
         });
         const element = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.trigger('focusin');
         $input.val('');
@@ -1454,7 +1450,7 @@ QUnit.module('widget options', moduleSetup, () => {
             searchTimeout: 0,
             opened: true
         });
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         this.clock.tick(TIME_TO_WAIT);
         keyboardMock($input)
@@ -1463,11 +1459,11 @@ QUnit.module('widget options', moduleSetup, () => {
             .change();
         this.clock.tick(TIME_TO_WAIT);
 
-        $(toSelector(OVERLAY_CONTENT_CLASS)).focus();
+        $(`.${OVERLAY_CONTENT_CLASS}`).focus();
         assert.notOk($input.is(':focus'), 'input is not focused');
         assert.strictEqual($input.val(), '1', 'input text has not been cleared');
 
-        const items = $(toSelector(LIST_ITEM_CLASS));
+        const items = $(`.${LIST_ITEM_CLASS}`);
         assert.strictEqual(items.length, 1, 'items are filtered');
     });
 
@@ -1489,7 +1485,7 @@ QUnit.module('widget options', moduleSetup, () => {
             value: 4
         });
         const element = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.trigger('focusin');
         $input.trigger('blur');
@@ -1507,7 +1503,7 @@ QUnit.module('widget options', moduleSetup, () => {
             value: 1
         });
         const element = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.focusin();
         $input.val('');
@@ -1525,7 +1521,7 @@ QUnit.module('widget options', moduleSetup, () => {
             value: 1
         });
         const element = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         element.option('allowClearing', false);
 
@@ -1598,12 +1594,12 @@ QUnit.module('clearButton', moduleSetup, () => {
         const selectBox = $element.dxSelectBox('instance');
 
         this.clock.tick(TIME_TO_WAIT);
-        pointerMock($element.find(toSelector(CLEAR_BUTTON_AREA))).click();
+        pointerMock($element.find(`.${CLEAR_BUTTON_AREA}`)).click();
         assert.equal(selectBox.option('opened'), false, 'selectbox is closed after click on clear button');
 
         selectBox.option('searchEnabled', true);
         selectBox.option('searchTimeout', 0);
-        pointerMock($element.find(toSelector(CLEAR_BUTTON_AREA))).click();
+        pointerMock($element.find(`.${CLEAR_BUTTON_AREA}`)).click();
         assert.equal(selectBox.option('opened'), false, 'selectbox is closed after click on clear button if searchEnabled = true');
     });
 
@@ -1616,8 +1612,8 @@ QUnit.module('clearButton', moduleSetup, () => {
             searchTimeout: 3000
         });
         const selectBox = $element.dxSelectBox('instance');
-        const $clearButton = $element.find(toSelector(CLEAR_BUTTON_AREA));
-        const $dropDownButton = $element.find(toSelector(DX_DROP_DOWN_BUTTON));
+        const $clearButton = $element.find(`.${CLEAR_BUTTON_AREA}`);
+        const $dropDownButton = $element.find(`.${DX_DROP_DOWN_BUTTON}`);
 
         pointerMock($clearButton).click();
         pointerMock($dropDownButton).click();
@@ -1633,7 +1629,7 @@ QUnit.module('clearButton', moduleSetup, () => {
             searchTimeout: 0
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
         const $list = $selectBox.find(`.${LIST_CLASS}`);
 
@@ -1641,7 +1637,7 @@ QUnit.module('clearButton', moduleSetup, () => {
 
         keyboard.type('1');
 
-        assert.strictEqual($list.find(toSelector(LIST_ITEM_CLASS)).length, 1, 'items are filtered');
+        assert.strictEqual($list.find(`.${LIST_ITEM_CLASS}`).length, 1, 'items are filtered');
     });
 
     QUnit.test('drop down list should be still opened if click "clear" during the search', function(assert) {
@@ -1653,13 +1649,13 @@ QUnit.module('clearButton', moduleSetup, () => {
             value: 1
         });
         const selectBox = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input)
             .focus()
             .type('50')
             .change();
-        pointerMock($element.find(toSelector(CLEAR_BUTTON_AREA))).click();
+        pointerMock($element.find(`.${CLEAR_BUTTON_AREA}`)).click();
 
         assert.ok(selectBox.option('opened'), 'selectbox is opened');
     });
@@ -1674,11 +1670,11 @@ QUnit.module('clearButton', moduleSetup, () => {
             searchEnabled: true
         });
 
-        const $clearButton = $selectBox.find(toSelector(CLEAR_BUTTON_AREA));
+        const $clearButton = $selectBox.find(`.${CLEAR_BUTTON_AREA}`);
 
         $($clearButton).trigger('dxclick');
 
-        assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), '', 'text is cleared');
+        assert.equal($selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`).val(), '', 'text is cleared');
     });
 
     QUnit.test('selectedItem should be reset on "clear" button', function(assert) {
@@ -1695,11 +1691,11 @@ QUnit.module('clearButton', moduleSetup, () => {
 
         this.clock.tick(10);
 
-        pointerMock($selectBox.find(toSelector(CLEAR_BUTTON_AREA))).click();
+        pointerMock($selectBox.find(`.${CLEAR_BUTTON_AREA}`)).click();
 
         this.clock.tick(10);
 
-        assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), '', 'text field is cleared');
+        assert.equal($selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`).val(), '', 'text field is cleared');
         assert.strictEqual(selectBox.option('value'), null, 'value is null');
         assert.strictEqual(selectBox.option('selectedItem'), null, 'selected item');
     });
@@ -1718,16 +1714,16 @@ QUnit.module('clearButton', moduleSetup, () => {
             opened: true
         }).dxSelectBox('instance');
 
-        const items = $(toSelector(LIST_ITEM_CLASS));
+        const items = $(`.${LIST_ITEM_CLASS}`);
         items.eq(1).trigger('dxclick');
 
-        const $clearButton = $(toSelector(CLEAR_BUTTON_AREA));
+        const $clearButton = $(`.${CLEAR_BUTTON_AREA}`);
         $($clearButton).trigger('dxclick');
 
         assert.equal(selectBox.option('value'), null, 'value is reset after click on "clear" button');
         assert.equal(selectBox.option('text'), '', 'text is reset after click on "clear" button');
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.equal($input.val(), '', 'input is empty');
     });
@@ -1742,8 +1738,8 @@ QUnit.module('clearButton', moduleSetup, () => {
                 showClearButton: true
             });
 
-        $(toSelector(CLEAR_BUTTON_AREA)).trigger('dxclick');
-        const items = $(toSelector(LIST_ITEM_CLASS));
+        $(`.${CLEAR_BUTTON_AREA}`).trigger('dxclick');
+        const items = $(`.${LIST_ITEM_CLASS}`);
 
         assert.strictEqual(items.length, 0, 'items are re-filtered, and no item is shown because of minSearchLength=1');
     });
@@ -1787,7 +1783,7 @@ QUnit.module('showSelectionControls', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        pointerMock($(toSelector(LIST_ITEM_CLASS)).eq(1))
+        pointerMock($(`.${LIST_ITEM_CLASS}`).eq(1))
             .start()
             .click();
 
@@ -1805,7 +1801,7 @@ QUnit.module('editing', moduleSetup, () => {
         const selectBox = $selectBox.dxSelectBox('instance');
         const $list = $selectBox.find('.dx-list');
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         assert.equal($input.prop('readonly'), false, 'input is readonly');
 
         selectBox.option('readOnly', true);
@@ -1825,7 +1821,7 @@ QUnit.module('editing', moduleSetup, () => {
         });
         const selectBox = $selectBox.dxSelectBox('instance');
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         assert.equal($input.prop('readonly'), false, 'input is readonly');
 
         selectBox.option('readOnly', true);
@@ -1839,7 +1835,7 @@ QUnit.module('editing', moduleSetup, () => {
             value: 'item1'
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         selectBox.option('readOnly', true);
         keyboardMock($input).keyDown('down');
@@ -1858,12 +1854,12 @@ QUnit.module('editing', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('it');
 
         this.clock.tick(TIME_TO_WAIT);
 
-        assert.equal($(toSelector(LIST_ITEM_CLASS)).length, 2, 'items is filtered');
+        assert.equal($(`.${LIST_ITEM_CLASS}`).length, 2, 'items is filtered');
         assert.equal($selectBox.dxSelectBox('option', 'value'), null, 'value was not set');
     });
 
@@ -1879,7 +1875,7 @@ QUnit.module('editing', moduleSetup, () => {
             }
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('test');
 
         $selectBox.dxSelectBox('blur');
@@ -1898,10 +1894,10 @@ QUnit.module('editing', moduleSetup, () => {
             }
         });
 
-        const $listItem = $(toSelector(LIST_ITEM_CLASS)).eq(0).trigger('dxclick');
+        const $listItem = $(`.${LIST_ITEM_CLASS}`).eq(0).trigger('dxclick');
         $selectBox.dxSelectBox('instance')._list._setFocusedItem($listItem); // TODO: set focused item workaround, improve it if aware how better
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('test');
@@ -1918,7 +1914,7 @@ QUnit.module('editing', moduleSetup, () => {
             opened: true
         });
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         let keyboard = keyboardMock($input);
         let prevented = 0;
@@ -1939,7 +1935,7 @@ QUnit.module('editing', moduleSetup, () => {
         prevented = 0;
         instance.option('opened', false);
         instance.option('acceptCustomValue', true);
-        keyboard = keyboardMock($element.find(toSelector(TEXTEDITOR_INPUT_CLASS)));
+        keyboard = keyboardMock($element.find(`.${TEXTEDITOR_INPUT_CLASS}`));
         keyboard.keyDown('enter');
 
         assert.equal(prevented, 1, 'defaults prevented on enter key when acceptCustomValue is true');
@@ -1950,7 +1946,7 @@ QUnit.module('editing', moduleSetup, () => {
             items: ['item 1', 'item 2'],
             acceptCustomValue: true
         });
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.val('custom');
         $(document).trigger('dxpointerdown');
@@ -1964,7 +1960,7 @@ QUnit.module('editing', moduleSetup, () => {
             value: 'item 1',
             acceptCustomValue: true
         });
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         $element.dxSelectBox('instance').option('opened', true);
@@ -1983,10 +1979,10 @@ QUnit.module('editing', moduleSetup, () => {
             searchEnabled: true,
             searchTimeout: 0
         });
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
         const instance = $element.dxSelectBox('instance');
-        const $ddButton = $element.find(toSelector(DX_DROP_DOWN_BUTTON));
+        const $ddButton = $element.find(`.${DX_DROP_DOWN_BUTTON}`);
 
         keyboard
             .caret({ start: 0, end: 2 })
@@ -1995,7 +1991,7 @@ QUnit.module('editing', moduleSetup, () => {
         $input.trigger('dxclick');
 
         assert.strictEqual($input.val(), 'em 1', 'value has not been restored');
-        assert.strictEqual($(instance.content()).find(toSelector(LIST_ITEM_CLASS)).length, 1, 'filter has not been reseted');
+        assert.strictEqual($(instance.content()).find(`.${LIST_ITEM_CLASS}`).length, 1, 'filter has not been reseted');
     });
 
     QUnit.test('selectBox should restore old value after esc if custom value is accepted', function(assert) {
@@ -2005,7 +2001,7 @@ QUnit.module('editing', moduleSetup, () => {
             acceptCustomValue: true,
             opened: true
         });
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.press('down');
@@ -2028,11 +2024,11 @@ QUnit.module('editing', moduleSetup, () => {
         });
         const instance = $selectBox.dxSelectBox('instance');
 
-        $($selectBox.find(toSelector(DX_DROP_DOWN_BUTTON))).trigger('dxclick');
+        $($selectBox.find(`.${DX_DROP_DOWN_BUTTON}`)).trigger('dxclick');
         assert.equal(dataSourceLoadedCount, 1, 'content ready fired when content is rendered');
 
         instance.close();
-        $($selectBox.find(toSelector(DX_DROP_DOWN_BUTTON))).trigger('dxclick');
+        $($selectBox.find(`.${DX_DROP_DOWN_BUTTON}`)).trigger('dxclick');
 
         assert.equal(dataSourceLoadedCount, 1, 'content ready not fired when reopen dropdown');
     });
@@ -2052,7 +2048,7 @@ QUnit.module('editing', moduleSetup, () => {
             }
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('test');
@@ -2088,7 +2084,7 @@ QUnit.module('editing', moduleSetup, () => {
             value: 1
         });
         const instance = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         instance.focus();
         $input.val('');
@@ -2114,7 +2110,7 @@ QUnit.module('editing', moduleSetup, () => {
             },
             value: 'Item 2'
         });
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.equal(loadMock.callCount, 0, 'load should not be called on init if defer rendering is true');
         assert.equal(byKeyMock.callCount, 1, 'bykey should be called on init if value is specified');
@@ -2161,7 +2157,7 @@ QUnit.module('editing', moduleSetup, () => {
                 data.push(options.customItem);
             }
         });
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         $input.trigger('dxclick');
@@ -2188,12 +2184,12 @@ QUnit.module('editing', moduleSetup, () => {
 
         this.clock.tick(TIME_TO_WAIT);
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('it').change();
 
         this.clock.tick(TIME_TO_WAIT);
 
-        assert.equal($(toSelector(LIST_ITEM_CLASS)).length, 3, 'items is filtered');
+        assert.equal($(`.${LIST_ITEM_CLASS}`).length, 3, 'items is filtered');
         assert.equal($selectBox.dxSelectBox('option', 'value'), 'it', 'value was set');
     });
 
@@ -2209,7 +2205,7 @@ QUnit.module('editing', moduleSetup, () => {
             }
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.val('');
         keyboardMock($input).type('2').change();
@@ -2270,7 +2266,7 @@ QUnit.module('editing', moduleSetup, () => {
             opened: true,
             value: 1
         });
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.focusout();
 
@@ -2303,7 +2299,7 @@ QUnit.module('editing', moduleSetup, () => {
             displayExpr: 'text'
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input).type('three');
 
@@ -2319,12 +2315,12 @@ QUnit.module('editing', moduleSetup, () => {
             items: [1, 2]
         });
 
-        const $dropDownButton = $selectBox.find(toSelector(DX_DROP_DOWN_BUTTON));
+        const $dropDownButton = $selectBox.find(`.${DX_DROP_DOWN_BUTTON}`);
         $dropDownButton.addClass('test');
 
-        $($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS))).trigger('blur');
+        $($selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`)).trigger('blur');
 
-        assert.ok($selectBox.find(toSelector(DX_DROP_DOWN_BUTTON)).hasClass('test'), 'button is not rendered again');
+        assert.ok($selectBox.find(`.${DX_DROP_DOWN_BUTTON}`).hasClass('test'), 'button is not rendered again');
     });
 
     QUnit.test('T316005 - mousedown on inputWrapper should not be prevented if openOnFieldClick is true', function(assert) {
@@ -2354,7 +2350,7 @@ QUnit.module('editing', moduleSetup, () => {
                 };
             }
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
         const customValue = 'Custom value';
         const logStub = sinon.stub(errors, 'log');
@@ -2381,7 +2377,7 @@ QUnit.module('editing', moduleSetup, () => {
             searchEnabled: true,
             onCustomItemCreating: onCustomItemCreating
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard
@@ -2401,7 +2397,7 @@ QUnit.module('editing', moduleSetup, () => {
             onCustomItemCreating: onCustomItemCreating,
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('t');
@@ -2425,7 +2421,7 @@ QUnit.module('editing', moduleSetup, () => {
                 e.customItem = null;
             }
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard
@@ -2447,7 +2443,7 @@ QUnit.module('editing', moduleSetup, () => {
                 };
             }
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
         const customValue = 'Custom value';
 
@@ -2465,7 +2461,7 @@ QUnit.module('editing', moduleSetup, () => {
             displayExpr: 'display',
             valueExpr: 'value'
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
         const customValue = 'Custom value';
         const onCustomItemCreating = (event) => {
@@ -2496,7 +2492,7 @@ QUnit.module('editing', moduleSetup, () => {
                 e.customItem = deferred.promise();
             }
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
         const customValue = 'Custom value';
 
@@ -2531,7 +2527,7 @@ QUnit.module('editing', moduleSetup, () => {
                 e.customItem = promise;
             }
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
         const customValue = 'Custom value';
 
@@ -2565,7 +2561,7 @@ QUnit.module('editing', moduleSetup, () => {
                 e.customItem = deferred.reject().promise();
             }
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
         const customValue = 'Custom value';
 
@@ -2591,19 +2587,19 @@ QUnit.module('editing', moduleSetup, () => {
             }
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('4');
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 0, 'filter is applied');
+        assert.equal($(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).length, 0, 'filter is applied');
         keyboard.change();
 
         selectBox.option('opened', true);
 
         assert.equal($selectBox.dxSelectBox('option', 'value'), null, 'value is reset');
         assert.equal($input.val(), '', 'input value is reset after deferred is rejected');
-        assert.equal($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'filter was cleared');
+        assert.equal($(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).length, 3, 'filter was cleared');
     });
 
     QUnit.test('filter should be cleared if all text was removed using backspace', function(assert) {
@@ -2613,12 +2609,12 @@ QUnit.module('editing', moduleSetup, () => {
             items: [1, 2, 3]
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('456');
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 0, 'filter is applied');
+        assert.equal($(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).length, 0, 'filter is applied');
 
         $input.get(0).setSelectionRange(0, 3);
         keyboard.caret({ start: 0, end: 3 });
@@ -2626,7 +2622,7 @@ QUnit.module('editing', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         assert.equal($input.val(), '', 'value was cleared');
-        assert.equal($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'filter was cleared');
+        assert.equal($(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).length, 3, 'filter was cleared');
     });
 
     QUnit.test('search timer should not be cleared when the widget is opening', function(assert) {
@@ -2638,18 +2634,18 @@ QUnit.module('editing', moduleSetup, () => {
             items: [1, 2, 3]
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-        const $button = $selectBox.find(toSelector(DX_DROP_DOWN_BUTTON));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $button = $selectBox.find(`.${DX_DROP_DOWN_BUTTON}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('4');
         this.clock.tick(100);
-        assert.equal($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 0, 'items are filtered');
+        assert.equal($(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).length, 0, 'items are filtered');
 
         keyboard.press('backspace');
         $button.trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal($(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).length, 3, 'filter was cleared');
+        assert.equal($(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).length, 3, 'filter was cleared');
     });
 
     QUnit.test('Custom value should be selected in the list', function(assert) {
@@ -2666,7 +2662,7 @@ QUnit.module('editing', moduleSetup, () => {
             searchEnabled: true
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const kb = keyboardMock($input);
 
         kb.type('Custom value').change();
@@ -2684,7 +2680,7 @@ QUnit.module('editing', moduleSetup, () => {
             items: items
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const customValue = 'Custom value';
 
         selectBox.option('onCustomItemCreating', (e) => {
@@ -2717,13 +2713,13 @@ QUnit.module('editing', moduleSetup, () => {
             items: items
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const kb = keyboardMock($input);
 
         kb.type('2');
         selectBox.open();
 
-        const $items = $(toSelector(LIST_ITEM_CLASS));
+        const $items = $(`.${LIST_ITEM_CLASS}`);
         $($items.eq(0)).trigger('dxclick');
 
         kb.change();
@@ -2737,7 +2733,7 @@ QUnit.module('editing', moduleSetup, () => {
             acceptCustomValue: true,
             onCustomItemCreating: noop
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('abc');
@@ -2757,7 +2753,7 @@ QUnit.module('editing', moduleSetup, () => {
             items: items,
             value: items[0]
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         $input.val('');
@@ -2979,7 +2975,7 @@ QUnit.module('search', moduleSetup, () => {
             opened: true
         });
 
-        const $items = $(toSelector(LIST_ITEM_CLASS));
+        const $items = $(`.${LIST_ITEM_CLASS}`);
 
         assert.equal($items.length, 0, 'items is not rendered');
     });
@@ -2994,7 +2990,7 @@ QUnit.module('search', moduleSetup, () => {
         });
 
         $selectBox.dxSelectBox('instance').option('showDataBeforeSearch', true);
-        const $items = $(toSelector(LIST_ITEM_CLASS));
+        const $items = $(`.${LIST_ITEM_CLASS}`);
 
         assert.ok($items.length, 'items is shown');
     });
@@ -3008,7 +3004,7 @@ QUnit.module('search', moduleSetup, () => {
             opened: true
         });
 
-        const $items = $(toSelector(LIST_ITEM_CLASS));
+        const $items = $(`.${LIST_ITEM_CLASS}`);
 
         assert.equal($items.length, 3, 'items is not rendered');
     });
@@ -3024,12 +3020,12 @@ QUnit.module('search', moduleSetup, () => {
             opened: true
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('o');
 
-        const $items = $(toSelector(LIST_ITEM_CLASS));
+        const $items = $(`.${LIST_ITEM_CLASS}`);
         assert.equal($items.length, 1, 'items was filtered');
     });
 
@@ -3044,12 +3040,12 @@ QUnit.module('search', moduleSetup, () => {
             opened: true
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('o');
 
-        const $items = $(toSelector(LIST_ITEM_CLASS));
+        const $items = $(`.${LIST_ITEM_CLASS}`);
         assert.equal($items.length, 1, 'items was filtered');
     });
 
@@ -3068,12 +3064,12 @@ QUnit.module('search', moduleSetup, () => {
             opened: true
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('o');
 
-        const $items = $(toSelector(LIST_ITEM_CLASS));
+        const $items = $(`.${LIST_ITEM_CLASS}`);
         assert.equal($items.length, 1, 'items was filtered');
     });
 
@@ -3088,7 +3084,7 @@ QUnit.module('search', moduleSetup, () => {
             opened: true
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard
@@ -3096,7 +3092,7 @@ QUnit.module('search', moduleSetup, () => {
             .press('backspace')
             .press('backspace');
 
-        const $items = $(toSelector(LIST_ITEM_CLASS));
+        const $items = $(`.${LIST_ITEM_CLASS}`);
 
         assert.equal($items.length, 3, 'items are not filtered');
     });
@@ -3112,7 +3108,7 @@ QUnit.module('search', moduleSetup, () => {
             opened: true
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
         keyboard
@@ -3120,7 +3116,7 @@ QUnit.module('search', moduleSetup, () => {
             .press('backspace')
             .press('backspace');
 
-        const $items = $(toSelector(LIST_ITEM_CLASS));
+        const $items = $(`.${LIST_ITEM_CLASS}`);
 
         assert.equal($items.length, 3, 'list of items is full');
 
@@ -3136,27 +3132,27 @@ QUnit.module('search', moduleSetup, () => {
             opened: true
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
-        let items = $(toSelector(LIST_ITEM_CLASS));
+        let items = $(`.${LIST_ITEM_CLASS}`);
         assert.equal(items.length, 3, 'all items shown');
 
         keyboard
             .type('o');
 
-        items = $(toSelector(LIST_ITEM_CLASS));
+        items = $(`.${LIST_ITEM_CLASS}`);
         assert.equal(items.length, 3, 'all items shown');
 
         keyboard
             .type('n');
 
-        items = $(toSelector(LIST_ITEM_CLASS));
+        items = $(`.${LIST_ITEM_CLASS}`);
         assert.equal(items.length, 3, 'all items shown');
         keyboard
             .type('e');
 
-        items = $(toSelector(LIST_ITEM_CLASS));
+        items = $(`.${LIST_ITEM_CLASS}`);
         assert.equal(items.length, 1, 'one item shown');
     });
 
@@ -3171,7 +3167,7 @@ QUnit.module('search', moduleSetup, () => {
             opened: true
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('tw');
@@ -3207,7 +3203,7 @@ QUnit.module('search', moduleSetup, () => {
             searchTimeout: 0
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type('item');
@@ -3224,7 +3220,7 @@ QUnit.module('search', moduleSetup, () => {
         });
 
         const instance = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input)
             .type('1')
@@ -3246,7 +3242,7 @@ QUnit.module('search', moduleSetup, () => {
         });
 
         const instance = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input)
             .type('1')
@@ -3269,7 +3265,7 @@ QUnit.module('search', moduleSetup, () => {
         });
 
         $selectBox
-            .find(toSelector(TEXTEDITOR_INPUT_CLASS))
+            .find(`.${TEXTEDITOR_INPUT_CLASS}`)
             .trigger('focusin')
             .trigger('focusout');
 
@@ -3309,14 +3305,14 @@ QUnit.module('search', moduleSetup, () => {
             }
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const keyboard = keyboardMock($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)));
+        const keyboard = keyboardMock($selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`));
 
         keyboard.type('a');
 
-        const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+        const listItem = $(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).eq(1);
         listItem.trigger('dxclick');
 
-        assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), 'Name 2', 'selectBox displays right value');
+        assert.equal($selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`).val(), 'Name 2', 'selectBox displays right value');
     });
 
     [
@@ -3339,17 +3335,17 @@ QUnit.module('search', moduleSetup, () => {
                 validationRules: [ { type: 'required' } ]
             });
             const selectBox = $selectBox.dxSelectBox('instance');
-            let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            let $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
             assert.strictEqual($input.attr(attribute), value, `initial render should have ${attribute} attribute set to ${value}`);
 
             keyboardMock($input)
                 .type('a');
 
-            const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+            const listItem = $(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).eq(1);
             listItem.trigger('dxclick');
 
-            $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             assert.strictEqual($input.attr(attribute), value, `${attribute} should stay ${value} after search and selection`);
         });
     });
@@ -3387,26 +3383,26 @@ QUnit.module('search', moduleSetup, () => {
                 this.clock.tick(TIME_TO_WAIT);
 
                 const selectBox = $selectBox.dxSelectBox('instance');
-                let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+                let $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
                 assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `initial render should set aria-invalid to ${nonEmptyValue}`);
 
-                const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(0);
+                const listItem = $(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).eq(0);
                 listItem.trigger('dxclick');
 
                 this.clock.tick(TIME_TO_WAIT);
 
                 assert.equal($input.val(), '1', 'input value is not empty');
-                $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+                $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
                 assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `non empty input value set aria-invalid to ${nonEmptyValue}`);
 
-                const $clearButton = $(toSelector(CLEAR_BUTTON_AREA));
+                const $clearButton = $(`.${CLEAR_BUTTON_AREA}`);
                 $($clearButton).trigger('dxclick');
 
                 this.clock.tick(TIME_TO_WAIT);
 
                 assert.equal($input.val(), '', 'input value is empty');
-                $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+                $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
                 assert.strictEqual($input.attr('aria-invalid'), emptyValue, `empty input value set aria-invalid to ${emptyValue}`);
             });
         });
@@ -3437,26 +3433,26 @@ QUnit.module('search', moduleSetup, () => {
             this.clock.tick(TIME_TO_WAIT);
 
             const selectBox = $selectBox.dxSelectBox('instance');
-            let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            let $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
             assert.strictEqual($input.attr('aria-invalid'), undefined, 'initial render should set aria-invalid to undefined');
 
-            const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(0);
+            const listItem = $(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).eq(0);
             listItem.trigger('dxclick');
 
             this.clock.tick(TIME_TO_WAIT);
 
             assert.equal($input.val(), '1', 'input value is not empty');
-            $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             assert.strictEqual($input.attr('aria-invalid'), undefined, 'initial render should set aria-invalid to undefined');
 
-            const $clearButton = $(toSelector(CLEAR_BUTTON_AREA));
+            const $clearButton = $(`.${CLEAR_BUTTON_AREA}`);
             $($clearButton).trigger('dxclick');
 
             this.clock.tick(TIME_TO_WAIT);
 
             assert.equal($input.val(), '', 'input value is empty');
-            $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             assert.strictEqual($input.attr('aria-invalid'), undefined, 'initial render should set aria-invalid to undefined');
         });
     });
@@ -3470,7 +3466,7 @@ QUnit.module('search', moduleSetup, () => {
             searchEnabled: true,
             searchTimeout: 0,
         });
-        let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        let $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.strictEqual($input.attr('role'), 'combobox', 'initial render should have role attribute set to combobox');
 
@@ -3479,10 +3475,10 @@ QUnit.module('search', moduleSetup, () => {
 
         keyboard.type('a');
 
-        const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+        const listItem = $(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).eq(1);
         listItem.trigger('dxclick');
 
-        $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.strictEqual($input.attr('role'), 'combobox', 'role should stay to combobox after search and selection');
     });
@@ -3503,8 +3499,8 @@ QUnit.module('search', moduleSetup, () => {
                 searchTimeout: 0,
                 ...options
             });
-            let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-            const $label = $selectBox.find(toSelector(TEXTEDITOR_LABEL_CLASS));
+            let $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            const $label = $selectBox.find(`.${TEXTEDITOR_LABEL_CLASS}`);
 
             const expectedAriaLabeledByValue = !options.inputAttr && options.label ? $label.attr('id') : undefined;
 
@@ -3515,10 +3511,10 @@ QUnit.module('search', moduleSetup, () => {
 
             keyboard.type('a');
 
-            const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+            const listItem = $(selectBox.content()).find(`.${LIST_ITEM_CLASS}`).eq(1);
             listItem.trigger('dxclick');
 
-            $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
             assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabeledByValue, 'aria-labelledby attribute value after search and selection');
         });
@@ -3534,7 +3530,7 @@ QUnit.module('search', moduleSetup, () => {
                 searchTimeout: 0
             });
             const selectBox = $selectBox.dxSelectBox('instance');
-            const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             const keyboard = keyboardMock($input);
 
             $input.focus();
@@ -3584,7 +3580,7 @@ QUnit.module('search', moduleSetup, () => {
             allowClearing: true,
             searchEnabled: true
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.focus();
         $input.focusout();
@@ -3607,7 +3603,7 @@ QUnit.module('search', moduleSetup, () => {
             onValueChanged: valueChangedHandler
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         $input.focus();
@@ -3639,7 +3635,7 @@ QUnit.module('search', moduleSetup, () => {
         });
         const selectBox = $selectBox.dxSelectBox('instance');
 
-        keyboardMock($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)), true)
+        keyboardMock($selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`), true)
             .caret({
                 start: 0,
                 end: item.length
@@ -3658,12 +3654,12 @@ QUnit.module('search', moduleSetup, () => {
             value: item,
             searchTimeout: 0
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const selectBox = $selectBox.dxSelectBox('instance');
         const keyboard = keyboardMock($input);
 
         keyboard.focus();
-        $($selectBox.find(toSelector(DX_DROP_DOWN_BUTTON))).trigger('dxclick');
+        $($selectBox.find(`.${DX_DROP_DOWN_BUTTON}`)).trigger('dxclick');
 
         keyboard
             .press('tab')
@@ -3690,7 +3686,7 @@ QUnit.module('search', moduleSetup, () => {
             searchTimeout: 0
         });
         const instance = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input)
             .focus()
@@ -3702,7 +3698,7 @@ QUnit.module('search', moduleSetup, () => {
         $($input).trigger('dxclick');
 
         const $emptyMessage = $(`.${EMPTY_MESSAGE_CLASS}`);
-        const $items = $(toSelector(LIST_ITEM_CLASS));
+        const $items = $(`.${LIST_ITEM_CLASS}`);
 
         assert.equal(loadSpy.callCount, 0, 'the was no load');
         assert.ok(instance.option('opened'), 'selectBox is opened');
@@ -3717,7 +3713,7 @@ QUnit.module('search', moduleSetup, () => {
             minSearchLength: 2,
             searchTimeout: 0
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input)
             .focus()
@@ -3726,7 +3722,7 @@ QUnit.module('search', moduleSetup, () => {
         $input.trigger('dxclick');
         $input.trigger('dxclick');
 
-        const $items = $(toSelector(LIST_ITEM_CLASS));
+        const $items = $(`.${LIST_ITEM_CLASS}`);
         assert.strictEqual($items.length, 1, 'filtered item is shown');
     });
 
@@ -3742,8 +3738,8 @@ QUnit.module('search', moduleSetup, () => {
             searchEnabled: true
         });
         const instance = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-        const $dropDownButton = $selectBox.find(toSelector(DX_DROP_DOWN_BUTTON));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $dropDownButton = $selectBox.find(`.${DX_DROP_DOWN_BUTTON}`);
 
         keyboardMock($input)
             .focus()
@@ -3870,7 +3866,7 @@ QUnit.module('search substitution', {
 
         this.selectBox = this.$selectBox.dxSelectBox('instance');
         this._init = () => {
-            this.$input = this.$selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            this.$input = this.$selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             this.keyboard = keyboardMock(this.$input, true);
 
             const inputElement = this.$input.get(0);
@@ -3906,9 +3902,9 @@ QUnit.module('search substitution', {
                 searchTimeout: 100
             });
 
-            const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             const kb = keyboardMock($input, true);
-            const $dropDownButton = $selectBox.find(toSelector(DX_DROP_DOWN_BUTTON));
+            const $dropDownButton = $selectBox.find(`.${DX_DROP_DOWN_BUTTON}`);
 
             kb.type('2');
             this.clock.tick(60);
@@ -4149,16 +4145,16 @@ QUnit.module('search substitution', {
             }
         });
 
-        const listItem = $('.dx-list').find(toSelector(LIST_ITEM_CLASS)).eq(1);
+        const listItem = $('.dx-list').find(`.${LIST_ITEM_CLASS}`).eq(1);
 
         listItem.trigger('dxpointerdown');
         this.clock.tick(10);
-        let $input = this.$selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        let $input = this.$selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.equal($input.val(), '', 'input value should not be changed when selection is not complete');
 
         listItem.trigger('dxclick');
-        $input = this.$selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        $input = this.$selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         assert.equal($input.val(), '2', 'input value should be changed after selection complete');
         this.clock.tick(100000);
@@ -4179,14 +4175,14 @@ QUnit.module('search substitution', {
 
         const $list = $(this.selectBox._list.$element());
 
-        assert.ok($list.find(toSelector(LIST_ITEM_CLASS)).eq(2).hasClass(STATE_FOCUSED_CLASS), 'the focused element is correct after popup is opened');
+        assert.ok($list.find(`.${LIST_ITEM_CLASS}`).eq(2).hasClass(STATE_FOCUSED_CLASS), 'the focused element is correct after popup is opened');
 
         this.keyboard
             .focus()
             .press('end')
             .press('backspace');
 
-        assert.ok($list.find(toSelector(LIST_ITEM_CLASS)).eq(0).hasClass(STATE_FOCUSED_CLASS), 'the focused element is correct after the first searching');
+        assert.ok($list.find(`.${LIST_ITEM_CLASS}`).eq(0).hasClass(STATE_FOCUSED_CLASS), 'the focused element is correct after the first searching');
     });
 
     QUnit.test('There is no substitution if the "acceptCustomValue" option is true', function(assert) {
@@ -4212,7 +4208,7 @@ QUnit.module('search substitution', {
 
         const $list = $(this.selectBox._list.$element());
 
-        assert.equal($list.find(toSelector(STATE_FOCUSED_CLASS)).length, 0, 'no items are focused');
+        assert.equal($list.find(`.${STATE_FOCUSED_CLASS}`).length, 0, 'no items are focused');
     });
 });
 
@@ -4286,7 +4282,7 @@ QUnit.module('Async tests', {}, () => {
             searchTimeout: 0
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         $input.focus();
@@ -4373,7 +4369,7 @@ QUnit.module('Async tests', {}, () => {
 
         clock.tick(50);
 
-        const $selectedItems = $list.find(toSelector(LIST_ITEM_SELECTED_CLASS));
+        const $selectedItems = $list.find(`.${LIST_ITEM_SELECTED_CLASS}`);
 
         assert.strictEqual($selectedItems.length, 0, 'no items are selected');
         clock.restore();
@@ -4450,7 +4446,7 @@ QUnit.module('regressions', moduleSetup, () => {
         assert.expect(0);
 
         const $element = $('#selectBox').dxSelectBox({ items: [0, 1, 2], value: 0 });
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.click();
         $($input).trigger('keyup', { key: KEY_DOWN });
@@ -4461,19 +4457,19 @@ QUnit.module('regressions', moduleSetup, () => {
 
         const $element = $('#selectBox').dxSelectBox({ dataSource: [0, 1, 2], value: 0 });
         const $list = $element.find('.dx-list');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.click();
         this.clock.tick(TIME_TO_WAIT);
 
-        assert.equal($list.find(toSelector(LIST_ITEM_CLASS)).length, 3, 'all items rendered');
+        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).length, 3, 'all items rendered');
     });
 
     QUnit.test('incorrect list items count after press key_down', function(assert) {
         assert.expect(1);
 
         const $element = $('#selectBox').dxSelectBox({ dataSource: [0, 1, 2], value: 0 });
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const $list = $element.find('.dx-list');
 
         $input.click();
@@ -4482,7 +4478,7 @@ QUnit.module('regressions', moduleSetup, () => {
         $($input).trigger('keyup', { key: KEY_DOWN });
         this.clock.tick(TIME_TO_WAIT);
 
-        assert.strictEqual($list.find(toSelector(LIST_ITEM_CLASS)).length, 3);
+        assert.strictEqual($list.find(`.${LIST_ITEM_CLASS}`).length, 3);
     });
 
     QUnit.test('B251138 disabled', function(assert) {
@@ -4515,11 +4511,11 @@ QUnit.module('regressions', moduleSetup, () => {
 
         $(instance._input()).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
-        $($element.find(toSelector(LIST_ITEM_CLASS)).eq(1)).trigger('dxclick');
+        $($element.find(`.${LIST_ITEM_CLASS}`).eq(1)).trigger('dxclick');
 
         $(instance._input()).click();
         this.clock.tick(TIME_TO_WAIT);
-        $($element.find(toSelector(LIST_ITEM_CLASS)).eq(0)).trigger('dxclick');
+        $($element.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
 
         assert.equal(instance._input().val(), 'item1', 'item was found in items by reference');
     });
@@ -4568,7 +4564,7 @@ QUnit.module('regressions', moduleSetup, () => {
         this.clock.tick(10);
 
         const selectBox = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         selectBox.open();
         keyboardMock($input)
@@ -4597,7 +4593,7 @@ QUnit.module('regressions', moduleSetup, () => {
         this.clock.tick(10);
 
         const selectBox = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         selectBox.open();
         keyboardMock($input)
@@ -4627,7 +4623,7 @@ QUnit.module('regressions', moduleSetup, () => {
         this.clock.tick(10);
 
         const selectBox = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         selectBox.open();
         keyboardMock($input)
@@ -4657,7 +4653,7 @@ QUnit.module('regressions', moduleSetup, () => {
         this.clock.tick(10);
 
         const selectBox = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         selectBox.open();
         keyboardMock($input)
@@ -4712,7 +4708,7 @@ QUnit.module('regressions', moduleSetup, () => {
         const instance = $element.dxSelectBox('instance');
 
         $element
-            .find(toSelector(TEXTEDITOR_INPUT_CLASS))
+            .find(`.${TEXTEDITOR_INPUT_CLASS}`)
             .trigger('dxclick')
             .trigger('keyup');
 
@@ -4742,13 +4738,13 @@ QUnit.module('regressions', moduleSetup, () => {
         assert.equal(valueChanged, 1, 'when change value via option(optionName, value) - option value changed');
 
         $element
-            .find(toSelector(TEXTEDITOR_INPUT_CLASS))
+            .find(`.${TEXTEDITOR_INPUT_CLASS}`)
             .trigger('keyup');
 
         assert.equal(valueChanged, 1, 'after keypress "optionChanged" didn\'t changed');
 
         $element
-            .find(toSelector(TEXTEDITOR_INPUT_CLASS))
+            .find(`.${TEXTEDITOR_INPUT_CLASS}`)
             .trigger('change');
         assert.equal(valueChanged, 1, 'after change value didn\'t changed');
 
@@ -4774,7 +4770,7 @@ QUnit.module('hide on blur', moduleSetup, () => {
         });
         const selectBox = $selectBox.dxSelectBox('instance');
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         pointerMock($input).start().click();
         const $popupContent = $(selectBox.content());
         assert.equal($popupContent.is(':visible'), true, 'popup visible after click');
@@ -4815,7 +4811,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             deferRendering: true
         });
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         assert.strictEqual(instance.option('value'), 1);
@@ -4857,7 +4853,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             deferRendering: true
         });
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         instance.option('dataSource', [4, 5, 6]);
@@ -4881,7 +4877,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             opened: false,
             deferRendering: true
         });
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const instance = $element.dxSelectBox('instance');
         const keyboard = keyboardMock($input);
 
@@ -4903,7 +4899,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             opened: false
         });
 
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const instance = $element.dxSelectBox('instance');
         const keyboard = keyboardMock($input);
 
@@ -4912,9 +4908,9 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             keyboard.press('down');
         }
 
-        const $list = $(instance.content()).find(toSelector(LIST_CLASS));
+        const $list = $(instance.content()).find(`.${LIST_CLASS}`);
 
-        assert.equal($list.find(toSelector(LIST_ITEM_CLASS)).text(), '123', 'downArrow works correct');
+        assert.equal($list.find(`.${LIST_ITEM_CLASS}`).text(), '123', 'downArrow works correct');
     });
 
     [144, 145].forEach((testHeight) => {
@@ -4938,9 +4934,9 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
                     container: testContainer
                 }
             });
-            const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             const instance = $element.dxSelectBox('instance');
-            const $dropDownButton = $element.find(toSelector(DX_DROP_DOWN_BUTTON));
+            const $dropDownButton = $element.find(`.${DX_DROP_DOWN_BUTTON}`);
             const keyboard = keyboardMock($input);
 
             $dropDownButton.trigger('dxclick');
@@ -4973,11 +4969,11 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             }
         });
 
-        let $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        let $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.press('down');
-        $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         assert.equal($input.val(), 'item 2', 'navigation is correct');
     });
 
@@ -4994,7 +4990,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             displayExpr: 'text'
         });
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.keyDown('down');
@@ -5015,7 +5011,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             acceptCustomValue: true
         });
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         let prevented = 0;
@@ -5042,7 +5038,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             focusStateEnabled: true,
             opened: false
         });
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         let prevented = 0;
@@ -5067,7 +5063,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             deferRendering: true,
             opened: false
         });
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.keyDown('esc');
@@ -5083,7 +5079,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             opened: false
         });
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.keyDown('up');
@@ -5101,7 +5097,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             showClearButton: true
         });
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.keyDown('backspace');
@@ -5127,7 +5123,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
         });
 
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.keyDown('backspace');
@@ -5147,7 +5143,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
         });
 
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.keyDown('backspace');
@@ -5194,7 +5190,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             displayExpr: 'value'
         });
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.keyDown('down');
@@ -5235,7 +5231,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             value: 0
         });
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         this.clock.tick(0);
@@ -5277,7 +5273,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             valueExpr: 'id'
         });
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.keyDown('down');
@@ -5304,7 +5300,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             focusStateEnabled: true
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         const altDownEvent = $.Event('keydown', { key: KEY_DOWN, altKey: true });
@@ -5331,7 +5327,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             focusStateEnabled: true
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         $input.val('');
@@ -5350,10 +5346,10 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
         });
 
         const scrollView = $('.dx-scrollview').dxScrollView('instance');
-        scrollView.scrollToElement($(toSelector(LIST_ITEM_CLASS)).last());
-        $(toSelector(LIST_ITEM_CLASS)).last().trigger('dxclick');
+        scrollView.scrollToElement($(`.${LIST_ITEM_CLASS}`).last());
+        $(`.${LIST_ITEM_CLASS}`).last().trigger('dxclick');
 
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input)
             .keyDown('down');
@@ -5370,7 +5366,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             value: '9'
         });
 
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         ds.beginLoading();
         keyboardMock($input)
             .keyDown('down');
@@ -5391,7 +5387,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             searchEnabled: true
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input)
             .focus()
@@ -5415,7 +5411,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             value: items[0]
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.focus();
@@ -5439,7 +5435,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             searchTimeout: 0
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input)
             .focus()
@@ -5463,7 +5459,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             opened: true,
             value: items[0]
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         $input.get(0).focus();
@@ -5485,8 +5481,8 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             opened: true,
             value: items[0]
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-        const $dropDownButton = $selectBox.find(toSelector(DX_DROP_DOWN_BUTTON));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const $dropDownButton = $selectBox.find(`.${DX_DROP_DOWN_BUTTON}`);
         const keyboard = keyboardMock($input);
 
         keyboard.keyDown(KEY_DOWN);
@@ -5506,7 +5502,7 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
             deferRendering: true,
             onKeyboardHandled: handler
         });
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.keyDown('esc');
@@ -5523,7 +5519,7 @@ QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
             items: items,
             value: value
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const instance = $selectBox.dxSelectBox('instance');
         const keyboard = keyboardMock($input);
 
@@ -5542,7 +5538,7 @@ QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
             dataSource: ['1', '2', '3']
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.keyDown('tab');
@@ -5558,7 +5554,7 @@ QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
             value: null
         });
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.focus();
         instance.option('opened', true);
@@ -5580,7 +5576,7 @@ QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
         });
 
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.focus();
 
@@ -5606,7 +5602,7 @@ QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
         });
 
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.focus();
 
@@ -5628,7 +5624,7 @@ QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
         });
 
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input)
             .keyDown('tab');
@@ -5646,7 +5642,7 @@ QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
         });
 
         const instance = $element.dxSelectBox('instance');
-        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input.focus();
 
@@ -5667,7 +5663,7 @@ QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
             searchTimeout: 0
         });
 
-        const keyboard = keyboardMock($element.find(toSelector(TEXTEDITOR_INPUT_CLASS)), true)
+        const keyboard = keyboardMock($element.find(`.${TEXTEDITOR_INPUT_CLASS}`), true)
             .focus()
             .type(items[0][0])
             .press('tab');
@@ -5690,7 +5686,7 @@ QUnit.module('keyboard navigation "TAB" button', moduleSetup, () => {
         const instance = $element.dxSelectBox('instance');
         const $applyButton = instance._popup.$wrapper().find('.dx-popup-done.dx-button');
 
-        keyboardMock($element.find(toSelector(TEXTEDITOR_INPUT_CLASS)), true)
+        keyboardMock($element.find(`.${TEXTEDITOR_INPUT_CLASS}`), true)
             .focus()
             .keyDown('tab');
 
@@ -5733,7 +5729,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
         const $selectBox = $('#selectBox').dxSelectBox({
             acceptCustomValue: true
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input).type('test');
         assert.equal($input.val(), 'test', 'value typed in input');
@@ -5743,7 +5739,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
         const $selectBox = $('#selectBox').dxSelectBox({
             acceptCustomValue: true
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input).type('test').change();
         assert.equal($selectBox.dxSelectBox('option', 'value'), 'test', 'value typed in input');
@@ -5757,7 +5753,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
             dataSource: ['a', 'b', 'c', 'ab', 'bb', 'ac'],
             displayExpr: 'this'
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         keyboardMock($input).type('a');
 
@@ -5772,7 +5768,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
             acceptCustomValue: true,
             dataSource: ['1', '2', '3']
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard
@@ -5788,7 +5784,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
             searchEnabled: true,
             acceptCustomValue: true,
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
         const instance = $selectBox.dxSelectBox('instance');
 
@@ -5807,7 +5803,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
             opened: true,
             onCustomItemCreating: onCustomItemCreating
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard
@@ -5824,7 +5820,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
             value: initialCustomValue
         });
         const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $input
             .focus()
@@ -5851,7 +5847,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
             },
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard
@@ -5871,7 +5867,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
             opened: false,
             onCustomItemCreating: onCustomItemCreating
         });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard
@@ -5888,7 +5884,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
             searchTimeout: 0
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         keyboardMock($input).type('a');
 
         $($input).trigger('dxclick');
@@ -5905,9 +5901,9 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
             opened: true
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-        let $item = $(toSelector(LIST_ITEM_CLASS)).eq(1);
+        let $item = $(`.${LIST_ITEM_CLASS}`).eq(1);
         $($item).trigger('dxclick');
         assert.equal($input.val(), 'b', 'item was chosen');
 
@@ -5917,7 +5913,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
 
         assert.equal($input.val(), '', 'input value is clear');
 
-        $item = $(toSelector(LIST_ITEM_CLASS)).eq(1);
+        $item = $(`.${LIST_ITEM_CLASS}`).eq(1);
         $($item).trigger('dxclick');
         assert.equal($input.val(), 'b', 'item should be choose after click on list item');
     });
@@ -5932,7 +5928,7 @@ QUnit.module('acceptCustomValue mode', moduleSetup, () => {
                 e.customItem = '';
             }
         }).dxSelectBox('instance');
-        const $input = instance.$element().find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = instance.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
         const filterDataSourceStub = sinon.stub(instance, '_filterDataSource');
 
@@ -6003,7 +5999,7 @@ QUnit.module('focus policy', {
             items: [1, 2, 3]
         });
         this.instance = this.$element.dxSelectBox('instance');
-        this.$input = this.$element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         this.keyboard = keyboardMock(this.$input);
     },
     afterEach: function() {
@@ -6018,23 +6014,23 @@ QUnit.module('focus policy', {
             items: ['a', 'b', 'c']
         });
 
-        const $input = this.$element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const kb = keyboardMock($input);
 
         kb.type('a').press('esc');
         $($input).trigger($.Event('keydown', { key: KEY_DOWN, altKey: true }));
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal($(toSelector(LIST_ITEM_CLASS)).text().trim(), 'a', 'filter should not be cleared before focusout');
+        assert.equal($(`.${LIST_ITEM_CLASS}`).text().trim(), 'a', 'filter should not be cleared before focusout');
 
         this.instance.blur();
         this.instance.option('opened', false);
         $($input).trigger($.Event('keydown', { key: KEY_DOWN, altKey: true }));
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal($(toSelector(LIST_ITEM_CLASS)).text().trim(), 'abc', 'no filtering');
+        assert.equal($(`.${LIST_ITEM_CLASS}`).text().trim(), 'abc', 'no filtering');
     });
 
     QUnit.test('input keep focus when popup is opened by click on button', function(assert) {
-        const $arrow = this.$element.find(toSelector(TEXTEDITOR_BUTTONS_CONTAINER_CLASS));
+        const $arrow = this.$element.find(`.${TEXTEDITOR_BUTTONS_CONTAINER_CLASS}`);
 
         this.instance.focus();
         assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), 'element is focused');
@@ -6079,7 +6075,7 @@ QUnit.module('focus policy', {
         keyboardMock($input).type('b');
 
         this.clock.tick(TIME_TO_WAIT);
-        const $item = $(toSelector(LIST_ITEM_CLASS)).eq(1);
+        const $item = $(`.${LIST_ITEM_CLASS}`).eq(1);
 
         // assert
         assert.ok($item.hasClass(STATE_FOCUSED_CLASS), 'first non disabled item is focused');
@@ -6173,7 +6169,7 @@ QUnit.module('focus policy', {
             }
         });
 
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
 
         keyboard.type(customValue);
