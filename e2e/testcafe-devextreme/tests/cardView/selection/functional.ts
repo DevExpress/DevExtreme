@@ -2,6 +2,7 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { filter } from '../../filterBuilder/data';
 
 fixture.disablePageReloads`Selection.Functional`
   .page(url(__dirname, '../../container.html'));
@@ -966,5 +967,88 @@ test('Switching the showCheckBoxesMode option from always to onClick at runtime 
   selection: {
     mode: 'multiple',
     showCheckBoxesMode: 'always',
+  },
+}));
+
+test('should select only cards matching dataSource.filter()', async (t) => {
+  const cardView = new CardView(CARD_VIEW_SELECTOR);
+
+  await cardView.apiDataSourceFilter(['category', '=', 'A']);
+
+  await cardView.apiSelectAll();
+
+  const selectedKeys = await cardView.getSelectedCardKeys();
+
+  await t.expect(selectedKeys).eql([1, 2]);
+}).before(async () => createWidget('dxCardView', {
+  columns: ['id', 'category'],
+  dataSource: [
+    { id: 1, category: 'A' },
+    { id: 2, category: 'A' },
+    { id: 3, category: 'B' },
+    { id: 4, category: 'B' },
+  ],
+  keyExpr: 'id',
+  selection: {
+    mode: 'multiple',
+    allowSelectAll: true,
+  },
+}));
+
+test('should select only cards matching filterValue', async (t) => {
+  const cardView = new CardView(CARD_VIEW_SELECTOR);
+
+  await cardView.apiOption('filterValue', ['category', '=', 'B']);
+
+  await cardView.apiSelectAll();
+
+  const selectedKeys = await cardView.getSelectedCardKeys();
+
+  await t.expect(selectedKeys).eql([3, 4]);
+}).before(async () => createWidget('dxCardView', {
+  columns: ['id', 'category'],
+  dataSource: [
+    { id: 1, category: 'A' },
+    { id: 2, category: 'A' },
+    { id: 3, category: 'B' },
+    { id: 4, category: 'B' },
+  ],
+  keyExpr: 'id',
+  selection: {
+    mode: 'multiple',
+    allowSelectAll: true,
+  },
+  filterPanel: {
+    filterEnabled: true,
+  },
+}));
+
+test('should select only cards matching both dataSource.filter() and filterValue', async (t) => {
+  const cardView = new CardView(CARD_VIEW_SELECTOR);
+
+  await cardView.apiDataSourceFilter(['category2', '=', '1']);
+
+  await cardView.apiOption('filterValue', ['category1', '=', 'A']);
+
+  await cardView.apiSelectAll();
+
+  const selectedKeys = await cardView.getSelectedCardKeys();
+
+  await t.expect(selectedKeys).eql([1]);
+}).before(async () => createWidget('dxCardView', {
+  columns: ['id', 'category1', 'category2'],
+  dataSource: [
+    { id: 1, category1: 'A', category2: '1' },
+    { id: 2, category1: 'A', category2: '2' },
+    { id: 3, category1: 'B', category2: '1' },
+    { id: 4, category1: 'B', category2: '2' },
+  ],
+  keyExpr: 'id',
+  selection: {
+    mode: 'multiple',
+    allowSelectAll: true,
+  },
+  filterPanel: {
+    filterEnabled: true,
   },
 }));
