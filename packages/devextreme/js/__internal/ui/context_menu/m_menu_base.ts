@@ -8,7 +8,7 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
-import type { Item, SubmenuShowMode } from '@js/ui/menu';
+import type { dxMenuBaseItem, Item, SubmenuShowMode } from '@js/ui/menu';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
@@ -47,6 +47,8 @@ export interface MenuBaseProperties extends dxMenuBaseOptions<MenuBase, Item> {
   focusedElement?: dxElementWrapper;
   useInkRipple?: boolean;
 }
+
+export type MenuBaseNode = InternalNode & dxMenuBaseItem;
 
 class MenuBase<
   TProperties extends MenuBaseProperties = MenuBaseProperties,
@@ -368,13 +370,10 @@ class MenuBase<
   }
 
   _getAvailableItems($itemElements?: dxElementWrapper): dxElementWrapper {
-    // @ts-expect-error ts-error
-    // eslint-disable-next-line func-names
-    return super._getAvailableItems($itemElements).filter(function () {
+    return super._getAvailableItems($itemElements).filter(
       // @ts-expect-error ts-error
-      // eslint-disable-next-line @typescript-eslint/no-invalid-this
-      return $(this).css('visibility') !== 'hidden';
-    });
+      (_index: number, item: Element) => $(item).css('visibility') !== 'hidden',
+    );
   }
 
   _isItemDisabled($item: dxElementWrapper): boolean {
@@ -432,7 +431,7 @@ class MenuBase<
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _hasSubmenu(node: InternalNode | null): boolean {
+  _hasSubmenu(node: MenuBaseNode | null): boolean {
     return !!node?.internalFields.childrenKeys.length;
   }
 
@@ -441,7 +440,7 @@ class MenuBase<
   }
 
   _renderItems(
-    nodes: InternalNode[],
+    nodes: MenuBaseNode[],
     $submenuContainer?: dxElementWrapper,
   ): void {
     if (!nodes.length) {
@@ -454,7 +453,7 @@ class MenuBase<
     let firstVisibleIndex = -1;
     let nextGroupFirstIndex = -1;
 
-    each(nodes, (index: number, node: InternalNode) => {
+    each(nodes, (index: number, node: MenuBaseNode) => {
       const isVisibleNode = node.visible !== false;
 
       if (isVisibleNode && firstVisibleIndex < 0) {
@@ -462,7 +461,7 @@ class MenuBase<
       }
 
       const isBeginGroup = firstVisibleIndex < index
-        // @ts-expect-error ts-error
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         && (node.beginGroup || index === nextGroupFirstIndex);
 
       if (isBeginGroup) {
@@ -502,7 +501,7 @@ class MenuBase<
 
   _renderItem(
     index: number,
-    node: InternalNode,
+    node: MenuBaseNode,
     $nodeContainer: dxElementWrapper,
     $nodeElement?: dxElementWrapper,
   ): dxElementWrapper {
@@ -590,9 +589,9 @@ class MenuBase<
       return;
     }
 
-    const node = this._dataAdapter.getNodeByItem(args.itemData) as Item;
+    const node = this._dataAdapter.getNodeByItem(args.itemData);
 
-    if (node.internalFields.key === selectedIndex[0]) {
+    if (node && node.internalFields.key === selectedIndex[0]) {
       $itemElement.addClass(this._selectedItemClass());
       this._setAriaSelectionAttribute($itemElement, 'true');
     } else {
@@ -706,7 +705,7 @@ class MenuBase<
       case 'showSubmenuMode':
         break;
       case 'selectedItem': {
-        const node = this._dataAdapter.getNodeByItem(args.value as Item);
+        const node = args.value ? this._dataAdapter.getNodeByItem(args.value) : null;
         const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
 
         if (node && node.internalFields.key !== selectedKey) {
@@ -734,7 +733,7 @@ class MenuBase<
     }
   }
 
-  _toggleItemSelection(node: InternalNode, value: boolean): void {
+  _toggleItemSelection(node: MenuBaseNode, value: boolean): void {
     const itemElement = this._getElementByItem(node.internalFields.item);
 
     if (itemElement) {

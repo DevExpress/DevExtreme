@@ -2,7 +2,7 @@ import type { DefaultOptionsRule } from '@js/common';
 import type { AnimationConfig, PositionConfig } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import animationPosition from '@js/common/core/animation/position';
-import type { Cancelable, EventInfo, EventObject } from '@js/common/core/events';
+import type { Cancelable, EventInfo } from '@js/common/core/events';
 import { name as contextMenuEventName } from '@js/common/core/events/contextmenu';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
@@ -29,9 +29,8 @@ import type { Properties } from '@js/ui/context_menu';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import { current as currentTheme, isGeneric } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { MenuBaseProperties } from '@ts/ui/context_menu/m_menu_base';
+import type { MenuBaseNode, MenuBaseProperties } from '@ts/ui/context_menu/m_menu_base';
 import MenuBase from '@ts/ui/context_menu/m_menu_base';
-import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
 import Overlay from '@ts/ui/overlay/m_overlay';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 
@@ -77,7 +76,7 @@ const BORDER_WIDTH = 1;
 
 const window = getWindow();
 
-type ContextMenuTarget = string | dxElementWrapper | Element | undefined;
+type ContextMenuTarget = string | dxElementWrapper | Element | Window | undefined;
 
 type ShowContextMenuEvent = EventInfo<ContextMenu> & {
   target?: ContextMenuTarget;
@@ -526,6 +525,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
         this._showContextMenuEventHandler,
       );
     } else {
+      // @ts-expect-error ts-error
       eventsEngine.off($(target), eventName, this._showContextMenuEventHandler);
     }
   }
@@ -595,7 +595,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     return $itemsContainer;
   }
 
-  _renderSubmenuItems(node: InternalNode, $itemFrame: dxElementWrapper): void {
+  _renderSubmenuItems(node: MenuBaseNode, $itemFrame: dxElementWrapper): void {
     this._renderItems(this._getChildNodes(node), $itemFrame);
 
     const $submenu = $itemFrame.children(`.${DX_SUBMENU_CLASS}`);
@@ -761,7 +761,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
 
   _setSubMenuHeight(
     $submenu: dxElementWrapper,
-    $anchor: dxElementWrapper,
+    $anchor: ContextMenuTarget,
     isNestedSubmenu: boolean,
   ): void {
     const $itemsContainer = $submenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
@@ -777,17 +777,17 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     return windowHeight;
   }
 
-  _getMaxHeight($anchor: dxElementWrapper, considerAnchorHeight = true): number {
+  _getMaxHeight($anchor: ContextMenuTarget, considerAnchorHeight = true): number {
     const windowHeight: number = getOuterHeight(window);
     const isAnchorRenderer = isRenderer($anchor);
     const document = domAdapter.getDocument();
-    const isAnchorDocument = $anchor.length && $anchor[0] === document;
+    const isAnchorDocument = isObject($anchor) && 'length' in $anchor && $anchor.length && $anchor[0] === document;
 
     if (!isAnchorRenderer || isAnchorDocument) {
       return windowHeight;
     }
 
-    const offsetTop = $anchor[0].getBoundingClientRect().top;
+    const offsetTop = $anchor?.[0].getBoundingClientRect().top;
     const anchorHeight = getOuterHeight($anchor);
     const availableHeight = considerAnchorHeight
       ? this._getMaxUsableSpace(offsetTop, windowHeight, anchorHeight)
@@ -1097,13 +1097,14 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
   // eslint-disable-next-line class-methods-use-this
   _toggleVisibility(): void {}
 
-  _show(event?: EventObject & Event): Promise<unknown> {
-    const args = { jQEvent: event };
+  _show(event?: DxEvent): Promise<unknown> {
+    const args: Cancelable & { jQEvent?: DxEvent } = {
+      jQEvent: event,
+    };
     let promise = Deferred().reject().promise();
 
     this._actions.onShowing(args);
 
-    // @ts-expect-error ts-error
     if (args.cancel) {
       return promise;
     }
@@ -1124,7 +1125,6 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
 
       this._setOptionWithoutOptionChange('visible', true);
       this._overlay?.option({
-        // @ts-expect-error ts-error
         height: () => this._getMaxHeight(position.of),
         maxHeight: () => {
           const $content = $subMenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
@@ -1137,7 +1137,6 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
       });
 
       if ($subMenu.length) {
-        // @ts-expect-error ts-error
         this._setSubMenuHeight($subMenu, position.of, false);
       }
 
@@ -1159,7 +1158,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     return promise;
   }
 
-  _renderItems(nodes: InternalNode[], submenuContainer?: dxElementWrapper): void {
+  _renderItems(nodes: MenuBaseNode[], submenuContainer?: dxElementWrapper): void {
     super._renderItems(nodes, submenuContainer);
 
     const $submenu = $(this._overlay?.content()).children(`.${DX_SUBMENU_CLASS}`);
@@ -1200,7 +1199,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     };
   }
 
-  _positionContextMenu(jQEvent?: EventObject & Event): PositionConfig | null | undefined {
+  _positionContextMenu(jQEvent?: DxEvent): PositionConfig | null | undefined {
     let position: PositionConfig | null | undefined = this._getContextMenuPosition();
     const isInitialPosition = this._isInitialOptionValue('position');
     const positioningAction = this._createActionByOption('onPositioning');
@@ -1210,18 +1209,19 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
       position.of = jQEvent;
     }
 
-    const actionArgs = {
+    const actionArgs: Cancelable & {
+      event?: Cancelable & DxEvent;
+      position?: PositionConfig | null;
+    } = {
       position,
       event: jQEvent,
     };
 
     positioningAction(actionArgs);
 
-    // @ts-expect-error ts-error
     if (actionArgs.cancel) {
       position = null;
     } else if (actionArgs.event) {
-      // @ts-expect-error ts-error
       actionArgs.event.cancel = true;
       jQEvent?.preventDefault();
     }
