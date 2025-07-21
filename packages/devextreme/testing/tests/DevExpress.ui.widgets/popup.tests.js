@@ -141,10 +141,7 @@ const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
 const VIEWPORT_CLASS = 'dx-viewport';
 
-const viewport = function() { return $(toSelector(VIEWPORT_CLASS)); };
-
-const toSelector = (cssClass) => `.${cssClass}`;
-
+const viewport = function() { return $(`.${VIEWPORT_CLASS}`); };
 
 QUnit.module('basic', () => {
     QUnit.test('markup init', function(assert) {
@@ -2228,7 +2225,7 @@ QUnit.module('drag', {
             assert.strictEqual(position.top + startEvent.maxBottomOffset, viewHeight - getOuterHeight(this.$overlayContent), 'popup should not be dragged below than target');
         } finally {
             viewPort().removeAttr('style');
-            viewPort(toSelector(VIEWPORT_CLASS));
+            viewPort(`.${VIEWPORT_CLASS}`);
         }
     });
 
@@ -2350,7 +2347,7 @@ QUnit.module('resize', {
                 .dxPopup($.extend({}, initialOptions, options))
                 .dxPopup('instance');
             this.$overlayContent = this.popup.$content().parent();
-            this.$handle = this.$overlayContent.find(toSelector(POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS));
+            this.$handle = this.$overlayContent.find(`.${POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS}`);
         };
         this.reinit = (options) => {
             this.popup && this.popup.dispose();
@@ -2480,7 +2477,7 @@ QUnit.module('resize', {
 
             assert.ok(isWindow(resizable.option('area').get(0)), 'window is the area of the resizable');
         } finally {
-            viewPort(toSelector(VIEWPORT_CLASS));
+            viewPort(`.${VIEWPORT_CLASS}`);
         }
     });
 
