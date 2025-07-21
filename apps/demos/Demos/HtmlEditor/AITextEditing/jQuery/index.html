@@ -10,16 +10,19 @@
     <script src="../../../../node_modules/devextreme-quill/dist/dx-quill.min.js"></script>
 
     <script type="module">
-      import { AzureOpenAI } from "https://esm.sh/openai@4.73.1";
+      const { getDepWithVersion } = await import('../../../../utils/deps-version-helper.mjs');
+
+      const { AzureOpenAI } = await import(`https://esm.sh/${getDepWithVersion('openai', false)}`);
 
       window.AzureOpenAI = AzureOpenAI;
+      
+      await import("./index.js");
     </script>
 
     <script src="../../../../node_modules/devextreme-dist/js/dx.all.js"></script>
     <script src="../../../../node_modules/devextreme-dist/js/dx.ai-integration.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
-    <script src="index.js"></script>
   </head>
   <body class="dx-viewport">
     <div class="demo-container">
