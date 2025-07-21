@@ -652,10 +652,7 @@
 
 /packages/devextreme/js/__internal/ui/calendar/**                    @DevExpress/devextreme-editors
 
-/packages/devextreme-scss/scss/widgets/base/calendar/**              @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/calendar/**            @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/calendar/**           @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/calendar/**          @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/calendar/**               @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/common/calendar.ts      @DevExpress/devextreme-editors
 
@@ -667,14 +664,12 @@
 
 /packages/devextreme/js/__internal/ui/chat/**                        @DevExpress/devextreme-editors
 
-/packages/devextreme-scss/scss/widgets/base/chat/**                  @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/chat/**                @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/chat/**               @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/chat/**              @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/chat/**                    @DevExpress/devextreme-editors
 
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/chatParts/** @DevExpress/devextreme-editors
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/chat.markup.tests.js @DevExpress/devextreme-editors
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/chat.tests.js @DevExpress/devextreme-editors
+
 /e2e/testcafe-devextreme/tests/chat/**                               @DevExpress/devextreme-editors
 /e2e/testcafe-devextreme/tests/accessibility/common/chat.ts          @DevExpress/devextreme-editors
 
@@ -686,10 +681,7 @@
 
 /packages/devextreme/js/__internal/ui/check_box/**                   @DevExpress/devextreme-editors
 
-/packages/devextreme-scss/scss/widgets/base/checkBox/**              @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/checkBox/**            @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/checkBox/**           @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/checkBox/**          @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/checkBox/**                @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/common/checkBox.ts      @DevExpress/devextreme-editors
 
@@ -702,10 +694,7 @@
 /packages/devextreme/js/ui/color_box/**                              @DevExpress/devextreme-editors
 /packages/devextreme/js/__internal/ui/color_box/**                   @DevExpress/devextreme-editors
 
-/packages/devextreme-scss/scss/widgets/base/colorBox/**              @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/colorBox/**            @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/colorBox/**           @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/colorBox/**          @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/colorBox/**                @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/common/colorBox/**      @DevExpress/devextreme-editors
 
@@ -720,9 +709,7 @@
 
 /packages/devextreme-scss/scss/widgets/base/_dateBox.scss            @DevExpress/devextreme-editors
 /packages/devextreme-scss/scss/widgets/base/_dateView.scss           @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/dateBox/**             @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/dateBox/**            @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/dateBox/**           @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/dateBox/**                 @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/common/dateBox/**       @DevExpress/devextreme-editors
 
@@ -734,10 +721,7 @@
 
 /packages/devextreme/js/__internal/ui/date_range_box/**              @DevExpress/devextreme-editors
 
-/packages/devextreme-scss/scss/widgets/base/dateRangeBox/**          @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/dateRangeBox/**        @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/dateRangeBox/**       @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/dateRangeBox/**      @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/dateRangeBox/**            @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/common/dateRangeBox/**  @DevExpress/devextreme-editors
 
@@ -759,10 +743,7 @@
 
 /packages/devextreme/js/__internal/ui/m_drop_down_button.ts          @DevExpress/devextreme-editors
 
-/packages/devextreme-scss/scss/widgets/base/dropDownButton/**        @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/dropDownButton/**      @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/dropDownButton/**     @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/dropDownButton/**    @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/dropDownButton/**          @DevExpress/devextreme-editors
 
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/dropDownButton.markup.tests.js @DevExpress/devextreme-editors
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/dropDownButton.tests.js @DevExpress/devextreme-editors
@@ -776,10 +757,7 @@
 
 /packages/devextreme-scss/scss/widgets/base/dropDownEditor/**        @DevExpress/devextreme-editors
 /packages/devextreme-scss/scss/widgets/base/_dropDownList.scss       @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/base/_dropDownMenu.scss       @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/dropDownEditor/**      @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/dropDownEditor/**     @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/dropDownEditor/**    @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/dropDownEditor/**    @DevExpress/devextreme-editors
 
 ## editor
 /packages/devextreme/js/ui/editor/**                                 @DevExpress/devextreme-editors
@@ -790,9 +768,7 @@
 /packages/devextreme/js/ui/file_uploader_types.d.ts                  @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
 
 /packages/devextreme-scss/scss/widgets/base/_fileUploader.scss       @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/fileUploader/**        @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/fileUploader/**       @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/fileUploader/**      @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/fileUploader/**            @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/common/fileUploader.ts  @DevExpress/devextreme-editors
 
@@ -806,9 +782,7 @@
 /packages/devextreme/js/__internal/ui/html_editor/**                 @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/base/_htmlEditor.scss         @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/htmlEditor/**          @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/htmlEditor/**         @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/htmlEditor/**        @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/htmlEditor/**              @DevExpress/devextreme-editors
 
 /packages/devextreme/testing/tests/DevExpress.ui.widgets.htmlEditor/** @DevExpress/devextreme-editors
 /e2e/testcafe-devextreme/tests/accessibility/common/htmlEditor.ts    @DevExpress/devextreme-editors
@@ -820,9 +794,7 @@
 /packages/devextreme/js/__internal/ui/m_load_panel.ts                @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/base/_loadPanel.scss          @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/loadPanel/**           @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/loadPanel/**          @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/loadPanel/**         @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/loadPanel/**               @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/common/loadPanel.ts     @DevExpress/devextreme-editors
 
@@ -845,9 +817,7 @@
 /packages/devextreme/js/__internal/ui/map/**                         @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/base/_map.scss                @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/map/**                 @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/map/**                @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/map/**               @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/map/**                     @DevExpress/devextreme-editors
 
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/mapParts/** @DevExpress/devextreme-editors
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/map.tests.js @DevExpress/devextreme-editors
@@ -861,9 +831,7 @@
 /packages/devextreme/js/__internal/ui/number_box/**                  @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/base/_numberBox.scss          @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/numberBox/**           @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/numberBox/**          @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/numberBox/**         @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/numberBox/**               @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/common/numberBox.ts     @DevExpress/devextreme-editors
 
@@ -876,9 +844,7 @@
 /packages/devextreme/js/__internal/ui/overlay/**                     @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/base/_overlay.scss            @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/overlay/**             @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/overlay/**            @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/overlay/**           @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/overlay/**                 @DevExpress/devextreme-editors
 
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/overlay.tests.js @DevExpress/devextreme-editors
 
@@ -889,10 +855,7 @@
 /packages/devextreme/js/ui/popover/**                                @DevExpress/devextreme-editors
 /packages/devextreme/js/__internal/ui/popover/**                     @DevExpress/devextreme-editors
 
-/packages/devextreme-scss/scss/widgets/base/popover/**               @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/popover/**             @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/popover/**            @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/popover/**           @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/popover/**                 @DevExpress/devextreme-editors
 
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/popover.tests.js @DevExpress/devextreme-editors
 /e2e/testcafe-devextreme/tests/accessibility/common/popover.ts       @DevExpress/devextreme-editors
@@ -907,13 +870,12 @@
 /packages/devextreme/js/__internal/ui/popup/**                       @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/base/_popup.scss              @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/popup/**               @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/popup/**              @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/popup/**             @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/popup/**                   @DevExpress/devextreme-editors
 
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/popup.materialTheme.tests.js @DevExpress/devextreme-editors
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/popup.tests.js @DevExpress/devextreme-editors
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/popupDrag.tests.js @DevExpress/devextreme-editors
+
 /e2e/testcafe-devextreme/tests/accessibility/common/popup.ts         @DevExpress/devextreme-editors
 
 /apps/demos/Demos/Popup/**                                           @DevExpress/devextreme-editors
@@ -925,9 +887,7 @@
 /packages/devextreme/js/__internal/ui/m_progress_bar.ts              @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/base/_progressBar.scss        @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/progressBar/**         @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/progressBar/**        @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/progressBar/**       @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/progressBar/**             @DevExpress/devextreme-editors
 
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/progressBar.markup.tests.js @DevExpress/devextreme-editors
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/progressBar.tests.js @DevExpress/devextreme-editors
@@ -942,9 +902,7 @@
 /packages/devextreme/js/__internal/ui/m_range_slider.ts              @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/base/_rangeSlider.scss        @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/rangeSlider/**         @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/rangeSlider/**        @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/rangeSlider/**       @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/rangeSlider/**             @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/common/rangeSlider.ts   @DevExpress/devextreme-editors
 
@@ -972,10 +930,7 @@
 
 /packages/devextreme/js/__internal/ui/m_switch.ts                    @DevExpress/devextreme-editors
 
-/packages/devextreme-scss/scss/widgets/base/switch/**                @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/switch/**              @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/switch/**             @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/switch/**            @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/switch/**                  @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/common/switch.ts        @DevExpress/devextreme-editors
 
@@ -988,9 +943,7 @@
 /packages/devextreme/js/__internal/ui/m_tag_box.ts                   @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/base/_tagBox.scss             @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/tagBox/**              @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/tagBox/**             @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/tagBox/**            @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/tagBox/**                  @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/common/tagBox/**        @DevExpress/devextreme-editors
 
@@ -1002,10 +955,7 @@
 
 /packages/devextreme/js/__internal/ui/m_text_area.ts                 @DevExpress/devextreme-editors
 
-/packages/devextreme-scss/scss/widgets/base/textArea/**              @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/textArea/**            @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/textArea/**           @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/textArea/**          @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/textArea/**                @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/common/textArea.ts      @DevExpress/devextreme-editors
 
@@ -1018,10 +968,7 @@
 /packages/devextreme/js/ui/text_box/**                               @DevExpress/devextreme-editors
 /packages/devextreme/js/__internal/ui/text_box/**                    @DevExpress/devextreme-editors
 
-/packages/devextreme-scss/scss/widgets/base/textEditor/**            @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/textEditor/**          @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/textEditor/**         @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/textEditor/**        @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/textEditor/**              @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/common/textBox.ts       @DevExpress/devextreme-editors
 
@@ -1035,9 +982,7 @@
 /packages/devextreme/js/__internal/ui/toast/**                       @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/base/_toast.scss              @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/toast/**               @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/toast/**              @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/toast/**             @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/toast/**                   @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/common/toast.ts         @DevExpress/devextreme-editors
 
@@ -1051,9 +996,7 @@
 /packages/devextreme/js/__internal/ui/m_tooltip.ts                   @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/base/_tooltip.scss            @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/tooltip/**             @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/tooltip/**            @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/tooltip/**           @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/tooltip/**                 @DevExpress/devextreme-editors
 
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/tooltip.tests.js @DevExpress/devextreme-editors
 /packages/devextreme/testing/tests/DevExpress.ui/tooltip.tests.js    @DevExpress/devextreme-editors
@@ -1080,9 +1023,7 @@
 /packages/devextreme/js/__internal/ui/m_validator.ts                 @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/base/_validation.scss         @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/fluent/validation/**          @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/generic/validation/**         @DevExpress/devextreme-editors
-/packages/devextreme-scss/scss/widgets/material/validation/**        @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/validation/**          @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/common/validationSummary.ts @DevExpress/devextreme-editors
 
