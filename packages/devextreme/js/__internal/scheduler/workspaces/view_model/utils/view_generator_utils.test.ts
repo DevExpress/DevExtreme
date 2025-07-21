@@ -7,7 +7,7 @@ import {
   alignToLastDayOfWeek,
   calculateAlignedWeeksBetweenDates,
   calculateDaysBetweenDates,
-} from '../m_utils';
+} from './view_generator_utils';
 
 /*
 
