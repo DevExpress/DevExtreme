@@ -6,8 +6,9 @@ import { asyncNoop, noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
-import type { DxEvent } from '@js/events';
+import type { DxEvent, ItemInfo, NativeEventInfo } from '@js/events';
 import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
+import type dxMenuBase from '@js/ui/context_menu/ui.menu_base';
 import type { dxMenuBaseItem, Item, SubmenuShowMode } from '@js/ui/menu';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -47,6 +48,36 @@ export interface MenuBaseProperties extends dxMenuBaseOptions<MenuBase, Item> {
   focusedElement?: dxElementWrapper;
   useInkRipple?: boolean;
 }
+
+export type ActionEventInfo<TComponent, TItem = never> =
+  NativeEventInfo<TComponent>
+  & (TItem extends never ? {} : ItemInfo<TItem>);
+
+export type ActionArguments<
+  TComponent,
+  TEventData,
+> = Record<string, unknown> & TEventData & {
+  args?: TEventData[];
+  action: (e: TEventData) => void;
+  context: TComponent;
+  component: TComponent;
+  cancel: boolean;
+  handled: boolean;
+  validatingTargetName?: string;
+};
+
+export type BaseMenuActionEventInfo<
+  TComponent extends dxMenuBase<MenuBaseProperties> = dxMenuBase<MenuBaseProperties>,
+  TItem extends dxMenuBaseItem = dxMenuBaseItem,
+> = ActionEventInfo<TComponent, TItem>;
+
+export type BaseMenuActionArguments<
+  TComponent extends dxMenuBase<MenuBaseProperties> = dxMenuBase<MenuBaseProperties>,
+  TItem extends dxMenuBaseItem = dxMenuBaseItem,
+> = ActionArguments<
+  TComponent,
+  BaseMenuActionEventInfo<TComponent, TItem>
+>;
 
 export type MenuBaseNode = InternalNode & dxMenuBaseItem;
 
@@ -647,19 +678,24 @@ class MenuBase<
     this._clickByLink(link);
   }
 
-  _updateSubmenuVisibilityOnClick(actionArgs: Record<string, unknown>): void {
+  _updateSubmenuVisibilityOnClick(actionArgs: BaseMenuActionArguments): void {
     this._updateSelectedItemOnClick(actionArgs);
 
     if (this._getShowSubmenuMode() === 'onClick') {
-      // @ts-expect-error ts-error
-      this._addExpandedClass(actionArgs.args[0].itemElement);
+      const itemElement = actionArgs.args?.[0].itemElement;
+
+      if (itemElement) {
+        this._addExpandedClass(itemElement);
+      }
     }
   }
 
-  _updateSelectedItemOnClick(actionArgs: Record<string, unknown>): void {
-    const args = actionArgs.args ? actionArgs.args[0] : actionArgs;
+  _updateSelectedItemOnClick(actionArgs: BaseMenuActionArguments): void {
+    const args: BaseMenuActionEventInfo = actionArgs.args ? actionArgs.args[0] : actionArgs;
 
-    if (!this._isItemSelectAllowed(args.itemData)) {
+    const { itemData } = args;
+
+    if (!itemData || !this._isItemSelectAllowed(itemData)) {
       return;
     }
 
@@ -671,8 +707,8 @@ class MenuBase<
       this._toggleItemSelection(selectedNode, false);
     }
 
-    if (!selectedNode || (selectedNode.internalFields.item !== args.itemData)) {
-      this.selectItem(args.itemData);
+    if (!selectedNode || (selectedNode.internalFields.item !== itemData)) {
+      this.selectItem(itemData);
     } else {
       this._fireSelectionChangeEvent(null, this.option('selectedItem'));
       this._setOptionWithoutOptionChange('selectedItem', null);
@@ -780,8 +816,8 @@ class MenuBase<
     });
   }
 
-  selectItem(itemElement: Element): void {
-    const itemData = itemElement.nodeType ? this._getItemData(itemElement) : itemElement;
+  selectItem(itemElement: Element | dxMenuBaseItem): void {
+    const itemData = itemElement.nodeType ? this._getItemData(itemElement as Element) : itemElement;
     const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
     const selectedItem = this.option('selectedItem');
     const node = this._dataAdapter.getNodeByItem(itemData);

@@ -25,11 +25,13 @@ import {
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
-import type { Properties } from '@js/ui/context_menu';
+import type { Item, Properties } from '@js/ui/context_menu';
+import type dxMenuBase from '@js/ui/context_menu/ui.menu_base';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
+import type dxOverlay from '@js/ui/overlay';
 import { current as currentTheme, isGeneric } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { MenuBaseNode, MenuBaseProperties } from '@ts/ui/context_menu/m_menu_base';
+import type { BaseMenuActionArguments, MenuBaseNode, MenuBaseProperties } from '@ts/ui/context_menu/m_menu_base';
 import MenuBase from '@ts/ui/context_menu/m_menu_base';
 import Overlay from '@ts/ui/overlay/m_overlay';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
@@ -88,6 +90,7 @@ type KeyboardEventHandler = (e: KeyboardEvent, options?: Record<string, unknown>
 type KeyboardEventHandlerAsync =
   (e: KeyboardEvent, options?: Record<string, unknown>) => Promise<unknown>;
 type ClickEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
+type ContextMenuActionArguments = BaseMenuActionArguments<dxMenuBase<ContextMenuProperties>, Item>;
 
 interface ContextMenuProperties extends
   MenuBaseProperties,
@@ -651,19 +654,22 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     };
   }
 
-  _overlayShownActionHandler(arg: Record<string, unknown>): void {
+  _overlayShownActionHandler(arg: EventInfo<dxOverlay<OverlayProperties>>): void {
     this._actions.onShown(arg);
   }
 
-  _overlayHidingActionHandler(arg: Record<string, unknown>): void {
-    this._actions.onHiding(arg);
-    if (!arg.cancel) {
+  _overlayHidingActionHandler(arg: EventInfo<dxOverlay<OverlayProperties>>): void {
+    const actionArgs: Cancelable & EventInfo<dxOverlay<OverlayProperties>> = arg;
+
+    this._actions.onHiding(actionArgs);
+
+    if (!actionArgs.cancel) {
       this._hideAllShownSubmenus();
       this._setOptionWithoutOptionChange('visible', false);
     }
   }
 
-  _overlayHiddenActionHandler(arg: Record<string, unknown>): void {
+  _overlayHiddenActionHandler(arg: EventInfo<dxOverlay<OverlayProperties>>): void {
     this._actions.onHidden(arg);
   }
 
@@ -944,14 +950,17 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
   }
 
   // TODO: try to simplify it
-  _updateSubmenuVisibilityOnClick(actionArgs: Record<string, unknown>): void {
-    // @ts-expect-error ts-error
-    if (!actionArgs.args.length) {
+  _updateSubmenuVisibilityOnClick(actionArgs: ContextMenuActionArguments): void {
+    if (!actionArgs.args?.length) {
       return;
     }
 
-    // @ts-expect-error ts-error
     const { itemData, itemElement } = actionArgs.args[0];
+
+    if (!itemData) {
+      return;
+    }
+
     const node = this._dataAdapter.getNodeByItem(itemData);
 
     if (!node) {
