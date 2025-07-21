@@ -159,3 +159,62 @@ const tasksT1223168 = [{
     await changeTheme(Themes.genericLight);
   });
 });
+
+// T1291705
+test('The shading should alternate correctly after expanding the node when repaintChangesOnly is enabled', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const treeList = new TreeList('#container');
+
+  await treeList.apiExpandRow(4);
+  await treeList.apiExpandRow(2);
+
+  await takeScreenshot('T1291705-row-alternation-after-expanding-node-when-repaintChangesOnly=true', treeList.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxTreeList', {
+  dataSource: [
+    { id: 1, parentId: 0, text: 'item 1' },
+    { id: 2, parentId: 0, text: 'item 2' },
+    { id: 3, parentId: 2, text: 'item 3' },
+    { id: 4, parentId: 0, text: 'item 4' },
+    { id: 5, parentId: 4, text: 'item 5' },
+    { id: 6, parentId: 0, text: 'item 6' },
+  ],
+  keyExpr: 'id',
+  parentIdExpr: 'parentId',
+  rowAlternationEnabled: true,
+  repaintChangesOnly: true,
+}));
+
+test('The shading should alternate correctly after expanding the node when repaintChangesOnly and old fixed columns are enabled', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const treeList = new TreeList('#container');
+
+  await treeList.apiExpandRow(4);
+  await treeList.apiExpandRow(2);
+
+  await takeScreenshot('T1291705-row-alternation-after-expanding-node-when-there-is-fixed-column-and-repaintChangesOnly=true', treeList.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxTreeList', {
+  dataSource: [
+    { id: 1, parentId: 0, text: 'item 1' },
+    { id: 2, parentId: 0, text: 'item 2' },
+    { id: 3, parentId: 2, text: 'item 3' },
+    { id: 4, parentId: 0, text: 'item 4' },
+    { id: 5, parentId: 4, text: 'item 5' },
+    { id: 6, parentId: 0, text: 'item 6' },
+  ],
+  keyExpr: 'id',
+  parentIdExpr: 'parentId',
+  rowAlternationEnabled: true,
+  repaintChangesOnly: true,
+  columnFixing: {
+    legacyMode: true,
+  },
+  columns: [{ dataField: 'id', fixed: true }, 'text'],
+}));

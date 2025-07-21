@@ -1548,6 +1548,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return gridCoreUtils.getIndexByKey(key, this.items(byLoaded));
   }
 
+  public getRowByKey(key: unknown): Item | undefined {
+    return this.items()?.[this.getRowIndexByKey(key)];
+  }
+
   public keyOf(data) {
     const store = this.store();
     if (store) {
