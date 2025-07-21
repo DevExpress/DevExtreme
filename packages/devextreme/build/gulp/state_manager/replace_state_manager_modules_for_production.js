@@ -10,6 +10,8 @@ const {
     STATE_MANAGER_FOLDER_PATH,
     STATE_MANAGER_INDEX_MODULE_PATH,
     STATE_MANAGER_INDEX_PRODUCTION_MODULE_PATH,
+    STATE_MANAGER_REACTIVE_PRIMITIVES_INDEX_MODULE_PATH,
+    STATE_MANAGER_REACTIVE_PRIMITIVES_INDEX_PRODUCTION_MODULE_PATH
 } = require('./constants');
 const ctx = require('../context');
 
@@ -17,7 +19,31 @@ const ERROR_PREFIX = 'Error during replacing the state manager modules:';
 
 function replaceStateManagerModulesForProduction() {
     return through2.obj(function(file, enc, callback) {
-        if (file.path.includes(STATE_MANAGER_INDEX_MODULE_PATH)) {
+        if (file.path.includes(STATE_MANAGER_REACTIVE_PRIMITIVES_INDEX_MODULE_PATH)) {
+            try {
+                const absolutePathToStateManagerFolder = path.dirname(file.path);
+                const replacerFileName = path.basename(STATE_MANAGER_REACTIVE_PRIMITIVES_INDEX_PRODUCTION_MODULE_PATH);
+
+                const replacerFilePath = path.join(
+                    absolutePathToStateManagerFolder,
+                    replacerFileName,
+                );
+
+                const shouldReplaceWithProductionCode = fs.existsSync(replacerFilePath);
+
+                if (shouldReplaceWithProductionCode) {
+                    let productionContent = fs.readFileSync(replacerFilePath, 'utf8');
+
+                    file.contents = Buffer.from(productionContent);
+                } else {
+                    console.error(
+                        ERROR_PREFIX,
+                        `${replacerFileName} file not found at ${replacerFilePath}`);
+                }
+            } catch (error) {
+                console.error(ERROR_PREFIX, error);
+            }
+        } else if (file.path.includes(STATE_MANAGER_INDEX_MODULE_PATH)) {
             try {
                 const absolutePathToStateManagerFolder = path.dirname(file.path);
                 const replacerFileName = path.basename(STATE_MANAGER_INDEX_PRODUCTION_MODULE_PATH);
@@ -33,7 +59,6 @@ function replaceStateManagerModulesForProduction() {
                     let productionContent = fs.readFileSync(replacerFilePath, 'utf8');
 
                     file.contents = Buffer.from(productionContent);
-
                 } else {
                     console.error(
                         ERROR_PREFIX,
@@ -55,6 +80,8 @@ const prepareStateManager = (dist) => gulp.series.apply(gulp, [
         .pipe(gulp.dest(dist)),
 ]);
 
-gulp.task('state-manager-replace-production-modules', prepareStateManager(ctx.TRANSPILED_PROD_ESM_PATH));
+gulp.task('state-manager-replace-production-modules-transpiled-prod-esm', prepareStateManager(ctx.TRANSPILED_PROD_ESM_PATH));
+
+gulp.task('state-manager-replace-production-modules-transpiled-prod-renovation', prepareStateManager(ctx.TRANSPILED_PROD_RENOVATION_PATH));
 
 module.exports = replaceStateManagerModulesForProduction;

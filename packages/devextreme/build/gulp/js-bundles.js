@@ -41,12 +41,6 @@ const getWebpackConfig = (watch) => {
         }));
     }
 
-    if (watch) {
-        plugins.push(new webpack.NormalModuleReplacementPlugin(/(.*)\/reactive/,(resource) => {
-            resource.request = resource.request.replace('reactive/index', 'reactive/index.dev');
-        }));
-    }
-
     return Object.assign(webpackConfig, { plugins });
 };
 

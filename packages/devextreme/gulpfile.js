@@ -74,8 +74,11 @@ function createDefaultBatch(dev) {
     tasks.push('transpile');
 
     if(REMOVE_NON_PRODUCTION_MODULE) {
-        tasks.push('state-manager-replace-production-modules');
-        tasks.push('state-manager-remove-development-only-modules');
+        tasks.push('state-manager-replace-production-modules-transpiled-prod-renovation');
+        tasks.push('state-manager-replace-production-modules-transpiled-prod-esm');
+
+        tasks.push('state-manager-remove-development-only-modules-transpiled-prod-renovation');
+        tasks.push('state-manager-remove-development-only-modules-transpiled-prod-esm');
     }
 
     tasks.push(dev && !env.BUILD_TESTCAFE ? 'main-batch-dev' : 'main-batch');
@@ -109,5 +112,3 @@ gulp.task('dev', gulp.series(
     'default-dev',
     'dev-watch'
 ));
-
-

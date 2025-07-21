@@ -48,18 +48,6 @@ const config: StorybookConfig = {
       );
     }
 
-    if (configType === 'DEVELOPMENT') {
-      config.plugins.push(
-        new webpack.NormalModuleReplacementPlugin(
-          /(.*)\/reactive/,
-          (resource) => {
-            const newRequest = resource.request.replace('reactive/index', 'reactive/index.dev');
-            resource.request = newRequest;
-          }
-        )
-      );
-    }
-
     return config;
   },
 };
