@@ -1,6 +1,6 @@
 import type { SortOrder } from '@js/common';
-import type { ReadonlySignal } from '@ts/core/reactive/index';
-import { batch, computed } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@ts/core/state_manager/index';
+import { batch, computed } from '@ts/core/state_manager/index';
 
 import { ColumnsController } from '../columns_controller/index';
 import type { Column } from '../columns_controller/types';

@@ -5,7 +5,7 @@
 import $ from '@js/core/renderer';
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
-import { computed, signal } from '@ts/core/reactive/index';
+import { computed, signal } from '@ts/core/state_manager/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { BaseContextMenuController } from '@ts/grids/new/grid_core/context_menu/controller';
 import { View } from '@ts/grids/new/grid_core/core/view';

@@ -1,5 +1,5 @@
-import type { ReadonlySignal } from '@ts/core/reactive/index';
-import { computed } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@ts/core/state_manager/index';
+import { computed } from '@ts/core/state_manager/index';
 
 import { BaseContextMenuController } from '../context_menu/controller';
 import { View } from '../core/view';

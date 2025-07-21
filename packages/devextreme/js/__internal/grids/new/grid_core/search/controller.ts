@@ -1,5 +1,5 @@
-import type { ReadonlySignal } from '@ts/core/reactive/index';
-import { computed } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@ts/core/state_manager/index';
+import { computed } from '@ts/core/state_manager/index';
 import type { Options as SearchOptions } from '@ts/grids/new/grid_core/search/options';
 import type { HighlightedTextItem, HighlightTextOptions } from '@ts/grids/new/grid_core/search/types';
 

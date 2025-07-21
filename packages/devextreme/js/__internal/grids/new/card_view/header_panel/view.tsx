@@ -1,5 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
-import { computed, type ReadonlySignal } from '@ts/core/reactive/index';
+import { computed, type ReadonlySignal } from '@ts/core/state_manager/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/columns_controller';
 import { View } from '@ts/grids/new/grid_core/core/view';
 import { KeyboardNavigationController, NavigationStrategyHorizontalList } from '@ts/grids/new/grid_core/keyboard_navigation/index';

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { computed } from '@ts/core/reactive/index';
+import { computed } from '@ts/core/state_manager/index';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import type { Column } from '@ts/grids/new/grid_core/columns_controller/types';
 import { getColumnByIndexOrName } from '@ts/grids/new/grid_core/columns_controller/utils';

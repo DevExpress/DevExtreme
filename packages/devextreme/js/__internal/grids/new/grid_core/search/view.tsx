@@ -1,6 +1,6 @@
 import type { TextBoxInstance } from '@js/ui/text_box';
-import type { Signal } from '@ts/core/reactive/index';
-import { effect, signal } from '@ts/core/reactive/index';
+import type { Signal } from '@ts/core/state_manager/index';
+import { effect, signal } from '@ts/core/state_manager/index';
 import { ToolbarController } from '@ts/grids/new/grid_core/toolbar/controller';
 
 import { OptionsController } from '../options_controller/options_controller';

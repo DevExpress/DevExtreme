@@ -1,5 +1,5 @@
 import dxTreeView from '@js/ui/tree_view';
-import { effect } from '@ts/core/reactive/index';
+import { effect } from '@ts/core/state_manager/index';
 
 import type { ColumnsController } from '../columns_controller/index';
 import type { OptionsController } from '../options_controller/options_controller';

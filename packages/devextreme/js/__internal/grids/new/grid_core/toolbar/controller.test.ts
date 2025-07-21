@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { signal } from '@ts/core/reactive/index';
+import { signal } from '@ts/core/state_manager/index';
 
 import { getContext } from '../di.test_utils';
 import type { Options } from '../options';

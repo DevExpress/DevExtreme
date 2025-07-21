@@ -11,7 +11,7 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import { signal } from '@ts/core/reactive/index';
+import { signal } from '@ts/core/state_manager/index';
 import { render, rerender } from 'inferno';
 
 import type { PopupState } from './types';

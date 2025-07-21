@@ -1,5 +1,5 @@
-import type { ReadonlySignal, Signal } from '@ts/core/reactive/index';
-import { computed, effect, signal } from '@ts/core/reactive/index';
+import type { ReadonlySignal, Signal } from '@ts/core/state_manager/index';
+import { computed, effect, signal } from '@ts/core/state_manager/index';
 import { MAX_PAGES_COUNT } from '@ts/grids/grid_core/pager/m_pager';
 
 import { View } from '../core/view';

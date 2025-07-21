@@ -5,8 +5,8 @@ import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
 import type dxPopup from '@js/ui/popup';
 import type { Properties as TreeViewProperties } from '@js/ui/tree_view';
 import type dxTreeView from '@js/ui/tree_view';
-import type { ReadonlySignal } from '@ts/core/reactive/index';
-import { computed, signal } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@ts/core/state_manager/index';
+import { computed, signal } from '@ts/core/state_manager/index';
 import { createRef } from 'inferno';
 
 import type { Props as ColumnSortableProps } from '../../card_view/header_panel/column_sortable';

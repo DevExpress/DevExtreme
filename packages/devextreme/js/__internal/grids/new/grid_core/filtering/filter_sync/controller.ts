@@ -1,7 +1,7 @@
-// import type { ReadonlySignal } from '@ts/core/reactive/index';
-// import { computed } from '@ts/core/reactive/index';
+// import type { ReadonlySignal } from '@ts/core/state_manager/index';
+// import { computed } from '@ts/core/state_manager/index';
 import { equalByValue } from '@js/core/utils/common';
-import { batch, effect } from '@ts/core/reactive/index';
+import { batch, effect } from '@ts/core/state_manager/index';
 import { getMatchedConditions } from '@ts/filter_builder/m_utils';
 import type { HeaderFilterInfo } from '@ts/grids/new/grid_core/filtering/header_filter/types';
 import { SearchController } from '@ts/grids/new/grid_core/search/index';

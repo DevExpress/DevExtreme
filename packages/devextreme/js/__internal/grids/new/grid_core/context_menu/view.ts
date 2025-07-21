@@ -1,8 +1,8 @@
 import type {
   InitializedEvent, ItemClickEvent,
 } from '@js/ui/context_menu';
-import type { ReadonlySignal } from '@ts/core/reactive/index';
-import { computed } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@ts/core/state_manager/index';
+import { computed } from '@ts/core/state_manager/index';
 
 import { View } from '../core/view';
 import type { ContextMenuProps } from './context_menu';

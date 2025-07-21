@@ -1,5 +1,5 @@
-import type { ReadonlySignal } from '@ts/core/reactive/index';
-import { computed } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@ts/core/state_manager/index';
+import { computed } from '@ts/core/state_manager/index';
 import { ColumnsController } from '@ts/grids/new/grid_core/columns_controller/index';
 import type { HeaderFilterInfo } from '@ts/grids/new/grid_core/filtering/header_filter/types';
 

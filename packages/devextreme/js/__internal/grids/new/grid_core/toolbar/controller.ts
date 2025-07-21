@@ -1,5 +1,5 @@
-import type { ReadonlySignal } from '@ts/core/reactive/index';
-import { computed, effect, signal } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@ts/core/state_manager/index';
+import { computed, effect, signal } from '@ts/core/state_manager/index';
 
 import { OptionsController } from '../options_controller/options_controller';
 import { DEFAULT_TOOLBAR_ITEMS } from './const';

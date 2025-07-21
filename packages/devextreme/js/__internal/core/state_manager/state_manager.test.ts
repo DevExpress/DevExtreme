@@ -9,8 +9,8 @@ import {
   it,
   jest,
 } from '@jest/globals';
-import type { Signal } from '@ts/core/reactive/index';
-import { signal } from '@ts/core/reactive/index';
+import type { Signal } from '@ts/core/state_manager/index';
+import { signal } from '@ts/core/state_manager/index';
 
 import { DIContext } from '../di';
 import { setupStateManager } from './setup_state_manager';

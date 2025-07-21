@@ -1,6 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
-import type { ReadonlySignal } from '@ts/core/reactive/index';
-import { signal } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@ts/core/state_manager/index';
+import { signal } from '@ts/core/state_manager/index';
 import { removeFieldConditionsFromFilter } from '@ts/filter_builder/m_utils';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 

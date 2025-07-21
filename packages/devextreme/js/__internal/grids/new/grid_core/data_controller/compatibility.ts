@@ -1,6 +1,6 @@
 import createCallback from '@js/core/utils/callbacks';
 import type DataSource from '@js/data/data_source';
-import { effect } from '@ts/core/reactive/index';
+import { effect } from '@ts/core/state_manager/index';
 
 import { DataController } from './data_controller';
 

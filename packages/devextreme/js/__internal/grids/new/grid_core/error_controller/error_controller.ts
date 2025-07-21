@@ -1,5 +1,5 @@
-import type { ReadonlySignal } from '@ts/core/reactive/index';
-import { signal } from '@ts/core/reactive/index';
+import type { ReadonlySignal } from '@ts/core/state_manager/index';
+import { signal } from '@ts/core/state_manager/index';
 
 export interface GridError {
   text: string;
