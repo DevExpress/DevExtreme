@@ -43,7 +43,7 @@
 import {
   DxDataGrid, DxColumn, DxExport, type DxDataGridTypes,
 } from 'devextreme-vue/data-grid';
-import { Anchor, Workbook } from 'exceljs';
+import { Anchor, Workbook } from 'devextreme-exceljs-fork';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
 import { saveAs } from 'file-saver-es';

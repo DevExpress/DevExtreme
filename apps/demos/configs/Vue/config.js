@@ -31,7 +31,7 @@ window.config = {
     },
     /**/
     /** exceljs&file-saver */
-    'exceljs': {
+    'devextreme-exceljs-fork': {
       'esModule': true,
     },
     /**/
@@ -69,7 +69,7 @@ window.config = {
     /**/
 
     /** exceljs&file-saver */
-    'exceljs': 'npm:exceljs/dist/exceljs.min.js',
+    'devextreme-exceljs-fork': 'npm:devextreme-exceljs-fork/dist/dx-exceljs-fork.min.js',
     'file-saver-es': 'npm:file-saver-es/dist/FileSaver.min.js',
     /**/
 
