@@ -188,6 +188,7 @@ class DropDownEditor<
       buttonsLocation: 'default',
       useHiddenSubmitElement: false,
       validationMessagePosition: 'auto',
+      _userDropDownOptions: {},
     };
   }
 
@@ -237,8 +238,7 @@ class DropDownEditor<
     const { rtlEnabled, dropDownOptions } = this.option();
 
     this._updatePopupPosition(rtlEnabled);
-    // @ts-expect-error ts-error
-    this._options.cache('dropDownOptions', dropDownOptions);
+    this._cacheUserDropDownOptions(dropDownOptions);
   }
 
   _updatePopupPosition(isRtlEnabled?: boolean): void {
@@ -633,7 +633,7 @@ class DropDownEditor<
   _renderPopupContent(): void {}
 
   _renderPopup(): void {
-    const popupConfig = extend(this._popupConfig(), this._options.cache('dropDownOptions'));
+    const popupConfig = extend(this._popupConfig(), this.option('_userDropDownOptions'));
 
     delete popupConfig.closeOnOutsideClick;
     // @ts-expect-error ts-error
@@ -956,6 +956,12 @@ class DropDownEditor<
     }
   }
 
+  _cacheUserDropDownOptions(value, name = 'dropDownOptions'): void {
+    const optionName = name.replace('dropDownOptions', '_userDropDownOptions');
+
+    this.option(optionName, value);
+  }
+
   _renderSubmitElement(): void {
     if (this.option('useHiddenSubmitElement')) {
       this._$submitElement = $('<input>')
@@ -984,7 +990,7 @@ class DropDownEditor<
   }
 
   _optionChanged(args: OptionChanged<TProperties>): void {
-    const { name, value } = args;
+    const { name, fullName, value } = args;
 
     switch (name) {
       case 'width':
@@ -1013,11 +1019,11 @@ class DropDownEditor<
         break;
       case 'dropDownOptions': {
         this._popupOptionChanged(args);
-        const { dropDownOptions } = this.option();
-        // @ts-expect-error ts-error
-        this._options.cache('dropDownOptions', dropDownOptions);
+        this._cacheUserDropDownOptions(value, fullName);
         break;
       }
+      case '_userDropDownOptions':
+        break;
       case 'popupPosition':
         break;
       case 'deferRendering':
