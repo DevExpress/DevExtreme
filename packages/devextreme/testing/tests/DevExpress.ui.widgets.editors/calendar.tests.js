@@ -1571,7 +1571,7 @@ QUnit.module('Calendar footer', {
 
         const $element = this.$element;
         const calendar = this.calendar;
-        const viewWidth = $element.find(`.${CALENDAR_VIEWS_WRAPPER_CLASS}` + ' .dx-widget').eq(0).width();
+        const viewWidth = $element.find(`.${CALENDAR_VIEWS_WRAPPER_CLASS} .dx-widget`).eq(0).width();
 
         try {
             fx.off = false;
@@ -1600,7 +1600,7 @@ QUnit.module('Calendar footer', {
         const origAnimate = fx.animate;
 
         const calendar = this.calendar;
-        const viewWidth = this.$element.find(`.${CALENDAR_VIEWS_WRAPPER_CLASS}` + ' .dx-widget').eq(0).width();
+        const viewWidth = this.$element.find(`.${CALENDAR_VIEWS_WRAPPER_CLASS} .dx-widget`).eq(0).width();
         const today = new Date();
 
         calendar.option('currentDate', new Date(today.getFullYear() + 2, 2, 7));
@@ -4521,7 +4521,7 @@ QUnit.module('Navigation - click on other view cell', {
 
                 this.pointer.swipeStart().swipe(0.5 * directionMultiplayer);
 
-                const $tables = this.$element.find(`.${CALENDAR_BODY_CLASS}` + ' .dx-widget');
+                const $tables = this.$element.find(`.${CALENDAR_BODY_CLASS} .dx-widget`);
                 const $wrapper = this.$element.find(`.${CALENDAR_VIEWS_WRAPPER_CLASS}`).eq(0);
 
                 assert.roughEqual(translator.locate($wrapper).left, offset * directionMultiplayer, 1, 'Views wrapper position is correct');
@@ -4595,7 +4595,7 @@ QUnit.module('Navigation - click on other view cell', {
                 const origAnimate = fx.animate;
 
                 try {
-                    const $views = this.$element.find(`.${CALENDAR_VIEWS_WRAPPER_CLASS}` + ' .dx-widget');
+                    const $views = this.$element.find(`.${CALENDAR_VIEWS_WRAPPER_CLASS} .dx-widget`);
                     const viewWidth = $views.eq(0).width();
 
                     fx.animate = (_, config) => {
@@ -4614,7 +4614,7 @@ QUnit.module('Navigation - click on other view cell', {
         QUnit.test('should not overlap during multidirectional swipe', function(assert) {
             this.pointer.swipeStart().swipe(-0.1).swipe(0.01);
 
-            const $views = this.$element.find(`.${CALENDAR_VIEWS_WRAPPER_CLASS}` + ' .dx-widget');
+            const $views = this.$element.find(`.${CALENDAR_VIEWS_WRAPPER_CLASS} .dx-widget`);
 
             assert.equal($views.length, 2 + viewsCount, 'correct views count');
             assert.ok($views.eq(1).position().left < 0, 'first additional view located at right');
