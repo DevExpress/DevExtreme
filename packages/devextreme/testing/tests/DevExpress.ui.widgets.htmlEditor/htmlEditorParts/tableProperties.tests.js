@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import 'ui/html_editor';
 import localization from 'localization';
+import { getWindow } from 'core/utils/window';
 
 import { getFormatHandlers } from '__internal/ui/html_editor/utils/m_toolbar_helper';
 
@@ -311,6 +312,32 @@ module('Table properties forms', {
             assert.strictEqual($form.length, 1);
             assert.ok($form.eq(0).is(':visible'));
             assert.ok($scrollView.length, 'Form should be in the ScrollView');
+        });
+
+        test('border width is not equal to 0 if page zoom is not default (T1295949)', function(assert) {
+            const window = getWindow();
+            const originalZoom = window.document.body.style.zoom;
+
+            window.document.body.style.zoom = '125%';
+
+            try {
+                this.createWidget({ width: 432 });
+
+                const $tableElement = this.$element.find('table').eq(0);
+                const $targetCell = $tableElement.find('td').eq(6);
+
+                this.quillInstance.setSelection(50, 1);
+
+                showCellPropertiesForm(this.instance, $targetCell);
+
+                this.clock.tick(10);
+
+                const borderWidthEditor = this.getFormInstance().getEditor('borderWidth');
+
+                assert.strictEqual(borderWidthEditor.option('value'), 1, 'borderWidthEditor value is correct');
+            } finally {
+                window.document.body.style.zoom = originalZoom;
+            }
         });
 
         [
