@@ -15,7 +15,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import TreeView from '@js/ui/tree_view';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import type SearchBoxController from '@ts/ui/collection/m_search_box_controller';
+import type SearchBoxController from '@ts/ui/collection/m_search_box_mixin';
 
 import gridCoreUtils from '../m_utils';
 

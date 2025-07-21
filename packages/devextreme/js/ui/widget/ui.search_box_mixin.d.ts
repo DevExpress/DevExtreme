@@ -11,7 +11,7 @@ import {
  * @docid
  * @hidden
  */
-export interface SearchBoxControllerOptions {
+export interface SearchBoxMixinOptions {
     /**
      * @docid
      * @default {}
