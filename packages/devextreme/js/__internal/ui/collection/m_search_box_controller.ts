@@ -60,10 +60,7 @@ class SearchBoxController {
       return;
     }
 
-    // const editorOptions = this._getEditorOptions(options);
-
     if (this._editor) {
-      // this._editor.option(editorOptions);
       this.updateEditorOptions(options);
     } else {
       const editorOptions = this._getEditorOptions(options);

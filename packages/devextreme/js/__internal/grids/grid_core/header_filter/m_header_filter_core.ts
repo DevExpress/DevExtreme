@@ -15,7 +15,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import TreeView from '@js/ui/tree_view';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import type TextBox from '@ts/ui/text_box/m_text_box';
+import type SearchBoxController from '@ts/ui/collection/m_search_box_controller';
 
 import gridCoreUtils from '../m_utils';
 
@@ -335,7 +335,7 @@ export class HeaderFilterView extends Modules.View {
 
     const onTreeViewOptionChanged = (
       event: ChangedOptionInfo & {
-        component: TreeView & { _searchEditor: TextBox };
+        component: TreeView & { _searchController: SearchBoxController };
       },
     ): void => {
       switch (true) {
@@ -350,7 +350,7 @@ export class HeaderFilterView extends Modules.View {
           // So we should focus the searchEditor only after render will be completed
           Promise.resolve()
             .then(() => {
-              event.component._searchEditor.focus();
+              event.component._searchController.focus();
             })
             .catch(() => {});
           break;
