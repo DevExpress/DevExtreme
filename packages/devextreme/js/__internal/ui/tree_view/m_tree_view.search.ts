@@ -2,6 +2,7 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
+import type dxTextBox from '@js/ui/text_box';
 import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SearchBoxControllerOptions } from '@ts/ui/collection/m_search_box_mixin';
@@ -44,7 +45,9 @@ class TreeViewSearch extends TreeViewBase {
       searchValue,
       searchTimeout,
       searchEditorOptions,
-      onValueChanged: (value: string) => this.option('searchValue', value),
+      onValueChanged: (value: string): void => {
+        this.option('searchValue', value);
+      },
     };
   }
 
@@ -52,9 +55,10 @@ class TreeViewSearch extends TreeViewBase {
     this._searchController = new SearchBoxController({
       createEditor: (
         $element: dxElementWrapper,
-        component,
+        component: typeof dxTextBox,
         options: Record<string, unknown>,
-      ): unknown => this._createComponent($element, component, options),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ): dxTextBox<any> => this._createComponent($element, component, options),
       widgetPrefix: TREEVIEW_CLASS_PREFIX,
     });
     super._init();
@@ -68,7 +72,8 @@ class TreeViewSearch extends TreeViewBase {
   }
 
   _getAriaTarget(): dxElementWrapper {
-    if (this.option('searchEnabled')) {
+    const { searchEnabled } = this.option();
+    if (searchEnabled) {
       return this._itemContainer(true);
     }
     return super._getAriaTarget();

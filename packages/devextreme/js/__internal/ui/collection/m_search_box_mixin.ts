@@ -8,19 +8,25 @@ import type { ValueChangedEvent } from '@js/ui/text_box';
 import TextBox from '@js/ui/text_box';
 import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
 
+export const getOperationBySearchMode = (searchMode?: SearchMode): string | undefined => (searchMode === 'equals' ? '=' : searchMode);
+
 export type SearchBoxControllerOptions = SearchBoxMixinOptions & {
   tabIndex?: number;
   onValueChanged?: (value: string) => void;
 };
 
-export const getOperationBySearchMode = (searchMode?: SearchMode): string | undefined => (searchMode === 'equals' ? '=' : searchMode);
-
-class SearchBoxController {
-  _createEditor!: (
+interface SearchBoxControllerProps {
+  createEditor: (
     $element: dxElementWrapper,
     component: typeof TextBox,
     options: Record<string, unknown>,
   ) => TextBox;
+  widgetPrefix: string;
+  editorWidget?: typeof TextBox;
+}
+
+class SearchBoxController {
+  _createEditor: SearchBoxControllerProps['createEditor'];
 
   _widgetPrefix: string;
 
@@ -35,13 +41,13 @@ class SearchBoxController {
   // eslint-disable-next-line no-restricted-globals
   _valueChangeTimeout!: ReturnType<typeof setTimeout>;
 
-  _onValueChange?: (value: string) => void;
+  _onSearchBoxValueChanged?: (value: string) => void;
 
   constructor({
     createEditor,
     widgetPrefix,
     editorWidget = TextBox,
-  }) {
+  }: SearchBoxControllerProps) {
     this._createEditor = createEditor;
     this._widgetPrefix = widgetPrefix;
     this._editorWidget = editorWidget;
@@ -52,7 +58,7 @@ class SearchBoxController {
     const searchBoxClassName = this._addWidgetPrefix('search');
     const { searchEnabled, onValueChanged } = options;
 
-    this._onValueChange = onValueChanged;
+    this._onSearchBoxValueChanged = onValueChanged;
 
     if (!searchEnabled) {
       $container.removeClass(rootElementClassName);
@@ -75,7 +81,7 @@ class SearchBoxController {
     this._editor?.option(editorOptions);
   }
 
-  _getEditorOptions(options: SearchBoxControllerOptions): any {
+  _getEditorOptions(options: SearchBoxControllerOptions): Record<string, unknown> {
     const {
       tabIndex,
       searchValue,
@@ -91,7 +97,9 @@ class SearchBoxController {
       value: searchValue,
       valueChangeEvent: 'input',
       inputAttr: { 'aria-label': placeholder },
-      onValueChanged: (e: ValueChangedEvent): void => this._onValueChanged(e, searchTimeout),
+      onValueChanged: (e: ValueChangedEvent): void => {
+        this._onValueChanged(e, searchTimeout);
+      },
       ...searchEditorOptions,
     };
   }
@@ -101,7 +109,7 @@ class SearchBoxController {
     clearTimeout(this._valueChangeTimeout);
 
     this._valueChangeDeferred.done((): void => {
-      this._onValueChange?.(e.value);
+      this._onSearchBoxValueChanged?.(e.value);
     });
 
     if (e.event?.type === 'input' && searchTimeout) {

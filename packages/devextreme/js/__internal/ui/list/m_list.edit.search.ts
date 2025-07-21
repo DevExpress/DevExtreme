@@ -1,5 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
+import type dxTextBox from '@js/ui/text_box';
 import errors from '@js/ui/widget/ui.errors';
 import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -16,10 +17,13 @@ type ListSearchProperties = ListBaseProperties & SearchBoxMixinOptions;
 const LIST_CLASS_PREFIX = 'dx-list';
 
 class ListSearch extends ListEdit {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _dataSource!: any;
 
   _searchController!: SearchBoxController;
 
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   _getCombinedFilter() {
     const dataController = this._dataController;
     // @ts-expect-error ts-error
@@ -27,6 +31,7 @@ class ListSearch extends ListEdit {
     dataController.addSearchFilter(storeLoadOptions);
     const { filter } = storeLoadOptions;
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return filter;
   }
 
@@ -56,7 +61,9 @@ class ListSearch extends ListEdit {
       searchValue,
       searchTimeout,
       searchEditorOptions,
-      onValueChanged: (value: string) => this.option('searchValue', value),
+      onValueChanged: (value: string): void => {
+        this.option('searchValue', value);
+      },
     };
   }
 
@@ -84,9 +91,10 @@ class ListSearch extends ListEdit {
     this._searchController = new SearchBoxController({
       createEditor: (
         $element: dxElementWrapper,
-        component,
+        component: typeof dxTextBox,
         options: Record<string, unknown>,
-      ): unknown => this._createComponent($element, component, options),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ): dxTextBox<any> => this._createComponent($element, component, options),
       widgetPrefix: LIST_CLASS_PREFIX,
     });
     super._init();
