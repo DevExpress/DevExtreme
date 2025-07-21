@@ -339,9 +339,9 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     }
   }
 
-  _itemPointerDownHandler(e: DxEvent): void {
+  _itemPointerHandler(e: DxEvent): void {
     if (!this._shouldPreventItemEvent(e.currentTarget)) {
-      super._itemPointerDownHandler(e);
+      super._itemPointerHandler(e);
     }
   }
 
