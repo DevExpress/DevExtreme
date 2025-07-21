@@ -14,7 +14,7 @@ export const dependencies: FlatStylesDependencies = {
   autocomplete: ['validation', 'button', 'loadindicator', 'textbox', 'popup', 'loadpanel', 'scrollview', 'list'],
   box: [],
   buttongroup: ['validation', 'button'],
-  dropdownbutton: ['validation', 'button', 'buttongroup', 'popup', 'loadindicator', 'loadpanel', 'scrollview', 'list'],
+  dropdownbutton: ['validation', 'button', 'buttongroup', 'popup', 'loadindicator', 'loadpanel', 'scrollview', 'list', 'textbox'],
   calendar: ['validation', 'button'],
   cardview: ['box', 'button', 'calendar', 'checkbox', 'contextmenu', 'datebox', 'filterbuilder', 'form', 'list', 'loadindicator', 'loadpanel', 'multiview', 'numberbox', 'popup', 'responsivebox', 'scrollview', 'selectbox', 'sortable', 'tabpanel', 'tabs', 'textbox', 'toast', 'toolbar', 'treeview', 'validation'],
   chat: ['button', 'loadindicator', 'loadpanel', 'popup', 'scrollview', 'textbox', 'toolbar', 'validation'],
