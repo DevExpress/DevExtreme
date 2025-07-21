@@ -59,18 +59,16 @@ const createFileManagerInsidePopup = (context, useThumbnailViewMode, extOptions)
             mode: viewMode
         }
     }, extOptions);
-    let fileManager;
     const fileManagerPopup = $('#fileManagerPopup').dxPopup({
-        visible: true,
+        visible: false,
         contentTemplate: function(contentElement) {
-            fileManager = $('<div id="fileManager"></div>')
+            $('<div id="fileManager"></div>')
                 .appendTo(contentElement)
-                .dxFileManager(options)
-                .dxFileManager('instance');
+                .dxFileManager(options);
         }
-    });
+    }).dxPopup('instance');
     context.clock.tick(400);
-    return { fileManager, fileManagerPopup };
+    return fileManagerPopup;
 };
 
 const moduleConfig = {
@@ -245,13 +243,16 @@ QUnit.module('Markup rendering', moduleConfig, () => {
 });
 
 QUnit.module('fileManager inside popup not causing any warnings in console (T1297188)', moduleConfig_T1297188, () => {
-    test('details view height option set correctly and no console warnings displayed (T1297188)', function(assert) {
+    test('details view height option set correctly and no console warnings displayed (T1297188)', async function(assert) {
         const loggerSpy = sinon.spy(consoleUtils.logger, 'warn');
 
         try {
-            const { fileManager } = createFileManagerInsidePopup(this, false, { width: '100%', height: '100%' });
+            const fileManagerPopup = createFileManagerInsidePopup(this, false, { width: '100%', height: '100%' });
 
+            await fileManagerPopup.show();
             this.clock.tick(400);
+
+            const fileManager = $('#fileManager').dxFileManager('instance');
 
             assert.strictEqual(fileManager._itemView._filesView.option('height'), '100%', 'height is applied to the details view');
 
