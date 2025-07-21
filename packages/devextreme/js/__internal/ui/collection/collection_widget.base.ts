@@ -43,7 +43,7 @@ import type CollectionItem from '@ts/ui/collection/item';
 import CollectionWidgetItem from '@ts/ui/collection/item';
 
 const COLLECTION_CLASS = 'dx-collection';
-const ITEM_CLASS = 'dx-item';
+export const ITEM_CLASS = 'dx-item';
 const CONTENT_CLASS_POSTFIX = '-content';
 const ITEM_CONTENT_PLACEHOLDER_CLASS = 'dx-item-content-placeholder';
 const ITEM_DATA_KEY = 'dxItemData';
@@ -921,34 +921,57 @@ class CollectionWidget<
 
   _attachClickEvent(): void {
     const itemSelector = this._itemSelector();
-    const pointerEvent = this._getPointerEvent();
+    const pointerDownEvent = pointerEvents.down;
+    const pointerUpEvent = pointerEvents.up;
     // @ts-expect-error ts-error
     const clickEventNamespace = addNamespace(clickEventName, this.NAME);
     // @ts-expect-error ts-error
-    const pointerEventNamespace = addNamespace(pointerEvent, this.NAME);
+    const pointerDownEventNamespace = addNamespace(pointerDownEvent, this.NAME);
+    // @ts-expect-error ts-error
+    const pointerUpEventNamespace = addNamespace(pointerUpEvent, this.NAME);
 
-    const pointerAction = new Action((args) => {
+    const pointerDownAction = new Action((args) => {
       const { event } = args;
 
-      this._itemPointerDownHandler(event);
+      this._itemPointerHandler(event);
+    });
+
+    const pointerUpAction = new Action((args) => {
+      const { event } = args;
+
+      this._itemPointerUpHandler(event);
     });
 
     const clickEventCallback = (e): void => this._itemClickHandler(e);
-    const pointerEventCallback = (e): void => {
-      pointerAction.execute({
+    const pointerDownEventCallback = (e): void => {
+      pointerDownAction.execute({
+        element: $(e.target),
+        event: e,
+      });
+    };
+
+    const pointerUpEventCallback = (e): void => {
+      pointerUpAction.execute({
         element: $(e.target),
         event: e,
       });
     };
 
     eventsEngine.off(this._itemContainer(), clickEventNamespace, itemSelector);
-    eventsEngine.off(this._itemContainer(), pointerEventNamespace, itemSelector);
+    eventsEngine.off(this._itemContainer(), pointerDownEventNamespace, itemSelector);
+    eventsEngine.off(this._itemContainer(), pointerUpEventNamespace, itemSelector);
     eventsEngine.on(this._itemContainer(), clickEventNamespace, itemSelector, clickEventCallback);
     eventsEngine.on(
       this._itemContainer(),
-      pointerEventNamespace,
+      pointerDownEventNamespace,
       itemSelector,
-      pointerEventCallback,
+      pointerDownEventCallback,
+    );
+    eventsEngine.on(
+      this._itemContainer(),
+      pointerUpEventNamespace,
+      itemSelector,
+      pointerUpEventCallback,
     );
   }
 
@@ -960,7 +983,24 @@ class CollectionWidget<
     this._itemDXEventHandler(e, 'onItemClick', args, config);
   }
 
-  _itemPointerDownHandler(e: DxEvent): void {
+  _handleItemFocus(e: DxEvent): void {
+    if (e.isDefaultPrevented()) {
+      return;
+    }
+
+    const $target = $(e.target);
+    const $closestItem = $target.closest(this._itemElements());
+    const $closestFocusable = this._closestFocusable($target);
+
+    if ($closestItem.length && this._isFocusTarget($closestFocusable?.get(0))) {
+      // NOTE: Selection here is already processed in click handler.
+      this._shouldSkipSelectOnFocus = true;
+      this.option('focusedElement', getPublicElement($closestItem));
+      this._shouldSkipSelectOnFocus = false;
+    }
+  }
+
+  _itemPointerHandler(e: DxEvent): void {
     if (!this.option('focusStateEnabled')) {
       return;
     }
@@ -968,29 +1008,18 @@ class CollectionWidget<
       clearTimeout(this._itemFocusTimeout);
       this._itemFocusHandler = undefined;
 
-      if (e.isDefaultPrevented()) {
-        return;
-      }
-
-      const $target = $(e.target);
-      const $closestItem = $target.closest(this._itemElements());
-      const $closestFocusable = this._closestFocusable($target);
-
-      if ($closestItem.length && this._isFocusTarget($closestFocusable?.get(0))) {
-        // NOTE: Selection here is already processed in click handler.
-        this._shouldSkipSelectOnFocus = true;
-        this.option('focusedElement', getPublicElement($closestItem));
-        this._shouldSkipSelectOnFocus = false;
-      }
+      this._handleItemFocus(e);
     };
 
     // eslint-disable-next-line no-restricted-globals
-    this._itemFocusTimeout = setTimeout(
-      this._forcePointerDownFocus.bind(this),
-    );
+    this._itemFocusTimeout = setTimeout(() => {
+      this._forcePointerDownFocus();
+    });
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _itemPointerUpHandler(e: DxEvent): void {}
+
   _closestFocusable(
     $target: dxElementWrapper,
   ): dxElementWrapper | undefined {
