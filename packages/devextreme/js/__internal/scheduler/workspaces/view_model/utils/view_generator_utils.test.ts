@@ -6,23 +6,23 @@ import {
   alignToLastDayOfWeek,
   calculateAlignedWeeksBetweenDates,
   calculateDaysBetweenDates,
-} from '../m_utils';
+} from './view_generator_utils';
 
-/*
+describe('view generator utils', () => {
+  /*
 
-Calendar for 2023-06 for easier test cases understanding:
+  Calendar for 2023-06 for easier test cases understanding:
 
-mon tue wed thu fri sat sun
-             1   2   3   4
- 5   6   7   8   9   10  11
- 12  13  14  15  16  17  18
- 19  20  21  22  23  24  25
- 26  27  28  29  30
+  mon tue wed thu fri sat sun
+               1   2   3   4
+   5   6   7   8   9   10  11
+   12  13  14  15  16  17  18
+   19  20  21  22  23  24  25
+   26  27  28  29  30
 
-*/
-
-describe('alignToFirstDayOfWeek', () => {
-  each`
+  */
+  describe('alignToFirstDayOfWeek', () => {
+    each`
         date                      | firstDayOfWeek
         ${new Date('2023-06-26')} | ${1}
         ${new Date('2023-06-25')} | ${0}
@@ -33,7 +33,7 @@ describe('alignToFirstDayOfWeek', () => {
             expect(resultDate).toEqual(date);
           });
 
-  each`
+    each`
         date                      | rightDate                 | firstDayOfWeek
         ${new Date('2023-06-29')} | ${new Date('2023-06-26')} | ${1}
         ${new Date('2023-06-27')} | ${new Date('2023-06-26')} | ${1}
@@ -48,10 +48,10 @@ describe('alignToFirstDayOfWeek', () => {
             const resultDate = alignToFirstDayOfWeek(date, firstDayOfWeek);
             expect(resultDate).toEqual(rightDate);
           });
-});
+  });
 
-describe('alignToLastDayOfWeek', () => {
-  each`
+  describe('alignToLastDayOfWeek', () => {
+    each`
         date                      | firstDayOfWeek
         ${new Date('2023-06-25')} | ${1}
         ${new Date('2023-06-24')} | ${0}
@@ -62,7 +62,7 @@ describe('alignToLastDayOfWeek', () => {
             expect(resultDate).toEqual(date);
           });
 
-  each`
+    each`
         date                      | rightDate                 | firstDayOfWeek
         ${new Date('2023-06-12')} | ${new Date('2023-06-18')} | ${1}
         ${new Date('2023-06-14')} | ${new Date('2023-06-18')} | ${1}
@@ -75,10 +75,10 @@ describe('alignToLastDayOfWeek', () => {
             const resultDate = alignToLastDayOfWeek(date, firstDayOfWeek);
             expect(resultDate).toEqual(rightDate);
           });
-});
+  });
 
-describe('calculateDaysBetweenDates', () => {
-  each`
+  describe('calculateDaysBetweenDates', () => {
+    each`
         fromDate                  | toDate                     | res
         ${new Date('2023-06-28')} | ${new Date('2023-06-28')}  | ${1}
         ${new Date('2023-06-28')} | ${new Date('2023-06-29')}  | ${2}
@@ -89,7 +89,7 @@ describe('calculateDaysBetweenDates', () => {
             expect(calculateDaysBetweenDates(fromDate, toDate)).toBe(res);
           });
 
-  each`
+    each`
         fromDate                  | toDate                     | res
         ${new Date('2023-06-28T23:59:00')} | ${new Date('2023-06-29T00:01:00')}  | ${2}
         ${new Date('2023-06-28T00:01:00')} | ${new Date('2023-06-28T23:59:00')}  | ${1}
@@ -98,10 +98,10 @@ describe('calculateDaysBetweenDates', () => {
           }) => {
             expect(calculateDaysBetweenDates(fromDate, toDate)).toBe(res);
           });
-});
+  });
 
-describe('calculateAlignedWeeksBetweenDates', () => {
-  each`
+  describe('calculateAlignedWeeksBetweenDates', () => {
+    each`
         fromDate                  | toDate                     | res
         ${new Date('2023-10-01')} | ${new Date('2023-10-31')}  | ${6}
         ${new Date('2023-06-01')} | ${new Date('2023-07-31')}  | ${10}
@@ -111,7 +111,7 @@ describe('calculateAlignedWeeksBetweenDates', () => {
             expect(calculateAlignedWeeksBetweenDates(fromDate, toDate, 1)).toBe(res);
           });
 
-  each`
+    each`
         fromDate                  | toDate                     | res
         ${new Date('2023-06-04')} | ${new Date('2023-06-12')}  | ${6}
         ${new Date('2023-06-05')} | ${new Date('2023-06-12')}  | ${6}
@@ -121,4 +121,5 @@ describe('calculateAlignedWeeksBetweenDates', () => {
           }) => {
             expect(calculateAlignedWeeksBetweenDates(fromDate, toDate, 1)).toBe(res);
           });
+  });
 });
