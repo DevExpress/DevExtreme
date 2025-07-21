@@ -246,19 +246,16 @@ QUnit.module('Markup rendering', moduleConfig, () => {
 
 QUnit.module('fileManager inside popup not causing any warnings in console (T1297188)', moduleConfig_T1297188, () => {
     test('height applies to the details view (T1297188)', function(assert) {
-        const originalWarn = consoleUtils.logger.warn;
-        const warnings = [];
-        consoleUtils.logger.warn = function(message) {
-            warnings.push(message);
-            originalWarn.apply(consoleUtils.logger, arguments);
-        };
+        const loggerSpy = sinon.spy(consoleUtils.logger, 'warn');
 
         try {
-            createFileManagerInsidePopup(this, false, { width: '100%', height: '100%' });
+            const { fileManager } = createFileManagerInsidePopup(this, false, { width: '100%', height: '100%' });
 
             this.clock.tick(400);
 
-            const w1025Warning = warnings.find(warning =>
+            assert.strictEqual(fileManager._itemView._filesView.option('height'), '100%', 'height is applied to the details view');
+
+            const w1025Warning = loggerSpy.args.find(([warning, ...rest]) =>
                 typeof warning === 'string' &&
                 warning.includes('W1025 - \'scrolling.mode\' is set to \'virtual\' or \'infinite\'')
             );
@@ -266,7 +263,7 @@ QUnit.module('fileManager inside popup not causing any warnings in console (T129
             assert.ok(!w1025Warning, 'W1025 scrolling.mode warning should not appear in console');
 
         } finally {
-            consoleUtils.logger.warn = originalWarn;
+            loggerSpy.restore();
         }
     });
 });
