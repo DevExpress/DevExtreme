@@ -161,7 +161,7 @@ module('Table properties forms', {
 
             this.quillInstance.setSelection(50, 1);
 
-            showCellPropertiesForm(this.instance, $tableElement);
+            showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick(10);
             const formInstance = this.getFormInstance();
             const tableBorderColor = $tableElement.css('borderTopColor');
@@ -180,8 +180,8 @@ module('Table properties forms', {
             assert.strictEqual(borderColorEditor.option('value'), tableBorderColor, 'borderColorEditor value is correct');
             assert.strictEqual(backgroundColorEditor.option('value'), tableBackgroundColor, 'backgroundColorEditor value is correct');
             assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'left', 'alignmentEditor selectedItemKeys is correct');
-            assert.roughEqual(heightEditor.option('value'), 73, 3, 'heightEditor value is correct');
-            assert.roughEqual(widthEditor.option('value'), 400, 3, 'widthEditor value is correct');
+            assert.strictEqual(heightEditor.option('value'), null, 'heightEditor value is correct');
+            assert.strictEqual(widthEditor.option('value'), null, 'widthEditor value is correct');
         });
 
         test('Check properties edititng at the table Form (without dimensions)', function(assert) {
@@ -370,12 +370,12 @@ module('Table properties forms', {
             assert.strictEqual(borderWidthEditor.option('value'), 1, 'borderWidthEditor value is correct');
             assert.strictEqual(borderColorEditor.option('value'), 'rgb(221, 221, 221)', 'borderColorEditor value is correct');
             assert.strictEqual(backgroundColorEditor.option('value'), 'rgba(0, 0, 0, 0)', 'backgroundColorEditor value is correct');
-            assert.strictEqual(horizontalPaddingEditor.option('value'), 5, 'horizontalPaddingEditor value is correct');
-            assert.strictEqual(verticalPaddingEditor.option('value'), 2, 'verticalPaddingEditor value is correct');
+            assert.strictEqual(horizontalPaddingEditor.option('value'), null, 'horizontalPaddingEditor value is correct');
+            assert.strictEqual(verticalPaddingEditor.option('value'), null, 'verticalPaddingEditor value is correct');
             assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'left', 'alignmentEditor selectedItemKeys is correct');
             assert.strictEqual(verticalAlignmentEditor.option('selectedItemKeys')[0], 'middle', 'verticalAlignmentEditor selectedItemKeys is correct');
-            assert.roughEqual(heightEditor.option('value'), 24, 2, 'heightEditor value is correct');
-            assert.roughEqual(widthEditor.option('value'), 100, 2, 'widthEditor value is correct');
+            assert.strictEqual(heightEditor.option('value'), null, 'heightEditor value is correct');
+            assert.strictEqual(widthEditor.option('value'), null, 'widthEditor value is correct');
         });
 
         test('Check properties edititng at the cell Form (without dimensions)', function(assert) {
@@ -1041,9 +1041,10 @@ module('Table properties forms', {
             this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick(10);
-            const formInstance = this.getFormInstance();
 
+            const formInstance = this.getFormInstance();
             const widthEditor = formInstance.getEditor('width');
+
             widthEditor.option('value', 60);
 
             this.applyFormChanges();

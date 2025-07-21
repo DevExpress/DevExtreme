@@ -47,7 +47,8 @@ const DIALOG_LINK_FIELD_TARGET_CLASS = 'dx-formdialog-field-target';
 const DIALOG_TABLE_FIELD_COLUMNS = 'dxHtmlEditor-dialogInsertTableRowsField';
 const DIALOG_TABLE_FIELD_ROWS = 'dxHtmlEditor-dialogInsertTableColumnsField';
 
-const DEFAULT_BORDER_WIDTH = 1;
+const DEFAULT_CELL_BORDER_WIDTH = 1;
+const DEFAULT_TABLE_BORDER_WIDTH = 0;
 
 const ICON_MAP = {
   insertHeaderRow: 'header',
@@ -504,7 +505,9 @@ function getTablePropertiesFormConfig(
   const window = getWindow();
 
   const tableStyles = window.getComputedStyle($table.get(0));
-  const tableWidth = isDefined(formats.tableWidth) ? parseFloat(formats.tableWidth) : null;
+  const rawTableWidth = parseFloat(formats.tableWidth);
+
+  const tableWidth = isNaN(rawTableWidth) ? null : rawTableWidth;
   const textAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
 
   const formData = {
@@ -514,7 +517,7 @@ function getTablePropertiesFormConfig(
     borderStyle: formats.tableBorderStyle || tableStyles.borderTopStyle,
     borderColor: formats.tableBorderColor || tableStyles.borderTopColor,
     borderWidth: isDefined(formats.tableBorderWidth)
-      ? parseFloat(formats.tableBorderWidth) : DEFAULT_BORDER_WIDTH,
+      ? parseFloat(formats.tableBorderWidth) : DEFAULT_TABLE_BORDER_WIDTH,
     alignment: formats.tableAlign || textAlign,
   };
 
@@ -724,7 +727,7 @@ function getCellPropertiesFormConfig(
     borderStyle: formats.cellBorderStyle || cellStyles.borderTopStyle,
     borderColor: getColorFromFormat(formats.cellBorderColor) || cellStyles.borderTopColor,
     borderWidth: isDefined(formats.cellBorderWidth)
-      ? parseFloat(formats.cellBorderWidth) : DEFAULT_BORDER_WIDTH,
+      ? parseFloat(formats.cellBorderWidth) : DEFAULT_CELL_BORDER_WIDTH,
     alignment: formats.cellTextAlign || textAlign,
     verticalAlignment: formats.cellVerticalAlign || cellStyles.verticalAlign,
     verticalPadding: isDefined(formats.cellPaddingTop) ? parseFloat(formats.cellPaddingTop) : null,
