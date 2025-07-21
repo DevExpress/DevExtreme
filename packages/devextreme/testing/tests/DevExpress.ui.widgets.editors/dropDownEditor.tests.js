@@ -1940,6 +1940,64 @@ QUnit.module('popup integration', () => {
 
             assert.strictEqual($overlayContent.outerWidth(), $container.outerWidth(), 'width is correct');
         });
+
+        QUnit.test('dropDownOptions should get options from Popup after render', function(assert) {
+            const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                opened: true,
+            }).dxDropDownEditor('instance');
+
+            const { dropDownOptions } = dropDownEditor.option();
+
+
+            assert.strictEqual(dropDownOptions.visible, true, 'dropDownOptions includes visible option from Popup');
+            assert.strictEqual(dropDownOptions.disabled, false, 'dropDownOptions includes disabled option from Popup');
+        });
+
+        QUnit.test('Should cache dropDownOptions from user in _userDropDownOptions on init', function(assert) {
+            const dropDownOptions = { showTitle: true };
+            const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                opened: true,
+                dropDownOptions,
+            }).dxDropDownEditor('instance');
+
+            const { _userDropDownOptions } = dropDownEditor.option();
+
+            assert.deepEqual(_userDropDownOptions, dropDownOptions, 'initial dropDownOptions are cached in _userDropDownOptions');
+        });
+
+        QUnit.test('Should cache updated dropDownOptions from user in _userDropDownOptions on runtime change', function(assert) {
+            const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                opened: true,
+            }).dxDropDownEditor('instance');
+
+            dropDownEditor.option('dropDownOptions', { width: 123 });
+
+            const { _userDropDownOptions } = dropDownEditor.option();
+
+            assert.deepEqual(_userDropDownOptions, { width: 123, showTitle: false }, 'updated dropDownOptions are cached in _userDropDownOptions');
+        });
+
+        QUnit.test('_userDropDownOptions cache should be updated correctly after partial dropDownOptions update', function(assert) {
+            const dropDownOptions = {
+                showTitle: false,
+                position: {
+                    my: 'left',
+                    at: 'right',
+                    of: '#dropDownEditorLazy',
+                }
+            };
+            const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                opened: true,
+                dropDownOptions,
+            }).dxDropDownEditor('instance');
+
+            dropDownEditor.option('dropDownOptions.position.my', 'top');
+
+            const { _userDropDownOptions } = dropDownEditor.option();
+            dropDownOptions.position.my = 'top';
+
+            assert.deepEqual(_userDropDownOptions, dropDownOptions, 'updated part of dropDownOptions is cached in _userDropDownOptions');
+        });
     });
 
     QUnit.module('overlay content height', () => {

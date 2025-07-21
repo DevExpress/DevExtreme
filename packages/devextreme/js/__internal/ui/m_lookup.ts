@@ -622,7 +622,7 @@ class Lookup extends DropDownList<LookupProperties> {
 
     const options = extend(
       popupConfig,
-      this._options.cache('dropDownOptions'),
+      this.option('_userDropDownOptions'),
       {
         showEvent: null,
         hideEvent: null,
@@ -1160,9 +1160,7 @@ class Lookup extends DropDownList<LookupProperties> {
               fullName,
               value: value === 'auto' ? this.initialOption('dropDownOptions')[getFieldName(fullName)] : value,
             });
-            const { dropDownOptions } = this.option();
-            // @ts-expect-error ts-error
-            this._options.cache('dropDownOptions', dropDownOptions);
+            this._cacheUserDropDownOptions(value, fullName);
             break;
           }
           default:
