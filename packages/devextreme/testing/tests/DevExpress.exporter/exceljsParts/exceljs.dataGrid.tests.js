@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import errors from 'core/errors';
-import ExcelJS from 'exceljs';
+import ExcelJS from 'devextreme-exceljs-fork';
 import { ExcelJSDataGridTestHelper } from './ExcelJSTestHelper.js';
 import { exportDataGrid } from 'excel_exporter';
 import { Export } from '__internal/exporter/exceljs/export';
