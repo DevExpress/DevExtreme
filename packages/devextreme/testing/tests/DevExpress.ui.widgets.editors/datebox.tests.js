@@ -3281,7 +3281,7 @@ QUnit.module('datebox with time component', {
         assert.ok(amPmEditor.hasClass('dx-editor-underlined'));
     });
 
-    QUnit.test('DateBox with timeview should have amPm popup inside of dateBox popup content', function(assert) {
+    QUnit.test('DateBox with timeview should have amPm popup inside of dateBox popup content (T1300566)', function(assert) {
         const dateBox = $('#dateBox').dxDateBox({
             type: 'datetime',
             pickerType: 'calendar',

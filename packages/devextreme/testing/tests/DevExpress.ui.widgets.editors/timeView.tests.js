@@ -332,7 +332,7 @@ QUnit.module('12 hours format', () => {
         assert.equal($element.find('.' + TIMEVIEW_FORMAT12_CLASS).length, 0, 'input was removed');
     });
 
-    QUnit.test('format selcetBox should set timeView root as a dropDown contanier', function(assert) {
+    QUnit.test('format selectBox should set timeView root as a dropDown container (T1300566)', function(assert) {
         const $element = $('#timeView').dxTimeView({
             use24HourFormat: false,
         });
