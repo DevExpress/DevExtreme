@@ -5,12 +5,12 @@ import {
   it,
 } from '@jest/globals';
 
+import * as ReactiveDev from './index';
 import type {
   ReadonlySignal,
   Signal,
-} from './index';
-import * as Reactive from './index';
-import * as ReactiveDev from './index.dev';
+} from './index.prod';
+import * as Reactive from './index.prod';
 
 describe('Reactive wrapper', () => {
   describe.each([

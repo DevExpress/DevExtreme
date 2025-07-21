@@ -1,4 +1,4 @@
-import * as Reactive from './index';
+import * as Reactive from './index.prod';
 import type {
   BatchFunction,
   ComputedFunction,
