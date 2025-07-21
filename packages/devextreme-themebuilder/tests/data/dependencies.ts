@@ -10,7 +10,7 @@ export const dependencies: FlatStylesDependencies = {
   actionsheet: ['validation', 'button', 'popup', 'popover'],
   textbox: ['validation', 'button', 'loadindicator'],
   scrollview: ['loadindicator', 'loadpanel'],
-  list: ['validation', 'button', 'loadindicator', 'loadpanel', 'scrollview'],
+  list: ['validation', 'button', 'loadindicator', 'loadpanel', 'scrollview', 'textbox'],
   autocomplete: ['validation', 'button', 'loadindicator', 'textbox', 'popup', 'loadpanel', 'scrollview', 'list'],
   box: [],
   buttongroup: ['validation', 'button'],

@@ -6,9 +6,9 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import type { ValueChangedEvent } from '@js/ui/text_box';
 import TextBox from '@js/ui/text_box';
-import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
+import type { SearchBoxControllerOptions as Options } from '@js/ui/widget/ui.search_box_controller';
 
-export type SearchBoxControllerOptions = SearchBoxMixinOptions & {
+export type SearchBoxControllerOptions = Options & {
   tabIndex?: number;
   onValueChanged?: (value: string) => void;
 };

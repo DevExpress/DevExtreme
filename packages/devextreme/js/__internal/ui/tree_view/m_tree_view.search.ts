@@ -2,11 +2,10 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
-import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
-import { extend } from '@ts/core/utils/m_extend';
+import type { SearchBoxControllerOptions as Options } from '@js/ui/widget/ui.search_box_controller';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { SearchBoxControllerOptions } from '@ts/ui/collection/m_search_box_mixin';
-import SearchBoxController from '@ts/ui/collection/m_search_box_mixin';
+import type { SearchBoxControllerOptions } from '@ts/ui/collection/m_search_box_controller';
+import SearchBoxController from '@ts/ui/collection/m_search_box_controller';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
 
 import type { DataAdapterOptions } from '../hierarchical_collection/data_adapter';
@@ -16,17 +15,18 @@ import TreeViewBase from './m_tree_view.base';
 const TREEVIEW_CLASS_PREFIX = 'dx-treeview';
 const TREEVIEW_NODE_CONTAINER_CLASS = `${TREEVIEW_CLASS_PREFIX}-node-container`;
 
-type TreeViewSearchProperties = TreeViewBaseProperties & SearchBoxMixinOptions;
+type TreeViewSearchProperties = TreeViewBaseProperties & Options;
 
 class TreeViewSearch extends TreeViewBase {
   _searchController!: SearchBoxController;
 
   _getDefaultOptions(): TreeViewSearchProperties {
-    return extend(super._getDefaultOptions(), {
+    return {
+      ...super._getDefaultOptions(),
       searchValue: '',
       searchEnabled: false,
       searchEditorOptions: {},
-    }) as TreeViewSearchProperties;
+    } as TreeViewSearchProperties;
   }
 
   _getSearchBoxControllerOptions(): SearchBoxControllerOptions {

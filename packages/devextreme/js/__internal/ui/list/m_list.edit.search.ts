@@ -1,18 +1,17 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
 import errors from '@js/ui/widget/ui.errors';
-import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
-import { extend } from '@ts/core/utils/m_extend';
+import type { SearchBoxControllerOptions as Options } from '@js/ui/widget/ui.search_box_controller';
 import type { OptionChanged } from '@ts/core/widget/types';
 import SearchBoxController, {
   getOperationBySearchMode,
   type SearchBoxControllerOptions,
-} from '@ts/ui/collection/m_search_box_mixin';
+} from '@ts/ui/collection/m_search_box_controller';
 import type { ListBaseProperties } from '@ts/ui/list/m_list.base';
 
 import ListEdit from './m_list.edit';
 
-type ListSearchProperties = ListBaseProperties & SearchBoxMixinOptions;
+type ListSearchProperties = ListBaseProperties & Options;
 
 const LIST_CLASS_PREFIX = 'dx-list';
 
@@ -23,7 +22,7 @@ class ListSearch extends ListEdit {
 
   _getCombinedFilter() {
     const dataController = this._dataController;
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     const storeLoadOptions = { filter: dataController.filter() };
     dataController.addSearchFilter(storeLoadOptions);
     const { filter } = storeLoadOptions;
@@ -32,13 +31,14 @@ class ListSearch extends ListEdit {
   }
 
   _getDefaultOptions(): ListSearchProperties {
-    return extend(super._getDefaultOptions(), {
+    return {
+      ...super._getDefaultOptions(),
       searchMode: '',
       searchExpr: null,
       searchValue: '',
       searchEnabled: false,
       searchEditorOptions: {},
-    }) as ListSearchProperties;
+    } as ListSearchProperties;
   }
 
   _getSearchBoxControllerOptions(): SearchBoxControllerOptions {

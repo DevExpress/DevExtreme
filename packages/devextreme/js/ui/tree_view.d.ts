@@ -23,8 +23,8 @@ import HierarchicalCollectionWidget, {
 } from './hierarchical_collection/ui.hierarchical_collection_widget';
 
 import {
-    SearchBoxMixinOptions,
-} from './widget/ui.search_box_mixin';
+    SearchBoxControllerOptions,
+} from './widget/ui.search_box_controller';
 
 import {
     DataStructure,
@@ -180,7 +180,7 @@ export type SelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
  * @docid
  */
 export interface dxTreeViewOptions<TKey = any>
-    extends Omit<HierarchicalCollectionWidgetOptions<dxTreeView<TKey>, dxTreeViewItem, TKey>, 'dataSource'>, SearchBoxMixinOptions {
+    extends Omit<HierarchicalCollectionWidgetOptions<dxTreeView<TKey>, dxTreeViewItem, TKey>, 'dataSource'>, SearchBoxControllerOptions {
     /**
      * @docid
      * @default true

@@ -36,8 +36,8 @@ import {
 } from './sortable';
 
 import {
-    SearchBoxMixinOptions,
-} from './widget/ui.search_box_mixin';
+    SearchBoxControllerOptions,
+} from './widget/ui.search_box_controller';
 
 export {
     SelectAllMode,
@@ -276,7 +276,7 @@ export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = Ev
 export interface dxListOptions<
     TItem extends ItemLike = any,
     TKey = any,
-> extends CollectionWidgetOptions<dxList<TItem, TKey>, TItem, TKey>, SearchBoxMixinOptions {
+> extends CollectionWidgetOptions<dxList<TItem, TKey>, TItem, TKey>, SearchBoxControllerOptions {
     /**
      * @docid
      * @default true
