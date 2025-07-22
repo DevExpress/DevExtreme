@@ -72,7 +72,6 @@ interface OverlayAnimationConfig extends AnimationConfig {
 }
 
 ready(() => {
-  // subscribeGlobal метод отсутствует в типах eventsEngine, но существует в реализации
   (eventsEngine as typeof eventsEngine & { subscribeGlobal: Function }).subscribeGlobal(
     domAdapter.getDocument(),
     pointerEvents.down,
@@ -86,13 +85,11 @@ ready(() => {
   );
 });
 
-// Интерфейс для информации о подписке на прокрутку родительских элементов
 interface ParentsScrollSubscriptionInfo {
   handler: (e: Event) => void;
   prevTargets?: dxElementWrapper;
 }
 
-// Интерфейс для действий overlay
 interface OverlayActions {
   [actionName: string]: (e?: Record<string, unknown>) => void;
 }
@@ -405,7 +402,6 @@ class Overlay<
     const { hideOnOutsideClick } = this.option();
 
     if (isFunction(hideOnOutsideClick)) {
-      // Create proper DxEvent from native PointerEvent
       const dxEvent = createEvent(e, {
         target: e.target,
         currentTarget: e.currentTarget,
