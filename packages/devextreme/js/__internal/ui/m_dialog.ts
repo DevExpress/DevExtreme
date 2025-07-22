@@ -51,7 +51,7 @@ const getCancelButtonConfig = () => {
   if (isFluent()) {
     return {
       stylingMode: 'outlined',
-      type: 'default',
+      type: 'normal',
     };
   }
 

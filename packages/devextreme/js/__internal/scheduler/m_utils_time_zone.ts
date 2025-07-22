@@ -360,6 +360,12 @@ const cacheTimeZones = async (): Promise<TimezoneLabel[]> => globalCache.timezon
 
 const getTimeZonesCache = (): TimezoneLabel[] => globalCache.timezones.get('timeZonesCache') ?? [];
 
+const isLocalTimeMidnightDST = (date: Date): boolean => {
+  const startDayDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+  return startDayDate.getHours() === 1;
+};
+
 const utils = {
   getDaylightOffset,
   getDaylightOffsetInMs,
@@ -389,6 +395,8 @@ const utils = {
   getTimeZones,
   getTimeZonesCache,
   cacheTimeZones,
+
+  isLocalTimeMidnightDST,
 };
 
 export default utils;

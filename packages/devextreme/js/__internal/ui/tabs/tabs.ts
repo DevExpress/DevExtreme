@@ -513,6 +513,14 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this._scrollable.scrollToElement($item);
   }
 
+  _itemPointerHandler(e: DxEvent): void {
+    this._handleItemFocus(e);
+  }
+
+  _itemPointerUpHandler(e: DxEvent): void {
+    super._itemPointerHandler(e);
+  }
+
   _renderNavButtons(): void {
     const { showNavButtons, rtlEnabled } = this.option();
 

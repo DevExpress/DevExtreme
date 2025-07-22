@@ -11,10 +11,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-function toSelector(text) {
-    return '.' + text;
-}
-
 const PROGRESSBAR_CLASS = 'dx-progressbar';
 const PROGRESSBAR_CONTAINER_CLASS = 'dx-progressbar-container';
 const PROGRESSBAR_RANGE_CLASS = 'dx-progressbar-range';
@@ -34,10 +30,10 @@ QUnit.module('ProgressBar markup', {
         const $progressBar = this.$element.dxProgressBar();
 
         assert.ok($progressBar.hasClass(PROGRESSBAR_CLASS), 'ProgressBar initialized');
-        assert.equal($progressBar.find(toSelector(PROGRESSBAR_CONTAINER_CLASS)).length, 1, 'Container has been created');
-        assert.equal($progressBar.find(toSelector(PROGRESSBAR_RANGE_CLASS)).length, 1, 'Range has been created');
-        assert.equal($progressBar.find(toSelector(PROGRESSBAR_WRAPPER_CLASS)).length, 1, 'Wrapper div has been created');
-        assert.equal($progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS)).length, 1, 'Status div has been created');
+        assert.equal($progressBar.find(`.${PROGRESSBAR_CONTAINER_CLASS}`).length, 1, 'Container has been created');
+        assert.equal($progressBar.find(`.${PROGRESSBAR_RANGE_CLASS}`).length, 1, 'Range has been created');
+        assert.equal($progressBar.find(`.${PROGRESSBAR_WRAPPER_CLASS}`).length, 1, 'Wrapper div has been created');
+        assert.equal($progressBar.find(`.${PROGRESSBAR_STATUS_CLASS}`).length, 1, 'Status div has been created');
     });
 
     QUnit.test('showStatus test', function(assert) {
@@ -48,10 +44,10 @@ QUnit.module('ProgressBar markup', {
         });
         const progressBar = $progressBar.dxProgressBar('instance');
 
-        assert.equal($progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS)).length, 0, 'Status div hasn\'t been created');
+        assert.equal($progressBar.find(`.${PROGRESSBAR_STATUS_CLASS}`).length, 0, 'Status div hasn\'t been created');
 
         progressBar.option('showStatus', true);
-        assert.equal($progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS)).length, 1, 'Status div has been added');
+        assert.equal($progressBar.find(`.${PROGRESSBAR_STATUS_CLASS}`).length, 1, 'Status div has been added');
     });
 
     QUnit.test('value display in status', function(assert) {
@@ -59,7 +55,7 @@ QUnit.module('ProgressBar markup', {
             value: 10
         });
         const progressBar = $progressBar.dxProgressBar('instance');
-        const $status = $progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS));
+        const $status = $progressBar.find(`.${PROGRESSBAR_STATUS_CLASS}`);
 
         assert.equal($status.text(), 'Progress: ' + progressBar.option('value') + '%', 'status text is right');
     });
@@ -72,7 +68,7 @@ QUnit.module('ProgressBar markup', {
             }
         });
         const progressBar = $progressBar.dxProgressBar('instance');
-        const $status = $progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS));
+        const $status = $progressBar.find(`.${PROGRESSBAR_STATUS_CLASS}`);
         assert.equal($status.text(), 'Customised value: ' + progressBar.option('value'), 'status text is right');
     });
 
@@ -105,10 +101,10 @@ QUnit.module('ProgressBar markup', {
         });
         const progressBar = $progressBar.dxProgressBar('instance');
 
-        const renderedIndeterminateSegmentsCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT)).length;
+        const renderedIndeterminateSegmentsCount = $progressBar.find(`.${PROGRESSBAR_INDETERMINATE_SEGMENT}`).length;
         const defaultSegmentCount = progressBar.option('_animatingSegmentCount');
 
-        assert.equal($progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER)).length, 1, 'Segment wrapper has been created');
+        assert.equal($progressBar.find(`.${PROGRESSBAR_INDETERMINATE_SEGMENT_CONTAINER}`).length, 1, 'Segment wrapper has been created');
         assert.equal(renderedIndeterminateSegmentsCount, defaultSegmentCount, 'Segments have been created');
     });
 
@@ -119,7 +115,7 @@ QUnit.module('ProgressBar markup', {
         });
         const progressBar = $progressBar.dxProgressBar('instance');
 
-        const renderedIndeterminateSegmentsCount = $progressBar.find(toSelector(PROGRESSBAR_INDETERMINATE_SEGMENT)).length;
+        const renderedIndeterminateSegmentsCount = $progressBar.find(`.${PROGRESSBAR_INDETERMINATE_SEGMENT}`).length;
         const defaultSegmentCount = progressBar.option('_animatingSegmentCount');
 
         assert.equal(renderedIndeterminateSegmentsCount, defaultSegmentCount, 'dxProgressBar have been created with correct segment count');
