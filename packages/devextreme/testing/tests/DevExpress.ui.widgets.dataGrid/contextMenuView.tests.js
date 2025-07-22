@@ -26,6 +26,7 @@ QUnit.module('Context menu', {
         this.element = function() {
             return $('#container');
         };
+        this.$element = function() {};
         const that = this;
         setupDataGridModules(this, ['contextMenu'], {
             initViews: true,
@@ -211,6 +212,7 @@ QUnit.module('Context menu with rowsView', {
         that.element = function() {
             return $('#secondContainer');
         };
+        this.$element = function() {};
 
         that.items = [
             { data: { Column1: 'test1', Column2: 'test2' }, values: ['test1', 'test2'], rowType: 'data', dataIndex: 0 },
