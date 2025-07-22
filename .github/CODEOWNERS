@@ -624,6 +624,418 @@
 
 /packages/devextreme/js/viz/**/*.d.ts                          @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
 
+# Editors
+
+/e2e/testcafe-devextreme/tests/editors/**                            @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/fileUploader/**                       @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/htmlEditor/**                         @DevExpress/devextreme-editors
+
+/apps/demos/Demos/Common/EditorsOverview/**                          @DevExpress/devextreme-editors
+/apps/demos/Demos/Common/CustomTextEditorButtons/**                  @DevExpress/devextreme-editors
+/apps/demos/Demos/Common/EditorAppearanceVariants/**                 @DevExpress/devextreme-editors
+/apps/demos/Demos/Common/EditorsRightToLeftSupport/**                @DevExpress/devextreme-editors
+/apps/demos/Demos/Common/PopupAndNotificationsOverview/**            @DevExpress/devextreme-editors
+
+## autocomplete
+/packages/devextreme/js/ui/autocomplete.d.ts                         @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/autocomplete_types.d.ts                   @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/m_autocomplete.ts              @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/autocomplete/**  @DevExpress/devextreme-editors
+
+/apps/demos/Demos/Autocomplete/**                                    @DevExpress/devextreme-editors
+
+## calendar
+/packages/devextreme/js/ui/calendar.d.ts                             @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/calendar_types.d.ts                       @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/calendar/**                    @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/**/calendar/**               @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/calendar.ts      @DevExpress/devextreme-editors
+
+/apps/demos/Demos/Calendar/**                                        @DevExpress/devextreme-editors
+
+## chat
+/packages/devextreme/js/ui/chat.d.ts                                 @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/chat_types.d.ts                           @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/chat/**                        @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/**/chat/**                    @DevExpress/devextreme-editors
+
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/chatParts/** @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/chat.markup.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/chat.tests.js @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/chat/**                               @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/common/chat.ts          @DevExpress/devextreme-editors
+
+/apps/demos/Demos/Chat/**                                            @DevExpress/devextreme-editors
+
+## check_box
+/packages/devextreme/js/ui/check_box.d.ts                            @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/check_box_types.d.ts                      @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/check_box/**                   @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/**/checkBox/**                @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/checkBox.ts      @DevExpress/devextreme-editors
+
+/apps/demos/Demos/CheckBox/**                                        @DevExpress/devextreme-editors
+
+## color_box
+/packages/devextreme/js/ui/color_box.d.ts                            @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/color_box_types.d.ts                      @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/ui/color_box/**                              @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/color_box/**                   @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/**/colorBox/**                @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/colorBox/**      @DevExpress/devextreme-editors
+
+/apps/demos/Demos/ColorBox/**                                        @DevExpress/devextreme-editors
+
+## date_box
+/packages/devextreme/js/ui/date_box.d.ts                             @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/date_box_types.d.ts                       @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/ui/date_box/**                               @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/date_box/**                    @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/base/_dateBox.scss            @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_dateView.scss           @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/dateBox/**                 @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/dateBox/**       @DevExpress/devextreme-editors
+
+/apps/demos/Demos/DateBox/**                                         @DevExpress/devextreme-editors
+
+## date_range_box
+/packages/devextreme/js/ui/date_range_box.d.ts                       @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/date_range_box_types.d.ts                 @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/date_range_box/**              @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/**/dateRangeBox/**            @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/dateRangeBox/**  @DevExpress/devextreme-editors
+
+/apps/demos/Demos/DateRangeBox/**                                    @DevExpress/devextreme-editors
+
+## drop_down_box
+/packages/devextreme/js/ui/drop_down_box.d.ts                        @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/drop_down_box_types.d.ts                  @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/m_drop_down_box.ts             @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/dropDownBox/**   @DevExpress/devextreme-editors
+
+/apps/demos/Demos/DropDownBox/**                                     @DevExpress/devextreme-editors
+
+## drop_down_button
+/packages/devextreme/js/ui/drop_down_button.d.ts                     @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/drop_down_button_types.d.ts               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/m_drop_down_button.ts          @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/**/dropDownButton/**          @DevExpress/devextreme-editors
+
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/dropDownButton.markup.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/dropDownButton.tests.js @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/common/dropDownButton.ts @DevExpress/devextreme-editors
+
+/apps/demos/Demos/DropDownButton/**                                  @DevExpress/devextreme-editors
+
+## drop_down_editor
+/packages/devextreme/js/ui/drop_down_editor/**                       @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/drop_down_editor/**            @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/base/dropDownEditor/**        @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/base/_dropDownList.scss       @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/dropDownEditor/**    @DevExpress/devextreme-editors
+
+## editor
+/packages/devextreme/js/ui/editor/**                                 @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/editor/**                      @DevExpress/devextreme-editors
+
+## file_uploader
+/packages/devextreme/js/ui/file_uploader.d.ts                        @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/file_uploader_types.d.ts                  @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme-scss/scss/widgets/base/_fileUploader.scss       @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/fileUploader/**            @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/fileUploader.ts  @DevExpress/devextreme-editors
+
+/apps/demos/Demos/FileUploader/**                                    @DevExpress/devextreme-editors
+
+## html_editor
+/packages/devextreme/js/ui/html_editor.d.ts                          @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/html_editor_types.d.ts                    @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/ui/html_editor/**                            @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/html_editor/**                 @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/base/_htmlEditor.scss         @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/htmlEditor/**              @DevExpress/devextreme-editors
+
+/packages/devextreme/testing/tests/DevExpress.ui.widgets.htmlEditor/** @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/common/htmlEditor.ts    @DevExpress/devextreme-editors
+
+## load_panel
+/packages/devextreme/js/ui/load_panel.d.ts                           @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/load_panel_types.d.ts                     @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/m_load_panel.ts                @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/base/_loadPanel.scss          @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/loadPanel/**               @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/loadPanel.ts     @DevExpress/devextreme-editors
+
+/apps/demos/Demos/LoadPanel/**                                       @DevExpress/devextreme-editors
+
+## lookup
+/packages/devextreme/js/ui/lookup.d.ts                               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/lookup_types.d.ts                         @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/m_lookup.ts                    @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/lookup.ts        @DevExpress/devextreme-editors
+
+/apps/demos/Demos/Lookup/**                                          @DevExpress/devextreme-editors
+
+## map
+/packages/devextreme/js/ui/map.d.ts                                   @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/map_types.d.ts                            @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/map/**                         @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/base/_map.scss                @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/map/**                     @DevExpress/devextreme-editors
+
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/mapParts/** @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/map.tests.js @DevExpress/devextreme-editors
+
+/apps/demos/Demos/Map/**                                             @DevExpress/devextreme-editors
+
+## number_box
+/packages/devextreme/js/ui/number_box.d.ts                           @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/number_box_types.d.ts                     @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/number_box/**                  @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/base/_numberBox.scss          @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/numberBox/**               @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/numberBox.ts     @DevExpress/devextreme-editors
+
+/apps/demos/Demos/NumberBox/**                                       @DevExpress/devextreme-editors
+
+## overlay
+/packages/devextreme/js/ui/overlay.d.ts                              @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/overlay_types.d.ts                        @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/overlay/**                     @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/base/_overlay.scss            @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/overlay/**                 @DevExpress/devextreme-editors
+
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/overlay.tests.js @DevExpress/devextreme-editors
+
+## popover
+/packages/devextreme/js/ui/popover.d.ts                              @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/popover_types.d.ts                        @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/ui/popover/**                                @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/popover/**                     @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/**/popover/**                 @DevExpress/devextreme-editors
+
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/popover.tests.js @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/common/popover.ts       @DevExpress/devextreme-editors
+
+/apps/demos/Demos/Popover/**                                         @DevExpress/devextreme-editors
+
+## popup
+/packages/devextreme/js/ui/popup.d.ts                                @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/popup_types.d.ts                          @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/ui/popup/**                                  @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/popup/**                       @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/base/_popup.scss              @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/popup/**                   @DevExpress/devextreme-editors
+
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/popup.materialTheme.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/popup.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/popupDrag.tests.js @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/popup.ts         @DevExpress/devextreme-editors
+
+/apps/demos/Demos/Popup/**                                           @DevExpress/devextreme-editors
+
+## progress_bar
+/packages/devextreme/js/ui/progress_bar.d.ts                         @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/progress_bar_types.d.ts                   @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/m_progress_bar.ts              @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/base/_progressBar.scss        @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/progressBar/**             @DevExpress/devextreme-editors
+
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/progressBar.markup.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/progressBar.tests.js @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/common/progressBar.ts   @DevExpress/devextreme-editors
+
+/apps/demos/Demos/ProgressBar/**                                     @DevExpress/devextreme-editors
+
+## range_slider
+/packages/devextreme/js/ui/range_slider.d.ts                         @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/range_slider_types.d.ts                   @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/m_range_slider.ts              @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/base/_rangeSlider.scss        @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/rangeSlider/**             @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/rangeSlider.ts   @DevExpress/devextreme-editors
+
+/apps/demos/Demos/RangeSlider/**                                     @DevExpress/devextreme-editors
+
+## select_box
+/packages/devextreme/js/ui/select_box.d.ts                           @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/select_box_types.d.ts                     @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/m_select_box.ts                @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/selectBox/**     @DevExpress/devextreme-editors
+
+## slider
+/packages/devextreme/js/ui/slider.d.ts                               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/slider_types.d.ts                         @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/slider/**                      @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/slider.ts        @DevExpress/devextreme-editors
+
+## switch
+/packages/devextreme/js/ui/switch.d.ts                               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/switch_types.d.ts                         @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/m_switch.ts                    @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/**/switch/**                  @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/switch.ts        @DevExpress/devextreme-editors
+
+/apps/demos/Demos/Switch/**                                          @DevExpress/devextreme-editors
+
+## tag_box
+/packages/devextreme/js/ui/tag_box.d.ts                              @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/tag_box_types.d.ts                        @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/m_tag_box.ts                   @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/base/_tagBox.scss             @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/tagBox/**                  @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/tagBox/**        @DevExpress/devextreme-editors
+
+/apps/demos/Demos/TagBox/**                                          @DevExpress/devextreme-editors
+
+## text_area
+/packages/devextreme/js/ui/text_area.d.ts                            @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/text_area_types.d.ts                      @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/m_text_area.ts                 @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/**/textArea/**                @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/textArea.ts      @DevExpress/devextreme-editors
+
+/apps/demos/Demos/TextArea/**                                        @DevExpress/devextreme-editors
+
+## text_box
+/packages/devextreme/js/ui/text_box.d.ts                             @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/text_box_types.d.ts                       @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/ui/text_box/**                               @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/text_box/**                    @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/**/textEditor/**              @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/textBox.ts       @DevExpress/devextreme-editors
+
+/apps/demos/Demos/TextBox/**                                         @DevExpress/devextreme-editors
+
+## toast
+/packages/devextreme/js/ui/toast.d.ts                                @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/toast_types.d.ts                          @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/ui/toast/**                                  @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/toast/**                       @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/base/_toast.scss              @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/toast/**                   @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/toast.ts         @DevExpress/devextreme-editors
+
+/apps/demos/Demos/Toast/**                                           @DevExpress/devextreme-editors
+
+## tooltip
+/packages/devextreme/js/ui/tooltip.d.ts                              @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/tooltip_types.d.ts                        @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/tooltip/**                     @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_tooltip.ts                   @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/base/_tooltip.scss            @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/tooltip/**                 @DevExpress/devextreme-editors
+
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/tooltip.tests.js @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/DevExpress.ui/tooltip.tests.js    @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/common/tooltip.ts       @DevExpress/devextreme-editors
+
+/apps/demos/Demos/Tooltip/**                                         @DevExpress/devextreme-editors
+
+## validation
+/packages/devextreme/js/ui/validation_engine.d.ts                    @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/validation_group.d.ts                     @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/validation_message.d.ts                   @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/validation_summary.d.ts                   @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/validator.d.ts                            @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/validation_engine_types.d.ts              @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/validation_group_types.d.ts               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/validation_message_types.d.ts             @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/validation_summary_types.d.ts             @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/validator_types.d.ts                      @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+/packages/devextreme/js/__internal/ui/m_validation_engine.ts         @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_validation_group.ts          @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_validation_message.ts        @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_validation_summary.ts        @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_validator.ts                 @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/widgets/base/_validation.scss         @DevExpress/devextreme-editors
+/packages/devextreme-scss/scss/widgets/**/validation/**          @DevExpress/devextreme-editors
+
+/e2e/testcafe-devextreme/tests/accessibility/common/validationSummary.ts @DevExpress/devextreme-editors
+
+/apps/demos/Demos/Validation/**                                      @DevExpress/devextreme-editors
+
+## common editors
+/packages/devextreme/testing/tests/DevExpress.ui.widgets.editors/**  @DevExpress/devextreme-editors
+
+/packages/devextreme/js/__internal/ui/informer/informer.ts           @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/informer/**                    @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/m_track_bar.ts                 @DevExpress/devextreme-editors
+
 # DevOps
 
 /.github/**             @DevExpress/devextreme-devops
