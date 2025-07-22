@@ -158,7 +158,7 @@ QUnit.test('PointerDown event at checkbox should not be ignored', function(asser
     });
 
     const treeView = $treeView.dxTreeView('instance');
-    const pointerDownStub = sinon.stub(treeView, '_itemPointerDownHandler');
+    const pointerDownStub = sinon.stub(treeView, '_itemPointerHandler');
 
     const $node = $treeView.find('.' + NODE_CLASS).eq(0);
     const $checkBox = $node.find('.dx-checkbox');
@@ -180,7 +180,7 @@ QUnit.test('PointerDown event at expansion arrow should not be ignored', functio
     });
 
     const treeView = $treeView.dxTreeView('instance');
-    const pointerDownStub = sinon.stub(treeView, '_itemPointerDownHandler');
+    const pointerDownStub = sinon.stub(treeView, '_itemPointerHandler');
 
     const $node = $treeView.find('.' + NODE_CLASS).eq(0);
     const $arrow = $node.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS);

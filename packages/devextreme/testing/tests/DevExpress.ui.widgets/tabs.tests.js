@@ -11,6 +11,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import { TestAsyncTabsWrapper, TestTabsWrapper } from '../../helpers/wrappers/tabsWrappers.js';
 import { getScrollLeftMax } from '__internal/ui/scroll_view/utils/get_scroll_left_max';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import pointerEvents from 'common/core/events/pointer';
 
 QUnit.testStart(function() {
     const markup =
@@ -152,7 +153,7 @@ QUnit.module('General', () => {
         assert.equal(tabsInstance.option('selectedIndex'), 2);
     });
 
-    QUnit.test('dxpointerup event should change focused tab', function(assert) {
+    QUnit.test('dxpointerdown event should change focused tab', function(assert) {
         const clock = sinon.useFakeTimers();
 
         const $tabs = $('#tabs').dxTabs({
@@ -162,15 +163,31 @@ QUnit.module('General', () => {
         const $secondTab = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
 
         try {
-            $secondTab.trigger('dxpointerdown');
+            $secondTab.trigger(pointerEvents.down);
             clock.tick(10);
-            assert.strictEqual($secondTab.hasClass(FOCUS_STATE_CLASS), false);
-            $secondTab.trigger('dxpointerup');
+            assert.strictEqual($secondTab.hasClass(FOCUS_STATE_CLASS), true);
+            $secondTab.trigger(pointerEvents.up);
             clock.tick(10);
             assert.strictEqual($secondTab.hasClass(FOCUS_STATE_CLASS), true);
         } finally {
             clock.restore();
         }
+    });
+
+    QUnit.test('focusedElement should be changed on pointerDown (T1297348)', function(assert) {
+        const tabs = $('#tabs').dxTabs({
+            focusStateEnabled: true,
+            items: [1, 2],
+        }).dxTabs('instance');
+
+        const $secondTab = $(tabs.$element()).find(`.${TABS_ITEM_CLASS}`).eq(1);
+
+        $secondTab.trigger(pointerEvents.down);
+        assert.strictEqual($secondTab.hasClass(FOCUS_STATE_CLASS), true);
+
+        const $focusedElement = $(tabs.option('focusedElement'));
+
+        assert.strictEqual($focusedElement.get(0), $secondTab.get(0), 'focusedElement is changed correctly');
     });
 
     QUnit.test('regression: wrong selectedIndex in tab mouseup handler', function(assert) {
