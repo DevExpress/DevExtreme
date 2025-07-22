@@ -7788,7 +7788,7 @@ declare module DevExpress.events {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type DxEvent<TNativeEvent extends Event = Event> =
-    ({} extends EventType ? EventObject<TNativeEvent> : EventType) & {
+    ({} extends EventType ? EventObject & TNativeEvent : EventType) & {
       /**
        * [descr:DxEvent.originalEvent]
        */
@@ -7803,226 +7803,23 @@ declare module DevExpress.events {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type EventObject<TNativeEvent extends Event = Event> = {
-    /**
-     * [descr:EventObject.altKey]
-     */
-    altKey: PickFromEvent<
-      TNativeEvent,
-      MouseEvent | TouchEvent | KeyboardEvent,
-      'altKey'
-    >;
-
-    /**
-     * [descr:EventObject.bubbles]
-     */
-    bubbles: boolean;
-
-    /**
-     * [descr:EventObject.button]
-     */
-    button: PickFromEvent<TNativeEvent, MouseEvent, 'button'>;
-
-    /**
-     * [descr:EventObject.buttons]
-     */
-    buttons: PickFromEvent<TNativeEvent, MouseEvent, 'buttons'>;
-
-    /**
-     * [descr:EventObject.cancelable]
-     */
-    cancelable: boolean;
-
-    /**
-     * [descr:EventObject.changedTouches]
-     */
-    changedTouches: PickFromEvent<TNativeEvent, TouchEvent, 'changedTouches'>;
-    /**
-     * [descr:EventObject.char]
-     */
-    char: any;
-
-    /**
-     * [descr:EventObject.charCode]
-     */
-    charCode: PickFromEvent<TNativeEvent, KeyboardEvent, 'charCode'>;
-
-    /**
-     * [descr:EventObject.clientX]
-     */
-    clientX: PickFromEvent<TNativeEvent, MouseEvent, 'clientX'>;
-
-    /**
-     * [descr:EventObject.clientY]
-     */
-    clientY: PickFromEvent<TNativeEvent, MouseEvent, 'clientY'>;
-
-    /**
-     * [descr:EventObject.code]
-     */
-    code: PickFromEvent<TNativeEvent, KeyboardEvent, 'code'>;
-
-    /**
-     * [descr:EventObject.ctrlKey]
-     */
-    ctrlKey: PickFromEvent<
-      TNativeEvent,
-      KeyboardEvent | MouseEvent | TouchEvent,
-      'ctrlKey'
-    >;
-
+  export type EventObject = {
     /**
      * [descr:EventObject.currentTarget]
      */
     currentTarget: Element;
-
     /**
      * [descr:EventObject.data]
      */
     data: any;
-
     /**
      * [descr:EventObject.delegateTarget]
      */
     delegateTarget: Element;
-
-    /**
-     * [descr:EventObject.detail]
-     */
-    detail: PickFromEvent<TNativeEvent, UIEvent, 'detail'>;
-
-    /**
-     * [descr:EventObject.eventPhase]
-     */
-    eventPhase: number;
-
-    /**
-     * [descr:EventObject.guid]
-     */
-    guid: number;
-
-    /**
-     * [descr:EventObject.isTrusted]
-     */
-    isTrusted: boolean;
-
-    /**
-     * [descr:EventObject.key]
-     */
-    key: PickFromEvent<TNativeEvent, KeyboardEvent, 'key'>;
-
-    /**
-     * [descr:EventObject.keyCode]
-     */
-    keyCode: PickFromEvent<TNativeEvent, KeyboardEvent, 'keyCode'>;
-
-    /**
-     * [descr:EventObject.metaKey]
-     */
-    metaKey: PickFromEvent<
-      TNativeEvent,
-      KeyboardEvent | TouchEvent | MouseEvent,
-      'metaKey'
-    >;
-
-    /**
-     * [descr:EventObject.offsetX]
-     */
-    offsetX: PickFromEvent<TNativeEvent, MouseEvent, 'offsetX'>;
-
-    /**
-     * [descr:EventObject.offsetY]
-     */
-    offsetY: PickFromEvent<TNativeEvent, MouseEvent, 'offsetY'>;
-
-    /**
-     * [descr:EventObject.pageX]
-     */
-    pageX: PickFromEvent<TNativeEvent, MouseEvent, 'pageX'>;
-
-    /**
-     * [descr:EventObject.pageY]
-     */
-    pageY: PickFromEvent<TNativeEvent, MouseEvent, 'pageY'>;
-
-    /**
-     * [descr:EventObject.pointerId]
-     */
-    pointerId: PickFromEvent<TNativeEvent, PointerEvent, 'pointerId'>;
-
-    /**
-     * [descr:EventObject.pointerType]
-     */
-    pointerType: PickFromEvent<TNativeEvent, PointerEvent, 'pointerType'>;
-
-    /**
-     * [descr:EventObject.relatedTarget]
-     */
-    relatedTarget: PickFromEvent<
-      TNativeEvent,
-      FocusEvent | MouseEvent,
-      'relatedTarget'
-    >;
-
-    /**
-     * [descr:EventObject.screenX]
-     */
-    screenX: PickFromEvent<TNativeEvent, MouseEvent, 'screenX'>;
-
-    /**
-     * [descr:EventObject.screenY]
-     */
-    screenY: PickFromEvent<TNativeEvent, MouseEvent, 'screenY'>;
-
-    /**
-     * [descr:EventObject.shiftKey]
-     */
-    shiftKey: PickFromEvent<
-      TNativeEvent,
-      MouseEvent | KeyboardEvent | TouchEvent,
-      'shiftKey'
-    >;
-
     /**
      * [descr:EventObject.target]
      */
     target: Element;
-
-    /**
-     * [descr:EventObject.targetTouches]
-     */
-    targetTouches: PickFromEvent<TNativeEvent, TouchEvent, 'targetTouches'>;
-
-    /**
-     * [descr:EventObject.timeStamp]
-     */
-    timeStamp: number;
-
-    /**
-     * [descr:EventObject.toElement]
-     */
-    toElement: Element;
-
-    /**
-     * [descr:EventObject.touches]
-     */
-    touches: PickFromEvent<TNativeEvent, TouchEvent, 'touches'>;
-
-    /**
-     * [descr:EventObject.type]
-     */
-    type: string;
-
-    /**
-     * [descr:EventObject.view]
-     */
-    view: PickFromEvent<TNativeEvent, UIEvent, 'view'>;
-
-    /**
-     * [descr:EventObject.which]
-     */
-    which: number;
-
     /**
      * [descr:EventObject.isDefaultPrevented()]
      */
@@ -8063,16 +7860,6 @@ declare module DevExpress.events {
   interface EventType extends JQueryEventObject {
     cancel?: boolean;
   }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  type PickFromEvent<
-    TNativeEvent extends Event,
-    TTargetEvents extends Event,
-    PropName extends keyof TTargetEvents
-  > = TNativeEvent extends Pick<TTargetEvents, PropName>
-    ? TTargetEvents[PropName]
-    : undefined;
   /**
    * [descr:events.triggerHandler(element, event)]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
