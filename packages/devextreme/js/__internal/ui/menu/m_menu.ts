@@ -127,6 +127,7 @@ class Menu extends MenuBase {
     const currentSubmenu = this._submenus.length && this._submenus[0];
 
     if (currentSubmenu && currentSubmenu.itemsContainer()) {
+      // @ts-expect-error
       elements = currentSubmenu.itemsContainer().find(itemSelector);
     }
 
@@ -835,12 +836,13 @@ class Menu extends MenuBase {
   _hoverStartHandler(e) {
     const mouseMoveEventName = addNamespace(pointerEvents.move, this.NAME);
     const $item = this._getItemElementByEventArgs(e);
-    const node = this._dataAdapter.getNodeByItem(this._getItemData($item));
-    const isSelectionActive = isDefined(e.buttons) && e.buttons === 1 || !isDefined(e.buttons) && e.which === 1;
 
-    if (this._isItemDisabled($item)) {
+    if (!$item || this._isItemDisabled($item)) {
       return;
     }
+
+    const node = this._dataAdapter.getNodeByItem(this._getItemData($item));
+    const isSelectionActive = isDefined(e.buttons) && e.buttons === 1 || !isDefined(e.buttons) && e.which === 1;
 
     eventsEngine.off($item, mouseMoveEventName);
 
@@ -868,7 +870,7 @@ class Menu extends MenuBase {
     super._hoverEndHandler(eventArg);
     this._clearTimeouts();
 
-    if (this._isItemDisabled($item)) {
+    if (!$item || this._isItemDisabled($item)) {
       return;
     }
 
