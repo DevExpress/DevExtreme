@@ -132,7 +132,11 @@ export default abstract class GridCore extends Widget {
 
     return ClientFunction(
       () => (getInstance() as any).searchByText(text),
-      { dependencies: { getInstance } },
+      {
+        dependencies: {
+          getInstance, text
+        },
+      },
     )();
   }
 
@@ -141,38 +145,11 @@ export default abstract class GridCore extends Widget {
 
     return ClientFunction(
       () => (getInstance() as any).getCombinedFilter(),
-      { dependencies: { getInstance } },
-    )();
-  }
-
-  apiSelectAll(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).selectAll(),
-      { dependencies: { getInstance } },
-    )();
-  }
-
-  apiDeselectAll(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).deselectAll(),
-      { dependencies: { getInstance } },
-    )();
-  }
-
-  apiDataSourceFilter(filterExpr?: any[]): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => {
-        const dataSource = (getInstance() as any).getDataSource();
-        return dataSource.filter(filterExpr);
+      {
+        dependencies: {
+          getInstance,
+        },
       },
-      { dependencies: { getInstance, filterExpr } },
     )();
   }
 }
-
