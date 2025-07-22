@@ -2185,8 +2185,8 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         const $items = instance.itemsContainer().find('.' + DX_MENU_ITEM_CLASS);
 
-        fx.stop = $element => {
-            if($element.hasClass(DX_SUBMENU_CLASS)) {
+        fx.stop = (element) => {
+            if($(element).hasClass(DX_SUBMENU_CLASS)) {
                 stopCalls++;
             }
         };
