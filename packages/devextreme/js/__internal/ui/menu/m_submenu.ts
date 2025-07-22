@@ -18,6 +18,7 @@ const DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS = 'dx-context-menu-content-delimit
 const DX_SUBMENU_CLASS = 'dx-submenu';
 
 class Submenu extends ContextMenu {
+  // @ts-expect-error
   _overlay!: Overlay<Properties>;
 
   $contentDelimiter?: dxElementWrapper;
@@ -186,8 +187,10 @@ class Submenu extends ContextMenu {
     animationPosition.setup(this.$contentDelimiter, position);
   }
 
-  _getContextMenuPosition() {
-    return this.option('position');
+  _getContextMenuPosition(): PositionConfig | undefined {
+    const { position } = this.option();
+
+    return position;
   }
 
   isOverlayVisible(): boolean | undefined {
