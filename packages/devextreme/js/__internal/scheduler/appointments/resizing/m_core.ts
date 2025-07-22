@@ -19,6 +19,7 @@ const getCellData = (
   cellRowIndex: number,
   cellColumnIndex: number,
   isOccupiedAllDay: boolean,
+  isAllDay = false,
   rtlEnabled = false,
 ): ViewCellData => {
   const cellData = viewDataProvider.getCellData(
@@ -27,7 +28,9 @@ const getCellData = (
     isOccupiedAllDay,
     rtlEnabled,
   );
-  cellData.endDate = dateUtilsTs.addOffsets(cellData.startDate, [toMs('day')]);
+  // NOTE: All day appointments occupy day if they start at the beginning of the day,
+  // but long appointments are not.
+  cellData.endDate = dateUtilsTs.addOffsets(cellData.startDate, [toMs('day') - Number(isAllDay)]);
 
   return cellData;
 };
@@ -49,6 +52,7 @@ const getAppointmentLeftCell = (options: GetAppointmentDateRangeOptionsExtended)
     cellRowIndex,
     cellColumnIndex,
     appointment.isOccupiedAllDay,
+    appointment.isAllDay,
     rtlEnabled,
   );
 };
@@ -82,6 +86,7 @@ const getDateRangeHorizontal = (options: GetAppointmentDateRangeOptionsExtended)
     appointmentRowIndex,
     appointmentColumnIndex,
     appointment.isOccupiedAllDay,
+    appointment.isAllDay,
   );
 
   const { endDate } = appointmentLastCell;
@@ -115,6 +120,7 @@ const getDateRangeHorizontalRTL = (options: GetAppointmentDateRangeOptionsExtend
       appointmentRowIndex,
       appointmentFirstCellIndex,
       appointment.isOccupiedAllDay,
+      appointment.isAllDay,
       true,
     );
 
