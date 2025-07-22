@@ -46,6 +46,10 @@ const ready = readyCallbacks.add;
 const window = windowUtils.getWindow();
 const viewPortChanged = changeCallback;
 
+const OVERLAY_STACK: Overlay[] = [];
+const ANONYMOUS_TEMPLATE_NAME = 'content';
+const TAB_KEY = 'tab';
+
 const OVERLAY_CLASS = 'dx-overlay';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 export const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
@@ -53,21 +57,14 @@ const OVERLAY_SHADER_CLASS = 'dx-overlay-shader';
 const INNER_OVERLAY_CLASS = 'dx-inner-overlay';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
-const ANONYMOUS_TEMPLATE_NAME = 'content';
-
 const RTL_DIRECTION_CLASS = 'dx-rtl';
-
-const OVERLAY_STACK: Overlay[] = [];
-
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
-const TAB_KEY = 'tab';
-
 ready(() => {
-  // @ts-expect-error
+  // @ts-expect-error Parameter 'e' implicitly has an 'any' type
   eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, (e) => {
-    for (let i = OVERLAY_STACK.length - 1; i >= 0; i--) {
-      // @ts-expect-error
+    for (let i = OVERLAY_STACK.length - 1; i >= 0; i -= 1) {
+      // @ts-expect-error TS2345: Method expects typed parameter but receives any
       if (!OVERLAY_STACK[i]._proxiedDocumentDownHandler(e)) {
         return;
       }
@@ -130,12 +127,15 @@ class Overlay<
 
   _parentHidden?: boolean;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Legacy code requires any type
   _parentsScrollSubscriptionInfo?: any;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Legacy handler requires any type
   _proxiedTabTerminatorHandler?: any;
 
   _zIndex!: number;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Legacy actions object type
   _actions?: any;
 
   _isHidingActionCanceled?: boolean;
@@ -152,6 +152,7 @@ class Overlay<
 
   _keyboardListenerId?: string;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Legacy viewport handler type
   _viewPortChangeHandle?: any;
 
   _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
@@ -201,7 +202,6 @@ class Overlay<
         },
       },
       hideOnOutsideClick: false,
-      _ignorePreventScrollEventsDeprecation: false,
       onShowing: null,
       onShown: null,
       onHiding: null,
@@ -209,9 +209,6 @@ class Overlay<
       contentTemplate: 'content',
       innerOverlay: false,
       restorePosition: true,
-
-      // NOTE: private options
-      hideTopOverlayHandler: () => { this.hide(); },
       hideOnParentScroll: false,
       preventScrollEvents: true,
       onPositioned: null,
@@ -220,6 +217,12 @@ class Overlay<
       _checkParentVisibility: true,
       _fixWrapperPosition: false,
       _loopFocus: false,
+      _ignorePreventScrollEventsDeprecation: false,
+      // NOTE: private option
+      hideTopOverlayHandler: (): void => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this.hide();
+      },
     };
   }
 
@@ -293,7 +296,9 @@ class Overlay<
     // @ts-expect-error ts-error
     this._initHideTopOverlayHandler(hideTopOverlayHandler);
     this._parentsScrollSubscriptionInfo = {
-      handler: (e) => { this._hideOnParentsScrollHandler(e); },
+      handler: (e): void => {
+        this._hideOnParentsScrollHandler(e);
+      },
     };
 
     this.warnPositionAsFunction();
@@ -333,6 +338,7 @@ class Overlay<
 
   _initHideOnOutsideClickHandler(): void {
     // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- Legacy handler
     this._proxiedDocumentDownHandler = (...args) => this._documentDownHandler(...args);
   }
 
@@ -342,16 +348,25 @@ class Overlay<
     this._initPositionController();
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Legacy event type
   _documentDownHandler(e): boolean | undefined {
     if (this._showAnimationProcessing) {
       this._stopAnimation();
     }
-    const isAttachedTarget = $(window.document).is(e.target) || domUtils.contains(window.document, e.target);
-    const isInnerOverlay = $(e.target).closest(`.${INNER_OVERLAY_CLASS}`).length;
-    const outsideClick = isAttachedTarget && !isInnerOverlay && !(this._$content.is(e.target)
-            || domUtils.contains(this._$content.get(0), e.target));
 
-    if (outsideClick && this._shouldHideOnOutsideClick(e)) {
+    const { target } = e;
+
+    const isTargetDocument = domUtils.contains(window.document, target);
+    const isAttachedTarget = $(window.document).is(target) || isTargetDocument;
+    const isInnerOverlay = $(target).closest(`.${INNER_OVERLAY_CLASS}`).length;
+    const isTargetContent = this._$content.is(target);
+    const isTargetInContent = domUtils.contains(this._$content.get(0), target);
+
+    const isOutsideClick = isAttachedTarget
+      && !isInnerOverlay
+      && !(isTargetContent || isTargetInContent);
+
+    if (isOutsideClick && this._shouldHideOnOutsideClick(e)) {
       this._outsideClickHandler(e);
     }
 
@@ -360,6 +375,7 @@ class Overlay<
     return propagateOutsideClick;
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Legacy event type
   _shouldHideOnOutsideClick(e): boolean | undefined {
     const { hideOnOutsideClick } = this.option();
 
@@ -370,14 +386,17 @@ class Overlay<
     return hideOnOutsideClick;
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Legacy event type
   _outsideClickHandler(e): void {
     if (this.option('shading')) {
       e.preventDefault();
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.hide();
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _getAnonymousTemplateName(): string {
     return ANONYMOUS_TEMPLATE_NAME;
   }
@@ -392,11 +411,11 @@ class Overlay<
   _isTopOverlay(): boolean {
     const overlayStack = this._overlayStack();
 
-    for (let i = overlayStack.length - 1; i >= 0; i--) {
+    for (let i = overlayStack.length - 1; i >= 0; i -= 1) {
       const tabbableElements = overlayStack[i]._findTabbableBounds();
 
       if (tabbableElements.first || tabbableElements.last) {
-        // @ts-ignore
+        // @ts-expect-error ts error
         return overlayStack[i] === this;
       }
     }
@@ -412,6 +431,7 @@ class Overlay<
   // eslint-disable-next-line class-methods-use-this
   _zIndexInitValue(): number {
     // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Legacy static method call
     return Overlay.baseZIndex();
   }
 
@@ -419,7 +439,7 @@ class Overlay<
     viewPortChanged.remove(this._viewPortChangeHandle);
 
     if (toggle) {
-      this._viewPortChangeHandle = (...args) => {
+      this._viewPortChangeHandle = (...args): void => {
         // @ts-expect-error ts-error
         this._viewPortChangeHandler(...args);
       };
@@ -454,7 +474,10 @@ class Overlay<
     return visible ? this._show() : this._hide();
   }
 
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types -- Legacy return type
   _getAnimationConfig() {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Legacy animation config
     return this._getOptionValue('animation', this);
   }
 
@@ -474,7 +497,7 @@ class Overlay<
           return;
         }
         if (this.option('focusStateEnabled')) {
-          // @ts-expect-error
+          // @ts-expect-error ts error
           eventsEngine.trigger(this._focusTarget(), 'focus');
         }
 
@@ -495,7 +518,9 @@ class Overlay<
     );
   }
 
-  _processShowingHidingCancel(cancelArg, applyFunction, cancelFunction) {
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, class-methods-use-this -- Legacy params
+  _processShowingHidingCancel(cancelArg, applyFunction, cancelFunction): void {
     if (isPromise(cancelArg)) {
       cancelArg
         .then((shouldCancel) => {
@@ -505,16 +530,19 @@ class Overlay<
             applyFunction();
           }
         })
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Legacy error handling
         .catch(() => applyFunction());
+    } else if (cancelArg) {
+      cancelFunction();
     } else {
-      cancelArg ? cancelFunction() : applyFunction();
+      applyFunction();
     }
   }
 
   _show(): DeferredObj<unknown> | Promise<unknown> {
     this._showingDeferred = Deferred();
-
     this._parentHidden = this._isParentHidden();
+
     this._showingDeferred.done(() => {
       delete this._parentHidden;
     });
@@ -527,13 +555,14 @@ class Overlay<
     if (this._currentVisible) {
       return Deferred().resolve().promise();
     }
+
     this._currentVisible = true;
 
     if (this._isHidingActionCanceled) {
       delete this._isHidingActionCanceled;
       this._showingDeferred.reject();
     } else {
-      const show = () => {
+      const show = (): void => {
         this._stopAnimation();
         const { enableBodyScroll } = this.option();
 
@@ -548,7 +577,7 @@ class Overlay<
         const showingArgs = { cancel: false };
         this._actions.onShowing(showingArgs);
 
-        const cancelShow = () => {
+        const cancelShow = (): void => {
           this._toggleVisibility(false);
           this._$content.css('visibility', '');
           this._$content.toggleClass(INVISIBLE_STATE_CLASS, true);
@@ -559,7 +588,7 @@ class Overlay<
           this._showingDeferred.resolve();
         };
 
-        const applyShow = () => {
+        const applyShow = (): void => {
           this._$content.css('visibility', '');
           this._renderVisibility(true);
           this._animateShowing();
@@ -574,8 +603,11 @@ class Overlay<
     return this._showingDeferred.promise();
   }
 
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type -- Legacy config
   _normalizeAnimation(showHideConfig, direction) {
     if (showHideConfig) {
+      // eslint-disable-next-line no-param-reassign -- Required for animation config modification
       showHideConfig = extend({
         type: 'slide',
         skipElementInitialStyles: true, // NOTE: for fadeIn animation
@@ -588,10 +620,11 @@ class Overlay<
       }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Legacy animation config
     return showHideConfig;
   }
 
-  _animateHiding() {
+  _animateHiding(): void {
     const animation = this._getAnimationConfig() ?? {};
     const hideAnimation = this._normalizeAnimation(animation.hide, 'from');
     const startHideAnimation = hideAnimation?.start ?? noop;
@@ -617,6 +650,8 @@ class Overlay<
     );
   }
 
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types -- Legacy return type
   _hide() {
     if (!this._currentVisible) {
       return Deferred().resolve().promise();
@@ -635,8 +670,9 @@ class Overlay<
       this._toggleSafariScrolling();
       this._toggleBodyScroll(true);
 
-      const cancelHide = () => {
+      const cancelHide = (): void => {
         this._isHidingActionCanceled = true;
+
         const { enableBodyScroll } = this.option();
 
         this._toggleBodyScroll(enableBodyScroll);
@@ -644,7 +680,7 @@ class Overlay<
         this._hidingDeferred.resolve();
       };
 
-      const applyHide = () => {
+      const applyHide = (): void => {
         this._forceFocusLost();
         this._toggleShading(false);
         this._toggleSubscriptions(false);
@@ -653,6 +689,7 @@ class Overlay<
 
       this._processShowingHidingCancel(hidingArgs.cancel, applyHide, cancelHide);
     }
+
     return this._hidingDeferred.promise();
   }
 
@@ -665,10 +702,13 @@ class Overlay<
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Legacy params
   _animate(animation, completeCallback, startCallback): void {
     if (animation) {
+      // eslint-disable-next-line no-param-reassign -- Required for callback assignment
       startCallback = startCallback || animation.start || noop;
       // @ts-expect-error ts-error
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       fx.animate(this._$content, extend({}, animation, {
         start: startCallback,
         complete: completeCallback,
@@ -744,6 +784,7 @@ class Overlay<
   }
 
   _initTabTerminatorHandler(): void {
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- Legacy handler
     this._proxiedTabTerminatorHandler = (...args) => {
       // @ts-expect-error ts-error
       this._tabKeyHandler(...args);
@@ -751,12 +792,11 @@ class Overlay<
   }
 
   _toggleTabTerminator(enabled: boolean): void {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { _loopFocus } = this.option();
+    const { _loopFocus: loopFocus } = this.option();
     // @ts-expect-error ts-error
     const eventName = addNamespace('keydown', this.NAME);
 
-    if (_loopFocus || enabled) {
+    if (loopFocus || enabled) {
       eventsEngine.on(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
     } else {
       this._destroyTabTerminator();
@@ -830,6 +870,7 @@ class Overlay<
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Legacy param type
   _toggleHideTopOverlayCallback(subscribe): void {
     if (!this._hideTopOverlayHandler) {
       return;
@@ -861,6 +902,7 @@ class Overlay<
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Legacy event type
   _hideOnParentsScrollHandler(e): void {
     let hideHandled = false;
     const hideOnScroll = this.option('hideOnParentScroll');
@@ -869,15 +911,15 @@ class Overlay<
     }
 
     if (!hideHandled && !this._showAnimationProcessing) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.hide();
     }
   }
 
   _getHideOnParentScrollTarget(): dxElementWrapper {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { _hideOnParentScrollTarget } = this.option();
+    const { _hideOnParentScrollTarget: target } = this.option();
     // @ts-expect-error ts-error
-    const $hideOnParentScrollTarget = $(_hideOnParentScrollTarget);
+    const $hideOnParentScrollTarget = $(target);
 
     if ($hideOnParentScrollTarget.length) {
       return $hideOnParentScrollTarget;
@@ -943,6 +985,7 @@ class Overlay<
         isHidden = true;
         return false;
       }
+      return undefined;
     });
 
     return isHidden || !domAdapter.getBody().contains($parent.get(0));
@@ -986,27 +1029,30 @@ class Overlay<
     }
   }
 
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types -- Legacy config
   _getPositionControllerConfig() {
     const {
       container,
       visualContainer,
+      restorePosition,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       _fixWrapperPosition,
-      restorePosition,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       _skipContentPositioning,
     } = this.option();
-    // NOTE: position is passed to controller in renderGeometry to prevent window field using in server side mode
+    // NOTE: position is passed to controller in renderGeometry
+    // to prevent window field using in server side mode
 
     return {
       container,
       visualContainer,
+      restorePosition,
       $root: this.$element(),
       $content: this._$content,
       $wrapper: this._$wrapper,
       onPositioned: this._actions.onPositioned,
       onVisualPositionChanged: this._actions.onVisualPositionChanged,
-      restorePosition,
       _fixWrapperPosition,
       _skipContentPositioning,
     };
@@ -1046,21 +1092,23 @@ class Overlay<
         const isWheel = type === 'wheel';
         const isMouseMove = type === 'mousemove';
         const isScrollByWheel = isWheel && !isCommandKeyPressed(e);
+        const isNotMouseOrWheel = !isMouseMove && !isWheel;
+
         e._cancelPreventDefault = true;
 
-        if (originalEvent && e.cancelable !== false && (!isMouseMove && !isWheel || isScrollByWheel)) {
+        if (originalEvent && e.cancelable !== false && (isNotMouseOrWheel || isScrollByWheel)) {
           e.preventDefault();
         }
       });
     }
   }
 
-  _moveFromContainer() {
+  _moveFromContainer(): void {
     this._$content.appendTo(this.$element());
     this._$wrapper.detach();
   }
 
-  _checkContainerExists() {
+  _checkContainerExists(): void {
     const $wrapperContainer = this._positionController.$container;
 
     // NOTE: The container is undefined when DOM is not ready yet. See T1143527
@@ -1082,7 +1130,8 @@ class Overlay<
     this._$content.appendTo(this._$wrapper);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-unused-vars
   _renderGeometry(options?): void {
     const { visible } = this.option();
 
@@ -1100,7 +1149,8 @@ class Overlay<
     this._renderPosition();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-unused-vars
   _renderPosition(state?): void {
     this._positionController.positionContent();
   }
@@ -1118,10 +1168,11 @@ class Overlay<
     const isScrollingPrevented = $body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS);
 
     const shouldPreventScrolling = !isScrollingPrevented
-            && visible
-            && isAllWindowCovered;
+      && visible
+      && isAllWindowCovered;
+
     const shouldEnableScrolling = isScrollingPrevented
-            && (!visible || !isAllWindowCovered || this._disposed);
+      && (!visible || !isAllWindowCovered || this._disposed);
 
     if (isIosSafari) {
       if (shouldEnableScrolling) {
@@ -1149,6 +1200,7 @@ class Overlay<
     const wrapperWidth = isVisualContainerWindow
       ? documentElement.clientWidth
       : getOuterWidth($visualContainer);
+
     const wrapperHeight = isVisualContainerWindow
       ? window.innerHeight
       : getOuterHeight($visualContainer);
@@ -1185,13 +1237,15 @@ class Overlay<
   }
 
   // @ts-expect-error ts-error
-  _keyboardHandler(options): void {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Legacy args
+  _keyboardHandler(...args): void {
+    const options = args[0];
     const e = options.originalEvent;
     const $target = $(e.target);
 
     if ($target.is(this._$content) || !this.option('ignoreChildEvents')) {
       // @ts-expect-error ts-error
-      super._keyboardHandler(...arguments);
+      super._keyboardHandler(...args);
     }
   }
 
@@ -1227,7 +1281,7 @@ class Overlay<
   }
 
   _dispose(): void {
-    // @ts-expect-error
+    // @ts-expect-error ts error
     fx.stop(this._$content, false);
 
     this._toggleViewPortSubscription(false);
@@ -1240,13 +1294,19 @@ class Overlay<
     super._dispose();
 
     this._toggleSafariScrolling();
-    this.option('visible') && zIndexPool.remove(this._zIndex);
+
+    if (this.option('visible')) {
+      zIndexPool.remove(this._zIndex);
+    }
+
     this._$wrapper.remove();
     this._$content.remove();
+
     this._destroyTabTerminator();
   }
 
-  _toggleRTLDirection(rtl) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Legacy RTL param
+  _toggleRTLDirection(rtl): void {
     this._$content.toggleClass(RTL_DIRECTION_CLASS, rtl);
   }
 
@@ -1355,7 +1415,9 @@ class Overlay<
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Legacy param type
   toggle(showing?): Promise<unknown> {
+    // eslint-disable-next-line no-param-reassign -- Required for parameter default value
     showing = showing === undefined ? !this.option('visible') : showing;
     const result = Deferred();
 
@@ -1391,10 +1453,14 @@ class Overlay<
     return this.toggle(true);
   }
 
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   hide() {
     return this.toggle(false);
   }
 
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   content() {
     return getPublicElement(this._$content);
   }
@@ -1409,8 +1475,9 @@ class Overlay<
     }
   }
 }
-// @ts-expect-error
-Overlay.baseZIndex = (zIndex) => zIndexPool.base(zIndex);
+
+// @ts-expect-error ts error
+Overlay.baseZIndex = (zIndex): number => zIndexPool.base(zIndex);
 
 registerComponent('dxOverlay', Overlay);
 
