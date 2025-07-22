@@ -1180,7 +1180,6 @@ class ContextMenu<
       this._setAriaAttributes();
 
       // T983617. Prevent the browser's context menu appears on desktop touch screens.
-      // @ts-expect-error ts-error
       if (event?.originalEvent?.type === holdEvent.name) {
         this.preventShowingDefaultContextMenuAboveOverlay();
       }
