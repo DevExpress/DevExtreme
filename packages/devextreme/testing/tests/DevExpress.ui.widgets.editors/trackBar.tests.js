@@ -14,10 +14,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-function toSelector(text) {
-    return '.' + text;
-}
-
 const TRACKBAR_RANGE_CLASS = 'dx-trackbar-range';
 
 QUnit.module('options', {
@@ -93,7 +89,7 @@ QUnit.module('options', {
             max: 100
         }).css('width', 100);
         const trackBar = $trackBar.dxTrackBar('instance');
-        const $range = $trackBar.find(toSelector(TRACKBAR_RANGE_CLASS));
+        const $range = $trackBar.find(`.${TRACKBAR_RANGE_CLASS}`);
 
         assert.equal($range.width(), trackBar.option('value'), 'range width is right');
 
@@ -110,7 +106,7 @@ QUnit.module('options', {
             max: 100
         }).css('width', 100);
         const trackBar = $trackBar.dxTrackBar('instance');
-        const $range = $trackBar.find(toSelector(TRACKBAR_RANGE_CLASS));
+        const $range = $trackBar.find(`.${TRACKBAR_RANGE_CLASS}`);
 
         assert.equal($range.width(), 25, 'range width is right');
 
