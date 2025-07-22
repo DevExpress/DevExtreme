@@ -2,7 +2,6 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { filter } from '../../filterBuilder/data';
 
 fixture.disablePageReloads`Selection.Functional`
   .page(url(__dirname, '../../container.html'));
