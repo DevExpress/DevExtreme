@@ -4,7 +4,9 @@ import dxTreeView from '@js/ui/tree_view';
 
 import { InfernoWrapper } from './widget_wrapper';
 
-export class TreeView<TItem extends TreeViewItemProperties> extends InfernoWrapper<
+export class TreeView<
+  TItem extends TreeViewItemProperties = TreeViewItemProperties,
+> extends InfernoWrapper<
   TreeViewProperties,
   dxTreeView<TItem>
 > {
