@@ -114,7 +114,7 @@ jobs:
         framework: [angular, react, vue]
 
     steps:
-     - name: Get sources
+      - name: Get sources
         uses: actions/checkout@v4
 
       - name: Use Node.js
