@@ -46,7 +46,7 @@ const Sortable = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const independentEvents = useMemo(() => (["onAdd","onDisposing","onDragChange","onDragEnd","onDragMove","onDragStart","onInitialized","onRemove","onReorder"]), []);
 
