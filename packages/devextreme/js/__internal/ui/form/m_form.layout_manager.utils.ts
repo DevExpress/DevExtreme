@@ -1,15 +1,31 @@
+import type {
+  EditorStyle, LabelMode, ValidationRule,
+} from '@js/common';
 import Guid from '@js/core/guid';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { FunctionTemplate } from '@js/core/templates/function_template';
 import { extend } from '@js/core/utils/extend';
 import { captionize } from '@js/core/utils/inflector';
-import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import type { dxDropDownEditorOptions } from '@js/ui/drop_down_editor/ui.drop_down_editor';
-import type { FormItemComponent } from '@js/ui/form';
-import type { Properties as PopupProperties } from '@js/ui/popup';
-import type dxTextBox from '@js/ui/text_box';
+import type { DxEvent } from '@js/events';
+import type {
+  FormItemComponent, FormLabelMode, LabelLocation, SimpleItem,
+} from '@js/ui/form';
+import type { DropDownEditorProperties } from '@ts/ui/drop_down_editor/m_drop_down_editor';
+import type { EditorProperties } from '@ts/ui/editor/editor';
+import type Editor from '@ts/ui/editor/editor';
+import type { LabelOptions } from '@ts/ui/form/components/m_label';
+import { SIMPLE_ITEM_TYPE } from '@ts/ui/form/constants';
+import type Form from '@ts/ui/form/m_form';
+import type LayoutManager from '@ts/ui/form/m_form.layout_manager';
 
-import { SIMPLE_ITEM_TYPE } from './constants';
+export interface LabelMarkOptions {
+  showRequiredMark?: boolean;
+  requiredMark?: string;
+  showOptionalMark?: boolean;
+  optionalMark?: string;
+}
 
 const EDITORS_WITH_ARRAY_VALUE: FormItemComponent[] = [
   'dxTagBox',
@@ -41,128 +57,116 @@ const DROP_DOWN_EDITORS: FormItemComponent[] = [
   'dxDateRangeBox',
 ];
 
-type DropDownOptions = dxDropDownEditorOptions<dxTextBox>;
+export interface ConvertToRenderFieldItemOptions {
+  $parent: dxElementWrapper;
+  rootElementCssClassList: string[];
+  formOrLayoutManager: Form | LayoutManager;
 
-export function convertToRenderFieldItemOptions({
-  $parent,
-  rootElementCssClassList,
-  formOrLayoutManager,
-  createComponentCallback,
-  item,
-  template,
-  labelTemplate,
-  name,
-  formLabelLocation,
-  requiredMessageTemplate,
-  validationGroup,
-  editorValue,
-  canAssignUndefinedValueToEditor,
-  editorValidationBoundary,
-  editorStylingMode,
-  showColonAfterLabel,
-  managerLabelLocation,
-  itemId,
-  managerMarkOptions,
-  labelMode,
-  onLabelTemplateRendered,
-}) {
-  const isRequired = isDefined(item.isRequired)
-    ? item.isRequired
-    : !!_hasRequiredRuleInSet(item.validationRules);
-  const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
-  const helpID = item.helpText ? `dx-${new Guid()}` : null;
+  createComponentCallback: ((
+    $editor: dxElementWrapper,
+    component: string,
+    editorOptions: EditorProperties
+  ) => Editor);
 
-  const labelOptions = _convertToLabelOptions({
-    item,
-    id: itemId,
-    isRequired,
-    managerMarkOptions,
-    showColonAfterLabel,
-    labelLocation: managerLabelLocation,
-    formLabelMode: labelMode,
-    labelTemplate,
-    onLabelTemplateRendered,
-  });
+  item: Required<SimpleItem>;
+  template: FunctionTemplate;
+  labelTemplate: FunctionTemplate;
+  name: string;
+  formLabelLocation: LabelLocation | undefined;
+  requiredMessageTemplate: FunctionTemplate;
+  validationGroup?: string;
+  canAssignUndefinedValueToEditor: boolean;
+  editorValidationBoundary?: dxElementWrapper;
+  editorStylingMode?: EditorStyle;
+  showColonAfterLabel: boolean;
+  managerLabelLocation: LabelLocation | undefined;
+  itemId: string;
+  managerMarkOptions: LabelMarkOptions;
+  labelMode?: FormLabelMode;
+  onLabelTemplateRendered: () => void;
 
-  const needRenderLabel = labelOptions.visible
-    && (labelOptions.text || (labelOptions.labelTemplate && isSimpleItem));
-  const { location: labelLocation, labelID } = labelOptions;
-  const labelNeedBaselineAlign = labelLocation !== 'top'
-    && ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor'].includes(
-      item.editorType,
-    );
-
-  const editorOptions = _convertToEditorOptions({
-    $parent,
-    editorType: item.editorType,
-    editorValue,
-    defaultEditorName: item.dataField,
-    canAssignUndefinedValueToEditor,
-    externalEditorOptions: item.editorOptions,
-    editorInputId: itemId,
-    editorValidationBoundary,
-    editorStylingMode,
-    formLabelMode: labelMode,
-    labelText: labelOptions.textWithoutColon,
-    labelMark: labelOptions.markOptions.showRequiredMark
-      ? String.fromCharCode(160) + labelOptions.markOptions.requiredMark
-      : '',
-  });
-
-  const needRenderOptionalMarkAsHelpText = labelOptions.markOptions.showOptionalMark
-    && !labelOptions.visible
-    && editorOptions.labelMode !== 'hidden'
-    && !isDefined(item.helpText);
-
-  const helpText = needRenderOptionalMarkAsHelpText
-    ? labelOptions.markOptions.optionalMark
-    : item.helpText;
-
-  return {
-    $parent,
-    rootElementCssClassList,
-    formOrLayoutManager,
-    createComponentCallback,
-    labelOptions,
-    labelNeedBaselineAlign,
-    labelLocation,
-    needRenderLabel,
-    item,
-    isSimpleItem,
-    isRequired,
-    template,
-    helpID,
-    labelID,
-    name,
-    helpText,
-    formLabelLocation,
-    requiredMessageTemplate,
-    validationGroup,
-    editorOptions,
-  };
+  editorValue: unknown;
 }
 
-export function getLabelMarkText({
-  showRequiredMark,
-  requiredMark,
-  showOptionalMark,
-  optionalMark,
-}) {
-  if (!showRequiredMark && !showOptionalMark) {
-    return '';
-  }
+export interface FieldItemOptions {
+  $parent: dxElementWrapper;
+  rootElementCssClassList: string[];
+  formOrLayoutManager: Form | LayoutManager;
 
-  return (
-    String.fromCharCode(160) + (showRequiredMark ? requiredMark : optionalMark)
-  );
+  createComponentCallback: ((
+    $editor: dxElementWrapper,
+    component: string,
+    editorOptions: EditorProperties
+  ) => Editor);
+
+  labelOptions: LabelOptions;
+  labelNeedBaselineAlign: boolean;
+  labelLocation: LabelLocation | undefined;
+  needRenderLabel: boolean;
+  item: Required<SimpleItem>;
+  isSimpleItem: boolean;
+  isRequired: boolean;
+  template: FunctionTemplate;
+  helpID: string | null;
+  labelID?: string | null;
+  name: string;
+  helpText?: string;
+  formLabelLocation: LabelLocation | undefined;
+  requiredMessageTemplate: FunctionTemplate;
+  validationGroup?: string;
+  editorOptions: EditorOptions;
+}
+
+export interface ConvertToLabelOptions {
+  item: Required<SimpleItem>;
+  id: string;
+  isRequired: boolean;
+  managerMarkOptions: LabelMarkOptions;
+  showColonAfterLabel: boolean;
+  labelLocation: LabelLocation | undefined;
+  labelTemplate: FunctionTemplate;
+  formLabelMode?: FormLabelMode;
+  onLabelTemplateRendered: () => void;
+}
+
+export interface ConvertToEditorOptions {
+  $parent: dxElementWrapper;
+  editorType: FormItemComponent;
+  editorValue: unknown;
+  defaultEditorName: string | undefined;
+  canAssignUndefinedValueToEditor: boolean;
+  externalEditorOptions: SimpleItem['editorOptions'];
+  editorInputId: string;
+  editorValidationBoundary?: dxElementWrapper;
+  editorStylingMode?: EditorStyle;
+  formLabelMode?: FormLabelMode;
+  labelText?: string;
+  labelMark?: string;
+}
+
+export type EditorOptions = EditorProperties & DropDownEditorProperties & {
+  inputAttr: { id: string };
+  validationBoundary: dxElementWrapper;
+  stylingMode: EditorStyle;
+  label?: string;
+  labelMode: LabelMode;
+  labelMark?: string;
+};
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+function _hasRequiredRuleInSet(rules?: ValidationRule[]): boolean | undefined {
+  return rules?.some((rule) => rule.type === 'required');
 }
 
 export function convertToLabelMarkOptions(
   {
-    showRequiredMark, requiredMark, showOptionalMark, optionalMark,
-  },
+    showRequiredMark,
+    requiredMark,
+    showOptionalMark,
+    optionalMark,
+  }: LabelMarkOptions,
   isRequired?: boolean,
-) {
+): LabelMarkOptions {
   return {
     showRequiredMark: showRequiredMark && isRequired,
     requiredMark,
@@ -171,11 +175,70 @@ export function convertToLabelMarkOptions(
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
+function _convertToLabelOptions({
+  item,
+  id,
+  isRequired,
+  managerMarkOptions,
+  showColonAfterLabel,
+  labelLocation,
+  labelTemplate,
+  formLabelMode,
+  onLabelTemplateRendered,
+}: ConvertToLabelOptions): LabelOptions {
+  const isEditorWithoutLabels = EDITORS_WITHOUT_LABELS.includes(
+    item.editorType,
+  );
+  const labelOptions: LabelOptions = extend(
+    {
+      showColon: showColonAfterLabel,
+      location: labelLocation,
+      id,
+      visible:
+        formLabelMode === 'outside'
+        || (isEditorWithoutLabels && formLabelMode !== 'hidden'),
+      isRequired,
+    },
+    item ? item.label : {},
+    {
+      markOptions: convertToLabelMarkOptions(managerMarkOptions, isRequired),
+      labelTemplate,
+      onLabelTemplateRendered,
+    },
+  );
+
+  const editorsRequiringIdForLabel: FormItemComponent[] = [
+    'dxRadioGroup',
+    'dxCheckBox',
+    'dxLookup',
+    'dxSlider',
+    'dxRangeSlider',
+    'dxSwitch',
+    'dxHtmlEditor',
+    'dxDateRangeBox',
+  ]; // TODO: support "dxCalendar"
+  if (editorsRequiringIdForLabel.includes(item.editorType)) {
+    labelOptions.labelID = `dx-label-${new Guid()}`;
+  }
+
+  if (!labelOptions.text && item.dataField) {
+    labelOptions.text = captionize(item.dataField);
+  }
+
+  if (labelOptions.text) {
+    labelOptions.textWithoutColon = labelOptions.text;
+    labelOptions.text += labelOptions.showColon ? ':' : '';
+  }
+
+  return labelOptions;
+}
+
 function getDropDownEditorOptions(
-  $parent,
+  $parent: dxElementWrapper,
   editorType: FormItemComponent,
   editorInputId: string,
-): DropDownOptions {
+): DropDownEditorProperties {
   const isDropDownEditor = DROP_DOWN_EDITORS.includes(editorType);
 
   if (!isDropDownEditor) {
@@ -183,14 +246,15 @@ function getDropDownEditorOptions(
   }
 
   return {
-    // @ts-expect-error // unpublished option
     onPopupInitialized: ({ component, popup }): void => {
-      const openOnFieldClick = component.option('openOnFieldClick') as DropDownOptions['openOnFieldClick'];
-      const initialHideOnOutsideClick = popup.option('hideOnOutsideClick') as PopupProperties['hideOnOutsideClick'];
+      const { openOnFieldClick } = component.option();
+      const { hideOnOutsideClick: initialHideOnOutsideClick } = popup.option();
 
       // Do not overwrite boolean hideOnOutsideClick
       if (openOnFieldClick && isFunction(initialHideOnOutsideClick)) {
-        const hideOnOutsideClick: PopupProperties['hideOnOutsideClick'] = (e) => {
+        const hideOnOutsideClick = (
+          e: DxEvent<MouseEvent | PointerEvent | TouchEvent>,
+        ): boolean => {
           const $target = $(e.target);
           const $label = $parent.find(`label[for="${editorInputId}"]`);
           const isLabelClicked = !!$target.closest($label).length;
@@ -224,8 +288,10 @@ function _convertToEditorOptions({
   formLabelMode,
   labelText,
   labelMark,
-}) {
-  const editorOptionsWithValue: any = {};
+}: ConvertToEditorOptions): EditorOptions {
+  const editorOptionsWithValue: {
+    value?: unknown;
+  } = {};
 
   if (editorValue !== undefined || canAssignUndefinedValueToEditor) {
     editorOptionsWithValue.value = editorValue;
@@ -288,6 +354,7 @@ function _convertToEditorOptions({
         }
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return result;
     }
 
@@ -296,81 +363,121 @@ function _convertToEditorOptions({
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return result;
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-function _hasRequiredRuleInSet(rules) {
-  let hasRequiredRule;
+export function convertToRenderFieldItemOptions({
+  $parent,
+  rootElementCssClassList,
+  formOrLayoutManager,
+  createComponentCallback,
+  item,
+  template,
+  labelTemplate,
+  name,
+  formLabelLocation,
+  requiredMessageTemplate,
+  validationGroup,
+  editorValue,
+  canAssignUndefinedValueToEditor,
+  editorValidationBoundary,
+  editorStylingMode,
+  showColonAfterLabel,
+  managerLabelLocation,
+  itemId,
+  managerMarkOptions,
+  labelMode,
+  onLabelTemplateRendered,
+}: ConvertToRenderFieldItemOptions): FieldItemOptions {
+  const isRequired = isDefined(item.isRequired)
+    ? item.isRequired
+    : !!_hasRequiredRuleInSet(item.validationRules);
+  const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
+  const helpID = item.helpText ? `dx-${new Guid()}` : null;
 
-  if (rules?.length) {
-    // @ts-expect-error
-    each(rules, (index, rule) => {
-      if (rule.type === 'required') {
-        hasRequiredRule = true;
-        return false;
-      }
-    });
-  }
+  const labelOptions = _convertToLabelOptions({
+    item,
+    id: itemId,
+    isRequired,
+    managerMarkOptions,
+    showColonAfterLabel,
+    labelLocation: managerLabelLocation,
+    formLabelMode: labelMode,
+    labelTemplate,
+    onLabelTemplateRendered,
+  });
 
-  return hasRequiredRule;
+  const needRenderLabel = !!labelOptions.visible
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    && !!(labelOptions.text || (labelOptions.labelTemplate && isSimpleItem));
+  const { location: labelLocation, labelID } = labelOptions;
+  const labelNeedBaselineAlign = labelLocation !== 'top'
+    && ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor'].includes(
+      item.editorType ?? '',
+    );
+
+  const editorOptions = _convertToEditorOptions({
+    $parent,
+    editorType: item.editorType,
+    editorValue,
+    defaultEditorName: item.dataField,
+    canAssignUndefinedValueToEditor,
+    externalEditorOptions: item.editorOptions,
+    editorInputId: itemId,
+    editorValidationBoundary,
+    editorStylingMode,
+    formLabelMode: labelMode,
+    labelText: labelOptions.textWithoutColon,
+    labelMark: labelOptions.markOptions.showRequiredMark
+      ? String.fromCharCode(160) + labelOptions.markOptions.requiredMark
+      : '',
+  });
+
+  const needRenderOptionalMarkAsHelpText = labelOptions.markOptions.showOptionalMark
+    && !labelOptions.visible
+    && editorOptions.labelMode !== 'hidden'
+    && !isDefined(item.helpText);
+
+  const helpText = needRenderOptionalMarkAsHelpText
+    ? labelOptions.markOptions.optionalMark
+    : item.helpText;
+
+  return {
+    $parent,
+    rootElementCssClassList,
+    formOrLayoutManager,
+    createComponentCallback,
+    labelOptions,
+    labelNeedBaselineAlign,
+    labelLocation,
+    needRenderLabel,
+    item,
+    isSimpleItem,
+    isRequired,
+    template,
+    helpID,
+    labelID,
+    name,
+    helpText,
+    formLabelLocation,
+    requiredMessageTemplate,
+    validationGroup,
+    editorOptions,
+  };
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-function _convertToLabelOptions({
-  item,
-  id,
-  isRequired,
-  managerMarkOptions,
-  showColonAfterLabel,
-  labelLocation,
-  labelTemplate,
-  formLabelMode,
-  onLabelTemplateRendered,
-}) {
-  const isEditorWithoutLabels = EDITORS_WITHOUT_LABELS.includes(
-    item.editorType,
+export function getLabelMarkText({
+  showRequiredMark,
+  requiredMark,
+  showOptionalMark,
+  optionalMark,
+}: LabelMarkOptions): string {
+  if (!showRequiredMark && !showOptionalMark) {
+    return '';
+  }
+
+  return (
+    String.fromCharCode(160) + (showRequiredMark ? requiredMark : optionalMark)
   );
-  const labelOptions = extend(
-    {
-      showColon: showColonAfterLabel,
-      location: labelLocation,
-      id,
-      visible:
-        formLabelMode === 'outside'
-        || (isEditorWithoutLabels && formLabelMode !== 'hidden'),
-      isRequired,
-    },
-    item ? item.label : {},
-    {
-      markOptions: convertToLabelMarkOptions(managerMarkOptions, isRequired),
-      labelTemplate,
-      onLabelTemplateRendered,
-    },
-  );
-
-  const editorsRequiringIdForLabel: FormItemComponent[] = [
-    'dxRadioGroup',
-    'dxCheckBox',
-    'dxLookup',
-    'dxSlider',
-    'dxRangeSlider',
-    'dxSwitch',
-    'dxHtmlEditor',
-    'dxDateRangeBox',
-  ]; // TODO: support "dxCalendar"
-  if (editorsRequiringIdForLabel.includes(item.editorType)) {
-    labelOptions.labelID = `dx-label-${new Guid()}`;
-  }
-
-  if (!labelOptions.text && item.dataField) {
-    labelOptions.text = captionize(item.dataField);
-  }
-
-  if (labelOptions.text) {
-    labelOptions.textWithoutColon = labelOptions.text;
-    labelOptions.text += labelOptions.showColon ? ':' : '';
-  }
-
-  return labelOptions;
 }
