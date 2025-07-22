@@ -195,6 +195,12 @@ const DEFAULT_WORKSPACE_RENDER_OPTIONS: RenderRWorkspaceOptions = {
 type WorkspaceOptionsInternal = Omit<dxSchedulerOptions, 'groups'> & {
   groups: ResourceLoader[];
   getResourceManager: () => ResourceManager;
+  startDate?: Date;
+  currentDate: Date;
+  intervalCount: number;
+  hoursInterval: number;
+  startDayHour: number;
+  endDayHour: number;
 };
 class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
   _viewDataProvider: any;
@@ -891,8 +897,8 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
 
   _getViewStartByOptions() {
     return getViewStartByOptions(
-      this.option('startDate') as any,
-      this.option('currentDate') as any,
+      this.option('startDate'),
+      this.option('currentDate'),
       this._getIntervalDuration(),
       this.option('startDate') ? this._calculateViewStartDate() : undefined,
     );
@@ -907,7 +913,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
   }
 
   _calculateViewStartDate() {
-    return calculateViewStartDate(this.option('startDate') as any);
+    return calculateViewStartDate(this.option('startDate'));
   }
 
   _firstDayOfWeek() {
@@ -1233,7 +1239,6 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
     return {
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
-      isWorkView: this.viewDataProvider.viewDataGenerator.isWorkView,
       interval: this.viewDataProvider.viewDataGenerator?.getInterval(this.option('hoursInterval')),
       startViewDate: this.getStartViewDate(),
       firstDayOfWeek: this._firstDayOfWeek(),
@@ -1355,9 +1360,9 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
   }
 
   _getScrollCoordinates(hours, minutes, date, groupIndex?: any, allDay?: any) {
-    const currentDate = date || new Date(this.option('currentDate') as any);
-    const startDayHour = this.option('startDayHour')!;
-    const endDayHour = this.option('endDayHour')!;
+    const currentDate = date || new Date(this.option('currentDate'));
+    const startDayHour = this.option('startDayHour');
+    const endDayHour = this.option('endDayHour');
 
     if (hours < startDayHour) {
       hours = startDayHour;
@@ -1422,7 +1427,7 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
   }
 
   getCellData($cell) {
-    const cellData = this._getFullCellData($cell) || {};
+    const cellData = this._getFullCellData($cell) ?? {};
 
     return this._normalizeCellData(cellData);
   }
@@ -1987,7 +1992,11 @@ class SchedulerWorkSpace extends WidgetObserver<WorkspaceOptionsInternal> {
     return (cell, rowIndex, columnIndex) => {
       const validColumnIndex = columnIndex % this._getCellCount();
       const options = this._getDateGenerationOptions(true);
-      let startDate = this.viewDataProvider.viewDataGenerator.getDateByCellIndices(options, rowIndex, validColumnIndex, this._getCellCountInDay());
+      let startDate = this.viewDataProvider.viewDataGenerator.getDateByCellIndices(
+        options as any,
+        rowIndex,
+        validColumnIndex,
+      );
 
       startDate = dateUtils.trimTime(startDate);
 

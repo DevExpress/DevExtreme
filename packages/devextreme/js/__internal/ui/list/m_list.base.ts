@@ -164,6 +164,17 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     return lastItemInDirection.is($(focusedElement));
   }
 
+  _getNextItem($item: dxElementWrapper, direction: Direction): dxElementWrapper {
+    const $items = this._getAvailableItems();
+    const itemIndex = $items.index($item);
+
+    if (direction === 'prev') {
+      return $($items[itemIndex - 1]);
+    }
+
+    return $($items[itemIndex + 1]);
+  }
+
   _getEdgeVisibleItem(direction: Direction): dxElementWrapper {
     const scrollTop = this.scrollTop();
     const containerHeight = getHeight(this.$element());
@@ -178,7 +189,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     }
 
     while (isItemVisible) {
-      const $nextItem = $item[direction]();
+      const $nextItem = this._getNextItem($item, direction);
 
       if (!$nextItem.length) {
         break;
@@ -365,7 +376,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     return $items;
   }
 
-  _getAvailableItems($itemElements) {
+  _getAvailableItems($itemElements?: dxElementWrapper): dxElementWrapper {
     const { collapsibleGroups } = this.option();
 
     if (collapsibleGroups) {
