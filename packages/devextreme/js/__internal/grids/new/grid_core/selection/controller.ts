@@ -190,7 +190,7 @@ export class SelectionController {
         return dataSource.items();
       },
       filter() {
-        return dataController.getCombinedFilter();
+        return dataController.combinedFilter.peek();
       },
       totalCount: () => dataSource.totalCount(),
       onSelectionChanging: this.selectionChanging.bind(this),
