@@ -9,8 +9,8 @@ const MAX_COL_SPAN = 1000;
 export interface RowProps extends Partial<PropsWithClassName>,
   Partial<PropsWithStyles>,
   PropsWithChildren {
-  leftVirtualCellWidth: number;
-  rightVirtualCellWidth: number;
+  leftVirtualCellWidth?: number;
+  rightVirtualCellWidth?: number;
   leftVirtualCellCount?: number;
   rightVirtualCellCount?: number;
   isHeaderRow?: boolean;
@@ -30,9 +30,9 @@ export class Row extends BaseInfernoComponent<RowProps> {
       className,
       isHeaderRow,
       leftVirtualCellCount,
-      leftVirtualCellWidth,
+      leftVirtualCellWidth = RowDefaultProps.leftVirtualCellWidth,
       rightVirtualCellCount,
-      rightVirtualCellWidth,
+      rightVirtualCellWidth = RowDefaultProps.rightVirtualCellWidth,
       styles,
     } = this.props;
     const hasLeftVirtualCell = !!leftVirtualCellCount;

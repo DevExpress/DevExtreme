@@ -1,18 +1,22 @@
 import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-// @ts-expect-error
+// @ts-expect-error ts-error
 import { asyncNoop, noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
-import type { DxEvent } from '@js/events';
+import type { DxEvent, ItemInfo, NativeEventInfo } from '@js/events';
 import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
-import type { Item, SubmenuShowMode } from '@js/ui/menu';
+import type dxMenuBase from '@js/ui/context_menu/ui.menu_base';
+import type { dxMenuBaseItem, Item, SubmenuShowMode } from '@js/ui/menu';
 import { render } from '@js/ui/widget/utils.ink_ripple';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import MenuItem from '@ts/ui/collection/item';
 import MenuBaseEditStrategy from '@ts/ui/context_menu/menu_base.edit.strategy';
 import type { BaseDataAdapterOptions } from '@ts/ui/hierarchical_collection/data_adapter';
+import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
 import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/hierarchical_collection_widget';
 
 const DX_MENU_CLASS = 'dx-menu';
@@ -37,23 +41,61 @@ const DEFAULT_DELAY = { show: 50, hide: 300 };
 const DX_MENU_ITEM_CAPTION_URL_CLASS = `${DX_MENU_ITEM_CAPTION_CLASS}-with-url`;
 const DX_ICON_WITH_URL_CLASS = 'dx-icon-with-url';
 const ITEM_URL_CLASS = 'dx-item-url';
+const DX_MENU_ITEM_DATA_KEY = 'dxMenuItemDataKey';
 
 // @ts-expect-error ts-error
-export interface Properties extends dxMenuBaseOptions<MenuBase, Item> {
+export interface MenuBaseProperties extends dxMenuBaseOptions<MenuBase, Item> {
   focusedElement?: dxElementWrapper;
+  useInkRipple?: boolean;
 }
 
-class MenuBase extends HierarchicalCollectionWidget<Properties> {
+export type ActionEventInfo<TComponent, TItem = never> =
+  NativeEventInfo<TComponent>
+  & (TItem extends never ? {} : ItemInfo<TItem>);
+
+export type ActionArguments<
+  TComponent,
+  TEventData,
+> = Record<string, unknown> & TEventData & {
+  args?: TEventData[];
+  action: (e: TEventData) => void;
+  context: TComponent;
+  component: TComponent;
+  cancel: boolean;
+  handled: boolean;
+  validatingTargetName?: string;
+};
+
+export type BaseMenuActionEventInfo<
+  TComponent extends dxMenuBase<MenuBaseProperties> = dxMenuBase<MenuBaseProperties>,
+  TItem extends dxMenuBaseItem = dxMenuBaseItem,
+> = ActionEventInfo<TComponent, TItem>;
+
+export type BaseMenuActionArguments<
+  TComponent extends dxMenuBase<MenuBaseProperties> = dxMenuBase<MenuBaseProperties>,
+  TItem extends dxMenuBaseItem = dxMenuBaseItem,
+> = ActionArguments<
+  TComponent,
+  BaseMenuActionEventInfo<TComponent, TItem>
+>;
+
+export type MenuBaseNode = InternalNode & dxMenuBaseItem;
+
+class MenuBase<
+  TProperties extends MenuBaseProperties = MenuBaseProperties,
+> extends HierarchicalCollectionWidget<TProperties> {
   static ItemClass = MenuItem;
 
   _editStrategy!: MenuBaseEditStrategy;
 
   hasIcons?: boolean;
 
+  // eslint-disable-next-line no-restricted-globals
   _showSubmenusTimeout?: ReturnType<typeof setTimeout>;
 
-  _getDefaultOptions() {
-    return extend(super._getDefaultOptions(), {
+  _getDefaultOptions(): TProperties {
+    return {
+      ...super._getDefaultOptions(),
       items: [],
       cssClass: '',
       activeStateEnabled: true,
@@ -83,17 +125,20 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
       keyExpr: null,
       _itemAttributes: { role: 'menuitem' },
       useInkRipple: false,
-    });
+    };
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
-    return 'dxMenuItemDataKey';
+    return DX_MENU_ITEM_DATA_KEY;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return ITEM_CLASS;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _setAriaSelectionAttribute(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     $itemElement: dxElementWrapper,
@@ -101,10 +146,12 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     isSelected: string,
   ): void {}
 
+  // eslint-disable-next-line class-methods-use-this
   _selectedItemClass(): string {
     return DX_MENU_SELECTED_ITEM_CLASS;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _widgetClass(): string {
     return DX_MENU_BASE_CLASS;
   }
@@ -119,10 +166,10 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     super._clean();
   }
 
-  _supportedKeys() {
-    const selectItem = () => {
-      // @ts-expect-error
-      const $item = $(this.option('focusedElement'));
+  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+    const selectItem = (): void => {
+      const { focusedElement } = this.option();
+      const $item = $(focusedElement);
 
       if (!$item.length || !this._isSelectionEnabled()) {
         return;
@@ -130,11 +177,12 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
 
       this.selectItem($item[0]);
     };
-    return extend(super._supportedKeys(), {
+    return {
+      ...super._supportedKeys(),
       space: selectItem,
       pageUp: noop,
       pageDown: noop,
-    });
+    };
   }
 
   _isSelectionEnabled(): boolean {
@@ -152,7 +200,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
   }
 
   _getLinkContainer(
-    iconContainer: dxElementWrapper,
+    iconContainer: dxElementWrapper | undefined | null,
     textContainer: dxElementWrapper,
     itemData: Item,
   ): dxElementWrapper {
@@ -170,7 +218,6 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     if (url) {
       $container.html(html);
       const link = this._getLinkContainer(
-        // @ts-expect-error
         this._getIconContainer(itemData),
         this._getTextContainer(itemData),
         itemData,
@@ -184,29 +231,34 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     this._addContentClasses(itemData, $container.parent());
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _getTextContainer(itemData: Item): dxElementWrapper {
     const { text } = itemData;
     if (!text) {
-      // @ts-expect-error
-      return;
+      return $();
     }
     const $itemContainer = $('<span>').addClass(DX_MENU_ITEM_CAPTION_CLASS);
     const itemText = isPlainObject(itemData) ? text : String(itemData);
     return $itemContainer.text(itemText);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _getItemExtraPropNames(): string[] {
     return ['url', 'linkAttr'];
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _getPopoutContainer(itemData: Item): dxElementWrapper {
     const { items } = itemData;
-    let $popOutContainer;
 
-    if (items?.length) {
-      const $popOutImage = $('<div>').addClass(DX_MENU_ITEM_POPOUT_CLASS);
-      $popOutContainer = $('<span>').addClass(DX_MENU_ITEM_POPOUT_CONTAINER_CLASS).append($popOutImage);
+    if (!items?.length) {
+      return $();
     }
+
+    const $popOutImage = $('<div>').addClass(DX_MENU_ITEM_POPOUT_CLASS);
+    const $popOutContainer = $('<span>').addClass(DX_MENU_ITEM_POPOUT_CONTAINER_CLASS);
+
+    $popOutContainer.append($popOutImage);
 
     return $popOutContainer;
   }
@@ -222,8 +274,10 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     };
   }
 
-  _selectByItem(selectedItem): void {
-    if (!selectedItem) return;
+  _selectByItem(selectedItem: Item): void {
+    if (!selectedItem) {
+      return;
+    }
 
     const nodeToSelect = this._dataAdapter.getNodeByItem(selectedItem);
     // @ts-expect-error ts-error
@@ -240,9 +294,11 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
       return;
     }
 
-    const node = this._dataAdapter.getNodeByKey(selectedKey) as Item;
+    const node: Item | null = this._dataAdapter.getNodeByKey(selectedKey);
 
-    if (node.selectable === false) return;
+    if (!node || node.selectable === false) {
+      return;
+    }
 
     if (!selectedItem) {
       this.option('selectedItem', node.internalFields.item);
@@ -255,20 +311,29 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _initActions(): void {}
 
   _initMarkup(): void {
     super._initMarkup();
-    this.option('useInkRipple') && this._renderInkRipple();
+
+    const { useInkRipple } = this.option();
+
+    if (useInkRipple) {
+      this._renderInkRipple();
+    }
   }
 
   _renderInkRipple(): void {
     this._inkRipple = render();
   }
 
-  _toggleActiveState($element: dxElementWrapper, value, e): void {
-    // @ts-expect-error
-    super._toggleActiveState.apply(this, arguments);
+  _toggleActiveState(
+    $element: dxElementWrapper,
+    value: boolean,
+    e: Record<string, unknown>,
+  ): void {
+    super._toggleActiveState($element, value, e);
 
     if (!this._inkRipple) {
       return;
@@ -295,8 +360,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     return this._isDesktopDevice() ? showMode : defaultValue;
   }
 
-  _initSelectedItems(): void {}
-
+  // eslint-disable-next-line class-methods-use-this
   _isDesktopDevice(): boolean {
     return devices.real().deviceType === 'desktop';
   }
@@ -306,12 +370,11 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
   }
 
   _addCustomCssClass($element: dxElementWrapper): void {
-    // @ts-expect-error
-    $element.addClass(this.option('cssClass'));
-  }
+    const { cssClass } = this.option();
 
-  _itemWrapperSelector(): string {
-    return `.${DX_MENU_ITEM_WRAPPER_CLASS}`;
+    if (cssClass) {
+      $element.addClass(cssClass);
+    }
   }
 
   _hoverStartHandler(e: DxEvent): void {
@@ -322,27 +385,31 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     e.stopPropagation();
 
     if (this._getShowSubmenuMode() === 'onHover') {
-      const submenuDelay = this._getSubmenuDelay('show');
+      const submenuDelay = this._getSubmenuDelay();
 
       if (submenuDelay === 0) {
         this._showSubmenu($itemElement);
       } else {
         clearTimeout(this._showSubmenusTimeout);
-        this._showSubmenusTimeout = setTimeout(this._showSubmenu.bind(this, $itemElement), submenuDelay);
+        // eslint-disable-next-line no-restricted-globals
+        this._showSubmenusTimeout = setTimeout(
+          this._showSubmenu.bind(this, $itemElement),
+          submenuDelay,
+        );
       }
     }
   }
 
   _getAvailableItems($itemElements?: dxElementWrapper): dxElementWrapper {
-    // @ts-expect-error
-    return super._getAvailableItems($itemElements).filter(function () {
-      // @ts-expect-error
-      return $(this).css('visibility') !== 'hidden';
-    });
+    return super._getAvailableItems($itemElements).filter(
+      // @ts-expect-error ts-error
+      (_index: number, item: Element) => $(item).css('visibility') !== 'hidden',
+    );
   }
 
-  _isItemDisabled($item) {
-    // @ts-expect-error
+  _isItemDisabled($item: dxElementWrapper): boolean {
+    // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._disabledGetter($item.data(this._itemDataKey()));
   }
 
@@ -350,22 +417,28 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     this._addExpandedClass($itemElement);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _addExpandedClass(itemElement: Element | dxElementWrapper): void {
     $(itemElement).addClass(DX_MENU_ITEM_EXPANDED_CLASS);
   }
 
-  _getSubmenuDelay(action: 'show'): number {
-    // @ts-expect-error
-    const { delay } = this.option('showSubmenuMode');
+  _getSubmenuDelay(): number {
+    const { showSubmenuMode } = this.option();
+    const delay = isObject(showSubmenuMode) ? showSubmenuMode.delay : undefined;
+
     if (!isDefined(delay)) {
-      return DEFAULT_DELAY[action];
+      return DEFAULT_DELAY.show;
     }
 
-    return isObject(delay) ? delay[action] : delay;
+    if (isObject(delay)) {
+      return delay.show ?? DEFAULT_DELAY.show;
+    }
+
+    return delay;
   }
 
   // TODO: try to simplify
-  _getItemElementByEventArgs(eventArgs): dxElementWrapper {
+  _getItemElementByEventArgs(eventArgs: DxEvent): dxElementWrapper | null {
     let $target = $(eventArgs.target);
 
     if ($target.hasClass(this._itemClass()) || $target.get(0) === eventArgs.currentTarget) {
@@ -376,7 +449,6 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     while (!$target.hasClass(this._itemClass())) {
       $target = $target.parent();
       if ($target.hasClass('dx-submenu')) {
-        // @ts-expect-error
         return null;
       }
     }
@@ -385,21 +457,22 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _hoverEndHandler(event: unknown): void {
+  _hoverEndHandler(event: DxEvent): void {
     clearTimeout(this._showSubmenusTimeout);
   }
 
-  _hasSubmenu(node) {
-    return node?.internalFields.childrenKeys.length;
+  // eslint-disable-next-line class-methods-use-this
+  _hasSubmenu(node: MenuBaseNode | null): boolean {
+    return !!node?.internalFields.childrenKeys.length;
   }
 
-  _renderContentImpl() {
+  _renderContentImpl(): void {
     this._renderItems(this._dataAdapter.getRootNodes());
   }
 
   _renderItems(
-    nodes: Item[],
-    submenuContainer?: dxElementWrapper,
+    nodes: MenuBaseNode[],
+    $submenuContainer?: dxElementWrapper,
   ): void {
     if (!nodes.length) {
       return;
@@ -407,19 +480,20 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
 
     this.hasIcons = false;
 
-    // @ts-expect-error
-    const $nodeContainer = this._renderContainer(this.$element(), submenuContainer);
+    const $nodeContainer = this._renderContainer(this.$element(), $submenuContainer?.[0]);
     let firstVisibleIndex = -1;
     let nextGroupFirstIndex = -1;
 
-    each(nodes, (index, node) => {
+    each(nodes, (index: number, node: MenuBaseNode) => {
       const isVisibleNode = node.visible !== false;
 
       if (isVisibleNode && firstVisibleIndex < 0) {
         firstVisibleIndex = index;
       }
 
-      const isBeginGroup = firstVisibleIndex < index && (node.beginGroup || index === nextGroupFirstIndex);
+      const isBeginGroup = firstVisibleIndex < index
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        && (node.beginGroup || index === nextGroupFirstIndex);
 
       if (isBeginGroup) {
         nextGroupFirstIndex = isVisibleNode ? index : index + 1;
@@ -458,7 +532,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
 
   _renderItem(
     index: number,
-    node: Item,
+    node: MenuBaseNode,
     $nodeContainer: dxElementWrapper,
     $nodeElement?: dxElementWrapper,
   ): dxElementWrapper {
@@ -490,14 +564,17 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
   ): dxElementWrapper {
     const $itemFrame = $itemContainer.children(`.${ITEM_CLASS}`);
 
-    // @ts-expect-error
-    return $itemFrame.length ? $itemFrame : super._renderItemFrame.apply(this, arguments);
+    return $itemFrame.length ? $itemFrame : super._renderItemFrame(index, itemData, $itemContainer);
   }
 
   _refreshItem($item: dxElementWrapper, item: Item): void {
-    const node = this._dataAdapter.getNodeByItem(item) as Item;
+    const node = this._dataAdapter.getNodeByItem(item);
 
-    // @ts-expect-error
+    if (!node) {
+      return;
+    }
+
+    // @ts-expect-error ts-error
     const index: number = $item.data(this._itemIndexKey());
     const $nodeContainer = $item.closest('ul');
     const $nodeElement = $item.closest('li');
@@ -529,19 +606,23 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     return $itemContent;
   }
 
-  _postprocessRenderItem(args): void {
+  _postprocessRenderItem(args: PostprocessRenderItemInfo<Item>): void {
     const $itemElement = $(args.itemElement);
     const selectedIndex = this._dataAdapter.getSelectedNodesKeys();
 
-    // @ts-expect-error
-    if (!selectedIndex.length || !this._selectedGetter(args.itemData) || !this._isItemSelectable(args.itemData)) {
+    if (
+      !selectedIndex.length
+      // @ts-expect-error ts-error
+      || !this._selectedGetter(args.itemData)
+      || !this._isItemSelectable(args.itemData)
+    ) {
       this._setAriaSelectionAttribute($itemElement, 'false');
       return;
     }
 
-    const node = this._dataAdapter.getNodeByItem(args.itemData) as Item;
+    const node = this._dataAdapter.getNodeByItem(args.itemData);
 
-    if (node.internalFields.key === selectedIndex[0]) {
+    if (node && node.internalFields.key === selectedIndex[0]) {
       $itemElement.addClass(this._selectedItemClass());
       this._setAriaSelectionAttribute($itemElement, 'true');
     } else {
@@ -549,34 +630,42 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _isItemSelectable(item: Item): boolean {
     return item.selectable !== false;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _renderSeparator($itemsContainer: dxElementWrapper): void {
     $('<li>')
       .appendTo($itemsContainer)
       .addClass(DX_MENU_SEPARATOR_CLASS);
   }
 
-  _itemClickHandler(e): void {
+  _itemClickHandler(e: DxEvent): void {
+    // @ts-expect-error ts-error
     if (e._skipHandling) return;
 
-    const itemClickActionHandler = this._createAction(this._updateSubmenuVisibilityOnClick.bind(this));
+    const itemClickActionHandler = this._createAction(
+      this._updateSubmenuVisibilityOnClick.bind(this),
+    );
     this._itemDXEventHandler(e, 'onItemClick', {}, {
       beforeExecute: this._itemClick,
       afterExecute: itemClickActionHandler.bind(this),
     });
+
+    // @ts-expect-error ts-error
     e._skipHandling = true;
   }
 
-  _itemClick(actionArgs): void {
+  _itemClick(actionArgs: Record<string, unknown>): void {
+    // @ts-expect-error ts-error
     const { event, itemData } = actionArgs.args[0];
 
     const $itemElement = this._getItemElementByEventArgs(event);
     const link = $itemElement && $itemElement.find(`.${ITEM_URL_CLASS}`)[0];
 
-    if (!itemData.url || !link) {
+    if (!itemData?.url || !link) {
       return;
     }
 
@@ -589,30 +678,37 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     this._clickByLink(link);
   }
 
-  _updateSubmenuVisibilityOnClick(actionArgs): void {
+  _updateSubmenuVisibilityOnClick(actionArgs: BaseMenuActionArguments): void {
     this._updateSelectedItemOnClick(actionArgs);
 
     if (this._getShowSubmenuMode() === 'onClick') {
-      this._addExpandedClass(actionArgs.args[0].itemElement);
+      const itemElement = actionArgs.args?.[0].itemElement;
+
+      if (itemElement) {
+        this._addExpandedClass(itemElement);
+      }
     }
   }
 
-  _updateSelectedItemOnClick(actionArgs) {
-    const args = actionArgs.args ? actionArgs.args[0] : actionArgs;
+  _updateSelectedItemOnClick(actionArgs: BaseMenuActionArguments): void {
+    const args: BaseMenuActionEventInfo = actionArgs.args ? actionArgs.args[0] : actionArgs;
 
-    if (!this._isItemSelectAllowed(args.itemData)) {
+    const { itemData } = args;
+
+    if (!itemData || !this._isItemSelectAllowed(itemData)) {
       return;
     }
 
     const selectedItemKey = this._dataAdapter.getSelectedNodesKeys();
-    const selectedNode = selectedItemKey.length && this._dataAdapter.getNodeByKey(selectedItemKey[0]);
+    const selectedNode = selectedItemKey.length
+      && this._dataAdapter.getNodeByKey(selectedItemKey[0]);
 
     if (selectedNode) {
       this._toggleItemSelection(selectedNode, false);
     }
 
-    if (!selectedNode || (selectedNode.internalFields.item !== args.itemData)) {
-      this.selectItem(args.itemData);
+    if (!selectedNode || (selectedNode.internalFields.item !== itemData)) {
+      this.selectItem(itemData);
     } else {
       this._fireSelectionChangeEvent(null, this.option('selectedItem'));
       this._setOptionWithoutOptionChange('selectedItem', null);
@@ -620,11 +716,13 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
   }
 
   _isItemSelectAllowed(item: Item): boolean | undefined {
-    const isSelectByClickEnabled = this._isSelectionEnabled() && this.option('selectByClick');
+    const { selectByClick } = this.option();
+    const isSelectByClickEnabled = this._isSelectionEnabled() && selectByClick;
+
     return !this._isContainerEmpty()
       && isSelectByClickEnabled
       && this._isItemSelectable(item)
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       && !this._itemsGetter(item);
   }
 
@@ -632,24 +730,27 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     return this._itemContainer().is(':empty');
   }
 
-  _syncSelectionOptions() {
+  // eslint-disable-next-line class-methods-use-this
+  _syncSelectionOptions(): DeferredObj<unknown> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return asyncNoop();
   }
 
-  _optionChanged(args) {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     switch (args.name) {
       case 'showSubmenuMode':
         break;
       case 'selectedItem': {
-        const node = this._dataAdapter.getNodeByItem(args.value);
+        const node = args.value ? this._dataAdapter.getNodeByItem(args.value) : null;
         const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
 
         if (node && node.internalFields.key !== selectedKey) {
           // @ts-expect-error ts-error
           if (node.selectable === false) break;
+          const selectedNode = this._dataAdapter.getNodeByKey(selectedKey);
 
-          if (selectedKey) {
-            this._toggleItemSelection(this._dataAdapter.getNodeByKey(selectedKey), false);
+          if (selectedKey && selectedNode) {
+            this._toggleItemSelection(selectedNode, false);
           }
           this._toggleItemSelection(node, true);
           this._updateSelectedItems();
@@ -668,23 +769,29 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     }
   }
 
-  _toggleItemSelection(node, value) {
+  _toggleItemSelection(node: MenuBaseNode, value: boolean): void {
     const itemElement = this._getElementByItem(node.internalFields.item);
-    itemElement && $(itemElement).toggleClass(DX_MENU_SELECTED_ITEM_CLASS);
+
+    if (itemElement) {
+      $(itemElement).toggleClass(DX_MENU_SELECTED_ITEM_CLASS);
+    }
+
     this._dataAdapter.toggleSelection(node.internalFields.key, value);
   }
 
-  _getElementByItem(itemData) {
-    let result;
+  _getElementByItem(itemData: Item): dxElementWrapper {
+    let result: dxElementWrapper = $();
 
-    each(this._itemElements(), (_, itemElement) => {
-      if ($(itemElement).data(this._itemDataKey()) !== itemData) {
+    each(this._itemElements(), (_index: number, $itemElement: dxElementWrapper) => {
+      // @ts-expect-error ts-error
+      if ($($itemElement).data(this._itemDataKey()) !== itemData) {
         return true;
       }
 
-      result = itemElement;
+      result = $itemElement;
       return false;
     });
+
     return result;
   }
 
@@ -697,7 +804,10 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     }
   }
 
-  _fireSelectionChangeEvent(addedSelection, removedSelection): void {
+  _fireSelectionChangeEvent(
+    addedSelection: Item | null | undefined,
+    removedSelection: Item | undefined,
+  ): void {
     this._createActionByOption('onSelectionChanged', {
       excludeValidators: ['disabled', 'readOnly'],
     })({
@@ -706,15 +816,17 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
     });
   }
 
-  selectItem(itemElement: Element): void {
-    const itemData = itemElement.nodeType ? this._getItemData(itemElement) : itemElement;
+  selectItem(itemElement: Element | dxMenuBaseItem): void {
+    const itemData = itemElement.nodeType ? this._getItemData(itemElement as Element) : itemElement;
     const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
     const selectedItem = this.option('selectedItem');
-    const node = this._dataAdapter.getNodeByItem(itemData) as Item;
+    const node = this._dataAdapter.getNodeByItem(itemData);
 
-    if (node.internalFields.key !== selectedKey) {
-      if (selectedKey) {
-        this._toggleItemSelection(this._dataAdapter.getNodeByKey(selectedKey), false);
+    if (node && node.internalFields.key !== selectedKey) {
+      const selectedNode = this._dataAdapter.getNodeByKey(selectedKey);
+
+      if (selectedKey && selectedNode) {
+        this._toggleItemSelection(selectedNode, false);
       }
       this._toggleItemSelection(node, true);
       this._updateSelectedItems(selectedItem, itemData);
@@ -724,10 +836,10 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
 
   unselectItem(itemElement: Element): void {
     const itemData = itemElement.nodeType ? this._getItemData(itemElement) : itemElement;
-    const node = this._dataAdapter.getNodeByItem(itemData) as Item;
+    const node = this._dataAdapter.getNodeByItem(itemData);
     const selectedItem = this.option('selectedItem');
 
-    if (node.internalFields.selected) {
+    if (node?.internalFields.selected) {
       this._toggleItemSelection(node, false);
       this._updateSelectedItems(selectedItem, null);
       this._setOptionWithoutOptionChange('selectedItem', null);
