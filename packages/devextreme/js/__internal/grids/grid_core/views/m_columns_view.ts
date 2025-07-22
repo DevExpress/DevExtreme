@@ -79,7 +79,8 @@ const subscribeToRowEvents = function (that, $table) {
   }
 
   eventsEngine.on($table, 'touchstart touchend', '.dx-row', (e) => {
-    if (e?.event.target && !gridCoreUtils.isElementInCurrentGrid(that, $(e.event.target))) {
+    // NOTE: checking for target only for mocks in qunits
+    if (e?.event?.target && !gridCoreUtils.isElementInCurrentGrid(that, $(e.event.target))) {
       return;
     }
 
@@ -96,7 +97,8 @@ const subscribeToRowEvents = function (that, $table) {
   eventsEngine.on($table, [clickEventName, dblclickEvent, pointerEvents.down].join(' '), '.dx-row', that.createAction((e) => {
     const { event } = e;
 
-    if (e?.event.target && !gridCoreUtils.isElementInCurrentGrid(that, $(event.target))) {
+    // NOTE: checking for target only for mocks in qunits
+    if (e?.event?.target && !gridCoreUtils.isElementInCurrentGrid(that, $(event.target))) {
       return;
     }
 

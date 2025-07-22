@@ -372,7 +372,6 @@ export default {
   normalizeSortingInfo,
 
   getFormatByDataType(dataType) {
-    // eslint-disable-next-line default-case
     switch (dataType) {
       case 'date':
         return 'shortDate';

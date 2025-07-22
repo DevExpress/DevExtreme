@@ -952,7 +952,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
         that.NAME = 'dx' + nameWidget;
 
-        that.element = () => $('#container');
+        that.element = () => $('#qunit-fixture').find('.dx-gridbase-container').parent();
 
         that.focus = commonUtils.noop;
 
@@ -1115,7 +1115,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             return handler;
         };
 
-        that.$element = that.$element || function() { };
+        that.$element = that.$element || that.element || function() { };
 
         that.on = commonUtils.noop;
 
