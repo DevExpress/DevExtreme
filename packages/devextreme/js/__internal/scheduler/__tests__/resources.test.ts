@@ -26,8 +26,8 @@ const getAppointmentColor = (container: HTMLDivElement): string => {
   return appointment.style.backgroundColor;
 };
 
-describe('T1300252', () => {
-  it('should render correct appointment color for remote datasource', async () => {
+describe('Resources', () => {
+  it('should render correct appointment color for remote datasource (T1300252)', async () => {
     setupSchedulerTestEnvironment();
 
     const dataPromise = new Promise((resolve) => {
@@ -51,6 +51,26 @@ describe('T1300252', () => {
       }],
     } as any);
     await dataPromise;
+    await new Promise(process.nextTick);
+
+    expect(getAppointmentColor(container)).toBe(rooms[0].color);
+  });
+
+  it('should render correct appointment color for local datasource (T1300252)', async () => {
+    setupSchedulerTestEnvironment();
+
+    const container = document.createElement('div');
+    const scheduler = new Scheduler(container, {
+      views: ['month'],
+      currentView: 'month',
+      currentDate: new Date(2024, 8, 8),
+      dataSource,
+      resources: [{
+        fieldExpr: 'roomId',
+        label: 'Room',
+        dataSource: rooms,
+      }],
+    } as any);
     await new Promise(process.nextTick);
 
     expect(getAppointmentColor(container)).toBe(rooms[0].color);
