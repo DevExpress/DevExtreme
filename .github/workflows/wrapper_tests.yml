@@ -82,54 +82,54 @@ jobs:
             echo "To update generated code, use "pnpm run regenerate-all" and commit changes."
             exit 1
 
-    test:
-    runs-on: devextreme-shr2
-    timeout-minutes: 80
-    needs: build
-    strategy:
-      matrix:
-        framework: [angular, react, vue]
+  test:
+  runs-on: devextreme-shr2
+  timeout-minutes: 80
+  needs: build
+  strategy:
+    matrix:
+      framework: [angular, react, vue]
 
-    steps:
-      - name: Get sources
-        uses: actions/checkout@v4
+  steps:
+    - name: Get sources
+      uses: actions/checkout@v4
 
-      - name: Setup Chrome
-        uses: ./.github/actions/setup-chrome
-        with:
-          chrome-version: '133.0.6943.53'
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '133.0.6943.53'
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
 
-      - name: Install dependencies
-        run: pnpm install
+    - name: Install dependencies
+      run: pnpm install
 
-      - name: Angular - Download Browser
-        if: matrix.framework == 'angular'
-        run: pnpx puppeteer browsers install chrome@130.0.6723.69
+    - name: Angular - Download Browser
+      if: matrix.framework == 'angular'
+      run: pnpx puppeteer browsers install chrome@130.0.6723.69
 
-      - name: Build and Test ${{ matrix.framework }}
-        run: |
-          if [ "${{ matrix.framework }}" = "angular" ]; then
-            pnpx nx build devextreme-angular
-            pnpx nx test:dev devextreme-angular
-            pnpx nx pack devextreme-angular
-          elif [ "${{ matrix.framework }}" = "react" ]; then
-            pnpm exec nx test devextreme-react
-            pnpm exec nx pack devextreme-react
-          elif [ "${{ matrix.framework }}" = "vue" ]; then
-            pnpx nx test devextreme-vue
-            pnpx nx pack devextreme-vue
-          fi
+    - name: Build and Test ${{ matrix.framework }}
+      run: |
+        if [ "${{ matrix.framework }}" = "angular" ]; then
+          pnpx nx build devextreme-angular
+          pnpx nx test:dev devextreme-angular
+          pnpx nx pack devextreme-angular
+        elif [ "${{ matrix.framework }}" = "react" ]; then
+          pnpm exec nx test devextreme-react
+          pnpm exec nx pack devextreme-react
+        elif [ "${{ matrix.framework }}" = "vue" ]; then
+          pnpx nx test devextreme-vue
+          pnpx nx pack devextreme-vue
+        fi
 
-      - name: Archive devextreme-metadata artifacts
-        if: matrix.framework == 'angular'
-        uses: actions/upload-artifact@v4
-        with:
-          name: devextreme-metadata-artifacts
-          path: packages/devextreme-metadata/dist/
-          retention-days: 7
+    - name: Archive devextreme-metadata artifacts
+      if: matrix.framework == 'angular'
+      uses: actions/upload-artifact@v4
+      with:
+        name: devextreme-metadata-artifacts
+        path: packages/devextreme-metadata/dist/
+        retention-days: 7
 
