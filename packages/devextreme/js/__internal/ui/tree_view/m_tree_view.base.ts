@@ -1575,7 +1575,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     });
 
     eventsEngine.on($itemContainer, pointerDownEventNamespace, nodeSelector, (e) => {
-      this._itemPointerDownHandler(e);
+      this._itemPointerHandler(e);
     });
   }
 
@@ -1683,7 +1683,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     this.option('focusedElement', getPublicElement($activeItem.closest(`.${NODE_CLASS}`)));
   }
 
-  _itemPointerDownHandler(e) {
+  _itemPointerHandler(e) {
     if (!this.option('focusStateEnabled')) {
       return;
     }

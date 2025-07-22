@@ -820,7 +820,7 @@ class Menu extends MenuBase {
       .hide();
   }
 
-  _itemPointerDownHandler(e): void {
+  _itemPointerHandler(e): void {
     const $target = $(e.target);
     const $closestItem = $target.closest(this._itemElements());
 
@@ -829,7 +829,7 @@ class Menu extends MenuBase {
       return;
     }
 
-    super._itemPointerDownHandler(e);
+    super._itemPointerHandler(e);
   }
 
   _hoverStartHandler(e) {
