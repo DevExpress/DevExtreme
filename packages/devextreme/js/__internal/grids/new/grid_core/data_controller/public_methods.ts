@@ -35,7 +35,6 @@ export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: 
 
     public getCombinedFilter(): FilterDescriptor | FilterDescriptor[] {
       return this.dataController.combinedFilter.peek();
-      // return this.dataController.getCombinedFilter();
     }
 
     public keyOf(obj: DataObject) {
