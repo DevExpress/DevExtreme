@@ -11,8 +11,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 import { TestAsyncTabsWrapper, TestTabsWrapper } from '../../helpers/wrappers/tabsWrappers.js';
 import { getScrollLeftMax } from '__internal/ui/scroll_view/utils/get_scroll_left_max';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import devices from '__internal/core/m_devices';
-import { compare as compareVersions } from 'core/utils/version';
 import resizeObserverSingleton from 'core/resize_observer';
 import {
     TABS_ITEM_CLASS,
@@ -64,8 +62,6 @@ const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const BUTTON_NEXT_ICON = 'chevronnext';
 const BUTTON_PREV_ICON = 'chevronprev';
 const TAB_OFFSET = 30;
-
-const toSelector = cssClass => `.${cssClass}`;
 
 QUnit.module('General', () => {
     QUnit.test('mouseup switch selected tab', function(assert) {
@@ -212,7 +208,7 @@ QUnit.module('General', () => {
         keyboard.press('right');
         keyboard.press('right');
 
-        const $items = $element.find(toSelector(TABS_ITEM_CLASS));
+        const $items = $element.find(`.${TABS_ITEM_CLASS}`);
 
         assert.notOk($items.eq(0).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The first item does not have specific class');
         assert.ok($items.eq(1).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The second item has specific class');
@@ -242,7 +238,7 @@ QUnit.module('General', () => {
         keyboard.press('right');
         keyboard.press('right');
 
-        const $items = $element.find(toSelector(TABS_ITEM_CLASS));
+        const $items = $element.find(`.${TABS_ITEM_CLASS}`);
 
         assert.notOk($items.eq(0).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), 'The first item does not have specific class');
         assert.notOk($items.eq(3).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), 'The fourth item does not have specific class');
@@ -649,7 +645,7 @@ QUnit.module('Tab select action', () => {
             }
         });
 
-        const $tab = $tabs.find(toSelector(TABS_ITEM_CLASS)).eq(1);
+        const $tab = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
 
         $tab
             .trigger('dxclick')
@@ -671,7 +667,7 @@ QUnit.module('Tab select action', () => {
             }
         });
 
-        const $tab = $tabs.find(toSelector(TABS_ITEM_CLASS)).eq(2);
+        const $tab = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(2);
 
         pointerMock($tab).click();
     });
@@ -724,7 +720,7 @@ QUnit.module('Tab select action', () => {
 
         assert.ok(!instance.option('selectOnFocus'), 'option selectOnFocus must be false with turn on multiple mode');
 
-        const $tab = $element.find(toSelector(TABS_ITEM_CLASS)).eq(3);
+        const $tab = $element.find(`.${TABS_ITEM_CLASS}`).eq(3);
         pointerMock($tab).click();
 
         assert.equal(instance.option('selectedItems').length, 2, 'selected two items in multiple mode');
