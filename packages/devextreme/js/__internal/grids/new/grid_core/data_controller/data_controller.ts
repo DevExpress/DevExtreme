@@ -156,7 +156,7 @@ export class DataController {
           changedCallback();
         };
         const customizeStoreLoadOptionsCallback = (e): void => {
-          e.storeLoadOptions = gridCoreUtils.combineFilters([
+          e.storeLoadOptions.filter = gridCoreUtils.combineFilters([
             e.storeLoadOptions.filter,
             this.normalizedDisplayFilter.peek(),
           ]);
