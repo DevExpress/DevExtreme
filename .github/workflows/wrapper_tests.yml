@@ -11,21 +11,15 @@ env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
   BUILD_TEST_INTERNAL_PACKAGE: true
-  ALLOW_WRAPPER_DIFF: ${{ contains(github.head_ref || github.ref_name, 'test-regenerate-label') }}
 
 jobs:
-  test:
+  build:
     runs-on: devextreme-shr2
     timeout-minutes: 80
 
     steps:
       - name: Get sources
         uses: actions/checkout@v4
-
-      - name: Setup Chrome
-        uses: ./.github/actions/setup-chrome
-        with:
-          chrome-version: '133.0.6943.53'
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -52,14 +46,27 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store
 
-      - name: Install dependencies
-        run: pnpm install
-
       - name: Build devextreme package
         env:
           BUILD_TEST_INTERNAL_PACKAGE: true
         working-directory: ./packages/devextreme
         run: pnpx nx build
+
+  check-regenerate:
+    runs-on: devextreme-shr2
+    timeout-minutes: 80
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Generate wrappers
         run: pnpm run regenerate-all
@@ -71,44 +78,58 @@ jobs:
           changes=$(git diff --name-status HEAD -- packages/devextreme-angular/src packages/devextreme-react/src packages/devextreme-vue/src)
           if [ -n "$changes" ]; then
             echo "Generated code is outdated. The following files have uncommitted changes:"
-            echo "$changes"
-            echo "To update generated code, use \"pnpm run regenerate-all\" and commit changes."
+            echo "$changes";
+            echo "To update generated code, use "pnpm run regenerate-all" and commit changes."
+            exit 1
 
-            if [ "${ALLOW_WRAPPER_DIFF}" != "true" ]; then
-              echo "Failing because wrapper diff is not allowed (missing 'allow-wrapper-diff' label)"
-              exit 1
-            fi
-          else
-            echo "Generated code is up to date."
-          fi
+    test:
+    runs-on: devextreme-shr2
+    timeout-minutes: 80
+    needs: build
+    strategy:
+      matrix:
+        framework: [angular, react, vue]
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Setup Chrome
+        uses: ./.github/actions/setup-chrome
+        with:
+          chrome-version: '133.0.6943.53'
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Angular - Download Browser
+        if: matrix.framework == 'angular'
         run: pnpx puppeteer browsers install chrome@130.0.6723.69
 
-      - name: Angular - Build
-        run: pnpx nx build devextreme-angular
-
-      - name: Angular - Run tests
-        run: pnpx nx test:dev devextreme-angular
-
-      - name: Angular - Check packing
-        run: pnpx nx pack devextreme-angular
-
-      - name: React - Run tests
-        run: pnpm exec nx test devextreme-react
-
-      - name: React - Check packing
-        run: pnpm exec nx pack devextreme-react
-
-      - name: Vue - Run tests
-        run: pnpx nx test devextreme-vue
-
-      - name: Vue - Check packing
-        run: pnpx nx pack devextreme-vue
+      - name: Build and Test ${{ matrix.framework }}
+        run: |
+          if [ "${{ matrix.framework }}" = "angular" ]; then
+            pnpx nx build devextreme-angular
+            pnpx nx test:dev devextreme-angular
+            pnpx nx pack devextreme-angular
+          elif [ "${{ matrix.framework }}" = "react" ]; then
+            pnpm exec nx test devextreme-react
+            pnpm exec nx pack devextreme-react
+          elif [ "${{ matrix.framework }}" = "vue" ]; then
+            pnpx nx test devextreme-vue
+            pnpx nx pack devextreme-vue
+          fi
 
       - name: Archive devextreme-metadata artifacts
+        if: matrix.framework == 'angular'
         uses: actions/upload-artifact@v4
         with:
           name: devextreme-metadata-artifacts
           path: packages/devextreme-metadata/dist/
           retention-days: 7
+

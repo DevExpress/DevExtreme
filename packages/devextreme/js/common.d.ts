@@ -287,6 +287,13 @@ export type GlobalConfig = {
   decimalSeparator?: string;
   /**
    * @docid
+   * @default "."
+   * @deprecated
+   * @public
+   */
+  testBrokenRegenerate?: string; // TODO: Need To Revert brfore merge
+  /**
+   * @docid
    * @default "USD"
    * @public
    */
