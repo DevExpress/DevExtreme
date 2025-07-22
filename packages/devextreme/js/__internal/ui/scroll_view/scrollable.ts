@@ -10,7 +10,8 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { ensureDefined, noop } from '@js/core/utils/common';
-import { when } from '@js/core/utils/deferred';
+import type { DeferredObj } from '@js/core/utils/deferred';
+import { Deferred, when } from '@js/core/utils/deferred';
 import {
   getHeight, getOuterHeight, getOuterWidth, getWidth,
 } from '@js/core/utils/size';
@@ -498,12 +499,11 @@ class Scrollable<
     return getOuterWidth(this.$content());
   }
 
-  update(): void {
+  update(): DeferredObj<unknown> {
     if (!this._strategy) {
-      return;
+      return Deferred().resolve();
     }
-    // @ts-expect-error ts-error
-    // eslint-disable-next-line consistent-return
+
     return when(this._strategy.update()).done(() => {
       this._updateAllowedDirection();
     });
