@@ -417,22 +417,22 @@
 /packages/devextreme/js/ui/multi_view.d.ts                     @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
 
 ## radio_group
-/packages/devextreme/js/ui/radio_group.js                      @DevExpress/devextreme-navigation
-/packages/devextreme/js/ui/radio_group/**                      @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/radio_group/**           @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/radio_group.js                      @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/radio_group/**                      @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/radio_group/**           @DevExpress/devextreme-editors
 
-/packages/devextreme-scss/scss/**/radioGroup/**                @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/**/radioGroup/**                @DevExpress/devextreme-editors
 
-/apps/demos/Demos/RadioGroup/**                                @DevExpress/devextreme-navigation
+/apps/demos/Demos/RadioGroup/**                                @DevExpress/devextreme-editors
 
-/packages/testcafe-models/radioGroup/**                        @DevExpress/devextreme-navigation
-/e2e/testcafe-devextreme/tests/accessibility/common/radioGroup.ts   @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/radioGroup.*             @DevExpress/devextreme-navigation
-/packages/devextreme/testing/tests/**/radioButton.*            @DevExpress/devextreme-navigation
+/packages/testcafe-models/radioGroup/**                        @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/common/radioGroup.ts   @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/**/radioGroup.*             @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/**/radioButton.*            @DevExpress/devextreme-editors
 
-/packages/devextreme/js/ui/radio_group_types.d.ts              @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/radio_group.d.ts                    @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/radio_group/**/*.d.ts               @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/radio_group_types.d.ts              @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/radio_group.d.ts                    @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/radio_group/**/*.d.ts               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
 
 ## resizable
 /packages/devextreme/js/ui/resizable.js                        @DevExpress/devextreme-navigation
