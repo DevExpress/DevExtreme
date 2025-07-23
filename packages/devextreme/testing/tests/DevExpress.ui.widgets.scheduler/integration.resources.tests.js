@@ -12,7 +12,9 @@ import translator from 'common/core/animation/translator';
 import '__internal/scheduler/m_scheduler';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
-import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
+
+const getHexColor = ($appointment) => new Color($appointment.css('backgroundColor')).toHex();
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -464,8 +466,9 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
         const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
 
-        assert.equal(new Color($appointments.eq(0).css('backgroundColor')).toHex(), '#ff0000', 'Color is OK');
-        assert.equal(new Color($appointments.eq(1).css('backgroundColor')).toHex(), '#0000ff', 'Color is OK');
+        await waitForAsync(() => getHexColor($appointments.eq(0)) === '#ff0000');
+        assert.equal(getHexColor($appointments.eq(0)), '#ff0000', 'Color is OK');
+        assert.equal(getHexColor($appointments.eq(1)), '#0000ff', 'Color is OK');
     });
 
     QUnit.test('Resources should not be reloaded when details popup is opening', async function(assert) {
@@ -560,7 +563,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         await waitAsync(0);
 
         const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
-        assert.equal(new Color($appointments.eq(0).css('backgroundColor')).toHex(), '#ff0000', 'Color is OK');
+        await waitForAsync(() => getHexColor($appointments.eq(0)) === '#ff0000');
+        assert.equal(getHexColor($appointments.eq(0)), '#ff0000', 'Color is OK');
     });
 });
 
