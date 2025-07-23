@@ -88,7 +88,14 @@ export interface EventType { }
  */
 export type DxEvent<TNativeEvent = Event> = {} extends EventType
   ? (EventObject<TNativeEvent> & TNativeEvent)
-  : (Omit<EventType, 'originalEvent'> & { originalEvent: TNativeEvent });
+  : (Omit<EventType, 'originalEvent'> & {
+    /**
+     * @docid
+     * @public
+     * @type event
+     */
+    originalEvent: TNativeEvent;
+  });
 
 /** @deprecated EventObject */
 export type dxEvent = EventObject;
