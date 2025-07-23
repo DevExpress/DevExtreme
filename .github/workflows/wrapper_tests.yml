@@ -115,13 +115,6 @@ jobs:
             echo "No changes in generated code."
           fi
 
-      - name: Upload changed files list
-        uses: actions/upload-artifact@v4
-        with:
-          name: changed-generated-files
-          path: changed-files.json
-          retention-days: 1
-
   test:
     runs-on: devextreme-shr2
     timeout-minutes: 80
