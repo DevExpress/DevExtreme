@@ -3,7 +3,7 @@ import type { FilterDescriptor } from '@js/common/data.types';
 import ArrayStore from '@js/common/data/array_store';
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
-import type { ReadonlySignal, Signal } from '@preact/signals-core';
+import type { ReadonlySignal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
 import { equalByValue } from '@ts/core/utils/m_common';
 import type { PromiseWithResolvers } from '@ts/core/utils/promise';
@@ -106,15 +106,6 @@ export class DataController {
     ),
   );
 
-  private readonly _dataSourceFilter: Signal = signal(null);
-
-  public readonly combinedFilter = computed(
-    (): FilterDescriptor => gridCoreUtils.combineFilters([
-      this._dataSourceFilter.value,
-      this.normalizedDisplayFilter.value,
-    ]),
-  );
-
   public static dependencies = [
     ColumnsController,
     OptionsController,
@@ -156,10 +147,9 @@ export class DataController {
           changedCallback();
         };
         const customizeStoreLoadOptionsCallback = (e): void => {
-          e.storeLoadOptions = gridCoreUtils.combineFilters([
+          e.storeLoadOptions.filter = this.combineFilterWithDisplayFilter(
             e.storeLoadOptions.filter,
-            this.normalizedDisplayFilter.peek(),
-          ]);
+          );
 
           const localOperations = this.normalizedLocalOperations.peek();
           this.pendingLocalOperations[e.operationId] = getLocalLoadOptions(
@@ -321,6 +311,19 @@ export class DataController {
     );
   }
 
+  public getCombinedFilter(): FilterDescriptor {
+    return this.combineFilterWithDisplayFilter(
+      this.dataSource.peek().filter(),
+    );
+  }
+
+  private combineFilterWithDisplayFilter(filter: FilterDescriptor): FilterDescriptor {
+    return gridCoreUtils.combineFilters([
+      filter,
+      this.normalizedDisplayFilter.peek(),
+    ]);
+  }
+
   private normalizePageIndex(dataSource: DataSource): 'normalized' | 'require-reload' {
     const pageIndex = dataSource.pageIndex();
     const totalCount = dataSource.totalCount();
@@ -358,7 +361,6 @@ export class DataController {
     this.pageIndex.value = dataSource.pageIndex();
     this.pageSize.value = dataSource.pageSize();
     this._totalCount.value = dataSource.totalCount();
-    this._dataSourceFilter.value = dataSource.filter();
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     Promise.resolve().then(() => {
