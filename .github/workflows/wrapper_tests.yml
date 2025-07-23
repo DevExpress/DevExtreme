@@ -104,6 +104,7 @@ jobs:
             echo "$changes";
             echo "To update generated code, use "pnpm run regenerate-all" and commit changes."
             exit 1
+          fi
 
   test:
     runs-on: devextreme-shr2
