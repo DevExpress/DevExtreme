@@ -121,7 +121,7 @@ const onFocusedRowChanging = (e: DxDataGridTypes.FocusedRowChangingEvent) => {
   const rowsCount = e.component.getVisibleRows().length;
   const pageCount = e.component.pageCount();
   const pageIndex = e.component.pageIndex();
-  const key = e.event?.key;
+  const key = (e.event as KeyboardEvent)?.key;
 
   if (key && e.prevRowIndex === e.newRowIndex) {
     if (e.newRowIndex === rowsCount - 1 && pageIndex < pageCount - 1) {
