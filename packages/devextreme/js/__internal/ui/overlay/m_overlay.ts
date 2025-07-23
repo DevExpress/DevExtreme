@@ -934,7 +934,9 @@ class Overlay<
 
   _toggleHideOnParentsScrollSubscription(needSubscribe?: boolean): void {
     const scrollEvent = addNamespace('scroll', this.NAME as string);
-    const { prevTargets, handler } = this._parentsScrollSubscriptionInfo ?? {};
+    const info = this._parentsScrollSubscriptionInfo ?? {};
+
+    const { prevTargets, handler } = info;
 
     eventsEngine.off(prevTargets, scrollEvent, handler);
 
@@ -950,7 +952,7 @@ class Overlay<
       eventsEngine.on($parents, scrollEvent, handler);
 
       this._parentsScrollSubscriptionInfo = {
-        ...this._parentsScrollSubscriptionInfo ?? {},
+        ...info,
         prevTargets: $parents,
       };
     }
