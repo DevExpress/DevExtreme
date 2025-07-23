@@ -91,6 +91,9 @@ const Accordion = memo(
         },
       ]), []);
 
+      const foo = 'should report about changes' // TODO: need to revert before merge
+      console.log(foo);
+
       return (
         React.createElement(BaseComponent<React.PropsWithChildren<IAccordionOptions<TItem, TKey>>>, {
           WidgetClass: dxAccordion,
