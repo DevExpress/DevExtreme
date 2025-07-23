@@ -842,10 +842,11 @@ class Overlay<
   }
 
   _toggleTabTerminator(enabled: boolean): void {
-    const { _loopFocus: loopFocus } = this.option();
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _loopFocus } = this.option();
     const eventName = addNamespace('keydown', this.NAME as string);
 
-    if (loopFocus || enabled) {
+    if (_loopFocus || enabled) {
       eventsEngine.on(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
     } else {
       this._destroyTabTerminator();
