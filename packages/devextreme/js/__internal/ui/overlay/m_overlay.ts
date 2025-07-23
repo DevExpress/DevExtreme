@@ -1,7 +1,7 @@
 import type { AnimationConfig } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import { hideCallback as hideTopOverlayCallback } from '@js/common/core/environment/hide_callback';
-import type { NativeEventInfo } from '@js/common/core/events';
+import type { EventInfo } from '@js/common/core/events';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   move as dragEventMove,
@@ -72,26 +72,10 @@ interface ParentsScrollSubscriptionInfo {
   prevTargets?: dxElementWrapper;
 }
 
-interface OverlayActions {
-  [key: string]: ((event?: Record<string, unknown>) => void) | undefined;
-  onShowing?: (event?: Record<string, unknown>) => void;
-  onShown?: (event?: Record<string, unknown>) => void;
-  onHiding?: (event?: Record<string, unknown>) => void;
-  onHidden?: (event?: Record<string, unknown>) => void;
-  onPositioned?: (event?: Record<string, unknown>) => void;
-  onVisualPositionChanged?: (event?: Record<string, unknown>) => void;
-}
-
 interface OverlayProperties extends Properties {
-  _loopFocus?: boolean;
+  container?: string | dxElementWrapper | Element;
 
-  _ignorePreventScrollEventsDeprecation?: boolean;
-
-  hideTopOverlayHandler?: () => void;
-
-  _hideOnParentScrollTarget?: string | Element | dxElementWrapper;
-
-  enableBodyScroll?: boolean;
+  visualContainer?: string | Element | null;
 
   innerOverlay?: boolean;
 
@@ -99,15 +83,30 @@ interface OverlayProperties extends Properties {
 
   restorePosition?: boolean;
 
+  preventScrollEvents?: boolean;
+
+  enableBodyScroll?: boolean;
+
+  _loopFocus?: boolean;
+
+  _ignorePreventScrollEventsDeprecation?: boolean;
+
   _fixWrapperPosition?: boolean;
 
   _skipContentPositioning?: boolean;
 
-  visualContainer?: string | Element | null;
+  _hideOnParentScrollTarget?: string | Element | dxElementWrapper;
 
-  container?: string | dxElementWrapper | Element;
+  hideTopOverlayHandler?: () => void;
+}
 
-  preventScrollEvents?: boolean;
+export interface OverlayActions {
+  onShowing?: OverlayProperties['onShowing'];
+  onShown?: OverlayProperties['onShown'];
+  onHiding?: OverlayProperties['onHiding'];
+  onHidden?: OverlayProperties['onHidden'];
+  onPositioned?: (e: EventInfo<Overlay>) => void;
+  onVisualPositionChanged?: (e: EventInfo<Overlay>) => void;
 }
 
 ready(() => {
@@ -375,7 +374,9 @@ class Overlay<
   }
 
   _initHideOnOutsideClickHandler(): void {
-    this._proxiedDocumentDownHandler = (...args): boolean => this._documentDownHandler(...args);
+    this._proxiedDocumentDownHandler = (
+      e: PointerLikeEvent,
+    ): boolean => this._documentDownHandler(e);
   }
 
   _initMarkup(): void {
@@ -540,6 +541,7 @@ class Overlay<
 
       this._showAnimationProcessing = false;
       this._isHidden = false;
+      // @ts-expect-error onShown should provide event
       this._actions?.onShown?.();
       this._toggleSafariScrolling();
       this._showingDeferred.resolve();
@@ -620,6 +622,7 @@ class Overlay<
 
         const showingArgs = { cancel: false };
 
+        // @ts-expect-error onShowing should provide event
         this._actions?.onShowing?.(showingArgs);
 
         const cancelShow = (): void => {
@@ -685,6 +688,7 @@ class Overlay<
       }
 
       this._hideAnimationProcessing = false;
+      // @ts-expect-error onHidden should provide event
       this._actions?.onHidden?.();
 
       this._hidingDeferred.resolve();
@@ -717,6 +721,7 @@ class Overlay<
 
       this._hidingDeferred.reject();
     } else {
+      // @ts-expect-error onHiding should provide event
       this._actions?.onHiding?.(hidingArgs);
 
       this._toggleSafariScrolling();
@@ -1499,7 +1504,7 @@ class Overlay<
     return this.toggle(false);
   }
 
-  content(): Element | null {
+  content(): Element {
     return getPublicElement(this._$content);
   }
 
