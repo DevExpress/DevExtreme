@@ -1,7 +1,7 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { DIContext } from '../di';
 import { Logger } from './logger';
-import { makeStateManager } from './state_manager_factory';
+import { StateManagerFactory } from './state_manager';
 import type * as StateManagementTypes from './types';
 
 export type DecoratorFunction<T = unknown> = (instance: T) => T;
@@ -54,7 +54,7 @@ export const setupStateManager = (
     if (!componentName) {
       throw new Error('Component name not provided');
     }
-    const stateManager = makeStateManager({
+    const stateManager = StateManagerFactory.create({
       componentName,
       stateSourceSign: controllerSign,
       logger,
