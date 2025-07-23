@@ -1,5 +1,6 @@
 export type WrappedCallback = Function & {
   originalCallback: Function;
+  columnIndex?: number;
 };
 type Callback = Function | WrappedCallback;
 type Selector = string | Callback;
@@ -8,14 +9,24 @@ export const getNormalizedCallback = (
   callback: Callback,
 ): Function => ('originalCallback' in callback ? callback.originalCallback : callback);
 
+export const getNormalizedColumnIdx = (
+  callback: Callback,
+): number | null | undefined => ('columnIndex' in callback ? callback.columnIndex ?? null : undefined);
+
 export const compareCallbacks = (
   callback: Callback,
   callbackToCompare: Callback,
 ): boolean => {
   const normalizedCallback = getNormalizedCallback(callback);
   const normalizedCallbackToCompare = getNormalizedCallback(callbackToCompare);
+  const normalizedColumnIdx = getNormalizedColumnIdx(callback);
+  const normalizedColumnIdxToCompare = getNormalizedColumnIdx(callbackToCompare);
 
-  return normalizedCallback === normalizedCallbackToCompare;
+  const originalCallbacksEqual = normalizedCallback === normalizedCallbackToCompare;
+  const shouldCompareColumnIdx = normalizedColumnIdx !== undefined;
+  const columnIdxEqual = normalizedColumnIdx === normalizedColumnIdxToCompare;
+
+  return originalCallbacksEqual && (!shouldCompareColumnIdx || columnIdxEqual);
 };
 
 export const isEqualSelectors = (

@@ -2,7 +2,8 @@ import { describe, expect, it } from '@jest/globals';
 
 import type { WrappedCallback } from './selector_comparison';
 import {
-  compareCallbacks, getNormalizedCallback, isEqualSelectors, isSelectorEqualWithCallback,
+  compareCallbacks, getNormalizedCallback, getNormalizedColumnIdx,
+  isEqualSelectors, isSelectorEqualWithCallback,
 } from './selector_comparison';
 
 describe('GridCore utils', () => {
@@ -24,6 +25,45 @@ describe('GridCore utils', () => {
         const result = getNormalizedCallback(wrapper);
 
         expect(result).toBe(originalCallback);
+      });
+    });
+
+    describe('getNormalizedColumnIdx', () => {
+      it('should return undefined if callback is usual function', () => {
+        const callback = () => 'test';
+
+        const result = getNormalizedColumnIdx(callback);
+
+        expect(result).toBeUndefined();
+      });
+
+      it('should return undefined if columnIdx field not exist', () => {
+        const wrapper: WrappedCallback = () => 'wrapper';
+        wrapper.originalCallback = () => 'original';
+
+        const result = getNormalizedColumnIdx(wrapper);
+
+        expect(result).toBeUndefined();
+      });
+
+      it('should return null if columnIdx field exist but value not set', () => {
+        const wrapper: WrappedCallback = () => 'wrapper';
+        wrapper.originalCallback = () => 'original';
+        wrapper.columnIndex = undefined;
+
+        const result = getNormalizedColumnIdx(wrapper);
+
+        expect(result).toBeNull();
+      });
+
+      it('should return number if columnIdx field exist and value is set', () => {
+        const wrapper: WrappedCallback = () => 'wrapper';
+        wrapper.originalCallback = () => 'original';
+        wrapper.columnIndex = 5;
+
+        const result = getNormalizedColumnIdx(wrapper);
+
+        expect(result).toBe(5);
       });
     });
 
@@ -73,10 +113,88 @@ describe('GridCore utils', () => {
           second: wrappedB,
           expectedResult: false,
         },
-      ])('Should compare $caseName', ({ first, second, expectedResult }) => {
+      ])('should compare $caseName without column idx', ({ first, second, expectedResult }) => {
         const result = compareCallbacks(first, second);
 
         expect(result).toBe(expectedResult);
+      });
+
+      it('should compare function with same wrapped one with column idx field without value', () => {
+        const first = () => 'A';
+        const second: WrappedCallback = () => 'wrapped A';
+        second.originalCallback = first;
+        second.columnIndex = undefined;
+
+        const result = compareCallbacks(first, second);
+
+        expect(result).toBe(true);
+      });
+
+      it('should compare function with same wrapped one with column idx value', () => {
+        const first = () => 'A';
+        const second: WrappedCallback = () => 'wrapped A';
+        second.originalCallback = first;
+        second.columnIndex = 100;
+
+        const result = compareCallbacks(first, second);
+
+        expect(result).toBe(true);
+      });
+
+      it('should compare same wrapped functions with column idx field but without values', () => {
+        const callback = () => 'A';
+        const first: WrappedCallback = () => 'wrapped A';
+        const second: WrappedCallback = () => 'wrapped B';
+        first.originalCallback = callback;
+        first.columnIndex = undefined;
+        second.originalCallback = callback;
+        second.columnIndex = undefined;
+
+        const result = compareCallbacks(first, second);
+
+        expect(result).toBe(true);
+      });
+
+      it('should compare same wrapped functions with column idx field and one value is not set', () => {
+        const callback = () => 'A';
+        const first: WrappedCallback = () => 'wrapped A';
+        const second: WrappedCallback = () => 'wrapped B';
+        first.originalCallback = callback;
+        first.columnIndex = 10;
+        second.originalCallback = callback;
+        second.columnIndex = undefined;
+
+        const result = compareCallbacks(first, second);
+
+        expect(result).toBe(false);
+      });
+
+      it('should compare same wrapped functions with different column idx values', () => {
+        const callback = () => 'A';
+        const first: WrappedCallback = () => 'wrapped A';
+        const second: WrappedCallback = () => 'wrapped B';
+        first.originalCallback = callback;
+        first.columnIndex = 10;
+        second.originalCallback = callback;
+        second.columnIndex = 20;
+
+        const result = compareCallbacks(first, second);
+
+        expect(result).toBe(false);
+      });
+
+      it('should compare same wrapped functions with same column idx values', () => {
+        const callback = () => 'A';
+        const first: WrappedCallback = () => 'wrapped A';
+        const second: WrappedCallback = () => 'wrapped B';
+        first.originalCallback = callback;
+        first.columnIndex = 100;
+        second.originalCallback = callback;
+        second.columnIndex = 100;
+
+        const result = compareCallbacks(first, second);
+
+        expect(result).toBe(true);
       });
     });
 
@@ -127,7 +245,7 @@ describe('GridCore utils', () => {
           second: undefined,
           expectedResult: false,
         },
-      ])('Should compare $caseName', ({ first, second, expectedResult }) => {
+      ])('should compare $caseName', ({ first, second, expectedResult }) => {
         const result = isEqualSelectors(first, second);
 
         expect(result).toBe(expectedResult);
@@ -181,7 +299,7 @@ describe('GridCore utils', () => {
           callback: undefined,
           expectedResult: false,
         },
-      ])('Should compare $caseName', ({ selector, callback, expectedResult }) => {
+      ])('should compare $caseName', ({ selector, callback, expectedResult }) => {
         const result = isSelectorEqualWithCallback(selector, callback);
 
         expect(result).toBe(expectedResult);
