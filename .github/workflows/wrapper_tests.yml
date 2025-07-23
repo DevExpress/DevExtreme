@@ -146,9 +146,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Angular - Download Browser
-        if: matrix.framework == 'angular'
-        run: pnpx puppeteer browsers install chrome@130.0.6723.69
+      # - name: Angular - Download Browser
+      #   if: matrix.framework == 'angular'
+      #   run: pnpx puppeteer browsers install chrome@130.0.6723.69
 
       - name: Build and Test ${{ matrix.framework }}
         run: |
