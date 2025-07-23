@@ -183,4 +183,3 @@ jobs:
           name: devextreme-metadata-artifacts
           path: packages/devextreme-metadata/dist/
           retention-days: 7
-
