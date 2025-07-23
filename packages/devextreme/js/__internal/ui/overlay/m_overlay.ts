@@ -60,17 +60,24 @@ const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const RTL_DIRECTION_CLASS = 'dx-rtl';
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
-ready(() => {
-  // @ts-expect-error Parameter 'e' implicitly has an 'any' type
-  eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, (e) => {
-    for (let i = OVERLAY_STACK.length - 1; i >= 0; i -= 1) {
-      // @ts-expect-error TS2345: Method expects typed parameter but receives any
-      if (!OVERLAY_STACK[i]._proxiedDocumentDownHandler(e)) {
-        return;
-      }
-    }
-  });
-});
+type EventHandler = (e: PointerEvent | MouseEvent | TouchEvent) => boolean | undefined;
+type TabTerminatorHandler = (e: KeyboardEvent) => void;
+
+interface ParentsScrollSubscriptionInfo {
+  handler?: (e: Event) => void;
+  target?: Element | Document;
+  prevTargets?: dxElementWrapper;
+}
+
+interface OverlayActions {
+  [key: string]: ((event?: Record<string, unknown>) => void) | undefined;
+  onShowing?: (event?: Record<string, unknown>) => void;
+  onShown?: (event?: Record<string, unknown>) => void;
+  onHiding?: (event?: Record<string, unknown>) => void;
+  onHidden?: (event?: Record<string, unknown>) => void;
+  onPositioned?: (event?: Record<string, unknown>) => void;
+  onVisualPositionChanged?: (event?: Record<string, unknown>) => void;
+}
 
 interface OverlayProperties extends Properties {
   _loopFocus?: boolean;
@@ -79,7 +86,7 @@ interface OverlayProperties extends Properties {
 
   hideTopOverlayHandler?: () => void;
 
-  _hideOnParentScrollTarget?: boolean;
+  _hideOnParentScrollTarget?: string | Element | dxElementWrapper;
 
   enableBodyScroll?: boolean;
 
@@ -99,6 +106,23 @@ interface OverlayProperties extends Properties {
 
   preventScrollEvents?: boolean;
 }
+
+ready(() => {
+  const callback = (e: PointerEvent | MouseEvent | TouchEvent): void => {
+    for (let i = OVERLAY_STACK.length - 1; i >= 0; i -= 1) {
+      if (!OVERLAY_STACK[i]._proxiedDocumentDownHandler?.(e)) {
+        return;
+      }
+    }
+  };
+
+  // @ts-expect-error subscribeGlobal should be described in .d.ts
+  eventsEngine.subscribeGlobal(
+    domAdapter.getDocument(),
+    pointerEvents.down,
+    callback,
+  );
+});
 
 class Overlay<
   TProperties extends OverlayProperties = OverlayProperties,
@@ -127,16 +151,13 @@ class Overlay<
 
   _parentHidden?: boolean;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Legacy code requires any type
-  _parentsScrollSubscriptionInfo?: any;
+  _parentsScrollSubscriptionInfo?: ParentsScrollSubscriptionInfo;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Legacy handler requires any type
-  _proxiedTabTerminatorHandler?: any;
+  _proxiedTabTerminatorHandler?: TabTerminatorHandler;
 
   _zIndex!: number;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Legacy actions object type
-  _actions?: any;
+  _actions?: OverlayActions;
 
   _isHidingActionCanceled?: boolean;
 
@@ -152,8 +173,9 @@ class Overlay<
 
   _keyboardListenerId?: string;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Legacy viewport handler type
-  _viewPortChangeHandle?: any;
+  _viewPortChangeHandle?: () => void;
+
+  _proxiedDocumentDownHandler?: EventHandler;
 
   _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
     return {
@@ -231,7 +253,7 @@ class Overlay<
       device(): boolean {
         return !windowUtils.hasWindow();
       },
-      // @ts-expect-error ts-error
+      // @ts-expect-error overload
       options: {
         width: null,
         height: null,
@@ -293,8 +315,9 @@ class Overlay<
     this._toggleViewPortSubscription(true);
 
     const { hideTopOverlayHandler } = this.option();
-    // @ts-expect-error ts-error
+
     this._initHideTopOverlayHandler(hideTopOverlayHandler);
+
     this._parentsScrollSubscriptionInfo = {
       handler: (e): void => {
         this._hideOnParentsScrollHandler(e);
@@ -316,30 +339,40 @@ class Overlay<
     this._$content.toggleClass(INNER_OVERLAY_CLASS, innerOverlay);
   }
 
-  _initHideTopOverlayHandler(handler: () => void): void {
-    this._hideTopOverlayHandler = handler;
+  _initHideTopOverlayHandler(handler?: () => void): void {
+    if (handler) {
+      this._hideTopOverlayHandler = handler;
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
   _getActionsList(): string[] {
-    return ['onShowing', 'onShown', 'onHiding', 'onHidden', 'onPositioned', 'onVisualPositionChanged'];
+    return [
+      'onShowing',
+      'onShown',
+      'onHiding',
+      'onHidden',
+      'onPositioned',
+      'onVisualPositionChanged',
+    ];
   }
 
   _initActions(): void {
     this._actions = {};
+
     const actions = this._getActionsList();
 
     each(actions, (_, action) => {
-      this._actions[action] = this._createActionByOption(action, {
-        excludeValidators: ['disabled', 'readOnly'],
-      }) || noop;
+      if (this._actions) {
+        this._actions[action] = this._createActionByOption(action, {
+          excludeValidators: ['disabled', 'readOnly'],
+        }) || noop;
+      }
     });
   }
 
   _initHideOnOutsideClickHandler(): void {
-    // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- Legacy handler
-    this._proxiedDocumentDownHandler = (...args) => this._documentDownHandler(...args);
+    this._proxiedDocumentDownHandler = (...args): boolean => this._documentDownHandler(...args);
   }
 
   _initMarkup(): void {
@@ -349,7 +382,7 @@ class Overlay<
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Legacy event type
-  _documentDownHandler(e): boolean | undefined {
+  _documentDownHandler(e): boolean {
     if (this._showAnimationProcessing) {
       this._stopAnimation();
     }
@@ -372,18 +405,18 @@ class Overlay<
 
     const { propagateOutsideClick } = this.option();
 
-    return propagateOutsideClick;
+    return Boolean(propagateOutsideClick);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Legacy event type
-  _shouldHideOnOutsideClick(e): boolean | undefined {
+  _shouldHideOnOutsideClick(e): boolean {
     const { hideOnOutsideClick } = this.option();
 
     if (isFunction(hideOnOutsideClick)) {
       return hideOnOutsideClick(e);
     }
 
-    return hideOnOutsideClick;
+    return Boolean(hideOnOutsideClick);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Legacy event type
@@ -405,6 +438,7 @@ class Overlay<
     this._templateManager.addDefaultTemplates({
       content: new EmptyTemplate(),
     });
+
     super._initTemplates();
   }
 
@@ -430,19 +464,19 @@ class Overlay<
 
   // eslint-disable-next-line class-methods-use-this
   _zIndexInitValue(): number {
-    // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Legacy static method call
     return Overlay.baseZIndex();
   }
 
   _toggleViewPortSubscription(toggle: boolean): void {
-    viewPortChanged.remove(this._viewPortChangeHandle);
+    if (this._viewPortChangeHandle) {
+      viewPortChanged.remove(this._viewPortChangeHandle);
+    }
 
     if (toggle) {
       this._viewPortChangeHandle = (...args): void => {
-        // @ts-expect-error ts-error
         this._viewPortChangeHandler(...args);
       };
+
       viewPortChanged.add(this._viewPortChangeHandle);
     }
   }
@@ -458,10 +492,11 @@ class Overlay<
     const classNames = attributes.class;
 
     delete attributes.class;
-    // @ts-expect-error ts-error
+
+    // @ts-expect-error object is possible undefined
     this.$wrapper()
       .attr(attributes)
-      // @ts-expect-error ts-error
+      // @ts-expect-error .attr() returns string
       .removeClass(this._customWrapperClass)
       .addClass(classNames);
 
@@ -504,7 +539,7 @@ class Overlay<
         completeShowAnimation.call(this, ...args);
         this._showAnimationProcessing = false;
         this._isHidden = false;
-        this._actions.onShown();
+        this._actions?.onShown?.();
         this._toggleSafariScrolling();
         this._showingDeferred.resolve();
       },
@@ -575,7 +610,8 @@ class Overlay<
         this._renderContent();
 
         const showingArgs = { cancel: false };
-        this._actions.onShowing(showingArgs);
+
+        this._actions?.onShowing?.(showingArgs);
 
         const cancelShow = (): void => {
           this._toggleVisibility(false);
@@ -638,7 +674,7 @@ class Overlay<
 
         completeHideAnimation.call(this, ...args);
         this._hideAnimationProcessing = false;
-        this._actions?.onHidden();
+        this._actions?.onHidden?.();
 
         this._hidingDeferred.resolve();
       },
@@ -665,7 +701,7 @@ class Overlay<
       delete this._isShowingActionCanceled;
       this._hidingDeferred.reject();
     } else {
-      this._actions.onHiding(hidingArgs);
+      this._actions?.onHiding?.(hidingArgs);
 
       this._toggleSafariScrolling();
       this._toggleBodyScroll(true);
@@ -755,14 +791,12 @@ class Overlay<
 
   _updateZIndexStackPosition(pushToStack: boolean): void {
     const overlayStack = this._overlayStack();
-    // @ts-expect-error ts-error
-    const index = overlayStack.indexOf(this);
+    const index = overlayStack.indexOf(this as unknown as Overlay);
 
     if (pushToStack) {
       if (index === -1) {
         this._zIndex = zIndexPool.create(this._zIndexInitValue());
-        // @ts-expect-error ts-error
-        overlayStack.push(this);
+        overlayStack.push(this as unknown as Overlay);
       }
 
       this._$wrapper.css('zIndex', this._zIndex);
@@ -777,24 +811,19 @@ class Overlay<
     const { shading, shadingColor } = this.option();
 
     this._$wrapper.toggleClass(OVERLAY_SHADER_CLASS, visible && shading);
-    // @ts-expect-error ts-error
-    this._$wrapper.css('backgroundColor', shading ? shadingColor : '');
-    // @ts-expect-error ts-error
-    this._toggleTabTerminator(visible && shading);
+    this._$wrapper.css('backgroundColor', shading ? shadingColor ?? '' : '');
+    this._toggleTabTerminator(!!(visible && shading));
   }
 
   _initTabTerminatorHandler(): void {
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- Legacy handler
-    this._proxiedTabTerminatorHandler = (...args) => {
-      // @ts-expect-error ts-error
-      this._tabKeyHandler(...args);
+    this._proxiedTabTerminatorHandler = (e: KeyboardEvent): void => {
+      this._tabKeyHandler(e);
     };
   }
 
   _toggleTabTerminator(enabled: boolean): void {
     const { _loopFocus: loopFocus } = this.option();
-    // @ts-expect-error ts-error
-    const eventName = addNamespace('keydown', this.NAME);
+    const eventName = addNamespace('keydown', this.NAME as string);
 
     if (loopFocus || enabled) {
       eventsEngine.on(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
@@ -804,8 +833,7 @@ class Overlay<
   }
 
   _destroyTabTerminator(): void {
-    // @ts-expect-error ts-error
-    const eventName = addNamespace('keydown', this.NAME);
+    const eventName = addNamespace('keydown', this.NAME as string);
     eventsEngine.off(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
   }
 
@@ -884,8 +912,7 @@ class Overlay<
   }
 
   _toggleHideOnParentsScrollSubscription(needSubscribe?: boolean): void {
-    // @ts-expect-error ts-error
-    const scrollEvent = addNamespace('scroll', this.NAME);
+    const scrollEvent = addNamespace('scroll', this.NAME as string);
     const { prevTargets, handler } = this._parentsScrollSubscriptionInfo ?? {};
 
     eventsEngine.off(prevTargets, scrollEvent, handler);
@@ -894,11 +921,17 @@ class Overlay<
 
     if (needSubscribe && hideOnScroll) {
       let $parents = this._getHideOnParentScrollTarget().parents();
+
       if (devices.real().deviceType === 'desktop') {
         $parents = $parents.add(window);
       }
+
       eventsEngine.on($parents, scrollEvent, handler);
-      this._parentsScrollSubscriptionInfo.prevTargets = $parents;
+
+      this._parentsScrollSubscriptionInfo = {
+        ...this._parentsScrollSubscriptionInfo ?? {},
+        prevTargets: $parents,
+      };
     }
   }
 
@@ -918,7 +951,6 @@ class Overlay<
 
   _getHideOnParentScrollTarget(): dxElementWrapper {
     const { _hideOnParentScrollTarget: target } = this.option();
-    // @ts-expect-error ts-error
     const $hideOnParentScrollTarget = $(target);
 
     if ($hideOnParentScrollTarget.length) {
@@ -1019,7 +1051,7 @@ class Overlay<
       this._processContentRendering();
     });
 
-    // @ts-expect-error ts-error
+    // @ts-expect-error Promise should be typed as Promise<T>
     return whenContentRendered.promise();
   }
 
@@ -1051,8 +1083,8 @@ class Overlay<
       $root: this.$element(),
       $content: this._$content,
       $wrapper: this._$wrapper,
-      onPositioned: this._actions.onPositioned,
-      onVisualPositionChanged: this._actions.onVisualPositionChanged,
+      onPositioned: this._actions?.onPositioned,
+      onVisualPositionChanged: this._actions?.onVisualPositionChanged,
       _fixWrapperPosition,
       _skipContentPositioning,
     };
@@ -1066,8 +1098,7 @@ class Overlay<
   }
 
   _toggleWrapperScrollEventsSubscription(enabled?: boolean): void {
-    // @ts-expect-error ts-error
-    const eventName = addNamespace(dragEventMove, this.NAME);
+    const eventName = addNamespace(dragEventMove, this.NAME as string);
 
     eventsEngine.off(this._$wrapper, eventName);
 
@@ -1288,8 +1319,8 @@ class Overlay<
     this._toggleSubscriptions(false);
     this._updateZIndexStackPosition(false);
 
-    this._actions = null;
-    this._parentsScrollSubscriptionInfo = null;
+    this._actions = undefined;
+    this._parentsScrollSubscriptionInfo = undefined;
 
     super._dispose();
 
@@ -1474,10 +1505,11 @@ class Overlay<
       super.repaint();
     }
   }
-}
 
-// @ts-expect-error ts error
-Overlay.baseZIndex = (zIndex): number => zIndexPool.base(zIndex);
+  static baseZIndex(zIndex?: number): number {
+    return zIndexPool.base(zIndex);
+  }
+}
 
 registerComponent('dxOverlay', Overlay);
 
