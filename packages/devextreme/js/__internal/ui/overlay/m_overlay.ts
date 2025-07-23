@@ -1,3 +1,4 @@
+import type { AnimationConfig } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import { hideCallback as hideTopOverlayCallback } from '@js/common/core/environment/hide_callback';
 import type { NativeEventInfo } from '@js/common/core/events';
@@ -31,8 +32,7 @@ import {
 } from '@js/core/utils/type';
 import { changeCallback } from '@js/core/utils/view_port';
 import type { DxEvent } from '@js/events';
-import type { Properties } from '@js/ui/overlay';
-import type dxOverlay from '@js/ui/overlay';
+import type { dxOverlayAnimation, Properties } from '@js/ui/overlay';
 import { tabbable } from '@js/ui/widget/selectors';
 import uiErrors from '@js/ui/widget/ui.errors';
 import domUtils from '@ts/core/utils/m_dom';
@@ -61,8 +61,8 @@ const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const RTL_DIRECTION_CLASS = 'dx-rtl';
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
+type AnimationDirection = 'to' | 'from';
 type PointerLikeEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
-
 type EventHandler = (e: PointerLikeEvent) => boolean | undefined;
 type TabTerminatorHandler = (e: KeyboardEvent) => void;
 
@@ -510,47 +510,53 @@ class Overlay<
     return visible ? this._show() : this._hide();
   }
 
-  // eslint-disable-next-line @stylistic/max-len
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types -- Legacy return type
-  _getAnimationConfig() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Legacy animation config
-    return this._getOptionValue('animation', this);
+  _getAnimationConfig(): dxOverlayAnimation {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this._getOptionValue('animation', this) ?? {};
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
   _toggleBodyScroll(enabled?: boolean): void {}
 
   _animateShowing(): void {
-    const animation = this._getAnimationConfig() ?? {};
+    const animation = this._getAnimationConfig();
     const showAnimation = this._normalizeAnimation(animation.show, 'to');
     const startShowAnimation = showAnimation?.start ?? noop;
     const completeShowAnimation = showAnimation?.complete ?? noop;
 
+    const completeCallback = (element?: HTMLElement, config?: AnimationConfig): void => {
+      if (this._isAnimationPaused) {
+        return;
+      }
+
+      if (this.option('focusStateEnabled')) {
+        // @ts-expect-error trigger should be typed on type 'EventsEngineType'
+        eventsEngine.trigger(this._focusTarget(), 'focus');
+      }
+
+      if (element && config) {
+        completeShowAnimation.call(this, element, config);
+      }
+
+      this._showAnimationProcessing = false;
+      this._isHidden = false;
+      this._actions?.onShown?.();
+      this._toggleSafariScrolling();
+      this._showingDeferred.resolve();
+    };
+
+    const startCallback = (element: HTMLElement, config: AnimationConfig): void => {
+      if (this._isAnimationPaused) {
+        return;
+      }
+      startShowAnimation.call(this, element, config);
+      this._showAnimationProcessing = true;
+    };
+
     this._animate(
       showAnimation,
-      (...args) => {
-        if (this._isAnimationPaused) {
-          return;
-        }
-        if (this.option('focusStateEnabled')) {
-          // @ts-expect-error ts error
-          eventsEngine.trigger(this._focusTarget(), 'focus');
-        }
-
-        completeShowAnimation.call(this, ...args);
-        this._showAnimationProcessing = false;
-        this._isHidden = false;
-        this._actions?.onShown?.();
-        this._toggleSafariScrolling();
-        this._showingDeferred.resolve();
-      },
-      (...args) => {
-        if (this._isAnimationPaused) {
-          return;
-        }
-        startShowAnimation.call(this, ...args);
-        this._showAnimationProcessing = true;
-      },
+      completeCallback,
+      startCallback,
     );
   }
 
@@ -642,56 +648,62 @@ class Overlay<
     return this._showingDeferred.promise();
   }
 
-  // eslint-disable-next-line @stylistic/max-len
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/explicit-function-return-type -- Legacy config
-  _normalizeAnimation(showHideConfig, direction) {
+  _normalizeAnimation(
+    showHideConfig: AnimationConfig | undefined,
+    direction: AnimationDirection,
+  ): AnimationConfig {
+    let configuration: Partial<AnimationConfig> = {};
+
     if (showHideConfig) {
-      // eslint-disable-next-line no-param-reassign -- Required for animation config modification
-      showHideConfig = extend({
+      configuration = extend({
         type: 'slide',
         skipElementInitialStyles: true, // NOTE: for fadeIn animation
       }, showHideConfig);
 
-      if (isObject(showHideConfig[direction])) {
-        extend(showHideConfig[direction], {
+      if (isObject(configuration[direction])) {
+        extend(configuration[direction], {
           position: this._positionController.position,
         });
       }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return -- Legacy animation config
-    return showHideConfig;
+    return configuration;
   }
 
   _animateHiding(): void {
     const animation = this._getAnimationConfig() ?? {};
     const hideAnimation = this._normalizeAnimation(animation.hide, 'from');
-    const startHideAnimation = hideAnimation?.start ?? noop;
-    const completeHideAnimation = hideAnimation?.complete ?? noop;
+    const startHideAnimation = hideAnimation.start ?? noop;
+    const completeHideAnimation = hideAnimation.complete ?? noop;
+
+    const completeCallback = (element?: HTMLElement, config?: AnimationConfig): void => {
+      this._$content.css('pointerEvents', '');
+      this._renderVisibility(false);
+
+      if (element && config) {
+        completeHideAnimation.call(this, element, config);
+      }
+
+      this._hideAnimationProcessing = false;
+      this._actions?.onHidden?.();
+
+      this._hidingDeferred.resolve();
+    };
+
+    const startCallback = (element: HTMLElement, config: AnimationConfig): void => {
+      this._$content.css('pointerEvents', 'none');
+      startHideAnimation.call(this, element, config);
+      this._hideAnimationProcessing = true;
+    };
 
     this._animate(
       hideAnimation,
-      (...args) => {
-        this._$content.css('pointerEvents', '');
-        this._renderVisibility(false);
-
-        completeHideAnimation.call(this, ...args);
-        this._hideAnimationProcessing = false;
-        this._actions?.onHidden?.();
-
-        this._hidingDeferred.resolve();
-      },
-      (...args) => {
-        this._$content.css('pointerEvents', 'none');
-        startHideAnimation.call(this, ...args);
-        this._hideAnimationProcessing = true;
-      },
+      completeCallback,
+      startCallback,
     );
   }
 
-  // eslint-disable-next-line @stylistic/max-len
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types -- Legacy return type
-  _hide() {
+  _hide(): DeferredObj<unknown> | Promise<unknown> {
     if (!this._currentVisible) {
       return Deferred().resolve().promise();
     }
@@ -742,15 +754,17 @@ class Overlay<
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types -- Legacy params
-  _animate(animation, completeCallback, startCallback): void {
+  _animate(
+    animation: AnimationConfig | undefined,
+    completeCallback: (element?: HTMLElement, config?: AnimationConfig) => void,
+    startCallback?: (element: HTMLElement, config: AnimationConfig) => void,
+  ): void {
     if (animation) {
-      // eslint-disable-next-line no-param-reassign -- Required for callback assignment
-      startCallback = startCallback || animation.start || noop;
-      // @ts-expect-error ts-error
+      const actualStartCallback = startCallback ?? animation.start ?? noop;
+
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      fx.animate(this._$content, extend({}, animation, {
-        start: startCallback,
+      fx.animate(this._$content.get(0), extend({}, animation, {
+        start: actualStartCallback,
         complete: completeCallback,
       }));
     } else {
@@ -759,8 +773,7 @@ class Overlay<
   }
 
   _stopAnimation(): void {
-    // @ts-expect-error ts-error
-    fx.stop(this._$content, true);
+    fx.stop(this._$content.get(0), true);
   }
 
   _renderVisibility(visible: boolean): void {
@@ -845,19 +858,19 @@ class Overlay<
     const $elements = this._$wrapper.find('*');
     const elementsCount = $elements.length - 1;
 
-    let first = null;
-    let last = null;
+    let first: dxElementWrapper | null = null;
+    let last: dxElementWrapper | null = null;
 
     for (let i = 0; i <= elementsCount; i += 1) {
-      // @ts-expect-error ts-error
-      if (!first && $elements.eq(i).is(tabbable)) {
-        // @ts-expect-error ts-error
-        first = $elements.eq(i);
+      const currentElement = $elements.eq(i);
+      const reverseElement = $elements.eq(elementsCount - i);
+
+      if (!first && currentElement.length && tabbable(i, currentElement.get(0))) {
+        first = currentElement;
       }
-      // @ts-expect-error ts-error
-      if (!last && $elements.eq(elementsCount - i).is(tabbable)) {
-        // @ts-expect-error ts-error
-        last = $elements.eq(elementsCount - i);
+
+      if (!last && reverseElement.length && tabbable(elementsCount - i, reverseElement.get(0))) {
+        last = reverseElement;
       }
 
       if (first && last) {
@@ -888,9 +901,10 @@ class Overlay<
       e.preventDefault();
 
       const $focusElement = e.shiftKey ? $lastTabbable : $firstTabbable;
-      // @ts-expect-error ts-error
+
+      // @ts-expect-error trigger should be typed on type 'EventsEngineType'
       eventsEngine.trigger($focusElement, 'focusin');
-      // @ts-expect-error ts-error
+      // @ts-expect-error trigger should be typed on type 'EventsEngineType'
       eventsEngine.trigger($focusElement, 'focus');
     }
   }
@@ -1013,10 +1027,12 @@ class Overlay<
     }
 
     let isHidden = false;
-    // @ts-expect-error ts-error
+
+    // @ts-expect-error add should can get dxElementWrapper
     $parent.add($parent.parents()).each((index, element) => {
       const $element = $(element);
-      // @ts-expect-error ts-error
+
+      // @ts-expect-error css should can get 1 argument
       if ($element.css('display') === 'none') {
         isHidden = true;
         return false;
@@ -1093,7 +1109,6 @@ class Overlay<
 
   _initPositionController(): void {
     this._positionController = new OverlayPositionController(
-      // @ts-expect-error ts-error
       this._getPositionControllerConfig(),
     );
   }
@@ -1309,8 +1324,7 @@ class Overlay<
   }
 
   _dispose(): void {
-    // @ts-expect-error ts error
-    fx.stop(this._$content, false);
+    fx.stop(this._$content.get(0), false);
 
     this._toggleViewPortSubscription(false);
     this._toggleSubscriptions(false);
@@ -1380,7 +1394,7 @@ class Overlay<
         break;
       case 'visible':
         this._renderVisibilityAnimate(Boolean(value))
-          // @ts-expect-error ts-error
+          // @ts-expect-error done should be typed
           .done(() => this._animateDeferred?.resolveWith(this))
           .fail(() => this._animateDeferred?.reject());
         break;
@@ -1447,7 +1461,7 @@ class Overlay<
     const result = Deferred<boolean>();
 
     if (isShowing === Boolean(this.option('visible'))) {
-      // @ts-expect-error deferred resolution compatibility
+      // @ts-expect-error this
       return result.resolveWith(this, [isShowing]).promise();
     }
 
@@ -1457,11 +1471,11 @@ class Overlay<
     this.option('visible', isShowing);
 
     animateDeferred.promise()
-      // @ts-expect-error deferred resolution compatibility
+      // @ts-expect-error done shpuld be typed
       .done(() => {
         delete this._animateDeferred;
 
-        // @ts-expect-error deferred resolution compatibility
+        // @ts-expect-error this
         result.resolveWith(this, [Boolean(this.option('visible'))]);
       })
       .fail(() => {
