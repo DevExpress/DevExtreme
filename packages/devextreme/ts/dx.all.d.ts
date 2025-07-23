@@ -2873,10 +2873,7 @@ declare module DevExpress.common.core.events {
   /**
    * [descr:NativeEventInfo]
    */
-  export type NativeEventInfo<
-    TComponent,
-    TNativeEvent extends Event = Event
-  > = {
+  export type NativeEventInfo<TComponent, TNativeEvent = Event> = {
     /**
      * [descr:NativeEventInfo.component]
      */
@@ -7787,13 +7784,14 @@ declare module DevExpress.events {
    * [descr:DxEvent]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export type DxEvent<TNativeEvent extends Event = Event> =
-    ({} extends EventType ? EventObject & TNativeEvent : EventType) & {
-      /**
-       * [descr:DxEvent.originalEvent]
-       */
-      originalEvent: TNativeEvent;
-    };
+  export type DxEvent<TNativeEvent = Event> = ({} extends EventType
+    ? EventObject & TNativeEvent
+    : EventType) & {
+    /**
+     * [descr:DxEvent.originalEvent]
+     */
+    originalEvent: TNativeEvent;
+  };
   /**
    * [descr:event]
    * @deprecated [depNote:event]
@@ -7808,14 +7806,17 @@ declare module DevExpress.events {
      * [descr:EventObject.currentTarget]
      */
     currentTarget: Element;
+
     /**
      * [descr:EventObject.data]
      */
     data: any;
+
     /**
      * [descr:EventObject.delegateTarget]
      */
     delegateTarget: Element;
+
     /**
      * [descr:EventObject.target]
      */
