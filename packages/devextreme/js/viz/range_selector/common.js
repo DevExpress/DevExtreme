@@ -31,3 +31,5 @@ export const formatValue = function(value, formatOptions, tickIntervalsInfo, val
     };
     return String(isFunction(formatOptions.customizeText) ? formatOptions.customizeText.call(formatObject, formatObject) : formatObject.valueText);
 };
+
+export const isFirefoxOnAndroid = () => /Android.*Firefox/.test(navigator.userAgent);

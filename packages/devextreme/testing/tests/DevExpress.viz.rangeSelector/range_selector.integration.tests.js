@@ -871,3 +871,91 @@ QUnit.test('Scale from dataSource. calculate linearThreshold', function(assert) 
     assert.deepEqual(rangeSelector.getValue(), [-100, 1000]);
     assert.equal(rangeSelector._axis.getTranslator().getBusinessRange().linearThreshold, -4);
 });
+
+QUnit.module('Firefox for Android adjustments (T1296261)', {
+    originalUserEvent: undefined,
+    createRangeSelector() {
+        $('#container').dxRangeSelector({
+            margin: {
+                top: 10,
+            },
+            scale: {
+                startValue: 35,
+                endValue: 150,
+            },
+            value: [40, 80],
+            behavior: {
+                animationEnabled: false,
+            }
+        });
+    },
+    beforeEach: function() {
+        this.originalUserEvent = navigator.userAgent;
+        Object.defineProperty(navigator, 'userAgent', {
+            value: 'Mozilla/5.0 (Android 15; Mobile; rv:141.0) Gecko/141.0 Firefox/141.0',
+            configurable: true,
+        });
+        this.createRangeSelector();
+    },
+    afterEach: function() {
+        Object.defineProperty(navigator, 'userAgent', {
+            value: this.originalUserEvent,
+            configurable: true,
+        });
+    },
+}, () => {
+    QUnit.test('there should not be transform props on trackers if browser is Firefox for Android', function(assert) {
+        const $areaTracker = $('.area-tracker');
+        const $selectedAreaTracker = $('.selected-area-tracker');
+        const $sliderTrackers = $('.slider-tracker');
+
+        assert.strictEqual($areaTracker.attr('transform'), undefined, 'area tracker does not have transform prop');
+        assert.strictEqual($selectedAreaTracker.attr('transform'), undefined, 'selected area tracker does not have transform prop');
+        $sliderTrackers.each((index, tracker) => {
+            assert.strictEqual($(tracker).attr('transform'), undefined, `slider tracker ${index} does not have transform prop`);
+        });
+    });
+
+    QUnit.test('it should set x and y props instead of transform to position sliders if browser is Firefox for Android', function(assert) {
+        const $sliderTrackers = $('.slider-tracker');
+
+        $sliderTrackers.each((index, tracker) => {
+            const $tracker = $(tracker);
+            const xCoordinate = parseInt($tracker.attr('x'));
+            const yCoordinate = parseInt($tracker.attr('y'));
+
+            assert.strictEqual(xCoordinate >= 0, true, `slider tracker ${index} should have valid x position: ${xCoordinate}`);
+            assert.strictEqual(yCoordinate > 0, true, `slider tracker ${index} should have valid y position: ${yCoordinate}`);
+        });
+
+        const leftX = parseInt($sliderTrackers.eq(0).attr('x'));
+        const rightX = parseInt($sliderTrackers.eq(1).attr('x'));
+        assert.strictEqual(leftX < rightX, true, `left tracker x (${leftX}) is less than right slider x (${rightX})`);
+
+        const leftY = parseInt($sliderTrackers.eq(0).attr('y'));
+        const rightY = parseInt($sliderTrackers.eq(1).attr('y'));
+        assert.strictEqual(leftX < rightX, true, `left tracker y (${leftY}) is the same as the right slider y (${rightY})`);
+    });
+
+    QUnit.test('selected area tracker position should be adjusted by half tracker width if browser is Firefox for Android', function(assert) {
+        const $selectedAreaTracker = $('.selected-area-tracker');
+        const $sliderTrackers = $('.slider-tracker');
+
+        const leftSliderX = parseInt($sliderTrackers.eq(0).attr('x'));
+        const rightSliderX = parseInt($sliderTrackers.eq(1).attr('x'));
+
+        const trackerWidth = parseInt($sliderTrackers.eq(0).attr('width'));
+
+        const selectedAreaPoints = $selectedAreaTracker.attr('d');
+
+        const points = selectedAreaPoints.split(' ').map(p => parseFloat(p));
+        const selectedAreaLeft = points[1];
+        const selectedAreaRight = points[4];
+
+        const expectedLeft = leftSliderX + trackerWidth;
+        const expectedRight = rightSliderX;
+
+        assert.roughEqual(selectedAreaLeft, expectedLeft, 1, 'Selected area left starts on the tracker end');
+        assert.roughEqual(selectedAreaRight, expectedRight, 1, 'Selected area right ends where the right tracker starts');
+    });
+});
