@@ -226,7 +226,7 @@ describe('selectAll with filters', () => {
     expect(cardView.getSelectedCardKeys()).toEqual([1, 2]);
   });
 
-  it('should select only cards matching dataSource.filter()', async () => {
+  it('should select only cards matching dataSource.filter()', () => {
     const cardView = setup({
       keyExpr: 'id',
       columns: ['id', 'category'],
@@ -244,17 +244,14 @@ describe('selectAll with filters', () => {
         filterEnabled: true,
       },
     });
-    const dataSource = cardView.getDataSource();
 
-    dataSource.filter(['category', '=', 'A']);
-    await dataSource.load();
-
+    cardView.getDataSource().filter(['category', '=', 'A']);
     cardView.selectAll();
 
     expect(cardView.getSelectedCardKeys()).toEqual([1, 2]);
   });
 
-  it('should select only cards matching filterValue, headerFilter and dataSource.filter()', async () => {
+  it('should select only cards matching filterValue, headerFilter and dataSource.filter()', () => {
     const cardView = setup({
       keyExpr: 'id',
       columns: ['id', 'category1', 'category2', 'category3'],
@@ -292,13 +289,10 @@ describe('selectAll with filters', () => {
         filterEnabled: true,
       },
     });
-    const dataSource = cardView.getDataSource();
 
     cardView.option('filterValue', ['category1', '=', 'A']);
     cardView.columnOption('category2', 'filterValues', ['1']);
-
-    dataSource.filter(['category3', '=', true]);
-    await dataSource.load();
+    cardView.getDataSource().filter(['category3', '=', true]);
 
     cardView.selectAll();
 
