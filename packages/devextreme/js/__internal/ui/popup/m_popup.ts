@@ -1166,7 +1166,6 @@ class Popup<
   _isAllWindowCovered(): boolean | undefined {
     const { fullScreen } = this.option();
 
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return super._isAllWindowCovered() || fullScreen;
   }
 
