@@ -451,7 +451,8 @@ class Overlay<
       const tabbableElements = overlayStack[i]._findTabbableBounds();
 
       if (tabbableElements.first || tabbableElements.last) {
-        // @ts-expect-error ts error
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore expected: types Overlay<OverlayProperties> and this have no overlap
         return overlayStack[i] === this;
       }
     }
@@ -1042,6 +1043,7 @@ class Overlay<
         isHidden = true;
         return false;
       }
+
       return undefined;
     });
 

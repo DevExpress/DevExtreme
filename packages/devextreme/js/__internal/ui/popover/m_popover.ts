@@ -305,6 +305,7 @@ TProperties extends PopoverProperties = PopoverProperties,
     super._renderPosition();
     this._renderOverlayPosition(shouldUpdateDimensions);
 
+    // @ts-expect-error should provide event
     this._actions?.onPositioned?.();
   }
 
