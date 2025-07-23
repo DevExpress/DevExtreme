@@ -974,8 +974,9 @@ class Overlay<
   }
 
   _getHideOnParentScrollTarget(): dxElementWrapper {
-    const { _hideOnParentScrollTarget: target } = this.option();
-    const $hideOnParentScrollTarget = $(target);
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _hideOnParentScrollTarget } = this.option();
+    const $hideOnParentScrollTarget = $(_hideOnParentScrollTarget);
 
     if ($hideOnParentScrollTarget.length) {
       return $hideOnParentScrollTarget;
@@ -1478,7 +1479,7 @@ class Overlay<
     this.option('visible', isShowing);
 
     animateDeferred.promise()
-      // @ts-expect-error done shpuld be typed
+      // @ts-expect-error done should be typed
       .done(() => {
         delete this._animateDeferred;
 
