@@ -65,6 +65,12 @@ type AnimationDirection = 'to' | 'from';
 type PointerLikeEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
 type EventHandler = (e: PointerLikeEvent) => boolean | undefined;
 type TabTerminatorHandler = (e: KeyboardEvent) => void;
+type DragLikeEvent = DxEvent & {
+  originalEvent: DxEvent & { originalEvent?: Event };
+  _cancelPreventDefault?: boolean;
+  ctrlKey: boolean;
+  metaKey: boolean;
+};
 
 interface ParentsScrollSubscriptionInfo {
   handler?: (e: Event) => void;
@@ -450,7 +456,7 @@ class Overlay<
     for (let i = overlayStack.length - 1; i >= 0; i -= 1) {
       const tabbableElements = overlayStack[i]._findTabbableBounds();
 
-      if (tabbableElements.first || tabbableElements.last) {
+      if (tabbableElements.$first || tabbableElements.$last) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore expected: types Overlay<OverlayProperties> and this have no overlap
         return overlayStack[i] === this;
@@ -858,31 +864,36 @@ class Overlay<
     eventsEngine.off(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
   }
 
-  _findTabbableBounds(): { first: dxElementWrapper | null; last: dxElementWrapper | null } {
+  _findTabbableBounds(): {
+    $first: dxElementWrapper | null;
+    $last: dxElementWrapper | null;
+  } {
     const $elements = this._$wrapper.find('*');
     const elementsCount = $elements.length - 1;
 
-    let first: dxElementWrapper | null = null;
-    let last: dxElementWrapper | null = null;
+    let $first: dxElementWrapper | null = null;
+    let $last: dxElementWrapper | null = null;
 
     for (let i = 0; i <= elementsCount; i += 1) {
-      const currentElement = $elements.eq(i);
-      const reverseElement = $elements.eq(elementsCount - i);
+      const $currentElement = $elements.eq(i);
+      const $reverseElement = $elements.eq(elementsCount - i);
 
-      if (!first && currentElement.length && tabbable(i, currentElement.get(0))) {
-        first = currentElement;
+      // @ts-expect-error is should can get function as callback
+      if (!$first && $currentElement.is(tabbable)) {
+        $first = $currentElement;
       }
 
-      if (!last && reverseElement.length && tabbable(elementsCount - i, reverseElement.get(0))) {
-        last = reverseElement;
+      // @ts-expect-error is should can get function as callback
+      if (!$last && $reverseElement.is(tabbable)) {
+        $last = $reverseElement;
       }
 
-      if (first && last) {
+      if ($first && $last) {
         break;
       }
     }
 
-    return { first, last };
+    return { $first, $last };
   }
 
   _tabKeyHandler(e: KeyboardEvent): void {
@@ -893,7 +904,10 @@ class Overlay<
     const wrapper = this._$wrapper.get(0) as HTMLElement;
     const activeElement = domAdapter.getActiveElement(wrapper);
 
-    const { first: $firstTabbable, last: $lastTabbable } = this._findTabbableBounds();
+    const {
+      $first: $firstTabbable,
+      $last: $lastTabbable,
+    } = this._findTabbableBounds();
 
     const isTabOnLast = !e.shiftKey && activeElement === $lastTabbable?.get(0);
     const isShiftTabOnFirst = e.shiftKey && activeElement === $firstTabbable?.get(0);
@@ -1127,23 +1141,9 @@ class Overlay<
     eventsEngine.off(this._$wrapper, eventName);
 
     if (enabled) {
-      eventsEngine.on(this._$wrapper, eventName, {
-        validate() {
-          return true;
-        },
-        getDirection() {
-          return 'both';
-        },
-        _toggleGestureCover(toggle) {
-          if (!toggle) {
-            this._toggleGestureCoverImpl(toggle);
-          }
-        },
-        _clearSelection: noop,
-        isNative: true,
-      }, (e) => {
+      const callback = (e: DragLikeEvent): void => {
         const { originalEvent } = e.originalEvent;
-        const { type } = originalEvent || {};
+        const { type } = originalEvent ?? {};
         const isWheel = type === 'wheel';
         const isMouseMove = type === 'mousemove';
         const isScrollByWheel = isWheel && !isCommandKeyPressed(e);
@@ -1151,10 +1151,33 @@ class Overlay<
 
         e._cancelPreventDefault = true;
 
-        if (originalEvent && e.cancelable !== false && (isNotMouseOrWheel || isScrollByWheel)) {
+        if (originalEvent && e.cancelable && (isNotMouseOrWheel || isScrollByWheel)) {
           e.preventDefault();
         }
-      });
+      };
+
+      const options = {
+        validate(): boolean {
+          return true;
+        },
+        getDirection(): string {
+          return 'both';
+        },
+        _toggleGestureCover(toggle: boolean): void {
+          if (!toggle) {
+            this._toggleGestureCoverImpl(toggle);
+          }
+        },
+        _clearSelection: noop,
+        isNative: true,
+      };
+
+      eventsEngine.on(
+        this._$wrapper,
+        eventName,
+        options,
+        callback,
+      );
     }
   }
 
@@ -1287,7 +1310,7 @@ class Overlay<
     this._keyboardListenerId = keyboard.on(
       this._$content,
       null,
-      (options) => this._keyboardHandler(options),
+      (options: { originalEvent: Event }): void => this._keyboardHandler(options),
     );
   }
 
