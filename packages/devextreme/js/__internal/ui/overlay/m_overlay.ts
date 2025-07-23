@@ -526,7 +526,7 @@ class Overlay<
     const startShowAnimation = showAnimation?.start ?? noop;
     const completeShowAnimation = showAnimation?.complete ?? noop;
 
-    const completeCallback = (element?: HTMLElement, config?: AnimationConfig): void => {
+    const completeCallback = (element: HTMLElement, config: AnimationConfig): void => {
       if (this._isAnimationPaused) {
         return;
       }
@@ -536,9 +536,7 @@ class Overlay<
         eventsEngine.trigger(this._focusTarget(), 'focus');
       }
 
-      if (element && config) {
-        completeShowAnimation.call(this, element, config);
-      }
+      completeShowAnimation.call(this, element, config);
 
       this._showAnimationProcessing = false;
       this._isHidden = false;
@@ -655,11 +653,9 @@ class Overlay<
   _normalizeAnimation(
     showHideConfig: AnimationConfig | undefined,
     direction: AnimationDirection,
-  ): AnimationConfig {
-    let configuration: Partial<AnimationConfig> = {};
-
+  ): AnimationConfig | undefined {
     if (showHideConfig) {
-      configuration = extend({
+      const configuration = extend({
         type: 'slide',
         skipElementInitialStyles: true, // NOTE: for fadeIn animation
       }, showHideConfig);
@@ -669,24 +665,24 @@ class Overlay<
           position: this._positionController.position,
         });
       }
+
+      return configuration as AnimationConfig;
     }
 
-    return configuration;
+    return undefined;
   }
 
   _animateHiding(): void {
-    const animation = this._getAnimationConfig() ?? {};
+    const animation = this._getAnimationConfig();
     const hideAnimation = this._normalizeAnimation(animation.hide, 'from');
-    const startHideAnimation = hideAnimation.start ?? noop;
-    const completeHideAnimation = hideAnimation.complete ?? noop;
+    const startHideAnimation = hideAnimation?.start ?? noop;
+    const completeHideAnimation = hideAnimation?.complete ?? noop;
 
-    const completeCallback = (element?: HTMLElement, config?: AnimationConfig): void => {
+    const completeCallback = (element: HTMLElement, config: AnimationConfig): void => {
       this._$content.css('pointerEvents', '');
       this._renderVisibility(false);
 
-      if (element && config) {
-        completeHideAnimation.call(this, element, config);
-      }
+      completeHideAnimation.call(this, element, config);
 
       this._hideAnimationProcessing = false;
       // @ts-expect-error onHidden should provide event
@@ -762,7 +758,7 @@ class Overlay<
 
   _animate(
     animation: AnimationConfig | undefined,
-    completeCallback: (element?: HTMLElement, config?: AnimationConfig) => void,
+    completeCallback: (element: HTMLElement, config: AnimationConfig) => void,
     startCallback?: (element: HTMLElement, config: AnimationConfig) => void,
   ): void {
     if (animation) {
@@ -774,6 +770,7 @@ class Overlay<
         complete: completeCallback,
       }));
     } else {
+      // @ts-expect-error complate in AnimationConfig contains required params
       completeCallback();
     }
   }
