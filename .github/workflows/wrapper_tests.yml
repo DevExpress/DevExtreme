@@ -95,16 +95,45 @@ jobs:
         run: pnpm run regenerate-all
 
       - name: Check generated code
+        id: check-diff
+        uses: DevExpress/github-actions/get-changed-files@v1
+        with:
+          gh-token: ${{ secrets.GITHUB_TOKEN }}
+          paths: 'packages/devextreme-*/src/**'
+          output: changed-files.json
+
+      - name: Fail if generated code is outdated
         shell: bash
         run: |
-          git add . -N
-          changes=$(git diff --name-status HEAD -- packages/devextreme-angular/src packages/devextreme-react/src packages/devextreme-vue/src)
-          if [ -n "$changes" ]; then
-            echo "Generated code is outdated. The following files have uncommitted changes:"
-            echo "$changes";
-            echo "To update generated code, use "pnpm run regenerate-all" and commit changes."
+          if [ -s changed-files.json ]; then
+            echo "Generated code is outdated. The following files were changed:"
+            cat changed-files.json | jq -r '.[]'
+            echo ""
+            echo "To update generated code, run: pnpm run regenerate-all"
             exit 1
+          else
+            echo "No changes in generated code."
           fi
+
+      - name: Upload changed files list
+        uses: actions/upload-artifact@v4
+        with:
+          name: changed-generated-files
+          path: changed-files.json
+          retention-days: 1
+
+
+      # - name: Check generated code
+      #   shell: bash
+      #   run: |
+      #     git add . -N
+      #     changes=$(git diff --name-status HEAD -- packages/devextreme-angular/src packages/devextreme-react/src packages/devextreme-vue/src)
+      #     if [ -n "$changes" ]; then
+      #       echo "Generated code is outdated. The following files have uncommitted changes:"
+      #       echo "$changes";
+      #       echo "To update generated code, use "pnpm run regenerate-all" and commit changes."
+      #       exit 1
+      #     fi
 
   test:
     runs-on: devextreme-shr2
