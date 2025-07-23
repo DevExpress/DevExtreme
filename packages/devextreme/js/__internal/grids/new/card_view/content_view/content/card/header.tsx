@@ -1,5 +1,4 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils/index';
-import type { DxEvent } from '@js/events';
 import messageLocalization from '@js/localization/message';
 import type { ValueChangedEvent } from '@js/ui/check_box';
 import type * as dxToolbar from '@js/ui/toolbar';
@@ -52,7 +51,7 @@ export class CardHeader extends Component<CardHeaderProps> {
           },
           value: card.isSelected,
           onValueChanged: (e: ValueChangedEvent): void => {
-            const event = e.event as DxEvent<MouseEvent>;
+            const event = e.event as MouseEvent;
 
             selectCard?.(card, {
               control: isCommandKeyPressed(event),

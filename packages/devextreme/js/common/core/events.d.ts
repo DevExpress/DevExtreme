@@ -51,7 +51,7 @@ export type EventInfo<TComponent> = {
  * @public
  * @namespace DevExpress.common.core.events
  */
-export type NativeEventInfo<TComponent, TNativeEvent extends Event = Event> = {
+export type NativeEventInfo<TComponent, TNativeEvent = Event> = {
   /**
    * @docid
    * @type this

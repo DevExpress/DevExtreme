@@ -7,16 +7,19 @@ export type EventObject = {
    * @public
    */
   currentTarget: Element;
+
   /**
    * @docid
    * @public
    */
   data: any;
+
   /**
    * @docid
    * @public
    */
   delegateTarget: Element;
+
   /**
    * @docid
    * @public
@@ -74,8 +77,9 @@ export interface EventType { }
 /**
  * @docid
  * @type EventObject|jQuery.Event
+ *
  */
-export type DxEvent<TNativeEvent extends Event = Event> = ({} extends EventType ? (EventObject & TNativeEvent) : EventType) & {
+export type DxEvent<TNativeEvent = Event> = ({} extends EventType ? (EventObject & TNativeEvent) : EventType) & {
   /**
    * @docid
    * @public

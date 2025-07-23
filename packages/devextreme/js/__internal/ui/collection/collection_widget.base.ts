@@ -373,7 +373,7 @@ class CollectionWidget<
     return this.$element();
   }
 
-  _focusInHandler(e: DxEvent<FocusEvent>): void {
+  _focusInHandler(e: DxEvent): void {
     super._focusInHandler(e);
 
     if (!this._isFocusTarget(e.target)) {
@@ -394,7 +394,7 @@ class CollectionWidget<
     }
   }
 
-  _focusOutHandler(e: DxEvent<FocusEvent>): void {
+  _focusOutHandler(e: DxEvent): void {
     super._focusOutHandler(e);
 
     const { focusedElement } = this.option();

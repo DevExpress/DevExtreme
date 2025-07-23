@@ -470,7 +470,7 @@ class TabPanel extends MultiView<TabPanelProperties> {
     }
   }
 
-  _focusOutHandler(e: DxEvent<FocusEvent>): void {
+  _focusOutHandler(e: DxEvent): void {
     this._isFocusOutHandlerExecuting = true;
     super._focusOutHandler(e);
 

@@ -909,7 +909,7 @@ declare namespace DevExpress.events {
   export type EventInfo<TComponent> = common.core.events.EventInfo<TComponent>;
   export type InitializedEventInfo<TComponent> = common.core.events.InitializedEventInfo<TComponent>;
   export type ItemInfo<TItemData = any> = common.core.events.ItemInfo<TItemData>;
-  export type NativeEventInfo<TComponent, TNativeEvent extends Event = Event> = common.core.events.NativeEventInfo<TComponent, TNativeEvent>;
+  export type NativeEventInfo<TComponent, TNativeEvent = Event> = common.core.events.NativeEventInfo<TComponent, TNativeEvent>;
   export const off: typeof common.core.events.off;
   export const on: typeof common.core.events.on;
   export const one: typeof common.core.events.one;

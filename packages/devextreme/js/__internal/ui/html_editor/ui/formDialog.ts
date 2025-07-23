@@ -164,7 +164,7 @@ export default class FormDialog extends BaseDialog {
     };
   }
 
-  public callAddButtonAction(event?: ClickEvent['event']): void {
+  public callAddButtonAction(event?: Event): void {
     if (this.beforeAddButtonAction && !this.beforeAddButtonAction()) {
       return;
     }
@@ -182,7 +182,7 @@ export default class FormDialog extends BaseDialog {
     return super.show();
   }
 
-  public hide(formData: FormProperties, event?: ClickEvent['event']): void {
+  public hide(formData: FormProperties, event?: Event): void {
     this.deferred?.resolve(formData, event);
 
     super.hide();
