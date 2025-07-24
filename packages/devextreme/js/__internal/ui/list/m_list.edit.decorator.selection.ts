@@ -202,8 +202,7 @@ class EditDecoratorSelection extends EditDecorator {
     const stateVariableName = indeterminate ? 'indeterminate' : value ? 'checked' : 'notChecked';
 
     const label = `${messageLocalization.format('dxList-selectAll')}, ${messageLocalization.format(`dxList-selectAll-${stateVariableName}`)}`;
-    // @ts-expect-error ts-error
-    this._$selectAll.attr({ 'aria-label': label });
+    this._list.setAria('label', label, this._$selectAll);
   }
 
   _selectAllHandler(event): DeferredObj<unknown> {

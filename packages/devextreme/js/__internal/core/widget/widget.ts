@@ -31,7 +31,7 @@ const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 function setAttribute(name, value, target): void {
   // eslint-disable-next-line no-param-reassign
-  name = name === 'role' || name === 'id' ? name : `aria-${name}`;
+  name = name === 'role' || name === 'id' || name === 'multiple' ? name : `aria-${name}`;
   // eslint-disable-next-line no-param-reassign
   value = isDefined(value) ? value.toString() : null;
 

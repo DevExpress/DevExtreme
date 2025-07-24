@@ -105,15 +105,11 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
   }
 
   _updateWrapperAria(): void {
-    this.$wrapper()
-      .removeAttr('aria-label')
-      .removeAttr('role');
+    this.setAria({ label: null, role: null }, this.$wrapper());
 
     const showIndicator = this.option('showIndicator');
     if (!showIndicator) {
-      const aria = this._getAriaAttributes();
-      // @ts-expect-error ts-error
-      this.$wrapper().attr(aria);
+      this.setAria(this._getAriaAttributes(), this.$wrapper());
     }
   }
 
@@ -124,7 +120,7 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
 
     const aria = {
       role: 'alert',
-      'aria-label': label,
+      label,
     };
 
     return aria;
@@ -203,9 +199,9 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
     }
 
     this._createComponent(this._$indicator, LoadIndicator, {
-      elementAttr: this._getAriaAttributes(),
       indicatorSrc: this.option('indicatorSrc'),
     });
+    this.setAria(this._getAriaAttributes(), this._$indicator);
   }
 
   _cleanPreviousContent(): void {

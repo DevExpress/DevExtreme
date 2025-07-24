@@ -459,14 +459,14 @@ class TagBox<
 
     const attributes = {
       multiple: 'multiple',
-      'aria-label': 'Selected items',
+      label: 'Selected items',
     };
 
     this._$submitElement = $('<select>')
-      // @ts-expect-error ts-error
-      .attr(attributes)
       .css('display', 'none')
       .appendTo(this.$element());
+
+    this.setAria(attributes, this._$submitElement);
   }
 
   _setSubmitValue(): void {

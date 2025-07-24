@@ -95,13 +95,13 @@ export const custom = function (options) {
     container: $element,
     visualContainer: window,
     dragAndResizeArea: window,
-    onContentReady(args) {
-      args.component.$content()
+    onContentReady({ component }) {
+      component.$content()
         .addClass(DX_DIALOG_CONTENT_CLASSNAME)
         .append($message);
 
       if (messageId) {
-        args.component.$overlayContent().attr('aria-labelledby', messageId);
+        component.setAria('labelledby', messageId, component.$overlayContent());
       }
     },
     onShowing(e) {

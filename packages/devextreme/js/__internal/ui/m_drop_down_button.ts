@@ -482,7 +482,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     this._popup = this._createComponent($popup, Popup, this._popupOptions());
     this._popup.$content().addClass(DROP_DOWN_BUTTON_CONTENT);
     this._popup.$wrapper().addClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS);
-    this._popup.$overlayContent().attr('aria-label', OVERLAY_CONTENT_LABEL);
+    this.setAria('label', OVERLAY_CONTENT_LABEL, this._popup.$overlayContent());
     this._popup.on('hiding', this._popupHidingHandler.bind(this));
     this._popup.on('showing', this._popupShowingHandler.bind(this));
     this._bindInnerWidgetOptions(this._popup, 'dropDownOptions');

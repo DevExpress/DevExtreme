@@ -679,7 +679,7 @@ class Popup<
     const titleId = shouldSetAriaLabel ? new Guid().toString() : null;
 
     this._$topToolbar?.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0).attr('id', titleId);
-    this.$overlayContent().attr('aria-labelledby', titleId);
+    this.setAria('labelledby', titleId, this.$overlayContent());
   }
 
   _animateShowing(): void {

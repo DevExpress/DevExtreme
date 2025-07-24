@@ -67,11 +67,9 @@ class ConfirmationPopup {
       dragEnabled: false,
       hideOnOutsideClick: true,
       toolbarItems: this._getToolbarItems(),
-      onContentReady(args) {
-        args.component.$content()
-          .append($message);
-
-        args.component.$overlayContent().attr('aria-labelledby', messageId);
+      onContentReady({ component }) {
+        component.$content().append($message);
+        component.setAria('labelledby', messageId, component.$overlayContent());
       },
       onShown: (e) => {
         const $firstButton = e.component
