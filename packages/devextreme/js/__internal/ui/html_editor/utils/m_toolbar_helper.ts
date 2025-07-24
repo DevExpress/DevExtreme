@@ -47,8 +47,8 @@ const DIALOG_LINK_FIELD_TARGET_CLASS = 'dx-formdialog-field-target';
 const DIALOG_TABLE_FIELD_COLUMNS = 'dxHtmlEditor-dialogInsertTableRowsField';
 const DIALOG_TABLE_FIELD_ROWS = 'dxHtmlEditor-dialogInsertTableColumnsField';
 
-const DEFAULT_CELL_BORDER_WIDTH = 1;
-const DEFAULT_TABLE_BORDER_WIDTH = 0;
+const DEFAULT_TEXT_ALIGNMENT = 'center';
+const DEFAULT_VERTICAL_ALIGN = 'middle';
 
 const ICON_MAP = {
   insertHeaderRow: 'header',
@@ -502,23 +502,20 @@ function getTablePropertiesFormConfig(
   let backgroundColorEditorInstance;
 
   const { editorInstance } = module;
-  const window = getWindow();
 
-  const tableStyles = window.getComputedStyle($table.get(0));
   const rawTableWidth = parseFloat(formats.tableWidth);
-
   const tableWidth = isNaN(rawTableWidth) ? null : rawTableWidth;
-  const textAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
+  const alignment = formats.tableAlign || DEFAULT_TEXT_ALIGNMENT;
 
   const formData = {
     width: tableWidth,
     height: isDefined(formats.tableHeight) ? parseFloat(formats.tableHeight) : null,
-    backgroundColor: formats.tableBackgroundColor || tableStyles.backgroundColor,
-    borderStyle: formats.tableBorderStyle || tableStyles.borderTopStyle,
-    borderColor: formats.tableBorderColor || tableStyles.borderTopColor,
+    backgroundColor: formats.tableBackgroundColor || null,
+    borderStyle: formats.tableBorderStyle || null,
+    borderColor: formats.tableBorderColor || null,
     borderWidth: isDefined(formats.tableBorderWidth)
-      ? parseFloat(formats.tableBorderWidth) : DEFAULT_TABLE_BORDER_WIDTH,
-    alignment: formats.tableAlign || textAlign,
+      ? parseFloat(formats.tableBorderWidth) : null,
+    alignment,
   };
 
   const items = [
@@ -646,7 +643,7 @@ function getTablePropertiesFormConfig(
                 { value: 'justify', icon: 'alignjustify' },
               ],
               keyExpr: 'value',
-              selectedItemKeys: [textAlign],
+              selectedItemKeys: [alignment === 'start' ? 'left' : alignment],
               onInitialized: (event: InitializedButtonGroupEvent): void => {
                 alignmentEditorInstance = event.component;
               },
@@ -714,22 +711,21 @@ function getCellPropertiesFormConfig(
   let backgroundColorEditorInstance;
 
   const { editorInstance } = module;
-  const window = getWindow();
 
-  const cellStyles = window.getComputedStyle($cell.get(0));
   const cellWidth = isDefined(formats.cellWidth) ? parseFloat(formats.cellWidth) : null;
-  const textAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
+  const alignment = formats.cellTextAlign || DEFAULT_TEXT_ALIGNMENT;
+  const verticalAlignment = formats.cellVerticalAlign || DEFAULT_VERTICAL_ALIGN;
 
   const formData = {
     width: cellWidth,
     height: isDefined(formats.cellHeight) ? parseFloat(formats.cellHeight) : null,
-    backgroundColor: getColorFromFormat(formats.cellBackgroundColor) || cellStyles.backgroundColor,
-    borderStyle: formats.cellBorderStyle || cellStyles.borderTopStyle,
-    borderColor: getColorFromFormat(formats.cellBorderColor) || cellStyles.borderTopColor,
+    backgroundColor: getColorFromFormat(formats.cellBackgroundColor) || null,
+    borderStyle: formats.cellBorderStyle || null,
+    borderColor: getColorFromFormat(formats.cellBorderColor) || null,
     borderWidth: isDefined(formats.cellBorderWidth)
-      ? parseFloat(formats.cellBorderWidth) : DEFAULT_CELL_BORDER_WIDTH,
-    alignment: formats.cellTextAlign || textAlign,
-    verticalAlignment: formats.cellVerticalAlign || cellStyles.verticalAlign,
+      ? parseFloat(formats.cellBorderWidth) : null,
+    alignment,
+    verticalAlignment,
     verticalPadding: isDefined(formats.cellPaddingTop) ? parseFloat(formats.cellPaddingTop) : null,
     horizontalPadding: isDefined(formats.cellPaddingLeft)
       ? parseFloat(formats.cellPaddingLeft) : null,
@@ -870,7 +866,7 @@ function getCellPropertiesFormConfig(
                 { value: 'justify', icon: 'alignjustify' },
               ],
               keyExpr: 'value',
-              selectedItemKeys: [textAlign],
+              selectedItemKeys: [alignment === 'start' ? 'left' : alignment],
               onInitialized: (event: InitializedButtonGroupEvent): void => {
                 alignmentEditorInstance = event.component;
               },
@@ -890,7 +886,7 @@ function getCellPropertiesFormConfig(
                 { value: 'bottom', icon: 'verticalalignbottom' },
               ],
               keyExpr: 'value',
-              selectedItemKeys: [cellStyles.verticalAlign],
+              selectedItemKeys: [verticalAlignment],
               onInitialized: (event: InitializedButtonGroupEvent): void => {
                 verticalAlignmentEditorInstance = event.component;
               },
