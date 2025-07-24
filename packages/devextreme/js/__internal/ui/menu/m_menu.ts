@@ -12,18 +12,43 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getOuterWidth } from '@js/core/utils/size';
 import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
-import type { DxEvent } from '@js/events';
+import type { DxEvent, EventInfo } from '@js/events';
 import Button from '@js/ui/button';
-import type { Item, Properties } from '@js/ui/menu';
+import type dxMenuBase from '@js/ui/context_menu/ui.menu_base';
+import type {
+  Item,
+  ItemClickEvent,
+  ItemContextMenuEvent,
+  ItemRenderedEvent,
+  Properties,
+  SelectionChangedEvent,
+  SubmenuHiddenEvent,
+  SubmenuHidingEvent,
+  SubmenuShowingEvent,
+  SubmenuShowMode,
+  SubmenuShownEvent,
+} from '@js/ui/menu';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import Overlay from '@js/ui/overlay/ui.overlay';
-import type { ItemCollapsedEvent, ItemExpandedEvent } from '@js/ui/tree_view';
+import type {
+  ItemClickEvent as TreeViewItemClickEvent,
+  ItemCollapsedEvent as TreeViewItemCollapsedEvent,
+  ItemExpandedEvent as TreeViewItemExpandedEvent,
+} from '@js/ui/tree_view';
 import TreeView from '@js/ui/tree_view';
-import type { MenuBaseNode, MenuBaseProperties } from '@ts/ui/context_menu/m_menu_base';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type {
+  ClickEvent,
+  HoverEvent,
+  ItemClickActionArguments,
+  MenuBaseProperties,
+} from '@ts/ui/context_menu/m_menu_base';
 import MenuBase from '@ts/ui/context_menu/m_menu_base';
+import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/m_utils';
 import type { TreeViewBaseProperties } from '@ts/ui/tree_view/m_tree_view.base';
 
+import type { SubmenuProperties } from './m_submenu';
 import Submenu from './m_submenu';
 
 const DX_MENU_CLASS = 'dx-menu';
@@ -68,7 +93,26 @@ const ACTIONS = [
   'onItemClick',
   'onSelectionChanged',
   'onItemRendered',
-];
+] as const;
+
+type MenuNode = InternalNode & Item;
+interface SubmenuVisibilityChangeEventParams {
+  itemData?: Item;
+  rootItem: Element;
+  submenuContainer: Element;
+  submenu: Submenu;
+}
+
+interface MenuActions {
+  onSubmenuShowing?: (e: SubmenuShowingEvent | SubmenuVisibilityChangeEventParams) => void;
+  onSubmenuShown?: (e: SubmenuShownEvent | SubmenuVisibilityChangeEventParams) => void;
+  onSubmenuHiding?: (e: SubmenuHidingEvent | SubmenuVisibilityChangeEventParams) => void;
+  onSubmenuHidden?: (e: SubmenuHiddenEvent | SubmenuVisibilityChangeEventParams) => void;
+  onItemContextMenu?: (e: ItemContextMenuEvent) => void;
+  onItemClick?: (e: ItemClickEvent) => void;
+  onSelectionChanged?: (e: SelectionChangedEvent) => void;
+  onItemRendered?: (e: ItemRenderedEvent) => void;
+}
 
 type MenuPropertiesKeys = Exclude<keyof Properties, keyof MenuBaseProperties>;
 
@@ -86,9 +130,9 @@ class Menu extends MenuBase<MenuProperties> {
 
   _visibleSubmenu?: Submenu | null;
 
-  _overlay: Overlay | null = null;
+  _overlay!: Overlay | null;
 
-  _treeView: TreeView | null = null;
+  _treeView!: TreeView | null;
 
   _hamburger?: Button | null;
 
@@ -96,13 +140,19 @@ class Menu extends MenuBase<MenuProperties> {
 
   _menuItemsWidth!: number;
 
-  _hoveredRootItem?: dxElementWrapper;
+  _hoveredRootItem?: dxElementWrapper | null;
 
-  _showSubmenuTimer?: any;
+  // eslint-disable-next-line no-restricted-globals
+  _showSubmenuTimer?: ReturnType<typeof setTimeout> | number;
 
-  _hideSubmenuTimer?: any;
+  // eslint-disable-next-line no-restricted-globals
+  _hideSubmenuTimer?: ReturnType<typeof setTimeout>;
 
-  _resizeEventTimer?: any;
+  // eslint-disable-next-line no-restricted-globals
+  _resizeEventTimer?: ReturnType<typeof setTimeout>;
+
+  // @ts-expect-error ts-error
+  _actions!: MenuActions;
 
   _getDefaultOptions(): MenuProperties {
     return {
@@ -167,43 +217,48 @@ class Menu extends MenuBase<MenuProperties> {
     return orientation === 'horizontal';
   }
 
-  _moveFocus(location) {
+  // eslint-disable-next-line consistent-return,@typescript-eslint/no-invalid-void-type
+  _moveFocus(location: string): boolean | undefined | void {
     const $items = this._getAvailableItems();
     const isMenuHorizontal = this._isMenuHorizontal();
     const $activeItem = this._getActiveItem(true);
-    let argument;
-    let operation;
-    let navigationAction;
-    let $newTarget;
+
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let $argument: dxElementWrapper;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let operation: string;
 
     switch (location) {
       case FOCUS_UP:
-        operation = isMenuHorizontal ? SHOW_SUBMENU_OPERATION : this._getItemsNavigationOperation(PREV_ITEM_OPERATION);
-        argument = isMenuHorizontal ? $activeItem : $items;
-        navigationAction = this._getKeyboardNavigationAction(operation, argument);
-        $newTarget = navigationAction();
+        operation = isMenuHorizontal
+          ? SHOW_SUBMENU_OPERATION
+          : this._getItemsNavigationOperation(PREV_ITEM_OPERATION);
+        $argument = isMenuHorizontal ? $activeItem : $items;
         break;
       case FOCUS_DOWN:
-        operation = isMenuHorizontal ? SHOW_SUBMENU_OPERATION : this._getItemsNavigationOperation(NEXT_ITEM_OPERATION);
-        argument = isMenuHorizontal ? $activeItem : $items;
-        navigationAction = this._getKeyboardNavigationAction(operation, argument);
-        $newTarget = navigationAction();
+        operation = isMenuHorizontal
+          ? SHOW_SUBMENU_OPERATION
+          : this._getItemsNavigationOperation(NEXT_ITEM_OPERATION);
+        $argument = isMenuHorizontal ? $activeItem : $items;
         break;
       case FOCUS_RIGHT:
-        operation = isMenuHorizontal ? this._getItemsNavigationOperation(NEXT_ITEM_OPERATION) : SHOW_SUBMENU_OPERATION;
-        argument = isMenuHorizontal ? $items : $activeItem;
-        navigationAction = this._getKeyboardNavigationAction(operation, argument);
-        $newTarget = navigationAction();
+        operation = isMenuHorizontal
+          ? this._getItemsNavigationOperation(NEXT_ITEM_OPERATION)
+          : SHOW_SUBMENU_OPERATION;
+        $argument = isMenuHorizontal ? $items : $activeItem;
         break;
       case FOCUS_LEFT:
-        operation = isMenuHorizontal ? this._getItemsNavigationOperation(PREV_ITEM_OPERATION) : SHOW_SUBMENU_OPERATION;
-        argument = isMenuHorizontal ? $items : $activeItem;
-        navigationAction = this._getKeyboardNavigationAction(operation, argument);
-        $newTarget = navigationAction();
+        operation = isMenuHorizontal
+          ? this._getItemsNavigationOperation(PREV_ITEM_OPERATION)
+          : SHOW_SUBMENU_OPERATION;
+        $argument = isMenuHorizontal ? $items : $activeItem;
         break;
       default:
         return super._moveFocus(location);
     }
+
+    const navigationAction = this._getKeyboardNavigationAction(operation, $argument);
+    const $newTarget = navigationAction();
 
     if ($newTarget && $newTarget.length !== 0) {
       this.option('focusedElement', getPublicElement($newTarget));
@@ -220,10 +275,13 @@ class Menu extends MenuBase<MenuProperties> {
     return operation;
   }
 
-  _getKeyboardNavigationAction(operation, argument) {
+  _getKeyboardNavigationAction(
+    operation: string,
+    argument: dxElementWrapper,
+    // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  ): () => dxElementWrapper | void {
     let action = noop;
 
-    // eslint-disable-next-line default-case
     switch (operation) {
       case SHOW_SUBMENU_OPERATION:
         if (!argument.hasClass(DX_STATE_DISABLED_CLASS)) {
@@ -235,6 +293,8 @@ class Menu extends MenuBase<MenuProperties> {
         break;
       case PREV_ITEM_OPERATION:
         action = this._prevItem.bind(this, argument);
+        break;
+      default:
         break;
     }
 
@@ -293,7 +353,8 @@ class Menu extends MenuBase<MenuProperties> {
   _initActions(): void {
     this._actions = {};
 
-    each(ACTIONS, (_index: number, action) => {
+    each(ACTIONS, (_index: number, action: typeof ACTIONS[number]) => {
+      // @ts-expect-error ts-error
       this._actions[action] = this._createActionByOption(action);
     });
   }
@@ -403,10 +464,11 @@ class Menu extends MenuBase<MenuProperties> {
     this._overlay = null;
   }
 
-  _treeviewItemClickHandler(e): void {
+  _treeviewItemClickHandler(e: TreeViewItemClickEvent): void {
+    // @ts-expect-error ts-error
     this._actions.onItemClick(e);
 
-    if (!e.node.children.length) {
+    if (!e.node?.children?.length) {
       this._toggleTreeView(false);
     }
   }
@@ -454,7 +516,7 @@ class Menu extends MenuBase<MenuProperties> {
 
     const actionsToTransfer = ['onItemContextMenu', 'onSelectionChanged', 'onItemRendered'];
     each(actionsToTransfer, (_index: number, actionName: string) => {
-      menuOptions[actionName] = (e) => {
+      menuOptions[actionName] = (e: DxEvent): void => {
         this._actions[actionName](e);
       };
     });
@@ -467,15 +529,15 @@ class Menu extends MenuBase<MenuProperties> {
       dataSource: this.getDataSource(),
       animationEnabled: !!animation,
       onItemClick: this._treeviewItemClickHandler.bind(this),
-      onItemExpanded: (e: ItemExpandedEvent): void => {
+      onItemExpanded: (e: TreeViewItemExpandedEvent): void => {
         this._overlay?.repaint();
-        // @ts-expect-error
-        this._actions.onSubmenuShown(e);
+        // @ts-expect-error ts-error
+        this._actions.onSubmenuShown?.(e);
       },
-      onItemCollapsed: (e: ItemCollapsedEvent): void => {
+      onItemCollapsed: (e: TreeViewItemCollapsedEvent): void => {
         this._overlay?.repaint();
-        // @ts-expect-error
-        this._actions.onSubmenuHidden(e);
+        // @ts-expect-error ts-error
+        this._actions.onSubmenuHidden?.(e);
       },
       selectNodesRecursive: false,
       selectByClick,
@@ -537,7 +599,7 @@ class Menu extends MenuBase<MenuProperties> {
     return super._renderContainer($wrapper);
   }
 
-  _renderSubmenuItems(node: MenuBaseNode, $itemFrame: dxElementWrapper): Submenu {
+  _renderSubmenuItems(node: MenuNode, $itemFrame: dxElementWrapper): Submenu {
     const submenu = this._createSubmenu(node, $itemFrame);
 
     this._submenus.push(submenu);
@@ -550,7 +612,7 @@ class Menu extends MenuBase<MenuProperties> {
     return super._getKeyboardListeners().concat(this._visibleSubmenu);
   }
 
-  _createSubmenu(node: MenuBaseNode, $rootItem: dxElementWrapper): Submenu {
+  _createSubmenu(node: MenuNode, $rootItem: dxElementWrapper): Submenu {
     const $submenuContainer = $('<div>')
       .addClass(DX_CONTEXT_MENU_CLASS)
       .appendTo($rootItem);
@@ -559,7 +621,6 @@ class Menu extends MenuBase<MenuProperties> {
     const subMenu = this._createComponent(
       $submenuContainer,
       Submenu,
-      // @ts-expect-error
       {
         ...this._getSubmenuOptions(),
         _dataAdapter: this._dataAdapter,
@@ -575,27 +636,44 @@ class Menu extends MenuBase<MenuProperties> {
     return subMenu;
   }
 
-  _getSubmenuOptions() {
+  _getSubmenuOptions(): SubmenuProperties {
     const $submenuTarget = $('<div>');
     const isMenuHorizontal = this._isMenuHorizontal();
+    const {
+      itemTemplate,
+      orientation,
+      selectionMode,
+      cssClass,
+      selectByClick,
+      hoverStateEnabled,
+      activeStateEnabled,
+      focusStateEnabled,
+      animation,
+      showSubmenuMode,
+      displayExpr,
+      disabledExpr,
+      selectedExpr,
+      itemsExpr,
+    } = this.option();
 
     return {
-      itemTemplate: this.option('itemTemplate'),
+      itemTemplate,
+      // @ts-expect-error ts-error
       target: $submenuTarget,
-      orientation: this.option('orientation'),
-      selectionMode: this.option('selectionMode'),
-      cssClass: this.option('cssClass'),
-      selectByClick: this.option('selectByClick'),
-      hoverStateEnabled: this.option('hoverStateEnabled'),
-      activeStateEnabled: this.option('activeStateEnabled'),
-      focusStateEnabled: this.option('focusStateEnabled'),
-      animation: this.option('animation'),
-      showSubmenuMode: this.option('showSubmenuMode'),
-      displayExpr: this.option('displayExpr'),
-      disabledExpr: this.option('disabledExpr'),
-      selectedExpr: this.option('selectedExpr'),
-      itemsExpr: this.option('itemsExpr'),
-      onFocusedItemChanged: (e) => {
+      orientation,
+      selectionMode,
+      cssClass,
+      selectByClick,
+      hoverStateEnabled,
+      activeStateEnabled,
+      focusStateEnabled,
+      animation,
+      showSubmenuMode,
+      displayExpr,
+      disabledExpr,
+      selectedExpr,
+      itemsExpr,
+      onFocusedItemChanged: (e: EventInfo<dxMenuBase<SubmenuProperties>>): void => {
         const { visible, focusedElement } = e.component.option();
 
         if (!visible) {
@@ -604,28 +682,36 @@ class Menu extends MenuBase<MenuProperties> {
 
         this.option('focusedElement', focusedElement);
       },
+      // @ts-expect-error ts-error
       onSelectionChanged: this._nestedItemOnSelectionChangedHandler.bind(this),
+      // @ts-expect-error ts-error
       onItemClick: this._nestedItemOnItemClickHandler.bind(this),
+      // @ts-expect-error ts-error
       onItemRendered: this._nestedItemOnItemRenderedHandler.bind(this),
-      onLeftFirstItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, PREV_ITEM_OPERATION),
-      onLeftLastItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, NEXT_ITEM_OPERATION),
-      onCloseRootSubmenu: this._moveMainMenuFocus.bind(this, isMenuHorizontal ? PREV_ITEM_OPERATION : null),
-      onExpandLastSubmenu: isMenuHorizontal ? this._moveMainMenuFocus.bind(this, NEXT_ITEM_OPERATION) : null,
+      onLeftFirstItem:
+        isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, PREV_ITEM_OPERATION),
+      onLeftLastItem:
+        isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, NEXT_ITEM_OPERATION),
+      onCloseRootSubmenu:
+        this._moveMainMenuFocus.bind(this, isMenuHorizontal ? PREV_ITEM_OPERATION : null),
+      onExpandLastSubmenu:
+        isMenuHorizontal ? this._moveMainMenuFocus.bind(this, NEXT_ITEM_OPERATION) : null,
     };
   }
 
-  _getShowFirstSubmenuMode() {
+  _getShowFirstSubmenuMode(): SubmenuShowMode | undefined {
     if (!this._isDesktopDevice()) {
       return 'onClick';
     }
 
-    const optionValue = this.option('showFirstSubmenuMode');
+    const { showFirstSubmenuMode: optionValue } = this.option();
 
-    // @ts-expect-error
     return isObject(optionValue) ? optionValue.name : optionValue;
   }
 
-  _moveMainMenuFocus(direction) {
+  _moveMainMenuFocus(
+    direction: typeof PREV_ITEM_OPERATION | typeof NEXT_ITEM_OPERATION | null,
+  ): void {
     const $items = this._getAvailableItems();
     const itemCount = $items.length;
     const $currentItem = $items.filter(`.${DX_MENU_ITEM_EXPANDED_CLASS}`).eq(0);
@@ -646,22 +732,24 @@ class Menu extends MenuBase<MenuProperties> {
     this.option('focusedElement', getPublicElement($newItem));
   }
 
-  _nestedItemOnSelectionChangedHandler(args) {
+  _nestedItemOnSelectionChangedHandler(args: SelectionChangedEvent): void {
     const selectedItem = args.addedItems.length && args.addedItems[0];
-    const submenu = Submenu.getInstance(args.element);
+    const submenu: Submenu = Submenu.getInstance(args.element);
     const { onSelectionChanged } = this._actions;
 
-    onSelectionChanged(args);
+    onSelectionChanged?.(args);
 
-    selectedItem && this._clearSelectionInSubmenus(selectedItem[0], submenu);
+    if (selectedItem) {
+      this._clearSelectionInSubmenus(submenu);
+    }
     this._clearRootSelection();
     this._setOptionWithoutOptionChange('selectedItem', selectedItem);
   }
 
-  _clearSelectionInSubmenus(item, targetSubmenu) {
+  _clearSelectionInSubmenus(targetSubmenu: Submenu): void {
     const cleanAllSubmenus = !arguments.length;
 
-    each(this._submenus, (index, submenu) => {
+    each(this._submenus, (_index: number, submenu: Submenu) => {
       const $submenu = submenu._itemContainer();
       const isOtherItem = !$submenu.is(targetSubmenu?._itemContainer());
       const $selectedItem = $submenu.find(`.${this._selectedItemClass()}`);
@@ -691,17 +779,17 @@ class Menu extends MenuBase<MenuProperties> {
     }
   }
 
-  _nestedItemOnItemClickHandler(e): void {
-    this._actions.onItemClick(e);
+  _nestedItemOnItemClickHandler(e: ItemClickEvent): void {
+    this._actions.onItemClick?.(e);
   }
 
-  _nestedItemOnItemRenderedHandler(e): void {
-    this._actions.onItemRendered(e);
+  _nestedItemOnItemRenderedHandler(e: ItemRenderedEvent): void {
+    this._actions.onItemRendered?.(e);
   }
 
-  _attachSubmenuHandlers($menuAnchorItem, submenu) {
+  _attachSubmenuHandlers($menuAnchorItem: dxElementWrapper, submenu: Submenu): void {
     const $submenuOverlayContent = submenu.getOverlayContent();
-    const submenus = $submenuOverlayContent.find(`.${DX_SUBMENU_CLASS}`);
+    const submenus = $submenuOverlayContent?.find(`.${DX_SUBMENU_CLASS}`);
     const submenuMouseLeaveName = addNamespace(hoverEventEnd, `${this.NAME}_submenu`);
 
     submenu.option({
@@ -711,39 +799,68 @@ class Menu extends MenuBase<MenuProperties> {
       onHidden: this._submenuOnHiddenHandler.bind(this, $menuAnchorItem, submenu),
     });
 
-    each(submenus, (index, submenu) => {
-      eventsEngine.off(submenu, submenuMouseLeaveName);
-      eventsEngine.on(submenu, submenuMouseLeaveName, null, this._submenuMouseLeaveHandler.bind(this, $menuAnchorItem));
+    each(submenus, (_index: number, subMenu: Submenu) => {
+      eventsEngine.off(subMenu, submenuMouseLeaveName);
+      eventsEngine.on(
+        subMenu,
+        submenuMouseLeaveName,
+        null,
+        this._submenuMouseLeaveHandler.bind(this, $menuAnchorItem),
+      );
     });
   }
 
-  _submenuOnShowingHandler($menuAnchorItem, submenu, { rootItem }) {
+  _submenuOnShowingHandler(
+    $menuAnchorItem: dxElementWrapper,
+    submenu: Submenu,
+    { rootItem }: SubmenuShowingEvent,
+  ): void {
     const $border = $menuAnchorItem.children(`.${DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS}`);
     const params = this._getVisibilityChangeEventParams(rootItem, submenu, $menuAnchorItem);
 
-    this._actions.onSubmenuShowing(params);
+    this._actions.onSubmenuShowing?.(params);
 
     $border.show();
 
     $menuAnchorItem.addClass(DX_MENU_ITEM_EXPANDED_CLASS);
   }
 
-  _submenuOnShownHandler($menuAnchorItem, submenu, { rootItem }) {
+  _submenuOnShownHandler(
+    $menuAnchorItem: dxElementWrapper,
+    submenu: Submenu,
+    { rootItem }: SubmenuShownEvent,
+  ): void {
     const params = this._getVisibilityChangeEventParams(rootItem, submenu, $menuAnchorItem);
 
-    this._actions.onSubmenuShown(params);
+    this._actions.onSubmenuShown?.(params);
   }
 
-  _submenuOnHidingHandler($menuAnchorItem, submenu, eventArgs) {
+  _submenuOnHidingHandler(
+    $menuAnchorItem: dxElementWrapper,
+    submenu: Submenu,
+    eventArgs: SubmenuHidingEvent,
+  ): void {
     const $border = $menuAnchorItem.children(`.${DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS}`);
-    const params = this._getVisibilityChangeEventParams(eventArgs.rootItem, submenu, $menuAnchorItem, true);
+    const params = this._getVisibilityChangeEventParams(
+      eventArgs.rootItem,
+      submenu,
+      $menuAnchorItem,
+      true,
+    );
 
+    // @ts-expect-error ts-error
+    // noinspection JSConstantReassignment
     eventArgs.itemData = params.itemData;
+    // @ts-expect-error ts-error
+    // noinspection JSConstantReassignment
     eventArgs.rootItem = params.rootItem;
+    // @ts-expect-error ts-error
+    // noinspection JSConstantReassignment
     eventArgs.submenuContainer = params.submenuContainer;
+    // @ts-expect-error ts-error
     eventArgs.submenu = params.submenu;
 
-    this._actions.onSubmenuHiding(eventArgs);
+    this._actions.onSubmenuHiding?.(eventArgs);
 
     const { focusedElement } = this.option();
     const { focusedElement: submenuFocusedElement } = submenu.option();
@@ -764,15 +881,26 @@ class Menu extends MenuBase<MenuProperties> {
     }
   }
 
-  _submenuOnHiddenHandler($menuAnchorItem, submenu, { rootItem }) {
+  _submenuOnHiddenHandler(
+    $menuAnchorItem: dxElementWrapper,
+    submenu: Submenu,
+    { rootItem }: SubmenuHiddenEvent,
+  ): void {
     const params = this._getVisibilityChangeEventParams(rootItem, submenu, $menuAnchorItem, true);
 
-    this._actions.onSubmenuHidden(params);
+    this._actions.onSubmenuHidden?.(params);
   }
 
-  _getVisibilityChangeEventParams(submenuItem, submenu, $menuAnchorItem, isHide?: boolean) {
-    let itemData;
-    let $submenuContainer;
+  _getVisibilityChangeEventParams(
+    submenuItem: Element | undefined,
+    submenu: Submenu,
+    $menuAnchorItem: dxElementWrapper,
+    isHide?: boolean,
+  ): SubmenuVisibilityChangeEventParams {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let itemData: Item | undefined;
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let $submenuContainer: dxElementWrapper | undefined;
 
     if (submenuItem) {
       const anchor = isHide ? $(submenuItem).closest(`.${DX_MENU_ITEM_CLASS}`)[0] : submenuItem;
@@ -780,7 +908,7 @@ class Menu extends MenuBase<MenuProperties> {
       itemData = this._getItemData(anchor);
       $submenuContainer = $(anchor).find(`.${DX_SUBMENU_CLASS}`).first();
     } else {
-      const $overlayContent = $(submenu._overlay.content());
+      const $overlayContent = $(submenu._overlay?.content());
 
       itemData = this._getItemData($menuAnchorItem);
       $submenuContainer = $overlayContent.find(`.${DX_SUBMENU_CLASS}`).first();
@@ -794,54 +922,59 @@ class Menu extends MenuBase<MenuProperties> {
     };
   }
 
-  _submenuMouseLeaveHandler($rootItem: dxElementWrapper, eventArgs): void {
-    const target = $(eventArgs.relatedTarget).parents(`.${DX_CONTEXT_MENU_CLASS}`)[0];
-    // @ts-expect-error
-    const contextMenu = this._getSubmenuByRootElement($rootItem).getOverlayContent()[0];
+  _submenuMouseLeaveHandler($rootItem: dxElementWrapper, eventArgs: HoverEvent): void {
+    const target: dxElementWrapper = $(eventArgs.relatedTarget as Element).parents(`.${DX_CONTEXT_MENU_CLASS}`)[0];
+    const submenu = this._getSubmenuByRootElement($rootItem);
+    const contextMenu: dxElementWrapper | undefined = submenu?.getOverlayContent()?.[0];
+    const { hideSubmenuOnMouseLeave } = this.option();
 
-    if (this.option('hideSubmenuOnMouseLeave') && target !== contextMenu) {
+    if (hideSubmenuOnMouseLeave && target !== contextMenu) {
       this._clearTimeouts();
+      // eslint-disable-next-line no-restricted-globals
       setTimeout(this._hideSubmenuAfterTimeout.bind(this), this._getDelay('hide'));
     }
   }
 
-  _hideSubmenuAfterTimeout() {
+  _hideSubmenuAfterTimeout(): void {
     if (!this._visibleSubmenu) {
       return;
     }
 
-    // @ts-expect-error
-    const isRootItemHovered = $(this._visibleSubmenu.$element().context).hasClass(DX_STATE_HOVER_CLASS);
-    // @ts-expect-error
-    const isSubmenuItemHovered = this._visibleSubmenu.getOverlayContent().find(`.${DX_STATE_HOVER_CLASS}`).length;
-    // @ts-expect-error
-    const hoveredElementFromSubMenu = this._visibleSubmenu.getOverlayContent().get(0).querySelector(':hover');
+    // @ts-expect-error ts-error
+    const isRootItemHovered = $(this._visibleSubmenu.$element().context)
+      .hasClass(DX_STATE_HOVER_CLASS);
+    const isSubmenuItemHovered = this._visibleSubmenu.getOverlayContent()?.find(`.${DX_STATE_HOVER_CLASS}`).length;
+    const hoveredElementFromSubMenu = this._visibleSubmenu.getOverlayContent()?.get(0).querySelector(':hover');
 
     if (!hoveredElementFromSubMenu && !isSubmenuItemHovered && !isRootItemHovered) {
       this._visibleSubmenu.hide();
     }
   }
 
-  _getSubmenuByRootElement($rootItem: dxElementWrapper): Submenu {
+  // eslint-disable-next-line class-methods-use-this
+  _getSubmenuByRootElement($rootItem: dxElementWrapper): Submenu | undefined {
     if (!$rootItem) {
-      // @ts-expect-error
-      return false;
+      return undefined;
     }
 
     const $submenu = $rootItem.children(`.${DX_CONTEXT_MENU_CLASS}`);
 
-    return $submenu.length && Submenu.getInstance($submenu);
+    if (!$submenu.length) {
+      return undefined;
+    }
+
+    return Submenu.getInstance($submenu) as Submenu;
   }
 
-  getSubmenuPosition($rootItem) {
+  getSubmenuPosition($rootItem: dxElementWrapper): PositionConfig {
+    const { submenuDirection: submenuDirectionOption, rtlEnabled } = this.option();
+
     const isHorizontalMenu = this._isMenuHorizontal();
-    // @ts-expect-error
-    const submenuDirection = this.option('submenuDirection').toLowerCase();
-    const rtlEnabled = this.option('rtlEnabled');
+    const submenuDirection = submenuDirectionOption?.toLowerCase();
     const submenuPosition: PositionConfig = {
       collision: 'flip',
+      // @ts-expect-error ts-error
       of: $rootItem,
-      // @ts-expect-error
       precise: true,
     };
 
@@ -868,6 +1001,7 @@ class Menu extends MenuBase<MenuProperties> {
     return submenuPosition;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _renderBorderElement($item: dxElementWrapper): void {
     $('<div>')
       .appendTo($item)
@@ -875,7 +1009,7 @@ class Menu extends MenuBase<MenuProperties> {
       .hide();
   }
 
-  _itemPointerHandler(e): void {
+  _itemPointerHandler(e: ClickEvent): void {
     const $target = $(e.target);
     const $closestItem = $target.closest(this._itemElements());
 
@@ -887,7 +1021,7 @@ class Menu extends MenuBase<MenuProperties> {
     super._itemPointerHandler(e);
   }
 
-  _hoverStartHandler(e) {
+  _hoverStartHandler(e: HoverEvent): void {
     const mouseMoveEventName = addNamespace(pointerEvents.move, this.NAME);
     const $item = this._getItemElementByEventArgs(e);
 
@@ -896,11 +1030,13 @@ class Menu extends MenuBase<MenuProperties> {
     }
 
     const node = this._dataAdapter.getNodeByItem(this._getItemData($item));
-    const isSelectionActive = isDefined(e.buttons) && e.buttons === 1 || !isDefined(e.buttons) && e.which === 1;
+    const isSelectionActive = (isDefined(e.buttons) && e.buttons === 1)
+      || (!isDefined(e.buttons) && e.which === 1);
 
     eventsEngine.off($item, mouseMoveEventName);
 
     if (!this._hasChildren(node)) {
+      // eslint-disable-next-line no-restricted-globals
       this._showSubmenuTimer = setTimeout(this._hideSubmenuAfterTimeout.bind(this), this._getDelay('hide'));
       return;
     }
@@ -910,16 +1046,16 @@ class Menu extends MenuBase<MenuProperties> {
 
       this._clearTimeouts();
 
-      if (!submenu.isOverlayVisible()) {
+      if (!submenu?.isOverlayVisible()) {
         eventsEngine.on($item, mouseMoveEventName, this._itemMouseMoveHandler.bind(this));
         this._showSubmenuTimer = this._getDelay('hide');
       }
     }
   }
 
-  _hoverEndHandler(eventArg): void {
+  _hoverEndHandler(eventArg: HoverEvent): void {
     const $item = this._getItemElementByEventArgs(eventArg);
-    const relatedTarget = $(eventArg.relatedTarget);
+    const relatedTarget = $(eventArg.relatedTarget as Element);
 
     super._hoverEndHandler(eventArg);
     this._clearTimeouts();
@@ -932,7 +1068,10 @@ class Menu extends MenuBase<MenuProperties> {
       return;
     }
 
-    if (this.option('hideSubmenuOnMouseLeave') && !relatedTarget.hasClass(DX_MENU_ITEMS_CONTAINER_CLASS)) {
+    const { hideSubmenuOnMouseLeave } = this.option();
+
+    if (hideSubmenuOnMouseLeave && !relatedTarget.hasClass(DX_MENU_ITEMS_CONTAINER_CLASS)) {
+      // eslint-disable-next-line no-restricted-globals
       this._hideSubmenuTimer = setTimeout(() => { this._hideSubmenuAfterTimeout(); }, this._getDelay('hide'));
     }
   }
@@ -943,10 +1082,11 @@ class Menu extends MenuBase<MenuProperties> {
     }
 
     this._hideSubmenu(this._visibleSubmenu);
+
     return true;
   }
 
-  _showSubmenu($itemElement): void {
+  _showSubmenu($itemElement: dxElementWrapper): void {
     const submenu = this._getSubmenuByElement($itemElement);
 
     if (this._visibleSubmenu !== submenu) {
@@ -958,14 +1098,17 @@ class Menu extends MenuBase<MenuProperties> {
       this.focus();
 
       submenu.show();
-      this.option('focusedElement', submenu.option('focusedElement'));
+
+      const { focusedElement } = submenu.option();
+
+      this.option('focusedElement', focusedElement);
     }
 
     this._visibleSubmenu = submenu;
     this._hoveredRootItem = $itemElement;
   }
 
-  _hideSubmenu(submenu) {
+  _hideSubmenu(submenu: Submenu | null | undefined): void {
     if (submenu) {
       submenu.hide();
     }
@@ -973,12 +1116,13 @@ class Menu extends MenuBase<MenuProperties> {
     if (this._visibleSubmenu === submenu) {
       this._visibleSubmenu = null;
     }
-    // @ts-expect-error
+
     this._hoveredRootItem = null;
   }
 
-  _itemMouseMoveHandler(e) {
+  _itemMouseMoveHandler(e: DxEvent<HoverEvent>): void {
     // todo: replace mousemove with hover event
+    // @ts-expect-error ts-error
     if (e.pointers?.length) {
       return;
     }
@@ -991,6 +1135,7 @@ class Menu extends MenuBase<MenuProperties> {
 
     this._clearTimeouts();
 
+    // eslint-disable-next-line no-restricted-globals
     this._showSubmenuTimer = setTimeout(() => {
       const submenu = this._getSubmenuByElement($item);
 
@@ -1005,23 +1150,28 @@ class Menu extends MenuBase<MenuProperties> {
     clearTimeout(this._showSubmenuTimer);
   }
 
-  _getSubmenuByElement($itemElement: dxElementWrapper, itemData?: Item): Submenu {
+  _getSubmenuByElement($itemElement: dxElementWrapper, itemData?: Item): Submenu | undefined {
     const submenu = this._getSubmenuByRootElement($itemElement);
 
     if (submenu) {
       return submenu;
     }
+
     itemData = itemData ?? this._getItemData($itemElement) as Item;
 
     const node = this._dataAdapter.getNodeByItem(itemData);
-    // @ts-expect-error
-    return this._hasChildren(node) && this._renderSubmenuItems(node, $itemElement);
+
+    if (node && this._hasChildren(node)) {
+      return this._renderSubmenuItems(node, $itemElement);
+    }
+
+    return undefined;
   }
 
-  _updateSubmenuVisibilityOnClick(actionArgs) {
-    const args = actionArgs.args.length && actionArgs.args[0];
+  _updateSubmenuVisibilityOnClick(actionArgs: ItemClickActionArguments): void {
+    const args = actionArgs.args?.[0];
 
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     if (!args || this._disabledGetter(args.itemData)) {
       return;
     }
@@ -1033,8 +1183,11 @@ class Menu extends MenuBase<MenuProperties> {
 
     if (this._visibleSubmenu) {
       if (this._visibleSubmenu === currentSubmenu) {
-        // @ts-expect-error
-        if (this.option('showFirstSubmenuMode') === 'onClick') this._hideSubmenu(this._visibleSubmenu);
+        const { showFirstSubmenuMode } = this.option();
+
+        if (showFirstSubmenuMode === 'onClick') {
+          this._hideSubmenu(this._visibleSubmenu);
+        }
         return;
       }
       this._hideSubmenu(this._visibleSubmenu);
@@ -1049,8 +1202,8 @@ class Menu extends MenuBase<MenuProperties> {
     }
   }
 
-  _optionChanged(args) {
-    if (ACTIONS.includes(args.name)) {
+  _optionChanged(args: OptionChanged<MenuProperties>): void {
+    if (ACTIONS.includes(args.name as typeof ACTIONS[number])) {
       this._initActions();
       return;
     }
@@ -1064,10 +1217,14 @@ class Menu extends MenuBase<MenuProperties> {
       case 'hideSubmenuOnMouseLeave':
         break;
       case 'showSubmenuMode':
-        this._changeSubmenusOption(args.name, args.value);
+        this._changeSubmenusOption(args);
         break;
       case 'adaptivityEnabled':
-        args.value ? this._initAdaptivity() : this._removeAdaptivity();
+        if (args.value) {
+          this._initAdaptivity();
+        } else {
+          this._removeAdaptivity();
+        }
         break;
       case 'width':
         if (this._isAdaptivityEnabled()) {
@@ -1085,25 +1242,24 @@ class Menu extends MenuBase<MenuProperties> {
         break;
       default:
         if (this._isAdaptivityEnabled() && ((args.name === args.fullName) || (args.name === 'items'))) {
-          // TODO: if(args.name === 'items') this._treeView.option('items', this.option('items')) or treeView.repaint() ?
           this._treeView?.option(args.fullName, args.value);
         }
         super._optionChanged(args);
     }
   }
 
-  _changeSubmenusOption(name, value): void {
-    each(this._submenus, (index, submenu) => {
+  _changeSubmenusOption({ name, value }: OptionChanged<SubmenuProperties>): void {
+    each(this._submenus, (_index: number, submenu: Submenu) => {
       submenu.option(name, value);
     });
   }
 
-  selectItem(itemElement): void {
+  selectItem(itemElement: Element): void {
     this._hideSubmenu(this._visibleSubmenu);
     super.selectItem(itemElement);
   }
 
-  unselectItem(itemElement): void {
+  unselectItem(itemElement: Element): void {
     this._hideSubmenu(this._visibleSubmenu);
     super.unselectItem(itemElement);
   }

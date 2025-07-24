@@ -11,6 +11,7 @@ import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
 import type dxMenuBase from '@js/ui/context_menu/ui.menu_base';
 import type { dxMenuBaseItem, Item, SubmenuShowMode } from '@js/ui/menu';
 import { render } from '@js/ui/widget/utils.ink_ripple';
+import type { ActionArguments } from '@ts/core/m_action';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import MenuItem from '@ts/ui/collection/item';
@@ -44,46 +45,25 @@ const DX_ICON_WITH_URL_CLASS = 'dx-icon-with-url';
 const ITEM_URL_CLASS = 'dx-item-url';
 const DX_MENU_ITEM_DATA_KEY = 'dxMenuItemDataKey';
 
+type ItemClickEvent =
+  NativeEventInfo<dxMenuBase<MenuBaseProperties>, MouseEvent | PointerEvent | TouchEvent>
+  & ItemInfo<dxMenuBaseItem>;
+export type HoverEvent = DxEvent<MouseEvent | PointerEvent>;
+export type ClickEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
+export type ItemClickActionArguments = ActionArguments<
+  dxMenuBase<MenuBaseProperties>,
+  ItemClickEvent
+>;
+type MenuBaseNode = InternalNode & dxMenuBaseItem;
+
 export interface MenuBaseProperties<
-  TItem extends Item = Item,
+  TItem extends dxMenuBaseItem = Item,
   // @ts-expect-error ts-error
 > extends dxMenuBaseOptions<MenuBase, TItem> {
   focusedElement?: dxElementWrapper;
   useInkRipple?: boolean;
   _dataAdapter: DataAdapter;
 }
-
-export type ActionEventInfo<TComponent, TItem = never> =
-  NativeEventInfo<TComponent>
-  & (TItem extends never ? {} : ItemInfo<TItem>);
-
-export type ActionArguments<
-  TComponent,
-  TEventData,
-> = Record<string, unknown> & TEventData & {
-  args?: TEventData[];
-  action: (e: TEventData) => void;
-  context: TComponent;
-  component: TComponent;
-  cancel: boolean;
-  handled: boolean;
-  validatingTargetName?: string;
-};
-
-export type BaseMenuActionEventInfo<
-  TComponent extends dxMenuBase<MenuBaseProperties> = dxMenuBase<MenuBaseProperties>,
-  TItem extends dxMenuBaseItem = dxMenuBaseItem,
-> = ActionEventInfo<TComponent, TItem>;
-
-export type BaseMenuActionArguments<
-  TComponent extends dxMenuBase<MenuBaseProperties> = dxMenuBase<MenuBaseProperties>,
-  TItem extends dxMenuBaseItem = dxMenuBaseItem,
-> = ActionArguments<
-  TComponent,
-  BaseMenuActionEventInfo<TComponent, TItem>
->;
-
-export type MenuBaseNode = InternalNode & dxMenuBaseItem;
 
 class MenuBase<
   TProperties extends MenuBaseProperties = MenuBaseProperties,
@@ -284,8 +264,10 @@ class MenuBase<
     }
 
     const nodeToSelect = this._dataAdapter.getNodeByItem(selectedItem);
-    // @ts-expect-error ts-error
-    this._dataAdapter.toggleSelection(nodeToSelect.internalFields.key, true);
+
+    if (nodeToSelect) {
+      this._dataAdapter.toggleSelection(nodeToSelect.internalFields.key, true);
+    }
   }
 
   _renderSelectedItem(): void {
@@ -381,7 +363,7 @@ class MenuBase<
     }
   }
 
-  _hoverStartHandler(e: DxEvent): void {
+  _hoverStartHandler(e: DxEvent<HoverEvent>): void {
     const $itemElement = this._getItemElementByEventArgs(e);
 
     if (!$itemElement || this._isItemDisabled($itemElement)) return;
@@ -442,7 +424,9 @@ class MenuBase<
   }
 
   // TODO: try to simplify
-  _getItemElementByEventArgs(eventArgs: DxEvent): dxElementWrapper | null {
+  _getItemElementByEventArgs(
+    eventArgs: HoverEvent | ClickEvent,
+  ): dxElementWrapper | null {
     let $target = $(eventArgs.target);
 
     if ($target.hasClass(this._itemClass()) || $target.get(0) === eventArgs.currentTarget) {
@@ -461,7 +445,7 @@ class MenuBase<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _hoverEndHandler(event: DxEvent): void {
+  _hoverEndHandler(event: DxEvent<HoverEvent>): void {
     clearTimeout(this._showSubmenusTimeout);
   }
 
@@ -646,25 +630,27 @@ class MenuBase<
       .addClass(DX_MENU_SEPARATOR_CLASS);
   }
 
-  _itemClickHandler(e: DxEvent): void {
-    // @ts-expect-error ts-error
+  _itemClickHandler(e: DxEvent & { _skipHandling?: boolean }): void {
     if (e._skipHandling) return;
 
     const itemClickActionHandler = this._createAction(
       this._updateSubmenuVisibilityOnClick.bind(this),
     );
     this._itemDXEventHandler(e, 'onItemClick', {}, {
+      // @ts-expect-error ts-error
       beforeExecute: this._itemClick,
       afterExecute: itemClickActionHandler.bind(this),
     });
 
-    // @ts-expect-error ts-error
     e._skipHandling = true;
   }
 
-  _itemClick(actionArgs: Record<string, unknown>): void {
-    // @ts-expect-error ts-error
-    const { event, itemData } = actionArgs.args[0];
+  _itemClick(actionArgs: ItemClickActionArguments): void {
+    const { event, itemData } = actionArgs.args?.[0] ?? {};
+
+    if (!event) {
+      return;
+    }
 
     const $itemElement = this._getItemElementByEventArgs(event);
     const link = $itemElement && $itemElement.find(`.${ITEM_URL_CLASS}`)[0];
@@ -682,7 +668,7 @@ class MenuBase<
     this._clickByLink(link);
   }
 
-  _updateSubmenuVisibilityOnClick(actionArgs: BaseMenuActionArguments): void {
+  _updateSubmenuVisibilityOnClick(actionArgs: ItemClickActionArguments): void {
     this._updateSelectedItemOnClick(actionArgs);
 
     if (this._getShowSubmenuMode() === 'onClick') {
@@ -694,8 +680,8 @@ class MenuBase<
     }
   }
 
-  _updateSelectedItemOnClick(actionArgs: BaseMenuActionArguments): void {
-    const args: BaseMenuActionEventInfo = actionArgs.args ? actionArgs.args[0] : actionArgs;
+  _updateSelectedItemOnClick(actionArgs: ItemClickActionArguments): void {
+    const args: ItemClickEvent = actionArgs.args ? actionArgs.args[0] : actionArgs;
 
     const { itemData } = args;
 

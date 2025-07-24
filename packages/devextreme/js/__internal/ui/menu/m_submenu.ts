@@ -12,17 +12,19 @@ import {
   getHeight, getWidth, setHeight, setWidth,
 } from '@js/core/utils/size';
 import type { DxEvent } from '@js/events';
+import type { Item } from '@js/ui/menu';
 import type { ContextMenuProperties } from '@ts/ui/context_menu/m_context_menu';
 import ContextMenu from '@ts/ui/context_menu/m_context_menu';
+import type { HoverEvent } from '@ts/ui/context_menu/m_menu_base';
 import type DataAdapter from '@ts/ui/hierarchical_collection/data_adapter';
 import type { ItemKey } from '@ts/ui/hierarchical_collection/data_converter';
-import type { OverlayProperties } from '@ts/ui/overlay/m_overlay';
+import type { OverlayProperties, PositioningEvent as OverlayPositioningEvent } from '@ts/ui/overlay/m_overlay';
 import type Overlay from '@ts/ui/overlay/m_overlay';
 
 const DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS = 'dx-context-menu-content-delimiter';
 const DX_SUBMENU_CLASS = 'dx-submenu';
 
-interface SubmenuProperties extends ContextMenuProperties {
+export interface SubmenuProperties extends ContextMenuProperties<Item> {
   _parentKey: ItemKey;
   orientation?: Orientation;
   onHoverStart?: (e: DxEvent) => void;
@@ -89,14 +91,14 @@ class Submenu extends ContextMenu<SubmenuProperties> {
     }) as OverlayProperties;
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _overlayPositionedActionHandler(arg): void {
+  _overlayPositionedActionHandler(arg: OverlayPositioningEvent): void {
     this._showDelimiter(arg);
   }
 
-  _hoverEndHandler(e: DxEvent): void {
+  _hoverEndHandler(e: HoverEvent): void {
     super._hoverEndHandler(e);
-    this._toggleFocusClass(false, $(e.currentTarget));
+    // @ts-expect-error ts-error
+    this._toggleFocusClass(false, e.currentTarget);
   }
 
   _isMenuHorizontal(): boolean {
@@ -105,34 +107,39 @@ class Submenu extends ContextMenu<SubmenuProperties> {
     return orientation === 'horizontal';
   }
 
-  _hoverStartHandler(e: DxEvent): void {
+  _hoverStartHandler(e: HoverEvent): void {
     const { onHoverStart } = this.option();
 
     onHoverStart?.(e);
     super._hoverStartHandler(e);
-    this._toggleFocusClass(true, $(e.currentTarget));
+    // @ts-expect-error ts-error
+    this._toggleFocusClass(true, e.currentTarget);
   }
 
   _drawSubmenu($rootItem: dxElementWrapper): void {
-    this._actions.onShowing({
+    this._actions.onShowing?.({
+      // @ts-expect-error ts-error
       rootItem: getPublicElement($rootItem),
       submenu: this,
     });
     super._drawSubmenu($rootItem);
-    this._actions.onShown({
+    this._actions.onShown?.({
+      // @ts-expect-error ts-error
       rootItem: getPublicElement($rootItem),
       submenu: this,
     });
   }
 
   _hideSubmenu($rootItem: dxElementWrapper): void {
-    this._actions.onHiding({
+    this._actions.onHiding?.({
       cancel: true,
+      // @ts-expect-error ts-error
       rootItem: getPublicElement($rootItem),
       submenu: this,
     });
     super._hideSubmenu($rootItem);
-    this._actions.onHidden({
+    this._actions.onHidden?.({
+      // @ts-expect-error ts-error
       rootItem: getPublicElement($rootItem),
       submenu: this,
     });
@@ -161,8 +168,7 @@ class Submenu extends ContextMenu<SubmenuProperties> {
   }
 
   // TODO: try to simplify it
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _showDelimiter(arg): void {
+  _showDelimiter(arg: OverlayPositioningEvent): void {
     if (!this.$contentDelimiter) {
       return;
     }
