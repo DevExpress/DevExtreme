@@ -134,7 +134,7 @@ const getDateRangeHorizontalRTL = (options: GetAppointmentDateRangeOptionsExtend
     };
   }
 
-  const { startDate: endDate } = appointmentLastCell;
+  const { endDate } = appointmentLastCell;
 
   return {
     startDate: endDate < appointment.startDate
