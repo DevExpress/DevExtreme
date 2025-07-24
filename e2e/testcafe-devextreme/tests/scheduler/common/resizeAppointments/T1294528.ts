@@ -1,5 +1,6 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import url from '../../../../helpers/getPageUrl';
+import { getTimezoneTest, MACHINE_TIMEZONES } from '../../../../helpers/machineTimezones';
 import createScheduler from './init/widget.setup';
 
 fixture.disablePageReloads`Resize all day panel appointments`
@@ -44,7 +45,7 @@ fixture.disablePageReloads`Resize all day panel appointments`
     }],
   }));
 
-  test(`Shrink long appointment endDate rtlEnabled=${rtlEnabled}`, async (t) => {
+  getTimezoneTest([MACHINE_TIMEZONES.EuropeBerlin])(`Shrink long appointment endDate rtlEnabled=${rtlEnabled}`, async (t) => {
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Appointment');
     const { left, right } = appointment.resizableHandle;
@@ -68,7 +69,7 @@ fixture.disablePageReloads`Resize all day panel appointments`
     }],
   }));
 
-  test(`Shrink long appointment startDate rtlEnabled=${rtlEnabled}`, async (t) => {
+  getTimezoneTest([MACHINE_TIMEZONES.EuropeBerlin])(`Shrink long appointment startDate rtlEnabled=${rtlEnabled}`, async (t) => {
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Appointment');
     const { left, right } = appointment.resizableHandle;
@@ -92,7 +93,7 @@ fixture.disablePageReloads`Resize all day panel appointments`
     }],
   }));
 
-  test(`Resize long appointment endDate with offset rtlEnabled=${rtlEnabled}`, async (t) => {
+  getTimezoneTest([MACHINE_TIMEZONES.EuropeBerlin])(`Resize long appointment endDate with offset rtlEnabled=${rtlEnabled}`, async (t) => {
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Appointment');
     const { left, right } = appointment.resizableHandle;
@@ -123,7 +124,7 @@ fixture.disablePageReloads`Resize all day panel appointments`
     firstDayOfWeek: 0,
   }));
 
-  test(`Resize long appointment startDate with offset rtlEnabled=${rtlEnabled}`, async (t) => {
+  getTimezoneTest([MACHINE_TIMEZONES.EuropeBerlin])(`Resize long appointment startDate with offset rtlEnabled=${rtlEnabled}`, async (t) => {
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Appointment');
     const { left, right } = appointment.resizableHandle;
@@ -140,7 +141,6 @@ fixture.disablePageReloads`Resize all day panel appointments`
       .expect(appointment.getAriaLabel())
       .eql('Appointment: March 31, 2021, 6:00 AM - April 1, 2021, 5:00 AM');
   }).before(async () => createScheduler({
-    timeZone: 'Europe/Berlin',
     dataSource: [{
       text: 'Appointment',
       startDate: new Date('2021-03-30T03:00:00.000Z'),
@@ -155,7 +155,7 @@ fixture.disablePageReloads`Resize all day panel appointments`
   }));
 });
 
-test('Resize long appointment rtlEnabled=true', async (t) => {
+getTimezoneTest([MACHINE_TIMEZONES.EuropeBerlin])('Resize long appointment rtlEnabled=true', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Appointment');
   const { left, right } = appointment.resizableHandle;
@@ -189,7 +189,7 @@ test('Resize long appointment rtlEnabled=true', async (t) => {
   }],
 }));
 
-test('Resize long appointment rtlEnabled=false', async (t) => {
+getTimezoneTest([MACHINE_TIMEZONES.EuropeBerlin])('Resize long appointment rtlEnabled=false', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment = scheduler.getAppointment('Appointment');
   const { left, right } = appointment.resizableHandle;
