@@ -15,7 +15,7 @@ env:
 jobs:
   build:
     runs-on: devextreme-shr2
-    timeout-minutes: 80
+    timeout-minutes: 15
 
     steps:
       - name: Get sources
@@ -94,46 +94,33 @@ jobs:
       - name: Generate wrappers
         run: pnpm run regenerate-all
 
+      - name: Archive devextreme-metadata artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: devextreme-metadata-artifacts
+          path: packages/devextreme-metadata/dist/
+          retention-days: 1
+
       - name: Check generated code
         id: check-diff
         uses: DevExpress/github-actions/get-changed-files@v1
         with:
           gh-token: ${{ secrets.GITHUB_TOKEN }}
           paths: 'packages/devextreme-*/src/**'
-          output: changed-files.json
-
-      # - name: Fail if generated code is outdated
-      #   shell: bash
-      #   run: |
-      #     if [ -s changed-files.json ]; then
-      #       echo "Generated code is outdated. The following files were changed:"
-      #       cat changed-files.json | jq -r '.[]'
-      #       echo ""
-      #       echo "To update generated code, run: pnpm run regenerate-all"
-      #       exit 1
-      #     else
-      #       echo "No changes in generated code."
-      #     fi
 
       - name: Fail if generated code is outdated
         shell: bash
         run: |
           if ${{ steps.check-diff.outputs.count > 0 }}; then
             echo ${{ steps.check-diff.outputs.files }}
+            exit 1;
           else
             echo "No changes in generated code."
           fi
 
-      - name: Archive devextreme-metadata artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: devextreme-metadata-artifacts
-          path: packages/devextreme-metadata/dist/
-          retention-days: 7
-
   test:
     runs-on: devextreme-shr2
-    timeout-minutes: 80
+    timeout-minutes: 10
     needs: build
     strategy:
       matrix:
@@ -155,8 +142,7 @@ jobs:
 
       - name: Get pnpm store directory
         shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
       - uses: actions/cache@v4
         name: Setup pnpm cache
@@ -171,18 +157,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build wrappers
-        run: pnpx nx build devextreme-${{ matrix.framework }}
+      - name: Test ${{ matrix.framework }}
+        run: pnpx nx test devextreme-${{ matrix.framework }}
 
-      - name: Build and Test ${{ matrix.framework }}
-        run: |
-          if [ "${{ matrix.framework }}" = "angular" ]; then
-            pnpx nx test:dev devextreme-angular
-            pnpx nx pack devextreme-angular
-          elif [ "${{ matrix.framework }}" = "react" ]; then
-            pnpx nx test devextreme-react
-            pnpx nx pack devextreme-react
-          elif [ "${{ matrix.framework }}" = "vue" ]; then
-            pnpx nx test devextreme-vue
-            pnpx nx pack devextreme-vue
-          fi
+      - name: Pack ${{ matrix.framework }}
+        run: pnpx nx pack devextreme-${{ matrix.framework }}
