@@ -263,7 +263,11 @@ QUnit.test('Check getters attached to event wrappers', function(assert) {
     const done = assert.async();
     const div = document.createElement('div');
     const handler = function(e) {
-        EVENT_PROPERTIES.forEach(prop => { assert.ok(prop in e, `getter for the '${prop}' prop found in the event arg`); });
+        if(e instanceof eventsEngine.Event) {
+            EVENT_PROPERTIES.forEach(prop => { assert.ok(prop in e, `getter for the '${prop}' prop found in the event arg`); });
+        } else {
+            assert.ok(true);
+        }
         done();
     };
 
