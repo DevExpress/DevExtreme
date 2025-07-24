@@ -109,6 +109,9 @@ QUnit.module('Rows view', { beforeEach: setupModule, afterEach: teardownModule }
 
 QUnit.module('Expand/Collapse rows', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
+
         const that = this;
 
         that.options = {
@@ -129,6 +132,7 @@ QUnit.module('Expand/Collapse rows', {
     },
     afterEach: function() {
         this.dispose();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
