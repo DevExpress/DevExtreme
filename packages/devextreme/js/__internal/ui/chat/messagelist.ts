@@ -15,13 +15,13 @@ import { isDate, isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { Message, TextMessage, User } from '@js/ui/chat';
 import type { Item as ContextMenuItem } from '@js/ui/context_menu';
+import type dxContextMenu from '@js/ui/context_menu';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import ContextMenu from '@ts/ui/context_menu/m_context_menu';
 import type {
   ScrollView as ScrollViewType,
-  ScrollViewServerSide as ScrollViewServerSideType,
 } from '@ts/ui/scroll_view/scroll_view';
 import ScrollView from '@ts/ui/scroll_view/scroll_view';
 import { getScrollTopMax } from '@ts/ui/scroll_view/utils/get_scroll_top_max';
@@ -107,7 +107,7 @@ class MessageList extends Widget<Properties> {
 
   private _isBottomReached!: boolean;
 
-  private _scrollView!: ScrollViewType | ScrollViewServerSideType;
+  private _scrollView!: ScrollViewType;
 
   private _typingIndicator!: TypingIndicator;
 
@@ -332,6 +332,7 @@ class MessageList extends Widget<Properties> {
       hideOnParentScroll: false,
       overlayContainer: this._scrollView.container(),
       visualContainer: this._scrollView.container(),
+      // @ts-expect-error ts-error
       boundaryOffset: { h: 16 },
     });
 
@@ -346,7 +347,7 @@ class MessageList extends Widget<Properties> {
     $contextMenu.appendTo(this.$element());
   }
 
-  _onContextMenuShowing(e: Cancelable & EventInfo<ContextMenu>): void {
+  _onContextMenuShowing(e: Cancelable & EventInfo<dxContextMenu>): void {
     // @ts-expect-error ts-error
     const { jQEvent } = e;
 
@@ -378,7 +379,7 @@ class MessageList extends Widget<Properties> {
   _renderScrollView(): void {
     const $scrollable = $('<div>')
       .appendTo(this.$element());
-    // @ts-expect-error ts-error
+
     this._scrollView = this._createComponent($scrollable, ScrollView, {
       useKeyboard: false,
       bounceEnabled: false,
@@ -434,7 +435,6 @@ class MessageList extends Widget<Properties> {
 
     this.$element().toggleClass(CHAT_MESSAGELIST_EMPTY_LOADING_CLASS, this._isEmpty() && isLoading);
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._scrollView.release(!isLoading);
   }
 

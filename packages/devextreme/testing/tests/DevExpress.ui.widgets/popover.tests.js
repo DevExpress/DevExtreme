@@ -28,12 +28,8 @@ const positionAtWindowCenter = function(element) {
     });
 };
 
-const toSelector = function(cssClass) {
-    return '.' + cssClass;
-};
-
 const wrapper = function() {
-    return $('body').find(toSelector(POPOVER_WRAPPER_CLASS));
+    return $('body').find(`.${POPOVER_WRAPPER_CLASS}`);
 };
 
 const getArrow = function() {
@@ -546,7 +542,7 @@ QUnit.module('arrow positioning', () => {
                 height: 50,
                 visible: true
             });
-            const $arrow = $(toSelector(POPOVER_ARROW_CLASS));
+            const $arrow = $(`.${POPOVER_ARROW_CLASS}`);
             const $content = $(`.${POPUP_CONTENT_CLASS}`);
 
             const positions = [

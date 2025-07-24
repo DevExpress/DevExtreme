@@ -687,7 +687,6 @@ class Overlay<
     }
 
     this._currentVisible = visible;
-
     this._stopAnimation();
 
     if (!visible) {
@@ -707,8 +706,8 @@ class Overlay<
       this._updateZIndexStackPosition(visible);
       this._moveFromContainer();
     }
-    this._toggleShading(visible);
 
+    this._toggleShading(visible);
     this._toggleSubscriptions(visible);
   }
 

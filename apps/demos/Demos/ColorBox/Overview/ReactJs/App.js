@@ -79,7 +79,7 @@ function App() {
               <use href="../../../../images/Brush.svg#brush"></use>
             </svg>
             <svg
-              className="superhero"
+              className="superhero dx-color-icon"
               width="360"
               height="254"
             >

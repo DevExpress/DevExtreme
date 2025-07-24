@@ -80,6 +80,8 @@ export interface ListBaseProperties extends Properties<Item> {
   focusedElement?: dxElementWrapper;
 }
 
+type Direction = 'prev' | 'next';
+
 export class ListBase extends CollectionWidget<ListBaseProperties> {
   static ItemClass = ListItem;
 
@@ -120,78 +122,99 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
   _selectionChangeEventInstance?: any;
 
   _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
-    const that = this;
-
-    const moveFocusPerPage = function (direction) {
-      let $item = getEdgeVisibleItem(direction);
-
-      const { focusedElement } = that.option();
-      // @ts-expect-error ts-error
-      const isFocusedItem = $item.is(focusedElement);
-
-      if (isFocusedItem) {
-        scrollListTo($item, direction);
-        $item = getEdgeVisibleItem(direction);
-      }
-
-      that.option('focusedElement', getPublicElement($item));
-      that.scrollToItem($item);
-    };
-
-    function getEdgeVisibleItem(direction) {
-      const scrollTop = that.scrollTop();
-      const containerHeight = getHeight(that.$element());
-
-      const { focusedElement } = that.option();
-
-      let $item = $(focusedElement);
-      let isItemVisible = true;
-
-      if (!$item.length) {
-        return $();
-      }
-
-      while (isItemVisible) {
-        const $nextItem = $item[direction]();
-
-        if (!$nextItem.length) {
-          break;
-        }
-
-        const nextItemLocation = $nextItem.position().top + getOuterHeight($nextItem) / 2;
-        isItemVisible = nextItemLocation < containerHeight + scrollTop && nextItemLocation > scrollTop;
-
-        if (isItemVisible) {
-          $item = $nextItem;
-        }
-      }
-
-      return $item;
-    }
-
-    function scrollListTo($item, direction) {
-      let resultPosition = $item.position().top;
-
-      if (direction === 'prev') {
-        resultPosition = $item.position().top - getHeight(that.$element()) + getOuterHeight($item);
-      }
-
-      that.scrollTo(resultPosition);
-    }
-
     return {
       ...super._supportedKeys(),
       leftArrow: noop,
       rightArrow: noop,
-      pageUp() {
-        moveFocusPerPage('prev');
-        return false;
+      pageUp(e) {
+        this._moveFocusPerPage(e, 'prev');
       },
-      pageDown() {
-        moveFocusPerPage('next');
-        return false;
+      pageDown(e) {
+        this._moveFocusPerPage(e, 'next');
       },
     };
+  }
+
+  _moveFocusPerPage(e: KeyboardEvent, direction: Direction): void {
+    if (this._isLastItemFocused(direction)) {
+      return;
+    }
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    let $item = this._getEdgeVisibleItem(direction);
+    const { focusedElement } = this.option();
+
+    const isFocusedItem = $item.is($(focusedElement));
+
+    if (isFocusedItem) {
+      this.scrollTo(this._getItemLocation($item, direction));
+      $item = this._getEdgeVisibleItem(direction);
+    }
+
+    this.option('focusedElement', getPublicElement($item));
+    this.scrollToItem($item);
+  }
+
+  _isLastItemFocused(direction: Direction): boolean {
+    const lastItemInDirection = direction === 'prev' ? this._itemElements().first() : this._itemElements().last();
+    const { focusedElement } = this.option();
+
+    return lastItemInDirection.is($(focusedElement));
+  }
+
+  _getNextItem($item: dxElementWrapper, direction: Direction): dxElementWrapper {
+    const $items = this._getAvailableItems();
+    const itemIndex = $items.index($item);
+
+    if (direction === 'prev') {
+      return $($items[itemIndex - 1]);
+    }
+
+    return $($items[itemIndex + 1]);
+  }
+
+  _getEdgeVisibleItem(direction: Direction): dxElementWrapper {
+    const scrollTop = this.scrollTop();
+    const containerHeight = getHeight(this.$element());
+
+    const { focusedElement } = this.option();
+
+    let $item = $(focusedElement);
+    let isItemVisible = true;
+
+    if (!$item.length) {
+      return $();
+    }
+
+    while (isItemVisible) {
+      const $nextItem = this._getNextItem($item, direction);
+
+      if (!$nextItem.length) {
+        break;
+      }
+
+      const nextItemLocation = ($nextItem.position()?.top ?? 0) + getOuterHeight($nextItem) / 2;
+      isItemVisible = nextItemLocation < containerHeight + scrollTop && nextItemLocation > scrollTop;
+
+      if (isItemVisible) {
+        $item = $nextItem;
+      }
+    }
+
+    return $item;
+  }
+
+  _getItemLocation($item: dxElementWrapper, direction: Direction): number {
+    if (direction === 'prev') {
+      // @ts-expect-error ts-error
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return $item.position().top - getHeight(this.$element()) + getOuterHeight($item);
+    }
+
+    // @ts-expect-error ts-error
+    return $item.position().top;
   }
 
   _getDefaultOptions(): ListBaseProperties {
@@ -353,7 +376,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     return $items;
   }
 
-  _getAvailableItems($itemElements) {
+  _getAvailableItems($itemElements?: dxElementWrapper): dxElementWrapper {
     const { collapsibleGroups } = this.option();
 
     if (collapsibleGroups) {

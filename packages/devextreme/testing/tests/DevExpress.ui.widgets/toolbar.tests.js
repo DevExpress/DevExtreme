@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import ToolbarBase from '__internal/ui/toolbar/m_toolbar.base';
+import ToolbarBase from '__internal/ui/toolbar/toolbar.base';
 
 import fx from 'common/core/animation/fx';
 import resizeCallbacks from 'core/utils/resize_callbacks';
@@ -587,8 +587,14 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
             widget: 'dxDropDownButton',
             options: { items: ['item'] },
         },
+        {
+            locateInMenu: 'always',
+            location: 'after',
+            widget: 'dxDropDownButton',
+            options: { items: ['item'] },
+        }
     ].forEach(({ widget, options }) => {
-        QUnit.test(`click on editor component (${widget}) inside the toolbar menu should not close it (T1287462)`, function(assert) {
+        QUnit.test(`click on editor component (${widget}) inside the toolbar menu should not close it (T1287462, T1298858)`, function(assert) {
             this.instance.option('items', [{
                 locateInMenu: 'always',
                 widget,
@@ -1263,6 +1269,23 @@ QUnit.module('adaptivity', moduleConfig, () => {
         assert.ok($sections.eq(2).hasClass('dx-toolbar-menu-last-section'), 'border for last section is removed');
     });
 
+    QUnit.test('menu shouldn\'t be closed after click on editors', function(assert) {
+        const $beforeItem = $('<div>').width(150);
+
+        this.instance.option({
+            items: [
+                { location: 'before', locateInMenu: 'auto', template: () => $beforeItem },
+            ],
+            width: 100
+        });
+
+        this.overflowMenu.click();
+
+        $($beforeItem).trigger('dxclick');
+
+        assert.ok(this.overflowMenu.instance().option('opened'), 'dropdown isn\'t closed');
+    });
+
     QUnit.test('menu should be closed after click on button or menu items', function(assert) {
         this.instance.option({
             items: [
@@ -1568,30 +1591,6 @@ QUnit.module('adaptivity', moduleConfig, () => {
 });
 
 QUnit.module('default template', moduleConfig, () => {
-    QUnit.test('T430159 menu should be closed after click on item if location is defined', function(assert) {
-        const onClickActionStub = sinon.stub();
-
-        this.instance.option({
-            items: [
-                {
-                    location: 'center',
-                    text: '123',
-                    locateInMenu: 'always',
-                    onClick: onClickActionStub
-                }
-            ],
-            width: 100
-        });
-
-        this.overflowMenu.click();
-
-        const $menuItem = $(`.${TOOLBAR_MENU_SECTION_CLASS} .${LIST_ITEM_CLASS}`).eq(0);
-        $menuItem.trigger('dxclick');
-
-        assert.strictEqual(this.instance.option('overflowMenuVisible'), false, 'dropdown is closed');
-        assert.strictEqual(onClickActionStub.callCount, 1, 'onClick was fired');
-    });
-
     ['single', 'multiple'].forEach(selectionMode => {
         QUnit.test(`Click on buttonGroup item inside menu (T977105). selectionMode: ${selectionMode}`, function(assert) {
             const onClickActionStub = sinon.stub();

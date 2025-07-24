@@ -141,10 +141,7 @@ const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
 const VIEWPORT_CLASS = 'dx-viewport';
 
-const viewport = function() { return $(toSelector(VIEWPORT_CLASS)); };
-
-const toSelector = (cssClass) => `.${cssClass}`;
-
+const viewport = function() { return $(`.${VIEWPORT_CLASS}`); };
 
 QUnit.module('basic', () => {
     QUnit.test('markup init', function(assert) {
@@ -1509,7 +1506,7 @@ QUnit.module('options changed callbacks', {
             const topToolbar = this.instance.topToolbar();
 
             assert.strictEqual(topToolbar.length, 1, 'top toolbar is rendered');
-            // 1st and 2nd from toolbar rendering on init, 3rd from overlay visibility changing
+            // 1st from overlay visibility changing, 2nd and 3rd from _animateShowing
             assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times');
         });
 
@@ -1524,7 +1521,7 @@ QUnit.module('options changed callbacks', {
             const topToolbar = this.instance.topToolbar();
 
             assert.strictEqual(topToolbar.length, 1, 'top toolbar is rendered');
-            // 1st and 2nd from toolbar rendering on init, 3rd from overlay visibility changing
+            // 1st from overlay visibility changing, 2nd and 3rd from _animateShowing
             assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times');
         });
 
@@ -1540,8 +1537,8 @@ QUnit.module('options changed callbacks', {
             this.instance.option({ toolbarItems: [{ text: 'text' }] });
 
             assert.strictEqual(getTopToolbar().length, 1, 'top toolbar is rendered');
-            // 2, 3 from top toolbar rendering, 4, 5 from optionChanged
-            assert.strictEqual(this.resizeEventSpy.callCount, 5, 'event is triggered 5 times');
+            // 2nd and 3rd from optionChanged
+            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times');
         });
 
         QUnit.test('toolbarItems runtime changing should trigger resize event if toolbar is rendered on init', function(assert) {
@@ -1559,9 +1556,56 @@ QUnit.module('options changed callbacks', {
             const $toolbar2 = getTopToolbar();
 
             assert.strictEqual($toolbar2.length, 1, 'top toolbar is rendered');
-            assert.strictEqual(this.resizeEventSpy.callCount, 7, 'event is triggered additional times');
+            assert.strictEqual(this.resizeEventSpy.callCount, 5, 'event is triggered additional times');
 
             assert.strictEqual($toolbar1, $toolbar2, 'toolbar is not rendered twice after toolbarItems update in runtime');
+        });
+
+        QUnit.test('resize event is triggered during animation showing when toolbar is present', function(assert) {
+            this.resizeEventSpy.resetHistory();
+            this.reinit({
+                visible: false,
+                showTitle: true,
+                showCloseButton: true,
+            });
+            const beforeShow = this.resizeEventSpy.callCount;
+
+            this.instance.show();
+
+            const topToolbar = this.instance.topToolbar();
+
+            assert.strictEqual(beforeShow, 0, 'event is not triggered when popup is hidden');
+            assert.strictEqual(topToolbar.length, 1, 'top toolbar is rendered');
+            // 1st from overlay visibility changing, 2nd and 3rd from _animateShowing
+            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times during show animation');
+        });
+
+        QUnit.test('additional resize events are triggered only on toolbar elements', function(assert) {
+            this.resizeEventSpy.resetHistory();
+            this.reinit({
+                visible: true,
+                showTitle: true,
+                showCloseButton: true,
+                toolbarItems: [
+                    {
+                        text: 'bottom text',
+                        toolbar: 'bottom',
+                        location: 'center',
+                    },
+                ],
+            });
+
+            const topToolbar = this.instance.topToolbar();
+            const bottomToolbar = this.instance.bottomToolbar();
+            const overlayContent = this.instance.$overlayContent();
+
+            const callsForTopToolbar = this.resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === topToolbar[0]);
+            const callsForBottomToolbar = this.resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === bottomToolbar[0]);
+            const callsForOverlayContent = this.resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === overlayContent[0]);
+
+            assert.strictEqual(callsForTopToolbar.length, 2, 'additional resize events are triggered on top toolbar');
+            assert.strictEqual(callsForBottomToolbar.length, 2, 'additional resize events are triggered on bottom toolbar');
+            assert.strictEqual(callsForOverlayContent.length, 1, 'resize event is triggered on overlay content for geometry rendering');
         });
     });
 
@@ -2181,7 +2225,7 @@ QUnit.module('drag', {
             assert.strictEqual(position.top + startEvent.maxBottomOffset, viewHeight - getOuterHeight(this.$overlayContent), 'popup should not be dragged below than target');
         } finally {
             viewPort().removeAttr('style');
-            viewPort(toSelector(VIEWPORT_CLASS));
+            viewPort(`.${VIEWPORT_CLASS}`);
         }
     });
 
@@ -2303,7 +2347,7 @@ QUnit.module('resize', {
                 .dxPopup($.extend({}, initialOptions, options))
                 .dxPopup('instance');
             this.$overlayContent = this.popup.$content().parent();
-            this.$handle = this.$overlayContent.find(toSelector(POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS));
+            this.$handle = this.$overlayContent.find(`.${POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS}`);
         };
         this.reinit = (options) => {
             this.popup && this.popup.dispose();
@@ -2433,7 +2477,7 @@ QUnit.module('resize', {
 
             assert.ok(isWindow(resizable.option('area').get(0)), 'window is the area of the resizable');
         } finally {
-            viewPort(toSelector(VIEWPORT_CLASS));
+            viewPort(`.${VIEWPORT_CLASS}`);
         }
     });
 

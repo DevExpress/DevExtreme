@@ -37,8 +37,6 @@ const WORKSPACE_DAY = { class: 'dxSchedulerWorkSpaceDay', name: 'SchedulerWorkSp
 const WORKSPACE_WEEK = { class: 'dxSchedulerWorkSpaceWeek', name: 'SchedulerWorkSpaceWeek' };
 const WORKSPACE_MONTH = { class: 'dxSchedulerWorkSpaceMonth', name: 'SchedulerWorkSpaceMonth' };
 
-const toSelector = cssClass => '.' + cssClass;
-
 const checkRowsAndCells = function($element, assert, interval, start, end, groupCount) {
     interval = interval || 0.5;
     start = start || 0;
@@ -271,7 +269,7 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
     QUnit.test('Scheduler all day rows should be built into dateTable', async function(assert) {
         this.instance.option('showAllDayPanel', true);
 
-        const $allDayRows = this.instance.$element().find(toSelector(ALL_DAY_ROW_CLASS));
+        const $allDayRows = this.instance.$element().find(`.${ALL_DAY_ROW_CLASS}`);
 
         assert.equal($allDayRows.length, 2, 'DateTable contains 2 allDay rows');
     });
@@ -279,8 +277,8 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
     QUnit.test('Scheduler all day titles should be built into timePanel', async function(assert) {
         this.instance.option('showAllDayPanel', true);
 
-        const $timePanel = this.instance.$element().find(toSelector(TIME_PANEL_CLASS));
-        const $allDayTitles = $timePanel.find(toSelector(ALL_DAY_TITLE_CLASS));
+        const $timePanel = this.instance.$element().find(`.${TIME_PANEL_CLASS}`);
+        const $allDayTitles = $timePanel.find(`.${ALL_DAY_TITLE_CLASS}`);
 
         assert.equal($allDayTitles.length, 2, 'TimePanel contains 2 allDay titles');
     });
@@ -342,7 +340,7 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
 
         this.instance.option('showAllDayPanel', true);
 
-        const $allDayCells = this.instance.$element().find(toSelector(ALL_DAY_TABLE_CELL_CLASS));
+        const $allDayCells = this.instance.$element().find(`.${ALL_DAY_TABLE_CELL_CLASS}`);
 
         assert.deepEqual($allDayCells.eq(0).data('dxCellData').groups, { a: 1 }, 'Cell group is OK');
         assert.deepEqual($allDayCells.eq(1).data('dxCellData').groups, { a: 2 }, 'Cell group is OK');
@@ -566,7 +564,7 @@ QUnit.module('Workspace Week markup with vertical grouping', weekWithGroupingMod
     QUnit.test('Scheduler all day rows should be built into dateTable', async function(assert) {
         this.instance.option('showAllDayPanel', true);
 
-        const $allDayRows = this.instance.$element().find(toSelector(ALL_DAY_ROW_CLASS));
+        const $allDayRows = this.instance.$element().find(`.${ALL_DAY_ROW_CLASS}`);
 
         assert.equal($allDayRows.length, 2, 'DateTable contains 2 allDay rows');
     });
@@ -1036,7 +1034,7 @@ QUnit.module('Workspace Month markup', monthModuleConfig, () => {
         assert.equal(rows.length, 7 * 10, 'view has right cells count');
     });
 
-    QUnit.test('WorkSpace Month view with option intervalCount has cells with special firstDayOfMonth class', async function(assert) {
+    QUnit.test('WorkSpace Month view with option intervalCount has cells with special isFirstDayMonthHighlighting class', async function(assert) {
         this.instance.option({
             intervalCount: 2,
             currentDate: new Date(2017, 5, 25)
@@ -1298,19 +1296,19 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                 QUnit.test(`first-group-cell class should be assigned to correct cells in basic case in ${view.name}`, async function(assert) {
                     const instance = this.createInstance(view.class);
 
-                    instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
                         checkFirstGroupCell(assert, this, index, columnCountInGroup, 'Date table');
                     });
 
-                    instance.$element().find(toSelector(ALL_DAY_TABLE_CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${ALL_DAY_TABLE_CELL_CLASS}`).each(function(index) {
                         checkFirstGroupCell(assert, this, index, columnCountInGroup, 'All-day panel');
                     });
 
-                    instance.$element().find(toSelector(TIME_PANEL_CELL_CLASS)).each(function() {
+                    instance.$element().find(`.${TIME_PANEL_CELL_CLASS}`).each(function() {
                         assert.notOk($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Time panel cell does not have first-group class');
                     });
 
-                    instance.$element().find(toSelector(HEADER_PANEL_CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}`).each(function(index) {
                         checkFirstGroupCell(assert, this, index, columnCountInGroup, 'Header panel');
                     });
                 });
@@ -1323,19 +1321,19 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }],
                     }]);
 
-                    instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
                         checkFirstGroupCell(assert, this, index, columnCountInGroup, 'Date table');
                     });
 
-                    instance.$element().find(toSelector(ALL_DAY_TABLE_CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${ALL_DAY_TABLE_CELL_CLASS}`).each(function(index) {
                         checkFirstGroupCell(assert, this, index, columnCountInGroup, 'All-day panel');
                     });
 
-                    instance.$element().find(toSelector(TIME_PANEL_CELL_CLASS)).each(function() {
+                    instance.$element().find(`.${TIME_PANEL_CELL_CLASS}`).each(function() {
                         assert.notOk($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Time panel cell does not have first-group class');
                     });
 
-                    instance.$element().find(toSelector(HEADER_PANEL_CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}`).each(function(index) {
                         checkFirstGroupCell(assert, this, index, columnCountInGroup, 'Header panel');
                     });
                 });
@@ -1350,19 +1348,19 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }],
                     }]);
 
-                    instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
                         checkFirstGroupCell(assert, this, index, GROUP_COUNT, 'Date table');
                     });
 
-                    instance.$element().find(toSelector(ALL_DAY_TABLE_CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${ALL_DAY_TABLE_CELL_CLASS}`).each(function(index) {
                         checkFirstGroupCell(assert, this, index, GROUP_COUNT, 'All-day panel');
                     });
 
-                    instance.$element().find(toSelector(TIME_PANEL_CELL_CLASS)).each(function() {
+                    instance.$element().find(`.${TIME_PANEL_CELL_CLASS}`).each(function() {
                         assert.notOk($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Time panel cell does not have first-group class');
                     });
 
-                    instance.$element().find(toSelector(HEADER_PANEL_CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}`).each(function(index) {
                         assert.ok($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Header panel cell has first-group class');
                     });
                 });
@@ -1377,7 +1375,7 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }],
                     }]);
 
-                    instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
                         if(Math.floor(index / columnCountInGroup) % rowCountInGroup === 0) {
                             assert.ok($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Date table cell has first-group class');
                         } else {
@@ -1385,11 +1383,11 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         }
                     });
 
-                    instance.$element().find(toSelector(ALL_DAY_TABLE_CELL_CLASS)).each(function() {
+                    instance.$element().find(`.${ALL_DAY_TABLE_CELL_CLASS}`).each(function() {
                         assert.notOk($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'All-day panel cell does not have first-group class');
                     });
 
-                    instance.$element().find(toSelector(TIME_PANEL_CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${TIME_PANEL_CELL_CLASS}`).each(function(index) {
                         if(index % rowCountInGroup === 0) {
                             assert.ok($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Time panel cell has first-group class');
                         } else {
@@ -1397,7 +1395,7 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         }
                     });
 
-                    instance.$element().find(toSelector(HEADER_PANEL_CELL_CLASS)).each(function() {
+                    instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}`).each(function() {
                         assert.notOk($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Header panel cell does not have first-group class');
                     });
                 });
@@ -1405,19 +1403,19 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                 QUnit.test(`last-group-cell class should be assigned to correct cells in basic case in ${view.name}`, async function(assert) {
                     const instance = this.createInstance(view.class);
 
-                    instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
                         checkLastGroupCell(assert, this, index, columnCountInGroup, 'Date table');
                     });
 
-                    instance.$element().find(toSelector(ALL_DAY_TABLE_CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${ALL_DAY_TABLE_CELL_CLASS}`).each(function(index) {
                         checkLastGroupCell(assert, this, index, columnCountInGroup, 'All-day panel');
                     });
 
-                    instance.$element().find(toSelector(TIME_PANEL_CELL_CLASS)).each(function() {
+                    instance.$element().find(`.${TIME_PANEL_CELL_CLASS}`).each(function() {
                         assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Time panel cell does not have last-group class');
                     });
 
-                    instance.$element().find(toSelector(HEADER_PANEL_CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}`).each(function(index) {
                         checkLastGroupCell(assert, this, index, columnCountInGroup, 'Header panel');
                     });
                 });
@@ -1430,19 +1428,19 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                     }]);
 
-                    instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
                         checkLastGroupCell(assert, this, index, columnCountInGroup, 'Date table');
                     });
 
-                    instance.$element().find(toSelector(ALL_DAY_TABLE_CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${ALL_DAY_TABLE_CELL_CLASS}`).each(function(index) {
                         checkLastGroupCell(assert, this, index, columnCountInGroup, 'All-day panel');
                     });
 
-                    instance.$element().find(toSelector(TIME_PANEL_CELL_CLASS)).each(function() {
+                    instance.$element().find(`.${TIME_PANEL_CELL_CLASS}`).each(function() {
                         assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Time panel cell does not have last-group class');
                     });
 
-                    instance.$element().find(toSelector(HEADER_PANEL_CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}`).each(function(index) {
                         checkLastGroupCell(assert, this, index, columnCountInGroup, 'Header panel');
                     });
                 });
@@ -1457,19 +1455,19 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                     }]);
 
-                    instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
                         checkLastGroupCell(assert, this, index, GROUP_COUNT, 'Date table');
                     });
 
-                    instance.$element().find(toSelector(ALL_DAY_TABLE_CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${ALL_DAY_TABLE_CELL_CLASS}`).each(function(index) {
                         checkLastGroupCell(assert, this, index, GROUP_COUNT, 'All-day panel');
                     });
 
-                    instance.$element().find(toSelector(TIME_PANEL_CELL_CLASS)).each(function() {
+                    instance.$element().find(`.${TIME_PANEL_CELL_CLASS}`).each(function() {
                         assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Time panel cell does not have last-group class');
                     });
 
-                    instance.$element().find(toSelector(HEADER_PANEL_CELL_CLASS)).each(function() {
+                    instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}`).each(function() {
                         assert.ok($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Header panel cell has last-group class');
                     });
                 });
@@ -1484,7 +1482,7 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                     }]);
 
-                    instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${CELL_CLASS}`).each(function(index) {
                         if((Math.floor(index / columnCountInGroup) + 1) % rowCountInGroup === 0) {
                             assert.ok($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Date table cell has last-group class');
                         } else {
@@ -1492,11 +1490,11 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         }
                     });
 
-                    instance.$element().find(toSelector(ALL_DAY_TABLE_CELL_CLASS)).each(function() {
+                    instance.$element().find(`.${ALL_DAY_TABLE_CELL_CLASS}`).each(function() {
                         assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'All-day panel cell does not have last-group class');
                     });
 
-                    instance.$element().find(toSelector(TIME_PANEL_CELL_CLASS)).each(function(index) {
+                    instance.$element().find(`.${TIME_PANEL_CELL_CLASS}`).each(function(index) {
                         if((index + 1) % rowCountInGroup === 0) {
                             assert.ok($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Time panel cell has last-group class');
                         } else {
@@ -1504,7 +1502,7 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                         }
                     });
 
-                    instance.$element().find(toSelector(HEADER_PANEL_CELL_CLASS)).each(function() {
+                    instance.$element().find(`.${HEADER_PANEL_CELL_CLASS}`).each(function() {
                         assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Header panel cell does not have last-group class');
                     });
                 });

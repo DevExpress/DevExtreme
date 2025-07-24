@@ -95,6 +95,7 @@ class FileManagerDetailsItemList extends FileManagerItemListBase {
             loadPanel: {
                 shading: true
             },
+            height: '100%',
             showColumnLines: false,
             showRowLines: false,
             columnHidingEnabled: false,

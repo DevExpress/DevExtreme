@@ -44,8 +44,8 @@ import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Overlay from '@ts/ui/overlay/m_overlay';
 import * as zIndexPool from '@ts/ui/overlay/m_z_index';
-import { TOOLBAR_CLASS } from '@ts/ui/toolbar/m_constants';
-import type { ToolbarBaseProperties } from '@ts/ui/toolbar/m_toolbar.base';
+import { TOOLBAR_CLASS } from '@ts/ui/toolbar/constants';
+import type { ToolbarBaseProperties } from '@ts/ui/toolbar/toolbar.base';
 
 import PopupDrag from './m_popup_drag';
 import type { OverflowManager } from './m_popup_overflow_manager';
@@ -505,7 +505,7 @@ class Popup<
       } else {
         this._renderTopToolbarImpl();
       }
-      this._triggerToolbarResizeEvent();
+
       this._$topToolbar?.toggleClass(POPUP_HAS_CLOSE_BUTTON_CLASS, this._hasCloseButton());
     } else {
       this._$topToolbar?.detach();
@@ -553,7 +553,7 @@ class Popup<
     } else {
       this._renderBottomToolbarImpl();
     }
-    this._triggerToolbarResizeEvent();
+
     this._toggleClasses();
   }
 
@@ -582,10 +582,13 @@ class Popup<
   }
 
   _triggerToolbarResizeEvent(): void {
-    // To trigger toolbar width set in initial rendering to set menu button width (T1245421)
-    // And to trigger with animation in runtime items update
-    triggerResizeEvent(this.$overlayContent());
-    triggerResizeEvent(this.$overlayContent());
+    // To trigger toolbar width to set overflow menu button width (T1245421)
+    [this._$topToolbar, this._$bottomToolbar].forEach(($toolbar) => {
+      if ($toolbar) {
+        triggerResizeEvent($toolbar);
+        triggerResizeEvent($toolbar);
+      }
+    });
   }
 
   _renderToolbar(
@@ -677,6 +680,11 @@ class Popup<
 
     this._$topToolbar?.find(`.${TOOLBAR_LABEL_CLASS}`).eq(0).attr('id', titleId);
     this.$overlayContent().attr('aria-labelledby', titleId);
+  }
+
+  _animateShowing(): void {
+    this._triggerToolbarResizeEvent();
+    super._animateShowing();
   }
 
   _renderVisibilityAnimate(visible: boolean): DeferredObj<unknown> | Promise<unknown> {

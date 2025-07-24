@@ -1,12 +1,12 @@
 import {
-  NgModule, Component, ViewChild, enableProdMode,
+  NgModule, Component, enableProdMode,
 } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import notify from 'devextreme/ui/notify';
 import { ArrayStore } from 'devextreme-angular/common/data';
-import { DxDiagramModule, DxDiagramComponent, DxDiagramTypes } from 'devextreme-angular/ui/diagram';
+import { DxDiagramModule, DxDiagramTypes } from 'devextreme-angular/ui/diagram';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -27,8 +27,6 @@ if (window && window.config?.packageConfigPaths) {
   preserveWhitespaces: true,
 })
 export class AppComponent {
-  @ViewChild(DxDiagramComponent, { static: false }) diagram: DxDiagramComponent;
-
   orgItemsDataSource: ArrayStore;
 
   constructor(service: Service) {
@@ -56,7 +54,7 @@ export class AppComponent {
   }
 
   requestEditOperationHandler(e) {
-    const diagram = this.diagram.instance;
+    const diagram = e.component.instance();
     if (e.operation === 'addShape') {
       if (e.args.shape.type !== 'employee' && e.args.shape.type !== 'team') {
         if (e.reason !== 'checkUIElementAvailability') { this.showToast("You can add only a 'Team' or 'Employee' shape."); }

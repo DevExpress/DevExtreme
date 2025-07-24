@@ -97,10 +97,6 @@ const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
 
 const WINDOW_RATIO = 0.8;
 
-const toSelector = function(val) {
-    return '.' + val;
-};
-
 const openPopupWithList = function(lookup) {
     $(lookup._$field).trigger('dxclick');
 };
@@ -2077,7 +2073,7 @@ QUnit.module('options', {
     });
 
     QUnit.test('clear button option runtime change', function(assert) {
-        const getClearButton = (instance) => $(instance.content()).parent().find(toSelector(CLEAR_BUTTON_CLASS)).get(0);
+        const getClearButton = (instance) => $(instance.content()).parent().find(`.${CLEAR_BUTTON_CLASS}`).get(0);
 
         const lookup = $('#lookup')
             .dxLookup({
@@ -2168,7 +2164,7 @@ QUnit.module('popup options', {
         }).dxLookup('instance');
 
         openPopupWithList(instance);
-        const $wrapper = $(toSelector(OVERLAY_WRAPPER_CLASS));
+        const $wrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
 
         assert.ok($wrapper.hasClass(OVERLAY_SHADER_CLASS));
 
@@ -2184,7 +2180,7 @@ QUnit.module('popup options', {
 
         openPopupWithList(instance);
 
-        const $overlay = $(toSelector(OVERLAY_CONTENT_CLASS)).eq(0);
+        const $overlay = $(`.${OVERLAY_CONTENT_CLASS}`).eq(0);
 
         $(document).trigger('dxpointerdown');
         assert.equal($overlay.is(':visible'), false, 'overlay is hidden');
@@ -2200,7 +2196,7 @@ QUnit.module('popup options', {
 
         openPopupWithList(instance);
 
-        const $overlay = $(toSelector(OVERLAY_CONTENT_CLASS)).eq(0);
+        const $overlay = $(`.${OVERLAY_CONTENT_CLASS}`).eq(0);
 
         $($overlay).trigger('dxpointerdown');
         assert.equal($overlay.is(':visible'), true, 'overlay is not hidden');
@@ -2248,7 +2244,7 @@ QUnit.module('popup options', {
 
         openPopupWithList($lookup.dxLookup('instance'));
 
-        const $title = $(toSelector(POPUP_TITLE_CLASS));
+        const $title = $(`.${POPUP_TITLE_CLASS}`);
 
         assert.equal($title.text().trim(), 'testTitle', 'title text is correct');
     });
@@ -2267,9 +2263,9 @@ QUnit.module('popup options', {
 
         openPopupWithList(instance);
 
-        const $title = $(toSelector(POPUP_TITLE_CLASS));
+        const $title = $(`.${POPUP_TITLE_CLASS}`);
 
-        assert.ok($title.find(toSelector('test-title-renderer')).length, 'option \'titleTemplate\' was set successfully');
+        assert.ok($title.find('.test-title-renderer').length, 'option \'titleTemplate\' was set successfully');
     });
 
     QUnit.test('custom titleTemplate and onTitleRendered option is set correctly by options', function(assert) {
@@ -2291,9 +2287,9 @@ QUnit.module('popup options', {
         });
 
         openPopupWithList(instance);
-        const $title = $(toSelector(POPUP_TITLE_CLASS));
+        const $title = $(`.${POPUP_TITLE_CLASS}`);
 
-        assert.ok($title.find(toSelector('changed-test-title-renderer')).length, 'option \'titleTemplate\' successfully passed to the popup widget');
+        assert.ok($title.find('.changed-test-title-renderer').length, 'option \'titleTemplate\' successfully passed to the popup widget');
     });
 
     QUnit.test('popup does not close when filtering datasource has item equal selected item', function(assert) {
@@ -2305,7 +2301,7 @@ QUnit.module('popup options', {
 
         $lookup.dxLookup('option', 'opened', true);
 
-        const $popupContent = $(toSelector(POPUP_CONTENT_CLASS));
+        const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
         keyboardMock($popupContent.find('.' + TEXTEDITOR_INPUT_CLASS)).type('y');
 
         assert.ok($lookup.dxLookup('option', 'opened'), 'lookup stays opened');
@@ -2535,6 +2531,18 @@ QUnit.module('popup options', {
         assert.roughEqual(getOuterHeight($overlayContent), getOuterHeight($container) / 2, 0.1, 'popup height is correct');
     });
 
+    QUnit.test('_userDropDownOptions cache should be updated correctly after partial dropDownOptions update', function(assert) {
+        const lookup = $('#lookup').dxLookup({ }).dxLookup('instance');
+        const dropDownOptionsAfterInit = { ... lookup.option('dropDownOptions') };
+
+        lookup.open();
+        lookup.option('dropDownOptions.width', 123);
+
+        const { _userDropDownOptions } = lookup.option();
+
+        assert.deepEqual(_userDropDownOptions, { ...dropDownOptionsAfterInit, width: 123 }, 'updated part of dropDownOptions is cached in _userDropDownOptions');
+    });
+
     [
         {
             component: PopupFull,
@@ -2606,7 +2614,8 @@ QUnit.module('list options', {
 
         openPopupWithList(instance);
 
-        const $list = $(toSelector(LIST_CLASS)); const list = $list.dxList('instance');
+        const $list = $(`.${LIST_CLASS}`);
+        const list = $list.dxList('instance');
 
         assert.equal(list.option('pageLoadMode'), 'scrollBottom', 'pageLoadMode was bounced');
         instance.option('pageLoadMode', 'nextButton');
@@ -2649,11 +2658,12 @@ QUnit.module('list options', {
 
         openPopupWithList(instance);
 
-        const $list = $(toSelector(LIST_CLASS)); const list = $list.dxList('instance');
+        const $list = $(`.${LIST_CLASS}`);
+        const list = $list.dxList('instance');
 
         assert.equal(list.option('grouped'), true, 'grouped was bounced');
 
-        let $title = $(toSelector(LIST_GROUP_HEADER_CLASS));
+        let $title = $(`.${LIST_GROUP_HEADER_CLASS}`);
         assert.equal($title.length, 2, 'there are 2 group titles');
         $title = $title.eq(0);
         assert.equal($title.text().trim(), 'testGroupTemplate', 'title text is correct');
@@ -2663,7 +2673,7 @@ QUnit.module('list options', {
             return 'test';
         });
 
-        $title = $(toSelector(LIST_GROUP_HEADER_CLASS)).eq(0);
+        $title = $(`.${LIST_GROUP_HEADER_CLASS}`).eq(0);
         assert.equal($title.text().trim(), 'test', 'title text is correct');
     });
 });
@@ -3292,7 +3302,7 @@ QUnit.module('dataSource integration', {
             searchMode: 'contains'
         });
 
-        const $input = $(toSelector(POPUP_CONTENT_CLASS) + ' ' + toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $input = $(`.${POPUP_CONTENT_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
         $($input.val('o')).trigger('input');
         this.clock.tick(10);
         assert.equal($('.dx-list-item').length, 2, 'filters execute on input event');
