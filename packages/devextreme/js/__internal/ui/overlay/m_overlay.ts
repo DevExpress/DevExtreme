@@ -841,7 +841,7 @@ class Overlay<
 
     this._$wrapper.toggleClass(OVERLAY_SHADER_CLASS, visible && shading);
     this._$wrapper.css('backgroundColor', shading ? shadingColor ?? '' : '');
-    this._toggleTabTerminator(!!(visible && shading));
+    this._toggleTabTerminator(Boolean(visible && shading));
   }
 
   _initTabTerminatorHandler(): void {
