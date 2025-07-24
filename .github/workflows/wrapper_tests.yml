@@ -110,16 +110,16 @@ jobs:
           output: diff.json
 
       - name: Fail if generated code is outdated
+        if: ${{ steps.check-diff.outputs.count > 0 }}
         shell: bash
         run: |
-          if [ "${{ steps.check-diff.outputs.count }}" -gt 0 ]; then
-            echo "Found changed files:"
-            echo "${{ steps.check-diff.outputs.files }}"
-            exit 1
-          else
-            echo "No changes in generated code."
-          fi
-
+          echo "Generated code is outdated. The following files have uncommitted changes:"
+          echo "${{ steps.check-diff.outputs.files }}" | tr -d "'" | tr ' ' '\n' | while read -r file; do
+            echo "::error file=$file::Generated file is outdated"
+          done
+          echo "Please, update generated code and commit changes."
+          exit 1
+        
   test:
     runs-on: devextreme-shr2
     timeout-minutes: 10
@@ -164,7 +164,7 @@ jobs:
         if: matrix.framework == 'angular'
         uses: ./.github/actions/setup-chrome
         with:
-          chrome-version: '133.0.6943.53'
+          chrome-version: '130.0.6723.69'
 
       - name: Test ${{ matrix.framework }}
         run: pnpx nx test devextreme-${{ matrix.framework }}
