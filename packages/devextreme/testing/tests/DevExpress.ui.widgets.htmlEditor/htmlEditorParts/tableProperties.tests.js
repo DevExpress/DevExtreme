@@ -178,7 +178,7 @@ module('Table properties forms', {
             assert.strictEqual(borderWidthEditor.option('value'), null, 'borderWidthEditor value is correct');
             assert.strictEqual(borderColorEditor.option('value'), null, 'borderColorEditor value is correct');
             assert.strictEqual(backgroundColorEditor.option('value'), null, 'backgroundColorEditor value is correct');
-            assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'center', 'alignmentEditor selectedItemKeys is correct');
+            assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'left', 'alignmentEditor selectedItemKeys is correct');
             assert.strictEqual(heightEditor.option('value'), null, 'heightEditor value is correct');
             assert.strictEqual(widthEditor.option('value'), null, 'widthEditor value is correct');
         });
@@ -397,10 +397,27 @@ module('Table properties forms', {
             assert.strictEqual(backgroundColorEditor.option('value'), null, 'backgroundColorEditor value is correct');
             assert.strictEqual(horizontalPaddingEditor.option('value'), null, 'horizontalPaddingEditor value is correct');
             assert.strictEqual(verticalPaddingEditor.option('value'), null, 'verticalPaddingEditor value is correct');
-            assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'center', 'alignmentEditor selectedItemKeys is correct');
+            assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'left', 'alignmentEditor selectedItemKeys is correct');
             assert.strictEqual(verticalAlignmentEditor.option('selectedItemKeys')[0], 'middle', 'verticalAlignmentEditor selectedItemKeys is correct');
             assert.strictEqual(heightEditor.option('value'), null, 'heightEditor value is correct');
             assert.strictEqual(widthEditor.option('value'), null, 'widthEditor value is correct');
+        });
+
+        test('alignment default value in the Cell Properties form should be "center" for header cells', function(assert) {
+            this.createWidget({ value: tableMarkupWithHeaderRow });
+
+            const $tableElement = this.$element.find('table').eq(0);
+            const $targetCell = $tableElement.find('th').eq(0);
+
+            this.quillInstance.setSelection(0, 1);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick(10);
+            const formInstance = this.getFormInstance();
+
+            const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
+
+            assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'center', 'alignmentEditor selectedItemKeys is correct');
         });
 
         test('Check properties edititng at the cell Form (without dimensions)', function(assert) {
@@ -1180,7 +1197,7 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
 
-            showCellPropertiesForm(this.instance, $tableElement);
+            showTablePropertiesForm(this.instance, $tableElement);
 
             this.clock.tick(10);
 

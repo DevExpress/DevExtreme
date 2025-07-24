@@ -47,7 +47,8 @@ const DIALOG_LINK_FIELD_TARGET_CLASS = 'dx-formdialog-field-target';
 const DIALOG_TABLE_FIELD_COLUMNS = 'dxHtmlEditor-dialogInsertTableRowsField';
 const DIALOG_TABLE_FIELD_ROWS = 'dxHtmlEditor-dialogInsertTableColumnsField';
 
-const DEFAULT_TEXT_ALIGNMENT = 'center';
+const DEFAULT_TEXT_ALIGNMENT = 'left';
+const DEFAULT_TH_TEXT_ALIGNMENT = 'center';
 const DEFAULT_VERTICAL_ALIGN = 'middle';
 
 const ICON_MAP = {
@@ -513,8 +514,7 @@ function getTablePropertiesFormConfig(
     backgroundColor: formats.tableBackgroundColor || null,
     borderStyle: formats.tableBorderStyle || null,
     borderColor: formats.tableBorderColor || null,
-    borderWidth: isDefined(formats.tableBorderWidth)
-      ? parseFloat(formats.tableBorderWidth) : null,
+    borderWidth: isDefined(formats.tableBorderWidth) ? parseFloat(formats.tableBorderWidth) : null,
     alignment,
   };
 
@@ -713,7 +713,8 @@ function getCellPropertiesFormConfig(
   const { editorInstance } = module;
 
   const cellWidth = isDefined(formats.cellWidth) ? parseFloat(formats.cellWidth) : null;
-  const alignment = formats.cellTextAlign || DEFAULT_TEXT_ALIGNMENT;
+  const defaultAlignment = rowBlot.childFormatName === 'tableHeaderCell' ? DEFAULT_TH_TEXT_ALIGNMENT : DEFAULT_TEXT_ALIGNMENT;
+  const alignment = formats.cellTextAlign || defaultAlignment;
   const verticalAlignment = formats.cellVerticalAlign || DEFAULT_VERTICAL_ALIGN;
 
   const formData = {
@@ -722,13 +723,11 @@ function getCellPropertiesFormConfig(
     backgroundColor: getColorFromFormat(formats.cellBackgroundColor) || null,
     borderStyle: formats.cellBorderStyle || null,
     borderColor: getColorFromFormat(formats.cellBorderColor) || null,
-    borderWidth: isDefined(formats.cellBorderWidth)
-      ? parseFloat(formats.cellBorderWidth) : null,
+    borderWidth: isDefined(formats.cellBorderWidth) ? parseFloat(formats.cellBorderWidth) : null,
     alignment,
     verticalAlignment,
     verticalPadding: isDefined(formats.cellPaddingTop) ? parseFloat(formats.cellPaddingTop) : null,
-    horizontalPadding: isDefined(formats.cellPaddingLeft)
-      ? parseFloat(formats.cellPaddingLeft) : null,
+    horizontalPadding: isDefined(formats.cellPaddingLeft) ? parseFloat(formats.cellPaddingLeft) : null,
   };
 
   const items = [
