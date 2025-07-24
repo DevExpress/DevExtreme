@@ -8,6 +8,7 @@ import { getFormatHandlers } from '__internal/ui/html_editor/utils/m_toolbar_hel
 const FORM_CLASS = 'dx-formdialog-form';
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const COLOR_BOX_CLASS = 'dx-colorbox';
+const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 
 const showCellPropertiesForm = (instance, $cellElement) => {
     showForm(instance, $cellElement, 'cellProperties');
@@ -170,7 +171,7 @@ module('Table properties forms', {
             const borderWidthEditor = formInstance.getEditor('borderWidth');
             const borderColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(0).dxColorBox('instance');
             const backgroundColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(1).dxColorBox('instance');
-            const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
+            const alignmentEditor = formInstance.$element().find(`.${BUTTON_GROUP_CLASS}`).eq(0).dxButtonGroup('instance');
             const heightEditor = formInstance.getEditor('height');
             const widthEditor = formInstance.getEditor('width');
 
@@ -207,7 +208,7 @@ module('Table properties forms', {
             const backgroundColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(1).dxColorBox('instance');
             backgroundColorEditor.option('value', 'green');
 
-            const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
+            const alignmentEditor = formInstance.$element().find(`.${BUTTON_GROUP_CLASS}`).eq(0).dxButtonGroup('instance');
             alignmentEditor.option('selectedItemKeys', ['right']);
 
             this.applyFormChanges();
@@ -386,8 +387,8 @@ module('Table properties forms', {
             const backgroundColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(1).dxColorBox('instance');
             const horizontalPaddingEditor = formInstance.getEditor('horizontalPadding');
             const verticalPaddingEditor = formInstance.getEditor('verticalPadding');
-            const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
-            const verticalAlignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(1).dxButtonGroup('instance');
+            const alignmentEditor = formInstance.$element().find(`.${BUTTON_GROUP_CLASS}`).eq(0).dxButtonGroup('instance');
+            const verticalAlignmentEditor = formInstance.$element().find(`.${BUTTON_GROUP_CLASS}`).eq(1).dxButtonGroup('instance');
             const heightEditor = formInstance.getEditor('height');
             const widthEditor = formInstance.getEditor('width');
 
@@ -415,7 +416,7 @@ module('Table properties forms', {
             this.clock.tick(10);
             const formInstance = this.getFormInstance();
 
-            const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
+            const alignmentEditor = formInstance.$element().find(`.${BUTTON_GROUP_CLASS}`).eq(0).dxButtonGroup('instance');
 
             assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'center', 'alignmentEditor selectedItemKeys is correct');
         });
@@ -449,10 +450,10 @@ module('Table properties forms', {
             const verticalPaddingEditor = formInstance.getEditor('verticalPadding');
             verticalPaddingEditor.option('value', 15);
 
-            const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
+            const alignmentEditor = formInstance.$element().find(`.${BUTTON_GROUP_CLASS}`).eq(0).dxButtonGroup('instance');
             alignmentEditor.option('selectedItemKeys', ['right']);
 
-            const verticalAlignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(1).dxButtonGroup('instance');
+            const verticalAlignmentEditor = formInstance.$element().find(`.${BUTTON_GROUP_CLASS}`).eq(1).dxButtonGroup('instance');
             verticalAlignmentEditor.option('selectedItemKeys', ['bottom']);
 
             this.applyFormChanges();
@@ -613,10 +614,10 @@ module('Table properties forms', {
             const verticalPaddingEditor = formInstance.getEditor('verticalPadding');
             verticalPaddingEditor.option('value', 8);
 
-            const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
+            const alignmentEditor = formInstance.$element().find(`.${BUTTON_GROUP_CLASS}`).eq(0).dxButtonGroup('instance');
             alignmentEditor.option('selectedItemKeys', ['center']);
 
-            const verticalAlignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(1).dxButtonGroup('instance');
+            const verticalAlignmentEditor = formInstance.$element().find(`.${BUTTON_GROUP_CLASS}`).eq(1).dxButtonGroup('instance');
             verticalAlignmentEditor.option('selectedItemKeys', ['top']);
 
             this.applyFormChanges();
@@ -633,8 +634,8 @@ module('Table properties forms', {
             const reopenedBackgroundColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(1).dxColorBox('instance');
             const reopenedHorizontalPaddingEditor = formInstance.getEditor('horizontalPadding');
             const reopenedVerticalPaddingEditor = formInstance.getEditor('verticalPadding');
-            const reopenedAlignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
-            const reopenedVerticalAlignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(1).dxButtonGroup('instance');
+            const reopenedAlignmentEditor = formInstance.$element().find(`.${BUTTON_GROUP_CLASS}`).eq(0).dxButtonGroup('instance');
+            const reopenedVerticalAlignmentEditor = formInstance.$element().find(`.${BUTTON_GROUP_CLASS}`).eq(1).dxButtonGroup('instance');
 
             assert.strictEqual(reopenedBorderStyleEditor.option('value'), 'dotted', 'border style editor shows updated value');
             assert.strictEqual(reopenedBorderWidthEditor.option('value'), 5, 'border width editor shows updated value');
