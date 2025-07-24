@@ -160,6 +160,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Setup Chrome
+        if: matrix.framework == 'angular'
+        uses: ./.github/actions/setup-chrome
+        with:
+          chrome-version: '133.0.6943.53'
+
       - name: Test ${{ matrix.framework }}
         run: pnpx nx test devextreme-${{ matrix.framework }}
 
