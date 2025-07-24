@@ -2,7 +2,7 @@ import type { PositionConfig } from '@js/common/core/animation';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { end as hoverEventEnd } from '@js/common/core/events/hover';
 import pointerEvents from '@js/common/core/events/pointer';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -12,14 +12,17 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getOuterWidth } from '@js/core/utils/size';
 import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
 import Button from '@js/ui/button';
-import type { Item } from '@js/ui/menu';
+import type { Item, Properties } from '@js/ui/menu';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
-import type dxOverlay from '@js/ui/overlay';
 import Overlay from '@js/ui/overlay/ui.overlay';
+import type { ItemCollapsedEvent, ItemExpandedEvent } from '@js/ui/tree_view';
 import TreeView from '@js/ui/tree_view';
+import type { MenuBaseNode, MenuBaseProperties } from '@ts/ui/context_menu/m_menu_base';
 import MenuBase from '@ts/ui/context_menu/m_menu_base';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/m_utils';
+import type { TreeViewBaseProperties } from '@ts/ui/tree_view/m_tree_view.base';
 
 import Submenu from './m_submenu';
 
@@ -48,17 +51,34 @@ const FOCUS_LEFT = 'left';
 const FOCUS_RIGHT = 'right';
 
 const SHOW_SUBMENU_OPERATION = 'showSubmenu';
-const NEXTITEM_OPERATION = 'nextItem';
-const PREVITEM_OPERATION = 'prevItem';
+const NEXT_ITEM_OPERATION = 'nextItem';
+const PREV_ITEM_OPERATION = 'prevItem';
 
 const DEFAULT_DELAY = {
   show: 50,
   hide: 300,
 };
 
-const ACTIONS = ['onSubmenuShowing', 'onSubmenuShown', 'onSubmenuHiding', 'onSubmenuHidden', 'onItemContextMenu', 'onItemClick', 'onSelectionChanged', 'onItemRendered'];
+const ACTIONS = [
+  'onSubmenuShowing',
+  'onSubmenuShown',
+  'onSubmenuHiding',
+  'onSubmenuHidden',
+  'onItemContextMenu',
+  'onItemClick',
+  'onSelectionChanged',
+  'onItemRendered',
+];
 
-class Menu extends MenuBase {
+type MenuPropertiesKeys = Exclude<keyof Properties, keyof MenuBaseProperties>;
+
+interface MenuProperties extends
+  MenuBaseProperties,
+  Pick<Properties, MenuPropertiesKeys> {
+  templatesRenderAsynchronously?: boolean;
+}
+
+class Menu extends MenuBase<MenuProperties> {
   // Temporary solution. Move to component level
   public NAME!: string;
 
@@ -66,13 +86,13 @@ class Menu extends MenuBase {
 
   _visibleSubmenu?: Submenu | null;
 
-  _overlay!: dxOverlay<OverlayProperties>;
+  _overlay: Overlay | null = null;
 
-  _treeView!: TreeView;
+  _treeView: TreeView | null = null;
 
-  _hamburger?: Button;
+  _hamburger?: Button | null;
 
-  _$adaptiveContainer?: dxElementWrapper;
+  _$adaptiveContainer?: dxElementWrapper | null;
 
   _menuItemsWidth!: number;
 
@@ -84,8 +104,9 @@ class Menu extends MenuBase {
 
   _resizeEventTimer?: any;
 
-  _getDefaultOptions() {
-    return extend(super._getDefaultOptions(), {
+  _getDefaultOptions(): MenuProperties {
+    return {
+      ...super._getDefaultOptions(),
       orientation: 'horizontal',
       submenuDirection: 'auto',
       showFirstSubmenuMode: {
@@ -96,12 +117,16 @@ class Menu extends MenuBase {
         },
       },
       hideSubmenuOnMouseLeave: false,
+      // @ts-expect-error ts-error
       onSubmenuShowing: null,
+      // @ts-expect-error ts-error
       onSubmenuShown: null,
+      // @ts-expect-error ts-error
       onSubmenuHiding: null,
+      // @ts-expect-error ts-error
       onSubmenuHidden: null,
       adaptivityEnabled: false,
-    });
+    };
   }
 
   _setOptionsByReference(): void {
@@ -113,25 +138,23 @@ class Menu extends MenuBase {
     });
   }
 
-  _itemElements() {
+  _itemElements(): dxElementWrapper {
     const rootMenuElements = super._itemElements();
     const submenuElements = this._submenuItemElements();
-    // @ts-expect-error
+
+    // @ts-expect-error ts-error
     return rootMenuElements.add(submenuElements);
   }
 
-  _submenuItemElements() {
-    let elements = [];
-
+  _submenuItemElements(): dxElementWrapper {
     const itemSelector = `.${DX_MENU_ITEM_CLASS}`;
     const currentSubmenu = this._submenus.length && this._submenus[0];
 
     if (currentSubmenu && currentSubmenu.itemsContainer()) {
-      // @ts-expect-error
-      elements = currentSubmenu.itemsContainer().find(itemSelector);
+      return currentSubmenu.itemsContainer()?.find(itemSelector) ?? $();
     }
 
-    return elements;
+    return $();
   }
 
   _focusTarget(): dxElementWrapper {
@@ -139,8 +162,9 @@ class Menu extends MenuBase {
   }
 
   _isMenuHorizontal(): boolean {
-    // @ts-expect-error
-    return this.option('orientation') === 'horizontal';
+    const { orientation } = this.option();
+
+    return orientation === 'horizontal';
   }
 
   _moveFocus(location) {
@@ -154,25 +178,25 @@ class Menu extends MenuBase {
 
     switch (location) {
       case FOCUS_UP:
-        operation = isMenuHorizontal ? SHOW_SUBMENU_OPERATION : this._getItemsNavigationOperation(PREVITEM_OPERATION);
+        operation = isMenuHorizontal ? SHOW_SUBMENU_OPERATION : this._getItemsNavigationOperation(PREV_ITEM_OPERATION);
         argument = isMenuHorizontal ? $activeItem : $items;
         navigationAction = this._getKeyboardNavigationAction(operation, argument);
         $newTarget = navigationAction();
         break;
       case FOCUS_DOWN:
-        operation = isMenuHorizontal ? SHOW_SUBMENU_OPERATION : this._getItemsNavigationOperation(NEXTITEM_OPERATION);
+        operation = isMenuHorizontal ? SHOW_SUBMENU_OPERATION : this._getItemsNavigationOperation(NEXT_ITEM_OPERATION);
         argument = isMenuHorizontal ? $activeItem : $items;
         navigationAction = this._getKeyboardNavigationAction(operation, argument);
         $newTarget = navigationAction();
         break;
       case FOCUS_RIGHT:
-        operation = isMenuHorizontal ? this._getItemsNavigationOperation(NEXTITEM_OPERATION) : SHOW_SUBMENU_OPERATION;
+        operation = isMenuHorizontal ? this._getItemsNavigationOperation(NEXT_ITEM_OPERATION) : SHOW_SUBMENU_OPERATION;
         argument = isMenuHorizontal ? $items : $activeItem;
         navigationAction = this._getKeyboardNavigationAction(operation, argument);
         $newTarget = navigationAction();
         break;
       case FOCUS_LEFT:
-        operation = isMenuHorizontal ? this._getItemsNavigationOperation(PREVITEM_OPERATION) : SHOW_SUBMENU_OPERATION;
+        operation = isMenuHorizontal ? this._getItemsNavigationOperation(PREV_ITEM_OPERATION) : SHOW_SUBMENU_OPERATION;
         argument = isMenuHorizontal ? $items : $activeItem;
         navigationAction = this._getKeyboardNavigationAction(operation, argument);
         $newTarget = navigationAction();
@@ -186,14 +210,14 @@ class Menu extends MenuBase {
     }
   }
 
-  _getItemsNavigationOperation(operation) {
-    let navOperation = operation;
+  _getItemsNavigationOperation(operation: string): string {
+    const { rtlEnabled } = this.option();
 
-    if (this.option('rtlEnabled')) {
-      navOperation = operation === PREVITEM_OPERATION ? NEXTITEM_OPERATION : PREVITEM_OPERATION;
+    if (rtlEnabled) {
+      return operation === PREV_ITEM_OPERATION ? NEXT_ITEM_OPERATION : PREV_ITEM_OPERATION;
     }
 
-    return navOperation;
+    return operation;
   }
 
   _getKeyboardNavigationAction(operation, argument) {
@@ -206,10 +230,10 @@ class Menu extends MenuBase {
           action = this._showSubmenu.bind(this, argument);
         }
         break;
-      case NEXTITEM_OPERATION:
+      case NEXT_ITEM_OPERATION:
         action = this._nextItem.bind(this, argument);
         break;
-      case PREVITEM_OPERATION:
+      case PREV_ITEM_OPERATION:
         action = this._prevItem.bind(this, argument);
         break;
     }
@@ -217,12 +241,17 @@ class Menu extends MenuBase {
     return action;
   }
 
-  _clean() {
+  _clean(): void {
     super._clean();
-    this.option('templatesRenderAsynchronously') && clearTimeout(this._resizeEventTimer);
+
+    const { templatesRenderAsynchronously } = this.option();
+
+    if (templatesRenderAsynchronously) {
+      clearTimeout(this._resizeEventTimer);
+    }
   }
 
-  _visibilityChanged(visible) {
+  _visibilityChanged(visible: boolean): void {
     if (visible) {
       if (!this._menuItemsWidth) {
         this._updateItemsWidthCache();
@@ -232,13 +261,18 @@ class Menu extends MenuBase {
   }
 
   _isAdaptivityEnabled(): boolean {
-    // @ts-expect-error
-    return this.option('adaptivityEnabled') && this.option('orientation') === 'horizontal';
+    const { adaptivityEnabled, orientation } = this.option();
+
+    return !!adaptivityEnabled && orientation === 'horizontal';
   }
 
   _updateItemsWidthCache(): void {
-    const $menuItems = this.$element().find('ul').first().children('li')
+    const $menuItems = this.$element()
+      .find('ul')
+      .first()
+      .children('li')
       .children(`.${DX_MENU_ITEM_CLASS}`);
+
     this._menuItemsWidth = this._getSummaryItemsSize('width', $menuItems, true);
   }
 
@@ -247,7 +281,7 @@ class Menu extends MenuBase {
       return;
     }
 
-    const containerWidth = getOuterWidth(this.$element());
+    const containerWidth: number = getOuterWidth(this.$element());
     this._toggleAdaptiveMode(this._menuItemsWidth > containerWidth);
   }
 
@@ -259,7 +293,7 @@ class Menu extends MenuBase {
   _initActions(): void {
     this._actions = {};
 
-    each(ACTIONS, (index, action) => {
+    each(ACTIONS, (_index: number, action) => {
       this._actions[action] = this._createActionByOption(action);
     });
   }
@@ -285,20 +319,19 @@ class Menu extends MenuBase {
     this._initAdaptivity();
   }
 
-  _isTargetOutOfComponent(relatedTarget): boolean {
+  // eslint-disable-next-line class-methods-use-this
+  _isTargetOutOfComponent(relatedTarget: Element): boolean {
     const isInsideRootMenu = $(relatedTarget).closest(`.${DX_MENU_CLASS}`).length !== 0;
     const isInsideContextMenu = $(relatedTarget).closest(`.${DX_CONTEXT_MENU_CLASS}`).length !== 0;
 
-    const isTargetOutOfComponent = !(isInsideRootMenu || isInsideContextMenu);
-
-    return isTargetOutOfComponent;
+    return !(isInsideRootMenu || isInsideContextMenu);
   }
 
-  _focusOutHandler(e) {
+  _focusOutHandler(e: DxEvent<FocusEvent>): void {
     const { relatedTarget } = e;
 
     if (relatedTarget) {
-      const isTargetOutside = this._isTargetOutOfComponent(relatedTarget);
+      const isTargetOutside = this._isTargetOutOfComponent(relatedTarget as Element);
 
       if (isTargetOutside) {
         this._hideVisibleSubmenu();
@@ -309,7 +342,7 @@ class Menu extends MenuBase {
   }
 
   _renderHamburgerButton(): dxElementWrapper {
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     this._hamburger = new Button($('<div>').addClass(DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS), {
       icon: 'menu',
       activeStateEnabled: false,
@@ -319,19 +352,23 @@ class Menu extends MenuBase {
     return this._hamburger.$element();
   }
 
-  _toggleTreeView(state): void {
+  _toggleTreeView(state: boolean): void {
     if (isPlainObject(state)) {
-      state = !this._overlay.option('visible');
+      const { visible } = this._overlay?.option() ?? {};
+
+      state = !visible;
     }
-    this._overlay.option('visible', state);
+
+    this._overlay?.option('visible', state);
+
     if (state) {
-      this._treeView.focus();
+      this._treeView?.focus();
     }
     this._toggleHamburgerActiveState(state);
   }
 
-  _toggleHamburgerActiveState(state) {
-    this._hamburger?.$element().toggleClass(DX_STATE_ACTIVE_CLASS, state);
+  _toggleHamburgerActiveState(isActive: boolean): void {
+    this._hamburger?.$element().toggleClass(DX_STATE_ACTIVE_CLASS, isActive);
   }
 
   _toggleAdaptiveMode(state: boolean): void {
@@ -341,34 +378,32 @@ class Menu extends MenuBase {
     if (state) {
       this._hideVisibleSubmenu();
     } else {
-      this._treeView && this._treeView.collapseAll();
-      this._overlay && this._toggleTreeView(state);
+      this._treeView?.collapseAll();
+      if (this._overlay) {
+        this._toggleTreeView(state);
+      }
     }
 
     this._setAriaRole(state);
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     $menuItemsContainer.toggle(!state);
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     $adaptiveElements.toggle(state);
   }
 
-  _removeAdaptivity() {
+  _removeAdaptivity(): void {
     if (!this._$adaptiveContainer) {
       return;
     }
     this._toggleAdaptiveMode(false);
     this._$adaptiveContainer.remove();
-    // @ts-expect-error
     this._$adaptiveContainer = null;
-    // @ts-expect-error
     this._treeView = null;
-    // @ts-expect-error
     this._hamburger = null;
-    // @ts-expect-error
     this._overlay = null;
   }
 
-  _treeviewItemClickHandler(e) {
+  _treeviewItemClickHandler(e): void {
     this._actions.onItemClick(e);
 
     if (!e.node.children.length) {
@@ -377,8 +412,8 @@ class Menu extends MenuBase {
   }
 
   _getAdaptiveOverlayOptions(): OverlayProperties {
-    const rtl = this.option('rtlEnabled');
-    const position = rtl ? 'right' : 'left';
+    const { rtlEnabled } = this.option();
+    const position = rtlEnabled ? 'right' : 'left';
 
     return {
       _ignoreFunctionValueDeprecation: true,
@@ -386,27 +421,26 @@ class Menu extends MenuBase {
       maxHeight: () => getElementMaxHeightByWindow(this.$element()),
       deferRendering: false,
       shading: false,
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       animation: false,
       hideOnParentScroll: true,
-      onHidden: () => {
+      onHidden: (): void => {
         this._toggleHamburgerActiveState(false);
       },
       height: 'auto',
-      hideOnOutsideClick(e) {
+      hideOnOutsideClick(e: DxEvent): boolean {
         return !$(e.target).closest(`.${DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS}`).length;
       },
       position: {
         collision: 'flipfit',
         at: `bottom ${position}`,
         my: `top ${position}`,
-        // @ts-expect-error
-        of: this._hamburger.$element(),
+        of: this._hamburger?.$element(),
       },
     };
   }
 
-  _getTreeViewOptions() {
+  _getTreeViewOptions(): TreeViewBaseProperties {
     const menuOptions = {};
     const optionsToTransfer = [
       'rtlEnabled', 'width', 'accessKey', 'activeStateEnabled', 'animation', 'dataSource',
@@ -414,56 +448,62 @@ class Menu extends MenuBase {
       'itemsExpr', 'items', 'itemTemplate', 'selectedExpr',
       'selectionMode', 'tabIndex', 'visible',
     ];
-    each(optionsToTransfer, (_, option) => {
+    each(optionsToTransfer, (_index: number, option: string) => {
       menuOptions[option] = this.option(option);
     });
 
     const actionsToTransfer = ['onItemContextMenu', 'onSelectionChanged', 'onItemRendered'];
-    each(actionsToTransfer, (_, actionName) => {
+    each(actionsToTransfer, (_index: number, actionName: string) => {
       menuOptions[actionName] = (e) => {
         this._actions[actionName](e);
       };
     });
 
-    return extend(menuOptions, {
-      // @ts-expect-error
+    const { animation, selectByClick } = this.option();
+
+    return {
+      ...menuOptions,
+      // @ts-expect-error ts-error
       dataSource: this.getDataSource(),
-      animationEnabled: !!this.option('animation'),
+      animationEnabled: !!animation,
       onItemClick: this._treeviewItemClickHandler.bind(this),
-      onItemExpanded: (e) => {
-        this._overlay.repaint();
+      onItemExpanded: (e: ItemExpandedEvent): void => {
+        this._overlay?.repaint();
+        // @ts-expect-error
         this._actions.onSubmenuShown(e);
       },
-      onItemCollapsed: (e) => {
-        this._overlay.repaint();
+      onItemCollapsed: (e: ItemCollapsedEvent): void => {
+        this._overlay?.repaint();
+        // @ts-expect-error
         this._actions.onSubmenuHidden(e);
       },
       selectNodesRecursive: false,
-      selectByClick: this.option('selectByClick'),
+      selectByClick,
       expandEvent: 'click',
       _supportItemUrl: true,
-    });
+    };
   }
 
-  _initAdaptivity() {
-    if (!this._isAdaptivityEnabled()) return;
+  _initAdaptivity(): void {
+    if (!this._isAdaptivityEnabled()) {
+      return;
+    }
 
-    this._$adaptiveContainer = $('<div>').addClass(DX_ADAPTIVE_MODE_CLASS);
+    const { cssClass } = this.option();
 
     const $hamburger = this._renderHamburgerButton();
-
+    // @ts-expect-error ts-error
     this._treeView = this._createComponent($('<div>'), TreeView, this._getTreeViewOptions());
-    // @ts-expect-error
+
     this._overlay = this._createComponent($('<div>'), Overlay, this._getAdaptiveOverlayOptions());
-    // @ts-expect-error
     this._overlay.$content()
       .append(this._treeView.$element())
       .addClass(DX_ADAPTIVE_MODE_CLASS)
-      .addClass(this.option('cssClass'));
-
-    // @ts-expect-error
+      // @ts-expect-error ts-error
+      .addClass(cssClass);
     this._overlay.$wrapper().addClass(DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS);
 
+    this._$adaptiveContainer = $('<div>').addClass(DX_ADAPTIVE_MODE_CLASS);
     this._$adaptiveContainer.append($hamburger);
     this._$adaptiveContainer.append(this._overlay.$element());
 
@@ -473,17 +513,17 @@ class Menu extends MenuBase {
     this._dimensionChanged();
   }
 
-  _getDelay(delayType: 'show' | 'hide') {
-    // @ts-expect-error
-    const { delay } = this.option('showFirstSubmenuMode');
+  _getDelay(delayType: 'show' | 'hide'): number {
+    const { showFirstSubmenuMode } = this.option();
+    const delay = isObject(showFirstSubmenuMode) ? showFirstSubmenuMode.delay : undefined;
 
     if (!isDefined(delay)) {
       return DEFAULT_DELAY[delayType];
     }
-    return isObject(delay) ? delay[delayType] : delay;
+    return isObject(delay) ? delay[delayType] ?? DEFAULT_DELAY[delayType] : delay;
   }
 
-  _keyboardHandler(e): boolean {
+  _keyboardHandler(e: KeyboardEvent): boolean {
     return super._keyboardHandler(e, !!this._visibleSubmenu);
   }
 
@@ -497,7 +537,7 @@ class Menu extends MenuBase {
     return super._renderContainer($wrapper);
   }
 
-  _renderSubmenuItems(node, $itemFrame): Submenu {
+  _renderSubmenuItems(node: MenuBaseNode, $itemFrame: dxElementWrapper): Submenu {
     const submenu = this._createSubmenu(node, $itemFrame);
 
     this._submenus.push(submenu);
@@ -505,22 +545,30 @@ class Menu extends MenuBase {
     return submenu;
   }
 
-  _getKeyboardListeners() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _getKeyboardListeners(): any[] {
     return super._getKeyboardListeners().concat(this._visibleSubmenu);
   }
 
-  _createSubmenu(node, $rootItem: dxElementWrapper): Submenu {
-    const $submenuContainer = $('<div>').addClass(DX_CONTEXT_MENU_CLASS)
+  _createSubmenu(node: MenuBaseNode, $rootItem: dxElementWrapper): Submenu {
+    const $submenuContainer = $('<div>')
+      .addClass(DX_CONTEXT_MENU_CLASS)
       .appendTo($rootItem);
 
     const items = this._getChildNodes(node);
-    const subMenu = this._createComponent($submenuContainer, Submenu, extend(this._getSubmenuOptions(), {
-      _dataAdapter: this._dataAdapter,
-      _parentKey: node.internalFields.key,
-      items,
-      onHoverStart: this._clearTimeouts.bind(this),
-      position: this.getSubmenuPosition($rootItem),
-    }));
+    const subMenu = this._createComponent(
+      $submenuContainer,
+      Submenu,
+      // @ts-expect-error
+      {
+        ...this._getSubmenuOptions(),
+        _dataAdapter: this._dataAdapter,
+        _parentKey: node.internalFields.key,
+        items,
+        onHoverStart: this._clearTimeouts.bind(this),
+        position: this.getSubmenuPosition($rootItem),
+      },
+    );
 
     this._attachSubmenuHandlers($rootItem, subMenu);
 
@@ -548,18 +596,21 @@ class Menu extends MenuBase {
       selectedExpr: this.option('selectedExpr'),
       itemsExpr: this.option('itemsExpr'),
       onFocusedItemChanged: (e) => {
-        if (!e.component.option('visible')) {
+        const { visible, focusedElement } = e.component.option();
+
+        if (!visible) {
           return;
         }
-        this.option('focusedElement', e.component.option('focusedElement'));
+
+        this.option('focusedElement', focusedElement);
       },
       onSelectionChanged: this._nestedItemOnSelectionChangedHandler.bind(this),
       onItemClick: this._nestedItemOnItemClickHandler.bind(this),
       onItemRendered: this._nestedItemOnItemRenderedHandler.bind(this),
-      onLeftFirstItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, PREVITEM_OPERATION),
-      onLeftLastItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, NEXTITEM_OPERATION),
-      onCloseRootSubmenu: this._moveMainMenuFocus.bind(this, isMenuHorizontal ? PREVITEM_OPERATION : null),
-      onExpandLastSubmenu: isMenuHorizontal ? this._moveMainMenuFocus.bind(this, NEXTITEM_OPERATION) : null,
+      onLeftFirstItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, PREV_ITEM_OPERATION),
+      onLeftLastItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, NEXT_ITEM_OPERATION),
+      onCloseRootSubmenu: this._moveMainMenuFocus.bind(this, isMenuHorizontal ? PREV_ITEM_OPERATION : null),
+      onExpandLastSubmenu: isMenuHorizontal ? this._moveMainMenuFocus.bind(this, NEXT_ITEM_OPERATION) : null,
     };
   }
 
@@ -582,7 +633,7 @@ class Menu extends MenuBase {
 
     this._hideSubmenu(this._visibleSubmenu);
 
-    itemIndex += direction === PREVITEM_OPERATION ? -1 : 1;
+    itemIndex += direction === PREV_ITEM_OPERATION ? -1 : 1;
 
     if (itemIndex >= itemCount) {
       itemIndex = 0;
@@ -745,6 +796,7 @@ class Menu extends MenuBase {
 
   _submenuMouseLeaveHandler($rootItem: dxElementWrapper, eventArgs): void {
     const target = $(eventArgs.relatedTarget).parents(`.${DX_CONTEXT_MENU_CLASS}`)[0];
+    // @ts-expect-error
     const contextMenu = this._getSubmenuByRootElement($rootItem).getOverlayContent()[0];
 
     if (this.option('hideSubmenuOnMouseLeave') && target !== contextMenu) {
@@ -760,7 +812,9 @@ class Menu extends MenuBase {
 
     // @ts-expect-error
     const isRootItemHovered = $(this._visibleSubmenu.$element().context).hasClass(DX_STATE_HOVER_CLASS);
+    // @ts-expect-error
     const isSubmenuItemHovered = this._visibleSubmenu.getOverlayContent().find(`.${DX_STATE_HOVER_CLASS}`).length;
+    // @ts-expect-error
     const hoveredElementFromSubMenu = this._visibleSubmenu.getOverlayContent().get(0).querySelector(':hover');
 
     if (!hoveredElementFromSubMenu && !isSubmenuItemHovered && !isRootItemHovered) {
@@ -1017,22 +1071,22 @@ class Menu extends MenuBase {
         break;
       case 'width':
         if (this._isAdaptivityEnabled()) {
-          this._treeView.option(args.name, args.value);
-          this._overlay.option(args.name, args.value);
+          this._treeView?.option(args.name, args.value);
+          this._overlay?.option(args.name, args.value);
         }
         super._optionChanged(args);
         this._dimensionChanged();
         break;
       case 'animation':
         if (this._isAdaptivityEnabled()) {
-          this._treeView.option('animationEnabled', !!args.value);
+          this._treeView?.option('animationEnabled', !!args.value);
         }
         super._optionChanged(args);
         break;
       default:
         if (this._isAdaptivityEnabled() && ((args.name === args.fullName) || (args.name === 'items'))) {
           // TODO: if(args.name === 'items') this._treeView.option('items', this.option('items')) or treeView.repaint() ?
-          this._treeView.option(args.fullName, args.value);
+          this._treeView?.option(args.fullName, args.value);
         }
         super._optionChanged(args);
     }

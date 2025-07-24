@@ -73,7 +73,7 @@ ready(() => {
   });
 });
 
-interface OverlayProperties extends Properties {
+export interface OverlayProperties extends Properties {
   _loopFocus?: boolean;
 
   _ignorePreventScrollEventsDeprecation?: boolean;

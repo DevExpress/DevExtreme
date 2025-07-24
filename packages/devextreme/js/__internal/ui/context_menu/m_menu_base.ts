@@ -15,6 +15,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import MenuItem from '@ts/ui/collection/item';
 import MenuBaseEditStrategy from '@ts/ui/context_menu/menu_base.edit.strategy';
+import type DataAdapter from '@ts/ui/hierarchical_collection/data_adapter';
 import type { BaseDataAdapterOptions } from '@ts/ui/hierarchical_collection/data_adapter';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
 import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/hierarchical_collection_widget';
@@ -43,10 +44,13 @@ const DX_ICON_WITH_URL_CLASS = 'dx-icon-with-url';
 const ITEM_URL_CLASS = 'dx-item-url';
 const DX_MENU_ITEM_DATA_KEY = 'dxMenuItemDataKey';
 
-// @ts-expect-error ts-error
-export interface MenuBaseProperties extends dxMenuBaseOptions<MenuBase, Item> {
+export interface MenuBaseProperties<
+  TItem extends Item = Item,
+  // @ts-expect-error ts-error
+> extends dxMenuBaseOptions<MenuBase, TItem> {
   focusedElement?: dxElementWrapper;
   useInkRipple?: boolean;
+  _dataAdapter: DataAdapter;
 }
 
 export type ActionEventInfo<TComponent, TItem = never> =

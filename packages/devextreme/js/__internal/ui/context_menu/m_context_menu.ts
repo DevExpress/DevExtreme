@@ -92,8 +92,8 @@ type KeyboardEventHandlerAsync =
 type ClickEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
 type ContextMenuActionArguments = BaseMenuActionArguments<dxMenuBase<ContextMenuProperties>, Item>;
 
-interface ContextMenuProperties extends
-  MenuBaseProperties,
+export interface ContextMenuProperties extends
+  MenuBaseProperties<Item>,
   Pick<Properties, ContextMenuPropertiesKeys> {
   hideOnParentScroll?: boolean;
   visualContainer?: string | Element | Window | null;
@@ -101,7 +101,9 @@ interface ContextMenuProperties extends
   boundaryOffset?: PositionConfig['boundaryOffset'];
 }
 
-class ContextMenu extends MenuBase<ContextMenuProperties> {
+class ContextMenu<
+  TProperties extends ContextMenuProperties = ContextMenuProperties,
+> extends MenuBase<TProperties> {
   // Temporary solution. Move to component level
   public NAME!: string;
 
@@ -129,31 +131,24 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getShowDelay(showEventOption: ContextMenuProperties['showEvent']): number {
+  getShowDelay(showEventOption: TProperties['showEvent']): number {
     return isObject(showEventOption) ? showEventOption.delay ?? 0 : 0;
   }
 
-  _getDefaultOptions(): ContextMenuProperties {
+  _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
       showEvent: DEFAULT_SHOW_EVENT,
       hideOnOutsideClick: true,
       position: {
-        // @ts-expect-error ts-error
         at: 'top left',
-        // @ts-expect-error ts-error
         my: 'top left',
       },
-      // @ts-expect-error ts-error
       onShowing: null,
-      // @ts-expect-error ts-error
       onShown: null,
       onSubmenuCreated: null,
-      // @ts-expect-error ts-error
       onHiding: null,
-      // @ts-expect-error ts-error
       onHidden: null,
-      // @ts-expect-error ts-error
       onPositioning: null,
       submenuDirection: 'auto',
       visible: false,
@@ -167,11 +162,11 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     };
   }
 
-  _defaultOptionsRules(): DefaultOptionsRule<ContextMenuProperties>[] {
+  _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
     return super._defaultOptionsRules().concat([{
       device: () => !hasWindow(),
+      // @ts-expect-error ts-error
       options: {
-        // @ts-expect-error ts-error
         animation: null,
       },
     }]);
@@ -508,7 +503,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     });
   }
 
-  _detachShowContextMenuEvents(target: ContextMenuTarget, event?: ContextMenuProperties['showEvent']): void {
+  _detachShowContextMenuEvents(target: ContextMenuTarget, event?: TProperties['showEvent']): void {
     const { showEvent: showEventOption } = this.option();
     const showEvent = this.getShowEvent(event ?? showEventOption);
 
@@ -1060,7 +1055,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     }
   }
 
-  _optionChanged(args: OptionChanged<ContextMenuProperties>): void {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     const { name, value, previousValue } = args;
 
     if (ACTIONS.includes(name)) {
@@ -1071,7 +1066,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     switch (name) {
       case 'visible':
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this._renderVisibility(value);
+        this._renderVisibility(value as boolean);
         break;
       case 'disabled':
       case 'position':
@@ -1086,7 +1081,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
         break;
       case 'target':
         if (previousValue) {
-          this._detachShowContextMenuEvents(previousValue);
+          this._detachShowContextMenuEvents(previousValue as ContextMenuProperties['target']);
         }
         this._invalidate();
         break;

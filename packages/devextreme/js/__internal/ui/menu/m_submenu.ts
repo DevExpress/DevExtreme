@@ -1,5 +1,6 @@
 import '@js/ui/context_menu';
 
+import type { Orientation } from '@js/common';
 import type { PositionConfig } from '@js/common/core/animation';
 import animationPosition from '@js/common/core/animation/position';
 import { getPublicElement } from '@js/core/element';
@@ -10,35 +11,49 @@ import { extend } from '@js/core/utils/extend';
 import {
   getHeight, getWidth, setHeight, setWidth,
 } from '@js/core/utils/size';
-import type Overlay from '@js/ui/overlay';
-import type { Properties } from '@js/ui/overlay';
+import type { DxEvent } from '@js/events';
+import type { ContextMenuProperties } from '@ts/ui/context_menu/m_context_menu';
 import ContextMenu from '@ts/ui/context_menu/m_context_menu';
+import type DataAdapter from '@ts/ui/hierarchical_collection/data_adapter';
+import type { ItemKey } from '@ts/ui/hierarchical_collection/data_converter';
+import type { OverlayProperties } from '@ts/ui/overlay/m_overlay';
+import type Overlay from '@ts/ui/overlay/m_overlay';
 
 const DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS = 'dx-context-menu-content-delimiter';
 const DX_SUBMENU_CLASS = 'dx-submenu';
 
-class Submenu extends ContextMenu {
-  // @ts-expect-error
-  _overlay!: Overlay<Properties>;
+interface SubmenuProperties extends ContextMenuProperties {
+  _parentKey: ItemKey;
+  orientation?: Orientation;
+  onHoverStart?: (e: DxEvent) => void;
+}
+class Submenu extends ContextMenu<SubmenuProperties> {
+  _overlay!: Overlay | null;
 
   $contentDelimiter?: dxElementWrapper;
 
-  _dataAdapter: any;
+  _dataAdapter!: DataAdapter;
 
+  // eslint-disable-next-line class-methods-use-this
   _getMaxUsableSpace(offsetTop: number, windowHeight: number, anchorHeight: number): number {
     return Math.max(offsetTop, windowHeight - offsetTop - anchorHeight);
   }
 
-  _getDefaultOptions() {
-    return extend(super._getDefaultOptions(), {
+  _getDefaultOptions(): SubmenuProperties {
+    return {
+      ...super._getDefaultOptions(),
       orientation: 'horizontal',
+      // @ts-expect-error ts-error
       tabIndex: null,
       onHoverStart: noop,
-    });
+    };
   }
 
   _initDataAdapter(): void {
-    this._dataAdapter = this.option('_dataAdapter');
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _dataAdapter } = this.option();
+
+    this._dataAdapter = _dataAdapter;
     if (!this._dataAdapter) {
       super._initDataAdapter();
     }
@@ -48,8 +63,14 @@ class Submenu extends ContextMenu {
     this._renderContextMenuOverlay();
     super._renderContentImpl();
 
-    const node = this._dataAdapter.getNodeByKey(this.option('_parentKey'));
-    node && this._renderItems(this._getChildNodes(node));
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _parentKey } = this.option();
+    const node = this._dataAdapter.getNodeByKey(_parentKey);
+
+    if (node) {
+      this._renderItems(this._getChildNodes(node));
+    }
+
     this._renderDelimiter();
   }
 
@@ -59,36 +80,37 @@ class Submenu extends ContextMenu {
       .addClass(DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS);
   }
 
-  _getOverlayOptions() {
+  _getOverlayOptions(): OverlayProperties {
     return extend(true, super._getOverlayOptions(), {
       onPositioned: this._overlayPositionedActionHandler.bind(this),
       position: {
         precise: true,
       },
-    });
+    }) as OverlayProperties;
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _overlayPositionedActionHandler(arg): void {
     this._showDelimiter(arg);
   }
 
-  _hoverEndHandler(e): void {
+  _hoverEndHandler(e: DxEvent): void {
     super._hoverEndHandler(e);
-    this._toggleFocusClass(false, e.currentTarget);
+    this._toggleFocusClass(false, $(e.currentTarget));
   }
 
   _isMenuHorizontal(): boolean {
-    // @ts-expect-error
-    return this.option('orientation') === 'horizontal';
+    const { orientation } = this.option();
+
+    return orientation === 'horizontal';
   }
 
-  _hoverStartHandler(e): void {
-    const hoverStartAction = this.option('onHoverStart');
-    // @ts-expect-error
-    hoverStartAction(e);
+  _hoverStartHandler(e: DxEvent): void {
+    const { onHoverStart } = this.option();
 
+    onHoverStart?.(e);
     super._hoverStartHandler(e);
-    this._toggleFocusClass(true, e.currentTarget);
+    this._toggleFocusClass(true, $(e.currentTarget));
   }
 
   _drawSubmenu($rootItem: dxElementWrapper): void {
@@ -116,16 +138,42 @@ class Submenu extends ContextMenu {
     });
   }
 
+  _getDelimiterWidth($rootItem: dxElementWrapper, $submenu: dxElementWrapper): number {
+    if (this._isMenuHorizontal()) {
+      const rootWidth: number = getWidth($rootItem);
+      const submenuWidth: number = getWidth($submenu);
+
+      return rootWidth < submenuWidth ? rootWidth : submenuWidth;
+    }
+
+    return 3;
+  }
+
+  _getDelimiterHeight($rootItem: dxElementWrapper, $submenu: dxElementWrapper): number {
+    if (this._isMenuHorizontal()) {
+      return 3;
+    }
+
+    const rootHeight: number = getHeight($rootItem);
+    const submenuHeight: number = getHeight($submenu);
+
+    return rootHeight < submenuHeight ? rootHeight : submenuHeight;
+  }
+
   // TODO: try to simplify it
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _showDelimiter(arg): void {
     if (!this.$contentDelimiter) {
       return;
     }
+
+    const { position: positionOption } = this.option();
+
     const $submenu = this._itemContainer().children(`.${DX_SUBMENU_CLASS}`).eq(0);
-    // @ts-expect-error
-    const $rootItem = this.option('position').of.find('.dx-context-menu-container-border');
+    // @ts-expect-error ts-error
+    const $rootItem = $(positionOption?.of).find('.dx-context-menu-container-border');
     const position: PositionConfig = {
-      // @ts-expect-error
+      // @ts-expect-error ts-error
       of: $submenu,
       precise: true,
     };
@@ -133,56 +181,60 @@ class Submenu extends ContextMenu {
     const vLocation = containerOffset.v.location;
     const hLocation = containerOffset.h.location;
     const rootOffset = $rootItem.offset();
-    const offsetLeft = Math.round(rootOffset.left);
-    const offsetTop = Math.round(rootOffset.top);
-    const rootWidth = getWidth($rootItem);
-    const rootHeight = getHeight($rootItem);
-    const submenuWidth = getWidth($submenu);
-    const submenuHeight = getHeight($submenu);
+    const offsetLeft = Math.round(rootOffset?.left ?? 0);
+    const offsetTop = Math.round(rootOffset?.top ?? 0);
 
     this.$contentDelimiter.css('display', 'block');
     setWidth(
       this.$contentDelimiter,
-      this._isMenuHorizontal() ? rootWidth < submenuWidth ? rootWidth : submenuWidth : 3,
+      this._getDelimiterWidth($rootItem, $submenu),
     );
     setHeight(
       this.$contentDelimiter,
-      this._isMenuHorizontal() ? 3 : rootHeight < submenuHeight ? rootHeight : submenuHeight,
+      this._getDelimiterHeight($rootItem, $submenu),
     );
 
     if (this._isMenuHorizontal()) {
       if (vLocation > offsetTop) {
         if (Math.round(hLocation) === offsetLeft) {
           position.offset = '0 -2.5';
-          position.at = position.my = 'left top';
+          position.at = 'left top';
+          position.my = 'left top';
         } else {
           position.offset = '0 -2.5';
-          position.at = position.my = 'right top';
+          position.at = 'right top';
+          position.my = 'right top';
         }
       } else {
         setHeight(this.$contentDelimiter, 5);
         if (Math.round(hLocation) === offsetLeft) {
           position.offset = '0 5';
-          position.at = position.my = 'left bottom';
+          position.at = 'left bottom';
+          position.my = 'left bottom';
         } else {
           position.offset = '0 5';
-          position.at = position.my = 'right bottom';
+          position.at = 'right bottom';
+          position.my = 'right bottom';
         }
       }
     } else if (hLocation > offsetLeft) {
       if (Math.round(vLocation) === offsetTop) {
         position.offset = '-2.5 0';
-        position.at = position.my = 'left top';
+        position.at = 'left top';
+        position.my = 'left top';
       } else {
         position.offset = '-2.5 0';
-        position.at = position.my = 'left bottom';
+        position.at = 'left bottom';
+        position.my = 'left bottom';
       }
     } else if (Math.round(vLocation) === offsetTop) {
       position.offset = '2.5 0';
-      position.at = position.my = 'right top';
+      position.at = 'right top';
+      position.my = 'right top';
     } else {
       position.offset = '2.5 0';
-      position.at = position.my = 'right bottom';
+      position.at = 'right bottom';
+      position.my = 'right bottom';
     }
     animationPosition.setup(this.$contentDelimiter, position);
   }
@@ -194,12 +246,13 @@ class Submenu extends ContextMenu {
   }
 
   isOverlayVisible(): boolean | undefined {
-    return this._overlay.option('visible');
+    const { visible } = this._overlay?.option() ?? {};
+
+    return visible;
   }
 
-  getOverlayContent(): dxElementWrapper {
-    // @ts-expect-error
-    return this._overlay.$content();
+  getOverlayContent(): dxElementWrapper | undefined {
+    return this._overlay?.$content();
   }
 }
 
