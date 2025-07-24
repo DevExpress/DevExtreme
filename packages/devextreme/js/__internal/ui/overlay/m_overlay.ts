@@ -823,7 +823,9 @@ class Overlay<
     if (pushToStack) {
       if (index === -1) {
         this._zIndex = zIndexPool.create(this._zIndexInitValue());
-        overlayStack.push(this as unknown as Overlay);
+
+        // @ts-expect-error this and Overlay have no overlap
+        overlayStack.push(this);
       }
 
       this._$wrapper.css('zIndex', this._zIndex);
