@@ -923,16 +923,16 @@ function getCellPropertiesFormConfig(
       },
     );
 
-    module.editorInstance.format('cellBorderWidth', `${data.borderWidth}px`);
+    module.editorInstance.format('cellBorderWidth', data.borderWidth && `${data.borderWidth}px`);
     module.editorInstance.format('cellBorderColor', borderColorEditorInstance.option('value'));
     module.editorInstance.format('cellBorderStyle', data.borderStyle);
     module.editorInstance.format('cellBackgroundColor', backgroundColorEditorInstance.option('value'));
     module.editorInstance.format('cellTextAlign', alignmentEditorInstance.option('selectedItemKeys')[0]);
     module.editorInstance.format('cellVerticalAlign', verticalAlignmentEditorInstance.option('selectedItemKeys')[0]);
-    module.editorInstance.format('cellPaddingLeft', `${data.horizontalPadding}px`);
-    module.editorInstance.format('cellPaddingRight', `${data.horizontalPadding}px`);
-    module.editorInstance.format('cellPaddingTop', `${data.verticalPadding}px`);
-    module.editorInstance.format('cellPaddingBottom', `${data.verticalPadding}px`);
+    module.editorInstance.format('cellPaddingLeft', data.horizontalPadding && `${data.horizontalPadding}px`);
+    module.editorInstance.format('cellPaddingRight', data.horizontalPadding && `${data.horizontalPadding}px`);
+    module.editorInstance.format('cellPaddingTop', data.verticalPadding && `${data.verticalPadding}px`);
+    module.editorInstance.format('cellPaddingBottom', data.verticalPadding && `${data.verticalPadding}px`);
   };
 
   return {

@@ -469,6 +469,29 @@ module('Table properties forms', {
             assert.strictEqual($targetCell.css('verticalAlign'), 'bottom', 'vertical align is applied');
         });
 
+        test('Cell Properties form applying with no changes should not affect formats of the cell', function(assert) {
+            this.createWidget();
+            debugger;
+            const $tableElement = this.$element.find('table').eq(0);
+            const $targetCell = $tableElement.find('td').eq(6);
+            this.quillInstance.setSelection(50, 1);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick(10);
+
+            this.applyFormChanges();
+
+            const cellFormats = this.quillInstance.getFormat();
+
+            assert.deepEqual(cellFormats, {
+                cellTextAlign: 'left',
+                cellVerticalAlign: 'middle',
+                'data-table-row': '2',
+                row: '2',
+                tableCellLine: { row: '2', cell: '3' }
+            }, 'cell formats are not changed');
+        });
+
         test('Check cell width and height editor options', function(assert) {
             this.createWidget();
 
