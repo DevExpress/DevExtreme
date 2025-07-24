@@ -3,6 +3,7 @@ import eventsEngine from 'common/core/events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import registerEvent from 'common/core/events/core/event_registrator';
 import { compare as compareVersion } from 'core/utils/version';
+import { EVENT_PROPERTIES } from '__internal/events/core/m_consts';
 
 QUnit.module('base');
 
@@ -256,6 +257,21 @@ QUnit.test('Simulate clicks, check which property', function(assert) {
     for(; i < testData.length; i++) {
         fireEvent(testData[i].button);
     }
+});
+
+QUnit.test('Check getters attached to event wrappers', function(assert) {
+    const done = assert.async();
+    const div = document.createElement('div');
+    const handler = function(e) {
+        EVENT_PROPERTIES.forEach(prop => { assert.ok(prop in e, `getter for the '${prop}' prop found in the event arg`); });
+        done();
+    };
+
+    document.body.appendChild(div);
+    eventsEngine.on(div, 'click', handler);
+    const event = div.ownerDocument.createEvent('MouseEvents');
+    event.initMouseEvent('click', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
+    div.dispatchEvent(event);
 });
 
 QUnit.test('Simulate tab press, check key property', function(assert) {
