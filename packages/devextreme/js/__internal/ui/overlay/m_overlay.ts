@@ -1146,12 +1146,16 @@ class Overlay<
         const { type } = originalEvent ?? {};
         const isWheel = type === 'wheel';
         const isMouseMove = type === 'mousemove';
-        const isScrollByWheel = isWheel && !isCommandKeyPressed(e);
-        const isNotMouseOrWheel = !isMouseMove && !isWheel;
+        const isScrollByWheel = isWheel && isCommandKeyPressed(e);
 
         e._cancelPreventDefault = true;
 
-        if (originalEvent && e.cancelable && (isNotMouseOrWheel || isScrollByWheel)) {
+        if (
+          originalEvent
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
+          && e.cancelable !== false // T1082501
+          && !(isMouseMove || isScrollByWheel)
+        ) {
           e.preventDefault();
         }
       };
