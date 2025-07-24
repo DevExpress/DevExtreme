@@ -25,11 +25,13 @@ const wheel = {
       deltaMode, deltaY, deltaX, deltaZ,
     } = e.originalEvent;
 
+    const delta = Math.abs(deltaY) > Math.abs(deltaX) ? deltaY : deltaX;
+
     fireEvent({
       type: EVENT_NAME,
       originalEvent: e,
       // @ts-expect-error
-      delta: this._normalizeDelta(deltaY, deltaMode),
+      delta: this._normalizeDelta(delta, deltaMode),
       deltaX,
       deltaY,
       deltaZ,
