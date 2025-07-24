@@ -492,6 +492,160 @@ module('Table properties forms', {
             }, 'cell formats are not changed');
         });
 
+        test('Cell Properties form should show updated values when reopened after applying changes', function(assert) {
+            const multilineTableMarkup = `
+            <table>
+                <tr>
+                    <td>0_0 content</td>
+                    <td>0_1</td>
+                    <td>0_2</td>
+                </tr>
+                <tr>
+                    <td>1_0</td>
+                    <td><p>Line 1</p><p>Line 2</p></td>
+                    <td>1_2</td>
+                </tr>
+                <tr>
+                    <td>2_0</td>
+                    <td>2_1</td>
+                    <td>2_2</td>
+                </tr>
+            </table>`;
+
+            this.createWidget({ value: multilineTableMarkup });
+
+            const $tableElement = this.$element.find('table').eq(0);
+            const $targetCell = $tableElement.find('td').eq(4);
+
+            const editorText = this.quillInstance.getText();
+            const secondLinePosition = editorText.indexOf('Line 2');
+            this.quillInstance.setSelection(secondLinePosition, 0);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick(10);
+
+            let formInstance = this.getFormInstance();
+
+            const borderStyleEditor = formInstance.getEditor('borderStyle');
+            borderStyleEditor.option('value', 'dotted');
+
+            const borderWidthEditor = formInstance.getEditor('borderWidth');
+            borderWidthEditor.option('value', 5);
+
+            const borderColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(0).dxColorBox('instance');
+            borderColorEditor.option('value', 'blue');
+
+            const backgroundColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(1).dxColorBox('instance');
+            backgroundColorEditor.option('value', 'yellow');
+
+            const horizontalPaddingEditor = formInstance.getEditor('horizontalPadding');
+            horizontalPaddingEditor.option('value', 12);
+
+            const verticalPaddingEditor = formInstance.getEditor('verticalPadding');
+            verticalPaddingEditor.option('value', 8);
+
+            const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
+            alignmentEditor.option('selectedItemKeys', ['center']);
+
+            const verticalAlignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(1).dxButtonGroup('instance');
+            verticalAlignmentEditor.option('selectedItemKeys', ['top']);
+
+            this.applyFormChanges();
+
+            this.quillInstance.setSelection(36, 1);
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick(10);
+
+            formInstance = this.getFormInstance();
+            const reopenedBorderStyleEditor = formInstance.getEditor('borderStyle');
+            const reopenedBorderWidthEditor = formInstance.getEditor('borderWidth');
+            const reopenedBorderColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(0).dxColorBox('instance');
+            const reopenedBackgroundColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(1).dxColorBox('instance');
+            const reopenedHorizontalPaddingEditor = formInstance.getEditor('horizontalPadding');
+            const reopenedVerticalPaddingEditor = formInstance.getEditor('verticalPadding');
+            const reopenedAlignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
+            const reopenedVerticalAlignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(1).dxButtonGroup('instance');
+
+
+            assert.strictEqual(reopenedBorderStyleEditor.option('value'), 'dotted', 'border style editor shows updated value');
+            assert.strictEqual(reopenedBorderWidthEditor.option('value'), 5, 'border width editor shows updated value');
+            assert.strictEqual(reopenedBorderColorEditor.option('value'), 'blue', 'border color editor shows updated value');
+            assert.strictEqual(reopenedBackgroundColorEditor.option('value'), 'yellow', 'background color editor shows updated value');
+            assert.strictEqual(reopenedHorizontalPaddingEditor.option('value'), 12, 'horizontal padding editor shows updated value');
+            assert.strictEqual(reopenedVerticalPaddingEditor.option('value'), 8, 'vertical padding editor shows updated value');
+            assert.strictEqual(reopenedAlignmentEditor.option('selectedItemKeys')[0], 'center', 'alignment editor shows updated value');
+            assert.strictEqual(reopenedVerticalAlignmentEditor.option('selectedItemKeys')[0], 'top', 'vertical alignment editor shows updated value');
+        });
+
+        test('Cell Properties form should show updated values when reopened after applying changes (TableLite)', function(assert) {
+            this.createWidget({
+                onInitialized: ({ component }) => {
+                    const liteTableModule = component.get('tableModules/lite');
+                    component.register({ 'modules/table': liteTableModule });
+                }
+            });
+
+            const $tableElement = this.$element.find('table').eq(0);
+            const $targetCell = $tableElement.find('td').eq(6);
+
+            this.quillInstance.setSelection(50, 1);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick(10);
+
+            let formInstance = this.getFormInstance();
+
+            const borderStyleEditor = formInstance.getEditor('borderStyle');
+            borderStyleEditor.option('value', 'dotted');
+
+            const borderWidthEditor = formInstance.getEditor('borderWidth');
+            borderWidthEditor.option('value', 5);
+
+            const borderColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(0).dxColorBox('instance');
+            borderColorEditor.option('value', 'blue');
+
+            const backgroundColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(1).dxColorBox('instance');
+            backgroundColorEditor.option('value', 'yellow');
+
+            const horizontalPaddingEditor = formInstance.getEditor('horizontalPadding');
+            horizontalPaddingEditor.option('value', 12);
+
+            const verticalPaddingEditor = formInstance.getEditor('verticalPadding');
+            verticalPaddingEditor.option('value', 8);
+
+            const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
+            alignmentEditor.option('selectedItemKeys', ['center']);
+
+            const verticalAlignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(1).dxButtonGroup('instance');
+            verticalAlignmentEditor.option('selectedItemKeys', ['top']);
+
+            this.applyFormChanges();
+
+            this.quillInstance.setSelection(50, 1);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick(10);
+
+            formInstance = this.getFormInstance();
+            const reopenedBorderStyleEditor = formInstance.getEditor('borderStyle');
+            const reopenedBorderWidthEditor = formInstance.getEditor('borderWidth');
+            const reopenedBorderColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(0).dxColorBox('instance');
+            const reopenedBackgroundColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(1).dxColorBox('instance');
+            const reopenedHorizontalPaddingEditor = formInstance.getEditor('horizontalPadding');
+            const reopenedVerticalPaddingEditor = formInstance.getEditor('verticalPadding');
+            const reopenedAlignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
+            const reopenedVerticalAlignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(1).dxButtonGroup('instance');
+
+            assert.strictEqual(reopenedBorderStyleEditor.option('value'), 'dotted', 'border style editor shows updated value');
+            assert.strictEqual(reopenedBorderWidthEditor.option('value'), 5, 'border width editor shows updated value');
+            assert.strictEqual(reopenedBorderColorEditor.option('value'), 'blue', 'border color editor shows updated value');
+            assert.strictEqual(reopenedBackgroundColorEditor.option('value'), 'yellow', 'background color editor shows updated value');
+            assert.strictEqual(reopenedHorizontalPaddingEditor.option('value'), 12, 'horizontal padding editor shows updated value');
+            assert.strictEqual(reopenedVerticalPaddingEditor.option('value'), 8, 'vertical padding editor shows updated value');
+            assert.strictEqual(reopenedAlignmentEditor.option('selectedItemKeys')[0], 'center', 'alignment editor shows updated value');
+            assert.strictEqual(reopenedVerticalAlignmentEditor.option('selectedItemKeys')[0], 'top', 'vertical alignment editor shows updated value');
+        });
+
         test('Check cell width and height editor options', function(assert) {
             this.createWidget();
 

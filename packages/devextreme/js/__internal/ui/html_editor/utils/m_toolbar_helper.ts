@@ -195,12 +195,12 @@ function prepareShowFormProperties(module, type) {
     if (!$element?.length) {
       $element = $(getTargetTableNode(module, type));
     }
-    const [tableBlot, rowBlot] = module.quill.getModule('table').getTable() ?? [];
+    const [tableBlot, rowBlot, cellBlot] = module.quill.getModule('table').getTable() ?? [];
 
     const formats = module.quill.getFormat(module.editorInstance.getSelection(true));
 
     const tablePropertiesFormConfig = getFormConfigConstructor(type)(module, {
-      $element, formats, tableBlot, rowBlot,
+      $element, formats, tableBlot, rowBlot, cellBlot,
     });
 
     const {
@@ -700,6 +700,7 @@ function getCellPropertiesFormConfig(
     formats,
     tableBlot,
     rowBlot,
+    cellBlot,
   },
 ): {
     formOptions: unknown;
@@ -716,6 +717,8 @@ function getCellPropertiesFormConfig(
   const defaultAlignment = rowBlot.childFormatName === 'tableHeaderCell' ? DEFAULT_TH_TEXT_ALIGNMENT : DEFAULT_TEXT_ALIGNMENT;
   const alignment = formats.cellTextAlign || defaultAlignment;
   const verticalAlignment = formats.cellVerticalAlign || DEFAULT_VERTICAL_ALIGN;
+  const rawVerticalPadding = formats.cellPaddingTop ?? formats.cellPadding?.split(' ')[0];
+  const rawHorizontalPadding = formats.cellPaddingLeft ?? formats.cellPadding?.split(' ')[1];
 
   const formData = {
     width: cellWidth,
@@ -726,8 +729,8 @@ function getCellPropertiesFormConfig(
     borderWidth: isDefined(formats.cellBorderWidth) ? parseFloat(formats.cellBorderWidth) : null,
     alignment,
     verticalAlignment,
-    verticalPadding: isDefined(formats.cellPaddingTop) ? parseFloat(formats.cellPaddingTop) : null,
-    horizontalPadding: isDefined(formats.cellPaddingLeft) ? parseFloat(formats.cellPaddingLeft) : null,
+    verticalPadding: isDefined(rawVerticalPadding) ? parseFloat(rawVerticalPadding) : null,
+    horizontalPadding: isDefined(rawHorizontalPadding) ? parseFloat(rawHorizontalPadding) : null,
   };
 
   const items = [
@@ -923,16 +926,21 @@ function getCellPropertiesFormConfig(
       },
     );
 
-    module.editorInstance.format('cellBorderWidth', data.borderWidth && `${data.borderWidth}px`);
-    module.editorInstance.format('cellBorderColor', borderColorEditorInstance.option('value'));
-    module.editorInstance.format('cellBorderStyle', data.borderStyle);
-    module.editorInstance.format('cellBackgroundColor', backgroundColorEditorInstance.option('value'));
-    module.editorInstance.format('cellTextAlign', alignmentEditorInstance.option('selectedItemKeys')[0]);
-    module.editorInstance.format('cellVerticalAlign', verticalAlignmentEditorInstance.option('selectedItemKeys')[0]);
-    module.editorInstance.format('cellPaddingLeft', data.horizontalPadding && `${data.horizontalPadding}px`);
-    module.editorInstance.format('cellPaddingRight', data.horizontalPadding && `${data.horizontalPadding}px`);
-    module.editorInstance.format('cellPaddingTop', data.verticalPadding && `${data.verticalPadding}px`);
-    module.editorInstance.format('cellPaddingBottom', data.verticalPadding && `${data.verticalPadding}px`);
+    const tableBlotNames = module.quill.getModule('table').tableBlots;
+    const hasValidCellLineChild = cellBlot.children?.head
+      && tableBlotNames.includes(cellBlot.children.head.statics.blotName);
+    const formatBlot = hasValidCellLineChild ? cellBlot.children.head : cellBlot;
+
+    formatBlot.format('cellBorderWidth', data.borderWidth && `${data.borderWidth}px`);
+    formatBlot.format('cellBorderColor', borderColorEditorInstance.option('value'));
+    formatBlot.format('cellBorderStyle', data.borderStyle);
+    formatBlot.format('cellBackgroundColor', backgroundColorEditorInstance.option('value'));
+    formatBlot.format('cellTextAlign', alignmentEditorInstance.option('selectedItemKeys')[0]);
+    formatBlot.format('cellVerticalAlign', verticalAlignmentEditorInstance.option('selectedItemKeys')[0]);
+    formatBlot.format('cellPaddingLeft', data.horizontalPadding && `${data.horizontalPadding}px`);
+    formatBlot.format('cellPaddingRight', data.horizontalPadding && `${data.horizontalPadding}px`);
+    formatBlot.format('cellPaddingTop', data.verticalPadding && `${data.verticalPadding}px`);
+    formatBlot.format('cellPaddingBottom', data.verticalPadding && `${data.verticalPadding}px`);
   };
 
   return {
