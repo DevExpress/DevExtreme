@@ -31755,7 +31755,7 @@ declare module DevExpress.ui {
      * [descr:_ui_tree_view_ItemInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    export interface ItemInfo<TItem extends ItemLike, TKey = any> {
+    export interface ItemInfo<TItem extends ItemLike = any, TKey = any> {
       /**
        * [descr:_ui_tree_view_ItemInfo.itemData]
        */
@@ -31877,8 +31877,6 @@ declare module DevExpress.ui {
      * [descr:dxTreeViewItem.selected]
      */
     selected?: boolean;
-
-    [key: string]: any;
   }
   /**
    * [descr:dxTreeViewNode]

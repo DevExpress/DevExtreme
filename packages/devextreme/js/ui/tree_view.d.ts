@@ -40,7 +40,7 @@ type ItemLike = string | Item | any;
  * @docid _ui_tree_view_ItemInfo
  * @hidden
  */
-export interface ItemInfo<TItem extends ItemLike, TKey= any> {
+export interface ItemInfo<TItem extends ItemLike = any, TKey= any> {
     /**
      * @docid _ui_tree_view_ItemInfo.itemData
      * @type object
@@ -623,8 +623,6 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
      * @public
      */
     selected?: boolean;
-
-    [key: string]: any;
 }
 
 /**
