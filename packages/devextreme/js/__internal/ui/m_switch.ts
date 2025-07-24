@@ -72,7 +72,8 @@ class Switch extends Editor<Properties> {
     const move = (value: boolean, e: KeyboardEvent): void => {
       e.preventDefault();
       e.stopPropagation();
-      this._saveValueChangeEvent(e as unknown as ValueChangedEvent);
+      // @ts-expect-error ValueChangedEvent should be compatible with KeyboardEvent
+      this._saveValueChangeEvent(e);
       this._animateValue(value);
     };
 
@@ -238,7 +239,7 @@ class Switch extends Editor<Properties> {
   }
 
   _renderClick(): void {
-    const eventName = addNamespace(clickEventName, this.NAME as string);
+    const eventName = addNamespace(clickEventName, this.NAME ?? '');
     const $element = this.$element();
     this._clickAction = this._createAction(this._clickHandler.bind(this));
 
