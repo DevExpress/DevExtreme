@@ -590,8 +590,7 @@ export default {
     if ($element && $element.length) {
       const $grid = $element.closest(`.${controller.getWidgetContainerClass()}`).parent();
 
-      // NOTE: if element is not in the grid at all, method will return true. This is done for qunitmocks
-      return $grid.length === 0 || $grid.is(controller.component.$element());
+      return $grid.is(controller.component.$element());
     }
     return false;
   },

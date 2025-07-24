@@ -3,6 +3,7 @@ import $ from 'jquery';
 import 'ui/data_grid';
 
 import dataGridMocks from '../../helpers/dataGridMocks.js';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 
 const MockColumnsController = dataGridMocks.MockColumnsController;
 const MockDataController = dataGridMocks.MockDataController;
@@ -23,10 +24,11 @@ QUnit.testStart(function() {
 
 QUnit.module('Context menu', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.element = function() {
             return $('#container');
         };
-        this.$element = function() {};
         const that = this;
         setupDataGridModules(this, ['contextMenu'], {
             initViews: true,
@@ -70,6 +72,7 @@ QUnit.module('Context menu', {
     },
     afterEach: function() {
         this.dispose();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -207,12 +210,13 @@ QUnit.module('Context menu', {
 
 QUnit.module('Context menu with rowsView', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         const that = this;
 
         that.element = function() {
             return $('#secondContainer');
         };
-        this.$element = function() {};
 
         that.items = [
             { data: { Column1: 'test1', Column2: 'test2' }, values: ['test1', 'test2'], rowType: 'data', dataIndex: 0 },
@@ -234,6 +238,7 @@ QUnit.module('Context menu with rowsView', {
     },
     afterEach: function() {
         this.dispose();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 

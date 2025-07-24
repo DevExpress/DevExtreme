@@ -1,4 +1,5 @@
 import fx from 'common/core/animation/fx';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import dataUtils from 'core/element_data';
@@ -68,6 +69,8 @@ $('body').addClass('dx-viewport');
 
 QUnit.module('Editing', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.$element = () => $('#container');
         this.gridContainer = $('#container > .dx-datagrid');
 
@@ -127,6 +130,7 @@ QUnit.module('Editing', {
     afterEach: function() {
         this.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -2890,6 +2894,8 @@ QUnit.module('Editing', {
 
 QUnit.module('Editing with real dataController', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.clock = sinon.useFakeTimers();
 
         this.$element = () => $('#container');
@@ -2953,6 +2959,7 @@ QUnit.module('Editing with real dataController', {
     afterEach: function() {
         this.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
