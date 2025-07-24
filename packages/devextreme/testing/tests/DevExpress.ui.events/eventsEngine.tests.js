@@ -4,6 +4,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import registerEvent from 'common/core/events/core/event_registrator';
 import { compare as compareVersion } from 'core/utils/version';
 import { EVENT_PROPERTIES } from '__internal/events/core/m_consts';
+import config from 'core/config';
 
 QUnit.module('base');
 
@@ -261,7 +262,7 @@ QUnit.test('Simulate clicks, check which property', function(assert) {
 
 QUnit.test('Check getters attached to event wrappers', function(assert) {
     const done = assert.async();
-    const useJQuery = require('core/config')().useJQuery;
+    const useJQuery = config().useJQuery;
     const div = document.createElement('div');
     const handler = function(e) {
         if(e instanceof eventsEngine.Event && !useJQuery) {
