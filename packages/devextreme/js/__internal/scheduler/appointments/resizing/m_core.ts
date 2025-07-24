@@ -29,8 +29,11 @@ const getCellData = (
     rtlEnabled,
   );
   // NOTE: All day appointments occupy day if they start at the beginning of the day,
-  // but long appointments are not.
-  cellData.endDate = dateUtilsTs.addOffsets(cellData.startDate, [toMs('day') - Number(isAllDay)]);
+  // but long appointments are not. So for all day appointments endDate === startDate,
+  // for long appointments endDate = startDate + 1 day.
+  if (!isAllDay) {
+    cellData.endDate = dateUtilsTs.addOffsets(cellData.startDate, [toMs('day')]);
+  }
 
   return cellData;
 };
@@ -121,7 +124,6 @@ const getDateRangeHorizontalRTL = (options: GetAppointmentDateRangeOptionsExtend
       appointmentFirstCellIndex,
       appointment.isOccupiedAllDay,
       appointment.isAllDay,
-      true,
     );
 
     return {
@@ -132,7 +134,7 @@ const getDateRangeHorizontalRTL = (options: GetAppointmentDateRangeOptionsExtend
     };
   }
 
-  const { endDate } = appointmentLastCell;
+  const { startDate: endDate } = appointmentLastCell;
 
   return {
     startDate: endDate < appointment.startDate
