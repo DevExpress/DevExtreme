@@ -107,6 +107,7 @@ jobs:
         with:
           gh-token: ${{ secrets.GITHUB_TOKEN }}
           paths: 'packages/devextreme-*/src/**'
+          output: diff.json
 
       - name: Fail if generated code is outdated
         shell: bash
@@ -123,6 +124,7 @@ jobs:
     timeout-minutes: 10
     needs: build
     strategy:
+      fail-fast: false
       matrix:
         framework: [angular, react, vue]
 
