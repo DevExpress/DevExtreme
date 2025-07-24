@@ -164,10 +164,8 @@ module('Table properties forms', {
 
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick(10);
-            const formInstance = this.getFormInstance();
-            const tableBorderColor = $tableElement.css('borderTopColor');
-            const tableBackgroundColor = $tableElement.css('backgroundColor');
 
+            const formInstance = this.getFormInstance();
             const borderStyleEditor = formInstance.getEditor('borderStyle');
             const borderWidthEditor = formInstance.getEditor('borderWidth');
             const borderColorEditor = formInstance.$element().find(`.${COLOR_BOX_CLASS}`).eq(0).dxColorBox('instance');
@@ -176,11 +174,11 @@ module('Table properties forms', {
             const heightEditor = formInstance.getEditor('height');
             const widthEditor = formInstance.getEditor('width');
 
-            assert.strictEqual(borderStyleEditor.option('value'), 'none', 'borderStyleEditor value is correct');
-            assert.strictEqual(borderWidthEditor.option('value'), 0, 'borderWidthEditor value is correct');
-            assert.strictEqual(borderColorEditor.option('value'), tableBorderColor, 'borderColorEditor value is correct');
-            assert.strictEqual(backgroundColorEditor.option('value'), tableBackgroundColor, 'backgroundColorEditor value is correct');
-            assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'left', 'alignmentEditor selectedItemKeys is correct');
+            assert.strictEqual(borderStyleEditor.option('value'), null, 'borderStyleEditor value is correct');
+            assert.strictEqual(borderWidthEditor.option('value'), null, 'borderWidthEditor value is correct');
+            assert.strictEqual(borderColorEditor.option('value'), null, 'borderColorEditor value is correct');
+            assert.strictEqual(backgroundColorEditor.option('value'), null, 'backgroundColorEditor value is correct');
+            assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'center', 'alignmentEditor selectedItemKeys is correct');
             assert.strictEqual(heightEditor.option('value'), null, 'heightEditor value is correct');
             assert.strictEqual(widthEditor.option('value'), null, 'widthEditor value is correct');
         });
@@ -334,7 +332,7 @@ module('Table properties forms', {
 
                 const borderWidthEditor = this.getFormInstance().getEditor('borderWidth');
 
-                assert.strictEqual(borderWidthEditor.option('value'), 1, 'borderWidthEditor value is correct');
+                assert.strictEqual(borderWidthEditor.option('value'), null, 'borderWidthEditor value is correct');
             } finally {
                 window.document.body.style.zoom = originalZoom;
             }
@@ -393,13 +391,13 @@ module('Table properties forms', {
             const heightEditor = formInstance.getEditor('height');
             const widthEditor = formInstance.getEditor('width');
 
-            assert.strictEqual(borderStyleEditor.option('value'), 'solid', 'borderStyleEditor value is correct');
-            assert.strictEqual(borderWidthEditor.option('value'), 1, 'borderWidthEditor value is correct');
-            assert.strictEqual(borderColorEditor.option('value'), 'rgb(221, 221, 221)', 'borderColorEditor value is correct');
-            assert.strictEqual(backgroundColorEditor.option('value'), 'rgba(0, 0, 0, 0)', 'backgroundColorEditor value is correct');
+            assert.strictEqual(borderStyleEditor.option('value'), null, 'borderStyleEditor value is correct');
+            assert.strictEqual(borderWidthEditor.option('value'), null, 'borderWidthEditor value is correct');
+            assert.strictEqual(borderColorEditor.option('value'), null, 'borderColorEditor value is correct');
+            assert.strictEqual(backgroundColorEditor.option('value'), null, 'backgroundColorEditor value is correct');
             assert.strictEqual(horizontalPaddingEditor.option('value'), null, 'horizontalPaddingEditor value is correct');
             assert.strictEqual(verticalPaddingEditor.option('value'), null, 'verticalPaddingEditor value is correct');
-            assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'left', 'alignmentEditor selectedItemKeys is correct');
+            assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'center', 'alignmentEditor selectedItemKeys is correct');
             assert.strictEqual(verticalAlignmentEditor.option('selectedItemKeys')[0], 'middle', 'verticalAlignmentEditor selectedItemKeys is correct');
             assert.strictEqual(heightEditor.option('value'), null, 'heightEditor value is correct');
             assert.strictEqual(widthEditor.option('value'), null, 'widthEditor value is correct');
