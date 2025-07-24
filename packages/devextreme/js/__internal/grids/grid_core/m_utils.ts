@@ -372,7 +372,6 @@ export default {
   normalizeSortingInfo,
 
   getFormatByDataType(dataType) {
-    // eslint-disable-next-line default-case
     switch (dataType) {
       case 'date':
         return 'shortDate';
@@ -590,6 +589,7 @@ export default {
   isElementInCurrentGrid(controller, $element) {
     if ($element && $element.length) {
       const $grid = $element.closest(`.${controller.getWidgetContainerClass()}`).parent();
+
       return $grid.is(controller.component.$element());
     }
     return false;
