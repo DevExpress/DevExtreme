@@ -6,7 +6,8 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
-import { getOperationBySearchMode } from '@ts/ui/collection/m_search_box_mixin';
+import SearchBoxController, { getOperationBySearchMode } from '@ts/ui/collection/m_search_box_mixin';
+import TextBox from '@ts/ui/text_box/m_text_box';
 
 import HierarchicalDataConverter, {
   type DataAccessors,
@@ -50,6 +51,8 @@ export interface DataAdapterOptions extends BaseDataAdapterOptions {
   searchMode: SearchMode;
   searchExpr?: string | string[] | ((item: ItemData) => unknown);
 }
+
+SearchBoxController.setEditorClass(TextBox);
 
 class DataAdapter {
   options: DataAdapterOptions;

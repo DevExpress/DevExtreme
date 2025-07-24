@@ -4,9 +4,10 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
+import { stubComponent } from '@js/core/utils/stubs';
 import type { ValueChangedEvent } from '@js/ui/text_box';
-import TextBox from '@js/ui/text_box';
 import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
+import type TextBox from '@ts/ui/text_box/m_text_box';
 
 export const getOperationBySearchMode = (searchMode?: SearchMode): string | undefined => (searchMode === 'equals' ? '=' : searchMode);
 
@@ -18,19 +19,16 @@ export type SearchBoxControllerOptions = SearchBoxMixinOptions & {
 interface SearchBoxControllerProps {
   createEditor: (
     $element: dxElementWrapper,
-    component: typeof TextBox,
+    component: TextBox,
     options: Record<string, unknown>,
   ) => TextBox;
   widgetPrefix: string;
-  editorWidget?: typeof TextBox;
 }
 
 class SearchBoxController {
   _createEditor: SearchBoxControllerProps['createEditor'];
 
   _widgetPrefix: string;
-
-  _editorWidget: typeof TextBox = TextBox;
 
   _$element!: dxElementWrapper | null;
 
@@ -43,14 +41,18 @@ class SearchBoxController {
 
   _onSearchBoxValueChanged?: (value: string) => void;
 
+  static EditorClass: any = stubComponent('TextBox');
+
   constructor({
     createEditor,
     widgetPrefix,
-    editorWidget = TextBox,
   }: SearchBoxControllerProps) {
     this._createEditor = createEditor;
     this._widgetPrefix = widgetPrefix;
-    this._editorWidget = editorWidget;
+  }
+
+  static setEditorClass(value): void {
+    SearchBoxController.EditorClass = value;
   }
 
   render($container: dxElementWrapper, options: SearchBoxControllerOptions): void {
@@ -72,7 +74,11 @@ class SearchBoxController {
       const editorOptions = this._getEditorOptions(options);
       $container.addClass(rootElementClassName);
       this._$element = $('<div>').addClass(searchBoxClassName).prependTo($container);
-      this._editor = this._createEditor(this._$element, this._editorWidget, editorOptions);
+      this._editor = this._createEditor(
+        this._$element,
+        SearchBoxController.EditorClass,
+        editorOptions,
+      );
     }
   }
 

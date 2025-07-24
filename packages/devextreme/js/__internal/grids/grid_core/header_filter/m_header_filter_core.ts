@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import '@ts/ui/list/modules/m_search';
 import '@ts/ui/list/modules/m_selection';
 
 import type { ChangedOptionInfo } from '@js/common/core/events';

@@ -2,12 +2,12 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
-import type dxTextBox from '@js/ui/text_box';
 import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SearchBoxControllerOptions } from '@ts/ui/collection/m_search_box_mixin';
 import SearchBoxController from '@ts/ui/collection/m_search_box_mixin';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
+import TextBox from '@ts/ui/text_box/m_text_box';
 
 import type { DataAdapterOptions } from '../hierarchical_collection/data_adapter';
 import type { TreeViewBaseProperties } from './m_tree_view.base';
@@ -17,6 +17,8 @@ const TREEVIEW_CLASS_PREFIX = 'dx-treeview';
 const TREEVIEW_NODE_CONTAINER_CLASS = `${TREEVIEW_CLASS_PREFIX}-node-container`;
 
 type TreeViewSearchProperties = TreeViewBaseProperties & SearchBoxMixinOptions;
+
+SearchBoxController.setEditorClass(TextBox);
 
 class TreeViewSearch extends TreeViewBase {
   _searchController!: SearchBoxController;
@@ -55,10 +57,9 @@ class TreeViewSearch extends TreeViewBase {
     this._searchController = new SearchBoxController({
       createEditor: (
         $element: dxElementWrapper,
-        component: typeof dxTextBox,
+        component: any,
         options: Record<string, unknown>,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ): dxTextBox<any> => this._createComponent($element, component, options),
+      ) => this._createComponent($element, component, options),
       widgetPrefix: TREEVIEW_CLASS_PREFIX,
     });
     super._init();

@@ -1,6 +1,5 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
-import type dxTextBox from '@js/ui/text_box';
 import errors from '@js/ui/widget/ui.errors';
 import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -12,7 +11,7 @@ import type { ListBaseProperties } from '@ts/ui/list/m_list.base';
 
 import ListEdit from './m_list.edit';
 
-type ListSearchProperties = ListBaseProperties & SearchBoxMixinOptions;
+export type ListSearchProperties = ListBaseProperties & SearchBoxMixinOptions;
 
 const LIST_CLASS_PREFIX = 'dx-list';
 
@@ -91,10 +90,9 @@ class ListSearch extends ListEdit {
     this._searchController = new SearchBoxController({
       createEditor: (
         $element: dxElementWrapper,
-        component: typeof dxTextBox,
+        component: any,
         options: Record<string, unknown>,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ): dxTextBox<any> => this._createComponent($element, component, options),
+      ) => this._createComponent($element, component, options),
       widgetPrefix: LIST_CLASS_PREFIX,
     });
     super._init();
