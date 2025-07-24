@@ -261,9 +261,10 @@ QUnit.test('Simulate clicks, check which property', function(assert) {
 
 QUnit.test('Check getters attached to event wrappers', function(assert) {
     const done = assert.async();
+    const useJQuery = require('core/config')().useJQuery;
     const div = document.createElement('div');
     const handler = function(e) {
-        if(e instanceof eventsEngine.Event) {
+        if(e instanceof eventsEngine.Event && !useJQuery) {
             EVENT_PROPERTIES.forEach(prop => { assert.ok(prop in e, `getter for the '${prop}' prop found in the event arg`); });
         } else {
             assert.ok(true);
