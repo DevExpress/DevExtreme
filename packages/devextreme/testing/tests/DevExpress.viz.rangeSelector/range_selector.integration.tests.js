@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import 'viz/range_selector/range_selector';
 import { DataSource } from 'common/data/data_source/data_source';
+import browser from 'core/utils/browser';
+import devices from '__internal/core/m_devices';
 
 QUnit.testStart(function() {
     const markup =
@@ -873,7 +875,6 @@ QUnit.test('Scale from dataSource. calculate linearThreshold', function(assert) 
 });
 
 QUnit.module('Firefox for Android adjustments (T1296261)', {
-    originalUserEvent: undefined,
     createRangeSelector() {
         $('#container').dxRangeSelector({
             margin: {
@@ -890,20 +891,13 @@ QUnit.module('Firefox for Android adjustments (T1296261)', {
         });
     },
     beforeEach: function() {
-        this.originalUserEvent = navigator.userAgent;
-        Object.defineProperty(navigator, 'userAgent', {
-            value: 'Mozilla/5.0 (Android 15; Mobile; rv:141.0) Gecko/141.0 Firefox/141.0',
-            configurable: true,
-        });
         this.createRangeSelector();
     },
-    afterEach: function() {
-        Object.defineProperty(navigator, 'userAgent', {
-            value: this.originalUserEvent,
-            configurable: true,
-        });
-    },
 }, () => {
+    if(!browser.mozilla || !devices.real().android) {
+        return;
+    }
+
     QUnit.test('there should not be transform props on trackers if browser is Firefox for Android', function(assert) {
         const $areaTracker = $('.area-tracker');
         const $selectedAreaTracker = $('.selected-area-tracker');

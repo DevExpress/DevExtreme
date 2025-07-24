@@ -83,16 +83,11 @@ Slider.prototype = {
 
         const trackerAttrs = {
             x: -trackerWidth / 2,
-            y: 0,
             width: trackerWidth,
             height: verticalRange[1] - verticalRange[0],
-            translateY: verticalRange[0],
+            y: isFirefoxOnAndroid() ? verticalRange[0] : 0,
+            translateY: isFirefoxOnAndroid() ? undefined : verticalRange[0]
         };
-
-        if(isFirefoxOnAndroid()) {
-            trackerAttrs.y = verticalRange[0];
-            trackerAttrs.translateY = undefined;
-        }
 
         that._tracker.attr(trackerAttrs);
     },
