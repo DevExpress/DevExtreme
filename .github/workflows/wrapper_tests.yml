@@ -112,9 +112,10 @@ jobs:
       - name: Fail if generated code is outdated
         shell: bash
         run: |
-          if ${{ steps.check-diff.outputs.count > 0 }}; then
-            echo ${{ steps.check-diff.outputs.files }}
-            exit 1;
+          if [ "${{ steps.check-diff.outputs.count }}" -gt 0 ]; then
+            echo "Found changed files:"
+            echo "${{ steps.check-diff.outputs.files }}"
+            exit 1
           else
             echo "No changes in generated code."
           fi
