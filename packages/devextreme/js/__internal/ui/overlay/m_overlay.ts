@@ -817,7 +817,8 @@ class Overlay<
 
   _updateZIndexStackPosition(pushToStack: boolean): void {
     const overlayStack = this._overlayStack();
-    const index = overlayStack.indexOf(this as unknown as Overlay);
+    // @ts-expect-error this and Overlay have no overlap
+    const index = overlayStack.indexOf(this);
 
     if (pushToStack) {
       if (index === -1) {
