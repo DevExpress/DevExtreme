@@ -1,4 +1,3 @@
-import type { AnimationState } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { lock } from '@js/common/core/events/core/emitter.feedback';
@@ -244,7 +243,7 @@ class Switch extends Editor<Properties> {
     this._clickAction = this._createAction(this._clickHandler.bind(this));
 
     eventsEngine.off($element, eventName);
-    eventsEngine.on($element, eventName, (e) => {
+    eventsEngine.on($element, eventName, (e: Event): void => {
       this._clickAction?.({ event: e });
     });
   }
@@ -286,15 +285,19 @@ class Switch extends Editor<Properties> {
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fx.animate(this._$handle.get(0), {
-      from: fromHandleConfig as unknown as AnimationState,
-      to: toHandlerConfig as unknown as AnimationState,
+      // @ts-expect-error AnimationState type should be extended
+      from: fromHandleConfig,
+      // @ts-expect-error AnimationState type should be extended
+      to: toHandlerConfig,
       duration: SWITCH_ANIMATION_DURATION,
     });
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fx.animate(this._$switchInner.get(0), {
-      from: fromInnerConfig as unknown as AnimationState,
-      to: toInnerConfig as unknown as AnimationState,
+      // @ts-expect-error AnimationState type should be extended
+      from: fromInnerConfig,
+      // @ts-expect-error AnimationState type should be extended
+      to: toInnerConfig,
       duration: SWITCH_ANIMATION_DURATION,
       complete: () => {
         this._animating = false;
@@ -338,13 +341,15 @@ class Switch extends Editor<Properties> {
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fx.animate(this._$handle.get(0), {
-      to: toHandleConfig as unknown as AnimationState,
+      // @ts-expect-error AnimationState type should be extended
+      to: toHandleConfig,
       duration: SWITCH_ANIMATION_DURATION,
     });
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fx.animate(this._$switchInner.get(0), {
-      to: toInnerConfig as unknown as AnimationState,
+      // @ts-expect-error AnimationState type should be extended
+      to: toInnerConfig,
       duration: SWITCH_ANIMATION_DURATION,
       complete: () => {
         this._swiping = false;
