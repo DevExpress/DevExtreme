@@ -16,11 +16,15 @@ import $ from 'jquery';
 import fx from 'common/core/animation/fx';
 import { noop } from 'core/utils/common';
 import { setupTreeListModules, MockColumnsController, MockDataController } from '../../helpers/treeListMocks.js';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 
 fx.off = true;
 
 const setupModule = function() {
     const that = this;
+
+    this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+    gridCoreUtils.isElementInCurrentGrid = () => true;
 
     that.items = [
         { data: { field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) }, values: ['test1', 1, '1/01/2001'], rowType: 'data', dataIndex: 0, isExpanded: true, level: 0, node: { level: 0, hasChildren: true } },
@@ -41,6 +45,7 @@ const setupModule = function() {
 };
 
 const teardownModule = function() {
+    gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     this.dispose();
 };
 
