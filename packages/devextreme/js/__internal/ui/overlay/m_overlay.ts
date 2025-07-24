@@ -850,7 +850,8 @@ class Overlay<
   _toggleTabTerminator(enabled: boolean): void {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const { _loopFocus } = this.option();
-    const eventName = addNamespace('keydown', this.NAME as string);
+    // @ts-expect-error NAME can be undefined
+    const eventName = addNamespace('keydown', this.NAME);
 
     if (_loopFocus || enabled) {
       eventsEngine.on(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
@@ -860,7 +861,8 @@ class Overlay<
   }
 
   _destroyTabTerminator(): void {
-    const eventName = addNamespace('keydown', this.NAME as string);
+    // @ts-expect-error NAME can be undefined
+    const eventName = addNamespace('keydown', this.NAME);
     eventsEngine.off(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
   }
 
@@ -947,7 +949,8 @@ class Overlay<
   }
 
   _toggleHideOnParentsScrollSubscription(needSubscribe?: boolean): void {
-    const scrollEvent = addNamespace('scroll', this.NAME as string);
+    // @ts-expect-error NAME can be undefined
+    const scrollEvent = addNamespace('scroll', this.NAME);
     const info = this._parentsScrollSubscriptionInfo ?? {};
 
     const { prevTargets, handler } = info;
@@ -1136,7 +1139,8 @@ class Overlay<
   }
 
   _toggleWrapperScrollEventsSubscription(enabled?: boolean): void {
-    const eventName = addNamespace(dragEventMove, this.NAME as string);
+    // @ts-expect-error NAME can be undefined
+    const eventName = addNamespace(dragEventMove, this.NAME);
 
     eventsEngine.off(this._$wrapper, eventName);
 
