@@ -92,7 +92,7 @@ class ListSearch extends ListEdit {
         $element: dxElementWrapper,
         component: any,
         options: Record<string, unknown>,
-      ) => this._createComponent($element, component, options),
+      ): any => this._createComponent($element, component, options),
       widgetPrefix: LIST_CLASS_PREFIX,
     });
     super._init();
