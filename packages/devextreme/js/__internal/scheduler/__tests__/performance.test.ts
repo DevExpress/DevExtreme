@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-  describe, expect, it, jest,
+  beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 
 import Scheduler from '../m_scheduler';
@@ -16,6 +16,10 @@ const dataSource = Array.from({ length: 10 }, (_, i) => ({
 }));
 
 describe('scheduler', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it.each([
     { timeZone: 'Europe/London' },
     { timeZone: undefined },
