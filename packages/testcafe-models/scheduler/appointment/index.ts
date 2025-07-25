@@ -115,4 +115,14 @@ export default class Appointment {
   getRecurrenceElement(): Selector {
     return this.element.find(`.${CLASS.appoinmentRecurrenceIcon}`);
   }
+
+  getAriaLabel(): Promise<string | null> {
+    return this.element.getAttribute('aria-roledescription');
+  }
+
+  getTime(): Promise<string | null> {
+    const appointmentContentDate = this.element.find(`.${CLASS.appointmentContentDate}`);
+
+    return appointmentContentDate.nth(0).innerText;
+  }
 }
