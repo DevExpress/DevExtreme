@@ -117,6 +117,12 @@ export default class Appointment {
   }
 
   getAriaLabel(): Promise<string | null> {
-    return this.element.getAttribute('aria-label');
+    return this.element.getAttribute('aria-roledescription');
+  }
+
+  getTime(): Promise<string | null> {
+    const appointmentContentDate = this.element.find(`.${CLASS.appointmentContentDate}`);
+
+    return appointmentContentDate.nth(0).innerText;
   }
 }

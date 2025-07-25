@@ -11,9 +11,9 @@ fixture.disablePageReloads`Resize all day panel appointments`
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Appointment');
     const { left, right } = appointment.resizableHandle;
-    const text = 'Appointment: February 9, 2015, All day';
-    const startDateExtendedText = 'Appointment: February 8, 2015 - February 9, 2015, All day';
-    const endDateExtendedText = 'Appointment: February 9, 2015 - February 10, 2015, All day';
+    const text = 'February 9, 2015, ';
+    const startDateExtendedText = 'February 8, 2015 - February 9, 2015, ';
+    const endDateExtendedText = 'February 9, 2015 - February 10, 2015, ';
 
     await t
       .drag(right, 100, 0)
@@ -54,8 +54,11 @@ fixture.disablePageReloads`Resize all day panel appointments`
     rtlEnabled
       ? await t.drag(right, -100, 0)
       : await t.drag(left, 100, 0);
-    await t.expect(appointment.getAriaLabel())
-      .eql('Appointment: February 10, 2015, 12:00 AM - 10:00 AM');
+    await t
+      .expect(appointment.getAriaLabel())
+      .eql('February 10, 2015, ')
+      .expect(appointment.getTime())
+      .eql('12:00 AM - 10:00 AM');
   }).before(async () => createScheduler({
     currentDate: new Date(2015, 1, 9),
     currentView: 'week',
@@ -78,8 +81,11 @@ fixture.disablePageReloads`Resize all day panel appointments`
     rtlEnabled
       ? await t.drag(left, 100, 0)
       : await t.drag(right, -100, 0);
-    await t.expect(appointment.getAriaLabel())
-      .eql('Appointment: February 9, 2015, 8:00 AM - February 10, 2015, 12:00 AM');
+    await t
+      .expect(appointment.getAriaLabel())
+      .eql('February 9, 2015 - February 10, 2015, ')
+      .expect(appointment.getTime())
+      .eql('8:00 AM - 12:00 AM');
   }).before(async () => createScheduler({
     currentDate: new Date(2015, 1, 9),
     currentView: 'week',
@@ -104,13 +110,14 @@ fixture.disablePageReloads`Resize all day panel appointments`
     await drag();
     await t
       .expect(appointment.getAriaLabel())
-      .eql('Appointment: March 30, 2021, 5:00 AM - March 31, 2021, 6:00 AM');
+      .eql('March 30, 2021 - March 31, 2021, ');
     await drag();
     await t
       .expect(appointment.getAriaLabel())
-      .eql('Appointment: March 30, 2021, 5:00 AM - 6:00 AM');
+      .eql('March 30, 2021, ')
+      .expect(appointment.getTime())
+      .eql('5:00 AM - 6:00 AM');
   }).before(async () => createScheduler({
-    timeZone: 'Europe/Berlin',
     dataSource: [{
       text: 'Appointment',
       startDate: new Date('2021-03-30T03:00:00.000Z'),
@@ -135,11 +142,13 @@ fixture.disablePageReloads`Resize all day panel appointments`
     await drag();
     await t
       .expect(appointment.getAriaLabel())
-      .eql('Appointment: March 30, 2021, 6:00 AM - April 1, 2021, 5:00 AM');
+      .eql('March 30, 2021 - April 1, 2021, ');
     await drag();
     await t
       .expect(appointment.getAriaLabel())
-      .eql('Appointment: March 31, 2021, 6:00 AM - April 1, 2021, 5:00 AM');
+      .eql('March 31, 2021 - April 1, 2021, ')
+      .expect(appointment.getTime())
+      .eql('6:00 AM - 5:00 AM');
   }).before(async () => createScheduler({
     dataSource: [{
       text: 'Appointment',
@@ -163,19 +172,19 @@ getTimezoneTest([MACHINE_TIMEZONES.EuropeBerlin])('Resize long appointment rtlEn
   await t
     .drag(right, 100, 0)
     .expect(appointment.getAriaLabel())
-    .eql('Appointment: February 8, 2015, 12:00 AM - February 10, 2015, 10:00 AM');
+    .eql('February 8, 2015 - February 10, 2015, ');
   await t
     .drag(right, -100, 0)
     .expect(appointment.getAriaLabel())
-    .eql('Appointment: February 9, 2015, 12:00 AM - February 10, 2015, 10:00 AM');
+    .eql('February 9, 2015 - February 10, 2015, ');
   await t
     .drag(left, -100, 0)
     .expect(appointment.getAriaLabel())
-    .eql('Appointment: February 9, 2015, 12:00 AM - February 12, 2015, 12:00 AM');
+    .eql('February 9, 2015 - February 12, 2015, ');
   await t
     .drag(left, 100, 0)
     .expect(appointment.getAriaLabel())
-    .eql('Appointment: February 9, 2015, 12:00 AM - February 11, 2015, 12:00 AM');
+    .eql('February 9, 2015 - February 11, 2015, ');
 }).before(async () => createScheduler({
   currentDate: new Date(2015, 1, 9),
   currentView: 'week',
@@ -197,19 +206,19 @@ getTimezoneTest([MACHINE_TIMEZONES.EuropeBerlin])('Resize long appointment rtlEn
   await t
     .drag(right, 100, 0)
     .expect(appointment.getAriaLabel())
-    .eql('Appointment: February 9, 2015, 8:00 AM - February 12, 2015, 12:00 AM');
+    .eql('February 9, 2015 - February 12, 2015, ');
   await t
     .drag(right, -100, 0)
     .expect(appointment.getAriaLabel())
-    .eql('Appointment: February 9, 2015, 8:00 AM - February 11, 2015, 12:00 AM');
+    .eql('February 9, 2015 - February 11, 2015, ');
   await t
     .drag(left, -100, 0)
     .expect(appointment.getAriaLabel())
-    .eql('Appointment: February 8, 2015, 12:00 AM - February 11, 2015, 12:00 AM');
+    .eql('February 8, 2015 - February 11, 2015, ');
   await t
     .drag(left, 100, 0)
     .expect(appointment.getAriaLabel())
-    .eql('Appointment: February 9, 2015, 12:00 AM - February 11, 2015, 12:00 AM');
+    .eql('February 9, 2015 - February 11, 2015, ');
 }).before(async () => createScheduler({
   currentDate: new Date(2015, 1, 9),
   currentView: 'week',
