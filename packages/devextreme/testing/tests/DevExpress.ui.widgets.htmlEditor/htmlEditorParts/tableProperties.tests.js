@@ -472,7 +472,7 @@ module('Table properties forms', {
 
         test('Cell Properties form applying with no changes should not affect formats of the cell', function(assert) {
             this.createWidget();
-            debugger;
+
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(6);
             this.quillInstance.setSelection(50, 1);
