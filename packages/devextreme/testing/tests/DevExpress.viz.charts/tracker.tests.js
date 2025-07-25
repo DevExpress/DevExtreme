@@ -1209,8 +1209,12 @@ QUnit.test('mouseover on legend item', function(assert) {
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50 }));
 
     // assert
-    assert.ok(this.series.stub('hover').calledOnce);
-    assert.deepEqual(this.series.hover.lastCall.args, ['includepoints']);
+    assert.strictEqual(this.series.stub('hover').calledOnce, true, 'series hover called');
+    assert.deepEqual(this.series.hover.lastCall.args, ['includepoints'], 'hover mode is includepoints');
+
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50 }));
+
+    assert.strictEqual(this.series.stub('clearHover').calledOnce, true, 'series clear hover called');
 });
 
 QUnit.test('mouseover on legend item. ExcludePoints mode', function(assert) {
@@ -2164,6 +2168,11 @@ QUnit.module('Root events. Pie chart', {
             return createTracker('dxPieChart', options);
         };
 
+        that.updateTracker = function(series) {
+            that.tracker.updateSeries(series);
+            that.tracker.update(this.options);
+        };
+
         that.tracker = that.createTracker(that.options);
         that.options.tooltip.stub('hide').reset();
     },
@@ -2340,6 +2349,41 @@ QUnit.test('mouseover on legend item', function(assert) {
     assert.strictEqual(this.series.notify.lastCall.args[0].target.argumentIndex, 11);
     assert.strictEqual(this.series.notify.lastCall.args[0].target.argument, 'argument1');
     assert.strictEqual(this.series.notify.lastCall.args[0].target.getOptions().hoverMode, 'allargumentpoints');
+});
+
+QUnit.test('hover on legend should trigger point hover if PieChart has single series (T1299624)', function(assert) {
+    this.legend.coordsIn.withArgs(97, 45).returns(true);
+    this.legend.getItemByCoord.withArgs(97, 45).returns({ id: 0, argument: 'argument1', argumentIndex: 11 });
+    this.series.stub('getPointsByKeys').withArgs('argument1', 11).returns([this.point]);
+
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50 }));
+
+    assert.strictEqual(this.point.stub('hover').callCount, 1, 'point hover called on legend mouseover');
+
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 80, pageY: 50 }));
+
+    assert.strictEqual(this.point.stub('clearHover').callCount, 1, 'point clear hover called on legend mouseout');
+});
+
+QUnit.test('hover on legend should not be triggered point hover if PieChart has multiple series (T1299624)', function(assert) {
+    const series2 = createSeries();
+    const point2 = createPoint(series2);
+    this.updateTracker([this.series, series2]);
+
+    this.legend.coordsIn.withArgs(97, 45).returns(true);
+    this.legend.getItemByCoord.withArgs(97, 45).returns({ id: 0, argument: 'argument1', argumentIndex: 11 });
+    this.series.stub('getPointsByKeys').withArgs('argument1', 11).returns([this.point]);
+    series2.stub('getPointsByKeys').withArgs('argument1', 11).returns([point2]);
+
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50 }));
+
+    assert.strictEqual(this.point.stub('hover').callCount, 0, 'first series point not hovered on legend mouseover');
+    assert.strictEqual(point2.stub('hover').callCount, 0, 'second series point not hovered on legend mouseover');
+
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 80, pageY: 50 }));
+
+    assert.strictEqual(this.point.stub('clearHover').callCount, 0, 'first series point hover not cleared on legend mouseout');
+    assert.strictEqual(point2.stub('clearHover').callCount, 0, 'second series point hover not cleared on legend mouseout');
 });
 
 QUnit.test('mouseout from legend item', function(assert) {

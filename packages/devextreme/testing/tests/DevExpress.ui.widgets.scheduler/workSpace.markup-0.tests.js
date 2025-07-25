@@ -26,8 +26,6 @@ const ALL_DAY_TITLE_CLASS = 'dx-scheduler-all-day-title';
 
 const VERTICAL_SIZES_CLASS = 'dx-scheduler-cell-sizes-vertical';
 
-const toSelector = cssClass => '.' + cssClass;
-
 [{
     viewName: 'Day',
     view: 'dxSchedulerWorkSpaceDay',
@@ -65,9 +63,9 @@ const toSelector = cssClass => '.' + cssClass;
         if(viewName === 'Day' || viewName === 'Week') {
             QUnit.test('All day title should be rendered in header panel empty cell', async function(assert) {
                 const $element = this.instance.$element();
-                const headerEmptyCell = $element.find(toSelector('dx-scheduler-header-panel-empty-cell'));
+                const headerEmptyCell = $element.find('.dx-scheduler-header-panel-empty-cell');
 
-                assert.equal(headerEmptyCell.children(toSelector(ALL_DAY_TITLE_CLASS)).length, 1, 'All-day-title is OK');
+                assert.equal(headerEmptyCell.children(`.${ALL_DAY_TITLE_CLASS}`).length, 1, 'All-day-title is OK');
             });
 
             QUnit.test('Workspace should have specific css class, if showAllDayPanel = true ', async function(assert) {
@@ -109,10 +107,10 @@ const toSelector = cssClass => '.' + cssClass;
             QUnit.test('Scheduler workspace should contain time panel, header panel, allday panel and content', async function(assert) {
                 const $element = this.instance.$element();
 
-                assert.equal($element.find(toSelector(HEADER_PANEL_CLASS)).length, 1, 'Workspace contains the time panel');
-                assert.equal($element.find(toSelector(ALL_DAY_PANEL_CLASS)).length, 1, 'Workspace contains the all day panel');
-                assert.equal($element.find(toSelector(TIME_PANEL_CLASS)).length, 1, 'Workspace contains the time panel');
-                assert.equal($element.find(toSelector(DATE_TABLE_CLASS)).length, 1, 'Workspace contains date table');
+                assert.equal($element.find(`.${HEADER_PANEL_CLASS}`).length, 1, 'Workspace contains the time panel');
+                assert.equal($element.find(`.${ALL_DAY_PANEL_CLASS}`).length, 1, 'Workspace contains the all day panel');
+                assert.equal($element.find(`.${TIME_PANEL_CLASS}`).length, 1, 'Workspace contains the time panel');
+                assert.equal($element.find(`.${DATE_TABLE_CLASS}`).length, 1, 'Workspace contains date table');
             });
 
             QUnit.test('Time panel cells and rows should have special css classes', async function(assert) {

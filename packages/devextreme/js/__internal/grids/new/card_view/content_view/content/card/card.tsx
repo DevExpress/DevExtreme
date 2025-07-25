@@ -144,7 +144,7 @@ export class Card extends Component<CardProps> {
       [CLASSES.selectCard]: !!card.isSelected,
     });
 
-    const hasCover = !!cover?.imageExpr;
+    const hasCover = !!cover?.imageExpr || !!cover?.template;
 
     const imageSrc = cover?.imageExpr?.(this.props.card.data);
     const alt = cover?.altExpr?.(this.props.card.data);

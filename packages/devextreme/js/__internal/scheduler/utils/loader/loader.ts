@@ -71,8 +71,9 @@ export abstract class Loader<T, Data, Config extends BaseConfig<T> = BaseConfig<
       this.loadingStatePromise = this.loadingStatePromise && !forceReload
         ? this.loadingStatePromise
         : loadResource(this.dataSource, forceReload);
-      await this.loadingStatePromise;
     }
+
+    await this.loadingStatePromise;
   }
 
   protected abstract onLoadTransform(items: T[]): Data[];

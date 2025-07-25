@@ -32,11 +32,10 @@ $(() => {
     onValueChanged(e) {
       const resources = scheduler.option('resources');
 
-      for (let i = 0; i < resources.length; i += 1) {
-        resources[i].useColorAsDefault = resources[i].label === e.value;
-      }
-
-      scheduler.repaint();
+      scheduler.option('resources', resources.map((resource) => ({
+        ...resource,
+        useColorAsDefault: resource.label === e.value,
+      })));
     },
   });
 });
