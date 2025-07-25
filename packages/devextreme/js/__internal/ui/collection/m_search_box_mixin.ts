@@ -41,7 +41,7 @@ class SearchBoxController {
 
   _onSearchBoxValueChanged?: (value: string) => void;
 
-  static EditorClass: ReturnType<typeof stubComponent> = stubComponent<TextBox>('TextBox');
+  static EditorClass: ReturnType<typeof stubComponent> = stubComponent('TextBox');
 
   constructor({
     createEditor,
