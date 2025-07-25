@@ -137,7 +137,6 @@ class TreeViewSearch extends TreeViewBase {
       ...super._getDataAdapterOptions(),
       searchValue,
       searchMode: searchMode ?? 'contains',
-      // @ts-expect-error ts-error
       searchExpr,
     };
   }

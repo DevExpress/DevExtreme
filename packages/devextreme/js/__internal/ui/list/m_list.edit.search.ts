@@ -43,7 +43,7 @@ class ListSearch extends ListEdit {
       searchValue: '',
       searchEnabled: false,
       searchEditorOptions: {},
-    } as ListSearchProperties;
+    };
   }
 
   _getSearchBoxControllerOptions(): SearchBoxControllerOptions {

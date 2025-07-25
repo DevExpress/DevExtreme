@@ -49,7 +49,7 @@ export interface DataAdapterOptions extends BaseDataAdapterOptions {
   sort: SortOption | SortOption[] | null;
   langParams?: LangParams;
   searchMode: SearchMode;
-  searchExpr?: string | string[] | ((item: ItemData) => unknown);
+  searchExpr?: string | Function | (string | Function)[] | ((item: ItemData) => unknown);
 }
 
 SearchBoxController.setEditorClass(TextBox);
@@ -555,7 +555,7 @@ class DataAdapter {
   }
 
   static _createCriteria(
-    selector: string | string[] | ((item: ItemData) => unknown),
+    selector: DataAdapterOptions['searchExpr'],
     value: string,
     operation: string,
   ): unknown[] {
