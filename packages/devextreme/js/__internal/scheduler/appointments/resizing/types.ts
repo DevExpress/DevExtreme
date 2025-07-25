@@ -43,15 +43,15 @@ export interface CellsInfo {
 }
 
 export type GetAppointmentDateRangeOptionsExtended = Omit<GetAppointmentDateRangeOptions, 'appointmentSettings'>
-  & CellsInfo & {
-    relativeAppointmentRect: Rect;
-    appointment: {
-      startDate: Date;
-      endDate: Date;
-      isAllDay: boolean;
-      isOccupiedAllDay: boolean;
-    };
+& CellsInfo & {
+  relativeAppointmentRect: Rect;
+  appointment: {
+    startDate: Date;
+    endDate: Date;
+    isAllDay: boolean;
+    isOccupiedAllDay: boolean;
   };
+};
 
 export interface DateRange {
   startDate: Date;

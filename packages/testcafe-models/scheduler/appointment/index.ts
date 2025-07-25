@@ -115,4 +115,8 @@ export default class Appointment {
   getRecurrenceElement(): Selector {
     return this.element.find(`.${CLASS.appoinmentRecurrenceIcon}`);
   }
+
+  getAriaLabel(): Promise<string | null> {
+    return this.element.getAttribute('aria-label');
+  }
 }
