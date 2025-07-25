@@ -52,15 +52,8 @@ const correctAppointment = {
   },
 };
 const correctAllDayAppointment = {
-  startDate: new Date(2000, 0, 15, 10),
-  endDate: new Date(2000, 0, 15, 11),
-  hasRecurrenceRule: false,
+  ...correctAppointment,
   allDay: true,
-  visible: true,
-  rawAppointment: {
-    startDate: new Date(2000, 0, 15, 10),
-    endDate: new Date(2000, 0, 15, 11),
-  },
 };
 const correctSeveralDaysAppointment = {
   startDate: new Date(2000, 0, 15, 10),
