@@ -1279,7 +1279,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getResizableStep: () => (this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0),
       getDOMElementsMetaData: () => this._workSpace?.getDOMElementsMetaData(),
       getViewDataProvider: () => this._workSpace?.viewDataProvider,
-      isVerticalViewDirection: () => this.getRenderingStrategyInstance().getDirection() === 'vertical',
       isVerticalGroupedWorkSpace: () => this._workSpace._isVerticalGroupedWorkSpace(),
       isDateAndTimeView: () => isDateAndTimeView(this._workSpace.type),
       onContentReady: () => {
