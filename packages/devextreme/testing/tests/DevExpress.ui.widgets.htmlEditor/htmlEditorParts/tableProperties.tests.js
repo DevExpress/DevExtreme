@@ -583,6 +583,10 @@ module('Table properties forms', {
                 onInitialized: ({ component }) => {
                     const liteTableModule = component.get('tableModules/lite');
                     component.register({ 'modules/table': liteTableModule });
+                },
+                onDisposing: ({ component }) => {
+                    const mainTableModule = component.get('tableModules/main');
+                    component.register({ 'modules/table': mainTableModule });
                 }
             });
 
