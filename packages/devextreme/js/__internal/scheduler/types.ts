@@ -234,7 +234,12 @@ export interface ViewDataProviderType {
   viewDataMap: ViewDataMap;
   timePanelData: TimePanelData;
   dateHeaderData: DateHeaderData;
-  getCellData: (rowIndex: number, columnIndex: number, isAllDay) => ViewCellData;
+  getCellData: (
+    rowIndex: number,
+    columnIndex: number,
+    isAllDay?: boolean,
+    rtlEnabled?: boolean
+  ) => ViewCellData;
   getCellCount: (config: CountGenerationConfig) => number;
   getRowCount: (config: CountGenerationConfig) => number;
   update: (options: unknown, isGenerateNewData: boolean) => void;

@@ -14,6 +14,8 @@ import renderer from 'core/renderer';
 import themes from 'ui/themes';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+
 const device = devices.real();
 
 const CLICK_NAMESPACE = 'dxclick.dxDataGridAdaptivity';
@@ -68,10 +70,13 @@ QUnit.testStart(function() {
 QUnit.module('AdaptiveColumns', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
     },
     afterEach: function() {
         this.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -2006,10 +2011,13 @@ QUnit.module('AdaptiveColumns', {
 QUnit.module('API', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
     },
     afterEach: function() {
         this.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -2294,10 +2302,13 @@ QUnit.module('API', {
 QUnit.module('Editing', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
     },
     afterEach: function() {
         this.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -3982,10 +3993,13 @@ QUnit.module('Editing', {
 QUnit.module('Validation', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
     },
     afterEach: function() {
         this.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, function() {
 
@@ -4498,6 +4512,8 @@ QUnit.module('Keyboard navigation', {
 
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
     },
 
     afterEach: function() {
@@ -4505,6 +4521,7 @@ QUnit.module('Keyboard navigation', {
             this.dispose();
         }
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, function() {
     QUnit.testInActiveWindow('Edit next an adaptive detail item by tab key', function(assert) {
