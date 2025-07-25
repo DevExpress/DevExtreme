@@ -1,4 +1,4 @@
-export function stubComponent(componentName: string) {
+export function stubComponent<T>(componentName: string): T {
   // eslint-disable-next-line @typescript-eslint/no-extraneous-class
   return class NoComponent {
     constructor() {
@@ -7,5 +7,5 @@ export function stubComponent(componentName: string) {
     }
 
     static getInstance(): void {}
-  };
+  } as T;
 }

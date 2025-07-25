@@ -4,9 +4,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import { stubComponent } from '@js/core/utils/stubs';
 import type { ValueChangedEvent } from '@js/ui/text_box';
 import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
+import { stubComponent } from '@ts/core/utils/m_stubs';
 import type TextBox from '@ts/ui/text_box/m_text_box';
 
 export const getOperationBySearchMode = (searchMode?: SearchMode): string | undefined => (searchMode === 'equals' ? '=' : searchMode);
@@ -41,7 +41,7 @@ class SearchBoxController {
 
   _onSearchBoxValueChanged?: (value: string) => void;
 
-  static EditorClass: ReturnType<typeof stubComponent> | TextBox = stubComponent('TextBox');
+  static EditorClass: ReturnType<typeof stubComponent> = stubComponent<TextBox>('TextBox');
 
   constructor({
     createEditor,
