@@ -24,13 +24,12 @@ import { isDefined, isObject, isWindow } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import type { dxDropDownListOptions } from '@js/ui/drop_down_editor/ui.drop_down_list';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
-import type dxList from '@js/ui/list';
-import List from '@js/ui/list_light';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 import type { ListSearchProperties } from '@ts/ui/list/m_list.edit.search';
+import List from '@ts/ui/list/m_list.edit.search';
 import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
 
 const window = getWindow();
@@ -55,7 +54,7 @@ interface DropDownListProperties extends Omit<dxDropDownListOptions<DropDownList
 class DropDownList<
   TProperties extends DropDownListProperties = DropDownListProperties,
 > extends DropDownEditor<TProperties> {
-  _list?: dxList;
+  _list?: List;
 
   _$list?: dxElementWrapper;
 
@@ -235,7 +234,6 @@ class DropDownList<
   }
 
   _saveFocusOnWidget(): void {
-    // @ts-expect-error ts-error
     if (this._list?.initialOption('focusStateEnabled')) {
       this._focusInput();
     }
@@ -400,12 +398,12 @@ class DropDownList<
 
   _updateActiveDescendant($target?): void {
     const opened = this.option('opened');
-    // @ts-expect-error ts-error
     const listFocusedItemId = this._list?.getFocusedItemId();
     const isElementOnDom = $(`#${listFocusedItemId}`).length > 0;
     const activedescendant = opened && isElementOnDom && listFocusedItemId;
 
     this.setAria({
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       activedescendant: activedescendant || null,
     }, $target);
   }
@@ -534,7 +532,6 @@ class DropDownList<
       .appendTo(this._popup.$content());
     this._$list = $list;
 
-    // @ts-expect-error ts-error
     this._list = this._createComponent($list, List, this._listConfig());
     this._refreshList();
 
