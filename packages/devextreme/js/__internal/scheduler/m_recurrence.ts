@@ -29,7 +29,7 @@ const RRULE_BROKEN_TIMEZONES = [
 
 let recurrence: RecurrenceProcessor | null = null;
 
-export function getRecurrenceProcessor() {
+export function getRecurrenceProcessor(): RecurrenceProcessor {
   if (!recurrence) {
     recurrence = new RecurrenceProcessor();
   }
