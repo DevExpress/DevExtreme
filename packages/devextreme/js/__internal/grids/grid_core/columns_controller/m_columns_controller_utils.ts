@@ -311,7 +311,6 @@ export const createColumnsFromDataSource = function (that: ColumnsController, da
 
   for (let i = 0; i < firstItems.length; i++) {
     if (firstItems[i]) {
-      // eslint-disable-next-line no-restricted-syntax
       for (fieldName in firstItems[i]) {
         if (!isFunction(firstItems[i][fieldName]) || variableWrapper.isWrapped(firstItems[i][fieldName])) {
           processedFields[fieldName] = true;
@@ -320,7 +319,6 @@ export const createColumnsFromDataSource = function (that: ColumnsController, da
     }
   }
 
-  // eslint-disable-next-line no-restricted-syntax
   for (fieldName in processedFields) {
     if (fieldName.indexOf('__') !== 0) {
       const column = createColumn(that, fieldName);
@@ -657,9 +655,11 @@ export const columnOptionCore = function (that: ColumnsController, column, optio
   // @ts-expect-error
   const prevValue = optionGetter(column, { functionsAsIs: true });
   if (!equalByValue(prevValue, value, { maxDepth: 5 })) {
-    if (optionName === 'groupIndex' || optionName === 'calculateGroupValue') {
+    if (optionName === 'groupIndex') {
       changeType = 'grouping';
       updateSortOrderWhenGrouping(that, column, value, prevValue);
+    } else if (optionName === 'calculateGroupValue') {
+      changeType = 'grouping';
     } else if (optionName === 'sortIndex' || optionName === 'sortOrder' || optionName === 'calculateSortValue') {
       changeType = 'sorting';
     } else {
