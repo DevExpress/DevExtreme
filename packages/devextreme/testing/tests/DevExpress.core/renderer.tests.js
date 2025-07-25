@@ -241,6 +241,18 @@ QUnit.test('should return true if one of element has class', function(assert) {
     assert.notOk($allInnerElements.hasClass('five'));
 });
 
+QUnit.test('should return false if elements collection is empty', function(assert) {
+
+    const $wrapper = renderer('<div>').html('<div class="one two">1</div><div class="two three">2</div>');
+
+    const $allInnerElements = $wrapper.find('h1');
+
+    assert.notOk($allInnerElements.hasClass('one'));
+    assert.notOk($allInnerElements.hasClass('two'));
+    assert.notOk($allInnerElements.hasClass('three'));
+    assert.notOk($allInnerElements.hasClass('five'));
+});
+
 
 QUnit.module('width and height methods');
 
