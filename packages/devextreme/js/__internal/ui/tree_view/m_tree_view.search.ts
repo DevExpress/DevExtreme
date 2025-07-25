@@ -14,14 +14,14 @@ import type { TreeViewBaseProperties } from './m_tree_view.base';
 import TreeViewBase from './m_tree_view.base';
 
 const TREEVIEW_CLASS_PREFIX = 'dx-treeview';
-const TREEVIEW_NODE_CONTAINER_CLASS = `${TREEVIEW_CLASS_PREFIX}-node-container`;
+const TREEVIEW_NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
 
-type TreeViewSearchProperties = TreeViewBaseProperties & SearchBoxMixinOptions;
+export type TreeViewSearchProperties = TreeViewBaseProperties & SearchBoxMixinOptions;
 
 SearchBoxController.setEditorClass(TextBox);
 
 class TreeViewSearch extends TreeViewBase {
-  _searchController!: SearchBoxController;
+  _searchBoxController!: SearchBoxController;
 
   _getDefaultOptions(): TreeViewSearchProperties {
     return {
@@ -54,7 +54,7 @@ class TreeViewSearch extends TreeViewBase {
   }
 
   _init(): void {
-    this._searchController = new SearchBoxController({
+    this._searchBoxController = new SearchBoxController({
       createEditor: (
         $element: dxElementWrapper,
         component: any,
@@ -68,7 +68,7 @@ class TreeViewSearch extends TreeViewBase {
   _initMarkup(): void {
     const searchBoxControllerOptions = this._getSearchBoxControllerOptions();
 
-    this._searchController.render(this.$element(), searchBoxControllerOptions);
+    this._searchBoxController.render(this.$element(), searchBoxControllerOptions);
     super._initMarkup();
   }
 
@@ -78,6 +78,10 @@ class TreeViewSearch extends TreeViewBase {
       return this._itemContainer(true);
     }
     return super._getAriaTarget();
+  }
+
+  getSearchBoxController(): SearchBoxController {
+    return this._searchBoxController;
   }
 
   _optionChanged(args: OptionChanged<TreeViewSearchProperties>): void {
@@ -144,7 +148,7 @@ class TreeViewSearch extends TreeViewBase {
 
   _updateSearch(): void {
     const searchBoxControllerOptions = this._getSearchBoxControllerOptions();
-    this._searchController?.updateEditorOptions(searchBoxControllerOptions);
+    this._searchBoxController?.updateEditorOptions(searchBoxControllerOptions);
   }
 
   _repaintContainer(): void {
@@ -174,22 +178,21 @@ class TreeViewSearch extends TreeViewBase {
 
   focus(): void {
     if (!this.option('focusedElement') && this.option('searchEnabled')) {
-      this._searchController?.focus();
+      this._searchBoxController?.focus();
       return;
     }
     super.focus();
   }
 
   _cleanItemContainer(): void {
-    this._searchController?.remove();
+    this._searchBoxController?.remove();
     this.$element().empty();
   }
 
   _itemContainer(isSearchMode?: boolean, selectAllEnabled?: boolean): dxElementWrapper {
-    // eslint-disable-next-line
-    selectAllEnabled ??= this._selectAllEnabled();
+    const isSelectAllEnabled = selectAllEnabled ?? this._selectAllEnabled();
 
-    if (selectAllEnabled) {
+    if (isSelectAllEnabled) {
       return this._getNodeContainer();
     }
 
@@ -216,7 +219,7 @@ class TreeViewSearch extends TreeViewBase {
   }
 
   _refresh(): void {
-    this._searchController?.resolveValueChange();
+    this._searchBoxController?.resolveValueChange();
     super._refresh();
   }
 
@@ -226,7 +229,7 @@ class TreeViewSearch extends TreeViewBase {
   }
 
   dispose(): void {
-    this._searchController?.dispose();
+    this._searchBoxController?.dispose();
     super.dispose();
   }
 }

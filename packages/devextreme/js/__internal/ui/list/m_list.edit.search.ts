@@ -1,3 +1,4 @@
+import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
 import errors from '@js/ui/widget/ui.errors';
@@ -19,7 +20,7 @@ class ListSearch extends ListEdit {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _dataSource!: any;
 
-  _searchController!: SearchBoxController;
+  _searchBoxController!: SearchBoxController;
 
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
@@ -87,7 +88,7 @@ class ListSearch extends ListEdit {
   }
 
   _init(): void {
-    this._searchController = new SearchBoxController({
+    this._searchBoxController = new SearchBoxController({
       createEditor: (
         $element: dxElementWrapper,
         component: any,
@@ -99,7 +100,7 @@ class ListSearch extends ListEdit {
   }
 
   _initMarkup(): void {
-    this._searchController.render(this.$element(), this._getSearchBoxControllerOptions());
+    this._searchBoxController.render(this.$element(), this._getSearchBoxControllerOptions());
     super._initMarkup();
   }
 
@@ -112,7 +113,7 @@ class ListSearch extends ListEdit {
 
   focus(): void {
     if (!this.option('focusedElement') && this.option('searchEnabled')) {
-      this._searchController?.focus();
+      this._searchBoxController?.focus();
       return;
     }
     super.focus();
@@ -161,7 +162,7 @@ class ListSearch extends ListEdit {
   }
 
   _refresh(): void {
-    this._searchController?.resolveValueChange();
+    this._searchBoxController?.resolveValueChange();
     super._refresh();
   }
 
@@ -182,9 +183,11 @@ class ListSearch extends ListEdit {
   }
 
   _dispose(): void {
-    this._searchController?.dispose();
+    this._searchBoxController?.dispose();
     super._dispose();
   }
 }
+
+registerComponent('dxList', ListSearch);
 
 export default ListSearch;

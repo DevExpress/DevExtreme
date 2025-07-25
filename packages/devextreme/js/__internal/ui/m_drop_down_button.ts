@@ -19,12 +19,11 @@ import type {
 } from '@js/ui/button_group';
 import ButtonGroup from '@js/ui/button_group';
 import type { Item, Properties } from '@js/ui/drop_down_button';
-import type dxList from '@js/ui/list';
-import List from '@js/ui/list_light';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import { getElementWidth, getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
 import type { ListSearchProperties } from '@ts/ui/list/m_list.edit.search';
+import List from '@ts/ui/list/m_list.edit.search';
 import Popup from '@ts/ui/popup/m_popup';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
@@ -55,7 +54,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
 
   _loadSingleDeferred?: DeferredObj<unknown>;
 
-  _list!: dxList;
+  _list!: List;
 
   _lastSelectedItemData?: Item;
 
@@ -148,7 +147,6 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
         const $popupContent = $(options.container);
         const $listContainer = $('<div>').appendTo($popupContent);
 
-        // @ts-expect-error ts-error
         this._list = this._createComponent($listContainer, List, this._listOptions());
 
         this._list.registerKeyHandler('escape', this._escHandler.bind(this));

@@ -41,7 +41,7 @@ class SearchBoxController {
 
   _onSearchBoxValueChanged?: (value: string) => void;
 
-  static EditorClass: any = stubComponent('TextBox');
+  static EditorClass: ReturnType<typeof stubComponent> | TextBox = stubComponent('TextBox');
 
   constructor({
     createEditor,
@@ -76,7 +76,7 @@ class SearchBoxController {
       this._$element = $('<div>').addClass(searchBoxClassName).prependTo($container);
       this._editor = this._createEditor(
         this._$element,
-        SearchBoxController.EditorClass,
+        SearchBoxController.EditorClass as TextBox,
         editorOptions,
       );
     }

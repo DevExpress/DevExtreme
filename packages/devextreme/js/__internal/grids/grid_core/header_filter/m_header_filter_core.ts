@@ -13,10 +13,11 @@ import type dxCheckBox from '@js/ui/check_box';
 import type dxList from '@js/ui/list';
 import List from '@js/ui/list_light';
 import Popup from '@js/ui/popup/ui.popup';
-import TreeView from '@js/ui/tree_view';
+import type { OptionChanged } from '@ts/core/widget/types';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import type SearchBoxController from '@ts/ui/collection/m_search_box_mixin';
+import type { TreeViewSearchProperties } from '@ts/ui/tree_view/m_tree_view.search';
+import TreeView from '@ts/ui/tree_view/m_tree_view.search';
 
 import gridCoreUtils from '../m_utils';
 
@@ -335,23 +336,24 @@ export class HeaderFilterView extends Modules.View {
       && that.option('headerFilter.hideSelectAllOnSearch') !== false;
 
     const onTreeViewOptionChanged = (
-      event: ChangedOptionInfo & {
-        component: TreeView & { _searchController: SearchBoxController };
-      },
+      args: OptionChanged<TreeViewSearchProperties> & { component: TreeView },
     ): void => {
-      switch (true) {
-        case event.fullName === 'searchValue' && shouldChangeSelectAllCheckBoxVisibility():
-          event.component.option('showCheckBoxesMode', event.value ? 'normal' : 'selectAll');
+      const { fullName, component, value } = args;
+      switch (fullName) {
+        case 'searchValue':
+          if (shouldChangeSelectAllCheckBoxVisibility()) {
+            component.option('showCheckBoxesMode', value ? 'normal' : 'selectAll');
+          }
           break;
         // TODO TreeView: remove this WA after Navigation squad re-render fix
         // NOTE: WA for TreeView re-render after changing the "showCheckBoxesMode" option
         // After this option change the whole TreeView re-render and search input loose the focus
-        case event.fullName === 'showCheckBoxesMode':
+        case 'showCheckBoxesMode':
           // NOTE: the TreeView render is async
           // So we should focus the searchEditor only after render will be completed
           Promise.resolve()
             .then(() => {
-              event.component._searchController.focus();
+              component.getSearchBoxController().focus();
             })
             .catch(() => {});
           break;
