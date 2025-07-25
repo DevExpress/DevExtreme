@@ -13,7 +13,7 @@
         "Back": "Назад",
         "OK": "OK",
         "Today": "Сегодня",
-        "Yesterday": "Yesterday",
+        "Yesterday": "Вчера",
 
         "dxCollectionWidget-noDataText": "Нет данных для отображения",
 
@@ -52,10 +52,10 @@
         "dxListEditDecorator-delete": "Удалить",
         "dxListEditDecorator-more": "Еще",
         "dxList-selectAll-indeterminate": "Half-checked",
-        "dxList-selectAll-checked": "Checked",
-        "dxList-selectAll-notChecked": "Not checked",
-        "dxList-ariaRoleDescription": "List",
-        "dxList-listAriaLabel-itemContent": "List item content",
+        "dxList-selectAll-checked": "Выбрано",
+        "dxList-selectAll-notChecked": "Не выбрано",
+        "dxList-ariaRoleDescription": "Список",
+        "dxList-listAriaLabel-itemContent": "Содержимое элемента списка",
 
         "dxScrollView-pullingDownText": "Потяните, чтобы обновить...",
         "dxScrollView-pulledDownText": "Отпустите, чтобы обновить...",
@@ -846,7 +846,7 @@
         "dxMultiView-itemAriaLabel": "{0} of {1}",
 
         "dxSplitter-resizeHandleAriaLabel": "Split bar",
-        "dxSplitter-resizeHandleAriaRoleDescription": "Separator",
+        "dxSplitter-resizeHandleAriaRoleDescription": "Разделитель",
 
         "dxStepper-optionalMark": "(Optional)"
     }
