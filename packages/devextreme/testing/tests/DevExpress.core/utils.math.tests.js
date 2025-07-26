@@ -68,4 +68,6 @@ QUnit.test('adjust', function(assert) {
     assert.strictEqual(adjust(5000000070121.669), 5000000070121.669, 'adjusting big numbers');
     assert.strictEqual(adjust(10000000000.1 + 0.2), 10000000000.3);
     assert.strictEqual(adjust(1.000001, 0.000001), 1.000001);
+    assert.strictEqual(adjust(1.231234, 0.00001), 1.231234);
+    assert.strictEqual(adjust(1.2341234, 0.0001), 1.2341234);
 });

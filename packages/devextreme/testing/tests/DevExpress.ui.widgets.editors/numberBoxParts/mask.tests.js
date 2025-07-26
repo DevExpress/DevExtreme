@@ -1391,6 +1391,14 @@ QUnit.module('format: percent format', moduleConfig, () => {
         assert.strictEqual(this.instance.option('value'), 0.00123456789, 'value is correct');
     });
 
+    QUnit.test('It should be possible to type full decimal part when integer part is bigger than 100 and precision=5 (T1277123)', function(assert) {
+        this.instance.option('format', { type: 'percent', precision: 5 });
+        this.keyboard.type('123.12345').change();
+
+        assert.strictEqual(this.input.val(), '123.12345%', 'text is correct');
+        assert.strictEqual(this.instance.option('value'), 1.2312345, 'value is correct');
+    });
+
     [
         { text: '0.04', value: 0.00035, format: '#0.00%' },
         { text: '0.0350', value: 0.00035, format: '#0.0000%' },

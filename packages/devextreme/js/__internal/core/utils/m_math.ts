@@ -73,7 +73,13 @@ function adjust(value, interval) {
     value = value - Math.floor(value) + integerPart;
   }
 
-  precision = (isEdgeBug() && (getExponent(value) > 6)) || precision > 7 ? 15 : 7; // fix toPrecision() bug in Edge (T570217)
+  const shouldConsiderIntegerPart = !isExponentValue && absValue > 1;
+
+  if (isEdgeBug() && (getExponent(value) > 6)) { // fix toPrecision() bug in Edge (T570217)
+    precision = 15;
+  } else {
+    precision = (shouldConsiderIntegerPart ? 2 : 0) + precision > 7 ? 15 : 7;
+  }
 
   if (!isExponentValue) {
     separatedAdjustedValue = parseFloat(value.toPrecision(precision)).toString().split('.');
