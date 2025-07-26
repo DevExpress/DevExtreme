@@ -1,11 +1,4 @@
-// ESM version of positionFixtures.js
-// Auto-generated from UMD module
-
 import $ from 'jquery';
-
-
-// Execute factory function
-
 
 const fixtures = {
     simple: {
@@ -28,33 +21,21 @@ const fixtures = {
                 left: 0
             }).appendTo(document.body);
         },
-
         drop: function() {
             $('#where').remove();
             $('#what').remove();
         }
     },
-
     frameAdapted: {
         create: function() {
             fixtures.simple.create();
-
-            $('#where').css({
-                top: 100,
-                left: 100
-            });
-
-            $('#what').css({
-                width: 10,
-                height: 10
-            });
+            $('#where').css({ top: 100, left: 100 });
+            $('#what').css({ width: 10, height: 10 });
         },
-
         drop: function() {
             fixtures.simple.drop();
         }
     },
-
     differentTargets: {
         create: function() {
             fixtures.simple.create();
@@ -72,7 +53,6 @@ const fixtures = {
             $('#there').remove();
         }
     },
-
     separatePositionedContainers: {
         create: function() {
             fixtures.simple.create();
@@ -81,20 +61,17 @@ const fixtures = {
                 top: 100,
                 left: 100
             }).append($('#where')).appendTo(document.body);
-
             $('<div id=whatWrapper>').css({
                 position: 'absolute',
                 top: 400,
                 left: 200
             }).append($('#what')).appendTo(document.body);
         },
-
         drop: function() {
             $('#whereWrapper').remove();
             $('#whatWrapper').remove();
         }
     },
-
     customBoundary: {
         create: function() {
             const b = $('<div id=boundary>').css({
@@ -105,7 +82,6 @@ const fixtures = {
                 left: 10,
                 top: 10
             }).appendTo(document.body);
-
             $('<div id=where>').css({
                 position: 'absolute',
                 width: 100,
@@ -114,7 +90,6 @@ const fixtures = {
                 top: 100,
                 left: 100
             }).appendTo(b);
-
             $('<div id=what>').css({
                 position: 'absolute',
                 background: 'orange',
@@ -124,42 +99,30 @@ const fixtures = {
                 left: 0
             }).appendTo(document.body);
         },
-
         drop: function() {
             $('#where').remove();
             $('#what').remove();
             $('#boundary').remove();
         }
     },
-
     customBoundaryWithLeftTopOffset: {
         create: function() {
             fixtures.customBoundary.create();
-            $('#where').css({
-                left: 50,
-                top: 50
-            });
+            $('#where').css({ left: 50, top: 50 });
         },
-
         drop: function() {
             fixtures.customBoundary.drop();
         }
     },
-
     collisionTopLeft: {
         create: function() {
             fixtures.simple.create();
-            $('#where').css({
-                top: 0,
-                left: 0
-            });
+            $('#where').css({ top: 0, left: 0 });
         },
-
         drop: function() {
             fixtures.simple.drop();
         }
     },
-
     collisionTopRight: {
         create: function() {
             fixtures.simple.create();
@@ -170,12 +133,10 @@ const fixtures = {
                 left: win.scrollLeft() + win.width() - where.outerWidth()
             });
         },
-
         drop: function() {
             fixtures.simple.drop();
         }
     },
-
     collisionBottomLeft: {
         create: function() {
             fixtures.simple.create();
@@ -186,12 +147,10 @@ const fixtures = {
                 left: 0
             });
         },
-
         drop: function() {
             fixtures.simple.drop();
         }
     },
-
     collisionBottomRight: {
         create: function() {
             fixtures.simple.create();
@@ -202,12 +161,10 @@ const fixtures = {
                 left: win.scrollLeft() + win.width() - where.outerWidth()
             });
         },
-
         drop: function() {
             fixtures.simple.drop();
         }
     },
-
     collisionSmallWindow: {
         create: function() {
             fixtures.simple.create();
@@ -218,37 +175,26 @@ const fixtures = {
                 left: 0
             });
         },
-
         drop: function() {
             fixtures.simple.drop();
         }
     },
-
     svg: {
         create: function() {
-            const $container = $(
-                `<div id="container">
-                        <svg viewBox="0 0 500 500">
-                            <g id="where">
-                                <rect x="10" y="20" width="30" height="40" fill="red" />
-                            </g>
-                        </svg>
-                    </div>`
-            );
-
-            $container.css({
-                position: 'absolute',
-                top: 0
-            });
-
+            const $container = $(`
+                <div id="container">
+                    <svg viewBox="0 0 500 500">
+                        <g id="where">
+                            <rect x="10" y="20" width="30" height="40" fill="red" />
+                        </g>
+                    </svg>
+                </div>
+            `);
+            $container.css({ position: 'absolute', top: 0 });
             $container.appendTo(document.body);
-
-            // NOTE: converts HtmlElement to SvgElement
             $container.html($container.html());
-
             $('<div id=what>').appendTo(document.body);
         },
-
         drop: function() {
             $('#container').remove();
             $('#what').remove();
@@ -256,17 +202,5 @@ const fixtures = {
     }
 };
 
-return fixtures;
-
-
-// Backward compatibility
-if(typeof window !== 'undefined') {
-    window.DevExpress = window.DevExpress || {};
-    window.DevExpress.testing = window.DevExpress.testing || {};
-    window.DevExpress.testing.positionFixtures = {};
-}
-
-// ES6 exports
-const positionFixtures = {};
-export default positionFixtures;
-export { positionFixtures };
+export default fixtures;
+export { fixtures as positionFixtures };

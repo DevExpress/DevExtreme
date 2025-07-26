@@ -5,8 +5,8 @@ const inferno = {
         // Mock implementation for tests
     }
 };
-import GestureEmitter from '../../../js/common/core/events/gesture/emitter.gesture';
-import * as clickEvent from '../../../js/common/core/events/';
+import GestureEmitter from '../../../js/common/core/events/gesture/emitter.gesture.js';
+import * as clickEvent from '../../../js/common/core/events';
 
 GestureEmitter.touchBoundary(0);
 

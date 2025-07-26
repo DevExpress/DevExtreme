@@ -11,7 +11,8 @@ import {
 import { 
   moduleResolverPlugin, 
   testServerPlugin,
-  esmHelpersPlugin
+  esmHelpersPlugin,
+  editorPlugin
 } from './testing/test-environment/plugins'
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
@@ -73,9 +74,12 @@ function getAllTests(): TestFile[] {
 export default defineConfig({
   plugins: [
     inferno(), 
-    commonjs({}),
+    commonjs({
+       requireReturnsDefault: 'auto'
+    }),
     moduleResolverPlugin(__dirname), 
     esmHelpersPlugin(__dirname),
+    editorPlugin(__dirname),
     testServerPlugin(__dirname, scanTestsInDirectory, getAllTests)
   ],
   server: {
@@ -83,18 +87,29 @@ export default defineConfig({
     host: true,
     fs: {
       allow: ['..', '.', './testing']
+    },
+    // Enable editor integration for opening files
+    middlewareMode: false,
+    hmr: {
+      port: 3001
     }
   },
   resolve: {
     alias: {
+      'aspnet': path.resolve(__dirname, 'js/aspnet.js'),
+      'exporter': path.resolve(__dirname, './js/exporter'),
+      'excel_exporter': path.resolve(__dirname, './js/excel_exporter'),
+      'color': path.resolve(__dirname, '/js/color.js'),
       'core': path.resolve(__dirname, './js/core'),
       'common': path.resolve(__dirname, './js/common'),
       'data': path.resolve(__dirname, './js/data'),
       'ui': path.resolve(__dirname, './js/ui'),
       'localization': path.resolve(__dirname, './js/localization'),
+      'viz': path.resolve(__dirname, './js/viz'),
       '@js': path.resolve(__dirname, './js'),
       '@ts': path.resolve(__dirname, './js/__internal'),
       '__internal': path.resolve(__dirname, './js/__internal'),
+      'integration': path.resolve(__dirname, './js/integration'),
       'testing': path.resolve(__dirname, './testing'),
       'bundles': path.resolve(__dirname, './js/bundles'),
       'globalize$': path.resolve(__dirname, './node_modules/globalize/dist/globalize.js'),
@@ -102,6 +117,7 @@ export default defineConfig({
       'globalize/date': path.resolve(__dirname, './node_modules/globalize/dist/globalize/date.js'),
       'globalize/message': path.resolve(__dirname, './node_modules/globalize/dist/globalize/message.js'),
       'globalize/number': path.resolve(__dirname, './node_modules/globalize/dist/globalize/number.js'),
+
       'generic_light.css!': path.resolve(__dirname, './artifacts/css/dx.light.css'),
       'generic_light.css': path.resolve(__dirname, './artifacts/css/dx.light.css'),
       'material_blue_light.css!': path.resolve(__dirname, './artifacts/css/dx.material.blue.light.css'),

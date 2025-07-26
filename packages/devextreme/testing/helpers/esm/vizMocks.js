@@ -1,8 +1,7 @@
 // ESM version of vizMocks.js
 // Auto-generated from UMD module
 
-import $ from 'jquery';
-
+const $ = window.$;
 
 // Execute factory function and create module
 (function() {

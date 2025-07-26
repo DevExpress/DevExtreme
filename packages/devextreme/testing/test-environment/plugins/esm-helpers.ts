@@ -3,6 +3,55 @@ import * as path from 'path';
 import * as fs from 'fs';
 
 /**
+ * Transform __internal imports to absolute paths with extensions
+ */
+function transformInternalImports(code: string, baseDir: string, fileName?: string): string {
+  let transformedCode = code;
+  
+  // Transform import statements
+  transformedCode = transformedCode.replace(
+    /import\s+(.+)\s+from\s+['"]__internal\/([^'"]+)['"]/g,
+    (match, imports, internalPath) => {
+      const tsPath = path.join(baseDir, 'js/__internal', internalPath + '.ts');
+      const jsPath = path.join(baseDir, 'js/__internal', internalPath + '.js');
+      
+      if (fs.existsSync(tsPath)) {
+        if (fileName) console.log(`🔧 [ESM Helpers] Transforming __internal import in ${fileName}: ${internalPath} -> .ts`);
+        return `import ${imports} from '/js/__internal/${internalPath}.ts'`;
+      } else if (fs.existsSync(jsPath)) {
+        if (fileName) console.log(`🔧 [ESM Helpers] Transforming __internal import in ${fileName}: ${internalPath} -> .js`);
+        return `import ${imports} from '/js/__internal/${internalPath}.js'`;
+      } else {
+        if (fileName) console.log(`🔧 [ESM Helpers] Transforming __internal import in ${fileName}: ${internalPath} (no extension check)`);
+        return `import ${imports} from '/js/__internal/${internalPath}'`;
+      }
+    }
+  );
+  
+  // Transform require statements
+  transformedCode = transformedCode.replace(
+    /require\s*\(\s*['"]__internal\/([^'"]+)['"]\s*\)/g,
+    (match, internalPath) => {
+      const tsPath = path.join(baseDir, 'js/__internal', internalPath + '.ts');
+      const jsPath = path.join(baseDir, 'js/__internal', internalPath + '.js');
+      
+      if (fs.existsSync(tsPath)) {
+        if (fileName) console.log(`🔧 [ESM Helpers] Transforming __internal require in ${fileName}: ${internalPath} -> .ts`);
+        return `require('/js/__internal/${internalPath}.ts')`;
+      } else if (fs.existsSync(jsPath)) {
+        if (fileName) console.log(`🔧 [ESM Helpers] Transforming __internal require in ${fileName}: ${internalPath} -> .js`);
+        return `require('/js/__internal/${internalPath}.js')`;
+      } else {
+        if (fileName) console.log(`🔧 [ESM Helpers] Transforming __internal require in ${fileName}: ${internalPath} (no extension check)`);
+        return `require('/js/__internal/${internalPath}')`;
+      }
+    }
+  );
+  
+  return transformedCode;
+}
+
+/**
  * Vite plugin for automatically replacing UMD helpers with ESM versions
  */
 export function esmHelpersPlugin(baseDir: string): PluginOption {
@@ -11,11 +60,13 @@ export function esmHelpersPlugin(baseDir: string): PluginOption {
   
   // List of UMD modules that need to be replaced with ESM
   const umdHelpers = new Set([
+    'ajaxMock.js',
     'data.errorHandlingHelper.js',
     'executeAsyncMock.js',
     'keyboardMock.js',
     'memoryLeaksHelper.js',
     'nativePointerMock.js',
+    'includeThemesLinks.js',
     'pointerMock.js',
     'positionFixtures.js',
     'publicModulesHelper.js',
@@ -41,7 +92,15 @@ export function esmHelpersPlugin(baseDir: string): PluginOption {
           if (fs.existsSync(esmFilePath)) {
             console.log(`🔄 [ESM Helpers] Serving ESM version: ${fileName}`);
             
-            const esmContent = fs.readFileSync(esmFilePath, 'utf-8');
+            let esmContent = fs.readFileSync(esmFilePath, 'utf-8');
+            const originalContent = esmContent;
+            
+            // Transform __internal imports using the shared function
+            esmContent = transformInternalImports(esmContent, baseDir, fileName);
+            
+            if (esmContent !== originalContent) {
+              console.log(`🔧 [ESM Helpers] Content transformed in middleware for ${fileName}`);
+            }
             
             res.setHeader('Content-Type', 'application/javascript');
             res.setHeader('Cache-Control', 'no-cache');
@@ -105,8 +164,8 @@ export function esmHelpersPlugin(baseDir: string): PluginOption {
 
     // Transform JS/TS files to replace imports
     transform(code: string, id: string) {
-      // Process only test files
-      if (id.includes('/testing/tests/')) {
+      // Process test files, helper files, and any files with __internal imports
+      if (id.includes('/testing/tests/') || id.includes('/testing/helpers/esm/') || code.includes('__internal/')) {
         let transformedCode = code;
         
         // Replace absolute imports /testing/helpers/
@@ -133,7 +192,11 @@ export function esmHelpersPlugin(baseDir: string): PluginOption {
           }
         );
         
+        // Transform __internal imports using the shared function
+        transformedCode = transformInternalImports(transformedCode, baseDir, path.basename(id));
+        
         if (transformedCode !== code) {
+          console.log(`🔧 [ESM Helpers] Code transformed for ${path.basename(id)}`);
           return {
             code: transformedCode,
             map: null

@@ -77,6 +77,13 @@ export function generateFolderListHTML(directory: TestDirectory, currentPath: st
           <span class="folder-icon">📁</span>
           <span class="folder-name">${subdir.name}</span>
           <span class="tests-count">(${testsCount} tests)</span>
+          <div class="folder-stats" data-folder-path="${fullPath}">
+            <span class="stat-passed clickable-folder-stat" title="Click to run passed tests in this folder" onclick="event.stopPropagation(); runFolderTestsByStatus('${fullPath}', 'passed')">✅ <span class="count">0</span></span>
+            <span class="stat-failed clickable-folder-stat" title="Click to run failed tests in this folder" onclick="event.stopPropagation(); runFolderTestsByStatus('${fullPath}', 'failed')">❌ <span class="count">0</span></span>
+            <span class="stat-broken clickable-folder-stat" title="Click to run broken tests in this folder" onclick="event.stopPropagation(); runFolderTestsByStatus('${fullPath}', 'broken')">💥 <span class="count">0</span></span>
+            <span class="stat-pending clickable-folder-stat" title="Click to run pending tests in this folder" onclick="event.stopPropagation(); runFolderTestsByStatus('${fullPath}', 'pending')">⏳ <span class="count">${testsCount}</span></span>
+          </div>
+          <button class="run-folder-btn" onclick="event.stopPropagation(); runFolderTests('${fullPath}')" title="Запустить все тесты из папки">▶️</button>
           <span class="toggle-arrow">▶</span>
         </div>
         <div class="folder-tests" id="tests-${fullPath}" style="display: none;">
@@ -96,9 +103,15 @@ export function generateFolderListHTML(directory: TestDirectory, currentPath: st
         </div>
         <div class="folder-tests" style="display: block;">
           ${directory.tests.map(test => `
-            <div class="test-item" onclick="openTest('${test.relativePath}')">
+            <div class="test-item" data-test-path="${test.relativePath}" oncontextmenu="showStatusMenu(event, '${test.relativePath}')">
               <span class="test-icon">🧪</span>
-              <span class="test-name">${test.name}</span>
+              <span class="test-name" onclick="openTest('${test.relativePath}')">${test.name}</span>
+              <div class="test-actions">
+                <button class="vscode-btn" onclick="event.stopPropagation(); openInVSCode('${test.relativePath}')" title="Open in Editor">💻</button>
+                <button class="port-btn" onclick="event.stopPropagation(); openTestOnPort20060('${test.relativePath}')" title="Open on port 20060">c# ccche</button>
+                <button class="status-btn" onclick="event.stopPropagation(); showStatusMenu(event, '${test.relativePath}')" title="Change status">⚙️</button>
+                <span class="test-status" data-status="pending">⏳</span>
+              </div>
             </div>
           `).join('')}
         </div>
@@ -120,10 +133,16 @@ export function getAllTestsInDirectory(directory: TestDirectory): TestFile[] {
 function generateTestsList(directory: TestDirectory): string {
   const allTests = getAllTestsInDirectory(directory);
   return allTests.map(test => `
-    <div class="test-item" onclick="openTest('${test.relativePath}')">
+    <div class="test-item" data-test-path="${test.relativePath}" oncontextmenu="showStatusMenu(event, '${test.relativePath}')">
       <span class="test-icon">🧪</span>
-      <span class="test-name">${test.name}</span>
+      <span class="test-name" onclick="openTest('${test.relativePath}')">${test.name}</span>
       <span class="test-path">${test.relativePath}</span>
+      <div class="test-actions">
+        <button class="vscode-btn" onclick="event.stopPropagation(); openInVSCode('${test.relativePath}')" title="Open in Editor">💻</button>
+        <button class="port-btn" onclick="event.stopPropagation(); openTestOnPort20060('${test.relativePath}')" title="Open on port 20060">c#</button>
+        <button class="status-btn" onclick="event.stopPropagation(); showStatusMenu(event, '${test.relativePath}')" title="Change status">⚙️</button>
+        <span class="test-status" data-status="pending">⏳</span>
+      </div>
     </div>
   `).join('');
 }

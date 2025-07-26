@@ -16,7 +16,45 @@
 
     <div class="stats">
       📊 <strong>Total tests:</strong> {{TOTAL_TESTS}} |
-      📂 <strong>Categories:</strong> {{TOTAL_FOLDERS}}
+      📂 <strong>Categories:</strong> {{TOTAL_FOLDERS}} |
+      <span id="runningTestsIndicator" style="display: none;">
+        ⏱️ <strong>Running:</strong> <span id="runningTestsCount">0</span>
+      </span>
+    </div>
+
+    <div class="global-stats">
+      <div class="global-stat passed clickable" onclick="runTestsByStatus('passed')" title="Click to run all passed tests">
+        <span class="stat-icon">✅</span>
+        <div class="stat-info">
+          <span class="stat-label">Passed</span>
+          <span class="stat-count" id="globalPassedCount">0</span>
+        </div>
+        <div class="stat-action">▶️</div>
+      </div>
+      <div class="global-stat failed clickable" onclick="runTestsByStatus('failed')" title="Click to run all failed tests">
+        <span class="stat-icon">❌</span>
+        <div class="stat-info">
+          <span class="stat-label">Failed</span>
+          <span class="stat-count" id="globalFailedCount">0</span>
+        </div>
+        <div class="stat-action">▶️</div>
+      </div>
+      <div class="global-stat broken clickable" onclick="runTestsByStatus('broken')" title="Click to run all broken tests">
+        <span class="stat-icon">💥</span>
+        <div class="stat-info">
+          <span class="stat-label">Broken</span>
+          <span class="stat-count" id="globalBrokenCount">0</span>
+        </div>
+        <div class="stat-action">▶️</div>
+      </div>
+      <div class="global-stat pending clickable" onclick="runTestsByStatus('pending')" title="Click to run all pending tests">
+        <span class="stat-icon">⏳</span>
+        <div class="stat-info">
+          <span class="stat-label">Pending</span>
+          <span class="stat-count" id="globalPendingCount">{{TOTAL_TESTS}}</span>
+        </div>
+        <div class="stat-action">▶️</div>
+      </div>
     </div>
 
     <div class="search-box">
@@ -27,6 +65,7 @@
       <button class="control-button" onclick="expandAll()">📂 Expand all</button>
       <button class="control-button" onclick="collapseAll()">📁 Collapse all</button>
       <button class="control-button" onclick="runAllTests()">▶️ Run all tests</button>
+      <button class="clear-results-btn" onclick="clearAllTestResults()">🗑️ Clear results</button>
     </div>
 
     <div class="folders-container" id="foldersContainer">
