@@ -1,4 +1,4 @@
-import clientExporter from 'exporter';
+import * as clientExporter from 'exporter';
 import { Deferred } from 'core/utils/deferred';
 const fileSaver = clientExporter.fileSaver;
 

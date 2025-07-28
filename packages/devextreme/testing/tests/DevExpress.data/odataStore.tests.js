@@ -6,7 +6,7 @@ import Guid from 'core/guid';
 import { isDate } from 'core/utils/type';
 import config from 'core/config';
 import ErrorHandlingHelper from '../../helpers/data.errorHandlingHelper.js';
-import ajaxMock from '../../helpers/ajaxMock.js';
+import * as ajaxMock from '../../helpers/ajaxMock.js';
 
 const MUST_NOT_REACH_MESSAGE = 'Shouldn\'t reach this point';
 

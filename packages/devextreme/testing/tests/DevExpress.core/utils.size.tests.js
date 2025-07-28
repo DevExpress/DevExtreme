@@ -1,6 +1,7 @@
 import $ from 'jquery';
-import sizeUtils, { getHeight, getWidth, getInnerHeight, getInnerWidth, getOuterHeight, getOuterWidth } from 'core/utils/size';
+import * as sizeUtils from 'core/utils/size';
 import browser from 'core/utils/browser';
+const { getHeight, getWidth, getInnerHeight, getInnerWidth, getOuterHeight, getOuterWidth } = sizeUtils;
 
 const testStyles = [
     {},

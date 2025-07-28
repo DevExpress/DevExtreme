@@ -46,6 +46,17 @@ const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
 
 themes.setDefaultTimeout(0);
+/* msw start
+// inject mock
+sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
+const resizeEventSpy = visibilityChangeUtils.triggerResizeEvent;
+*/
+
+// const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
+/* msw end */
+
+const resizeEventSpy = visibilityChangeUtils.triggerResizeEvent;
+
 
 QUnit.testStart(function() {
     viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
@@ -1466,20 +1477,19 @@ QUnit.module('options changed callbacks', {
         assert.equal($toolbarItems.length, 0, 'no items are rendered inside top toolbar');
     });
 
-    QUnit.module('T934380, T1245421', {
-        beforeEach() {
-            this.resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
-        },
-        afterEach() {
-            this.resizeEventSpy.restore();
-        },
-    }, () => {
+    QUnit.module('T934380, T1245421', () => {
         QUnit.test('resize event is not triggered if visible is false', function(assert) {
-            assert.strictEqual(this.resizeEventSpy.callCount, 0, 'event is not triggered');
+            resizeEventSpy.resetHistory();
+
+            this.reinit({
+                visible: false,
+            });
+
+            assert.strictEqual(resizeEventSpy.callCount, 0, 'event is not triggered');
         });
 
         QUnit.test('resize event is not triggered if toolbar is not rendered', function(assert) {
-            this.resizeEventSpy.resetHistory();
+            resizeEventSpy.resetHistory();
             this.reinit({
                 visible: true,
                 showTitle: false,
@@ -1492,11 +1502,11 @@ QUnit.module('options changed callbacks', {
             assert.strictEqual(bottomToolbar, undefined, 'bottom toolbar is not rendered');
 
             // Triggered from overlay visibility changing
-            assert.strictEqual(this.resizeEventSpy.callCount, 1, 'event is triggered once');
+            assert.strictEqual(resizeEventSpy.callCount, 1, 'event is triggered once');
         });
 
         QUnit.test('resize event is triggered 3 times after toolbar rendering by showCloseButton and showTitle', function(assert) {
-            this.resizeEventSpy.resetHistory();
+            resizeEventSpy.resetHistory();
             this.reinit({
                 visible: true,
                 showTitle: true,
@@ -1507,11 +1517,11 @@ QUnit.module('options changed callbacks', {
 
             assert.strictEqual(topToolbar.length, 1, 'top toolbar is rendered');
             // 1st from overlay visibility changing, 2nd and 3rd from _animateShowing
-            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times');
+            assert.strictEqual(resizeEventSpy.callCount, 3, 'event is triggered 3 times');
         });
 
         QUnit.test('resize event is triggered 3 times after toolbar rendering by toolbarItems', function(assert) {
-            this.resizeEventSpy.resetHistory();
+            resizeEventSpy.resetHistory();
             this.reinit({
                 visible: true,
                 showTitle: false,
@@ -1522,53 +1532,53 @@ QUnit.module('options changed callbacks', {
 
             assert.strictEqual(topToolbar.length, 1, 'top toolbar is rendered');
             // 1st from overlay visibility changing, 2nd and 3rd from _animateShowing
-            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times');
+            assert.strictEqual(resizeEventSpy.callCount, 3, 'event is triggered 3 times');
         });
 
         QUnit.test('toolbarItems runtime changing should trigger resize event if toolbar is not rendered on init', function(assert) {
             const getTopToolbar = () => this.instance.topToolbar();
-            this.resizeEventSpy.resetHistory();
+            resizeEventSpy.resetHistory();
             this.reinit({ visible: true, showTitle: false });
 
             assert.strictEqual(getTopToolbar(), undefined, 'top toolbar is not rendered');
             // From overlay visibility changing
-            assert.strictEqual(this.resizeEventSpy.callCount, 1, 'event is triggered once');
+            assert.strictEqual(resizeEventSpy.callCount, 1, 'event is triggered once');
 
             this.instance.option({ toolbarItems: [{ text: 'text' }] });
 
             assert.strictEqual(getTopToolbar().length, 1, 'top toolbar is rendered');
             // 2nd and 3rd from optionChanged
-            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times');
+            assert.strictEqual(resizeEventSpy.callCount, 3, 'event is triggered 3 times');
         });
 
         QUnit.test('toolbarItems runtime changing should trigger resize event if toolbar is rendered on init', function(assert) {
             const getTopToolbar = () => this.instance.topToolbar();
-            this.resizeEventSpy.resetHistory();
+            resizeEventSpy.resetHistory();
             this.reinit({ visible: true });
 
             const $toolbar1 = getTopToolbar();
 
             assert.strictEqual($toolbar1.length, 1, 'top toolbar is rendered');
-            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times');
+            assert.strictEqual(resizeEventSpy.callCount, 3, 'event is triggered 3 times');
 
             this.instance.option({ toolbarItems: [{ text: 'text' }] });
 
             const $toolbar2 = getTopToolbar();
 
             assert.strictEqual($toolbar2.length, 1, 'top toolbar is rendered');
-            assert.strictEqual(this.resizeEventSpy.callCount, 5, 'event is triggered additional times');
+            assert.strictEqual(resizeEventSpy.callCount, 5, 'event is triggered additional times');
 
             assert.strictEqual($toolbar1, $toolbar2, 'toolbar is not rendered twice after toolbarItems update in runtime');
         });
 
         QUnit.test('resize event is triggered during animation showing when toolbar is present', function(assert) {
-            this.resizeEventSpy.resetHistory();
+            resizeEventSpy.resetHistory();
             this.reinit({
                 visible: false,
                 showTitle: true,
                 showCloseButton: true,
             });
-            const beforeShow = this.resizeEventSpy.callCount;
+            const beforeShow = resizeEventSpy.callCount;
 
             this.instance.show();
 
@@ -1577,11 +1587,11 @@ QUnit.module('options changed callbacks', {
             assert.strictEqual(beforeShow, 0, 'event is not triggered when popup is hidden');
             assert.strictEqual(topToolbar.length, 1, 'top toolbar is rendered');
             // 1st from overlay visibility changing, 2nd and 3rd from _animateShowing
-            assert.strictEqual(this.resizeEventSpy.callCount, 3, 'event is triggered 3 times during show animation');
+            assert.strictEqual(resizeEventSpy.callCount, 3, 'event is triggered 3 times during show animation');
         });
 
         QUnit.test('additional resize events are triggered only on toolbar elements', function(assert) {
-            this.resizeEventSpy.resetHistory();
+            resizeEventSpy.resetHistory();
             this.reinit({
                 visible: true,
                 showTitle: true,
@@ -1599,9 +1609,9 @@ QUnit.module('options changed callbacks', {
             const bottomToolbar = this.instance.bottomToolbar();
             const overlayContent = this.instance.$overlayContent();
 
-            const callsForTopToolbar = this.resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === topToolbar[0]);
-            const callsForBottomToolbar = this.resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === bottomToolbar[0]);
-            const callsForOverlayContent = this.resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === overlayContent[0]);
+            const callsForTopToolbar = resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === topToolbar[0]);
+            const callsForBottomToolbar = resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === bottomToolbar[0]);
+            const callsForOverlayContent = resizeEventSpy.getCalls().filter(call => call.args[0] && call.args[0][0] === overlayContent[0]);
 
             assert.strictEqual(callsForTopToolbar.length, 2, 'additional resize events are triggered on top toolbar');
             assert.strictEqual(callsForBottomToolbar.length, 2, 'additional resize events are triggered on bottom toolbar');
@@ -1611,33 +1621,24 @@ QUnit.module('options changed callbacks', {
 
     QUnit.test('titleTemplate option change should trigger resize event for content correct geometry rendering', function(assert) {
         this.instance.option('visible', true);
+        resizeEventSpy.resetHistory();
 
-        const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
+        this.instance.option({
+            titleTemplate: () => '',
+        });
 
-        try {
-            this.instance.option({
-                titleTemplate: () => '',
-            });
-
-            assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
-        } finally {
-            resizeEventSpy.restore();
-        }
+        assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
     });
 
     QUnit.test('bottomTemplate option change should trigger resize event for content correct geometry rendering', function(assert) {
         this.instance.option('visible', true);
-        const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
+        resizeEventSpy.resetHistory();
 
-        try {
-            this.instance.option({
-                bottomTemplate: () => ''
-            });
+        this.instance.option({
+            bottomTemplate: () => ''
+        });
 
-            assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
-        } finally {
-            resizeEventSpy.restore();
-        }
+        assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
     });
 
     QUnit.module('enableBodyScroll on desktop', {
@@ -2267,8 +2268,8 @@ QUnit.module('drag', {
 
     QUnit.test('popup should be dragged correctly when position.of and shading (T534551)', function(assert) {
         const $container = $('<div>').appendTo('#qunit-fixture').height(0).width(200);
-        $container.css('margin-left', '200px');
-        $container.css('margin-top', '200px');
+        $container.css('marginLeft', '200px');
+        $container.css('marginTop', '200px');
 
         this.reinit({
             shading: true,

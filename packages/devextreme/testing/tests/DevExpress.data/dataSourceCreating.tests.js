@@ -3,7 +3,7 @@ import ArrayStore from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import LocalStore from 'common/data/local_store';
 import ODataStore from 'common/data/odata/store';
-import ajaxMock from '../../helpers/ajaxMock.js';
+import * as ajaxMock from '../../helpers/ajaxMock.js';
 
 QUnit.test('no options', function(assert) {
     const ds = new DataSource();

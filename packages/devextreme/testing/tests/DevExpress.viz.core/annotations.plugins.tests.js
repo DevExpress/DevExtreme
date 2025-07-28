@@ -1,12 +1,13 @@
 import $ from 'jquery';
 import { __test_utils, plugins } from 'viz/core/annotations';
-import rendererModule from 'viz/core/renderers/renderer';
-import TooltipModule from 'viz/core/tooltip';
+import * as rendererModule from 'viz/core/renderers/renderer';
+import * as TooltipModule from 'viz/core/tooltip';
 import vizMocks from '../../helpers/vizMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import eventsEngine from 'common/core/events/core/events_engine';
-import { getDocument } from 'core/dom_adapter';
+import * as domAdapterModule from 'core/dom_adapter';
 import devices from '__internal/core/m_devices';
+const { getDocument } = domAdapterModule;
 
 import 'viz/chart';
 import 'viz/polar_chart';

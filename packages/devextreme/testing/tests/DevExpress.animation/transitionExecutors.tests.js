@@ -4,7 +4,7 @@ import devices from '__internal/core/m_devices';
 import fx from 'common/core/animation/fx';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import { presets as animationPresets } from 'common/core/animation/presets/presets';
-import TransitionExecutorModule from 'common/core/animation/transition_executor/transition_executor';
+import * as TransitionExecutorModule from 'common/core/animation/transition_executor/transition_executor';
 
 QUnit.module('transition executor', {
     beforeEach: function() {

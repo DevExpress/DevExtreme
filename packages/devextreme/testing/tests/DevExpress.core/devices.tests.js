@@ -5,7 +5,7 @@ import $ from 'jquery';
 import domAdapter from '__internal/core/m_dom_adapter';
 import themes from 'ui/themes';
 import devices from '__internal/core/m_devices';
-import viewPort from 'core/utils/view_port';
+import * as viewPort from 'core/utils/view_port';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import readyCallbacks from 'core/utils/ready_callbacks';
 import config from 'core/config';
