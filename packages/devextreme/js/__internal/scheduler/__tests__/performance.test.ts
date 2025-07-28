@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 
-import Scheduler from '../m_scheduler';
 import timezoneUtils from '../m_utils_time_zone';
+import { createScheduler } from './__mock__/create_scheduler';
 
 const startDate = new Date(2025, 0, 6);
 const delta = 15 * 60 * 1000;
@@ -15,8 +14,7 @@ const dataSource = Array.from({ length: 10 }, (_, i) => ({
   text: `Appointment ${i + 1}`,
 }));
 
-// TODO: fix during T1297019
-describe.skip('scheduler', () => {
+describe('scheduler', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -25,8 +23,7 @@ describe.skip('scheduler', () => {
     { timeZone: 'Europe/London' },
     { timeZone: undefined },
   ])('should memo Intl object for timezone: $timeZone', async ({ timeZone }) => {
-    const container = document.createElement('div');
-    const scheduler = new Scheduler(container, {
+    const { container } = await createScheduler({
       dataSource,
       timeZone,
       views: ['week'],
@@ -35,7 +32,7 @@ describe.skip('scheduler', () => {
       startDayHour: 8,
       firstDayOfWeek: 1,
       height: 600,
-    } as any);
+    });
     await timezoneUtils.cacheTimeZones();
 
     expect(container.classList).toContain('dx-scheduler');
@@ -49,6 +46,6 @@ describe.skip('scheduler', () => {
     nextButton.click();
     expect(navigator.querySelector('.dx-scheduler-navigator-caption')?.textContent).toBe('20-26 January 2025');
 
-    expect(Intl.DateTimeFormat).toHaveBeenCalledTimes(0);
+    expect(Intl.DateTimeFormat).toHaveBeenCalledTimes(timeZone ? 0 : 1);
   });
 });

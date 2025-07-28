@@ -1,4 +1,4 @@
-<a href="https://github.com/DevExpress/devextreme-exceljs-fork" target="_blank">ExcelJS</a> library allows you to customize worksheets outside the exported cell area. This demo uses this functionality to add a header (a title before exported data) and a footer (a note after exported data).
+<a href="https://github.com/DevExpress/devextreme-exceljs-fork" target="_blank">DevExtreme ExcelJS</a> library allows you to customize worksheets outside the exported cell area. This demo uses this functionality to add a header (a title before exported data) and a footer (a note after exported data).
 
 Review the [onExporting](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#onExporting) handler to see the data export code. The functions that create header and footer sections utilize the following customization features:
 
