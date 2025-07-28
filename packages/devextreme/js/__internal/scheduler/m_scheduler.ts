@@ -767,7 +767,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       allDayPanelMode: () => this.getViewOption('allDayPanelMode'),
       showAllDayPanel: () => this.option('showAllDayPanel'),
       getResourceManager: () => this.resourceManager,
-      getLoadedResources: () => this.option('loadedResources'),
       getIsVirtualScrolling: () => this.isVirtualScrolling(),
       getSupportAllDayRow: () => this._workSpace.supportAllDayRow(),
       getViewType: () => this._workSpace.type,
