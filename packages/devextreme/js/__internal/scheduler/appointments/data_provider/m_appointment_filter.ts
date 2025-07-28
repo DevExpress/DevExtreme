@@ -39,15 +39,15 @@ export class AppointmentFilterBaseStrategy {
 
   get timeZoneCalculator() { return this.options.timeZoneCalculator; }
 
-  get viewStartDayHour() { return this.options.startDayHour; }
+  get viewStartDayHour() { return this._resolveOption('startDayHour'); }
 
-  get viewEndDayHour() { return this.options.endDayHour; }
+  get viewEndDayHour() { return this._resolveOption('endDayHour'); }
 
-  get timezone() { return this.options.timezone; }
+  get timezone() { return this._resolveOption('timezone'); }
 
-  get firstDayOfWeek() { return this.options.firstDayOfWeek; }
+  get firstDayOfWeek() { return this._resolveOption('firstDayOfWeek'); }
 
-  get showAllDayPanel() { return this.options.showAllDayPanel; }
+  get showAllDayPanel() { return this._resolveOption('showAllDayPanel'); }
 
   get loadedResources() { return this._resolveOption('loadedResources'); }
 
@@ -74,7 +74,7 @@ export class AppointmentFilterBaseStrategy {
 
   filter(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
     const [min, max] = this.dateRange;
-    const { viewOffset } = this.options;
+    const viewOffset = this._resolveOption('viewOffset');
     const allDay = !this.showAllDayPanel && this.supportAllDayRow
       ? false
       : undefined;
@@ -285,7 +285,7 @@ export class AppointmentFilterBaseStrategy {
     }
 
     if (result && recurrenceProcessor.isValidRecurrenceRule(recurrenceRule)) {
-      const { viewOffset } = this.options;
+      const viewOffset = this._resolveOption('viewOffset');
       result = recurrenceProcessor.hasRecurrence({
         rule: recurrenceRule,
         exception: recurrenceException,
