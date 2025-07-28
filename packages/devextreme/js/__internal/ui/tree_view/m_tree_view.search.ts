@@ -54,21 +54,17 @@ class TreeViewSearch extends TreeViewBase {
   }
 
   _init(): void {
-    this._searchBoxController = new SearchBoxController({
-      createEditor: (
-        $element: dxElementWrapper,
-        component: any,
-        options: Record<string, unknown>,
-      ): any => this._createComponent($element, component, options),
-      widgetPrefix: TREEVIEW_CLASS_PREFIX,
-    });
+    this._searchBoxController = new SearchBoxController();
     super._init();
   }
 
   _initMarkup(): void {
-    const searchBoxControllerOptions = this._getSearchBoxControllerOptions();
-
-    this._searchBoxController.render(this.$element(), searchBoxControllerOptions);
+    this._searchBoxController.render(
+      TREEVIEW_CLASS_PREFIX,
+      this.$element(),
+      this._getSearchBoxControllerOptions(),
+      this._createComponent.bind(this),
+    );
     super._initMarkup();
   }
 

@@ -12,6 +12,8 @@ import type { ListBaseProperties } from '@ts/ui/list/m_list.base';
 
 import ListEdit from './m_list.edit';
 
+// STYLE list
+
 export type ListSearchProperties = ListBaseProperties & SearchBoxMixinOptions;
 
 const LIST_CLASS_PREFIX = 'dx-list';
@@ -88,19 +90,18 @@ class ListSearch extends ListEdit {
   }
 
   _init(): void {
-    this._searchBoxController = new SearchBoxController({
-      createEditor: (
-        $element: dxElementWrapper,
-        component: any,
-        options: Record<string, unknown>,
-      ): any => this._createComponent($element, component, options),
-      widgetPrefix: LIST_CLASS_PREFIX,
-    });
+    this._searchBoxController = new SearchBoxController();
+
     super._init();
   }
 
   _initMarkup(): void {
-    this._searchBoxController.render(this.$element(), this._getSearchBoxControllerOptions());
+    this._searchBoxController.render(
+      LIST_CLASS_PREFIX,
+      this.$element(),
+      this._getSearchBoxControllerOptions(),
+      this._createComponent.bind(this),
+    );
     super._initMarkup();
   }
 

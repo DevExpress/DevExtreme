@@ -8,6 +8,7 @@ import type { ValueChangedEvent } from '@js/ui/text_box';
 import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
 import { stubComponent } from '@ts/core/utils/m_stubs';
 import type TextBox from '@ts/ui/text_box/m_text_box';
+import type { TextBoxProperties } from '@ts/ui/text_box/m_text_box';
 
 export const getOperationBySearchMode = (searchMode?: SearchMode): string | undefined => (searchMode === 'equals' ? '=' : searchMode);
 
@@ -16,23 +17,10 @@ export type SearchBoxControllerOptions = SearchBoxMixinOptions & {
   onValueChanged?: (value: string) => void;
 };
 
-interface SearchBoxControllerProps {
-  createEditor: (
-    $element: dxElementWrapper,
-    component: TextBox,
-    options: Record<string, unknown>,
-  ) => TextBox;
-  widgetPrefix: string;
-}
-
 class SearchBoxController {
-  _createEditor: SearchBoxControllerProps['createEditor'];
+  static EditorClass: (new (...args) => TextBox) = stubComponent('TextBox');
 
-  _widgetPrefix: string;
-
-  _$element!: dxElementWrapper | null;
-
-  _editor!: TextBox | null;
+  _editor?: TextBox | null;
 
   _valueChangeDeferred!: DeferredObj<unknown>;
 
@@ -41,23 +29,22 @@ class SearchBoxController {
 
   _onSearchBoxValueChanged?: (value: string) => void;
 
-  static EditorClass: ReturnType<typeof stubComponent> = stubComponent('TextBox');
-
-  constructor({
-    createEditor,
-    widgetPrefix,
-  }: SearchBoxControllerProps) {
-    this._createEditor = createEditor;
-    this._widgetPrefix = widgetPrefix;
-  }
-
-  static setEditorClass(value): void {
+  static setEditorClass(value: new (...args) => TextBox): void {
     SearchBoxController.EditorClass = value;
   }
 
-  render($container: dxElementWrapper, options: SearchBoxControllerOptions): void {
-    const rootElementClassName = this._addWidgetPrefix('with-search');
-    const searchBoxClassName = this._addWidgetPrefix('search');
+  render(
+    widgetPrefix: string,
+    $container: dxElementWrapper,
+    options: SearchBoxControllerOptions,
+    createEditorFunc: (
+      $element: dxElementWrapper,
+      component: (new (...args) => TextBox),
+      options: TextBoxProperties,
+    ) => TextBox,
+  ): void {
+    const rootElementClassName = `${widgetPrefix}-with-search`;
+    const searchBoxClassName = `${widgetPrefix}-search`;
     const { searchEnabled, onValueChanged } = options;
 
     this._onSearchBoxValueChanged = onValueChanged;
@@ -73,10 +60,13 @@ class SearchBoxController {
     } else {
       const editorOptions = this._getEditorOptions(options);
       $container.addClass(rootElementClassName);
-      this._$element = $('<div>').addClass(searchBoxClassName).prependTo($container);
-      this._editor = this._createEditor(
-        this._$element,
-        SearchBoxController.EditorClass as TextBox,
+      const $editor = $('<div>')
+        .addClass(searchBoxClassName)
+        .prependTo($container);
+
+      this._editor = createEditorFunc(
+        $editor,
+        SearchBoxController.EditorClass,
         editorOptions,
       );
     }
@@ -87,7 +77,7 @@ class SearchBoxController {
     this._editor?.option(editorOptions);
   }
 
-  _getEditorOptions(options: SearchBoxControllerOptions): Record<string, unknown> {
+  _getEditorOptions(options: SearchBoxControllerOptions): TextBoxProperties {
     const {
       tabIndex,
       searchValue,
@@ -103,6 +93,7 @@ class SearchBoxController {
       value: searchValue,
       valueChangeEvent: 'input',
       inputAttr: { 'aria-label': placeholder },
+      // @ts-expect-error ts-error
       onValueChanged: (e: ValueChangedEvent): void => {
         this._onValueChanged(e, searchTimeout);
       },
@@ -133,8 +124,7 @@ class SearchBoxController {
   }
 
   remove(): void {
-    this._$element?.remove();
-    this._$element = null;
+    this._editor?.$element().remove();
     this._editor = null;
   }
 
@@ -144,10 +134,6 @@ class SearchBoxController {
 
   dispose(): void {
     this.remove();
-  }
-
-  _addWidgetPrefix(className: string): string {
-    return `${this._widgetPrefix}-${className}`;
   }
 }
 

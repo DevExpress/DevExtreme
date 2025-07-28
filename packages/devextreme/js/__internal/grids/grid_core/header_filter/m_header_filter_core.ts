@@ -11,11 +11,11 @@ import { each } from '@js/core/utils/iterator';
 import { isDeferred, isDefined, isFunction } from '@js/core/utils/type';
 import type dxCheckBox from '@js/ui/check_box';
 import type dxList from '@js/ui/list';
-import List from '@js/ui/list_light';
 import Popup from '@js/ui/popup/ui.popup';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import List from '@ts/ui/list/m_list.edit.search';
 import type { TreeViewSearchProperties } from '@ts/ui/tree_view/m_tree_view.search';
 import TreeView from '@ts/ui/tree_view/m_tree_view.search';
 

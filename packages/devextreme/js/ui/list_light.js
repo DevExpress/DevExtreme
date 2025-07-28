@@ -1,7 +1,5 @@
 import ListEdit from '../__internal/ui/list/m_list.edit.search';
 
-// STYLE list
-
 export default ListEdit;
 
 /**
