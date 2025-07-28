@@ -14,9 +14,10 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterWidth } from '@js/core/utils/size';
+import type { NativeEventInfo } from '@js/events';
 import type { Properties } from '@js/ui/switch';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { ValueChangedEvent } from '@ts/ui/editor/editor';
+import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
 import Editor from '@ts/ui/editor/editor';
 
 const SWITCH_CLASS = 'dx-switch';
@@ -29,14 +30,6 @@ const SWITCH_ON_CLASS = `${SWITCH_CLASS}-on`;
 const SWITCH_OFF_CLASS = `${SWITCH_CLASS}-off`;
 
 const SWITCH_ANIMATION_DURATION = 100;
-
-interface SwipeEvent<T> {
-  event: ValueChangedEvent & T;
-}
-
-type SwipeStartEvent = SwipeEvent<{ maxLeftOffset: number; maxRightOffset: number }>;
-type SwipeUpdateEvent = SwipeEvent<{ offset: number }>;
-type SwipeEndEvent = SwipeEvent<{ targetOffset: number }>;
 
 class Switch extends Editor<Properties> {
   _$switchWrapper!: dxElementWrapper;
@@ -81,8 +74,8 @@ class Switch extends Editor<Properties> {
       ...super._supportedKeys(),
       space: click,
       enter: click,
-      leftArrow: (e) => move(Boolean(rtlEnabled), e),
-      rightArrow: (e) => move(!rtlEnabled, e),
+      leftArrow: (e): void => { move(Boolean(rtlEnabled), e); },
+      rightArrow: (e): void => { move(!rtlEnabled, e); },
     };
   }
 
@@ -197,10 +190,10 @@ class Switch extends Editor<Properties> {
     this._createComponent(this.$element(), Swipeable, {
       elastic: false,
       immediate: true,
-      onStart: this._swipeStartHandler.bind(this),
-      onUpdated: this._swipeUpdateHandler.bind(this),
-      onEnd: this._swipeEndHandler.bind(this),
-      itemSizeFunc: this._getItemSizeFunc.bind(this),
+      onStart: (e): void => this._swipeStartHandler(e),
+      onUpdated: (e): void => this._swipeUpdateHandler(e),
+      onEnd: (e): void => this._swipeEndHandler(e),
+      itemSizeFunc: () => this._getItemSizeFunc(),
     });
   }
 
@@ -220,7 +213,8 @@ class Switch extends Editor<Properties> {
   }
 
   _offsetDirection(): number {
-    return this.option('rtlEnabled') ? -1 : 1;
+    const { rtlEnabled } = this.option();
+    return rtlEnabled ? -1 : 1;
   }
 
   _renderPosition(state: boolean, swipeOffset: number): void {
@@ -232,7 +226,7 @@ class Switch extends Editor<Properties> {
   }
 
   _validateValue(): void {
-    const check = this.option('value');
+    const { value: check } = this.option();
     if (typeof check !== 'boolean') {
       this._options.silent('value', !!check);
     }
@@ -249,16 +243,19 @@ class Switch extends Editor<Properties> {
     });
   }
 
-  _clickHandler(args: { event: ValueChangedEvent }): void {
-    const e = args.event;
+  _clickHandler(args: NativeEventInfo<Switch, MouseEvent | PointerEvent>): void {
+    const { event } = args;
 
-    this._saveValueChangeEvent(e);
+    // @ts-expect-error ValueChangedEvent should be compatible with KeyboardEvent
+    this._saveValueChangeEvent(event);
 
     if (this._animating || this._swiping) {
       return;
     }
 
-    this._animateValue(!this.option('value'));
+    const { value } = this.option();
+
+    this._animateValue(!value);
   }
 
   _animateValue(newValue: boolean): void {
@@ -302,24 +299,23 @@ class Switch extends Editor<Properties> {
       duration: SWITCH_ANIMATION_DURATION,
       complete: () => {
         this._animating = false;
-        this.option('value', endValue);
+        this.option({ value: endValue });
       },
     });
   }
 
   _swipeStartHandler(e: SwipeStartEvent): void {
-    const state = this.option('value');
-    const rtlEnabled = this.option('rtlEnabled');
+    const { value: state, rtlEnabled, activeStateEnabled } = this.option();
     const maxOffOffset = rtlEnabled ? 0 : 1;
     const maxOnOffset = rtlEnabled ? 1 : 0;
 
     e.event.maxLeftOffset = state ? maxOffOffset : maxOnOffset;
     e.event.maxRightOffset = state ? maxOnOffset : maxOffOffset;
+
     this._swiping = true;
 
     this._feedbackDeferred = Deferred();
     lock(this._feedbackDeferred);
-    const { activeStateEnabled } = this.option();
 
     this._toggleActiveState(this.$element(), Boolean(activeStateEnabled));
   }
@@ -355,6 +351,7 @@ class Switch extends Editor<Properties> {
       complete: () => {
         this._swiping = false;
         const pos = Number(value) + offsetDirection * e.event.targetOffset;
+        // @ts-expect-error ValueChangedEvent should be compatible with KeyboardEvent
         this._saveValueChangeEvent(e.event);
         this.option({ value: Boolean(pos) });
         this._feedbackDeferred?.resolve();
@@ -372,7 +369,7 @@ class Switch extends Editor<Properties> {
 
     this.$element().toggleClass(SWITCH_ON_VALUE_CLASS, value);
 
-    this._getSubmitElement().val(String(value));
+    this._getSubmitElement().val(String(value ?? ''));
     this.setAria({
       checked: value,
       label: value ? switchedOnText : switchedOffText,

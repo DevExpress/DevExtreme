@@ -1,4 +1,9 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
+import type {
+  SwipeEndEvent,
+  SwipeStartEvent,
+  SwipeUpdateEvent,
+} from '@js/common/core/events/swipe';
 import {
   end as swipeEventEnd,
   start as swipeEventStart,
@@ -29,9 +34,9 @@ export interface SwipeableProperties extends DOMComponentProperties {
   immediateTimeout?: number;
   direction?: string;
   itemSizeFunc?: (() => number) | null;
-  onStart?: ((e) => void) | null;
-  onUpdated?: ((e) => void) | null;
-  onEnd?: ((e) => void) | null;
+  onStart?: ((e: SwipeStartEvent) => void) | null;
+  onUpdated?: ((e: SwipeUpdateEvent) => void) | null;
+  onEnd?: ((e: SwipeEndEvent) => void) | null;
   onCancel?: ((e) => void) | null;
   disabled?: boolean;
 }
