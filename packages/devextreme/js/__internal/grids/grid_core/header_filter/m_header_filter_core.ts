@@ -12,11 +12,9 @@ import { isDeferred, isDefined, isFunction } from '@js/core/utils/type';
 import type dxCheckBox from '@js/ui/check_box';
 import type dxList from '@js/ui/list';
 import Popup from '@js/ui/popup/ui.popup';
-import type { OptionChanged } from '@ts/core/widget/types';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import List from '@ts/ui/list/m_list.edit.search';
-import type { TreeViewSearchProperties } from '@ts/ui/tree_view/m_tree_view.search';
 import TreeView from '@ts/ui/tree_view/m_tree_view.search';
 
 import gridCoreUtils from '../m_utils';
@@ -336,24 +334,23 @@ export class HeaderFilterView extends Modules.View {
       && that.option('headerFilter.hideSelectAllOnSearch') !== false;
 
     const onTreeViewOptionChanged = (
-      args: OptionChanged<TreeViewSearchProperties> & { component: TreeView },
+      event: ChangedOptionInfo & {
+        component: TreeView;
+      },
     ): void => {
-      const { fullName, component, value } = args;
-      switch (fullName) {
-        case 'searchValue':
-          if (shouldChangeSelectAllCheckBoxVisibility()) {
-            component.option('showCheckBoxesMode', value ? 'normal' : 'selectAll');
-          }
+      switch (true) {
+        case event.fullName === 'searchValue' && shouldChangeSelectAllCheckBoxVisibility():
+          event.component.option('showCheckBoxesMode', event.value ? 'normal' : 'selectAll');
           break;
         // TODO TreeView: remove this WA after Navigation squad re-render fix
         // NOTE: WA for TreeView re-render after changing the "showCheckBoxesMode" option
         // After this option change the whole TreeView re-render and search input loose the focus
-        case 'showCheckBoxesMode':
+        case event.fullName === 'showCheckBoxesMode':
           // NOTE: the TreeView render is async
           // So we should focus the searchEditor only after render will be completed
           Promise.resolve()
             .then(() => {
-              component.getSearchBoxController().focus();
+              event.component.getSearchBoxController().focus();
             })
             .catch(() => {});
           break;

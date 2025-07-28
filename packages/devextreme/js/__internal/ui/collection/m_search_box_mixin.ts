@@ -37,7 +37,7 @@ class SearchBoxController {
     widgetPrefix: string,
     $container: dxElementWrapper,
     options: SearchBoxControllerOptions,
-    createEditorFunc: (
+    createEditorCallback: (
       $element: dxElementWrapper,
       component: (new (...args) => TextBox),
       options: TextBoxProperties,
@@ -64,7 +64,7 @@ class SearchBoxController {
         .addClass(searchBoxClassName)
         .prependTo($container);
 
-      this._editor = createEditorFunc(
+      this._editor = createEditorCallback(
         $editor,
         SearchBoxController.EditorClass,
         editorOptions,
