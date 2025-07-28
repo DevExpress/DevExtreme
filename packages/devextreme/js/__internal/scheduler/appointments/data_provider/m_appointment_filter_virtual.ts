@@ -19,7 +19,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
   get resources() { return this.options.resources; }
 
   filter(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
-    const { viewOffset } = this.options;
+    const viewOffset = this._resolveOption('viewOffset');
     const hourMs = toMs('hour');
     const isCalculateStartAndEndDayHour = isDateAndTimeView(this.viewType);
     const checkIntersectViewport = isCalculateStartAndEndDayHour && this.viewDirection === 'horizontal';
