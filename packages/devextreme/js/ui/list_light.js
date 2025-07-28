@@ -1,9 +1,4 @@
 import ListEdit from '../__internal/ui/list/m_list.edit.search';
-import registerComponent from '../core/component_registrator';
-
-// STYLE list
-
-registerComponent('dxList', ListEdit);
 
 export default ListEdit;
 
