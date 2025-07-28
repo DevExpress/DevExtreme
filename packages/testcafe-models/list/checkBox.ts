@@ -25,15 +25,16 @@ export default class CheckBox {
     const isChecked = await this.isChecked;
     const isIndeterminate = await this.isIndeterminate;
 
-    switch (true) {
-      case isChecked && !isIndeterminate:
-        return 'checked';
-        case !isChecked && !isIndeterminate:
-          return 'unchecked';
-      case !isChecked && isIndeterminate:
-        return 'indeterminate';
-      default:
-        throw Error(`Invalid checkbox state. checked = ${isChecked}, indeterminate = ${isIndeterminate}`);
+    if (isChecked && !isIndeterminate) {
+      return 'checked';
     }
+    if (!isChecked && !isIndeterminate) {
+      return 'unchecked';
+    }
+    if (!isChecked && isIndeterminate) {
+      return 'indeterminate';
+    }
+
+    throw Error(`Invalid checkbox state. checked = ${isChecked}, indeterminate = ${isIndeterminate}`);
   }
 }
