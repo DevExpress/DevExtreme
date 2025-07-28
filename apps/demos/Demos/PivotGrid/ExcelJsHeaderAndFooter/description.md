@@ -1,4 +1,4 @@
-The PivotGrid allows you to customize a header and a footer in the exported Excel file. The <a href="https://github.com/DevExpress/devextreme-exceljs-fork" target="_blank">ExcelJS</a> library allows you to customize worksheets outside of exported cell regions. This, in turns, allows you to add a header (a title before exported data) and a footer (a note after exported data).
+The PivotGrid allows you to customize a header and a footer in the exported Excel file. The <a href="https://github.com/DevExpress/devextreme-exceljs-fork" target="_blank">DevExtreme ExcelJS</a> library allows you to customize worksheets outside of exported cell regions. This, in turns, allows you to add a header (a title before exported data) and a footer (a note after exported data).
 <!--split-->
 
 Follow the steps below to configure a header/footer:
