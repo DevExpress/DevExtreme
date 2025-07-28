@@ -36,6 +36,8 @@ export default [
             'themebuilder-scss/src/data/metadata/*',
             'js/bundles/dx.custom.js',
             'testing/jest/utils/transformers/*',
+            'testing/test-environment/*',
+            'vite.config.ts',
             '**/ts/',
             'js/common/core/localization/cldr-data/*',
             'js/common/core/localization/default_messages.js',

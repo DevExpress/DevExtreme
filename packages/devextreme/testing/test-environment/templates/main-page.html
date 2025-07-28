@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>QUnit Test Runner - DevExtreme Tests</title>
+  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.24.1.css">
+  <link rel="stylesheet" href="/testing/test-environment/styles/main-page.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>DevExtreme Test Runner</h1>
+    </div>
+
+    <div class="stats">
+      📊 <strong>Total tests:</strong> {{TOTAL_TESTS}} |
+      📂 <strong>Categories:</strong> {{TOTAL_FOLDERS}}
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="🔍 Search tests..." oninput="filterTests()">
+    </div>
+
+    <div class="controls">
+      <button class="control-button" onclick="expandAll()">📂 Expand all</button>
+      <button class="control-button" onclick="collapseAll()">📁 Collapse all</button>
+      <button class="control-button" onclick="runAllTests()">▶️ Run all tests</button>
+    </div>
+
+    <div class="folders-container" id="foldersContainer">
+      {{FOLDER_LIST}}
+    </div>
+  </div>
+
+  <script src="/testing/test-environment/scripts/main-page.js"></script>
+</body>
+
+</html>

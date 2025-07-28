@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>QUnit Test: {{TEST_NAME}}</title>
+  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.24.1.css">
+  <script src="https://code.jquery.com/qunit/qunit-2.24.1.js"></script>
+  <script>
+    window.ROOT_URL = "/";
+    window.farmMode = true;
+    window.INTRANET = true;
+
+    QUnit.config.autostart = false;
+    QUnit.config.failOnZeroTests = false;
+  </script>
+  <script src="/testing/helpers/qunitExtensions.js"></script>
+  <script src="/testing/test-environment/scripts/qunit-config.js"></script>
+  <link rel="stylesheet" href="/testing/test-environment/templates/test-page.css">
+</head>
+
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <script src="/node_modules/jquery/dist/jquery.js"></script>
+  <script src="/node_modules/sinon/pkg/sinon.js"></script>
+  <script type="module" src="/testing/test-environment/scripts/events-engine-patch.js"></script>
+  <script type="module" src="/@vite/client"></script>
+
+  <script type="module" src="/testing/test-environment/scripts/test-loader.js"></script>
+</body>
+
+</html>
