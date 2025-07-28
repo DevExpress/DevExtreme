@@ -38,9 +38,9 @@ export interface ActionConfig {
 }
 
 export interface Properties<TComponent> extends ComponentOptions<
-EventInfo<TComponent>,
-InitializedEventInfo<TComponent>,
-OptionChangedEventInfo<TComponent>
+  EventInfo<TComponent>,
+  InitializedEventInfo<TComponent>,
+  OptionChangedEventInfo<TComponent>
 > {
   onInitializing?: ((e: Record<string, unknown>) => void) | undefined;
 
