@@ -22006,6 +22006,7 @@ declare module DevExpress.ui {
      */
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxLoadIndicator>;
+    export type LoadingAnimationType = 'circle' | 'sparkle';
     /**
      * [descr:_ui_load_indicator_OptionChangedEvent]
      */
@@ -22021,6 +22022,10 @@ declare module DevExpress.ui {
    */
   export interface dxLoadIndicatorOptions
     extends WidgetOptions<dxLoadIndicator> {
+    /**
+     * [descr:dxLoadIndicatorOptions.animationType]
+     */
+    animationType?: DevExpress.ui.dxLoadIndicator.LoadingAnimationType;
     /**
      * [descr:dxLoadIndicatorOptions.indicatorSrc]
      */
