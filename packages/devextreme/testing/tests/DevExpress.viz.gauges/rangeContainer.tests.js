@@ -1,11 +1,11 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const BaseRangeContainer = require('viz/gauges/base_range_container');
-const CircularRangeContainer = require('viz/gauges/circular_range_container');
-const LinearRangeContainer = require('viz/gauges/linear_range_container');
-const Translator1D = require('viz/translators/translator1d').Translator1D;
-const themeManagerModule = require('viz/gauges/theme_manager');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import vizMocks from '../../helpers/vizMocks.js';
+import BaseRangeContainer from 'viz/gauges/base_range_container';
+import CircularRangeContainer from 'viz/gauges/circular_range_container';
+import LinearRangeContainer from 'viz/gauges/linear_range_container';
+import { Translator1D } from 'viz/translators/translator1d';
+import themeManagerModule from 'viz/gauges/theme_manager';
 
 const TestRangeContainer = BaseRangeContainer.inherit({
     _processOptions: function() {

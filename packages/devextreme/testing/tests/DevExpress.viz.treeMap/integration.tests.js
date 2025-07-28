@@ -1,7 +1,7 @@
-const common = require('./commonParts/common.js');
+import * as common from './commonParts/common.js';
 
 // The following list is to be manually kept synchronized with the contents of "Registry.data" treemap section - that part which follows after treeMap.js.
-require('viz/tree_map/tree_map');
+import 'viz/tree_map/tree_map';
 
 QUnit.module('Integration', common.environment);
 

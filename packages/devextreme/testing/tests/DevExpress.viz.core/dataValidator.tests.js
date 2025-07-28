@@ -1,9 +1,9 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const commonUtils = require('core/utils/common');
-const seriesModule = require('viz/series/base_series');
-const dataValidatorModule = require('viz/components/data_validator');
-const chartMocks = require('../../helpers/chartMocks.js');
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import commonUtils from 'core/utils/common';
+import seriesModule from 'viz/series/base_series';
+import dataValidatorModule from 'viz/components/data_validator';
+import chartMocks from '../../helpers/chartMocks.js';
 const MockAxis = chartMocks.MockAxis;
 
 function checkTypes(assert, data, groupsData, argumentAxisType, argumentType, valueAxisType, valueType, callCount, options) {

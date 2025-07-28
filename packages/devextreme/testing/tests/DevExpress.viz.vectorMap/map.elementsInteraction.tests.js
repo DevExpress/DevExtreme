@@ -1,11 +1,11 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const commons = require('./vectorMapParts/commons.js');
-const mapLayerModule = require('viz/vector_map/map_layer');
-const projectionModule = require('viz/vector_map/projection.main');
-const resizeCallbacks = require('core/utils/resize_callbacks');
-const { implementationsMap } = require('core/utils/size');
-const vizMocks = require('../../helpers/vizMocks.js');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import commons from './vectorMapParts/commons.js';
+import mapLayerModule from 'viz/vector_map/map_layer';
+import projectionModule from 'viz/vector_map/projection.main';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import { implementationsMap } from 'core/utils/size';
+import vizMocks from '../../helpers/vizMocks.js';
 
 QUnit.module('Map - projection events', $.extend({}, commons.environment, {
     beforeEach: function() {

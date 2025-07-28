@@ -1,7 +1,7 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const ko = require('knockout');
-const KoTemplate = require('integration/knockout/template').KoTemplate;
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import ko from 'knockout';
+import { KoTemplate } from 'integration/knockout/template';
 
 const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 

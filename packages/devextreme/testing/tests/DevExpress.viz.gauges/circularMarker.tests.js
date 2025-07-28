@@ -1,8 +1,8 @@
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const circularIndicatorsModule = require('viz/gauges/circular_indicators');
-const getTextCloudInfo = require('viz/gauges/base_indicators').getTextCloudInfo;
-const Translator1D = require('viz/translators/translator1d').Translator1D;
+import { noop } from 'core/utils/common';
+import vizMocks from '../../helpers/vizMocks.js';
+import circularIndicatorsModule from 'viz/gauges/circular_indicators';
+import { getTextCloudInfo } from 'viz/gauges/base_indicators';
+import { Translator1D } from 'viz/translators/translator1d';
 
 QUnit.module('TriangleMarker', {
     beforeEach: function() {

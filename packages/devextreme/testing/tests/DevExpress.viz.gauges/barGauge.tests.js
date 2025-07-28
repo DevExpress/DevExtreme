@@ -1,16 +1,16 @@
 /* global createTestContainer, currentTest */
 
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const dxBarGauge = require('viz/bar_gauge');
-const rendererModule = require('viz/core/renderers/renderer');
-const loadingIndicatorModule = require('viz/core/loading_indicator');
-const titleModule = require('viz/core/title');
-const tooltipModule = require('viz/core/tooltip');
-const barGaugeModule = require('viz/gauges/bar_gauge');
-const exportModule = require('viz/core/export');
-const themeModule = require('viz/themes');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import vizMocks from '../../helpers/vizMocks.js';
+import dxBarGauge from 'viz/bar_gauge';
+import rendererModule from 'viz/core/renderers/renderer';
+import loadingIndicatorModule from 'viz/core/loading_indicator';
+import titleModule from 'viz/core/title';
+import tooltipModule from 'viz/core/tooltip';
+import barGaugeModule from 'viz/gauges/bar_gauge';
+import exportModule from 'viz/core/export';
+import themeModule from 'viz/themes';
 const BarWrapper = barGaugeModule.BarWrapper;
 const stubBarWrapper = barGaugeModule.stubBarWrapper;
 const restoreBarWrapper = barGaugeModule.restoreBarWrapper;

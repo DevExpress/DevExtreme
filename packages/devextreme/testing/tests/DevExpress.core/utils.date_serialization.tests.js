@@ -1,5 +1,5 @@
-const dateSerialization = require('core/utils/date_serialization');
-const config = require('core/config');
+import dateSerialization from 'core/utils/date_serialization';
+import config from 'core/config';
 
 QUnit.module('date serialization tests', {
     beforeEach: function() {

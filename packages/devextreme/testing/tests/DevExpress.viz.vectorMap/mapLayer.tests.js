@@ -1,8 +1,8 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const mapLayerModule = require('viz/vector_map/map_layer');
-const trackerModule = require('viz/vector_map/tracker');
-const dataExchangerModule = require('viz/vector_map/data_exchanger');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import mapLayerModule from 'viz/vector_map/map_layer';
+import trackerModule from 'viz/vector_map/tracker';
+import dataExchangerModule from 'viz/vector_map/data_exchanger';
 let StubProjection;
 let StubThemeManager;
 let StubDataExchanger;
@@ -10,10 +10,10 @@ let StubTracker;
 let stubSelectStrategy;
 let StubMapLayerElement;
 let StubProxy;
-const projectionModule = require('viz/vector_map/projection.main');
-const DataSource = require('common/data/data_source/data_source').DataSource;
-const baseThemeManagerModule = require('viz/core/base_theme_manager');
-const vizMocks = require('../../helpers/vizMocks.js');
+import projectionModule from 'viz/vector_map/projection.main';
+import { DataSource } from 'common/data/data_source/data_source';
+import baseThemeManagerModule from 'viz/core/base_theme_manager';
+import vizMocks from '../../helpers/vizMocks.js';
 
 QUnit.begin(function() {
     StubProjection = vizMocks.stubClass(projectionModule.Projection, {

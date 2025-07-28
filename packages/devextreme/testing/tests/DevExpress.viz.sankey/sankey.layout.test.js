@@ -1,11 +1,11 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const common = require('./commonParts/common.js');
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import common from './commonParts/common.js';
 const environment = common.environment;
 const createSankey = common.createSankey;
-const titleModule = require('viz/core/title');
-const exportModule = require('viz/core/export');
-const dxSankey = require('viz/sankey/sankey');
+import titleModule from 'viz/core/title';
+import exportModule from 'viz/core/export';
+import dxSankey from 'viz/sankey/sankey';
 const TitleOrig = titleModule.Title;
 const ExportMenuOrig = exportModule.ExportMenu;
 

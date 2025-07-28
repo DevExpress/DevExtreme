@@ -1,8 +1,8 @@
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const BaseIndicator = require('viz/gauges/base_indicators').BaseIndicator;
-const animation = require('viz/core/renderers/animation');
-const translator1DModule = require('viz/translators/translator1d');
+import { noop } from 'core/utils/common';
+import vizMocks from '../../helpers/vizMocks.js';
+import { BaseIndicator } from 'viz/gauges/base_indicators';
+import animation from 'viz/core/renderers/animation';
+import translator1DModule from 'viz/translators/translator1d';
 
 const BaseIndicatorTester = BaseIndicator.inherit({
     _isEnabled: function() {

@@ -1,8 +1,8 @@
-const vizMocks = require('../../helpers/vizMocks.js');
-const exportModule = require('viz/core/export');
-const themeModule = require('viz/themes');
-const clientExporter = require('exporter');
-const $ = require('jquery');
+import vizMocks from '../../helpers/vizMocks.js';
+import exportModule from 'viz/core/export';
+import themeModule from 'viz/themes';
+import clientExporter from 'exporter';
+import $ from 'jquery';
 const combineMarkupsOrig = exportModule.combineMarkups;
 
 themeModule.registerTheme({

@@ -1,10 +1,12 @@
-const $ = require('jquery');
-const version = require('core/version').version;
-const getData = require('exporter').pdf.getData;
-const pdfCreator = require('__internal/exporter/pdf_creator').__tests;
-const isFunction = require('core/utils/type').isFunction;
-const imageCreator = require('__internal/exporter/image_creator').imageCreator;
-const getWindow = require('core/utils/window').getWindow;
+import $ from 'jquery';
+import { version } from 'core/version';
+import exporter from 'exporter';
+const getData = exporter.pdf.getData;
+import pdfCreatorModule from '__internal/exporter/pdf_creator';
+const pdfCreator = pdfCreatorModule.__tests;
+import { isFunction } from 'core/utils/type';
+import { imageCreator } from '__internal/exporter/image_creator';
+import { getWindow } from 'core/utils/window';
 const window = getWindow();
 const ASN_DATE_REGEX = /CreationDate\s\(D:([0-9]+)Z([0-9]+)'([0-9]+)'/;
 

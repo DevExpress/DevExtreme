@@ -1,6 +1,6 @@
-const vizMocks = require('../../helpers/vizMocks.js');
-const circularIndicatorsModule = require('viz/gauges/circular_indicators');
-const Translator1D = require('viz/translators/translator1d').Translator1D;
+import vizMocks from '../../helpers/vizMocks.js';
+import circularIndicatorsModule from 'viz/gauges/circular_indicators';
+import { Translator1D } from 'viz/translators/translator1d';
 
 QUnit.module('RectangleNeedle', {
     beforeEach: function() {

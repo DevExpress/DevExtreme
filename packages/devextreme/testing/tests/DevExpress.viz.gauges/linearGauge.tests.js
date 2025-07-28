@@ -1,12 +1,12 @@
 /* global createTestContainer */
 
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const dxLinearGauge = require('viz/linear_gauge');
+import $ from 'jquery';
+import vizMocks from '../../helpers/vizMocks.js';
+import dxLinearGauge from 'viz/linear_gauge';
 const factory = dxLinearGauge.prototype._factory;
-const axisModule = require('viz/axes/base_axis');
-const Class = require('core/class');
-const rendererModule = require('viz/core/renderers/renderer');
+import axisModule from 'viz/axes/base_axis';
+import Class from 'core/class';
+import rendererModule from 'viz/core/renderers/renderer';
 
 $('<div id="test-container">').appendTo('#qunit-fixture');
 

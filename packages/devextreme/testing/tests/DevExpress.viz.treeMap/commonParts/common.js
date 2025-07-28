@@ -1,18 +1,18 @@
-const vizMocks = require('../../../helpers/vizMocks.js');
+import vizMocks from '../../../helpers/vizMocks.js';
 
-const rendererModule = require('viz/core/renderers/renderer');
-const titleModule = require('viz/core/title');
-const tooltipModule = require('viz/core/tooltip');
-const loadingIndicatorModule = require('viz/core/loading_indicator');
+import rendererModule from 'viz/core/renderers/renderer';
+import titleModule from 'viz/core/title';
+import tooltipModule from 'viz/core/tooltip';
+import loadingIndicatorModule from 'viz/core/loading_indicator';
 
-const $ = require('jquery');
+import $ from 'jquery';
 
 titleModule.DEBUG_set_title(vizMocks.Title);
 tooltipModule.DEBUG_set_tooltip(vizMocks.Tooltip);
 
 loadingIndicatorModule.DEBUG_set_LoadingIndicator(vizMocks.LoadingIndicator);
 
-require('viz/tree_map/tree_map.base');
+import 'viz/tree_map/tree_map.base';
 
 $('#qunit-fixture').append('<div id="test-container"></div>');
 
