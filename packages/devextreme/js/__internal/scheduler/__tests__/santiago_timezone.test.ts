@@ -1,13 +1,12 @@
 /**
  * @timezone America/Santiago
  */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import {
   describe, expect, it,
 } from '@jest/globals';
 
-import Scheduler from '../m_scheduler';
+import { createScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 
 const dataSource = [
@@ -104,13 +103,9 @@ const getTexts = (
 
 describe('scheduler', () => {
   it.each(views)('should render correct workspace in Santiago DST for view: $view.name', async ({ view, result }) => {
-    setupSchedulerTestEnvironment({
-      cellWidth: 250,
-      cellHeight: view.name.includes('Timeline') ? 450 : 80,
-    });
+    setupSchedulerTestEnvironment(true);
 
-    const container = document.createElement('div');
-    const scheduler = new Scheduler(container, {
+    const { container } = await createScheduler({
       views: [view],
       currentView: view.name,
       currentDate: new Date(2024, 8, 8),
@@ -118,8 +113,7 @@ describe('scheduler', () => {
       cellDuration: 60,
       firstDayOfWeek: 1,
       dataSource,
-    } as any);
-    await new Promise(process.nextTick);
+    });
 
     if (result.hasCellContent) {
       const cells = container.querySelectorAll('.dx-scheduler-date-table-cell');
