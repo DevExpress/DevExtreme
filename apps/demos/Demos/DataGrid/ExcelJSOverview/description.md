@@ -1,4 +1,4 @@
-To enable export in the DataGrid, reference or import the <a href="https://github.com/DevExpress/devextreme-exceljs-fork" target="_blank">ExcelJS</a> and <a href="https://github.com/eligrey/FileSaver.js/" target="_blank">FileSaver</a> libraries. Set **export**.[enabled](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/export/#enabled) to **true**. 
+To enable export in the DataGrid, reference or import the <a href="https://github.com/DevExpress/devextreme-exceljs-fork" target="_blank">DevExtreme ExcelJS</a> and <a href="https://github.com/eligrey/FileSaver.js/" target="_blank">FileSaver</a> libraries. Set **export**.[enabled](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/export/#enabled) to **true**. 
 
 Once the conditions above are met, use the [exportDataGrid(options)](/Documentation/ApiReference/Common/Utils/excelExporter/#exportDataGridoptions) method to export the DataGrid to an Excel <a href="https://github.com/DevExpress/devextreme-exceljs-fork#create-a-workbook" target="_blank">workbook</a>. 
 
