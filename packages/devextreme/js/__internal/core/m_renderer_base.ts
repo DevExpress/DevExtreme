@@ -142,22 +142,17 @@ initRender.prototype.removeClass = function (className) {
   return this.toggleClass(className, false);
 };
 
-initRender.prototype.hasClass = function (className) {
+initRender.prototype.hasClass = function (className: string) {
   const classNames = className.split(' ');
 
   for (let i = 0; i < this.length; i++) {
-    if (!this[i] || !this[i].className) return false;
+    if (!this[i] || !this[i].className) continue;
 
     for (let j = 0; j < classNames.length; j++) {
-      if (this[i].classList) {
-        if (this[i].classList.contains(classNames[j])) return true;
-      } else {
-        // IE9
-        const className = isString(this[i].className) ? this[i].className : domAdapter.getAttribute(this[i], 'class');
-        if ((className || '').split(' ').indexOf(classNames[j]) >= 0) return true;
-      }
+      if (this[i].classList.contains(classNames[j])) return true;
     }
   }
+
   return false;
 };
 
