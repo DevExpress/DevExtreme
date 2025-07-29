@@ -77,7 +77,6 @@ export class AppointmentDataProvider {
       showAllDayPanel: this.options.showAllDayPanel,
       timeZoneCalculator: this.options.timeZoneCalculator,
       //
-      loadedResources: this.options.getLoadedResources(),
       supportAllDayRow: this.options.getSupportAllDayRow,
       viewType: this.options.getViewType,
       viewDirection: this.options.getViewDirection,
@@ -128,10 +127,6 @@ export class AppointmentDataProvider {
 
   hasAllDayAppointments(filteredItems, preparedItems) {
     return this.getFilterStrategy().hasAllDayAppointments(filteredItems, preparedItems);
-  }
-
-  filterLoadedAppointments(filterOption, preparedItems) {
-    return this.getFilterStrategy().filterLoadedAppointments(filterOption, preparedItems);
   }
 
   // Appointment data source mappings

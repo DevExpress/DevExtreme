@@ -900,15 +900,16 @@ class BaseRenderingStrategy {
     };
   }
 
-  protected shiftAppointmentByViewOffset(appointment: any): any {
+  protected shiftAppointmentByViewOffset(appointment: SafeAppointment): any {
     const { viewOffset } = this.options;
 
     const startDateField = this.dataAccessors.expr.startDateExpr;
     const endDateField = this.dataAccessors.expr.endDateExpr;
 
     let startDate = this.dataAccessors.get('startDate', appointment);
-    startDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
     let endDate = this.dataAccessors.get('endDate', appointment);
+
+    startDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
     endDate = dateUtilsTs.addOffsets(endDate, [-viewOffset]);
 
     return {

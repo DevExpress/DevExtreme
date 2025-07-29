@@ -1291,10 +1291,10 @@ export class ColumnsController extends modules.Controller {
             if (selector === column.dataField
               || selector === column.name
               || selector === column.displayField
-              || selector === column.selector
-              || selector === column.calculateCellValue
-              || selector === column.calculateGroupValue
-              || selector === column.calculateDisplayValue
+              || gridCoreUtils.isEqualSelectors(selector, column.selector)
+              || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateCellValue)
+              || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateGroupValue)
+              || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateDisplayValue)
             ) {
               if (fromDataSource) {
                 column.sortOrder = 'sortOrder' in column ? column.sortOrder : sortParameters[i].desc ? 'desc' : 'asc';

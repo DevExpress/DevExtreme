@@ -25,14 +25,31 @@ import {
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
-import type { Item, Properties } from '@js/ui/context_menu';
-import type dxMenuBase from '@js/ui/context_menu/ui.menu_base';
+import type {
+  HiddenEvent,
+  HidingEvent,
+  Item,
+  ItemClickEvent,
+  PositioningEvent,
+  Properties,
+  ShowingEvent,
+  ShownEvent,
+} from '@js/ui/context_menu';
+import type dxContextMenu from '@js/ui/context_menu';
+import type {
+  dxMenuBaseItem,
+  SubmenuHiddenEvent,
+  SubmenuHidingEvent,
+  SubmenuShowingEvent,
+  SubmenuShownEvent,
+} from '@js/ui/menu';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
-import type dxOverlay from '@js/ui/overlay';
 import { current as currentTheme, isGeneric } from '@js/ui/themes';
+import type { ActionArguments } from '@ts/core/m_action';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { BaseMenuActionArguments, MenuBaseNode, MenuBaseProperties } from '@ts/ui/context_menu/m_menu_base';
-import MenuBase from '@ts/ui/context_menu/m_menu_base';
+import type { ClickEvent, HoverEvent, MenuBaseProperties } from '@ts/ui/context_menu/menu_base';
+import MenuBase from '@ts/ui/context_menu/menu_base';
+import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
 import Overlay from '@ts/ui/overlay/m_overlay';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 
@@ -70,7 +87,7 @@ const ACTIONS = [
   'onLeftLastItem',
   'onCloseRootSubmenu',
   'onExpandLastSubmenu',
-];
+] as const;
 const LOCAL_SUBMENU_DIRECTIONS = [FOCUS_UP, FOCUS_DOWN, FOCUS_FIRST, FOCUS_LAST];
 const DEFAULT_SHOW_EVENT = 'dxcontextmenu';
 const SUBMENU_PADDING = 10;
@@ -79,21 +96,44 @@ const BORDER_WIDTH = 1;
 const window = getWindow();
 
 type ContextMenuTarget = string | dxElementWrapper | Element | Window | undefined;
+type ContextMenuNode = InternalNode & Item;
+
+type KeyboardEventHandler = (e: KeyboardEvent, options?: Record<string, unknown>) => void;
+type KeyboardEventHandlerAsync =
+  (e: KeyboardEvent, options?: Record<string, unknown>) => Promise<unknown>;
 
 type ShowContextMenuEvent = EventInfo<ContextMenu> & {
   target?: ContextMenuTarget;
   event?: DxEvent;
 };
+type ChatMenuShowingEvent = Cancelable & { jQEvent?: DxEvent };
+interface SubmenuCreatedEvent<TItem extends dxMenuBaseItem = dxMenuBaseItem> {
+  itemElement: Element;
+  submenuElement: Element;
+  itemData: TItem;
+}
+type ItemClickActionArguments =
+  ActionArguments<dxContextMenu<ContextMenuProperties>, ItemClickEvent>;
+
+interface ContextMenuActions {
+  onShowing?: ((e: ShowingEvent | SubmenuShowingEvent | ChatMenuShowingEvent) => void);
+  onShown?: (e: ShownEvent | SubmenuShownEvent) => void;
+  onSubmenuCreated?: (e: SubmenuCreatedEvent) => void;
+  onHiding?: (e: HidingEvent | SubmenuHidingEvent) => void;
+  onHidden?: (e: HiddenEvent | SubmenuHiddenEvent) => void;
+  onPositioning?: (e: PositioningEvent) => void;
+  onLeftFirstItem?: ($item?: dxElementWrapper) => void;
+  onLeftLastItem?: ($item?: dxElementWrapper) => void;
+  onCloseRootSubmenu?: ($item?: dxElementWrapper) => void;
+  onExpandLastSubmenu?: ($item?: dxElementWrapper) => void;
+}
 
 type ContextMenuPropertiesKeys = Exclude<keyof Properties, keyof MenuBaseProperties>;
-type KeyboardEventHandler = (e: KeyboardEvent, options?: Record<string, unknown>) => void;
-type KeyboardEventHandlerAsync =
-  (e: KeyboardEvent, options?: Record<string, unknown>) => Promise<unknown>;
-type ClickEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
-type ContextMenuActionArguments = BaseMenuActionArguments<dxMenuBase<ContextMenuProperties>, Item>;
 
-interface ContextMenuProperties extends
-  MenuBaseProperties,
+export interface ContextMenuProperties<
+  TItem extends dxMenuBaseItem = Item,
+> extends
+  MenuBaseProperties<TItem>,
   Pick<Properties, ContextMenuPropertiesKeys> {
   hideOnParentScroll?: boolean;
   visualContainer?: string | Element | Window | null;
@@ -101,7 +141,9 @@ interface ContextMenuProperties extends
   boundaryOffset?: PositionConfig['boundaryOffset'];
 }
 
-class ContextMenu extends MenuBase<ContextMenuProperties> {
+class ContextMenu<
+  TProperties extends ContextMenuProperties = ContextMenuProperties,
+> extends MenuBase<TProperties> {
   // Temporary solution. Move to component level
   public NAME!: string;
 
@@ -115,7 +157,9 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
 
   _showContextMenuEventHandler?: (event: DxEvent) => void;
 
-  // eslint-disable-next-line class-methods-use-this
+  // @ts-expect-error ts-error
+  _actions!: ContextMenuActions;
+
   getShowEvent(showEventOption: ContextMenuProperties['showEvent']): string | null {
     if (isObject(showEventOption)) {
       if (showEventOption.name === null) {
@@ -128,32 +172,24 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     return showEventOption ?? null;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getShowDelay(showEventOption: ContextMenuProperties['showEvent']): number {
+  getShowDelay(showEventOption: TProperties['showEvent']): number {
     return isObject(showEventOption) ? showEventOption.delay ?? 0 : 0;
   }
 
-  _getDefaultOptions(): ContextMenuProperties {
+  _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
       showEvent: DEFAULT_SHOW_EVENT,
       hideOnOutsideClick: true,
       position: {
-        // @ts-expect-error ts-error
         at: 'top left',
-        // @ts-expect-error ts-error
         my: 'top left',
       },
-      // @ts-expect-error ts-error
       onShowing: null,
-      // @ts-expect-error ts-error
       onShown: null,
       onSubmenuCreated: null,
-      // @ts-expect-error ts-error
       onHiding: null,
-      // @ts-expect-error ts-error
       onHidden: null,
-      // @ts-expect-error ts-error
       onPositioning: null,
       submenuDirection: 'auto',
       visible: false,
@@ -167,11 +203,11 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     };
   }
 
-  _defaultOptionsRules(): DefaultOptionsRule<ContextMenuProperties>[] {
+  _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
     return super._defaultOptionsRules().concat([{
       device: () => !hasWindow(),
+      // @ts-expect-error ts-error
       options: {
-        // @ts-expect-error ts-error
         animation: null,
       },
     }]);
@@ -180,7 +216,8 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
   _initActions(): void {
     this._actions = {};
 
-    each(ACTIONS, (_index: number, action: string) => {
+    each(ACTIONS, (_index: number, action: typeof ACTIONS[number]) => {
+      // @ts-expect-error ts-error
       this._actions[action] = this._createActionByOption(action) || noop;
     });
   }
@@ -194,7 +231,6 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _focusInHandler(): void {}
 
   _itemContainer(): dxElementWrapper {
@@ -205,9 +241,8 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     return this._itemContainer();
   }
 
-  // @ts-expect-error ts-error
-  itemsContainer(): dxElementWrapper | undefined {
-    return this._overlay?.$content();
+  itemsContainer(): dxElementWrapper {
+    return this._overlay?.$content() ?? $();
   }
 
   _supportedKeys(): Record<string, KeyboardEventHandler | KeyboardEventHandlerAsync> {
@@ -233,7 +268,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getActiveItem(last?: boolean): dxElementWrapper {
+  _getActiveItem(_last?: boolean): dxElementWrapper {
     const $availableItems = this._getAvailableItems();
 
     const $focusedItem = $availableItems.filter(`.${DX_STATE_FOCUSED_CLASS}`);
@@ -255,7 +290,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
   _moveFocus(location: string): boolean | undefined | void {
     const $items = this._getItemsByLocation(location);
     const $oldTarget = this._getActiveItem(true);
-    const $hoveredItem = this.itemsContainer()?.find(`.${DX_STATE_HOVER_CLASS}`);
+    const $hoveredItem = this.itemsContainer().find(`.${DX_STATE_HOVER_CLASS}`);
     const { focusedElement, rtlEnabled } = this.option();
     const $focusedItem = $(focusedElement);
     const $activeItemHighlighted = !!($focusedItem.length || $hoveredItem?.length);
@@ -267,16 +302,14 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
         $newTarget = $activeItemHighlighted ? this._prevItem($items) : $oldTarget;
         this._setFocusedElement($newTarget);
         if ($oldTarget.is($items.first())) {
-          // @ts-expect-error ts-error
-          this._actions.onLeftFirstItem($oldTarget);
+          this._actions.onLeftFirstItem?.($oldTarget);
         }
         break;
       case FOCUS_DOWN:
         $newTarget = $activeItemHighlighted ? this._nextItem($items) : $oldTarget;
         this._setFocusedElement($newTarget);
         if ($oldTarget.is($items.last())) {
-          // @ts-expect-error ts-error
-          this._actions.onLeftLastItem($oldTarget);
+          this._actions.onLeftLastItem?.($oldTarget);
         }
         break;
       case FOCUS_RIGHT:
@@ -311,7 +344,6 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _scrollToElement($element: dxElementWrapper): void {
     const $scrollableElement = $element.closest(`.${SCROLLABLE_CLASS}`);
     const scrollableInstance: Scrollable = Scrollable.getInstance($scrollableElement.get(0));
@@ -357,8 +389,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
       return $parentItem;
     }
 
-    // @ts-expect-error ts-error
-    this._actions.onCloseRootSubmenu($curItem);
+    this._actions.onCloseRootSubmenu?.($curItem);
 
     return undefined;
   }
@@ -378,8 +409,8 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
 
       return this._nextItem(this._getItemsByLocation(location));
     }
-    // @ts-expect-error ts-error
-    this._actions.onExpandLastSubmenu($curItem);
+
+    this._actions.onExpandLastSubmenu?.($curItem);
     return undefined;
   }
 
@@ -412,7 +443,6 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     this._addWidgetClass();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isTargetOutOfComponent(relatedTarget: Element): boolean {
     const isInsideContextMenu = $(relatedTarget).closest(`.${DX_CONTEXT_MENU_CLASS}`).length !== 0;
 
@@ -481,7 +511,6 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     e.stopPropagation();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _addPlatformDependentClass($element: dxElementWrapper): void {
     if (devices.current().phone) {
       $element.addClass(DX_MENU_PHONE_CLASS);
@@ -508,7 +537,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     });
   }
 
-  _detachShowContextMenuEvents(target: ContextMenuTarget, event?: ContextMenuProperties['showEvent']): void {
+  _detachShowContextMenuEvents(target: ContextMenuTarget, event?: TProperties['showEvent']): void {
     const { showEvent: showEventOption } = this.option();
     const showEvent = this.getShowEvent(event ?? showEventOption);
 
@@ -557,12 +586,11 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     }
   }
 
-  _hoverEndHandler(e: DxEvent): void {
+  _hoverEndHandler(e: DxEvent<HoverEvent>): void {
     super._hoverEndHandler(e);
     e.stopPropagation();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderDimensions(): void {}
 
   _renderContainer($wrapper: dxElementWrapper, submenuContainer?: Element): dxElementWrapper {
@@ -598,12 +626,12 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     return $itemsContainer;
   }
 
-  _renderSubmenuItems(node: MenuBaseNode, $itemFrame: dxElementWrapper): void {
+  _renderSubmenuItems(node: ContextMenuNode, $itemFrame: dxElementWrapper): void {
     this._renderItems(this._getChildNodes(node), $itemFrame);
 
     const $submenu = $itemFrame.children(`.${DX_SUBMENU_CLASS}`);
 
-    this._actions.onSubmenuCreated({
+    this._actions.onSubmenuCreated?.({
       itemElement: getPublicElement($itemFrame),
       itemData: node.internalFields.item,
       submenuElement: getPublicElement($submenu),
@@ -626,7 +654,6 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     return {
       focusStateEnabled,
       animation,
-      // @ts-expect-error ts-error
       innerOverlay: true,
       hideOnOutsideClick: (e: ClickEvent): boolean => this._hideOnOutsideClickHandler(e),
       propagateOutsideClick: true,
@@ -647,30 +674,31 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
       showTitle: false,
       height: 'auto',
       width: 'auto',
+      // @ts-expect-error ts-error
       onShown: this._overlayShownActionHandler.bind(this),
+      // @ts-expect-error ts-error
       onHiding: this._overlayHidingActionHandler.bind(this),
+      // @ts-expect-error ts-error
       onHidden: this._overlayHiddenActionHandler.bind(this),
       visualContainer,
     };
   }
 
-  _overlayShownActionHandler(arg: EventInfo<dxOverlay<OverlayProperties>>): void {
-    this._actions.onShown(arg);
+  _overlayShownActionHandler(arg: ShownEvent): void {
+    this._actions.onShown?.(arg);
   }
 
-  _overlayHidingActionHandler(arg: EventInfo<dxOverlay<OverlayProperties>>): void {
-    const actionArgs: Cancelable & EventInfo<dxOverlay<OverlayProperties>> = arg;
+  _overlayHidingActionHandler(arg: HidingEvent): void {
+    this._actions.onHiding?.(arg);
 
-    this._actions.onHiding(actionArgs);
-
-    if (!actionArgs.cancel) {
+    if (!arg.cancel) {
       this._hideAllShownSubmenus();
       this._setOptionWithoutOptionChange('visible', false);
     }
   }
 
-  _overlayHiddenActionHandler(arg: EventInfo<dxOverlay<OverlayProperties>>): void {
-    this._actions.onHidden(arg);
+  _overlayHiddenActionHandler(arg: HiddenEvent): void {
+    this._actions.onHidden?.(arg);
   }
 
   _shouldHideOnOutsideClick(e: ClickEvent): boolean | undefined {
@@ -711,7 +739,6 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     return true;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getActiveItemsContainer(target: Element): dxElementWrapper {
     return $(target).closest(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
   }
@@ -720,12 +747,10 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     return this._overlay?.$content().find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`) ?? $();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _searchActiveItem(target: Element): dxElementWrapper {
     return $(target).closest(`.${DX_MENU_ITEM_CLASS}`).eq(0);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isIncludeOverlay($activeOverlay: dxElementWrapper, $allOverlays: dxElementWrapper): boolean {
     let isSame = false;
 
@@ -778,8 +803,8 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     $submenu.css('height', isNestedSubmenu ? menuHeight : '100%');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
-  _getMaxUsableSpace(offsetTop: number, windowHeight: number, anchorHeight: number): number {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _getMaxUsableSpace(_offsetTop: number, windowHeight: number, _anchorHeight: number): number {
     return windowHeight;
   }
 
@@ -818,7 +843,6 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getSubmenuBorderWidth(): number {
     return isGeneric(currentTheme()) ? BORDER_WIDTH : 0;
   }
@@ -869,7 +893,6 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isSubmenuVisible($submenu: dxElementWrapper): boolean {
     // @ts-expect-error ts-error
     return $submenu.css('visibility') === 'visible';
@@ -907,7 +930,6 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _animate(container: Element, options: AnimationConfig): void {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fx.animate(container, options);
@@ -950,7 +972,8 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
   }
 
   // TODO: try to simplify it
-  _updateSubmenuVisibilityOnClick(actionArgs: ContextMenuActionArguments): void {
+  // @ts-expect-error ts-error
+  _updateSubmenuVisibilityOnClick(actionArgs: ItemClickActionArguments): void {
     if (!actionArgs.args?.length) {
       return;
     }
@@ -981,6 +1004,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
       return;
     }
 
+    // @ts-expect-error ts-error
     this._updateSelectedItemOnClick(actionArgs);
 
     // T238943. Give the workaround with e.cancel and remove this hack
@@ -1038,7 +1062,6 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     this.option('focusedElement', null);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _stopAnimate($container: dxElementWrapper): void {
     fx.stop($container.get(0), true);
   }
@@ -1060,10 +1083,10 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     }
   }
 
-  _optionChanged(args: OptionChanged<ContextMenuProperties>): void {
+  _optionChanged(args: OptionChanged<TProperties>): void {
     const { name, value, previousValue } = args;
 
-    if (ACTIONS.includes(name)) {
+    if (ACTIONS.includes(name as typeof ACTIONS[number])) {
       this._initActions();
       return;
     }
@@ -1071,7 +1094,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     switch (name) {
       case 'visible':
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this._renderVisibility(value);
+        this._renderVisibility(value as boolean | undefined);
         break;
       case 'disabled':
       case 'position':
@@ -1086,7 +1109,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
         break;
       case 'target':
         if (previousValue) {
-          this._detachShowContextMenuEvents(previousValue);
+          this._detachShowContextMenuEvents(previousValue as ContextMenuProperties['target']);
         }
         this._invalidate();
         break;
@@ -1103,7 +1126,6 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     return showing ? this._show() : this._hide();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _toggleVisibility(): void {}
 
   _show(event?: DxEvent): Promise<unknown> {
@@ -1112,7 +1134,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     };
     let promise = Deferred().reject().promise();
 
-    this._actions.onShowing(args);
+    this._actions.onShowing?.(args);
 
     if (args.cancel) {
       return promise;
@@ -1167,7 +1189,7 @@ class ContextMenu extends MenuBase<ContextMenuProperties> {
     return promise;
   }
 
-  _renderItems(nodes: MenuBaseNode[], submenuContainer?: dxElementWrapper): void {
+  _renderItems(nodes: ContextMenuNode[], submenuContainer?: dxElementWrapper): void {
     super._renderItems(nodes, submenuContainer);
 
     const $submenu = $(this._overlay?.content()).children(`.${DX_SUBMENU_CLASS}`);

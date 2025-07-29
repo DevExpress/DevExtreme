@@ -1,10 +1,22 @@
-/* eslint-disable guard-for-in */
 /* eslint-disable @typescript-eslint/prefer-for-of */
-/* eslint-disable no-restricted-syntax */
+
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { isFunction, isPlainObject } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+
+export type ActionArguments<
+  TComponent,
+  TEventData,
+> = Record<string, unknown> & TEventData & {
+  args?: TEventData[];
+  action: (e: TEventData) => void;
+  context: TComponent;
+  component: TComponent;
+  cancel: boolean;
+  handled: boolean;
+  validatingTargetName?: string;
+};
 
 class Action {
   _action: any;
@@ -81,7 +93,6 @@ class Action {
     const excludeValidators = this._excludeValidators;
     const { executors } = Action;
 
-    // eslint-disable-next-line no-restricted-syntax
     for (const name in executors) {
       if (!excludeValidators[name]) {
         const executor = executors[name];

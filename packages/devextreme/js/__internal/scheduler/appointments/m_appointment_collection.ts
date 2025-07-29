@@ -714,8 +714,7 @@ class SchedulerAppointments extends CollectionWidget {
 
     return getAppointmentDateRange({
       handles: e.handles,
-      appointmentSettings: $element.data(APPOINTMENT_SETTINGS_KEY),
-      isVerticalViewDirection: this.option('isVerticalViewDirection')(),
+      appointmentSettings: $element.data(APPOINTMENT_SETTINGS_KEY) as any,
       isVerticalGroupedWorkSpace: this.option('isVerticalGroupedWorkSpace')(),
       appointmentRect: getBoundingRect($element[0]),
       parentAppointmentRect: getBoundingRect($element.parent()[0]),

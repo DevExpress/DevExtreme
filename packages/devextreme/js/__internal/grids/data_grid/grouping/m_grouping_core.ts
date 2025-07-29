@@ -1,6 +1,7 @@
 import { normalizeSortingInfo } from '@js/common/data/utils';
 import $ from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
+import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
 import gridCore from '../m_core';
 
@@ -262,7 +263,7 @@ export class GroupingHelper {
     that._group = storeLoadOptions.group;
 
     for (let groupIndex = 0; groupIndex < groupsCount; groupIndex++) {
-      if (oldGroups[groupIndex].selector !== groups[groupIndex].selector) {
+      if (!gridCoreUtils.isEqualSelectors(oldGroups[groupIndex].selector, groups[groupIndex].selector)) {
         groupsCount = groupIndex;
         break;
       }

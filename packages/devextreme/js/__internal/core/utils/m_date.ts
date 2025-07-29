@@ -623,7 +623,7 @@ const intervalsOverlap = function (options) {
 
 const dateTimeFromDecimal = function (number) {
   const hours = Math.floor(number);
-  const minutes = (number % 1) * 60;
+  const minutes = Math.round((number % 1) * 60);
 
   return {
     hours,
