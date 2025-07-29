@@ -110,6 +110,18 @@
   }
 }
 
+.dx-datagrid-total-footer {
+  .dx-row.dx-footer-row {
+    .dx-datagrid-sticky-column,
+    .dx-datagrid-sticky-column-left,
+    .dx-datagrid-sticky-column-right {
+      .dx-datagrid-summary-item {
+        padding-inline: $material-grid-base-cell-horizontal-padding;
+      }
+    }
+  }
+}
+
 .dx-datagrid-group-opened {
   @include dx-icon(chevrondown);
   @include dx-icon-sizing($material-base-icon-size);

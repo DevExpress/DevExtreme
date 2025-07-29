@@ -105,6 +105,18 @@
   }
 }
 
+.dx-datagrid-total-footer {
+  .dx-row.dx-footer-row {
+    .dx-datagrid-sticky-column,
+    .dx-datagrid-sticky-column-left,
+    .dx-datagrid-sticky-column-right {
+      .dx-datagrid-summary-item {
+        padding-inline: $generic-datagrid-cell-padding;
+      }
+    }
+  }
+}
+
 .dx-datagrid-group-opened {
   @include dx-icon(spindown);
   @include dx-icon-sizing($generic-base-icon-size);
