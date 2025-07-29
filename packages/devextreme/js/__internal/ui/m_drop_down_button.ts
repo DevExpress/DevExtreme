@@ -128,10 +128,10 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     this._initDataController();
     this._compileKeyGetter();
     this._compileDisplayGetter();
-    // @ts-expect-error ts-error
-    this._options.cache('buttonGroupOptions', this.option('buttonGroupOptions'));
-    // @ts-expect-error ts-error
-    this._options.cache('dropDownOptions', this.option('dropDownOptions'));
+
+    const { buttonGroupOptions, dropDownOptions } = this.option();
+    this._options.cache('buttonGroupOptions', buttonGroupOptions);
+    this._options.cache('dropDownOptions', dropDownOptions);
   }
 
   _initDataController(): void {
