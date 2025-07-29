@@ -8,16 +8,14 @@ const resolve = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const babel = require('@rollup/plugin-babel');
 
-const openaiPackageJsonContent = fs.readFileSync(path.resolve('./node_modules/openai/package.json'), 'utf-8');
-const openaiPackageJSON = JSON.parse(openaiPackageJsonContent);
-
 const execAsync = util.promisify(exec);
+const outDir = './bundles/externals/';
 
-async function buildAndPack() {
-    const outDir = './bundles/externals/';
-    const outPackageDir = outDir + 'openai/';
-    const inputFile = './node_modules/openai/index.mjs';
-    const outputFile = outPackageDir + 'openai.bundle.mjs';
+async function buildAndPack(packageName, inputFile) {
+    const packageJsonContent = fs.readFileSync(path.resolve(`./node_modules/${packageName}/package.json`), 'utf-8');
+    const packageJSON = JSON.parse(packageJsonContent);
+    const outPackageDir = outDir + `${packageName}/`;
+    const outputFile = outPackageDir + `${packageName}.bundle.mjs`;
 
     fs.mkdirSync(outPackageDir, { recursive: true });
     
@@ -41,16 +39,16 @@ async function buildAndPack() {
     await bundle.write({
         file: outputFile,
         format: 'esm',
-        name: 'openai',
+        name: packageName,
         globals: { },
     });
 
     const packageJson = {
-        name: 'openai',
-        version: openaiPackageJSON.version,
-        exports: './openai.bundle.mjs',
+        name: packageName,
+        version: packageJSON.version,
+        exports: `./${packageName}.bundle.mjs`,
         type: 'module',
-        license: openaiPackageJSON.license
+        license: packageJSON.license
     };
 
     await fs.writeFileSync(
@@ -59,7 +57,7 @@ async function buildAndPack() {
     );
 
    const { stdout,  stderr } = await execAsync('npm pack', { cwd: outPackageDir });
-   const filename = `openai-${openaiPackageJSON.version}.tgz`;
+   const filename = `${packageName}-${packageJSON.version}.tgz`;
    
     if (stdout.trim('\n') === filename) {
         fs.renameSync(
@@ -72,6 +70,13 @@ async function buildAndPack() {
     }
 }
 
-buildAndPack().catch(err => {
-    console.error('Build failed:', err);
+[
+    {
+        packageName: 'openai',
+        inputFile:  './node_modules/openai/index.mjs'
+    }
+].forEach(({ packageName, inputFile}) => {
+    buildAndPack(packageName, inputFile).catch(err => {
+        console.error('Build failed:', err);
+    })
 });
