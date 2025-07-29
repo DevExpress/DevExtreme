@@ -2517,6 +2517,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
 QUnit.module('double FileManager - notification displayed next to correct FileManager (Bugs)', moduleConfig_T1301121, () => {
 
     test('error in second filemanager displayed in the popup located next to second filemanager', function(assert) {
+        this.clock.tick(800);
+
         const $popupContents = this.wrapper2.getNotificationPopup();
         const popupInstance = this.wrapper2.getNotificationPopupInstance();
 
