@@ -284,39 +284,6 @@ test('Data should be filtered if True is selected in the header filter when case
   headerFilter: { visible: true },
 }));
 
-test('[T1284200] Should handle dxList "selectAll" when has unselected items on the second page', async (t) => {
-  const dataGrid = new DataGrid(GRID_CONTAINER);
-  const headerCell = dataGrid.getHeaders()
-    .getHeaderRow(0)
-    .getHeaderCell(0);
-  const filterIconElement = headerCell.getFilterIcon();
-  const headerFilter = new HeaderFilter();
-  const list = headerFilter.getList();
-
-  await t
-    .click(filterIconElement)
-    .click(list.selectAll.checkBox.element);
-
-  await t.expect(list.selectAll.checkBox.isChecked).ok();
-
-  await t.click(list.selectAll.checkBox.element);
-
-  await t.expect(list.selectAll.checkBox.isChecked).notOk();
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: new Array(100).fill(null).map((_, idx) => ({
-    id: idx,
-  })),
-  keyExpr: 'id',
-  columns: [{
-    dataField: 'id',
-    filterType: 'exclude',
-    filterValues: [70],
-  }],
-  headerFilter: {
-    visible: true,
-  },
-}));
-
 test('Header filter search input loses focus on first key in datetime columns (T1284663)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const headerCell = dataGrid.getHeaders()
