@@ -205,26 +205,26 @@ $datagrid-text-stub-background-image-path: null !default;
     }
   }
 
-.dx-datagrid-total-footer {
-  .dx-row.dx-footer-row {
+  .dx-datagrid-total-footer {
+    .dx-row.dx-footer-row {
 
-    td.dx-command-expand {
-      &.dx-datagrid-sticky-column, &.dx-datagrid-sticky-column-left, &.dx-datagrid-sticky-column-right {
-        background-color: $datagrid-base-background-color;
+      td.dx-command-expand {
+        &.dx-datagrid-sticky-column, &.dx-datagrid-sticky-column-left, &.dx-datagrid-sticky-column-right {
+          background-color: $datagrid-base-background-color;
+        }
       }
-    }
 
-    .dx-datagrid-sticky-column,
-    .dx-datagrid-sticky-column-left,
-    .dx-datagrid-sticky-column-right {
-        padding-inline: 0;
+      .dx-datagrid-sticky-column,
+      .dx-datagrid-sticky-column-left,
+      .dx-datagrid-sticky-column-right {
+          padding-inline: 0;
 
-      .dx-datagrid-summary-item {
-        background-color: $datagrid-base-background-color;
+        .dx-datagrid-summary-item {
+          background-color: $datagrid-base-background-color;
+        }
       }
     }
   }
-}
 
   .dx-datagrid-filter-row .dx-filter-range-content {
     color: $datagrid-base-color;
