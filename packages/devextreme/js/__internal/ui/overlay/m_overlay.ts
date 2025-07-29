@@ -91,7 +91,7 @@ export interface GeometryOptions {
   isDimensionChange?: boolean;
 }
 
-interface OverlayProperties extends Properties {
+export interface OverlayProperties extends Properties {
   container?: string | dxElementWrapper | Element;
 
   visualContainer?: string | Element | null;
@@ -704,6 +704,8 @@ class Overlay<
 
     if (isObject(configuration[direction])) {
       configuration[direction] = {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore spread types may only be created from object types
         ...configuration[direction],
         position: this._positionController.position,
       };
