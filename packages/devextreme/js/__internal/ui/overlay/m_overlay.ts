@@ -99,6 +99,10 @@ interface OverlayProperties extends Properties {
 
   enableBodyScroll?: boolean;
 
+  ignoreChildEvents?: boolean;
+
+  templatesRenderAsynchronously?: boolean;
+
   _loopFocus?: boolean;
 
   _ignorePreventScrollEventsDeprecation?: boolean;
@@ -108,6 +112,8 @@ interface OverlayProperties extends Properties {
   _skipContentPositioning?: boolean;
 
   _hideOnParentScrollTarget?: string | Element | dxElementWrapper;
+
+  _checkParentVisibility?: boolean;
 
   hideTopOverlayHandler?: () => void;
 }
@@ -293,6 +299,7 @@ class Overlay<
     return this._$content;
   }
 
+  /** REMOVE */
   ctor(element: Element, options: TProperties): void {
     super.ctor(element, options);
 
@@ -342,7 +349,9 @@ class Overlay<
   }
 
   warnPositionAsFunction(): void {
-    if (isFunction(this.option('position'))) { // position as function deprecated in 21.2
+    const { position } = this.option();
+
+    if (isFunction(position)) { // position as function deprecated in 21.2
       errors.log('W0018');
     }
   }
@@ -433,7 +442,9 @@ class Overlay<
   }
 
   _outsideClickHandler(e: PointerLikeEvent): void {
-    if (this.option('shading')) {
+    const { shading } = this.option();
+
+    if (shading) {
       e.preventDefault();
     }
 
@@ -486,8 +497,8 @@ class Overlay<
     }
 
     if (toggle) {
-      this._viewPortChangeHandle = (...args): void => {
-        this._viewPortChangeHandler(...args);
+      this._viewPortChangeHandle = (): void => {
+        this._viewPortChangeHandler();
       };
 
       viewPortChanged.add(this._viewPortChangeHandle);
@@ -495,12 +506,15 @@ class Overlay<
   }
 
   _viewPortChangeHandler(): void {
-    this._positionController.updateContainer(this.option('container'));
+    const { container } = this.option();
+
+    this._positionController.updateContainer(container);
     this._refresh();
   }
 
   _renderWrapperAttributes(): void {
     const { wrapperAttr } = this.option();
+
     const attributes = extend({}, wrapperAttr);
     const classNames = attributes.class;
 
@@ -541,7 +555,9 @@ class Overlay<
         return;
       }
 
-      if (this.option('focusStateEnabled')) {
+      const { focusStateEnabled } = this.option();
+
+      if (focusStateEnabled) {
         // @ts-expect-error trigger should be typed on type 'EventsEngineType'
         eventsEngine.trigger(this._focusTarget(), 'focus');
       }
@@ -964,9 +980,9 @@ class Overlay<
 
     eventsEngine.off(prevTargets, scrollEvent, handler);
 
-    const hideOnScroll = this.option('hideOnParentScroll');
+    const { hideOnParentScroll } = this.option();
 
-    if (needSubscribe && hideOnScroll) {
+    if (needSubscribe && hideOnParentScroll) {
       let $parents = this._getHideOnParentScrollTarget().parents();
 
       if (devices.real().deviceType === 'desktop') {
@@ -985,10 +1001,11 @@ class Overlay<
   _hideOnParentsScrollHandler(e: Event): void {
     let hideHandled = false;
 
-    const hideOnScroll = this.option('hideOnParentScroll');
+    const { hideOnParentScroll } = this.option();
 
-    if (isFunction(hideOnScroll)) {
-      hideHandled = hideOnScroll(e);
+    if (isFunction(hideOnParentScroll)) {
+      // @ts-expect-error hideOnParentScroll is typed as boolean
+      hideHandled = hideOnParentScroll(e);
     }
 
     if (!hideHandled && !this._showAnimationProcessing) {
@@ -1013,8 +1030,9 @@ class Overlay<
     super._render();
 
     this._appendContentToElement();
+
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this._renderVisibilityAnimate(Boolean(this.option('visible')));
+    this._renderVisibilityAnimate(this._isVisible());
   }
 
   _appendContentToElement(): void {
@@ -1024,8 +1042,10 @@ class Overlay<
   }
 
   _renderContent(): void {
-    const shouldDeferRendering = !this._currentVisible && this.option('deferRendering');
-    const isParentHidden = this.option('visible') && this._isParentHidden();
+    const { deferRendering } = this.option();
+
+    const shouldDeferRendering = !this._currentVisible && deferRendering;
+    const isParentHidden = this._isVisible() && this._isParentHidden();
 
     if (isParentHidden) {
       this._isHidden = true;
@@ -1043,7 +1063,10 @@ class Overlay<
   }
 
   _isParentHidden(): boolean {
-    if (!this.option('_checkParentVisibility')) {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _checkParentVisibility } = this.option();
+
+    if (!_checkParentVisibility) {
       return false;
     }
 
@@ -1076,8 +1099,9 @@ class Overlay<
   }
 
   _renderContentImpl(): Promise<void> {
+    const { contentTemplate: contentTemplateOption } = this.option();
+
     const whenContentRendered = Deferred();
-    const contentTemplateOption = this.option('contentTemplate');
     const contentTemplate = this._getTemplate(contentTemplateOption);
     const transclude = this._templateManager.anonymousTemplateName === contentTemplateOption;
 
@@ -1088,8 +1112,10 @@ class Overlay<
       onRendered: () => {
         whenContentRendered.resolve();
 
+        const { templatesRenderAsynchronously } = this.option();
+
         // NOTE: T1114344
-        if (this.option('templatesRenderAsynchronously')) {
+        if (templatesRenderAsynchronously) {
           this._dimensionChanged();
         }
       },
@@ -1108,7 +1134,7 @@ class Overlay<
   }
 
   _processContentRendering(): void {
-    if (this.option('visible')) {
+    if (this._isVisible()) {
       this._moveToContainer();
     }
   }
@@ -1225,9 +1251,7 @@ class Overlay<
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _renderGeometry(options?: Record<string, unknown>): void {
-    const { visible } = this.option();
-
-    if (visible && windowUtils.hasWindow()) {
+    if (this._isVisible() && windowUtils.hasWindow()) {
       this._stopAnimation();
       this._renderGeometryImpl();
     }
@@ -1254,7 +1278,8 @@ class Overlay<
   }
 
   _toggleSafariScrolling(): void {
-    const visible = this.option('visible');
+    const visible = this._isVisible();
+
     const $body = $(domAdapter.getBody());
     const isIosSafari = devices.real().platform === 'ios' && browser.safari;
     const isAllWindowCovered = this._isAllWindowCovered();
@@ -1334,19 +1359,22 @@ class Overlay<
     const e = options.originalEvent;
     const $target = $(e.target as Element);
 
-    if ($target.is(this._$content) || !this.option('ignoreChildEvents')) {
+    const { ignoreChildEvents } = this.option();
+
+    if ($target.is(this._$content) || !ignoreChildEvents) {
       super._keyboardHandler(options, onlyChildProcessing);
     }
   }
 
   _isVisible(): boolean {
     const { visible } = this.option();
+
     return Boolean(visible);
   }
 
   _visibilityChanged(visible: boolean): void {
     if (visible) {
-      if (this.option('visible')) {
+      if (this._isVisible()) {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._renderVisibilityAnimate(visible);
       }
@@ -1383,7 +1411,7 @@ class Overlay<
 
     this._toggleSafariScrolling();
 
-    if (this.option('visible')) {
+    if (this._isVisible()) {
       zIndexPool.remove(this._zIndex);
     }
 
@@ -1410,16 +1438,12 @@ class Overlay<
         break;
       case '_loopFocus':
       case 'shading': {
-        const { visible } = this.option();
-
-        this._toggleShading(visible);
+        this._toggleShading(this._isVisible());
         this._toggleSafariScrolling();
         break;
       }
       case 'shadingColor': {
-        const { visible } = this.option();
-
-        this._toggleShading(visible);
+        this._toggleShading(this._isVisible());
         break;
       }
       case 'width':
@@ -1432,12 +1456,15 @@ class Overlay<
       case 'maxHeight':
         this._renderGeometry();
         break;
-      case 'position':
-        this._positionController.updatePosition(this.option('position'));
+      case 'position': {
+        const { position } = this.option();
+
+        this._positionController.updatePosition(position);
         this._positionController.restorePositionOnNextRender(true);
         this._renderGeometry();
         this._toggleSafariScrolling();
         break;
+      }
       case 'visible':
         this._renderVisibilityAnimate(Boolean(value))
           // @ts-expect-error done should be typed
@@ -1467,13 +1494,11 @@ class Overlay<
         this._toggleHideTopOverlayCallback(false);
         // @ts-expect-error ts-error
         this._initHideTopOverlayHandler(value);
-        this._toggleHideTopOverlayCallback(Boolean(this.option('visible')));
+        this._toggleHideTopOverlayCallback(this._isVisible());
         break;
       case 'hideOnParentScroll':
       case '_hideOnParentScrollTarget': {
-        const { visible } = this.option();
-
-        this._toggleHideOnParentsScrollSubscription(visible);
+        this._toggleHideOnParentsScrollSubscription(this._isVisible());
         break;
       }
       case 'hideOnOutsideClick':
@@ -1503,10 +1528,11 @@ class Overlay<
   }
 
   toggle(showing?: boolean): Promise<boolean> {
-    const isShowing = showing ?? !this.option('visible');
+    const visible = this._isVisible();
+    const isShowing = showing ?? !visible;
     const result = Deferred<boolean>();
 
-    if (isShowing === Boolean(this.option('visible'))) {
+    if (isShowing === visible) {
       // @ts-expect-error this
       return result.resolveWith(this, [isShowing]).promise();
     }
@@ -1522,7 +1548,7 @@ class Overlay<
         delete this._animateDeferred;
 
         // @ts-expect-error this
-        result.resolveWith(this, [Boolean(this.option('visible'))]);
+        result.resolveWith(this, [this._isVisible()]);
       })
       .fail(() => {
         delete this._animateDeferred;
