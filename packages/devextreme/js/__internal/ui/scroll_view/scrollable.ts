@@ -1,7 +1,7 @@
 import type { ScrollDirection } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import scrollEvents from '@js/common/core/events/gesture/emitter.gesture.scroll';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
@@ -10,6 +10,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { ensureDefined, noop } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { when } from '@js/core/utils/deferred';
 import {
   getHeight, getOuterHeight, getOuterWidth, getWidth,
@@ -498,11 +499,11 @@ class Scrollable<
     return getOuterWidth(this.$content());
   }
 
-  update(): void {
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  update(): DeferredObj<unknown> | void {
     if (!this._strategy) {
       return;
     }
-    // @ts-expect-error ts-error
     // eslint-disable-next-line consistent-return
     return when(this._strategy.update()).done(() => {
       this._updateAllowedDirection();

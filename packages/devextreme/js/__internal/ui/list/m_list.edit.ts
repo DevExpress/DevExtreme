@@ -1,4 +1,4 @@
-import { isTouchEvent } from '@js/common/core/events/utils/index';
+import { isTouchEvent } from '@js/common/core/events/utils';
 import localizationMessage from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -33,7 +33,7 @@ class ListEdit extends ListBase {
       }
     };
 
-    const moveFocusedItem = (e, moveUp?: boolean) => {
+    const moveFocusedItem = (e, moveUp?: boolean): void => {
       const editStrategy = this._editStrategy;
       const { focusedElement } = this.option();
       // @ts-expect-error ts-error
@@ -49,9 +49,9 @@ class ListEdit extends ListBase {
 
         const isMoveFromGroup = this.option('grouped')
           && $(focusedElement).parent().get(0) !== $nextItem.parent().get(0);
-        if (!isMoveFromGroup) {
-          this.reorderItem(focusedElement, $nextItem);
-          this.scrollToItem(focusedElement);
+        if (!isMoveFromGroup && focusedElement) {
+          this.reorderItem($(focusedElement).get(0), $nextItem.get(0));
+          this.scrollToItem($(focusedElement).get(0));
         }
         e.preventDefault();
       } else {
@@ -316,7 +316,7 @@ class ListEdit extends ListBase {
 
     this.option('focusedElement', $item);
     this.focus();
-    this.scrollToItem(this.option('focusedElement'));
+    this.scrollToItem($item.get(0));
   }
 
   _getFlatIndex(): number {
@@ -402,6 +402,7 @@ class ListEdit extends ListBase {
       : focusedItemIndex;
     const promise = super.deleteItem(itemElement);
 
+    // @ts-expect-error ts-error
     return promise.done(function () {
       if (focusStateEnabled) {
         this.focusListItem(nextFocusedItem);

@@ -1,7 +1,7 @@
 import '@ts/ui/list/modules/m_selection';
 
 import type { SingleOrMultiple } from '@js/common';
-import { normalizeKeyName } from '@js/common/core/events/utils/index';
+import { normalizeKeyName } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
@@ -304,8 +304,11 @@ class SelectBox<
     delete this._preventInputValueRender;
   }
 
-  _scrollToSelectedItem() {
-    this._list?.scrollToItem(this._list.option('selectedItem'));
+  _scrollToSelectedItem(): void {
+    const { selectedItem } = this._list?.option() ?? {};
+    if (selectedItem) {
+      this._list?.scrollToItem(selectedItem);
+    }
   }
 
   _listContentReadyHandler(): void {

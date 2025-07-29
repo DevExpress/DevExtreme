@@ -1,9 +1,11 @@
+import type { template as Template } from '@js/common';
 import { fx } from '@js/common/core/animation';
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { end as swipeEventEnd } from '@js/common/core/events/swipe';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
+import type { DataSourceOptions } from '@js/common/data';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
 import Guid from '@js/core/guid';
@@ -13,23 +15,33 @@ import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { ensureDefined, noop } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
 import { getHeight, getOuterHeight, setHeight } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import type { DxEvent } from '@js/events';
+import type { DxEvent, NativeEventInfo } from '@js/events';
 import Button from '@js/ui/button';
-import type { Item, Properties } from '@js/ui/list';
-import ScrollView from '@js/ui/scroll_view';
+import type { CollectionWidgetItem as CollectionWidgetItemProperties } from '@js/ui/collection/ui.collection_widget.base';
+import type {
+  Item,
+  ListItemInfo,
+  PageLoadingEvent,
+  Properties,
+  PullRefreshEvent,
+  ScrollEvent,
+} from '@js/ui/list';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { DataChange, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import CollectionWidget from '@ts/ui/collection/collection_widget.live_update';
+import { ScrollView } from '@ts/ui/scroll_view/scroll_view';
 import { deviceDependentOptions } from '@ts/ui/scroll_view/scrollable.device';
+import type { ScrollOffset } from '@ts/ui/scroll_view/types';
 import { getElementMargin } from '@ts/ui/scroll_view/utils/get_element_style';
 import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
 
@@ -60,18 +72,34 @@ const LIST_FEEDBACK_SHOW_TIMEOUT = 70;
 const groupItemsGetter = compileGetter('items');
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-let _scrollView;
+let _scrollView = null;
 
-export interface ListBaseProperties extends Properties<Item> {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function getScrollView() {
+  return _scrollView ?? ScrollView;
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function setScrollView(value): void {
+  _scrollView = value;
+}
+
+type ListItemProperties = CollectionWidgetItemProperties & {
+  icon?: string;
+};
+
+export interface ListBaseProperties<
+  TItem extends Item = Item,
+> extends Properties<TItem> {
   validationGroup?: string;
 
   _onItemsRendered?: () => void;
 
   _swipeEnabled?: boolean;
 
-  showChevronExpr?: (data) => boolean | undefined;
+  showChevronExpr?: (data: TItem) => boolean | undefined;
 
-  badgeExpr?: (data) => string | undefined;
+  badgeExpr?: (data: TItem) => string | undefined;
 
   wrapItemText?: boolean;
 
@@ -82,23 +110,33 @@ export interface ListBaseProperties extends Properties<Item> {
 
 type Direction = 'prev' | 'next';
 
-export class ListBase extends CollectionWidget<ListBaseProperties> {
+type InkRippleEvent = DxEvent<PointerEvent>;
+
+export class ListBase<
+  TProperties extends ListBaseProperties = ListBaseProperties,
+  TItem extends Item = Item,
+  // @ts-expect-error ts-error
+> extends CollectionWidget<TProperties, TItem> {
   static ItemClass = ListItem;
 
   _$listContainer!: dxElementWrapper;
 
   _$container!: dxElementWrapper;
 
-  _scrollView?: any;
+  _scrollView?: ScrollView;
 
   _$nextButton!: dxElementWrapper | null;
 
+  // eslint-disable-next-line no-restricted-globals
   _holdTimer?: ReturnType<typeof setTimeout>;
 
+  // eslint-disable-next-line no-restricted-globals
   _loadNextPageTimer?: ReturnType<typeof setTimeout>;
 
+  // eslint-disable-next-line no-restricted-globals
   _showLoadingIndicatorTimer?: ReturnType<typeof setTimeout>;
 
+  // eslint-disable-next-line no-restricted-globals
   _inkRippleTimer?: ReturnType<typeof setTimeout>;
 
   _isFirstLoadCompleted?: boolean;
@@ -109,16 +147,17 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
 
   _isLoadIndicationSuppressed?: boolean;
 
-  _scrollAction?: (e) => void;
+  _scrollAction?: (e: ScrollEvent) => void;
 
-  _pullRefreshAction?: (e) => void;
+  _pullRefreshAction?: (e?: PullRefreshEvent) => void;
 
-  _pageLoadingAction?: (e) => void;
+  _pageLoadingAction?: (e: PageLoadingEvent) => void;
 
-  _upInkRippleHandler?: (e) => void;
+  _upInkRippleHandler?: (e: InkRippleEvent) => void;
 
-  _downInkRippleHandler?: (e) => void;
+  _downInkRippleHandler?: (e: InkRippleEvent) => void;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _selectionChangeEventInstance?: any;
 
   _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
@@ -126,10 +165,10 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
       ...super._supportedKeys(),
       leftArrow: noop,
       rightArrow: noop,
-      pageUp(e) {
+      pageUp(e): void {
         this._moveFocusPerPage(e, 'prev');
       },
-      pageDown(e) {
+      pageDown(e): void {
         this._moveFocusPerPage(e, 'next');
       },
     };
@@ -154,7 +193,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     }
 
     this.option('focusedElement', getPublicElement($item));
-    this.scrollToItem($item);
+    this.scrollToItem($item.get(0));
   }
 
   _isLastItemFocused(direction: Direction): boolean {
@@ -196,7 +235,8 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
       }
 
       const nextItemLocation = ($nextItem.position()?.top ?? 0) + getOuterHeight($nextItem) / 2;
-      isItemVisible = nextItemLocation < containerHeight + scrollTop && nextItemLocation > scrollTop;
+      isItemVisible = nextItemLocation < containerHeight + scrollTop
+        && nextItemLocation > scrollTop;
 
       if (isItemVisible) {
         $item = $nextItem;
@@ -217,7 +257,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     return $item.position().top;
   }
 
-  _getDefaultOptions(): ListBaseProperties {
+  _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
       hoverStateEnabled: true,
@@ -233,18 +273,13 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
       pulledDownText: messageLocalization.format('dxList-pulledDownText'),
       refreshingText: messageLocalization.format('dxList-refreshingText'),
       pageLoadingText: messageLocalization.format('dxList-pageLoadingText'),
-      // @ts-expect-error ts-error
       onScroll: null,
-      // @ts-expect-error ts-error
       onPullRefresh: null,
-      // @ts-expect-error ts-error
       onPageLoading: null,
       pageLoadMode: 'scrollBottom',
       nextButtonText: messageLocalization.format('dxList-nextButtonText'),
-      // @ts-expect-error ts-error
       onItemSwipe: null,
       grouped: false,
-      // @ts-expect-error ts-error
       onGroupRendered: null,
       collapsibleGroups: false,
       groupTemplate: 'group',
@@ -254,17 +289,18 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
       useInkRipple: false,
       wrapItemText: false,
       _swipeEnabled: true,
-      showChevronExpr(data: Item): boolean | undefined {
+      showChevronExpr(data: TItem): boolean | undefined {
         return data?.showChevron;
       },
-      badgeExpr(data: Item): string | undefined { return data?.badge; },
+      badgeExpr(data: TItem): string | undefined { return data?.badge; },
       _onItemsRendered: (): void => {},
     };
   }
 
-  _defaultOptionsRules(): DefaultOptionsRule<ListBaseProperties>[] {
+  _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
     const themeName = current();
 
+    // @ts-expect-error ts-error
     return super._defaultOptionsRules().concat(deviceDependentOptions(), [
       {
         device(): boolean {
@@ -320,15 +356,17 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return LIST_ITEM_CLASS;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return LIST_ITEM_DATA_KEY;
   }
 
-  _itemContainer() {
+  _itemContainer(): dxElementWrapper {
     return this._$container;
   }
 
@@ -343,15 +381,19 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     listContainer.appendTo(this._$container);
   }
 
-  _saveSelectionChangeEvent(e) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  _saveSelectionChangeEvent(e): void {
     this._selectionChangeEventInstance = e;
   }
 
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   _getSelectionChangeEvent() {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._selectionChangeEventInstance;
   }
 
-  _refreshItemElements() {
+  _refreshItemElements(): void {
     const { grouped } = this.option();
     const $itemsContainer = this._getItemsContainer();
 
@@ -365,15 +407,13 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     }
   }
 
-  _getItemAndHeaderElements() {
+  _getItemAndHeaderElements(): dxElementWrapper {
     const itemSelector = `> .${LIST_GROUP_BODY_CLASS} > ${this._itemSelector()}`;
     const itemAndHeaderSelector = `${itemSelector}, > .${LIST_GROUP_HEADER_CLASS}`;
 
     const $listGroup = this._getItemsContainer().children(`.${LIST_GROUP_CLASS}`);
 
-    const $items = $listGroup.find(itemAndHeaderSelector);
-
-    return $items;
+    return $listGroup.find(itemAndHeaderSelector);
   }
 
   _getAvailableItems($itemElements?: dxElementWrapper): dxElementWrapper {
@@ -381,41 +421,41 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
 
     if (collapsibleGroups) {
       const $elements = this._getItemAndHeaderElements();
-      // @ts-expect-error ts-error
-      const $visibleItems = $elements.filter((_, element) => {
-        if ($(element).hasClass(LIST_GROUP_HEADER_CLASS)) {
-          return true;
-        }
 
-        return !$(element).closest(`.${LIST_GROUP_CLASS}`).hasClass(LIST_GROUP_COLLAPSED_CLASS);
-      });
+      return $elements
+        // @ts-expect-error ts-error
+        .filter((_index: number, element: dxElementWrapper): boolean => {
+          if ($(element).hasClass(LIST_GROUP_HEADER_CLASS)) {
+            return true;
+          }
 
-      return $visibleItems;
+          return !$(element).closest(`.${LIST_GROUP_CLASS}`).hasClass(LIST_GROUP_COLLAPSED_CLASS);
+        });
     }
 
     return super._getAvailableItems($itemElements);
   }
 
-  _modifyByChanges(): void {
-    // @ts-expect-error ts-error
-    super._modifyByChanges.apply(this, arguments);
+  _modifyByChanges(changes: DataChange<TItem>[], isPartialRefresh?: boolean): void {
+    super._modifyByChanges(changes, isPartialRefresh);
 
     this._refreshItemElements();
     this._updateLoadingState(true);
   }
 
-  reorderItem(itemElement, toItemElement) {
+  reorderItem(itemElement: Element, toItemElement: Element): DeferredObj<unknown> {
     const promise = super.reorderItem(itemElement, toItemElement);
 
-    return promise.done(function () {
+    return promise.done((): void => {
       this._refreshItemElements();
     });
   }
 
-  deleteItem(itemElement) {
+  deleteItem(itemElement: Element): Promise<unknown> {
     const promise = super.deleteItem(itemElement);
     // @ts-expect-error ts-error
-    return promise.done(function () {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return promise.done((): void => {
       this._refreshItemElements();
     });
   }
@@ -424,7 +464,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     return this._itemElementsCache;
   }
 
-  _itemSelectHandler(e: DxEvent) {
+  _itemSelectHandler(e: DxEvent):
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  DeferredObj<unknown> | void {
     const { selectionMode } = this.option();
 
     const isSingleSelectedItemClicked = selectionMode === 'single'
@@ -441,9 +483,11 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
       this.option('focusedElement', e.currentTarget);
     }
 
+    // eslint-disable-next-line consistent-return
     return super._itemSelectHandler(e, isSelectionControlClicked);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _allowDynamicItemsAppend(): boolean {
     return true;
   }
@@ -489,23 +533,26 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     return pageLoadMode === 'nextButton';
   }
 
-  _dataSourceOptions() {
+  _dataSourceOptions(): DataSourceOptions {
     const scrollBottom = this._scrollBottomMode();
     const nextButton = this._nextButtonMode();
 
-    return extend(super._dataSourceOptions(), {
+    return {
+      ...super._dataSourceOptions(),
       paginate: ensureDefined(scrollBottom || nextButton, true),
-    });
+    };
   }
 
-  _getGroupedOption() {
-    return this.option('grouped');
+  _getGroupedOption(): boolean | undefined {
+    const { grouped } = this.option();
+    return grouped;
   }
 
-  _getGroupContainerByIndex(groupIndex) {
+  _getGroupContainerByIndex(groupIndex: number): dxElementWrapper {
     return this._getItemsContainer().find(`.${LIST_GROUP_CLASS}`).eq(groupIndex).find(`.${LIST_GROUP_BODY_CLASS}`);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _dataSourceFromUrlLoadMode(): string {
     return 'raw';
   }
@@ -513,7 +560,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
   _initScrollView(): void {
     const scrollingEnabled = this.option('scrollingEnabled');
     const pullRefreshEnabled = scrollingEnabled && this.option('pullRefreshEnabled');
-    const autoPagingEnabled = scrollingEnabled && this._scrollBottomMode() && !!this._dataController.getDataSource();
+    const autoPagingEnabled = scrollingEnabled
+      && this._scrollBottomMode()
+      && !!this._dataController.getDataSource();
 
     this._scrollView = this._createComponent(this.$element(), getScrollView(), {
       height: this.option('height'),
@@ -538,28 +587,30 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
 
     this._$listContainer.appendTo(this._$container);
 
-    this._toggleWrapItemText(this.option('wrapItemText'));
+    const { wrapItemText } = this.option();
+    this._toggleWrapItemText(wrapItemText);
 
     this._createScrollViewActions();
   }
 
-  _toggleWrapItemText(value): void {
+  _toggleWrapItemText(value: boolean | undefined): void {
     this._$listContainer.toggleClass(WRAP_ITEM_TEXT_CLASS, value);
   }
 
   _createScrollViewActions(): void {
+    // @ts-expect-error ts-error
     this._scrollAction = this._createActionByOption('onScroll');
     this._pullRefreshAction = this._createActionByOption('onPullRefresh');
     this._pageLoadingAction = this._createActionByOption('onPageLoading');
   }
 
-  _scrollHandler(e): void {
+  _scrollHandler(e: ScrollEvent): void {
     this._scrollAction?.(e);
   }
 
   _initTemplates(): void {
     this._templateManager.addDefaultTemplates({
-      group: new BindableTemplate(($container, data) => {
+      group: new BindableTemplate(($container: dxElementWrapper, data) => {
         if (isPlainObject(data)) {
           if (data.key) {
             $container.text(data.key);
@@ -572,12 +623,16 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     super._initTemplates();
   }
 
-  _prepareDefaultItemTemplate(data, $container) {
+  _prepareDefaultItemTemplate(data: ListItemProperties, $container: dxElementWrapper): void {
     super._prepareDefaultItemTemplate(data, $container);
 
     if (data.icon) {
-      // @ts-expect-error
-      const $icon = getImageContainer(data.icon).addClass(LIST_ITEM_ICON_CLASS);
+      const $imageContainer = getImageContainer(data.icon);
+      if (!$imageContainer) {
+        return;
+      }
+
+      const $icon = $imageContainer.addClass(LIST_ITEM_ICON_CLASS);
       const $iconContainer = $('<div>').addClass(LIST_ITEM_ICON_CONTAINER_CLASS);
 
       $iconContainer.append($icon);
@@ -586,6 +641,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _getBindableFields(): string[] {
     return ['text', 'html', 'icon'];
   }
@@ -594,7 +650,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     const dataController = this._dataController;
     const scrollBottomMode = this._scrollBottomMode();
     const isDataControllerLoading = dataController.isLoading();
-    // @ts-expect-error ts-error
+    // @ts-expect-error mixin method
     const isLastPage = this._isLastPage();
 
     const shouldLoadNextPage = scrollBottomMode
@@ -605,18 +661,18 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     if (this._shouldContinueLoading(shouldLoadNextPage)) {
       this._infiniteDataLoading();
     } else {
-      this._scrollView.release(!shouldLoadNextPage && !dataController.isLoading());
-      // @ts-expect-error ts-error
+      this._scrollView?.release(!shouldLoadNextPage && !dataController.isLoading());
+      // @ts-expect-error mixin method
       this._toggleNextButton(this._shouldRenderNextButton() && !this._isLastPage());
       this._loadIndicationSuppressed(false);
     }
   }
 
   _shouldRenderNextButton(): boolean {
-    return this._nextButtonMode() && this._dataController.isLoaded();
+    return this._nextButtonMode() && this._dataController.isLoaded() as boolean;
   }
 
-  _isDataSourceFirstLoadCompleted(newValue?) {
+  _isDataSourceFirstLoadCompleted(newValue?: boolean): boolean | undefined {
     if (isDefined(newValue)) {
       this._isFirstLoadCompleted = newValue;
     }
@@ -624,12 +680,13 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     return this._isFirstLoadCompleted;
   }
 
-  _dataSourceLoadingChangedHandler(isLoading) {
+  _dataSourceLoadingChangedHandler(isLoading: boolean): void {
     if (this._loadIndicationSuppressed()) {
       return;
     }
 
     if (isLoading && this.option('indicateLoading')) {
+      // eslint-disable-next-line no-restricted-globals
       this._showLoadingIndicatorTimer = setTimeout(() => {
         const isEmpty = !this._itemElements().length;
         const shouldIndicateLoading = !isEmpty || this._isDataSourceFirstLoadCompleted();
@@ -646,12 +703,12 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     }
   }
 
-  _dataSourceChangedHandler(): void {
+  _dataSourceChangedHandler(...args: unknown[]): void {
     if (!this._shouldAppendItems() && hasWindow()) {
       this._scrollView?.scrollTo(0);
     }
     // @ts-expect-error ts-error
-    super._dataSourceChangedHandler.apply(this, arguments);
+    super._dataSourceChangedHandler.apply(this, args);
 
     this._isDataSourceFirstLoadCompleted(true);
   }
@@ -667,12 +724,11 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     }
   }
 
-  // @ts-expect-error ts-error
-  _loadIndicationSuppressed(value?) {
-    if (!arguments.length) {
-      return this._isLoadIndicationSuppressed;
+  _loadIndicationSuppressed(value?: boolean): boolean | undefined {
+    if (arguments.length) {
+      this._isLoadIndicationSuppressed = value;
     }
-    this._isLoadIndicationSuppressed = value;
+    return this._isLoadIndicationSuppressed;
   }
 
   _scrollViewIsFull(): boolean {
@@ -680,7 +736,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     return !scrollView || getHeight(scrollView.content()) > getHeight(scrollView.container());
   }
 
-  _pullDownHandler(e?): void {
+  _pullDownHandler(e?: PullRefreshEvent): void {
     this._pullRefreshAction?.(e);
     const dataController = this._dataController;
 
@@ -698,16 +754,15 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
       return false;
     }
 
-    const $content = this._scrollView.content();
-    const $container = this._scrollView.container();
+    const $content = this._scrollView?.content();
+    const $container = this._scrollView?.container();
     const contentHeight = getHeight($content);
     const containerHeight = getHeight($container);
-    const offsetTop = this._scrollView.scrollOffset()?.top ?? 0;
+    const offsetTop = this._scrollView?.scrollOffset()?.top ?? 0;
     const isBottomReached = contentHeight - containerHeight < offsetTop;
     const isFull = this._scrollViewIsFull();
-    const shouldContinueLoading = shouldLoadNextPage && !isFull || isBottomReached;
 
-    return shouldContinueLoading;
+    return (shouldLoadNextPage && !isFull) || isBottomReached;
   }
 
   _infiniteDataLoading(): void {
@@ -716,16 +771,17 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     if (isElementVisible) {
       clearTimeout(this._loadNextPageTimer);
 
-      this._loadNextPageTimer = setTimeout(() => {
+      // eslint-disable-next-line no-restricted-globals
+      this._loadNextPageTimer = setTimeout((): void => {
         this._loadNextPage();
       });
     }
   }
 
-  _scrollBottomHandler(e): void {
+  _scrollBottomHandler(e: PageLoadingEvent): void {
     this._pageLoadingAction?.(e);
     const dataController = this._dataController;
-    // @ts-expect-error ts-error
+    // @ts-expect-error ts-error mixin method
     if (!dataController.isLoading() && !this._isLastPage()) {
       this._loadNextPage();
     } else {
@@ -733,8 +789,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     }
   }
 
-  _renderItems(items) {
-    if (this.option('grouped')) {
+  _renderItems(items: TItem[]): void {
+    const { grouped } = this.option();
+    if (grouped) {
       each(items, this._renderGroup.bind(this));
       this._attachGroupCollapseEvent();
       this._renderEmptyMessage();
@@ -743,8 +800,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
         this.attachGroupHeaderInkRippleEvents();
       }
     } else {
-      // @ts-expect-error ts-error
-      super._renderItems.apply(this, arguments);
+      super._renderItems(items);
     }
 
     this._refreshItemElements();
@@ -775,11 +831,12 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     }
   }
 
-  _processGroupCollapse(e): void {
-    const actionCallback = (e) => {
+  _processGroupCollapse(e: NativeEventInfo<ListBase>): void {
+    const actionCallback = (evt: NativeEventInfo<ListBase>): void => {
       const { focusStateEnabled } = this.option();
-      const $group = $(e.event.currentTarget).parent();
+      const $group = $(evt.event?.currentTarget).parent();
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._collapseGroupHandler($group);
 
       if (focusStateEnabled) {
@@ -798,14 +855,17 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     action({ event: e });
   }
 
-  _enterKeyHandler(e): void {
+  _enterKeyHandler(e: KeyboardEvent): void {
     const { collapsibleGroups, focusedElement } = this.option();
     const isGroupHeader = $(focusedElement).hasClass(LIST_GROUP_HEADER_CLASS);
 
     if (collapsibleGroups && isGroupHeader) {
-      const params = this._getHandlerExtendedParams(e, $(focusedElement));
+      const params = this._getHandlerExtendedParams(
+        e as unknown as Record<string, unknown>,
+        $(focusedElement),
+      );
 
-      this._processGroupCollapse(params);
+      this._processGroupCollapse(params as NativeEventInfo<ListBase>);
 
       return;
     }
@@ -813,7 +873,11 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     super._enterKeyHandler(e);
   }
 
-  _collapseGroupHandler($group, toggle?) {
+  _collapseGroupHandler(
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    $group,
+    toggle?: boolean,
+  ): DeferredObj<unknown> | Promise<unknown> {
     const deferred = Deferred();
 
     const $groupHeader = $group.children(`.${LIST_GROUP_HEADER_CLASS}`);
@@ -841,25 +905,27 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
       fx.stop($groupBody, false);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fx.animate($groupBody, {
-      // @ts-expect-error
+      // @ts-expect-error fx.animate does not have proper typing
       type: 'custom',
-      // @ts-expect-error
+      // @ts-expect-error fx.animate does not have proper typing
       from: { height: startHeight },
-      // @ts-expect-error
+      // @ts-expect-error fx.animate does not have proper typing
       to: { height: endHeight },
       duration: 200,
-      complete: function () {
+      complete: (): void => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.updateDimensions();
         this._updateLoadingState(true);
         deferred.resolve();
-      }.bind(this),
+      },
     });
 
     return deferred.promise();
   }
 
-  _dataSourceLoadErrorHandler() {
+  _dataSourceLoadErrorHandler(): void {
     this._forgetNextPageLoading();
 
     if (this._initialized) {
@@ -868,12 +934,16 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     }
   }
 
-  _initMarkup() {
+  _initMarkup(): void {
     this._itemElementsCache = $();
 
     this.$element().addClass(LIST_CLASS);
     super._initMarkup();
-    this.option('useInkRipple') && this._renderInkRipple();
+
+    const { useInkRipple } = this.option();
+    if (useInkRipple) {
+      this._renderInkRipple();
+    }
 
     const elementAria = {
       role: 'group',
@@ -904,7 +974,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     this.setAria(listArea, this._$listContainer);
   }
 
-  _focusTarget() {
+  _focusTarget(): dxElementWrapper {
     return this._itemContainer();
   }
 
@@ -912,10 +982,12 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     this._inkRipple = render();
   }
 
-  _toggleActiveState($element, value, e?) {
-    // @ts-expect-error ts-error
-    super._toggleActiveState.apply(this, arguments);
-    const that = this;
+  _toggleActiveState(
+    $element: dxElementWrapper,
+    value: boolean,
+    event?: Record<string, unknown>,
+  ): void {
+    super._toggleActiveState($element, value, event);
 
     if (!this._inkRipple) {
       return;
@@ -923,17 +995,18 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
 
     const config = {
       element: $element,
-      event: e,
+      event,
     };
 
     if (value) {
       // @ts-expect-error ts-error
       if (isMaterial()) {
-        this._inkRippleTimer = setTimeout(() => {
-          that._inkRipple?.showWave(config);
+        // eslint-disable-next-line no-restricted-globals
+        this._inkRippleTimer = setTimeout((): void => {
+          this._inkRipple?.showWave(config);
         }, LIST_FEEDBACK_SHOW_TIMEOUT / 2);
       } else {
-        that._inkRipple?.showWave(config);
+        this._inkRipple?.showWave(config);
       }
     } else {
       clearTimeout(this._inkRippleTimer);
@@ -941,45 +1014,45 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     }
   }
 
-  _postprocessRenderItem(args): void {
+  _postprocessRenderItem(args: PostprocessRenderItemInfo<TItem>): void {
     this._refreshItemElements();
-    // @ts-expect-error ts-error
-    super._postprocessRenderItem.apply(this, arguments);
+    super._postprocessRenderItem(args);
 
     if (this.option('_swipeEnabled')) {
       this._attachSwipeEvent($(args.itemElement));
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _getElementClassToSkipRefreshId(): string {
     return LIST_GROUP_HEADER_CLASS;
   }
 
-  _attachSwipeEvent($itemElement): void {
+  _attachSwipeEvent($itemElement: dxElementWrapper): void {
     // @ts-expect-error ts-error
     const endEventName = addNamespace(swipeEventEnd, this.NAME);
 
     eventsEngine.on($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
   }
 
-  _itemSwipeEndHandler(e): void {
+  _itemSwipeEndHandler(e: DxEvent & { offset: number }): void {
     this._itemDXEventHandler(e, 'onItemSwipe', {
       direction: e.offset < 0 ? 'left' : 'right',
     });
   }
 
-  _nextButtonHandler(e): void {
+  _nextButtonHandler(e: PageLoadingEvent): void {
     this._pageLoadingAction?.(e);
     const dataController = this._dataController;
     if (dataController.getDataSource() && !dataController.isLoading()) {
-      this._scrollView.toggleLoading(true);
+      this._scrollView?.toggleLoading(true);
       this._$nextButton?.detach();
       this._loadIndicationSuppressed(true);
       this._loadNextPage();
     }
   }
 
-  _setGroupAria($group, groupHeaderId): void {
+  _setGroupAria($group: dxElementWrapper, groupHeaderId: string): void {
     const { collapsibleGroups } = this.option();
 
     const groupAria = {
@@ -991,11 +1064,11 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     this.setAria(groupAria, $group);
   }
 
-  _updateGroupHeaderAriaExpanded($groupHeader, expanded): void {
+  _updateGroupHeaderAriaExpanded($groupHeader: dxElementWrapper, expanded: boolean): void {
     this.setAria({ expanded }, $groupHeader);
   }
 
-  _setGroupHeaderAria($groupHeader, listGroupBodyId): void {
+  _setGroupHeaderAria($groupHeader: dxElementWrapper, listGroupBodyId: string): void {
     const { collapsibleGroups } = this.option();
 
     const groupHeaderAria = {
@@ -1007,7 +1080,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     this.setAria(groupHeaderAria, $groupHeader);
   }
 
-  _setGroupBodyAria($groupBody, groupHeaderId): void {
+  _setGroupBodyAria($groupBody: dxElementWrapper, groupHeaderId: string): void {
     const { collapsibleGroups } = this.option();
 
     const groupHeaderAria = {
@@ -1019,7 +1092,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     this.setAria(groupHeaderAria, $groupBody);
   }
 
-  _renderGroup(index, group) {
+  _renderGroup(index: number, group: TItem & { template: Template }): void {
     const $groupElement = $('<div>')
       .addClass(LIST_GROUP_CLASS)
       .appendTo(this._getItemsContainer());
@@ -1061,7 +1134,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
       .appendTo($groupElement);
 
     // @ts-expect-error ts-error
-    each(groupItemsGetter(group) || [], (itemIndex, item) => {
+    each(groupItemsGetter(group) || [], (itemIndex: number, item) => {
       this._renderItem({ group: index, item: itemIndex }, item, $groupBody);
     });
     // @ts-expect-error ts-error
@@ -1076,11 +1149,11 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     this._setGroupBodyAria($groupBody, groupHeaderId);
   }
 
-  downInkRippleHandler(e): void {
-    this._toggleActiveState($(e.currentTarget), true, e);
+  downInkRippleHandler(e: InkRippleEvent): void {
+    this._toggleActiveState($(e.currentTarget), true, e as unknown as Record<string, unknown>);
   }
 
-  upInkRippleHandler(e): void {
+  upInkRippleHandler(e: InkRippleEvent): void {
     this._toggleActiveState($(e.currentTarget), false);
   }
 
@@ -1093,16 +1166,12 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     this._upInkRippleHandler = this._upInkRippleHandler || this.upInkRippleHandler.bind(this);
 
-    const downArguments = [$element, 'dxpointerdown', selector, this._downInkRippleHandler];
-    const upArguments = [$element, 'dxpointerup dxpointerout', selector, this._upInkRippleHandler];
-    // @ts-expect-error
-    eventsEngine.off(...downArguments);
-    // @ts-expect-error
-    eventsEngine.on(...downArguments);
-    // @ts-expect-error
-    eventsEngine.off(...upArguments);
-    // @ts-expect-error
-    eventsEngine.on(...upArguments);
+    // @ts-expect-error ts-error
+    eventsEngine.off($element, 'dxpointerdown', selector, this._downInkRippleHandler);
+    eventsEngine.on($element, 'dxpointerdown', selector, this._downInkRippleHandler);
+    // @ts-expect-error ts-error
+    eventsEngine.off($element, 'dxpointerup dxpointerout', selector, this._upInkRippleHandler);
+    eventsEngine.on($element, 'dxpointerup dxpointerout', selector, this._upInkRippleHandler);
   }
 
   _createGroupRenderAction(): void {
@@ -1115,8 +1184,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
       this._$nextButton.remove();
       this._$nextButton = null;
     }
-    // @ts-expect-error ts-error
-    super._clean.apply(this, arguments);
+    super._clean();
   }
 
   _dispose(): void {
@@ -1127,12 +1195,12 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     super._dispose();
   }
 
-  _toggleDisabledState(value): void {
+  _toggleDisabledState(value: boolean): void {
     super._toggleDisabledState(value);
-    this._scrollView.option('disabled', value || !this.option('scrollingEnabled'));
+    this._scrollView?.option('disabled', value || !this.option('scrollingEnabled'));
   }
 
-  _toggleNextButton(value): void {
+  _toggleNextButton(value: boolean): void {
     const dataController = this._dataController;
     const $nextButton = this._getNextButton();
 
@@ -1170,27 +1238,32 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     return $result;
   }
 
-  _moveFocus(): void {
-    // @ts-expect-error ts-error
-    super._moveFocus.apply(this, arguments);
+  _moveFocus(location: string, e?: unknown): void {
+    super._moveFocus(location, e);
 
-    this.scrollToItem(this.option('focusedElement'));
+    const { focusedElement } = this.option();
+    if (focusedElement) {
+      this.scrollToItem($(focusedElement).get(0));
+    }
   }
 
   _refresh(): void {
     if (!hasWindow()) {
       super._refresh();
     } else {
-      const scrollTop = this._scrollView.scrollTop();
+      const scrollTop = this._scrollView?.scrollTop();
       super._refresh();
-      scrollTop && this._scrollView.scrollTo(scrollTop);
+      if (scrollTop) {
+        this._scrollView?.scrollTo(scrollTop);
+      }
     }
   }
 
-  _optionChanged(args: OptionChanged<ListBaseProperties>): void {
-    switch (args.name) {
+  _optionChanged(args: OptionChanged<TProperties>): void {
+    const { name, value } = args;
+    switch (name) {
       case 'pageLoadMode':
-        this._toggleNextButton(args.value);
+        this._toggleNextButton(!!value);
         this._initScrollView();
         break;
       case 'dataSource':
@@ -1236,7 +1309,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
         this._invalidate();
         break;
       case 'wrapItemText':
-        this._toggleWrapItemText(args.value);
+        this._toggleWrapItemText(value as boolean);
         break;
       case 'onGroupRendered':
         this._createGroupRenderAction();
@@ -1244,15 +1317,15 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
       case 'width':
       case 'height':
         super._optionChanged(args);
-        this._scrollView.option(args.name, args.value);
-        this._scrollView.update();
+        this._scrollView?.option(name, value);
+        this._scrollView?.update();
         break;
       case 'indicateLoading':
         this._hideLoadingIfLoadIndicationOff();
         break;
       case 'visible':
         super._optionChanged(args);
-        this._scrollView.update();
+        this._scrollView?.update();
         break;
       case 'rtlEnabled':
         this._initScrollView();
@@ -1271,22 +1344,25 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     }
   }
 
-  _extendActionArgs($itemElement) {
-    if (!this.option('grouped')) {
+  // @ts-expect-error ts-error
+  _extendActionArgs($itemElement: dxElementWrapper): ListItemInfo<TItem> {
+    const { grouped } = this.option();
+    if (!grouped) {
       return super._extendActionArgs($itemElement);
     }
 
     const $group = $itemElement.closest(`.${LIST_GROUP_CLASS}`);
     const $item = $group.find(`.${LIST_ITEM_CLASS}`);
-    return extend(super._extendActionArgs($itemElement), {
+    return {
+      ...super._extendActionArgs($itemElement),
       itemIndex: {
         group: $group.index(),
         item: $item.index($itemElement),
       },
-    });
+    };
   }
 
-  expandGroup(groupIndex) {
+  expandGroup(groupIndex: number): Promise<unknown> {
     const deferred = Deferred();
     const $group = this._getItemsContainer().find(`.${LIST_GROUP_CLASS}`).eq(groupIndex);
     // @ts-expect-error ts-error
@@ -1298,7 +1374,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     return deferred.promise();
   }
 
-  collapseGroup(groupIndex) {
+  collapseGroup(groupIndex: number): DeferredObj<unknown> {
     const deferred = Deferred();
     const $group = this._getItemsContainer().find(`.${LIST_GROUP_CLASS}`).eq(groupIndex);
     // @ts-expect-error ts-error
@@ -1310,73 +1386,67 @@ export class ListBase extends CollectionWidget<ListBaseProperties> {
     return deferred;
   }
 
-  updateDimensions() {
-    const that = this;
+  updateDimensions(): Promise<unknown> {
     const deferred = Deferred();
 
-    if (that._scrollView) {
-      that._scrollView.update().done(() => {
-        !that._scrollViewIsFull() && that._updateLoadingState(true);
+    if (this._scrollView) {
+      (this._scrollView.update() as DeferredObj<unknown>).done((): void => {
+        if (!this._scrollViewIsFull()) {
+          this._updateLoadingState(true);
+        }
         // @ts-expect-error ts-error
-        deferred.resolveWith(that);
+        deferred.resolveWith(this);
       });
     } else {
       // @ts-expect-error ts-error
-      deferred.resolveWith(that);
+      deferred.resolveWith(this);
     }
 
     return deferred.promise();
   }
 
-  reload() {
+  reload(): void {
     super.reload();
     this.scrollTo(0);
     this._pullDownHandler();
   }
 
-  repaint() {
+  repaint(): void {
     this.scrollTo(0);
     super.repaint();
   }
 
-  scrollTop() {
-    return this._scrollView.scrollOffset().top;
+  scrollTop(): number {
+    return this._scrollView?.scrollOffset().top ?? 0;
   }
 
-  clientHeight() {
-    return this._scrollView.clientHeight();
+  clientHeight(): number | undefined {
+    return this._scrollView?.clientHeight();
   }
 
-  scrollHeight() {
-    return this._scrollView.scrollHeight();
+  scrollHeight(): number | undefined {
+    return this._scrollView?.scrollHeight();
   }
 
-  scrollBy(distance) {
-    this._scrollView.scrollBy(distance);
+  scrollBy(distance: Partial<ScrollOffset> | number): void {
+    this._scrollView?.scrollBy(distance);
   }
 
-  scrollTo(location) {
-    this._scrollView.scrollTo(location);
+  scrollTo(location: Partial<ScrollOffset> | number): void {
+    this._scrollView?.scrollTo(location);
   }
 
-  scrollToItem(itemElement) {
+  scrollToItem(itemElement: TItem | Element | number): void {
     const $item = this._editStrategy.getItemElement(itemElement);
 
     const item = $item?.get(0);
-    this._scrollView.scrollToElement(item, { bottom: getElementMargin(item, 'bottom') });
+    this._scrollView?.scrollToElement(item, { bottom: getElementMargin(item, 'bottom') });
   }
 
-  _dimensionChanged() {
+  _dimensionChanged(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.updateDimensions();
   }
 }
 // @ts-expect-error ts-error
 ListBase.include(DataConverterMixin);
-
-function getScrollView() {
-  return _scrollView || ScrollView;
-}
-
-export function setScrollView(value) {
-  _scrollView = value;
-}

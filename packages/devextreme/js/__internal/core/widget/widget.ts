@@ -54,7 +54,7 @@ class Widget<
 
   public _feedbackHideTimeout = 400;
 
-  private readonly _feedbackShowTimeout = 30;
+  private readonly _feedbackShowTimeout: number = 30;
 
   _contentReadyAction?: ((event?: Record<string, unknown>) => void) | null;
 

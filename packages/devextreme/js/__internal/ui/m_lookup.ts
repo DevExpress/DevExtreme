@@ -413,8 +413,7 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _scrollToSelectedItem(): void {
-    const selectedIndex = this._list?.option('selectedIndex');
-    const listItems = this._list?.option('items');
+    const { selectedIndex, items: listItems } = this._list?.option() ?? {};
     // @ts-expect-error ts-error
     const itemsCount = listItems.length;
 
@@ -426,7 +425,9 @@ class Lookup extends DropDownList<LookupProperties> {
         this._list?.scrollToItem(itemsCount - 1);
       }
 
-      this._list?.scrollToItem(selectedIndex);
+      if (isDefined(selectedIndex)) {
+        this._list?.scrollToItem(selectedIndex);
+      }
     }
   }
 
@@ -874,7 +875,7 @@ class Lookup extends DropDownList<LookupProperties> {
 
   _filterDataSource(...args): void {
     if (this._list && !this._list._dataSource && this._isMinSearchLengthExceeded()) {
-      this._list?._scrollView.startLoading();
+      this._list?._scrollView?.startLoading();
     }
     // @ts-expect-error ts-error
     super._filterDataSource(...args);
@@ -882,7 +883,7 @@ class Lookup extends DropDownList<LookupProperties> {
 
   _dataSourceFiltered(...args) {
     super._dataSourceFiltered(...args);
-    this._list?._scrollView.finishLoading();
+    this._list?._scrollView?.finishLoading();
   }
 
   _updateActiveDescendant(): void {
