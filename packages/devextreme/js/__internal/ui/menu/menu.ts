@@ -42,14 +42,14 @@ import type {
   HoverEvent,
   ItemClickActionArguments,
   MenuBaseProperties,
-} from '@ts/ui/context_menu/m_menu_base';
-import MenuBase from '@ts/ui/context_menu/m_menu_base';
+} from '@ts/ui/context_menu/menu_base';
+import MenuBase from '@ts/ui/context_menu/menu_base';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/m_utils';
 import type { TreeViewBaseProperties } from '@ts/ui/tree_view/m_tree_view.base';
 
-import type { SubmenuProperties } from './m_submenu';
-import Submenu from './m_submenu';
+import type { SubmenuProperties } from './submenu';
+import Submenu from './submenu';
 
 const DX_MENU_CLASS = 'dx-menu';
 const DX_MENU_VERTICAL_CLASS = `${DX_MENU_CLASS}-vertical`;
@@ -380,7 +380,6 @@ class Menu extends MenuBase<MenuProperties> {
     this._initAdaptivity();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isTargetOutOfComponent(relatedTarget: Element): boolean {
     const isInsideRootMenu = $(relatedTarget).closest(`.${DX_MENU_CLASS}`).length !== 0;
     const isInsideContextMenu = $(relatedTarget).closest(`.${DX_CONTEXT_MENU_CLASS}`).length !== 0;
@@ -417,6 +416,7 @@ class Menu extends MenuBase<MenuProperties> {
     if (isPlainObject(state)) {
       const { visible } = this._overlay?.option() ?? {};
 
+      // eslint-disable-next-line no-param-reassign
       state = !visible;
     }
 
@@ -947,11 +947,11 @@ class Menu extends MenuBase<MenuProperties> {
     const hoveredElementFromSubMenu = this._visibleSubmenu.getOverlayContent()?.get(0).querySelector(':hover');
 
     if (!hoveredElementFromSubMenu && !isSubmenuItemHovered && !isRootItemHovered) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._visibleSubmenu.hide();
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getSubmenuByRootElement($rootItem: dxElementWrapper): Submenu | undefined {
     if (!$rootItem) {
       return undefined;
@@ -1001,7 +1001,6 @@ class Menu extends MenuBase<MenuProperties> {
     return submenuPosition;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderBorderElement($item: dxElementWrapper): void {
     $('<div>')
       .appendTo($item)
@@ -1097,6 +1096,7 @@ class Menu extends MenuBase<MenuProperties> {
       this._clearTimeouts();
       this.focus();
 
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       submenu.show();
 
       const { focusedElement } = submenu.option();
@@ -1110,6 +1110,7 @@ class Menu extends MenuBase<MenuProperties> {
 
   _hideSubmenu(submenu: Submenu | null | undefined): void {
     if (submenu) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       submenu.hide();
     }
 
@@ -1157,6 +1158,7 @@ class Menu extends MenuBase<MenuProperties> {
       return submenu;
     }
 
+    // eslint-disable-next-line no-param-reassign
     itemData = itemData ?? this._getItemData($itemElement) as Item;
 
     const node = this._dataAdapter.getNodeByItem(itemData);
