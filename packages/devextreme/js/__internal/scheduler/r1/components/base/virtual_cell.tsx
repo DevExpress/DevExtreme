@@ -30,7 +30,7 @@ export class VirtualCell extends BaseInfernoComponent<VirtualCellProps> {
 
     return (
       <Cell
-        className="dx-scheduler-virtual-cell"
+        className="dx-scheduler-virtual-cell dx-scheduler-cell-sizes-horizontal dx-scheduler-cell-sizes-vertical"
         styles={modifiedStyles}
         colSpan={colSpan}
       />
