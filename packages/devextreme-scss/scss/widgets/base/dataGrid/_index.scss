@@ -207,7 +207,6 @@ $datagrid-text-stub-background-image-path: null !default;
 
   .dx-datagrid-total-footer {
     .dx-row.dx-footer-row {
-
       td.dx-command-expand {
         &.dx-datagrid-sticky-column, &.dx-datagrid-sticky-column-left, &.dx-datagrid-sticky-column-right {
           background-color: $datagrid-base-background-color;
@@ -217,7 +216,7 @@ $datagrid-text-stub-background-image-path: null !default;
       .dx-datagrid-sticky-column,
       .dx-datagrid-sticky-column-left,
       .dx-datagrid-sticky-column-right {
-          padding-inline: 0;
+        padding-inline: 0;
 
         .dx-datagrid-summary-item {
           background-color: $datagrid-base-background-color;
