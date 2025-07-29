@@ -1,15 +1,15 @@
-const { rollup } = require('rollup');
 const fs = require('fs');
 const path = require('path');
 const { exec} = require('child_process');
 const util = require('util');
+const { rollup } = require('rollup');
 
 const resolve = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const babel = require('@rollup/plugin-babel');
 
-const fileContents = fs.readFileSync(path.resolve('./node_modules/openai/package.json'), 'utf-8');
-const openaiPackageJSON = JSON.parse(fileContents);
+const openaiPackageJsonContent = fs.readFileSync(path.resolve('./node_modules/openai/package.json'), 'utf-8');
+const openaiPackageJSON = JSON.parse(openaiPackageJsonContent);
 
 const execAsync = util.promisify(exec);
 
