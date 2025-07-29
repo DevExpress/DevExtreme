@@ -3,7 +3,7 @@ import fx from 'common/core/animation/fx';
 import renderer from 'core/renderer';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import Submenu from '../../../js/__internal/ui/menu/submenu';
+import Submenu from '__internal/ui/menu/submenu';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import domAdapter from '__internal/core/m_dom_adapter';
 import Menu from '__internal/ui/menu/menu';
