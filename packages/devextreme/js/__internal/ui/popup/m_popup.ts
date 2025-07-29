@@ -42,7 +42,7 @@ import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import type Toolbar from '@js/ui/toolbar';
 import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { OverlayActions } from '@ts/ui/overlay/m_overlay';
+import type { GeometryOptions, OverlayActions } from '@ts/ui/overlay/m_overlay';
 import Overlay from '@ts/ui/overlay/m_overlay';
 import * as zIndexPool from '@ts/ui/overlay/m_z_index';
 import { TOOLBAR_CLASS } from '@ts/ui/toolbar/constants';
@@ -109,12 +109,6 @@ interface HeightCssStyles {
   maxHeight: number | string;
 }
 
-interface GeometryOptions {
-  forceStopAnimation?: boolean;
-  shouldOnlyReposition?: boolean;
-  isDimensionChange?: boolean;
-}
-
 const getButtonPlace = (name: string): { toolbar: string; location: string } => {
   const device = devices.current();
   const { platform } = device;
@@ -179,7 +173,7 @@ export interface PopupProperties extends Properties {
 class Popup<
   TProperties extends PopupProperties = PopupProperties,
 > extends Overlay<TProperties> {
-  _actions?: PopupActions;
+  _actions: PopupActions = {};
 
   _positionController!: PopupPositionController;
 
@@ -1014,11 +1008,11 @@ class Popup<
       handles: this.option('resizeEnabled') ? 'all' : 'none',
       onResizeStart: (e: ResizeStartEvent) => {
         this._observeContentResize(false);
-        this._actions?.onResizeStart?.(e);
+        this._actions.onResizeStart?.(e);
       },
       onResize: (e: ResizeEvent) => {
         this._setContentHeight();
-        this._actions?.onResize?.(e);
+        this._actions.onResize?.(e);
       },
       onResizeEnd: (e: ResizeEndEvent) => {
         this._resizeEndHandler(e);
@@ -1048,7 +1042,7 @@ class Popup<
     this._positionController.resizeHandled();
     this._positionController.detectVisualPositionChange(e.event);
 
-    this._actions?.onResizeEnd?.(e);
+    this._actions.onResizeEnd?.(e);
   }
 
   _setContentHeight(): void {

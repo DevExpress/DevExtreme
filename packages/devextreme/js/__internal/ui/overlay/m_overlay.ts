@@ -72,15 +72,23 @@ type DragLikeEvent = DxEvent & {
   metaKey: boolean;
 };
 
-export type PositioningEvent =
-  NativeEventInfo<dxOverlay<Properties>, MouseEvent | PointerEvent | TouchEvent> & {
-    readonly position: Properties['position'];
-  };
+export type PositioningEvent = NativeEventInfo<
+  dxOverlay<Properties>,
+  MouseEvent | PointerEvent | TouchEvent
+> & {
+  readonly position: Properties['position'];
+};
 
 interface ParentsScrollSubscriptionInfo {
   handler?: (e: Event) => void;
   target?: Element | Document;
   prevTargets?: dxElementWrapper;
+}
+
+export interface GeometryOptions {
+  forceStopAnimation?: boolean;
+  shouldOnlyReposition?: boolean;
+  isDimensionChange?: boolean;
 }
 
 interface OverlayProperties extends Properties {
@@ -1259,7 +1267,7 @@ class Overlay<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _renderGeometry(options?: Record<string, unknown>): void {
+  _renderGeometry(options: GeometryOptions = {}): void {
     if (this._isVisible() && windowUtils.hasWindow()) {
       this._stopAnimation();
       this._renderGeometryImpl();
@@ -1275,7 +1283,7 @@ class Overlay<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _renderPosition(state?: unknown): void {
+  _renderPosition(state?: boolean): void {
     this._positionController.positionContent();
   }
 
