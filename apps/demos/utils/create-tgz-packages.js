@@ -62,7 +62,6 @@ async function buildAndPack() {
    const filename = `openai-${openaiPackageJSON.version}.tgz`;
    
     if (stdout.trim('\n') === filename) {
-        
         fs.renameSync(
           path.join(outPackageDir, filename),
           path.join(outDir, filename)
