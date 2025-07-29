@@ -413,7 +413,6 @@ export default class dxTreeView<TItem extends ItemLike = any, TKey = any>
      * @docid
      * @publicName collapseItem(itemData)
      * @param1 itemData:dxTreeViewItem
-     * @param1_field items:Array<dxTreeViewItem>
      * @return Promise<void>
      * @public
      */
@@ -442,7 +441,6 @@ export default class dxTreeView<TItem extends ItemLike = any, TKey = any>
      * @docid
      * @publicName expandItem(itemData)
      * @param1 itemData:dxTreeViewItem
-     * @param1_field items:Array<dxTreeViewItem>
      * @return Promise<void>
      * @public
      */
@@ -498,7 +496,6 @@ export default class dxTreeView<TItem extends ItemLike = any, TKey = any>
      * @docid
      * @publicName selectItem(itemData)
      * @param1 itemData:dxTreeViewItem
-     * @param1_field items:Array<dxTreeViewItem>
      * @public
      */
     selectItem(itemData: TItem): boolean;
@@ -524,7 +521,6 @@ export default class dxTreeView<TItem extends ItemLike = any, TKey = any>
      * @docid
      * @publicName unselectItem(itemData)
      * @param1 itemData:dxTreeViewItem
-     * @param1_field items:Array<dxTreeViewItem>
      * @public
      */
     unselectItem(itemData: TItem): boolean;
@@ -551,7 +547,6 @@ export default class dxTreeView<TItem extends ItemLike = any, TKey = any>
      * @docid
      * @publicName scrollToItem(itemData)
      * @param1 itemData:dxTreeViewItem
-     * @param1_field items:Array<dxTreeViewItem>
      * @return Promise<void>
      * @public
      */
