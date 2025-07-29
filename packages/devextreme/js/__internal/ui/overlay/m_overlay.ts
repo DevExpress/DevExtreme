@@ -23,6 +23,7 @@ import browser from '@js/core/utils/browser';
 import { noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
@@ -705,12 +706,9 @@ class Overlay<
     };
 
     if (isObject(configuration[direction])) {
-      configuration[direction] = {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore spread types may only be created from object types
-        ...configuration[direction],
+      extend(configuration[direction], {
         position: this._positionController.position,
-      };
+      });
     }
 
     return configuration;
