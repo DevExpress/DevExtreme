@@ -188,6 +188,7 @@ class DropDownEditor<
       buttonsLocation: 'default',
       useHiddenSubmitElement: false,
       validationMessagePosition: 'auto',
+      _cached_dropDownOptions: {},
     };
   }
 
@@ -1018,6 +1019,8 @@ class DropDownEditor<
         this._innerWidgetOptionChanged(this._popup, args);
         break;
       }
+      case '_cached_dropDownOptions':
+        break;
       case 'popupPosition':
         break;
       case 'deferRendering':

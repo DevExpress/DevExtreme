@@ -124,6 +124,7 @@ class Editor<
       validationBoundary: undefined,
       validationMessageOffset: { h: 0, v: 0 },
       validationTooltipOptions: {},
+      _cached_validationTooltipOptions: {},
       _showValidationMessage: true,
       isDirty: false,
     };
@@ -455,6 +456,8 @@ class Editor<
         break;
       case 'validationTooltipOptions':
         this._innerWidgetOptionChanged(this._validationMessage, args);
+        break;
+      case '_cached_validationTooltipOptions':
         break;
       case '_showValidationMessage':
       case 'isDirty':

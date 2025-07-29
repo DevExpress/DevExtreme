@@ -24,6 +24,7 @@ import List from '@js/ui/list_light';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import { getElementWidth, getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
+import type { PopupProperties } from '@ts/ui/popup/m_popup';
 import Popup from '@ts/ui/popup/m_popup';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
@@ -43,6 +44,8 @@ export interface DropDownButtonProperties extends Properties {
   buttonGroupOptions?: ButtonGroupItem;
   grouped?: boolean;
   groupTemplate?: string;
+  _cached_buttonGroupOptions?: ButtonGroupItem;
+  _cached_dropDownOptions?: PopupProperties;
 }
 
 class DropDownButton extends Widget<DropDownButtonProperties> {
@@ -109,6 +112,8 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       grouped: false,
       groupTemplate: 'group',
       buttonGroupOptions: {},
+      _cached_buttonGroupOptions: {},
+      _cached_dropDownOptions: {},
     };
   }
 
@@ -816,6 +821,9 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
         break;
       case 'template':
         this._renderButtonGroup();
+        break;
+      case '_cached_buttonGroupOptions':
+      case '_cached_dropDownOptions':
         break;
       default:
         super._optionChanged(args);
