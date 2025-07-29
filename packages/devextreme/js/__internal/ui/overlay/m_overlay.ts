@@ -1,5 +1,6 @@
 import { fx } from '@js/common/core/animation';
 import { hideCallback as hideTopOverlayCallback } from '@js/common/core/environment/hide_callback';
+import type { NativeEventInfo } from '@js/common/core/events';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   move as dragEventMove,
@@ -30,6 +31,7 @@ import {
 } from '@js/core/utils/type';
 import { changeCallback } from '@js/core/utils/view_port';
 import type { Properties } from '@js/ui/overlay';
+import type dxOverlay from '@js/ui/overlay';
 import { tabbable } from '@js/ui/widget/selectors';
 import uiErrors from '@js/ui/widget/ui.errors';
 import domUtils from '@ts/core/utils/m_dom';
@@ -73,7 +75,12 @@ ready(() => {
   });
 });
 
-interface OverlayProperties extends Properties {
+export type PositioningEvent =
+  NativeEventInfo<dxOverlay<Properties>, MouseEvent | PointerEvent | TouchEvent> & {
+    readonly position: Properties['position'];
+  };
+
+export interface OverlayProperties extends Properties {
   _loopFocus?: boolean;
 
   _ignorePreventScrollEventsDeprecation?: boolean;
