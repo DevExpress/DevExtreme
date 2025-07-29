@@ -12,7 +12,7 @@ import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 fixture.disablePageReloads`Scheduler: Virtual scrolling`
   .page(url(__dirname, '../../../container.html'));
 
-safeSizeTest('it should render cell width set in css for virtual scrolling after scroll down (T1287345)', async (t) => {
+safeSizeTest('Cell width set in css should be correct for virtual scrolling after scroll down (T1287345)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const scheduler = new Scheduler('#container');
@@ -29,18 +29,15 @@ safeSizeTest('it should render cell width set in css for virtual scrolling after
     #container .dx-scheduler-cell-sizes-horizontal {
         width: 200px !important;
     }`);
-  await createWidget(
-    'dxScheduler',
-    {
-      dataSource: [],
-      currentView: 'week',
-      scrolling: {
-        mode: 'virtual',
-      },
-      currentDate: new Date(2021, 2, 28),
-      height: 300,
+  await createWidget('dxScheduler', {
+    dataSource: [],
+    currentView: 'week',
+    scrolling: {
+      mode: 'virtual',
     },
-  );
+    currentDate: new Date(2021, 2, 28),
+    height: 300,
+  });
 }).after(async () => {
   await removeStylesheetRulesFromPage();
 });
