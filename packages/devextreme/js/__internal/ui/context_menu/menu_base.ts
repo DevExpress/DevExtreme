@@ -112,17 +112,14 @@ class MenuBase<
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return DX_MENU_ITEM_DATA_KEY;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return ITEM_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _setAriaSelectionAttribute(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     $itemElement: dxElementWrapper,
@@ -130,12 +127,10 @@ class MenuBase<
     isSelected: string,
   ): void {}
 
-  // eslint-disable-next-line class-methods-use-this
   _selectedItemClass(): string {
     return DX_MENU_SELECTED_ITEM_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _widgetClass(): string {
     return DX_MENU_BASE_CLASS;
   }
@@ -215,7 +210,6 @@ class MenuBase<
     this._addContentClasses(itemData, $container.parent());
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getTextContainer(itemData: Item): dxElementWrapper {
     const { text } = itemData;
     if (!text) {
@@ -226,12 +220,10 @@ class MenuBase<
     return $itemContainer.text(itemText);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getItemExtraPropNames(): string[] {
     return ['url', 'linkAttr'];
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getPopoutContainer(itemData: Item): dxElementWrapper {
     const { items } = itemData;
 
@@ -247,7 +239,6 @@ class MenuBase<
     return $popOutContainer;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getDataAdapterOptions(): BaseDataAdapterOptions {
     return {
       rootValue: 0,
@@ -297,7 +288,6 @@ class MenuBase<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _initActions(): void {}
 
   _initMarkup(): void {
@@ -346,7 +336,6 @@ class MenuBase<
     return this._isDesktopDevice() ? showMode : defaultValue;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isDesktopDevice(): boolean {
     return devices.real().deviceType === 'desktop';
   }
@@ -403,7 +392,6 @@ class MenuBase<
     this._addExpandedClass($itemElement);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _addExpandedClass(itemElement: Element | dxElementWrapper): void {
     $(itemElement).addClass(DX_MENU_ITEM_EXPANDED_CLASS);
   }
@@ -449,7 +437,6 @@ class MenuBase<
     clearTimeout(this._showSubmenusTimeout);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _hasSubmenu(node: MenuBaseNode | null): boolean {
     return !!node?.internalFields.childrenKeys.length;
   }
@@ -618,12 +605,10 @@ class MenuBase<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isItemSelectable(item: Item): boolean {
     return item.selectable !== false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderSeparator($itemsContainer: dxElementWrapper): void {
     $('<li>')
       .appendTo($itemsContainer)
@@ -653,7 +638,7 @@ class MenuBase<
     }
 
     const $itemElement = this._getItemElementByEventArgs(event);
-    const link = $itemElement && $itemElement.find(`.${ITEM_URL_CLASS}`)[0];
+    const link = $itemElement?.find(`.${ITEM_URL_CLASS}`)[0];
 
     if (!itemData?.url || !link) {
       return;
@@ -720,7 +705,6 @@ class MenuBase<
     return this._itemContainer().is(':empty');
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _syncSelectionOptions(): DeferredObj<unknown> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return asyncNoop();
