@@ -3,10 +3,34 @@ import * as path from 'path';
 import * as fs from 'fs';
 
 /**
- * Transform __internal imports to absolute paths with extensions
+ * Transform DevExtreme module imports to absolute paths
  */
 function transformInternalImports(code: string, baseDir: string, fileName?: string): string {
   let transformedCode = code;
+  
+  // Transform core module imports (core/utils/ajax -> /js/core/utils/ajax.js)
+  const devExtremeModules = ['core', 'common', 'data', 'ui', 'viz', 'localization', 'integration'];
+  
+  devExtremeModules.forEach(moduleName => {
+    const regex = new RegExp(`import\\s+(.+)\\s+from\\s+['"]${moduleName}/([^'"]+)['"]`, 'g');
+    transformedCode = transformedCode.replace(regex, (match, imports, modulePath) => {
+      const fullPath = path.join(baseDir, 'js', moduleName, modulePath);
+      const jsPath = fullPath + '.js';
+      const tsPath = fullPath + '.ts';
+      
+      // Check if .js or .ts file exists
+      if (fs.existsSync(jsPath)) {
+        if (fileName) console.log(`🔧 [ESM Helpers] Transforming ${moduleName} import in ${fileName}: ${modulePath} -> .js`);
+        return `import ${imports} from '/js/${moduleName}/${modulePath}.js'`;
+      } else if (fs.existsSync(tsPath)) {
+        if (fileName) console.log(`🔧 [ESM Helpers] Transforming ${moduleName} import in ${fileName}: ${modulePath} -> .ts`);
+        return `import ${imports} from '/js/${moduleName}/${modulePath}.ts'`;
+      } else {
+        if (fileName) console.log(`🔧 [ESM Helpers] Transforming ${moduleName} import in ${fileName}: ${modulePath} (no extension check)`);
+        return `import ${imports} from '/js/${moduleName}/${modulePath}'`;
+      }
+    });
+  });
   
   // Transform import statements
   transformedCode = transformedCode.replace(
@@ -95,7 +119,7 @@ export function esmHelpersPlugin(baseDir: string): PluginOption {
             let esmContent = fs.readFileSync(esmFilePath, 'utf-8');
             const originalContent = esmContent;
             
-            // Transform __internal imports using the shared function
+            // Transform DevExtreme module imports and __internal imports using the shared function
             esmContent = transformInternalImports(esmContent, baseDir, fileName);
             
             if (esmContent !== originalContent) {
@@ -164,8 +188,10 @@ export function esmHelpersPlugin(baseDir: string): PluginOption {
 
     // Transform JS/TS files to replace imports
     transform(code: string, id: string) {
-      // Process test files, helper files, and any files with __internal imports
-      if (id.includes('/testing/tests/') || id.includes('/testing/helpers/esm/') || code.includes('__internal/')) {
+      // Process test files, helper files, and any files with DevExtreme module imports
+      if (id.includes('/testing/tests/') || id.includes('/testing/helpers/esm/') || 
+          code.includes('__internal/') || 
+          /from\s+['"](?:core|common|data|ui|viz|localization|integration)\//.test(code)) {
         let transformedCode = code;
         
         // Replace absolute imports /testing/helpers/
@@ -192,7 +218,7 @@ export function esmHelpersPlugin(baseDir: string): PluginOption {
           }
         );
         
-        // Transform __internal imports using the shared function
+        // Transform DevExtreme module imports and __internal imports using the shared function
         transformedCode = transformInternalImports(transformedCode, baseDir, path.basename(id));
         
         if (transformedCode !== code) {

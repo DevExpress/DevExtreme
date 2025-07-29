@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { version } from 'core/version';
 import exporter from 'exporter';
 const getData = exporter.pdf.getData;
-import pdfCreatorModule from '__internal/exporter/pdf_creator';
+import * as pdfCreatorModule from '__internal/exporter/pdf_creator';
 const pdfCreator = pdfCreatorModule.__tests;
 import { isFunction } from 'core/utils/type';
 import { imageCreator } from '__internal/exporter/image_creator';

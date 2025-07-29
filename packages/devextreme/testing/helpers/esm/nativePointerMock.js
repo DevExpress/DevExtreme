@@ -976,17 +976,13 @@ const result = function($element) {
 
 result.simulateEvent = simulateEvent;
 
-return result;
-
-
 // Backward compatibility
 if(typeof window !== 'undefined') {
     window.DevExpress = window.DevExpress || {};
     window.DevExpress.testing = window.DevExpress.testing || {};
-    window.DevExpress.testing.nativePointerMock = {};
+    window.DevExpress.testing.nativePointerMock = result;
 }
 
 // ES6 exports
-const nativePointerMock = {};
-export default nativePointerMock;
-export { nativePointerMock };
+export default result;
+export { result as nativePointerMock };

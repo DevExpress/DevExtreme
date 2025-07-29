@@ -3,7 +3,6 @@ import inferno from 'vite-plugin-inferno'
 import path from 'path';
 import fs from 'fs'
 import url from 'url'
-import commonjs from 'vite-plugin-commonjs';
 import { 
   type TestFile,
   type TestDirectory 
@@ -12,7 +11,8 @@ import {
   moduleResolverPlugin, 
   testServerPlugin,
   esmHelpersPlugin,
-  editorPlugin
+  editorPlugin,
+  cssAliasPlugin
 } from './testing/test-environment/plugins'
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
@@ -74,9 +74,7 @@ function getAllTests(): TestFile[] {
 export default defineConfig({
   plugins: [
     inferno(), 
-    commonjs({
-       requireReturnsDefault: 'auto'
-    }),
+    cssAliasPlugin(__dirname),
     moduleResolverPlugin(__dirname), 
     esmHelpersPlugin(__dirname),
     editorPlugin(__dirname),
@@ -117,29 +115,6 @@ export default defineConfig({
       'globalize/date': path.resolve(__dirname, './node_modules/globalize/dist/globalize/date.js'),
       'globalize/message': path.resolve(__dirname, './node_modules/globalize/dist/globalize/message.js'),
       'globalize/number': path.resolve(__dirname, './node_modules/globalize/dist/globalize/number.js'),
-
-      'generic_light.css!': path.resolve(__dirname, './artifacts/css/dx.light.css'),
-      'generic_light.css': path.resolve(__dirname, './artifacts/css/dx.light.css'),
-      'material_blue_light.css!': path.resolve(__dirname, './artifacts/css/dx.material.blue.light.css'),
-      'material_blue_light.css': path.resolve(__dirname, './artifacts/css/dx.material.blue.light.css'),
-      'material_blue_dark.css!': path.resolve(__dirname, './artifacts/css/dx.material.blue.dark.css'),
-      'material_blue_dark.css': path.resolve(__dirname, './artifacts/css/dx.material.blue.dark.css'),
-      'material_lime_light.css!': path.resolve(__dirname, './artifacts/css/dx.material.lime.light.css'),
-      'material_lime_light.css': path.resolve(__dirname, './artifacts/css/dx.material.lime.light.css'),
-      'material_lime_dark.css!': path.resolve(__dirname, './artifacts/css/dx.material.lime.dark.css'),
-      'material_lime_dark.css': path.resolve(__dirname, './artifacts/css/dx.material.lime.dark.css'),
-      'material_orange_light.css!': path.resolve(__dirname, './artifacts/css/dx.material.orange.light.css'),
-      'material_orange_light.css': path.resolve(__dirname, './artifacts/css/dx.material.orange.light.css'),
-      'material_orange_dark.css!': path.resolve(__dirname, './artifacts/css/dx.material.orange.dark.css'),
-      'material_orange_dark.css': path.resolve(__dirname, './artifacts/css/dx.material.orange.dark.css'),
-      'material_purple_light.css!': path.resolve(__dirname, './artifacts/css/dx.material.purple.light.css'),
-      'material_purple_light.css': path.resolve(__dirname, './artifacts/css/dx.material.purple.light.css'),
-      'material_purple_dark.css!': path.resolve(__dirname, './artifacts/css/dx.material.purple.dark.css'),
-      'material_purple_dark.css': path.resolve(__dirname, './artifacts/css/dx.material.purple.dark.css'),
-      'material_teal_light.css!': path.resolve(__dirname, './artifacts/css/dx.material.teal.light.css'),
-      'material_teal_light.css': path.resolve(__dirname, './artifacts/css/dx.material.teal.light.css'),
-      'material_teal_dark.css!': path.resolve(__dirname, './artifacts/css/dx.material.teal.dark.css'),
-      'material_teal_dark.css': path.resolve(__dirname, './artifacts/css/dx.material.teal.dark.css'),
     }
   },
 
