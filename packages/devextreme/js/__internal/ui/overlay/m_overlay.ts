@@ -23,7 +23,6 @@ import browser from '@js/core/utils/browser';
 import { noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
@@ -215,7 +214,7 @@ class Overlay<
       shading: true,
       shadingColor: '',
       wrapperAttr: {},
-      position: extend({}, OVERLAY_POSITION_ALIASES.center),
+      position: { ...OVERLAY_POSITION_ALIASES.center },
       width: '80vw',
       minWidth: null,
       maxWidth: null,
@@ -286,9 +285,10 @@ class Overlay<
   _setOptionsByReference(): void {
     super._setOptionsByReference();
 
-    extend(this._optionsByReference, {
+    this._optionsByReference = {
+      ...this._optionsByReference,
       animation: true,
-    });
+    };
   }
 
   $wrapper(): dxElementWrapper {
@@ -515,17 +515,20 @@ class Overlay<
   _renderWrapperAttributes(): void {
     const { wrapperAttr } = this.option();
 
-    const attributes = extend({}, wrapperAttr);
+    const attributes = { ...wrapperAttr };
     const classNames = attributes.class;
 
     delete attributes.class;
 
-    // @ts-expect-error object is possible undefined
-    this.$wrapper()
-      .attr(attributes)
-      // @ts-expect-error .attr() type returns string
-      .removeClass(this._customWrapperClass)
-      .addClass(classNames);
+    const $wrapper = this.$wrapper();
+
+    $wrapper.attr(attributes);
+
+    if (this._customWrapperClass) {
+      $wrapper.removeClass(this._customWrapperClass);
+    }
+
+    $wrapper.addClass(classNames);
 
     this._customWrapperClass = classNames;
   }
@@ -680,22 +683,25 @@ class Overlay<
     showHideConfig: AnimationConfig | undefined,
     direction: AnimationDirection,
   ): AnimationConfig | undefined {
-    if (showHideConfig) {
-      const configuration = extend({
-        type: 'slide',
-        skipElementInitialStyles: true, // NOTE: for fadeIn animation
-      }, showHideConfig);
-
-      if (isObject(configuration[direction])) {
-        extend(configuration[direction], {
-          position: this._positionController.position,
-        });
-      }
-
-      return configuration as AnimationConfig;
+    if (!showHideConfig) {
+      return undefined;
     }
 
-    return undefined;
+    const configuration: AnimationConfig = {
+      type: 'slide',
+      // @ts-expect-error skipElementInitialStyles should be typed in AnimationConfig
+      skipElementInitialStyles: true, // NOTE: for fadeIn animation
+      ...showHideConfig,
+    };
+
+    if (isObject(configuration[direction])) {
+      configuration[direction] = {
+        ...configuration[direction],
+        position: this._positionController.position,
+      };
+    }
+
+    return configuration;
   }
 
   _animateHiding(): void {
@@ -790,11 +796,14 @@ class Overlay<
     if (animation) {
       const actualStartCallback = startCallback ?? animation.start ?? noop;
 
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      fx.animate(this._$content.get(0), extend({}, animation, {
+      const configuration: AnimationConfig = {
+        ...animation,
         start: actualStartCallback,
         complete: completeCallback,
-      }));
+      };
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      fx.animate(this._$content.get(0), configuration);
     } else {
       // @ts-expect-error complate in AnimationConfig contains required params
       completeCallback();
