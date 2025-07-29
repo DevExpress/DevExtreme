@@ -173,7 +173,7 @@ export interface PopupProperties extends Properties {
 class Popup<
   TProperties extends PopupProperties = PopupProperties,
 > extends Overlay<TProperties> {
-  _actions: PopupActions = {};
+  _actions?: PopupActions;
 
   _positionController!: PopupPositionController;
 
@@ -1008,11 +1008,11 @@ class Popup<
       handles: this.option('resizeEnabled') ? 'all' : 'none',
       onResizeStart: (e: ResizeStartEvent) => {
         this._observeContentResize(false);
-        this._actions.onResizeStart?.(e);
+        this._actions?.onResizeStart?.(e);
       },
       onResize: (e: ResizeEvent) => {
         this._setContentHeight();
-        this._actions.onResize?.(e);
+        this._actions?.onResize?.(e);
       },
       onResizeEnd: (e: ResizeEndEvent) => {
         this._resizeEndHandler(e);
@@ -1042,7 +1042,7 @@ class Popup<
     this._positionController.resizeHandled();
     this._positionController.detectVisualPositionChange(e.event);
 
-    this._actions.onResizeEnd?.(e);
+    this._actions?.onResizeEnd?.(e);
   }
 
   _setContentHeight(): void {
