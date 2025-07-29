@@ -6,7 +6,7 @@ import config from 'core/config';
 import Submenu from '../../../js/__internal/ui/menu/submenu';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import domAdapter from '__internal/core/m_dom_adapter';
-import Menu from '__internal/ui/menu/m_menu';
+import Menu from '__internal/ui/menu/menu';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fixtures from '../../helpers/positionFixtures.js';
 import { CustomStore } from 'common/data/custom_store';
