@@ -47,8 +47,8 @@ import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import { current as currentTheme, isGeneric } from '@js/ui/themes';
 import type { ActionArguments } from '@ts/core/m_action';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { ClickEvent, HoverEvent, MenuBaseProperties } from '@ts/ui/context_menu/m_menu_base';
-import MenuBase from '@ts/ui/context_menu/m_menu_base';
+import type { ClickEvent, HoverEvent, MenuBaseProperties } from '@ts/ui/context_menu/menu_base';
+import MenuBase from '@ts/ui/context_menu/menu_base';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
 import Overlay from '@ts/ui/overlay/m_overlay';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
@@ -160,7 +160,6 @@ class ContextMenu<
   // @ts-expect-error ts-error
   _actions!: ContextMenuActions;
 
-  // eslint-disable-next-line class-methods-use-this
   getShowEvent(showEventOption: ContextMenuProperties['showEvent']): string | null {
     if (isObject(showEventOption)) {
       if (showEventOption.name === null) {
@@ -173,7 +172,6 @@ class ContextMenu<
     return showEventOption ?? null;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   getShowDelay(showEventOption: TProperties['showEvent']): number {
     return isObject(showEventOption) ? showEventOption.delay ?? 0 : 0;
   }
@@ -233,7 +231,6 @@ class ContextMenu<
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _focusInHandler(): void {}
 
   _itemContainer(): dxElementWrapper {
@@ -271,7 +268,7 @@ class ContextMenu<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getActiveItem(last?: boolean): dxElementWrapper {
+  _getActiveItem(_last?: boolean): dxElementWrapper {
     const $availableItems = this._getAvailableItems();
 
     const $focusedItem = $availableItems.filter(`.${DX_STATE_FOCUSED_CLASS}`);
@@ -347,7 +344,6 @@ class ContextMenu<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _scrollToElement($element: dxElementWrapper): void {
     const $scrollableElement = $element.closest(`.${SCROLLABLE_CLASS}`);
     const scrollableInstance: Scrollable = Scrollable.getInstance($scrollableElement.get(0));
@@ -447,7 +443,6 @@ class ContextMenu<
     this._addWidgetClass();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isTargetOutOfComponent(relatedTarget: Element): boolean {
     const isInsideContextMenu = $(relatedTarget).closest(`.${DX_CONTEXT_MENU_CLASS}`).length !== 0;
 
@@ -516,7 +511,6 @@ class ContextMenu<
     e.stopPropagation();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _addPlatformDependentClass($element: dxElementWrapper): void {
     if (devices.current().phone) {
       $element.addClass(DX_MENU_PHONE_CLASS);
@@ -597,7 +591,6 @@ class ContextMenu<
     e.stopPropagation();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _renderDimensions(): void {}
 
   _renderContainer($wrapper: dxElementWrapper, submenuContainer?: Element): dxElementWrapper {
@@ -746,7 +739,6 @@ class ContextMenu<
     return true;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getActiveItemsContainer(target: Element): dxElementWrapper {
     return $(target).closest(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
   }
@@ -755,12 +747,10 @@ class ContextMenu<
     return this._overlay?.$content().find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`) ?? $();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _searchActiveItem(target: Element): dxElementWrapper {
     return $(target).closest(`.${DX_MENU_ITEM_CLASS}`).eq(0);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isIncludeOverlay($activeOverlay: dxElementWrapper, $allOverlays: dxElementWrapper): boolean {
     let isSame = false;
 
@@ -813,8 +803,8 @@ class ContextMenu<
     $submenu.css('height', isNestedSubmenu ? menuHeight : '100%');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
-  _getMaxUsableSpace(offsetTop: number, windowHeight: number, anchorHeight: number): number {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _getMaxUsableSpace(_offsetTop: number, windowHeight: number, _anchorHeight: number): number {
     return windowHeight;
   }
 
@@ -853,7 +843,6 @@ class ContextMenu<
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getSubmenuBorderWidth(): number {
     return isGeneric(currentTheme()) ? BORDER_WIDTH : 0;
   }
@@ -904,7 +893,6 @@ class ContextMenu<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isSubmenuVisible($submenu: dxElementWrapper): boolean {
     // @ts-expect-error ts-error
     return $submenu.css('visibility') === 'visible';
@@ -942,7 +930,6 @@ class ContextMenu<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _animate(container: Element, options: AnimationConfig): void {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     fx.animate(container, options);
@@ -1075,7 +1062,6 @@ class ContextMenu<
     this.option('focusedElement', null);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _stopAnimate($container: dxElementWrapper): void {
     fx.stop($container.get(0), true);
   }
@@ -1140,7 +1126,6 @@ class ContextMenu<
     return showing ? this._show() : this._hide();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _toggleVisibility(): void {}
 
   _show(event?: DxEvent): Promise<unknown> {
