@@ -171,7 +171,7 @@ class Overlay<
 
   _zIndex!: number;
 
-  _actions?: OverlayActions;
+  _actions: OverlayActions = {};
 
   _isHidingActionCanceled?: boolean;
 
@@ -372,8 +372,6 @@ class Overlay<
   }
 
   _initActions(): void {
-    this._actions = {};
-
     const actions = this._getActionsList();
 
     each(actions, (_, action) => {
@@ -553,7 +551,7 @@ class Overlay<
       this._showAnimationProcessing = false;
       this._isHidden = false;
       // @ts-expect-error onShown should provide event
-      this._actions?.onShown?.();
+      this._actions.onShown?.();
       this._toggleSafariScrolling();
       this._showingDeferred.resolve();
     };
@@ -634,7 +632,7 @@ class Overlay<
         const showingArgs = { cancel: false };
 
         // @ts-expect-error onShowing should provide event
-        this._actions?.onShowing?.(showingArgs);
+        this._actions.onShowing?.(showingArgs);
 
         const cancelShow = (): void => {
           this._toggleVisibility(false);
@@ -698,7 +696,7 @@ class Overlay<
 
       this._hideAnimationProcessing = false;
       // @ts-expect-error onHidden should provide event
-      this._actions?.onHidden?.();
+      this._actions.onHidden?.();
 
       this._hidingDeferred.resolve();
     };
@@ -731,7 +729,7 @@ class Overlay<
       this._hidingDeferred.reject();
     } else {
       // @ts-expect-error onHiding should provide event
-      this._actions?.onHiding?.(hidingArgs);
+      this._actions.onHiding?.(hidingArgs);
 
       this._toggleSafariScrolling();
       this._toggleBodyScroll(true);
@@ -1134,8 +1132,8 @@ class Overlay<
       $root: this.$element(),
       $content: this._$content,
       $wrapper: this._$wrapper,
-      onPositioned: this._actions?.onPositioned,
-      onVisualPositionChanged: this._actions?.onVisualPositionChanged,
+      onPositioned: this._actions.onPositioned,
+      onVisualPositionChanged: this._actions.onVisualPositionChanged,
       _fixWrapperPosition,
       _skipContentPositioning,
     };
@@ -1378,7 +1376,7 @@ class Overlay<
     this._toggleSubscriptions(false);
     this._updateZIndexStackPosition(false);
 
-    this._actions = undefined;
+    this._actions = {};
     this._parentsScrollSubscriptionInfo = undefined;
 
     super._dispose();
