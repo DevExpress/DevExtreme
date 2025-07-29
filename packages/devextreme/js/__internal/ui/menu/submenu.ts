@@ -13,9 +13,9 @@ import {
 } from '@js/core/utils/size';
 import type { DxEvent } from '@js/events';
 import type { Item } from '@js/ui/menu';
-import type { ContextMenuProperties } from '@ts/ui/context_menu/m_context_menu';
-import ContextMenu from '@ts/ui/context_menu/m_context_menu';
-import type { HoverEvent } from '@ts/ui/context_menu/m_menu_base';
+import type { ContextMenuProperties } from '@ts/ui/context_menu/context_menu';
+import ContextMenu from '@ts/ui/context_menu/context_menu';
+import type { HoverEvent } from '@ts/ui/context_menu/menu_base';
 import type DataAdapter from '@ts/ui/hierarchical_collection/data_adapter';
 import type { ItemKey } from '@ts/ui/hierarchical_collection/data_converter';
 import type { OverlayProperties, PositioningEvent as OverlayPositioningEvent } from '@ts/ui/overlay/m_overlay';
@@ -36,7 +36,6 @@ class Submenu extends ContextMenu<SubmenuProperties> {
 
   _dataAdapter!: DataAdapter;
 
-  // eslint-disable-next-line class-methods-use-this
   _getMaxUsableSpace(offsetTop: number, windowHeight: number, anchorHeight: number): number {
     return Math.max(offsetTop, windowHeight - offsetTop - anchorHeight);
   }

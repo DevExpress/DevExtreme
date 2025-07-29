@@ -19,7 +19,7 @@ import type dxContextMenu from '@js/ui/context_menu';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-import ContextMenu from '@ts/ui/context_menu/m_context_menu';
+import ContextMenu from '@ts/ui/context_menu/context_menu';
 import type {
   ScrollView as ScrollViewType,
 } from '@ts/ui/scroll_view/scroll_view';

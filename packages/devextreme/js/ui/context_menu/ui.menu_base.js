@@ -1,4 +1,4 @@
-import MenuBase from '../../__internal/ui/context_menu/m_menu_base';
+import MenuBase from '../../__internal/ui/context_menu/menu_base';
 
 export default MenuBase;
 
