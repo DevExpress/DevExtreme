@@ -291,7 +291,7 @@ export default class FileManagerNotificationControl extends Widget {
                 position: {
                     my: 'right top',
                     at: 'right top',
-                    of: this.option('positionTarget'),
+                    of: this._progressDrawer.$element().find(this.option('positionTargetSelector')),
                     offset: '-10 -5'
                 },
                 _wrapperClassExternal: FILE_MANAGER_NOTIFICATION_POPUP_CLASS,
