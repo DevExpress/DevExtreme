@@ -17,7 +17,7 @@ async function buildAndPack() {
     const outDir = './bundles/externals/';
     const outPackageDir = outDir + 'openai/';
     const inputFile = './node_modules/openai/index.mjs';
-    const outputFile = outPackageDir +'openai.bundle.mjs';
+    const outputFile = outPackageDir + 'openai.bundle.mjs';
 
     fs.mkdirSync(outPackageDir, { recursive: true });
     
