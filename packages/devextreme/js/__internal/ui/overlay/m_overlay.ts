@@ -308,7 +308,6 @@ class Overlay<
     return this._$content;
   }
 
-  /** REMOVE */
   ctor(element: Element, options: TProperties): void {
     super.ctor(element, options);
 
