@@ -66,7 +66,7 @@ const moduleConfig = {
 
 const moduleConfig_T1301121 = {
     beforeEach: function() {
-        const markup = '<div id="file-manager-1"></div><div id="file-manager-2"></div>';
+        const markup = '<div style="display: flex; flex-flow: column nowrap;"><div id="file-manager-1"></div><div id="file-manager-2"></div></div>';
         $('#qunit-fixture').html(markup);
 
         this.clock = sinon.useFakeTimers();
@@ -2517,18 +2517,20 @@ QUnit.module('Editing operations', moduleConfig, () => {
 QUnit.module('double FileManager - notification displayed next to correct FileManager (Bugs)', moduleConfig_T1301121, () => {
 
     test('error in second filemanager displayed in the popup located next to second filemanager', function(assert) {
-        const $popup = this.wrapper2.getNotificationPopup();
+        const $popupContents = this.wrapper2.getNotificationPopup();
+        const popupInstance = this.wrapper2.getNotificationPopupInstance();
 
         assert.strictEqual(this.progressPanelWrapper1.getInfos().length, 0, 'There is no notifications on panel of first filemanager');
         assert.strictEqual(this.progressPanelWrapper2.getInfos().length, 1, 'There is one notification on panel of second filemanager');
 
-        assert.ok($popup.is(':visible'), 'notification popup is visible');
-        const popupTop = $popup[0].getBoundingClientRect().top;
-        const popupLeft = $popup[0].getBoundingClientRect().left;
+        assert.ok($popupContents.is(':visible'), 'notification popup is visible');
+        const popupTop = $popupContents[0].getBoundingClientRect().top;
+        const popupLeft = $popupContents[0].getBoundingClientRect().left;
         const fileManager2Top = this.$fMElement2[0].getBoundingClientRect().top;
         const fileManager2Left = this.$fMElement2[0].getBoundingClientRect().left;
         assert.true(popupTop > fileManager2Top, `notification popup is visible below second filemanager upper border (${popupTop} > ${fileManager2Top})`);
         assert.true(popupLeft > fileManager2Left, `notification popup is visible to the right of second filemanager (${popupLeft} > ${fileManager2Left})`);
+        assert.true(this.wrapper2.getContainer()[0].isEqualNode(popupInstance.option('position').of[0]), 'notification popup position is correct');
     });
 
 });
