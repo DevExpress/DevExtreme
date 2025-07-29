@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import fx from 'common/core/animation/fx';
 
-import Menu from '__internal/ui/menu/m_menu';
-import '__internal/ui/menu/m_submenu';
+import Menu from '__internal/ui/menu/menu';
+import '__internal/ui/menu/submenu';
 
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
