@@ -20,7 +20,7 @@ import type { Item } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import errors from '@js/ui/widget/ui.errors';
 import { capitalize } from '@ts/core/utils/capitalize';
-import { DX_MENU_ITEM_CLASS } from '@ts/ui/menu/m_menu';
+import { DX_MENU_ITEM_CLASS } from '@ts/ui/menu/menu';
 import Quill from 'devextreme-quill';
 
 import type { CommandsMap } from '../utils/ai';
