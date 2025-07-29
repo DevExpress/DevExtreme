@@ -1,7 +1,7 @@
 import type { AnimationConfig } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import { hideCallback as hideTopOverlayCallback } from '@js/common/core/environment/hide_callback';
-import type { EventInfo } from '@js/common/core/events';
+import type { EventInfo, NativeEventInfo } from '@js/common/core/events';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   move as dragEventMove,
@@ -32,6 +32,7 @@ import {
 } from '@js/core/utils/type';
 import { changeCallback } from '@js/core/utils/view_port';
 import type { DxEvent } from '@js/events';
+import type dxOverlay from '@js/ui/overlay';
 import type { dxOverlayAnimation, Properties } from '@js/ui/overlay';
 import { tabbable } from '@js/ui/widget/selectors';
 import uiErrors from '@js/ui/widget/ui.errors';
@@ -71,6 +72,11 @@ type DragLikeEvent = DxEvent & {
   ctrlKey: boolean;
   metaKey: boolean;
 };
+
+export type PositioningEvent =
+  NativeEventInfo<dxOverlay<Properties>, MouseEvent | PointerEvent | TouchEvent> & {
+    readonly position: Properties['position'];
+  };
 
 interface ParentsScrollSubscriptionInfo {
   handler?: (e: Event) => void;
