@@ -1,25 +1,92 @@
 import registerComponent from '@js/core/component_registrator';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import TextBox from '@js/ui/text_box';
-import searchBoxMixin from '@js/ui/widget/ui.search_box_mixin';
+import type { DxEvent } from '@js/events';
+import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { SearchBoxControllerOptions } from '@ts/ui/collection/m_search_box_mixin';
+import SearchBoxController from '@ts/ui/collection/m_search_box_mixin';
+import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
+import TextBox from '@ts/ui/text_box/m_text_box';
 
 import type { DataAdapterOptions } from '../hierarchical_collection/data_adapter';
+import type { TreeViewBaseProperties } from './m_tree_view.base';
 import TreeViewBase from './m_tree_view.base';
 
-// @ts-expect-error
-searchBoxMixin.setEditorClass(TextBox);
+const TREEVIEW_CLASS_PREFIX = 'dx-treeview';
+const TREEVIEW_NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
 
-const WIDGET_CLASS = 'dx-treeview';
-const NODE_CONTAINER_CLASS = `${WIDGET_CLASS}-node-container`;
-// @ts-expect-error ts-error
-const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
-  _addWidgetPrefix(className) {
-    return `${WIDGET_CLASS}-${className}`;
-  },
+export type TreeViewSearchProperties = TreeViewBaseProperties & SearchBoxMixinOptions;
 
-  _optionChanged(args) {
+SearchBoxController.setEditorClass(TextBox);
+
+class TreeViewSearch extends TreeViewBase {
+  _searchBoxController!: SearchBoxController;
+
+  _getDefaultOptions(): TreeViewSearchProperties {
+    return {
+      ...super._getDefaultOptions(),
+      searchValue: '',
+      searchEnabled: false,
+      searchEditorOptions: {},
+    } as TreeViewSearchProperties;
+  }
+
+  _getSearchBoxControllerOptions(): SearchBoxControllerOptions {
+    const {
+      tabIndex,
+      searchEnabled,
+      searchValue,
+      searchTimeout,
+      searchEditorOptions,
+    } = this.option();
+
+    return {
+      tabIndex,
+      searchEnabled,
+      searchValue,
+      searchTimeout,
+      searchEditorOptions,
+      onValueChanged: (value: string): void => {
+        this.option('searchValue', value);
+      },
+    };
+  }
+
+  _init(): void {
+    this._searchBoxController = new SearchBoxController();
+    super._init();
+  }
+
+  _initMarkup(): void {
+    this._searchBoxController.render(
+      TREEVIEW_CLASS_PREFIX,
+      this.$element(),
+      this._getSearchBoxControllerOptions(),
+      this._createComponent.bind(this),
+    );
+    super._initMarkup();
+  }
+
+  _getAriaTarget(): dxElementWrapper {
+    const { searchEnabled } = this.option();
+    if (searchEnabled) {
+      return this._itemContainer(true);
+    }
+    return super._getAriaTarget();
+  }
+
+  getSearchBoxController(): SearchBoxController {
+    return this._searchBoxController;
+  }
+
+  _optionChanged(args: OptionChanged<TreeViewSearchProperties>): void {
     switch (args.name) {
-      case 'searchValue':
+      case 'searchEnabled':
+      case 'searchEditorOptions':
+        this._invalidate();
+        break;
+      case 'searchValue': {
         if (this._showCheckboxes() && this._isRecursiveSelection()) {
           this._removeSelection();
         }
@@ -29,50 +96,59 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
         this._repaintContainer();
         this.option('focusedElement', null);
         break;
-      case 'searchExpr':
+      }
+      case 'searchExpr': {
         this._initDataAdapter();
         this.repaint();
         break;
-      case 'searchMode':
-        this.option('expandNodesRecursive') ? this._updateDataAdapter() : this._initDataAdapter();
+      }
+      case 'searchMode': {
+        const { expandNodesRecursive } = this.option();
+        if (expandNodesRecursive) {
+          this._updateDataAdapter();
+        } else {
+          this._initDataAdapter();
+        }
         this.repaint();
         break;
+      }
+      case 'searchTimeout':
+        break;
       default:
-        this.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
-  _updateDataAdapter() {
+  _updateDataAdapter(): void {
     this._setOptionWithoutOptionChange('expandNodesRecursive', false);
 
     this._initDataAdapter();
 
     this._setOptionWithoutOptionChange('expandNodesRecursive', true);
-  },
+  }
 
   _getDataAdapterOptions(): Partial<DataAdapterOptions> {
+    const { searchValue, searchMode, searchExpr } = this.option();
     return {
-      ...this.callBase(),
-      searchValue: this.option('searchValue'),
-      searchMode: this.option('searchMode') || 'contains',
-      searchExpr: this.option('searchExpr'),
+      ...super._getDataAdapterOptions(),
+      searchValue,
+      searchMode: searchMode ?? 'contains',
+      searchExpr,
     };
-  },
+  }
 
-  _getNodeContainer() {
-    return this.$element().find(`.${NODE_CONTAINER_CLASS}`).first();
-  },
+  _getNodeContainer(): dxElementWrapper {
+    return this.$element().find(`.${TREEVIEW_NODE_CONTAINER_CLASS}`).first();
+  }
 
-  _updateSearch() {
-    if (this._searchEditor) {
-      const editorOptions = this._getSearchEditorOptions();
-      this._searchEditor.option(editorOptions);
-    }
-  },
+  _updateSearch(): void {
+    const searchBoxControllerOptions = this._getSearchBoxControllerOptions();
+    this._searchBoxController?.updateEditorOptions(searchBoxControllerOptions);
+  }
 
-  _repaintContainer() {
+  _repaintContainer(): void {
     const $container = this._getNodeContainer();
-    let rootNodes;
+    let rootNodes: InternalNode[] = [];
 
     if ($container.length) {
       $container.empty();
@@ -81,20 +157,37 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
       this._renderItems($container, rootNodes);
       this._fireContentReadyAction();
     }
-  },
+  }
 
-  _focusTarget() {
-    return this._itemContainer(this.option('searchEnabled'));
-  },
+  _updateFocusState(e: DxEvent, isFocused: boolean): void {
+    if (this.option('searchEnabled')) {
+      this._toggleFocusClass(isFocused, this.$element());
+    }
+    super._updateFocusState(e, isFocused);
+  }
 
-  _cleanItemContainer() {
+  _focusTarget(): dxElementWrapper {
+    const { searchEnabled } = this.option();
+    return this._itemContainer(searchEnabled);
+  }
+
+  focus(): void {
+    if (!this.option('focusedElement') && this.option('searchEnabled')) {
+      this._searchBoxController?.focus();
+      return;
+    }
+    super.focus();
+  }
+
+  _cleanItemContainer(): void {
+    this._searchBoxController?.remove();
     this.$element().empty();
-  },
+  }
 
-  _itemContainer(isSearchMode, selectAllEnabled) {
-    selectAllEnabled ??= this._selectAllEnabled();
+  _itemContainer(isSearchMode?: boolean, selectAllEnabled?: boolean): dxElementWrapper {
+    const isSelectAllEnabled = selectAllEnabled ?? this._selectAllEnabled();
 
-    if (selectAllEnabled) {
+    if (isSelectAllEnabled) {
       return this._getNodeContainer();
     }
 
@@ -102,18 +195,39 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
       return $(this._scrollable.content());
     }
 
-    return this.callBase();
-  },
+    return super._itemContainer();
+  }
 
-  _addWidgetClass() {
+  _addWidgetClass(): void {
     this.$element().addClass(this._widgetClass());
-  },
+  }
 
-  _clean() {
-    this.callBase();
-    this._removeSearchBox();
-  },
-});
+  _cleanAria(): void {
+    const $element = this.$element();
+
+    this.setAria({
+      role: null,
+      activedescendant: null,
+    }, $element);
+
+    $element.attr('tabIndex', null);
+  }
+
+  _refresh(): void {
+    this._searchBoxController?.resolveValueChange();
+    super._refresh();
+  }
+
+  _clean(): void {
+    this._cleanAria();
+    super._clean();
+  }
+
+  dispose(): void {
+    this._searchBoxController?.dispose();
+    super.dispose();
+  }
+}
 
 registerComponent('dxTreeView', TreeViewSearch);
 

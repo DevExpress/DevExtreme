@@ -19,11 +19,11 @@ import type {
 } from '@js/ui/button_group';
 import ButtonGroup from '@js/ui/button_group';
 import type { Item, Properties } from '@js/ui/drop_down_button';
-import type dxList from '@js/ui/list';
-import List from '@js/ui/list_light';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import { getElementWidth, getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
+import type { ListSearchProperties } from '@ts/ui/list/m_list.edit.search';
+import List from '@ts/ui/list/m_list.edit.search';
 import type { PopupProperties } from '@ts/ui/popup/m_popup';
 import Popup from '@ts/ui/popup/m_popup';
 
@@ -57,7 +57,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
 
   _loadSingleDeferred?: DeferredObj<unknown>;
 
-  _list?: dxList;
+  _list!: List;
 
   _lastSelectedItemData?: Item;
 
@@ -151,6 +151,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       content: new FunctionTemplate((options) => {
         const $popupContent = $(options.container);
         const $listContainer = $('<div>').appendTo($popupContent);
+
         this._list = this._createComponent($listContainer, List, this._listOptions());
 
         this._list.registerKeyHandler('escape', this._escHandler.bind(this));
@@ -423,24 +424,39 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     }, this._options.cache('dropDownOptions'), { visible: this.option('opened') });
   }
 
-  _listOptions() {
-    const selectedItemKey = this.option('selectedItemKey');
-    const useSelectMode = this.option('useSelectMode');
+  _listOptions(): ListSearchProperties {
+    const {
+      wrapItemText,
+      focusStateEnabled,
+      hoverStateEnabled,
+      grouped,
+      groupTemplate,
+      noDataText,
+      displayExpr,
+      itemTemplate,
+      items,
+
+      selectedItemKey,
+      useSelectMode,
+    } = this.option();
+
     return {
       selectionMode: useSelectMode ? 'single' : 'none',
-      wrapItemText: this.option('wrapItemText'),
-      focusStateEnabled: this.option('focusStateEnabled'),
-      hoverStateEnabled: this.option('hoverStateEnabled'),
+      wrapItemText,
+      focusStateEnabled,
+      hoverStateEnabled,
       useItemTextAsTitle: this.option('useItemTextAsTitle'),
+      // eslint-disable-next-line
       onContentReady: () => this._fireContentReadyAction(),
       selectedItemKeys: isDefined(selectedItemKey) && useSelectMode ? [selectedItemKey] : [],
-      grouped: this.option('grouped'),
-      groupTemplate: this.option('groupTemplate'),
+      grouped,
+      groupTemplate,
       keyExpr: this._dataController.key(),
-      noDataText: this.option('noDataText'),
-      displayExpr: this.option('displayExpr'),
-      itemTemplate: this.option('itemTemplate'),
-      items: this.option('items'),
+      noDataText,
+      displayExpr,
+      itemTemplate,
+      items,
+      // @ts-expect-error ts-error
       dataSource: this._dataController.getDataSource(),
       onItemClick: (e) => {
         if (!this.option('useSelectMode')) {
@@ -448,6 +464,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
         }
         // @ts-expect-error ts-error
         this.option('selectedItemKey', this._keyGetter(e.itemData));
+        // @ts-expect-error ts-error
         const actionResult = this._fireItemClickAction(e);
         // @ts-expect-error ts-error
         if (actionResult !== false) {
