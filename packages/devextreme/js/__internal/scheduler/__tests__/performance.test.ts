@@ -47,6 +47,7 @@ describe('scheduler', () => {
     nextButton.click();
     expect(navigator.querySelector('.dx-scheduler-navigator-caption')?.textContent).toBe('20-26 January 2025');
 
+    expect((Intl.DateTimeFormat as ReturnType<jest.fn>).mock.calls).toEqual([]);
     expect(Intl.DateTimeFormat).toHaveBeenCalledTimes(0);
   });
 });
