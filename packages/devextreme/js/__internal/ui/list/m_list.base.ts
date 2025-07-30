@@ -33,13 +33,13 @@ import type {
   PullRefreshEvent,
   ScrollEvent,
 } from '@js/ui/list';
+import ScrollView from '@js/ui/scroll_view';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { DataChange, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import CollectionWidget from '@ts/ui/collection/collection_widget.live_update';
-import { ScrollView } from '@ts/ui/scroll_view/scroll_view';
 import { deviceDependentOptions } from '@ts/ui/scroll_view/scrollable.device';
 import type { ScrollOffset } from '@ts/ui/scroll_view/types';
 import { getElementMargin } from '@ts/ui/scroll_view/utils/get_element_style';
@@ -73,6 +73,16 @@ const groupItemsGetter = compileGetter('items');
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 let _scrollView = null;
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function getScrollView() {
+  return _scrollView ?? ScrollView;
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function setScrollView(value): void {
+  _scrollView = value;
+}
 
 type ListItemProperties = CollectionWidgetItemProperties & {
   icon?: string;
@@ -113,7 +123,7 @@ export class ListBase<
 
   _$container!: dxElementWrapper;
 
-  _scrollView?: ScrollView;
+  _scrollView?: any;
 
   _$nextButton!: dxElementWrapper | null;
 
@@ -1440,13 +1450,3 @@ export class ListBase<
 }
 // @ts-expect-error ts-error
 ListBase.include(DataConverterMixin);
-
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-function getScrollView() {
-  return _scrollView ?? ScrollView;
-}
-
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function setScrollView(value): void {
-  _scrollView = value;
-}
