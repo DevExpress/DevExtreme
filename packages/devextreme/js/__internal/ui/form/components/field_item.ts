@@ -10,14 +10,14 @@ import type { SimpleItem } from '@js/ui/form';
 import { current, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import type Editor from '@ts/ui/editor/editor';
-import type { SimpleItemLabelTemplateData } from '@ts/ui/form/components/m_label';
-import { renderLabel } from '@ts/ui/form/components/m_label';
+import type { SimpleItemLabelTemplateData } from '@ts/ui/form/components/label';
+import { renderLabel } from '@ts/ui/form/components/label';
 import {
   FIELD_ITEM_CONTENT_CLASS,
 } from '@ts/ui/form/constants';
-import type Form from '@ts/ui/form/m_form';
-import type LayoutManager from '@ts/ui/form/m_form.layout_manager';
-import type { FieldItemOptions } from '@ts/ui/form/m_form.layout_manager.utils';
+import type Form from '@ts/ui/form/form';
+import type LayoutManager from '@ts/ui/form/form.layout_manager';
+import type { FieldItemOptions } from '@ts/ui/form/form.layout_manager.utils';
 import Validator from '@ts/ui/m_validator';
 
 export const FLEX_LAYOUT_CLASS = 'dx-flex-layout';
@@ -240,11 +240,10 @@ export function renderFieldItem({
   //
 
   const $validationTarget = getValidationTarget($fieldEditorContainer);
-  const validationTargetInstance = $validationTarget
-    && $validationTarget.data(VALIDATION_TARGET_CLASS);
+  const validationTargetInstance = $validationTarget?.data(VALIDATION_TARGET_CLASS);
 
   if (validationTargetInstance) {
-    const isItemHaveCustomLabel = item.label && item.label.text;
+    const isItemHaveCustomLabel = item.label?.text;
     const itemName = isItemHaveCustomLabel ? null : name;
     const fieldName = isItemHaveCustomLabel ? item.label.text : itemName && captionize(itemName);
     let validationRules: ValidationRule[] | null = null;

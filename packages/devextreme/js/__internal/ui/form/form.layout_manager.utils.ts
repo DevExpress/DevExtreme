@@ -15,10 +15,10 @@ import type {
 import type { DropDownEditorProperties } from '@ts/ui/drop_down_editor/m_drop_down_editor';
 import type { EditorProperties } from '@ts/ui/editor/editor';
 import type Editor from '@ts/ui/editor/editor';
-import type { LabelOptions } from '@ts/ui/form/components/m_label';
+import type { LabelOptions } from '@ts/ui/form/components/label';
 import { SIMPLE_ITEM_TYPE } from '@ts/ui/form/constants';
-import type Form from '@ts/ui/form/m_form';
-import type LayoutManager from '@ts/ui/form/m_form.layout_manager';
+import type Form from '@ts/ui/form/form';
+import type LayoutManager from '@ts/ui/form/form.layout_manager';
 
 export interface LabelMarkOptions {
   showRequiredMark?: boolean;
