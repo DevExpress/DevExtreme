@@ -4,14 +4,14 @@ import { name as contextMenuEventName } from '@js/common/core/events/contextmenu
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
-import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
+import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
+import type {
+  DeepPartial,
+} from '@js/core';
 import Action from '@js/core/action';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
-import type {
-  DeepPartial,
-} from '@js/core/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
@@ -95,6 +95,8 @@ export interface PostprocessRenderItemInfo<TItem> {
   itemIndex: number;
 }
 
+export type InkRippleEvent = DxEvent<PointerEvent | MouseEvent | TouchEvent>;
+
 export interface CollectionWidgetBaseProperties<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TComponent extends CollectionWidget<any, TItem, TKey> | any,
@@ -143,11 +145,11 @@ class CollectionWidget<
   _inkRipple?: {
     showWave: (config: {
       element: dxElementWrapper;
-      event: unknown;
+      event: InkRippleEvent;
     }) => void;
     hideWave: (config: {
       element: dxElementWrapper;
-      event: unknown;
+      event: InkRippleEvent;
     }) => void;
   };
 

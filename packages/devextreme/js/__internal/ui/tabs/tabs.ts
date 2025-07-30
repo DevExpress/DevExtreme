@@ -25,6 +25,7 @@ import type {
 import { current as currentTheme, isFluent, isMaterial } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { InkRippleEvent } from '@ts/ui/collection/collection_widget.base';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import {
   isReachedBottom, isReachedLeft, isReachedRight, isReachedTop,
@@ -433,13 +434,9 @@ class Tabs extends CollectionWidget<TabsProperties> {
   _toggleActiveState(
     $element: dxElementWrapper,
     value: boolean,
-    e: Record<string, unknown>,
+    e: unknown,
   ): void {
-    super._toggleActiveState(
-      $element,
-      value,
-      e,
-    );
+    super._toggleActiveState($element, value);
 
     if (!this._inkRipple) {
       return;
@@ -447,7 +444,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
     const config = {
       element: $element,
-      event: e,
+      event: e as InkRippleEvent,
     };
 
     if (value) {

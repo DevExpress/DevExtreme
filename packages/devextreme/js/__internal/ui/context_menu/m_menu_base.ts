@@ -12,7 +12,7 @@ import type dxMenuBase from '@js/ui/context_menu/ui.menu_base';
 import type { dxMenuBaseItem, Item, SubmenuShowMode } from '@js/ui/menu';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import type { InkRippleEvent, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import MenuItem from '@ts/ui/collection/item';
 import MenuBaseEditStrategy from '@ts/ui/context_menu/menu_base.edit.strategy';
 import type { BaseDataAdapterOptions } from '@ts/ui/hierarchical_collection/data_adapter';
@@ -331,9 +331,9 @@ class MenuBase<
   _toggleActiveState(
     $element: dxElementWrapper,
     value: boolean,
-    e: Record<string, unknown>,
+    e: unknown,
   ): void {
-    super._toggleActiveState($element, value, e);
+    super._toggleActiveState($element, value);
 
     if (!this._inkRipple) {
       return;
@@ -341,7 +341,7 @@ class MenuBase<
 
     const config = {
       element: $element,
-      event: e,
+      event: e as InkRippleEvent,
     };
 
     if (value) {
