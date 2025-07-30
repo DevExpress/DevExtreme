@@ -1391,7 +1391,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     const deferred = Deferred();
 
     if (this._scrollView) {
-      // @ts-expect-error ts-error
       this._scrollView.update().done((): void => {
         if (!this._scrollViewIsFull()) {
           this._updateLoadingState(true);
