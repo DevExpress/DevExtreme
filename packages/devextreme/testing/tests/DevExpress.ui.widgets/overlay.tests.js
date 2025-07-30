@@ -1462,8 +1462,8 @@ testModule('animation', moduleConfig, () => {
         const originAnimate = fx.animate;
 
         try {
-            fx.animate = ($element, config) => {
-                if(instance.$content().get(0) === $element.get(0)) {
+            fx.animate = (element, config) => {
+                if(instance.$content().get(0) === element) {
                     lastConfig = config;
                 }
             };
