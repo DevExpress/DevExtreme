@@ -20,7 +20,7 @@ import { animation } from '@ts/ui/drawer/drawer.animation';
 import OverlapStrategy from '@ts/ui/drawer/drawer.rendering.strategy.overlap';
 import PushStrategy from '@ts/ui/drawer/drawer.rendering.strategy.push';
 import ShrinkStrategy from '@ts/ui/drawer/drawer.rendering.strategy.shrink';
-import type Overlay from '@ts/ui/overlay/m_overlay';
+import type Overlay from '@ts/ui/overlay/overlay';
 
 const DRAWER_CLASS = 'dx-drawer';
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';

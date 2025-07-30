@@ -50,7 +50,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { ClickEvent, HoverEvent, MenuBaseProperties } from '@ts/ui/context_menu/menu_base';
 import MenuBase from '@ts/ui/context_menu/menu_base';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
-import Overlay from '@ts/ui/overlay/m_overlay';
+import Overlay from '@ts/ui/overlay/overlay';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 
 const DX_MENU_CLASS = 'dx-menu';
