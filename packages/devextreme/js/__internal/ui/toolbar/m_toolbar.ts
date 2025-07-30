@@ -151,7 +151,7 @@ class Toolbar extends ToolbarBase {
   }
 
   _isMenuItem(itemData): boolean {
-    return itemData.location === 'menu' || itemData.locateInMenu === 'always';
+    return itemData.locateInMenu === 'always';
   }
 
   _isToolbarItem(itemData): boolean {

@@ -74,6 +74,7 @@ const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-v
 const DROPDOWNEDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const NUMBERBOX_CLASS = 'dx-numberbox';
 const NUMBERBOX_SPIN_DOWN_CLASS = 'dx-numberbox-spin-down';
+const SELECTBOX_CLASS = 'dx-selectbox';
 const SHOW_INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
 
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
@@ -3262,9 +3263,9 @@ QUnit.module('datebox with time component', {
 
         dateBox.open();
 
-        const hourEditor = $('.dx-timeview-field .dx-numberbox').eq(0);
-        const minuteEditor = $('.dx-timeview-field .dx-numberbox').eq(1);
-        const amPmEditor = $('.dx-timeview-field .dx-selectbox').eq(0);
+        const hourEditor = $(`.${TIMEVIEW_CLASS} .${NUMBERBOX_CLASS}`).eq(0);
+        const minuteEditor = $(`.${TIMEVIEW_CLASS} .${NUMBERBOX_CLASS}`).eq(1);
+        const amPmEditor = $(`.${TIMEVIEW_CLASS} .${SELECTBOX_CLASS}`).eq(0);
 
         assert.ok(hourEditor.hasClass('dx-editor-outlined'));
         assert.ok(minuteEditor.hasClass('dx-editor-outlined'));
@@ -3284,13 +3285,30 @@ QUnit.module('datebox with time component', {
 
         dateBox.open();
 
-        const hourEditor = $('.dx-timeview-field .dx-numberbox').eq(0);
-        const minuteEditor = $('.dx-timeview-field .dx-numberbox').eq(1);
-        const amPmEditor = $('.dx-timeview-field .dx-selectbox').eq(0);
+        const hourEditor = $(`.${TIMEVIEW_CLASS} .${NUMBERBOX_CLASS}`).eq(0);
+        const minuteEditor = $(`.${TIMEVIEW_CLASS} .${NUMBERBOX_CLASS}`).eq(1);
+        const amPmEditor = $(`.${TIMEVIEW_CLASS} .${SELECTBOX_CLASS}`).eq(0);
 
         assert.ok(hourEditor.hasClass('dx-editor-underlined'));
         assert.ok(minuteEditor.hasClass('dx-editor-underlined'));
         assert.ok(amPmEditor.hasClass('dx-editor-underlined'));
+    });
+
+    QUnit.test('DateBox with timeview should have amPm popup inside of dateBox popup content (T1300566)', function(assert) {
+        const dateBox = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            pickerType: 'calendar',
+            opened: true,
+            displayFormat: 'ddMMyy hh:mm',
+        }).dxDateBox('instance');
+        const amPmEditor = $(`.${TIMEVIEW_CLASS} .${SELECTBOX_CLASS}`).eq(0).dxSelectBox('instance');
+
+        amPmEditor.open();
+
+        const $dateBoxPopup = $(dateBox.content());
+        const $amPmPopup = $(amPmEditor.content());
+
+        assert.strictEqual($amPmPopup.closest($dateBoxPopup).length, 1, 'amPm popup is inside dateBox popup');
     });
 
     QUnit.test('Reset seconds and milliseconds when DateBox has no value for time view', function(assert) {
@@ -6375,6 +6393,20 @@ QUnit.module('valueChanged handler should receive correct event', {
 
         this.checkEvent(assert, 'dxclick', $todayButton);
         this.testProgramChange(assert);
+    });
+
+    QUnit.test('should display custom text on today button from todayButtonText option', function(assert) {
+        this.instance.option({ calendarOptions: { showTodayButton: true }, todayButtonText: 'today button text' });
+        const $todayButton = $(this.instance.content()).parent().find(`.${CALENDAR_TODAY_BUTTON_CLASS}`);
+
+        assert.equal($todayButton.text().trim(), 'today button text');
+    });
+
+    QUnit.test('should display custom text on today button from todayButtonText option initialize', function(assert) {
+        this.reinit({ calendarOptions: { showTodayButton: true }, todayButtonText: 'today button text' });
+        const $todayButton = $(this.instance.content()).parent().find(`.${CALENDAR_TODAY_BUTTON_CLASS}`);
+
+        assert.equal($todayButton.text().trim(), 'today button text');
     });
 });
 

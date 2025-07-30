@@ -17,7 +17,7 @@ const CalendarStrategy = DateBoxStrategy.inherit({
 
   getDefaultOptions() {
     return extend(this.callBase(), {
-      todayButtonText: messageLocalization.format('dxCalendar-todayButtonText'),
+      todayButtonText: this.dateBox.option('todayButtonText') ?? messageLocalization.format('dxCalendar-todayButtonText'),
     });
   },
 
@@ -90,19 +90,22 @@ const CalendarStrategy = DateBoxStrategy.inherit({
   },
 
   _getWidgetOptions() {
-    const disabledDates = this.dateBox.option('disabledDates');
+    const {
+      disabledDates, min, max, todayButtonText,
+    } = this.dateBox.option();
 
     return extend(this.dateBox.option('calendarOptions'), {
       value: this.dateBoxValue() || null,
       selectionMode: 'single',
       dateSerializationFormat: null,
-      min: this.dateBox.dateOption('min'),
-      max: this.dateBox.dateOption('max'),
+      min,
+      max,
       onValueChanged: this._valueChangedHandler.bind(this),
       onCellClick: this._cellClickHandler.bind(this),
       disabledDates: isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this.dateBox)) : disabledDates,
       onContouredChanged: this._refreshActiveDescendant.bind(this),
       skipFocusCheck: true,
+      todayButtonText,
     });
   },
 
