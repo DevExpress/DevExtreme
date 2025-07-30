@@ -709,11 +709,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
     .dx-master-detail-row {
       > .dx-master-detail-cell {
-        padding: 0;
-
-        > .dx-#{$widget-name}-master-detail-container {
-          padding: $grid-masterdetail-padding;
-        }
+        padding: $grid-masterdetail-padding;
       }
 
       > .dx-#{$widget-name}-group-space,
@@ -1068,6 +1064,14 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
     .dx-row-removed.dx-row-lines > td {
       border-top-width: 0;
+    }
+
+    .dx-master-detail-row > .dx-master-detail-cell {
+      padding: 0;
+
+      > .dx-#{$widget-name}-master-detail-container {
+        padding: $grid-masterdetail-padding;
+      }
     }
   }
 

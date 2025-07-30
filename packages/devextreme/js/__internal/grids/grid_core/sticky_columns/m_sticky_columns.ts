@@ -456,7 +456,7 @@ const rowsView = (
     const isDetailRowResult = isDetailRow(options);
     const needWrapContent = isGroupRowResult || isDetailRowResult;
 
-    if (!hasStickyColumns && !needWrapContent) {
+    if (!hasStickyColumns || !needWrapContent) {
       return super._renderCellContent($cell, options, renderOptions);
     }
 
