@@ -48,13 +48,9 @@ const SIDE_BORDER_WIDTH_STYLES: Record<Position, string> = {
 };
 
 interface MovingSides { top: boolean; left: boolean; bottom: boolean; right: boolean }
-interface ElementLocation { top: number; left: number }
+interface Offset { top: number; left: number }
 interface ElementSize { width: number; height: number }
 type Axis = 'x' | 'y';
-interface Coordinates {
-  left: number;
-  top: number;
-}
 
 interface DragOffset {
   x: number;
@@ -68,7 +64,7 @@ interface StepDelta {
 interface AreaResult {
   width: number;
   height: number;
-  offset: { left: number; top: number };
+  offset: Offset;
 }
 interface ScrollOffset {
   scrollX: number;
@@ -95,7 +91,7 @@ export interface ResizableProperties extends Properties {
 class Resizable extends DOMComponent<Resizable, ResizableProperties> {
   _movingSides!: MovingSides;
 
-  _elementLocation!: ElementLocation;
+  _elementLocation!: Offset;
 
   _elementSize!: ElementSize;
 
@@ -284,7 +280,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     const $handle = $(e.target).closest(`.${RESIZABLE_HANDLE_CLASS}`);
     const handleWidth = getOuterWidth($handle);
     const handleHeight = getOuterHeight($handle);
-    const handleOffset = $handle.offset() as Coordinates;
+    const handleOffset: Offset = $handle.offset() ?? { left: 0, top: 0 };
     const areaOffset = area.offset;
     const scrollOffset = this._getAreaScrollOffset();
 
@@ -303,14 +299,12 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     e.maxBottomOffset = this._bottomMaxOffset;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getBorderWidth($element: dxElementWrapper, direction: Position): number {
     if (isWindow($element.get(0))) return 0;
     // @ts-expect-error ts-error
-    const borderWidth = $element.css(SIDE_BORDER_WIDTH_STYLES[direction]);
-    // @ts-expect-error ts-error
-    // eslint-disable-next-line radix
-    return parseInt(borderWidth) || 0;
+    const borderWidth: string = $element.css(SIDE_BORDER_WIDTH_STYLES[direction]);
+
+    return parseInt(borderWidth, 10) || 0;
   }
 
   _proportionate(direction: Axis, value: number): number {
@@ -494,7 +488,6 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     triggerResizeEvent(this.$element());
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isCornerHandler(sides: MovingSides): boolean {
     // eslint-disable-next-line no-bitwise
     return Object.values(sides).reduce((xor, value) => xor ^ value, 0) === 0;
@@ -584,7 +577,6 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getMovingSides(e: DxEvent<MouseEvent | TouchEvent>): MovingSides {
     const $target = $(e.target);
     const hasCornerTopLeftClass = $target.hasClass(`${RESIZABLE_HANDLE_CORNER_CLASS}-top-left`);
@@ -749,7 +741,6 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
     this.$element().find(`.${RESIZABLE_HANDLE_CLASS}`).remove();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _useTemplates(): boolean {
     return false;
   }

@@ -13,6 +13,7 @@ import {
   getWindow,
   hasWindow,
 } from '@js/core/utils/window';
+import type { EventInfo } from '@js/events';
 import type { BoxDirection } from '@js/ui/box';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import type { Item, Properties } from '@js/ui/responsive_box';
@@ -30,13 +31,16 @@ const BOX_ITEM_DATA_KEY = 'dxBoxItemData';
 
 const HD_SCREEN_WIDTH = 1920;
 
-type SizeQualifier = 'xs' | 'sm' | 'md' | 'lg';
+export type ScreenSizeQualifier = 'xs' | 'sm' | 'md' | 'lg';
 
 interface BlockRange { start: number; end: number }
 type BoxOptions = BoxProperties<BoxItemData, string | number>;
 
-type ResponsiveBoxItem = BoxItemData & {
-  location?: Item['location'];
+type LocationObject = Extract<Item['location'], unknown[]>;
+export type LocationItem = LocationObject extends (infer U)[] ? U : LocationObject;
+
+export type ResponsiveBoxItem<T = LocationItem | LocationItem[]> = BoxItemData & {
+  location?: T;
   item?: ResponsiveBoxItem;
 };
 
@@ -58,16 +62,18 @@ export interface GridCell {
   spanningCell?: GridCell;
 }
 
-export interface ResponsiveBoxProperties extends Properties<Item> {
+export interface ResponsiveBoxProperties extends Omit<Properties<Item>, 'onContentReady'> {
   onLayoutChanged?: (() => void) | null;
 
-  currentScreenFactor?: string;
+  currentScreenFactor?: ScreenSizeQualifier;
 
   onItemStateChanged?: (args: {
     name: string;
     state: unknown;
     oldState: unknown;
   }) => void;
+
+  onContentReady?: (e: EventInfo<ResponsiveBox>) => void;
 }
 
 class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
@@ -287,11 +293,11 @@ class ResponsiveBox extends CollectionWidget<ResponsiveBoxProperties> {
     return new RegExp(`(^|\\s)${screen}($|\\s)`, 'i');
   }
 
-  _getCurrentScreen(): SizeQualifier {
+  _getCurrentScreen(): ScreenSizeQualifier {
     const width = this._screenWidth();
     const { screenByWidth } = this.option();
 
-    return screenByWidth?.(width) as SizeQualifier;
+    return screenByWidth?.(width) as ScreenSizeQualifier;
   }
 
   _screenWidth(): number {

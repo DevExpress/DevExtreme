@@ -24,7 +24,7 @@ import { each } from '@js/core/utils/iterator';
 import { getDefaultAlignment } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import type { DxEvent } from '@js/events';
+import type { DxEvent, EventInfo } from '@js/events';
 import type { Options as Properties } from '@js/ui/drop_down_editor/ui.drop_down_editor';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
@@ -60,6 +60,8 @@ export interface DropDownEditorProperties extends Omit<Properties,
   buttonsLocation?: string;
 
   _onMarkupRendered?: () => void;
+
+  onPopupInitialized?: (e: { component: DropDownEditor; popup: Popup }) => void;
 }
 
 function createTemplateWrapperElement(): dxElementWrapper {
@@ -87,7 +89,9 @@ class DropDownEditor<
 
   _activeRenderContext?: symbol;
 
-  _popupInitializedAction!: (event?: Record<string, unknown>) => void;
+  _popupInitializedAction!: (event?: EventInfo<DropDownEditor> & {
+    popup?: Popup;
+  }) => void;
 
   _popupContentId?: string;
 
@@ -742,11 +746,12 @@ class DropDownEditor<
   _popupInitializedHandler(): void {}
 
   _getPopupInitializedHandler(): (e) => void {
-    const onPopupInitialized = this.option('onPopupInitialized');
+    const { onPopupInitialized } = this.option();
 
     return (e) => {
       this._popupInitializedHandler();
       if (onPopupInitialized) {
+        // @ts-expect-error
         this._popupInitializedAction({ popup: e.component });
       }
     };

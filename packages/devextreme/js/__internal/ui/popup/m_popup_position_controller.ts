@@ -19,7 +19,6 @@ class PopupPositionController extends OverlayPositionController {
     outsideDragFactor,
     ...args
   }) {
-    // @ts-expect-error
     super(args);
 
     this._props = {
