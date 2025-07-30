@@ -37,6 +37,8 @@ fixture.disablePageReloads`FixedColumns - Grouping`
       summaryType: 'max',
       valueFormat: 'currency',
     }]);
+    await dataGrid.scrollTo(t, { x: 0 });
+    await dataGrid.scrollTo(t, { x: rtlEnabled ? 100 : 250 });
 
     await takeScreenshot(`grouping-scroll-total_summary-rtl=${rtlEnabled}.png`, dataGrid.element);
 
