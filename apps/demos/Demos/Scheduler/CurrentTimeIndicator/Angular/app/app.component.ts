@@ -6,7 +6,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxSchedulerModule,
   DxSchedulerComponent,
-  DxTemplateModule,
   DxSwitchModule,
   DxNumberBoxModule,
 } from 'devextreme-angular';
@@ -84,7 +83,6 @@ export class AppComponent {
     DxSchedulerModule,
     DxSwitchModule,
     DxNumberBoxModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent, ApplyPipe],
   bootstrap: [AppComponent],

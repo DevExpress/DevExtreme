@@ -5,7 +5,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxTabPanelModule,
   DxTreeViewModule,
-  DxTemplateModule,
 } from 'devextreme-angular';
 
 import {
@@ -60,7 +59,6 @@ export class AppComponent {
     BrowserModule,
     DxTabPanelModule,
     DxTreeViewModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

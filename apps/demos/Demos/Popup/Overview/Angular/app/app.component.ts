@@ -2,7 +2,7 @@ import { Component, NgModule, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { DxPopupModule, DxButtonModule, DxTemplateModule } from 'devextreme-angular';
+import { DxPopupModule, DxButtonModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 import { Employee, Service } from './app.service';
 
@@ -93,7 +93,6 @@ export class AppComponent {
     BrowserModule,
     DxPopupModule,
     DxButtonModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
