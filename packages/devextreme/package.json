@@ -32,7 +32,7 @@
     "@devextreme/runtime": "3.0.13",
     "devexpress-diagram": "catalog:",
     "devexpress-gantt": "catalog:",
-    "devextreme-quill": "1.7.2",
+    "devextreme-quill": "catalog:",
     "inferno": "^7.4.9",
     "inferno-hydrate": "^7.4.9",
     "inferno-create-element": "^7.4.9",
