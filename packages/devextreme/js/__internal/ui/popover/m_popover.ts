@@ -365,7 +365,8 @@ TProperties extends PopoverProperties = PopoverProperties,
   }
 
   _getHideOnParentScrollTarget(): dxElementWrapper {
-    return $(this._positionController._position.of || super._getHideOnParentScrollTarget());
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return $(this._positionController._position?.of || super._getHideOnParentScrollTarget());
   }
 
   _getSideByLocation(location) {
@@ -396,7 +397,7 @@ TProperties extends PopoverProperties = PopoverProperties,
 
     const axis = this._isVerticalSide(side) ? 'left' : 'top';
     const sizeProperty = this._isVerticalSide(side) ? 'width' : 'height';
-    const $target = $(this._positionController._position.of);
+    const $target = $(this._positionController._position?.of);
     const targetOffset = positionUtils.offset($target) ?? { top: 0, left: 0 };
     const contentOffset = positionUtils.offset(this.$overlayContent());
 

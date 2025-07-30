@@ -36,6 +36,8 @@ type Position = OverlayPosition | OverlayPositionAlignment;
 interface OverlayPosition {
   my?: OverlayPositionAlignment;
   at?: OverlayPositionAlignment;
+  of?: string | dxElementWrapper | Element; // Move to Popover
+  offset?: unknown; // Move to Popover
   boundaryOffset?: typeof OVERLAY_DEFAULT_BOUNDARY_OFFSET;
 }
 
@@ -53,7 +55,15 @@ export interface OverlayPositionControllerConstructor {
   _skipContentPositioning?: OverlayProperties['_skipContentPositioning'];
 }
 
-type Props = Partial<OverlayPositionControllerConstructor>;
+type Props = Partial<OverlayPositionControllerConstructor> & {
+  target?: dxElementWrapper; // Move to Popover
+  shading?: unknown; // Move to Popover
+  fullScreen?: unknown; // Move to Popup
+  dragOutsideBoundary?: unknown; // Move to Popup
+  dragAndResizeArea?: string | dxElementWrapper | Element; // Move to Popup
+  outsideDragFactor?: unknown; // Move to Popup
+  forceApplyBindings?: () => void; // Move to Popup
+};
 
 const window = windowUtils.getWindow();
 

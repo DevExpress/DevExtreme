@@ -65,7 +65,7 @@ class PopoverPositionController extends OverlayPositionController {
   _renderBoundaryOffset(): void {}
 
   _getContainerPosition() {
-    const offset = pairToObject(this._position.offset || '');
+    const offset = pairToObject(this._position?.offset || '');
     let { h: hOffset, v: vOffset } = offset;
     const isVerticalSide = this._isVerticalSide();
     const isHorizontalSide = this._isHorizontalSide();
@@ -92,8 +92,8 @@ class PopoverPositionController extends OverlayPositionController {
   }
 
   _isPopoverInside(): boolean {
-    const my = positionUtils.setup.normalizeAlign(this._position.my);
-    const at = positionUtils.setup.normalizeAlign(this._position.at);
+    const my = positionUtils.setup.normalizeAlign(this._position?.my);
+    const at = positionUtils.setup.normalizeAlign(this._position?.at);
 
     return my.h === at.h && my.v === at.v;
   }
