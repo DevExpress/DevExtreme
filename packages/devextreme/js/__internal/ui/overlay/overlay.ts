@@ -139,7 +139,7 @@ export interface OverlayActions {
   onPositioned?: (e: Partial<PositioningEvent>) => void;
   onVisualPositionChanged?: (
     e: Partial<PositioningEvent> & {
-      prevPosition: OverlayProperties['position'];
+      previousPosition: OverlayProperties['position'];
     }) => void;
 }
 

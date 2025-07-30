@@ -268,18 +268,18 @@ class OverlayPositionController {
   }
 
   _raisePositionedEvents(event?: PointerLikeEvent): void {
-    const prevPosition = this._previousVisualPosition;
+    const previousPosition = this._previousVisualPosition;
     const newPosition = this._visualPosition;
 
-    const isTopEqual = prevPosition?.top === newPosition.top;
-    const isLeftEqual = prevPosition?.left !== newPosition.left;
+    const isTopEqual = previousPosition?.top === newPosition.top;
+    const isLeftEqual = previousPosition?.left !== newPosition.left;
 
     const isVisualPositionChanged = !(isTopEqual && isLeftEqual);
 
     if (isVisualPositionChanged) {
       this._props.onVisualPositionChanged?.({
         event,
-        prevPosition,
+        previousPosition,
         position: newPosition,
       });
     }
@@ -292,7 +292,7 @@ class OverlayPositionController {
   _renderBoundaryOffset(): void {
     const boundaryOffset = this._position?.boundaryOffset ?? OVERLAY_DEFAULT_BOUNDARY_OFFSET;
 
-    if (!boundaryOffset) {
+    if (!boundaryOffset || !(boundaryOffset.v && boundaryOffset.h)) {
       return;
     }
 
