@@ -658,7 +658,7 @@ export class AppointmentSettingsGenerator {
       isRecurrent,
     } = this._generateDateSettings();
     const { isVirtualScrolling, viewDataProvider } = this.options;
-    const appointments = this.isAllDayRowAppointment || !isVirtualScrolling
+    const filteredDateSettings = this.isAllDayRowAppointment || !isVirtualScrolling
       ? dateSettings
       : dateSettings.filter(({ source, startDate, endDate }) => viewDataProvider.isGroupIntersectDateInterval(
         source.groupIndex,
@@ -666,8 +666,8 @@ export class AppointmentSettingsGenerator {
         endDate,
       ));
 
-    const cellPositions = this._calculateCellPositions(appointments, itemGroupIndices);
-    const result = this._prepareAppointmentInfos(appointments, cellPositions, isRecurrent);
+    const cellPositions = this._calculateCellPositions(filteredDateSettings, itemGroupIndices);
+    const result = this._prepareAppointmentInfos(filteredDateSettings, cellPositions, isRecurrent);
 
     return result;
   }
