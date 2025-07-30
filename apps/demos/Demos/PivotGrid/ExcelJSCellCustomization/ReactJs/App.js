@@ -38,8 +38,7 @@ const dataSource = new PivotGridDataSource({
   ],
   store: sales,
 });
-const isDataCell = (cell) =>
-  cell.area === 'data' && cell.rowType === 'D' && cell.columnType === 'D';
+const isDataCell = (cell) => cell.rowType === 'D' && cell.columnType === 'D';
 const isTotalCell = (cell) =>
   cell.type === 'T'
   || cell.type === 'GT'
@@ -94,8 +93,7 @@ const onExporting = (e) => {
     });
   });
 };
-const onCellPrepared = ({ cell, area, cellElement }) => {
-  cell.area = area;
+const onCellPrepared = ({ cell, cellElement }) => {
   if (isDataCell(cell) || isTotalCell(cell)) {
     const appearance = getConditionalAppearance(cell);
     Object.assign(cellElement.style, getCssStyles(appearance));

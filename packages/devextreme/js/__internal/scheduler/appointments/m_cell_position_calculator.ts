@@ -222,16 +222,8 @@ class VirtualStrategy extends BaseStrategy {
   isVirtualScrolling = true;
 
   calculateCellPositions(groupIndices, isAllDayRowAppointment, isRecurrentAppointment) {
-    const appointments = isAllDayRowAppointment
-      ? this.appointments
-      : this.appointments.filter(({ source, startDate, endDate }) => this.viewDataProvider.isGroupIntersectDateInterval(
-        source.groupIndex,
-        startDate,
-        endDate,
-      ));
-
     if (isRecurrentAppointment) {
-      return this.createRecurrentAppointmentInfos(appointments, isAllDayRowAppointment);
+      return this.createRecurrentAppointmentInfos(this.appointments, isAllDayRowAppointment);
     }
 
     return super.calculateCellPositions(groupIndices, isAllDayRowAppointment, isRecurrentAppointment);
