@@ -1277,7 +1277,7 @@ class Overlay<
     const $wrapperContainer = this._positionController.$container;
 
     // NOTE: The container is undefined when DOM is not ready yet. See T1143527
-    if (!$wrapperContainer) {
+    if ($wrapperContainer === undefined) {
       return;
     }
 
