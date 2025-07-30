@@ -13,7 +13,7 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-type CellData = DxPivotGridTypes.CellPreparedEvent['cell'] & { area?: string };
+type CellData = DxPivotGridTypes.CellPreparedEvent['cell'];
 
 let modulePrefix = '';
 // @ts-ignore
@@ -87,17 +87,15 @@ export class AppComponent {
     });
   }
 
-  onCellPrepared({ cell, area, cellElement }: DxPivotGridTypes.CellPreparedEvent) {
-    const cellData = { ...cell, area };
-
-    if (this.isDataCell(cellData) || this.isTotalCell(cellData)) {
-      const appearance = this.getConditionalAppearance(cellData);
+  onCellPrepared({ cell, cellElement }: DxPivotGridTypes.CellPreparedEvent) {
+    if (this.isDataCell(cell) || this.isTotalCell(cell)) {
+      const appearance = this.getConditionalAppearance(cell);
       Object.assign(cellElement.style, this.getCssStyles(appearance));
     }
   }
 
   isDataCell(cell: CellData) {
-    return (cell.area === 'data' && cell.rowType === 'D' && cell.columnType === 'D');
+    return cell.rowType === 'D' && cell.columnType === 'D';
   }
 
   isTotalCell(cell: CellData) {
