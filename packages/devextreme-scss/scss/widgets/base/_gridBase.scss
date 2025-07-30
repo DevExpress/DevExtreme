@@ -66,7 +66,6 @@
 
     > .dx-#{$widget-name}-rowsview.dx-last-row-border {
       tbody:last-child > .dx-data-row:nth-last-child(2) {
-        &,
         & > td {
           border-bottom-width: 0;
         }
@@ -922,8 +921,6 @@
     }
 
     .dx-row.dx-row-lines:first-child {
-      border-top: none;
-
       & > td,
       & > tr > td {
         border-top: none;
