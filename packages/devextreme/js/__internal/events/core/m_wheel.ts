@@ -64,13 +64,6 @@ const wheel = {
     return -delta * DELTA_MUTLIPLIER;
   },
 
-  /* https://developer.mozilla.org/en-US/docs/Web/API/Element/wheel_event
-  * wheelDelta - is deprecated.
-  * Use deltaX, deltaY, and deltaZ instead.
-  *
-  * jQuery implementation of mousewheel event.
-  * https://github.com/jquery/jquery-mousewheel/blob/main/src/jquery.mousewheel.js#L83
-  */
   _getWheelDelta(deltaY: number, deltaX: number, deltaZ: number) {
     if (deltaY) {
       return deltaY;
