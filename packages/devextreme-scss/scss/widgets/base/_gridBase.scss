@@ -974,7 +974,7 @@
         outline: 0;
       }
 
-      .dx-master-detail-container {
+      .dx-#{$widget-name}-master-detail-container {
         overflow: hidden;
         text-overflow: ellipsis;
 
