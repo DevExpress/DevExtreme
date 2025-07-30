@@ -64,6 +64,62 @@ const moduleConfig = {
     }
 };
 
+const moduleConfig_T1301121 = {
+    beforeEach: function() {
+        const markup = '<div style="display: flex; flex-flow: column nowrap;"><div id="file-manager-1"></div><div id="file-manager-2"></div></div>';
+        $('#qunit-fixture').html(markup);
+
+        this.clock = sinon.useFakeTimers();
+        fx.off = true;
+
+        const createProvider = fileManagerName => new CustomFileSystemProvider({
+            getItems: parent => {
+                if(fileManagerName === 'fileManager2') {
+                    return Promise.reject(new FileSystemError(42, parent, 'You have no access to this folder.'));
+                }
+                return [
+                    {
+                        name: 'Folder 1',
+                        isDirectory: true,
+                        hasSubDirectories: false
+                    }
+                ];
+            },
+        });
+
+        const getFmOptions = rootFolderName => ({
+            name: rootFolderName,
+            rootFolderName: rootFolderName,
+            fileSystemProvider: createProvider(rootFolderName),
+            notifications: {
+                showPanel: true,
+                showPopup: true
+            }
+        });
+
+        this.$fMElement1 = $('#file-manager-1').dxFileManager(getFmOptions('fileManager1'));
+        this.$fMElement2 = $('#file-manager-2').dxFileManager(getFmOptions('fileManager2'));
+
+        this.fileManager1 = this.$fMElement1.dxFileManager('instance');
+        this.fileManager2 = this.$fMElement2.dxFileManager('instance');
+
+        this.wrapper1 = new FileManagerWrapper(this.$fMElement1);
+        this.wrapper2 = new FileManagerWrapper(this.$fMElement2);
+        this.progressPanelWrapper1 = new FileManagerProgressPanelWrapper(this.$fMElement1);
+        this.progressPanelWrapper2 = new FileManagerProgressPanelWrapper(this.$fMElement2);
+        this.clock.tick(400);
+    },
+
+    afterEach: function() {
+        this.clock.tick(5000);
+
+        this.clock.restore();
+        fx.off = false;
+
+        FileUploaderInternals.resetFileInputTag();
+    }
+};
+
 QUnit.module('Editing operations', moduleConfig, () => {
 
     test('rename folder in folders area', function(assert) {
@@ -2456,4 +2512,27 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'file moved');
         fx.off = true;
     });
+});
+
+QUnit.module('double FileManager - notification displayed next to correct FileManager (Bugs)', moduleConfig_T1301121, () => {
+
+    test('error in second filemanager displayed in the popup located next to second filemanager', function(assert) {
+        this.clock.tick(800);
+
+        const $popupContents = this.wrapper2.getNotificationPopup();
+        const popupInstance = this.wrapper2.getNotificationPopupInstance();
+
+        assert.strictEqual(this.progressPanelWrapper1.getInfos().length, 0, 'There is no notifications on panel of first filemanager');
+        assert.strictEqual(this.progressPanelWrapper2.getInfos().length, 1, 'There is one notification on panel of second filemanager');
+
+        assert.ok($popupContents.is(':visible'), 'notification popup is visible');
+        const popupTop = $popupContents[0].getBoundingClientRect().top;
+        const popupLeft = $popupContents[0].getBoundingClientRect().left;
+        const fileManager2Top = this.$fMElement2[0].getBoundingClientRect().top;
+        const fileManager2Left = this.$fMElement2[0].getBoundingClientRect().left;
+        assert.true(popupTop > fileManager2Top, `notification popup is visible below second filemanager upper border (${popupTop} > ${fileManager2Top})`);
+        assert.true(popupLeft > fileManager2Left, `notification popup is visible to the right of second filemanager (${popupLeft} > ${fileManager2Left})`);
+        assert.true(this.wrapper2.getContainer()[0].isEqualNode(popupInstance.option('position').of[0]), 'notification popup position is correct');
+    });
+
 });
