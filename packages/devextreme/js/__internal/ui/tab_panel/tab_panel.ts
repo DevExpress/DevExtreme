@@ -24,8 +24,9 @@ import Tabs, {
   TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS,
 } from '@ts/ui/tabs/tabs';
 
-// eslint-disable-next-line import/no-named-default
-import { default as TabPanelItem } from './item';
+import TabPanelItem from './item';
+
+// STYLE tabPanel
 
 export const TABPANEL_CLASS = 'dx-tabpanel';
 const TABPANEL_TABS_CLASS = 'dx-tabpanel-tabs';
