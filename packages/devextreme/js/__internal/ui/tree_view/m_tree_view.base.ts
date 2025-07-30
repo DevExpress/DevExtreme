@@ -1860,7 +1860,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
 
     const scrollable = this.getScrollable();
     if (scrollable) {
-      // @ts-expect-error ts-error
       scrollable.update().done(() => {
         // @ts-expect-error ts-error
         deferred.resolveWith(this);

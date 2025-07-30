@@ -1,39 +1,57 @@
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
+import type { GroupItem, SimpleItem, TabbedItem } from '@js/ui/form';
+import type { PreparedItem, TabItem } from '@ts/ui/form/m_form.items_runtime_info';
+import type { ConvertToLayoutManagerOptionsParams, LayoutManagerProperties } from '@ts/ui/form/m_form.layout_manager';
 
-export const createItemPathByIndex = (index, isTabs) => `${isTabs ? 'tabs' : 'items'}[${index}]`;
+export const createItemPathByIndex = (
+  index: number,
+  isTabs: boolean | undefined,
+): string => `${isTabs ? 'tabs' : 'items'}[${index}]`;
 
-export const concatPaths = (path1, path2) => {
+export const concatPaths = (
+  path1: string | undefined,
+  path2: string | undefined,
+): string | undefined => {
   if (isDefined(path1) && isDefined(path2)) {
     return `${path1}.${path2}`;
   }
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   return path1 || path2;
 };
 
-export const getTextWithoutSpaces = (text) => (text ? text.replace(/\s/g, '') : undefined);
+export const getTextWithoutSpaces = (text: string | undefined): string | undefined => (text ? text.replace(/\s/g, '') : undefined);
 
-export const isEqualToDataFieldOrNameOrTitleOrCaption = (item, fieldName) => {
+export const isEqualToDataFieldOrNameOrTitleOrCaption = (
+  item: PreparedItem,
+  fieldName: string,
+): boolean => {
   if (item) {
-    return item.dataField === fieldName
-            || item.name === fieldName
-            || getTextWithoutSpaces(item.title) === fieldName
-            || (item.itemType === 'group' && getTextWithoutSpaces(item.caption) === fieldName);
+    return (item as SimpleItem).dataField === fieldName
+      || item.name === fieldName
+      || getTextWithoutSpaces((item as TabItem).title) === fieldName
+      || (item.itemType === 'group' && getTextWithoutSpaces((item as GroupItem).caption) === fieldName);
   }
   return false;
 };
 
-export const getFullOptionName = (path, optionName) => `${path}.${optionName}`;
+export const getFullOptionName = (
+  path: string,
+  optionName: string | undefined,
+): string => `${path}.${optionName}`;
 
-export const getOptionNameFromFullName = (fullName) => {
+export const getOptionNameFromFullName = (fullName: string): string => {
   const parts = fullName.split('.');
   return parts[parts.length - 1].replace(/\[\d+]/, '');
 };
 
-export const tryGetTabPath = (fullPath) => {
+export const isFullPathContainsTabs = (fullPath: string): boolean => fullPath.includes('tabs');
+
+export const tryGetTabPath = (fullPath: string): string => {
   const pathParts = fullPath.split('.');
   const resultPathParts = [...pathParts];
 
-  for (let i = pathParts.length - 1; i >= 0; i--) {
+  for (let i = pathParts.length - 1; i >= 0; i -= 1) {
     if (isFullPathContainsTabs(pathParts[i])) {
       return resultPathParts.join('.');
     }
@@ -42,34 +60,52 @@ export const tryGetTabPath = (fullPath) => {
   return '';
 };
 
-export const isFullPathContainsTabs = (fullPath) => fullPath.indexOf('tabs') > -1;
+export const getItemPath = (
+  items: PreparedItem[],
+  item: PreparedItem | false,
+  isTabs?: boolean,
+): string => {
+  if (!item) {
+    return '';
+  }
 
-export const getItemPath = (items, item, isTabs?: boolean) => {
   const index = items.indexOf(item);
   if (index > -1) {
     return createItemPathByIndex(index, isTabs);
   }
-  for (let i = 0; i < items.length; i++) {
+  for (let i = 0; i < items.length; i += 1) {
     const targetItem = items[i];
-    const tabOrGroupItems = targetItem.tabs || targetItem.items;
+
+    const tabOrGroupItems = (targetItem as TabbedItem).tabs ?? targetItem.items;
     if (tabOrGroupItems) {
-      const itemPath = getItemPath(tabOrGroupItems, item, targetItem.tabs);
+      const itemPath = getItemPath(tabOrGroupItems, item, !!(targetItem as TabbedItem).tabs);
       if (itemPath) {
-        return concatPaths(createItemPathByIndex(i, isTabs), itemPath);
+        return concatPaths(createItemPathByIndex(i, isTabs), itemPath) ?? '';
       }
     }
   }
+
+  return '';
 };
 
 export function convertToLayoutManagerOptions({
-  form, $formElement, formOptions, items, validationGroup, extendedLayoutManagerOptions,
-  onFieldDataChanged, onContentReady, onDisposing, onFieldItemRendered,
-}) {
-  const baseOptions = {
+  form,
+  $formElement,
+  formOptions,
+  items,
+  validationGroup,
+  extendedLayoutManagerOptions,
+  onFieldDataChanged,
+  onContentReady,
+  onDisposing,
+  onFieldItemRendered,
+}: ConvertToLayoutManagerOptionsParams): LayoutManagerProperties {
+  const baseOptions: LayoutManagerProperties = {
     form,
     items,
     $formElement,
     validationGroup,
+    // @ts-expect-error ts-error
     onFieldDataChanged,
     onContentReady,
     onDisposing,
@@ -92,7 +128,7 @@ export function convertToLayoutManagerOptions({
   };
 
   // cannot use '=' because 'extend' makes special assingment
-  const result = extend(baseOptions, {
+  const result: LayoutManagerProperties = extend(baseOptions, {
     isRoot: extendedLayoutManagerOptions.isRoot,
     colCount: extendedLayoutManagerOptions.colCount,
     alignItemLabels: extendedLayoutManagerOptions.alignItemLabels,
