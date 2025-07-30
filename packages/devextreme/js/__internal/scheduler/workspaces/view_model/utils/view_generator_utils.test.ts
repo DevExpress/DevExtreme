@@ -1,3 +1,7 @@
+/**
+ * @timezone Etc/GMT-2
+ */
+
 import { describe, expect } from '@jest/globals';
 import each from 'jest-each';
 
