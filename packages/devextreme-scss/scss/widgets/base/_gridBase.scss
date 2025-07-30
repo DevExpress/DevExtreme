@@ -968,21 +968,23 @@
     }
 
     .dx-row > .dx-master-detail-cell {
-      overflow: visible;
-
       &:focus {
         outline: 0;
       }
+    }
 
-      .dx-#{$widget-name}-master-detail-container {
-        overflow: hidden;
-        text-overflow: ellipsis;
+    &.dx-#{$widget-name}-sticky-columns {
+      .dx-row > .dx-master-detail-cell {
+        overflow: visible;
 
-        &.dx-#{$widget-name}-sticky-column-left {
-          position: sticky;
-          z-index: 2;
-          left: 0;
-          right: 0;
+        .dx-#{$widget-name}-master-detail-container {
+          overflow: hidden;
+          text-overflow: ellipsis;
+
+          &.dx-#{$widget-name}-sticky-column-left {
+            left: 0;
+            right: 0;
+          }
         }
       }
     }
