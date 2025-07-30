@@ -22,7 +22,7 @@ export class VirtualCell extends BaseInfernoComponent<VirtualCellProps> {
     const {
       colSpan,
       isHeaderCell,
-      className,
+      className = '',
       width,
       styles,
     } = this.props;
