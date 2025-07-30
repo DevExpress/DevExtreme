@@ -3,7 +3,7 @@ import { ensureDefined } from '@js/core/utils/common';
 let baseZIndex = 1500;
 let zIndexStack: number[] = [];
 
-export const base = (ZIndex?: number) => {
+export const base = (ZIndex?: number): number => {
   baseZIndex = ensureDefined(ZIndex, baseZIndex);
   return baseZIndex;
 };
