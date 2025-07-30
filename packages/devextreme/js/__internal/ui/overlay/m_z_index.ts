@@ -3,8 +3,9 @@ import { ensureDefined } from '@js/core/utils/common';
 let baseZIndex = 1500;
 let zIndexStack: number[] = [];
 
-export const base = (ZIndex?: number) => {
-  baseZIndex = ensureDefined(ZIndex, baseZIndex);
+export const base = (zIndex?: number): number => {
+  baseZIndex = ensureDefined(zIndex, baseZIndex);
+
   return baseZIndex;
 };
 
@@ -17,15 +18,22 @@ export const create = (baseIndex = baseZIndex): number => {
   return index;
 };
 
-export const remove = (zIndex) => {
+export const remove = (zIndex: number): void => {
   const position = zIndexStack.indexOf(zIndex);
+
   if (position >= 0) {
     zIndexStack.splice(position, 1);
   }
 };
 
-export const isLastZIndexInStack = (zIndex) => zIndexStack.length && zIndexStack[zIndexStack.length - 1] === zIndex;
+export const isLastZIndexInStack = (zIndex: number): boolean => {
+  if (zIndexStack.length) {
+    return zIndexStack[zIndexStack.length - 1] === zIndex;
+  }
 
-export const clearStack = () => {
+  return false;
+};
+
+export const clearStack = (): void => {
   zIndexStack = [];
 };

@@ -11,7 +11,7 @@ import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { ensureDefined, noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
-import { when } from '@js/core/utils/deferred';
+import { Deferred, when } from '@js/core/utils/deferred';
 import {
   getHeight, getOuterHeight, getOuterWidth, getWidth,
 } from '@js/core/utils/size';
@@ -499,12 +499,11 @@ class Scrollable<
     return getOuterWidth(this.$content());
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-  update(): DeferredObj<unknown> | void {
+  update(): DeferredObj<unknown> {
     if (!this._strategy) {
-      return;
+      return Deferred().resolve();
     }
-    // eslint-disable-next-line consistent-return
+
     return when(this._strategy.update()).done(() => {
       this._updateAllowedDirection();
     });

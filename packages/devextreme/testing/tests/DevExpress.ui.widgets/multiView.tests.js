@@ -307,8 +307,8 @@ QUnit.module('animations', {
 
         const origFxStop = fx.stop;
 
-        fx.stop = $.proxy(function(element, complete) {
-            assert.equal(element[0], this.$animated[0], 'element correct');
+        fx.stop = $.proxy(function($element, complete) {
+            assert.equal($element, this.$animated[0], 'element correct');
             assert.equal(complete, true, 'animation completed');
         }, this);
 
