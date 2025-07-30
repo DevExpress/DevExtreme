@@ -74,16 +74,6 @@ const groupItemsGetter = compileGetter('items');
 // eslint-disable-next-line @typescript-eslint/naming-convention
 let _scrollView = null;
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-function getScrollView() {
-  return _scrollView ?? ScrollView;
-}
-
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function setScrollView(value): void {
-  _scrollView = value;
-}
-
 type ListItemProperties = CollectionWidgetItemProperties & {
   icon?: string;
 };
@@ -1450,3 +1440,13 @@ export class ListBase<
 }
 // @ts-expect-error ts-error
 ListBase.include(DataConverterMixin);
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function getScrollView() {
+  return _scrollView ?? ScrollView;
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function setScrollView(value): void {
+  _scrollView = value;
+}
