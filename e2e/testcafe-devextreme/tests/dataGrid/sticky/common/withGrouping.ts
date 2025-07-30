@@ -26,11 +26,19 @@ fixture.disablePageReloads`FixedColumns - Grouping`
     await dataGrid.scrollTo(t, { x: rtlEnabled ? 500 : 100 });
     await takeScreenshot(`grouping-scroll-center=${rtlEnabled}.png.png`, dataGrid.element);
 
+    await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
+    await takeScreenshot(`grouping-scroll-end=${rtlEnabled}.png.png`, dataGrid.element);
+
     await dataGrid.scrollTo(t, { x: rtlEnabled ? 100 : 250 });
     await takeScreenshot(`grouping-scroll-total_summary_intersection-rtl=${rtlEnabled}.png`, dataGrid.element);
 
-    await dataGrid.scrollTo(t, { x: rtlEnabled ? 0 : 10000 });
-    await takeScreenshot(`grouping-scroll-end=${rtlEnabled}.png.png`, dataGrid.element);
+    await dataGrid.apiOption('summary.totalItems', [{
+      column: 'SaleAmount',
+      summaryType: 'max',
+      valueFormat: 'currency',
+    }]);
+
+    await takeScreenshot(`grouping-scroll-total_summary-rtl=${rtlEnabled}.png`, dataGrid.element);
 
     await t
       .expect(compareResults.isValid())
