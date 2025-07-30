@@ -5,7 +5,7 @@ import { isDefined } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/button';
 import type { HorizontalAlignment, VerticalAlignment } from '@js/ui/form';
 import type Button from '@ts/ui/button/wrapper';
-import type { TemplatesInfo } from '@ts/ui/form/m_form.layout_manager';
+import type { TemplatesInfo } from '@ts/ui/form/form.layout_manager';
 
 const FIELD_BUTTON_ITEM_CLASS = 'dx-field-button-item';
 
