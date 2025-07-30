@@ -711,7 +711,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       > .dx-master-detail-cell {
         padding: 0;
 
-        > .dx-master-detail-container {
+        > .dx-#{$widget-name}-master-detail-container {
           padding: $grid-masterdetail-padding;
         }
       }
