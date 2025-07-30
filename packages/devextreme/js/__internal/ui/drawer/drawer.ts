@@ -41,6 +41,8 @@ export interface DrawerProperties extends Properties {
   __debugWhenPanelContentRendered?: (e: { drawer: Drawer }) => boolean;
 
   templateSize?: number;
+
+  templatesRenderAsynchronously?: boolean;
 }
 
 class Drawer extends Widget<DrawerProperties> {

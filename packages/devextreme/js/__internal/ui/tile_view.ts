@@ -251,7 +251,7 @@ class TileView extends CollectionWidget<TileViewProperties> {
 
   _renderContentSize(
     config: OrientationConfig<Orientation>,
-    itemMargin: number | undefined = 0,
+    itemMargin = 0,
   ): void {
     const { mainDimension, baseItemMainDimension } = config;
 
@@ -308,9 +308,7 @@ class TileView extends CollectionWidget<TileViewProperties> {
   _refreshActiveDescendant(): void {}
 
   _getItemPosition(item: Item): ItemPosition {
-    const config = this._config;
-    const { mainPosition } = config;
-    const { crossPosition } = config;
+    const { mainPosition, crossPosition } = this._config;
 
     // @ts-expect-error ts-error
     const position: ItemPosition = {
