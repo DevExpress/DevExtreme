@@ -434,9 +434,9 @@ class Tabs extends CollectionWidget<TabsProperties> {
   _toggleActiveState(
     $element: dxElementWrapper,
     value: boolean,
-    e: unknown,
+    event: InkRippleEvent,
   ): void {
-    super._toggleActiveState($element, value);
+    super._toggleActiveState($element, value, event);
 
     if (!this._inkRipple) {
       return;
@@ -444,7 +444,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
 
     const config = {
       element: $element,
-      event: e as InkRippleEvent,
+      event,
     };
 
     if (value) {
