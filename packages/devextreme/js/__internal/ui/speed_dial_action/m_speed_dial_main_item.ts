@@ -234,7 +234,6 @@ class SpeedDialMainItem extends SpeedDialItem {
     for (let i = 0; i < actions.length; i++) {
       actions[i].option('animation', this._getActionAnimation(actions[i], i, lastActionIndex));
       actions[i].option('position', this._getActionPosition(actions, i));
-      // @ts-expect-error
       actions[i]._$wrapper.css('position', this._$wrapper.css('position'));
       actions[i].toggle();
     }
