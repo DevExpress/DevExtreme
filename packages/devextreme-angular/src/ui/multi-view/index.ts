@@ -253,6 +253,19 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
 
     /**
+     * [descr:CollectionWidgetOptions.keyExpr]
+    
+     */
+    @Input()
+    get keyExpr(): Function | string {
+        return this._getOption('keyExpr');
+    }
+    set keyExpr(value: Function | string) {
+        this._setOption('keyExpr', value);
+    }
+
+
+    /**
      * [descr:dxMultiViewOptions.loop]
     
      */
@@ -543,6 +556,13 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() keyExprChange: EventEmitter<Function | string>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() loopChange: EventEmitter<boolean>;
 
     /**
@@ -657,6 +677,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
             { emit: 'itemHoldTimeoutChange' },
             { emit: 'itemsChange' },
             { emit: 'itemTemplateChange' },
+            { emit: 'keyExprChange' },
             { emit: 'loopChange' },
             { emit: 'noDataTextChange' },
             { emit: 'rtlEnabledChange' },

@@ -23177,7 +23177,7 @@ declare module DevExpress.ui {
     TComponent extends dxMultiView<TItem, TKey> = dxMultiView<any, any>,
     TItem extends DevExpress.ui.dxMultiView.ItemLike = any,
     TKey = any
-  > extends CollectionWidgetOptions<TComponent, TItem, TKey> {
+  > extends Omit<CollectionWidgetOptions<TComponent, TItem, TKey>, 'keyExpr'> {
     /**
      * [descr:dxMultiViewOptions.animationEnabled]
      */
@@ -28311,7 +28311,11 @@ declare module DevExpress.ui {
   export interface dxTabPanelOptions<
     TItem extends DevExpress.ui.dxTabPanel.ItemLike = any,
     TKey = any
-  > extends dxMultiViewBaseOptions<dxTabPanel<TItem, TKey>, TItem, TKey> {
+  > extends dxMultiViewBaseOptions<dxTabPanel<TItem, TKey>, TItem, TKey>,
+      Pick<
+        CollectionWidgetOptions<dxTabPanel<TItem, TKey>, TItem, TKey>,
+        'keyExpr'
+      > {
     /**
      * [descr:dxTabPanelOptions.animationEnabled]
      */

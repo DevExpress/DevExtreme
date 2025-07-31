@@ -99,6 +99,8 @@ export interface dxMultiViewOptions<
     TKey = any,
 > extends dxMultiViewBaseOptions<dxMultiView<TItem, TKey>, TItem, TKey> {}
 
+type ABC = dxMultiViewOptions['keyExpr'];
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
@@ -108,7 +110,7 @@ export interface dxMultiViewBaseOptions<
     TComponent extends dxMultiView<TItem, TKey> = dxMultiView<any, any>,
     TItem extends ItemLike = any,
     TKey = any,
-> extends CollectionWidgetOptions<TComponent, TItem, TKey> {
+> extends Omit<CollectionWidgetOptions<TComponent, TItem, TKey>, 'keyExpr'> {
     /**
      * @docid dxMultiViewOptions.animationEnabled
      * @default true

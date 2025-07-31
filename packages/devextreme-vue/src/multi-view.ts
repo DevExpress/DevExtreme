@@ -39,6 +39,7 @@ type AccessibleOptions = Pick<Properties,
   "itemHoldTimeout" |
   "items" |
   "itemTemplate" |
+  "keyExpr" |
   "loop" |
   "noDataText" |
   "onContentReady" |
@@ -79,6 +80,7 @@ const componentConfig = {
     itemHoldTimeout: Number,
     items: Array as PropType<Array<any | dxMultiViewItem | string>>,
     itemTemplate: {},
+    keyExpr: [Function, String] as PropType<((() => void)) | string>,
     loop: Boolean,
     noDataText: String,
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
@@ -115,6 +117,7 @@ const componentConfig = {
     "update:itemHoldTimeout": null,
     "update:items": null,
     "update:itemTemplate": null,
+    "update:keyExpr": null,
     "update:loop": null,
     "update:noDataText": null,
     "update:onContentReady": null,

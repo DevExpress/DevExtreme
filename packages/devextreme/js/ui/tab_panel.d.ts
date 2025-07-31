@@ -20,8 +20,9 @@ import {
 } from '../common/core/events';
 
 import CollectionWidget, {
-    SelectionChangeInfo,
-    SelectionChangingEventBase,
+  CollectionWidgetOptions,
+  SelectionChangeInfo,
+  SelectionChangingEventBase,
 } from './collection/ui.collection_widget.base';
 
 import {
@@ -157,6 +158,8 @@ export type TitleHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEve
  */
 export type TitleRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & TabPanelItemInfo<TItem>;
 
+type ABC = dxTabPanelOptions['keyExpr'];
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
@@ -166,7 +169,8 @@ export type TitleRenderedEvent<TItem extends ItemLike = any, TKey = any> = Event
 export interface dxTabPanelOptions<
     TItem extends ItemLike = any,
     TKey = any,
-> extends dxMultiViewBaseOptions<dxTabPanel<TItem, TKey>, TItem, TKey> {
+> extends dxMultiViewBaseOptions<dxTabPanel<TItem, TKey>, TItem, TKey>,
+  Pick<CollectionWidgetOptions<dxTabPanel<TItem, TKey>, TItem, TKey>, 'keyExpr'> {
     /**
      * @docid
      * @default false
