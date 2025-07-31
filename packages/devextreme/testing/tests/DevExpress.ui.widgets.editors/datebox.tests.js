@@ -6164,6 +6164,44 @@ QUnit.module('DateBox number and string value support', {
             assert.ok(true, 'there is no error');
         }
     });
+
+    [true, false].forEach(isRuntime => {
+        QUnit.test(`should not throw error after applying new date when empty string ${isRuntime ? 'runtime' : 'initial'} value is passed and datetime type used (T1301310)`, function(assert) {
+            const dateBox = $('#dateBox').dxDateBox({
+                value: isRuntime ? undefined : '',
+                type: 'datetime',
+            }).dxDateBox('instance');
+
+            try {
+                dateBox.open();
+
+                if(isRuntime) {
+                    dateBox.option('value', '');
+                }
+
+                const $calendarCell = $(`.${CALENDAR_CELL_CLASS}`).eq(0);
+                $calendarCell.trigger('dxclick');
+
+                const $applyButton = $(dateBox.content()).parent().find(APPLY_BUTTON_SELECTOR);
+                $applyButton.trigger('dxclick');
+
+                assert.ok(true, 'no error');
+            } catch(e) {
+                assert.ok(false, `error thrown: ${e.message}`);
+            }
+        });
+    });
+
+    QUnit.test('should convert empty string initial value to null when datetime type used (T1301310)', function(assert) {
+        const dateBox = $('#dateBox').dxDateBox({
+            value: '',
+            type: 'datetime',
+        }).dxDateBox('instance');
+
+        const processedValue = dateBox.option('value');
+
+        assert.strictEqual(processedValue, null, 'empty string value is converted to null');
+    });
 });
 
 testModule('native picker', function() {
