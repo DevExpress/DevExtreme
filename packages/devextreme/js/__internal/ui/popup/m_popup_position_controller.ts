@@ -29,8 +29,9 @@ class PopupPositionController extends OverlayPositionController {
   }: PopupPositionControllerConstructor) {
     super(args);
 
-    this._props = {
-      ...this._props,
+    this._properties = {
+      ...this._properties,
+      // @ts-expect-error todo
       fullScreen,
       forceApplyBindings,
       dragOutsideBoundary,
@@ -44,7 +45,8 @@ class PopupPositionController extends OverlayPositionController {
   }
 
   set fullScreen(fullScreen) {
-    this._props.fullScreen = fullScreen;
+    // @ts-expect-error todo
+    this._properties.fullScreen = fullScreen;
 
     if (fullScreen) {
       this._fullScreenEnabled();
@@ -58,28 +60,33 @@ class PopupPositionController extends OverlayPositionController {
   }
 
   get outsideDragFactor() {
-    if (this._props.dragOutsideBoundary) {
+    // @ts-expect-error todo
+    if (this._properties.dragOutsideBoundary) {
       return 1;
     }
 
-    return this._props.outsideDragFactor;
+    // @ts-expect-error todo
+    return this._properties.outsideDragFactor;
   }
 
   set dragAndResizeArea(dragAndResizeArea) {
-    this._props.dragAndResizeArea = dragAndResizeArea;
+    // @ts-expect-error todo
+    this._properties.dragAndResizeArea = dragAndResizeArea;
 
     this._updateDragResizeContainer();
   }
 
   set dragOutsideBoundary(dragOutsideBoundary) {
-    this._props.dragOutsideBoundary = dragOutsideBoundary;
+    // @ts-expect-error todo
+    this._properties.dragOutsideBoundary = dragOutsideBoundary;
 
     this._updateDragResizeContainer();
   }
 
   // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures, grouped-accessor-pairs
   set outsideDragFactor(outsideDragFactor) {
-    this._props.outsideDragFactor = outsideDragFactor;
+    // @ts-expect-error todo
+    this._properties.outsideDragFactor = outsideDragFactor;
   }
 
   updateContainer(containerProp): void {
@@ -96,12 +103,14 @@ class PopupPositionController extends OverlayPositionController {
   }
 
   positionContent(): void {
-    if (this._props.fullScreen) {
+    // @ts-expect-error todo
+    if (this._properties.fullScreen) {
       move(this._$content, { top: 0, left: 0 });
 
       this.detectVisualPositionChange();
     } else {
-      this._props.forceApplyBindings?.();
+      // @ts-expect-error todo
+      this._properties.forceApplyBindings?.();
 
       super.positionContent();
     }
@@ -110,7 +119,9 @@ class PopupPositionController extends OverlayPositionController {
   _normalizePosition(positionProp) {
     const normalizedPosition = super._normalizePosition(positionProp);
 
-    if (this._props.fullScreen) {
+    // @ts-expect-error todo
+    if (this._properties.fullScreen) {
+      // @ts-expect-error todo
       normalizedPosition.of = 'window';
     }
 
@@ -122,15 +133,18 @@ class PopupPositionController extends OverlayPositionController {
   }
 
   _getDragResizeContainer(): dxElementWrapper | undefined {
-    if (this._props.dragOutsideBoundary) {
+    // @ts-expect-error todo
+    if (this._properties.dragOutsideBoundary) {
       return $(window);
     }
 
-    if (this._props.dragAndResizeArea) {
-      return $(this._props.dragAndResizeArea);
+    // @ts-expect-error todo
+    if (this._properties.dragAndResizeArea) {
+      // @ts-expect-error todo
+      return $(this._properties.dragAndResizeArea);
     }
 
-    const isContainerDefined = originalViewPort().get(0) || this._props.container;
+    const isContainerDefined = originalViewPort().get(0) || this._properties.container;
 
     return isContainerDefined
       ? this._$markupContainer
@@ -138,7 +152,8 @@ class PopupPositionController extends OverlayPositionController {
   }
 
   _getVisualContainer(): dxElementWrapper {
-    if (this._props.fullScreen) {
+    // @ts-expect-error todo
+    if (this._properties.fullScreen) {
       return $(window);
     }
 

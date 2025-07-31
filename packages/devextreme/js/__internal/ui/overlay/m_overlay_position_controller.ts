@@ -34,8 +34,8 @@ type OverlayPositionAlignment =
 interface OverlayPosition {
   my?: OverlayPositionAlignment;
   at?: OverlayPositionAlignment;
-  of?: string | dxElementWrapper | Element; // Move to Popover
-  offset?: unknown; // Move to Popover
+  // of?: string | dxElementWrapper | Element; // Move to Popover
+  // offset?: unknown; // Move to Popover
   boundaryOffset?: typeof OVERLAY_DEFAULT_BOUNDARY_OFFSET;
 }
 

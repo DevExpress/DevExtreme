@@ -37,11 +37,13 @@ class PopoverPositionController extends OverlayPositionController {
     $arrow,
     ...args
   }) {
+    // @ts-expect-error todo
     super(args);
 
-    this._props = {
-      ...this._props,
+    this._properties = {
+      ...this._properties,
       shading,
+      // @ts-expect-error todo
       target,
     };
 
@@ -49,24 +51,26 @@ class PopoverPositionController extends OverlayPositionController {
 
     this._positionSide = undefined;
 
-    this.updatePosition(this._props.position);
+    this.updatePosition(this._properties.position);
   }
 
   positionWrapper(): void {
-    if (this._props.shading) {
+    if (this._properties.shading) {
       this._$wrapper?.css({ top: 0, left: 0 });
     }
   }
 
   updateTarget(target): void {
-    this._props.target = target;
+    // @ts-expect-error todo
+    this._properties.target = target;
 
-    this.updatePosition(this._props.position);
+    this.updatePosition(this._properties.position);
   }
 
   _renderBoundaryOffset(): void {}
 
   _getContainerPosition() {
+    // @ts-expect-error todo
     const offset = pairToObject(this._position?.offset || '');
     let { h: hOffset, v: vOffset } = offset;
     const isVerticalSide = this._isVerticalSide();
@@ -121,7 +125,8 @@ class PopoverPositionController extends OverlayPositionController {
 
   _normalizePosition(positionProp) {
     const defaultPositionConfig = {
-      of: this._props.target,
+      // @ts-expect-error todo
+      of: this._properties.target,
       boundaryOffset: POPOVER_DEFAULT_BOUNDARY_OFFSET,
     };
 

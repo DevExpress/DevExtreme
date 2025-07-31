@@ -15,7 +15,8 @@ const SLIDER_TOOLTIP_DEFAULT_BOUNDARY_OFFSET = { h: 2, v: 1 };
 
 class SliderTooltipPositionController extends PopoverPositionController {
   _normalizePosition(positionProp) {
-    const $sliderHandle = this._props.target;
+    // @ts-expect-error todo
+    const $sliderHandle = this._properties.target;
     const sliderClass = `.${SLIDER_CLASS}`;
     const $slider = $sliderHandle?.closest(sliderClass);
     const defaultPositionConfig = {
@@ -48,6 +49,7 @@ class SliderTooltipPositionController extends PopoverPositionController {
       oversize,
     } = positionUtils.calculate(this._$content, this._position).h;
 
+    // @ts-expect-error todo
     const { left } = this._visualPosition;
 
     const isLeftSide = collisionSide === 'left';
