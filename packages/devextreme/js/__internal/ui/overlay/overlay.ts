@@ -1167,20 +1167,31 @@ class Overlay<
       // eslint-disable-next-line @typescript-eslint/naming-convention
       _skipContentPositioning,
     } = this.option();
+
     // NOTE: position is passed to controller in renderGeometry
     // to prevent window field using in server side mode
-    return {
+    const properties = {
       container,
       visualContainer,
       restorePosition,
+      fixWrapperPosition: _fixWrapperPosition,
+      skipContentPositioning: _skipContentPositioning,
+      onPositioned: this._actions?.onPositioned,
+      onVisualPositionChanged: this._actions?.onVisualPositionChanged,
+    };
+
+    const elements = {
       $root: this.$element(),
       $content: this._$content,
       $wrapper: this._$wrapper,
-      onPositioned: this._actions?.onPositioned,
-      onVisualPositionChanged: this._actions?.onVisualPositionChanged,
-      _fixWrapperPosition,
-      _skipContentPositioning,
     };
+
+    const positionControllerConfiguration = {
+      properties,
+      elements,
+    };
+
+    return positionControllerConfiguration;
   }
 
   _initPositionController(): void {

@@ -15,6 +15,7 @@ const WEIGHT_OF_SIDES = {
   right: 1,
   bottom: 1,
 };
+
 const POPOVER_POSITION_ALIASES = {
   // NOTE: public API
   top: { my: 'bottom center', at: 'top center', collision: 'fit flip' },
@@ -22,6 +23,7 @@ const POPOVER_POSITION_ALIASES = {
   right: { my: 'left center', at: 'right center', collision: 'flip fit' },
   left: { my: 'right center', at: 'left center', collision: 'flip fit' },
 };
+
 const POPOVER_DEFAULT_BOUNDARY_OFFSET = { h: 10, v: 10 };
 
 class PopoverPositionController extends OverlayPositionController {

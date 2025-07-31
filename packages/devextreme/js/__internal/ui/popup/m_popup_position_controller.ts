@@ -2,9 +2,17 @@ import { move } from '@js/common/core/animation/translator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { originalViewPort } from '@js/core/utils/view_port';
+import type { OverlayPositionControllerConstructor } from '@ts/ui/overlay/m_overlay_position_controller';
 import { OverlayPositionController } from '@ts/ui/overlay/m_overlay_position_controller';
 
+// import type {
+//   PopupProperties,
+// } from '@ts/ui/popup/m_popup';
 import windowUtils from '../../core/utils/m_window';
+
+export interface PopupPositionControllerConstructor extends OverlayPositionControllerConstructor {
+  [key: string]: any;
+}
 
 const window = windowUtils.getWindow();
 
@@ -18,7 +26,7 @@ class PopupPositionController extends OverlayPositionController {
     dragAndResizeArea,
     outsideDragFactor,
     ...args
-  }) {
+  }: PopupPositionControllerConstructor) {
     super(args);
 
     this._props = {
@@ -90,6 +98,7 @@ class PopupPositionController extends OverlayPositionController {
   positionContent(): void {
     if (this._props.fullScreen) {
       move(this._$content, { top: 0, left: 0 });
+
       this.detectVisualPositionChange();
     } else {
       this._props.forceApplyBindings?.();
@@ -116,6 +125,7 @@ class PopupPositionController extends OverlayPositionController {
     if (this._props.dragOutsideBoundary) {
       return $(window);
     }
+
     if (this._props.dragAndResizeArea) {
       return $(this._props.dragAndResizeArea);
     }
