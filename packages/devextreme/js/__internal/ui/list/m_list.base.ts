@@ -1,6 +1,7 @@
 import { fx } from '@js/common/core/animation';
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
+import pointerEvents from '@js/common/core/events/pointer';
 import { end as swipeEventEnd } from '@js/common/core/events/swipe';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
@@ -1165,11 +1166,11 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this._upInkRippleHandler = this._upInkRippleHandler || this.upInkRippleHandler.bind(this);
 
     // @ts-expect-error ts-error
-    eventsEngine.off($element, 'dxpointerdown', selector, this._downInkRippleHandler);
-    eventsEngine.on($element, 'dxpointerdown', selector, this._downInkRippleHandler);
+    eventsEngine.off($element, pointerEvents.down, selector, this._downInkRippleHandler);
+    eventsEngine.on($element, pointerEvents.down, selector, this._downInkRippleHandler);
     // @ts-expect-error ts-error
-    eventsEngine.off($element, 'dxpointerup dxpointerout', selector, this._upInkRippleHandler);
-    eventsEngine.on($element, 'dxpointerup dxpointerout', selector, this._upInkRippleHandler);
+    eventsEngine.off($element, [pointerEvents.up, pointerEvents.out].join(' '), selector, this._upInkRippleHandler);
+    eventsEngine.on($element, [pointerEvents.up, pointerEvents.out].join(' '), selector, this._upInkRippleHandler);
   }
 
   _createGroupRenderAction(): void {
