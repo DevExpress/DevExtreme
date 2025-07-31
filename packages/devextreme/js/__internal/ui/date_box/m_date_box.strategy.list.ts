@@ -6,8 +6,8 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import { getHeight, getOuterHeight } from '@js/core/utils/size';
 import { isDate } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import List from '@js/ui/list_light';
 import { getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
+import List from '@ts/ui/list/m_list.edit.search';
 
 import DateBoxStrategy from './m_date_box.strategy';
 import dateUtils from './m_date_utils';

@@ -16,11 +16,15 @@ import $ from 'jquery';
 import fx from 'common/core/animation/fx';
 import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 import ArrayStore from 'common/data/array_store';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 
 fx.off = true;
 
 const setupModule = function() {
     const that = this;
+
+    this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+    gridCoreUtils.isElementInCurrentGrid = () => true;
 
     that.options = {
         dataSource: {
@@ -70,6 +74,7 @@ const setupModule = function() {
 };
 
 const teardownModule = function() {
+    gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     this.dispose();
     this.clock.restore();
 };

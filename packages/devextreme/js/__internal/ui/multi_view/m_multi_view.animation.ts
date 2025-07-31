@@ -19,18 +19,19 @@ export const animation = {
     duration: number,
     completeAction: () => void,
   ): void {
-    // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fx.animate($element, {
-      type: 'slide',
-      to: { left: position },
-      duration,
-      complete: completeAction,
-    });
+    fx.animate(
+      $element.get(0),
+      {
+        type: 'slide',
+        to: { left: position },
+        duration,
+        complete: completeAction,
+      },
+    );
   },
 
   complete($element: dxElementWrapper): void {
-    // @ts-expect-error
-    fx.stop($element, true);
+    fx.stop($element.get(0), true);
   },
 };

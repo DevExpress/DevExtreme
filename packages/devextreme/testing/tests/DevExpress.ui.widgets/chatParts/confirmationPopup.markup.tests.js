@@ -5,7 +5,7 @@ import ConfirmationPopup, {
     CHAT_CONFIRMATION_POPUP_WRAPPER_CLASS,
 } from '__internal/ui/chat/confirmationpopup';
 
-import { OVERLAY_CONTENT_CLASS } from '__internal/ui/overlay/m_overlay';
+import { OVERLAY_CONTENT_CLASS } from '__internal/ui/overlay/overlay';
 import { POPUP_CONTENT_CLASS } from '__internal/ui/popup/m_popup';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 

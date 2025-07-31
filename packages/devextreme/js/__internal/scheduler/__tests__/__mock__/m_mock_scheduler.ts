@@ -3,13 +3,12 @@ import DOMComponent from '@ts/core/widget/dom_component';
 
 import SchedulerWorkSpace from '../../workspaces/m_work_space';
 
-export const setupSchedulerTestEnvironment = ({
-  cellWidth,
-  cellHeight,
-} = {
-  cellWidth: 250,
-  cellHeight: 80,
-}): void => {
+export const setupSchedulerTestEnvironment = (
+  isTimelineView = false,
+): void => {
+  const cellWidth = 250;
+  const cellHeight = isTimelineView ? 450 : 80;
+
   (DOMComponent.prototype as any)._isVisible = jest.fn().mockReturnValue(true);
   SchedulerWorkSpace.prototype._createCrossScrollingConfig = () => ({
     direction: 'both',

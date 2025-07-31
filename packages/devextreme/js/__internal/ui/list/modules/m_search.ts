@@ -1,4 +1,4 @@
-import TextBox from '@js/ui/text_box';
-import searchBoxMixin from '@js/ui/widget/ui.search_box_mixin';
-// @ts-expect-error
-searchBoxMixin.setEditorClass(TextBox);
+import SearchBoxController from '@ts/ui/collection/m_search_box_mixin';
+import TextBox from '@ts/ui/text_box/m_text_box';
+
+SearchBoxController.setEditorClass(TextBox);

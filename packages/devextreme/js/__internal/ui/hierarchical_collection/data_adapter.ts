@@ -5,9 +5,9 @@ import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import TextBox from '@js/ui/text_box';
 import errors from '@js/ui/widget/ui.errors';
-import uiSearchBoxMixin from '@js/ui/widget/ui.search_box_mixin';
+import SearchBoxController, { getOperationBySearchMode } from '@ts/ui/collection/m_search_box_mixin';
+import TextBox from '@ts/ui/text_box/m_text_box';
 
 import HierarchicalDataConverter, {
   type DataAccessors,
@@ -49,11 +49,10 @@ export interface DataAdapterOptions extends BaseDataAdapterOptions {
   sort: SortOption | SortOption[] | null;
   langParams?: LangParams;
   searchMode: SearchMode;
-  searchExpr?: string | string[] | ((item: ItemData) => unknown);
+  searchExpr?: string | Function | (string | Function)[] | ((item: ItemData) => unknown);
 }
 
-// @ts-expect-error ts-error
-uiSearchBoxMixin.setEditorClass(TextBox);
+SearchBoxController.setEditorClass(TextBox);
 
 class DataAdapter {
   options: DataAdapterOptions;
@@ -556,7 +555,7 @@ class DataAdapter {
   }
 
   static _createCriteria(
-    selector: string | string[] | ((item: ItemData) => unknown),
+    selector: DataAdapterOptions['searchExpr'],
     value: string,
     operation: string,
   ): unknown[] {
@@ -574,8 +573,8 @@ class DataAdapter {
 
   _filterDataStructure(filterValue: string, dataStructure?: InternalNode[]): InternalNode[] {
     const selector = this.options.searchExpr ?? this.options.dataAccessors.getters.display;
-    // @ts-expect-error ts-error
-    const operation = uiSearchBoxMixin.getOperationBySearchMode(this.options.searchMode);
+    const operation = getOperationBySearchMode(this.options.searchMode);
+    // @ts-expect-error
     const criteria = DataAdapter._createCriteria(selector, filterValue, operation);
 
     const data = dataStructure ?? this._initialDataStructure;
