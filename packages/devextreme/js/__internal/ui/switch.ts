@@ -79,7 +79,6 @@ class Switch extends Editor<Properties> {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _useTemplates(): boolean {
     return false;
   }
