@@ -36,14 +36,13 @@ import type { dxOverlayAnimation, Properties } from '@js/ui/overlay';
 import { tabbable } from '@js/ui/widget/selectors';
 import uiErrors from '@js/ui/widget/ui.errors';
 import domUtils from '@ts/core/utils/m_dom';
+import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import type { OverlayPositionControllerConstructor } from '@ts/ui/overlay/m_overlay_position_controller';
 import { OVERLAY_POSITION_ALIASES, OverlayPositionController } from '@ts/ui/overlay/m_overlay_position_controller';
-
-import windowUtils from '../../core/utils/m_window';
-import * as zIndexPool from './z_index';
+import * as zIndexPool from '@ts/ui/overlay/z_index';
 
 const ready = readyCallbacks.add;
 const window = windowUtils.getWindow();
