@@ -1346,6 +1346,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     }
   }
 
+  // @ts-expect-error ts-error
   _extendActionArgs($itemElement: dxElementWrapper): ListItemInfo<Item> {
     const { grouped } = this.option();
     if (!grouped) {
@@ -1445,7 +1446,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     const $item = this._editStrategy.getItemElement(itemElement);
 
     this._scrollView.scrollToElement($item, {
-      bottom: getElementMargin($item.get(0), 'bottom'),
+      bottom: getElementMargin($item?.get(0), 'bottom'),
     });
   }
 
