@@ -34,6 +34,7 @@ describe('scheduler', () => {
       height: 600,
     });
     await timezoneUtils.cacheTimeZones();
+    timezoneUtils.getMachineTimezoneName();
 
     expect(container.classList).toContain('dx-scheduler');
 
@@ -46,6 +47,6 @@ describe('scheduler', () => {
     nextButton.click();
     expect(navigator.querySelector('.dx-scheduler-navigator-caption')?.textContent).toBe('20-26 January 2025');
 
-    expect(Intl.DateTimeFormat).toHaveBeenCalledTimes(timeZone ? 0 : 1);
+    expect(Intl.DateTimeFormat).toHaveBeenCalledTimes(0);
   });
 });
