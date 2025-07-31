@@ -586,7 +586,7 @@ class ContextMenu<
     }
   }
 
-  _hoverEndHandler(e: DxEvent<HoverEvent>): void {
+  _hoverEndHandler(e: HoverEvent): void {
     super._hoverEndHandler(e);
     e.stopPropagation();
   }
