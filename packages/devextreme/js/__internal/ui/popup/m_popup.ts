@@ -42,9 +42,9 @@ import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import type Toolbar from '@js/ui/toolbar';
 import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
-import * as zIndexPool from '@ts/ui/overlay/m_z_index';
 import type { GeometryOptions, OverlayActions } from '@ts/ui/overlay/overlay';
 import Overlay from '@ts/ui/overlay/overlay';
+import * as zIndexPool from '@ts/ui/overlay/z_index';
 import { TOOLBAR_CLASS } from '@ts/ui/toolbar/constants';
 import type { ToolbarBaseProperties } from '@ts/ui/toolbar/toolbar.base';
 
