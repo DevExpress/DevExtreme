@@ -817,7 +817,7 @@ class CollectionWidget<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-  selectItem(itemElement: Element): DeferredObj<unknown> | void {
+  selectItem(itemElement: Element | number | TItem): DeferredObj<unknown> | void {
     const { selectionMode } = this.option();
 
     if (selectionMode === 'none') return Deferred().resolve();

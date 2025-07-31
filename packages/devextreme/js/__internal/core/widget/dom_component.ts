@@ -18,9 +18,8 @@ import { hasWindow } from '@js/core/utils/window';
 import license, { peekValidationPerformed } from '@ts/core/license/license_validation';
 import TemplateManagerModule from '@ts/core/m_template_manager';
 import { uiLayerInitialized } from '@ts/core/utils/m_common';
-
-import { Component } from './component';
-import type { OptionChanged } from './types';
+import { Component } from '@ts/core/widget/component';
+import type { OptionChanged } from '@ts/core/widget/types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface Properties<TComponent = any> extends DOMComponentOptions<TComponent> {

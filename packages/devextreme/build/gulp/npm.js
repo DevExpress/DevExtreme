@@ -57,7 +57,7 @@ const distGlobsPattern = (jsFolder, exclude) => [
     `!${jsFolder}/cldr*`,
     `!${jsFolder}/globalize/*.*`,
     `!${jsFolder}/globalize*`,
-    `!${jsFolder}/exceljs*`,
+    `!${jsFolder}/dx-exceljs-fork*`,
     `!${jsFolder}/file-saver*`,
     `!${jsFolder}/jquery*`,
     `!${jsFolder}/jspdf*`,

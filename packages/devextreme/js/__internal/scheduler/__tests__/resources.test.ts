@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import {
   describe, expect, it,
 } from '@jest/globals';
 import { DataSource } from '@ts/data/data_source/m_data_source';
 import CustomStore from '@ts/data/m_custom_store';
+import { createScheduler } from '@ts/scheduler/__tests__/__mock__/create_scheduler';
 
-import Scheduler from '../m_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 
 const dataSource = [
@@ -21,58 +19,95 @@ const dataSource = [
 const rooms = [
   { id: 1, text: 'Room 2', color: 'rgb(142, 205, 60)' },
 ];
+const rooms2 = [
+  { id: 1, text: 'Room 2', color: 'rgb(60, 154, 205)' },
+];
 const getAppointmentColor = (container: HTMLDivElement): string => {
   const appointment = container.querySelector('.dx-scheduler-appointment') as HTMLDivElement;
   return appointment.style.backgroundColor;
 };
+const getAgendaAppointmentColor = (container: HTMLDivElement): string => {
+  const appointment = container.querySelector('.dx-scheduler-agenda-appointment-marker') as HTMLDivElement;
+  return appointment.style.backgroundColor;
+};
 
 describe('Resources', () => {
-  it('should render correct appointment color for remote datasource (T1300252)', async () => {
-    setupSchedulerTestEnvironment();
+  describe.each([
+    'month',
+    'agenda',
+  ])('%s view', (view) => {
+    const getColor = view === 'agenda'
+      ? getAgendaAppointmentColor
+      : getAppointmentColor;
 
-    const dataPromise = new Promise((resolve) => {
-      setTimeout(resolve, 100, rooms);
-    });
-    const container = document.createElement('div');
-    const scheduler = new Scheduler(container, {
-      views: ['month'],
-      currentView: 'month',
-      currentDate: new Date(2024, 8, 8),
-      dataSource,
-      resources: [{
-        fieldExpr: 'roomId',
-        label: 'Room',
-        dataSource: new DataSource({
-          store: new CustomStore({
-            load: () => dataPromise,
+    it('should render correct appointment color for remote datasource (T1300252)', async () => {
+      setupSchedulerTestEnvironment();
+
+      const dataPromise = new Promise((resolve) => {
+        setTimeout(resolve, 100, rooms);
+      });
+      const { container } = await createScheduler({
+        views: [view],
+        currentView: view,
+        currentDate: new Date(2024, 8, 7),
+        dataSource,
+        resources: [{
+          fieldExpr: 'roomId',
+          label: 'Room',
+          dataSource: new DataSource({
+            store: new CustomStore({
+              load: () => dataPromise,
+            }),
+            paginate: false,
           }),
-          paginate: false,
-        }),
-      }],
-    } as any);
-    await dataPromise;
-    await new Promise(process.nextTick);
+        }],
+      });
+      await dataPromise;
+      await new Promise(process.nextTick);
 
-    expect(getAppointmentColor(container)).toBe(rooms[0].color);
-  });
+      expect(getColor(container)).toBe(rooms[0].color);
+    });
 
-  it('should render correct appointment color for local datasource (T1300252)', async () => {
-    setupSchedulerTestEnvironment();
+    it('should render correct appointment color for local datasource (T1300252)', async () => {
+      setupSchedulerTestEnvironment();
 
-    const container = document.createElement('div');
-    const scheduler = new Scheduler(container, {
-      views: ['month'],
-      currentView: 'month',
-      currentDate: new Date(2024, 8, 8),
-      dataSource,
-      resources: [{
+      const { container } = await createScheduler({
+        views: [view],
+        currentView: view,
+        currentDate: new Date(2024, 8, 7),
+        dataSource,
+        resources: [{
+          fieldExpr: 'roomId',
+          label: 'Room',
+          dataSource: rooms,
+        }],
+      });
+
+      expect(getColor(container)).toBe(rooms[0].color);
+    });
+
+    it('should render appointments after resources update (T1301345)', async () => {
+      setupSchedulerTestEnvironment();
+
+      const { container, scheduler } = await createScheduler({
+        views: [view],
+        currentView: view,
+        currentDate: new Date(2024, 8, 7),
+        dataSource,
+        resources: [{
+          fieldExpr: 'roomId',
+          label: 'Room',
+          dataSource: rooms,
+        }],
+      });
+      scheduler.option('resources', [{
         fieldExpr: 'roomId',
         label: 'Room',
-        dataSource: rooms,
-      }],
-    } as any);
-    await new Promise(process.nextTick);
+        dataSource: rooms2,
+      }]);
+      await new Promise(process.nextTick);
 
-    expect(getAppointmentColor(container)).toBe(rooms[0].color);
+      expect(getColor(container)).toBe(rooms2[0].color);
+    });
   });
 });

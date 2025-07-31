@@ -841,7 +841,6 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _beforeSaveEditData(change, editIndex?) {
     let result: any = super._beforeSaveEditData.apply(this, arguments as any);
     const validationData = this._validatingController._getValidationData(change?.key, true);
@@ -1063,7 +1062,6 @@ const getBoundaryNonFixedColumnsInfo = function (fixedColumns) {
   let firstNonFixedColumnIndex;
   let lastNonFixedColumnIndex;
 
-  // eslint-disable-next-line array-callback-return
   fixedColumns.some((column, index) => {
     if (column.command === COMMAND_TRANSPARENT) {
       firstNonFixedColumnIndex = index === 0 ? -1 : index;
@@ -1301,8 +1299,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
   }
 
   protected getOverlayBaseZIndex(): number {
-    // @ts-expect-error
-    return Overlay.baseZIndex() as number;
+    return Overlay.baseZIndex();
   }
 
   protected overlayPositionedHandler(e, isOverlayVisible) {
@@ -1479,7 +1476,6 @@ export const validatingDataControllerExtender = (Base: ModuleType<DataController
     return validationStatus || VALIDATION_STATUS.valid;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
     const cell = oldRow.cells?.[columnIndex];
     const oldValidationStatus = this._getValidationStatus({ status: cell?.validationStatus });
