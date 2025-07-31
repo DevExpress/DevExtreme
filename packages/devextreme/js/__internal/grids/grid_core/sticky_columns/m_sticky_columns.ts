@@ -391,9 +391,11 @@ const rowsView = (
   }
 
   private _updateMasterDetailWidths() {
+    const $detailContainers = this._getRowElements()
+      .children(`.${MASTER_DETAIL_CLASSES.detailCell}`)
+      .children(`.${this.addWidgetPrefix(MASTER_DETAIL_CLASSES.detailContainer)}`);
+
     const width = this._getMasterDetailWidth();
-    const detailContainerSelector = `.${this.addWidgetPrefix(MASTER_DETAIL_CLASSES.detailContainer)}`;
-    const $detailContainers = this._getRowElements().find(detailContainerSelector);
 
     setWidth(
       $detailContainers,

@@ -12,11 +12,14 @@ const SELECTORS = {
   detailContainer: 'dx-datagrid-master-detail-container',
 };
 
+const GRID_CONTAINER_ID = 'gridContainer';
+
 const createDataGrid = async (
   options: DataGridProperties = {},
 ): Promise<{ $container: JQuery; instance: DataGrid }> => new Promise((resolve) => {
-  const $container = $('<div>').appendTo(document.body);
-  $container.attr('id', SELECTORS.gridContainer.slice(1));
+  const $container = $('<div>')
+    .attr('id', GRID_CONTAINER_ID)
+    .appendTo(document.body);
 
   const instance = new DataGrid($container.get(0) as HTMLDivElement, options);
 
@@ -30,10 +33,11 @@ const createDataGrid = async (
 
 describe('GridCore master_detail', () => {
   afterEach(() => {
-    const dataGridElement = document.body.querySelector(SELECTORS.gridContainer) as HTMLDivElement;
-    const dataGrid = ($(dataGridElement) as any).dxDataGrid('instance') as DataGrid;
+    const $container = $(SELECTORS.gridContainer);
+    const dataGrid = ($container as any).dxDataGrid('instance') as DataGrid;
 
     dataGrid.dispose();
+    $container.remove();
   });
 
   describe('master detail container', () => {
