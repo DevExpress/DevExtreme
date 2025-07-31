@@ -164,12 +164,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      # - name: Setup Chrome
-      #   if: matrix.framework == 'angular'
-      #   uses: ./.github/actions/setup-chrome
-      #   with:
-      #     chrome-version: '133.0.6943.53'
-
       - name: Download Browser
         if: matrix.framework == 'angular'
         run: pnpx puppeteer browsers install chrome@130.0.6723.69
