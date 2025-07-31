@@ -17,6 +17,7 @@ import { getOuterWidth } from '@js/core/utils/size';
 import type { NativeEventInfo } from '@js/events';
 import type { Properties } from '@js/ui/switch';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
 import Editor from '@ts/ui/editor/editor';
 
@@ -54,7 +55,7 @@ class Switch extends Editor<Properties> {
 
   _clickAction?: (event?: Record<string, unknown>) => void;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     const { rtlEnabled } = this.option();
 
     const click = (e: Event): void => {
