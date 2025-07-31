@@ -413,8 +413,7 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _scrollToSelectedItem(): void {
-    const selectedIndex = this._list?.option('selectedIndex');
-    const listItems = this._list?.option('items');
+    const { selectedIndex, items: listItems } = this._list?.option() ?? {};
     // @ts-expect-error ts-error
     const itemsCount = listItems.length;
 
