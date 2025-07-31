@@ -79,6 +79,7 @@ const UA_PARSERS = {
         const isIPhone4 = (window.screen.height === (960 / 2));
         const grade = isIPhone4 ? 'B' : 'A';
 
+        // test build
         return {
             deviceType: isPhone ? 'phone' : 'tablet',
             platform: 'ios',
