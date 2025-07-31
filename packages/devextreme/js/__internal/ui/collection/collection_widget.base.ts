@@ -66,6 +66,8 @@ const FOCUS_FIRST = 'first';
 
 export type DataChangeType = 'insert' | 'update' | 'remove';
 
+export type CollectionItemInfo<TItem> = ItemInfo<TItem> | ListItemInfo<TItem>;
+
 export interface DataChange<TItem = CollectionItem, TKey = number | string> {
   key: TKey;
   type: DataChangeType;
@@ -1455,7 +1457,7 @@ class CollectionWidget<
     return action(extend(actionArgs, this._extendActionArgs($itemElement), args));
   }
 
-  _extendActionArgs($itemElement: dxElementWrapper): ItemInfo<TItem> | ListItemInfo<TItem> {
+  _extendActionArgs($itemElement: dxElementWrapper): CollectionItemInfo<TItem> {
     return {
       itemElement: getPublicElement($itemElement),
       itemIndex: this._itemElements().index($itemElement),

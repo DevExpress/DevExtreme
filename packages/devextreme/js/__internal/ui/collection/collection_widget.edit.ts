@@ -22,7 +22,11 @@ import type { ItemLike, SelectionChangeInfo } from '@js/ui/collection/ui.collect
 import errors from '@js/ui/widget/ui.errors';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { CollectionWidgetBaseProperties, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import type {
+  CollectionItemInfo,
+  CollectionWidgetBaseProperties,
+  PostprocessRenderItemInfo,
+} from '@ts/ui/collection/collection_widget.base';
 import BaseCollectionWidget from '@ts/ui/collection/collection_widget.base';
 import PlainEditStrategy from '@ts/ui/collection/collection_widget.edit.strategy.plain';
 import type DataController from '@ts/ui/collection/m_data_controller';
@@ -878,13 +882,13 @@ class CollectionWidget<
 
   _afterItemElementDeleted(
     $item: dxElementWrapper,
-    deletedActionArgs: ItemInfo<TItem>,
+    deletedActionArgs: CollectionItemInfo<TItem>,
   ): void {
     const changingOption = this._dataController.getDataSource()
       ? 'dataSource'
       : 'items';
     this._simulateOptionChange(changingOption);
-    this._itemEventHandler($item, 'onItemDeleted', deletedActionArgs, {
+    this._itemEventHandler($item, 'onItemDeleted', deletedActionArgs as ItemInfo<TItem>, {
       beforeExecute() {
         $item.remove();
       },

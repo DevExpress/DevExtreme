@@ -1346,7 +1346,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     }
   }
 
-  // @ts-expect-error ts-error
   _extendActionArgs($itemElement: dxElementWrapper): ListItemInfo<Item> {
     const { grouped } = this.option();
     if (!grouped) {
