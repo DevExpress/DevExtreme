@@ -13,11 +13,6 @@ export default MultiView;
  */
 
 /**
- * @name dxMultiViewOptions.keyExpr
- * @hidden
- */
-
-/**
  * @name dxMultiViewOptions.onSelectionChanging
  * @action
  * @hidden

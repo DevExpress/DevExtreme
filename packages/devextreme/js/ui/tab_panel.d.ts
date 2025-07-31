@@ -22,6 +22,7 @@ import {
 import CollectionWidget, {
     SelectionChangeInfo,
     SelectionChangingEventBase,
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
 import {
@@ -278,6 +279,11 @@ export interface dxTabPanelOptions<
      * @public
      */
     tabsPosition?: Position;
+    /**
+     * @docid
+     * @public
+     */
+    keyExpr?: string | Function;
 }
 /**
  * @docid
