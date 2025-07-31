@@ -24,6 +24,7 @@ import Widget from '@ts/core/widget/widget';
 import { getElementWidth, getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
 import type { ListSearchProperties } from '@ts/ui/list/m_list.edit.search';
 import List from '@ts/ui/list/m_list.edit.search';
+import type { PopupProperties } from '@ts/ui/popup/m_popup';
 import Popup from '@ts/ui/popup/m_popup';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
@@ -43,6 +44,8 @@ export interface DropDownButtonProperties extends Properties {
   buttonGroupOptions?: ButtonGroupItem;
   grouped?: boolean;
   groupTemplate?: string;
+  _cached_buttonGroupOptions?: ButtonGroupItem;
+  _cached_dropDownOptions?: PopupProperties;
 }
 
 class DropDownButton extends Widget<DropDownButtonProperties> {
@@ -109,6 +112,8 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       grouped: false,
       groupTemplate: 'group',
       buttonGroupOptions: {},
+      _cached_buttonGroupOptions: {},
+      _cached_dropDownOptions: {},
     };
   }
 
@@ -128,10 +133,10 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     this._initDataController();
     this._compileKeyGetter();
     this._compileDisplayGetter();
-    // @ts-expect-error ts-error
-    this._options.cache('buttonGroupOptions', this.option('buttonGroupOptions'));
-    // @ts-expect-error ts-error
-    this._options.cache('dropDownOptions', this.option('dropDownOptions'));
+
+    const { buttonGroupOptions, dropDownOptions } = this.option();
+    this._options.cache('buttonGroupOptions', buttonGroupOptions);
+    this._options.cache('dropDownOptions', dropDownOptions);
   }
 
   _initDataController(): void {
@@ -833,6 +838,9 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
         break;
       case 'template':
         this._renderButtonGroup();
+        break;
+      case '_cached_buttonGroupOptions':
+      case '_cached_dropDownOptions':
         break;
       default:
         super._optionChanged(args);
