@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxListModule, DxTemplateModule, DxCheckBoxModule } from 'devextreme-angular';
+import { DxListModule, DxCheckBoxModule } from 'devextreme-angular';
 import { DxTreeViewModule, DxTreeViewComponent, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { Service, Employee } from './app.service';
@@ -98,7 +98,6 @@ export class AppComponent {
     BrowserModule,
     DxTreeViewModule,
     DxListModule,
-    DxTemplateModule,
     DxCheckBoxModule,
     DxSelectBoxModule,
   ],

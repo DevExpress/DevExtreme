@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxSchedulerComponent, DxSchedulerModule, DxTemplateModule } from 'devextreme-angular';
+import { DxSchedulerComponent, DxSchedulerModule } from 'devextreme-angular';
 import { DataSource } from 'devextreme-angular/common/data';
 import notify from 'devextreme/ui/notify';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
@@ -183,7 +183,6 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxSchedulerModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent, ApplyPipe],
   bootstrap: [AppComponent],

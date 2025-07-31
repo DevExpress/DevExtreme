@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxSchedulerModule, DxSelectBoxModule, DxTemplateModule } from 'devextreme-angular';
+import { DxSchedulerModule, DxSelectBoxModule } from 'devextreme-angular';
 import { getTimeZones, dxSchedulerTimeZone } from 'devextreme/time_zone_utils';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import { DataSource } from 'devextreme-angular/common/data';
@@ -68,7 +68,6 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxSchedulerModule,
-    DxTemplateModule,
     DxSelectBoxModule,
   ],
   declarations: [AppComponent],
