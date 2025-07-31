@@ -109,6 +109,10 @@ jobs:
           paths: 'packages/devextreme-*/src/**'
           output: diff.json
 
+      - name: Debug diff.json
+        run: |
+          cat diff.json || echo "No diff.json"
+
       - name: Debug changed count
         run: |
           echo "Changed count: ${{ steps.check-diff.outputs.count }}"
