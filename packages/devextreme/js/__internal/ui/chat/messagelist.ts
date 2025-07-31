@@ -782,7 +782,7 @@ class MessageList extends Widget<Properties> {
     changes.forEach((change) => {
       switch (change.type) {
         case 'update':
-          this._updateMessageByKey(change.key, change.data as Message ?? {});
+          this._updateMessageByKey(change.key, change.data ?? {});
           break;
         case 'insert': {
           const { items } = this.option();
