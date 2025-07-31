@@ -320,7 +320,7 @@ export class Component<
           previousValue,
         };
 
-        if (!isInnerOption(name)) {
+        if (!isInnerOption(name) && !this._cancelOptionChange) {
           this._optionChangedCallbacks.fireWith(this, [extend(this._defaultActionArgs(), args)]);
           this._optionChangedAction?.(extend({}, args));
         }

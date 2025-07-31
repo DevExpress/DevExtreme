@@ -28,9 +28,7 @@ export default function App() {
 
   const onSelectedItemKeysChange = useCallback(({ name, value }) => {
     if (name === 'selectedItemKeys') {
-      if (selectionMode !== 'none' || selectedItemKeys.length !== 0) {
         setSelectedItemKeys(value);
-      }
     }
   }, [selectionMode, selectedItemKeys, setSelectedItemKeys]);
 
@@ -57,8 +55,9 @@ export default function App() {
           selectAllMode={selectAllMode}
           selectedItemKeys={selectedItemKeys}
           selectByClick={selectByClick}
-          onOptionChanged={onSelectedItemKeysChange}>
-        </List>
+          // onSelectedItemKeysChange={onSelectedItemKeysChange}
+          onOptionChanged={onSelectedItemKeysChange}
+        />
         <div className="selected-data">
           <span className="caption">Selected IDs: </span>
           <span>{ selectedItemKeys.join(', ') }</span>
