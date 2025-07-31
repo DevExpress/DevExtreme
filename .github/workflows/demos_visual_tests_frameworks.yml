@@ -43,7 +43,7 @@ jobs:
       - name: DevExtreme - Build-all
         env:
           BUILD_TEST_INTERNAL_PACKAGE: true
-        run: pnpm run all:build-dev
+        run: npm run all:build-dev
 
       - name: Move packages
         run: |
