@@ -109,6 +109,9 @@ jobs:
           paths: 'packages/devextreme-*/src/**'
           output: diff.json
 
+      - name: Debug changed count
+        run: echo "changed ${{ steps.check-diff.outputs }}"
+
       - name: Fail if generated code is outdated
         if: ${{ steps.check-diff.outputs.count > 0 }}
         shell: bash
