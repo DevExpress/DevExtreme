@@ -168,7 +168,7 @@ jobs:
         if: matrix.framework == 'angular'
         uses: ./.github/actions/setup-chrome
         with:
-          chrome-version: '130.0.6723.69'
+          chrome-version: '133.0.6943.53'
 
       - name: Test ${{ matrix.framework }}
         run: pnpx nx test devextreme-${{ matrix.framework }}
