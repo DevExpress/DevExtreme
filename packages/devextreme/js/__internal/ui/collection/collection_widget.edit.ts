@@ -53,6 +53,8 @@ export interface CollectionWidgetEditProperties<
   selectionRequired?: boolean;
 
   focusOnSelectedItem?: boolean;
+
+  grouped?: boolean;
 }
 
 class CollectionWidget<
@@ -62,7 +64,7 @@ class CollectionWidget<
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey = any,
-> extends BaseCollectionWidget<TProperties> {
+> extends BaseCollectionWidget<TProperties, TItem, TKey> {
   _userOptions?: TProperties;
 
   _selection!: Selection;
@@ -466,7 +468,9 @@ class CollectionWidget<
           normalizedSelection = this._editStrategy.itemsGetter()[0];
         }
 
-        if (this.option('grouped') && normalizedSelection?.items) {
+        const { grouped } = this.option();
+
+        if (grouped && normalizedSelection?.items) {
           normalizedSelection.items = [normalizedSelection.items[0]];
         }
 
@@ -736,7 +740,8 @@ class CollectionWidget<
   _deleteItemFromDS($item: dxElementWrapper): Promise<unknown> | DeferredObj<unknown> {
     const dataController = this._dataController;
     const deferred = Deferred();
-    const disabledState = this.option('disabled');
+    const { disabled } = this.option();
+
     const dataStore = dataController.store();
 
     if (!dataStore) {
@@ -762,7 +767,7 @@ class CollectionWidget<
       });
 
     deferred.always((): void => {
-      this.option('disabled', disabledState);
+      this.option('disabled', disabled);
     });
 
     return deferred;
@@ -770,8 +775,10 @@ class CollectionWidget<
 
   _tryRefreshLastPage(): Promise<unknown> {
     const deferred = Deferred();
+
+    const { grouped } = this.option();
     // @ts-expect-error mixin method
-    if (this._isLastPage() || this.option('grouped')) {
+    if (this._isLastPage() || grouped) {
       deferred.resolve();
     } else {
       this._refreshLastPage().done(() => {
@@ -886,7 +893,7 @@ class CollectionWidget<
     this._renderEmptyMessage();
   }
 
-  deleteItem(itemElement: Element): Promise<unknown> {
+  deleteItem(itemElement: Element): PromiseLike<unknown> {
     const deferred = Deferred();
     const $item = this._editStrategy.getItemElement(itemElement);
     const index = this._editStrategy.getNormalizedIndex(itemElement);

@@ -305,10 +305,12 @@ class SelectBox<
   }
 
   _scrollToSelectedItem(): void {
-    const { selectedItem } = this._list?.option() ?? {};
-    if (selectedItem) {
-      this._list?.scrollToItem(selectedItem);
+    if (!this._list) {
+      return;
     }
+
+    const { selectedItem } = this._list.option();
+    this._list.scrollToItem(selectedItem);
   }
 
   _listContentReadyHandler(): void {

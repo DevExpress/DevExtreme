@@ -246,7 +246,7 @@ export class SingleLineStrategy {
     // @ts-expect-error ts-error
     if (property === 'disabled' || property === 'options.disabled') {
       if (this._toolbar._isMenuItem(item)) {
-        this._menu?._itemOptionChanged(item, property, value);
+        this._menu?._itemOptionChanged(item, 'disabled', value);
         return;
       }
     }

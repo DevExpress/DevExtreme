@@ -6,9 +6,6 @@ import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
-import type {
-  DeepPartial,
-} from '@js/core';
 import Action from '@js/core/action';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
@@ -34,6 +31,7 @@ import type {
   Cancelable, DxEvent, EventInfo, ItemInfo,
 } from '@js/events';
 import type { CollectionWidgetItem as CollectionWidgetItemProperties, CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
+import type { ListItemInfo } from '@js/ui/list';
 import { focusable } from '@js/ui/widget/selectors';
 import { getPublicElement } from '@ts/core/m_element';
 import type { ActionConfig } from '@ts/core/widget/component';
@@ -71,7 +69,7 @@ export type DataChangeType = 'insert' | 'update' | 'remove';
 export interface DataChange<TItem = CollectionItem, TKey = number | string> {
   key: TKey;
   type: DataChangeType;
-  data: DeepPartial<TItem>;
+  data: TItem;
   index: number;
 }
 
@@ -96,6 +94,7 @@ export interface PostprocessRenderItemInfo<TItem> {
 }
 
 export type InkRippleEvent = DxEvent<PointerEvent | MouseEvent | TouchEvent>;
+export type Constructor<T> = new (...args: unknown[]) => T;
 
 export interface CollectionWidgetBaseProperties<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1456,7 +1455,7 @@ class CollectionWidget<
     return action(extend(actionArgs, this._extendActionArgs($itemElement), args));
   }
 
-  _extendActionArgs($itemElement: dxElementWrapper): ItemInfo<TItem> {
+  _extendActionArgs($itemElement: dxElementWrapper): ItemInfo<TItem> | ListItemInfo<TItem> {
     return {
       itemElement: getPublicElement($itemElement),
       itemIndex: this._itemElements().index($itemElement),
@@ -1509,10 +1508,10 @@ class CollectionWidget<
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(CollectionWidget as any).include(DataHelperMixin);
-
 // @ts-expect-error ts-error
 CollectionWidget.ItemClass = CollectionWidgetItem;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(CollectionWidget as any).include(DataHelperMixin);
 
 export default CollectionWidget;
