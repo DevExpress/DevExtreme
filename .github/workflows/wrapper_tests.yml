@@ -110,7 +110,9 @@ jobs:
           output: diff.json
 
       - name: Debug changed count
-        run: echo "changed ${{ steps.check-diff.outputs }}"
+        run: |
+          echo "Changed count: ${{ steps.check-diff.outputs.count }}"
+          echo "Changed files: ${{ steps.check-diff.outputs.files }}"
 
       - name: Fail if generated code is outdated
         if: ${{ steps.check-diff.outputs.count > 0 }}
