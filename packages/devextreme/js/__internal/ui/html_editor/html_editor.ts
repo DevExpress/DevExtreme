@@ -31,8 +31,7 @@ import type { Converter, HtmlEditorFormat, Properties } from '@js/ui/html_editor
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
-import type DeltaConverterType from '@ts/ui/html_editor/converters/m_delta';
-import ConverterController from '@ts/ui/html_editor/m_converterController';
+import ConverterController, { type BaseConverter } from '@ts/ui/html_editor/m_converterController';
 import { getQuill } from '@ts/ui/html_editor/m_quill_importer';
 import QuillRegistrator from '@ts/ui/html_editor/m_quill_registrator';
 import getWordMatcher from '@ts/ui/html_editor/matchers/m_wordLists';
@@ -89,7 +88,7 @@ class HtmlEditor extends Editor<Properties> {
 
   _htmlConverter?: Converter;
 
-  _deltaConverter!: DeltaConverterType;
+  _deltaConverter!: BaseConverter;
 
   _updateContentTask?: DeferredObj<unknown> & { abort: () => void };
 
@@ -371,7 +370,7 @@ class HtmlEditor extends Editor<Properties> {
 
     this._quillInstance = this._getRegistrator().createEditor(this._$htmlContainer[0], {
       placeholder,
-      readOnly: Boolean(readOnly ?? disabled),
+      readOnly: Boolean(readOnly) || Boolean(disabled),
       modules: modulesConfig,
       theme: 'basic',
     });
