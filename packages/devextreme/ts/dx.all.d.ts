@@ -23223,7 +23223,15 @@ declare module DevExpress.ui {
   export interface dxMultiViewOptions<
     TItem extends DevExpress.ui.dxMultiView.ItemLike = any,
     TKey = any
-  > extends dxMultiViewBaseOptions<dxMultiView<TItem, TKey>, TItem, TKey> {}
+  > extends Omit<
+      dxMultiViewBaseOptions<dxMultiView<TItem, TKey>, TItem, TKey>,
+      'keyExpr'
+    > {
+    /**
+     * [descr:dxMultiViewOptions.keyExpr]
+     */
+    keyExpr?: string | Function;
+  }
   /**
    * [descr:dxNumberBox]
    */
@@ -28388,6 +28396,10 @@ declare module DevExpress.ui {
      * [descr:dxTabPanelOptions.tabsPosition]
      */
     tabsPosition?: DevExpress.common.Position;
+    /**
+     * [descr:dxTabPanelOptions.keyExpr]
+     */
+    keyExpr?: string | Function;
   }
   /**
    * [descr:dxTabs]
