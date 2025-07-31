@@ -267,10 +267,11 @@ TProperties extends PopoverProperties = PopoverProperties,
       .prependTo(this.$overlayContent());
   }
 
-  _documentDownHandler(e): boolean | undefined {
+  _documentDownHandler(e): boolean {
     if (this._isOutsideClick(e)) {
       return super._documentDownHandler(e);
     }
+
     return true;
   }
 
@@ -303,7 +304,9 @@ TProperties extends PopoverProperties = PopoverProperties,
   _renderPosition(shouldUpdateDimensions = true): void {
     super._renderPosition();
     this._renderOverlayPosition(shouldUpdateDimensions);
-    this._actions.onPositioned();
+
+    // @ts-expect-error should provide event
+    this._actions?.onPositioned?.();
   }
 
   _renderOverlayPosition(shouldUpdateDimensions: boolean): void {
@@ -531,7 +534,7 @@ TProperties extends PopoverProperties = PopoverProperties,
     }
   }
 
-  show(target?): Promise<unknown> {
+  show(target?): Promise<boolean> {
     if (target) {
       this.option('target', target);
     }

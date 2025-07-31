@@ -35,7 +35,6 @@ class PopoverPositionController extends OverlayPositionController {
     $arrow,
     ...args
   }) {
-    // @ts-expect-error
     super(args);
 
     this._props = {
@@ -53,7 +52,7 @@ class PopoverPositionController extends OverlayPositionController {
 
   positionWrapper(): void {
     if (this._props.shading) {
-      this._$wrapper.css({ top: 0, left: 0 });
+      this._$wrapper?.css({ top: 0, left: 0 });
     }
   }
 
@@ -85,7 +84,7 @@ class PopoverPositionController extends OverlayPositionController {
   }
 
   _getContentBorderWidth(side) {
-    const borderWidth = this._$content.css(borderWidthStyles[side]);
+    const borderWidth = this._$content?.css(borderWidthStyles[side]);
 
     // @ts-expect-error
     // eslint-disable-next-line radix
