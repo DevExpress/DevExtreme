@@ -75,8 +75,8 @@ const UA_PARSERS = {
         const isPhone = /ip(hone|od)/i.test(userAgent);
         const matches = userAgent.match(/os\s{0,}X? (\d+)_(\d+)_?(\d+)?/i);
         const version = matches
-          ? [parseInt(matches[1], 10), parseInt(matches[2], 10), parseInt(matches[3] || 0, 10)]
-          : [];
+            ? [parseInt(matches[1], 10), parseInt(matches[2], 10), parseInt(matches[3] || 0, 10)]
+            : [];
         const isIPhone4 = (window.screen.height === (960 / 2));
         const grade = isIPhone4 ? 'B' : 'A';
         const isDesktopMode = /Macintosh/i.test(userAgent) && !/Mobile/i.test(userAgent);
