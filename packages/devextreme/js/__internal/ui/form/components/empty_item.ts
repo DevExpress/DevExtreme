@@ -1,6 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { TemplatesInfo } from '@ts/ui/form/m_form.layout_manager';
+import type { TemplatesInfo } from '@ts/ui/form/form.layout_manager';
 
 export const FIELD_EMPTY_ITEM_CLASS = 'dx-field-empty-item';
 

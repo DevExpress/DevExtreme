@@ -4,8 +4,8 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import type { Item, SimpleItem } from '@js/ui/form';
 import type Button from '@ts/ui/button';
 import type Editor from '@ts/ui/editor/editor';
-import type FormItemsRunTimeInfo from '@ts/ui/form/m_form.items_runtime_info';
-import type { PreparedItem } from '@ts/ui/form/m_form.items_runtime_info';
+import type FormItemsRunTimeInfo from '@ts/ui/form/form.items_runtime_info';
+import type { PreparedItem } from '@ts/ui/form/form.items_runtime_info';
 import type TabPanel from '@ts/ui/tab_panel/tab_panel';
 
 export interface ItemOptionActionOptions<T = Item> {
@@ -43,7 +43,6 @@ export default class ItemOptionAction<T extends ItemOptionActionOptions = ItemOp
     return this._itemsRunTimeInfo.findPreparedItemByItem(this._options.item);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   tryExecute(): void {
     Class.abstract();
   }
