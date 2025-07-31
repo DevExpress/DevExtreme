@@ -16,7 +16,7 @@ import type { Item, Properties } from '@js/ui/tab_panel';
 import { current as currentTheme, isFluent, isMaterialBased } from '@js/ui/themes';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
-import MultiView from '@ts/ui/m_multi_view';
+import MultiView from '@ts/ui/multi_view/m_multi_view';
 import type { TabsProperties } from '@ts/ui/tabs/tabs';
 import Tabs, {
   TABS_ITEM_TEXT_CLASS,
@@ -331,7 +331,6 @@ class TabPanel extends MultiView<TabPanelProperties> {
         const newTabsSelectedItemData = e.addedItems[0];
         const newTabsSelectedIndex = this._getIndexByItemData(newTabsSelectedItemData);
 
-        // @ts-expect-error ts-error
         const selectingResult = this.selectItem(newTabsSelectedIndex);
         // @ts-expect-error ts-error
         const promiseState = selectingResult.state();
