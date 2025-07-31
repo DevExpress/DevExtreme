@@ -54,7 +54,7 @@ class Widget<
 
   public _feedbackHideTimeout = 400;
 
-  private readonly _feedbackShowTimeout = 30;
+  private readonly _feedbackShowTimeout: number = 30;
 
   _contentReadyAction?: ((event?: Record<string, unknown>) => void) | null;
 
@@ -497,7 +497,7 @@ class Widget<
     $element: dxElementWrapper,
     value: boolean,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    event?: Record<string, unknown>,
+    event?: DxEvent<PointerEvent | MouseEvent | TouchEvent>,
   ): void {
     this.option('isActive', value);
     $element.toggleClass('dx-state-active', value);
