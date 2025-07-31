@@ -11,12 +11,11 @@ import { isDefined, isFunction } from '@js/core/utils/type';
 import type dxCheckBox from '@js/ui/check_box';
 import type { ValueChangedInfo } from '@js/ui/editor/editor';
 import type dxList from '@js/ui/list';
-import List from '@js/ui/list_light';
 import Popup from '@js/ui/popup/ui.popup';
-import TreeView from '@js/ui/tree_view';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import type TextBox from '@ts/ui/text_box/m_text_box';
+import List from '@ts/ui/list/m_list.edit.search';
+import TreeView from '@ts/ui/tree_view/m_tree_view.search';
 
 import gridCoreUtils from '../m_utils';
 
@@ -367,7 +366,7 @@ export class HeaderFilterView extends Modules.View {
 
     const onTreeViewOptionChanged = (
       event: ChangedOptionInfo & {
-        component: TreeView & { _searchEditor: TextBox };
+        component: TreeView;
       },
     ): void => {
       switch (true) {
@@ -382,7 +381,7 @@ export class HeaderFilterView extends Modules.View {
           // So we should focus the searchEditor only after render will be completed
           Promise.resolve()
             .then(() => {
-              event.component._searchEditor.focus();
+              event.component.getSearchBoxController().focus();
             })
             .catch(() => {});
           break;
