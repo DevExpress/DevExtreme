@@ -376,7 +376,6 @@ class Overlay<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getActionsList(): string[] {
     return [
       'onShowing',
@@ -462,7 +461,6 @@ class Overlay<
     this.hide();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getAnonymousTemplateName(): string {
     return ANONYMOUS_TEMPLATE_NAME;
   }
@@ -482,7 +480,6 @@ class Overlay<
       const tabbableElements = overlayStack[i]._findTabbableBounds();
 
       if (tabbableElements.$first || tabbableElements.$last) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore expected: types Overlay<OverlayProperties> and this have no overlap
         return overlayStack[i] === this;
       }
@@ -491,12 +488,10 @@ class Overlay<
     return false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _overlayStack(): Overlay[] {
     return OVERLAY_STACK;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _zIndexInitValue(): number {
     return Overlay.baseZIndex();
   }
@@ -554,7 +549,7 @@ class Overlay<
     return this._getOptionValue('animation', this) ?? {};
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _toggleBodyScroll(enabled?: boolean): void {}
 
   _animateShowing(): void {
@@ -600,7 +595,6 @@ class Overlay<
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _processShowingHidingCancel(
     cancelArg: boolean | Promise<boolean>,
     applyFunction: () => void,
