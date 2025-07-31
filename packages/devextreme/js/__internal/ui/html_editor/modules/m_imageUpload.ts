@@ -31,7 +31,6 @@ if (Quill) {
     _fileUploader!: FileUploader;
 
     constructor(quill, options) {
-      // @ts-expect-error
       super(quill, options);
 
       this.options = options;

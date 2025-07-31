@@ -33,7 +33,6 @@ if (Quill) {
     options: any;
 
     constructor(quill, options) {
-      // @ts-expect-error
       super(quill, options);
 
       this.options = extend({}, this._getDefaultOptions(), options);

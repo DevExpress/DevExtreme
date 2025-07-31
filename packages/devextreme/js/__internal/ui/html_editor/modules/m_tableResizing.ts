@@ -82,7 +82,6 @@ export default class TableResizingModule extends BaseModule {
   _startLineSeparatorPosition?: number;
 
   constructor(quill, options) {
-    // @ts-expect-error
     super(quill, options);
     this.enabled = !!options.enabled;
     this._tableResizeFrames = [];

@@ -44,7 +44,6 @@ export default class ResizingModule extends BaseModule {
   _$resizeFrame!: dxElementWrapper;
 
   constructor(quill, options) {
-    // @ts-expect-error
     super(quill, options);
     this.allowedTargets = options.allowedTargets || ['image'];
     this.enabled = !!options.enabled;

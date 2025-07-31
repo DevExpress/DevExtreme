@@ -18,7 +18,6 @@ if (Quill) {
     quill: any;
 
     constructor(quill, options) {
-      // @ts-expect-error
       super(quill, options);
 
       const widgetName = this.editorInstance.NAME;

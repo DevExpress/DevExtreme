@@ -42,7 +42,6 @@ if (Quill) {
     _targetElement: any;
 
     constructor(quill, options) {
-      // @ts-expect-error
       super(quill, options);
       this.enabled = !!options.enabled;
       this._quillContainer = this.editorInstance._getQuillContainer();

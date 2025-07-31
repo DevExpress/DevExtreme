@@ -24,7 +24,6 @@ if (Quill) {
     options: any;
 
     constructor(quill, options) {
-      // @ts-expect-error
       super(quill, options);
 
       const toolbar = quill.getModule('toolbar');
@@ -47,7 +46,6 @@ if (Quill) {
     }
 
     _getDefaultOptions() {
-      // @ts-expect-error
       const baseConfig = super._getDefaultOptions();
 
       return extend(baseConfig, {
@@ -62,7 +60,7 @@ if (Quill) {
       this.savePosition(position);
 
       this._resetPopupPosition(event, position);
-      // @ts-expect-error
+
       super.showPopup();
     }
 

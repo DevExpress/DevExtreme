@@ -75,7 +75,6 @@ if (Quill) {
     _hasSearch?: boolean;
 
     constructor(quill, options) {
-      // @ts-expect-error
       super(quill, options);
       this._mentions = {};
 
@@ -102,7 +101,6 @@ if (Quill) {
     }
 
     _getDefaultOptions() {
-      // @ts-expect-error
       const baseConfig = super._getDefaultOptions();
 
       return extend(baseConfig, {
@@ -199,7 +197,7 @@ if (Quill) {
 
     renderList($container, options) {
       this.compileGetters(this.options);
-      // @ts-expect-error
+
       super.renderList($container, options);
     }
 
@@ -209,7 +207,6 @@ if (Quill) {
     }
 
     _getListConfig(options) {
-      // @ts-expect-error
       const baseConfig = super._getListConfig(options);
 
       return extend(baseConfig, {
@@ -435,7 +432,6 @@ if (Quill) {
     }
 
     _getPopupConfig() {
-      // @ts-expect-error
       return extend(super._getPopupConfig(), {
         hideOnParentScroll: false,
         onShown: () => {

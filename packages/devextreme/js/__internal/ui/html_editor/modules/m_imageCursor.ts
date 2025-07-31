@@ -15,7 +15,6 @@ if (Quill) {
     quill: any;
 
     constructor(quill, options) {
-      // @ts-expect-error
       super(quill, options);
       // @ts-expect-error
       this.addCleanCallback(this.clean.bind(this));

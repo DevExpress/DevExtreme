@@ -102,7 +102,6 @@ if (Quill) {
     _isReset?: boolean;
 
     constructor(quill, options) {
-      // @ts-expect-error
       super(quill, options);
 
       this._toolbarWidgets = new WidgetCollector();
