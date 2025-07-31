@@ -42,7 +42,7 @@ import Widget from '@ts/core/widget/widget';
 
 import windowUtils from '../../core/utils/m_window';
 import { OVERLAY_POSITION_ALIASES, OverlayPositionController } from './m_overlay_position_controller';
-import * as zIndexPool from './m_z_index';
+import * as zIndexPool from './z_index';
 
 const ready = readyCallbacks.add;
 const window = windowUtils.getWindow();
