@@ -307,7 +307,7 @@ class MenuBase<
   _toggleActiveState(
     $element: dxElementWrapper,
     value: boolean,
-    e: unknown,
+    event: InkRippleEvent,
   ): void {
     super._toggleActiveState($element, value);
 
@@ -317,7 +317,7 @@ class MenuBase<
 
     const config = {
       element: $element,
-      event: e as InkRippleEvent,
+      event,
     };
 
     if (value) {

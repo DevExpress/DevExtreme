@@ -36,8 +36,11 @@ import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { DataChange, InkRippleEvent, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import type {
+  Constructor, DataChange, InkRippleEvent, PostprocessRenderItemInfo,
+} from '@ts/ui/collection/collection_widget.base';
 import CollectionWidget from '@ts/ui/collection/collection_widget.live_update';
+import ListItem from '@ts/ui/list/item';
 import type {
   ScrollView as ScrollViewType,
 } from '@ts/ui/scroll_view/scroll_view';
@@ -46,8 +49,6 @@ import { deviceDependentOptions } from '@ts/ui/scroll_view/scrollable.device';
 import type { ScrollOffset } from '@ts/ui/scroll_view/types';
 import { getElementMargin } from '@ts/ui/scroll_view/utils/get_element_style';
 import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
-
-import ListItem from './item';
 
 const LIST_CLASS = 'dx-list';
 const LIST_ITEMS_CLASS = 'dx-list-items';
@@ -73,7 +74,7 @@ const LIST_FEEDBACK_SHOW_TIMEOUT = 70;
 
 const groupItemsGetter = compileGetter('items');
 
-type ScrollViewConstructor = (new (...args: unknown[]) => ScrollViewType);
+type ScrollViewConstructor = Constructor<ScrollViewType>;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 let _scrollView: ScrollViewConstructor | null = null;
@@ -656,7 +657,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     if (this._shouldContinueLoading(shouldLoadNextPage)) {
       this._infiniteDataLoading();
     } else {
-      this._scrollView?.release(!shouldLoadNextPage && !dataController.isLoading());
+      this._scrollView.release(!shouldLoadNextPage && !dataController.isLoading());
       // @ts-expect-error mixin method
       this._toggleNextButton(this._shouldRenderNextButton() && !this._isLastPage());
       this._loadIndicationSuppressed(false);
@@ -984,7 +985,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   _toggleActiveState(
     $element: dxElementWrapper,
     value: boolean,
-    event?: unknown,
+    event: InkRippleEvent,
   ): void {
     super._toggleActiveState($element, value);
 
@@ -994,7 +995,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
 
     const config = {
       element: $element,
-      event: event as InkRippleEvent,
+      event,
     };
 
     if (value) {
@@ -1004,7 +1005,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
           this._inkRipple?.showWave(config);
         }, LIST_FEEDBACK_SHOW_TIMEOUT / 2);
       } else {
-        this._inkRipple?.showWave(config);
+        this._inkRipple.showWave(config);
       }
     } else {
       clearTimeout(this._inkRippleTimer);
@@ -1043,7 +1044,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this._pageLoadingAction?.(e);
     const dataController = this._dataController;
     if (dataController.getDataSource() && !dataController.isLoading()) {
-      this._scrollView?.toggleLoading(true);
+      this._scrollView.toggleLoading(true);
       this._$nextButton?.detach();
       this._loadIndicationSuppressed(true);
       this._loadNextPage();
@@ -1153,7 +1154,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   }
 
   upInkRippleHandler(e: InkRippleEvent): void {
-    this._toggleActiveState($(e.currentTarget), false);
+    this._toggleActiveState($(e.currentTarget), false, e);
   }
 
   attachGroupHeaderInkRippleEvents(): void {
@@ -1310,7 +1311,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
         this._invalidate();
         break;
       case 'wrapItemText':
-        this._toggleWrapItemText(value as boolean);
+        this._toggleWrapItemText(value);
         break;
       case 'onGroupRendered':
         this._createGroupRenderAction();
@@ -1438,11 +1439,15 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this._scrollView.scrollTo(location);
   }
 
-  scrollToItem(itemElement: Element | number | Item): void {
+  scrollToItem(itemElement: Element | number | Item | undefined): void {
+    if (!isDefined(itemElement)) {
+      return;
+    }
     const $item = this._editStrategy.getItemElement(itemElement);
 
-    const item = $item?.get(0);
-    this._scrollView.scrollToElement(item, { bottom: getElementMargin(item, 'bottom') });
+    this._scrollView.scrollToElement($item, {
+      bottom: getElementMargin($item.get(0), 'bottom'),
+    });
   }
 
   _dimensionChanged(): void {

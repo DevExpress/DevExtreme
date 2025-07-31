@@ -3,8 +3,10 @@ import localizationMessage from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
+import type { DxEvent } from '@js/events';
 import type { Item } from '@js/ui/list';
 import { isNumeric, isObject } from '@ts/core/utils/m_type';
+import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import { NOT_EXISTING_INDEX } from '@ts/ui/collection/collection_widget.edit';
 
@@ -49,7 +51,7 @@ class ListEdit extends ListBase {
 
         const isMoveFromGroup = this.option('grouped')
           && $(focusedElement).parent().get(0) !== $nextItem.parent().get(0);
-        if (!isMoveFromGroup && focusedElement) {
+        if (!isMoveFromGroup) {
           this.reorderItem($(focusedElement).get(0), $nextItem.get(0));
           this.scrollToItem($(focusedElement).get(0));
         }
@@ -59,7 +61,11 @@ class ListEdit extends ListBase {
         const isInternalMoving = editProvider.handleKeyboardEvents(focusedItemIndex, moveUp);
 
         if (!isInternalMoving) {
-          moveUp ? parent.upArrow(e) : parent.downArrow(e);
+          if (moveUp) {
+            parent.upArrow(e);
+          } else {
+            parent.downArrow(e);
+          }
         }
       }
     };
@@ -242,15 +248,21 @@ class ListEdit extends ListBase {
     );
   }
 
-  _selectedItemClass() {
+  // eslint-disable-next-line class-methods-use-this
+  _selectedItemClass(): string {
     return LIST_ITEM_SELECTED_CLASS;
   }
 
-  _itemResponseWaitClass() {
+  // eslint-disable-next-line class-methods-use-this
+  _itemResponseWaitClass(): string {
     return LIST_ITEM_RESPONSE_WAIT_CLASS;
   }
 
-  _itemClickHandler(e): void {
+  _itemClickHandler(
+    e: DxEvent,
+    args?: Record<string, unknown>,
+    config?: ActionConfig,
+  ): void {
     const $itemElement = $(e.currentTarget);
     if ($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
       return;
@@ -261,8 +273,7 @@ class ListEdit extends ListBase {
       return;
     }
     this._saveSelectionChangeEvent(e);
-    // @ts-expect-error ts-error
-    super._itemClickHandler(...arguments);
+    super._itemClickHandler(e, args, config);
   }
 
   _shouldFireContextMenuEvent(...args) {
@@ -311,7 +322,7 @@ class ListEdit extends ListBase {
     super._clean();
   }
 
-  focusListItem(index): void {
+  focusListItem(index: number): void {
     const $item = this._editStrategy.getItemElement(index);
 
     this.option('focusedElement', $item);
@@ -394,8 +405,11 @@ class ListEdit extends ListBase {
     const editStrategy = this._editStrategy;
     const deletingElementIndex = editStrategy.getNormalizedIndex(itemElement);
     const { focusedElement, focusStateEnabled } = this.option();
-    // @ts-expect-error ts-error
-    const focusedItemIndex = focusedElement ? editStrategy.getNormalizedIndex(focusedElement) : deletingElementIndex;
+
+    const focusedItemIndex = focusedElement
+      // @ts-expect-error ts-error
+      ? editStrategy.getNormalizedIndex(focusedElement)
+      : deletingElementIndex;
     const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
     const nextFocusedItem = isLastIndexFocused || deletingElementIndex < focusedItemIndex
       ? focusedItemIndex - 1

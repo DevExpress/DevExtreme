@@ -71,7 +71,7 @@ export type DataChangeType = 'insert' | 'update' | 'remove';
 export interface DataChange<TItem = CollectionItem, TKey = number | string> {
   key: TKey;
   type: DataChangeType;
-  data: DeepPartial<TItem>;
+  data: TItem;
   index: number;
 }
 
@@ -96,6 +96,7 @@ export interface PostprocessRenderItemInfo<TItem> {
 }
 
 export type InkRippleEvent = DxEvent<PointerEvent | MouseEvent | TouchEvent>;
+export type Constructor<T> = new (...args: unknown[]) => T;
 
 export interface CollectionWidgetBaseProperties<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1509,10 +1510,10 @@ class CollectionWidget<
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(CollectionWidget as any).include(DataHelperMixin);
-
 // @ts-expect-error ts-error
 CollectionWidget.ItemClass = CollectionWidgetItem;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(CollectionWidget as any).include(DataHelperMixin);
 
 export default CollectionWidget;
