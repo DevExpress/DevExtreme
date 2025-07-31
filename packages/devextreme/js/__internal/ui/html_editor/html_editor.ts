@@ -367,10 +367,11 @@ class HtmlEditor extends Editor<Properties> {
     if (isFunction(customizeModules)) {
       customizeModules(modulesConfig);
     }
+    const { placeholder, readOnly, disabled } = this.option();
 
     this._quillInstance = this._getRegistrator().createEditor(this._$htmlContainer[0], {
-      placeholder: this.option('placeholder'),
-      readOnly: this.option('readOnly') || this.option('disabled'),
+      placeholder,
+      readOnly: Boolean(readOnly ?? disabled),
       modules: modulesConfig,
       theme: 'basic',
     });
@@ -783,7 +784,7 @@ class HtmlEditor extends Editor<Properties> {
     this._contentInitializedCallback.add(callback);
   }
 
-  register(components: unknown): void {
+  register(components: Record<string, unknown>): void {
     this._getRegistrator().registerModules(components);
 
     if (this._quillInstance) {
