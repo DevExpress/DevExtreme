@@ -97,13 +97,7 @@ export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = Ev
 export interface dxMultiViewOptions<
     TItem extends ItemLike = any,
     TKey = any,
-> extends Omit<dxMultiViewBaseOptions<dxMultiView<TItem, TKey>, TItem, TKey>, 'keyExpr'> {
-    /**
-     * @docid
-     * @hidden
-     */
-    keyExpr?: string | Function;
-}
+> extends Omit<dxMultiViewBaseOptions<dxMultiView<TItem, TKey>, TItem, TKey>, 'keyExpr'> {}
 
 /**
  * @deprecated use Properties instead

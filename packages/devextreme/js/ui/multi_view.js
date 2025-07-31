@@ -3,6 +3,11 @@ import MultiView from '../__internal/ui/multi_view/m_multi_view';
 export default MultiView;
 
 /**
+ * @name dxMultiViewOptions.keyExpr
+ * @hidden
+ */
+
+/**
  * @name dxMultiViewOptions.selectedItems
  * @hidden
  */

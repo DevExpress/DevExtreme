@@ -23222,12 +23222,7 @@ declare module DevExpress.ui {
   > extends Omit<
       dxMultiViewBaseOptions<dxMultiView<TItem, TKey>, TItem, TKey>,
       'keyExpr'
-    > {
-    /**
-     * [descr:dxMultiViewOptions.keyExpr]
-     */
-    keyExpr?: string | Function;
-  }
+    > {}
   /**
    * [descr:dxNumberBox]
    */
@@ -28347,6 +28342,10 @@ declare module DevExpress.ui {
      */
     items?: Array<TItem>;
     /**
+     * [descr:dxTabPanelOptions.keyExpr]
+     */
+    keyExpr?: string | Function;
+    /**
      * [descr:dxTabPanelOptions.onTitleClick]
      */
     onTitleClick?:
@@ -28392,10 +28391,6 @@ declare module DevExpress.ui {
      * [descr:dxTabPanelOptions.tabsPosition]
      */
     tabsPosition?: DevExpress.common.Position;
-    /**
-     * [descr:dxTabPanelOptions.keyExpr]
-     */
-    keyExpr?: string | Function;
   }
   /**
    * [descr:dxTabs]
