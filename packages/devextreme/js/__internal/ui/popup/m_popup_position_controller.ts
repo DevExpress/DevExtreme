@@ -2,36 +2,54 @@ import { move } from '@js/common/core/animation/translator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { originalViewPort } from '@js/core/utils/view_port';
-import type { OverlayPositionControllerConstructor } from '@ts/ui/overlay/m_overlay_position_controller';
+import type {
+  BaseControllerProperties,
+  ControllerOverlayElements,
+  NormalizedPosition,
+  Position,
+  // ControllerOverlayProperties,
+  PositionControllerConstructor,
+} from '@ts/ui/overlay/m_overlay_position_controller';
 import { OverlayPositionController } from '@ts/ui/overlay/m_overlay_position_controller';
+import type { PopupProperties } from '@ts/ui/popup/m_popup';
 
-// import type {
-//   PopupProperties,
-// } from '@ts/ui/popup/m_popup';
 import windowUtils from '../../core/utils/m_window';
 
-export interface PopupPositionControllerConstructor extends OverlayPositionControllerConstructor {
-  [key: string]: any;
+interface PopupControllerElements extends ControllerOverlayElements {}
+
+export interface PopupControllerProperties extends BaseControllerProperties {
+  fullScreen?: PopupProperties['fullScreen'];
+  dragOutsideBoundary?: PopupProperties['dragOutsideBoundary'];
+  dragAndResizeArea?: PopupProperties['dragAndResizeArea'];
+  outsideDragFactor?: PopupProperties['outsideDragFactor'];
+  forceApplyBindings?: PopupProperties['forceApplyBindings'];
 }
+
+export type PopupPositionControllerConstructor<
+  TProperties extends PopupControllerProperties = PopupControllerProperties,
+> = PositionControllerConstructor<TProperties>;
 
 const window = windowUtils.getWindow();
 
-class PopupPositionController extends OverlayPositionController {
+class PopupPositionController<
+  TProperties extends PopupControllerProperties = PopupControllerProperties,
+  TElements extends PopupControllerElements = PopupControllerElements,
+> extends OverlayPositionController<TProperties, TElements> {
   _$dragResizeContainer?: dxElementWrapper;
 
-  constructor({
-    fullScreen,
-    forceApplyBindings,
-    dragOutsideBoundary,
-    dragAndResizeArea,
-    outsideDragFactor,
-    ...args
-  }: PopupPositionControllerConstructor) {
-    super(args);
+  constructor(params: PopupPositionControllerConstructor<TProperties>) {
+    super(params);
+
+    const {
+      fullScreen,
+      forceApplyBindings,
+      dragOutsideBoundary,
+      dragAndResizeArea,
+      outsideDragFactor,
+    } = params.properties;
 
     this._properties = {
       ...this._properties,
-      // @ts-expect-error todo
       fullScreen,
       forceApplyBindings,
       dragOutsideBoundary,
@@ -44,8 +62,7 @@ class PopupPositionController extends OverlayPositionController {
     this._updateDragResizeContainer();
   }
 
-  set fullScreen(fullScreen) {
-    // @ts-expect-error todo
+  set fullScreen(fullScreen: PopupProperties['fullScreen']) {
     this._properties.fullScreen = fullScreen;
 
     if (fullScreen) {
@@ -59,38 +76,32 @@ class PopupPositionController extends OverlayPositionController {
     return this._$dragResizeContainer;
   }
 
-  get outsideDragFactor() {
-    // @ts-expect-error todo
+  get outsideDragFactor(): PopupProperties['outsideDragFactor'] {
     if (this._properties.dragOutsideBoundary) {
       return 1;
     }
 
-    // @ts-expect-error todo
     return this._properties.outsideDragFactor;
   }
 
-  set dragAndResizeArea(dragAndResizeArea) {
-    // @ts-expect-error todo
+  set outsideDragFactor(outsideDragFactor: PopupProperties['outsideDragFactor']) {
+    this._properties.outsideDragFactor = outsideDragFactor;
+  }
+
+  set dragAndResizeArea(dragAndResizeArea: PopupProperties['dragAndResizeArea']) {
     this._properties.dragAndResizeArea = dragAndResizeArea;
 
     this._updateDragResizeContainer();
   }
 
-  set dragOutsideBoundary(dragOutsideBoundary) {
-    // @ts-expect-error todo
+  set dragOutsideBoundary(dragOutsideBoundary: PopupProperties['dragOutsideBoundary']) {
     this._properties.dragOutsideBoundary = dragOutsideBoundary;
 
     this._updateDragResizeContainer();
   }
 
-  // eslint-disable-next-line @typescript-eslint/adjacent-overload-signatures, grouped-accessor-pairs
-  set outsideDragFactor(outsideDragFactor) {
-    // @ts-expect-error todo
-    this._properties.outsideDragFactor = outsideDragFactor;
-  }
-
-  updateContainer(containerProp): void {
-    super.updateContainer(containerProp);
+  updateContainer(container: PopupProperties['container']): void {
+    super.updateContainer(container);
     this._updateDragResizeContainer();
   }
 
@@ -103,25 +114,21 @@ class PopupPositionController extends OverlayPositionController {
   }
 
   positionContent(): void {
-    // @ts-expect-error todo
     if (this._properties.fullScreen) {
       move(this._$content, { top: 0, left: 0 });
 
       this.detectVisualPositionChange();
     } else {
-      // @ts-expect-error todo
       this._properties.forceApplyBindings?.();
 
       super.positionContent();
     }
   }
 
-  _normalizePosition(positionProp) {
-    const normalizedPosition = super._normalizePosition(positionProp);
+  _normalizePosition(position?: Position): NormalizedPosition {
+    const normalizedPosition = super._normalizePosition(position);
 
-    // @ts-expect-error todo
     if (this._properties.fullScreen) {
-      // @ts-expect-error todo
       normalizedPosition.of = 'window';
     }
 
@@ -133,14 +140,11 @@ class PopupPositionController extends OverlayPositionController {
   }
 
   _getDragResizeContainer(): dxElementWrapper | undefined {
-    // @ts-expect-error todo
     if (this._properties.dragOutsideBoundary) {
       return $(window);
     }
 
-    // @ts-expect-error todo
     if (this._properties.dragAndResizeArea) {
-      // @ts-expect-error todo
       return $(this._properties.dragAndResizeArea);
     }
 
@@ -152,7 +156,6 @@ class PopupPositionController extends OverlayPositionController {
   }
 
   _getVisualContainer(): dxElementWrapper {
-    // @ts-expect-error todo
     if (this._properties.fullScreen) {
       return $(window);
     }

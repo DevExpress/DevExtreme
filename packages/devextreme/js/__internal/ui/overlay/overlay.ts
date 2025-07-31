@@ -40,8 +40,15 @@ import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
-import type { OverlayPositionControllerConstructor } from '@ts/ui/overlay/m_overlay_position_controller';
-import { OVERLAY_POSITION_ALIASES, OverlayPositionController } from '@ts/ui/overlay/m_overlay_position_controller';
+import type {
+  BaseControllerProperties,
+  ControllerProperties,
+  PositionControllerConstructor,
+} from '@ts/ui/overlay/m_overlay_position_controller';
+import {
+  OVERLAY_POSITION_ALIASES,
+  OverlayPositionController,
+} from '@ts/ui/overlay/m_overlay_position_controller';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
 
 const ready = readyCallbacks.add;
@@ -1157,7 +1164,7 @@ class Overlay<
     }
   }
 
-  _getPositionControllerConfig(): OverlayPositionControllerConstructor {
+  _getPositionControllerConfig(): PositionControllerConstructor<BaseControllerProperties> {
     const {
       container,
       visualContainer,
@@ -1170,12 +1177,12 @@ class Overlay<
 
     // NOTE: position is passed to controller in renderGeometry
     // to prevent window field using in server side mode
-    const properties = {
+    const properties: ControllerProperties<BaseControllerProperties> = {
       container,
       visualContainer,
       restorePosition,
-      fixWrapperPosition: _fixWrapperPosition,
-      skipContentPositioning: _skipContentPositioning,
+      _fixWrapperPosition,
+      _skipContentPositioning,
       onPositioned: this._actions?.onPositioned,
       onVisualPositionChanged: this._actions?.onVisualPositionChanged,
     };

@@ -34,14 +34,14 @@ type OverlayPositionAlignment =
 interface OverlayPosition {
   my?: OverlayPositionAlignment;
   at?: OverlayPositionAlignment;
-  // of?: string | dxElementWrapper | Element; // Move to Popover
-  // offset?: unknown; // Move to Popover
+  of?: string | dxElementWrapper | Element;
+  offset?: string | { x?: number; y?: number };
   boundaryOffset?: typeof OVERLAY_DEFAULT_BOUNDARY_OFFSET;
 }
 
-type Position = OverlayPosition | OverlayPositionAlignment | Coordinates;
+export type Position = OverlayPosition | OverlayPositionAlignment | Coordinates;
 
-type NormalizedPosition = OverlayPosition & Partial<Coordinates>;
+export type NormalizedPosition = OverlayPosition & Partial<Coordinates>;
 
 export interface ControllerOverlayElements {
   $root?: dxElementWrapper;
@@ -49,21 +49,32 @@ export interface ControllerOverlayElements {
   $wrapper?: dxElementWrapper;
 }
 
-type ControllerOverlayProperties = OverlayProperties & OverlayActions;
+export interface BaseControllerProperties {
+  container?: OverlayProperties['container'];
+  visualContainer?: OverlayProperties['visualContainer'];
+  position?: OverlayProperties['position'];
+  restorePosition?: OverlayProperties['restorePosition'];
+  _fixWrapperPosition?: OverlayProperties['_fixWrapperPosition'];
+  _skipContentPositioning?: OverlayProperties['_skipContentPositioning'];
+}
 
-export interface OverlayPositionControllerConstructor {
-  elements: ControllerOverlayElements;
-  properties: ControllerOverlayProperties;
+export type ControllerProperties<
+  TProperties extends BaseControllerProperties,
+> = Partial<TProperties> & OverlayActions;
+
+export type ControllerOverlayProperties = ControllerProperties<OverlayProperties>;
+
+export interface PositionControllerConstructor<
+  TProperties extends BaseControllerProperties,
+  TElements extends ControllerOverlayElements = ControllerOverlayElements,
+> {
+  properties: ControllerProperties<TProperties>;
+  elements: TElements;
 }
 
 // type Props = Partial<OverlayPositionControllerConstructor> & {
 //   target?: dxElementWrapper; // Move to Popover
 //   shading?: unknown; // Move to Popover
-//   fullScreen?: unknown; // Move to Popup
-//   dragOutsideBoundary?: unknown; // Move to Popup
-//   dragAndResizeArea?: string | dxElementWrapper | Element; // Move to Popup
-//   outsideDragFactor?: unknown; // Move to Popup
-//   forceApplyBindings?: () => void; // Move to Popup
 // };
 
 const window = windowUtils.getWindow();
@@ -82,14 +93,17 @@ const OVERLAY_POSITION_ALIASES: Record<PositionAlignment, OverlayPosition> = {
 
 const OVERLAY_DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
 
-class OverlayPositionController {
-  _properties: ControllerOverlayProperties;
+class OverlayPositionController<
+  TProperties extends BaseControllerProperties = BaseControllerProperties,
+  TElements extends ControllerOverlayElements = ControllerOverlayElements,
+> {
+  _properties: ControllerProperties<TProperties>;
 
-  _$root?: dxElementWrapper;
+  _$root?: TElements['$root'];
 
-  _$content?: dxElementWrapper;
+  _$content?: TElements['$content'];
 
-  _$wrapper?: dxElementWrapper;
+  _$wrapper?: TElements['$wrapper'];
 
   _$markupContainer?: dxElementWrapper;
 
@@ -105,7 +119,7 @@ class OverlayPositionController {
 
   _position?: NormalizedPosition;
 
-  constructor(params: OverlayPositionControllerConstructor) {
+  constructor(params: PositionControllerConstructor<TProperties>) {
     const { properties, elements } = params;
     const { container, position, visualContainer } = properties;
     const { $root, $content, $wrapper } = elements;
