@@ -19,7 +19,9 @@
       ],
       "outputs": [
         "{projectRoot}/scss/bundles",
-        "{workspaceRoot}/packages/devextreme/artifacts/css"
+        "{workspaceRoot}/packages/devextreme/artifacts/css/dx.*.css",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/fonts",
+        "{workspaceRoot}/packages/devextreme/artifacts/css/icons"
       ],
       "cache": true
     },

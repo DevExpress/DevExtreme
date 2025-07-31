@@ -24,7 +24,7 @@ function run_test_impl {
     local runner_pid
     local runner_result=0
 
-    [ -z "$CHROME_CMD"] && CHROME_CMD=google-chrome-stable
+    [ -z "$CHROME_CMD" ] && CHROME_CMD=google-chrome-stable
     [ "$LOCAL" == "true" ] && url="http://host.docker.internal:$port/run?notimers=true"
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
     [ -n "$MOBILE_UA" ] && url="$url&deviceMode=true"
