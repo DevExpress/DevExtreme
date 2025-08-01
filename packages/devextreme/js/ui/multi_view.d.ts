@@ -97,7 +97,7 @@ export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = Ev
 export interface dxMultiViewOptions<
     TItem extends ItemLike = any,
     TKey = any,
-> extends Omit<dxMultiViewBaseOptions<dxMultiView<TItem, TKey>, TItem, TKey>, 'keyExpr'> {}
+> extends dxMultiViewBaseOptions<dxMultiView<TItem, TKey>, TItem, TKey> {}
 
 /**
  * @deprecated use Properties instead
@@ -108,7 +108,7 @@ export interface dxMultiViewBaseOptions<
     TComponent extends dxMultiView<TItem, TKey> = dxMultiView<any, any>,
     TItem extends ItemLike = any,
     TKey = any,
-> extends CollectionWidgetOptions<TComponent, TItem, TKey> {
+> extends Omit<CollectionWidgetOptions<TComponent, TItem, TKey>, 'keyExpr'> {
     /**
      * @docid dxMultiViewOptions.animationEnabled
      * @default true
