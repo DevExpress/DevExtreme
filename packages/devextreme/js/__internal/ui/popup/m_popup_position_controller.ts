@@ -5,7 +5,7 @@ import { originalViewPort } from '@js/core/utils/view_port';
 import type {
   BaseControllerProperties,
   ControllerOverlayElements,
-  NormalizedPosition,
+  OverlayPosition,
   Position,
   // ControllerOverlayProperties,
   PositionControllerConstructor,
@@ -125,7 +125,7 @@ class PopupPositionController<
     }
   }
 
-  _normalizePosition(position?: Position): NormalizedPosition {
+  _normalizePosition(position?: Position): OverlayPosition {
     const normalizedPosition = super._normalizePosition(position);
 
     if (this._properties.fullScreen) {
