@@ -7,7 +7,6 @@ import type {
   ControllerOverlayElements,
   OverlayPosition,
   Position,
-  // ControllerOverlayProperties,
   PositionControllerConstructor,
 } from '@ts/ui/overlay/m_overlay_position_controller';
 import { OverlayPositionController } from '@ts/ui/overlay/m_overlay_position_controller';
@@ -40,16 +39,19 @@ class PopupPositionController<
   constructor(params: PopupPositionControllerConstructor<TProperties>) {
     super(params);
 
+    const superProperties = this._properties;
+
+    const { properties } = params;
     const {
       fullScreen,
       forceApplyBindings,
       dragOutsideBoundary,
       dragAndResizeArea,
       outsideDragFactor,
-    } = params.properties;
+    } = properties;
 
     this._properties = {
-      ...this._properties,
+      ...superProperties,
       fullScreen,
       forceApplyBindings,
       dragOutsideBoundary,
@@ -60,16 +62,6 @@ class PopupPositionController<
     this._$dragResizeContainer = undefined;
 
     this._updateDragResizeContainer();
-  }
-
-  set fullScreen(fullScreen: PopupProperties['fullScreen']) {
-    this._properties.fullScreen = fullScreen;
-
-    if (fullScreen) {
-      this._fullScreenEnabled();
-    } else {
-      this._fullScreenDisabled();
-    }
   }
 
   get $dragResizeContainer(): dxElementWrapper | undefined {
@@ -88,6 +80,16 @@ class PopupPositionController<
     this._properties.outsideDragFactor = outsideDragFactor;
   }
 
+  set fullScreen(fullScreen: PopupProperties['fullScreen']) {
+    this._properties.fullScreen = fullScreen;
+
+    if (fullScreen) {
+      this._fullScreenEnabled();
+    } else {
+      this._fullScreenDisabled();
+    }
+  }
+
   set dragAndResizeArea(dragAndResizeArea: PopupProperties['dragAndResizeArea']) {
     this._properties.dragAndResizeArea = dragAndResizeArea;
 
@@ -100,7 +102,7 @@ class PopupPositionController<
     this._updateDragResizeContainer();
   }
 
-  updateContainer(container: PopupProperties['container']): void {
+  updateContainer(container?: PopupProperties['container']): void {
     super.updateContainer(container);
     this._updateDragResizeContainer();
   }
