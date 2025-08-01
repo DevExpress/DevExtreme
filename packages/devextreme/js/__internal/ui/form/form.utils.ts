@@ -1,8 +1,8 @@
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import type { GroupItem, SimpleItem, TabbedItem } from '@js/ui/form';
-import type { PreparedItem, TabItem } from '@ts/ui/form/m_form.items_runtime_info';
-import type { ConvertToLayoutManagerOptionsParams, LayoutManagerProperties } from '@ts/ui/form/m_form.layout_manager';
+import type { PreparedItem, TabItem } from '@ts/ui/form/form.items_runtime_info';
+import type { ConvertToLayoutManagerOptionsParams, LayoutManagerProperties } from '@ts/ui/form/form.layout_manager';
 
 export const createItemPathByIndex = (
   index: number,

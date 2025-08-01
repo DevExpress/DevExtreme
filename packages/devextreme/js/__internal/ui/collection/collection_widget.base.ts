@@ -4,14 +4,11 @@ import { name as contextMenuEventName } from '@js/common/core/events/contextmenu
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
-import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
+import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import Action from '@js/core/action';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
-import type {
-  DeepPartial,
-} from '@js/core/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
@@ -34,6 +31,7 @@ import type {
   Cancelable, DxEvent, EventInfo, ItemInfo,
 } from '@js/events';
 import type { CollectionWidgetItem as CollectionWidgetItemProperties, CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
+import type { ListItemInfo } from '@js/ui/list';
 import { focusable } from '@js/ui/widget/selectors';
 import { getPublicElement } from '@ts/core/m_element';
 import type { ActionConfig } from '@ts/core/widget/component';
@@ -68,10 +66,12 @@ const FOCUS_FIRST = 'first';
 
 export type DataChangeType = 'insert' | 'update' | 'remove';
 
+export type CollectionItemInfo<TItem> = ItemInfo<TItem> | ListItemInfo<TItem>;
+
 export interface DataChange<TItem = CollectionItem, TKey = number | string> {
   key: TKey;
   type: DataChangeType;
-  data: DeepPartial<TItem>;
+  data: TItem;
   index: number;
 }
 
@@ -94,6 +94,9 @@ export interface PostprocessRenderItemInfo<TItem> {
   itemData: TItem;
   itemIndex: number;
 }
+
+export type InkRippleEvent = DxEvent<PointerEvent | MouseEvent | TouchEvent>;
+export type Constructor<T> = new (...args: unknown[]) => T;
 
 export interface CollectionWidgetBaseProperties<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -143,11 +146,11 @@ class CollectionWidget<
   _inkRipple?: {
     showWave: (config: {
       element: dxElementWrapper;
-      event: unknown;
+      event: InkRippleEvent;
     }) => void;
     hideWave: (config: {
       element: dxElementWrapper;
-      event: unknown;
+      event: InkRippleEvent;
     }) => void;
   };
 
@@ -1454,7 +1457,7 @@ class CollectionWidget<
     return action(extend(actionArgs, this._extendActionArgs($itemElement), args));
   }
 
-  _extendActionArgs($itemElement: dxElementWrapper): ItemInfo<TItem> {
+  _extendActionArgs($itemElement: dxElementWrapper): CollectionItemInfo<TItem> {
     return {
       itemElement: getPublicElement($itemElement),
       itemIndex: this._itemElements().index($itemElement),
@@ -1507,10 +1510,10 @@ class CollectionWidget<
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(CollectionWidget as any).include(DataHelperMixin);
-
 // @ts-expect-error ts-error
 CollectionWidget.ItemClass = CollectionWidgetItem;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(CollectionWidget as any).include(DataHelperMixin);
 
 export default CollectionWidget;

@@ -704,6 +704,29 @@ const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
                                 const message = this.getValidationMessage().$content().text();
                                 assert.strictEqual(message, 'New error message');
                             });
+
+                            QUnit.test('It should be possible to update 2nd lvl nested option in validationTooltipOptions', function(assert) {
+                                this.editor.option({
+                                    isValid: false,
+                                });
+                                this.editor.option('validationTooltipOptions.wrapperAttr.class', 'customClass');
+
+                                const message = this.getValidationMessage();
+                                const { wrapperAttr } = message.option();
+
+                                assert.deepEqual(wrapperAttr, { class: 'customClass' });
+                            });
+
+                            QUnit.test('validationTooltipOptions should be cached in _cached_validationTooltipOptions after validationTooltipOptions runtime change', function(assert) {
+                                this.editor.option({
+                                    isValid: false,
+                                });
+
+                                this.editor.option('validationTooltipOptions', { positionSide: 'left' });
+                                const { _cached_validationTooltipOptions } = this.editor.option();
+
+                                assert.deepEqual(_cached_validationTooltipOptions, { positionSide: 'left' });
+                            });
                         });
                     });
                 });

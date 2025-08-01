@@ -54,7 +54,7 @@ class Widget<
 
   public _feedbackHideTimeout = 400;
 
-  private readonly _feedbackShowTimeout = 30;
+  private readonly _feedbackShowTimeout: number = 30;
 
   _contentReadyAction?: ((event?: Record<string, unknown>) => void) | null;
 
@@ -138,11 +138,17 @@ class Widget<
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _innerWidgetOptionChanged(innerWidget, args): void {
-    const options = Widget.getOptionsFromContainer(args);
-    // eslint-disable-next-line @stylistic/max-len
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions, @typescript-eslint/prefer-optional-chain
-    innerWidget && innerWidget.option(options);
-    this._options.cache(args.name, options);
+    const { fullName, value } = args;
+
+    if (fullName.indexOf('.') > -1) {
+      const innerWidgetOptionName = fullName.split('.').slice(1).join('.');
+
+      innerWidget?.option(innerWidgetOptionName, value);
+    } else {
+      innerWidget?.option(value);
+    }
+
+    this._options.cache(fullName, value);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -497,7 +503,7 @@ class Widget<
     $element: dxElementWrapper,
     value: boolean,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    event?: Record<string, unknown>,
+    event?: DxEvent<PointerEvent | MouseEvent | TouchEvent>,
   ): void {
     this.option('isActive', value);
     $element.toggleClass('dx-state-active', value);

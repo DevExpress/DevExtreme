@@ -2,10 +2,10 @@
 import type { ValidationRule } from '@js/common';
 import { data } from '@js/core/element_data';
 import type { GroupItem } from '@js/ui/form';
-import type { ItemOptionActionOptions, ValidationRulesItemOptionActionOption } from '@ts/ui/form/m_form.item_option_action';
-import ItemOptionAction from '@ts/ui/form/m_form.item_option_action';
-import type { PreparedGroupedItem } from '@ts/ui/form/m_form.items_runtime_info';
-import { getFullOptionName } from '@ts/ui/form/m_form.utils';
+import type { ItemOptionActionOptions, ValidationRulesItemOptionActionOption } from '@ts/ui/form/form.item_option_action';
+import ItemOptionAction from '@ts/ui/form/form.item_option_action';
+import type { PreparedGroupedItem } from '@ts/ui/form/form.items_runtime_info';
+import { getFullOptionName } from '@ts/ui/form/form.utils';
 
 export type ItemOptionActionType = WidgetOptionItemOptionAction
   | ValidationRulesItemOptionAction
@@ -44,7 +44,6 @@ class TabOptionItemOptionAction extends ItemOptionAction {
 }
 
 class SimpleItemTemplateChangedAction extends ItemOptionAction {
-  // eslint-disable-next-line class-methods-use-this
   tryExecute(): boolean {
     return false;
   }
@@ -55,8 +54,7 @@ class GroupItemTemplateChangedAction extends ItemOptionAction<
 > {
   tryExecute(): boolean {
     const preparedItem: PreparedGroupedItem | undefined = this.findPreparedItem();
-    if (preparedItem != null
-      && preparedItem._prepareGroupItemTemplate
+    if (preparedItem?._prepareGroupItemTemplate
       && preparedItem._renderGroupContentTemplate
     ) {
       preparedItem._prepareGroupItemTemplate(this._options.item.template);

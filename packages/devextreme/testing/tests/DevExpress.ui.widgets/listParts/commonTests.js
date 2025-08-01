@@ -417,7 +417,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
             const args = animateSpy.getCall(0).args;
 
             assert.ok(animateSpy.calledOnce, 'fx.animate is executed');
-            assert.equal(args[0].get(0), $groupBody.get(0), 'fx.animate ran on correct element');
+            assert.equal(args[0], $groupBody.get(0), 'fx.animate ran on correct element');
             assert.equal(args[1].type, 'custom', 'fx.animate ran with correct animation type');
             assert.equal(args[1].from.height, groupBodyHeight, 'fx.animate ran with correct start height');
             assert.equal(args[1].to.height, 0, 'fx.animate ran with correct end height');

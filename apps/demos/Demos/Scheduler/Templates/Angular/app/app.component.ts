@@ -3,7 +3,6 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxTemplateModule } from 'devextreme-angular';
 import { query as Query } from 'devextreme-angular/common/data';
 import { DxSchedulerModule, DxSchedulerComponent, DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import {
@@ -119,7 +118,6 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxSchedulerModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent, ApplyPipe],
   bootstrap: [AppComponent],

@@ -56,7 +56,7 @@ export default class ToolbarMenuList extends ListBase {
     });
   }
 
-  _renderItems(items: Item): void {
+  _renderItems(items: Item[]): void {
     super._renderItems(items);
     this._updateSections();
   }

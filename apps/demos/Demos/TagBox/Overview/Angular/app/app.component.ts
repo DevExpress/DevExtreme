@@ -1,7 +1,7 @@
 import { Component, NgModule, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxTagBoxModule, DxPopoverModule, DxTemplateModule } from 'devextreme-angular';
+import { DxTagBoxModule, DxPopoverModule } from 'devextreme-angular';
 import { ArrayStore } from 'devextreme-angular/common/data';
 import { DxTagBoxTypes } from 'devextreme-angular/ui/tag-box';
 import { Service, Product } from './app.service';
@@ -80,7 +80,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxTemplateModule,
     DxTagBoxModule,
     DxPopoverModule,
   ],

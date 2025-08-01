@@ -469,7 +469,7 @@ class ToolbarBase<
 
   _itemOptionChanged(
     item: Item,
-    property: string,
+    property: keyof Item,
     value: unknown,
     prevValue: unknown,
   ): void {
@@ -541,7 +541,6 @@ class ToolbarBase<
         const promises: Promise<unknown>[] = [];
         $labels.each((_, label): boolean => {
           const text = $(label).text();
-          // @ts-expect-error ts-error
           const fontWeight = $(label).css('fontWeight');
           promises.push(waitWebFont(text, fontWeight));
           return true;
