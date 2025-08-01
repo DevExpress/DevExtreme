@@ -373,9 +373,19 @@ TProperties extends PopoverProperties = PopoverProperties,
     const isFlippedByVertical = location.v.flip;
     const isFlippedByHorizontal = location.h.flip;
 
-    return this._isVerticalSide() && isFlippedByVertical || this._isHorizontalSide() && isFlippedByHorizontal || this._isPopoverInside()
-      ? POSITION_FLIP_MAP[this._positionController._positionSide]
-      : this._positionController._positionSide;
+    const isVertical = this._isVerticalSide() && isFlippedByVertical;
+    const isHorizontal = this._isHorizontalSide() && isFlippedByHorizontal;
+    const isInside = this._isPopoverInside();
+
+    const condition = isVertical || isHorizontal || isInside;
+
+    const positionSide = this._positionController._positionSide;
+
+    if (condition && positionSide) {
+      return POSITION_FLIP_MAP[positionSide];
+    }
+
+    return undefined;
   }
 
   _togglePositionClass(positionClass) {
@@ -507,7 +517,7 @@ TProperties extends PopoverProperties = PopoverProperties,
         if (previousValue) {
           this._detachEvents(previousValue);
         }
-        this._positionController.updateTarget(value);
+        this._positionController.updateTarget(value as TProperties['target']);
         this._invalidate();
         break;
       case 'showEvent':

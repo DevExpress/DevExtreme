@@ -1,6 +1,4 @@
-import type {
-  Position as CommonPosition,
-} from '@js/common';
+import type { Position as CommonPosition } from '@js/common';
 import type { CollisionResolutionCombination } from '@js/common/core/animation';
 import positionUtils from '@js/common/core/animation/position';
 import type { dxElementWrapper } from '@js/core/renderer';
