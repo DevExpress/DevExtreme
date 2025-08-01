@@ -29,6 +29,10 @@ import EditProvider from './m_list.edit.provider';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const LIST_ITEM_RESPONSE_WAIT_CLASS = 'dx-list-item-response-wait';
 
+type DxEventHandledByEditProvider = DxEvent & {
+  handledByEditProvider?: boolean;
+};
+
 export interface ListEditProperties extends ListBaseProperties {
   showSelectionControls?: boolean;
 
@@ -210,7 +214,6 @@ class ListEdit extends ListBase {
   }
 
   _initEditProvider(): void {
-    // @s-expect-error ts-error
     this._editProvider = new EditProvider(this);
   }
 
@@ -302,7 +305,7 @@ class ListEdit extends ListBase {
     return super._shouldFireContextMenuEvent() || this._editProvider.contextMenuHandlerExists();
   }
 
-  _itemHoldHandler(e: DxEvent & { handledByEditProvider: boolean }): void {
+  _itemHoldHandler(e: DxEventHandledByEditProvider): void {
     const $itemElement = $(e.currentTarget);
     if ($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
       return;
@@ -317,7 +320,7 @@ class ListEdit extends ListBase {
     super._itemHoldHandler(e);
   }
 
-  _itemContextMenuHandler(e: DxEvent & { handledByEditProvider: boolean }): void {
+  _itemContextMenuHandler(e: DxEventHandledByEditProvider): void {
     const $itemElement = $(e.currentTarget);
     if ($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
       return;
