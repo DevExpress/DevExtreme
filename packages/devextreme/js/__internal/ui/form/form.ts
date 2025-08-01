@@ -38,7 +38,7 @@ import { DROP_DOWN_EDITOR_CLASS } from '@ts/ui/drop_down_editor/m_drop_down_edit
 import Editor from '@ts/ui/editor/editor';
 import {
   setLabelWidthByMaxLabelWidth,
-} from '@ts/ui/form/components/m_label';
+} from '@ts/ui/form/components/label';
 import {
   FIELD_ITEM_CLASS,
   FIELD_ITEM_CONTENT_CLASS,
@@ -57,18 +57,18 @@ import {
   GROUP_COL_COUNT_CLASS,
   ROOT_SIMPLE_ITEM_CLASS,
 } from '@ts/ui/form/constants';
-import type { ItemOptionActionType } from '@ts/ui/form/m_form.item_options_actions';
-import tryCreateItemOptionAction from '@ts/ui/form/m_form.item_options_actions';
+import type { ItemOptionActionType } from '@ts/ui/form/form.item_options_actions';
+import tryCreateItemOptionAction from '@ts/ui/form/form.item_options_actions';
 import type {
   FormItemRuntimeInfo,
   PreparedGroupedItem,
   PreparedItem,
   PreparedTabItem,
   TabItem,
-} from '@ts/ui/form/m_form.items_runtime_info';
-import FormItemsRunTimeInfo from '@ts/ui/form/m_form.items_runtime_info';
-import type { ExtendedLayoutManagerProperties, LayoutManagerProperties } from '@ts/ui/form/m_form.layout_manager';
-import LayoutManager from '@ts/ui/form/m_form.layout_manager';
+} from '@ts/ui/form/form.items_runtime_info';
+import FormItemsRunTimeInfo from '@ts/ui/form/form.items_runtime_info';
+import type { ExtendedLayoutManagerProperties, LayoutManagerProperties } from '@ts/ui/form/form.layout_manager';
+import LayoutManager from '@ts/ui/form/form.layout_manager';
 import {
   concatPaths,
   convertToLayoutManagerOptions,
@@ -80,7 +80,7 @@ import {
   isEqualToDataFieldOrNameOrTitleOrCaption,
   isFullPathContainsTabs,
   tryGetTabPath,
-} from '@ts/ui/form/m_form.utils';
+} from '@ts/ui/form/form.utils';
 import ValidationEngine from '@ts/ui/m_validation_engine';
 import ValidationSummary from '@ts/ui/m_validation_summary';
 import type { ScreenSizeQualifier } from '@ts/ui/responsive_box';
@@ -207,12 +207,10 @@ class Form extends Widget<FormProperties> {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getGroupColCount($element: dxElementWrapper): number {
     return parseInt($element.attr(GROUP_COL_COUNT_ATTR) ?? '1', 10);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _applyLabelsWidthByCol(
     $container: dxElementWrapper,
     index: number,
@@ -258,7 +256,6 @@ class Form extends Widget<FormProperties> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getGroupElementsInColumn(
     $container: dxElementWrapper,
     columnIndex: number,
@@ -575,10 +572,12 @@ class Form extends Widget<FormProperties> {
           this._tryPrepareTabbedItem(preparedItem, path);
           this._tryPrepareItemTemplate(preparedItem);
 
+          // eslint-disable-next-line max-depth
           if (parentIsTabbedItem) {
             preparedItem.cssItemClass = FIELD_ITEM_TAB_CLASS;
           }
 
+          // eslint-disable-next-line max-depth
           if (preparedItem.items) {
             preparedItem.items = this._prepareItems(preparedItem.items, parentIsTabbedItem, path);
           }
@@ -594,7 +593,6 @@ class Form extends Widget<FormProperties> {
     return items;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isGroupItem(item: PreparedItem): item is PreparedItem<PreparedGroupedItem> {
     return item.itemType === 'group';
   }
@@ -626,7 +624,6 @@ class Form extends Widget<FormProperties> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isTabbedItem(item: PreparedItem): item is PreparedItem<TabbedItem> {
     return item.itemType === 'tabbed';
   }
@@ -646,7 +643,6 @@ class Form extends Widget<FormProperties> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _checkGrouping(items: Item[] | undefined): boolean {
     if (items) {
       // eslint-disable-next-line @typescript-eslint/prefer-for-of
@@ -703,7 +699,6 @@ class Form extends Widget<FormProperties> {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _tryGetItemsForTemplate(
     item: PreparedItem<PreparedTabItem>,
   ): PreparedItem<PreparedTabItem>[] {
@@ -1174,7 +1169,6 @@ class Form extends Widget<FormProperties> {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _tryExecuteItemOptionAction(action: ItemOptionActionType): boolean | undefined {
     return action?.tryExecute();
   }
@@ -1257,6 +1251,7 @@ class Form extends Widget<FormProperties> {
       if (layoutManager) {
         const fullOptionName = getFullOptionName(nameParts[endPartIndex], optionName);
         if (optionName === 'editorType') { // T903774
+          // eslint-disable-next-line max-depth
           if (layoutManager.option(fullOptionName) !== value) {
             return false;
           }
@@ -1264,6 +1259,7 @@ class Form extends Widget<FormProperties> {
         if (optionName === 'visible') { // T874843
           const formItems: FormProperties['items'] = this.option(getFullOptionName(itemPath, 'items')) as FormProperties['items'];
 
+          // eslint-disable-next-line max-depth
           if (formItems?.length) {
             const { items: layoutManagerItems } = layoutManager.option();
 
@@ -1300,7 +1296,6 @@ class Form extends Widget<FormProperties> {
     return result;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getItemPath(nameParts: string[]): string {
     let itemPath = nameParts[0];
 
@@ -1415,7 +1410,6 @@ class Form extends Widget<FormProperties> {
     return resultItem;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getFieldParts(field: string): {
     fieldName: string;
     fieldPath: string[];
@@ -1466,12 +1460,14 @@ class Form extends Widget<FormProperties> {
         if (!path.length) {
           result = this._getItemByField(fieldName, item[subItemsField]);
 
+          // eslint-disable-next-line max-depth
           if (result) {
             break;
           }
         }
 
         if (!isGroupWithName || (isGroupWithName && nameWithoutSpaces === pathNode)) {
+          // eslint-disable-next-line max-depth
           if (path.length) {
             result = this._searchItemInEverySubItem(path, fieldName, item[subItemsField]);
           }
@@ -1484,7 +1480,6 @@ class Form extends Widget<FormProperties> {
     return result;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getSubItemField(itemType: FormItemType | undefined): 'tabs' | 'items' {
     return itemType === 'tabbed' ? 'tabs' : 'items';
   }
@@ -1510,7 +1505,6 @@ class Form extends Widget<FormProperties> {
     return result;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _changeItemOption(item: Item, option: string, value: unknown): void {
     if (isObject(item)) {
       item[option] = value;
@@ -1739,6 +1733,7 @@ class Form extends Widget<FormProperties> {
                 allowUpdateItems = true;
               }
             });
+            // eslint-disable-next-line max-depth
             if (allowUpdateItems) {
               this.option('items', generatedItems);
             }

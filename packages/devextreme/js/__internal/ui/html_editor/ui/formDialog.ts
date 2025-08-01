@@ -8,7 +8,7 @@ import Form from '@js/ui/form';
 import type { InitializedEvent, Properties as PopupProperties } from '@js/ui/popup';
 import type Popup from '@js/ui/popup';
 import { current, isFluent, isMaterialBased } from '@js/ui/themes';
-import type { FormProperties } from '@ts/ui/form/m_form';
+import type { FormProperties } from '@ts/ui/form/form';
 
 import BaseDialog from './m_baseDialog';
 

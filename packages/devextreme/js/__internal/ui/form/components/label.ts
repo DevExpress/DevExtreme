@@ -8,10 +8,10 @@ import {
   FIELD_ITEM_LABEL_CLASS,
   FIELD_ITEM_LABEL_CONTENT_CLASS,
 } from '@ts/ui/form/constants';
-import type Form from '@ts/ui/form/m_form';
-import type LayoutManager from '@ts/ui/form/m_form.layout_manager';
-import type { LabelMarkOptions } from '@ts/ui/form/m_form.layout_manager.utils';
-import { getLabelMarkText } from '@ts/ui/form/m_form.layout_manager.utils';
+import type Form from '@ts/ui/form/form';
+import type LayoutManager from '@ts/ui/form/form.layout_manager';
+import type { LabelMarkOptions } from '@ts/ui/form/form.layout_manager.utils';
+import { getLabelMarkText } from '@ts/ui/form/form.layout_manager.utils';
 
 // TODO: exported for tests only
 export const GET_LABEL_WIDTH_BY_TEXT_CLASS = 'dx-layout-manager-hidden-label';
