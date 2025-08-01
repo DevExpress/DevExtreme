@@ -5,6 +5,7 @@ import { pairToObject } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined, isString } from '@js/core/utils/type';
+import type { OverlayPosition } from '@ts/ui/overlay/m_overlay_position_controller';
 import { OverlayPositionController } from '@ts/ui/overlay/m_overlay_position_controller';
 import { borderWidthStyles } from '@ts/ui/resizable/utils';
 
@@ -42,8 +43,8 @@ class PopoverPositionController extends OverlayPositionController {
 
     this._properties = {
       ...this._properties,
-      shading,
       // @ts-expect-error todo
+      shading,
       target,
     };
 
@@ -55,6 +56,7 @@ class PopoverPositionController extends OverlayPositionController {
   }
 
   positionWrapper(): void {
+    // @ts-expect-error todo
     if (this._properties.shading) {
       this._$wrapper?.css({ top: 0, left: 0 });
     }
@@ -70,7 +72,7 @@ class PopoverPositionController extends OverlayPositionController {
   _renderBoundaryOffset(): void {}
 
   _getContainerPosition() {
-    // @ts-expect-error todo
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const offset = pairToObject(this._position?.offset || '');
     let { h: hOffset, v: vOffset } = offset;
     const isVerticalSide = this._isVerticalSide();
@@ -123,7 +125,7 @@ class PopoverPositionController extends OverlayPositionController {
     return horizontalWeight > verticalWeight ? at.h : at.v;
   }
 
-  _normalizePosition(positionProp) {
+  _normalizePosition(positionProp): OverlayPosition {
     const defaultPositionConfig = {
       // @ts-expect-error todo
       of: this._properties.target,
@@ -142,7 +144,7 @@ class PopoverPositionController extends OverlayPositionController {
     return resultPosition;
   }
 
-  _positionToObject(positionProp) {
+  _positionToObject(positionProp): OverlayPosition {
     if (isString(positionProp)) {
       return extend({}, POPOVER_POSITION_ALIASES[positionProp]);
     }

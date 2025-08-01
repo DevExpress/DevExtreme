@@ -31,7 +31,7 @@ type OverlayPositionAlignment =
   | 'left bottom'
   | 'left top';
 
-interface OverlayPosition {
+export interface OverlayPosition extends Partial<Coordinates> {
   my?: OverlayPositionAlignment;
   at?: OverlayPositionAlignment;
   of?: string | dxElementWrapper | Element;
@@ -39,9 +39,7 @@ interface OverlayPosition {
   boundaryOffset?: typeof OVERLAY_DEFAULT_BOUNDARY_OFFSET;
 }
 
-export type Position = OverlayPosition | OverlayPositionAlignment | Coordinates;
-
-export type NormalizedPosition = OverlayPosition & Partial<Coordinates>;
+export type Position = OverlayPosition | OverlayPositionAlignment;
 
 export interface ControllerOverlayElements {
   $root?: dxElementWrapper;
@@ -111,13 +109,13 @@ class OverlayPositionController<
 
   _shouldRenderContentInitialPosition?: boolean;
 
-  _visualPosition?: NormalizedPosition;
+  _visualPosition?: OverlayPosition;
 
-  _initialPosition?: NormalizedPosition;
+  _initialPosition?: OverlayPosition;
 
-  _previousVisualPosition?: NormalizedPosition;
+  _previousVisualPosition?: OverlayPosition;
 
-  _position?: NormalizedPosition;
+  _position?: OverlayPosition;
 
   constructor(params: PositionControllerConstructor<TProperties>) {
     const { properties, elements } = params;
@@ -153,7 +151,7 @@ class OverlayPositionController<
     return this._$visualContainer;
   }
 
-  get position(): Position | undefined {
+  get position(): OverlayPosition | undefined {
     return this._position;
   }
 
@@ -271,7 +269,7 @@ class OverlayPositionController<
     const newPosition = this._visualPosition;
 
     const isTopEqual = previousPosition?.top === newPosition?.top;
-    const isLeftEqual = previousPosition?.left !== newPosition?.left;
+    const isLeftEqual = previousPosition?.left === newPosition?.left;
 
     const isVisualPositionChanged = !(isTopEqual && isLeftEqual);
 
@@ -289,9 +287,10 @@ class OverlayPositionController<
   }
 
   _renderBoundaryOffset(): void {
-    const boundaryOffset = this._position?.boundaryOffset ?? OVERLAY_DEFAULT_BOUNDARY_OFFSET;
+    const boundaryOffset = this._position?.boundaryOffset
+      ?? OVERLAY_DEFAULT_BOUNDARY_OFFSET;
 
-    if (!boundaryOffset || !(boundaryOffset.v && boundaryOffset.h)) {
+    if (!(boundaryOffset?.v && boundaryOffset?.h)) {
       return;
     }
 
@@ -320,17 +319,19 @@ class OverlayPositionController<
     return $(window);
   }
 
-  _normalizePosition(positionProp?: Position): NormalizedPosition {
-    const defaultConfiguration = {
+  _normalizePosition(position?: Position): OverlayPosition {
+    const defaultConfiguration: OverlayPosition = {
       boundaryOffset: OVERLAY_DEFAULT_BOUNDARY_OFFSET,
     };
 
-    if (isDefined(positionProp)) {
-      const configuration: NormalizedPosition = extend(
+    if (isDefined(position)) {
+      const positionObject = this._positionToObject(position);
+
+      const configuration: OverlayPosition = extend(
         true,
         {},
         defaultConfiguration,
-        this._positionToObject(positionProp),
+        positionObject,
       );
 
       return configuration;
@@ -340,9 +341,9 @@ class OverlayPositionController<
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _positionToObject(position: Position): NormalizedPosition {
+  _positionToObject(position: Position): OverlayPosition {
     if (isString(position)) {
-      const configuration: NormalizedPosition = {
+      const configuration: OverlayPosition = {
         ...OVERLAY_POSITION_ALIASES[position],
       };
 
