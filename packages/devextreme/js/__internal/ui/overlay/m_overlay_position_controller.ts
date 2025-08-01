@@ -19,7 +19,7 @@ import type {
 
 import windowUtils from '../../core/utils/m_window';
 
-type OverlayPositionAlignment =
+export type OverlayPositionAlignment =
   | 'top center'
   | 'bottom center'
   | 'right center'
@@ -69,23 +69,45 @@ export interface PositionControllerConstructor<
   elements: TElements;
 }
 
-// type Props = Partial<OverlayPositionControllerConstructor> & {
-//   target?: dxElementWrapper; // Move to Popover
-//   shading?: unknown; // Move to Popover
-// };
-
 const window = windowUtils.getWindow();
 
 const OVERLAY_POSITION_ALIASES: Record<PositionAlignment, OverlayPosition> = {
-  top: { my: 'top center', at: 'top center' },
-  bottom: { my: 'bottom center', at: 'bottom center' },
-  right: { my: 'right center', at: 'right center' },
-  left: { my: 'left center', at: 'left center' },
-  center: { my: 'center', at: 'center' },
-  'right bottom': { my: 'right bottom', at: 'right bottom' },
-  'right top': { my: 'right top', at: 'right top' },
-  'left bottom': { my: 'left bottom', at: 'left bottom' },
-  'left top': { my: 'left top', at: 'left top' },
+  top: {
+    my: 'top center',
+    at: 'top center',
+  },
+  bottom: {
+    my: 'bottom center',
+    at: 'bottom center',
+  },
+  right: {
+    my: 'right center',
+    at: 'right center',
+  },
+  left: {
+    my: 'left center',
+    at: 'left center',
+  },
+  center: {
+    my: 'center',
+    at: 'center',
+  },
+  'right bottom': {
+    my: 'right bottom',
+    at: 'right bottom',
+  },
+  'right top': {
+    my: 'right top',
+    at: 'right top',
+  },
+  'left bottom': {
+    my: 'left bottom',
+    at: 'left bottom',
+  },
+  'left top': {
+    my: 'left top',
+    at: 'left top',
+  },
 };
 
 const OVERLAY_DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
@@ -93,6 +115,7 @@ const OVERLAY_DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
 class OverlayPositionController<
   TProperties extends BaseControllerProperties = BaseControllerProperties,
   TElements extends ControllerOverlayElements = ControllerOverlayElements,
+  TPosition = Position,
 > {
   _properties: ControllerProperties<TProperties>;
 
@@ -164,7 +187,7 @@ class OverlayPositionController<
     this._properties.restorePosition = restorePosition;
   }
 
-  updatePosition(position?: Position): void {
+  updatePosition(position?: TPosition): void {
     this._properties.position = position;
     this._position = this._normalizePosition(position);
 
@@ -319,7 +342,7 @@ class OverlayPositionController<
     return $(window);
   }
 
-  _normalizePosition(position?: Position): OverlayPosition {
+  _normalizePosition(position?: TPosition): OverlayPosition {
     const defaultConfiguration: OverlayPosition = {
       boundaryOffset: OVERLAY_DEFAULT_BOUNDARY_OFFSET,
     };
@@ -341,16 +364,16 @@ class OverlayPositionController<
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _positionToObject(position: Position): OverlayPosition {
+  _positionToObject(position: TPosition): OverlayPosition {
     if (isString(position)) {
       const configuration: OverlayPosition = {
-        ...OVERLAY_POSITION_ALIASES[position],
+        ...OVERLAY_POSITION_ALIASES[position as OverlayPositionAlignment],
       };
 
       return configuration;
     }
 
-    return position;
+    return position as OverlayPosition;
   }
 }
 

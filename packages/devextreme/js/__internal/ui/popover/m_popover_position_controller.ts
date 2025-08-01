@@ -1,13 +1,43 @@
+import type {
+  Position as CommonPosition,
+} from '@js/common';
 import positionUtils from '@js/common/core/animation/position';
 import type { dxElementWrapper } from '@js/core/renderer';
-// @ts-expect-error
 import { pairToObject } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined, isString } from '@js/core/utils/type';
-import type { OverlayPosition } from '@ts/ui/overlay/m_overlay_position_controller';
+import type {
+  BaseControllerProperties,
+  ControllerOverlayElements,
+  OverlayPosition,
+  PositionControllerConstructor,
+} from '@ts/ui/overlay/m_overlay_position_controller';
 import { OverlayPositionController } from '@ts/ui/overlay/m_overlay_position_controller';
+import type { PopoverProperties } from '@ts/ui/popover/m_popover';
 import { borderWidthStyles } from '@ts/ui/resizable/utils';
+
+interface PopoverControllerElements extends ControllerOverlayElements {
+  $arrow?: dxElementWrapper;
+}
+
+type Collision = 'fit flip' | 'flip fit';
+
+export interface PopoverControllerProperties extends BaseControllerProperties {
+  target?: PopoverProperties['target'];
+  shading?: PopoverProperties['shading'];
+}
+
+export interface PopoverPosition extends OverlayPosition {
+  collision?: Collision;
+}
+
+export type Position = PopoverPosition | CommonPosition;
+
+export type PopoverPositionControllerConstructor<
+  TProperties extends PopoverControllerProperties = PopoverControllerProperties,
+  TElements extends PopoverControllerElements = PopoverControllerElements,
+> = PositionControllerConstructor<TProperties, TElements>;
 
 const WEIGHT_OF_SIDES = {
   left: -1,
@@ -17,33 +47,60 @@ const WEIGHT_OF_SIDES = {
   bottom: 1,
 };
 
-const POPOVER_POSITION_ALIASES = {
-  // NOTE: public API
-  top: { my: 'bottom center', at: 'top center', collision: 'fit flip' },
-  bottom: { my: 'top center', at: 'bottom center', collision: 'fit flip' },
-  right: { my: 'left center', at: 'right center', collision: 'flip fit' },
-  left: { my: 'right center', at: 'left center', collision: 'flip fit' },
+// NOTE: public API
+const POPOVER_POSITION_ALIASES: Record<CommonPosition, PopoverPosition> = {
+  top: {
+    my: 'bottom center',
+    at: 'top center',
+    collision: 'fit flip',
+  },
+  bottom: {
+    my: 'top center',
+    at: 'bottom center',
+    collision: 'fit flip',
+  },
+  right: {
+    my: 'left center',
+    at: 'right center',
+    collision: 'flip fit',
+  },
+  left: {
+    my: 'right center',
+    at: 'left center',
+    collision: 'flip fit',
+  },
 };
 
 const POPOVER_DEFAULT_BOUNDARY_OFFSET = { h: 10, v: 10 };
 
-class PopoverPositionController extends OverlayPositionController {
-  _positionSide?: any;
+const isCommonPosition = (
+  position: unknown,
+): position is CommonPosition => isString(position);
 
-  _$arrow?: dxElementWrapper;
+class PopoverPositionController<
+  TProperties extends PopoverControllerProperties = PopoverControllerProperties,
+  TElements extends PopoverControllerElements = PopoverControllerElements,
+  TPosition = Position,
+> extends OverlayPositionController<
+  TProperties,
+  TElements,
+  TPosition
+> {
+  _positionSide?: CommonPosition;
 
-  constructor({
-    shading,
-    target,
-    $arrow,
-    ...args
-  }) {
-    // @ts-expect-error todo
-    super(args);
+  _$arrow?: TElements['$arrow'];
+
+  constructor(params: PopoverPositionControllerConstructor<TProperties, TElements>) {
+    super(params);
+
+    const superProperties = this._properties;
+
+    const { properties, elements } = params;
+    const { shading, target } = properties;
+    const { $arrow } = elements;
 
     this._properties = {
-      ...this._properties,
-      // @ts-expect-error todo
+      ...superProperties,
       shading,
       target,
     };
@@ -56,47 +113,60 @@ class PopoverPositionController extends OverlayPositionController {
   }
 
   positionWrapper(): void {
-    // @ts-expect-error todo
     if (this._properties.shading) {
       this._$wrapper?.css({ top: 0, left: 0 });
     }
   }
 
-  updateTarget(target): void {
-    // @ts-expect-error todo
+  updateTarget(target: PopoverControllerProperties['target']): void {
     this._properties.target = target;
 
     this.updatePosition(this._properties.position);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _renderBoundaryOffset(): void {}
 
-  _getContainerPosition() {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const offset = pairToObject(this._position?.offset || '');
+  _getContainerPosition(): PopoverPosition {
+    const offset = pairToObject(this._position?.offset ?? '');
+
     let { h: hOffset, v: vOffset } = offset;
+
     const isVerticalSide = this._isVerticalSide();
     const isHorizontalSide = this._isHorizontalSide();
 
     if (isVerticalSide || isHorizontalSide) {
       const isPopoverInside = this._isPopoverInside();
-      const sign = (isPopoverInside ? -1 : 1) * WEIGHT_OF_SIDES[this._positionSide];
+
+      const weightOfSide = this._positionSide
+        ? WEIGHT_OF_SIDES[this._positionSide]
+        : WEIGHT_OF_SIDES.center;
+
+      const sign = (isPopoverInside ? -1 : 1) * weightOfSide;
+
       const arrowSize = isVerticalSide ? getHeight(this._$arrow) : getWidth(this._$arrow);
       const arrowSizeCorrection = this._getContentBorderWidth(this._positionSide);
       const arrowOffset = sign * (arrowSize - arrowSizeCorrection);
 
-      isVerticalSide ? vOffset += arrowOffset : hOffset += arrowOffset;
+      if (isVerticalSide) {
+        vOffset += arrowOffset;
+      } else {
+        hOffset += arrowOffset;
+      }
     }
 
-    return extend({}, this._position, { offset: `${hOffset} ${vOffset}` });
+    const position: PopoverPosition = {
+      ...this._position,
+      offset: `${hOffset} ${vOffset}`,
+    };
+
+    return position;
   }
 
-  _getContentBorderWidth(side) {
-    const borderWidth = this._$content?.css(borderWidthStyles[side]);
+  _getContentBorderWidth(side?: CommonPosition): number {
+    const borderWidth = side ? this._$content?.css(borderWidthStyles[side]) ?? '' : '';
 
-    // @ts-expect-error
-    // eslint-disable-next-line radix
-    return parseInt(borderWidth) || 0;
+    return parseInt(borderWidth, 10) || 0;
   }
 
   _isPopoverInside(): boolean {
@@ -106,35 +176,43 @@ class PopoverPositionController extends OverlayPositionController {
     return my.h === at.h && my.v === at.v;
   }
 
-  _isVerticalSide(side = this._positionSide) {
+  _isVerticalSide(side = this._positionSide): boolean {
     return side === 'top' || side === 'bottom';
   }
 
-  _isHorizontalSide(side = this._positionSide) {
+  _isHorizontalSide(side = this._positionSide): boolean {
     return side === 'left' || side === 'right';
   }
 
-  _getDisplaySide(position) {
+  // eslint-disable-next-line class-methods-use-this
+  _getDisplaySide(position: PopoverPosition): CommonPosition {
     const my = positionUtils.setup.normalizeAlign(position.my);
     const at = positionUtils.setup.normalizeAlign(position.at);
 
-    const weightSign = WEIGHT_OF_SIDES[my.h] === WEIGHT_OF_SIDES[at.h] && WEIGHT_OF_SIDES[my.v] === WEIGHT_OF_SIDES[at.v] ? -1 : 1;
+    const weightSign = WEIGHT_OF_SIDES[my.h] === WEIGHT_OF_SIDES[at.h]
+      && WEIGHT_OF_SIDES[my.v] === WEIGHT_OF_SIDES[at.v] ? -1 : 1;
+
     const horizontalWeight = Math.abs(WEIGHT_OF_SIDES[my.h] - weightSign * WEIGHT_OF_SIDES[at.h]);
     const verticalWeight = Math.abs(WEIGHT_OF_SIDES[my.v] - weightSign * WEIGHT_OF_SIDES[at.v]);
 
-    return horizontalWeight > verticalWeight ? at.h : at.v;
+    return (horizontalWeight > verticalWeight ? at.h : at.v) as CommonPosition;
   }
 
-  _normalizePosition(positionProp): OverlayPosition {
-    const defaultPositionConfig = {
-      // @ts-expect-error todo
+  _normalizePosition(positionProp: TPosition): PopoverPosition {
+    const defaultPositionConfig: PopoverPosition = {
       of: this._properties.target,
       boundaryOffset: POPOVER_DEFAULT_BOUNDARY_OFFSET,
     };
 
-    let resultPosition;
+    let resultPosition: PopoverPosition = defaultPositionConfig;
+
     if (isDefined(positionProp)) {
-      resultPosition = extend(true, {}, defaultPositionConfig, this._positionToObject(positionProp));
+      resultPosition = extend(
+        true,
+        {},
+        defaultPositionConfig,
+        this._positionToObject(positionProp),
+      );
     } else {
       resultPosition = defaultPositionConfig;
     }
@@ -144,12 +222,17 @@ class PopoverPositionController extends OverlayPositionController {
     return resultPosition;
   }
 
-  _positionToObject(positionProp): OverlayPosition {
-    if (isString(positionProp)) {
-      return extend({}, POPOVER_POSITION_ALIASES[positionProp]);
+  // eslint-disable-next-line class-methods-use-this
+  _positionToObject(position: TPosition): PopoverPosition {
+    if (isCommonPosition(position)) {
+      const configuration = {
+        ...POPOVER_POSITION_ALIASES[position],
+      };
+
+      return configuration;
     }
 
-    return positionProp;
+    return position as PopoverPosition;
   }
 }
 
