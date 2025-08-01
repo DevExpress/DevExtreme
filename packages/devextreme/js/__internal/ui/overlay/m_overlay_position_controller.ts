@@ -310,13 +310,16 @@ class OverlayPositionController<
   }
 
   _renderBoundaryOffset(): void {
-    const boundaryOffset = this._position?.boundaryOffset
-      ?? OVERLAY_DEFAULT_BOUNDARY_OFFSET;
+    const boundaryOffset = this._position ?? { boundaryOffset: OVERLAY_DEFAULT_BOUNDARY_OFFSET };
 
-    if (!(boundaryOffset?.v && boundaryOffset?.h)) {
-      return;
-    }
+    // const boundaryOffset = this._position?.boundaryOffset
+    //   ?? OVERLAY_DEFAULT_BOUNDARY_OFFSET;
 
+    // if (!(boundaryOffset?.v && boundaryOffset?.h)) {
+    //   return;
+    // }
+
+    // @ts-expect-error v and h
     this._$content?.css('margin', `${boundaryOffset.v}px ${boundaryOffset.h}px`);
   }
 

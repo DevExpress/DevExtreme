@@ -378,11 +378,14 @@ TProperties extends PopoverProperties = PopoverProperties,
     const isInside = this._isPopoverInside();
 
     const condition = isVertical || isHorizontal || isInside;
-
     const positionSide = this._positionController._positionSide;
 
     if (condition && positionSide) {
       return POSITION_FLIP_MAP[positionSide];
+    }
+
+    if (positionSide) {
+      return positionSide;
     }
 
     return undefined;
@@ -403,6 +406,7 @@ TProperties extends PopoverProperties = PopoverProperties,
   _renderArrowPosition(side) {
     const arrowRect = getBoundingRect(this._$arrow.get(0));
     const arrowFlip = -(this._isVerticalSide(side) ? arrowRect.height : arrowRect.width);
+
     this._$arrow.css(POSITION_FLIP_MAP[side], arrowFlip);
 
     const axis = this._isVerticalSide(side) ? 'left' : 'top';
@@ -423,8 +427,11 @@ TProperties extends PopoverProperties = PopoverProperties,
 
     const min = Math.max(contentLocation, targetLocation);
     const max = Math.min(contentLocation + contentSize, targetLocation + targetSize);
+
     let arrowLocation;
+
     const { arrowPosition } = this.option();
+
     if (arrowPosition === 'start') {
       arrowLocation = min - contentLocation;
     } else if (arrowPosition === 'end') {
@@ -434,12 +441,15 @@ TProperties extends PopoverProperties = PopoverProperties,
     }
 
     const borderWidth = this._positionController._getContentBorderWidth(side);
+
     const { arrowOffset } = this.option();
+
     const finalArrowLocation = fitIntoRange(
       arrowLocation - borderWidth + arrowOffset,
       borderWidth,
       contentSize - arrowSize - borderWidth * 2,
     );
+
     this._$arrow.css(axis, finalArrowLocation);
   }
 
