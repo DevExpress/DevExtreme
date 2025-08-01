@@ -13,7 +13,6 @@ import { inputType } from '@js/core/utils/support';
 import { isDate as isDateType, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import type {
-  DateLike,
   DatePickerType, DateType, Properties,
 } from '@js/ui/date_box';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -152,29 +151,8 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     ]);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  _sanitizeValue(value?: DateLike): DateLike | undefined {
-    if (value === '') {
-      return null;
-    }
-
-    return value;
-  }
-
-  _sanitizeValueOption(args: OptionChanged<DateBoxBaseProperties>):
-  OptionChanged<DateBoxBaseProperties> {
-    const sanitizedArgs = { ...args };
-    const sanitizedValue = this._sanitizeValue(sanitizedArgs.value);
-
-    sanitizedArgs.value = sanitizedValue;
-
-    this.option({ value: sanitizedValue });
-
-    return sanitizedArgs;
-  }
-
   _initOptions(options: DateBoxBaseProperties): void {
-    this._userOptions = { ...options, value: this._sanitizeValue(options.value) };
+    this._userOptions = extend({}, options);
     super._initOptions(options);
     this._updatePickerOptions();
   }
@@ -773,9 +751,6 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
       case 'showAnalogClock':
       case '_showValidationIcon':
         break;
-      case 'value':
-        super._optionChanged.apply(this, [this._sanitizeValueOption(args)]);
-        break;
       default:
         // @ts-expect-error ts-error
         super._optionChanged.apply(this, arguments);
@@ -783,7 +758,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
   }
 
   _getSerializationFormat() {
-    const value = this.option('value');
+    const { value } = this.option();
 
     if (this.option('dateSerializationFormat') && config().forceIsoDateParsing) {
       return this.option('dateSerializationFormat');
@@ -793,7 +768,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
       return 'number';
     }
 
-    if (!isString(value)) {
+    if (!isString(value) || value === '') {
       return;
     }
 

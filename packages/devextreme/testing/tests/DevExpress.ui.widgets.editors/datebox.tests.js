@@ -2230,14 +2230,14 @@ QUnit.module('datebox w/ calendar', {
         assert.deepEqual(this.fixture.input.val(), dateLocalization.format(date, this.fixture.format));
     });
 
-    QUnit.test('DateBox must pass value to calendar correctly if value is empty string', function(assert) {
+    QUnit.test('DateBox should pass empty string value to calendar if value is empty string', function(assert) {
         this.reinitFixture({
             value: '',
             pickerType: 'calendar',
             opened: true
         });
 
-        assert.equal(this.fixture.dateBox._strategy._widget.option('value'), null, 'value is correctly');
+        assert.equal(this.fixture.dateBox._strategy._widget.option('value'), '', 'value is equal to empty string');
     });
 
     QUnit.test('DateBox must show the calendar with a proper date selected', function(assert) {
@@ -6190,17 +6190,6 @@ QUnit.module('DateBox number and string value support', {
                 assert.ok(false, `error thrown: ${e.message}`);
             }
         });
-    });
-
-    QUnit.test('should convert empty string initial value to null when datetime type used (T1301310)', function(assert) {
-        const dateBox = $('#dateBox').dxDateBox({
-            value: '',
-            type: 'datetime',
-        }).dxDateBox('instance');
-
-        const processedValue = dateBox.option('value');
-
-        assert.strictEqual(processedValue, null, 'empty string value is converted to null');
     });
 });
 
