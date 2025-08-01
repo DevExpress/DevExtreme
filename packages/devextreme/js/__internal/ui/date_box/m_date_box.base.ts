@@ -758,7 +758,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
   }
 
   _getSerializationFormat() {
-    const value = this.option('value');
+    const { value } = this.option();
 
     if (this.option('dateSerializationFormat') && config().forceIsoDateParsing) {
       return this.option('dateSerializationFormat');
@@ -768,7 +768,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
       return 'number';
     }
 
-    if (!isString(value)) {
+    if (!isString(value) || value === '') {
       return;
     }
 
