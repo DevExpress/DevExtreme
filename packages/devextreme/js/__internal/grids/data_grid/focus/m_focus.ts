@@ -114,7 +114,9 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
       filter: that._concatWithCombinedFilter(filter),
       group,
     }).done((data) => {
-      if (!data || data.length === 0 || !isDefined(data[0].key) || data[0].key === -1) {
+      const isDataEmpty = !isDefined(data) || data.length === 0;
+
+      if (isDataEmpty) {
         return deferred.resolve(-1).promise();
       }
 
