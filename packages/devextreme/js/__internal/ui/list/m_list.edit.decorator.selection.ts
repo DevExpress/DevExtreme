@@ -6,10 +6,13 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import CheckBox from '@js/ui/check_box';
-import RadioButton from '@js/ui/radio_group/radio_button';
+import type { DxEvent } from '@js/events';
 import errors from '@js/ui/widget/ui.errors';
+import CheckBox from '@ts/ui/check_box/generated_wrapper';
+import type { ValueChangedEvent } from '@ts/ui/editor/editor';
+import RadioButton from '@ts/ui/radio_group/m_radio_button';
 
+import type { BagConfig } from './m_list.edit.decorator';
 import EditDecorator from './m_list.edit.decorator';
 import { register as registerDecorator } from './m_list.edit.decorator_registry';
 
@@ -34,19 +37,18 @@ class EditDecoratorSelection extends EditDecorator {
 
   _singleStrategy?: boolean;
 
-  _containerClass?: string;
+  _containerClass!: string;
 
   _controlClass!: string;
 
-  _controlWidget?: any;
+  _controlWidget!: typeof RadioButton | typeof CheckBox;
 
-  _selectAllCheckBox?: any;
+  _selectAllCheckBox?: CheckBox;
 
   _init(): void {
-    // @ts-expect-error ts-error
-    super._init.apply(this, arguments);
+    super._init();
 
-    const selectionMode = this._list.option('selectionMode');
+    const { selectionMode } = this._list.option();
 
     this._singleStrategy = selectionMode === 'single';
     this._containerClass = this._singleStrategy
@@ -59,20 +61,20 @@ class EditDecoratorSelection extends EditDecorator {
     this._list.$element().addClass(SELECT_DECORATOR_ENABLED_CLASS);
   }
 
-  beforeBag(config?): void {
-    const { $itemElement } = config;
-    const $container = config.$container.addClass(this._containerClass);
+  beforeBag(config?: BagConfig): void {
+    const { $itemElement = $() } = config ?? {};
+    const $container = config?.$container?.addClass(this._containerClass) ?? $();
 
     const $control = $('<div>')
       .addClass(this._controlClass)
       .appendTo($container);
     // eslint-disable-next-line no-new
-    new this._controlWidget($control, extend(this._commonOptions(), {
-      value: this._isSelected($itemElement),
+    new this._controlWidget($control.get(0), extend(this._commonOptions(), {
+      value: this._isSelected($itemElement.get(0)),
       elementAttr: { 'aria-label': messageLocalization.format('CheckState') },
       focusStateEnabled: false,
       hoverStateEnabled: false,
-      onValueChanged: ({ value, component, event }) => {
+      onValueChanged: ({ value, component, event }: ValueChangedEvent): void => {
         const isUiClick = !!event;
         if (isUiClick) {
           component._valueChangeEventInstance = undefined;
@@ -82,14 +84,13 @@ class EditDecoratorSelection extends EditDecorator {
     }));
   }
 
-  modifyElement(config): void {
-    // @ts-expect-error ts-error
-    super.modifyElement.apply(this, arguments);
+  modifyElement(config: BagConfig): void {
+    super.modifyElement(config);
 
     const { $itemElement } = config;
-    const control = this._controlWidget.getInstance($itemElement.find(`.${this._controlClass}`));
+    const control = this._controlWidget.getInstance($itemElement.find(`.${this._controlClass}`).get(0));
 
-    eventsEngine.on($itemElement, 'stateChanged', (e, state) => {
+    eventsEngine.on($itemElement, 'stateChanged', (_e: DxEvent, state: boolean): void => {
       control.option('value', state);
     });
   }
@@ -99,11 +100,12 @@ class EditDecoratorSelection extends EditDecorator {
       return;
     }
 
-    this._selectAllCheckBox.option('value', this._list.isSelectAll());
+    this._selectAllCheckBox?.option('value', this._list.isSelectAll());
   }
 
   afterRender(): void {
-    if (this._list.option('selectionMode') !== 'all') {
+    const { selectionMode } = this._list.option();
+    if (selectionMode !== 'all') {
       return;
     }
 
@@ -114,13 +116,14 @@ class EditDecoratorSelection extends EditDecorator {
     }
   }
 
-  handleKeyboardEvents(currentFocusedIndex, moveFocusUp) {
+  handleKeyboardEvents(currentFocusedIndex: number, moveFocusUp: boolean | undefined): boolean {
     const moveFocusDown = !moveFocusUp;
     const list = this._list;
     const $selectAll = this._$selectAll;
     const lastItemIndex = list._getLastItemIndex();
-    const isFocusOutOfList = moveFocusUp && currentFocusedIndex === 0
-              || moveFocusDown && currentFocusedIndex === lastItemIndex;
+    const isFocusOutOfList = (moveFocusUp && currentFocusedIndex === 0)
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+              || (moveFocusDown && currentFocusedIndex === lastItemIndex);
     const hasSelectAllItem = !!$selectAll;
 
     if (hasSelectAllItem && isFocusOutOfList) {
@@ -133,13 +136,13 @@ class EditDecoratorSelection extends EditDecorator {
     return false;
   }
 
-  // @ts-expect-error
-  handleEnterPressing(e) {
+  handleEnterPressing(e: DxEvent<KeyboardEvent>): boolean {
     if (this._$selectAll?.hasClass(FOCUSED_STATE_CLASS)) {
       e.target = this._$selectAll.get(0);
       this._selectAllHandler(e);
       return true;
     }
+    return false;
   }
 
   _renderSelectAll(): void {
@@ -163,8 +166,10 @@ class EditDecoratorSelection extends EditDecorator {
 
     this._selectAllCheckBox.registerKeyHandler('downArrow', downArrowHandler);
 
+    const { selectAllText = '' } = this._list.option();
+
     $('<div>').addClass(SELECT_DECORATOR_SELECT_ALL_LABEL_CLASS)
-      .text(this._list.option('selectAllText'))
+      .text(selectAllText)
       .appendTo(this._$selectAll);
 
     this._list.itemsContainer().prepend(this._$selectAll);
@@ -175,7 +180,7 @@ class EditDecoratorSelection extends EditDecorator {
   }
 
   _attachSelectAllHandler(): void {
-    this._selectAllCheckBox.option('onValueChanged', ({ value, event, component }) => {
+    this._selectAllCheckBox?.option('onValueChanged', ({ value, event, component }: ValueChangedEvent): void => {
       const isUiClick = !!event;
       if (isUiClick) {
         component._setOptionWithoutOptionChange('value', !value);
@@ -195,24 +200,25 @@ class EditDecoratorSelection extends EditDecorator {
       return;
     }
 
-    const { value } = this._selectAllCheckBox.option();
+    const { value } = this._selectAllCheckBox?.option() ?? {};
 
     const indeterminate = value === undefined;
+    const checkedState = value ? 'checked' : 'notChecked';
 
-    const stateVariableName = indeterminate ? 'indeterminate' : value ? 'checked' : 'notChecked';
+    const stateVariableName = indeterminate ? 'indeterminate' : checkedState;
 
     const label = `${messageLocalization.format('dxList-selectAll')}, ${messageLocalization.format(`dxList-selectAll-${stateVariableName}`)}`;
     // @ts-expect-error ts-error
     this._$selectAll.attr({ 'aria-label': label });
   }
 
-  _selectAllHandler(event): DeferredObj<unknown> {
+  _selectAllHandler(event: DxEvent<KeyboardEvent>): DeferredObj<unknown> {
     event.stopPropagation();
     this._list._saveSelectionChangeEvent(event);
 
-    const { value } = this._selectAllCheckBox.option();
+    const { value } = this._selectAllCheckBox?.option() ?? {};
 
-    let selectionDeferred;
+    let selectionDeferred = Deferred();
     if (value !== true) {
       selectionDeferred = this._selectAllItems();
     } else {
@@ -228,34 +234,39 @@ class EditDecoratorSelection extends EditDecorator {
     const list = this._list;
     const dataController = list._dataController;
 
-    if (list.option('selectAllMode') === 'allPages' && list.option('grouped') && !dataController.group()) {
+    const { selectAllMode, grouped } = list.option();
+
+    if (selectAllMode === 'allPages' && grouped && !dataController.group()) {
       errors.log('W1010');
       return false;
     }
     return true;
   }
 
-  _selectAllItems() {
+  _selectAllItems(): DeferredObj<unknown> {
     if (!this._checkSelectAllCapability()) return Deferred().resolve();
 
-    return this._list._selection.selectAll(this._list.option('selectAllMode') === 'page');
+    const { selectAllMode } = this._list.option();
+
+    return this._list._selection.selectAll(selectAllMode === 'page');
   }
 
-  _unselectAllItems() {
+  _unselectAllItems(): DeferredObj<unknown> {
     if (!this._checkSelectAllCapability()) return Deferred().resolve();
 
-    return this._list._selection.deselectAll(this._list.option('selectAllMode') === 'page');
+    const { selectAllMode } = this._list.option();
+
+    return this._list._selection.deselectAll(selectAllMode === 'page');
   }
 
-  _isSelected($itemElement) {
-    return this._list.isItemSelected($itemElement);
+  _isSelected(itemElement: Element): boolean {
+    return this._list.isItemSelected(itemElement);
   }
 
   dispose(): void {
     this._disposeSelectAll();
     this._list.$element().removeClass(SELECT_DECORATOR_ENABLED_CLASS);
-    // @ts-expect-error ts-error
-    super.dispose.apply(this, arguments);
+    super.dispose();
   }
 
   _disposeSelectAll(): void {

@@ -1,7 +1,10 @@
+import type { EventInfo } from '@js/common/core/events';
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
+import type { ItemClickEvent } from '@js/ui/list';
+import type { PointerLikeEvent } from '@ts/ui/overlay/overlay';
 import Overlay from '@ts/ui/overlay/overlay';
 
 import { ListBase } from './m_list.base';
@@ -25,24 +28,25 @@ class EditDecoratorContext extends EditDecorator {
     this._menu = this._renderOverlay($menu);
   }
 
-  _renderOverlay($element): Overlay {
+  _renderOverlay($element: dxElementWrapper): Overlay {
     return this._list._createComponent($element, Overlay, {
       shading: false,
       deferRendering: true,
       hideOnParentScroll: true,
-      hideOnOutsideClick(e) {
-        return !$(e.target).closest(`.${CONTEXTMENU_CLASS}`).length;
-      },
+      hideOnOutsideClick: (e: PointerLikeEvent): boolean => !$(e.target).closest(`.${CONTEXTMENU_CLASS}`).length,
       animation: {
         show: {
           type: 'slide',
           duration: 300,
           from: {
+            // @ts-expect-error ts-error
             height: 0,
             opacity: 1,
           },
           to: {
-            height: function () { return getOuterHeight(this._$menuList); }.bind(this),
+            // @ts-expect-error ts-error
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            height: () => getOuterHeight(this._$menuList),
             opacity: 1,
           },
         },
@@ -58,16 +62,21 @@ class EditDecoratorContext extends EditDecorator {
         },
       },
       _ignoreFunctionValueDeprecation: true,
-      height: function () { return this._$menuList ? getOuterHeight(this._$menuList) : 0; }.bind(this),
-      width: function () { return getOuterWidth(this._list.$element()); }.bind(this),
+      // @ts-expect-error ts-error
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      height: () => (this._$menuList ? getOuterHeight(this._$menuList) : 0),
+      // @ts-expect-error ts-error
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      width: () => getOuterWidth(this._list.$element()),
+      // @ts-expect-error ts-error
       onContentReady: this._renderMenuContent.bind(this),
     });
   }
 
-  _renderMenuContent(e): void {
+  _renderMenuContent(e: EventInfo<Overlay>): void {
     const $overlayContent = e.component.$content();
 
-    const { menuItems, allowItemDeleting } = this._list.option();
+    const { menuItems = [], allowItemDeleting } = this._list.option();
     const items = menuItems.slice();
 
     if (allowItemDeleting) {
@@ -82,6 +91,7 @@ class EditDecoratorContext extends EditDecorator {
       items,
       onItemClick: this._menuItemClickHandler.bind(this),
       height: 'auto',
+      // @ts-expect-error ts-error
       integrationOptions: {},
     });
 
@@ -89,10 +99,11 @@ class EditDecoratorContext extends EditDecorator {
     $overlayContent.append(this._$menuList);
   }
 
-  _menuItemClickHandler(args): void {
+  _menuItemClickHandler(args: ItemClickEvent): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._menu.hide();
     this._list._itemEventHandlerByHandler(
-      this._$itemWithMenu,
+      this._$itemWithMenu ?? $(),
       args.itemData.action,
       {},
       { excludeValidators: ['disabled', 'readOnly'] },
@@ -100,10 +111,11 @@ class EditDecoratorContext extends EditDecorator {
   }
 
   _deleteItem(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._list.deleteItem(this._$itemWithMenu);
   }
 
-  handleContextMenu($itemElement) {
+  handleContextMenu($itemElement: dxElementWrapper): boolean {
     this._$itemWithMenu = $itemElement;
 
     this._menu.option({
@@ -114,6 +126,7 @@ class EditDecoratorContext extends EditDecorator {
         collision: 'flip',
       },
     });
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._menu.show();
 
     return true;
@@ -123,8 +136,7 @@ class EditDecoratorContext extends EditDecorator {
     if (this._menu) {
       this._menu.$element().remove();
     }
-    // @ts-expect-error ts-error
-    super.dispose.apply(this, arguments);
+    super.dispose();
   }
 }
 

@@ -4,8 +4,11 @@ import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getOuterWidth, getWidth } from '@js/core/utils/size';
+import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
-import { isMaterialBased } from '@js/ui/themes';
+import { current, isMaterialBased } from '@js/ui/themes';
+import type { SwipeEndEvent } from '@ts/events/m_swipe';
+import type { BagConfig } from '@ts/ui/list/m_list.edit.decorator';
 
 import SwitchableEditDecorator from './m_list.edit.decorator.switchable';
 import { register as registerDecorator } from './m_list.edit.decorator_registry';
@@ -22,8 +25,7 @@ class SwitchableButtonEditDecorator extends SwitchableEditDecorator {
   _buttonContainerWidth!: number;
 
   _init(): void {
-    // @ts-expect-error ts-error
-    super._init.apply(this, arguments);
+    super._init();
 
     const $buttonContainer = $('<div>').addClass(SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS);
     const $buttonWrapper = $('<div>').addClass(SWITCHABLE_DELETE_BUTTON_WRAPPER_CLASS);
@@ -33,12 +35,11 @@ class SwitchableButtonEditDecorator extends SwitchableEditDecorator {
     this._list._createComponent($button, Button, {
       text: messageLocalization.format('dxListEditDecorator-delete'),
       type: 'danger',
-      // @ts-expect-error ts-error
-      stylingMode: isMaterialBased() ? 'text' : 'contained',
-      onClick: function (e) {
+      stylingMode: isMaterialBased(current()) ? 'text' : 'contained',
+      onClick: (e: ClickEvent): void => {
         this._deleteItem();
-        e.event.stopPropagation();
-      }.bind(this),
+        e.event?.stopPropagation();
+      },
       integrationOptions: {},
       elementAttr: {
         role: null,
@@ -54,49 +55,50 @@ class SwitchableButtonEditDecorator extends SwitchableEditDecorator {
     this._$buttonContainer = $buttonContainer;
   }
 
-  _enablePositioning($itemElement): void {
-    // @ts-expect-error ts-error
-    super._enablePositioning.apply(this, arguments);
-    // @ts-expect-error ts-error
-    fx.stop(this._$buttonContainer, true);
+  _enablePositioning($itemElement: dxElementWrapper): void {
+    super._enablePositioning($itemElement);
+    fx.stop(this._$buttonContainer.get(0), true);
     this._$buttonContainer.appendTo($itemElement);
   }
 
-  _disablePositioning(): void {
-    // @ts-expect-error ts-error
-    super._disablePositioning.apply(this, arguments);
+  _disablePositioning($itemElement?: dxElementWrapper): void {
+    if ($itemElement) {
+      super._disablePositioning($itemElement);
+    }
 
     this._$buttonContainer.detach();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  _animatePrepareDeleteReady() {
+  _animatePrepareDeleteReady(): Promise<void> {
     const rtl = this._isRtlEnabled();
     const listWidth = getWidth(this._list.$element());
     const buttonWidth = this._buttonWidth();
     const fromValue = rtl ? listWidth : -buttonWidth;
     const toValue = rtl ? listWidth - buttonWidth : 0;
-    // @ts-expect-error ts-error
-    return fx.animate(this._$buttonContainer, {
+    return fx.animate(this._$buttonContainer.get(0), {
+      // @ts-expect-error ts-error
       type: 'custom',
       duration: SWITCHABLE_DELETE_BUTTON_ANIMATION_DURATION,
+      // @ts-expect-error ts-error
       from: { right: fromValue },
+      // @ts-expect-error ts-error
       to: { right: toValue },
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-  _animateForgetDeleteReady() {
+  _animateForgetDeleteReady(): Promise<void> {
     const rtl = this._isRtlEnabled();
     const listWidth = getWidth(this._list.$element());
     const buttonWidth = this._buttonWidth();
     const fromValue = rtl ? listWidth - buttonWidth : 0;
     const toValue = rtl ? listWidth : -buttonWidth;
-    // @ts-expect-error ts-error
-    return fx.animate(this._$buttonContainer, {
+    return fx.animate(this._$buttonContainer.get(0), {
+      // @ts-expect-error ts-error
       type: 'custom',
       duration: SWITCHABLE_DELETE_BUTTON_ANIMATION_DURATION,
+      // @ts-expect-error ts-error
       from: { right: fromValue },
+      // @ts-expect-error ts-error
       to: { right: toValue },
     });
   }
@@ -112,8 +114,7 @@ class SwitchableButtonEditDecorator extends SwitchableEditDecorator {
     if (this._$buttonContainer) {
       this._$buttonContainer.remove();
     }
-    // @ts-expect-error ts-error
-    super.dispose.apply(this, arguments);
+    super.dispose();
   }
 }
 
@@ -121,18 +122,17 @@ const TOGGLE_DELETE_SWITCH_CONTAINER_CLASS = 'dx-list-toggle-delete-switch-conta
 const TOGGLE_DELETE_SWITCH_CLASS = 'dx-list-toggle-delete-switch';
 
 class SwitchableButtonToggleEditDecorator extends SwitchableButtonEditDecorator {
-  beforeBag(config) {
-    const { $itemElement } = config;
-    const { $container } = config;
+  beforeBag(config: BagConfig): void {
+    const { $itemElement, $container } = config;
 
     const $toggle = $('<div>').addClass(TOGGLE_DELETE_SWITCH_CLASS);
     this._list._createComponent($toggle, Button, {
       icon: 'toggle-delete',
-      onClick: function (e) {
-        fx.stop(this._$buttonContainer, false);
+      onClick: (e: ClickEvent): void => {
+        fx.stop(this._$buttonContainer.get(0), false);
         this._toggleDeleteReady($itemElement);
-        e.event.stopPropagation();
-      }.bind(this),
+        e.event?.stopPropagation();
+      },
       integrationOptions: {},
       elementAttr: {
         role: null,
@@ -141,8 +141,8 @@ class SwitchableButtonToggleEditDecorator extends SwitchableButtonEditDecorator 
       tabIndex: -1,
     });
 
-    $container.addClass(TOGGLE_DELETE_SWITCH_CONTAINER_CLASS);
-    $container.append($toggle);
+    $container?.addClass(TOGGLE_DELETE_SWITCH_CONTAINER_CLASS);
+    $container?.append($toggle);
   }
 }
 
@@ -158,10 +158,9 @@ class SwitchableButtonSlideEditDecorator extends SwitchableButtonEditDecorator {
     return true;
   }
 
-  _swipeEndHandler($itemElement, args) {
+  _swipeEndHandler($itemElement: dxElementWrapper, args: SwipeEndEvent['event']): boolean {
     if (args.targetOffset !== 0) {
-      // @ts-expect-error ts-error
-      fx.stop(this._$buttonContainer, false);
+      fx.stop(this._$buttonContainer.get(0), false);
       this._toggleDeleteReady($itemElement);
     }
 

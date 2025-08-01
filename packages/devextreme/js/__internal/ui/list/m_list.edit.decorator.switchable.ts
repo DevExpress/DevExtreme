@@ -1,12 +1,15 @@
+import type { Cancelable, NativeEventInfo } from '@js/common/core/events';
 import { active } from '@js/common/core/events/core/emitter.feedback';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
-import { addNamespace } from '@js/common/core/events/utils/index';
-import Class from '@js/core/class';
+import { addNamespace } from '@js/common/core/events/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { getOuterHeight, setHeight } from '@js/core/utils/size';
+import type { DxEvent } from '@js/events';
+import type { ScrollInfo } from '@js/ui/list';
+import type List from '@ts/ui/list/m_list.edit';
 
 import EditDecorator from './m_list.edit.decorator';
 
@@ -24,7 +27,7 @@ const SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS = 'dx-list-switchable-menu-i
 const SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS = 'dx-list-switchable-delete-item-content-shield';
 const SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS = 'dx-list-switchable-delete-button-container';
 
-class SwitchableEditDecorator extends EditDecorator {
+abstract class SwitchableEditDecorator extends EditDecorator {
   _$bottomShield!: dxElementWrapper;
 
   _$topShield!: dxElementWrapper;
@@ -57,7 +60,7 @@ class SwitchableEditDecorator extends EditDecorator {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  handleClick($itemElement, e): boolean {
+  handleClick(_$itemElement: dxElementWrapper, _e: DxEvent): boolean {
     return this._cancelDeleteReadyItem();
   }
 
@@ -70,28 +73,29 @@ class SwitchableEditDecorator extends EditDecorator {
     return true;
   }
 
-  _cancelDelete($itemElement): void {
+  _cancelDelete($itemElement: dxElementWrapper): void {
     this._toggleDeleteReady($itemElement, false);
   }
 
-  _toggleDeleteReady($itemElement, readyToDelete?): void {
-    if (readyToDelete === undefined) {
-      readyToDelete = !this._isReadyToDelete($itemElement);
-    }
+  _toggleDeleteReady($itemElement: dxElementWrapper, readyToDelete?: boolean): void {
+    const isReadyToDelete = readyToDelete ?? !this._isReadyToDelete($itemElement);
 
-    this._toggleShields($itemElement, readyToDelete);
-    this._toggleScrolling(readyToDelete);
-    this._cacheReadyToDeleteItem($itemElement, readyToDelete);
-    this._animateToggleDelete($itemElement, readyToDelete);
+    this._toggleShields($itemElement, isReadyToDelete);
+    this._toggleScrolling(isReadyToDelete);
+    this._cacheReadyToDeleteItem($itemElement, isReadyToDelete);
+    this._animateToggleDelete($itemElement, isReadyToDelete);
   }
 
-  _isReadyToDelete($itemElement) {
+  // eslint-disable-next-line class-methods-use-this
+  _isReadyToDelete($itemElement: dxElementWrapper): boolean {
     return $itemElement.hasClass(SWITCHABLE_DELETE_READY_CLASS);
   }
 
-  _toggleShields($itemElement, enabled) {
+  _toggleShields($itemElement: dxElementWrapper, enabled: boolean): void {
     this._list.$element().toggleClass(SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS, enabled);
+    // @ts-expect-error ts-error
     this._$topShield.toggle(enabled);
+    // @ts-expect-error ts-error
     this._$bottomShield.toggle(enabled);
     if (enabled) {
       this._updateShieldsHeight($itemElement);
@@ -100,12 +104,12 @@ class SwitchableEditDecorator extends EditDecorator {
     this._toggleContentShield($itemElement, enabled);
   }
 
-  _updateShieldsHeight($itemElement) {
+  _updateShieldsHeight($itemElement: dxElementWrapper): void {
     const $list = this._list.$element();
 
-    const listTopOffset = $list.offset().top;
+    const listTopOffset = $list.offset()?.top ?? 0;
     const listHeight = getOuterHeight($list);
-    const itemTopOffset = $itemElement.offset().top;
+    const itemTopOffset = $itemElement.offset()?.top ?? 0;
     const itemHeight = getOuterHeight($itemElement);
 
     const dirtyTopShieldHeight = itemTopOffset - listTopOffset;
@@ -115,7 +119,7 @@ class SwitchableEditDecorator extends EditDecorator {
     setHeight(this._$bottomShield, Math.max(dirtyBottomShieldHeight, 0));
   }
 
-  _toggleContentShield($itemElement, enabled) {
+  _toggleContentShield($itemElement: dxElementWrapper, enabled: boolean): void {
     if (enabled) {
       $itemElement
         .find(`.${LIST_ITEM_CONTENT_CLASS}`)
@@ -126,8 +130,8 @@ class SwitchableEditDecorator extends EditDecorator {
     }
   }
 
-  _toggleScrolling(readyToDelete): void {
-    const scrollView = this._list.$element().dxScrollView('instance');
+  _toggleScrolling(readyToDelete: boolean): void {
+    const scrollView = this._list._scrollView;
 
     if (readyToDelete) {
       scrollView.on('start', this._cancelScrolling);
@@ -136,11 +140,14 @@ class SwitchableEditDecorator extends EditDecorator {
     }
   }
 
-  _cancelScrolling(args): void {
-    args.event.cancel = true;
+  // eslint-disable-next-line class-methods-use-this
+  _cancelScrolling(args: NativeEventInfo<List, DxEvent & Cancelable> & ScrollInfo): void {
+    if (args.event) {
+      args.event.cancel = true;
+    }
   }
 
-  _cacheReadyToDeleteItem($itemElement, cache): void {
+  _cacheReadyToDeleteItem($itemElement: dxElementWrapper, cache: boolean): void {
     if (cache) {
       this._$readyToDeleteItem = $itemElement;
     } else {
@@ -148,68 +155,76 @@ class SwitchableEditDecorator extends EditDecorator {
     }
   }
 
-  _animateToggleDelete($itemElement, readyToDelete): void {
+  _animateToggleDelete($itemElement: dxElementWrapper, readyToDelete: boolean): void {
     if (readyToDelete) {
       this._enablePositioning($itemElement);
       this._prepareDeleteReady($itemElement);
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._animatePrepareDeleteReady($itemElement);
       eventsEngine.off($itemElement, pointerEvents.up);
     } else {
       this._forgetDeleteReady($itemElement);
-      // @ts-expect-error ts-error
-      this._animateForgetDeleteReady($itemElement).done(this._disablePositioning.bind(this, $itemElement));
+      this._animateForgetDeleteReady($itemElement)
+        // @ts-expect-error ts-error
+        .done(this._disablePositioning.bind(this, $itemElement));
     }
   }
 
-  _enablePositioning($itemElement): void {
+  _enablePositioning($itemElement: dxElementWrapper): void {
     $itemElement.addClass(SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS);
     eventsEngine.on($itemElement, ACTIVE_EVENT_NAME, noop);
-    eventsEngine.one($itemElement, pointerEvents.up, this._disablePositioning.bind(this, $itemElement));
+    eventsEngine.one(
+      $itemElement,
+      pointerEvents.up,
+      this._disablePositioning.bind(this, $itemElement),
+    );
   }
 
-  _disablePositioning($itemElement): void {
+  // eslint-disable-next-line class-methods-use-this
+  _disablePositioning($itemElement: dxElementWrapper): void {
     $itemElement.removeClass(SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS);
     eventsEngine.off($itemElement, ACTIVE_EVENT_NAME);
   }
 
-  _prepareDeleteReady($itemElement): void {
+  // eslint-disable-next-line class-methods-use-this
+  _prepareDeleteReady($itemElement: dxElementWrapper): void {
     $itemElement.addClass(SWITCHABLE_DELETE_READY_CLASS);
   }
 
-  _forgetDeleteReady($itemElement): void {
+  // eslint-disable-next-line class-methods-use-this
+  _forgetDeleteReady($itemElement: dxElementWrapper): void {
     $itemElement.removeClass(SWITCHABLE_DELETE_READY_CLASS);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _animatePrepareDeleteReady($element: dxElementWrapper): void {
-    Class.abstract();
+  abstract _animatePrepareDeleteReady($element: dxElementWrapper): Promise<void>;
+
+  abstract _animateForgetDeleteReady($itemElement?: dxElementWrapper): Promise<void>;
+
+  _getDeleteButtonContainer($itemElement: dxElementWrapper): dxElementWrapper {
+    const $element = $itemElement || this._$readyToDeleteItem;
+
+    return $element.children(`.${SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS}`);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _animateForgetDeleteReady($itemElement?): void {
-    Class.abstract();
-  }
+  _deleteItem($itemElement?: dxElementWrapper): void {
+    const $element = $itemElement ?? this._$readyToDeleteItem;
+    if (!$element) {
+      return;
+    }
+    this._getDeleteButtonContainer($element).detach();
 
-  _getDeleteButtonContainer($itemElement) {
-    $itemElement = $itemElement || this._$readyToDeleteItem;
-
-    return $itemElement.children(`.${SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS}`);
-  }
-
-  _deleteItem($itemElement?) {
-    $itemElement = $itemElement || this._$readyToDeleteItem;
-    this._getDeleteButtonContainer($itemElement).detach();
-
-    if ($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
+    if ($element.is('.dx-state-disabled, .dx-state-disabled *')) {
       return;
     }
 
-    this._list.deleteItem($itemElement)
-      .always(this._cancelDelete.bind(this, $itemElement));
+    this._list.deleteItem($element)
+      // @ts-expect-error ts-error
+      .always(this._cancelDelete.bind(this, $element));
   }
 
-  _isRtlEnabled() {
-    return this._list.option('rtlEnabled');
+  _isRtlEnabled(): boolean {
+    const { rtlEnabled = false } = this._list.option();
+    return rtlEnabled;
   }
 
   dispose(): void {
@@ -219,8 +234,7 @@ class SwitchableEditDecorator extends EditDecorator {
     if (this._$bottomShield) {
       this._$bottomShield.remove();
     }
-    // @ts-expect-error ts-error
-    super.dispose.apply(this, arguments);
+    super.dispose();
   }
 }
 

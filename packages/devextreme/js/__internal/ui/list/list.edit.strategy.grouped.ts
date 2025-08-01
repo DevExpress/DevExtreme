@@ -16,7 +16,7 @@ const SELECTION_SHIFT = 20;
 const SELECTION_MASK = (1 << SELECTION_SHIFT) - 1;
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-type GroupedItem = {
+export type GroupedItem = {
   [key: string]: unknown;
   key?: unknown;
   items?: unknown[];
@@ -55,10 +55,10 @@ class GroupedEditStrategy extends EditStrategy<Item> {
     }
     // @ts-expect-error ts-error
     // eslint-disable-next-line consistent-return
-    each(groups, (groupIndex, group) => {
+    each(groups, (groupIndex: number, group: GroupedItem) => {
       if (!group.items) return false;
 
-      each(group.items, (itemIndex, item) => {
+      each(group.items, (itemIndex: number, item: Item): boolean => {
         if (item !== itemData) {
           return true;
         }
@@ -183,7 +183,7 @@ class GroupedEditStrategy extends EditStrategy<Item> {
       };
     };
 
-    each(keys, (_, key) => {
+    each(keys, (_index: number, key: string | number): undefined => {
       const itemMeta = getItemMeta(key);
 
       if (!itemMeta) return undefined;

@@ -112,29 +112,27 @@ const reorderingPointerMock = ($item, clock, usePixel) => {
 
 QUnit.module('switchable menu decorator', {
     beforeEach: function() {
-        const testDecorator = SwitchableEditDecorator.inherit({
-
-            modifyElement: function(config) {
-                this.callBase.apply(this, arguments);
+        class TestDecorator extends SwitchableEditDecorator {
+            modifyElement(config) {
+                super.modifyElement(config);
 
                 const $itemElement = $(config.$itemElement);
 
                 $itemElement.on('dxpreparetodelete', $.proxy((e) => {
                     this._toggleDeleteReady($itemElement);
                 }, this));
-            },
+            }
 
-            _animateForgetDeleteReady: () => {
-                return $.when().promise();
-            },
-
-            _animatePrepareDeleteReady: () => {
+            _animateForgetDeleteReady() {
                 return $.when().promise();
             }
 
-        });
+            _animatePrepareDeleteReady() {
+                return $.when().promise();
+            }
+        }
 
-        register('menu', 'test', testDecorator);
+        register('menu', 'test', TestDecorator);
     },
     afterEach: function() {
         delete registry.menu.test;
@@ -346,10 +344,9 @@ QUnit.module('switchable button delete decorator', {
     beforeEach: function() {
         fx.off = true;
 
-        const testDecorator = SwitchableButtonEditDecorator.inherit({
-
-            modifyElement: function(config) {
-                this.callBase.apply(this, arguments);
+        class TestDecorator extends SwitchableButtonEditDecorator {
+            modifyElement(config) {
+                super.modifyElement(config);
 
                 const $itemElement = $(config.$itemElement);
 
@@ -357,9 +354,8 @@ QUnit.module('switchable button delete decorator', {
                     this._toggleDeleteReady($itemElement);
                 }, this));
             }
-
-        });
-        register('menu', 'test', testDecorator);
+        }
+        register('menu', 'test', TestDecorator);
     },
     afterEach: function() {
         fx.off = false;
@@ -479,7 +475,7 @@ QUnit.module('toggle delete decorator', () => {
         const $buttonContainer = $item.find(`.${SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS}`);
 
         assert.strictEqual(fxStopSpy.callCount, 3);
-        assert.strictEqual(fxStopSpy.getCall(1).args[0][0], $buttonContainer[0], 'stop is called on button container');
+        assert.strictEqual(fxStopSpy.getCall(1).args[0], $buttonContainer.get(0), 'stop is called on button container');
         assert.strictEqual(fxStopSpy.getCall(1).args[1], false, 'without jump to end');
         fx.stop.restore();
     });
@@ -570,7 +566,7 @@ QUnit.module('slideButton delete decorator', () => {
         const $buttonContainer = $item.find(`.${SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS}`);
 
         assert.strictEqual(fxStopSpy.callCount, 3);
-        assert.strictEqual(fxStopSpy.getCall(1).args[0][0], $buttonContainer[0], 'stop is called on button container');
+        assert.strictEqual(fxStopSpy.getCall(1).args[0], $buttonContainer.get(0), 'stop is called on button container');
         assert.strictEqual(fxStopSpy.getCall(1).args[1], false, 'without jump to end');
         fx.stop.restore();
     });
@@ -3003,8 +2999,8 @@ QUnit.module('reordering decorator', {
         const list = $list.dxList('instance');
 
         list.reorderItem = (itemElement, toItemElement) => {
-            assert.strictEqual(itemElement.text(), $item1.text());
-            assert.strictEqual(toItemElement.text(), $item2.text());
+            assert.strictEqual($(itemElement).text(), $item1.text());
+            assert.strictEqual($(toItemElement).text(), $item2.text());
         };
 
         const $items = $list.find(`.${LIST_ITEM_CLASS}`);
@@ -3034,8 +3030,8 @@ QUnit.module('reordering decorator', {
         const list = $list.dxList('instance');
 
         list.reorderItem = (itemElement, toItemElement) => {
-            assert.strictEqual(itemElement.text(), $item1.text());
-            assert.strictEqual(toItemElement.text(), $item2.text());
+            assert.strictEqual($(itemElement).text(), $item1.text());
+            assert.strictEqual($(toItemElement).text(), $item2.text());
         };
 
         const $items = $list.find(`.${LIST_ITEM_CLASS}`);

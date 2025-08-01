@@ -1436,7 +1436,7 @@ class CollectionWidget<
 
   _itemEventHandlerByHandler(
     initiator: dxElementWrapper | Element,
-    handler: () => void,
+    handler: () => unknown,
     actionArgs: Record<string, unknown>,
     actionConfig?: ActionConfig,
   ): void {

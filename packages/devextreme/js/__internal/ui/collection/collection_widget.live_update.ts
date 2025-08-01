@@ -14,9 +14,9 @@ import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collectio
 
 import type { DataChange } from './collection_widget.base';
 
-const PRIVATE_KEY_FIELD = '__dx_key__';
+export const PRIVATE_KEY_FIELD = '__dx_key__';
 
-type CachedItem<TItem> = TItem | {
+export type CachedItem<TItem> = TItem | {
   [PRIVATE_KEY_FIELD]: TItem;
   data: TItem;
 };

@@ -41,6 +41,7 @@ import type {
 } from '@ts/ui/collection/collection_widget.base';
 import CollectionWidget from '@ts/ui/collection/collection_widget.live_update';
 import ListItem from '@ts/ui/list/item';
+import type { GroupedItem } from '@ts/ui/list/list.edit.strategy.grouped';
 import type {
   ScrollView as ScrollViewType,
 } from '@ts/ui/scroll_view/scroll_view';
@@ -446,7 +447,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     });
   }
 
-  deleteItem(itemElement: Element): Promise<unknown> {
+  deleteItem(itemElement: number | Element): Promise<unknown> {
     const promise = super.deleteItem(itemElement);
     // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -1091,7 +1092,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this.setAria(groupHeaderAria, $groupBody);
   }
 
-  _renderGroup(index: number, group: Item): void {
+  _renderGroup(index: number, group: GroupedItem): void {
     const $groupElement = $('<div>')
       .addClass(LIST_GROUP_CLASS)
       .appendTo(this._getItemsContainer());
@@ -1106,7 +1107,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     const { groupTemplate: templateName } = this.option();
 
     const groupTemplate = this._getTemplate(
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       group.template || templateName,
       // @ts-expect-error ts-error
       group,
@@ -1134,7 +1134,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       .appendTo($groupElement);
 
     // @ts-expect-error ts-error
-    each(groupItemsGetter(group) || [], (itemIndex: number, item) => {
+    each(groupItemsGetter(group) || [], (itemIndex: number, item: Item): void => {
       this._renderItem({ group: index, item: itemIndex }, item, $groupBody);
     });
     // @ts-expect-error ts-error
