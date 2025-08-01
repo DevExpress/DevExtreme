@@ -7,9 +7,10 @@ import $ from '@js/core/renderer';
 import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import type { DxEvent } from '@js/events';
+import type { ValueChangedEvent as CheckBoxValueChangedEvent } from '@js/ui/check_box';
+import CheckBox from '@js/ui/check_box';
 import errors from '@js/ui/widget/ui.errors';
-import CheckBox from '@ts/ui/check_box/generated_wrapper';
-import type { ValueChangedEvent } from '@ts/ui/editor/editor';
+import type { ValueChangedEvent as EditorValueChangedEvent } from '@ts/ui/editor/editor';
 import RadioButton from '@ts/ui/radio_group/m_radio_button';
 
 import type { BagConfig } from './m_list.edit.decorator';
@@ -74,7 +75,7 @@ class EditDecoratorSelection extends EditDecorator {
       elementAttr: { 'aria-label': messageLocalization.format('CheckState') },
       focusStateEnabled: false,
       hoverStateEnabled: false,
-      onValueChanged: ({ value, component, event }: ValueChangedEvent): void => {
+      onValueChanged: ({ value, component, event }: EditorValueChangedEvent): void => {
         const isUiClick = !!event;
         if (isUiClick) {
           component._valueChangeEventInstance = undefined;
@@ -180,9 +181,10 @@ class EditDecoratorSelection extends EditDecorator {
   }
 
   _attachSelectAllHandler(): void {
-    this._selectAllCheckBox?.option('onValueChanged', ({ value, event, component }: ValueChangedEvent): void => {
+    this._selectAllCheckBox?.option('onValueChanged', ({ value, event, component }: CheckBoxValueChangedEvent): void => {
       const isUiClick = !!event;
       if (isUiClick) {
+        // @ts-expect-error ts-error
         component._setOptionWithoutOptionChange('value', !value);
         return;
       }
