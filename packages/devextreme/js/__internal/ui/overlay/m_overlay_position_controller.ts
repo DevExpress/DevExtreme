@@ -6,7 +6,6 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import {
   isDefined,
-  // @ts-expect-error private prop
   isEvent,
   isString,
   isWindow,
@@ -250,8 +249,8 @@ class OverlayPositionController<
 
     resetPosition(this._$content);
 
-    // @ts-expect-error css must be able to accept 1 argument
-    const wrapperOverflow: string = this._$wrapper?.css('overflow');
+    const wrapperOverflow = this._$wrapper?.css('overflow') ?? '';
+
     this._$wrapper?.css('overflow', 'hidden');
 
     if (!this._properties._skipContentPositioning) {
@@ -261,6 +260,7 @@ class OverlayPositionController<
     }
 
     this._$wrapper?.css('overflow', wrapperOverflow);
+
     this.detectVisualPositionChange();
   }
 
