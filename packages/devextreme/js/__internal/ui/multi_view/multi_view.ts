@@ -22,7 +22,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
 import type { DataChange, ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
 
-import { _translator, animation } from './m_multi_view.animation';
+import { _translator, animation } from './multi_view.animation';
 
 // STYLE multiView
 
@@ -109,12 +109,10 @@ class MultiView<
     ]);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return MULTIVIEW_ITEM_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return MULTIVIEW_ITEM_DATA_KEY;
   }
@@ -156,7 +154,7 @@ class MultiView<
     let normalizedIndex = index;
 
     if (this._isAllItemsHidden()) {
-      return;
+      return undefined;
     }
 
     if (index < 0) {
@@ -308,7 +306,6 @@ class MultiView<
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getElementAria(): Record<string, string> {
     return {
       role: 'group',
@@ -336,7 +333,6 @@ class MultiView<
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getItemAria(args: {
     itemIndex: number;
     itemsCount: number;
@@ -423,7 +419,6 @@ class MultiView<
     this._updateItemsVisibility(selectedIndex);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _setAriaSelectionAttribute(): void {}
 
   _updateSelection(addedSelection: number[], removedSelection: number[]): void {
@@ -584,7 +579,7 @@ class MultiView<
     return index;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _postprocessSwipe(args: { swipedTabsIndex: number }): void {}
 
   _swipeEndHandler(e: SwipeEndEvent['event']): void {
