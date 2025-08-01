@@ -7,7 +7,6 @@ import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-// @ts-expect-error ts-error
 import { pairToObject } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -512,7 +511,7 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
 
   _getSteps(): StepDelta {
     const { step, roundStepValue } = this.option();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
     return pairToObject(step, !roundStepValue);
   }
 
