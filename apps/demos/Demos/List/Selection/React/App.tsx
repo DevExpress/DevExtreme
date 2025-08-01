@@ -55,7 +55,6 @@ export default function App() {
           selectAllMode={selectAllMode}
           selectedItemKeys={selectedItemKeys}
           selectByClick={selectByClick}
-          // onSelectedItemKeysChange={onSelectedItemKeysChange}
           onOptionChanged={onSelectedItemKeysChange}
         />
         <div className="selected-data">
