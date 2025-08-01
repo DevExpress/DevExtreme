@@ -283,7 +283,7 @@ class Calendar<
       return 'number';
     }
 
-    if (!isString(value)) {
+    if (!isString(value) || value === '') {
       return;
     }
 
