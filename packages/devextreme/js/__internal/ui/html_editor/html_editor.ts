@@ -31,8 +31,7 @@ import type { Converter, HtmlEditorFormat, Properties } from '@js/ui/html_editor
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
-import type DeltaConverterType from '@ts/ui/html_editor/converters/m_delta';
-import ConverterController from '@ts/ui/html_editor/m_converterController';
+import ConverterController, { type BaseConverter } from '@ts/ui/html_editor/m_converterController';
 import { getQuill } from '@ts/ui/html_editor/m_quill_importer';
 import QuillRegistrator from '@ts/ui/html_editor/m_quill_registrator';
 import getWordMatcher from '@ts/ui/html_editor/matchers/m_wordLists';
@@ -89,7 +88,7 @@ class HtmlEditor extends Editor<Properties> {
 
   _htmlConverter?: Converter;
 
-  _deltaConverter!: DeltaConverterType;
+  _deltaConverter!: BaseConverter;
 
   _updateContentTask?: DeferredObj<unknown> & { abort: () => void };
 
@@ -367,10 +366,11 @@ class HtmlEditor extends Editor<Properties> {
     if (isFunction(customizeModules)) {
       customizeModules(modulesConfig);
     }
+    const { placeholder, readOnly, disabled } = this.option();
 
     this._quillInstance = this._getRegistrator().createEditor(this._$htmlContainer[0], {
-      placeholder: this.option('placeholder'),
-      readOnly: this.option('readOnly') || this.option('disabled'),
+      placeholder,
+      readOnly: Boolean(readOnly) || Boolean(disabled),
       modules: modulesConfig,
       theme: 'basic',
     });
@@ -783,7 +783,7 @@ class HtmlEditor extends Editor<Properties> {
     this._contentInitializedCallback.add(callback);
   }
 
-  register(components: unknown): void {
+  register(components: Record<string, unknown>): void {
     this._getRegistrator().registerModules(components);
 
     if (this._quillInstance) {
