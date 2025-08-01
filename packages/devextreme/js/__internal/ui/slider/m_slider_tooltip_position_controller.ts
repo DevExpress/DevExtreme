@@ -15,9 +15,9 @@ const SLIDER_TOOLTIP_DEFAULT_BOUNDARY_OFFSET = { h: 2, v: 1 };
 
 class SliderTooltipPositionController extends PopoverPositionController {
   _normalizePosition(positionProp) {
-    // @ts-expect-error todo
     const $sliderHandle = this._properties.target;
     const sliderClass = `.${SLIDER_CLASS}`;
+    // @ts-expect-error sliderHandle should be dxElementWrapper
     const $slider = $sliderHandle?.closest(sliderClass);
     const defaultPositionConfig = {
       of: $sliderHandle,
