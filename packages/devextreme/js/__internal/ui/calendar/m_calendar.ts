@@ -1,3 +1,4 @@
+import type { AnimationConfig } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import { move } from '@js/common/core/animation/translator';
 import eventsEngine from '@js/common/core/events/core/events_engine';
@@ -15,24 +16,32 @@ import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
-import { extend } from '@js/core/utils/extend';
 import { inRange } from '@js/core/utils/math';
 import { getWidth } from '@js/core/utils/size';
 import {
   isDefined, isFunction, isNumeric, isString,
 } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import Button from '@js/ui/button';
-import type { Properties } from '@js/ui/calendar';
-import { isFluent } from '@js/ui/themes';
+import type { DxEvent } from '@js/events';
+import type { ClickEvent } from '@js/ui/button';
+import type {
+  CalendarZoomLevel, DateLike, Properties,
+} from '@js/ui/calendar';
+import { current, isFluent } from '@js/ui/themes';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
+import Button from '@ts/ui/button/wrapper';
 import Editor from '@ts/ui/editor/editor';
+import { isDate } from 'util/types';
 
+import type { BaseViewProperties } from './m_calendar.base_view';
 import CalendarMultipleSelectionStrategy from './m_calendar.multiple.selection.strategy';
+import type { NavigatorOptions } from './m_calendar.navigator';
 import Navigator from './m_calendar.navigator';
 import CalendarRangeSelectionStrategy from './m_calendar.range.selection.strategy';
 import CalendarSingleSelectionStrategy from './m_calendar.single.selection.strategy';
 import type {
-  CenturyView, DecadeView, MonthView, YearView,
+  CenturyView, DecadeView, MonthView, MonthViewProperties, YearView,
 } from './m_calendar.views';
 import Views from './m_calendar.views';
 
@@ -64,13 +73,6 @@ const LEVEL_COMPARE_MAP = {
   century: 0,
 };
 
-const ZOOM_LEVEL = {
-  MONTH: 'month',
-  YEAR: 'year',
-  DECADE: 'decade',
-  CENTURY: 'century',
-};
-
 const SELECTION_STRATEGIES = {
   SingleSelection: CalendarSingleSelectionStrategy,
   MultipleSelection: CalendarMultipleSelectionStrategy,
@@ -83,6 +85,10 @@ export interface CalendarProperties extends Properties {
   currentDate?: Date;
 
   todayButtonText?: string;
+
+  _rangeMin?: Date;
+  _rangeMax?: Date;
+  _todayDate: () => Date;
 }
 
 class Calendar<
@@ -104,11 +110,13 @@ class Calendar<
 
   _additionalView!: MonthView | YearView | DecadeView | CenturyView;
 
-  _beforeView?: MonthView | YearView | DecadeView | CenturyView;
+  _beforeView?: MonthView | YearView | DecadeView | CenturyView | null;
 
-  _afterView?: MonthView | YearView | DecadeView | CenturyView;
+  _afterView?: MonthView | YearView | DecadeView | CenturyView | null;
 
-  _selectionStrategy!: CalendarSingleSelectionStrategy | CalendarMultipleSelectionStrategy | CalendarRangeSelectionStrategy;
+  _selectionStrategy!: CalendarSingleSelectionStrategy
+    | CalendarMultipleSelectionStrategy
+    | CalendarRangeSelectionStrategy;
 
   _suppressNavigation?: true;
 
@@ -142,9 +150,9 @@ class Calendar<
       min: new Date(1000, 0),
       max: new Date(3000, 0),
       viewsCount: 1,
-      zoomLevel: ZOOM_LEVEL.MONTH,
-      maxZoomLevel: ZOOM_LEVEL.MONTH,
-      minZoomLevel: ZOOM_LEVEL.CENTURY,
+      zoomLevel: 'month',
+      maxZoomLevel: 'month',
+      minZoomLevel: 'century',
       selectionMode: 'single',
       selectWeekOnClick: true,
       showTodayButton: false,
@@ -178,7 +186,7 @@ class Calendar<
   _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
     return {
       ...super._supportedKeys(),
-      rightArrow(e): void {
+      rightArrow(e: KeyboardEvent): void {
         e.preventDefault();
         if (isCommandKeyPressed(e)) {
           this._waitRenderView(1);
@@ -186,7 +194,7 @@ class Calendar<
           this._moveCurrentDateByOffset(1 * this._getRtlCorrection());
         }
       },
-      leftArrow(e): void {
+      leftArrow(e: KeyboardEvent): void {
         e.preventDefault();
         if (isCommandKeyPressed(e)) {
           this._waitRenderView(-1);
@@ -194,7 +202,7 @@ class Calendar<
           this._moveCurrentDateByOffset(-1 * this._getRtlCorrection());
         }
       },
-      upArrow(e): void {
+      upArrow(e: KeyboardEvent): void {
         e.preventDefault();
         if (isCommandKeyPressed(e)) {
           this._navigateUp();
@@ -205,7 +213,7 @@ class Calendar<
           this._moveCurrentDateByOffset(-1 * this._view.option('colCount'));
         }
       },
-      downArrow(e): void {
+      downArrow(e: KeyboardEvent): void {
         e.preventDefault();
         if (isCommandKeyPressed(e)) {
           this._navigateDown();
@@ -216,12 +224,12 @@ class Calendar<
           this._moveCurrentDateByOffset(1 * this._view.option('colCount'));
         }
       },
-      home(e): void {
+      home(e: KeyboardEvent): void {
         e.preventDefault();
 
         const zoomLevel = this.option('zoomLevel');
         const currentDate = this.option('currentDate');
-        const min = this._dateOption('min');
+        const min = this._getDateOption('min');
 
         if (this._view.isDateDisabled(currentDate)) {
           return;
@@ -233,12 +241,12 @@ class Calendar<
 
         this._moveToClosestAvailableDate(date);
       },
-      end(e): void {
+      end(e: KeyboardEvent): void {
         e.preventDefault();
 
         const zoomLevel = this.option('zoomLevel');
         const currentDate = this.option('currentDate');
-        const max = this._dateOption('max');
+        const max = this._getDateOption('max');
 
         if (this._view.isDateDisabled(currentDate)) {
           return;
@@ -250,51 +258,53 @@ class Calendar<
 
         this._moveToClosestAvailableDate(date);
       },
-      pageUp(e): void {
+      pageUp(e: KeyboardEvent): void {
         e.preventDefault();
         this._waitRenderView(-1 * this._getRtlCorrection());
       },
-      pageDown(e): void {
+      pageDown(e: KeyboardEvent): void {
         e.preventDefault();
         this._waitRenderView(1 * this._getRtlCorrection());
       },
-      tab() {},
+      tab(): void {},
       enter: this._enterKeyHandler,
     };
   }
 
-  _enterKeyHandler(e): void {
+  _enterKeyHandler(e: KeyboardEvent): void {
+    const { currentDate = new Date() } = this.option();
     if (!this._isMaxZoomLevel()) {
       this._navigateDown();
-    } else if (!this._view.isDateDisabled(this.option('currentDate'))) {
-      const value = this._updateTimeComponent(this.option('currentDate'));
+    } else if (!this._view.isDateDisabled(currentDate)) {
+      const value = this._updateTimeComponent(currentDate);
       this._selectionStrategy.selectValue(value, e);
     }
   }
 
-  _getSerializationFormat(optionName) {
-    const value = this.option(optionName || 'value');
+  _getSerializationFormat(optionName = 'value'): string | undefined | null {
+    const value = this.option(optionName);
+    const { dateSerializationFormat } = this.option();
 
-    if (this.option('dateSerializationFormat')) {
-      return this.option('dateSerializationFormat');
+    if (dateSerializationFormat) {
+      return dateSerializationFormat;
     }
 
     if (isNumeric(value)) {
       return 'number';
     }
 
-    if (!isString(value)) {
-      return;
+    if (!isString(value) || value === '') {
+      return undefined;
     }
 
     return dateSerialization.getDateSerializationFormat(value);
   }
 
-  _convertToDate(value) {
+  _convertToDate(value): Date | null {
     return dateSerialization.deserializeDate(value);
   }
 
-  _dateValue(value, event) {
+  _dateValue(value: Date | Date[], event): void {
     if (event) {
       if (event.type === 'keydown') {
         const cellElement = this._view._getContouredCell().get(0);
@@ -302,26 +312,35 @@ class Calendar<
       }
       this._saveValueChangeEvent(event);
     }
-    this._dateOption('value', value);
+    this._setDateOption('value', value);
   }
 
-  _dateOption(optionName, optionValue) {
-    const isArray = optionName === 'value' && !this._isSingleMode();
-    const value = this.option('value');
-
-    if (arguments.length === 1) {
-      return isArray
-        // @ts-expect-error ts-error
-        ? (value ?? []).map((value) => this._convertToDate(value))
-        : this._convertToDate(this.option(optionName));
-    }
-
+  _setDateOption(
+    optionName: 'value' | 'min' | 'max',
+    optionValue: DateLike | DateLike[],
+  ): void {
+    const isArray = optionName === 'value' && !this._isSingleMode() && Array.isArray(optionValue);
     const serializationFormat = this._getSerializationFormat(optionName);
     const serializedValue = isArray
-      ? optionValue?.map((value) => dateSerialization.serializeDate(value, serializationFormat)) || []
+      ? optionValue?.map((value) => dateSerialization.serializeDate(value, serializationFormat))
+        || []
       : dateSerialization.serializeDate(optionValue, serializationFormat);
 
     this.option(optionName, serializedValue);
+  }
+
+  _getDateOption(optionName: 'value' | 'min' | 'max'): Date | Date[] | undefined | null {
+    const isArray = optionName === 'value' && !this._isSingleMode();
+    const { value } = this.option();
+
+    if (!isArray) {
+      return this._convertToDate(this.option(optionName));
+    }
+
+    const valueArray = value ?? [];
+
+    // @ts-expect-error ts-error
+    return valueArray.map((value) => this._convertToDate(value));
   }
 
   _isSingleMode(): boolean {
@@ -330,36 +349,43 @@ class Calendar<
     return selectionMode === 'single';
   }
 
-  _shiftDate(zoomLevel, date, offset, reverse) {
-    // eslint-disable-next-line default-case
+  _shiftDate(zoomLevel: CalendarZoomLevel, date: Date, offset: number, reverse: number): void {
     switch (zoomLevel) {
-      case ZOOM_LEVEL.MONTH:
+      case 'month':
         date.setDate(date.getDate() + offset * reverse);
         break;
-      case ZOOM_LEVEL.YEAR:
+      case 'year':
         date.setMonth(date.getMonth() + offset * reverse);
         break;
-      case ZOOM_LEVEL.DECADE:
+      case 'decade':
         date.setFullYear(date.getFullYear() + offset * reverse);
         break;
-      case ZOOM_LEVEL.CENTURY:
+      case 'century':
         date.setFullYear(date.getFullYear() + 10 * offset * reverse);
+        break;
+      default:
         break;
     }
   }
 
-  _moveCurrentDateByOffset(offset) {
-    const baseDate = this.option('currentDate');
-    // @ts-expect-error ts-error
+  _moveCurrentDateByOffset(offset: number): void {
+    const {
+      currentDate: baseDate = new Date(),
+      zoomLevel = 'month',
+    } = this.option();
     let currentDate = new Date(baseDate);
-    const zoomLevel = this.option('zoomLevel');
     this._shiftDate(zoomLevel, currentDate, offset, 1);
 
     const maxDate = this._getMaxDate();
     const minDate = this._getMinDate();
 
-    let isDateForwardInNeighborView = this._areDatesInNeighborView(zoomLevel, currentDate, baseDate);
-    let isDateForwardInRange = inRange(currentDate, minDate, maxDate) && isDateForwardInNeighborView;
+    let isDateForwardInNeighborView = this._areDatesInNeighborView(
+      zoomLevel,
+      currentDate,
+      baseDate,
+    );
+    let isDateForwardInRange = inRange(currentDate, minDate, maxDate)
+      && isDateForwardInNeighborView;
     const dateForward = new Date(currentDate);
 
     while (isDateForwardInRange) {
@@ -376,12 +402,13 @@ class Calendar<
 
     if (this._view.isDateDisabled(baseDate) || this._view.isDateDisabled(currentDate)) {
       const direction = offset > 0 ? 1 : -1;
-      const isViewDisabled = direction === 1 ? this._isNextViewDisabled() : this._isPrevViewDisabled();
+      const isViewDisabled = direction === 1
+        ? this._isNextViewDisabled()
+        : this._isPrevViewDisabled();
 
       if (!isViewDisabled) {
         this._waitRenderView(direction);
       } else {
-        // @ts-expect-error ts-error
         this._moveToClosestAvailableDate(currentDate);
       }
     } else {
@@ -390,65 +417,61 @@ class Calendar<
     }
   }
 
-  _isNextViewDisabled() {
-    return this._navigator._nextButton.option('disabled');
+  _isNextViewDisabled(): boolean {
+    return this._navigator._nextButton.option('disabled') === true;
   }
 
-  _isPrevViewDisabled() {
-    return this._navigator._prevButton.option('disabled');
+  _isPrevViewDisabled(): boolean {
+    return this._navigator._prevButton.option('disabled') === true;
   }
 
-  // @ts-expect-error
-  _areDatesInSameView(zoomLevel, date1, date2) {
-    // eslint-disable-next-line default-case
+  _areDatesInSameView(zoomLevel: CalendarZoomLevel, date1: Date, date2: Date): boolean {
     switch (zoomLevel) {
-      case ZOOM_LEVEL.MONTH:
+      case 'year':
+        return date1.getFullYear() === date2.getFullYear();
+      case 'decade':
+        return Math.floor(date1.getFullYear() / 10) === Math.floor(date2.getFullYear() / 10);
+      case 'century':
+        return Math.floor(date1.getFullYear() / 100) === Math.floor(date2.getFullYear() / 100);
+      case 'month':
+      default:
         return date1.getMonth() === date2.getMonth();
-      case ZOOM_LEVEL.YEAR:
-        return date1.getYear() === date2.getYear();
-      case ZOOM_LEVEL.DECADE:
-      // @ts-expect-error
-      // eslint-disable-next-line radix
-        return parseInt(date1.getYear() / 10) === parseInt(date2.getYear() / 10);
-      case ZOOM_LEVEL.CENTURY:
-      // @ts-expect-error
-      // eslint-disable-next-line radix
-        return parseInt(date1.getYear() / 100) === parseInt(date2.getYear() / 100);
     }
   }
 
-  // @ts-expect-error
-  _areDatesInNeighborView(zoomLevel, date1, date2) {
-    const monthMinDistance = (a, b) => {
+  _areDatesInNeighborView(zoomLevel: CalendarZoomLevel, date1: Date, date2: Date): boolean {
+    const monthMinDistance = (a: number, b: number): number => {
       const abs = Math.abs(a - b);
       return Math.min(abs, 12 - abs);
     };
 
-    // eslint-disable-next-line default-case
     switch (zoomLevel) {
-      case ZOOM_LEVEL.MONTH:
+      case 'year':
+        return Math.abs(date1.getFullYear() - date2.getFullYear()) <= 1;
+      case 'decade':
+        return Math.abs(date1.getFullYear() - date2.getFullYear()) <= 10;
+      case 'century':
+        return Math.abs(date1.getFullYear() - date2.getFullYear()) <= 100;
+      case 'month':
+      default:
         return monthMinDistance(date1.getMonth(), date2.getMonth()) <= 1;
-      case ZOOM_LEVEL.YEAR:
-        return Math.abs(date1.getYear() - date2.getYear()) <= 1;
-      case ZOOM_LEVEL.DECADE:
-        return Math.abs(date1.getYear() - date2.getYear()) <= 10;
-      case ZOOM_LEVEL.CENTURY:
-        return Math.abs(date1.getYear() - date2.getYear()) <= 100;
     }
   }
 
-  _moveToClosestAvailableDate(baseDate = this.option('currentDate')) {
-    // @ts-expect-error ts-error
-    let currentDate = new Date(baseDate);
-    const zoomLevel = this.option('zoomLevel');
+  _moveToClosestAvailableDate(baseDate?: Date): void {
+    const {
+      zoomLevel = 'month',
+      currentDate: oldCurrentDate = new Date(),
+    } = this.option();
+    let currentDate = new Date(baseDate ?? oldCurrentDate);
 
     const isCurrentDateAvailable = !this._isDateNotAvailable(currentDate);
 
     let isDateForwardAvailable = isCurrentDateAvailable;
     let isDateBackwardAvailable = isCurrentDateAvailable;
 
-    let isDateForwardInStartView;
-    let isDateBackwardInStartView;
+    let isDateForwardInStartView = true;
+    let isDateBackwardInStartView = true;
 
     const dateForward = new Date(currentDate);
     const dateBackward = new Date(currentDate);
@@ -467,17 +490,27 @@ class Calendar<
       this._shiftDate(zoomLevel, dateForward, 1, 1);
       this._shiftDate(zoomLevel, dateBackward, 1, -1);
 
-      isDateForwardInStartView = this._areDatesInSameView(zoomLevel, dateForward, baseDate);
-      isDateBackwardInStartView = this._areDatesInSameView(zoomLevel, dateBackward, baseDate);
+      isDateForwardInStartView = this._areDatesInSameView(
+        zoomLevel,
+        dateForward,
+        baseDate ?? oldCurrentDate,
+      );
+      isDateBackwardInStartView = this._areDatesInSameView(
+        zoomLevel,
+        dateBackward,
+        baseDate ?? oldCurrentDate,
+      );
 
-      isDateForwardAvailable = isDateForwardInStartView && !this._isDateNotAvailable(dateForward);
-      isDateBackwardAvailable = isDateBackwardInStartView && !this._isDateNotAvailable(dateBackward);
+      isDateForwardAvailable = isDateForwardInStartView
+        && !this._isDateNotAvailable(dateForward);
+      isDateBackwardAvailable = isDateBackwardInStartView
+        && !this._isDateNotAvailable(dateBackward);
     } while (isDateForwardInStartView || isDateBackwardInStartView);
 
     this.option('currentDate', currentDate);
   }
 
-  _isDateNotAvailable(date) {
+  _isDateNotAvailable(date: Date): boolean {
     const maxDate = this._getMaxDate();
     const minDate = this._getMinDate();
 
@@ -494,7 +527,7 @@ class Calendar<
     this._initActions();
   }
 
-  _initSelectionStrategy() {
+  _initSelectionStrategy(): void {
     const strategyName = this._getSelectionStrategyName();
     const strategy = SELECTION_STRATEGIES[strategyName];
 
@@ -504,13 +537,13 @@ class Calendar<
     }
   }
 
-  _refreshSelectionStrategy() {
+  _refreshSelectionStrategy(): void {
     this._initSelectionStrategy();
     this._selectionStrategy.restoreValue();
     this._refresh();
   }
 
-  _getSelectionStrategyName() {
+  _getSelectionStrategyName(): string {
     const { selectionMode } = this.option();
 
     switch (selectionMode) {
@@ -524,38 +557,46 @@ class Calendar<
   }
 
   _correctZoomLevel(): void {
-    const { minZoomLevel, maxZoomLevel, zoomLevel } = this.option();
-    // @ts-expect-error ts-error
+    const {
+      minZoomLevel = 'century',
+      maxZoomLevel = 'month',
+      zoomLevel = 'month',
+    } = this.option();
+
     if (LEVEL_COMPARE_MAP[maxZoomLevel] < LEVEL_COMPARE_MAP[minZoomLevel]) {
       return;
     }
-    // @ts-expect-error ts-error
+
     if (LEVEL_COMPARE_MAP[zoomLevel] > LEVEL_COMPARE_MAP[maxZoomLevel]) {
       this.option('zoomLevel', maxZoomLevel);
-      // @ts-expect-error ts-error
-    } else if (LEVEL_COMPARE_MAP[zoomLevel] < LEVEL_COMPARE_MAP[minZoomLevel]) {
+
+      return;
+    }
+
+    if (LEVEL_COMPARE_MAP[zoomLevel] < LEVEL_COMPARE_MAP[minZoomLevel]) {
       this.option('zoomLevel', minZoomLevel);
     }
   }
 
-  _initCurrentDate() {
-    const currentDate = this._getNormalizedDate(this._selectionStrategy.getDefaultCurrentDate())
-    ?? this._getNormalizedDate(this.option('currentDate'));
+  _initCurrentDate(): void {
+    const { currentDate = new Date() } = this.option();
+    const date = this._getNormalizedDate(this._selectionStrategy.getDefaultCurrentDate())
+    ?? this._getNormalizedDate(currentDate);
 
-    this.option('currentDate', currentDate);
+    this.option('currentDate', date);
   }
 
-  _getNormalizedDate(date) {
-    date = dateUtils.normalizeDate(date, this._getMinDate(), this._getMaxDate());
-    return isDefined(date) ? this._getDate(date) : date;
+  _getNormalizedDate(date: Date): Date {
+    const normalizedDate = dateUtils.normalizeDate(date, this._getMinDate(), this._getMaxDate());
+    return isDefined(normalizedDate) ? this._getDate(normalizedDate) : date;
   }
 
-  _initActions() {
+  _initActions(): void {
     this._cellClickAction = this._createActionByOption('onCellClick');
     this._onContouredChanged = this._createActionByOption('onContouredChanged');
   }
 
-  _initTemplates() {
+  _initTemplates(): void {
     this._templateManager.addDefaultTemplates({
       // @ts-expect-error ts-error
       cell: new FunctionTemplate((options) => {
@@ -566,7 +607,7 @@ class Calendar<
     super._initTemplates();
   }
 
-  _updateCurrentDate(date) {
+  _updateCurrentDate(date: Date): void {
     // @ts-expect-error ts-error
     if (fx.isAnimating(this._$viewsWrapper)) {
       // @ts-expect-error ts-error
@@ -575,7 +616,7 @@ class Calendar<
 
     const min = this._getMinDate();
     const max = this._getMaxDate();
-    // @ts-expect-error ts-error
+
     if (min > max) {
       this.option('currentDate', new Date());
       return;
@@ -588,7 +629,8 @@ class Calendar<
       return;
     }
 
-    let offset = this._getViewsOffset(this._view.option('date'), normalizedDate);
+    const { date: viewDate } = this._view.option();
+    let offset = this._getViewsOffset(viewDate, normalizedDate);
 
     if (offset !== 0 && !this._isMaxZoomLevel() && this._isOtherViewCellClicked) { offset = 0; }
 
@@ -616,7 +658,7 @@ class Calendar<
     this._skipNavigate = false;
   }
 
-  _isAdditionalViewDate(date) {
+  _isAdditionalViewDate(date: Date = new Date()): boolean {
     if (!this._additionalView) {
       return false;
     }
@@ -624,11 +666,11 @@ class Calendar<
     return date >= this._additionalView._getFirstAvailableDate();
   }
 
-  _getActiveView(date) {
+  _getActiveView(date: Date): MonthView | YearView | DecadeView | CenturyView {
     return this._isAdditionalViewDate(date) ? this._additionalView : this._view;
   }
 
-  _setViewContoured(date) {
+  _setViewContoured(date: Date): void {
     if (this.option('skipFocusCheck') || $(this._$viewsWrapper).is(':focus')) {
       this._view.option('contouredDate', null);
       this._additionalView?.option('contouredDate', null);
@@ -639,50 +681,53 @@ class Calendar<
     }
   }
 
-  _getMinDate() {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const _rangeMin = this.option('_rangeMin');
-    if (_rangeMin) {
-      return _rangeMin;
+  _getMinDate(): Date {
+    const { _rangeMin: rangeMin } = this.option();
+    if (rangeMin) {
+      return rangeMin;
     }
 
     if (this.min) {
       return this.min;
     }
-    // @ts-expect-error ts-error
-    this.min = this._dateOption('min') || new Date(1000, 0);
-    return this.min;
+
+    if (isDate(this.min)) {
+      return this.min;
+    }
+
+    return new Date(1000, 0);
   }
 
-  _getMaxDate() {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const _rangeMax = this.option('_rangeMax');
-    if (_rangeMax) {
-      return _rangeMax;
+  _getMaxDate(): Date {
+    const { _rangeMax: rangeMax } = this.option();
+    if (rangeMax) {
+      return rangeMax;
     }
 
     if (this.max) {
       return this.max;
     }
-    // @ts-expect-error ts-error
-    this.max = this._dateOption('max') || new Date(3000, 0);
-    return this.max;
+    if (isDate(this.max)) {
+      return this.max;
+    }
+
+    return new Date(3000, 0);
   }
 
-  _getViewsOffset(startDate, endDate) {
+  _getViewsOffset(startDate: Date, endDate: Date): number {
     const { zoomLevel } = this.option();
 
-    if (zoomLevel === ZOOM_LEVEL.MONTH) {
+    if (zoomLevel === 'month') {
       return this._getMonthsOffset(startDate, endDate);
     }
 
-    let zoomCorrection;
+    let zoomCorrection = 1;
 
     switch (zoomLevel) {
-      case ZOOM_LEVEL.CENTURY:
+      case 'century':
         zoomCorrection = 100;
         break;
-      case ZOOM_LEVEL.DECADE:
+      case 'decade':
         zoomCorrection = 10;
         break;
       default:
@@ -690,19 +735,18 @@ class Calendar<
         break;
     }
 
-    // @ts-expect-error
-    // eslint-disable-next-line @stylistic/space-infix-ops, radix
-    return parseInt(endDate.getFullYear() / zoomCorrection)- parseInt(startDate.getFullYear() / zoomCorrection);
+    return Math.floor(endDate.getFullYear() / zoomCorrection)
+      - Math.floor(startDate.getFullYear() / zoomCorrection);
   }
 
-  _getMonthsOffset(startDate, endDate) {
+  _getMonthsOffset(startDate: Date, endDate: Date): number {
     const yearOffset = endDate.getFullYear() - startDate.getFullYear();
     const monthOffset = endDate.getMonth() - startDate.getMonth();
 
     return yearOffset * 12 + monthOffset;
   }
 
-  _waitRenderView(offset) {
+  _waitRenderView(offset: number): void {
     if (this._alreadyViewRender) {
       return;
     }
@@ -718,12 +762,15 @@ class Calendar<
     });
   }
 
-  _getRtlCorrection() {
-    return this.option('rtlEnabled') ? -1 : 1;
+  _getRtlCorrection(): number {
+    const { rtlEnabled } = this.option();
+
+    return rtlEnabled ? -1 : 1;
   }
 
-  _getDateByOffset(offset, date?) {
-    date = this._getDate(date ?? this.option('currentDate'));
+  _getDateByOffset(offset: number, initialDate?: DateLike): Date {
+    const { currentDate = new Date() } = this.option();
+    const date = this._getDate(initialDate ?? currentDate);
 
     const currentDay = date.getDate();
     const difference = dateUtils.getDifferenceInMonth(this.option('zoomLevel')) * offset;
@@ -731,18 +778,18 @@ class Calendar<
     date.setDate(1);
     date.setMonth(date.getMonth() + difference);
 
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     const lastDay = dateUtils.getLastMonthDate(date).getDate();
     date.setDate(currentDay > lastDay ? lastDay : currentDay);
 
     return date;
   }
 
-  _focusTarget() {
+  _focusTarget(): dxElementWrapper {
     return this._$viewsWrapper;
   }
 
-  _focusEventTarget() {
+  _focusEventTarget(): dxElementWrapper {
     return this.$element();
   }
 
@@ -755,8 +802,9 @@ class Calendar<
     $element.toggleClass(CALENDAR_RANGE_CLASS, selectionMode === 'range');
 
     this._renderBody();
-    // @ts-expect-error ts-error
-    $element.append(this.$body);
+    if (this.$body) {
+      $element.append(this.$body);
+    }
 
     this._renderViews();
     this._renderNavigator();
@@ -783,7 +831,8 @@ class Calendar<
   _render(): void {
     super._render();
 
-    this._setViewContoured(this.option('currentDate'));
+    const { currentDate = new Date() } = this.option();
+    this._setViewContoured(currentDate);
   }
 
   _renderBody(): void {
@@ -794,7 +843,7 @@ class Calendar<
     }
   }
 
-  _updateAriaLabelAndRole() {
+  _updateAriaLabelAndRole(): void {
     const readOnly = this.option('readOnly');
     const $element = this.$element();
 
@@ -806,9 +855,10 @@ class Calendar<
     this.setAria(aria, $element);
   }
 
-  _setAriaReadonly() {}
+  _setAriaReadonly(): void {}
 
-  _getKeyboardListeners() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _getKeyboardListeners(): any {
     return super._getKeyboardListeners().concat([this._view]);
   }
 
@@ -817,7 +867,7 @@ class Calendar<
 
     this.$element().addClass(`${CALENDAR_VIEW_CLASS}-${zoomLevel}`);
 
-    const { currentDate, viewsCount } = this.option();
+    const { currentDate = new Date(), viewsCount } = this.option();
 
     this.$element().toggleClass(CALENDAR_MULTIVIEW_CLASS, viewsCount > 1);
 
@@ -825,13 +875,15 @@ class Calendar<
 
     if (hasWindow()) {
       const beforeDate = this._getDateByOffset(-1, currentDate);
-      // @ts-expect-error ts-error
-      this._beforeView = this._isViewAvailable(beforeDate) ? this._renderSpecificView(beforeDate) : null;
+      this._beforeView = this._isViewAvailable(beforeDate)
+        ? this._renderSpecificView(beforeDate)
+        : null;
 
       const afterDate = this._getDateByOffset(viewsCount, currentDate);
       afterDate.setDate(1);
-      // @ts-expect-error ts-error
-      this._afterView = this._isViewAvailable(afterDate) ? this._renderSpecificView(afterDate) : null;
+      this._afterView = this._isViewAvailable(afterDate)
+        ? this._renderSpecificView(afterDate)
+        : null;
     }
 
     if (viewsCount > 1) {
@@ -841,41 +893,54 @@ class Calendar<
     this._translateViews();
   }
 
-  _renderSpecificView(date): MonthView | YearView | DecadeView | CenturyView {
-    const { zoomLevel } = this.option();
-    // @ts-expect-error ts-error
+  _renderSpecificView(date: Date): MonthView | YearView | DecadeView | CenturyView {
+    const { zoomLevel = 'month' } = this.option();
     const specificView = Views[zoomLevel];
     const $view = $('<div>').appendTo(this._$viewsWrapper);
     const config = this._viewConfig(date);
 
-    const view = this._createComponent($view, specificView, config);
     // @ts-expect-error ts-error
+    const view = this._createComponent($view, specificView, config);
+
     return view;
   }
 
-  _viewConfig(date) {
-    let disabledDates = this.option('disabledDates');
-    // @ts-expect-error ts-error
-    disabledDates = isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this)) : disabledDates;
+  _viewConfig(date: Date): MonthViewProperties | BaseViewProperties {
+    const {
+      firstDayOfWeek = dateLocalization.firstDayOfWeekIndex(),
+      showWeekNumbers = false,
+      selectWeekOnClick,
+      weekNumberRule,
+      zoomLevel = 'month',
+      focusStateEnabled,
+      hoverStateEnabled,
+      disabledDates: disabledDatesOption,
+      _todayDate: todayDate,
+    } = this.option();
+
+    const disabledDates = isFunction(disabledDatesOption)
+      ? this._injectComponent(disabledDatesOption.bind(this))
+      : disabledDatesOption;
 
     return {
       ...this._selectionStrategy.getViewOptions(),
       date,
       min: this._getMinDate(),
       max: this._getMaxDate(),
-      firstDayOfWeek: this.option('firstDayOfWeek') ?? dateLocalization.firstDayOfWeekIndex(),
-      showWeekNumbers: this.option('showWeekNumbers'),
-      selectWeekOnClick: this.option('selectWeekOnClick'),
-      weekNumberRule: this.option('weekNumberRule'),
-      zoomLevel: this.option('zoomLevel'),
+      // @ts-expect-error ts-error
+      firstDayOfWeek,
+      showWeekNumbers,
+      selectWeekOnClick,
+      weekNumberRule,
+      zoomLevel,
       tabIndex: undefined,
-      focusStateEnabled: this.option('focusStateEnabled'),
-      hoverStateEnabled: this.option('hoverStateEnabled'),
+      focusStateEnabled,
+      hoverStateEnabled,
       disabledDates,
       onCellClick: this._cellClickHandler.bind(this),
       cellTemplate: this._getTemplateByOption('cellTemplate'),
       allowValueSelection: this._isMaxZoomLevel(),
-      _todayDate: this.option('_todayDate'),
+      _todayDate: todayDate,
     };
   }
 
@@ -891,23 +956,24 @@ class Calendar<
     }
   }
 
-  _injectComponent(func) {
-    const that = this;
-    return function (params) {
-      extend(params, { component: that });
-      return func(params);
+  _injectComponent<T extends { date: Date; view: string }>(
+    func: (params: T & { component: Calendar<TProperties> }) => boolean,
+  ): (params: T) => boolean {
+    return (params: T): boolean => {
+      const paramsWithComponent = { ...params, component: this };
+      return func(paramsWithComponent as T & { component: Calendar<TProperties> });
     };
   }
 
-  _isViewAvailable(date) {
-    const zoomLevel = this.option('zoomLevel');
+  _isViewAvailable(date: Date): boolean {
+    const { zoomLevel } = this.option();
     const min = dateUtils.getViewMinBoundaryDate(zoomLevel, this._getMinDate());
     const max = dateUtils.getViewMaxBoundaryDate(zoomLevel, this._getMaxDate());
 
     return dateUtils.dateInRange(date, min, max);
   }
 
-  _translateViews() {
+  _translateViews(): void {
     const { viewsCount } = this.option();
 
     move(this._view.$element(), { left: 0, top: 0 });
@@ -916,19 +982,24 @@ class Calendar<
     this._moveViewElement(this._additionalView, 1);
   }
 
-  _moveViewElement(view, coefficient) {
-    view && move(view.$element(), {
-      left: this._getViewPosition(coefficient),
-      top: 0,
-    });
+  _moveViewElement(
+    view: MonthView | YearView | DecadeView | CenturyView | undefined | null,
+    coefficient: number,
+  ): void {
+    if (view) {
+      move(view.$element(), {
+        left: this._getViewPosition(coefficient),
+        top: 0,
+      });
+    }
   }
 
-  _getViewPosition(coefficient) {
+  _getViewPosition(coefficient: number): string {
     const rtlCorrection = this.option('rtlEnabled') ? -1 : 1;
     return `${coefficient * 100 * rtlCorrection}%`;
   }
 
-  _cellClickHandler(e) {
+  _cellClickHandler(e: { event: DxEvent; value: Date }): void {
     const zoomLevel = this.option('zoomLevel');
     const nextView = dateUtils.getViewDown(zoomLevel);
 
@@ -943,10 +1014,9 @@ class Calendar<
     }
   }
 
-  _updateTimeComponent(date) {
+  _updateTimeComponent(date: Date): Date {
     const result = new Date(date);
-    // @ts-expect-error ts-error
-    const currentValue = this._dateOption('value');
+    const currentValue = this._getDateOption('value') as Date;
 
     if (currentValue && this._isSingleMode()) {
       result.setHours(currentValue.getHours());
@@ -958,12 +1028,13 @@ class Calendar<
     return result;
   }
 
-  _isMaxZoomLevel() {
-    return this.option('zoomLevel') === this.option('maxZoomLevel');
+  _isMaxZoomLevel(): boolean {
+    const { zoomLevel = 'month', maxZoomLevel } = this.option();
+    return zoomLevel === maxZoomLevel;
   }
 
-  _navigateDown(cell?) {
-    const zoomLevel = this.option('zoomLevel');
+  _navigateDown(cell?: Element): void {
+    const { zoomLevel, currentDate = new Date() } = this.option();
 
     if (this._isMaxZoomLevel()) {
       return;
@@ -974,8 +1045,8 @@ class Calendar<
     if (!nextView) {
       return;
     }
-
-    let newCurrentDate = this._view.option('contouredDate') || this._view.option('date');
+    const { contouredDate, date } = this._view.option();
+    let newCurrentDate = contouredDate ?? date;
 
     if (cell) {
       // @ts-expect-error ts-error
@@ -993,20 +1064,19 @@ class Calendar<
     this._animateShowView();
 
     this._moveToClosestAvailableDate();
-    this._setViewContoured(this._getNormalizedDate(this.option('currentDate')));
+    this._setViewContoured(this._getNormalizedDate(currentDate));
   }
 
-  _renderNavigator() {
+  _renderNavigator(): void {
     if (!this._navigator) {
-      // @ts-expect-error
-      this._navigator = new Navigator($('<div>'), this._navigatorConfig());
+      this._navigator = this._createComponent($('<div>'), Navigator, this._navigatorConfig());
     }
 
     this._navigator.option('text', this._getViewsCaption(this._view, this._additionalView));
     this._updateButtonsVisibility();
   }
 
-  _navigatorConfig() {
+  _navigatorConfig(): NavigatorOptions {
     const { focusStateEnabled, rtlEnabled } = this.option();
 
     return {
@@ -1019,13 +1089,14 @@ class Calendar<
     };
   }
 
-  _navigatorClickHandler(e) {
+  _navigatorClickHandler(e): void {
     const { currentDate, viewsCount } = this.option();
     let offset = e.direction;
 
     if (viewsCount > 1) {
       const additionalViewActive = this._isAdditionalViewDate(currentDate);
-      const shouldDoubleOffset = additionalViewActive && offset < 0 || !additionalViewActive && offset > 0;
+      const shouldDoubleOffset = (additionalViewActive && offset < 0)
+        || (!additionalViewActive && offset > 0);
 
       if (shouldDoubleOffset) {
         offset *= 2;
@@ -1036,8 +1107,8 @@ class Calendar<
     this._moveToClosestAvailableDate(newCurrentDate);
   }
 
-  _navigateUp() {
-    const zoomLevel = this.option('zoomLevel');
+  _navigateUp(): void {
+    const { zoomLevel = 'month', currentDate = new Date() } = this.option();
     const nextView = dateUtils.getViewUp(zoomLevel);
 
     if (!nextView || this._isMinZoomLevel(zoomLevel)) {
@@ -1051,22 +1122,23 @@ class Calendar<
     this._animateShowView();
 
     this._moveToClosestAvailableDate();
-    this._setViewContoured(this._getNormalizedDate(this.option('currentDate')));
+    this._setViewContoured(this._getNormalizedDate(currentDate));
   }
 
-  _isMinZoomLevel(zoomLevel) {
+  _isMinZoomLevel(zoomLevel: CalendarZoomLevel): boolean {
     const min = this._getMinDate();
     const max = this._getMaxDate();
+    const { minZoomLevel } = this.option();
 
-    return dateUtils.sameView(zoomLevel, min, max) || this.option('minZoomLevel') === zoomLevel;
+    return !!dateUtils.sameView(zoomLevel, min, max) || minZoomLevel === zoomLevel;
   }
 
-  _updateButtonsVisibility() {
+  _updateButtonsVisibility(): void {
     this._navigator.toggleButton('next', !isDefined(this._afterView));
     this._navigator.toggleButton('prev', !isDefined(this._beforeView));
   }
 
-  _renderSwipeable() {
+  _renderSwipeable(): void {
     if (!this._swipeable) {
       this._swipeable = this._createComponent(this.$element(), Swipeable, {
         onStart: this._swipeStartHandler.bind(this),
@@ -1077,7 +1149,7 @@ class Calendar<
     }
   }
 
-  _swipeStartHandler(e): void {
+  _swipeStartHandler(e: SwipeStartEvent): void {
     // @ts-expect-error ts-error
     fx.stop(this._$viewsWrapper, true);
     const { viewsCount } = this.option();
@@ -1088,31 +1160,29 @@ class Calendar<
     e.event.maxRightOffset = this._getRequiredView('prev') ? 1 / viewsCount : 0;
   }
 
-  _toggleGestureCoverCursor(cursor): void {
+  _toggleGestureCoverCursor(cursor: string): void {
     $(`.${GESTURE_COVER_CLASS}`).css('cursor', cursor);
   }
 
-  _getRequiredView(name) {
-    let view;
-    const isRtl = this.option('rtlEnabled');
+  _getRequiredView(
+    name: string,
+  ): MonthView | YearView | DecadeView | CenturyView | undefined | null {
+    const { rtlEnabled } = this.option();
 
-    if (name === 'next') {
-      view = isRtl ? this._beforeView : this._afterView;
-    } else if (name === 'prev') {
-      view = isRtl ? this._afterView : this._beforeView;
+    if (name === 'prev') {
+      return rtlEnabled ? this._afterView : this._beforeView;
     }
-
-    return view;
+    return rtlEnabled ? this._beforeView : this._afterView;
   }
 
-  _swipeUpdateHandler(e) {
+  _swipeUpdateHandler(e: SwipeUpdateEvent): void {
     const { offset } = e.event;
 
     move(this._$viewsWrapper, { left: offset * this._viewWidth(), top: 0 });
     this._updateNavigatorCaption(offset);
   }
 
-  _swipeEndHandler(e) {
+  _swipeEndHandler(e: SwipeEndEvent): void {
     this._toggleGestureCoverCursor('auto');
 
     const { currentDate, rtlEnabled } = this.option();
@@ -1120,7 +1190,8 @@ class Calendar<
     const moveOffset = !targetOffset ? 0 : targetOffset / Math.abs(targetOffset);
 
     const isAdditionalViewActive = this._isAdditionalViewDate(currentDate);
-    const shouldDoubleOffset = isAdditionalViewActive && (rtlEnabled ? moveOffset === -1 : moveOffset === 1);
+    const shouldDoubleOffset = isAdditionalViewActive
+      && (rtlEnabled ? moveOffset === -1 : moveOffset === 1);
 
     if (moveOffset === 0) {
       this._animateWrapper(0, ANIMATION_DURATION_SHOW_VIEW);
@@ -1132,17 +1203,15 @@ class Calendar<
 
     if (this._isDateInInvalidRange(date)) {
       if (moveOffset >= 0) {
-        // @ts-expect-error ts-error
         date = new Date(this._getMinDate());
       } else {
-        // @ts-expect-error ts-error
         date = new Date(this._getMaxDate());
       }
     }
     this.option('currentDate', date);
   }
 
-  _viewWidth() {
+  _viewWidth(): number {
     if (!this._viewWidthValue) {
       const { viewsCount } = this.option();
 
@@ -1152,18 +1221,20 @@ class Calendar<
     return this._viewWidthValue;
   }
 
-  _updateNavigatorCaption(offset) {
-    offset *= this._getRtlCorrection();
+  _updateNavigatorCaption(initialOffset: number): void {
+    const offset = initialOffset * this._getRtlCorrection();
     const { viewsCount } = this.option();
 
     const isMultiView = viewsCount > 1;
 
-    let view;
-    let additionalView;
+    let view: MonthView | YearView | DecadeView | CenturyView | null = null;
+    let additionalView: MonthView | YearView | DecadeView | CenturyView | null = null;
 
     if (offset > 0.5 && this._beforeView) {
       view = this._beforeView;
-      additionalView = isMultiView && this._view;
+      if (isMultiView) {
+        additionalView = this._view;
+      }
     } else if (offset < -0.5 && this._afterView) {
       view = isMultiView ? this._additionalView : this._afterView;
       additionalView = isMultiView ? this._afterView : null;
@@ -1175,7 +1246,10 @@ class Calendar<
     this._navigator.option('text', this._getViewsCaption(view, additionalView));
   }
 
-  _getViewsCaption(view, additionalView) {
+  _getViewsCaption(
+    view: MonthView | YearView | DecadeView | CenturyView,
+    additionalView: MonthView | YearView | DecadeView | CenturyView | null,
+  ): string {
     let caption = view.getNavigatorCaption();
     const { viewsCount } = this.option();
 
@@ -1187,9 +1261,9 @@ class Calendar<
     return caption;
   }
 
-  _isDateInInvalidRange(date) {
+  _isDateInInvalidRange(date: Date): boolean {
     if (this._view.isBoundary(date)) {
-      return;
+      return false;
     }
 
     const min = this._getMinDate();
@@ -1199,7 +1273,7 @@ class Calendar<
     return normalizedDate === min || normalizedDate === max;
   }
 
-  _renderFooter() {
+  _renderFooter(): void {
     const { showTodayButton, todayButtonText: text } = this.option();
 
     if (showTodayButton) {
@@ -1212,10 +1286,8 @@ class Calendar<
           onClick: (args) => {
             this._toTodayView(args);
           },
-          // @ts-expect-error
-          type: isFluent() ? 'normal' : 'default',
-          // @ts-expect-error
-          stylingMode: isFluent() ? 'outlined' : 'text',
+          type: isFluent(current()) ? 'normal' : 'default',
+          stylingMode: isFluent(current()) ? 'outlined' : 'text',
           integrationOptions: {},
         },
       ).$element()
@@ -1235,12 +1307,15 @@ class Calendar<
     this._$submitElement = $('<input>')
       .attr('type', 'hidden')
       .appendTo(this.$element());
-    this._setSubmitValue(this.option('value'));
+
+    const { value } = this.option();
+    this._setSubmitValue(value);
   }
 
   _setSubmitValue(value): void {
     const dateValue = this._convertToDate(value);
-    this._getSubmitElement().val(dateSerialization.serializeDate(dateValue, CALENDAR_INPUT_STANDARD_PATTERN));
+    this._getSubmitElement()
+      .val(dateSerialization.serializeDate(dateValue, CALENDAR_INPUT_STANDARD_PATTERN));
   }
 
   _getSubmitElement(): dxElementWrapper {
@@ -1250,18 +1325,34 @@ class Calendar<
   _animateShowView(): void {
     // @ts-expect-error ts-error
     fx.stop(this._view.$element(), true);
-    this._popAnimationView(this._view, POP_ANIMATION_FROM, POP_ANIMATION_TO, ANIMATION_DURATION_SHOW_VIEW);
+    this._popAnimationView(
+      this._view,
+      POP_ANIMATION_FROM,
+      POP_ANIMATION_TO,
+      ANIMATION_DURATION_SHOW_VIEW,
+    );
 
     const { viewsCount } = this.option();
 
     if (viewsCount > 1) {
       // @ts-expect-error ts-error
       fx.stop(this._additionalView.$element(), true);
-      this._popAnimationView(this._additionalView, POP_ANIMATION_FROM, POP_ANIMATION_TO, ANIMATION_DURATION_SHOW_VIEW);
+      this._popAnimationView(
+        this._additionalView,
+        POP_ANIMATION_FROM,
+        POP_ANIMATION_TO,
+        ANIMATION_DURATION_SHOW_VIEW,
+      );
     }
   }
 
-  _popAnimationView(view, from, to, duration) {
+  _popAnimationView(
+    view: MonthView | YearView | DecadeView | CenturyView,
+    from: AnimationConfig['from'],
+    to: AnimationConfig['to'],
+    duration: number,
+  ): Promise<unknown> {
+    // @ts-expect-error ts-error
     return fx.animate(view.$element(), {
       type: 'pop',
       from: {
@@ -1276,7 +1367,7 @@ class Calendar<
     });
   }
 
-  _navigate(offset, value) {
+  _navigate(offset: number, value: Date): void {
     if (offset !== 0 && Math.abs(offset) !== 1 && this._isViewAvailable(value)) {
       const newView = this._renderSpecificView(value);
 
@@ -1292,7 +1383,12 @@ class Calendar<
     }
 
     const rtlCorrection = this._getRtlCorrection();
-    const offsetSign = offset > 0 ? 1 : offset < 0 ? -1 : 0;
+    let offsetSign = 0;
+    if (offset > 0) {
+      offsetSign = 1;
+    } else if (offset < 0) {
+      offsetSign = -1;
+    }
     const endPosition = -rtlCorrection * offsetSign * this._viewWidth();
     // @ts-expect-error ts-error
     const viewsWrapperPosition = this._$viewsWrapper.position().left;
@@ -1308,7 +1404,7 @@ class Calendar<
     }
   }
 
-  _animateWrapper(to, duration) {
+  _animateWrapper(to: AnimationConfig['to'], duration: number): Promise<unknown> {
     // @ts-expect-error ts-error
     return fx.animate(this._$viewsWrapper, {
       type: 'slide',
@@ -1319,11 +1415,11 @@ class Calendar<
     });
   }
 
-  _getDate(value) {
+  _getDate(value: Date | number | string): Date {
     return new Date(value);
   }
 
-  _toTodayView(args) {
+  _toTodayView(args: ClickEvent): void {
     const today = new Date();
 
     if (this._isMaxZoomLevel()) {
@@ -1341,7 +1437,7 @@ class Calendar<
     this._preventViewChangeAnimation = false;
   }
 
-  _wrapperAnimationEndHandler(offset, newDate) {
+  _wrapperAnimationEndHandler(offset: number, newDate: Date): void {
     this._rearrangeViews(offset);
     this._translateViews();
     this._resetLocation();
@@ -1351,7 +1447,7 @@ class Calendar<
     this._selectionStrategy.updateAriaSelected();
   }
 
-  _rearrangeViews(offset) {
+  _rearrangeViews(offset: number): void {
     if (offset === 0) {
       return;
     }
@@ -1384,7 +1480,9 @@ class Calendar<
     const destinationDate = this[viewToCreateKey].option('date');
 
     this[viewToRemoveKey]?.$element().remove();
-    this[viewToRemoveKey] = this._renderSpecificView(this._getDateByOffset(viewOffset * viewsCount, destinationDate));
+    this[viewToRemoveKey] = this._renderSpecificView(
+      this._getDateByOffset(viewOffset * viewsCount, destinationDate),
+    );
     this[viewAfterRemoveKey].$element().remove();
 
     if (viewsCount === 1) {
@@ -1395,10 +1493,12 @@ class Calendar<
     }
 
     const dateByOffset = this._getDateByOffset(-viewOffset, destinationDate);
-    this[viewToCreateKey] = this._isViewAvailable(dateByOffset) ? this._renderSpecificView(dateByOffset) : null;
+    this[viewToCreateKey] = this._isViewAvailable(dateByOffset)
+      ? this._renderSpecificView(dateByOffset)
+      : null;
   }
 
-  _resetLocation() {
+  _resetLocation(): void {
     move(this._$viewsWrapper, { left: 0, top: 0 });
   }
 
@@ -1445,26 +1545,28 @@ class Calendar<
     this._translateViews();
   }
 
-  _shouldSkipFocusEvent(event) {
+  _shouldSkipFocusEvent(event: DxEvent<FocusEvent>): boolean {
     const { target, relatedTarget } = event;
 
-    return $(target).parents(`.${CALENDAR_CLASS}`).length && $(relatedTarget).parents(`.${CALENDAR_CLASS}`).length;
+    return Boolean($(target).parents(`.${CALENDAR_CLASS}`).length)
+      && Boolean($(relatedTarget as Element).parents(`.${CALENDAR_CLASS}`).length);
   }
 
-  _focusInHandler(event): void {
+  _focusInHandler(event: DxEvent<FocusEvent>): void {
     if ($(event.target).is(this._$viewsWrapper)) {
-      this._setViewContoured(this.option('currentDate'));
+      const { currentDate = new Date() } = this.option();
+      this._setViewContoured(currentDate);
     }
 
     if (this._shouldSkipFocusEvent(event)) {
       return;
     }
-    // @ts-expect-error ts-error
-    super._focusInHandler.apply(this, arguments);
+
+    super._focusInHandler.apply(this, [event]);
     this._toggleFocusClass(true, this.$element());
   }
 
-  _focusOutHandler(event): void {
+  _focusOutHandler(event: DxEvent<FocusEvent>): void {
     if ($(event.target).is(this._$viewsWrapper)) {
       this._view.option('contouredDate', null);
       this._additionalView?.option('contouredDate', null);
@@ -1473,25 +1575,25 @@ class Calendar<
     if (this._shouldSkipFocusEvent(event)) {
       return;
     }
-    // @ts-expect-error ts-error
-    super._focusOutHandler.apply(this, arguments);
+
+    super._focusOutHandler.apply(this, [event]);
     this._toggleFocusClass(false, this.$element());
   }
 
-  _updateViewsOption(optionName, newValue): void {
+  _updateViewsOption(optionName: string, newValue: Date | Date[]): void {
     this._view.option(optionName, newValue);
     this._additionalView?.option(optionName, newValue);
     this._beforeView?.option(optionName, newValue);
     this._afterView?.option(optionName, newValue);
   }
 
-  _setViewsMinOption(min): void {
+  _setViewsMinOption(min: Date): void {
     this._restoreViewsMinMaxOptions();
     this.option('_rangeMin', this._convertToDate(min));
     this._updateViewsOption('min', this._getMinDate());
   }
 
-  _setViewsMaxOption(max): void {
+  _setViewsMaxOption(max: Date): void {
     this._restoreViewsMinMaxOptions();
     this.option('_rangeMax', this._convertToDate(max));
     this._updateViewsOption('max', this._getMaxDate());
@@ -1508,22 +1610,21 @@ class Calendar<
     this._updateViewsOption('max', this._getMaxDate());
   }
 
-  _updateNavigatorLabels() {
-    let { zoomLevel } = this.option();
-    // @ts-expect-error ts-error
-    zoomLevel = zoomLevel.charAt(0).toUpperCase() + zoomLevel.slice(1);
+  _updateNavigatorLabels(): void {
+    const { zoomLevel = 'month' } = this.option();
+    const capitalizedZoomLevel = zoomLevel.charAt(0).toUpperCase() + zoomLevel.slice(1);
 
     const captionButtonText = this._navigator._caption.option('text');
-    const localizedPrevButtonLabel = messageLocalization.format(`dxCalendar-previous${zoomLevel}ButtonLabel`);
-    const localizedCaptionLabel = messageLocalization.format(`dxCalendar-caption${zoomLevel}Label`);
-    const localizedNextButtonLabel = messageLocalization.format(`dxCalendar-next${zoomLevel}ButtonLabel`);
+    const localizedPrevButtonLabel = messageLocalization.format(`dxCalendar-previous${capitalizedZoomLevel}ButtonLabel`);
+    const localizedCaptionLabel = messageLocalization.format(`dxCalendar-caption${capitalizedZoomLevel}Label`);
+    const localizedNextButtonLabel = messageLocalization.format(`dxCalendar-next${capitalizedZoomLevel}ButtonLabel`);
 
     this.setAria('label', localizedPrevButtonLabel, this._navigator._prevButton.$element());
     this.setAria('label', `${captionButtonText}. ${localizedCaptionLabel}`, this._navigator._caption.$element());
     this.setAria('label', localizedNextButtonLabel, this._navigator._nextButton.$element());
   }
 
-  _updateAriaSelected(value, previousValue) {
+  _updateAriaSelected(value: Date[], previousValue: Date[]): void {
     previousValue.forEach((item) => {
       this.setAria('selected', false, this._view._getCellByDate(item));
     });
@@ -1545,12 +1646,13 @@ class Calendar<
     }
   }
 
-  _updateAriaId(value?) {
-    value = value ?? this.option('currentDate');
+  _updateAriaId(value?: Date): void {
+    const { currentDate = new Date() } = this.option();
+    const date = value ?? currentDate;
 
     const ariaId = `dx-${new Guid()}`;
-    const view = this._getActiveView(value);
-    const $newCell = view._getCellByDate(value);
+    const view = this._getActiveView(date);
+    const $newCell = view._getCellByDate(date);
 
     this.setAria('id', ariaId, $newCell);
     this.setAria('activedescendant', ariaId);
@@ -1558,28 +1660,31 @@ class Calendar<
     this._onContouredChanged?.(ariaId);
   }
 
-  _suppressingNavigation(callback, args) {
+  _suppressingNavigation(callback: (date: Date) => void, args: [Date]): void {
     this._suppressNavigation = true;
     callback.apply(this, args);
     delete this._suppressNavigation;
   }
 
-  _optionChanged(args) {
-    const { value, previousValue } = args;
+  _optionChanged(args: OptionChanged<TProperties>): void {
+    const { name, value, previousValue } = args;
 
-    switch (args.name) {
+    switch (name) {
       case 'width':
         super._optionChanged(args);
         this._clearViewWidthCache();
         break;
       case 'min':
       case 'max':
+      {
         this.min = undefined;
         this.max = undefined;
-        this._suppressingNavigation(this._updateCurrentDate, [this.option('currentDate')]);
+        const { currentDate = new Date() } = this.option();
+        this._suppressingNavigation(this._updateCurrentDate, [currentDate]);
         this._refreshViews();
         this._renderNavigator();
         break;
+      }
       case 'selectionMode':
         this._refreshSelectionStrategy();
         this._initCurrentDate();
@@ -1596,7 +1701,7 @@ class Calendar<
         break;
       case 'currentDate':
         this.setAria('id', undefined, this._view._getCellByDate(previousValue));
-        this._updateCurrentDate(value);
+        this._updateCurrentDate(value as Date);
         break;
       case 'zoomLevel':
         this.$element().removeClass(`${CALENDAR_VIEW_CLASS}-${previousValue}`);
@@ -1612,6 +1717,7 @@ class Calendar<
         this._updateButtonsVisibility();
         break;
       case 'value': {
+        // @ts-expect-error ts-error
         const isSameValue = dateUtils.sameDatesArrays(value, previousValue);
 
         if (!isSameValue) {
@@ -1655,7 +1761,7 @@ class Calendar<
     }
   }
 
-  getContouredDate() {
+  getContouredDate(): Date | undefined {
     const { contouredDate } = this._view.option();
 
     return contouredDate;
