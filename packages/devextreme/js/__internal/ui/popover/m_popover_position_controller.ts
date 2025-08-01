@@ -1,6 +1,7 @@
 import type {
   Position as CommonPosition,
 } from '@js/common';
+import type { CollisionResolutionCombination } from '@js/common/core/animation';
 import positionUtils from '@js/common/core/animation/position';
 import type { dxElementWrapper } from '@js/core/renderer';
 import { pairToObject } from '@js/core/utils/common';
@@ -21,15 +22,13 @@ interface PopoverControllerElements extends ControllerOverlayElements {
   $arrow?: dxElementWrapper;
 }
 
-type Collision = 'fit flip' | 'flip fit';
-
 export interface PopoverControllerProperties extends BaseControllerProperties {
   target?: PopoverProperties['target'];
   shading?: PopoverProperties['shading'];
 }
 
 export interface PopoverPosition extends OverlayPosition {
-  collision?: Collision;
+  collision?: CollisionResolutionCombination;
 }
 
 export type Position = PopoverPosition | CommonPosition;
