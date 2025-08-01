@@ -159,12 +159,10 @@ class Accordion extends CollectionWidget<AccordionProperties> {
     this._updateItemHeights(true);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return ACCORDION_ITEM_DATA_KEY;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return ACCORDION_ITEM_CLASS;
   }
@@ -435,7 +433,6 @@ class Accordion extends CollectionWidget<AccordionProperties> {
     super._clean();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _tryParseItemPropertyName(fullName: string): string | null {
     // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
     const matches = fullName.match(/.*\.(.*)/);
