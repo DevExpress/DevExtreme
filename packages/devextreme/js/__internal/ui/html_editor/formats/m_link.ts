@@ -1,25 +1,38 @@
 import { isObject } from '@js/core/utils/type';
 import Quill from 'devextreme-quill';
 
-// eslint-disable-next-line import/no-mutable-exports
-let ExtLink = {};
+import EmptyModule from '../modules/empty';
+import type { BlotConstructor } from '../types/quill';
 
-if (Quill) {
+interface LinkData {
+  href?: string;
+  text?: string;
+  target?: boolean;
+}
+
+interface LinkFormats {
+  href: string | null;
+  target: string | null;
+}
+
+type ConditionalLinkBlot = BlotConstructor | typeof EmptyModule;
+
+const ExtLink = ((): ConditionalLinkBlot => {
+  if (!Quill) return EmptyModule;
+
   const Link = Quill.import('formats/link');
 
-  ExtLink = class ExtLink extends Link {
-    static create(data) {
-      const HREF = data?.href ?? data;
-      const node = super.create(HREF);
+  return class ExtendedLink extends Link {
+    static create(data: string | LinkData): HTMLAnchorElement {
+      const HREF = (typeof data === 'object' && data?.href) ?? data;
+      const node = super.create(HREF) as HTMLAnchorElement;
 
       if (isObject(data)) {
-        // @ts-expect-error
-        if (data.text) {
-          // @ts-expect-error
-          node.innerText = data.text;
+        const linkData = data;
+        if (linkData.text) {
+          node.innerText = linkData.text;
         }
-        // @ts-expect-error
-        if (!data.target) {
+        if (!linkData.target) {
           node.removeAttribute('target');
         }
       }
@@ -27,16 +40,16 @@ if (Quill) {
       return node;
     }
 
-    static formats(domNode) {
+    static formats(domNode: HTMLAnchorElement): LinkFormats {
       return {
         href: domNode.getAttribute('href'),
         target: domNode.getAttribute('target'),
       };
     }
 
-    formats() {
-      const formats = super.formats();
-      const { href, target } = ExtLink.formats(this.domNode);
+    formats(): Record<string, unknown> {
+      const formats = super.formats() as Record<string, unknown>;
+      const { href, target } = ExtendedLink.formats(this.domNode as HTMLAnchorElement);
 
       formats.link = href;
       formats.target = target;
@@ -44,34 +57,33 @@ if (Quill) {
       return formats;
     }
 
-    format(name, value) {
+    format(name: string, value: unknown): void {
       if (name === 'link' && isObject(value)) {
-        // @ts-expect-error
-        if (value.text) {
-          // @ts-expect-error
-          this.domNode.innerText = value.text;
+        const linkValue = value as LinkData;
+        if (linkValue.text) {
+          (this.domNode as HTMLAnchorElement).innerText = linkValue.text;
         }
-        // @ts-expect-error
-        if (value.target) {
-          this.domNode.setAttribute('target', '_blank');
+        if (linkValue.target) {
+          (this.domNode as HTMLAnchorElement).setAttribute('target', '_blank');
         } else {
-          this.domNode.removeAttribute('target');
+          (this.domNode as HTMLAnchorElement).removeAttribute('target');
         }
-        // @ts-expect-error
-        this.domNode.setAttribute('href', value.href);
+        if (linkValue.href) {
+          (this.domNode as HTMLAnchorElement).setAttribute('href', linkValue.href);
+        }
       } else {
         super.format(name, value);
       }
     }
 
-    static value(domNode) {
+    static value(domNode: HTMLAnchorElement): LinkData {
       return {
-        href: domNode.getAttribute('href'),
+        href: domNode.getAttribute('href') ?? '',
         text: domNode.innerText,
         target: !!domNode.getAttribute('target'),
       };
     }
   };
-}
+})();
 
 export default ExtLink;
