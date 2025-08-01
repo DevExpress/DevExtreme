@@ -39,6 +39,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { unified } from "unified";
+import type { Plugin } from 'unified';
+
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import remarkStringify from "remark-stringify";
@@ -51,6 +53,12 @@ import {
   DxItem,
 } from 'devextreme-vue/html-editor';
 import { markup } from './data.ts';
+
+// Plugin<[(Options | null | undefined)?], string, Root>
+// Plugin<[Options?] | Array<void>, string, Root>
+type RehypeParseType = typeof rehypeParse extends Plugin<[infer P], infer S, infer R>
+    ? Plugin<[(P | null | undefined)?], S, R>
+    : never;
 
 const valueContent = ref(markup);
 const headerValues = [false, 1, 2, 3, 4, 5];
@@ -69,7 +77,7 @@ const converter = {
   },
   fromHtml(value) {
     const result = unified()
-      .use(rehypeParse)
+      .use(rehypeParse as RehypeParseType)
       .use(rehypeRemark)
       .use(remarkStringify)
       .processSync(value)
