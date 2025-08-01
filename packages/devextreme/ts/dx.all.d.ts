@@ -6804,6 +6804,7 @@ declare module DevExpress.core {
 
     css(propertyName: string, value: string | number): this;
     css(properties: Record<string, any>): this;
+    css(propertyName: string): string | undefined;
 
     data(key: string, value?: any): this;
 
@@ -22006,6 +22007,7 @@ declare module DevExpress.ui {
      */
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxLoadIndicator>;
+    export type LoadingAnimationType = 'circle' | 'sparkle';
     /**
      * [descr:_ui_load_indicator_OptionChangedEvent]
      */
@@ -22021,6 +22023,10 @@ declare module DevExpress.ui {
    */
   export interface dxLoadIndicatorOptions
     extends WidgetOptions<dxLoadIndicator> {
+    /**
+     * [descr:dxLoadIndicatorOptions.animationType]
+     */
+    animationType?: DevExpress.ui.dxLoadIndicator.LoadingAnimationType;
     /**
      * [descr:dxLoadIndicatorOptions.indicatorSrc]
      */

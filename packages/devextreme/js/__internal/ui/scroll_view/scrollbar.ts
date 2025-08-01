@@ -169,7 +169,6 @@ class Scrollbar extends Widget<ScrollbarProperties> {
     const { visibilityMode } = this.option();
     if (visibilityMode === 'onScroll') {
       // NOTE: need to relayout thumb and show it instantly
-      // @ts-expect-error ts-error
       this._$thumb.css('opacity');
     }
 

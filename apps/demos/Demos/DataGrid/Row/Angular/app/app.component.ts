@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxDataGridModule, DxTemplateModule } from 'devextreme-angular';
+import { DxDataGridModule } from 'devextreme-angular';
 import { Service, Employee } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -32,7 +32,6 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxDataGridModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

@@ -18,8 +18,8 @@ import ContextMenu from '@ts/ui/context_menu/context_menu';
 import type { HoverEvent } from '@ts/ui/context_menu/menu_base';
 import type DataAdapter from '@ts/ui/hierarchical_collection/data_adapter';
 import type { ItemKey } from '@ts/ui/hierarchical_collection/data_converter';
-import type { OverlayProperties, PositioningEvent as OverlayPositioningEvent } from '@ts/ui/overlay/m_overlay';
-import type Overlay from '@ts/ui/overlay/m_overlay';
+import type { OverlayProperties, PositioningEvent as OverlayPositioningEvent } from '@ts/ui/overlay/overlay';
+import type Overlay from '@ts/ui/overlay/overlay';
 
 const DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS = 'dx-context-menu-content-delimiter';
 const DX_SUBMENU_CLASS = 'dx-submenu';

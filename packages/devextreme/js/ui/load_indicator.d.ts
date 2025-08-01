@@ -40,6 +40,9 @@ export type InitializedEvent = InitializedEventInfo<dxLoadIndicator>;
  */
 export type OptionChangedEvent = EventInfo<dxLoadIndicator> & ChangedOptionInfo;
 
+/** @public */
+export type LoadingAnimationType = 'circle' | 'sparkle';
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
@@ -48,7 +51,13 @@ export type OptionChangedEvent = EventInfo<dxLoadIndicator> & ChangedOptionInfo;
 export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
     /**
      * @docid
-     * @default ""
+     * @default 'circle'
+     * @public
+     */
+    animationType?: LoadingAnimationType;
+    /**
+     * @docid
+     * @default ''
      * @public
      */
     indicatorSrc?: string;

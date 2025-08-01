@@ -16,7 +16,7 @@ import type { Item, Properties } from '@js/ui/tab_panel';
 import { current as currentTheme, isFluent, isMaterialBased } from '@js/ui/themes';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
-import MultiView from '@ts/ui/multi_view/m_multi_view';
+import MultiView from '@ts/ui/multi_view/multi_view';
 import type { TabsProperties } from '@ts/ui/tabs/tabs';
 import Tabs, {
   TABS_ITEM_TEXT_CLASS,
@@ -24,8 +24,9 @@ import Tabs, {
   TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS,
 } from '@ts/ui/tabs/tabs';
 
-// eslint-disable-next-line import/no-named-default
-import { default as TabPanelItem } from './item';
+import TabPanelItem from './item';
+
+// STYLE tabPanel
 
 export const TABPANEL_CLASS = 'dx-tabpanel';
 const TABPANEL_TABS_CLASS = 'dx-tabpanel-tabs';

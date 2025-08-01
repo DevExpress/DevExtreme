@@ -313,7 +313,7 @@ export default class AIDialog extends BaseDialog<AIDialogResult> {
       .appendTo($inputContainer);
 
     const options: LoadIndicatorProperties = {
-      _animationType: AnimationType.Sparkle,
+      animationType: AnimationType.Sparkle,
       width: LOADINDICATOR_SIZE,
       height: LOADINDICATOR_SIZE,
     };

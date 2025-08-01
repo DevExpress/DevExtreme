@@ -1,6 +1,8 @@
 import { findChanges } from 'core/utils/array_compare';
 import { extend } from 'core/utils/extend';
 import { applyBatch } from 'common/data/array_utils';
+import { logger } from '__internal/core/utils/m_console';
+import errors from 'ui/widget/ui.errors';
 
 const ITEMS_ARRAY_LENGTH = 4;
 const createItems = (length = ITEMS_ARRAY_LENGTH) => Array.from({ length }, (_, i) => ({ a: `Item ${i}`, id: i }));
@@ -133,5 +135,22 @@ QUnit.module('findChanges', {
         const result = findChangesWithoutReorders();
 
         assert.strictEqual(result, undefined);
+    });
+
+    QUnit.test('should return undefined and log error if detect items with duplicated keys', function(assert) {
+        sinon.spy(logger, 'error');
+        sinon.spy(errors, 'Error');
+
+        this.newItems.push({ a: 'Item 4', id: 3 });
+        const changes = this.findChanges();
+
+        assert.strictEqual(changes, undefined, 'changes are undefined');
+        assert.strictEqual(errors.Error.callCount, 1, 'throws 1 error');
+        assert.strictEqual(errors.Error.lastCall.args[0], 'E1040', 'error code id E1040');
+        assert.strictEqual(errors.Error.lastCall.args[1], 3, 'error argument is duplicated key');
+        assert.deepEqual(logger.error.getCall(0).args[0], errors.Error('E1040', 3));
+
+        logger.error.restore();
+        errors.Error.restore();
     });
 });

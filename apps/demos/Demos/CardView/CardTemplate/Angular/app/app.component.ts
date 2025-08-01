@@ -5,7 +5,6 @@ import {
   DxButtonModule,
   DxCardViewModule,
   DxPopupModule,
-  DxTemplateModule,
 } from 'devextreme-angular';
 import { CardInfo } from 'devextreme-angular/ui/card-view';
 import { Service, Vehicle } from './app.service';
@@ -55,7 +54,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxTemplateModule,
     DxCardViewModule,
     DxPopupModule,
     DxButtonModule,

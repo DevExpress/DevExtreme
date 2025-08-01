@@ -14,7 +14,7 @@ class CollectionWidgetAsync<
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey = any,
-> extends CollectionWidgetEdit<TProperties> {
+> extends CollectionWidgetEdit<TProperties, TItem, TKey> {
   _asyncTemplateItemsMap!: Record<string, DeferredObj<unknown>>;
 
   _initMarkup(): void {

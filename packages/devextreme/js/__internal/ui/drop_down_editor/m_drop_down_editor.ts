@@ -24,7 +24,7 @@ import { each } from '@js/core/utils/iterator';
 import { getDefaultAlignment } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import type { DxEvent } from '@js/events';
+import type { DxEvent, EventInfo } from '@js/events';
 import type { Options as Properties } from '@js/ui/drop_down_editor/ui.drop_down_editor';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
@@ -60,6 +60,8 @@ export interface DropDownEditorProperties extends Omit<Properties,
   buttonsLocation?: string;
 
   _onMarkupRendered?: () => void;
+
+  onPopupInitialized?: (e: { component: DropDownEditor; popup: Popup }) => void;
 }
 
 function createTemplateWrapperElement(): dxElementWrapper {
@@ -87,7 +89,9 @@ class DropDownEditor<
 
   _activeRenderContext?: symbol;
 
-  _popupInitializedAction!: (event?: Record<string, unknown>) => void;
+  _popupInitializedAction!: (event?: EventInfo<DropDownEditor> & {
+    popup?: Popup;
+  }) => void;
 
   _popupContentId?: string;
 
@@ -188,7 +192,7 @@ class DropDownEditor<
       buttonsLocation: 'default',
       useHiddenSubmitElement: false,
       validationMessagePosition: 'auto',
-      _userDropDownOptions: {},
+      _cached_dropDownOptions: {},
     };
   }
 
@@ -238,7 +242,7 @@ class DropDownEditor<
     const { rtlEnabled, dropDownOptions } = this.option();
 
     this._updatePopupPosition(rtlEnabled);
-    this._cacheUserDropDownOptions(dropDownOptions);
+    this._options.cache('dropDownOptions', dropDownOptions);
   }
 
   _updatePopupPosition(isRtlEnabled?: boolean): void {
@@ -633,7 +637,7 @@ class DropDownEditor<
   _renderPopupContent(): void {}
 
   _renderPopup(): void {
-    const popupConfig = extend(this._popupConfig(), this.option('_userDropDownOptions'));
+    const popupConfig = extend(this._popupConfig(), this._options.cache('dropDownOptions'));
 
     // @ts-expect-error ts-error
     this._popup = this._createComponent(this._$popup, Popup, popupConfig);
@@ -742,11 +746,12 @@ class DropDownEditor<
   _popupInitializedHandler(): void {}
 
   _getPopupInitializedHandler(): (e) => void {
-    const onPopupInitialized = this.option('onPopupInitialized');
+    const { onPopupInitialized } = this.option();
 
     return (e) => {
       this._popupInitializedHandler();
       if (onPopupInitialized) {
+        // @ts-expect-error
         this._popupInitializedAction({ popup: e.component });
       }
     };
@@ -959,12 +964,6 @@ class DropDownEditor<
     }
   }
 
-  _cacheUserDropDownOptions(value, name = 'dropDownOptions'): void {
-    const optionName = name.replace('dropDownOptions', '_userDropDownOptions');
-
-    this.option(optionName, value);
-  }
-
   _renderSubmitElement(): void {
     if (this.option('useHiddenSubmitElement')) {
       this._$submitElement = $('<input>')
@@ -993,7 +992,7 @@ class DropDownEditor<
   }
 
   _optionChanged(args: OptionChanged<TProperties>): void {
-    const { name, fullName, value } = args;
+    const { name, value } = args;
 
     switch (name) {
       case 'width':
@@ -1022,10 +1021,10 @@ class DropDownEditor<
         break;
       case 'dropDownOptions': {
         this._popupOptionChanged(args);
-        this._cacheUserDropDownOptions(value, fullName);
+        this._innerWidgetOptionChanged(this._popup, args);
         break;
       }
-      case '_userDropDownOptions':
+      case '_cached_dropDownOptions':
         break;
       case 'popupPosition':
         break;

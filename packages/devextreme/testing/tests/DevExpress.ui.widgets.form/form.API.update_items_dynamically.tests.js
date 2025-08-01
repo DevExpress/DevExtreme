@@ -1,8 +1,8 @@
 import { getWidth } from 'core/utils/size';
 import $ from 'jquery';
 import 'ui/form';
-import '__internal/ui/form/m_form.layout_manager';
-import { renderLabel } from '__internal/ui/form/components/m_label';
+import '__internal/ui/form/form.layout_manager';
+import { renderLabel } from '__internal/ui/form/components/label';
 import { TABPANEL_CONTAINER_CLASS } from '__internal/ui/tab_panel/tab_panel';
 import { TABS_ITEM_CLASS } from '__internal/ui/tabs/tabs';
 
