@@ -32,7 +32,6 @@ export const ANIMATION_TYPE_CLASSES = {
 export interface LoadIndicatorProperties extends Properties {
   _animatingSegmentCount?: number;
   _animatingSegmentInner?: boolean;
-  _animationType: AnimationType;
 }
 
 interface SegmentParams {
@@ -52,7 +51,7 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
       ...super._getDefaultOptions(),
       _animatingSegmentCount: 1,
       _animatingSegmentInner: false,
-      _animationType: AnimationType.Circle,
+      animationType: AnimationType.Circle,
       activeStateEnabled: false,
       hoverStateEnabled: false,
       indicatorSrc: '',
@@ -114,10 +113,10 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     this.$element().append(this._$wrapper);
   }
 
-  _getAnimationTypeContentClass(): (typeof ANIMATION_TYPE_CLASSES)[AnimationType] {
-    const { _animationType: animationType } = this.option();
+  _getAnimationTypeContentClass(): (typeof ANIMATION_TYPE_CLASSES)[AnimationType] | undefined {
+    const { animationType } = this.option();
 
-    return ANIMATION_TYPE_CLASSES[animationType];
+    return animationType && ANIMATION_TYPE_CLASSES[animationType];
   }
 
   _renderIndicatorContent(): void {
@@ -141,7 +140,7 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
 
   _getSegmentParams(): SegmentParams {
     const {
-      _animationType: animationType,
+      animationType,
       _animatingSegmentCount: animatingSegmentCount,
       _animatingSegmentInner: animatingSegmentInner,
     } = this.option();
@@ -205,13 +204,13 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
       return;
     }
 
-    let { width, height } = this.option();
+    const { width, height } = this.option();
 
     if (width || height) {
-      width = getWidth(this.$element());
-      height = getHeight(this.$element());
-      // @ts-expect-error ts-error
-      const minDimension = Math.min(height, width);
+      const elementWidth = getWidth(this.$element());
+      const elementHeight = getHeight(this.$element());
+
+      const minDimension = Math.min(elementHeight, elementWidth);
 
       this._$wrapper.css({
         height: minDimension,
@@ -234,7 +233,7 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     }
 
     this._$indicator.remove();
-    delete this._$indicator;
+    this._$indicator = undefined;
   }
 
   _removeMarkupForImage(): void {
@@ -245,7 +244,7 @@ class LoadIndicator extends Widget<LoadIndicatorProperties> {
     switch (args.name) {
       case '_animatingSegmentCount':
       case '_animatingSegmentInner':
-      case '_animationType':
+      case 'animationType':
       case 'indicatorSrc':
         this._invalidate();
         break;

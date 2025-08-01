@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import {
-  DxPopupModule, DxTemplateModule, DxDiagramModule, DxDiagramComponent, DxTextBoxModule, DxButtonModule,
+  DxPopupModule, DxDiagramModule, DxDiagramComponent, DxTextBoxModule, DxButtonModule,
 } from 'devextreme-angular';
 import { ArrayStore } from 'devextreme-angular/common/data';
 import { Service, Employee } from './app.service';
@@ -126,7 +126,6 @@ export class AppComponent {
     DxPopupModule,
     DxTextBoxModule,
     DxButtonModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

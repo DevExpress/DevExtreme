@@ -52,7 +52,7 @@ fixture.disablePageReloads`LoadIndicator`
     return createWidget('dxLoadIndicator', {
       width: 128,
       height: 128,
-      _animationType: animationType,
+      animationType,
     });
   });
 });

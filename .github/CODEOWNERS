@@ -923,7 +923,7 @@
 /packages/devextreme/js/ui/switch.d.ts                               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
 /packages/devextreme/js/ui/switch_types.d.ts                         @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
 
-/packages/devextreme/js/__internal/ui/m_switch.ts                    @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/switch.ts                    @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/**/switch/**                  @DevExpress/devextreme-editors
 

@@ -31,9 +31,9 @@ import Widget from '@ts/core/widget/widget';
 import Button from '@ts/ui/button/wrapper';
 import type Editor from '@ts/ui/editor/editor';
 import type { EditorProperties } from '@ts/ui/editor/editor';
-import { renderButtonItem } from '@ts/ui/form/components/m_button_item';
-import { renderEmptyItem } from '@ts/ui/form/components/m_empty_item';
-import { renderFieldItem } from '@ts/ui/form/components/m_field_item';
+import { renderButtonItem } from '@ts/ui/form/components/button_item';
+import { renderEmptyItem } from '@ts/ui/form/components/empty_item';
+import { renderFieldItem } from '@ts/ui/form/components/field_item';
 import {
   FIELD_ITEM_CLASS,
   FORM_LAYOUT_MANAGER_CLASS,
@@ -42,12 +42,12 @@ import {
   SIMPLE_ITEM_TYPE,
   SINGLE_COLUMN_ITEM_CONTENT,
 } from '@ts/ui/form/constants';
-import type { FormProperties } from '@ts/ui/form/m_form';
-import type Form from '@ts/ui/form/m_form';
-import type { FormItemRuntimeInfo, PreparedItem } from '@ts/ui/form/m_form.items_runtime_info';
-import FormItemsRunTimeInfo from '@ts/ui/form/m_form.items_runtime_info';
-import type { LabelMarkOptions } from '@ts/ui/form/m_form.layout_manager.utils';
-import { convertToRenderFieldItemOptions } from '@ts/ui/form/m_form.layout_manager.utils';
+import type { FormProperties } from '@ts/ui/form/form';
+import type Form from '@ts/ui/form/form';
+import type { FormItemRuntimeInfo, PreparedItem } from '@ts/ui/form/form.items_runtime_info';
+import FormItemsRunTimeInfo from '@ts/ui/form/form.items_runtime_info';
+import type { LabelMarkOptions } from '@ts/ui/form/form.layout_manager.utils';
+import { convertToRenderFieldItemOptions } from '@ts/ui/form/form.layout_manager.utils';
 import type { LocationItem, ResponsiveBoxItem, ResponsiveBoxProperties } from '@ts/ui/responsive_box';
 import ResponsiveBox from '@ts/ui/responsive_box';
 
@@ -309,7 +309,6 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _generateItemsByData(layoutData: unknown): Item[] {
     const result: Item[] = [];
 
@@ -358,7 +357,6 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     return item as ExtendedItem;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getEditorTypeByDataType(dataType: string): 'dxNumberBox' | 'dxDateBox' | 'dxCheckBox' | 'dxTextBox' {
     switch (dataType) {
       case 'number':
@@ -404,7 +402,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
   _renderResponsiveBox(): void {
     const templatesInfo: TemplatesInfo[] = [];
 
-    if (this._items && this._items.length) {
+    if (this._items?.length) {
       const colCount = this._getColCount();
       const $container = $('<div>').appendTo(this.$element());
 
@@ -464,7 +462,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     const that = this;
     const { colCountByScreen, screenByWidth } = this.option();
 
-    const xsColCount = colCountByScreen && colCountByScreen.xs;
+    const xsColCount = colCountByScreen?.xs;
 
     return {
       onItemStateChanged: this._itemStateChangedHandler.bind(this),
@@ -639,7 +637,6 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     this._setItems(result);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getColByIndex(index: number, colCount: number): number {
     return index % colCount;
   }
@@ -903,7 +900,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     if (!isDefined(this._watch)) {
       const { form: formInstance } = this.option();
 
-      this._watch = formInstance && formInstance.option('integrationOptions.watchMethod');
+      this._watch = formInstance?.option('integrationOptions.watchMethod');
     }
 
     return this._watch;
@@ -941,7 +938,6 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     return instance;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _generateRatio(count: number, isAutoSize?: boolean): ResponsiveBoxItem[] {
     const result: ResponsiveBoxItem[] = [];
 

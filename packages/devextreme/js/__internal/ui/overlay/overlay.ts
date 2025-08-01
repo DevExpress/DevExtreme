@@ -42,7 +42,7 @@ import Widget from '@ts/core/widget/widget';
 
 import windowUtils from '../../core/utils/m_window';
 import { OVERLAY_POSITION_ALIASES, OverlayPositionController } from './m_overlay_position_controller';
-import * as zIndexPool from './m_z_index';
+import * as zIndexPool from './z_index';
 
 const ready = readyCallbacks.add;
 const window = windowUtils.getWindow();
@@ -376,7 +376,6 @@ class Overlay<
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getActionsList(): string[] {
     return [
       'onShowing',
@@ -462,7 +461,6 @@ class Overlay<
     this.hide();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getAnonymousTemplateName(): string {
     return ANONYMOUS_TEMPLATE_NAME;
   }
@@ -482,7 +480,6 @@ class Overlay<
       const tabbableElements = overlayStack[i]._findTabbableBounds();
 
       if (tabbableElements.$first || tabbableElements.$last) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore expected: types Overlay<OverlayProperties> and this have no overlap
         return overlayStack[i] === this;
       }
@@ -491,12 +488,10 @@ class Overlay<
     return false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _overlayStack(): Overlay[] {
     return OVERLAY_STACK;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _zIndexInitValue(): number {
     return Overlay.baseZIndex();
   }
@@ -554,7 +549,7 @@ class Overlay<
     return this._getOptionValue('animation', this) ?? {};
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _toggleBodyScroll(enabled?: boolean): void {}
 
   _animateShowing(): void {
@@ -600,7 +595,6 @@ class Overlay<
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _processShowingHidingCancel(
     cancelArg: boolean | Promise<boolean>,
     applyFunction: () => void,
@@ -1104,7 +1098,6 @@ class Overlay<
     $parent.add($parent.parents()).each((index, element) => {
       const $element = $(element);
 
-      // @ts-expect-error css should can get 1 argument
       if ($element.css('display') === 'none') {
         isHidden = true;
         return false;

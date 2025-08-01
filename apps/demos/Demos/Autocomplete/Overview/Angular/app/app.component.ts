@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
-import { DxAutocompleteModule, DxTemplateModule } from 'devextreme-angular';
+import { DxAutocompleteModule } from 'devextreme-angular';
 import { CustomStore, ODataStore } from 'devextreme-angular/common/data';
 import { Service } from './app.service';
 
@@ -99,7 +99,6 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxAutocompleteModule,
-    DxTemplateModule,
     HttpClientModule,
   ],
   declarations: [AppComponent],

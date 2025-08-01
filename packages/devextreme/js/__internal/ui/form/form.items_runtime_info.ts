@@ -10,7 +10,7 @@ import type {
 } from '@js/ui/form';
 import type Button from '@ts/ui/button';
 import type Editor from '@ts/ui/editor/editor';
-import type LayoutManager from '@ts/ui/form/m_form.layout_manager';
+import type LayoutManager from '@ts/ui/form/form.layout_manager';
 import type TabPanel from '@ts/ui/tab_panel/tab_panel';
 
 export type PreparedItem<T = Item> = T & {

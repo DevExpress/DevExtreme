@@ -2531,16 +2531,16 @@ QUnit.module('popup options', {
         assert.roughEqual(getOuterHeight($overlayContent), getOuterHeight($container) / 2, 0.1, 'popup height is correct');
     });
 
-    QUnit.test('_userDropDownOptions cache should be updated correctly after partial dropDownOptions update', function(assert) {
+    QUnit.test('_cached_dropDownOptions cache should be updated correctly after partial dropDownOptions update', function(assert) {
         const lookup = $('#lookup').dxLookup({ }).dxLookup('instance');
         const dropDownOptionsAfterInit = { ... lookup.option('dropDownOptions') };
 
         lookup.open();
         lookup.option('dropDownOptions.width', 123);
 
-        const { _userDropDownOptions } = lookup.option();
+        const { _cached_dropDownOptions } = lookup.option();
 
-        assert.deepEqual(_userDropDownOptions, { ...dropDownOptionsAfterInit, width: 123 }, 'updated part of dropDownOptions is cached in _userDropDownOptions');
+        assert.deepEqual(_cached_dropDownOptions, { ...dropDownOptionsAfterInit, width: 123 }, 'updated part of dropDownOptions is cached in _cached_dropDownOptions');
     });
 
     [

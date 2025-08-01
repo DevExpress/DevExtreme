@@ -1,4 +1,4 @@
-import Overlay from '../../__internal/ui/overlay/m_overlay';
+import Overlay from '../../__internal/ui/overlay/overlay';
 
 export default Overlay;
 

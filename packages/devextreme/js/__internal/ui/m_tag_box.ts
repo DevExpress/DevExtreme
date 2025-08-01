@@ -1432,6 +1432,7 @@ class TagBox<
     }
   }
 
+  // @ts-expect-error ts-error
   _fieldRenderData() {
     // @ts-expect-error ts-error
     return this._selectedItems.slice();

@@ -413,8 +413,7 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _scrollToSelectedItem(): void {
-    const selectedIndex = this._list?.option('selectedIndex');
-    const listItems = this._list?.option('items');
+    const { selectedIndex, items: listItems } = this._list?.option() ?? {};
     // @ts-expect-error ts-error
     const itemsCount = listItems.length;
 
@@ -617,7 +616,7 @@ class Lookup extends DropDownList<LookupProperties> {
 
     const options = extend(
       popupConfig,
-      this.option('_userDropDownOptions'),
+      this._options.cache('dropDownOptions'),
       {
         showEvent: null,
         hideEvent: null,
@@ -1145,17 +1144,17 @@ class Lookup extends DropDownList<LookupProperties> {
         switch (fullName) {
           case 'dropDownOptions.width':
           case 'dropDownOptions.height': {
-            this._popupOptionChanged({
+            const args = {
               name,
               fullName,
               value: value === 'auto' ? this.initialOption('dropDownOptions')[getFieldName(fullName)] : value,
-            });
-            this._cacheUserDropDownOptions(value, fullName);
+            };
+            this._popupOptionChanged(args);
+            this._innerWidgetOptionChanged(this._popup, args);
             break;
           }
           default:
-            // @ts-expect-error ts-error
-            super._optionChanged(...arguments);
+            super._optionChanged(args);
         }
         break;
       case 'dropDownCentered':

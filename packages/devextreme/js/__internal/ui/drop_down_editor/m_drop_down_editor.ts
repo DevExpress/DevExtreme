@@ -192,7 +192,7 @@ class DropDownEditor<
       buttonsLocation: 'default',
       useHiddenSubmitElement: false,
       validationMessagePosition: 'auto',
-      _userDropDownOptions: {},
+      _cached_dropDownOptions: {},
     };
   }
 
@@ -242,7 +242,7 @@ class DropDownEditor<
     const { rtlEnabled, dropDownOptions } = this.option();
 
     this._updatePopupPosition(rtlEnabled);
-    this._cacheUserDropDownOptions(dropDownOptions);
+    this._options.cache('dropDownOptions', dropDownOptions);
   }
 
   _updatePopupPosition(isRtlEnabled?: boolean): void {
@@ -637,7 +637,7 @@ class DropDownEditor<
   _renderPopupContent(): void {}
 
   _renderPopup(): void {
-    const popupConfig = extend(this._popupConfig(), this.option('_userDropDownOptions'));
+    const popupConfig = extend(this._popupConfig(), this._options.cache('dropDownOptions'));
 
     // @ts-expect-error ts-error
     this._popup = this._createComponent(this._$popup, Popup, popupConfig);
@@ -964,12 +964,6 @@ class DropDownEditor<
     }
   }
 
-  _cacheUserDropDownOptions(value, name = 'dropDownOptions'): void {
-    const optionName = name.replace('dropDownOptions', '_userDropDownOptions');
-
-    this.option(optionName, value);
-  }
-
   _renderSubmitElement(): void {
     if (this.option('useHiddenSubmitElement')) {
       this._$submitElement = $('<input>')
@@ -998,7 +992,7 @@ class DropDownEditor<
   }
 
   _optionChanged(args: OptionChanged<TProperties>): void {
-    const { name, fullName, value } = args;
+    const { name, value } = args;
 
     switch (name) {
       case 'width':
@@ -1027,10 +1021,10 @@ class DropDownEditor<
         break;
       case 'dropDownOptions': {
         this._popupOptionChanged(args);
-        this._cacheUserDropDownOptions(value, fullName);
+        this._innerWidgetOptionChanged(this._popup, args);
         break;
       }
-      case '_userDropDownOptions':
+      case '_cached_dropDownOptions':
         break;
       case 'popupPosition':
         break;

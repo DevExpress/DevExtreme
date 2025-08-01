@@ -50,7 +50,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { ClickEvent, HoverEvent, MenuBaseProperties } from '@ts/ui/context_menu/menu_base';
 import MenuBase from '@ts/ui/context_menu/menu_base';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
-import Overlay from '@ts/ui/overlay/m_overlay';
+import Overlay from '@ts/ui/overlay/overlay';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 
 const DX_MENU_CLASS = 'dx-menu';
@@ -402,7 +402,6 @@ class ContextMenu<
     const $submenu = $curItem.children(`.${DX_SUBMENU_CLASS}`);
 
     if (isItemHasSubmenu && !$curItem.hasClass(DX_STATE_DISABLED_CLASS)) {
-      // @ts-expect-error ts-error
       if (!$submenu.length || $submenu.css('visibility') === 'hidden') {
         this._showSubmenu($curItem);
       }
@@ -894,7 +893,6 @@ class ContextMenu<
   }
 
   _isSubmenuVisible($submenu: dxElementWrapper): boolean {
-    // @ts-expect-error ts-error
     return $submenu.css('visibility') === 'visible';
   }
 
