@@ -128,8 +128,6 @@ QUnit.module('Checkbox', function() {
 
                 const message = $checkBox.find('.dx-overlay-wrapper.dx-invalid-message').get(0);
 
-                // debugger;
-
                 assert.strictEqual(window.getComputedStyle(message).visibility, 'visible');
                 clock.restore();
             });

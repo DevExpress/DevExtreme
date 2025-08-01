@@ -201,18 +201,16 @@ class OverlayPositionController<
       this._properties.container = element;
     }
 
-    this._$markupContainer = container
-      ? $(container)
+    this._$markupContainer = element
+      ? $(element)
       : swatch.getSwatchContainer(this._$root);
 
     this.updateVisualContainer(this._properties.visualContainer);
   }
 
   updateVisualContainer(visualContainer?: OverlayProperties['visualContainer']): void {
-    const element = visualContainer ?? this._properties.visualContainer;
-
     if (isDefined(visualContainer)) {
-      this._properties.visualContainer = element;
+      this._properties.visualContainer = visualContainer;
     }
 
     this._$visualContainer = this._getVisualContainer();
@@ -310,8 +308,6 @@ class OverlayPositionController<
   }
 
   _renderBoundaryOffset(): void {
-    // const boundaryOffset = this._position ?? { boundaryOffset: DEFAULT_BOUNDARY_OFFSET };
-
     const boundaryOffset = this._position?.boundaryOffset ?? DEFAULT_BOUNDARY_OFFSET;
 
     const { v, h } = boundaryOffset;
