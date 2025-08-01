@@ -35,7 +35,7 @@ export interface OverlayPosition extends Partial<Coordinates> {
   at?: OverlayPositionAlignment;
   of?: string | dxElementWrapper | Element;
   offset?: string | { x?: number; y?: number };
-  boundaryOffset?: typeof OVERLAY_DEFAULT_BOUNDARY_OFFSET;
+  boundaryOffset?: typeof DEFAULT_BOUNDARY_OFFSET;
 }
 
 export type Position = OverlayPosition | OverlayPositionAlignment;
@@ -110,7 +110,7 @@ const OVERLAY_POSITION_ALIASES: Record<PositionAlignment, OverlayPosition> = {
   },
 };
 
-const OVERLAY_DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
+const DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
 
 class OverlayPositionController<
   TProperties extends BaseControllerProperties = BaseControllerProperties,
@@ -310,16 +310,16 @@ class OverlayPositionController<
   }
 
   _renderBoundaryOffset(): void {
-    const boundaryOffset = this._position ?? { boundaryOffset: OVERLAY_DEFAULT_BOUNDARY_OFFSET };
+    // const boundaryOffset = this._position ?? { boundaryOffset: DEFAULT_BOUNDARY_OFFSET };
 
-    // const boundaryOffset = this._position?.boundaryOffset
-    //   ?? OVERLAY_DEFAULT_BOUNDARY_OFFSET;
+    const boundaryOffset = this._position?.boundaryOffset ?? DEFAULT_BOUNDARY_OFFSET;
 
-    // if (!(boundaryOffset?.v && boundaryOffset?.h)) {
-    //   return;
-    // }
+    const { v, h } = boundaryOffset;
 
-    // @ts-expect-error v and h
+    if (!(v && h)) {
+      return;
+    }
+
     this._$content?.css('margin', `${boundaryOffset.v}px ${boundaryOffset.h}px`);
   }
 
@@ -347,7 +347,7 @@ class OverlayPositionController<
 
   _normalizePosition(position?: TPosition): OverlayPosition {
     const defaultConfiguration: OverlayPosition = {
-      boundaryOffset: OVERLAY_DEFAULT_BOUNDARY_OFFSET,
+      boundaryOffset: DEFAULT_BOUNDARY_OFFSET,
     };
 
     if (isDefined(position)) {
