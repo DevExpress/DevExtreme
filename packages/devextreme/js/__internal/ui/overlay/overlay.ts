@@ -1267,7 +1267,7 @@ class Overlay<
     const $wrapperContainer = this._positionController.$container;
 
     // NOTE: The container is undefined when DOM is not ready yet. See T1143527
-    if (!$wrapperContainer) {
+    if ($wrapperContainer === undefined) {
       return;
     }
 
@@ -1281,11 +1281,10 @@ class Overlay<
   _moveToContainer(): void {
     const $wrapperContainer = this._positionController.$container;
 
-    if (!$wrapperContainer) {
-      return;
+    if ($wrapperContainer !== undefined) {
+      this._$wrapper.appendTo($wrapperContainer);
     }
 
-    this._$wrapper.appendTo($wrapperContainer);
     this._$content.appendTo(this._$wrapper);
   }
 
