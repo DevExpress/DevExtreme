@@ -9,6 +9,7 @@ export interface VirtualCellProps extends Partial<PropsWithStyles> {
   width: number;
   colSpan?: number;
   isHeaderCell: boolean;
+  className?: string;
 }
 
 export const VirtualCellDefaultProps = {
@@ -21,6 +22,7 @@ export class VirtualCell extends BaseInfernoComponent<VirtualCellProps> {
     const {
       colSpan,
       isHeaderCell,
+      className = '',
       width,
       styles,
     } = this.props;
@@ -31,7 +33,7 @@ export class VirtualCell extends BaseInfernoComponent<VirtualCellProps> {
     return (
       // @ts-ignore
       <Cell
-        className="dx-scheduler-virtual-cell"
+        className={`dx-scheduler-virtual-cell ${className}`}
         styles={modifiedStyles}
         colSpan={colSpan}
       />
