@@ -2,7 +2,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import { scrollTo } from '../../helpers/utils';
+import { scrollTo } from '../../utils';
 import {
   insertStylesheetRulesToPage,
   removeStylesheetRulesFromPage,
