@@ -954,6 +954,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       > .dx-master-detail-cell {
         padding: $grid-masterdetail-padding;
       }
+
       > .dx-#{$widget-name}-group-space,
       .dx-master-detail-cell:not(.dx-row-lines) {
         border-top: $datagrid-border;
@@ -1177,6 +1178,14 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       .dx-row.dx-row-lines.dx-edit-row > td,
       .dx-row-removed.dx-row-lines > td {
         border-top-width: 0;
+      }
+
+      .dx-master-detail-row > .dx-master-detail-cell {
+        padding: 0;
+
+        > .dx-#{$widget-name}-master-detail-container {
+          padding: $grid-masterdetail-padding;
+        }
       }
     }
   }
