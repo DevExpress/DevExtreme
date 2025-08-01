@@ -19,6 +19,7 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import { inRange } from '@js/core/utils/math';
 import { getWidth } from '@js/core/utils/size';
 import {
+  isDate,
   isDefined, isFunction, isNumeric, isString,
 } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
@@ -32,7 +33,6 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
 import Button from '@ts/ui/button/wrapper';
 import Editor from '@ts/ui/editor/editor';
-import { isDate } from 'util/types';
 
 import type { BaseViewProperties } from './m_calendar.base_view';
 import CalendarMultipleSelectionStrategy from './m_calendar.multiple.selection.strategy';
