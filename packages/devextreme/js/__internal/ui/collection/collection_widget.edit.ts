@@ -853,7 +853,7 @@ class CollectionWidget<
     return this._selection.setSelection([...selectedItemKeys ?? [], key], [key]);
   }
 
-  unselectItem(itemElement: Element): void {
+  unselectItem(itemElement: Element | number | TItem): void {
     const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
     if (!indexExists(itemIndex)) {
       return;
