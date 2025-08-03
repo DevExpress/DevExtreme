@@ -2230,14 +2230,14 @@ QUnit.module('datebox w/ calendar', {
         assert.deepEqual(this.fixture.input.val(), dateLocalization.format(date, this.fixture.format));
     });
 
-    QUnit.test('DateBox must pass value to calendar correctly if value is empty string', function(assert) {
+    QUnit.test('DateBox should pass empty string value to calendar if value is empty string', function(assert) {
         this.reinitFixture({
             value: '',
             pickerType: 'calendar',
             opened: true
         });
 
-        assert.equal(this.fixture.dateBox._strategy._widget.option('value'), null, 'value is correctly');
+        assert.equal(this.fixture.dateBox._strategy._widget.option('value'), '', 'value is equal to empty string');
     });
 
     QUnit.test('DateBox must show the calendar with a proper date selected', function(assert) {
@@ -6163,6 +6163,33 @@ QUnit.module('DateBox number and string value support', {
         } finally {
             assert.ok(true, 'there is no error');
         }
+    });
+
+    [true, false].forEach(isRuntime => {
+        QUnit.test(`should not throw error after applying new date when empty string ${isRuntime ? 'runtime' : 'initial'} value is passed and datetime type used (T1301310)`, function(assert) {
+            const dateBox = $('#dateBox').dxDateBox({
+                value: isRuntime ? undefined : '',
+                type: 'datetime',
+            }).dxDateBox('instance');
+
+            try {
+                dateBox.open();
+
+                if(isRuntime) {
+                    dateBox.option('value', '');
+                }
+
+                const $calendarCell = $(`.${CALENDAR_CELL_CLASS}`).eq(0);
+                $calendarCell.trigger('dxclick');
+
+                const $applyButton = $(dateBox.content()).parent().find(APPLY_BUTTON_SELECTOR);
+                $applyButton.trigger('dxclick');
+
+                assert.ok(true, 'no error');
+            } catch(e) {
+                assert.ok(false, `error thrown: ${e.message}`);
+            }
+        });
     });
 });
 
