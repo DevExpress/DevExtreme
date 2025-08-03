@@ -15,7 +15,8 @@
     "packageRules": [
         {
             "matchPackageNames": [
-                "openai"
+                "openai",
+                "rehype-parse"
             ],
             "enabled": false
         },
