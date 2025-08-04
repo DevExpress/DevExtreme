@@ -9,7 +9,9 @@ import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
 import type { DxEvent, ItemInfo, NativeEventInfo } from '@js/events';
 import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
 import type dxMenuBase from '@js/ui/context_menu/ui.menu_base';
-import type { dxMenuBaseItem, Item, SubmenuShowMode } from '@js/ui/menu';
+import type {
+  dxMenuBaseItem, Item, ItemClickEvent as MenuItemClickEvent, SubmenuShowMode,
+} from '@js/ui/menu';
 import type { ActionArguments } from '@ts/core/m_action';
 import { render } from '@ts/core/utils/m_ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -46,14 +48,14 @@ const DX_ICON_WITH_URL_CLASS = 'dx-icon-with-url';
 const ITEM_URL_CLASS = 'dx-item-url';
 const DX_MENU_ITEM_DATA_KEY = 'dxMenuItemDataKey';
 
-type ItemClickEvent =
+type BaseItemClickEvent =
   NativeEventInfo<dxMenuBase<MenuBaseProperties>, MouseEvent | PointerEvent | TouchEvent>
   & ItemInfo<dxMenuBaseItem>;
 export type HoverEvent = DxEvent<MouseEvent | PointerEvent>;
 export type ClickEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
 export type ItemClickActionArguments = ActionArguments<
   dxMenuBase<MenuBaseProperties>,
-  ItemClickEvent
+  BaseItemClickEvent | MenuItemClickEvent<Item>
 >;
 type MenuBaseNode = InternalNode & dxMenuBaseItem;
 
@@ -272,7 +274,7 @@ class MenuBase<
       return;
     }
 
-    const node: Item | null = this._dataAdapter.getNodeByKey(selectedKey);
+    const node: MenuBaseNode | null = this._dataAdapter.getNodeByKey(selectedKey);
 
     if (!node || node.selectable === false) {
       return;
@@ -414,7 +416,7 @@ class MenuBase<
 
   // TODO: try to simplify
   _getItemElementByEventArgs(
-    eventArgs: HoverEvent | ClickEvent,
+    eventArgs: HoverEvent | ClickEvent | DxEvent<KeyboardEvent>,
   ): dxElementWrapper | null {
     let $target = $(eventArgs.target);
 
@@ -640,8 +642,9 @@ class MenuBase<
 
     const $itemElement = this._getItemElementByEventArgs(event);
     const link = $itemElement?.find(`.${ITEM_URL_CLASS}`)[0];
+    const isUrlItem = (item: Item | dxMenuBaseItem | undefined): item is Item => !!item && 'url' in item && !!item.url;
 
-    if (!itemData?.url || !link) {
+    if (!isUrlItem(itemData) || !link) {
       return;
     }
 
@@ -667,7 +670,7 @@ class MenuBase<
   }
 
   _updateSelectedItemOnClick(actionArgs: ItemClickActionArguments): void {
-    const args: ItemClickEvent = actionArgs.args ? actionArgs.args[0] : actionArgs;
+    const args = actionArgs.args ? actionArgs.args[0] : actionArgs;
 
     const { itemData } = args;
 
@@ -728,7 +731,7 @@ class MenuBase<
             this._toggleItemSelection(selectedNode, false);
           }
           this._toggleItemSelection(node, true);
-          this._updateSelectedItems();
+          this._changeSelectedItems();
         }
         break;
       }
@@ -770,7 +773,7 @@ class MenuBase<
     return result;
   }
 
-  _updateSelectedItems(
+  _changeSelectedItems(
     oldSelection?: Item,
     newSelection?: Item | null,
   ): void {
@@ -792,7 +795,9 @@ class MenuBase<
   }
 
   selectItem(itemElement: Element | dxMenuBaseItem): void {
-    const itemData = itemElement.nodeType ? this._getItemData(itemElement as Element) : itemElement;
+    const isElement = (item: Element | dxMenuBaseItem): item is Element => 'nodeType' in item && !!item.nodeType;
+
+    const itemData = isElement(itemElement) ? this._getItemData(itemElement) : itemElement;
     const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
     const selectedItem = this.option('selectedItem');
     const node = this._dataAdapter.getNodeByItem(itemData);
@@ -804,7 +809,7 @@ class MenuBase<
         this._toggleItemSelection(selectedNode, false);
       }
       this._toggleItemSelection(node, true);
-      this._updateSelectedItems(selectedItem, itemData);
+      this._changeSelectedItems(selectedItem, itemData);
       this._setOptionWithoutOptionChange('selectedItem', itemData);
     }
   }
@@ -816,7 +821,7 @@ class MenuBase<
 
     if (node?.internalFields.selected) {
       this._toggleItemSelection(node, false);
-      this._updateSelectedItems(selectedItem, null);
+      this._changeSelectedItems(selectedItem, null);
       this._setOptionWithoutOptionChange('selectedItem', null);
     }
   }

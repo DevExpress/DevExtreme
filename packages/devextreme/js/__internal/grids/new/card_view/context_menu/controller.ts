@@ -100,7 +100,7 @@ export class ContextMenuController
         icon: 'none',
         onItemClick,
       },
-    ] as ContextMenuItem[];
+    ] as unknown as ContextMenuItem[];
   }
 
   private handleSortMenuClick(

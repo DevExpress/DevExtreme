@@ -242,7 +242,7 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
     hasItemsExpr?: string | Function;
     /**
      * @docid
-     * @type Array<dxTreeViewItem>
+     * @type Array<dxTreeViewItem | any>
      * @public
      */
     items?: Array<TItem>;
