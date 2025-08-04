@@ -926,6 +926,8 @@ test('It is possible to focus row that was added via push method if previously r
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
 
+    await dataGrid.apiOption('focusedRowKey', 1);
+
     await takeScreenshot(`focused-row_under_group=${groupValue}.png`, dataGrid.element);
 
     await t
@@ -943,10 +945,11 @@ test('It is possible to focus row that was added via push method if previously r
       autoExpandAll: false,
     },
     columns: [
+      { dataField: 'id' },
       { dataField: 'group', groupIndex: 0 },
       { dataField: 'name' },
     ],
+    height: 400,
     focusedRowEnabled: true,
-    focusedRowKey: 2,
   }));
 });

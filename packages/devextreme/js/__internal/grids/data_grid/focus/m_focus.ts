@@ -62,12 +62,11 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
 
     while (items && items[0] && groupCount) {
       const item = items[0];
-      if (item.key !== undefined) {
-        groupPath.push(item.key);
-      }
+      groupPath.push(item.key);
       items = item.items;
       groupCount--;
     }
+
     return groupPath;
   }
 
