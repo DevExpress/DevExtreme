@@ -1422,7 +1422,8 @@ QUnit.module('onSelectionChanging', {
             assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is raised once');
 
             const $firstItem = $list.find(`.${LIST_ITEM_CLASS}`);
-            assert.strictEqual($list.dxList('option', 'focusedElement'), $firstItem.get(0), 'focusedElement is updated correctly');
+            const focusedElement = $list.dxList('option', 'focusedElement');
+            assert.strictEqual($(focusedElement).get(0), $firstItem.get(0), 'focusedElement is updated correctly');
         });
 
         QUnit.test(`should be raised only once on radioButton click if selectByClick=${selectByClick} and selection is applied`, function(assert) {
@@ -1459,7 +1460,8 @@ QUnit.module('onSelectionChanging', {
             assert.strictEqual(selectionChangingHandler.callCount, 1, 'selectionChanging is raised once');
 
             const $selectAllItem = $list.find(`.${LIST_SELECT_ALL_CLASS}`);
-            assert.strictEqual($list.dxList('option', 'focusedElement'), $selectAllItem.get(0), 'focusedElement is updated correctly');
+            const focusedElement = $list.dxList('option', 'focusedElement');
+            assert.strictEqual($(focusedElement).get(0), $selectAllItem.get(0), 'focusedElement is updated correctly');
         });
 
         QUnit.test(`should be raised only once on selectAll checkbox click if selectByClick=${selectByClick} and selection is cancelled`, function(assert) {
