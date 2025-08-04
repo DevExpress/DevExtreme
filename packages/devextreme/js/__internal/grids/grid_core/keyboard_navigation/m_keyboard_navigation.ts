@@ -2346,15 +2346,11 @@ export class KeyboardNavigationController extends modules.ViewController {
   ): void {
     const $cell = this._getFocusedCell();
 
-    // myTODO check if this is correct
     const rowIndex = this.getRowIndex();
-    const localRowIndex = this.getVisibleRowIndex();
-
-    // const rowIndex = this._getRowIndex($cell?.parent());
-    // const localRowIndex = Math.min(
-    //   rowIndex - this._dataController.getRowIndexOffset(),
-    //   this._dataController.items().length - 1,
-    // );
+    const localRowIndex = Math.min(
+      this.getVisibleRowIndex(),
+      this._dataController.items().length - 1,
+    );
 
     const isEditingCell = this._editingController.isEditCell(
       localRowIndex,
