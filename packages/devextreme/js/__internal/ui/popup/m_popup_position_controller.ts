@@ -30,7 +30,7 @@ export type PopupPositionControllerConstructor<
 
 const window = windowUtils.getWindow();
 
-class PopupPositionController<
+export class PopupPositionController<
   TProperties extends PopupControllerProperties = PopupControllerProperties,
   TElements extends PopupControllerElements = PopupControllerElements,
 > extends OverlayPositionController<TProperties, TElements> {
@@ -173,7 +173,3 @@ class PopupPositionController<
     this.restorePositionOnNextRender(true);
   }
 }
-
-export {
-  PopupPositionController,
-};

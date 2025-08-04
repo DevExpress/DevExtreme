@@ -16,7 +16,7 @@ import { OverlayPositionController } from '@ts/ui/overlay/m_overlay_position_con
 import type { PopoverProperties } from '@ts/ui/popover/m_popover';
 import { borderWidthStyles } from '@ts/ui/resizable/utils';
 
-interface PopoverControllerElements extends ControllerOverlayElements {
+export interface PopoverControllerElements extends ControllerOverlayElements {
   $arrow?: dxElementWrapper;
 }
 
@@ -45,7 +45,7 @@ const WEIGHT_OF_SIDES = {
 };
 
 // NOTE: public API
-const POPOVER_POSITION_ALIASES: Record<CommonPosition, PopoverPosition> = {
+export const POPOVER_POSITION_ALIASES: Record<CommonPosition, PopoverPosition> = {
   top: {
     my: 'bottom center',
     at: 'top center',
@@ -70,11 +70,11 @@ const POPOVER_POSITION_ALIASES: Record<CommonPosition, PopoverPosition> = {
 
 const POPOVER_DEFAULT_BOUNDARY_OFFSET = { h: 10, v: 10 };
 
-const isCommonPosition = (
+export const isCommonPosition = (
   position: unknown,
 ): position is CommonPosition => isString(position);
 
-class PopoverPositionController<
+export class PopoverPositionController<
   TProperties extends PopoverControllerProperties = PopoverControllerProperties,
   TElements extends PopoverControllerElements = PopoverControllerElements,
   TPosition = Position,
@@ -195,24 +195,22 @@ class PopoverPositionController<
     return (horizontalWeight > verticalWeight ? at.h : at.v) as CommonPosition;
   }
 
-  _normalizePosition(positionProp: TPosition): PopoverPosition {
+  _normalizePosition(position?: TPosition): PopoverPosition {
     const defaultPositionConfig: PopoverPosition = {
       of: this._properties.target,
       boundaryOffset: POPOVER_DEFAULT_BOUNDARY_OFFSET,
     };
 
-    let resultPosition: PopoverPosition = defaultPositionConfig;
+    const positionObject = isDefined(position)
+      ? this._positionToObject(position)
+      : {};
 
-    if (isDefined(positionProp)) {
-      resultPosition = extend(
-        true,
-        {},
-        defaultPositionConfig,
-        this._positionToObject(positionProp),
-      );
-    } else {
-      resultPosition = defaultPositionConfig;
-    }
+    const resultPosition: PopoverPosition = extend(
+      true,
+      {},
+      defaultPositionConfig,
+      positionObject,
+    );
 
     this._positionSide = this._getDisplaySide(resultPosition);
 
@@ -232,8 +230,3 @@ class PopoverPositionController<
     return position as PopoverPosition;
   }
 }
-
-export {
-  POPOVER_POSITION_ALIASES,
-  PopoverPositionController,
-};

@@ -1,35 +1,69 @@
+import type { VerticalEdge } from '@js/common';
 import positionUtils from '@js/common/core/animation/position';
 import { move } from '@js/common/core/animation/translator';
 import { extend } from '@js/core/utils/extend';
-import { isString } from '@js/core/utils/type';
-import { PopoverPositionController } from '@ts/ui/popover/m_popover_position_controller';
+import { isDefined } from '@js/core/utils/type';
+import type {
+  POPOVER_POSITION_ALIASES,
+  PopoverControllerElements,
+  PopoverControllerProperties,
+  PopoverPosition,
+} from '@ts/ui/popover/m_popover_position_controller';
+import {
+  isCommonPosition,
+  PopoverPositionController,
+} from '@ts/ui/popover/m_popover_position_controller';
 
 const SLIDER_CLASS = 'dx-slider';
 
-const SLIDER_TOOLTIP_POSITION_ALIASES = {
-  top: { my: 'bottom center', at: 'top center', collision: 'fit none' },
-  bottom: { my: 'top center', at: 'bottom center', collision: 'fit none' },
+const SLIDER_TOOLTIP_POSITION_ALIASES: Pick<
+  typeof POPOVER_POSITION_ALIASES,
+  VerticalEdge
+> = {
+  top: {
+    my: 'bottom center',
+    at: 'top center',
+    collision: 'fit none',
+  },
+  bottom: {
+    my: 'top center',
+    at: 'bottom center',
+    collision: 'fit none',
+  },
 };
 
-const SLIDER_TOOLTIP_DEFAULT_BOUNDARY_OFFSET = { h: 2, v: 1 };
+const DEFAULT_BOUNDARY_OFFSET = { h: 2, v: 1 };
 
-class SliderTooltipPositionController extends PopoverPositionController {
-  _normalizePosition(positionProp) {
-    const $sliderHandle = this._properties.target;
-    const sliderClass = `.${SLIDER_CLASS}`;
-    // @ts-expect-error sliderHandle should be dxElementWrapper
-    const $slider = $sliderHandle?.closest(sliderClass);
+export class SliderTooltipPositionController<
+  TProperties extends PopoverControllerProperties = PopoverControllerProperties,
+  TElements extends PopoverControllerElements = PopoverControllerElements,
+  TPosition extends VerticalEdge = VerticalEdge,
+> extends PopoverPositionController<
+  TProperties,
+  TElements,
+  TPosition
+> {
+  _normalizePosition(position?: TPosition): PopoverPosition {
+    const { target } = this._properties;
+
+    const $sliderHandle = target ? $(target) : null;
+    const sliderElement = $sliderHandle?.closest(`.${SLIDER_CLASS}`)?.get(0);
+
     const defaultPositionConfig = {
       of: $sliderHandle,
-      boundaryOffset: SLIDER_TOOLTIP_DEFAULT_BOUNDARY_OFFSET,
-      boundary: $slider?.get(0),
+      boundaryOffset: DEFAULT_BOUNDARY_OFFSET,
+      boundary: sliderElement,
     };
 
-    const resultPosition = extend(
+    const positionObject = isDefined(position)
+      ? this._positionToObject(position)
+      : {};
+
+    const resultPosition: PopoverPosition = extend(
       true,
       {},
       defaultPositionConfig,
-      this._positionToObject(positionProp),
+      positionObject,
     );
 
     this._positionSide = this._getDisplaySide(resultPosition);
@@ -44,13 +78,10 @@ class SliderTooltipPositionController extends PopoverPositionController {
   }
 
   _fitIntoSlider(): void {
-    const {
-      collisionSide,
-      oversize,
-    } = positionUtils.calculate(this._$content, this._position).h;
+    const calculatedPosition = positionUtils.calculate(this._$content, this._position);
 
-    // @ts-expect-error todo
-    const { left } = this._visualPosition;
+    const { collisionSide, oversize } = calculatedPosition.h;
+    const left = this._visualPosition?.left ?? 0;
 
     const isLeftSide = collisionSide === 'left';
     const offset = (isLeftSide ? 1 : -1) * oversize;
@@ -60,17 +91,16 @@ class SliderTooltipPositionController extends PopoverPositionController {
     this._updateVisualPositionValue();
   }
 
-  _positionToObject(positionProp) {
-    if (isString(positionProp)) {
-      const configuration = {
-        ...SLIDER_TOOLTIP_POSITION_ALIASES[positionProp],
+  // eslint-disable-next-line class-methods-use-this
+  _positionToObject(position: VerticalEdge): PopoverPosition {
+    if (isCommonPosition(position)) {
+      const configuration: PopoverPosition = {
+        ...SLIDER_TOOLTIP_POSITION_ALIASES[position],
       };
 
       return configuration;
     }
 
-    return positionProp;
+    return position as PopoverPosition;
   }
 }
-
-export { SliderTooltipPositionController };

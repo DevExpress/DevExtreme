@@ -71,7 +71,10 @@ export interface PositionControllerConstructor<
 
 const window = windowUtils.getWindow();
 
-const OVERLAY_POSITION_ALIASES: Record<PositionAlignment, OverlayPosition> = {
+export const OVERLAY_POSITION_ALIASES: Record<
+  PositionAlignment,
+  OverlayPosition
+> = {
   top: {
     my: 'top center',
     at: 'top center',
@@ -112,7 +115,7 @@ const OVERLAY_POSITION_ALIASES: Record<PositionAlignment, OverlayPosition> = {
 
 const DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
 
-class OverlayPositionController<
+export class OverlayPositionController<
   TProperties extends BaseControllerProperties = BaseControllerProperties,
   TElements extends ControllerOverlayElements = ControllerOverlayElements,
   TPosition = Position,
@@ -131,11 +134,11 @@ class OverlayPositionController<
 
   _shouldRenderContentInitialPosition?: boolean;
 
-  _visualPosition?: OverlayPosition;
+  _visualPosition?: Coordinates;
 
   _initialPosition?: OverlayPosition;
 
-  _previousVisualPosition?: OverlayPosition;
+  _previousVisualPosition?: Coordinates;
 
   _position?: OverlayPosition;
 
@@ -375,8 +378,3 @@ class OverlayPositionController<
     return position as OverlayPosition;
   }
 }
-
-export {
-  OVERLAY_POSITION_ALIASES,
-  OverlayPositionController,
-};
