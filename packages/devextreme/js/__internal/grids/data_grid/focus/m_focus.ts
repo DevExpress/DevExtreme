@@ -62,12 +62,11 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
 
     while (item && item.items) {
       groupPath.push(item.key);
-      item = item.items[0];
+      [item] = item.items;
     }
 
     return groupPath;
   }
-
 
   private _expandGroupByPath(that, groupPath, level) {
   // @ts-expect-error
