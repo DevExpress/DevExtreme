@@ -11,9 +11,8 @@ import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getOuterWidth } from '@js/core/utils/size';
-import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
+import { isDefined, isObject } from '@js/core/utils/type';
 import type { DxEvent, EventInfo } from '@js/events';
-import type { ClickEvent as ButtonClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type dxMenuBase from '@js/ui/context_menu/ui.menu_base';
 import type {
@@ -407,16 +406,16 @@ class Menu extends MenuBase<MenuProperties> {
     this._hamburger = new Button($('<div>').addClass(DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS), {
       icon: 'menu',
       activeStateEnabled: false,
-      onClick: this._toggleTreeView.bind(this),
+      onClick: (): void => {
+        this._toggleTreeView();
+      },
     });
 
     return this._hamburger.$element();
   }
 
-  _toggleTreeView(state: boolean | ButtonClickEvent): void {
-    const isTreeViewVisible = isPlainObject(state)
-      ? !this._overlay?.option()?.visible
-      : state;
+  _toggleTreeView(visible?: boolean): void {
+    const isTreeViewVisible = visible ?? !this._overlay?.option()?.visible;
 
     this._overlay?.option('visible', isTreeViewVisible);
 
