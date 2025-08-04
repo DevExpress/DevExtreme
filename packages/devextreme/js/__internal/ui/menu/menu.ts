@@ -13,6 +13,7 @@ import { each } from '@js/core/utils/iterator';
 import { getOuterWidth } from '@js/core/utils/size';
 import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
 import type { DxEvent, EventInfo } from '@js/events';
+import type { ClickEvent as ButtonClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type dxMenuBase from '@js/ui/context_menu/ui.menu_base';
 import type {
@@ -412,44 +413,41 @@ class Menu extends MenuBase<MenuProperties> {
     return this._hamburger.$element();
   }
 
-  _toggleTreeView(state: boolean): void {
-    if (isPlainObject(state)) {
-      const { visible } = this._overlay?.option() ?? {};
+  _toggleTreeView(state: boolean | ButtonClickEvent): void {
+    const isTreeViewVisible = isPlainObject(state)
+      ? !this._overlay?.option()?.visible
+      : state;
 
-      // eslint-disable-next-line no-param-reassign
-      state = !visible;
-    }
+    this._overlay?.option('visible', isTreeViewVisible);
 
-    this._overlay?.option('visible', state);
-
-    if (state) {
+    if (isTreeViewVisible) {
       this._treeView?.focus();
     }
-    this._toggleHamburgerActiveState(state);
+    this._toggleHamburgerActiveState(isTreeViewVisible);
   }
 
   _toggleHamburgerActiveState(isActive: boolean): void {
     this._hamburger?.$element().toggleClass(DX_STATE_ACTIVE_CLASS, isActive);
   }
 
-  _toggleAdaptiveMode(state: boolean): void {
+  _toggleAdaptiveMode(isAdaptive: boolean): void {
     const $menuItemsContainer = this.$element().find(`.${DX_MENU_HORIZONTAL_CLASS}`);
     const $adaptiveElements = this.$element().find(`.${DX_ADAPTIVE_MODE_CLASS}`);
 
-    if (state) {
+    if (isAdaptive) {
       this._hideVisibleSubmenu();
     } else {
       this._treeView?.collapseAll();
       if (this._overlay) {
-        this._toggleTreeView(state);
+        this._toggleTreeView(isAdaptive);
       }
     }
 
-    this._setAriaRole(state);
+    this._setAriaRole(isAdaptive);
     // @ts-expect-error ts-error
-    $menuItemsContainer.toggle(!state);
+    $menuItemsContainer.toggle(!isAdaptive);
     // @ts-expect-error ts-error
-    $adaptiveElements.toggle(state);
+    $adaptiveElements.toggle(isAdaptive);
   }
 
   _removeAdaptivity(): void {
@@ -1158,10 +1156,7 @@ class Menu extends MenuBase<MenuProperties> {
       return submenu;
     }
 
-    // eslint-disable-next-line no-param-reassign
-    itemData = itemData ?? this._getItemData($itemElement) as Item;
-
-    const node = this._dataAdapter.getNodeByItem(itemData);
+    const node = this._dataAdapter.getNodeByItem(itemData ?? this._getItemData($itemElement));
 
     if (node && this._hasChildren(node)) {
       return this._renderSubmenuItems(node, $itemElement);
