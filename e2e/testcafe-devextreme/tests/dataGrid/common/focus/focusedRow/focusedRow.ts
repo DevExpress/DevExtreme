@@ -922,7 +922,7 @@ test('It is possible to focus row that was added via push method if previously r
 }));
 
 [null, undefined, -1, 'test'].forEach((groupValue) => {
-  test.only(`Group should expand when focusedRowKey is set - group: ${groupValue}`, async (t) => {
+  test(`Group should expand when focusedRowKey is set - group: ${groupValue}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
 
