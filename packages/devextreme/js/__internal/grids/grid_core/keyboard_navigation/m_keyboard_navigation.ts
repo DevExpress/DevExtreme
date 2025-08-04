@@ -907,9 +907,9 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
 
     const column = this._getColumnByCellElement($cell);
-    const $row = $cell.parent();
-    const rowIndex = this._getRowIndex($row);
+    const rowIndex = this.getVisibleRowIndex();
     const row = this._dataController.items()[rowIndex] as any;
+
     const editingController = this._editingController;
 
     if (column && column.allowEditing) {
@@ -2302,11 +2302,17 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     columnIndex: number,
   ): void {
     const $cell = this._getFocusedCell();
-    const rowIndex = this._getRowIndex($cell?.parent());
-    const localRowIndex = Math.min(
-      rowIndex - this._dataController.getRowIndexOffset(),
-      this._dataController.items().length - 1,
-    );
+
+    // myTODO check if this is correct
+    const rowIndex = this.getRowIndex();
+    const localRowIndex = this.getVisibleRowIndex();
+
+    // const rowIndex = this._getRowIndex($cell?.parent());
+    // const localRowIndex = Math.min(
+    //   rowIndex - this._dataController.getRowIndexOffset(),
+    //   this._dataController.items().length - 1,
+    // );
+
     const isEditingCell = this._editingController.isEditCell(
       localRowIndex,
       columnIndex,
