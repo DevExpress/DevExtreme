@@ -22,7 +22,6 @@ import { defaultOptions } from './const';
 
 const COLUMN_CHOOSER_CLASS = 'column-chooser';
 const COLUMN_CHOOSER_BUTTON_CLASS = 'column-chooser-button';
-// const NOTOUCH_ACTION_CLASS = 'notouch-action';
 const COLUMN_CHOOSER_LIST_CLASS = 'column-chooser-list';
 const COLUMN_CHOOSER_PLAIN_CLASS = 'column-chooser-plain';
 const COLUMN_CHOOSER_DRAG_CLASS = 'column-chooser-mode-drag';
