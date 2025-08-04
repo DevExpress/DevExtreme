@@ -1,5 +1,8 @@
 @use "../sizes" as *;
+@use '../../base/dataGrid/variables' as *;
 
 // adduse
 
 $material-datagrid-cell-padding: 7px !default;
+
+$datagrid-cell-padding: $material-datagrid-cell-padding !default;
