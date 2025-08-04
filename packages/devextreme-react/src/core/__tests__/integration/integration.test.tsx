@@ -5,11 +5,14 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import SelectBox from '../../../select-box';
 import TextBox from '../../../text-box';
+import DataGrid from '../../../data-grid';
 import { ContextMenu, Item as ContextMenuItem } from '../../../context-menu';
 
 jest.useFakeTimers();
 
 describe('integration tests', () => {
+  let consoleWarnSpy;
+
   afterEach(() => {
     jest.clearAllMocks();
     testingLib.cleanup();
@@ -79,5 +82,79 @@ describe('integration tests', () => {
     const firstMenuSubItemElement = await renderContextMenu.findByText('Item 1');
 
     expect(firstMenuSubItemElement).not.toBeFalsy();
+  });
+
+  it('NEW TESTTTT', async () => {
+    const user = userEvent.setup({ delay: null });
+    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {}); 
+
+    const DataGridWithSelectButton = () => {
+    const [selectedRowKeys, setSelectedRowKeys] = React.useState([] as any);
+
+    const refCallback = React.useCallback((instance) => {
+      console.warn(`Ref callback invoked instance=${instance}`);
+    }, []);
+
+    const click = React.useCallback(
+      () => {
+        setSelectedRowKeys([...selectedRowKeys, selectedRowKeys.length + 1]);
+      },
+      [selectedRowKeys]
+    );
+
+    const employees = [
+      {
+        ID: 1,
+        FirstName: 'John',
+        LastName: 'Heart',
+        Prefix: 'Mr.',
+        Position: 'CEO',
+        BirthDate: '1964/03/16',
+        HireDate: '1995/01/15',
+        Notes: 'John has been in the Audio/Video industry since 1990. He has led DevAv as its CEO since 2003.\r\n\r\nWhen not working hard as the CEO, John loves to golf and bowl. He once bowled a perfect game of 300.',
+        Address: '351 S Hill St.',
+        StateID: 5,
+      }, {
+        ID: 2,
+        FirstName: 'Olivia',
+        LastName: 'Peyton',
+        Prefix: 'Mrs.',
+        Position: 'Sales Assistant',
+        BirthDate: '1981/06/03',
+        HireDate: '2012/05/14',
+        Notes: 'Olivia loves to sell. She has been selling DevAV products since 2012. \r\n\r\nOlivia was homecoming queen in high school. She is expecting her first child in 6 months. Good Luck Olivia.',
+        Address: '807 W Paseo Del Mar',
+        StateID: 5,
+      }
+    ];
+
+    return (
+      <React.Fragment>
+        <button onClick={click}>Test</button>
+        <DataGrid
+          id="gridContainer"
+          ref={refCallback}
+          dataSource={employees}
+          keyExpr="ID"
+          allowColumnReordering={true}
+          showBorders={true}
+          selectedRowKeys={selectedRowKeys}
+        ></DataGrid>
+      </React.Fragment>
+    )
+    }
+
+    testingLib.render(
+       <React.Fragment>
+        <DataGridWithSelectButton />
+      </React.Fragment>
+    );
+
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    await user.click(testingLib.screen.getByText('Test'));
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    await user.click(testingLib.screen.getByText('Test'));
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    consoleWarnSpy.mockRestore();
   });
 });
