@@ -48,7 +48,7 @@ interface DropDownListProperties extends Omit<dxDropDownListOptions<DropDownList
 'onOpened' | 'onClosed' |
 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
 | 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
-
+  encodeNoDataText?: boolean;
 }
 
 class DropDownList<
@@ -587,6 +587,7 @@ class DropDownList<
       groupTemplate,
       hoverStateEnabled,
       focusStateEnabled,
+      encodeNoDataText,
     } = this.option();
 
     const options = {
@@ -594,7 +595,7 @@ class DropDownList<
       _templates: this.option('_templates'),
       templateProvider: this.option('templateProvider'),
       noDataText,
-      encodeNoDataText: this.option('encodeNoDataText'),
+      encodeNoDataText,
       grouped,
       wrapItemText,
       useItemTextAsTitle: this.option('useItemTextAsTitle'),

@@ -139,7 +139,7 @@ export interface TabsProperties extends Properties {
 
   _indicatorPosition?: Position | null;
 
-  focusedElement?: dxElementWrapper;
+  focusedElement?: Element | null;
 }
 
 class Tabs extends CollectionWidget<TabsProperties> {
@@ -504,7 +504,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this.$element().append(this._scrollable.$element());
   }
 
-  _scrollToItem(item: dxElementWrapper | undefined): void {
+  _scrollToItem(item: Element | undefined | null): void {
     if (!this._scrollable) return;
     const $item = this._editStrategy.getItemElement(item);
     this._scrollable.scrollToElement($item);
@@ -773,7 +773,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
       .toggleClass(FOCUSED_DISABLED_PREV_TAB_CLASS, isPrevDisabled);
   }
 
-  _toggleFocusedDisabledClasses(value: dxElementWrapper | undefined): void {
+  _toggleFocusedDisabledClasses(value: dxElementWrapper): void {
     const { selectedIndex: currentIndex } = this.option();
 
     this._itemElements()
@@ -783,7 +783,6 @@ class Tabs extends CollectionWidget<TabsProperties> {
     const prevItemIndex = currentIndex - 1;
     // @ts-expect-error ts-error
     const nextItemIndex = currentIndex + 1;
-
     const nextFocusedIndex = $(value).index();
 
     const isNextDisabled = this._itemElements().eq(nextItemIndex).hasClass(STATE_DISABLED_CLASS);
@@ -837,11 +836,10 @@ class Tabs extends CollectionWidget<TabsProperties> {
         this._invalidate();
         break;
       case 'focusedElement': {
-        type PropertyType = TabsProperties[typeof name];
-
-        this._toggleFocusedDisabledClasses(value as PropertyType);
+        // @ts-expect-error ts-error
+        this._toggleFocusedDisabledClasses($(value));
         super._optionChanged(args);
-        this._scrollToItem(value as PropertyType);
+        this._scrollToItem(value);
         break;
       }
       case 'rtlEnabled': {

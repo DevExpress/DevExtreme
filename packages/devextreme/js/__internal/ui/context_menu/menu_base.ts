@@ -60,7 +60,7 @@ export interface MenuBaseProperties<
   TItem extends dxMenuBaseItem = Item,
   // @ts-expect-error ts-error
 > extends dxMenuBaseOptions<MenuBase, TItem> {
-  focusedElement?: dxElementWrapper;
+  focusedElement?: Element | null;
   useInkRipple?: boolean;
   _dataAdapter: DataAdapter;
 }
@@ -148,6 +148,7 @@ class MenuBase<
   _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
     const selectItem = (): void => {
       const { focusedElement } = this.option();
+      // @ts-expect-error
       const $item = $(focusedElement);
 
       if (!$item.length || !this._isSelectionEnabled()) {

@@ -111,8 +111,11 @@ class EditDecoratorContext extends EditDecorator {
   }
 
   _deleteItem(): void {
+    if (!this._$itemWithMenu) {
+      return;
+    }
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this._list.deleteItem(this._$itemWithMenu);
+    this._list.deleteItem(this._$itemWithMenu.get(0));
   }
 
   handleContextMenu($itemElement: dxElementWrapper): boolean {

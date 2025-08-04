@@ -61,7 +61,7 @@ class EditDecoratorSwipe extends EditDecorator {
       .done(($element: dxElementWrapper, offset: number): void => {
         if (Math.abs(offset)) {
           // @ts-expect-error ts-error
-          this._list.deleteItem($element).fail((): void => {
+          this._list.deleteItem($element.get(0)).fail((): void => {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             this._renderItemPosition($element, 0, true);
           });

@@ -276,7 +276,7 @@ QUnit.module('keyboard navigation', {
         assert.deepEqual(list.option('items'), items, 'deletion by keyboard is impossible if \'allowItemDeleting\' = false ');
 
         list.option('allowItemDeleting', true);
-        list.option('focusedElement', $list.find('.' + LIST_ITEM_CLASS).eq(1));
+        list.option('focusedElement', $list.find('.' + LIST_ITEM_CLASS).eq(1).get(0));
 
         keyboard.keyDown('del');
 

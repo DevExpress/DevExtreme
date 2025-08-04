@@ -78,7 +78,7 @@ export interface TabPanelProperties extends Properties {
 
   badgeExpr?: (data) => string | undefined;
 
-  focusedElement?: dxElementWrapper;
+  focusedElement?: Element | null;
 }
 
 class TabPanel extends MultiView<TabPanelProperties> {
@@ -558,7 +558,6 @@ class TabPanel extends MultiView<TabPanelProperties> {
         this._setTabsOption(fullName, value);
         break;
       case 'focusedElement': {
-        // @ts-expect-error ts-error
         const id = value ? $(value).index() : value;
         // @ts-expect-error ts-error
         const newItem = value && this._tabs ? this._tabs._itemElements().eq(id) : value;

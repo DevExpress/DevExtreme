@@ -41,7 +41,7 @@ class EditDecoratorStatic extends EditDecorator {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this._list.deleteItem($itemElement);
+    this._list.deleteItem($itemElement.get(0));
   }
 }
 

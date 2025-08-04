@@ -217,7 +217,7 @@ abstract class SwitchableEditDecorator extends EditDecorator {
       return;
     }
 
-    this._list.deleteItem($element)
+    this._list.deleteItem($element.get(0))
       // @ts-expect-error ts-error
       .always(this._cancelDelete.bind(this, $element));
   }
