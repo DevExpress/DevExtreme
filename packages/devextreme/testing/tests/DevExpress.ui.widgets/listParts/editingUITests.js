@@ -412,7 +412,7 @@ QUnit.module('switchable button delete decorator', {
 
         $item.trigger('dxpreparetodelete');
         list.deleteItem = ($itemElement) => {
-            assert.strictEqual($itemElement.get(0), $item.get(0), 'item is deleted');
+            assert.strictEqual($itemElement, $item.get(0), 'item is deleted');
             return $.Deferred().resolve().promise();
         };
 
@@ -495,7 +495,7 @@ QUnit.module('static delete decorator', () => {
         const $item = $items.eq(0);
 
         list.deleteItem = ($itemElement) => {
-            assert.strictEqual($itemElement.get(0), $item.get(0), 'item is deleted');
+            assert.strictEqual($itemElement, $item.get(0), 'item is deleted');
             return $.Deferred().resolve().promise();
         };
 
@@ -756,7 +756,7 @@ QUnit.module('slideItem delete decorator', {
         const $item = $items.eq(0);
 
         list.deleteItem = ($itemElement) => {
-            assert.strictEqual($itemElement.get(0), $item.get(0), 'item is deleted');
+            assert.strictEqual($itemElement, $item.get(0), 'item is deleted');
             return $.Deferred().resolve().promise();
         };
 
@@ -1299,7 +1299,7 @@ QUnit.module('swipe delete decorator', {
         const pointer = pointerMock($item);
 
         list.deleteItem = ($itemElement) => {
-            assert.strictEqual($itemElement.get(0), $item.get(0), 'item is deleted');
+            assert.strictEqual($itemElement, $item.get(0), 'item is deleted');
             return $.Deferred().resolve().promise();
         };
 

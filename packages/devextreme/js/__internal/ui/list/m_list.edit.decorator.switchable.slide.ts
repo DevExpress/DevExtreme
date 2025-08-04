@@ -130,6 +130,7 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
 
   _renderDeleteButton(): void {
     const { allowItemDeleting } = this._list.option();
+
     if (!allowItemDeleting) {
       return;
     }

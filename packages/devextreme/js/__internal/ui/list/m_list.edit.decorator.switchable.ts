@@ -224,6 +224,7 @@ abstract class SwitchableEditDecorator extends EditDecorator {
 
   _isRtlEnabled(): boolean {
     const { rtlEnabled = false } = this._list.option();
+
     return rtlEnabled;
   }
 

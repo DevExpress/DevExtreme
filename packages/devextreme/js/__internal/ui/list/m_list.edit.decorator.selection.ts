@@ -107,6 +107,7 @@ class EditDecoratorSelection extends EditDecorator {
 
   afterRender(): void {
     const { selectionMode } = this._list.option();
+
     if (selectionMode !== 'all') {
       return;
     }
@@ -130,7 +131,12 @@ class EditDecoratorSelection extends EditDecorator {
 
     if (hasSelectAllItem && isFocusOutOfList) {
       list.option('focusedElement', getPublicElement($selectAll));
-      list.scrollToItem(list.option('focusedElement'));
+
+      const { focusedElement } = list.option();
+
+      if (focusedElement) {
+        list.scrollToItem(focusedElement);
+      }
 
       return true;
     }
@@ -221,12 +227,7 @@ class EditDecoratorSelection extends EditDecorator {
 
     const { value } = this._selectAllCheckBox?.option() ?? {};
 
-    let selectionDeferred = Deferred();
-    if (value !== true) {
-      selectionDeferred = this._selectAllItems();
-    } else {
-      selectionDeferred = this._unselectAllItems();
-    }
+    const selectionDeferred = value ? this._unselectAllItems() : this._selectAllItems();
 
     this._list.option('focusedElement', getPublicElement($(this._$selectAll ?? undefined)));
 

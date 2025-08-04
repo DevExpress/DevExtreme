@@ -69,11 +69,7 @@ class GroupedEditStrategy extends EditStrategy<GroupedItem, ItemKey> {
         return false;
       });
 
-      if (indexExists(index)) {
-        return false;
-      }
-
-      return true;
+      return !indexExists(index);
     });
 
     return index;
@@ -102,15 +98,14 @@ class GroupedEditStrategy extends EditStrategy<GroupedItem, ItemKey> {
     let resultItems: GroupedItem[] = [];
     const items = this._getItems();
 
-    // eslint-disable-next-line @typescript-eslint/prefer-for-of
-    for (let i = 0; i < items.length; i += 1) {
-      const subItems = items[i].items;
-      if (subItems) {
-        resultItems = resultItems.concat(subItems);
+    items.forEach((groupedItem: GroupedItem): void => {
+      if (groupedItem.items) {
+        resultItems = resultItems.concat(groupedItem.items);
       } else {
-        resultItems.push(items[i]);
+        resultItems.push(groupedItem);
       }
-    }
+    });
+
     return resultItems;
   }
 
@@ -200,7 +195,7 @@ class GroupedEditStrategy extends EditStrategy<GroupedItem, ItemKey> {
     each(keys, (_index: number, key: ItemKey): void => {
       const itemMeta = getItemMeta(key);
 
-      if (!itemMeta) return undefined;
+      if (!itemMeta) return;
 
       const { groupKey, item } = itemMeta;
 
@@ -212,7 +207,6 @@ class GroupedEditStrategy extends EditStrategy<GroupedItem, ItemKey> {
       }
 
       selectedGroup.items?.push(item);
-      return undefined;
     });
 
     return result;

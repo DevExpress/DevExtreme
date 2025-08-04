@@ -2,19 +2,18 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
 import errors from '@js/ui/widget/ui.errors';
-import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
 import type { OptionChanged } from '@ts/core/widget/types';
 import SearchBoxController, {
   getOperationBySearchMode,
   type SearchBoxControllerOptions,
 } from '@ts/ui/collection/m_search_box_mixin';
-import type { ListEditProperties } from '@ts/ui/list/m_list.edit';
 
+import type { ListEditProperties } from './m_list.edit';
 import ListEdit from './m_list.edit';
 
 // STYLE list
 
-export type ListSearchProperties = ListEditProperties & SearchBoxMixinOptions;
+export interface ListSearchProperties extends ListEditProperties {}
 
 const LIST_CLASS_PREFIX = 'dx-list';
 
@@ -126,6 +125,7 @@ class ListSearch extends ListEdit {
 
   _focusTarget(): dxElementWrapper {
     const { searchEnabled } = this.option();
+
     if (searchEnabled) {
       return this._itemContainer();
     }
@@ -143,6 +143,7 @@ class ListSearch extends ListEdit {
 
   _optionChanged(args: OptionChanged<ListSearchProperties>): void {
     const { name, value } = args;
+
     switch (name) {
       case 'searchEnabled':
       case 'searchEditorOptions':

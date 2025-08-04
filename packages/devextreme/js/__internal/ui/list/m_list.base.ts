@@ -183,7 +183,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
 
     let $item = this._getEdgeVisibleItem(direction);
     const { focusedElement } = this.option();
-    // @ts-expect-error
+    // @ts-expect-error $() can not be used with null
     const isFocusedItem = $item.is($(focusedElement));
 
     if (isFocusedItem) {
@@ -198,7 +198,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
   _isLastItemFocused(direction: Direction): boolean {
     const lastItemInDirection = direction === 'prev' ? this._itemElements().first() : this._itemElements().last();
     const { focusedElement } = this.option();
-    // @ts-expect-error
+    // @ts-expect-error $() can not be used with null
     return lastItemInDirection.is($(focusedElement));
   }
 
@@ -218,7 +218,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
     const containerHeight = getHeight(this.$element());
 
     const { focusedElement } = this.option();
-    // @ts-expect-error
+    // @ts-expect-error $() can not be used with null
     let $item = $(focusedElement);
     let isItemVisible = true;
 
@@ -562,28 +562,45 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
   }
 
   _initScrollView(): void {
-    const scrollingEnabled = this.option('scrollingEnabled');
-    const pullRefreshEnabled = scrollingEnabled && this.option('pullRefreshEnabled');
+    const {
+      height,
+      width,
+      disabled,
+      showScrollbar,
+      useNativeScrolling,
+      bounceEnabled,
+      scrollByContent,
+      scrollByThumb,
+      pullingDownText,
+      pulledDownText,
+      refreshingText,
+      pageLoadingText,
+      scrollingEnabled,
+      pullRefreshEnabled,
+    } = this.option();
+
+    const isPullRefreshEnabled = scrollingEnabled && pullRefreshEnabled;
     const autoPagingEnabled = scrollingEnabled
       && this._scrollBottomMode()
       && !!this._dataController.getDataSource();
 
     this._scrollView = this._createComponent(this.$element(), getScrollView(), {
-      height: this.option('height'),
-      width: this.option('width'),
-      disabled: this.option('disabled') || !scrollingEnabled,
+      height,
+      width,
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      disabled: disabled || !scrollingEnabled,
       onScroll: this._scrollHandler.bind(this),
-      onPullDown: pullRefreshEnabled ? this._pullDownHandler.bind(this) : null,
+      onPullDown: isPullRefreshEnabled ? this._pullDownHandler.bind(this) : null,
       onReachBottom: autoPagingEnabled ? this._scrollBottomHandler.bind(this) : null,
-      showScrollbar: this.option('showScrollbar'),
-      useNative: this.option('useNativeScrolling'),
-      bounceEnabled: this.option('bounceEnabled'),
-      scrollByContent: this.option('scrollByContent'),
-      scrollByThumb: this.option('scrollByThumb'),
-      pullingDownText: this.option('pullingDownText'),
-      pulledDownText: this.option('pulledDownText'),
-      refreshingText: this.option('refreshingText'),
-      reachBottomText: this.option('pageLoadingText'),
+      showScrollbar,
+      useNative: useNativeScrolling,
+      bounceEnabled,
+      scrollByContent,
+      scrollByThumb,
+      pullingDownText,
+      pulledDownText,
+      refreshingText,
+      reachBottomText: pageLoadingText,
       useKeyboard: false,
     });
 
@@ -689,9 +706,11 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
       return;
     }
 
-    if (isLoading && this.option('indicateLoading')) {
+    const { indicateLoading } = this.option();
+
+    if (isLoading && indicateLoading) {
       // eslint-disable-next-line no-restricted-globals
-      this._showLoadingIndicatorTimer = setTimeout(() => {
+      this._showLoadingIndicatorTimer = setTimeout((): void => {
         const isEmpty = !this._itemElements().length;
         const shouldIndicateLoading = !isEmpty || this._isDataSourceFirstLoadCompleted();
         if (shouldIndicateLoading) {
@@ -723,7 +742,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
   }
 
   _hideLoadingIfLoadIndicationOff(): void {
-    if (!this.option('indicateLoading')) {
+    const { indicateLoading } = this.option();
+
+    if (!indicateLoading) {
       this._dataSourceLoadingChangedHandler(false);
     }
   }
@@ -795,6 +816,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
 
   _renderItems(items: Item[]): void {
     const { grouped } = this.option();
+
     if (grouped) {
       each(items, this._renderGroup.bind(this));
       this._attachGroupCollapseEvent();
@@ -840,8 +862,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
   }
 
   _processGroupCollapse(e: DxEvent<MouseEvent | PointerEvent | TouchEvent | KeyboardEvent>): void {
-    // eslint-disable-next-line @stylistic/max-len
-    const actionCallback = (evt: NativeEventInfo<MouseEvent | PointerEvent | TouchEvent | KeyboardEvent>): void => {
+    const actionCallback = (
+      evt: NativeEventInfo<MouseEvent | PointerEvent | TouchEvent | KeyboardEvent>,
+    ): void => {
       const { focusStateEnabled } = this.option();
       const $group = $(evt.event?.currentTarget).parent();
 
@@ -866,7 +889,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
 
   _enterKeyHandler(e: KeyboardEvent): void {
     const { collapsibleGroups, focusedElement } = this.option();
-    // @ts-expect-error
+    // @ts-expect-error $() can not be used with null
     const isGroupHeader = $(focusedElement).hasClass(LIST_GROUP_HEADER_CLASS);
 
     if (collapsibleGroups && isGroupHeader) {
@@ -1025,7 +1048,10 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
     this._refreshItemElements();
     super._postprocessRenderItem(args);
 
-    if (this.option('_swipeEnabled')) {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _swipeEnabled } = this.option();
+
+    if (_swipeEnabled) {
       this._attachSwipeEvent($(args.itemElement));
     }
   }
@@ -1234,8 +1260,10 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
 
     const $button = $('<div>').appendTo($result);
 
+    const { nextButtonText } = this.option();
+
     this._createComponent($button, Button, {
-      text: this.option('nextButtonText'),
+      text: nextButtonText,
       onClick: this._nextButtonHandler.bind(this),
       type: isMaterialBased(current()) ? 'default' : undefined,
       integrationOptions: {},
@@ -1249,7 +1277,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
 
     const { focusedElement } = this.option();
     if (focusedElement) {
-      this.scrollToItem($(focusedElement).get(0));
+      this.scrollToItem(focusedElement);
     }
   }
 
@@ -1267,6 +1295,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
 
   _optionChanged(args: OptionChanged<ListBaseProperties>): void {
     const { name, value } = args;
+
     switch (name) {
       case 'pageLoadMode':
         this._toggleNextButton(!!value);
@@ -1352,6 +1381,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
 
   _extendActionArgs($itemElement: dxElementWrapper): ListItemInfo<Item> {
     const { grouped } = this.option();
+
     if (!grouped) {
       return super._extendActionArgs($itemElement);
     }

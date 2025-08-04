@@ -51,7 +51,7 @@ class EditDecoratorReorder extends EditDecorator {
       allowReordering: false,
       filter,
       container: list.$element(),
-      dragDirection: list.option('itemDragging.group') ? 'both' : 'vertical',
+      dragDirection: itemDragging?.group ? 'both' : 'vertical',
       handle: `.${REORDER_HANDLE_CLASS}`,
       dragTemplate: this._dragTemplate,
       onDragStart: this._dragStartHandler.bind(this),
@@ -100,7 +100,7 @@ class EditDecoratorReorder extends EditDecorator {
 
   _reorderHandler(e: ReorderEvent): void {
     const $targetElement = this._list.getItemElementByFlatIndex(e.toIndex);
-    this._list.reorderItem($(e.itemElement).get(0), $($targetElement).get(0));
+    this._list.reorderItem(e.itemElement, $targetElement.get(0));
   }
 
   afterBag(config?: BagConfig): void {

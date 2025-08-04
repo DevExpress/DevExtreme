@@ -43,19 +43,19 @@ class ListEdit extends ListBase {
 
     const deleteFocusedItem = (e: KeyboardEvent): void => {
       const { allowItemDeleting, focusedElement } = this.option();
-      if (allowItemDeleting) {
+      if (allowItemDeleting && focusedElement) {
         e.preventDefault();
-        // @ts-expect-error
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this.deleteItem($(focusedElement).get(0));
+        this.deleteItem(focusedElement);
       }
     };
 
     const moveFocusedItem = (e: KeyboardEvent, moveUp?: boolean): void => {
-      const editStrategy = this._editStrategy;
       const { focusedElement, itemDragging, grouped } = this.option();
-      // @ts-expect-error
-      const focusedItemIndex = editStrategy.getNormalizedIndex($(focusedElement).get(0));
+
+      const editStrategy = this._editStrategy;
+      // @ts-expect-error ts-error
+      const focusedItemIndex = editStrategy.getNormalizedIndex(focusedElement);
       const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
       if (isLastIndexFocused && this._dataController.isLoading()) {
         return;
@@ -66,13 +66,13 @@ class ListEdit extends ListBase {
         const $nextItem = editStrategy.getItemElement(nextItemIndex);
 
         const isMoveFromGroup = grouped
-        // @ts-expect-error
+          // @ts-expect-error ts-error
           && $(focusedElement).parent().get(0) !== $nextItem.parent().get(0);
         if (!isMoveFromGroup) {
-          // @ts-expect-error
-          this.reorderItem($(focusedElement).get(0), $nextItem.get(0));
-          // @ts-expect-error
-          this.scrollToItem($(focusedElement).get(0));
+          // @ts-expect-error ts-error
+          this.reorderItem(focusedElement, $nextItem.get(0));
+          // @ts-expect-error ts-error
+          this.scrollToItem(focusedElement);
         }
         e.preventDefault();
       } else {
@@ -212,7 +212,9 @@ class ListEdit extends ListBase {
   }
 
   _initEditStrategy(): void {
-    if (this.option('grouped')) {
+    const { grouped } = this.option();
+
+    if (grouped) {
       this._editStrategy = new GroupedEditStrategy(this);
     } else {
       super._initEditStrategy();
