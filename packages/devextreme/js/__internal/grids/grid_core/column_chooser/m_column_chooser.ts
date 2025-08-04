@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import messageLocalization from '@js/common/core/localization/message';
-import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import { deferUpdate } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
@@ -23,7 +22,7 @@ import { defaultOptions } from './const';
 
 const COLUMN_CHOOSER_CLASS = 'column-chooser';
 const COLUMN_CHOOSER_BUTTON_CLASS = 'column-chooser-button';
-const NOTOUCH_ACTION_CLASS = 'notouch-action';
+// const NOTOUCH_ACTION_CLASS = 'notouch-action';
 const COLUMN_CHOOSER_LIST_CLASS = 'column-chooser-list';
 const COLUMN_CHOOSER_PLAIN_CLASS = 'column-chooser-plain';
 const COLUMN_CHOOSER_DRAG_CLASS = 'column-chooser-mode-drag';
@@ -145,11 +144,6 @@ export class ColumnChooserView extends ColumnsView {
 
   }
 
-  private _isWinDevice() {
-    // @ts-expect-error
-    return !!devices.real().win;
-  }
-
   private _initializePopupContainer() {
     const that = this;
     const columnChooserClass = that.addWidgetPrefix(COLUMN_CHOOSER_CLASS);
@@ -171,11 +165,6 @@ export class ColumnChooserView extends ColumnsView {
       width: columnChooserOptions.width,
       height: columnChooserOptions.height,
       rtlEnabled: that.option('rtlEnabled'),
-      onHidden() {
-        if (that._isWinDevice()) {
-          $('body').removeClass(that.addWidgetPrefix(NOTOUCH_ACTION_CLASS));
-        }
-      },
       container: columnChooserOptions.container,
       _loopFocus: true,
     } as PopupProperties;
@@ -249,10 +238,6 @@ export class ColumnChooserView extends ColumnsView {
       searchTimeout,
       searchEditorOptions: columnChooser.search?.editorOptions,
     };
-
-    if (this._isWinDevice()) {
-      treeViewConfig.useNativeScrolling = false;
-    }
 
     extend(treeViewConfig, isSelectMode ? this._prepareSelectModeConfig() : this._prepareDragModeConfig());
 
@@ -481,10 +466,6 @@ export class ColumnChooserView extends ColumnsView {
       this.render();
     }
     this._popupContainer.show();
-
-    if (this._isWinDevice()) {
-      $('body').addClass(this.addWidgetPrefix(NOTOUCH_ACTION_CLASS));
-    }
   }
 
   private hideColumnChooser() {
