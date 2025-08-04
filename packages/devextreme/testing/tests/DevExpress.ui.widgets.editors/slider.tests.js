@@ -1511,8 +1511,6 @@ module('tooltip integration', {
                 useInkRipple: false
             });
 
-            debugger;
-
             resizeCallbacks.fire();
 
             const $arrow = this.$slider.find('.dx-popover-arrow');
