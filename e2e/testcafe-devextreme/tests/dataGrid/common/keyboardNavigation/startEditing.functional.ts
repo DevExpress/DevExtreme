@@ -1,4 +1,5 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import { ClientFunction } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 
@@ -28,6 +29,48 @@ test('Editing should start by pressing enter after scrolling content with scroll
     ],
     editing: {
       allowUpdating: true,
+    },
+    scrolling: {
+      mode: 'virtual',
+    },
+    height: 300,
+  });
+});
+
+test('Tab key should start editing in the next cell after scrolling with virtual scrolling (T1290811)', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const focusRowKey = 49;
+
+  await dataGrid.scrollBy({ y: 10000 });
+
+  await t
+    .click(dataGrid.getDataCell(focusRowKey, 0).element)
+    .expect(dataGrid.getDataCell(focusRowKey, 0).getEditor().element.focused).ok();
+
+  await t
+    .pressKey('tab')
+    .expect(dataGrid.getDataCell(focusRowKey, 1).getEditor().element.focused).ok();
+
+  const eventRowKeys = await ClientFunction(() => (window as any).eventRowKeys)();
+  const uniqueEventRowKeys = [...new Set(eventRowKeys)];
+
+  await t.expect(uniqueEventRowKeys.length).eql(1);
+  await t.expect(uniqueEventRowKeys[0]).eql(focusRowKey);
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [...new Array(50)].map((_, i) => ({
+      id: i,
+      data: `Row ${i}`,
+    })),
+    keyExpr: 'id',
+    columns: ['id', 'data'],
+    editing: {
+      mode: 'cell',
+      allowUpdating: (e) => {
+        (window as any).eventRowKeys ??= [];
+        (window as any).eventRowKeys.push(e.row?.key);
+        return true;
+      },
     },
     scrolling: {
       mode: 'virtual',
