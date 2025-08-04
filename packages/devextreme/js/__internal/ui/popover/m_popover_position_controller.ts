@@ -128,10 +128,7 @@ export class PopoverPositionController<
   _renderBoundaryOffset(): void {}
 
   _getContainerPosition(): PopoverPosition {
-    // @ts-expect-error todo
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const offset = pairToObject(this._position.offset || '');
-    // const offset = pairToObject(this._position?.offset ?? '');
+    const offset = pairToObject(this._position?.offset ?? '');
 
     let { h: hOffset, v: vOffset } = offset;
 
@@ -140,48 +137,36 @@ export class PopoverPositionController<
 
     if (isVerticalSide || isHorizontalSide) {
       const isPopoverInside = this._isPopoverInside();
-      // @ts-expect-error todo
-      const sign = (isPopoverInside ? -1 : 1) * WEIGHT_OF_SIDES[this._positionSide];
 
-      // const weightOfSide = this._positionSide
-      //   ? WEIGHT_OF_SIDES[this._positionSide]
-      //   : WEIGHT_OF_SIDES.center;
+      const weightOfSide = this._positionSide
+        ? WEIGHT_OF_SIDES[this._positionSide]
+        : WEIGHT_OF_SIDES.center;
 
-      // const sign = (isPopoverInside ? -1 : 1) * weightOfSide;
+      const sign = (isPopoverInside ? -1 : 1) * weightOfSide;
 
       const arrowSize = isVerticalSide ? getHeight(this._$arrow) : getWidth(this._$arrow);
       const arrowSizeCorrection = this._getContentBorderWidth(this._positionSide);
       const arrowOffset = sign * (arrowSize - arrowSizeCorrection);
 
-      isVerticalSide ? vOffset += arrowOffset : hOffset += arrowOffset;
-
-      // if (isVerticalSide) {
-      //   vOffset += arrowOffset;
-      // } else {
-      //   hOffset += arrowOffset;
-      // }
+      if (isVerticalSide) {
+        vOffset += arrowOffset;
+      } else {
+        hOffset += arrowOffset;
+      }
     }
 
-    return extend({}, this._position, { offset: `${hOffset} ${vOffset}` });
+    const position: PopoverPosition = {
+      ...this._position,
+      offset: `${hOffset} ${vOffset}`,
+    };
 
-    // const position: PopoverPosition = {
-    //   ...this._position,
-    //   offset: `${hOffset} ${vOffset}`,
-    // };
-
-    // return position;
+    return position;
   }
 
   _getContentBorderWidth(side?: CommonPosition): number {
-    // const borderWidth = side ? this._$content?.css(borderWidthStyles[side]) ?? '' : '';
+    const borderWidth = side ? this._$content?.css(borderWidthStyles[side]) ?? '' : '';
 
-    // @ts-expect-error todo
-    const borderWidth = this._$content?.css(borderWidthStyles[side]);
-    // @ts-expect-error todo
-    // eslint-disable-next-line radix
-    return parseInt(borderWidth) || 0;
-
-    // return parseInt(borderWidth, 10) || 0;
+    return parseInt(borderWidth, 10) || 0;
   }
 
   _isPopoverInside(): boolean {
