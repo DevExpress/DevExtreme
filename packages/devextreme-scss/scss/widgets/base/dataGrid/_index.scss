@@ -15,6 +15,7 @@ $datagrid-text-stub-background-image-path: null !default;
 @use "../mixins" as *;
 @use "../icons" as *;
 @use "./common";
+@use "./variables" as *;
 
 .dx-datagrid-borders {
   > .dx-datagrid-headers,
@@ -220,6 +221,7 @@ $datagrid-text-stub-background-image-path: null !default;
 
         .dx-datagrid-summary-item {
           background-color: $datagrid-base-background-color;
+          padding-inline: $datagrid-cell-padding;
         }
       }
     }

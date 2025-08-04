@@ -1,6 +1,5 @@
 @use "../mixins" as *;
 @use "../gridBase" as *;
-@use "./variables" as *;
 
 // adduse
 
@@ -117,18 +116,6 @@
     .dx-sort {
       margin-left: 0;
       margin-right: 6px;
-    }
-  }
-}
-
-.dx-datagrid-total-footer {
-  .dx-row.dx-footer-row {
-    .dx-datagrid-sticky-column,
-    .dx-datagrid-sticky-column-left,
-    .dx-datagrid-sticky-column-right {
-      .dx-datagrid-summary-item {
-        padding-inline: $datagrid-cell-padding;
-      }
     }
   }
 }
