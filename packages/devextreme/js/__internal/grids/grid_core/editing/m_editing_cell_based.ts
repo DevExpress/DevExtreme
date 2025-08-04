@@ -236,7 +236,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
   private _editCellCore(options) {
     const dataController = this._dataController;
-    const isEditByOptionChanged = isDefined(options.oldColumnIndex) || isDefined(options.oldRowIndex);
     const {
       columnIndex, rowIndex, column, item,
     } = this._getNormalizedEditCellOptions(options) as any;
@@ -252,7 +251,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
 
     if (column && (item.rowType === 'data' || item.rowType === 'detailAdaptive') && !item.removed && this.isCellOrBatchEditMode()) {
-      if (!isEditByOptionChanged && this.isEditCell(rowIndex, columnIndex)) {
+      if (this.isEditCell(rowIndex, columnIndex)) {
         return true;
       }
 

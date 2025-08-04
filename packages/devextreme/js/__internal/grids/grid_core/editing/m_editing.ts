@@ -652,17 +652,6 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  private _setEditRowKeyByIndex(rowIndex, silent) {
-    const key = this._dataController.getKeyByRowIndex(rowIndex);
-
-    if (key === undefined) {
-      this._dataController.fireError('E1043');
-      return;
-    }
-
-    this._setEditRowKey(key, silent);
-  }
-
   public getEditRowIndex() {
     return this._getVisibleEditRowIndex();
   }
