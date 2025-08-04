@@ -1,6 +1,11 @@
-import MultiView from '../__internal/ui/m_multi_view';
+import MultiView from '../__internal/ui/multi_view/multi_view';
 
 export default MultiView;
+
+/**
+ * @name dxMultiViewOptions.keyExpr
+ * @hidden
+ */
 
 /**
  * @name dxMultiViewOptions.selectedItems
@@ -9,11 +14,6 @@ export default MultiView;
 
 /**
  * @name dxMultiViewOptions.selectedItemKeys
- * @hidden
- */
-
-/**
- * @name dxMultiViewOptions.keyExpr
  * @hidden
  */
 

@@ -469,7 +469,7 @@ class ToolbarBase<
 
   _itemOptionChanged(
     item: Item,
-    property: string,
+    property: keyof Item,
     value: unknown,
     prevValue: unknown,
   ): void {

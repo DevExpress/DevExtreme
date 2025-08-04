@@ -1,4 +1,3 @@
-import Class from '@js/core/class';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
@@ -54,8 +53,7 @@ export interface ItemExtraOption<TProperties> {
 
 class CollectionItem<
   TProperties extends CollectionWidgetItem = CollectionWidgetItem,
-  // @ts-expect-error dxClass inheritance issue
-> extends (Class.inherit({}) as new() => {}) {
+> {
   _dirty?: boolean;
 
   _watchers!: Watcher[];
@@ -66,11 +64,11 @@ class CollectionItem<
 
   _rawData?: TProperties;
 
-  ctor(
+  constructor(
     $element: dxElementWrapper,
     options: ItemExtraOption<TProperties>,
     rawData: TProperties,
-  ): void {
+  ) {
     this._$element = $element;
     this._options = options;
     this._rawData = rawData;

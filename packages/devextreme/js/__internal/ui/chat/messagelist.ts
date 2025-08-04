@@ -19,7 +19,7 @@ import type dxContextMenu from '@js/ui/context_menu';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-import ContextMenu from '@ts/ui/context_menu/m_context_menu';
+import ContextMenu from '@ts/ui/context_menu/context_menu';
 import type {
   ScrollView as ScrollViewType,
 } from '@ts/ui/scroll_view/scroll_view';
@@ -782,7 +782,7 @@ class MessageList extends Widget<Properties> {
     changes.forEach((change) => {
       switch (change.type) {
         case 'update':
-          this._updateMessageByKey(change.key, change.data as Message ?? {});
+          this._updateMessageByKey(change.key, change.data ?? {});
           break;
         case 'insert': {
           const { items } = this.option();

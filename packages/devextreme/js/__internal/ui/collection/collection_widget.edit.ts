@@ -22,7 +22,11 @@ import type { ItemLike, SelectionChangeInfo } from '@js/ui/collection/ui.collect
 import errors from '@js/ui/widget/ui.errors';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { CollectionWidgetBaseProperties, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import type {
+  CollectionItemInfo,
+  CollectionWidgetBaseProperties,
+  PostprocessRenderItemInfo,
+} from '@ts/ui/collection/collection_widget.base';
 import BaseCollectionWidget from '@ts/ui/collection/collection_widget.base';
 import PlainEditStrategy from '@ts/ui/collection/collection_widget.edit.strategy.plain';
 import type DataController from '@ts/ui/collection/m_data_controller';
@@ -53,6 +57,8 @@ export interface CollectionWidgetEditProperties<
   selectionRequired?: boolean;
 
   focusOnSelectedItem?: boolean;
+
+  grouped?: boolean;
 }
 
 class CollectionWidget<
@@ -62,7 +68,7 @@ class CollectionWidget<
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey = any,
-> extends BaseCollectionWidget<TProperties> {
+> extends BaseCollectionWidget<TProperties, TItem, TKey> {
   _userOptions?: TProperties;
 
   _selection!: Selection;
@@ -466,7 +472,9 @@ class CollectionWidget<
           normalizedSelection = this._editStrategy.itemsGetter()[0];
         }
 
-        if (this.option('grouped') && normalizedSelection?.items) {
+        const { grouped } = this.option();
+
+        if (grouped && normalizedSelection?.items) {
           normalizedSelection.items = [normalizedSelection.items[0]];
         }
 
@@ -736,7 +744,8 @@ class CollectionWidget<
   _deleteItemFromDS($item: dxElementWrapper): Promise<unknown> | DeferredObj<unknown> {
     const dataController = this._dataController;
     const deferred = Deferred();
-    const disabledState = this.option('disabled');
+    const { disabled } = this.option();
+
     const dataStore = dataController.store();
 
     if (!dataStore) {
@@ -762,7 +771,7 @@ class CollectionWidget<
       });
 
     deferred.always((): void => {
-      this.option('disabled', disabledState);
+      this.option('disabled', disabled);
     });
 
     return deferred;
@@ -770,8 +779,10 @@ class CollectionWidget<
 
   _tryRefreshLastPage(): Promise<unknown> {
     const deferred = Deferred();
+
+    const { grouped } = this.option();
     // @ts-expect-error mixin method
-    if (this._isLastPage() || this.option('grouped')) {
+    if (this._isLastPage() || grouped) {
       deferred.resolve();
     } else {
       this._refreshLastPage().done(() => {
@@ -817,7 +828,7 @@ class CollectionWidget<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-  selectItem(itemElement: Element): DeferredObj<unknown> | void {
+  selectItem(itemElement: Element | number | TItem): DeferredObj<unknown> | void {
     const { selectionMode } = this.option();
 
     if (selectionMode === 'none') return Deferred().resolve();
@@ -842,7 +853,7 @@ class CollectionWidget<
     return this._selection.setSelection([...selectedItemKeys ?? [], key], [key]);
   }
 
-  unselectItem(itemElement: Element): void {
+  unselectItem(itemElement: Element | number | TItem): void {
     const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
     if (!indexExists(itemIndex)) {
       return;
@@ -871,13 +882,13 @@ class CollectionWidget<
 
   _afterItemElementDeleted(
     $item: dxElementWrapper,
-    deletedActionArgs: ItemInfo<TItem>,
+    deletedActionArgs: CollectionItemInfo<TItem>,
   ): void {
     const changingOption = this._dataController.getDataSource()
       ? 'dataSource'
       : 'items';
     this._simulateOptionChange(changingOption);
-    this._itemEventHandler($item, 'onItemDeleted', deletedActionArgs, {
+    this._itemEventHandler($item, 'onItemDeleted', deletedActionArgs as ItemInfo<TItem>, {
       beforeExecute() {
         $item.remove();
       },
@@ -886,7 +897,7 @@ class CollectionWidget<
     this._renderEmptyMessage();
   }
 
-  deleteItem(itemElement: Element): Promise<unknown> {
+  deleteItem(itemElement: Element): PromiseLike<unknown> {
     const deferred = Deferred();
     const $item = this._editStrategy.getItemElement(itemElement);
     const index = this._editStrategy.getNormalizedIndex(itemElement);

@@ -9,7 +9,7 @@ import LoadIndicator from '@js/ui/load_indicator';
 import type { Properties } from '@js/ui/load_panel';
 import { isFluent, isMaterial } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
-import Overlay from '@ts/ui/overlay/m_overlay';
+import Overlay from '@ts/ui/overlay/overlay';
 
 // STYLE loadPanel
 

@@ -8,7 +8,7 @@ import Swipeable from 'common/core/events/gesture/swipeable';
 import { triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import 'ui/multi_view';
-import { animation } from '__internal/ui/multi_view/m_multi_view.animation';
+import { animation } from '__internal/ui/multi_view/multi_view.animation';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 
@@ -307,8 +307,8 @@ QUnit.module('animations', {
 
         const origFxStop = fx.stop;
 
-        fx.stop = $.proxy(function(element, complete) {
-            assert.equal(element[0], this.$animated[0], 'element correct');
+        fx.stop = $.proxy(function($element, complete) {
+            assert.equal($element, this.$animated[0], 'element correct');
             assert.equal(complete, true, 'animation completed');
         }, this);
 

@@ -76,6 +76,10 @@ class Editor<
 
   _$validationMessage?: dxElementWrapper;
 
+  static isEditor(instance: unknown): instance is Editor {
+    return instance instanceof Editor;
+  }
+
   ctor(element: Element, options: TProperties): void {
     this.showValidationMessageTimeout = undefined;
     this.validationRequest = Callbacks();
@@ -490,6 +494,4 @@ class Editor<
   }
 }
 
-// @ts-expect-error ts-error
-Editor.isEditor = (instance): boolean => instance instanceof Editor;
 export default Editor;

@@ -50,7 +50,7 @@ class CollectionWidgetLiveUpdate<
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey = any,
-> extends CollectionWidgetAsync<TProperties> {
+> extends CollectionWidgetAsync<TProperties, TItem, TKey> {
   _itemsCache!: CachedItem<TItem>[];
 
   _getDefaultOptions(): TProperties {
@@ -118,7 +118,9 @@ class CollectionWidgetLiveUpdate<
     items: CachedItem<TItem>[],
   ): boolean {
     let result = false;
-    if (this.option('grouped')) {
+    const { grouped } = this.option();
+
+    if (grouped) {
       if (!changes.length) {
         result = true;
       }
@@ -147,7 +149,7 @@ class CollectionWidgetLiveUpdate<
           // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return data[PRIVATE_KEY_FIELD];
         }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
         return this.keyOf(data);
       };
       const result = findChanges({

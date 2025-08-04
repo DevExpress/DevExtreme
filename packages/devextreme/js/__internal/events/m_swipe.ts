@@ -7,6 +7,14 @@ const SWIPE_START_EVENT = 'dxswipestart';
 const SWIPE_EVENT = 'dxswipe';
 const SWIPE_END_EVENT = 'dxswipeend';
 
+export interface SwipeEvent<T> {
+  event: Event & T;
+}
+
+export type SwipeStartEvent = SwipeEvent<{ maxLeftOffset: number; maxRightOffset: number }>;
+export type SwipeUpdateEvent = SwipeEvent<{ offset: number }>;
+export type SwipeEndEvent = SwipeEvent<{ targetOffset: number }>;
+
 const HorizontalStrategy = {
   defaultItemSizeFunc() {
     return getWidth(this.getElement());

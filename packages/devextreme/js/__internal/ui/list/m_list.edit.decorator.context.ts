@@ -2,7 +2,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
-import Overlay from '@ts/ui/overlay/m_overlay';
+import Overlay from '@ts/ui/overlay/overlay';
 
 import { ListBase } from './m_list.base';
 import EditDecorator from './m_list.edit.decorator';
