@@ -84,7 +84,7 @@ describe('integration tests', () => {
     expect(firstMenuSubItemElement).not.toBeFalsy();
   });
 
-  it('NEW TESTTTT', async () => {
+  it('ref callback is not triggered when not needed', async () => {
     const user = userEvent.setup({ delay: null });
     consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {}); 
 
