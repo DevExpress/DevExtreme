@@ -136,7 +136,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
 
   _isFirstLoadCompleted?: boolean;
 
-  _groupRenderAction?: (e: Partial<GroupRenderedEvent>) => void;
+  _groupRenderAction?: (e?: Partial<GroupRenderedEvent>) => void;
 
   _itemElementsCache!: dxElementWrapper;
 
