@@ -242,7 +242,6 @@ export class OverlayPositionController<
   }
 
   positionContent(): void {
-    debugger;
     if (this._shouldRenderContentInitialPosition) {
       this._renderContentInitialPosition();
     } else {
