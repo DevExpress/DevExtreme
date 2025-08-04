@@ -59,7 +59,6 @@ const converter = {
 
   toHtml(value) {
     const result = unified()
-      // @ts-expect-error
       .use(remarkParse)
       .use(remarkRehype)
       .use(rehypeStringify)
@@ -70,6 +69,7 @@ const converter = {
   },
   fromHtml(value) {
     const result = unified()
+       // @ts-expect-error
       .use(rehypeParse)
       .use(rehypeRemark)
       .use(remarkStringify)
