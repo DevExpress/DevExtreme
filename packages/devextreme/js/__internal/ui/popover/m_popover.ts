@@ -22,7 +22,13 @@ import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Popup from '@ts/ui/popup/m_popup';
 
-import { POPOVER_POSITION_ALIASES, PopoverPositionController } from './m_popover_position_controller';
+import type {
+  PopoverPositionControllerConstructor,
+} from './m_popover_position_controller';
+import {
+  POPOVER_POSITION_ALIASES,
+  PopoverPositionController,
+} from './m_popover_position_controller';
 
 // STYLE popover
 
@@ -463,14 +469,28 @@ TProperties extends PopoverProperties = PopoverProperties,
     }
   }
 
-  _getPositionControllerConfig() {
+  _getPositionControllerConfig(): PopoverPositionControllerConstructor {
+    const superConfiguration = super._getPositionControllerConfig();
+
     const { shading, target } = this.option();
 
-    return extend({}, super._getPositionControllerConfig(), {
+    const properties = {
+      ...superConfiguration.properties,
       target,
       shading,
+    };
+
+    const elements = {
+      ...superConfiguration.elements,
       $arrow: this._$arrow,
-    });
+    };
+
+    const configuration = {
+      properties,
+      elements,
+    };
+
+    return configuration;
   }
 
   _initPositionController() {

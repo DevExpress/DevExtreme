@@ -42,6 +42,7 @@ export class PopupPositionController<
     const superProperties = this._properties;
 
     const { properties } = params;
+
     const {
       fullScreen,
       forceApplyBindings,

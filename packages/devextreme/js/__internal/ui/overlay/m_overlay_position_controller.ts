@@ -269,6 +269,16 @@ export class OverlayPositionController<
   }
 
   _renderContentInitialPosition(): void {
+    const pos = this._position;
+    const pos1 = this._previousVisualPosition;
+    const pos2 = this._initialPosition;
+    const pos3 = this._visualPosition;
+
+    const cont = this._$content;
+    const wr = this._$wrapper;
+
+    debugger;
+
     this._renderBoundaryOffset();
 
     resetPosition(this._$content);
