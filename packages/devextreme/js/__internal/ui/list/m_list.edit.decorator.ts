@@ -2,7 +2,9 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   end as swipeEventEnd,
   start as swipeEventStart,
-  swipe as swipeEventSwipe, type SwipeEndEvent, type SwipeUpdateEvent,
+  swipe as swipeEventSwipe,
+  type SwipeEndEvent,
+  type SwipeUpdateEvent,
 } from '@js/common/core/events/swipe';
 import { addNamespace } from '@js/common/core/events/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -10,6 +12,7 @@ import $ from '@js/core/renderer';
 import { getWidth } from '@js/core/utils/size';
 import type { Cancelable, DxEvent } from '@js/events';
 
+import type { ListEditProperties } from './m_list.edit';
 import type List from './m_list.edit';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
@@ -22,11 +25,7 @@ export interface BagConfig {
   $container?: dxElementWrapper;
 }
 
-export interface CommonControlOptions {
-  activeStateEnabled?: boolean;
-  hoverStateEnabled?: boolean;
-  focusStateEnabled?: boolean;
-}
+export type CommonControlOptions = Pick<ListEditProperties, 'activeStateEnabled' | 'hoverStateEnabled' | 'focusStateEnabled'>;
 
 class EditDecorator {
   _clearSwipeCache?: boolean;

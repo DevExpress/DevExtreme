@@ -132,7 +132,7 @@ class EditStrategy<
     return this.getIndexByItemData(value as TItem);
   }
 
-  getItemElement(value: Element | number | TItem): dxElementWrapper {
+  getItemElement(value: number | Element | dxElementWrapper | TItem): dxElementWrapper {
     if (this._isNormalizedItemIndex(value)) {
       return this._getItemByNormalizedIndex(value as number);
     }
@@ -167,12 +167,12 @@ class EditStrategy<
     return Class.abstract();
   }
 
-  _isNormalizedItemIndex(index: number | Element | TItem): boolean {
+  _isNormalizedItemIndex(index: number | Element | dxElementWrapper | TItem): boolean {
     return (typeof index === 'number') && Math.round(index) === index;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _isItemIndex(index: number | Element | TItem): boolean {
+  _isItemIndex(index: number | Element | dxElementWrapper | TItem): boolean {
     return Class.abstract();
   }
 

@@ -6,6 +6,7 @@ import { each } from '@js/core/utils/iterator';
 import type { DxEvent } from '@js/events';
 import type { Item } from '@js/ui/list';
 import errors from '@js/ui/widget/ui.errors';
+import { isFunction } from '@ts/core/utils/m_type';
 import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import type { BagConfig } from '@ts/ui/list/m_list.edit.decorator';
 import type EditDecorator from '@ts/ui/list/m_list.edit.decorator';
@@ -185,7 +186,7 @@ class EditProvider {
     const $collector = $('<div>');
 
     this._decorators?.forEach((decorator: EditDecorator): void => {
-      if (typeof decorator[method] === 'function') {
+      if (isFunction(decorator[method])) {
         const $container = $('<div>').addClass(containerClass);
         decorator[method](extend({
           $container,

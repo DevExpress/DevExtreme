@@ -25,6 +25,7 @@ import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent, NativeEventInfo } from '@js/events';
 import Button from '@js/ui/button';
 import type {
+  GroupRenderedEvent,
   Item,
   ListItemInfo,
   PageLoadingEvent,
@@ -73,7 +74,9 @@ const SELECT_ALL_ITEM_SELECTOR = '.dx-list-select-all';
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
 const LIST_FEEDBACK_SHOW_TIMEOUT = 70;
 
-const groupItemsGetter = compileGetter('items');
+export type Key = string | number;
+
+const groupItemsGetter = compileGetter('items') as (data: GroupedItem) => Item[];
 
 type ScrollViewConstructor = Constructor<ScrollViewType>;
 
@@ -108,7 +111,7 @@ export interface ListBaseProperties extends Properties<Item> {
 
 type Direction = 'prev' | 'next';
 
-export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
+export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
   static ItemClass = ListItem;
 
   _$listContainer!: dxElementWrapper;
@@ -133,13 +136,13 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
 
   _isFirstLoadCompleted?: boolean;
 
-  _groupRenderAction?: () => void;
+  _groupRenderAction?: (e: Partial<GroupRenderedEvent>) => void;
 
   _itemElementsCache!: dxElementWrapper;
 
   _isLoadIndicationSuppressed?: boolean;
 
-  _scrollAction?: (e: ScrollEvent) => void;
+  _scrollAction?: (e?: Partial<ScrollEvent>) => void;
 
   _pullRefreshAction?: (e?: PullRefreshEvent) => void;
 
@@ -185,7 +188,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     }
 
     this.option('focusedElement', getPublicElement($item));
-    this.scrollToItem($item.get(0));
+    this.scrollToItem($item);
   }
 
   _isLastItemFocused(direction: Direction): boolean {
@@ -595,7 +598,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   }
 
   _createScrollViewActions(): void {
-    // @ts-expect-error ts-error
     this._scrollAction = this._createActionByOption('onScroll');
     this._pullRefreshAction = this._createActionByOption('onPullRefresh');
     this._pageLoadingAction = this._createActionByOption('onPageLoading');
@@ -1133,13 +1135,11 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       .attr('id', groupBodyId)
       .appendTo($groupElement);
 
-    // @ts-expect-error ts-error
     each(groupItemsGetter(group) || [], (itemIndex: number, item: Item): void => {
       this._renderItem({ group: index, item: itemIndex }, item, $groupBody);
     });
-    // @ts-expect-error ts-error
-    this._groupRenderAction({
-      groupElement: getPublicElement($groupElement),
+    this._groupRenderAction?.({
+      groupElement: getPublicElement<HTMLElement>($groupElement),
       groupIndex: index,
       groupData: group,
     });
@@ -1161,10 +1161,8 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     const selector = `.${LIST_GROUP_HEADER_CLASS}`;
     const $element = this.$element();
 
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    this._downInkRippleHandler = this._downInkRippleHandler || this.downInkRippleHandler.bind(this);
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    this._upInkRippleHandler = this._upInkRippleHandler || this.upInkRippleHandler.bind(this);
+    this._downInkRippleHandler = this._downInkRippleHandler ?? this.downInkRippleHandler.bind(this);
+    this._upInkRippleHandler = this._upInkRippleHandler ?? this.upInkRippleHandler.bind(this);
 
     // @ts-expect-error ts-error
     eventsEngine.off($element, pointerEvents.down, selector, this._downInkRippleHandler);
@@ -1438,7 +1436,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this._scrollView.scrollTo(location);
   }
 
-  scrollToItem(itemElement: Element | number | Item | undefined): void {
+  scrollToItem(itemElement: number | Element | dxElementWrapper | Item | undefined): void {
     if (!isDefined(itemElement)) {
       return;
     }
