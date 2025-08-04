@@ -167,7 +167,7 @@ const componentConfig = {
     hint: String,
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
-    items: Array as PropType<Array<dxTreeViewItem>>,
+    items: Array as PropType<Array<any | dxTreeViewItem>>,
     itemsExpr: [Function, String] as PropType<((() => void)) | string>,
     itemTemplate: {},
     keyExpr: [Function, String] as PropType<((() => void)) | string>,
