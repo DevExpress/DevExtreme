@@ -16,11 +16,13 @@ import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
-import { inRange } from '@js/core/utils/math';
+import { inRange, sign } from '@js/core/utils/math';
 import { getWidth } from '@js/core/utils/size';
 import {
-  isDate,
-  isDefined, isFunction, isNumeric, isString,
+  isDefined,
+  isFunction,
+  isNumeric,
+  isString,
 } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
@@ -304,12 +306,13 @@ class Calendar<
     return dateSerialization.deserializeDate(value);
   }
 
-  _dateValue(value: Date | Date[], event): void {
+  _dateValue(value: Date | Date[], event: DxEvent): void {
     if (event) {
       if (event.type === 'keydown') {
         const cellElement = this._view._getContouredCell().get(0);
         event.target = cellElement;
       }
+      // @ts-expect-error ts-error
       this._saveValueChangeEvent(event);
     }
     this._setDateOption('value', value);
@@ -329,9 +332,9 @@ class Calendar<
     this.option(optionName, serializedValue);
   }
 
-  _getDateOption(optionName: 'value' | 'min' | 'max'): Date | Date[] | undefined | null {
-    const isArray = optionName === 'value' && !this._isSingleMode();
+  _getDateOption(optionName: 'value' | 'min' | 'max'): Date | undefined | null | (Date | null)[] {
     const { value } = this.option();
+    const isArray = optionName === 'value' && !this._isSingleMode();
 
     if (!isArray) {
       return this._convertToDate(this.option(optionName));
@@ -339,8 +342,7 @@ class Calendar<
 
     const valueArray = value ?? [];
 
-    // @ts-expect-error ts-error
-    return valueArray.map((value) => this._convertToDate(value));
+    return (valueArray as (DateLike | null)[]).map((item) => this._convertToDate(item));
   }
 
   _isSingleMode(): boolean {
@@ -418,11 +420,15 @@ class Calendar<
   }
 
   _isNextViewDisabled(): boolean {
-    return this._navigator._nextButton.option('disabled') === true;
+    const { disabled } = this._navigator._nextButton.option();
+
+    return disabled === true;
   }
 
   _isPrevViewDisabled(): boolean {
-    return this._navigator._prevButton.option('disabled') === true;
+    const { disabled } = this._navigator._prevButton.option();
+
+    return disabled === true;
   }
 
   _areDatesInSameView(zoomLevel: CalendarZoomLevel, date1: Date, date2: Date): boolean {
@@ -691,11 +697,8 @@ class Calendar<
       return this.min;
     }
 
-    if (isDate(this.min)) {
-      return this.min;
-    }
-
-    return new Date(1000, 0);
+    this.min = this._getDateOption('min') as Date | null ?? new Date(1000, 0);
+    return this.min;
   }
 
   _getMaxDate(): Date {
@@ -707,11 +710,9 @@ class Calendar<
     if (this.max) {
       return this.max;
     }
-    if (isDate(this.max)) {
-      return this.max;
-    }
 
-    return new Date(3000, 0);
+    this.max = this._getDateOption('max') as Date | null ?? new Date(3000, 0);
+    return this.max;
   }
 
   _getViewsOffset(startDate: Date, endDate: Date): number {
@@ -956,13 +957,10 @@ class Calendar<
     }
   }
 
-  _injectComponent<T extends { date: Date; view: string }>(
+  _injectComponent<T>(
     func: (params: T & { component: Calendar<TProperties> }) => boolean,
   ): (params: T) => boolean {
-    return (params: T): boolean => {
-      const paramsWithComponent = { ...params, component: this };
-      return func(paramsWithComponent as T & { component: Calendar<TProperties> });
-    };
+    return (params: T): boolean => func({ ...params, component: this });
   }
 
   _isViewAvailable(date: Date): boolean {
@@ -1383,12 +1381,7 @@ class Calendar<
     }
 
     const rtlCorrection = this._getRtlCorrection();
-    let offsetSign = 0;
-    if (offset > 0) {
-      offsetSign = 1;
-    } else if (offset < 0) {
-      offsetSign = -1;
-    }
+    const offsetSign = sign(offset);
     const endPosition = -rtlCorrection * offsetSign * this._viewWidth();
     // @ts-expect-error ts-error
     const viewsWrapperPosition = this._$viewsWrapper.position().left;
