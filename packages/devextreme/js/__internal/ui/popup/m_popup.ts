@@ -53,7 +53,11 @@ import type { ToolbarBaseProperties } from '@ts/ui/toolbar/toolbar.base';
 import PopupDrag from './m_popup_drag';
 import type { OverflowManager } from './m_popup_overflow_manager';
 import { createBodyOverflowManager } from './m_popup_overflow_manager';
-import type { PopupControllerProperties, PopupPositionControllerConstructor } from './m_popup_position_controller';
+import type {
+  PopupControllerElements,
+  PopupControllerProperties,
+  PopupPositionControllerConstructor,
+} from './m_popup_position_controller';
 import { PopupPositionController } from './m_popup_position_controller';
 
 // STYLE popup
@@ -910,9 +914,13 @@ class Popup<
       outsideDragFactor,
     };
 
-    const configuration = {
+    const elements: PopupControllerElements = {
+      ...superConfiguration.elements,
+    };
+
+    const configuration: PopupPositionControllerConstructor = {
       properties,
-      elements: superConfiguration.elements,
+      elements,
     };
 
     return configuration;

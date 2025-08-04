@@ -14,7 +14,7 @@ import type { PopupProperties } from '@ts/ui/popup/m_popup';
 
 import windowUtils from '../../core/utils/m_window';
 
-interface PopupControllerElements extends ControllerOverlayElements {}
+export interface PopupControllerElements extends ControllerOverlayElements {}
 
 export interface PopupControllerProperties extends BaseControllerProperties {
   fullScreen?: PopupProperties['fullScreen'];

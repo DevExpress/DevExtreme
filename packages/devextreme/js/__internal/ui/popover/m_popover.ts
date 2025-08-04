@@ -23,6 +23,8 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Popup from '@ts/ui/popup/m_popup';
 
 import type {
+  PopoverControllerElements,
+  PopoverControllerProperties,
   PopoverPositionControllerConstructor,
 } from './m_popover_position_controller';
 import {
@@ -474,18 +476,18 @@ TProperties extends PopoverProperties = PopoverProperties,
 
     const { shading, target } = this.option();
 
-    const properties = {
+    const properties: PopoverControllerProperties = {
       ...superConfiguration.properties,
       target,
       shading,
     };
 
-    const elements = {
+    const elements: PopoverControllerElements = {
       ...superConfiguration.elements,
       $arrow: this._$arrow,
     };
 
-    const configuration = {
+    const configuration: PopoverPositionControllerConstructor = {
       properties,
       elements,
     };

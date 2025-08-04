@@ -42,6 +42,7 @@ import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import type {
   BaseControllerProperties,
+  ControllerOverlayElements,
   ControllerProperties,
   PositionControllerConstructor,
 } from '@ts/ui/overlay/m_overlay_position_controller';
@@ -1187,7 +1188,7 @@ class Overlay<
       onVisualPositionChanged: this._actions?.onVisualPositionChanged,
     };
 
-    const elements = {
+    const elements: ControllerOverlayElements = {
       $root: this.$element(),
       $content: this._$content,
       $wrapper: this._$wrapper,
