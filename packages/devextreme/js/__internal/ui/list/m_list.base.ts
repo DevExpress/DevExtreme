@@ -106,7 +106,7 @@ export interface ListBaseProperties extends Properties<Item> {
 
   useInkRipple?: boolean;
 
-  focusedElement?: dxElementWrapper;
+  focusedElement?: Element | null;
 }
 
 type Direction = 'prev' | 'next';
@@ -179,7 +179,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
 
     let $item = this._getEdgeVisibleItem(direction);
     const { focusedElement } = this.option();
-
+    // @ts-expect-error
     const isFocusedItem = $item.is($(focusedElement));
 
     if (isFocusedItem) {
@@ -194,7 +194,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
   _isLastItemFocused(direction: Direction): boolean {
     const lastItemInDirection = direction === 'prev' ? this._itemElements().first() : this._itemElements().last();
     const { focusedElement } = this.option();
-
+    // @ts-expect-error
     return lastItemInDirection.is($(focusedElement));
   }
 
@@ -214,7 +214,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
     const containerHeight = getHeight(this.$element());
 
     const { focusedElement } = this.option();
-
+    // @ts-expect-error
     let $item = $(focusedElement);
     let isItemVisible = true;
 
@@ -479,7 +479,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
       || $(e.target).closest(`.${LIST_SELECT_RADIOBUTTON}`).length;
 
     if (isSelectionControlClicked) {
-      this.option('focusedElement', e.currentTarget);
+      this.option('focusedElement', getPublicElement($(e.currentTarget)));
     }
 
     // eslint-disable-next-line consistent-return
@@ -862,6 +862,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
 
   _enterKeyHandler(e: KeyboardEvent): void {
     const { collapsibleGroups, focusedElement } = this.option();
+    // @ts-expect-error
     const isGroupHeader = $(focusedElement).hasClass(LIST_GROUP_HEADER_CLASS);
 
     if (collapsibleGroups && isGroupHeader) {
@@ -1109,6 +1110,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
     const { groupTemplate: templateName } = this.option();
 
     const groupTemplate = this._getTemplate(
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       group.template || templateName,
       // @ts-expect-error ts-error
       group,

@@ -820,8 +820,8 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   _loadNextPageIfNeeded(selectedIndex?): void {
     selectedIndex = selectedIndex === undefined ? this.option('selectedIndex') : selectedIndex;
     if (
-      // @ts-expect-error ts-error
-      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+    // @ts-expect-error ts-error
+
       this._dataSource
         // @ts-expect-error ts-error
         && this._dataSource.paginate()
@@ -907,7 +907,7 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     let nextHidden = selectedIndex === itemsCount - this._itemsPerPage();
     const prevHidden = itemsCount < 2 || selectedIndex === 0;
     // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
     if (this._dataSource && this._dataSource.paginate()) {
       // @ts-expect-error ts-error
       nextHidden = nextHidden && this._isLastPage();

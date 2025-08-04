@@ -105,7 +105,7 @@ export interface CollectionWidgetBaseProperties<
     TItem extends ItemLike = any,
     TKey = string | number,
 > extends CollectionWidgetOptions<TComponent, TItem, TKey> {
-  focusedElement?: dxElementWrapper;
+  focusedElement?: Element | null;
 
   encodeNoDataText?: boolean;
 
@@ -197,7 +197,7 @@ class CollectionWidget<
 
   _enterKeyHandler(e: KeyboardEvent): void {
     const { focusedElement } = this.option();
-
+    // @ts-expect-error
     const $itemElement = $(focusedElement);
 
     if (!$itemElement.length) {
@@ -401,6 +401,7 @@ class CollectionWidget<
     super._focusOutHandler(e);
 
     const { focusedElement } = this.option();
+    // @ts-expect-error
     const $target = $(focusedElement);
 
     this._updateFocusedItemState($target, false);
@@ -412,7 +413,7 @@ class CollectionWidget<
 
   _getActiveItem(last?: boolean): dxElementWrapper {
     const { focusedElement } = this.option();
-
+    // @ts-expect-error
     const $focusedElement = $(focusedElement);
 
     if ($focusedElement.length) {

@@ -64,7 +64,7 @@ type OrientationConfigMap = typeof CONFIGS;
 type OrientationConfig<T extends Orientation> = OrientationConfigMap[T];
 
 export interface TileViewProperties extends Properties {
-  focusedElement?: dxElementWrapper;
+  focusedElement?: Element | null;
 
   indicateLoading?: boolean;
 }
@@ -424,6 +424,7 @@ class TileView extends CollectionWidget<TileViewProperties> {
 
     const horizontalDirection = direction === 'horizontal';
     const cells = this._cells;
+    // @ts-expect-error
     const index = $(focusedElement).index();
     let targetCol = this._itemsPositions[index].left;
     let targetRow = this._itemsPositions[index].top;

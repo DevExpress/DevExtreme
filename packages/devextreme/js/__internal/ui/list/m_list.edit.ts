@@ -1,6 +1,7 @@
 import type { SingleMultipleAllOrNone } from '@js/common';
 import { isTouchEvent } from '@js/common/core/events/utils';
 import localizationMessage from '@js/common/core/localization/message';
+import { getPublicElement } from '@js/core/element';
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -67,6 +68,7 @@ class ListEdit extends ListBase {
       const { allowItemDeleting, focusedElement } = this.option();
       if (allowItemDeleting) {
         e.preventDefault();
+        // @ts-expect-error
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.deleteItem(focusedElement);
       }
@@ -75,6 +77,7 @@ class ListEdit extends ListBase {
     const moveFocusedItem = (e: KeyboardEvent, moveUp?: boolean): void => {
       const editStrategy = this._editStrategy;
       const { focusedElement, itemDragging, grouped } = this.option();
+      // @ts-expect-error
       const focusedItemIndex = editStrategy.getNormalizedIndex($(focusedElement).get(0));
       const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
       if (isLastIndexFocused && this._dataController.isLoading()) {
@@ -86,9 +89,12 @@ class ListEdit extends ListBase {
         const $nextItem = editStrategy.getItemElement(nextItemIndex);
 
         const isMoveFromGroup = grouped
+        // @ts-expect-error
           && $(focusedElement).parent().get(0) !== $nextItem.parent().get(0);
         if (!isMoveFromGroup) {
+          // @ts-expect-error
           this.reorderItem($(focusedElement).get(0), $nextItem.get(0));
+          // @ts-expect-error
           this.scrollToItem($(focusedElement).get(0));
         }
         e.preventDefault();
@@ -348,7 +354,7 @@ class ListEdit extends ListBase {
   focusListItem(index: number): void {
     const $item = this._editStrategy.getItemElement(index);
 
-    this.option('focusedElement', $item);
+    this.option('focusedElement', getPublicElement($item));
     this.focus();
     this.scrollToItem($item.get(0));
   }
@@ -422,30 +428,22 @@ class ListEdit extends ListBase {
     return this._editStrategy.getItemDataByIndex(index);
   }
 
-  deleteItem(itemElement: number | Element | dxElementWrapper | undefined): Promise<unknown> {
-    let itemToDelete: number | Element = $().get(0);
-    if (typeof itemElement === 'number') {
-      itemToDelete = itemElement;
-    } else {
-      itemToDelete = $(itemElement).get(0);
-    }
+  deleteItem(itemElement: Element): Promise<unknown> {
     const editStrategy = this._editStrategy;
-    const deletingElementIndex = editStrategy.getNormalizedIndex(itemToDelete);
+    const deletingElementIndex = editStrategy.getNormalizedIndex(itemElement);
     const { focusedElement, focusStateEnabled } = this.option();
-
     const focusedItemIndex = focusedElement
-      // @ts-expect-error ts-error
       ? editStrategy.getNormalizedIndex(focusedElement)
       : deletingElementIndex;
     const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
     const nextFocusedItem = isLastIndexFocused || deletingElementIndex < focusedItemIndex
       ? focusedItemIndex - 1
       : focusedItemIndex;
-    const promise = super.deleteItem(itemToDelete);
+    const promise = super.deleteItem(itemElement);
 
     // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return promise.done((): void => {
+    return promise.done(() => {
       if (focusStateEnabled) {
         this.focusListItem(nextFocusedItem);
       }

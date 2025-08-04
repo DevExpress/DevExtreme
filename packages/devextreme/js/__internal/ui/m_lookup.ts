@@ -905,7 +905,7 @@ class Lookup extends DropDownList<LookupProperties> {
 
   _selectListItemHandler(e) {
     const { focusedElement } = this._list!.option();
-
+    // @ts-expect-error
     const $itemElement = $(focusedElement);
 
     if (!$itemElement.length) {

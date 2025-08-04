@@ -139,7 +139,7 @@ export interface TabsProperties extends Properties {
 
   _indicatorPosition?: Position | null;
 
-  focusedElement?: dxElementWrapper;
+  focusedElement?: Element | null;
 }
 
 class Tabs extends CollectionWidget<TabsProperties> {
@@ -504,7 +504,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this.$element().append(this._scrollable.$element());
   }
 
-  _scrollToItem(item: dxElementWrapper | undefined): void {
+  _scrollToItem(item: Element | null): void {
     if (!this._scrollable) return;
     const $item = this._editStrategy.getItemElement(item);
     this._scrollable.scrollToElement($item);
@@ -837,11 +837,12 @@ class Tabs extends CollectionWidget<TabsProperties> {
         this._invalidate();
         break;
       case 'focusedElement': {
-        type PropertyType = TabsProperties[typeof name];
-
-        this._toggleFocusedDisabledClasses(value as PropertyType);
+        // type PropertyType = TabsProperties[typeof name];
+        // @ts-expect-error
+        this._toggleFocusedDisabledClasses(value);
         super._optionChanged(args);
-        this._scrollToItem(value as PropertyType);
+        // @ts-expect-error
+        this._scrollToItem(value);
         break;
       }
       case 'rtlEnabled': {

@@ -2,6 +2,7 @@ import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
+import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
@@ -128,7 +129,7 @@ class EditDecoratorSelection extends EditDecorator {
     const hasSelectAllItem = !!$selectAll;
 
     if (hasSelectAllItem && isFocusOutOfList) {
-      list.option('focusedElement', $selectAll);
+      list.option('focusedElement', getPublicElement($selectAll));
       list.scrollToItem(list.option('focusedElement'));
 
       return true;
@@ -227,7 +228,7 @@ class EditDecoratorSelection extends EditDecorator {
       selectionDeferred = this._unselectAllItems();
     }
 
-    this._list.option('focusedElement', this._$selectAll?.get(0));
+    this._list.option('focusedElement', getPublicElement($(this._$selectAll ?? undefined)));
 
     return selectionDeferred;
   }

@@ -70,7 +70,7 @@ const ROOT_NODE_CLASS = `${WIDGET_CLASS}-root-node`;
 const EXPANDER_ICON_STUB_CLASS = `${WIDGET_CLASS}-expander-icon-stub`;
 
 export interface TreeViewBaseProperties extends Properties {
-  focusedElement?: dxElementWrapper;
+  focusedElement?: Element | null;
 
   deferRendering?: boolean;
 
@@ -102,7 +102,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
   _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
     const click = (e): void => {
       const { focusedElement } = this.option();
-
+      // @ts-expect-error
       const $itemElement = $(focusedElement);
 
       if (!$itemElement.length) {
@@ -127,6 +127,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     const select = (e): void => {
       e.preventDefault();
       const { focusedElement } = this.option();
+      // @ts-expect-error
       const $focusedElement = $(focusedElement);
       const checkboxInstance = this._getCheckBoxInstance($focusedElement);
       if (!checkboxInstance.option('disabled')) {
@@ -1671,6 +1672,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
         const { focusedElement } = this.option();
         const element = isSelectAllItem
           ? getPublicElement(this._$selectAllItem!)
+          // @ts-expect-error
           : $(focusedElement);
         // @ts-expect-error ts-error
         this._setFocusedItem(element);
@@ -1793,6 +1795,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
 
   _expandFocusedContainer() {
     const { focusedElement } = this.option();
+    // @ts-expect-error
     const $focusedNode = $(focusedElement);
     if (!$focusedNode.length || $focusedNode.hasClass(IS_LEAF)) {
       return;
@@ -1821,6 +1824,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
 
   _collapseFocusedContainer() {
     const { focusedElement } = this.option();
+    // @ts-expect-error
     const $focusedNode = $(focusedElement);
 
     if (!$focusedNode.length) {

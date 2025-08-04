@@ -27,7 +27,7 @@ import type {
 } from '@js/ui/splitter';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { ItemRenderInfo, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
-import CollectionWidgetLiveUpdate from '@ts/ui/collection/collection_widget.live_update';
+import CollectionWidgetLiveUpdate, { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 
 import type { CollectionWidgetEditProperties } from '../collection/collection_widget.edit';
 import type ResizeHandle from './resize_handle';
@@ -96,11 +96,10 @@ export interface Properties<
   TItem extends ItemLike<TKey> = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TKey = any,
-> extends PublicProperties<TItem, TKey>,
-  Omit<
-  CollectionWidgetEditProperties<Splitter, TItem, TKey>,
+> extends PublicProperties<TItem, TKey>, Omit<
+  CollectionWidgetLiveUpdateProperties<Splitter, TItem, TKey>,
   keyof PublicProperties<TItem, TKey> & keyof CollectionWidgetEditProperties<Splitter, TItem, TKey>
-  > {
+> {
   _renderQueue?: RenderQueueItem[];
 }
 

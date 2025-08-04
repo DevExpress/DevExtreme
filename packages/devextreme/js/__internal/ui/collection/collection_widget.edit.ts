@@ -32,12 +32,14 @@ import PlainEditStrategy from '@ts/ui/collection/collection_widget.edit.strategy
 import type DataController from '@ts/ui/collection/m_data_controller';
 import Selection from '@ts/ui/selection/m_selection';
 
+import type { CollectionItemIndex } from './collection_widget.edit.strategy';
+
 const ITEM_DELETING_DATA_KEY = 'dxItemDeleting';
 const SELECTED_ITEM_CLASS = 'dx-item-selected';
 
 export const NOT_EXISTING_INDEX = -1;
 
-const indexExists = (index): boolean => index !== NOT_EXISTING_INDEX;
+export const indexExists = (index: CollectionItemIndex): boolean => index !== NOT_EXISTING_INDEX;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type SelectionInfo<TItem, TKey = any> = SelectionChangeInfo<TItem> & {
@@ -166,7 +168,7 @@ class CollectionWidget<
     return this._editStrategy.getItemsByKeys(selectedItemKeys, selectedItems);
   }
 
-  _getKeyByIndex(index: number): unknown {
+  _getKeyByIndex(index: CollectionItemIndex): unknown {
     return this._editStrategy.getKeyByIndex(index);
   }
 
@@ -174,7 +176,7 @@ class CollectionWidget<
     return this._editStrategy.getIndexByKey(key);
   }
 
-  _getIndexByItemData(itemData: TItem): number {
+  _getIndexByItemData(itemData: TItem): CollectionItemIndex {
     return this._editStrategy.getIndexByItemData(itemData);
   }
 
@@ -641,7 +643,7 @@ class CollectionWidget<
     }
   }
 
-  _isItemSelected(index: number): boolean {
+  _isItemSelected(index: CollectionItemIndex): boolean {
     const key = this._getKeyByIndex(index);
 
     return this._selection.isItemSelected(key, { checkPending: true });

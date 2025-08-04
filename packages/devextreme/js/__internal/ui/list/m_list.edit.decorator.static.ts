@@ -39,8 +39,7 @@ class EditDecoratorStatic extends EditDecorator {
     if ($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
       return;
     }
-
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    // @ts-expect-error
     this._list.deleteItem($itemElement);
   }
 }
