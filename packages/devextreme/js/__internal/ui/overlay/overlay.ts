@@ -354,7 +354,6 @@ class Overlay<
     $element.addClass(OVERLAY_CLASS);
 
     this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');
-
     this._toggleViewPortSubscription(true);
 
     const { hideTopOverlayHandler } = this.option();
@@ -373,7 +372,8 @@ class Overlay<
   warnPositionAsFunction(): void {
     const { position } = this.option();
 
-    if (isFunction(position)) { // position as function deprecated in 21.2
+    if (isFunction(position)) {
+      // position as function deprecated in 21.2
       errors.log('W0018');
     }
   }

@@ -49,8 +49,6 @@ export class SliderTooltipPositionController<
     const $sliderHandle = target ? $(target) : null;
     const sliderElement = $sliderHandle?.closest(`.${SLIDER_CLASS}`)?.get(0);
 
-    debugger;
-
     const defaultPositionConfig = {
       of: $sliderHandle,
       boundaryOffset: DEFAULT_BOUNDARY_OFFSET,

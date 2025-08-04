@@ -115,6 +115,10 @@ export const OVERLAY_POSITION_ALIASES: Record<
 
 const DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
 
+export const isPositionAlignment = (
+  position: unknown,
+): position is PositionAlignment => isString(position);
+
 export class OverlayPositionController<
   TProperties extends BaseControllerProperties = BaseControllerProperties,
   TElements extends ControllerOverlayElements = ControllerOverlayElements,
@@ -167,7 +171,8 @@ export class OverlayPositionController<
   }
 
   get $container(): dxElementWrapper | undefined {
-    this.updateContainer(); // NOTE: swatch classes can be updated runtime
+    // NOTE: swatch classes can be updated runtime
+    this.updateContainer();
 
     return this._$markupContainer;
   }
@@ -260,6 +265,7 @@ export class OverlayPositionController<
     const useFixed = isContainerWindow || this._properties._fixWrapperPosition;
 
     const positionStyle = useFixed ? 'fixed' : 'absolute';
+
     this._$wrapper?.css('position', positionStyle);
   }
 
@@ -269,16 +275,6 @@ export class OverlayPositionController<
   }
 
   _renderContentInitialPosition(): void {
-    const pos = this._position;
-    const pos1 = this._previousVisualPosition;
-    const pos2 = this._initialPosition;
-    const pos3 = this._visualPosition;
-
-    const cont = this._$content;
-    const wr = this._$wrapper;
-
-    debugger;
-
     this._renderBoundaryOffset();
 
     resetPosition(this._$content);
@@ -377,9 +373,9 @@ export class OverlayPositionController<
 
   // eslint-disable-next-line class-methods-use-this
   _positionToObject(position: TPosition): OverlayPosition {
-    if (isString(position)) {
+    if (isPositionAlignment(position)) {
       const configuration: OverlayPosition = {
-        ...OVERLAY_POSITION_ALIASES[position as OverlayPositionAlignment],
+        ...OVERLAY_POSITION_ALIASES[position],
       };
 
       return configuration;
