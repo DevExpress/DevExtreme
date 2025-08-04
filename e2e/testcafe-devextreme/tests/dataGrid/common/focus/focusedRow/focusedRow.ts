@@ -1,3 +1,4 @@
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../../helpers/getPageUrl';
@@ -919,3 +920,33 @@ test('It is possible to focus row that was added via push method if previously r
     },
   ],
 }));
+
+[null, undefined, -1, 'test'].forEach((groupValue) => {
+  test(`Group should expand when focusedRowKey is set - group: ${groupValue}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
+
+    await takeScreenshot(`focused-row_under_group=${groupValue}.png`, dataGrid.element);
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: [
+      { id: 1, group: groupValue, name: 'Item 1' },
+      { id: 2, group: groupValue, name: 'Item 2' },
+      { id: 3, group: 'A', name: 'Item 3' },
+      { id: 4, group: 'A', name: 'Item 4' },
+    ],
+    keyExpr: 'id',
+    grouping: {
+      autoExpandAll: false,
+    },
+    columns: [
+      { dataField: 'group', groupIndex: 0 },
+      { dataField: 'name' },
+    ],
+    focusedRowEnabled: true,
+    focusedRowKey: 2,
+  }));
+});
