@@ -959,49 +959,51 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   private _editingCellTabHandler(eventArgs, direction) {
     const eventTarget = eventArgs.originalEvent.target;
-    let $cell = this._getCellElementFromTarget(eventTarget);
-    let isEditingAllowed;
-    const $event = eventArgs.originalEvent;
-    const elementType = this._getElementType(eventTarget);
+    const $targetCell = this._getCellElementFromTarget(eventTarget);
+    const isCommandCell = $targetCell.is(COMMAND_CELL_SELECTOR);
 
-    if ($cell.is(COMMAND_CELL_SELECTOR)) {
+    if (isCommandCell) {
       return !this._targetCellTabHandler(eventArgs, direction);
     }
 
-    this._updateFocusedCellPosition($cell);
+    this._updateFocusedCellPosition($targetCell);
+
+    const elementType = this._getElementType(eventTarget);
     const nextCellInfo = this._getNextCellByTabKey(
-      $event,
+      eventArgs.originalEvent,
       direction,
       elementType,
     );
-    $cell = nextCellInfo.$cell;
+    const $nextCell = nextCellInfo.$cell;
 
-    if (!$cell || this._handleTabKeyOnMasterDetailCell($cell, direction)) {
+    if (!$nextCell || this._handleTabKeyOnMasterDetailCell($nextCell, direction)) {
       return false;
     }
 
-    const column = this._getColumnByCellElement($cell);
-    const rowIndex = this.getVisibleRowIndex();
-    const row = this._dataController.items()[rowIndex] as any;
+    let isEditingAllowed = false;
+    const column = this._getColumnByCellElement($nextCell);
 
-    const editingController = this._editingController;
-
-    if (column && column.allowEditing) {
+    if (column?.allowEditing) {
+      const rowIndex = this.getVisibleRowIndex();
+      const row = this._dataController.items()[rowIndex] as any;
       const isDataRow = !row || row.rowType === 'data';
-      isEditingAllowed = editingController.allowUpdating({ row })
-        ? isDataRow
-        : row && row.isNewRow;
+
+      isEditingAllowed = this._editingController.allowUpdating({ row })
+        ? isDataRow : row?.isNewRow;
     }
 
     if (!isEditingAllowed) {
       this._closeEditCell();
     }
 
-    if (this._focusCell($cell, !nextCellInfo.isHighlighted)) {
-      if (!this._isRowEditMode() && isEditingAllowed) {
+    const wasFocused = this._focusCell($nextCell, !nextCellInfo.isHighlighted);
+
+    if (wasFocused) {
+      const isRowMode = this._isRowEditMode();
+      if (!isRowMode && isEditingAllowed) {
         this._editFocusedCell();
       } else {
-        this._focusInteractiveElement($cell, eventArgs.shift);
+        this._focusInteractiveElement($nextCell, eventArgs.shift);
       }
     }
 
