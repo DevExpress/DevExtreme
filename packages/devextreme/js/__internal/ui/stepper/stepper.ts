@@ -47,7 +47,7 @@ export const ORIENTATION: Record<string, Orientation> = {
 
 export interface StepperProperties extends Properties, Omit<
   CollectionWidgetEditProperties<Stepper, Item>,
-  keyof Properties<Item> & keyof CollectionWidgetEditProperties<Stepper, Item>
+  keyof Properties<Item>
 > {
   hintExpr?: (data: Item) => string | undefined;
 }

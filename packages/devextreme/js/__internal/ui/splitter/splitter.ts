@@ -27,9 +27,9 @@ import type {
 } from '@js/ui/splitter';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { ItemRenderInfo, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
-import CollectionWidgetLiveUpdate, { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
+import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
+import CollectionWidgetLiveUpdate from '@ts/ui/collection/collection_widget.live_update';
 
-import type { CollectionWidgetEditProperties } from '../collection/collection_widget.edit';
 import type ResizeHandle from './resize_handle';
 import type { ResizeHandleOptions } from './resize_handle';
 import { RESIZE_HANDLE_CLASS } from './resize_handle';
@@ -98,7 +98,7 @@ export interface Properties<
   TKey = any,
 > extends PublicProperties<TItem, TKey>, Omit<
   CollectionWidgetLiveUpdateProperties<Splitter, TItem, TKey>,
-  keyof PublicProperties<TItem, TKey> & keyof CollectionWidgetEditProperties<Splitter, TItem, TKey>
+  keyof PublicProperties<TItem, TKey>
 > {
   _renderQueue?: RenderQueueItem[];
 }

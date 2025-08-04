@@ -216,8 +216,8 @@ abstract class SwitchableEditDecorator extends EditDecorator {
     if ($element.is('.dx-state-disabled, .dx-state-disabled *')) {
       return;
     }
-    // @ts-expect-error
-    this._list.deleteItem($element)
+
+    this._list.deleteItem($element.get(0))
       // @ts-expect-error ts-error
       .always(this._cancelDelete.bind(this, $element));
   }

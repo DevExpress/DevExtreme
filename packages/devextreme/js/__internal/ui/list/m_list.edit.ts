@@ -1,4 +1,3 @@
-import type { SingleMultipleAllOrNone } from '@js/common';
 import { isTouchEvent } from '@js/common/core/events/utils';
 import localizationMessage from '@js/common/core/localization/message';
 import { getPublicElement } from '@js/core/element';
@@ -9,9 +8,6 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import type { DxEvent } from '@js/events';
 import type {
   Item,
-  ItemDeleteMode,
-  ListMenuMode,
-  SelectAllMode,
 } from '@js/ui/list';
 import { isNumeric, isObject } from '@ts/core/utils/m_type';
 import type { ActionConfig } from '@ts/core/widget/component';
@@ -21,6 +17,7 @@ import { NOT_EXISTING_INDEX } from '@ts/ui/collection/collection_widget.edit';
 import type { CachedItem } from '@ts/ui/collection/collection_widget.live_update';
 import { PRIVATE_KEY_FIELD } from '@ts/ui/collection/collection_widget.live_update';
 
+import type { CollectionItemIndex } from '../collection/collection_widget.edit.strategy';
 import type PlainEditStrategy from '../collection/collection_widget.edit.strategy.plain';
 import GroupedEditStrategy from './list.edit.strategy.grouped';
 import type { ListBaseProperties } from './m_list.base';
@@ -34,27 +31,7 @@ type DxEventHandledByEditProvider = DxEvent & {
   handledByEditProvider?: boolean;
 };
 
-export interface ListEditProperties extends ListBaseProperties {
-  showSelectionControls?: boolean;
-
-  selectionMode?: SingleMultipleAllOrNone;
-
-  selectAllMode?: SelectAllMode;
-
-  onSelectAllValueChanged?: ListBaseProperties['onSelectAllValueChanged'];
-
-  selectAllText?: string;
-
-  menuItems?: ListBaseProperties['menuItems'];
-
-  menuMode?: ListMenuMode;
-
-  allowItemDeleting?: boolean;
-
-  itemDeleteMode?: ItemDeleteMode;
-
-  itemDragging?: {};
-}
+export interface ListEditProperties extends ListBaseProperties {}
 
 class ListEdit extends ListBase {
   _editStrategy!: PlainEditStrategy<Item> | GroupedEditStrategy;
@@ -70,7 +47,7 @@ class ListEdit extends ListBase {
         e.preventDefault();
         // @ts-expect-error
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this.deleteItem(focusedElement);
+        this.deleteItem($(focusedElement).get(0));
       }
     };
 
@@ -428,7 +405,7 @@ class ListEdit extends ListBase {
     return this._editStrategy.getItemDataByIndex(index);
   }
 
-  deleteItem(itemElement: Element): Promise<unknown> {
+  deleteItem(itemElement: CollectionItemIndex | Element): Promise<unknown> {
     const editStrategy = this._editStrategy;
     const deletingElementIndex = editStrategy.getNormalizedIndex(itemElement);
     const { focusedElement, focusStateEnabled } = this.option();

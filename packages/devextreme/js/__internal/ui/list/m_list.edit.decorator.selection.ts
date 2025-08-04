@@ -125,7 +125,7 @@ class EditDecoratorSelection extends EditDecorator {
     const lastItemIndex = list._getLastItemIndex();
     const isFocusOutOfList = (moveFocusUp && currentFocusedIndex === 0)
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-              || (moveFocusDown && currentFocusedIndex === lastItemIndex);
+      || (moveFocusDown && currentFocusedIndex === lastItemIndex);
     const hasSelectAllItem = !!$selectAll;
 
     if (hasSelectAllItem && isFocusOutOfList) {

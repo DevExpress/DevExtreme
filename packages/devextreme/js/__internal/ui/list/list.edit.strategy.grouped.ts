@@ -136,7 +136,7 @@ class GroupedEditStrategy extends EditStrategy<GroupedItem, ItemKey> {
     );
   }
 
-  getIndexByKey(key: string | number, items?: GroupedItem[]): number {
+  getIndexByKey(key: ItemKey, items?: GroupedItem[]): number {
     const { items: userItems } = this._collectionWidget.option();
     const groups = items ?? userItems;
     let index: CollectionItemIndex = -1;

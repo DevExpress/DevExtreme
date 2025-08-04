@@ -40,6 +40,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type {
   Constructor, DataChange, InkRippleEvent, PostprocessRenderItemInfo,
 } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 import CollectionWidget from '@ts/ui/collection/collection_widget.live_update';
 import ListItem from '@ts/ui/list/item';
 import type { GroupedItem } from '@ts/ui/list/list.edit.strategy.grouped';
@@ -51,6 +52,8 @@ import { deviceDependentOptions } from '@ts/ui/scroll_view/scrollable.device';
 import type { ScrollOffset } from '@ts/ui/scroll_view/types';
 import { getElementMargin } from '@ts/ui/scroll_view/utils/get_element_style';
 import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
+
+import type { CollectionItemIndex } from '../collection/collection_widget.edit.strategy';
 
 const LIST_CLASS = 'dx-list';
 const LIST_ITEMS_CLASS = 'dx-list-items';
@@ -91,7 +94,10 @@ export function setScrollView(value: ScrollViewConstructor): void {
   _scrollView = value;
 }
 
-export interface ListBaseProperties extends Properties<Item> {
+export interface ListBaseProperties extends Properties<Item>, Omit<
+  CollectionWidgetLiveUpdateProperties<ListBase, Item>,
+  keyof Properties<Item>
+  > {
   validationGroup?: string;
 
   _onItemsRendered?: () => void;
@@ -105,8 +111,6 @@ export interface ListBaseProperties extends Properties<Item> {
   wrapItemText?: boolean;
 
   useInkRipple?: boolean;
-
-  focusedElement?: Element | null;
 }
 
 type Direction = 'prev' | 'next';
@@ -450,7 +454,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
     });
   }
 
-  deleteItem(itemElement: number | Element): Promise<unknown> {
+  deleteItem(itemElement: CollectionItemIndex | Element): Promise<unknown> {
     const promise = super.deleteItem(itemElement);
     // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return

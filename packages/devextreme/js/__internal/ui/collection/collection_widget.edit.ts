@@ -899,7 +899,7 @@ class CollectionWidget<
     this._renderEmptyMessage();
   }
 
-  deleteItem(itemElement: number | Element): PromiseLike<unknown> {
+  deleteItem(itemElement: CollectionItemIndex | Element): PromiseLike<unknown> {
     const deferred = Deferred();
     const $item = this._editStrategy.getItemElement(itemElement);
     const index = this._editStrategy.getNormalizedIndex(itemElement);

@@ -333,7 +333,6 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       focusStateEnabled: false,
       activeStateEnabled: true,
       onItemRendered,
-      // @ts-expect-error ts-error
       _itemAttributes: { role: 'menuitem' },
     });
   }

@@ -137,7 +137,9 @@ class EditStrategy<
     return this.getIndexByItemData(value);
   }
 
-  getItemElement(value: Element | number | TItem): dxElementWrapper {
+  getItemElement(
+    value: Element | dxElementWrapper | CollectionItemIndex | TItem,
+  ): dxElementWrapper {
     if (this._isNode(value)) {
       return $(value);
     }
