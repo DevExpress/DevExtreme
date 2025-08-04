@@ -238,6 +238,7 @@ class ListEdit extends ListBase {
     $itemToReplace?: dxElementWrapper,
   ): dxElementWrapper {
     const { showSelectionControls, selectionMode } = this.option();
+
     const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
 
     if (showSelectionControls && selectionMode !== 'none') {
@@ -335,7 +336,7 @@ class ListEdit extends ListBase {
 
     this.option('focusedElement', getPublicElement($item));
     this.focus();
-    this.scrollToItem($item.get(0));
+    this.scrollToItem($item);
   }
 
   _getFlatIndex(): number {
@@ -350,7 +351,9 @@ class ListEdit extends ListBase {
   }
 
   _optionChanged(args: OptionChanged<ListBaseProperties>): void {
-    switch (args.name) {
+    const { name } = args;
+
+    switch (name) {
       case 'selectAllMode':
         this._initDataSource();
         this._dataController.pageIndex(0);

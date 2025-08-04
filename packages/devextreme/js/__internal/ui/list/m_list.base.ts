@@ -1476,6 +1476,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
     if (!isDefined(itemElement)) {
       return;
     }
+
     const $item = this._editStrategy.getItemElement(itemElement);
 
     this._scrollView.scrollToElement($item, {
