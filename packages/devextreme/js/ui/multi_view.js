@@ -1,4 +1,4 @@
-import MultiView from '../__internal/ui/multi_view/m_multi_view';
+import MultiView from '../__internal/ui/multi_view/multi_view';
 
 export default MultiView;
 

@@ -22,6 +22,7 @@ import {
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
+import { isDetailRow } from '../master_detail/utils';
 import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
 import { isGroupRow } from '../views/m_rows_view';
@@ -341,7 +342,6 @@ const columnHeadersView = (
           });
         }
 
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         items = items || [];
         items.push(
           {
@@ -379,19 +379,26 @@ const rowsView = (
     const $detailCell: dxElementWrapper = super._renderMasterDetailCell($row, row, options);
 
     if (this.hasStickyColumns()) {
-      $detailCell.addClass(this.addWidgetPrefix(CLASSES.stickyColumnLeft));
-      setWidth($detailCell, this._getMasterDetailWidth());
+      const detailContainerSelector = `.${this.addWidgetPrefix(MASTER_DETAIL_CLASSES.detailContainer)}`;
+      const $detailContainer = $detailCell.find(detailContainerSelector);
+
+      $detailContainer.addClass(this.addWidgetPrefix(CLASSES.stickyColumnLeft));
+
+      setWidth($detailContainer, this._getMasterDetailWidth());
     }
 
     return $detailCell;
   }
 
   private _updateMasterDetailWidths() {
+    const $detailContainers = this._getRowElements()
+      .children(`.${MASTER_DETAIL_CLASSES.detailCell}`)
+      .children(`.${this.addWidgetPrefix(MASTER_DETAIL_CLASSES.detailContainer)}`);
+
     const width = this._getMasterDetailWidth();
-    const $masterDetailCells = this._getRowElements().children('.dx-master-detail-cell');
 
     setWidth(
-      $masterDetailCells,
+      $detailContainers,
       `${width}px`,
     );
   }
@@ -446,12 +453,18 @@ const rowsView = (
   }
 
   protected _renderCellContent($cell, options, renderOptions) {
-    if (!isGroupRow(options) || !this.hasStickyColumns()) {
+    const hasStickyColumns = this.hasStickyColumns();
+    const isGroupRowResult = isGroupRow(options);
+    const isDetailRowResult = isDetailRow(options);
+    const needWrapContent = isGroupRowResult || isDetailRowResult;
+
+    if (!hasStickyColumns || !needWrapContent) {
       return super._renderCellContent($cell, options, renderOptions);
     }
 
     const $container = $('<div>')
-      .addClass(this.addWidgetPrefix(CLASSES.groupRowContainer))
+      .toggleClass(this.addWidgetPrefix(CLASSES.groupRowContainer), isGroupRowResult)
+      .toggleClass(this.addWidgetPrefix(MASTER_DETAIL_CLASSES.detailContainer), isDetailRowResult)
       .appendTo($cell);
 
     return super._renderCellContent($container, options, renderOptions);
