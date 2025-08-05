@@ -19,7 +19,7 @@ import { hasWindow } from '@js/core/utils/window';
 import type { Item, Orientation, Properties } from '@js/ui/tile_view';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
-import CollectionWidgetEdit from '@ts/ui/collection/collection_widget.edit';
+import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 import type {
   ScrollView as ScrollViewType,
 } from '@ts/ui/scroll_view/scroll_view';
@@ -71,7 +71,7 @@ export interface TileViewProperties extends Properties, Omit<
   indicateLoading?: boolean;
 }
 
-class TileView extends CollectionWidgetEdit<TileViewProperties> {
+class TileView extends CollectionWidget<TileViewProperties> {
   _$container!: dxElementWrapper;
 
   _scrollView!: ScrollViewType;
