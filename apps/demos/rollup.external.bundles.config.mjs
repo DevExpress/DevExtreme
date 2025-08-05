@@ -1,7 +1,6 @@
-import resolve from '@rollup/plugin-node-resolve';
+import resolve, { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import babel from '@rollup/plugin-babel';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 const NG_BASE_DIR = './node_modules/';
 const OUTPUT_DIR = './bundles/externals/';
