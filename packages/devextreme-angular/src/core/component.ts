@@ -37,11 +37,10 @@ import {
   INestedOptionContainer,
   ICollectionNestedOption,
   ICollectionNestedOptionContainer,
-  CollectionNestedOptionContainerImpl,
+  CollectionNestedOptionContainerImpl, BaseNestedOption,
 } from './nested-option';
 
 import { DxIntegrationModule } from './integration';
-import { CollectionNestedOption } from "./nested-option";
 
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx',
@@ -62,14 +61,14 @@ export const getServerStateKey = () => {
 })
 export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterContentChecked, AfterViewInit, AfterViewChecked,
     INestedOptionContainer, ICollectionNestedOptionContainer, IDxTemplateHost {
+  @ContentChildren(BaseNestedOption)
+  private _collectionNestedOptions!: QueryList<BaseNestedOption>;
+
   private _initialOptions: any = {};
 
   protected _optionsToUpdate: any = {};
 
   private readonly _collectionContainerImpl: ICollectionNestedOptionContainer;
-
-  @ContentChildren(CollectionNestedOption)
-  private _collectionNestedOptions!: QueryList<CollectionNestedOption>;
 
   eventHelper: EmitterHelper;
 

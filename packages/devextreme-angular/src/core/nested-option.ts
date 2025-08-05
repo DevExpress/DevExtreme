@@ -22,36 +22,12 @@ export interface INestedOptionContainer {
 
 export type IOptionPathGetter = () => string;
 
-export interface ICollectionNestedOption {
-  _index: number;
-  _value: object;
-}
-
-@Component({
-  template: '',
-})
-export abstract class CollectionNestedOption extends BaseNestedOption implements ICollectionNestedOption {
-  _index: number;
-
-  protected _fullOptionPath() {
-    return `${this._getOptionPath()}[${this._index}].`;
-  }
-
-  get _value() {
-    return this._initialOptions;
-  }
-
-  get isLinked() {
-    return this._index !== undefined && !!this.instance && this._host.isLinked;
-  }
-}
-
 @Component({
   template: '',
 })
 export abstract class BaseNestedOption implements INestedOptionContainer, ICollectionNestedOptionContainer {
-  @ContentChildren(CollectionNestedOption)
-  private _collectionNestedOptions!: QueryList<CollectionNestedOption>;
+  @ContentChildren(BaseNestedOption)
+  private _collectionNestedOptions!: QueryList<BaseNestedOption>;
   
   protected _host: INestedOptionContainer;
 
@@ -177,8 +153,32 @@ export abstract class BaseNestedOption implements INestedOptionContainer, IColle
   }
 }
 
+export interface ICollectionNestedOption {
+  _index: number;
+  _value: object;
+}
+
+@Component({
+  template: '',
+})
+export abstract class CollectionNestedOption extends BaseNestedOption implements ICollectionNestedOption {
+  _index: number;
+
+  protected _fullOptionPath() {
+    return `${this._getOptionPath()}[${this._index}].`;
+  }
+
+  get _value() {
+    return this._initialOptions;
+  }
+
+  get isLinked() {
+    return this._index !== undefined && !!this.instance && this._host.isLinked;
+  }
+}
+
 export interface ICollectionNestedOptionContainer {
-  setChildren: <T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>, className: string, contentChildrenItems: QueryList<CollectionNestedOption>) => any;
+  setChildren: <T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>, className: string, contentChildrenItems: QueryList<BaseNestedOption>) => any;
 }
 
 export class CollectionNestedOptionContainerImpl implements ICollectionNestedOptionContainer {

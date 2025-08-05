@@ -43,6 +43,7 @@ import {
 
 import { DxoAdapterModule } from 'devextreme-angular/ui/nested';
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
+import { BaseNestedOption } from 'devextreme-angular/core';
 
 import { DxoValidatorAdapterModule } from 'devextreme-angular/ui/validator/nested';
 import { DxiValidatorAsyncRuleModule } from 'devextreme-angular/ui/validator/nested';
@@ -261,9 +262,9 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
-
-
-
+    @ContentChildren(BaseNestedOption)
+    protected _validators!: QueryList<BaseNestedOption>;
+    
     @ContentChildren(DxiValidatorAsyncRuleComponent)
     get asyncRulesChildren(): QueryList<DxiValidatorAsyncRuleComponent> {
         return this._getOption('validationRules');
