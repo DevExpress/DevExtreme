@@ -59,7 +59,7 @@ const ContextMenu = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["items","selectedItem","visible"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onHidden","onHiding","onInitialized","onItemClick","onItemContextMenu","onItemRendered","onPositioning","onShowing","onShown"]), []);
