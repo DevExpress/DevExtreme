@@ -106,18 +106,22 @@ class ListSearch extends ListEdit {
 
   _getAriaTarget(): dxElementWrapper {
     const { searchEnabled } = this.option();
+
     if (searchEnabled) {
       return this._itemContainer();
     }
+
     return super._getAriaTarget();
   }
 
   focus(): void {
     const { focusedElement, searchEnabled } = this.option();
+
     if (!focusedElement && searchEnabled) {
       this._searchBoxController?.focus();
       return;
     }
+
     super.focus();
   }
 
@@ -133,9 +137,11 @@ class ListSearch extends ListEdit {
 
   _updateFocusState(e: DxEvent, isFocused: boolean): void {
     const { searchEnabled } = this.option();
+
     if (searchEnabled) {
       this._toggleFocusClass(isFocused, this.$element());
     }
+
     super._updateFocusState(e, isFocused);
   }
 
