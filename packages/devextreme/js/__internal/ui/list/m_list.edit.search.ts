@@ -8,12 +8,10 @@ import SearchBoxController, {
   type SearchBoxControllerOptions,
 } from '@ts/ui/collection/m_search_box_mixin';
 
-import type { ListEditProperties } from './m_list.edit';
+import type { ListBaseProperties } from './m_list.base';
 import ListEdit from './m_list.edit';
 
 // STYLE list
-
-export interface ListSearchProperties extends ListEditProperties {}
 
 const LIST_CLASS_PREFIX = 'dx-list';
 
@@ -36,7 +34,7 @@ class ListSearch extends ListEdit {
     return filter;
   }
 
-  _getDefaultOptions(): ListSearchProperties {
+  _getDefaultOptions(): ListBaseProperties {
     return {
       ...super._getDefaultOptions(),
       // @ts-expect-error ts-error
@@ -141,7 +139,7 @@ class ListSearch extends ListEdit {
     super._updateFocusState(e, isFocused);
   }
 
-  _optionChanged(args: OptionChanged<ListSearchProperties>): void {
+  _optionChanged(args: OptionChanged<ListBaseProperties>): void {
     const { name, value } = args;
 
     switch (name) {
