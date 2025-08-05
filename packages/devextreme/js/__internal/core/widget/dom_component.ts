@@ -56,7 +56,7 @@ class DOMComponent<
 
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
-  static getInstance(element) {
+  static getInstance(element: Element | dxElementWrapper) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return getInstanceByElement($(element), this);
   }

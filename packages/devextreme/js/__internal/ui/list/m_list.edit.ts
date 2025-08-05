@@ -8,6 +8,7 @@ import type { Item } from '@js/ui/list';
 import { isNumeric, isObject } from '@ts/core/utils/m_type';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import { NOT_EXISTING_INDEX } from '@ts/ui/collection/collection_widget.edit';
 
 import type PlainEditStrategy from '../collection/collection_widget.edit.strategy.plain';
@@ -24,7 +25,7 @@ class ListEdit extends ListBase {
 
   _editProvider!: EditProvider;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     const that = this;
     const parent = super._supportedKeys();
 
@@ -238,7 +239,6 @@ class ListEdit extends ListBase {
   }
 
   _updateItemAriaLabel($itemFrame: dxElementWrapper, itemData: Item): void {
-    // @ts-expect-error ts-error
     const label = this._displayGetter?.(itemData) ?? itemData?.text ?? itemData;
 
     this.setAria(

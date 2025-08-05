@@ -32,6 +32,7 @@ import type {
 } from '@js/ui/calendar';
 import { current, isFluent } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
 import Button from '@ts/ui/button/wrapper';
 import Editor from '@ts/ui/editor/editor';
@@ -185,7 +186,7 @@ class Calendar<
     ]);
   }
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     return {
       ...super._supportedKeys(),
       rightArrow(e: KeyboardEvent): void {
