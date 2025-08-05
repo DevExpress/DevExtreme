@@ -99,8 +99,8 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
     const { parentType } = useContext(NestedOptionContext);
 
-    if(parentType === 'option'){
-        return React.createElement('div');
+    if (parentType === 'option') {
+      return React.createElement('div');
     }
 
     const [widgetConfig, context] = useOptionScanning(
