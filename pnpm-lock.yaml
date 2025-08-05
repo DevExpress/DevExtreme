@@ -102,8 +102,8 @@ catalogs:
       specifier: 20.12.8
       version: 20.12.8
     devextreme-internal-tools:
-      specifier: 18.0.0-beta.13
-      version: 18.0.0-beta.13
+      specifier: 18.0.0-beta.15
+      version: 18.0.0-beta.15
     prettier:
       specifier: 3.5.3
       version: 3.5.3
@@ -156,7 +156,7 @@ importers:
         version: 6.0.2(@angular/compiler@19.2.8)(@angular/core@19.2.8(rxjs@7.8.1)(zone.js@0.15.0))(tslint@6.1.3(typescript@5.8.3))
       devextreme-internal-tools:
         specifier: catalog:tools
-        version: 18.0.0-beta.13
+        version: 18.0.0-beta.15
       devextreme-metadata:
         specifier: workspace:*
         version: link:packages/devextreme-metadata
@@ -1807,7 +1807,7 @@ importers:
         version: 20.12.8
       devextreme-internal-tools:
         specifier: catalog:tools
-        version: 18.0.0-beta.13
+        version: 18.0.0-beta.15
       prettier:
         specifier: catalog:tools
         version: 3.5.3
@@ -10068,8 +10068,8 @@ packages:
     resolution: {integrity: sha512-+HFrt1BAGomEEkKE0sQNH5OW8NaBt3iiSKYOFZ2Yi1+G0wJZzcvdMNxPMd3yI4c1M8X5WT+LUxjYCChv4FNlyA==}
     engines: {node: '>=8.3.0'}
 
-  devextreme-internal-tools@18.0.0-beta.13:
-    resolution: {integrity: sha512-rm7SbxKaaElQZ0ko1wJhZl05qe1no000OV16VGnSzvetlMz0O+RGKYTF8EFCKmOXsX8ItSweLqrKPgxkI0NgfA==}
+  devextreme-internal-tools@18.0.0-beta.15:
+    resolution: {integrity: sha512-k1g3YEFg1iUlpF0QqjBlE5xbqIBFvOdlG7BgHmGHOXc5bLwTYOvXufRH5LzEAfi5wOJ8jgD+DnjYLGMuT9eXDA==}
     engines: {node: '>=12.0.0'}
     hasBin: true
 
@@ -11582,7 +11582,7 @@ packages:
     resolution: {integrity: sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==}
     engines: {node: '>= 4.0'}
     os: [darwin]
-    deprecated: Upgrade to fsevents v2 to mitigate potential security issues
+    deprecated: The v1 package contains DANGEROUS / INSECURE binaries. Upgrade to safe fsevents v2
 
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
@@ -30884,7 +30884,7 @@ snapshots:
       unzipper: 0.12.3
       uuid: 8.3.2
 
-  devextreme-internal-tools@18.0.0-beta.13:
+  devextreme-internal-tools@18.0.0-beta.15:
     dependencies:
       dasherize: 2.0.0
       dot: 1.1.3

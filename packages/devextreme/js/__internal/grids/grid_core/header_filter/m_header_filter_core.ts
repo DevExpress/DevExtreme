@@ -353,7 +353,7 @@ export class HeaderFilterView extends Modules.View {
       },
       itemTemplate(data, _, element) {
         const $element = $(element);
-        if (options.encodeHtml) {
+        if (options.encodeHtml !== false) {
           return $element.text(data.text);
         }
 
