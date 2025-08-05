@@ -8,8 +8,10 @@ const typeGroups = ['typeId'];
 const priorityGroups = ['priorityId'];
 const DateCell = ({ data: cellData }) => (
   <React.Fragment>
-    <div className="name">{dayOfWeekNames[cellData.date.getDay()]}</div>
-    <div className="number">{cellData.date.getDate()}</div>
+    <div>
+      <div className="name">{dayOfWeekNames[cellData.date.getDay()]}</div>
+      <div className="number">{cellData.date.getDate()}</div>
+    </div>
   </React.Fragment>
 );
 const App = () => (
