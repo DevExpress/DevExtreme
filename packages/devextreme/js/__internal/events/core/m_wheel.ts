@@ -8,7 +8,7 @@ const EVENT_NAMESPACE = 'dxWheel';
 const NATIVE_EVENT_NAME = 'wheel';
 
 const PIXEL_MODE = 0;
-const DELTA_MUTLIPLIER = 30;
+const DELTA_MULTIPLIER = 30;
 
 enum DeltaMode {
   DOM_DELTA_PIXEL = 0,
@@ -38,7 +38,7 @@ const wheel = {
       deltaMode, deltaY, deltaX, deltaZ,
     }: WheelEvent = e.originalEvent;
 
-    const delta = this._getWheelDelta(deltaY, deltaX, deltaZ);
+    const delta = this._getWheelDelta(deltaY, deltaX);
 
     fireEvent({
       type: EVENT_NAME,
@@ -61,15 +61,15 @@ const wheel = {
     }
     // Use multiplier to get rough delta value in px for the LINE or PAGE mode
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1392460
-    return -delta * DELTA_MUTLIPLIER;
+    return -delta * DELTA_MULTIPLIER;
   },
 
-  _getWheelDelta(deltaY: number, deltaX: number, deltaZ: number) {
+  _getWheelDelta(deltaY: number, deltaX: number) {
     if (deltaY) {
       return deltaY;
     }
 
-    if (deltaX && deltaZ === 0) {
+    if (deltaX) {
       return deltaX;
     }
 

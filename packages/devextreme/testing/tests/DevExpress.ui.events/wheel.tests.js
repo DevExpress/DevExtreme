@@ -89,15 +89,15 @@ QUnit.test('_getWheelDelta handles different delta combinations correctly', func
         eventArgs = e;
     });
 
-    mouse.wheel(10, { deltaY: 10, deltaX: 5, deltaZ: 0 });
+    mouse.wheel(0, { deltaY: 10, deltaX: 5, deltaZ: 0 });
     assert.strictEqual(eventArgs.delta, -10, 'vertical scroll should use deltaY');
 
-    mouse.wheel(10, { deltaY: 0, deltaX: 5, deltaZ: 0 });
+    mouse.wheel(0, { deltaY: 0, deltaX: 5, deltaZ: 0 });
     assert.strictEqual(eventArgs.delta, -5, 'horizontal scroll should use deltaX when deltaZ is 0');
 
-    mouse.wheel(10, { deltaY: 0, deltaX: 5, deltaZ: 1 });
+    mouse.wheel(0, { deltaY: 0, deltaX: 5, deltaZ: 1 });
     assert.strictEqual(eventArgs.delta, 0, 'should return 0 when deltaX present but deltaZ is not 0');
 
-    mouse.wheel(10, { deltaY: 0, deltaX: 0, deltaZ: 0 });
+    mouse.wheel(0, { deltaY: 0, deltaX: 0, deltaZ: 0 });
     assert.strictEqual(eventArgs.delta, 0, 'should return 0 when no delta values present');
 });
