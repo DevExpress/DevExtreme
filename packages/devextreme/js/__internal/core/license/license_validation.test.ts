@@ -512,6 +512,34 @@ describe('internal license check', () => {
   });
 });
 
+describe('DevExpress license check', () => {
+  let trialPanelSpy = jest.spyOn(trialPanel, 'renderTrialPanel');
+
+  beforeEach(() => {
+    jest.spyOn(errors, 'log').mockImplementation(() => {});
+    trialPanelSpy = jest.spyOn(trialPanel, 'renderTrialPanel');
+    setLicenseCheckSkipCondition(false);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  test('DevExpress License Key copied from Download Manager (incorrect)', () => {
+    const token = 'LCXv1therestofthekey';
+    validateLicense(token, '25.1.3');
+    expect(errors.log).toHaveBeenCalled();
+    expect(trialPanelSpy).toHaveBeenCalled();
+  });
+
+  test('DevExpress License Key generated from LCX key (incorrect)', () => {
+    const token = 'LCPtherestofthekey';
+    validateLicense(token, '25.1.3');
+    expect(errors.log).toHaveBeenCalled();
+    expect(trialPanelSpy).toHaveBeenCalled();
+  });
+});
+
 describe('assertedVersions integration', () => {
   const packages = [{ packageName: 'test-package', version: '1.2.3' }];
 
