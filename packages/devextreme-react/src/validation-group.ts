@@ -35,7 +35,7 @@ const ValidationGroup = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const independentEvents = useMemo(() => (["onDisposing","onInitialized"]), []);
 

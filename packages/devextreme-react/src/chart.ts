@@ -63,7 +63,7 @@ const Chart = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["argumentAxis","argumentAxis.categories","argumentAxis.visualRange","loadingIndicator","loadingIndicator.show","valueAxis","valueAxis.categories","valueAxis.visualRange"]), []);
       const independentEvents = useMemo(() => (["onArgumentAxisClick","onDisposing","onDone","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onLegendClick","onPointClick","onSeriesClick","onTooltipHidden","onTooltipShown","onZoomEnd","onZoomStart"]), []);
