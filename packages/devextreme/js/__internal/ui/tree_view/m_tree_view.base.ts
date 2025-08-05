@@ -240,7 +240,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     }
     const element = this.$element().get(0).querySelector(`[${DATA_ITEM_ID}="${key}"]`);
 
-    return $(element ?? undefined);
+    return $(element);
   }
 
   // eslint-disable-next-line class-methods-use-this
