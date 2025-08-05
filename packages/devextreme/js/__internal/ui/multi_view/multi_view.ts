@@ -25,6 +25,7 @@ import type {
   DataChange,
   ItemRenderInfo,
 } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 
 import { _translator, animation } from './multi_view.animation';
 
@@ -44,17 +45,13 @@ const toNumber = (value): number => +value;
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 const getPosition = ($element: dxElementWrapper): number => locate($element).left;
 
-export interface MultiViewProperties extends Properties<Item> {
-  loopItemFocus?: boolean;
-
-  selectOnFocus?: boolean;
-
+export interface MultiViewProperties extends Properties<Item>, Omit<
+  CollectionWidgetLiveUpdateProperties<MultiViewProperties>,
+  keyof Properties<Item>
+> {
   selectionMode?: SingleOrMultiple;
-
-  selectionRequired?: boolean;
-
-  selectByClick?: boolean;
 }
+
 class MultiView<
   TProperties extends MultiViewProperties = MultiViewProperties,
 > extends CollectionWidget<TProperties> {

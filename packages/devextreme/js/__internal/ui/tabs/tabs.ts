@@ -26,6 +26,7 @@ import { current as currentTheme, isFluent, isMaterial } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { CollectionItemInfo, InkRippleEvent } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import {
   isReachedBottom, isReachedLeft, isReachedRight, isReachedTop,
@@ -124,22 +125,15 @@ const STYLING_MODE: Record<TabsStyle, TabsStyle> = {
   secondary: 'secondary',
 };
 
-export interface TabsProperties extends Properties {
-  selectionRequired?: boolean;
-
-  selectOnFocus?: boolean;
-
-  loopItemFocus?: boolean;
-
+export interface TabsProperties extends Properties, Omit<
+  CollectionWidgetLiveUpdateProperties<TabsProperties>,
+  keyof Properties
+> {
   useInkRipple?: boolean;
 
   badgeExpr?: (data) => string | undefined;
 
-  _itemAttributes?: Record<string, unknown>;
-
   _indicatorPosition?: Position | null;
-
-  focusedElement?: Element | null;
 }
 
 class Tabs extends CollectionWidget<TabsProperties> {

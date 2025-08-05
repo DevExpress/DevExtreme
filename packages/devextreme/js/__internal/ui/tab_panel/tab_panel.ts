@@ -1,6 +1,9 @@
 import type {
   DefaultOptionsRule,
-  Orientation, Position, TabsIconPosition, TabsStyle,
+  Orientation,
+  Position,
+  TabsIconPosition,
+  TabsStyle,
 } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
@@ -16,6 +19,7 @@ import type { Item, Properties } from '@js/ui/tab_panel';
 import { current as currentTheme, isFluent, isMaterialBased } from '@js/ui/themes';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { MultiViewProperties } from '@ts/ui/multi_view/multi_view';
 import MultiView from '@ts/ui/multi_view/multi_view';
 import type { TabsProperties } from '@ts/ui/tabs/tabs';
 import Tabs, {
@@ -73,12 +77,13 @@ const STYLING_MODE: Record<TabsStyle, TabsStyle> = {
   secondary: 'secondary',
 };
 
-export interface TabPanelProperties extends Properties {
+export interface TabPanelProperties extends Properties, Omit<
+  MultiViewProperties,
+  keyof Properties
+> {
   _tabsIndicatorPosition?: Position | null;
 
   badgeExpr?: (data) => string | undefined;
-
-  focusedElement?: Element | null;
 }
 
 class TabPanel extends MultiView<TabPanelProperties> {
