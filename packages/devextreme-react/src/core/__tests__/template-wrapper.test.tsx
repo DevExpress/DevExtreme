@@ -43,7 +43,7 @@ describe('Template Wrapper', () => {
     cleanup();
   });
 
-  it('works with locker in the context correctly', () => {
+  it('works with locker in the context correctly', async () => {
     let onRemovedFired = false;
     let removalLocker: UpdateLocker | undefined = undefined;
 
@@ -86,6 +86,7 @@ describe('Template Wrapper', () => {
 
     events.triggerHandler(document.querySelector('.template-element')!, 'dxremove');
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeTruthy();
 
     onRemovedFired = false;
@@ -107,6 +108,7 @@ describe('Template Wrapper', () => {
     removalLocker.lock();
     events.triggerHandler(document.querySelector('.template-element')!, 'dxremove');
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeFalsy();
 
     rerender(
@@ -127,6 +129,7 @@ describe('Template Wrapper', () => {
     removalLocker.lock();
     events.triggerHandler(document.querySelector('.template-element')!, 'dxremove');
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeFalsy();
 
     rerender(
@@ -147,10 +150,11 @@ describe('Template Wrapper', () => {
     removalLocker.unlock();
     events.triggerHandler(document.querySelector('.template-element')!, 'dxremove');
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeTruthy();
   });
 
-  it('does not fire onRemove when the event comes from wrappers', () => {
+  it('does not fire onRemove when the event comes from wrappers', async () => {
     let onRemovedFired = false;
 
     const onRemoved = () => {
@@ -182,6 +186,7 @@ describe('Template Wrapper', () => {
 
     events.triggerHandler(document.querySelector('.template-element')!, 'dxremove', { isUnmounting: true });
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeFalsy();
 
     rerender(
@@ -201,6 +206,7 @@ describe('Template Wrapper', () => {
 
     events.triggerHandler(document.querySelector('.template-element')!, 'dxremove');
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeTruthy();
   });
 
@@ -355,7 +361,7 @@ describe('Template Wrapper', () => {
       .toBe('<div class="template-container">My template - 1<div style="display: none;"></div><span style="display: none;"></span></div>');
   });
 
-  it('triggers onRemove when the element is removed', () => {
+  it('triggers onRemove when the element is removed', async () => {
     let onRemovedFired = false;
 
     const onRemoved = () => {
@@ -383,15 +389,17 @@ describe('Template Wrapper', () => {
         />
       </>
     );
-
+    
+    await Promise.resolve();
     expect(onRemovedFired).toBeFalsy();
 
     events.triggerHandler(document.querySelector('.template-element')!, 'dxremove');
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeTruthy();
   });
 
-  it('removes text templates when the removal listener is removed', () => {
+  it('removes text templates when the removal listener is removed', async () => {
     let onRemovedFired = false;
 
     const onRemoved = () => {
@@ -420,6 +428,7 @@ describe('Template Wrapper', () => {
       </>
     );
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeFalsy();
 
     const containerChildren = document.querySelector('.template-container')?.children!;
@@ -428,6 +437,7 @@ describe('Template Wrapper', () => {
       events.triggerHandler(containerChildren[i], 'dxremove');
     }
 
+    await Promise.resolve();
     expect(onRemovedFired).toBeTruthy();
   });
 
