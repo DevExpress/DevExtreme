@@ -61,7 +61,7 @@ const wheel = {
     }
     // Use multiplier to get rough delta value in px for the LINE or PAGE mode
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1392460
-    return -delta * DELTA_MULTIPLIER;
+    return -DELTA_MULTIPLIER * delta;
   },
 
   _getWheelDelta(deltaY: number, deltaX: number) {
