@@ -2,7 +2,8 @@ import CardView from 'devextreme-testcafe-models/cardView';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
-fixture.disablePageReloads`CardView - FilterSync API`
+// NOTE: Skip tests because FilterSync feature disabled
+fixture.skip`CardView - FilterSync API`
   .page(url(__dirname, '../../container.html'));
 
 const baseConfig = {
@@ -67,7 +68,7 @@ test('sync from headerFilter: filter by one value', async (t) => {
   await cardView.apiColumnOption('id', 'filterValues', [0]);
 
   await t.expect(cardView.apiOption('filterValue'))
-    .eql([['id', '=', 0]]);
+    .eql(['id', '=', 0]);
 
   await expectFilterElementsState(t, ['id']);
 }).before(() => createWidget('dxCardView', baseConfig));
@@ -79,7 +80,7 @@ test('sync from headerFilter: filter by exclude one value', async (t) => {
   await cardView.apiColumnOption('id', 'filterValues', [0]);
 
   await t.expect(cardView.apiOption('filterValue'))
-    .eql([['id', '<>', 0]]);
+    .eql(['id', '<>', 0]);
 
   await expectFilterElementsState(t, ['id']);
 }).before(() => createWidget('dxCardView', baseConfig));
@@ -90,7 +91,7 @@ test('sync from headerFilter: filter by two values', async (t) => {
   await cardView.apiColumnOption('id', 'filterValues', [0, 1]);
 
   await t.expect(cardView.apiOption('filterValue'))
-    .eql([['id', 'anyof', [0, 1]]]);
+    .eql(['id', 'anyof', [0, 1]]);
 
   await expectFilterElementsState(t, ['id']);
 }).before(() => createWidget('dxCardView', baseConfig));
@@ -102,7 +103,7 @@ test('sync from headerFilter: filter by exclude two values', async (t) => {
   await cardView.apiColumnOption('id', 'filterValues', [0, 1]);
 
   await t.expect(cardView.apiOption('filterValue'))
-    .eql([['id', 'noneof', [0, 1]]]);
+    .eql(['id', 'noneof', [0, 1]]);
 
   await expectFilterElementsState(t, ['id']);
 }).before(() => createWidget('dxCardView', baseConfig));
@@ -113,7 +114,7 @@ test('sync from headerFilter: filter by empty', async (t) => {
   await cardView.apiColumnOption('gender', 'filterValues', [null]);
 
   await t.expect(cardView.apiOption('filterValue'))
-    .eql([['gender', '=', null]]);
+    .eql(['gender', '=', null]);
 
   await expectFilterElementsState(t, ['gender']);
 }).before(() => createWidget('dxCardView', baseConfig));
@@ -125,7 +126,7 @@ test('sync from headerFilter: filter by non-empty', async (t) => {
   await cardView.apiColumnOption('gender', 'filterValues', [null]);
 
   await t.expect(cardView.apiOption('filterValue'))
-    .eql([['gender', '<>', null]]);
+    .eql(['gender', '<>', null]);
 
   await expectFilterElementsState(t, ['gender']);
 }).before(() => createWidget('dxCardView', baseConfig));
@@ -166,7 +167,7 @@ test('sync from headerFilter: filter by groupInterval', async (t) => {
   await cardView.apiColumnOption('id', 'filterValues', [0]);
 
   await t.expect(cardView.apiOption('filterValue')).eql(
-    [['id', 'anyof', [0]]],
+    ['id', 'anyof', [0]],
   );
 }).before(() => createWidget('dxCardView', {
   ...baseConfig,
@@ -265,28 +266,28 @@ test('sync from filterPanel: is not blank filter', async (t) => {
 
 [
   {
-    column: 'id', filterName: 'is less than', operation: '', value: 0,
+    column: 'id', filterName: 'is less than', operation: '<', value: 0,
   },
   {
-    column: 'id', filterName: 'is greater than', operation: '', value: 0,
+    column: 'id', filterName: 'is greater than', operation: '>', value: 0,
   },
   {
-    column: 'id', filterName: 'is less than or equal to', operation: '', value: 0,
+    column: 'id', filterName: 'is less than or equal to', operation: '<=', value: 0,
   },
   {
-    column: 'id', filterName: 'is greater than or equal to', operation: '', value: 0,
+    column: 'id', filterName: 'is greater than or equal to', operation: '>=', value: 0,
   },
   {
-    column: 'gender', filterName: 'contains', operation: '', value: 'a',
+    column: 'gender', filterName: 'contains', operation: 'contains', value: 'a',
   },
   {
-    column: 'gender', filterName: 'does not contain', operation: '', value: 'a',
+    column: 'gender', filterName: 'does not contain', operation: 'notcontains', value: 'a',
   },
   {
-    column: 'gender', filterName: 'starts with', operation: '', value: 'a',
+    column: 'gender', filterName: 'starts with', operation: 'startswith', value: 'a',
   },
   {
-    column: 'gender', filterName: 'ends with', operation: '', value: 'a',
+    column: 'gender', filterName: 'ends with', operation: 'endswith', value: 'a',
   },
 ].forEach(({
   column, filterName, operation, value,

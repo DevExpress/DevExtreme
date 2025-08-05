@@ -272,7 +272,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
      * @default "or Drop file here"
-     * @default "" &for(InternetExplorer|desktop)
+     * @default "" &for(mobile_devices)
      * @public
      */
     labelText?: string;

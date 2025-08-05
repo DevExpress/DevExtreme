@@ -1,6 +1,6 @@
 import { equalByValue } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
-import { getCellDuration, getGroupCount } from '@ts/scheduler/r1/utils/index';
+import { getCellDuration } from '@ts/scheduler/r1/utils/index';
 import type {
   AppointmentViewModel,
   BaseAppointmentViewModelSettings,
@@ -11,6 +11,7 @@ import type {
 
 import { AppointmentViewModelGenerator } from './appointments/m_view_model_generator';
 import type Scheduler from './m_scheduler';
+import type { ResourceManager } from './utils/resource_manager/resource_manager';
 import { getAllDayHeight, getCellHeight, getCellWidth } from './workspaces/helpers/m_position_helper';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -35,7 +36,7 @@ class AppointmentLayoutManager {
   }
 
   get appointmentRenderingStrategyName(): RenderStrategyName {
-    return appointmentRenderingStrategyMap[this.instance.currentViewType];
+    return appointmentRenderingStrategyMap[this.instance.currentView.type];
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -58,7 +59,7 @@ class AppointmentLayoutManager {
       cellCountInsideLeftVirtualCell,
       cellCountInsideTopVirtualRow,
     } = virtualScrollingDispatcher;
-    const groupCount = getGroupCount(this.instance.option('loadedResources'));
+    const groupCount = this.instance.resourceManager.groupCount();
     const DOMMetaData = workspace.getDOMElementsMetaData();
     const allDayHeight = getAllDayHeight(
       workspace.option('showAllDayPanel'),
@@ -82,15 +83,16 @@ class AppointmentLayoutManager {
     return {
       resources: this.instance.option('resources'),
       loadedResources: this.instance.option('loadedResources'),
+      getResourceManager: (): ResourceManager => this.instance.resourceManager,
       getAppointmentColor: this.instance.createGetAppointmentColor(),
       dataAccessors: this.instance._dataAccessors,
       appointmentRenderingStrategyName: this.appointmentRenderingStrategyName,
       adaptivityEnabled: this.instance.option('adaptivityEnabled'),
       rtlEnabled: this.instance.option('rtlEnabled'),
-      startDayHour: this.instance._getCurrentViewOption('startDayHour'),
-      endDayHour: this.instance._getCurrentViewOption('endDayHour'),
-      viewOffset: this.instance._getCurrentViewOption('offset') * toMs('minute'),
-      maxAppointmentsPerCell: this.instance._getCurrentViewOption('maxAppointmentsPerCell'),
+      startDayHour: this.instance.getViewOption('startDayHour'),
+      endDayHour: this.instance.getViewOption('endDayHour'),
+      viewOffset: this.instance.getViewOption('offset') * toMs('minute'),
+      maxAppointmentsPerCell: this.instance.getViewOption('maxAppointmentsPerCell'),
       currentDate: this.instance.option('currentDate'),
       isVirtualScrolling: this.instance.isVirtualScrolling(),
       leftVirtualCellCount: cellCountInsideLeftVirtualCell,
@@ -99,7 +101,7 @@ class AppointmentLayoutManager {
       hoursInterval: workspace.option('hoursInterval'),
       showAllDayPanel: workspace.option('showAllDayPanel'),
       isGroupedAllDayPanel: workspace.isGroupedAllDayPanel(),
-      groups: this.instance._getCurrentViewOption('groups'),
+      groups: this.instance.getViewOption('groups'),
       groupCount,
       rowCount,
       appointmentCountPerCell: this.instance.option('_appointmentCountPerCell'),
@@ -113,13 +115,13 @@ class AppointmentLayoutManager {
       allDayHeight,
       resizableStep: positionHelper.getResizableStep(),
       visibleDayDuration,
-      allDayPanelMode: this.instance._getCurrentViewOption('allDayPanelMode'),
+      allDayPanelMode: this.instance.getViewOption('allDayPanelMode'),
       // appointment settings
       timeZoneCalculator: this.instance.timeZoneCalculator,
       timeZone: this.instance.option('timeZone'),
       firstDayOfWeek: this.instance.getFirstDayOfWeek(),
-      viewStartDayHour: this.instance._getCurrentViewOption('startDayHour'),
-      viewEndDayHour: this.instance._getCurrentViewOption('endDayHour'),
+      viewStartDayHour: this.instance.getViewOption('startDayHour'),
+      viewEndDayHour: this.instance.getViewOption('endDayHour'),
       viewType: workspace.type,
       endViewDate: workspace.getEndViewDate(),
       positionHelper,

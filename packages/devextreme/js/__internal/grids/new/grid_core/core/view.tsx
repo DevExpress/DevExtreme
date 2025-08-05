@@ -6,7 +6,9 @@
 import type { ReadonlySignal } from '@preact/signals-core';
 import { effect } from '@preact/signals-core';
 import { infernoRenderer } from '@ts/core/m_inferno_renderer';
-import { Component, type ComponentType } from 'inferno';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/base_component';
+import { hasWindow } from '@ts/core/utils/m_window';
+import { type ComponentType } from 'inferno';
 
 export abstract class View<T extends {}> {
   private inferno: undefined | ComponentType;
@@ -48,23 +50,27 @@ export abstract class View<T extends {}> {
       props: T;
     }
 
-    return class InfernoView extends Component<{}, State> {
-      private readonly subscription: () => void;
+    return class InfernoView extends BaseInfernoComponent<{}, State> {
+      private readonly unsubscribe: () => void;
 
       constructor() {
         super();
         const props = view.getProps();
-        this.subscription = effect(() => {
+        this.unsubscribe = effect(() => {
           view.props = props.value;
 
           this.state ??= {
             props: props.value,
           };
 
-          if (this.state.props !== props.value) {
+          if (this.state.props !== props.value && hasWindow()) {
             this.setState({ props: props.value });
           }
         });
+      }
+
+      public componentWillUnmount(): void {
+        this.unsubscribe();
       }
 
       public render(): JSX.Element | undefined {

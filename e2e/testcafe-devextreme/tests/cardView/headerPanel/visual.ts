@@ -194,6 +194,36 @@ test(
   width: 600,
 }));
 
+test('render with horizontal scroll', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const cardView = new CardView(CARD_VIEW_SELECTOR);
+  const firstItem = cardView.getHeaderPanel().getHeaderItem(0);
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'render-with-horizontal-scroll.png',
+    { element: firstItem.element },
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+  await a11yCheck(t, a11yCheckConfig, HEADER_PANEL_SELECTOR);
+}).before(async () => createWidget('dxCardView', {
+  columns: [
+    {
+      dataField: 'A',
+      caption: 'First long caption',
+    },
+    {
+      dataField: 'B',
+      caption: 'Second long caption',
+    },
+  ],
+  width: 250,
+}));
+
 test('headerPanel column chooser link opens column chooser on click', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const cardView = new CardView(CARD_VIEW_SELECTOR);
@@ -213,4 +243,7 @@ test('headerPanel column chooser link opens column chooser on click', async (t) 
   columns: [
     { dataField: 'Column 1', visible: false },
   ],
+  columnChooser: {
+    enabled: true,
+  },
 }));

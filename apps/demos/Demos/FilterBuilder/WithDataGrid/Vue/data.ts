@@ -1,3 +1,4 @@
+import { type DxDataGridTypes } from "devextreme-vue/data-grid";
 import { type DxFilterBuilderTypes } from 'devextreme-vue/filter-builder';
 
 export const filter = [
@@ -10,13 +11,13 @@ export const filter = [
   ],
 ];
 
-export const fields: DxFilterBuilderTypes.Field[] = [
+export const fields: (DxFilterBuilderTypes.Field & DxDataGridTypes.Column)[] = [
   {
     caption: 'ID',
     dataField: 'Product_ID',
     dataType: 'number',
     width: 50,
-  } as DxFilterBuilderTypes.Field, {
+  }, {
     dataField: 'Product_Name',
     dataType: 'string',
   }, {

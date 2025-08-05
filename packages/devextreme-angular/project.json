@@ -34,10 +34,10 @@
     },
     "regenerate": {
       "executor": "nx:run-script",
+      "dependsOn": ["devextreme-metadata:build"],
       "options": {
         "script": "regenerate"
-      },
-      "dependsOn": ["devextreme-monorepo:\"angular:copy-metadata\""]
+      }
     },
     "test:dev": {
       "executor": "nx:run-script",
@@ -53,7 +53,7 @@
   },
   "namedInputs": {
     "default": [
-      "{projectRoot}/metadata/**/*",
+      "{projectRoot}/devextreme-metadata/**/*",
       "{projectRoot}/src/**/*",
       "{projectRoot}/build.config.js",
       "{projectRoot}/gulpfile.js",

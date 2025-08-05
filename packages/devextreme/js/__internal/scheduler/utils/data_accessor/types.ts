@@ -12,5 +12,5 @@ export interface IFieldExpr {
   visibleExpr: string;
 }
 
-export type DataAccessorGetter<T> = (obj: T) => unknown;
-export type DataAccessorSetter<T> = (obj: T, value: unknown) => void;
+export type DataAccessorGetter<T, D = unknown> = (obj: T) => D;
+export type DataAccessorSetter<T, D = unknown> = (obj: T, value: D) => void;

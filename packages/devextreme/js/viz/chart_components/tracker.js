@@ -9,7 +9,6 @@ import pointerEvents from '../../common/core/events/pointer';
 import { addNamespace } from '../../common/core/events/utils/index';
 import { isDefined } from '../../core/utils/type';
 import { noop as _noop } from '../../core/utils/common';
-import errors from '../../core/errors';
 const _floor = Math.floor;
 const eventsConsts = consts.events;
 const statesConsts = consts.states;
@@ -57,15 +56,8 @@ function getData(event, dataKey, tryCheckParent) {
     return data;
 }
 
-function eventCanceled({ event, cancel }, target, clickTarget) {
-    const deprecatedCancel = event.cancel; // DEPRECATED_22_1
-    const eventCanceled = cancel || deprecatedCancel;
-
-    if(deprecatedCancel) {
-        errors.log('W0003', `${clickTarget}Click handler argument`, 'event.cancel', '22.1', 'Use the \'cancel\' field instead');
-    }
-
-    return eventCanceled || !target.getOptions();
+function eventCanceled({ cancel }, target) {
+    return cancel || !target.getOptions();
 }
 
 function correctLegendHoverMode(mode) {
@@ -306,12 +298,17 @@ const baseTrackerPrototype = {
         }
     },
 
+    _processArgumentHoveredPoint: function(argument, argumentIndex) {
+        this._releaseHoveredPoint();
+    },
+
     _hoverArgument: function(argument, argumentIndex) {
         const that = this;
         const hoverMode = that._getArgumentHoverMode();
 
         if(isDefined(argument)) {
-            that._releaseHoveredPoint();
+            this._processArgumentHoveredPoint(argument, argumentIndex);
+
             that._hoveredArgument = argument;
             that._argumentIndex = argumentIndex;
             that._notifySeries({
@@ -693,6 +690,17 @@ extend(PieTracker.prototype, baseTrackerPrototype, {
     _getArgumentHoverMode: function() {
         return correctHoverMode(this._legend);
     },
+
+    _processArgumentHoveredPoint: function(argument, argumentIndex) {
+        const points = this._storedSeries.flatMap((series) => series.getPointsByKeys(argument, argumentIndex));
+
+        if(points.length === 1) {
+            this._setHoveredPoint(points[0]);
+        } else {
+            this._releaseHoveredPoint();
+        }
+    },
+
     _hoverArgumentAxis: _noop,
     _setStuckSeries: _noop,
     _getCanvas: _noop,

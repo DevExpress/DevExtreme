@@ -1,8 +1,10 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxCardViewModule } from 'devextreme-angular';
-import { Customer, Service } from './app.service';
+import { DxCardViewModule, DxTextAreaModule } from 'devextreme-angular';
+import { lastValueFrom } from 'rxjs';
+import { Employee, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,19 +22,57 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
 })
 export class AppComponent {
-  customers: Customer[];
+  employees: Employee[];
 
-  columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+  phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/i;
 
-  constructor(service: Service) {
-    this.customers = service.getCustomers();
+  popupConfig = {
+    title: 'Employee Info',
+    showTitle: true,
+    width: 700,
+    height: 525,
   }
+  
+  constructor(private httpClient: HttpClient, service: Service) {
+    this.employees = service.getEmployees();
+  }
+
+  altExpr({ fullName }: Employee) {
+    return `Photo of ${fullName}`;
+  }
+  
+  imageExpr({ picture }: Employee) {
+    return picture;
+  }
+  
+  calculateFullName({firstName, lastName}: Employee) {
+    return `${firstName} ${lastName}`;
+  }
+
+  emailValidationCallback = async (params) => {
+    const emailValidationUrl = 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
+
+    const result = await lastValueFrom(this.httpClient.post(emailValidationUrl, {
+      id: params.data.id,
+      email: params.value,
+    }, {
+      responseType: 'json',
+    }));
+
+    return result;
+  };
+
+  hireDateValidationCallback = (params) => {
+    return new Date(params.value) > new Date(params.data.birthDate);
+  };
 }
 
 @NgModule({
   imports: [
     BrowserModule,
     DxCardViewModule,
+    DxTextAreaModule,
+    HttpClientModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

@@ -32,6 +32,7 @@ export interface Options extends Base.Options {
 export const defaultOptions = {
   wordWrapEnabled: false,
   cardsPerRow: 3,
+  cardMinWidth: 250,
   cardCover: {
     aspectRatio: '1 / 1',
   },

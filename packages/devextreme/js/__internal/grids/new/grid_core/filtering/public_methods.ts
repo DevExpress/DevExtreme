@@ -7,12 +7,7 @@ import type { GridCoreNewBase } from '../widget';
 export function PublicMethods<T extends Constructor<GridCoreNewBase>>(GridCore: T) {
   return class GridCoreWithFilterController extends GridCore {
     public clearFilter(): void {
-      this.filterController.clearFilter();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public getCombinedFilter(): any {
-      return this.filterController.displayFilter.peek();
+      this.filterSyncController.clearFilters();
     }
   };
 }

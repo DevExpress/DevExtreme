@@ -14,3 +14,5 @@ export interface TimeZoneOffsetsType {
   common: number;
   appointment: number;
 }
+
+export type PathTimeZoneConversion = 'toAppointment' | 'fromAppointment' | 'toGrid' | 'fromGrid';

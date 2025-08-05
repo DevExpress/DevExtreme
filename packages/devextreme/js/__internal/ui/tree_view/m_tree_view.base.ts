@@ -25,10 +25,13 @@ import LoadIndicator from '@js/ui/load_indicator';
 import type { Properties } from '@js/ui/tree_view';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
-import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/m_hierarchical_collection_widget';
+import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/hierarchical_collection_widget';
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, SCROLLABLE_CONTENT_CLASS } from '@ts/ui/scroll_view/consts';
-import Scrollable from '@ts/ui/scroll_view/m_scrollable';
+import Scrollable from '@ts/ui/scroll_view/scrollable';
 import { getRelativeOffset } from '@ts/ui/scroll_view/utils/get_relative_offset';
+
+import type { DataAdapterOptions } from '../hierarchical_collection/data_adapter';
+import type { InternalNode } from '../hierarchical_collection/data_converter';
 
 const WIDGET_CLASS = 'dx-treeview';
 
@@ -71,12 +74,15 @@ export interface TreeViewBaseProperties extends Properties {
 
   deferRendering?: boolean;
 
+  selectionRequired?: boolean;
+
   _supportItemUrl?: boolean;
 }
 
 class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> {
   _dataSource!: any;
 
+  // eslint-disable-next-line no-restricted-globals
   _setFocusedItemTimeout?: ReturnType<typeof setTimeout>;
 
   _$selectAllItem?: dxElementWrapper;
@@ -243,9 +249,9 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     ]);
   }
 
-  // TODO: implement these functions
   _initSelectedItems(): void {}
 
+  // @ts-expect-error ts-error
   _syncSelectionOptions(): Promise<unknown> { return Deferred().resolve().promise(); }
 
   _fireSelectionChanged(): void {
@@ -276,7 +282,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     const selectAllExists = this._$selectAllItem && this._$selectAllItem.length;
 
     // eslint-disable-next-line default-case
@@ -381,7 +386,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
   _initDataSource(): void {
     if (this._useCustomChildrenLoader()) {
       this._loadChildrenByCustomLoader(null).done((newItems) => {
-        // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
         if (newItems && newItems.length) {
           this.option('items', newItems);
         }
@@ -425,7 +429,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
 
   _combineFilter() {
     // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (!this._filter.custom || !this._filter.custom.length) {
       return this._filter.internal;
     }
@@ -500,7 +503,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     this._dataSource && this._dataSource.store()
       .on('inserted', (newItem) => {
         // @ts-expect-error ts-error
@@ -599,14 +601,22 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     return accessors;
   }
 
-  _getDataAdapterOptions() {
+  _getDataAdapterOptions(): Partial<DataAdapterOptions> {
+    const {
+      rootValue,
+      expandNodesRecursive,
+      selectionRequired,
+      dataStructure,
+    } = this.option();
+
     return {
-      rootValue: this.option('rootValue'),
+      rootValue,
       multipleSelection: !this._isSingleSelection(),
       recursiveSelection: this._isRecursiveSelection(),
-      recursiveExpansion: this.option('expandNodesRecursive'),
-      selectionRequired: this.option('selectionRequired'),
-      dataType: this.option('dataStructure'),
+      recursiveExpansion: expandNodesRecursive,
+      searchValue: '',
+      selectionRequired,
+      dataType: dataStructure,
       sort: this._dataSource?.sort(),
       langParams: this._dataSource?.loadOptions?.()?.langParams,
     };
@@ -624,7 +634,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
   _setAriaRole(): void {
     const { items } = this.option();
 
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (items && items.length) {
       this.setAria({ role: 'tree' });
     }
@@ -635,7 +644,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
 
     $(this.getScrollable().content()).append($nodeContainer);
     // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (!this.option('items') || !this.option('items').length) {
       return;
     }
@@ -681,9 +689,11 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
   }
 
   _renderScrollableContainer(): void {
+    const { useNativeScrolling, scrollDirection } = this.option();
+
     this._scrollable = this._createComponent($('<div>').appendTo(this.$element()), Scrollable, {
-      useNative: this.option('useNativeScrolling'),
-      direction: this.option('scrollDirection'),
+      useNative: useNativeScrolling,
+      direction: scrollDirection,
       useKeyboard: false,
     });
   }
@@ -826,7 +836,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     return this._dataAdapter.getNodeByKey(cachedNode.internalFields.key);
   }
 
-  _hasChildren(node): number | boolean | undefined {
+  _hasChildren(node): boolean {
     if (this._isVirtualMode() || this._useCustomChildrenLoader()) {
       // @ts-expect-error ts-error
       return this._hasItemsGetter(node.internalFields.item) !== false;
@@ -949,6 +959,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     }
 
     if (isPrimitive(identifier)) {
+      // @ts-expect-error ts-error
       return this._dataAdapter.getNodeByKey(identifier);
     }
 
@@ -960,7 +971,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     if (domAdapter.isElementNode(itemElement)) {
       return this._getNodeByElement(itemElement);
     }
-
+    // @ts-expect-error ts-error
     return this._dataAdapter.getNodeByItem(itemElement);
   }
 
@@ -1142,7 +1153,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     this._loadNestedItems(node).done((items) => {
       const actualNodeData = this._getActualNode(node);
       this._renderSublevel($node, actualNodeData, this._dataAdapter.getNodesByItems(items));
-      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
       if (!items || !items.length) {
         completionCallback.resolve();
         return;
@@ -1270,7 +1281,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
 
   _renderContent() {
     const { items } = this.option();
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
     if (items && items.length) {
       this._contentAlreadyRendered = true;
     }
@@ -1506,7 +1517,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
       return;
     }
 
-    const parentNode = this._dataAdapter.getNodeByKey(node.internalFields.parentKey);
+    const parentNode = this._dataAdapter.getNodeByKey(node.internalFields.parentKey) as InternalNode;
     const $parentNode = $($node.parents(`.${NODE_CLASS}`)[0]);
 
     if (this._showCheckboxes()) {
@@ -1535,7 +1546,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
   }
 
   _createEventHandler(eventName, e) {
-    const node = this._getNodeByElement(e.currentTarget);
+    const node = this._getNodeByElement(e.currentTarget) as InternalNode;
 
     this._itemDXEventHandler(e, eventName, { node: this._dataAdapter.getPublicNode(node) });
   }
@@ -1564,7 +1575,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     });
 
     eventsEngine.on($itemContainer, pointerDownEventNamespace, nodeSelector, (e) => {
-      this._itemPointerDownHandler(e);
+      this._itemPointerHandler(e);
     });
   }
 
@@ -1593,19 +1604,19 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     };
   }
 
-  _itemClick(actionArgs) {
-    const args = actionArgs.args[0];
-    const target = args.event.target[0] || args.event.target;
+  _itemClick(actionArgs): void {
+    const { event, itemData } = actionArgs.args[0];
+    const target = event.target[0] || event.target;
     const link = target.getElementsByClassName(ITEM_URL_CLASS)[0];
 
-    if (args.itemData.url && link) {
-      link.click();
+    if (itemData.url && link) {
+      this._clickByLink(link);
     }
   }
 
   _itemClickHandler(e, $item) {
     const itemData = this._getItemData($item);
-    const node = this._getNodeByElement($item);
+    const node = this._getNodeByElement($item) as InternalNode;
     this._itemDXEventHandler(e, 'onItemClick', {
       node: this._dataAdapter.getPublicNode(node),
     }, {
@@ -1672,7 +1683,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     this.option('focusedElement', getPublicElement($activeItem.closest(`.${NODE_CLASS}`)));
   }
 
-  _itemPointerDownHandler(e) {
+  _itemPointerHandler(e) {
     if (!this.option('focusStateEnabled')) {
       return;
     }
@@ -1707,7 +1718,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     });
 
     const $items = this._nodeElements();
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
     if (!$items || !$items.length) {
       return;
     }
@@ -1849,7 +1860,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
 
     const scrollable = this.getScrollable();
     if (scrollable) {
-      // @ts-expect-error ts-error
       scrollable.update().done(() => {
         // @ts-expect-error ts-error
         deferred.resolveWith(this);
@@ -1885,7 +1895,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
 
   getSelectedNodes() {
     return this.getSelectedNodeKeys().map((key) => {
-      const node = this._dataAdapter.getNodeByKey(key);
+      const node = this._dataAdapter.getNodeByKey(key) as InternalNode;
       return this._dataAdapter.getPublicNode(node);
     });
   }
@@ -1956,7 +1966,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
     // @ts-expect-error ts-error
     this._expandNodes(nodeKeysToExpand.reverse()).always(() => {
       const $element = this._getNodeElement(node);
-      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
       if ($element && $element.length) {
         this.scrollToElementTopLeft($element.get(0));
         scrollCallback.resolve();

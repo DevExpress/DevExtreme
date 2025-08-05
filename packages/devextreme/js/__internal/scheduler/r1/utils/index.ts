@@ -27,9 +27,6 @@ import {
   getDateForHeaderText,
 } from './timeline_week';
 import {
-  getCurrentView,
-} from './views';
-import {
   calculateStartViewDate as weekCalculateStartViewDate,
   calculateViewStartDate as weekCalculateViewStartDate,
   getIntervalDuration,
@@ -51,7 +48,6 @@ export {
   getDatesWithoutTime,
   getDisplayedCellCount,
   getDisplayedRowCount,
-  getGroupCount,
   getGroupPanelData,
   getHeaderCellText,
   getHorizontalGroupCount,
@@ -68,7 +64,6 @@ export {
   getVerticalGroupCountClass,
   getViewStartByOptions,
   getWeekendsCount,
-  hasResourceValue,
   isAppointmentTakesAllDay,
   isDataOnWeekend,
   isDateAndTimeView,
@@ -125,10 +120,6 @@ export const timelineWeekUtils = {
 
 export const timelineMonthUtils = {
   calculateStartViewDate: timelineMonthCalculateStartViewDate,
-};
-
-export const viewsUtils = {
-  getCurrentView,
 };
 
 export const renderUtils = {

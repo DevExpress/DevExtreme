@@ -13,7 +13,7 @@ const DESTINATION_CSS_PATH = './artifacts/css';
 
 const JS_VENDORS = [
     {
-        path: 'exceljs/dist/exceljs.js'
+        path: 'devextreme-exceljs-fork/dist/dx-exceljs-fork.js'
     },
     {
         path: 'file-saver/dist/FileSaver.js'

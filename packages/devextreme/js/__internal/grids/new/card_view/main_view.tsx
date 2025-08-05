@@ -98,6 +98,12 @@ function MainViewComponent({
 export class MainView extends View<MainViewProps> {
   protected override component = MainViewComponent;
 
+  private readonly config = computed(() => ({
+    rtlEnabled: this.options.oneWay('rtlEnabled').value,
+    disabled: this.options.oneWay('disabled').value,
+    templatesRenderAsynchronously: this.options.oneWay('templatesRenderAsynchronously').value,
+  }));
+
   public static dependencies = [
     ContentView,
     PagerView,
@@ -143,11 +149,7 @@ export class MainView extends View<MainViewProps> {
       ColumnChooser: this.columnsChooser.asInferno(),
       EditPopup: this.editPopup.asInferno(),
       ContextMenu: this.contextMenu.asInferno(),
-      config: {
-        rtlEnabled: this.options.oneWay('rtlEnabled').value,
-        disabled: this.options.oneWay('disabled').value,
-        templatesRenderAsynchronously: this.options.oneWay('templatesRenderAsynchronously').value,
-      },
+      config: this.config.value,
       rootElementRef: { current: this.root! },
       onKeyDown: (event: KeyboardEvent): void => {
         this.keyboardNavigation.onKeyDown(event);

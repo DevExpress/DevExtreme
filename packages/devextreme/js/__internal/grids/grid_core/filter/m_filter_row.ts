@@ -76,8 +76,6 @@ const EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
 
 const BETWEEN_OPERATION_DATA_TYPES = ['date', 'datetime', 'number'];
 
-const ARIA_SEARCH_BOX = messageLocalization.format('dxDataGrid-ariaSearchBox');
-
 function isOnClickApplyFilterMode(that) {
   return that.option('filterRow.applyFilter') === 'onClick';
 }
@@ -299,6 +297,8 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       showTitle: false,
       focusStateEnabled: false,
       hideOnOutsideClick: true,
+      hideOnParentScroll: true,
+      _hideOnParentScrollTarget: $overlay,
       wrapperAttr: { class: filterRangeOverlayClass },
       animation: false,
       position: {
@@ -579,6 +579,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     };
 
     const editorFactoryController = this._editorFactoryController;
+    const ariaSearchBox = messageLocalization.format('dxDataGrid-ariaSearchBox');
 
     that._createComponent($menu, Menu, {
       // @ts-expect-error
@@ -589,7 +590,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       showFirstSubmenuMode: 'onHover',
       hideSubmenuOnMouseLeave: true,
       items: [{
-        name: getColumnSelectedFilterOperation(that, column) || ARIA_SEARCH_BOX,
+        name: getColumnSelectedFilterOperation(that, column) || ariaSearchBox,
         disabled: !column.filterOperations?.length,
         icon: OPERATION_ICONS[getColumnSelectedFilterOperation(that, column) || 'default'],
         selectable: false,
@@ -597,7 +598,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       }],
       onItemRendered: ({ itemElement, itemData }) => {
         if (itemData?.items && itemData?.name) {
-          const labelText = that._getOperationDescriptionFromDescriptor(itemData.name) || ARIA_SEARCH_BOX;
+          const labelText = that._getOperationDescriptionFromDescriptor(itemData.name) || ariaSearchBox;
           this.setAria('label', labelText, $(itemElement));
         }
       },

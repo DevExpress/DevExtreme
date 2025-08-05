@@ -1,14 +1,13 @@
 import { getImageSourceType } from '@js/core/utils/icon';
-import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
+import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index'; // with short path tests cant run
+import type { TemplateComponent } from '@ts/core/r1/types';
 import { getTemplate } from '@ts/core/r1/utils/index';
 import { combineClasses } from '@ts/core/utils/combine_classes';
 
 export interface IconProps {
   position?: string;
-
   source?: string;
-
-  iconTemplate?: (props) => JSX.Element;
+  iconTemplate?: TemplateComponent;
 }
 
 export const defaultIconProps = {
@@ -52,36 +51,19 @@ export class Icon extends BaseInfernoComponent<IconProps> {
     return '';
   }
 
-  get restAttributes(): Record<string, unknown> {
-    const restProps = { ...this.props };
-
-    ['iconTemplate', 'position', 'source'].forEach((excluded) => {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete restProps[excluded];
-    });
-
-    return restProps;
-  }
-
   render(): JSX.Element {
-    const {
-      iconClassName,
-      props: {
-        source,
-      },
-      sourceType,
-    } = this;
-
-    const IconTemplate = getTemplate(this.props.iconTemplate);
+    const { iconClassName, props, sourceType } = this;
+    const IconTemplate = getTemplate(props.iconTemplate);
 
     return (
       <>
         {sourceType === 'dxIcon' && (<i className={iconClassName} />)}
         {sourceType === 'fontIcon' && (<i className={iconClassName} />)}
-        {sourceType === 'image' && (<img className={iconClassName} alt="" src={source} />)}
+        {sourceType === 'image' && (<img className={iconClassName} alt="" src={props.source} />)}
         {IconTemplate && (<i className={iconClassName}>{IconTemplate({})}</i>)}
       </>
     );
   }
 }
+
 Icon.defaultProps = defaultIconProps;

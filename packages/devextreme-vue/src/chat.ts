@@ -90,7 +90,7 @@ const componentConfig = {
     editing: Object as PropType<Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     items: Array as PropType<Array<Message>>,
@@ -117,7 +117,7 @@ const componentConfig = {
     typingUsers: Array as PropType<Array<User>>,
     user: Object as PropType<User | Record<string, any>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

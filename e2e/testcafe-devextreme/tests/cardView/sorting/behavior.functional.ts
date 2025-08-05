@@ -474,3 +474,41 @@ const CLEAR_SORTING_MENUITEM_INDEX = 2;
     });
   });
 });
+
+test('Sorting should work with computed columns', async (t) => {
+  const cardView = new CardView('#container');
+  const headerItem = cardView.getHeaders().getHeaderItemByText('Computed');
+
+  await t.click(headerItem.element);
+
+  const getCardTexts = async () => {
+    await t.expect(cardView.getCards().count).eql(4);
+
+    return [
+      await cardView.getCard(0).getFieldValueCell('Computed').textContent,
+      await cardView.getCard(1).getFieldValueCell('Computed').textContent,
+      await cardView.getCard(2).getFieldValueCell('Computed').textContent,
+      await cardView.getCard(3).getFieldValueCell('Computed').textContent,
+    ];
+  };
+
+  await t.expect(await getCardTexts()).eql(['str_0', 'str_1', 'str_2', 'str_3']);
+
+  await t.click(headerItem.element);
+
+  await t.expect(await getCardTexts()).eql(['str_3', 'str_2', 'str_1', 'str_0']);
+}).before(async () => {
+  await createWidget('dxCardView', {
+    dataSource: [
+      { id: 0 }, { id: 1 }, { id: 2 }, { id: 3 },
+    ],
+    keyExpr: 'id',
+    columns: [
+      {
+        caption: 'Computed',
+        allowSorting: true,
+        calculateFieldValue: ({ id }) => `str_${id}`,
+      },
+    ],
+  });
+});

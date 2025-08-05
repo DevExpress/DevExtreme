@@ -1,4 +1,4 @@
-.options {
+.options-panel {
   margin-top: 20px;
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
@@ -17,11 +17,13 @@
 
 .option {
   margin: 10px;
+  display: flex;
+  align-items: center;
   width: fit-content;
 }
 
 .option > .dx-selectbox {
-  width: 150px;
+  width: 200px;
   display: inline-block;
   vertical-align: middle;
 }

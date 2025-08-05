@@ -3,7 +3,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import type { DxElement } from '@js/core/element';
 import $, { type dxElementWrapper } from '@js/core/renderer';
-import { Deferred } from '@js/core/utils/deferred';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { Item, Properties } from '@js/ui/stepper';
@@ -12,11 +12,11 @@ import type { Template } from '@ts/core/templates/m_template';
 import { getImageContainer } from '@ts/core/utils/m_icon';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import CollectionWidgetAsync from '@ts/ui/collection/collection_widget.async';
 import type {
   ItemRenderInfo,
   PostprocessRenderItemInfo,
 } from '@ts/ui/collection/collection_widget.base';
-import CollectionWidgetAsync from '@ts/ui/collection/m_collection_widget.async';
 import Connector from '@ts/ui/stepper/connector';
 import StepperItem, {
   STEP_COMPLETED_CLASS,
@@ -215,7 +215,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     return $itemFrame;
   }
 
-  _postprocessRenderItem(args: PostprocessRenderItemInfo<StepperItem>): void {
+  _postprocessRenderItem(args: PostprocessRenderItemInfo<Item>): void {
     super._postprocessRenderItem(args);
 
     const { selectedIndex = 0 } = this.option();
@@ -323,7 +323,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   }
 
   _shouldPreventItemEvent(itemElement: Element | dxElementWrapper): boolean {
-    const itemIndex = this._editStrategy.getIndex(itemElement);
+    const itemIndex = this._editStrategy.getIndex(itemElement) as number;
     const { linear, selectedIndex = 0 } = this.option();
 
     return !!linear && Math.abs(selectedIndex - itemIndex) > 1;
@@ -339,9 +339,9 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     }
   }
 
-  _itemPointerDownHandler(e: DxEvent): void {
+  _itemPointerHandler(e: DxEvent): void {
     if (!this._shouldPreventItemEvent(e.currentTarget)) {
-      super._itemPointerDownHandler(e);
+      super._itemPointerHandler(e);
     }
   }
 
@@ -379,7 +379,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     }
 
     const $lastCompletedElement = itemElements.filter(`.${STEP_COMPLETED_CLASS}`).last();
-    const lastCompletedIndex = this._editStrategy.getIndex($lastCompletedElement);
+    const lastCompletedIndex = this._editStrategy.getIndex($lastCompletedElement) as number;
     const { selectedIndex = 0 } = this.option();
 
     const startIndex = Math.min(lastCompletedIndex + 1, selectedIndex);
@@ -398,12 +398,14 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     this._processChangeCompletedItems();
   }
 
-  _syncSelectionOptions(byOption?: string): Promise<unknown> {
-    super._syncSelectionOptions(byOption).done(() => {
+  _syncSelectionOptions(byOption?: string): DeferredObj<unknown> {
+    const parentDeferred = super._syncSelectionOptions(byOption);
+
+    parentDeferred.done(() => {
       this._postProcessSyncSelection();
     });
 
-    return Deferred().resolve().promise();
+    return parentDeferred;
   }
 
   _itemOptionChanged(

@@ -239,3 +239,45 @@ safeSizeTest('The group separator should be visible when dragging a fixed column
 }).after(async () => {
   await MouseUpEvents.enable(MouseAction.dragToOffset);
 });
+
+test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled and the grid has a fixed column (T1286077)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  const groupRow = dataGrid.getGroupRow(0);
+  const groupPanelToggle = groupRow.getCell(0).element;
+
+  await dataGrid.isReady();
+
+  await t
+    .click(groupPanelToggle);
+
+  await t
+    .expect(dataGrid.getGroupRow(0).isExpanded)
+    .ok();
+
+  await t
+    .click(groupPanelToggle);
+
+  await t
+    .expect(dataGrid.getGroupRow(0).isExpanded)
+    .notOk();
+
+  await dataGrid.scrollBy({ x: 1000 });
+
+  await t
+    .expect(await takeScreenshot('group_row_scrolling_all_collapsed_fixed_columns.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  ...defaultConfig,
+  columnAutoWidth: false,
+  customizeColumns(columns) {
+    columns[2].groupIndex = 0;
+  },
+  columnWidth: 200,
+  repaintChangesOnly: true,
+  grouping: {
+    autoExpandAll: false,
+  },
+}));

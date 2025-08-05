@@ -4,6 +4,8 @@
 // eslint-disable-next-line max-classes-per-file
 import { extend } from '@js/core/utils/extend';
 import Widget from '@js/ui/widget/ui.widget';
+import type { Signal } from '@preact/signals-core';
+import { signal } from '@preact/signals-core';
 import { DIContext } from '@ts/core/di/index';
 import { infernoRenderer } from '@ts/core/m_inferno_renderer';
 import { SearchView } from '@ts/grids/new/grid_core/search/view';
@@ -19,13 +21,11 @@ import * as EditingModule from './editing/index';
 import { EditPopupView } from './editing/popup/view';
 import { ErrorController } from './error_controller/error_controller';
 import { CompatibilityFilterSyncController, FilterSyncController } from './filtering/filter_sync/index';
-import { ClearFilterVisitor } from './filtering/filter_visitors/clear_filter_visitor';
-import { FilterCustomOperationsVisitor } from './filtering/filter_visitors/filter_custom_operations_visitor';
-import { GetAppliedFilterVisitor } from './filtering/filter_visitors/get_applied_filters_visitor';
 import { CompatibilityHeaderFilterController, HeaderFilterController } from './filtering/header_filter/index';
 import { HeaderFilterViewController } from './filtering/header_filter/view_controller';
 import * as FilterControllerModule from './filtering/index';
 import { ItemsController } from './items_controller/items_controller';
+import { LifeCycleController } from './lifecycle/controller';
 import { MainView } from './main_view';
 import { defaultOptions, defaultOptionsRules, type Options } from './options';
 import { PagerView } from './pager/view';
@@ -82,15 +82,14 @@ export class GridCoreNewBase<
 
   private headerFilterController!: HeaderFilterController;
 
-  private filterSyncController!: FilterSyncController;
-
-  private clearFilterVisitor!: ClearFilterVisitor;
-
-  private getAppliedFiltersVisitor!: GetAppliedFilterVisitor;
+  public filterSyncController!: FilterSyncController;
 
   private accessibilityController!: AccessibilityController;
 
-  private filterCustomOperationsVisitor!: FilterCustomOperationsVisitor;
+  private lifeCycleController!: LifeCycleController;
+
+  // TODO: rewrite to lifeCycleController
+  public initialized!: Signal<boolean>;
 
   protected _registerDIContext(): void {
     this.diContext = new DIContext();
@@ -129,18 +128,24 @@ export class GridCoreNewBase<
     this.accessibilityController = this.diContext.get(AccessibilityController);
     this.filterSyncController = this.diContext.get(FilterSyncController);
     this.searchView = this.diContext.get(SearchView);
+  }
 
-    this.clearFilterVisitor = this.diContext.get(ClearFilterVisitor);
-    this.getAppliedFiltersVisitor = this.diContext.get(GetAppliedFilterVisitor);
-    this.filterCustomOperationsVisitor = this.diContext.get(FilterCustomOperationsVisitor);
+  private _initLifeCycleController(): void {
+    this.lifeCycleController = this.diContext.get(LifeCycleController);
+    this.lifeCycleController.provideContentReadyCallback(() => {
+      // @ts-expect-error
+      this._fireContentReadyAction();
+    });
   }
 
   protected _init(): void {
     // @ts-expect-error
     super._init();
+    this.initialized = signal(false);
     this._registerDIContext();
     this._initWidgetMock();
     this._initDIContext();
+    this._initLifeCycleController();
   }
 
   protected _getDefaultOptions() {
@@ -155,6 +160,18 @@ export class GridCoreNewBase<
     // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return super._defaultOptionsRules().concat(defaultOptionsRules);
+  }
+
+  protected _initializeComponent(): void {
+    // @ts-expect-error usage of base method not described in d.ts
+    super._initializeComponent();
+    this.initialized.value = true;
+  }
+
+  // NOTE: this disables calling of _fireContentReadyAction on initial render
+  protected _renderContent() {
+    // @ts-expect-error
+    this._renderContentImpl();
   }
 
   protected _initMarkup(): void {

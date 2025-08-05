@@ -24,19 +24,19 @@ QUnit.test('Creation', function(assert) {
     });
     const nodes = sankey.getAllNodes();
 
-    assert.equal(nodes[0].title, 'A');
+    assert.equal(nodes[0].label, 'A');
     assert.equal(nodes[0].linksIn.length, 0);
     assert.equal(nodes[0].linksOut.length, 1);
     assert.equal(nodes[0].linksOut[0].weight, 1);
     assert.equal(nodes[0].linksOut[0].node, 'Z');
 
-    assert.equal(nodes[1].title, 'B');
+    assert.equal(nodes[1].label, 'B');
     assert.equal(nodes[1].linksIn.length, 0);
     assert.equal(nodes[1].linksOut.length, 1);
     assert.equal(nodes[1].linksOut[0].weight, 1);
     assert.equal(nodes[1].linksOut[0].node, 'Z');
 
-    assert.equal(nodes[2].title, 'Z');
+    assert.equal(nodes[2].label, 'Z');
     assert.equal(nodes[2].linksIn.length, 2);
     assert.equal(nodes[2].linksIn[0].weight, 1);
     assert.equal(nodes[2].linksIn[0].node, 'A');
@@ -53,7 +53,7 @@ QUnit.test('Passing nodes[].rect coordinates to SVG', function(assert) {
     const nodesSVG = this.nodes();
 
     ['A', 'B', 'Z'].forEach(function(nodeName) {
-        const nodeItem = find(nodes, function(n) { return n.title === nodeName; });
+        const nodeItem = find(nodes, function(n) { return n.label === nodeName; });
         const nodeSVG = find(nodesSVG, function(node) { return node.attr.firstCall.args[0]._name === nodeName; });
         assert.deepEqual(nodeSVG.attr.firstCall.args[0], nodeItem.rect, 'Node ' + nodeName + ': rectangles match');
     });

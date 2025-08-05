@@ -22,7 +22,7 @@ import {
 import { getHeaderItemText } from './header_filter/legacy_header_filter';
 
 function baseOperation(config) {
-  const { headerFilterController } = config;
+  const { getHeaderFilterController } = config;
 
   const calculateFilterExpression = function (filterValue, field, fields) {
     const result: string[] = [];
@@ -32,7 +32,7 @@ function baseOperation(config) {
         const filterExpression = getFilterExpression(value, fields, [], 'headerFilter');
         result.push(filterExpression);
       } else {
-        const filterExpression = getFilterExpression([field.dataField, '=', value], fields, [], 'headerFilter');
+        const filterExpression = getFilterExpression([field.dataField ?? field.name, '=', value], fields, [], 'headerFilter');
         result.push(filterExpression);
       }
       index !== lastIndex && result.push('or');
@@ -62,6 +62,7 @@ function baseOperation(config) {
   // Override in the private API WA [T1232532]
   const customizeText = function (fieldInfo, options) {
     options = options || {};
+    const headerFilterController = getHeaderFilterController();
     const { value } = fieldInfo;
     let column = config.columnOption(fieldInfo.field.dataField);
     const headerFilter = column && column.headerFilter;
@@ -118,6 +119,7 @@ function baseOperation(config) {
     dataTypes: ['string', 'date', 'datetime', 'number', 'boolean', 'object'],
     calculateFilterExpression,
     editorTemplate(conditionInfo, container) {
+      const headerFilterController = getHeaderFilterController();
       const div = $('<div>')
         .addClass('dx-filterbuilder-item-value-text')
         .appendTo(container);

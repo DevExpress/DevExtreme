@@ -417,7 +417,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
             const args = animateSpy.getCall(0).args;
 
             assert.ok(animateSpy.calledOnce, 'fx.animate is executed');
-            assert.equal(args[0].get(0), $groupBody.get(0), 'fx.animate ran on correct element');
+            assert.equal(args[0], $groupBody.get(0), 'fx.animate ran on correct element');
             assert.equal(args[1].type, 'custom', 'fx.animate ran with correct animation type');
             assert.equal(args[1].from.height, groupBodyHeight, 'fx.animate ran with correct start height');
             assert.equal(args[1].to.height, 0, 'fx.animate ran with correct end height');
@@ -4333,6 +4333,158 @@ QUnit.module('keyboard navigation', {
 
         assert.roughEqual(instance.scrollTop(), itemHeight, 1.0001, 'list scrolled to previous focusedItem');
         assert.ok(secondItemIsFocused, 'focused item change to last visible item on new page');
+    });
+
+    ['pageUp', 'pageDown'].forEach((key) => {
+        const moveDown = key === 'pageDown';
+
+        [true, false].forEach((useNativeScrolling) => {
+            QUnit.test(`on list scroll with ${key} pressed original event prevented and propagation stopped if not ${moveDown ? 'last' : 'first'} item was focused, useNativeScrolling=${useNativeScrolling} (T1298074)`, function(assert) {
+                assert.expect(4);
+
+                const $list = $('#list').dxList({
+                    useNativeScrolling,
+                    focusStateEnabled: true,
+                    items: [0, 1, 2, 3, 4],
+                });
+
+                const instance = $list.dxList('instance');
+                const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+                const keyboard = getListKeyboard($list);
+                const itemHeight = $items.first().outerHeight();
+
+                instance.option('height', itemHeight * 3);
+                instance.option('focusedElement', $items.eq(3));
+                instance.scrollToItem(moveDown ? $items.last() : $items.first());
+
+                keyboard.keyDown(key);
+
+                assert.strictEqual(keyboard.event.isDefaultPrevented(), true, 'event is prevented');
+                assert.strictEqual(keyboard.event.isPropagationStopped(), true, 'propogation is stopped');
+
+                keyboard.keyDown(key);
+
+                assert.strictEqual(keyboard.event.isDefaultPrevented(), false, `event is not prevented when ${moveDown ? 'last' : 'first'} item is focused`);
+                assert.strictEqual(keyboard.event.isPropagationStopped(), false, `propogation is not stopped when ${moveDown ? 'last' : 'first'} item is focused`);
+            });
+        });
+    });
+
+    [true, false].forEach(useNativeScrolling => {
+        QUnit.test(`grouped list scroll to focused item after press pageDown, useNativeScrolling=${useNativeScrolling} (T1300059)`, function(assert) {
+            const $list = $('#list').dxList({
+                dataSource: [
+                    { key: 1, items: [10, 11] },
+                    { key: 2, items: [20, 21] },
+                ],
+                grouped: true,
+                useNativeScrolling,
+                focusStateEnabled: true,
+            });
+
+            const instance = $list.dxList('instance');
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+            const keyboard = getListKeyboard($list);
+            const itemHeight = $items.first().outerHeight();
+
+            $list.dxList('focus');
+            instance.option('height', itemHeight * 3);
+
+            keyboard.keyDown('pageDown');
+            const secondItemFirstGroupIsFocused = $items.eq(1).hasClass(FOCUSED_STATE_CLASS);
+
+            assert.roughEqual(instance.scrollTop(), 0, 1.0001, 'list is not scrolled, when focusedItem is not last visible item on this page');
+            assert.ok(secondItemFirstGroupIsFocused, 'second item in first group is focused');
+
+            keyboard.keyDown('pageDown');
+            const firstItemSecondGroupIsFocused = $items.eq(2).hasClass(FOCUSED_STATE_CLASS);
+
+            assert.roughEqual(instance.scrollTop(), itemHeight * 2, 1.0001, 'list scrolled to next page');
+            assert.ok(firstItemSecondGroupIsFocused, 'last item on new page obtained focus');
+
+            keyboard.keyDown('pageDown');
+            const lastItemIsFocused = $items.eq(3).hasClass(FOCUSED_STATE_CLASS);
+
+            assert.roughEqual(instance.scrollTop(), itemHeight * 3, 1.0001, 'list scrolled to last page');
+            assert.ok(lastItemIsFocused, 'last item on last page obtained focus');
+        });
+    });
+
+    [true, false].forEach(useNativeScrolling => {
+        QUnit.test(`grouped list with collapsed group scroll to focused item after press pageDown, useNativeScrolling=${useNativeScrolling} (T1300059)`, function(assert) {
+            const $list = $('#list').dxList({
+                dataSource: [
+                    { key: 1, items: [10, 11] },
+                    { key: 2, items: [20, 21] },
+                ],
+                grouped: true,
+                collapsibleGroups: true,
+                useNativeScrolling,
+                focusStateEnabled: true,
+            });
+
+            const instance = $list.dxList('instance');
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+            const firstGroupHeader = $list.find(`.${LIST_GROUP_HEADER_CLASS}`)[0];
+            const keyboard = getListKeyboard($list);
+            const itemHeight = $items.first().outerHeight();
+
+            $list.trigger('focusin');
+            instance.option('height', itemHeight * 3);
+            instance.option('focusedElement', firstGroupHeader);
+            $(firstGroupHeader).trigger('dxclick');
+            this.clock.tick(300);
+
+            keyboard.keyDown('pageDown');
+            const firstItemSecondGroupIsFocused = $items.eq(2).hasClass(FOCUSED_STATE_CLASS);
+
+            assert.roughEqual(instance.scrollTop(), 0, 1.0001, 'list is not scrolled, when focusedItem is not last visible item on this page');
+            assert.ok(firstItemSecondGroupIsFocused, 'first item in second group is focused');
+
+            keyboard.keyDown('pageDown');
+            const lastItemIsFocused = $items.eq(3).hasClass(FOCUSED_STATE_CLASS);
+
+            assert.roughEqual(instance.scrollTop(), itemHeight, 1.0001, 'list scrolled to next page');
+            assert.ok(lastItemIsFocused, 'last item on last page obtained focus');
+        });
+    });
+
+    [true, false].forEach((useNativeScrolling) => {
+        QUnit.test(`list scroll to focused item after press pageDown when SelectAll item focused, useNativeScrolling=${useNativeScrolling} (T1300059)`, function(assert) {
+            const $list = $('#list').dxList({
+                useNativeScrolling,
+                focusStateEnabled: true,
+                dataSource: [0, 1, 2, 3, 4],
+                showSelectionControls: true,
+                selectionMode: 'all',
+            });
+
+            const instance = $list.dxList('instance');
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+            const keyboard = getListKeyboard($list);
+            const itemHeight = $items.first().outerHeight();
+
+            $list.dxList('focus');
+            instance.option('height', itemHeight * 3);
+
+            keyboard.keyDown('pageDown');
+            const secondItemIsFocused = $items.eq(1).hasClass(FOCUSED_STATE_CLASS);
+
+            assert.roughEqual(instance.scrollTop(), 0, 1.0001, 'list is not scrolled, when focusedItem is not last visible item on this page');
+            assert.ok(secondItemIsFocused, 'second item in first group is focused');
+
+            keyboard.keyDown('pageDown');
+            const forthItemIsFocused = $items.eq(3).hasClass(FOCUSED_STATE_CLASS);
+
+            assert.roughEqual(instance.scrollTop(), itemHeight * 2, 1.0001, 'list scrolled to next page');
+            assert.ok(forthItemIsFocused, 'last item on new page obtained focus');
+
+            keyboard.keyDown('pageDown');
+            const lastItemIsFocused = $items.eq(4).hasClass(FOCUSED_STATE_CLASS);
+
+            assert.roughEqual(instance.scrollTop(), itemHeight * 3, 1.0001, 'list scrolled to last page');
+            assert.ok(lastItemIsFocused, 'last item on last page obtained focus');
+        });
     });
 
     QUnit.test('focus should be moved to selectedItem after focusing of grouped list (T1278005)', function(assert) {

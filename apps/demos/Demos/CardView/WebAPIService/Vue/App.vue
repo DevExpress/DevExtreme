@@ -2,15 +2,42 @@
   <DxCardView
     :data-source="dataSource"
     :remote-operations="true"
+    cards-per-row="auto"
+    :card-min-width="280"
     :word-wrap-enabled="true"
-    :header-filter="headerFilterConfig"
-    :search-panel="searchPanelConfig"
   >
+    <DxSearchPanel
+      :visible="true"
+    />
+    <DxHeaderFilter
+      :visible="true"
+    />
     <DxEditing
       :allow-adding="true"
       :allow-updating="true"
       :allow-deleting="true"
-    ></DxEditing>
+      :popup="{ width: 700, height: 400 }"
+    >
+      <DxForm>
+        <DxItem
+          dataField="Task_Subject"
+        ></DxItem>
+        <DxItem
+          dataField="Task_Start_Date"
+        ></DxItem>
+        <DxItem
+          dataField="Task_Due_Date"
+        ></DxItem>
+        <DxItem
+          data-field="Task_Priority"
+          editor-type="dxSelectBox"
+          :editor-options="{ dataSource: ['Low', 'Normal', 'High', 'Urgent'] }"
+        ></DxItem>
+        <DxItem
+          dataField="Task_Status"
+        ></DxItem>
+      </DxForm>
+    </DxEditing>
     <DxColumn
       data-field="Task_Subject"
       caption="Subject"
@@ -21,46 +48,39 @@
       data-field="Task_Start_Date"
       caption="Start Date"
       data-type="date"
-    ></DxColumn>
+    />
     <DxColumn
       data-field="Task_Due_Date"
       caption="Due Date"
       data-type="date"
-    ></DxColumn>
+    />
     <DxColumn
       data-field="Task_Priority"
       caption="Priority"
-    ></DxColumn>
+    />
     <DxColumn
       data-field="Task_Status"
       caption="Status"
-    ></DxColumn>
+    />
   </DxCardView>
 </template>
 <script setup lang="ts">
-  import { DxCardView, DxColumn, DxEditing, DxRequiredRule } from 'devextreme-vue/card-view';
-  import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import {
+  DxCardView, DxColumn, DxEditing, DxSearchPanel, DxHeaderFilter, DxRequiredRule, DxForm, DxItem,
+} from 'devextreme-vue/card-view';
+import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import 'devextreme-vue/text-area';
 
-  // TODO: Nested component does not exist
-  const headerFilterConfig = {
-    visible: true,
-  };
+const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
 
-  // TODO: Nested component does not exist
-  const searchPanelConfig = {
-    visible: true,
-  };
-
-  const url = 'https://js.devexpress.com/Demos/NetCore/api/TreeListTasks';
-
-  const dataSource = AspNetData.createStore({
-    key: 'Task_ID',
-    loadUrl: `${url}/Tasks`,
-    insertUrl: `${url}/InsertTask`,
-    updateUrl: `${url}/UpdateTask`,
-    deleteUrl: `${url}/DeleteTask`,
-    onBeforeSend(method, ajaxOptions) {
-      ajaxOptions.xhrFields = { withCredentials: true };
-    },
-  });
+const dataSource = AspNetData.createStore({
+  key: 'Task_ID',
+  loadUrl: `${url}/Tasks`,
+  insertUrl: `${url}/InsertTask`,
+  updateUrl: `${url}/UpdateTask`,
+  deleteUrl: `${url}/DeleteTask`,
+  onBeforeSend(method, ajaxOptions) {
+    ajaxOptions.xhrFields = { withCredentials: true };
+  },
+});
 </script>

@@ -127,7 +127,7 @@ const componentConfig = {
     fileSystemProvider: {},
     focusedItemKey: String,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     itemView: Object as PropType<Record<string, any>>,
@@ -166,7 +166,7 @@ const componentConfig = {
     toolbar: Object as PropType<dxFileManagerToolbar | Record<string, any>>,
     upload: Object as PropType<Record<string, any>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

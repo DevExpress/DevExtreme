@@ -58,6 +58,7 @@ import {
     SeriesHoverMode,
     SeriesSelectionMode,
     TimeIntervalConfig,
+    ValueAxisVisualRangeUpdateMode,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
     VisualRange,
@@ -89,6 +90,7 @@ export {
     RelativePosition,
     SeriesHoverMode,
     SeriesSelectionMode,
+    ValueAxisVisualRangeUpdateMode,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
     ZoomPanAction,
@@ -96,8 +98,6 @@ export {
 
 /** @public */
 export type PolarChartSeriesType = 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
-/** @public */
-export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
 
 /**
  * @docid _viz_polar_chart_ArgumentAxisClickEvent

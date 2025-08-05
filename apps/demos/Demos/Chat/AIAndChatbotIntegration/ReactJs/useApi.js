@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react';
 import { AzureOpenAI } from 'openai';
-import CustomStore from 'devextreme/data/custom_store';
-import DataSource from 'devextreme/data/data_source';
+import { CustomStore, DataSource } from 'devextreme-react/common/data';
 import {
   ALERT_TIMEOUT, assistant, AzureOpenAIConfig, REGENERATION_TEXT,
 } from './data.js';

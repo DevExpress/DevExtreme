@@ -225,3 +225,72 @@ test('DataGrid - NVDA reads filter menu items as "Search box 1 of 8" (T1290386)'
     visible: true,
   },
 }));
+
+test('DataGrid - The `between` filter dropdown sticks to the viewport edge during horizontal scrolling (T1280071)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
+
+  await dataGrid.isReady();
+
+  await t
+    .click(filterEditor.menuButton)
+    .click(filterEditor.menu.getItemByText('Between'));
+
+  await dataGrid.scrollBy({ x: 999 });
+  await t
+    .expect(await takeScreenshot('filter-row-filter-range-hide-on-scroll.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { ID: 1, Text: 'Item 1' },
+    { ID: 2, Text: '' },
+    { ID: 3, Text: 'Item 3' },
+  ],
+  keyExpr: 'ID',
+  filterRow: {
+    visible: true,
+  },
+  scrolling: {
+    useNative: true,
+  },
+  columnWidth: 400,
+  width: 500,
+}));
+
+// T1290381
+test('DataGrid - filter row\'s search-box\'s aria-label should be customizable via localization', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
+
+  await dataGrid.isReady();
+
+  await t
+    .expect(filterEditor.menuButton.getAttribute('aria-label'))
+    .eql('custom text');
+}).before(async (t) => {
+  await t.eval(() => {
+    (window as any).DevExpress.localization.loadMessages({
+      // Replace "en" with the target locale of the dictionary
+      en: {
+        'dxDataGrid-ariaSearchBox': 'custom text',
+      },
+    });
+  });
+
+  return createWidget('dxDataGrid', {
+    columns: [{
+      dataField: 'test',
+      dataType: 'string',
+    }],
+    filterRow: {
+      visible: true,
+    },
+  });
+}).after(async (t) => {
+  // To reset localization messages
+  await t
+    .eval(() => location.reload());
+});

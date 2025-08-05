@@ -1,5 +1,6 @@
 import type { ReadonlySignal, Signal } from '@preact/signals-core';
 import { computed, effect, signal } from '@preact/signals-core';
+import { MAX_PAGES_COUNT } from '@ts/grids/grid_core/pager/m_pager';
 
 import { View } from '../core/view';
 import { DataController } from '../data_controller/index';
@@ -55,13 +56,16 @@ export class PagerView extends View<PagerProps> {
       pageSizeChanged: (value): void => {
         this.dataController.pageSize.value = value;
       },
-      isGridCompatibility: false,
       pageCount: this.dataController.pageCount.value,
       showPageSizeSelector: this.options.oneWay('pager.showPageSizeSelector').value,
       _skipValidation: true,
       tabIndex: 0,
       showInfo: this.options.oneWay('pager.showInfo').value,
       showNavigationButtons: this.options.oneWay('pager.showNavigationButtons').value,
+      label: this.options.oneWay('pager.label').value,
+      pagesNavigatorVisible: this.options.oneWay('pager.visible').value,
+      displayMode: this.options.oneWay('pager.displayMode').value,
+      maxPagesCount: MAX_PAGES_COUNT,
     }));
   }
 }

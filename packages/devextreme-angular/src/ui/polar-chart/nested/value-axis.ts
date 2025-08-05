@@ -20,9 +20,8 @@ import {
 
 
 import * as CommonChartTypes from 'devextreme/common/charts';
-import { DashStyle, Font, DiscreteAxisDivisionMode, LabelOverlap, TimeInterval, AxisScaleType, ChartsDataType } from 'devextreme/common/charts';
+import { DashStyle, Font, DiscreteAxisDivisionMode, LabelOverlap, TimeInterval, AxisScaleType, ChartsDataType, ValueAxisVisualRangeUpdateMode } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';
-import { ValueAxisVisualRangeUpdateMode } from 'devextreme/viz/polar_chart';
 
 import {
     DxIntegrationModule,

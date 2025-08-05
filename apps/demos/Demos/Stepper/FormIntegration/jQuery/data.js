@@ -1,4 +1,4 @@
-const initialSteps = [
+const steps = [
   {
     label: 'Dates', hint: 'Dates', icon: 'daterangepicker',
   },

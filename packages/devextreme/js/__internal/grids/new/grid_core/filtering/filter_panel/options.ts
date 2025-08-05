@@ -4,8 +4,8 @@ import type { Properties as FilterBuilderProperties } from '@js/ui/filter_builde
 import type { Properties as PopupProperties } from '@js/ui/popup';
 
 export interface Options {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  filterPanel?: FilterPanel<any>;
+
+  filterPanel?: FilterPanel;
   filterBuilder?: FilterBuilderProperties;
   filterBuilderPopup?: PopupProperties;
 }

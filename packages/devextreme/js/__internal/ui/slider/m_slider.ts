@@ -542,8 +542,6 @@ class Slider<
 
     setWidth(this._$range, `${newRatio * 100}%`);
 
-    SliderHandle.getInstance(this._activeHandle()).fitTooltipPosition;
-
     this._changeValueOnSwipe(newRatio);
   }
 

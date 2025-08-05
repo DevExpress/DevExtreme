@@ -30,7 +30,7 @@ const App = () => {
   }, []);
 
   return <>
-    <div className="options">
+    <div className="options-panel">
       <div className="caption">Options</div>
       <div className="options-container">
         <div className="option">
@@ -75,6 +75,8 @@ const App = () => {
     <CardView
       dataSource={employees}
       keyExpr="ID"
+      cardsPerRow="auto"
+      cardMinWidth={300}
       defaultSelectedCardKeys={[4, 6]}
       ref={cardViewRef}
     >

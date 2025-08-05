@@ -1,6 +1,6 @@
 import React from 'react';
-import ButtonGroup from 'devextreme-react/button-group';
-import CheckBox from 'devextreme-react/check-box';
+import { ButtonGroup } from 'devextreme-react/button-group';
+import { CheckBox } from 'devextreme-react/check-box';
 import { navigationModes, orientations } from './data.js';
 
 export default function Options({

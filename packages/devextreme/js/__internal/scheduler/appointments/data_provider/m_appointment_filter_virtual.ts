@@ -1,13 +1,16 @@
-import query from '@js/common/data/query';
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import { isDateAndTimeView, isTimelineView } from '@ts/scheduler/r1/utils/index';
-import type { AppointmentDataItem, SafeAppointment } from '@ts/scheduler/types';
 
-import {
-  getResourcesDataByGroups,
-} from '../../resources/m_utils';
+import { isAppointmentTakesAllDay, isDateAndTimeView } from '../../r1/utils/index';
+import type { AppointmentDataItem, SafeAppointment } from '../../types';
+import { getResourcesByGroupIndex } from '../../utils/resource_manager/group_utils';
 import { AppointmentFilterBaseStrategy } from './m_appointment_filter';
+import { isAppointmentMatchedResources } from './utils/get_appointment_filter/is_appointment_matched_resources';
+import {
+  filterArray,
+  getRawAppointments,
+} from './utils/index';
+import type { CombinedFilter, CompareOptions, FilterOptions } from './utils/type';
 
 // TODO Vinogradov refactoring: this module should be refactored :)
 
@@ -16,20 +19,13 @@ const toMs = dateUtils.dateToMilliseconds;
 export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrategy {
   public static readonly strategyName = 'virtual';
 
-  get resources() { return this.options.resources; }
-
-  filter(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
-    const { viewOffset } = this.options;
+  protected getBasePanelFilterOptions(): FilterOptions[] {
+    const viewOffset = this._resolveOption('viewOffset');
     const hourMs = toMs('hour');
     const isCalculateStartAndEndDayHour = isDateAndTimeView(this.viewType);
-    const checkIntersectViewport = isCalculateStartAndEndDayHour && this.viewDirection === 'horizontal';
-
-    const isAllDayWorkspace = !this.supportAllDayRow;
-    const showAllDayAppointments = this.showAllDayPanel || isAllDayWorkspace;
-
     const endViewDate = this.viewDataProvider.getLastViewDateByEndDayHour(this.viewEndDayHour);
     const shiftedEndViewDate = dateUtilsTs.addOffsets(endViewDate, [viewOffset]);
-    const filterOptions: any = [];
+    const filterOptions: FilterOptions[] = [];
 
     const groupsInfo = this.viewDataProvider.getCompletedGroupsInfo();
     groupsInfo.forEach((item) => {
@@ -46,84 +42,102 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         ? groupStartDate.getHours()
         : this.viewStartDayHour;
       const endDayHour = isCalculateStartAndEndDayHour
-        ? startDayHour + groupStartDate.getMinutes() / 60 + (groupEndDate.getTime() - groupStartDate.getTime()) / hourMs
+        ? startDayHour
+        + groupStartDate.getMinutes() / 60
+        + (groupEndDate.getTime() - groupStartDate.getTime()) / hourMs
         : this.viewEndDayHour;
 
-      const resources = this._getPrerenderFilterResources(groupIndex);
-
-      const hasAllDayPanel = this.viewDataProvider.hasGroupAllDayPanel(groupIndex);
-
-      const supportAllDayAppointment = isAllDayWorkspace || (!!showAllDayAppointments && hasAllDayPanel);
-
-      filterOptions.push({
-        isVirtualScrolling: true,
+      const resourceManager = this.options.getResourceManager();
+      const resources = getResourcesByGroupIndex(
+        resourceManager.groupsLeafs,
+        resourceManager.resourceById,
+        groupIndex,
+      );
+      const compareOptions: CompareOptions = {
         startDayHour,
         endDayHour,
-        viewOffset,
-        viewStartDayHour: this.viewStartDayHour,
-        viewEndDayHour: this.viewEndDayHour,
-        min: dateUtilsTs.addOffsets(groupStartDate, [-viewOffset]),
-        max: dateUtilsTs.addOffsets(groupEndDate, [-viewOffset]),
-        supportMultiDayAppointments: isTimelineView(this.viewType),
-        allDay: supportAllDayAppointment,
+        min: groupStartDate,
+        max: groupEndDate,
+      };
+
+      filterOptions.push({
+        ...compareOptions,
+        ...this.getIntervals(compareOptions),
         resources,
         firstDayOfWeek: this.firstDayOfWeek,
-        checkIntersectViewport,
+        allDayPanelFilter: false,
+        allDayPanelMode: this.allDayPanelMode,
+        supportAllDayRow: this.supportAllDayRow,
+        viewOffset: this._resolveOption('viewOffset'),
       });
     });
 
-    return this.filterLoadedAppointments({
-      filterOptions,
-      groupCount: this.groupCount,
-    }, preparedItems);
+    return filterOptions;
   }
 
-  filterPreparedItems(
-    { filterOptions, groupCount },
+  protected filterByResources(
     preparedItems: AppointmentDataItem[],
+    filterOptions: FilterOptions[],
   ): AppointmentDataItem[] {
-    const combinedFilters: any = [];
-
-    let itemsToFilter = preparedItems;
-    const needPreFilter = groupCount > 0;
-    if (needPreFilter) {
-      // @ts-expect-error
-      itemsToFilter = itemsToFilter.filter(({ rawAppointment }) => {
-        for (let i = 0; i < filterOptions.length; ++i) {
-          const { resources } = filterOptions[i];
-          if (this._filterAppointmentByResources(rawAppointment, resources)) {
-            return true;
-          }
-        }
-      });
+    if (!this.groupCount) {
+      return preparedItems;
     }
 
-    filterOptions.forEach((option) => {
-      combinedFilters.length && combinedFilters.push('or');
+    return preparedItems.filter(({ rawAppointment }) => filterOptions.some(
+      ({ resources }) => isAppointmentMatchedResources(rawAppointment, resources),
+    ));
+  }
 
-      const filter = this._createCombinedFilter(option);
+  protected getCombinedFilterOptions(basePanelFilterOptions: FilterOptions[]): (CombinedFilter | 'or')[] {
+    const combinedFilters: (CombinedFilter | 'or')[] = [];
 
+    basePanelFilterOptions.forEach((option) => {
+      if (combinedFilters.length) {
+        combinedFilters.push('or');
+      }
+
+      const filter = this.createCombinedFilter(option);
       combinedFilters.push(filter);
     });
 
-    // @ts-expect-error
-    return query(itemsToFilter)
-      // @ts-expect-error
-      .filter(combinedFilters)
-      .toArray();
+    const filterOptions = this.getFilterOptions();
+    if (filterOptions.allDayPanelFilter === undefined) {
+      combinedFilters.push('or');
+      combinedFilters.push(this.createCombinedFilter({
+        ...filterOptions,
+        allDayPanelFilter: true,
+      }));
+    }
+
+    return combinedFilters;
   }
 
-  hasAllDayAppointments(filteredItems, preparedItems: AppointmentDataItem[]): boolean {
+  filter(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
+    const basePanelFilterOptions = this.getBasePanelFilterOptions();
+    const itemsToFilter = this.filterByResources(preparedItems, basePanelFilterOptions);
+    const combinedFilters = this.getCombinedFilterOptions(basePanelFilterOptions);
+    const filteredItems = filterArray(itemsToFilter, combinedFilters);
+
+    return getRawAppointments(filteredItems);
+  }
+
+  hasAllDayAppointments(_, preparedItems: AppointmentDataItem[]): boolean {
     return this.filterAllDayAppointments(preparedItems).length > 0;
   }
 
-  _getPrerenderFilterResources(groupIndex) {
-    const cellGroup = this.viewDataProvider.getCellsGroup(groupIndex);
+  protected filterAllDayAppointments(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
+    const combinedFilter = this.createAllDayAppointmentFilter();
+    const filteredItems = filterArray(preparedItems, combinedFilter);
 
-    return getResourcesDataByGroups(
-      this.loadedResources,
-      this.resources,
-      [cellGroup],
-    );
+    return getRawAppointments(filteredItems);
+  }
+
+  protected createAllDayAppointmentFilter(): CombinedFilter {
+    return [[
+      (appointment: AppointmentDataItem): boolean => isAppointmentTakesAllDay(
+        appointment,
+        this.allDayPanelMode,
+      ),
+    ]];
   }
 }

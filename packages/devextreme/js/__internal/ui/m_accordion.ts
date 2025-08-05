@@ -20,7 +20,7 @@ import { isDefined, isPlainObject } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/accordion';
 import { isMaterialBased } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
-import CollectionWidget from '@ts/ui/collection/m_collection_widget.live_update';
+import CollectionWidget from '@ts/ui/collection/collection_widget.live_update';
 
 const ACCORDION_CLASS = 'dx-accordion';
 const ACCORDION_WRAPPER_CLASS = 'dx-accordion-wrapper';
@@ -414,8 +414,8 @@ class Accordion extends CollectionWidget<AccordionProperties> {
         const { repaintChangesOnly } = this.option();
 
         if (repaintChangesOnly === true && args.fullName === 'items') {
-          this._updateItemHeightsWrapper(true);
           this._renderSelection(this._getSelectedItemIndices(), []);
+          this._updateItemHeightsWrapper(true);
         }
         break;
       }

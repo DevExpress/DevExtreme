@@ -3,9 +3,9 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { OptionChanged } from '@ts/core/widget/types';
+import Box from '@ts/ui/box';
 import type { EditorProperties } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
-import Box from '@ts/ui/m_box';
 import SelectBox from '@ts/ui/m_select_box';
 import NumberBox from '@ts/ui/number_box/m_number_box';
 
@@ -268,6 +268,9 @@ class TimeView extends Editor<TimeViewProperties> {
 
           time.setHours(newHours);
           this.option('value', time);
+        },
+        dropDownOptions: {
+          container: this.$element(),
         },
         value: this._getValue().getHours() >= 12 ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM,
         stylingMode: this.option('stylingMode'),

@@ -244,10 +244,10 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -411,7 +411,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 

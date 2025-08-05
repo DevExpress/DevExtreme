@@ -54,7 +54,7 @@ import notify from 'devextreme/ui/notify';
 const formRef = ref();
 
 function onButtonClick() {
-  notify('Uncomment the line to enable sending a form to the server.');
+  notify('This demo only illustrates the form upload interface. Uploading to a server is not available.');
   // const form = this.$refs[this.formRefName];
   // form.submit();
 }

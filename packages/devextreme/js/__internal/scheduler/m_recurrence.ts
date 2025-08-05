@@ -29,7 +29,7 @@ const RRULE_BROKEN_TIMEZONES = [
 
 let recurrence: RecurrenceProcessor | null = null;
 
-export function getRecurrenceProcessor() {
+export function getRecurrenceProcessor(): RecurrenceProcessor {
   if (!recurrence) {
     recurrence = new RecurrenceProcessor();
   }
@@ -121,7 +121,7 @@ class RecurrenceProcessor {
 
   _getLocalMachineOffset(rruleDate) {
     const machineTimezoneOffset = timeZoneUtils.getClientTimezoneOffset(rruleDate);
-    const machineTimezoneName = dateUtils.getMachineTimezoneName();
+    const machineTimezoneName = timeZoneUtils.getMachineTimezoneName();
     const result = [machineTimezoneOffset];
 
     // NOTE: Workaround for the RRule bug with timezones greater than GMT+12 (e.g. Apia Standard Time GMT+13)

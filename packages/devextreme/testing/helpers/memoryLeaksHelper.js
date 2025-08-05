@@ -81,6 +81,12 @@
         ]) === -1;
     };
 
+    exports.componentCanBeAsyncInstantiated = function(componentName) {
+        return $.inArray(componentName, [
+            'dxMap',
+        ]) === -1;
+    };
+
     exports.getComponentOptions = function(componentName) {
         switch(componentName) {
             case 'dxDataGrid':

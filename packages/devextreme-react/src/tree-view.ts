@@ -168,7 +168,7 @@ type IOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
@@ -186,7 +186,7 @@ type IOptionsProps = React.PropsWithChildren<{
   useSubmitBehavior?: boolean;
   validationGroup?: string | undefined;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
@@ -218,7 +218,7 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   inputAttr?: any;
@@ -266,7 +266,7 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   value?: string;
   valueChangeEvent?: string;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
 }>

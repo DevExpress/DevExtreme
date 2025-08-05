@@ -3,7 +3,11 @@
   that information in Additional Requests. We will do our best to suggest best
   pricing options, depending on room availability.
 </p>
-<dx-form [(formData)]="formData" [validationGroup]="validationGroup">
+<dx-form
+  #formComponent
+  [(formData)]="formData"
+  [validationGroup]="validationGroup"
+>
   <dxi-form-item
     [isRequired]="true"
     dataField="dates"

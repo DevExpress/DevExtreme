@@ -103,7 +103,6 @@ class DateBoxMask extends DateBoxBase {
     // @ts-expect-error
     const isNotDeletingInCalendar = this.option('opened') && e && !keysToHandleByMask.includes(normalizeKeyName(e));
 
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     return !this._useMaskBehavior() || isNotDeletingInCalendar || (e && e.altKey);
   }
 
@@ -513,7 +512,7 @@ class DateBoxMask extends DateBoxBase {
     const limits = this._getActivePartLimits();
     const maxLimitLength = String(limits.max).length;
 
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain, @typescript-eslint/prefer-nullish-coalescing
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return ((zeroes && zeroes[0] || '') + String(value)).substr(-maxLimitLength);
   }
 
@@ -533,7 +532,7 @@ class DateBoxMask extends DateBoxBase {
 
   _getActivePartProp(property) {
     // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
     if (!this._dateParts || !this._dateParts[this._activePartIndex]) {
       return undefined;
     }
@@ -549,12 +548,16 @@ class DateBoxMask extends DateBoxBase {
   _saveMaskValue(): void {
     const value = this._maskValue && new Date(this._maskValue);
     const { type } = this.option();
+
     if (value && type === 'date') {
       value.setHours(0, 0, 0, 0);
     }
     // @ts-expect-error ts-error
     this._initialMaskValue = new Date(value);
-    this.dateOption('value', value);
+
+    if (this._applyInternalValidation(value).isValid) {
+      this.dateOption('value', value);
+    }
   }
 
   _revertChanges(): void {
@@ -640,7 +643,7 @@ class DateBoxMask extends DateBoxBase {
 
   _isValueDirty() {
     const value = this.dateOption('value');
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
     return (this._maskValue && this._maskValue.getTime()) !== (value && value.getTime());
   }
 

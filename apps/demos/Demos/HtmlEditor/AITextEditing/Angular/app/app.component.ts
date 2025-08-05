@@ -1,11 +1,11 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxHtmlEditorModule } from 'devextreme-angular';
+import { DxHtmlEditorModule, type DxHtmlEditorTypes } from 'devextreme-angular/ui/html-editor';
 import {
-    AIIntegration,
-    RequestParams,
-    Response,
+  AIIntegration,
+  RequestParams,
+  Response,
 } from 'devextreme-angular/common/ai-integration';
 import { AzureOpenAI, OpenAI } from 'openai';
 import { Service } from './app.service';
@@ -38,13 +38,13 @@ export class AppComponent {
 
   aiIntegration: AIIntegration;
 
-  commands: any[];
+  extractKeywordsPrompt: DxHtmlEditorTypes.AICustomCommand['prompt'];
 
   valueContent: string;
 
   constructor(service: Service) {
     this.azureOpenAIConfig = service.getAzureOpenAIConfig();
-    this.commands = service.getCommands();
+    this.extractKeywordsPrompt = service.getPrompt();
     this.valueContent = service.getMarkup();
 
     this.aiService = new AzureOpenAI(this.azureOpenAIConfig);
@@ -53,7 +53,7 @@ export class AppComponent {
     });
   }
 
-  sendRequest ({ prompt }: RequestParams): Response {
+  sendRequest({ prompt }: RequestParams): Response {
     const controller = new AbortController();
     const signal = controller.signal;
 

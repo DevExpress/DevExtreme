@@ -20,7 +20,7 @@ import type { Item } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import errors from '@js/ui/widget/ui.errors';
 import { capitalize } from '@ts/core/utils/capitalize';
-import { DX_MENU_ITEM_CLASS } from '@ts/ui/menu/m_menu';
+import { DX_MENU_ITEM_CLASS } from '@ts/ui/menu/menu';
 import Quill from 'devextreme-quill';
 
 import type { CommandsMap } from '../utils/ai';
@@ -241,24 +241,6 @@ if (Quill) {
       return $container;
     }
 
-    _detectRenamedOptions(item) {
-      const optionsInfo = [{
-        newName: 'name',
-        oldName: 'formatName',
-      }, {
-        newName: 'acceptedValues',
-        oldName: 'formatValues',
-      }];
-
-      if (isObject(item)) {
-        each(optionsInfo, (index, optionName) => {
-          if (Object.prototype.hasOwnProperty.call(item, optionName.oldName)) {
-            errors.log('W1016', optionName.oldName, optionName.newName);
-          }
-        });
-      }
-    }
-
     _subscribeFormatHotKeys() {
       this.quill.keyboard.addBinding({
         which: KEY_CODES.b,
@@ -299,7 +281,6 @@ if (Quill) {
 
       each(this.options.items, (index, item) => {
         let newItem;
-        this._detectRenamedOptions(item);
         if (isObject(item)) {
           newItem = this._handleObjectItem(item);
         } else if (item === TOOLBAR_AI_ITEM_NAME) {

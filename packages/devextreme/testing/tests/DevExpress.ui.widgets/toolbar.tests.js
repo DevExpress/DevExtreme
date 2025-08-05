@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import ToolbarBase from '__internal/ui/toolbar/m_toolbar.base';
+import ToolbarBase from '__internal/ui/toolbar/toolbar.base';
 
 import fx from 'common/core/animation/fx';
 import resizeCallbacks from 'core/utils/resize_callbacks';
@@ -11,6 +11,7 @@ import 'generic_light.css!';
 
 import 'ui/text_box';
 import 'ui/drop_down_button';
+import 'ui/select_box';
 import 'ui/tabs';
 import 'ui/toolbar';
 
@@ -293,7 +294,7 @@ QUnit.module('render', {
 
         toolbar.option('compactMode', false);
 
-        assert.ok(!$toolbar.hasClass(TOOLBAR_COMPACT_CLASS), 'toolbar without compact mode hasn\'t the compact class');
+        assert.ok(!$toolbar.hasClass(TOOLBAR_COMPACT_CLASS), 'toolbar without compact mode has not the compact class');
 
         toolbar.option('compactMode', true);
 
@@ -301,7 +302,7 @@ QUnit.module('render', {
 
         toolbar.option('width', 400);
 
-        assert.ok(!$toolbar.hasClass(TOOLBAR_COMPACT_CLASS), 'toolbar with compact mode hasn\'t the compact class if widget has a large width');
+        assert.ok(!$toolbar.hasClass(TOOLBAR_COMPACT_CLASS), 'toolbar with compact mode has not the compact class if widget has a large width');
     });
 
     QUnit.test('Buttons has default style in generic theme', function(assert) {
@@ -320,7 +321,7 @@ QUnit.module('render', {
         assert.notOk(button.hasClass('dx-button-mode-text'));
     });
 
-    QUnit.test('Toolbar provides it\'s own templates for the item widgets', function(assert) {
+    QUnit.test('Toolbar provides its own templates for the item widgets', function(assert) {
         let templateUsed;
 
         this.$element.dxToolbar({
@@ -530,7 +531,7 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
         assert.strictEqual(this.instance.option('overflowMenuVisible'), false);
     });
 
-    QUnit.test('menu button click doesn\'t dispatch action', function(assert) {
+    QUnit.test('menu button click does not dispatch action', function(assert) {
         const onItemClickHandler = sinon.spy();
 
         this.instance.option({
@@ -545,7 +546,7 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
         assert.strictEqual(onItemClickHandler.callCount, 0, 'onItemClick was not executed');
     });
 
-    QUnit.test('windowResize should not show/hide menu that doesn\'t created', function(assert) {
+    QUnit.test('windowResize should not show/hide menu that was not created', function(assert) {
         this.instance.option('items', []);
 
         resizeCallbacks.fire();
@@ -575,6 +576,38 @@ QUnit.module('toolbar with menu', moduleConfig, () => {
         this.instance.option('items[0].disabled', false);
 
         assert.strictEqual($('.dx-state-disabled').length, 0, 'disabled state changed');
+    });
+
+    [
+        {
+            widget: 'dxSelectBox',
+            options: { items: ['item'] },
+        },
+        {
+            widget: 'dxDropDownButton',
+            options: { items: ['item'] },
+        },
+        {
+            locateInMenu: 'always',
+            location: 'after',
+            widget: 'dxDropDownButton',
+            options: { items: ['item'] },
+        }
+    ].forEach(({ widget, options }) => {
+        QUnit.test(`click on editor component (${widget}) inside the toolbar menu should not close it (T1287462, T1298858)`, function(assert) {
+            this.instance.option('items', [{
+                locateInMenu: 'always',
+                widget,
+                options,
+            }]);
+
+            this.overflowMenu.click();
+
+            const $menuItem = $(`.${TOOLBAR_MENU_SECTION_CLASS} .${LIST_ITEM_CLASS}`).eq(0);
+            $menuItem.trigger('dxclick');
+
+            assert.strictEqual(this.instance.option('overflowMenuVisible'), true, `overflow menu remains visible after clicking ${widget} in it`);
+        });
     });
 });
 
@@ -618,7 +651,7 @@ QUnit.module('widget sizing render', () => {
         assert.strictEqual($element.outerWidth(), customWidth, 'outer width of the element must be equal to custom width');
     });
 
-    QUnit.test('text should crop in the label inside the toolbar on toolbar\'s width changing', function(assert) {
+    QUnit.test('text should crop in the label inside the toolbar on toolbar width changing', function(assert) {
         const $element = $('#widget').dxToolbar({
             items: [
                 { location: 'before', text: 'Before long text label' },
@@ -636,7 +669,7 @@ QUnit.module('widget sizing render', () => {
         assert.roughEqual($before.width(), 100 - $after.width() - afterPadding, 1.001, 'width of before element should be changed');
     });
 
-    QUnit.test('text should crop in the label inside the toolbar on window\'s width changing', function(assert) {
+    QUnit.test('text should crop in the label inside the toolbar on window width changing', function(assert) {
         const $element = $('#widget').width(300).dxToolbar({
             items: [
                 { location: 'before', text: 'Before long text label' },
@@ -1061,7 +1094,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         assert.strictEqual(this.overflowMenu.$element().length, 1);
     });
 
-    QUnit.test('menu shouldn\'t be closed during resize with open menu if menu has items', function(assert) {
+    QUnit.test('menu should not be closed during resize with open menu if menu has items', function(assert) {
         this.instance.option({
             items: [
                 { location: 'before', template: () => $('<div>').width(100) },
@@ -1171,7 +1204,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         this.overflowMenu.click();
     });
 
-    QUnit.test('items with locateInMenu == \'always\' should be rendered in menu if there is free space for them', function(assert) {
+    QUnit.test('items with locateInMenu === always should be rendered in menu if there is free space for them', function(assert) {
         const $item = $('<div>').width(100);
         this.instance.option({
             items: [
@@ -1343,7 +1376,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
         });
 
         assert.ok($toolbarTemplate.is(':visible'), 'toolbar template was rendered');
-        assert.ok($menuTemplate.is(':hidden'), 'menu template won\'t rendered');
+        assert.ok($menuTemplate.is(':hidden'), 'menu template was not rendered');
 
         this.instance.option('width', 400);
 
@@ -1518,7 +1551,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
 
         this.overflowMenu.click();
 
-        assert.strictEqual(this.$element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 0, 'Toolbar\'s container isn\'t contains a dropDown list');
+        assert.strictEqual(this.$element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 0, 'Toolbar container does not contain a dropDown list');
     });
 
     QUnit.test('init Toolbar with new menuContainer', function(assert) {
@@ -1535,7 +1568,7 @@ QUnit.module('adaptivity', moduleConfig, () => {
 
         this.overflowMenu.click();
 
-        assert.strictEqual(this.$element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 1, 'Toolbar\'s container contains a dropDown list');
+        assert.strictEqual(this.$element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 1, 'Toolbar container contains a dropDown list');
     });
 
     QUnit.test('change Toolbar menuContainer', function(assert) {
@@ -1553,37 +1586,11 @@ QUnit.module('adaptivity', moduleConfig, () => {
 
         this.overflowMenu.click();
 
-        assert.strictEqual(this.$element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 1, 'Toolbar\'s container contains a dropDown list');
+        assert.strictEqual(this.$element.find(`.${DROP_DOWN_MENU_POPUP_WRAPPER_CLASS}`).length, 1, 'Toolbar container contains a dropDown list');
     });
 });
 
 QUnit.module('default template', moduleConfig, () => {
-    QUnit.test('T430159 menu should be closed after click on item if location is defined', function(assert) {
-        const onClickActionStub = sinon.stub();
-
-        this.instance.option({
-            items: [
-                {
-                    location: 'center',
-                    text: '123',
-                    locateInMenu: 'always',
-                    isAction: true,
-                    onClick: onClickActionStub
-                }
-            ],
-            width: 100
-        });
-
-        this.overflowMenu.click();
-
-        const $items = this.overflowMenu.instance()._popup.$content().find('.dx-list-item');
-
-        $($items.eq(0)).trigger('dxclick');
-
-        assert.ok(!this.overflowMenu.instance().option('opened'), 'dropdown is closed');
-        assert.strictEqual(onClickActionStub.callCount, 1, 'onClick was fired');
-    });
-
     ['single', 'multiple'].forEach(selectionMode => {
         QUnit.test(`Click on buttonGroup item inside menu (T977105). selectionMode: ${selectionMode}`, function(assert) {
             const onClickActionStub = sinon.stub();

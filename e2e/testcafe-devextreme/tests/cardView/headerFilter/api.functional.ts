@@ -71,6 +71,7 @@ test('getCombinedFilter API', async (t) => {
 }).before(async () => {
   await createWidget('dxCardView', {
     ...baseConfig,
+    remoteOperations: true, // NOTE: for more easy match of selector. If local, selector is func
   });
 });
 

@@ -28,12 +28,8 @@ const positionAtWindowCenter = function(element) {
     });
 };
 
-const toSelector = function(cssClass) {
-    return '.' + cssClass;
-};
-
 const wrapper = function() {
-    return $('body').find(toSelector(POPOVER_WRAPPER_CLASS));
+    return $('body').find(`.${POPOVER_WRAPPER_CLASS}`);
 };
 
 const getArrow = function() {
@@ -157,7 +153,7 @@ QUnit.module('render', () => {
         fixtures.simple.drop();
     });
 
-    QUnit.test('popover should render correctly when it\'s position.of is event', function(assert) {
+    QUnit.test('popover should render correctly when its position.of is event', function(assert) {
         fixtures.collisionBottomLeft.create();
         try {
             const $target = $('#where');
@@ -510,7 +506,7 @@ QUnit.module('arrow positioning', () => {
         }
     });
 
-    QUnit.test('\'arrowPosition\' option affects real arrow position', function(assert) {
+    QUnit.test('"arrowPosition" option affects real arrow position', function(assert) {
         fixtures.collisionTopLeft.create();
         try {
             const $target = $('#where');
@@ -546,7 +542,7 @@ QUnit.module('arrow positioning', () => {
                 height: 50,
                 visible: true
             });
-            const $arrow = $(toSelector(POPOVER_ARROW_CLASS));
+            const $arrow = $(`.${POPOVER_ARROW_CLASS}`);
             const $content = $(`.${POPUP_CONTENT_CLASS}`);
 
             const positions = [
@@ -563,7 +559,7 @@ QUnit.module('arrow positioning', () => {
                 const arrowRight = arrowLeft + getOuterWidth($arrow);
 
                 popover.option('position', position);
-                assert.ok(arrowLeft >= contentLeft && arrowRight <= contentRight, 'arrow is between left and right popover\'s side');
+                assert.ok(arrowLeft >= contentLeft && arrowRight <= contentRight, 'arrow is between left and right popover side');
             });
         } finally {
             fixtures.simple.drop();
@@ -924,7 +920,7 @@ QUnit.module('content positioning', () => {
             const $popoverBottom = popover.bottomToolbar();
 
             popover.show().done(function() {
-                assert.equal($popoverBottom.offset().top, $popoverContent.offset().top + getOuterHeight($popoverContent, true), 'content doesn\'t overlap bottom buttons');
+                assert.equal($popoverBottom.offset().top, $popoverContent.offset().top + getOuterHeight($popoverContent, true), 'content does not overlap bottom buttons');
             });
         } finally {
             fixtures.collisionBottomLeft.drop();
@@ -955,7 +951,7 @@ QUnit.module('content positioning', () => {
             popover.repaint();
 
             popover.show().done(function() {
-                assert.equal(getOuterHeight($popoverContent) + getOuterHeight($popoverBottom, true), getHeight($overlayContent), 'content doesn\'t overlap bottom buttons');
+                assert.equal(getOuterHeight($popoverContent) + getOuterHeight($popoverBottom, true), getHeight($overlayContent), 'content does not overlap bottom buttons');
             });
         } finally {
             fixtures.collisionTopLeft.drop();
@@ -1224,7 +1220,7 @@ QUnit.module('positioning', () => {
         }
     });
 
-    QUnit.test('popover should not change it\'s position option during rendering', function(assert) {
+    QUnit.test('popover should not change its position option during rendering', function(assert) {
         try {
             fixtures.simple.create();
 
@@ -1535,7 +1531,7 @@ QUnit.module('flipping', () => {
 });
 
 QUnit.module('animation', () => {
-    QUnit.test('content position with animation type = \'slide\'', function(assert) {
+    QUnit.test('content position with animation type = slide', function(assert) {
         fixtures.collisionTopLeft.create();
         fx.off = true;
         try {
@@ -1756,7 +1752,7 @@ QUnit.module('position offset', {
         assert.equal(Math.round(popupContent.offsetTop - arrow.height - target.height - target.offsetTop), 5, 'content with top offset is OK');
     });
 
-    QUnit.test('animation of popover should run correctly when the \'animation.show.to.position\' is not set', function(assert) {
+    QUnit.test('animation of popover should run correctly when the "animation.show.to.position" is not set', function(assert) {
 
         const $target = $('#where');
 
@@ -1971,7 +1967,7 @@ QUnit.module('Show/Hide', {
         $('#where').trigger('mouseenter');
         this.clock.tick(500);
 
-        assert.equal(shownStub.callCount, 0, 'Popover wasn\'t shown');
+        assert.equal(shownStub.callCount, 0, 'Popover was not shown');
     });
 
     QUnit.test('showEvent set as string with several events', function(assert) {
@@ -2056,7 +2052,7 @@ QUnit.module('Show/Hide', {
         assert.ok(!instance.option('visible'), 'Popover was hidden');
     });
 
-    QUnit.test('second popover should be hidden by click on the first\'s target', function(assert) {
+    QUnit.test('second popover should be hidden by click on the first target', function(assert) {
         const $markup = $('<div id=\'popover1\'></div>' +
             '<div id=\'popover2\'></div>' +
             '<div id=\'target1\'></div>' +

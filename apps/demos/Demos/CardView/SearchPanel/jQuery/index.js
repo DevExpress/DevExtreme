@@ -2,6 +2,8 @@ $(() => {
   $('#card-view').dxCardView({
     dataSource: tasks,
     keyExpr: 'Task_ID',
+    cardsPerRow: 'auto',
+    cardMinWidth: 310,
     wordWrapEnabled: true,
     columns: [
       {

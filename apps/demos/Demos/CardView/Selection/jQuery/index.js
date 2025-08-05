@@ -1,11 +1,13 @@
 $(() => {
   const cardView = $('#card-view').dxCardView({
+    dataSource: employees,
+    keyExpr: 'ID',
+    cardsPerRow: 'auto',
+    cardMinWidth: 300,
     selection: {
       mode: 'multiple'
     },
     selectedCardKeys: [4, 6],
-    dataSource: employees,
-    keyExpr: 'ID',
     columns: ['FullName', 'Position', 'Phone', 'Email'],
     cardCover: {
       altExpr: ({ FullName }) => `Photo of ${FullName}`,

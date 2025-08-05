@@ -12,6 +12,22 @@ import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import translator from 'common/core/animation/translator';
 import { shouldSkipOnMobile } from '../../helpers/device.js';
+import {
+    TABPANEL_TABS_ITEM_CLASS,
+    TABPANEL_CONTAINER_CLASS,
+    DISABLED_FOCUSED_TAB_CLASS,
+    TABPANEL_TABS_POSITION_CLASS,
+    TABS_POSITION,
+    TABS_ORIENTATION,
+} from '__internal/ui/tab_panel/tab_panel';
+import {
+    TABS_CLASS,
+    TABS_ITEM_CLASS,
+    TABS_ITEM_SELECTED_CLASS,
+    FOCUSED_DISABLED_NEXT_TAB_CLASS,
+    FOCUSED_DISABLED_PREV_TAB_CLASS,
+    TABS_INDICATOR_POSITION_CLASS,
+} from '__internal/ui/tabs/tabs';
 
 
 QUnit.testStart(() => {
@@ -31,58 +47,19 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-const TABPANEL_TABS_ITEM_CLASS = 'dx-tabpanel-tab';
-const TABS_CLASS = 'dx-tabs';
 const MULTIVIEW_ITEM_CLASS = 'dx-multiview-item';
 const MULTIVIEW_WRAPPER_CLASS = 'dx-multiview-wrapper';
-const TABS_ITEM_CLASS = 'dx-tab';
-const SELECTED_TAB_CLASS = 'dx-tab-selected';
 const SELECTED_ITEM_CLASS = 'dx-item-selected';
-const TABS_TITLE_TEXT_CLASS = 'dx-tab-text';
 const ICON_CLASS = 'dx-icon';
-const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
-const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
-const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
 const FOCUS_STATE_CLASS = 'dx-state-focused';
-const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 const MULTIVIEW_ITEM_CONTAINER_CLASS = 'dx-multiview-item-container';
 const MULTIVIEW_HIDDEN_ITEM_CLASS = 'dx-multiview-item-hidden';
 
-const TABPANEL_TABS_POSITION_CLASS = {
-    top: 'dx-tabpanel-tabs-position-top',
-    right: 'dx-tabpanel-tabs-position-right',
-    bottom: 'dx-tabpanel-tabs-position-bottom',
-    left: 'dx-tabpanel-tabs-position-left',
-};
-
-const TABS_POSITION = {
-    top: 'top',
-    right: 'right',
-    bottom: 'bottom',
-    left: 'left',
-};
-
-const TABS_ORIENTATION = {
-    horizontal: 'horizontal',
-    vertical: 'vertical',
-};
-
 const TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION = {
-    top: 'dx-tab-indicator-position-bottom',
-    right: 'dx-tab-indicator-position-left',
-    bottom: 'dx-tab-indicator-position-top',
-    left: 'dx-tab-indicator-position-right',
-};
-
-const TABS_INDICATOR_POSITION_CLASS = {
-    top: 'dx-tab-indicator-position-top',
-    right: 'dx-tab-indicator-position-right',
-    bottom: 'dx-tab-indicator-position-bottom',
-    left: 'dx-tab-indicator-position-left',
-};
-
-const toSelector = cssClass => {
-    return '.' + cssClass;
+    top: TABS_INDICATOR_POSITION_CLASS.bottom,
+    right: TABS_INDICATOR_POSITION_CLASS.left,
+    bottom: TABS_INDICATOR_POSITION_CLASS.top,
+    left: TABS_INDICATOR_POSITION_CLASS.right,
 };
 
 QUnit.module('rendering', {
@@ -100,7 +77,7 @@ QUnit.module('rendering', {
             });
         });
 
-        const $tabTexts = $tabPanel.find('.dx-tab-text');
+        const $tabTexts = $tabPanel.find(`.${TABS_ITEM_CLASS}`);
         const $contents = $tabPanel.find('.dx-multiview-item-content');
 
         assert.equal($tabTexts.length, 2, 'two tabs are rendered');
@@ -144,7 +121,7 @@ QUnit.module('rendering', {
                 rtlEnabled,
                 items: [{ title: 'Caption', icon: 'remove' }], });
 
-            const $title = $element.find(`.${TABS_TITLE_TEXT_CLASS}`);
+            const $title = $element.find(`.${TABS_ITEM_CLASS}`);
 
             const TEXT_NODE_TYPE = 3;
             $title.contents()
@@ -203,7 +180,7 @@ QUnit.module('options', {
         });
 
         this.tabPanelInstance = this.$tabPanel.dxTabPanel('instance');
-        this.tabWidgetInstance = this.$tabPanel.find(toSelector(TABS_CLASS)).dxTabs('instance');
+        this.tabWidgetInstance = this.$tabPanel.find(`.${TABS_CLASS}`).dxTabs('instance');
     },
     afterEach() {
         fx.off = false;
@@ -340,7 +317,7 @@ QUnit.module('onSelectionChanging', {
             this.tabPanel = this.$tabPanel
                 .dxTabPanel($.extend({}, initialOptions, options))
                 .dxTabPanel('instance');
-            this.$tabs = this.$tabPanel.find(toSelector(TABS_CLASS));
+            this.$tabs = this.$tabPanel.find(`.${TABS_CLASS}`);
             this.tabs = this.$tabs.dxTabs('instance');
         };
         this.reinit = (options) => {
@@ -357,7 +334,7 @@ QUnit.module('onSelectionChanging', {
             assert.deepEqual(this.tabs.option('selectedItem'), this.items[0], 'Tabs selectedItem should remain the first item');
             assert.deepEqual(this.tabs.option('selectedItems'), [this.items[0]], 'Tabs selectedItems should remain the first item');
             assert.deepEqual(this.tabs.option('selectedItemKeys'), [this.items[0]], 'Tabs selectedItemKeys should remain the first key');
-            assert.ok(this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(0).hasClass(SELECTED_TAB_CLASS), 'First tab had a selected class');
+            assert.ok(this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(0).hasClass(TABS_ITEM_SELECTED_CLASS), 'First tab had a selected class');
 
 
             assert.strictEqual(this.tabPanel.option('selectedIndex'), 0, 'TabPanel selectedIndex should remain 0');
@@ -374,7 +351,7 @@ QUnit.module('onSelectionChanging', {
             assert.deepEqual(this.tabs.option('selectedItem'), this.items[1], 'Tabs selectedItem should be equal to the second item');
             assert.deepEqual(this.tabs.option('selectedItems'), [this.items[1]], 'Tabs selectedItems should contain second item');
             assert.deepEqual(this.tabs.option('selectedItemKeys'), [this.items[1]], 'Tabs selectedItemKeys should contain second item');
-            assert.ok(this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(1).hasClass(SELECTED_TAB_CLASS), 'Second tab had a selected class');
+            assert.ok(this.$tabs.find(`.${TABS_ITEM_CLASS}`).eq(1).hasClass(TABS_ITEM_SELECTED_CLASS), 'Second tab had a selected class');
 
             assert.strictEqual(this.tabPanel.option('selectedIndex'), 1, 'TabPanel selectedIndex should be updated to 1');
             assert.deepEqual(this.tabPanel.option('selectedItem'), this.items[1], 'TabPanel selectedItem should be equal to the second item');
@@ -782,10 +759,10 @@ QUnit.module('action handlers', {
         });
 
         this.tabPanelInstance = this.$tabPanel.dxTabPanel('instance');
-        this.tabWidgetInstance = this.$tabPanel.find(toSelector(TABS_CLASS)).dxTabs('instance');
+        this.tabWidgetInstance = this.$tabPanel.find(`.${TABS_CLASS}`).dxTabs('instance');
 
-        this.multiViewMouse = pointerMock(this.$tabPanel.find(toSelector(MULTIVIEW_ITEM_CLASS))[0]).start();
-        this.tabWidgetMouse = pointerMock(this.$tabPanel.find(toSelector(TABS_ITEM_CLASS))[0]).start();
+        this.multiViewMouse = pointerMock(this.$tabPanel.find(`.${MULTIVIEW_ITEM_CLASS}`)[0]).start();
+        this.tabWidgetMouse = pointerMock(this.$tabPanel.find(`.${TABS_ITEM_CLASS}`)[0]).start();
     },
     afterEach() {
         this.clock.restore();
@@ -853,15 +830,15 @@ QUnit.module('action handlers', {
         });
 
         try {
-            assert.equal($element.find(toSelector(MULTIVIEW_ITEM_CLASS + '-content')).length, 1, 'only one multiView item is rendered on init');
+            assert.equal($element.find(`.${MULTIVIEW_ITEM_CLASS}-content`).length, 1, 'only one multiView item is rendered on init');
 
             const index = 2;
-            const pointer = pointerMock($element.find(toSelector(TABS_ITEM_CLASS)).eq(index));
+            const pointer = pointerMock($element.find(`.${TABS_ITEM_CLASS}`).eq(index));
 
             pointer.start().click();
 
-            assert.equal($element.find(toSelector(MULTIVIEW_ITEM_CLASS + '-content')).length, 2, 'one multiView item is rendered after click on tab');
-            assert.equal($element.find(toSelector(SELECTED_ITEM_CLASS)).text(), items[index].text, 'selected multiView item has correct data');
+            assert.equal($element.find(`.${MULTIVIEW_ITEM_CLASS}-content`).length, 2, 'one multiView item is rendered after click on tab');
+            assert.equal($element.find(`.${SELECTED_ITEM_CLASS}`).text(), items[index].text, 'selected multiView item has correct data');
         } finally {
             $element.remove();
         }
@@ -900,7 +877,7 @@ QUnit.module('events handlers', {
 
             that.tabPanelInstance = that.$tabPanel.dxTabPanel('instance');
 
-            that.tabWidgetMouse = pointerMock(that.$tabPanel.find(toSelector(TABS_ITEM_CLASS))[0]).start();
+            that.tabWidgetMouse = pointerMock(that.$tabPanel.find(`.${TABS_ITEM_CLASS}`)[0]).start();
         };
     },
     afterEach() {
@@ -989,7 +966,7 @@ QUnit.module('focus policy', {
         QUnit.assert.equal($tabPanel.find(`.${MULTIVIEW_ITEM_CLASS}.${SELECTED_ITEM_CLASS}`).get(0).innerText, 'content ' + expectedSelectedIndex, 'tabPanel.SELECTED_ITEM_CLASS');
 
         QUnit.assert.equal(tabPanel._tabs.option('selectedItem'), expectedSelectedItem, 'tabPanel._tabs.option(selectedItem)');
-        QUnit.assert.equal($tabPanel.find(`.${TABS_ITEM_CLASS}.${SELECTED_TAB_CLASS}`).get(0).innerText, 'tab ' + expectedSelectedIndex, 'tabPanel._tabs.SELECTED_TAB_CLASS');
+        QUnit.assert.equal($tabPanel.find(`.${TABS_ITEM_CLASS}.${TABS_ITEM_SELECTED_CLASS}`).get(0).innerText, 'tab ' + expectedSelectedIndex, 'tabPanel._tabs.TABS_ITEM_SELECTED_CLASS');
 
         if(tabPanel.option('focusStateEnabled') === true) {
             QUnit.assert.equal($(tabPanel.option('focusedElement')).text(), 'content ' + expectedSelectedIndex, 'tabPanel.options(focusedElement)');
@@ -1047,8 +1024,8 @@ QUnit.module('focus policy', {
             focusStateEnabled: true,
         });
 
-        const $tabs = $tabPanel.find(toSelector(TABPANEL_TABS_ITEM_CLASS));
-        const tabsInstance = $tabPanel.find(toSelector(TABS_CLASS)).dxTabs('instance');
+        const $tabs = $tabPanel.find(`.${TABPANEL_TABS_ITEM_CLASS}`);
+        const tabsInstance = $tabPanel.find(`.${TABS_CLASS}`).dxTabs('instance');
         const $firstTab = $tabs.first();
 
         assert.strictEqual($tabs.filter(`.${FOCUS_STATE_CLASS}`).length, 1, 'only one tab is focused');
@@ -1070,7 +1047,7 @@ QUnit.module('keyboard navigation', {
             items
         });
         this.instance = this.$element.dxTabPanel('instance');
-        this.$tabs = this.$element.find(toSelector(TABS_CLASS));
+        this.$tabs = this.$element.find(`.${TABS_CLASS}`);
         this.tabs = this.$tabs.dxTabs('instance');
         this.clock = sinon.useFakeTimers();
     },
@@ -1093,7 +1070,7 @@ QUnit.module('keyboard navigation', {
         assert.expect(4);
 
         this.instance.focus();
-        $(toSelector(MULTIVIEW_ITEM_CLASS)).eq(1).trigger('dxpointerdown');
+        $(`.${MULTIVIEW_ITEM_CLASS}`).eq(1).trigger('dxpointerdown');
         this.clock.tick(10);
 
         const multiViewFocusedIndex = $(this.instance.option('focusedElement')).index();
@@ -1111,15 +1088,15 @@ QUnit.module('keyboard navigation', {
         const keyboard = keyboardMock(this.$tabs);
         keyboard.press('right');
 
-        const $thirdTab = this.$tabs.find(toSelector(TABPANEL_TABS_ITEM_CLASS)).get(2);
+        const $thirdTab = this.$tabs.find(`.${TABPANEL_TABS_ITEM_CLASS}`).get(2);
         pointerMock($thirdTab).start().click();
 
         this.clock.tick(10);
 
         assert.strictEqual($($thirdTab).hasClass(FOCUS_STATE_CLASS), true);
-        assert.strictEqual($($thirdTab).hasClass(SELECTED_TAB_CLASS), true);
+        assert.strictEqual($($thirdTab).hasClass(TABS_ITEM_SELECTED_CLASS), true);
 
-        const $firstTab = this.$tabs.find(toSelector(TABPANEL_TABS_ITEM_CLASS)).get(0);
+        const $firstTab = this.$tabs.find(`.${TABPANEL_TABS_ITEM_CLASS}`).get(0);
         assert.strictEqual($($firstTab).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), false);
 
         keyboard.press('left');
@@ -1133,7 +1110,7 @@ QUnit.module('keyboard navigation', {
         assert.expect(3);
 
         this.instance.focus();
-        $(toSelector(TABS_ITEM_CLASS)).eq(1).trigger('dxpointerup');
+        $(`.${TABS_ITEM_CLASS}`).eq(1).trigger('dxpointerup');
         this.clock.tick(10);
 
         const tabsFocusedIndex = $(this.instance.option('focusedElement')).index();
@@ -1194,7 +1171,7 @@ QUnit.module('Disabled items', {
         });
 
         this.instance = this.$element.dxTabPanel('instance');
-        this.$tabs = this.$element.find(toSelector(TABS_CLASS));
+        this.$tabs = this.$element.find(`.${TABS_CLASS}`);
 
         this.instance.option('items[1].disabled', true);
         this.instance.focus();
@@ -1204,7 +1181,7 @@ QUnit.module('Disabled items', {
     }
 }, () => {
     QUnit.test('disabled item can be focused by keyboard', function(assert) {
-        const $disabledItem = $(toSelector(TABS_ITEM_CLASS)).eq(1);
+        const $disabledItem = $(`.${TABS_ITEM_CLASS}`).eq(1);
         const keyboard = keyboardMock(this.$tabs);
 
         keyboard.press('right');
@@ -1214,7 +1191,7 @@ QUnit.module('Disabled items', {
     });
 
     QUnit.test('multiview wrapper should have focused class if item is available', function(assert) {
-        const multiViewWrapper = this.$element.find(toSelector(MULTIVIEW_WRAPPER_CLASS));
+        const multiViewWrapper = this.$element.find(`.${MULTIVIEW_WRAPPER_CLASS}`);
         const keyboard = keyboardMock(this.$tabs);
 
         assert.strictEqual($(multiViewWrapper).hasClass('dx-state-focused'), true, 'focused class set');
@@ -1290,7 +1267,7 @@ QUnit.module('Tabs Indicator position', () => {
     ['top', 'right', 'bottom', 'left'].forEach(tabsPosition => {
         QUnit.test(`The tabs element must have the correct indicator position class when tabsPosition=${tabsPosition}`, function(assert) {
             const $tabPanel = $('#tabPanel').dxTabPanel({ items: [1, 2, 3], tabsPosition });
-            const $tabs = $tabPanel.find(toSelector(TABS_CLASS));
+            const $tabs = $tabPanel.find(`.${TABS_CLASS}`);
 
             assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION[tabsPosition]));
         });
@@ -1299,7 +1276,7 @@ QUnit.module('Tabs Indicator position', () => {
     QUnit.test('The tabs element must have the correct indicator position class when tabsPosition was changed', function(assert) {
         const $tabPanel = $('#tabPanel').dxTabPanel({ items: [1, 2, 3] });
         const tabPanel = $tabPanel.dxTabPanel('instance');
-        const $tabs = $tabPanel.find(toSelector(TABS_CLASS));
+        const $tabs = $tabPanel.find(`.${TABS_CLASS}`);
 
         assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['top']));
 
@@ -1327,7 +1304,7 @@ QUnit.module('Tabs Indicator position', () => {
     QUnit.test('The tabs element must have the correct indicator position class when _tabsIndicatorPosition was changed', function(assert) {
         const $tabPanel = $('#tabPanel').dxTabPanel({ items: [1, 2, 3] });
         const tabPanel = $tabPanel.dxTabPanel('instance');
-        const $tabs = $tabPanel.find(toSelector(TABS_CLASS));
+        const $tabs = $tabPanel.find(`.${TABS_CLASS}`);
 
         assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS.bottom));
 

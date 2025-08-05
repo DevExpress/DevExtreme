@@ -509,7 +509,7 @@ export default [
             '@typescript-eslint/restrict-plus-operands': 'warn',
             '@typescript-eslint/no-use-before-define': 'warn',
             '@typescript-eslint/no-unused-expressions': 'warn',
-            '@typescript-eslint/prefer-optional-chain': 'warn',
+            '@typescript-eslint/prefer-optional-chain': 'off',
             '@typescript-eslint/no-this-alias': 'warn',
             '@typescript-eslint/no-non-null-assertion': 'warn',
             '@typescript-eslint/explicit-module-boundary-types': 'warn',

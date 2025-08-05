@@ -149,7 +149,7 @@ QUnit.test('Label color if useNodeColors set to true', function(assert) {
 QUnit.test('Labels customize text', function(assert) {
 
     const customizeText = function(node) {
-        return 'test text ' + node.title;
+        return 'test text ' + node.label;
     };
 
     createSankey({

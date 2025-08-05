@@ -1,5 +1,6 @@
+import type { SingleMultipleAllOrNone } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import dataQuery from '@js/common/data/query';
 import registerComponent from '@js/core/component_registrator';
@@ -11,7 +12,7 @@ import $ from '@js/core/renderer';
 import { ChildDefaultTemplate } from '@js/core/templates/child_default_template';
 import {
   ensureDefined,
-  // @ts-expect-error
+  // @ts-expect-error ts-error
   grep,
   noop,
 } from '@js/core/utils/common';
@@ -23,12 +24,12 @@ import { isDefined, isObject, isWindow } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import type { dxDropDownListOptions } from '@js/ui/drop_down_editor/ui.drop_down_list';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
-import type dxList from '@js/ui/list';
-import List from '@js/ui/list_light';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
+import type { ListSearchProperties } from '@ts/ui/list/m_list.edit.search';
+import List from '@ts/ui/list/m_list.edit.search';
 import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
 
 const window = getWindow();
@@ -53,7 +54,7 @@ interface DropDownListProperties extends Omit<dxDropDownListOptions<DropDownList
 class DropDownList<
   TProperties extends DropDownListProperties = DropDownListProperties,
 > extends DropDownEditor<TProperties> {
-  _list?: dxList;
+  _list?: List;
 
   _$list?: dxElementWrapper;
 
@@ -233,7 +234,6 @@ class DropDownList<
   }
 
   _saveFocusOnWidget(): void {
-    // @ts-expect-error ts-error
     if (this._list?.initialOption('focusStateEnabled')) {
       this._focusInput();
     }
@@ -398,12 +398,12 @@ class DropDownList<
 
   _updateActiveDescendant($target?): void {
     const opened = this.option('opened');
-    // @ts-expect-error ts-error
     const listFocusedItemId = this._list?.getFocusedItemId();
     const isElementOnDom = $(`#${listFocusedItemId}`).length > 0;
     const activedescendant = opened && isElementOnDom && listFocusedItemId;
 
     this.setAria({
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       activedescendant: activedescendant || null,
     }, $target);
   }
@@ -504,9 +504,9 @@ class DropDownList<
   _popupConfig(): PopupProperties {
     return {
       ...super._popupConfig(),
-      // @ts-expect-error ts-error
       templatesRenderAsynchronously: false,
       autoResizeEnabled: false,
+      // @ts-expect-error ts-error
       maxHeight: this._getMaxHeight.bind(this),
     };
   }
@@ -578,29 +578,39 @@ class DropDownList<
     return devices.real().deviceType === 'desktop';
   }
 
-  _listConfig() {
+  _listConfig(): ListSearchProperties {
+    const {
+      noDataText,
+      grouped,
+      wrapItemText,
+      itemTemplate,
+      groupTemplate,
+      hoverStateEnabled,
+      focusStateEnabled,
+    } = this.option();
+
     const options = {
-      selectionMode: 'single',
+      selectionMode: 'single' as SingleMultipleAllOrNone,
       _templates: this.option('_templates'),
       templateProvider: this.option('templateProvider'),
-      noDataText: this.option('noDataText'),
+      noDataText,
       encodeNoDataText: this.option('encodeNoDataText'),
-      grouped: this.option('grouped'),
-      wrapItemText: this.option('wrapItemText'),
+      grouped,
+      wrapItemText,
       useItemTextAsTitle: this.option('useItemTextAsTitle'),
       onContentReady: this._listContentReadyHandler.bind(this),
-      itemTemplate: this.option('itemTemplate'),
+      itemTemplate,
       indicateLoading: false,
       // @ts-expect-error ts-error
       keyExpr: this._getCollectionKeyExpr(),
       // @ts-expect-error ts-error
       displayExpr: this._displayGetterExpr(),
-      groupTemplate: this.option('groupTemplate'),
+      groupTemplate,
       onItemClick: this._listItemClickAction.bind(this),
       dataSource: this._getDataSource(),
       _dataController: this._dataController,
-      hoverStateEnabled: this._isDesktopDevice() ? this.option('hoverStateEnabled') : false,
-      focusStateEnabled: this._isDesktopDevice() ? this.option('focusStateEnabled') : false,
+      hoverStateEnabled: this._isDesktopDevice() ? hoverStateEnabled : false,
+      focusStateEnabled: this._isDesktopDevice() ? focusStateEnabled : false,
       _onItemsRendered: (): void => {
         // @ts-expect-error ts-error
         this._popup.repaint();

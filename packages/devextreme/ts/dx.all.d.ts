@@ -724,7 +724,7 @@ declare module DevExpress {
     /**
      * [descr:DOMComponentOptions.height]
      */
-    height?: number | string | (() => number | string) | undefined;
+    height?: number | string | undefined;
     /**
      * [descr:DOMComponentOptions.onDisposing]
      */
@@ -744,7 +744,7 @@ declare module DevExpress {
     /**
      * [descr:DOMComponentOptions.width]
      */
-    width?: number | string | (() => number | string) | undefined;
+    width?: number | string | undefined;
   }
   /**
    * [descr:ExportLoadPanel]
@@ -2385,6 +2385,7 @@ declare module DevExpress.common.charts {
       }
     | TimeInterval
     | undefined;
+  export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
   export type ValueErrorBarDisplayMode = 'auto' | 'high' | 'low' | 'none';
   export type ValueErrorBarType =
     | 'fixed'
@@ -4702,57 +4703,57 @@ declare module DevExpress.common.grids {
    */
   export type ColumnChooser = {
     /**
-     * [descr:GridBaseOptions.columnChooser.allowSearch]
-     * @deprecated [depNote:GridBaseOptions.columnChooser.allowSearch]
+     * [descr:ColumnChooser.allowSearch]
+     * @deprecated [depNote:ColumnChooser.allowSearch]
      */
     allowSearch?: boolean;
     /**
-     * [descr:GridBaseOptions.columnChooser.container]
+     * [descr:ColumnChooser.container]
      */
     container?: string | DevExpress.core.UserDefinedElement | undefined;
     /**
-     * [descr:GridBaseOptions.columnChooser.emptyPanelText]
+     * [descr:ColumnChooser.emptyPanelText]
      */
     emptyPanelText?: string;
     /**
-     * [descr:GridBaseOptions.columnChooser.enabled]
+     * [descr:ColumnChooser.enabled]
      */
     enabled?: boolean;
     /**
-     * [descr:GridBaseOptions.columnChooser.height]
+     * [descr:ColumnChooser.height]
      */
     height?: number | string;
     /**
-     * [descr:GridBaseOptions.columnChooser.mode]
+     * [descr:ColumnChooser.mode]
      */
     mode?: ColumnChooserMode;
     /**
-     * [descr:GridBaseOptions.columnChooser.position]
+     * [descr:ColumnChooser.position]
      */
     position?: DevExpress.common.core.animation.PositionConfig | undefined;
     /**
-     * [descr:GridBaseOptions.columnChooser.search]
+     * [descr:ColumnChooser.search]
      */
     search?: ColumnChooserSearchConfig;
     /**
-     * [descr:GridBaseOptions.columnChooser.searchTimeout]
-     * @deprecated [depNote:GridBaseOptions.columnChooser.searchTimeout]
+     * [descr:ColumnChooser.searchTimeout]
+     * @deprecated [depNote:ColumnChooser.searchTimeout]
      */
     searchTimeout?: number;
     /**
-     * [descr:GridBaseOptions.columnChooser.selection]
+     * [descr:ColumnChooser.selection]
      */
     selection?: ColumnChooserSelectionConfig;
     /**
-     * [descr:GridBaseOptions.columnChooser.title]
+     * [descr:ColumnChooser.title]
      */
     title?: string;
     /**
-     * [descr:GridBaseOptions.columnChooser.width]
+     * [descr:ColumnChooser.width]
      */
     width?: number | string;
     /**
-     * [descr:GridBaseOptions.columnChooser.sortOrder]
+     * [descr:ColumnChooser.sortOrder]
      */
     sortOrder?: SortOrder | undefined;
   };
@@ -4864,18 +4865,21 @@ declare module DevExpress.common.grids {
      */
     stickyPosition?: string;
   };
+  /**
+   * [descr:ColumnHeaderFilter]
+   */
   export type ColumnHeaderFilter = {
     /**
-     * [descr:GridBaseColumn.headerFilter.allowSearch]
-     * @deprecated [depNote:GridBaseColumn.headerFilter.allowSearch]
+     * [descr:ColumnHeaderFilter.allowSearch]
+     * @deprecated [depNote:ColumnHeaderFilter.allowSearch]
      */
     allowSearch?: boolean;
     /**
-     * [descr:GridBaseColumn.headerFilter.allowSelectAll]
+     * [descr:ColumnHeaderFilter.allowSelectAll]
      */
     allowSelectAll?: boolean;
     /**
-     * [descr:GridBaseColumn.headerFilter.dataSource]
+     * [descr:ColumnHeaderFilter.dataSource]
      */
     dataSource?:
       | DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>
@@ -4885,24 +4889,24 @@ declare module DevExpress.common.grids {
         }) => void)
       | undefined;
     /**
-     * [descr:GridBaseColumn.headerFilter.groupInterval]
+     * [descr:ColumnHeaderFilter.groupInterval]
      */
     groupInterval?: HeaderFilterGroupInterval | number | undefined;
     /**
-     * [descr:GridBaseColumn.headerFilter.height]
+     * [descr:ColumnHeaderFilter.height]
      */
     height?: number | string | undefined;
     /**
-     * [descr:GridBaseColumn.headerFilter.search]
+     * [descr:ColumnHeaderFilter.search]
      */
     search?: ColumnHeaderFilterSearchConfig;
     /**
-     * [descr:GridBaseColumn.headerFilter.searchMode]
-     * @deprecated [depNote:GridBaseColumn.headerFilter.searchMode]
+     * [descr:ColumnHeaderFilter.searchMode]
+     * @deprecated [depNote:ColumnHeaderFilter.searchMode]
      */
     searchMode?: SearchMode;
     /**
-     * [descr:GridBaseColumn.headerFilter.width]
+     * [descr:ColumnHeaderFilter.width]
      */
     width?: number | string | undefined;
   };
@@ -5140,21 +5144,21 @@ declare module DevExpress.common.grids {
    * [descr:FilterPanel]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface FilterPanel<TComponent, TRowData = any, TKey = any> {
+  export interface FilterPanel<TComponent = any, TRowData = any, TKey = any> {
     /**
-     * [descr:GridBaseOptions.filterPanel.customizeText]
+     * [descr:FilterPanel.customizeText]
      */
     customizeText?: (e: FilterPanelCustomizeTextArg<TComponent>) => string;
     /**
-     * [descr:GridBaseOptions.filterPanel.filterEnabled]
+     * [descr:FilterPanel.filterEnabled]
      */
     filterEnabled?: boolean;
     /**
-     * [descr:GridBaseOptions.filterPanel.texts]
+     * [descr:FilterPanel.texts]
      */
     texts?: FilterPanelTexts;
     /**
-     * [descr:GridBaseOptions.filterPanel.visible]
+     * [descr:FilterPanel.visible]
      */
     visible?: boolean;
   }
@@ -5171,15 +5175,15 @@ declare module DevExpress.common.grids {
    */
   export type FilterPanelTexts = {
     /**
-     * [descr:GridBaseOptions.filterPanel.texts.clearFilter]
+     * [descr:FilterPanelTexts.clearFilter]
      */
     clearFilter?: string;
     /**
-     * [descr:GridBaseOptions.filterPanel.texts.createFilter]
+     * [descr:FilterPanelTexts.createFilter]
      */
     createFilter?: string;
     /**
-     * [descr:GridBaseOptions.filterPanel.texts.filterEnabledHint]
+     * [descr:FilterPanelTexts.filterEnabledHint]
      */
     filterEnabledHint?: string;
   };
@@ -5950,37 +5954,37 @@ declare module DevExpress.common.grids {
    */
   export type HeaderFilter = {
     /**
-     * [descr:GridBaseOptions.headerFilter.allowSearch]
-     * @deprecated [depNote:GridBaseOptions.headerFilter.allowSearch]
+     * [descr:HeaderFilter.allowSearch]
+     * @deprecated [depNote:HeaderFilter.allowSearch]
      */
     allowSearch?: boolean;
     /**
-     * [descr:GridBaseOptions.headerFilter.allowSelectAll]
+     * [descr:HeaderFilter.allowSelectAll]
      */
     allowSelectAll?: boolean;
     /**
-     * [descr:GridBaseOptions.headerFilter.height]
+     * [descr:HeaderFilter.height]
      */
     height?: number | string;
     /**
-     * [descr:GridBaseOptions.headerFilter.search]
+     * [descr:HeaderFilter.search]
      */
     search?: HeaderFilterSearchConfig;
     /**
-     * [descr:GridBaseOptions.headerFilter.searchTimeout]
-     * @deprecated [depNote:GridBaseOptions.headerFilter.searchTimeout]
+     * [descr:HeaderFilter.searchTimeout]
+     * @deprecated [depNote:HeaderFilter.searchTimeout]
      */
     searchTimeout?: number;
     /**
-     * [descr:GridBaseOptions.headerFilter.texts]
+     * [descr:HeaderFilter.texts]
      */
     texts?: HeaderFilterTexts;
     /**
-     * [descr:GridBaseOptions.headerFilter.visible]
+     * [descr:HeaderFilter.visible]
      */
     visible?: boolean;
     /**
-     * [descr:GridBaseOptions.headerFilter.width]
+     * [descr:HeaderFilter.width]
      */
     width?: number | string;
   };
@@ -6018,15 +6022,15 @@ declare module DevExpress.common.grids {
    */
   export type HeaderFilterTexts = {
     /**
-     * [descr:GridBaseOptions.headerFilter.texts.cancel]
+     * [descr:HeaderFilterTexts.cancel]
      */
     cancel?: string;
     /**
-     * [descr:GridBaseOptions.headerFilter.texts.emptyValue]
+     * [descr:HeaderFilterTexts.emptyValue]
      */
     emptyValue?: string;
     /**
-     * [descr:GridBaseOptions.headerFilter.texts.ok]
+     * [descr:HeaderFilterTexts.ok]
      */
     ok?: string;
   };
@@ -6539,31 +6543,31 @@ declare module DevExpress.common.grids {
    */
   export type SearchPanel = {
     /**
-     * [descr:GridBaseOptions.searchPanel.highlightCaseSensitive]
+     * [descr:SearchPanel.highlightCaseSensitive]
      */
     highlightCaseSensitive?: boolean;
     /**
-     * [descr:GridBaseOptions.searchPanel.highlightSearchText]
+     * [descr:SearchPanel.highlightSearchText]
      */
     highlightSearchText?: boolean;
     /**
-     * [descr:GridBaseOptions.searchPanel.placeholder]
+     * [descr:SearchPanel.placeholder]
      */
     placeholder?: string;
     /**
-     * [descr:GridBaseOptions.searchPanel.searchVisibleColumnsOnly]
+     * [descr:SearchPanel.searchVisibleColumnsOnly]
      */
     searchVisibleColumnsOnly?: boolean;
     /**
-     * [descr:GridBaseOptions.searchPanel.text]
+     * [descr:SearchPanel.text]
      */
     text?: string;
     /**
-     * [descr:GridBaseOptions.searchPanel.visible]
+     * [descr:SearchPanel.visible]
      */
     visible?: boolean;
     /**
-     * [descr:GridBaseOptions.searchPanel.width]
+     * [descr:SearchPanel.width]
      */
     width?: string | number;
   };
@@ -6625,23 +6629,23 @@ declare module DevExpress.common.grids {
    */
   export type Sorting = {
     /**
-     * [descr:GridBaseOptions.sorting.ascendingText]
+     * [descr:Sorting.ascendingText]
      */
     ascendingText?: string;
     /**
-     * [descr:GridBaseOptions.sorting.clearText]
+     * [descr:Sorting.clearText]
      */
     clearText?: string;
     /**
-     * [descr:GridBaseOptions.sorting.descendingText]
+     * [descr:Sorting.descendingText]
      */
     descendingText?: string;
     /**
-     * [descr:GridBaseOptions.sorting.mode]
+     * [descr:Sorting.mode]
      */
     mode?: SingleMultipleOrNone;
     /**
-     * [descr:GridBaseOptions.sorting.showSortIndexes]
+     * [descr:Sorting.showSortIndexes]
      */
     showSortIndexes?: boolean;
   };
@@ -8983,7 +8987,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxAccordionOptions.height]
      */
-    height?: number | string | (() => number | string) | undefined;
+    height?: number | string | undefined;
     /**
      * [descr:dxAccordionOptions.hoverStateEnabled]
      */
@@ -10003,7 +10007,7 @@ declare module DevExpress.ui {
     searchByText(text: string): void;
 
     /**
-     * [descr:dxCardView.addRow()]
+     * [descr:dxCardView.addCard()]
      */
     addCard(): void;
     /**
@@ -10356,6 +10360,10 @@ declare module DevExpress.ui {
        * [descr:dxCardViewEditing.popup]
        */
       popup?: DevExpress.ui.dxPopup.Properties;
+      /**
+       * [descr:dxCardViewEditing.texts]
+       */
+      texts?: EditingTexts;
     };
     /**
      * [descr:_ui_card_view_EditingStartEvent]
@@ -10439,19 +10447,6 @@ declare module DevExpress.ui {
      */
     export type FocusedCardChanged =
       DevExpress.common.core.events.EventInfo<dxCardView> & WithCardInfo;
-
-    export type HeaderPanelDragging = Pick<
-      dxSortableOptions,
-      | 'dropFeedbackMode'
-      | 'scrollSpeed'
-      | 'scrollSensitivity'
-      | 'onDragChange'
-      | 'onDragEnd'
-      | 'onDragMove'
-      | 'onDragStart'
-      | 'onRemove'
-      | 'onReorder'
-    >;
     /**
      * [descr:_ui_card_view_InitNewCardEvent]
      */
@@ -10501,31 +10496,6 @@ declare module DevExpress.ui {
        */
       currentDeselectedCardKeys: Array<TKey>;
     };
-    /**
-     * [descr:_ui_card_view_SelectionChangingEvent]
-     */
-    export type SelectionChangingEvent<
-      TCardData = unknown,
-      TKey = unknown
-    > = DevExpress.common.core.events.EventInfo<dxCardView> &
-      DevExpress.common.core.events.Cancelable & {
-        /**
-         * [descr:_ui_card_view_SelectionChangingEvent.selectedCardsData]
-         */
-        selectedCardsData: Array<TCardData>;
-        /**
-         * [descr:_ui_card_view_SelectionChangingEvent.selectedCardKeys]
-         */
-        selectedCardKeys: Array<TKey>;
-        /**
-         * [descr:_ui_card_view_SelectionChangingEvent.currentSelectedCardKeys]
-         */
-        currentSelectedCardKeys: Array<TKey>;
-        /**
-         * [descr:_ui_card_view_SelectionChangingEvent.currentDeselectedCardKeys]
-         */
-        currentDeselectedCardKeys: Array<TKey>;
-      };
 
     /**
      * [descr:SelectionConfiguration]
@@ -10592,7 +10562,6 @@ declare module DevExpress.ui {
       readonly fieldValueElement: DevExpress.core.DxElement;
     };
   }
-
   /**
    * @deprecated Use DevExpress.ui.dxCardView.Editing instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -10667,10 +10636,24 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCardViewOptions.scrolling]
      */
-    scrolling?: Pick<
-      DevExpress.common.grids.ScrollingBase,
-      'scrollByContent' | 'scrollByThumb' | 'showScrollbar' | 'useNative'
-    >;
+    scrolling?: {
+      /**
+       * [descr:dxCardViewOptions.scrolling.scrollByContent]
+       */
+      scrollByContent?: boolean;
+      /**
+       * [descr:dxCardViewOptions.scrolling.scrollByThumb]
+       */
+      scrollByThumb?: boolean;
+      /**
+       * [descr:dxCardViewOptions.scrolling.showScrollbar]
+       */
+      showScrollbar?: DevExpress.common.ScrollbarMode;
+      /**
+       * [descr:dxCardViewOptions.scrolling.useNative]
+       */
+      useNative?: boolean | DevExpress.common.Mode;
+    };
     /**
      * [descr:dxCardViewOptions.errorRowEnabled]
      */
@@ -10812,6 +10795,9 @@ declare module DevExpress.ui {
      */
     toolbar?: DevExpress.ui.dxCardView.Toolbar;
 
+    /**
+     * [descr:dxCardViewOptions.sorting]
+     */
     sorting?: DevExpress.common.grids.Sorting;
 
     /**
@@ -10907,12 +10893,6 @@ declare module DevExpress.ui {
      */
     selection?: DevExpress.ui.dxCardView.SelectionConfiguration;
     /**
-     * [descr:dxCardViewOptions.onSelectionChanging]
-     */
-    onSelectionChanging?: (
-      e: DevExpress.ui.dxCardView.SelectionChangingEvent
-    ) => void;
-    /**
      * [descr:dxCardViewOptions.onSelectionChanged]
      */
     onSelectionChanged?: (
@@ -10933,6 +10913,16 @@ declare module DevExpress.ui {
       e: DevExpress.ui.dxCardView.ContextMenuPreparingEvent<TCardData>
     ) => void;
   }
+  /**
+   * @deprecated Use DevExpress.ui.dxCardView.Toolbar instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type dxCardViewToolbar = DevExpress.ui.dxCardView.Toolbar;
+  /**
+   * @deprecated Use DevExpress.ui.dxCardView.ToolbarItem instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type dxCardViewToolbarItem = DevExpress.ui.dxCardView.ToolbarItem;
   /**
    * [descr:dxChat]
    */
@@ -11629,17 +11619,6 @@ declare module DevExpress.ui {
    */
   export interface dxContextMenuOptions<TKey = any>
     extends dxMenuBaseOptions<dxContextMenu<TKey>, dxContextMenuItem, TKey> {
-    /**
-     * [descr:dxContextMenuOptions.closeOnOutsideClick]
-     * @deprecated [depNote:dxContextMenuOptions.closeOnOutsideClick]
-     */
-    closeOnOutsideClick?:
-      | boolean
-      | ((
-          event: DevExpress.events.DxEvent<
-            MouseEvent | PointerEvent | TouchEvent
-          >
-        ) => boolean);
     /**
      * [descr:dxContextMenuOptions.dataSource]
      */
@@ -21353,21 +21332,9 @@ declare module DevExpress.ui {
      */
     name?: DevExpress.ui.dxHtmlEditor.HtmlEditorPredefinedToolbarItem | string;
     /**
-     * [descr:dxHtmlEditorToolbarItem.formatName]
-     * @deprecated [depNote:dxHtmlEditorToolbarItem.formatName]
-     */
-    formatName?:
-      | DevExpress.ui.dxHtmlEditor.HtmlEditorPredefinedToolbarItem
-      | string;
-    /**
      * [descr:dxHtmlEditorToolbarItem.acceptedValues]
      */
     acceptedValues?: Array<string | number | boolean>;
-    /**
-     * [descr:dxHtmlEditorToolbarItem.formatValues]
-     * @deprecated [depNote:dxHtmlEditorToolbarItem.formatValues]
-     */
-    formatValues?: Array<string | number | boolean>;
     /**
      * [descr:dxHtmlEditorToolbarItem.location]
      */
@@ -22155,7 +22122,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxLoadPanelOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxLoadPanelOptions.indicatorSrc]
      */
@@ -22163,11 +22130,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxLoadPanelOptions.maxHeight]
      */
-    maxHeight?: number | string | (() => number | string);
+    maxHeight?: number | string;
     /**
      * [descr:dxLoadPanelOptions.maxWidth]
      */
-    maxWidth?: number | string | (() => number | string);
+    maxWidth?: number | string;
     /**
      * [descr:dxLoadPanelOptions.message]
      */
@@ -22194,7 +22161,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxLoadPanelOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
   }
   /**
    * [descr:dxLookup]
@@ -22316,11 +22283,6 @@ declare module DevExpress.ui {
      */
     focusStateEnabled?: boolean;
     /**
-     * [descr:dxLookupOptions.fullScreen]
-     * @deprecated [depNote:dxLookupOptions.fullScreen]
-     */
-    fullScreen?: boolean;
-    /**
      * [descr:dxLookupOptions.groupTemplate]
      */
     groupTemplate?:
@@ -22410,11 +22372,6 @@ declare module DevExpress.ui {
      * [descr:dxLookupOptions.usePopover]
      */
     usePopover?: boolean;
-    /**
-     * [descr:dxLookupOptions.valueChangeEvent]
-     * @deprecated [depNote:dxLookupOptions.valueChangeEvent]
-     */
-    valueChangeEvent?: string;
     /**
      * [descr:dxLookupOptions.dropDownCentered]
      */
@@ -22590,7 +22547,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMapOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxMapOptions.markerIconSrc]
      */
@@ -22701,7 +22658,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMapOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
     /**
      * [descr:dxMapOptions.zoom]
      */
@@ -23490,17 +23447,6 @@ declare module DevExpress.ui {
      */
     animation?: dxOverlayAnimation;
     /**
-     * [descr:dxOverlayOptions.closeOnOutsideClick]
-     * @deprecated [depNote:dxOverlayOptions.closeOnOutsideClick]
-     */
-    closeOnOutsideClick?:
-      | boolean
-      | ((
-          event: DevExpress.events.DxEvent<
-            MouseEvent | PointerEvent | TouchEvent
-          >
-        ) => boolean);
-    /**
      * [descr:dxOverlayOptions.contentTemplate]
      */
     contentTemplate?:
@@ -23534,23 +23480,23 @@ declare module DevExpress.ui {
     /**
      * [descr:dxOverlayOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxOverlayOptions.maxHeight]
      */
-    maxHeight?: number | string | (() => number | string);
+    maxHeight?: number | string;
     /**
      * [descr:dxOverlayOptions.maxWidth]
      */
-    maxWidth?: number | string | (() => number | string);
+    maxWidth?: number | string;
     /**
      * [descr:dxOverlayOptions.minHeight]
      */
-    minHeight?: number | string | (() => number | string);
+    minHeight?: number | string;
     /**
      * [descr:dxOverlayOptions.minWidth]
      */
-    minWidth?: number | string | (() => number | string);
+    minWidth?: number | string;
     /**
      * [descr:dxOverlayOptions.onHidden]
      */
@@ -23592,7 +23538,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxOverlayOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
     /**
      * [descr:dxOverlayOptions.wrapperAttr]
      */
@@ -23969,7 +23915,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridFieldChooserOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxPivotGridFieldChooserOptions.layout]
      */
@@ -24572,7 +24518,7 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_popover_HidingEvent]
      */
-    export type HidingEvent = DevExpress.common.core.events.Cancelable &
+    export type HidingEvent = DevExpress.common.core.events.AsyncCancelable &
       DevExpress.common.core.events.EventInfo<dxPopover>;
     /**
      * [descr:_ui_popover_InitializedEvent]
@@ -24632,20 +24578,9 @@ declare module DevExpress.ui {
      */
     animation?: dxPopoverAnimation;
     /**
-     * [descr:dxPopoverOptions.closeOnOutsideClick]
-     * @deprecated [depNote:dxPopoverOptions.closeOnOutsideClick]
-     */
-    closeOnOutsideClick?:
-      | boolean
-      | ((
-          event: DevExpress.events.DxEvent<
-            MouseEvent | PointerEvent | TouchEvent
-          >
-        ) => boolean);
-    /**
      * [descr:dxPopoverOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxPopoverOptions.hideEvent]
      */
@@ -24713,7 +24648,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopoverOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
   }
   /**
    * [descr:dxPopup]
@@ -24821,7 +24756,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxPopupOptions.onResize]
      */
@@ -24887,7 +24822,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
   }
   /**
    * [descr:dxProgressBar]
@@ -25244,7 +25179,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResizableOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxResizableOptions.keepAspectRatio]
      */
@@ -25280,7 +25215,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResizableOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
   }
   /**
    * [descr:dxResponsiveBox]
@@ -25461,7 +25396,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResponsiveBoxOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxResponsiveBoxOptions.items]
      */
@@ -25498,7 +25433,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResponsiveBoxOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
   }
   /**
    * [descr:dxScheduler]
@@ -27053,12 +26988,6 @@ declare module DevExpress.ui {
      */
     showSelectionControls?: boolean;
     /**
-     * [descr:dxSelectBoxOptions.valueChangeEvent]
-     * @deprecated [depNote:dxSelectBoxOptions.valueChangeEvent]
-     */
-    valueChangeEvent?: string;
-
-    /**
      * [descr:dxSelectBoxOptions.customItemCreateEvent]
      */
     customItemCreateEvent?: string;
@@ -28319,6 +28248,10 @@ declare module DevExpress.ui {
        * [descr:TabPanelItemInfo.itemElement]
        */
       readonly itemElement?: DevExpress.core.DxElement;
+      /**
+       * [descr:TabPanelItemInfo.itemIndex]
+       */
+      readonly itemIndex: number;
     }
     /**
      * [descr:_ui_tab_panel_TitleClickEvent]
@@ -29529,7 +29462,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTileViewOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxTileViewOptions.hoverStateEnabled]
      */
@@ -29623,17 +29556,6 @@ declare module DevExpress.ui {
      */
     closeOnClick?: boolean;
     /**
-     * [descr:dxToastOptions.closeOnOutsideClick]
-     * @deprecated [depNote:dxToastOptions.closeOnOutsideClick]
-     */
-    closeOnOutsideClick?:
-      | boolean
-      | ((
-          event: DevExpress.events.DxEvent<
-            MouseEvent | PointerEvent | TouchEvent
-          >
-        ) => boolean);
-    /**
      * [descr:dxToastOptions.closeOnSwipe]
      */
     closeOnSwipe?: boolean;
@@ -29654,11 +29576,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxToastOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:dxToastOptions.maxWidth]
      */
-    maxWidth?: number | string | (() => number | string);
+    maxWidth?: number | string;
     /**
      * [descr:dxToastOptions.message]
      */
@@ -29666,7 +29588,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxToastOptions.minWidth]
      */
-    minWidth?: number | string | (() => number | string);
+    minWidth?: number | string;
     /**
      * [descr:dxToastOptions.position]
      */
@@ -29682,7 +29604,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxToastOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
   }
   /**
    * [descr:dxToolbar]
@@ -33071,7 +32993,7 @@ declare module DevExpress.ui.dxCardView {
      */
     customizeText?: (
       this: Column,
-      cellInfo: DevExpress.common.grids.ColumnCustomizeTextArg
+      fieldInfo: DevExpress.common.grids.ColumnCustomizeTextArg
     ) => string;
     /**
      * [descr:ColumnProperties.dataField]
@@ -33201,6 +33123,36 @@ declare module DevExpress.ui.dxCardView {
      */
     headerItemCssClass?: string;
   };
+
+  /**
+   * [descr:EditingTexts]
+   */
+  export type EditingTexts = {
+    /**
+     * [descr:EditingTexts.addCard]
+     */
+    addCard?: string;
+    /**
+     * [descr:EditingTexts.confirmDeleteMessage]
+     */
+    confirmDeleteMessage?: string;
+    /**
+     * [descr:EditingTexts.confirmDeleteTitle]
+     */
+    confirmDeleteTitle?: string;
+    /**
+     * [descr:EditingTexts.deleteCard]
+     */
+    deleteCard?: string;
+    /**
+     * [descr:EditingTexts.editCard]
+     */
+    editCard?: string;
+    /**
+     * [descr:EditingTexts.saveCard]
+     */
+    saveCard?: string;
+  };
   /**
    * [descr:dxCardViewFieldInfo]
    */
@@ -33230,6 +33182,7 @@ declare module DevExpress.ui.dxCardView {
      */
     card: CardInfo;
   };
+
   /**
    * [descr:HeaderPanel]
    */
@@ -33237,7 +33190,44 @@ declare module DevExpress.ui.dxCardView {
     /**
      * [descr:HeaderPanel.dragging]
      */
-    dragging?: HeaderPanelDragging;
+    dragging?: {
+      /**
+       * [descr:HeaderPanel.dragging.dropFeedbackMode]
+       */
+      dropFeedbackMode?: DevExpress.common.DragHighlight;
+      /**
+       * [descr:HeaderPanel.dragging.scrollSpeed]
+       */
+      scrollSpeed?: number;
+      /**
+       * [descr:HeaderPanel.dragging.scrollSensitivity]
+       */
+      scrollSensitivity?: number;
+      /**
+       * [descr:HeaderPanel.dragging.onDragChange]
+       */
+      onDragChange?: (e: any) => void;
+      /**
+       * [descr:HeaderPanel.dragging.onDragEnd]
+       */
+      onDragEnd?: (e: any) => void;
+      /**
+       * [descr:HeaderPanel.dragging.onDragMove]
+       */
+      onDragMove?: (e: any) => void;
+      /**
+       * [descr:HeaderPanel.dragging.onDragStart]
+       */
+      onDragStart?: (e: any) => void;
+      /**
+       * [descr:HeaderPanel.dragging.onRemove]
+       */
+      onRemove?: (e: any) => void;
+      /**
+       * [descr:HeaderPanel.dragging.onReorder]
+       */
+      onReorder?: (e: any) => void;
+    };
     /**
      * [descr:HeaderPanel.visible]
      */
@@ -33295,36 +33285,36 @@ declare module DevExpress.ui.dxCardView {
     grouping?: boolean;
   };
   /**
-   * [descr:Toolbar]
+   * [descr:dxCardViewToolbar]
    */
   export type Toolbar = {
     /**
-     * [descr:Toolbar.items]
+     * [descr:dxCardViewToolbar.items]
      */
     items?: Array<PredefinedToolbarItem | ToolbarItem>;
     /**
-     * [descr:Toolbar.visible]
+     * [descr:dxCardViewToolbar.visible]
      */
     visible?: boolean | undefined;
     /**
-     * [descr:Toolbar.disabled]
+     * [descr:dxCardViewToolbar.disabled]
      */
     disabled?: boolean;
     /**
-     * [descr:Toolbar.multiline]
+     * [descr:dxCardViewToolbar.multiline]
      */
     multiline?: boolean;
   };
   /**
-   * [descr:ToolbarItem]
+   * [descr:dxCardViewToolbarItem]
    */
   export type ToolbarItem = dxToolbarItem & {
     /**
-     * [descr:ToolbarItem.name]
+     * [descr:dxCardViewToolbarItem.name]
      */
     name?: PredefinedToolbarItem | string;
     /**
-     * [descr:ToolbarItem.location]
+     * [descr:dxCardViewToolbarItem.location]
      */
     location?: DevExpress.common.ToolbarItemLocation;
   };
@@ -35136,7 +35126,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.height]
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * [descr:BaseWidgetOptions.loadingIndicator]
      */
@@ -35206,7 +35196,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.width]
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
   }
   /**
    * [descr:BaseWidgetSize]
@@ -36073,11 +36063,6 @@ declare module DevExpress.viz {
      * [descr:dxChartArgumentAxis]
      */
     export type ArgumentAxis = CommonAxisSettings & {
-      /**
-       * [descr:dxChartOptions.argumentAxis.aggregateByCategory]
-       * @deprecated [depNote:dxChartOptions.argumentAxis.aggregateByCategory]
-       */
-      aggregateByCategory?: boolean;
       /**
        * [descr:dxChartOptions.argumentAxis.aggregationGroupWidth]
        */
@@ -37186,7 +37171,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.valueAxis.visualRangeUpdateMode]
        */
-      visualRangeUpdateMode?: DevExpress.common.charts.VisualRangeUpdateMode;
+      visualRangeUpdateMode?: DevExpress.common.charts.ValueAxisVisualRangeUpdateMode;
       /**
        * [descr:dxChartOptions.valueAxis.wholeRange]
        */
@@ -41759,7 +41744,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartOptions.valueAxis.visualRangeUpdateMode]
        */
-      visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode;
+      visualRangeUpdateMode?: DevExpress.common.charts.ValueAxisVisualRangeUpdateMode;
       /**
        * [descr:dxPolarChartOptions.valueAxis.wholeRange]
        */
@@ -41861,7 +41846,6 @@ declare module DevExpress.viz {
        */
       visible?: boolean;
     };
-    export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
     /**
      * [descr:_viz_polar_chart_ZoomEndEvent]
      */
@@ -42814,7 +42798,6 @@ declare module DevExpress.viz {
       DevExpress.common.core.events.EventInfo<dxRangeSelector> &
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxRangeSelectorOptions;
-    export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
     /**
      * [descr:_viz_range_selector_ValueChangedEvent]
      */
@@ -42878,11 +42861,6 @@ declare module DevExpress.viz {
        * [descr:dxRangeSelectorOptions.behavior.animationEnabled]
        */
       animationEnabled?: boolean;
-      /**
-       * [descr:dxRangeSelectorOptions.behavior.callValueChanged]
-       * @deprecated [depNote:dxRangeSelectorOptions.behavior.callValueChanged]
-       */
-      callValueChanged?: DevExpress.viz.dxRangeSelector.ValueChangedCallMode;
       /**
        * [descr:dxRangeSelectorOptions.behavior.manualRangeSelectionEnabled]
        */
@@ -43048,11 +43026,6 @@ declare module DevExpress.viz {
      * [descr:dxRangeSelectorOptions.scale]
      */
     scale?: {
-      /**
-       * [descr:dxRangeSelectorOptions.scale.aggregateByCategory]
-       * @deprecated [depNote:dxRangeSelectorOptions.scale.aggregateByCategory]
-       */
-      aggregateByCategory?: boolean;
       /**
        * [descr:dxRangeSelectorOptions.scale.aggregationGroupWidth]
        */
@@ -43602,11 +43575,6 @@ declare module DevExpress.viz {
      * [descr:dxSankeyNode.showTooltip()]
      */
     showTooltip(): void;
-    /**
-     * [descr:dxSankeyNode.title]
-     * @deprecated [depNote:dxSankeyNode.title]
-     */
-    title?: string;
   }
   /**
    * [descr:dxSankeyOptions]
@@ -44702,11 +44670,6 @@ declare module DevExpress.viz {
      * [descr:dxVectorMap.clearSelection()]
      */
     clearSelection(): void;
-    /**
-     * [descr:dxVectorMap.convertCoordinates(x, y)]
-     * @deprecated [depNote:dxVectorMap.convertCoordinates(x, y)]
-     */
-    convertCoordinates(x: number, y: number): Array<number>;
     /**
      * [descr:dxVectorMap.convertToGeo(x, y)]
      */

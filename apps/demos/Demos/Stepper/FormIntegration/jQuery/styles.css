@@ -65,3 +65,7 @@
     display: flex;
     gap: 8px;
 }
+
+.readonly {
+    pointer-events: none;
+}

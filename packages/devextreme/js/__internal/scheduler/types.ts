@@ -1,7 +1,6 @@
-import type { Appointment, Properties } from '@js/ui/scheduler';
+import type { Appointment } from '@js/ui/scheduler';
 
-export type ResourcesConfig = Required<Properties>['resources'];
-export type ResourceConfig = ResourcesConfig[number];
+import type { ResourceLoader } from './utils/loader/resource_loader';
 
 export type Direction = 'vertical' | 'horizontal';
 export type GroupOrientation = 'vertical' | 'horizontal';
@@ -105,7 +104,7 @@ export interface ViewCellData {
   isFirstGroupCell: boolean;
   isLastGroupCell: boolean;
   key: number;
-  firstDayOfMonth?: boolean;
+  isFirstDayMonthHighlighting?: boolean;
   isSelected?: boolean;
   isFocused?: boolean;
   highlighted?: boolean;
@@ -149,7 +148,7 @@ export interface ViewDataProviderOptions {
   startCellIndex: number;
   groupOrientation: GroupOrientation;
   groupByDate: boolean;
-  groups: Group[];
+  groups: ResourceLoader[];
   isProvideVirtualCellsWidth: boolean;
   isAllDayPanelVisible: boolean;
   selectedCells?: unknown;
@@ -168,8 +167,8 @@ export interface ViewDataProviderOptions {
   firstDayOfWeek: number;
   today: Date;
 
-  isGenerateTimePanelData: boolean;
-  isGenerateWeekDaysHeaderData: boolean;
+  isGenerateTimePanelData?: boolean;
+  isGenerateWeekDaysHeaderData?: boolean;
 }
 
 export interface CellInfo {
@@ -188,8 +187,8 @@ export interface DateHeaderCellData extends ViewCellData {
 
 export interface DateHeaderData {
   dataMap: DateHeaderCellData[][];
-  leftVirtualCellWidth: number;
-  rightVirtualCellWidth: number;
+  leftVirtualCellWidth?: number;
+  rightVirtualCellWidth?: number;
   leftVirtualCellCount: number;
   rightVirtualCellCount: number;
   weekDayLeftVirtualCellWidth?: number;
@@ -235,7 +234,12 @@ export interface ViewDataProviderType {
   viewDataMap: ViewDataMap;
   timePanelData: TimePanelData;
   dateHeaderData: DateHeaderData;
-  getCellData: (rowIndex: number, columnIndex: number, isAllDay) => ViewCellData;
+  getCellData: (
+    rowIndex: number,
+    columnIndex: number,
+    isAllDay?: boolean,
+    rtlEnabled?: boolean
+  ) => ViewCellData;
   getCellCount: (config: CountGenerationConfig) => number;
   getRowCount: (config: CountGenerationConfig) => number;
   update: (options: unknown, isGenerateNewData: boolean) => void;

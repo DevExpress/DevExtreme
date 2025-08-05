@@ -64,7 +64,7 @@ const componentConfig = {
     direction: String as PropType<BoxDirection>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
     items: Array as PropType<Array<any | dxBoxItem | string>>,
@@ -79,7 +79,7 @@ const componentConfig = {
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     rtlEnabled: Boolean,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

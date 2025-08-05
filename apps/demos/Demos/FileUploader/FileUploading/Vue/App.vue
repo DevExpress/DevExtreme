@@ -27,7 +27,7 @@
         </div>
       </div>
     </div>
-    <div class="options">
+    <div class="options-panel">
       <div class="caption">Options</div>
       <div class="option">
         <span>File types</span>
@@ -95,7 +95,7 @@ const files = ref([]);
   margin-bottom: 20px;
 }
 
-.options {
+.options-panel {
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
   position: absolute;

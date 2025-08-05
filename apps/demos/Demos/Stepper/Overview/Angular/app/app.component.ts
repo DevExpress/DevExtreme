@@ -2,10 +2,10 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { DxStepperModule, DxButtonGroupModule, DxCheckBoxModule } from 'devextreme-angular';
-import { DxButtonGroupTypes } from 'devextreme-angular/ui/button-group';
-import { DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
-import { Item } from 'devextreme/ui/stepper';
+import { DxButtonGroupModule, type DxButtonGroupTypes } from 'devextreme-angular/ui/button-group';
+import { DxCheckBoxModule, type DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
+import { DxStepperModule, type DxStepperTypes } from 'devextreme-angular/ui/stepper';
+
 import { AppService } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -24,7 +24,7 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
 })
 export class AppComponent {
-  steps: Item[];
+  steps: DxStepperTypes.Item[];
   orientations: any[];
   navigationModes: any[];
 

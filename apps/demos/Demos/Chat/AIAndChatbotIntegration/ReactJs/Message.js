@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import Button from 'devextreme-react/button';
+import { Button } from 'devextreme-react/button';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
@@ -32,8 +32,8 @@ const Message = ({ text, onRegenerateButtonClick }) => {
   }
   return (
     <React.Fragment>
-      <div className="dx-chat-messagebubble-text">{HTMLReactParser(convertToHtml(text))}</div>
-      <div className="dx-bubble-button-container">
+      <div className="chat-messagebubble-text">{HTMLReactParser(convertToHtml(text))}</div>
+      <div className="bubble-button-container">
         <Button
           icon={icon}
           stylingMode="text"

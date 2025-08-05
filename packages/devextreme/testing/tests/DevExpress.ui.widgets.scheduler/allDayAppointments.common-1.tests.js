@@ -10,6 +10,7 @@ import {
     createWrapper,
     initTestMarkup
 } from '../../helpers/scheduler/helpers.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import 'generic_light.css!';
 import '__internal/scheduler/m_scheduler';
@@ -25,7 +26,6 @@ const createInstanceBase = options => createWrapper({ _draggingMode: 'default', 
 const config = {
     beforeEach: function() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
         this.tasks = [
             {
                 text: 'Task 1',
@@ -41,7 +41,6 @@ const config = {
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 };
 
@@ -58,11 +57,12 @@ module('All day appointments common', config, () => {
                 }));
             };
 
-            test('AllDay appointment should be displayed correctly after changing view with custom store', function(assert) {
-                const scheduler = createInstance({
+            test('AllDay appointment should be displayed correctly after changing view with custom store', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 4),
                     currentView: 'day',
                     maxAppointmentsPerCell: 'unlimited',
+                    showCurrentTimeIndicator: false,
                     dataSource: new DataSource({
                         store: new CustomStore({
                             load: function(options) {
@@ -74,7 +74,7 @@ module('All day appointments common', config, () => {
                                         startDate: new Date(2015, 2, 5),
                                         endDate: new Date(2015, 2, 5, 0, 30)
                                     }]);
-                                }, 300);
+                                }, 100);
 
                                 return d.promise();
                             }
@@ -82,9 +82,12 @@ module('All day appointments common', config, () => {
                     })
                 });
 
-                this.clock.tick(300);
+                const clock = sinon.useFakeTimers();
+                await waitAsync(100, clock);
                 scheduler.instance.option('currentView', 'week');
-                this.clock.tick(300);
+                await waitAsync(100, clock);
+                await waitForAsync(() => scheduler.appointments.getAppointments().length === 1, clock);
+                clock.restore();
 
                 const allDayPanelHeight = $(scheduler.instance.$element()).find('.dx-scheduler-all-day-table-cell').eq(0).get(0).getBoundingClientRect().height;
                 const $appointment = $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(0);
@@ -92,13 +95,13 @@ module('All day appointments common', config, () => {
                 assert.roughEqual(getOuterHeight($appointment), allDayPanelHeight, 0.501, 'Appointment height is correct');
             });
 
-            test('AllDay appointment should be displayed correctly after changing date with custom store', function(assert) {
+            test('AllDay appointment should be displayed correctly after changing date with custom store', async function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('This test is for the standard scrolling mode');
                     return;
                 }
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 4),
                     currentView: 'day',
                     maxAppointmentsPerCell: 'unlimited',
@@ -113,7 +116,7 @@ module('All day appointments common', config, () => {
                                         startDate: new Date(2015, 2, 5),
                                         endDate: new Date(2015, 2, 5, 0, 30)
                                     }]);
-                                }, 300);
+                                }, 100);
 
                                 return d.promise();
                             }
@@ -121,9 +124,9 @@ module('All day appointments common', config, () => {
                     })
                 });
 
-                this.clock.tick(300);
+                await waitForAsync(() => scheduler.appointments.getAppointments().length === 1);
                 scheduler.instance.option('currentDate', new Date(2015, 2, 5));
-                this.clock.tick(300);
+                await waitAsync(110);
 
                 const allDayPanelHeight = $(scheduler.instance.$element()).find('.dx-scheduler-all-day-table-cell').eq(0).get(0).getBoundingClientRect().height;
                 const $appointment = $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(0);
@@ -131,10 +134,10 @@ module('All day appointments common', config, () => {
                 assert.roughEqual(getOuterHeight($appointment), allDayPanelHeight, 2, 'Appointment height is correct');
             });
 
-            test('Multi-day appointment parts should have allDay class', function(assert) {
+            test('Multi-day appointment parts should have allDay class', async function(assert) {
                 const appointment = { startDate: new Date(2015, 1, 4, 0), endDate: new Date(2015, 1, 10, 0), text: 'long appointment' };
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 1, 5),
                     dataSource: [appointment],
                     currentView: 'day'
@@ -145,10 +148,10 @@ module('All day appointments common', config, () => {
                 assert.ok($appointment.hasClass('dx-scheduler-all-day-appointment'), 'Appointment part has allDay class');
             });
 
-            test('Multi-day appointment parts should have correct reduced class', function(assert) {
+            test('Multi-day appointment parts should have correct reduced class', async function(assert) {
                 const appointment = { startDate: new Date(2015, 1, 4, 0), endDate: new Date(2015, 1, 7, 0), text: 'long appointment' };
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 1, 5),
                     dataSource: [appointment],
                     currentView: 'day'
@@ -165,7 +168,7 @@ module('All day appointments common', config, () => {
                 assert.notOk($appointment.hasClass('dx-scheduler-appointment-head'), 'Appointment part hasn\'t reduced class. It is tail');
             });
 
-            test('AllDay recurrent appointment should be rendered coorectly after changing currentDate', function(assert) {
+            test('AllDay recurrent appointment should be rendered coorectly after changing currentDate', async function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('This test is for the standard scrolling mode');
                     return;
@@ -179,7 +182,7 @@ module('All day appointments common', config, () => {
                     endDate: new Date(2015, 4, 25, 0, 30)
                 };
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 4, 25),
                     dataSource: [appointment],
                     currentView: 'week'
@@ -195,20 +198,18 @@ module('All day appointments common', config, () => {
                 assert.roughEqual(getOuterHeight($appointment), 1.1, cellHeight, 'Appointment height is OK');
             });
 
-            test('DblClick on appointment should call scheduler.showAppointmentPopup for allDay appointment on month view', function(assert) {
+            test('DblClick on appointment should call scheduler.showAppointmentPopup for allDay appointment on month view', async function(assert) {
                 const data = [{
                     text: 'a', allDay: true, startDate: new Date(2015, 2, 5), endDate: new Date(2015, 2, 5, 0, 30)
                 }];
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 4),
                     currentView: 'month',
                     dataSource: data,
                     maxAppointmentsPerCell: 1,
                     width: 600
                 });
-
-                this.clock.tick(10);
 
                 const spy = sinon.spy(scheduler.instance, 'showAppointmentPopup');
 
@@ -217,9 +218,9 @@ module('All day appointments common', config, () => {
                 assert.ok(spy.calledOnce, 'Method was called');
             });
 
-            test('AllDay appointment has right startDate and endDate', function(assert) {
+            test('AllDay appointment has right startDate and endDate', async function(assert) {
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 4),
                     currentView: 'week'
                 });
@@ -233,8 +234,8 @@ module('All day appointments common', config, () => {
                 assert.equal(endDate.option('type'), 'date', 'type is right');
             });
 
-            test('All-day & common appointments should have a right sorting', function(assert) {
-                const scheduler = createInstanceBase({
+            test('All-day & common appointments should have a right sorting', async function(assert) {
+                const scheduler = await createInstanceBase({
                     currentDate: new Date(2016, 1, 10),
                     currentView: 'day',
                     width: 800,
@@ -295,8 +296,8 @@ module('All day appointments common', config, () => {
                 assert.roughEqual(scheduler.appointments.getAppointmentWidth(3), cellWidth - APPOINTMENT_DEFAULT_LEFT_OFFSET, 1.001, 'Appointment size is OK');
             });
 
-            test('dropDown appointment should have correct container & position', function(assert) {
-                const scheduler = createInstance({
+            test('dropDown appointment should have correct container & position', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 4, 25),
                     views: ['week'],
                     currentView: 'week',
@@ -317,6 +318,9 @@ module('All day appointments common', config, () => {
                     { text: '9', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
                     { text: '10', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true }
                 ]);
+                const clock = sinon.useFakeTimers();
+                await waitForAsync(() => scheduler.appointments.getAppointments().length === 10, clock);
+                clock.restore();
 
                 const $dropDown = $(scheduler.instance.$element()).find('.dx-scheduler-appointment-collector').eq(0);
 
@@ -325,8 +329,8 @@ module('All day appointments common', config, () => {
                 assert.roughEqual(translator.locate($dropDown).top, 0, 1.001, 'Appointment position is OK');
             });
 
-            test('dropDown appointment should not have compact class on allDay panel', function(assert) {
-                const scheduler = createInstance({
+            test('dropDown appointment should not have compact class on allDay panel', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 4, 25),
                     views: ['week'],
                     currentView: 'week'
@@ -350,12 +354,12 @@ module('All day appointments common', config, () => {
                 assert.notOk($dropDown.hasClass('dx-scheduler-appointment-collector-compact'), 'class is ok');
             });
 
-            test('AllDay appointments should have correct height, groupOrientation = vertical', function(assert) {
+            test('AllDay appointments should have correct height, groupOrientation = vertical', async function(assert) {
                 const appointments = [
                     { ownerId: 1, startDate: new Date(2015, 2, 10, 1), endDate: new Date(2015, 2, 10, 1, 30), allDay: true, text: 'caption1' },
                     { ownerId: 2, startDate: new Date(2015, 2, 10, 1), endDate: new Date(2015, 2, 10, 1, 30), allDay: true, text: 'caption2' }];
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 10),
                     dataSource: appointments,
                     groupOrientation: 'vertical',
@@ -394,12 +398,12 @@ module('All day appointments common', config, () => {
                 ), allDayPanelHeight, 0.501, 'Second appointment height is correct on init');
             });
 
-            test('AllDay appointments should have correct position, groupOrientation = vertical', function(assert) {
+            test('AllDay appointments should have correct position, groupOrientation = vertical', async function(assert) {
                 const appointments = [
                     { ownerId: 1, startDate: new Date(2015, 2, 10, 1), endDate: new Date(2015, 2, 10, 1, 30), allDay: true, text: 'caption1' },
                     { ownerId: 2, startDate: new Date(2015, 2, 10, 1), endDate: new Date(2015, 2, 10, 1, 30), allDay: true, text: 'caption2' }];
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     dataSource: appointments,
                     currentDate: new Date(2015, 2, 10),
                     groupOrientation: 'vertical',
@@ -437,8 +441,8 @@ module('All day appointments common', config, () => {
                 assert.roughEqual(secondPosition.top, secondAllDayRowPosition.top, 1.5, 'Appointment has correct top');
             });
 
-            test('Appointment in allDayPanel must not change position if `editing` option is changed (T807933)', function(assert) {
-                const scheduler = createInstanceBase({
+            test('Appointment in allDayPanel must not change position if `editing` option is changed (T807933)', async function(assert) {
+                const scheduler = await createInstanceBase({
                     dataSource: [{
                         text: 'Website Re-Design Plan',
                         startDate: new Date(2017, 4, 22, 9, 30),
@@ -465,7 +469,7 @@ module('All day appointments common', config, () => {
                 assert.strictEqual(translator.locate($appointment).top, 0, 'Appointment is on top of it`s container');
             });
 
-            test('New allDay appointment should be rendered correctly when groupByDate = true (T845632)', function(assert) {
+            test('New allDay appointment should be rendered correctly when groupByDate = true (T845632)', async function(assert) {
                 const appointment = {
                     text: 'a',
                     startDate: new Date(2020, 1, 9, 1),
@@ -480,7 +484,7 @@ module('All day appointments common', config, () => {
                     ownerId: [2]
                 };
 
-                const scheduler = createInstanceBase({
+                const scheduler = await createInstanceBase({
                     currentDate: new Date(2020, 1, 9),
                     views: ['week'],
                     currentView: 'week',
@@ -516,7 +520,7 @@ module('All day appointments common', config, () => {
                 assert.strictEqual(translator.locate($appointment).top, 0, 'Appointment is on top of it`s container');
             });
 
-            test('Recurrence allDay appointment should be rendered correctly (T831801)', function(assert) {
+            test('Recurrence allDay appointment should be rendered correctly (T831801)', async function(assert) {
                 const appointment = {
                     text: 'a',
                     startDate: new Date(2020, 1, 9, 1),
@@ -531,7 +535,7 @@ module('All day appointments common', config, () => {
                     recurrenceRule: 'FREQ=DAILY'
                 };
 
-                const scheduler = createInstanceBase({
+                const scheduler = await createInstanceBase({
                     currentDate: new Date(2020, 1, 9),
                     views: ['week'],
                     currentView: 'week',

@@ -5,7 +5,7 @@
     <template #item="{ data }">
       <div
         :style="{backgroundImage: 'url(' + data.ImageSrc + ')'}"
-        class="dx-tile-image"
+        class="tile-image"
       />
     </template>
   </DxTileView>
@@ -15,7 +15,7 @@ import DxTileView from 'devextreme-vue/tile-view';
 import { homes } from './data.ts';
 </script>
 <style>
-.dx-tile-image {
+.tile-image {
   height: 100%;
   width: 100%;
   background-position: center;

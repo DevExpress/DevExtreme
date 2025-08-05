@@ -1,63 +1,144 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import CardView, {
-  CardCover, Column, Pager, Selection,
+  CardCover, Column, Selection, Paging, HeaderFilter, SearchPanel, CardViewRef,
 } from 'devextreme-react/card-view';
+import Button from 'devextreme-react/button';
+import notify from 'devextreme/ui/notify';
 import { Employee, employees } from './data.ts';
 
-const IMG_URL = 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos';
-const getEmployeeImage = ({ Picture }: Employee): string => `${IMG_URL}/${Picture}`;
-const getEmployeeImageAltText = ({ FullName }: Employee): string => `${FullName} picture`;
+function imageExpr({ First_Name, Last_Name }: Employee): string {
+  return `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`;
+}
 
-// TODO: Nested component does not exist
-const headerFilterConfig = {
-  visible: true,
-};
+function altExpr({ First_Name, Last_Name }: Employee): string {
+  return `Photo of ${First_Name} ${Last_Name}`;
+}
 
-// TODO: Nested component does not exist
-const searchPanelConfig = {
-  visible: true,
-};
+function calculateFullName({ First_Name, Last_Name }: Employee): string {
+  return `${First_Name} ${Last_Name}`;
+}
 
-// TODO: Nested component does not exist
-// TODO: Bad position types (strings not allowed)
-const columnChooserConfig = {
-  enabled: true,
-  height: 340,
-  mode: 'select' as const,
-  position: {
-    my: 'right top' as const,
-    at: 'right bottom' as const,
-    of: '.dx-cardview-column-chooser-button',
-  },
-  selection: {
-    selectByClick: true,
-  },
-};
+function calculateAddress({ State, City }: Employee): string {
+  return `${City}, ${State}`;
+}
 
-const App = () => (
-  <CardView
-    dataSource={employees}
-    keyExpr="ID"
-    allowColumnReordering={true}
-    cardsPerRow="auto"
-    cardMinWidth={250}
-    headerFilter={headerFilterConfig}
-    searchPanel={searchPanelConfig}
-    columnChooser={columnChooserConfig}
-  >
-    <Column dataField="FullName" allowHiding={false} />
-    <Column dataField="Position" />
-    <Column dataField="Department" />
-    <Column dataField="Phone" />
-    <Column dataField="Email" />
+function notifyCall() {
+  notify({
+    message: 'The "Call" button is clicked.',
+    maxWidth: 560,
+  });
+}
 
-    <CardCover
-      imageExpr={getEmployeeImage}
-      altExpr={getEmployeeImageAltText}
+function notifySendEmail() {
+  notify({
+    message: 'The "Send Email" button is clicked.',
+    maxWidth: 560,
+  });
+}
+
+function CardFooterComponent() {
+  return <div className='card-footer'>
+    <Button
+      text="Call"
+      icon="tel"
+      type="default"
+      stylingMode="contained"
+      onClick={notifyCall}
     />
-    <Pager showInfo={true} showNavigationButtons={true} showPageSizeSelector={true} />
-    <Selection mode="multiple" />
-  </CardView>
-);
+    <Button
+      text="Send Email"
+      icon="message"
+      type="default"
+      stylingMode="contained"
+      onClick={notifySendEmail}
+    />
+  </div>
+}
+
+function StatusComponent({ data: { field: { value }}}) {
+  const classNameMap = {
+    'Salaried': 'status--salaried',
+    'Commission': 'status--commission',
+    'Terminated': 'status--terminated',
+  };
+
+  const className = classNameMap[value];
+
+  return (
+    <div className={`status ${className}`}>
+      <div className="indicator"></div>
+      <div>{ value }</div>
+    </div>
+  );
+}
+
+function EmailComponent({ data: { field: { value, text }}}) {
+  return (
+    <a href={`mailto:${value}`}>{text}</a>
+  );
+}
+
+function App() {
+  const cardView = useRef<CardViewRef>();
+
+  return (
+    <CardView
+      dataSource={employees}
+      keyExpr="ID"
+      cardMinWidth={300}
+      cardsPerRow="auto"
+      cardFooterComponent={CardFooterComponent}
+      ref={cardView}
+    >
+      <Paging
+        pageSize={4}
+      />
+      <HeaderFilter
+        visible={true}
+      />
+      <SearchPanel
+        visible={true}
+      />
+      <Selection mode="multiple" />
+      <CardCover
+        imageExpr={imageExpr}
+        altExpr={altExpr}
+      />
+
+      <Column
+        dataField="Status"
+        fieldValueComponent={StatusComponent}
+        allowSearch={false}
+      />
+      <Column
+        caption="Full Name"
+        allowFiltering={true}
+        allowSorting={true}
+        calculateFieldValue={calculateFullName}
+      />
+      <Column
+        caption="Position"
+        dataField="Title"
+      />
+      <Column
+        dataField="Department"
+      />
+      <Column
+        dataField="Mobile_Phone"
+      />
+      <Column
+        dataField="Email"
+        fieldValueComponent={EmailComponent}
+        allowSearch={false}
+      />
+      <Column
+        caption="Address"
+        allowFiltering={true}
+        allowSorting={true}
+        calculateFieldValue={calculateAddress}
+      />
+    </CardView>
+  );
+};
 
 export default App;

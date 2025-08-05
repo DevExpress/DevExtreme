@@ -4,11 +4,11 @@ import { isNumeric, isObject } from '@js/core/utils/type';
 import { current as currentTheme } from '@js/ui/themes';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { isAppointmentTakesAllDay } from '@ts/scheduler/r1/utils/index';
-import type { SafeAppointment } from '@ts/scheduler/types';
 
-import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import timeZoneUtils from '../../m_utils_time_zone';
-import type { AppointmentDataAccessor } from '../../utils';
+import type { SafeAppointment } from '../../types';
+import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
+import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import { AppointmentSettingsGenerator } from '../m_settings_generator';
 import AdaptivePositioningStrategy from './m_appointments_positioning_strategy_adaptive';
 import AppointmentPositioningStrategy from './m_appointments_positioning_strategy_base';
@@ -290,9 +290,8 @@ class BaseRenderingStrategy {
   }
 
   isAppointmentTakesAllDay(rawAppointment) {
-    const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
     return isAppointmentTakesAllDay(
-      adapter,
+      new AppointmentAdapter(rawAppointment, this.dataAccessors),
       this.allDayPanelMode,
     );
   }
@@ -901,15 +900,16 @@ class BaseRenderingStrategy {
     };
   }
 
-  protected shiftAppointmentByViewOffset(appointment: any): any {
+  protected shiftAppointmentByViewOffset(appointment: SafeAppointment): any {
     const { viewOffset } = this.options;
 
     const startDateField = this.dataAccessors.expr.startDateExpr;
     const endDateField = this.dataAccessors.expr.endDateExpr;
 
-    let startDate = new Date(this.dataAccessors.get('startDate', appointment));
+    let startDate = this.dataAccessors.get('startDate', appointment);
+    let endDate = this.dataAccessors.get('endDate', appointment);
+
     startDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
-    let endDate = new Date(this.dataAccessors.get('endDate', appointment));
     endDate = dateUtilsTs.addOffsets(endDate, [-viewOffset]);
 
     return {

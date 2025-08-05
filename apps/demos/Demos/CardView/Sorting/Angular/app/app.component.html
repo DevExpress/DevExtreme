@@ -1,4 +1,12 @@
-<dx-card-view id="cardView" [dataSource]="houses" keyExpr="ID">
+<dx-card-view
+  id="cardView"
+  [dataSource]="houses"
+  keyExpr="ID"
+  cardsPerRow="auto"
+  [cardMinWidth]="350"
+  [wordWrapEnabled]="true"
+>
+  <dxo-card-view-sorting mode="multiple"></dxo-card-view-sorting>
   <dxo-card-view-card-cover
     [imageExpr]="imageExpr"
     [altExpr]="altExpr"

@@ -1,8 +1,10 @@
 import React, {
   useCallback, useMemo, useRef, useState,
 } from 'react';
-import Scheduler, { Toolbar, Item, Resource } from 'devextreme-react/scheduler';
-import SelectBox from 'devextreme-react/select-box';
+import {
+  Scheduler, Resource, Toolbar, Item,
+} from 'devextreme-react/scheduler';
+import { SelectBox } from 'devextreme-react/select-box';
 import { assignees, schedulerDataSource, currentDate } from './data.js';
 
 const views = ['day', 'week', 'workWeek', 'month'];

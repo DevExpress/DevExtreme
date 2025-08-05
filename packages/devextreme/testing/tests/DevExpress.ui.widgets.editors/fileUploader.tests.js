@@ -6,7 +6,7 @@ import { Deferred } from 'core/utils/deferred';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { createBlobFile } from '../../helpers/fileHelper.js';
 import { getFileChunkCount } from '../../helpers/fileManagerHelpers.js';
-import { shouldSkipOnMobile } from '../../helpers/device.js';
+import { shouldSkipOnDesktop, shouldSkipOnMobile } from '../../helpers/device.js';
 import '../../helpers/xmlHttpRequestMock.js';
 import 'generic_light.css!';
 
@@ -269,7 +269,7 @@ QUnit.module('custom uploading', moduleConfig, () => {
         const chunkSize = 20000;
         const fileSize = 50100;
         const uploadChunkSpy = sinon.spy((file, chunksInfo) => {
-            lastCustomData = $.extend(true, { }, chunksInfo.customData);
+            lastCustomData = $.extend(true, {}, chunksInfo.customData);
             chunksInfo.customData.testCounter = chunksInfo.customData.testCounter || 0;
             chunksInfo.customData.testCounter++;
             return executeAfterDelay();
@@ -287,7 +287,7 @@ QUnit.module('custom uploading', moduleConfig, () => {
 
         this.clock.tick(500);
         assert.strictEqual(uploadChunkSpy.callCount, 1, 'custom function called for 1st chunk');
-        assert.deepEqual(lastCustomData, { }, 'custom data is empty');
+        assert.deepEqual(lastCustomData, {}, 'custom data is empty');
 
         this.clock.tick(1000);
         assert.strictEqual(uploadChunkSpy.callCount, 2, 'custom function called for 2nd chunk');
@@ -476,7 +476,7 @@ QUnit.module('custom uploading', moduleConfig, () => {
             return executeAfterDelay();
         });
         const abortUploadSpy = sinon.spy((file, chunksInfo) => {
-            lastCustomData = $.extend(true, { }, chunksInfo.customData);
+            lastCustomData = $.extend(true, {}, chunksInfo.customData);
             return executeAfterDelay();
         });
 
@@ -944,7 +944,7 @@ QUnit.module('uploading by chunks', moduleConfig, function() {
         let fileUploadedCount = 0;
         let totalBytes = 0;
         let totalLoadedBytes = 0;
-        const fileStates = { };
+        const fileStates = {};
 
         const files = [createBlobFile('fake1.png', 100023), createBlobFile('fake2.png', 5000)];
         files.forEach(function(item) {
@@ -3931,6 +3931,10 @@ QUnit.module('Drag and drop', moduleConfig, () => {
     });
 
     QUnit.test('Default label text must be shown if upload mode is useForm and native drop is supported (T936087)', function(assert) {
+        if(shouldSkipOnMobile(assert, 'default label text is hidden for mobile devices')) {
+            return;
+        }
+
         const defaultLabelText = 'or Drop a file here';
         const $fileUploader = $('#fileuploader').dxFileUploader({
             uploadMode: 'useForm',
@@ -4061,11 +4065,14 @@ QUnit.module('disabled option', () => {
     });
 
     QUnit.test('label text must be visible when disabled option changed dynamically', function(assert) {
+        const defaultLabelText = 'or Drop a file here';
+
         const $fileUploader = $('#fileuploader').dxFileUploader({
             disabled: true,
             useDragOver: true,
             nativeDropSupported: true,
-            uploadMode: 'useForm'
+            uploadMode: 'useForm',
+            labelText: defaultLabelText,
         });
         const $inputContainer = $fileUploader.find('.' + FILEUPLOADER_INPUT_CONTAINER_CLASS);
         const $inputLabel = $inputContainer.find('.' + FILEUPLOADER_INPUT_LABEL_CLASS);
@@ -4075,7 +4082,7 @@ QUnit.module('disabled option', () => {
 
         $fileUploader.dxFileUploader('option', 'disabled', false);
         assert.ok($inputContainer.is(':visible'), 'input container is visible');
-        assert.strictEqual($inputLabel.text(), 'or Drop a file here', 'label has default text');
+        assert.strictEqual($inputLabel.text(), defaultLabelText, 'label has default text');
     });
 });
 
@@ -4086,7 +4093,8 @@ QUnit.module('readOnly option', moduleConfig, () => {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             readOnly: false,
             useDragOver: true,
-            uploadMode: 'useButtons'
+            uploadMode: 'useButtons',
+            labelText: defaultLabelText
         });
         const $inputContainer = $fileUploader.find('.' + FILEUPLOADER_INPUT_CONTAINER_CLASS);
         const $inputLabel = $inputContainer.find('.' + FILEUPLOADER_INPUT_LABEL_CLASS);
@@ -4289,8 +4297,8 @@ QUnit.module('readOnly option', moduleConfig, () => {
 });
 
 QUnit.module('integration of dx button components via dialogTrigger', moduleConfig, () => {
-    ['enter', 'space'].forEach(keyName => {
-        ['dxButton', 'dxButtonGroup', 'dxDropDownButton'].forEach(component => {
+    ['dxButton', 'dxButtonGroup', 'dxDropDownButton'].forEach(component => {
+        ['enter', 'space'].forEach(keyName => {
             QUnit.test(`dialog should be shown after press ${keyName} key on ${component} (T1178836, T1256752)`, function(assert) {
                 if(shouldSkipOnMobile(assert, 'keyboard is not supported for non-desktop devices')) {
                     return;
@@ -4313,5 +4321,38 @@ QUnit.module('integration of dx button components via dialogTrigger', moduleConf
                 assert.strictEqual(fileUploaderInputClickSpy.calledOnce, true, 'click on input fired once');
             });
         });
+
+        QUnit.test(`dialog should be shown after multiple clicks on ${component} (T1290774)`, function(assert) {
+            const $dialogTrigger = $('<div>')[component]().appendTo('#qunit-fixture');
+
+            $('#fileuploader').dxFileUploader({ dialogTrigger: $dialogTrigger });
+
+            const $fileUploaderInput = $(`.${FILEUPLOADER_INPUT_CLASS}`);
+            const fileUploaderInputClickSpy = sinon.spy();
+
+            $fileUploaderInput.on('click', fileUploaderInputClickSpy);
+
+            $dialogTrigger.trigger('click');
+            assert.strictEqual(fileUploaderInputClickSpy.callCount, 1, 'first click triggers input click');
+
+            $dialogTrigger.trigger('click');
+            assert.strictEqual(fileUploaderInputClickSpy.callCount, 2, 'second click triggers input click');
+
+            $dialogTrigger.trigger('click');
+            assert.strictEqual(fileUploaderInputClickSpy.callCount, 3, 'third click triggers input click');
+        });
+    });
+});
+
+QUnit.module('labelText', moduleConfig, () => {
+    QUnit.test('Dropzone default label text should be hidden on mobile devices', function(assert) {
+        if(shouldSkipOnDesktop(assert, 'should only apply on mobile devices')) {
+            return;
+        }
+
+        const $fileUploader = $('#fileuploader').dxFileUploader();
+        const $inputLabel = $fileUploader.find(`.${FILEUPLOADER_INPUT_LABEL_CLASS}`);
+
+        assert.strictEqual($inputLabel.text(), '', 'default label is hidden on mobile');
     });
 });

@@ -13,6 +13,7 @@ fixture`Popup_toolbar`
 
 const COMPONENT_SELECTOR = '#container';
 const CLOSE_BUTTON_SELECTOR = '.dx-closebutton';
+const ANIMATION_DELAY = 500;
 
 [
   { name: 'dxPopup', Class: Popup },
@@ -126,3 +127,118 @@ const CLOSE_BUTTON_SELECTOR = '.dx-closebutton';
     });
   });
 });
+
+function getItemConfig(
+  text: string,
+  toolbar: 'top' | 'bottom' = 'top',
+  location: 'before' | 'center' | 'after' = 'after',
+  locateInMenu: 'auto' | 'none' = 'none',
+) {
+  return {
+    text,
+    toolbar,
+    locateInMenu,
+    location,
+  };
+}
+
+const toolbarItems = [
+  getItemConfig('First Item'),
+  getItemConfig('Second Item', 'top', 'after', 'auto'),
+  getItemConfig('Third Item', 'top', 'after', 'auto'),
+  getItemConfig('!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+', 'bottom', 'before'),
+  getItemConfig('First Item', 'bottom'),
+  getItemConfig('Second Item', 'bottom', 'after', 'auto'),
+  getItemConfig('Third Item', 'bottom', 'after', 'auto'),
+];
+
+const baseConfiguration = {
+  title: '!@#$%^&*()-+=[]{}<>|:;.,!?~^*_(){}<>[]:-=+',
+  width: 'auto',
+  height: 'auto',
+  showCloseButton: false,
+  contentTemplate: () => $('<div>')
+    .width(300)
+    .height(300),
+};
+
+safeSizeTest('Popup toolbars with wide elements and overflow menu if hidden on init with toolbar items', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const instance = new Popup(COMPONENT_SELECTOR);
+  await instance.option({ visible: true });
+
+  await t
+    .wait(ANIMATION_DELAY)
+    .click(instance.getOverflowButton().element);
+
+  await testScreenshot(t, takeScreenshot, 'Popup toolbars with wide elements and overflow menu before items rebinding.png');
+
+  const items = await instance.option('toolbarItems');
+  items[2].visible = false;
+  await instance.option('toolbarItems', [...items]);
+
+  await t.click(instance.getOverflowButton().element);
+
+  await testScreenshot(t, takeScreenshot, 'Popup toolbars with wide elements and overflow menu after items rebinding.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [600, 600]).before(async () => createWidget('dxPopup', {
+  ...baseConfiguration,
+  toolbarItems,
+  visible: false,
+}, undefined, { disableFxAnimation: false }));
+
+safeSizeTest('Popup toolbars with wide elements and overflow menu if hidden on init with no toolbar items', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const instance = new Popup(COMPONENT_SELECTOR);
+  await instance.option({ visible: true, toolbarItems });
+
+  await t
+    .wait(ANIMATION_DELAY)
+    .click(instance.getOverflowButton().element);
+
+  await testScreenshot(t, takeScreenshot, 'Toolbar before items rebinding if it was hidden without items on init.png');
+
+  const items = await instance.option('toolbarItems');
+  items[2].visible = false;
+  await instance.option('toolbarItems', [...items]);
+
+  await t.click(instance.getOverflowButton().element);
+
+  await testScreenshot(t, takeScreenshot, 'Toolbar after items rebinding if it was hidden without items on init.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [600, 600]).before(async () => createWidget('dxPopup', {
+  ...baseConfiguration,
+  toolbarItems: [],
+  visible: false,
+}, undefined, { disableFxAnimation: false }));
+
+safeSizeTest('Popup toolbars with wide elements and overflow menu if shown on init with toolbar items', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const instance = new Popup(COMPONENT_SELECTOR);
+
+  await t.click(instance.getOverflowButton().element);
+
+  await testScreenshot(t, takeScreenshot, 'Toolbar before items rebinding if it was visible with items on init.png');
+
+  const items = await instance.option('toolbarItems');
+  items[2].visible = false;
+  await instance.option('toolbarItems', [...items]);
+
+  await t.click(instance.getOverflowButton().element);
+
+  await testScreenshot(t, takeScreenshot, 'Toolbar after items rebinding if it was visible with items on init.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [600, 600]).before(async () => createWidget('dxPopup', {
+  ...baseConfiguration,
+  toolbarItems,
+  visible: true,
+}, undefined, { disableFxAnimation: false }));

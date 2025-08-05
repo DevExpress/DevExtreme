@@ -159,6 +159,8 @@ export class ColumnSortable extends Component<Props> {
 
     return (
       <Sortable
+        // TODO: maybe we should move it to default options of dxSortable
+        boundary={'body'}
         {...restProps}
         dropFeedbackMode={dropFeedbackMode ?? 'indicate'}
         onDragStart={this.onDragStart}

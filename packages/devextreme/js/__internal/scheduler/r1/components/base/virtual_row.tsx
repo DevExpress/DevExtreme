@@ -72,7 +72,9 @@ export class VirtualRow extends BaseInfernoComponent<VirtualRowProps> {
               <VirtualCell
                 key={index.toString()}
                 width={VirtualCellDefaultProps.width}
-                isHeaderCell={VirtualCellDefaultProps.isHeaderCell} />
+                isHeaderCell={VirtualCellDefaultProps.isHeaderCell}
+                className="dx-scheduler-cell-sizes-horizontal"
+              />
             ),
           )
         }

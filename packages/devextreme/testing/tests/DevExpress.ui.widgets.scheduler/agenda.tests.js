@@ -3,6 +3,8 @@ import SchedulerAgenda from '__internal/scheduler/workspaces/m_agenda';
 import dateLocalization from 'common/core/localization/date';
 import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
 
+import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
+
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const HOVER_CLASS = 'dx-state-hover';
 
@@ -50,7 +52,8 @@ module('Agenda', {}, () => {
                 getIsVirtualScrolling: () => false,
                 dataAccessors: {},
                 resources,
-            })
+            }),
+            getResourceManager: getEmptyResourceManager,
         };
 
         const $element = $('#scheduler-agenda').dxSchedulerAgenda({
@@ -60,12 +63,12 @@ module('Agenda', {}, () => {
         return $element.dxSchedulerAgenda('instance');
     };
 
-    test('Scheduler agenda should be initialized', function(assert) {
+    test('Scheduler agenda should be initialized', async function(assert) {
         const instance = createInstance();
         assert.ok(instance instanceof SchedulerAgenda, 'SchedulerAgenda was initialized');
     });
 
-    test('the getStartViewDate method', function(assert) {
+    test('the getStartViewDate method', async function(assert) {
         const instance = createInstance({
             currentDate: new Date(2016, 1, 17),
             startDayHour: 2
@@ -76,7 +79,7 @@ module('Agenda', {}, () => {
         assert.deepEqual(firstViewDate, new Date(2016, 1, 17, 2), 'The first view date is OK');
     });
 
-    test('_removeEmptyRows method', function(assert) {
+    test('_removeEmptyRows method', async function(assert) {
         const rows = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 1], [0, 0, 0, 0, 0], [1, 1, 1, 0, 1]];
 
         const instance = createInstance();
@@ -85,7 +88,7 @@ module('Agenda', {}, () => {
         assert.deepEqual(resultRows, [[0, 0, 0, 0, 1], [1, 1, 1, 0, 1]], 'The empty rows was removed');
     });
 
-    test('the getEndViewDate method', function(assert) {
+    test('the getEndViewDate method', async function(assert) {
         const instance = createInstance({
             currentDate: new Date(2016, 1, 17).toString()
         });
@@ -100,7 +103,7 @@ module('Agenda', {}, () => {
         assert.deepEqual(lastViewDate, new Date(2016, 2, 2, 23, 59), 'The last view date is OK');
     });
 
-    test('the getEndViewDate method with endDayHour option', function(assert) {
+    test('the getEndViewDate method with endDayHour option', async function(assert) {
         const instance = createInstance({
             currentDate: new Date(2016, 1, 17).toString(),
             endDayHour: 5
@@ -110,7 +113,7 @@ module('Agenda', {}, () => {
         assert.deepEqual(lastViewDate, new Date(2016, 1, 23, 4, 59), 'The last view date is OK');
     });
 
-    test('Agenda time panel should contain right text inside cells', function(assert) {
+    test('Agenda time panel should contain right text inside cells', async function(assert) {
         const instance = createInstance({
             currentDate: new Date(2016, 1, 17).toString()
         });
@@ -123,7 +126,7 @@ module('Agenda', {}, () => {
         assert.equal($cells.eq(3).text(), dateLocalization.format(new Date(2016, 1, 23), formatDateAndWeekday));
     });
 
-    test('Agenda date table should not handle any events', function(assert) {
+    test('Agenda date table should not handle any events', async function(assert) {
         const currentDate = new Date(2016, 1, 17).toString();
 
         const instance = createInstance({
@@ -135,7 +138,7 @@ module('Agenda', {}, () => {
         assert.strictEqual($._data(dateTable, 'events'), undefined, 'Date table doesn\'t handle any events');
     });
 
-    test('Agenda element should not handle click event', function(assert) {
+    test('Agenda element should not handle click event', async function(assert) {
         const currentDate = new Date(2016, 1, 17).toString();
 
         const instance = createInstance({
@@ -152,7 +155,7 @@ module('Agenda', {}, () => {
         assert.ok(true);
     });
 
-    test('Agenda should be recalculated after rowHeight changed', function(assert) {
+    test('Agenda should be recalculated after rowHeight changed', async function(assert) {
         const instance = createInstance();
 
         const recalculateStub = sinon.stub(instance, '_recalculateAgenda');
@@ -162,7 +165,7 @@ module('Agenda', {}, () => {
         assert.ok(recalculateStub.called, 'Agenda was recalculated');
     });
 
-    test('Agenda getEndViewDate should not change \'currentDate\' option value', function(assert) {
+    test('Agenda getEndViewDate should not change \'currentDate\' option value', async function(assert) {
         const currentDate = new Date(2016, 1, 17).toString();
 
         const instance = createInstance({
@@ -173,7 +176,7 @@ module('Agenda', {}, () => {
         assert.equal(currentDate, instance.option('currentDate').toString(), 'Current date is OK');
     });
 
-    test('Agenda dateTable scrollable should not have direction=both if crossScrollingEnabled=true', function(assert) {
+    test('Agenda dateTable scrollable should not have direction=both if crossScrollingEnabled=true', async function(assert) {
         const instance = createInstance({
             crossScrollingEnabled: true
         });
@@ -184,7 +187,7 @@ module('Agenda', {}, () => {
         assert.equal(dateTableScrollable.option('direction'), 'vertical', 'Direction is OK');
     });
 
-    test('Cell hover should not work', function(assert) {
+    test('Cell hover should not work', async function(assert) {
         const instance = createInstance();
         const $element = $(instance.$element());
 
@@ -195,7 +198,7 @@ module('Agenda', {}, () => {
         assert.notOk(cells.eq(2).hasClass(HOVER_CLASS), 'onHover event does not work');
     });
 
-    test('Should return correct DOM meta data', function(assert) {
+    test('Should return correct DOM meta data', async function(assert) {
         const instance = createInstance();
 
         assert.deepEqual(

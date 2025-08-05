@@ -16,30 +16,33 @@ import type { Item, Properties } from '@js/ui/tab_panel';
 import { current as currentTheme, isFluent, isMaterialBased } from '@js/ui/themes';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
-import MultiView from '@ts/ui/m_multi_view';
+import MultiView from '@ts/ui/multi_view/m_multi_view';
 import type { TabsProperties } from '@ts/ui/tabs/tabs';
-import Tabs from '@ts/ui/tabs/tabs';
+import Tabs, {
+  TABS_ITEM_TEXT_CLASS,
+  TABS_ITEM_TEXT_SPAN_CLASS,
+  TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS,
+} from '@ts/ui/tabs/tabs';
 
-// eslint-disable-next-line import/no-named-default
-import { default as TabPanelItem } from './item';
+import TabPanelItem from './item';
+
+// STYLE tabPanel
 
 export const TABPANEL_CLASS = 'dx-tabpanel';
 const TABPANEL_TABS_CLASS = 'dx-tabpanel-tabs';
-const TABPANEL_TABS_ITEM_CLASS = 'dx-tabpanel-tab';
-const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
-const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
-const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
-const TABS_ITEM_TEXT_SPAN_CLASS = 'dx-tab-text-span';
-const TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS = 'dx-tab-text-span-pseudo';
+export const TABPANEL_TABS_ITEM_CLASS = 'dx-tabpanel-tab';
+export const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 
-const TABPANEL_TABS_POSITION_CLASS: Record<Position, string> = {
+export const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
+
+export const TABPANEL_TABS_POSITION_CLASS: Record<Position, string> = {
   top: 'dx-tabpanel-tabs-position-top',
   right: 'dx-tabpanel-tabs-position-right',
   bottom: 'dx-tabpanel-tabs-position-bottom',
   left: 'dx-tabpanel-tabs-position-left',
 };
 
-const TABS_POSITION: Record<Position, Position> = {
+export const TABS_POSITION: Record<Position, Position> = {
   top: 'top',
   right: 'right',
   bottom: 'bottom',
@@ -53,7 +56,7 @@ const TABS_INDICATOR_POSITION_BY_TABS_POSITION: Record<Position, Position> = {
   left: 'right',
 };
 
-const TABS_ORIENTATION: Record<Orientation, Orientation> = {
+export const TABS_ORIENTATION: Record<Orientation, Orientation> = {
   horizontal: 'horizontal',
   vertical: 'vertical',
 };
@@ -212,7 +215,7 @@ class TabPanel extends MultiView<TabPanelProperties> {
     super._initTemplates();
 
     this._templateManager.addDefaultTemplates({
-      title: new BindableTemplate(($container, data) => {
+      title: new BindableTemplate(($container: dxElementWrapper, data: Item) => {
         this._prepareTabsItemTemplate(data, $container);
 
         const $tabItem = $('<div>').addClass(TABS_ITEM_TEXT_CLASS);

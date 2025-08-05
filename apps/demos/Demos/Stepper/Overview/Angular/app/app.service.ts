@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
-import { Item } from "devextreme/ui/stepper";
+import { type DxStepperTypes } from 'devextreme-angular/ui/stepper';
 
 @Injectable({
   providedIn: "root"
 })
 export class AppService {
-  steps: Item[] = [];
+  steps: DxStepperTypes.Item[] = [];
   orientations = [];
   navigationModes = [];
 
@@ -50,7 +50,7 @@ export class AppService {
     ]
   }
 
-  getSteps(): Item[] {
+  getSteps(): DxStepperTypes.Item[] {
     return this.steps;
   }
 

@@ -95,7 +95,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @fires dxResizableOptions.onResize
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * @docid
      * @default true
@@ -155,7 +155,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
      * @fires dxResizableOptions.onResize
      * @public
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
 }
 /**
  * @docid

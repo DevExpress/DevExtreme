@@ -142,27 +142,19 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     }
 
     @Input()
+    get commands(): Array<AICommand | AICommandName> {
+        return this._getOption('commands');
+    }
+    set commands(value: Array<AICommand | AICommandName>) {
+        this._setOption('commands', value);
+    }
+
+    @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');
     }
     set cssClass(value: string | undefined) {
         this._setOption('cssClass', value);
-    }
-
-    @Input()
-    get formatName(): HtmlEditorPredefinedToolbarItem | string {
-        return this._getOption('formatName');
-    }
-    set formatName(value: HtmlEditorPredefinedToolbarItem | string) {
-        this._setOption('formatName', value);
-    }
-
-    @Input()
-    get formatValues(): Array<boolean | number | string> {
-        return this._getOption('formatValues');
-    }
-    set formatValues(value: Array<boolean | number | string>) {
-        this._setOption('formatValues', value);
     }
 
     @Input()
@@ -219,14 +211,6 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     }
     set widget(value: ToolbarItemComponent) {
         this._setOption('widget', value);
-    }
-
-    @Input()
-    get commands(): Array<AICommand | AICommandName> {
-        return this._getOption('commands');
-    }
-    set commands(value: Array<AICommand | AICommandName>) {
-        this._setOption('commands', value);
     }
 
 

@@ -1,10 +1,10 @@
 /* eslint-disable no-restricted-globals */
-import { getChanges } from './configuration/comparer';
+import { compareValues, getChanges } from './configuration/comparer';
 import { buildConfig, findValue, ValueType } from './configuration/tree';
 import { mergeNameParts, shallowEquals } from './configuration/utils';
 import { capitalizeFirstLetter } from './helpers';
 import type { IConfigNode, ITemplate } from './configuration/config-node';
-import { DXTemplateCollection } from './types';
+import { DXTemplateCollection, GuardObject } from './types';
 
 const optionsManagers = new Set<OptionsManager>();
 let guardTimeoutHandler = -1;
@@ -24,7 +24,7 @@ export function scheduleGuards(): void {
 }
 
 class OptionsManager {
-  private readonly guards: Record<string, () => void> = {};
+  private readonly guards: Record<string, GuardObject> = {};
 
   private instance: any;
 
@@ -137,17 +137,22 @@ class OptionsManager {
     const { value, type } = valueDescriptor;
     if (value instanceof Array && type === ValueType.Array) {
       for (let i = 0; i < value.length; i += 1) {
-        if (value[i] !== (e.value as unknown[])?.[i]) {
-          this.addGuard(e.fullName, value);
+        const newValue = (e.value as unknown[])?.[i];
+
+        if (value[i] !== newValue) {
+          this.addGuard(e.fullName, value, newValue);
           return;
         }
       }
     } else if (type === ValueType.Complex && value instanceof Object) {
       Object.keys(value).forEach((key) => {
-        if (value[key] === (e.value as Record<string, unknown>)?.[key]) {
+        const newValue = (e.value as Record<string, unknown>)?.[key];
+
+        if (value[key] === newValue) {
           return;
         }
-        this.addGuard(mergeNameParts(e.fullName, key), value[key]);
+
+        this.addGuard(mergeNameParts(e.fullName, key), value[key], newValue);
       });
     } else {
       const valuesAreEqual = value === e.value;
@@ -160,7 +165,7 @@ class OptionsManager {
         return;
       }
 
-      this.addGuard(e.fullName, value);
+      this.addGuard(e.fullName, value, e.value);
     }
   }
 
@@ -225,21 +230,25 @@ class OptionsManager {
     return value;
   }
 
-  private addGuard(optionName: string, optionValue: unknown): void {
+  private addGuard(optionName: string, initialValue: unknown, latestValue: unknown): void {
     if (this.guards[optionName] !== undefined) {
+      this.guards[optionName].latestValue = latestValue;
       return;
     }
     const handler = () => {
-      this.setValue(optionName, optionValue);
+      this.setValue(optionName, initialValue);
       delete this.guards[optionName];
     };
-    this.guards[optionName] = handler;
+    this.guards[optionName] = {
+      handler,
+      latestValue,
+    };
     scheduleGuards();
   }
 
   public execGuards(): void {
     Object.values(this.guards)
-      .forEach((handler) => handler());
+      .forEach((guard) => guard.handler());
   }
 
   private resetOption(name: string) {
@@ -257,7 +266,13 @@ class OptionsManager {
 
   private setValue(name: string, value: unknown) {
     if (this.guards[name]) {
-      delete this.guards[name];
+      try {
+        if (compareValues(this.guards[name].latestValue, value)) {
+          return;
+        }
+      } finally {
+        delete this.guards[name];
+      }
     }
 
     this.instance.option(

@@ -35,13 +35,14 @@ describe('ColumnsController', () => {
 
     it('should infer dataType and format from firstItems', () => {
       const { columnsController } = setup({
+        dataSource: [
+          {
+            id: 1,
+            price: 9.99,
+            createdAt: new Date('2023-01-01T00:00:00Z'),
+          },
+        ],
         columns: ['id', 'price', 'createdAt'],
-      });
-
-      columnsController.setColumnOptionsFromDataItem({
-        id: 1,
-        price: 9.99,
-        createdAt: new Date('2023-01-01T00:00:00Z'),
       });
 
       const columns = columnsController.columns.peek();
@@ -64,13 +65,15 @@ describe('ColumnsController', () => {
     });
 
     it('should generate columns from firstItems when no columns config is provided', () => {
-      const { columnsController } = setup();
-
-      columnsController.setColumnOptionsFromDataItem({
-        id: 1,
-        title: 'Hello',
-        price: 99.99,
-        createdAt: new Date('2024-01-01T00:00:00Z'),
+      const { columnsController } = setup({
+        dataSource: [
+          {
+            id: 1,
+            title: 'Hello',
+            price: 99.99,
+            createdAt: new Date('2024-01-01T00:00:00Z'),
+          },
+        ],
       });
 
       const columns = columnsController.columns.peek();

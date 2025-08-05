@@ -1020,30 +1020,6 @@ QUnit.test('dxpointermove on series, click', function(assert) {
     assert.deepEqual(this.options.eventTrigger.withArgs('seriesClick').lastCall.args[1], { target: this.point.series, event: clickEvent }, 'series event arg');
 });
 
-QUnit.test('dxpointermove on series, click, pointClick with cancel (DEPRECATED) seriesClick', function(assert) {
-    const clickEvent = getEvent('dxclick', { pageX: 100, pageY: 50, target: this.seriesGroup.element });
-    this.series.getPointByCoord.withArgs(97, 45).returns(this.point);
-
-    // Act
-    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
-    $(this.renderer.root.element).trigger(clickEvent);
-
-    assert.ok(this.options.eventTrigger.withArgs('pointClick').calledOnce);
-    assert.deepEqual(this.options.eventTrigger.withArgs('pointClick').lastCall.args[1], { target: this.point, event: clickEvent });
-    assert.ok(!this.options.eventTrigger.withArgs('seriesClick').calledOnce);
-    clickEvent.cancel = true;
-    this.options.eventTrigger.withArgs('pointClick').lastCall.args[2]();
-
-    assert.ok(!this.options.eventTrigger.withArgs('seriesClick').called);
-    assert.deepEqual(errors.log.lastCall.args, [
-        'W0003',
-        'pointClick handler argument',
-        'event.cancel',
-        '22.1',
-        'Use the \'cancel\' field instead'
-    ], 'args of the log method');
-});
-
 QUnit.test('dxpointermove on series, click, pointClick with cancel seriesClick', function(assert) {
     this.options.eventTrigger = sinon.spy((eventName, eventArgs) => {
         if(eventName === 'pointClick') {
@@ -1233,8 +1209,12 @@ QUnit.test('mouseover on legend item', function(assert) {
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50 }));
 
     // assert
-    assert.ok(this.series.stub('hover').calledOnce);
-    assert.deepEqual(this.series.hover.lastCall.args, ['includepoints']);
+    assert.strictEqual(this.series.stub('hover').calledOnce, true, 'series hover called');
+    assert.deepEqual(this.series.hover.lastCall.args, ['includepoints'], 'hover mode is includepoints');
+
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50 }));
+
+    assert.strictEqual(this.series.stub('clearHover').calledOnce, true, 'series clear hover called');
 });
 
 QUnit.test('mouseover on legend item. ExcludePoints mode', function(assert) {
@@ -1411,36 +1391,6 @@ QUnit.test('legendClick', function(assert) {
 
     assert.ok(this.options.eventTrigger.withArgs('seriesClick').calledOnce);
     assert.deepEqual(this.options.eventTrigger.withArgs('seriesClick').lastCall.args[1], { target: this.series, event: event }, 'series event arg');
-});
-
-QUnit.test('click on legend with chancel (DEPRECATED) in legendClick handler', function(assert) {
-    const event = getEvent('dxclick', { pageX: 100, pageY: 50 });
-
-    this.tracker = this.createTracker(this.options, this.canvases);
-    this.legend.coordsIn.withArgs(97, 45).returns(true);
-    this.legend.getItemByCoord.withArgs(97, 45).returns({
-        id: 0
-    });
-
-    $(this.renderer.root.element).trigger(event);
-
-    assert.ok(this.options.eventTrigger.withArgs('legendClick').calledOnce);
-    assert.deepEqual(this.options.eventTrigger.withArgs('legendClick').lastCall.args[1], { target: this.series, event: event });
-
-    assert.ok(!this.options.eventTrigger.withArgs('seriesClick').calledOnce);
-
-    event.cancel = true;
-    this.options.eventTrigger.withArgs('legendClick').lastCall.args[2]();
-
-
-    assert.ok(!this.options.eventTrigger.withArgs('seriesClick').called);
-    assert.deepEqual(errors.log.lastCall.args, [
-        'W0003',
-        'legendClick handler argument',
-        'event.cancel',
-        '22.1',
-        'Use the \'cancel\' field instead'
-    ], 'args of the log method');
 });
 
 QUnit.test('click on legend with chancel in legendClick handler', function(assert) {
@@ -2218,6 +2168,11 @@ QUnit.module('Root events. Pie chart', {
             return createTracker('dxPieChart', options);
         };
 
+        that.updateTracker = function(series) {
+            that.tracker.updateSeries(series);
+            that.tracker.update(this.options);
+        };
+
         that.tracker = that.createTracker(that.options);
         that.options.tooltip.stub('hide').reset();
     },
@@ -2394,6 +2349,41 @@ QUnit.test('mouseover on legend item', function(assert) {
     assert.strictEqual(this.series.notify.lastCall.args[0].target.argumentIndex, 11);
     assert.strictEqual(this.series.notify.lastCall.args[0].target.argument, 'argument1');
     assert.strictEqual(this.series.notify.lastCall.args[0].target.getOptions().hoverMode, 'allargumentpoints');
+});
+
+QUnit.test('hover on legend should trigger point hover if PieChart has single series (T1299624)', function(assert) {
+    this.legend.coordsIn.withArgs(97, 45).returns(true);
+    this.legend.getItemByCoord.withArgs(97, 45).returns({ id: 0, argument: 'argument1', argumentIndex: 11 });
+    this.series.stub('getPointsByKeys').withArgs('argument1', 11).returns([this.point]);
+
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50 }));
+
+    assert.strictEqual(this.point.stub('hover').callCount, 1, 'point hover called on legend mouseover');
+
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 80, pageY: 50 }));
+
+    assert.strictEqual(this.point.stub('clearHover').callCount, 1, 'point clear hover called on legend mouseout');
+});
+
+QUnit.test('hover on legend should not be triggered point hover if PieChart has multiple series (T1299624)', function(assert) {
+    const series2 = createSeries();
+    const point2 = createPoint(series2);
+    this.updateTracker([this.series, series2]);
+
+    this.legend.coordsIn.withArgs(97, 45).returns(true);
+    this.legend.getItemByCoord.withArgs(97, 45).returns({ id: 0, argument: 'argument1', argumentIndex: 11 });
+    this.series.stub('getPointsByKeys').withArgs('argument1', 11).returns([this.point]);
+    series2.stub('getPointsByKeys').withArgs('argument1', 11).returns([point2]);
+
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50 }));
+
+    assert.strictEqual(this.point.stub('hover').callCount, 0, 'first series point not hovered on legend mouseover');
+    assert.strictEqual(point2.stub('hover').callCount, 0, 'second series point not hovered on legend mouseover');
+
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 80, pageY: 50 }));
+
+    assert.strictEqual(this.point.stub('clearHover').callCount, 0, 'first series point hover not cleared on legend mouseout');
+    assert.strictEqual(point2.stub('clearHover').callCount, 0, 'second series point hover not cleared on legend mouseout');
 });
 
 QUnit.test('mouseout from legend item', function(assert) {

@@ -30,7 +30,7 @@ import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
 import DropDownBox from 'ui/drop_down_box';
 import DropDownButton from 'ui/drop_down_button';
 import DropDownList from 'ui/drop_down_editor/ui.drop_down_list';
-import DropDownMenu from '__internal/ui/toolbar/internal/m_toolbar.menu';
+import DropDownMenu from '__internal/ui/toolbar/internal/toolbar.menu';
 import TextEditor from 'ui/text_box/ui.text_editor';
 import Gallery from 'ui/gallery';
 import Informer from 'ui/informer';
@@ -51,7 +51,7 @@ import RadioGroup from 'ui/radio_group';
 import Resizable from 'ui/resizable';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
 import Scheduler from '__internal/scheduler/m_scheduler';
-import Scrollable from '__internal/ui/scroll_view/m_scrollable';
+import Scrollable from '__internal/ui/scroll_view/scrollable';
 import ScrollView from 'ui/scroll_view';
 import SelectBox from 'ui/select_box';
 import SliderHandle from '__internal/ui/slider/m_slider_handle';
@@ -63,7 +63,7 @@ import TagBox from 'ui/tag_box';
 import Toast from 'ui/toast';
 import TreeList from 'ui/tree_list';
 import TreeView from 'ui/tree_view';
-import TileView from '__internal/ui/m_tile_view';
+import TileView from '__internal/ui/tile_view';
 import FileUploader from 'ui/file_uploader';
 import Form from 'ui/form';
 import ValidationMessage from 'ui/validation_message';
@@ -867,7 +867,7 @@ testComponentDefaults(Scrollable,
     {
         useNative: false,
         // NOTE: useSimulatedScrollbar setting value doesn't affect on simulated strategy
-        useSimulatedScrollbar: Scrollable.IS_RENOVATED_WIDGET ? false : true
+        useSimulatedScrollbar: true,
     },
     function() {
         this._supportNativeScrolling = support.nativeScrolling;
@@ -969,19 +969,18 @@ testComponentDefaults(Scrollable,
     }
 );
 
-if(!Scrollable.IS_RENOVATED_WIDGET) {
-    testComponentDefaults(ScrollView,
-        {},
-        { refreshStrategy: 'swipeDown' },
-        function() {
-            this._originalRealDevice = devices.real();
-            devices.real({ platform: 'android' });
-        },
-        function() {
-            devices.real(this._originalRealDevice);
-        }
-    );
-}
+
+testComponentDefaults(ScrollView,
+    {},
+    { refreshStrategy: 'swipeDown' },
+    function() {
+        this._originalRealDevice = devices.real();
+        devices.real({ platform: 'android' });
+    },
+    function() {
+        devices.real(this._originalRealDevice);
+    }
+);
 
 testComponentDefaults(ScrollView,
     {},
@@ -1804,8 +1803,6 @@ testComponentDefaults(Scheduler,
     {},
     {
         useDropDownViewSwitcher: true,
-        _appointmentTooltipButtonsPosition: 'top',
-        _appointmentTooltipOpenButtonText: null,
         _appointmentCountPerCell: 1,
         _collectorOffset: 20,
         _appointmentOffset: 30

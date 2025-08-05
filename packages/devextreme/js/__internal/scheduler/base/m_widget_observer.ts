@@ -1,7 +1,6 @@
-import type { dxSchedulerOptions } from '@js/ui/scheduler';
 import Widget from '@js/ui/widget/ui.widget';
 
-class WidgetObserver extends Widget<dxSchedulerOptions> {
+class WidgetObserver<T> extends Widget<T> {
   notifyObserver(subject, args) {
     const observer = this.option('observer') as any;
 

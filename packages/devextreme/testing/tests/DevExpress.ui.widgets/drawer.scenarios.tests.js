@@ -3,7 +3,7 @@ import { extend } from 'core/utils/extend';
 import { isNumeric } from 'core/utils/type';
 import { drawerTesters } from '../../helpers/drawerHelpers.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import { clearStack } from '__internal/ui/overlay/m_z_index';
+import { clearStack } from '__internal/ui/overlay/z_index';
 import 'ui/file_manager';
 import 'ui/color_box';
 import 'ui/menu';
@@ -492,7 +492,9 @@ configs.forEach(config => {
                     templates: {
                         template1: {
                             render(data) {
-                                drawer.getOverlay()._viewPortChangeHandler();
+                                Promise.resolve().then(() => {
+                                    drawer.getOverlay()._viewPortChangeHandler();
+                                });
                                 $(data.container).append($(drawerTesters[config.position].template()));
                                 data.onRendered();
                             }

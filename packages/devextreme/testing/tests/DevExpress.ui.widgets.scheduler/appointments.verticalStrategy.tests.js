@@ -3,9 +3,9 @@ import { Deferred } from 'core/utils/deferred';
 import fx from 'common/core/animation/fx';
 
 import '__internal/scheduler/m_scheduler';
-import { createExpressions } from '__internal/scheduler/resources/m_utils';
 
 import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
+import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
 
 const { module, test, testStart } = QUnit;
 
@@ -37,10 +37,9 @@ const createInstance = (options) => {
         observer,
         ...options,
         dataAccessors: mockDataAccessor,
-        getResources: () => [],
         getLoadedResources: () => [],
+        getResourceManager: getEmptyResourceManager,
         getAppointmentColor: () => new Deferred(),
-        getResourceDataAccessors: () => createExpressions([])
     }).dxSchedulerAppointments('instance');
 };
 
@@ -56,7 +55,7 @@ const moduleOptions = {
 };
 
 module('Vertical Strategy', moduleOptions, () => {
-    test('Wide rival appointments should not have specific class', function(assert) {
+    test('Wide rival appointments should not have specific class', async function(assert) {
         const items = [{
             itemData: {
                 text: 'Appointment 1',
@@ -89,7 +88,7 @@ module('Vertical Strategy', moduleOptions, () => {
     });
 
     // NOTE: integration test
-    test('Narrow rival appointments should have specific class', function(assert) {
+    test('Narrow rival appointments should have specific class', async function(assert) {
         const items = [{
             itemData: {
                 text: 'Appointment 1',
@@ -123,7 +122,7 @@ module('Vertical Strategy', moduleOptions, () => {
 });
 
 module('Vertical All Day Strategy', moduleOptions, () => {
-    test('Scheduler appointments should be rendered in right containers', function(assert) {
+    test('Scheduler appointments should be rendered in right containers', async function(assert) {
         const instance = createInstance({
             fixedContainer: $('#fixedContainer'),
             allDayContainer: $('#allDayContainer')
@@ -154,7 +153,7 @@ module('Vertical All Day Strategy', moduleOptions, () => {
         assert.equal($('#allDayContainer .dx-scheduler-appointment').length, 1, 'allDayContainer has 1 item');
     });
 
-    test('Scheduler appointments should have specific allDay class if needed', function(assert) {
+    test('Scheduler appointments should have specific allDay class if needed', async function(assert) {
         const items = [{
             itemData: {
                 text: 'Appointment 1',

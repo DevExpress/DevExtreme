@@ -4,14 +4,11 @@ import { name as contextMenuEventName } from '@js/common/core/events/contextmenu
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import holdEvent from '@js/common/core/events/hold';
 import pointerEvents from '@js/common/core/events/pointer';
-import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils/index';
+import { addNamespace, isCommandKeyPressed } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import Action from '@js/core/action';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
-import type {
-  DeepPartial,
-} from '@js/core/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
@@ -34,6 +31,7 @@ import type {
   Cancelable, DxEvent, EventInfo, ItemInfo,
 } from '@js/events';
 import type { CollectionWidgetItem as CollectionWidgetItemProperties, CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
+import type { ListItemInfo } from '@js/ui/list';
 import { focusable } from '@js/ui/widget/selectors';
 import { getPublicElement } from '@ts/core/m_element';
 import type { ActionConfig } from '@ts/core/widget/component';
@@ -43,7 +41,7 @@ import type CollectionItem from '@ts/ui/collection/item';
 import CollectionWidgetItem from '@ts/ui/collection/item';
 
 const COLLECTION_CLASS = 'dx-collection';
-const ITEM_CLASS = 'dx-item';
+export const ITEM_CLASS = 'dx-item';
 const CONTENT_CLASS_POSTFIX = '-content';
 const ITEM_CONTENT_PLACEHOLDER_CLASS = 'dx-item-content-placeholder';
 const ITEM_DATA_KEY = 'dxItemData';
@@ -68,13 +66,16 @@ const FOCUS_FIRST = 'first';
 
 export type DataChangeType = 'insert' | 'update' | 'remove';
 
+export type CollectionItemInfo<TItem> = ItemInfo<TItem> | ListItemInfo<TItem>;
+
 export interface DataChange<TItem = CollectionItem, TKey = number | string> {
   key: TKey;
   type: DataChangeType;
-  data: DeepPartial<TItem>;
+  data: TItem;
+  index: number;
 }
 
-type ItemTemplate<TItem> = template | (
+export type ItemTemplate<TItem> = template | (
   (itemData: TItem, itemIndex: number, itemElement: Element) => string | dxElementWrapper
 );
 export interface ItemRenderInfo<TItem> {
@@ -94,13 +95,15 @@ export interface PostprocessRenderItemInfo<TItem> {
   itemIndex: number;
 }
 
+export type InkRippleEvent = DxEvent<PointerEvent | MouseEvent | TouchEvent>;
+export type Constructor<T> = new (...args: unknown[]) => T;
+
 export interface CollectionWidgetBaseProperties<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TComponent extends CollectionWidget<any, TItem, TKey> | any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TItem extends ItemLike = any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    TKey = any,
+    TKey = string | number,
 > extends CollectionWidgetOptions<TComponent, TItem, TKey> {
   focusedElement?: dxElementWrapper;
 
@@ -143,11 +146,11 @@ class CollectionWidget<
   _inkRipple?: {
     showWave: (config: {
       element: dxElementWrapper;
-      event: unknown;
+      event: InkRippleEvent;
     }) => void;
     hideWave: (config: {
       element: dxElementWrapper;
-      event: unknown;
+      event: InkRippleEvent;
     }) => void;
   };
 
@@ -910,34 +913,57 @@ class CollectionWidget<
 
   _attachClickEvent(): void {
     const itemSelector = this._itemSelector();
-    const pointerEvent = this._getPointerEvent();
+    const pointerDownEvent = pointerEvents.down;
+    const pointerUpEvent = pointerEvents.up;
     // @ts-expect-error ts-error
     const clickEventNamespace = addNamespace(clickEventName, this.NAME);
     // @ts-expect-error ts-error
-    const pointerEventNamespace = addNamespace(pointerEvent, this.NAME);
+    const pointerDownEventNamespace = addNamespace(pointerDownEvent, this.NAME);
+    // @ts-expect-error ts-error
+    const pointerUpEventNamespace = addNamespace(pointerUpEvent, this.NAME);
 
-    const pointerAction = new Action((args) => {
+    const pointerDownAction = new Action((args) => {
       const { event } = args;
 
-      this._itemPointerDownHandler(event);
+      this._itemPointerHandler(event);
+    });
+
+    const pointerUpAction = new Action((args) => {
+      const { event } = args;
+
+      this._itemPointerUpHandler(event);
     });
 
     const clickEventCallback = (e): void => this._itemClickHandler(e);
-    const pointerEventCallback = (e): void => {
-      pointerAction.execute({
+    const pointerDownEventCallback = (e): void => {
+      pointerDownAction.execute({
+        element: $(e.target),
+        event: e,
+      });
+    };
+
+    const pointerUpEventCallback = (e): void => {
+      pointerUpAction.execute({
         element: $(e.target),
         event: e,
       });
     };
 
     eventsEngine.off(this._itemContainer(), clickEventNamespace, itemSelector);
-    eventsEngine.off(this._itemContainer(), pointerEventNamespace, itemSelector);
+    eventsEngine.off(this._itemContainer(), pointerDownEventNamespace, itemSelector);
+    eventsEngine.off(this._itemContainer(), pointerUpEventNamespace, itemSelector);
     eventsEngine.on(this._itemContainer(), clickEventNamespace, itemSelector, clickEventCallback);
     eventsEngine.on(
       this._itemContainer(),
-      pointerEventNamespace,
+      pointerDownEventNamespace,
       itemSelector,
-      pointerEventCallback,
+      pointerDownEventCallback,
+    );
+    eventsEngine.on(
+      this._itemContainer(),
+      pointerUpEventNamespace,
+      itemSelector,
+      pointerUpEventCallback,
     );
   }
 
@@ -949,7 +975,24 @@ class CollectionWidget<
     this._itemDXEventHandler(e, 'onItemClick', args, config);
   }
 
-  _itemPointerDownHandler(e: DxEvent): void {
+  _handleItemFocus(e: DxEvent): void {
+    if (e.isDefaultPrevented()) {
+      return;
+    }
+
+    const $target = $(e.target);
+    const $closestItem = $target.closest(this._itemElements());
+    const $closestFocusable = this._closestFocusable($target);
+
+    if ($closestItem.length && this._isFocusTarget($closestFocusable?.get(0))) {
+      // NOTE: Selection here is already processed in click handler.
+      this._shouldSkipSelectOnFocus = true;
+      this.option('focusedElement', getPublicElement($closestItem));
+      this._shouldSkipSelectOnFocus = false;
+    }
+  }
+
+  _itemPointerHandler(e: DxEvent): void {
     if (!this.option('focusStateEnabled')) {
       return;
     }
@@ -957,27 +1000,17 @@ class CollectionWidget<
       clearTimeout(this._itemFocusTimeout);
       this._itemFocusHandler = undefined;
 
-      if (e.isDefaultPrevented()) {
-        return;
-      }
-
-      const $target = $(e.target);
-      const $closestItem = $target.closest(this._itemElements());
-      const $closestFocusable = this._closestFocusable($target);
-
-      if ($closestItem.length && this._isFocusTarget($closestFocusable?.get(0))) {
-        // NOTE: Selection here is already processed in click handler.
-        this._shouldSkipSelectOnFocus = true;
-        this.option('focusedElement', getPublicElement($closestItem));
-        this._shouldSkipSelectOnFocus = false;
-      }
+      this._handleItemFocus(e);
     };
 
     // eslint-disable-next-line no-restricted-globals
-    this._itemFocusTimeout = setTimeout(
-      this._forcePointerDownFocus.bind(this),
-    );
+    this._itemFocusTimeout = setTimeout(() => {
+      this._forcePointerDownFocus();
+    });
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _itemPointerUpHandler(e: DxEvent): void {}
 
   _closestFocusable(
     $target: dxElementWrapper,
@@ -1405,7 +1438,7 @@ class CollectionWidget<
     initiator: dxElementWrapper | Element,
     handler: () => void,
     actionArgs: Record<string, unknown>,
-    actionConfig: ActionConfig,
+    actionConfig?: ActionConfig,
   ): void {
     const action = this._createAction(handler, extend({
       validatingTargetName: 'itemElement',
@@ -1424,7 +1457,7 @@ class CollectionWidget<
     return action(extend(actionArgs, this._extendActionArgs($itemElement), args));
   }
 
-  _extendActionArgs($itemElement: dxElementWrapper): ItemInfo<TItem> {
+  _extendActionArgs($itemElement: dxElementWrapper): CollectionItemInfo<TItem> {
     return {
       itemElement: getPublicElement($itemElement),
       itemIndex: this._itemElements().index($itemElement),
@@ -1437,13 +1470,12 @@ class CollectionWidget<
   }
 
   _getItemData(itemElement: Element | dxElementWrapper): TItem {
-    // @ts-expect-error ts-error
-    return $(itemElement).data(this._itemDataKey());
+    return $(itemElement).data(this._itemDataKey()) as TItem;
   }
 
   _getSummaryItemsSize(
     dimension: string,
-    items: dxElementWrapper,
+    items: dxElementWrapper | dxElementWrapper[],
     includeMargin?: boolean,
   ): number {
     let result = 0;
@@ -1478,10 +1510,10 @@ class CollectionWidget<
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(CollectionWidget as any).include(DataHelperMixin);
-
 // @ts-expect-error ts-error
 CollectionWidget.ItemClass = CollectionWidgetItem;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(CollectionWidget as any).include(DataHelperMixin);
 
 export default CollectionWidget;

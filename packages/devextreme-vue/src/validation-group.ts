@@ -24,11 +24,11 @@ interface DxValidationGroup extends AccessibleOptions {
 const componentConfig = {
   props: {
     elementAttr: Object as PropType<Record<string, any>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

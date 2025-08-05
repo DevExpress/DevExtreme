@@ -2,8 +2,8 @@ import dateUtils from '@js/core/utils/date';
 import { each } from '@js/core/utils/iterator';
 import type { SafeAppointment } from '@ts/scheduler/types';
 
-import { createAppointmentAdapter } from '../../m_appointment_adapter';
-import { groupAppointmentsByResources } from '../../resources/m_utils';
+import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
+import { groupAppointmentsByGroupLeafs } from '../../utils/resource_manager/appointment_groups_utils';
 import { getAppointmentTakesSeveralDays } from '../data_provider/m_utils';
 import BaseRenderingStrategy from './m_strategy_base';
 
@@ -29,19 +29,17 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
   }
 
   groupAppointmentByResources(appointments) {
-    const groups = this.instance._getCurrentViewOption('groups');
-
-    const config = {
-      loadedResources: this.options.loadedResources,
-      resources: this.options.resources,
-      dataAccessors: this.dataAccessors.resources,
-    };
-
-    return groupAppointmentsByResources(
-      config,
+    const resourceManager = this.options.getResourceManager();
+    const grouped = groupAppointmentsByGroupLeafs(
+      resourceManager.resourceById,
+      resourceManager.groupsLeafs,
       appointments,
-      groups,
     );
+
+    // TODO(9): Get rid of it as soon as you can. Unnecessary copy of appointments
+    // NOTE: one appointment in different groups has the same link,
+    //       and on render it will be removed by link
+    return grouped.map((group) => group.map((item) => ({ ...item })));
   }
 
   createTaskPositionMap(appointments: SafeAppointment[]) {
@@ -61,11 +59,11 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
 
       let groupedAppts: any = [];
 
-      each(appointmentsByResources, (i, appts) => {
+      appointmentsByResources.forEach((appts) => {
         let additionalAppointments = [];
         let recurrentIndexes = [];
 
-        each(appts, (index, appointment) => {
+        appts.forEach((appointment, index) => {
           const recurrenceBatch = this.instance.getAppointmentsInstance()._processRecurrenceAppointment(appointment, index);
           let appointmentBatch: any = null;
 
@@ -224,8 +222,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
 
         for (let j = 0; j < appointmentCount; j++) {
           const appointmentData = currentAppointments[j].settings || currentAppointments[j];
-
-          const adapter = createAppointmentAdapter(currentAppointments[j], this.dataAccessors, this.timeZoneCalculator);
+          const adapter = new AppointmentAdapter(currentAppointments[j], this.dataAccessors);
           const appointmentIsLong = getAppointmentTakesSeveralDays(adapter);
           const appointmentIsRecurrence = this.dataAccessors.get('recurrenceRule', currentAppointments[j]);
 

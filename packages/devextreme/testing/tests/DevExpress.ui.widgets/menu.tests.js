@@ -3,10 +3,10 @@ import fx from 'common/core/animation/fx';
 import renderer from 'core/renderer';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import Submenu from '__internal/ui/menu/m_submenu';
+import Submenu from '__internal/ui/menu/submenu';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import domAdapter from '__internal/core/m_dom_adapter';
-import Menu from '__internal/ui/menu/m_menu';
+import Menu from '__internal/ui/menu/menu';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fixtures from '../../helpers/positionFixtures.js';
 import { CustomStore } from 'common/data/custom_store';
@@ -1632,7 +1632,7 @@ QUnit.module('Menu tests', {
         submenu = getSubMenuInstance($itemA);
         assert.ok(submenu._overlay.option('visible'));
 
-        $(document).trigger('dxpointerdown'); // it needs to trigger closeOnOutsideClick
+        $(document).trigger('dxpointerdown'); // it needs to trigger hideOnOutsideClick
         assert.ok(submenu._overlay.option('visible'));
         assert.equal(i, 1, 'event triggered');
     });
@@ -2078,7 +2078,7 @@ QUnit.module('Menu tests', {
         assert.ok(menu);
         assert.equal(calls, 1, 'onItemRendered called once');
         $rootMenuItem
-            .trigger('dxpointerdown') // it needs to trigger closeOnOutsideClick
+            .trigger('dxpointerdown') // it needs to trigger hideOnOutsideClick
             .trigger('dxclick');
 
         assert.equal(calls, 2, 'onItemRendered called twice');
@@ -3705,6 +3705,27 @@ QUnit.module('adaptivity: behavior', {
         treeviewItem.trigger('dxclick');
 
         assert.ok(clickSpy.calledOnce);
+    });
+
+    QUnit.test('onItemClick should be raised once if item.url is set', function(assert) {
+        const onItemClickSpy = sinon.spy();
+
+        new Menu(this.$element, {
+            items: this.items,
+            onItemClick: onItemClickSpy,
+            adaptivityEnabled: true
+        });
+
+        const parentTreeviewItem = $(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(1);
+
+        parentTreeviewItem.trigger('dxclick');
+        onItemClickSpy.resetHistory();
+
+        const treeviewItem = $(`.${DX_TREEVIEW_ITEM_CLASS}`).eq(2);
+
+        treeviewItem.trigger('dxclick');
+
+        assert.strictEqual(onItemClickSpy.calledOnce, true, 'onItemClick was called once');
     });
 
     QUnit.test('link should be clicked programmatically with enter key if item.url is set', function(assert) {

@@ -1,0 +1,98 @@
+{
+  "name": "devextreme-metadata",
+  "projectType": "library",
+  "targets": {
+    "discover-declarations": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm exec ts-node ./discover-declarations.ts"
+      },
+      "cache": false,
+      "inputs": [
+        "metadataToolsCommonInputs",
+        "{workspaceRoot}/packages/devextreme/js/**/*.ts",
+        "{workspaceRoot}/packages/devextreme/js/**/*.js"
+      ],
+      "outputs": [
+        "{projectRoot}/dist/Declarations.json",
+        "{projectRoot}/dist/devextreme-uml.wsd",
+        "{projectRoot}/dist/modules-meta.json",
+        "{projectRoot}/dist/ts-members-meta.json"
+      ]
+    },
+    "make-angular-metadata": {
+      "dependsOn": ["discover-declarations"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm exec ts-node ./make-angular-metadata.ts"
+      },
+      "cache": false,
+      "inputs": [
+        "metadataToolsCommonInputs",
+        "{projectRoot}/dist/Declarations.json"
+      ],
+      "outputs": [
+        "{projectRoot}/dist/NGMetaData.json"
+      ]
+    },
+    "make-aspnet-metadata": {
+      "dependsOn": ["discover-declarations"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm exec ts-node ./make-aspnet-metadata.ts"
+      },
+      "cache": false,
+      "inputs": [
+        "metadataToolsCommonInputs",
+        "{projectRoot}/dist/Declarations.json"
+      ],
+      "outputs": [
+        "{projectRoot}/dist/StrongMetaData.json"
+      ]
+    },
+    "make-integration-metadata": {
+      "dependsOn": ["discover-declarations"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm exec ts-node ./make-integration-metadata.ts"
+      },
+      "cache": false,
+      "inputs": [
+        "metadataToolsCommonInputs",
+        "{projectRoot}/dist/Declarations.json"
+      ],
+      "outputs": [
+        "{projectRoot}/dist/integration-data.json"
+      ]
+    },
+    "build": {
+      "dependsOn": [
+        "make-angular-metadata",
+        "make-aspnet-metadata",
+        "make-integration-metadata"
+      ],
+      "executor": "nx:noop",
+      "cache": false,
+      "inputs": [
+        "{projectRoot}/dist/**"
+      ]
+    },
+    "pack": {
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "pnpm pack"
+      },
+      "cache": false,
+      "inputs": [
+        "{projectRoot}/dist/**",
+        "{projectRoot}/package.json"
+      ]
+    }
+  }
+}

@@ -1,4 +1,4 @@
-<div class="options">
+<div class="options-panel">
   <div class="caption">Options</div>
   <div class="options-container">
     <div class="option">
@@ -29,14 +29,34 @@
         [disabled]="columnChooserMode !== 'select'"
       ></dx-check-box>
     </div>
+    <div class="option">
+      <dx-check-box
+        text="Allow Column Reordering"
+        [(value)]="allowColumnReordering"
+      ></dx-check-box>
+    </div>
   </div>
 </div>
 <dx-card-view
   [dataSource]="employees"
   keyExpr="ID"
-  [columnChooser]="getColumnChooserConfig()"
-  [searchPanel]="searchPanelConfig"
+  cardsPerRow="auto"
+  [cardMinWidth]="300"
+  [allowColumnReordering]="allowColumnReordering"
 >
+  <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
+  <dxo-card-view-column-chooser
+    [enabled]="true"
+    [mode]="columnChooserMode"
+    height="340px"
+  >
+    <dxo-card-view-column-chooser-search [enabled]="searchEnabled">
+    </dxo-card-view-column-chooser-search>
+    <dxo-card-view-column-chooser-selection
+      [allowSelectAll]="allowSelectAll"
+      [selectByClick]="selectByClick"
+    ></dxo-card-view-column-chooser-selection>
+  </dxo-card-view-column-chooser>
   <dxo-card-view-card-cover
     [altExpr]="altExpr"
     [imageExpr]="imageExpr"
