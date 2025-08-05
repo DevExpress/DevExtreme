@@ -456,7 +456,7 @@ importers:
         specifier: 0.1.13
         version: 0.1.13
       rehype-minify-whitespace:
-        specifier: ^5.0.0
+        specifier: 5.0.1
         version: 5.0.1
       rehype-parse:
         specifier: 8.0.5
