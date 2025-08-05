@@ -2,34 +2,30 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
-import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SearchBoxControllerOptions } from '@ts/ui/collection/m_search_box_mixin';
 import SearchBoxController from '@ts/ui/collection/m_search_box_mixin';
+import type { DataAdapterOptions } from '@ts/ui/hierarchical_collection/data_adapter';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
 import TextBox from '@ts/ui/text_box/m_text_box';
-
-import type { DataAdapterOptions } from '../hierarchical_collection/data_adapter';
-import type { TreeViewBaseProperties } from './m_tree_view.base';
-import TreeViewBase from './m_tree_view.base';
+import type { TreeViewBaseProperties } from '@ts/ui/tree_view/m_tree_view.base';
+import TreeViewBase from '@ts/ui/tree_view/m_tree_view.base';
 
 const TREEVIEW_CLASS_PREFIX = 'dx-treeview';
 const TREEVIEW_NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
-
-export type TreeViewSearchProperties = TreeViewBaseProperties & SearchBoxMixinOptions;
 
 SearchBoxController.setEditorClass(TextBox);
 
 class TreeViewSearch extends TreeViewBase {
   _searchBoxController!: SearchBoxController;
 
-  _getDefaultOptions(): TreeViewSearchProperties {
+  _getDefaultOptions(): TreeViewBaseProperties {
     return {
       ...super._getDefaultOptions(),
       searchValue: '',
       searchEnabled: false,
       searchEditorOptions: {},
-    } as TreeViewSearchProperties;
+    };
   }
 
   _getSearchBoxControllerOptions(): SearchBoxControllerOptions {
@@ -80,8 +76,10 @@ class TreeViewSearch extends TreeViewBase {
     return this._searchBoxController;
   }
 
-  _optionChanged(args: OptionChanged<TreeViewSearchProperties>): void {
-    switch (args.name) {
+  _optionChanged(args: OptionChanged<TreeViewBaseProperties>): void {
+    const { name } = args;
+
+    switch (name) {
       case 'searchEnabled':
       case 'searchEditorOptions':
         this._invalidate();
@@ -128,11 +126,16 @@ class TreeViewSearch extends TreeViewBase {
   }
 
   _getDataAdapterOptions(): Partial<DataAdapterOptions> {
-    const { searchValue, searchMode, searchExpr } = this.option();
+    const {
+      searchValue = '',
+      searchMode = 'contains',
+      searchExpr,
+    } = this.option();
+
     return {
       ...super._getDataAdapterOptions(),
       searchValue,
-      searchMode: searchMode ?? 'contains',
+      searchMode,
       searchExpr,
     };
   }
@@ -154,7 +157,7 @@ class TreeViewSearch extends TreeViewBase {
       $container.empty();
       rootNodes = this._dataAdapter.getRootNodes();
       this._renderEmptyMessage(rootNodes);
-      this._renderItems($container, rootNodes);
+      this._renderNodes(rootNodes, $container);
       this._fireContentReadyAction();
     }
   }

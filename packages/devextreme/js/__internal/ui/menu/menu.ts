@@ -37,6 +37,7 @@ import type {
 } from '@js/ui/tree_view';
 import TreeView from '@js/ui/tree_view';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
 import type {
   ClickEvent,
   HoverEvent,
@@ -354,7 +355,6 @@ class Menu extends MenuBase<MenuProperties> {
     this._actions = {};
 
     each(ACTIONS, (_index: number, action: typeof ACTIONS[number]) => {
-      // @ts-expect-error ts-error
       this._actions[action] = this._createActionByOption(action);
     });
   }
@@ -585,7 +585,7 @@ class Menu extends MenuBase<MenuProperties> {
     return isObject(delay) ? delay[delayType] ?? DEFAULT_DELAY[delayType] : delay;
   }
 
-  _keyboardHandler(e: KeyboardEvent): boolean {
+  _keyboardHandler(e: KeyboardKeyDownEvent): boolean {
     return super._keyboardHandler(e, !!this._visibleSubmenu);
   }
 
