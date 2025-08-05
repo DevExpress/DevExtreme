@@ -152,11 +152,38 @@ QUnit.module('default', {}, () => {
             opt2: 'custom'
         });
 
+        let optionChangedActionCalled = false;
+        instance._createOptionChangedAction();
+        instance._optionChangedAction = () => {
+            optionChangedActionCalled = true;
+        };
+
         instance._setOptionWithoutOptionChange('opt2', 'new custom');
 
         assert.strictEqual(instance.option('opt2'), 'new custom', 'option has been changed');
         const log = instance._getTraceLogByMethod('_optionChanged');
         assert.strictEqual(log.length, 0, 'optionChanged method has not been called');
+        assert.strictEqual(optionChangedActionCalled, false, 'optionChanged action has not been called');
+    });
+
+    QUnit.test('_setOptionWithoutOptionChange should prevent user subscribers from being called', function(assert) {
+        const instance = new TestComponent();
+        let onOptionChangedCalled = false;
+        let onOptionChangedSubscriberCalled = false;
+
+        instance.option('onOptionChanged', () => {
+            onOptionChangedCalled = true;
+        });
+
+        instance.on('optionChanged', () => {
+            onOptionChangedSubscriberCalled = true;
+        });
+
+        instance._setOptionWithoutOptionChange('opt1', 'new value');
+
+        assert.strictEqual(instance.option('opt1'), 'new value', 'option value was changed');
+        assert.strictEqual(onOptionChangedCalled, false, 'onOptionChanged was not called');
+        assert.strictEqual(onOptionChangedSubscriberCalled, false, 'optionChanged subscriber was not called');
     });
 
     QUnit.test('setOptionSilently method (nested option)', function(assert) {

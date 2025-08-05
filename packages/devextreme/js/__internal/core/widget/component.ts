@@ -26,7 +26,7 @@ import type { OptionChanged } from './types';
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @stylistic/max-len
 const getEventName = (actionName): string => actionName.charAt(2).toLowerCase() + actionName.substr(3);
 
-const isInnerOption = (optionName): boolean => optionName.indexOf('_', 0) === 0;
+const isInnerOption = (optionName: string): boolean => optionName.startsWith('_');
 
 export interface ActionConfig {
   beforeExecute?: (e: Record<string, unknown>) => void;
@@ -308,28 +308,27 @@ export class Component<
   }
 
   _notifyOptionChanged(option: string, value: unknown, previousValue: unknown): void {
-    if (this._initialized) {
-      const optionNames = [option].concat(this._options.getAliasesByName(option));
-      // eslint-disable-next-line @typescript-eslint/prefer-for-of, no-plusplus
-      for (let i = 0; i < optionNames.length; i++) {
-        const name = optionNames[i];
-        const args = {
-          name: getPathParts(name)[0],
-          fullName: name,
-          value,
-          previousValue,
-        };
+    if (!this._initialized) return;
 
-        if (!isInnerOption(name)) {
-          this._optionChangedCallbacks.fireWith(this, [extend(this._defaultActionArgs(), args)]);
-          this._optionChangedAction?.(extend({}, args));
-        }
+    const optionNames = [option].concat(this._options.getAliasesByName(option));
 
-        if (!this._disposed && this._cancelOptionChange !== name) {
-          this._optionChanged(args);
-        }
+    optionNames.forEach((optionName) => {
+      const args = {
+        name: getPathParts(optionName)[0],
+        fullName: optionName,
+        value,
+        previousValue,
+      };
+
+      if (!isInnerOption(optionName) && !this._cancelOptionChange) {
+        this._optionChangedCallbacks.fireWith(this, [extend(this._defaultActionArgs(), args)]);
+        this._optionChangedAction?.(extend({}, args));
       }
-    }
+
+      if (!this._disposed && this._cancelOptionChange !== optionName) {
+        this._optionChanged(args);
+      }
+    });
   }
 
   initialOption(name: string): TProperties {
