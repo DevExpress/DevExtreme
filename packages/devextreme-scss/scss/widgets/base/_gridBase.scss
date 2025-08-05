@@ -203,6 +203,12 @@
         z-index: 3;
       }
     }
+
+    .dx-#{$widget-name}-total-footer {
+      .dx-#{$widget-name}-sticky-column, .dx-#{$widget-name}-sticky-column-left, .dx-#{$widget-name}-sticky-column-right {
+        background-color: transparent;
+      }
+    }
   }
 
   .dx-sortable-dragging .dx-#{$widget-name}-rowsview .dx-data-row .dx-command-drag {
