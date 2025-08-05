@@ -135,7 +135,7 @@ class ButtonCollection extends CollectionWidgetEdit<ButtonCollectionProperties> 
     return this._focusTarget();
   }
 
-  _enterKeyHandler(e: KeyboardEvent): void {
+  _enterKeyHandler(e: DxEvent<KeyboardEvent>): void {
     e.preventDefault();
     super._enterKeyHandler(e);
   }
