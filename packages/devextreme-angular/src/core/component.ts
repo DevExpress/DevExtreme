@@ -61,8 +61,16 @@ export const getServerStateKey = () => {
 })
 export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterContentChecked, AfterViewInit, AfterViewChecked,
     INestedOptionContainer, ICollectionNestedOptionContainer, IDxTemplateHost {
+  protected _collectionNestedOptionsItems: QueryList<BaseNestedOption> = new QueryList<BaseNestedOption>();
+  
   @ContentChildren(BaseNestedOption)
-  private _collectionNestedOptions!: QueryList<BaseNestedOption>;
+  get _collectionNestedOptions() {
+    return this._collectionNestedOptionsItems;
+  };
+
+  set _collectionNestedOptions(value) {
+    this._collectionNestedOptionsItems = value
+  };
 
   private _initialOptions: any = {};
 
