@@ -16,8 +16,7 @@ import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import Button from '@js/ui/button';
-// eslint-disable-next-line import/no-named-default
-import { default as CollectionWidget } from '@js/ui/collection/ui.collection_widget.live_update';
+import CollectionWidgetLiveUpdate from '@js/ui/collection/ui.collection_widget.live_update';
 import type {
   Item,
   Orientation,
@@ -139,7 +138,7 @@ export interface TabsProperties extends Properties, Omit<
   _indicatorPosition?: Position | null;
 }
 
-class Tabs extends CollectionWidget<TabsProperties> {
+class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
   static ItemClass = TabsItem;
 
   _scrollable?: Scrollable | null;

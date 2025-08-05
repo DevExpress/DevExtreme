@@ -16,7 +16,7 @@ import { sign } from '@js/core/utils/math';
 import { getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
-import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
+import CollectionWidgetLiveUpdate from '@js/ui/collection/ui.collection_widget.live_update';
 import type { Item, Properties } from '@js/ui/multi_view';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
@@ -54,7 +54,7 @@ export interface MultiViewProperties extends Properties<Item>, Omit<
 
 class MultiView<
   TProperties extends MultiViewProperties = MultiViewProperties,
-> extends CollectionWidget<TProperties> {
+> extends CollectionWidgetLiveUpdate<TProperties> {
   _boundaryIndices?: {
     firstAvailableIndex: number;
     lastAvailableIndex: number;
