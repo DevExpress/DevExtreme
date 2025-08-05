@@ -192,7 +192,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties> 
       return cache.$nodeByKey[key] || $();
     }
     const element = this.$element().get(0).querySelector(`[${DATA_ITEM_ID}="${key}"]`);
-    // @ts-expect-error ts-error
+
     return $(element);
   }
 

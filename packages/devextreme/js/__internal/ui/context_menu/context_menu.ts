@@ -556,7 +556,6 @@ class ContextMenu<
         this._showContextMenuEventHandler,
       );
     } else {
-      // @ts-expect-error ts-error
       eventsEngine.off($(target), eventName, this._showContextMenuEventHandler);
     }
   }
@@ -1213,7 +1212,6 @@ class ContextMenu<
   _getTarget(): ContextMenuTarget {
     const { target, position } = this.option();
 
-    // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return target || position?.of || $(domAdapter.getDocument());
   }
