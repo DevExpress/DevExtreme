@@ -43,7 +43,10 @@ import type Toolbar from '@js/ui/toolbar';
 import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
-import type { ControllerProperties } from '@ts/ui/overlay/m_overlay_position_controller';
+import type {
+  ControllerOverlayElements,
+  ControllerProperties,
+} from '@ts/ui/overlay/m_overlay_position_controller';
 import type { GeometryOptions, OverlayActions } from '@ts/ui/overlay/overlay';
 import Overlay from '@ts/ui/overlay/overlay';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
@@ -54,7 +57,6 @@ import PopupDrag from './m_popup_drag';
 import type { OverflowManager } from './m_popup_overflow_manager';
 import { createBodyOverflowManager } from './m_popup_overflow_manager';
 import type {
-  PopupControllerElements,
   PopupControllerProperties,
   PopupPositionControllerConstructor,
 } from './m_popup_position_controller';
@@ -914,7 +916,7 @@ class Popup<
       outsideDragFactor,
     };
 
-    const elements: PopupControllerElements = {
+    const elements: ControllerOverlayElements = {
       ...superConfiguration.elements,
     };
 

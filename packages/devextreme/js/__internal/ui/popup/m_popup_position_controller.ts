@@ -14,8 +14,6 @@ import type { PopupProperties } from '@ts/ui/popup/m_popup';
 
 import windowUtils from '../../core/utils/m_window';
 
-export interface PopupControllerElements extends ControllerOverlayElements {}
-
 export interface PopupControllerProperties extends BaseControllerProperties {
   fullScreen?: PopupProperties['fullScreen'];
   dragOutsideBoundary?: PopupProperties['dragOutsideBoundary'];
@@ -26,17 +24,24 @@ export interface PopupControllerProperties extends BaseControllerProperties {
 
 export type PopupPositionControllerConstructor<
   TProperties extends PopupControllerProperties = PopupControllerProperties,
-> = PositionControllerConstructor<TProperties>;
+  TElements extends ControllerOverlayElements = ControllerOverlayElements,
+  TPosition = Position,
+> = PositionControllerConstructor<TProperties, TElements, TPosition>;
 
 const window = windowUtils.getWindow();
 
 export class PopupPositionController<
   TProperties extends PopupControllerProperties = PopupControllerProperties,
-  TElements extends PopupControllerElements = PopupControllerElements,
-> extends OverlayPositionController<TProperties, TElements> {
+  TElements extends ControllerOverlayElements = ControllerOverlayElements,
+  TPosition = Position,
+> extends OverlayPositionController<
+  TProperties,
+  TElements,
+  TPosition
+> {
   _$dragResizeContainer?: dxElementWrapper;
 
-  constructor(params: PopupPositionControllerConstructor<TProperties>) {
+  constructor(params: PopupPositionControllerConstructor<TProperties, TElements, TPosition>) {
     super(params);
 
     const superProperties = this._properties;
@@ -128,7 +133,7 @@ export class PopupPositionController<
     }
   }
 
-  _normalizePosition(position?: Position): OverlayPosition {
+  _normalizePosition(position?: TPosition): OverlayPosition {
     const normalizedPosition = super._normalizePosition(position);
 
     if (this._properties.fullScreen) {

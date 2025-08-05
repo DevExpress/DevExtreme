@@ -131,23 +131,32 @@ export interface OverlayProperties extends Properties {
   hideTopOverlayHandler?: () => void;
 }
 
-export type PositioningEvent = NativeEventInfo<
+export type PositioningEvent<
+  TPosition = OverlayProperties['position'],
+> = NativeEventInfo<
   Overlay,
   PointerLikeEvent
 > & {
-  readonly position: OverlayProperties['position'];
+  readonly position: TPosition;
 };
 
-export interface OverlayActions {
+interface VisualPositionChangedEvent<
+  TPosition = OverlayProperties['position'],
+> extends PositioningEvent<TPosition> {
+  readonly previousPosition: OverlayProperties['position'];
+}
+
+export interface OverlayActions<
+  TPosition = OverlayProperties['position'],
+> {
   onShowing?: OverlayProperties['onShowing'];
   onShown?: OverlayProperties['onShown'];
   onHiding?: OverlayProperties['onHiding'];
   onHidden?: OverlayProperties['onHidden'];
-  onPositioned?: (e: Partial<PositioningEvent>) => void;
+  onPositioned?: (e: Partial<PositioningEvent<TPosition>>) => void;
   onVisualPositionChanged?: (
-    e: Partial<PositioningEvent> & {
-      previousPosition: OverlayProperties['position'];
-    }) => void;
+    e: Partial<VisualPositionChangedEvent<TPosition>>
+  ) => void;
 }
 
 ready(() => {

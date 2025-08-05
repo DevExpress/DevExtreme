@@ -63,7 +63,7 @@ export interface PopoverProperties extends Omit<Properties,
   preventScrollEvents?: boolean;
 }
 class Popover<
-TProperties extends PopoverProperties = PopoverProperties,
+  TProperties extends PopoverProperties = PopoverProperties,
 > extends Popup<TProperties> {
   // @ts-expect-error ts-error
   _positionController!: PopoverPositionController;
@@ -471,6 +471,7 @@ TProperties extends PopoverProperties = PopoverProperties,
     }
   }
 
+  // @ts-expect-error Override parent method with more specific type
   _getPositionControllerConfig(): PopoverPositionControllerConstructor {
     const superConfiguration = super._getPositionControllerConfig();
 

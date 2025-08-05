@@ -7,20 +7,25 @@ import { extend } from '@js/core/utils/extend';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined, isString } from '@js/core/utils/type';
 import type {
-  BaseControllerProperties,
+  // BaseControllerProperties,
   ControllerOverlayElements,
   OverlayPosition,
-  PositionControllerConstructor,
+  // PositionControllerConstructor,
+  // Position as OverlayPositionWithAlignment,
 } from '@ts/ui/overlay/m_overlay_position_controller';
 import { OverlayPositionController } from '@ts/ui/overlay/m_overlay_position_controller';
 import type { PopoverProperties } from '@ts/ui/popover/m_popover';
+import type {
+  PopupControllerProperties,
+  PopupPositionControllerConstructor,
+} from '@ts/ui/popup/m_popup_position_controller';
 import { borderWidthStyles } from '@ts/ui/resizable/utils';
 
 export interface PopoverControllerElements extends ControllerOverlayElements {
   $arrow?: dxElementWrapper;
 }
 
-export interface PopoverControllerProperties extends BaseControllerProperties {
+export interface PopoverControllerProperties extends PopupControllerProperties {
   target?: PopoverProperties['target'];
   shading?: PopoverProperties['shading'];
 }
@@ -34,7 +39,8 @@ export type Position = PopoverPosition | CommonPosition;
 export type PopoverPositionControllerConstructor<
   TProperties extends PopoverControllerProperties = PopoverControllerProperties,
   TElements extends PopoverControllerElements = PopoverControllerElements,
-> = PositionControllerConstructor<TProperties, TElements>;
+  TPosition = Position,
+> = PopupPositionControllerConstructor<TProperties, TElements, TPosition>;
 
 const WEIGHT_OF_SIDES = {
   left: -1,
@@ -77,7 +83,7 @@ export const isCommonPosition = (
 export class PopoverPositionController<
   TProperties extends PopoverControllerProperties = PopoverControllerProperties,
   TElements extends PopoverControllerElements = PopoverControllerElements,
-  TPosition = Position,
+  TPosition extends Position = Position,
 > extends OverlayPositionController<
   TProperties,
   TElements,
@@ -87,7 +93,7 @@ export class PopoverPositionController<
 
   _$arrow?: TElements['$arrow'];
 
-  constructor(params: PopoverPositionControllerConstructor<TProperties, TElements>) {
+  constructor(params: PopoverPositionControllerConstructor<TProperties, TElements, TPosition>) {
     super(params);
 
     const superProperties = this._properties;
@@ -227,6 +233,6 @@ export class PopoverPositionController<
       return configuration;
     }
 
-    return position as PopoverPosition;
+    return position;
   }
 }

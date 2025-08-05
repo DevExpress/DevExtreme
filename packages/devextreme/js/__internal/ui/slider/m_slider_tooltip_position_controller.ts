@@ -92,7 +92,7 @@ export class SliderTooltipPositionController<
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _positionToObject(position: VerticalEdge): PopoverPosition {
+  _positionToObject(position: TPosition): PopoverPosition {
     if (isCommonPosition(position)) {
       const configuration: PopoverPosition = {
         ...SLIDER_TOOLTIP_POSITION_ALIASES[position],

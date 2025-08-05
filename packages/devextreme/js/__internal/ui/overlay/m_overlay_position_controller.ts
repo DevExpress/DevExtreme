@@ -57,15 +57,15 @@ export interface BaseControllerProperties {
 
 export type ControllerProperties<
   TProperties extends BaseControllerProperties,
-> = Partial<TProperties> & OverlayActions;
-
-export type ControllerOverlayProperties = ControllerProperties<OverlayProperties>;
+  TPosition = Position,
+> = Partial<TProperties> & OverlayActions<TPosition>;
 
 export interface PositionControllerConstructor<
   TProperties extends BaseControllerProperties,
   TElements extends ControllerOverlayElements = ControllerOverlayElements,
+  TPosition = Position,
 > {
-  properties: ControllerProperties<TProperties>;
+  properties: ControllerProperties<TProperties, TPosition>;
   elements: TElements;
 }
 
@@ -124,7 +124,7 @@ export class OverlayPositionController<
   TElements extends ControllerOverlayElements = ControllerOverlayElements,
   TPosition = Position,
 > {
-  _properties: ControllerProperties<TProperties>;
+  _properties: ControllerProperties<TProperties, TPosition>;
 
   _$root?: TElements['$root'];
 
@@ -146,7 +146,7 @@ export class OverlayPositionController<
 
   _position?: OverlayPosition;
 
-  constructor(params: PositionControllerConstructor<TProperties>) {
+  constructor(params: PositionControllerConstructor<TProperties, TElements, TPosition>) {
     const { properties, elements } = params;
     const { container, position, visualContainer } = properties;
     const { $root, $content, $wrapper } = elements;
@@ -307,12 +307,12 @@ export class OverlayPositionController<
       this._properties.onVisualPositionChanged?.({
         event,
         previousPosition,
-        position: newPosition,
+        position: newPosition as TPosition,
       });
     }
 
     this._properties.onPositioned?.({
-      position: this._initialPosition,
+      position: this._initialPosition as TPosition,
     });
   }
 
