@@ -420,8 +420,8 @@ importers:
         specifier: 3.0.1
         version: 3.0.1
       jspdf-autotable:
-        specifier: 3.8.3
-        version: 3.8.3(jspdf@3.0.1)
+        specifier: 5.0.2
+        version: 5.0.2(jspdf@3.0.1)
       jszip:
         specifier: ^3.10.1
         version: 3.10.1
@@ -13448,6 +13448,11 @@ packages:
     resolution: {integrity: sha512-PQFdljBt+ijm6ZWXYxhZ54A/awV63UKcipYoA2+YGsz0BXXiXTIL/FIg+V30j7wPdSdzClfbB3qKX9UeuFylPQ==}
     peerDependencies:
       jspdf: ^2.5.1
+
+  jspdf-autotable@5.0.2:
+    resolution: {integrity: sha512-YNKeB7qmx3pxOLcNeoqAv3qTS7KuvVwkFe5AduCawpop3NOkBUtqDToxNc225MlNecxT4kP2Zy3z/y/yvGdXUQ==}
+    peerDependencies:
+      jspdf: ^2 || ^3
 
   jspdf@3.0.1:
     resolution: {integrity: sha512-qaGIxqxetdoNnFQQXxTKUD9/Z7AloLaw94fFsOiJMxbfYdBbrBuhWmbzI8TVjrw7s3jBY1PFHofBKMV/wZPapg==}
@@ -36143,6 +36148,10 @@ snapshots:
       semver: 7.7.1
 
   jspdf-autotable@3.8.3(jspdf@3.0.1):
+    dependencies:
+      jspdf: 3.0.1
+
+  jspdf-autotable@5.0.2(jspdf@3.0.1):
     dependencies:
       jspdf: 3.0.1
 
