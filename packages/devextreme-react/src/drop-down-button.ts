@@ -58,7 +58,7 @@ const DropDownButton = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), []);
+      ), [baseRef.current]);
 
       const independentEvents = useMemo(() => (["onButtonClick","onContentReady","onDisposing","onInitialized","onItemClick"]), []);
 

@@ -51,7 +51,7 @@ const Form = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), []);
+      ), [baseRef.current]);
 
       const subscribableOptions = useMemo(() => (["formData"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onEditorEnterKey","onInitialized"]), []);
