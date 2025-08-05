@@ -1,5 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
+import type { CollectionItemKey } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionItemIndex } from '@ts/ui/collection/collection_widget.edit.strategy';
 import EditStrategy from '@ts/ui/collection/collection_widget.edit.strategy';
 
@@ -7,7 +8,7 @@ class PlainEditStrategy<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
+  TKey extends CollectionItemKey = any,
 > extends EditStrategy<TItem, TKey> {
   _getPlainItems(): TItem[] {
     return this._getItems() ?? [];

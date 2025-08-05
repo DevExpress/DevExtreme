@@ -149,7 +149,6 @@ class MenuBase<
   _supportedKeys(): SupportedKeys {
     const selectItem = (): void => {
       const { focusedElement } = this.option();
-      // @ts-expect-error
       const $item = $(focusedElement);
 
       if (!$item.length || !this._isSelectionEnabled()) {

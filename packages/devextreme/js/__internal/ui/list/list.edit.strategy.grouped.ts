@@ -5,10 +5,10 @@ import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
 import { isNumeric } from '@js/core/utils/type';
 import type { Item } from '@js/ui/list';
+import type { CollectionItemKey } from '@ts/ui/collection/collection_widget.base';
 import { indexExists, NOT_EXISTING_INDEX } from '@ts/ui/collection/collection_widget.edit';
 import type { CollectionGroupedItemIndex, CollectionItemIndex } from '@ts/ui/collection/collection_widget.edit.strategy';
 import EditStrategy from '@ts/ui/collection/collection_widget.edit.strategy.plain';
-import type { ItemKey } from '@ts/ui/hierarchical_collection/data_converter';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_GROUP_CLASS = 'dx-list-group';
@@ -33,7 +33,7 @@ const splitIndex = (combinedIndex: number): CollectionGroupedItemIndex => ({
   item: combinedIndex & SELECTION_MASK,
 });
 
-class GroupedEditStrategy extends EditStrategy<GroupedItem, ItemKey> {
+class GroupedEditStrategy extends EditStrategy<GroupedItem, CollectionItemKey> {
   _groupElements(): dxElementWrapper {
     return this._collectionWidget._itemContainer().find(`.${LIST_GROUP_CLASS}`);
   }
@@ -117,7 +117,7 @@ class GroupedEditStrategy extends EditStrategy<GroupedItem, ItemKey> {
     itemGroup?.splice(indices.item, 1);
   }
 
-  getKeysByItems(items: GroupedItem[]): ItemKey[] {
+  getKeysByItems(items: GroupedItem[]): CollectionItemKey[] {
     const plainItems = items.reduce((counter: GroupedItem[], item: GroupedItem) => {
       if (item?.items) {
         return counter.concat(item.items);
@@ -131,7 +131,7 @@ class GroupedEditStrategy extends EditStrategy<GroupedItem, ItemKey> {
     );
   }
 
-  getIndexByKey(key: ItemKey, items?: GroupedItem[]): number {
+  getIndexByKey(key: CollectionItemKey, items?: GroupedItem[]): number {
     const { items: userItems } = this._collectionWidget.option();
     const groups = items ?? userItems;
     let index: CollectionItemIndex = -1;
@@ -173,12 +173,14 @@ class GroupedEditStrategy extends EditStrategy<GroupedItem, ItemKey> {
     return userItems;
   }
 
-  getItemsByKeys(keys: ItemKey[], items: GroupedItem[]): GroupedItem[] {
+  getItemsByKeys(keys: CollectionItemKey[], items: GroupedItem[]): GroupedItem[] {
     const result: GroupedItem[] = [];
     const groups = this._getGroups(items);
     const groupItemByKeyMap: Record<string, GroupedItem> = {};
 
-    const getItemMeta = (key: ItemKey): { groupKey: string; item: GroupedItem } | undefined => {
+    const getItemMeta = (
+      key: CollectionItemKey,
+    ): { groupKey: string; item: GroupedItem } | undefined => {
       const index = this.getIndexByKey(key, groups);
       const splitIdx = splitIndex(index);
       const group = splitIdx && groups[splitIdx.group];
@@ -192,7 +194,7 @@ class GroupedEditStrategy extends EditStrategy<GroupedItem, ItemKey> {
       };
     };
 
-    each(keys, (_index: number, key: ItemKey): void => {
+    each(keys, (_index: number, key: CollectionItemKey): void => {
       const itemMeta = getItemMeta(key);
 
       if (!itemMeta) return;

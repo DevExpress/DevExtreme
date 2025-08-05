@@ -36,9 +36,9 @@ class SwitchableButtonEditDecorator extends SwitchableEditDecorator {
       text: messageLocalization.format('dxListEditDecorator-delete'),
       type: 'danger',
       stylingMode: isMaterialBased(current()) ? 'text' : 'contained',
-      onClick: (e: ClickEvent): void => {
+      onClick: (e: Required<ClickEvent>): void => {
         this._deleteItem();
-        e.event?.stopPropagation();
+        e.event.stopPropagation();
       },
       integrationOptions: {},
       elementAttr: {

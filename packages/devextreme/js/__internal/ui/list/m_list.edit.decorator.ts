@@ -106,10 +106,10 @@ class EditDecorator {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
-  beforeBag(config: BagConfig): void {}
+  beforeBag(config: Required<BagConfig>): void {}
 
-  // eslint-disable-next-line class-methods-use-this
-  afterBag(): void {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
+  afterBag(config: Required<BagConfig>): void {}
 
   _commonOptions(): CommonControlOptions {
     const { activeStateEnabled, hoverStateEnabled, focusStateEnabled } = this._list.option();

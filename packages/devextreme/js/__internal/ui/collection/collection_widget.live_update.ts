@@ -12,7 +12,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import CollectionWidgetAsync from '@ts/ui/collection/collection_widget.async';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 
-import type { DataChange } from './collection_widget.base';
+import type { CollectionItemKey, DataChange } from './collection_widget.base';
 
 export const PRIVATE_KEY_FIELD = '__dx_key__';
 
@@ -21,7 +21,7 @@ export type CachedItem<TItem> = TItem | {
   data: TItem;
 };
 
-export interface KeyInfo<TItem = unknown, TKey = string | number> {
+export interface KeyInfo<TItem = unknown, TKey = CollectionItemKey> {
   key: () => string | Function | undefined;
   keyOf: (item: TItem) => TKey;
 }
@@ -38,7 +38,8 @@ export interface CollectionWidgetLiveUpdateProperties<
   TComponent extends CollectionWidgetLiveUpdate<any, TItem, TKey> | any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
-  TKey = string | number,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey extends CollectionItemKey = any,
 > extends CollectionWidgetEditProperties<TComponent, TItem, TKey> {
   repaintChangesOnly?: boolean;
 }
@@ -49,7 +50,7 @@ class CollectionWidgetLiveUpdate<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
+  TKey extends CollectionItemKey = any,
 > extends CollectionWidgetAsync<TProperties, TItem, TKey> {
   _itemsCache!: CachedItem<TItem>[];
 

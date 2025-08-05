@@ -4,7 +4,8 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import type { ItemClickEvent } from '@js/ui/list';
-import type { PointerLikeEvent } from '@ts/ui/overlay/overlay';
+import type dxOverlay from '@js/ui/overlay';
+import type { OverlayProperties, PointerLikeEvent } from '@ts/ui/overlay/overlay';
 import Overlay from '@ts/ui/overlay/overlay';
 
 import { ListBase } from './m_list.base';
@@ -46,7 +47,7 @@ class EditDecoratorContext extends EditDecorator {
           to: {
             // @ts-expect-error ts-error
             // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-            height: () => getOuterHeight(this._$menuList),
+            height: (): number => getOuterHeight(this._$menuList),
             opacity: 1,
           },
         },
@@ -64,17 +65,18 @@ class EditDecoratorContext extends EditDecorator {
       _ignoreFunctionValueDeprecation: true,
       // @ts-expect-error ts-error
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      height: () => (this._$menuList ? getOuterHeight(this._$menuList) : 0),
+      height: (): number => (this._$menuList ? getOuterHeight(this._$menuList) : 0),
       // @ts-expect-error ts-error
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      width: () => getOuterWidth(this._list.$element()),
-      // @ts-expect-error ts-error
-      onContentReady: this._renderMenuContent.bind(this),
+      width: (): number => getOuterWidth(this._list.$element()),
+      onContentReady: (e: EventInfo<dxOverlay<OverlayProperties>>): void => {
+        this._renderMenuContent(e);
+      },
     });
   }
 
-  _renderMenuContent(e: EventInfo<Overlay>): void {
-    const $overlayContent = e.component.$content();
+  _renderMenuContent(e: EventInfo<dxOverlay<OverlayProperties>>): void {
+    const $overlayContent = $(e.component.content());
 
     const { menuItems = [], allowItemDeleting } = this._list.option();
     const items = menuItems.slice();

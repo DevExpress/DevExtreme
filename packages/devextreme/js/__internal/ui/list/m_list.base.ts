@@ -32,6 +32,7 @@ import type {
   PullRefreshEvent,
   ScrollEvent,
 } from '@js/ui/list';
+import type dxList from '@js/ui/list';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
@@ -39,7 +40,11 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import type {
   CollectionItemInfo,
-  Constructor, DataChange, InkRippleEvent, PostprocessRenderItemInfo,
+  CollectionItemKey,
+  Constructor,
+  DataChange,
+  InkRippleEvent,
+  PostprocessRenderItemInfo,
 } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 import CollectionWidget from '@ts/ui/collection/collection_widget.live_update';
@@ -53,7 +58,6 @@ import { deviceDependentOptions } from '@ts/ui/scroll_view/scrollable.device';
 import type { ScrollOffset } from '@ts/ui/scroll_view/types';
 import { getElementMargin } from '@ts/ui/scroll_view/utils/get_element_style';
 import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
-import type { InteractionEvent } from '@ts/ui/splitter/utils/types';
 
 import type { CollectionItemIndex } from '../collection/collection_widget.edit.strategy';
 
@@ -79,10 +83,6 @@ const SELECT_ALL_ITEM_SELECTOR = '.dx-list-select-all';
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
 const LIST_FEEDBACK_SHOW_TIMEOUT = 70;
 
-export type Key = string | number;
-
-const groupItemsGetter = compileGetter('items') as (data: GroupedItem) => Item[];
-
 type ScrollViewConstructor = Constructor<ScrollViewType>;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -97,7 +97,7 @@ export function setScrollView(value: ScrollViewConstructor): void {
 }
 
 export interface ListBaseProperties extends Properties<Item>, Omit<
-  CollectionWidgetLiveUpdateProperties<ListBase, Item>,
+  CollectionWidgetLiveUpdateProperties<ListBase, Item, CollectionItemKey>,
   keyof Properties<Item>
   > {
   validationGroup?: string;
@@ -117,7 +117,7 @@ export interface ListBaseProperties extends Properties<Item>, Omit<
 
 type Direction = 'prev' | 'next';
 
-export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
+export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   static ItemClass = ListItem;
 
   _$listContainer!: dxElementWrapper;
@@ -148,7 +148,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
 
   _isLoadIndicationSuppressed?: boolean;
 
-  _scrollAction?: (e?: Partial<ScrollEvent>) => void;
+  _scrollAction?: (e?: ScrollEvent) => void;
 
   _pullRefreshAction?: (e?: PullRefreshEvent) => void;
 
@@ -185,7 +185,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
 
     let $item = this._getEdgeVisibleItem(direction);
     const { focusedElement } = this.option();
-    const isFocusedItem = $item.is($(focusedElement ?? undefined));
+    const isFocusedItem = $item.is($(focusedElement));
 
     if (isFocusedItem) {
       this.scrollTo(this._getItemLocation($item, direction));
@@ -199,7 +199,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
   _isLastItemFocused(direction: Direction): boolean {
     const lastItemInDirection = direction === 'prev' ? this._itemElements().first() : this._itemElements().last();
     const { focusedElement } = this.option();
-    return lastItemInDirection.is($(focusedElement ?? undefined));
+    return lastItemInDirection.is($(focusedElement));
   }
 
   _getNextItem($item: dxElementWrapper, direction: Direction): dxElementWrapper {
@@ -218,7 +218,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
     const containerHeight = getHeight(this.$element());
 
     const { focusedElement } = this.option();
-    let $item = $(focusedElement ?? undefined);
+    let $item = $(focusedElement);
     let isItemVisible = true;
 
     if (!$item.length) {
@@ -445,7 +445,10 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
     this._updateLoadingState(true);
   }
 
-  reorderItem(itemElement: Element, toItemElement: Element): DeferredObj<unknown> {
+  reorderItem(
+    itemElement: dxElementWrapper | CollectionItemIndex | Element,
+    toItemElement: dxElementWrapper | CollectionItemIndex | Element,
+  ): DeferredObj<unknown> {
     const promise = super.reorderItem(itemElement, toItemElement);
 
     return promise.done((): void => {
@@ -453,7 +456,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
     });
   }
 
-  deleteItem(itemElement: CollectionItemIndex | Element): Promise<unknown> {
+  deleteItem(itemElement: dxElementWrapper | CollectionItemIndex | Element): Promise<unknown> {
     const promise = super.deleteItem(itemElement);
     // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -588,7 +591,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
       width,
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       disabled: disabled || !scrollingEnabled,
-      onScroll: this._scrollHandler.bind(this),
+      onScroll: (e: ScrollEvent): void => {
+        this._scrollHandler(e);
+      },
       onPullDown: isPullRefreshEnabled ? this._pullDownHandler.bind(this) : null,
       onReachBottom: autoPagingEnabled ? this._scrollBottomHandler.bind(this) : null,
       showScrollbar,
@@ -860,7 +865,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
     }
   }
 
-  _processGroupCollapse(e: InteractionEvent): void {
+  _processGroupCollapse(e: DxEvent<MouseEvent | PointerEvent | TouchEvent | KeyboardEvent>): void {
     const actionCallback = (
       evt: NativeEventInfo<MouseEvent | PointerEvent | TouchEvent | KeyboardEvent>,
     ): void => {
@@ -888,11 +893,11 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
 
   _enterKeyHandler(e: DxEvent<KeyboardEvent>): void {
     const { collapsibleGroups, focusedElement } = this.option();
-    const isGroupHeader = $(focusedElement ?? undefined).hasClass(LIST_GROUP_HEADER_CLASS);
+    const isGroupHeader = $(focusedElement).hasClass(LIST_GROUP_HEADER_CLASS);
 
     if (collapsibleGroups && isGroupHeader) {
       // @ts-expect-error ts-error
-      const params: DxEvent<KeyboardEvent> = this._getHandlerExtendedParams(e, $(focusedElement ?? undefined));
+      const params: DxEvent<KeyboardEvent> = this._getHandlerExtendedParams(e, $(focusedElement));
 
       this._processGroupCollapse(params);
 
@@ -1072,8 +1077,12 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
     });
   }
 
-  _nextButtonHandler(e: PageLoadingEvent): void {
-    this._pageLoadingAction?.(e);
+  _nextButtonHandler(): void {
+    const pageLoadingArgs = {
+      component: this as unknown as dxList,
+      element: this.element(),
+    };
+    this._pageLoadingAction?.(pageLoadingArgs);
     const dataController = this._dataController;
     if (dataController.getDataSource() && !dataController.isLoading()) {
       this._scrollView.toggleLoading(true);
@@ -1164,6 +1173,8 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
       .addClass(LIST_GROUP_BODY_CLASS)
       .attr('id', groupBodyId)
       .appendTo($groupElement);
+
+    const groupItemsGetter = compileGetter('items') as (data: GroupedItem) => Item[];
 
     each(groupItemsGetter(group) || [], (itemIndex: number, item: Item): void => {
       this._renderItem({ group: index, item: itemIndex }, item, $groupBody);
@@ -1262,7 +1273,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
 
     this._createComponent($button, Button, {
       text: nextButtonText,
-      onClick: this._nextButtonHandler.bind(this),
+      onClick: (): void => {
+        this._nextButtonHandler();
+      },
       type: isMaterialBased(current()) ? 'default' : undefined,
       integrationOptions: {},
     });

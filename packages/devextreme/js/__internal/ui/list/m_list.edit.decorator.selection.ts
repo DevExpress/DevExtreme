@@ -6,12 +6,12 @@ import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { Deferred, type DeferredObj } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import type { DxEvent } from '@js/events';
 import type { ValueChangedEvent as CheckBoxValueChangedEvent } from '@js/ui/check_box';
 import CheckBox from '@js/ui/check_box';
 import errors from '@js/ui/widget/ui.errors';
 import type { ValueChangedEvent as EditorValueChangedEvent } from '@ts/ui/editor/editor';
+import type Editor from '@ts/ui/editor/editor';
 import RadioButton from '@ts/ui/radio_group/m_radio_button';
 
 import type { BagConfig } from './m_list.edit.decorator';
@@ -33,6 +33,8 @@ const SELECT_RADIO_BUTTON_CLASS = 'dx-list-select-radiobutton';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const CLICK_EVENT_NAME = addNamespace(clickEventName, 'dxListEditDecorator');
+
+type UnifiedValueChangedEvent = EditorValueChangedEvent | CheckBoxValueChangedEvent;
 
 class EditDecoratorSelection extends EditDecorator {
   _$selectAll?: dxElementWrapper | null;
@@ -63,27 +65,29 @@ class EditDecoratorSelection extends EditDecorator {
     this._list.$element().addClass(SELECT_DECORATOR_ENABLED_CLASS);
   }
 
-  beforeBag(config?: BagConfig): void {
-    const { $itemElement = $() } = config ?? {};
+  beforeBag(config: BagConfig): void {
+    const { $itemElement = $() } = config;
     const $container = config?.$container?.addClass(this._containerClass) ?? $();
 
     const $control = $('<div>')
       .addClass(this._controlClass)
       .appendTo($container);
     // eslint-disable-next-line no-new
-    new this._controlWidget($control.get(0), extend(this._commonOptions(), {
+    new this._controlWidget($control.get(0), {
+      ...this._commonOptions(),
       value: this._isSelected($itemElement.get(0)),
       elementAttr: { 'aria-label': messageLocalization.format('CheckState') },
       focusStateEnabled: false,
       hoverStateEnabled: false,
-      onValueChanged: ({ value, component, event }: EditorValueChangedEvent): void => {
+      onValueChanged: (e: UnifiedValueChangedEvent): void => {
+        const { value, component, event } = e;
         const isUiClick = !!event;
         if (isUiClick) {
-          component._valueChangeEventInstance = undefined;
+          (component as Editor)._valueChangeEventInstance = undefined;
           component.option('value', !value);
         }
       },
-    }));
+    });
   }
 
   modifyElement(config: BagConfig): void {
@@ -188,7 +192,8 @@ class EditDecoratorSelection extends EditDecorator {
   }
 
   _attachSelectAllHandler(): void {
-    this._selectAllCheckBox?.option('onValueChanged', ({ value, event, component }: CheckBoxValueChangedEvent): void => {
+    this._selectAllCheckBox?.option('onValueChanged', (e: CheckBoxValueChangedEvent): void => {
+      const { value, component, event } = e;
       const isUiClick = !!event;
       if (isUiClick) {
         // @ts-expect-error ts-error
@@ -229,7 +234,7 @@ class EditDecoratorSelection extends EditDecorator {
 
     const selectionDeferred = value ? this._unselectAllItems() : this._selectAllItems();
 
-    this._list.option('focusedElement', getPublicElement($(this._$selectAll ?? undefined)));
+    this._list.option('focusedElement', getPublicElement($(this._$selectAll)));
 
     return selectionDeferred;
   }

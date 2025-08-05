@@ -23,6 +23,7 @@ import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type {
   CollectionItemInfo,
+  CollectionItemKey,
   CollectionWidgetBaseProperties,
   PostprocessRenderItemInfo,
 } from '@ts/ui/collection/collection_widget.base';
@@ -40,8 +41,7 @@ export const NOT_EXISTING_INDEX = -1;
 
 export const indexExists = (index: CollectionItemIndex): boolean => index !== NOT_EXISTING_INDEX;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type SelectionInfo<TItem, TKey = any> = SelectionChangeInfo<TItem> & {
+type SelectionInfo<TItem, TKey = CollectionItemKey> = SelectionChangeInfo<TItem> & {
   addedItemKeys: TKey[];
   removedItemKeys: TKey[];
 };
@@ -51,7 +51,8 @@ export interface CollectionWidgetEditProperties<
   TComponent extends CollectionWidget<any, TItem, TKey> | any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
-  TKey = string | number,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey extends CollectionItemKey = any,
 > extends CollectionWidgetBaseProperties<TComponent, TItem, TKey> {
   selectionMode?: SingleMultipleOrNone | SingleMultipleAllOrNone;
 
@@ -72,7 +73,7 @@ class CollectionWidget<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
+  TKey extends CollectionItemKey = any,
 > extends BaseCollectionWidget<TProperties, TItem, TKey> {
   _userOptions?: TProperties;
 
@@ -914,7 +915,7 @@ class CollectionWidget<
     this._renderEmptyMessage();
   }
 
-  deleteItem(itemElement: CollectionItemIndex | Element): PromiseLike<unknown> {
+  deleteItem(itemElement: dxElementWrapper | Element | CollectionItemIndex): PromiseLike<unknown> {
     const deferred = Deferred();
     const $item = this._editStrategy.getItemElement(itemElement);
     const index = this._editStrategy.getNormalizedIndex(itemElement);
@@ -952,8 +953,8 @@ class CollectionWidget<
   }
 
   reorderItem(
-    itemElement: Element,
-    toItemElement: Element,
+    itemElement: dxElementWrapper | Element | CollectionItemIndex,
+    toItemElement: dxElementWrapper | Element | CollectionItemIndex,
   ): DeferredObj<unknown> {
     const deferred = Deferred();
     const strategy = this._editStrategy;

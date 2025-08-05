@@ -1,7 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import type { DxEvent } from '@js/events';
 import type { Item } from '@js/ui/list';
@@ -115,7 +114,7 @@ class EditProvider {
   }
 
   _fetchRequiredDecorators(): void {
-    each(editOptionsRegistry, (_: number, option: OptionRegistry): void => {
+    each(editOptionsRegistry, (_index: number, option: OptionRegistry): void => {
       const optionEnabled = option.enabled.call(this._list);
       if (optionEnabled) {
         const decoratorType = option.decoratorType.call(this._list);
@@ -188,9 +187,10 @@ class EditProvider {
     this._decorators?.forEach((decorator: EditDecorator): void => {
       if (isFunction(decorator[method])) {
         const $container = $('<div>').addClass(containerClass);
-        decorator[method](extend({
+        decorator[method]({
           $container,
-        }, config));
+          ...config,
+        });
         if ($container.children().length) {
           $collector.append($container);
         }

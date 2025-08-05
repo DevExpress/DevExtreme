@@ -244,7 +244,6 @@ class ContextMenu<
   _supportedKeys(): SupportedKeys {
     const selectItem = (): void => {
       const { focusedElement } = this.option();
-      // @ts-expect-error
       const $item = $(focusedElement);
 
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -292,7 +291,6 @@ class ContextMenu<
     const $oldTarget = this._getActiveItem(true);
     const $hoveredItem = this.itemsContainer().find(`.${DX_STATE_HOVER_CLASS}`);
     const { focusedElement, rtlEnabled } = this.option();
-    // @ts-expect-error
     const $focusedItem = $(focusedElement);
     const $activeItemHighlighted = !!($focusedItem.length || $hoveredItem?.length);
     // eslint-disable-next-line @typescript-eslint/init-declarations

@@ -2999,8 +2999,8 @@ QUnit.module('reordering decorator', {
         const list = $list.dxList('instance');
 
         list.reorderItem = (itemElement, toItemElement) => {
-            assert.strictEqual($(itemElement).text(), $item1.text());
-            assert.strictEqual($(toItemElement).text(), $item2.text());
+            assert.strictEqual(itemElement.text(), $item1.text());
+            assert.strictEqual(toItemElement.text(), $item2.text());
         };
 
         const $items = $list.find(`.${LIST_ITEM_CLASS}`);
@@ -3030,8 +3030,8 @@ QUnit.module('reordering decorator', {
         const list = $list.dxList('instance');
 
         list.reorderItem = (itemElement, toItemElement) => {
-            assert.strictEqual($(itemElement).text(), $item1.text());
-            assert.strictEqual($(toItemElement).text(), $item2.text());
+            assert.strictEqual(itemElement.text(), $item1.text());
+            assert.strictEqual(toItemElement.text(), $item2.text());
         };
 
         const $items = $list.find(`.${LIST_ITEM_CLASS}`);

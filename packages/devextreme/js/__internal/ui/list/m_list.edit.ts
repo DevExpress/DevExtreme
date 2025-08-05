@@ -67,10 +67,10 @@ class ListEdit extends ListBase {
         const $nextItem = editStrategy.getItemElement(nextItemIndex);
 
         const isMoveFromGroup = grouped
-          && $(focusedElement ?? undefined).parent().get(0) !== $nextItem.parent().get(0);
+          && $(focusedElement).parent().get(0) !== $nextItem.parent().get(0);
         if (!isMoveFromGroup) {
-          this.reorderItem($(focusedElement ?? undefined).get(0), $nextItem.get(0));
-          this.scrollToItem($(focusedElement ?? undefined));
+          this.reorderItem($(focusedElement).get(0), $nextItem.get(0));
+          this.scrollToItem($(focusedElement));
         }
         e.preventDefault();
       } else {

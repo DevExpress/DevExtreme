@@ -11,15 +11,15 @@ const STATIC_DELETE_BUTTON_CONTAINER_CLASS = 'dx-list-static-delete-button-conta
 const STATIC_DELETE_BUTTON_CLASS = 'dx-list-static-delete-button';
 
 class EditDecoratorStatic extends EditDecorator {
-  afterBag(config?: BagConfig): void {
-    const { $itemElement = $(), $container = $() } = config ?? {};
+  afterBag(config: Required<BagConfig>): void {
+    const { $itemElement, $container } = config;
 
     const $button = $('<div>').addClass(STATIC_DELETE_BUTTON_CLASS);
 
     this._list._createComponent($button, Button, {
       icon: 'remove',
-      onClick: (args: ClickEvent): void => {
-        args.event?.stopPropagation();
+      onClick: (args: Required<ClickEvent>): void => {
+        args.event.stopPropagation();
         this._deleteItem($itemElement);
       },
       integrationOptions: {},

@@ -836,7 +836,6 @@ class Tabs extends CollectionWidget<TabsProperties> {
         this._invalidate();
         break;
       case 'focusedElement': {
-        // @ts-expect-error ts-error
         this._toggleFocusedDisabledClasses($(value));
         super._optionChanged(args);
         this._scrollToItem(value);

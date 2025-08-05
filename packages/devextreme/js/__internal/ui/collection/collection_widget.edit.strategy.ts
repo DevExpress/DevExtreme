@@ -5,6 +5,7 @@ import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { isRenderer } from '@js/core/utils/type';
 import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
+import type { CollectionItemKey } from '@ts/ui/collection/collection_widget.base';
 import type CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 
@@ -18,7 +19,7 @@ export type CollectionItemIndex = number | CollectionGroupedItemIndex;
 export type EditStrategyComponent<
   TItem extends ItemLike = ItemLike,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
+  TKey extends CollectionItemKey = any,
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 > = Pick<CollectionWidget<CollectionWidgetEditProperties<any, TItem, TKey>, TItem, TKey>,
   'keyOf'
@@ -29,8 +30,7 @@ export type EditStrategyComponent<
   | '_dataController'
 >;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-interface KeysCache<TKey = any> {
+interface KeysCache<TKey = CollectionItemKey> {
   [key: string]: unknown;
   keys?: TKey[];
 }
@@ -38,7 +38,7 @@ class EditStrategy<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
+  TKey extends CollectionItemKey = any,
 > {
   _collectionWidget!: EditStrategyComponent<TItem, TKey>;
 

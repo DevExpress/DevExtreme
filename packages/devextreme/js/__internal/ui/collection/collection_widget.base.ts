@@ -68,11 +68,13 @@ const FOCUS_LAST = 'last';
 const FOCUS_FIRST = 'first';
 
 export type DataChangeType = 'insert' | 'update' | 'remove';
-export interface CollectionItemInfo<TItem, TIndex = number | { group: number; item: number }> {
+export interface CollectionItemInfo<TItem, TIndex = CollectionItemIndex> {
   readonly itemData: TItem;
   readonly itemElement: HTMLElement;
   readonly itemIndex: TIndex;
 }
+
+export type CollectionItemKey = string | number;
 
 export type ActionArgs<TItem> = CollectionItemInfo<TItem> | {
   cancel?: boolean;
@@ -81,7 +83,7 @@ export type ActionArgs<TItem> = CollectionItemInfo<TItem> | {
   toIndex?: CollectionItemIndex;
   node?: PublicNode;
 };
-export interface DataChange<TItem = CollectionItem, TKey = number | string> {
+export interface DataChange<TItem = CollectionItem, TKey = CollectionItemKey> {
   key: TKey;
   type: DataChangeType;
   data: TItem;
@@ -117,7 +119,8 @@ export interface CollectionWidgetBaseProperties<
     TComponent extends CollectionWidget<any, TItem, TKey> | any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TItem extends ItemLike = any,
-    TKey = string | number,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    TKey extends CollectionItemKey = any,
 > extends CollectionWidgetOptions<TComponent, TItem, TKey> {
   focusedElement?: Element | null;
 
@@ -142,7 +145,7 @@ class CollectionWidget<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
+  TKey extends CollectionItemKey = any,
 > extends Widget<TProperties> {
   private _focusedItemId?: string;
 

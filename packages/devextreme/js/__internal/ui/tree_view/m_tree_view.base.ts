@@ -3,7 +3,7 @@ import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as dblclickEvent } from '@js/common/core/events/double_click';
 import pointerEvents from '@js/common/core/events/pointer';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
@@ -124,7 +124,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   _supportedKeys(): SupportedKeys {
     const click = (e: DxEvent<KeyboardEvent>): void => {
       const { focusedElement } = this.option();
-      // @ts-expect-error
+
       const $itemElement = $(focusedElement);
 
       if (!$itemElement.length) {
@@ -152,7 +152,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     const select = (e: DxEvent<KeyboardEvent>): void => {
       e.preventDefault();
       const { focusedElement } = this.option();
-      // @ts-expect-error
       const $focusedElement = $(focusedElement);
       const checkboxInstance = this._getCheckBoxInstance($focusedElement);
       const { disabled, value } = checkboxInstance.option();
@@ -2077,7 +2076,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
   _expandFocusedContainer(): void {
     const { focusedElement } = this.option();
-    // @ts-expect-error
     const $focusedNode = $(focusedElement);
     if (!$focusedNode.length || $focusedNode.hasClass(IS_LEAF)) {
       return;
@@ -2112,7 +2110,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
   _collapseFocusedContainer(): void {
     const { focusedElement } = this.option();
-    // @ts-expect-error
     const $focusedNode = $(focusedElement);
 
     if (!$focusedNode.length) {
