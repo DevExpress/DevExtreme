@@ -40,7 +40,7 @@ const Drawer = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["opened"]), []);
       const independentEvents = useMemo(() => (["onDisposing","onInitialized"]), []);
