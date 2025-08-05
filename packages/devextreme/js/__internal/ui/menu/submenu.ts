@@ -111,8 +111,6 @@ class Submenu extends ContextMenu<SubmenuProperties> {
 
     onHoverStart?.(e);
     super._hoverStartHandler(e);
-    // @ts-expect-error ts-error
-    this._toggleFocusClass(true, e.currentTarget);
   }
 
   _drawSubmenu($rootItem: dxElementWrapper): void {
