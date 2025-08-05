@@ -97,6 +97,7 @@
         "@rollup/plugin-babel": "6.0.4",
         "@rollup/plugin-node-resolve": "15.2.3",
         "@rollup/plugin-replace": "5.0.5",
+        "rollup-plugin-node-polyfills": "0.2.1",
         "@testcafe-community/axe": "3.5.0",
         "@types/eslint": "8.56.2",
         "@types/fs-extra": "11.0.2",

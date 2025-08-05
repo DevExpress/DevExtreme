@@ -1,6 +1,7 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import babel from '@rollup/plugin-babel';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 const NG_BASE_DIR = './node_modules/';
 const OUTPUT_DIR = './bundles/externals/';
@@ -40,7 +41,10 @@ export default [
       globals: { },
     },
     external: [],
-    plugins,
+    plugins : [nodeResolve({
+      preferBuiltins: false,
+      browser: true,
+    })].concat(plugins),
   },
   {
     input: NG_BASE_DIR + `remark-parse/index.js`,
