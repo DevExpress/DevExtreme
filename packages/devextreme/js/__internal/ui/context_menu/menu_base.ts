@@ -10,7 +10,10 @@ import type { DxEvent, ItemInfo, NativeEventInfo } from '@js/events';
 import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
 import type dxMenuBase from '@js/ui/context_menu/ui.menu_base';
 import type {
-  dxMenuBaseItem, Item, ItemClickEvent as MenuItemClickEvent, SubmenuShowMode,
+  dxMenuBaseItem,
+  Item,
+  ItemClickEvent as MenuItemClickEvent,
+  SubmenuShowMode,
 } from '@js/ui/menu';
 import type { ActionArguments } from '@ts/core/m_action';
 import { render } from '@ts/core/utils/m_ink_ripple';
@@ -60,7 +63,8 @@ export type ItemClickActionArguments = ActionArguments<
 type MenuBaseNode = InternalNode & dxMenuBaseItem;
 
 export interface MenuBaseProperties<
-  TItem extends dxMenuBaseItem = Item,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TItem extends dxMenuBaseItem | any = any,
   // @ts-expect-error ts-error
 > extends dxMenuBaseOptions<MenuBase, TItem> {
   focusedElement?: Element | null;
@@ -414,7 +418,6 @@ class MenuBase<
     return delay;
   }
 
-  // TODO: try to simplify
   _getItemElementByEventArgs(
     eventArgs: HoverEvent | ClickEvent | DxEvent<KeyboardEvent>,
   ): dxElementWrapper | null {
@@ -633,6 +636,10 @@ class MenuBase<
     e._skipHandling = true;
   }
 
+  _isUrlItem(item: Item | dxMenuBaseItem | undefined): item is Item {
+    return !!item && 'url' in item && !!item.url;
+  }
+
   _itemClick(actionArgs: ItemClickActionArguments): void {
     const { event, itemData } = actionArgs.args?.[0] ?? {};
 
@@ -642,9 +649,8 @@ class MenuBase<
 
     const $itemElement = this._getItemElementByEventArgs(event);
     const link = $itemElement?.find(`.${ITEM_URL_CLASS}`)[0];
-    const isUrlItem = (item: Item | dxMenuBaseItem | undefined): item is Item => !!item && 'url' in item && !!item.url;
 
-    if (!isUrlItem(itemData) || !link) {
+    if (!this._isUrlItem(itemData) || !link) {
       return;
     }
 
@@ -731,7 +737,7 @@ class MenuBase<
             this._toggleItemSelection(selectedNode, false);
           }
           this._toggleItemSelection(node, true);
-          this._changeSelectedItems();
+          this._updateSelectedItems();
         }
         break;
       }
@@ -773,7 +779,8 @@ class MenuBase<
     return result;
   }
 
-  _changeSelectedItems(
+  // @ts-expect-error ts-error
+  _updateSelectedItems(
     oldSelection?: Item,
     newSelection?: Item | null,
   ): void {
@@ -795,7 +802,7 @@ class MenuBase<
   }
 
   selectItem(itemElement: Element | dxMenuBaseItem): void {
-    const isElement = (item: Element | dxMenuBaseItem): item is Element => 'nodeType' in item && !!item.nodeType;
+    const isElement = (item: Element | dxMenuBaseItem): item is Element => typeof item === 'object' && 'nodeType' in item && !!item.nodeType;
 
     const itemData = isElement(itemElement) ? this._getItemData(itemElement) : itemElement;
     const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
@@ -809,7 +816,7 @@ class MenuBase<
         this._toggleItemSelection(selectedNode, false);
       }
       this._toggleItemSelection(node, true);
-      this._changeSelectedItems(selectedItem, itemData);
+      this._updateSelectedItems(selectedItem, itemData);
       this._setOptionWithoutOptionChange('selectedItem', itemData);
     }
   }
@@ -821,7 +828,7 @@ class MenuBase<
 
     if (node?.internalFields.selected) {
       this._toggleItemSelection(node, false);
-      this._changeSelectedItems(selectedItem, null);
+      this._updateSelectedItems(selectedItem, null);
       this._setOptionWithoutOptionChange('selectedItem', null);
     }
   }
