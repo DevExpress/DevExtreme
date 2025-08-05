@@ -53,6 +53,7 @@ import { deviceDependentOptions } from '@ts/ui/scroll_view/scrollable.device';
 import type { ScrollOffset } from '@ts/ui/scroll_view/types';
 import { getElementMargin } from '@ts/ui/scroll_view/utils/get_element_style';
 import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
+import type { InteractionEvent } from '@ts/ui/splitter/utils/types';
 
 import type { CollectionItemIndex } from '../collection/collection_widget.edit.strategy';
 
@@ -184,8 +185,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
 
     let $item = this._getEdgeVisibleItem(direction);
     const { focusedElement } = this.option();
-    // @ts-expect-error $() can not be used with null
-    const isFocusedItem = $item.is($(focusedElement));
+    const isFocusedItem = $item.is($(focusedElement ?? undefined));
 
     if (isFocusedItem) {
       this.scrollTo(this._getItemLocation($item, direction));
@@ -199,8 +199,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
   _isLastItemFocused(direction: Direction): boolean {
     const lastItemInDirection = direction === 'prev' ? this._itemElements().first() : this._itemElements().last();
     const { focusedElement } = this.option();
-    // @ts-expect-error $() can not be used with null
-    return lastItemInDirection.is($(focusedElement));
+    return lastItemInDirection.is($(focusedElement ?? undefined));
   }
 
   _getNextItem($item: dxElementWrapper, direction: Direction): dxElementWrapper {
@@ -219,8 +218,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
     const containerHeight = getHeight(this.$element());
 
     const { focusedElement } = this.option();
-    // @ts-expect-error $() can not be used with null
-    let $item = $(focusedElement);
+    let $item = $(focusedElement ?? undefined);
     let isItemVisible = true;
 
     if (!$item.length) {
@@ -862,7 +860,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
     }
   }
 
-  _processGroupCollapse(e: DxEvent<MouseEvent | PointerEvent | TouchEvent | KeyboardEvent>): void {
+  _processGroupCollapse(e: InteractionEvent): void {
     const actionCallback = (
       evt: NativeEventInfo<MouseEvent | PointerEvent | TouchEvent | KeyboardEvent>,
     ): void => {
@@ -890,12 +888,11 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
 
   _enterKeyHandler(e: DxEvent<KeyboardEvent>): void {
     const { collapsibleGroups, focusedElement } = this.option();
-    // @ts-expect-error $() can not be used with null
-    const isGroupHeader = $(focusedElement).hasClass(LIST_GROUP_HEADER_CLASS);
+    const isGroupHeader = $(focusedElement ?? undefined).hasClass(LIST_GROUP_HEADER_CLASS);
 
     if (collapsibleGroups && isGroupHeader) {
       // @ts-expect-error ts-error
-      const params: DxEvent<KeyboardEvent> = this._getHandlerExtendedParams(e, $(focusedElement));
+      const params: DxEvent<KeyboardEvent> = this._getHandlerExtendedParams(e, $(focusedElement ?? undefined));
 
       this._processGroupCollapse(params);
 

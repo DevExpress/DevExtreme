@@ -588,6 +588,7 @@ class DropDownList<
       hoverStateEnabled,
       focusStateEnabled,
       encodeNoDataText,
+      useItemTextAsTitle,
     } = this.option();
 
     const options = {
@@ -598,7 +599,7 @@ class DropDownList<
       encodeNoDataText,
       grouped,
       wrapItemText,
-      useItemTextAsTitle: this.option('useItemTextAsTitle'),
+      useItemTextAsTitle,
       onContentReady: this._listContentReadyHandler.bind(this),
       itemTemplate,
       indicateLoading: false,

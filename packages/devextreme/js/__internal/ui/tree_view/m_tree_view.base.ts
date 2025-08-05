@@ -178,7 +178,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       e.preventDefault();
 
       const { focusedElement } = this.option();
-      const $rootElement = $(focusedElement);
+      const $rootElement = $(focusedElement ?? undefined);
 
       if (!$rootElement.length) {
         return;
@@ -1949,7 +1949,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
         const { focusedElement } = this.option();
         const element = isSelectAllItem
           ? getPublicElement($(this._$selectAllItem))
-          : $(focusedElement);
+          : $(focusedElement ?? undefined);
 
         this._setFocusedItem($(element));
       });

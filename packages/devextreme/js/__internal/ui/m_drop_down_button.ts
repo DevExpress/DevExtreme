@@ -429,6 +429,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       wrapItemText,
       focusStateEnabled,
       hoverStateEnabled,
+      useItemTextAsTitle,
       grouped,
       groupTemplate,
       noDataText,
@@ -445,7 +446,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       wrapItemText,
       focusStateEnabled,
       hoverStateEnabled,
-      useItemTextAsTitle: this.option('useItemTextAsTitle'),
+      useItemTextAsTitle,
       // eslint-disable-next-line
       onContentReady: () => this._fireContentReadyAction(),
       selectedItemKeys: isDefined(selectedItemKey) && useSelectMode ? [selectedItemKey] : [],

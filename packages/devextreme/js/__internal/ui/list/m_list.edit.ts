@@ -12,8 +12,8 @@ import type {
 import { isNumeric, isObject } from '@ts/core/utils/m_type';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import { NOT_EXISTING_INDEX } from '@ts/ui/collection/collection_widget.edit';
 import type { CachedItem } from '@ts/ui/collection/collection_widget.live_update';
 import { PRIVATE_KEY_FIELD } from '@ts/ui/collection/collection_widget.live_update';
@@ -51,7 +51,7 @@ class ListEdit extends ListBase {
       }
     };
 
-    const moveFocusedItem = (e: KeyboardEvent, moveUp?: boolean): void => {
+    const moveFocusedItem = (e: DxEvent<KeyboardEvent>, moveUp?: boolean): void => {
       const { focusedElement, itemDragging, grouped } = this.option();
 
       const editStrategy = this._editStrategy;
@@ -67,13 +67,10 @@ class ListEdit extends ListBase {
         const $nextItem = editStrategy.getItemElement(nextItemIndex);
 
         const isMoveFromGroup = grouped
-          // @ts-expect-error ts-error
-          && $(focusedElement).parent().get(0) !== $nextItem.parent().get(0);
+          && $(focusedElement ?? undefined).parent().get(0) !== $nextItem.parent().get(0);
         if (!isMoveFromGroup) {
-          // @ts-expect-error ts-error
-          this.reorderItem(focusedElement, $nextItem.get(0));
-          // @ts-expect-error ts-error
-          this.scrollToItem(focusedElement);
+          this.reorderItem($(focusedElement ?? undefined).get(0), $nextItem.get(0));
+          this.scrollToItem($(focusedElement ?? undefined));
         }
         e.preventDefault();
       } else {
@@ -90,13 +87,13 @@ class ListEdit extends ListBase {
       }
     };
 
-    const enter = (e: KeyboardEvent): void => {
+    const enter = (e: DxEvent<KeyboardEvent>): void => {
       if (!this._editProvider.handleEnterPressing(e)) {
         parent.enter.apply(this, [e]);
       }
     };
 
-    const space = (e: KeyboardEvent): void => {
+    const space = (e: DxEvent<KeyboardEvent>): void => {
       if (!this._editProvider.handleEnterPressing(e)) {
         parent.space.apply(this, [e]);
       }
@@ -105,8 +102,8 @@ class ListEdit extends ListBase {
     return {
       ...parent,
       del: deleteFocusedItem,
-      upArrow: (e: KeyboardEvent): void => moveFocusedItem(e, true),
-      downArrow: (e: KeyboardEvent): void => moveFocusedItem(e),
+      upArrow: (e: DxEvent<KeyboardEvent>): void => moveFocusedItem(e, true),
+      downArrow: (e: DxEvent<KeyboardEvent>): void => moveFocusedItem(e),
       enter,
       space,
     };

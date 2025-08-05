@@ -218,7 +218,7 @@ class CollectionWidget<
   _enterKeyHandler(e: DxEvent<KeyboardEvent>): void {
     const { focusedElement } = this.option();
 
-    const $itemElement = $(focusedElement);
+    const $itemElement = $(focusedElement ?? undefined);
 
     if (!$itemElement.length) {
       return;
@@ -405,8 +405,7 @@ class CollectionWidget<
     }
 
     const { focusedElement } = this.option();
-
-    const $focusedElement = $(focusedElement);
+    const $focusedElement = $(focusedElement ?? undefined);
     if ($focusedElement.length) {
       // NOTE: If focusedElement is set, selection was already processed on its focusing.
       this._shouldSkipSelectOnFocus = true;
@@ -424,8 +423,7 @@ class CollectionWidget<
     super._focusOutHandler(e);
 
     const { focusedElement } = this.option();
-    // @ts-expect-error
-    const $target = $(focusedElement);
+    const $target = $(focusedElement ?? undefined);
 
     this._updateFocusedItemState($target, false);
   }
@@ -436,8 +434,7 @@ class CollectionWidget<
 
   _getActiveItem(last?: boolean): dxElementWrapper {
     const { focusedElement } = this.option();
-    // @ts-expect-error
-    const $focusedElement = $(focusedElement);
+    const $focusedElement = $(focusedElement ?? undefined);
 
     if ($focusedElement.length) {
       return $focusedElement;
