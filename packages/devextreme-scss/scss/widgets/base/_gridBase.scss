@@ -1074,10 +1074,6 @@
     }
   }
 
-  .dx-#{$widget-name}-notouch-action {
-    touch-action: none;
-  }
-
   .dx-#{$widget-name}-column-chooser-list.dx-treeview {
     .dx-treeview-item,
     .dx-empty-message {
