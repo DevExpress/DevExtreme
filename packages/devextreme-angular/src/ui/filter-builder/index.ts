@@ -672,6 +672,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this.setupChanges('customOperations', changes);
         this.setupChanges('fields', changes);
         this.setupChanges('groupOperations', changes);
+        this.setupChanges('value', changes);
     }
 
     setupChanges(prop: string, changes: SimpleChanges) {
@@ -684,6 +685,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._idh.doCheck('customOperations');
         this._idh.doCheck('fields');
         this._idh.doCheck('groupOperations');
+        this._idh.doCheck('value');
         this._watcherHelper.checkWatchers();
         super.ngDoCheck();
         super.clearChangedOptions();
