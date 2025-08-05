@@ -45,7 +45,7 @@ const Chat = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["items"]), []);
       const independentEvents = useMemo(() => (["onDisposing","onInitialized","onMessageEntered","onTypingEnd","onTypingStart"]), []);
