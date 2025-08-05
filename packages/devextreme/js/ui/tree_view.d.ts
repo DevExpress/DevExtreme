@@ -34,7 +34,7 @@ import {
 
 import dxScrollable from './scroll_view/ui.scrollable';
 
-type ItemLike = string | Item | any;
+type ItemLike = Item | any;
 
 /**
  * @docid _ui_tree_view_ItemInfo
