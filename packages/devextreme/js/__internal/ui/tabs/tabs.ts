@@ -20,7 +20,10 @@ import Button from '@js/ui/button';
 import { default as CollectionWidget } from '@js/ui/collection/ui.collection_widget.live_update';
 import type {
   Item,
-  Orientation, Properties, TabsIconPosition, TabsStyle,
+  Orientation,
+  Properties,
+  TabsIconPosition,
+  TabsStyle,
 } from '@js/ui/tabs';
 import { current as currentTheme, isFluent, isMaterial } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
