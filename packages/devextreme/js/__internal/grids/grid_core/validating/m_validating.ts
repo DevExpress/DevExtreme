@@ -710,12 +710,13 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     super._validateEditFormAfterUpdate.apply(this, arguments as any);
   }
 
-  private _prepareEditCell(params) {
+  private _prepareEditCell({ column, item }): boolean {
     // @ts-expect-error
-    const isNotCanceled = super._prepareEditCell.apply(this, arguments as any);
+    const isNotCanceled: boolean = super._prepareEditCell.apply(this, arguments as any);
+    const key = !item.isNewRow ? item.key : undefined;
 
-    if (isNotCanceled && params.column.showEditorAlways) {
-      this._validatingController.updateValidationState({ key: params.key });
+    if (isNotCanceled && column.showEditorAlways) {
+      this._validatingController.updateValidationState({ key });
     }
 
     return isNotCanceled;

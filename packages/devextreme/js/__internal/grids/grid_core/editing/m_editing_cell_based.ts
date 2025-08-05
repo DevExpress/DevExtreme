@@ -235,15 +235,13 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 
   private _editCellCore(options) {
-    const dataController = this._dataController;
+    const editCellOptions: any = this._getNormalizedEditCellOptions(options);
     const {
-      columnIndex, rowIndex, column, item,
-    } = this._getNormalizedEditCellOptions(options) as any;
-    const params = {
-      data: item?.data,
-      cancel: false,
+      columnIndex,
+      rowIndex,
       column,
-    };
+      item,
+    } = editCellOptions;
 
     if (item.key === undefined) {
       this._dataController.fireError('E1043');
@@ -255,14 +253,12 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
         return true;
       }
 
-      const editRowIndex = rowIndex + dataController.getRowIndexOffset();
-
       return when(this._beforeEditCell(rowIndex, columnIndex, item)).done((cancel) => {
         if (cancel) {
           return;
         }
 
-        if (!this._prepareEditCell(params, item, columnIndex, editRowIndex)) {
+        if (!this._prepareEditCell(editCellOptions)) {
           this._processCanceledEditingCell();
         }
       });
@@ -323,22 +319,40 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private _prepareEditCell(params, item, editColumnIndex, editRowIndex) {
-    if (!item.isNewRow) {
-      params.key = item.key;
-    }
+  private setEditCell(
+    key: unknown,
+    columnIndex: number,
+    silent: boolean,
+  ): void {
+    this._setEditRowKey(key, silent);
+    this._setEditColumnNameByIndex(columnIndex, silent);
+  }
 
-    if (this._isEditingStart(params)) {
+  private _prepareEditCell(params): boolean {
+    const {
+      item,
+      column,
+      oldColumn,
+      columnIndex,
+      oldRowIndex,
+    } = params;
+    const editingStartParams = {
+      data: item?.data,
+      cancel: false,
+      column,
+      key: !item.isNewRow ? item.key : undefined,
+    };
+
+    if (this._isEditingStart(editingStartParams)) {
       return false;
     }
 
     this._pageIndex = this._dataController.pageIndex();
 
-    this._setEditRowKey(item.key);
-    this._setEditColumnNameByIndex(editColumnIndex);
+    this.setEditCell(item.key, columnIndex, true);
+    this._repaintEditCell(column, oldColumn, oldRowIndex);
 
-    if (!params.column.showEditorAlways) {
+    if (!column.showEditorAlways) {
       this._addInternalData({
         key: item.key,
         oldData: item.oldData ?? item.data,
