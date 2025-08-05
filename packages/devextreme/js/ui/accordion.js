@@ -1,4 +1,4 @@
-import Accordion from '../__internal/ui/m_accordion';
+import Accordion from '../__internal/ui/accordion';
 
 export default Accordion;
 

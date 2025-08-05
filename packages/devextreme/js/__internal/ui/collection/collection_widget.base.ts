@@ -28,17 +28,20 @@ import { isDefined, isFunction, isPlainObject } from '@js/core/utils/type';
 import type { DataSourceOptions } from '@js/data/data_source';
 import DataHelperMixin from '@js/data_helper';
 import type {
-  Cancelable, DxEvent, EventInfo, ItemInfo,
+  Cancelable, DxEvent,
 } from '@js/events';
 import type { CollectionWidgetItem as CollectionWidgetItemProperties, CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
-import type { ListItemInfo } from '@js/ui/list';
 import { focusable } from '@js/ui/widget/selectors';
 import { getPublicElement } from '@ts/core/m_element';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import type CollectionItem from '@ts/ui/collection/item';
 import CollectionWidgetItem from '@ts/ui/collection/item';
+
+import type { PublicNode } from '../hierarchical_collection/data_converter';
+import type { CollectionItemIndex } from './collection_widget.edit.strategy';
 
 const COLLECTION_CLASS = 'dx-collection';
 export const ITEM_CLASS = 'dx-item';
@@ -65,14 +68,25 @@ const FOCUS_LAST = 'last';
 const FOCUS_FIRST = 'first';
 
 export type DataChangeType = 'insert' | 'update' | 'remove';
+export interface CollectionItemInfo<TItem, TIndex = number | { group: number; item: number }> {
+  readonly itemData: TItem;
+  readonly itemElement: HTMLElement;
+  readonly itemIndex: TIndex;
+}
 
-export type CollectionItemInfo<TItem> = ItemInfo<TItem> | ListItemInfo<TItem>;
-
+export type ActionArgs<TItem> = CollectionItemInfo<TItem> | {
+  cancel?: boolean;
+  event?: DxEvent;
+  fromIndex?: CollectionItemIndex;
+  toIndex?: CollectionItemIndex;
+  node?: PublicNode;
+};
 export interface DataChange<TItem = CollectionItem, TKey = number | string> {
   key: TKey;
   type: DataChangeType;
   data: TItem;
   index: number;
+  oldItem?: TItem;
 }
 
 export type ItemTemplate<TItem> = template | (
@@ -114,6 +128,12 @@ export interface CollectionWidgetBaseProperties<
   selectOnFocus?: boolean;
 
   loopItemFocus?: boolean;
+
+  useItemTextAsTitle?: boolean;
+
+  itemTemplateProperty?: string | null;
+
+  displayExpr?: string | ((item: TItem) => string);
 }
 
 class CollectionWidget<
@@ -129,13 +149,13 @@ class CollectionWidget<
   // eslint-disable-next-line no-restricted-globals
   private _itemFocusTimeout?: ReturnType<typeof setTimeout>;
 
-  private _itemRenderAction?: (event?: Partial<EventInfo<unknown> & ItemInfo<TItem>>) => void;
+  private _itemRenderAction?: (event?: ActionArgs<TItem>) => void;
 
-  _displayGetter?: unknown;
+  _displayGetter?: ((item: TItem) => string);
 
   _shouldSkipSelectOnFocus?: boolean;
 
-  _renderedItemsCount?: number;
+  _renderedItemsCount!: number;
 
   _startIndexForAppendedItems?: number | null;
 
@@ -154,12 +174,12 @@ class CollectionWidget<
     }) => void;
   };
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
-    const space = (e): void => {
+  _supportedKeys(): SupportedKeys {
+    const space = (e: DxEvent<KeyboardEvent>): void => {
       e.preventDefault();
       this._enterKeyHandler(e);
     };
-    const move = (location, e): void => {
+    const move = (location: string, e: DxEvent<KeyboardEvent>): void => {
       if (!isCommandKeyPressed(e)) {
         e.preventDefault();
         e.stopPropagation();
@@ -195,9 +215,9 @@ class CollectionWidget<
     return params;
   }
 
-  _enterKeyHandler(e: KeyboardEvent): void {
+  _enterKeyHandler(e: DxEvent<KeyboardEvent>): void {
     const { focusedElement } = this.option();
-    // @ts-expect-error
+
     const $itemElement = $(focusedElement);
 
     if (!$itemElement.length) {
@@ -207,10 +227,11 @@ class CollectionWidget<
     const itemData = this._getItemData($itemElement);
     // @ts-expect-error ts-error
     if (itemData?.onClick) {
-      // @ts-expect-error ts-error
-      this._itemEventHandlerByHandler($itemElement, itemData.onClick, {
+      const actionArgs: ActionArgs<TItem> = {
         event: e,
-      });
+      };
+      // @ts-expect-error
+      this._itemEventHandlerByHandler($itemElement, itemData.onClick, actionArgs);
     }
     // @ts-expect-error ts-error
     this._itemClickHandler(this._getHandlerExtendedParams(e, $itemElement));
@@ -266,9 +287,8 @@ class CollectionWidget<
   }
 
   _compileDisplayGetter(): void {
-    // @ts-expect-error ts-error
     const { displayExpr } = this.option();
-
+    // @ts-expect-error ts-error
     this._displayGetter = displayExpr ? compileGetter(displayExpr) : undefined;
   }
 
@@ -329,8 +349,9 @@ class CollectionWidget<
 
   _initItemsFromMarkup(): void {
     const rawItems = findTemplates(this.$element(), ITEMS_OPTIONS_NAME);
-    // @ts-expect-error ts-error
-    if (!rawItems.length || this.option('items').length) {
+    const { items: userItems = [] } = this.option();
+
+    if (!rawItems.length || userItems.length) {
       return;
     }
 
@@ -382,8 +403,10 @@ class CollectionWidget<
     if (!this._isFocusTarget(e.target)) {
       return;
     }
-    // @ts-expect-error ts-error
-    const $focusedElement = $(this.option('focusedElement'));
+
+    const { focusedElement } = this.option();
+
+    const $focusedElement = $(focusedElement);
     if ($focusedElement.length) {
       // NOTE: If focusedElement is set, selection was already processed on its focusing.
       this._shouldSkipSelectOnFocus = true;
@@ -444,7 +467,7 @@ class CollectionWidget<
   _moveFocus(
     location: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    e?: unknown,
+    e?: DxEvent<KeyboardEvent>,
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   ): boolean | undefined | void {
     const $items = this._getAvailableItems();
@@ -459,12 +482,18 @@ class CollectionWidget<
       case FOCUS_DOWN:
         $newTarget = this._nextItem($items);
         break;
-      case FOCUS_RIGHT:
-        $newTarget = this.option('rtlEnabled') ? this._prevItem($items) : this._nextItem($items);
+      case FOCUS_RIGHT: {
+        const { rtlEnabled } = this.option();
+
+        $newTarget = rtlEnabled ? this._prevItem($items) : this._nextItem($items);
         break;
-      case FOCUS_LEFT:
-        $newTarget = this.option('rtlEnabled') ? this._nextItem($items) : this._prevItem($items);
+      }
+      case FOCUS_LEFT: {
+        const { rtlEnabled } = this.option();
+
+        $newTarget = rtlEnabled ? this._nextItem($items) : this._prevItem($items);
         break;
+      }
       case FOCUS_FIRST:
         $newTarget = $items.first();
         break;
@@ -494,9 +523,9 @@ class CollectionWidget<
     const targetIndex = $items.index($target);
     const $last = $items.last();
     let $item = $($items[targetIndex - 1]);
-    const loop = this.option('loopItemFocus');
+    const { loopItemFocus } = this.option();
 
-    if ($item.length === 0 && loop) {
+    if ($item.length === 0 && loopItemFocus) {
       $item = $last;
     }
 
@@ -508,9 +537,9 @@ class CollectionWidget<
     const targetIndex = $items.index($target);
     const $first = $items.first();
     let $item = $($items[targetIndex + 1]);
-    const loop = this.option('loopItemFocus');
+    const { loopItemFocus } = this.option();
 
-    if ($item.length === 0 && loop) {
+    if ($item.length === 0 && loopItemFocus) {
       $item = $first;
     }
 
@@ -608,7 +637,7 @@ class CollectionWidget<
     let result = $();
     const itemDataKey = this._itemDataKey();
 
-    this.itemElements().each((index, itemElement): boolean => {
+    this.itemElements().each((_index: number, itemElement: Element): boolean => {
       const $item = $(itemElement);
       if ($item.data(itemDataKey) === item) {
         result = $item;
@@ -652,8 +681,9 @@ class CollectionWidget<
   }
 
   _resetItemFocus($item: dxElementWrapper): void {
+    const { focusedElement } = this.option();
     // @ts-expect-error ts-error
-    if ($item.is(this.option('focusedElement'))) {
+    if ($item.is(focusedElement)) {
       this._resetFocusedElement();
     }
   }
@@ -782,11 +812,10 @@ class CollectionWidget<
   _dataSourceChangedHandler(
     newItems: TItem[],
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    e?: { changes?: DataChange<TItem>[] },
+    e?: { changes?: DataChange<TItem, TKey>[] },
   ): void {
-    const items = this.option('items');
+    const { items } = this.option();
     if (this._initialized && items && this._shouldAppendItems()) {
-      // @ts-expect-error ts-error
       this._renderedItemsCount = items.length;
       // @ts-expect-error ts-error
       if (!this._isLastPage() || this._startIndexForAppendedItems !== -1) {
@@ -808,7 +837,10 @@ class CollectionWidget<
 
   _dataSourceLoadErrorHandler(): void {
     this._forgetNextPageLoading();
-    this.option('items', this.option('items'));
+
+    const { items } = this.option();
+
+    this.option('items', items);
   }
 
   _shouldAppendItems(): boolean {
@@ -846,9 +878,12 @@ class CollectionWidget<
     super._refresh();
   }
 
-  // eslint-disable-next-line @stylistic/max-len
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-module-boundary-types
-  _itemContainer(searchEnabled?, previousSelectAllEnabled?): dxElementWrapper {
+  _itemContainer(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    searchEnabled?: boolean,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    previousSelectAllEnabled?: boolean,
+  ): dxElementWrapper {
     return this.$element();
   }
 
@@ -994,9 +1029,12 @@ class CollectionWidget<
   }
 
   _itemPointerHandler(e: DxEvent): void {
-    if (!this.option('focusStateEnabled')) {
+    const { focusStateEnabled } = this.option();
+
+    if (!focusStateEnabled) {
       return;
     }
+
     this._itemFocusHandler = (): void => {
       clearTimeout(this._itemFocusTimeout);
       this._itemFocusHandler = undefined;
@@ -1122,7 +1160,7 @@ class CollectionWidget<
 
   _renderItems(items: TItem[]): void {
     if (items.length) {
-      each(items, (index, itemData) => {
+      each(items, (index: number, itemData: TItem): void => {
         this._renderItem(this._renderedItemsCount + index, itemData);
       });
     }
@@ -1134,13 +1172,14 @@ class CollectionWidget<
   }
 
   _setAttributes($element: dxElementWrapper): void {
-    const attributes = { ...this.option('_itemAttributes') };
-    // @ts-expect-error ts-error
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _itemAttributes } = this.option();
+    const attributes = { ..._itemAttributes };
     const { class: customClassValue } = attributes;
 
     if (customClassValue) {
       const currentClassValue = $element.get(0).className;
-      // @ts-expect-error ts-error
+      // eslint-disable-next-line @typescript-eslint/no-base-to-string
       attributes.class = [currentClassValue, customClassValue].join(' ');
     }
     // @ts-expect-error ts-error
@@ -1200,17 +1239,21 @@ class CollectionWidget<
 
   _attachItemClickEvent(itemData: TItem, $itemElement: dxElementWrapper): void {
     // @ts-expect-error ts-error
-
     if (!itemData || !itemData.onClick) {
       return;
     }
 
-    eventsEngine.on($itemElement, clickEventName, (e) => {
-      // @ts-expect-error ts-error
-      this._itemEventHandlerByHandler($itemElement, itemData.onClick, {
-        event: e,
-      });
-    });
+    eventsEngine.on(
+      $itemElement,
+      clickEventName,
+      (e: DxEvent) => {
+        const actionArgs = {
+          event: e,
+        };
+        // @ts-expect-error ts-error
+        this._itemEventHandlerByHandler($itemElement, itemData.onClick, actionArgs);
+      },
+    );
   }
 
   _renderItemContent(
@@ -1274,9 +1317,13 @@ class CollectionWidget<
       this._appendItemToContainer.call(this, $container, $itemFrame, index);
     }
 
-    if (this.option('useItemTextAsTitle')) {
-      // @ts-expect-error ts-error
-      const displayValue = this._displayGetter ? this._displayGetter(itemData) : itemData;
+    const { useItemTextAsTitle } = this.option();
+
+    if (useItemTextAsTitle) {
+      const displayValue = this._displayGetter
+        ? this._displayGetter(itemData)
+        : itemData;
+      // @ts-expect-error
       $itemFrame.attr('title', displayValue);
     }
 
@@ -1325,7 +1372,7 @@ class CollectionWidget<
       .data(this._itemIndexKey(), index);
   }
 
-  _createItemRenderAction(): (event?: Partial<EventInfo<unknown> & ItemInfo<TItem>>) => void {
+  _createItemRenderAction(): (event?: ActionArgs<TItem>) => void {
     this._itemRenderAction = this._createActionByOption('onItemRendered', {
       element: this.element(),
       excludeValidators: ['disabled', 'readOnly'],
@@ -1335,7 +1382,7 @@ class CollectionWidget<
     return this._itemRenderAction;
   }
 
-  _getItemRenderAction(): (event?: Partial<EventInfo<unknown> & ItemInfo<TItem>>) => void {
+  _getItemRenderAction(): (event?: ActionArgs<TItem>) => void {
     return this._itemRenderAction ?? this._createItemRenderAction();
   }
 
@@ -1343,8 +1390,9 @@ class CollectionWidget<
     args: ItemRenderInfo<TItem>,
   ): ItemTemplate<TItem> {
     const data = args.itemData;
+    const { itemTemplateProperty } = this.option();
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const templateProperty = args.templateProperty || this.option('itemTemplateProperty');
+    const templateProperty = args.templateProperty || itemTemplateProperty;
     // @ts-expect-error ts-error
 
     const template = data && data[templateProperty];
@@ -1384,11 +1432,11 @@ class CollectionWidget<
   }
 
   _renderEmptyMessage(rootNodes?: TItem[]): void {
-    const items = rootNodes ?? this.option('items');
-    const noDataText = this.option('noDataText');
-    // @ts-expect-error ts-error
+    const { items: userItems = [], noDataText } = this.option();
 
-    const hideNoData = !noDataText || (items && items.length) || this._dataController.isLoading();
+    const items = rootNodes ?? userItems;
+    // @ts-expect-error ts-error
+    const hideNoData = !noDataText || items?.length || this._dataController.isLoading();
 
     if (hideNoData && this._$noData) {
       this._$noData.remove();
@@ -1401,11 +1449,11 @@ class CollectionWidget<
       this._$noData = this._$noData ?? $('<div>').addClass('dx-empty-message');
       this._$noData.appendTo(this._emptyMessageContainer());
 
-      if (this.option('encodeNoDataText')) {
-        // @ts-expect-error ts-error
+      const { encodeNoDataText } = this.option();
+
+      if (encodeNoDataText) {
         this._$noData.text(noDataText);
       } else {
-        // @ts-expect-error ts-error
         this._$noData.html(noDataText);
       }
     }
@@ -1426,19 +1474,20 @@ class CollectionWidget<
   _itemEventHandler(
     initiator: dxElementWrapper | Element,
     handlerOptionName: string,
-    actionArgs: Record<string, unknown>,
+    actionArgs: ActionArgs<TItem>,
     actionConfig?: ActionConfig,
   ): void {
-    const action = this._createActionByOption(handlerOptionName, extend({
+    const action = this._createActionByOption(handlerOptionName, {
       validatingTargetName: 'itemElement',
-    }, actionConfig));
+      ...actionConfig,
+    });
     return this._itemEventHandlerImpl(initiator, action, actionArgs);
   }
 
   _itemEventHandlerByHandler(
     initiator: dxElementWrapper | Element,
     handler: () => unknown,
-    actionArgs: Record<string, unknown>,
+    actionArgs: ActionArgs<TItem>,
     actionConfig?: ActionConfig,
   ): void {
     const action = this._createAction(handler, extend({
@@ -1450,7 +1499,7 @@ class CollectionWidget<
   _itemEventHandlerImpl(
     initiator: dxElementWrapper | Element,
     action: (event?: Record<string, unknown>) => void,
-    actionArgs: ActionConfig,
+    actionArgs: ActionArgs<TItem>,
   ): void {
     const $itemElement = this._closestItemElement($(initiator));
     const args = extend({}, actionArgs);
@@ -1458,7 +1507,9 @@ class CollectionWidget<
     return action(extend(actionArgs, this._extendActionArgs($itemElement), args));
   }
 
-  _extendActionArgs($itemElement: dxElementWrapper): CollectionItemInfo<TItem> {
+  _extendActionArgs(
+    $itemElement: dxElementWrapper,
+  ): CollectionItemInfo<TItem> {
     return {
       itemElement: getPublicElement($itemElement),
       itemIndex: this._itemElements().index($itemElement),
@@ -1482,7 +1533,7 @@ class CollectionWidget<
     let result = 0;
 
     if (items) {
-      each(items, (_, item) => {
+      each(items, (_index: number, item: dxElementWrapper) => {
         if (dimension === 'width') {
           result += getOuterWidth(item, includeMargin ?? false);
         } else if (dimension === 'height') {

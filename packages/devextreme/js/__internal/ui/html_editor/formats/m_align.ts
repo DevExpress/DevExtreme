@@ -1,11 +1,12 @@
 import Quill from 'devextreme-quill';
 
-// eslint-disable-next-line import/no-mutable-exports
-let AlignStyle = {};
+import type { AttributorConstructor } from '../types/quill';
 
-if (Quill) {
-  AlignStyle = Quill.import('attributors/style/align');
-  // @ts-expect-error
+type OptionalAttributor = AttributorConstructor | Record<string, never>;
+
+const AlignStyle: OptionalAttributor = Quill?.import('attributors/style/align') || {};
+
+if (Array.isArray(AlignStyle.whitelist)) {
   AlignStyle.whitelist.push('left');
 }
 

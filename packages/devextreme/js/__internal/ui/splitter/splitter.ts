@@ -26,6 +26,7 @@ import type {
   ResizeStartEvent,
 } from '@js/ui/splitter';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeyHandler } from '@ts/core/widget/widget';
 import type { ItemRenderInfo, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 import CollectionWidgetLiveUpdate from '@ts/ui/collection/collection_widget.live_update';
@@ -950,11 +951,12 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   _fireCollapsedStateChanged(
     isExpanded: boolean,
     $item: dxElementWrapper,
-    e?: unknown,
+    e?: InteractionEvent,
   ): void {
     const eventName = isExpanded ? ITEM_EXPANDED_EVENT : ITEM_COLLAPSED_EVENT;
+    const actionArgs = { event: e };
 
-    this._itemEventHandler($item, eventName, { event: e });
+    this._itemEventHandler($item, eventName, actionArgs);
   }
 
   _getDefaultLayoutBasedOnSize(): number[] {
@@ -1109,7 +1111,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     }
   }
 
-  registerKeyHandler(key: string, handler: () => void): void {
+  registerKeyHandler(key: string, handler: SupportedKeyHandler): void {
     $(this.element()).find(`.${RESIZE_HANDLE_CLASS}`).each((index, element) => {
       getComponentInstance($(element)).registerKeyHandler(key, handler);
 

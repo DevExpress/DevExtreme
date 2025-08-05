@@ -1,6 +1,5 @@
 import type { SingleOrMultiple } from '@js/common';
 import { locate } from '@js/common/core/animation/translator';
-import type { ItemInfo } from '@js/common/core/events';
 import Swipeable from '@js/common/core/events/gesture/swipeable';
 import { triggerResizeEvent } from '@js/common/core/events/visibility_change';
 import messageLocalization from '@js/common/core/localization/message';
@@ -16,13 +15,18 @@ import { Deferred } from '@js/core/utils/deferred';
 import { sign } from '@js/core/utils/math';
 import { getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
 import type { Item, Properties } from '@js/ui/multi_view';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SwipeEndEvent, SwipeStartEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
-import type { DataChange, ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
+import type {
+  CollectionItemInfo,
+  DataChange,
+  ItemRenderInfo,
+} from '@ts/ui/collection/collection_widget.base';
 
-import { _translator, animation } from './m_multi_view.animation';
+import { _translator, animation } from './multi_view.animation';
 
 // STYLE multiView
 
@@ -109,12 +113,10 @@ class MultiView<
     ]);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return MULTIVIEW_ITEM_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return MULTIVIEW_ITEM_DATA_KEY;
   }
@@ -156,7 +158,7 @@ class MultiView<
     let normalizedIndex = index;
 
     if (this._isAllItemsHidden()) {
-      return;
+      return undefined;
     }
 
     if (index < 0) {
@@ -247,7 +249,10 @@ class MultiView<
     this._setItemsAria();
   }
 
-  _afterItemElementDeleted($item: dxElementWrapper, deletedActionArgs: ItemInfo<Item>): void {
+  _afterItemElementDeleted(
+    $item: dxElementWrapper,
+    deletedActionArgs: CollectionItemInfo<Item, number>,
+  ): void {
     super._afterItemElementDeleted($item, deletedActionArgs);
 
     if (this._deferredItems) {
@@ -308,7 +313,6 @@ class MultiView<
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getElementAria(): Record<string, string> {
     return {
       role: 'group',
@@ -336,7 +340,6 @@ class MultiView<
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getItemAria(args: {
     itemIndex: number;
     itemsCount: number;
@@ -423,7 +426,6 @@ class MultiView<
     this._updateItemsVisibility(selectedIndex);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _setAriaSelectionAttribute(): void {}
 
   _updateSelection(addedSelection: number[], removedSelection: number[]): void {
@@ -584,7 +586,7 @@ class MultiView<
     return index;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _postprocessSwipe(args: { swipedTabsIndex: number }): void {}
 
   _swipeEndHandler(e: SwipeEndEvent['event']): void {
@@ -624,7 +626,7 @@ class MultiView<
     return this._itemFocusLooped ? -1 : 1;
   }
 
-  _moveFocus(location: string, e?: unknown): void {
+  _moveFocus(location: string, e?: DxEvent<KeyboardEvent>): void {
     super._moveFocus(location, e);
 
     this._itemFocusLooped = false;

@@ -38,6 +38,7 @@ import { tabbable } from '@js/ui/widget/selectors';
 import uiErrors from '@js/ui/widget/ui.errors';
 import domUtils from '@ts/core/utils/m_dom';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 
 import windowUtils from '../../core/utils/m_window';
@@ -205,7 +206,7 @@ class Overlay<
 
   _proxiedDocumentDownHandler?: EventHandler;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     return {
       ...super._supportedKeys(),
       escape(): void {
@@ -1098,7 +1099,6 @@ class Overlay<
     $parent.add($parent.parents()).each((index, element) => {
       const $element = $(element);
 
-      // @ts-expect-error css should can get 1 argument
       if ($element.css('display') === 'none') {
         isHidden = true;
         return false;
@@ -1367,7 +1367,7 @@ class Overlay<
   }
 
   // @ts-expect-error return type in base class is not void
-  _keyboardHandler(options: { originalEvent: Event }, onlyChildProcessing?: boolean): void {
+  _keyboardHandler(options: KeyboardKeyDownEvent, onlyChildProcessing?: boolean): void {
     const e = options.originalEvent;
     const $target = $(e.target as Element);
 
@@ -1379,7 +1379,7 @@ class Overlay<
   }
 
   _isVisible(): boolean {
-    const { visible } = this.option();
+    const visible = this.option('visible');
 
     return Boolean(visible);
   }

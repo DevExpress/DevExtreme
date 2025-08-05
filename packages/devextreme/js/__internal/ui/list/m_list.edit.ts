@@ -13,6 +13,7 @@ import { isNumeric, isObject } from '@ts/core/utils/m_type';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import { NOT_EXISTING_INDEX } from '@ts/ui/collection/collection_widget.edit';
 import type { CachedItem } from '@ts/ui/collection/collection_widget.live_update';
 import { PRIVATE_KEY_FIELD } from '@ts/ui/collection/collection_widget.live_update';
@@ -38,7 +39,7 @@ class ListEdit extends ListBase {
 
   _editProvider!: EditProvider;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     const parent = super._supportedKeys();
 
     const deleteFocusedItem = (e: KeyboardEvent): void => {
@@ -249,7 +250,6 @@ class ListEdit extends ListBase {
   }
 
   _updateItemAriaLabel($itemFrame: dxElementWrapper, itemData: Item): void {
-    // @ts-expect-error ts-error
     const label = this._displayGetter?.(itemData) ?? itemData?.text ?? itemData;
 
     this.setAria(

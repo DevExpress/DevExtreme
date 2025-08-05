@@ -1,7 +1,8 @@
+import type { DefaultOptionsRule } from '@js/common';
 import { fx } from '@js/common/core/animation';
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
@@ -12,14 +13,15 @@ import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { deferRender } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
 import * as iteratorUtils from '@js/core/utils/iterator';
 import { getHeight, getOuterHeight, setHeight } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
-import type { Properties } from '@js/ui/accordion';
+import type { DxEvent } from '@js/events';
+import type { Item, Properties } from '@js/ui/accordion';
 import { isMaterialBased } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { CollectionItemInfo, ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
 import CollectionWidget from '@ts/ui/collection/collection_widget.live_update';
 
 const ACCORDION_CLASS = 'dx-accordion';
@@ -33,13 +35,16 @@ const ACCORDION_ITEM_TITLE_CAPTION_CLASS = 'dx-accordion-item-title-caption';
 
 const ACCORDION_ITEM_DATA_KEY = 'dxAccordionItemData';
 
-export interface AccordionProperties extends Properties {
+export interface AccordionProperties extends Properties<Item> {
   _animationEasing?: string;
+
+  templatesRenderAsynchronously?: boolean;
 }
 
-class Accordion extends CollectionWidget<AccordionProperties> {
+class Accordion extends CollectionWidget<AccordionProperties, Item> {
   _deferredAnimate?: DeferredObj<unknown>;
 
+  // eslint-disable-next-line no-restricted-globals
   _animationTimer?: ReturnType<typeof setTimeout>;
 
   _$container!: dxElementWrapper;
@@ -65,7 +70,7 @@ class Accordion extends CollectionWidget<AccordionProperties> {
     };
   }
 
-  _defaultOptionsRules() {
+  _defaultOptionsRules(): DefaultOptionsRule<AccordionProperties>[] {
     return super._defaultOptionsRules().concat([
       {
         device(): boolean {
@@ -96,9 +101,10 @@ class Accordion extends CollectionWidget<AccordionProperties> {
     super._init();
 
     this._activeStateUnit = `.${ACCORDION_ITEM_CLASS}`;
+    const { collapsible, multiple } = this.option();
 
-    this.option('selectionRequired', !this.option('collapsible'));
-    this.option('selectionMode', this.option('multiple') ? 'multiple' : 'single');
+    this.option('selectionRequired', !collapsible);
+    this.option('selectionMode', multiple ? 'multiple' : 'single');
 
     const $element = this.$element();
     $element.addClass(ACCORDION_CLASS);
@@ -110,7 +116,8 @@ class Accordion extends CollectionWidget<AccordionProperties> {
   _initTemplates(): void {
     super._initTemplates();
     this._templateManager.addDefaultTemplates({
-      title: new BindableTemplate(($container, data) => {
+
+      title: new BindableTemplate(($container: dxElementWrapper, data: Item) => {
         if (isPlainObject(data)) {
           const $iconElement = getImageContainer(data.icon);
           if ($iconElement) {
@@ -133,14 +140,16 @@ class Accordion extends CollectionWidget<AccordionProperties> {
     this._deferredItems = [];
     super._initMarkup();
 
+    const { multiple } = this.option();
+
     this.setAria({
       role: 'tablist',
-
       // eslint-disable-next-line spellcheck/spell-checker
-      multiselectable: this.option('multiple'),
+      multiselectable: multiple,
     });
 
-    deferRender(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    deferRender((): void => {
       const selectedItemIndices = this._getSelectedItemIndices();
       this._renderSelection(selectedItemIndices, []);
     });
@@ -170,43 +179,41 @@ class Accordion extends CollectionWidget<AccordionProperties> {
     return this._itemElements().find(`.${ACCORDION_ITEM_BODY_CLASS}`);
   }
 
-  _getItemData(target) {
+  _getItemData(target: Element | dxElementWrapper): Item {
     // @ts-expect-error ts-error
-    return $(target).parent().data(this._itemDataKey()) || super._getItemData.apply(this, arguments);
+    const itemData = $(target).parent().data(this._itemDataKey()) as Item | undefined;
+
+    return itemData ?? super._getItemData(target);
   }
 
-  _executeItemRenderAction(itemData): void {
-    if (itemData.type) {
-      return;
-    }
-    // @ts-expect-error ts-error
-    super._executeItemRenderAction.apply(this, arguments);
-  }
-
-  _itemSelectHandler(e): void {
+  _itemSelectHandler(e: DxEvent): void {
     if ($(e.target).closest(this._itemContents()).length) {
       return;
     }
-    // @ts-expect-error ts-error
-    super._itemSelectHandler.apply(this, arguments);
+
+    super._itemSelectHandler(e);
   }
 
-  _afterItemElementDeleted($item, deletedActionArgs): void {
+  _afterItemElementDeleted(
+    $item: dxElementWrapper,
+    deletedActionArgs: CollectionItemInfo<Item, number>,
+  ): void {
     this._deferredItems.splice(deletedActionArgs.itemIndex, 1);
-    // @ts-expect-error ts-error
-    super._afterItemElementDeleted.apply(this, arguments);
+    super._afterItemElementDeleted($item, deletedActionArgs);
   }
 
-  // @ts-expect-error ts-error
-  _renderItemContent(args): void {
-    const itemTitleDeferred = super._renderItemContent(extend({}, args, {
+  _renderItemContent(args: ItemRenderInfo<Item>): DeferredObj<dxElementWrapper> {
+    const { itemTitleTemplate } = this.option();
+
+    const itemTitleDeferred = super._renderItemContent({
+      ...args,
       contentClass: ACCORDION_ITEM_TITLE_CLASS,
       templateProperty: 'titleTemplate',
-      defaultTemplateName: this.option('itemTitleTemplate'),
-    }));
-
+      defaultTemplateName: itemTitleTemplate,
+    });
     const callBase = super._renderItemContent.bind(this);
-    itemTitleDeferred.done((itemTitle) => {
+
+    return itemTitleDeferred.done((itemTitle: dxElementWrapper | Element): void => {
       this._attachItemTitleClickAction(itemTitle);
 
       const deferred = Deferred();
@@ -216,65 +223,72 @@ class Accordion extends CollectionWidget<AccordionProperties> {
         this._deferredItems.push(deferred);
       }
 
-      if (!this.option('deferRendering') || this._getSelectedItemIndices().includes(args.index)) {
+      const { deferRendering } = this.option();
+
+      if (!deferRendering || this._getSelectedItemIndices().includes(args.index)) {
         deferred.resolve();
       }
 
       deferred.done(() => {
-        callBase(extend({}, args, {
+        callBase({
+          ...args,
           contentClass: ACCORDION_ITEM_BODY_CLASS,
+          // @ts-expect-error ts-error
           container: getPublicElement($('<div>').appendTo($(itemTitle).parent())),
-        }));
+        });
       });
     });
   }
 
-  _attachItemTitleClickAction(itemTitle): void {
+  _attachItemTitleClickAction($itemTitle: dxElementWrapper | Element): void {
     // @ts-expect-error ts-error
     const eventName = addNamespace(clickEventName, this.NAME);
 
-    eventsEngine.off(itemTitle, eventName);
-    eventsEngine.on(itemTitle, eventName, this._itemTitleClickHandler.bind(this));
+    eventsEngine.off($itemTitle, eventName);
+    eventsEngine.on($itemTitle, eventName, this._itemTitleClickHandler.bind(this));
   }
 
-  _itemTitleClickHandler(e): void {
+  _itemTitleClickHandler(e: DxEvent): void {
     this._itemDXEventHandler(e, 'onItemTitleClick');
   }
 
-  _renderSelection(addedSelection, removedSelection): void {
+  _renderSelection(addedSelection: number[], removedSelection: number[]): void {
     this._itemElements().addClass(ACCORDION_ITEM_CLOSED_CLASS);
     this.setAria('hidden', true, this._itemContents());
 
     this._updateItems(addedSelection, removedSelection);
   }
 
-  _updateSelection(addedSelection, removedSelection): void {
+  _updateSelection(addedSelection: number[], removedSelection: number[]): void {
     this._updateItems(addedSelection, removedSelection);
     this._updateItemHeightsWrapper(false);
   }
 
-  _updateItems(addedSelection, removedSelection): void {
+  _updateItems(addedSelection: number[], removedSelection: number[]): void {
     const $items = this._itemElements();
 
-    iteratorUtils.each(addedSelection, (_, index) => {
-      this._deferredItems[index]?.resolve();
+    iteratorUtils.each(addedSelection, (_i: number, addedIndex: number) => {
+      this._deferredItems[addedIndex]?.resolve();
 
-      const $item = $items.eq(index)
+      const $item = $items.eq(addedIndex)
         .addClass(ACCORDION_ITEM_OPENED_CLASS)
         .removeClass(ACCORDION_ITEM_CLOSED_CLASS);
       this.setAria('hidden', false, $item.find(`.${ACCORDION_ITEM_BODY_CLASS}`));
     });
 
-    iteratorUtils.each(removedSelection, (_, index) => {
-      const $item = $items.eq(index)
+    iteratorUtils.each(removedSelection, (_i: number, removedIndex: number) => {
+      const $item = $items.eq(removedIndex)
         .removeClass(ACCORDION_ITEM_OPENED_CLASS);
       this.setAria('hidden', true, $item.find(`.${ACCORDION_ITEM_BODY_CLASS}`));
     });
   }
 
-  _updateItemHeightsWrapper(skipAnimation): void {
+  _updateItemHeightsWrapper(skipAnimation: boolean): void {
+    const { templatesRenderAsynchronously } = this.option();
+
     // Note: require for proper animation in angularjs (T520346)
-    if (this.option('templatesRenderAsynchronously')) {
+    if (templatesRenderAsynchronously) {
+      // eslint-disable-next-line no-restricted-globals
       this._animationTimer = setTimeout(() => {
         this._updateItemHeights(skipAnimation);
       });
@@ -283,33 +297,44 @@ class Accordion extends CollectionWidget<AccordionProperties> {
     }
   }
 
-  _updateItemHeights(skipAnimation) {
-    const that = this;
-    const deferredAnimate = that._deferredAnimate;
+  _updateItemHeights(skipAnimation: boolean): DeferredObj<unknown> {
+    const deferredAnimate = this._deferredAnimate;
     const itemHeight = this._splitFreeSpace(this._calculateFreeSpace());
 
     clearTimeout(this._animationTimer);
 
-    return when.apply($, [].slice.call(this._itemElements()).map((item) => that._updateItemHeight($(item), itemHeight, skipAnimation))).done(() => {
-      if (deferredAnimate) {
-        // @ts-expect-error ts-error
-        deferredAnimate.resolveWith(that);
-      }
-    });
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const that = this;
+
+    return when.apply($, [...this._itemElements().toArray()].map(
+      (item) => that._updateItemHeight($(item), itemHeight, skipAnimation),
+    ))
+      .done(() => {
+        if (deferredAnimate) {
+          // @ts-expect-error ts-error
+          deferredAnimate.resolveWith(that);
+        }
+      });
   }
 
-  _updateItemHeight($item, itemHeight, skipAnimation) {
+  _updateItemHeight(
+    $item: dxElementWrapper,
+    itemHeight: number | undefined,
+    skipAnimation: boolean,
+  ): DeferredObj<unknown> {
     const $title = $item.children(`.${ACCORDION_ITEM_TITLE_CLASS}`);
-
+    // @ts-expect-error ts-error
     if (fx.isAnimating($item)) {
-      // @ts-expect-error
-      fx.stop($item);
+      fx.stop($item.get(0), false);
     }
 
-    const startItemHeight = getOuterHeight($item);
-    let finalItemHeight;
+    const startItemHeight: number = getOuterHeight($item);
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let finalItemHeight: number;
+
     if ($item.hasClass(ACCORDION_ITEM_OPENED_CLASS)) {
       finalItemHeight = itemHeight + getOuterHeight($title);
+
       if (!finalItemHeight) {
         setHeight($item, 'auto');
         finalItemHeight = getOuterHeight($item);
@@ -321,27 +346,39 @@ class Accordion extends CollectionWidget<AccordionProperties> {
     return this._animateItem($item, startItemHeight, finalItemHeight, skipAnimation, !!itemHeight);
   }
 
-  _animateItem($element, startHeight, endHeight, skipAnimation, fixedHeight) {
-    let d;
+  _animateItem(
+    $element: dxElementWrapper,
+    startHeight: number,
+    endHeight: number,
+    skipAnimation: boolean,
+    fixedHeight: boolean,
+  ): DeferredObj<unknown> {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let deferred: DeferredObj<unknown> | Promise<void>;
+
     if (skipAnimation || startHeight === endHeight) {
       $element.css('height', endHeight);
-      d = Deferred().resolve();
+      deferred = Deferred().resolve();
     } else {
       const { animationDuration, _animationEasing: easing } = this.option();
 
-      d = fx.animate($element, {
-        // @ts-expect-error
-        type: 'custom',
-        // @ts-expect-error
-        from: { height: startHeight },
-        // @ts-expect-error
-        to: { height: endHeight },
-        duration: animationDuration,
-        easing,
-      });
+      deferred = fx.animate(
+        $element.get(0),
+        {
+          // @ts-expect-error ts-error
+          type: 'custom',
+          // @ts-expect-error ts-error
+          from: { height: startHeight },
+          // @ts-expect-error ts-error,
+          to: { height: endHeight },
+          duration: animationDuration,
+          easing,
+        },
+      );
     }
 
-    return d.done(() => {
+    // @ts-expect-error ts-error
+    return deferred.done(() => {
       if ($element.hasClass(ACCORDION_ITEM_OPENED_CLASS) && !fixedHeight) {
         $element.css('height', '');
       }
@@ -349,35 +386,39 @@ class Accordion extends CollectionWidget<AccordionProperties> {
       $element
         .not(`.${ACCORDION_ITEM_OPENED_CLASS}`)
         .addClass(ACCORDION_ITEM_CLOSED_CLASS);
-    });
+    }) as DeferredObj<unknown>;
   }
 
-  _splitFreeSpace(freeSpace): number {
-    if (!freeSpace) {
+  _splitFreeSpace(freeSpace: number | undefined): number | undefined {
+    const { selectedItems } = this.option();
+
+    if (!freeSpace || !selectedItems?.length) {
       return freeSpace;
     }
 
-    // @ts-expect-error ts-error
-    return freeSpace / this.option('selectedItems').length;
+    return freeSpace / selectedItems.length;
   }
 
   _calculateFreeSpace(): number | undefined {
     const { height } = this.option();
+
     if (height === undefined || height === 'auto') {
-      return;
+      return undefined;
     }
 
     const $titles = this._itemTitles();
     let itemsHeight = 0;
 
-    iteratorUtils.each($titles, (_, title) => {
+    iteratorUtils.each($titles, (_index: number, title: Element) => {
       itemsHeight += getOuterHeight(title);
     });
 
-    return getHeight(this.$element()) - itemsHeight;
+    const elementHeight: number = getHeight(this.$element());
+
+    return elementHeight - itemsHeight;
   }
 
-  _visibilityChanged(visible): void {
+  _visibilityChanged(visible: boolean): void {
     if (visible) {
       this._dimensionChanged();
     }
@@ -392,12 +433,15 @@ class Accordion extends CollectionWidget<AccordionProperties> {
     super._clean();
   }
 
-  _tryParseItemPropertyName(fullName) {
+  _tryParseItemPropertyName(fullName: string): string | null {
+    // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
     const matches = fullName.match(/.*\.(.*)/);
 
     if (isDefined(matches) && (matches.length >= 1)) {
       return matches[1];
     }
+
+    return null;
   }
 
   _optionChanged(args: OptionChanged<AccordionProperties>): void {
@@ -439,7 +483,7 @@ class Accordion extends CollectionWidget<AccordionProperties> {
     }
   }
 
-  expandItem(index): Promise<unknown> {
+  expandItem(index: number): Promise<unknown> {
     this._deferredAnimate = Deferred();
 
     this.selectItem(index);
@@ -447,7 +491,7 @@ class Accordion extends CollectionWidget<AccordionProperties> {
     return this._deferredAnimate.promise();
   }
 
-  collapseItem(index): Promise<unknown> {
+  collapseItem(index: number): Promise<unknown> {
     this._deferredAnimate = Deferred();
 
     this.unselectItem(index);
@@ -455,7 +499,7 @@ class Accordion extends CollectionWidget<AccordionProperties> {
     return this._deferredAnimate.promise();
   }
 
-  updateDimensions() {
+  updateDimensions(): DeferredObj<unknown> {
     return this._updateItemHeights(false);
   }
 }

@@ -1,4 +1,5 @@
 import type { dxElementWrapper } from '@js/core/renderer';
+import type { DxEvent } from '@js/events';
 import type {
   ItemCollapsedEvent, ItemExpandedEvent, Properties, ResizeEndEvent, ResizeEvent, ResizeStartEvent,
 } from '@js/ui/splitter';
@@ -37,7 +38,7 @@ export type HandlerMap = {
   [K in keyof EventMap]: (e: Partial<EventMap[K]>) => void;
 };
 
-export type InteractionEvent = KeyboardEvent | PointerEvent | MouseEvent | TouchEvent;
+export type InteractionEvent = DxEvent<KeyboardEvent | PointerEvent | MouseEvent | TouchEvent>;
 export type ResizeEvents = 'onResize' | 'onResizeStart' | 'onResizeEnd';
 export type CollapseEvents = 'onCollapsePrev' | 'onCollapseNext';
 export enum CollapseExpandDirection {

@@ -28,7 +28,7 @@ import type { ClickEvent } from '@js/ui/button';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import type { Properties } from '@js/ui/gallery';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { Properties as WidgetProperties } from '@ts/core/widget/widget';
+import type { Properties as WidgetProperties, SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 
 const GALLERY_CLASS = 'dx-gallery';
@@ -63,7 +63,7 @@ export interface GalleryNavButtonProperties extends WidgetProperties {
 }
 
 class GalleryNavButton extends Widget<GalleryNavButtonProperties> {
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     return {
       ...super._supportedKeys(),
       pageUp: noop,

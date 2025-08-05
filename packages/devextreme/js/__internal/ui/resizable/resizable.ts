@@ -223,7 +223,6 @@ class Resizable extends DOMComponent<Resizable, ResizableProperties> {
 
   _getElementSize(): ElementSize {
     const $element = this.$element();
-    // @ts-expect-error ts-error
     return $element.css('boxSizing') === 'border-box'
       ? {
         width: getOuterWidth($element),

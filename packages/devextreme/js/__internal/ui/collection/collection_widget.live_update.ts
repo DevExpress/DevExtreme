@@ -86,7 +86,7 @@ class CollectionWidgetLiveUpdate<
 
   _dataSourceChangedHandler(
     newItems: TItem[],
-    e?: { changes?: DataChange<TItem>[] },
+    e?: { changes?: DataChange<TItem, TKey>[] },
   ): void {
     if (e?.changes) {
       this._modifyByChanges(e.changes);
@@ -190,7 +190,7 @@ class CollectionWidgetLiveUpdate<
   _updateByChange(
     keyInfo: KeyInfo<TItem, TKey>,
     items: TItem[],
-    change: DataChange<TItem>,
+    change: DataChange<TItem, TKey>,
     isPartialRefresh?: boolean,
   ): void {
     if (isPartialRefresh) {
@@ -198,7 +198,7 @@ class CollectionWidgetLiveUpdate<
         change.index,
         change.data,
         null,
-        this._findItemElementByKey(change.key as TKey),
+        this._findItemElementByKey(change.key),
       );
     } else {
       const changedItem = items[indexByKey(keyInfo, items, change.key)];
@@ -209,7 +209,7 @@ class CollectionWidgetLiveUpdate<
             items.indexOf(changedItem),
             changedItem,
             null,
-            this._findItemElementByKey(change.key as TKey),
+            this._findItemElementByKey(change.key),
           );
         });
       }
@@ -219,7 +219,7 @@ class CollectionWidgetLiveUpdate<
   _insertByChange(
     keyInfo: KeyInfo<TItem, TKey>,
     items: TItem[],
-    change: DataChange<TItem>,
+    change: DataChange<TItem, TKey>,
     isPartialRefresh?: boolean,
   ): void {
     when(
@@ -247,7 +247,7 @@ class CollectionWidgetLiveUpdate<
     }
   }
 
-  _beforeItemElementInserted(change: DataChange<TItem>): void {
+  _beforeItemElementInserted(change: DataChange<TItem, TKey>): void {
     const { selectedIndex } = this.option();
     const index = selectedIndex as number;
 
@@ -263,13 +263,13 @@ class CollectionWidgetLiveUpdate<
   _removeByChange(
     keyInfo: KeyInfo<TItem, TKey>,
     items: TItem[],
-    change: DataChange<TItem> & { oldItem?: TItem },
+    change: DataChange<TItem, TKey>,
     isPartialRefresh?: boolean,
   ): void {
     const index = isPartialRefresh ? change.index : indexByKey(keyInfo, items, change.key);
     const removedItem = isPartialRefresh ? change.oldItem : items[index];
     if (removedItem) {
-      const $removedItemElement = this._findItemElementByKey(change.key as TKey);
+      const $removedItemElement = this._findItemElementByKey(change.key);
       const deletedActionArgs = this._extendActionArgs($removedItemElement);
       // @ts-expect-error ts-error
       this._waitDeletingPrepare($removedItemElement).done(() => {
@@ -285,7 +285,7 @@ class CollectionWidgetLiveUpdate<
     }
   }
 
-  _modifyByChanges(changes: DataChange<TItem>[], isPartialRefresh?: boolean): void {
+  _modifyByChanges(changes: DataChange<TItem, TKey>[], isPartialRefresh?: boolean): void {
     const items = this._editStrategy.itemsGetter();
     const keyInfo: KeyInfo<TItem, TKey> = {
       key: this.key.bind(this),
@@ -298,11 +298,13 @@ class CollectionWidgetLiveUpdate<
     let filteredChanges = changes;
     if (paginate || group) {
       filteredChanges = changes.filter((
-        item: DataChange<TItem>,
+        item: DataChange<TItem, TKey>,
       ) => item.type !== 'insert' || item.index !== undefined);
     }
 
-    filteredChanges.forEach((change: DataChange<TItem>) => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
+    filteredChanges.forEach((
+      change: DataChange<TItem, TKey>,
+    ) => this[`_${change.type}ByChange`](keyInfo, items, change, isPartialRefresh));
     this._renderedItemsCount = items.length;
     this._refreshItemsCache();
     this._fireContentReadyAction();

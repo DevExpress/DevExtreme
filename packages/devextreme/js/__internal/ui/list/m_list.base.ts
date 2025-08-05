@@ -27,7 +27,6 @@ import Button from '@js/ui/button';
 import type {
   GroupRenderedEvent,
   Item,
-  ListItemInfo,
   PageLoadingEvent,
   Properties,
   PullRefreshEvent,
@@ -37,7 +36,9 @@ import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import type {
+  CollectionItemInfo,
   Constructor, DataChange, InkRippleEvent, PostprocessRenderItemInfo,
 } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
@@ -159,7 +160,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _selectionChangeEventInstance?: any;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     return {
       ...super._supportedKeys(),
       leftArrow: noop,
@@ -887,7 +888,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
     action({ event: e });
   }
 
-  _enterKeyHandler(e: KeyboardEvent): void {
+  _enterKeyHandler(e: DxEvent<KeyboardEvent>): void {
     const { collapsibleGroups, focusedElement } = this.option();
     // @ts-expect-error $() can not be used with null
     const isGroupHeader = $(focusedElement).hasClass(LIST_GROUP_HEADER_CLASS);
@@ -1379,7 +1380,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item, Key> {
     }
   }
 
-  _extendActionArgs($itemElement: dxElementWrapper): ListItemInfo<Item> {
+  _extendActionArgs(
+    $itemElement: dxElementWrapper,
+  ): CollectionItemInfo<Item> {
     const { grouped } = this.option();
 
     if (!grouped) {

@@ -1,5 +1,4 @@
 import type { SingleMultipleAllOrNone, SingleMultipleOrNone } from '@js/common';
-import type { ItemInfo } from '@js/common/core/events';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeLoadResult } from '@js/common/data/data_source/utils';
@@ -59,6 +58,10 @@ export interface CollectionWidgetEditProperties<
   selectionRequired?: boolean;
 
   focusOnSelectedItem?: boolean;
+
+  selectByClick?: boolean;
+
+  maxFilterLengthInRequest?: number;
 
   grouped?: boolean;
 }
@@ -200,7 +203,9 @@ class CollectionWidget<
   }
 
   keyOf(item: TItem): TKey {
-    if (this.option('keyExpr')) {
+    const { keyExpr } = this.option();
+
+    if (keyExpr) {
       return this._keyGetter(item);
     }
 
@@ -219,11 +224,12 @@ class CollectionWidget<
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
     const { itemsGetter } = this._editStrategy;
+    const { selectionMode, maxFilterLengthInRequest } = this.option();
 
     this._selection = new Selection({
       allowNullValue: this._nullValueSelectionSupported(),
-      mode: this.option('selectionMode'),
-      maxFilterLengthInRequest: this.option('maxFilterLengthInRequest'),
+      mode: selectionMode,
+      maxFilterLengthInRequest,
       equalByReference: !this._isKeySpecified(),
       onSelectionChanging: (args): void => {
         const isSelectionChanged = args.addedItemKeys.length || args.removedItemKeys.length;
@@ -362,12 +368,12 @@ class CollectionWidget<
         break;
       }
       case 'selectedItems': {
-        const { selectedItems = [] } = this.option();
+        const { selectedItems = [], selectionRequired } = this.option();
         const selectedIndex = selectedItems.length
           ? this._editStrategy.getIndexByItemData(selectedItems[0])
           : NOT_EXISTING_INDEX;
 
-        if (this.option('selectionRequired') && !indexExists(selectedIndex)) {
+        if (selectionRequired && !indexExists(selectedIndex)) {
           return this._syncSelectionOptions('selectedIndex');
         }
 
@@ -377,10 +383,10 @@ class CollectionWidget<
         break;
       }
       case 'selectedItem': {
-        const { selectedItem = {} as TItem } = this.option();
+        const { selectedItem = {} as TItem, selectionRequired } = this.option();
         const selectedIndex = this._editStrategy.getIndexByItemData(selectedItem);
 
-        if (this.option('selectionRequired') && !indexExists(selectedIndex)) {
+        if (selectionRequired && !indexExists(selectedIndex)) {
           return this._syncSelectionOptions('selectedIndex');
         }
 
@@ -463,8 +469,9 @@ class CollectionWidget<
       this._syncSelectionOptions('selectedItems');
     } else if (selectionMode === 'single') {
       const newSelection = selectedItems ?? [];
+      const { selectionRequired } = this.option();
 
-      if (newSelection.length > 1 || (!newSelection.length && this.option('selectionRequired') && items?.length)) {
+      if (newSelection.length > 1 || (!newSelection.length && selectionRequired && items?.length)) {
         const currentSelection = this._selection.getSelectedItems();
 
         let normalizedSelection = newSelection[0] ?? currentSelection[0];
@@ -523,7 +530,9 @@ class CollectionWidget<
     shouldIgnoreSelectByClick?: boolean | number,
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   ): DeferredObj<unknown> | void {
-    if (!shouldIgnoreSelectByClick && !this.option('selectByClick')) {
+    const { selectByClick } = this.option();
+
+    if (!shouldIgnoreSelectByClick && !selectByClick) {
       return;
     }
 
@@ -707,7 +716,12 @@ class CollectionWidget<
 
     const deferred = Deferred();
     const deletingActionArgs = { cancel: false };
-    const deletePromise = this._itemEventHandler($itemElement, 'onItemDeleting', deletingActionArgs, { excludeValidators: ['disabled', 'readOnly'] });
+    const deletePromise = this._itemEventHandler(
+      $itemElement,
+      'onItemDeleting',
+      deletingActionArgs,
+      { excludeValidators: ['disabled', 'readOnly'] },
+    );
 
     // eslint-disable-next-line func-names
     when(deletePromise).always(function (value) {
@@ -855,15 +869,16 @@ class CollectionWidget<
     return this._selection.setSelection([...selectedItemKeys ?? [], key], [key]);
   }
 
-  unselectItem(itemElement: Element): void {
+  unselectItem(itemElement: Element | number | TItem): void {
     const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
     if (!indexExists(itemIndex)) {
       return;
     }
 
     const selectedItemKeys = this._selection.getSelectedItemKeys();
+    const { selectionRequired } = this.option();
 
-    if (this.option('selectionRequired') && selectedItemKeys.length <= 1) {
+    if (selectionRequired && selectedItemKeys.length <= 1) {
       return;
     }
 
@@ -890,7 +905,7 @@ class CollectionWidget<
       ? 'dataSource'
       : 'items';
     this._simulateOptionChange(changingOption);
-    this._itemEventHandler($item, 'onItemDeleted', deletedActionArgs as ItemInfo<TItem>, {
+    this._itemEventHandler($item, 'onItemDeleted', deletedActionArgs, {
       beforeExecute() {
         $item.remove();
       },

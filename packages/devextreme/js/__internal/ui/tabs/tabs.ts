@@ -14,7 +14,7 @@ import { each } from '@js/core/utils/iterator';
 import { getHeight, getOuterWidth, getWidth } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import type { DxEvent, ItemInfo } from '@js/events';
+import type { DxEvent } from '@js/events';
 import Button from '@js/ui/button';
 // eslint-disable-next-line import/no-named-default
 import { default as CollectionWidget } from '@js/ui/collection/ui.collection_widget.live_update';
@@ -25,7 +25,7 @@ import type {
 import { current as currentTheme, isFluent, isMaterial } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { InkRippleEvent } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionItemInfo, InkRippleEvent } from '@ts/ui/collection/collection_widget.base';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 import {
   isReachedBottom, isReachedLeft, isReachedRight, isReachedTop,
@@ -650,7 +650,7 @@ class Tabs extends CollectionWidget<TabsProperties> {
   }
 
   _enterKeyHandler(
-    e: KeyboardEvent,
+    e: DxEvent<KeyboardEvent>,
   ): void {
     const { focusedElement } = this.option();
 
@@ -893,7 +893,10 @@ class Tabs extends CollectionWidget<TabsProperties> {
     this._planPostRenderActions();
   }
 
-  _afterItemElementDeleted($item: dxElementWrapper, deletedActionArgs: ItemInfo<Item>): void {
+  _afterItemElementDeleted(
+    $item: dxElementWrapper,
+    deletedActionArgs: CollectionItemInfo<Item, number>,
+  ): void {
     super._afterItemElementDeleted($item, deletedActionArgs);
     this._renderScrolling();
   }
