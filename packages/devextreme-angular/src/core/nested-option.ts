@@ -1,5 +1,5 @@
 import {
-  Component, QueryList, ElementRef, Renderer2, EventEmitter,
+  Component, QueryList, ElementRef, Renderer2, EventEmitter, ContentChildren,
 } from '@angular/core';
 
 import render from 'devextreme/core/renderer';
@@ -22,10 +22,37 @@ export interface INestedOptionContainer {
 
 export type IOptionPathGetter = () => string;
 
+export interface ICollectionNestedOption {
+  _index: number;
+  _value: object;
+}
+
+@Component({
+  template: '',
+})
+export abstract class CollectionNestedOption extends BaseNestedOption implements ICollectionNestedOption {
+  _index: number;
+
+  protected _fullOptionPath() {
+    return `${this._getOptionPath()}[${this._index}].`;
+  }
+
+  get _value() {
+    return this._initialOptions;
+  }
+
+  get isLinked() {
+    return this._index !== undefined && !!this.instance && this._host.isLinked;
+  }
+}
+
 @Component({
   template: '',
 })
 export abstract class BaseNestedOption implements INestedOptionContainer, ICollectionNestedOptionContainer {
+  @ContentChildren(CollectionNestedOption)
+  private _collectionNestedOptions!: QueryList<CollectionNestedOption>;
+  
   protected _host: INestedOptionContainer;
 
   protected _hostOptionPath: IOptionPathGetter;
@@ -104,9 +131,9 @@ export abstract class BaseNestedOption implements INestedOptionContainer, IColle
     this.optionChangedHandlers.subscribe(this._optionChangedHandler.bind(this));
   }
 
-  setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) {
+  setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>, className = '') {
     this.resetOptions(propertyName);
-    return this._collectionContainerImpl.setChildren(propertyName, items);
+    return this._collectionContainerImpl.setChildren(propertyName, items, className, this._collectionNestedOptions);
   }
 
   _filterItems(items: QueryList<BaseNestedOption>) {
@@ -151,7 +178,7 @@ export abstract class BaseNestedOption implements INestedOptionContainer, IColle
 }
 
 export interface ICollectionNestedOptionContainer {
-  setChildren: <T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) => any;
+  setChildren: <T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>, className: string, contentChildrenItems: QueryList<CollectionNestedOption>) => any;
 }
 
 export class CollectionNestedOptionContainerImpl implements ICollectionNestedOptionContainer {
@@ -159,18 +186,32 @@ export class CollectionNestedOptionContainerImpl implements ICollectionNestedOpt
 
   constructor(private readonly _setOption: Function, private readonly _filterItems?: Function) { }
 
-  setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) {
+  setChildren(propertyName, items, className = '', contentChildrenItems) {
+
     if (this._filterItems) {
       items = this._filterItems(items);
     }
+
+    console.log('----CollectionNestedOptionContainerImpl----setChildren-->', contentChildrenItems);
     if (items.length) {
-      this._activatedQueries[propertyName] = true;
-    }
-    if (this._activatedQueries[propertyName]) {
-      const widgetItems = items.map((item, index) => {
+      if(className) {
+        const activatedQuery = this._activatedQueries[propertyName] || [];
+
+        this._activatedQueries[propertyName] = activatedQuery
+            .filter((currentItem) => currentItem.className !== className)
+            .concat([{ className, items }]);
+
+        items = this._activatedQueries[propertyName]
+            .reduce((acc, {items}) => acc.concat(items.toArray()), []);
+      } else {
+        items = items.toArray();
+      }
+
+      let widgetItems = items.map((item, index) => {
         item._index = index;
         return item._value;
       });
+
       this._setOption(propertyName, widgetItems);
     }
   }
@@ -191,29 +232,7 @@ export abstract class NestedOption extends BaseNestedOption {
   }
 }
 
-export interface ICollectionNestedOption {
-  _index: number;
-  _value: object;
-}
 
-@Component({
-  template: '',
-})
-export abstract class CollectionNestedOption extends BaseNestedOption implements ICollectionNestedOption {
-  _index: number;
-
-  protected _fullOptionPath() {
-    return `${this._getOptionPath()}[${this._index}].`;
-  }
-
-  get _value() {
-    return this._initialOptions;
-  }
-
-  get isLinked() {
-    return this._index !== undefined && !!this.instance && this._host.isLinked;
-  }
-}
 
 export interface IOptionWithTemplate extends BaseNestedOption {
   template: any;

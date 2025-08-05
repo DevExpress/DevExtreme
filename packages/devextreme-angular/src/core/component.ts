@@ -19,6 +19,7 @@ import {
   createNgModule,
   inject,
   Injector,
+  ContentChildren,
 } from '@angular/core';
 
 import { isPlatformServer } from '@angular/common';
@@ -40,6 +41,7 @@ import {
 } from './nested-option';
 
 import { DxIntegrationModule } from './integration';
+import { CollectionNestedOption } from "./nested-option";
 
 config({
   buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx',
@@ -65,6 +67,9 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   protected _optionsToUpdate: any = {};
 
   private readonly _collectionContainerImpl: ICollectionNestedOptionContainer;
+
+  @ContentChildren(CollectionNestedOption)
+  private _collectionNestedOptions!: QueryList<CollectionNestedOption>;
 
   eventHelper: EmitterHelper;
 
@@ -215,10 +220,10 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     }
   }
 
-  protected _setChildren(propertyName, value, className) {
-    if (this.checkContentChildren(propertyName, value, className)) {
-      this.setContentChildren(propertyName, value, className);
-      this.setChildren(propertyName, value);
+  _setChildren(propertyName, value, className, isLegacy = false) {
+    if (this.checkContentChildren(propertyName, value, className, isLegacy)) {
+      this.setContentChildren(propertyName, value, className, isLegacy);
+      this.setChildren(propertyName, value, className);
     }
   }
 
@@ -308,12 +313,12 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
 
   contentChildren = {};
 
-  checkContentChildren<T>(propertyName: string, items: QueryList<T>, className: string) {
-    if (this.contentChildren[propertyName] && this.contentChildren[propertyName] !== className) {
+  checkContentChildren<T>(propertyName: string, items: QueryList<T>, className: string, isLegacy = false) {
+    if ( this.contentChildren[propertyName] && this.contentChildren[propertyName].isLegacy !== isLegacy ) {
       if (items.length > 0) {
         if (console && console.warn) {
-          console.warn(`In ${this.constructor.name}, 
-          the nested ${className} and ${this.contentChildren[propertyName]} components are incompatible. 
+          console.warn(`In ${this.constructor.name},
+          the nested ${className} and ${this.contentChildren[propertyName].className} components are incompatible.
           Ensure that all nested components in the content area match.`);
         }
       }
@@ -321,16 +326,16 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     }
     return true;
   }
-
-  setContentChildren<T>(propertyName: string, items: QueryList<T>, className: string) {
+  setContentChildren<T>(propertyName: string, items: QueryList<T>, className: string, isLegacy = false) {
     if (items.length > 0) {
-      this.contentChildren[propertyName] = className;
+      this.contentChildren[propertyName] = { className, isLegacy };
+
     }
   }
 
-  setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) {
+  setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>, className = '') {
     this.resetOptions(propertyName);
-    return this._collectionContainerImpl.setChildren(propertyName, items);
+    return this._collectionContainerImpl.setChildren(propertyName, items, className, this._collectionNestedOptions);
   }
 }
 
