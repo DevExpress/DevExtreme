@@ -20,7 +20,7 @@ import { getExponentLength, getRemainderByDivision, roundFloatPart } from '@js/c
 import { getWidth, setWidth } from '@js/core/utils/size';
 import type { dxSliderBaseOptions } from '@js/ui/slider';
 import { current as currentTheme, isMaterial } from '@js/ui/themes';
-import { render } from '@js/ui/widget/utils.ink_ripple';
+import { render } from '@ts/core/utils/m_ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 
