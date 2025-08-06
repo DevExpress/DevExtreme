@@ -23,8 +23,8 @@ import {
 import { isDeferred, isDefined, isEmptyObject } from '@js/core/utils/type';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import * as accessibility from '@js/ui/shared/accessibility';
-import { focused } from '@js/ui/widget/selectors';
 import { isElementInDom } from '@ts/core/utils/m_dom';
+import { focused } from '@ts/core/utils/m_selectors';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';

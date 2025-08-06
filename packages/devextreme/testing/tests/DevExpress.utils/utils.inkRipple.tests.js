@@ -1,5 +1,5 @@
 const $ = require('jquery');
-const inkRipple = require('ui/widget/utils.ink_ripple');
+const inkRipple = require('__internal/core/utils/m_ink_ripple');
 const fx = require('common/core/animation/fx');
 
 const INKRIPPLE_CLASS = 'dx-inkripple';
