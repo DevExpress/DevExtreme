@@ -9,8 +9,8 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getWidth } from '@js/core/utils/size';
 import type { Cancelable, DxEvent } from '@js/events';
-import type { ListBaseProperties } from '@ts/ui/list/m_list.base';
-import type List from '@ts/ui/list/m_list.edit';
+import type { ListBaseProperties } from '@ts/ui/list/list.base';
+import type List from '@ts/ui/list/list.edit';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
 const SWIPE_START_EVENT_NAME = addNamespace(swipeEventStart, LIST_EDIT_DECORATOR);
@@ -40,12 +40,10 @@ class EditDecorator {
     this._init();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _shouldHandleSwipe(): boolean {
     return false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _init(): void {}
 
   _attachSwipeEvent(config: BagConfig): void {
@@ -111,10 +109,10 @@ class EditDecorator {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   beforeBag(config: BagConfig): void {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   afterBag(config: BagConfig): void {}
 
   _commonOptions(): CommonControlOptions {
@@ -134,25 +132,23 @@ class EditDecorator {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   afterRender(): void {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   handleClick($itemElement: dxElementWrapper, e: DxEvent): void {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   handleKeyboardEvents(currentFocusedIndex: number, moveFocusUp: boolean | undefined): void {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   handleEnterPressing(e: KeyboardEvent): void {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   handleContextMenu($itemElement: dxElementWrapper): void {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _swipeStartHandler($element: dxElementWrapper): void {}
 
-  // eslint-disable-next-line class-methods-use-this
   _swipeUpdateHandler(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     $element: dxElementWrapper,
@@ -160,16 +156,13 @@ class EditDecorator {
     event: DxEvent & SwipeUpdateArgs & Cancelable,
   ): void {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _swipeEndHandler($element: dxElementWrapper, event: DxEvent & SwipeEndArgs): void {}
 
-  // eslint-disable-next-line class-methods-use-this
   visibilityChange(): void {}
 
-  // eslint-disable-next-line class-methods-use-this
   getExcludedSelectors(): void {}
 
-  // eslint-disable-next-line class-methods-use-this
   dispose(): void {}
 }
 

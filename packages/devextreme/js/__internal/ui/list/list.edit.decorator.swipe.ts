@@ -4,14 +4,13 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { getWidth } from '@js/core/utils/size';
 import type { DxEvent } from '@js/events';
-import type { SwipeEndArgs, SwipeUpdateArgs } from '@ts/ui/list/m_list.edit.decorator';
-import EditDecorator from '@ts/ui/list/m_list.edit.decorator';
-import { register as registerDecorator } from '@ts/ui/list/m_list.edit.decorator_registry';
+import type { SwipeEndArgs, SwipeUpdateArgs } from '@ts/ui/list/list.edit.decorator';
+import EditDecorator from '@ts/ui/list/list.edit.decorator';
+import { register as registerDecorator } from '@ts/ui/list/list.edit.decorator_registry';
 
 class EditDecoratorSwipe extends EditDecorator {
   _itemElementWidth!: number;
 
-  // eslint-disable-next-line class-methods-use-this
   _shouldHandleSwipe(): boolean {
     return true;
   }

@@ -14,9 +14,9 @@ import type {
 } from '@js/ui/sortable';
 import { isDefined } from '@ts/core/utils/m_type';
 import Sortable from '@ts/m_sortable';
-import type { BagConfig } from '@ts/ui/list/m_list.edit.decorator';
-import EditDecorator from '@ts/ui/list/m_list.edit.decorator';
-import { register as registerDecorator } from '@ts/ui/list/m_list.edit.decorator_registry';
+import type { BagConfig } from '@ts/ui/list/list.edit.decorator';
+import EditDecorator from '@ts/ui/list/list.edit.decorator';
+import { register as registerDecorator } from '@ts/ui/list/list.edit.decorator_registry';
 
 const REORDER_HANDLE_CONTAINER_CLASS = 'dx-list-reorder-handle-container';
 const REORDER_HANDLE_CLASS = 'dx-list-reorder-handle';
@@ -70,7 +70,6 @@ class EditDecoratorReorder extends EditDecorator {
     this._sortable.update();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _dragTemplate(e: DragTemplateData): dxElementWrapper {
     const result = $(e.itemElement)
       .clone()

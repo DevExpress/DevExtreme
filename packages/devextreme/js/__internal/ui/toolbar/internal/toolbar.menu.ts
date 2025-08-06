@@ -19,7 +19,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { Properties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import Button from '@ts/ui/button/wrapper';
-import type { ListBase } from '@ts/ui/list/m_list.base';
+import type { ListBase } from '@ts/ui/list/list.base';
 import ToolbarMenuList from '@ts/ui/toolbar/internal/toolbar.menu.list';
 import { toggleItemFocusableElementTabIndex } from '@ts/ui/toolbar/toolbar.utils';
 
