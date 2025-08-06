@@ -1,4 +1,4 @@
-import TreeView from '../__internal/ui/tree_view/m_tree_view.search';
+import TreeView from '../__internal/ui/tree_view/tree_view.search';
 export default TreeView;
 
 // STYLE treeView
