@@ -74,7 +74,7 @@ class TreeListRowsView extends RowsView {
       const isLast = idx === level;
       const hasIcon = isLast && row.node.hasChildren;
       const $icon = createIcon(isLast, hasIcon, row.isExpanded);
-      $icon.append($iconContainer);
+      $icon.appendTo($iconContainer);
     }
 
     return $iconContainer;
