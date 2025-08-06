@@ -107,7 +107,7 @@ class EditDecoratorContext extends EditDecorator {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._menu.hide();
     this._list._itemEventHandlerByHandler(
-      this._$itemWithMenu ?? $(),
+      $(this._$itemWithMenu),
       e.itemData.action,
       {},
       { excludeValidators: ['disabled', 'readOnly'] },
