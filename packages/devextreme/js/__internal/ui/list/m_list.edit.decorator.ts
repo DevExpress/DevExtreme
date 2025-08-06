@@ -12,7 +12,7 @@ import $ from '@js/core/renderer';
 import { getWidth } from '@js/core/utils/size';
 import type { Cancelable, DxEvent } from '@js/events';
 
-import type { ListEditProperties } from './m_list.edit';
+import type { ListBaseProperties } from './m_list.base';
 import type List from './m_list.edit';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
@@ -25,7 +25,7 @@ export interface BagConfig {
   $container?: dxElementWrapper;
 }
 
-export type CommonControlOptions = Pick<ListEditProperties, 'activeStateEnabled' | 'hoverStateEnabled' | 'focusStateEnabled'>;
+export type CommonControlOptions = Pick<ListBaseProperties, 'activeStateEnabled' | 'hoverStateEnabled' | 'focusStateEnabled'>;
 
 class EditDecorator {
   _clearSwipeCache?: boolean;
@@ -63,17 +63,23 @@ class EditDecorator {
       config.$itemElement,
       SWIPE_START_EVENT_NAME,
       swipeConfig,
-      this._itemSwipeStartHandler.bind(this),
+      (e): void => {
+        this._itemSwipeStartHandler(e);
+      },
     );
     eventsEngine.on(
       config.$itemElement,
       SWIPE_UPDATE_EVENT_NAME,
-      this._itemSwipeUpdateHandler.bind(this),
+      (e): void => {
+        this._itemSwipeUpdateHandler(e);
+      },
     );
     eventsEngine.on(
       config.$itemElement,
       SWIPE_END_EVENT_NAME,
-      this._itemSwipeEndHandler.bind(this),
+      (e): void => {
+        this._itemSwipeEndHandler(e);
+      },
     );
   }
 

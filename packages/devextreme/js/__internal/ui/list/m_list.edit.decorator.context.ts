@@ -91,7 +91,9 @@ class EditDecoratorContext extends EditDecorator {
     this._$menuList = $('<div>');
     this._list._createComponent(this._$menuList, ListBase, {
       items,
-      onItemClick: this._menuItemClickHandler.bind(this),
+      onItemClick: (event: ItemClickEvent) => {
+        this._menuItemClickHandler(event);
+      },
       height: 'auto',
       // @ts-expect-error ts-error
       integrationOptions: {},
@@ -101,12 +103,12 @@ class EditDecoratorContext extends EditDecorator {
     $overlayContent.append(this._$menuList);
   }
 
-  _menuItemClickHandler(args: ItemClickEvent): void {
+  _menuItemClickHandler(e: ItemClickEvent): void {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._menu.hide();
     this._list._itemEventHandlerByHandler(
       this._$itemWithMenu ?? $(),
-      args.itemData.action,
+      e.itemData.action,
       {},
       { excludeValidators: ['disabled', 'readOnly'] },
     );

@@ -44,12 +44,16 @@ abstract class SwitchableEditDecorator extends EditDecorator {
     eventsEngine.on(
       this._$topShield,
       POINTER_DOWN_EVENT_NAME,
-      this._cancelDeleteReadyItem.bind(this),
+      (): void => {
+        this._cancelDeleteReadyItem();
+      },
     );
     eventsEngine.on(
       this._$bottomShield,
       POINTER_DOWN_EVENT_NAME,
-      this._cancelDeleteReadyItem.bind(this),
+      (): void => {
+        this._cancelDeleteReadyItem();
+      },
     );
 
     this._list.$element()

@@ -1068,7 +1068,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     // @ts-expect-error ts-error
     const endEventName = addNamespace(swipeEventEnd, this.NAME);
 
-    eventsEngine.on($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
+    eventsEngine.on($itemElement, endEventName, (e) => {
+      this._itemSwipeEndHandler(e);
+    });
   }
 
   _itemSwipeEndHandler(e: DxEvent & { offset: number }): void {

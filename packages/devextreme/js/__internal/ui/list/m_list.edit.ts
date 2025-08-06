@@ -32,8 +32,6 @@ type DxEventHandledByEditProvider = DxEvent & {
   handledByEditProvider?: boolean;
 };
 
-export interface ListEditProperties extends ListBaseProperties {}
-
 class ListEdit extends ListBase {
   _editStrategy!: PlainEditStrategy<Item> | GroupedEditStrategy;
 
@@ -137,7 +135,7 @@ class ListEdit extends ListBase {
     return super._isItemStrictEquals(item1, item2);
   }
 
-  _getDefaultOptions(): ListEditProperties {
+  _getDefaultOptions(): ListBaseProperties {
     return {
       ...super._getDefaultOptions(),
       showSelectionControls: false,

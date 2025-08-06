@@ -206,7 +206,9 @@ class EditDecoratorSelection extends EditDecorator {
     });
 
     eventsEngine.off(this._$selectAll, CLICK_EVENT_NAME);
-    eventsEngine.on(this._$selectAll, CLICK_EVENT_NAME, this._selectAllHandler.bind(this));
+    eventsEngine.on(this._$selectAll, CLICK_EVENT_NAME, (e) => {
+      this._selectAllHandler(e);
+    });
   }
 
   _updateSelectAllAriaLabel(): void {
