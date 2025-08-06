@@ -15,7 +15,7 @@ export interface ContextInfo {
   cardIndex?: number;
 }
 
-export interface ExtendedContextMenuItem extends ContextMenuItem {
+export interface CardViewContextMenuItem extends ContextMenuItem {
   value?: string;
   onItemClick: (event: ContextMenuItemPressedEvent) => void;
 }
@@ -76,7 +76,7 @@ export class ContextMenuController
     return event.items;
   }
 
-  private getSortingItems(column: Column): ExtendedContextMenuItem[] {
+  private getSortingItems(column: Column): CardViewContextMenuItem[] {
     const mode = this.sortingController.mode.value;
     const isDisabled = mode === 'none' || !column.allowSorting;
     const onItemClick = (event: ContextMenuItemPressedEvent): void => {
