@@ -25,6 +25,7 @@ import { hasWindow } from '@js/core/utils/window';
 import Button from '@js/ui/button';
 import type { Properties } from '@js/ui/calendar';
 import { isFluent } from '@js/ui/themes';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import Editor from '@ts/ui/editor/editor';
 
 import CalendarMultipleSelectionStrategy from './m_calendar.multiple.selection.strategy';
@@ -175,7 +176,7 @@ class Calendar<
     ]);
   }
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     return {
       ...super._supportedKeys(),
       rightArrow(e): void {
