@@ -56,13 +56,13 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
     return true;
   }
 
-  private _getGroupPath(groupItems) {
+  private _getGroupPath(groupItems, groupCount): any[] {
     const groupPath: any[] = [];
-    let item = groupItems[0];
+    let groupItem = groupItems[0];
 
-    while (item && item.items) {
-      groupPath.push(item.key);
-      [item] = item.items;
+    while (groupItem && groupPath.length < groupCount) {
+      groupPath.push(groupItem.key);
+      groupItem = groupItem.items?.[0];
     }
 
     return groupPath;
@@ -117,7 +117,7 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
         return deferred.resolve(-1).promise();
       }
 
-      const groupPath = that._getGroupPath(data);
+      const groupPath = that._getGroupPath(data, group.length);
 
       that._expandGroupByPath(that, groupPath, 0).done(() => {
         that._calculateExpandedRowGlobalIndex(deferred, key, groupPath, group);
