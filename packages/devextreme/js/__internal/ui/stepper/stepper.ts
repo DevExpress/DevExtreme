@@ -1,7 +1,6 @@
 import type { Orientation } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
-import type { DxElement } from '@js/core/element';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { isDefined } from '@js/core/utils/type';
@@ -184,7 +183,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
   _createItemByTemplate(
     itemTemplate: Template,
     renderArgs: ItemRenderInfo<Item>,
-  ): DxElement {
+  ): dxElementWrapper {
     const { itemData, index } = renderArgs;
 
     return super._createItemByTemplate(itemTemplate, {
@@ -193,7 +192,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
         text: `${index + 1}`,
         ...itemData,
       },
-    }) as DxElement;
+    });
   }
 
   _getItemInstance($item: dxElementWrapper): StepperItem {

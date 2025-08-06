@@ -1,1 +1,1 @@
-import '../list.edit.decorator.switchable.slide';
+import '@ts/ui/list/list.edit.decorator.switchable.slide';

@@ -20,7 +20,7 @@ export interface ResizeOffset {
 }
 
 export interface RenderQueueItem {
-  itemContent: dxElementWrapper;
+  itemContent: dxElementWrapper | Element;
   splitterConfig: Properties;
 }
 
@@ -28,14 +28,20 @@ export interface EventMap {
   onResizeStart: ResizeStartEvent;
   onResize: ResizeEvent;
   onResizeEnd: ResizeEndEvent;
-  onItemExpanded: ItemExpandedEvent;
-  onItemCollapsed: ItemCollapsedEvent;
+}
+
+export interface ResizeHandleEventMap extends EventMap {
   onCollapsePrev: ItemExpandedEvent;
   onCollapseNext: ItemCollapsedEvent;
 }
 
-export type HandlerMap = {
-  [K in keyof EventMap]: (e: Partial<EventMap[K]>) => void;
+export interface SplitterEventMap extends EventMap {
+  onItemExpanded: ItemExpandedEvent;
+  onItemCollapsed: ItemCollapsedEvent;
+}
+
+export type HandlerMap<T = SplitterEventMap> = {
+  [K in keyof T]: (e: Partial<T[K]>) => void;
 };
 
 export type InteractionEvent = DxEvent<KeyboardEvent | PointerEvent | MouseEvent | TouchEvent>;

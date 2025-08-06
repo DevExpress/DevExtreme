@@ -8,10 +8,9 @@ import { camelize } from '@js/core/utils/inflector';
 import { getWidth } from '@js/core/utils/size';
 import type { PanelLocation } from '@js/ui/drawer';
 import type Drawer from '@ts/ui/drawer/drawer';
+import { animation } from '@ts/ui/drawer/drawer.animation';
+import DrawerStrategy from '@ts/ui/drawer/drawer.rendering.strategy';
 import Overlay from '@ts/ui/overlay/overlay';
-
-import { animation } from './drawer.animation';
-import DrawerStrategy from './drawer.rendering.strategy';
 
 interface InitialPosition {
   left?: number;

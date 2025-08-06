@@ -9,6 +9,7 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import type { Properties } from '@js/ui/radio_group';
+import type { OptionChanged } from '@ts/core/widget/types';
 import type { EditorProperties, UnresolvedEvents } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 
@@ -135,7 +136,7 @@ class RadioGroup extends Editor<RadioGroupProperties> {
     this._validationMessage?.$content().attr('role', 'alert');
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<RadioGroupProperties>): void {
     const { name, value } = args;
     // @ts-expect-error
     this._dataExpressionOptionChanged(args);

@@ -23,6 +23,7 @@ import { getHeight, getOuterHeight, setHeight } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent, NativeEventInfo } from '@js/events';
+import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type {
   GroupRenderedEvent,
@@ -30,9 +31,9 @@ import type {
   PageLoadingEvent,
   Properties,
   PullRefreshEvent,
-  ScrollEvent,
 } from '@js/ui/list';
 import type dxList from '@js/ui/list';
+import type { ScrollEvent } from '@js/ui/scroll_view';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import { render } from '@ts/core/utils/m_ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
@@ -46,6 +47,7 @@ import type {
   InkRippleEvent,
   PostprocessRenderItemInfo,
 } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionItemIndex } from '@ts/ui/collection/collection_widget.edit.strategy';
 import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 import CollectionWidget from '@ts/ui/collection/collection_widget.live_update';
 import ListItem from '@ts/ui/list/item';
@@ -58,8 +60,6 @@ import { deviceDependentOptions } from '@ts/ui/scroll_view/scrollable.device';
 import type { ScrollOffset } from '@ts/ui/scroll_view/types';
 import { getElementMargin } from '@ts/ui/scroll_view/utils/get_element_style';
 import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
-
-import type { CollectionItemIndex } from '../collection/collection_widget.edit.strategy';
 
 const LIST_CLASS = 'dx-list';
 const LIST_ITEMS_CLASS = 'dx-list-items';
@@ -590,7 +590,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       onScroll: (e: ScrollEvent): void => {
         this._scrollHandler(e);
       },
+      // @ts-expect-error ts-error
       onPullDown: isPullRefreshEnabled ? this._pullDownHandler.bind(this) : null,
+      // @ts-expect-error ts-error
       onReachBottom: autoPagingEnabled ? this._scrollBottomHandler.bind(this) : null,
       showScrollbar,
       useNative: useNativeScrolling,
@@ -1147,8 +1149,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     const { groupTemplate: templateName } = this.option();
 
     const groupTemplate = this._getTemplate(
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      group.template || templateName,
+      group.template ?? templateName,
       // @ts-expect-error ts-error
       group,
       index,
@@ -1160,7 +1161,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       itemData: group,
       container: getPublicElement($groupHeaderElement),
     };
-    // @ts-expect-error ts-error
+
     this._createItemByTemplate(groupTemplate, renderArgs);
 
     $('<div>')
@@ -1174,8 +1175,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       .attr('id', groupBodyId)
       .appendTo($groupElement);
 
-    const groupItemsGetter = compileGetter('items') as (data: GroupedItem) => Item[];
+    const groupItemsGetter = compileGetter('items');
 
+    // @ts-expect-error ts-error
     each(groupItemsGetter(group) || [], (itemIndex: number, item: Item): void => {
       this._renderItem({ group: index, item: itemIndex }, item, $groupBody);
     });
@@ -1271,12 +1273,13 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
 
     const { nextButtonText } = this.option();
 
-    this._createComponent($button, Button, {
+    this._createComponent<Button, ButtonProperties>($button, Button, {
       text: nextButtonText,
       onClick: (): void => {
         this._nextButtonHandler();
       },
       type: isMaterialBased(current()) ? 'default' : undefined,
+      // @ts-expect-error
       integrationOptions: {},
     });
 
