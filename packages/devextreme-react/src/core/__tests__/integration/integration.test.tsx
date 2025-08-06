@@ -5,7 +5,15 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import SelectBox from '../../../select-box';
 import TextBox from '../../../text-box';
+import {
+  Form,
+  RequiredRule,
+  SimpleItem,
+} from '../../../form';
+import Validator from '../../../validator';
+import ValidationSummary from '../../../validation-summary';
 import { ContextMenu, Item as ContextMenuItem } from '../../../context-menu';
+import Button from '../../../button';
 
 jest.useFakeTimers();
 
@@ -14,6 +22,67 @@ describe('integration tests', () => {
     jest.clearAllMocks();
     testingLib.cleanup();
   });
+
+  it('renders selectbox with nested Validator component without double error rendering', async () => {
+    const user = userEvent.setup({ delay: null });
+    const groupName = "sharedGroup";
+    const onClick = (e: any) => {
+      return e.validationGroup?.validate();
+    };
+
+    const items = [
+      {
+        id: 1,
+        description: "One",
+      },
+    ];
+
+    const SelectBoxWithValidator = () => {
+      const [formData, setFormData] = React.useState({ code: null, type: null });
+
+      const valueChanged = React.useCallback((e) => {
+        setFormData((prevFormData) => {
+          return {
+            ...prevFormData,
+            type: e.value,
+          };
+        });
+      }, []);
+
+      return (
+        <>
+          <Form validationGroup={groupName} formData={formData}>
+            <SimpleItem>
+              <SelectBox
+                value={formData.type}
+                onValueChanged={valueChanged}
+                items={items}
+                showClearButton
+                valueExpr={'id'}
+                displayExpr={'description'}
+              >
+                <Validator validationGroup={groupName}>
+                  <RequiredRule message='Type is required' />
+                </Validator>
+              </SelectBox>
+            </SimpleItem>
+          </Form>
+          <ValidationSummary validationGroup={groupName} />
+          <Button validationGroup={groupName} text='Validate' onClick={onClick} />
+        </>
+      );
+    }
+
+    testingLib.render(
+      <React.Fragment>
+        <SelectBoxWithValidator />
+      </React.Fragment>
+    );
+
+    await user.click(testingLib.screen.getByText('Validate'));
+    const summaryElement = document.querySelector('.dx-validationsummary');
+    expect(summaryElement?.children.length).toBe(1);
+  })
 
   it('renders selectbox in strict mode when data source is specified dynamically without errors', () => {
     const Field = (data: any) => {
