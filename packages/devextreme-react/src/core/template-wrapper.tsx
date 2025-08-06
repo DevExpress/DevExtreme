@@ -58,7 +58,7 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
     }
 
     if (elements.current.length) {
-      elements.current.map(el => events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
+      elements.current.forEach((el) => events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
     }
 
     if (removalListenerElement.current) {
@@ -66,16 +66,15 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
     }
 
     Promise.resolve().then(() => {
-      debugger;
       onRemoved();
-    })
+    });
   }, [onRemoved]);
 
   useLayoutEffect(() => {
     const elems = elements.current;
 
-    if (elems.length && elems.some(el => el.nodeType === Node.ELEMENT_NODE)) {
-      elems.map(el => {
+    if (elems.length && elems.some((el) => el.nodeType === Node.ELEMENT_NODE)) {
+      elems.forEach((el) => {
         if (el.nodeType === Node.ELEMENT_NODE) {
           events.off(el, DX_REMOVE_EVENT, onTemplateRemoved);
           events.on(el, DX_REMOVE_EVENT, onTemplateRemoved);
@@ -95,12 +94,12 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
         }
       };
 
-      elements.current.map(el => safeAppend(el));
+      elements.current.forEach((el) => safeAppend(el));
       safeAppend(hiddenNodeElement.current);
       safeAppend(removalListenerElement.current);
 
       if (elems && elems.length) {
-        elems.map(el => events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
+        elems.forEach((el) => events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
       }
     };
   }, [onTemplateRemoved, removalListenerRequired, container]);
@@ -116,9 +115,9 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
     elements.current = [];
 
     let currentNode = node?.previousSibling as HTMLElement;
-  
-    while(currentNode) {
-      if(!containerContent.includes(currentNode)) {
+
+    while (currentNode) {
+      if (!containerContent.includes(currentNode)) {
         elements.current.push(currentNode);
       }
 
