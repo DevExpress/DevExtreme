@@ -17,11 +17,11 @@ import { getImageContainer } from '@js/core/utils/icon';
 import * as iteratorUtils from '@js/core/utils/iterator';
 import { getHeight, getOuterHeight, setHeight } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
-import type { DxEvent, ItemInfo } from '@js/events';
+import type { DxEvent } from '@js/events';
 import type { Item, Properties } from '@js/ui/accordion';
 import { isMaterialBased } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionItemInfo, ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
 import CollectionWidget from '@ts/ui/collection/collection_widget.live_update';
 
 const ACCORDION_CLASS = 'dx-accordion';
@@ -41,7 +41,7 @@ export interface AccordionProperties extends Properties<Item> {
   templatesRenderAsynchronously?: boolean;
 }
 
-class Accordion extends CollectionWidget<AccordionProperties> {
+class Accordion extends CollectionWidget<AccordionProperties, Item> {
   _deferredAnimate?: DeferredObj<unknown>;
 
   // eslint-disable-next-line no-restricted-globals
@@ -183,7 +183,7 @@ class Accordion extends CollectionWidget<AccordionProperties> {
     // @ts-expect-error ts-error
     const itemData = $(target).parent().data(this._itemDataKey()) as Item | undefined;
 
-    return itemData ?? super._getItemData(target) as Item;
+    return itemData ?? super._getItemData(target);
   }
 
   _itemSelectHandler(e: DxEvent): void {
@@ -196,7 +196,7 @@ class Accordion extends CollectionWidget<AccordionProperties> {
 
   _afterItemElementDeleted(
     $item: dxElementWrapper,
-    deletedActionArgs: ItemInfo<Item>,
+    deletedActionArgs: CollectionItemInfo<Item, number>,
   ): void {
     this._deferredItems.splice(deletedActionArgs.itemIndex, 1);
     super._afterItemElementDeleted($item, deletedActionArgs);

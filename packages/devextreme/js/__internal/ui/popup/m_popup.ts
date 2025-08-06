@@ -42,6 +42,7 @@ import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import type Toolbar from '@js/ui/toolbar';
 import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { GeometryOptions, OverlayActions } from '@ts/ui/overlay/overlay';
 import Overlay from '@ts/ui/overlay/overlay';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
@@ -204,7 +205,7 @@ class Popup<
 
   _titleRenderAction?: TitleRenderAction;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     return {
       ...super._supportedKeys(),
       upArrow: (e): void => { this._drag?.moveUp(e); },
