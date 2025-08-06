@@ -1,5 +1,5 @@
-import type List from '@ts/ui/list/m_list.edit';
-import type EditDecorator from '@ts/ui/list/m_list.edit.decorator';
+import type List from '@ts/ui/list/list.edit';
+import type EditDecorator from '@ts/ui/list/list.edit.decorator';
 
 export type DecoratorClass = new (list: List) => EditDecorator;
 
