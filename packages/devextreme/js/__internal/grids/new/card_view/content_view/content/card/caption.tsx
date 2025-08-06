@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
 import type { FieldInfo } from '@ts/grids/new/grid_core/columns_controller/types';
@@ -20,7 +19,7 @@ export class Caption extends Component<CaptionProps> {
   private readonly onClick = (e): void => {
     const args = {
       event: e,
-      fieldCaptionElement: getPublicElement($(this.ref.current!)),
+      fieldCaptionElement: getPublicElement($(this.ref.current)),
       field: this.props.field,
     };
 
@@ -30,7 +29,7 @@ export class Caption extends Component<CaptionProps> {
   private readonly onDblClick = (e): void => {
     const args = {
       event: e,
-      fieldCaptionElement: getPublicElement($(this.ref.current!)),
+      fieldCaptionElement: getPublicElement($(this.ref.current)),
       field: this.props.field,
     };
 
@@ -58,7 +57,7 @@ export class Caption extends Component<CaptionProps> {
 
   componentDidMount(): void {
     const args = {
-      fieldCaptionElement: getPublicElement($(this.ref.current!)),
+      fieldCaptionElement: getPublicElement($(this.ref.current)),
       field: this.props.field,
     };
 

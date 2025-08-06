@@ -65,7 +65,6 @@ class DropDownBox<
   }
 
   _getElements(): dxElementWrapper {
-    // @ts-expect-error ts-error
     return $(this.content()).find('*');
   }
 

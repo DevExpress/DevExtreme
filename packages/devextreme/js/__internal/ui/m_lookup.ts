@@ -532,7 +532,6 @@ class Lookup extends DropDownList<LookupProperties> {
       });
     });
 
-    // @ts-expect-error
     return $(items);
   }
 
