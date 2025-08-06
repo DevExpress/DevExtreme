@@ -51,7 +51,7 @@ const TreeMap = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["loadingIndicator","loadingIndicator.show"]), []);
       const independentEvents = useMemo(() => (["onClick","onDisposing","onDrawn","onDrill","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onNodesInitialized","onNodesRendering"]), []);
