@@ -2,19 +2,15 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { DxEvent } from '@js/events';
 import errors from '@js/ui/widget/ui.errors';
-import type { SearchBoxMixinOptions } from '@js/ui/widget/ui.search_box_mixin';
 import type { OptionChanged } from '@ts/core/widget/types';
 import SearchBoxController, {
   getOperationBySearchMode,
   type SearchBoxControllerOptions,
-} from '@ts/ui/collection/m_search_box_mixin';
-import type { ListBaseProperties } from '@ts/ui/list/m_list.base';
-
-import ListEdit from './m_list.edit';
+} from '@ts/ui/collection/search_box_controller';
+import type { ListBaseProperties } from '@ts/ui/list/list.base';
+import ListEdit from '@ts/ui/list/list.edit';
 
 // STYLE list
-
-export type ListSearchProperties = ListBaseProperties & SearchBoxMixinOptions;
 
 const LIST_CLASS_PREFIX = 'dx-list';
 
@@ -37,10 +33,12 @@ class ListSearch extends ListEdit {
     return filter;
   }
 
-  _getDefaultOptions(): ListSearchProperties {
+  _getDefaultOptions(): ListBaseProperties {
     return {
       ...super._getDefaultOptions(),
+      // @ts-expect-error ts-error
       searchMode: '',
+      // @ts-expect-error ts-error
       searchExpr: null,
       searchValue: '',
       searchEnabled: false,
@@ -106,22 +104,30 @@ class ListSearch extends ListEdit {
   }
 
   _getAriaTarget(): dxElementWrapper {
-    if (this.option('searchEnabled')) {
+    const { searchEnabled } = this.option();
+
+    if (searchEnabled) {
       return this._itemContainer();
     }
+
     return super._getAriaTarget();
   }
 
   focus(): void {
-    if (!this.option('focusedElement') && this.option('searchEnabled')) {
+    const { focusedElement, searchEnabled } = this.option();
+
+    if (!focusedElement && searchEnabled) {
       this._searchBoxController?.focus();
       return;
     }
+
     super.focus();
   }
 
   _focusTarget(): dxElementWrapper {
-    if (this.option('searchEnabled')) {
+    const { searchEnabled } = this.option();
+
+    if (searchEnabled) {
       return this._itemContainer();
     }
 
@@ -129,14 +135,19 @@ class ListSearch extends ListEdit {
   }
 
   _updateFocusState(e: DxEvent, isFocused: boolean): void {
-    if (this.option('searchEnabled')) {
+    const { searchEnabled } = this.option();
+
+    if (searchEnabled) {
       this._toggleFocusClass(isFocused, this.$element());
     }
+
     super._updateFocusState(e, isFocused);
   }
 
-  _optionChanged(args: OptionChanged<ListSearchProperties>): void {
-    switch (args.name) {
+  _optionChanged(args: OptionChanged<ListBaseProperties>): void {
+    const { name, value } = args;
+
+    switch (name) {
       case 'searchEnabled':
       case 'searchEditorOptions':
         this._invalidate();
@@ -148,10 +159,10 @@ class ListSearch extends ListEdit {
           errors.log('W1009');
           return;
         }
-        if (args.name === 'searchMode') {
-          this._dataSource.searchOperation(getOperationBySearchMode(args.value));
+        if (name === 'searchMode') {
+          this._dataSource.searchOperation(getOperationBySearchMode(value));
         } else {
-          this._dataSource[args.name](args.value);
+          this._dataSource[name](value);
         }
         this._dataSource.load();
         break;

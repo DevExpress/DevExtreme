@@ -9,9 +9,9 @@ import config from 'core/config';
 import pointerMock from '../../../helpers/pointerMock.js';
 import contextMenuEvent from 'common/core/events/contextmenu';
 import keyboardMock from '../../../helpers/keyboardMock.js';
-import { registry, register } from '__internal/ui/list/m_list.edit.decorator_registry';
-import SwitchableEditDecorator from '__internal/ui/list/m_list.edit.decorator.switchable';
-import SwitchableButtonEditDecorator from '__internal/ui/list/m_list.edit.decorator.switchable.button';
+import { registry, register } from '__internal/ui/list/list.edit.decorator_registry';
+import SwitchableEditDecorator from '__internal/ui/list/list.edit.decorator.switchable';
+import SwitchableButtonEditDecorator from '__internal/ui/list/list.edit.decorator.switchable.button';
 import themes from 'ui/themes';
 import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
@@ -112,29 +112,27 @@ const reorderingPointerMock = ($item, clock, usePixel) => {
 
 QUnit.module('switchable menu decorator', {
     beforeEach: function() {
-        const testDecorator = SwitchableEditDecorator.inherit({
-
-            modifyElement: function(config) {
-                this.callBase.apply(this, arguments);
+        class TestDecorator extends SwitchableEditDecorator {
+            modifyElement(config) {
+                super.modifyElement(config);
 
                 const $itemElement = $(config.$itemElement);
 
                 $itemElement.on('dxpreparetodelete', $.proxy((e) => {
                     this._toggleDeleteReady($itemElement);
                 }, this));
-            },
+            }
 
-            _animateForgetDeleteReady: () => {
-                return $.when().promise();
-            },
-
-            _animatePrepareDeleteReady: () => {
+            _animateForgetDeleteReady() {
                 return $.when().promise();
             }
 
-        });
+            _animatePrepareDeleteReady() {
+                return $.when().promise();
+            }
+        }
 
-        register('menu', 'test', testDecorator);
+        register('menu', 'test', TestDecorator);
     },
     afterEach: function() {
         delete registry.menu.test;
@@ -346,10 +344,9 @@ QUnit.module('switchable button delete decorator', {
     beforeEach: function() {
         fx.off = true;
 
-        const testDecorator = SwitchableButtonEditDecorator.inherit({
-
-            modifyElement: function(config) {
-                this.callBase.apply(this, arguments);
+        class TestDecorator extends SwitchableButtonEditDecorator {
+            modifyElement(config) {
+                super.modifyElement(config);
 
                 const $itemElement = $(config.$itemElement);
 
@@ -357,9 +354,8 @@ QUnit.module('switchable button delete decorator', {
                     this._toggleDeleteReady($itemElement);
                 }, this));
             }
-
-        });
-        register('menu', 'test', testDecorator);
+        }
+        register('menu', 'test', TestDecorator);
     },
     afterEach: function() {
         fx.off = false;
@@ -416,7 +412,7 @@ QUnit.module('switchable button delete decorator', {
 
         $item.trigger('dxpreparetodelete');
         list.deleteItem = ($itemElement) => {
-            assert.strictEqual($itemElement.get(0), $item.get(0), 'item is deleted');
+            assert.strictEqual($itemElement, $item.get(0), 'item is deleted');
             return $.Deferred().resolve().promise();
         };
 
@@ -479,7 +475,7 @@ QUnit.module('toggle delete decorator', () => {
         const $buttonContainer = $item.find(`.${SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS}`);
 
         assert.strictEqual(fxStopSpy.callCount, 3);
-        assert.strictEqual(fxStopSpy.getCall(1).args[0][0], $buttonContainer[0], 'stop is called on button container');
+        assert.strictEqual(fxStopSpy.getCall(1).args[0], $buttonContainer.get(0), 'stop is called on button container');
         assert.strictEqual(fxStopSpy.getCall(1).args[1], false, 'without jump to end');
         fx.stop.restore();
     });
@@ -499,7 +495,7 @@ QUnit.module('static delete decorator', () => {
         const $item = $items.eq(0);
 
         list.deleteItem = ($itemElement) => {
-            assert.strictEqual($itemElement.get(0), $item.get(0), 'item is deleted');
+            assert.strictEqual($itemElement, $item.get(0), 'item is deleted');
             return $.Deferred().resolve().promise();
         };
 
@@ -570,7 +566,7 @@ QUnit.module('slideButton delete decorator', () => {
         const $buttonContainer = $item.find(`.${SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS}`);
 
         assert.strictEqual(fxStopSpy.callCount, 3);
-        assert.strictEqual(fxStopSpy.getCall(1).args[0][0], $buttonContainer[0], 'stop is called on button container');
+        assert.strictEqual(fxStopSpy.getCall(1).args[0], $buttonContainer.get(0), 'stop is called on button container');
         assert.strictEqual(fxStopSpy.getCall(1).args[1], false, 'without jump to end');
         fx.stop.restore();
     });
@@ -760,7 +756,7 @@ QUnit.module('slideItem delete decorator', {
         const $item = $items.eq(0);
 
         list.deleteItem = ($itemElement) => {
-            assert.strictEqual($itemElement.get(0), $item.get(0), 'item is deleted');
+            assert.strictEqual($itemElement, $item.get(0), 'item is deleted');
             return $.Deferred().resolve().promise();
         };
 
@@ -1303,7 +1299,7 @@ QUnit.module('swipe delete decorator', {
         const pointer = pointerMock($item);
 
         list.deleteItem = ($itemElement) => {
-            assert.strictEqual($itemElement.get(0), $item.get(0), 'item is deleted');
+            assert.strictEqual($itemElement, $item.get(0), 'item is deleted');
             return $.Deferred().resolve().promise();
         };
 

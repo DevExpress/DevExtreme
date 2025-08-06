@@ -355,7 +355,6 @@ class Devices {
   }
 
   _changeOrientation() {
-    // @ts-expect-error
     const $window = $(this._window);
     const orientation = getHeight($window) > getWidth($window) ? 'portrait' : 'landscape';
 

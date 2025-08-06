@@ -47,7 +47,7 @@ import type {
 import MenuBase from '@ts/ui/context_menu/menu_base';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/m_utils';
-import type { TreeViewBaseProperties } from '@ts/ui/tree_view/m_tree_view.base';
+import type { TreeViewBaseProperties } from '@ts/ui/tree_view/tree_view.base';
 
 import type { SubmenuProperties } from './submenu';
 import Submenu from './submenu';
@@ -866,7 +866,7 @@ class Menu extends MenuBase<MenuProperties> {
     const isFocusedElementHiding = focusedElement === submenuFocusedElement;
 
     if (isVisibleSubmenuHiding && isFocusedElementHiding) {
-      this.option('focusedElement', $menuAnchorItem);
+      this.option('focusedElement', getPublicElement($menuAnchorItem));
     }
 
     if (!eventArgs.cancel) {

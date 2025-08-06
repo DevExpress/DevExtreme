@@ -1,5 +1,6 @@
 import { fx } from '@js/common/core/animation';
 import { locate, move } from '@js/common/core/animation/translator';
+import type { Cancelable, ItemInfo, NativeEventInfo } from '@js/common/core/events';
 import { name as clickEventName } from '@js/common/core/events/click';
 import { active } from '@js/common/core/events/core/emitter.feedback';
 import eventsEngine from '@js/common/core/events/core/events_engine';
@@ -9,11 +10,14 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { getOuterWidth, setWidth } from '@js/core/utils/size';
-import { isMaterialBased } from '@js/ui/themes';
+import type { DxEvent } from '@js/events';
+import type dxActionSheet from '@js/ui/action_sheet';
+import type { Item } from '@js/ui/list';
+import { current, isMaterialBased } from '@js/ui/themes';
 import ActionSheet from '@ts/ui/action_sheet';
-
-import SwitchableEditDecorator from './m_list.edit.decorator.switchable';
-import { register as registerDecorator } from './m_list.edit.decorator_registry';
+import type { BagConfig, SwipeEndArgs, SwipeUpdateArgs } from '@ts/ui/list/list.edit.decorator';
+import SwitchableEditDecorator from '@ts/ui/list/list.edit.decorator.switchable';
+import { register as registerDecorator } from '@ts/ui/list/list.edit.decorator_registry';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
 const CLICK_EVENT_NAME = addNamespace(clickEventName, LIST_EDIT_DECORATOR);
@@ -34,6 +38,12 @@ const SLIDE_MENU_BUTTON_DELETE_CLASS = 'dx-list-slide-menu-button-delete';
 const SLIDE_MENU_ANIMATION_DURATION = 400;
 const SLIDE_MENU_ANIMATION_EASING = 'cubic-bezier(0.075, 0.82, 0.165, 1)';
 
+interface Positions {
+  content: number;
+  buttonsContainer: number;
+  buttons: number;
+}
+
 class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
   _$buttonsContainer!: dxElementWrapper;
 
@@ -49,14 +59,12 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
 
   _cachedNode?: Element;
 
-  // eslint-disable-next-line class-methods-use-this
   _shouldHandleSwipe(): boolean {
     return true;
   }
 
   _init(): void {
-    // @ts-expect-error ts-error
-    super._init.apply(this, arguments);
+    super._init();
 
     this._$buttonsContainer = $('<div>').addClass(SLIDE_MENU_BUTTONS_CONTAINER_CLASS);
     eventsEngine.on(this._$buttonsContainer, ACTIVE_EVENT_NAME, noop);
@@ -70,7 +78,7 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
   }
 
   _renderMenu(): void {
-    const { menuItems } = this._list.option();
+    const { menuItems = [] } = this._list.option();
     if (!menuItems.length) {
       return;
     }
@@ -78,7 +86,7 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
     if (menuItems.length === 1) {
       const menuItem = menuItems[0];
 
-      this._renderMenuButton(menuItem.text, (e) => {
+      this._renderMenuButton(menuItem.text ?? '', (e: DxEvent): void => {
         e.stopPropagation();
         this._fireAction(menuItem);
       });
@@ -87,14 +95,17 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
       this._menu = this._list._createComponent($menu, ActionSheet, {
         showTitle: false,
         items: menuItems,
-        onItemClick: function (args) {
+        onItemClick: (
+          args: NativeEventInfo<dxActionSheet<Item>, MouseEvent | PointerEvent> & ItemInfo<Item>,
+        ): void => {
           this._fireAction(args.itemData);
-        }.bind(this),
+        },
+        // @ts-expect-error ts-error
         integrationOptions: {},
       });
       $menu.appendTo(this._list.$element());
 
-      const $menuButton = this._renderMenuButton(messageLocalization.format('dxListEditDecorator-more'), (e) => {
+      const $menuButton = this._renderMenuButton(messageLocalization.format('dxListEditDecorator-more'), (e: DxEvent): void => {
         e.stopPropagation();
         this._menu.show();
       });
@@ -102,7 +113,7 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
     }
   }
 
-  _renderMenuButton(text, action) {
+  _renderMenuButton(text: string, action: (e: DxEvent) => void): dxElementWrapper {
     const $menuButton = $('<div>')
       .addClass(SLIDE_MENU_BUTTON_CLASS)
       .addClass(SLIDE_MENU_BUTTON_MENU_CLASS)
@@ -116,6 +127,7 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
 
   _renderDeleteButton(): void {
     const { allowItemDeleting } = this._list.option();
+
     if (!allowItemDeleting) {
       return;
     }
@@ -123,12 +135,11 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
     const $deleteButton = $('<div>')
       .addClass(SLIDE_MENU_BUTTON_CLASS)
       .addClass(SLIDE_MENU_BUTTON_DELETE_CLASS)
-      // @ts-expect-error ts-error
-      .text(isMaterialBased()
+      .text(isMaterialBased(current())
         ? ''
         : messageLocalization.format('dxListEditDecorator-delete'));
 
-    eventsEngine.on($deleteButton, CLICK_EVENT_NAME, (e) => {
+    eventsEngine.on($deleteButton, CLICK_EVENT_NAME, (e: DxEvent): void => {
       e.stopPropagation();
       this._deleteItem();
     });
@@ -146,9 +157,8 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
     this._cancelDeleteReadyItem();
   }
 
-  modifyElement(config): void {
-    // @ts-expect-error ts-error
-    super.modifyElement.apply(this, arguments);
+  modifyElement(config: BagConfig): void {
+    super.modifyElement(config);
 
     const { $itemElement } = config;
 
@@ -161,45 +171,49 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
     $itemElement.wrapInner($slideMenuContent);
   }
 
-  _getDeleteButtonContainer() {
+  _getDeleteButtonContainer(): dxElementWrapper {
     return this._$buttonsContainer;
   }
 
-  handleClick(_, e) {
+  handleClick($itemElement: dxElementWrapper, e: DxEvent): boolean {
     if ($(e.target).closest(`.${SLIDE_MENU_CONTENT_CLASS}`).length) {
-      // @ts-expect-error ts-error
-      return super.handleClick.apply(this, arguments);
+      return super.handleClick($itemElement, e);
     }
     return false;
   }
 
-  _swipeStartHandler($itemElement): void {
+  _swipeStartHandler($itemElement: dxElementWrapper): void {
     this._enablePositioning($itemElement);
     this._cacheItemData($itemElement);
     this._setPositions(this._getPositions(0));
   }
 
-  _swipeUpdateHandler($itemElement, args) {
+  _swipeUpdateHandler(
+    $itemElement: dxElementWrapper,
+    e: DxEvent & SwipeUpdateArgs & Cancelable,
+  ): void {
     const rtl = this._isRtlEnabled();
     const signCorrection = rtl ? -1 : 1;
     const isItemReadyToDelete = this._isReadyToDelete($itemElement);
-    const moveJustStarted = this._getCurrentPositions().content === this._getStartPositions().content;
+    const moveJustStarted = this._getCurrentPositions().content
+      === this._getStartPositions().content;
 
-    if (moveJustStarted && !isItemReadyToDelete && args.offset * signCorrection > 0) {
-      args.cancel = true;
+    if (moveJustStarted && !isItemReadyToDelete && e.offset * signCorrection > 0) {
+      e.cancel = true;
       return;
     }
 
-    const offset = this._cachedItemWidth * args.offset;
+    const offset = this._cachedItemWidth * e.offset;
     const startOffset = isItemReadyToDelete ? -this._cachedButtonWidth * signCorrection : 0;
     const correctedOffset = (offset + startOffset) * signCorrection;
-    const percent = correctedOffset < 0 ? Math.abs((offset + startOffset) / this._cachedButtonWidth) : 0;
+    const percent = correctedOffset < 0
+      ? Math.abs((offset + startOffset) / this._cachedButtonWidth)
+      : 0;
 
     this._setPositions(this._getPositions(percent));
-    return true;
   }
 
-  _getStartPositions() {
+  _getStartPositions(): Positions {
     const rtl = this._isRtlEnabled();
     const signCorrection = rtl ? -1 : 1;
 
@@ -210,19 +224,21 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
     };
   }
 
-  _getPositions(percent) {
+  _getPositions(percent: number): Positions {
     const rtl = this._isRtlEnabled();
     const signCorrection = rtl ? -1 : 1;
     const startPositions = this._getStartPositions();
 
     return {
       content: startPositions.content - percent * this._cachedButtonWidth * signCorrection,
-      buttonsContainer: startPositions.buttonsContainer - Math.min(percent, 1) * this._cachedButtonWidth * signCorrection,
-      buttons: startPositions.buttons + Math.min(percent, 1) * this._cachedButtonWidth * signCorrection,
+      buttonsContainer: startPositions.buttonsContainer
+        - Math.min(percent, 1) * this._cachedButtonWidth * signCorrection,
+      buttons: startPositions.buttons
+        + Math.min(percent, 1) * this._cachedButtonWidth * signCorrection,
     };
   }
 
-  _getCurrentPositions() {
+  _getCurrentPositions(): Positions {
     return {
       content: locate(this._$cachedContent).left,
       buttonsContainer: locate(this._$buttonsContainer).left,
@@ -230,13 +246,13 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
     };
   }
 
-  _setPositions(positions): void {
+  _setPositions(positions: Positions): void {
     move(this._$cachedContent, { left: positions.content });
     move(this._$buttonsContainer, { left: positions.buttonsContainer });
     move(this._$buttons, { left: positions.buttons });
   }
 
-  _cacheItemData($itemElement) {
+  _cacheItemData($itemElement: dxElementWrapper): void {
     if ($itemElement[0] === this._cachedNode) {
       return;
     }
@@ -247,70 +263,68 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
     setWidth(this._$buttonsContainer, this._cachedButtonWidth);
 
     if (this._$cachedContent?.length) {
-      // eslint-disable-next-line prefer-destructuring
-      this._cachedNode = $itemElement[0];
+      this._cachedNode = $itemElement.get(0);
     }
   }
 
-  _minButtonContainerLeftOffset() {
+  _minButtonContainerLeftOffset(): number {
     return this._cachedItemWidth - this._cachedButtonWidth;
   }
 
-  _swipeEndHandler($itemElement, args): boolean {
+  _swipeEndHandler($itemElement: dxElementWrapper, args: DxEvent & SwipeEndArgs): void {
     this._cacheItemData($itemElement);
 
     const signCorrection = this._isRtlEnabled() ? 1 : -1;
     const offset = this._cachedItemWidth * args.offset;
-    const endedAtReadyToDelete = !this._isReadyToDelete($itemElement) && (offset * signCorrection > this._cachedButtonWidth * 0.2);
+    const endedAtReadyToDelete = !this._isReadyToDelete($itemElement)
+      && (offset * signCorrection > this._cachedButtonWidth * 0.2);
     const readyToDelete = args.targetOffset === signCorrection && endedAtReadyToDelete;
 
     this._toggleDeleteReady($itemElement, readyToDelete);
-    return true;
   }
 
-  _enablePositioning($itemElement) {
-    // @ts-expect-error ts-error
-    fx.stop(this._$cachedContent, true);
-    // @ts-expect-error ts-error
-    super._enablePositioning.apply(this, arguments);
+  _enablePositioning($itemElement: dxElementWrapper): void {
+    if (this._$cachedContent) {
+      fx.stop(this._$cachedContent.get(0), true);
+    }
+
+    super._enablePositioning($itemElement);
 
     this._$buttonsContainer.appendTo($itemElement);
   }
 
-  _disablePositioning(): void {
-    // @ts-expect-error ts-error
-    super._disablePositioning.apply(this, arguments);
+  _disablePositioning($itemElement: dxElementWrapper): void {
+    super._disablePositioning($itemElement);
 
     this._$buttonsContainer.detach();
   }
 
-  _animatePrepareDeleteReady() {
+  _animatePrepareDeleteReady(): Promise<void> {
     return this._animateToPositions(this._getPositions(1));
   }
 
-  _animateForgetDeleteReady($itemElement) {
+  _animateForgetDeleteReady($itemElement: dxElementWrapper): Promise<void> {
     this._cacheItemData($itemElement);
 
     return this._animateToPositions(this._getPositions(0));
   }
 
-  _animateToPositions(positions): void {
-    const that = this;
-
+  _animateToPositions(positions: Positions): Promise<void> {
     const currentPosition = this._getCurrentPositions();
     const durationTimePart = Math.min(
       Math.abs(currentPosition.content - positions.content) / this._cachedButtonWidth,
       1,
     );
-    // @ts-expect-error ts-error
-    return fx.animate(this._$cachedContent, {
+    return fx.animate($(this._$cachedContent).get(0), {
+      // @ts-expect-error ts-error
       from: currentPosition,
+      // @ts-expect-error ts-error
       to: positions,
       easing: SLIDE_MENU_ANIMATION_EASING,
       duration: SLIDE_MENU_ANIMATION_DURATION * durationTimePart,
       strategy: 'frame',
-      draw(positions) {
-        that._setPositions(positions);
+      draw: (drawPositions: Positions): void => {
+        this._setPositions(drawPositions);
       },
     });
   }
@@ -322,8 +336,7 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
     if (this._$buttonsContainer) {
       this._$buttonsContainer.remove();
     }
-    // @ts-expect-error ts-error
-    super.dispose.apply(this, arguments);
+    super.dispose();
   }
 }
 

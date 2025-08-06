@@ -1,44 +1,57 @@
 import { isTouchEvent } from '@js/common/core/events/utils';
 import localizationMessage from '@js/common/core/localization/message';
+import { getPublicElement } from '@js/core/element';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import type { DxEvent } from '@js/events';
-import type { Item } from '@js/ui/list';
+import type {
+  Item,
+} from '@js/ui/list';
 import { isNumeric, isObject } from '@ts/core/utils/m_type';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import { NOT_EXISTING_INDEX } from '@ts/ui/collection/collection_widget.edit';
-
-import type PlainEditStrategy from '../collection/collection_widget.edit.strategy.plain';
-import GroupedEditStrategy from './list.edit.strategy.grouped';
-import type { ListBaseProperties } from './m_list.base';
-import { ListBase } from './m_list.base';
-import EditProvider from './m_list.edit.provider';
+import type { CollectionItemIndex } from '@ts/ui/collection/collection_widget.edit.strategy';
+import type PlainEditStrategy from '@ts/ui/collection/collection_widget.edit.strategy.plain';
+import type { CachedItem } from '@ts/ui/collection/collection_widget.live_update';
+import { PRIVATE_KEY_FIELD } from '@ts/ui/collection/collection_widget.live_update';
+import type { ListBaseProperties } from '@ts/ui/list/list.base';
+import { ListBase } from '@ts/ui/list/list.base';
+import EditProvider from '@ts/ui/list/list.edit.provider';
+import GroupedEditStrategy from '@ts/ui/list/list.edit.strategy.grouped';
 
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const LIST_ITEM_RESPONSE_WAIT_CLASS = 'dx-list-item-response-wait';
 
+type DxEventHandledByEditProvider = DxEvent & {
+  handledByEditProvider?: boolean;
+};
+
 class ListEdit extends ListBase {
-  _editStrategy!: PlainEditStrategy | GroupedEditStrategy;
+  _editStrategy!: PlainEditStrategy<Item> | GroupedEditStrategy;
 
   _editProvider!: EditProvider;
 
   _supportedKeys(): SupportedKeys {
-    const that = this;
     const parent = super._supportedKeys();
 
-    const deleteFocusedItem = (e) => {
-      if (that.option('allowItemDeleting')) {
+    const deleteFocusedItem = (e: KeyboardEvent): void => {
+      const { allowItemDeleting, focusedElement } = this.option();
+      if (allowItemDeleting && focusedElement) {
         e.preventDefault();
-        that.deleteItem(that.option('focusedElement'));
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this.deleteItem(focusedElement);
       }
     };
 
-    const moveFocusedItem = (e, moveUp?: boolean): void => {
+    const moveFocusedItem = (e: DxEvent<KeyboardEvent>, moveUp?: boolean): void => {
+      const { focusedElement, itemDragging, grouped } = this.option();
+
       const editStrategy = this._editStrategy;
-      const { focusedElement } = this.option();
       // @ts-expect-error ts-error
       const focusedItemIndex = editStrategy.getNormalizedIndex(focusedElement);
       const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
@@ -46,15 +59,15 @@ class ListEdit extends ListBase {
         return;
       }
 
-      if (e.shiftKey && that.option('itemDragging.allowReordering')) {
+      if (e.shiftKey && itemDragging?.allowReordering) {
         const nextItemIndex = focusedItemIndex + (moveUp ? -1 : 1);
         const $nextItem = editStrategy.getItemElement(nextItemIndex);
 
-        const isMoveFromGroup = this.option('grouped')
+        const isMoveFromGroup = grouped
           && $(focusedElement).parent().get(0) !== $nextItem.parent().get(0);
         if (!isMoveFromGroup) {
           this.reorderItem($(focusedElement).get(0), $nextItem.get(0));
-          this.scrollToItem($(focusedElement).get(0));
+          this.scrollToItem($(focusedElement));
         }
         e.preventDefault();
       } else {
@@ -71,25 +84,23 @@ class ListEdit extends ListBase {
       }
     };
 
-    const enter = function (e) {
+    const enter = (e: DxEvent<KeyboardEvent>): void => {
       if (!this._editProvider.handleEnterPressing(e)) {
-        // @ts-expect-error ts-error
-        parent.enter.apply(this, arguments);
+        parent.enter.apply(this, [e]);
       }
     };
 
-    const space = function (e) {
+    const space = (e: DxEvent<KeyboardEvent>): void => {
       if (!this._editProvider.handleEnterPressing(e)) {
-        // @ts-expect-error ts-error
-        parent.space.apply(this, arguments);
+        parent.space.apply(this, [e]);
       }
     };
 
     return {
       ...parent,
       del: deleteFocusedItem,
-      upArrow: (e) => moveFocusedItem(e, true),
-      downArrow: (e) => moveFocusedItem(e),
+      upArrow: (e: DxEvent<KeyboardEvent>): void => moveFocusedItem(e, true),
+      downArrow: (e: DxEvent<KeyboardEvent>): void => moveFocusedItem(e),
       enter,
       space,
     };
@@ -114,8 +125,8 @@ class ListEdit extends ListBase {
     }
   }
 
-  _isItemStrictEquals(item1, item2) {
-    const privateKey = item1?.__dx_key__;
+  _isItemStrictEquals(item1: CachedItem<Item>, item2: CachedItem<Item>): boolean {
+    const privateKey = item1?.[PRIVATE_KEY_FIELD];
     if (privateKey && !this.key() && this._selection.isItemSelected(privateKey)) {
       return false;
     }
@@ -123,34 +134,27 @@ class ListEdit extends ListBase {
     return super._isItemStrictEquals(item1, item2);
   }
 
-  _getDefaultOptions() {
-    return extend(super._getDefaultOptions(), {
+  _getDefaultOptions(): ListBaseProperties {
+    return {
+      ...super._getDefaultOptions(),
       showSelectionControls: false,
-
       selectionMode: 'none',
-
       selectAllMode: 'page',
-
+      // @ts-expect-error ts-error
       onSelectAllValueChanged: null,
-
       selectAllText: localizationMessage.format('dxList-selectAll'),
-
       menuItems: [],
-
       menuMode: 'context',
-
       allowItemDeleting: false,
-
       itemDeleteMode: 'static',
-
       itemDragging: {},
-    });
+    };
   }
 
-  _defaultOptionsRules() {
+  _defaultOptionsRules(): DefaultOptionsRule<ListBaseProperties>[] {
     return super._defaultOptionsRules().concat([
       {
-        device: (device) => device.platform === 'ios',
+        device: (device): boolean => device.platform === 'ios',
         options: {
           menuMode: 'slide',
 
@@ -188,7 +192,6 @@ class ListEdit extends ListBase {
   }
 
   _initEditProvider(): void {
-    // @ts-expect-error ts-error
     this._editProvider = new EditProvider(this);
   }
 
@@ -204,7 +207,9 @@ class ListEdit extends ListBase {
   }
 
   _initEditStrategy(): void {
-    if (this.option('grouped')) {
+    const { grouped } = this.option();
+
+    if (grouped) {
       this._editStrategy = new GroupedEditStrategy(this);
     } else {
       super._initEditStrategy();
@@ -216,9 +221,8 @@ class ListEdit extends ListBase {
     super._initMarkup();
   }
 
-  _renderItems(...args): void {
-    // @ts-expect-error ts-error
-    super._renderItems(...args);
+  _renderItems(items: Item[]): void {
+    super._renderItems(items);
     this._editProvider.afterItemsRendered();
   }
 
@@ -229,6 +233,7 @@ class ListEdit extends ListBase {
     $itemToReplace?: dxElementWrapper,
   ): dxElementWrapper {
     const { showSelectionControls, selectionMode } = this.option();
+
     const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
 
     if (showSelectionControls && selectionMode !== 'none') {
@@ -248,12 +253,10 @@ class ListEdit extends ListBase {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _selectedItemClass(): string {
     return LIST_ITEM_SELECTED_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemResponseWaitClass(): string {
     return LIST_ITEM_RESPONSE_WAIT_CLASS;
   }
@@ -276,44 +279,42 @@ class ListEdit extends ListBase {
     super._itemClickHandler(e, args, config);
   }
 
-  _shouldFireContextMenuEvent(...args) {
-    // @ts-expect-error ts-error
-    return super._shouldFireContextMenuEvent(...args) || this._editProvider.contextMenuHandlerExists();
+  _shouldFireContextMenuEvent(): boolean {
+    return super._shouldFireContextMenuEvent() || this._editProvider.contextMenuHandlerExists();
   }
 
-  _itemHoldHandler(e): void {
+  _itemHoldHandler(e: DxEventHandledByEditProvider): void {
     const $itemElement = $(e.currentTarget);
     if ($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
       return;
     }
 
-    const handledByEditProvider = isTouchEvent(e) && this._editProvider.handleContextMenu($itemElement, e);
+    const handledByEditProvider = isTouchEvent(e)
+      && this._editProvider.handleContextMenu($itemElement, e);
     if (handledByEditProvider) {
       e.handledByEditProvider = true;
       return;
     }
-    // @ts-expect-error ts-error
-    super._itemHoldHandler(...arguments);
+    super._itemHoldHandler(e);
   }
 
-  _itemContextMenuHandler(e): void {
+  _itemContextMenuHandler(e: DxEventHandledByEditProvider): void {
     const $itemElement = $(e.currentTarget);
     if ($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
       return;
     }
 
-    const handledByEditProvider = !e.handledByEditProvider && this._editProvider.handleContextMenu($itemElement, e);
+    const handledByEditProvider = !e.handledByEditProvider
+      && this._editProvider.handleContextMenu($itemElement, e);
     if (handledByEditProvider) {
       e.preventDefault();
       return;
     }
-    // @ts-expect-error ts-error
-    super._itemContextMenuHandler(...arguments);
+    super._itemContextMenuHandler(e);
   }
 
-  _postprocessRenderItem(args): void {
-    // @ts-expect-error ts-error
-    super._postprocessRenderItem(...arguments);
+  _postprocessRenderItem(args: PostprocessRenderItemInfo<Item>): void {
+    super._postprocessRenderItem(args);
     this._editProvider.modifyItemElement(args);
   }
 
@@ -325,9 +326,9 @@ class ListEdit extends ListBase {
   focusListItem(index: number): void {
     const $item = this._editStrategy.getItemElement(index);
 
-    this.option('focusedElement', $item);
+    this.option('focusedElement', getPublicElement($item));
     this.focus();
-    this.scrollToItem($item.get(0));
+    this.scrollToItem($item);
   }
 
   _getFlatIndex(): number {
@@ -338,13 +339,13 @@ class ListEdit extends ListBase {
     }
 
     const $item = this._editStrategy.getItemElement(selectedIndex);
-    const index = this.getFlatIndexByItemElement($item);
-
-    return index;
+    return this.getFlatIndexByItemElement($item);
   }
 
   _optionChanged(args: OptionChanged<ListBaseProperties>): void {
-    switch (args.name) {
+    const { name } = args;
+
+    switch (name) {
       case 'selectAllMode':
         this._initDataSource();
         this._dataController.pageIndex(0);
@@ -371,23 +372,23 @@ class ListEdit extends ListBase {
     }
   }
 
-  selectAll() {
+  selectAll(): DeferredObj<unknown> {
     return this._selection.selectAll(this._isPageSelectAll());
   }
 
-  unselectAll() {
+  unselectAll(): DeferredObj<unknown> {
     return this._selection.deselectAll(this._isPageSelectAll());
   }
 
-  isSelectAll() {
+  isSelectAll(): boolean | undefined {
     return this._selection.getSelectAllState(this._isPageSelectAll());
   }
 
-  getFlatIndexByItemElement(itemElement) {
+  getFlatIndexByItemElement(itemElement: dxElementWrapper): number {
     return this._itemElements().index(itemElement);
   }
 
-  getItemElementByFlatIndex(flatIndex) {
+  getItemElementByFlatIndex(flatIndex: number): dxElementWrapper {
     const $itemElements = this._itemElements();
 
     if (flatIndex < 0 || flatIndex >= $itemElements.length) {
@@ -397,17 +398,15 @@ class ListEdit extends ListBase {
     return $itemElements.eq(flatIndex);
   }
 
-  getItemByIndex(index) {
+  getItemByIndex(index: number): Item {
     return this._editStrategy.getItemDataByIndex(index);
   }
 
-  deleteItem(itemElement) {
+  deleteItem(itemElement: CollectionItemIndex | Element): Promise<unknown> {
     const editStrategy = this._editStrategy;
     const deletingElementIndex = editStrategy.getNormalizedIndex(itemElement);
     const { focusedElement, focusStateEnabled } = this.option();
-
     const focusedItemIndex = focusedElement
-      // @ts-expect-error ts-error
       ? editStrategy.getNormalizedIndex(focusedElement)
       : deletingElementIndex;
     const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
@@ -417,7 +416,8 @@ class ListEdit extends ListBase {
     const promise = super.deleteItem(itemElement);
 
     // @ts-expect-error ts-error
-    return promise.done(function () {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return promise.done(() => {
       if (focusStateEnabled) {
         this.focusListItem(nextFocusedItem);
       }

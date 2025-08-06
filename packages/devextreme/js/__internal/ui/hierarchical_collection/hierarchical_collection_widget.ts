@@ -16,9 +16,7 @@ import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collectio
 import DataAdapter, {
   type DataAdapterOptions,
 } from './data_adapter';
-import {
-  type DataAccessors,
-} from './data_converter';
+import type { DataAccessors, ItemKey } from './data_converter';
 
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const ITEM_URL_CLASS = 'dx-item-url';
@@ -29,7 +27,7 @@ TProperties extends CollectionWidgetEditProperties<any, TItem, TKey>,
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 TItem extends ItemLike = any,
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-TKey = any,
+TKey extends ItemKey = any,
 > extends CollectionWidgetAsync<TProperties, TItem, TKey> {
   _dataAdapter!: DataAdapter;
 
