@@ -64,7 +64,7 @@ const RTL_DIRECTION_CLASS = 'dx-rtl';
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 type AnimationDirection = 'to' | 'from';
-export type PointerLikeEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
+type PointerLikeEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
 type EventHandler = (e: PointerLikeEvent) => boolean | undefined;
 type TabTerminatorHandler = (e: KeyboardEvent) => void;
 type DragLikeEvent = DxEvent & {
