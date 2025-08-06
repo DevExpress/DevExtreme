@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  line-height: inherit;
   min-height: inherit;
   max-height: inherit;
 }
@@ -64,6 +65,7 @@
       margin-top: -1px;
     }
 
+    // here 2
     > .dx-#{$widget-name}-rowsview.dx-last-row-border {
       tbody:last-child > .dx-data-row:nth-last-child(2) {
         &,
@@ -927,6 +929,7 @@
       }
     }
 
+    // here
     .dx-row.dx-row-lines:first-child {
       border-top: none;
 
