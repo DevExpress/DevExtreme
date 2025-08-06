@@ -79,15 +79,15 @@ export class DIContext {
 
       this.instances.set(id, decoratedInstance);
       this.instances.set(fabric, decoratedInstance);
-      return instance;
+      return decoratedInstance;
     }
 
     return null;
   }
 
-  public decorator<T>(decoratorFn: DecoratorFunction<T>): void {
+  public registerDecorator<T>(decoratorFn: DecoratorFunction<T>): void {
     if (this.hasInitiatedInstances) {
-      throw new Error('Cannot add decorator: decorators must be registered before any instances are created or retrieved from the DI container.');
+      throw new Error('Cannot register decorator: decorators must be registered before any instances are created or retrieved from the DI container.');
     }
 
     this.globalDecorators.push(decoratorFn);

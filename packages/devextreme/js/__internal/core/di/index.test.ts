@@ -200,7 +200,7 @@ describe('decorators', () => {
     const ctx = new DIContext();
     ctx.register(MyClass);
 
-    ctx.decorator((instance) => {
+    ctx.registerDecorator((instance) => {
       if (instance instanceof MyClass) {
         instance.value = 2;
       }
@@ -214,7 +214,7 @@ describe('decorators', () => {
     const ctx = new DIContext();
     const instance = new MyClass();
 
-    ctx.decorator((obj) => {
+    ctx.registerDecorator((obj) => {
       if (obj instanceof MyClass) {
         obj.value = 3;
       }
@@ -231,7 +231,7 @@ describe('decorators', () => {
     const ctx = new DIContext();
     ctx.register(MyClass);
 
-    ctx.decorator((instance) => {
+    ctx.registerDecorator((instance) => {
       if (instance instanceof MyClass) {
         instance.value += 1;
         instance.tag += 'A';
@@ -239,7 +239,7 @@ describe('decorators', () => {
       return instance;
     });
 
-    ctx.decorator((instance) => {
+    ctx.registerDecorator((instance) => {
       if (instance instanceof MyClass) {
         instance.value += 2;
         instance.tag += 'B';
@@ -269,7 +269,7 @@ describe('decorators', () => {
 
     ctx.register(BaseClass, ExtendedClass);
 
-    ctx.decorator((instance) => {
+    ctx.registerDecorator((instance) => {
       if (instance instanceof ExtendedClass) {
         instance.extraValue = 20;
       }
@@ -289,7 +289,7 @@ describe('decorators', () => {
 
     const myClassInstance = ctx.get(MyClass);
 
-    expect(() => ctx.decorator((obj) => {
+    expect(() => ctx.registerDecorator((obj) => {
       if (obj instanceof MyClass) {
         obj.value = 42;
         obj.tag = 'decorated';

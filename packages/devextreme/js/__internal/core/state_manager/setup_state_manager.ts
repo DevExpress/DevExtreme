@@ -70,7 +70,7 @@ export const setupStateManager = (
       return instance;
     };
 
-    diContext.decorator(trackControllerByStateManager);
+    diContext.registerDecorator(trackControllerByStateManager);
 
     return stateManager;
   } catch (error) {
