@@ -71,7 +71,7 @@ const DropDownBox = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["opened"]), []);
       const independentEvents = useMemo(() => (["onChange","onClosed","onCopy","onCut","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onKeyDown","onKeyUp","onOpened","onPaste","onValueChanged"]), []);
