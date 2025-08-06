@@ -7,7 +7,7 @@ import type { DxEvent } from '@js/events';
 import type { Item } from '@js/ui/toolbar';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { ItemRenderInfo, ItemTemplate } from '@ts/ui/collection/collection_widget.base';
-import { ListBase } from '@ts/ui/list/m_list.base';
+import { ListBase } from '@ts/ui/list/list.base';
 
 const TOOLBAR_MENU_ACTION_CLASS = 'dx-toolbar-menu-action';
 const TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button';

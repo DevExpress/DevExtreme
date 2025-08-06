@@ -1,4 +1,4 @@
-import ListEdit from '../__internal/ui/list/m_list.edit.search';
+import ListEdit from '../__internal/ui/list/list.edit.search';
 
 export default ListEdit;
 

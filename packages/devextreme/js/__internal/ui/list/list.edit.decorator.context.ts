@@ -6,9 +6,9 @@ import { getOuterHeight, getOuterWidth } from '@js/core/utils/size';
 import type { DxEvent } from '@js/events';
 import type { ItemClickEvent } from '@js/ui/list';
 import type dxOverlay from '@js/ui/overlay';
-import { ListBase } from '@ts/ui/list/m_list.base';
-import EditDecorator from '@ts/ui/list/m_list.edit.decorator';
-import { register as registerDecorator } from '@ts/ui/list/m_list.edit.decorator_registry';
+import { ListBase } from '@ts/ui/list/list.base';
+import EditDecorator from '@ts/ui/list/list.edit.decorator';
+import { register as registerDecorator } from '@ts/ui/list/list.edit.decorator_registry';
 import type { OverlayProperties } from '@ts/ui/overlay/overlay';
 import Overlay from '@ts/ui/overlay/overlay';
 

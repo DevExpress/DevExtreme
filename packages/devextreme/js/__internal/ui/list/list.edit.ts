@@ -19,10 +19,10 @@ import type { CollectionItemIndex } from '@ts/ui/collection/collection_widget.ed
 import type PlainEditStrategy from '@ts/ui/collection/collection_widget.edit.strategy.plain';
 import type { CachedItem } from '@ts/ui/collection/collection_widget.live_update';
 import { PRIVATE_KEY_FIELD } from '@ts/ui/collection/collection_widget.live_update';
+import type { ListBaseProperties } from '@ts/ui/list/list.base';
+import { ListBase } from '@ts/ui/list/list.base';
+import EditProvider from '@ts/ui/list/list.edit.provider';
 import GroupedEditStrategy from '@ts/ui/list/list.edit.strategy.grouped';
-import type { ListBaseProperties } from '@ts/ui/list/m_list.base';
-import { ListBase } from '@ts/ui/list/m_list.base';
-import EditProvider from '@ts/ui/list/m_list.edit.provider';
 
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const LIST_ITEM_RESPONSE_WAIT_CLASS = 'dx-list-item-response-wait';
@@ -253,12 +253,10 @@ class ListEdit extends ListBase {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _selectedItemClass(): string {
     return LIST_ITEM_SELECTED_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemResponseWaitClass(): string {
     return LIST_ITEM_RESPONSE_WAIT_CLASS;
   }

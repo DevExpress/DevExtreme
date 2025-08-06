@@ -11,9 +11,9 @@ import type { ValueChangedEvent as CheckBoxValueChangedEvent } from '@js/ui/chec
 import CheckBox from '@js/ui/check_box';
 import errors from '@js/ui/widget/ui.errors';
 import type Editor from '@ts/ui/editor/editor';
-import type { BagConfig } from '@ts/ui/list/m_list.edit.decorator';
-import EditDecorator from '@ts/ui/list/m_list.edit.decorator';
-import { register as registerDecorator } from '@ts/ui/list/m_list.edit.decorator_registry';
+import type { BagConfig } from '@ts/ui/list/list.edit.decorator';
+import EditDecorator from '@ts/ui/list/list.edit.decorator';
+import { register as registerDecorator } from '@ts/ui/list/list.edit.decorator_registry';
 import RadioButton from '@ts/ui/radio_group/m_radio_button';
 
 const SELECT_DECORATOR_ENABLED_CLASS = 'dx-list-select-decorator-enabled';

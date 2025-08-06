@@ -9,8 +9,8 @@ import { noop } from '@js/core/utils/common';
 import { getOuterHeight, setHeight } from '@js/core/utils/size';
 import type { DxEvent } from '@js/events';
 import type { ScrollInfo } from '@js/ui/list';
-import type List from '@ts/ui/list/m_list.edit';
-import EditDecorator from '@ts/ui/list/m_list.edit.decorator';
+import type List from '@ts/ui/list/list.edit';
+import EditDecorator from '@ts/ui/list/list.edit.decorator';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
 const POINTER_DOWN_EVENT_NAME = addNamespace(pointerEvents.down, LIST_EDIT_DECORATOR);
@@ -143,7 +143,6 @@ abstract class SwitchableEditDecorator extends EditDecorator {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _cancelScrolling(args: NativeEventInfo<List, DxEvent & Cancelable> & ScrollInfo): void {
     if (args.event) {
       args.event.cancel = true;
@@ -183,18 +182,15 @@ abstract class SwitchableEditDecorator extends EditDecorator {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _disablePositioning($itemElement: dxElementWrapper): void {
     $itemElement.removeClass(SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS);
     eventsEngine.off($itemElement, ACTIVE_EVENT_NAME);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _prepareDeleteReady($itemElement: dxElementWrapper): void {
     $itemElement.addClass(SWITCHABLE_DELETE_READY_CLASS);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _forgetDeleteReady($itemElement: dxElementWrapper): void {
     $itemElement.removeClass(SWITCHABLE_DELETE_READY_CLASS);
   }
