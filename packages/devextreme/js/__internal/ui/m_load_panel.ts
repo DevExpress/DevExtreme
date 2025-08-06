@@ -9,6 +9,7 @@ import LoadIndicator from '@js/ui/load_indicator';
 import type { Properties } from '@js/ui/load_panel';
 import { isFluent, isMaterial } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import Overlay from '@ts/ui/overlay/overlay';
 
 // STYLE loadPanel
@@ -30,7 +31,7 @@ class LoadPanel extends Overlay<LoadPanelProperties> {
 
   _showTimeout?: ReturnType<typeof setTimeout>;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     return {
       ...super._supportedKeys(),
       escape: noop,

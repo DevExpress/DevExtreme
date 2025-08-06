@@ -22,6 +22,7 @@ import type { dxSliderBaseOptions } from '@js/ui/slider';
 import { current as currentTheme, isMaterial } from '@js/ui/themes';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 
 import TrackBar from '../m_track_bar';
 import SliderHandle from './m_slider_handle';
@@ -76,7 +77,7 @@ class Slider<
 
   _startOffset?: number;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     const { rtlEnabled } = this.option();
 
     const roundedValue = (offset, isLeftDirection) => {

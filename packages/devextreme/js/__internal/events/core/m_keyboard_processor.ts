@@ -2,13 +2,28 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import Class from '@js/core/class';
 import $ from '@js/core/renderer';
+import type { DxEvent } from '@js/events';
 
 const COMPOSITION_START_EVENT = 'compositionstart';
 const COMPOSITION_END_EVENT = 'compositionend';
 const KEYDOWN_EVENT = 'keydown';
 const NAMESPACE = 'KeyboardProcessor';
 
-const createKeyDownOptions = (e) => ({
+export interface KeyboardKeyDownEvent {
+  keyName: string;
+  key: string;
+  code: string;
+  ctrl: boolean;
+  location: number;
+  metaKey: boolean;
+  shift: boolean;
+  alt: boolean;
+  which: number;
+  originalEvent: DxEvent<KeyboardEvent>;
+}
+
+const createKeyDownOptions = (e: DxEvent<KeyboardEvent>): KeyboardKeyDownEvent => ({
+  // @ts-expect-error
   keyName: normalizeKeyName(e),
   key: e.key,
   code: e.code,
@@ -37,10 +52,14 @@ const KeyboardProcessor = Class.inherit({
     this._handler = options.handler;
 
     if (this._element) {
-      this._processFunction = (e) => {
+      this._processFunction = (e: DxEvent<KeyboardEvent>): void => {
         const focusTargets = $(this._focusTarget).toArray();
-        const isNotFocusTarget = this._focusTarget && this._focusTarget !== e.target && !focusTargets.includes(e.target);
-        const shouldSkipProcessing = this._isComposingJustFinished && e.which === 229 || this._isComposing || isNotFocusTarget;
+        const isNotFocusTarget = this._focusTarget
+          && this._focusTarget !== e.target
+          && !focusTargets.includes(e.target);
+        const shouldSkipProcessing = (this._isComposingJustFinished && e.which === 229)
+          || this._isComposing
+          || isNotFocusTarget;
 
         this._isComposingJustFinished = false;
         if (!shouldSkipProcessing) {
@@ -65,7 +84,7 @@ const KeyboardProcessor = Class.inherit({
     this._handler = undefined;
   },
 
-  process(e) {
+  process(e: DxEvent<KeyboardEvent>) {
     this._handler(createKeyDownOptions(e));
   },
 

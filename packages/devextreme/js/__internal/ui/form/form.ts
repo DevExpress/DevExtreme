@@ -32,6 +32,7 @@ import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import type { ValidationResult } from '@js/ui/validation_group';
 import type { Component } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeyHandler } from '@ts/core/widget/widget';
 import Widget, { FOCUSED_STATE_CLASS } from '@ts/core/widget/widget';
 import type { Button } from '@ts/ui/button/button';
 import { DROP_DOWN_EDITOR_CLASS } from '@ts/ui/drop_down_editor/m_drop_down_editor';
@@ -1599,7 +1600,7 @@ class Form extends Widget<FormProperties> {
     }
   }
 
-  registerKeyHandler(key: string, handler: (e: KeyboardEvent) => void): void {
+  registerKeyHandler(key: string, handler: SupportedKeyHandler): void {
     super.registerKeyHandler(key, handler);
     this._itemsRunTimeInfo.each((_, itemRunTimeInfo) => {
       if (isDefined(itemRunTimeInfo.widgetInstance)) {

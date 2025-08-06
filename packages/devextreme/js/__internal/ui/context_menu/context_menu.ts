@@ -47,6 +47,7 @@ import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import { current as currentTheme, isGeneric } from '@js/ui/themes';
 import type { ActionArguments } from '@ts/core/m_action';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { ClickEvent, HoverEvent, MenuBaseProperties } from '@ts/ui/context_menu/menu_base';
 import MenuBase from '@ts/ui/context_menu/menu_base';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
@@ -97,10 +98,6 @@ const window = getWindow();
 
 type ContextMenuTarget = string | dxElementWrapper | Element | Window | undefined;
 type ContextMenuNode = InternalNode & Item;
-
-type KeyboardEventHandler = (e: KeyboardEvent, options?: Record<string, unknown>) => void;
-type KeyboardEventHandlerAsync =
-  (e: KeyboardEvent, options?: Record<string, unknown>) => Promise<unknown>;
 
 type ShowContextMenuEvent = EventInfo<ContextMenu> & {
   target?: ContextMenuTarget;
@@ -217,7 +214,6 @@ class ContextMenu<
     this._actions = {};
 
     each(ACTIONS, (_index: number, action: typeof ACTIONS[number]) => {
-      // @ts-expect-error ts-error
       this._actions[action] = this._createActionByOption(action) || noop;
     });
   }
@@ -245,7 +241,7 @@ class ContextMenu<
     return this._overlay?.$content() ?? $();
   }
 
-  _supportedKeys(): Record<string, KeyboardEventHandler | KeyboardEventHandlerAsync> {
+  _supportedKeys(): SupportedKeys {
     const selectItem = (): void => {
       const { focusedElement } = this.option();
       const $item = $(focusedElement);
@@ -263,7 +259,10 @@ class ContextMenu<
     return {
       ...super._supportedKeys(),
       space: selectItem,
-      escape: this.hide,
+      escape: (): void => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this.hide();
+      },
     };
   }
 
