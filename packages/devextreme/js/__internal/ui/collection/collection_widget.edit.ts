@@ -23,6 +23,7 @@ import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type {
   CollectionItemInfo,
+  CollectionItemKey,
   CollectionWidgetBaseProperties,
   PostprocessRenderItemInfo,
 } from '@ts/ui/collection/collection_widget.base';
@@ -31,15 +32,16 @@ import PlainEditStrategy from '@ts/ui/collection/collection_widget.edit.strategy
 import type DataController from '@ts/ui/collection/m_data_controller';
 import Selection from '@ts/ui/selection/m_selection';
 
+import type { CollectionItemIndex } from './collection_widget.edit.strategy';
+
 const ITEM_DELETING_DATA_KEY = 'dxItemDeleting';
 const SELECTED_ITEM_CLASS = 'dx-item-selected';
 
 export const NOT_EXISTING_INDEX = -1;
 
-const indexExists = (index): boolean => index !== NOT_EXISTING_INDEX;
+export const indexExists = (index: CollectionItemIndex): boolean => index !== NOT_EXISTING_INDEX;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type SelectionInfo<TItem, TKey = any> = SelectionChangeInfo<TItem> & {
+type SelectionInfo<TItem, TKey = CollectionItemKey> = SelectionChangeInfo<TItem> & {
   addedItemKeys: TKey[];
   removedItemKeys: TKey[];
 };
@@ -49,7 +51,8 @@ export interface CollectionWidgetEditProperties<
   TComponent extends CollectionWidget<any, TItem, TKey> | any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
-  TKey = string | number,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey extends CollectionItemKey = any,
 > extends CollectionWidgetBaseProperties<TComponent, TItem, TKey> {
   selectionMode?: SingleMultipleOrNone | SingleMultipleAllOrNone;
 
@@ -70,7 +73,7 @@ class CollectionWidget<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
+  TKey extends CollectionItemKey = any,
 > extends BaseCollectionWidget<TProperties, TItem, TKey> {
   _userOptions?: TProperties;
 
@@ -169,7 +172,7 @@ class CollectionWidget<
     return this._editStrategy.getItemsByKeys(selectedItemKeys, selectedItems);
   }
 
-  _getKeyByIndex(index: number): unknown {
+  _getKeyByIndex(index: CollectionItemIndex): unknown {
     return this._editStrategy.getKeyByIndex(index);
   }
 
@@ -177,7 +180,7 @@ class CollectionWidget<
     return this._editStrategy.getIndexByKey(key);
   }
 
-  _getIndexByItemData(itemData: TItem): number {
+  _getIndexByItemData(itemData: TItem): CollectionItemIndex {
     return this._editStrategy.getIndexByItemData(itemData);
   }
 
@@ -650,7 +653,7 @@ class CollectionWidget<
     }
   }
 
-  _isItemSelected(index: number): boolean {
+  _isItemSelected(index: CollectionItemIndex): boolean {
     const key = this._getKeyByIndex(index);
 
     return this._selection.isItemSelected(key, { checkPending: true });
@@ -912,7 +915,7 @@ class CollectionWidget<
     this._renderEmptyMessage();
   }
 
-  deleteItem(itemElement: Element): PromiseLike<unknown> {
+  deleteItem(itemElement: dxElementWrapper | Element | CollectionItemIndex): PromiseLike<unknown> {
     const deferred = Deferred();
     const $item = this._editStrategy.getItemElement(itemElement);
     const index = this._editStrategy.getNormalizedIndex(itemElement);
@@ -950,8 +953,8 @@ class CollectionWidget<
   }
 
   reorderItem(
-    itemElement: Element,
-    toItemElement: Element,
+    itemElement: dxElementWrapper | Element | CollectionItemIndex,
+    toItemElement: dxElementWrapper | Element | CollectionItemIndex,
   ): DeferredObj<unknown> {
     const deferred = Deferred();
     const strategy = this._editStrategy;

@@ -1,10 +1,12 @@
 import { fx } from '@js/common/core/animation';
 import { move } from '@js/common/core/animation/translator';
+import type { dxElementWrapper } from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { getWidth } from '@js/core/utils/size';
-
-import EditDecorator from './m_list.edit.decorator';
-import { register as registerDecorator } from './m_list.edit.decorator_registry';
+import type { DxEvent } from '@js/events';
+import type { SwipeEndArgs, SwipeUpdateArgs } from '@ts/ui/list/m_list.edit.decorator';
+import EditDecorator from '@ts/ui/list/m_list.edit.decorator';
+import { register as registerDecorator } from '@ts/ui/list/m_list.edit.decorator_registry';
 
 class EditDecoratorSwipe extends EditDecorator {
   _itemElementWidth!: number;
@@ -14,16 +16,20 @@ class EditDecoratorSwipe extends EditDecorator {
     return true;
   }
 
-  _renderItemPosition($itemElement, offset, animate?: boolean): Promise<unknown> {
+  _renderItemPosition(
+    $itemElement: dxElementWrapper,
+    offset: number,
+    animate?: boolean,
+  ): Promise<unknown> {
     const deferred = Deferred();
     const itemOffset = offset * this._itemElementWidth;
 
     if (animate) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      fx.animate($itemElement, {
+      fx.animate($itemElement.get(0), {
         to: { left: itemOffset },
         type: 'slide',
-        complete() {
+        complete(): void {
           deferred.resolve($itemElement, offset);
         },
       });
@@ -35,29 +41,30 @@ class EditDecoratorSwipe extends EditDecorator {
     return deferred.promise();
   }
 
-  _swipeStartHandler($itemElement): boolean {
+  _swipeStartHandler($itemElement: dxElementWrapper): void {
     this._itemElementWidth = getWidth($itemElement);
-    return true;
   }
 
-  _swipeUpdateHandler($itemElement, args): boolean {
-    this._renderItemPosition($itemElement, args.offset);
-    return true;
+  _swipeUpdateHandler($itemElement: dxElementWrapper, e: DxEvent & SwipeUpdateArgs): void {
+    const { offset } = e;
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this._renderItemPosition($itemElement, offset);
   }
 
-  _swipeEndHandler($itemElement, args): boolean {
-    const offset = args.targetOffset;
+  _swipeEndHandler($itemElement: dxElementWrapper, e: DxEvent & SwipeEndArgs): void {
+    const { targetOffset } = e;
 
-    this._renderItemPosition($itemElement, offset, true)
+    this._renderItemPosition($itemElement, targetOffset, true)
       // @ts-expect-error ts-error
-      .done(($itemElement, offset) => {
+      .done(($element: dxElementWrapper, offset: number): void => {
         if (Math.abs(offset)) {
-          this._list.deleteItem($itemElement).fail(() => {
-            this._renderItemPosition($itemElement, 0, true);
+          // @ts-expect-error ts-error
+          this._list.deleteItem($element.get(0)).fail((): void => {
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            this._renderItemPosition($element, 0, true);
           });
         }
       });
-    return true;
   }
 }
 

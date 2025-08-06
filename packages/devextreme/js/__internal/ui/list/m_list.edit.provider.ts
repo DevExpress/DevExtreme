@@ -1,69 +1,88 @@
-import Class from '@js/core/class';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
+import type { DxEvent } from '@js/events';
+import type { Item } from '@js/ui/list';
 import errors from '@js/ui/widget/ui.errors';
+import { isFunction } from '@ts/core/utils/m_type';
+import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import type List from '@ts/ui/list/m_list.edit';
+import type { BagConfig } from '@ts/ui/list/m_list.edit.decorator';
+import type EditDecorator from '@ts/ui/list/m_list.edit.decorator';
+import type { DecoratorClass } from '@ts/ui/list/m_list.edit.decorator_registry';
+import { registry } from '@ts/ui/list/m_list.edit.decorator_registry';
 
-import { registry } from './m_list.edit.decorator_registry';
+interface OptionRegistry {
+  enabled: () => boolean;
+  decoratorType: () => string;
+  decoratorSubType: () => string;
+}
 
-const editOptionsRegistry: {
-  enabled: any;
-  decoratorType: any;
-  decoratorSubType: any;
-}[] = [];
+const editOptionsRegistry: OptionRegistry[] = [];
 
-const registerOption = function (enabledFunc, decoratorTypeFunc, decoratorSubTypeFunc) {
+const registerOption = ({ enabled, decoratorType, decoratorSubType }: OptionRegistry): void => {
   editOptionsRegistry.push({
-    enabled: enabledFunc,
-    decoratorType: decoratorTypeFunc,
-    decoratorSubType: decoratorSubTypeFunc,
+    enabled,
+    decoratorType,
+    decoratorSubType,
   });
 };
 
 // NOTE: option registration order does matter
-registerOption(
-  function () {
-    return this.option('menuItems').length;
+registerOption({
+  enabled(): boolean {
+    const { menuItems } = this.option();
+    return Boolean(menuItems.length);
   },
-  () => 'menu',
-  function () {
-    return this.option('menuMode');
+  decoratorType: (): string => 'menu',
+  decoratorSubType(): string {
+    const { menuMode } = this.option();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return menuMode;
   },
-);
-registerOption(
-  function () {
-    return !this.option('menuItems').length && this.option('allowItemDeleting');
+});
+registerOption({
+  enabled(): boolean {
+    const { menuItems, allowItemDeleting } = this.option();
+    return Boolean(!menuItems.length && allowItemDeleting);
   },
-  function () {
-    const mode = this.option('itemDeleteMode');
+  decoratorType(): string {
+    const { itemDeleteMode } = this.option();
 
-    return mode === 'toggle' || mode === 'slideButton' || mode === 'swipe' || mode === 'static' ? 'delete' : 'menu';
+    return ['toggle', 'slideButton', 'swipe', 'static'].includes(itemDeleteMode) ? 'delete' : 'menu';
   },
-  function () {
-    let mode = this.option('itemDeleteMode');
+  decoratorSubType(): string {
+    let { itemDeleteMode } = this.option();
 
-    if (mode === 'slideItem') {
-      mode = 'slide';
+    if (itemDeleteMode === 'slideItem') {
+      itemDeleteMode = 'slide';
     }
 
-    return mode;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return itemDeleteMode;
   },
-);
-registerOption(
-  function () {
-    return this.option('selectionMode') !== 'none' && this.option('showSelectionControls');
+});
+registerOption({
+  enabled(): boolean {
+    const { selectionMode, showSelectionControls } = this.option();
+    return Boolean(selectionMode !== 'none' && showSelectionControls);
   },
-  () => 'selection',
-  () => 'default',
-);
-registerOption(
-  function () {
-    return this.option('itemDragging.allowReordering') || this.option('itemDragging.allowDropInsideItem') || this.option('itemDragging.group');
+  decoratorType: (): string => 'selection',
+  decoratorSubType: (): string => 'default',
+});
+registerOption({
+  enabled(): boolean {
+    const { itemDragging } = this.option();
+    return Boolean(
+      itemDragging.allowReordering
+      || itemDragging.allowDropInsideItem
+      || itemDragging.group,
+    );
   },
-  () => 'reorder',
-  () => 'default',
-);
+  decoratorType: (): string => 'reorder',
+  decoratorSubType: (): string => 'default',
+});
 
 const LIST_ITEM_BEFORE_BAG_CLASS = 'dx-list-item-before-bag';
 const LIST_ITEM_AFTER_BAG_CLASS = 'dx-list-item-after-bag';
@@ -73,29 +92,28 @@ const DECORATOR_AFTER_BAG_CREATE_METHOD = 'afterBag';
 const DECORATOR_MODIFY_ELEMENT_METHOD = 'modifyElement';
 const DECORATOR_AFTER_RENDER_METHOD = 'afterRender';
 const DECORATOR_GET_EXCLUDED_SELECTORS_METHOD = 'getExcludedSelectors';
-// @ts-expect-error dxClass inheritance issue
-class EditProvider extends (Class.inherit({}) as new() => {}) {
-  _list?: any;
 
-  _decorators?: any;
+class EditProvider {
+  _list: List;
 
-  ctor(list) {
+  _decorators: EditDecorator[];
+
+  constructor(list: List) {
     this._list = list;
+    this._decorators = [];
     this._fetchRequiredDecorators();
   }
 
-  dispose() {
+  dispose(): void {
     if (this._decorators?.length) {
-      each(this._decorators, (_, decorator) => {
+      each(this._decorators, (_index: number, decorator: EditDecorator): void => {
         decorator.dispose();
       });
     }
   }
 
-  _fetchRequiredDecorators() {
-    this._decorators = [];
-
-    each(editOptionsRegistry, (_, option) => {
+  _fetchRequiredDecorators(): void {
+    each(editOptionsRegistry, (_index: number, option: OptionRegistry): void => {
       const optionEnabled = option.enabled.call(this._list);
       if (optionEnabled) {
         const decoratorType = option.decoratorType.call(this._list);
@@ -108,13 +126,13 @@ class EditProvider extends (Class.inherit({}) as new() => {}) {
     });
   }
 
-  _createDecorator(type, subType) {
-    const decoratorClass = this._findDecorator(type, subType);
-    // eslint-disable-next-line new-cap
-    return new decoratorClass(this._list);
+  _createDecorator(type: string, subType: string): EditDecorator {
+    const CreatedDecoratorClass = this._findDecorator(type, subType);
+    return new CreatedDecoratorClass(this._list);
   }
 
-  _findDecorator(type, subType) {
+  // eslint-disable-next-line class-methods-use-this
+  _findDecorator(type: string, subType: string): DecoratorClass {
     const foundDecorator = registry[type]?.[subType];
 
     if (!foundDecorator) {
@@ -124,11 +142,12 @@ class EditProvider extends (Class.inherit({}) as new() => {}) {
     return foundDecorator;
   }
 
-  modifyItemElement(args) {
+  modifyItemElement(args: PostprocessRenderItemInfo<Item>): void {
     const $itemElement = $(args.itemElement);
 
     const config = {
       $itemElement,
+      $container: $(),
     };
 
     this._prependBeforeBags($itemElement, config);
@@ -136,50 +155,65 @@ class EditProvider extends (Class.inherit({}) as new() => {}) {
     this._applyDecorators(DECORATOR_MODIFY_ELEMENT_METHOD, config);
   }
 
-  afterItemsRendered() {
+  afterItemsRendered(): void {
     this._applyDecorators(DECORATOR_AFTER_RENDER_METHOD);
   }
 
-  _prependBeforeBags($itemElement, config) {
-    const $beforeBags = this._collectDecoratorsMarkup(DECORATOR_BEFORE_BAG_CREATE_METHOD, config, LIST_ITEM_BEFORE_BAG_CLASS);
+  _prependBeforeBags($itemElement: dxElementWrapper, config: BagConfig): void {
+    const $beforeBags = this._collectDecoratorsMarkup(
+      DECORATOR_BEFORE_BAG_CREATE_METHOD,
+      config,
+      LIST_ITEM_BEFORE_BAG_CLASS,
+    );
     $itemElement.prepend($beforeBags);
   }
 
-  _appendAfterBags($itemElement, config) {
-    const $afterBags = this._collectDecoratorsMarkup(DECORATOR_AFTER_BAG_CREATE_METHOD, config, LIST_ITEM_AFTER_BAG_CLASS);
+  _appendAfterBags($itemElement: dxElementWrapper, config: BagConfig): void {
+    const $afterBags = this._collectDecoratorsMarkup(
+      DECORATOR_AFTER_BAG_CREATE_METHOD,
+      config,
+      LIST_ITEM_AFTER_BAG_CLASS,
+    );
     $itemElement.append($afterBags);
   }
 
-  _collectDecoratorsMarkup(method, config, containerClass) {
+  _collectDecoratorsMarkup(
+    method: string,
+    config: BagConfig,
+    containerClass: string,
+  ): dxElementWrapper {
     const $collector = $('<div>');
 
-    each(this._decorators, function () {
-      const $container = $('<div>').addClass(containerClass);
-      this[method](extend({
-        $container,
-      }, config));
-      if ($container.children().length) {
-        $collector.append($container);
+    this._decorators?.forEach((decorator: EditDecorator): void => {
+      if (isFunction(decorator[method])) {
+        const $container = $('<div>').addClass(containerClass);
+        decorator[method]({
+          ...config,
+          $container,
+        });
+        if ($container.children().length) {
+          $collector.append($container);
+        }
       }
     });
 
     return $collector.children();
   }
 
-  _applyDecorators(method, config?) {
-    each(this._decorators, function () {
-      this[method](config);
+  _applyDecorators(method: string, config?: unknown): void {
+    this._decorators?.forEach((decorator: EditDecorator): void => {
+      decorator[method](config);
     });
   }
 
-  _handlerExists(name) {
+  _handlerExists(name: string): boolean {
     if (!this._decorators) {
       return false;
     }
 
     const decorators = this._decorators;
     const { length } = decorators;
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < length; i += 1) {
       if (decorators[i][name] !== noop) {
         return true;
       }
@@ -188,7 +222,7 @@ class EditProvider extends (Class.inherit({}) as new() => {}) {
     return false;
   }
 
-  _eventHandler(name, $itemElement, e?) {
+  _eventHandler(name: string, ...args: unknown[]): boolean {
     if (!this._decorators) {
       return false;
     }
@@ -196,8 +230,8 @@ class EditProvider extends (Class.inherit({}) as new() => {}) {
     let response = false;
     const decorators = this._decorators;
     const { length } = decorators;
-    for (let i = 0; i < length; i++) {
-      response = decorators[i][name]($itemElement, e);
+    for (let i = 0; i < length; i += 1) {
+      response = decorators[i][name](...args);
       if (response) {
         break;
       }
@@ -206,27 +240,27 @@ class EditProvider extends (Class.inherit({}) as new() => {}) {
     return response;
   }
 
-  handleClick($itemElement, e) {
+  handleClick($itemElement: dxElementWrapper, e: DxEvent): boolean {
     return this._eventHandler('handleClick', $itemElement, e);
   }
 
-  handleKeyboardEvents(currentFocusedIndex, moveFocusUp) {
+  handleKeyboardEvents(currentFocusedIndex: number, moveFocusUp: boolean | undefined): boolean {
     return this._eventHandler('handleKeyboardEvents', currentFocusedIndex, moveFocusUp);
   }
 
-  handleEnterPressing(e) {
+  handleEnterPressing(e: KeyboardEvent): boolean {
     return this._eventHandler('handleEnterPressing', e);
   }
 
-  contextMenuHandlerExists() {
+  contextMenuHandlerExists(): boolean {
     return this._handlerExists('handleContextMenu');
   }
 
-  handleContextMenu($itemElement, e) {
+  handleContextMenu($itemElement: dxElementWrapper, e: DxEvent): boolean {
     return this._eventHandler('handleContextMenu', $itemElement, e);
   }
 
-  getExcludedItemSelectors() {
+  getExcludedItemSelectors(): string {
     const excludedSelectors = [];
 
     this._applyDecorators(DECORATOR_GET_EXCLUDED_SELECTORS_METHOD, excludedSelectors);

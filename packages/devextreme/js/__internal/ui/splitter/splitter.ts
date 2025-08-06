@@ -27,10 +27,14 @@ import type {
 } from '@js/ui/splitter';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeyHandler } from '@ts/core/widget/widget';
-import type { ItemRenderInfo, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import type {
+  CollectionItemKey,
+  ItemRenderInfo,
+  PostprocessRenderItemInfo,
+} from '@ts/ui/collection/collection_widget.base';
+import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 import CollectionWidgetLiveUpdate from '@ts/ui/collection/collection_widget.live_update';
 
-import type { CollectionWidgetEditProperties } from '../collection/collection_widget.edit';
 import type ResizeHandle from './resize_handle';
 import type { ResizeHandleOptions } from './resize_handle';
 import { RESIZE_HANDLE_CLASS } from './resize_handle';
@@ -96,12 +100,11 @@ export interface Properties<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike<TKey> = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
-> extends PublicProperties<TItem, TKey>,
-  Omit<
-  CollectionWidgetEditProperties<Splitter, TItem, TKey>,
-  keyof PublicProperties<TItem, TKey> & keyof CollectionWidgetEditProperties<Splitter, TItem, TKey>
-  > {
+  TKey extends CollectionItemKey = any,
+> extends PublicProperties<TItem, TKey>, Omit<
+  CollectionWidgetLiveUpdateProperties<Splitter, TItem, TKey>,
+  keyof PublicProperties<TItem, TKey>
+> {
   _renderQueue?: RenderQueueItem[];
 }
 
