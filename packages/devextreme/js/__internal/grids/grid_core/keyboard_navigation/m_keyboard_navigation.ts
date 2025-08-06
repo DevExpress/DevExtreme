@@ -2507,7 +2507,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   protected _getLocalRowIndex($row): number {
-    let rowIndex = this._rowsView.getRowIndex($row);
+    const rowIndex = this._rowsView.getRowIndex($row);
 
     return rowIndex;
   }
