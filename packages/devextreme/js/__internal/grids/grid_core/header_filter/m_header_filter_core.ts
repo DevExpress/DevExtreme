@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import '@ts/ui/list/modules/m_search';
-import '@ts/ui/list/modules/m_selection';
+import '@ts/ui/list/modules/search';
+import '@ts/ui/list/modules/selection';
 
 import type { ChangedOptionInfo, NativeEventInfo } from '@js/common/core/events';
 import messageLocalization from '@js/common/core/localization/message';

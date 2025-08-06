@@ -1,4 +1,4 @@
-import '@ts/ui/list/modules/m_selection';
+import '@ts/ui/list/modules/selection';
 
 import dateLocalization from '@js/common/core/localization/date';
 import { ensureDefined, noop } from '@js/core/utils/common';
