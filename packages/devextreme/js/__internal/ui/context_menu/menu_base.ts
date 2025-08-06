@@ -61,7 +61,7 @@ export interface MenuBaseProperties<
   TItem extends dxMenuBaseItem = Item,
   // @ts-expect-error ts-error
 > extends dxMenuBaseOptions<MenuBase, TItem> {
-  focusedElement?: dxElementWrapper;
+  focusedElement?: Element | null;
   useInkRipple?: boolean;
   _dataAdapter: DataAdapter;
 }

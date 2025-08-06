@@ -8,7 +8,7 @@ import {
 } from '@js/common/core/events/drag';
 import pointerEvents from '@js/common/core/events/pointer';
 import { keyboard } from '@js/common/core/events/short';
-import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '@js/common/core/events/visibility_change';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';

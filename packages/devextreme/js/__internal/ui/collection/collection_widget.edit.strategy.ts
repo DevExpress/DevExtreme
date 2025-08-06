@@ -5,15 +5,21 @@ import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
 import { isRenderer } from '@js/core/utils/type';
 import type { ItemLike } from '@js/ui/collection/ui.collection_widget.base';
+import type { CollectionItemKey } from '@ts/ui/collection/collection_widget.base';
 import type CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 
-export type CollectionItemIndex = number | { group: number; item: number };
+export interface CollectionGroupedItemIndex {
+  group: number;
+  item: number;
+}
+
+export type CollectionItemIndex = number | CollectionGroupedItemIndex;
 
 export type EditStrategyComponent<
   TItem extends ItemLike = ItemLike,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
+  TKey extends CollectionItemKey = any,
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 > = Pick<CollectionWidget<CollectionWidgetEditProperties<any, TItem, TKey>, TItem, TKey>,
   'keyOf'
@@ -24,8 +30,7 @@ export type EditStrategyComponent<
   | '_dataController'
 >;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-interface KeysCache<TKey = any> {
+interface KeysCache<TKey = CollectionItemKey> {
   [key: string]: unknown;
   keys?: TKey[];
 }
@@ -33,7 +38,7 @@ class EditStrategy<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
+  TKey extends CollectionItemKey = any,
 > {
   _collectionWidget!: EditStrategyComponent<TItem, TKey>;
 
@@ -49,7 +54,7 @@ class EditStrategy<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getIndexByItemData(value: TItem): number {
+  getIndexByItemData(value: TItem): CollectionItemIndex {
     return Class.abstract();
   }
 
@@ -64,7 +69,7 @@ class EditStrategy<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getItemsByKeys(keys: TKey[], items?: TItem[]): TItem[] {
+  getItemsByKeys(keys: TKey[], items: TItem[] | undefined): TItem[] {
     return Class.abstract();
   }
 
@@ -72,7 +77,7 @@ class EditStrategy<
     return Class.abstract();
   }
 
-  getKeyByIndex(index: number): TKey {
+  getKeyByIndex(index: CollectionItemIndex): TKey {
     const resultIndex = this._denormalizeItemIndex(index);
 
     return this.getKeysByItems([this.getItemDataByIndex(resultIndex as number)])[0];
@@ -99,57 +104,61 @@ class EditStrategy<
   }
 
   getNormalizedIndex(
-    value: number | Element | TItem,
+    value: CollectionItemIndex | Element | dxElementWrapper | TItem,
   ): number {
-    if (this._isNormalizedItemIndex(value)) {
-      return value as number;
-    }
-
-    if (this._isItemIndex(value)) {
-      return this._normalizeItemIndex(value as number);
-    }
-
     if (this._isNode(value)) {
       return this._getNormalizedItemIndex(value);
     }
 
-    return this._normalizeItemIndex(this.getIndexByItemData(value as TItem));
-  }
-
-  getIndex(value: number | Element | TItem): CollectionItemIndex {
     if (this._isNormalizedItemIndex(value)) {
-      return this._denormalizeItemIndex(value as number);
+      return value;
     }
 
     if (this._isItemIndex(value)) {
-      return value as number;
+      return this._normalizeItemIndex(value);
     }
 
+    return this._normalizeItemIndex(this.getIndexByItemData(value));
+  }
+
+  getIndex(value: CollectionItemIndex | Element | TItem): CollectionItemIndex {
     if (this._isNode(value)) {
       return this._denormalizeItemIndex(this._getNormalizedItemIndex(value));
     }
 
-    return this.getIndexByItemData(value as TItem);
-  }
-
-  getItemElement(value: Element | number | TItem): dxElementWrapper {
     if (this._isNormalizedItemIndex(value)) {
-      return this._getItemByNormalizedIndex(value as number);
+      return this._denormalizeItemIndex(value);
     }
 
     if (this._isItemIndex(value)) {
-      return this._getItemByNormalizedIndex(this._normalizeItemIndex(value as number));
+      return value;
     }
 
+    return this.getIndexByItemData(value);
+  }
+
+  getItemElement(
+    value: Element | dxElementWrapper | CollectionItemIndex | TItem,
+  ): dxElementWrapper {
     if (this._isNode(value)) {
       return $(value);
     }
 
-    const normalizedItemIndex = this._normalizeItemIndex(this.getIndexByItemData(value as TItem));
+    if (this._isNormalizedItemIndex(value)) {
+      return this._getItemByNormalizedIndex(value);
+    }
+
+    if (this._isItemIndex(value)) {
+      return this._getItemByNormalizedIndex(this._normalizeItemIndex(value));
+    }
+
+    const normalizedItemIndex = this._normalizeItemIndex(this.getIndexByItemData(value));
     return this._getItemByNormalizedIndex(normalizedItemIndex);
   }
 
-  _isNode(el: unknown): el is Element {
+  _isNode(
+    el: CollectionItemIndex | TItem | Element | dxElementWrapper,
+  ): el is Element | dxElementWrapper {
     return domAdapter.isNode(el && isRenderer(el) ? (el as dxElementWrapper).get(0) : el);
   }
 
@@ -167,34 +176,37 @@ class EditStrategy<
     return Class.abstract();
   }
 
-  _isNormalizedItemIndex(index: number | Element | TItem): boolean {
+  _isNormalizedItemIndex(
+    index: CollectionItemIndex | TItem,
+  ): index is number {
     return (typeof index === 'number') && Math.round(index) === index;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _isItemIndex(index: number | Element | TItem): boolean {
+  _isItemIndex(
+    index: CollectionItemIndex | TItem,
+  ): index is CollectionItemIndex {
     return Class.abstract();
   }
 
   _getNormalizedItemIndex(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    value: Element,
+    value: Element | dxElementWrapper,
   ): number {
     return Class.abstract();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _normalizeItemIndex(index: number): number {
+  _normalizeItemIndex(index: CollectionItemIndex): number {
     return Class.abstract();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _denormalizeItemIndex(index: number): CollectionItemIndex {
+  _denormalizeItemIndex(index: CollectionItemIndex): CollectionItemIndex {
     return Class.abstract();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getItemByNormalizedIndex(index: number): dxElementWrapper {
+  _getItemByNormalizedIndex(index: CollectionItemIndex): dxElementWrapper {
     return Class.abstract();
   }
 

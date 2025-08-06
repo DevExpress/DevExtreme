@@ -68,11 +68,13 @@ const FOCUS_LAST = 'last';
 const FOCUS_FIRST = 'first';
 
 export type DataChangeType = 'insert' | 'update' | 'remove';
-export interface CollectionItemInfo<TItem, TIndex = number | { group: number; item: number }> {
+export interface CollectionItemInfo<TItem, TIndex = CollectionItemIndex> {
   readonly itemData: TItem;
   readonly itemElement: HTMLElement;
   readonly itemIndex: TIndex;
 }
+
+export type CollectionItemKey = string | number;
 
 export type ActionArgs<TItem> = CollectionItemInfo<TItem> | {
   cancel?: boolean;
@@ -81,7 +83,7 @@ export type ActionArgs<TItem> = CollectionItemInfo<TItem> | {
   toIndex?: CollectionItemIndex;
   node?: PublicNode;
 };
-export interface DataChange<TItem = CollectionItem, TKey = number | string> {
+export interface DataChange<TItem = CollectionItem, TKey = CollectionItemKey> {
   key: TKey;
   type: DataChangeType;
   data: TItem;
@@ -117,9 +119,10 @@ export interface CollectionWidgetBaseProperties<
     TComponent extends CollectionWidget<any, TItem, TKey> | any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TItem extends ItemLike = any,
-    TKey = string | number,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    TKey extends CollectionItemKey = any,
 > extends CollectionWidgetOptions<TComponent, TItem, TKey> {
-  focusedElement?: dxElementWrapper;
+  focusedElement?: Element | null;
 
   encodeNoDataText?: boolean;
 
@@ -142,7 +145,7 @@ class CollectionWidget<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TItem extends ItemLike = any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
+  TKey extends CollectionItemKey = any,
 > extends Widget<TProperties> {
   private _focusedItemId?: string;
 
@@ -217,6 +220,7 @@ class CollectionWidget<
 
   _enterKeyHandler(e: DxEvent<KeyboardEvent>): void {
     const { focusedElement } = this.option();
+
     const $itemElement = $(focusedElement);
 
     if (!$itemElement.length) {
@@ -404,7 +408,6 @@ class CollectionWidget<
     }
 
     const { focusedElement } = this.option();
-
     const $focusedElement = $(focusedElement);
     if ($focusedElement.length) {
       // NOTE: If focusedElement is set, selection was already processed on its focusing.
@@ -434,7 +437,6 @@ class CollectionWidget<
 
   _getActiveItem(last?: boolean): dxElementWrapper {
     const { focusedElement } = this.option();
-
     const $focusedElement = $(focusedElement);
 
     if ($focusedElement.length) {
@@ -1484,7 +1486,7 @@ class CollectionWidget<
 
   _itemEventHandlerByHandler(
     initiator: dxElementWrapper | Element,
-    handler: () => void,
+    handler: () => unknown,
     actionArgs: ActionArgs<TItem>,
     actionConfig?: ActionConfig,
   ): void {

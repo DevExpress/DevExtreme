@@ -1,25 +1,26 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
-
-import EditDecorator from './m_list.edit.decorator';
-import { register as registerDecorator } from './m_list.edit.decorator_registry';
+import type { BagConfig } from '@ts/ui/list/m_list.edit.decorator';
+import EditDecorator from '@ts/ui/list/m_list.edit.decorator';
+import { register as registerDecorator } from '@ts/ui/list/m_list.edit.decorator_registry';
 
 const STATIC_DELETE_BUTTON_CONTAINER_CLASS = 'dx-list-static-delete-button-container';
 const STATIC_DELETE_BUTTON_CLASS = 'dx-list-static-delete-button';
 
 class EditDecoratorStatic extends EditDecorator {
-  afterBag(config?) {
-    const { $itemElement } = config;
-    const { $container } = config;
+  afterBag(config: BagConfig): void {
+    const { $itemElement, $container } = config;
 
     const $button = $('<div>').addClass(STATIC_DELETE_BUTTON_CLASS);
 
     this._list._createComponent($button, Button, {
       icon: 'remove',
-      onClick: function (args) {
+      onClick: (args: Required<ClickEvent>): void => {
         args.event.stopPropagation();
         this._deleteItem($itemElement);
-      }.bind(this),
+      },
       integrationOptions: {},
       elementAttr: {
         role: null,
@@ -33,12 +34,13 @@ class EditDecoratorStatic extends EditDecorator {
       .append($button);
   }
 
-  _deleteItem($itemElement) {
+  _deleteItem($itemElement: dxElementWrapper): void {
     if ($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
       return;
     }
 
-    this._list.deleteItem($itemElement);
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this._list.deleteItem($itemElement.get(0));
   }
 }
 
