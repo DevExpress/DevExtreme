@@ -12,6 +12,7 @@ import type { Template } from '@ts/core/templates/m_template';
 import { getImageContainer } from '@ts/core/utils/m_icon';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import CollectionWidgetAsync from '@ts/ui/collection/collection_widget.async';
 import type {
   ItemRenderInfo,
@@ -79,7 +80,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     };
   }
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     const defaultHandlers = super._supportedKeys();
     const { linear, selectOnFocus } = this.option();
 

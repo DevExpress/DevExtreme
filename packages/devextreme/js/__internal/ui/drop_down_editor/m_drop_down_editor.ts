@@ -515,7 +515,6 @@ class DropDownEditor<
   }
 
   _isTargetOutOfComponent(newTarget): boolean {
-    // @ts-expect-error ts-error
     const popupWrapper = this.content ? $(this.content()).closest(`.${DROP_DOWN_EDITOR_OVERLAY}`) : this._$popup;
     // @ts-expect-error
     const isTargetOutsidePopup = $(newTarget).closest(`.${DROP_DOWN_EDITOR_OVERLAY}`, popupWrapper).length === 0;

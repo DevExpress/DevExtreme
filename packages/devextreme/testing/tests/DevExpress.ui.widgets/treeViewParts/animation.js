@@ -20,16 +20,16 @@ QUnit.test('expand item should be animated if option animationEnabled is true', 
     const originalStop = fx.stop;
 
     try {
-        fx.stop = sinon.spy(function($element) {
+        fx.stop = sinon.spy((element) => {
             const $nodeContainer = $node.find('.' + internals.NODE_CONTAINER_CLASS).eq(0);
-            assert.equal($element.get(0), $nodeContainer.get(0), 'correct element was animated');
+            assert.equal($(element).get(0), $nodeContainer.get(0), 'correct element was animated');
         });
-        fx.animate = sinon.spy(function($element, config) {
+        fx.animate = sinon.spy(function(element, config) {
             const $nodeContainer = $node.find('.' + internals.NODE_CONTAINER_CLASS).eq(0);
 
             config.duration = 0;
 
-            assert.equal($element.get(0), $nodeContainer.get(0), 'correct element was animated');
+            assert.equal($(element).get(0), $nodeContainer.get(0), 'correct element was animated');
             assert.equal(config.from['maxHeight'], 0, 'starting from zero height');
             assert.equal(config.to['maxHeight'], $nodeContainer.height(), 'starting from zero height');
             assert.ok($nodeContainer.hasClass(internals.OPENED_NODE_CONTAINER_CLASS), 'node container displayed');
@@ -44,7 +44,7 @@ QUnit.test('expand item should be animated if option animationEnabled is true', 
                 };
             })();
 
-            originalAnimation.call(this, $element, config);
+            originalAnimation.call(this, $(element), config);
         });
 
         const $treeView = $('#treeView').dxTreeView({
@@ -72,14 +72,14 @@ QUnit.test('collapse item should be animated if option animationEnabled is true'
     const originalStop = fx.stop;
 
     try {
-        fx.stop = sinon.spy(function($element) {
-            assert.equal($element.get(0), $nodeContainer.get(0), 'correct element was animated');
+        fx.stop = sinon.spy(function(element) {
+            assert.equal($(element).get(0), $nodeContainer.get(0), 'correct element was animated');
         });
-        fx.animate = sinon.spy(function($element, config) {
+        fx.animate = sinon.spy(function(element, config) {
             assert.notEqual(config.duration, 0, 'not zero duration');
             config.duration = 0;
 
-            assert.equal($element.get(0), $nodeContainer.get(0), 'correct element was animated');
+            assert.equal($(element).get(0), $nodeContainer.get(0), 'correct element was animated');
 
             assert.equal(config.from['maxHeight'], $nodeContainer.height(), 'starting from real height');
             assert.equal(config.to['maxHeight'], 0, 'starting to zero height');
@@ -95,7 +95,7 @@ QUnit.test('collapse item should be animated if option animationEnabled is true'
                 };
             })();
 
-            originalAnimation.call(this, $element, config);
+            originalAnimation.call(this, $(element), config);
         });
 
         const $treeView = $('#treeView').dxTreeView({
@@ -121,9 +121,9 @@ QUnit.test('collapse item should not be animated if option animationEnabled is f
     const originalAnimation = fx.animate;
 
     try {
-        fx.animate = sinon.spy(function($element, config) {
+        fx.animate = sinon.spy(function(element, config) {
             assert.equal(config.duration, 0, 'not zero duration');
-            originalAnimation.call(this, $element, config);
+            originalAnimation.call(this, $(element), config);
         });
 
         const $treeView = $('#treeView').dxTreeView({
@@ -149,7 +149,7 @@ QUnit.test('collapse item should not be animated if item is already collapsed', 
     const originalAnimation = fx.animate;
 
     try {
-        fx.animate = sinon.spy(function($element, config) {
+        fx.animate = sinon.spy(function(element, config) {
             assert.ok(false, 'animation was no run');
         });
 

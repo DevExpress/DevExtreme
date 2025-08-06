@@ -239,7 +239,6 @@ export default {
   },
 
   calculateLoadPanelPosition($element) {
-    // @ts-expect-error
     const $window = $(getWindow());
     if (getHeight($element) > getHeight($window)) {
       return {

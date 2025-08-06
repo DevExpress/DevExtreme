@@ -75,7 +75,7 @@ const Autocomplete = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["opened","value"]), []);
       const independentEvents = useMemo(() => (["onChange","onClosed","onContentReady","onCopy","onCut","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onItemClick","onKeyDown","onKeyUp","onOpened","onPaste","onValueChanged"]), []);

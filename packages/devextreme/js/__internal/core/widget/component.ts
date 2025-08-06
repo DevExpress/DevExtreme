@@ -23,10 +23,13 @@ import type { EventInfo, InitializedEventInfo } from '@js/events';
 
 import type { OptionChanged } from './types';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @stylistic/max-len
-const getEventName = (actionName): string => actionName.charAt(2).toLowerCase() + actionName.substr(3);
+const getEventName = (
+  actionName: string,
+): string => actionName.charAt(2).toLowerCase() + actionName.substr(3);
 
-const isInnerOption = (optionName): boolean => optionName.indexOf('_', 0) === 0;
+const isInnerOption = (
+  optionName: string,
+): boolean => optionName.indexOf('_', 0) === 0;
 
 export interface ActionConfig {
   beforeExecute?: (e: Record<string, unknown>) => void;
@@ -50,7 +53,7 @@ export interface Properties<TComponent> extends ComponentOptions<
 
 export class Component<
   TComponent extends Component<TComponent, TProperties>,
-  TProperties extends Properties<TComponent>,
+  TProperties extends Properties<TComponent> = Properties<TComponent>,
   // @ts-expect-error dxClass inheritance issue
 > extends (Class.inherit({}) as new() => {}) implements PublicComponent<TProperties> {
   _deprecatedOptions!: Partial<TProperties>;
@@ -375,7 +378,7 @@ export class Component<
   _createActionByOption(
     optionName: string,
     config?: ActionConfig,
-  ): (event?: Record<string, unknown>) => void {
+  ): (event?: unknown) => void {
     // eslint-disable-next-line @typescript-eslint/init-declarations
     let action;
     // eslint-disable-next-line @typescript-eslint/init-declarations
@@ -418,9 +421,7 @@ export class Component<
         const { beforeExecute } = config;
         // @ts-expect-error
         config.beforeExecute = (...props): void => {
-          // eslint-disable-next-line @stylistic/max-len
-          // eslint-disable-next-line @typescript-eslint/prefer-optional-chain, @typescript-eslint/no-unused-expressions
-          beforeExecute && beforeExecute.apply(this, props);
+          beforeExecute?.apply(this, props);
           this._eventsStrategy.fireEvent(eventName, props[0].args);
         };
         action = this._createAction(actionFunc, config);
@@ -465,7 +466,7 @@ export class Component<
   hasActionSubscription(actionName: string): boolean {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return !!this._options.silent(actionName)
-            || this._eventsStrategy.hasEvent(getEventName(actionName));
+      || this._eventsStrategy.hasEvent(getEventName(actionName));
   }
 
   isOptionDeprecated(name: string): boolean {
