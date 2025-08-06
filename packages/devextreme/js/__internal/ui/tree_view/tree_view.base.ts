@@ -243,7 +243,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     return $(element);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _widgetClass(): string {
     return WIDGET_CLASS;
   }
@@ -299,11 +298,10 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     ]);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _initSelectedItems(): void {}
 
   // @ts-expect-error ts-error
-  // eslint-disable-next-line class-methods-use-this
+
   _syncSelectionOptions(): Promise<unknown> {
     return Deferred().resolve().promise();
   }
@@ -443,7 +441,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     if (this._useCustomChildrenLoader()) {
       // @ts-expect-error ts-error
       this._loadChildrenByCustomLoader(null).done((newItems: TreeViewNode[]) => {
-        if (newItems && newItems.length) {
+        if (newItems?.length) {
           this.option('items', newItems);
         }
       });
@@ -494,7 +492,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   }
 
   _combineFilter(): unknown[] | undefined {
-    if (!this._filter.custom || !this._filter.custom.length) {
+    if (!this._filter.custom?.length) {
       return this._filter.internal;
     }
 
@@ -713,7 +711,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   _setAriaRole(): void {
     const { items } = this.option();
 
-    if (items && items.length) {
+    if (items?.length) {
       this.setAria({ role: 'tree' });
     }
   }
@@ -725,7 +723,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
     const { items } = this.option();
 
-    if (!items || !items.length) {
+    if (!items?.length) {
       return;
     }
 
@@ -828,7 +826,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     return $node;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getLevel($nodeContainer: dxElementWrapper): number {
     const parent = $nodeContainer.parent();
 
@@ -907,7 +904,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     return $node;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _setAriaSelectionAttribute(): void {}
 
   _renderChildren($node: dxElementWrapper, node: TreeViewNode): void {
@@ -973,7 +969,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     return deferred.promise();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getItemExtraPropNames(): string[] {
     return ['url', 'linkAttr'];
   }
@@ -1046,7 +1041,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _addLeafClass($node: dxElementWrapper): void {
     $node.addClass(IS_LEAF);
   }
@@ -1079,7 +1073,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     eventsEngine.off(itemsContainer, `.${EXPAND_EVENT_NAMESPACE}`, this._itemSelector());
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getEventNameByOption(name: TreeViewExpandEvent | undefined): string {
     const event = name === 'click' ? clickEventName : dblclickEvent;
     return addNamespace(event, EXPAND_EVENT_NAMESPACE);
@@ -1163,13 +1156,11 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     return this._updateExpandedItemsUI(node, newState, e);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _nodeHasRenderedChildren($node: dxElementWrapper): number {
     const $nodeContainer = $node.children(`.${NODE_CONTAINER_CLASS}`);
     return $nodeContainer.not(':empty').length;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getItem($node: dxElementWrapper): dxElementWrapper {
     return $node.children(`.${ITEM_CLASS}`).eq(0);
   }
@@ -1261,7 +1252,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _toggleCustomExpanderIcons(
     $expandIcon: dxElementWrapper,
     $collapseIcon: dxElementWrapper,
@@ -1338,7 +1328,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
       this._renderSublevel($node, actualNodeData, this._dataAdapter.getNodesByItems(items));
 
-      if (!items || !items.length) {
+      if (!items?.length) {
         completionCallback.resolve();
         return;
       }
@@ -1491,7 +1481,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   _renderContent(): void {
     const { items } = this.option();
 
-    if (items && items.length) {
+    if (items?.length) {
       this._contentAlreadyRendered = true;
     }
 
@@ -1555,7 +1545,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _toggleSelectedClass($node: dxElementWrapper, value: boolean | undefined): void {
     $node.toggleClass(SELECTED_ITEM_CLASS, !!value);
   }
@@ -1793,12 +1782,10 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     this._itemDXEventHandler(e, eventName, { node: this._dataAdapter.getPublicNode(node) });
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return ITEM_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return ITEM_DATA_KEY;
   }
@@ -1978,7 +1965,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     this.option('focusedElement', getPublicElement(itemElement));
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _findNonDisabledNodes($nodes: dxElementWrapper): dxElementWrapper {
     return $nodes.not(`:has(>.${ITEM_CLASS}.${DISABLED_STATE_CLASS})`);
   }
@@ -2002,7 +1988,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
     const $items = this._nodeElements();
 
-    if (!$items || !$items.length) {
+    if (!$items?.length) {
       return;
     }
 
@@ -2063,7 +2049,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getNodeItemElement($node: dxElementWrapper): Element {
     return $node.find(`.${ITEM_CLASS}`).get(0);
   }
@@ -2095,7 +2080,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     this._toggleExpandedState(node, true);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getClosestNonDisabledNode($node: dxElementWrapper): dxElementWrapper {
     const isNodeDisabled = ($el: dxElementWrapper): boolean => $el.children(`.${ITEM_CLASS}.${DISABLED_STATE_CLASS}`).length > 0;
 
@@ -2136,7 +2120,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   _encodeString(value: string): string;
   _encodeString(value: number): number;
   _encodeString(value: ItemKey): ItemKey;
-  // eslint-disable-next-line class-methods-use-this
+
   _encodeString(value: ItemKey): ItemKey {
     return isString(value)
       ? encodeURI(value)
@@ -2146,7 +2130,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   _decodeString(value: string): string;
   _decodeString(value: number): number;
   _decodeString(value: ItemKey): ItemKey;
-  // eslint-disable-next-line class-methods-use-this
+
   _decodeString(value: ItemKey): ItemKey {
     return isString(value)
       ? decodeURI(value)
@@ -2274,7 +2258,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     this._expandNodes(nodeKeysToExpand.reverse()).always(() => {
       const $element = this._getNodeElement(node);
 
-      if ($element && $element.length) {
+      if ($element?.length) {
         this.scrollToElementTopLeft($element[0]);
         scrollCallback.resolve();
       } else {
