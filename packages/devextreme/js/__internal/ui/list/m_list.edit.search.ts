@@ -7,9 +7,8 @@ import SearchBoxController, {
   getOperationBySearchMode,
   type SearchBoxControllerOptions,
 } from '@ts/ui/collection/m_search_box_mixin';
-
-import type { ListBaseProperties } from './m_list.base';
-import ListEdit from './m_list.edit';
+import type { ListBaseProperties } from '@ts/ui/list/m_list.base';
+import ListEdit from '@ts/ui/list/m_list.edit';
 
 // STYLE list
 

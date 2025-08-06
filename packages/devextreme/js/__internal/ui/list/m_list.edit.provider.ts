@@ -7,12 +7,11 @@ import type { Item } from '@js/ui/list';
 import errors from '@js/ui/widget/ui.errors';
 import { isFunction } from '@ts/core/utils/m_type';
 import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import type List from '@ts/ui/list/m_list.edit';
 import type { BagConfig } from '@ts/ui/list/m_list.edit.decorator';
 import type EditDecorator from '@ts/ui/list/m_list.edit.decorator';
-
-import type List from './m_list.edit';
-import type { DecoratorClass } from './m_list.edit.decorator_registry';
-import { registry } from './m_list.edit.decorator_registry';
+import type { DecoratorClass } from '@ts/ui/list/m_list.edit.decorator_registry';
+import { registry } from '@ts/ui/list/m_list.edit.decorator_registry';
 
 interface OptionRegistry {
   enabled: () => boolean;
@@ -148,6 +147,7 @@ class EditProvider {
 
     const config = {
       $itemElement,
+      $container: $(),
     };
 
     this._prependBeforeBags($itemElement, config);
@@ -188,8 +188,8 @@ class EditProvider {
       if (isFunction(decorator[method])) {
         const $container = $('<div>').addClass(containerClass);
         decorator[method]({
-          $container,
           ...config,
+          $container,
         });
         if ($container.children().length) {
           $collector.append($container);

@@ -15,15 +15,14 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import { NOT_EXISTING_INDEX } from '@ts/ui/collection/collection_widget.edit';
+import type { CollectionItemIndex } from '@ts/ui/collection/collection_widget.edit.strategy';
+import type PlainEditStrategy from '@ts/ui/collection/collection_widget.edit.strategy.plain';
 import type { CachedItem } from '@ts/ui/collection/collection_widget.live_update';
 import { PRIVATE_KEY_FIELD } from '@ts/ui/collection/collection_widget.live_update';
-
-import type { CollectionItemIndex } from '../collection/collection_widget.edit.strategy';
-import type PlainEditStrategy from '../collection/collection_widget.edit.strategy.plain';
-import GroupedEditStrategy from './list.edit.strategy.grouped';
-import type { ListBaseProperties } from './m_list.base';
-import { ListBase } from './m_list.base';
-import EditProvider from './m_list.edit.provider';
+import GroupedEditStrategy from '@ts/ui/list/list.edit.strategy.grouped';
+import type { ListBaseProperties } from '@ts/ui/list/m_list.base';
+import { ListBase } from '@ts/ui/list/m_list.base';
+import EditProvider from '@ts/ui/list/m_list.edit.provider';
 
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const LIST_ITEM_RESPONSE_WAIT_CLASS = 'dx-list-item-response-wait';

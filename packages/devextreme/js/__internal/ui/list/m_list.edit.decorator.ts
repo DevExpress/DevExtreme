@@ -3,17 +3,14 @@ import {
   end as swipeEventEnd,
   start as swipeEventStart,
   swipe as swipeEventSwipe,
-  type SwipeEndEvent,
-  type SwipeUpdateEvent,
 } from '@js/common/core/events/swipe';
 import { addNamespace } from '@js/common/core/events/utils';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getWidth } from '@js/core/utils/size';
 import type { Cancelable, DxEvent } from '@js/events';
-
-import type { ListBaseProperties } from './m_list.base';
-import type List from './m_list.edit';
+import type { ListBaseProperties } from '@ts/ui/list/m_list.base';
+import type List from '@ts/ui/list/m_list.edit';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
 const SWIPE_START_EVENT_NAME = addNamespace(swipeEventStart, LIST_EDIT_DECORATOR);
@@ -22,13 +19,18 @@ const SWIPE_END_EVENT_NAME = addNamespace(swipeEventEnd, LIST_EDIT_DECORATOR);
 
 export interface BagConfig {
   $itemElement: dxElementWrapper;
-  $container?: dxElementWrapper;
+  $container: dxElementWrapper;
 }
 
 export type CommonControlOptions = Pick<ListBaseProperties, 'activeStateEnabled' | 'hoverStateEnabled' | 'focusStateEnabled'>;
 
+export interface SwipeUpdateArgs { offset: number }
+export interface SwipeEndArgs { offset: number; targetOffset: number }
+
 class EditDecorator {
   _clearSwipeCache?: boolean;
+
+  _itemWidthCache = 0;
 
   _list!: List;
 
@@ -48,36 +50,34 @@ class EditDecorator {
 
   _attachSwipeEvent(config: BagConfig): void {
     const swipeConfig = {
-      // eslint-disable-next-line func-names
-      itemSizeFunc: function (): number {
+      itemSizeFunc: (): number => {
         if (this._clearSwipeCache) {
           this._itemWidthCache = getWidth(this._list.$element());
           this._clearSwipeCache = false;
         }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return this._itemWidthCache;
-      }.bind(this),
+      },
     };
 
     eventsEngine.on(
       config.$itemElement,
       SWIPE_START_EVENT_NAME,
       swipeConfig,
-      (e): void => {
+      (e: DxEvent): void => {
         this._itemSwipeStartHandler(e);
       },
     );
     eventsEngine.on(
       config.$itemElement,
       SWIPE_UPDATE_EVENT_NAME,
-      (e): void => {
+      (e: DxEvent & SwipeUpdateArgs): void => {
         this._itemSwipeUpdateHandler(e);
       },
     );
     eventsEngine.on(
       config.$itemElement,
       SWIPE_END_EVENT_NAME,
-      (e): void => {
+      (e: DxEvent & SwipeEndArgs): void => {
         this._itemSwipeEndHandler(e);
       },
     );
@@ -95,7 +95,7 @@ class EditDecorator {
     this._swipeStartHandler($itemElement);
   }
 
-  _itemSwipeUpdateHandler(e: SwipeUpdateEvent['event']): void {
+  _itemSwipeUpdateHandler(e: DxEvent & SwipeUpdateArgs): void {
     const target = e.currentTarget;
     if (target instanceof Element) {
       const $itemElement = $(target);
@@ -103,7 +103,7 @@ class EditDecorator {
     }
   }
 
-  _itemSwipeEndHandler(e: SwipeEndEvent['event']): void {
+  _itemSwipeEndHandler(e: DxEvent & SwipeEndArgs): void {
     const target = e.currentTarget;
     if (target instanceof Element) {
       const $itemElement = $(target);
@@ -112,10 +112,10 @@ class EditDecorator {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
-  beforeBag(config: Required<BagConfig>): void {}
+  beforeBag(config: BagConfig): void {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
-  afterBag(config: Required<BagConfig>): void {}
+  afterBag(config: BagConfig): void {}
 
   _commonOptions(): CommonControlOptions {
     const { activeStateEnabled, hoverStateEnabled, focusStateEnabled } = this._list.option();
@@ -152,11 +152,16 @@ class EditDecorator {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
   _swipeStartHandler($element: dxElementWrapper): void {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
-  _swipeUpdateHandler($element: dxElementWrapper, event: SwipeUpdateEvent['event']): void {}
+  // eslint-disable-next-line class-methods-use-this
+  _swipeUpdateHandler(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    $element: dxElementWrapper,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    event: DxEvent & SwipeUpdateArgs & Cancelable,
+  ): void {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,class-methods-use-this
-  _swipeEndHandler($element: dxElementWrapper, event: SwipeEndEvent['event']): void {}
+  _swipeEndHandler($element: dxElementWrapper, event: DxEvent & SwipeEndArgs): void {}
 
   // eslint-disable-next-line class-methods-use-this
   visibilityChange(): void {}

@@ -3,10 +3,10 @@ import { move } from '@js/common/core/animation/translator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { getWidth } from '@js/core/utils/size';
-import type { SwipeEndEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
-
-import EditDecorator from './m_list.edit.decorator';
-import { register as registerDecorator } from './m_list.edit.decorator_registry';
+import type { DxEvent } from '@js/events';
+import type { SwipeEndArgs, SwipeUpdateArgs } from '@ts/ui/list/m_list.edit.decorator';
+import EditDecorator from '@ts/ui/list/m_list.edit.decorator';
+import { register as registerDecorator } from '@ts/ui/list/m_list.edit.decorator_registry';
 
 class EditDecoratorSwipe extends EditDecorator {
   _itemElementWidth!: number;
@@ -41,20 +41,18 @@ class EditDecoratorSwipe extends EditDecorator {
     return deferred.promise();
   }
 
-  _swipeStartHandler($itemElement: dxElementWrapper): boolean {
+  _swipeStartHandler($itemElement: dxElementWrapper): void {
     this._itemElementWidth = getWidth($itemElement);
-    return true;
   }
 
-  _swipeUpdateHandler($itemElement: dxElementWrapper, args: SwipeUpdateEvent['event']): boolean {
-    const { offset } = args;
+  _swipeUpdateHandler($itemElement: dxElementWrapper, e: DxEvent & SwipeUpdateArgs): void {
+    const { offset } = e;
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._renderItemPosition($itemElement, offset);
-    return true;
   }
 
-  _swipeEndHandler($itemElement: dxElementWrapper, args: SwipeEndEvent['event']): boolean {
-    const { targetOffset } = args;
+  _swipeEndHandler($itemElement: dxElementWrapper, e: DxEvent & SwipeEndArgs): void {
+    const { targetOffset } = e;
 
     this._renderItemPosition($itemElement, targetOffset, true)
       // @ts-expect-error ts-error
@@ -67,7 +65,6 @@ class EditDecoratorSwipe extends EditDecorator {
           });
         }
       });
-    return true;
   }
 }
 

@@ -4,14 +4,13 @@ import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getOuterWidth, getWidth } from '@js/core/utils/size';
+import type { DxEvent } from '@js/events';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import { current, isMaterialBased } from '@js/ui/themes';
-import type { SwipeEndEvent } from '@ts/events/m_swipe';
-import type { BagConfig } from '@ts/ui/list/m_list.edit.decorator';
-
-import SwitchableEditDecorator from './m_list.edit.decorator.switchable';
-import { register as registerDecorator } from './m_list.edit.decorator_registry';
+import type { BagConfig, SwipeEndArgs } from '@ts/ui/list/m_list.edit.decorator';
+import SwitchableEditDecorator from '@ts/ui/list/m_list.edit.decorator.switchable';
+import { register as registerDecorator } from '@ts/ui/list/m_list.edit.decorator_registry';
 
 const SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS = 'dx-list-switchable-delete-button-container';
 const SWITCHABLE_DELETE_BUTTON_WRAPPER_CLASS = 'dx-list-switchable-delete-button-wrapper';
@@ -141,8 +140,8 @@ class SwitchableButtonToggleEditDecorator extends SwitchableButtonEditDecorator 
       tabIndex: -1,
     });
 
-    $container?.addClass(TOGGLE_DELETE_SWITCH_CONTAINER_CLASS);
-    $container?.append($toggle);
+    $container.addClass(TOGGLE_DELETE_SWITCH_CONTAINER_CLASS);
+    $container.append($toggle);
   }
 }
 
@@ -158,13 +157,11 @@ class SwitchableButtonSlideEditDecorator extends SwitchableButtonEditDecorator {
     return true;
   }
 
-  _swipeEndHandler($itemElement: dxElementWrapper, args: SwipeEndEvent['event']): boolean {
+  _swipeEndHandler($itemElement: dxElementWrapper, args: DxEvent & SwipeEndArgs): void {
     if (args.targetOffset !== 0) {
       fx.stop(this._$buttonContainer.get(0), false);
       this._toggleDeleteReady($itemElement);
     }
-
-    return true;
   }
 }
 

@@ -14,12 +14,10 @@ import type { DxEvent } from '@js/events';
 import type dxActionSheet from '@js/ui/action_sheet';
 import type { Item } from '@js/ui/list';
 import { current, isMaterialBased } from '@js/ui/themes';
-import type { SwipeEvent, SwipeUpdateEvent } from '@ts/events/m_swipe';
 import ActionSheet from '@ts/ui/action_sheet';
-import type { BagConfig } from '@ts/ui/list/m_list.edit.decorator';
-
-import SwitchableEditDecorator from './m_list.edit.decorator.switchable';
-import { register as registerDecorator } from './m_list.edit.decorator_registry';
+import type { BagConfig, SwipeEndArgs, SwipeUpdateArgs } from '@ts/ui/list/m_list.edit.decorator';
+import SwitchableEditDecorator from '@ts/ui/list/m_list.edit.decorator.switchable';
+import { register as registerDecorator } from '@ts/ui/list/m_list.edit.decorator_registry';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
 const CLICK_EVENT_NAME = addNamespace(clickEventName, LIST_EDIT_DECORATOR);
@@ -191,19 +189,22 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
     this._setPositions(this._getPositions(0));
   }
 
-  _swipeUpdateHandler($itemElement: dxElementWrapper, args: SwipeUpdateEvent['event'] & Cancelable): boolean | undefined {
+  _swipeUpdateHandler(
+    $itemElement: dxElementWrapper,
+    e: DxEvent & SwipeUpdateArgs & Cancelable,
+  ): void {
     const rtl = this._isRtlEnabled();
     const signCorrection = rtl ? -1 : 1;
     const isItemReadyToDelete = this._isReadyToDelete($itemElement);
     const moveJustStarted = this._getCurrentPositions().content
       === this._getStartPositions().content;
 
-    if (moveJustStarted && !isItemReadyToDelete && args.offset * signCorrection > 0) {
-      args.cancel = true;
-      return undefined;
+    if (moveJustStarted && !isItemReadyToDelete && e.offset * signCorrection > 0) {
+      e.cancel = true;
+      return;
     }
 
-    const offset = this._cachedItemWidth * args.offset;
+    const offset = this._cachedItemWidth * e.offset;
     const startOffset = isItemReadyToDelete ? -this._cachedButtonWidth * signCorrection : 0;
     const correctedOffset = (offset + startOffset) * signCorrection;
     const percent = correctedOffset < 0
@@ -211,7 +212,6 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
       : 0;
 
     this._setPositions(this._getPositions(percent));
-    return true;
   }
 
   _getStartPositions(): Positions {
@@ -272,7 +272,7 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
     return this._cachedItemWidth - this._cachedButtonWidth;
   }
 
-  _swipeEndHandler($itemElement: dxElementWrapper, args: SwipeEvent<{ offset: number; targetOffset: number }>['event']): boolean {
+  _swipeEndHandler($itemElement: dxElementWrapper, args: DxEvent & SwipeEndArgs): void {
     this._cacheItemData($itemElement);
 
     const signCorrection = this._isRtlEnabled() ? 1 : -1;
@@ -282,7 +282,6 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
     const readyToDelete = args.targetOffset === signCorrection && endedAtReadyToDelete;
 
     this._toggleDeleteReady($itemElement, readyToDelete);
-    return true;
   }
 
   _enablePositioning($itemElement: dxElementWrapper): void {

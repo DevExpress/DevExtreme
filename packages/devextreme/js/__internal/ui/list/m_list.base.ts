@@ -142,15 +142,15 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
 
   _isFirstLoadCompleted?: boolean;
 
-  _groupRenderAction?: (e?: Partial<GroupRenderedEvent>) => void;
+  _groupRenderAction?: (e: Partial<GroupRenderedEvent>) => void;
 
   _itemElementsCache!: dxElementWrapper;
 
   _isLoadIndicationSuppressed?: boolean;
 
-  _scrollAction?: (e?: ScrollEvent) => void;
+  _scrollAction?: (e: ScrollEvent) => void;
 
-  _pullRefreshAction?: (e?: PullRefreshEvent) => void;
+  _pullRefreshAction?: (e: PullRefreshEvent) => void;
 
   _pageLoadingAction?: (e: PageLoadingEvent) => void;
 
@@ -765,8 +765,12 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     return !scrollView || getHeight(scrollView.content()) > getHeight(scrollView.container());
   }
 
-  _pullDownHandler(e?: PullRefreshEvent): void {
-    this._pullRefreshAction?.(e);
+  _pullDownHandler(): void {
+    const pullRefreshArgs = {
+      component: this as unknown as dxList,
+      element: this.element(),
+    };
+    this._pullRefreshAction?.(pullRefreshArgs);
     const dataController = this._dataController;
 
     if (dataController.getDataSource() && !dataController.isLoading()) {

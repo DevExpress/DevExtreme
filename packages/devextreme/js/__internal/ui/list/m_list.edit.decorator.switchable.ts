@@ -10,8 +10,7 @@ import { getOuterHeight, setHeight } from '@js/core/utils/size';
 import type { DxEvent } from '@js/events';
 import type { ScrollInfo } from '@js/ui/list';
 import type List from '@ts/ui/list/m_list.edit';
-
-import EditDecorator from './m_list.edit.decorator';
+import EditDecorator from '@ts/ui/list/m_list.edit.decorator';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
 const POINTER_DOWN_EVENT_NAME = addNamespace(pointerEvents.down, LIST_EDIT_DECORATOR);

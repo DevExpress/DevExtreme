@@ -10,13 +10,11 @@ import type { DxEvent } from '@js/events';
 import type { ValueChangedEvent as CheckBoxValueChangedEvent } from '@js/ui/check_box';
 import CheckBox from '@js/ui/check_box';
 import errors from '@js/ui/widget/ui.errors';
-import type { ValueChangedEvent as EditorValueChangedEvent } from '@ts/ui/editor/editor';
 import type Editor from '@ts/ui/editor/editor';
+import type { BagConfig } from '@ts/ui/list/m_list.edit.decorator';
+import EditDecorator from '@ts/ui/list/m_list.edit.decorator';
+import { register as registerDecorator } from '@ts/ui/list/m_list.edit.decorator_registry';
 import RadioButton from '@ts/ui/radio_group/m_radio_button';
-
-import type { BagConfig } from './m_list.edit.decorator';
-import EditDecorator from './m_list.edit.decorator';
-import { register as registerDecorator } from './m_list.edit.decorator_registry';
 
 const SELECT_DECORATOR_ENABLED_CLASS = 'dx-list-select-decorator-enabled';
 
@@ -33,8 +31,6 @@ const SELECT_RADIO_BUTTON_CLASS = 'dx-list-select-radiobutton';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const CLICK_EVENT_NAME = addNamespace(clickEventName, 'dxListEditDecorator');
-
-type UnifiedValueChangedEvent = EditorValueChangedEvent | CheckBoxValueChangedEvent;
 
 class EditDecoratorSelection extends EditDecorator {
   _$selectAll?: dxElementWrapper | null;
@@ -66,8 +62,8 @@ class EditDecoratorSelection extends EditDecorator {
   }
 
   beforeBag(config: BagConfig): void {
-    const { $itemElement = $() } = config;
-    const $container = config?.$container?.addClass(this._containerClass) ?? $();
+    const { $itemElement } = config;
+    const $container = config.$container.addClass(this._containerClass);
 
     const $control = $('<div>')
       .addClass(this._controlClass)
@@ -79,7 +75,7 @@ class EditDecoratorSelection extends EditDecorator {
       elementAttr: { 'aria-label': messageLocalization.format('CheckState') },
       focusStateEnabled: false,
       hoverStateEnabled: false,
-      onValueChanged: (e: UnifiedValueChangedEvent): void => {
+      onValueChanged: (e): void => {
         const { value, component, event } = e;
         const isUiClick = !!event;
         if (isUiClick) {
