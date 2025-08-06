@@ -23,7 +23,8 @@ export const getElementMaxHeightByWindow = (
 
   let actualOffset = 0;
 
-  const windowScrollTop = $window.scrollTop();
+  // @ts-expect-error scrollTop should be typed correctly with return type
+  const windowScrollTop: number = $window.scrollTop();
   const windowHeight = getInnerHeight($window);
 
   if (isNumeric(startLocation)) {
@@ -31,11 +32,8 @@ export const getElementMaxHeightByWindow = (
       return elementOffset - startLocation;
     }
 
-    // @ts-expect-error scrollTop should be typed correctly with return type
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
     actualOffset = windowHeight - startLocation + windowScrollTop;
   } else {
-    // @ts-expect-error scrollTop should be typed correctly with return type
     const offsetTop = elementOffset - windowScrollTop;
     const offsetBottom = windowHeight - offsetTop - getOuterHeight($element);
 
