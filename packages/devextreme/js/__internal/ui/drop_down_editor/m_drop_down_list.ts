@@ -28,7 +28,7 @@ import type { Properties as PopupProperties } from '@js/ui/popup';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
-import type { ListSearchProperties } from '@ts/ui/list/m_list.edit.search';
+import type { ListBaseProperties } from '@ts/ui/list/m_list.base';
 import List from '@ts/ui/list/m_list.edit.search';
 import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
 
@@ -48,7 +48,7 @@ interface DropDownListProperties extends Omit<dxDropDownListOptions<DropDownList
 'onOpened' | 'onClosed' |
 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' | 'onKeyDown' | 'onKeyUp' | 'onPaste'
 | 'onValueChanged' | 'validationMessagePosition' | 'onContentReady' | 'onDisposing' | 'onOptionChanged' | 'onInitialized'> {
-
+  encodeNoDataText?: boolean;
 }
 
 class DropDownList<
@@ -578,7 +578,7 @@ class DropDownList<
     return devices.real().deviceType === 'desktop';
   }
 
-  _listConfig(): ListSearchProperties {
+  _listConfig(): ListBaseProperties {
     const {
       noDataText,
       grouped,
@@ -587,6 +587,8 @@ class DropDownList<
       groupTemplate,
       hoverStateEnabled,
       focusStateEnabled,
+      encodeNoDataText,
+      useItemTextAsTitle,
     } = this.option();
 
     const options = {
@@ -594,10 +596,10 @@ class DropDownList<
       _templates: this.option('_templates'),
       templateProvider: this.option('templateProvider'),
       noDataText,
-      encodeNoDataText: this.option('encodeNoDataText'),
+      encodeNoDataText,
       grouped,
       wrapItemText,
-      useItemTextAsTitle: this.option('useItemTextAsTitle'),
+      useItemTextAsTitle,
       onContentReady: this._listContentReadyHandler.bind(this),
       itemTemplate,
       indicateLoading: false,

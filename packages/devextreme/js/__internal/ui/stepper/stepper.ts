@@ -1,4 +1,4 @@
-import type { Orientation, SingleOrNone } from '@js/common';
+import type { Orientation } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import type { DxElement } from '@js/core/element';
@@ -25,6 +25,8 @@ import StepperItem, {
   STEP_VALID_ICON,
 } from '@ts/ui/stepper/stepper_item';
 
+import type { CollectionWidgetEditProperties } from '../collection/collection_widget.edit';
+
 export const STEPPER_CLASS = 'dx-stepper';
 export const STEP_LIST_CLASS = 'dx-step-list';
 export const STEP_CLASS = 'dx-step';
@@ -44,16 +46,11 @@ export const ORIENTATION: Record<string, Orientation> = {
   vertical: 'vertical',
 };
 
-export interface StepperProperties extends Properties {
-  selectionMode?: SingleOrNone;
-
-  loopItemFocus?: boolean;
-
-  selectionRequired?: boolean;
-
+export interface StepperProperties extends Properties, Omit<
+  CollectionWidgetEditProperties<Stepper, Item>,
+  keyof Properties<Item>
+> {
   hintExpr?: (data: Item) => string | undefined;
-
-  _itemAttributes?: Record<string, unknown>;
 }
 
 class Stepper extends CollectionWidgetAsync<StepperProperties> {

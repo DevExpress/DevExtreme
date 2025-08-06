@@ -22,7 +22,7 @@ import type { Item, Properties } from '@js/ui/drop_down_button';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import { getElementWidth, getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
-import type { ListSearchProperties } from '@ts/ui/list/m_list.edit.search';
+import type { ListBaseProperties } from '@ts/ui/list/m_list.base';
 import List from '@ts/ui/list/m_list.edit.search';
 import Popup from '@ts/ui/popup/m_popup';
 
@@ -419,11 +419,12 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     }, this._options.cache('dropDownOptions'), { visible: this.option('opened') });
   }
 
-  _listOptions(): ListSearchProperties {
+  _listOptions(): ListBaseProperties {
     const {
       wrapItemText,
       focusStateEnabled,
       hoverStateEnabled,
+      useItemTextAsTitle,
       grouped,
       groupTemplate,
       noDataText,
@@ -440,7 +441,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
       wrapItemText,
       focusStateEnabled,
       hoverStateEnabled,
-      useItemTextAsTitle: this.option('useItemTextAsTitle'),
+      useItemTextAsTitle,
       // eslint-disable-next-line
       onContentReady: () => this._fireContentReadyAction(),
       selectedItemKeys: isDefined(selectedItemKey) && useSelectMode ? [selectedItemKey] : [],

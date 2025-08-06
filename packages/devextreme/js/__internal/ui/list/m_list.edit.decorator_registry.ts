@@ -1,13 +1,23 @@
-import { extend } from '@js/core/utils/extend';
+import type List from '@ts/ui/list/m_list.edit';
+import type EditDecorator from '@ts/ui/list/m_list.edit.decorator';
 
-export const registry = {};
+export type DecoratorClass = new (list: List) => EditDecorator;
 
-export function register(option, type, decoratorClass) {
-  const decoratorsRegistry = registry;
+export interface DecoratorRegistry {
+  [option: string]: {
+    [type: string]: DecoratorClass;
+  };
+}
 
-  const decoratorConfig = {};
-  decoratorConfig[option] = decoratorsRegistry[option] ? decoratorsRegistry[option] : {};
-  decoratorConfig[option][type] = decoratorClass;
+export const registry: DecoratorRegistry = {};
 
-  extend(decoratorsRegistry, decoratorConfig);
+export function register(
+  option: string,
+  type: string,
+  decoratorClass: DecoratorClass,
+): void {
+  if (!registry[option]) {
+    registry[option] = {};
+  }
+  registry[option][type] = decoratorClass;
 }
