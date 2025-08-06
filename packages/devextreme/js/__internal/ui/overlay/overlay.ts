@@ -34,9 +34,9 @@ import { changeCallback } from '@js/core/utils/view_port';
 import type { DxEvent } from '@js/events';
 import type dxOverlay from '@js/ui/overlay';
 import type { dxOverlayAnimation, Properties } from '@js/ui/overlay';
-import { tabbable } from '@js/ui/widget/selectors';
 import uiErrors from '@js/ui/widget/ui.errors';
 import domUtils from '@ts/core/utils/m_dom';
+import selectors from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
@@ -917,12 +917,12 @@ class Overlay<
       const $reverseElement = $elements.eq(elementsCount - i);
 
       // @ts-expect-error is should can get function as callback
-      if (!$first && $currentElement.is(tabbable)) {
+      if (!$first && $currentElement.is(selectors.tabbable)) {
         $first = $currentElement;
       }
 
       // @ts-expect-error is should can get function as callback
-      if (!$last && $reverseElement.is(tabbable)) {
+      if (!$last && $reverseElement.is(selectors.tabbable)) {
         $last = $reverseElement;
       }
 

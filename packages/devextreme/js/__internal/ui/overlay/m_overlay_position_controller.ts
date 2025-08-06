@@ -10,7 +10,7 @@ import {
   isString,
   isWindow,
 } from '@js/core/utils/type';
-import swatch from '@js/ui/widget/swatch_container';
+import swatch from '@ts/core/utils/m_swatch_container';
 
 import windowUtils from '../../core/utils/m_window';
 
