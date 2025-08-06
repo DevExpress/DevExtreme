@@ -69,7 +69,7 @@ const List = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["items","selectedItemKeys","selectedItems"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onGroupRendered","onInitialized","onItemClick","onItemContextMenu","onItemDeleted","onItemDeleting","onItemHold","onItemRendered","onItemReordered","onItemSwipe","onPageLoading","onPullRefresh","onScroll","onSelectAllValueChanged","onSelectionChanging"]), []);

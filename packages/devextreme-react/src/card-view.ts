@@ -90,7 +90,7 @@ const CardView = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["filterValue","selectedCardKeys","filterBuilder.value","filterPanel.filterEnabled","editing.form.formData","loadPanel.position","loadPanel.visible","paging.pageIndex","paging.pageSize","searchPanel.text"]), []);
       const independentEvents = useMemo(() => (["onCardClick","onCardDblClick","onCardInserted","onCardInserting","onCardPrepared","onCardRemoved","onCardRemoving","onCardSaved","onCardSaving","onCardUpdated","onCardUpdating","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onFieldCaptionClick","onFieldCaptionDblClick","onFieldCaptionPrepared","onFieldValueClick","onFieldValueDblClick","onFieldValuePrepared","onInitialized","onInitNewCard"]), []);

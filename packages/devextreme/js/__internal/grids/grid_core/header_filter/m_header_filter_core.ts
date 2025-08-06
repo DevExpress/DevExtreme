@@ -15,7 +15,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import List from '@ts/ui/list/m_list.edit.search';
-import TreeView from '@ts/ui/tree_view/m_tree_view.search';
+import TreeView from '@ts/ui/tree_view/tree_view.search';
 
 import gridCoreUtils from '../m_utils';
 
