@@ -16,7 +16,6 @@
         {
             "matchPackageNames": [
                 "openai",
-                "rehype-parse",
                 "rehype-minify-whitespace",
                 "rehype-parse",
                 "rehype-remark",
