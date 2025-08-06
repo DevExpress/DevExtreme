@@ -1517,8 +1517,6 @@ module('tooltip integration', {
             const arrowCenter = $arrow.offset().left + $arrow.outerWidth() / 2;
             const handleCenter = this.$handle.offset().left + this.$handle.outerWidth() / 2;
 
-            debugger;
-
             assert.roughEqual(arrowCenter, handleCenter, 0.1, 'arrow is centered');
         });
 
