@@ -2,27 +2,43 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getInnerHeight, getOuterHeight } from '@js/core/utils/size';
 import { isNumeric } from '@js/core/utils/type';
-
-import windowUtils from '../../core/utils/m_window';
+import { getWindow } from '@ts/core/utils/m_window';
 
 const WINDOW_HEIGHT_PERCENT = 0.9;
 
-export const getElementMaxHeightByWindow = ($element: dxElementWrapper, startLocation?: number) => {
-  const $window = $(windowUtils.getWindow());
-  // @ts-expect-error
-  const { top: elementOffset } = $element.offset();
-  let actualOffset;
+export const getElementMaxHeightByWindow = (
+  $element: dxElementWrapper,
+  startLocation?: number,
+): number | undefined => {
+  const offset = $element.offset();
+
+  // offset can be undefined if the element is not inserted into the DOM
+  // or the element does not exist
+  if (offset === undefined) {
+    return undefined;
+  }
+
+  const $window = $(getWindow());
+  const { top: elementOffset } = offset;
+
+  let actualOffset = 0;
+
+  const windowScrollTop = $window.scrollTop();
+  const windowHeight = getInnerHeight($window);
 
   if (isNumeric(startLocation)) {
     if (startLocation < elementOffset) {
       return elementOffset - startLocation;
     }
-    // @ts-expect-error
-    actualOffset = getInnerHeight($window) - startLocation + $window.scrollTop();
+
+    // @ts-expect-error scrollTop should be typed correctly with return type
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    actualOffset = windowHeight - startLocation + windowScrollTop;
   } else {
-    // @ts-expect-error
-    const offsetTop = elementOffset - $window.scrollTop();
-    const offsetBottom = getInnerHeight($window) - offsetTop - getOuterHeight($element);
+    // @ts-expect-error scrollTop should be typed correctly with return type
+    const offsetTop = elementOffset - windowScrollTop;
+    const offsetBottom = windowHeight - offsetTop - getOuterHeight($element);
+
     actualOffset = Math.max(offsetTop, offsetBottom);
   }
 
