@@ -953,3 +953,37 @@ test('It is possible to focus row that was added via push method if previously r
     focusedRowEnabled: true,
   }));
 });
+
+test('Group should expand when focusedRowKey is set and data items have \'items\' property', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.apiOption('focusedRowKey', 1);
+
+  await takeScreenshot('focused-row_under_group_when_data-items_have_items-property.png', dataGrid.element);
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    {
+      id: 1, group: 'A', name: 'Item 1', items: 1,
+    },
+    {
+      id: 2, group: 'A', name: 'Item 2', items: 2,
+    },
+  ],
+  keyExpr: 'id',
+  grouping: {
+    autoExpandAll: false,
+  },
+  columns: [
+    { dataField: 'id' },
+    { dataField: 'group', groupIndex: 0 },
+    { dataField: 'name' },
+    { dataField: 'items' },
+  ],
+  height: 400,
+  focusedRowEnabled: true,
+}));
