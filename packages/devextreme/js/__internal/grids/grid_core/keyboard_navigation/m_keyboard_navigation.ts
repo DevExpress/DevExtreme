@@ -997,9 +997,9 @@ export class KeyboardNavigationController extends modules.ViewController {
       this._closeEditCell();
     }
 
-    const wasFocused = this._focusCell($nextCell, !nextCellInfo.isHighlighted);
+    const nextCellFocused = this._focusCell($nextCell, !nextCellInfo.isHighlighted);
 
-    if (wasFocused) {
+    if (nextCellFocused) {
       const isRowMode = this._isRowEditMode();
       if (!isRowMode && isEditingAllowed) {
         this._editFocusedCell();
