@@ -6,7 +6,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import SearchBoxController, {
   getOperationBySearchMode,
   type SearchBoxControllerOptions,
-} from '@ts/ui/collection/m_search_box_mixin';
+} from '@ts/ui/collection/search_box_controller';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
 import ListEdit from '@ts/ui/list/list.edit';
 
