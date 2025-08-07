@@ -10,6 +10,8 @@ import type { ActionConfig } from '@ts/core/widget/component';
 import type { ButtonProps } from './button';
 import { Button as ButtonComponent, buttonComponentProps, defaultOptions } from './button';
 
+// STYLE button
+
 export default class Button extends ComponentWrapper {
   _clickAction!: (event?: Record<string, unknown>) => void;
 
