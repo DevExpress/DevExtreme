@@ -518,6 +518,7 @@ export default [
             '@typescript-eslint/no-implied-eval': 'warn',
             '@typescript-eslint/ban-ts-comment': 'warn',
             '@typescript-eslint/prefer-for-of': 'warn',
+            'no-undef': 'error',
         },
     },
     // Rules for grid controls
