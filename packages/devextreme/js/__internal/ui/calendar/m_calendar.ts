@@ -76,6 +76,13 @@ const LEVEL_COMPARE_MAP = {
   century: 0,
 };
 
+const ZOOM_LEVEL: Record<string, CalendarZoomLevel> = {
+  MONTH: 'month',
+  YEAR: 'year',
+  DECADE: 'decade',
+  CENTURY: 'century',
+};
+
 const SELECTION_STRATEGIES = {
   SingleSelection: CalendarSingleSelectionStrategy,
   MultipleSelection: CalendarMultipleSelectionStrategy,
@@ -101,7 +108,7 @@ class Calendar<
 
   _$viewsWrapper!: dxElementWrapper;
 
-  $body?: dxElementWrapper;
+  $body!: dxElementWrapper;
 
   _skipNavigate?: boolean;
 
@@ -153,9 +160,9 @@ class Calendar<
       min: new Date(1000, 0),
       max: new Date(3000, 0),
       viewsCount: 1,
-      zoomLevel: 'month',
-      maxZoomLevel: 'month',
-      minZoomLevel: 'century',
+      zoomLevel: ZOOM_LEVEL.MONTH,
+      maxZoomLevel: ZOOM_LEVEL.MONTH,
+      minZoomLevel: ZOOM_LEVEL.CENTURY,
       selectionMode: 'single',
       selectWeekOnClick: true,
       showTodayButton: false,
@@ -189,7 +196,7 @@ class Calendar<
   _supportedKeys(): SupportedKeys {
     return {
       ...super._supportedKeys(),
-      rightArrow(e: KeyboardEvent): void {
+      rightArrow(e: DxEvent<KeyboardEvent>): void {
         e.preventDefault();
         if (isCommandKeyPressed(e)) {
           this._waitRenderView(1);
@@ -197,7 +204,7 @@ class Calendar<
           this._moveCurrentDateByOffset(1 * this._getRtlCorrection());
         }
       },
-      leftArrow(e: KeyboardEvent): void {
+      leftArrow(e: DxEvent<KeyboardEvent>): void {
         e.preventDefault();
         if (isCommandKeyPressed(e)) {
           this._waitRenderView(-1);
@@ -205,7 +212,7 @@ class Calendar<
           this._moveCurrentDateByOffset(-1 * this._getRtlCorrection());
         }
       },
-      upArrow(e: KeyboardEvent): void {
+      upArrow(e: DxEvent<KeyboardEvent>): void {
         e.preventDefault();
         if (isCommandKeyPressed(e)) {
           this._navigateUp();
@@ -216,7 +223,7 @@ class Calendar<
           this._moveCurrentDateByOffset(-1 * this._view.option('colCount'));
         }
       },
-      downArrow(e: KeyboardEvent): void {
+      downArrow(e: DxEvent<KeyboardEvent>): void {
         e.preventDefault();
         if (isCommandKeyPressed(e)) {
           this._navigateDown();
@@ -227,7 +234,7 @@ class Calendar<
           this._moveCurrentDateByOffset(1 * this._view.option('colCount'));
         }
       },
-      home(e: KeyboardEvent): void {
+      home(e: DxEvent<KeyboardEvent>): void {
         e.preventDefault();
 
         const zoomLevel = this.option('zoomLevel');
@@ -244,7 +251,7 @@ class Calendar<
 
         this._moveToClosestAvailableDate(date);
       },
-      end(e: KeyboardEvent): void {
+      end(e: DxEvent<KeyboardEvent>): void {
         e.preventDefault();
 
         const zoomLevel = this.option('zoomLevel');
@@ -261,11 +268,11 @@ class Calendar<
 
         this._moveToClosestAvailableDate(date);
       },
-      pageUp(e: KeyboardEvent): void {
+      pageUp(e: DxEvent<KeyboardEvent>): void {
         e.preventDefault();
         this._waitRenderView(-1 * this._getRtlCorrection());
       },
-      pageDown(e: KeyboardEvent): void {
+      pageDown(e: DxEvent<KeyboardEvent>): void {
         e.preventDefault();
         this._waitRenderView(1 * this._getRtlCorrection());
       },
@@ -274,7 +281,7 @@ class Calendar<
     };
   }
 
-  _enterKeyHandler(e: KeyboardEvent): void {
+  _enterKeyHandler(e: DxEvent<KeyboardEvent>): void {
     const { currentDate = new Date() } = this.option();
     if (!this._isMaxZoomLevel()) {
       this._navigateDown();
@@ -284,8 +291,8 @@ class Calendar<
     }
   }
 
-  _getSerializationFormat(optionName = 'value'): string | undefined | null {
-    const value = this.option(optionName);
+  _getSerializationFormat(optionName: 'value' | 'min' | 'max' = 'value'): string | undefined | null {
+    const { [optionName]: value } = this.option();
     const { dateSerializationFormat } = this.option();
 
     if (dateSerializationFormat) {
@@ -319,31 +326,36 @@ class Calendar<
     this._setDateOption('value', value);
   }
 
+  _isArrayValue(optionName: 'value' | 'min' | 'max', value: DateLike | DateLike[] | undefined): value is DateLike[] {
+    return optionName === 'value' && !this._isSingleMode();
+  }
+
   _setDateOption(
     optionName: 'value' | 'min' | 'max',
     optionValue: DateLike | DateLike[],
   ): void {
-    const isArray = optionName === 'value' && !this._isSingleMode() && Array.isArray(optionValue);
     const serializationFormat = this._getSerializationFormat(optionName);
-    const serializedValue = isArray
-      ? optionValue?.map((value) => dateSerialization.serializeDate(value, serializationFormat))
-        || []
+    const serializedValue = this._isArrayValue(optionName, optionValue)
+      ? optionValue.map((value) => dateSerialization.serializeDate(value, serializationFormat))
       : dateSerialization.serializeDate(optionValue, serializationFormat);
 
     this.option(optionName, serializedValue);
   }
 
-  _getDateOption(optionName: 'value' | 'min' | 'max'): Date | undefined | null | (Date | null)[] {
+  _getDateOption(optionName: 'value'): Date | null | (Date | null)[];
+  _getDateOption(optionName: 'min' | 'max'): Date | null;
+  _getDateOption(optionName: 'value' | 'min' | 'max'): Date | null | (Date | null)[] {
     const { value } = this.option();
-    const isArray = optionName === 'value' && !this._isSingleMode();
 
-    if (!isArray) {
-      return this._convertToDate(this.option(optionName));
+    if (!this._isArrayValue(optionName, value)) {
+      const { [optionName]: optionValue } = this.option();
+
+      return this._convertToDate(optionValue);
     }
 
     const valueArray = value ?? [];
 
-    return (valueArray as (DateLike | null)[]).map((item) => this._convertToDate(item));
+    return valueArray.map((item) => this._convertToDate(item));
   }
 
   _isSingleMode(): boolean {
@@ -354,16 +366,16 @@ class Calendar<
 
   _shiftDate(zoomLevel: CalendarZoomLevel, date: Date, offset: number, reverse: number): void {
     switch (zoomLevel) {
-      case 'month':
+      case ZOOM_LEVEL.MONTH:
         date.setDate(date.getDate() + offset * reverse);
         break;
-      case 'year':
+      case ZOOM_LEVEL.YEAR:
         date.setMonth(date.getMonth() + offset * reverse);
         break;
-      case 'decade':
+      case ZOOM_LEVEL.DECADE:
         date.setFullYear(date.getFullYear() + offset * reverse);
         break;
-      case 'century':
+      case ZOOM_LEVEL.CENTURY:
         date.setFullYear(date.getFullYear() + 10 * offset * reverse);
         break;
       default:
@@ -374,7 +386,7 @@ class Calendar<
   _moveCurrentDateByOffset(offset: number): void {
     const {
       currentDate: baseDate = new Date(),
-      zoomLevel = 'month',
+      zoomLevel = ZOOM_LEVEL.MONTH,
     } = this.option();
     let currentDate = new Date(baseDate);
     this._shiftDate(zoomLevel, currentDate, offset, 1);
@@ -434,13 +446,13 @@ class Calendar<
 
   _areDatesInSameView(zoomLevel: CalendarZoomLevel, date1: Date, date2: Date): boolean {
     switch (zoomLevel) {
-      case 'year':
+      case ZOOM_LEVEL.YEAR:
         return date1.getFullYear() === date2.getFullYear();
-      case 'decade':
+      case ZOOM_LEVEL.DECADE:
         return Math.floor(date1.getFullYear() / 10) === Math.floor(date2.getFullYear() / 10);
-      case 'century':
+      case ZOOM_LEVEL.CENTURY:
         return Math.floor(date1.getFullYear() / 100) === Math.floor(date2.getFullYear() / 100);
-      case 'month':
+      case ZOOM_LEVEL.MONTH:
       default:
         return date1.getMonth() === date2.getMonth();
     }
@@ -453,13 +465,13 @@ class Calendar<
     };
 
     switch (zoomLevel) {
-      case 'year':
+      case ZOOM_LEVEL.YEAR:
         return Math.abs(date1.getFullYear() - date2.getFullYear()) <= 1;
-      case 'decade':
+      case ZOOM_LEVEL.DECADE:
         return Math.abs(date1.getFullYear() - date2.getFullYear()) <= 10;
-      case 'century':
+      case ZOOM_LEVEL.CENTURY:
         return Math.abs(date1.getFullYear() - date2.getFullYear()) <= 100;
-      case 'month':
+      case ZOOM_LEVEL.MONTH:
       default:
         return monthMinDistance(date1.getMonth(), date2.getMonth()) <= 1;
     }
@@ -467,7 +479,7 @@ class Calendar<
 
   _moveToClosestAvailableDate(baseDate?: Date): void {
     const {
-      zoomLevel = 'month',
+      zoomLevel = ZOOM_LEVEL.MONTH,
       currentDate: oldCurrentDate = new Date(),
     } = this.option();
     let currentDate = new Date(baseDate ?? oldCurrentDate);
@@ -565,9 +577,9 @@ class Calendar<
 
   _correctZoomLevel(): void {
     const {
-      minZoomLevel = 'century',
-      maxZoomLevel = 'month',
-      zoomLevel = 'month',
+      minZoomLevel = ZOOM_LEVEL.CENTURY,
+      maxZoomLevel = ZOOM_LEVEL.MONTH,
+      zoomLevel = ZOOM_LEVEL.MONTH,
     } = this.option();
 
     if (LEVEL_COMPARE_MAP[maxZoomLevel] < LEVEL_COMPARE_MAP[minZoomLevel]) {
@@ -698,7 +710,7 @@ class Calendar<
       return this.min;
     }
 
-    this.min = this._getDateOption('min') as Date | null ?? new Date(1000, 0);
+    this.min = this._getDateOption('min') ?? new Date(1000, 0);
     return this.min;
   }
 
@@ -712,24 +724,24 @@ class Calendar<
       return this.max;
     }
 
-    this.max = this._getDateOption('max') as Date | null ?? new Date(3000, 0);
+    this.max = this._getDateOption('max') ?? new Date(3000, 0);
     return this.max;
   }
 
   _getViewsOffset(startDate: Date, endDate: Date): number {
     const { zoomLevel } = this.option();
 
-    if (zoomLevel === 'month') {
+    if (zoomLevel === ZOOM_LEVEL.MONTH) {
       return this._getMonthsOffset(startDate, endDate);
     }
 
     let zoomCorrection = 1;
 
     switch (zoomLevel) {
-      case 'century':
+      case ZOOM_LEVEL.CENTURY:
         zoomCorrection = 100;
         break;
-      case 'decade':
+      case ZOOM_LEVEL.DECADE:
         zoomCorrection = 10;
         break;
       default:
@@ -804,9 +816,7 @@ class Calendar<
     $element.toggleClass(CALENDAR_RANGE_CLASS, selectionMode === 'range');
 
     this._renderBody();
-    if (this.$body) {
-      $element.append(this.$body);
-    }
+    $element.append(this.$body);
 
     this._renderViews();
     this._renderNavigator();
@@ -896,7 +906,7 @@ class Calendar<
   }
 
   _renderSpecificView(date: Date): MonthView | YearView | DecadeView | CenturyView {
-    const { zoomLevel = 'month' } = this.option();
+    const { zoomLevel = ZOOM_LEVEL.MONTH } = this.option();
     const specificView = Views[zoomLevel];
     const $view = $('<div>').appendTo(this._$viewsWrapper);
     const config = this._viewConfig(date);
@@ -913,7 +923,7 @@ class Calendar<
       showWeekNumbers = false,
       selectWeekOnClick,
       weekNumberRule,
-      zoomLevel = 'month',
+      zoomLevel = ZOOM_LEVEL.MONTH,
       focusStateEnabled,
       hoverStateEnabled,
       disabledDates: disabledDatesOption,
@@ -1015,9 +1025,9 @@ class Calendar<
 
   _updateTimeComponent(date: Date): Date {
     const result = new Date(date);
-    const currentValue = this._getDateOption('value') as Date;
+    const currentValue = this._getDateOption('value');
 
-    if (currentValue && this._isSingleMode()) {
+    if (currentValue && !this._isArrayValue('value', currentValue)) {
       result.setHours(currentValue.getHours());
       result.setMinutes(currentValue.getMinutes());
       result.setSeconds(currentValue.getSeconds());
@@ -1028,7 +1038,7 @@ class Calendar<
   }
 
   _isMaxZoomLevel(): boolean {
-    const { zoomLevel = 'month', maxZoomLevel } = this.option();
+    const { zoomLevel = ZOOM_LEVEL.MONTH, maxZoomLevel } = this.option();
     return zoomLevel === maxZoomLevel;
   }
 
@@ -1107,7 +1117,7 @@ class Calendar<
   }
 
   _navigateUp(): void {
-    const { zoomLevel = 'month', currentDate = new Date() } = this.option();
+    const { zoomLevel = ZOOM_LEVEL.MONTH, currentDate = new Date() } = this.option();
     const nextView = dateUtils.getViewUp(zoomLevel);
 
     if (!nextView || this._isMinZoomLevel(zoomLevel)) {
@@ -1605,7 +1615,7 @@ class Calendar<
   }
 
   _updateNavigatorLabels(): void {
-    const { zoomLevel = 'month' } = this.option();
+    const { zoomLevel = ZOOM_LEVEL.MONTH } = this.option();
     const capitalizedZoomLevel = zoomLevel.charAt(0).toUpperCase() + zoomLevel.slice(1);
 
     const captionButtonText = this._navigator._caption.option('text');
