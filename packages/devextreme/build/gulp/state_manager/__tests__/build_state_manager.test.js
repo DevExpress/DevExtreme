@@ -1,125 +1,113 @@
 const fs = require('fs');
 const path = require('path');
 const through2 = require('through2');
+const Vinyl = require('vinyl');
 const replaceStateManagerModulesForProduction = require('../replace_state_manager_modules_for_production');
 const { removeDevelopmentStateManagerModules } = require('../remove_development_state_manager_modules');
 
-const SETUP_STATE_MANAGER_PRODUCTION_CONTENT = `export const setupStateManager = () => {
-    // this setupStateManager function body is empty for production build
-}
-`;
+const createEnvContent = (env) => ({
+    index: [
+        `export { setupStateManager } from './setup_state_manager';`,
+        `export { signal } from './reactive_primitives/index';`
+    ].join('\n'),
+    setupStateManager: `export const setupStateManager = () => {
+        // this setupStateManager function body is for ${env} build
+    }`,
+    reactivePrimitivesIndex: `export const signal = () => {
+        // this signal function body is for ${env} build
+    }`,
+});
 
-const REACTIVE_PRIMITIVES_PRODUCTION_CONTENT = `export const signal = () => {
-    // this signal function body is for production build
-}`
+const PROD_DIR_CONTENT = createEnvContent('prod');
+const DEV_DIR_CONTENT = createEnvContent('dev');
 
-const INDEX_PRODUCTION_CONTENT = [
-    SETUP_STATE_MANAGER_PRODUCTION_CONTENT,
-    REACTIVE_PRIMITIVES_PRODUCTION_CONTENT
-].join('\n');
+const INDEX_DEV_CONTENT = `export { setupStateManager, signal } from './dev/index';`;
+const INDEX_PROD_CONTENT = `export * from './prod/index';`;
 
-const INDEX_DEVELOPMENT_CONTENT = [
-    `export { setupStateManager } from './setup_state_manager';`,
-    `export { signal } from './reactive_primitives/index`
-].join('\n');
-
-const SETUP_STATE_MANAGER_DEVELOPMENT_CONTENT = `export const setupStateManager = () => {
-    // this setupStateManager function body is for development build
-}`;
-
-const REACTIVE_PRIMITIVES_DEVELOPMENT_CONTENT = `export const signal = () => {
-    // this signal function body is for development build
-}`;
-
-const UTILS_FILE_CONTENT = 'console.log("utils file");';
-
+const FILE_OUTSIDE_OF_ENV_SPECIFIC_FOLDER_CONTENT = 'test content';
 const FILE_OUTSIDE_STATE_MANGER_CONTENT = 'console.log("file outside of state manager");';
 
 describe('Build the state manager', () => {
-    let tempDir;
-    let devextremeDir;
-    let stateManagerDir;
-    let setupFilePath;
-    let indexProductionFilePath;
-    let indexFilePath;
-    let utilsFilePath;
-    let fileOutsideStateMangerPath;
+    let testsContext;
     let originalConsoleError;
     let consoleErrorSpy;
-    let reactivePrimitivesIndexFilePath;
-    let reactivePrimitivesIndexProductionFilePath;
-    let files;
-    let stream;
+
+    const createEnvPaths = (baseDir, env) => ({
+        reactivePrimitivesDir: path.join(baseDir, env, 'reactive_primitives'),
+        reactivePrimitivesIndex: path.join(baseDir, env, 'reactive_primitives', 'index.js'),
+        setupStateManager: path.join(baseDir, env, 'setup_state_manager.js'),
+        index: path.join(baseDir, env, 'index.js'),
+    });
+
+    const createEnvFiles = (paths, content) => {
+        Object.entries(paths).forEach(([key, filePath]) => {
+            if (filePath.endsWith('.js') && content[key]) {
+                fs.writeFileSync(filePath, content[key]);
+            }
+        });
+    };
+
+    const createEnvSpecificStreamFileObjects = (paths, content) => {
+        return Object.entries(paths)
+            .filter(([key, filePath]) => filePath.endsWith('.js') && content[key])
+            .map(([key, filePath]) => new Vinyl({
+                path: filePath,
+                contents: Buffer.from(content[key])
+            }));
+    };
 
     beforeEach(() => {
-        stream = replaceStateManagerModulesForProduction();
-        const testDir = __dirname;
-        const tempDirName = `temp`;
-        tempDir = path.join(testDir, tempDirName);
+        const stream = replaceStateManagerModulesForProduction();
+        const tempDir = path.join(__dirname, 'temp');
 
-        if (tempDir && fs.existsSync(tempDir)) {
+        if (fs.existsSync(tempDir)) {
             fs.rmSync(tempDir, { recursive: true, force: true });
         }
 
-        devextremeDir = path.join(tempDir, 'devextreme');
-        stateManagerDir = path.join(devextremeDir, 'esm', '__internal', 'core', 'state_manager');
-        reactivePrimitivesDir = path.join(stateManagerDir, 'reactive_primitives');
+        const devextremeDir = path.join(tempDir, 'devextreme');
+        const stateManagerDir = path.join(devextremeDir, 'esm', '__internal', 'core', 'state_manager');
+        const devDir = path.join(stateManagerDir, 'dev');
+        const prodDir = path.join(stateManagerDir, 'prod');
+
+        const devPaths = createEnvPaths(stateManagerDir, 'dev');
+        const prodPaths = createEnvPaths(stateManagerDir, 'prod');
+
+        const indexFilePath = path.join(stateManagerDir, 'index.js');
+        const fileOutsideOfEnvSpecificFolderFilePath = path.join(stateManagerDir, 'state_manager.test.js');
+        const fileOutsideStateMangerPath = path.join(tempDir, 'other_file.js');
+
         fs.mkdirSync(stateManagerDir, { recursive: true });
-        fs.mkdirSync(reactivePrimitivesDir, { recursive: true });
+        fs.mkdirSync(devDir, { recursive: true });
+        fs.mkdirSync(prodDir, { recursive: true });
+        fs.mkdirSync(devPaths.reactivePrimitivesDir, { recursive: true });
+        fs.mkdirSync(prodPaths.reactivePrimitivesDir, { recursive: true });
 
-
-        setupFilePath = path.join(stateManagerDir, 'setup_state_manager.js');
-        indexFilePath = path.join(stateManagerDir, 'index.js');
-        indexProductionFilePath = path.join(stateManagerDir, 'index.prod.js');
-
-        reactivePrimitivesIndexFilePath = path.join(stateManagerDir, 'reactive_primitives', 'index.js');
-        reactivePrimitivesIndexProductionFilePath = path.join(stateManagerDir, 'reactive_primitives', 'index.prod.js');
-
-        utilsFilePath = path.join(stateManagerDir, 'utils.js');
-        fileOutsideStateMangerPath = path.join(tempDir, 'other_file.js');
-
-        fs.writeFileSync(setupFilePath, SETUP_STATE_MANAGER_DEVELOPMENT_CONTENT);
-        fs.writeFileSync(indexFilePath, INDEX_DEVELOPMENT_CONTENT);
-        fs.writeFileSync(indexProductionFilePath, INDEX_PRODUCTION_CONTENT);
-        fs.writeFileSync(utilsFilePath, UTILS_FILE_CONTENT);
+        fs.writeFileSync(indexFilePath, INDEX_DEV_CONTENT);
+        fs.writeFileSync(fileOutsideOfEnvSpecificFolderFilePath, FILE_OUTSIDE_OF_ENV_SPECIFIC_FOLDER_CONTENT);
         fs.writeFileSync(fileOutsideStateMangerPath, FILE_OUTSIDE_STATE_MANGER_CONTENT);
 
-        fs.writeFileSync(reactivePrimitivesIndexFilePath, REACTIVE_PRIMITIVES_DEVELOPMENT_CONTENT);
-        fs.writeFileSync(reactivePrimitivesIndexProductionFilePath, REACTIVE_PRIMITIVES_PRODUCTION_CONTENT);
+        createEnvFiles(devPaths, DEV_DIR_CONTENT);
+        createEnvFiles(prodPaths, PROD_DIR_CONTENT);
 
         originalConsoleError = console.error;
         consoleErrorSpy = jest.fn();
         console.error = consoleErrorSpy;
 
-        files = [
-            {
+        const files = [
+            ...createEnvSpecificStreamFileObjects(prodPaths, PROD_DIR_CONTENT),
+            ...createEnvSpecificStreamFileObjects(devPaths, DEV_DIR_CONTENT),
+            new Vinyl({
                 path: fileOutsideStateMangerPath,
                 contents: Buffer.from(FILE_OUTSIDE_STATE_MANGER_CONTENT)
-            },
-            {
-                path: setupFilePath,
-                contents: Buffer.from(SETUP_STATE_MANAGER_DEVELOPMENT_CONTENT)
-            },
-            {
-                path: utilsFilePath,
-                contents: Buffer.from(UTILS_FILE_CONTENT)
-            },
-            {
+            }),
+            new Vinyl({
+                path: fileOutsideOfEnvSpecificFolderFilePath,
+                contents: Buffer.from(FILE_OUTSIDE_OF_ENV_SPECIFIC_FOLDER_CONTENT)
+            }),
+            new Vinyl({
                 path: indexFilePath,
-                contents: Buffer.from(INDEX_DEVELOPMENT_CONTENT)
-            },
-            {
-                path: indexProductionFilePath,
-                contents: Buffer.from(INDEX_PRODUCTION_CONTENT)
-            },
-            {
-                path: reactivePrimitivesIndexFilePath,
-                contents: Buffer.from(REACTIVE_PRIMITIVES_DEVELOPMENT_CONTENT)
-            },
-            {
-                path: reactivePrimitivesIndexProductionFilePath,
-                contents: Buffer.from(REACTIVE_PRIMITIVES_PRODUCTION_CONTENT)
-            },
+                contents: Buffer.from(INDEX_DEV_CONTENT)
+            }),
         ];
 
         stream.on('data', (file) => {
@@ -127,73 +115,58 @@ describe('Build the state manager', () => {
         });
 
         files.forEach(file => stream.write(file));
-
         stream.end();
+
+        testsContext = {
+            stream,
+            devextremeDir,
+            devDir,
+            prodPaths,
+            indexFilePath,
+            fileOutsideOfEnvSpecificFolderFilePath,
+            fileOutsideStateMangerPath
+        };
     });
 
     afterEach(() => {
         console.error = originalConsoleError;
     });
 
-    it('should remove development modules', (done) => {
-        stream.on('end', () => {
-            try {
-                removeDevelopmentStateManagerModules(devextremeDir);
+    const runTestWithStream = (testFn) => {
+        return (done) => {
+            testsContext.stream.on('end', () => {
+                try {
+                    testFn();
+                    done();
+                } catch (error) {
+                    done(error);
+                }
+            });
+            testsContext.stream.on('error', done);
+        };
+    };
 
-                expect(fs.existsSync(indexFilePath)).toBe(true);
-                expect(fs.existsSync(indexProductionFilePath)).not.toBe(true);
-                expect(fs.existsSync(reactivePrimitivesIndexFilePath)).toBe(true);
-                expect(fs.existsSync(reactivePrimitivesIndexProductionFilePath)).not.toBe(true);
-                expect(fs.existsSync(setupFilePath)).not.toBe(true);
-                expect(fs.existsSync(utilsFilePath)).not.toBe(true);
+    it('should remove development modules', runTestWithStream(() => {
+        removeDevelopmentStateManagerModules(testsContext.devextremeDir);
 
-                expect(consoleErrorSpy).not.toHaveBeenCalled();
+        expect(fs.existsSync(testsContext.devDir)).toBe(false);
+        expect(fs.existsSync(testsContext.fileOutsideOfEnvSpecificFolderFilePath)).toBe(false);
+        expect(consoleErrorSpy).not.toHaveBeenCalled();
+    }));
 
-                done();
-            } catch (error) {
-                done(error);
-            }
-        });
+    it('should not remove modules that are unrelated to the state manager', runTestWithStream(() => {
+        removeDevelopmentStateManagerModules(testsContext.devextremeDir);
 
-        stream.on('error', done);
-    });
+        const fileOutsideStateMangerPathContent = fs.readFileSync(testsContext.fileOutsideStateMangerPath, 'utf8');
+        expect(fileOutsideStateMangerPathContent).toBe(FILE_OUTSIDE_STATE_MANGER_CONTENT);
+    }));
 
-    it('should not remove modules that are unrelated to the state manager', (done) => {
-        stream.on('end', () => {
-            try {
-                removeDevelopmentStateManagerModules(devextremeDir);
+    it('should replace `index.js` content by `prod/index.js` content', runTestWithStream(() => {
+        removeDevelopmentStateManagerModules(testsContext.devextremeDir);
 
-                const fileOutsideStateMangerPathContent = fs.readFileSync(fileOutsideStateMangerPath, 'utf8');
-
-                expect(fileOutsideStateMangerPathContent).toBe(FILE_OUTSIDE_STATE_MANGER_CONTENT);
-                done();
-            } catch (error) {
-                done(error);
-            }
-        });
-
-        stream.on('error', done);
-    });
-
-    it('should replace index.js content by production content', (done) => {
-        stream.on('end', () => {
-            try {
-                removeDevelopmentStateManagerModules(devextremeDir);
-                const indexFileContent = fs.readFileSync(indexFilePath, 'utf8');
-
-                const reactivePrimitivesIndexFileContent = fs.readFileSync(reactivePrimitivesIndexFilePath, 'utf8');
-
-                expect(indexFileContent).toBe(INDEX_PRODUCTION_CONTENT);
-                expect(reactivePrimitivesIndexFileContent).toBe(REACTIVE_PRIMITIVES_PRODUCTION_CONTENT);
-
-                expect(consoleErrorSpy).not.toHaveBeenCalled();
-
-                done();
-            } catch (error) {
-                done(error);
-            }
-        });
-
-        stream.on('error', done);
-    });
+        const indexFileContent = fs.readFileSync(testsContext.indexFilePath, 'utf8');
+        expect(indexFileContent).toBe(INDEX_PROD_CONTENT);
+        expect(fs.existsSync(testsContext.prodPaths.index)).toBe(true);
+        expect(consoleErrorSpy).not.toHaveBeenCalled();
+    }));
 });

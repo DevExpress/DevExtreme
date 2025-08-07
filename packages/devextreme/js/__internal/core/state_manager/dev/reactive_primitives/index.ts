@@ -1,4 +1,4 @@
-import * as Reactive from './index.prod';
+import * as Reactive from '../../prod/reactive_primitives/index';
 import type {
   BatchFunction,
   ComputedFunction,
@@ -8,12 +8,12 @@ import type {
   Signal,
   // eslint-disable-next-line spellcheck/spell-checker
   UntrackedFunction,
-} from './types';
+} from '../../prod/reactive_primitives/types';
 
 export type {
   ReadonlySignal,
   Signal,
-} from './types';
+} from '../../prod/reactive_primitives/types';
 
 export function signal<T>(initialValue: T): Signal<T> {
   const signalInstance = Reactive.signal(initialValue);

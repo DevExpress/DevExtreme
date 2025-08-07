@@ -1,5 +1,5 @@
 /* eslint-disable spellcheck/spell-checker */
-import type { DIContext } from '../di';
+import type { DIContext } from '../../di';
 import { Logger } from './logger';
 import { StateManagerFactory } from './state_manager';
 import type * as StateManagementTypes from './types';

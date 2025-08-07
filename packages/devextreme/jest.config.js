@@ -12,7 +12,8 @@ module.exports = {
                 '@preact/signals-core': '<rootDir>/node_modules/@preact/signals-core/dist/signals-core.js'
             },
             modulePathIgnorePatterns: [
-                'node_modules'
+                'node_modules',
+                '__test-artifacts__'
             ],
             preset: 'ts-jest',
             testMatch: [
@@ -37,6 +38,9 @@ module.exports = {
         {
             displayName: 'build-scripts-tests',
             testEnvironment: 'node',
+            modulePathIgnorePatterns: [
+                '__test-artifacts__'
+            ],
             roots: ['<rootDir>/build'],
             moduleFileExtensions: ['js'],
             testMatch: [

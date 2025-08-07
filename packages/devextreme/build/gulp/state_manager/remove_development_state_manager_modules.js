@@ -6,8 +6,7 @@ const del = require('del');
 const {
     STATE_MANAGER_FOLDER_PATH,
     STATE_MANAGER_INDEX_MODULE_PATH,
-    STATE_MANAGER_REACTIVE_PRIMITIVES_INDEX_MODULE_PATH,
-    STATE_MANAGER_REACTIVE_PRIMITIVES_FOLDER_PATH
+    STATE_MANAGER_PROD_FOLDER_PATH
 } = require('./constants');
 const ctx = require('../context');
 
@@ -23,8 +22,8 @@ const removeDevelopmentStateManagerModules = (targetPath) => {
     MODULE_TYPES.forEach(type => {
         patterns.push(`!${path.join(targetPath, type, STATE_MANAGER_FOLDER_PATH)}`);
         patterns.push(`!${path.join(targetPath, type, STATE_MANAGER_INDEX_MODULE_PATH)}`);
-        patterns.push(`!${path.join(targetPath, type, STATE_MANAGER_REACTIVE_PRIMITIVES_FOLDER_PATH)}`);
-        patterns.push(`!${path.join(targetPath, type, STATE_MANAGER_REACTIVE_PRIMITIVES_INDEX_MODULE_PATH)}`);
+        patterns.push(`!${path.join(targetPath, type, STATE_MANAGER_PROD_FOLDER_PATH)}`);
+        patterns.push(`!${path.join(targetPath, type, STATE_MANAGER_PROD_FOLDER_PATH)}/**`);
     });
 
     del.sync(patterns);

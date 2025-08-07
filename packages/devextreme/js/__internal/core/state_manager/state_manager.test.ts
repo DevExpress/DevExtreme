@@ -13,8 +13,8 @@ import type { Signal } from '@ts/core/state_manager/index';
 import { signal } from '@ts/core/state_manager/index';
 
 import { DIContext } from '../di';
-import { setupStateManager } from './setup_state_manager';
-import type { StateManager } from './types';
+import { setupStateManager } from './dev/setup_state_manager';
+import type { StateManager } from './dev/types';
 
 const waitGarbageCollection = async (): Promise<void> => {
   if (global.gc) {

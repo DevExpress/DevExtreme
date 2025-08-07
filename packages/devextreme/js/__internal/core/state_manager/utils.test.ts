@@ -6,7 +6,7 @@ import {
 
 import {
   deepCopy,
-} from './utils';
+} from './dev/utils';
 
 describe('deepCopy', () => {
   it('should create a deep copy of an object', () => {
