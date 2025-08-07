@@ -43,7 +43,6 @@ import {
 
 import { DxoAdapterModule } from 'devextreme-angular/ui/nested';
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
-import { BaseNestedOption } from 'devextreme-angular/core';
 
 import { DxoValidatorAdapterModule } from 'devextreme-angular/ui/validator/nested';
 import { DxiValidatorAsyncRuleModule } from 'devextreme-angular/ui/validator/nested';
@@ -93,7 +92,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.adapter]
-    
+
      */
     @Input()
     get adapter(): { applyValidationResults?: Function, bypass?: Function, focus?: Function, getValue?: Function, reset?: Function, validationRequestsCallbacks?: Array<Function> } {
@@ -106,7 +105,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:DOMComponentOptions.elementAttr]
-    
+
      */
     @Input()
     get elementAttr(): Record<string, any> {
@@ -119,7 +118,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:DOMComponentOptions.height]
-    
+
      */
     @Input()
     get height(): number | string | undefined {
@@ -132,7 +131,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.name]
-    
+
      */
     @Input()
     get name(): string {
@@ -145,7 +144,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.validationGroup]
-    
+
      */
     @Input()
     get validationGroup(): string {
@@ -158,7 +157,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:dxValidatorOptions.validationRules]
-    
+
      */
     @Input()
     get validationRules(): Array<CommonTypes.ValidationRule> {
@@ -171,7 +170,7 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     /**
      * [descr:DOMComponentOptions.width]
-    
+
      */
     @Input()
     get width(): number | string | undefined {
@@ -182,89 +181,89 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
     }
 
     /**
-    
+
      * [descr:dxValidatorOptions.onDisposing]
-    
-    
+
+
      */
     @Output() onDisposing: EventEmitter<DisposingEvent>;
 
     /**
-    
+
      * [descr:dxValidatorOptions.onInitialized]
-    
-    
+
+
      */
     @Output() onInitialized: EventEmitter<InitializedEvent>;
 
     /**
-    
+
      * [descr:dxValidatorOptions.onOptionChanged]
-    
-    
+
+
      */
     @Output() onOptionChanged: EventEmitter<OptionChangedEvent>;
 
     /**
-    
+
      * [descr:dxValidatorOptions.onValidated]
-    
-    
+
+
      */
     @Output() onValidated: EventEmitter<ValidatedEvent>;
 
     /**
-    
+
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
+
      */
     @Output() adapterChange: EventEmitter<{ applyValidationResults?: Function, bypass?: Function, focus?: Function, getValue?: Function, reset?: Function, validationRequestsCallbacks?: Array<Function> }>;
 
     /**
-    
+
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
+
      */
     @Output() elementAttrChange: EventEmitter<Record<string, any>>;
 
     /**
-    
+
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
+
      */
     @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
-    
+
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
+
      */
     @Output() nameChange: EventEmitter<string>;
 
     /**
-    
+
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
+
      */
     @Output() validationGroupChange: EventEmitter<string>;
 
     /**
-    
+
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
+
      */
     @Output() validationRulesChange: EventEmitter<Array<CommonTypes.ValidationRule>>;
 
     /**
-    
+
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
+
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
-    @ContentChildren(BaseNestedOption)
-    protected _validators!: QueryList<BaseNestedOption>;
-    
+
+
+
     @ContentChildren(DxiValidatorAsyncRuleComponent)
     get asyncRulesChildren(): QueryList<DxiValidatorAsyncRuleComponent> {
         return this._getOption('validationRules');
@@ -360,12 +359,12 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
-            private _watcherHelper: WatcherHelper,
-            private _idh: IterableDifferHelper,
-            @SkipSelf() @Optional() @Host() parentOptionHost: NestedOptionHost,
-            optionHost: NestedOptionHost,
-            transferState: TransferState,
-            @Inject(PLATFORM_ID) platformId: any) {
+                private _watcherHelper: WatcherHelper,
+                private _idh: IterableDifferHelper,
+                @SkipSelf() @Optional() @Host() parentOptionHost: NestedOptionHost,
+                optionHost: NestedOptionHost,
+                transferState: TransferState,
+                @Inject(PLATFORM_ID) platformId: any) {
 
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
@@ -439,41 +438,41 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 }
 
 @NgModule({
-  imports: [
-    DxValidatorComponent,
-    DxoAdapterModule,
-    DxiValidationRuleModule,
-    DxoValidatorAdapterModule,
-    DxiValidatorAsyncRuleModule,
-    DxiValidatorCompareRuleModule,
-    DxiValidatorCustomRuleModule,
-    DxiValidatorEmailRuleModule,
-    DxiValidatorNumericRuleModule,
-    DxiValidatorPatternRuleModule,
-    DxiValidatorRangeRuleModule,
-    DxiValidatorRequiredRuleModule,
-    DxiValidatorStringLengthRuleModule,
-    DxiValidatorValidationRuleModule,
-    DxIntegrationModule,
-    DxTemplateModule
-  ],
-  exports: [
-    DxValidatorComponent,
-    DxoAdapterModule,
-    DxiValidationRuleModule,
-    DxoValidatorAdapterModule,
-    DxiValidatorAsyncRuleModule,
-    DxiValidatorCompareRuleModule,
-    DxiValidatorCustomRuleModule,
-    DxiValidatorEmailRuleModule,
-    DxiValidatorNumericRuleModule,
-    DxiValidatorPatternRuleModule,
-    DxiValidatorRangeRuleModule,
-    DxiValidatorRequiredRuleModule,
-    DxiValidatorStringLengthRuleModule,
-    DxiValidatorValidationRuleModule,
-    DxTemplateModule
-  ]
+    imports: [
+        DxValidatorComponent,
+        DxoAdapterModule,
+        DxiValidationRuleModule,
+        DxoValidatorAdapterModule,
+        DxiValidatorAsyncRuleModule,
+        DxiValidatorCompareRuleModule,
+        DxiValidatorCustomRuleModule,
+        DxiValidatorEmailRuleModule,
+        DxiValidatorNumericRuleModule,
+        DxiValidatorPatternRuleModule,
+        DxiValidatorRangeRuleModule,
+        DxiValidatorRequiredRuleModule,
+        DxiValidatorStringLengthRuleModule,
+        DxiValidatorValidationRuleModule,
+        DxIntegrationModule,
+        DxTemplateModule
+    ],
+    exports: [
+        DxValidatorComponent,
+        DxoAdapterModule,
+        DxiValidationRuleModule,
+        DxoValidatorAdapterModule,
+        DxiValidatorAsyncRuleModule,
+        DxiValidatorCompareRuleModule,
+        DxiValidatorCustomRuleModule,
+        DxiValidatorEmailRuleModule,
+        DxiValidatorNumericRuleModule,
+        DxiValidatorPatternRuleModule,
+        DxiValidatorRangeRuleModule,
+        DxiValidatorRequiredRuleModule,
+        DxiValidatorStringLengthRuleModule,
+        DxiValidatorValidationRuleModule,
+        DxTemplateModule
+    ]
 })
 export class DxValidatorModule { }
 
