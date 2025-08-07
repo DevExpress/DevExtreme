@@ -33,7 +33,7 @@ if (window && window.config?.packageConfigPaths) {
   preserveWhitespaces: true,
 })
 export class AppComponent {
-  @ViewChild(DxTreeViewComponent, { static: false }) treeView: DxTreeViewComponent;
+  @ViewChild(DxTreeViewComponent<Employee>, { static: false }) treeView: DxTreeViewComponent;
 
   employees: Employee[];
 
@@ -59,19 +59,19 @@ export class AppComponent {
     this.employees = service.getEmployees();
   }
 
-  treeViewSelectionChanged(e: DxTreeViewTypes.SelectionChangedEvent) {
+  treeViewSelectionChanged(e: DxTreeViewTypes.SelectionChangedEvent<Employee>) {
     this.syncSelection(e.component);
   }
 
-  treeViewContentReady(e: DxTreeViewTypes.ContentReadyEvent) {
+  treeViewContentReady(e: DxTreeViewTypes.ContentReadyEvent<Employee>) {
     this.syncSelection(e.component);
   }
 
-  syncSelection(treeView: DxTreeViewComponent['instance']) {
+  syncSelection(treeView: DxTreeViewComponent<Employee>['instance']) {
     const selectedEmployees = treeView.getSelectedNodes()
       .map((node) => node.itemData);
 
-    this.selectedEmployees = selectedEmployees as Employee[];
+    this.selectedEmployees = selectedEmployees;
   }
 
   showCheckBoxesModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
