@@ -1,7 +1,7 @@
 import type { AnimationConfig } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import { hideCallback as hideTopOverlayCallback } from '@js/common/core/environment/hide_callback';
-import type { EventInfo, NativeEventInfo } from '@js/common/core/events';
+import type { NativeEventInfo } from '@js/common/core/events';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import {
   move as dragEventMove,
@@ -32,18 +32,25 @@ import {
 } from '@js/core/utils/type';
 import { changeCallback } from '@js/core/utils/view_port';
 import type { DxEvent } from '@js/events';
-import type dxOverlay from '@js/ui/overlay';
 import type { dxOverlayAnimation, Properties } from '@js/ui/overlay';
 import { tabbable } from '@js/ui/widget/selectors';
 import uiErrors from '@js/ui/widget/ui.errors';
 import domUtils from '@ts/core/utils/m_dom';
+import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
-
-import windowUtils from '../../core/utils/m_window';
-import { OVERLAY_POSITION_ALIASES, OverlayPositionController } from './m_overlay_position_controller';
-import * as zIndexPool from './z_index';
+import type {
+  BaseControllerProperties,
+  ControllerOverlayElements,
+  ControllerProperties,
+  PositionControllerConstructor,
+} from '@ts/ui/overlay/m_overlay_position_controller';
+import {
+  OVERLAY_POSITION_ALIASES,
+  OverlayPositionController,
+} from '@ts/ui/overlay/m_overlay_position_controller';
+import * as zIndexPool from '@ts/ui/overlay/z_index';
 
 const ready = readyCallbacks.add;
 const window = windowUtils.getWindow();
@@ -64,21 +71,18 @@ const RTL_DIRECTION_CLASS = 'dx-rtl';
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 
 type AnimationDirection = 'to' | 'from';
-type PointerLikeEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
+
+export type PointerLikeEvent = DxEvent<MouseEvent | PointerEvent | TouchEvent>;
+
 type EventHandler = (e: PointerLikeEvent) => boolean | undefined;
+
 type TabTerminatorHandler = (e: KeyboardEvent) => void;
+
 type DragLikeEvent = DxEvent & {
   originalEvent: DxEvent & { originalEvent?: Event };
   _cancelPreventDefault?: boolean;
   ctrlKey: boolean;
   metaKey: boolean;
-};
-
-export type PositioningEvent = NativeEventInfo<
-  dxOverlay<Properties>,
-  MouseEvent | PointerEvent | TouchEvent
-> & {
-  readonly position: Properties['position'];
 };
 
 interface ParentsScrollSubscriptionInfo {
@@ -127,13 +131,32 @@ export interface OverlayProperties extends Properties {
   hideTopOverlayHandler?: () => void;
 }
 
-export interface OverlayActions {
+export type PositioningEvent<
+  TPosition = OverlayProperties['position'],
+> = NativeEventInfo<
+  Overlay,
+  PointerLikeEvent
+> & {
+  readonly position: TPosition;
+};
+
+interface VisualPositionChangedEvent<
+  TPosition = OverlayProperties['position'],
+> extends PositioningEvent<TPosition> {
+  readonly previousPosition: OverlayProperties['position'];
+}
+
+export interface OverlayActions<
+  TPosition = OverlayProperties['position'],
+> {
   onShowing?: OverlayProperties['onShowing'];
   onShown?: OverlayProperties['onShown'];
   onHiding?: OverlayProperties['onHiding'];
   onHidden?: OverlayProperties['onHidden'];
-  onPositioned?: (e: EventInfo<Overlay>) => void;
-  onVisualPositionChanged?: (e: EventInfo<Overlay>) => void;
+  onPositioned?: (e: Partial<PositioningEvent<TPosition>>) => void;
+  onVisualPositionChanged?: (
+    e: Partial<VisualPositionChangedEvent<TPosition>>
+  ) => void;
 }
 
 ready(() => {
@@ -341,7 +364,6 @@ class Overlay<
     $element.addClass(OVERLAY_CLASS);
 
     this._$wrapper.attr('data-bind', 'dxControlsDescendantBindings: true');
-
     this._toggleViewPortSubscription(true);
 
     const { hideTopOverlayHandler } = this.option();
@@ -360,7 +382,8 @@ class Overlay<
   warnPositionAsFunction(): void {
     const { position } = this.option();
 
-    if (isFunction(position)) { // position as function deprecated in 21.2
+    if (isFunction(position)) {
+      // position as function deprecated in 21.2
       errors.log('W0018');
     }
   }
@@ -1151,7 +1174,7 @@ class Overlay<
     }
   }
 
-  _getPositionControllerConfig(): Record<string, unknown> {
+  _getPositionControllerConfig(): PositionControllerConstructor<BaseControllerProperties> {
     const {
       container,
       visualContainer,
@@ -1161,20 +1184,31 @@ class Overlay<
       // eslint-disable-next-line @typescript-eslint/naming-convention
       _skipContentPositioning,
     } = this.option();
+
     // NOTE: position is passed to controller in renderGeometry
     // to prevent window field using in server side mode
-    return {
+    const properties: ControllerProperties<BaseControllerProperties> = {
       container,
       visualContainer,
       restorePosition,
+      _fixWrapperPosition,
+      _skipContentPositioning,
+      onPositioned: this._actions?.onPositioned,
+      onVisualPositionChanged: this._actions?.onVisualPositionChanged,
+    };
+
+    const elements: ControllerOverlayElements = {
       $root: this.$element(),
       $content: this._$content,
       $wrapper: this._$wrapper,
-      onPositioned: this._actions?.onPositioned,
-      onVisualPositionChanged: this._actions?.onVisualPositionChanged,
-      _fixWrapperPosition,
-      _skipContentPositioning,
     };
+
+    const positionControllerConfiguration = {
+      properties,
+      elements,
+    };
+
+    return positionControllerConfiguration;
   }
 
   _initPositionController(): void {
@@ -1257,7 +1291,10 @@ class Overlay<
   _moveToContainer(): void {
     const $wrapperContainer = this._positionController.$container;
 
-    this._$wrapper.appendTo($wrapperContainer);
+    if ($wrapperContainer !== undefined) {
+      this._$wrapper.appendTo($wrapperContainer);
+    }
+
     this._$content.appendTo(this._$wrapper);
   }
 
@@ -1284,7 +1321,7 @@ class Overlay<
 
   _isAllWindowCovered(): boolean {
     const { shading } = this.option();
-    const element = this._positionController.$visualContainer.get(0);
+    const element = this._positionController.$visualContainer?.get(0);
 
     return isWindow(element) && Boolean(shading);
   }
@@ -1325,7 +1362,7 @@ class Overlay<
   _renderWrapperDimensions(): void {
     const { $visualContainer } = this._positionController;
     const documentElement = domAdapter.getDocumentElement();
-    const isVisualContainerWindow = isWindow($visualContainer.get(0));
+    const isVisualContainerWindow = isWindow($visualContainer?.get(0));
 
     const wrapperWidth = isVisualContainerWindow
       ? documentElement.clientWidth
@@ -1484,12 +1521,12 @@ class Overlay<
           .fail(() => this._animateDeferred?.reject());
         break;
       case 'container':
-        this._positionController.updateContainer(value);
+        this._positionController.updateContainer(value as TProperties['container']);
         this._invalidate();
         this._toggleSafariScrolling();
         break;
       case 'visualContainer':
-        this._positionController.updateVisualContainer(value);
+        this._positionController.updateVisualContainer(value as TProperties['visualContainer']);
         this._renderWrapper();
         this._toggleSafariScrolling();
         break;
@@ -1521,13 +1558,13 @@ class Overlay<
         super._optionChanged(args);
         break;
       case '_fixWrapperPosition':
-        this._positionController.fixWrapperPosition = value;
+        this._positionController.fixWrapperPosition = value as TProperties['_fixWrapperPosition'];
         break;
       case 'wrapperAttr':
         this._renderWrapperAttributes();
         break;
       case 'restorePosition':
-        this._positionController.restorePosition = value;
+        this._positionController.restorePosition = value as TProperties['restorePosition'];
         break;
       case 'preventScrollEvents':
         this._logDeprecatedPreventScrollEventsInfo();
