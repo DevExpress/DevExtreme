@@ -1,12 +1,14 @@
 import {
-  Component, QueryList, ElementRef, Renderer2, EventEmitter,
+  Component, QueryList, ElementRef, Renderer2, EventEmitter, ContentChildren, InjectionToken,
 } from '@angular/core';
 
 import render from 'devextreme/core/renderer';
 import { triggerHandler } from 'devextreme/events';
 import domAdapter from 'devextreme/core/dom_adapter';
 import { getElement } from './utils';
-import { DX_TEMPLATE_WRAPPER_CLASS } from './template';
+import { DX_TEMPLATE_WRAPPER_CLASS  } from './template';
+
+export const NESTED_ITEM_TOKEN = new InjectionToken<string>('nested-item');
 
 const VISIBILITY_CHANGE_SELECTOR = 'dx-visibility-change-handler';
 
@@ -21,6 +23,26 @@ export interface INestedOptionContainer {
 }
 
 export type IOptionPathGetter = () => string;
+
+export const _updateNestedItems = (
+    items: QueryList<{ propertyName: string, component: ICollectionNestedOption}>,
+    setChildrenFn: (propertyName: string, items: QueryList<ICollectionNestedOption>) => void
+) => {
+  const groupedItems = items.reduce((acc, { propertyName, component }) => {
+    acc[propertyName] = acc[propertyName] || [];
+    acc[propertyName].push(component);
+
+    return acc;
+  }, {});
+
+  Object.entries(groupedItems).forEach(([propertyName, components]: [string, ICollectionNestedOption[]]) => {
+    const queryList = new QueryList<ICollectionNestedOption>();
+
+    queryList.reset(components);
+
+    setChildrenFn(propertyName, queryList);
+  });
+};
 
 @Component({
   template: '',
@@ -202,6 +224,11 @@ export interface ICollectionNestedOption {
 export abstract class CollectionNestedOption extends BaseNestedOption implements ICollectionNestedOption {
   _index: number;
 
+  @ContentChildren(NESTED_ITEM_TOKEN)
+  set _nestedItems(value) {
+    _updateNestedItems(value, this.setChildren.bind(this));
+  }
+  
   protected _fullOptionPath() {
     return `${this._getOptionPath()}[${this._index}].`;
   }

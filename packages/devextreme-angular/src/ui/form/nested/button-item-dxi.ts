@@ -29,7 +29,15 @@ import { CollectionNestedOption, NESTED_ITEM_TOKEN } from 'devextreme-angular/co
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, { provide: NESTED_ITEM_TOKEN, useExisting: DxiFormButtonItemComponent }]
+    providers: [
+        NestedOptionHost,
+        { provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiFormButtonItemComponent) => ({
+                propertyName: 'items',
+                component
+            }),
+            deps: [DxiFormButtonItemComponent],
+        }]
 })
 export class DxiFormButtonItemComponent extends CollectionNestedOption {
     @Input()

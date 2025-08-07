@@ -19,7 +19,7 @@ import {
   createNgModule,
   inject,
   Injector,
-  InjectionToken,
+  InjectionToken, ContentChildren,
 } from '@angular/core';
 
 import { isPlatformServer } from '@angular/common';
@@ -37,7 +37,9 @@ import {
   INestedOptionContainer,
   ICollectionNestedOption,
   ICollectionNestedOptionContainer,
-  CollectionNestedOptionContainerImpl,
+  CollectionNestedOptionContainerImpl, 
+  _updateNestedItems,
+  NESTED_ITEM_TOKEN
 } from './nested-option';
 
 import { DxIntegrationModule } from './integration';
@@ -48,7 +50,6 @@ config({
 });
 
 let serverStateKey;
-export const NESTED_ITEM_TOKEN = new InjectionToken<string>('nested-item');
 
 export const getServerStateKey = () => {
   if (!serverStateKey) {
@@ -68,6 +69,11 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   protected _optionsToUpdate: any = {};
 
   private readonly _collectionContainerImpl: ICollectionNestedOptionContainer;
+
+  @ContentChildren(NESTED_ITEM_TOKEN)
+  set _nestedItems(value) {
+    _updateNestedItems(value, this._setChildren.bind(this))
+  }
 
   eventHelper: EmitterHelper;
 
@@ -308,11 +314,12 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     this.templateUpdateRequired = true;
   }
 
-  protected legacyClassNames = {} 
+  protected getLegacyClassNames = (propertyName?: string) => []; 
 
   checkContentChildren<T>(propertyName: string, items: QueryList<T>) {
-    const legacyItem = items.find((item) => this.legacyClassNames[propertyName]?.includes(item.constructor.name));
-    const notLegacyItem = legacyItem && items.find((item) => !this.legacyClassNames[propertyName].includes(item.constructor.name));
+    const legacyClassNames = this.getLegacyClassNames(propertyName);
+    const legacyItem = items.find((item) => legacyClassNames.includes(item.constructor.name));
+    const notLegacyItem = legacyItem && items.find((item) => !legacyClassNames.includes(item.constructor.name));
 
       if (legacyItem && notLegacyItem) {
         if (console && console.warn) {

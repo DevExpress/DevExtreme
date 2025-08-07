@@ -1,6 +1,5 @@
 /* tslint:disable:max-line-length */
 
-
 import {
     TransferState,
     Component,
@@ -17,7 +16,6 @@ import {
     OnChanges,
     DoCheck,
     SimpleChanges,
-    ContentChildren,
 } from '@angular/core';
 
 import { Mode } from 'devextreme/common';
@@ -66,17 +64,6 @@ import { DxiFormTabbedItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxoFormTabPanelOptionsModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormTabPanelOptionsItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormValidationRuleModule } from 'devextreme-angular/ui/form/nested';
-
-/*import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiFormButtonItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormEmptyItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormGroupItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormSimpleItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormTabbedItemComponent } from 'devextreme-angular/ui/form/nested';*/
-
-import { NESTED_ITEM_TOKEN } from "devextreme-angular/core";
 
 /**
  * [descr:dxForm]
@@ -825,12 +812,6 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
     
-    @ContentChildren(NESTED_ITEM_TOKEN)
-    get _nestedItems() { return this._getOption('items') };
-    set _nestedItems(value) {
-        this._setChildren('items', value);
-    }
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,

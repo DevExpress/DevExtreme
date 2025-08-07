@@ -11,7 +11,6 @@ import {
     AfterViewInit,
     SkipSelf,
     Input,
-    ContentChildren,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -37,7 +36,17 @@ import { CollectionNestedOption, NESTED_ITEM_TOKEN } from 'devextreme-angular/co
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost, { provide: NESTED_ITEM_TOKEN, useExisting: DxiFormSimpleItemComponent }]
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiFormSimpleItemComponent) => ({
+                propertyName: 'items',
+                component
+            }),
+            deps: [DxiFormSimpleItemComponent],
+        }]
 })
 export class DxiFormSimpleItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost  {
@@ -157,13 +166,6 @@ export class DxiFormSimpleItemComponent extends CollectionNestedOption implement
     protected get _optionPath() {
         return 'items';
     }
-
-    @ContentChildren(NESTED_ITEM_TOKEN)
-    get _nestedItems() { return this._getOption('validationRules') };
-    set _nestedItems(value) {
-        this.setChildren('validationRules', value);
-    }
-    
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
                 @Host() optionHost: NestedOptionHost,

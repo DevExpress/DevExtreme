@@ -11,7 +11,6 @@ import {
     AfterViewInit,
     SkipSelf,
     Input,
-    ContentChildren,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -42,7 +41,17 @@ import { DxiFormTabbedItemComponent } from './tabbed-item-dxi';*/
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost, { provide: NESTED_ITEM_TOKEN, useExisting: DxiFormGroupItemComponent }]
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        { 
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiFormGroupItemComponent) => ({
+                propertyName: 'items',
+                component
+            }),
+            deps: [DxiFormGroupItemComponent],
+        }]
 })
 export class DxiFormGroupItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost  {
@@ -155,12 +164,6 @@ export class DxiFormGroupItemComponent extends CollectionNestedOption implements
         return 'items';
     }
     
-    @ContentChildren(NESTED_ITEM_TOKEN)
-    get _nestedItems() { return this._getOption('items') };
-    set _nestedItems(value) {
-        this.setChildren('items', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,

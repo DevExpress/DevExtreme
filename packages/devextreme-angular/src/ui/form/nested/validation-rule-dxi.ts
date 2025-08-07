@@ -28,7 +28,14 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, { provide: NESTED_ITEM_TOKEN, useExisting: DxiFormValidationRuleComponent }]
+    providers: [NestedOptionHost, 
+        { provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiFormValidationRuleComponent) => ({
+                propertyName: 'validationRules',
+                component
+            }),
+            deps: [DxiFormValidationRuleComponent],
+        }]
 })
 export class DxiFormValidationRuleComponent extends CollectionNestedOption {
     @Input()
