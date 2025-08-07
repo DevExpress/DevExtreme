@@ -11,7 +11,7 @@ import { format } from '@js/core/utils/string';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
 import { prepareItems } from '@ts/grids/grid_core/m_export';
-import List from '@ts/ui/list/m_list.edit.search';
+import List from '@ts/ui/list/list.edit.search';
 
 import type { ColumnHeadersView } from '../../grid_core/column_headers/m_column_headers';
 import type { ColumnsController } from '../../grid_core/columns_controller/m_columns_controller';

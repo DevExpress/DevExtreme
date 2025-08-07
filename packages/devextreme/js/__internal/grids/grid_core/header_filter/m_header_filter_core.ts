@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import '@ts/ui/list/modules/m_search';
-import '@ts/ui/list/modules/m_selection';
+import '@ts/ui/list/modules/search';
+import '@ts/ui/list/modules/selection';
 
 import type { ChangedOptionInfo, NativeEventInfo } from '@js/common/core/events';
 import messageLocalization from '@js/common/core/localization/message';
@@ -14,7 +14,7 @@ import type dxList from '@js/ui/list';
 import Popup from '@js/ui/popup/ui.popup';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import List from '@ts/ui/list/m_list.edit.search';
+import List from '@ts/ui/list/list.edit.search';
 import TreeView from '@ts/ui/tree_view/tree_view.search';
 
 import gridCoreUtils from '../m_utils';

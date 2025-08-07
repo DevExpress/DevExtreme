@@ -7,11 +7,11 @@ import type { Item } from '@js/ui/list';
 import errors from '@js/ui/widget/ui.errors';
 import { isFunction } from '@ts/core/utils/m_type';
 import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
-import type List from '@ts/ui/list/m_list.edit';
-import type { BagConfig } from '@ts/ui/list/m_list.edit.decorator';
-import type EditDecorator from '@ts/ui/list/m_list.edit.decorator';
-import type { DecoratorClass } from '@ts/ui/list/m_list.edit.decorator_registry';
-import { registry } from '@ts/ui/list/m_list.edit.decorator_registry';
+import type List from '@ts/ui/list/list.edit';
+import type { BagConfig } from '@ts/ui/list/list.edit.decorator';
+import type EditDecorator from '@ts/ui/list/list.edit.decorator';
+import type { DecoratorClass } from '@ts/ui/list/list.edit.decorator_registry';
+import { registry } from '@ts/ui/list/list.edit.decorator_registry';
 
 interface OptionRegistry {
   enabled: () => boolean;
@@ -131,7 +131,6 @@ class EditProvider {
     return new CreatedDecoratorClass(this._list);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _findDecorator(type: string, subType: string): DecoratorClass {
     const foundDecorator = registry[type]?.[subType];
 

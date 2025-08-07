@@ -2,9 +2,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
-import type { BagConfig } from '@ts/ui/list/m_list.edit.decorator';
-import EditDecorator from '@ts/ui/list/m_list.edit.decorator';
-import { register as registerDecorator } from '@ts/ui/list/m_list.edit.decorator_registry';
+import type { BagConfig } from '@ts/ui/list/list.edit.decorator';
+import EditDecorator from '@ts/ui/list/list.edit.decorator';
+import { register as registerDecorator } from '@ts/ui/list/list.edit.decorator_registry';
 
 const STATIC_DELETE_BUTTON_CONTAINER_CLASS = 'dx-list-static-delete-button-container';
 const STATIC_DELETE_BUTTON_CLASS = 'dx-list-static-delete-button';
