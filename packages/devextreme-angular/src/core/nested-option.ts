@@ -155,19 +155,22 @@ export interface ICollectionNestedOptionContainer {
 }
 
 export class CollectionNestedOptionContainerImpl implements ICollectionNestedOptionContainer {
+  private _activatedQueries = {};
+
   constructor(private readonly _setOption: Function, private readonly _filterItems?: Function) { }
 
-  setChildren(propertyName, items) {
+  setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) {
     if (this._filterItems) {
       items = this._filterItems(items);
     }
-
     if (items.length) {
+      this._activatedQueries[propertyName] = true;
+    }
+    if (this._activatedQueries[propertyName]) {
       const widgetItems = items.map((item, index) => {
         item._index = index;
         return item._value;
       });
-
       this._setOption(propertyName, widgetItems);
     }
   }
