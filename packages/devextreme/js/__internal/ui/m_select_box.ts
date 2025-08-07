@@ -1,4 +1,4 @@
-import '@ts/ui/list/modules/m_selection';
+import '@ts/ui/list/modules/selection';
 
 import type { SingleOrMultiple } from '@js/common';
 import { normalizeKeyName } from '@js/common/core/events/utils';

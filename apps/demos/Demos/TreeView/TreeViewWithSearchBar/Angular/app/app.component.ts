@@ -31,8 +31,8 @@ export class AppComponent {
     this.currentItem = this.products[0];
   }
 
-  selectItem(e: DxTreeViewTypes.ItemClickEvent) {
-    this.currentItem = e.itemData as Product;
+  selectItem(e: DxTreeViewTypes.ItemClickEvent<Product>) {
+    this.currentItem = e.itemData;
   }
 }
 

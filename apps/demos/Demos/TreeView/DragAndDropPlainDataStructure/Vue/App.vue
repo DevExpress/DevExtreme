@@ -58,16 +58,20 @@
 </template>
 <script setup lang="ts">
 import { nextTick, ref } from 'vue';
-import DxTreeView from 'devextreme-vue/tree-view';
-import DxSortable from 'devextreme-vue/sortable';
+import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
+import DxSortable, { type DxSortableTypes } from 'devextreme-vue/sortable';
+
 import service from './data.ts';
+import type { FileSystemItem } from './types';
+
+type Node = DxTreeViewTypes.Node<FileSystemItem>;
 
 const treeViewDriveCRef = ref();
 const treeViewDriveDRef = ref();
 const itemsDriveC = ref(service.getItemsDriveC());
 const itemsDriveD = ref(service.getItemsDriveD());
 
-function onDragChange(e) {
+function onDragChange(e: DxSortableTypes.DragChangeEvent) {
   if (e.fromComponent === e.toComponent) {
     const fromNode = findNode(getTreeView(e.fromData), e.fromIndex);
     const toNode = findNode(getTreeView(e.toData), calculateToIndex(e));
@@ -76,7 +80,7 @@ function onDragChange(e) {
     }
   }
 }
-function onDragEnd(e) {
+function onDragEnd(e: DxSortableTypes.DragEndEvent) {
   if (e.fromComponent === e.toComponent && e.fromIndex === e.toIndex) {
     return;
   }
@@ -132,7 +136,7 @@ function findNode(treeView, index) {
   }
   return null;
 }
-function findNodeById(nodes, id) {
+function findNodeById(nodes: Node[], id): Node {
   for (let i = 0; i < nodes.length; i += 1) {
     if (nodes[i].itemData.id === id) {
       return nodes[i];
@@ -146,7 +150,7 @@ function findNodeById(nodes, id) {
   }
   return null;
 }
-function moveNode(fromNode, toNode, fromItems, toItems, isDropInsideItem) {
+function moveNode(fromNode: Node, toNode: Node, fromItems, toItems, isDropInsideItem) {
   const fromIndex = fromItems.findIndex((item) => item.id === fromNode.itemData.id);
   fromItems.splice(fromIndex, 1);
 
@@ -164,7 +168,7 @@ function moveNode(fromNode, toNode, fromItems, toItems, isDropInsideItem) {
       : undefined;
   }
 }
-function moveChildren(node, fromDataSource, toDataSource) {
+function moveChildren(node: Node, fromDataSource, toDataSource) {
   if (!node.itemData.isDirectory) {
     return;
   }
@@ -179,7 +183,7 @@ function moveChildren(node, fromDataSource, toDataSource) {
     toDataSource.splice(toDataSource.length, 0, child.itemData);
   });
 }
-function isChildNode(parentNode, childNode) {
+function isChildNode(parentNode: Node, childNode: Node) {
   let { parent } = childNode;
   while (parent !== null) {
     if (parent.itemData.id === parentNode.itemData.id) {

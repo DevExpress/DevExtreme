@@ -12,8 +12,8 @@ if (!/localhost/.test(document.location.host)) {
 }
 
 type TreeView = ReturnType<AppComponent['getTreeView']>;
-type Node = DxTreeViewTypes.Node;
-type Item = DxTreeViewTypes.Item;
+type Node = DxTreeViewTypes.Node<FileSystemItem>;
+type Item = FileSystemItem;
 
 let modulePrefix = '';
 // @ts-ignore
@@ -28,9 +28,9 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
 })
 export class AppComponent {
-  @ViewChild('treeviewDriveC') treeviewDriveC: DxTreeViewComponent;
+  @ViewChild('treeviewDriveC') treeviewDriveC: DxTreeViewComponent<FileSystemItem>;
 
-  @ViewChild('treeviewDriveD') treeviewDriveD: DxTreeViewComponent;
+  @ViewChild('treeviewDriveD') treeviewDriveD: DxTreeViewComponent<FileSystemItem>;
 
   itemsDriveC: FileSystemItem[];
 
@@ -103,7 +103,7 @@ export class AppComponent {
     return null;
   }
 
-  findNodeById(nodes: Node[], id: string | number) {
+  findNodeById(nodes: Node[], id: string | number): Node {
     for (let i = 0; i < nodes.length; i++) {
       if (nodes[i].itemData.id == id) {
         return nodes[i];
