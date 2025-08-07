@@ -2305,10 +2305,11 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     columnIndex: number,
   ): void {
     const $cell = this._getFocusedCell();
+    const $row = $cell?.parent();
 
     const rowIndex = this.getRowIndex();
     const localRowIndex = Math.min(
-      this._getLocalRowIndex($cell),
+      this._getLocalRowIndex($row),
       this._dataController.items().length - 1,
     );
 
