@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CheckBox from 'devextreme-testcafe-models/checkBox';
@@ -19,7 +19,6 @@ test('selectAll state should be correct after unselect item if refresh(true) is 
 
   // act
   await t.click(firstRowSelectionCheckBox.element);
-
   // assert
   await t
     .expect(await selectAllCheckBox.option('value')).eql(undefined)
@@ -248,3 +247,51 @@ test('Sensitivity option change should be correctly handled during runtime chang
 }));
 
 // ---
+
+test('"Select All" checkbox should not react when not visible', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  const editorCell = Selector('.dx-editor-cell').nth(0);
+  const selectAllCheckBox = new CheckBox(
+    dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getEditor().element,
+  );
+
+  await t.expect(await selectAllCheckBox.option('visible')).notOk();
+
+  await t.click(editorCell);
+
+  await t.expect(await selectAllCheckBox.option('visible')).notOk();
+  // await t.expect(await selectAllCheckBox.option('value')).eql(undefined);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [],
+  keyExpr: 'orderId',
+  selection: {
+    mode: 'multiple',
+  },
+  paging: {
+    pageSize: 10,
+  },
+  pager: {
+    visible: true,
+  },
+  filterRow: {
+    visible: true,
+  },
+  columns: [{
+    dataField: 'orderId',
+    caption: 'Order ID',
+    width: 90,
+  },
+  'city', {
+    dataField: 'country',
+    width: 180,
+  },
+  'region', {
+    dataField: 'date',
+    dataType: 'date',
+  }, {
+    dataField: 'amount',
+    format: 'currency',
+    width: 90,
+  }],
+}));

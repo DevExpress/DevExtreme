@@ -786,9 +786,21 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
     return groupElement;
   }
 
+  private _isSelectAllCheckBoxVisible() {
+    const isEmptyData = this._dataController.isEmpty();
+    const allowSelectAll = this.option('selection.allowSelectAll');
+    const isSelectAll = this._selectionController.isSelectAll();
+    return !isEmptyData && (allowSelectAll ?? isSelectAll !== false);
+  }
+
   private _attachSelectAllCheckBoxClickEvent($element) {
     eventsEngine.on($element, clickEventName, this.createAction((e) => {
       const { event } = e;
+
+      if (!this._isSelectAllCheckBoxVisible()) {
+        event.preventDefault();
+        return;
+      }
 
       if (!$(event.target).closest(`.${SELECT_CHECKBOX_CLASS}`).length) {
         // @ts-expect-error
