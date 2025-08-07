@@ -20,7 +20,7 @@ import {
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { CollectionNestedOption } from 'devextreme-angular/core';
+import { CollectionNestedOption, NESTED_ITEM_TOKEN } from 'devextreme-angular/core';
 
 
 @Component({
@@ -29,7 +29,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [NestedOptionHost, { provide: NESTED_ITEM_TOKEN, useExisting: DxiFormButtonItemComponent }]
 })
 export class DxiFormButtonItemComponent extends CollectionNestedOption {
     @Input()

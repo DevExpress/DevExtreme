@@ -19,7 +19,7 @@ import {
   createNgModule,
   inject,
   Injector,
-  ContentChildren,
+  InjectionToken,
 } from '@angular/core';
 
 import { isPlatformServer } from '@angular/common';
@@ -48,6 +48,8 @@ config({
 });
 
 let serverStateKey;
+export const NESTED_ITEM_TOKEN = new InjectionToken<string>('nested-item');
+
 export const getServerStateKey = () => {
   if (!serverStateKey) {
     serverStateKey = makeStateKey<any>('DX_isPlatformServer');
@@ -61,17 +63,7 @@ export const getServerStateKey = () => {
 })
 export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterContentChecked, AfterViewInit, AfterViewChecked,
     INestedOptionContainer, ICollectionNestedOptionContainer, IDxTemplateHost {
-  protected _collectionNestedOptionsItems: QueryList<BaseNestedOption> = new QueryList<BaseNestedOption>();
   
-  @ContentChildren(BaseNestedOption)
-  get _collectionNestedOptions() {
-    return this._collectionNestedOptionsItems;
-  };
-
-  set _collectionNestedOptions(value) {
-    this._collectionNestedOptionsItems = value
-  };
-
   private _initialOptions: any = {};
 
   protected _optionsToUpdate: any = {};
@@ -227,10 +219,9 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     }
   }
 
-  _setChildren(propertyName, value, className, isLegacy = false) {
-    if (this.checkContentChildren(propertyName, value, className, isLegacy)) {
-      this.setContentChildren(propertyName, value, className, isLegacy);
-      this.setChildren(propertyName, value, className);
+  _setChildren(propertyName, value, className = '') {
+    if (this.checkContentChildren(propertyName, value)) {
+      this.setChildren(propertyName, value);
     }
   }
 
@@ -318,31 +309,27 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     this.templateUpdateRequired = true;
   }
 
-  contentChildren = {};
+  legacyClassNames = {} 
 
-  checkContentChildren<T>(propertyName: string, items: QueryList<T>, className: string, isLegacy = false) {
-    if ( this.contentChildren[propertyName] && this.contentChildren[propertyName].isLegacy !== isLegacy ) {
-      if (items.length > 0) {
+  checkContentChildren<T>(propertyName: string, items: QueryList<T>) {
+    const legacyItem = items.find((item) => this.legacyClassNames[propertyName]?.includes(item.constructor.name));
+    const notLegacyItem = legacyItem && items.find((item) => !this.legacyClassNames[propertyName].includes(item.constructor.name));
+
+      if (legacyItem && notLegacyItem) {
         if (console && console.warn) {
           console.warn(`In ${this.constructor.name},
-          the nested ${className} and ${this.contentChildren[propertyName].className} components are incompatible.
+          the nested ${legacyItem.constructor.name} and ${notLegacyItem.constructor.name} components are incompatible.
           Ensure that all nested components in the content area match.`);
         }
+        return false;
       }
-      return false;
-    }
+
     return true;
   }
-  setContentChildren<T>(propertyName: string, items: QueryList<T>, className: string, isLegacy = false) {
-    if (items.length > 0) {
-      this.contentChildren[propertyName] = { className, isLegacy };
 
-    }
-  }
-
-  setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>, className = '') {
+  setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) {
     this.resetOptions(propertyName);
-    return this._collectionContainerImpl.setChildren(propertyName, items, className, this._collectionNestedOptions);
+    return this._collectionContainerImpl.setChildren(propertyName, items);
   }
 }
 

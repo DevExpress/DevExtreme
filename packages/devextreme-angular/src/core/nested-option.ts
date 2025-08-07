@@ -1,5 +1,5 @@
 import {
-  Component, QueryList, ElementRef, Renderer2, EventEmitter, ContentChildren,
+  Component, QueryList, ElementRef, Renderer2, EventEmitter,
 } from '@angular/core';
 
 import render from 'devextreme/core/renderer';
@@ -26,9 +26,6 @@ export type IOptionPathGetter = () => string;
   template: '',
 })
 export abstract class BaseNestedOption implements INestedOptionContainer, ICollectionNestedOptionContainer {
-  @ContentChildren(BaseNestedOption)
-  private _collectionNestedOptions!: QueryList<BaseNestedOption>;
-  
   protected _host: INestedOptionContainer;
 
   protected _hostOptionPath: IOptionPathGetter;
@@ -107,9 +104,9 @@ export abstract class BaseNestedOption implements INestedOptionContainer, IColle
     this.optionChangedHandlers.subscribe(this._optionChangedHandler.bind(this));
   }
 
-  setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>, className = '') {
+  setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) {
     this.resetOptions(propertyName);
-    return this._collectionContainerImpl.setChildren(propertyName, items, className, this._collectionNestedOptions);
+    return this._collectionContainerImpl.setChildren(propertyName, items);
   }
 
   _filterItems(items: QueryList<BaseNestedOption>) {
@@ -178,35 +175,19 @@ export abstract class CollectionNestedOption extends BaseNestedOption implements
 }
 
 export interface ICollectionNestedOptionContainer {
-  setChildren: <T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>, className: string, contentChildrenItems: QueryList<BaseNestedOption>) => any;
+  setChildren: <T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) => any;
 }
 
 export class CollectionNestedOptionContainerImpl implements ICollectionNestedOptionContainer {
-  private _activatedQueries = {};
-
   constructor(private readonly _setOption: Function, private readonly _filterItems?: Function) { }
 
-  setChildren(propertyName, items, className = '', contentChildrenItems) {
+  setChildren(propertyName, items) {
 
     if (this._filterItems) {
       items = this._filterItems(items);
     }
 
-    console.log('----CollectionNestedOptionContainerImpl----setChildren-->', contentChildrenItems);
     if (items.length) {
-      if(className) {
-        const activatedQuery = this._activatedQueries[propertyName] || [];
-
-        this._activatedQueries[propertyName] = activatedQuery
-            .filter((currentItem) => currentItem.className !== className)
-            .concat([{ className, items }]);
-
-        items = this._activatedQueries[propertyName]
-            .reduce((acc, {items}) => acc.concat(items.toArray()), []);
-      } else {
-        items = items.toArray();
-      }
-
       let widgetItems = items.map((item, index) => {
         item._index = index;
         return item._value;
