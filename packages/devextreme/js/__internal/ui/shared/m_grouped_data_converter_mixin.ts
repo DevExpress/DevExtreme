@@ -5,7 +5,7 @@ import type { GroupedItem } from '@ts/ui/list/list.edit.strategy.grouped';
 type ConvertedDataSourceLike<TItem> = DataSourceLike<TItem>
   & { group?: DataSourceOptions['group'] & { keepInitialKeyOrder?: boolean } };
 
-const hasCorrectStructure = (
+const isGroupedItemArray = (
   data: DataSourceLike<GroupedItem>,
 ): data is GroupedItem[] => Array.isArray(data)
   && data.every((item: GroupedItem): boolean => {
@@ -23,7 +23,7 @@ export function getConvertedDataSource(
 ): ConvertedDataSourceLike<GroupedItem> {
   const groupKey = 'key';
 
-  if (!isGrouped || !hasCorrectStructure(dataSource)) {
+  if (!isGrouped || !isGroupedItemArray(dataSource)) {
     return dataSource;
   }
 
