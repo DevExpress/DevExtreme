@@ -1,10 +1,11 @@
 import type { DefaultOptionsRule } from '@js/core/options/utils';
 import $ from '@js/core/renderer';
 import type { ButtonStyle, ButtonType, ClickEvent } from '@js/ui/button';
-import Button from '@js/ui/button';
-import { isFluent, isMaterial } from '@js/ui/themes';
+import { current, isFluent, isMaterial } from '@js/ui/themes';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
+import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
+import Button from '@ts/ui/button/wrapper';
 
 const CALENDAR_NAVIGATOR_CLASS = 'dx-calendar-navigator';
 const CALENDAR_NAVIGATOR_PREVIOUS_MONTH_CLASS = 'dx-calendar-navigator-previous-month';
@@ -48,9 +49,8 @@ class Navigator extends Widget<NavigatorOptions> {
   _defaultOptionsRules(): DefaultOptionsRule<NavigatorOptions>[] {
     return super._defaultOptionsRules().concat([
       {
-        device() {
-          // @ts-expect-error
-          return isMaterial();
+        device(): boolean {
+          return isMaterial(current());
         },
         options: {
           type: 'default',
@@ -58,9 +58,8 @@ class Navigator extends Widget<NavigatorOptions> {
         },
       },
       {
-        device() {
-          // @ts-expect-error
-          return isFluent();
+        device(): boolean {
+          return isFluent(current());
         },
         options: {
           type: 'normal',
@@ -103,7 +102,7 @@ class Navigator extends Widget<NavigatorOptions> {
       {
         focusStateEnabled,
         icon: rtlEnabled ? 'chevronright' : 'chevronleft',
-        onClick: (e) => { this._clickAction?.({ direction: -direction, event: e }); },
+        onClick: (e: ClickEvent) => { this._clickAction?.({ direction: -direction, event: e }); },
         type,
         stylingMode,
         integrationOptions: {},
@@ -120,7 +119,7 @@ class Navigator extends Widget<NavigatorOptions> {
       {
         focusStateEnabled,
         icon: rtlEnabled ? 'chevronleft' : 'chevronright',
-        onClick: (e) => { this._clickAction?.({ direction, event: e }); },
+        onClick: (e: ClickEvent) => { this._clickAction?.({ direction, event: e }); },
         type,
         stylingMode,
         integrationOptions: {},
@@ -136,7 +135,7 @@ class Navigator extends Widget<NavigatorOptions> {
       Button,
       {
         focusStateEnabled,
-        onClick: (e) => { this._captionClickAction?.({ event: e }); },
+        onClick: (e: ClickEvent) => { this._captionClickAction?.({ event: e }); },
         type,
         stylingMode,
         template: (_, content) => {
@@ -181,8 +180,10 @@ class Navigator extends Widget<NavigatorOptions> {
     }
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
-    switch (args.name) {
+  _optionChanged(args: OptionChanged<NavigatorOptions>): void {
+    const { name } = args;
+
+    switch (name) {
       case 'text':
         this._renderCaption();
         break;
