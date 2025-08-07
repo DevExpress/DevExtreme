@@ -459,12 +459,12 @@ export default [
     {
         files: ['js/__internal/**/*.ts?(x)'],
         rules: {
-        'no-restricted-globals': ['error',
-            {
-                name: '$',
-                message: 'Please, import $ from \'@js/core/renderer\'',
-            }
-        ]
+            'no-restricted-globals': ['error',
+                {
+                    name: '$',
+                    message: 'Please, import $ from \'@js/core/renderer\'',
+                }
+            ]
         }
     },
     // Rules for a new TS files
