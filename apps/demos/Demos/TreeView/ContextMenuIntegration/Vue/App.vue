@@ -31,10 +31,11 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxTreeView from 'devextreme-vue/tree-view';
+import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 import DxList from 'devextreme-vue/list';
 import DxContextMenu from 'devextreme-vue/context-menu';
 import service from './data.ts';
+import type { Product } from './types';
 
 const products = ref(service.getProducts());
 const menuItems = ref(service.getMenuItems());
@@ -43,7 +44,7 @@ const selectedTreeItem = ref(undefined);
 const treeViewRef = ref();
 const contextMenuRef = ref();
 
-function treeViewItemContextMenu(e) {
+function treeViewItemContextMenu(e: DxTreeViewTypes.ItemContextMenuEvent<Product>) {
   selectedTreeItem.value = e.itemData;
   const contextMenu = contextMenuRef.value.instance;
   const isProduct = e.itemData.price !== undefined;

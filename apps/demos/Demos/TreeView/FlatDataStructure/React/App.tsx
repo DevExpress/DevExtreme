@@ -1,14 +1,15 @@
 import React, { useCallback, useState } from 'react';
 import TreeView, { type TreeViewTypes } from 'devextreme-react/tree-view';
 
-import service, { type ProductType } from './data.ts';
+import service from './data.ts';
+import type { Product } from './types';
 
 const products = service.getProducts();
 
 const App = () => {
   const [currentItem, setCurrentItem] = useState(products[0]);
 
-  const selectItem = useCallback((e: TreeViewTypes.ItemClickEvent & { itemData: ProductType }) => {
+  const selectItem = useCallback((e: TreeViewTypes.ItemClickEvent<Product>) => {
     setCurrentItem({ ...e.itemData });
   }, [setCurrentItem]);
 
