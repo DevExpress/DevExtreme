@@ -454,8 +454,18 @@ export default [
             'class-methods-use-this': 'off',
             '@typescript-eslint/ban-ts-comment': 'off',
             '@typescript-eslint/prefer-ts-expect-error': 'off',
-            'no-undef': 'error',
         },
+    },
+    {
+        files: ['js/__internal/**/*.ts?(x)'],
+        rules: {
+        'no-restricted-globals': ['error',
+            {
+                name: '$',
+                message: 'Please, import $ from \'@js/core/renderer\'',
+            }
+        ]
+        }
     },
     // Rules for a new TS files
     {
