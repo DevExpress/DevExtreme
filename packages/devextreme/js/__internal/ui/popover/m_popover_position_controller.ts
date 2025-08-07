@@ -7,11 +7,8 @@ import { extend } from '@js/core/utils/extend';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined, isString } from '@js/core/utils/type';
 import type {
-  // BaseControllerProperties,
   ControllerOverlayElements,
   OverlayPosition,
-  // PositionControllerConstructor,
-  // Position as OverlayPositionWithAlignment,
 } from '@ts/ui/overlay/m_overlay_position_controller';
 import { OverlayPositionController } from '@ts/ui/overlay/m_overlay_position_controller';
 import type { PopoverProperties } from '@ts/ui/popover/m_popover';

@@ -46,14 +46,15 @@ export interface ControllerOverlayElements {
   $wrapper?: dxElementWrapper;
 }
 
-export interface BaseControllerProperties {
-  container?: OverlayProperties['container'];
-  visualContainer?: OverlayProperties['visualContainer'];
-  position?: OverlayProperties['position'];
-  restorePosition?: OverlayProperties['restorePosition'];
-  _fixWrapperPosition?: OverlayProperties['_fixWrapperPosition'];
-  _skipContentPositioning?: OverlayProperties['_skipContentPositioning'];
-}
+export type BaseControllerProperties = Pick<
+  OverlayProperties,
+    | 'container'
+    | 'visualContainer'
+    | 'position'
+    | 'restorePosition'
+    | '_fixWrapperPosition'
+    | '_skipContentPositioning'
+>;
 
 export type ControllerProperties<
   TProperties extends BaseControllerProperties,
