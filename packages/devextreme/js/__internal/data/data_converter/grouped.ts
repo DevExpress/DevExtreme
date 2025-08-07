@@ -1,7 +1,7 @@
 import { isObject } from '@js/core/utils/type';
 import type { DataSourceLike, DataSourceOptions } from '@js/data/data_source';
 
-type ConvertedDataSourceLike<TItem> = DataSourceLike<TItem>
+export type GroupedDataSourceLike<TItem> = DataSourceLike<TItem>
   & {
     group?: DataSourceOptions['group'] & {
       keepInitialKeyOrder?: boolean;
@@ -20,10 +20,16 @@ interface GroupedItem {
   items?: (Item | string | number)[];
 }
 
-const isGroupedDataArray = <TGroupedItem extends GroupedItem = GroupedItem>(
-  data: DataSourceLike<TGroupedItem>,
-): data is TGroupedItem[] => Array.isArray(data)
-  && data.every((item: TGroupedItem): boolean => {
+const isGroupedDataArray = (
+  data: DataSourceLike<GroupedItem>,
+): data is GroupedItem[] => {
+  const isArray = Array.isArray(data);
+
+  if (!isArray) {
+    return false;
+  }
+
+  const isCorrectData = data.every?.((item: GroupedItem): boolean => {
     const hasTwoFields = Object.keys(item).length === 2;
     const hasCorrectFields = 'key' in item && 'items' in item;
 
@@ -32,18 +38,19 @@ const isGroupedDataArray = <TGroupedItem extends GroupedItem = GroupedItem>(
       && Array.isArray(item.items);
   });
 
-export function getDataSourceOptions<
-  TGroupedItem extends GroupedItem = GroupedItem,
->(
-  dataSource: DataSourceLike<TGroupedItem>,
-): ConvertedDataSourceLike<TGroupedItem> {
+  return isArray && isCorrectData;
+};
+
+export function getDataSourceOptions(
+  dataSource: DataSourceLike<GroupedItem>,
+): GroupedDataSourceLike<GroupedItem> {
   if (!isGroupedDataArray(dataSource)) {
     return dataSource;
   }
 
   let hasSimpleItems = false;
 
-  const data = dataSource.reduce((accumulator: Item[], item: TGroupedItem) => {
+  const data = dataSource?.reduce((accumulator: Item[], item: GroupedItem) => {
     const items = item.items?.map((value: Item | string | number): Item => {
       let innerItem = value;
       if (!isObject(innerItem)) {

@@ -39,6 +39,7 @@ import { render } from '@js/ui/widget/utils.ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import type { GroupedDataSourceLike } from '@ts/data/data_converter/grouped';
 import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
 import type {
   CollectionItemInfo,
@@ -545,7 +546,11 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     };
   }
 
-  _getSpecificDataSourceOption(): DataSourceLike<GroupedItem> | null | undefined {
+  _getSpecificDataSourceOption():
+    GroupedDataSourceLike<GroupedItem>
+    | DataSourceLike<Item>
+    | null
+    | undefined {
     const { dataSource, grouped } = this.option();
 
     if (dataSource && grouped) {

@@ -25,9 +25,11 @@ import { getWindow } from '@js/core/utils/window';
 import type { DataSourceLike } from '@js/data/data_source';
 import type { dxDropDownListOptions } from '@js/ui/drop_down_editor/ui.drop_down_list';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
+import type { Item } from '@js/ui/list';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { GroupedDataSourceLike } from '@ts/data/data_converter/grouped';
 import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
@@ -648,7 +650,11 @@ class DropDownList<
     };
   }
 
-  _getSpecificDataSourceOption(): DataSourceLike<GroupedItem> | null | undefined {
+  _getSpecificDataSourceOption():
+    GroupedDataSourceLike<GroupedItem>
+    | DataSourceLike<Item>
+    | null
+    | undefined {
     const { dataSource, grouped } = this.option();
 
     if (dataSource && grouped) {
