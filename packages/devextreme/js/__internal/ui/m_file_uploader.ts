@@ -12,6 +12,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import ajax from '@js/core/utils/ajax';
 import Callbacks from '@js/core/utils/callbacks';
+import type { DeferredObj } from '@js/core/utils/deferred';
 // @ts-expect-error
 import { Deferred, fromPromise } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -23,7 +24,7 @@ import type { ButtonStyle, ButtonType, Properties as ButtonProperties } from '@j
 import Button from '@js/ui/button';
 import type { Properties as PublicProperties } from '@js/ui/file_uploader';
 import ProgressBar from '@js/ui/progress_bar';
-import { isFluent, isMaterial } from '@js/ui/themes';
+import { current, isFluent, isMaterial } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { EditorProperties, UnresolvedEvents } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
@@ -70,85 +71,109 @@ const nativeClickEvent = 'click';
 const ENTER_KEY = 'enter';
 const SPACE_KEY = 'space';
 
-let renderFileUploaderInput = (): dxElementWrapper => $('<input>').attr('type', 'file');
+let renderFileUploaderInput = () => $('<input>').attr('type', 'file');
 // @ts-expect-error
 const isFormDataSupported = (): boolean => !!window.FormData;
 
 type CallbacksInstance = ReturnType<typeof Callbacks>;
-export interface FileUploaderItem {
+interface FileUploaderItem {
   value: File;
-
   loadedSize: number;
-
   onProgress: CallbacksInstance;
-
   onAbort: CallbacksInstance;
-
   onLoad: CallbacksInstance;
-
   onError: CallbacksInstance;
-
   onLoadStart: CallbacksInstance;
-
   isValidFileExtension: boolean;
-
   isValidMaxSize: boolean;
-
   isValidMinSize: boolean;
-
   isInitialized: boolean;
-
   $file?: dxElementWrapper | null;
-
   $statusMessage?: dxElementWrapper | null;
-
   progressBar?: ProgressBar;
-
   cancelButton?: Button;
-
   uploadButton?: Button;
-
   isAborted?: boolean;
-
   uploadStarted?: boolean;
-
   isStartLoad?: boolean;
-
   chunksData?: FileUploaderChunksData;
-
   request?: XMLHttpRequest | null;
-
+  _isProgressStarted?: boolean;
   _isError?: boolean;
-
   _isLoaded?: boolean;
-
   isValid: () => boolean;
 }
 
-export interface FileUploaderChunksData {
+interface FileUploaderChunksData {
   name: string;
-
   loadedBytes: number;
-
   type: string;
-
   blobReader: FileBlobReader;
-
   guid: Guid;
-
   fileSize: number;
-
   count: number;
-
   customData: Record<string, unknown>;
-
   currentChunk?: {
     blob: Blob | null;
-
     index: number;
-
     isCompleted: boolean;
   } | null;
+}
+
+export interface UploadChunkInfo {
+  bytesUploaded: number;
+  chunkCount: number;
+  customData: Record<string, unknown>;
+  chunkBlob: Blob;
+  chunkIndex: number;
+}
+
+type DragLikeEvent = DxEvent & {
+  originalEvent: {
+    dataTransfer: DataTransfer;
+    type?: string;
+    currentTarget?: EventTarget | null;
+    target?: EventTarget | null;
+    clientX?: number;
+    clientY?: number;
+    pageX?: number;
+    pageY?: number;
+    files?: FileList;
+    dropEffect?: string;
+    types?: string[];
+    preventDefault?: () => void;
+    stopPropagation?: () => void;
+  };
+};
+
+interface LoadedFileData {
+  loaded: number;
+  total: number;
+  currentSegmentSize: number;
+  event?: Event;
+}
+
+interface FileBlobChunk {
+  blob: Blob | null;
+  index: number;
+  isCompleted: boolean;
+}
+
+interface ChunkFormDataOptions {
+  fileName: string;
+  blobName?: string;
+  blob: Blob | null;
+  index: number;
+  count: number;
+  type: string;
+  guid: Guid;
+  size: number;
+}
+
+interface FileUploaderChunkUploadResponse {
+  [key: string]: unknown;
+  success?: boolean;
+  error?: string;
 }
 
 export interface Properties extends PublicProperties {
@@ -176,7 +201,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
   // Temporary solution. Move to component level
   public NAME!: string;
 
-  _activeDropZone?: string | dxElementWrapper | null;
+  _activeDropZone?: HTMLElement | null;
 
   _selectButton!: Button;
 
@@ -184,9 +209,9 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   _files!: FileUploaderItem[] | null;
 
-  _$fileInput!: any;
+  _$fileInput!: dxElementWrapper;
 
-  _$filesContainer!: dxElementWrapper;
+  _$filesContainer!: dxElementWrapper | null;
 
   _$inputWrapper!: dxElementWrapper;
 
@@ -229,7 +254,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   _beforeSendAction?: (event?: Record<string, unknown>) => void;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): Record<string, (e: Event) => void> {
     const click = (e: Event): void => {
       e.preventDefault();
       const $selectButton = this._selectButton.$element();
@@ -346,15 +371,13 @@ class FileUploader extends Editor<FileUploaderProperties> {
         },
       },
       {
-        // @ts-expect-error
-        device: (): boolean => isMaterial(),
+        device: (): boolean => isMaterial(current()),
         options: {
           _uploadButtonType: 'default',
         },
       },
       {
-        // @ts-expect-error
-        device: (): boolean => isFluent(),
+        device: (): boolean => isFluent(current()),
         options: {
           _buttonStylingMode: 'text',
         },
@@ -438,6 +461,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
       inputProps.title = hint;
     }
 
+    // @ts-expect-error dxElementWrapper should be extdened
     this._$fileInput.prop(inputProps);
   }
 
@@ -446,13 +470,16 @@ class FileUploader extends Editor<FileUploaderProperties> {
       return;
     }
 
+    // @ts-expect-error dxElementWrapper should be extdened
     const fileName = this._$fileInput.val().replace(/^.*\\/, '');
+    // @ts-expect-error dxElementWrapper should be extdened
     const files = this._$fileInput.prop('files');
     const { uploadMode } = this.option();
     if (files && !files.length && uploadMode !== 'useForm') {
       return;
     }
 
+    // @ts-expect-error dxElementWrapper should be extdened
     const value = files ? this._getFiles(files) : [{ name: fileName }];
     this._changeValue(value as File[]);
 
@@ -475,7 +502,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _getFiles(fileList: File[]): File[] {
+  _getFiles(fileList: FileList): File[] {
     return [...fileList];
   }
 
@@ -537,7 +564,9 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   _createFileProgressBar(file: FileUploaderItem): void {
     file.progressBar = this._createProgressBar(file.value.size);
-    file.progressBar.$element().appendTo(file.$file as any);
+    if (file.$file) {
+      file.progressBar.$element().appendTo(file.$file);
+    }
     this._initStatusMessage(file);
     this._ensureCancelButtonInitialized(file);
   }
@@ -734,6 +763,10 @@ class FileUploader extends Editor<FileUploaderProperties> {
   _renderFile(file: FileUploaderItem): void {
     const { value } = file;
 
+    if (!this._$filesContainer) {
+      return;
+    }
+
     const $fileContainer = $('<div>')
       .addClass(FILEUPLOADER_FILE_CONTAINER_CLASS)
       .appendTo(this._$filesContainer);
@@ -790,18 +823,18 @@ class FileUploader extends Editor<FileUploaderProperties> {
     const cancelButtonsCount = allowCanceling && uploadMode !== 'useForm' ? 1 : 0;
     const uploadButtonsCount = uploadMode === 'useButtons' ? 1 : 0;
     const filesContainerWidth = getWidth(
-      this._$filesContainer.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).first(),
+      this._$filesContainer?.find(`.${FILEUPLOADER_FILE_CONTAINER_CLASS}`).first(),
     ) || getWidth(this._$filesContainer);
-    const $buttonContainer = this._$filesContainer.find(`.${FILEUPLOADER_BUTTON_CONTAINER_CLASS}`).eq(0);
+    const $buttonContainer = this._$filesContainer?.find(`.${FILEUPLOADER_BUTTON_CONTAINER_CLASS}`).eq(0);
     const buttonsWidth = getWidth($buttonContainer) * (cancelButtonsCount + uploadButtonsCount);
-    const $fileSize = this._$filesContainer.find(`.${FILEUPLOADER_FILE_SIZE_CLASS}`).eq(0);
+    const $fileSize = this._$filesContainer?.find(`.${FILEUPLOADER_FILE_SIZE_CLASS}`).eq(0);
 
-    const prevFileSize = $fileSize.text();
-    $fileSize.text('1000 Mb');
+    const prevFileSize = $fileSize?.text();
+    $fileSize?.text('1000 Mb');
     const fileSizeWidth = getWidth($fileSize);
-    $fileSize.text(prevFileSize);
+    $fileSize?.text(prevFileSize ?? '');
 
-    this._$filesContainer.find(`.${FILEUPLOADER_FILE_NAME_CLASS}`).css('maxWidth', filesContainerWidth - buttonsWidth - fileSizeWidth);
+    this._$filesContainer?.find(`.${FILEUPLOADER_FILE_NAME_CLASS}`).css('maxWidth', filesContainerWidth - buttonsWidth - fileSizeWidth);
   }
 
   _renderFileButtons(file: FileUploaderItem, $container: dxElementWrapper): void {
@@ -1091,6 +1124,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     if (useNativeInputClick) {
       this._selectButton.option({ template: this._selectButtonInputTemplate.bind(this) });
     } else {
+      // @ts-expect-error dxElementWrapper should be extdened
       this._$fileInput.appendTo(this._$inputContainer);
       this._selectButton.option({ template: 'content' });
     }
@@ -1142,7 +1176,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
     eventsEngine.on($(target), addNamespace('drop', this.NAME), this._dropHandler.bind(this, isCustomTarget));
   }
 
-  _applyInputAttributes(customAttributes): void {
+  _applyInputAttributes(customAttributes: Record<string, string>): void {
+    // @ts-expect-error dxElementWrapper should be extdened
     this._$fileInput.attr(customAttributes);
   }
 
@@ -1152,12 +1187,13 @@ class FileUploader extends Editor<FileUploaderProperties> {
     return Boolean(nativeDropSupported) && uploadMode === 'useForm';
   }
 
-  _getDropZoneElement(isCustomTarget: boolean, e: DxEvent) {
+  _getDropZoneElement(isCustomTarget: boolean, e: DxEvent): HTMLElement | undefined {
     if (!e.currentTarget) {
       return;
     }
 
     const { dropZone } = this.option();
+
     // @ts-expect-error
     let targetList = isCustomTarget ? Array.from(dropZone) : [this._$inputWrapper];
     // @ts-expect-error
@@ -1167,8 +1203,8 @@ class FileUploader extends Editor<FileUploaderProperties> {
     return targetList[targetList.indexOf(e.currentTarget)];
   }
 
-  // @ts-expect-error
-  _dragEnterHandler(isCustomTarget: boolean, e) {
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  _dragEnterHandler(isCustomTarget: boolean, e: DragLikeEvent): void | false {
     const { disabled } = this.option();
     if (disabled) {
       return false;
@@ -1185,13 +1221,16 @@ class FileUploader extends Editor<FileUploaderProperties> {
     }
   }
 
-  _shouldRaiseDragOver(e, dropZoneElement?: dxElementWrapper | string): boolean {
+  _shouldRaiseDragOver(
+    e: DragLikeEvent,
+    dropZoneElement?: HTMLElement,
+  ): boolean | string | undefined {
     return this._activeDropZone === null
       && this.isMouseOverElement(e, dropZoneElement, false)
       && e.originalEvent.dataTransfer.types.find((item) => item === 'Files');
   }
 
-  _dragOverHandler(isCustomTarget: boolean, e): void {
+  _dragOverHandler(isCustomTarget: boolean, e: DragLikeEvent): void {
     if (!this._useInputForDrop()) {
       e.preventDefault();
     }
@@ -1208,7 +1247,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     }
   }
 
-  _dragLeaveHandler(isCustomTarget: boolean, e: DxEvent): void {
+  _dragLeaveHandler(isCustomTarget: boolean, e: DragLikeEvent): void {
     if (!this._useInputForDrop()) {
       e.preventDefault();
     }
@@ -1237,7 +1276,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     }
   }
 
-  _dropHandler(isCustomTarget: boolean, e): void {
+  _dropHandler(isCustomTarget: boolean, e: DragLikeEvent): void {
     this._activeDropZone = null;
 
     if (!isCustomTarget) {
@@ -1296,7 +1335,6 @@ class FileUploader extends Editor<FileUploaderProperties> {
   _clean(): void {
     this._$fileInput.detach();
 
-    // @ts-expect-error
     this._$filesContainer = null;
 
     const { dialogTrigger, dropZone } = this.option();
@@ -1355,7 +1393,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
     this._uploadStrategy.upload(file);
   }
 
-  _updateProgressBar(file: FileUploaderItem, loadedFileData): void {
+  _updateProgressBar(file: FileUploaderItem, loadedFileData: LoadedFileData): void {
     file.progressBar?.option({
       value: loadedFileData.loaded,
       showStatus: true,
@@ -1467,7 +1505,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
 
   isMouseOverElement(
     mouseEvent: Event,
-    element?: any,
+    element?: HTMLElement,
     correctPseudoElements?: boolean,
     dragEventDelta: number = DRAG_EVENT_DELTA,
   ): boolean {
@@ -1494,25 +1532,24 @@ class FileUploader extends Editor<FileUploaderProperties> {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _getTouchEventX(e): number {
-    let touchPoint = null;
+  _getTouchEventX(e: TouchEvent): number {
+    let touchPoint: TouchList | null = null;
     if (e.changedTouches.length > 0) {
       touchPoint = e.changedTouches;
     } else if (e.targetTouches.length > 0) {
       touchPoint = e.targetTouches;
     }
-    // @ts-expect-error
     return touchPoint ? touchPoint[0].pageX : 0;
   }
 
-  _getTouchEventY(e) {
-    let touchPoint = null;
+  // eslint-disable-next-line class-methods-use-this
+  _getTouchEventY(e: TouchEvent): number {
+    let touchPoint: TouchList | null = null;
     if (e.changedTouches.length > 0) {
       touchPoint = e.changedTouches;
     } else if (e.targetTouches.length > 0) {
       touchPoint = e.targetTouches;
     }
-    // @ts-expect-error
     return touchPoint ? touchPoint[0].pageY : 0;
   }
 
@@ -1698,7 +1735,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
         this._invalidate();
         break;
       case 'inputAttr':
-        this._applyInputAttributes(this.option(name));
+        this._applyInputAttributes(this.option()[name]);
         break;
       case 'hint':
         this._initFileInput();
@@ -1739,17 +1776,17 @@ FileUploader.__internals = {
 class FileBlobReader {
   file?: File | null;
 
-  chunkSize?: number;
+  chunkSize: number;
 
-  index?: number;
+  index: number;
 
-  constructor(file, chunkSize) {
+  constructor(file: File, chunkSize: number) {
     this.file = file;
     this.chunkSize = chunkSize;
     this.index = 0;
   }
 
-  read() {
+  read(): FileBlobChunk | null {
     if (!this.file) {
       return null;
     }
@@ -1757,12 +1794,13 @@ class FileBlobReader {
     if (result.isCompleted) {
       this.file = null;
     }
-    // @ts-expect-error
-    this.index++;
+
+    this.index += 1;
+
     return result;
   }
 
-  createBlobResult(file, index, chunkSize) {
+  createBlobResult(file: File, index: number, chunkSize: number): FileBlobChunk {
     const currentPosition = index * chunkSize;
     return {
       blob: this.sliceFile(file, currentPosition, chunkSize),
@@ -1771,13 +1809,15 @@ class FileBlobReader {
     };
   }
 
-  sliceFile(file, startPos, length) {
+  // eslint-disable-next-line class-methods-use-this
+  sliceFile(file: File, startPos: number, length: number): Blob | null {
     if (file.slice) {
       return file.slice(startPos, startPos + length);
     }
-    if (file.webkitSlice) {
-      return file.webkitSlice(startPos, startPos + length);
+    if ('webkitSlice' in file && typeof file.webkitSlice === 'function') {
+      return file.webkitSlice(startPos, startPos + length) as Blob;
     }
+
     return null;
   }
 }
@@ -1785,11 +1825,11 @@ class FileBlobReader {
 class FileUploadStrategyBase {
   fileUploader!: FileUploader;
 
-  constructor(fileUploader) {
+  constructor(fileUploader: FileUploader) {
     this.fileUploader = fileUploader;
   }
 
-  upload(file) {
+  upload(file: FileUploaderItem): void {
     if (file.isInitialized && file.isAborted) {
       this.fileUploader?._resetFileState(file);
     }
@@ -1799,7 +1839,7 @@ class FileUploadStrategyBase {
     }
   }
 
-  abortUpload(file) {
+  abortUpload(file: FileUploaderItem): void {
     if (file._isError || file._isLoaded || file.isAborted || !file.uploadStarted) {
       return;
     }
@@ -1827,7 +1867,7 @@ class FileUploadStrategyBase {
     }
   }
 
-  _beforeSend(xhr, file) {
+  _beforeSend(xhr: XMLHttpRequest, file: FileUploaderItem): void {
     const arg = this._createUploadArgument(file);
     this.fileUploader._beforeSendAction?.({
       request: xhr,
@@ -1837,38 +1877,45 @@ class FileUploadStrategyBase {
     file.request = xhr;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _createUploadArgument(file) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  _createUploadArgument(_file: FileUploaderItem): void {
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _uploadCore(file) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  _uploadCore(_file: FileUploaderItem): void {
   }
 
-  _isCustomCallback(name) {
+  _isCustomCallback(name: keyof FileUploaderProperties): boolean {
     const callback = this.fileUploader?.option(name);
     return callback && isFunction(callback);
   }
 
-  _handleProgress(file, e) {
+  _handleProgress(file: FileUploaderItem, e: Event | { loaded?: number; total?: number }): void {
     if (file._isError) {
       return;
     }
 
     file._isProgressStarted = true;
+
     this._handleProgressCore(file, e);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _handleProgressCore(file, e) {
+  // eslint-disable-next-line class-methods-use-this
+  _handleProgressCore(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _file: FileUploaderItem,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _e: Event | { loaded?: number; total?: number },
+  ): void {
   }
 
-  _handleFileError(file, error) {
+  // eslint-disable-next-line class-methods-use-this
+  _handleFileError(file: FileUploaderItem, error: unknown): void {
     file._isError = true;
     file.onError.fire(error);
   }
 
-  _prepareFileBeforeUpload(file) {
+  _prepareFileBeforeUpload(file: FileUploaderItem): void {
     if (file.$file) {
       file.progressBar?.dispose();
       this.fileUploader._createFileProgressBar(file);
@@ -1886,15 +1933,16 @@ class FileUploadStrategyBase {
     file.isInitialized = true;
   }
 
-  _shouldHandleError(file, e) {
+  _shouldHandleError(file: FileUploaderItem, e: { status: number }): boolean {
     return (this._isStatusError(e.status) || !file._isProgressStarted) && !file.isAborted;
   }
 
-  _isStatusError(status) {
+  // eslint-disable-next-line class-methods-use-this
+  _isStatusError(status: number): boolean {
     return status >= 400 && status < 500 || status >= 500 && status < 600;
   }
 
-  _onUploadStarted(file, e) {
+  _onUploadStarted(file: FileUploaderItem, e: Event): void {
     file.uploadStarted = true;
 
     this.fileUploader?._uploadStartedAction?.({
@@ -1904,7 +1952,7 @@ class FileUploadStrategyBase {
     });
   }
 
-  _onAbortHandler(file, e) {
+  _onAbortHandler(file: FileUploaderItem, e: Event): void {
     const args = {
       file: file.value,
       event: e,
@@ -1916,7 +1964,7 @@ class FileUploadStrategyBase {
     this.fileUploader._handleAllFilesUploaded();
   }
 
-  _onErrorHandler(file: FileUploaderItem, error): void {
+  _onErrorHandler(file: FileUploaderItem, error: unknown): void {
     const { uploadFailedMessage } = this.fileUploader.option();
     const args = {
       file: file.value,
@@ -1944,22 +1992,41 @@ class FileUploadStrategyBase {
     this.fileUploader._handleAllFilesUploaded();
   }
 
-  _onProgressHandler(file, e) {
+  _onProgressHandler(
+    file: FileUploaderItem,
+    e: ProgressEvent & { loaded?: number; total?: number },
+  ): void {
     if (file) {
       const totalFilesSize = this.fileUploader._getTotalFilesSize();
       const totalLoadedFilesSize = this.fileUploader._getTotalLoadedFilesSize();
 
-      const loadedSize = Math.min(e.loaded, file.value.size);
+      // ProgressEvent from XMLHttpRequest or FileReader
+      const loaded = (e as ProgressEvent & { loaded?: number }).loaded ?? 0;
+      const loadedSize = Math.min(loaded, file.value.size);
       const segmentSize = loadedSize - file.loadedSize;
       file.loadedSize = loadedSize;
 
       this.fileUploader._updateTotalProgress(totalFilesSize, totalLoadedFilesSize + segmentSize);
-      this.fileUploader._updateProgressBar(file, this._getLoadedData(loadedSize, e.total, segmentSize, e));
+      this.fileUploader._updateProgressBar(
+        file,
+        this._getLoadedData(
+          loadedSize,
+          e.total,
+          segmentSize,
+          e,
+        ),
+      );
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getLoadedData(loaded, total, currentSegmentSize, event) {
+  // eslint-disable-next-line class-methods-use-this
+  _getLoadedData(
+    loaded: number,
+    total: number,
+    currentSegmentSize: number,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _event: Event,
+  ): LoadedFileData {
     return {
       loaded,
       total,
@@ -1967,11 +2034,12 @@ class FileUploadStrategyBase {
     };
   }
 
-  _extendFormData(formData) {
+  _extendFormData(formData: FormData): void {
     const { uploadCustomData: formDataEntries } = this.fileUploader.option();
     // eslint-disable-next-line no-restricted-syntax
     for (const entryName in formDataEntries) {
-      if (Object.prototype.hasOwnProperty.call(formDataEntries, entryName) && isDefined(formDataEntries[entryName])) {
+      if (Object.prototype.hasOwnProperty.call(formDataEntries, entryName)
+         && isDefined(formDataEntries[entryName])) {
         formData.append(entryName, formDataEntries[entryName]);
       }
     }
@@ -1979,12 +2047,12 @@ class FileUploadStrategyBase {
 }
 
 class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
-  chunkSize?: any;
+  chunkSize: number;
 
-  constructor(fileUploader) {
+  constructor(fileUploader: FileUploader) {
     super(fileUploader);
     const { chunkSize } = this.fileUploader.option();
-    this.chunkSize = chunkSize;
+    this.chunkSize = chunkSize ?? 0;
   }
 
   _uploadCore(file: FileUploaderItem): void {
@@ -2013,13 +2081,13 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
     const chunk = chunksData.blobReader.read();
     chunksData.currentChunk = chunk;
     if (chunk) {
-      this._sendChunkCore(file, chunksData, chunk)
+      (this._sendChunkCore(file, chunksData, chunk) as DeferredObj<unknown>)
         .done(() => {
           if (file.isAborted) {
             return;
           }
 
-          chunksData.loadedBytes += chunk.blob.size;
+          chunksData.loadedBytes += chunk.blob?.size ?? 0;
 
           file.onProgress.fire({
             loaded: chunksData.loadedBytes,
@@ -2033,15 +2101,25 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
           setTimeout(() => this._sendChunk(file, chunksData));
         })
         .fail((error) => {
-          if (this._shouldHandleError(file, error)) {
+          if (this._shouldHandleError(file, error as { status: number })) {
             this._handleFileError(file, error);
           }
         });
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _sendChunkCore(file: FileUploaderItem, chunksData: FileUploaderChunksData, chunk): any {
+  // eslint-disable-next-line class-methods-use-this
+  _sendChunkCore(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _file: FileUploaderItem,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _chunksData: FileUploaderChunksData,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _chunk: FileBlobChunk,
+  ): DeferredObj<unknown> | PromiseLike<unknown> {
+    // This is an abstract method and should be implemented in subclasses.
+    // Returning a rejected Deferred to satisfy the return type.
+    return Deferred().reject();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -2053,27 +2131,32 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
-  _getEvent(e: Event): null {
+  _getEvent(_e: Event): null {
     return null;
   }
 
-  _createUploadArgument(file: FileUploaderItem) {
+  _createUploadArgument(file: FileUploaderItem): UploadChunkInfo {
     return this._createChunksInfo(file.chunksData);
   }
 
-  _createChunksInfo(chunksData) {
+  // eslint-disable-next-line class-methods-use-this
+  _createChunksInfo(chunksData?: FileUploaderChunksData): UploadChunkInfo {
     return {
-      bytesUploaded: chunksData.loadedBytes,
-      chunkCount: chunksData.count,
-      customData: chunksData.customData,
-      chunkBlob: chunksData.currentChunk.blob,
-      chunkIndex: chunksData.currentChunk.index,
+      bytesUploaded: chunksData?.loadedBytes ?? 0,
+      chunkCount: chunksData?.count ?? 0,
+      customData: chunksData?.customData ?? {},
+      chunkBlob: chunksData?.currentChunk?.blob ?? new Blob(),
+      chunkIndex: chunksData?.currentChunk?.index ?? 0,
     };
   }
 }
 
 class DefaultChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
-  _sendChunkCore(file, chunksData, chunk) {
+  _sendChunkCore(
+    file: FileUploaderItem,
+    chunksData: FileUploaderChunksData,
+    chunk: FileBlobChunk,
+  ): DeferredObj<FileUploaderChunkUploadResponse> {
     const {
       uploadUrl, uploadMethod, uploadHeaders, name,
     } = this.fileUploader.option();
@@ -2098,11 +2181,11 @@ class DefaultChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
         guid: chunksData.guid,
         size: chunksData.fileSize,
       }),
-    });
+    }) as DeferredObj<FileUploaderChunkUploadResponse>;
   }
 
-  _createFormData(options) {
-    // @ts-expect-error
+  _createFormData(options: ChunkFormDataOptions): FormData {
+    // @ts-expect-error: window.FormData may not be typed in all environments
     const formData = new window.FormData();
     formData.append(options.blobName, options.blob);
     formData.append(FILEUPLOADER_CHUNK_META_DATA_NAME, JSON.stringify({
@@ -2114,12 +2197,16 @@ class DefaultChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
       FileGuid: options.guid,
     }));
     this._extendFormData(formData);
-    return formData;
+
+    return formData as FormData;
   }
 }
 
 class CustomChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
-  _sendChunkCore(file, chunksData) {
+  _sendChunkCore(
+    file: FileUploaderItem,
+    chunksData: FileUploaderChunksData,
+  ): PromiseLike<unknown> {
     this._tryRaiseStartLoad(file);
 
     const chunksInfo = this._createChunksInfo(chunksData);
@@ -2132,16 +2219,17 @@ class CustomChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _shouldHandleError(file, error) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  _shouldHandleError(_file: FileUploaderItem, _error: unknown): boolean {
     return true;
   }
 }
 
 class WholeFileUploadStrategyBase extends FileUploadStrategyBase {
-  _uploadCore(file) {
+  _uploadCore(file: FileUploaderItem): void {
     file.loadedSize = 0;
     this._uploadFile(file)
+      // @ts-expect-error
       .done(() => {
         if (!file.isAborted) {
           file.onLoad.fire();
@@ -2154,24 +2242,35 @@ class WholeFileUploadStrategyBase extends FileUploadStrategyBase {
       });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _uploadFile(file): any {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  _uploadFile(_file: FileUploaderItem): PromiseLike<unknown> | DeferredObj<unknown> {
+    // Abstract method: subclasses should override this.
+    // Return a rejected Deferred to satisfy the return type.
+    return Deferred().reject();
   }
 
-  _handleProgressCore(file, e) {
+  // eslint-disable-next-line class-methods-use-this
+  _handleProgressCore(
+    file: FileUploaderItem,
+    e: Event | { loaded?: number; total?: number },
+  ): void {
     file.onProgress.fire(e);
   }
 
-  _getLoadedData(loaded, total, segmentSize, event) {
+  _getLoadedData(
+    loaded: number,
+    total: number,
+    segmentSize: number,
+    event: Event,
+  ): LoadedFileData {
     const result = super._getLoadedData(loaded, total, segmentSize, event);
-    // @ts-expect-error
     result.event = event;
     return result;
   }
 }
 
 class DefaultWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
-  _uploadFile(file) {
+  _uploadFile(file: FileUploaderItem): DeferredObj<FileUploaderChunkUploadResponse> {
     const {
       uploadUrl, uploadMethod, uploadHeaders, name,
     } = this.fileUploader.option();
@@ -2187,23 +2286,24 @@ class DefaultWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
         onabort: () => file.onAbort.fire(),
       },
       data: this._createFormData(name, file.value),
-    });
+    }) as DeferredObj<FileUploaderChunkUploadResponse>;
   }
 
-  _createFormData(fieldName, fieldValue) {
+  _createFormData(fieldName?: string, fieldValue?: File): FormData {
     // @ts-expect-error
     const formData = new window.FormData();
-    formData.append(fieldName, fieldValue, fieldValue.name);
+    formData.append(fieldName, fieldValue, fieldValue?.name);
     this._extendFormData(formData);
+
     return formData;
   }
 }
 
 class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
-  _uploadFile(file: FileUploaderItem) {
+  _uploadFile(file: FileUploaderItem): PromiseLike<unknown> {
     file.onLoadStart.fire();
 
-    const progressCallback = (loadedBytes) => {
+    const progressCallback = (loadedBytes: number): void => {
       const arg = {
         loaded: loadedBytes,
         total: file.value.size,
@@ -2214,14 +2314,15 @@ class CustomWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
     const { uploadFile } = this.fileUploader.option();
     try {
       const result = uploadFile?.(file.value, progressCallback);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return fromPromise(result);
     } catch (error) {
       return Deferred().reject(error).promise();
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _shouldHandleError(file, e) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  _shouldHandleError(_file: FileUploaderItem, _e: unknown): boolean {
     return true;
   }
 }
