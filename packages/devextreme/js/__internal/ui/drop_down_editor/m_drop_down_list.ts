@@ -28,11 +28,11 @@ import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import { getConvertedDataSource } from '@ts/data/data_converter/grouped';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
 import List from '@ts/ui/list/list.edit.search';
 import type { GroupedItem } from '@ts/ui/list/list.edit.strategy.grouped';
-import { getConvertedDataSource } from '@ts/ui/shared/m_grouped_data_converter_mixin';
 
 const window = getWindow();
 
