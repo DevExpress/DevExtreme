@@ -540,6 +540,7 @@ class Menu extends MenuBase<MenuProperties> {
       selectByClick,
       expandEvent: 'click',
       _supportItemUrl: true,
+      showItemStubs: false,
     };
   }
 

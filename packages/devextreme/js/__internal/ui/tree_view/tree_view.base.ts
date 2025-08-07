@@ -81,7 +81,7 @@ const ITEM_URL_CLASS = 'dx-item-url';
 const CHECK_BOX_CLASS = 'dx-checkbox';
 const CHECK_BOX_ICON_CLASS = 'dx-checkbox-icon';
 const ROOT_NODE_CLASS = `${WIDGET_CLASS}-root-node`;
-const EXPANDER_ICON_STUB_CLASS = `${WIDGET_CLASS}-expander-icon-stub`;
+export const EXPANDER_ICON_STUB_CLASS = `${WIDGET_CLASS}-expander-icon-stub`;
 
 type TreeViewItem = Item & {
   url?: string;
@@ -95,6 +95,8 @@ export interface TreeViewBaseProperties extends Properties<TreeViewNode>, Omit<
   deferRendering?: boolean;
 
   _supportItemUrl?: boolean;
+
+  showItemStubs?: boolean;
 }
 
 class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, TreeViewNode> {
@@ -275,6 +277,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       createChildren: null,
       onSelectAllValueChanged: null,
       _supportItemUrl: false,
+      showItemStubs: true,
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -416,6 +419,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       case 'virtualModeEnabled':
       case 'selectByClick':
       case '_supportItemUrl':
+      case 'showItemStubs':
         break;
       case 'selectionMode':
         this._initDataAdapter();
@@ -909,9 +913,12 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   _renderChildren($node: dxElementWrapper, node: TreeViewNode): void {
     if (!this._hasChildren(node)) {
       this._addLeafClass($node);
-      $('<div>')
-        .addClass(EXPANDER_ICON_STUB_CLASS)
-        .appendTo(this._getItem($node));
+      const { showItemStubs } = this.option();
+      if (showItemStubs) {
+        $('<div>')
+          .addClass(EXPANDER_ICON_STUB_CLASS)
+          .appendTo(this._getItem($node));
+      }
       return;
     }
 
