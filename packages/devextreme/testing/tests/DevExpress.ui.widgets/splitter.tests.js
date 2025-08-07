@@ -34,7 +34,7 @@ QUnit.testStart(() => {
                 border: 10px solid black;
             }
         </style>
-        
+
         <div id="splitter"></div>
         <div id="splitterParentContainer">
             <div id="splitterInContainer"></div>
@@ -2521,6 +2521,33 @@ QUnit.module('Behavior', moduleConfig, () => {
             this.assertLayout(expectedLayout);
             this.checkItemSizes(expectedItemSizes);
         });
+    });
+
+    QUnit.test('resize handler should call the clear selection on double click to prevent content selection (T1302984)', function(assert) {
+        this.reinit({
+            items: [ { collapsible: true }, { collapsible: true } ],
+        });
+
+        const $resizeHandle = this.getResizeHandles().eq(0);
+
+        const originalGetSelection = window.getSelection;
+        const mockedSelection = {
+            type: 'Range',
+            empty: sinon.spy(),
+            removeAllRanges: sinon.spy(),
+        };
+
+        window.getSelection = sinon.stub().returns(mockedSelection);
+
+        $resizeHandle.trigger($.Event(DOUBLE_CLICK_EVENT));
+
+        assert.strictEqual(
+            mockedSelection.empty.called || mockedSelection.removeAllRanges.called,
+            true,
+            'clearSelection should be called on double click on resize handler'
+        );
+
+        window.getSelection = originalGetSelection;
     });
 
     QUnit.module('Visibility class of panes with no size', moduleConfig, () => {
