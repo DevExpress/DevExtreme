@@ -1,49 +1,60 @@
 import { isObject } from '@js/core/utils/type';
+import type { DataSourceLike, DataSourceOptions } from '@js/data/data_source';
+import type { GroupedItem } from '@ts/ui/list/list.edit.strategy.grouped';
 
-const isCorrectStructure = (data) => Array.isArray(data) && data.every((item) => {
-  const hasTwoFields = Object.keys(item).length === 2;
-  const hasCorrectFields = 'key' in item && 'items' in item;
+type ConvertedDataSourceLike<TItem> = DataSourceLike<TItem>
+  & { group?: DataSourceOptions['group'] & { keepInitialKeyOrder?: boolean } };
 
-  return hasTwoFields && hasCorrectFields && Array.isArray(item.items);
-});
+const hasCorrectStructure = (
+  data: DataSourceLike<GroupedItem>,
+): data is GroupedItem[] => Array.isArray(data)
+  && data.every((item: GroupedItem): boolean => {
+    const hasTwoFields = Object.keys(item).length === 2;
+    const hasCorrectFields = 'key' in item && 'items' in item;
 
-export default {
-  _getSpecificDataSourceOption() {
-    const groupKey = 'key';
-    let dataSource = this.option('dataSource');
-    let hasSimpleItems = false;
-    let data = {};
+    return hasTwoFields
+      && hasCorrectFields
+      && Array.isArray(item.items);
+  });
 
-    if (this._getGroupedOption() && isCorrectStructure(dataSource)) {
-      data = dataSource.reduce((accumulator, item) => {
-        const items = item.items.map((innerItem) => {
-          if (!isObject(innerItem)) {
-            innerItem = { text: innerItem };
-            hasSimpleItems = true;
-          }
+export function getConvertedDataSource(
+  dataSource: DataSourceLike<GroupedItem>,
+  isGrouped?: boolean,
+): ConvertedDataSourceLike<GroupedItem> {
+  const groupKey = 'key';
 
-          if (!(groupKey in innerItem)) {
-            innerItem[groupKey] = item.key;
-          }
-
-          return innerItem;
-        });
-        return accumulator.concat(items);
-      }, []);
-
-      dataSource = {
-        store: {
-          type: 'array',
-          data,
-        },
-        group: { selector: 'key', keepInitialKeyOrder: true },
-      };
-
-      if (hasSimpleItems) {
-        dataSource.searchExpr = 'text';
-      }
-    }
-
+  if (!isGrouped || !hasCorrectStructure(dataSource)) {
     return dataSource;
-  },
-};
+  }
+
+  let hasSimpleItems = false;
+
+  const data = dataSource.reduce((accumulator: GroupedItem[], item: GroupedItem) => {
+    const items = item.items?.map((listItem) => {
+      let innerItem = listItem;
+      if (!isObject(innerItem)) {
+        innerItem = { text: innerItem };
+        hasSimpleItems = true;
+      }
+
+      if (!(groupKey in innerItem)) {
+        innerItem[groupKey] = item.key;
+      }
+
+      return innerItem;
+    }) ?? [];
+    return accumulator.concat(items);
+  }, []);
+
+  return {
+    store: {
+      type: 'array',
+      data,
+    },
+    group: {
+      selector: 'key',
+      keepInitialKeyOrder: true,
+    },
+    searchExpr: hasSimpleItems ? 'text' : undefined,
+  };
+}

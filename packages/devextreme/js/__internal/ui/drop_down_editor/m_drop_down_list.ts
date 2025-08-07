@@ -22,6 +22,7 @@ import { each } from '@js/core/utils/iterator';
 import { getOuterHeight } from '@js/core/utils/size';
 import { isDefined, isObject, isWindow } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import type { DataSourceLike } from '@js/data/data_source';
 import type { dxDropDownListOptions } from '@js/ui/drop_down_editor/ui.drop_down_list';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import type { Properties as PopupProperties } from '@js/ui/popup';
@@ -30,7 +31,8 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
 import List from '@ts/ui/list/list.edit.search';
-import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
+import type { GroupedItem } from '@ts/ui/list/list.edit.strategy.grouped';
+import { getConvertedDataSource } from '@ts/ui/shared/m_grouped_data_converter_mixin';
 
 const window = getWindow();
 
@@ -87,8 +89,11 @@ class DropDownList<
       tab(e): void {
         if (this._allowSelectItemByTab()) {
           this._saveValueChangeEvent(e);
-          const $focusedItem = $(this._list.option('focusedElement'));
-          $focusedItem.length && this._setSelectedElement($focusedItem);
+          const { focusedElement } = this._list.option();
+          const $focusedItem = $(focusedElement);
+          if ($focusedItem.length) {
+            this._setSelectedElement($focusedItem);
+          }
         }
 
         parentSupportedKeys.tab(e);
@@ -381,7 +386,8 @@ class DropDownList<
 
   _getPlainItems(items?) {
     let plainItems: any = [];
-    const grouped = this._getGroupedOption();
+
+    const { grouped } = this.option();
 
     items = items || this.option('items') || this._dataSource.items() || [];
 
@@ -642,8 +648,14 @@ class DropDownList<
     };
   }
 
-  _getGroupedOption() {
-    return this.option('grouped');
+  _getSpecificDataSourceOption(): DataSourceLike<GroupedItem> | undefined {
+    const { dataSource, grouped } = this.option();
+
+    if (!dataSource) {
+      return undefined;
+    }
+
+    return getConvertedDataSource(dataSource, grouped);
   }
 
   _dataSourceFromUrlLoadMode(): string {
@@ -1038,7 +1050,7 @@ class DropDownList<
 }
 
 // @ts-expect-error ts-error
-DropDownList.include(DataExpressionMixin, DataConverterMixin);
+DropDownList.include(DataExpressionMixin);
 
 registerComponent('dxDropDownList', DropDownList);
 
