@@ -2,7 +2,11 @@ import { isObject } from '@js/core/utils/type';
 import type { DataSourceLike, DataSourceOptions } from '@js/data/data_source';
 
 type ConvertedDataSourceLike<TItem> = DataSourceLike<TItem>
-  & { group?: DataSourceOptions['group'] & { keepInitialKeyOrder?: boolean } };
+  & {
+    group?: DataSourceOptions['group'] & {
+      keepInitialKeyOrder?: boolean;
+    };
+  };
 
 const groupKey = 'key';
 
