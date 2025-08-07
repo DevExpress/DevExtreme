@@ -8,6 +8,7 @@ import config from 'core/config';
 import { createEvent } from 'common/core/events/utils/index';
 import { name as DOUBLE_CLICK_EVENT } from 'common/core/events/double_click';
 import { name as CLICK_EVENT } from 'common/core/events/click';
+import { getWindow } from 'core/utils/window';
 
 import 'generic_light.css!';
 
@@ -2530,6 +2531,7 @@ QUnit.module('Behavior', moduleConfig, () => {
 
         const $resizeHandle = this.getResizeHandles().eq(0);
 
+        const window = getWindow();
         const originalGetSelection = window.getSelection;
         const mockedSelection = {
             type: 'Range',
