@@ -4,13 +4,11 @@ import type * as StateManagementTypes from './types';
 export class EventEmitter<T extends (...args: any[]) => void> {
   private readonly listeners: T[] = [];
 
-  private readonly logger: StateManagementTypes.Logger;
+  constructor(
+    private readonly eventName: string,
+    private readonly logger: StateManagementTypes.Logger,
+  ) {
 
-  private readonly eventName: string;
-
-  constructor(eventName: string, logger: StateManagementTypes.Logger) {
-    this.eventName = eventName;
-    this.logger = logger;
   }
 
   addListener(callback: T): void {

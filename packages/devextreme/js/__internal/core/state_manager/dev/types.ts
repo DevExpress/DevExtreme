@@ -105,6 +105,7 @@ export interface DevToolsConnector {
     action: StateChangeActionType, payload: StateChangePayload, state?: ComponentState
   ) => void;
   onExternalAction: (callback: DevToolsExternalActionCallback) => void;
+  isConnected: boolean;
 }
 
 // eslint-disable-next-line spellcheck/spell-checker

@@ -15,8 +15,6 @@ const ctx = require('./context.js');
 const headerPipes = require('./header-pipes.js');
 const webpackConfig = require('../../webpack.config.js');
 const env = require('./env-variables.js');
-const { STATE_MANAGER_INDEX_MODULE_PATH, STATE_MANAGER_PRODUCTION_MODULE_PATH } = require('./state_manager/constants');
-
 const namedDebug = lazyPipe()
     .pipe(named, (file) => path.basename(file.path, path.extname(file.path)) + '.debug');
 
@@ -31,7 +29,7 @@ const DEBUG_BUNDLES = BUNDLES.concat([ '/bundles/dx.custom.js' ]);
 
 const processBundles = (bundles, pathPrefix) => bundles.map((bundle) => pathPrefix + bundle);
 const muteWebPack = () => undefined;
-const getWebpackConfig = (watch) => {
+const getWebpackConfig = () => {
     const plugins = [];
     const isInternalBuild = env.BUILD_INTERNAL_PACKAGE || env.BUILD_TEST_INTERNAL_PACKAGE;
 
@@ -66,7 +64,7 @@ gulp.task('js-bundles-prod',
 );
 
 function prepareDebugMeta(watch) {
-    const debugConfig = Object.assign({ watch }, getWebpackConfig(watch));
+    const debugConfig = Object.assign({ watch }, getWebpackConfig());
     const bundlesPath = ctx.TRANSPILED_PROD_RENOVATION_PATH;
 
     const bundles = processBundles(DEBUG_BUNDLES, bundlesPath);

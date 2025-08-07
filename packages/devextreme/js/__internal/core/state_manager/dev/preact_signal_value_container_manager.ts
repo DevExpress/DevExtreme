@@ -9,23 +9,14 @@ function isSignal(value: { brand?: symbol } | unknown):
   return false;
 }
 
-// eslint-disable-next-line @stylistic/max-len
-export class PreactSignalValueContainerManager implements StateManagementTypes.ValueContainerManager {
-  private readonly logger: StateManagementTypes.Logger;
-
-  private readonly stateSourceSign: string;
-
-  private readonly valueContainer: StateManagementTypes.ObservableValueContainer;
-
+export class PreactSignalValueContainerManager
+implements StateManagementTypes.ValueContainerManager {
   constructor(
-    logger: StateManagementTypes.Logger,
-    stateSourceSign: string,
-    valueContainer: StateManagementTypes.ObservableValueContainer,
+    private readonly logger: StateManagementTypes.Logger,
+    private readonly stateSourceSign: string,
+    private readonly valueContainer: StateManagementTypes.ObservableValueContainer,
   ) {
-    this.logger = logger;
 
-    this.stateSourceSign = stateSourceSign;
-    this.valueContainer = valueContainer;
   }
 
   trackChanges(
@@ -38,26 +29,24 @@ export class PreactSignalValueContainerManager implements StateManagementTypes.V
 
     const previousValue = this.getValue();
 
-    if (this.valueContainer.subscribe) {
-      this.valueContainer.subscribe((newValue) => {
-        try {
-          const payload: StateManagementTypes.ValueContainerChange['payload'] = {
-            previousValue,
-            newValue,
-            timestamp: Date.now(),
-            source: this.captureSource(this.valueContainer),
-          };
+    this.valueContainer.subscribe((newValue) => {
+      try {
+        const payload: StateManagementTypes.ValueContainerChange['payload'] = {
+          previousValue,
+          newValue,
+          timestamp: Date.now(),
+          source: this.captureSource(this.valueContainer),
+        };
 
-          const change: StateManagementTypes.ValueContainerChange = {
-            payload,
-          };
+        const change: StateManagementTypes.ValueContainerChange = {
+          payload,
+        };
 
-          onChange(change);
-        } catch (error) {
-          this.logger.error('Error in Preact Signal subscription', error);
-        }
-      });
-    }
+        onChange(change);
+      } catch (error) {
+        this.logger.error('Error in Preact Signal subscription', error);
+      }
+    });
   }
 
   getValue(): StateManagementTypes.ObservableValueContainer['value'] {
@@ -68,7 +57,7 @@ export class PreactSignalValueContainerManager implements StateManagementTypes.V
     if (valueContainer.stack) {
       const { stack } = valueContainer;
 
-      return this.findStateSourceLine(stack);
+      return this.findStateSourceLine(stack).trim();
     }
 
     return 'The source is not tracked';
@@ -77,16 +66,11 @@ export class PreactSignalValueContainerManager implements StateManagementTypes.V
   private findStateSourceLine(stack: string): string {
     const lines = stack.split('\n');
 
-    const controllerLine = lines.find((line) => line.includes(this.stateSourceSign));
+    const stateSourceLine = lines
+      .find((line) => line.includes(this.stateSourceSign));
 
-    return controllerLine ?? (lines.length > 1 ? lines[1] : '');
+    return stateSourceLine ?? (lines.length > 1 ? lines[1] : '');
   }
-}
-
-function isPreactSignalValueContainer(
-  valueContainer: StateManagementTypes.MaybeValueContainer,
-): valueContainer is StateManagementTypes.ObservableValueContainer {
-  return isSignal(valueContainer);
 }
 
 export const PreactSignalValueContainerManagerFactory:
@@ -94,7 +78,7 @@ StateManagementTypes.ValueContainerManagerConstructor = {
   canHandle(
     valueContainer: StateManagementTypes.MaybeValueContainer,
   ): valueContainer is StateManagementTypes.ObservableValueContainer {
-    return isPreactSignalValueContainer(valueContainer);
+    return isSignal(valueContainer);
   },
 
   create(
@@ -102,7 +86,7 @@ StateManagementTypes.ValueContainerManagerConstructor = {
     stateSourceSign: string,
     valueContainer: StateManagementTypes.MaybeValueContainer,
   ): StateManagementTypes.ValueContainerManager {
-    if (!isPreactSignalValueContainer(valueContainer)) {
+    if (!isSignal(valueContainer)) {
       throw new Error('Invalid value container for PreactSignalValueContainerManager');
     }
 

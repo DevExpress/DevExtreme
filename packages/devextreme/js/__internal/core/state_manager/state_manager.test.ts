@@ -41,7 +41,7 @@ describe('StateManager', () => {
     process.env = originalEnv;
   });
 
-  describe('Component signal tracking', () => {
+  describe('Component state sources tracking', () => {
     let diContext: DIContext;
     let testComponentStateTracker: StateManager;
     let initialPagerConfig: { infinityScrollingEnabled: boolean };

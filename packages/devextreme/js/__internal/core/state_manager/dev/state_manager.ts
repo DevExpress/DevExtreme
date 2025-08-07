@@ -10,7 +10,7 @@ class StateManager implements StateManagementTypes.StateManager {
 
   private readonly logger: StateManagementTypes.Logger;
 
-  private componentState: StateManagementTypes.ComponentState;
+  readonly componentState: StateManagementTypes.ComponentState;
 
   private readonly stateSourceSign: string;
 
@@ -52,24 +52,25 @@ class StateManager implements StateManagementTypes.StateManager {
     }
 
     Object.entries(sourceData).forEach(([propertyName, propertyValue]) => {
-      if (this.hasValueContainerManagerFor(propertyValue)) {
-        if (!this.componentState[preparedSourceDataId]) {
-          this.componentState[preparedSourceDataId] = {};
-        }
-
-        const isObject = propertyValue !== undefined && propertyValue !== null
-          && typeof propertyValue === 'object';
-        this.componentState[preparedSourceDataId][propertyName] = isObject
-          ? new WeakRef(propertyValue) : propertyValue;
-
-        this.trackStateSourceChanges(
-          preparedSourceDataId,
-          propertyName,
-          propertyValue,
-        );
-      } else {
+      if (!this.hasValueContainerManagerFor(propertyValue)) {
         this.logger.debug(`No value container manager found for the '${propertyName}' property of the '${preparedSourceDataId}' state source`);
+        return;
       }
+
+      if (!this.componentState[preparedSourceDataId]) {
+        this.componentState[preparedSourceDataId] = {};
+      }
+
+      const isObject = propertyValue !== undefined && propertyValue !== null
+          && typeof propertyValue === 'object';
+      this.componentState[preparedSourceDataId][propertyName] = isObject
+        ? new WeakRef(propertyValue) : propertyValue;
+
+      this.trackStateSourceChanges(
+        preparedSourceDataId,
+        propertyName,
+        propertyValue,
+      );
     });
   }
 
@@ -78,7 +79,7 @@ class StateManager implements StateManagementTypes.StateManager {
     propertyName: string,
     propertyValue: StateManagementTypes.MaybeValueContainer,
   ): void {
-    const valueContainerManager = this.findValueContainerManagerFor(propertyValue);
+    const valueContainerManager = this.createValueContainerManagerFor(propertyValue);
 
     if (!valueContainerManager) {
       this.logger.debug(`No value container manager found for the '${propertyName}' property of the '${stateId}' state`);
@@ -107,12 +108,14 @@ class StateManager implements StateManagementTypes.StateManager {
 
           const updatedComponentState = this.getComponentState();
 
-          this.devToolsConnector
-            .sendAction(
-              'UPDATE',
-              valueContainerChangeCopy.payload,
-              updatedComponentState,
-            );
+          if (this.devToolsConnector.isConnected) {
+            this.devToolsConnector
+              .sendAction(
+                'UPDATE',
+                valueContainerChangeCopy.payload,
+                updatedComponentState,
+              );
+          }
         },
       );
     } catch (error) {
@@ -124,16 +127,18 @@ class StateManager implements StateManagementTypes.StateManager {
     valueContainer: StateManagementTypes.MaybeValueContainer,
   ): boolean {
     return this.valueContainerManagers
-      // eslint-disable-next-line @stylistic/max-len
-      .some((currentStateContainerManager) => currentStateContainerManager.canHandle(valueContainer));
+      .some((
+        currentStateContainerManager,
+      ) => currentStateContainerManager.canHandle(valueContainer));
   }
 
-  private findValueContainerManagerFor(
+  private createValueContainerManagerFor(
     valueContainer: StateManagementTypes.MaybeValueContainer,
   ): StateManagementTypes.ValueContainerManager | undefined {
     const valueContainerManagerFactory = this.valueContainerManagers
-      // eslint-disable-next-line @stylistic/max-len
-      .find((currentStateContainerManager) => currentStateContainerManager.canHandle(valueContainer));
+      .find((
+        currentStateContainerManager,
+      ) => currentStateContainerManager.canHandle(valueContainer));
 
     if (!valueContainerManagerFactory) {
       return undefined;
@@ -154,7 +159,7 @@ class StateManager implements StateManagementTypes.StateManager {
             return acc;
           }
 
-          const valueContainerManager = this.findValueContainerManagerFor(preparedPropertyValue);
+          const valueContainerManager = this.createValueContainerManagerFor(preparedPropertyValue);
 
           if (!valueContainerManager) {
             return acc;
@@ -195,5 +200,4 @@ export const StateManagerFactory = {
 
     return new StateManager(preparedConfig);
   },
-
 };

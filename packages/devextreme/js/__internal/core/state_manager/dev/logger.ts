@@ -11,19 +11,13 @@ export interface ConsoleLoggerOptions {
 }
 
 export class Logger implements StateManagementTypes.Logger {
-  private logLevel: StateManagementTypes.LogLevel = 'info';
+  private logLevel: StateManagementTypes.LogLevel;
 
-  private prefix;
+  private prefix: string;
 
   constructor(options?: ConsoleLoggerOptions) {
-    if (options) {
-      if (options.logLevel) {
-        this.logLevel = options.logLevel;
-      }
-      if (options.prefix !== undefined) {
-        this.prefix = options.prefix;
-      }
-    }
+    this.logLevel = options?.logLevel ?? 'info';
+    this.prefix = options?.prefix ?? '';
   }
 
   setLevel(level: StateManagementTypes.LogLevel): void {
