@@ -37,7 +37,7 @@ import {
   INestedOptionContainer,
   ICollectionNestedOption,
   ICollectionNestedOptionContainer,
-  CollectionNestedOptionContainerImpl, BaseNestedOption,
+  CollectionNestedOptionContainerImpl,
 } from './nested-option';
 
 import { DxIntegrationModule } from './integration';
@@ -63,7 +63,6 @@ export const getServerStateKey = () => {
 })
 export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterContentChecked, AfterViewInit, AfterViewChecked,
     INestedOptionContainer, ICollectionNestedOptionContainer, IDxTemplateHost {
-  
   private _initialOptions: any = {};
 
   protected _optionsToUpdate: any = {};
@@ -309,7 +308,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     this.templateUpdateRequired = true;
   }
 
-  legacyClassNames = {} 
+  protected legacyClassNames = {} 
 
   checkContentChildren<T>(propertyName: string, items: QueryList<T>) {
     const legacyItem = items.find((item) => this.legacyClassNames[propertyName]?.includes(item.constructor.name));

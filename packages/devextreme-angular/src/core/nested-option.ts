@@ -150,30 +150,6 @@ export abstract class BaseNestedOption implements INestedOptionContainer, IColle
   }
 }
 
-export interface ICollectionNestedOption {
-  _index: number;
-  _value: object;
-}
-
-@Component({
-  template: '',
-})
-export abstract class CollectionNestedOption extends BaseNestedOption implements ICollectionNestedOption {
-  _index: number;
-
-  protected _fullOptionPath() {
-    return `${this._getOptionPath()}[${this._index}].`;
-  }
-
-  get _value() {
-    return this._initialOptions;
-  }
-
-  get isLinked() {
-    return this._index !== undefined && !!this.instance && this._host.isLinked;
-  }
-}
-
 export interface ICollectionNestedOptionContainer {
   setChildren: <T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) => any;
 }
@@ -182,13 +158,12 @@ export class CollectionNestedOptionContainerImpl implements ICollectionNestedOpt
   constructor(private readonly _setOption: Function, private readonly _filterItems?: Function) { }
 
   setChildren(propertyName, items) {
-
     if (this._filterItems) {
       items = this._filterItems(items);
     }
 
     if (items.length) {
-      let widgetItems = items.map((item, index) => {
+      const widgetItems = items.map((item, index) => {
         item._index = index;
         return item._value;
       });
@@ -213,7 +188,29 @@ export abstract class NestedOption extends BaseNestedOption {
   }
 }
 
+export interface ICollectionNestedOption {
+  _index: number;
+  _value: object;
+}
 
+@Component({
+  template: '',
+})
+export abstract class CollectionNestedOption extends BaseNestedOption implements ICollectionNestedOption {
+  _index: number;
+
+  protected _fullOptionPath() {
+    return `${this._getOptionPath()}[${this._index}].`;
+  }
+
+  get _value() {
+    return this._initialOptions;
+  }
+
+  get isLinked() {
+    return this._index !== undefined && !!this.instance && this._host.isLinked;
+  }
+}
 
 export interface IOptionWithTemplate extends BaseNestedOption {
   template: any;
