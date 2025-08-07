@@ -3341,7 +3341,7 @@ QUnit.module('adaptivity: render', {
         }
     });
 
-    QUnit.test('menu should not show stub elements next to treeview items if adaptivity enabled is set to true (T1302958)', function(assert) {
+    QUnit.test('menu should not show stub elements next to treeview items if adaptivityEnabled is set to true (T1302958)', function(assert) {
         new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true
