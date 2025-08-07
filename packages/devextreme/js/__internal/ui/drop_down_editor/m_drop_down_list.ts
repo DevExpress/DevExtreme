@@ -28,7 +28,7 @@ import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
-import { getConvertedDataSource } from '@ts/data/data_converter/grouped';
+import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
 import List from '@ts/ui/list/list.edit.search';
@@ -648,14 +648,14 @@ class DropDownList<
     };
   }
 
-  _getSpecificDataSourceOption(): DataSourceLike<GroupedItem> | undefined {
+  _getSpecificDataSourceOption(): DataSourceLike<GroupedItem> | null | undefined {
     const { dataSource, grouped } = this.option();
 
-    if (!dataSource) {
-      return undefined;
+    if (dataSource && grouped) {
+      return getDataSourceOptions(dataSource);
     }
 
-    return getConvertedDataSource(dataSource, grouped);
+    return dataSource;
   }
 
   _dataSourceFromUrlLoadMode(): string {

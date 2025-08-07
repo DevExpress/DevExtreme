@@ -1,14 +1,25 @@
 import { isObject } from '@js/core/utils/type';
 import type { DataSourceLike, DataSourceOptions } from '@js/data/data_source';
-import type { GroupedItem } from '@ts/ui/list/list.edit.strategy.grouped';
 
 type ConvertedDataSourceLike<TItem> = DataSourceLike<TItem>
   & { group?: DataSourceOptions['group'] & { keepInitialKeyOrder?: boolean } };
 
-const isGroupedItemArray = (
-  data: DataSourceLike<GroupedItem>,
-): data is GroupedItem[] => Array.isArray(data)
-  && data.every((item: GroupedItem): boolean => {
+const groupKey = 'key';
+
+interface Item {
+  [key: string]: unknown;
+  [groupKey]?: string;
+}
+
+interface GroupedItem {
+  key?: string;
+  items?: (Item | string | number)[];
+}
+
+const isGroupedDataArray = <TGroupedItem extends GroupedItem = GroupedItem>(
+  data: DataSourceLike<TGroupedItem>,
+): data is TGroupedItem[] => Array.isArray(data)
+  && data.every((item: TGroupedItem): boolean => {
     const hasTwoFields = Object.keys(item).length === 2;
     const hasCorrectFields = 'key' in item && 'items' in item;
 
@@ -17,20 +28,19 @@ const isGroupedItemArray = (
       && Array.isArray(item.items);
   });
 
-export function getConvertedDataSource(
-  dataSource: DataSourceLike<GroupedItem>,
-  isGrouped?: boolean,
-): ConvertedDataSourceLike<GroupedItem> {
-  const groupKey = 'key';
-
-  if (!isGrouped || !isGroupedItemArray(dataSource)) {
+export function getDataSourceOptions<
+  TGroupedItem extends GroupedItem = GroupedItem,
+>(
+  dataSource: DataSourceLike<TGroupedItem>,
+): ConvertedDataSourceLike<TGroupedItem> {
+  if (!isGroupedDataArray(dataSource)) {
     return dataSource;
   }
 
   let hasSimpleItems = false;
 
-  const data = dataSource.reduce((accumulator: GroupedItem[], item: GroupedItem) => {
-    const items = item.items?.map((listItem) => {
+  const data = dataSource.reduce((accumulator: Item[], item: TGroupedItem) => {
+    const items = item.items?.map((listItem: Item | string | number): Item => {
       let innerItem = listItem;
       if (!isObject(innerItem)) {
         innerItem = { text: innerItem };
@@ -52,7 +62,7 @@ export function getConvertedDataSource(
       data,
     },
     group: {
-      selector: 'key',
+      selector: groupKey,
       keepInitialKeyOrder: true,
     },
     searchExpr: hasSimpleItems ? 'text' : undefined,

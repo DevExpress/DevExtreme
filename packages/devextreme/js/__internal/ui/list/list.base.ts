@@ -39,7 +39,7 @@ import { render } from '@js/ui/widget/utils.ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
-import { getConvertedDataSource } from '@ts/data/data_converter/grouped';
+import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
 import type {
   CollectionItemInfo,
   CollectionItemKey,
@@ -545,14 +545,14 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     };
   }
 
-  _getSpecificDataSourceOption(): DataSourceLike<GroupedItem> | undefined {
+  _getSpecificDataSourceOption(): DataSourceLike<GroupedItem> | null | undefined {
     const { dataSource, grouped } = this.option();
 
-    if (!dataSource) {
-      return undefined;
+    if (dataSource && grouped) {
+      return getDataSourceOptions(dataSource);
     }
 
-    return getConvertedDataSource(dataSource, grouped);
+    return dataSource;
   }
 
   _getGroupContainerByIndex(groupIndex: number): dxElementWrapper {
