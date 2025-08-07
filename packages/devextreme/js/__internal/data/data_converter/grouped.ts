@@ -40,8 +40,8 @@ export function getDataSourceOptions<
   let hasSimpleItems = false;
 
   const data = dataSource.reduce((accumulator: Item[], item: TGroupedItem) => {
-    const items = item.items?.map((listItem: Item | string | number): Item => {
-      let innerItem = listItem;
+    const items = item.items?.map((value: Item | string | number): Item => {
+      let innerItem = value;
       if (!isObject(innerItem)) {
         innerItem = { text: innerItem };
         hasSimpleItems = true;
