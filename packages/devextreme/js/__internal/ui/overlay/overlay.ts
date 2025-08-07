@@ -1099,7 +1099,6 @@ class Overlay<
     $parent.add($parent.parents()).each((index, element) => {
       const $element = $(element);
 
-      // @ts-expect-error css should can get 1 argument
       if ($element.css('display') === 'none') {
         isHidden = true;
         return false;
