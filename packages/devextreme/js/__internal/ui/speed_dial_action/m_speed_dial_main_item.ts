@@ -6,8 +6,8 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getHeight } from '@js/core/utils/size';
 import { isCompact, isFluent, isMaterial } from '@js/ui/themes';
-import swatchContainer from '@js/ui/widget/swatch_container';
 import errors from '@js/ui/widget/ui.errors';
+import swatchContainer from '@ts/core/utils/m_swatch_container';
 
 import type { SpeedDialItemProperties } from './m_speed_dial_item';
 import SpeedDialItem from './m_speed_dial_item';

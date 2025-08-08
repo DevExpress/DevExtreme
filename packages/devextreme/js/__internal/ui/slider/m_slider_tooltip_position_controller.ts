@@ -1,6 +1,7 @@
 import type { VerticalEdge } from '@js/common';
 import positionUtils from '@js/common/core/animation/position';
 import { move } from '@js/common/core/animation/translator';
+import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import type {
