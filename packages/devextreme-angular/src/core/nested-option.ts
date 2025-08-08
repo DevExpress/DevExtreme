@@ -6,7 +6,7 @@ import render from 'devextreme/core/renderer';
 import { triggerHandler } from 'devextreme/events';
 import domAdapter from 'devextreme/core/dom_adapter';
 import { getElement } from './utils';
-import { DX_TEMPLATE_WRAPPER_CLASS  } from './template';
+import { DX_TEMPLATE_WRAPPER_CLASS } from './template';
 
 export const NESTED_ITEM_TOKEN = new InjectionToken<string>('nested-item');
 
@@ -30,16 +30,16 @@ const warnAboutIncompatibleNestedItems = (containerClassName: string, itemClassN
           the nested ${itemClassName} and ${anotherItemClassName} components are incompatible.
           Ensure that all nested components in the content area match.`);
   }
-}
+};
 
 export const _updateNestedItems = (
-    items: QueryList<{ propertyName: string, className: string, component: ICollectionNestedOption}>,
-    setChildrenFn: (propertyName: string, items: QueryList<ICollectionNestedOption>) => void,
-    { componentClassName, legacyClassNames }: { componentClassName: string, legacyClassNames: Record<string, string[]> }
+  items: QueryList<{ propertyName: string; className: string; component: ICollectionNestedOption }>,
+  setChildrenFn: (propertyName: string, items: QueryList<ICollectionNestedOption>) => void,
+  { componentClassName, legacyClassNames }: { componentClassName: string; legacyClassNames: Record<string, string[]> },
 ) => {
-  let hasLegacy = {};
-  const groupedItems = {}
-  
+  const hasLegacy = {};
+  const groupedItems = {};
+
   for (let index = 0; index < items.length; index++) {
     const { propertyName, className, component } = items.get(index);
 
@@ -48,7 +48,7 @@ export const _updateNestedItems = (
 
     if (legacyClassNames) {
       const isLegacyClassName = legacyClassNames[propertyName].includes(className);
-      
+
       if (index === 0) {
         hasLegacy[propertyName] = isLegacyClassName;
       } else if (hasLegacy[propertyName] !== isLegacyClassName) {
@@ -248,17 +248,17 @@ export abstract class CollectionNestedOption extends BaseNestedOption implements
   _index: number;
 
   @ContentChildren(NESTED_ITEM_TOKEN)
-  set _nestedItems(value: QueryList<{ propertyName: string, className: string, component: ICollectionNestedOption}>) {
+  set _nestedItems(value: QueryList<{ propertyName: string; className: string; component: ICollectionNestedOption }>) {
     _updateNestedItems(
-        value, 
-        this.setChildren.bind(this),
-        { 
-          componentClassName: this.constructor.name,
-          legacyClassNames: null,
-        }
+      value,
+      this.setChildren.bind(this),
+      {
+        componentClassName: this.constructor.name,
+        legacyClassNames: null,
+      },
     );
   }
-  
+
   protected _fullOptionPath() {
     return `${this._getOptionPath()}[${this._index}].`;
   }

@@ -37,9 +37,9 @@ import {
   INestedOptionContainer,
   ICollectionNestedOption,
   ICollectionNestedOptionContainer,
-  CollectionNestedOptionContainerImpl, 
+  CollectionNestedOptionContainerImpl,
   _updateNestedItems,
-  NESTED_ITEM_TOKEN
+  NESTED_ITEM_TOKEN,
 } from './nested-option';
 
 import { DxIntegrationModule } from './integration';
@@ -71,14 +71,14 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   private readonly _collectionContainerImpl: ICollectionNestedOptionContainer;
 
   @ContentChildren(NESTED_ITEM_TOKEN)
-  set _nestedItems(value: QueryList<{ propertyName: string, className: string, component: ICollectionNestedOption}>) {
+  set _nestedItems(value: QueryList<{ propertyName: string; className: string; component: ICollectionNestedOption }>) {
     _updateNestedItems(
-        value, 
-        this.setChildren.bind(this),
-        {
-          componentClassName: this.constructor.name,
-          legacyClassNames: this.getLegacyClassNames(),
-        }
+      value,
+      this.setChildren.bind(this),
+      {
+        componentClassName: this.constructor.name,
+        legacyClassNames: this.getLegacyClassNames(),
+      },
     );
   }
 
@@ -315,7 +315,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     this.templateUpdateRequired = true;
   }
 
-  protected getLegacyClassNames: () => Record<string, string[]> = () => ({}); 
+  protected getLegacyClassNames: () => Record<string, string[]> = () => ({});
 
   setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) {
     this.resetOptions(propertyName);
