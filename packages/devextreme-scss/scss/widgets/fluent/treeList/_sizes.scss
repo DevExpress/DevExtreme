@@ -4,22 +4,19 @@
 
 // adduse
 
-$treelist-expand-icon-size-fluent: null !default;
-$treelist-expand-checkbox-right-gap-fluent: null !default;
+$treelist-fluent-expand-icon-size: null !default;
 
 @if $size == "default" {
-  $treelist-expand-icon-size-fluent: 20px !default;
-  $treelist-expand-checkbox-right-gap-fluent: 12px !default;
+  $treelist-fluent-expand-icon-size: 20px !default;
 }
 
 @else if $size == "compact" {
-  $treelist-expand-icon-size-fluent: 16px !default;
-  $treelist-expand-checkbox-right-gap-fluent: 8px !default;
+  $treelist-fluent-expand-icon-size: 16px !default;
 }
 
-$treelist-expand-icon-size: $treelist-expand-icon-size-fluent !default;
+$treelist-expand-icon-size: $treelist-fluent-expand-icon-size !default;
 $treelist-expand-icon-name-expanded: chevrondown !default;
 $treelist-expand-icon-name-collapsed: chevronright !default;
 $treelist-expand-icon-right-gap: 4px !default;
 $treelist-expand-checkbox-size: 16px !default;
-$treelist-expand-checkbox-right-gap: $treelist-expand-checkbox-right-gap-fluent !default;
+$treelist-expand-checkbox-right-gap: 8px !default;
