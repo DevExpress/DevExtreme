@@ -1,4 +1,3 @@
-import type { AnimationConfig } from '@js/common/core/animation';
 import { fx } from '@js/common/core/animation';
 import { move } from '@js/common/core/animation/translator';
 import eventsEngine from '@js/common/core/events/core/events_engine';
@@ -99,6 +98,8 @@ export interface CalendarProperties extends Properties {
   _rangeMin?: Date;
   _rangeMax?: Date;
   _todayDate: () => Date;
+  onCellClick?: (e: { event: DxEvent; value: Date }) => void;
+  onContouredChanged?: (e: { activeElement: string }) => void;
 }
 
 class Calendar<
@@ -138,7 +139,7 @@ class Calendar<
 
   _alreadyViewRender?: boolean;
 
-  _waitRenderViewTimeout?: ReturnType<typeof setTimeout>;
+  _waitRenderViewTimeout?: NodeJS.Timeout;
 
   _$footer?: dxElementWrapper;
 
@@ -217,7 +218,7 @@ class Calendar<
         if (isCommandKeyPressed(e)) {
           this._navigateUp();
         } else {
-          if (fx.isAnimating(this._view.$element())) {
+          if (fx.isAnimating(this._view.$element().get(0))) {
             return;
           }
           this._moveCurrentDateByOffset(-1 * this._view.option('colCount'));
@@ -228,7 +229,7 @@ class Calendar<
         if (isCommandKeyPressed(e)) {
           this._navigateDown();
         } else {
-          if (fx.isAnimating(this._view.$element())) {
+          if (fx.isAnimating(this._view.$element().get(0))) {
             return;
           }
           this._moveCurrentDateByOffset(1 * this._view.option('colCount'));
@@ -307,10 +308,12 @@ class Calendar<
       return undefined;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateSerialization.getDateSerializationFormat(value);
   }
 
-  _convertToDate(value): Date | null {
+  _convertToDate(value: DateLike | undefined): Date | null {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateSerialization.deserializeDate(value);
   }
 
@@ -336,6 +339,7 @@ class Calendar<
   ): void {
     const serializationFormat = this._getSerializationFormat(optionName);
     const serializedValue = this._isArrayValue(optionName, optionValue)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       ? optionValue.map((value) => dateSerialization.serializeDate(value, serializationFormat))
       : dateSerialization.serializeDate(optionValue, serializationFormat);
 
@@ -345,15 +349,12 @@ class Calendar<
   _getDateOption(optionName: 'value'): Date | null | (Date | null)[];
   _getDateOption(optionName: 'min' | 'max'): Date | null;
   _getDateOption(optionName: 'value' | 'min' | 'max'): Date | null | (Date | null)[] {
-    const { value } = this.option();
-
-    if (!this._isArrayValue(optionName, value)) {
-      const { [optionName]: optionValue } = this.option();
-
+    const { [optionName]: optionValue } = this.option();
+    if (!this._isArrayValue(optionName, optionValue)) {
       return this._convertToDate(optionValue);
     }
 
-    const valueArray = value ?? [];
+    const valueArray = optionValue ?? [];
 
     return valueArray.map((item) => this._convertToDate(item));
   }
@@ -627,10 +628,8 @@ class Calendar<
   }
 
   _updateCurrentDate(date: Date): void {
-    // @ts-expect-error ts-error
-    if (fx.isAnimating(this._$viewsWrapper)) {
-      // @ts-expect-error ts-error
-      fx.stop(this._$viewsWrapper, true);
+    if (fx.isAnimating(this._$viewsWrapper.get(0))) {
+      fx.stop(this._$viewsWrapper.get(0), true);
     }
 
     const min = this._getMinDate();
@@ -771,6 +770,7 @@ class Calendar<
 
     this._moveToClosestAvailableDate(date);
 
+    // eslint-disable-next-line no-restricted-globals
     this._waitRenderViewTimeout = setTimeout(() => {
       this._alreadyViewRender = false;
     });
@@ -1098,7 +1098,7 @@ class Calendar<
     };
   }
 
-  _navigatorClickHandler(e): void {
+  _navigatorClickHandler(e: { direction: number; event: ClickEvent }): void {
     const { currentDate, viewsCount } = this.option();
     let offset = e.direction;
 
@@ -1159,8 +1159,7 @@ class Calendar<
   }
 
   _swipeStartHandler(e: SwipeStartEvent): void {
-    // @ts-expect-error ts-error
-    fx.stop(this._$viewsWrapper, true);
+    fx.stop(this._$viewsWrapper.get(0), true);
     const { viewsCount } = this.option();
 
     this._toggleGestureCoverCursor('grabbing');
@@ -1203,6 +1202,7 @@ class Calendar<
       && (rtlEnabled ? moveOffset === -1 : moveOffset === 1);
 
     if (moveOffset === 0) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._animateWrapper(0, ANIMATION_DURATION_SHOW_VIEW);
       return;
     }
@@ -1318,10 +1318,16 @@ class Calendar<
       .appendTo(this.$element());
 
     const { value } = this.option();
+    // if (!this._isArrayValue('value', value)) {
     this._setSubmitValue(value);
+    // }
   }
 
-  _setSubmitValue(value): void {
+  _setSubmitValue(value: DateLike | DateLike[] | undefined): void {
+    if (this._isArrayValue('value', value)) {
+      return;
+    }
+
     const dateValue = this._convertToDate(value);
     this._getSubmitElement()
       .val(dateSerialization.serializeDate(dateValue, CALENDAR_INPUT_STANDARD_PATTERN));
@@ -1332,8 +1338,8 @@ class Calendar<
   }
 
   _animateShowView(): void {
-    // @ts-expect-error ts-error
-    fx.stop(this._view.$element(), true);
+    fx.stop(this._view.$element().get(0), true);
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._popAnimationView(
       this._view,
       POP_ANIMATION_FROM,
@@ -1344,8 +1350,8 @@ class Calendar<
     const { viewsCount } = this.option();
 
     if (viewsCount > 1) {
-      // @ts-expect-error ts-error
-      fx.stop(this._additionalView.$element(), true);
+      fx.stop(this._additionalView.$element().get(0), true);
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._popAnimationView(
         this._additionalView,
         POP_ANIMATION_FROM,
@@ -1357,12 +1363,11 @@ class Calendar<
 
   _popAnimationView(
     view: MonthView | YearView | DecadeView | CenturyView,
-    from: AnimationConfig['from'],
-    to: AnimationConfig['to'],
+    from: number,
+    to: number,
     duration: number,
   ): Promise<unknown> {
-    // @ts-expect-error ts-error
-    return fx.animate(view.$element(), {
+    return fx.animate(view.$element().get(0), {
       type: 'pop',
       from: {
         scale: from,
@@ -1408,9 +1413,8 @@ class Calendar<
     }
   }
 
-  _animateWrapper(to: AnimationConfig['to'], duration: number): Promise<unknown> {
-    // @ts-expect-error ts-error
-    return fx.animate(this._$viewsWrapper, {
+  _animateWrapper(to: number, duration: number): Promise<void> {
+    return fx.animate(this._$viewsWrapper.get(0), {
       type: 'slide',
       // @ts-expect-error ts-error
       from: { left: this._$viewsWrapper.position().left },
@@ -1457,11 +1461,11 @@ class Calendar<
     }
 
     const { viewsCount } = this.option();
-    let viewOffset;
-    let viewToCreateKey;
-    let viewToRemoveKey;
-    let viewBeforeCreateKey;
-    let viewAfterRemoveKey;
+    let viewOffset = -1;
+    let viewToCreateKey = '_afterView';
+    let viewToRemoveKey = '_beforeView';
+    let viewBeforeCreateKey = viewsCount === 1 ? '_view' : '_additionalView';
+    let viewAfterRemoveKey = '_view';
 
     if (offset < 0) {
       viewOffset = 1;
@@ -1469,12 +1473,6 @@ class Calendar<
       viewToRemoveKey = '_afterView';
       viewBeforeCreateKey = '_view';
       viewAfterRemoveKey = viewsCount === 1 ? '_view' : '_additionalView';
-    } else {
-      viewOffset = -1;
-      viewToCreateKey = '_afterView';
-      viewToRemoveKey = '_beforeView';
-      viewBeforeCreateKey = viewsCount === 1 ? '_view' : '_additionalView';
-      viewAfterRemoveKey = '_view';
     }
 
     if (!this[viewToCreateKey]) {
@@ -1727,8 +1725,7 @@ class Calendar<
         if (!isSameValue) {
           this._selectionStrategy.processValueChanged(value, previousValue);
         }
-
-        this._setSubmitValue(value);
+        this._setSubmitValue(value as DateLike | DateLike[] | undefined);
         super._optionChanged(args);
         break;
       }
