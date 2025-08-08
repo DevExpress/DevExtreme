@@ -18,11 +18,11 @@ import { DashStyle, Font } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-circular-gauge-tooltip',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCircularGaugeTooltipComponent) => ({
+                propertyName: 'tooltip',
+                className: 'DxoCircularGaugeTooltipComponent',
+                component
+            }),
+            deps: [DxoCircularGaugeTooltipComponent],
+         }
+         ]
 })
-export class DxoCircularGaugeTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeTooltipComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');
@@ -165,7 +176,6 @@ export class DxoCircularGaugeTooltipComponent extends NestedOption implements On
     protected get _optionPath() {
         return 'tooltip';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

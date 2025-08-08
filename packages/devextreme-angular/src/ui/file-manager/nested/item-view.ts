@@ -17,11 +17,11 @@ import {
 import { dxFileManagerDetailsColumn, FileManagerItemViewMode } from 'devextreme/ui/file_manager';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-file-manager-item-view',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoFileManagerItemViewComponent) => ({
+                propertyName: 'itemView',
+                className: 'DxoFileManagerItemViewComponent',
+                component
+            }),
+            deps: [DxoFileManagerItemViewComponent],
+         }
+         ]
 })
-export class DxoFileManagerItemViewComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFileManagerItemViewComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get details(): { columns?: Array<dxFileManagerDetailsColumn | string> } {
         return this._getOption('details');
@@ -68,7 +79,6 @@ export class DxoFileManagerItemViewComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'itemView';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

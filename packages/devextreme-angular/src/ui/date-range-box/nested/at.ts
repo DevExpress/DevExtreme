@@ -17,11 +17,11 @@ import {
 import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-date-range-box-at',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDateRangeBoxAtComponent) => ({
+                propertyName: 'at',
+                className: 'DxoDateRangeBoxAtComponent',
+                component
+            }),
+            deps: [DxoDateRangeBoxAtComponent],
+         }
+         ]
 })
-export class DxoDateRangeBoxAtComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDateRangeBoxAtComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get x(): HorizontalAlignment {
         return this._getOption('x');
@@ -52,7 +63,6 @@ export class DxoDateRangeBoxAtComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'at';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

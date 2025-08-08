@@ -21,6 +21,7 @@ import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import { ToolbarLocation } from 'devextreme/ui/popup';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -30,14 +31,25 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-
 @Component({
     selector: 'dxi-tree-list-toolbar-item',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiTreeListToolbarItemComponent) => ({
+                propertyName: 'toolbarItems',
+                className: 'DxiTreeListToolbarItemComponent',
+                component
+            }),
+            deps: [DxiTreeListToolbarItemComponent],
+         }
+         ]
 })
 export class DxiTreeListToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -149,7 +161,6 @@ export class DxiTreeListToolbarItemComponent extends CollectionNestedOption impl
     protected get _optionPath() {
         return 'toolbarItems';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/validation_summary';
@@ -42,10 +40,6 @@ import {
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiValidationSummaryItemModule } from 'devextreme-angular/ui/validation-summary/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiValidationSummaryItemComponent } from 'devextreme-angular/ui/validation-summary/nested';
 
 
 /**
@@ -210,22 +204,20 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
 
 
-    @ContentChildren(DxiValidationSummaryItemComponent)
-    get itemsChildren(): QueryList<DxiValidationSummaryItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiValidationSummaryItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

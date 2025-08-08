@@ -19,11 +19,11 @@ import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-gantt-resources',
@@ -31,9 +31,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoGanttResourcesComponent) => ({
+                propertyName: 'resources',
+                className: 'DxoGanttResourcesComponent',
+                component
+            }),
+            deps: [DxoGanttResourcesComponent],
+         }
+         ]
 })
-export class DxoGanttResourcesComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGanttResourcesComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get colorExpr(): Function | string {
         return this._getOption('colorExpr');
@@ -70,7 +81,6 @@ export class DxoGanttResourcesComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'resources';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

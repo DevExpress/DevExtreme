@@ -17,11 +17,11 @@ import {
 import { ChartsColor, DashStyle } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-common-pane-settings',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCommonPaneSettingsComponent) => ({
+                propertyName: 'commonPaneSettings',
+                className: 'DxoCommonPaneSettingsComponent',
+                component
+            }),
+            deps: [DxoCommonPaneSettingsComponent],
+         }
+         ]
 })
-export class DxoCommonPaneSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCommonPaneSettingsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get backgroundColor(): ChartsColor | string {
         return this._getOption('backgroundColor');
@@ -52,7 +63,6 @@ export class DxoCommonPaneSettingsComponent extends NestedOption implements OnDe
     protected get _optionPath() {
         return 'commonPaneSettings';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

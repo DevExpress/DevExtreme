@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tree-list-group-operation-descriptions',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTreeListGroupOperationDescriptionsComponent) => ({
+                propertyName: 'groupOperationDescriptions',
+                className: 'DxoTreeListGroupOperationDescriptionsComponent',
+                component
+            }),
+            deps: [DxoTreeListGroupOperationDescriptionsComponent],
+         }
+         ]
 })
-export class DxoTreeListGroupOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListGroupOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get and(): string {
         return this._getOption('and');
@@ -67,7 +78,6 @@ export class DxoTreeListGroupOperationDescriptionsComponent extends NestedOption
     protected get _optionPath() {
         return 'groupOperationDescriptions';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

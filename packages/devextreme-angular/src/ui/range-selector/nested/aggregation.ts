@@ -17,11 +17,11 @@ import {
 import { chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod } from 'devextreme/viz/chart';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-range-selector-aggregation',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoRangeSelectorAggregationComponent) => ({
+                propertyName: 'aggregation',
+                className: 'DxoRangeSelectorAggregationComponent',
+                component
+            }),
+            deps: [DxoRangeSelectorAggregationComponent],
+         }
+         ]
 })
-export class DxoRangeSelectorAggregationComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorAggregationComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get calculate(): ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>) | undefined {
         return this._getOption('calculate');
@@ -60,7 +71,6 @@ export class DxoRangeSelectorAggregationComponent extends NestedOption implement
     protected get _optionPath() {
         return 'aggregation';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

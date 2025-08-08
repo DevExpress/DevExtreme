@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoGanttFilterRow } from './base/gantt-filter-row';
-
 
 @Component({
     selector: 'dxo-filter-row',
@@ -28,7 +28,18 @@ import { DxoGanttFilterRow } from './base/gantt-filter-row';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoFilterRowComponent) => ({
+                propertyName: 'filterRow',
+                className: 'DxoFilterRowComponent',
+                component
+            }),
+            deps: [DxoFilterRowComponent],
+         }
+         ],
     inputs: [
         'applyFilter',
         'applyFilterText',
@@ -41,12 +52,11 @@ import { DxoGanttFilterRow } from './base/gantt-filter-row';
         'visible'
     ]
 })
-export class DxoFilterRowComponent extends DxoGanttFilterRow implements OnDestroy, OnInit  {
+export class DxoFilterRowComponent extends DxoGanttFilterRow implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'filterRow';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

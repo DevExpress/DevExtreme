@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-sankey-adaptive-layout',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSankeyAdaptiveLayoutComponent) => ({
+                propertyName: 'adaptiveLayout',
+                className: 'DxoSankeyAdaptiveLayoutComponent',
+                component
+            }),
+            deps: [DxoSankeyAdaptiveLayoutComponent],
+         }
+         ]
 })
-export class DxoSankeyAdaptiveLayoutComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSankeyAdaptiveLayoutComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get height(): number {
         return this._getOption('height');
@@ -59,7 +70,6 @@ export class DxoSankeyAdaptiveLayoutComponent extends NestedOption implements On
     protected get _optionPath() {
         return 'adaptiveLayout';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

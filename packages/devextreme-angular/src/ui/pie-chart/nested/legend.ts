@@ -19,11 +19,11 @@ import { PieChartLegendItem, PieChartLegendHoverMode } from 'devextreme/viz/pie_
 import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-pie-chart-legend',
@@ -31,9 +31,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPieChartLegendComponent) => ({
+                propertyName: 'legend',
+                className: 'DxoPieChartLegendComponent',
+                component
+            }),
+            deps: [DxoPieChartLegendComponent],
+         }
+         ]
 })
-export class DxoPieChartLegendComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPieChartLegendComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get backgroundColor(): string | undefined {
         return this._getOption('backgroundColor');
@@ -222,7 +233,6 @@ export class DxoPieChartLegendComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'legend';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

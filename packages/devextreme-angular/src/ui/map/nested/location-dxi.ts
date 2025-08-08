@@ -14,11 +14,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-map-location',
@@ -26,7 +26,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiMapLocationComponent) => ({
+                propertyName: 'locations',
+                className: 'DxiMapLocationComponent',
+                component
+            }),
+            deps: [DxiMapLocationComponent],
+         }
+         ]
 })
 export class DxiMapLocationComponent extends CollectionNestedOption {
     @Input()
@@ -49,7 +60,6 @@ export class DxiMapLocationComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'locations';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

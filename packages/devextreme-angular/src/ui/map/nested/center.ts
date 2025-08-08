@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-map-center',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoMapCenterComponent) => ({
+                propertyName: 'center',
+                className: 'DxoMapCenterComponent',
+                component
+            }),
+            deps: [DxoMapCenterComponent],
+         }
+         ]
 })
-export class DxoMapCenterComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoMapCenterComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get lat(): number {
         return this._getOption('lat');
@@ -51,7 +62,6 @@ export class DxoMapCenterComponent extends NestedOption implements OnDestroy, On
     protected get _optionPath() {
         return 'center';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

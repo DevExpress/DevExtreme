@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoAnimationConfig } from './base/animation-config';
-
 
 @Component({
     selector: 'dxo-animation',
@@ -28,7 +28,18 @@ import { DxoAnimationConfig } from './base/animation-config';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoAnimationComponent) => ({
+                propertyName: 'animation',
+                className: 'DxoAnimationComponent',
+                component
+            }),
+            deps: [DxoAnimationComponent],
+         }
+         ],
     inputs: [
         'hide',
         'show',
@@ -46,12 +57,11 @@ import { DxoAnimationConfig } from './base/animation-config';
         'type'
     ]
 })
-export class DxoAnimationComponent extends DxoAnimationConfig implements OnDestroy, OnInit  {
+export class DxoAnimationComponent extends DxoAnimationConfig implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'animation';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

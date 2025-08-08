@@ -17,11 +17,11 @@ import {
 import { SliderValueChangeMode } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-behavior',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoBehaviorComponent) => ({
+                propertyName: 'behavior',
+                className: 'DxoBehaviorComponent',
+                component
+            }),
+            deps: [DxoBehaviorComponent],
+         }
+         ]
 })
-export class DxoBehaviorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBehaviorComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowSlidersSwap(): boolean {
         return this._getOption('allowSlidersSwap');
@@ -84,7 +95,6 @@ export class DxoBehaviorComponent extends NestedOption implements OnDestroy, OnI
     protected get _optionPath() {
         return 'behavior';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

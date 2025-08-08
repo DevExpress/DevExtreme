@@ -14,11 +14,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-chart-break',
@@ -26,7 +26,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiChartBreakComponent) => ({
+                propertyName: 'breaks',
+                className: 'DxiChartBreakComponent',
+                component
+            }),
+            deps: [DxiChartBreakComponent],
+         }
+         ]
 })
 export class DxiChartBreakComponent extends CollectionNestedOption {
     @Input()
@@ -49,7 +60,6 @@ export class DxiChartBreakComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'breaks';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

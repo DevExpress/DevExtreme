@@ -16,11 +16,11 @@ import { AllDayPanelMode, CellAppointmentsLimit, dxSchedulerScrolling, ViewType 
 import { FirstDayOfWeek, Orientation } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-scheduler-view',
@@ -28,7 +28,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiSchedulerViewComponent) => ({
+                propertyName: 'views',
+                className: 'DxiSchedulerViewComponent',
+                component
+            }),
+            deps: [DxiSchedulerViewComponent],
+         }
+         ]
 })
 export class DxiSchedulerViewComponent extends CollectionNestedOption {
     @Input()
@@ -227,7 +238,6 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'views';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

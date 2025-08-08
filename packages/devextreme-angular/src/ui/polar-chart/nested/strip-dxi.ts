@@ -15,11 +15,11 @@ import {
 import { Font } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-polar-chart-strip',
@@ -27,7 +27,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiPolarChartStripComponent) => ({
+                propertyName: 'strips',
+                className: 'DxiPolarChartStripComponent',
+                component
+            }),
+            deps: [DxiPolarChartStripComponent],
+         }
+         ]
 })
 export class DxiPolarChartStripComponent extends CollectionNestedOption {
     @Input()
@@ -66,7 +77,6 @@ export class DxiPolarChartStripComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'strips';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

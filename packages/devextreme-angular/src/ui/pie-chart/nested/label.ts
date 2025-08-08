@@ -18,11 +18,11 @@ import { Format } from 'devextreme/common/core/localization';
 import { DashStyle, Font, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-pie-chart-label',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPieChartLabelComponent) => ({
+                propertyName: 'label',
+                className: 'DxoPieChartLabelComponent',
+                component
+            }),
+            deps: [DxoPieChartLabelComponent],
+         }
+         ]
 })
-export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get argumentFormat(): Format | undefined {
         return this._getOption('argumentFormat');
@@ -149,7 +160,6 @@ export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy
     protected get _optionPath() {
         return 'label';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

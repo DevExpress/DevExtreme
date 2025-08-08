@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-data-grid-column-chooser-search',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDataGridColumnChooserSearchComponent) => ({
+                propertyName: 'search',
+                className: 'DxoDataGridColumnChooserSearchComponent',
+                component
+            }),
+            deps: [DxoDataGridColumnChooserSearchComponent],
+         }
+         ]
 })
-export class DxoDataGridColumnChooserSearchComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridColumnChooserSearchComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get editorOptions(): any {
         return this._getOption('editorOptions');
@@ -59,7 +70,6 @@ export class DxoDataGridColumnChooserSearchComponent extends NestedOption implem
     protected get _optionPath() {
         return 'search';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

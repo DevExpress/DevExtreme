@@ -8,10 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
@@ -21,12 +18,11 @@ import { dxFileUploaderOptions } from 'devextreme/ui/file_uploader';
 import { HtmlEditorImageUploadMode, dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiHtmlEditorTabComponent } from './tab-dxi';
-
 
 @Component({
     selector: 'dxo-html-editor-image-upload',
@@ -34,9 +30,20 @@ import { DxiHtmlEditorTabComponent } from './tab-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoHtmlEditorImageUploadComponent) => ({
+                propertyName: 'imageUpload',
+                className: 'DxoHtmlEditorImageUploadComponent',
+                component
+            }),
+            deps: [DxoHtmlEditorImageUploadComponent],
+         }
+         ]
 })
-export class DxoHtmlEditorImageUploadComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoHtmlEditorImageUploadComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get fileUploaderOptions(): dxFileUploaderOptions {
         return this._getOption('fileUploaderOptions');
@@ -80,15 +87,6 @@ export class DxoHtmlEditorImageUploadComponent extends NestedOption implements O
 
     protected get _optionPath() {
         return 'imageUpload';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiHtmlEditorTabComponent))
-    get tabsChildren(): QueryList<DxiHtmlEditorTabComponent> {
-        return this._getOption('tabs');
-    }
-    set tabsChildren(value) {
-        this.setChildren('tabs', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

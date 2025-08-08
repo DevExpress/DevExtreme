@@ -10,10 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -30,12 +27,11 @@ import { PositionAlignment } from 'devextreme/common';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDateRangeBoxToolbarItemComponent } from './toolbar-item-dxi';
-
 
 @Component({
     selector: 'dxo-date-range-box-drop-down-options',
@@ -43,9 +39,20 @@ import { DxiDateRangeBoxToolbarItemComponent } from './toolbar-item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDateRangeBoxDropDownOptionsComponent) => ({
+                propertyName: 'dropDownOptions',
+                className: 'DxoDateRangeBoxDropDownOptionsComponent',
+                component
+            }),
+            deps: [DxoDateRangeBoxDropDownOptionsComponent],
+         }
+         ]
 })
-export class DxoDateRangeBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDateRangeBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -460,15 +467,6 @@ export class DxoDateRangeBoxDropDownOptionsComponent extends NestedOption implem
     @Output() widthChange: EventEmitter<number | string>;
     protected get _optionPath() {
         return 'dropDownOptions';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiDateRangeBoxToolbarItemComponent))
-    get toolbarItemsChildren(): QueryList<DxiDateRangeBoxToolbarItemComponent> {
-        return this._getOption('toolbarItems');
-    }
-    set toolbarItemsChildren(value) {
-        this.setChildren('toolbarItems', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

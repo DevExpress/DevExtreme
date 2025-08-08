@@ -18,11 +18,11 @@ import { DashStyle, Font } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-horizontal-line',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoHorizontalLineComponent) => ({
+                propertyName: 'horizontalLine',
+                className: 'DxoHorizontalLineComponent',
+                component
+            }),
+            deps: [DxoHorizontalLineComponent],
+         }
+         ]
 })
-export class DxoHorizontalLineComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoHorizontalLineComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -85,7 +96,6 @@ export class DxoHorizontalLineComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'horizontalLine';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

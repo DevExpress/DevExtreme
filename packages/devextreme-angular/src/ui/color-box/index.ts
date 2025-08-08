@@ -18,9 +18,7 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -76,10 +74,6 @@ import { DxoColorBoxPositionModule } from 'devextreme-angular/ui/color-box/neste
 import { DxoColorBoxShowModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxToModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxiColorBoxToolbarItemModule } from 'devextreme-angular/ui/color-box/nested';
-
-import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiColorBoxButtonComponent } from 'devextreme-angular/ui/color-box/nested';
 
 
 
@@ -1109,22 +1103,20 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiColorBoxButtonComponent)
-    get buttonsChildren(): QueryList<DxiColorBoxButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiColorBoxButtonComponent');
-    }
-
-
-    @ContentChildren(DxiButtonComponent)
-    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('buttons').push('DxiButtonComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

@@ -17,11 +17,11 @@ import {
 import { Format } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-data-grid-value-format',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDataGridValueFormatComponent) => ({
+                propertyName: 'valueFormat',
+                className: 'DxoDataGridValueFormatComponent',
+                component
+            }),
+            deps: [DxoDataGridValueFormatComponent],
+         }
+         ]
 })
-export class DxoDataGridValueFormatComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridValueFormatComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -84,7 +95,6 @@ export class DxoDataGridValueFormatComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'valueFormat';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

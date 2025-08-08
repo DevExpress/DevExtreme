@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/data_grid';
@@ -203,12 +201,6 @@ import { DxiDataGridToolbarItemModule } from 'devextreme-angular/ui/data-grid/ne
 import { DxiDataGridTotalItemModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridValidationRuleModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridValueFormatModule } from 'devextreme-angular/ui/data-grid/nested';
-
-import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
-import { DxiSortByGroupSummaryInfoComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiDataGridColumnComponent } from 'devextreme-angular/ui/data-grid/nested';
-import { DxiDataGridSortByGroupSummaryInfoComponent } from 'devextreme-angular/ui/data-grid/nested';
 
 
 /**
@@ -2063,38 +2055,22 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
 
 
-    @ContentChildren(DxiDataGridColumnComponent)
-    get columnsChildren(): QueryList<DxiDataGridColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsChildren(value) {
-        this._setChildren('columns', value, 'DxiDataGridColumnComponent');
-    }
-
-    @ContentChildren(DxiDataGridSortByGroupSummaryInfoComponent)
-    get sortByGroupSummaryInfosChildren(): QueryList<DxiDataGridSortByGroupSummaryInfoComponent> {
-        return this._getOption('sortByGroupSummaryInfo');
-    }
-    set sortByGroupSummaryInfosChildren(value) {
-        this._setChildren('sortByGroupSummaryInfo', value, 'DxiDataGridSortByGroupSummaryInfoComponent');
-    }
-
-
-    @ContentChildren(DxiColumnComponent)
-    get columnsLegacyChildren(): QueryList<DxiColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsLegacyChildren(value) {
-        this._setChildren('columns', value, 'DxiColumnComponent');
-    }
-
-    @ContentChildren(DxiSortByGroupSummaryInfoComponent)
-    get sortByGroupSummaryInfoLegacyChildren(): QueryList<DxiSortByGroupSummaryInfoComponent> {
-        return this._getOption('sortByGroupSummaryInfo');
-    }
-    set sortByGroupSummaryInfoLegacyChildren(value) {
-        this._setChildren('sortByGroupSummaryInfo', value, 'DxiSortByGroupSummaryInfoComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('columns').push('DxiColumnComponent');
+    
+        getLegacyClassNamesForPropertyName('sortByGroupSummaryInfo').push('DxiSortByGroupSummaryInfoComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

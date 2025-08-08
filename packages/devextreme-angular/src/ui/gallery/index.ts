@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/gallery';
@@ -44,10 +42,6 @@ import {
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiGalleryItemModule } from 'devextreme-angular/ui/gallery/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiGalleryItemComponent } from 'devextreme-angular/ui/gallery/nested';
 
 
 /**
@@ -724,22 +718,20 @@ export class DxGalleryComponent<TItem = any, TKey = any> extends DxComponent imp
 
 
 
-    @ContentChildren(DxiGalleryItemComponent)
-    get itemsChildren(): QueryList<DxiGalleryItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiGalleryItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

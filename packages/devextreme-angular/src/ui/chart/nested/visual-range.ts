@@ -19,11 +19,11 @@ import {
 import { TimeInterval } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-chart-visual-range',
@@ -31,9 +31,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoChartVisualRangeComponent) => ({
+                propertyName: 'visualRange',
+                className: 'DxoChartVisualRangeComponent',
+                component
+            }),
+            deps: [DxoChartVisualRangeComponent],
+         }
+         ]
 })
-export class DxoChartVisualRangeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartVisualRangeComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get endValue(): Date | number | string | undefined {
         return this._getOption('endValue');
@@ -75,7 +86,6 @@ export class DxoChartVisualRangeComponent extends NestedOption implements OnDest
     protected get _optionPath() {
         return 'visualRange';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

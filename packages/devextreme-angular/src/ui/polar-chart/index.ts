@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -164,12 +162,6 @@ import { DxoPolarChartValueAxisModule } from 'devextreme-angular/ui/polar-chart/
 import { DxoPolarChartValueErrorBarModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartVisualRangeModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartWholeRangeModule } from 'devextreme-angular/ui/polar-chart/nested';
-
-import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
-import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiPolarChartAnnotationComponent } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxiPolarChartSeriesComponent } from 'devextreme-angular/ui/polar-chart/nested';
 
 
 /**
@@ -1123,38 +1115,22 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
 
 
 
-    @ContentChildren(DxiPolarChartAnnotationComponent)
-    get annotationsChildren(): QueryList<DxiPolarChartAnnotationComponent> {
-        return this._getOption('annotations');
-    }
-    set annotationsChildren(value) {
-        this._setChildren('annotations', value, 'DxiPolarChartAnnotationComponent');
-    }
-
-    @ContentChildren(DxiPolarChartSeriesComponent)
-    get seriesChildren(): QueryList<DxiPolarChartSeriesComponent> {
-        return this._getOption('series');
-    }
-    set seriesChildren(value) {
-        this._setChildren('series', value, 'DxiPolarChartSeriesComponent');
-    }
-
-
-    @ContentChildren(DxiAnnotationComponent)
-    get annotationsLegacyChildren(): QueryList<DxiAnnotationComponent> {
-        return this._getOption('annotations');
-    }
-    set annotationsLegacyChildren(value) {
-        this._setChildren('annotations', value, 'DxiAnnotationComponent');
-    }
-
-    @ContentChildren(DxiSeriesComponent)
-    get seriesLegacyChildren(): QueryList<DxiSeriesComponent> {
-        return this._getOption('series');
-    }
-    set seriesLegacyChildren(value) {
-        this._setChildren('series', value, 'DxiSeriesComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('annotations').push('DxiAnnotationComponent');
+    
+        getLegacyClassNamesForPropertyName('series').push('DxiSeriesComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

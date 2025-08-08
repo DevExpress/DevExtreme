@@ -19,11 +19,11 @@ import { dxFunnelItem, FunnelLegendItem } from 'devextreme/viz/funnel';
 import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-funnel-legend',
@@ -31,9 +31,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoFunnelLegendComponent) => ({
+                propertyName: 'legend',
+                className: 'DxoFunnelLegendComponent',
+                component
+            }),
+            deps: [DxoFunnelLegendComponent],
+         }
+         ]
 })
-export class DxoFunnelLegendComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFunnelLegendComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get backgroundColor(): string | undefined {
         return this._getOption('backgroundColor');
@@ -214,7 +225,6 @@ export class DxoFunnelLegendComponent extends NestedOption implements OnDestroy,
     protected get _optionPath() {
         return 'legend';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

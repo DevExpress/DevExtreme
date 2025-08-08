@@ -16,11 +16,11 @@ import { dxFilterBuilderField, FieldInfo } from 'devextreme/ui/filter_builder';
 import { DataType } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-filter-builder-custom-operation',
@@ -28,7 +28,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiFilterBuilderCustomOperationComponent) => ({
+                propertyName: 'customOperations',
+                className: 'DxiFilterBuilderCustomOperationComponent',
+                component
+            }),
+            deps: [DxiFilterBuilderCustomOperationComponent],
+         }
+         ]
 })
 export class DxiFilterBuilderCustomOperationComponent extends CollectionNestedOption {
     @Input()
@@ -99,7 +110,6 @@ export class DxiFilterBuilderCustomOperationComponent extends CollectionNestedOp
     protected get _optionPath() {
         return 'customOperations';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -17,11 +17,11 @@ import {
 import { HatchDirection } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-sankey-node',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSankeyNodeComponent) => ({
+                propertyName: 'node',
+                className: 'DxoSankeyNodeComponent',
+                component
+            }),
+            deps: [DxoSankeyNodeComponent],
+         }
+         ]
 })
-export class DxoSankeyNodeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSankeyNodeComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get border(): { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } {
         return this._getOption('border');
@@ -84,7 +95,6 @@ export class DxoSankeyNodeComponent extends NestedOption implements OnDestroy, O
     protected get _optionPath() {
         return 'node';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

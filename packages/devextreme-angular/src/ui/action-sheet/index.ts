@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/action_sheet';
@@ -44,10 +42,6 @@ import {
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiActionSheetItemModule } from 'devextreme-angular/ui/action-sheet/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiActionSheetItemComponent } from 'devextreme-angular/ui/action-sheet/nested';
 
 
 /**
@@ -504,22 +498,20 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
 
 
 
-    @ContentChildren(DxiActionSheetItemComponent)
-    get itemsChildren(): QueryList<DxiActionSheetItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiActionSheetItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

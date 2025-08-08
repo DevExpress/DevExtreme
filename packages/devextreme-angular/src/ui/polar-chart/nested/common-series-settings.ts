@@ -19,11 +19,11 @@ import { Format } from 'devextreme/common/core/localization';
 import { PolarChartSeriesType } from 'devextreme/viz/polar_chart';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-polar-chart-common-series-settings',
@@ -31,9 +31,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPolarChartCommonSeriesSettingsComponent) => ({
+                propertyName: 'commonSeriesSettings',
+                className: 'DxoPolarChartCommonSeriesSettingsComponent',
+                component
+            }),
+            deps: [DxoPolarChartCommonSeriesSettingsComponent],
+         }
+         ]
 })
-export class DxoPolarChartCommonSeriesSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPolarChartCommonSeriesSettingsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get area(): any {
         return this._getOption('area');
@@ -278,7 +289,6 @@ export class DxoPolarChartCommonSeriesSettingsComponent extends NestedOption imp
     protected get _optionPath() {
         return 'commonSeriesSettings';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

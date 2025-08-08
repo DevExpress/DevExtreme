@@ -79,8 +79,6 @@ import { DxoBarGaugeTooltipModule } from 'devextreme-angular/ui/bar-gauge/nested
 import { DxoBarGaugeTooltipBorderModule } from 'devextreme-angular/ui/bar-gauge/nested';
 
 
-
-
 /**
  * [descr:dxBarGauge]
 
@@ -720,7 +718,6 @@ export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnCha
     
      */
     @Output() valuesChange: EventEmitter<Array<number>>;
-
 
 
 

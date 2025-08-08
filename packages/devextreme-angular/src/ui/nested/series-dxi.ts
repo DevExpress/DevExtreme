@@ -14,11 +14,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiChartSeries } from './base/chart-series-dxi';
-
 
 @Component({
     selector: 'dxi-series',
@@ -26,7 +26,18 @@ import { DxiChartSeries } from './base/chart-series-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiSeriesComponent) => ({
+                propertyName: 'series',
+                className: 'DxiSeriesComponent',
+                component
+            }),
+            deps: [DxiSeriesComponent],
+         }
+         ],
     inputs: [
         'aggregation',
         'argumentField',
@@ -79,7 +90,6 @@ export class DxiSeriesComponent extends DxiChartSeries {
     protected get _optionPath() {
         return 'series';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

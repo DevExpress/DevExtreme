@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-appointment-dragging',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoAppointmentDraggingComponent) => ({
+                propertyName: 'appointmentDragging',
+                className: 'DxoAppointmentDraggingComponent',
+                component
+            }),
+            deps: [DxoAppointmentDraggingComponent],
+         }
+         ]
 })
-export class DxoAppointmentDraggingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoAppointmentDraggingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get autoScroll(): boolean {
         return this._getOption('autoScroll');
@@ -115,7 +126,6 @@ export class DxoAppointmentDraggingComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'appointmentDragging';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

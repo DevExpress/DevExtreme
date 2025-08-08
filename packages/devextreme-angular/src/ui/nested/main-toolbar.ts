@@ -8,10 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
@@ -20,12 +17,11 @@ import {
 import { Command, CustomCommand } from 'devextreme/ui/diagram';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiCommandComponent } from './command-dxi';
-
 
 @Component({
     selector: 'dxo-main-toolbar',
@@ -33,9 +29,20 @@ import { DxiCommandComponent } from './command-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoMainToolbarComponent) => ({
+                propertyName: 'mainToolbar',
+                className: 'DxoMainToolbarComponent',
+                component
+            }),
+            deps: [DxoMainToolbarComponent],
+         }
+         ]
 })
-export class DxoMainToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoMainToolbarComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get commands(): Array<CustomCommand | Command> {
         return this._getOption('commands');
@@ -55,15 +62,6 @@ export class DxoMainToolbarComponent extends NestedOption implements OnDestroy, 
 
     protected get _optionPath() {
         return 'mainToolbar';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiCommandComponent))
-    get commandsChildren(): QueryList<DxiCommandComponent> {
-        return this._getOption('commands');
-    }
-    set commandsChildren(value) {
-        this.setChildren('commands', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

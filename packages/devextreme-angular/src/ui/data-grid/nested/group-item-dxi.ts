@@ -16,11 +16,11 @@ import { SummaryType } from 'devextreme/common/grids';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-data-grid-group-item',
@@ -28,7 +28,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiDataGridGroupItemComponent) => ({
+                propertyName: 'groupItems',
+                className: 'DxiDataGridGroupItemComponent',
+                component
+            }),
+            deps: [DxiDataGridGroupItemComponent],
+         }
+         ]
 })
 export class DxiDataGridGroupItemComponent extends CollectionNestedOption {
     @Input()
@@ -115,7 +126,6 @@ export class DxiDataGridGroupItemComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'groupItems';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

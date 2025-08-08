@@ -8,11 +8,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    EventEmitter
 } from '@angular/core';
 
 
@@ -25,21 +21,11 @@ import { Format } from 'devextreme/common/core/localization';
 import { dxFormSimpleItem } from 'devextreme/ui/form';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiCardViewAsyncRuleComponent } from './async-rule-dxi';
-import { DxiCardViewCompareRuleComponent } from './compare-rule-dxi';
-import { DxiCardViewCustomRuleComponent } from './custom-rule-dxi';
-import { DxiCardViewEmailRuleComponent } from './email-rule-dxi';
-import { DxiCardViewNumericRuleComponent } from './numeric-rule-dxi';
-import { DxiCardViewPatternRuleComponent } from './pattern-rule-dxi';
-import { DxiCardViewRangeRuleComponent } from './range-rule-dxi';
-import { DxiCardViewRequiredRuleComponent } from './required-rule-dxi';
-import { DxiCardViewStringLengthRuleComponent } from './string-length-rule-dxi';
-import { DxiCardViewValidationRuleComponent } from './validation-rule-dxi';
-
 
 @Component({
     selector: 'dxi-card-view-column',
@@ -47,9 +33,20 @@ import { DxiCardViewValidationRuleComponent } from './validation-rule-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiCardViewColumnComponent) => ({
+                propertyName: 'columns',
+                className: 'DxiCardViewColumnComponent',
+                component
+            }),
+            deps: [DxiCardViewColumnComponent],
+         }
+         ]
 })
-export class DxiCardViewColumnComponent extends CollectionNestedOption implements AfterContentInit  {
+export class DxiCardViewColumnComponent extends CollectionNestedOption {
     @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');
@@ -408,54 +405,6 @@ export class DxiCardViewColumnComponent extends CollectionNestedOption implement
         return 'columns';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiCardViewAsyncRuleComponent)) asyncRulesChildren!: QueryList<DxiCardViewAsyncRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewCompareRuleComponent)) compareRulesChildren!: QueryList<DxiCardViewCompareRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewCustomRuleComponent)) customRulesChildren!: QueryList<DxiCardViewCustomRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewEmailRuleComponent)) emailRulesChildren!: QueryList<DxiCardViewEmailRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewNumericRuleComponent)) numericRulesChildren!: QueryList<DxiCardViewNumericRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewPatternRuleComponent)) patternRulesChildren!: QueryList<DxiCardViewPatternRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewRangeRuleComponent)) rangeRulesChildren!: QueryList<DxiCardViewRangeRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewRequiredRuleComponent)) requiredRulesChildren!: QueryList<DxiCardViewRequiredRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewStringLengthRuleComponent)) stringLengthRulesChildren!: QueryList<DxiCardViewStringLengthRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewValidationRuleComponent)) validationRulesChildren!: QueryList<DxiCardViewValidationRuleComponent>
-    
-    setValidationRules() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.asyncRulesChildren.toArray(),
-            ...this.compareRulesChildren.toArray(),
-            ...this.customRulesChildren.toArray(),
-            ...this.emailRulesChildren.toArray(),
-            ...this.numericRulesChildren.toArray(),
-            ...this.patternRulesChildren.toArray(),
-            ...this.rangeRulesChildren.toArray(),
-            ...this.requiredRulesChildren.toArray(),
-            ...this.stringLengthRulesChildren.toArray(),
-            ...this.validationRulesChildren.toArray(),
-        ]);
-        this.setChildren('validationRules', q);
-    }
-
-
-
-
-
-
-
-
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -479,20 +428,6 @@ export class DxiCardViewColumnComponent extends CollectionNestedOption implement
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
-    ngAfterContentInit() {
-        this.setValidationRules();
-        
-        this.asyncRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.compareRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.customRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.emailRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.numericRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.patternRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.rangeRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.requiredRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.stringLengthRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.validationRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-    }
 }
 
 @NgModule({

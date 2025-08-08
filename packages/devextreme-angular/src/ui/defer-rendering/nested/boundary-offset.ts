@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-defer-rendering-boundary-offset',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDeferRenderingBoundaryOffsetComponent) => ({
+                propertyName: 'boundaryOffset',
+                className: 'DxoDeferRenderingBoundaryOffsetComponent',
+                component
+            }),
+            deps: [DxoDeferRenderingBoundaryOffsetComponent],
+         }
+         ]
 })
-export class DxoDeferRenderingBoundaryOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDeferRenderingBoundaryOffsetComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -51,7 +62,6 @@ export class DxoDeferRenderingBoundaryOffsetComponent extends NestedOption imple
     protected get _optionPath() {
         return 'boundaryOffset';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

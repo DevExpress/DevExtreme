@@ -10,10 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -23,12 +20,11 @@ import { TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorS
 import { TextBoxType, ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/text_box';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiListButtonComponent } from './button-dxi';
-
 
 @Component({
     selector: 'dxo-list-search-editor-options',
@@ -36,9 +32,20 @@ import { DxiListButtonComponent } from './button-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoListSearchEditorOptionsComponent) => ({
+                propertyName: 'searchEditorOptions',
+                className: 'DxoListSearchEditorOptionsComponent',
+                component
+            }),
+            deps: [DxoListSearchEditorOptionsComponent],
+         }
+         ]
 })
-export class DxoListSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoListSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -488,15 +495,6 @@ export class DxoListSearchEditorOptionsComponent extends NestedOption implements
     @Output() valueChange: EventEmitter<string>;
     protected get _optionPath() {
         return 'searchEditorOptions';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiListButtonComponent))
-    get buttonsChildren(): QueryList<DxiListButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this.setChildren('buttons', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoColumnHeaderFilter } from './base/column-header-filter';
-
 
 @Component({
     selector: 'dxo-header-filter',
@@ -28,7 +28,18 @@ import { DxoColumnHeaderFilter } from './base/column-header-filter';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoHeaderFilterComponent) => ({
+                propertyName: 'headerFilter',
+                className: 'DxoHeaderFilterComponent',
+                component
+            }),
+            deps: [DxoHeaderFilterComponent],
+         }
+         ],
     inputs: [
         'allowSearch',
         'allowSelectAll',
@@ -44,12 +55,11 @@ import { DxoColumnHeaderFilter } from './base/column-header-filter';
         'showRelevantValues'
     ]
 })
-export class DxoHeaderFilterComponent extends DxoColumnHeaderFilter implements OnDestroy, OnInit  {
+export class DxoHeaderFilterComponent extends DxoColumnHeaderFilter implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'headerFilter';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

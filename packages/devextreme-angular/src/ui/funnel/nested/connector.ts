@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-funnel-connector',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoFunnelConnectorComponent) => ({
+                propertyName: 'connector',
+                className: 'DxoFunnelConnectorComponent',
+                component
+            }),
+            deps: [DxoFunnelConnectorComponent],
+         }
+         ]
 })
-export class DxoFunnelConnectorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFunnelConnectorComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get color(): string | undefined {
         return this._getOption('color');
@@ -67,7 +78,6 @@ export class DxoFunnelConnectorComponent extends NestedOption implements OnDestr
     protected get _optionPath() {
         return 'connector';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

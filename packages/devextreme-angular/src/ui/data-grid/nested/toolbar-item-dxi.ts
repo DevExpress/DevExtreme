@@ -21,6 +21,7 @@ import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import { ToolbarLocation } from 'devextreme/ui/popup';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -30,14 +31,25 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-
 @Component({
     selector: 'dxi-data-grid-toolbar-item',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiDataGridToolbarItemComponent) => ({
+                propertyName: 'toolbarItems',
+                className: 'DxiDataGridToolbarItemComponent',
+                component
+            }),
+            deps: [DxiDataGridToolbarItemComponent],
+         }
+         ]
 })
 export class DxiDataGridToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -149,7 +161,6 @@ export class DxiDataGridToolbarItemComponent extends CollectionNestedOption impl
     protected get _optionPath() {
         return 'toolbarItems';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

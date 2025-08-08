@@ -19,11 +19,11 @@ import { ChartsAxisLabelOverlap, DashStyle, DiscreteAxisDivisionMode, Font, Labe
 import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-common-axis-settings',
@@ -31,9 +31,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCommonAxisSettingsComponent) => ({
+                propertyName: 'commonAxisSettings',
+                className: 'DxoCommonAxisSettingsComponent',
+                component
+            }),
+            deps: [DxoCommonAxisSettingsComponent],
+         }
+         ]
 })
-export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get aggregatedPointsPosition(): AggregatedPointsPosition {
         return this._getOption('aggregatedPointsPosition');
@@ -214,7 +225,6 @@ export class DxoCommonAxisSettingsComponent extends NestedOption implements OnDe
     protected get _optionPath() {
         return 'commonAxisSettings';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

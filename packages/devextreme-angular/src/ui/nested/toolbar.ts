@@ -8,10 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    SkipSelf
 } from '@angular/core';
 
 
@@ -19,13 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoDataGridToolbar } from './base/data-grid-toolbar';
-import { DxiItemComponent } from './item-dxi';
-import { DxiFileSelectionItemComponent } from './file-selection-item-dxi';
-
 
 @Component({
     selector: 'dxo-toolbar',
@@ -33,7 +28,18 @@ import { DxiFileSelectionItemComponent } from './file-selection-item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoToolbarComponent) => ({
+                propertyName: 'toolbar',
+                className: 'DxoToolbarComponent',
+                component
+            }),
+            deps: [DxoToolbarComponent],
+         }
+         ],
     inputs: [
         'disabled',
         'items',
@@ -43,27 +49,10 @@ import { DxiFileSelectionItemComponent } from './file-selection-item-dxi';
         'multiline'
     ]
 })
-export class DxoToolbarComponent extends DxoDataGridToolbar implements OnDestroy, OnInit  {
+export class DxoToolbarComponent extends DxoDataGridToolbar implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'toolbar';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiFileSelectionItemComponent))
-    get fileSelectionItemsChildren(): QueryList<DxiFileSelectionItemComponent> {
-        return this._getOption('fileSelectionItems');
-    }
-    set fileSelectionItemsChildren(value) {
-        this.setChildren('fileSelectionItems', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

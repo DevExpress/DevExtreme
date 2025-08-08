@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-vector-map-margin',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoVectorMapMarginComponent) => ({
+                propertyName: 'margin',
+                className: 'DxoVectorMapMarginComponent',
+                component
+            }),
+            deps: [DxoVectorMapMarginComponent],
+         }
+         ]
 })
-export class DxoVectorMapMarginComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoVectorMapMarginComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get bottom(): number {
         return this._getOption('bottom');
@@ -67,7 +78,6 @@ export class DxoVectorMapMarginComponent extends NestedOption implements OnDestr
     protected get _optionPath() {
         return 'margin';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

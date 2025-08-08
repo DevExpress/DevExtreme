@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -68,15 +66,6 @@ import { DxiFormTabbedItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxoFormTabPanelOptionsModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormTabPanelOptionsItemModule } from 'devextreme-angular/ui/form/nested';
 import { DxiFormValidationRuleModule } from 'devextreme-angular/ui/form/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiFormButtonItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormEmptyItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormGroupItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormSimpleItemComponent } from 'devextreme-angular/ui/form/nested';
-import { DxiFormTabbedItemComponent } from 'devextreme-angular/ui/form/nested';
 
 
 /**
@@ -829,62 +818,20 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
 
 
 
-    @ContentChildren(DxiFormButtonItemComponent)
-    get buttonItemsChildren(): QueryList<DxiFormButtonItemComponent> {
-        return this._getOption('items');
-    }
-    set buttonItemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormButtonItemComponent');
-    }
-
-    @ContentChildren(DxiFormEmptyItemComponent)
-    get emptyItemsChildren(): QueryList<DxiFormEmptyItemComponent> {
-        return this._getOption('items');
-    }
-    set emptyItemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormEmptyItemComponent');
-    }
-
-    @ContentChildren(DxiFormGroupItemComponent)
-    get groupItemsChildren(): QueryList<DxiFormGroupItemComponent> {
-        return this._getOption('items');
-    }
-    set groupItemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormGroupItemComponent');
-    }
-
-    @ContentChildren(DxiFormItemComponent)
-    get itemsChildren(): QueryList<DxiFormItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormItemComponent');
-    }
-
-    @ContentChildren(DxiFormSimpleItemComponent)
-    get simpleItemsChildren(): QueryList<DxiFormSimpleItemComponent> {
-        return this._getOption('items');
-    }
-    set simpleItemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormSimpleItemComponent');
-    }
-
-    @ContentChildren(DxiFormTabbedItemComponent)
-    get tabbedItemsChildren(): QueryList<DxiFormTabbedItemComponent> {
-        return this._getOption('items');
-    }
-    set tabbedItemsChildren(value) {
-        this._setChildren('items', value, 'DxiFormTabbedItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

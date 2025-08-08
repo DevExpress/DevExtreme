@@ -17,11 +17,11 @@ import {
 import { HeaderFilterSearchConfig, HeaderFilterTexts } from 'devextreme/common/grids';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-data-grid-data-grid-header-filter',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDataGridDataGridHeaderFilterComponent) => ({
+                propertyName: 'headerFilter',
+                className: 'DxoDataGridDataGridHeaderFilterComponent',
+                component
+            }),
+            deps: [DxoDataGridDataGridHeaderFilterComponent],
+         }
+         ]
 })
-export class DxoDataGridDataGridHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridDataGridHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
@@ -100,7 +111,6 @@ export class DxoDataGridDataGridHeaderFilterComponent extends NestedOption imple
     protected get _optionPath() {
         return 'headerFilter';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -8,10 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
@@ -21,13 +18,11 @@ import { ChartsDataType, DashStyle, Font, DiscreteAxisDivisionMode, ArgumentAxis
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiPolarChartConstantLineComponent } from './constant-line-dxi';
-import { DxiPolarChartStripComponent } from './strip-dxi';
-
 
 @Component({
     selector: 'dxo-polar-chart-argument-axis',
@@ -35,9 +30,20 @@ import { DxiPolarChartStripComponent } from './strip-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPolarChartArgumentAxisComponent) => ({
+                propertyName: 'argumentAxis',
+                className: 'DxoPolarChartArgumentAxisComponent',
+                component
+            }),
+            deps: [DxoPolarChartArgumentAxisComponent],
+         }
+         ]
 })
-export class DxoPolarChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPolarChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowDecimals(): boolean | undefined {
         return this._getOption('allowDecimals');
@@ -289,23 +295,6 @@ export class DxoPolarChartArgumentAxisComponent extends NestedOption implements 
 
     protected get _optionPath() {
         return 'argumentAxis';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiPolarChartConstantLineComponent))
-    get constantLinesChildren(): QueryList<DxiPolarChartConstantLineComponent> {
-        return this._getOption('constantLines');
-    }
-    set constantLinesChildren(value) {
-        this.setChildren('constantLines', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiPolarChartStripComponent))
-    get stripsChildren(): QueryList<DxiPolarChartStripComponent> {
-        return this._getOption('strips');
-    }
-    set stripsChildren(value) {
-        this.setChildren('strips', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

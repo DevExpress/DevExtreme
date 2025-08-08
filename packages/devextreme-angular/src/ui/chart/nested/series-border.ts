@@ -17,11 +17,11 @@ import {
 import { DashStyle } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-chart-series-border',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoChartSeriesBorderComponent) => ({
+                propertyName: 'border',
+                className: 'DxoChartSeriesBorderComponent',
+                component
+            }),
+            deps: [DxoChartSeriesBorderComponent],
+         }
+         ]
 })
-export class DxoChartSeriesBorderComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartSeriesBorderComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get color(): string | undefined {
         return this._getOption('color');
@@ -68,7 +79,6 @@ export class DxoChartSeriesBorderComponent extends NestedOption implements OnDes
     protected get _optionPath() {
         return 'border';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

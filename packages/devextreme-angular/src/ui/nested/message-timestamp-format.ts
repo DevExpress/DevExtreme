@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFormat } from './base/format';
-
 
 @Component({
     selector: 'dxo-message-timestamp-format',
@@ -28,7 +28,18 @@ import { DxoFormat } from './base/format';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoMessageTimestampFormatComponent) => ({
+                propertyName: 'messageTimestampFormat',
+                className: 'DxoMessageTimestampFormatComponent',
+                component
+            }),
+            deps: [DxoMessageTimestampFormatComponent],
+         }
+         ],
     inputs: [
         'currency',
         'formatter',
@@ -38,12 +49,11 @@ import { DxoFormat } from './base/format';
         'useCurrencyAccountingStyle'
     ]
 })
-export class DxoMessageTimestampFormatComponent extends DxoFormat implements OnDestroy, OnInit  {
+export class DxoMessageTimestampFormatComponent extends DxoFormat implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'messageTimestampFormat';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -17,11 +17,11 @@ import {
 import { GroupExpandMode } from 'devextreme/common/grids';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-grouping',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoGroupingComponent) => ({
+                propertyName: 'grouping',
+                className: 'DxoGroupingComponent',
+                component
+            }),
+            deps: [DxoGroupingComponent],
+         }
+         ]
 })
-export class DxoGroupingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGroupingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowCollapsing(): boolean {
         return this._getOption('allowCollapsing');
@@ -76,7 +87,6 @@ export class DxoGroupingComponent extends NestedOption implements OnDestroy, OnI
     protected get _optionPath() {
         return 'grouping';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

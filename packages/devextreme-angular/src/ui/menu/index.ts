@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/menu';
@@ -74,10 +72,6 @@ import { DxoMenuShowModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuShowFirstSubmenuModeModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuShowSubmenuModeModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuToModule } from 'devextreme-angular/ui/menu/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiMenuItemComponent } from 'devextreme-angular/ui/menu/nested';
 
 
 /**
@@ -798,22 +792,20 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
 
 
 
-    @ContentChildren(DxiMenuItemComponent)
-    get itemsChildren(): QueryList<DxiMenuItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiMenuItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

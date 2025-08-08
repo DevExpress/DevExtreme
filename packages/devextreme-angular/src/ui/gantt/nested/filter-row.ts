@@ -17,11 +17,11 @@ import {
 import { dxGanttFilterRowOperationDescriptions } from 'devextreme/ui/gantt';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-gantt-filter-row',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoGanttFilterRowComponent) => ({
+                propertyName: 'filterRow',
+                className: 'DxoGanttFilterRowComponent',
+                component
+            }),
+            deps: [DxoGanttFilterRowComponent],
+         }
+         ]
 })
-export class DxoGanttFilterRowComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGanttFilterRowComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get betweenEndText(): string {
         return this._getOption('betweenEndText');
@@ -92,7 +103,6 @@ export class DxoGanttFilterRowComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'filterRow';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

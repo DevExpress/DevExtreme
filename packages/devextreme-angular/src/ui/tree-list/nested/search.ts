@@ -17,11 +17,11 @@ import {
 import { SearchMode } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tree-list-search',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTreeListSearchComponent) => ({
+                propertyName: 'search',
+                className: 'DxoTreeListSearchComponent',
+                component
+            }),
+            deps: [DxoTreeListSearchComponent],
+         }
+         ]
 })
-export class DxoTreeListSearchComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListSearchComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get editorOptions(): any {
         return this._getOption('editorOptions');
@@ -76,7 +87,6 @@ export class DxoTreeListSearchComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'search';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

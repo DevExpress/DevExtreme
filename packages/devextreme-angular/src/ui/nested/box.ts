@@ -10,10 +10,7 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -22,12 +19,11 @@ import {
 import { Properties as dxBoxOptions } from 'devextreme/ui/box';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoBoxOptions } from './base/box-options';
-import { DxiItemComponent } from './item-dxi';
-
 
 @Component({
     selector: 'dxo-box',
@@ -35,7 +31,18 @@ import { DxiItemComponent } from './item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoBoxComponent) => ({
+                propertyName: 'box',
+                className: 'DxoBoxComponent',
+                component
+            }),
+            deps: [DxoBoxComponent],
+         }
+         ],
     inputs: [
         'align',
         'crossAlign',
@@ -61,7 +68,7 @@ import { DxiItemComponent } from './item-dxi';
         'width'
     ]
 })
-export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit  {
+export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit {
 
     /**
     
@@ -71,15 +78,6 @@ export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit 
     @Output() itemsChange: EventEmitter<Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>>;
     protected get _optionPath() {
         return 'box';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

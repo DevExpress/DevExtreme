@@ -17,11 +17,11 @@ import {
 import { Font, TextOverflow } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-group',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoGroupComponent) => ({
+                propertyName: 'group',
+                className: 'DxoGroupComponent',
+                component
+            }),
+            deps: [DxoGroupComponent],
+         }
+         ]
 })
-export class DxoGroupComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGroupComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get border(): { color?: string | undefined, width?: number | undefined } {
         return this._getOption('border');
@@ -100,7 +111,6 @@ export class DxoGroupComponent extends NestedOption implements OnDestroy, OnInit
     protected get _optionPath() {
         return 'group';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

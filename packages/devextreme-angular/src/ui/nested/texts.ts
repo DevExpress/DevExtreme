@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFilterPanelTexts } from './base/filter-panel-texts';
-
 
 @Component({
     selector: 'dxo-texts',
@@ -28,7 +28,18 @@ import { DxoFilterPanelTexts } from './base/filter-panel-texts';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTextsComponent) => ({
+                propertyName: 'texts',
+                className: 'DxoTextsComponent',
+                component
+            }),
+            deps: [DxoTextsComponent],
+         }
+         ],
     inputs: [
         'fix',
         'leftPosition',
@@ -92,12 +103,11 @@ import { DxoFilterPanelTexts } from './base/filter-panel-texts';
         'addRowToNode'
     ]
 })
-export class DxoTextsComponent extends DxoFilterPanelTexts implements OnDestroy, OnInit  {
+export class DxoTextsComponent extends DxoFilterPanelTexts implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'texts';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

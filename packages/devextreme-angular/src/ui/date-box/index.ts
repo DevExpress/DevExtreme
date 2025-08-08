@@ -18,9 +18,7 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -83,10 +81,6 @@ import { DxoDateBoxPositionModule } from 'devextreme-angular/ui/date-box/nested'
 import { DxoDateBoxShowModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxoDateBoxToModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxiDateBoxToolbarItemModule } from 'devextreme-angular/ui/date-box/nested';
-
-import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiDateBoxButtonComponent } from 'devextreme-angular/ui/date-box/nested';
 
 
 
@@ -1424,22 +1418,20 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiDateBoxButtonComponent)
-    get buttonsChildren(): QueryList<DxiDateBoxButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiDateBoxButtonComponent');
-    }
-
-
-    @ContentChildren(DxiButtonComponent)
-    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('buttons').push('DxiButtonComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

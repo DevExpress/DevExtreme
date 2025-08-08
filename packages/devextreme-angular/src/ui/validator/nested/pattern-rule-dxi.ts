@@ -15,11 +15,11 @@ import {
 import { ValidationRuleType } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-validator-pattern-rule',
@@ -27,7 +27,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiValidatorPatternRuleComponent) => ({
+                propertyName: 'validationRules',
+                className: 'DxiValidatorPatternRuleComponent',
+                component
+            }),
+            deps: [DxiValidatorPatternRuleComponent],
+         }
+         ]
 })
 export class DxiValidatorPatternRuleComponent extends CollectionNestedOption {
     @Input()
@@ -66,7 +77,6 @@ export class DxiValidatorPatternRuleComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'validationRules';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

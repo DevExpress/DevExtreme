@@ -17,11 +17,11 @@ import {
 import { FinancialChartReductionLevel } from 'devextreme/viz/chart';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-reduction',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoReductionComponent) => ({
+                propertyName: 'reduction',
+                className: 'DxoReductionComponent',
+                component
+            }),
+            deps: [DxoReductionComponent],
+         }
+         ]
 })
-export class DxoReductionComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoReductionComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -52,7 +63,6 @@ export class DxoReductionComponent extends NestedOption implements OnDestroy, On
     protected get _optionPath() {
         return 'reduction';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

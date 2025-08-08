@@ -18,9 +18,7 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -82,12 +80,6 @@ import { DxoAutocompletePositionModule } from 'devextreme-angular/ui/autocomplet
 import { DxoAutocompleteShowModule } from 'devextreme-angular/ui/autocomplete/nested';
 import { DxoAutocompleteToModule } from 'devextreme-angular/ui/autocomplete/nested';
 import { DxiAutocompleteToolbarItemModule } from 'devextreme-angular/ui/autocomplete/nested';
-
-import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiAutocompleteButtonComponent } from 'devextreme-angular/ui/autocomplete/nested';
-import { DxiAutocompleteItemComponent } from 'devextreme-angular/ui/autocomplete/nested';
 
 
 
@@ -1361,38 +1353,22 @@ export class DxAutocompleteComponent extends DxComponent implements OnDestroy, C
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiAutocompleteButtonComponent)
-    get buttonsChildren(): QueryList<DxiAutocompleteButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiAutocompleteButtonComponent');
-    }
-
-    @ContentChildren(DxiAutocompleteItemComponent)
-    get itemsChildren(): QueryList<DxiAutocompleteItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiAutocompleteItemComponent');
-    }
-
-
-    @ContentChildren(DxiButtonComponent)
-    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
-    }
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('buttons').push('DxiButtonComponent');
+    
+        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

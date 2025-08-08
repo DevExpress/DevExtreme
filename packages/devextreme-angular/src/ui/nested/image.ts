@@ -17,11 +17,11 @@ import {
 import { BackgroundImageLocation } from 'devextreme/viz/range_selector';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-image',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoImageComponent) => ({
+                propertyName: 'image',
+                className: 'DxoImageComponent',
+                component
+            }),
+            deps: [DxoImageComponent],
+         }
+         ]
 })
-export class DxoImageComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoImageComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get height(): number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } {
         return this._getOption('height');
@@ -68,7 +79,6 @@ export class DxoImageComponent extends NestedOption implements OnDestroy, OnInit
     protected get _optionPath() {
         return 'image';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -107,12 +105,6 @@ import { DxoPieChartSubtitleModule } from 'devextreme-angular/ui/pie-chart/neste
 import { DxoPieChartTitleModule } from 'devextreme-angular/ui/pie-chart/nested';
 import { DxoPieChartTooltipModule } from 'devextreme-angular/ui/pie-chart/nested';
 import { DxoPieChartTooltipBorderModule } from 'devextreme-angular/ui/pie-chart/nested';
-
-import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
-import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiPieChartAnnotationComponent } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxiPieChartSeriesComponent } from 'devextreme-angular/ui/pie-chart/nested';
 
 
 /**
@@ -978,38 +970,22 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
 
 
-    @ContentChildren(DxiPieChartAnnotationComponent)
-    get annotationsChildren(): QueryList<DxiPieChartAnnotationComponent> {
-        return this._getOption('annotations');
-    }
-    set annotationsChildren(value) {
-        this._setChildren('annotations', value, 'DxiPieChartAnnotationComponent');
-    }
-
-    @ContentChildren(DxiPieChartSeriesComponent)
-    get seriesChildren(): QueryList<DxiPieChartSeriesComponent> {
-        return this._getOption('series');
-    }
-    set seriesChildren(value) {
-        this._setChildren('series', value, 'DxiPieChartSeriesComponent');
-    }
-
-
-    @ContentChildren(DxiAnnotationComponent)
-    get annotationsLegacyChildren(): QueryList<DxiAnnotationComponent> {
-        return this._getOption('annotations');
-    }
-    set annotationsLegacyChildren(value) {
-        this._setChildren('annotations', value, 'DxiAnnotationComponent');
-    }
-
-    @ContentChildren(DxiSeriesComponent)
-    get seriesLegacyChildren(): QueryList<DxiSeriesComponent> {
-        return this._getOption('series');
-    }
-    set seriesLegacyChildren(value) {
-        this._setChildren('series', value, 'DxiSeriesComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('annotations').push('DxiAnnotationComponent');
+    
+        getLegacyClassNamesForPropertyName('series').push('DxiSeriesComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

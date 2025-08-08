@@ -17,11 +17,11 @@ import {
 import { CollisionResolution } from 'devextreme/common/core/animation';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-popup-collision',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPopupCollisionComponent) => ({
+                propertyName: 'collision',
+                className: 'DxoPopupCollisionComponent',
+                component
+            }),
+            deps: [DxoPopupCollisionComponent],
+         }
+         ]
 })
-export class DxoPopupCollisionComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPopupCollisionComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get x(): CollisionResolution {
         return this._getOption('x');
@@ -52,7 +63,6 @@ export class DxoPopupCollisionComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'collision';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

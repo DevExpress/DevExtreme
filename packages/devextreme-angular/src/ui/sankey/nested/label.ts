@@ -18,11 +18,11 @@ import { dxSankeyNode } from 'devextreme/viz/sankey';
 import { Font, TextOverflow } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-sankey-label',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSankeyLabelComponent) => ({
+                propertyName: 'label',
+                className: 'DxoSankeyLabelComponent',
+                component
+            }),
+            deps: [DxoSankeyLabelComponent],
+         }
+         ]
 })
-export class DxoSankeyLabelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSankeyLabelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get border(): { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } {
         return this._getOption('border');
@@ -109,7 +120,6 @@ export class DxoSankeyLabelComponent extends NestedOption implements OnDestroy, 
     protected get _optionPath() {
         return 'label';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

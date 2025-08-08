@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-circular-gauge-shadow',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCircularGaugeShadowComponent) => ({
+                propertyName: 'shadow',
+                className: 'DxoCircularGaugeShadowComponent',
+                component
+            }),
+            deps: [DxoCircularGaugeShadowComponent],
+         }
+         ]
 })
-export class DxoCircularGaugeShadowComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeShadowComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get blur(): number {
         return this._getOption('blur');
@@ -75,7 +86,6 @@ export class DxoCircularGaugeShadowComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'shadow';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

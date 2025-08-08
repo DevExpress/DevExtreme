@@ -18,11 +18,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoSearchPanel } from './base/search-panel';
-
 
 @Component({
     selector: 'dxo-search-panel',
@@ -30,7 +30,18 @@ import { DxoSearchPanel } from './base/search-panel';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSearchPanelComponent) => ({
+                propertyName: 'searchPanel',
+                className: 'DxoSearchPanelComponent',
+                component
+            }),
+            deps: [DxoSearchPanelComponent],
+         }
+         ],
     inputs: [
         'highlightCaseSensitive',
         'highlightSearchText',
@@ -41,7 +52,7 @@ import { DxoSearchPanel } from './base/search-panel';
         'width'
     ]
 })
-export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy, OnInit  {
+export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy, OnInit {
 
     /**
     
@@ -52,7 +63,6 @@ export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy
     protected get _optionPath() {
         return 'searchPanel';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

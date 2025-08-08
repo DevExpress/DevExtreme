@@ -20,11 +20,11 @@ import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_s
 import { DataLayoutType } from 'devextreme/ui/diagram';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-nodes',
@@ -32,9 +32,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoNodesComponent) => ({
+                propertyName: 'nodes',
+                className: 'DxoNodesComponent',
+                component
+            }),
+            deps: [DxoNodesComponent],
+         }
+         ]
 })
-export class DxoNodesComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoNodesComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get autoLayout(): DataLayoutType | { orientation?: Orientation, type?: DataLayoutType } {
         return this._getOption('autoLayout');
@@ -199,7 +210,6 @@ export class DxoNodesComponent extends NestedOption implements OnDestroy, OnInit
     protected get _optionPath() {
         return 'nodes';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

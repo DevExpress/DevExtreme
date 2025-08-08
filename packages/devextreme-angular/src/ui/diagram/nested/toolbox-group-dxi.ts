@@ -15,11 +15,11 @@ import {
 import { ShapeCategory, ToolboxDisplayMode, ShapeType } from 'devextreme/ui/diagram';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-diagram-toolbox-group',
@@ -27,7 +27,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiDiagramToolboxGroupComponent) => ({
+                propertyName: 'groups',
+                className: 'DxiDiagramToolboxGroupComponent',
+                component
+            }),
+            deps: [DxiDiagramToolboxGroupComponent],
+         }
+         ]
 })
 export class DxiDiagramToolboxGroupComponent extends CollectionNestedOption {
     @Input()
@@ -74,7 +85,6 @@ export class DxiDiagramToolboxGroupComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'groups';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

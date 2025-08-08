@@ -23,6 +23,7 @@ import { DOCUMENT } from '@angular/common';
 import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -38,14 +39,25 @@ import { DxiCardViewItemComponent } from './item-dxi';
 import { DxiCardViewSimpleItemComponent } from './simple-item-dxi';
 import { DxiCardViewTabbedItemComponent } from './tabbed-item-dxi';
 
-
 @Component({
     selector: 'dxi-card-view-tab',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiCardViewTabComponent) => ({
+                propertyName: 'tabs',
+                className: 'DxiCardViewTabComponent',
+                component
+            }),
+            deps: [DxiCardViewTabComponent],
+         }
+         ]
 })
 export class DxiCardViewTabComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost, AfterContentInit  {
@@ -159,7 +171,6 @@ export class DxiCardViewTabComponent extends CollectionNestedOption implements A
         ]);
         this.setChildren('items', q);
     }
-
 
 
 

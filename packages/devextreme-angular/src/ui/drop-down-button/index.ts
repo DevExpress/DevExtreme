@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -70,10 +68,6 @@ import { DxoDropDownButtonPositionModule } from 'devextreme-angular/ui/drop-down
 import { DxoDropDownButtonShowModule } from 'devextreme-angular/ui/drop-down-button/nested';
 import { DxoDropDownButtonToModule } from 'devextreme-angular/ui/drop-down-button/nested';
 import { DxiDropDownButtonToolbarItemModule } from 'devextreme-angular/ui/drop-down-button/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiDropDownButtonItemComponent } from 'devextreme-angular/ui/drop-down-button/nested';
 
 
 /**
@@ -834,22 +828,20 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
 
 
 
-    @ContentChildren(DxiDropDownButtonItemComponent)
-    get itemsChildren(): QueryList<DxiDropDownButtonItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiDropDownButtonItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

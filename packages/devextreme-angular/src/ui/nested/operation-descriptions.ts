@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoGanttFilterRowOperationDescriptions } from './base/gantt-filter-row-operation-descriptions';
-
 
 @Component({
     selector: 'dxo-operation-descriptions',
@@ -28,7 +28,18 @@ import { DxoGanttFilterRowOperationDescriptions } from './base/gantt-filter-row-
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoOperationDescriptionsComponent) => ({
+                propertyName: 'operationDescriptions',
+                className: 'DxoOperationDescriptionsComponent',
+                component
+            }),
+            deps: [DxoOperationDescriptionsComponent],
+         }
+         ],
     inputs: [
         'between',
         'contains',
@@ -43,12 +54,11 @@ import { DxoGanttFilterRowOperationDescriptions } from './base/gantt-filter-row-
         'startsWith'
     ]
 })
-export class DxoOperationDescriptionsComponent extends DxoGanttFilterRowOperationDescriptions implements OnDestroy, OnInit  {
+export class DxoOperationDescriptionsComponent extends DxoGanttFilterRowOperationDescriptions implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'operationDescriptions';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

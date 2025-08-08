@@ -17,11 +17,11 @@ import {
 import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-vector-map-vector-map-title-subtitle',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoVectorMapVectorMapTitleSubtitleComponent) => ({
+                propertyName: 'subtitle',
+                className: 'DxoVectorMapVectorMapTitleSubtitleComponent',
+                component
+            }),
+            deps: [DxoVectorMapVectorMapTitleSubtitleComponent],
+         }
+         ]
 })
-export class DxoVectorMapVectorMapTitleSubtitleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoVectorMapVectorMapTitleSubtitleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get font(): Font {
         return this._getOption('font');
@@ -76,7 +87,6 @@ export class DxoVectorMapVectorMapTitleSubtitleComponent extends NestedOption im
     protected get _optionPath() {
         return 'subtitle';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -10,10 +10,7 @@ import {
     Renderer2,
     Inject,
     AfterViewInit,
-    SkipSelf,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    SkipSelf
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -21,6 +18,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -29,10 +27,6 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { DxiHtmlEditorImageUploadTabItem } from './base/html-editor-image-upload-tab-item-dxi';
-import { DxiItemComponent } from './item-dxi';
-import { DxiCommandComponent } from './command-dxi';
-import { DxiGroupComponent } from './group-dxi';
-
 
 @Component({
     selector: 'dxi-tab',
@@ -40,7 +34,19 @@ import { DxiGroupComponent } from './group-dxi';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost],
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiTabComponent) => ({
+                propertyName: 'tabs',
+                className: 'DxiTabComponent',
+                component
+            }),
+            deps: [DxiTabComponent],
+         }
+         ],
     inputs: [
         'alignItemLabels',
         'badge',
@@ -62,31 +68,6 @@ export class DxiTabComponent extends DxiHtmlEditorImageUploadTabItem implements 
 
     protected get _optionPath() {
         return 'tabs';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiCommandComponent))
-    get commandsChildren(): QueryList<DxiCommandComponent> {
-        return this._getOption('commands');
-    }
-    set commandsChildren(value) {
-        this.setChildren('commands', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiGroupComponent))
-    get groupsChildren(): QueryList<DxiGroupComponent> {
-        return this._getOption('groups');
-    }
-    set groupsChildren(value) {
-        this.setChildren('groups', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

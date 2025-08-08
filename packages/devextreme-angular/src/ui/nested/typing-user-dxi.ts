@@ -14,11 +14,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiUser } from './base/user-dxi';
-
 
 @Component({
     selector: 'dxi-typing-user',
@@ -26,7 +26,18 @@ import { DxiUser } from './base/user-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiTypingUserComponent) => ({
+                propertyName: 'typingUsers',
+                className: 'DxiTypingUserComponent',
+                component
+            }),
+            deps: [DxiTypingUserComponent],
+         }
+         ],
     inputs: [
         'avatarAlt',
         'avatarUrl',
@@ -39,7 +50,6 @@ export class DxiTypingUserComponent extends DxiUser {
     protected get _optionPath() {
         return 'typingUsers';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

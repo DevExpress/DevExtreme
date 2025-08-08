@@ -15,11 +15,11 @@ import {
 import { ValidationRuleType } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-data-grid-required-rule',
@@ -27,7 +27,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiDataGridRequiredRuleComponent) => ({
+                propertyName: 'validationRules',
+                className: 'DxiDataGridRequiredRuleComponent',
+                component
+            }),
+            deps: [DxiDataGridRequiredRuleComponent],
+         }
+         ]
 })
 export class DxiDataGridRequiredRuleComponent extends CollectionNestedOption {
     @Input()
@@ -58,7 +69,6 @@ export class DxiDataGridRequiredRuleComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'validationRules';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

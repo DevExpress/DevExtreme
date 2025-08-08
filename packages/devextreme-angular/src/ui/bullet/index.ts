@@ -50,8 +50,6 @@ import { DxoBulletSizeModule } from 'devextreme-angular/ui/bullet/nested';
 import { DxoBulletTooltipModule } from 'devextreme-angular/ui/bullet/nested';
 
 
-
-
 /**
  * [descr:dxBullet]
 
@@ -490,7 +488,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() valueChange: EventEmitter<number>;
-
 
 
 

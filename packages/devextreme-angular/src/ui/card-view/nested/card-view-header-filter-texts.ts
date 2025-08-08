@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-card-view-card-view-header-filter-texts',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCardViewCardViewHeaderFilterTextsComponent) => ({
+                propertyName: 'texts',
+                className: 'DxoCardViewCardViewHeaderFilterTextsComponent',
+                component
+            }),
+            deps: [DxoCardViewCardViewHeaderFilterTextsComponent],
+         }
+         ]
 })
-export class DxoCardViewCardViewHeaderFilterTextsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewCardViewHeaderFilterTextsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get cancel(): string {
         return this._getOption('cancel');
@@ -59,7 +70,6 @@ export class DxoCardViewCardViewHeaderFilterTextsComponent extends NestedOption 
     protected get _optionPath() {
         return 'texts';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

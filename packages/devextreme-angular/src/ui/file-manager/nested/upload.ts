@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-file-manager-upload',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoFileManagerUploadComponent) => ({
+                propertyName: 'upload',
+                className: 'DxoFileManagerUploadComponent',
+                component
+            }),
+            deps: [DxoFileManagerUploadComponent],
+         }
+         ]
 })
-export class DxoFileManagerUploadComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFileManagerUploadComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get chunkSize(): number {
         return this._getOption('chunkSize');
@@ -51,7 +62,6 @@ export class DxoFileManagerUploadComponent extends NestedOption implements OnDes
     protected get _optionPath() {
         return 'upload';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

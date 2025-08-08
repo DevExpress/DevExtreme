@@ -20,11 +20,11 @@ import { Format } from 'devextreme/common/core/localization';
 import { PieChartLegendHoverMode } from 'devextreme/viz/pie_chart';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-legend',
@@ -32,9 +32,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoLegendComponent) => ({
+                propertyName: 'legend',
+                className: 'DxoLegendComponent',
+                component
+            }),
+            deps: [DxoLegendComponent],
+         }
+         ]
 })
-export class DxoLegendComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLegendComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get backgroundColor(): string | undefined {
         return this._getOption('backgroundColor');
@@ -239,7 +250,6 @@ export class DxoLegendComponent extends NestedOption implements OnDestroy, OnIni
     protected get _optionPath() {
         return 'legend';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

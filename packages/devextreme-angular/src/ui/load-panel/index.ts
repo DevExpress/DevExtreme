@@ -59,8 +59,6 @@ import { DxoLoadPanelShowModule } from 'devextreme-angular/ui/load-panel/nested'
 import { DxoLoadPanelToModule } from 'devextreme-angular/ui/load-panel/nested';
 
 
-
-
 /**
  * [descr:dxLoadPanel]
 
@@ -642,7 +640,6 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() wrapperAttrChange: EventEmitter<any>;
-
 
 
 

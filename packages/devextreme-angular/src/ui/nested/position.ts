@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoPositionConfig } from './base/position-config';
-
 
 @Component({
     selector: 'dxo-position',
@@ -28,7 +28,18 @@ import { DxoPositionConfig } from './base/position-config';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPositionComponent) => ({
+                propertyName: 'position',
+                className: 'DxoPositionComponent',
+                component
+            }),
+            deps: [DxoPositionComponent],
+         }
+         ],
     inputs: [
         'at',
         'boundary',
@@ -39,12 +50,11 @@ import { DxoPositionConfig } from './base/position-config';
         'offset'
     ]
 })
-export class DxoPositionComponent extends DxoPositionConfig implements OnDestroy, OnInit  {
+export class DxoPositionComponent extends DxoPositionConfig implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'position';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -18,11 +18,11 @@ import { DragDirection, DragHighlight } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-row-dragging',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoRowDraggingComponent) => ({
+                propertyName: 'rowDragging',
+                className: 'DxoRowDraggingComponent',
+                component
+            }),
+            deps: [DxoRowDraggingComponent],
+         }
+         ]
 })
-export class DxoRowDraggingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRowDraggingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowDropInsideItem(): boolean {
         return this._getOption('allowDropInsideItem');
@@ -221,7 +232,6 @@ export class DxoRowDraggingComponent extends NestedOption implements OnDestroy, 
     protected get _optionPath() {
         return 'rowDragging';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

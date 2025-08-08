@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-data-grid-operation-descriptions',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDataGridOperationDescriptionsComponent) => ({
+                propertyName: 'operationDescriptions',
+                className: 'DxoDataGridOperationDescriptionsComponent',
+                component
+            }),
+            deps: [DxoDataGridOperationDescriptionsComponent],
+         }
+         ]
 })
-export class DxoDataGridOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get between(): string {
         return this._getOption('between');
@@ -123,7 +134,6 @@ export class DxoDataGridOperationDescriptionsComponent extends NestedOption impl
     protected get _optionPath() {
         return 'operationDescriptions';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

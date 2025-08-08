@@ -19,11 +19,11 @@ import {
 import { Mode } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-group-panel',
@@ -31,9 +31,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoGroupPanelComponent) => ({
+                propertyName: 'groupPanel',
+                className: 'DxoGroupPanelComponent',
+                component
+            }),
+            deps: [DxoGroupPanelComponent],
+         }
+         ]
 })
-export class DxoGroupPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGroupPanelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowColumnDragging(): boolean {
         return this._getOption('allowColumnDragging');
@@ -68,7 +79,6 @@ export class DxoGroupPanelComponent extends NestedOption implements OnDestroy, O
     protected get _optionPath() {
         return 'groupPanel';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

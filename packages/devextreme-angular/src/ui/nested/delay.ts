@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-delay',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDelayComponent) => ({
+                propertyName: 'delay',
+                className: 'DxoDelayComponent',
+                component
+            }),
+            deps: [DxoDelayComponent],
+         }
+         ]
 })
-export class DxoDelayComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDelayComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get hide(): number {
         return this._getOption('hide');
@@ -51,7 +62,6 @@ export class DxoDelayComponent extends NestedOption implements OnDestroy, OnInit
     protected get _optionPath() {
         return 'delay';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

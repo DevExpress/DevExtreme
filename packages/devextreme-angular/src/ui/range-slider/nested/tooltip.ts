@@ -18,11 +18,11 @@ import { Format } from 'devextreme/common/core/localization';
 import { VerticalEdge, TooltipShowMode } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-range-slider-tooltip',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoRangeSliderTooltipComponent) => ({
+                propertyName: 'tooltip',
+                className: 'DxoRangeSliderTooltipComponent',
+                component
+            }),
+            deps: [DxoRangeSliderTooltipComponent],
+         }
+         ]
 })
-export class DxoRangeSliderTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSliderTooltipComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');
@@ -69,7 +80,6 @@ export class DxoRangeSliderTooltipComponent extends NestedOption implements OnDe
     protected get _optionPath() {
         return 'tooltip';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection-config';
-
 
 @Component({
     selector: 'dxo-selection',
@@ -28,7 +28,18 @@ import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSelectionComponent) => ({
+                propertyName: 'selection',
+                className: 'DxoSelectionComponent',
+                component
+            }),
+            deps: [DxoSelectionComponent],
+         }
+         ],
     inputs: [
         'allowSelectAll',
         'recursive',
@@ -40,12 +51,11 @@ import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection
         'showCheckBoxesMode'
     ]
 })
-export class DxoSelectionComponent extends DxoColumnChooserSelectionConfig implements OnDestroy, OnInit  {
+export class DxoSelectionComponent extends DxoColumnChooserSelectionConfig implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'selection';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

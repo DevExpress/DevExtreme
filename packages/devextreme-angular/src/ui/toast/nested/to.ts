@@ -17,11 +17,11 @@ import {
 import { PositionConfig } from 'devextreme/common/core/animation';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-toast-to',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoToastToComponent) => ({
+                propertyName: 'to',
+                className: 'DxoToastToComponent',
+                component
+            }),
+            deps: [DxoToastToComponent],
+         }
+         ]
 })
-export class DxoToastToComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoToastToComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get left(): number {
         return this._getOption('left');
@@ -76,7 +87,6 @@ export class DxoToastToComponent extends NestedOption implements OnDestroy, OnIn
     protected get _optionPath() {
         return 'to';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

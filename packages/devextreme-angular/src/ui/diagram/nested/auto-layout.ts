@@ -18,11 +18,11 @@ import { Orientation } from 'devextreme/common';
 import { DataLayoutType } from 'devextreme/ui/diagram';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-diagram-auto-layout',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDiagramAutoLayoutComponent) => ({
+                propertyName: 'autoLayout',
+                className: 'DxoDiagramAutoLayoutComponent',
+                component
+            }),
+            deps: [DxoDiagramAutoLayoutComponent],
+         }
+         ]
 })
-export class DxoDiagramAutoLayoutComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDiagramAutoLayoutComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get orientation(): Orientation {
         return this._getOption('orientation');
@@ -53,7 +64,6 @@ export class DxoDiagramAutoLayoutComponent extends NestedOption implements OnDes
     protected get _optionPath() {
         return 'autoLayout';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

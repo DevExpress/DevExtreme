@@ -54,8 +54,6 @@ import { DxoDeferRenderingPositionModule } from 'devextreme-angular/ui/defer-ren
 import { DxoDeferRenderingToModule } from 'devextreme-angular/ui/defer-rendering/nested';
 
 
-
-
 /**
  * [descr:dxDeferRendering]
 
@@ -441,7 +439,6 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
 
 
 

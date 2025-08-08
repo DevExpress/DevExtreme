@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoChartsColor } from './base/charts-color';
-
 
 @Component({
     selector: 'dxo-background-color',
@@ -28,18 +28,28 @@ import { DxoChartsColor } from './base/charts-color';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoBackgroundColorComponent) => ({
+                propertyName: 'backgroundColor',
+                className: 'DxoBackgroundColorComponent',
+                component
+            }),
+            deps: [DxoBackgroundColorComponent],
+         }
+         ],
     inputs: [
         'base',
         'fillId'
     ]
 })
-export class DxoBackgroundColorComponent extends DxoChartsColor implements OnDestroy, OnInit  {
+export class DxoBackgroundColorComponent extends DxoChartsColor implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'backgroundColor';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -17,11 +17,11 @@ import {
 import { ChartsColor } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-chart-point-selection-style',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoChartPointSelectionStyleComponent) => ({
+                propertyName: 'selectionStyle',
+                className: 'DxoChartPointSelectionStyleComponent',
+                component
+            }),
+            deps: [DxoChartPointSelectionStyleComponent],
+         }
+         ]
 })
-export class DxoChartPointSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartPointSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get border(): { color?: string | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
@@ -60,7 +71,6 @@ export class DxoChartPointSelectionStyleComponent extends NestedOption implement
     protected get _optionPath() {
         return 'selectionStyle';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

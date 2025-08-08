@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tree-map-tree-mapborder',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTreeMapTreeMapborderComponent) => ({
+                propertyName: 'border',
+                className: 'DxoTreeMapTreeMapborderComponent',
+                component
+            }),
+            deps: [DxoTreeMapTreeMapborderComponent],
+         }
+         ]
 })
-export class DxoTreeMapTreeMapborderComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeMapTreeMapborderComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get color(): string | undefined {
         return this._getOption('color');
@@ -51,7 +62,6 @@ export class DxoTreeMapTreeMapborderComponent extends NestedOption implements On
     protected get _optionPath() {
         return 'border';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

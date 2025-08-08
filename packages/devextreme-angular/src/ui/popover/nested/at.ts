@@ -17,11 +17,11 @@ import {
 import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-popover-at',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPopoverAtComponent) => ({
+                propertyName: 'at',
+                className: 'DxoPopoverAtComponent',
+                component
+            }),
+            deps: [DxoPopoverAtComponent],
+         }
+         ]
 })
-export class DxoPopoverAtComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPopoverAtComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get x(): HorizontalAlignment {
         return this._getOption('x');
@@ -52,7 +63,6 @@ export class DxoPopoverAtComponent extends NestedOption implements OnDestroy, On
     protected get _optionPath() {
         return 'at';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

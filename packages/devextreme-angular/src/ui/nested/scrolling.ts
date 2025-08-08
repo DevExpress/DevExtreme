@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
-
 
 @Component({
     selector: 'dxo-scrolling',
@@ -28,7 +28,18 @@ import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoScrollingComponent) => ({
+                propertyName: 'scrolling',
+                className: 'DxoScrollingComponent',
+                component
+            }),
+            deps: [DxoScrollingComponent],
+         }
+         ],
     inputs: [
         'columnRenderingMode',
         'mode',
@@ -41,12 +52,11 @@ import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
         'useNative'
     ]
 })
-export class DxoScrollingComponent extends DxoSchedulerScrolling implements OnDestroy, OnInit  {
+export class DxoScrollingComponent extends DxoSchedulerScrolling implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'scrolling';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

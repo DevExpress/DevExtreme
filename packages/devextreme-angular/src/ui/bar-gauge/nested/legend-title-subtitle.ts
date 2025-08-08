@@ -17,11 +17,11 @@ import {
 import { Font } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-bar-gauge-legend-title-subtitle',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoBarGaugeLegendTitleSubtitleComponent) => ({
+                propertyName: 'subtitle',
+                className: 'DxoBarGaugeLegendTitleSubtitleComponent',
+                component
+            }),
+            deps: [DxoBarGaugeLegendTitleSubtitleComponent],
+         }
+         ]
 })
-export class DxoBarGaugeLegendTitleSubtitleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBarGaugeLegendTitleSubtitleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get font(): Font {
         return this._getOption('font');
@@ -60,7 +71,6 @@ export class DxoBarGaugeLegendTitleSubtitleComponent extends NestedOption implem
     protected get _optionPath() {
         return 'subtitle';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

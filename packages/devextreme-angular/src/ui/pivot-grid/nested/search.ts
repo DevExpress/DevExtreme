@@ -17,11 +17,11 @@ import {
 import { SearchMode } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-pivot-grid-search',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPivotGridSearchComponent) => ({
+                propertyName: 'search',
+                className: 'DxoPivotGridSearchComponent',
+                component
+            }),
+            deps: [DxoPivotGridSearchComponent],
+         }
+         ]
 })
-export class DxoPivotGridSearchComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPivotGridSearchComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get editorOptions(): any {
         return this._getOption('editorOptions');
@@ -68,7 +79,6 @@ export class DxoPivotGridSearchComponent extends NestedOption implements OnDestr
     protected get _optionPath() {
         return 'search';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

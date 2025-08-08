@@ -18,11 +18,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFilterPanel } from './base/filter-panel';
-
 
 @Component({
     selector: 'dxo-filter-panel',
@@ -30,7 +30,18 @@ import { DxoFilterPanel } from './base/filter-panel';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoFilterPanelComponent) => ({
+                propertyName: 'filterPanel',
+                className: 'DxoFilterPanelComponent',
+                component
+            }),
+            deps: [DxoFilterPanelComponent],
+         }
+         ],
     inputs: [
         'customizeText',
         'filterEnabled',
@@ -38,7 +49,7 @@ import { DxoFilterPanel } from './base/filter-panel';
         'visible'
     ]
 })
-export class DxoFilterPanelComponent extends DxoFilterPanel implements OnDestroy, OnInit  {
+export class DxoFilterPanelComponent extends DxoFilterPanel implements OnDestroy, OnInit {
 
     /**
     
@@ -49,7 +60,6 @@ export class DxoFilterPanelComponent extends DxoFilterPanel implements OnDestroy
     protected get _optionPath() {
         return 'filterPanel';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -17,11 +17,11 @@ import {
 import { ApplyFilterMode } from 'devextreme/common/grids';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tree-list-filter-row',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTreeListFilterRowComponent) => ({
+                propertyName: 'filterRow',
+                className: 'DxoTreeListFilterRowComponent',
+                component
+            }),
+            deps: [DxoTreeListFilterRowComponent],
+         }
+         ]
 })
-export class DxoTreeListFilterRowComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListFilterRowComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get applyFilter(): ApplyFilterMode {
         return this._getOption('applyFilter');
@@ -108,7 +119,6 @@ export class DxoTreeListFilterRowComponent extends NestedOption implements OnDes
     protected get _optionPath() {
         return 'filterRow';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

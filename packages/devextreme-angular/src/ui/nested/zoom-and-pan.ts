@@ -17,11 +17,11 @@ import {
 import { ChartZoomAndPanMode, EventKeyModifier } from 'devextreme/viz/chart';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-zoom-and-pan',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoZoomAndPanComponent) => ({
+                propertyName: 'zoomAndPan',
+                className: 'DxoZoomAndPanComponent',
+                component
+            }),
+            deps: [DxoZoomAndPanComponent],
+         }
+         ]
 })
-export class DxoZoomAndPanComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoZoomAndPanComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowMouseWheel(): boolean {
         return this._getOption('allowMouseWheel');
@@ -92,7 +103,6 @@ export class DxoZoomAndPanComponent extends NestedOption implements OnDestroy, O
     protected get _optionPath() {
         return 'zoomAndPan';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

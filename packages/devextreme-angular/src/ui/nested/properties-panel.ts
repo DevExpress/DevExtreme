@@ -8,10 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
@@ -20,12 +17,11 @@ import {
 import { Command, CustomCommand, PanelVisibility } from 'devextreme/ui/diagram';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiTabComponent } from './tab-dxi';
-
 
 @Component({
     selector: 'dxo-properties-panel',
@@ -33,9 +29,20 @@ import { DxiTabComponent } from './tab-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPropertiesPanelComponent) => ({
+                propertyName: 'propertiesPanel',
+                className: 'DxoPropertiesPanelComponent',
+                component
+            }),
+            deps: [DxoPropertiesPanelComponent],
+         }
+         ]
 })
-export class DxoPropertiesPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPropertiesPanelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get tabs(): Array<any | { commands?: Array<CustomCommand | Command>, groups?: Array<any | { commands?: Array<CustomCommand | Command>, title?: string }>, title?: string }> {
         return this._getOption('tabs');
@@ -55,15 +62,6 @@ export class DxoPropertiesPanelComponent extends NestedOption implements OnDestr
 
     protected get _optionPath() {
         return 'propertiesPanel';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiTabComponent))
-    get tabsChildren(): QueryList<DxiTabComponent> {
-        return this._getOption('tabs');
-    }
-    set tabsChildren(value) {
-        this.setChildren('tabs', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

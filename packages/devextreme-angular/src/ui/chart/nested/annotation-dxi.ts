@@ -20,6 +20,7 @@ import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextr
 import { dxChartAnnotationConfig } from 'devextreme/viz/chart';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -29,14 +30,25 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-
 @Component({
     selector: 'dxi-chart-annotation',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiChartAnnotationComponent) => ({
+                propertyName: 'annotations',
+                className: 'DxiChartAnnotationComponent',
+                component
+            }),
+            deps: [DxiChartAnnotationComponent],
+         }
+         ]
 })
 export class DxiChartAnnotationComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -300,7 +312,6 @@ export class DxiChartAnnotationComponent extends CollectionNestedOption implemen
     protected get _optionPath() {
         return 'annotations';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

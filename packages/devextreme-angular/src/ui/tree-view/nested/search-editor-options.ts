@@ -10,10 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -23,12 +20,11 @@ import { TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorS
 import { TextBoxType, ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/text_box';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiTreeViewButtonComponent } from './button-dxi';
-
 
 @Component({
     selector: 'dxo-tree-view-search-editor-options',
@@ -36,9 +32,20 @@ import { DxiTreeViewButtonComponent } from './button-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTreeViewSearchEditorOptionsComponent) => ({
+                propertyName: 'searchEditorOptions',
+                className: 'DxoTreeViewSearchEditorOptionsComponent',
+                component
+            }),
+            deps: [DxoTreeViewSearchEditorOptionsComponent],
+         }
+         ]
 })
-export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -488,15 +495,6 @@ export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implem
     @Output() valueChange: EventEmitter<string>;
     protected get _optionPath() {
         return 'searchEditorOptions';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiTreeViewButtonComponent))
-    get buttonsChildren(): QueryList<DxiTreeViewButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this.setChildren('buttons', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

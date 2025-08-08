@@ -17,11 +17,11 @@ import {
 import { ChartSeriesAggregationMethod } from 'devextreme/viz/chart';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-aggregation',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoAggregationComponent) => ({
+                propertyName: 'aggregation',
+                className: 'DxoAggregationComponent',
+                component
+            }),
+            deps: [DxoAggregationComponent],
+         }
+         ]
 })
-export class DxoAggregationComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoAggregationComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get calculate(): Function | undefined {
         return this._getOption('calculate');
@@ -60,7 +71,6 @@ export class DxoAggregationComponent extends NestedOption implements OnDestroy, 
     protected get _optionPath() {
         return 'aggregation';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

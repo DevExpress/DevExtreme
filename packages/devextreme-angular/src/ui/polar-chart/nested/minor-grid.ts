@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-polar-chart-minor-grid',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPolarChartMinorGridComponent) => ({
+                propertyName: 'minorGrid',
+                className: 'DxoPolarChartMinorGridComponent',
+                component
+            }),
+            deps: [DxoPolarChartMinorGridComponent],
+         }
+         ]
 })
-export class DxoPolarChartMinorGridComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPolarChartMinorGridComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -67,7 +78,6 @@ export class DxoPolarChartMinorGridComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'minorGrid';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

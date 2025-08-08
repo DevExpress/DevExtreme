@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -59,14 +57,6 @@ import { DxiChatItemModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatMessageTimestampFormatModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatTypingUserModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
-
-import { DxiAlertComponent } from 'devextreme-angular/ui/nested';
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-import { DxiTypingUserComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiChatAlertComponent } from 'devextreme-angular/ui/chat/nested';
-import { DxiChatItemComponent } from 'devextreme-angular/ui/chat/nested';
-import { DxiChatTypingUserComponent } from 'devextreme-angular/ui/chat/nested';
 
 
 /**
@@ -687,54 +677,24 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
 
 
-    @ContentChildren(DxiChatAlertComponent)
-    get alertsChildren(): QueryList<DxiChatAlertComponent> {
-        return this._getOption('alerts');
-    }
-    set alertsChildren(value) {
-        this._setChildren('alerts', value, 'DxiChatAlertComponent');
-    }
-
-    @ContentChildren(DxiChatItemComponent)
-    get itemsChildren(): QueryList<DxiChatItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiChatItemComponent');
-    }
-
-    @ContentChildren(DxiChatTypingUserComponent)
-    get typingUsersChildren(): QueryList<DxiChatTypingUserComponent> {
-        return this._getOption('typingUsers');
-    }
-    set typingUsersChildren(value) {
-        this._setChildren('typingUsers', value, 'DxiChatTypingUserComponent');
-    }
-
-
-    @ContentChildren(DxiAlertComponent)
-    get alertsLegacyChildren(): QueryList<DxiAlertComponent> {
-        return this._getOption('alerts');
-    }
-    set alertsLegacyChildren(value) {
-        this._setChildren('alerts', value, 'DxiAlertComponent');
-    }
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
-
-    @ContentChildren(DxiTypingUserComponent)
-    get typingUsersLegacyChildren(): QueryList<DxiTypingUserComponent> {
-        return this._getOption('typingUsers');
-    }
-    set typingUsersLegacyChildren(value) {
-        this._setChildren('typingUsers', value, 'DxiTypingUserComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('alerts').push('DxiAlertComponent');
+    
+        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
+    
+        getLegacyClassNamesForPropertyName('typingUsers').push('DxiTypingUserComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

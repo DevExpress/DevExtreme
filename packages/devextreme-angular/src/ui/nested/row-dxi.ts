@@ -14,11 +14,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-row',
@@ -26,7 +26,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiRowComponent) => ({
+                propertyName: 'rows',
+                className: 'DxiRowComponent',
+                component
+            }),
+            deps: [DxiRowComponent],
+         }
+         ]
 })
 export class DxiRowComponent extends CollectionNestedOption {
     @Input()
@@ -65,7 +76,6 @@ export class DxiRowComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'rows';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

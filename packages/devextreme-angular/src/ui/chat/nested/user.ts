@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-chat-user',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoChatUserComponent) => ({
+                propertyName: 'user',
+                className: 'DxoChatUserComponent',
+                component
+            }),
+            deps: [DxoChatUserComponent],
+         }
+         ]
 })
-export class DxoChatUserComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChatUserComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get avatarAlt(): string {
         return this._getOption('avatarAlt');
@@ -67,7 +78,6 @@ export class DxoChatUserComponent extends NestedOption implements OnDestroy, OnI
     protected get _optionPath() {
         return 'user';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

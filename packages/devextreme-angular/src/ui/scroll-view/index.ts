@@ -35,8 +35,6 @@ import {
 
 
 
-
-
 /**
  * [descr:dxScrollView]
 
@@ -410,7 +408,6 @@ export class DxScrollViewComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
 
 
 

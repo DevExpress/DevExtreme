@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-diagram-editing',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDiagramEditingComponent) => ({
+                propertyName: 'editing',
+                className: 'DxoDiagramEditingComponent',
+                component
+            }),
+            deps: [DxoDiagramEditingComponent],
+         }
+         ]
 })
-export class DxoDiagramEditingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDiagramEditingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowAddShape(): boolean {
         return this._getOption('allowAddShape');
@@ -107,7 +118,6 @@ export class DxoDiagramEditingComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'editing';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -17,11 +17,11 @@ import {
 import { ShapeCategory, ToolboxDisplayMode, ShapeType } from 'devextreme/ui/diagram';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-diagram-context-toolbox',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDiagramContextToolboxComponent) => ({
+                propertyName: 'contextToolbox',
+                className: 'DxoDiagramContextToolboxComponent',
+                component
+            }),
+            deps: [DxoDiagramContextToolboxComponent],
+         }
+         ]
 })
-export class DxoDiagramContextToolboxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDiagramContextToolboxComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get category(): ShapeCategory | string {
         return this._getOption('category');
@@ -84,7 +95,6 @@ export class DxoDiagramContextToolboxComponent extends NestedOption implements O
     protected get _optionPath() {
         return 'contextToolbox';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

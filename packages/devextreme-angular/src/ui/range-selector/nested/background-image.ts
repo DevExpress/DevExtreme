@@ -17,11 +17,11 @@ import {
 import { BackgroundImageLocation } from 'devextreme/viz/range_selector';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-range-selector-background-image',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoRangeSelectorBackgroundImageComponent) => ({
+                propertyName: 'image',
+                className: 'DxoRangeSelectorBackgroundImageComponent',
+                component
+            }),
+            deps: [DxoRangeSelectorBackgroundImageComponent],
+         }
+         ]
 })
-export class DxoRangeSelectorBackgroundImageComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorBackgroundImageComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get location(): BackgroundImageLocation {
         return this._getOption('location');
@@ -52,7 +63,6 @@ export class DxoRangeSelectorBackgroundImageComponent extends NestedOption imple
     protected get _optionPath() {
         return 'image';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

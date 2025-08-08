@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoSortableOptions } from './base/sortable-options';
-
 
 @Component({
     selector: 'dxo-item-dragging',
@@ -28,7 +28,18 @@ import { DxoSortableOptions } from './base/sortable-options';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoItemDraggingComponent) => ({
+                propertyName: 'itemDragging',
+                className: 'DxoItemDraggingComponent',
+                component
+            }),
+            deps: [DxoItemDraggingComponent],
+         }
+         ],
     inputs: [
         'allowDropInsideItem',
         'allowReordering',
@@ -63,12 +74,11 @@ import { DxoSortableOptions } from './base/sortable-options';
         'width'
     ]
 })
-export class DxoItemDraggingComponent extends DxoSortableOptions implements OnDestroy, OnInit  {
+export class DxoItemDraggingComponent extends DxoSortableOptions implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'itemDragging';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

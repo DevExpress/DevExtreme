@@ -18,11 +18,11 @@ import { Font } from 'devextreme/common/charts';
 import { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-chart-legend-title',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoChartLegendTitleComponent) => ({
+                propertyName: 'title',
+                className: 'DxoChartLegendTitleComponent',
+                component
+            }),
+            deps: [DxoChartLegendTitleComponent],
+         }
+         ]
 })
-export class DxoChartLegendTitleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartLegendTitleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get font(): Font {
         return this._getOption('font');
@@ -93,7 +104,6 @@ export class DxoChartLegendTitleComponent extends NestedOption implements OnDest
     protected get _optionPath() {
         return 'title';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -18,11 +18,11 @@ import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-resource-assignments',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoResourceAssignmentsComponent) => ({
+                propertyName: 'resourceAssignments',
+                className: 'DxoResourceAssignmentsComponent',
+                component
+            }),
+            deps: [DxoResourceAssignmentsComponent],
+         }
+         ]
 })
-export class DxoResourceAssignmentsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoResourceAssignmentsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
         return this._getOption('dataSource');
@@ -69,7 +80,6 @@ export class DxoResourceAssignmentsComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'resourceAssignments';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

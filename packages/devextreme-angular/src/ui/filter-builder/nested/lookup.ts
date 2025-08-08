@@ -18,11 +18,11 @@ import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-filter-builder-lookup',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoFilterBuilderLookupComponent) => ({
+                propertyName: 'lookup',
+                className: 'DxoFilterBuilderLookupComponent',
+                component
+            }),
+            deps: [DxoFilterBuilderLookupComponent],
+         }
+         ]
 })
-export class DxoFilterBuilderLookupComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFilterBuilderLookupComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowClearing(): boolean {
         return this._getOption('allowClearing');
@@ -69,7 +80,6 @@ export class DxoFilterBuilderLookupComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'lookup';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -18,9 +18,7 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -82,12 +80,6 @@ import { DxoSelectBoxPositionModule } from 'devextreme-angular/ui/select-box/nes
 import { DxoSelectBoxShowModule } from 'devextreme-angular/ui/select-box/nested';
 import { DxoSelectBoxToModule } from 'devextreme-angular/ui/select-box/nested';
 import { DxiSelectBoxToolbarItemModule } from 'devextreme-angular/ui/select-box/nested';
-
-import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiSelectBoxButtonComponent } from 'devextreme-angular/ui/select-box/nested';
-import { DxiSelectBoxItemComponent } from 'devextreme-angular/ui/select-box/nested';
 
 
 
@@ -1509,38 +1501,22 @@ export class DxSelectBoxComponent extends DxComponent implements OnDestroy, Cont
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiSelectBoxButtonComponent)
-    get buttonsChildren(): QueryList<DxiSelectBoxButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiSelectBoxButtonComponent');
-    }
-
-    @ContentChildren(DxiSelectBoxItemComponent)
-    get itemsChildren(): QueryList<DxiSelectBoxItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiSelectBoxItemComponent');
-    }
-
-
-    @ContentChildren(DxiButtonComponent)
-    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
-    }
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('buttons').push('DxiButtonComponent');
+    
+        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

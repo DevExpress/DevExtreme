@@ -19,11 +19,11 @@ import { dxTreeMapNode } from 'devextreme/viz/tree_map';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tree-map-tooltip',
@@ -31,9 +31,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTreeMapTooltipComponent) => ({
+                propertyName: 'tooltip',
+                className: 'DxoTreeMapTooltipComponent',
+                component
+            }),
+            deps: [DxoTreeMapTooltipComponent],
+         }
+         ]
 })
-export class DxoTreeMapTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeMapTooltipComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');
@@ -158,7 +169,6 @@ export class DxoTreeMapTooltipComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'tooltip';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

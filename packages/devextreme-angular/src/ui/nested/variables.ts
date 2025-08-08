@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorVariables } from './base/html-editor-variables';
-
 
 @Component({
     selector: 'dxo-variables',
@@ -28,18 +28,28 @@ import { DxoHtmlEditorVariables } from './base/html-editor-variables';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoVariablesComponent) => ({
+                propertyName: 'variables',
+                className: 'DxoVariablesComponent',
+                component
+            }),
+            deps: [DxoVariablesComponent],
+         }
+         ],
     inputs: [
         'dataSource',
         'escapeChar'
     ]
 })
-export class DxoVariablesComponent extends DxoHtmlEditorVariables implements OnDestroy, OnInit  {
+export class DxoVariablesComponent extends DxoHtmlEditorVariables implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'variables';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

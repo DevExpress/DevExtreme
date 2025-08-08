@@ -8,11 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    Input
 } from '@angular/core';
 
 
@@ -21,13 +17,11 @@ import {
 import { dxCardViewToolbarItem, PredefinedToolbarItem } from 'devextreme/ui/card_view';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiCardViewItemComponent } from './item-dxi';
-import { DxiCardViewToolbarItemComponent } from './toolbar-item-dxi';
-
 
 @Component({
     selector: 'dxo-card-view-toolbar',
@@ -35,9 +29,20 @@ import { DxiCardViewToolbarItemComponent } from './toolbar-item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCardViewToolbarComponent) => ({
+                propertyName: 'toolbar',
+                className: 'DxoCardViewToolbarComponent',
+                component
+            }),
+            deps: [DxoCardViewToolbarComponent],
+         }
+         ]
 })
-export class DxoCardViewToolbarComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
+export class DxoCardViewToolbarComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -75,22 +80,6 @@ export class DxoCardViewToolbarComponent extends NestedOption implements OnDestr
         return 'toolbar';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiCardViewItemComponent)) itemsChildren!: QueryList<DxiCardViewItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiCardViewToolbarItemComponent)) toolbarItemsChildren!: QueryList<DxiCardViewToolbarItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.itemsChildren.toArray(),
-            ...this.toolbarItemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -108,12 +97,6 @@ export class DxoCardViewToolbarComponent extends NestedOption implements OnDestr
     }
 
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-        this.toolbarItemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

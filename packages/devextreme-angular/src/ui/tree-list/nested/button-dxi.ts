@@ -21,6 +21,7 @@ import { dxTreeListColumn, dxTreeListRowObject, TreeListPredefinedColumnButton }
 import { event } from 'devextreme/events/events.types';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -30,14 +31,25 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-
 @Component({
     selector: 'dxi-tree-list-button',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiTreeListButtonComponent) => ({
+                propertyName: 'buttons',
+                className: 'DxiTreeListButtonComponent',
+                component
+            }),
+            deps: [DxiTreeListButtonComponent],
+         }
+         ]
 })
 export class DxiTreeListButtonComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -117,7 +129,6 @@ export class DxiTreeListButtonComponent extends CollectionNestedOption implement
     protected get _optionPath() {
         return 'buttons';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

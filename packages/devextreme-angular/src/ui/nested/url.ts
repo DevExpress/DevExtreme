@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-url',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoUrlComponent) => ({
+                propertyName: 'url',
+                className: 'DxoUrlComponent',
+                component
+            }),
+            deps: [DxoUrlComponent],
+         }
+         ]
 })
-export class DxoUrlComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoUrlComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get rangeMaxPoint(): string | undefined {
         return this._getOption('rangeMaxPoint');
@@ -51,7 +62,6 @@ export class DxoUrlComponent extends NestedOption implements OnDestroy, OnInit  
     protected get _optionPath() {
         return 'url';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

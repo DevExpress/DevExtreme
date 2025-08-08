@@ -22,6 +22,7 @@ import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextr
 import { dxPieChartAnnotationConfig, PieChartAnnotationLocation } from 'devextreme/viz/pie_chart';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -31,14 +32,25 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
-
 @Component({
     selector: 'dxo-pie-chart-common-annotation-settings',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPieChartCommonAnnotationSettingsComponent) => ({
+                propertyName: 'commonAnnotationSettings',
+                className: 'DxoPieChartCommonAnnotationSettingsComponent',
+                component
+            }),
+            deps: [DxoPieChartCommonAnnotationSettingsComponent],
+         }
+         ]
 })
 export class DxoPieChartCommonAnnotationSettingsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
@@ -286,7 +298,6 @@ export class DxoPieChartCommonAnnotationSettingsComponent extends NestedOption i
     protected get _optionPath() {
         return 'commonAnnotationSettings';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

@@ -17,11 +17,11 @@ import {
 import { ScrollMode, Mode } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-pivot-grid-scrolling',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPivotGridScrollingComponent) => ({
+                propertyName: 'scrolling',
+                className: 'DxoPivotGridScrollingComponent',
+                component
+            }),
+            deps: [DxoPivotGridScrollingComponent],
+         }
+         ]
 })
-export class DxoPivotGridScrollingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPivotGridScrollingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get mode(): ScrollMode {
         return this._getOption('mode');
@@ -52,7 +63,6 @@ export class DxoPivotGridScrollingComponent extends NestedOption implements OnDe
     protected get _optionPath() {
         return 'scrolling';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

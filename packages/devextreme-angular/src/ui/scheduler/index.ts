@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -61,12 +59,6 @@ import { DxoSchedulerScrollingModule } from 'devextreme-angular/ui/scheduler/nes
 import { DxoSchedulerToolbarModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerToolbarItemModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerViewModule } from 'devextreme-angular/ui/scheduler/nested';
-
-import { DxiResourceComponent } from 'devextreme-angular/ui/nested';
-import { DxiViewComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiSchedulerResourceComponent } from 'devextreme-angular/ui/scheduler/nested';
-import { DxiSchedulerViewComponent } from 'devextreme-angular/ui/scheduler/nested';
 
 
 /**
@@ -1457,38 +1449,22 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
 
 
-    @ContentChildren(DxiSchedulerResourceComponent)
-    get resourcesChildren(): QueryList<DxiSchedulerResourceComponent> {
-        return this._getOption('resources');
-    }
-    set resourcesChildren(value) {
-        this._setChildren('resources', value, 'DxiSchedulerResourceComponent');
-    }
-
-    @ContentChildren(DxiSchedulerViewComponent)
-    get viewsChildren(): QueryList<DxiSchedulerViewComponent> {
-        return this._getOption('views');
-    }
-    set viewsChildren(value) {
-        this._setChildren('views', value, 'DxiSchedulerViewComponent');
-    }
-
-
-    @ContentChildren(DxiResourceComponent)
-    get resourcesLegacyChildren(): QueryList<DxiResourceComponent> {
-        return this._getOption('resources');
-    }
-    set resourcesLegacyChildren(value) {
-        this._setChildren('resources', value, 'DxiResourceComponent');
-    }
-
-    @ContentChildren(DxiViewComponent)
-    get viewsLegacyChildren(): QueryList<DxiViewComponent> {
-        return this._getOption('views');
-    }
-    set viewsLegacyChildren(value) {
-        this._setChildren('views', value, 'DxiViewComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('resources').push('DxiResourceComponent');
+    
+        getLegacyClassNamesForPropertyName('views').push('DxiViewComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

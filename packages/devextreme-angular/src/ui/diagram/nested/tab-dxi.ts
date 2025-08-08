@@ -6,11 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    Input
 } from '@angular/core';
 
 
@@ -19,14 +15,11 @@ import {
 import { Command, CustomCommand } from 'devextreme/ui/diagram';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiDiagramCommandComponent } from './command-dxi';
-import { DxiDiagramGroupComponent } from './group-dxi';
-import { DxiDiagramTabGroupComponent } from './tab-group-dxi';
-
 
 @Component({
     selector: 'dxi-diagram-tab',
@@ -34,9 +27,20 @@ import { DxiDiagramTabGroupComponent } from './tab-group-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiDiagramTabComponent) => ({
+                propertyName: 'tabs',
+                className: 'DxiDiagramTabComponent',
+                component
+            }),
+            deps: [DxiDiagramTabComponent],
+         }
+         ]
 })
-export class DxiDiagramTabComponent extends CollectionNestedOption implements AfterContentInit  {
+export class DxiDiagramTabComponent extends CollectionNestedOption {
     @Input()
     get commands(): Array<Command | CustomCommand> {
         return this._getOption('commands');
@@ -66,30 +70,6 @@ export class DxiDiagramTabComponent extends CollectionNestedOption implements Af
         return 'tabs';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiDiagramGroupComponent)) groupsChildren!: QueryList<DxiDiagramGroupComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDiagramTabGroupComponent)) tabGroupsChildren!: QueryList<DxiDiagramTabGroupComponent>
-    
-    setGroups() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.groupsChildren.toArray(),
-            ...this.tabGroupsChildren.toArray(),
-        ]);
-        this.setChildren('groups', q);
-    }
-
-    @ContentChildren(forwardRef(() => DxiDiagramCommandComponent))
-    get commandsChildren(): QueryList<DxiDiagramCommandComponent> {
-        return this._getOption('commands');
-    }
-    set commandsChildren(value) {
-        this.setChildren('commands', value);
-    }
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -103,12 +83,6 @@ export class DxiDiagramTabComponent extends CollectionNestedOption implements Af
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
-    ngAfterContentInit() {
-        this.setGroups();
-        
-        this.groupsChildren.changes.subscribe(() => { this.setGroups() });
-        this.tabGroupsChildren.changes.subscribe(() => { this.setGroups() });
-    }
 }
 
 @NgModule({

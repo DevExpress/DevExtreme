@@ -8,11 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    Input
 } from '@angular/core';
 
 
@@ -21,13 +17,11 @@ import {
 import { AIToolbarItem, dxHtmlEditorToolbarItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiHtmlEditorItemComponent } from './item-dxi';
-import { DxiHtmlEditorToolbarItemComponent } from './toolbar-item-dxi';
-
 
 @Component({
     selector: 'dxo-html-editor-toolbar',
@@ -35,9 +29,20 @@ import { DxiHtmlEditorToolbarItemComponent } from './toolbar-item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoHtmlEditorToolbarComponent) => ({
+                propertyName: 'toolbar',
+                className: 'DxoHtmlEditorToolbarComponent',
+                component
+            }),
+            deps: [DxoHtmlEditorToolbarComponent],
+         }
+         ]
 })
-export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
+export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get container(): any | string {
         return this._getOption('container');
@@ -67,22 +72,6 @@ export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDes
         return 'toolbar';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent)) itemsChildren!: QueryList<DxiHtmlEditorItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiHtmlEditorToolbarItemComponent)) toolbarItemsChildren!: QueryList<DxiHtmlEditorToolbarItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.itemsChildren.toArray(),
-            ...this.toolbarItemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -100,12 +89,6 @@ export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDes
     }
 
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-        this.toolbarItemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

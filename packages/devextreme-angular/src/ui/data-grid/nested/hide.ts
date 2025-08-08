@@ -18,11 +18,11 @@ import { AnimationConfig, AnimationState, AnimationType } from 'devextreme/commo
 import { Direction } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-data-grid-hide',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDataGridHideComponent) => ({
+                propertyName: 'hide',
+                className: 'DxoDataGridHideComponent',
+                component
+            }),
+            deps: [DxoDataGridHideComponent],
+         }
+         ]
 })
-export class DxoDataGridHideComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridHideComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get complete(): (($element: any, config: AnimationConfig) => void) {
         return this._getOption('complete');
@@ -117,7 +128,6 @@ export class DxoDataGridHideComponent extends NestedOption implements OnDestroy,
     protected get _optionPath() {
         return 'hide';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

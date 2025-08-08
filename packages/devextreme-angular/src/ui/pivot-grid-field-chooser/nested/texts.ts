@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-pivot-grid-field-chooser-texts',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPivotGridFieldChooserTextsComponent) => ({
+                propertyName: 'texts',
+                className: 'DxoPivotGridFieldChooserTextsComponent',
+                component
+            }),
+            deps: [DxoPivotGridFieldChooserTextsComponent],
+         }
+         ]
 })
-export class DxoPivotGridFieldChooserTextsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPivotGridFieldChooserTextsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get cancel(): string {
         return this._getOption('cancel');
@@ -99,7 +110,6 @@ export class DxoPivotGridFieldChooserTextsComponent extends NestedOption impleme
     protected get _optionPath() {
         return 'texts';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

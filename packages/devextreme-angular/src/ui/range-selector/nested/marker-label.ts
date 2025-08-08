@@ -17,11 +17,11 @@ import {
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-range-selector-marker-label',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoRangeSelectorMarkerLabelComponent) => ({
+                propertyName: 'label',
+                className: 'DxoRangeSelectorMarkerLabelComponent',
+                component
+            }),
+            deps: [DxoRangeSelectorMarkerLabelComponent],
+         }
+         ]
 })
-export class DxoRangeSelectorMarkerLabelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorMarkerLabelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get customizeText(): ((markerValue: { value: Date | number, valueText: string }) => string) {
         return this._getOption('customizeText');
@@ -52,7 +63,6 @@ export class DxoRangeSelectorMarkerLabelComponent extends NestedOption implement
     protected get _optionPath() {
         return 'label';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

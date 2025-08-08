@@ -8,10 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
@@ -20,12 +17,11 @@ import {
 import { dxFileManagerDetailsColumn } from 'devextreme/ui/file_manager';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiColumnComponent } from './column-dxi';
-
 
 @Component({
     selector: 'dxo-details',
@@ -33,9 +29,20 @@ import { DxiColumnComponent } from './column-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDetailsComponent) => ({
+                propertyName: 'details',
+                className: 'DxoDetailsComponent',
+                component
+            }),
+            deps: [DxoDetailsComponent],
+         }
+         ]
 })
-export class DxoDetailsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDetailsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get columns(): Array<dxFileManagerDetailsColumn | string> {
         return this._getOption('columns');
@@ -47,15 +54,6 @@ export class DxoDetailsComponent extends NestedOption implements OnDestroy, OnIn
 
     protected get _optionPath() {
         return 'details';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiColumnComponent))
-    get columnsChildren(): QueryList<DxiColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsChildren(value) {
-        this.setChildren('columns', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

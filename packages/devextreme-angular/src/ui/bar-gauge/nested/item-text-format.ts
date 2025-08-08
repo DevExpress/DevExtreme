@@ -17,11 +17,11 @@ import {
 import { Format } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-bar-gauge-item-text-format',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoBarGaugeItemTextFormatComponent) => ({
+                propertyName: 'itemTextFormat',
+                className: 'DxoBarGaugeItemTextFormatComponent',
+                component
+            }),
+            deps: [DxoBarGaugeItemTextFormatComponent],
+         }
+         ]
 })
-export class DxoBarGaugeItemTextFormatComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBarGaugeItemTextFormatComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get currency(): string {
         return this._getOption('currency');
@@ -84,7 +95,6 @@ export class DxoBarGaugeItemTextFormatComponent extends NestedOption implements 
     protected get _optionPath() {
         return 'itemTextFormat';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -10,10 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -24,12 +21,11 @@ import { Properties as dxFormOptions } from 'devextreme/ui/form';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiChangeComponent } from './change-dxi';
-
 
 @Component({
     selector: 'dxo-editing',
@@ -37,9 +33,20 @@ import { DxiChangeComponent } from './change-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoEditingComponent) => ({
+                propertyName: 'editing',
+                className: 'DxoEditingComponent',
+                component
+            }),
+            deps: [DxoEditingComponent],
+         }
+         ]
 })
-export class DxoEditingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoEditingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowDeleting(): boolean | Function {
         return this._getOption('allowDeleting');
@@ -367,15 +374,6 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
     @Output() editRowKeyChange: EventEmitter<any>;
     protected get _optionPath() {
         return 'editing';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiChangeComponent))
-    get changesChildren(): QueryList<DxiChangeComponent> {
-        return this._getOption('changes');
-    }
-    set changesChildren(value) {
-        this.setChildren('changes', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

@@ -16,11 +16,11 @@ import { dxFilterBuilderField, FieldInfo } from 'devextreme/ui/filter_builder';
 import { DataType } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-data-grid-custom-operation',
@@ -28,7 +28,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiDataGridCustomOperationComponent) => ({
+                propertyName: 'customOperations',
+                className: 'DxiDataGridCustomOperationComponent',
+                component
+            }),
+            deps: [DxiDataGridCustomOperationComponent],
+         }
+         ]
 })
 export class DxiDataGridCustomOperationComponent extends CollectionNestedOption {
     @Input()
@@ -99,7 +110,6 @@ export class DxiDataGridCustomOperationComponent extends CollectionNestedOption 
     protected get _optionPath() {
         return 'customOperations';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

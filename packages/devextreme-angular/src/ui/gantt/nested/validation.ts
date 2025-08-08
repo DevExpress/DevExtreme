@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-gantt-validation',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoGanttValidationComponent) => ({
+                propertyName: 'validation',
+                className: 'DxoGanttValidationComponent',
+                component
+            }),
+            deps: [DxoGanttValidationComponent],
+         }
+         ]
 })
-export class DxoGanttValidationComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGanttValidationComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get autoUpdateParentTasks(): boolean {
         return this._getOption('autoUpdateParentTasks');
@@ -59,7 +70,6 @@ export class DxoGanttValidationComponent extends NestedOption implements OnDestr
     protected get _optionPath() {
         return 'validation';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

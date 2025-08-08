@@ -19,11 +19,11 @@ import {
 import { CalendarZoomLevel } from 'devextreme/ui/calendar';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoCalendarOptions } from './base/calendar-options';
-
 
 @Component({
     selector: 'dxo-calendar-options',
@@ -31,7 +31,18 @@ import { DxoCalendarOptions } from './base/calendar-options';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCalendarOptionsComponent) => ({
+                propertyName: 'calendarOptions',
+                className: 'DxoCalendarOptionsComponent',
+                component
+            }),
+            deps: [DxoCalendarOptionsComponent],
+         }
+         ],
     inputs: [
         'accessKey',
         'activeStateEnabled',
@@ -75,7 +86,7 @@ import { DxoCalendarOptions } from './base/calendar-options';
         'zoomLevel'
     ]
 })
-export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements OnDestroy, OnInit  {
+export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements OnDestroy, OnInit {
 
     /**
     
@@ -93,7 +104,6 @@ export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements O
     protected get _optionPath() {
         return 'calendarOptions';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

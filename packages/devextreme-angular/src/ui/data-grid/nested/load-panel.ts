@@ -17,11 +17,11 @@ import {
 import { Mode } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-data-grid-load-panel',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDataGridLoadPanelComponent) => ({
+                propertyName: 'loadPanel',
+                className: 'DxoDataGridLoadPanelComponent',
+                component
+            }),
+            deps: [DxoDataGridLoadPanelComponent],
+         }
+         ]
 })
-export class DxoDataGridLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridLoadPanelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get enabled(): boolean | Mode {
         return this._getOption('enabled');
@@ -108,7 +119,6 @@ export class DxoDataGridLoadPanelComponent extends NestedOption implements OnDes
     protected get _optionPath() {
         return 'loadPanel';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

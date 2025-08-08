@@ -17,11 +17,11 @@ import { VectorMapLegendItem, VectorMapMarkerShape } from 'devextreme/viz/vector
 import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-vector-map-legend',
@@ -29,7 +29,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiVectorMapLegendComponent) => ({
+                propertyName: 'legends',
+                className: 'DxiVectorMapLegendComponent',
+                component
+            }),
+            deps: [DxiVectorMapLegendComponent],
+         }
+         ]
 })
 export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     @Input()
@@ -236,7 +247,6 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'legends';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

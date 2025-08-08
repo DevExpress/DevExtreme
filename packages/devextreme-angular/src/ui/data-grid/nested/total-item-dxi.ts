@@ -17,11 +17,11 @@ import { SummaryType } from 'devextreme/common/grids';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-data-grid-total-item',
@@ -29,7 +29,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiDataGridTotalItemComponent) => ({
+                propertyName: 'totalItems',
+                className: 'DxiDataGridTotalItemComponent',
+                component
+            }),
+            deps: [DxiDataGridTotalItemComponent],
+         }
+         ]
 })
 export class DxiDataGridTotalItemComponent extends CollectionNestedOption {
     @Input()
@@ -116,7 +127,6 @@ export class DxiDataGridTotalItemComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'totalItems';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

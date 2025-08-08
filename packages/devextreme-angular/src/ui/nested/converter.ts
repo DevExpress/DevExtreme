@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoConverter } from './base/converter';
-
 
 @Component({
     selector: 'dxo-converter',
@@ -28,18 +28,28 @@ import { DxoConverter } from './base/converter';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoConverterComponent) => ({
+                propertyName: 'converter',
+                className: 'DxoConverterComponent',
+                component
+            }),
+            deps: [DxoConverterComponent],
+         }
+         ],
     inputs: [
         'fromHtml',
         'toHtml'
     ]
 })
-export class DxoConverterComponent extends DxoConverter implements OnDestroy, OnInit  {
+export class DxoConverterComponent extends DxoConverter implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'converter';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

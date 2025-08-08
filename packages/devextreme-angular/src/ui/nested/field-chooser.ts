@@ -18,11 +18,11 @@ import { FieldChooserLayout } from 'devextreme/common';
 import { ApplyChangesMode } from 'devextreme/common/grids';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-field-chooser',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoFieldChooserComponent) => ({
+                propertyName: 'fieldChooser',
+                className: 'DxoFieldChooserComponent',
+                component
+            }),
+            deps: [DxoFieldChooserComponent],
+         }
+         ]
 })
-export class DxoFieldChooserComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFieldChooserComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
@@ -109,7 +120,6 @@ export class DxoFieldChooserComponent extends NestedOption implements OnDestroy,
     protected get _optionPath() {
         return 'fieldChooser';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

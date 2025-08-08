@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-vector-map-source',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoVectorMapSourceComponent) => ({
+                propertyName: 'source',
+                className: 'DxoVectorMapSourceComponent',
+                component
+            }),
+            deps: [DxoVectorMapSourceComponent],
+         }
+         ]
 })
-export class DxoVectorMapSourceComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoVectorMapSourceComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get grouping(): string {
         return this._getOption('grouping');
@@ -51,7 +62,6 @@ export class DxoVectorMapSourceComponent extends NestedOption implements OnDestr
     protected get _optionPath() {
         return 'source';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

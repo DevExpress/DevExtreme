@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tree-map-size',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTreeMapSizeComponent) => ({
+                propertyName: 'size',
+                className: 'DxoTreeMapSizeComponent',
+                component
+            }),
+            deps: [DxoTreeMapSizeComponent],
+         }
+         ]
 })
-export class DxoTreeMapSizeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeMapSizeComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get height(): number | undefined {
         return this._getOption('height');
@@ -51,7 +62,6 @@ export class DxoTreeMapSizeComponent extends NestedOption implements OnDestroy, 
     protected get _optionPath() {
         return 'size';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

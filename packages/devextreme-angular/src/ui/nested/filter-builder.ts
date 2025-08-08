@@ -10,10 +10,7 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -21,13 +18,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFilterBuilderOptions } from './base/filter-builder-options';
-import { DxiCustomOperationComponent } from './custom-operation-dxi';
-import { DxiFieldComponent } from './field-dxi';
-
 
 @Component({
     selector: 'dxo-filter-builder',
@@ -35,7 +30,18 @@ import { DxiFieldComponent } from './field-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoFilterBuilderComponent) => ({
+                propertyName: 'filterBuilder',
+                className: 'DxoFilterBuilderComponent',
+                component
+            }),
+            deps: [DxoFilterBuilderComponent],
+         }
+         ],
     inputs: [
         'accessKey',
         'activeStateEnabled',
@@ -66,7 +72,7 @@ import { DxiFieldComponent } from './field-dxi';
         'width'
     ]
 })
-export class DxoFilterBuilderComponent extends DxoFilterBuilderOptions implements OnDestroy, OnInit  {
+export class DxoFilterBuilderComponent extends DxoFilterBuilderOptions implements OnDestroy, OnInit {
 
     /**
     
@@ -76,23 +82,6 @@ export class DxoFilterBuilderComponent extends DxoFilterBuilderOptions implement
     @Output() valueChange: EventEmitter<any>;
     protected get _optionPath() {
         return 'filterBuilder';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiCustomOperationComponent))
-    get customOperationsChildren(): QueryList<DxiCustomOperationComponent> {
-        return this._getOption('customOperations');
-    }
-    set customOperationsChildren(value) {
-        this.setChildren('customOperations', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiFieldComponent))
-    get fieldsChildren(): QueryList<DxiFieldComponent> {
-        return this._getOption('fields');
-    }
-    set fieldsChildren(value) {
-        this.setChildren('fields', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

@@ -10,10 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -26,12 +23,11 @@ import { Position } from 'devextreme/common';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiLookupToolbarItemComponent } from './toolbar-item-dxi';
-
 
 @Component({
     selector: 'dxo-lookup-drop-down-options',
@@ -39,9 +35,20 @@ import { DxiLookupToolbarItemComponent } from './toolbar-item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoLookupDropDownOptionsComponent) => ({
+                propertyName: 'dropDownOptions',
+                className: 'DxoLookupDropDownOptionsComponent',
+                component
+            }),
+            deps: [DxoLookupDropDownOptionsComponent],
+         }
+         ]
 })
-export class DxoLookupDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLookupDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
         return this._getOption('animation');
@@ -384,15 +391,6 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     @Output() widthChange: EventEmitter<number | string>;
     protected get _optionPath() {
         return 'dropDownOptions';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiLookupToolbarItemComponent))
-    get toolbarItemsChildren(): QueryList<DxiLookupToolbarItemComponent> {
-        return this._getOption('toolbarItems');
-    }
-    set toolbarItemsChildren(value) {
-        this.setChildren('toolbarItems', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
