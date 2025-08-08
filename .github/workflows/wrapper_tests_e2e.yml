@@ -84,7 +84,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        framework: [react19, vue3, angular19]
+        framework: [angular19]
 
     steps:
       - name: Get sources

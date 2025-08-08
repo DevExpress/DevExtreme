@@ -52,7 +52,7 @@ export const _updateNestedItems = (
       if (index === 0) {
         hasLegacy[propertyName] = isLegacyClassName;
       } else if (hasLegacy[propertyName] !== isLegacyClassName) {
-        warnAboutIncompatibleNestedItems(componentClassName, items.get(0).className, className);
+        // warnAboutIncompatibleNestedItems(componentClassName, items.get(0).className, className);
         // return;
       }
     }

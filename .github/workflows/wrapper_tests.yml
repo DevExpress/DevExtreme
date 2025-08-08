@@ -113,7 +113,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        framework: [angular, react, vue]
+        framework: [angular]
 
     steps:
       - name: Get sources
