@@ -45,6 +45,14 @@ const DX_DIALOG_BUTTON_CLASSNAME = 'dx-dialog-button';
 
 const DX_BUTTON_CLASSNAME = 'dx-button';
 
+const DEFAULT_HORIZONTAL_OFFSET = 10;
+const DEFAULT_VERTICAL_OFFSET = 0;
+
+const DEFAULT_BOUNDARY_OFFSET = {
+  h: DEFAULT_HORIZONTAL_OFFSET,
+  v: DEFAULT_VERTICAL_OFFSET,
+};
+
 const DEFAULT_BUTTON_OPTIONS: ButtonProperties = {
   text: messageLocalization.format('OK'),
   onClick: (): boolean => true,
@@ -218,7 +226,7 @@ export const custom = (params: DialogParams): BaseDialog => {
   });
 
   const popupPosition = position ?? {
-    boundaryOffset: { h: 10, v: 0 },
+    boundaryOffset: { ...DEFAULT_BOUNDARY_OFFSET },
   };
 
   const configuration: PopupProperties = {
@@ -252,7 +260,7 @@ export const custom = (params: DialogParams): BaseDialog => {
     ...popupOptions,
   };
 
-  // @ts-expect-error ts-error
+  // @ts-expect-error Incorrect constructor usage
   popupInstance = new Popup($element, options);
 
   popupInstance.$wrapper()
