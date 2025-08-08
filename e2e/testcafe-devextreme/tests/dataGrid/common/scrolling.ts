@@ -1838,15 +1838,15 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
 }).before(async () => createWidget('dxDataGrid', {
   height: 70,
   dataSource: [
-    { 'id': '0' },
-    { 'id': '1' },
-    { 'id': '2' },
+    { id: '0' },
+    { id: '1' },
+    { id: '2' },
   ],
   scrolling: { mode: 'virtual' },
   keyExpr: 'id',
   focusedRowEnabled: true,
-  onFocusedRowChanged: function(e) {
-      const data = e.row?.data;
-      $('#otherContainer').text(data.id);
+  onFocusedRowChanged(e) {
+    const data = e.row?.data;
+    $('#otherContainer').text(data.id);
   },
 }));
