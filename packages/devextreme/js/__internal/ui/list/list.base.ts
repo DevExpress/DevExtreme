@@ -5,7 +5,7 @@ import pointerEvents from '@js/common/core/events/pointer';
 import { end as swipeEventEnd } from '@js/common/core/events/swipe';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
-import type { DataSourceOptions } from '@js/common/data';
+import type { DataSourceOptions, GroupItem } from '@js/common/data';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
 import Guid from '@js/core/guid';
@@ -39,7 +39,6 @@ import { render } from '@js/ui/widget/utils.ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
-import type { GroupedDataSourceLike } from '@ts/data/data_converter/grouped';
 import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
 import type {
   CollectionItemInfo,
@@ -546,15 +545,14 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     };
   }
 
-  _getSpecificDataSourceOption():
-    GroupedDataSourceLike<GroupedItem>
-    | DataSourceLike<Item>
+  _getSpecificDataSourceOption(): DataSourceLike<Item>
+    | DataSourceOptions<GroupItem<Item>>
     | null
     | undefined {
     const { dataSource, grouped } = this.option();
 
     if (dataSource && grouped) {
-      return getDataSourceOptions(dataSource);
+      return getDataSourceOptions<Item>(dataSource);
     }
 
     return dataSource;

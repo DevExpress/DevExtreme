@@ -1,49 +1,38 @@
-import { isGroupItemsArray } from '@js/common/data/custom_store';
+import type { GroupItem } from '@js/common/data';
+import { isGroupItemsArray } from '@js/common/data';
 import { isObject } from '@js/core/utils/type';
 import type { DataSourceLike, DataSourceOptions } from '@js/data/data_source';
 
-export type GroupedDataSourceLike<TItem> = DataSourceLike<TItem>
-  & {
-    group?: DataSourceOptions['group'] & {
-      keepInitialKeyOrder?: boolean;
-    };
-  };
-
 const groupKey = 'key';
 
-interface Item {
-  [key: string]: unknown;
-  [groupKey]?: string;
-}
-
-interface GroupedItem {
-  key?: string;
-  items?: (Item | string | number)[];
-}
-
-export function getDataSourceOptions(
-  dataSource: DataSourceLike<GroupedItem>,
-): GroupedDataSourceLike<GroupedItem> {
-  // isArray check is needed to avoid ts errors in identifying the reduce method on dataSource
-  if (!Array.isArray(dataSource) || !isGroupItemsArray(dataSource)) {
+export function getDataSourceOptions<TItem>(
+  dataSource: DataSourceLike<TItem>,
+): DataSourceLike<TItem> | DataSourceOptions<GroupItem<TItem>> {
+  if (!isGroupItemsArray<TItem>(dataSource)) {
     return dataSource;
   }
 
   let hasSimpleItems = false;
 
-  const data = dataSource?.reduce((accumulator: Item[], item: GroupedItem) => {
-    const items = item.items?.map((value: Item | string | number): Item => {
+  const data = dataSource.reduce((
+    accumulator: GroupItem<TItem>[],
+    item: GroupItem<TItem>,
+  ) => {
+    const items = item.items?.map((value: TItem | GroupItem<TItem>): GroupItem<TItem> => {
       let innerItem = value;
       if (!isObject(innerItem)) {
+        // @ts-expect-error
         innerItem = { text: innerItem };
         hasSimpleItems = true;
       }
 
-      if (!(groupKey in innerItem)) {
-        innerItem[groupKey] = item.key;
+      const objectItem = innerItem as Partial<GroupItem<TItem>>;
+
+      if (!(groupKey in objectItem)) {
+        objectItem[groupKey] = item.key;
       }
 
-      return innerItem;
+      return objectItem as GroupItem<TItem>;
     }) ?? [];
     return accumulator.concat(items);
   }, []);
@@ -55,6 +44,7 @@ export function getDataSourceOptions(
     },
     group: {
       selector: groupKey,
+      // @ts-expect-error
       keepInitialKeyOrder: true,
     },
     searchExpr: hasSimpleItems ? 'text' : undefined,

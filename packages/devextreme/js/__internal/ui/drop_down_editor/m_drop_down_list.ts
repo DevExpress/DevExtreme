@@ -2,6 +2,7 @@ import type { SingleMultipleAllOrNone } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
+import type { GroupItem } from '@js/common/data';
 import dataQuery from '@js/common/data/query';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
@@ -22,19 +23,17 @@ import { each } from '@js/core/utils/iterator';
 import { getOuterHeight } from '@js/core/utils/size';
 import { isDefined, isObject, isWindow } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import type { DataSourceLike } from '@js/data/data_source';
+import type { DataSourceLike, DataSourceOptions } from '@js/data/data_source';
 import type { dxDropDownListOptions } from '@js/ui/drop_down_editor/ui.drop_down_list';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import type { Item } from '@js/ui/list';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { GroupedDataSourceLike } from '@ts/data/data_converter/grouped';
 import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 import type { ListBaseProperties } from '@ts/ui/list/list.base';
 import List from '@ts/ui/list/list.edit.search';
-import type { GroupedItem } from '@ts/ui/list/list.edit.strategy.grouped';
 
 const window = getWindow();
 
@@ -650,9 +649,8 @@ class DropDownList<
     };
   }
 
-  _getSpecificDataSourceOption():
-    GroupedDataSourceLike<GroupedItem>
-    | DataSourceLike<Item>
+  _getSpecificDataSourceOption(): DataSourceLike<Item>
+    | DataSourceOptions<GroupItem<Item>>
     | null
     | undefined {
     const { dataSource, grouped } = this.option();
