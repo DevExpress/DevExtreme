@@ -721,7 +721,8 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
     const isEmptyData = this._dataController.isEmpty();
     const allowSelectAll = this.option('selection.allowSelectAll');
     const isSelectAll = this._selectionController.isSelectAll();
-    return !isEmptyData && (allowSelectAll ?? isSelectAll !== false);
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return !isEmptyData && (allowSelectAll || isSelectAll !== false);
   }
 
   private _updateSelectAllValue() {
@@ -729,9 +730,9 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
     const $element = that.element();
     const $editor = $element?.find(`.${SELECT_CHECKBOX_CLASS}`);
 
-    if ($element && $editor.length && that.option('selection.mode') === 'multiple') {
-      const selectAllValue = that._selectionController.isSelectAll();
-      const isVisible = that._isSelectAllCheckBoxVisible();
+    if ($element && $editor.length && this.option('selection.mode') === 'multiple') {
+      const selectAllValue = this._selectionController.isSelectAll();
+      const isVisible = this._isSelectAllCheckBoxVisible();
 
       $editor.dxCheckBox('instance').option({
         visible: isVisible,
@@ -764,7 +765,7 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
       dataType: 'boolean',
       value: that._selectionController.isSelectAll(),
       editorOptions: {
-        visible: that._isSelectAllCheckBoxVisible(),
+        visible: this._isSelectAllCheckBoxVisible(),
       },
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       tabIndex: that.option('useLegacyKeyboardNavigation') ? -1 : that.option('tabIndex') || 0,
