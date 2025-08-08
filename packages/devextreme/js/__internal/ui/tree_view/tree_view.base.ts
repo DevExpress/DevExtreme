@@ -95,8 +95,6 @@ export interface TreeViewBaseProperties extends Properties<TreeViewNode>, Omit<
   deferRendering?: boolean;
 
   _supportItemUrl?: boolean;
-
-  showItemStubs?: boolean;
 }
 
 class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, TreeViewNode> {
@@ -419,7 +417,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       case 'virtualModeEnabled':
       case 'selectByClick':
       case '_supportItemUrl':
-      case 'showItemStubs':
         break;
       case 'selectionMode':
         this._initDataAdapter();
@@ -913,12 +910,9 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   _renderChildren($node: dxElementWrapper, node: TreeViewNode): void {
     if (!this._hasChildren(node)) {
       this._addLeafClass($node);
-      const { showItemStubs } = this.option();
-      if (showItemStubs) {
-        $('<div>')
-          .addClass(EXPANDER_ICON_STUB_CLASS)
-          .appendTo(this._getItem($node));
-      }
+      $('<div>')
+        .addClass(EXPANDER_ICON_STUB_CLASS)
+        .appendTo(this._getItem($node));
       return;
     }
 
