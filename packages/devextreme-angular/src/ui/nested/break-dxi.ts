@@ -37,7 +37,7 @@ import { DxiVizScaleBreak } from './base/viz-scale-break-dxi';
             }),
             deps: [DxiBreakComponent],
          }
-         ],
+    ],
     inputs: [
         'endValue',
         'startValue'

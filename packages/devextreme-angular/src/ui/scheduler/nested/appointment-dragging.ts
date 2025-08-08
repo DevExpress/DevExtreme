@@ -20,7 +20,6 @@ import dxDraggable from 'devextreme/ui/draggable';
 import { event } from 'devextreme/events/events.types';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -34,16 +33,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoSchedulerAppointmentDraggingComponent) => ({
-                propertyName: 'appointmentDragging',
-                className: 'DxoSchedulerAppointmentDraggingComponent',
-                component
-            }),
-            deps: [DxoSchedulerAppointmentDraggingComponent],
-         }
-         ]
+    ],
 })
 export class DxoSchedulerAppointmentDraggingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

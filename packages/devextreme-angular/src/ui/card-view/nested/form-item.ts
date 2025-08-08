@@ -23,7 +23,6 @@ import { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/fo
 import { HorizontalAlignment } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -41,17 +40,8 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         DxTemplateHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoCardViewFormItemComponent) => ({
-                propertyName: 'formItem',
-                className: 'DxoCardViewFormItemComponent',
-                component
-            }),
-            deps: [DxoCardViewFormItemComponent],
-         }
-         ]
+        DxTemplateHost,
+    ],
 })
 export class DxoCardViewFormItemComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {

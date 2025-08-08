@@ -20,7 +20,6 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -38,17 +37,8 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         DxTemplateHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoCardViewCardCoverComponent) => ({
-                propertyName: 'cardCover',
-                className: 'DxoCardViewCardCoverComponent',
-                component
-            }),
-            deps: [DxoCardViewCardCoverComponent],
-         }
-         ]
+        DxTemplateHost,
+    ],
 })
 export class DxoCardViewCardCoverComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {

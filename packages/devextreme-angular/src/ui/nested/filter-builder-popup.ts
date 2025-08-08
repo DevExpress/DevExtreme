@@ -20,7 +20,6 @@ import { PositionAlignment } from 'devextreme/common';
 import { PositionConfig } from 'devextreme/common/core/animation';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -34,16 +33,7 @@ import { DxoPopupOptions } from './base/popup-options';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoFilterBuilderPopupComponent) => ({
-                propertyName: 'filterBuilderPopup',
-                className: 'DxoFilterBuilderPopupComponent',
-                component
-            }),
-            deps: [DxoFilterBuilderPopupComponent],
-         }
-         ],
+    ],
     inputs: [
         'accessKey',
         'animation',

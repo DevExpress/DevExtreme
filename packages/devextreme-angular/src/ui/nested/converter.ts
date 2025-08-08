@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoConverter } from './base/converter';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoConverterComponent) => ({
-                propertyName: 'converter',
-                className: 'DxoConverterComponent',
-                component
-            }),
-            deps: [DxoConverterComponent],
-         }
-         ],
+    ],
     inputs: [
         'fromHtml',
         'toHtml'

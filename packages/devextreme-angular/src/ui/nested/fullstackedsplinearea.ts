@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoFullstackedsplineareaComponent) => ({
-                propertyName: 'fullstackedsplinearea',
-                className: 'DxoFullstackedsplineareaComponent',
-                component
-            }),
-            deps: [DxoFullstackedsplineareaComponent],
-         }
-         ],
+    ],
     inputs: [
         'aggregation',
         'area',

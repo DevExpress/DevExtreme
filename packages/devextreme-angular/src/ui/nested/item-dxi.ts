@@ -36,7 +36,7 @@ import { DxiButtonGroupItem } from './base/button-group-item-dxi';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         DxTemplateHost,
+        DxTemplateHost,
          {
             provide: NESTED_ITEM_TOKEN,
             useFactory: (component: DxiItemComponent) => ({
@@ -46,7 +46,7 @@ import { DxiButtonGroupItem } from './base/button-group-item-dxi';
             }),
             deps: [DxiItemComponent],
          }
-         ],
+    ],
     inputs: [
         'disabled',
         'html',

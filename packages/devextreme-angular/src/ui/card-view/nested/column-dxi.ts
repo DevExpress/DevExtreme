@@ -44,7 +44,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiCardViewColumnComponent],
          }
-         ]
+    ],
 })
 export class DxiCardViewColumnComponent extends CollectionNestedOption {
     @Input()

@@ -19,7 +19,6 @@ import {
 import { CalendarZoomLevel } from 'devextreme/ui/calendar';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -33,16 +32,7 @@ import { DxoCalendarOptions } from './base/calendar-options';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoCalendarOptionsComponent) => ({
-                propertyName: 'calendarOptions',
-                className: 'DxoCalendarOptionsComponent',
-                component
-            }),
-            deps: [DxoCalendarOptionsComponent],
-         }
-         ],
+    ],
     inputs: [
         'accessKey',
         'activeStateEnabled',

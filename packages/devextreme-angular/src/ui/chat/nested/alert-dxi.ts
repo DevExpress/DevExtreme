@@ -37,7 +37,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiChatAlertComponent],
          }
-         ]
+    ],
 })
 export class DxiChatAlertComponent extends CollectionNestedOption {
     @Input()

@@ -38,7 +38,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiLinearGaugeRangeComponent],
          }
-         ]
+    ],
 })
 export class DxiLinearGaugeRangeComponent extends CollectionNestedOption {
     @Input()

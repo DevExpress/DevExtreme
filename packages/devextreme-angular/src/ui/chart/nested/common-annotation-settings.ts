@@ -22,7 +22,6 @@ import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextr
 import { dxChartAnnotationConfig } from 'devextreme/viz/chart';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -40,17 +39,8 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         DxTemplateHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoChartCommonAnnotationSettingsComponent) => ({
-                propertyName: 'commonAnnotationSettings',
-                className: 'DxoChartCommonAnnotationSettingsComponent',
-                component
-            }),
-            deps: [DxoChartCommonAnnotationSettingsComponent],
-         }
-         ]
+        DxTemplateHost,
+    ],
 })
 export class DxoChartCommonAnnotationSettingsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {

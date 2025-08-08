@@ -17,7 +17,6 @@ import {
 import { CollisionResolution } from 'devextreme/common/core/animation';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -31,16 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoPopupCollisionComponent) => ({
-                propertyName: 'collision',
-                className: 'DxoPopupCollisionComponent',
-                component
-            }),
-            deps: [DxoPopupCollisionComponent],
-         }
-         ]
+    ],
 })
 export class DxoPopupCollisionComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

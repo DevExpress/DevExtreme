@@ -38,7 +38,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiFormRequiredRuleComponent],
          }
-         ]
+    ],
 })
 export class DxiFormRequiredRuleComponent extends CollectionNestedOption {
     @Input()

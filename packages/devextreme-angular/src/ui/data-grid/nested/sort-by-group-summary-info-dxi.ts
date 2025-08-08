@@ -38,7 +38,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiDataGridSortByGroupSummaryInfoComponent],
          }
-         ]
+    ],
 })
 export class DxiDataGridSortByGroupSummaryInfoComponent extends CollectionNestedOption {
     @Input()

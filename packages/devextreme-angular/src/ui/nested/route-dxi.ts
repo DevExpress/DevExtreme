@@ -38,7 +38,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiRouteComponent],
          }
-         ]
+    ],
 })
 export class DxiRouteComponent extends CollectionNestedOption {
     @Input()

@@ -37,7 +37,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiResponsiveBoxRowComponent],
          }
-         ]
+    ],
 })
 export class DxiResponsiveBoxRowComponent extends CollectionNestedOption {
     @Input()

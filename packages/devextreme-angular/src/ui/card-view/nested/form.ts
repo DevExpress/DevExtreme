@@ -20,7 +20,6 @@ import { Mode } from 'devextreme/common';
 import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/form';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -34,16 +33,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoCardViewFormComponent) => ({
-                propertyName: 'form',
-                className: 'DxoCardViewFormComponent',
-                component
-            }),
-            deps: [DxoCardViewFormComponent],
-         }
-         ]
+    ],
 })
 export class DxoCardViewFormComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

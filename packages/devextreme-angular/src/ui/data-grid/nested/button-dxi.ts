@@ -38,7 +38,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         DxTemplateHost,
+        DxTemplateHost,
          {
             provide: NESTED_ITEM_TOKEN,
             useFactory: (component: DxiDataGridButtonComponent) => ({
@@ -48,7 +48,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiDataGridButtonComponent],
          }
-         ]
+    ],
 })
 export class DxiDataGridButtonComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {

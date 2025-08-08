@@ -21,7 +21,6 @@ import { SearchMode } from 'devextreme/common';
 import { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -35,16 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoGanttHeaderFilterComponent) => ({
-                propertyName: 'headerFilter',
-                className: 'DxoGanttHeaderFilterComponent',
-                component
-            }),
-            deps: [DxoGanttHeaderFilterComponent],
-         }
-         ]
+    ],
 })
 export class DxoGanttHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

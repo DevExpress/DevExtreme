@@ -18,7 +18,6 @@ import { DashStyle, LegendItem, Font, LegendHoverMode } from 'devextreme/common/
 import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -32,16 +31,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoPolarChartLegendComponent) => ({
-                propertyName: 'legend',
-                className: 'DxoPolarChartLegendComponent',
-                component
-            }),
-            deps: [DxoPolarChartLegendComponent],
-         }
-         ]
+    ],
 })
 export class DxoPolarChartLegendComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

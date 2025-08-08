@@ -39,7 +39,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiFilterBuilderCustomOperationComponent],
          }
-         ]
+    ],
 })
 export class DxiFilterBuilderCustomOperationComponent extends CollectionNestedOption {
     @Input()

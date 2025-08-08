@@ -17,7 +17,6 @@ import {
 import { dxSchedulerToolbarItem, SchedulerPredefinedToolbarItem } from 'devextreme/ui/scheduler';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -31,16 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoSchedulerToolbarComponent) => ({
-                propertyName: 'toolbar',
-                className: 'DxoSchedulerToolbarComponent',
-                component
-            }),
-            deps: [DxoSchedulerToolbarComponent],
-         }
-         ]
+    ],
 })
 export class DxoSchedulerToolbarComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

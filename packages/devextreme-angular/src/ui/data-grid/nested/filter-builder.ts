@@ -19,7 +19,6 @@ import {
 import { dxFilterBuilderCustomOperation, dxFilterBuilderField, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -33,16 +32,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoDataGridFilterBuilderComponent) => ({
-                propertyName: 'filterBuilder',
-                className: 'DxoDataGridFilterBuilderComponent',
-                component
-            }),
-            deps: [DxoDataGridFilterBuilderComponent],
-         }
-         ]
+    ],
 })
 export class DxoDataGridFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

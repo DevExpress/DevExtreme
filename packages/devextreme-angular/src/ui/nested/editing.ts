@@ -21,7 +21,6 @@ import { Properties as dxFormOptions } from 'devextreme/ui/form';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -35,16 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoEditingComponent) => ({
-                propertyName: 'editing',
-                className: 'DxoEditingComponent',
-                component
-            }),
-            deps: [DxoEditingComponent],
-         }
-         ]
+    ],
 })
 export class DxoEditingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

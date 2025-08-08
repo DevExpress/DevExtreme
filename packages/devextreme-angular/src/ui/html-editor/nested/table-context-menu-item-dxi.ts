@@ -37,7 +37,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         DxTemplateHost,
+        DxTemplateHost,
          {
             provide: NESTED_ITEM_TOKEN,
             useFactory: (component: DxiHtmlEditorTableContextMenuItemComponent) => ({
@@ -47,7 +47,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiHtmlEditorTableContextMenuItemComponent],
          }
-         ]
+    ],
 })
 export class DxiHtmlEditorTableContextMenuItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {

@@ -37,7 +37,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiChatTypingUserComponent],
          }
-         ]
+    ],
 })
 export class DxiChatTypingUserComponent extends CollectionNestedOption {
     @Input()

@@ -18,7 +18,6 @@ import { dxFileUploaderOptions } from 'devextreme/ui/file_uploader';
 import { HtmlEditorImageUploadMode, dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -32,16 +31,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoHtmlEditorImageUploadComponent) => ({
-                propertyName: 'imageUpload',
-                className: 'DxoHtmlEditorImageUploadComponent',
-                component
-            }),
-            deps: [DxoHtmlEditorImageUploadComponent],
-         }
-         ]
+    ],
 })
 export class DxoHtmlEditorImageUploadComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

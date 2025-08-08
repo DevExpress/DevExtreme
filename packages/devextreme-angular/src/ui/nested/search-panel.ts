@@ -18,7 +18,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -32,16 +31,7 @@ import { DxoSearchPanel } from './base/search-panel';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoSearchPanelComponent) => ({
-                propertyName: 'searchPanel',
-                className: 'DxoSearchPanelComponent',
-                component
-            }),
-            deps: [DxoSearchPanelComponent],
-         }
-         ],
+    ],
     inputs: [
         'highlightCaseSensitive',
         'highlightSearchText',

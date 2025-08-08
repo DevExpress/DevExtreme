@@ -17,7 +17,6 @@ import {
 import { Font } from 'devextreme/common/charts';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -31,16 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoPolarChartConstantLineStyleLabelComponent) => ({
-                propertyName: 'label',
-                className: 'DxoPolarChartConstantLineStyleLabelComponent',
-                component
-            }),
-            deps: [DxoPolarChartConstantLineStyleLabelComponent],
-         }
-         ]
+    ],
 })
 export class DxoPolarChartConstantLineStyleLabelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

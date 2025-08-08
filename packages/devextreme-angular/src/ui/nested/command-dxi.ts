@@ -37,7 +37,7 @@ import { DxiDiagramCustomCommand } from './base/diagram-custom-command-dxi';
             }),
             deps: [DxiCommandComponent],
          }
-         ],
+    ],
     inputs: [
         'icon',
         'items',

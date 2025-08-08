@@ -22,7 +22,6 @@ import { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, Option
 import { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -40,17 +39,8 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         DxTemplateHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoTreeViewOptionsComponent) => ({
-                propertyName: 'options',
-                className: 'DxoTreeViewOptionsComponent',
-                component
-            }),
-            deps: [DxoTreeViewOptionsComponent],
-         }
-         ]
+        DxTemplateHost,
+    ],
 })
 export class DxoTreeViewOptionsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {

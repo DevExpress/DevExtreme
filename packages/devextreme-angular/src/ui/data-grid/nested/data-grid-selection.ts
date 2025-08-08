@@ -19,7 +19,6 @@ import { SelectionSensitivity } from 'devextreme/ui/data_grid';
 import { SelectionColumnDisplayMode } from 'devextreme/common/grids';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -33,16 +32,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoDataGridDataGridSelectionComponent) => ({
-                propertyName: 'selection',
-                className: 'DxoDataGridDataGridSelectionComponent',
-                component
-            }),
-            deps: [DxoDataGridDataGridSelectionComponent],
-         }
-         ]
+    ],
 })
 export class DxoDataGridDataGridSelectionComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

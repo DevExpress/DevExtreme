@@ -21,7 +21,6 @@ import { BeforeSendEvent, ContentReadyEvent, DisposingEvent, DropZoneEnterEvent,
 import { ValidationStatus } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -35,16 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoHtmlEditorFileUploaderOptionsComponent) => ({
-                propertyName: 'fileUploaderOptions',
-                className: 'DxoHtmlEditorFileUploaderOptionsComponent',
-                component
-            }),
-            deps: [DxoHtmlEditorFileUploaderOptionsComponent],
-         }
-         ]
+    ],
 })
 export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

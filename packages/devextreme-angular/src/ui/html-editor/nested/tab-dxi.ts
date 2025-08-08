@@ -38,7 +38,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiHtmlEditorTabComponent],
          }
-         ]
+    ],
 })
 export class DxiHtmlEditorTabComponent extends CollectionNestedOption {
     @Input()

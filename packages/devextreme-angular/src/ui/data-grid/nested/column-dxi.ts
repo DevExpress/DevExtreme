@@ -47,7 +47,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiDataGridColumnComponent],
          }
-         ]
+    ],
 })
 export class DxiDataGridColumnComponent extends CollectionNestedOption {
     @Input()

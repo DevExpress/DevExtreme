@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoChartsColor } from './base/charts-color';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoColorComponent) => ({
-                propertyName: 'color',
-                className: 'DxoColorComponent',
-                component
-            }),
-            deps: [DxoColorComponent],
-         }
-         ],
+    ],
     inputs: [
         'base',
         'fillId'

@@ -37,7 +37,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiDiagramPageSizeItemComponent],
          }
-         ]
+    ],
 })
 export class DxiDiagramPageSizeItemComponent extends CollectionNestedOption {
     @Input()

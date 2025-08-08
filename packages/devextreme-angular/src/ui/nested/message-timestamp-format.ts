@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoFormat } from './base/format';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoMessageTimestampFormatComponent) => ({
-                propertyName: 'messageTimestampFormat',
-                className: 'DxoMessageTimestampFormatComponent',
-                component
-            }),
-            deps: [DxoMessageTimestampFormatComponent],
-         }
-         ],
+    ],
     inputs: [
         'currency',
         'formatter',

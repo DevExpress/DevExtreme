@@ -18,7 +18,6 @@ import { PagerPageSize } from 'devextreme/common/grids';
 import { Mode, DisplayMode } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -32,16 +31,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoTreeListPagerComponent) => ({
-                propertyName: 'pager',
-                className: 'DxoTreeListPagerComponent',
-                component
-            }),
-            deps: [DxoTreeListPagerComponent],
-         }
-         ]
+    ],
 })
 export class DxoTreeListPagerComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

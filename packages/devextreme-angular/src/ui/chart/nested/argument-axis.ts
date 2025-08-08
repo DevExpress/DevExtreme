@@ -23,7 +23,6 @@ import { HorizontalAlignment, VerticalAlignment, Position } from 'devextreme/com
 import { Format } from 'devextreme/common/core/localization';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -37,16 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoChartArgumentAxisComponent) => ({
-                propertyName: 'argumentAxis',
-                className: 'DxoChartArgumentAxisComponent',
-                component
-            }),
-            deps: [DxoChartArgumentAxisComponent],
-         }
-         ]
+    ],
 })
 export class DxoChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

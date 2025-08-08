@@ -39,7 +39,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiConstantLineComponent],
          }
-         ]
+    ],
 })
 export class DxiConstantLineComponent extends CollectionNestedOption {
     @Input()

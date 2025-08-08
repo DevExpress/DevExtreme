@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-c
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoCommonAnnotationSettingsComponent) => ({
-                propertyName: 'commonAnnotationSettings',
-                className: 'DxoCommonAnnotationSettingsComponent',
-                component
-            }),
-            deps: [DxoCommonAnnotationSettingsComponent],
-         }
-         ],
+    ],
     inputs: [
         'allowDragging',
         'argument',

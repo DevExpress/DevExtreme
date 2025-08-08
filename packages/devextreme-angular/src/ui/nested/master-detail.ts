@@ -20,7 +20,6 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -38,17 +37,8 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         DxTemplateHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoMasterDetailComponent) => ({
-                propertyName: 'masterDetail',
-                className: 'DxoMasterDetailComponent',
-                component
-            }),
-            deps: [DxoMasterDetailComponent],
-         }
-         ]
+        DxTemplateHost,
+    ],
 })
 export class DxoMasterDetailComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {

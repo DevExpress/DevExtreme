@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoVizFont } from './base/viz-font';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoFontComponent) => ({
-                propertyName: 'font',
-                className: 'DxoFontComponent',
-                component
-            }),
-            deps: [DxoFontComponent],
-         }
-         ],
+    ],
     inputs: [
         'color',
         'family',

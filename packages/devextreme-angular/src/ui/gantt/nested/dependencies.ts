@@ -19,7 +19,6 @@ import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -33,16 +32,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoGanttDependenciesComponent) => ({
-                propertyName: 'dependencies',
-                className: 'DxoGanttDependenciesComponent',
-                component
-            }),
-            deps: [DxoGanttDependenciesComponent],
-         }
-         ]
+    ],
 })
 export class DxoGanttDependenciesComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

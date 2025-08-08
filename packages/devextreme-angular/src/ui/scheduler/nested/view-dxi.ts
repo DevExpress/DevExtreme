@@ -39,7 +39,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiSchedulerViewComponent],
          }
-         ]
+    ],
 })
 export class DxiSchedulerViewComponent extends CollectionNestedOption {
     @Input()

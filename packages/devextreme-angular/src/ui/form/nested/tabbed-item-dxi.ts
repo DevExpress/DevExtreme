@@ -39,7 +39,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiFormTabbedItemComponent],
          }
-         ]
+    ],
 })
 export class DxiFormTabbedItemComponent extends CollectionNestedOption {
     @Input()

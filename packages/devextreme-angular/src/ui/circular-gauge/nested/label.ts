@@ -19,7 +19,6 @@ import { Format } from 'devextreme/common/core/localization';
 import { CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -33,16 +32,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoCircularGaugeLabelComponent) => ({
-                propertyName: 'label',
-                className: 'DxoCircularGaugeLabelComponent',
-                component
-            }),
-            deps: [DxoCircularGaugeLabelComponent],
-         }
-         ]
+    ],
 })
 export class DxoCircularGaugeLabelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

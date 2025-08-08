@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoFileManagerContextMenu } from './base/file-manager-context-menu';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoContextMenuComponent) => ({
-                propertyName: 'contextMenu',
-                className: 'DxoContextMenuComponent',
-                component
-            }),
-            deps: [DxoContextMenuComponent],
-         }
-         ],
+    ],
     inputs: [
         'commands',
         'enabled',

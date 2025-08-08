@@ -18,7 +18,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -32,16 +31,7 @@ import { DxoFilterPanel } from './base/filter-panel';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoFilterPanelComponent) => ({
-                propertyName: 'filterPanel',
-                className: 'DxoFilterPanelComponent',
-                component
-            }),
-            deps: [DxoFilterPanelComponent],
-         }
-         ],
+    ],
     inputs: [
         'customizeText',
         'filterEnabled',

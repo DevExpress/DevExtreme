@@ -17,7 +17,6 @@ import {
 import { ValueErrorBarDisplayMode, ValueErrorBarType } from 'devextreme/common/charts';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -31,16 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoRangeSelectorValueErrorBarComponent) => ({
-                propertyName: 'valueErrorBar',
-                className: 'DxoRangeSelectorValueErrorBarComponent',
-                component
-            }),
-            deps: [DxoRangeSelectorValueErrorBarComponent],
-         }
-         ]
+    ],
 })
 export class DxoRangeSelectorValueErrorBarComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

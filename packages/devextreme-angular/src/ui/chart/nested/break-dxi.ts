@@ -37,7 +37,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiChartBreakComponent],
          }
-         ]
+    ],
 })
 export class DxiChartBreakComponent extends CollectionNestedOption {
     @Input()

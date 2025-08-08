@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoGaugeIndicator } from './base/gauge-indicator';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoSubvalueIndicatorComponent) => ({
-                propertyName: 'subvalueIndicator',
-                className: 'DxoSubvalueIndicatorComponent',
-                component
-            }),
-            deps: [DxoSubvalueIndicatorComponent],
-         }
-         ],
+    ],
     inputs: [
         'arrowLength',
         'backgroundColor',

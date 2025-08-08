@@ -37,7 +37,7 @@ import { DxiFilterBuilderCustomOperation } from './base/filter-builder-custom-op
             }),
             deps: [DxiCustomOperationComponent],
          }
-         ],
+    ],
     inputs: [
         'calculateFilterExpression',
         'caption',

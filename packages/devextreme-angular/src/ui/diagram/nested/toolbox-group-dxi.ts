@@ -38,7 +38,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiDiagramToolboxGroupComponent],
          }
-         ]
+    ],
 })
 export class DxiDiagramToolboxGroupComponent extends CollectionNestedOption {
     @Input()

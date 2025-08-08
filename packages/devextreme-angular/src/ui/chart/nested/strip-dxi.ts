@@ -39,7 +39,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiChartStripComponent],
          }
-         ]
+    ],
 })
 export class DxiChartStripComponent extends CollectionNestedOption {
     @Input()

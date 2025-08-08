@@ -38,7 +38,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiFileManagerColumnComponent],
          }
-         ]
+    ],
 })
 export class DxiFileManagerColumnComponent extends CollectionNestedOption {
     @Input()

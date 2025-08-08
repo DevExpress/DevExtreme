@@ -19,7 +19,6 @@ import {
 import { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -33,16 +32,7 @@ import { DxoSplitterOptions } from './base/splitter-options';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoSplitterComponent) => ({
-                propertyName: 'splitter',
-                className: 'DxoSplitterComponent',
-                component
-            }),
-            deps: [DxoSplitterComponent],
-         }
-         ],
+    ],
     inputs: [
         'allowKeyboardNavigation',
         'dataSource',

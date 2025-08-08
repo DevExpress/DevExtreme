@@ -37,7 +37,7 @@ import { DxiFilterBuilderField } from './base/filter-builder-field-dxi';
             }),
             deps: [DxiFieldComponent],
          }
-         ],
+    ],
     inputs: [
         'calculateFilterExpression',
         'caption',

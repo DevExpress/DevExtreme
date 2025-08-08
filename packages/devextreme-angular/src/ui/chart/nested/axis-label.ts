@@ -24,7 +24,6 @@ import { Font, ChartsAxisLabelOverlap, RelativePosition, TextOverflow, WordWrap 
 import { Format } from 'devextreme/common/core/localization';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -42,17 +41,8 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         DxTemplateHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoChartAxisLabelComponent) => ({
-                propertyName: 'label',
-                className: 'DxoChartAxisLabelComponent',
-                component
-            }),
-            deps: [DxoChartAxisLabelComponent],
-         }
-         ]
+        DxTemplateHost,
+    ],
 })
 export class DxoChartAxisLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {

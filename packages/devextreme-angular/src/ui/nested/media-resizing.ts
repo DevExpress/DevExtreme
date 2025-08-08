@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoHtmlEditorMediaResizing } from './base/html-editor-media-resizing';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoMediaResizingComponent) => ({
-                propertyName: 'mediaResizing',
-                className: 'DxoMediaResizingComponent',
-                component
-            }),
-            deps: [DxoMediaResizingComponent],
-         }
-         ],
+    ],
     inputs: [
         'allowedTargets',
         'enabled'

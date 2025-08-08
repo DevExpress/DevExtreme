@@ -38,7 +38,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiTreeListChangeComponent],
          }
-         ]
+    ],
 })
 export class DxiTreeListChangeComponent extends CollectionNestedOption {
     @Input()

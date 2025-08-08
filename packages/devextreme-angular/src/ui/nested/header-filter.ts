@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoColumnHeaderFilter } from './base/column-header-filter';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoHeaderFilterComponent) => ({
-                propertyName: 'headerFilter',
-                className: 'DxoHeaderFilterComponent',
-                component
-            }),
-            deps: [DxoHeaderFilterComponent],
-         }
-         ],
+    ],
     inputs: [
         'allowSearch',
         'allowSelectAll',

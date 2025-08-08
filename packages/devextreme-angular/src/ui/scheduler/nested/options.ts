@@ -21,7 +21,6 @@ import { SchedulerPredefinedDateNavigatorItem } from 'devextreme/ui/scheduler';
 import { SingleMultipleOrNone, ButtonStyle } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -35,16 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoSchedulerOptionsComponent) => ({
-                propertyName: 'options',
-                className: 'DxoSchedulerOptionsComponent',
-                component
-            }),
-            deps: [DxoSchedulerOptionsComponent],
-         }
-         ]
+    ],
 })
 export class DxoSchedulerOptionsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

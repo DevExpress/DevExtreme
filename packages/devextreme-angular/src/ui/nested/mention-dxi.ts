@@ -37,7 +37,7 @@ import { DxiHtmlEditorMention } from './base/html-editor-mention-dxi';
             }),
             deps: [DxiMentionComponent],
          }
-         ],
+    ],
     inputs: [
         'dataSource',
         'displayExpr',

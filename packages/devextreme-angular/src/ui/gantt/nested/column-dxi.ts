@@ -42,7 +42,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiGanttColumnComponent],
          }
-         ]
+    ],
 })
 export class DxiGanttColumnComponent extends CollectionNestedOption {
     @Input()

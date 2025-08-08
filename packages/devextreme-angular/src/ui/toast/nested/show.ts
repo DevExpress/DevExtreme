@@ -18,7 +18,6 @@ import { AnimationConfig, AnimationState, AnimationType } from 'devextreme/commo
 import { Direction } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -32,16 +31,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoToastShowComponent) => ({
-                propertyName: 'show',
-                className: 'DxoToastShowComponent',
-                component
-            }),
-            deps: [DxoToastShowComponent],
-         }
-         ]
+    ],
 })
 export class DxoToastShowComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

@@ -19,7 +19,6 @@ import { DataGridScrollMode } from 'devextreme/ui/data_grid';
 import { ScrollbarMode, Mode } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -33,16 +32,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoDataGridScrollingComponent) => ({
-                propertyName: 'scrolling',
-                className: 'DxoDataGridScrollingComponent',
-                component
-            }),
-            deps: [DxoDataGridScrollingComponent],
-         }
-         ]
+    ],
 })
 export class DxoDataGridScrollingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

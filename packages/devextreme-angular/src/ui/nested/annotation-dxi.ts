@@ -37,7 +37,7 @@ import { DxiChartAnnotationConfig } from './base/chart-annotation-config-dxi';
             }),
             deps: [DxiAnnotationComponent],
          }
-         ],
+    ],
     inputs: [
         'allowDragging',
         'argument',

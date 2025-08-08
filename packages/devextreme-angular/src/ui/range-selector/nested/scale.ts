@@ -19,7 +19,6 @@ import { Format } from 'devextreme/common/core/localization';
 import { AxisScale } from 'devextreme/viz/range_selector';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -33,16 +32,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoRangeSelectorScaleComponent) => ({
-                propertyName: 'scale',
-                className: 'DxoRangeSelectorScaleComponent',
-                component
-            }),
-            deps: [DxoRangeSelectorScaleComponent],
-         }
-         ]
+    ],
 })
 export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

@@ -37,7 +37,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiDiagramConnectionPointComponent],
          }
-         ]
+    ],
 })
 export class DxiDiagramConnectionPointComponent extends CollectionNestedOption {
     @Input()

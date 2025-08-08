@@ -18,7 +18,6 @@ import { DragDirection, DragHighlight, Orientation } from 'devextreme/common';
 import { AddEvent, DisposingEvent, DragChangeEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent, RemoveEvent, ReorderEvent } from 'devextreme/ui/sortable';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -32,16 +31,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoListItemDraggingComponent) => ({
-                propertyName: 'itemDragging',
-                className: 'DxoListItemDraggingComponent',
-                component
-            }),
-            deps: [DxoListItemDraggingComponent],
-         }
-         ]
+    ],
 })
 export class DxoListItemDraggingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

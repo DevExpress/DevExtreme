@@ -38,7 +38,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiCardViewAsyncRuleComponent],
          }
-         ]
+    ],
 })
 export class DxiCardViewAsyncRuleComponent extends CollectionNestedOption {
     @Input()

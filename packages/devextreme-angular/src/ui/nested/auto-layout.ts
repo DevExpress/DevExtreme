@@ -18,7 +18,6 @@ import { Orientation } from 'devextreme/common';
 import { DataLayoutType } from 'devextreme/ui/diagram';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -32,16 +31,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoAutoLayoutComponent) => ({
-                propertyName: 'autoLayout',
-                className: 'DxoAutoLayoutComponent',
-                component
-            }),
-            deps: [DxoAutoLayoutComponent],
-         }
-         ]
+    ],
 })
 export class DxoAutoLayoutComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

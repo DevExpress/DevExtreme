@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoDateBoxOffsetComponent) => ({
-                propertyName: 'offset',
-                className: 'DxoDateBoxOffsetComponent',
-                component
-            }),
-            deps: [DxoDateBoxOffsetComponent],
-         }
-         ]
+    ],
 })
 export class DxoDateBoxOffsetComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

@@ -37,7 +37,7 @@ import { DxiFileManagerToolbarItem } from './base/file-manager-toolbar-item-dxi'
             }),
             deps: [DxiFileSelectionItemComponent],
          }
-         ],
+    ],
     inputs: [
         'cssClass',
         'disabled',

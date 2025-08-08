@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoVectorMapProjectionConfig } from './base/vector-map-projection-confi
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoProjectionComponent) => ({
-                propertyName: 'projection',
-                className: 'DxoProjectionComponent',
-                component
-            }),
-            deps: [DxoProjectionComponent],
-         }
-         ],
+    ],
     inputs: [
         'aspectRatio',
         'from',

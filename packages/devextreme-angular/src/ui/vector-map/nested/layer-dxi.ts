@@ -43,7 +43,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiVectorMapLayerComponent],
          }
-         ]
+    ],
 })
 export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     @Input()

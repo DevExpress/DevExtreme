@@ -23,7 +23,6 @@ import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
 import { Font, ChartsAxisLabelOverlap, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -41,17 +40,8 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         DxTemplateHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoChartCommonAxisSettingsLabelComponent) => ({
-                propertyName: 'label',
-                className: 'DxoChartCommonAxisSettingsLabelComponent',
-                component
-            }),
-            deps: [DxoChartCommonAxisSettingsLabelComponent],
-         }
-         ]
+        DxTemplateHost,
+    ],
 })
 export class DxoChartCommonAxisSettingsLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {

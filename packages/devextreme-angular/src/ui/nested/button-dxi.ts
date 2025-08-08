@@ -37,7 +37,7 @@ import { DxiTextEditorButton } from './base/text-editor-button-dxi';
             }),
             deps: [DxiButtonComponent],
          }
-         ],
+    ],
     inputs: [
         'location',
         'name',

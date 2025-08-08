@@ -37,7 +37,7 @@ import { DxiUser } from './base/user-dxi';
             }),
             deps: [DxiTypingUserComponent],
          }
-         ],
+    ],
     inputs: [
         'avatarAlt',
         'avatarUrl',

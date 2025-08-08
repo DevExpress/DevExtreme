@@ -17,7 +17,6 @@ import {
 import { Command, CustomCommand } from 'devextreme/ui/diagram';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -31,16 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoMainToolbarComponent) => ({
-                propertyName: 'mainToolbar',
-                className: 'DxoMainToolbarComponent',
-                component
-            }),
-            deps: [DxoMainToolbarComponent],
-         }
-         ]
+    ],
 })
 export class DxoMainToolbarComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

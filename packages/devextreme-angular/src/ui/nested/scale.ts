@@ -21,7 +21,6 @@ import { CircularGaugeElementOrientation, CircularGaugeLabelOverlap } from 'deve
 import { AxisScale } from 'devextreme/viz/range_selector';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -35,16 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoScaleComponent) => ({
-                propertyName: 'scale',
-                className: 'DxoScaleComponent',
-                component
-            }),
-            deps: [DxoScaleComponent],
-         }
-         ]
+    ],
 })
 export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

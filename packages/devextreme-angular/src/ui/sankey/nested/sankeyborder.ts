@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoSankeySankeyborderComponent) => ({
-                propertyName: 'border',
-                className: 'DxoSankeySankeyborderComponent',
-                component
-            }),
-            deps: [DxoSankeySankeyborderComponent],
-         }
-         ]
+    ],
 })
 export class DxoSankeySankeyborderComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

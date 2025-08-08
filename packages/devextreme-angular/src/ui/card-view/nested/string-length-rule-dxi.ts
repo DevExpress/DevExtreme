@@ -38,7 +38,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiCardViewStringLengthRuleComponent],
          }
-         ]
+    ],
 })
 export class DxiCardViewStringLengthRuleComponent extends CollectionNestedOption {
     @Input()

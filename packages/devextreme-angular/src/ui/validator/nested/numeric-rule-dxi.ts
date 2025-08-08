@@ -38,7 +38,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiValidatorNumericRuleComponent],
          }
-         ]
+    ],
 })
 export class DxiValidatorNumericRuleComponent extends CollectionNestedOption {
     @Input()

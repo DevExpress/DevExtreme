@@ -36,7 +36,7 @@ import { DxiHtmlEditorImageUploadTabItem } from './base/html-editor-image-upload
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         DxTemplateHost,
+        DxTemplateHost,
          {
             provide: NESTED_ITEM_TOKEN,
             useFactory: (component: DxiTabComponent) => ({
@@ -46,7 +46,7 @@ import { DxiHtmlEditorImageUploadTabItem } from './base/html-editor-image-upload
             }),
             deps: [DxiTabComponent],
          }
-         ],
+    ],
     inputs: [
         'alignItemLabels',
         'badge',

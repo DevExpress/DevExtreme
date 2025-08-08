@@ -18,7 +18,6 @@ import { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/ch
 import { CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -32,16 +31,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoCircularGaugeRangeContainerComponent) => ({
-                propertyName: 'rangeContainer',
-                className: 'DxoCircularGaugeRangeContainerComponent',
-                component
-            }),
-            deps: [DxoCircularGaugeRangeContainerComponent],
-         }
-         ]
+    ],
 })
 export class DxoCircularGaugeRangeContainerComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

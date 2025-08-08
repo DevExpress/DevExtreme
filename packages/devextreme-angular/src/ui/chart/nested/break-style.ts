@@ -17,7 +17,6 @@ import {
 import { ScaleBreakLineStyle } from 'devextreme/common/charts';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -31,16 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoChartBreakStyleComponent) => ({
-                propertyName: 'breakStyle',
-                className: 'DxoChartBreakStyleComponent',
-                component
-            }),
-            deps: [DxoChartBreakStyleComponent],
-         }
-         ]
+    ],
 })
 export class DxoChartBreakStyleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

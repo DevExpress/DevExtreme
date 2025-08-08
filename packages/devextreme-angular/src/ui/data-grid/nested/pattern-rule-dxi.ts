@@ -38,7 +38,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiDataGridPatternRuleComponent],
          }
-         ]
+    ],
 })
 export class DxiDataGridPatternRuleComponent extends CollectionNestedOption {
     @Input()

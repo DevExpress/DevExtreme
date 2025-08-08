@@ -19,7 +19,6 @@ import { Font, LabelOverlap } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -33,16 +32,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoLinearGaugeScaleComponent) => ({
-                propertyName: 'scale',
-                className: 'DxoLinearGaugeScaleComponent',
-                component
-            }),
-            deps: [DxoLinearGaugeScaleComponent],
-         }
-         ]
+    ],
 })
 export class DxoLinearGaugeScaleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

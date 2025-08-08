@@ -19,7 +19,6 @@ import {
 import { Properties as dxBoxOptions } from 'devextreme/ui/box';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -33,16 +32,7 @@ import { DxoBoxOptions } from './base/box-options';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoBoxComponent) => ({
-                propertyName: 'box',
-                className: 'DxoBoxComponent',
-                component
-            }),
-            deps: [DxoBoxComponent],
-         }
-         ],
+    ],
     inputs: [
         'align',
         'crossAlign',

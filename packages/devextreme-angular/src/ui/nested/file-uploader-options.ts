@@ -18,7 +18,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -32,16 +31,7 @@ import { DxoFileUploaderOptions } from './base/file-uploader-options';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoFileUploaderOptionsComponent) => ({
-                propertyName: 'fileUploaderOptions',
-                className: 'DxoFileUploaderOptionsComponent',
-                component
-            }),
-            deps: [DxoFileUploaderOptionsComponent],
-         }
-         ],
+    ],
     inputs: [
         'abortUpload',
         'accept',

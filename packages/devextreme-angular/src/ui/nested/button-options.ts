@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoButtonOptions } from './base/button-options';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoButtonOptionsComponent) => ({
-                propertyName: 'buttonOptions',
-                className: 'DxoButtonOptionsComponent',
-                component
-            }),
-            deps: [DxoButtonOptionsComponent],
-         }
-         ],
+    ],
     inputs: [
         'accessKey',
         'activeStateEnabled',

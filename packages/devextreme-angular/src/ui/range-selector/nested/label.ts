@@ -19,7 +19,6 @@ import { Format } from 'devextreme/common/core/localization';
 import { DashStyle, Font, RelativePosition, LabelOverlap } from 'devextreme/common/charts';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -33,16 +32,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoRangeSelectorLabelComponent) => ({
-                propertyName: 'label',
-                className: 'DxoRangeSelectorLabelComponent',
-                component
-            }),
-            deps: [DxoRangeSelectorLabelComponent],
-         }
-         ]
+    ],
 })
 export class DxoRangeSelectorLabelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

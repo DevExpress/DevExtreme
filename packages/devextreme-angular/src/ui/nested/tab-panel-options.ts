@@ -18,7 +18,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -32,16 +31,7 @@ import { DxoTabPanelOptions } from './base/tab-panel-options';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoTabPanelOptionsComponent) => ({
-                propertyName: 'tabPanelOptions',
-                className: 'DxoTabPanelOptionsComponent',
-                component
-            }),
-            deps: [DxoTabPanelOptionsComponent],
-         }
-         ],
+    ],
     inputs: [
         'accessKey',
         'activeStateEnabled',

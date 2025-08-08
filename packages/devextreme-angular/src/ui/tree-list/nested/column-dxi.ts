@@ -47,7 +47,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiTreeListColumnComponent],
          }
-         ]
+    ],
 })
 export class DxiTreeListColumnComponent extends CollectionNestedOption {
     @Input()

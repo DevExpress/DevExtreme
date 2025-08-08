@@ -24,7 +24,6 @@ import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -42,17 +41,8 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         DxTemplateHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoChartLabelComponent) => ({
-                propertyName: 'label',
-                className: 'DxoChartLabelComponent',
-                component
-            }),
-            deps: [DxoChartLabelComponent],
-         }
-         ]
+        DxTemplateHost,
+    ],
 })
 export class DxoChartLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {

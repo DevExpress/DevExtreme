@@ -17,7 +17,6 @@ import {
 import { GroupExpandMode } from 'devextreme/common/grids';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -31,16 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoDataGridGroupingComponent) => ({
-                propertyName: 'grouping',
-                className: 'DxoDataGridGroupingComponent',
-                component
-            }),
-            deps: [DxoDataGridGroupingComponent],
-         }
-         ]
+    ],
 })
 export class DxoDataGridGroupingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoAnimationState } from './base/animation-state';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoToComponent) => ({
-                propertyName: 'to',
-                className: 'DxoToComponent',
-                component
-            }),
-            deps: [DxoToComponent],
-         }
-         ],
+    ],
     inputs: [
         'left',
         'opacity',

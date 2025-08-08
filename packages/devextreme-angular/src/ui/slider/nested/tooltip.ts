@@ -18,7 +18,6 @@ import { Format } from 'devextreme/common/core/localization';
 import { VerticalEdge, TooltipShowMode } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -32,16 +31,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoSliderTooltipComponent) => ({
-                propertyName: 'tooltip',
-                className: 'DxoSliderTooltipComponent',
-                component
-            }),
-            deps: [DxoSliderTooltipComponent],
-         }
-         ]
+    ],
 })
 export class DxoSliderTooltipComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

@@ -41,7 +41,7 @@ import { DxiDataGridColumn } from './base/data-grid-column-dxi';
             }),
             deps: [DxiColumnComponent],
          }
-         ],
+    ],
     inputs: [
         'alignment',
         'allowEditing',

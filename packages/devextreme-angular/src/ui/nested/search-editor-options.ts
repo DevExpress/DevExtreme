@@ -18,7 +18,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -32,16 +31,7 @@ import { DxoTextBoxOptions } from './base/text-box-options';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoSearchEditorOptionsComponent) => ({
-                propertyName: 'searchEditorOptions',
-                className: 'DxoSearchEditorOptionsComponent',
-                component
-            }),
-            deps: [DxoSearchEditorOptionsComponent],
-         }
-         ],
+    ],
     inputs: [
         'accessKey',
         'activeStateEnabled',

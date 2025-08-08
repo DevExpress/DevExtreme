@@ -17,7 +17,6 @@ import {
 import { ChartsColor, DashStyle, HatchDirection } from 'devextreme/common/charts';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -31,16 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoHoverStyleComponent) => ({
-                propertyName: 'hoverStyle',
-                className: 'DxoHoverStyleComponent',
-                component
-            }),
-            deps: [DxoHoverStyleComponent],
-         }
-         ]
+    ],
 })
 export class DxoHoverStyleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

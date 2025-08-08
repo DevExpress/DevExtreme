@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoHtmlEditorTableContextMenu } from './base/html-editor-table-context-
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoTableContextMenuComponent) => ({
-                propertyName: 'tableContextMenu',
-                className: 'DxoTableContextMenuComponent',
-                component
-            }),
-            deps: [DxoTableContextMenuComponent],
-         }
-         ],
+    ],
     inputs: [
         'enabled',
         'items'

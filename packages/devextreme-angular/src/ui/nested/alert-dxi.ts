@@ -37,7 +37,7 @@ import { DxiAlert } from './base/alert-dxi';
             }),
             deps: [DxiAlertComponent],
          }
-         ],
+    ],
     inputs: [
         'id',
         'message'

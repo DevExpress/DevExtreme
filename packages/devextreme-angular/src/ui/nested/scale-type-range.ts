@@ -17,7 +17,6 @@ import {
 import { GanttScaleType } from 'devextreme/ui/gantt';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -31,16 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoScaleTypeRangeComponent) => ({
-                propertyName: 'scaleTypeRange',
-                className: 'DxoScaleTypeRangeComponent',
-                component
-            }),
-            deps: [DxoScaleTypeRangeComponent],
-         }
-         ]
+    ],
 })
 export class DxoScaleTypeRangeComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

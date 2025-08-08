@@ -19,7 +19,6 @@ import {
 import { FilterPanel, FilterPanelTexts } from 'devextreme/common/grids';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -33,16 +32,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoDataGridFilterPanelComponent) => ({
-                propertyName: 'filterPanel',
-                className: 'DxoDataGridFilterPanelComponent',
-                component
-            }),
-            deps: [DxoDataGridFilterPanelComponent],
-         }
-         ]
+    ],
 })
 export class DxoDataGridFilterPanelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

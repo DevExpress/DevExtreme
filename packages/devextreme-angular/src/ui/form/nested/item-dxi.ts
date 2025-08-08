@@ -41,7 +41,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         DxTemplateHost,
+        DxTemplateHost,
          {
             provide: NESTED_ITEM_TOKEN,
             useFactory: (component: DxiFormItemComponent) => ({
@@ -51,7 +51,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiFormItemComponent],
          }
-         ]
+    ],
 })
 export class DxiFormItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {

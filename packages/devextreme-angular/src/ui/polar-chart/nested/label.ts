@@ -18,7 +18,6 @@ import { Font, LabelOverlap, DashStyle, RelativePosition } from 'devextreme/comm
 import { Format } from 'devextreme/common/core/localization';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -32,16 +31,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoPolarChartLabelComponent) => ({
-                propertyName: 'label',
-                className: 'DxoPolarChartLabelComponent',
-                component
-            }),
-            deps: [DxoPolarChartLabelComponent],
-         }
-         ]
+    ],
 })
 export class DxoPolarChartLabelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

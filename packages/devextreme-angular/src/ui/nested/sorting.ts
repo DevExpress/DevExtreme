@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoSorting } from './base/sorting';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoSortingComponent) => ({
-                propertyName: 'sorting',
-                className: 'DxoSortingComponent',
-                component
-            }),
-            deps: [DxoSortingComponent],
-         }
-         ],
+    ],
     inputs: [
         'ascendingText',
         'clearText',

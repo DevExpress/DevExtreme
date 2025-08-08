@@ -37,7 +37,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiGanttStripLineComponent],
          }
-         ]
+    ],
 })
 export class DxiGanttStripLineComponent extends CollectionNestedOption {
     @Input()

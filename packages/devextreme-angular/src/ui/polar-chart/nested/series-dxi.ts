@@ -40,7 +40,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiPolarChartSeriesComponent],
          }
-         ]
+    ],
 })
 export class DxiPolarChartSeriesComponent extends CollectionNestedOption {
     @Input()

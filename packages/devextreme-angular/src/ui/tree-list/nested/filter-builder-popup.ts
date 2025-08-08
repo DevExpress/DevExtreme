@@ -27,7 +27,6 @@ import { PositionAlignment } from 'devextreme/common';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -41,16 +40,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoTreeListFilterBuilderPopupComponent) => ({
-                propertyName: 'filterBuilderPopup',
-                className: 'DxoTreeListFilterBuilderPopupComponent',
-                component
-            }),
-            deps: [DxoTreeListFilterBuilderPopupComponent],
-         }
-         ]
+    ],
 })
 export class DxoTreeListFilterBuilderPopupComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

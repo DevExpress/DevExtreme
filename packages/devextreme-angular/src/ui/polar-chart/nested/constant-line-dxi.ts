@@ -38,7 +38,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiPolarChartConstantLineComponent],
          }
-         ]
+    ],
 })
 export class DxiPolarChartConstantLineComponent extends CollectionNestedOption {
     @Input()

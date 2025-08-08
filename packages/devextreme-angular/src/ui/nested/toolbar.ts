@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoDataGridToolbar } from './base/data-grid-toolbar';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoToolbarComponent) => ({
-                propertyName: 'toolbar',
-                className: 'DxoToolbarComponent',
-                component
-            }),
-            deps: [DxoToolbarComponent],
-         }
-         ],
+    ],
     inputs: [
         'disabled',
         'items',

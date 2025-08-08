@@ -39,7 +39,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiListButtonComponent],
          }
-         ]
+    ],
 })
 export class DxiListButtonComponent extends CollectionNestedOption {
     @Input()

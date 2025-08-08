@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoFormSimpleItem } from './base/form-simple-item';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoFormItemComponent) => ({
-                propertyName: 'formItem',
-                className: 'DxoFormItemComponent',
-                component
-            }),
-            deps: [DxoFormItemComponent],
-         }
-         ],
+    ],
     inputs: [
         'colSpan',
         'cssClass',

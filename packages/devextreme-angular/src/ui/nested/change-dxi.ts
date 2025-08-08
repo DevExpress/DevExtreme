@@ -37,7 +37,7 @@ import { DxiDataChange } from './base/data-change-dxi';
             }),
             deps: [DxiChangeComponent],
          }
-         ],
+    ],
     inputs: [
         'data',
         'insertAfterKey',

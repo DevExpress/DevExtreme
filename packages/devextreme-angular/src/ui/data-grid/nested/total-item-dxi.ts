@@ -40,7 +40,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiDataGridTotalItemComponent],
          }
-         ]
+    ],
 })
 export class DxiDataGridTotalItemComponent extends CollectionNestedOption {
     @Input()

@@ -43,7 +43,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiValueAxisComponent],
          }
-         ]
+    ],
 })
 export class DxiValueAxisComponent extends CollectionNestedOption {
     @Input()

@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoPager } from './base/pager';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoPagerComponent) => ({
-                propertyName: 'pager',
-                className: 'DxoPagerComponent',
-                component
-            }),
-            deps: [DxoPagerComponent],
-         }
-         ],
+    ],
     inputs: [
         'allowedPageSizes',
         'displayMode',

@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoSortableOptions } from './base/sortable-options';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoItemDraggingComponent) => ({
-                propertyName: 'itemDragging',
-                className: 'DxoItemDraggingComponent',
-                component
-            }),
-            deps: [DxoItemDraggingComponent],
-         }
-         ],
+    ],
     inputs: [
         'allowDropInsideItem',
         'allowReordering',

@@ -17,7 +17,6 @@ import {
 import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -31,16 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoPolarChartSubtitleComponent) => ({
-                propertyName: 'subtitle',
-                className: 'DxoPolarChartSubtitleComponent',
-                component
-            }),
-            deps: [DxoPolarChartSubtitleComponent],
-         }
-         ]
+    ],
 })
 export class DxoPolarChartSubtitleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

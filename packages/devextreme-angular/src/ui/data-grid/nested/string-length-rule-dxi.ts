@@ -38,7 +38,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiDataGridStringLengthRuleComponent],
          }
-         ]
+    ],
 })
 export class DxiDataGridStringLengthRuleComponent extends CollectionNestedOption {
     @Input()

@@ -17,7 +17,6 @@ import {
 import { SmallValuesGroupingMode } from 'devextreme/viz/pie_chart';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -31,16 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoSmallValuesGroupingComponent) => ({
-                propertyName: 'smallValuesGrouping',
-                className: 'DxoSmallValuesGroupingComponent',
-                component
-            }),
-            deps: [DxoSmallValuesGroupingComponent],
-         }
-         ]
+    ],
 })
 export class DxoSmallValuesGroupingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

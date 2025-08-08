@@ -37,7 +37,7 @@ import { DxiGanttStripLine } from './base/gantt-strip-line-dxi';
             }),
             deps: [DxiStripLineComponent],
          }
-         ],
+    ],
     inputs: [
         'cssClass',
         'end',

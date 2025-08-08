@@ -36,7 +36,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         DxTemplateHost,
+        DxTemplateHost,
          {
             provide: NESTED_ITEM_TOKEN,
             useFactory: (component: DxiGalleryItemComponent) => ({
@@ -46,7 +46,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiGalleryItemComponent],
          }
-         ]
+    ],
 })
 export class DxiGalleryItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {

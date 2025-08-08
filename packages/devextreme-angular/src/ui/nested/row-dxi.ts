@@ -37,7 +37,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiRowComponent],
          }
-         ]
+    ],
 })
 export class DxiRowComponent extends CollectionNestedOption {
     @Input()

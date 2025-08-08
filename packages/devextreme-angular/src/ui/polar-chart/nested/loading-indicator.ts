@@ -19,7 +19,6 @@ import {
 import { Font } from 'devextreme/common/charts';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -33,16 +32,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoPolarChartLoadingIndicatorComponent) => ({
-                propertyName: 'loadingIndicator',
-                className: 'DxoPolarChartLoadingIndicatorComponent',
-                component
-            }),
-            deps: [DxoPolarChartLoadingIndicatorComponent],
-         }
-         ]
+    ],
 })
 export class DxoPolarChartLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

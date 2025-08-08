@@ -17,7 +17,6 @@ import {
 import { AIToolbarItem, dxHtmlEditorToolbarItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -31,16 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoHtmlEditorToolbarComponent) => ({
-                propertyName: 'toolbar',
-                className: 'DxoHtmlEditorToolbarComponent',
-                component
-            }),
-            deps: [DxoHtmlEditorToolbarComponent],
-         }
-         ]
+    ],
 })
 export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

@@ -38,7 +38,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiCircularGaugeRangeComponent],
          }
-         ]
+    ],
 })
 export class DxiCircularGaugeRangeComponent extends CollectionNestedOption {
     @Input()

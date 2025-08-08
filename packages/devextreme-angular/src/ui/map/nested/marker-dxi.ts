@@ -37,7 +37,7 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
             }),
             deps: [DxiMapMarkerComponent],
          }
-         ]
+    ],
 })
 export class DxiMapMarkerComponent extends CollectionNestedOption {
     @Input()

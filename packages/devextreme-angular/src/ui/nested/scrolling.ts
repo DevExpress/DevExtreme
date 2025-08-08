@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoScrollingComponent) => ({
-                propertyName: 'scrolling',
-                className: 'DxoScrollingComponent',
-                component
-            }),
-            deps: [DxoScrollingComponent],
-         }
-         ],
+    ],
     inputs: [
         'columnRenderingMode',
         'mode',

@@ -37,7 +37,7 @@ import { DxiPopupToolbarItem } from './base/popup-toolbar-item-dxi';
             }),
             deps: [DxiToolbarItemComponent],
          }
-         ],
+    ],
     inputs: [
         'cssClass',
         'disabled',

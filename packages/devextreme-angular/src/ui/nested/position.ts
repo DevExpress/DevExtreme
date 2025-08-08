@@ -16,7 +16,6 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -30,16 +29,7 @@ import { DxoPositionConfig } from './base/position-config';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoPositionComponent) => ({
-                propertyName: 'position',
-                className: 'DxoPositionComponent',
-                component
-            }),
-            deps: [DxoPositionComponent],
-         }
-         ],
+    ],
     inputs: [
         'at',
         'boundary',

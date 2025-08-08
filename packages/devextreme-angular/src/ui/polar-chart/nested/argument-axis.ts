@@ -18,7 +18,6 @@ import { ChartsDataType, DashStyle, Font, DiscreteAxisDivisionMode, ArgumentAxis
 import { Format } from 'devextreme/common/core/localization';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -32,16 +31,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoPolarChartArgumentAxisComponent) => ({
-                propertyName: 'argumentAxis',
-                className: 'DxoPolarChartArgumentAxisComponent',
-                component
-            }),
-            deps: [DxoPolarChartArgumentAxisComponent],
-         }
-         ]
+    ],
 })
 export class DxoPolarChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()

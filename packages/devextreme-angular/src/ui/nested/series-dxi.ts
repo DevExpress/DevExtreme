@@ -37,7 +37,7 @@ import { DxiChartSeries } from './base/chart-series-dxi';
             }),
             deps: [DxiSeriesComponent],
          }
-         ],
+    ],
     inputs: [
         'aggregation',
         'argumentField',

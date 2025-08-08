@@ -22,7 +22,6 @@ import { HorizontalAlignment } from 'devextreme/common';
 import { LabelLocation } from 'devextreme/ui/form';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -40,17 +39,8 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         DxTemplateHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoDataGridLabelComponent) => ({
-                propertyName: 'label',
-                className: 'DxoDataGridLabelComponent',
-                component
-            }),
-            deps: [DxoDataGridLabelComponent],
-         }
-         ]
+        DxTemplateHost,
+    ],
 })
 export class DxoDataGridLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {

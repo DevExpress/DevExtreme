@@ -17,7 +17,6 @@ import {
 import { DragHighlight } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
@@ -31,16 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-         {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxoCardViewDraggingComponent) => ({
-                propertyName: 'dragging',
-                className: 'DxoCardViewDraggingComponent',
-                component
-            }),
-            deps: [DxoCardViewDraggingComponent],
-         }
-         ]
+    ],
 })
 export class DxoCardViewDraggingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
