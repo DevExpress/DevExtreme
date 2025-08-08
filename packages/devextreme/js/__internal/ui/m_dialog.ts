@@ -327,7 +327,7 @@ export const confirm: typeof confirmFunc = (
         },
         {
           text: messageLocalization.format('No'),
-          onClick: (): boolean => true,
+          onClick: (): boolean => false,
           ...getCancelButtonConfig(),
         },
       ],
