@@ -1119,7 +1119,7 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         assert.strictEqual(selectionChangedCount, 2, 'selection changed raised');
     });
 
-    QUnit.test.skip('Not rise selectionChanged event on refresh with changesOnly', function(assert) {
+    QUnit.test('Rise selectionChanged event on refresh with changesOnly', function(assert) {
         let selectionChangedCount = 0;
 
         this.applyOptions({
@@ -1137,10 +1137,8 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         this.dataController.refresh(true);
 
         // assert
-
-        // Why we preserve in selectedRowKeys data that's not in dataSource anymore?
-        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }, { name: 'Dmitry', age: 18 }]);
-        assert.strictEqual(selectionChangedCount, 1, 'selection changed is not raised');
+        assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Dan', age: 16 }]);
+        assert.strictEqual(selectionChangedCount, 2, 'selection changed is raised');
     });
 
     QUnit.test('Not rise selectionChanged event on apply filter when selectedRows count not changed', function(assert) {
