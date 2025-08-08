@@ -46,14 +46,14 @@ export const _updateNestedItems = (
     groupedItems[propertyName] = groupedItems[propertyName] || [];
     groupedItems[propertyName].push(component);
 
-    if (legacyClassNames) {
+    if (legacyClassNames?.[propertyName]) {
       const isLegacyClassName = legacyClassNames[propertyName].includes(className);
 
       if (index === 0) {
         hasLegacy[propertyName] = isLegacyClassName;
       } else if (hasLegacy[propertyName] !== isLegacyClassName) {
         warnAboutIncompatibleNestedItems(componentClassName, items.get(0).className, className);
-        return;
+        // return;
       }
     }
   }
