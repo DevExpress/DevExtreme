@@ -19,11 +19,11 @@ import {
 import { FilterPanel, FilterPanelTexts } from 'devextreme/common/grids';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-data-grid-filter-panel',
@@ -31,9 +31,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDataGridFilterPanelComponent) => ({
+                propertyName: 'filterPanel',
+                className: 'DxoDataGridFilterPanelComponent',
+                component
+            }),
+            deps: [DxoDataGridFilterPanelComponent],
+         }
+         ]
 })
-export class DxoDataGridFilterPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridFilterPanelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get customizeText(): ((e: { component: FilterPanel, filterValue: Record<string, any>, text: string }) => string) {
         return this._getOption('customizeText');
@@ -76,7 +87,6 @@ export class DxoDataGridFilterPanelComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'filterPanel';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

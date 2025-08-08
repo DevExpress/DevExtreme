@@ -17,11 +17,11 @@ import {
 import { EnterKeyAction, EnterKeyDirection } from 'devextreme/common/grids';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-data-grid-keyboard-navigation',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDataGridKeyboardNavigationComponent) => ({
+                propertyName: 'keyboardNavigation',
+                className: 'DxoDataGridKeyboardNavigationComponent',
+                component
+            }),
+            deps: [DxoDataGridKeyboardNavigationComponent],
+         }
+         ]
 })
-export class DxoDataGridKeyboardNavigationComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridKeyboardNavigationComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get editOnKeyPress(): boolean {
         return this._getOption('editOnKeyPress');
@@ -68,7 +79,6 @@ export class DxoDataGridKeyboardNavigationComponent extends NestedOption impleme
     protected get _optionPath() {
         return 'keyboardNavigation';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

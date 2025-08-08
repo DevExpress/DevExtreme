@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -41,10 +39,6 @@ import {
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiButtonGroupItemModule } from 'devextreme-angular/ui/button-group/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiButtonGroupItemComponent } from 'devextreme-angular/ui/button-group/nested';
 
 
 /**
@@ -497,22 +491,20 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
 
 
-    @ContentChildren(DxiButtonGroupItemComponent)
-    get itemsChildren(): QueryList<DxiButtonGroupItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiButtonGroupItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

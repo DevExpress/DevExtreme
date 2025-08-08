@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -69,9 +67,6 @@ import { DxoPopoverShowModule } from 'devextreme-angular/ui/popover/nested';
 import { DxoPopoverShowEventModule } from 'devextreme-angular/ui/popover/nested';
 import { DxoPopoverToModule } from 'devextreme-angular/ui/popover/nested';
 import { DxiPopoverToolbarItemModule } from 'devextreme-angular/ui/popover/nested';
-
-
-import { DxiPopoverToolbarItemComponent } from 'devextreme-angular/ui/popover/nested';
 
 
 /**
@@ -766,15 +761,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     @Output() wrapperAttrChange: EventEmitter<any>;
 
 
-
-
-    @ContentChildren(DxiPopoverToolbarItemComponent)
-    get toolbarItemsChildren(): QueryList<DxiPopoverToolbarItemComponent> {
-        return this._getOption('toolbarItems');
-    }
-    set toolbarItemsChildren(value) {
-        this._setChildren('toolbarItems', value, 'DxiPopoverToolbarItemComponent');
-    }
 
 
 

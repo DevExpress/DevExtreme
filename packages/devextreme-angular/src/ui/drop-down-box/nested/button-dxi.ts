@@ -16,11 +16,11 @@ import { TextEditorButtonLocation } from 'devextreme/common';
 import { dxButtonOptions } from 'devextreme/ui/button';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-drop-down-box-button',
@@ -28,7 +28,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiDropDownBoxButtonComponent) => ({
+                propertyName: 'buttons',
+                className: 'DxiDropDownBoxButtonComponent',
+                component
+            }),
+            deps: [DxiDropDownBoxButtonComponent],
+         }
+         ]
 })
 export class DxiDropDownBoxButtonComponent extends CollectionNestedOption {
     @Input()
@@ -59,7 +70,6 @@ export class DxiDropDownBoxButtonComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'buttons';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

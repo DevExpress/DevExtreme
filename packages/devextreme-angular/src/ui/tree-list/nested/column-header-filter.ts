@@ -20,11 +20,11 @@ import { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig } from 'devex
 import { SearchMode } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tree-list-column-header-filter',
@@ -32,9 +32,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTreeListColumnHeaderFilterComponent) => ({
+                propertyName: 'headerFilter',
+                className: 'DxoTreeListColumnHeaderFilterComponent',
+                component
+            }),
+            deps: [DxoTreeListColumnHeaderFilterComponent],
+         }
+         ]
 })
-export class DxoTreeListColumnHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListColumnHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
@@ -103,7 +114,6 @@ export class DxoTreeListColumnHeaderFilterComponent extends NestedOption impleme
     protected get _optionPath() {
         return 'headerFilter';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

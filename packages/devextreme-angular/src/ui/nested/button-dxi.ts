@@ -14,11 +14,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiTextEditorButton } from './base/text-editor-button-dxi';
-
 
 @Component({
     selector: 'dxi-button',
@@ -26,7 +26,18 @@ import { DxiTextEditorButton } from './base/text-editor-button-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiButtonComponent) => ({
+                propertyName: 'buttons',
+                className: 'DxiButtonComponent',
+                component
+            }),
+            deps: [DxiButtonComponent],
+         }
+         ],
     inputs: [
         'location',
         'name',
@@ -46,7 +57,6 @@ export class DxiButtonComponent extends DxiTextEditorButton {
     protected get _optionPath() {
         return 'buttons';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

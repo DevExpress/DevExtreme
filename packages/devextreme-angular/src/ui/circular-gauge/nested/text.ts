@@ -18,11 +18,11 @@ import { Font } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-circular-gauge-text',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCircularGaugeTextComponent) => ({
+                propertyName: 'text',
+                className: 'DxoCircularGaugeTextComponent',
+                component
+            }),
+            deps: [DxoCircularGaugeTextComponent],
+         }
+         ]
 })
-export class DxoCircularGaugeTextComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeTextComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get customizeText(): ((indicatedValue: { value: number, valueText: string }) => string) | undefined {
         return this._getOption('customizeText');
@@ -69,7 +80,6 @@ export class DxoCircularGaugeTextComponent extends NestedOption implements OnDes
     protected get _optionPath() {
         return 'text';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-api-key',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoApiKeyComponent) => ({
+                propertyName: 'apiKey',
+                className: 'DxoApiKeyComponent',
+                component
+            }),
+            deps: [DxoApiKeyComponent],
+         }
+         ]
 })
-export class DxoApiKeyComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoApiKeyComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get azure(): string {
         return this._getOption('azure');
@@ -67,7 +78,6 @@ export class DxoApiKeyComponent extends NestedOption implements OnDestroy, OnIni
     protected get _optionPath() {
         return 'apiKey';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

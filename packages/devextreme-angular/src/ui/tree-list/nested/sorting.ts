@@ -17,11 +17,11 @@ import {
 import { SingleMultipleOrNone } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tree-list-sorting',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTreeListSortingComponent) => ({
+                propertyName: 'sorting',
+                className: 'DxoTreeListSortingComponent',
+                component
+            }),
+            deps: [DxoTreeListSortingComponent],
+         }
+         ]
 })
-export class DxoTreeListSortingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListSortingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get ascendingText(): string {
         return this._getOption('ascendingText');
@@ -76,7 +87,6 @@ export class DxoTreeListSortingComponent extends NestedOption implements OnDestr
     protected get _optionPath() {
         return 'sorting';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

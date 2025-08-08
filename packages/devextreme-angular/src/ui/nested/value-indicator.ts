@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoGaugeIndicator } from './base/gauge-indicator';
-
 
 @Component({
     selector: 'dxo-value-indicator',
@@ -28,7 +28,18 @@ import { DxoGaugeIndicator } from './base/gauge-indicator';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoValueIndicatorComponent) => ({
+                propertyName: 'valueIndicator',
+                className: 'DxoValueIndicatorComponent',
+                component
+            }),
+            deps: [DxoValueIndicatorComponent],
+         }
+         ],
     inputs: [
         'arrowLength',
         'backgroundColor',
@@ -51,12 +62,11 @@ import { DxoGaugeIndicator } from './base/gauge-indicator';
         'width'
     ]
 })
-export class DxoValueIndicatorComponent extends DxoGaugeIndicator implements OnDestroy, OnInit  {
+export class DxoValueIndicatorComponent extends DxoGaugeIndicator implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'valueIndicator';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-indent',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoIndentComponent) => ({
+                propertyName: 'indent',
+                className: 'DxoIndentComponent',
+                component
+            }),
+            deps: [DxoIndentComponent],
+         }
+         ]
 })
-export class DxoIndentComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoIndentComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get left(): number | undefined {
         return this._getOption('left');
@@ -51,7 +62,6 @@ export class DxoIndentComponent extends NestedOption implements OnDestroy, OnIni
     protected get _optionPath() {
         return 'indent';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

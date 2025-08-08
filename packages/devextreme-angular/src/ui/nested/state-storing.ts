@@ -17,11 +17,11 @@ import {
 import { StateStoreType } from 'devextreme/common/grids';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-state-storing',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoStateStoringComponent) => ({
+                propertyName: 'stateStoring',
+                className: 'DxoStateStoringComponent',
+                component
+            }),
+            deps: [DxoStateStoringComponent],
+         }
+         ]
 })
-export class DxoStateStoringComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoStateStoringComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get customLoad(): Function {
         return this._getOption('customLoad');
@@ -84,7 +95,6 @@ export class DxoStateStoringComponent extends NestedOption implements OnDestroy,
     protected get _optionPath() {
         return 'stateStoring';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

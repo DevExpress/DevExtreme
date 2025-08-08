@@ -18,11 +18,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-diagram-grid-size',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDiagramGridSizeComponent) => ({
+                propertyName: 'gridSize',
+                className: 'DxoDiagramGridSizeComponent',
+                component
+            }),
+            deps: [DxoDiagramGridSizeComponent],
+         }
+         ]
 })
-export class DxoDiagramGridSizeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDiagramGridSizeComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get items(): Array<number> {
         return this._getOption('items');
@@ -59,7 +70,6 @@ export class DxoDiagramGridSizeComponent extends NestedOption implements OnDestr
     protected get _optionPath() {
         return 'gridSize';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

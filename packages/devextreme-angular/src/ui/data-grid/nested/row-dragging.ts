@@ -21,11 +21,11 @@ import { GridBase } from 'devextreme/common/grids';
 import { event } from 'devextreme/events/events.types';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-data-grid-row-dragging',
@@ -33,9 +33,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDataGridRowDraggingComponent) => ({
+                propertyName: 'rowDragging',
+                className: 'DxoDataGridRowDraggingComponent',
+                component
+            }),
+            deps: [DxoDataGridRowDraggingComponent],
+         }
+         ]
 })
-export class DxoDataGridRowDraggingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridRowDraggingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowDropInsideItem(): boolean {
         return this._getOption('allowDropInsideItem');
@@ -224,7 +235,6 @@ export class DxoDataGridRowDraggingComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'rowDragging';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

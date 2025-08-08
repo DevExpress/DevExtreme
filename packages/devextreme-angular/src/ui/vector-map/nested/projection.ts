@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-vector-map-projection',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoVectorMapProjectionComponent) => ({
+                propertyName: 'projection',
+                className: 'DxoVectorMapProjectionComponent',
+                component
+            }),
+            deps: [DxoVectorMapProjectionComponent],
+         }
+         ]
 })
-export class DxoVectorMapProjectionComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoVectorMapProjectionComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get aspectRatio(): number {
         return this._getOption('aspectRatio');
@@ -59,7 +70,6 @@ export class DxoVectorMapProjectionComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'projection';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

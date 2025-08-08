@@ -14,11 +14,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiDataChange } from './base/data-change-dxi';
-
 
 @Component({
     selector: 'dxi-change',
@@ -26,7 +26,18 @@ import { DxiDataChange } from './base/data-change-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiChangeComponent) => ({
+                propertyName: 'changes',
+                className: 'DxiChangeComponent',
+                component
+            }),
+            deps: [DxiChangeComponent],
+         }
+         ],
     inputs: [
         'data',
         'insertAfterKey',
@@ -40,7 +51,6 @@ export class DxiChangeComponent extends DxiDataChange {
     protected get _optionPath() {
         return 'changes';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

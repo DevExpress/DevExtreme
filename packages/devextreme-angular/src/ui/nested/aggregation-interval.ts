@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-aggregation-interval',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoAggregationIntervalComponent) => ({
+                propertyName: 'aggregationInterval',
+                className: 'DxoAggregationIntervalComponent',
+                component
+            }),
+            deps: [DxoAggregationIntervalComponent],
+         }
+         ]
 })
-export class DxoAggregationIntervalComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoAggregationIntervalComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get days(): number {
         return this._getOption('days');
@@ -107,7 +118,6 @@ export class DxoAggregationIntervalComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'aggregationInterval';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/multi_view';
@@ -44,10 +42,6 @@ import {
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiMultiViewItemModule } from 'devextreme-angular/ui/multi-view/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiMultiViewItemComponent } from 'devextreme-angular/ui/multi-view/nested';
 
 
 /**
@@ -604,22 +598,20 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
 
 
-    @ContentChildren(DxiMultiViewItemComponent)
-    get itemsChildren(): QueryList<DxiMultiViewItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiMultiViewItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

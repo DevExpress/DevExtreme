@@ -15,11 +15,11 @@ import {
 import { FormItemType } from 'devextreme/ui/form';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-card-view-empty-item',
@@ -27,7 +27,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiCardViewEmptyItemComponent) => ({
+                propertyName: 'items',
+                className: 'DxiCardViewEmptyItemComponent',
+                component
+            }),
+            deps: [DxiCardViewEmptyItemComponent],
+         }
+         ]
 })
 export class DxiCardViewEmptyItemComponent extends CollectionNestedOption {
     @Input()
@@ -82,7 +93,6 @@ export class DxiCardViewEmptyItemComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'items';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

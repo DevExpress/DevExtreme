@@ -17,11 +17,11 @@ import {
 import { BackgroundImageLocation } from 'devextreme/viz/range_selector';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-background',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoBackgroundComponent) => ({
+                propertyName: 'background',
+                className: 'DxoBackgroundComponent',
+                component
+            }),
+            deps: [DxoBackgroundComponent],
+         }
+         ]
 })
-export class DxoBackgroundComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBackgroundComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -68,7 +79,6 @@ export class DxoBackgroundComponent extends NestedOption implements OnDestroy, O
     protected get _optionPath() {
         return 'background';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

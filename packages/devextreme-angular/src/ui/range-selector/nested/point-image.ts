@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-range-selector-point-image',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoRangeSelectorPointImageComponent) => ({
+                propertyName: 'image',
+                className: 'DxoRangeSelectorPointImageComponent',
+                component
+            }),
+            deps: [DxoRangeSelectorPointImageComponent],
+         }
+         ]
 })
-export class DxoRangeSelectorPointImageComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorPointImageComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get height(): number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } {
         return this._getOption('height');
@@ -59,7 +70,6 @@ export class DxoRangeSelectorPointImageComponent extends NestedOption implements
     protected get _optionPath() {
         return 'image';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

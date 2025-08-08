@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoColumnChooser } from './base/column-chooser';
-
 
 @Component({
     selector: 'dxo-column-chooser',
@@ -28,7 +28,18 @@ import { DxoColumnChooser } from './base/column-chooser';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoColumnChooserComponent) => ({
+                propertyName: 'columnChooser',
+                className: 'DxoColumnChooserComponent',
+                component
+            }),
+            deps: [DxoColumnChooserComponent],
+         }
+         ],
     inputs: [
         'allowSearch',
         'container',
@@ -45,12 +56,11 @@ import { DxoColumnChooser } from './base/column-chooser';
         'width'
     ]
 })
-export class DxoColumnChooserComponent extends DxoColumnChooser implements OnDestroy, OnInit  {
+export class DxoColumnChooserComponent extends DxoColumnChooser implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'columnChooser';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

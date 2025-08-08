@@ -10,10 +10,7 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -21,12 +18,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoTabPanelOptions } from './base/tab-panel-options';
-import { DxiItemComponent } from './item-dxi';
-
 
 @Component({
     selector: 'dxo-tab-panel-options',
@@ -34,7 +30,18 @@ import { DxiItemComponent } from './item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTabPanelOptionsComponent) => ({
+                propertyName: 'tabPanelOptions',
+                className: 'DxoTabPanelOptionsComponent',
+                component
+            }),
+            deps: [DxoTabPanelOptionsComponent],
+         }
+         ],
     inputs: [
         'accessKey',
         'activeStateEnabled',
@@ -82,7 +89,7 @@ import { DxiItemComponent } from './item-dxi';
         'width'
     ]
 })
-export class DxoTabPanelOptionsComponent extends DxoTabPanelOptions implements OnDestroy, OnInit  {
+export class DxoTabPanelOptionsComponent extends DxoTabPanelOptions implements OnDestroy, OnInit {
 
     /**
     
@@ -106,15 +113,6 @@ export class DxoTabPanelOptionsComponent extends DxoTabPanelOptions implements O
     @Output() selectedItemChange: EventEmitter<any>;
     protected get _optionPath() {
         return 'tabPanelOptions';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

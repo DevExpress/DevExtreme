@@ -18,11 +18,11 @@ import { HorizontalAlignment } from 'devextreme/common';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-chart-series',
@@ -30,7 +30,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiChartSeriesComponent) => ({
+                propertyName: 'series',
+                className: 'DxiChartSeriesComponent',
+                component
+            }),
+            deps: [DxiChartSeriesComponent],
+         }
+         ]
 })
 export class DxiChartSeriesComponent extends CollectionNestedOption {
     @Input()
@@ -357,7 +368,6 @@ export class DxiChartSeriesComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'series';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

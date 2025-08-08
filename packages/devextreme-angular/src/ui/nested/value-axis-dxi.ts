@@ -8,10 +8,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -23,14 +20,11 @@ import { Format } from 'devextreme/common/core/localization';
 import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiBreakComponent } from './break-dxi';
-import { DxiConstantLineComponent } from './constant-line-dxi';
-import { DxiStripComponent } from './strip-dxi';
-
 
 @Component({
     selector: 'dxi-value-axis',
@@ -38,7 +32,18 @@ import { DxiStripComponent } from './strip-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiValueAxisComponent) => ({
+                propertyName: 'valueAxis',
+                className: 'DxiValueAxisComponent',
+                component
+            }),
+            deps: [DxiValueAxisComponent],
+         }
+         ]
 })
 export class DxiValueAxisComponent extends CollectionNestedOption {
     @Input()
@@ -441,31 +446,6 @@ export class DxiValueAxisComponent extends CollectionNestedOption {
     @Output() visualRangeChange: EventEmitter<VisualRange | Array<number | string | Date>>;
     protected get _optionPath() {
         return 'valueAxis';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiBreakComponent))
-    get breaksChildren(): QueryList<DxiBreakComponent> {
-        return this._getOption('breaks');
-    }
-    set breaksChildren(value) {
-        this.setChildren('breaks', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiConstantLineComponent))
-    get constantLinesChildren(): QueryList<DxiConstantLineComponent> {
-        return this._getOption('constantLines');
-    }
-    set constantLinesChildren(value) {
-        this.setChildren('constantLines', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiStripComponent))
-    get stripsChildren(): QueryList<DxiStripComponent> {
-        return this._getOption('strips');
-    }
-    set stripsChildren(value) {
-        this.setChildren('strips', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

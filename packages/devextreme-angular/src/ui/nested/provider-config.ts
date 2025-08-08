@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-provider-config',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoProviderConfigComponent) => ({
+                propertyName: 'providerConfig',
+                className: 'DxoProviderConfigComponent',
+                component
+            }),
+            deps: [DxoProviderConfigComponent],
+         }
+         ]
 })
-export class DxoProviderConfigComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoProviderConfigComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get mapId(): string {
         return this._getOption('mapId');
@@ -51,7 +62,6 @@ export class DxoProviderConfigComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'providerConfig';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

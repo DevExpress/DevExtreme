@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-config';
-
 
 @Component({
     selector: 'dxo-common-annotation-settings',
@@ -28,7 +28,18 @@ import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-c
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCommonAnnotationSettingsComponent) => ({
+                propertyName: 'commonAnnotationSettings',
+                className: 'DxoCommonAnnotationSettingsComponent',
+                component
+            }),
+            deps: [DxoCommonAnnotationSettingsComponent],
+         }
+         ],
     inputs: [
         'allowDragging',
         'argument',
@@ -67,12 +78,11 @@ import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-c
         'coordinates'
     ]
 })
-export class DxoCommonAnnotationSettingsComponent extends DxoChartCommonAnnotationConfig implements OnDestroy, OnInit  {
+export class DxoCommonAnnotationSettingsComponent extends DxoChartCommonAnnotationConfig implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'commonAnnotationSettings';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

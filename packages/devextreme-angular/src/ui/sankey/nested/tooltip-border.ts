@@ -17,11 +17,11 @@ import {
 import { DashStyle } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-sankey-tooltip-border',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSankeyTooltipBorderComponent) => ({
+                propertyName: 'border',
+                className: 'DxoSankeyTooltipBorderComponent',
+                component
+            }),
+            deps: [DxoSankeyTooltipBorderComponent],
+         }
+         ]
 })
-export class DxoSankeyTooltipBorderComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSankeyTooltipBorderComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -76,7 +87,6 @@ export class DxoSankeyTooltipBorderComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'border';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

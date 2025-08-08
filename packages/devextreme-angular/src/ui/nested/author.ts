@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoUser } from './base/user';
-
 
 @Component({
     selector: 'dxo-author',
@@ -28,7 +28,18 @@ import { DxoUser } from './base/user';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoAuthorComponent) => ({
+                propertyName: 'author',
+                className: 'DxoAuthorComponent',
+                component
+            }),
+            deps: [DxoAuthorComponent],
+         }
+         ],
     inputs: [
         'avatarAlt',
         'avatarUrl',
@@ -36,12 +47,11 @@ import { DxoUser } from './base/user';
         'name'
     ]
 })
-export class DxoAuthorComponent extends DxoUser implements OnDestroy, OnInit  {
+export class DxoAuthorComponent extends DxoUser implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'author';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

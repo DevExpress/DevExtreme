@@ -21,6 +21,7 @@ import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import { GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -30,14 +31,25 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-
 @Component({
     selector: 'dxi-gantt-toolbar-item',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiGanttToolbarItemComponent) => ({
+                propertyName: 'items',
+                className: 'DxiGanttToolbarItemComponent',
+                component
+            }),
+            deps: [DxiGanttToolbarItemComponent],
+         }
+         ]
 })
 export class DxiGanttToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -149,7 +161,6 @@ export class DxiGanttToolbarItemComponent extends CollectionNestedOption impleme
     protected get _optionPath() {
         return 'items';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

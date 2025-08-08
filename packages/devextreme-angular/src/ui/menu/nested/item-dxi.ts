@@ -10,10 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -22,6 +19,7 @@ import { DOCUMENT } from '@angular/common';
 import { dxMenuItem } from 'devextreme/ui/menu';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -31,14 +29,25 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-
 @Component({
     selector: 'dxi-menu-item',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiMenuItemComponent) => ({
+                propertyName: 'items',
+                className: 'DxiMenuItemComponent',
+                component
+            }),
+            deps: [DxiMenuItemComponent],
+         }
+         ]
 })
 export class DxiMenuItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -141,15 +150,6 @@ export class DxiMenuItemComponent extends CollectionNestedOption implements Afte
 
     protected get _optionPath() {
         return 'items';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiMenuItemComponent))
-    get itemsChildren(): QueryList<DxiMenuItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

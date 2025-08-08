@@ -17,11 +17,11 @@ import {
 import { HatchDirection } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-polar-chart-hatching',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPolarChartHatchingComponent) => ({
+                propertyName: 'hatching',
+                className: 'DxoPolarChartHatchingComponent',
+                component
+            }),
+            deps: [DxoPolarChartHatchingComponent],
+         }
+         ]
 })
-export class DxoPolarChartHatchingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPolarChartHatchingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get direction(): HatchDirection {
         return this._getOption('direction');
@@ -68,7 +79,6 @@ export class DxoPolarChartHatchingComponent extends NestedOption implements OnDe
     protected get _optionPath() {
         return 'hatching';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

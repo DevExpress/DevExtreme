@@ -17,11 +17,11 @@ import {
 import { PolarChartSeries } from 'devextreme/viz/polar_chart';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-polar-chart-series-template',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPolarChartSeriesTemplateComponent) => ({
+                propertyName: 'seriesTemplate',
+                className: 'DxoPolarChartSeriesTemplateComponent',
+                component
+            }),
+            deps: [DxoPolarChartSeriesTemplateComponent],
+         }
+         ]
 })
-export class DxoPolarChartSeriesTemplateComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPolarChartSeriesTemplateComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get customizeSeries(): ((seriesName: any) => PolarChartSeries) {
         return this._getOption('customizeSeries');
@@ -52,7 +63,6 @@ export class DxoPolarChartSeriesTemplateComponent extends NestedOption implement
     protected get _optionPath() {
         return 'seriesTemplate';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

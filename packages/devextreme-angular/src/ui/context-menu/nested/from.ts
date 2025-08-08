@@ -17,11 +17,11 @@ import {
 import { PositionConfig } from 'devextreme/common/core/animation';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-context-menu-from',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoContextMenuFromComponent) => ({
+                propertyName: 'from',
+                className: 'DxoContextMenuFromComponent',
+                component
+            }),
+            deps: [DxoContextMenuFromComponent],
+         }
+         ]
 })
-export class DxoContextMenuFromComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoContextMenuFromComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get left(): number {
         return this._getOption('left');
@@ -76,7 +87,6 @@ export class DxoContextMenuFromComponent extends NestedOption implements OnDestr
     protected get _optionPath() {
         return 'from';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

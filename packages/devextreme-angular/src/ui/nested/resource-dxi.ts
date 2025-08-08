@@ -16,11 +16,11 @@ import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-resource',
@@ -28,7 +28,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiResourceComponent) => ({
+                propertyName: 'resources',
+                className: 'DxiResourceComponent',
+                component
+            }),
+            deps: [DxiResourceComponent],
+         }
+         ]
 })
 export class DxiResourceComponent extends CollectionNestedOption {
     @Input()
@@ -99,7 +110,6 @@ export class DxiResourceComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'resources';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

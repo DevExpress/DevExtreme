@@ -10,10 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -26,12 +23,11 @@ import { dxFormOptions } from 'devextreme/ui/form';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDataGridChangeComponent } from './change-dxi';
-
 
 @Component({
     selector: 'dxo-data-grid-editing',
@@ -39,9 +35,20 @@ import { DxiDataGridChangeComponent } from './change-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDataGridEditingComponent) => ({
+                propertyName: 'editing',
+                className: 'DxoDataGridEditingComponent',
+                component
+            }),
+            deps: [DxoDataGridEditingComponent],
+         }
+         ]
 })
-export class DxoDataGridEditingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridEditingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowAdding(): boolean {
         return this._getOption('allowAdding');
@@ -193,15 +200,6 @@ export class DxoDataGridEditingComponent extends NestedOption implements OnDestr
     @Output() editRowKeyChange: EventEmitter<any>;
     protected get _optionPath() {
         return 'editing';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiDataGridChangeComponent))
-    get changesChildren(): QueryList<DxiDataGridChangeComponent> {
-        return this._getOption('changes');
-    }
-    set changesChildren(value) {
-        this.setChildren('changes', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

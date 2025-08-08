@@ -17,11 +17,11 @@ import {
 import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-drop-down-button-at',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDropDownButtonAtComponent) => ({
+                propertyName: 'at',
+                className: 'DxoDropDownButtonAtComponent',
+                component
+            }),
+            deps: [DxoDropDownButtonAtComponent],
+         }
+         ]
 })
-export class DxoDropDownButtonAtComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDropDownButtonAtComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get x(): HorizontalAlignment {
         return this._getOption('x');
@@ -52,7 +63,6 @@ export class DxoDropDownButtonAtComponent extends NestedOption implements OnDest
     protected get _optionPath() {
         return 'at';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

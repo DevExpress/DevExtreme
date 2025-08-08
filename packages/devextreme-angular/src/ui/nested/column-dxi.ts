@@ -8,10 +8,7 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -21,13 +18,11 @@ import { SortOrder } from 'devextreme/common';
 import { SelectedFilterOperation } from 'devextreme/common/grids';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiDataGridColumn } from './base/data-grid-column-dxi';
-import { DxiButtonComponent } from './button-dxi';
-import { DxiValidationRuleComponent } from './validation-rule-dxi';
-
 
 @Component({
     selector: 'dxi-column',
@@ -35,7 +30,18 @@ import { DxiValidationRuleComponent } from './validation-rule-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiColumnComponent) => ({
+                propertyName: 'columns',
+                className: 'DxiColumnComponent',
+                component
+            }),
+            deps: [DxiColumnComponent],
+         }
+         ],
     inputs: [
         'alignment',
         'allowEditing',
@@ -161,31 +167,6 @@ export class DxiColumnComponent extends DxiDataGridColumn {
     @Output() visibleIndexChange: EventEmitter<number | undefined>;
     protected get _optionPath() {
         return 'columns';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiButtonComponent))
-    get buttonsChildren(): QueryList<DxiButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this.setChildren('buttons', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiColumnComponent))
-    get columnsChildren(): QueryList<DxiColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsChildren(value) {
-        this.setChildren('columns', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiValidationRuleComponent))
-    get validationRulesChildren(): QueryList<DxiValidationRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set validationRulesChildren(value) {
-        this.setChildren('validationRules', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

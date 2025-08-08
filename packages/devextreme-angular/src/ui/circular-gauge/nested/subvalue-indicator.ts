@@ -19,11 +19,11 @@ import { HorizontalEdge, VerticalEdge } from 'devextreme/common';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-circular-gauge-subvalue-indicator',
@@ -31,9 +31,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCircularGaugeSubvalueIndicatorComponent) => ({
+                propertyName: 'subvalueIndicator',
+                className: 'DxoCircularGaugeSubvalueIndicatorComponent',
+                component
+            }),
+            deps: [DxoCircularGaugeSubvalueIndicatorComponent],
+         }
+         ]
 })
-export class DxoCircularGaugeSubvalueIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeSubvalueIndicatorComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');
@@ -190,7 +201,6 @@ export class DxoCircularGaugeSubvalueIndicatorComponent extends NestedOption imp
     protected get _optionPath() {
         return 'subvalueIndicator';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

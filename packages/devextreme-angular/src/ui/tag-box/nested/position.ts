@@ -18,11 +18,11 @@ import { PositionAlignment, HorizontalAlignment, VerticalAlignment } from 'devex
 import { CollisionResolutionCombination, CollisionResolution } from 'devextreme/common/core/animation';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tag-box-position',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTagBoxPositionComponent) => ({
+                propertyName: 'position',
+                className: 'DxoTagBoxPositionComponent',
+                component
+            }),
+            deps: [DxoTagBoxPositionComponent],
+         }
+         ]
 })
-export class DxoTagBoxPositionComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTagBoxPositionComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get at(): PositionAlignment | { x?: HorizontalAlignment, y?: VerticalAlignment } {
         return this._getOption('at');
@@ -93,7 +104,6 @@ export class DxoTagBoxPositionComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'position';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

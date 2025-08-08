@@ -8,10 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
@@ -20,12 +17,11 @@ import {
 import { PanelVisibility, ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiGroupComponent } from './group-dxi';
-
 
 @Component({
     selector: 'dxo-toolbox',
@@ -33,9 +29,20 @@ import { DxiGroupComponent } from './group-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoToolboxComponent) => ({
+                propertyName: 'toolbox',
+                className: 'DxoToolboxComponent',
+                component
+            }),
+            deps: [DxoToolboxComponent],
+         }
+         ]
 })
-export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get groups(): Array<ShapeCategory | any | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }> {
         return this._getOption('groups');
@@ -79,15 +86,6 @@ export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnIn
 
     protected get _optionPath() {
         return 'toolbox';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiGroupComponent))
-    get groupsChildren(): QueryList<DxiGroupComponent> {
-        return this._getOption('groups');
-    }
-    set groupsChildren(value) {
-        this.setChildren('groups', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

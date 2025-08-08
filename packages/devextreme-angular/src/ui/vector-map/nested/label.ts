@@ -17,11 +17,11 @@ import {
 import { Font } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-vector-map-label',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoVectorMapLabelComponent) => ({
+                propertyName: 'label',
+                className: 'DxoVectorMapLabelComponent',
+                component
+            }),
+            deps: [DxoVectorMapLabelComponent],
+         }
+         ]
 })
-export class DxoVectorMapLabelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoVectorMapLabelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get dataField(): string {
         return this._getOption('dataField');
@@ -60,7 +71,6 @@ export class DxoVectorMapLabelComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'label';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

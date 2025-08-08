@@ -8,10 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
@@ -22,13 +19,11 @@ import { Format } from 'devextreme/common/core/localization';
 import { SummaryType } from 'devextreme/common/grids';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiGroupItemComponent } from './group-item-dxi';
-import { DxiTotalItemComponent } from './total-item-dxi';
-
 
 @Component({
     selector: 'dxo-summary',
@@ -36,9 +31,20 @@ import { DxiTotalItemComponent } from './total-item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSummaryComponent) => ({
+                propertyName: 'summary',
+                className: 'DxoSummaryComponent',
+                component
+            }),
+            deps: [DxoSummaryComponent],
+         }
+         ]
 })
-export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get calculateCustomSummary(): Function {
         return this._getOption('calculateCustomSummary');
@@ -90,23 +96,6 @@ export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnIn
 
     protected get _optionPath() {
         return 'summary';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiGroupItemComponent))
-    get groupItemsChildren(): QueryList<DxiGroupItemComponent> {
-        return this._getOption('groupItems');
-    }
-    set groupItemsChildren(value) {
-        this.setChildren('groupItems', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiTotalItemComponent))
-    get totalItemsChildren(): QueryList<DxiTotalItemComponent> {
-        return this._getOption('totalItems');
-    }
-    set totalItemsChildren(value) {
-        this.setChildren('totalItems', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

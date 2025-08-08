@@ -19,11 +19,11 @@ import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_s
 import { VectorMapLayerType, VectorMapMarkerType } from 'devextreme/viz/vector_map';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-layer',
@@ -31,7 +31,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiLayerComponent) => ({
+                propertyName: 'layers',
+                className: 'DxiLayerComponent',
+                component
+            }),
+            deps: [DxiLayerComponent],
+         }
+         ]
 })
 export class DxiLayerComponent extends CollectionNestedOption {
     @Input()
@@ -270,7 +281,6 @@ export class DxiLayerComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'layers';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

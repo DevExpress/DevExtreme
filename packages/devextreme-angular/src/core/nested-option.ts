@@ -24,16 +24,39 @@ export interface INestedOptionContainer {
 
 export type IOptionPathGetter = () => string;
 
-export const _updateNestedItems = (
-    items: QueryList<{ propertyName: string, component: ICollectionNestedOption}>,
-    setChildrenFn: (propertyName: string, items: QueryList<ICollectionNestedOption>) => void
-) => {
-  const groupedItems = items.reduce((acc, { propertyName, component }) => {
-    acc[propertyName] = acc[propertyName] || [];
-    acc[propertyName].push(component);
+const warnAboutIncompatibleNestedItems = (containerClassName: string, itemClassName: string, anotherItemClassName: string) => {
+  if (console && console.warn) {
+    console.warn(`In ${containerClassName},
+          the nested ${itemClassName} and ${anotherItemClassName} components are incompatible.
+          Ensure that all nested components in the content area match.`);
+  }
+}
 
-    return acc;
-  }, {});
+export const _updateNestedItems = (
+    items: QueryList<{ propertyName: string, className: string, component: ICollectionNestedOption}>,
+    setChildrenFn: (propertyName: string, items: QueryList<ICollectionNestedOption>) => void,
+    { componentClassName, legacyClassNames }: { componentClassName: string, legacyClassNames: Record<string, string[]> }
+) => {
+  let hasLegacy = {};
+  const groupedItems = {}
+  
+  for (let index = 0; index < items.length; index++) {
+    const { propertyName, className, component } = items.get(index);
+
+    groupedItems[propertyName] = groupedItems[propertyName] || [];
+    groupedItems[propertyName].push(component);
+
+    if (legacyClassNames) {
+      const isLegacyClassName = legacyClassNames[propertyName].includes(className);
+      
+      if (index === 0) {
+        hasLegacy[propertyName] = isLegacyClassName;
+      } else if (hasLegacy[propertyName] !== isLegacyClassName) {
+        warnAboutIncompatibleNestedItems(componentClassName, items.get(0).className, className);
+        return;
+      }
+    }
+  }
 
   Object.entries(groupedItems).forEach(([propertyName, components]: [string, ICollectionNestedOption[]]) => {
     const queryList = new QueryList<ICollectionNestedOption>();
@@ -225,8 +248,15 @@ export abstract class CollectionNestedOption extends BaseNestedOption implements
   _index: number;
 
   @ContentChildren(NESTED_ITEM_TOKEN)
-  set _nestedItems(value) {
-    _updateNestedItems(value, this.setChildren.bind(this));
+  set _nestedItems(value: QueryList<{ propertyName: string, className: string, component: ICollectionNestedOption}>) {
+    _updateNestedItems(
+        value, 
+        this.setChildren.bind(this),
+        { 
+          componentClassName: this.constructor.name,
+          legacyClassNames: null,
+        }
+    );
   }
   
   protected _fullOptionPath() {

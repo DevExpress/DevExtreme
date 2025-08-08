@@ -17,11 +17,11 @@ import {
 import { AnimationEaseMode } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-bar-gauge-animation',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoBarGaugeAnimationComponent) => ({
+                propertyName: 'animation',
+                className: 'DxoBarGaugeAnimationComponent',
+                component
+            }),
+            deps: [DxoBarGaugeAnimationComponent],
+         }
+         ]
 })
-export class DxoBarGaugeAnimationComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoBarGaugeAnimationComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get duration(): number {
         return this._getOption('duration');
@@ -60,7 +71,6 @@ export class DxoBarGaugeAnimationComponent extends NestedOption implements OnDes
     protected get _optionPath() {
         return 'animation';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

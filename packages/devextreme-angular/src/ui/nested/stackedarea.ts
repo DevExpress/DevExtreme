@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoChartCommonSeriesSettings } from './base/chart-common-series-settings';
-
 
 @Component({
     selector: 'dxo-stackedarea',
@@ -28,7 +28,18 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoStackedareaComponent) => ({
+                propertyName: 'stackedarea',
+                className: 'DxoStackedareaComponent',
+                component
+            }),
+            deps: [DxoStackedareaComponent],
+         }
+         ],
     inputs: [
         'aggregation',
         'area',
@@ -93,12 +104,11 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
         'width'
     ]
 })
-export class DxoStackedareaComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit  {
+export class DxoStackedareaComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'stackedarea';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

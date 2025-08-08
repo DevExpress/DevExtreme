@@ -15,11 +15,11 @@ import {
 import { SortOrder } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-sort-by-group-summary-info',
@@ -27,7 +27,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiSortByGroupSummaryInfoComponent) => ({
+                propertyName: 'sortByGroupSummaryInfo',
+                className: 'DxiSortByGroupSummaryInfoComponent',
+                component
+            }),
+            deps: [DxiSortByGroupSummaryInfoComponent],
+         }
+         ]
 })
 export class DxiSortByGroupSummaryInfoComponent extends CollectionNestedOption {
     @Input()
@@ -58,7 +69,6 @@ export class DxiSortByGroupSummaryInfoComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'sortByGroupSummaryInfo';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

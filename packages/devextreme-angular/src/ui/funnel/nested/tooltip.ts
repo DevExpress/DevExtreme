@@ -19,11 +19,11 @@ import { dxFunnelItem } from 'devextreme/viz/funnel';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-funnel-tooltip',
@@ -31,9 +31,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoFunnelTooltipComponent) => ({
+                propertyName: 'tooltip',
+                className: 'DxoFunnelTooltipComponent',
+                component
+            }),
+            deps: [DxoFunnelTooltipComponent],
+         }
+         ]
 })
-export class DxoFunnelTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFunnelTooltipComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get arrowLength(): number {
         return this._getOption('arrowLength');
@@ -158,7 +169,6 @@ export class DxoFunnelTooltipComponent extends NestedOption implements OnDestroy
     protected get _optionPath() {
         return 'tooltip';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

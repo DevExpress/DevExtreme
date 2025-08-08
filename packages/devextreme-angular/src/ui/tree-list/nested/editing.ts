@@ -10,10 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -26,12 +23,11 @@ import { dxFormOptions } from 'devextreme/ui/form';
 import { dxPopupOptions } from 'devextreme/ui/popup';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiTreeListChangeComponent } from './change-dxi';
-
 
 @Component({
     selector: 'dxo-tree-list-editing',
@@ -39,9 +35,20 @@ import { DxiTreeListChangeComponent } from './change-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTreeListEditingComponent) => ({
+                propertyName: 'editing',
+                className: 'DxoTreeListEditingComponent',
+                component
+            }),
+            deps: [DxoTreeListEditingComponent],
+         }
+         ]
 })
-export class DxoTreeListEditingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListEditingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowAdding(): boolean | ((options: { component: dxTreeList, row: dxTreeListRowObject }) => boolean) {
         return this._getOption('allowAdding');
@@ -185,15 +192,6 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
     @Output() editRowKeyChange: EventEmitter<any>;
     protected get _optionPath() {
         return 'editing';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiTreeListChangeComponent))
-    get changesChildren(): QueryList<DxiTreeListChangeComponent> {
-        return this._getOption('changes');
-    }
-    set changesChildren(value) {
-        this.setChildren('changes', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

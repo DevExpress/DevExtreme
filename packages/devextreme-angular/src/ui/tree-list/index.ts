@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/tree_list';
@@ -181,10 +179,6 @@ import { DxoTreeListTreeListHeaderFilterSearchModule } from 'devextreme-angular/
 import { DxoTreeListTreeListHeaderFilterTextsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListTreeListSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListValidationRuleModule } from 'devextreme-angular/ui/tree-list/nested';
-
-import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiTreeListColumnComponent } from 'devextreme-angular/ui/tree-list/nested';
 
 
 /**
@@ -2037,22 +2031,20 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
 
 
 
-    @ContentChildren(DxiTreeListColumnComponent)
-    get columnsChildren(): QueryList<DxiTreeListColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsChildren(value) {
-        this._setChildren('columns', value, 'DxiTreeListColumnComponent');
-    }
-
-
-    @ContentChildren(DxiColumnComponent)
-    get columnsLegacyChildren(): QueryList<DxiColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsLegacyChildren(value) {
-        this._setChildren('columns', value, 'DxiColumnComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('columns').push('DxiColumnComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

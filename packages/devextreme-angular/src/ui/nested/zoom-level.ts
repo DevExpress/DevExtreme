@@ -18,11 +18,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-zoom-level',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoZoomLevelComponent) => ({
+                propertyName: 'zoomLevel',
+                className: 'DxoZoomLevelComponent',
+                component
+            }),
+            deps: [DxoZoomLevelComponent],
+         }
+         ]
 })
-export class DxoZoomLevelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoZoomLevelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get items(): Array<number> {
         return this._getOption('items');
@@ -59,7 +70,6 @@ export class DxoZoomLevelComponent extends NestedOption implements OnDestroy, On
     protected get _optionPath() {
         return 'zoomLevel';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

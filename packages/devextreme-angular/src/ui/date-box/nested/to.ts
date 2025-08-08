@@ -17,11 +17,11 @@ import {
 import { PositionConfig } from 'devextreme/common/core/animation';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-date-box-to',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDateBoxToComponent) => ({
+                propertyName: 'to',
+                className: 'DxoDateBoxToComponent',
+                component
+            }),
+            deps: [DxoDateBoxToComponent],
+         }
+         ]
 })
-export class DxoDateBoxToComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDateBoxToComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get left(): number {
         return this._getOption('left');
@@ -76,7 +87,6 @@ export class DxoDateBoxToComponent extends NestedOption implements OnDestroy, On
     protected get _optionPath() {
         return 'to';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

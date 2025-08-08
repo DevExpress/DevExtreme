@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-data-grid-column-fixing',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDataGridColumnFixingComponent) => ({
+                propertyName: 'columnFixing',
+                className: 'DxoDataGridColumnFixingComponent',
+                component
+            }),
+            deps: [DxoDataGridColumnFixingComponent],
+         }
+         ]
 })
-export class DxoDataGridColumnFixingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridColumnFixingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');
@@ -59,7 +70,6 @@ export class DxoDataGridColumnFixingComponent extends NestedOption implements On
     protected get _optionPath() {
         return 'columnFixing';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-pie-chart-color',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPieChartColorComponent) => ({
+                propertyName: 'color',
+                className: 'DxoPieChartColorComponent',
+                component
+            }),
+            deps: [DxoPieChartColorComponent],
+         }
+         ]
 })
-export class DxoPieChartColorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPieChartColorComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get base(): string | undefined {
         return this._getOption('base');
@@ -51,7 +62,6 @@ export class DxoPieChartColorComponent extends NestedOption implements OnDestroy
     protected get _optionPath() {
         return 'color';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

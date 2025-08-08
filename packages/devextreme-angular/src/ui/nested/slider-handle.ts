@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-slider-handle',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSliderHandleComponent) => ({
+                propertyName: 'sliderHandle',
+                className: 'DxoSliderHandleComponent',
+                component
+            }),
+            deps: [DxoSliderHandleComponent],
+         }
+         ]
 })
-export class DxoSliderHandleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSliderHandleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -59,7 +70,6 @@ export class DxoSliderHandleComponent extends NestedOption implements OnDestroy,
     protected get _optionPath() {
         return 'sliderHandle';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

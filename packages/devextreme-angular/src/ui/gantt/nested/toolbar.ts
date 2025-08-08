@@ -8,11 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    Input
 } from '@angular/core';
 
 
@@ -21,13 +17,11 @@ import {
 import { dxGanttToolbarItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiGanttItemComponent } from './item-dxi';
-import { DxiGanttToolbarItemComponent } from './toolbar-item-dxi';
-
 
 @Component({
     selector: 'dxo-gantt-toolbar',
@@ -35,9 +29,20 @@ import { DxiGanttToolbarItemComponent } from './toolbar-item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoGanttToolbarComponent) => ({
+                propertyName: 'toolbar',
+                className: 'DxoGanttToolbarComponent',
+                component
+            }),
+            deps: [DxoGanttToolbarComponent],
+         }
+         ]
 })
-export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
+export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get items(): Array<dxGanttToolbarItem | GanttPredefinedToolbarItem> {
         return this._getOption('items');
@@ -50,22 +55,6 @@ export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy,
     protected get _optionPath() {
         return 'toolbar';
     }
-
-
-    @ContentChildren(forwardRef(() => DxiGanttItemComponent)) itemsChildren!: QueryList<DxiGanttItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiGanttToolbarItemComponent)) toolbarItemsChildren!: QueryList<DxiGanttToolbarItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.itemsChildren.toArray(),
-            ...this.toolbarItemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -84,12 +73,6 @@ export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy,
     }
 
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-        this.toolbarItemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

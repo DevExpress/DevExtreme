@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-polar-chart-adaptive-layout',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPolarChartAdaptiveLayoutComponent) => ({
+                propertyName: 'adaptiveLayout',
+                className: 'DxoPolarChartAdaptiveLayoutComponent',
+                component
+            }),
+            deps: [DxoPolarChartAdaptiveLayoutComponent],
+         }
+         ]
 })
-export class DxoPolarChartAdaptiveLayoutComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPolarChartAdaptiveLayoutComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get height(): number {
         return this._getOption('height');
@@ -59,7 +70,6 @@ export class DxoPolarChartAdaptiveLayoutComponent extends NestedOption implement
     protected get _optionPath() {
         return 'adaptiveLayout';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

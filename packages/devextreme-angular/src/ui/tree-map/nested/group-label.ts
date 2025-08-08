@@ -17,11 +17,11 @@ import {
 import { Font, TextOverflow } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tree-map-group-label',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTreeMapGroupLabelComponent) => ({
+                propertyName: 'label',
+                className: 'DxoTreeMapGroupLabelComponent',
+                component
+            }),
+            deps: [DxoTreeMapGroupLabelComponent],
+         }
+         ]
 })
-export class DxoTreeMapGroupLabelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeMapGroupLabelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get font(): Font {
         return this._getOption('font');
@@ -60,7 +71,6 @@ export class DxoTreeMapGroupLabelComponent extends NestedOption implements OnDes
     protected get _optionPath() {
         return 'label';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

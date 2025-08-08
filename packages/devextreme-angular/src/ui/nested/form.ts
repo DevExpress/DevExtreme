@@ -10,10 +10,7 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -21,12 +18,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFormOptions } from './base/form-options';
-import { DxiItemComponent } from './item-dxi';
-
 
 @Component({
     selector: 'dxo-form',
@@ -34,7 +30,18 @@ import { DxiItemComponent } from './item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoFormComponent) => ({
+                propertyName: 'form',
+                className: 'DxoFormComponent',
+                component
+            }),
+            deps: [DxoFormComponent],
+         }
+         ],
     inputs: [
         'accessKey',
         'activeStateEnabled',
@@ -78,7 +85,7 @@ import { DxiItemComponent } from './item-dxi';
         'width'
     ]
 })
-export class DxoFormComponent extends DxoFormOptions implements OnDestroy, OnInit  {
+export class DxoFormComponent extends DxoFormOptions implements OnDestroy, OnInit {
 
     /**
     
@@ -88,15 +95,6 @@ export class DxoFormComponent extends DxoFormOptions implements OnDestroy, OnIni
     @Output() formDataChange: EventEmitter<any>;
     protected get _optionPath() {
         return 'form';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tree-map-hover-style',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTreeMapHoverStyleComponent) => ({
+                propertyName: 'hoverStyle',
+                className: 'DxoTreeMapHoverStyleComponent',
+                component
+            }),
+            deps: [DxoTreeMapHoverStyleComponent],
+         }
+         ]
 })
-export class DxoTreeMapHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeMapHoverStyleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get border(): { color?: string | undefined, width?: number | undefined } {
         return this._getOption('border');
@@ -51,7 +62,6 @@ export class DxoTreeMapHoverStyleComponent extends NestedOption implements OnDes
     protected get _optionPath() {
         return 'hoverStyle';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tree-list-editing-texts',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTreeListEditingTextsComponent) => ({
+                propertyName: 'texts',
+                className: 'DxoTreeListEditingTextsComponent',
+                component
+            }),
+            deps: [DxoTreeListEditingTextsComponent],
+         }
+         ]
 })
-export class DxoTreeListEditingTextsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListEditingTextsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get addRow(): string {
         return this._getOption('addRow');
@@ -131,7 +142,6 @@ export class DxoTreeListEditingTextsComponent extends NestedOption implements On
     protected get _optionPath() {
         return 'texts';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

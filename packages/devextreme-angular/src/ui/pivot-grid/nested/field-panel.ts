@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-pivot-grid-field-panel',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPivotGridFieldPanelComponent) => ({
+                propertyName: 'fieldPanel',
+                className: 'DxoPivotGridFieldPanelComponent',
+                component
+            }),
+            deps: [DxoPivotGridFieldPanelComponent],
+         }
+         ]
 })
-export class DxoPivotGridFieldPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPivotGridFieldPanelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowFieldDragging(): boolean {
         return this._getOption('allowFieldDragging');
@@ -91,7 +102,6 @@ export class DxoPivotGridFieldPanelComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'fieldPanel';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

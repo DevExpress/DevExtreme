@@ -19,7 +19,7 @@ import {
   createNgModule,
   inject,
   Injector,
-  InjectionToken, ContentChildren,
+  ContentChildren,
 } from '@angular/core';
 
 import { isPlatformServer } from '@angular/common';
@@ -71,8 +71,15 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   private readonly _collectionContainerImpl: ICollectionNestedOptionContainer;
 
   @ContentChildren(NESTED_ITEM_TOKEN)
-  set _nestedItems(value) {
-    _updateNestedItems(value, this._setChildren.bind(this))
+  set _nestedItems(value: QueryList<{ propertyName: string, className: string, component: ICollectionNestedOption}>) {
+    _updateNestedItems(
+        value, 
+        this.setChildren.bind(this),
+        {
+          componentClassName: this.constructor.name,
+          legacyClassNames: this.getLegacyClassNames(),
+        }
+    );
   }
 
   eventHelper: EmitterHelper;
@@ -224,12 +231,6 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     }
   }
 
-  _setChildren(propertyName, value, className = '') {
-    if (this.checkContentChildren(propertyName, value)) {
-      this.setChildren(propertyName, value);
-    }
-  }
-
   constructor(
     protected element: ElementRef,
     private readonly ngZone: NgZone,
@@ -314,24 +315,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
     this.templateUpdateRequired = true;
   }
 
-  protected getLegacyClassNames = (propertyName?: string) => []; 
-
-  checkContentChildren<T>(propertyName: string, items: QueryList<T>) {
-    const legacyClassNames = this.getLegacyClassNames(propertyName);
-    const legacyItem = items.find((item) => legacyClassNames.includes(item.constructor.name));
-    const notLegacyItem = legacyItem && items.find((item) => !legacyClassNames.includes(item.constructor.name));
-
-      if (legacyItem && notLegacyItem) {
-        if (console && console.warn) {
-          console.warn(`In ${this.constructor.name},
-          the nested ${legacyItem.constructor.name} and ${notLegacyItem.constructor.name} components are incompatible.
-          Ensure that all nested components in the content area match.`);
-        }
-        return false;
-      }
-
-    return true;
-  }
+  protected getLegacyClassNames: () => Record<string, string[]> = () => ({}); 
 
   setChildren<T extends ICollectionNestedOption>(propertyName: string, items: QueryList<T>) {
     this.resetOptions(propertyName);

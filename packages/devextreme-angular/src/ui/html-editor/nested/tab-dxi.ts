@@ -15,11 +15,11 @@ import {
 import { HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-html-editor-tab',
@@ -27,7 +27,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiHtmlEditorTabComponent) => ({
+                propertyName: 'tabs',
+                className: 'DxiHtmlEditorTabComponent',
+                component
+            }),
+            deps: [DxiHtmlEditorTabComponent],
+         }
+         ]
 })
 export class DxiHtmlEditorTabComponent extends CollectionNestedOption {
     @Input()
@@ -42,7 +53,6 @@ export class DxiHtmlEditorTabComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'tabs';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

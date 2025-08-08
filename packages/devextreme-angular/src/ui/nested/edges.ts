@@ -18,11 +18,11 @@ import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-edges',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoEdgesComponent) => ({
+                propertyName: 'edges',
+                className: 'DxoEdgesComponent',
+                component
+            }),
+            deps: [DxoEdgesComponent],
+         }
+         ]
 })
-export class DxoEdgesComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoEdgesComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get customDataExpr(): Function | string | undefined {
         return this._getOption('customDataExpr');
@@ -165,7 +176,6 @@ export class DxoEdgesComponent extends NestedOption implements OnDestroy, OnInit
     protected get _optionPath() {
         return 'edges';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

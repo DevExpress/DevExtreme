@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-sparkline-shadow',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSparklineShadowComponent) => ({
+                propertyName: 'shadow',
+                className: 'DxoSparklineShadowComponent',
+                component
+            }),
+            deps: [DxoSparklineShadowComponent],
+         }
+         ]
 })
-export class DxoSparklineShadowComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSparklineShadowComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get blur(): number {
         return this._getOption('blur');
@@ -75,7 +86,6 @@ export class DxoSparklineShadowComponent extends NestedOption implements OnDestr
     protected get _optionPath() {
         return 'shadow';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

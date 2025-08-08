@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFormat } from './base/format';
-
 
 @Component({
     selector: 'dxo-format',
@@ -28,7 +28,18 @@ import { DxoFormat } from './base/format';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoFormatComponent) => ({
+                propertyName: 'format',
+                className: 'DxoFormatComponent',
+                component
+            }),
+            deps: [DxoFormatComponent],
+         }
+         ],
     inputs: [
         'currency',
         'formatter',
@@ -38,12 +49,11 @@ import { DxoFormat } from './base/format';
         'useCurrencyAccountingStyle'
     ]
 })
-export class DxoFormatComponent extends DxoFormat implements OnDestroy, OnInit  {
+export class DxoFormatComponent extends DxoFormat implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'format';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

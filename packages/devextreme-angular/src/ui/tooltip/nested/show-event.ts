@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tooltip-show-event',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTooltipShowEventComponent) => ({
+                propertyName: 'showEvent',
+                className: 'DxoTooltipShowEventComponent',
+                component
+            }),
+            deps: [DxoTooltipShowEventComponent],
+         }
+         ]
 })
-export class DxoTooltipShowEventComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTooltipShowEventComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get delay(): number | undefined {
         return this._getOption('delay');
@@ -51,7 +62,6 @@ export class DxoTooltipShowEventComponent extends NestedOption implements OnDest
     protected get _optionPath() {
         return 'showEvent';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

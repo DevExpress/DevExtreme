@@ -34,8 +34,6 @@ import {
 
 
 
-
-
 /**
  * [descr:dxResizable]
 
@@ -321,7 +319,6 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() widthChange: EventEmitter<number | string>;
-
 
 
 

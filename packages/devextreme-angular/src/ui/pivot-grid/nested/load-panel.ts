@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-pivot-grid-load-panel',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPivotGridLoadPanelComponent) => ({
+                propertyName: 'loadPanel',
+                className: 'DxoPivotGridLoadPanelComponent',
+                component
+            }),
+            deps: [DxoPivotGridLoadPanelComponent],
+         }
+         ]
 })
-export class DxoPivotGridLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPivotGridLoadPanelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');
@@ -107,7 +118,6 @@ export class DxoPivotGridLoadPanelComponent extends NestedOption implements OnDe
     protected get _optionPath() {
         return 'loadPanel';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

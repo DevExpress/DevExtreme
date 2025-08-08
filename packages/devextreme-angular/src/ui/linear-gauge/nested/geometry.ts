@@ -17,11 +17,11 @@ import {
 import { Orientation } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-linear-gauge-geometry',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoLinearGaugeGeometryComponent) => ({
+                propertyName: 'geometry',
+                className: 'DxoLinearGaugeGeometryComponent',
+                component
+            }),
+            deps: [DxoLinearGaugeGeometryComponent],
+         }
+         ]
 })
-export class DxoLinearGaugeGeometryComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLinearGaugeGeometryComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get orientation(): Orientation {
         return this._getOption('orientation');
@@ -44,7 +55,6 @@ export class DxoLinearGaugeGeometryComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'geometry';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

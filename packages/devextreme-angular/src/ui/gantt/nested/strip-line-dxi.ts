@@ -14,11 +14,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-gantt-strip-line',
@@ -26,7 +26,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiGanttStripLineComponent) => ({
+                propertyName: 'stripLines',
+                className: 'DxiGanttStripLineComponent',
+                component
+            }),
+            deps: [DxiGanttStripLineComponent],
+         }
+         ]
 })
 export class DxiGanttStripLineComponent extends CollectionNestedOption {
     @Input()
@@ -65,7 +76,6 @@ export class DxiGanttStripLineComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'stripLines';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

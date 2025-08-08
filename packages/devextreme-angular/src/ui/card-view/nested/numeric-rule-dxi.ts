@@ -15,11 +15,11 @@ import {
 import { ValidationRuleType } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-card-view-numeric-rule',
@@ -27,7 +27,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiCardViewNumericRuleComponent) => ({
+                propertyName: 'validationRules',
+                className: 'DxiCardViewNumericRuleComponent',
+                component
+            }),
+            deps: [DxiCardViewNumericRuleComponent],
+         }
+         ]
 })
 export class DxiCardViewNumericRuleComponent extends CollectionNestedOption {
     @Input()
@@ -58,7 +69,6 @@ export class DxiCardViewNumericRuleComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'validationRules';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

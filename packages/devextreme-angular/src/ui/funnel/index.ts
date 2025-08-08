@@ -90,8 +90,6 @@ import { DxoFunnelTooltipModule } from 'devextreme-angular/ui/funnel/nested';
 import { DxoFunnelTooltipBorderModule } from 'devextreme-angular/ui/funnel/nested';
 
 
-
-
 /**
  * [descr:dxFunnel]
 
@@ -807,7 +805,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Output() valueFieldChange: EventEmitter<string>;
-
 
 
 

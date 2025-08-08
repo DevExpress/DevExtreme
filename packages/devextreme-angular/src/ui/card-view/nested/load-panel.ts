@@ -22,11 +22,11 @@ import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, Initialize
 import { PositionAlignment } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-card-view-load-panel',
@@ -34,9 +34,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCardViewLoadPanelComponent) => ({
+                propertyName: 'loadPanel',
+                className: 'DxoCardViewLoadPanelComponent',
+                component
+            }),
+            deps: [DxoCardViewLoadPanelComponent],
+         }
+         ]
 })
-export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
         return this._getOption('animation');
@@ -318,7 +329,6 @@ export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDes
     protected get _optionPath() {
         return 'loadPanel';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -39,8 +39,6 @@ import {
 
 
 
-
-
 /**
  * [descr:dxPagination]
 
@@ -531,7 +529,6 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
 
 
 

@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoVizFont } from './base/viz-font';
-
 
 @Component({
     selector: 'dxo-font',
@@ -28,7 +28,18 @@ import { DxoVizFont } from './base/viz-font';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoFontComponent) => ({
+                propertyName: 'font',
+                className: 'DxoFontComponent',
+                component
+            }),
+            deps: [DxoFontComponent],
+         }
+         ],
     inputs: [
         'color',
         'family',
@@ -37,12 +48,11 @@ import { DxoVizFont } from './base/viz-font';
         'weight'
     ]
 })
-export class DxoFontComponent extends DxoVizFont implements OnDestroy, OnInit  {
+export class DxoFontComponent extends DxoVizFont implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'font';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

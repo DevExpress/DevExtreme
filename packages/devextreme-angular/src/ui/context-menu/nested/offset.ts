@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-context-menu-offset',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoContextMenuOffsetComponent) => ({
+                propertyName: 'offset',
+                className: 'DxoContextMenuOffsetComponent',
+                component
+            }),
+            deps: [DxoContextMenuOffsetComponent],
+         }
+         ]
 })
-export class DxoContextMenuOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoContextMenuOffsetComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -51,7 +62,6 @@ export class DxoContextMenuOffsetComponent extends NestedOption implements OnDes
     protected get _optionPath() {
         return 'offset';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

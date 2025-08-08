@@ -19,11 +19,11 @@ import { Format } from 'devextreme/common/core/localization';
 import { CircularGaugeLabelOverlap, CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-circular-gauge-scale',
@@ -31,9 +31,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCircularGaugeScaleComponent) => ({
+                propertyName: 'scale',
+                className: 'DxoCircularGaugeScaleComponent',
+                component
+            }),
+            deps: [DxoCircularGaugeScaleComponent],
+         }
+         ]
 })
-export class DxoCircularGaugeScaleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeScaleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowDecimals(): boolean | undefined {
         return this._getOption('allowDecimals');
@@ -134,7 +145,6 @@ export class DxoCircularGaugeScaleComponent extends NestedOption implements OnDe
     protected get _optionPath() {
         return 'scale';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

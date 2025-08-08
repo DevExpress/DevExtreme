@@ -18,11 +18,11 @@ import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
 import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-chart-constant-line-style',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoChartConstantLineStyleComponent) => ({
+                propertyName: 'constantLineStyle',
+                className: 'DxoChartConstantLineStyleComponent',
+                component
+            }),
+            deps: [DxoChartConstantLineStyleComponent],
+         }
+         ]
 })
-export class DxoChartConstantLineStyleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartConstantLineStyleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -85,7 +96,6 @@ export class DxoChartConstantLineStyleComponent extends NestedOption implements 
     protected get _optionPath() {
         return 'constantLineStyle';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -18,11 +18,11 @@ import { HorizontalAlignment } from 'devextreme/common';
 import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-chart-common-axis-settings-title',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoChartCommonAxisSettingsTitleComponent) => ({
+                propertyName: 'title',
+                className: 'DxoChartCommonAxisSettingsTitleComponent',
+                component
+            }),
+            deps: [DxoChartCommonAxisSettingsTitleComponent],
+         }
+         ]
 })
-export class DxoChartCommonAxisSettingsTitleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartCommonAxisSettingsTitleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get alignment(): HorizontalAlignment {
         return this._getOption('alignment');
@@ -77,7 +88,6 @@ export class DxoChartCommonAxisSettingsTitleComponent extends NestedOption imple
     protected get _optionPath() {
         return 'title';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

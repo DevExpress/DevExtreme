@@ -18,11 +18,11 @@ import { Palette, PaletteExtensionMode } from 'devextreme/common/charts';
 import { TreeMapColorizerType } from 'devextreme/viz/tree_map';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-colorizer',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoColorizerComponent) => ({
+                propertyName: 'colorizer',
+                className: 'DxoColorizerComponent',
+                component
+            }),
+            deps: [DxoColorizerComponent],
+         }
+         ]
 })
-export class DxoColorizerComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoColorizerComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get colorCodeField(): string | undefined {
         return this._getOption('colorCodeField');
@@ -85,7 +96,6 @@ export class DxoColorizerComponent extends NestedOption implements OnDestroy, On
     protected get _optionPath() {
         return 'colorizer';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

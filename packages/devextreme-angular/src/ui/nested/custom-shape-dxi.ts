@@ -10,10 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -22,6 +19,7 @@ import { DOCUMENT } from '@angular/common';
 import { ShapeType } from 'devextreme/ui/diagram';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -30,8 +28,6 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiConnectionPointComponent } from './connection-point-dxi';
-
 
 @Component({
     selector: 'dxi-custom-shape',
@@ -39,7 +35,19 @@ import { DxiConnectionPointComponent } from './connection-point-dxi';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiCustomShapeComponent) => ({
+                propertyName: 'customShapes',
+                className: 'DxiCustomShapeComponent',
+                component
+            }),
+            deps: [DxiCustomShapeComponent],
+         }
+         ]
 })
 export class DxiCustomShapeComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -350,15 +358,6 @@ export class DxiCustomShapeComponent extends CollectionNestedOption implements A
 
     protected get _optionPath() {
         return 'customShapes';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiConnectionPointComponent))
-    get connectionPointsChildren(): QueryList<DxiConnectionPointComponent> {
-        return this._getOption('connectionPoints');
-    }
-    set connectionPointsChildren(value) {
-        this.setChildren('connectionPoints', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

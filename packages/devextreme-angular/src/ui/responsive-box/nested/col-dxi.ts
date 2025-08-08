@@ -14,11 +14,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-responsive-box-col',
@@ -26,7 +26,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiResponsiveBoxColComponent) => ({
+                propertyName: 'cols',
+                className: 'DxiResponsiveBoxColComponent',
+                component
+            }),
+            deps: [DxiResponsiveBoxColComponent],
+         }
+         ]
 })
 export class DxiResponsiveBoxColComponent extends CollectionNestedOption {
     @Input()
@@ -65,7 +76,6 @@ export class DxiResponsiveBoxColComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'cols';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

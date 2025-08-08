@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoPager } from './base/pager';
-
 
 @Component({
     selector: 'dxo-pager',
@@ -28,7 +28,18 @@ import { DxoPager } from './base/pager';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPagerComponent) => ({
+                propertyName: 'pager',
+                className: 'DxoPagerComponent',
+                component
+            }),
+            deps: [DxoPagerComponent],
+         }
+         ],
     inputs: [
         'allowedPageSizes',
         'displayMode',
@@ -40,12 +51,11 @@ import { DxoPager } from './base/pager';
         'visible'
     ]
 })
-export class DxoPagerComponent extends DxoPager implements OnDestroy, OnInit  {
+export class DxoPagerComponent extends DxoPager implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'pager';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

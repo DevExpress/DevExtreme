@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoButtonOptions } from './base/button-options';
-
 
 @Component({
     selector: 'dxo-button-options',
@@ -28,7 +28,18 @@ import { DxoButtonOptions } from './base/button-options';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoButtonOptionsComponent) => ({
+                propertyName: 'buttonOptions',
+                className: 'DxoButtonOptionsComponent',
+                component
+            }),
+            deps: [DxoButtonOptionsComponent],
+         }
+         ],
     inputs: [
         'accessKey',
         'activeStateEnabled',
@@ -56,12 +67,11 @@ import { DxoButtonOptions } from './base/button-options';
         'width'
     ]
 })
-export class DxoButtonOptionsComponent extends DxoButtonOptions implements OnDestroy, OnInit  {
+export class DxoButtonOptionsComponent extends DxoButtonOptions implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'buttonOptions';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

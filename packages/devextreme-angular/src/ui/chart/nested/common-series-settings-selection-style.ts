@@ -17,11 +17,11 @@ import {
 import { DashStyle, ChartsColor, HatchDirection } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-chart-common-series-settings-selection-style',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoChartCommonSeriesSettingsSelectionStyleComponent) => ({
+                propertyName: 'selectionStyle',
+                className: 'DxoChartCommonSeriesSettingsSelectionStyleComponent',
+                component
+            }),
+            deps: [DxoChartCommonSeriesSettingsSelectionStyleComponent],
+         }
+         ]
 })
-export class DxoChartCommonSeriesSettingsSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartCommonSeriesSettingsSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
@@ -84,7 +95,6 @@ export class DxoChartCommonSeriesSettingsSelectionStyleComponent extends NestedO
     protected get _optionPath() {
         return 'selectionStyle';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

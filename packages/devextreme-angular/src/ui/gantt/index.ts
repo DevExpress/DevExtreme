@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -87,12 +85,6 @@ import { DxoGanttTextsModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttToolbarModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxiGanttToolbarItemModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttValidationModule } from 'devextreme-angular/ui/gantt/nested';
-
-import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
-import { DxiStripLineComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiGanttColumnComponent } from 'devextreme-angular/ui/gantt/nested';
-import { DxiGanttStripLineComponent } from 'devextreme-angular/ui/gantt/nested';
 
 
 /**
@@ -1185,38 +1177,22 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
 
 
-    @ContentChildren(DxiGanttColumnComponent)
-    get columnsChildren(): QueryList<DxiGanttColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsChildren(value) {
-        this._setChildren('columns', value, 'DxiGanttColumnComponent');
-    }
-
-    @ContentChildren(DxiGanttStripLineComponent)
-    get stripLinesChildren(): QueryList<DxiGanttStripLineComponent> {
-        return this._getOption('stripLines');
-    }
-    set stripLinesChildren(value) {
-        this._setChildren('stripLines', value, 'DxiGanttStripLineComponent');
-    }
-
-
-    @ContentChildren(DxiColumnComponent)
-    get columnsLegacyChildren(): QueryList<DxiColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsLegacyChildren(value) {
-        this._setChildren('columns', value, 'DxiColumnComponent');
-    }
-
-    @ContentChildren(DxiStripLineComponent)
-    get stripLinesLegacyChildren(): QueryList<DxiStripLineComponent> {
-        return this._getOption('stripLines');
-    }
-    set stripLinesLegacyChildren(value) {
-        this._setChildren('stripLines', value, 'DxiStripLineComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('columns').push('DxiColumnComponent');
+    
+        getLegacyClassNamesForPropertyName('stripLines').push('DxiStripLineComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

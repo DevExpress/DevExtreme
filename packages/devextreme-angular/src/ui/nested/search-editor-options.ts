@@ -10,10 +10,7 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -21,12 +18,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoTextBoxOptions } from './base/text-box-options';
-import { DxiButtonComponent } from './button-dxi';
-
 
 @Component({
     selector: 'dxo-search-editor-options',
@@ -34,7 +30,18 @@ import { DxiButtonComponent } from './button-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSearchEditorOptionsComponent) => ({
+                propertyName: 'searchEditorOptions',
+                className: 'DxoSearchEditorOptionsComponent',
+                component
+            }),
+            deps: [DxoSearchEditorOptionsComponent],
+         }
+         ],
     inputs: [
         'accessKey',
         'activeStateEnabled',
@@ -93,7 +100,7 @@ import { DxiButtonComponent } from './button-dxi';
         'width'
     ]
 })
-export class DxoSearchEditorOptionsComponent extends DxoTextBoxOptions implements OnDestroy, OnInit  {
+export class DxoSearchEditorOptionsComponent extends DxoTextBoxOptions implements OnDestroy, OnInit {
 
     /**
     
@@ -110,15 +117,6 @@ export class DxoSearchEditorOptionsComponent extends DxoTextBoxOptions implement
     @Output() valueChange: EventEmitter<string>;
     protected get _optionPath() {
         return 'searchEditorOptions';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiButtonComponent))
-    get buttonsChildren(): QueryList<DxiButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this.setChildren('buttons', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

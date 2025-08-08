@@ -62,8 +62,6 @@ import { DxiFileManagerToolbarItemModule } from 'devextreme-angular/ui/file-mana
 import { DxoFileManagerUploadModule } from 'devextreme-angular/ui/file-manager/nested';
 
 
-
-
 /**
  * [descr:dxFileManager]
 
@@ -842,7 +840,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Output() widthChange: EventEmitter<number | string | undefined>;
-
 
 
 

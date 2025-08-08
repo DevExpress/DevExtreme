@@ -10,11 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    EventEmitter
 } from '@angular/core';
 
 
@@ -27,13 +23,11 @@ import { Store } from 'devextreme/data/store';
 import { TabsIconPosition, TabsStyle, Position } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiFormItemComponent } from './item-dxi';
-import { DxiFormTabPanelOptionsItemComponent } from './tab-panel-options-item-dxi';
-
 
 @Component({
     selector: 'dxo-form-tab-panel-options',
@@ -41,9 +35,20 @@ import { DxiFormTabPanelOptionsItemComponent } from './tab-panel-options-item-dx
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoFormTabPanelOptionsComponent) => ({
+                propertyName: 'tabPanelOptions',
+                className: 'DxoFormTabPanelOptionsComponent',
+                component
+            }),
+            deps: [DxoFormTabPanelOptionsComponent],
+         }
+         ]
 })
-export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
+export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -421,22 +426,6 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
         return 'tabPanelOptions';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiFormItemComponent)) itemsChildren!: QueryList<DxiFormItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiFormTabPanelOptionsItemComponent)) tabPanelOptionsItemsChildren!: QueryList<DxiFormTabPanelOptionsItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.itemsChildren.toArray(),
-            ...this.tabPanelOptionsItemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -461,12 +450,6 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
     }
 
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-        this.tabPanelOptionsItemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

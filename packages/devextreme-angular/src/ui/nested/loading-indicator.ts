@@ -19,11 +19,11 @@ import {
 import { Font } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-loading-indicator',
@@ -31,9 +31,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoLoadingIndicatorComponent) => ({
+                propertyName: 'loadingIndicator',
+                className: 'DxoLoadingIndicatorComponent',
+                component
+            }),
+            deps: [DxoLoadingIndicatorComponent],
+         }
+         ]
 })
-export class DxoLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get backgroundColor(): string {
         return this._getOption('backgroundColor');
@@ -84,7 +95,6 @@ export class DxoLoadingIndicatorComponent extends NestedOption implements OnDest
     protected get _optionPath() {
         return 'loadingIndicator';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

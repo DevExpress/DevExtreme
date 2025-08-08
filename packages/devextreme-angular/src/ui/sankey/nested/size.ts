@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-sankey-size',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSankeySizeComponent) => ({
+                propertyName: 'size',
+                className: 'DxoSankeySizeComponent',
+                component
+            }),
+            deps: [DxoSankeySizeComponent],
+         }
+         ]
 })
-export class DxoSankeySizeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSankeySizeComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get height(): number | undefined {
         return this._getOption('height');
@@ -51,7 +62,6 @@ export class DxoSankeySizeComponent extends NestedOption implements OnDestroy, O
     protected get _optionPath() {
         return 'size';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

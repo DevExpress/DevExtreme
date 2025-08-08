@@ -17,11 +17,11 @@ import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import { FormItemType } from 'devextreme/ui/form';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-card-view-button-item',
@@ -29,7 +29,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiCardViewButtonItemComponent) => ({
+                propertyName: 'items',
+                className: 'DxiCardViewButtonItemComponent',
+                component
+            }),
+            deps: [DxiCardViewButtonItemComponent],
+         }
+         ]
 })
 export class DxiCardViewButtonItemComponent extends CollectionNestedOption {
     @Input()
@@ -108,7 +119,6 @@ export class DxiCardViewButtonItemComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'items';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

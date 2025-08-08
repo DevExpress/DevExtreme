@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/stepper';
@@ -44,9 +42,6 @@ import {
 
 
 import { DxiStepperItemModule } from 'devextreme-angular/ui/stepper/nested';
-
-
-import { DxiStepperItemComponent } from 'devextreme-angular/ui/stepper/nested';
 
 
 
@@ -470,15 +465,6 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
-
-
-    @ContentChildren(DxiStepperItemComponent)
-    get itemsChildren(): QueryList<DxiStepperItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiStepperItemComponent');
-    }
 
 
 

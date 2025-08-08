@@ -17,11 +17,11 @@ import {
 import { DragHighlight } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-card-view-header-panel',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCardViewHeaderPanelComponent) => ({
+                propertyName: 'headerPanel',
+                className: 'DxoCardViewHeaderPanelComponent',
+                component
+            }),
+            deps: [DxoCardViewHeaderPanelComponent],
+         }
+         ]
 })
-export class DxoCardViewHeaderPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewHeaderPanelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get dragging(): { dropFeedbackMode?: DragHighlight, onDragChange?: ((e: any) => void), onDragEnd?: ((e: any) => void), onDragMove?: ((e: any) => void), onDragStart?: ((e: any) => void), onRemove?: ((e: any) => void), onReorder?: ((e: any) => void), scrollSensitivity?: number, scrollSpeed?: number } {
         return this._getOption('dragging');
@@ -68,7 +79,6 @@ export class DxoCardViewHeaderPanelComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'headerPanel';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -10,11 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -26,6 +22,7 @@ import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -34,8 +31,6 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiGanttContextMenuItemItemComponent } from './context-menu-item-item-dxi';
-
 
 @Component({
     selector: 'dxi-gantt-item',
@@ -43,10 +38,22 @@ import { DxiGanttContextMenuItemItemComponent } from './context-menu-item-item-d
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiGanttItemComponent) => ({
+                propertyName: 'items',
+                className: 'DxiGanttItemComponent',
+                component
+            }),
+            deps: [DxiGanttItemComponent],
+         }
+         ]
 })
 export class DxiGanttItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost, AfterContentInit  {
+    IDxTemplateHost {
     @Input()
     get beginGroup(): boolean {
         return this._getOption('beginGroup');
@@ -204,22 +211,6 @@ export class DxiGanttItemComponent extends CollectionNestedOption implements Aft
         return 'items';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiGanttContextMenuItemItemComponent)) contextMenuItemItemsChildren!: QueryList<DxiGanttContextMenuItemItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiGanttItemComponent)) itemsChildren!: QueryList<DxiGanttItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.contextMenuItemItemsChildren.toArray(),
-            ...this.itemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -245,12 +236,6 @@ export class DxiGanttItemComponent extends CollectionNestedOption implements Aft
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.contextMenuItemItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

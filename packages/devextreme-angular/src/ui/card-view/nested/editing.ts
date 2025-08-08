@@ -8,10 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
@@ -22,12 +19,11 @@ import { dxFormOptions } from 'devextreme/ui/form';
 import { EditingTexts } from 'devextreme/ui/card_view';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiCardViewChangeComponent } from './change-dxi';
-
 
 @Component({
     selector: 'dxo-card-view-editing',
@@ -35,9 +31,20 @@ import { DxiCardViewChangeComponent } from './change-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCardViewEditingComponent) => ({
+                propertyName: 'editing',
+                className: 'DxoCardViewEditingComponent',
+                component
+            }),
+            deps: [DxoCardViewEditingComponent],
+         }
+         ]
 })
-export class DxoCardViewEditingComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewEditingComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowAdding(): boolean {
         return this._getOption('allowAdding');
@@ -113,15 +120,6 @@ export class DxoCardViewEditingComponent extends NestedOption implements OnDestr
 
     protected get _optionPath() {
         return 'editing';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiCardViewChangeComponent))
-    get changesChildren(): QueryList<DxiCardViewChangeComponent> {
-        return this._getOption('changes');
-    }
-    set changesChildren(value) {
-        this.setChildren('changes', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

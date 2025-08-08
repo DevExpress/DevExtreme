@@ -10,10 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -26,14 +23,11 @@ import { HorizontalAlignment, VerticalAlignment, Position } from 'devextreme/com
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiChartBreakComponent } from './break-dxi';
-import { DxiChartConstantLineComponent } from './constant-line-dxi';
-import { DxiChartStripComponent } from './strip-dxi';
-
 
 @Component({
     selector: 'dxo-chart-argument-axis',
@@ -41,9 +35,20 @@ import { DxiChartStripComponent } from './strip-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoChartArgumentAxisComponent) => ({
+                propertyName: 'argumentAxis',
+                className: 'DxoChartArgumentAxisComponent',
+                component
+            }),
+            deps: [DxoChartArgumentAxisComponent],
+         }
+         ]
 })
-export class DxoChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get aggregatedPointsPosition(): AggregatedPointsPosition {
         return this._getOption('aggregatedPointsPosition');
@@ -452,31 +457,6 @@ export class DxoChartArgumentAxisComponent extends NestedOption implements OnDes
     @Output() visualRangeChange: EventEmitter<Array<Date | number | string> | CommonChartTypes.VisualRange>;
     protected get _optionPath() {
         return 'argumentAxis';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiChartBreakComponent))
-    get breaksChildren(): QueryList<DxiChartBreakComponent> {
-        return this._getOption('breaks');
-    }
-    set breaksChildren(value) {
-        this.setChildren('breaks', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiChartConstantLineComponent))
-    get constantLinesChildren(): QueryList<DxiChartConstantLineComponent> {
-        return this._getOption('constantLines');
-    }
-    set constantLinesChildren(value) {
-        this.setChildren('constantLines', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiChartStripComponent))
-    get stripsChildren(): QueryList<DxiChartStripComponent> {
-        return this._getOption('strips');
-    }
-    set stripsChildren(value) {
-        this.setChildren('strips', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

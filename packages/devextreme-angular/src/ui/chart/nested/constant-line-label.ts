@@ -18,11 +18,11 @@ import { Font, RelativePosition } from 'devextreme/common/charts';
 import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-chart-constant-line-label',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoChartConstantLineLabelComponent) => ({
+                propertyName: 'label',
+                className: 'DxoChartConstantLineLabelComponent',
+                component
+            }),
+            deps: [DxoChartConstantLineLabelComponent],
+         }
+         ]
 })
-export class DxoChartConstantLineLabelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoChartConstantLineLabelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get font(): Font {
         return this._getOption('font');
@@ -85,7 +96,6 @@ export class DxoChartConstantLineLabelComponent extends NestedOption implements 
     protected get _optionPath() {
         return 'label';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

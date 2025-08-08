@@ -20,6 +20,7 @@ import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextr
 import { dxVectorMapAnnotationConfig } from 'devextreme/viz/vector_map';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -29,14 +30,25 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-
 @Component({
     selector: 'dxi-vector-map-annotation',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiVectorMapAnnotationComponent) => ({
+                propertyName: 'annotations',
+                className: 'DxiVectorMapAnnotationComponent',
+                component
+            }),
+            deps: [DxiVectorMapAnnotationComponent],
+         }
+         ]
 })
 export class DxiVectorMapAnnotationComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -276,7 +288,6 @@ export class DxiVectorMapAnnotationComponent extends CollectionNestedOption impl
     protected get _optionPath() {
         return 'annotations';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

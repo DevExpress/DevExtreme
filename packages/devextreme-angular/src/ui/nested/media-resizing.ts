@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorMediaResizing } from './base/html-editor-media-resizing';
-
 
 @Component({
     selector: 'dxo-media-resizing',
@@ -28,18 +28,28 @@ import { DxoHtmlEditorMediaResizing } from './base/html-editor-media-resizing';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoMediaResizingComponent) => ({
+                propertyName: 'mediaResizing',
+                className: 'DxoMediaResizingComponent',
+                component
+            }),
+            deps: [DxoMediaResizingComponent],
+         }
+         ],
     inputs: [
         'allowedTargets',
         'enabled'
     ]
 })
-export class DxoMediaResizingComponent extends DxoHtmlEditorMediaResizing implements OnDestroy, OnInit  {
+export class DxoMediaResizingComponent extends DxoHtmlEditorMediaResizing implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'mediaResizing';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-gantt-operation-descriptions',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoGanttOperationDescriptionsComponent) => ({
+                propertyName: 'operationDescriptions',
+                className: 'DxoGanttOperationDescriptionsComponent',
+                component
+            }),
+            deps: [DxoGanttOperationDescriptionsComponent],
+         }
+         ]
 })
-export class DxoGanttOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoGanttOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get between(): string {
         return this._getOption('between');
@@ -123,7 +134,6 @@ export class DxoGanttOperationDescriptionsComponent extends NestedOption impleme
     protected get _optionPath() {
         return 'operationDescriptions';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

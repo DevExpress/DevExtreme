@@ -17,11 +17,11 @@ import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-scheduler-resource',
@@ -29,7 +29,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiSchedulerResourceComponent) => ({
+                propertyName: 'resources',
+                className: 'DxiSchedulerResourceComponent',
+                component
+            }),
+            deps: [DxiSchedulerResourceComponent],
+         }
+         ]
 })
 export class DxiSchedulerResourceComponent extends CollectionNestedOption {
     @Input()
@@ -100,7 +111,6 @@ export class DxiSchedulerResourceComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'resources';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

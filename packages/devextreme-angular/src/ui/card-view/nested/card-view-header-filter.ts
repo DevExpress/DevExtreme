@@ -17,11 +17,11 @@ import {
 import { HeaderFilterSearchConfig, HeaderFilterTexts } from 'devextreme/common/grids';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-card-view-card-view-header-filter',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCardViewCardViewHeaderFilterComponent) => ({
+                propertyName: 'headerFilter',
+                className: 'DxoCardViewCardViewHeaderFilterComponent',
+                component
+            }),
+            deps: [DxoCardViewCardViewHeaderFilterComponent],
+         }
+         ]
 })
-export class DxoCardViewCardViewHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewCardViewHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
@@ -100,7 +111,6 @@ export class DxoCardViewCardViewHeaderFilterComponent extends NestedOption imple
     protected get _optionPath() {
         return 'headerFilter';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

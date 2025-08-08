@@ -10,10 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -21,12 +18,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiItemComponent } from './item-dxi';
-
 
 @Component({
     selector: 'dxo-page-size',
@@ -34,9 +30,20 @@ import { DxiItemComponent } from './item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPageSizeComponent) => ({
+                propertyName: 'pageSize',
+                className: 'DxoPageSizeComponent',
+                component
+            }),
+            deps: [DxoPageSizeComponent],
+         }
+         ]
 })
-export class DxoPageSizeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPageSizeComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get height(): number {
         return this._getOption('height');
@@ -77,15 +84,6 @@ export class DxoPageSizeComponent extends NestedOption implements OnDestroy, OnI
     @Output() widthChange: EventEmitter<number>;
     protected get _optionPath() {
         return 'pageSize';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

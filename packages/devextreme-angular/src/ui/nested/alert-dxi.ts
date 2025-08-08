@@ -14,11 +14,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiAlert } from './base/alert-dxi';
-
 
 @Component({
     selector: 'dxi-alert',
@@ -26,7 +26,18 @@ import { DxiAlert } from './base/alert-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiAlertComponent) => ({
+                propertyName: 'alerts',
+                className: 'DxiAlertComponent',
+                component
+            }),
+            deps: [DxiAlertComponent],
+         }
+         ],
     inputs: [
         'id',
         'message'
@@ -37,7 +48,6 @@ export class DxiAlertComponent extends DxiAlert {
     protected get _optionPath() {
         return 'alerts';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

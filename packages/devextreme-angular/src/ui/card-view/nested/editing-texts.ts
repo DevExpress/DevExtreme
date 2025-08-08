@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-card-view-editing-texts',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCardViewEditingTextsComponent) => ({
+                propertyName: 'texts',
+                className: 'DxoCardViewEditingTextsComponent',
+                component
+            }),
+            deps: [DxoCardViewEditingTextsComponent],
+         }
+         ]
 })
-export class DxoCardViewEditingTextsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewEditingTextsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get addCard(): string {
         return this._getOption('addCard');
@@ -83,7 +94,6 @@ export class DxoCardViewEditingTextsComponent extends NestedOption implements On
     protected get _optionPath() {
         return 'texts';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

@@ -18,6 +18,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -27,14 +28,25 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-
 @Component({
     selector: 'dxi-autocomplete-item',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiAutocompleteItemComponent) => ({
+                propertyName: 'items',
+                className: 'DxiAutocompleteItemComponent',
+                component
+            }),
+            deps: [DxiAutocompleteItemComponent],
+         }
+         ]
 })
 export class DxiAutocompleteItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -82,7 +94,6 @@ export class DxiAutocompleteItemComponent extends CollectionNestedOption impleme
     protected get _optionPath() {
         return 'items';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

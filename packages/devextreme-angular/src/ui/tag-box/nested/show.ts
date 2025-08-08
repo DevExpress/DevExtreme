@@ -18,11 +18,11 @@ import { AnimationConfig, AnimationState, AnimationType } from 'devextreme/commo
 import { Direction } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tag-box-show',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTagBoxShowComponent) => ({
+                propertyName: 'show',
+                className: 'DxoTagBoxShowComponent',
+                component
+            }),
+            deps: [DxoTagBoxShowComponent],
+         }
+         ]
 })
-export class DxoTagBoxShowComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTagBoxShowComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get complete(): (($element: any, config: AnimationConfig) => void) {
         return this._getOption('complete');
@@ -117,7 +128,6 @@ export class DxoTagBoxShowComponent extends NestedOption implements OnDestroy, O
     protected get _optionPath() {
         return 'show';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

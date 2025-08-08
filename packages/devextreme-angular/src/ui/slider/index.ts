@@ -53,8 +53,6 @@ import { DxoSliderTooltipModule } from 'devextreme-angular/ui/slider/nested';
 
 
 
-
-
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => DxSliderComponent),
@@ -731,7 +729,6 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
 
 
 

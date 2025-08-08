@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-tree-list-column-chooser-selection',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoTreeListColumnChooserSelectionComponent) => ({
+                propertyName: 'selection',
+                className: 'DxoTreeListColumnChooserSelectionComponent',
+                component
+            }),
+            deps: [DxoTreeListColumnChooserSelectionComponent],
+         }
+         ]
 })
-export class DxoTreeListColumnChooserSelectionComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoTreeListColumnChooserSelectionComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowSelectAll(): boolean {
         return this._getOption('allowSelectAll');
@@ -59,7 +70,6 @@ export class DxoTreeListColumnChooserSelectionComponent extends NestedOption imp
     protected get _optionPath() {
         return 'selection';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

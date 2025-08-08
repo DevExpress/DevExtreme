@@ -15,11 +15,11 @@ import {
 import { FormItemType } from 'devextreme/ui/form';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxi-form-empty-item',
@@ -27,7 +27,18 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiFormEmptyItemComponent) => ({
+                propertyName: 'items',
+                className: 'DxiFormEmptyItemComponent',
+                component
+            }),
+            deps: [DxiFormEmptyItemComponent],
+         }
+         ]
 })
 export class DxiFormEmptyItemComponent extends CollectionNestedOption {
     @Input()
@@ -82,7 +93,6 @@ export class DxiFormEmptyItemComponent extends CollectionNestedOption {
     protected get _optionPath() {
         return 'items';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

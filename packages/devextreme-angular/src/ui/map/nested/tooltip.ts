@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-map-tooltip',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoMapTooltipComponent) => ({
+                propertyName: 'tooltip',
+                className: 'DxoMapTooltipComponent',
+                component
+            }),
+            deps: [DxoMapTooltipComponent],
+         }
+         ]
 })
-export class DxoMapTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoMapTooltipComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get isShown(): boolean {
         return this._getOption('isShown');
@@ -51,7 +62,6 @@ export class DxoMapTooltipComponent extends NestedOption implements OnDestroy, O
     protected get _optionPath() {
         return 'tooltip';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

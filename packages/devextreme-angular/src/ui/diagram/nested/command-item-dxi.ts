@@ -6,11 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    Input
 } from '@angular/core';
 
 
@@ -20,12 +16,11 @@ import { Command, CustomCommand } from 'devextreme/ui/diagram';
 import { ToolbarItemLocation } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiDiagramItemComponent } from './item-dxi';
-
 
 @Component({
     selector: 'dxi-diagram-command-item',
@@ -33,9 +28,20 @@ import { DxiDiagramItemComponent } from './item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiDiagramCommandItemComponent) => ({
+                propertyName: 'items',
+                className: 'DxiDiagramCommandItemComponent',
+                component
+            }),
+            deps: [DxiDiagramCommandItemComponent],
+         }
+         ]
 })
-export class DxiDiagramCommandItemComponent extends CollectionNestedOption implements AfterContentInit  {
+export class DxiDiagramCommandItemComponent extends CollectionNestedOption {
     @Input()
     get icon(): string {
         return this._getOption('icon');
@@ -81,22 +87,6 @@ export class DxiDiagramCommandItemComponent extends CollectionNestedOption imple
         return 'items';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiDiagramCommandItemComponent)) commandItemsChildren!: QueryList<DxiDiagramCommandItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDiagramItemComponent)) itemsChildren!: QueryList<DxiDiagramItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.commandItemsChildren.toArray(),
-            ...this.itemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -110,12 +100,6 @@ export class DxiDiagramCommandItemComponent extends CollectionNestedOption imple
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.commandItemsChildren.changes.subscribe(() => { this.setItems() });
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

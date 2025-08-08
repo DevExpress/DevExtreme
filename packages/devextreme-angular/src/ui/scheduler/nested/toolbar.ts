@@ -8,11 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    Input
 } from '@angular/core';
 
 
@@ -21,13 +17,11 @@ import {
 import { dxSchedulerToolbarItem, SchedulerPredefinedToolbarItem } from 'devextreme/ui/scheduler';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiSchedulerItemComponent } from './item-dxi';
-import { DxiSchedulerToolbarItemComponent } from './toolbar-item-dxi';
-
 
 @Component({
     selector: 'dxo-scheduler-toolbar',
@@ -35,9 +29,20 @@ import { DxiSchedulerToolbarItemComponent } from './toolbar-item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSchedulerToolbarComponent) => ({
+                propertyName: 'toolbar',
+                className: 'DxoSchedulerToolbarComponent',
+                component
+            }),
+            deps: [DxoSchedulerToolbarComponent],
+         }
+         ]
 })
-export class DxoSchedulerToolbarComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
+export class DxoSchedulerToolbarComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -75,22 +80,6 @@ export class DxoSchedulerToolbarComponent extends NestedOption implements OnDest
         return 'toolbar';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiSchedulerItemComponent)) itemsChildren!: QueryList<DxiSchedulerItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiSchedulerToolbarItemComponent)) toolbarItemsChildren!: QueryList<DxiSchedulerToolbarItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.itemsChildren.toArray(),
-            ...this.toolbarItemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -108,12 +97,6 @@ export class DxoSchedulerToolbarComponent extends NestedOption implements OnDest
     }
 
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-        this.toolbarItemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

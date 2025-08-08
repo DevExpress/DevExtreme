@@ -18,9 +18,7 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -72,10 +70,6 @@ import { DxoHtmlEditorTableResizingModule } from 'devextreme-angular/ui/html-edi
 import { DxoHtmlEditorToolbarModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxiHtmlEditorToolbarItemModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorVariablesModule } from 'devextreme-angular/ui/html-editor/nested';
-
-import { DxiMentionComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiHtmlEditorMentionComponent } from 'devextreme-angular/ui/html-editor/nested';
 
 
 
@@ -873,22 +867,20 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiHtmlEditorMentionComponent)
-    get mentionsChildren(): QueryList<DxiHtmlEditorMentionComponent> {
-        return this._getOption('mentions');
-    }
-    set mentionsChildren(value) {
-        this._setChildren('mentions', value, 'DxiHtmlEditorMentionComponent');
-    }
-
-
-    @ContentChildren(DxiMentionComponent)
-    get mentionsLegacyChildren(): QueryList<DxiMentionComponent> {
-        return this._getOption('mentions');
-    }
-    set mentionsLegacyChildren(value) {
-        this._setChildren('mentions', value, 'DxiMentionComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('mentions').push('DxiMentionComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

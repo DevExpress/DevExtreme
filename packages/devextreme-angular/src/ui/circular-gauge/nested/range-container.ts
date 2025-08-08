@@ -8,10 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
@@ -21,12 +18,11 @@ import { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/ch
 import { CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiCircularGaugeRangeComponent } from './range-dxi';
-
 
 @Component({
     selector: 'dxo-circular-gauge-range-container',
@@ -34,9 +30,20 @@ import { DxiCircularGaugeRangeComponent } from './range-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCircularGaugeRangeContainerComponent) => ({
+                propertyName: 'rangeContainer',
+                className: 'DxoCircularGaugeRangeContainerComponent',
+                component
+            }),
+            deps: [DxoCircularGaugeRangeContainerComponent],
+         }
+         ]
 })
-export class DxoCircularGaugeRangeContainerComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCircularGaugeRangeContainerComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get backgroundColor(): ChartsColor | string {
         return this._getOption('backgroundColor');
@@ -96,15 +103,6 @@ export class DxoCircularGaugeRangeContainerComponent extends NestedOption implem
 
     protected get _optionPath() {
         return 'rangeContainer';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiCircularGaugeRangeComponent))
-    get rangesChildren(): QueryList<DxiCircularGaugeRangeComponent> {
-        return this._getOption('ranges');
-    }
-    set rangesChildren(value) {
-        this.setChildren('ranges', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

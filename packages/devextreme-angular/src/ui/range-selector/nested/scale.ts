@@ -8,10 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
@@ -22,12 +19,11 @@ import { Format } from 'devextreme/common/core/localization';
 import { AxisScale } from 'devextreme/viz/range_selector';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiRangeSelectorBreakComponent } from './break-dxi';
-
 
 @Component({
     selector: 'dxo-range-selector-scale',
@@ -35,9 +31,20 @@ import { DxiRangeSelectorBreakComponent } from './break-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoRangeSelectorScaleComponent) => ({
+                propertyName: 'scale',
+                className: 'DxoRangeSelectorScaleComponent',
+                component
+            }),
+            deps: [DxoRangeSelectorScaleComponent],
+         }
+         ]
 })
-export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get aggregationGroupWidth(): number | undefined {
         return this._getOption('aggregationGroupWidth');
@@ -273,15 +280,6 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
 
     protected get _optionPath() {
         return 'scale';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiRangeSelectorBreakComponent))
-    get breaksChildren(): QueryList<DxiRangeSelectorBreakComponent> {
-        return this._getOption('breaks');
-    }
-    set breaksChildren(value) {
-        this.setChildren('breaks', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -90,10 +88,6 @@ import { DxoDiagramToolboxModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxiDiagramToolboxGroupModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramViewToolbarModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramZoomLevelModule } from 'devextreme-angular/ui/diagram/nested';
-
-import { DxiCustomShapeComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiDiagramCustomShapeComponent } from 'devextreme-angular/ui/diagram/nested';
 
 
 /**
@@ -918,22 +912,20 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
 
 
-    @ContentChildren(DxiDiagramCustomShapeComponent)
-    get customShapesChildren(): QueryList<DxiDiagramCustomShapeComponent> {
-        return this._getOption('customShapes');
-    }
-    set customShapesChildren(value) {
-        this._setChildren('customShapes', value, 'DxiDiagramCustomShapeComponent');
-    }
-
-
-    @ContentChildren(DxiCustomShapeComponent)
-    get customShapesLegacyChildren(): QueryList<DxiCustomShapeComponent> {
-        return this._getOption('customShapes');
-    }
-    set customShapesLegacyChildren(value) {
-        this._setChildren('customShapes', value, 'DxiCustomShapeComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('customShapes').push('DxiCustomShapeComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

@@ -18,11 +18,11 @@ import { Format } from 'devextreme/common/core/localization';
 import { VerticalEdge } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-slider-label',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSliderLabelComponent) => ({
+                propertyName: 'label',
+                className: 'DxoSliderLabelComponent',
+                component
+            }),
+            deps: [DxoSliderLabelComponent],
+         }
+         ]
 })
-export class DxoSliderLabelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSliderLabelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get format(): Format {
         return this._getOption('format');
@@ -61,7 +72,6 @@ export class DxoSliderLabelComponent extends NestedOption implements OnDestroy, 
     protected get _optionPath() {
         return 'label';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

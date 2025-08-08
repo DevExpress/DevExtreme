@@ -6,10 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
@@ -19,12 +16,11 @@ import { FormItemType, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFor
 import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiFormTabComponent } from './tab-dxi';
-
 
 @Component({
     selector: 'dxi-form-tabbed-item',
@@ -32,7 +28,18 @@ import { DxiFormTabComponent } from './tab-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiFormTabbedItemComponent) => ({
+                propertyName: 'items',
+                className: 'DxiFormTabbedItemComponent',
+                component
+            }),
+            deps: [DxiFormTabbedItemComponent],
+         }
+         ]
 })
 export class DxiFormTabbedItemComponent extends CollectionNestedOption {
     @Input()
@@ -102,15 +109,6 @@ export class DxiFormTabbedItemComponent extends CollectionNestedOption {
 
     protected get _optionPath() {
         return 'items';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiFormTabComponent))
-    get tabsChildren(): QueryList<DxiFormTabComponent> {
-        return this._getOption('tabs');
-    }
-    set tabsChildren(value) {
-        this.setChildren('tabs', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

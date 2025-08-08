@@ -17,11 +17,11 @@ import {
 import { SubmenuShowMode } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-show-submenu-mode',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoShowSubmenuModeComponent) => ({
+                propertyName: 'showSubmenuMode',
+                className: 'DxoShowSubmenuModeComponent',
+                component
+            }),
+            deps: [DxoShowSubmenuModeComponent],
+         }
+         ]
 })
-export class DxoShowSubmenuModeComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoShowSubmenuModeComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get delay(): number | { hide?: number, show?: number } {
         return this._getOption('delay');
@@ -52,7 +63,6 @@ export class DxoShowSubmenuModeComponent extends NestedOption implements OnDestr
     protected get _optionPath() {
         return 'showSubmenuMode';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

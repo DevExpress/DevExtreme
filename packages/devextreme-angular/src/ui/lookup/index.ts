@@ -18,9 +18,7 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -81,10 +79,6 @@ import { DxoLookupShowModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxoLookupShowEventModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxoLookupToModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxiLookupToolbarItemModule } from 'devextreme-angular/ui/lookup/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiLookupItemComponent } from 'devextreme-angular/ui/lookup/nested';
 
 
 
@@ -1602,22 +1596,20 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     @HostListener('onBlur', ['$event']) touched = (_) => {};
 
 
-    @ContentChildren(DxiLookupItemComponent)
-    get itemsChildren(): QueryList<DxiLookupItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiLookupItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

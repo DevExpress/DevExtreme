@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-validator-adapter',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoValidatorAdapterComponent) => ({
+                propertyName: 'adapter',
+                className: 'DxoValidatorAdapterComponent',
+                component
+            }),
+            deps: [DxoValidatorAdapterComponent],
+         }
+         ]
 })
-export class DxoValidatorAdapterComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoValidatorAdapterComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get applyValidationResults(): Function {
         return this._getOption('applyValidationResults');
@@ -83,7 +94,6 @@ export class DxoValidatorAdapterComponent extends NestedOption implements OnDest
     protected get _optionPath() {
         return 'adapter';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

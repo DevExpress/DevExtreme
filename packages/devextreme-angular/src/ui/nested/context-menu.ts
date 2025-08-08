@@ -8,10 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    SkipSelf
 } from '@angular/core';
 
 
@@ -19,13 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFileManagerContextMenu } from './base/file-manager-context-menu';
-import { DxiCommandComponent } from './command-dxi';
-import { DxiItemComponent } from './item-dxi';
-
 
 @Component({
     selector: 'dxo-context-menu',
@@ -33,34 +28,28 @@ import { DxiItemComponent } from './item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoContextMenuComponent) => ({
+                propertyName: 'contextMenu',
+                className: 'DxoContextMenuComponent',
+                component
+            }),
+            deps: [DxoContextMenuComponent],
+         }
+         ],
     inputs: [
         'commands',
         'enabled',
         'items'
     ]
 })
-export class DxoContextMenuComponent extends DxoFileManagerContextMenu implements OnDestroy, OnInit  {
+export class DxoContextMenuComponent extends DxoFileManagerContextMenu implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'contextMenu';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiCommandComponent))
-    get commandsChildren(): QueryList<DxiCommandComponent> {
-        return this._getOption('commands');
-    }
-    set commandsChildren(value) {
-        this.setChildren('commands', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

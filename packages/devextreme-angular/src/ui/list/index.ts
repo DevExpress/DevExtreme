@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/list';
@@ -59,12 +57,6 @@ import { DxoListItemDraggingModule } from 'devextreme-angular/ui/list/nested';
 import { DxiListMenuItemModule } from 'devextreme-angular/ui/list/nested';
 import { DxoListOptionsModule } from 'devextreme-angular/ui/list/nested';
 import { DxoListSearchEditorOptionsModule } from 'devextreme-angular/ui/list/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-import { DxiMenuItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiListItemComponent } from 'devextreme-angular/ui/list/nested';
-import { DxiListMenuItemComponent } from 'devextreme-angular/ui/list/nested';
 
 
 /**
@@ -1341,38 +1333,22 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
 
 
-    @ContentChildren(DxiListItemComponent)
-    get itemsChildren(): QueryList<DxiListItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiListItemComponent');
-    }
-
-    @ContentChildren(DxiListMenuItemComponent)
-    get menuItemsChildren(): QueryList<DxiListMenuItemComponent> {
-        return this._getOption('menuItems');
-    }
-    set menuItemsChildren(value) {
-        this._setChildren('menuItems', value, 'DxiListMenuItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
-
-    @ContentChildren(DxiMenuItemComponent)
-    get menuItemsLegacyChildren(): QueryList<DxiMenuItemComponent> {
-        return this._getOption('menuItems');
-    }
-    set menuItemsLegacyChildren(value) {
-        this._setChildren('menuItems', value, 'DxiMenuItemComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
+    
+        getLegacyClassNamesForPropertyName('menuItems').push('DxiMenuItemComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

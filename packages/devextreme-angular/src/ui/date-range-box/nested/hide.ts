@@ -18,11 +18,11 @@ import { AnimationConfig, AnimationState, AnimationType } from 'devextreme/commo
 import { Direction } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-date-range-box-hide',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDateRangeBoxHideComponent) => ({
+                propertyName: 'hide',
+                className: 'DxoDateRangeBoxHideComponent',
+                component
+            }),
+            deps: [DxoDateRangeBoxHideComponent],
+         }
+         ]
 })
-export class DxoDateRangeBoxHideComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDateRangeBoxHideComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get complete(): (($element: any, config: AnimationConfig) => void) {
         return this._getOption('complete');
@@ -117,7 +128,6 @@ export class DxoDateRangeBoxHideComponent extends NestedOption implements OnDest
     protected get _optionPath() {
         return 'hide';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

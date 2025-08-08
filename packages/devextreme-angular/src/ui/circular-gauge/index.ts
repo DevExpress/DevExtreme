@@ -90,8 +90,6 @@ import { DxoCircularGaugeTooltipModule } from 'devextreme-angular/ui/circular-ga
 import { DxoCircularGaugeValueIndicatorModule } from 'devextreme-angular/ui/circular-gauge/nested';
 
 
-
-
 /**
  * [descr:dxCircularGauge]
 
@@ -631,7 +629,6 @@ export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, 
     
      */
     @Output() valueIndicatorChange: EventEmitter<GaugeIndicator | { type?: "rectangleNeedle" | "triangleNeedle" | "twoColorNeedle" | "rangeBar" | "triangleMarker" | "textCloud" }>;
-
 
 
 

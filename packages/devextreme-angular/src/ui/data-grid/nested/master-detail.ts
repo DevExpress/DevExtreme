@@ -20,6 +20,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -29,14 +30,25 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
-
 @Component({
     selector: 'dxo-data-grid-master-detail',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDataGridMasterDetailComponent) => ({
+                propertyName: 'masterDetail',
+                className: 'DxoDataGridMasterDetailComponent',
+                component
+            }),
+            deps: [DxoDataGridMasterDetailComponent],
+         }
+         ]
 })
 export class DxoDataGridMasterDetailComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
@@ -68,7 +80,6 @@ export class DxoDataGridMasterDetailComponent extends NestedOption implements Af
     protected get _optionPath() {
         return 'masterDetail';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

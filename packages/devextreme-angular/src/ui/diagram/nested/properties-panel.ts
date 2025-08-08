@@ -8,10 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
@@ -20,12 +17,11 @@ import {
 import { Command, CustomCommand, PanelVisibility } from 'devextreme/ui/diagram';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDiagramTabComponent } from './tab-dxi';
-
 
 @Component({
     selector: 'dxo-diagram-properties-panel',
@@ -33,9 +29,20 @@ import { DxiDiagramTabComponent } from './tab-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDiagramPropertiesPanelComponent) => ({
+                propertyName: 'propertiesPanel',
+                className: 'DxoDiagramPropertiesPanelComponent',
+                component
+            }),
+            deps: [DxoDiagramPropertiesPanelComponent],
+         }
+         ]
 })
-export class DxoDiagramPropertiesPanelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDiagramPropertiesPanelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get tabs(): { commands?: Array<Command | CustomCommand>, groups?: { commands?: Array<Command | CustomCommand>, title?: string }[], title?: string }[] {
         return this._getOption('tabs');
@@ -55,15 +62,6 @@ export class DxoDiagramPropertiesPanelComponent extends NestedOption implements 
 
     protected get _optionPath() {
         return 'propertiesPanel';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiDiagramTabComponent))
-    get tabsChildren(): QueryList<DxiDiagramTabComponent> {
-        return this._getOption('tabs');
-    }
-    set tabsChildren(value) {
-        this.setChildren('tabs', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

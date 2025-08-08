@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -21,6 +21,7 @@ import { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/fo
 import { HorizontalAlignment } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -28,7 +29,7 @@ import {
     IDxTemplateHost,
     DxTemplateHost
 } from 'devextreme-angular/core';
-import { CollectionNestedOption, NESTED_ITEM_TOKEN } from 'devextreme-angular/core';
+import { CollectionNestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxi-form-simple-item',
@@ -38,18 +39,20 @@ import { CollectionNestedOption, NESTED_ITEM_TOKEN } from 'devextreme-angular/co
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-        DxTemplateHost,
-        {
+         DxTemplateHost,
+         {
             provide: NESTED_ITEM_TOKEN,
             useFactory: (component: DxiFormSimpleItemComponent) => ({
                 propertyName: 'items',
+                className: 'DxiFormSimpleItemComponent',
                 component
             }),
             deps: [DxiFormSimpleItemComponent],
-        }]
+         }
+         ]
 })
 export class DxiFormSimpleItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost  {
+    IDxTemplateHost {
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');
@@ -168,11 +171,11 @@ export class DxiFormSimpleItemComponent extends CollectionNestedOption implement
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
-                @Host() optionHost: NestedOptionHost,
-                private renderer: Renderer2,
-                @Inject(DOCUMENT) private document: any,
-                @Host() templateHost: DxTemplateHost,
-                private element: ElementRef) {
+            @Host() optionHost: NestedOptionHost,
+            private renderer: Renderer2,
+            @Inject(DOCUMENT) private document: any,
+            @Host() templateHost: DxTemplateHost,
+            private element: ElementRef) {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
@@ -191,14 +194,15 @@ export class DxiFormSimpleItemComponent extends CollectionNestedOption implement
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
+
 }
 
 @NgModule({
-    imports: [
-        DxiFormSimpleItemComponent
-    ],
-    exports: [
-        DxiFormSimpleItemComponent
-    ],
+  imports: [
+    DxiFormSimpleItemComponent
+  ],
+  exports: [
+    DxiFormSimpleItemComponent
+  ],
 })
 export class DxiFormSimpleItemModule { }

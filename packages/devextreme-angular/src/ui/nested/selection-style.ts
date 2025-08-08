@@ -17,11 +17,11 @@ import {
 import { ChartsColor, DashStyle, HatchDirection } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-selection-style',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSelectionStyleComponent) => ({
+                propertyName: 'selectionStyle',
+                className: 'DxoSelectionStyleComponent',
+                component
+            }),
+            deps: [DxoSelectionStyleComponent],
+         }
+         ]
 })
-export class DxoSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get border(): { color?: string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } | { color?: string | undefined, width?: number | undefined } {
         return this._getOption('border');
@@ -92,7 +103,6 @@ export class DxoSelectionStyleComponent extends NestedOption implements OnDestro
     protected get _optionPath() {
         return 'selectionStyle';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

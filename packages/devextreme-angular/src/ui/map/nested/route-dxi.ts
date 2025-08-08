@@ -6,10 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
@@ -18,12 +15,11 @@ import {
 import { RouteMode } from 'devextreme/ui/map';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiMapLocationComponent } from './location-dxi';
-
 
 @Component({
     selector: 'dxi-map-route',
@@ -31,7 +27,18 @@ import { DxiMapLocationComponent } from './location-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiMapRouteComponent) => ({
+                propertyName: 'routes',
+                className: 'DxiMapRouteComponent',
+                component
+            }),
+            deps: [DxiMapRouteComponent],
+         }
+         ]
 })
 export class DxiMapRouteComponent extends CollectionNestedOption {
     @Input()
@@ -77,15 +84,6 @@ export class DxiMapRouteComponent extends CollectionNestedOption {
 
     protected get _optionPath() {
         return 'routes';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiMapLocationComponent))
-    get locationsChildren(): QueryList<DxiMapLocationComponent> {
-        return this._getOption('locations');
-    }
-    set locationsChildren(value) {
-        this.setChildren('locations', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

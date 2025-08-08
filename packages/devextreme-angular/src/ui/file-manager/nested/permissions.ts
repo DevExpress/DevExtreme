@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-file-manager-permissions',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoFileManagerPermissionsComponent) => ({
+                propertyName: 'permissions',
+                className: 'DxoFileManagerPermissionsComponent',
+                component
+            }),
+            deps: [DxoFileManagerPermissionsComponent],
+         }
+         ]
 })
-export class DxoFileManagerPermissionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoFileManagerPermissionsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get copy(): boolean {
         return this._getOption('copy');
@@ -91,7 +102,6 @@ export class DxoFileManagerPermissionsComponent extends NestedOption implements 
     protected get _optionPath() {
         return 'permissions';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

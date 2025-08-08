@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 
@@ -222,16 +220,6 @@ import { DxoChartVisualRangeModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartWholeRangeModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartWidthModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartZoomAndPanModule } from 'devextreme-angular/ui/chart/nested';
-
-import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
-import { DxiPaneComponent } from 'devextreme-angular/ui/nested';
-import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
-import { DxiValueAxisComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiChartAnnotationComponent } from 'devextreme-angular/ui/chart/nested';
-import { DxiChartPaneComponent } from 'devextreme-angular/ui/chart/nested';
-import { DxiChartSeriesComponent } from 'devextreme-angular/ui/chart/nested';
-import { DxiChartValueAxisComponent } from 'devextreme-angular/ui/chart/nested';
 
 
 /**
@@ -1445,70 +1433,26 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
 
 
 
-    @ContentChildren(DxiChartAnnotationComponent)
-    get annotationsChildren(): QueryList<DxiChartAnnotationComponent> {
-        return this._getOption('annotations');
-    }
-    set annotationsChildren(value) {
-        this._setChildren('annotations', value, 'DxiChartAnnotationComponent');
-    }
-
-    @ContentChildren(DxiChartPaneComponent)
-    get panesChildren(): QueryList<DxiChartPaneComponent> {
-        return this._getOption('panes');
-    }
-    set panesChildren(value) {
-        this._setChildren('panes', value, 'DxiChartPaneComponent');
-    }
-
-    @ContentChildren(DxiChartSeriesComponent)
-    get seriesChildren(): QueryList<DxiChartSeriesComponent> {
-        return this._getOption('series');
-    }
-    set seriesChildren(value) {
-        this._setChildren('series', value, 'DxiChartSeriesComponent');
-    }
-
-    @ContentChildren(DxiChartValueAxisComponent)
-    get valueAxesChildren(): QueryList<DxiChartValueAxisComponent> {
-        return this._getOption('valueAxis');
-    }
-    set valueAxesChildren(value) {
-        this._setChildren('valueAxis', value, 'DxiChartValueAxisComponent');
-    }
-
-
-    @ContentChildren(DxiAnnotationComponent)
-    get annotationsLegacyChildren(): QueryList<DxiAnnotationComponent> {
-        return this._getOption('annotations');
-    }
-    set annotationsLegacyChildren(value) {
-        this._setChildren('annotations', value, 'DxiAnnotationComponent');
-    }
-
-    @ContentChildren(DxiPaneComponent)
-    get panesLegacyChildren(): QueryList<DxiPaneComponent> {
-        return this._getOption('panes');
-    }
-    set panesLegacyChildren(value) {
-        this._setChildren('panes', value, 'DxiPaneComponent');
-    }
-
-    @ContentChildren(DxiSeriesComponent)
-    get seriesLegacyChildren(): QueryList<DxiSeriesComponent> {
-        return this._getOption('series');
-    }
-    set seriesLegacyChildren(value) {
-        this._setChildren('series', value, 'DxiSeriesComponent');
-    }
-
-    @ContentChildren(DxiValueAxisComponent)
-    get valueAxisLegacyChildren(): QueryList<DxiValueAxisComponent> {
-        return this._getOption('valueAxis');
-    }
-    set valueAxisLegacyChildren(value) {
-        this._setChildren('valueAxis', value, 'DxiValueAxisComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('annotations').push('DxiAnnotationComponent');
+    
+        getLegacyClassNamesForPropertyName('panes').push('DxiPaneComponent');
+    
+        getLegacyClassNamesForPropertyName('series').push('DxiSeriesComponent');
+    
+        getLegacyClassNamesForPropertyName('valueAxis').push('DxiValueAxisComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

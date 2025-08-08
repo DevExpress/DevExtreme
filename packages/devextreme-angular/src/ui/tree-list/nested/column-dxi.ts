@@ -8,11 +8,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    EventEmitter
 } from '@angular/core';
 
 
@@ -28,22 +24,11 @@ import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiTreeListAsyncRuleComponent } from './async-rule-dxi';
-import { DxiTreeListButtonComponent } from './button-dxi';
-import { DxiTreeListCompareRuleComponent } from './compare-rule-dxi';
-import { DxiTreeListCustomRuleComponent } from './custom-rule-dxi';
-import { DxiTreeListEmailRuleComponent } from './email-rule-dxi';
-import { DxiTreeListNumericRuleComponent } from './numeric-rule-dxi';
-import { DxiTreeListPatternRuleComponent } from './pattern-rule-dxi';
-import { DxiTreeListRangeRuleComponent } from './range-rule-dxi';
-import { DxiTreeListRequiredRuleComponent } from './required-rule-dxi';
-import { DxiTreeListStringLengthRuleComponent } from './string-length-rule-dxi';
-import { DxiTreeListValidationRuleComponent } from './validation-rule-dxi';
-
 
 @Component({
     selector: 'dxi-tree-list-column',
@@ -51,9 +36,20 @@ import { DxiTreeListValidationRuleComponent } from './validation-rule-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiTreeListColumnComponent) => ({
+                propertyName: 'columns',
+                className: 'DxiTreeListColumnComponent',
+                component
+            }),
+            deps: [DxiTreeListColumnComponent],
+         }
+         ]
 })
-export class DxiTreeListColumnComponent extends CollectionNestedOption implements AfterContentInit  {
+export class DxiTreeListColumnComponent extends CollectionNestedOption {
     @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');
@@ -555,70 +551,6 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption implement
         return 'columns';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiTreeListAsyncRuleComponent)) asyncRulesChildren!: QueryList<DxiTreeListAsyncRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListCompareRuleComponent)) compareRulesChildren!: QueryList<DxiTreeListCompareRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListCustomRuleComponent)) customRulesChildren!: QueryList<DxiTreeListCustomRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListEmailRuleComponent)) emailRulesChildren!: QueryList<DxiTreeListEmailRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListNumericRuleComponent)) numericRulesChildren!: QueryList<DxiTreeListNumericRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListPatternRuleComponent)) patternRulesChildren!: QueryList<DxiTreeListPatternRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListRangeRuleComponent)) rangeRulesChildren!: QueryList<DxiTreeListRangeRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListRequiredRuleComponent)) requiredRulesChildren!: QueryList<DxiTreeListRequiredRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListStringLengthRuleComponent)) stringLengthRulesChildren!: QueryList<DxiTreeListStringLengthRuleComponent>
-    
-    @ContentChildren(forwardRef(() => DxiTreeListValidationRuleComponent)) validationRulesChildren!: QueryList<DxiTreeListValidationRuleComponent>
-    
-    setValidationRules() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.asyncRulesChildren.toArray(),
-            ...this.compareRulesChildren.toArray(),
-            ...this.customRulesChildren.toArray(),
-            ...this.emailRulesChildren.toArray(),
-            ...this.numericRulesChildren.toArray(),
-            ...this.patternRulesChildren.toArray(),
-            ...this.rangeRulesChildren.toArray(),
-            ...this.requiredRulesChildren.toArray(),
-            ...this.stringLengthRulesChildren.toArray(),
-            ...this.validationRulesChildren.toArray(),
-        ]);
-        this.setChildren('validationRules', q);
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiTreeListButtonComponent))
-    get buttonsChildren(): QueryList<DxiTreeListButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this.setChildren('buttons', value);
-    }
-
-
-
-
-
-
-
-
-
-
-    @ContentChildren(forwardRef(() => DxiTreeListColumnComponent))
-    get columnsChildren(): QueryList<DxiTreeListColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsChildren(value) {
-        this.setChildren('columns', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -643,20 +575,6 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption implement
         this._deleteRemovedOptions(this._fullOptionPath());
     }
 
-    ngAfterContentInit() {
-        this.setValidationRules();
-        
-        this.asyncRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.compareRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.customRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.emailRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.numericRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.patternRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.rangeRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.requiredRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.stringLengthRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-        this.validationRulesChildren.changes.subscribe(() => { this.setValidationRules() });
-    }
 }
 
 @NgModule({

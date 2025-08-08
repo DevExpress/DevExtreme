@@ -17,11 +17,11 @@ import {
 import { Font } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-polar-chart-strip-style',
@@ -29,9 +29,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPolarChartStripStyleComponent) => ({
+                propertyName: 'stripStyle',
+                className: 'DxoPolarChartStripStyleComponent',
+                component
+            }),
+            deps: [DxoPolarChartStripStyleComponent],
+         }
+         ]
 })
-export class DxoPolarChartStripStyleComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPolarChartStripStyleComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get label(): { font?: Font } {
         return this._getOption('label');
@@ -44,7 +55,6 @@ export class DxoPolarChartStripStyleComponent extends NestedOption implements On
     protected get _optionPath() {
         return 'stripStyle';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

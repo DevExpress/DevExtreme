@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/card_view';
@@ -122,9 +120,6 @@ import { DxoCardViewToModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxoCardViewToolbarModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewToolbarItemModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewValidationRuleModule } from 'devextreme-angular/ui/card-view/nested';
-
-
-import { DxiCardViewColumnComponent } from 'devextreme-angular/ui/card-view/nested';
 
 
 
@@ -1183,15 +1178,6 @@ export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponen
     @Output() wordWrapEnabledChange: EventEmitter<boolean>;
 
 
-
-
-    @ContentChildren(DxiCardViewColumnComponent)
-    get columnsChildren(): QueryList<DxiCardViewColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsChildren(value) {
-        this._setChildren('columns', value, 'DxiCardViewColumnComponent');
-    }
 
 
 

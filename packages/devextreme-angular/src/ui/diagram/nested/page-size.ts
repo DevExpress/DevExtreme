@@ -10,11 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList,
-    AfterContentInit
+    EventEmitter
 } from '@angular/core';
 
 
@@ -22,13 +18,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDiagramItemComponent } from './item-dxi';
-import { DxiDiagramPageSizeItemComponent } from './page-size-item-dxi';
-
 
 @Component({
     selector: 'dxo-diagram-page-size',
@@ -36,9 +30,20 @@ import { DxiDiagramPageSizeItemComponent } from './page-size-item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDiagramPageSizeComponent) => ({
+                propertyName: 'pageSize',
+                className: 'DxoDiagramPageSizeComponent',
+                component
+            }),
+            deps: [DxoDiagramPageSizeComponent],
+         }
+         ]
 })
-export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestroy, OnInit, AfterContentInit  {
+export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get height(): number {
         return this._getOption('height');
@@ -81,22 +86,6 @@ export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestr
         return 'pageSize';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiDiagramItemComponent)) itemsChildren!: QueryList<DxiDiagramItemComponent>
-    
-    @ContentChildren(forwardRef(() => DxiDiagramPageSizeItemComponent)) pageSizeItemsChildren!: QueryList<DxiDiagramPageSizeItemComponent>
-    
-    setItems() {
-        const q: QueryList<any> = new QueryList();
-        q.reset([
-            ...this.itemsChildren.toArray(),
-            ...this.pageSizeItemsChildren.toArray(),
-        ]);
-        this.setChildren('items', q);
-    }
-
-
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -120,12 +109,6 @@ export class DxoDiagramPageSizeComponent extends NestedOption implements OnDestr
     }
 
 
-    ngAfterContentInit() {
-        this.setItems();
-        
-        this.itemsChildren.changes.subscribe(() => { this.setItems() });
-        this.pageSizeItemsChildren.changes.subscribe(() => { this.setItems() });
-    }
 }
 
 @NgModule({

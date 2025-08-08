@@ -10,10 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -21,6 +18,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -29,8 +27,6 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiResponsiveBoxLocationComponent } from './location-dxi';
-
 
 @Component({
     selector: 'dxi-responsive-box-item',
@@ -38,7 +34,19 @@ import { DxiResponsiveBoxLocationComponent } from './location-dxi';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiResponsiveBoxItemComponent) => ({
+                propertyName: 'items',
+                className: 'DxiResponsiveBoxItemComponent',
+                component
+            }),
+            deps: [DxiResponsiveBoxItemComponent],
+         }
+         ]
 })
 export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -93,15 +101,6 @@ export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implem
 
     protected get _optionPath() {
         return 'items';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiResponsiveBoxLocationComponent))
-    get locationsChildren(): QueryList<DxiResponsiveBoxLocationComponent> {
-        return this._getOption('location');
-    }
-    set locationsChildren(value) {
-        this.setChildren('location', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

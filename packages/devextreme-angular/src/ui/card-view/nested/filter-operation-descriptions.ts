@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-card-view-filter-operation-descriptions',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCardViewFilterOperationDescriptionsComponent) => ({
+                propertyName: 'filterOperationDescriptions',
+                className: 'DxoCardViewFilterOperationDescriptionsComponent',
+                component
+            }),
+            deps: [DxoCardViewFilterOperationDescriptionsComponent],
+         }
+         ]
 })
-export class DxoCardViewFilterOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewFilterOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get between(): string {
         return this._getOption('between');
@@ -139,7 +150,6 @@ export class DxoCardViewFilterOperationDescriptionsComponent extends NestedOptio
     protected get _optionPath() {
         return 'filterOperationDescriptions';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

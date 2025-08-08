@@ -18,11 +18,11 @@ import { Font } from 'devextreme/common/charts';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-slider-marker',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSliderMarkerComponent) => ({
+                propertyName: 'sliderMarker',
+                className: 'DxoSliderMarkerComponent',
+                component
+            }),
+            deps: [DxoSliderMarkerComponent],
+         }
+         ]
 })
-export class DxoSliderMarkerComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoSliderMarkerComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -109,7 +120,6 @@ export class DxoSliderMarkerComponent extends NestedOption implements OnDestroy,
     protected get _optionPath() {
         return 'sliderMarker';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

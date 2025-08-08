@@ -57,8 +57,6 @@ import { DxoSparklineSizeModule } from 'devextreme-angular/ui/sparkline/nested';
 import { DxoSparklineTooltipModule } from 'devextreme-angular/ui/sparkline/nested';
 
 
-
-
 /**
  * [descr:dxSparkline]
 
@@ -758,7 +756,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Output() winlossThresholdChange: EventEmitter<number>;
-
 
 
 

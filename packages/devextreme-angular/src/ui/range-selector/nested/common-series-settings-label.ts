@@ -19,11 +19,11 @@ import { Format } from 'devextreme/common/core/localization';
 import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-range-selector-common-series-settings-label',
@@ -31,9 +31,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoRangeSelectorCommonSeriesSettingsLabelComponent) => ({
+                propertyName: 'label',
+                className: 'DxoRangeSelectorCommonSeriesSettingsLabelComponent',
+                component
+            }),
+            deps: [DxoRangeSelectorCommonSeriesSettingsLabelComponent],
+         }
+         ]
 })
-export class DxoRangeSelectorCommonSeriesSettingsLabelComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoRangeSelectorCommonSeriesSettingsLabelComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get alignment(): HorizontalAlignment {
         return this._getOption('alignment');
@@ -158,7 +169,6 @@ export class DxoRangeSelectorCommonSeriesSettingsLabelComponent extends NestedOp
     protected get _optionPath() {
         return 'label';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

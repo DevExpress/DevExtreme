@@ -18,11 +18,11 @@ import { Format } from 'devextreme/common/core/localization';
 import { DashStyle, Font } from 'devextreme/common/charts';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-polar-chart-tooltip',
@@ -30,9 +30,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPolarChartTooltipComponent) => ({
+                propertyName: 'tooltip',
+                className: 'DxoPolarChartTooltipComponent',
+                component
+            }),
+            deps: [DxoPolarChartTooltipComponent],
+         }
+         ]
 })
-export class DxoPolarChartTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPolarChartTooltipComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get argumentFormat(): Format | undefined {
         return this._getOption('argumentFormat');
@@ -181,7 +192,6 @@ export class DxoPolarChartTooltipComponent extends NestedOption implements OnDes
     protected get _optionPath() {
         return 'tooltip';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

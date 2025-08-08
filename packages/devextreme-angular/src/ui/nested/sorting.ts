@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoSorting } from './base/sorting';
-
 
 @Component({
     selector: 'dxo-sorting',
@@ -28,7 +28,18 @@ import { DxoSorting } from './base/sorting';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSortingComponent) => ({
+                propertyName: 'sorting',
+                className: 'DxoSortingComponent',
+                component
+            }),
+            deps: [DxoSortingComponent],
+         }
+         ],
     inputs: [
         'ascendingText',
         'clearText',
@@ -37,12 +48,11 @@ import { DxoSorting } from './base/sorting';
         'showSortIndexes'
     ]
 })
-export class DxoSortingComponent extends DxoSorting implements OnDestroy, OnInit  {
+export class DxoSortingComponent extends DxoSorting implements OnDestroy, OnInit {
 
     protected get _optionPath() {
         return 'sorting';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

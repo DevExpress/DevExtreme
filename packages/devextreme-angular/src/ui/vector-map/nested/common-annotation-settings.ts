@@ -22,6 +22,7 @@ import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextr
 import { dxVectorMapAnnotationConfig } from 'devextreme/viz/vector_map';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -31,14 +32,25 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
-
 @Component({
     selector: 'dxo-vector-map-common-annotation-settings',
     standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoVectorMapCommonAnnotationSettingsComponent) => ({
+                propertyName: 'commonAnnotationSettings',
+                className: 'DxoVectorMapCommonAnnotationSettingsComponent',
+                component
+            }),
+            deps: [DxoVectorMapCommonAnnotationSettingsComponent],
+         }
+         ]
 })
 export class DxoVectorMapCommonAnnotationSettingsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
     IDxTemplateHost {
@@ -270,7 +282,6 @@ export class DxoVectorMapCommonAnnotationSettingsComponent extends NestedOption 
     protected get _optionPath() {
         return 'commonAnnotationSettings';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

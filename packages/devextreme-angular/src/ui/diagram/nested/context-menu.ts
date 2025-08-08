@@ -8,10 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 
@@ -20,12 +17,11 @@ import {
 import { Command, CustomCommand } from 'devextreme/ui/diagram';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDiagramCommandComponent } from './command-dxi';
-
 
 @Component({
     selector: 'dxo-diagram-context-menu',
@@ -33,9 +29,20 @@ import { DxiDiagramCommandComponent } from './command-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDiagramContextMenuComponent) => ({
+                propertyName: 'contextMenu',
+                className: 'DxoDiagramContextMenuComponent',
+                component
+            }),
+            deps: [DxoDiagramContextMenuComponent],
+         }
+         ]
 })
-export class DxoDiagramContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDiagramContextMenuComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get commands(): Array<Command | CustomCommand> {
         return this._getOption('commands');
@@ -55,15 +62,6 @@ export class DxoDiagramContextMenuComponent extends NestedOption implements OnDe
 
     protected get _optionPath() {
         return 'contextMenu';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiDiagramCommandComponent))
-    get commandsChildren(): QueryList<DxiDiagramCommandComponent> {
-        return this._getOption('commands');
-    }
-    set commandsChildren(value) {
-        this.setChildren('commands', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

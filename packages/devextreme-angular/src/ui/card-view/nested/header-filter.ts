@@ -20,11 +20,11 @@ import { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilter
 import { SearchMode } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-card-view-header-filter',
@@ -32,9 +32,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoCardViewHeaderFilterComponent) => ({
+                propertyName: 'headerFilter',
+                className: 'DxoCardViewHeaderFilterComponent',
+                component
+            }),
+            deps: [DxoCardViewHeaderFilterComponent],
+         }
+         ]
 })
-export class DxoCardViewHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoCardViewHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get allowSearch(): boolean {
         return this._getOption('allowSearch');
@@ -127,7 +138,6 @@ export class DxoCardViewHeaderFilterComponent extends NestedOption implements On
     protected get _optionPath() {
         return 'headerFilter';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

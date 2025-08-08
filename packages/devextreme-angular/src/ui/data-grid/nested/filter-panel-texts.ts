@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-data-grid-filter-panel-texts',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoDataGridFilterPanelTextsComponent) => ({
+                propertyName: 'texts',
+                className: 'DxoDataGridFilterPanelTextsComponent',
+                component
+            }),
+            deps: [DxoDataGridFilterPanelTextsComponent],
+         }
+         ]
 })
-export class DxoDataGridFilterPanelTextsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoDataGridFilterPanelTextsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get clearFilter(): string {
         return this._getOption('clearFilter');
@@ -59,7 +70,6 @@ export class DxoDataGridFilterPanelTextsComponent extends NestedOption implement
     protected get _optionPath() {
         return 'texts';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

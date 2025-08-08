@@ -21,11 +21,11 @@ import { BeforeSendEvent, ContentReadyEvent, DisposingEvent, DropZoneEnterEvent,
 import { ValidationStatus } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-html-editor-file-uploader-options',
@@ -33,9 +33,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoHtmlEditorFileUploaderOptionsComponent) => ({
+                propertyName: 'fileUploaderOptions',
+                className: 'DxoHtmlEditorFileUploaderOptionsComponent',
+                component
+            }),
+            deps: [DxoHtmlEditorFileUploaderOptionsComponent],
+         }
+         ]
 })
-export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get abortUpload(): ((file: any, uploadInfo?: UploadInfo) => any) {
         return this._getOption('abortUpload');
@@ -558,7 +569,6 @@ export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption impl
     protected get _optionPath() {
         return 'fileUploaderOptions';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

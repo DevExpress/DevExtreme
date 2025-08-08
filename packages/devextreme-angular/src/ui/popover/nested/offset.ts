@@ -16,11 +16,11 @@ import {
 
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-popover-offset',
@@ -28,9 +28,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoPopoverOffsetComponent) => ({
+                propertyName: 'offset',
+                className: 'DxoPopoverOffsetComponent',
+                component
+            }),
+            deps: [DxoPopoverOffsetComponent],
+         }
+         ]
 })
-export class DxoPopoverOffsetComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoPopoverOffsetComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get x(): number {
         return this._getOption('x');
@@ -51,7 +62,6 @@ export class DxoPopoverOffsetComponent extends NestedOption implements OnDestroy
     protected get _optionPath() {
         return 'offset';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

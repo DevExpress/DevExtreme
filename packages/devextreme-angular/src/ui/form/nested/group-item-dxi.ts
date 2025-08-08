@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -19,21 +19,15 @@ import { DOCUMENT } from '@angular/common';
 import { dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem, FormItemType } from 'devextreme/ui/form';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost, 
-    NESTED_ITEM_TOKEN
+    DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-/*import { DxiFormButtonItemComponent } from './button-item-dxi';
-import { DxiFormEmptyItemComponent } from './empty-item-dxi';
-import { DxiFormItemComponent } from './item-dxi';
-import { DxiFormSimpleItemComponent } from './simple-item-dxi';
-import { DxiFormTabbedItemComponent } from './tabbed-item-dxi';*/
-
 
 @Component({
     selector: 'dxi-form-group-item',
@@ -43,18 +37,20 @@ import { DxiFormTabbedItemComponent } from './tabbed-item-dxi';*/
     imports: [ DxIntegrationModule ],
     providers: [
         NestedOptionHost,
-        DxTemplateHost,
-        { 
+         DxTemplateHost,
+         {
             provide: NESTED_ITEM_TOKEN,
             useFactory: (component: DxiFormGroupItemComponent) => ({
                 propertyName: 'items',
+                className: 'DxiFormGroupItemComponent',
                 component
             }),
             deps: [DxiFormGroupItemComponent],
-        }]
+         }
+         ]
 })
 export class DxiFormGroupItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost  {
+    IDxTemplateHost {
     @Input()
     get alignItemLabels(): boolean {
         return this._getOption('alignItemLabels');
@@ -163,7 +159,7 @@ export class DxiFormGroupItemComponent extends CollectionNestedOption implements
     protected get _optionPath() {
         return 'items';
     }
-    
+
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -183,9 +179,12 @@ export class DxiFormGroupItemComponent extends CollectionNestedOption implements
         extractTemplate(this, this.element, this.renderer, this.document);
     }
 
+
+
     ngOnDestroy() {
         this._deleteRemovedOptions(this._fullOptionPath());
     }
+
 }
 
 @NgModule({

@@ -16,9 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges,
-    ContentChildren,
-    QueryList
+    SimpleChanges
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/responsive_box';
@@ -50,14 +48,6 @@ import { DxiResponsiveBoxColModule } from 'devextreme-angular/ui/responsive-box/
 import { DxiResponsiveBoxItemModule } from 'devextreme-angular/ui/responsive-box/nested';
 import { DxiResponsiveBoxLocationModule } from 'devextreme-angular/ui/responsive-box/nested';
 import { DxiResponsiveBoxRowModule } from 'devextreme-angular/ui/responsive-box/nested';
-
-import { DxiColComponent } from 'devextreme-angular/ui/nested';
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-import { DxiRowComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiResponsiveBoxColComponent } from 'devextreme-angular/ui/responsive-box/nested';
-import { DxiResponsiveBoxItemComponent } from 'devextreme-angular/ui/responsive-box/nested';
-import { DxiResponsiveBoxRowComponent } from 'devextreme-angular/ui/responsive-box/nested';
 
 
 /**
@@ -446,54 +436,24 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
 
 
-    @ContentChildren(DxiResponsiveBoxColComponent)
-    get colsChildren(): QueryList<DxiResponsiveBoxColComponent> {
-        return this._getOption('cols');
-    }
-    set colsChildren(value) {
-        this._setChildren('cols', value, 'DxiResponsiveBoxColComponent');
-    }
-
-    @ContentChildren(DxiResponsiveBoxItemComponent)
-    get itemsChildren(): QueryList<DxiResponsiveBoxItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiResponsiveBoxItemComponent');
-    }
-
-    @ContentChildren(DxiResponsiveBoxRowComponent)
-    get rowsChildren(): QueryList<DxiResponsiveBoxRowComponent> {
-        return this._getOption('rows');
-    }
-    set rowsChildren(value) {
-        this._setChildren('rows', value, 'DxiResponsiveBoxRowComponent');
-    }
-
-
-    @ContentChildren(DxiColComponent)
-    get colsLegacyChildren(): QueryList<DxiColComponent> {
-        return this._getOption('cols');
-    }
-    set colsLegacyChildren(value) {
-        this._setChildren('cols', value, 'DxiColComponent');
-    }
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
-
-    @ContentChildren(DxiRowComponent)
-    get rowsLegacyChildren(): QueryList<DxiRowComponent> {
-        return this._getOption('rows');
-    }
-    set rowsLegacyChildren(value) {
-        this._setChildren('rows', value, 'DxiRowComponent');
-    }
+    protected getLegacyClassNames = () => {
+        const legacyClassNames = {};
+        
+        const getLegacyClassNamesForPropertyName = (propName) => {
+                 legacyClassNames[propName] = legacyClassNames[propName] || [];
+                 return legacyClassNames[propName];
+        };
+        
+    
+        getLegacyClassNamesForPropertyName('cols').push('DxiColComponent');
+    
+        getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
+    
+        getLegacyClassNamesForPropertyName('rows').push('DxiRowComponent');
+    
+    
+        return legacyClassNames || {};
+    };
 
 
 

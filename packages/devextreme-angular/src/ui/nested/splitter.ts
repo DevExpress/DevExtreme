@@ -10,10 +10,7 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    EventEmitter
 } from '@angular/core';
 
 
@@ -22,12 +19,11 @@ import {
 import { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoSplitterOptions } from './base/splitter-options';
-import { DxiItemComponent } from './item-dxi';
-
 
 @Component({
     selector: 'dxo-splitter',
@@ -35,7 +31,18 @@ import { DxiItemComponent } from './item-dxi';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost],
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoSplitterComponent) => ({
+                propertyName: 'splitter',
+                className: 'DxoSplitterComponent',
+                component
+            }),
+            deps: [DxoSplitterComponent],
+         }
+         ],
     inputs: [
         'allowKeyboardNavigation',
         'dataSource',
@@ -64,7 +71,7 @@ import { DxiItemComponent } from './item-dxi';
         'width'
     ]
 })
-export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestroy, OnInit  {
+export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestroy, OnInit {
 
     /**
     
@@ -74,15 +81,6 @@ export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestro
     @Output() itemsChange: EventEmitter<Array<any | { collapsed?: boolean, collapsedSize?: number | string | undefined, collapsible?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }>>;
     protected get _optionPath() {
         return 'splitter';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,

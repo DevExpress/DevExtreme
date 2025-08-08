@@ -19,11 +19,11 @@ import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-
 
 @Component({
     selector: 'dxo-html-editor-variables',
@@ -31,9 +31,20 @@ import { NestedOption } from 'devextreme-angular/core';
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost]
+    providers: [
+        NestedOptionHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxoHtmlEditorVariablesComponent) => ({
+                propertyName: 'variables',
+                className: 'DxoHtmlEditorVariablesComponent',
+                component
+            }),
+            deps: [DxoHtmlEditorVariablesComponent],
+         }
+         ]
 })
-export class DxoHtmlEditorVariablesComponent extends NestedOption implements OnDestroy, OnInit  {
+export class DxoHtmlEditorVariablesComponent extends NestedOption implements OnDestroy, OnInit {
     @Input()
     get dataSource(): Array<string> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
@@ -54,7 +65,6 @@ export class DxoHtmlEditorVariablesComponent extends NestedOption implements OnD
     protected get _optionPath() {
         return 'variables';
     }
-
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

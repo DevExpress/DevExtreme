@@ -10,10 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input,
-    ContentChildren,
-    forwardRef,
-    QueryList
+    Input
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -24,6 +21,7 @@ import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
 import {
+    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
@@ -32,8 +30,6 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiHtmlEditorCommandComponent } from './command-dxi';
-
 
 @Component({
     selector: 'dxi-html-editor-toolbar-item',
@@ -41,7 +37,19 @@ import { DxiHtmlEditorCommandComponent } from './command-dxi';
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],
-    providers: [NestedOptionHost, DxTemplateHost]
+    providers: [
+        NestedOptionHost,
+         DxTemplateHost,
+         {
+            provide: NESTED_ITEM_TOKEN,
+            useFactory: (component: DxiHtmlEditorToolbarItemComponent) => ({
+                propertyName: 'items',
+                className: 'DxiHtmlEditorToolbarItemComponent',
+                component
+            }),
+            deps: [DxiHtmlEditorToolbarItemComponent],
+         }
+         ]
 })
 export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -168,15 +176,6 @@ export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption im
 
     protected get _optionPath() {
         return 'items';
-    }
-
-
-    @ContentChildren(forwardRef(() => DxiHtmlEditorCommandComponent))
-    get commandsChildren(): QueryList<DxiHtmlEditorCommandComponent> {
-        return this._getOption('commands');
-    }
-    set commandsChildren(value) {
-        this.setChildren('commands', value);
     }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
