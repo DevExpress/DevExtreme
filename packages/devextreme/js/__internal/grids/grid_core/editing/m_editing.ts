@@ -1845,7 +1845,6 @@ class EditingControllerImpl extends modules.ViewController {
     }
 
     when(dataController.refresh({
-      selection: isFullRefresh,
       reload: isFullRefresh,
       load: refreshMode === 'reshape',
       changesOnly: this.option('repaintChangesOnly'),
