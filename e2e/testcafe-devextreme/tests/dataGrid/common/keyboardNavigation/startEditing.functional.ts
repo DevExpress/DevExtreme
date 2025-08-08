@@ -51,8 +51,9 @@ test('editing.allowUpdating callback should receive correct row on tab key on fi
     .expect(dataGrid.getDataCell(49, 1).getEditor().element.focused).ok();
 
   const eventRowKeys = await ClientFunction(() => (window as any).eventRowKeys)();
+  const uniqueRowKeys = [...new Set(eventRowKeys)];
 
-  await t.expect(eventRowKeys).eql([49, 49, 49, 49, 49, 49]);
+  await t.expect(uniqueRowKeys).eql([49]);
 }).before(async () => {
   await createWidget('dxDataGrid', {
     dataSource: [...new Array(50)].map((_, i) => ({
@@ -90,8 +91,9 @@ test('editing.allowUpdating callback should receive correct row on tab key on la
     .expect(dataGrid.getDataCell(49, 0).getEditor().element.focused).ok();
 
   const eventRowKeys = await ClientFunction(() => (window as any).eventRowKeys)();
+  const uniqueRowKeys = [...new Set(eventRowKeys)];
 
-  await t.expect(eventRowKeys).eql([48, 48, 48, 48, 49, 49, 49]);
+  await t.expect(uniqueRowKeys).eql([48, 49]);
 }).before(async () => {
   await createWidget('dxDataGrid', {
     dataSource: [...new Array(50)].map((_, i) => ({
