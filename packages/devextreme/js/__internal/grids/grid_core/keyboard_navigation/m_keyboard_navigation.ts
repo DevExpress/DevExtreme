@@ -984,7 +984,8 @@ export class KeyboardNavigationController extends modules.ViewController {
     const column = this._getColumnByCellElement($nextCell);
 
     if (column?.allowEditing) {
-      const rowIndex = this.getVisibleRowIndex();
+      const $row = $nextCell.parent();
+      const rowIndex = this._getLocalRowIndex($row);
       const row = this._dataController.items()[rowIndex] as any;
       const isDataRow = !row || row.rowType === 'data';
 
@@ -2350,7 +2351,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
     const rowIndex = this.getRowIndex();
     const localRowIndex = Math.min(
-      this.getVisibleRowIndex(),
+      this._getLocalRowIndex($cell),
       this._dataController.items().length - 1,
     );
 
@@ -2495,12 +2496,18 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
-  private _getRowIndex($row) {
-    let rowIndex = this._rowsView.getRowIndex($row);
+  private _getRowIndex($row): number {
+    let rowIndex = this._getLocalRowIndex($row);
 
     if (rowIndex >= 0) {
       rowIndex += this._dataController.getRowIndexOffset();
     }
+
+    return rowIndex;
+  }
+
+  protected _getLocalRowIndex($row): number {
+    let rowIndex = this._rowsView.getRowIndex($row);
 
     return rowIndex;
   }
