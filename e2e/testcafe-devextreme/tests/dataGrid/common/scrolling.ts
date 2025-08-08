@@ -1824,3 +1824,29 @@ test('DataGrid - Scrolling position is reset to far right on an attempt to scrol
     enabled: false,
   },
 }));
+
+// T1280020
+test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a non-focused row if the grid height is small', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const otherContainer = Selector('#otherContainer');
+
+  await dataGrid.apiOption('focusedRowKey', '2');
+  await t.expect(otherContainer.innerText).eql('2');
+
+  await dataGrid.apiOption('focusedRowKey', '0');
+  await t.expect(otherContainer.innerText).eql('0');
+}).before(async () => createWidget('dxDataGrid', {
+  height: 70,
+  dataSource: [
+    { 'id': '0' },
+    { 'id': '1' },
+    { 'id': '2' },
+  ],
+  scrolling: { mode: 'virtual' },
+  keyExpr: 'id',
+  focusedRowEnabled: true,
+  onFocusedRowChanged: function(e) {
+      const data = e.row?.data;
+      $('#otherContainer').text(data.id);
+  },
+}));
