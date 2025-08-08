@@ -1,3 +1,4 @@
+import { isGroupItemsArray } from '@js/common/data/custom_store';
 import { isObject } from '@js/core/utils/type';
 import type { DataSourceLike, DataSourceOptions } from '@js/data/data_source';
 
@@ -20,31 +21,11 @@ interface GroupedItem {
   items?: (Item | string | number)[];
 }
 
-const isGroupedDataArray = (
-  data: DataSourceLike<GroupedItem>,
-): data is GroupedItem[] => {
-  const isArray = Array.isArray(data);
-
-  if (!isArray) {
-    return false;
-  }
-
-  const isCorrectData = data.every?.((item: GroupedItem): boolean => {
-    const hasTwoFields = Object.keys(item).length === 2;
-    const hasCorrectFields = 'key' in item && 'items' in item;
-
-    return hasTwoFields
-      && hasCorrectFields
-      && Array.isArray(item.items);
-  });
-
-  return isArray && isCorrectData;
-};
-
 export function getDataSourceOptions(
   dataSource: DataSourceLike<GroupedItem>,
 ): GroupedDataSourceLike<GroupedItem> {
-  if (!isGroupedDataArray(dataSource)) {
+  // isArray check is needed to avoid ts errors in identifying the reduce method on dataSource
+  if (!Array.isArray(dataSource) || !isGroupItemsArray(dataSource)) {
     return dataSource;
   }
 
