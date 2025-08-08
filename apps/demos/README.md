@@ -11,7 +11,7 @@ Before running you need execute in `monorepo/root`:
 pnpm run all:build-dev
 ```
 
-To prepare demos for development:
+To prepare demos for development in `apps/demos`:
 
 ```
 pnpm run prepare-js
