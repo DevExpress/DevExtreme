@@ -24,13 +24,13 @@ export interface INestedOptionContainer {
 
 export type IOptionPathGetter = () => string;
 
-const warnAboutIncompatibleNestedItems = (containerClassName: string, itemClassName: string, anotherItemClassName: string) => {
+/* const warnAboutIncompatibleNestedItems = (containerClassName: string, itemClassName: string, anotherItemClassName: string) => {
   if (console && console.warn) {
     console.warn(`In ${containerClassName},
           the nested ${itemClassName} and ${anotherItemClassName} components are incompatible.
           Ensure that all nested components in the content area match.`);
   }
-};
+}; */
 
 export const _updateNestedItems = (
   items: QueryList<{ propertyName: string; className: string; component: ICollectionNestedOption }>,
@@ -84,6 +84,18 @@ export abstract class BaseNestedOption implements INestedOptionContainer, IColle
 
   constructor() {
     this._collectionContainerImpl = new CollectionNestedOptionContainerImpl(this._setOption.bind(this), this._filterItems.bind(this));
+  }
+
+  @ContentChildren(NESTED_ITEM_TOKEN)
+  set _nestedItems(value: QueryList<{ propertyName: string; className: string; component: ICollectionNestedOption }>) {
+    _updateNestedItems(
+        value,
+        this.setChildren.bind(this),
+        {
+          componentClassName: this.constructor.name,
+          legacyClassNames: null,
+        },
+    );
   }
 
   protected _optionChangedHandler(e: any) {
@@ -246,18 +258,6 @@ export interface ICollectionNestedOption {
 })
 export abstract class CollectionNestedOption extends BaseNestedOption implements ICollectionNestedOption {
   _index: number;
-
-  @ContentChildren(NESTED_ITEM_TOKEN)
-  set _nestedItems(value: QueryList<{ propertyName: string; className: string; component: ICollectionNestedOption }>) {
-    _updateNestedItems(
-      value,
-      this.setChildren.bind(this),
-      {
-        componentClassName: this.constructor.name,
-        legacyClassNames: null,
-      },
-    );
-  }
 
   protected _fullOptionPath() {
     return `${this._getOptionPath()}[${this._index}].`;
