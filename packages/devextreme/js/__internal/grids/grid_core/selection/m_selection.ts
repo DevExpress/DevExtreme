@@ -650,17 +650,12 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
     return dataItem;
   }
 
-  public refresh(options) {
-    const that = this;
+  public refresh(options): any {
     // @ts-expect-error
-    const d = new Deferred();
+    const d: DeferredObj<void> = new Deferred();
 
-    super.refresh.apply(this, arguments as any).done(() => {
-      if (!options || options.selection) {
-        that._selectionController.refresh().done(d.resolve).fail(d.reject);
-      } else {
-        d.resolve();
-      }
+    super.refresh(options).done(() => {
+      this._selectionController.refresh().done(d.resolve).fail(d.reject);
     }).fail(d.reject);
 
     return d.promise();
