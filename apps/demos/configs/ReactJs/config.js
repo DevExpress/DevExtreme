@@ -206,3 +206,4 @@ window.config = {
 };
 
 System.config(window.config);
+const useTgzInCSB = ['openai'];
