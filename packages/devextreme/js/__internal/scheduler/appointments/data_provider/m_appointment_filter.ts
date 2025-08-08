@@ -153,8 +153,11 @@ export class AppointmentFilterBaseStrategy {
       );
 
       if (!hasRecurrenceRule) {
-        if (!(endDate >= trimMin && startDate < trimMax
-                    || dateUtils.sameDate(endDate, trimMin)
+        const isInDisplayRange = isAllDay
+          ? endDate >= trimMin && startDate < trimMax
+          : endDate > trimMin && startDate < trimMax;
+
+        if (!(isInDisplayRange || dateUtils.sameDate(endDate, trimMin)
                     && dateUtils.sameDate(startDate, trimMin))
         ) {
           return false;

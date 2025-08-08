@@ -1057,6 +1057,32 @@ module('Client side after filtering', () => {
         });
     });
 
+    test('Appointment should be filtered if endDate is at the edge of the trimmed end view date', function(assert) {
+        const dataSource = new DataSource({ store: [] });
+        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
+            key: 0,
+            dataSource,
+            isVirtualScrolling: false,
+            dataAccessors: defaultDataAccessors
+        });
+
+        appointmentDataProvider.add({
+            text: 'a',
+            startDate: new Date(2020, 5, 16, 0),
+            endDate: new Date(2020, 6, 16, 0),
+        });
+
+        const appts = appointmentDataProvider.filterLoadedAppointments({
+            startDayHour: 0,
+            endDayHour: 24,
+            min: new Date(2020, 6, 16, 1),
+            max: new Date(2020, 6, 17, 23, 59),
+            viewOffset: 0,
+        }, prepareDataItems());
+
+        assert.ok(!appts.length, 'Filtered');
+    });
+
     test('Appointment should be filtered if startDate, endDate are at the edge of the trimmed end view date', function(assert) {
         const dataSource = new DataSource({ store: [] });
         const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
