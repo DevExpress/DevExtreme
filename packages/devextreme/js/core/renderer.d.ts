@@ -31,6 +31,7 @@ export interface dxElementWrapper {
 
   css(propertyName: string, value: string | number): this;
   css(properties: Record<string, any>): this;
+  css(propertyName: string): string | undefined;
 
   data(key: string, value?: any): this;
 
@@ -130,6 +131,6 @@ export interface dxElementWrapper {
   length: number;
 }
 
-declare function renderer(selector?: string | Element | dxElementWrapper): dxElementWrapper;
+declare function renderer(selector?: string | Element | Element[] | dxElementWrapper | null | Document | Window): dxElementWrapper;
 
 export default renderer;

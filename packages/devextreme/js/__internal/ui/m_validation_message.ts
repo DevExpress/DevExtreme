@@ -6,7 +6,7 @@ import { getOuterWidth } from '@js/core/utils/size';
 import { encodeHtml } from '@js/core/utils/string';
 import type { Properties } from '@js/ui/validation_message';
 import type { OptionChanged } from '@ts/core/widget/types';
-import Overlay from '@ts/ui/overlay/m_overlay';
+import Overlay from '@ts/ui/overlay/overlay';
 
 const INVALID_MESSAGE = 'dx-invalid-message';
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';

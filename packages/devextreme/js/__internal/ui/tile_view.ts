@@ -18,6 +18,7 @@ import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { Item, Orientation, Properties } from '@js/ui/tile_view';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 import type {
   ScrollView as ScrollViewType,
@@ -63,9 +64,10 @@ interface ItemPosition {
 type OrientationConfigMap = typeof CONFIGS;
 type OrientationConfig<T extends Orientation> = OrientationConfigMap[T];
 
-export interface TileViewProperties extends Properties {
-  focusedElement?: dxElementWrapper;
-
+export interface TileViewProperties extends Properties, Omit<
+  CollectionWidgetEditProperties<TileViewProperties>,
+  keyof Properties
+> {
   indicateLoading?: boolean;
 }
 
@@ -251,7 +253,7 @@ class TileView extends CollectionWidget<TileViewProperties> {
 
   _renderContentSize(
     config: OrientationConfig<Orientation>,
-    itemMargin: number | undefined = 0,
+    itemMargin = 0,
   ): void {
     const { mainDimension, baseItemMainDimension } = config;
 
@@ -308,9 +310,7 @@ class TileView extends CollectionWidget<TileViewProperties> {
   _refreshActiveDescendant(): void {}
 
   _getItemPosition(item: Item): ItemPosition {
-    const config = this._config;
-    const { mainPosition } = config;
-    const { crossPosition } = config;
+    const { mainPosition, crossPosition } = this._config;
 
     // @ts-expect-error ts-error
     const position: ItemPosition = {

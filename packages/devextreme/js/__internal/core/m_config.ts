@@ -17,6 +17,7 @@ const config = {
   useJQuery: undefined,
   editorStylingMode: undefined,
   useLegacyVisibleIndex: false,
+  versionAssertions: [],
 
   floatingActionButtonConfig: {
     icon: 'add',
@@ -76,6 +77,7 @@ const configMethod = (...args) => {
 
   extend(config, newConfig);
 };
+
 // @ts-expect-error typescript cant see global
 if (typeof DevExpress !== 'undefined' && DevExpress.config) {
 // @ts-expect-error typescript cant see global

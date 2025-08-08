@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
 import type { FieldInfo } from '@ts/grids/new/grid_core/columns_controller/types';
@@ -27,7 +26,7 @@ export class ValueText extends Component<ValueTextProps> {
   private readonly onClick = (e): void => {
     const args = {
       event: e,
-      fieldValueElement: getPublicElement($(this.ref.current!)),
+      fieldValueElement: getPublicElement($(this.ref.current)),
       field: this.props.field,
     };
 
@@ -37,7 +36,7 @@ export class ValueText extends Component<ValueTextProps> {
   private readonly onDblClick = (e): void => {
     const args = {
       event: e,
-      fieldValueElement: getPublicElement($(this.ref.current!)),
+      fieldValueElement: getPublicElement($(this.ref.current)),
       field: this.props.field,
     };
 
@@ -75,7 +74,7 @@ export class ValueText extends Component<ValueTextProps> {
 
   componentDidMount(): void {
     const args = {
-      fieldValueElement: getPublicElement($(this.ref.current!)),
+      fieldValueElement: getPublicElement($(this.ref.current)),
       field: this.props.field,
     };
 

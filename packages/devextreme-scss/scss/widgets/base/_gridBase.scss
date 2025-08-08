@@ -203,6 +203,12 @@
         z-index: 3;
       }
     }
+
+    .dx-#{$widget-name}-total-footer {
+      .dx-#{$widget-name}-sticky-column, .dx-#{$widget-name}-sticky-column-left, .dx-#{$widget-name}-sticky-column-right {
+        background-color: transparent;
+      }
+    }
   }
 
   .dx-sortable-dragging .dx-#{$widget-name}-rowsview .dx-data-row .dx-command-drag {
@@ -971,12 +977,21 @@
       &:focus {
         outline: 0;
       }
+    }
 
-      &.dx-#{$widget-name}-sticky-column-left  {
-        display: inline-block;
-        overflow: hidden;
-        left: 0;
-        right: 0;
+    &.dx-#{$widget-name}-sticky-columns {
+      .dx-row > .dx-master-detail-cell {
+        overflow: visible;
+
+        .dx-#{$widget-name}-master-detail-container {
+          overflow: hidden;
+          text-overflow: ellipsis;
+
+          &.dx-#{$widget-name}-sticky-column-left {
+            left: 0;
+            right: 0;
+          }
+        }
       }
     }
 

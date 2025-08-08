@@ -18,7 +18,7 @@ import ArrayStore from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import DOMComponent from 'core/dom_component';
 import List from 'ui/list';
-import { setScrollView } from '__internal/ui/list/m_list.base';
+import { setScrollView } from '__internal/ui/list/list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'common/core/events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
@@ -417,7 +417,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
             const args = animateSpy.getCall(0).args;
 
             assert.ok(animateSpy.calledOnce, 'fx.animate is executed');
-            assert.equal(args[0].get(0), $groupBody.get(0), 'fx.animate ran on correct element');
+            assert.equal(args[0], $groupBody.get(0), 'fx.animate ran on correct element');
             assert.equal(args[1].type, 'custom', 'fx.animate ran with correct animation type');
             assert.equal(args[1].from.height, groupBodyHeight, 'fx.animate ran with correct start height');
             assert.equal(args[1].to.height, 0, 'fx.animate ran with correct end height');

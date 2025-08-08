@@ -1,4 +1,4 @@
-import type { Orientation, SingleOrNone } from '@js/common';
+import type { Orientation } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import type { DxElement } from '@js/core/element';
@@ -12,6 +12,7 @@ import type { Template } from '@ts/core/templates/m_template';
 import { getImageContainer } from '@ts/core/utils/m_icon';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import CollectionWidgetAsync from '@ts/ui/collection/collection_widget.async';
 import type {
   ItemRenderInfo,
@@ -23,6 +24,8 @@ import StepperItem, {
   STEP_INVALID_ICON,
   STEP_VALID_ICON,
 } from '@ts/ui/stepper/stepper_item';
+
+import type { CollectionWidgetEditProperties } from '../collection/collection_widget.edit';
 
 export const STEPPER_CLASS = 'dx-stepper';
 export const STEP_LIST_CLASS = 'dx-step-list';
@@ -43,16 +46,11 @@ export const ORIENTATION: Record<string, Orientation> = {
   vertical: 'vertical',
 };
 
-export interface StepperProperties extends Properties {
-  selectionMode?: SingleOrNone;
-
-  loopItemFocus?: boolean;
-
-  selectionRequired?: boolean;
-
+export interface StepperProperties extends Properties, Omit<
+  CollectionWidgetEditProperties<Stepper, Item>,
+  keyof Properties<Item>
+> {
   hintExpr?: (data: Item) => string | undefined;
-
-  _itemAttributes?: Record<string, unknown>;
 }
 
 class Stepper extends CollectionWidgetAsync<StepperProperties> {
@@ -79,7 +77,7 @@ class Stepper extends CollectionWidgetAsync<StepperProperties> {
     };
   }
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     const defaultHandlers = super._supportedKeys();
     const { linear, selectOnFocus } = this.option();
 

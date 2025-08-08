@@ -1,12 +1,12 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getHeight } from '@js/core/utils/size';
 import type ListType from '@js/ui/list';
-import List from '@js/ui/list_light';
 import Popup from '@js/ui/popup';
 import windowUtils from '@ts/core/utils/m_window';
+import List from '@ts/ui/list/list.edit.search';
 import Quill from 'devextreme-quill';
 
 import BaseModule from './m_base';

@@ -212,6 +212,11 @@ export interface dxTabPanelOptions<
     items?: Array<TItem>;
     /**
      * @docid
+     * @public
+     */
+    keyExpr?: string | Function;
+    /**
+     * @docid
      * @default null
      * @type function
      * @type_function_param1 e:{ui/tab_panel:TitleClickEvent}

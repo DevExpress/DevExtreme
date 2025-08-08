@@ -1,4 +1,4 @@
-import Switch from '../__internal/ui/m_switch';
+import Switch from '../__internal/ui/switch';
 
 export default Switch;
 

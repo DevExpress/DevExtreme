@@ -19,7 +19,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { Properties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import Button from '@ts/ui/button/wrapper';
-import type { ListBase } from '@ts/ui/list/m_list.base';
+import type { ListBase } from '@ts/ui/list/list.base';
 import ToolbarMenuList from '@ts/ui/toolbar/internal/toolbar.menu.list';
 import { toggleItemFocusableElementTabIndex } from '@ts/ui/toolbar/toolbar.utils';
 
@@ -73,8 +73,9 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | void> {
     let extension = {};
+    const { opened } = this.option();
 
-    if (!this.option('opened') || !this._list?.option('focusedElement')) {
+    if (!opened || !this._list?.option('focusedElement')) {
       extension = this._button._supportedKeys();
     }
 
@@ -222,8 +223,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
     $element: dxElementWrapper,
     value: boolean,
   ): void {
-    // @ts-expect-error ts-error
-    this._button._toggleActiveState($element, value);
+    this._button._toggleActiveState($element[0], value);
   }
 
   _toggleMenuVisibility(opened: boolean | undefined): void {
@@ -333,14 +333,13 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       focusStateEnabled: false,
       activeStateEnabled: true,
       onItemRendered,
-      // @ts-expect-error ts-error
       _itemAttributes: { role: 'menuitem' },
     });
   }
 
   _itemOptionChanged(
     item: Item,
-    property: keyof Item,
+    property: 'disabled',
     value: unknown,
   ): void {
     this._list?._itemOptionChanged(item, property, value);

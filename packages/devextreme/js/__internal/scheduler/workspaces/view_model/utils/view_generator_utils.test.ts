@@ -1,3 +1,11 @@
+/**
+ * @timezone Etc/GMT-2
+ */
+// NOTE: We use this utils for calculating weeks count in month view
+// The Scheduler cells already converted to "grid time" format
+// That's why we use locale (machine timezone) dependent dates here
+// Plus set specific timezone for test run
+
 import { describe, expect } from '@jest/globals';
 import each from 'jest-each';
 

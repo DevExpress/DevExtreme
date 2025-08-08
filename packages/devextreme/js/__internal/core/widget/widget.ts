@@ -17,8 +17,9 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { compare as compareVersions } from '@js/core/utils/version';
 import type { DxEvent } from '@js/events';
-import { focusable as focusableSelector } from '@js/ui/widget/selectors';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
+import { focusable as focusableSelector } from '@ts/core/utils/m_selectors';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
 
 import DOMComponent from './dom_component';
 import type { OptionChanged } from './types';
@@ -29,19 +30,32 @@ export const FOCUSED_STATE_CLASS = 'dx-state-focused';
 export const HOVER_STATE_CLASS = 'dx-state-hover';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
-function setAttribute(name, value, target): void {
-  // eslint-disable-next-line no-param-reassign
-  name = name === 'role' || name === 'id' ? name : `aria-${name}`;
-  // eslint-disable-next-line no-param-reassign
-  value = isDefined(value) ? value.toString() : null;
+export type SupportedKeyHandler = (
+  e: DxEvent<KeyboardEvent>,
+  options?: KeyboardKeyDownEvent
+// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+) => void | boolean;
+export type SupportedKeys = Record<
+  string,
+  SupportedKeyHandler
+>;
 
-  target.attr(name, value);
+function setAttribute(
+  name: string,
+  value: string | undefined | null,
+  $target: dxElementWrapper,
+): void {
+  const attributeName = name === 'role' || name === 'id' ? name : `aria-${name}`;
+
+  const attr = isDefined(value) ? value.toString() : null;
+
+  $target.attr(attributeName, attr);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface Properties<TComponent = any> extends WidgetOptions<TComponent> {
   useResizeObserver?: boolean;
-  onKeyboardHandled?: (event: KeyboardEvent) => void;
+  onKeyboardHandled?: (event: KeyboardKeyDownEvent) => void;
   isActive?: boolean;
   ignoreParentReadOnly?: boolean;
   hoveredElement?: dxElementWrapper;
@@ -54,7 +68,7 @@ class Widget<
 
   public _feedbackHideTimeout = 400;
 
-  private readonly _feedbackShowTimeout = 30;
+  private readonly _feedbackShowTimeout: number = 30;
 
   _contentReadyAction?: ((event?: Record<string, unknown>) => void) | null;
 
@@ -77,9 +91,8 @@ class Widget<
     return options;
   }
 
-  _supportedKeys():
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-  Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void | boolean> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _supportedKeys(e?: DxEvent<KeyboardEvent>): SupportedKeys {
     return {};
   }
 
@@ -366,16 +379,14 @@ class Widget<
       this._keyboardListenerId = keyboard.on(
         this._keyboardEventBindingTarget(),
         this._focusTarget(),
-        (opts) => this._keyboardHandler(opts),
+        (opts: KeyboardKeyDownEvent) => this._keyboardHandler(opts),
       );
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _keyboardHandler(options, onlyChildProcessing?: boolean): boolean {
+  _keyboardHandler(options: KeyboardKeyDownEvent, onlyChildProcessing?: boolean): boolean {
     if (!onlyChildProcessing) {
       const { originalEvent, keyName, which } = options;
-      // @ts-expect-error
       const keys = this._supportedKeys(originalEvent);
       const func = keys[keyName] || keys[which];
 
@@ -497,7 +508,7 @@ class Widget<
     $element: dxElementWrapper,
     value: boolean,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    event?: Record<string, unknown>,
+    event?: DxEvent<PointerEvent | MouseEvent | TouchEvent>,
   ): void {
     this.option('isActive', value);
     $element.toggleClass('dx-state-active', value);
@@ -678,14 +689,16 @@ class Widget<
     focus.trigger(this._focusTarget());
   }
 
-  registerKeyHandler(key: string, handler: (event?) => void): void {
+  registerKeyHandler(
+    key: string,
+    handler: SupportedKeyHandler,
+  ): void {
     const currentKeys = this._supportedKeys();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    this._supportedKeys = (): Record<string, (e) => boolean> => extend(
-      currentKeys,
-      { [key]: handler },
-    );
+    this._supportedKeys = (): SupportedKeys => ({
+      ...currentKeys,
+      [key]: handler,
+    });
   }
 }
 

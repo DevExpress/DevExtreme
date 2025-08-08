@@ -47,10 +47,11 @@ import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import { current as currentTheme, isGeneric } from '@js/ui/themes';
 import type { ActionArguments } from '@ts/core/m_action';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { ClickEvent, HoverEvent, MenuBaseProperties } from '@ts/ui/context_menu/menu_base';
 import MenuBase from '@ts/ui/context_menu/menu_base';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
-import Overlay from '@ts/ui/overlay/m_overlay';
+import Overlay from '@ts/ui/overlay/overlay';
 import Scrollable from '@ts/ui/scroll_view/scrollable';
 
 const DX_MENU_CLASS = 'dx-menu';
@@ -97,10 +98,6 @@ const window = getWindow();
 
 type ContextMenuTarget = string | dxElementWrapper | Element | Window | undefined;
 type ContextMenuNode = InternalNode & Item;
-
-type KeyboardEventHandler = (e: KeyboardEvent, options?: Record<string, unknown>) => void;
-type KeyboardEventHandlerAsync =
-  (e: KeyboardEvent, options?: Record<string, unknown>) => Promise<unknown>;
 
 type ShowContextMenuEvent = EventInfo<ContextMenu> & {
   target?: ContextMenuTarget;
@@ -217,7 +214,6 @@ class ContextMenu<
     this._actions = {};
 
     each(ACTIONS, (_index: number, action: typeof ACTIONS[number]) => {
-      // @ts-expect-error ts-error
       this._actions[action] = this._createActionByOption(action) || noop;
     });
   }
@@ -245,7 +241,7 @@ class ContextMenu<
     return this._overlay?.$content() ?? $();
   }
 
-  _supportedKeys(): Record<string, KeyboardEventHandler | KeyboardEventHandlerAsync> {
+  _supportedKeys(): SupportedKeys {
     const selectItem = (): void => {
       const { focusedElement } = this.option();
       const $item = $(focusedElement);
@@ -263,7 +259,10 @@ class ContextMenu<
     return {
       ...super._supportedKeys(),
       space: selectItem,
-      escape: this.hide,
+      escape: (): void => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this.hide();
+      },
     };
   }
 
@@ -402,7 +401,6 @@ class ContextMenu<
     const $submenu = $curItem.children(`.${DX_SUBMENU_CLASS}`);
 
     if (isItemHasSubmenu && !$curItem.hasClass(DX_STATE_DISABLED_CLASS)) {
-      // @ts-expect-error ts-error
       if (!$submenu.length || $submenu.css('visibility') === 'hidden') {
         this._showSubmenu($curItem);
       }
@@ -557,7 +555,6 @@ class ContextMenu<
         this._showContextMenuEventHandler,
       );
     } else {
-      // @ts-expect-error ts-error
       eventsEngine.off($(target), eventName, this._showContextMenuEventHandler);
     }
   }
@@ -894,7 +891,6 @@ class ContextMenu<
   }
 
   _isSubmenuVisible($submenu: dxElementWrapper): boolean {
-    // @ts-expect-error ts-error
     return $submenu.css('visibility') === 'visible';
   }
 
@@ -1215,7 +1211,6 @@ class ContextMenu<
   _getTarget(): ContextMenuTarget {
     const { target, position } = this.option();
 
-    // @ts-expect-error ts-error
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return target || position?.of || $(domAdapter.getDocument());
   }

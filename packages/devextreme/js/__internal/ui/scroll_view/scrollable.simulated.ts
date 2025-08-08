@@ -620,7 +620,6 @@ export class Scroller {
   }
 
   _contentSize(): number {
-    // @ts-expect-error CSS method access
     const isOverflowHidden = this._$content.css(`overflow${this._axis.toUpperCase()}`) === 'hidden';
     let contentSize = this._getRealDimension(this._$content.get(0), this._dimension);
 

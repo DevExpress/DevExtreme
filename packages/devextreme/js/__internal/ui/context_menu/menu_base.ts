@@ -10,14 +10,15 @@ import type { DxEvent, ItemInfo, NativeEventInfo } from '@js/events';
 import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
 import type dxMenuBase from '@js/ui/context_menu/ui.menu_base';
 import type { dxMenuBaseItem, Item, SubmenuShowMode } from '@js/ui/menu';
-import { render } from '@js/ui/widget/utils.ink_ripple';
 import type { ActionArguments } from '@ts/core/m_action';
+import { render } from '@ts/core/utils/m_ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
+import type { SupportedKeys } from '@ts/core/widget/widget';
+import type { InkRippleEvent, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import MenuItem from '@ts/ui/collection/item';
 import MenuBaseEditStrategy from '@ts/ui/context_menu/menu_base.edit.strategy';
 import type DataAdapter from '@ts/ui/hierarchical_collection/data_adapter';
-import type { BaseDataAdapterOptions } from '@ts/ui/hierarchical_collection/data_adapter';
+import type { DataAdapterOptions } from '@ts/ui/hierarchical_collection/data_adapter';
 import type { InternalNode } from '@ts/ui/hierarchical_collection/data_converter';
 import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/hierarchical_collection_widget';
 
@@ -60,7 +61,7 @@ export interface MenuBaseProperties<
   TItem extends dxMenuBaseItem = Item,
   // @ts-expect-error ts-error
 > extends dxMenuBaseOptions<MenuBase, TItem> {
-  focusedElement?: dxElementWrapper;
+  focusedElement?: Element | null;
   useInkRipple?: boolean;
   _dataAdapter: DataAdapter;
 }
@@ -145,7 +146,7 @@ class MenuBase<
     super._clean();
   }
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     const selectItem = (): void => {
       const { focusedElement } = this.option();
       const $item = $(focusedElement);
@@ -239,7 +240,7 @@ class MenuBase<
     return $popOutContainer;
   }
 
-  _getDataAdapterOptions(): BaseDataAdapterOptions {
+  _getDataAdapterOptions(): Partial<DataAdapterOptions> {
     return {
       rootValue: 0,
       multipleSelection: false,
@@ -307,9 +308,9 @@ class MenuBase<
   _toggleActiveState(
     $element: dxElementWrapper,
     value: boolean,
-    e: Record<string, unknown>,
+    event: InkRippleEvent,
   ): void {
-    super._toggleActiveState($element, value, e);
+    super._toggleActiveState($element, value);
 
     if (!this._inkRipple) {
       return;
@@ -317,7 +318,7 @@ class MenuBase<
 
     const config = {
       element: $element,
-      event: e,
+      event,
     };
 
     if (value) {

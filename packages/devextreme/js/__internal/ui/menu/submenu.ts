@@ -18,8 +18,8 @@ import ContextMenu from '@ts/ui/context_menu/context_menu';
 import type { HoverEvent } from '@ts/ui/context_menu/menu_base';
 import type DataAdapter from '@ts/ui/hierarchical_collection/data_adapter';
 import type { ItemKey } from '@ts/ui/hierarchical_collection/data_converter';
-import type { OverlayProperties, PositioningEvent as OverlayPositioningEvent } from '@ts/ui/overlay/m_overlay';
-import type Overlay from '@ts/ui/overlay/m_overlay';
+import type { OverlayProperties, PositioningEvent as OverlayPositioningEvent } from '@ts/ui/overlay/overlay';
+import type Overlay from '@ts/ui/overlay/overlay';
 
 const DX_CONTEXT_MENU_CONTENT_DELIMITER_CLASS = 'dx-context-menu-content-delimiter';
 const DX_SUBMENU_CLASS = 'dx-submenu';
@@ -111,8 +111,6 @@ class Submenu extends ContextMenu<SubmenuProperties> {
 
     onHoverStart?.(e);
     super._hoverStartHandler(e);
-    // @ts-expect-error ts-error
-    this._toggleFocusClass(true, e.currentTarget);
   }
 
   _drawSubmenu($rootItem: dxElementWrapper): void {
@@ -175,7 +173,7 @@ class Submenu extends ContextMenu<SubmenuProperties> {
     const { position: positionOption } = this.option();
 
     const $submenu = this._itemContainer().children(`.${DX_SUBMENU_CLASS}`).eq(0);
-    // @ts-expect-error ts-error
+
     const $rootItem = $(positionOption?.of).find('.dx-context-menu-container-border');
     const position: PositionConfig = {
       // @ts-expect-error ts-error

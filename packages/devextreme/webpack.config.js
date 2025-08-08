@@ -25,7 +25,7 @@ module.exports = {
         'globalize/date': 'window.Globalize',
         'globalize/message': 'window.Globalize',
         'devextreme-quill': 'window.DevExpress.Quill',
-        'exceljs': 'window.ExcelJS',
+        'devextreme-exceljs-fork': 'window.ExcelJS',
         'jspdf': 'window.jspdf.jsPDF',
         'devexpress-diagram': 'window.DevExpress.diagram',
         'devexpress-gantt': 'window.DevExpress.Gantt',

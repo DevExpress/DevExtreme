@@ -18,17 +18,17 @@ import {
     FIELD_ITEM_LABEL_ALIGN_CLASS,
     LABEL_VERTICAL_ALIGNMENT_CLASS,
     LABEL_HORIZONTAL_ALIGNMENT_CLASS,
-} from '__internal/ui/form/components/m_field_item';
+} from '__internal/ui/form/components/field_item';
 
 import {
     FIELD_ITEM_OPTIONAL_MARK_CLASS,
     FIELD_ITEM_LABEL_LOCATION_CLASS,
     FIELD_ITEM_REQUIRED_MARK_CLASS,
-} from '__internal/ui/form/components/m_label';
+} from '__internal/ui/form/components/label';
 
 import {
     FIELD_EMPTY_ITEM_CLASS,
-} from '__internal/ui/form/components/m_empty_item';
+} from '__internal/ui/form/components/empty_item';
 
 import config from 'core/config';
 import { isFunction, isDefined, isRenderer } from 'core/utils/type';

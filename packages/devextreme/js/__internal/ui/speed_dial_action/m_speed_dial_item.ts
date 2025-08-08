@@ -6,10 +6,11 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getImageContainer } from '@js/core/utils/icon';
 import { isPlainObject } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import type { Properties } from '@js/ui/speed_dial_action';
 import { isMaterial } from '@js/ui/themes';
-import { render } from '@js/ui/widget/utils.ink_ripple';
+import { render } from '@ts/core/utils/m_ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 const FAB_CLASS = 'dx-fa-button';
@@ -236,8 +237,8 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
   _toggleActiveState(
     $element: dxElementWrapper,
     value: boolean,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    event?: Record<string, unknown>,
+
+    event?: DxEvent<PointerEvent | MouseEvent | TouchEvent>,
   ): void {
     super._toggleActiveState($element, value, event);
 

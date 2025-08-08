@@ -492,7 +492,7 @@ class BaseView<
     Class.abstract();
   }
 
-  isDateDisabled(cellDate) {
+  isDateDisabled(cellDate): boolean {
     const dateParts = {
       date: cellDate,
       view: this._getViewName(),

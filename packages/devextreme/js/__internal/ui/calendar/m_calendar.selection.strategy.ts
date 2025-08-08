@@ -13,7 +13,7 @@ class CalendarSelectionStrategy {
   }
 
   dateOption(optionName) {
-    return this.calendar._dateOption(optionName);
+    return this.calendar._getDateOption(optionName);
   }
 
   dateValue(value, e) {
@@ -52,8 +52,8 @@ class CalendarSelectionStrategy {
   }
 
   _isDateDisabled(date) {
-    const min = this.calendar._dateOption('min');
-    const max = this.calendar._dateOption('max');
+    const min = this.calendar._getDateOption('min');
+    const max = this.calendar._getDateOption('max');
     const isLessThanMin = isDefined(min) && date < min && !dateUtils.sameDate(min, date);
     const isBiggerThanMax = isDefined(max) && date > max && !dateUtils.sameDate(max, date);
 

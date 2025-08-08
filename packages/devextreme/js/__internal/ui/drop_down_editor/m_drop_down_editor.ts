@@ -24,13 +24,13 @@ import { each } from '@js/core/utils/iterator';
 import { getDefaultAlignment } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
-import type { DxEvent } from '@js/events';
+import type { DxEvent, EventInfo } from '@js/events';
 import type { Options as Properties } from '@js/ui/drop_down_editor/ui.drop_down_editor';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
-import { focused } from '@js/ui/widget/selectors';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
+import { focused } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import TextBox from '@ts/ui/text_box/m_text_box';
 
@@ -60,6 +60,8 @@ export interface DropDownEditorProperties extends Omit<Properties,
   buttonsLocation?: string;
 
   _onMarkupRendered?: () => void;
+
+  onPopupInitialized?: (e: { component: DropDownEditor; popup: Popup }) => void;
 }
 
 function createTemplateWrapperElement(): dxElementWrapper {
@@ -87,7 +89,9 @@ class DropDownEditor<
 
   _activeRenderContext?: symbol;
 
-  _popupInitializedAction!: (event?: Record<string, unknown>) => void;
+  _popupInitializedAction!: (event?: EventInfo<DropDownEditor> & {
+    popup?: Popup;
+  }) => void;
 
   _popupContentId?: string;
 
@@ -511,7 +515,6 @@ class DropDownEditor<
   }
 
   _isTargetOutOfComponent(newTarget): boolean {
-    // @ts-expect-error ts-error
     const popupWrapper = this.content ? $(this.content()).closest(`.${DROP_DOWN_EDITOR_OVERLAY}`) : this._$popup;
     // @ts-expect-error
     const isTargetOutsidePopup = $(newTarget).closest(`.${DROP_DOWN_EDITOR_OVERLAY}`, popupWrapper).length === 0;
@@ -742,11 +745,12 @@ class DropDownEditor<
   _popupInitializedHandler(): void {}
 
   _getPopupInitializedHandler(): (e) => void {
-    const onPopupInitialized = this.option('onPopupInitialized');
+    const { onPopupInitialized } = this.option();
 
     return (e) => {
       this._popupInitializedHandler();
       if (onPopupInitialized) {
+        // @ts-expect-error
         this._popupInitializedAction({ popup: e.component });
       }
     };

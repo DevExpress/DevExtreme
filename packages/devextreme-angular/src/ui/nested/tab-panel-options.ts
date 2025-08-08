@@ -52,6 +52,7 @@ import { DxiItemComponent } from './item-dxi';
         'items',
         'itemTemplate',
         'itemTitleTemplate',
+        'keyExpr',
         'loop',
         'noDataText',
         'onContentReady',

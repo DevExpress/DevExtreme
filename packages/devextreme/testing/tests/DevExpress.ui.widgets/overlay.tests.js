@@ -16,10 +16,10 @@ import { hideCallback as hideTopOverlayCallback } from 'common/core/environment/
 import errors from 'core/errors';
 import uiErrors from 'ui/widget/ui.errors';
 import Overlay from 'ui/overlay/ui.overlay';
-import * as zIndex from '__internal/ui/overlay/m_z_index';
+import * as zIndex from '__internal/ui/overlay/z_index';
 import 'ui/scroll_view/ui.scrollable';
-import selectors from 'ui/widget/selectors';
-import swatch from 'ui/widget/swatch_container';
+import selectors from '__internal/core/utils/m_selectors';
+import swatch from '__internal/core/utils/m_swatch_container';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
@@ -1462,8 +1462,8 @@ testModule('animation', moduleConfig, () => {
         const originAnimate = fx.animate;
 
         try {
-            fx.animate = ($element, config) => {
-                if(instance.$content().get(0) === $element.get(0)) {
+            fx.animate = (element, config) => {
+                if(instance.$content().get(0) === element) {
                     lastConfig = config;
                 }
             };
