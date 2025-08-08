@@ -34,7 +34,7 @@ import type {
 } from '@js/ui/list';
 import type dxList from '@js/ui/list';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
-import { render } from '@js/ui/widget/utils.ink_ripple';
+import { render } from '@ts/core/utils/m_ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
@@ -358,12 +358,10 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemClass(): string {
     return LIST_ITEM_CLASS;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return LIST_ITEM_DATA_KEY;
   }
@@ -492,7 +490,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     return super._itemSelectHandler(e, isSelectionControlClicked);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _allowDynamicItemsAppend(): boolean {
     return true;
   }
@@ -558,7 +555,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     return this._getItemsContainer().find(`.${LIST_GROUP_CLASS}`).eq(groupIndex).find(`.${LIST_GROUP_BODY_CLASS}`);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _dataSourceFromUrlLoadMode(): string {
     return 'raw';
   }
@@ -665,7 +661,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getBindableFields(): string[] {
     return ['text', 'html', 'icon'];
   }
@@ -1063,7 +1058,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getElementClassToSkipRefreshId(): string {
     return LIST_GROUP_HEADER_CLASS;
   }

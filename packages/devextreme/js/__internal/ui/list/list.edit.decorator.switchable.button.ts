@@ -8,9 +8,9 @@ import type { DxEvent } from '@js/events';
 import type { ClickEvent } from '@js/ui/button';
 import Button from '@js/ui/button';
 import { current, isMaterialBased } from '@js/ui/themes';
-import type { BagConfig, SwipeEndArgs } from '@ts/ui/list/m_list.edit.decorator';
-import SwitchableEditDecorator from '@ts/ui/list/m_list.edit.decorator.switchable';
-import { register as registerDecorator } from '@ts/ui/list/m_list.edit.decorator_registry';
+import type { BagConfig, SwipeEndArgs } from '@ts/ui/list/list.edit.decorator';
+import SwitchableEditDecorator from '@ts/ui/list/list.edit.decorator.switchable';
+import { register as registerDecorator } from '@ts/ui/list/list.edit.decorator_registry';
 
 const SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS = 'dx-list-switchable-delete-button-container';
 const SWITCHABLE_DELETE_BUTTON_WRAPPER_CLASS = 'dx-list-switchable-delete-button-wrapper';
@@ -152,7 +152,6 @@ registerDecorator(
 );
 
 class SwitchableButtonSlideEditDecorator extends SwitchableButtonEditDecorator {
-  // eslint-disable-next-line class-methods-use-this
   _shouldHandleSwipe(): boolean {
     return true;
   }

@@ -22,8 +22,8 @@ import type { Item, Properties } from '@js/ui/drop_down_button';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 import { getElementWidth, getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
-import type { ListBaseProperties } from '@ts/ui/list/m_list.base';
-import List from '@ts/ui/list/m_list.edit.search';
+import type { ListBaseProperties } from '@ts/ui/list/list.base';
+import List from '@ts/ui/list/list.edit.search';
 import Popup from '@ts/ui/popup/m_popup';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';

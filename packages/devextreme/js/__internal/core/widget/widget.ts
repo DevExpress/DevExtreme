@@ -17,8 +17,8 @@ import { each } from '@js/core/utils/iterator';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { compare as compareVersions } from '@js/core/utils/version';
 import type { DxEvent } from '@js/events';
-import { focusable as focusableSelector } from '@js/ui/widget/selectors';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
+import { focusable as focusableSelector } from '@ts/core/utils/m_selectors';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
 
 import DOMComponent from './dom_component';

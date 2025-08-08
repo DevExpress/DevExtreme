@@ -15,9 +15,9 @@ import type dxActionSheet from '@js/ui/action_sheet';
 import type { Item } from '@js/ui/list';
 import { current, isMaterialBased } from '@js/ui/themes';
 import ActionSheet from '@ts/ui/action_sheet';
-import type { BagConfig, SwipeEndArgs, SwipeUpdateArgs } from '@ts/ui/list/m_list.edit.decorator';
-import SwitchableEditDecorator from '@ts/ui/list/m_list.edit.decorator.switchable';
-import { register as registerDecorator } from '@ts/ui/list/m_list.edit.decorator_registry';
+import type { BagConfig, SwipeEndArgs, SwipeUpdateArgs } from '@ts/ui/list/list.edit.decorator';
+import SwitchableEditDecorator from '@ts/ui/list/list.edit.decorator.switchable';
+import { register as registerDecorator } from '@ts/ui/list/list.edit.decorator_registry';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
 const CLICK_EVENT_NAME = addNamespace(clickEventName, LIST_EDIT_DECORATOR);
@@ -59,7 +59,6 @@ class SwitchableEditDecoratorSlide extends SwitchableEditDecorator {
 
   _cachedNode?: Element;
 
-  // eslint-disable-next-line class-methods-use-this
   _shouldHandleSwipe(): boolean {
     return true;
   }

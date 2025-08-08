@@ -540,7 +540,6 @@ class ToolbarBase<
         const promises: Promise<unknown>[] = [];
         $labels.each((_, label): boolean => {
           const text = $(label).text();
-          // @ts-expect-error ts-error
           const fontWeight = $(label).css('fontWeight');
           promises.push(waitWebFont(text, fontWeight));
           return true;
