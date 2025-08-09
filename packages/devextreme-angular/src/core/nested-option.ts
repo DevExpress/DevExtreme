@@ -35,7 +35,11 @@ export type IOptionPathGetter = () => string;
 export const _updateNestedItems = (
   items: QueryList<{ propertyName: string; className: string; component: ICollectionNestedOption }>,
   setChildrenFn: (propertyName: string, items: QueryList<ICollectionNestedOption>) => void,
-  { componentClassName, legacyClassNames }: { componentClassName: string; legacyClassNames: Record<string, string[]> },
+  { 
+    componentClassName,
+    legacyClassNames,
+    currentOptions,
+  }: { componentClassName: string; legacyClassNames: Record<string, string[]>, currentOptions: Map<string, any> },
 ) => {
   const hasLegacy = {};
   const groupedItems = {};
@@ -62,9 +66,16 @@ export const _updateNestedItems = (
     const queryList = new QueryList<ICollectionNestedOption>();
 
     queryList.reset(components);
-
+    currentOptions.set(propertyName, true);
     setChildrenFn(propertyName, queryList);
   });
+
+  currentOptions.forEach((updated, propertyName) => {
+    if (!updated) {
+      setChildrenFn(propertyName, new QueryList<ICollectionNestedOption>());
+    }
+    currentOptions.set(propertyName, false);
+  })
 };
 
 @Component({
@@ -82,6 +93,8 @@ export abstract class BaseNestedOption implements INestedOptionContainer, IColle
   protected abstract get _optionPath(): string;
   protected abstract _fullOptionPath(): string;
 
+  private _currentNestedOptions:Map<string, any> = new Map();
+
   constructor() {
     this._collectionContainerImpl = new CollectionNestedOptionContainerImpl(this._setOption.bind(this), this._filterItems.bind(this));
   }
@@ -94,6 +107,7 @@ export abstract class BaseNestedOption implements INestedOptionContainer, IColle
         {
           componentClassName: this.constructor.name,
           legacyClassNames: null,
+          currentOptions: this._currentNestedOptions
         },
     );
   }

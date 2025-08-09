@@ -69,6 +69,8 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   protected _optionsToUpdate: any = {};
 
   private readonly _collectionContainerImpl: ICollectionNestedOptionContainer;
+  
+  private _currentNestedOptions:Map<string, any> = new Map();
 
   @ContentChildren(NESTED_ITEM_TOKEN)
   set _nestedItems(value: QueryList<{ propertyName: string; className: string; component: ICollectionNestedOption }>) {
@@ -78,6 +80,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
       {
         componentClassName: this.constructor.name,
         legacyClassNames: this.getLegacyClassNames(),
+        currentOptions: this._currentNestedOptions
       },
     );
   }
