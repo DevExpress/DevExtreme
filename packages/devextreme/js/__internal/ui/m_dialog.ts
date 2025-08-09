@@ -7,36 +7,59 @@ import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import { ensureDefined } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
-import { extend } from '@js/core/utils/extend';
 import { getHeight, getWidth } from '@js/core/utils/size';
-import { isPlainObject } from '@js/core/utils/type';
+import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { value as getViewport } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
-import Popup from '@js/ui/popup/ui.popup';
-import { isFluent } from '@js/ui/themes';
+import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
+import type {
+  alert as alertFunc,
+  confirm as confirmFunc,
+  CustomDialogOptions,
+} from '@js/ui/dialog';
+import type { ToolbarItem } from '@js/ui/popup';
+import { current, isFluent } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import domUtils from '@ts/core/utils/m_dom';
+import type { PopupProperties } from '@ts/ui/popup/m_popup';
+import Popup from '@ts/ui/popup/m_popup';
+
+interface BaseDialog {
+  show: () => Promise<unknown>;
+  hide: (value: boolean) => void;
+}
+
+interface DialogParams extends CustomDialogOptions, PopupProperties {
+  popupOptions?: PopupProperties;
+}
 
 const window = getWindow();
 
-const DEFAULT_BUTTON = {
-  text: 'OK',
-  onClick() { return true; },
-};
-
 const DX_DIALOG_CLASSNAME = 'dx-dialog';
-const DX_DIALOG_WRAPPER_CLASSNAME = `${DX_DIALOG_CLASSNAME}-wrapper`;
-const DX_DIALOG_ROOT_CLASSNAME = `${DX_DIALOG_CLASSNAME}-root`;
-const DX_DIALOG_CONTENT_CLASSNAME = `${DX_DIALOG_CLASSNAME}-content`;
-const DX_DIALOG_MESSAGE_CLASSNAME = `${DX_DIALOG_CLASSNAME}-message`;
-const DX_DIALOG_BUTTONS_CLASSNAME = `${DX_DIALOG_CLASSNAME}-buttons`;
-const DX_DIALOG_BUTTON_CLASSNAME = `${DX_DIALOG_CLASSNAME}-button`;
+const DX_DIALOG_WRAPPER_CLASSNAME = 'dx-dialog-wrapper';
+const DX_DIALOG_ROOT_CLASSNAME = 'dx-dialog-root';
+const DX_DIALOG_CONTENT_CLASSNAME = 'dx-dialog-content';
+const DX_DIALOG_MESSAGE_CLASSNAME = 'dx-dialog-message';
+const DX_DIALOG_BUTTONS_CLASSNAME = 'dx-dialog-buttons';
+const DX_DIALOG_BUTTON_CLASSNAME = 'dx-dialog-button';
 
 const DX_BUTTON_CLASSNAME = 'dx-button';
 
-const getApplyButtonConfig = () => {
-  // @ts-expect-error
-  if (isFluent()) {
+const DEFAULT_HORIZONTAL_OFFSET = 10;
+const DEFAULT_VERTICAL_OFFSET = 0;
+
+const DEFAULT_BOUNDARY_OFFSET = {
+  h: DEFAULT_HORIZONTAL_OFFSET,
+  v: DEFAULT_VERTICAL_OFFSET,
+};
+
+const DEFAULT_BUTTON_OPTIONS: ButtonProperties = {
+  text: messageLocalization.format('OK'),
+  onClick: (): boolean => true,
+};
+
+const getApplyButtonConfig = (): ButtonProperties => {
+  if (isFluent(current())) {
     return {
       stylingMode: 'contained',
       type: 'default',
@@ -46,9 +69,8 @@ const getApplyButtonConfig = () => {
   return {};
 };
 
-const getCancelButtonConfig = () => {
-  // @ts-expect-error
-  if (isFluent()) {
+const getCancelButtonConfig = (): ButtonProperties => {
+  if (isFluent(current())) {
     return {
       stylingMode: 'outlined',
       type: 'default',
@@ -58,163 +80,222 @@ const getCancelButtonConfig = () => {
   return {};
 };
 
-export const custom = function (options) {
-  const deferred = Deferred();
+export const custom = (params: DialogParams): BaseDialog => {
+  const {
+    buttons,
+    dragEnabled,
+    message,
+    messageHtml,
+    popupOptions,
+    showCloseButton,
+    showTitle,
+    title = '',
+    width,
+    position,
+  } = params ?? {};
 
-  options = options || {};
-
-  const $element = $('<div>')
-    .addClass(DX_DIALOG_CLASSNAME)
-    .appendTo(getViewport());
-
-  const isMessageDefined = 'message' in options;
-  const isMessageHtmlDefined = 'messageHtml' in options;
+  const isMessageDefined = isDefined(message);
 
   if (isMessageDefined) {
     errors.log('W1013');
   }
 
-  const messageHtml = String(isMessageHtmlDefined ? options.messageHtml : options.message);
-  const messageId = options.title ? null : new Guid();
+  const isMessageHtmlDefined = isDefined(messageHtml);
+
+  const messageMarkup = String(isMessageHtmlDefined ? messageHtml : message);
+  const messageId = title ? null : new Guid().toString();
+
+  const deferred = Deferred();
+
+  const $element = $('<div>')
+    .addClass(DX_DIALOG_CLASSNAME)
+    .appendTo(getViewport());
+
   const $message = $('<div>')
     .addClass(DX_DIALOG_MESSAGE_CLASSNAME)
-    .html(messageHtml)
-    // @ts-expect-error
+    .html(messageMarkup)
     .attr('id', messageId);
 
-  const popupToolbarItems = [];
-  // @ts-expect-error ts-error
-  const popupInstance = new Popup($element, extend({
-    title: options.title ?? '',
-    showTitle: ensureDefined(options.showTitle, true),
-    dragEnabled: ensureDefined(options.dragEnabled, true),
-    height: 'auto',
-    width: options.width,
-    showCloseButton: options.showCloseButton || false,
-    ignoreChildEvents: false,
-    container: $element,
-    visualContainer: window,
-    dragAndResizeArea: window,
-    onContentReady(args) {
-      args.component.$content()
-        .addClass(DX_DIALOG_CONTENT_CLASSNAME)
-        .append($message);
+  const onContentReady: PopupProperties['onContentReady'] = (e) => {
+    const component = e.component as Popup;
 
-      if (messageId) {
-        args.component.$overlayContent().attr('aria-labelledby', messageId);
-      }
-    },
-    onShowing(e) {
-      e.component
-        .bottomToolbar()
-        .addClass(DX_DIALOG_BUTTONS_CLASSNAME)
-        .find(`.${DX_BUTTON_CLASSNAME}`)
-        .addClass(DX_DIALOG_BUTTON_CLASSNAME);
+    component.$content()
+      .addClass(DX_DIALOG_CONTENT_CLASSNAME)
+      .append($message);
 
-      domUtils.resetActiveElement();
+    if (messageId) {
+      component.$overlayContent().attr('aria-labelledby', messageId);
+    }
+  };
+
+  const onShowing: PopupProperties['onShowing'] = (e) => {
+    const component = e.component as Popup;
+    const bottomToolbar = component.bottomToolbar();
+
+    bottomToolbar
+      ?.addClass(DX_DIALOG_BUTTONS_CLASSNAME)
+      .find(`.${DX_BUTTON_CLASSNAME}`)
+      .addClass(DX_DIALOG_BUTTON_CLASSNAME);
+
+    domUtils.resetActiveElement();
+  };
+
+  const onShown: PopupProperties['onShown'] = (e) => {
+    const component = e.component as Popup;
+    const bottomToolbar = component.bottomToolbar();
+
+    const $firstButton = bottomToolbar
+      ?.find(`.${DX_BUTTON_CLASSNAME}`)
+      .first();
+
+    // @ts-expect-error trigger should be typed on type 'EventsEngineType'
+    eventsEngine.trigger($firstButton, 'focus');
+  };
+
+  const onHidden: PopupProperties['onHidden'] = (e) => {
+    $(e.element).remove();
+  };
+
+  const animation = {
+    show: {
+      type: 'pop',
+      duration: 400,
     },
-    onShown(e) {
-      const $firstButton = e.component
-        .bottomToolbar()
-        .find(`.${DX_BUTTON_CLASSNAME}`)
-        .first();
-      // @ts-expect-error
-      eventsEngine.trigger($firstButton, 'focus');
-    },
-    onHiding() {
-      deferred.reject();
-    },
-    onHidden({ element }) {
-      $(element).remove();
-    },
-    animation: {
-      show: {
-        type: 'pop',
-        duration: 400,
+    hide: {
+      type: 'pop',
+      duration: 400,
+      to: {
+        opacity: 0,
+        scale: 0,
       },
-      hide: {
-        type: 'pop',
-        duration: 400,
-        to: {
-          opacity: 0,
-          scale: 0,
-        },
-        from: {
-          opacity: 1,
-          scale: 1,
-        },
+      from: {
+        opacity: 1,
+        scale: 1,
       },
     },
-    rtlEnabled: config().rtlEnabled,
-    position: {
-      boundaryOffset: { h: 10, v: 0 },
-    },
-  }, options.popupOptions));
+  };
 
-  const buttonOptions = options.buttons || [DEFAULT_BUTTON];
+  let popupInstance: Popup | null = null;
 
-  buttonOptions.forEach((options) => {
-    const action = new Action(options.onClick, {
+  const show = (): Promise<unknown> => {
+    if (devices.real().deviceType === 'phone') {
+      const isPortrait = getHeight(window) > getWidth(window);
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      const width = isPortrait ? '90%' : '60%';
+
+      popupInstance?.option({ width });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    popupInstance?.show();
+
+    return deferred.promise();
+  };
+
+  const hide = (value: boolean): void => {
+    deferred.resolve(value);
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    popupInstance?.hide();
+  };
+
+  const buttonOptions = buttons ?? [DEFAULT_BUTTON_OPTIONS];
+
+  const toolbarItems = buttonOptions.map((configuration) => {
+    const { onClick } = configuration;
+
+    const action = new Action(onClick, {
       context: popupInstance,
     });
-    // @ts-expect-error
-    popupToolbarItems.push({
+
+    const buttonItem: ToolbarItem = {
       toolbar: 'bottom',
       location: devices.current().android ? 'after' : 'center',
       widget: 'dxButton',
       options: {
-        ...options,
-        onClick() {
-          const result = action.execute(...arguments);
+        ...configuration,
+        onClick: (e: ClickEvent): void => {
+          const result = action.execute(e);
+
           hide(result);
         },
       },
-    });
+    };
+
+    return buttonItem;
   });
 
-  popupInstance.option('toolbarItems', popupToolbarItems);
+  const popupPosition = position ?? {
+    boundaryOffset: { ...DEFAULT_BOUNDARY_OFFSET },
+  };
 
-  popupInstance.$wrapper().addClass(DX_DIALOG_WRAPPER_CLASSNAME);
+  const configuration: PopupProperties = {
+    // @ts-expect-error animation should be typed correctly in popup.d.ts
+    animation,
+    // @ts-expect-error container should be typed correctly in popup.d.ts
+    container: $element,
+    // @ts-expect-error dragAndResizeArea should be typed correctly in popup.d.ts
+    dragAndResizeArea: window,
+    dragEnabled: ensureDefined(dragEnabled, true),
+    height: 'auto',
+    ignoreChildEvents: false,
+    onContentReady,
+    onHidden,
+    onHiding: (): void => { deferred.reject(); },
+    onShowing,
+    onShown,
+    // @ts-expect-error position should be typed correctly in popup.d.ts
+    position: popupPosition,
+    rtlEnabled: config().rtlEnabled,
+    showCloseButton: showCloseButton ?? false,
+    showTitle: ensureDefined(showTitle, true),
+    title,
+    toolbarItems,
+    visualContainer: window,
+    width,
+  };
 
-  if (options.position) {
-    popupInstance.option('position', options.position);
-  }
+  const options = {
+    ...configuration,
+    ...popupOptions,
+  };
+
+  // @ts-expect-error Incorrect constructor usage
+  popupInstance = new Popup($element, options);
 
   popupInstance.$wrapper()
+    .addClass(DX_DIALOG_WRAPPER_CLASSNAME)
     .addClass(DX_DIALOG_ROOT_CLASSNAME);
 
-  function show() {
-    if (devices.real().deviceType === 'phone') {
-      const isPortrait = getHeight(window) > getWidth(window);
-      const width = isPortrait ? '90%' : '60%';
-      popupInstance.option({ width });
-    }
-
-    popupInstance.show();
-    return deferred.promise();
-  }
-
-  function hide(value) {
-    deferred.resolve(value);
-    popupInstance.hide();
-  }
-
-  return {
+  const dialog: BaseDialog = {
     show,
     hide,
   };
+
+  return dialog;
 };
 
-// eslint-disable-next-line @typescript-eslint/default-param-last
-export const alert = function (messageHtml, title = '', showTitle) {
-  const options = isPlainObject(messageHtml)
-    ? messageHtml : {
-      title,
+const isCustomDialogOptions = (
+  options: unknown,
+): options is CustomDialogOptions => isPlainObject(options);
+
+// @ts-expect-error params and return types should be fixed in dialog.d.ts
+export const alert: typeof alertFunc = (
+  messageHtml: CustomDialogOptions['messageHtml'],
+  title: CustomDialogOptions['title'],
+  showTitle: CustomDialogOptions['showTitle'],
+) => {
+  const titleValue = title ?? '';
+
+  const options = isCustomDialogOptions(messageHtml)
+    ? messageHtml
+    : {
+      title: titleValue,
       messageHtml,
       showTitle,
       buttons: [
         {
-          ...DEFAULT_BUTTON,
+          ...DEFAULT_BUTTON_OPTIONS,
           ...getApplyButtonConfig(),
         },
       ],
@@ -224,23 +305,29 @@ export const alert = function (messageHtml, title = '', showTitle) {
   return custom(options).show();
 };
 
-// eslint-disable-next-line @typescript-eslint/default-param-last
-export const confirm = function (messageHtml, title = '', showTitle) {
-  const options = isPlainObject(messageHtml)
+// @ts-expect-error params and return types should be fixed in dialog.d.ts
+export const confirm: typeof confirmFunc = (
+  messageHtml: CustomDialogOptions['messageHtml'],
+  title: CustomDialogOptions['title'],
+  showTitle: CustomDialogOptions['showTitle'],
+) => {
+  const titleValue = title ?? '';
+
+  const options = isCustomDialogOptions(messageHtml)
     ? messageHtml
     : {
-      title,
+      title: titleValue,
       messageHtml,
       showTitle,
       buttons: [
         {
           text: messageLocalization.format('Yes'),
-          onClick() { return true; },
+          onClick: (): boolean => true,
           ...getApplyButtonConfig(),
         },
         {
           text: messageLocalization.format('No'),
-          onClick() { return false; },
+          onClick: (): boolean => false,
           ...getCancelButtonConfig(),
         },
       ],
