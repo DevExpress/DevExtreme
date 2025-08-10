@@ -1702,7 +1702,7 @@ class Calendar<
         this._invalidate();
         break;
       case 'currentDate':
-        this.setAria('id', undefined, this._view._getCellByDate(previousValue));
+        this.setAria('id', undefined, this._view._getCellByDate(previousValue as Date));
         this._updateCurrentDate(value as Date);
         break;
       case 'zoomLevel':
