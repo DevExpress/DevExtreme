@@ -8,7 +8,9 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -18,11 +20,18 @@ import { SortOrder } from 'devextreme/common';
 import { SelectedFilterOperation } from 'devextreme/common/grids';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxiDataGridColumn } from './base/data-grid-column-dxi';
+
+
+import {
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_columns,
+    PROPERTY_TOKEN_validationRules,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxi-column',
@@ -33,13 +42,8 @@ import { DxiDataGridColumn } from './base/data-grid-column-dxi';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiColumnComponent) => ({
-                propertyName: 'columns',
-                className: 'DxiColumnComponent',
-                component
-            }),
-            deps: [DxiColumnComponent],
+            provide: PROPERTY_TOKEN_columns,
+            useExisting: DxiColumnComponent,
          }
     ],
     inputs: [
@@ -108,7 +112,22 @@ import { DxiDataGridColumn } from './base/data-grid-column-dxi';
         'width'
     ]
 })
-export class DxiColumnComponent extends DxiDataGridColumn {
+export class DxiColumnComponent extends DxiDataGridColumn { 
+    protected _dxClassName = 'DxiColumnComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('buttons', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_columns)
+    set _columnsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('columns', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('validationRules', value);
+    }
+    
 
     /**
     

@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoGaugeIndicator } from './base/gauge-indicator';
+
+
 
 @Component({
     selector: 'dxo-value-indicator',
@@ -52,7 +54,10 @@ import { DxoGaugeIndicator } from './base/gauge-indicator';
         'width'
     ]
 })
-export class DxoValueIndicatorComponent extends DxoGaugeIndicator implements OnDestroy, OnInit {
+export class DxoValueIndicatorComponent extends DxoGaugeIndicator implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoValueIndicatorComponent';
+
+    
 
     protected get _optionPath() {
         return 'valueIndicator';

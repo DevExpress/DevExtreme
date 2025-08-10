@@ -19,7 +19,6 @@ import {
   createNgModule,
   inject,
   Injector,
-  ContentChildren,
 } from '@angular/core';
 
 import { isPlatformServer } from '@angular/common';
@@ -38,8 +37,8 @@ import {
   ICollectionNestedOption,
   ICollectionNestedOptionContainer,
   CollectionNestedOptionContainerImpl,
-  _updateNestedItems,
-  NESTED_ITEM_TOKEN,
+  checkIncompatibleNestedItems,  
+    
 } from './nested-option';
 
 import { DxIntegrationModule } from './integration';
@@ -64,27 +63,14 @@ export const getServerStateKey = () => {
 })
 export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterContentChecked, AfterViewInit, AfterViewChecked,
     INestedOptionContainer, ICollectionNestedOptionContainer, IDxTemplateHost {
+  protected _dxClassName = 'DxComponent';
+  
   private _initialOptions: any = {};
 
   protected _optionsToUpdate: any = {};
 
   private readonly _collectionContainerImpl: ICollectionNestedOptionContainer;
   
-  private _currentNestedOptions:Map<string, any> = new Map();
-
-  @ContentChildren(NESTED_ITEM_TOKEN)
-  set _nestedItems(value: QueryList<{ propertyName: string; className: string; component: ICollectionNestedOption }>) {
-    _updateNestedItems(
-      value,
-      this.setChildren.bind(this),
-      {
-        componentClassName: this.constructor.name,
-        legacyClassNames: this.getLegacyClassNames(),
-        currentOptions: this._currentNestedOptions
-      },
-    );
-  }
-
   eventHelper: EmitterHelper;
 
   optionChangedHandlers: EventEmitter<any> = new EventEmitter();
@@ -104,7 +90,20 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   widgetUpdateLocked = false;
 
   templateUpdateRequired = false;
+  
+  
+  protected _setChildren(propertyName: string, items: QueryList<ICollectionNestedOption>) {
+    const hasIncopatibleNestedItems = checkIncompatibleNestedItems(
+        items,
+        this._dxClassName,
+        this.getLegacyClassNames()[propertyName]
+    );
 
+    if (!hasIncopatibleNestedItems) {
+      this.setChildren(propertyName, items);
+    }
+  }
+  
   private _updateTemplates() {
     if (this.templates.length && this.templateUpdateRequired) {
       const updatedTemplates = {};

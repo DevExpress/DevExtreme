@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoButtonOptions } from './base/button-options';
+
+
 
 @Component({
     selector: 'dxo-button-options',
@@ -57,7 +59,10 @@ import { DxoButtonOptions } from './base/button-options';
         'width'
     ]
 })
-export class DxoButtonOptionsComponent extends DxoButtonOptions implements OnDestroy, OnInit {
+export class DxoButtonOptionsComponent extends DxoButtonOptions implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoButtonOptionsComponent';
+
+    
 
     protected get _optionPath() {
         return 'buttonOptions';

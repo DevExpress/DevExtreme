@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -15,11 +15,13 @@ import {
 import { ValidationRuleType } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-form-pattern-rule',
@@ -30,17 +32,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiFormPatternRuleComponent) => ({
-                propertyName: 'validationRules',
-                className: 'DxiFormPatternRuleComponent',
-                component
-            }),
-            deps: [DxiFormPatternRuleComponent],
+            provide: PROPERTY_TOKEN_validationRules,
+            useExisting: DxiFormPatternRuleComponent,
          }
     ],
 })
-export class DxiFormPatternRuleComponent extends CollectionNestedOption {
+export class DxiFormPatternRuleComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiFormPatternRuleComponent';
+
+    
     @Input()
     get ignoreEmptyValue(): boolean {
         return this._getOption('ignoreEmptyValue');

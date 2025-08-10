@@ -10,7 +10,9 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -22,8 +24,14 @@ import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, d
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-card-view-form',
@@ -35,7 +43,14 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoCardViewFormComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoCardViewFormComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoCardViewFormComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');

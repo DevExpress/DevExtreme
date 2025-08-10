@@ -18,7 +18,9 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -40,7 +42,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -50,6 +53,11 @@ import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxiNumberBoxButtonModule } from 'devextreme-angular/ui/number-box/nested';
 import { DxoNumberBoxFormatModule } from 'devextreme-angular/ui/number-box/nested';
 import { DxoNumberBoxOptionsModule } from 'devextreme-angular/ui/number-box/nested';
+
+import { 
+      PROPERTY_TOKEN_buttons,
+} from 'devextreme-angular/ui/nested/tokens';
+
 
 
 
@@ -77,6 +85,13 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxNumberBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+protected _dxClassName = 'DxNumberBoxComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('buttons', value);
+    }
+
     instance: DxNumberBox = null;
 
     /**
@@ -993,16 +1008,16 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('buttons').push('DxiButtonComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

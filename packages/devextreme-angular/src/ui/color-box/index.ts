@@ -18,7 +18,9 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -41,7 +43,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -75,6 +78,12 @@ import { DxoColorBoxShowModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxoColorBoxToModule } from 'devextreme-angular/ui/color-box/nested';
 import { DxiColorBoxToolbarItemModule } from 'devextreme-angular/ui/color-box/nested';
 
+import { 
+      PROPERTY_TOKEN_buttons,
+      PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/ui/nested/tokens';
+
+
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -101,6 +110,18 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxColorBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+protected _dxClassName = 'DxColorBoxComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('buttons', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('toolbarItems', value);
+    }
+
     instance: DxColorBox = null;
 
     /**
@@ -1105,16 +1126,16 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('buttons').push('DxiButtonComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -15,11 +15,13 @@ import {
 import { FormItemType } from 'devextreme/ui/form';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-card-view-empty-item',
@@ -30,17 +32,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiCardViewEmptyItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiCardViewEmptyItemComponent',
-                component
-            }),
-            deps: [DxiCardViewEmptyItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiCardViewEmptyItemComponent,
          }
     ],
 })
-export class DxiCardViewEmptyItemComponent extends CollectionNestedOption {
+export class DxiCardViewEmptyItemComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiCardViewEmptyItemComponent';
+
+    
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');

@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -17,11 +17,13 @@ import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import { FormItemType } from 'devextreme/ui/form';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-card-view-button-item',
@@ -32,17 +34,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiCardViewButtonItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiCardViewButtonItemComponent',
-                component
-            }),
-            deps: [DxiCardViewButtonItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiCardViewButtonItemComponent,
          }
     ],
 })
-export class DxiCardViewButtonItemComponent extends CollectionNestedOption {
+export class DxiCardViewButtonItemComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiCardViewButtonItemComponent';
+
+    
     @Input()
     get buttonOptions(): dxButtonOptions | undefined {
         return this._getOption('buttonOptions');

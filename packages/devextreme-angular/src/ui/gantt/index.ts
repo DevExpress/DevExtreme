@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -36,7 +38,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiColumnModule } from 'devextreme-angular/ui/nested';
@@ -86,6 +89,13 @@ import { DxoGanttToolbarModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxiGanttToolbarItemModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttValidationModule } from 'devextreme-angular/ui/gantt/nested';
 
+import { 
+      PROPERTY_TOKEN_columns,
+      PROPERTY_TOKEN_items,
+      PROPERTY_TOKEN_stripLines,
+} from 'devextreme-angular/ui/nested/tokens';
+
+
 
 /**
  * [descr:dxGantt]
@@ -105,6 +115,23 @@ import { DxoGanttValidationModule } from 'devextreme-angular/ui/gantt/nested';
     ]
 })
 export class DxGanttComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxGanttComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_columns)
+    set _columnsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('columns', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_stripLines)
+    set _stripLinesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('stripLines', value);
+    }
+
     instance: DxGantt = null;
 
     /**
@@ -1179,18 +1206,18 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('columns').push('DxiColumnComponent');
     
         getLegacyClassNamesForPropertyName('stripLines').push('DxiStripLineComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

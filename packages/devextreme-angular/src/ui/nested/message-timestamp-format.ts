@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFormat } from './base/format';
+
+
 
 @Component({
     selector: 'dxo-message-timestamp-format',
@@ -39,7 +41,10 @@ import { DxoFormat } from './base/format';
         'useCurrencyAccountingStyle'
     ]
 })
-export class DxoMessageTimestampFormatComponent extends DxoFormat implements OnDestroy, OnInit {
+export class DxoMessageTimestampFormatComponent extends DxoFormat implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoMessageTimestampFormatComponent';
+
+    
 
     protected get _optionPath() {
         return 'messageTimestampFormat';

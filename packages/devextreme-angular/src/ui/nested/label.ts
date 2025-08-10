@@ -12,7 +12,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -31,9 +31,11 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
 
 @Component({
     selector: 'dxo-label',
@@ -47,7 +49,10 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxoLabelComponent';
+
+    
     @Input()
     get connectorColor(): string | undefined {
         return this._getOption('connectorColor');

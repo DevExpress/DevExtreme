@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -16,11 +16,13 @@ import { TextEditorButtonLocation } from 'devextreme/common';
 import { dxButtonOptions } from 'devextreme/ui/button';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-autocomplete-button',
@@ -31,17 +33,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiAutocompleteButtonComponent) => ({
-                propertyName: 'buttons',
-                className: 'DxiAutocompleteButtonComponent',
-                component
-            }),
-            deps: [DxiAutocompleteButtonComponent],
+            provide: PROPERTY_TOKEN_buttons,
+            useExisting: DxiAutocompleteButtonComponent,
          }
     ],
 })
-export class DxiAutocompleteButtonComponent extends CollectionNestedOption {
+export class DxiAutocompleteButtonComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiAutocompleteButtonComponent';
+
+    
     @Input()
     get location(): TextEditorButtonLocation {
         return this._getOption('location');

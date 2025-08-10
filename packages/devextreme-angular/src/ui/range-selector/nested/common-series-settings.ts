@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -25,6 +25,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-range-selector-common-series-settings',
     standalone: true,
@@ -35,7 +37,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoRangeSelectorCommonSeriesSettingsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoRangeSelectorCommonSeriesSettingsComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoRangeSelectorCommonSeriesSettingsComponent';
+
+    
     @Input()
     get aggregation(): { calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>) | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');

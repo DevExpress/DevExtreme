@@ -12,7 +12,9 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -26,9 +28,15 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-card-view-card-header',
@@ -42,7 +50,14 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoCardViewCardHeaderComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxoCardViewCardHeaderComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+    
     @Input()
     get items(): Array<CardHeaderItem | CardHeaderPredefinedItem> {
         return this._getOption('items');

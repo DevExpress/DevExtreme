@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -14,11 +14,13 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_typingUsers } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-chat-typing-user',
@@ -29,17 +31,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiChatTypingUserComponent) => ({
-                propertyName: 'typingUsers',
-                className: 'DxiChatTypingUserComponent',
-                component
-            }),
-            deps: [DxiChatTypingUserComponent],
+            provide: PROPERTY_TOKEN_typingUsers,
+            useExisting: DxiChatTypingUserComponent,
          }
     ],
 })
-export class DxiChatTypingUserComponent extends CollectionNestedOption {
+export class DxiChatTypingUserComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiChatTypingUserComponent';
+
+    
     @Input()
     get avatarAlt(): string {
         return this._getOption('avatarAlt');

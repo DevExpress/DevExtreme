@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -15,11 +15,13 @@ import {
 import { DataChangeType } from 'devextreme/common/grids';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_changes } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-card-view-change',
@@ -30,17 +32,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiCardViewChangeComponent) => ({
-                propertyName: 'changes',
-                className: 'DxiCardViewChangeComponent',
-                component
-            }),
-            deps: [DxiCardViewChangeComponent],
+            provide: PROPERTY_TOKEN_changes,
+            useExisting: DxiCardViewChangeComponent,
          }
     ],
 })
-export class DxiCardViewChangeComponent extends CollectionNestedOption {
+export class DxiCardViewChangeComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiCardViewChangeComponent';
+
+    
     @Input()
     get data(): any {
         return this._getOption('data');

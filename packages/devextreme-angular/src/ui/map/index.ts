@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -32,7 +34,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoApiKeyModule } from 'devextreme-angular/ui/nested';
@@ -51,6 +54,13 @@ import { DxoMapProviderConfigModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapRouteModule } from 'devextreme-angular/ui/map/nested';
 import { DxoMapTooltipModule } from 'devextreme-angular/ui/map/nested';
 import { DxiMapLocationModule } from 'devextreme-angular/ui/map/nested';
+
+import { 
+      PROPERTY_TOKEN_markers,
+      PROPERTY_TOKEN_routes,
+      PROPERTY_TOKEN_locations,
+} from 'devextreme-angular/ui/nested/tokens';
+
 
 
 /**
@@ -71,6 +81,23 @@ import { DxiMapLocationModule } from 'devextreme-angular/ui/map/nested';
     ]
 })
 export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxMapComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_markers)
+    set _markersNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('markers', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_routes)
+    set _routesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('routes', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_locations)
+    set _locationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('locations', value);
+    }
+
     instance: DxMap = null;
 
     /**
@@ -609,12 +636,12 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('center').push('DxiCenterComponent');
     
@@ -622,7 +649,7 @@ export class DxMapComponent extends DxComponent implements OnDestroy, OnChanges,
     
         getLegacyClassNamesForPropertyName('routes').push('DxiRouteComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

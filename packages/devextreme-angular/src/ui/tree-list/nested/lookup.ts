@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -23,6 +23,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-tree-list-lookup',
     standalone: true,
@@ -33,7 +35,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoTreeListLookupComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoTreeListLookupComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoTreeListLookupComponent';
+
+    
     @Input()
     get allowClearing(): boolean {
         return this._getOption('allowClearing');

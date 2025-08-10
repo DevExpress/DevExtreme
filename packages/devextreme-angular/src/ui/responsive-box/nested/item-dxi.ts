@@ -10,7 +10,9 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -18,15 +20,21 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+
+import {
+    PROPERTY_TOKEN_location,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxi-responsive-box-item',
@@ -38,18 +46,20 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiResponsiveBoxItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiResponsiveBoxItemComponent',
-                component
-            }),
-            deps: [DxiResponsiveBoxItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiResponsiveBoxItemComponent,
          }
     ],
 })
 export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiResponsiveBoxItemComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_location)
+    set _locationNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('location', value);
+    }
+    
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');

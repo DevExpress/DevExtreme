@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -38,7 +40,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
@@ -106,6 +109,12 @@ import { DxoPieChartTitleModule } from 'devextreme-angular/ui/pie-chart/nested';
 import { DxoPieChartTooltipModule } from 'devextreme-angular/ui/pie-chart/nested';
 import { DxoPieChartTooltipBorderModule } from 'devextreme-angular/ui/pie-chart/nested';
 
+import { 
+      PROPERTY_TOKEN_annotations,
+      PROPERTY_TOKEN_series,
+} from 'devextreme-angular/ui/nested/tokens';
+
+
 
 /**
  * [descr:dxPieChart]
@@ -126,6 +135,18 @@ import { DxoPieChartTooltipBorderModule } from 'devextreme-angular/ui/pie-chart/
     ]
 })
 export class DxPieChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxPieChartComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_annotations)
+    set _annotationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('annotations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_series)
+    set _seriesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('series', value);
+    }
+
     instance: DxPieChart = null;
 
     /**
@@ -972,18 +993,18 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('annotations').push('DxiAnnotationComponent');
     
         getLegacyClassNamesForPropertyName('series').push('DxiSeriesComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

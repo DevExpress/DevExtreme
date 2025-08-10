@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -14,11 +14,13 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiHtmlEditorMention } from './base/html-editor-mention-dxi';
+
+import { PROPERTY_TOKEN_mentions } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-mention',
@@ -29,13 +31,8 @@ import { DxiHtmlEditorMention } from './base/html-editor-mention-dxi';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiMentionComponent) => ({
-                propertyName: 'mentions',
-                className: 'DxiMentionComponent',
-                component
-            }),
-            deps: [DxiMentionComponent],
+            provide: PROPERTY_TOKEN_mentions,
+            useExisting: DxiMentionComponent,
          }
     ],
     inputs: [
@@ -50,7 +47,10 @@ import { DxiHtmlEditorMention } from './base/html-editor-mention-dxi';
         'valueExpr'
     ]
 })
-export class DxiMentionComponent extends DxiHtmlEditorMention {
+export class DxiMentionComponent extends DxiHtmlEditorMention { 
+    protected _dxClassName = 'DxiMentionComponent';
+
+    
 
     protected get _optionPath() {
         return 'mentions';

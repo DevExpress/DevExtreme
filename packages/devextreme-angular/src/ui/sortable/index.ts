@@ -29,12 +29,14 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
 
 import { DxoSortableCursorOffsetModule } from 'devextreme-angular/ui/sortable/nested';
+
+
 
 
 /**
@@ -54,6 +56,8 @@ import { DxoSortableCursorOffsetModule } from 'devextreme-angular/ui/sortable/ne
     ]
 })
 export class DxSortableComponent extends DxComponent implements OnDestroy {
+protected _dxClassName = 'DxSortableComponent';
+
     instance: DxSortable = null;
 
     /**

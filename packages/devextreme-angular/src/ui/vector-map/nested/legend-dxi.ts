@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -17,11 +17,13 @@ import { VectorMapLegendItem, VectorMapMarkerShape } from 'devextreme/viz/vector
 import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_legends } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-vector-map-legend',
@@ -32,17 +34,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiVectorMapLegendComponent) => ({
-                propertyName: 'legends',
-                className: 'DxiVectorMapLegendComponent',
-                component
-            }),
-            deps: [DxiVectorMapLegendComponent],
+            provide: PROPERTY_TOKEN_legends,
+            useExisting: DxiVectorMapLegendComponent,
          }
     ],
 })
-export class DxiVectorMapLegendComponent extends CollectionNestedOption {
+export class DxiVectorMapLegendComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiVectorMapLegendComponent';
+
+    
     @Input()
     get backgroundColor(): string | undefined {
         return this._getOption('backgroundColor');

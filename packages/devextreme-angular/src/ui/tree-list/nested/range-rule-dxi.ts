@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -15,11 +15,13 @@ import {
 import { ValidationRuleType } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-tree-list-range-rule',
@@ -30,17 +32,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiTreeListRangeRuleComponent) => ({
-                propertyName: 'validationRules',
-                className: 'DxiTreeListRangeRuleComponent',
-                component
-            }),
-            deps: [DxiTreeListRangeRuleComponent],
+            provide: PROPERTY_TOKEN_validationRules,
+            useExisting: DxiTreeListRangeRuleComponent,
          }
     ],
 })
-export class DxiTreeListRangeRuleComponent extends CollectionNestedOption {
+export class DxiTreeListRangeRuleComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiTreeListRangeRuleComponent';
+
+    
     @Input()
     get ignoreEmptyValue(): boolean {
         return this._getOption('ignoreEmptyValue');

@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -40,7 +42,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
@@ -221,6 +224,17 @@ import { DxoChartWholeRangeModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartWidthModule } from 'devextreme-angular/ui/chart/nested';
 import { DxoChartZoomAndPanModule } from 'devextreme-angular/ui/chart/nested';
 
+import { 
+      PROPERTY_TOKEN_annotations,
+      PROPERTY_TOKEN_breaks,
+      PROPERTY_TOKEN_constantLines,
+      PROPERTY_TOKEN_panes,
+      PROPERTY_TOKEN_series,
+      PROPERTY_TOKEN_strips,
+      PROPERTY_TOKEN_valueAxis,
+} from 'devextreme-angular/ui/nested/tokens';
+
+
 
 /**
  * [descr:dxChart]
@@ -241,6 +255,43 @@ import { DxoChartZoomAndPanModule } from 'devextreme-angular/ui/chart/nested';
     ]
 })
 export class DxChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxChartComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_annotations)
+    set _annotationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('annotations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_breaks)
+    set _breaksNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('breaks', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_constantLines)
+    set _constantLinesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('constantLines', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_panes)
+    set _panesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('panes', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_series)
+    set _seriesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('series', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_strips)
+    set _stripsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('strips', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_valueAxis)
+    set _valueAxisNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('valueAxis', value);
+    }
+
     instance: DxChart = null;
 
     /**
@@ -1435,12 +1486,12 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('annotations').push('DxiAnnotationComponent');
     
@@ -1450,7 +1501,7 @@ export class DxChartComponent extends DxComponent implements OnDestroy, OnChange
     
         getLegacyClassNamesForPropertyName('valueAxis').push('DxiValueAxisComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

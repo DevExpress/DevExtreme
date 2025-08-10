@@ -6,7 +6,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -15,11 +17,16 @@ import {
 import { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem } from 'devextreme/ui/file_manager';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxi-file-manager-context-menu-item',
@@ -30,17 +37,19 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiFileManagerContextMenuItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiFileManagerContextMenuItemComponent',
-                component
-            }),
-            deps: [DxiFileManagerContextMenuItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiFileManagerContextMenuItemComponent,
          }
     ],
 })
-export class DxiFileManagerContextMenuItemComponent extends CollectionNestedOption {
+export class DxiFileManagerContextMenuItemComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiFileManagerContextMenuItemComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+    
     @Input()
     get beginGroup(): boolean {
         return this._getOption('beginGroup');

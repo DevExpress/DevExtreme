@@ -24,64 +24,25 @@ export interface INestedOptionContainer {
 
 export type IOptionPathGetter = () => string;
 
-/* const warnAboutIncompatibleNestedItems = (containerClassName: string, itemClassName: string, anotherItemClassName: string) => {
-  if (console && console.warn) {
+export const checkIncompatibleNestedItems = (
+     items: QueryList<ICollectionNestedOption>, 
+     containerClassName,
+     legacyClassNames,
+ ) => {
+/*  if (console && console.warn) {
     console.warn(`In ${containerClassName},
           the nested ${itemClassName} and ${anotherItemClassName} components are incompatible.
           Ensure that all nested components in the content area match.`);
-  }
-}; */
+  }*/
+  return false;
+}; 
 
-export const _updateNestedItems = (
-  items: QueryList<{ propertyName: string; className: string; component: ICollectionNestedOption }>,
-  setChildrenFn: (propertyName: string, items: QueryList<ICollectionNestedOption>) => void,
-  { 
-    componentClassName,
-    legacyClassNames,
-    currentOptions,
-  }: { componentClassName: string; legacyClassNames: Record<string, string[]>, currentOptions: Map<string, any> },
-) => {
-  const hasLegacy = {};
-  const groupedItems = {};
-
-  for (let index = 0; index < items.length; index++) {
-    const { propertyName, className, component } = items.get(index);
-
-    groupedItems[propertyName] = groupedItems[propertyName] || [];
-    groupedItems[propertyName].push(component);
-
-    if (legacyClassNames?.[propertyName]) {
-      const isLegacyClassName = legacyClassNames[propertyName].includes(className);
-
-      if (index === 0) {
-        hasLegacy[propertyName] = isLegacyClassName;
-      } else if (hasLegacy[propertyName] !== isLegacyClassName) {
-        // warnAboutIncompatibleNestedItems(componentClassName, items.get(0).className, className);
-        // return;
-      }
-    }
-  }
-
-  Object.entries(groupedItems).forEach(([propertyName, components]: [string, ICollectionNestedOption[]]) => {
-    const queryList = new QueryList<ICollectionNestedOption>();
-
-    queryList.reset(components);
-    currentOptions.set(propertyName, true);
-    setChildrenFn(propertyName, queryList);
-  });
-
-  currentOptions.forEach((updated, propertyName) => {
-    if (!updated) {
-      setChildrenFn(propertyName, new QueryList<ICollectionNestedOption>());
-    }
-    currentOptions.set(propertyName, false);
-  })
-};
 
 @Component({
   template: '',
 })
 export abstract class BaseNestedOption implements INestedOptionContainer, ICollectionNestedOptionContainer {
+  protected _dxClassName = 'BaseNestedOption';
   protected _host: INestedOptionContainer;
 
   protected _hostOptionPath: IOptionPathGetter;
@@ -93,25 +54,22 @@ export abstract class BaseNestedOption implements INestedOptionContainer, IColle
   protected abstract get _optionPath(): string;
   protected abstract _fullOptionPath(): string;
 
-  private _currentNestedOptions:Map<string, any> = new Map();
-
   constructor() {
     this._collectionContainerImpl = new CollectionNestedOptionContainerImpl(this._setOption.bind(this), this._filterItems.bind(this));
   }
 
-  @ContentChildren(NESTED_ITEM_TOKEN)
-  set _nestedItems(value: QueryList<{ propertyName: string; className: string; component: ICollectionNestedOption }>) {
-    _updateNestedItems(
-        value,
-        this.setChildren.bind(this),
-        {
-          componentClassName: this.constructor.name,
-          legacyClassNames: null,
-          currentOptions: this._currentNestedOptions
-        },
+  protected _setChildren(propertyName: string, items: QueryList<ICollectionNestedOption>) {
+    const hasIncopatibleNestedItems = checkIncompatibleNestedItems(
+        items,
+        this._dxClassName,
+        null
     );
+    
+    if (!hasIncopatibleNestedItems) {
+      this.setChildren(propertyName, items);
+    }
   }
-
+  
   protected _optionChangedHandler(e: any) {
     const fullOptionPath = this._fullOptionPath();
 

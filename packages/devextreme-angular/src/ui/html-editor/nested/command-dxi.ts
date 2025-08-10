@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -15,11 +15,13 @@ import {
 import { AICommandNameExtended } from 'devextreme/ui/html_editor';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_commands } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-html-editor-command',
@@ -30,17 +32,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiHtmlEditorCommandComponent) => ({
-                propertyName: 'commands',
-                className: 'DxiHtmlEditorCommandComponent',
-                component
-            }),
-            deps: [DxiHtmlEditorCommandComponent],
+            provide: PROPERTY_TOKEN_commands,
+            useExisting: DxiHtmlEditorCommandComponent,
          }
     ],
 })
-export class DxiHtmlEditorCommandComponent extends CollectionNestedOption {
+export class DxiHtmlEditorCommandComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiHtmlEditorCommandComponent';
+
+    
     @Input()
     get name(): AICommandNameExtended {
         return this._getOption('name');

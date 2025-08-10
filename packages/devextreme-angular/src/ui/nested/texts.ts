@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFilterPanelTexts } from './base/filter-panel-texts';
+
+
 
 @Component({
     selector: 'dxo-texts',
@@ -93,7 +95,10 @@ import { DxoFilterPanelTexts } from './base/filter-panel-texts';
         'addRowToNode'
     ]
 })
-export class DxoTextsComponent extends DxoFilterPanelTexts implements OnDestroy, OnInit {
+export class DxoTextsComponent extends DxoFilterPanelTexts implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoTextsComponent';
+
+    
 
     protected get _optionPath() {
         return 'texts';

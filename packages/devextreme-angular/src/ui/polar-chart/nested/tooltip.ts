@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -23,6 +23,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-polar-chart-tooltip',
     standalone: true,
@@ -33,7 +35,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoPolarChartTooltipComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoPolarChartTooltipComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoPolarChartTooltipComponent';
+
+    
     @Input()
     get argumentFormat(): Format | undefined {
         return this._getOption('argumentFormat');

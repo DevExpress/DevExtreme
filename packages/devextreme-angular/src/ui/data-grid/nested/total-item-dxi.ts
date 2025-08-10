@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -17,11 +17,13 @@ import { SummaryType } from 'devextreme/common/grids';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_totalItems } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-data-grid-total-item',
@@ -32,17 +34,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiDataGridTotalItemComponent) => ({
-                propertyName: 'totalItems',
-                className: 'DxiDataGridTotalItemComponent',
-                component
-            }),
-            deps: [DxiDataGridTotalItemComponent],
+            provide: PROPERTY_TOKEN_totalItems,
+            useExisting: DxiDataGridTotalItemComponent,
          }
     ],
 })
-export class DxiDataGridTotalItemComponent extends CollectionNestedOption {
+export class DxiDataGridTotalItemComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiDataGridTotalItemComponent';
+
+    
     @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');

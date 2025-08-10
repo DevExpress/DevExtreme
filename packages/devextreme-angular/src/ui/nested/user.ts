@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoUser } from './base/user';
+
+
 
 @Component({
     selector: 'dxo-user',
@@ -37,7 +39,10 @@ import { DxoUser } from './base/user';
         'name'
     ]
 })
-export class DxoUserComponent extends DxoUser implements OnDestroy, OnInit {
+export class DxoUserComponent extends DxoUser implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoUserComponent';
+
+    
 
     protected get _optionPath() {
         return 'user';

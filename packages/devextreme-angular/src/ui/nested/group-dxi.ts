@@ -6,7 +6,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -15,11 +17,17 @@ import {
 import { Command, CustomCommand, ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_groups } from 'devextreme-angular/ui/nested/tokens';
+
+import {
+    PROPERTY_TOKEN_commands,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxi-group',
@@ -30,17 +38,19 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiGroupComponent) => ({
-                propertyName: 'groups',
-                className: 'DxiGroupComponent',
-                component
-            }),
-            deps: [DxiGroupComponent],
+            provide: PROPERTY_TOKEN_groups,
+            useExisting: DxiGroupComponent,
          }
     ],
 })
-export class DxiGroupComponent extends CollectionNestedOption {
+export class DxiGroupComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiGroupComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('commands', value);
+    }
+    
     @Input()
     get commands(): Array<CustomCommand | Command> {
         return this._getOption('commands');

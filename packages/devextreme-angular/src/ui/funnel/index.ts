@@ -16,7 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -38,7 +38,7 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
@@ -90,6 +90,8 @@ import { DxoFunnelTooltipModule } from 'devextreme-angular/ui/funnel/nested';
 import { DxoFunnelTooltipBorderModule } from 'devextreme-angular/ui/funnel/nested';
 
 
+
+
 /**
  * [descr:dxFunnel]
 
@@ -109,6 +111,8 @@ import { DxoFunnelTooltipBorderModule } from 'devextreme-angular/ui/funnel/neste
     ]
 })
 export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxFunnelComponent';
+
     instance: DxFunnel = null;
 
     /**

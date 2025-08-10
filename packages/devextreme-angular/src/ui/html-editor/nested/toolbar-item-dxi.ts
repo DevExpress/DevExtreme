@@ -10,7 +10,9 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -21,15 +23,21 @@ import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+
+import {
+    PROPERTY_TOKEN_commands,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxi-html-editor-toolbar-item',
@@ -41,18 +49,20 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiHtmlEditorToolbarItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiHtmlEditorToolbarItemComponent',
-                component
-            }),
-            deps: [DxiHtmlEditorToolbarItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiHtmlEditorToolbarItemComponent,
          }
     ],
 })
 export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiHtmlEditorToolbarItemComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('commands', value);
+    }
+    
     @Input()
     get acceptedValues(): Array<boolean | number | string> {
         return this._getOption('acceptedValues');

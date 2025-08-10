@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -14,11 +14,13 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiVizScaleBreak } from './base/viz-scale-break-dxi';
+
+import { PROPERTY_TOKEN_breaks } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-break',
@@ -29,13 +31,8 @@ import { DxiVizScaleBreak } from './base/viz-scale-break-dxi';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiBreakComponent) => ({
-                propertyName: 'breaks',
-                className: 'DxiBreakComponent',
-                component
-            }),
-            deps: [DxiBreakComponent],
+            provide: PROPERTY_TOKEN_breaks,
+            useExisting: DxiBreakComponent,
          }
     ],
     inputs: [
@@ -43,7 +40,10 @@ import { DxiVizScaleBreak } from './base/viz-scale-break-dxi';
         'startValue'
     ]
 })
-export class DxiBreakComponent extends DxiVizScaleBreak {
+export class DxiBreakComponent extends DxiVizScaleBreak { 
+    protected _dxClassName = 'DxiBreakComponent';
+
+    
 
     protected get _optionPath() {
         return 'breaks';

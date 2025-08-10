@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -19,15 +19,17 @@ import { DOCUMENT } from '@angular/common';
 import { ItemClickEvent } from 'devextreme/ui/drop_down_button';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-drop-down-button-item',
@@ -39,18 +41,16 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiDropDownButtonItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiDropDownButtonItemComponent',
-                component
-            }),
-            deps: [DxiDropDownButtonItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiDropDownButtonItemComponent,
          }
     ],
 })
 export class DxiDropDownButtonItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiDropDownButtonItemComponent';
+
+    
     @Input()
     get badge(): string {
         return this._getOption('badge');

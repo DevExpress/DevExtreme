@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -14,11 +14,13 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_connectionPoints } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-diagram-connection-point',
@@ -29,17 +31,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiDiagramConnectionPointComponent) => ({
-                propertyName: 'connectionPoints',
-                className: 'DxiDiagramConnectionPointComponent',
-                component
-            }),
-            deps: [DxiDiagramConnectionPointComponent],
+            provide: PROPERTY_TOKEN_connectionPoints,
+            useExisting: DxiDiagramConnectionPointComponent,
          }
     ],
 })
-export class DxiDiagramConnectionPointComponent extends CollectionNestedOption {
+export class DxiDiagramConnectionPointComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiDiagramConnectionPointComponent';
+
+    
     @Input()
     get x(): number {
         return this._getOption('x');

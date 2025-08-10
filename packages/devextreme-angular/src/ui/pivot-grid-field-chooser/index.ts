@@ -16,7 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -35,7 +35,7 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
@@ -47,6 +47,8 @@ import { DxoPivotGridFieldChooserHeaderFilterTextsModule } from 'devextreme-angu
 import { DxoPivotGridFieldChooserPivotGridFieldChooserTextsModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
 import { DxoPivotGridFieldChooserSearchModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
 import { DxoPivotGridFieldChooserTextsModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
+
+
 
 
 /**
@@ -67,6 +69,8 @@ import { DxoPivotGridFieldChooserTextsModule } from 'devextreme-angular/ui/pivot
     ]
 })
 export class DxPivotGridFieldChooserComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxPivotGridFieldChooserComponent';
+
     instance: DxPivotGridFieldChooser = null;
 
     /**

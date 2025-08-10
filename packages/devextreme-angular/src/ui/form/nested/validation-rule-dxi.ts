@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -15,11 +15,13 @@ import {
 import { ValidationRuleType, ComparisonOperator } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-form-validation-rule',
@@ -30,17 +32,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiFormValidationRuleComponent) => ({
-                propertyName: 'validationRules',
-                className: 'DxiFormValidationRuleComponent',
-                component
-            }),
-            deps: [DxiFormValidationRuleComponent],
+            provide: PROPERTY_TOKEN_validationRules,
+            useExisting: DxiFormValidationRuleComponent,
          }
     ],
 })
-export class DxiFormValidationRuleComponent extends CollectionNestedOption {
+export class DxiFormValidationRuleComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiFormValidationRuleComponent';
+
+    
     @Input()
     get message(): string {
         return this._getOption('message');

@@ -10,7 +10,9 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -22,8 +24,14 @@ import { TextBoxType, ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, Dispo
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_buttons,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-list-search-editor-options',
@@ -35,7 +43,14 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoListSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoListSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoListSearchEditorOptionsComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('buttons', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');

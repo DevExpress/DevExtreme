@@ -10,7 +10,9 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -21,15 +23,21 @@ import { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/fo
 import { HorizontalAlignment } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+
+import {
+    PROPERTY_TOKEN_validationRules,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxi-card-view-simple-item',
@@ -41,18 +49,20 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiCardViewSimpleItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiCardViewSimpleItemComponent',
-                component
-            }),
-            deps: [DxiCardViewSimpleItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiCardViewSimpleItemComponent,
          }
     ],
 })
 export class DxiCardViewSimpleItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiCardViewSimpleItemComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('validationRules', value);
+    }
+    
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');

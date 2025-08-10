@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-remote-operations',
     standalone: true,
@@ -31,7 +33,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoRemoteOperationsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoRemoteOperationsComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoRemoteOperationsComponent';
+
+    
     @Input()
     get filtering(): boolean {
         return this._getOption('filtering');

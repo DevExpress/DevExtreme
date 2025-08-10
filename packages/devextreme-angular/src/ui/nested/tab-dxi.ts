@@ -10,7 +10,9 @@ import {
     Renderer2,
     Inject,
     AfterViewInit,
-    SkipSelf
+    SkipSelf,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -18,15 +20,23 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxiHtmlEditorImageUploadTabItem } from './base/html-editor-image-upload-tab-item-dxi';
+
+import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/ui/nested/tokens';
+
+import {
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_commands,
+    PROPERTY_TOKEN_groups,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxi-tab',
@@ -38,13 +48,8 @@ import { DxiHtmlEditorImageUploadTabItem } from './base/html-editor-image-upload
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiTabComponent) => ({
-                propertyName: 'tabs',
-                className: 'DxiTabComponent',
-                component
-            }),
-            deps: [DxiTabComponent],
+            provide: PROPERTY_TOKEN_tabs,
+            useExisting: DxiTabComponent,
          }
     ],
     inputs: [
@@ -64,7 +69,22 @@ import { DxiHtmlEditorImageUploadTabItem } from './base/html-editor-image-upload
     ]
 })
 export class DxiTabComponent extends DxiHtmlEditorImageUploadTabItem implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiTabComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('commands', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_groups)
+    set _groupsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('groups', value);
+    }
+    
 
     protected get _optionPath() {
         return 'tabs';

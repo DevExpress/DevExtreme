@@ -8,7 +8,9 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -24,11 +26,18 @@ import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_columns,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxi-tree-list-column',
@@ -39,17 +48,27 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiTreeListColumnComponent) => ({
-                propertyName: 'columns',
-                className: 'DxiTreeListColumnComponent',
-                component
-            }),
-            deps: [DxiTreeListColumnComponent],
+            provide: PROPERTY_TOKEN_columns,
+            useExisting: DxiTreeListColumnComponent,
          }
     ],
 })
-export class DxiTreeListColumnComponent extends CollectionNestedOption {
+export class DxiTreeListColumnComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiTreeListColumnComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('validationRules', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('buttons', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_columns)
+    set _columnsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('columns', value);
+    }
+    
     @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');

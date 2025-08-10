@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -37,7 +39,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiAlertModule } from 'devextreme-angular/ui/nested';
@@ -58,6 +61,13 @@ import { DxoChatMessageTimestampFormatModule } from 'devextreme-angular/ui/chat/
 import { DxiChatTypingUserModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
 
+import { 
+      PROPERTY_TOKEN_alerts,
+      PROPERTY_TOKEN_items,
+      PROPERTY_TOKEN_typingUsers,
+} from 'devextreme-angular/ui/nested/tokens';
+
+
 
 /**
  * [descr:dxChat]
@@ -77,6 +87,23 @@ import { DxoChatUserModule } from 'devextreme-angular/ui/chat/nested';
     ]
 })
 export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxChatComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_alerts)
+    set _alertsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('alerts', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_typingUsers)
+    set _typingUsersNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('typingUsers', value);
+    }
+
     instance: DxChat = null;
 
     /**
@@ -679,12 +706,12 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('alerts').push('DxiAlertComponent');
     
@@ -692,7 +719,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     
         getLegacyClassNamesForPropertyName('typingUsers').push('DxiTypingUserComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

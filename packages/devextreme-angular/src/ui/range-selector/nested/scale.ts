@@ -8,7 +8,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -21,8 +23,14 @@ import { AxisScale } from 'devextreme/viz/range_selector';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_breaks,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-range-selector-scale',
@@ -34,7 +42,14 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoRangeSelectorScaleComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_breaks)
+    set _breaksNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('breaks', value);
+    }
+    
     @Input()
     get aggregationGroupWidth(): number | undefined {
         return this._getOption('aggregationGroupWidth');

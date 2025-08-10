@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoVizFont } from './base/viz-font';
+
+
 
 @Component({
     selector: 'dxo-font',
@@ -38,7 +40,10 @@ import { DxoVizFont } from './base/viz-font';
         'weight'
     ]
 })
-export class DxoFontComponent extends DxoVizFont implements OnDestroy, OnInit {
+export class DxoFontComponent extends DxoVizFont implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoFontComponent';
+
+    
 
     protected get _optionPath() {
         return 'font';

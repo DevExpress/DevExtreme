@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -21,15 +21,17 @@ import { dxTreeListColumn, dxTreeListRowObject, TreeListPredefinedColumnButton }
 import { event } from 'devextreme/events/events.types';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-tree-list-button',
@@ -41,18 +43,16 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiTreeListButtonComponent) => ({
-                propertyName: 'buttons',
-                className: 'DxiTreeListButtonComponent',
-                component
-            }),
-            deps: [DxiTreeListButtonComponent],
+            provide: PROPERTY_TOKEN_buttons,
+            useExisting: DxiTreeListButtonComponent,
          }
     ],
 })
 export class DxiTreeListButtonComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiTreeListButtonComponent';
+
+    
     @Input()
     get cssClass(): string {
         return this._getOption('cssClass');

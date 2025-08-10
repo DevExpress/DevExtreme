@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -14,11 +14,13 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_alerts } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-chat-alert',
@@ -29,17 +31,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiChatAlertComponent) => ({
-                propertyName: 'alerts',
-                className: 'DxiChatAlertComponent',
-                component
-            }),
-            deps: [DxiChatAlertComponent],
+            provide: PROPERTY_TOKEN_alerts,
+            useExisting: DxiChatAlertComponent,
          }
     ],
 })
-export class DxiChatAlertComponent extends CollectionNestedOption {
+export class DxiChatAlertComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiChatAlertComponent';
+
+    
     @Input()
     get id(): number | string {
         return this._getOption('id');

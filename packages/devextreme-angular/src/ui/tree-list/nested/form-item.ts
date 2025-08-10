@@ -12,7 +12,9 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -28,9 +30,15 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_validationRules,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-tree-list-form-item',
@@ -44,7 +52,14 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoTreeListFormItemComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxoTreeListFormItemComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('validationRules', value);
+    }
+    
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');

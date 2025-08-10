@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -22,6 +22,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-data-grid-export',
     standalone: true,
@@ -32,7 +34,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoDataGridExportComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoDataGridExportComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoDataGridExportComponent';
+
+    
     @Input()
     get allowExportSelectedData(): boolean {
         return this._getOption('allowExportSelectedData');

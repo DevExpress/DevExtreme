@@ -10,7 +10,9 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -24,8 +26,16 @@ import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_breaks,
+    PROPERTY_TOKEN_constantLines,
+    PROPERTY_TOKEN_strips,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-argument-axis',
@@ -37,7 +47,22 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoArgumentAxisComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_breaks)
+    set _breaksNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('breaks', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_constantLines)
+    set _constantLinesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('constantLines', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_strips)
+    set _stripsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('strips', value);
+    }
+    
     @Input()
     get aggregatedPointsPosition(): AggregatedPointsPosition {
         return this._getOption('aggregatedPointsPosition');

@@ -8,7 +8,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -21,8 +23,14 @@ import { CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_ranges,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-range-container',
@@ -34,7 +42,14 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoRangeContainerComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoRangeContainerComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoRangeContainerComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_ranges)
+    set _rangesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('ranges', value);
+    }
+    
     @Input()
     get backgroundColor(): ChartsColor | string {
         return this._getOption('backgroundColor');

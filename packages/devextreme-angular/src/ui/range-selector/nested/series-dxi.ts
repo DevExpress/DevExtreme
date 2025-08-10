@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -18,11 +18,13 @@ import { HorizontalAlignment } from 'devextreme/common';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_series } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-range-selector-series',
@@ -33,17 +35,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiRangeSelectorSeriesComponent) => ({
-                propertyName: 'series',
-                className: 'DxiRangeSelectorSeriesComponent',
-                component
-            }),
-            deps: [DxiRangeSelectorSeriesComponent],
+            provide: PROPERTY_TOKEN_series,
+            useExisting: DxiRangeSelectorSeriesComponent,
          }
     ],
 })
-export class DxiRangeSelectorSeriesComponent extends CollectionNestedOption {
+export class DxiRangeSelectorSeriesComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiRangeSelectorSeriesComponent';
+
+    
     @Input()
     get aggregation(): { calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => Record<string, any> | Array<Record<string, any>>) | undefined, enabled?: boolean, method?: ChartSeriesAggregationMethod } {
         return this._getOption('aggregation');

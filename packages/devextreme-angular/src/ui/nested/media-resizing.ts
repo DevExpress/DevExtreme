@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorMediaResizing } from './base/html-editor-media-resizing';
+
+
 
 @Component({
     selector: 'dxo-media-resizing',
@@ -35,7 +37,10 @@ import { DxoHtmlEditorMediaResizing } from './base/html-editor-media-resizing';
         'enabled'
     ]
 })
-export class DxoMediaResizingComponent extends DxoHtmlEditorMediaResizing implements OnDestroy, OnInit {
+export class DxoMediaResizingComponent extends DxoHtmlEditorMediaResizing implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoMediaResizingComponent';
+
+    
 
     protected get _optionPath() {
         return 'mediaResizing';

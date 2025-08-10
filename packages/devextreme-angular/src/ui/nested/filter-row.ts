@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoGanttFilterRow } from './base/gantt-filter-row';
+
+
 
 @Component({
     selector: 'dxo-filter-row',
@@ -42,7 +44,10 @@ import { DxoGanttFilterRow } from './base/gantt-filter-row';
         'visible'
     ]
 })
-export class DxoFilterRowComponent extends DxoGanttFilterRow implements OnDestroy, OnInit {
+export class DxoFilterRowComponent extends DxoGanttFilterRow implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoFilterRowComponent';
+
+    
 
     protected get _optionPath() {
         return 'filterRow';

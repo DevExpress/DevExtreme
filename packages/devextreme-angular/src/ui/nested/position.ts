@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoPositionConfig } from './base/position-config';
+
+
 
 @Component({
     selector: 'dxo-position',
@@ -40,7 +42,10 @@ import { DxoPositionConfig } from './base/position-config';
         'offset'
     ]
 })
-export class DxoPositionComponent extends DxoPositionConfig implements OnDestroy, OnInit {
+export class DxoPositionComponent extends DxoPositionConfig implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoPositionComponent';
+
+    
 
     protected get _optionPath() {
         return 'position';

@@ -12,7 +12,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -25,9 +25,11 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
 
 @Component({
     selector: 'dxo-card-view-card-cover',
@@ -41,7 +43,10 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoCardViewCardCoverComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxoCardViewCardCoverComponent';
+
+    
     @Input()
     get altExpr(): ((data: any) => string) | string {
         return this._getOption('altExpr');

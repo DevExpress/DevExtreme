@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-config';
+
+
 
 @Component({
     selector: 'dxo-search',
@@ -38,7 +40,10 @@ import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-confi
         'searchExpr'
     ]
 })
-export class DxoSearchComponent extends DxoColumnChooserSearchConfig implements OnDestroy, OnInit {
+export class DxoSearchComponent extends DxoColumnChooserSearchConfig implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoSearchComponent';
+
+    
 
     protected get _optionPath() {
         return 'search';

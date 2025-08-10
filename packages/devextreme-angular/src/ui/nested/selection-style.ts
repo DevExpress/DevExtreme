@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -22,6 +22,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-selection-style',
     standalone: true,
@@ -32,7 +34,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoSelectionStyleComponent';
+
+    
     @Input()
     get border(): { color?: string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean | undefined, width?: number | undefined } | { color?: string | undefined, width?: number | undefined } {
         return this._getOption('border');

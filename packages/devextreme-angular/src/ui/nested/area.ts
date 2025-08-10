@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoChartCommonSeriesSettings } from './base/chart-common-series-settings';
+
+
 
 @Component({
     selector: 'dxo-area',
@@ -95,7 +97,10 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
         'closed'
     ]
 })
-export class DxoAreaComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit {
+export class DxoAreaComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoAreaComponent';
+
+    
 
     protected get _optionPath() {
         return 'area';

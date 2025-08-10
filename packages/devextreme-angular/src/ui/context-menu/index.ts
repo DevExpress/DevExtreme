@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/context_menu';
@@ -39,7 +41,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -74,6 +77,11 @@ import { DxoContextMenuShowEventModule } from 'devextreme-angular/ui/context-men
 import { DxoContextMenuShowSubmenuModeModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoContextMenuToModule } from 'devextreme-angular/ui/context-menu/nested';
 
+import { 
+      PROPERTY_TOKEN_items,
+} from 'devextreme-angular/ui/nested/tokens';
+
+
 
 /**
  * [descr:dxContextMenu]
@@ -93,6 +101,13 @@ import { DxoContextMenuToModule } from 'devextreme-angular/ui/context-menu/neste
     ]
 })
 export class DxContextMenuComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxContextMenuComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+
     instance: DxContextMenu<TKey> = null;
 
     /**
@@ -803,16 +818,16 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

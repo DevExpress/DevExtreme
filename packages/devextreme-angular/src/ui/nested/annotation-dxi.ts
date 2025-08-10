@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -14,11 +14,13 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiChartAnnotationConfig } from './base/chart-annotation-config-dxi';
+
+import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-annotation',
@@ -29,13 +31,8 @@ import { DxiChartAnnotationConfig } from './base/chart-annotation-config-dxi';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiAnnotationComponent) => ({
-                propertyName: 'annotations',
-                className: 'DxiAnnotationComponent',
-                component
-            }),
-            deps: [DxiAnnotationComponent],
+            provide: PROPERTY_TOKEN_annotations,
+            useExisting: DxiAnnotationComponent,
          }
     ],
     inputs: [
@@ -77,7 +74,10 @@ import { DxiChartAnnotationConfig } from './base/chart-annotation-config-dxi';
         'coordinates'
     ]
 })
-export class DxiAnnotationComponent extends DxiChartAnnotationConfig {
+export class DxiAnnotationComponent extends DxiChartAnnotationConfig { 
+    protected _dxClassName = 'DxiAnnotationComponent';
+
+    
 
     protected get _optionPath() {
         return 'annotations';

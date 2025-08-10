@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -19,11 +19,13 @@ import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_fields } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-tree-list-field',
@@ -34,17 +36,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiTreeListFieldComponent) => ({
-                propertyName: 'fields',
-                className: 'DxiTreeListFieldComponent',
-                component
-            }),
-            deps: [DxiTreeListFieldComponent],
+            provide: PROPERTY_TOKEN_fields,
+            useExisting: DxiTreeListFieldComponent,
          }
     ],
 })
-export class DxiTreeListFieldComponent extends CollectionNestedOption {
+export class DxiTreeListFieldComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiTreeListFieldComponent';
+
+    
     @Input()
     get calculateFilterExpression(): ((filterValue: any, selectedFilterOperation: string) => string | Function | Array<any>) {
         return this._getOption('calculateFilterExpression');

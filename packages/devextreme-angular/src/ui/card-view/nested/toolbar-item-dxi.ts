@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -21,15 +21,17 @@ import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import { PredefinedToolbarItem } from 'devextreme/ui/card_view';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-card-view-toolbar-item',
@@ -41,18 +43,16 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiCardViewToolbarItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiCardViewToolbarItemComponent',
-                component
-            }),
-            deps: [DxiCardViewToolbarItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiCardViewToolbarItemComponent,
          }
     ],
 })
 export class DxiCardViewToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiCardViewToolbarItemComponent';
+
+    
     @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');

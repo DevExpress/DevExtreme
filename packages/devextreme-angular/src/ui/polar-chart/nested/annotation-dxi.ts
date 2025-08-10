@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -20,15 +20,17 @@ import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextr
 import { dxPolarChartAnnotationConfig } from 'devextreme/viz/polar_chart';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-polar-chart-annotation',
@@ -40,18 +42,16 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiPolarChartAnnotationComponent) => ({
-                propertyName: 'annotations',
-                className: 'DxiPolarChartAnnotationComponent',
-                component
-            }),
-            deps: [DxiPolarChartAnnotationComponent],
+            provide: PROPERTY_TOKEN_annotations,
+            useExisting: DxiPolarChartAnnotationComponent,
          }
     ],
 })
 export class DxiPolarChartAnnotationComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiPolarChartAnnotationComponent';
+
+    
     @Input()
     get allowDragging(): boolean {
         return this._getOption('allowDragging');

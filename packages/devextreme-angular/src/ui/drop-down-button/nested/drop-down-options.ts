@@ -10,7 +10,9 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -29,8 +31,14 @@ import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-drop-down-button-drop-down-options',
@@ -42,7 +50,14 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoDropDownButtonDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoDropDownButtonDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoDropDownButtonDropDownOptionsComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('toolbarItems', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');

@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -36,7 +38,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -91,6 +94,11 @@ import { DxoLinearGaugeTooltipModule } from 'devextreme-angular/ui/linear-gauge/
 import { DxoLinearGaugeValueIndicatorModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/nested';
 
+import { 
+      PROPERTY_TOKEN_ranges,
+} from 'devextreme-angular/ui/nested/tokens';
+
+
 
 /**
  * [descr:dxLinearGauge]
@@ -111,6 +119,13 @@ import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/ne
     ]
 })
 export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxLinearGaugeComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_ranges)
+    set _rangesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('ranges', value);
+    }
+
     instance: DxLinearGauge = null;
 
     /**

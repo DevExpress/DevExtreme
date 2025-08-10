@@ -18,7 +18,9 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -43,7 +45,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -81,6 +84,12 @@ import { DxoDateRangeBoxShowModule } from 'devextreme-angular/ui/date-range-box/
 import { DxoDateRangeBoxToModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxiDateRangeBoxToolbarItemModule } from 'devextreme-angular/ui/date-range-box/nested';
 
+import { 
+      PROPERTY_TOKEN_buttons,
+      PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/ui/nested/tokens';
+
+
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -107,6 +116,18 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+protected _dxClassName = 'DxDateRangeBoxComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('buttons', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('toolbarItems', value);
+    }
+
     instance: DxDateRangeBox = null;
 
     /**
@@ -1499,16 +1520,16 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('buttons').push('DxiButtonComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

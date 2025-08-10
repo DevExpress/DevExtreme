@@ -8,7 +8,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -21,8 +23,15 @@ import { SummaryType } from 'devextreme/common/grids';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_groupItems,
+    PROPERTY_TOKEN_totalItems,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-summary',
@@ -34,7 +43,18 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoSummaryComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_groupItems)
+    set _groupItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('groupItems', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_totalItems)
+    set _totalItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('totalItems', value);
+    }
+    
     @Input()
     get calculateCustomSummary(): Function {
         return this._getOption('calculateCustomSummary');

@@ -18,7 +18,9 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -38,7 +40,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiCustomOperationModule } from 'devextreme-angular/ui/nested';
@@ -54,6 +57,12 @@ import { DxoFilterBuilderFilterOperationDescriptionsModule } from 'devextreme-an
 import { DxoFilterBuilderFormatModule } from 'devextreme-angular/ui/filter-builder/nested';
 import { DxoFilterBuilderGroupOperationDescriptionsModule } from 'devextreme-angular/ui/filter-builder/nested';
 import { DxoFilterBuilderLookupModule } from 'devextreme-angular/ui/filter-builder/nested';
+
+import { 
+      PROPERTY_TOKEN_customOperations,
+      PROPERTY_TOKEN_fields,
+} from 'devextreme-angular/ui/nested/tokens';
+
 
 
 
@@ -81,6 +90,18 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+protected _dxClassName = 'DxFilterBuilderComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_customOperations)
+    set _customOperationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('customOperations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_fields)
+    set _fieldsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('fields', value);
+    }
+
     instance: DxFilterBuilder = null;
 
     /**
@@ -553,18 +574,18 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('customOperations').push('DxiCustomOperationComponent');
     
         getLegacyClassNamesForPropertyName('fields').push('DxiFieldComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
+
+
 
 @Component({
     selector: 'dxo-scrolling',
@@ -42,7 +44,10 @@ import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
         'useNative'
     ]
 })
-export class DxoScrollingComponent extends DxoSchedulerScrolling implements OnDestroy, OnInit {
+export class DxoScrollingComponent extends DxoSchedulerScrolling implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoScrollingComponent';
+
+    
 
     protected get _optionPath() {
         return 'scrolling';

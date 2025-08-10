@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/toolbar';
@@ -36,12 +38,18 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiToolbarItemModule } from 'devextreme-angular/ui/toolbar/nested';
+
+import { 
+      PROPERTY_TOKEN_items,
+} from 'devextreme-angular/ui/nested/tokens';
+
 
 
 /**
@@ -62,6 +70,13 @@ import { DxiToolbarItemModule } from 'devextreme-angular/ui/toolbar/nested';
     ]
 })
 export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxToolbarComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+
     instance: DxToolbar<TItem, TKey> = null;
 
     /**
@@ -412,16 +427,16 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

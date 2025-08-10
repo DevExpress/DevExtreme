@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -16,11 +16,13 @@ import { dxFilterBuilderField, FieldInfo } from 'devextreme/ui/filter_builder';
 import { DataType } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-data-grid-custom-operation',
@@ -31,17 +33,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiDataGridCustomOperationComponent) => ({
-                propertyName: 'customOperations',
-                className: 'DxiDataGridCustomOperationComponent',
-                component
-            }),
-            deps: [DxiDataGridCustomOperationComponent],
+            provide: PROPERTY_TOKEN_customOperations,
+            useExisting: DxiDataGridCustomOperationComponent,
          }
     ],
 })
-export class DxiDataGridCustomOperationComponent extends CollectionNestedOption {
+export class DxiDataGridCustomOperationComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiDataGridCustomOperationComponent';
+
+    
     @Input()
     get calculateFilterExpression(): ((filterValue: any, field: dxFilterBuilderField) => string | Function | Array<any>) {
         return this._getOption('calculateFilterExpression');

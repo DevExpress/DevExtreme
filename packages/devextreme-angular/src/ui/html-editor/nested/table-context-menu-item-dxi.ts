@@ -10,7 +10,9 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -19,15 +21,20 @@ import { DOCUMENT } from '@angular/common';
 import { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem } from 'devextreme/ui/html_editor';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxi-html-editor-table-context-menu-item',
@@ -39,18 +46,20 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiHtmlEditorTableContextMenuItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiHtmlEditorTableContextMenuItemComponent',
-                component
-            }),
-            deps: [DxiHtmlEditorTableContextMenuItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiHtmlEditorTableContextMenuItemComponent,
          }
     ],
 })
 export class DxiHtmlEditorTableContextMenuItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiHtmlEditorTableContextMenuItemComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+    
     @Input()
     get beginGroup(): boolean {
         return this._getOption('beginGroup');

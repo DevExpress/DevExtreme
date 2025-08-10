@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -22,6 +22,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-chart-common-series-settings-hover-style',
     standalone: true,
@@ -32,7 +34,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoChartCommonSeriesSettingsHoverStyleComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoChartCommonSeriesSettingsHoverStyleComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoChartCommonSeriesSettingsHoverStyleComponent';
+
+    
     @Input()
     get border(): { color?: string | undefined, dashStyle?: DashStyle | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');

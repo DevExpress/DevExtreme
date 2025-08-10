@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -17,11 +17,13 @@ import { Format } from 'devextreme/common/core/localization';
 import { PolarChartSeriesType } from 'devextreme/viz/polar_chart';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_series } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-polar-chart-series',
@@ -32,17 +34,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiPolarChartSeriesComponent) => ({
-                propertyName: 'series',
-                className: 'DxiPolarChartSeriesComponent',
-                component
-            }),
-            deps: [DxiPolarChartSeriesComponent],
+            provide: PROPERTY_TOKEN_series,
+            useExisting: DxiPolarChartSeriesComponent,
          }
     ],
 })
-export class DxiPolarChartSeriesComponent extends CollectionNestedOption {
+export class DxiPolarChartSeriesComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiPolarChartSeriesComponent';
+
+    
     @Input()
     get argumentField(): string {
         return this._getOption('argumentField');

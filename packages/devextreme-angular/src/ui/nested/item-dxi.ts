@@ -10,7 +10,9 @@ import {
     Renderer2,
     Inject,
     AfterViewInit,
-    SkipSelf
+    SkipSelf,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -18,15 +20,24 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxiButtonGroupItem } from './base/button-group-item-dxi';
+
+
+import {
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_tabs,
+    PROPERTY_TOKEN_commands,
+    PROPERTY_TOKEN_location,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxi-item',
@@ -38,13 +49,8 @@ import { DxiButtonGroupItem } from './base/button-group-item-dxi';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiItemComponent',
-                component
-            }),
-            deps: [DxiItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiItemComponent,
          }
     ],
     inputs: [
@@ -133,7 +139,30 @@ import { DxiButtonGroupItem } from './base/button-group-item-dxi';
     ]
 })
 export class DxiItemComponent extends DxiButtonGroupItem implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiItemComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('validationRules', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('tabs', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('commands', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_location)
+    set _locationNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('location', value);
+    }
+    
 
     protected get _optionPath() {
         return 'items';

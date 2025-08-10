@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -14,11 +14,13 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiChartSeries } from './base/chart-series-dxi';
+
+import { PROPERTY_TOKEN_series } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-series',
@@ -29,13 +31,8 @@ import { DxiChartSeries } from './base/chart-series-dxi';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiSeriesComponent) => ({
-                propertyName: 'series',
-                className: 'DxiSeriesComponent',
-                component
-            }),
-            deps: [DxiSeriesComponent],
+            provide: PROPERTY_TOKEN_series,
+            useExisting: DxiSeriesComponent,
          }
     ],
     inputs: [
@@ -85,7 +82,10 @@ import { DxiChartSeries } from './base/chart-series-dxi';
         'closed'
     ]
 })
-export class DxiSeriesComponent extends DxiChartSeries {
+export class DxiSeriesComponent extends DxiChartSeries { 
+    protected _dxClassName = 'DxiSeriesComponent';
+
+    
 
     protected get _optionPath() {
         return 'series';

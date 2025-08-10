@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -15,11 +15,13 @@ import {
 import { ComparisonOperator, ValidationRuleType } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-card-view-compare-rule',
@@ -30,17 +32,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiCardViewCompareRuleComponent) => ({
-                propertyName: 'validationRules',
-                className: 'DxiCardViewCompareRuleComponent',
-                component
-            }),
-            deps: [DxiCardViewCompareRuleComponent],
+            provide: PROPERTY_TOKEN_validationRules,
+            useExisting: DxiCardViewCompareRuleComponent,
          }
     ],
 })
-export class DxiCardViewCompareRuleComponent extends CollectionNestedOption {
+export class DxiCardViewCompareRuleComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiCardViewCompareRuleComponent';
+
+    
     @Input()
     get comparisonTarget(): Function {
         return this._getOption('comparisonTarget');

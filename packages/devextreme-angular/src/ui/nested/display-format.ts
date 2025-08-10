@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFormat } from './base/format';
+
+
 
 @Component({
     selector: 'dxo-display-format',
@@ -39,7 +41,10 @@ import { DxoFormat } from './base/format';
         'useCurrencyAccountingStyle'
     ]
 })
-export class DxoDisplayFormatComponent extends DxoFormat implements OnDestroy, OnInit {
+export class DxoDisplayFormatComponent extends DxoFormat implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoDisplayFormatComponent';
+
+    
 
     protected get _optionPath() {
         return 'displayFormat';

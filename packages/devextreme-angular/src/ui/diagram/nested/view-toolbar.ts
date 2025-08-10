@@ -8,7 +8,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -19,8 +21,14 @@ import { Command, CustomCommand } from 'devextreme/ui/diagram';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_commands,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-diagram-view-toolbar',
@@ -32,7 +40,14 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoDiagramViewToolbarComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoDiagramViewToolbarComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoDiagramViewToolbarComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('commands', value);
+    }
+    
     @Input()
     get commands(): Array<Command | CustomCommand> {
         return this._getOption('commands');

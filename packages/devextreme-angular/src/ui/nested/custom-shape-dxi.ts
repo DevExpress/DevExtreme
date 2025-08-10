@@ -10,7 +10,9 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -19,15 +21,21 @@ import { DOCUMENT } from '@angular/common';
 import { ShapeType } from 'devextreme/ui/diagram';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_customShapes } from 'devextreme-angular/ui/nested/tokens';
+
+import {
+    PROPERTY_TOKEN_connectionPoints,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxi-custom-shape',
@@ -39,18 +47,20 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiCustomShapeComponent) => ({
-                propertyName: 'customShapes',
-                className: 'DxiCustomShapeComponent',
-                component
-            }),
-            deps: [DxiCustomShapeComponent],
+            provide: PROPERTY_TOKEN_customShapes,
+            useExisting: DxiCustomShapeComponent,
          }
     ],
 })
 export class DxiCustomShapeComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiCustomShapeComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_connectionPoints)
+    set _connectionPointsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('connectionPoints', value);
+    }
+    
     @Input()
     get allowEditImage(): boolean {
         return this._getOption('allowEditImage');

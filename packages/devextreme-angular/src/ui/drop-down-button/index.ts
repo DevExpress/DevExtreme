@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -37,7 +39,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/nested';
@@ -69,6 +72,12 @@ import { DxoDropDownButtonShowModule } from 'devextreme-angular/ui/drop-down-but
 import { DxoDropDownButtonToModule } from 'devextreme-angular/ui/drop-down-button/nested';
 import { DxiDropDownButtonToolbarItemModule } from 'devextreme-angular/ui/drop-down-button/nested';
 
+import { 
+      PROPERTY_TOKEN_items,
+      PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/ui/nested/tokens';
+
+
 
 /**
  * [descr:dxDropDownButton]
@@ -88,6 +97,18 @@ import { DxiDropDownButtonToolbarItemModule } from 'devextreme-angular/ui/drop-d
     ]
 })
 export class DxDropDownButtonComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxDropDownButtonComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('toolbarItems', value);
+    }
+
     instance: DxDropDownButton = null;
 
     /**
@@ -830,16 +851,16 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

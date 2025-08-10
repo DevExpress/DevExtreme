@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -14,11 +14,13 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_stripLines } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-gantt-strip-line',
@@ -29,17 +31,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiGanttStripLineComponent) => ({
-                propertyName: 'stripLines',
-                className: 'DxiGanttStripLineComponent',
-                component
-            }),
-            deps: [DxiGanttStripLineComponent],
+            provide: PROPERTY_TOKEN_stripLines,
+            useExisting: DxiGanttStripLineComponent,
          }
     ],
 })
-export class DxiGanttStripLineComponent extends CollectionNestedOption {
+export class DxiGanttStripLineComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiGanttStripLineComponent';
+
+    
     @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');

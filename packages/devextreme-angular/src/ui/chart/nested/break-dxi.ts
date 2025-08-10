@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -14,11 +14,13 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_breaks } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-chart-break',
@@ -29,17 +31,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiChartBreakComponent) => ({
-                propertyName: 'breaks',
-                className: 'DxiChartBreakComponent',
-                component
-            }),
-            deps: [DxiChartBreakComponent],
+            provide: PROPERTY_TOKEN_breaks,
+            useExisting: DxiChartBreakComponent,
          }
     ],
 })
-export class DxiChartBreakComponent extends CollectionNestedOption {
+export class DxiChartBreakComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiChartBreakComponent';
+
+    
     @Input()
     get endValue(): Date | number | string | undefined {
         return this._getOption('endValue');

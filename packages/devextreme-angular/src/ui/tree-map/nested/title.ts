@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -23,6 +23,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-tree-map-title',
     standalone: true,
@@ -33,7 +35,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoTreeMapTitleComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoTreeMapTitleComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoTreeMapTitleComponent';
+
+    
     @Input()
     get font(): Font {
         return this._getOption('font');

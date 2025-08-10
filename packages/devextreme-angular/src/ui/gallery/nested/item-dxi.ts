@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -18,15 +18,17 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-gallery-item',
@@ -38,18 +40,16 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiGalleryItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiGalleryItemComponent',
-                component
-            }),
-            deps: [DxiGalleryItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiGalleryItemComponent,
          }
     ],
 })
 export class DxiGalleryItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiGalleryItemComponent';
+
+    
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');

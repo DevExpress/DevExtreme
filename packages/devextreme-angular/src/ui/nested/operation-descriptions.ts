@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoGanttFilterRowOperationDescriptions } from './base/gantt-filter-row-operation-descriptions';
+
+
 
 @Component({
     selector: 'dxo-operation-descriptions',
@@ -44,7 +46,10 @@ import { DxoGanttFilterRowOperationDescriptions } from './base/gantt-filter-row-
         'startsWith'
     ]
 })
-export class DxoOperationDescriptionsComponent extends DxoGanttFilterRowOperationDescriptions implements OnDestroy, OnInit {
+export class DxoOperationDescriptionsComponent extends DxoGanttFilterRowOperationDescriptions implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoOperationDescriptionsComponent';
+
+    
 
     protected get _optionPath() {
         return 'operationDescriptions';

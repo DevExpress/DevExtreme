@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -20,15 +20,17 @@ import { NativeEventInfo } from 'devextreme/common/core/events';
 import { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-action-sheet-item',
@@ -40,18 +42,16 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiActionSheetItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiActionSheetItemComponent',
-                component
-            }),
-            deps: [DxiActionSheetItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiActionSheetItemComponent,
          }
     ],
 })
 export class DxiActionSheetItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiActionSheetItemComponent';
+
+    
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');

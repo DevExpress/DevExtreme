@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -20,15 +20,17 @@ import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-toolbar-item',
@@ -40,18 +42,16 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiToolbarItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiToolbarItemComponent',
-                component
-            }),
-            deps: [DxiToolbarItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiToolbarItemComponent,
          }
     ],
 })
 export class DxiToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiToolbarItemComponent';
+
+    
     @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');

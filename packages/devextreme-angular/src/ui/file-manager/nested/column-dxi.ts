@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -15,11 +15,13 @@ import {
 import { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_columns } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-file-manager-column',
@@ -30,17 +32,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiFileManagerColumnComponent) => ({
-                propertyName: 'columns',
-                className: 'DxiFileManagerColumnComponent',
-                component
-            }),
-            deps: [DxiFileManagerColumnComponent],
+            provide: PROPERTY_TOKEN_columns,
+            useExisting: DxiFileManagerColumnComponent,
          }
     ],
 })
-export class DxiFileManagerColumnComponent extends CollectionNestedOption {
+export class DxiFileManagerColumnComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiFileManagerColumnComponent';
+
+    
     @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');

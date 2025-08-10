@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -39,7 +41,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
@@ -163,6 +166,14 @@ import { DxoPolarChartValueErrorBarModule } from 'devextreme-angular/ui/polar-ch
 import { DxoPolarChartVisualRangeModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartWholeRangeModule } from 'devextreme-angular/ui/polar-chart/nested';
 
+import { 
+      PROPERTY_TOKEN_annotations,
+      PROPERTY_TOKEN_constantLines,
+      PROPERTY_TOKEN_series,
+      PROPERTY_TOKEN_strips,
+} from 'devextreme-angular/ui/nested/tokens';
+
+
 
 /**
  * [descr:dxPolarChart]
@@ -183,6 +194,28 @@ import { DxoPolarChartWholeRangeModule } from 'devextreme-angular/ui/polar-chart
     ]
 })
 export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxPolarChartComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_annotations)
+    set _annotationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('annotations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_constantLines)
+    set _constantLinesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('constantLines', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_series)
+    set _seriesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('series', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_strips)
+    set _stripsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('strips', value);
+    }
+
     instance: DxPolarChart = null;
 
     /**
@@ -1117,18 +1150,18 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('annotations').push('DxiAnnotationComponent');
     
         getLegacyClassNamesForPropertyName('series').push('DxiSeriesComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

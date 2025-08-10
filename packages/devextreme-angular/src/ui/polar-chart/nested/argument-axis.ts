@@ -8,7 +8,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -20,8 +22,15 @@ import { Format } from 'devextreme/common/core/localization';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_constantLines,
+    PROPERTY_TOKEN_strips,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-polar-chart-argument-axis',
@@ -33,7 +42,18 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoPolarChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoPolarChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoPolarChartArgumentAxisComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_constantLines)
+    set _constantLinesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('constantLines', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_strips)
+    set _stripsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('strips', value);
+    }
+    
     @Input()
     get allowDecimals(): boolean | undefined {
         return this._getOption('allowDecimals');

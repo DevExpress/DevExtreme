@@ -18,7 +18,9 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -47,7 +49,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoBackgroundModule } from 'devextreme-angular/ui/nested';
@@ -182,6 +185,12 @@ import { DxoRangeSelectorValueAxisModule } from 'devextreme-angular/ui/range-sel
 import { DxoRangeSelectorValueErrorBarModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorWidthModule } from 'devextreme-angular/ui/range-selector/nested';
 
+import { 
+      PROPERTY_TOKEN_breaks,
+      PROPERTY_TOKEN_series,
+} from 'devextreme-angular/ui/nested/tokens';
+
+
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -209,6 +218,18 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+protected _dxClassName = 'DxRangeSelectorComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_breaks)
+    set _breaksNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('breaks', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_series)
+    set _seriesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('series', value);
+    }
+
     instance: DxRangeSelector = null;
 
     /**

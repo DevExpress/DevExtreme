@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -22,6 +22,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-range-selector-format',
     standalone: true,
@@ -32,7 +34,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoRangeSelectorFormatComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoRangeSelectorFormatComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoRangeSelectorFormatComponent';
+
+    
     @Input()
     get currency(): string {
         return this._getOption('currency');

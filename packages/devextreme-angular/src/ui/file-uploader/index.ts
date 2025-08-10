@@ -18,7 +18,7 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -40,8 +40,10 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
+
+
 
 
 
@@ -71,6 +73,8 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxFileUploaderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+protected _dxClassName = 'DxFileUploaderComponent';
+
     instance: DxFileUploader = null;
 
     /**

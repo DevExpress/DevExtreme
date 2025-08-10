@@ -8,7 +8,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
 } from '@angular/core';
 
 
@@ -19,11 +19,13 @@ import { FilterOperation, FilterType, ColumnHeaderFilter, SelectedFilterOperatio
 import { Format } from 'devextreme/common/core/localization';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_columns } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-gantt-column',
@@ -34,17 +36,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiGanttColumnComponent) => ({
-                propertyName: 'columns',
-                className: 'DxiGanttColumnComponent',
-                component
-            }),
-            deps: [DxiGanttColumnComponent],
+            provide: PROPERTY_TOKEN_columns,
+            useExisting: DxiGanttColumnComponent,
          }
     ],
 })
-export class DxiGanttColumnComponent extends CollectionNestedOption {
+export class DxiGanttColumnComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiGanttColumnComponent';
+
+    
     @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');

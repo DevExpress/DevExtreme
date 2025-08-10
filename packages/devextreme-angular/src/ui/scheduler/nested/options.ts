@@ -10,7 +10,9 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -23,8 +25,14 @@ import { SingleMultipleOrNone, ButtonStyle } from 'devextreme/common';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-scheduler-options',
@@ -36,7 +44,14 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoSchedulerOptionsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoSchedulerOptionsComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoSchedulerOptionsComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');

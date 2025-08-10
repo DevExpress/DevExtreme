@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-chat-author',
     standalone: true,
@@ -31,7 +33,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoChatAuthorComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoChatAuthorComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoChatAuthorComponent';
+
+    
     @Input()
     get avatarAlt(): string {
         return this._getOption('avatarAlt');

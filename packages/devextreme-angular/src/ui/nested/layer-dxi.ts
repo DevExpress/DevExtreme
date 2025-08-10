@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -19,11 +19,13 @@ import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_s
 import { VectorMapLayerType, VectorMapMarkerType } from 'devextreme/viz/vector_map';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_layers } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-layer',
@@ -34,17 +36,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiLayerComponent) => ({
-                propertyName: 'layers',
-                className: 'DxiLayerComponent',
-                component
-            }),
-            deps: [DxiLayerComponent],
+            provide: PROPERTY_TOKEN_layers,
+            useExisting: DxiLayerComponent,
          }
     ],
 })
-export class DxiLayerComponent extends CollectionNestedOption {
+export class DxiLayerComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiLayerComponent';
+
+    
     @Input()
     get borderColor(): string {
         return this._getOption('borderColor');

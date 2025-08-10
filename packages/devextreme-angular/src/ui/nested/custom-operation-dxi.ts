@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -14,11 +14,13 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiFilterBuilderCustomOperation } from './base/filter-builder-custom-operation-dxi';
+
+import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-custom-operation',
@@ -29,13 +31,8 @@ import { DxiFilterBuilderCustomOperation } from './base/filter-builder-custom-op
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiCustomOperationComponent) => ({
-                propertyName: 'customOperations',
-                className: 'DxiCustomOperationComponent',
-                component
-            }),
-            deps: [DxiCustomOperationComponent],
+            provide: PROPERTY_TOKEN_customOperations,
+            useExisting: DxiCustomOperationComponent,
          }
     ],
     inputs: [
@@ -49,7 +46,10 @@ import { DxiFilterBuilderCustomOperation } from './base/filter-builder-custom-op
         'name'
     ]
 })
-export class DxiCustomOperationComponent extends DxiFilterBuilderCustomOperation {
+export class DxiCustomOperationComponent extends DxiFilterBuilderCustomOperation { 
+    protected _dxClassName = 'DxiCustomOperationComponent';
+
+    
 
     protected get _optionPath() {
         return 'customOperations';

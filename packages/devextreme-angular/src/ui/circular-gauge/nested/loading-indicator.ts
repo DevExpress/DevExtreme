@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
 } from '@angular/core';
 
 
@@ -24,6 +24,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-circular-gauge-loading-indicator',
     standalone: true,
@@ -34,7 +36,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoCircularGaugeLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoCircularGaugeLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoCircularGaugeLoadingIndicatorComponent';
+
+    
     @Input()
     get backgroundColor(): string {
         return this._getOption('backgroundColor');

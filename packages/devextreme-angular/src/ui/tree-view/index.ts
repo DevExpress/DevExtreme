@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/tree_view';
@@ -38,7 +40,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
@@ -50,6 +53,12 @@ import { DxiTreeViewButtonModule } from 'devextreme-angular/ui/tree-view/nested'
 import { DxiTreeViewItemModule } from 'devextreme-angular/ui/tree-view/nested';
 import { DxoTreeViewOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
 import { DxoTreeViewSearchEditorOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
+
+import { 
+      PROPERTY_TOKEN_buttons,
+      PROPERTY_TOKEN_items,
+} from 'devextreme-angular/ui/nested/tokens';
+
 
 
 /**
@@ -70,6 +79,18 @@ import { DxoTreeViewSearchEditorOptionsModule } from 'devextreme-angular/ui/tree
     ]
 })
 export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxTreeViewComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('buttons', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+
     instance: DxTreeView<TKey> = null;
 
     /**
@@ -1140,16 +1161,16 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

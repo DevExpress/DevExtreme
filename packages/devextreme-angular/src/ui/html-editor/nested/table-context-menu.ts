@@ -8,7 +8,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -19,8 +21,14 @@ import { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem }
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-html-editor-table-context-menu',
@@ -32,7 +40,14 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoHtmlEditorTableContextMenuComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoHtmlEditorTableContextMenuComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoHtmlEditorTableContextMenuComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+    
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');

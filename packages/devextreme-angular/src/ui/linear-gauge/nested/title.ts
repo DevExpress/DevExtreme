@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -23,6 +23,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-linear-gauge-title',
     standalone: true,
@@ -33,7 +35,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoLinearGaugeTitleComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoLinearGaugeTitleComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoLinearGaugeTitleComponent';
+
+    
     @Input()
     get font(): Font {
         return this._getOption('font');

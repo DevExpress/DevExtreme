@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
 } from '@angular/core';
 
 
@@ -26,6 +26,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-html-editor-file-uploader-options',
     standalone: true,
@@ -36,7 +38,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoHtmlEditorFileUploaderOptionsComponent';
+
+    
     @Input()
     get abortUpload(): ((file: any, uploadInfo?: UploadInfo) => any) {
         return this._getOption('abortUpload');

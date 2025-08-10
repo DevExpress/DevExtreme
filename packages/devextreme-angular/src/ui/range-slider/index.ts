@@ -18,7 +18,7 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -40,7 +40,7 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoLabelModule } from 'devextreme-angular/ui/nested';
@@ -50,6 +50,8 @@ import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxoRangeSliderFormatModule } from 'devextreme-angular/ui/range-slider/nested';
 import { DxoRangeSliderLabelModule } from 'devextreme-angular/ui/range-slider/nested';
 import { DxoRangeSliderTooltipModule } from 'devextreme-angular/ui/range-slider/nested';
+
+
 
 
 
@@ -77,6 +79,8 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxRangeSliderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+protected _dxClassName = 'DxRangeSliderComponent';
+
     instance: DxRangeSlider = null;
 
     /**

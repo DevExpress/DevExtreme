@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -22,6 +22,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-chart-series-border',
     standalone: true,
@@ -32,7 +34,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoChartSeriesBorderComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoChartSeriesBorderComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoChartSeriesBorderComponent';
+
+    
     @Input()
     get color(): string | undefined {
         return this._getOption('color');

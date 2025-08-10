@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoChartCommonSeriesSettings } from './base/chart-common-series-settings';
+
+
 
 @Component({
     selector: 'dxo-stackedbar',
@@ -95,7 +97,10 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
         'closed'
     ]
 })
-export class DxoStackedbarComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit {
+export class DxoStackedbarComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoStackedbarComponent';
+
+    
 
     protected get _optionPath() {
         return 'stackedbar';

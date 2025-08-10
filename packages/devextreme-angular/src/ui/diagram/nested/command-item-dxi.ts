@@ -6,7 +6,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -16,11 +18,16 @@ import { Command, CustomCommand } from 'devextreme/ui/diagram';
 import { ToolbarItemLocation } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxi-diagram-command-item',
@@ -31,17 +38,19 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiDiagramCommandItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiDiagramCommandItemComponent',
-                component
-            }),
-            deps: [DxiDiagramCommandItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiDiagramCommandItemComponent,
          }
     ],
 })
-export class DxiDiagramCommandItemComponent extends CollectionNestedOption {
+export class DxiDiagramCommandItemComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiDiagramCommandItemComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+    
     @Input()
     get icon(): string {
         return this._getOption('icon');

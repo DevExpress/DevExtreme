@@ -8,7 +8,9 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -21,11 +23,17 @@ import { Format } from 'devextreme/common/core/localization';
 import { dxFormSimpleItem } from 'devextreme/ui/form';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_columns } from 'devextreme-angular/ui/nested/tokens';
+
+import {
+    PROPERTY_TOKEN_validationRules,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxi-card-view-column',
@@ -36,17 +44,19 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiCardViewColumnComponent) => ({
-                propertyName: 'columns',
-                className: 'DxiCardViewColumnComponent',
-                component
-            }),
-            deps: [DxiCardViewColumnComponent],
+            provide: PROPERTY_TOKEN_columns,
+            useExisting: DxiCardViewColumnComponent,
          }
     ],
 })
-export class DxiCardViewColumnComponent extends CollectionNestedOption {
+export class DxiCardViewColumnComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiCardViewColumnComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('validationRules', value);
+    }
+    
     @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');

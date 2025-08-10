@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -15,11 +15,13 @@ import {
 import { ChartsColor } from 'devextreme/common/charts';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_ranges } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-range',
@@ -30,17 +32,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiRangeComponent) => ({
-                propertyName: 'ranges',
-                className: 'DxiRangeComponent',
-                component
-            }),
-            deps: [DxiRangeComponent],
+            provide: PROPERTY_TOKEN_ranges,
+            useExisting: DxiRangeComponent,
          }
     ],
 })
-export class DxiRangeComponent extends CollectionNestedOption {
+export class DxiRangeComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiRangeComponent';
+
+    
     @Input()
     get color(): ChartsColor | string {
         return this._getOption('color');

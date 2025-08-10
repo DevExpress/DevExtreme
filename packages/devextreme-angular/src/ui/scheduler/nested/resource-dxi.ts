@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -17,11 +17,13 @@ import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_resources } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-scheduler-resource',
@@ -32,17 +34,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiSchedulerResourceComponent) => ({
-                propertyName: 'resources',
-                className: 'DxiSchedulerResourceComponent',
-                component
-            }),
-            deps: [DxiSchedulerResourceComponent],
+            provide: PROPERTY_TOKEN_resources,
+            useExisting: DxiSchedulerResourceComponent,
          }
     ],
 })
-export class DxiSchedulerResourceComponent extends CollectionNestedOption {
+export class DxiSchedulerResourceComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiSchedulerResourceComponent';
+
+    
     @Input()
     get allowMultiple(): boolean {
         return this._getOption('allowMultiple');

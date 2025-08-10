@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/list';
@@ -39,7 +41,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoItemDraggingModule } from 'devextreme-angular/ui/nested';
@@ -57,6 +60,13 @@ import { DxoListItemDraggingModule } from 'devextreme-angular/ui/list/nested';
 import { DxiListMenuItemModule } from 'devextreme-angular/ui/list/nested';
 import { DxoListOptionsModule } from 'devextreme-angular/ui/list/nested';
 import { DxoListSearchEditorOptionsModule } from 'devextreme-angular/ui/list/nested';
+
+import { 
+      PROPERTY_TOKEN_buttons,
+      PROPERTY_TOKEN_items,
+      PROPERTY_TOKEN_menuItems,
+} from 'devextreme-angular/ui/nested/tokens';
+
 
 
 /**
@@ -77,6 +87,23 @@ import { DxoListSearchEditorOptionsModule } from 'devextreme-angular/ui/list/nes
     ]
 })
 export class DxListComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxListComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('buttons', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_menuItems)
+    set _menuItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('menuItems', value);
+    }
+
     instance: DxList<TItem, TKey> = null;
 
     /**
@@ -1335,18 +1362,18 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
     
         getLegacyClassNamesForPropertyName('menuItems').push('DxiMenuItemComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -17,11 +17,13 @@ import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import { FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_fileSelectionItems } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-file-manager-file-selection-item',
@@ -32,17 +34,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiFileManagerFileSelectionItemComponent) => ({
-                propertyName: 'fileSelectionItems',
-                className: 'DxiFileManagerFileSelectionItemComponent',
-                component
-            }),
-            deps: [DxiFileManagerFileSelectionItemComponent],
+            provide: PROPERTY_TOKEN_fileSelectionItems,
+            useExisting: DxiFileManagerFileSelectionItemComponent,
          }
     ],
 })
-export class DxiFileManagerFileSelectionItemComponent extends CollectionNestedOption {
+export class DxiFileManagerFileSelectionItemComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiFileManagerFileSelectionItemComponent';
+
+    
     @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');

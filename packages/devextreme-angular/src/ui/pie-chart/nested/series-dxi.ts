@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -17,11 +17,13 @@ import { PieChartSeriesInteractionMode, SmallValuesGroupingMode } from 'devextre
 import { Format } from 'devextreme/common/core/localization';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_series } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-pie-chart-series',
@@ -32,17 +34,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiPieChartSeriesComponent) => ({
-                propertyName: 'series',
-                className: 'DxiPieChartSeriesComponent',
-                component
-            }),
-            deps: [DxiPieChartSeriesComponent],
+            provide: PROPERTY_TOKEN_series,
+            useExisting: DxiPieChartSeriesComponent,
          }
     ],
 })
-export class DxiPieChartSeriesComponent extends CollectionNestedOption {
+export class DxiPieChartSeriesComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiPieChartSeriesComponent';
+
+    
     @Input()
     get argumentField(): string {
         return this._getOption('argumentField');

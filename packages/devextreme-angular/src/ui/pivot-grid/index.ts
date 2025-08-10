@@ -16,7 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -36,7 +36,7 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoExportModule } from 'devextreme-angular/ui/nested';
@@ -64,6 +64,8 @@ import { DxoPivotGridStateStoringModule } from 'devextreme-angular/ui/pivot-grid
 import { DxoPivotGridTextsModule } from 'devextreme-angular/ui/pivot-grid/nested';
 
 
+
+
 /**
  * [descr:dxPivotGrid]
 
@@ -82,6 +84,8 @@ import { DxoPivotGridTextsModule } from 'devextreme-angular/ui/pivot-grid/nested
     ]
 })
 export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxPivotGridComponent';
+
     instance: DxPivotGrid = null;
 
     /**

@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -16,11 +16,13 @@ import { SummaryType } from 'devextreme/common/grids';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_groupItems } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-data-grid-group-item',
@@ -31,17 +33,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiDataGridGroupItemComponent) => ({
-                propertyName: 'groupItems',
-                className: 'DxiDataGridGroupItemComponent',
-                component
-            }),
-            deps: [DxiDataGridGroupItemComponent],
+            provide: PROPERTY_TOKEN_groupItems,
+            useExisting: DxiDataGridGroupItemComponent,
          }
     ],
 })
-export class DxiDataGridGroupItemComponent extends CollectionNestedOption {
+export class DxiDataGridGroupItemComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiDataGridGroupItemComponent';
+
+    
     @Input()
     get alignByColumn(): boolean {
         return this._getOption('alignByColumn');

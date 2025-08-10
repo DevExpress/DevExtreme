@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -15,11 +15,13 @@ import {
 import { ValidationRuleType, ComparisonOperator } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-tree-list-validation-rule',
@@ -30,17 +32,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiTreeListValidationRuleComponent) => ({
-                propertyName: 'validationRules',
-                className: 'DxiTreeListValidationRuleComponent',
-                component
-            }),
-            deps: [DxiTreeListValidationRuleComponent],
+            provide: PROPERTY_TOKEN_validationRules,
+            useExisting: DxiTreeListValidationRuleComponent,
          }
     ],
 })
-export class DxiTreeListValidationRuleComponent extends CollectionNestedOption {
+export class DxiTreeListValidationRuleComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiTreeListValidationRuleComponent';
+
+    
     @Input()
     get message(): string {
         return this._getOption('message');

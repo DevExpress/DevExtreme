@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -20,15 +20,17 @@ import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextr
 import { dxPieChartAnnotationConfig, PieChartAnnotationLocation } from 'devextreme/viz/pie_chart';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-pie-chart-annotation',
@@ -40,18 +42,16 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiPieChartAnnotationComponent) => ({
-                propertyName: 'annotations',
-                className: 'DxiPieChartAnnotationComponent',
-                component
-            }),
-            deps: [DxiPieChartAnnotationComponent],
+            provide: PROPERTY_TOKEN_annotations,
+            useExisting: DxiPieChartAnnotationComponent,
          }
     ],
 })
 export class DxiPieChartAnnotationComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiPieChartAnnotationComponent';
+
+    
     @Input()
     get allowDragging(): boolean {
         return this._getOption('allowDragging');

@@ -10,7 +10,9 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -23,8 +25,14 @@ import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_changes,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-editing',
@@ -36,7 +44,14 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoEditingComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoEditingComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoEditingComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_changes)
+    set _changesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('changes', value);
+    }
+    
     @Input()
     get allowDeleting(): boolean | Function {
         return this._getOption('allowDeleting');

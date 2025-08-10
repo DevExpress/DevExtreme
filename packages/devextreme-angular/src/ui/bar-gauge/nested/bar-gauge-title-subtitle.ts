@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -22,6 +22,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-bar-gauge-bar-gauge-title-subtitle',
     standalone: true,
@@ -32,7 +34,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoBarGaugeBarGaugeTitleSubtitleComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoBarGaugeBarGaugeTitleSubtitleComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoBarGaugeBarGaugeTitleSubtitleComponent';
+
+    
     @Input()
     get font(): Font {
         return this._getOption('font');

@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -14,11 +14,13 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_cols } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-col',
@@ -29,17 +31,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiColComponent) => ({
-                propertyName: 'cols',
-                className: 'DxiColComponent',
-                component
-            }),
-            deps: [DxiColComponent],
+            provide: PROPERTY_TOKEN_cols,
+            useExisting: DxiColComponent,
          }
     ],
 })
-export class DxiColComponent extends CollectionNestedOption {
+export class DxiColComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiColComponent';
+
+    
     @Input()
     get baseSize(): number | string {
         return this._getOption('baseSize');

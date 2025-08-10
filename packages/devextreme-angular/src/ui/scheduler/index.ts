@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -40,7 +42,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAppointmentDraggingModule } from 'devextreme-angular/ui/nested';
@@ -59,6 +62,13 @@ import { DxoSchedulerScrollingModule } from 'devextreme-angular/ui/scheduler/nes
 import { DxoSchedulerToolbarModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerToolbarItemModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerViewModule } from 'devextreme-angular/ui/scheduler/nested';
+
+import { 
+      PROPERTY_TOKEN_items,
+      PROPERTY_TOKEN_resources,
+      PROPERTY_TOKEN_views,
+} from 'devextreme-angular/ui/nested/tokens';
+
 
 
 /**
@@ -79,6 +89,23 @@ import { DxiSchedulerViewModule } from 'devextreme-angular/ui/scheduler/nested';
     ]
 })
 export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxSchedulerComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_resources)
+    set _resourcesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('resources', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_views)
+    set _viewsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('views', value);
+    }
+
     instance: DxScheduler = null;
 
     /**
@@ -1451,18 +1478,18 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('resources').push('DxiResourceComponent');
     
         getLegacyClassNamesForPropertyName('views').push('DxiViewComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

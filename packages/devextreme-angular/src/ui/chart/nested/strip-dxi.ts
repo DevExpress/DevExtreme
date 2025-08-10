@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -16,11 +16,13 @@ import { Font } from 'devextreme/common/charts';
 import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_strips } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-chart-strip',
@@ -31,17 +33,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiChartStripComponent) => ({
-                propertyName: 'strips',
-                className: 'DxiChartStripComponent',
-                component
-            }),
-            deps: [DxiChartStripComponent],
+            provide: PROPERTY_TOKEN_strips,
+            useExisting: DxiChartStripComponent,
          }
     ],
 })
-export class DxiChartStripComponent extends CollectionNestedOption {
+export class DxiChartStripComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiChartStripComponent';
+
+    
     @Input()
     get color(): string | undefined {
         return this._getOption('color');

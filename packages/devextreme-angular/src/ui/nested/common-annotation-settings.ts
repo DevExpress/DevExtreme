@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-config';
+
+
 
 @Component({
     selector: 'dxo-common-annotation-settings',
@@ -68,7 +70,10 @@ import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-c
         'coordinates'
     ]
 })
-export class DxoCommonAnnotationSettingsComponent extends DxoChartCommonAnnotationConfig implements OnDestroy, OnInit {
+export class DxoCommonAnnotationSettingsComponent extends DxoChartCommonAnnotationConfig implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoCommonAnnotationSettingsComponent';
+
+    
 
     protected get _optionPath() {
         return 'commonAnnotationSettings';

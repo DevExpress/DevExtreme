@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoColumnChooser } from './base/column-chooser';
+
+
 
 @Component({
     selector: 'dxo-column-chooser',
@@ -46,7 +48,10 @@ import { DxoColumnChooser } from './base/column-chooser';
         'width'
     ]
 })
-export class DxoColumnChooserComponent extends DxoColumnChooser implements OnDestroy, OnInit {
+export class DxoColumnChooserComponent extends DxoColumnChooser implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoColumnChooserComponent';
+
+    
 
     protected get _optionPath() {
         return 'columnChooser';

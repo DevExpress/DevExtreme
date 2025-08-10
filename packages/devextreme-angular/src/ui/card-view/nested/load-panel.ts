@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
 } from '@angular/core';
 
 
@@ -27,6 +27,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-card-view-load-panel',
     standalone: true,
@@ -37,7 +39,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoCardViewLoadPanelComponent';
+
+    
     @Input()
     get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
         return this._getOption('animation');

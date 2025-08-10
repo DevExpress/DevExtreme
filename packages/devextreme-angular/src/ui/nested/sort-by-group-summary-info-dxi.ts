@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -15,11 +15,13 @@ import {
 import { SortOrder } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_sortByGroupSummaryInfo } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-sort-by-group-summary-info',
@@ -30,17 +32,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiSortByGroupSummaryInfoComponent) => ({
-                propertyName: 'sortByGroupSummaryInfo',
-                className: 'DxiSortByGroupSummaryInfoComponent',
-                component
-            }),
-            deps: [DxiSortByGroupSummaryInfoComponent],
+            provide: PROPERTY_TOKEN_sortByGroupSummaryInfo,
+            useExisting: DxiSortByGroupSummaryInfoComponent,
          }
     ],
 })
-export class DxiSortByGroupSummaryInfoComponent extends CollectionNestedOption {
+export class DxiSortByGroupSummaryInfoComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiSortByGroupSummaryInfoComponent';
+
+    
     @Input()
     get groupColumn(): string | undefined {
         return this._getOption('groupColumn');

@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoPager } from './base/pager';
+
+
 
 @Component({
     selector: 'dxo-pager',
@@ -41,7 +43,10 @@ import { DxoPager } from './base/pager';
         'visible'
     ]
 })
-export class DxoPagerComponent extends DxoPager implements OnDestroy, OnInit {
+export class DxoPagerComponent extends DxoPager implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoPagerComponent';
+
+    
 
     protected get _optionPath() {
         return 'pager';

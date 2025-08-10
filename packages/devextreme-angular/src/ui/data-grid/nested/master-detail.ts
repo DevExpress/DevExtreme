@@ -12,7 +12,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -25,9 +25,11 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
 
 @Component({
     selector: 'dxo-data-grid-master-detail',
@@ -41,7 +43,10 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoDataGridMasterDetailComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxoDataGridMasterDetailComponent';
+
+    
     @Input()
     get autoExpandAll(): boolean {
         return this._getOption('autoExpandAll');

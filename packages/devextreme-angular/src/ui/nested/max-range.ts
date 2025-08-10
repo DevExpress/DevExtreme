@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-max-range',
     standalone: true,
@@ -31,7 +33,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoMaxRangeComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoMaxRangeComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoMaxRangeComponent';
+
+    
     @Input()
     get days(): number {
         return this._getOption('days');

@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoVectorMapProjectionConfig } from './base/vector-map-projection-config';
+
+
 
 @Component({
     selector: 'dxo-projection',
@@ -36,7 +38,10 @@ import { DxoVectorMapProjectionConfig } from './base/vector-map-projection-confi
         'to'
     ]
 })
-export class DxoProjectionComponent extends DxoVectorMapProjectionConfig implements OnDestroy, OnInit {
+export class DxoProjectionComponent extends DxoVectorMapProjectionConfig implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoProjectionComponent';
+
+    
 
     protected get _optionPath() {
         return 'projection';

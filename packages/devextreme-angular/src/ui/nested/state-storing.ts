@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -22,6 +22,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-state-storing',
     standalone: true,
@@ -32,7 +34,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoStateStoringComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoStateStoringComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoStateStoringComponent';
+
+    
     @Input()
     get customLoad(): Function {
         return this._getOption('customLoad');

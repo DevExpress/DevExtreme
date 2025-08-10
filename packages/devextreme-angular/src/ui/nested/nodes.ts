@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -25,6 +25,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-nodes',
     standalone: true,
@@ -35,7 +37,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoNodesComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoNodesComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoNodesComponent';
+
+    
     @Input()
     get autoLayout(): DataLayoutType | { orientation?: Orientation, type?: DataLayoutType } {
         return this._getOption('autoLayout');

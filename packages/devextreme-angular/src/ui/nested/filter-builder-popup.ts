@@ -10,7 +10,9 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -22,8 +24,14 @@ import { PositionConfig } from 'devextreme/common/core/animation';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoPopupOptions } from './base/popup-options';
+
+
+import {
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-filter-builder-popup',
@@ -85,7 +93,14 @@ import { DxoPopupOptions } from './base/popup-options';
         'wrapperAttr'
     ]
 })
-export class DxoFilterBuilderPopupComponent extends DxoPopupOptions implements OnDestroy, OnInit {
+export class DxoFilterBuilderPopupComponent extends DxoPopupOptions implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoFilterBuilderPopupComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('toolbarItems', value);
+    }
+    
 
     /**
     

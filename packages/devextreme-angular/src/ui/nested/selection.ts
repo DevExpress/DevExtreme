@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection-config';
+
+
 
 @Component({
     selector: 'dxo-selection',
@@ -41,7 +43,10 @@ import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection
         'showCheckBoxesMode'
     ]
 })
-export class DxoSelectionComponent extends DxoColumnChooserSelectionConfig implements OnDestroy, OnInit {
+export class DxoSelectionComponent extends DxoColumnChooserSelectionConfig implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoSelectionComponent';
+
+    
 
     protected get _optionPath() {
         return 'selection';

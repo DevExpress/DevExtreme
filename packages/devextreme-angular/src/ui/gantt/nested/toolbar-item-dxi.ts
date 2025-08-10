@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -21,15 +21,17 @@ import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import { GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-gantt-toolbar-item',
@@ -41,18 +43,16 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiGanttToolbarItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiGanttToolbarItemComponent',
-                component
-            }),
-            deps: [DxiGanttToolbarItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiGanttToolbarItemComponent,
          }
     ],
 })
 export class DxiGanttToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiGanttToolbarItemComponent';
+
+    
     @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');

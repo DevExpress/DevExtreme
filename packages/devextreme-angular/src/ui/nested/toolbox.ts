@@ -8,7 +8,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -19,8 +21,14 @@ import { PanelVisibility, ShapeCategory, ShapeType, ToolboxDisplayMode } from 'd
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_groups,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-toolbox',
@@ -32,7 +40,14 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoToolboxComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_groups)
+    set _groupsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('groups', value);
+    }
+    
     @Input()
     get groups(): Array<ShapeCategory | any | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }> {
         return this._getOption('groups');

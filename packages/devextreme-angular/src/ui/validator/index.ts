@@ -19,7 +19,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -36,7 +38,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAdapterModule } from 'devextreme-angular/ui/nested';
@@ -53,6 +56,11 @@ import { DxiValidatorRangeRuleModule } from 'devextreme-angular/ui/validator/nes
 import { DxiValidatorRequiredRuleModule } from 'devextreme-angular/ui/validator/nested';
 import { DxiValidatorStringLengthRuleModule } from 'devextreme-angular/ui/validator/nested';
 import { DxiValidatorValidationRuleModule } from 'devextreme-angular/ui/validator/nested';
+
+import { 
+      PROPERTY_TOKEN_validationRules,
+} from 'devextreme-angular/ui/nested/tokens';
+
 
 
 /**
@@ -73,6 +81,13 @@ import { DxiValidatorValidationRuleModule } from 'devextreme-angular/ui/validato
     ]
 })
 export class DxValidatorComponent extends DxComponentExtension implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxValidatorComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('validationRules', value);
+    }
+
     instance: DxValidator = null;
 
     /**
@@ -251,16 +266,16 @@ export class DxValidatorComponent extends DxComponentExtension implements OnDest
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('validationRules').push('DxiValidationRuleComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

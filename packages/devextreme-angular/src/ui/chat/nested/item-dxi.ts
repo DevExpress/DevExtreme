@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -15,11 +15,13 @@ import {
 import { User } from 'devextreme/ui/chat';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-chat-item',
@@ -30,17 +32,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiChatItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiChatItemComponent',
-                component
-            }),
-            deps: [DxiChatItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiChatItemComponent,
          }
     ],
 })
-export class DxiChatItemComponent extends CollectionNestedOption {
+export class DxiChatItemComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiChatItemComponent';
+
+    
     @Input()
     get alt(): string {
         return this._getOption('alt');

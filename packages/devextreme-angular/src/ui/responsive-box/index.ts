@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/responsive_box';
@@ -36,7 +38,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiColModule } from 'devextreme-angular/ui/nested';
@@ -48,6 +51,14 @@ import { DxiResponsiveBoxColModule } from 'devextreme-angular/ui/responsive-box/
 import { DxiResponsiveBoxItemModule } from 'devextreme-angular/ui/responsive-box/nested';
 import { DxiResponsiveBoxLocationModule } from 'devextreme-angular/ui/responsive-box/nested';
 import { DxiResponsiveBoxRowModule } from 'devextreme-angular/ui/responsive-box/nested';
+
+import { 
+      PROPERTY_TOKEN_cols,
+      PROPERTY_TOKEN_items,
+      PROPERTY_TOKEN_location,
+      PROPERTY_TOKEN_rows,
+} from 'devextreme-angular/ui/nested/tokens';
+
 
 
 /**
@@ -68,6 +79,28 @@ import { DxiResponsiveBoxRowModule } from 'devextreme-angular/ui/responsive-box/
     ]
 })
 export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxResponsiveBoxComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_cols)
+    set _colsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('cols', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_location)
+    set _locationNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('location', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_rows)
+    set _rowsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('rows', value);
+    }
+
     instance: DxResponsiveBox<TItem, TKey> = null;
 
     /**
@@ -438,12 +471,12 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('cols').push('DxiColComponent');
     
@@ -451,7 +484,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
         getLegacyClassNamesForPropertyName('rows').push('DxiRowComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

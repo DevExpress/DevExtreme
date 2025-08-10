@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -14,11 +14,13 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_menuItems } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-list-menu-item',
@@ -29,17 +31,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiListMenuItemComponent) => ({
-                propertyName: 'menuItems',
-                className: 'DxiListMenuItemComponent',
-                component
-            }),
-            deps: [DxiListMenuItemComponent],
+            provide: PROPERTY_TOKEN_menuItems,
+            useExisting: DxiListMenuItemComponent,
          }
     ],
 })
-export class DxiListMenuItemComponent extends CollectionNestedOption {
+export class DxiListMenuItemComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiListMenuItemComponent';
+
+    
     @Input()
     get action(): ((itemElement: any, itemData: any) => void) {
         return this._getOption('action');

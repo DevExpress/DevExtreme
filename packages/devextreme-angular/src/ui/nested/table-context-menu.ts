@@ -8,7 +8,9 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -18,8 +20,14 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorTableContextMenu } from './base/html-editor-table-context-menu';
+
+
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-table-context-menu',
@@ -35,7 +43,14 @@ import { DxoHtmlEditorTableContextMenu } from './base/html-editor-table-context-
         'items'
     ]
 })
-export class DxoTableContextMenuComponent extends DxoHtmlEditorTableContextMenu implements OnDestroy, OnInit {
+export class DxoTableContextMenuComponent extends DxoHtmlEditorTableContextMenu implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoTableContextMenuComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+    
 
     protected get _optionPath() {
         return 'tableContextMenu';

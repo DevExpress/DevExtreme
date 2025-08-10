@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -23,6 +23,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-diagram-auto-layout',
     standalone: true,
@@ -33,7 +35,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoDiagramAutoLayoutComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoDiagramAutoLayoutComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoDiagramAutoLayoutComponent';
+
+    
     @Input()
     get orientation(): Orientation {
         return this._getOption('orientation');

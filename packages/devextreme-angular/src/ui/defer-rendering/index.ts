@@ -30,7 +30,7 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -54,6 +54,8 @@ import { DxoDeferRenderingPositionModule } from 'devextreme-angular/ui/defer-ren
 import { DxoDeferRenderingToModule } from 'devextreme-angular/ui/defer-rendering/nested';
 
 
+
+
 /**
  * [descr:dxDeferRendering]
 
@@ -71,6 +73,8 @@ import { DxoDeferRenderingToModule } from 'devextreme-angular/ui/defer-rendering
     ]
 })
 export class DxDeferRenderingComponent extends DxComponent implements OnDestroy {
+protected _dxClassName = 'DxDeferRenderingComponent';
+
     instance: DxDeferRendering = null;
 
     /**

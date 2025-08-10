@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/splitter';
@@ -37,13 +39,19 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoSplitterModule } from 'devextreme-angular/ui/nested';
 
 import { DxiSplitterItemModule } from 'devextreme-angular/ui/splitter/nested';
+
+import { 
+      PROPERTY_TOKEN_items,
+} from 'devextreme-angular/ui/nested/tokens';
+
 
 
 /**
@@ -64,6 +72,13 @@ import { DxiSplitterItemModule } from 'devextreme-angular/ui/splitter/nested';
     ]
 })
 export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxSplitterComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+
     instance: DxSplitter<TItem, TKey> = null;
 
     /**
@@ -426,16 +441,16 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('items').push('DxiItemComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

@@ -10,7 +10,7 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter
+    EventEmitter,
 } from '@angular/core';
 
 
@@ -23,6 +23,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoCalendarOptions } from './base/calendar-options';
+
+
 
 @Component({
     selector: 'dxo-calendar-options',
@@ -76,7 +78,10 @@ import { DxoCalendarOptions } from './base/calendar-options';
         'zoomLevel'
     ]
 })
-export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements OnDestroy, OnInit {
+export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoCalendarOptionsComponent';
+
+    
 
     /**
     

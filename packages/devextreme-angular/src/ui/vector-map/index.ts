@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -38,7 +40,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiAnnotationModule } from 'devextreme-angular/ui/nested';
@@ -89,6 +92,13 @@ import { DxoVectorMapTooltipBorderModule } from 'devextreme-angular/ui/vector-ma
 import { DxoVectorMapVectorMapTitleModule } from 'devextreme-angular/ui/vector-map/nested';
 import { DxoVectorMapVectorMapTitleSubtitleModule } from 'devextreme-angular/ui/vector-map/nested';
 
+import { 
+      PROPERTY_TOKEN_annotations,
+      PROPERTY_TOKEN_layers,
+      PROPERTY_TOKEN_legends,
+} from 'devextreme-angular/ui/nested/tokens';
+
+
 
 /**
  * [descr:dxVectorMap]
@@ -109,6 +119,23 @@ import { DxoVectorMapVectorMapTitleSubtitleModule } from 'devextreme-angular/ui/
     ]
 })
 export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxVectorMapComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_annotations)
+    set _annotationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('annotations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_layers)
+    set _layersNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('layers', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_legends)
+    set _legendsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('legends', value);
+    }
+
     instance: DxVectorMap = null;
 
     /**
@@ -767,12 +794,12 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('annotations').push('DxiAnnotationComponent');
     
@@ -780,7 +807,7 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     
         getLegacyClassNamesForPropertyName('legends').push('DxiLegendComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

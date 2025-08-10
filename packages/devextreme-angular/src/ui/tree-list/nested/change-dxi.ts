@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -15,11 +15,13 @@ import {
 import { DataChangeType } from 'devextreme/common/grids';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_changes } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-tree-list-change',
@@ -30,17 +32,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiTreeListChangeComponent) => ({
-                propertyName: 'changes',
-                className: 'DxiTreeListChangeComponent',
-                component
-            }),
-            deps: [DxiTreeListChangeComponent],
+            provide: PROPERTY_TOKEN_changes,
+            useExisting: DxiTreeListChangeComponent,
          }
     ],
 })
-export class DxiTreeListChangeComponent extends CollectionNestedOption {
+export class DxiTreeListChangeComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiTreeListChangeComponent';
+
+    
     @Input()
     get data(): any {
         return this._getOption('data');

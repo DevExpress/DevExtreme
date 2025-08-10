@@ -10,7 +10,9 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -25,8 +27,14 @@ import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-lookup-drop-down-options',
@@ -38,7 +46,14 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoLookupDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoLookupDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoLookupDropDownOptionsComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('toolbarItems', value);
+    }
+    
     @Input()
     get animation(): { hide?: AnimationConfig, show?: AnimationConfig } {
         return this._getOption('animation');

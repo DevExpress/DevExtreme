@@ -6,7 +6,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -16,11 +18,17 @@ import { FormItemType, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFor
 import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+
+import {
+    PROPERTY_TOKEN_tabs,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxi-form-tabbed-item',
@@ -31,17 +39,19 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiFormTabbedItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiFormTabbedItemComponent',
-                component
-            }),
-            deps: [DxiFormTabbedItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiFormTabbedItemComponent,
          }
     ],
 })
-export class DxiFormTabbedItemComponent extends CollectionNestedOption {
+export class DxiFormTabbedItemComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiFormTabbedItemComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('tabs', value);
+    }
+    
     @Input()
     get colSpan(): number | undefined {
         return this._getOption('colSpan');

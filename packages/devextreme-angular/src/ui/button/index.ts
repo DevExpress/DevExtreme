@@ -29,8 +29,10 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
+
+
 
 
 
@@ -52,6 +54,8 @@ import {
     ]
 })
 export class DxButtonComponent extends DxComponent implements OnDestroy {
+protected _dxClassName = 'DxButtonComponent';
+
     instance: DxButton = null;
 
     /**

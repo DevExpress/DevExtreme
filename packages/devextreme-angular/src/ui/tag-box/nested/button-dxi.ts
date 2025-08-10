@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -16,11 +16,13 @@ import { TextEditorButtonLocation } from 'devextreme/common';
 import { dxButtonOptions } from 'devextreme/ui/button';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-tag-box-button',
@@ -31,17 +33,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiTagBoxButtonComponent) => ({
-                propertyName: 'buttons',
-                className: 'DxiTagBoxButtonComponent',
-                component
-            }),
-            deps: [DxiTagBoxButtonComponent],
+            provide: PROPERTY_TOKEN_buttons,
+            useExisting: DxiTagBoxButtonComponent,
          }
     ],
 })
-export class DxiTagBoxButtonComponent extends CollectionNestedOption {
+export class DxiTagBoxButtonComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiTagBoxButtonComponent';
+
+    
     @Input()
     get location(): TextEditorButtonLocation {
         return this._getOption('location');

@@ -6,7 +6,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -15,11 +17,17 @@ import {
 import { RouteMode } from 'devextreme/ui/map';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_routes } from 'devextreme-angular/ui/nested/tokens';
+
+import {
+    PROPERTY_TOKEN_locations,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxi-route',
@@ -30,17 +38,19 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiRouteComponent) => ({
-                propertyName: 'routes',
-                className: 'DxiRouteComponent',
-                component
-            }),
-            deps: [DxiRouteComponent],
+            provide: PROPERTY_TOKEN_routes,
+            useExisting: DxiRouteComponent,
          }
     ],
 })
-export class DxiRouteComponent extends CollectionNestedOption {
+export class DxiRouteComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiRouteComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_locations)
+    set _locationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('locations', value);
+    }
+    
     @Input()
     get color(): string {
         return this._getOption('color');

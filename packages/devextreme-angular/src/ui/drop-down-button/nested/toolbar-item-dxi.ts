@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -21,15 +21,17 @@ import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import { ToolbarLocation } from 'devextreme/ui/popup';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-drop-down-button-toolbar-item',
@@ -41,18 +43,16 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiDropDownButtonToolbarItemComponent) => ({
-                propertyName: 'toolbarItems',
-                className: 'DxiDropDownButtonToolbarItemComponent',
-                component
-            }),
-            deps: [DxiDropDownButtonToolbarItemComponent],
+            provide: PROPERTY_TOKEN_toolbarItems,
+            useExisting: DxiDropDownButtonToolbarItemComponent,
          }
     ],
 })
 export class DxiDropDownButtonToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiDropDownButtonToolbarItemComponent';
+
+    
     @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');

@@ -10,7 +10,7 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter
+    EventEmitter,
 } from '@angular/core';
 
 
@@ -22,6 +22,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoSearchPanel } from './base/search-panel';
+
+
 
 @Component({
     selector: 'dxo-search-panel',
@@ -42,7 +44,10 @@ import { DxoSearchPanel } from './base/search-panel';
         'width'
     ]
 })
-export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy, OnInit {
+export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoSearchPanelComponent';
+
+    
 
     /**
     

@@ -10,7 +10,9 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -20,8 +22,14 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoTabPanelOptions } from './base/tab-panel-options';
+
+
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-tab-panel-options',
@@ -80,7 +88,14 @@ import { DxoTabPanelOptions } from './base/tab-panel-options';
         'width'
     ]
 })
-export class DxoTabPanelOptionsComponent extends DxoTabPanelOptions implements OnDestroy, OnInit {
+export class DxoTabPanelOptionsComponent extends DxoTabPanelOptions implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoTabPanelOptionsComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+    
 
     /**
     

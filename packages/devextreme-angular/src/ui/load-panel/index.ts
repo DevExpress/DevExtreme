@@ -31,7 +31,7 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -59,6 +59,8 @@ import { DxoLoadPanelShowModule } from 'devextreme-angular/ui/load-panel/nested'
 import { DxoLoadPanelToModule } from 'devextreme-angular/ui/load-panel/nested';
 
 
+
+
 /**
  * [descr:dxLoadPanel]
 
@@ -76,6 +78,8 @@ import { DxoLoadPanelToModule } from 'devextreme-angular/ui/load-panel/nested';
     ]
 })
 export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
+protected _dxClassName = 'DxLoadPanelComponent';
+
     instance: DxLoadPanel = null;
 
     /**

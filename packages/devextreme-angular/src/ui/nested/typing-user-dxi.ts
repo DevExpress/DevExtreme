@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -14,11 +14,13 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiUser } from './base/user-dxi';
+
+import { PROPERTY_TOKEN_typingUsers } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-typing-user',
@@ -29,13 +31,8 @@ import { DxiUser } from './base/user-dxi';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiTypingUserComponent) => ({
-                propertyName: 'typingUsers',
-                className: 'DxiTypingUserComponent',
-                component
-            }),
-            deps: [DxiTypingUserComponent],
+            provide: PROPERTY_TOKEN_typingUsers,
+            useExisting: DxiTypingUserComponent,
          }
     ],
     inputs: [
@@ -45,7 +42,10 @@ import { DxiUser } from './base/user-dxi';
         'name'
     ]
 })
-export class DxiTypingUserComponent extends DxiUser {
+export class DxiTypingUserComponent extends DxiUser { 
+    protected _dxClassName = 'DxiTypingUserComponent';
+
+    
 
     protected get _optionPath() {
         return 'typingUsers';

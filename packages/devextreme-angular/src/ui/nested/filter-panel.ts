@@ -10,7 +10,7 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter
+    EventEmitter,
 } from '@angular/core';
 
 
@@ -22,6 +22,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFilterPanel } from './base/filter-panel';
+
+
 
 @Component({
     selector: 'dxo-filter-panel',
@@ -39,7 +41,10 @@ import { DxoFilterPanel } from './base/filter-panel';
         'visible'
     ]
 })
-export class DxoFilterPanelComponent extends DxoFilterPanel implements OnDestroy, OnInit {
+export class DxoFilterPanelComponent extends DxoFilterPanel implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoFilterPanelComponent';
+
+    
 
     /**
     

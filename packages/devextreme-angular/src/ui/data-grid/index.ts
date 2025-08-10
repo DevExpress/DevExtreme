@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/data_grid';
@@ -46,7 +48,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoColumnChooserModule } from 'devextreme-angular/ui/nested';
@@ -202,6 +205,21 @@ import { DxiDataGridTotalItemModule } from 'devextreme-angular/ui/data-grid/nest
 import { DxiDataGridValidationRuleModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridValueFormatModule } from 'devextreme-angular/ui/data-grid/nested';
 
+import { 
+      PROPERTY_TOKEN_validationRules,
+      PROPERTY_TOKEN_buttons,
+      PROPERTY_TOKEN_changes,
+      PROPERTY_TOKEN_columns,
+      PROPERTY_TOKEN_customOperations,
+      PROPERTY_TOKEN_fields,
+      PROPERTY_TOKEN_groupItems,
+      PROPERTY_TOKEN_items,
+      PROPERTY_TOKEN_sortByGroupSummaryInfo,
+      PROPERTY_TOKEN_toolbarItems,
+      PROPERTY_TOKEN_totalItems,
+} from 'devextreme-angular/ui/nested/tokens';
+
+
 
 /**
  * [descr:dxDataGrid]
@@ -221,6 +239,63 @@ import { DxoDataGridValueFormatModule } from 'devextreme-angular/ui/data-grid/ne
     ]
 })
 export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxDataGridComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('validationRules', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('buttons', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_changes)
+    set _changesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('changes', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_columns)
+    set _columnsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('columns', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_customOperations)
+    set _customOperationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('customOperations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_fields)
+    set _fieldsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('fields', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_groupItems)
+    set _groupItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('groupItems', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_sortByGroupSummaryInfo)
+    set _sortByGroupSummaryInfoNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('sortByGroupSummaryInfo', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('toolbarItems', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_totalItems)
+    set _totalItemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('totalItems', value);
+    }
+
     instance: DxDataGrid<TRowData, TKey> = null;
 
     /**
@@ -2057,18 +2132,18 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('columns').push('DxiColumnComponent');
     
         getLegacyClassNamesForPropertyName('sortByGroupSummaryInfo').push('DxiSortByGroupSummaryInfoComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

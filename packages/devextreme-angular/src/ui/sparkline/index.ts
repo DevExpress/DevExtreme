@@ -16,7 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -37,7 +37,7 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoMarginModule } from 'devextreme-angular/ui/nested';
@@ -55,6 +55,8 @@ import { DxoSparklineMarginModule } from 'devextreme-angular/ui/sparkline/nested
 import { DxoSparklineShadowModule } from 'devextreme-angular/ui/sparkline/nested';
 import { DxoSparklineSizeModule } from 'devextreme-angular/ui/sparkline/nested';
 import { DxoSparklineTooltipModule } from 'devextreme-angular/ui/sparkline/nested';
+
+
 
 
 /**
@@ -76,6 +78,8 @@ import { DxoSparklineTooltipModule } from 'devextreme-angular/ui/sparkline/neste
     ]
 })
 export class DxSparklineComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxSparklineComponent';
+
     instance: DxSparkline = null;
 
     /**

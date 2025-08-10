@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -18,15 +18,17 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-tabs-item',
@@ -38,18 +40,16 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiTabsItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiTabsItemComponent',
-                component
-            }),
-            deps: [DxiTabsItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiTabsItemComponent,
          }
     ],
 })
 export class DxiTabsItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiTabsItemComponent';
+
+    
     @Input()
     get badge(): string {
         return this._getOption('badge');

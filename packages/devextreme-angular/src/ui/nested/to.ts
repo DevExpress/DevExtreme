@@ -8,7 +8,7 @@ import {
     OnDestroy,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -20,6 +20,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoAnimationState } from './base/animation-state';
+
+
 
 @Component({
     selector: 'dxo-to',
@@ -38,7 +40,10 @@ import { DxoAnimationState } from './base/animation-state';
         'top'
     ]
 })
-export class DxoToComponent extends DxoAnimationState implements OnDestroy, OnInit {
+export class DxoToComponent extends DxoAnimationState implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoToComponent';
+
+    
 
     protected get _optionPath() {
         return 'to';

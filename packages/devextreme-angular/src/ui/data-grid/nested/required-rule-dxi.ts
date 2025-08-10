@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -15,11 +15,13 @@ import {
 import { ValidationRuleType } from 'devextreme/common';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-data-grid-required-rule',
@@ -30,17 +32,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiDataGridRequiredRuleComponent) => ({
-                propertyName: 'validationRules',
-                className: 'DxiDataGridRequiredRuleComponent',
-                component
-            }),
-            deps: [DxiDataGridRequiredRuleComponent],
+            provide: PROPERTY_TOKEN_validationRules,
+            useExisting: DxiDataGridRequiredRuleComponent,
          }
     ],
 })
-export class DxiDataGridRequiredRuleComponent extends CollectionNestedOption {
+export class DxiDataGridRequiredRuleComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiDataGridRequiredRuleComponent';
+
+    
     @Input()
     get message(): string {
         return this._getOption('message');

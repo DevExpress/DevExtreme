@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -25,6 +25,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-legend',
     standalone: true,
@@ -35,7 +37,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoLegendComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoLegendComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoLegendComponent';
+
+    
     @Input()
     get backgroundColor(): string | undefined {
         return this._getOption('backgroundColor');

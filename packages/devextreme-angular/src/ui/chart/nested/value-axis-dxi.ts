@@ -8,7 +8,9 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -21,11 +23,19 @@ import { HorizontalAlignment, VerticalAlignment, Position } from 'devextreme/com
 import { Format } from 'devextreme/common/core/localization';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_valueAxis } from 'devextreme-angular/ui/nested/tokens';
+
+import {
+    PROPERTY_TOKEN_breaks,
+    PROPERTY_TOKEN_constantLines,
+    PROPERTY_TOKEN_strips,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxi-chart-value-axis',
@@ -36,17 +46,27 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiChartValueAxisComponent) => ({
-                propertyName: 'valueAxis',
-                className: 'DxiChartValueAxisComponent',
-                component
-            }),
-            deps: [DxiChartValueAxisComponent],
+            provide: PROPERTY_TOKEN_valueAxis,
+            useExisting: DxiChartValueAxisComponent,
          }
     ],
 })
-export class DxiChartValueAxisComponent extends CollectionNestedOption {
+export class DxiChartValueAxisComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiChartValueAxisComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_breaks)
+    set _breaksNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('breaks', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_constantLines)
+    set _constantLinesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('constantLines', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_strips)
+    set _stripsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('strips', value);
+    }
+    
     @Input()
     get aggregatedPointsPosition(): AggregatedPointsPosition {
         return this._getOption('aggregatedPointsPosition');

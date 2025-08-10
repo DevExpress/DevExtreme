@@ -10,7 +10,7 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter
+    EventEmitter,
 } from '@angular/core';
 
 
@@ -22,6 +22,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFileUploaderOptions } from './base/file-uploader-options';
+
+
 
 @Component({
     selector: 'dxo-file-uploader-options',
@@ -99,7 +101,10 @@ import { DxoFileUploaderOptions } from './base/file-uploader-options';
         'width'
     ]
 })
-export class DxoFileUploaderOptionsComponent extends DxoFileUploaderOptions implements OnDestroy, OnInit {
+export class DxoFileUploaderOptionsComponent extends DxoFileUploaderOptions implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoFileUploaderOptionsComponent';
+
+    
 
     /**
     

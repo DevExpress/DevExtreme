@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -16,11 +16,13 @@ import { FirstDayOfWeek, Orientation } from 'devextreme/common';
 import { AllDayPanelMode, CellAppointmentsLimit, dxSchedulerScrolling, ViewType } from 'devextreme/ui/scheduler';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_views } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-view',
@@ -31,17 +33,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiViewComponent) => ({
-                propertyName: 'views',
-                className: 'DxiViewComponent',
-                component
-            }),
-            deps: [DxiViewComponent],
+            provide: PROPERTY_TOKEN_views,
+            useExisting: DxiViewComponent,
          }
     ],
 })
-export class DxiViewComponent extends CollectionNestedOption {
+export class DxiViewComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiViewComponent';
+
+    
     @Input()
     get agendaDuration(): number {
         return this._getOption('agendaDuration');

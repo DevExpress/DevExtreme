@@ -18,7 +18,9 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -40,7 +42,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoConverterModule } from 'devextreme-angular/ui/nested';
@@ -71,6 +74,14 @@ import { DxoHtmlEditorToolbarModule } from 'devextreme-angular/ui/html-editor/ne
 import { DxiHtmlEditorToolbarItemModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorVariablesModule } from 'devextreme-angular/ui/html-editor/nested';
 
+import { 
+      PROPERTY_TOKEN_commands,
+      PROPERTY_TOKEN_items,
+      PROPERTY_TOKEN_mentions,
+      PROPERTY_TOKEN_tabs,
+} from 'devextreme-angular/ui/nested/tokens';
+
+
 
 
 const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
@@ -97,6 +108,28 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+protected _dxClassName = 'DxHtmlEditorComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('commands', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_mentions)
+    set _mentionsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('mentions', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('tabs', value);
+    }
+
     instance: DxHtmlEditor = null;
 
     /**
@@ -869,16 +902,16 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     protected getLegacyClassNames = () => {
         const legacyClassNames = {};
-        
+
         const getLegacyClassNamesForPropertyName = (propName) => {
                  legacyClassNames[propName] = legacyClassNames[propName] || [];
                  return legacyClassNames[propName];
         };
-        
+
     
         getLegacyClassNamesForPropertyName('mentions').push('DxiMentionComponent');
     
-    
+
         return legacyClassNames || {};
     };
 

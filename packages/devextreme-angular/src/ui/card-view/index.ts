@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 export { ExplicitTypes } from 'devextreme/ui/card_view';
@@ -41,7 +43,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 
 
@@ -121,6 +124,17 @@ import { DxoCardViewToolbarModule } from 'devextreme-angular/ui/card-view/nested
 import { DxiCardViewToolbarItemModule } from 'devextreme-angular/ui/card-view/nested';
 import { DxiCardViewValidationRuleModule } from 'devextreme-angular/ui/card-view/nested';
 
+import { 
+      PROPERTY_TOKEN_validationRules,
+      PROPERTY_TOKEN_items,
+      PROPERTY_TOKEN_changes,
+      PROPERTY_TOKEN_columns,
+      PROPERTY_TOKEN_customOperations,
+      PROPERTY_TOKEN_fields,
+      PROPERTY_TOKEN_tabs,
+} from 'devextreme-angular/ui/nested/tokens';
+
+
 
 
 @Component({
@@ -137,6 +151,43 @@ import { DxiCardViewValidationRuleModule } from 'devextreme-angular/ui/card-view
     ]
 })
 export class DxCardViewComponent<TCardData = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxCardViewComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('validationRules', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_changes)
+    set _changesNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('changes', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_columns)
+    set _columnsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('columns', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_customOperations)
+    set _customOperationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('customOperations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_fields)
+    set _fieldsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('fields', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('tabs', value);
+    }
+
     instance: DxCardView<TCardData, TKey> = null;
 
     

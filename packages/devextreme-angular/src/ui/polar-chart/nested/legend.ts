@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -23,6 +23,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-polar-chart-legend',
     standalone: true,
@@ -33,7 +35,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoPolarChartLegendComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoPolarChartLegendComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoPolarChartLegendComponent';
+
+    
     @Input()
     get backgroundColor(): string | undefined {
         return this._getOption('backgroundColor');

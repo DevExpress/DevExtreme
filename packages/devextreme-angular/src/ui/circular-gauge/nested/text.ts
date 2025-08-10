@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -23,6 +23,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-circular-gauge-text',
     standalone: true,
@@ -33,7 +35,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoCircularGaugeTextComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoCircularGaugeTextComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoCircularGaugeTextComponent';
+
+    
     @Input()
     get customizeText(): ((indicatedValue: { value: number, valueText: string }) => string) | undefined {
         return this._getOption('customizeText');

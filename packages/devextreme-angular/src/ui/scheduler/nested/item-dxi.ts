@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -21,15 +21,17 @@ import { ToolbarItemLocation, ToolbarItemComponent, ButtonType } from 'devextrem
 import { SchedulerPredefinedToolbarItem, DateNavigatorItemProperties } from 'devextreme/ui/scheduler';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-scheduler-item',
@@ -41,18 +43,16 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiSchedulerItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiSchedulerItemComponent',
-                component
-            }),
-            deps: [DxiSchedulerItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiSchedulerItemComponent,
          }
     ],
 })
 export class DxiSchedulerItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiSchedulerItemComponent';
+
+    
     @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');

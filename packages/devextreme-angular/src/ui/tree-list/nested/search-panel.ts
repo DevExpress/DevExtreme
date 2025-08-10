@@ -10,7 +10,7 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
 } from '@angular/core';
 
 
@@ -23,6 +23,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-tree-list-search-panel',
     standalone: true,
@@ -33,7 +35,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoTreeListSearchPanelComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoTreeListSearchPanelComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoTreeListSearchPanelComponent';
+
+    
     @Input()
     get highlightCaseSensitive(): boolean {
         return this._getOption('highlightCaseSensitive');

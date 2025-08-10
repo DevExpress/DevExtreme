@@ -12,7 +12,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -27,9 +27,11 @@ import {
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
 
 @Component({
     selector: 'dxo-card-view-button-options',
@@ -43,7 +45,10 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoCardViewButtonOptionsComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxoCardViewButtonOptionsComponent';
+
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');

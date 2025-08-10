@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -14,11 +14,13 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_markers } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-map-marker',
@@ -29,17 +31,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiMapMarkerComponent) => ({
-                propertyName: 'markers',
-                className: 'DxiMapMarkerComponent',
-                component
-            }),
-            deps: [DxiMapMarkerComponent],
+            provide: PROPERTY_TOKEN_markers,
+            useExisting: DxiMapMarkerComponent,
          }
     ],
 })
-export class DxiMapMarkerComponent extends CollectionNestedOption {
+export class DxiMapMarkerComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiMapMarkerComponent';
+
+    
     @Input()
     get iconSrc(): string {
         return this._getOption('iconSrc');

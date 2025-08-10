@@ -6,7 +6,7 @@ import {
     Component,
     NgModule,
     Host,
-    SkipSelf
+    SkipSelf,
 } from '@angular/core';
 
 
@@ -14,11 +14,13 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiDataChange } from './base/data-change-dxi';
+
+import { PROPERTY_TOKEN_changes } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-change',
@@ -29,13 +31,8 @@ import { DxiDataChange } from './base/data-change-dxi';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiChangeComponent) => ({
-                propertyName: 'changes',
-                className: 'DxiChangeComponent',
-                component
-            }),
-            deps: [DxiChangeComponent],
+            provide: PROPERTY_TOKEN_changes,
+            useExisting: DxiChangeComponent,
          }
     ],
     inputs: [
@@ -46,7 +43,10 @@ import { DxiDataChange } from './base/data-change-dxi';
         'type'
     ]
 })
-export class DxiChangeComponent extends DxiDataChange {
+export class DxiChangeComponent extends DxiDataChange { 
+    protected _dxClassName = 'DxiChangeComponent';
+
+    
 
     protected get _optionPath() {
         return 'changes';

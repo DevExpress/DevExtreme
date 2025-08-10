@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -19,15 +19,17 @@ import { DOCUMENT } from '@angular/common';
 import { dxBoxOptions } from 'devextreme/ui/box';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-box-item',
@@ -39,18 +41,16 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiBoxItemComponent) => ({
-                propertyName: 'items',
-                className: 'DxiBoxItemComponent',
-                component
-            }),
-            deps: [DxiBoxItemComponent],
+            provide: PROPERTY_TOKEN_items,
+            useExisting: DxiBoxItemComponent,
          }
     ],
 })
 export class DxiBoxItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiBoxItemComponent';
+
+    
     @Input()
     get baseSize(): number | string {
         return this._getOption('baseSize');

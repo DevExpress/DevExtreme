@@ -28,8 +28,10 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
+
+
 
 
 
@@ -51,6 +53,8 @@ import {
     ]
 })
 export class DxValidationGroupComponent extends DxComponent implements OnDestroy {
+protected _dxClassName = 'DxValidationGroupComponent';
+
     instance: DxValidationGroup = null;
 
     /**

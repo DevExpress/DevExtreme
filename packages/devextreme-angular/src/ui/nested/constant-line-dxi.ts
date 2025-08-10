@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -16,11 +16,13 @@ import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_constantLines } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-constant-line',
@@ -31,17 +33,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiConstantLineComponent) => ({
-                propertyName: 'constantLines',
-                className: 'DxiConstantLineComponent',
-                component
-            }),
-            deps: [DxiConstantLineComponent],
+            provide: PROPERTY_TOKEN_constantLines,
+            useExisting: DxiConstantLineComponent,
          }
     ],
 })
-export class DxiConstantLineComponent extends CollectionNestedOption {
+export class DxiConstantLineComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiConstantLineComponent';
+
+    
     @Input()
     get color(): string {
         return this._getOption('color');

@@ -8,7 +8,9 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -19,8 +21,14 @@ import { dxFileManagerDetailsColumn } from 'devextreme/ui/file_manager';
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_columns,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-file-manager-details',
@@ -32,7 +40,14 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoFileManagerDetailsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoFileManagerDetailsComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoFileManagerDetailsComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_columns)
+    set _columnsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('columns', value);
+    }
+    
     @Input()
     get columns(): Array<dxFileManagerDetailsColumn | string> {
         return this._getOption('columns');

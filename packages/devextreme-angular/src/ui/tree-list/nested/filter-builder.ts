@@ -10,7 +10,9 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -21,8 +23,15 @@ import { dxFilterBuilderCustomOperation, dxFilterBuilderField, GroupOperation, C
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
+
+
+import {
+    PROPERTY_TOKEN_customOperations,
+    PROPERTY_TOKEN_fields,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-tree-list-filter-builder',
@@ -34,7 +43,18 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoTreeListFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoTreeListFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoTreeListFilterBuilderComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_customOperations)
+    set _customOperationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('customOperations', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_fields)
+    set _fieldsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('fields', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');

@@ -10,7 +10,7 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -21,15 +21,17 @@ import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_mentions } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-html-editor-mention',
@@ -41,18 +43,16 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
         DxTemplateHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiHtmlEditorMentionComponent) => ({
-                propertyName: 'mentions',
-                className: 'DxiHtmlEditorMentionComponent',
-                component
-            }),
-            deps: [DxiHtmlEditorMentionComponent],
+            provide: PROPERTY_TOKEN_mentions,
+            useExisting: DxiHtmlEditorMentionComponent,
          }
     ],
 })
 export class DxiHtmlEditorMentionComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost {
+    IDxTemplateHost { 
+    protected _dxClassName = 'DxiHtmlEditorMentionComponent';
+
+    
     @Input()
     get dataSource(): Array<any> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');

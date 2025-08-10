@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-tree-list-tree-list-header-filter-texts',
     standalone: true,
@@ -31,7 +33,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoTreeListTreeListHeaderFilterTextsComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoTreeListTreeListHeaderFilterTextsComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoTreeListTreeListHeaderFilterTextsComponent';
+
+    
     @Input()
     get cancel(): string {
         return this._getOption('cancel');

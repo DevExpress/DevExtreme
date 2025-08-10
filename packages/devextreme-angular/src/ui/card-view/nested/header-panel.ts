@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -22,6 +22,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-card-view-header-panel',
     standalone: true,
@@ -32,7 +34,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoCardViewHeaderPanelComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoCardViewHeaderPanelComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoCardViewHeaderPanelComponent';
+
+    
     @Input()
     get dragging(): { dropFeedbackMode?: DragHighlight, onDragChange?: ((e: any) => void), onDragEnd?: ((e: any) => void), onDragMove?: ((e: any) => void), onDragStart?: ((e: any) => void), onRemove?: ((e: any) => void), onReorder?: ((e: any) => void), scrollSensitivity?: number, scrollSpeed?: number } {
         return this._getOption('dragging');

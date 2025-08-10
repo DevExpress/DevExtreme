@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -22,6 +22,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-range-selector-marker',
     standalone: true,
@@ -32,7 +34,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoRangeSelectorMarkerComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoRangeSelectorMarkerComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoRangeSelectorMarkerComponent';
+
+    
     @Input()
     get label(): { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format | undefined } {
         return this._getOption('label');

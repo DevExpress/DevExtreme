@@ -10,7 +10,9 @@ import {
     Host,
     SkipSelf,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    QueryList,
 } from '@angular/core';
 
 
@@ -20,8 +22,15 @@ import {
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoFilterBuilderOptions } from './base/filter-builder-options';
+
+
+import {
+    PROPERTY_TOKEN_customOperations,
+    PROPERTY_TOKEN_fields,
+} from 'devextreme-angular/ui/nested/tokens';
 
 @Component({
     selector: 'dxo-filter-builder',
@@ -62,7 +71,18 @@ import { DxoFilterBuilderOptions } from './base/filter-builder-options';
         'width'
     ]
 })
-export class DxoFilterBuilderComponent extends DxoFilterBuilderOptions implements OnDestroy, OnInit {
+export class DxoFilterBuilderComponent extends DxoFilterBuilderOptions implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoFilterBuilderComponent';
+
+    @ContentChildren(PROPERTY_TOKEN_customOperations)
+    set _customOperationsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('customOperations', value);
+    }
+    @ContentChildren(PROPERTY_TOKEN_fields)
+    set _fieldsNestedItems(value: QueryList<ICollectionNestedOption>) {
+        this._setChildren('fields', value);
+    }
+    
 
     /**
     

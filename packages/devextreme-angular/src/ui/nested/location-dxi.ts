@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -14,11 +14,13 @@ import {
 
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_location } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-location',
@@ -29,17 +31,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiLocationComponent) => ({
-                propertyName: 'location',
-                className: 'DxiLocationComponent',
-                component
-            }),
-            deps: [DxiLocationComponent],
+            provide: PROPERTY_TOKEN_location,
+            useExisting: DxiLocationComponent,
          }
     ],
 })
-export class DxiLocationComponent extends CollectionNestedOption {
+export class DxiLocationComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiLocationComponent';
+
+    
     @Input()
     get lat(): number {
         return this._getOption('lat');

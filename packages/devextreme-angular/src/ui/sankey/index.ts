@@ -16,7 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -38,7 +38,7 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
@@ -80,6 +80,8 @@ import { DxoSankeyTooltipModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoSankeyTooltipBorderModule } from 'devextreme-angular/ui/sankey/nested';
 
 
+
+
 /**
  * [descr:dxSankey]
 
@@ -99,6 +101,8 @@ import { DxoSankeyTooltipBorderModule } from 'devextreme-angular/ui/sankey/neste
     ]
 })
 export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+protected _dxClassName = 'DxSankeyComponent';
+
     instance: DxSankey = null;
 
     /**

@@ -8,7 +8,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -21,6 +21,8 @@ import {
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+
+
 @Component({
     selector: 'dxo-appointment-dragging',
     standalone: true,
@@ -31,7 +33,10 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoAppointmentDraggingComponent extends NestedOption implements OnDestroy, OnInit {
+export class DxoAppointmentDraggingComponent extends NestedOption implements OnDestroy, OnInit { 
+    protected _dxClassName = 'DxoAppointmentDraggingComponent';
+
+    
     @Input()
     get autoScroll(): boolean {
         return this._getOption('autoScroll');

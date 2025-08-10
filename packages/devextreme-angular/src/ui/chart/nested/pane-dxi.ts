@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -15,11 +15,13 @@ import {
 import { ChartsColor, DashStyle } from 'devextreme/common/charts';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_panes } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-chart-pane',
@@ -30,17 +32,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiChartPaneComponent) => ({
-                propertyName: 'panes',
-                className: 'DxiChartPaneComponent',
-                component
-            }),
-            deps: [DxiChartPaneComponent],
+            provide: PROPERTY_TOKEN_panes,
+            useExisting: DxiChartPaneComponent,
          }
     ],
 })
-export class DxiChartPaneComponent extends CollectionNestedOption {
+export class DxiChartPaneComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiChartPaneComponent';
+
+    
     @Input()
     get backgroundColor(): ChartsColor | string {
         return this._getOption('backgroundColor');

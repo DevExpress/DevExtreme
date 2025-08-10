@@ -6,7 +6,7 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
 } from '@angular/core';
 
 
@@ -15,11 +15,13 @@ import {
 import { ChartsColor } from 'devextreme/common/charts';
 
 import {
-    NESTED_ITEM_TOKEN,
     DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+
+import { PROPERTY_TOKEN_ranges } from 'devextreme-angular/ui/nested/tokens';
+
 
 @Component({
     selector: 'dxi-circular-gauge-range',
@@ -30,17 +32,15 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [
         NestedOptionHost,
          {
-            provide: NESTED_ITEM_TOKEN,
-            useFactory: (component: DxiCircularGaugeRangeComponent) => ({
-                propertyName: 'ranges',
-                className: 'DxiCircularGaugeRangeComponent',
-                component
-            }),
-            deps: [DxiCircularGaugeRangeComponent],
+            provide: PROPERTY_TOKEN_ranges,
+            useExisting: DxiCircularGaugeRangeComponent,
          }
     ],
 })
-export class DxiCircularGaugeRangeComponent extends CollectionNestedOption {
+export class DxiCircularGaugeRangeComponent extends CollectionNestedOption { 
+    protected _dxClassName = 'DxiCircularGaugeRangeComponent';
+
+    
     @Input()
     get color(): ChartsColor | string {
         return this._getOption('color');
