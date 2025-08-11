@@ -13,8 +13,8 @@ catalogs:
       specifier: 4.1.62
       version: 4.1.62
     devextreme-quill:
-      specifier: 1.7.3
-      version: 1.7.3
+      specifier: 1.7.4
+      version: 1.7.4
 
 overrides:
   '@devexpress/callsite-record@^4.1.6': 4.1.6
@@ -275,7 +275,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.3
+        version: 1.7.4
       devextreme-react:
         specifier: workspace:~
         version: link:../../packages/devextreme-react/npm
@@ -885,7 +885,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.3
+        version: 1.7.4
       devextreme-react:
         specifier: workspace:~
         version: link:../../packages/devextreme-react/npm
@@ -1024,7 +1024,7 @@ importers:
         version: 4.1.62
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.3
+        version: 1.7.4
       inferno:
         specifier: ^7.4.9
         version: 7.4.11
@@ -9684,8 +9684,8 @@ packages:
     engines: {node: '>=12.0.0'}
     hasBin: true
 
-  devextreme-quill@1.7.3:
-    resolution: {integrity: sha512-YPE9e8UOOByf/QUBAGZRmCDHFzQDnM+hyPet6vFNFGm2UsJAIz4xkL6gDhfan/a6otInQUB5wLsbPZqldZrliQ==}
+  devextreme-quill@1.7.4:
+    resolution: {integrity: sha512-Jb8rkK/frapLCZjQuVszyQdDSpJd7L84Zpym5c4KNS3oCDe8idXGaeRG1JP1rE5g2HjHTVQDwKBT1nOwMyCpkw==}
 
   devextreme-schematics@1.7.1:
     resolution: {integrity: sha512-K+FNrji2/G7QPkfWYhWiNNaXcmxdlXDTOVpIiISoMr6fumRhz5PindoIYlOx0HXtnpvcBWzb2Fqadujr8qop2g==}
@@ -29978,7 +29978,7 @@ snapshots:
       winston: 3.10.0
       yargs: 17.7.2
 
-  devextreme-quill@1.7.3:
+  devextreme-quill@1.7.4:
     dependencies:
       core-js: 3.39.0
       eventemitter3: 4.0.7
