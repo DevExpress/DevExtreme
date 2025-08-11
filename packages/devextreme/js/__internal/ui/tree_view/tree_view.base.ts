@@ -1258,9 +1258,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     $collapseIcon: dxElementWrapper,
     isNodeExpanded: boolean | undefined,
   ): void {
-    // @ts-expect-error ts-error
     $collapseIcon.toggle(isNodeExpanded);
-    // @ts-expect-error ts-error
     $expandIcon.toggle(!isNodeExpanded);
   }
 

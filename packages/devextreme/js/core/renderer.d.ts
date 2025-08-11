@@ -116,7 +116,7 @@ export interface dxElementWrapper {
 
   toArray(): Element[];
 
-  toggle(value: string | undefined): this;
+  toggle(value?: boolean | string): this;
 
   toggleClass(className: string, value?: boolean): this;
 
