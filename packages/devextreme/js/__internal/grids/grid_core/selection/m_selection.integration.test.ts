@@ -65,7 +65,7 @@ describe('GridCore master_detail', () => {
 
         dataSource.splice(1, 1); // Remove the item with id 2
 
-        await instance.refresh(true);
+        await instance.refresh(repaintChangesOnly);
 
         expect(instance.getSelectedRowKeys()).toEqual([]);
       });
