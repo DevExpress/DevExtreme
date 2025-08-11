@@ -275,7 +275,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       createChildren: null,
       onSelectAllValueChanged: null,
       _supportItemUrl: false,
-      showItemStubs: true,
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
