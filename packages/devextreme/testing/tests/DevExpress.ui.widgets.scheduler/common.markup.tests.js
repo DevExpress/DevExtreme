@@ -2,7 +2,7 @@ import fx from 'common/core/animation/fx';
 import dxScheduler from '__internal/scheduler/m_scheduler';
 import { DataSource } from 'common/data/data_source/data_source';
 import dateUtils from 'core/utils/date';
-import { AppointmentDataProvider } from '__internal/scheduler/view_model/3.generate_view_model/data_provider/m_appointment_data_provider';
+import { AppointmentDataProvider } from '__internal/scheduler/view_model/generate_view_model/data_provider/m_appointment_data_provider';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
