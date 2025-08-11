@@ -31,6 +31,8 @@ type IChatOptionsNarrowedEvents = {
 }
 
 type IChatOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IChatOptionsNarrowedEvents> & IHtmlOptions & {
+  emptyMessageRender?: (...params: any) => React.ReactNode;
+  emptyMessageComponent?: React.ComponentType<any>;
   messageRender?: (...params: any) => React.ReactNode;
   messageComponent?: React.ComponentType<any>;
   defaultItems?: Array<Message>;
@@ -72,6 +74,11 @@ const Chat = memo(
       }), []);
 
       const templateProps = useMemo(() => ([
+        {
+          tmplOption: "emptyMessageTemplate",
+          render: "emptyMessageRender",
+          component: "emptyMessageComponent"
+        },
         {
           tmplOption: "messageTemplate",
           render: "messageRender",

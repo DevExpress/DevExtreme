@@ -10945,6 +10945,10 @@ declare module DevExpress.ui {
      */
     export type DisposingEvent =
       DevExpress.common.core.events.EventInfo<dxChat>;
+    export type EmptyMessageTemplateData = {
+      readonly component: dxChat;
+      readonly emptyMessageText: string;
+    };
     export type ExplicitTypes = {
       Properties: Properties;
       DisposingEvent: DisposingEvent;
@@ -11123,6 +11127,16 @@ declare module DevExpress.ui {
             message?: DevExpress.ui.dxChat.Message;
           }) => boolean);
     };
+    /**
+     * [descr:dxChatOptions.emptyMessageTemplate]
+     */
+    emptyMessageTemplate?:
+      | template
+      | null
+      | ((
+          data: DevExpress.ui.dxChat.EmptyMessageTemplateData,
+          itemElement: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:dxChatOptions.dataSource]
      */
