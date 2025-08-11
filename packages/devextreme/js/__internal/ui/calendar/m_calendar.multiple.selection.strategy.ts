@@ -1,23 +1,43 @@
+import type { DxEvent } from '@js/events';
+
+import type Calendar from './m_calendar';
 import CalendarSelectionStrategy from './m_calendar.selection.strategy';
 
 class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
-  constructor(component) {
+  constructor(component: Calendar) {
     super(component);
     this.NAME = 'MultiSelection';
   }
 
-  getViewOptions() {
+  dateOption(optionName: 'value'): (Date | null)[];
+  dateOption(optionName: 'min' | 'max'): Date | null;
+  dateOption(optionName: 'min' | 'max' | 'value'): Date | null | (Date | null)[] {
+    if (optionName === 'value') {
+      return this.calendar._getDateOption('value') as Date[];
+    }
+    return this.calendar._getDateOption(optionName);
+  }
+
+  getViewOptions(): {
+    value: (Date | null)[];
+    range: Date[];
+    selectionMode: 'multiple';
+    onWeekNumberClick?: ((e: { rowDates: Date[]; event: DxEvent }) => void) | null;
+  } {
     return {
       value: this.dateOption('value'),
       range: [],
       selectionMode: 'multiple',
-      onWeekNumberClick: this._shouldHandleWeekNumberClick() ? this._weekNumberClickHandler.bind(this) : null,
+      onWeekNumberClick: this._shouldHandleWeekNumberClick()
+        ? this._weekNumberClickHandler.bind(this)
+        : null,
     };
   }
 
-  selectValue(selectedValue, e) {
+  selectValue(selectedValue: Date, e: DxEvent): void {
     const value = [...this.dateOption('value')];
-    const alreadySelectedIndex = value.findIndex((date) => date?.toDateString() === selectedValue.toDateString());
+    const alreadySelectedIndex = value
+      .findIndex((date) => date?.toDateString() === selectedValue.toDateString());
 
     if (alreadySelectedIndex > -1) {
       value.splice(alreadySelectedIndex, 1);
@@ -31,23 +51,25 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
     this.dateValue(value, e);
   }
 
-  updateAriaSelected(value?, previousValue?) {
-    value ??= this.dateOption('value');
-    previousValue ??= [];
+  updateAriaSelected(val?: (Date | null)[], previousVal?: (Date | null)[]): void {
+    const value = val ?? this.dateOption('value');
+    const previousValue = previousVal ?? [];
 
     super.updateAriaSelected(value, previousValue);
   }
 
-  getDefaultCurrentDate() {
-    const dates = this.dateOption('value').filter(Boolean);
+  getDefaultCurrentDate(): Date | null {
+    const value = this.dateOption('value');
+    const dates = value.filter((date) => date !== null);
+
     return this._getLowestDateInArray(dates);
   }
 
-  restoreValue() {
+  restoreValue(): void {
     this.calendar.option('value', []);
   }
 
-  _weekNumberClickHandler({ rowDates, event }) {
+  _weekNumberClickHandler({ rowDates, event }: { rowDates: Date[]; event: DxEvent }): void {
     const selectedDates = rowDates.filter((date) => !this._isDateDisabled(date));
 
     this.dateValue(selectedDates, event);

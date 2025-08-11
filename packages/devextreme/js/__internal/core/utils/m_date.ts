@@ -700,7 +700,7 @@ const makeDate = function (date) {
 };
 
 const getDatesOfInterval = function (startDate, endDate, step) {
-  const result: any[] = [];
+  const result: Date[] = [];
   let currentDate = new Date(startDate.getTime());
 
   while (currentDate < endDate) {

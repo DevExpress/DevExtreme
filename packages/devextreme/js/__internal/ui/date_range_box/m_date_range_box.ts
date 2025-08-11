@@ -149,7 +149,7 @@ class DateRangeBox extends Editor<Properties> {
       value: [null, null],
       valueChangeEvent: 'change',
       _internalValidationErrors: [],
-      _currentSelection: 'startDate',
+      currentSelection: 'startDate',
     });
   }
 

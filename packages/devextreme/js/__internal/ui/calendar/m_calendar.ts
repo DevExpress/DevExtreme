@@ -95,8 +95,10 @@ export interface CalendarProperties extends Properties {
 
   todayButtonText?: string;
 
-  _rangeMin?: Date;
-  _rangeMax?: Date;
+  rangeMin?: Date;
+  rangeMax?: Date;
+  allowChangeSelectionOrder?: boolean;
+  currentSelection?: 'startDate' | 'endDate';
   _todayDate: () => Date;
   onCellClick?: (e: { event: DxEvent; value: Date }) => void;
   onContouredChanged?: (e: { activeElement: string }) => void;
@@ -150,6 +152,8 @@ class Calendar<
   _$submitElement!: dxElementWrapper;
 
   _isOtherViewCellClicked?: boolean;
+
+  _valueSelected?: boolean;
 
   _getDefaultOptions(): TProperties {
     return {
@@ -317,7 +321,7 @@ class Calendar<
     return dateSerialization.deserializeDate(value);
   }
 
-  _dateValue(value: Date | Date[], event: DxEvent): void {
+  _dateValue(value: Date | null | (Date | null)[], event: DxEvent): void {
     if (event) {
       if (event.type === 'keydown') {
         const cellElement = this._view._getContouredCell().get(0);
@@ -349,8 +353,11 @@ class Calendar<
   _getDateOption(optionName: 'value'): Date | null | (Date | null)[];
   _getDateOption(optionName: 'min' | 'max'): Date | null;
   _getDateOption(optionName: 'value' | 'min' | 'max'): Date | null | (Date | null)[] {
-    const { [optionName]: optionValue } = this.option();
+    let { [optionName]: optionValue } = this.option();
     if (!this._isArrayValue(optionName, optionValue)) {
+      if (optionValue === '') {
+        optionValue = null;
+      }
       return this._convertToDate(optionValue);
     }
 
@@ -600,13 +607,16 @@ class Calendar<
 
   _initCurrentDate(): void {
     const { currentDate = new Date() } = this.option();
-    const date = this._getNormalizedDate(this._selectionStrategy.getDefaultCurrentDate())
+    const defaultCurrentDate = this._selectionStrategy.getDefaultCurrentDate();
+    const date = (defaultCurrentDate ? this._getNormalizedDate(defaultCurrentDate) : null)
     ?? this._getNormalizedDate(currentDate);
 
     this.option('currentDate', date);
   }
 
-  _getNormalizedDate(date: Date): Date {
+  _getNormalizedDate(date: Date): Date;
+  _getNormalizedDate(date: null): null;
+  _getNormalizedDate(date: Date | null): Date | null {
     const normalizedDate = dateUtils.normalizeDate(date, this._getMinDate(), this._getMaxDate());
     return isDefined(normalizedDate) ? this._getDate(normalizedDate) : date;
   }
@@ -700,7 +710,7 @@ class Calendar<
   }
 
   _getMinDate(): Date {
-    const { _rangeMin: rangeMin } = this.option();
+    const { rangeMin } = this.option();
     if (rangeMin) {
       return rangeMin;
     }
@@ -714,7 +724,7 @@ class Calendar<
   }
 
   _getMaxDate(): Date {
-    const { _rangeMax: rangeMax } = this.option();
+    const { rangeMax } = this.option();
     if (rangeMax) {
       return rangeMax;
     }
@@ -1427,10 +1437,11 @@ class Calendar<
     return new Date(value);
   }
 
-  _toTodayView(args: ClickEvent): void {
+  _toTodayView(args: DxEvent<ClickEvent>): void {
     const today = new Date();
 
     if (this._isMaxZoomLevel()) {
+      // @ts-expect-error ts-error
       this._selectionStrategy.selectValue(today, args.event);
       return;
     }
@@ -1438,6 +1449,7 @@ class Calendar<
     this._preventViewChangeAnimation = true;
 
     this.option('zoomLevel', this.option('maxZoomLevel'));
+    // @ts-expect-error
     this._selectionStrategy.selectValue(today, args.event);
 
     this._animateShowView();
@@ -1591,21 +1603,21 @@ class Calendar<
 
   _setViewsMinOption(min: Date): void {
     this._restoreViewsMinMaxOptions();
-    this.option('_rangeMin', this._convertToDate(min));
+    this.option('rangeMin', this._convertToDate(min));
     this._updateViewsOption('min', this._getMinDate());
   }
 
   _setViewsMaxOption(max: Date): void {
     this._restoreViewsMinMaxOptions();
-    this.option('_rangeMax', this._convertToDate(max));
+    this.option('rangeMax', this._convertToDate(max));
     this._updateViewsOption('max', this._getMaxDate());
   }
 
   _restoreViewsMinMaxOptions(): void {
     this._resetActiveState();
     this.option({
-      _rangeMin: null,
-      _rangeMax: null,
+      rangeMin: null,
+      rangeMax: null,
     });
 
     this._updateViewsOption('min', this._getMinDate());
@@ -1626,23 +1638,38 @@ class Calendar<
     this.setAria('label', localizedNextButtonLabel, this._navigator._nextButton.$element());
   }
 
-  _updateAriaSelected(value: Date[], previousValue: Date[]): void {
-    previousValue.forEach((item) => {
+  _updateAriaSelected(
+    value: (Date | null)[] | null,
+    previousValue: (Date | null)[] | null,
+  ): void {
+    previousValue?.forEach((item) => {
+      if (!item) {
+        return;
+      }
       this.setAria('selected', false, this._view._getCellByDate(item));
     });
 
-    value.forEach((item) => {
+    value?.forEach((item) => {
+      if (!item) {
+        return;
+      }
       this.setAria('selected', true, this._view._getCellByDate(item));
     });
 
     const { viewsCount } = this.option();
 
     if (viewsCount > 1) {
-      previousValue.forEach((item) => {
+      previousValue?.forEach((item) => {
+        if (!item) {
+          return;
+        }
         this.setAria('selected', false, this._additionalView._getCellByDate(item));
       });
 
-      value.forEach((item) => {
+      value?.forEach((item) => {
+        if (!item) {
+          return;
+        }
         this.setAria('selected', true, this._additionalView._getCellByDate(item));
       });
     }
@@ -1723,7 +1750,10 @@ class Calendar<
         const isSameValue = dateUtils.sameDatesArrays(value, previousValue);
 
         if (!isSameValue) {
-          this._selectionStrategy.processValueChanged(value, previousValue);
+          this._selectionStrategy.processValueChanged(
+            value as (Date | null)[],
+            previousValue as (Date | null)[],
+          );
         }
         this._setSubmitValue(value as DateLike | DateLike[] | undefined);
         super._optionChanged(args);
