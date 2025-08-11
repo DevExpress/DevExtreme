@@ -37,7 +37,7 @@ import {
     PROPERTY_TOKEN_validationRules,
     PROPERTY_TOKEN_buttons,
     PROPERTY_TOKEN_columns,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-data-grid-column',

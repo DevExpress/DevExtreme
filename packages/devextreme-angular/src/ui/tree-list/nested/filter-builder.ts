@@ -31,7 +31,7 @@ import { NestedOption } from 'devextreme-angular/core';
 import {
     PROPERTY_TOKEN_customOperations,
     PROPERTY_TOKEN_fields,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-tree-list-filter-builder',

@@ -27,7 +27,7 @@ import { DxoFormSimpleItem } from './base/form-simple-item';
 
 import {
     PROPERTY_TOKEN_validationRules,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-form-item',

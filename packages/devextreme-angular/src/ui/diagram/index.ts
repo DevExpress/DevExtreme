@@ -99,7 +99,7 @@ import {
       PROPERTY_TOKEN_customShapes,
       PROPERTY_TOKEN_groups,
       PROPERTY_TOKEN_tabs,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

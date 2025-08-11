@@ -217,7 +217,7 @@ import {
       PROPERTY_TOKEN_sortByGroupSummaryInfo,
       PROPERTY_TOKEN_toolbarItems,
       PROPERTY_TOKEN_totalItems,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

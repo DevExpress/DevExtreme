@@ -78,7 +78,7 @@ import { DxoMenuToModule } from 'devextreme-angular/ui/menu/nested';
 
 import { 
       PROPERTY_TOKEN_items,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

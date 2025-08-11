@@ -19,7 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiAlert } from './base/alert-dxi';
 
-import { PROPERTY_TOKEN_alerts } from 'devextreme-angular/ui/nested/tokens';
+import { PROPERTY_TOKEN_alerts } from 'devextreme-angular/tokens';
 
 
 @Component({

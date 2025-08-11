@@ -19,7 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-import { PROPERTY_TOKEN_connectionPoints } from 'devextreme-angular/ui/nested/tokens';
+import { PROPERTY_TOKEN_connectionPoints } from 'devextreme-angular/tokens';
 
 
 @Component({

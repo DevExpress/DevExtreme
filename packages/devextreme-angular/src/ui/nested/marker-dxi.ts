@@ -22,11 +22,11 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-import { PROPERTY_TOKEN_markers } from 'devextreme-angular/ui/nested/tokens';
+import { PROPERTY_TOKEN_markers } from 'devextreme-angular/tokens';
 
 import {
     PROPERTY_TOKEN_location,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-marker',

@@ -30,7 +30,7 @@ import { NestedOption } from 'devextreme-angular/core';
 import {
     PROPERTY_TOKEN_constantLines,
     PROPERTY_TOKEN_strips,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-polar-chart-argument-axis',

@@ -19,7 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiChartSeries } from './base/chart-series-dxi';
 
-import { PROPERTY_TOKEN_series } from 'devextreme-angular/ui/nested/tokens';
+import { PROPERTY_TOKEN_series } from 'devextreme-angular/tokens';
 
 
 @Component({

@@ -1,5 +1,5 @@
 import {
-  Component, QueryList, ElementRef, Renderer2, EventEmitter, ContentChildren, InjectionToken,
+  Component, QueryList, ElementRef, Renderer2, EventEmitter,
 } from '@angular/core';
 
 import render from 'devextreme/core/renderer';
@@ -7,8 +7,6 @@ import { triggerHandler } from 'devextreme/events';
 import domAdapter from 'devextreme/core/dom_adapter';
 import { getElement } from './utils';
 import { DX_TEMPLATE_WRAPPER_CLASS } from './template';
-
-export const NESTED_ITEM_TOKEN = new InjectionToken<string>('nested-item');
 
 const VISIBILITY_CHANGE_SELECTOR = 'dx-visibility-change-handler';
 

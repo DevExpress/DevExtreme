@@ -31,7 +31,7 @@ import {
     PROPERTY_TOKEN_buttons,
     PROPERTY_TOKEN_columns,
     PROPERTY_TOKEN_validationRules,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-column',

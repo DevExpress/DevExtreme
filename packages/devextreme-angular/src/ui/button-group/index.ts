@@ -45,7 +45,7 @@ import { DxiButtonGroupItemModule } from 'devextreme-angular/ui/button-group/nes
 
 import { 
       PROPERTY_TOKEN_items,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

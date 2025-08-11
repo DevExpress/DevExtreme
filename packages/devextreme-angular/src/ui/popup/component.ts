@@ -69,7 +69,7 @@ import { DxiPopupToolbarItemModule } from 'devextreme-angular/ui/popup/nested';
 
 import { 
       PROPERTY_TOKEN_toolbarItems,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

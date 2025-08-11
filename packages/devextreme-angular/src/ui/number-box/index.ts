@@ -56,7 +56,7 @@ import { DxoNumberBoxOptionsModule } from 'devextreme-angular/ui/number-box/nest
 
 import { 
       PROPERTY_TOKEN_buttons,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

@@ -31,11 +31,11 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-import { PROPERTY_TOKEN_customShapes } from 'devextreme-angular/ui/nested/tokens';
+import { PROPERTY_TOKEN_customShapes } from 'devextreme-angular/tokens';
 
 import {
     PROPERTY_TOKEN_connectionPoints,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-diagram-custom-shape',

@@ -146,6 +146,7 @@ const prepareConfigs = (framework)=> {
       additionPaths = {
         'devextreme-angular': `${bundlesRoot}/devextreme-angular.umd.js`,
         'devextreme-angular/core': `${bundlesRoot}/devextreme-angular-core.umd.js`,
+        'devextreme-angular/tokens': `${bundlesRoot}/devextreme-angular-tokens.umd.js`,
         ...componentNames.reduce((items, item) => {
           // eslint-disable-next-line no-param-reassign
           items[`devextreme-angular/ui/${item.replace('-nested', '/nested')}`] = `${bundlesRoot}/devextreme-angular-ui-${item}.umd.js`;

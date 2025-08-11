@@ -94,7 +94,7 @@ import { DxoCircularGaugeValueIndicatorModule } from 'devextreme-angular/ui/circ
 
 import { 
       PROPERTY_TOKEN_ranges,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

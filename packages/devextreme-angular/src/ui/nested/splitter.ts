@@ -30,7 +30,7 @@ import { DxoSplitterOptions } from './base/splitter-options';
 
 import {
     PROPERTY_TOKEN_items,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-splitter',

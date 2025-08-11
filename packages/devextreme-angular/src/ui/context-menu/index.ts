@@ -79,7 +79,7 @@ import { DxoContextMenuToModule } from 'devextreme-angular/ui/context-menu/neste
 
 import { 
       PROPERTY_TOKEN_items,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

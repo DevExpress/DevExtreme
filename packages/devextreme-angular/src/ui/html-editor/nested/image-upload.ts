@@ -29,7 +29,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 import {
     PROPERTY_TOKEN_tabs,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-html-editor-image-upload',

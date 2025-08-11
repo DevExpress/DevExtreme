@@ -31,7 +31,7 @@ import { NestedOption } from 'devextreme-angular/core';
 
 import {
     PROPERTY_TOKEN_buttons,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-tree-view-search-editor-options',

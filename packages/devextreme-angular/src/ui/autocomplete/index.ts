@@ -88,7 +88,7 @@ import {
       PROPERTY_TOKEN_buttons,
       PROPERTY_TOKEN_items,
       PROPERTY_TOKEN_toolbarItems,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

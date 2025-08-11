@@ -55,7 +55,7 @@ import { DxiRadioGroupItemModule } from 'devextreme-angular/ui/radio-group/neste
 
 import { 
       PROPERTY_TOKEN_items,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

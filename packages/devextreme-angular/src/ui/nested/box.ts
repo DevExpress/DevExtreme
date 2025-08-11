@@ -30,7 +30,7 @@ import { DxoBoxOptions } from './base/box-options';
 
 import {
     PROPERTY_TOKEN_items,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-box',

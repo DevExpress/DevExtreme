@@ -59,7 +59,7 @@ import { DxiValidatorValidationRuleModule } from 'devextreme-angular/ui/validato
 
 import { 
       PROPERTY_TOKEN_validationRules,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

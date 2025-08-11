@@ -19,7 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiChartAnnotationConfig } from './base/chart-annotation-config-dxi';
 
-import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/ui/nested/tokens';
+import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/tokens';
 
 
 @Component({

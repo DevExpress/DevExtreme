@@ -57,7 +57,7 @@ import { DxoTreeViewSearchEditorOptionsModule } from 'devextreme-angular/ui/tree
 import { 
       PROPERTY_TOKEN_buttons,
       PROPERTY_TOKEN_items,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

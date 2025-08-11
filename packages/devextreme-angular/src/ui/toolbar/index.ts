@@ -48,7 +48,7 @@ import { DxiToolbarItemModule } from 'devextreme-angular/ui/toolbar/nested';
 
 import { 
       PROPERTY_TOKEN_items,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

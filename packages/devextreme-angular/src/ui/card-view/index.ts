@@ -132,7 +132,7 @@ import {
       PROPERTY_TOKEN_customOperations,
       PROPERTY_TOKEN_fields,
       PROPERTY_TOKEN_tabs,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

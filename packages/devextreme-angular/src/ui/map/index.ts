@@ -59,7 +59,7 @@ import {
       PROPERTY_TOKEN_markers,
       PROPERTY_TOKEN_routes,
       PROPERTY_TOKEN_locations,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

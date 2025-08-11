@@ -48,7 +48,7 @@ import { DxiActionSheetItemModule } from 'devextreme-angular/ui/action-sheet/nes
 
 import { 
       PROPERTY_TOKEN_items,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

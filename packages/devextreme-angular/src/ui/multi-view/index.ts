@@ -48,7 +48,7 @@ import { DxiMultiViewItemModule } from 'devextreme-angular/ui/multi-view/nested'
 
 import { 
       PROPERTY_TOKEN_items,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

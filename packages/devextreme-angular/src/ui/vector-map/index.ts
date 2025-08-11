@@ -96,7 +96,7 @@ import {
       PROPERTY_TOKEN_annotations,
       PROPERTY_TOKEN_layers,
       PROPERTY_TOKEN_legends,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

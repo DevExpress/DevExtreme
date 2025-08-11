@@ -65,7 +65,7 @@ import {
       PROPERTY_TOKEN_alerts,
       PROPERTY_TOKEN_items,
       PROPERTY_TOKEN_typingUsers,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

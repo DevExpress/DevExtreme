@@ -81,7 +81,7 @@ import { DxiColorBoxToolbarItemModule } from 'devextreme-angular/ui/color-box/ne
 import { 
       PROPERTY_TOKEN_buttons,
       PROPERTY_TOKEN_toolbarItems,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

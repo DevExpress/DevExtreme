@@ -68,7 +68,7 @@ import {
       PROPERTY_TOKEN_columns,
       PROPERTY_TOKEN_items,
       PROPERTY_TOKEN_fileSelectionItems,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

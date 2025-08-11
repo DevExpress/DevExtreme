@@ -73,7 +73,7 @@ import { DxiPopoverToolbarItemModule } from 'devextreme-angular/ui/popover/neste
 
 import { 
       PROPERTY_TOKEN_toolbarItems,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

@@ -19,7 +19,7 @@ import {
 } from 'devextreme-angular/core';
 import { DxiTextEditorButton } from './base/text-editor-button-dxi';
 
-import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/ui/nested/tokens';
+import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/tokens';
 
 
 @Component({

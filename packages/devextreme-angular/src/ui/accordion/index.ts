@@ -48,7 +48,7 @@ import { DxiAccordionItemModule } from 'devextreme-angular/ui/accordion/nested';
 
 import { 
       PROPERTY_TOKEN_items,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

@@ -33,11 +33,11 @@ import {
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
-import { PROPERTY_TOKEN_items } from 'devextreme-angular/ui/nested/tokens';
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
 
 import {
     PROPERTY_TOKEN_validationRules,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-form-simple-item',

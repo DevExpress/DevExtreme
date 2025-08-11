@@ -32,7 +32,7 @@ import { NestedOption } from 'devextreme-angular/core';
 import {
     PROPERTY_TOKEN_groupItems,
     PROPERTY_TOKEN_totalItems,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxo-data-grid-summary',

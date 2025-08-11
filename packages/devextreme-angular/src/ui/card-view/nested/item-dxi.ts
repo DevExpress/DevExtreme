@@ -42,7 +42,7 @@ import {
     PROPERTY_TOKEN_validationRules,
     PROPERTY_TOKEN_tabs,
     PROPERTY_TOKEN_items,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-card-view-item',

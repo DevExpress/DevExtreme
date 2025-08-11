@@ -48,7 +48,7 @@ import { DxiStepperItemModule } from 'devextreme-angular/ui/stepper/nested';
 
 import { 
       PROPERTY_TOKEN_items,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

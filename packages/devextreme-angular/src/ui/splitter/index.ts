@@ -50,7 +50,7 @@ import { DxiSplitterItemModule } from 'devextreme-angular/ui/splitter/nested';
 
 import { 
       PROPERTY_TOKEN_items,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

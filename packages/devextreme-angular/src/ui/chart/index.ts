@@ -232,7 +232,7 @@ import {
       PROPERTY_TOKEN_series,
       PROPERTY_TOKEN_strips,
       PROPERTY_TOKEN_valueAxis,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

@@ -87,7 +87,7 @@ import { DxiDateRangeBoxToolbarItemModule } from 'devextreme-angular/ui/date-ran
 import { 
       PROPERTY_TOKEN_buttons,
       PROPERTY_TOKEN_toolbarItems,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 

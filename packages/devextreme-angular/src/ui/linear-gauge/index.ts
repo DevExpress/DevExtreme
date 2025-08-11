@@ -96,7 +96,7 @@ import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/ne
 
 import { 
       PROPERTY_TOKEN_ranges,
-} from 'devextreme-angular/ui/nested/tokens';
+} from 'devextreme-angular/tokens';
 
 
 
