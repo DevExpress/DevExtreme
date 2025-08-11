@@ -31,6 +31,7 @@ import type {
 } from '@ts/ui/chat/messagebox';
 import MessageBox from '@ts/ui/chat/messagebox';
 import type {
+  EmptyMessageTemplate,
   MessageEditingEvent,
   MessageTemplate,
   Properties as MessageListProperties,
@@ -89,6 +90,7 @@ class Chat extends Widget<Properties> {
       dayHeaderFormat: 'shortdate',
       messageTemplate: null,
       messageTimestampFormat: 'shorttime',
+      emptyMessageTemplate: null,
       alerts: [],
       showAvatar: true,
       showUserName: true,
@@ -201,6 +203,7 @@ class Chat extends Widget<Properties> {
       allowDeleting: (message: Message): boolean => this._allowDeleteAction(message),
       isEditActionDisabled: (message) => this._messageToEdit === message,
       messageTemplate: this._getMessageTemplate(),
+      emptyMessageTemplate: this._getEmptyMessageTemplate(),
       showDayHeaders,
       showAvatar,
       showUserName,
@@ -259,11 +262,16 @@ class Chat extends Widget<Properties> {
     return allowDeleting ?? false;
   }
 
-  _getMessageTemplate(): MessageTemplate {
-    const { messageTemplate } = this.option();
-    if (messageTemplate) {
+  _getRenderTemplateFunction(optionName: 'messageTemplate'): MessageTemplate | null;
+  _getRenderTemplateFunction(optionName: 'emptyMessageTemplate'): EmptyMessageTemplate | null;
+  _getRenderTemplateFunction(
+    optionName: 'messageTemplate' | 'emptyMessageTemplate',
+  ): MessageTemplate | EmptyMessageTemplate | null {
+    const { [optionName]: templateOption } = this.option();
+
+    if (templateOption) {
       return (message, $container): void => {
-        const template = this._getTemplateByOption('messageTemplate');
+        const template = this._getTemplateByOption(optionName);
 
         template.render({
           container: $container,
@@ -276,6 +284,14 @@ class Chat extends Widget<Properties> {
     }
 
     return null;
+  }
+
+  _getMessageTemplate(): MessageTemplate {
+    return this._getRenderTemplateFunction('messageTemplate');
+  }
+
+  _getEmptyMessageTemplate(): EmptyMessageTemplate {
+    return this._getRenderTemplateFunction('emptyMessageTemplate');
   }
 
   _messageEditingStartHandler(e: MessageEditingEvent): void {
@@ -614,6 +630,9 @@ class Chat extends Widget<Properties> {
         break;
       case 'messageTemplate':
         this._messageList.option(name, this._getMessageTemplate());
+        break;
+      case 'emptyMessageTemplate':
+        this._messageList.option(name, this._getEmptyMessageTemplate());
         break;
       case 'reloadOnChange':
         break;
