@@ -92,6 +92,7 @@ import {
   isEditingCell,
   isEditingOrShowEditorAlwaysDataCell,
 } from './m_editing_utils';
+import type { NormalizedEditCellOptions } from './m_types';
 
 class EditingControllerImpl extends modules.ViewController {
   protected _columnsController!: Controllers['columns'];
@@ -2465,6 +2466,8 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   protected _isRowDeleteAllowed(): any {}
+
+  protected _prepareEditCell(parameters: NormalizedEditCellOptions): boolean { return false; }
 
   public shouldHighlightCell(parameters) {
     const cellModified = this.isCellModified(parameters);

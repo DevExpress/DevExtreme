@@ -33,6 +33,7 @@ import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import { EDITORS_INPUT_SELECTOR } from '../editing/const';
 import type { EditingController } from '../editing/m_editing';
+import type { NormalizedEditCellOptions } from '../editing/m_types';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
@@ -710,9 +711,9 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
     super._validateEditFormAfterUpdate.apply(this, arguments as any);
   }
 
-  private _prepareEditCell({ column, item }): boolean {
-    // @ts-expect-error
-    const isNotCanceled: boolean = super._prepareEditCell.apply(this, arguments as any);
+  protected _prepareEditCell(parameters: NormalizedEditCellOptions): boolean {
+    const { column, item } = parameters;
+    const isNotCanceled: boolean = super._prepareEditCell(parameters);
     const key = !item.isNewRow ? item.key : undefined;
 
     if (isNotCanceled && column.showEditorAlways) {

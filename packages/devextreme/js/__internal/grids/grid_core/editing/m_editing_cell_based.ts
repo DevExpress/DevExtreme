@@ -33,6 +33,7 @@ import {
 } from './const';
 import type { EditingController } from './m_editing';
 import { isEditable } from './m_editing_utils';
+import type { NormalizedEditCellOptions } from './m_types';
 
 export interface ICellBasedEditingControllerExtender {
   // eslint-disable-next-line @typescript-eslint/method-signature-style
@@ -234,7 +235,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return coreResult !== undefined ? coreResult : d.promise();
   }
 
-  private _editCellCore(options) {
+  private _editCellCore(options): boolean | DeferredObj<boolean> | undefined {
     const editCellOptions: any = this._getNormalizedEditCellOptions(options);
     const {
       columnIndex,
@@ -289,8 +290,16 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 
   private _getNormalizedEditCellOptions({
-    oldColumnIndex, oldRowIndex, columnIndex, rowIndex,
-  }) {
+    oldColumnIndex,
+    oldRowIndex,
+    columnIndex,
+    rowIndex,
+  }: {
+    oldColumnIndex: number;
+    oldRowIndex: number;
+    columnIndex: number;
+    rowIndex: number;
+  }): NormalizedEditCellOptions {
     const columnsController = this._columnsController;
     const visibleColumns = columnsController.getVisibleColumns();
     const items = this._dataController.items();
@@ -319,23 +328,13 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     };
   }
 
-  private setEditCell(
-    key: unknown,
-    columnIndex: number,
-    silent: boolean,
-  ): void {
-    this._setEditRowKey(key, silent);
-    this._setEditColumnNameByIndex(columnIndex, silent);
-  }
-
-  private _prepareEditCell(params): boolean {
-    const {
-      item,
-      column,
-      oldColumn,
-      columnIndex,
-      oldRowIndex,
-    } = params;
+  protected _prepareEditCell({
+    item,
+    column,
+    oldColumn,
+    columnIndex,
+    oldRowIndex,
+  }: NormalizedEditCellOptions): boolean {
     const editingStartParams = {
       data: item?.data,
       cancel: false,
@@ -349,7 +348,8 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
     this._pageIndex = this._dataController.pageIndex();
 
-    this.setEditCell(item.key, columnIndex, true);
+    this._setEditRowKey(item.key, true);
+    this._setEditColumnNameByIndex(columnIndex, true);
     this._repaintEditCell(column, oldColumn, oldRowIndex);
 
     if (!column.showEditorAlways) {
