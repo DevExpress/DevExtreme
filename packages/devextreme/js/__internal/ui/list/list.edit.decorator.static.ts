@@ -1,7 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { ClickEvent } from '@js/ui/button';
-import Button from '@js/ui/button';
+import type { ClickEvent, Properties as ButtonProperties } from '@js/ui/button';
+import Button from '@ts/ui/button/wrapper';
 import type { BagConfig } from '@ts/ui/list/list.edit.decorator';
 import EditDecorator from '@ts/ui/list/list.edit.decorator';
 import { register as registerDecorator } from '@ts/ui/list/list.edit.decorator_registry';
@@ -15,12 +15,15 @@ class EditDecoratorStatic extends EditDecorator {
 
     const $button = $('<div>').addClass(STATIC_DELETE_BUTTON_CLASS);
 
-    this._list._createComponent($button, Button, {
+    this._list._createComponent<Button, ButtonProperties>($button, Button, {
       icon: 'remove',
-      onClick: (args: Required<ClickEvent>): void => {
-        args.event.stopPropagation();
+      onClick: (args: ClickEvent): void => {
+        const { event } = args;
+
+        event?.stopPropagation();
         this._deleteItem($itemElement);
       },
+      // @ts-expect-error
       integrationOptions: {},
       elementAttr: {
         role: null,

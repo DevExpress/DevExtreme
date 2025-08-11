@@ -10,8 +10,9 @@ import { extend } from '@js/core/utils/extend';
 import { getWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
 import type { Properties } from '@js/ui/action_sheet';
-import Button from '@js/ui/button';
+import type { Properties as ButtonProperties } from '@js/ui/button';
 import type { OptionChanged } from '@ts/core/widget/types';
+import Button from '@ts/ui/button/wrapper';
 import CollectionWidget from '@ts/ui/collection/collection_widget.edit';
 import type { PopoverProperties } from '@ts/ui/popover/m_popover';
 import Popover from '@ts/ui/popover/m_popover';
@@ -269,7 +270,7 @@ class ActionSheet extends CollectionWidget<Properties> {
         .addClass(ACTION_SHEET_CANCEL_BUTTON_CLASS)
         .appendTo(this._popup?.$content());
 
-      this._createComponent(this._$cancelButton, Button, {
+      this._createComponent<Button, ButtonProperties>(this._$cancelButton, Button, {
         disabled: false,
         stylingMode: ACTION_SHEET_BUTTON_DEFAULT_STYLING_MODE,
         text: cancelText,
@@ -281,6 +282,7 @@ class ActionSheet extends CollectionWidget<Properties> {
             this.hide();
           }
         },
+        // @ts-expect-error
         integrationOptions: {},
       });
     }

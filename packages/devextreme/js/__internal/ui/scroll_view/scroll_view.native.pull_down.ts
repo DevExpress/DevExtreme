@@ -7,10 +7,9 @@ import { Deferred } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import LoadIndicator from '@js/ui/load_indicator';
 import type { ScrollEvent } from '@js/ui/scroll_view';
-
-import type { ScrollView, ScrollViewProperties } from './scroll_view';
-import NativeStrategy from './scrollable.native';
-import type { AllowedDirections } from './types';
+import type { ScrollView, ScrollViewProperties } from '@ts/ui/scroll_view/scroll_view';
+import NativeStrategy from '@ts/ui/scroll_view/scrollable.native';
+import type { AllowedDirections } from '@ts/ui/scroll_view/types';
 
 const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';
 const SCROLLVIEW_PULLDOWN_READY_CLASS = 'dx-scrollview-pull-down-ready';

@@ -2,9 +2,8 @@ import $ from '@js/core/renderer';
 import { camelize } from '@js/core/utils/inflector';
 import type { PanelLocation } from '@js/ui/drawer';
 import type Drawer from '@ts/ui/drawer/drawer';
-
-import { animation } from './drawer.animation';
-import DrawerStrategy from './drawer.rendering.strategy';
+import { animation } from '@ts/ui/drawer/drawer.animation';
+import DrawerStrategy from '@ts/ui/drawer/drawer.rendering.strategy';
 
 class ShrinkStrategy extends DrawerStrategy {
   _internalRenderPosition(

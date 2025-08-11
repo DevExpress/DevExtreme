@@ -3,6 +3,7 @@ import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
+import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 
 import TextEditorButton from '../text_box/texteditor_button_collection/m_button';
@@ -52,7 +53,7 @@ export default class DropDownButton extends TextEditorButton {
 
     this._addToContainer($element);
 
-    const instance = editor._createComponent($element, Button, extend({}, options, { elementAttr: { 'aria-label': messageLocalization.format(BUTTON_MESSAGE) } }));
+    const instance = editor._createComponent<Button, ButtonProperties>($element, Button, extend({}, options, { elementAttr: { 'aria-label': messageLocalization.format(BUTTON_MESSAGE) } }));
 
     this._legacyRender(editor.$element(), $element, options.visible);
 
