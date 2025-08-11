@@ -8,7 +8,7 @@ import {
     getEmptyResourceManager,
     getLoadedResources,
     getWorkspaceResourceConfig
-} from '../../helpers/scheduler/mockResourceManager.js';
+} from '../../../../testing/helpers/scheduler/mockResourceManager.js';
 
 const {
     module,

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import SchedulerAgenda from '__internal/scheduler/workspaces/m_agenda';
 import dateLocalization from 'common/core/localization/date';
-import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
+import { AppointmentDataProvider } from '__internal/scheduler/view_model/3.generate_view_model/data_provider/m_appointment_data_provider';
 
 import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
 

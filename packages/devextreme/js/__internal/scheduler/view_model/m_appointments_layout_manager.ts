@@ -1,6 +1,6 @@
 import { equalByValue } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
-import { getCellDuration } from '@ts/scheduler/r1/utils/index';
+import { getCellDuration } from '@ts/scheduler/r1/utils';
 import type {
   AppointmentViewModel,
   BaseAppointmentViewModelSettings,
@@ -9,10 +9,10 @@ import type {
   ViewType,
 } from '@ts/scheduler/types';
 
-import { AppointmentViewModelGenerator } from './appointments/m_view_model_generator';
-import type Scheduler from './m_scheduler';
-import type { ResourceManager } from './utils/resource_manager/resource_manager';
-import { getAllDayHeight, getCellHeight, getCellWidth } from './workspaces/helpers/m_position_helper';
+import { AppointmentViewModelGenerator } from '../appointments/m_view_model_generator';
+import type Scheduler from '../m_scheduler';
+import type { ResourceManager } from '../utils/resource_manager/resource_manager';
+import { getAllDayHeight, getCellHeight, getCellWidth } from '../workspaces/helpers/m_position_helper';
 
 const toMs = dateUtils.dateToMilliseconds;
 const appointmentRenderingStrategyMap: Record<ViewType, RenderStrategyName> = {
