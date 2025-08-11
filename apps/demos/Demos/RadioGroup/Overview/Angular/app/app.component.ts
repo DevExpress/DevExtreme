@@ -1,7 +1,7 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxRadioGroupModule, DxTemplateModule } from 'devextreme-angular';
+import { DxRadioGroupModule } from 'devextreme-angular';
 import { DxRadioGroupTypes } from 'devextreme-angular/ui/radio-group';
 import { PriorityEntity, Service, Task } from './app.service';
 
@@ -62,7 +62,6 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxRadioGroupModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

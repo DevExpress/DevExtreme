@@ -4,7 +4,12 @@ import dxTreeView from '@js/ui/tree_view';
 
 import { InfernoWrapper } from './widget_wrapper';
 
-export class TreeView extends InfernoWrapper<TreeViewProperties, dxTreeView> {
+export class TreeView<
+  TItem extends TreeViewItemProperties = TreeViewItemProperties,
+> extends InfernoWrapper<
+  TreeViewProperties,
+  dxTreeView<TItem>
+> {
   protected getComponentFabric(): typeof dxTreeView {
     return dxTreeView;
   }
@@ -29,15 +34,15 @@ export class TreeView extends InfernoWrapper<TreeViewProperties, dxTreeView> {
     prevProps: TreeViewProperties,
     props: TreeViewProperties,
   ): boolean {
-    const oldItems = (prevProps.items ?? []).map(({ selected, ...restProps }) => restProps);
-    const newItems = (props.items ?? []).map(({ selected, ...restProps }) => restProps);
+    const oldItems = (prevProps.items ?? []).map(({ selected, ...restProps }: TItem) => restProps);
+    const newItems = (props.items ?? []).map(({ selected, ...restProps }: TItem) => restProps);
 
     const onlySelectionChanged = equalByValue(oldItems, newItems);
 
     return onlySelectionChanged;
   }
 
-  private updateSelection(items: TreeViewItemProperties[]): void {
+  private updateSelection(items: TItem[]): void {
     const treeView = this.component;
 
     if (!treeView) {

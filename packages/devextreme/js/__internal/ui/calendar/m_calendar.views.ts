@@ -160,9 +160,10 @@ export class MonthView extends BaseView<MonthViewProperties> {
     return dateUtils.getWeekNumber(date, firstDayOfWeek, weekNumberRule);
   }
 
-  getNavigatorCaption() {
+  getNavigatorCaption(): string {
     const { date } = this.option();
 
+    // @ts-expect-error ts-error
     return dateLocalization.format(date, 'monthandyear');
   }
 
@@ -309,10 +310,10 @@ export class YearView extends BaseView {
     return this._$table.find(`td[data-value='${dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
   }
 
-  getNavigatorCaption(): string | Date | undefined {
+  getNavigatorCaption(): string {
     const { date } = this.option();
 
-    return dateLocalization.format(date, 'yyyy');
+    return `${dateLocalization.format(date, 'yyyy')}`;
   }
 
   isBoundary(date) {

@@ -31,14 +31,13 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { ScrollEvent } from '@js/ui/scroll_view';
 import type { ActionConfig } from '@ts/core/widget/component';
 import Animator from '@ts/ui/scroll_view/animator';
-
-import type { ScrollViewScroller } from './scroll_view.simulated';
-import type Scrollable from './scrollable';
-import type { ScrollableProperties } from './scrollable';
-import Scrollbar from './scrollbar';
+import type { ScrollViewScroller } from '@ts/ui/scroll_view/scroll_view.simulated';
+import type Scrollable from '@ts/ui/scroll_view/scrollable';
+import type { ScrollableProperties } from '@ts/ui/scroll_view/scrollable';
+import Scrollbar from '@ts/ui/scroll_view/scrollbar';
 import type {
   AllowedDirections, DxMouseEvent, DxMouseWheelEvent, ScrollEventArgs, ScrollOffset,
-} from './types';
+} from '@ts/ui/scroll_view/types';
 
 interface ScrollVelocity {
   x: number;
@@ -620,7 +619,6 @@ export class Scroller {
   }
 
   _contentSize(): number {
-    // @ts-expect-error CSS method access
     const isOverflowHidden = this._$content.css(`overflow${this._axis.toUpperCase()}`) === 'hidden';
     let contentSize = this._getRealDimension(this._$content.get(0), this._dimension);
 
@@ -680,8 +678,9 @@ let activeScrollable: SimulatedStrategy<any> | null = null;
 
 export class SimulatedStrategy<
   TProperties extends ScrollableProperties = ScrollableProperties,
+  TComponent extends Scrollable<TProperties> = Scrollable<TProperties>,
 > {
-  _component!: Scrollable<TProperties>;
+  _component!: TComponent;
 
   _$element!: dxElementWrapper;
 
@@ -731,7 +730,7 @@ export class SimulatedStrategy<
   _scrollOffset?: ScrollOffset;
 
   _createActionByOption!: (
-    optionName: string,
+    optionName: keyof TProperties,
     config?: ActionConfig,
   ) => (event?: Record<string, unknown>) => void;
 
@@ -741,11 +740,11 @@ export class SimulatedStrategy<
 
   _validDirections!: Record<string, boolean>;
 
-  constructor(scrollable: Scrollable<TProperties>) {
+  constructor(scrollable: TComponent) {
     this._init(scrollable);
   }
 
-  _init(scrollable: Scrollable<TProperties>): void {
+  _init(scrollable: TComponent): void {
     this._component = scrollable;
     this._$element = scrollable.$element();
     this._$container = $(scrollable.container());
@@ -762,7 +761,10 @@ export class SimulatedStrategy<
   render(): void {
     this._$element.addClass(SCROLLABLE_SIMULATED_CLASS);
     this._createScrollers();
-    if (this.option('useKeyboard')) {
+
+    const { useKeyboard } = this.option();
+
+    if (useKeyboard) {
       this._$container.prop('tabIndex', 0);
     }
     this._attachKeyboardHandler();
@@ -1083,7 +1085,7 @@ export class SimulatedStrategy<
     });
   }
 
-  _createActionHandler(optionName: string): () => void {
+  _createActionHandler(optionName: keyof TProperties): () => void {
     const actionHandler = this._createActionByOption(optionName);
 
     return (...args: unknown[]) => {

@@ -42,8 +42,8 @@ export class AppComponent {
     this.menuItems = service.getMenuItems();
   }
 
-  treeViewItemContextMenu(e: DxTreeViewTypes.ItemContextMenuEvent) {
-    this.selectedTreeItem = e.itemData as Product;
+  treeViewItemContextMenu(e: DxTreeViewTypes.ItemContextMenuEvent<Product>) {
+    this.selectedTreeItem = e.itemData;
 
     const isProduct = e.itemData.price !== undefined;
     const contextMenu = this.contextMenu.instance;

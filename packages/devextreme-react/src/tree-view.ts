@@ -19,34 +19,34 @@ type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
 }
 
-type ITreeViewOptionsNarrowedEvents<TKey = any> = {
-  onContentReady?: ((e: ContentReadyEvent<TKey>) => void);
-  onDisposing?: ((e: DisposingEvent<TKey>) => void);
-  onInitialized?: ((e: InitializedEvent<TKey>) => void);
-  onItemClick?: ((e: ItemClickEvent<TKey>) => void);
-  onItemCollapsed?: ((e: ItemCollapsedEvent<TKey>) => void);
-  onItemContextMenu?: ((e: ItemContextMenuEvent<TKey>) => void);
-  onItemExpanded?: ((e: ItemExpandedEvent<TKey>) => void);
-  onItemHold?: ((e: ItemHoldEvent<TKey>) => void);
-  onItemRendered?: ((e: ItemRenderedEvent<TKey>) => void);
-  onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TKey>) => void);
+type ITreeViewOptionsNarrowedEvents<TItem = any, TKey = any> = {
+  onContentReady?: ((e: ContentReadyEvent<TItem, TKey>) => void);
+  onDisposing?: ((e: DisposingEvent<TItem, TKey>) => void);
+  onInitialized?: ((e: InitializedEvent<TItem, TKey>) => void);
+  onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void);
+  onItemCollapsed?: ((e: ItemCollapsedEvent<TItem, TKey>) => void);
+  onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
+  onItemExpanded?: ((e: ItemExpandedEvent<TItem, TKey>) => void);
+  onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void);
+  onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
+  onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void);
 }
 
-type ITreeViewOptions<TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TKey>, ITreeViewOptionsNarrowedEvents<TKey>> & IHtmlOptions & {
-  dataSource?: Properties<TKey>["dataSource"];
+type ITreeViewOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TItem, TKey>, ITreeViewOptionsNarrowedEvents<TItem, TKey>> & IHtmlOptions & {
+  dataSource?: Properties<TItem, TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
   defaultItems?: Array<dxTreeViewItem>;
   onItemsChange?: (value: Array<dxTreeViewItem>) => void;
 }>
 
-interface TreeViewRef<TKey = any> {
-  instance: () => dxTreeView<TKey>;
+interface TreeViewRef<TItem = any, TKey = any> {
+  instance: () => dxTreeView<TItem, TKey>;
 }
 
 const TreeView = memo(
   forwardRef(
-    <TKey = any>(props: React.PropsWithChildren<ITreeViewOptions<TKey>>, ref: ForwardedRef<TreeViewRef<TKey>>) => {
+    <TItem = any, TKey = any>(props: React.PropsWithChildren<ITreeViewOptions<TItem, TKey>>, ref: ForwardedRef<TreeViewRef<TItem, TKey>>) => {
       const baseRef = useRef<ComponentRef>(null);
 
       useImperativeHandle(ref, () => (
@@ -55,7 +55,7 @@ const TreeView = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["items"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick","onItemCollapsed","onItemContextMenu","onItemExpanded","onItemHold","onItemRendered","onSelectAllValueChanged"]), []);
@@ -78,7 +78,7 @@ const TreeView = memo(
       ]), []);
 
       return (
-        React.createElement(BaseComponent<React.PropsWithChildren<ITreeViewOptions<TKey>>>, {
+        React.createElement(BaseComponent<React.PropsWithChildren<ITreeViewOptions<TItem, TKey>>>, {
           WidgetClass: dxTreeView,
           ref: baseRef,
           subscribableOptions,
@@ -91,7 +91,7 @@ const TreeView = memo(
       );
     },
   ),
-) as <TKey = any>(props: React.PropsWithChildren<ITreeViewOptions<TKey>> & { ref?: Ref<TreeViewRef<TKey>> }) => ReactElement | null;
+) as <TItem = any, TKey = any>(props: React.PropsWithChildren<ITreeViewOptions<TItem, TKey>> & { ref?: Ref<TreeViewRef<TItem, TKey>> }) => ReactElement | null;
 
 
 // owners:

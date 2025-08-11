@@ -18,7 +18,7 @@ import {
 import type { Item, Properties } from '@js/ui/toolbar';
 import type { OptionChanged } from '@ts/core/widget/types';
 import CollectionWidgetAsync from '@ts/ui/collection/collection_widget.async';
-import type { CollectionWidgetBaseProperties } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionItemKey, CollectionWidgetBaseProperties } from '@ts/ui/collection/collection_widget.base';
 
 import { TOOLBAR_CLASS } from './constants';
 
@@ -44,8 +44,7 @@ type ItemLike = string | Item;
 
 export interface ToolbarBaseProperties<
   TItem extends ItemLike = Item,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  TKey = any,
+  TKey extends CollectionItemKey = CollectionItemKey,
 > extends Properties<TItem, TKey>,
   Omit<
   CollectionWidgetBaseProperties<ToolbarBase, TItem, TKey>,
@@ -469,7 +468,7 @@ class ToolbarBase<
 
   _itemOptionChanged(
     item: Item,
-    property: string,
+    property: keyof Item,
     value: unknown,
     prevValue: unknown,
   ): void {
@@ -541,7 +540,6 @@ class ToolbarBase<
         const promises: Promise<unknown>[] = [];
         $labels.each((_, label): boolean => {
           const text = $(label).text();
-          // @ts-expect-error ts-error
           const fontWeight = $(label).css('fontWeight');
           promises.push(waitWebFont(text, fontWeight));
           return true;

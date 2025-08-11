@@ -6,7 +6,7 @@ import MessageList, {
 } from '__internal/ui/chat/messagelist';
 import ContextMenu, {
     DX_MENU_ITEM_CLASS,
-} from '__internal/ui/context_menu/m_context_menu';
+} from '__internal/ui/context_menu/context_menu';
 import {
     FOCUSED_STATE_CLASS,
     WIDGET_CLASS,

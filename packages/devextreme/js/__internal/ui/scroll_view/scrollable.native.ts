@@ -47,7 +47,7 @@ class NativeStrategy<
   _hideScrollbarTimeout?: ReturnType<typeof setTimeout> | number;
 
   _createActionByOption!: (
-    optionName: string,
+    optionName: keyof TProperties,
     config?: ActionConfig,
   ) => (event?: ScrollEventArgs) => void;
 
@@ -93,7 +93,7 @@ class NativeStrategy<
     this._useSimulatedScrollbar = useSimulatedScrollbar;
 
     this.option = scrollable.option.bind(scrollable);
-    // @ts-expect-error ts-error
+
     this._createActionByOption = scrollable._createActionByOption.bind(scrollable);
     this._isLocked = scrollable._isLocked.bind(scrollable);
     this._isDirection = scrollable._isDirection.bind(scrollable);

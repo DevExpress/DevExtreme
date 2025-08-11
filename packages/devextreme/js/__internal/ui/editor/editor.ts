@@ -76,6 +76,10 @@ class Editor<
 
   _$validationMessage?: dxElementWrapper;
 
+  static isEditor(instance: unknown): instance is Editor {
+    return instance instanceof Editor;
+  }
+
   ctor(element: Element, options: TProperties): void {
     this.showValidationMessageTimeout = undefined;
     this.validationRequest = Callbacks();
@@ -124,6 +128,7 @@ class Editor<
       validationBoundary: undefined,
       validationMessageOffset: { h: 0, v: 0 },
       validationTooltipOptions: {},
+      _cached_validationTooltipOptions: {},
       _showValidationMessage: true,
       isDirty: false,
     };
@@ -456,6 +461,8 @@ class Editor<
       case 'validationTooltipOptions':
         this._innerWidgetOptionChanged(this._validationMessage, args);
         break;
+      case '_cached_validationTooltipOptions':
+        break;
       case '_showValidationMessage':
       case 'isDirty':
         break;
@@ -490,6 +497,4 @@ class Editor<
   }
 }
 
-// @ts-expect-error ts-error
-Editor.isEditor = (instance): boolean => instance instanceof Editor;
 export default Editor;

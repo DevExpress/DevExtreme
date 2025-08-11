@@ -197,8 +197,7 @@
 
 ## action_sheet
 /packages/devextreme/js/ui/action_sheet.js                     @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/action_sheet/**          @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/m_action_sheet.ts        @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/action_sheet.ts          @DevExpress/devextreme-navigation
 
 /packages/devextreme-scss/scss/**/actionSheet/**               @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_actionSheet.scss  @DevExpress/devextreme-navigation
@@ -213,8 +212,7 @@
 
 ## box
 /packages/devextreme/js/ui/box.js                              @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/box/**                   @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/m_box.ts                 @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/box.ts                   @DevExpress/devextreme-navigation
 
 /packages/devextreme-scss/scss/**/box/**                       @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_box.scss          @DevExpress/devextreme-navigation
@@ -244,8 +242,7 @@
 
 ## button_group
 /packages/devextreme/js/ui/button_group.js                     @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/button_group/**          @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/m_button_group.ts        @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/button_group.ts          @DevExpress/devextreme-navigation
 
 /packages/devextreme-scss/scss/**/buttonGroup/**               @DevExpress/devextreme-navigation
 
@@ -450,8 +447,7 @@
 
 ## responsive_box
 /packages/devextreme/js/ui/responsive_box.js                   @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/responsive_box/**        @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/m_responsive_box.ts      @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/responsive_box.ts        @DevExpress/devextreme-navigation
 
 /packages/devextreme-scss/scss/**/responsiveBox/**             @DevExpress/devextreme-navigation
 
@@ -484,7 +480,7 @@
 ## selection
 /packages/devextreme/js/__internal/ui/selection/**             @DevExpress/devextreme-navigation
 
-/packages/devextreme/testing/tests/**/selection.*              @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/selection.*   @DevExpress/devextreme-navigation
 
 ## splitter
 /packages/devextreme/js/ui/splitter.js                         @DevExpress/devextreme-navigation
@@ -552,8 +548,7 @@
 
 ## tile_view
 /packages/devextreme/js/ui/tile_view.js                        @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/tile_view/**             @DevExpress/devextreme-navigation
-/packages/devextreme/js/__internal/ui/m_tile_view.ts           @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/tile_view.ts             @DevExpress/devextreme-navigation
 
 /packages/devextreme-scss/scss/**/tileView/**                  @DevExpress/devextreme-navigation
 /packages/devextreme-scss/scss/widgets/base/_tileView.scss     @DevExpress/devextreme-navigation
@@ -928,7 +923,7 @@
 /packages/devextreme/js/ui/switch.d.ts                               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
 /packages/devextreme/js/ui/switch_types.d.ts                         @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
 
-/packages/devextreme/js/__internal/ui/m_switch.ts                    @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/switch.ts                    @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/**/switch/**                  @DevExpress/devextreme-editors
 

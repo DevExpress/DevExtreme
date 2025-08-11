@@ -101,7 +101,7 @@ class FileManager extends Widget {
             progressPanelContainer: this.$element(),
             contentTemplate: (container, notificationControl) => this._createWrapper(container, notificationControl),
             onActionProgress: e => this._onActionProgress(e),
-            positionTarget: `.${FILE_MANAGER_CONTAINER_CLASS}`,
+            positionTargetSelector: `.${FILE_MANAGER_CONTAINER_CLASS}`,
             showProgressPanel: this.option('notifications.showPanel'),
             showNotificationPopup: this.option('notifications.showPopup')
         });

@@ -7,6 +7,18 @@ const SWIPE_START_EVENT = 'dxswipestart';
 const SWIPE_EVENT = 'dxswipe';
 const SWIPE_END_EVENT = 'dxswipeend';
 
+export type SwipeStartEvent = Event & {
+  maxLeftOffset: number;
+  maxRightOffset: number;
+};
+export type SwipeUpdateEvent = Event & {
+  offset: number;
+
+};
+export type SwipeEndEvent = Event & {
+  targetOffset: number;
+};
+
 const HorizontalStrategy = {
   defaultItemSizeFunc() {
     return getWidth(this.getElement());

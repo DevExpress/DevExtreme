@@ -18,7 +18,7 @@ import ArrayStore from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import DOMComponent from 'core/dom_component';
 import List from 'ui/list';
-import { setScrollView } from '__internal/ui/list/m_list.base';
+import { setScrollView } from '__internal/ui/list/list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'common/core/events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
@@ -50,12 +50,13 @@ const getListKeyboard = ($list) => {
     return keyboardMock($list.find('[tabindex=0]'));
 };
 
-const ScrollViewMock = DOMComponent.inherit({
+class ScrollViewMock extends DOMComponent {
+    ctor(element, options) {
+        this.NAME = 'dxScrollView';
+        this._contentHeight = 400;
 
-    NAME: 'dxScrollView',
-
-    _containerHeight: 300,
-    _contentHeight: 400,
+        super.ctor(element, options);
+    }
 
     _init() {
         const container = this.$element().find('.scroll-view-container');
@@ -63,34 +64,38 @@ const ScrollViewMock = DOMComponent.inherit({
             this._$scrollViewContainer = container;
             this._$scrollViewContent = container.children();
         } else {
-            this._$scrollViewContainer = $('<div />').addClass('scroll-view-container').height(this._containerHeight);
+            this._$scrollViewContainer = $('<div />').addClass('scroll-view-container').height(this.containerHeight);
             this._$scrollViewContent = $('<div />').addClass('scroll-view-content').height(this._contentHeight).appendTo(this._$scrollViewContainer);
             this.$element().append(this._$scrollViewContainer);
         }
 
-        this.callBase();
+        super._init();
 
         this._history = [];
         this._updateCount = 0;
         this._pageLoading = true;
         this._loading = false;
         this._pos = 0;
-    },
+    }
+
+    get containerHeight() {
+        return 300;
+    }
 
     container() {
         return this._$scrollViewContainer;
-    },
+    }
 
     content() {
         return this._$scrollViewContent;
-    },
+    }
 
     pullDown() {
         const pullDownHandler = this.option('onPullDown');
         if(isFunction(pullDownHandler)) {
             pullDownHandler();
         }
-    },
+    }
 
     scrollBottom() {
         const scrollBottomHandler = this.option('onReachBottom');
@@ -98,54 +103,54 @@ const ScrollViewMock = DOMComponent.inherit({
         if(isFunction(scrollBottomHandler)) {
             scrollBottomHandler();
         }
-    },
+    }
 
     release(hideOrShow) {
         this._history.push(new Date());
         this.toggleLoading(!hideOrShow);
         $(this.$element()).trigger('released');
-    },
+    }
 
     toggleLoading(showOrHide) {
         this._pageLoading = showOrHide;
-    },
+    }
 
     update() {
         this._updateCount++;
         return $.Deferred().resolve().promise();
-    },
+    }
 
     startLoading() {
         this._loading = true;
-    },
+    }
 
     finishLoading() {
         this._loading = false;
-    },
+    }
 
     scrollTo(pos) {
         this._pos = pos;
-    },
+    }
 
     scrollTop() {
         return this._pos;
-    },
+    }
 
     scrollOffset() {
         return { top: this._pos };
-    },
+    }
 
     _useTemplates() {
         return false;
-    },
+    }
 
     _createActions() {
         this._tryRefreshPocketState();
-    },
+    }
 
     _tryRefreshPocketState() {
         this._pageLoading = !!this.option('onReachBottom');
-    },
+    }
 
     _optionChanged(args) {
         switch(args.name) {
@@ -154,8 +159,8 @@ const ScrollViewMock = DOMComponent.inherit({
                 this._createActions();
                 break;
         }
-    },
-});
+    }
+}
 
 const showListSlideMenu = ($list) => {
     const $item = $list.find('.dx-list-item').eq(0);
@@ -417,7 +422,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
             const args = animateSpy.getCall(0).args;
 
             assert.ok(animateSpy.calledOnce, 'fx.animate is executed');
-            assert.equal(args[0].get(0), $groupBody.get(0), 'fx.animate ran on correct element');
+            assert.equal(args[0], $groupBody.get(0), 'fx.animate ran on correct element');
             assert.equal(args[1].type, 'custom', 'fx.animate ran with correct animation type');
             assert.equal(args[1].from.height, groupBodyHeight, 'fx.animate ran with correct start height');
             assert.equal(args[1].to.height, 0, 'fx.animate ran with correct end height');
@@ -2285,9 +2290,12 @@ QUnit.module('events', moduleSetup, () => {
 
 QUnit.module('dataSource integration', moduleSetup, () => {
     QUnit.test('pageLoading should be ordered for async dataSource (T233998)', function(assert) {
-        setScrollView(ScrollViewMock.inherit({
-            _containerHeight: 600
-        }));
+        class ScrollView extends ScrollViewMock {
+            get containerHeight() {
+                return 600;
+            }
+        }
+        setScrollView(ScrollView);
 
         const $list = $('#list').dxList({
             dataSource: {
@@ -2662,9 +2670,12 @@ QUnit.module('dataSource integration', moduleSetup, () => {
     });
 
     QUnit.test('first item rendered when pageSize is 1 and dataSource set as array', function(assert) {
-        setScrollView(ScrollViewMock.inherit({
-            _containerHeight: 600
-        }));
+        class ScrollView extends ScrollViewMock {
+            get containerHeight() {
+                return 600;
+            }
+        }
+        setScrollView(ScrollView);
 
         const $list = this.element.dxList({
             pageLoadMode: 'scrollBottom',
@@ -2900,9 +2911,12 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
     });
 
     QUnit.test('infinite loading should not happen if widget element is hidden', function(assert) {
-        setScrollView(ScrollViewMock.inherit({
-            _containerHeight: 600
-        }));
+        class ScrollView extends ScrollViewMock {
+            get containerHeight() {
+                return 600;
+            }
+        }
+        setScrollView(ScrollView);
 
         const $element = this.element.hide().dxList({
             pageLoadMode: 'scrollBottom',
@@ -2919,9 +2933,12 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
     });
 
     QUnit.test('infinite loading should happen when widget element is shown', function(assert) {
-        setScrollView(ScrollViewMock.inherit({
-            _containerHeight: 600
-        }));
+        class ScrollView extends ScrollViewMock {
+            get containerHeight() {
+                return 600;
+            }
+        }
+        setScrollView(ScrollView);
 
         const $element = this.element.hide().dxList({
             pageLoadMode: 'scrollBottom',

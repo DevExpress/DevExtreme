@@ -28,7 +28,7 @@ import type { ClickEvent } from '@js/ui/button';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import type { Properties } from '@js/ui/gallery';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { Properties as WidgetProperties } from '@ts/core/widget/widget';
+import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 
 const GALLERY_CLASS = 'dx-gallery';
@@ -63,7 +63,7 @@ export interface GalleryNavButtonProperties extends WidgetProperties {
 }
 
 class GalleryNavButton extends Widget<GalleryNavButtonProperties> {
-  _supportedKeys(): Record<string, (e: KeyboardEvent, options?: Record<string, unknown>) => void> {
+  _supportedKeys(): SupportedKeys {
     return {
       ...super._supportedKeys(),
       pageUp: noop,
@@ -820,8 +820,8 @@ class Gallery extends CollectionWidget<GalleryProperties> {
   _loadNextPageIfNeeded(selectedIndex?): void {
     selectedIndex = selectedIndex === undefined ? this.option('selectedIndex') : selectedIndex;
     if (
-      // @ts-expect-error ts-error
-      // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+    // @ts-expect-error ts-error
+
       this._dataSource
         // @ts-expect-error ts-error
         && this._dataSource.paginate()
@@ -907,7 +907,7 @@ class Gallery extends CollectionWidget<GalleryProperties> {
     let nextHidden = selectedIndex === itemsCount - this._itemsPerPage();
     const prevHidden = itemsCount < 2 || selectedIndex === 0;
     // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
     if (this._dataSource && this._dataSource.paginate()) {
       // @ts-expect-error ts-error
       nextHidden = nextHidden && this._isLastPage();

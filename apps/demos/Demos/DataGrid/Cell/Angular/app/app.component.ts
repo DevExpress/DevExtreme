@@ -6,7 +6,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxDataGridModule,
   DxSparklineModule,
-  DxTemplateModule,
 } from 'devextreme-angular';
 import { Service, WeekData } from './app.service';
 
@@ -49,7 +48,6 @@ export class GridCellDataPipe implements PipeTransform {
   imports: [
     BrowserModule,
     DxDataGridModule,
-    DxTemplateModule,
     DxSparklineModule,
   ],
   declarations: [AppComponent, GridCellDataPipe],

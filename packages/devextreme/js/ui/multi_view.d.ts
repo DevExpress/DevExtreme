@@ -108,7 +108,7 @@ export interface dxMultiViewBaseOptions<
     TComponent extends dxMultiView<TItem, TKey> = dxMultiView<any, any>,
     TItem extends ItemLike = any,
     TKey = any,
-> extends CollectionWidgetOptions<TComponent, TItem, TKey> {
+> extends Omit<CollectionWidgetOptions<TComponent, TItem, TKey>, 'keyExpr'> {
     /**
      * @docid dxMultiViewOptions.animationEnabled
      * @default true

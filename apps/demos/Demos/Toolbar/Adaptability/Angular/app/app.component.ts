@@ -4,7 +4,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxToolbarModule,
   DxSelectBoxModule,
-  DxTemplateModule,
   DxResizableModule,
   DxDropDownButtonModule,
   DxButtonModule,
@@ -97,7 +96,6 @@ export class AppComponent {
     BrowserModule,
     DxToolbarModule,
     DxSelectBoxModule,
-    DxTemplateModule,
     DxResizableModule,
     DxDropDownButtonModule,
     DxButtonModule,

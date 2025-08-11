@@ -8,10 +8,9 @@ import { camelize } from '@js/core/utils/inflector';
 import { getWidth } from '@js/core/utils/size';
 import type { PanelLocation } from '@js/ui/drawer';
 import type Drawer from '@ts/ui/drawer/drawer';
-import Overlay from '@ts/ui/overlay/m_overlay';
-
-import { animation } from './drawer.animation';
-import DrawerStrategy from './drawer.rendering.strategy';
+import { animation } from '@ts/ui/drawer/drawer.animation';
+import DrawerStrategy from '@ts/ui/drawer/drawer.rendering.strategy';
+import Overlay from '@ts/ui/overlay/overlay';
 
 interface InitialPosition {
   left?: number;
@@ -25,7 +24,13 @@ class OverlapStrategy extends DrawerStrategy {
     delete this._initialPosition;
 
     const drawer = this.getDrawerInstance();
-    const { opened, minSize, template: contentTemplate } = drawer.option();
+    const {
+      opened,
+      minSize,
+      template: contentTemplate,
+      templatesRenderAsynchronously,
+    } = drawer.option();
+
     drawer._overlay = drawer._createComponent($(drawer.content()), Overlay, {
       shading: false,
       container: drawer.content(),
@@ -34,7 +39,7 @@ class OverlapStrategy extends DrawerStrategy {
       position: this._getOverlayPosition(),
       width: opened ? 'auto' : minSize ?? 0,
       height: '100%',
-      templatesRenderAsynchronously: drawer.option('templatesRenderAsynchronously'),
+      templatesRenderAsynchronously,
       animation: {
         show: {
           duration: 0,

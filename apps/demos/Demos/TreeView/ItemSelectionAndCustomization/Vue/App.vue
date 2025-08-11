@@ -91,6 +91,7 @@ import DxList from 'devextreme-vue/list';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxCheckBox from 'devextreme-vue/check-box';
 import { employees } from './data.ts';
+import type { Employee } from './types';
 
 const selectionModes: SingleOrMultiple[] = ['multiple', 'single'];
 const showCheckBoxesModes: DxTreeViewTypes.TreeViewCheckBoxMode[] = ['normal', 'selectAll', 'none'];
@@ -112,7 +113,7 @@ function treeViewContentReady() {
 function syncSelection() {
   selectedEmployees.value = treeViewRef.value.instance
     .getSelectedNodes()
-    .map((node) => node.itemData);
+    .map((node: DxTreeViewTypes.Node<Employee>) => node.itemData);
 }
 function showCheckBoxesModeValueChanged(e) {
   if (e.value === 'selectAll') {

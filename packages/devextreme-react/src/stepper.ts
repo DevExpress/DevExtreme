@@ -53,7 +53,7 @@ const Stepper = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["items","selectedIndex","selectedItem"]), []);
       const independentEvents = useMemo(() => (["onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemRendered","onSelectionChanging"]), []);

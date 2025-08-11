@@ -20,7 +20,7 @@ import { animation } from '@ts/ui/drawer/drawer.animation';
 import OverlapStrategy from '@ts/ui/drawer/drawer.rendering.strategy.overlap';
 import PushStrategy from '@ts/ui/drawer/drawer.rendering.strategy.push';
 import ShrinkStrategy from '@ts/ui/drawer/drawer.rendering.strategy.shrink';
-import type Overlay from '@ts/ui/overlay/m_overlay';
+import type Overlay from '@ts/ui/overlay/overlay';
 
 const DRAWER_CLASS = 'dx-drawer';
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
@@ -41,6 +41,8 @@ export interface DrawerProperties extends Properties {
   __debugWhenPanelContentRendered?: (e: { drawer: Drawer }) => boolean;
 
   templateSize?: number;
+
+  templatesRenderAsynchronously?: boolean;
 }
 
 class Drawer extends Widget<DrawerProperties> {
@@ -211,8 +213,7 @@ class Drawer extends Widget<DrawerProperties> {
   }
 
   _removePanelManualPosition(): void {
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    if (this._$panelContentWrapper && this._$panelContentWrapper.attr('manualposition')) {
+    if (this._$panelContentWrapper?.attr('manualposition')) {
       this._$panelContentWrapper.removeAttr('manualPosition');
       this._$panelContentWrapper.css({
         position: '', top: '', left: '', right: '', bottom: '',

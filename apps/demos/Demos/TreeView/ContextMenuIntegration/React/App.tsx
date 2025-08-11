@@ -2,7 +2,9 @@ import React, { useCallback, useRef, useState } from 'react';
 import TreeView, { type TreeViewTypes } from 'devextreme-react/tree-view';
 import ContextMenu, { type ContextMenuTypes } from 'devextreme-react/context-menu';
 import List from 'devextreme-react/list';
+
 import service from './data.ts';
+import type { Product } from './types';
 
 const products = service.getProducts();
 const menuItems = service.getMenuItems();
@@ -14,7 +16,7 @@ const App = () => {
   const [selectedTreeItem, setSelectedTreeItem] = useState(undefined);
 
   const treeViewItemContextMenu = useCallback((
-    e: TreeViewTypes.ItemContextMenuEvent & { itemData: { price?: any; }; },
+    e: TreeViewTypes.ItemContextMenuEvent<Product>,
   ) => {
     setSelectedTreeItem(e.itemData);
 

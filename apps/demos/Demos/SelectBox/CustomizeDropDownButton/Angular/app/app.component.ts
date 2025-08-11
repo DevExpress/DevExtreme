@@ -5,7 +5,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxSelectBoxModule,
   DxLoadIndicatorModule,
-  DxTemplateModule,
 } from 'devextreme-angular';
 
 import { Product, Service } from './app.service';
@@ -62,7 +61,6 @@ export class AppComponent {
     BrowserModule,
     DxSelectBoxModule,
     DxLoadIndicatorModule,
-    DxTemplateModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

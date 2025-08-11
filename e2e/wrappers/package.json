@@ -32,7 +32,7 @@
     "devextreme": "workspace:~",
     "devextreme-angular": "workspace:~",
     "devextreme-dist": "workspace:~",
-    "devextreme-quill": "1.7.1",
+    "devextreme-quill": "catalog:",
     "devextreme-react": "workspace:~",
     "devextreme-vue": "workspace:~",
     "express": "4.21.1",

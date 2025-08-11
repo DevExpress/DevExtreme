@@ -1,7 +1,7 @@
 import type { ScrollDirection } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import scrollEvents from '@js/common/core/events/gesture/emitter.gesture.scroll';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
@@ -10,27 +10,28 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { ensureDefined, noop } from '@js/core/utils/common';
-import { when } from '@js/core/utils/deferred';
+import type { DeferredObj } from '@js/core/utils/deferred';
+import { Deferred, when } from '@js/core/utils/deferred';
 import {
   getHeight, getOuterHeight, getOuterWidth, getWidth,
 } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { ScrollEvent } from '@js/ui/scroll_view';
-import type { Properties } from '@js/ui/scroll_view/ui.scrollable';
+import type { dxScrollableOptions } from '@js/ui/scroll_view/ui.scrollable';
+import supportUtils from '@ts/core/utils/m_support';
+import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
-
-import supportUtils from '../../core/utils/m_support';
-import { deviceDependentOptions } from './scrollable.device';
-import NativeStrategy from './scrollable.native';
-import { SimulatedStrategy } from './scrollable.simulated';
+import { deviceDependentOptions } from '@ts/ui/scroll_view/scrollable.device';
+import NativeStrategy from '@ts/ui/scroll_view/scrollable.native';
+import { SimulatedStrategy } from '@ts/ui/scroll_view/scrollable.simulated';
 import type {
   DxMouseEvent,
   ElementOffset,
   ScrollOffset,
-} from './types';
+} from '@ts/ui/scroll_view/types';
+import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
 const SCROLLABLE = 'dxScrollable';
 const SCROLLABLE_STRATEGY = 'dxScrollableStrategy';
@@ -43,12 +44,21 @@ const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 const BOTH = 'both';
 
-export interface ScrollableProperties extends Properties {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface ScrollableProperties extends DOMComponentProperties<any>, Omit<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  dxScrollableOptions<any>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  keyof DOMComponentProperties<any>
+> {
   _onVisibilityChanged?: (data: unknown) => void;
   useSimulatedScrollbar?: boolean;
   useKeyboard?: boolean;
   updateManually?: boolean;
   inertiaEnabled?: boolean;
+  onStart?: (() => void) | null;
+  onEnd?: (() => void) | null;
+  onBounce?: (() => void) | null;
 }
 
 class Scrollable<
@@ -64,7 +74,7 @@ class Scrollable<
 
   _allowedDirectionValue!: ScrollDirection | null;
 
-  _strategy!: NativeStrategy | SimulatedStrategy;
+  _strategy!: NativeStrategy<TProperties> | SimulatedStrategy<TProperties>;
 
   _savedScrollOffset?: {
     top?: number;
@@ -307,10 +317,10 @@ class Scrollable<
 
   _createStrategy(): void {
     const { useNative } = this.option();
-    // @ts-expect-error ts-error
+
     this._strategy = useNative
-      ? new NativeStrategy(this)
-      : new SimulatedStrategy(this);
+      ? new NativeStrategy<TProperties>(this)
+      : new SimulatedStrategy<TProperties>(this);
   }
 
   _createActions(): void {
@@ -498,12 +508,11 @@ class Scrollable<
     return getOuterWidth(this.$content());
   }
 
-  update(): void {
+  update(): DeferredObj<unknown> {
     if (!this._strategy) {
-      return;
+      return Deferred().resolve();
     }
-    // @ts-expect-error ts-error
-    // eslint-disable-next-line consistent-return
+
     return when(this._strategy.update()).done(() => {
       this._updateAllowedDirection();
     });
@@ -533,7 +542,7 @@ class Scrollable<
 
     const { useNative } = this.option();
     if (!useNative) {
-      const strategy = this._strategy as SimulatedStrategy;
+      const strategy = this._strategy as SimulatedStrategy<TProperties>;
 
       normalizedLocation = strategy._applyScaleRatio(normalizedLocation);
       location = strategy._applyScaleRatio(location) as ScrollOffset;
