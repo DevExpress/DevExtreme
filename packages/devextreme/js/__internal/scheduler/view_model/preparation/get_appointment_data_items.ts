@@ -3,10 +3,10 @@ import type { Appointment } from '@js/ui/scheduler';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { dateUtils } from '@ts/core/utils/m_date';
 
+import type { TimeZoneCalculator } from '../../r1/timezone_calculator';
 import type { AppointmentDataItem, SafeAppointment } from '../../types';
 import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
-import type { TimeZoneCalculator } from '../timezone_calculator';
 
 const toMs = dateUtils.dateToMilliseconds;
 
