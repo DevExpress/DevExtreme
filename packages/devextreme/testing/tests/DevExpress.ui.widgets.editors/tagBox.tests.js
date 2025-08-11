@@ -8160,6 +8160,32 @@ QUnit.module('regression', {
 
         assert.strictEqual(selectAllCheckBox.option('value'), true, 'the "select all" checkbox is checked');
     });
+
+    QUnit.test('Multitag should be rendered if maxDisplayedTags and fieldTemplate is specified (T1303488)', function(assert) {
+        const items = [
+            { id: 1, name: 'Item 1' },
+            { id: 2, name: 'Item 2' },
+        ];
+
+        const selectedItems = [1, 2];
+
+        const fieldTemplate = (data) => {
+            return $('<div>').dxTextBox({ value: data.name });
+        };
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: items,
+            value: selectedItems,
+            displayExpr: 'name',
+            valueExpr: 'id',
+            maxDisplayedTags: 1,
+            fieldTemplate
+        });
+
+        const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+
+        assert.strictEqual($tag.length, 1, 'only one tag is rendered');
+    });
 });
 
 QUnit.module('valueChanged should receive correct event parameter', {
