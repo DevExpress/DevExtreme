@@ -15,9 +15,8 @@ import type { SelectionChangeInfo } from '@js/ui/collection/ui.collection_widget
 import CollectionWidgetEdit from '@js/ui/collection/ui.collection_widget.edit';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
-
-import type { ItemRenderInfo } from './collection/collection_widget.base';
-import type { CollectionWidgetEditProperties } from './collection/collection_widget.edit';
+import type { ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 
 export const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const BUTTON_GROUP_WRAPPER_CLASS = `${BUTTON_GROUP_CLASS}-wrapper`;
@@ -39,8 +38,6 @@ export type SelectionChangedEvent = EventInfo<ButtonCollection> & SelectionChang
 export interface ButtonCollectionProperties extends CollectionWidgetEditProperties<
  ButtonCollection
 > {
-  itemTemplateProperty?: string | null;
-
   buttonTemplate?: template | (
     (buttonData: Item, buttonContent: Element) => dxElementWrapper
   );
@@ -113,17 +110,20 @@ class ButtonCollection extends CollectionWidgetEdit<ButtonCollectionProperties> 
     $item.addClass(SHAPE_STANDARD_CLASS);
   }
 
-  _renderItemContent(args: ItemRenderInfo<Item>): dxElementWrapper | DeferredObj<dxElementWrapper> {
+  _renderItemContent(
+    args: ItemRenderInfo<Item>,
+  ): dxElementWrapper | Element | DeferredObj<dxElementWrapper> {
     args.container = $(args.container).parent();
+
     return super._renderItemContent(args);
   }
 
-  _setAriaSelectionAttribute($target, value): void {
+  _setAriaSelectionAttribute($target: dxElementWrapper, value: string): void {
     this.setAria('pressed', value, $target);
   }
 
   _renderItemContentByNode(args: ItemRenderInfo<Item>, $node: dxElementWrapper): dxElementWrapper {
-    args.container = $(args.container.children().first());
+    args.container = $(args.container).children().first();
     return super._renderItemContentByNode(args, $node);
   }
 

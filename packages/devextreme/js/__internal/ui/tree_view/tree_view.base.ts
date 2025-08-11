@@ -26,7 +26,7 @@ import {
 } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent, NativeEventInfo } from '@js/events';
-import type { InitializedEvent, ValueChangedEvent } from '@js/ui/check_box';
+import type { InitializedEvent, Properties as CheckBoxProperties, ValueChangedEvent } from '@js/ui/check_box';
 import type {
   Item, Properties, TreeViewCheckBoxMode, TreeViewExpandEvent,
 } from '@js/ui/tree_view';
@@ -1532,7 +1532,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   _renderCheckBox($node: dxElementWrapper, node: TreeViewNode | null): void {
     const $checkbox = $('<div>').appendTo($node);
 
-    this._createComponent($checkbox, CheckBox, {
+    this._createComponent<CheckBox, CheckBoxProperties>($checkbox, CheckBox, {
       value: node?.internalFields.selected,
       onValueChanged: (e: ValueChangedEvent) => {
         this._changeCheckboxValue(e);
@@ -1775,7 +1775,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     this._createEventHandler('onItemHold', e);
   }
 
-  _createEventHandler(eventName: string, e: DxEvent): void {
+  _createEventHandler(eventName: keyof TreeViewBaseProperties, e: DxEvent): void {
     const node = this._getNodeByElement(e.currentTarget) as TreeViewNode;
 
     this._itemDXEventHandler(e, eventName, { node: this._dataAdapter.getPublicNode(node) });

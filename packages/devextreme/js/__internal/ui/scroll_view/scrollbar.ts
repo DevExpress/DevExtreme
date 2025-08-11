@@ -12,10 +12,9 @@ import readyCallback from '@js/core/utils/ready_callbacks';
 import { isPlainObject } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { Properties } from '@ts/core/widget/widget';
+import type { WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
-
-import type { ScrollableShowScrollbar } from './types';
+import type { ScrollableShowScrollbar } from '@ts/ui/scroll_view/types';
 
 const SCROLLBAR = 'dxScrollbar';
 const SCROLLABLE_SCROLLBAR_CLASS = 'dx-scrollable-scrollbar';
@@ -31,7 +30,7 @@ const MIN_CONTAINER_TO_CONTENT_RATIO = 1;
 
 let activeScrollbar: Scrollbar | null = null;
 
-export interface ScrollbarProperties extends Properties {
+export interface ScrollbarProperties extends WidgetProperties {
   visibilityMode: ScrollableShowScrollbar;
 
   expandable?: boolean;

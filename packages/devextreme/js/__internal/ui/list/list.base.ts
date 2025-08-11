@@ -24,6 +24,7 @@ import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DataSourceLike } from '@js/data/data_source';
 import type { DxEvent, NativeEventInfo } from '@js/events';
+import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type {
   GroupRenderedEvent,
@@ -31,9 +32,9 @@ import type {
   PageLoadingEvent,
   Properties,
   PullRefreshEvent,
-  ScrollEvent,
 } from '@js/ui/list';
 import type dxList from '@js/ui/list';
+import type { ScrollEvent } from '@js/ui/scroll_view';
 import { current, isMaterial, isMaterialBased } from '@js/ui/themes';
 import { render } from '@ts/core/utils/m_ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
@@ -597,7 +598,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       onScroll: (e: ScrollEvent): void => {
         this._scrollHandler(e);
       },
+      // @ts-expect-error ts-error
       onPullDown: isPullRefreshEnabled ? this._pullDownHandler.bind(this) : null,
+      // @ts-expect-error ts-error
       onReachBottom: autoPagingEnabled ? this._scrollBottomHandler.bind(this) : null,
       showScrollbar,
       useNative: useNativeScrolling,
@@ -1154,8 +1157,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     const { groupTemplate: templateName } = this.option();
 
     const groupTemplate = this._getTemplate(
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      group.template || templateName,
+      group.template ?? templateName,
       // @ts-expect-error ts-error
       group,
       index,
@@ -1167,7 +1169,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       itemData: group,
       container: getPublicElement($groupHeaderElement),
     };
-    // @ts-expect-error ts-error
+
     this._createItemByTemplate(groupTemplate, renderArgs);
 
     $('<div>')
@@ -1181,8 +1183,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       .attr('id', groupBodyId)
       .appendTo($groupElement);
 
-    const groupItemsGetter = compileGetter('items') as (data: GroupedItem) => Item[];
+    const groupItemsGetter = compileGetter('items');
 
+    // @ts-expect-error ts-error
     each(groupItemsGetter(group) || [], (itemIndex: number, item: Item): void => {
       this._renderItem({ group: index, item: itemIndex }, item, $groupBody);
     });
@@ -1278,12 +1281,13 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
 
     const { nextButtonText } = this.option();
 
-    this._createComponent($button, Button, {
+    this._createComponent<Button, ButtonProperties>($button, Button, {
       text: nextButtonText,
       onClick: (): void => {
         this._nextButtonHandler();
       },
       type: isMaterialBased(current()) ? 'default' : undefined,
+      // @ts-expect-error
       integrationOptions: {},
     });
 

@@ -210,6 +210,7 @@ class DropDownList<
   }
 
   _initContentReadyAction(): void {
+    // @ts-expect-error
     this._contentReadyAction = this._createActionByOption('onContentReady', {
       excludeValidators: ['disabled', 'readOnly'],
     });
@@ -526,7 +527,11 @@ class DropDownList<
   _getKeyboardListeners(): any[] {
     const canListHaveFocus = this._canListHaveFocus();
 
-    return super._getKeyboardListeners().concat([!canListHaveFocus && this._list]);
+    if (!canListHaveFocus) {
+      return super._getKeyboardListeners().concat([this._list]);
+    }
+
+    return super._getKeyboardListeners();
   }
 
   _renderList(): void {
