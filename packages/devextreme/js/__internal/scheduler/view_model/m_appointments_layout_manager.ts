@@ -1,18 +1,21 @@
-import { equalByValue } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
-import { getCellDuration } from '@ts/scheduler/r1/utils';
+import type { Appointment } from '@js/ui/scheduler';
+
+import type Scheduler from '../m_scheduler';
+import { getCellDuration } from '../r1/utils/index';
 import type {
+  AppointmentDataItem,
   AppointmentViewModel,
-  BaseAppointmentViewModelSettings,
   RenderStrategyName,
   SafeAppointment,
   ViewType,
-} from '@ts/scheduler/types';
-
-import { AppointmentViewModelGenerator } from '../appointments/m_view_model_generator';
-import type Scheduler from '../m_scheduler';
+} from '../types';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import { getAllDayHeight, getCellHeight, getCellWidth } from '../workspaces/helpers/m_position_helper';
+import { getRepaintedAppointments } from './detect_changes/get_repainted_appointments';
+import { createAppointmentFilter } from './filtering/create_appointment_filter';
+import { AppointmentViewModelGenerator } from './generate_view_model/m_view_model_generator';
+import { getAppointmentDataItems } from './preparation/get_appointment_data_items';
 
 const toMs = dateUtils.dateToMilliseconds;
 const appointmentRenderingStrategyMap: Record<ViewType, RenderStrategyName> = {
@@ -28,31 +31,40 @@ const appointmentRenderingStrategyMap: Record<ViewType, RenderStrategyName> = {
 };
 
 class AppointmentLayoutManager {
+  preparedItems: AppointmentDataItem[] = [];
+
+  filteredItems: SafeAppointment[] = [];
+
   appointmentViewModel = new AppointmentViewModelGenerator();
 
   _positionMap: any;
 
-  constructor(public instance: Scheduler) {
-  }
+  constructor(public instance: Scheduler) {}
 
-  get appointmentRenderingStrategyName(): RenderStrategyName {
+  public get appointmentRenderingStrategyName(): RenderStrategyName {
     return appointmentRenderingStrategyMap[this.instance.currentView.type];
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getCellDimensions(options) {
-    if (this.instance._workSpace) {
-      return {
-        width: this.instance._workSpace.getCellWidth(),
-        height: this.instance._workSpace.getCellHeight(),
-        allDayHeight: this.instance._workSpace.getAllDayHeight(),
-      };
-    }
-
-    return undefined;
+  public prepareItems(items?: Appointment[]): void {
+    this.preparedItems = getAppointmentDataItems(
+      items,
+      this.instance._dataAccessors,
+      this.instance.getViewOption('cellDuration'),
+      this.instance.timeZoneCalculator,
+    );
   }
 
-  _getRenderingStrategyOptions() {
+  public filterAppointments(): void {
+    const strategy = createAppointmentFilter(this.instance);
+    this.filteredItems = strategy.filter(this.preparedItems);
+  }
+
+  public hasAllDayAppointments(): boolean {
+    const strategy = createAppointmentFilter(this.instance);
+    return strategy.hasAllDayAppointments(this.filteredItems, this.preparedItems);
+  }
+
+  protected _getRenderingStrategyOptions() {
     const workspace = this.instance.getWorkSpace();
     const { virtualScrollingDispatcher } = this.instance.getWorkSpace();
     const {
@@ -141,131 +153,30 @@ class AppointmentLayoutManager {
     };
   }
 
-  createAppointmentsMap(items: SafeAppointment[]): AppointmentViewModel[] {
+  public createAppointmentsMap(): AppointmentViewModel[] {
     const renderingStrategyOptions = this._getRenderingStrategyOptions();
 
     const {
       viewModel,
       positionMap,
-    } = this.appointmentViewModel.generate(items, renderingStrategyOptions) as any;
+    } = this.appointmentViewModel.generate(this.filteredItems, renderingStrategyOptions) as any;
 
     this._positionMap = positionMap; // TODO get rid of this after remove old render
 
     return viewModel;
   }
 
-  _isDataChanged(data: SafeAppointment): boolean {
-    const { appointmentDataProvider } = this.instance;
-    const updatedData = appointmentDataProvider.getUpdatedAppointment();
-
-    return updatedData === data || appointmentDataProvider
-      .getUpdatedAppointmentKeys()
-      .some((item) => data[item.key] === item.value);
-  }
-
-  _isAppointmentShouldAppear(currentAppointment, sourceAppointment) {
-    return currentAppointment.needRepaint && sourceAppointment.needRemove;
-  }
-
-  _isSettingChanged(
-    settings: BaseAppointmentViewModelSettings[],
-    sourceSetting: BaseAppointmentViewModelSettings[],
-  ): boolean {
-    if (settings.length !== sourceSetting.length) {
-      return true;
-    }
-
-    const createSettingsToCompare = (currentSetting) => {
-      const leftVirtualCellCount = currentSetting.leftVirtualCellCount || 0;
-      const topVirtualCellCount = currentSetting.topVirtualCellCount || 0;
-      const columnIndex = currentSetting.columnIndex + leftVirtualCellCount;
-      const rowIndex = currentSetting.rowIndex + topVirtualCellCount;
-      const hMax = currentSetting.reduced ? currentSetting.hMax : undefined;
-      const vMax = currentSetting.reduced ? currentSetting.vMax : undefined;
-
-      return {
-        ...currentSetting,
-        columnIndex,
-        rowIndex,
-        positionByMap: undefined,
-        topVirtualCellCount: undefined,
-        leftVirtualCellCount: undefined,
-        leftVirtualWidth: undefined,
-        topVirtualHeight: undefined,
-        hMax,
-        vMax,
-        info: {},
-      };
-    };
-
-    for (let i = 0; i < settings.length; i++) {
-      const newSettings = createSettingsToCompare(settings[i]);
-      const oldSettings = createSettingsToCompare(sourceSetting[i]);
-
-      if (oldSettings) { // exclude sortedIndex property for comparison in commonUtils.equalByValue
-        oldSettings.sortedIndex = newSettings.sortedIndex;
-      }
-
-      if (!equalByValue(newSettings, oldSettings)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  _getAssociatedSourceAppointment(currentAppointment, sourceAppointments) {
-    for (let i = 0; i < sourceAppointments.length; i++) {
-      const item = sourceAppointments[i];
-      if (item.itemData === currentAppointment.itemData) {
-        return item;
-      }
-    }
-    return null;
-  }
-
-  _getDeletedAppointments(
+  public getRepaintedAppointments(
     currentAppointments: AppointmentViewModel[],
     sourceAppointments: AppointmentViewModel[],
   ): AppointmentViewModel[] {
-    const result: AppointmentViewModel[] = [];
-
-    for (let i = 0; i < sourceAppointments.length; i++) {
-      const sourceAppointment = sourceAppointments[i];
-      const currentAppointment = this._getAssociatedSourceAppointment(sourceAppointment, currentAppointments);
-      if (!currentAppointment) {
-        sourceAppointment.needRemove = true;
-        result.push(sourceAppointment);
-      }
-    }
-
-    return result;
-  }
-
-  getRepaintedAppointments(
-    currentAppointments: AppointmentViewModel[],
-    sourceAppointments: AppointmentViewModel[],
-  ): AppointmentViewModel[] {
-    if (sourceAppointments.length === 0 || this.appointmentRenderingStrategyName === 'agenda') {
-      return currentAppointments;
-    }
-
-    currentAppointments.forEach((appointment) => {
-      const sourceAppointment = this._getAssociatedSourceAppointment(appointment, sourceAppointments);
-
-      if (sourceAppointment) {
-        const isDataChanged = this._isDataChanged(appointment.itemData);
-        const isSettingChanged = this._isSettingChanged(appointment.settings, sourceAppointment.settings);
-        const isAppointmentShouldAppear = this._isAppointmentShouldAppear(appointment, sourceAppointment);
-
-        appointment.needRepaint = isDataChanged || isSettingChanged || isAppointmentShouldAppear;
-      }
+    return getRepaintedAppointments(currentAppointments, sourceAppointments, {
+      appointmentRenderingStrategyName: this.appointmentRenderingStrategyName,
+      appointmentDataProvider: this.instance.appointmentDataProvider,
     });
-
-    return currentAppointments.concat(this._getDeletedAppointments(currentAppointments, sourceAppointments));
   }
 
-  getRenderingStrategyInstance() {
+  public getRenderingStrategyInstance() {
     const renderingStrategy = this.appointmentViewModel.getRenderingStrategy();
 
     if (!renderingStrategy) {

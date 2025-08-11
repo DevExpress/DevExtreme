@@ -1,7 +1,7 @@
 import dateUtils from '@js/core/utils/date';
 import type { SafeAppointment } from '@ts/scheduler/types';
 
-import { getGroupWidth } from '../../workspaces/helpers/m_position_helper';
+import { getGroupWidth } from '../../../workspaces/helpers/m_position_helper';
 import HorizontalMonthLineRenderingStrategy from './m_strategy_horizontal_month_line';
 
 const MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6;

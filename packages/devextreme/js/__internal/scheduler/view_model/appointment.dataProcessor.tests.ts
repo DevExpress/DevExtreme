@@ -1,1271 +1,1220 @@
-import config from 'core/config';
-import { DataSource } from 'common/data/data_source/data_source';
-import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
-import { AppointmentDataAccessor } from '__internal/scheduler/utils/data_accessor/appointment_data_accessor';
-import { getAppointmentDataItems } from '__internal/scheduler/r1/utils/index.js';
-
 import {
-    getEmptyResourceManager,
-    getLoadedResources,
-    getWorkspaceResourceConfig
-} from '../../../../testing/helpers/scheduler/mockResourceManager.js';
+  describe, expect, it,
+} from '@jest/globals';
+import config from '@js/core/config';
+import { DataSource } from '@ts/data/data_source/m_data_source';
 
-const {
-    module,
-    test
-} = QUnit;
+import { createScheduler } from '../__tests__/__mock__/create_scheduler';
 
-const defaultDataAccessors = new AppointmentDataAccessor({
-    startDateExpr: 'startDate',
-    endDateExpr: 'endDate',
-    allDayExpr: 'allDay',
-}, true);
+const currentDate = new Date(2015, 1, 9, 1, 0);
+const recurrenceRuleFilter = ['recurrenceRule', 'startswith', 'freq'];
 
-const createAppointmentDataProvider = (options) => {
-    return {
-        appointmentDataProvider: new AppointmentDataProvider({
-            allDayPanelMode: 'all',
-            viewType: 'week',
-            dataAccessors: options.dataAccessors,
-            timeZoneCalculator: ({
-                createDate: date => date
-            }),
-            getIsVirtualScrolling: () => false,
-            viewOffset: 0,
-            getResourceManager: getEmptyResourceManager,
-            ...options,
-        }),
-        prepareDataItems: () => {
-            const appointmentDuration = options.appointmentDuration || 30;
-            return getAppointmentDataItems(
-                options.dataSource.items(),
-                options.dataAccessors,
-                appointmentDuration,
-                { createDate: date => date },
-                0
-            );
-        }
-    };
-};
-
-module('Server side filtering', () => {
-    test('Appointment filterByDate should filter dataSource', async function(assert) {
-        const data = [
-            {
-                text: 'Appointment 1',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0)
-            },
-            {
-                text: 'Appointment 2',
-                startDate: new Date(2015, 1, 10, 11, 0),
-                endDate: new Date(2015, 1, 10, 13, 0)
-            }
-        ];
-
-        const dataSource = new DataSource({
-            store: data,
-        });
-        const { appointmentDataProvider } = createAppointmentDataProvider({
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: defaultDataAccessors,
-        });
-
-        appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true);
-
-        dataSource.load();
-
-        assert.deepEqual(dataSource.items(), [data[1]], 'filterByDate work correctly');
-    });
-
-    test('Appointment filterByDate should filter dataSource correctly after changing user filter', async function(assert) {
-        const data = [
-            {
-                text: 'Appointment 1',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0)
-            },
-            {
-                text: 'Appointment 2',
-                startDate: new Date(2015, 1, 10, 11, 0),
-                endDate: new Date(2015, 1, 10, 13, 0)
-            }
-        ];
-        const dataSource = new DataSource({
-            store: data,
-            filter: ['text', '=', 'Appointment 2']
-        });
-        const { appointmentDataProvider } = createAppointmentDataProvider({
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: defaultDataAccessors
-        });
-        const dateFilter = [
-            [
-                ['endDate', '>=', new Date(2015, 1, 9, 0)],
-                ['startDate', '<', new Date(2015, 1, 11)]
-            ],
-            'or',
-            [
-                ['endDate', new Date(2015, 1, 9)],
-                ['startDate', new Date(2015, 1, 9)]
-            ]
-        ];
-
-        appointmentDataProvider.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
-
-        let expectedFilter = [dateFilter, [
-            'text',
-            '=',
-            'Appointment 2'
-        ]];
-        let actualFilter = dataSource.filter();
-        assert.deepEqual(expectedFilter, actualFilter, 'filter is correct');
-
-        const changedDataSource = new DataSource({
-            store: data
-        });
-        appointmentDataProvider.setDataSource(changedDataSource, true);
-        appointmentDataProvider.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
-
-        expectedFilter = [dateFilter];
-        actualFilter = changedDataSource.filter();
-        assert.deepEqual(actualFilter, expectedFilter, 'filter is correct');
-    });
-
-    test('Appointment should clear the internal user filter after dataSource has been filtered (T866593)', async function(assert) {
-        const appointments = [
-            { text: 'a', StartDate: new Date(2015, 0, 1, 1), EndDate: new Date(2015, 0, 1, 2), priorityId: 2 },
-            { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6, 0), priorityId: 1 },
-            { text: 'c', StartDate: new Date(2015, 0, 1, 8), EndDate: new Date(2015, 0, 1, 9), priorityId: 1 }
-        ];
-
-        const dataSource = new DataSource({
-            store: appointments
-        });
-
-        const { appointmentDataProvider } = createAppointmentDataProvider({
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception',
-                startDateTimeZoneExpr: 'StartDateTimeZone',
-                endDateTimeZoneExpr: 'EndDateTimeZone',
-            }, true),
-        });
-
-        appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
-
-        dataSource.load().done(() => {
-            dataSource.filter('priorityId', '=', 1);
-
-            appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2), true);
-
-            assert.equal(dataSource.filter().length, 2);
-            assert.deepEqual(dataSource.filter()[1], ['priorityId', '=', 1]);
-
-            dataSource.filter(null);
-
-            appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2), true);
-
-            assert.equal(dataSource.filter().length, 1);
-        });
-    });
-
-    test('Appointment filterByDate should filter dataSource correctly without copying dateFilter', async function(assert) {
-        const dateFilter = [
-            [
-                ['endDate', '>=', new Date(2015, 1, 9, 0)],
-                ['startDate', '<', new Date(2015, 1, 11)]
-            ],
-            'or',
-            [
-                ['endDate', new Date(2015, 1, 9)],
-                ['startDate', new Date(2015, 1, 9)]
-            ]
-        ];
-
-        const dataSource = new DataSource({
-            store: [],
-            filter: [dateFilter, ['text', '=', 'Appointment 2']]
-        });
-
-        const { appointmentDataProvider } = createAppointmentDataProvider({
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: defaultDataAccessors
-        });
-
-        appointmentDataProvider.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
-
-        const expectedFilter = [dateFilter, [
-            'text',
-            '=',
-            'Appointment 2'
-        ]];
-
-        const actualFilter = dataSource.filter();
-
-        assert.deepEqual(expectedFilter, actualFilter, 'filter is right');
-    });
-
-    test('Appointment filterByDate should return filter with dateSerializationFormat and without forceIsoDateParsing', async function(assert) {
-        const defaultForceIsoDateParsing = config().forceIsoDateParsing;
-        config().forceIsoDateParsing = false;
-        try {
-            const dataSource = new DataSource({
-                store: [
-                    {
-                        text: 'Appointment 1',
-                        startDate: new Date(2015, 1, 9, 1, 0),
-                        endDate: new Date(2015, 1, 9, 2, 0)
-                    },
-                    {
-                        text: 'Appointment 2',
-                        startDate: new Date(2015, 1, 10, 11, 0),
-                        endDate: new Date(2015, 1, 10, 13, 0)
-                    }
-                ]
-            });
-            const { appointmentDataProvider } = createAppointmentDataProvider({
-                key: 0,
-                dataSource,
-                isVirtualScrolling: false,
-                dataAccessors: defaultDataAccessors,
-            });
-
-            appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
-
-            const expectedFilter = [[
-                [
-                    ['endDate', '>=', new Date(2015, 1, 10)],
-                    ['startDate', '<', new Date(2015, 1, 11)]
-                ],
-                'or',
-                [
-                    ['endDate', new Date(2015, 1, 10)],
-                    ['startDate', new Date(2015, 1, 10)]
-                ]
-            ]];
-            const actualFilter = dataSource.filter();
-            assert.deepEqual(actualFilter, expectedFilter, 'filter is right');
-        } finally {
-            config().forceIsoDateParsing = defaultForceIsoDateParsing;
-        }
-    });
-
-    test('Appointment filterByDate should return filter with dateSerializationFormat and forceIsoDateParsing', async function(assert) {
-        const defaultForceIsoDateParsing = config().forceIsoDateParsing;
-        config().forceIsoDateParsing = true;
-        try {
-            const dataSource = new DataSource({
-                store: [
-                    {
-                        text: 'Appointment 1',
-                        startDate: new Date(2015, 1, 9, 1, 0),
-                        endDate: new Date(2015, 1, 9, 2, 0)
-                    },
-                    {
-                        text: 'Appointment 2',
-                        startDate: new Date(2015, 1, 10, 11, 0),
-                        endDate: new Date(2015, 1, 10, 13, 0)
-                    }
-                ]
-            });
-            const { appointmentDataProvider } = createAppointmentDataProvider({
-                key: 0,
-                dataSource,
-                isVirtualScrolling: false,
-                dataAccessors: defaultDataAccessors,
-            });
-
-            appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
-
-            const expectedFilter = [[
-                [
-                    ['endDate', '>=', '2015-02-10T00:00:00'],
-                    ['startDate', '<', '2015-02-11T00:00:00']
-                ],
-                'or',
-                [
-                    ['endDate', '2015-02-10T00:00:00'],
-                    ['startDate', '2015-02-10T00:00:00']
-                ]
-            ]];
-            const actualFilter = dataSource.filter();
-            assert.deepEqual(actualFilter, expectedFilter, 'filter is right');
-        } finally {
-            config().forceIsoDateParsing = defaultForceIsoDateParsing;
-        }
-    });
-
-
-    test('Start date of appt lower than first filter date & end appt date higher than second filter date', async function(assert) {
-        const data = [{
-            text: 'Appointment 1',
-            startDate: new Date(2015, 1, 9, 1, 0),
-            endDate: new Date(2015, 1, 9, 2, 0)
+describe('data processor', () => {
+  describe('Server side filtering', () => {
+    it('Appointment filterByDate should filter dataSource', async () => {
+      const data = [
+        {
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 1, 0),
+          endDate: new Date(2015, 1, 9, 2, 0),
         },
         {
-            text: 'Appointment 2',
-            startDate: new Date(2015, 1, 10, 11, 0),
-            endDate: new Date(2015, 1, 10, 13, 0)
-        }];
+          text: 'Appointment 2',
+          startDate: new Date(2015, 1, 10, 11, 0),
+          endDate: new Date(2015, 1, 10, 13, 0),
+        },
+      ];
 
-        const dataSource = new DataSource({
-            store: data,
-        });
-        const { appointmentDataProvider } = createAppointmentDataProvider({
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: defaultDataAccessors
-        });
+      const dataSource = new DataSource({
+        store: data,
+      });
+      const { scheduler } = await createScheduler({
+        dataSource,
+        currentView: 'week',
+        currentDate,
+      });
 
-        appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 11, 5), new Date(2015, 1, 10, 11, 45), true);
-        dataSource.load();
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2015, 1, 10, 10),
+        new Date(2015, 1, 10, 13),
+        true,
+        undefined,
+      );
 
-        assert.deepEqual(dataSource.items(), [data[1]], 'filterByDate work correctly');
+      dataSource.load();
+
+      expect(dataSource.items()).toEqual([data[1]]);
     });
 
-    test('Appointment should be filtered correctly by custom startDate field', async function(assert) {
-        const dataSource = new DataSource({
-            store: [{
-                text: 'Appointment 1',
-                Start: new Date(2015, 1, 12, 5),
-                End: new Date(2015, 1, 12, 5, 30)
-            }]
-        });
+    it('Appointment filterByDate should filter dataSource correctly after changing user filter', async () => {
+      const data = [
+        {
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 1, 0),
+          endDate: new Date(2015, 1, 9, 2, 0),
+        },
+        {
+          text: 'Appointment 2',
+          startDate: new Date(2015, 1, 10, 11, 0),
+          endDate: new Date(2015, 1, 10, 13, 0),
+        },
+      ];
+      const dataSource = new DataSource({
+        store: data,
+        filter: ['text', '=', 'Appointment 2'],
+      });
+      const { scheduler } = await createScheduler({
+        dataSource,
+        currentView: 'week',
+        currentDate,
+      });
+      const dateFilter = [
+        [
+          ['endDate', '>=', new Date(2015, 1, 9, 0)],
+          ['startDate', '<', new Date(2015, 1, 11)],
+        ],
+        'or',
+        recurrenceRuleFilter,
+        'or',
+        [
+          ['endDate', new Date(2015, 1, 9)],
+          ['startDate', new Date(2015, 1, 9)],
+        ],
+      ];
 
-        const { appointmentDataProvider } = createAppointmentDataProvider({
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: defaultDataAccessors
-        });
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2015, 1, 9, 0),
+        new Date(2015, 1, 10, 13),
+        true,
+        undefined,
+      );
 
-        appointmentDataProvider.filterByDate(new Date(2015, 1, 9), new Date(2015, 1, 20));
-        dataSource.load();
+      let expectedFilter = [dateFilter, [
+        'text',
+        '=',
+        'Appointment 2',
+      ]];
+      let actualFilter = dataSource.filter();
+      expect(expectedFilter).toEqual(actualFilter);
 
-        assert.equal(dataSource.items().length, 1, 'filterByDate works correctly with custom dateField');
+      const changedDataSource = new DataSource({
+        store: data,
+      });
+      scheduler.appointmentDataProvider.setDataSource(changedDataSource);
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2015, 1, 9, 0),
+        new Date(2015, 1, 10, 13),
+        true,
+        undefined,
+      );
+
+      expectedFilter = [dateFilter];
+      actualFilter = changedDataSource.filter();
+      expect(actualFilter).toEqual(expectedFilter);
     });
 
-    test('AllDay appointment should not be filtered by min date in range', async function(assert) {
-        const tasks = [{
-            text: 'Appointment 2',
-            startDate: new Date(2015, 1, 10, 11, 0),
-            endDate: new Date(2015, 1, 10, 11, 30),
-            AllDay: true
-        }];
+    it('Appointment should clear the internal user filter after dataSource has been filtered (T866593)', async () => {
+      const appointments = [
+        {
+          text: 'a', StartDate: new Date(2015, 0, 1, 1), EndDate: new Date(2015, 0, 1, 2), priorityId: 2,
+        },
+        {
+          text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6, 0), priorityId: 1,
+        },
+        {
+          text: 'c', StartDate: new Date(2015, 0, 1, 8), EndDate: new Date(2015, 0, 1, 9), priorityId: 1,
+        },
+      ];
 
-        const dataSource = new DataSource({
-            store: tasks
-        });
+      const dataSource = new DataSource({
+        store: appointments,
+      });
+      const { scheduler } = await createScheduler({
+        dataSource,
+        currentView: 'week',
+        currentDate,
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecurrenceRule',
+        recurrenceExceptionExpr: 'Exception',
+        startDateTimeZoneExpr: 'StartDateTimeZone',
+        endDateTimeZoneExpr: 'EndDateTimeZone',
+      });
 
-        const { appointmentDataProvider } = createAppointmentDataProvider({
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'startDate',
-                endDateExpr: 'endDate',
-                textExpr: 'text',
-                allDayExpr: 'AllDay',
-            }, true),
-        });
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2015, 0, 1, 1),
+        new Date(2015, 0, 2),
+      );
 
-        appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 12), new Date(2015, 1, 11), true);
-        dataSource.load();
-
-        assert.deepEqual(dataSource.items(), [tasks[0]], 'filterByDate works correctly');
-    });
-
-    test('AllDay appointment should be filtered when its endDate is equal to filter min', async function(assert) {
-        const tasks = [{
-            text: 'Appointment 1',
-            startDate: new Date(2015, 1, 10),
-            endDate: new Date(2015, 1, 11),
-            allDay: true
-        }];
-        const dataSource = new DataSource({
-            store: tasks
-        });
-
-        const { appointmentDataProvider } = createAppointmentDataProvider({
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'startDate',
-                endDateExpr: 'endDate',
-                textExpr: 'text',
-                allDayExpr: 'AllDay',
-            }, true),
-        });
-
-        appointmentDataProvider.filterByDate(new Date(2015, 1, 11), new Date(2015, 1, 11, 11), true);
-        dataSource.load();
-
-        assert.equal(dataSource.items().length, 1, 'filterByDate works correctly');
-    });
-
-    test('Appointment filterByDate should correctly filter items with recurrenceRule, if recurrenceRuleExpr!=null', async function(assert) {
-        const recurrentAppts = [
-            {
-                text: 'Appointment 1',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0),
-                _recurrenceRule: 'FREQ=DAILY'
-            },
-            {
-                text: 'Appointment 2',
-                startDate: new Date(2015, 1, 10, 11, 0),
-                endDate: new Date(2015, 1, 10, 13, 0)
-            }
-        ];
-
-        const dataSource = new DataSource({
-            store: recurrentAppts
-        });
-        const { appointmentDataProvider } = createAppointmentDataProvider({
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'startDate',
-                endDateExpr: 'endDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: '_recurrenceRule'
-            }, true),
-        });
-
-        appointmentDataProvider.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
-        dataSource.load();
-
-        assert.deepEqual(dataSource.items(), recurrentAppts, 'filterByDate works correctly');
-    });
-
-    test('Appointment filterByDate should ignore items with recurrenceRule, if recurrenceRuleExpr=null', async function(assert) {
-        const appts = [
-            {
-                text: 'Appointment 1',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0),
-                recurrenceRule: 'FREQ=DAILY'
-            },
-            {
-                text: 'Appointment 2',
-                startDate: new Date(2015, 1, 10, 11, 0),
-                endDate: new Date(2015, 1, 10, 13, 0)
-            }];
-
-        const dataSource = new DataSource({
-            store: appts
-        });
-        const { appointmentDataProvider } = createAppointmentDataProvider({
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'startDate',
-                endDateExpr: 'endDate',
-                allDayExpr: 'allDay',
-                recurrenceRuleExpr: null
-            }, true),
-        });
-
-        appointmentDataProvider.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
-        dataSource.load();
-
-        assert.deepEqual(dataSource.items(), [appts[1]], 'filterByDate works correctly');
-        assert.equal(dataSource.filter()[0].length, 3, 'filter is correct');
-    });
-
-    test('Appointment filterByDate should ignore items with recurrenceRule, if recurrenceRuleExpr=\'\'', function(assert) {
-        const appts = [
-            {
-                text: 'Appointment 1',
-                startDate: new Date(2015, 1, 9, 1, 0),
-                endDate: new Date(2015, 1, 9, 2, 0),
-                _recurrenceRule: 'FREQ=DAILY'
-            },
-            {
-                text: 'Appointment 2',
-                startDate: new Date(2015, 1, 10, 11, 0),
-                endDate: new Date(2015, 1, 10, 13, 0)
-            }];
-
-        const dataSource = new DataSource({
-            store: appts
-        });
-        const { appointmentDataProvider } = createAppointmentDataProvider({
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'startDate',
-                endDateExpr: 'endDate',
-                allDayExpr: 'allDay',
-                recurrenceRuleExpr: ''
-            }, true),
-        });
-
-        appointmentDataProvider.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
-        dataSource.load();
-
-        assert.deepEqual(dataSource.items(), [appts[1]], 'filterByDate works correctly');
-        assert.equal(dataSource.filter()[0].length, 3, 'filter is correct');
-    });
-
-    test('Appointment should be loaded if date range equals to 24 hours', async function(assert) {
-        const appts = [{
-            text: 'Appointment 1',
-            startDate: new Date(2015, 1, 9, 1, 0),
-            endDate: new Date(2015, 1, 9, 2, 0)
-        }];
-
-        const dataSource = new DataSource({
-            store: appts
-        });
-        const { appointmentDataProvider } = createAppointmentDataProvider({
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'startDate',
-                endDateExpr: 'endDate',
-                allDayExpr: 'allDay',
-                recurrenceRuleExpr: ''
-            }, true),
-        });
-
-        appointmentDataProvider.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 9, 23, 59));
-        dataSource.load();
-
-        assert.deepEqual(dataSource.items(), [appts[0]], 'filterByDate works correctly');
-    });
-
-    test('Scheduler filter expression must be saved, after a user override the filter', async function(assert) {
-        const appointments = [
-            { text: 'a', StartDate: new Date(2015, 0, 1, 1), EndDate: new Date(2015, 0, 1, 2), priorityId: 2 },
-            { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6, 0), priorityId: 1 },
-            { text: 'c', StartDate: new Date(2015, 0, 1, 8), EndDate: new Date(2015, 0, 1, 9), priorityId: 1 }
-        ];
-
-        const dataSource = new DataSource({
-            store: appointments
-        });
-
-        const {
-            appointmentDataProvider,
-            prepareDataItems
-        } = createAppointmentDataProvider({
-            startDayHour: 3,
-            endDayHour: 7,
-            getDateRange: () => [new Date(2015, 0, 1, 0), new Date(2015, 0, 3)],
-            viewOffset: 0,
-            dataSource,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception',
-                startDateTimeZoneExpr: 'startDateTimeZone',
-                endDateTimeZoneExpr: 'endDateTimeZone',
-            }, true),
-            getIsVirtualScrolling: () => false,
-        });
-
-        appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3));
-        dataSource.load();
-
+      dataSource.load().done(() => {
         dataSource.filter('priorityId', '=', 1);
-        dataSource.load();
 
-        const appts = appointmentDataProvider.filter(prepareDataItems());
+        scheduler.appointmentDataProvider.filterByDate(
+          new Date(2015, 0, 1, 1),
+          new Date(2015, 0, 2),
+          true,
+        );
 
-        assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6), priorityId: 1 }], 'Appointments are OK');
+        expect(dataSource.filter().length).toBe(2);
+        expect(dataSource.filter()[1]).toEqual(['priorityId', '=', 1]);
+
+        dataSource.filter(null);
+
+        scheduler.appointmentDataProvider.filterByDate(
+          new Date(2015, 0, 1, 1),
+          new Date(2015, 0, 2),
+          true,
+        );
+
+        expect(dataSource.filter().length).toBe(1);
+      });
     });
 
-    test('User filter must be constantly overwritten', async function(assert) {
-        const appointments = [
-            { text: 'a', StartDate: new Date(2014, 11, 29, 1), EndDate: new Date(2014, 11, 29, 2), priorityId: 2 },
-            { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6, 0), priorityId: 1 },
-            { text: 'c', StartDate: new Date(2015, 0, 1, 8), EndDate: new Date(2015, 0, 1, 9), priorityId: 1 }
-        ];
+    it('Appointment filterByDate should filter dataSource correctly without copying dateFilter', async () => {
+      const dateFilter = [
+        [
+          ['endDate', '>=', new Date(2015, 1, 9, 0)],
+          ['startDate', '<', new Date(2015, 1, 11)],
+        ],
+        'or',
+        [
+          ['endDate', new Date(2015, 1, 9)],
+          ['startDate', new Date(2015, 1, 9)],
+        ],
+      ];
 
+      const dataSource = new DataSource({
+        store: [],
+        filter: [dateFilter, ['text', '=', 'Appointment 2']],
+      });
+      const { scheduler } = await createScheduler({
+        dataSource,
+        currentView: 'week',
+        currentDate,
+      });
+
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2015, 1, 9, 0),
+        new Date(2015, 1, 10, 13),
+        true,
+      );
+
+      const expectedFilter = [
+        [[
+          ['endDate', '>=', new Date(2015, 1, 9, 0)],
+          ['startDate', '<', new Date(2015, 1, 11, 0)],
+        ],
+        'or',
+        recurrenceRuleFilter,
+        'or',
+        [
+          ['endDate', new Date(2015, 1, 9)],
+          ['startDate', new Date(2015, 1, 9)],
+        ]],
+        [dateFilter, ['text', '=', 'Appointment 2']],
+      ];
+
+      const actualFilter = dataSource.filter();
+
+      expect(expectedFilter).toEqual(actualFilter);
+    });
+
+    it('Appointment filterByDate should return filter with dateSerializationFormat and without forceIsoDateParsing', async () => {
+      const defaultForceIsoDateParsing = config().forceIsoDateParsing;
+      config().forceIsoDateParsing = false;
+      try {
         const dataSource = new DataSource({
-            store: appointments,
-            filter: ['priorityId', '=', 1]
-        });
-
-        const { appointmentDataProvider } = createAppointmentDataProvider({
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                textExpr: 'text',
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception',
-            }, true),
-        });
-
-        appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3), true);
-        dataSource.load();
-
-        const existingFilter = dataSource.filter();
-        const newUserFilter = ['priorityId', '=', 2];
-
-        existingFilter[1] = newUserFilter;
-        dataSource.filter(existingFilter);
-        appointmentDataProvider.filterByDate(new Date(2014, 11, 29, 0), new Date(2014, 11, 30), true);
-        dataSource.load();
-
-        assert.deepEqual(dataSource.items(), [{ text: 'a', StartDate: new Date(2014, 11, 29, 1), EndDate: new Date(2014, 11, 29, 2), priorityId: 2 }], 'Appointments are OK');
-    });
-}
-);
-
-module('Client side after filtering', () => {
-    test('Loaded appointments should be filtered by start & end day hours', async function(assert) {
-        const dataSource = new DataSource({ store: [] });
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2015, 0, 1), new Date(2015, 0, 1)],
-            startDayHour: 3,
-            endDayHour: 7,
-            viewOffset: 0,
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
-            }, true),
-        });
-
-        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
-        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6, 0).toString() });
-        appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-
-        const appts = appointmentDataProvider.filter(prepareDataItems());
-
-        assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() }], 'Appointments are OK');
-    });
-
-    test('Loaded appointments on the borders should be filtered by start & end day hours', async function(assert) {
-        const dataSource = new DataSource({ store: [] });
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2015, 0, 1), new Date(2015, 0, 1)],
-            startDayHour: 3,
-            endDayHour: 7,
-            viewOffset: 0,
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
-            }, true),
-        });
-
-        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 3).toString() });
-        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() });
-
-        const appts = appointmentDataProvider.filter(prepareDataItems());
-
-        assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() }], 'Appointments are OK. Appointment \'a\' was filtered');
-    });
-
-    test('Loaded appointments should be filtered by decimal start & end day hours', async function(assert) {
-        const dataSource = new DataSource({ store: [] });
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2015, 0, 1), new Date(2015, 0, 1)],
-            startDayHour: 3.5,
-            endDayHour: 7.5,
-            viewOffset: 0,
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
-            }, true),
-        });
-
-        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 3).toString(), EndDate: new Date(2015, 0, 1, 3, 10).toString() });
-        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 40).toString(), EndDate: new Date(2015, 0, 1, 7, 20).toString() });
-        appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 7, 35).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-
-        const appts = appointmentDataProvider.filter(prepareDataItems());
-
-        assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 40).toString(), EndDate: new Date(2015, 0, 1, 7, 20).toString() }], 'Appointments are OK');
-    });
-
-    test('Loaded appointments should be filtered by recurrence rule', async function(assert) {
-        const dataSource = new DataSource({ store: [] });
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2014, 11, 31).toString(), new Date(2015, 0, 1, 23, 59).toString()],
-            startDayHour: 3,
-            endDayHour: 7,
-            viewOffset: 0,
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecRule',
-                recurrenceExceptionExpr: 'RecException'
-            }, true),
-            timeZoneCalculator: {
-                getOriginStartDateOffsetInMs: () => 0,
-            },
-        });
-
-        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
-        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
-        appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-        appointmentDataProvider.add({ text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=WE' });
-        appointmentDataProvider.add({ text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), RecRule: 'FREQ=WEEKLY,BYDAY=TH' });
-
-        const appts = appointmentDataProvider.filter(prepareDataItems());
-
-        assert.deepEqual(appts, [
-            { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() },
-            { text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=WE' }
-        ], 'Appointments are OK');
-    });
-
-    test('Loaded appointments should be filtered by recurrence rule correctly, if appointment startDate.getHours < starDayHour', async function(assert) {
-        const dataSource = new DataSource({ store: [] });
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2015, 0, 5, 3, 0).toString(), new Date(2015, 0, 11, 7, 0).toString()],
-            startDayHour: 3,
-            endDayHour: 7,
-            viewOffset: 0,
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecRule',
-                recurrenceExceptionExpr: 'RecException'
-            }, true),
-            timeZoneCalculator: {
-                getOriginStartDateOffsetInMs: () => 0,
-            },
-        });
-
-        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
-        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
-
-        const appts = appointmentDataProvider.filter(prepareDataItems());
-
-        assert.deepEqual(appts, [
-            { text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' },
-            { text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' }
-        ], 'Appointments are OK');
-    });
-
-    test('Loaded appointments should be filtered by recurrence rule correctly for day interval', async function(assert) {
-        const dataSource = new DataSource({ store: [] });
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2015, 0, 5, 3, 0).toString(), new Date(2015, 0, 5, 7, 0).toString()],
-            startDayHour: 3,
-            endDayHour: 7,
-            viewOffset: 0,
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecRule',
-                recurrenceExceptionExpr: 'RecException'
-            }, true),
-            timeZoneCalculator: {
-                getOriginStartDateOffsetInMs: () => 0,
-            },
-        });
-
-        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
-        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
-
-        const appts = appointmentDataProvider.filter(prepareDataItems());
-
-        assert.deepEqual(appts, [
-            { text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' },
-            { text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' }
-        ], 'Appointments are OK');
-    });
-
-    test('Loaded appointments should not be filtered by recurrence rule, if recurrenceRuleExpr = null', async function(assert) {
-        const dataSource = new DataSource({ store: [] });
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2015, 0, 1), new Date(2015, 11, 27)],
-            startDayHour: 3,
-            endDayHour: 7,
-            viewOffset: 0,
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: null
-            }, true),
-        });
-
-        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
-        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
-        appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-        appointmentDataProvider.add({ text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE' });
-        appointmentDataProvider.add({ text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), recurrenceRule: 'FREQ=WEEKLY,BYDAY=TH' });
-
-        const appts = appointmentDataProvider.filter(prepareDataItems());
-
-        assert.deepEqual(appts, [
-            { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() },
-            { text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE' },
-            { text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), recurrenceRule: 'FREQ=WEEKLY,BYDAY=TH' }
-        ], 'Appointments are OK');
-    });
-
-    test('Loaded appointments should not be filtered by recurrence rule, if recurrenceRuleExpr = ""', async function(assert) {
-        const dataSource = new DataSource({ store: [] });
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2015, 0, 1), new Date(2015, 11, 27)],
-            startDayHour: 3,
-            endDayHour: 7,
-            viewOffset: 0,
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: ''
-            }, true),
-        });
-
-        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
-        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
-        appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-        appointmentDataProvider.add({ text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE' });
-        appointmentDataProvider.add({ text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), recurrenceRule: 'FREQ=WEEKLY,BYDAY=TH' });
-
-        const appts = appointmentDataProvider.filter(prepareDataItems());
-
-        assert.deepEqual(appts, [
-            { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() },
-            { text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), recurrenceRule: 'FREQ=WEEKLY;BYDAY=WE' },
-            { text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), recurrenceRule: 'FREQ=WEEKLY,BYDAY=TH' }
-        ], 'Appointments are OK');
-    });
-
-    test('Loaded appointments should be filtered by resources', async function(assert) {
-        const dataSource = new DataSource({ store: [] });
-        const dataAccessors = new AppointmentDataAccessor({
-            startDateExpr: 'StartDate',
-            endDateExpr: 'EndDate',
-            recurrenceRuleExpr: 'recurrenceRule',
-        }, true);
-        const { getResourceManager } = await getWorkspaceResourceConfig([
+          store: [
             {
-                fieldExpr: 'ownerId',
-                dataSource: [{ 'id': 1, 'text': 'a' }, { 'id': 2, 'text': 'b' }]
+              text: 'Appointment 1',
+              startDate: new Date(2015, 1, 9, 1, 0),
+              endDate: new Date(2015, 1, 9, 2, 0),
             },
             {
-                fieldExpr: 'roomId',
-                dataSource: [{ 'id': 1, 'text': 'a' }, { 'id': 2, 'text': 'b' }]
-            }
-        ]);
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2015, 2, 16), new Date(2015, 2, 17)],
-            startDayHour: 2,
-            endDayHour: 5,
-            viewOffset: 0,
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors,
-            getResourceManager,
-        });
-
-        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: [1, 2] });
-        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2], managerId: 4 });
-        appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 3, roomId: [1, 2] });
-        appointmentDataProvider.add({ text: 'd', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2, 3] });
-
-        const appts = appointmentDataProvider.filter(prepareDataItems());
-
-        assert.deepEqual(appts, [
-            { text: 'b', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2], managerId: 4 },
-            { text: 'd', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2, 3] }
-        ], 'Appointments are OK');
-    });
-
-    test('Loaded appointments should be filtered by allDay field', async function(assert) {
-        const dataSource = new DataSource({ store: [] });
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2015, 0, 1, 3), new Date(2015, 0, 1, 8)],
-            startDayHour: 3,
-            endDayHour: 7,
-            viewOffset: 0,
-            showAllDayPanel: false,
-            getSupportAllDayRow: () => true,
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
-            }, true),
-        });
-
-        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: true });
-        appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false });
-        appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
-        appointmentDataProvider.add({ text: 'd', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 3, 6).toString() });
-
-        const appts = appointmentDataProvider.filter(prepareDataItems());
-
-        assert.deepEqual(appts, [{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false }], 'Appointments are OK');
-    });
-
-    test('Loaded recurrent allDay appointments should not be filtered by start/endDayHour', async function(assert) {
-        const dataSource = new DataSource({ store: [] });
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2015, 0, 1, 3), new Date(2015, 0, 1, 9, 59)],
-            startDayHour: 3,
-            endDayHour: 10,
-            viewOffset: 0,
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
-            }, true),
-            timeZoneCalculator: {
-                getOriginStartDateOffsetInMs: () => 0,
+              text: 'Appointment 2',
+              startDate: new Date(2015, 1, 10, 11, 0),
+              endDate: new Date(2015, 1, 10, 13, 0),
             },
+          ],
+        });
+        const { scheduler } = await createScheduler({
+          dataSource,
+          currentView: 'week',
+          currentDate,
         });
 
-        appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY' });
+        scheduler.appointmentDataProvider.filterByDate(
+          new Date(2015, 1, 10, 10),
+          new Date(2015, 1, 10, 13),
+          true,
+          'yyyy-MM-ddTHH:mm:ss',
+        );
 
-        const appts = appointmentDataProvider.filter(prepareDataItems());
+        const expectedFilter = [[
+          [
+            ['endDate', '>=', new Date(2015, 1, 10)],
+            ['startDate', '<', new Date(2015, 1, 11)],
+          ],
+          'or',
+          recurrenceRuleFilter,
+          'or',
+          [
+            ['endDate', new Date(2015, 1, 10)],
+            ['startDate', new Date(2015, 1, 10)],
+          ],
+        ]];
+        const actualFilter = dataSource.filter();
+        expect(actualFilter).toEqual(expectedFilter);
+      } finally {
+        config().forceIsoDateParsing = defaultForceIsoDateParsing;
+      }
+    });
 
-        assert.deepEqual(appts, [{ text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY' }], 'Appointments are OK');
+    it('Appointment filterByDate should return filter with dateSerializationFormat and forceIsoDateParsing', async () => {
+      const defaultForceIsoDateParsing = config().forceIsoDateParsing;
+      config().forceIsoDateParsing = true;
+      try {
+        const dataSource = new DataSource({
+          store: [
+            {
+              text: 'Appointment 1',
+              startDate: new Date(2015, 1, 9, 1, 0),
+              endDate: new Date(2015, 1, 9, 2, 0),
+            },
+            {
+              text: 'Appointment 2',
+              startDate: new Date(2015, 1, 10, 11, 0),
+              endDate: new Date(2015, 1, 10, 13, 0),
+            },
+          ],
+        });
+        const { scheduler } = await createScheduler({
+          dataSource,
+          currentView: 'week',
+          currentDate,
+        });
+
+        scheduler.appointmentDataProvider.filterByDate(
+          new Date(2015, 1, 10, 10),
+          new Date(2015, 1, 10, 13),
+          true,
+          'yyyy-MM-ddTHH:mm:ss',
+        );
+
+        const expectedFilter = [[
+          [
+            ['endDate', '>=', '2015-02-10T00:00:00'],
+            ['startDate', '<', '2015-02-11T00:00:00'],
+          ],
+          'or',
+          recurrenceRuleFilter,
+          'or',
+          [
+            ['endDate', '2015-02-10T00:00:00'],
+            ['startDate', '2015-02-10T00:00:00'],
+          ],
+        ]];
+        const actualFilter = dataSource.filter();
+        expect(actualFilter).toEqual(expectedFilter);
+      } finally {
+        config().forceIsoDateParsing = defaultForceIsoDateParsing;
+      }
+    });
+
+    it('Start date of appt lower than first filter date & end appt date higher than second filter date', async () => {
+      const data = [{
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 9, 1, 0),
+        endDate: new Date(2015, 1, 9, 2, 0),
+      },
+      {
+        text: 'Appointment 2',
+        startDate: new Date(2015, 1, 10, 11, 0),
+        endDate: new Date(2015, 1, 10, 13, 0),
+      }];
+
+      const dataSource = new DataSource({
+        store: data,
+      });
+      const { scheduler } = await createScheduler({
+        dataSource,
+        currentView: 'week',
+        currentDate,
+      });
+
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2015, 1, 10, 11, 5),
+        new Date(2015, 1, 10, 11, 45),
+        true,
+      );
+      dataSource.load();
+
+      expect(dataSource.items()).toEqual([data[1]]);
+    });
+
+    it('Appointment should be filtered correctly by custom startDate field', async () => {
+      const dataSource = new DataSource({
+        store: [{
+          text: 'Appointment 1',
+          Start: new Date(2015, 1, 12, 5),
+          End: new Date(2015, 1, 12, 5, 30),
+        }],
+      });
+
+      const { scheduler } = await createScheduler({
+        dataSource,
+        currentView: 'week',
+        currentDate,
+      });
+
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2015, 1, 9),
+        new Date(2015, 1, 20),
+      );
+      dataSource.load();
+
+      expect(dataSource.items().length).toBe(1);
+    });
+
+    it('AllDay appointment should not be filtered by min date in range', async () => {
+      const tasks = [{
+        text: 'Appointment 2',
+        startDate: new Date(2015, 1, 10, 11, 0),
+        endDate: new Date(2015, 1, 10, 11, 30),
+        AllDay: true,
+      }];
+
+      const dataSource = new DataSource({
+        store: tasks,
+      });
+      const { scheduler } = await createScheduler({
+        dataSource,
+        currentView: 'week',
+        currentDate,
+        allDayExpr: 'AllDay',
+      });
+
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2015, 1, 10, 12),
+        new Date(2015, 1, 11),
+        true,
+      );
+      dataSource.load();
+
+      expect(dataSource.items()).toEqual([tasks[0]]);
+    });
+
+    it('AllDay appointment should be filtered when its endDate is equal to filter min', async () => {
+      const tasks = [{
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 10),
+        endDate: new Date(2015, 1, 11),
+        allDay: true,
+      }];
+      const dataSource = new DataSource({
+        store: tasks,
+      });
+
+      const { scheduler } = await createScheduler({
+        dataSource,
+        currentView: 'week',
+        currentDate,
+      });
+
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2015, 1, 11),
+        new Date(2015, 1, 11, 11),
+        true,
+      );
+      dataSource.load();
+
+      expect(dataSource.items().length).toBe(1);
+    });
+
+    it('Appointment filterByDate should correctly filter items with recurrenceRule, if recurrenceRuleExpr!=null', async () => {
+      const recurrentAppts = [
+        {
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 1, 0),
+          endDate: new Date(2015, 1, 9, 2, 0),
+          _recurrenceRule: 'FREQ=DAILY',
+        },
+        {
+          text: 'Appointment 2',
+          startDate: new Date(2015, 1, 10, 11, 0),
+          endDate: new Date(2015, 1, 10, 13, 0),
+        },
+      ];
+
+      const dataSource = new DataSource({
+        store: recurrentAppts,
+      });
+      const { scheduler } = await createScheduler({
+        dataSource,
+        currentView: 'week',
+        currentDate,
+        recurrenceRuleExpr: '_recurrenceRule',
+      });
+
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2015, 1, 10),
+        new Date(2015, 1, 10, 13),
+        true,
+      );
+      dataSource.load();
+
+      expect(dataSource.items()).toEqual(recurrentAppts);
+    });
+
+    it('Appointment filterByDate should ignore items with recurrenceRule, if recurrenceRuleExpr=null', async () => {
+      const appts = [
+        {
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 1, 0),
+          endDate: new Date(2015, 1, 9, 2, 0),
+          recurrenceRule: 'FREQ=DAILY',
+        },
+        {
+          text: 'Appointment 2',
+          startDate: new Date(2015, 1, 10, 11, 0),
+          endDate: new Date(2015, 1, 10, 13, 0),
+        }];
+
+      const dataSource = new DataSource({
+        store: appts,
+      });
+      const { scheduler } = await createScheduler({
+        dataSource,
+        currentView: 'week',
+        currentDate,
+        recurrenceRuleExpr: null,
+      });
+
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2015, 1, 10),
+        new Date(2015, 1, 10, 13),
+        true,
+      );
+      dataSource.load();
+
+      expect(dataSource.items()).toEqual([appts[1]]);
+      expect(dataSource.filter()[0].length).toBe(3);
+    });
+
+    it('Appointment filterByDate should ignore items with recurrenceRule, if recurrenceRuleExpr=""', async () => {
+      const appts = [
+        {
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 1, 0),
+          endDate: new Date(2015, 1, 9, 2, 0),
+          _recurrenceRule: 'FREQ=DAILY',
+        },
+        {
+          text: 'Appointment 2',
+          startDate: new Date(2015, 1, 10, 11, 0),
+          endDate: new Date(2015, 1, 10, 13, 0),
+        }];
+
+      const dataSource = new DataSource({
+        store: appts,
+      });
+      const { scheduler } = await createScheduler({
+        dataSource,
+        currentView: 'week',
+        currentDate,
+        recurrenceRuleExpr: '',
+      });
+
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2015, 1, 10),
+        new Date(2015, 1, 10, 13),
+        true,
+      );
+      dataSource.load();
+
+      expect(dataSource.items()).toEqual([appts[1]]);
+      expect(dataSource.filter()[0].length).toBe(3);
+    });
+
+    it('Appointment should be loaded if date range equals to 24 hours', async () => {
+      const appts = [{
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 9, 1, 0),
+        endDate: new Date(2015, 1, 9, 2, 0),
+      }];
+
+      const dataSource = new DataSource({
+        store: appts,
+      });
+      const { scheduler } = await createScheduler({
+        dataSource,
+        currentView: 'week',
+        currentDate,
+        recurrenceRuleExpr: '',
+      });
+
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2015, 1, 9, 0),
+        new Date(2015, 1, 9, 23, 59),
+      );
+      dataSource.load();
+
+      expect(dataSource.items()).toEqual([appts[0]]);
+    });
+
+    it('Scheduler filter expression must be saved, after a user override the filter', async () => {
+      const appointments = [
+        {
+          text: 'a', StartDate: new Date(2015, 0, 1, 1), EndDate: new Date(2015, 0, 1, 2), priorityId: 2,
+        },
+        {
+          text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6, 0), priorityId: 1,
+        },
+        {
+          text: 'c', StartDate: new Date(2015, 0, 1, 8), EndDate: new Date(2015, 0, 1, 9), priorityId: 1,
+        },
+      ];
+
+      const dataSource = new DataSource({
+        store: appointments,
+      });
+      const { scheduler } = await createScheduler({
+        dataSource,
+        currentView: 'week',
+        currentDate: appointments[1].StartDate,
+        startDayHour: 3,
+        endDayHour: 7,
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecurrenceRule',
+        recurrenceExceptionExpr: 'Exception',
+      });
+
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2015, 0, 1, 0),
+        new Date(2015, 0, 3),
+      );
+      dataSource.load();
+
+      dataSource.filter('priorityId', '=', 1);
+      dataSource.load();
+
+      scheduler.repaint();
+      const appts = scheduler._layoutManager.filteredItems;
+
+      expect(appts).toEqual([{
+        text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6), priorityId: 1,
+      }]);
+    });
+
+    it('User filter must be constantly overwritten', async () => {
+      const appointments = [
+        {
+          text: 'a', StartDate: new Date(2014, 11, 29, 1), EndDate: new Date(2014, 11, 29, 2), priorityId: 2,
+        },
+        {
+          text: 'b', StartDate: new Date(2015, 0, 1, 3, 30), EndDate: new Date(2015, 0, 1, 6, 0), priorityId: 1,
+        },
+        {
+          text: 'c', StartDate: new Date(2015, 0, 1, 8), EndDate: new Date(2015, 0, 1, 9), priorityId: 1,
+        },
+      ];
+
+      const dataSource = new DataSource({
+        store: appointments,
+        filter: ['priorityId', '=', 1],
+      });
+      const { scheduler } = await createScheduler({
+        dataSource,
+        currentView: 'week',
+        currentDate: appointments[0].StartDate,
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecurrenceRule',
+        recurrenceExceptionExpr: 'Exception',
+      });
+
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2015, 0, 1, 0),
+        new Date(2015, 0, 3),
+        true,
+      );
+      dataSource.load();
+
+      const existingFilter = dataSource.filter();
+      const newUserFilter = ['priorityId', '=', 2];
+
+      existingFilter[1] = newUserFilter;
+      dataSource.filter(existingFilter);
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2014, 11, 29, 0),
+        new Date(2014, 11, 30),
+        true,
+      );
+      dataSource.load();
+
+      expect(dataSource.items()).toEqual([{
+        text: 'a', StartDate: new Date(2014, 11, 29, 1), EndDate: new Date(2014, 11, 29, 2), priorityId: 2,
+      }]);
+    });
+  });
+
+  describe('Client side after filtering', () => {
+    it('Loaded appointments should be filtered by start & end day hours', async () => {
+      const dataSource = new DataSource({ store: [] });
+      const { scheduler } = await createScheduler({
+        startDayHour: 3,
+        endDayHour: 7,
+        dataSource,
+        currentView: 'week',
+        currentDate: new Date(2015, 0, 1, 1),
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecurrenceRule',
+        recurrenceExceptionExpr: 'Exception',
+      });
+
+      scheduler.appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
+      scheduler.appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6, 0).toString() });
+      scheduler.appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+
+      scheduler.repaint();
+      const appts = scheduler._layoutManager.filteredItems;
+
+      expect(appts).toEqual([{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() }]);
+    });
+
+    it('Loaded appointments on the borders should be filtered by start & end day hours', async () => {
+      const dataSource = new DataSource({ store: [] });
+      const { scheduler } = await createScheduler({
+        startDayHour: 3,
+        endDayHour: 7,
+        dataSource,
+        currentView: 'week',
+        currentDate: new Date(2015, 0, 1, 1),
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecurrenceRule',
+        recurrenceExceptionExpr: 'Exception',
+      });
+
+      scheduler.appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 3).toString() });
+      scheduler.appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() });
+
+      scheduler.repaint();
+      const appts = scheduler._layoutManager.filteredItems;
+
+      expect(appts).toEqual([{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 45).toString(), EndDate: new Date(2015, 0, 1, 3, 50).toString() }]);
+    });
+
+    it('Loaded appointments should be filtered by shifted start & end day hours', async () => {
+      const dataSource = new DataSource({ store: [] });
+      const { scheduler } = await createScheduler({
+        startDayHour: 3,
+        endDayHour: 7,
+        offset: 30,
+        dataSource,
+        currentView: 'week',
+        currentDate: new Date(2015, 0, 1, 1),
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecurrenceRule',
+        recurrenceExceptionExpr: 'Exception',
+      });
+
+      scheduler.appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 3).toString(), EndDate: new Date(2015, 0, 1, 3, 10).toString() });
+      scheduler.appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 40).toString(), EndDate: new Date(2015, 0, 1, 7, 20).toString() });
+      scheduler.appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 7, 35).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+
+      scheduler.repaint();
+      const appts = scheduler._layoutManager.filteredItems;
+
+      expect(appts).toEqual([{ text: 'b', StartDate: new Date(2015, 0, 1, 3, 40).toString(), EndDate: new Date(2015, 0, 1, 7, 20).toString() }]);
+    });
+
+    it('Loaded appointments should be filtered by recurrence rule', async () => {
+      const dataSource = new DataSource({ store: [] });
+      const { scheduler } = await createScheduler({
+        startDayHour: 3,
+        endDayHour: 7,
+        dataSource,
+        currentView: 'week',
+        currentDate: new Date(2015, 0, 1, 1),
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecRule',
+        recurrenceExceptionExpr: 'RecException',
+      });
+
+      scheduler.appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
+      scheduler.appointmentDataProvider.add({ text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() });
+      scheduler.appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+      scheduler.appointmentDataProvider.add({
+        text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=WE',
+      });
+      scheduler.appointmentDataProvider.add({
+        text: 'e', StartDate: new Date(2015, 11, 27).toString(), EndDate: new Date(2015, 11, 27, 4).toString(), RecRule: 'FREQ=WEEKLY,BYDAY=TH',
+      });
+
+      scheduler.repaint();
+      const appts = scheduler._layoutManager.filteredItems;
+
+      expect(appts).toEqual([
+        { text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString() },
+        {
+          text: 'd', StartDate: new Date(2014, 11, 31).toString(), EndDate: new Date(2015, 11, 31, 4).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=WE',
+        },
+      ]);
+    });
+
+    it('Loaded appointments should be filtered by recurrence rule correctly, if appointment startDate.getHours < starDayHour', async () => {
+      const dataSource = new DataSource({ store: [] });
+      const { scheduler } = await createScheduler({
+        startDayHour: 3,
+        endDayHour: 7,
+        dataSource,
+        currentView: 'week',
+        currentDate: new Date(2015, 0, 5, 2, 0),
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecRule',
+        recurrenceExceptionExpr: 'RecException',
+      });
+
+      scheduler.appointmentDataProvider.add({
+        text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO',
+      });
+      scheduler.appointmentDataProvider.add({
+        text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO',
+      });
+
+      scheduler.repaint();
+      const appts = scheduler._layoutManager.filteredItems;
+
+      expect(appts).toEqual([
+        {
+          text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO',
+        },
+        {
+          text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO',
+        },
+      ]);
+    });
+
+    it('Loaded appointments should be filtered by recurrence rule correctly for day interval', async () => {
+      const dataSource = new DataSource({ store: [] });
+      const { scheduler } = await createScheduler({
+        startDayHour: 3,
+        endDayHour: 7,
+        dataSource,
+        currentView: 'week',
+        currentDate: new Date(2015, 0, 5, 2, 0),
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecRule',
+        recurrenceExceptionExpr: 'RecException',
+      });
+
+      scheduler.appointmentDataProvider.add({
+        text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO',
+      });
+      scheduler.appointmentDataProvider.add({
+        text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO',
+      });
+
+      scheduler.repaint();
+      const appts = scheduler._layoutManager.filteredItems;
+
+      expect(appts).toEqual([
+        {
+          text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO',
+        },
+        {
+          text: 'b', StartDate: new Date(2015, 0, 5, 6, 0).toString(), EndDate: new Date(2015, 0, 5, 8, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO',
+        },
+      ]);
+    });
+
+    it('Loaded appointments should be filtered by resources', async () => {
+      const dataSource = new DataSource({ store: [] });
+      const { scheduler } = await createScheduler({
+        startDayHour: 2,
+        endDayHour: 5,
+        dataSource,
+        currentView: 'week',
+        currentDate: new Date(2015, 2, 16, 2),
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecRule',
+        recurrenceExceptionExpr: 'RecException',
+        groups: ['ownerId', 'roomId'],
+        resources: [
+          {
+            fieldExpr: 'ownerId',
+            dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }],
+          },
+          {
+            fieldExpr: 'roomId',
+            dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }],
+          },
+        ],
+      });
+
+      scheduler.appointmentDataProvider.add({
+        text: 'a', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: [1, 2],
+      });
+      scheduler.appointmentDataProvider.add({
+        text: 'b', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2], managerId: 4,
+      });
+      scheduler.appointmentDataProvider.add({
+        text: 'c', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 3, roomId: [1, 2],
+      });
+      scheduler.appointmentDataProvider.add({
+        text: 'd', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2, 3],
+      });
+
+      scheduler.repaint();
+      const appts = scheduler._layoutManager.filteredItems;
+
+      expect(appts).toEqual([
+        {
+          text: 'b', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2], managerId: 4,
+        },
+        {
+          text: 'd', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: 1, roomId: [1, 2, 3],
+        },
+      ]);
+    });
+
+    it('Loaded appointments should be filtered by allDay field', async () => {
+      const dataSource = new DataSource({ store: [] });
+      const { scheduler } = await createScheduler({
+        startDayHour: 3,
+        endDayHour: 7,
+        dataSource,
+        showAllDayPanel: false,
+        currentView: 'week',
+        currentDate: new Date(2015, 0, 1, 4),
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecurrenceRule',
+        recurrenceExceptionExpr: 'Exception',
+      });
+
+      scheduler.appointmentDataProvider.add({
+        text: 'a', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: true,
+      });
+      scheduler.appointmentDataProvider.add({
+        text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false,
+      });
+      scheduler.appointmentDataProvider.add({ text: 'c', StartDate: new Date(2015, 0, 1, 8).toString(), EndDate: new Date(2015, 0, 1, 9).toString() });
+      scheduler.appointmentDataProvider.add({ text: 'd', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 3, 6).toString() });
+
+      scheduler.repaint();
+      const appts = scheduler._layoutManager.filteredItems;
+
+      expect(appts).toEqual([{
+        text: 'b', StartDate: new Date(2015, 0, 1, 3, 30).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: false,
+      }]);
+    });
+
+    it('Loaded recurrent allDay appointments should not be filtered by start/endDayHour', async () => {
+      const dataSource = new DataSource({ store: [] });
+      const { scheduler } = await createScheduler({
+        startDayHour: 3,
+        endDayHour: 10,
+        dataSource,
+        currentView: 'week',
+        currentDate: new Date(2015, 0, 1),
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecurrenceRule',
+        recurrenceExceptionExpr: 'Exception',
+      });
+
+      scheduler.appointmentDataProvider.add({
+        text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY',
+      });
+
+      scheduler.repaint();
+      const appts = scheduler._layoutManager.filteredItems;
+
+      expect(appts).toEqual([{
+        text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY',
+      }]);
     });
 
     [
-        { visible: true, expectedVisibility: true },
-        { visible: false, expectedVisibility: false },
-        { visible: null, expectedVisibility: true },
-        { visible: undefined, expectedVisibility: true },
+      { visible: true, expectedVisibility: true },
+      { visible: false, expectedVisibility: false },
+      { visible: null, expectedVisibility: true },
+      { visible: undefined, expectedVisibility: true },
     ].forEach(({ visible, expectedVisibility }) => {
-        test(`Appointment should be correctly filtered by visible state if visible=${visible}`, async function(assert) {
-            const dataSource = new DataSource({ store: [] });
-            const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-                getDateRange: () => [new Date(2015, 0, 1, 3), new Date(2015, 0, 1, 9, 59)],
-                startDayHour: 3,
-                endDayHour: 10,
-                viewOffset: 0,
-                dataSource,
-                isVirtualScrolling: false,
-                dataAccessors: new AppointmentDataAccessor({
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay',
-                    recurrenceRuleExpr: 'RecurrenceRule',
-                    recurrenceExceptionExpr: 'Exception'
-                }, true),
-                timeZoneCalculator: {
-                    getOriginStartDateOffsetInMs: () => 0,
-                },
-            });
-
-            appointmentDataProvider.add({
-                text: 'a',
-                StartDate: new Date(2015, 0, 1).toString(),
-                EndDate: new Date(2015, 0, 2).toString(),
-                AllDay: true,
-                RecurrenceRule: 'FREQ=DAILY',
-                visible
-            });
-
-            const appts = appointmentDataProvider.filter(prepareDataItems());
-
-            assert.equal(!!appts.length, expectedVisibility, 'Filtered correctly');
-        });
-    });
-
-    test('Appointment should be filtered if startDate, endDate are at the edge of the trimmed end view date', async function(assert) {
+      it(`Appointment should be correctly filtered by visible state if visible=${visible}`, async () => {
         const dataSource = new DataSource({ store: [] });
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2020, 6, 15), new Date(2020, 6, 15, 23, 59)],
-            startDayHour: 0,
-            endDayHour: 24,
-            viewOffset: 0,
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: defaultDataAccessors
+        const { scheduler } = await createScheduler({
+          startDayHour: 3,
+          endDayHour: 10,
+          dataSource,
+          currentView: 'week',
+          currentDate: new Date(2015, 0, 1),
+          startDateExpr: 'StartDate',
+          endDateExpr: 'EndDate',
+          allDayExpr: 'AllDay',
+          recurrenceRuleExpr: 'RecurrenceRule',
+          recurrenceExceptionExpr: 'Exception',
         });
 
-        appointmentDataProvider.add({
-            text: 'a',
-            startDate: new Date(2020, 6, 16, 0),
-            endDate: new Date(2020, 6, 16, 1),
+        scheduler.appointmentDataProvider.add({
+          text: 'a',
+          StartDate: new Date(2015, 0, 1).toString(),
+          EndDate: new Date(2015, 0, 2).toString(),
+          AllDay: true,
+          RecurrenceRule: 'FREQ=DAILY',
+          visible,
         });
 
-        const appts = appointmentDataProvider.filter(prepareDataItems());
+        scheduler.repaint();
+        const appts = scheduler._layoutManager.filteredItems;
 
-        assert.ok(!appts.length, 'Filtered');
+        expect(!!appts.length).toBe(expectedVisibility);
+      });
     });
 
-    test('The part of long appointment should be filtered by start/endDayHour, with endDate < startDayHour(T339519)', async function(assert) {
-        const dataSource = new DataSource({ store: [] });
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2015, 1, 23, 1, 0), new Date(2015, 2, 1, 9, 59)],
-            startDayHour: 1,
-            endDayHour: 10,
-            viewOffset: 0,
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
-            }, true),
-        });
+    it('Appointment should be filtered if startDate, endDate are at the edge of the trimmed end view date', async () => {
+      const dataSource = new DataSource({ store: [] });
+      const { scheduler } = await createScheduler({
+        startDayHour: 0,
+        endDayHour: 24,
+        dataSource,
+        currentView: 'week',
+        currentDate: new Date(2015, 0, 1),
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecurrenceRule',
+        recurrenceExceptionExpr: 'Exception',
+      });
 
-        appointmentDataProvider.add({
-            text: 'a',
-            StartDate: new Date(2015, 2, 1, 10, 30),
-            EndDate: new Date(2015, 2, 2, 5, 0)
-        });
+      scheduler.appointmentDataProvider.add({
+        text: 'a',
+        startDate: new Date(2020, 6, 16, 0),
+        endDate: new Date(2020, 6, 16, 1),
+      });
 
-        const appts = appointmentDataProvider.filter(prepareDataItems());
+      scheduler.repaint();
+      const appts = scheduler._layoutManager.filteredItems;
 
-        assert.deepEqual(appts, [], 'Appointments are OK');
+      expect(appts.length).toBe(0);
     });
 
-    test('The part of long appointment should be filtered by start/endDayHour, with startDate < startDayHour(T339519)', async function(assert) {
-        const dataSource = new DataSource({ store: [] });
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2015, 2, 2, 1, 0), new Date(2015, 2, 8, 9, 59)],
-            startDayHour: 1,
-            endDayHour: 10,
-            viewOffset: 0,
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
-            }, true),
-        });
+    it('The part of long appointment should be filtered by start/endDayHour, with endDate < startDayHour(T339519)', async () => {
+      const dataSource = new DataSource({ store: [] });
+      const { scheduler } = await createScheduler({
+        startDayHour: 1,
+        endDayHour: 10,
+        dataSource,
+        currentView: 'week',
+        currentDate: new Date(2015, 1, 28),
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecurrenceRule',
+        recurrenceExceptionExpr: 'Exception',
+      });
 
-        appointmentDataProvider.add({
-            text: 'a',
-            StartDate: new Date(2015, 2, 1, 7, 0),
-            EndDate: new Date(2015, 2, 2, 0, 30)
-        });
+      scheduler.appointmentDataProvider.add({
+        text: 'a',
+        StartDate: new Date(2015, 2, 1, 10, 30),
+        EndDate: new Date(2015, 2, 2, 5, 0),
+      });
 
-        const appts = appointmentDataProvider.filter(prepareDataItems());
+      scheduler.repaint();
+      const appts = scheduler._layoutManager.filteredItems;
 
-        assert.deepEqual(appts, [], 'Appointments are OK');
+      expect(appts).toEqual([]);
     });
 
-    test('Appointment between days should be filtered by start/endDayHour (T339519)', async function(assert) {
-        const dataSource = new DataSource({ store: [] });
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2015, 2, 2, 1, 0), new Date(2015, 2, 8, 9, 59)],
-            startDayHour: 1,
-            endDayHour: 10,
-            viewOffset: 0,
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
-            }, true),
-        });
+    it('The part of long appointment should be filtered by start/endDayHour, with startDate < startDayHour(T339519)', async () => {
+      const dataSource = new DataSource({ store: [] });
+      const { scheduler } = await createScheduler({
+        startDayHour: 1,
+        endDayHour: 10,
+        dataSource,
+        currentView: 'week',
+        currentDate: new Date(2015, 1, 28),
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecurrenceRule',
+        recurrenceExceptionExpr: 'Exception',
+      });
 
-        appointmentDataProvider.add({
-            text: 'a',
-            StartDate: new Date(2015, 2, 1, 11, 0),
-            EndDate: new Date(2015, 2, 2, 1, 0)
-        });
+      scheduler.appointmentDataProvider.add({
+        text: 'a',
+        StartDate: new Date(2015, 2, 1, 7, 0),
+        EndDate: new Date(2015, 2, 2, 0, 30),
+      });
 
-        const appts = appointmentDataProvider.filter(prepareDataItems());
+      scheduler.repaint();
+      const appts = scheduler._layoutManager.filteredItems;
 
-        assert.deepEqual(appts, [], 'Appointments are OK');
+      expect(appts).toEqual([]);
     });
 
-    test('Wrong endDate of appointment should be replaced before filtering', async function(assert) {
-        const dataSource = new DataSource({ store: [] });
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2015, 2, 1), new Date(2015, 2, 8)],
-            startDayHour: 0,
-            endDayHour: 24,
-            viewOffset: 0,
-            key: 0,
-            dataSource,
-            isVirtualScrolling: false,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
-            }, true),
-            appointmentDuration: 60
-        });
+    it('Appointment between days should be filtered by start/endDayHour (T339519)', async () => {
+      const dataSource = new DataSource({ store: [] });
+      const { scheduler } = await createScheduler({
+        startDayHour: 1,
+        endDayHour: 10,
+        dataSource,
+        currentView: 'week',
+        currentDate: new Date(2015, 1, 28),
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecurrenceRule',
+        recurrenceExceptionExpr: 'Exception',
+      });
 
-        appointmentDataProvider.add({
-            text: 'a',
-            StartDate: new Date(2015, 2, 1, 11, 0),
-            EndDate: new Date(2015, 2, 1, 1, 0)
-        });
+      scheduler.appointmentDataProvider.add({
+        text: 'a',
+        StartDate: new Date(2015, 2, 1, 11, 0),
+        EndDate: new Date(2015, 2, 2, 1, 0),
+      });
 
-        const appts = appointmentDataProvider.filter(prepareDataItems());
+      scheduler.repaint();
+      const appts = scheduler._layoutManager.filteredItems;
 
-        assert.deepEqual(appts[0].EndDate, new Date(2015, 2, 1, 12, 0), 'EndDate of appointment should be replaced by correct value');
+      expect(appts).toEqual([]);
     });
-});
 
-module('API', () => {
+    it('Wrong endDate of appointment should be replaced before filtering', async () => {
+      const dataSource = new DataSource({ store: [] });
+      const { scheduler } = await createScheduler({
+        startDayHour: 0,
+        endDayHour: 24,
+        dataSource,
+        currentView: 'week',
+        currentDate: new Date(2015, 2, 1),
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecurrenceRule',
+        recurrenceExceptionExpr: 'Exception',
+        cellDuration: 60,
+      });
+
+      scheduler.appointmentDataProvider.add({
+        text: 'a',
+        StartDate: new Date(2015, 2, 1, 11, 0),
+        EndDate: new Date(2015, 2, 1, 1, 0),
+      });
+
+      scheduler.repaint();
+      const appts = scheduler._layoutManager.filteredItems;
+
+      expect(appts[0].EndDate).toEqual(new Date(2015, 2, 1, 12, 0));
+    });
+  });
+
+  describe('API', () => {
     [
-        {
-            item: {
-                text: 'all day appointment',
-                StartDate: new Date(2015, 2, 1, 11, 0),
-                AllDay123: true
-            },
-            expected: true
+      {
+        item: {
+          text: 'all day appointment',
+          StartDate: new Date(2015, 2, 1, 11, 0),
+          AllDay123: true,
         },
-        {
-            item: {
-                text: 'not all day appointment',
-                StartDate: new Date(2015, 2, 1, 11, 0),
-            },
-            expected: false
+        expected: true,
+      },
+      {
+        item: {
+          text: 'not all day appointment',
+          StartDate: new Date(2015, 2, 1, 11, 0),
         },
-        {
-            item: {
-                text: 'not all day appointment',
-                StartDate: new Date(2015, 2, 1, 11, 0),
-                allDay: true
-            },
-            expected: false
-        }
+        expected: false,
+      },
+      {
+        item: {
+          text: 'not all day appointment',
+          StartDate: new Date(2015, 2, 1, 11, 0),
+          allDay: true,
+        },
+        expected: false,
+      },
     ].forEach(({ item, expected }) => {
-        test(`hasAllDayAppointments() should return correct result if all day is ${expected}`, async function(assert) {
-            const dataSource = new DataSource({ store: [] });
-            const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-                key: 0,
-                dataSource,
-                isVirtualScrolling: false,
-                dataAccessors: new AppointmentDataAccessor({
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    allDayExpr: 'AllDay123',
-                }, true),
-                appointmentDuration: 60
-            });
-
-            appointmentDataProvider.add(item);
-
-            const result = appointmentDataProvider.hasAllDayAppointments([item], prepareDataItems());
-
-            assert.equal(result, expected, 'Result is corrects');
+      it(`hasAllDayAppointments() should return correct result if all day is ${expected}`, async () => {
+        const dataSource = new DataSource({ store: [] });
+        const { scheduler } = await createScheduler({
+          dataSource,
+          currentView: 'week',
+          currentDate: item.StartDate,
+          startDateExpr: 'StartDate',
+          endDateExpr: 'EndDate',
+          allDayExpr: 'AllDay123',
+          cellDuration: 60,
         });
+
+        scheduler.appointmentDataProvider.add(item);
+
+        const result = scheduler._layoutManager.hasAllDayAppointments();
+
+        expect(result).toBe(expected);
+      });
     });
-});
+  });
 
-module('Virtual Scrolling', () => {
-    test('Appointment model should take into account startDayHour, endDayHour of the current view', async function(assert) {
-        const appointments = [
-            {
-                text: 'a',
-                StartDate: new Date(2021, 8, 6, 9, 30),
-                EndDate: new Date(2021, 8, 6, 11, 30)
-            }
-        ];
+  describe('Virtual Scrolling', () => {
+    it('Appointment model should take into account startDayHour, endDayHour of the current view', async () => {
+      const appointments = [
+        {
+          text: 'a',
+          StartDate: new Date(2021, 8, 6, 9, 30),
+          EndDate: new Date(2021, 8, 6, 11, 30),
+        },
+      ];
 
-        const dataSource = new DataSource({
-            store: appointments
-        });
+      const dataSource = new DataSource({
+        store: appointments,
+      });
+      const { scheduler } = await createScheduler({
+        startDayHour: 9,
+        endDayHour: 18,
+        viewOffset: 0,
+        showAllDayPanel: false,
+        dataSource,
+        currentView: 'week',
+        currentDate: appointments[0].StartDate,
+        startDateExpr: 'StartDate',
+        endDateExpr: 'EndDate',
+        allDayExpr: 'AllDay',
+        recurrenceRuleExpr: 'RecurrenceRule',
+        recurrenceExceptionExpr: 'Exception',
+      });
 
-        const { appointmentDataProvider, prepareDataItems } = createAppointmentDataProvider({
-            getDateRange: () => [new Date(2021, 8, 6, 9), new Date(2021, 8, 6, 18)],
-            startDayHour: 9,
-            endDayHour: 18,
-            key: 0,
-            viewOffset: 0,
-            showAllDayPanel: false,
-            getSupportAllDayRow: () => true,
-            dataSource,
-            dataAccessors: new AppointmentDataAccessor({
-                startDateExpr: 'StartDate',
-                endDateExpr: 'EndDate',
-                allDayExpr: 'AllDay',
-                recurrenceRuleExpr: 'RecurrenceRule',
-                recurrenceExceptionExpr: 'Exception'
-            }, true),
-        });
+      scheduler.appointmentDataProvider.filterByDate(
+        new Date(2021, 8, 6, 9),
+        new Date(2021, 8, 6, 12),
+      );
+      dataSource.load();
+      scheduler.repaint();
 
-        appointmentDataProvider.filterByDate(new Date(2021, 8, 6, 9), new Date(2021, 8, 6, 12));
-        dataSource.load();
+      const result = scheduler._layoutManager.filteredItems;
 
-        const result = appointmentDataProvider.filter(prepareDataItems());
-
-        assert.deepEqual(result, appointments, 'Items feltered correcly');
+      expect(result).toEqual(appointments);
     });
+  });
 });

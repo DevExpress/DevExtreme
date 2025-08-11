@@ -2,9 +2,9 @@ import dateUtils from '@js/core/utils/date';
 import { each } from '@js/core/utils/iterator';
 import type { SafeAppointment } from '@ts/scheduler/types';
 
-import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
-import { groupAppointmentsByGroupLeafs } from '../../utils/resource_manager/appointment_groups_utils';
-import { getAppointmentTakesSeveralDays } from '../data_provider/m_utils';
+import { getAppointmentTakesSeveralDays } from '../../../appointments/utils/m_utils';
+import { AppointmentAdapter } from '../../../utils/appointment_adapter/appointment_adapter';
+import { groupAppointmentsByGroupLeafs } from '../../../utils/resource_manager/appointment_groups_utils';
 import BaseRenderingStrategy from './m_strategy_base';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {

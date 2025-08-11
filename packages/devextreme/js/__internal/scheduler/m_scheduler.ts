@@ -31,7 +31,6 @@ import { custom as customDialog } from '@js/ui/dialog';
 import type { Appointment, AppointmentTooltipShowingEvent } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import { AppointmentDataProvider } from '@ts/scheduler/view_model/generate_view_model/data_provider/m_appointment_data_provider';
 
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
@@ -70,6 +69,7 @@ import { setAppointmentGroupValues } from './utils/resource_manager/appointment_
 import { getLeafGroupValues } from './utils/resource_manager/group_utils';
 import { createResourceEditorModel } from './utils/resource_manager/popup_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
+import { AppointmentDataProvider } from './view_model/generate_view_model/data_provider/m_appointment_data_provider';
 import AppointmentLayoutManager from './view_model/m_appointments_layout_manager';
 import SchedulerAgenda from './workspaces/m_agenda';
 import SchedulerTimelineDay from './workspaces/m_timeline_day';
