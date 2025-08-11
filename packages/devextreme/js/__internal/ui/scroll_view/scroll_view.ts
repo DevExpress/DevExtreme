@@ -260,7 +260,6 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
     }
 
     if (this._$pullDown && this._strategy) {
-      // @ts-expect-error ts-error
       this._$pullDown.toggle(enabled);
       this._strategy.pullDownEnable(enabled);
       this._pullDownEnabled = enabled;
@@ -274,7 +273,6 @@ export class ScrollView extends Scrollable<ScrollViewProperties> {
     }
 
     if (this._$reachBottom && this._strategy) {
-      // @ts-expect-error ts-error
       this._$reachBottom.toggle(enabled);
       this._strategy.reachBottomEnable(enabled);
       this._reachBottomEnabled = enabled;

@@ -443,9 +443,7 @@ class Menu extends MenuBase<MenuProperties> {
     }
 
     this._setAriaRole(isAdaptive);
-    // @ts-expect-error ts-error
     $menuItemsContainer.toggle(!isAdaptive);
-    // @ts-expect-error ts-error
     $adaptiveElements.toggle(isAdaptive);
   }
 

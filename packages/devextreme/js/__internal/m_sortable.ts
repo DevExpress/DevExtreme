@@ -852,7 +852,6 @@ class Sortable extends Draggable {
       that._move(position, $placeholderElement);
     }
 
-    // @ts-expect-error bad toggle type
     $placeholderElement.toggle(!!position);
   }
 
