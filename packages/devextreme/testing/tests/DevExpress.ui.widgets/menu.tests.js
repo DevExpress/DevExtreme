@@ -19,7 +19,10 @@ import { shouldSkipOnMobile } from '../../helpers/device.js';
 import 'generic_light.css!';
 import { implementationsMap, getHeight, getWidth, getOuterHeight } from 'core/utils/size';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
-import { EXPANDER_ICON_STUB_CLASS } from '__internal/ui/tree_view/tree_view.base';
+import {
+    EXPANDER_ICON_STUB_CLASS as TREE_VIEW_EXPANDER_ICON_STUB_CLASS,
+    ITEM_CLASS as TREE_VIEW_ITEM_CLASS,
+} from '__internal/ui/tree_view/tree_view.base';
 
 QUnit.testStart(function() {
     const markup =
@@ -3347,13 +3350,22 @@ QUnit.module('adaptivity: render', {
             adaptivityEnabled: true
         });
 
-        const $stubElements = $.find(`.${EXPANDER_ICON_STUB_CLASS}`);
+        const $treeViewItems = $.find(`.${TREE_VIEW_ITEM_CLASS}`);
+        const $stubElements = $.find(`.${TREE_VIEW_EXPANDER_ICON_STUB_CLASS}`);
+
+        $treeViewItems.forEach((element, index) => {
+            assert.strictEqual(
+                window.getComputedStyle(element).gap,
+                '0px',
+                `gap property of tree view item #${index} is 0px`
+            );
+        });
 
         $stubElements.forEach((element, index) => {
             assert.strictEqual(
-                window.getComputedStyle(element).display,
-                'none',
-                `display property of stub element #${index} is none`
+                window.getComputedStyle(element).width,
+                '0px',
+                `width property of stub element #${index} is 0px`
             );
         });
     });
