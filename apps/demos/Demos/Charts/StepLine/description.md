@@ -1,2 +1,2 @@
-_Step line_ series are much like traditional line series. The primary difference is&nbsp;that in _step line_ series, data points are connected by&nbsp;vertical and horizontal lines --- resulting in&nbsp;a&nbsp;&laquo;stair step&raquo; effect.
+The DevExtreme Chart component supports step line charts. To display a step line chart, set **series**.[type](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#type) to *"stepline"*. Step line charts connect points with vertical and horizontal lines that form a "stair step" effect. You can utilize the [StepLine](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/StepLineSeries/) series type to display data with discrete values.
 <!--split-->
