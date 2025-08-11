@@ -3340,6 +3340,17 @@ QUnit.module('adaptivity: render', {
             offset.restore();
         }
     });
+
+    QUnit.test('menu should not show stub elements next to treeview items if adaptivityEnabled is set to true (T1302958)', function(assert) {
+        new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true
+        });
+
+        const $stubElements = $.find(`.${EXPANDER_ICON_STUB_CLASS}`);
+
+        assert.strictEqual($stubElements.length, 0, 'stub elements are not rendered');
+    });
 });
 
 QUnit.module('adaptivity: transfer options', {
