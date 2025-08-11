@@ -13,7 +13,6 @@ import type {
   ItemCollapsedEvent, ItemExpandedEvent, ResizeEndEvent, ResizeEvent, ResizeStartEvent,
 } from '@js/ui/splitter';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
-import { clearSelection } from '@ts/core/utils/m_dom';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
 
@@ -474,8 +473,6 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
 
   _doubleClickHandler(e: DxEvent<PointerEvent | MouseEvent | TouchEvent>): void {
     const { showCollapsePrev, showCollapseNext } = this.option();
-
-    clearSelection();
 
     if (showCollapsePrev === true) {
       this._collapsePrevHandler(e);
