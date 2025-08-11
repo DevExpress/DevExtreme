@@ -12,7 +12,7 @@ class StateManager implements StateManagementTypes.StateManager {
 
   readonly componentState: StateManagementTypes.ComponentState;
 
-  private readonly stateSourceSign: string;
+  private readonly stateSourceSign: RegExp;
 
   private readonly valueContainerManagers: StateManagementTypes.ValueContainerManagerConstructor[];
 

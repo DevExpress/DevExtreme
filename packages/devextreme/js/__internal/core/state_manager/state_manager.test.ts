@@ -177,13 +177,14 @@ describe('StateManager', () => {
     });
   });
 
-  it('Should allow garbage collection of controllers when a component is destroyed', async () => {
+  it('should allow garbage collection of a state source when a component is destroyed', async () => {
     let diContext: DIContext | null = new DIContext();
 
     const testComponentStateTracker = setupStateManager({
       diContext,
       componentName: 'TestComponent',
       logLevel: 'error',
+      stateSourceSign: /Test/,
     });
 
     if (!testComponentStateTracker) {
@@ -199,6 +200,10 @@ describe('StateManager', () => {
 
     diContext.registerInstance(TestController, controllerInstance);
 
+    expect(testComponentStateTracker.getComponentState().TestController).toEqual({
+      testValue: 42,
+    });
+
     controllerInstance = null;
     diContext = null;
 
@@ -209,13 +214,14 @@ describe('StateManager', () => {
     expect(isGarbageCollected).toBe(true);
   });
 
-  it('Should allow garbage collection of tracked controllers properties when they are destroyed', async () => {
+  it('should allow garbage collection of a tracked state source properties when they are destroyed', async () => {
     const diContext: DIContext | null = new DIContext();
 
     const testComponentStateTracker = setupStateManager({
       diContext,
       componentName: 'TestComponent',
       logLevel: 'error',
+      stateSourceSign: /Test/,
     });
 
     if (!testComponentStateTracker) {
@@ -232,6 +238,10 @@ describe('StateManager', () => {
     const controllerInstanceTestValuePropertyWeakRef = new WeakRef(controllerInstance.testValue!);
 
     diContext.registerInstance(TestController, controllerInstance);
+
+    expect(testComponentStateTracker.getComponentState().TestController).toEqual({
+      testValue: 42,
+    });
 
     controllerInstance.testValue = null;
 

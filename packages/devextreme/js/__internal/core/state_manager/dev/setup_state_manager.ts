@@ -10,20 +10,20 @@ export interface StateManagerInitializerOptions {
   logLevel?: StateManagementTypes.LogLevel;
   componentName: string;
   diContext: DIContext;
-  controllerSign?: string;
+  stateSourceSign?: RegExp;
 }
 
-const CONTROLLER_SIGN = 'Controller';
+const DEFAULT_STATE_SOURCE_SIGN = /Controller/;
 
-function isController(
+function isStateSource(
   instance: unknown,
-  controllerSign: string,
+  stateSourceSign: RegExp,
 ): instance is StateManagementTypes.StateSource {
   return instance !== null
         && typeof instance === 'object'
         && 'constructor' in instance
         && 'name' in instance.constructor
-        && instance.constructor.name.includes(controllerSign);
+        && stateSourceSign.test(instance.constructor.name);
 }
 
 export const setupStateManager = (
@@ -33,7 +33,7 @@ export const setupStateManager = (
     diContext,
     componentName,
     logLevel = 'warn',
-    controllerSign = CONTROLLER_SIGN,
+    stateSourceSign = DEFAULT_STATE_SOURCE_SIGN,
   } = options;
   if (!diContext) {
     throw new Error('DI context is not provided');
@@ -53,21 +53,21 @@ export const setupStateManager = (
 
   const stateManager = StateManagerFactory.create({
     componentName,
-    stateSourceSign: controllerSign,
+    stateSourceSign,
     logger,
   });
 
-  const trackControllerByStateManager: DecoratorFunction = (instance) => {
-    if (isController(instance, controllerSign)) {
+  const trackStateSource: DecoratorFunction = (instance) => {
+    if (isStateSource(instance, stateSourceSign)) {
       stateManager.trackStateOf(instance);
     } else {
-      logger.debug(`The '${instance?.constructor?.name}' controller isn't tracked by the state manager because it doesn't match the pattern of a controller with the "${CONTROLLER_SIGN}" sign in its name.`);
+      logger.debug(`The '${instance?.constructor?.name}' state source isn't tracked by the state manager because it doesn't match the "${stateSourceSign}" sign pattern.`);
     }
 
     return instance;
   };
 
-  diContext.registerDecorator(trackControllerByStateManager);
+  diContext.registerDecorator(trackStateSource);
 
   return stateManager;
 };

@@ -18,7 +18,7 @@ export interface StateManagerConfig {
   devToolsConnector: DevToolsConnector;
   logger: Logger;
   valueContainerManagers: ValueContainerManagerConstructor[];
-  stateSourceSign: string;
+  stateSourceSign: RegExp;
 }
 
 export interface ObservableValueContainer extends ValueContainer, Signal<unknown> {
@@ -31,7 +31,7 @@ export interface ValueContainerManagerConstructor {
   canHandle: (valueContainer: MaybeValueContainer) => valueContainer is ValueContainer;
   create: (
     logger: Logger,
-    stateSourceSign: string,
+    stateSourceSign: RegExp,
     valueContainer: MaybeValueContainer
   ) => ValueContainerManager;
 }
@@ -49,7 +49,7 @@ export interface StateManagerFactoryOptions extends Partial<StateManagerConfig> 
   componentName: string;
   valueContainerManagers?: ValueContainerManagerConstructor[];
   logLevel?: LogLevel;
-  stateSourceSign: string;
+  stateSourceSign: RegExp;
 }
 
 export type ValueContainerPayload = {

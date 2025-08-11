@@ -13,7 +13,7 @@ export class PreactSignalValueContainerManager
 implements StateManagementTypes.ValueContainerManager {
   constructor(
     private readonly logger: StateManagementTypes.Logger,
-    private readonly stateSourceSign: string,
+    private readonly stateSourceSign: RegExp,
     private readonly valueContainer: StateManagementTypes.ObservableValueContainer,
   ) {
 
@@ -67,7 +67,7 @@ implements StateManagementTypes.ValueContainerManager {
     const lines = stack.split('\n');
 
     const stateSourceLine = lines
-      .find((line) => line.includes(this.stateSourceSign));
+      .find((line) => line && this.stateSourceSign.test(line));
 
     return stateSourceLine ?? (lines.length > 1 ? lines[1] : '');
   }
@@ -83,7 +83,7 @@ StateManagementTypes.ValueContainerManagerConstructor = {
 
   create(
     logger: StateManagementTypes.Logger,
-    stateSourceSign: string,
+    stateSourceSign: RegExp,
     valueContainer: StateManagementTypes.MaybeValueContainer,
   ): StateManagementTypes.ValueContainerManager {
     if (!isSignal(valueContainer)) {
