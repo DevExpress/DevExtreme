@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { default as dxRender } from 'devextreme/core/renderer';
 import { useEffect, useContext } from 'react';
 import { TemplateWrapper } from '../template-wrapper';
 import { cleanup, render } from '@testing-library/react';
@@ -6,8 +7,8 @@ import * as events from 'devextreme/events';
 import { RemovalLockerContext, UpdateLocker } from '../contexts';
 import { TemplateFunc } from '../types';
 
-function TemplateComponent(args: { data, index, onRendered?, effect? }) {
-  const { data, index, onRendered, effect } = args;
+function TemplateComponent(args: { data, index, onRendered?, effect?, multipleRoots }) {
+  const { data, index, onRendered, effect, multipleRoots } = args;
 
   effect?.();
 
@@ -15,12 +16,19 @@ function TemplateComponent(args: { data, index, onRendered?, effect? }) {
     onRendered?.();
   }, [onRendered]);
 
-  return (
-    <div className='template-element'>{`${data.text} - ${index}`}</div>
-  );
+  return multipleRoots
+    ? (
+      <>
+        <div className='template-element-1'>{`${data.text} - ${index}`}</div>
+        <div className='template-element-2'>{`${data.text} - ${index}`}</div>
+      </>
+    )
+    : (
+      <div className='template-element'>{`${data.text} - ${index}`}</div>
+    );
 }
 
-function getComponentTemplateFunction(effect?) {
+function getComponentTemplateFunction(effect?, multipleRoots = false) {
   return ({ data, index, onRendered }) => {
     return (
       <TemplateComponent
@@ -28,6 +36,7 @@ function getComponentTemplateFunction(effect?) {
         index={index}
         onRendered={onRendered}
         effect={effect}
+        multipleRoots={multipleRoots}
       />
     );
   };
@@ -441,7 +450,7 @@ describe('Template Wrapper', () => {
     expect(onRemovedFired).toBeTruthy();
   });
 
-  it('returns all the elements to DOM on unmount to avoid upsetting React', () => {
+  it('returns the element and hidden nodes to DOM on unmount to avoid upsetting React', () => {
     const templateFunction: TemplateFunc = getComponentTemplateFunction();
 
     const { rerender, unmount } = render(
@@ -468,10 +477,45 @@ describe('Template Wrapper', () => {
     const children = container.children;
 
     for(var i = 0; i < children.length; i++) {
-      container.removeChild(children[i]);
+      dxRender(children[i]).remove();
     }
 
     expect(() => unmount()).not.toThrow();
+    expect(container.children.length).toBe(0);
+  });
+
+  it('returns multiple template root elements to DOM on unmount to avoid upsetting React', () => {
+    const templateFunction: TemplateFunc = getComponentTemplateFunction(void 0, true);
+
+    const { rerender, unmount } = render(
+      <>
+        <div className='template-container' />
+      </>
+    );
+
+    rerender(
+      <>
+        <div className='template-container' />
+        <TemplateWrapper
+          templateFactory={templateFunction}
+          data={{ text: 'My template' }}
+          index={1}
+          onRendered={() => undefined}
+          container={document.querySelector('.template-container')!}
+          onRemoved={() => undefined}
+        />
+      </>
+    );
+
+    const container = document.querySelector('.template-container')!;
+    const children = container.children;
+
+    for(var i = 0; i < children.length; i++) {
+      dxRender(children[i]).remove();
+    }
+
+    expect(() => unmount()).not.toThrow();
+    expect(container.children.length).toBe(0);
   });
 
   it('portals its component to the specified container', () => {
