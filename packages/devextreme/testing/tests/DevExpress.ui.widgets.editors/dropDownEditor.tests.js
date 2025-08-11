@@ -952,6 +952,26 @@ QUnit.module('Templates', () => {
             this.clock.restore();
         }
     }, () => {
+        QUnit.test('fieldTemplate using should raise a deprecation warning', function(assert) {
+            sinon.spy(errors, 'log');
+
+            try {
+                $('#dropDownEditorLazy').dxDropDownEditor({
+                    fieldTemplate: () => $('<div>').dxTextBox()
+                });
+
+                assert.deepEqual(errors.log.firstCall.args, [
+                    'W0001',
+                    'dxDropDownEditor',
+                    'fieldTemplate',
+                    '25.2',
+                    'The fieldTemplate option is deprecated. Use insted fieldTemplates.'
+                ], 'warning is raised with correct parameters');
+            } finally {
+                errors.log.restore();
+            }
+        });
+
         QUnit.test('should not raise error if template finished its render after new template starts render (T1059261)', function(assert) {
             const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
                 fieldTemplate: 'field',
