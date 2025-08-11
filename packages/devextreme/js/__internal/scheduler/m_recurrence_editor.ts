@@ -168,6 +168,7 @@ class RecurrenceEditor extends Editor {
     this._extendConfig(config, {
       readOnly: this.option('readOnly'),
     });
+
     // @ts-expect-error
     return super._createComponent(element, name, config);
   }

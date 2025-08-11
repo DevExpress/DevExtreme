@@ -7,11 +7,12 @@ import $ from '@js/core/renderer';
 import { getImageContainer } from '@js/core/utils/icon';
 import { isPlainObject } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
-import Overlay from '@js/ui/overlay/ui.overlay';
 import type { Properties } from '@js/ui/speed_dial_action';
 import { isMaterial } from '@js/ui/themes';
 import { render } from '@ts/core/utils/m_ink_ripple';
+import type { DefaultActionArgs } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
+import Overlay from '@ts/ui/overlay/overlay';
 
 const FAB_CLASS = 'dx-fa-button';
 const FAB_ICON_CLASS = 'dx-fa-button-icon';
@@ -215,7 +216,8 @@ class SpeedDialItem extends Overlay<SpeedDialItemProperties> {
     });
   }
 
-  _defaultActionArgs() {
+  // @ts-expect-error
+  _defaultActionArgs(): DefaultActionArgs<SpeedDialItem> {
     return {
       component: this._getActionComponent(),
     };

@@ -136,6 +136,11 @@ export interface ContextMenuProperties<
   visualContainer?: string | Element | Window | null;
   overlayContainer?: string | Element | null;
   boundaryOffset?: PositionConfig['boundaryOffset'];
+  onSubmenuCreated?: ((e) => void) | null;
+  onLeftFirstItem?: ((e) => void) | null;
+  onLeftLastItem?: ((e) => void) | null;
+  onCloseRootSubmenu?: ((e) => void) | null;
+  onExpandLastSubmenu?: ((e) => void) | null;
 }
 
 class ContextMenu<
