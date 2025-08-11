@@ -1061,7 +1061,7 @@ class DateRangeBox extends Editor<Properties> {
 
         break;
       }
-      case '_currentSelection':
+      case 'currentSelection':
         break;
       default:
       // @ts-expect-error
