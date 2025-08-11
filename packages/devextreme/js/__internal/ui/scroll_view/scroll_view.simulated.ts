@@ -10,10 +10,9 @@ import type { DeferredObj } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
 import LoadIndicator from '@js/ui/load_indicator';
+import type { ScrollView, ScrollViewProperties } from '@ts/ui/scroll_view/scroll_view';
 import { Scroller, type ScrollerOptions, SimulatedStrategy } from '@ts/ui/scroll_view/scrollable.simulated';
 import type { ScrollOffset } from '@ts/ui/scroll_view/types';
-
-import type { ScrollView, ScrollViewProperties } from './scroll_view';
 
 const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';
 const SCROLLVIEW_PULLDOWN_READY_CLASS = 'dx-scrollview-pull-down-ready';
@@ -284,7 +283,11 @@ export class ScrollViewScroller extends Scroller {
   }
 }
 
-class SimulatedScrollViewStrategy extends SimulatedStrategy<ScrollViewProperties> {
+class SimulatedScrollViewStrategy<
+  TProperties extends ScrollViewProperties = ScrollViewProperties,
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+> extends SimulatedStrategy<TProperties, any> {
   pullDownCallbacks!: Callback;
 
   releaseCallbacks!: Callback;
@@ -305,9 +308,7 @@ class SimulatedScrollViewStrategy extends SimulatedStrategy<ScrollViewProperties
 
   _$refreshingText?: dxElementWrapper;
 
-  // @ts-expect-error ts-error
   _init(scrollView: ScrollView): void {
-    // @ts-expect-error ts-error
     super._init(scrollView);
     this._$pullDown = scrollView._$pullDown;
     this._$topPocket = scrollView._$topPocket;

@@ -28,6 +28,7 @@ import {
   getWidth,
 } from '@js/core/utils/size';
 import { isDefined, isObject } from '@js/core/utils/type';
+import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { dxPopupAnimation, Properties, ToolbarItem } from '@js/ui/popup';
 import type { ResizeEndEvent, ResizeEvent, ResizeStartEvent } from '@js/ui/resizable';
@@ -43,6 +44,10 @@ import type Toolbar from '@js/ui/toolbar';
 import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import type {
+  ControllerOverlayElements,
+  ControllerProperties,
+} from '@ts/ui/overlay/m_overlay_position_controller';
 import type { GeometryOptions, OverlayActions } from '@ts/ui/overlay/overlay';
 import Overlay from '@ts/ui/overlay/overlay';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
@@ -52,6 +57,10 @@ import type { ToolbarBaseProperties } from '@ts/ui/toolbar/toolbar.base';
 import PopupDrag from './m_popup_drag';
 import type { OverflowManager } from './m_popup_overflow_manager';
 import { createBodyOverflowManager } from './m_popup_overflow_manager';
+import type {
+  PopupControllerProperties,
+  PopupPositionControllerConstructor,
+} from './m_popup_position_controller';
 import { PopupPositionController } from './m_popup_position_controller';
 
 // STYLE popup
@@ -431,9 +440,9 @@ class Popup<
 
     this._shouldSkipContentResize = (
       entry: ResizeObserverEntry,
-    ): boolean => isShowAnimationResizing
+    ): boolean => (isShowAnimationResizing
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      && this._showAnimationProcessing || this._areContentDimensionsRendered(entry);
+      && this._showAnimationProcessing) || this._areContentDimensionsRendered(entry);
   }
 
   _observeContentResize(shouldObserve: boolean): void {
@@ -731,10 +740,11 @@ class Popup<
     return (_, __, container): void => {
       const $button = $('<div>').addClass(POPUP_TITLE_CLOSEBUTTON_CLASS);
 
-      this._createComponent($button, Button, {
+      this._createComponent<Button, ButtonProperties>($button, Button, {
         icon: 'close',
         onClick: this._createToolbarItemAction(undefined),
         stylingMode: 'text',
+        // @ts-expect-error ts-error
         integrationOptions: {},
       });
 
@@ -829,7 +839,7 @@ class Popup<
     return {
       template: (_, __, container: dxElementWrapper): void => {
         const $toolbarItem = $('<div>').addClass(itemClass).appendTo(container);
-        this._createComponent($toolbarItem, Button, itemConfig);
+        this._createComponent<Button, ButtonProperties>($toolbarItem, Button, itemConfig);
       },
     };
   }
@@ -888,7 +898,9 @@ class Popup<
     this.$content().toggleClass(POPUP_CONTENT_SCROLLABLE_CLASS, isNativeScrollingEnabled);
   }
 
-  _getPositionControllerConfig() {
+  _getPositionControllerConfig(): PopupPositionControllerConstructor {
+    const superConfiguration = super._getPositionControllerConfig();
+
     const {
       fullScreen,
       forceApplyBindings,
@@ -897,14 +909,25 @@ class Popup<
       outsideDragFactor,
     } = this.option();
 
-    return {
-      ...super._getPositionControllerConfig(),
+    const properties: ControllerProperties<PopupControllerProperties> = {
+      ...superConfiguration.properties,
       fullScreen,
       forceApplyBindings,
       dragOutsideBoundary,
       dragAndResizeArea,
       outsideDragFactor,
     };
+
+    const elements: ControllerOverlayElements = {
+      ...superConfiguration.elements,
+    };
+
+    const configuration: PopupPositionControllerConstructor = {
+      properties,
+      elements,
+    };
+
+    return configuration;
   }
 
   _initPositionController(): void {
@@ -1281,7 +1304,7 @@ class Popup<
       case 'container':
         super._optionChanged(args);
         if (this.option('resizeEnabled')) {
-          // @ts-expect-error ts-error
+          // @ts-expect-error resizable area option type compatibility
           this._resizable?.option('area', this._positionController.$dragResizeContainer);
         }
         break;
@@ -1307,21 +1330,24 @@ class Popup<
         this._renderDrag();
         break;
       case 'dragAndResizeArea':
+        // @ts-expect-error property type compatibility
         this._positionController.dragAndResizeArea = value;
         if (this.option('resizeEnabled')) {
-          // @ts-expect-error ts-error
+          // @ts-expect-error resizable area option type compatibility
           this._resizable.option('area', this._positionController.$dragResizeContainer);
         }
         this._positionController.positionContent();
         break;
       case 'dragOutsideBoundary':
+        // @ts-expect-error property type compatibility
         this._positionController.dragOutsideBoundary = value;
         if (this.option('resizeEnabled')) {
-          // @ts-expect-error ts-error
+          // @ts-expect-error resizable area option type compatibility
           this._resizable.option('area', this._positionController.$dragResizeContainer);
         }
         break;
       case 'outsideDragFactor':
+        // @ts-expect-error property type compatibility
         this._positionController.outsideDragFactor = value;
         break;
       case 'resizeEnabled':
@@ -1333,6 +1359,7 @@ class Popup<
         triggerResizeEvent(this.$overlayContent());
         break;
       case 'fullScreen':
+        // @ts-expect-error property type compatibility
         this._positionController.fullScreen = value;
 
         this._toggleFullScreenClass(Boolean(value));

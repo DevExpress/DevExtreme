@@ -15,6 +15,7 @@ import { getHeight, getOuterWidth, getWidth } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent } from '@js/events';
+import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import CollectionWidgetLiveUpdate from '@js/ui/collection/ui.collection_widget.live_update';
 import type {
@@ -25,7 +26,7 @@ import type {
   TabsStyle,
 } from '@js/ui/tabs';
 import { current as currentTheme, isFluent, isMaterial } from '@js/ui/themes';
-import { render } from '@js/ui/widget/utils.ink_ripple';
+import { render } from '@ts/core/utils/m_ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { CollectionItemInfo, InkRippleEvent } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
@@ -589,9 +590,10 @@ class Tabs extends CollectionWidgetLiveUpdate<TabsProperties> {
     const pointerUpEventName = addNamespace(pointerEvents.up, 'dxNavButton');
     const pointerOutEventName = addNamespace(pointerEvents.out, 'dxNavButton');
 
-    const navButton = this._createComponent($('<div>').addClass(TABS_NAV_BUTTON_CLASS), Button, {
+    const navButton = this._createComponent<Button, ButtonProperties>($('<div>').addClass(TABS_NAV_BUTTON_CLASS), Button, {
       focusStateEnabled: false,
       icon,
+      // @ts-expect-error
       integrationOptions: {},
       elementAttr: {
         role: null,

@@ -59,13 +59,17 @@ QUnit.module('overlay_drag', {
                     handle: this.handle,
                     draggableElement: this.draggableElement,
                     positionController: new PopupPositionController({
-                        container: $('#qunit-fixture'),
-                        $root: $('#qunit-fixture'),
-                        $content: this.draggableElement,
-                        restorePosition: {},
-                        onVisualPositionChanged: () => {},
-                        onPositioned: () => {},
-                        outsideDragFactor: 0,
+                        properties: {
+                            container: $('#qunit-fixture'),
+                            restorePosition: {},
+                            onVisualPositionChanged: () => {},
+                            onPositioned: () => {},
+                            outsideDragFactor: 0,
+                        },
+                        elements: {
+                            $root: $('#qunit-fixture'),
+                            $content: this.draggableElement,
+                        },
                     })
                 });
                 this.initialPosition = this.draggableElement.getBoundingClientRect();

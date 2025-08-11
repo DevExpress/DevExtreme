@@ -31,11 +31,11 @@ import type {
   Cancelable, DxEvent,
 } from '@js/events';
 import type { CollectionWidgetItem as CollectionWidgetItemProperties, CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
-import { focusable } from '@js/ui/widget/selectors';
 import { getPublicElement } from '@ts/core/m_element';
+import { focusable } from '@ts/core/utils/m_selectors';
 import type { ActionConfig } from '@ts/core/widget/component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { SupportedKeys } from '@ts/core/widget/widget';
+import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import type CollectionItem from '@ts/ui/collection/item';
 import CollectionWidgetItem from '@ts/ui/collection/item';
@@ -97,16 +97,16 @@ export type ItemTemplate<TItem> = template | (
 export interface ItemRenderInfo<TItem> {
   index: number;
   itemData: TItem;
-  container: dxElementWrapper;
-  contentClass: string;
-  defaultTemplateName: ItemTemplate<TItem> | undefined;
+  container: dxElementWrapper | Element;
+  contentClass?: string;
+  defaultTemplateName?: ItemTemplate<TItem>;
   uniqueKey?: string;
   templateProperty?: string;
 }
 
 export interface PostprocessRenderItemInfo<TItem> {
   itemElement: dxElementWrapper;
-  itemContent: dxElementWrapper;
+  itemContent: dxElementWrapper | Element;
   itemData: TItem;
   itemIndex: number;
 }
@@ -121,7 +121,10 @@ export interface CollectionWidgetBaseProperties<
     TItem extends ItemLike = any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TKey extends CollectionItemKey = any,
-> extends CollectionWidgetOptions<TComponent, TItem, TKey> {
+> extends CollectionWidgetOptions<TComponent, TItem, TKey>, Omit<
+  WidgetProperties<TComponent>,
+  keyof CollectionWidgetOptions<TComponent, TItem, TKey>
+> {
   focusedElement?: Element | null;
 
   encodeNoDataText?: boolean;
@@ -616,8 +619,7 @@ class CollectionWidget<
   }
 
   _setFocusedItem($target: dxElementWrapper): void {
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-    if (!$target || !$target.length) {
+    if (!$target?.length) {
       return;
     }
 
@@ -1258,7 +1260,7 @@ class CollectionWidget<
 
   _renderItemContent(
     args: ItemRenderInfo<TItem>,
-  ): dxElementWrapper | DeferredObj<dxElementWrapper> {
+  ): dxElementWrapper | Element | DeferredObj<dxElementWrapper> {
     const itemTemplateName = this._getItemTemplateName(args);
     const itemTemplate = this._getTemplate(itemTemplateName);
 
@@ -1391,23 +1393,22 @@ class CollectionWidget<
   ): ItemTemplate<TItem> {
     const data = args.itemData;
     const { itemTemplateProperty } = this.option();
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const templateProperty = args.templateProperty || itemTemplateProperty;
-    // @ts-expect-error ts-error
 
-    const template = data && data[templateProperty];
+    const templateProperty = args.templateProperty ?? itemTemplateProperty;
+
+    const template = data && templateProperty
+      ? data[templateProperty]
+      : undefined;
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return template || args.defaultTemplateName;
   }
 
-  // eslint-disable-next-line @stylistic/max-len
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   _createItemByTemplate(
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     itemTemplate,
     renderArgs: ItemRenderInfo<TItem>,
-  ) {
+  ): dxElementWrapper {
     const { itemData, container, index } = renderArgs;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return itemTemplate.render({
@@ -1462,7 +1463,7 @@ class CollectionWidget<
 
   _itemDXEventHandler(
     dxEvent: DxEvent,
-    handlerOptionName: string,
+    handlerOptionName: keyof TProperties,
     actionArgs?: Record<string, unknown>,
     actionConfig?: ActionConfig,
   ): void {
@@ -1473,7 +1474,7 @@ class CollectionWidget<
 
   _itemEventHandler(
     initiator: dxElementWrapper | Element,
-    handlerOptionName: string,
+    handlerOptionName: keyof TProperties,
     actionArgs: ActionArgs<TItem>,
     actionConfig?: ActionConfig,
   ): void {
@@ -1486,7 +1487,7 @@ class CollectionWidget<
 
   _itemEventHandlerByHandler(
     initiator: dxElementWrapper | Element,
-    handler: () => unknown,
+    handler: () => void,
     actionArgs: ActionArgs<TItem>,
     actionConfig?: ActionConfig,
   ): void {
