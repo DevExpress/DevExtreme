@@ -31,8 +31,8 @@ catalogs:
       specifier: 4.1.62
       version: 4.1.62
     devextreme-quill:
-      specifier: 1.7.3
-      version: 1.7.3
+      specifier: 1.7.4
+      version: 1.7.4
     eslint:
       specifier: 9.18.0
       version: 9.18.0
@@ -376,7 +376,7 @@ importers:
         version: 4.4.2
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.3
+        version: 1.7.4
       devextreme-react:
         specifier: workspace:*
         version: link:../../packages/devextreme-react/npm
@@ -1031,7 +1031,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.3
+        version: 1.7.4
       devextreme-react:
         specifier: workspace:~
         version: link:../../packages/devextreme-react/npm
@@ -1170,7 +1170,7 @@ importers:
         version: 4.1.62
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.3
+        version: 1.7.4
       inferno:
         specifier: 'catalog:'
         version: 8.2.3
@@ -10070,8 +10070,8 @@ packages:
     engines: {node: '>=12.0.0'}
     hasBin: true
 
-  devextreme-quill@1.7.3:
-    resolution: {integrity: sha512-YPE9e8UOOByf/QUBAGZRmCDHFzQDnM+hyPet6vFNFGm2UsJAIz4xkL6gDhfan/a6otInQUB5wLsbPZqldZrliQ==}
+  devextreme-quill@1.7.4:
+    resolution: {integrity: sha512-Jb8rkK/frapLCZjQuVszyQdDSpJd7L84Zpym5c4KNS3oCDe8idXGaeRG1JP1rE5g2HjHTVQDwKBT1nOwMyCpkw==}
 
   devextreme-schematics@1.7.1:
     resolution: {integrity: sha512-K+FNrji2/G7QPkfWYhWiNNaXcmxdlXDTOVpIiISoMr6fumRhz5PindoIYlOx0HXtnpvcBWzb2Fqadujr8qop2g==}
@@ -11579,7 +11579,7 @@ packages:
     resolution: {integrity: sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==}
     engines: {node: '>= 4.0'}
     os: [darwin]
-    deprecated: The v1 package contains DANGEROUS / INSECURE binaries. Upgrade to safe fsevents v2
+    deprecated: Upgrade to fsevents v2 to mitigate potential security issues
 
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
@@ -30871,7 +30871,7 @@ snapshots:
       winston: 3.10.0
       yargs: 17.7.2
 
-  devextreme-quill@1.7.3:
+  devextreme-quill@1.7.4:
     dependencies:
       core-js: 3.39.0
       eventemitter3: 4.0.7
