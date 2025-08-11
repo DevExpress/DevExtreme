@@ -386,7 +386,6 @@ class MessageList extends Widget<Properties> {
       useKeyboard: false,
       bounceEnabled: false,
       reachBottomText: '',
-      indicateLoading: false,
       onReachBottom: noop,
     });
   }

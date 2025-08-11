@@ -1,1 +1,1 @@
-import './context';
+import '@ts/ui/list/modules/context';

@@ -610,8 +610,10 @@ class Calendar<
     return isDefined(normalizedDate) ? this._getDate(normalizedDate) : date;
   }
 
-  _initActions(): void {
+  _initActions() {
+    // @ts-expect-error ts-error
     this._cellClickAction = this._createActionByOption('onCellClick');
+    // @ts-expect-error ts-error
     this._onContouredChanged = this._createActionByOption('onContouredChanged');
   }
 
@@ -1150,23 +1152,29 @@ class Calendar<
   _renderSwipeable(): void {
     if (!this._swipeable) {
       this._swipeable = this._createComponent(this.$element(), Swipeable, {
-        onStart: this._swipeStartHandler.bind(this),
-        onUpdated: this._swipeUpdateHandler.bind(this),
-        onEnd: this._swipeEndHandler.bind(this),
+        onStart: (e) => {
+          this._swipeStartHandler(e.event);
+        },
+        onUpdated: (e) => {
+          this._swipeUpdateHandler(e.event);
+        },
+        onEnd: (e) => {
+          this._swipeEndHandler(e.event);
+        },
         itemSizeFunc: this._viewWidth.bind(this),
       });
     }
   }
 
-  _swipeStartHandler(e: SwipeStartEvent): void {
+  _swipeStartHandler(event: SwipeStartEvent): void {
     // @ts-expect-error ts-error
     fx.stop(this._$viewsWrapper, true);
     const { viewsCount } = this.option();
 
     this._toggleGestureCoverCursor('grabbing');
 
-    e.event.maxLeftOffset = this._getRequiredView('next') ? 1 / viewsCount : 0;
-    e.event.maxRightOffset = this._getRequiredView('prev') ? 1 / viewsCount : 0;
+    event.maxLeftOffset = this._getRequiredView('next') ? 1 / viewsCount : 0;
+    event.maxRightOffset = this._getRequiredView('prev') ? 1 / viewsCount : 0;
   }
 
   _toggleGestureCoverCursor(cursor: string): void {
@@ -1184,18 +1192,18 @@ class Calendar<
     return rtlEnabled ? this._beforeView : this._afterView;
   }
 
-  _swipeUpdateHandler(e: SwipeUpdateEvent): void {
-    const { offset } = e.event;
+  _swipeUpdateHandler(event: SwipeUpdateEvent): void {
+    const { offset } = event;
 
     move(this._$viewsWrapper, { left: offset * this._viewWidth(), top: 0 });
     this._updateNavigatorCaption(offset);
   }
 
-  _swipeEndHandler(e: SwipeEndEvent): void {
+  _swipeEndHandler(event: SwipeEndEvent): void {
     this._toggleGestureCoverCursor('auto');
 
     const { currentDate, rtlEnabled } = this.option();
-    const { targetOffset } = e.event;
+    const { targetOffset } = event;
     const moveOffset = !targetOffset ? 0 : targetOffset / Math.abs(targetOffset);
 
     const isAdditionalViewActive = this._isAdditionalViewDate(currentDate);
@@ -1740,6 +1748,7 @@ class Calendar<
         this._view.option('onCellClick', value);
         break;
       case 'onContouredChanged':
+        // @ts-expect-error ts-error
         this._onContouredChanged = this._createActionByOption('onContouredChanged');
         break;
       case 'disabledDates':

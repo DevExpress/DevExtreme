@@ -190,9 +190,15 @@ class Switch extends Editor<Properties> {
     this._createComponent(this.$element(), Swipeable, {
       elastic: false,
       immediate: true,
-      onStart: (e): void => this._swipeStartHandler(e),
-      onUpdated: (e): void => this._swipeUpdateHandler(e),
-      onEnd: (e): void => this._swipeEndHandler(e),
+      onStart: (e): void => {
+        this._swipeStartHandler(e.event);
+      },
+      onUpdated: (e): void => {
+        this._swipeUpdateHandler(e.event);
+      },
+      onEnd: (e): void => {
+        this._swipeEndHandler(e.event);
+      },
       itemSizeFunc: () => this._getItemSizeFunc(),
     });
   }
@@ -304,13 +310,13 @@ class Switch extends Editor<Properties> {
     });
   }
 
-  _swipeStartHandler(e: SwipeStartEvent): void {
+  _swipeStartHandler(event: SwipeStartEvent): void {
     const { value: state, rtlEnabled, activeStateEnabled } = this.option();
     const maxOffOffset = rtlEnabled ? 0 : 1;
     const maxOnOffset = rtlEnabled ? 1 : 0;
 
-    e.event.maxLeftOffset = state ? maxOffOffset : maxOnOffset;
-    e.event.maxRightOffset = state ? maxOnOffset : maxOffOffset;
+    event.maxLeftOffset = state ? maxOffOffset : maxOnOffset;
+    event.maxRightOffset = state ? maxOnOffset : maxOffOffset;
 
     this._swiping = true;
 
@@ -320,18 +326,18 @@ class Switch extends Editor<Properties> {
     this._toggleActiveState(this.$element(), Boolean(activeStateEnabled));
   }
 
-  _swipeUpdateHandler(e: SwipeUpdateEvent): void {
+  _swipeUpdateHandler(event: SwipeUpdateEvent): void {
     const { value } = this.option();
-    this._renderPosition(Boolean(value), e.event.offset);
+    this._renderPosition(Boolean(value), event.offset);
   }
 
-  _swipeEndHandler(e: SwipeEndEvent): void {
+  _swipeEndHandler(event: SwipeEndEvent): void {
     const { value } = this.option();
 
     const offsetDirection = this._offsetDirection();
 
-    const innerOffset = this._getInnerOffset(Boolean(value), e.event.targetOffset);
-    const handleOffset = this._getHandleOffset(Boolean(value), e.event.targetOffset);
+    const innerOffset = this._getInnerOffset(Boolean(value), event.targetOffset);
+    const handleOffset = this._getHandleOffset(Boolean(value), event.targetOffset);
 
     const toInnerConfig = { transform: ` translateX(${innerOffset})` };
     const toHandleConfig = { transform: ` translateX(${handleOffset})` };
@@ -350,9 +356,9 @@ class Switch extends Editor<Properties> {
       duration: SWITCH_ANIMATION_DURATION,
       complete: () => {
         this._swiping = false;
-        const pos = Number(value) + offsetDirection * e.event.targetOffset;
+        const pos = Number(value) + offsetDirection * event.targetOffset;
         // @ts-expect-error ValueChangedEvent should be compatible with KeyboardEvent
-        this._saveValueChangeEvent(e.event);
+        this._saveValueChangeEvent(event);
         this.option({ value: Boolean(pos) });
         this._feedbackDeferred?.resolve();
         this._toggleActiveState(this.$element(), false);
