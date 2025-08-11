@@ -25,6 +25,7 @@ const inputs = {
 };
 
 const getLibName =  (file) => file
+    .replace(/^devextreme-angular-ui-nested-/,'devextreme-angular/ui/nested/')
     .replace(/^devextreme-angular-ui-/,'devextreme-angular/ui/')
     .replace(/^devextreme-angular-common-ai-integration-/,'devextreme-angular-common-ai-integration/')
     .replace(/^devextreme-angular-common-core-events-/,'devextreme-angular/common/core/events/')
