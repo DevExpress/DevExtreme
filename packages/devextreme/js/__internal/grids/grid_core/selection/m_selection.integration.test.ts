@@ -57,7 +57,7 @@ describe('GridCore master_detail', () => {
           selection: {
             mode: 'single',
           },
-          repaintChangesOnly: true,
+          repaintChangesOnly,
         });
 
         await instance.selectRows([2], false);
@@ -76,6 +76,8 @@ describe('GridCore master_detail', () => {
           { id: 2, name: 'Item 2' },
         ];
 
+        let selectionChangedCount = 0;
+
         const { instance } = await createDataGrid({
           dataSource,
           columns: ['id', 'name'],
@@ -84,11 +86,9 @@ describe('GridCore master_detail', () => {
             mode: 'single',
           },
           repaintChangesOnly,
-        });
-
-        let selectionChangedCount = 0;
-        instance.on('selectionChanged', () => {
-          selectionChangedCount += 1;
+          onSelectionChanged: () => {
+            selectionChangedCount += 1;
+          },
         });
 
         await instance.selectRows([1], false);
