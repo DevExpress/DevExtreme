@@ -265,7 +265,6 @@ class SwipeDownNativeScrollViewStrategy<
   }
 
   pullDownEnable(enabled: boolean): void {
-    // @ts-expect-error ts-error
     this._$topPocket.toggle(enabled);
     this._pullDownEnabled = enabled;
   }
