@@ -10,7 +10,7 @@ import type { DxEvent } from '@js/events';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import type { Properties } from '@js/ui/speed_dial_action';
 import { isMaterial } from '@js/ui/themes';
-import { render } from '@js/ui/widget/utils.ink_ripple';
+import { render } from '@ts/core/utils/m_ink_ripple';
 import type { OptionChanged } from '@ts/core/widget/types';
 
 const FAB_CLASS = 'dx-fa-button';

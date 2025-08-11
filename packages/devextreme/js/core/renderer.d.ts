@@ -1,6 +1,6 @@
-interface Coordinates {
-    left: number;
-    top: number;
+export interface Coordinates {
+  left: number;
+  top: number;
 }
 
 export interface dxElementWrapper {
