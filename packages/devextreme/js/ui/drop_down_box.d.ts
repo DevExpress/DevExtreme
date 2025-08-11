@@ -19,6 +19,7 @@ import {
 import dxDropDownEditor, {
     dxDropDownEditorOptions,
     DropDownButtonTemplateDataModel,
+    FieldTemplate,
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
@@ -213,7 +214,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @public
      * @deprecated
      */
-    fieldTemplate?: template | ((value: any, fieldElement: DxElement) => string | UserDefinedElement);
+    fieldTemplate?: FieldTemplate;
     /**
      * @docid
      * @public

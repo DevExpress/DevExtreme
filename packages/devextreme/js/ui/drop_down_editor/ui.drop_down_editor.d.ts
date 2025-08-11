@@ -35,6 +35,13 @@ export interface DropDownButtonTemplateDataModel {
     readonly icon?: string;
 }
 
+export type FieldTemplate<T = any> = template | ((data: T, element: DxElement) => string | UserDefinedElement);
+
+export type FieldTemplates = {
+    beforeTemplate?: FieldTemplate;
+    afterTemplate?: FieldTemplate;
+};
+
 /**
  * @namespace DevExpress.ui
  * @docid
@@ -86,6 +93,13 @@ export interface dxDropDownEditorOptions<TComponent> extends Omit<dxTextBoxOptio
      * @public
      */
     dropDownButtonTemplate?: template | ((buttonData: DropDownButtonTemplateDataModel, contentElement: DxElement) => string | UserDefinedElement);
+    /**
+     * @docid
+     * @default null
+     * @type object
+     * @public
+     */
+    fieldTemplates?: FieldTemplates;
     /**
      * @docid
      * @default null
