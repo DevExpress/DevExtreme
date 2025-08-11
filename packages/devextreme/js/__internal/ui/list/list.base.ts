@@ -5,7 +5,7 @@ import pointerEvents from '@js/common/core/events/pointer';
 import { end as swipeEventEnd } from '@js/common/core/events/swipe';
 import { addNamespace } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
-import type { DataSourceOptions } from '@js/common/data';
+import type { DataSourceOptions, GroupItem } from '@js/common/data';
 import devices from '@js/core/devices';
 import { getPublicElement } from '@js/core/element';
 import Guid from '@js/core/guid';
@@ -22,6 +22,7 @@ import { each } from '@js/core/utils/iterator';
 import { getHeight, getOuterHeight, setHeight } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
+import type { DataSourceLike } from '@js/data/data_source';
 import type { DxEvent, NativeEventInfo } from '@js/events';
 import Button from '@js/ui/button';
 import type {
@@ -38,6 +39,7 @@ import { render } from '@ts/core/utils/m_ink_ripple';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import { getDataSourceOptions } from '@ts/data/data_converter/grouped';
 import type {
   CollectionItemInfo,
   CollectionItemKey,
@@ -46,6 +48,7 @@ import type {
   InkRippleEvent,
   PostprocessRenderItemInfo,
 } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionItemIndex } from '@ts/ui/collection/collection_widget.edit.strategy';
 import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
 import CollectionWidget from '@ts/ui/collection/collection_widget.live_update';
 import ListItem from '@ts/ui/list/item';
@@ -57,9 +60,6 @@ import ScrollView from '@ts/ui/scroll_view/scroll_view';
 import { deviceDependentOptions } from '@ts/ui/scroll_view/scrollable.device';
 import type { ScrollOffset } from '@ts/ui/scroll_view/types';
 import { getElementMargin } from '@ts/ui/scroll_view/utils/get_element_style';
-import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
-
-import type { CollectionItemIndex } from '../collection/collection_widget.edit.strategy';
 
 const LIST_CLASS = 'dx-list';
 const LIST_ITEMS_CLASS = 'dx-list-items';
@@ -545,10 +545,17 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     };
   }
 
-  _getGroupedOption(): boolean | undefined {
-    const { grouped } = this.option();
+  _getSpecificDataSourceOption(): DataSourceLike<Item>
+    | DataSourceOptions<GroupItem<Item>>
+    | null
+    | undefined {
+    const { dataSource, grouped } = this.option();
 
-    return grouped;
+    if (dataSource && grouped) {
+      return getDataSourceOptions<Item>(dataSource);
+    }
+
+    return dataSource;
   }
 
   _getGroupContainerByIndex(groupIndex: number): dxElementWrapper {
@@ -1502,5 +1509,3 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this.updateDimensions();
   }
 }
-// @ts-expect-error ts-error
-ListBase.include(DataConverterMixin);
