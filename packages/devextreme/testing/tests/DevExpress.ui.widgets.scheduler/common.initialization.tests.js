@@ -4,7 +4,7 @@ import { CustomStore } from 'common/data/custom_store';
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import { isFunction } from 'core/utils/type';
 import $ from 'jquery';
-import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
+import { AppointmentDataProvider } from '__internal/scheduler/view_model/3.generate_view_model/data_provider/m_appointment_data_provider';
 
 import { createWrapper, initTestMarkup, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 import { waitAsync, waitForAsync, waitGlobalFailure } from '../../helpers/scheduler/waitForAsync.js';
