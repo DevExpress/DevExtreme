@@ -57,28 +57,27 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
       return;
     }
 
-    if (elements.current.length) {
-      elements.current.forEach((el) => events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
-    }
+    Array.prototype.forEach.call(
+      [
+        ...elements.current,
+        removalListenerElement.current,
+      ],
+      (el: HTMLElement | undefined) => el && events.off(el, DX_REMOVE_EVENT, onTemplateRemoved),
+    )
 
-    if (removalListenerElement.current) {
-      events.off(removalListenerElement.current, DX_REMOVE_EVENT, onTemplateRemoved);
-    }
-
+    // In case of multiple root elements, letting the widget remove them all sync
     Promise.resolve().then(() => {
       onRemoved();
     });
   }, [onRemoved]);
 
   useLayoutEffect(() => {
-    const elems = elements.current;
+    const elementNodes = elements.current.filter((el) => el.nodeType === Node.ELEMENT_NODE);
 
-    if (elems.length && elems.some((el) => el.nodeType === Node.ELEMENT_NODE)) {
-      elems.forEach((el) => {
-        if (el.nodeType === Node.ELEMENT_NODE) {
-          events.off(el, DX_REMOVE_EVENT, onTemplateRemoved);
-          events.on(el, DX_REMOVE_EVENT, onTemplateRemoved);
-        }
+    if (elementNodes.length) {
+      elementNodes.forEach((el) => {
+        events.off(el, DX_REMOVE_EVENT, onTemplateRemoved);
+        events.on(el, DX_REMOVE_EVENT, onTemplateRemoved);
       });
     } else if (!removalListenerRequired) {
       setRemovalListenerRequired(true);
@@ -94,12 +93,17 @@ const TemplateWrapperComponent: FC<TemplateWrapperProps> = ({
         }
       };
 
-      elements.current.forEach((el) => safeAppend(el));
-      safeAppend(hiddenNodeElement.current);
-      safeAppend(removalListenerElement.current);
+      Array.prototype.forEach.call(
+        [
+          ...elements.current,
+          hiddenNodeElement.current,
+          removalListenerElement.current,
+        ],
+        (el: HTMLElement | undefined) => safeAppend(el),
+      );
 
-      if (elems && elems.length) {
-        elems.forEach((el) => events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
+      if (elementNodes.length) {
+        elementNodes.forEach((el) => events.off(el, DX_REMOVE_EVENT, onTemplateRemoved));
       }
     };
   }, [onTemplateRemoved, removalListenerRequired, container]);
