@@ -2,7 +2,7 @@ import query from '@js/common/data/query';
 import dateUtils from '@js/core/utils/date';
 import type { SafeAppointment } from '@ts/scheduler/types';
 
-import { sortAppointmentsByStartDate } from '../data_provider/m_utils';
+import { sortAppointmentsByStartDate } from '../../../appointments/utils/m_utils';
 import HorizontalAppointmentsStrategy from './m_strategy_horizontal';
 
 const HOURS_IN_DAY = 24;

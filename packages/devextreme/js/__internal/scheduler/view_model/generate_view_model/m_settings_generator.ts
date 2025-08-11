@@ -4,19 +4,19 @@ import { extend } from '@js/core/utils/extend';
 import { isEmptyObject } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
-import { getRecurrenceProcessor } from '../m_recurrence';
-import timeZoneUtils from '../m_utils_time_zone';
-import { isDateAndTimeView } from '../r1/utils/index';
-import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
-import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
+import { createFormattedDateText } from '../../appointments/m_text_utils';
+import { getRecurrenceProcessor } from '../../m_recurrence';
+import timeZoneUtils from '../../m_utils_time_zone';
+import { isDateAndTimeView } from '../../r1/utils/index';
+import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
+import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import {
   getAppointmentGroupIndex,
   getAppointmentGroupValues,
-} from '../utils/resource_manager/appointment_groups_utils';
-import type { ResourceManager } from '../utils/resource_manager/resource_manager';
-import type ViewDataProvider from '../workspaces/view_model/m_view_data_provider';
+} from '../../utils/resource_manager/appointment_groups_utils';
+import type { ResourceManager } from '../../utils/resource_manager/resource_manager';
+import type ViewDataProvider from '../../workspaces/view_model/m_view_data_provider';
 import { CellPositionCalculator } from './m_cell_position_calculator';
-import { createFormattedDateText } from './m_text_utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 const APPOINTMENT_DATE_TEXT_FORMAT = 'TIME';
