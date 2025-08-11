@@ -1117,6 +1117,17 @@ class DropDownEditor<
     return super._getSubmitElement();
   }
 
+  _setDeprecatedOptions(): void {
+    super._setDeprecatedOptions();
+
+    extend(this._deprecatedOptions, {
+      fieldTemplate: {
+        since: '25.2',
+        message: 'The fieldTemplate option is deprecated. Use insted fieldTemplates.',
+      },
+    });
+  }
+
   _dispose(): void {
     this._detachFocusOutEvents();
     super._dispose();
