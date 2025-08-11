@@ -681,7 +681,7 @@ class BaseView<
     const format = this._getCurrentDateFormat();
 
     const dateRangeText = format
-      ? `$${dateLocalization.format(date, format)}`
+      ? `${dateLocalization.format(date, format)}`
       : this._getCellText(date);
 
     const ariaLabel = isToday
