@@ -20,7 +20,7 @@ import type { Properties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 import Button from '@ts/ui/button/wrapper';
 import type { ListBase } from '@ts/ui/list/list.base';
-import ToolbarMenuList from '@ts/ui/toolbar/internal/toolbar.menu.list';
+import ToolbarMenuList, { TOOLBAR_MENU_ACTION_CLASS } from '@ts/ui/toolbar/internal/toolbar.menu.list';
 import { toggleItemFocusableElementTabIndex } from '@ts/ui/toolbar/toolbar.utils';
 
 const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
@@ -282,7 +282,27 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       dragEnabled: false,
       showTitle: false,
       fullScreen: false,
+      ignoreChildEvents: false,
       _fixWrapperPosition: true,
+    });
+    this._popup.registerKeyHandler('space', (
+      e: DxEvent<KeyboardEvent>,
+    ) => {
+      this._popupKeyHandler(e);
+    });
+    this._popup.registerKeyHandler('enter', (
+      e: DxEvent<KeyboardEvent>,
+    ) => {
+      this._popupKeyHandler(e);
+    });
+    this._popup.registerKeyHandler('escape', (
+      e: DxEvent<KeyboardEvent>,
+    ) => {
+      // @ts-expect-error
+      if (this._popup?.$overlayContent().is($(e.target))) {
+        this.option('opened', false);
+      }
+      return undefined;
     });
   }
 
@@ -322,12 +342,10 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       indicateLoading: false,
       noDataText: '',
       itemTemplate,
-      onItemClick: (e: ItemClickEvent<ListItem>): void => {
-        const { closeOnClick } = this.option();
-        if (closeOnClick) {
-          this.option('opened', false);
-        }
-        this._itemClickAction?.(e);
+      onItemClick: (
+        e: ItemClickEvent<ListItem>,
+      ) => {
+        this._itemClickHandler(e);
       },
       tabIndex: -1,
       focusStateEnabled: false,
@@ -335,6 +353,24 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       onItemRendered,
       _itemAttributes: { role: 'menuitem' },
     });
+  }
+
+  _popupKeyHandler(e: DxEvent<KeyboardEvent>): void {
+    if ($(e.target).closest(`.${TOOLBAR_MENU_ACTION_CLASS}`).length) {
+      this._closePopup();
+    }
+  }
+
+  _closePopup(): void {
+    const { closeOnClick } = this.option();
+    if (closeOnClick) {
+      this.option('opened', false);
+    }
+  }
+
+  _itemClickHandler(e: ItemClickEvent<ListItem>): void {
+    this._closePopup();
+    this._itemClickAction?.(e);
   }
 
   _itemOptionChanged(
