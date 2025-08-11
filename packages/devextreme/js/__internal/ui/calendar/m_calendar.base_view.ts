@@ -482,17 +482,14 @@ class BaseView<
   }
 
   _createCellClickAction(): void {
-    // @ts-expect-error ts-error
     this._cellClickAction = this._createActionByOption('onCellClick');
   }
 
   _createCellHoverAction(): void {
-    // @ts-expect-error ts-error
     this._cellHoverAction = this._createActionByOption('onCellHover');
   }
 
   _createWeekNumberCellClickAction(): void {
-    // @ts-expect-error ts-error
     this._weekNumberCellClickAction = this._createActionByOption('onWeekNumberClick');
   }
 
