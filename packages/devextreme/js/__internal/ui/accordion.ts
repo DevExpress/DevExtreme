@@ -19,10 +19,11 @@ import { getHeight, getOuterHeight, setHeight } from '@js/core/utils/size';
 import { isDefined, isPlainObject } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import type { Item, Properties } from '@js/ui/accordion';
-import { isMaterialBased } from '@js/ui/themes';
+import { current, isMaterialBased } from '@js/ui/themes';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { CollectionItemInfo, ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
-import CollectionWidget from '@ts/ui/collection/collection_widget.live_update';
+import type { CollectionItemInfo, CollectionItemKey, ItemRenderInfo } from '@ts/ui/collection/collection_widget.base';
+import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/collection_widget.live_update';
+import CollectionWidgetLiveUpdate from '@ts/ui/collection/collection_widget.live_update';
 
 const ACCORDION_CLASS = 'dx-accordion';
 const ACCORDION_WRAPPER_CLASS = 'dx-accordion-wrapper';
@@ -35,13 +36,14 @@ const ACCORDION_ITEM_TITLE_CAPTION_CLASS = 'dx-accordion-item-title-caption';
 
 const ACCORDION_ITEM_DATA_KEY = 'dxAccordionItemData';
 
-export interface AccordionProperties extends Properties<Item> {
+export interface AccordionProperties extends Properties<Item, CollectionItemKey>, Omit<
+  CollectionWidgetLiveUpdateProperties<Accordion, Item, CollectionItemKey>,
+  keyof Properties<Item, CollectionItemKey>
+> {
   _animationEasing?: string;
-
-  templatesRenderAsynchronously?: boolean;
 }
 
-class Accordion extends CollectionWidget<AccordionProperties, Item> {
+class Accordion extends CollectionWidgetLiveUpdate<AccordionProperties, Item, CollectionItemKey> {
   _deferredAnimate?: DeferredObj<unknown>;
 
   // eslint-disable-next-line no-restricted-globals
@@ -82,8 +84,7 @@ class Accordion extends CollectionWidget<AccordionProperties, Item> {
       },
       {
         device(): boolean {
-          // @ts-expect-error ts-error
-          return isMaterialBased();
+          return isMaterialBased(current());
         },
         options: {
           animationDuration: 200,
@@ -233,7 +234,6 @@ class Accordion extends CollectionWidget<AccordionProperties, Item> {
         callBase({
           ...args,
           contentClass: ACCORDION_ITEM_BODY_CLASS,
-          // @ts-expect-error ts-error
           container: getPublicElement($('<div>').appendTo($(itemTitle).parent())),
         });
       });
