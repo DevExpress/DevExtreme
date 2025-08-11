@@ -4,7 +4,7 @@ import '__internal/scheduler/m_scheduler';
 import {
     DateGeneratorBaseStrategy,
     DateGeneratorVirtualStrategy
-} from '__internal/scheduler/view_model/3.generate_view_model/m_settings_generator';
+} from '__internal/scheduler/view_model/generate_view_model/m_settings_generator';
 
 import $ from 'jquery';
 import fx from 'common/core/animation/fx';

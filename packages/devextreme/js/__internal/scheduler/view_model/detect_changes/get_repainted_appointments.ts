@@ -5,9 +5,10 @@ import type {
   AppointmentViewModelSettings,
   SafeAppointment,
 } from '@ts/scheduler/types';
+
 import type {
   AppointmentDataProvider,
-} from '@ts/scheduler/view_model/generate_view_model/data_provider/m_appointment_data_provider';
+} from '../generate_view_model/data_provider/m_appointment_data_provider';
 
 type Settings = AppointmentViewModelSettings & AgendaViewModelSettings & {
   columnIndex: number;

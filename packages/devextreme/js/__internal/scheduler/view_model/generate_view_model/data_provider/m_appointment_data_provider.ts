@@ -1,22 +1,8 @@
 import config from '@js/core/config';
 
-import { combineRemoteFilter } from '../../r1/filterting/index';
-import type { AppointmentDataItem, SafeAppointment } from '../../types';
-import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
+import { combineRemoteFilter } from '../../../r1/filterting/index';
+import type { AppointmentDataAccessor } from '../../../utils/data_accessor/appointment_data_accessor';
 import { AppointmentDataSource } from './m_appointment_data_source';
-import { AppointmentFilterBaseStrategy } from './m_appointment_filter';
-import { AppointmentFilterVirtualStrategy } from './m_appointment_filter_virtual';
-
-type FilterStrategy = (AppointmentFilterBaseStrategy | AppointmentFilterVirtualStrategy) & {
-  constructor: Function & {
-    strategyName: string;
-  };
-};
-
-const FilterStrategyMap = {
-  [AppointmentFilterVirtualStrategy.strategyName]: AppointmentFilterVirtualStrategy,
-  [AppointmentFilterBaseStrategy.strategyName]: AppointmentFilterBaseStrategy,
-};
 
 export class AppointmentDataProvider {
   options: any;
@@ -29,8 +15,6 @@ export class AppointmentDataProvider {
 
   appointmentDataSource: AppointmentDataSource;
 
-  filterStrategy!: FilterStrategy;
-
   constructor(options) {
     this.options = options;
     this.dataSource = this.options.dataSource;
@@ -38,7 +22,6 @@ export class AppointmentDataProvider {
     this.timeZoneCalculator = this.options.timeZoneCalculator;
 
     this.appointmentDataSource = new AppointmentDataSource(this.dataSource);
-    this.initFilterStrategy();
   }
 
   get keyName() {
@@ -49,65 +32,17 @@ export class AppointmentDataProvider {
     return !!this.dataSource;
   }
 
-  get filterStrategyName(): string {
-    return this.options.getIsVirtualScrolling()
-      ? AppointmentFilterVirtualStrategy.strategyName
-      : AppointmentFilterBaseStrategy.strategyName;
-  }
-
-  getFilterStrategy(): AppointmentFilterBaseStrategy | AppointmentFilterVirtualStrategy {
-    if (
-      !this.filterStrategy
-      || this.filterStrategy.constructor.strategyName !== this.filterStrategyName
-    ) {
-      this.initFilterStrategy();
-    }
-
-    return this.filterStrategy;
-  }
-
-  initFilterStrategy(): void {
-    const filterOptions = {
-      resources: this.options.resources,
-      getResourceManager: this.options.getResourceManager,
-      dataAccessors: this.dataAccessors,
-      startDayHour: this.options.startDayHour,
-      endDayHour: this.options.endDayHour,
-      viewOffset: this.options.viewOffset,
-      showAllDayPanel: this.options.showAllDayPanel,
-      timeZoneCalculator: this.options.timeZoneCalculator,
-      //
-      supportAllDayRow: this.options.getSupportAllDayRow,
-      viewType: this.options.getViewType,
-      viewDirection: this.options.getViewDirection,
-      dateRange: this.options.getDateRange,
-      groupCount: this.options.getGroupCount,
-      viewDataProvider: this.options.getViewDataProvider,
-      allDayPanelMode: this.options.allDayPanelMode,
-    };
-    const strategy = new FilterStrategyMap[this.filterStrategyName](filterOptions);
-
-    this.filterStrategy = strategy as FilterStrategy;
-  }
-
   setDataSource(dataSource): void {
     this.dataSource = dataSource;
-    this.initFilterStrategy();
     this.appointmentDataSource.setDataSource(this.dataSource);
   }
 
   updateDataAccessors(dataAccessors): void {
     this.dataAccessors = dataAccessors;
-    this.initFilterStrategy();
-  }
-
-  // Filter mapping
-  filter(preparedItems: AppointmentDataItem[]): SafeAppointment[] {
-    return this.getFilterStrategy().filter(preparedItems);
   }
 
   // TODO rename to the setRemoteFilter
-  filterByDate(min, max, remoteFiltering, dateSerializationFormat) {
+  filterByDate(min, max, remoteFiltering = false, dateSerializationFormat?) {
     if (!this.dataSource || !remoteFiltering) {
       return;
     }
@@ -123,10 +58,6 @@ export class AppointmentDataProvider {
     });
 
     this.dataSource.filter(filter);
-  }
-
-  hasAllDayAppointments(filteredItems, preparedItems) {
-    return this.getFilterStrategy().hasAllDayAppointments(filteredItems, preparedItems);
   }
 
   // Appointment data source mappings
