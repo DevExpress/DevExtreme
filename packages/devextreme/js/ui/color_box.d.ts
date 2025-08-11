@@ -197,6 +197,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      * @default null
      * @type_function_return string|Element|jQuery
      * @public
+     * @deprecated
      */
     fieldTemplate?: template | ((value: string, fieldElement: DxElement) => string | UserDefinedElement);
     /**
