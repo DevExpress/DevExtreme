@@ -16,6 +16,17 @@ import { DIContext } from '../di';
 import { setupStateManager } from './setup_state_manager';
 import type { StateManager } from './types';
 
+const waitGarbageCollection = async (): Promise<void> => {
+  if (global.gc) {
+    for (let i = 0; i < 2; i += 1) {
+      global.gc();
+      // eslint-disable-next-line @stylistic/max-len
+      // eslint-disable-next-line no-await-in-loop, no-promise-executor-return, no-restricted-globals
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+  }
+};
+
 type TrackedSignal<T> = Signal<T>;
 
 describe('StateManager', () => {
@@ -191,16 +202,42 @@ describe('StateManager', () => {
     controllerInstance = null;
     diContext = null;
 
-    if (global.gc) {
-      for (let i = 0; i < 2; i += 1) {
-        global.gc();
-        // eslint-disable-next-line @stylistic/max-len
-        // eslint-disable-next-line no-await-in-loop, no-promise-executor-return, no-restricted-globals
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      }
-    }
+    await waitGarbageCollection();
 
     const isGarbageCollected = controllerInstanceWeakRef.deref() === undefined;
+
+    expect(isGarbageCollected).toBe(true);
+  });
+
+  it('Should allow garbage collection of tracked controllers properties when they are destroyed', async () => {
+    const diContext: DIContext | null = new DIContext();
+
+    const testComponentStateTracker = setupStateManager({
+      diContext,
+      componentName: 'TestComponent',
+      logLevel: 'error',
+    });
+
+    if (!testComponentStateTracker) {
+      throw Error('StateManager not initialized');
+    }
+
+    class TestController {
+      testValue: Signal<number> | null = signal(42);
+    }
+
+    const controllerInstance: TestController | null = new TestController();
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const controllerInstanceTestValuePropertyWeakRef = new WeakRef(controllerInstance.testValue!);
+
+    diContext.registerInstance(TestController, controllerInstance);
+
+    controllerInstance.testValue = null;
+
+    await waitGarbageCollection();
+
+    const isGarbageCollected = controllerInstanceTestValuePropertyWeakRef.deref() === undefined;
 
     expect(isGarbageCollected).toBe(true);
   });
