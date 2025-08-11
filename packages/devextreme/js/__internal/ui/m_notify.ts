@@ -197,14 +197,20 @@ const getToastOptions = (
     onShowing: userOnShowing,
   } = userOptions;
 
-  const defaultConfiguration = {
-    type,
-    displayTime,
+  const defaultConfiguration: Partial<ToastProperties> = {
     onHidden: (e: HiddenEvent): void => {
       $(e.element).remove();
       userOnHidden?.(e);
     },
   };
+
+  if (type !== undefined) {
+    defaultConfiguration.type = type;
+  }
+
+  if (displayTime !== undefined) {
+    defaultConfiguration.displayTime = displayTime;
+  }
 
   if (stack?.position) {
     const { position } = stack;
