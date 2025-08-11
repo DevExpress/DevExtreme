@@ -3341,7 +3341,7 @@ QUnit.module('adaptivity: render', {
         }
     });
 
-    QUnit.test('menu should not show stub elements next to treeview items if adaptivityEnabled is set to true (T1302958)', function(assert) {
+    QUnit.test('tree view stub elements should have display=none if adaptivityEnabled is set to true (T1302958)', function(assert) {
         new Menu(this.$element, {
             items: this.items,
             adaptivityEnabled: true
@@ -3349,7 +3349,13 @@ QUnit.module('adaptivity: render', {
 
         const $stubElements = $.find(`.${EXPANDER_ICON_STUB_CLASS}`);
 
-        assert.strictEqual($stubElements.length, 0, 'stub elements are not rendered');
+        $stubElements.forEach((element, index) => {
+            assert.strictEqual(
+                window.getComputedStyle(element).display,
+                'none',
+                `display property of stub element #${index} is none`
+            );
+        });
     });
 });
 
