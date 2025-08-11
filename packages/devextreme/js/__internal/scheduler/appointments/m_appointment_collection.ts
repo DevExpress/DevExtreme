@@ -35,10 +35,10 @@ import { getAppointmentGroupValues } from '../utils/resource_manager/appointment
 import { getGroupTexts } from '../utils/resource_manager/group_utils';
 import { AgendaAppointment } from './appointment/agenda_appointment';
 import { Appointment } from './appointment/m_appointment';
-import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './data_provider/m_utils';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';
 import { getAppointmentDateRange } from './resizing/m_core';
 import { countVisibleAppointments } from './utils/countVisibleAppointments';
+import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './utils/m_utils';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
@@ -577,9 +577,6 @@ class SchedulerAppointments extends CollectionWidget {
     this._applyResourceDataAttr(element);
     const rawAppointment = (this as any)._getItemData(element);
     const geometry = this.invoke('getAppointmentGeometry', settings);
-    const allowResize = this.option('allowResize') && (!isDefined(settings.skipResizing) || isString(settings.skipResizing));
-    const allowDrag = this.option('allowDrag');
-    const { allDay } = settings;
 
     if (settings.virtual) {
       const appointmentConfig = {
@@ -592,6 +589,9 @@ class SchedulerAppointments extends CollectionWidget {
 
       this._processVirtualAppointment(settings, element, rawAppointment, deferredColor);
     } else {
+      const allowResize = this.option('allowResize') && (!isDefined(settings.skipResizing) || isString(settings.skipResizing));
+      const allowDrag = this.option('allowDrag');
+      const { allDay } = settings;
       const { groups, groupsLeafs, resourceById } = this.option('getResourceManager')();
       const config: any = {
         data: rawAppointment,
