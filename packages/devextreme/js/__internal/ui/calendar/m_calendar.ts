@@ -1328,9 +1328,8 @@ class Calendar<
       .appendTo(this.$element());
 
     const { value } = this.option();
-    // if (!this._isArrayValue('value', value)) {
+
     this._setSubmitValue(value);
-    // }
   }
 
   _setSubmitValue(value: DateLike | DateLike[] | undefined): void {
