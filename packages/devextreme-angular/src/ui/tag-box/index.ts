@@ -289,6 +289,8 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     /**
      * [descr:dxSelectBoxOptions.fieldTemplate]
     
+     * @deprecated [depNote:dxSelectBoxOptions.fieldTemplate]
+    
      */
     @Input()
     get fieldTemplate(): any {
