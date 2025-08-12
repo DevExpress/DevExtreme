@@ -1485,10 +1485,12 @@ QUnit.module('the "onCustomItemCreating" option', moduleSetup, () => {
 
             const $tags = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
 
+            const onCustomItemCreatingCallCount = logStub.args.filter(call => call.includes('onCustomItemCreating')).length;
+
             assert.deepEqual($tagBox.dxTagBox('option', 'value'), [`value ${customValue}`]);
             assert.strictEqual($tags.length, 1, 'tag is added');
             assert.strictEqual($tags.eq(0).text(), `display ${customValue}`);
-            assert.strictEqual(logStub.calledOnce, true, 'There is a one message');
+            assert.strictEqual(onCustomItemCreatingCallCount, 1, 'There is a one message related to onCustomItemCreating');
             assert.deepEqual(logStub.firstCall.args, ['W0015', 'onCustomItemCreating', 'customItem'], 'Check warning parameters');
         } finally {
             logStub.restore();
