@@ -1,20 +1,32 @@
 import Widget from '@js/ui/widget/ui.widget';
 
-class WidgetObserver<T> extends Widget<T> {
-  notifyObserver(subject, args) {
-    const observer = this.option('observer') as any;
+import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 
-    if (observer) {
-      observer.fire(subject, args);
+class WidgetObserver<T> extends Widget<T> {
+  notifyObserver<Subject extends SubscribeKey>(
+    funcName: Subject,
+    ...args: Parameters<SubscribeMethods[Subject]>
+  ): void {
+    const notifyScheduler = this.option('notifyScheduler');
+
+    if (!notifyScheduler) {
+      return undefined;
     }
+
+    (this.option('notifyScheduler') as any).invoke(funcName, ...args);
   }
 
-  invoke() {
-    const observer = this.option('observer') as any;
+  invoke<Subject extends SubscribeKey>(
+    funcName: Subject,
+    ...args: Parameters<SubscribeMethods[Subject]>
+  ): ReturnType<SubscribeMethods[Subject]> | undefined {
+    const notifyScheduler = this.option('notifyScheduler');
 
-    if (observer) {
-      return observer.fire.apply(observer, arguments);
+    if (!notifyScheduler) {
+      return undefined;
     }
+
+    return (this.option('notifyScheduler') as any).invoke(funcName, ...args);
   }
 }
 
