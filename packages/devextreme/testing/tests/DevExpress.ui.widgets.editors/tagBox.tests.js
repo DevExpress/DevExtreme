@@ -1473,7 +1473,7 @@ QUnit.module('the "onCustomItemCreating" option', moduleSetup, () => {
             }),
         });
 
-        const $input = $tagBox.find('.dx-texteditor-input');
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input);
         const customValue = 'Custom value';
         const logStub = sinon.stub(coreErrors, 'log');
