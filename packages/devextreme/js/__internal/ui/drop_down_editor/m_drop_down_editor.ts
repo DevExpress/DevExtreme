@@ -1123,7 +1123,7 @@ class DropDownEditor<
     extend(this._deprecatedOptions, {
       fieldTemplate: {
         since: '25.2',
-        message: 'The fieldTemplate option is deprecated. Use insted fieldTemplates.',
+        alias: 'fieldTemplates',
       },
     });
   }
