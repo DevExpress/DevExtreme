@@ -976,16 +976,17 @@ class Form extends Widget<FormProperties> {
     return validationGroup ?? this;
   }
 
-  _createComponent<TTComponent>(
+  _createComponent<TTComponent, IProperties = Record<string, unknown>>(
     element: string | HTMLElement | dxElementWrapper,
     component: string | (new (...args) => TTComponent),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    componentConfiguration?: TTComponent extends Component<any, infer TTProperties>
+    componentConfiguration: TTComponent extends Component<any, infer TTProperties>
       ? TTProperties
-      : Record<string, unknown>,
+      : IProperties,
   ): TTComponent {
     const { readOnly } = this.option();
-    this._extendConfig(componentConfiguration, {
+
+    this._extendConfig(componentConfiguration ?? {}, {
       readOnly,
     });
 

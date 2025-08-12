@@ -8,10 +8,9 @@ import { Deferred } from '@js/core/utils/deferred';
 import { getOuterHeight } from '@js/core/utils/size';
 import LoadIndicator from '@js/ui/load_indicator';
 import type { ScrollEvent } from '@js/ui/scroll_view';
-
-import type { ScrollView, ScrollViewProperties } from './scroll_view';
-import NativeStrategy from './scrollable.native';
-import type { AllowedDirections, DxMouseEvent } from './types';
+import type { ScrollView, ScrollViewProperties } from '@ts/ui/scroll_view/scroll_view';
+import NativeStrategy from '@ts/ui/scroll_view/scrollable.native';
+import type { AllowedDirections, DxMouseEvent } from '@ts/ui/scroll_view/types';
 
 const SCROLLVIEW_PULLDOWN_DOWN_LOADING_CLASS = 'dx-scrollview-pull-down-loading';
 const SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = 'dx-scrollview-pull-down-indicator';
@@ -265,7 +264,6 @@ class SwipeDownNativeScrollViewStrategy<
   }
 
   pullDownEnable(enabled: boolean): void {
-    // @ts-expect-error ts-error
     this._$topPocket.toggle(enabled);
     this._pullDownEnabled = enabled;
   }

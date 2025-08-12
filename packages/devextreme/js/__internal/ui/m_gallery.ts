@@ -28,7 +28,7 @@ import type { ClickEvent } from '@js/ui/button';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import type { Properties } from '@js/ui/gallery';
 import type { OptionChanged } from '@ts/core/widget/types';
-import type { Properties as WidgetProperties, SupportedKeys } from '@ts/core/widget/widget';
+import type { SupportedKeys, WidgetProperties } from '@ts/core/widget/widget';
 import Widget from '@ts/core/widget/widget';
 
 const GALLERY_CLASS = 'dx-gallery';

@@ -18,7 +18,7 @@ import { each } from '@js/core/utils/iterator';
 import { getOffset, getWidth } from '@js/core/utils/size';
 import { isDefined, isFunction, isNumeric } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
-import type { ButtonStyle, ButtonType } from '@js/ui/button';
+import type { ButtonStyle, ButtonType, Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { Properties as PublicProperties } from '@js/ui/file_uploader';
 import ProgressBar from '@js/ui/progress_bar';
@@ -839,11 +839,14 @@ class FileUploader extends Editor<FileUploaderProperties> {
       .addClass(FILEUPLOADER_BUTTON_CLASS)
       .appendTo(this._$inputWrapper);
 
-    this._selectButton = this._createComponent($button, Button, {
+    this._selectButton = this._createComponent<Button, ButtonProperties>($button, Button, {
+      // @ts-expect-error
       text: this.option('selectButtonText'),
       focusStateEnabled: false,
       integrationOptions: {},
+      // @ts-expect-error
       disabled: this.option('readOnly'),
+      // @ts-expect-error
       hoverStateEnabled: this.option('hoverStateEnabled'),
     });
 
@@ -918,11 +921,14 @@ class FileUploader extends Editor<FileUploaderProperties> {
       // @ts-expect-error
       .appendTo(this._$content);
 
-    this._uploadButton = this._createComponent($uploadButton, Button, {
+    this._uploadButton = this._createComponent<Button, ButtonProperties>($uploadButton, Button, {
+      // @ts-expect-error
       text: this.option('uploadButtonText'),
       onClick: this._uploadButtonClickHandler.bind(this),
+      // @ts-expect-error
       type: this.option('_uploadButtonType'),
       integrationOptions: {},
+      // @ts-expect-error
       hoverStateEnabled: this.option('hoverStateEnabled'),
     });
   }

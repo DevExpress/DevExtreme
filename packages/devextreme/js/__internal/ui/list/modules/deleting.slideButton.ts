@@ -1,1 +1,1 @@
-import '../list.edit.decorator.switchable.button';
+import '@ts/ui/list/list.edit.decorator.switchable.button';
