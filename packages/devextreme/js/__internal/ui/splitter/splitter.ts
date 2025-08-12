@@ -36,7 +36,7 @@ import type { CollectionWidgetLiveUpdateProperties } from '@ts/ui/collection/col
 import CollectionWidgetLiveUpdate from '@ts/ui/collection/collection_widget.live_update';
 
 import type ResizeHandle from './resize_handle';
-import type { ResizeHandleOptions } from './resize_handle';
+import type { ResizeHandleProperties } from './resize_handle';
 import { RESIZE_HANDLE_CLASS } from './resize_handle';
 import SplitterItem from './splitter_item';
 import { getComponentInstance } from './utils/component';
@@ -186,7 +186,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   }
 
   _pushItemToRenderQueue(
-    itemContent: dxElementWrapper,
+    itemContent: dxElementWrapper | Element,
     splitterConfig: Properties,
   ): void {
     this._renderQueue.push({ itemContent, splitterConfig });
@@ -429,7 +429,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     return this[actionName];
   }
 
-  _getResizeHandleConfig(paneId: string): ResizeHandleOptions {
+  _getResizeHandleConfig(paneId: string): ResizeHandleProperties {
     const {
       orientation,
       rtlEnabled,
@@ -621,15 +621,15 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   _createItemByTemplate(
     itemTemplate: { source: () => unknown },
     args: ItemRenderInfo<Item>,
-  ): unknown {
+  ): dxElementWrapper {
     const { itemData } = args;
 
     if (itemData.splitter) {
       this._onItemTemplateRendered(itemTemplate, args)();
+      // @ts-expect-error
       return itemTemplate.source
         ? itemTemplate.source()
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        : ($ as any)();
+        : $();
     }
 
     return super._createItemByTemplate(itemTemplate, args);

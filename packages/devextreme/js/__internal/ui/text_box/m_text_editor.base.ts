@@ -280,7 +280,7 @@ class TextEditorBase<
     const $indicatorElement = $('<div>')
       .addClass(TEXTEDITOR_PENDING_INDICATOR_CLASS)
       .appendTo($inputContainer);
-    this._pendingIndicator = this._createComponent($indicatorElement, LoadIndicator);
+    this._pendingIndicator = this._createComponent($indicatorElement, LoadIndicator, {});
   }
 
   _disposePendingIndicator(): void {
@@ -683,7 +683,9 @@ class TextEditorBase<
     const $input = this._input();
 
     each(EVENTS_LIST, (_, event) => {
+      // @ts-expect-error
       if (this.hasActionSubscription(`on${event}`)) {
+        // @ts-expect-error
         const action = this._createActionByOption(`on${event}`, { excludeValidators: ['readOnly'] });
         // @ts-expect-error ts-error
         eventsEngine.on($input, addNamespace(event.toLowerCase(), this.NAME), (e) => {
