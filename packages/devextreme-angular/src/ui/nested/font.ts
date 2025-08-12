@@ -40,7 +40,7 @@ import { DxoVizFont } from './base/viz-font';
         'weight'
     ]
 })
-export class DxoFontComponent extends DxoVizFont implements OnDestroy, OnInit { 
+export class DxoFontComponent extends DxoVizFont implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoFontComponent';
 
     

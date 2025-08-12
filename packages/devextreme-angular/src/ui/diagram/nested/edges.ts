@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoDiagramEdgesComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoDiagramEdgesComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoDiagramEdgesComponent';
 
     

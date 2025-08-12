@@ -36,7 +36,7 @@ import { PROPERTY_TOKEN_stripLines } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiGanttStripLineComponent extends CollectionNestedOption { 
+export class DxiGanttStripLineComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiGanttStripLineComponent';
 
     

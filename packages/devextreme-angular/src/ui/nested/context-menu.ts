@@ -45,7 +45,7 @@ import {
         'items'
     ]
 })
-export class DxoContextMenuComponent extends DxoFileManagerContextMenu implements OnDestroy, OnInit { 
+export class DxoContextMenuComponent extends DxoFileManagerContextMenu implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoContextMenuComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)

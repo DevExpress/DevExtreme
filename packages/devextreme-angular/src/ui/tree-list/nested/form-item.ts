@@ -52,7 +52,7 @@ import {
     ],
 })
 export class DxoTreeListFormItemComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxoTreeListFormItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)

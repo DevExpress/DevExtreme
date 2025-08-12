@@ -42,7 +42,7 @@ import { PROPERTY_TOKEN_typingUsers } from 'devextreme-angular/tokens';
         'name'
     ]
 })
-export class DxiTypingUserComponent extends DxiUser { 
+export class DxiTypingUserComponent extends DxiUser {
     protected _dxClassName = 'DxiTypingUserComponent';
 
     

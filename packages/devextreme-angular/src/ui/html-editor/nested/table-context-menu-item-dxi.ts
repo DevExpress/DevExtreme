@@ -52,7 +52,7 @@ import {
     ],
 })
 export class DxiHtmlEditorTableContextMenuItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxiHtmlEditorTableContextMenuItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)

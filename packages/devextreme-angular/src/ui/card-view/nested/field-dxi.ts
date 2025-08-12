@@ -41,7 +41,7 @@ import { PROPERTY_TOKEN_fields } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiCardViewFieldComponent extends CollectionNestedOption { 
+export class DxiCardViewFieldComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiCardViewFieldComponent';
 
     

@@ -46,7 +46,7 @@ import { DxoGanttFilterRowOperationDescriptions } from './base/gantt-filter-row-
         'startsWith'
     ]
 })
-export class DxoOperationDescriptionsComponent extends DxoGanttFilterRowOperationDescriptions implements OnDestroy, OnInit { 
+export class DxoOperationDescriptionsComponent extends DxoGanttFilterRowOperationDescriptions implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoOperationDescriptionsComponent';
 
     

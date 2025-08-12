@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_changes } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiTreeListChangeComponent extends CollectionNestedOption { 
+export class DxiTreeListChangeComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiTreeListChangeComponent';
 
     

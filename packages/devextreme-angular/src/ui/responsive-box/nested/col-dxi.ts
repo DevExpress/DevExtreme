@@ -36,7 +36,7 @@ import { PROPERTY_TOKEN_cols } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiResponsiveBoxColComponent extends CollectionNestedOption { 
+export class DxiResponsiveBoxColComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiResponsiveBoxColComponent';
 
     

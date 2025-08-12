@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_strips } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiChartStripComponent extends CollectionNestedOption { 
+export class DxiChartStripComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiChartStripComponent';
 
     

@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiTreeListAsyncRuleComponent extends CollectionNestedOption { 
+export class DxiTreeListAsyncRuleComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiTreeListAsyncRuleComponent';
 
     
@@ -91,6 +91,8 @@ export class DxiTreeListAsyncRuleComponent extends CollectionNestedOption {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.type = 'async';
+    
     }
 
 

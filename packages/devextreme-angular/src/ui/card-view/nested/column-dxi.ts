@@ -49,7 +49,7 @@ import {
          }
     ],
 })
-export class DxiCardViewColumnComponent extends CollectionNestedOption { 
+export class DxiCardViewColumnComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiCardViewColumnComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
@@ -418,7 +418,6 @@ export class DxiCardViewColumnComponent extends CollectionNestedOption {
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'filterValueChange' },
             { emit: 'filterValuesChange' },

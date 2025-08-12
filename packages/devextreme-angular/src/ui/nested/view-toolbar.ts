@@ -40,7 +40,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoViewToolbarComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoViewToolbarComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoViewToolbarComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)

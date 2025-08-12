@@ -41,7 +41,7 @@ import { PROPERTY_TOKEN_fields } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiDataGridFieldComponent extends CollectionNestedOption { 
+export class DxiDataGridFieldComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiDataGridFieldComponent';
 
     

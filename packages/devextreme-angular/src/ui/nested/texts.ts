@@ -95,7 +95,7 @@ import { DxoFilterPanelTexts } from './base/filter-panel-texts';
         'addRowToNode'
     ]
 })
-export class DxoTextsComponent extends DxoFilterPanelTexts implements OnDestroy, OnInit { 
+export class DxoTextsComponent extends DxoFilterPanelTexts implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoTextsComponent';
 
     

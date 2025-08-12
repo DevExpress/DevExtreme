@@ -93,7 +93,7 @@ import {
         'wrapperAttr'
     ]
 })
-export class DxoPopupComponent extends DxoPopupOptions implements OnDestroy, OnInit { 
+export class DxoPopupComponent extends DxoPopupOptions implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoPopupComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
@@ -136,7 +136,6 @@ export class DxoPopupComponent extends DxoPopupOptions implements OnDestroy, OnI
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'heightChange' },
             { emit: 'positionChange' },

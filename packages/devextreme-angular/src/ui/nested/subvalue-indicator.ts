@@ -54,7 +54,7 @@ import { DxoGaugeIndicator } from './base/gauge-indicator';
         'width'
     ]
 })
-export class DxoSubvalueIndicatorComponent extends DxoGaugeIndicator implements OnDestroy, OnInit { 
+export class DxoSubvalueIndicatorComponent extends DxoGaugeIndicator implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoSubvalueIndicatorComponent';
 
     

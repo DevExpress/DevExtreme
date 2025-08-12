@@ -39,7 +39,7 @@ import { PROPERTY_TOKEN_totalItems } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiTotalItemComponent extends CollectionNestedOption { 
+export class DxiTotalItemComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiTotalItemComponent';
 
     

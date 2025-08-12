@@ -42,7 +42,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoChartComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoChartComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoChartComponent';
 
     @ContentChildren(PROPERTY_TOKEN_series)

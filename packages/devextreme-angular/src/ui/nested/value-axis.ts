@@ -45,7 +45,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoValueAxisComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoValueAxisComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoValueAxisComponent';
 
     @ContentChildren(PROPERTY_TOKEN_constantLines)
@@ -359,7 +359,6 @@ export class DxoValueAxisComponent extends NestedOption implements OnDestroy, On
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'visualRangeChange' }
         ]);

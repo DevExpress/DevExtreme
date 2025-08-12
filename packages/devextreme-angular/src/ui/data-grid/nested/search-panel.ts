@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoDataGridSearchPanelComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoDataGridSearchPanelComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoDataGridSearchPanelComponent';
 
     
@@ -109,7 +109,6 @@ export class DxoDataGridSearchPanelComponent extends NestedOption implements OnD
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'textChange' }
         ]);

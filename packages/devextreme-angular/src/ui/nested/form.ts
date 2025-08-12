@@ -83,7 +83,7 @@ import {
         'width'
     ]
 })
-export class DxoFormComponent extends DxoFormOptions implements OnDestroy, OnInit { 
+export class DxoFormComponent extends DxoFormOptions implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoFormComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
@@ -105,7 +105,6 @@ export class DxoFormComponent extends DxoFormOptions implements OnDestroy, OnIni
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'formDataChange' }
         ]);

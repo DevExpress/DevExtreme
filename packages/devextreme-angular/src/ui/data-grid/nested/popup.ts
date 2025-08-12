@@ -50,7 +50,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoDataGridPopupComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoDataGridPopupComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoDataGridPopupComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
@@ -477,7 +477,6 @@ export class DxoDataGridPopupComponent extends NestedOption implements OnDestroy
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'heightChange' },
             { emit: 'positionChange' },

@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoPolarChartWholeRangeComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoPolarChartWholeRangeComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoPolarChartWholeRangeComponent';
 
     
@@ -85,7 +85,6 @@ export class DxoPolarChartWholeRangeComponent extends NestedOption implements On
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'endValueChange' },
             { emit: 'startValueChange' }

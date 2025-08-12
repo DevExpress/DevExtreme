@@ -43,7 +43,7 @@ import { DxoColumnChooserSelectionConfig } from './base/column-chooser-selection
         'showCheckBoxesMode'
     ]
 })
-export class DxoSelectionComponent extends DxoColumnChooserSelectionConfig implements OnDestroy, OnInit { 
+export class DxoSelectionComponent extends DxoColumnChooserSelectionConfig implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoSelectionComponent';
 
     

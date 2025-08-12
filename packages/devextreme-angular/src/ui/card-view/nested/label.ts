@@ -45,7 +45,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoCardViewLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxoCardViewLabelComponent';
 
     

@@ -33,7 +33,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoCursorOffsetComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoCursorOffsetComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoCursorOffsetComponent';
 
     

@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiTreeListRangeRuleComponent extends CollectionNestedOption { 
+export class DxiTreeListRangeRuleComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiTreeListRangeRuleComponent';
 
     
@@ -99,6 +99,8 @@ export class DxiTreeListRangeRuleComponent extends CollectionNestedOption {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.type = 'range';
+    
     }
 
 

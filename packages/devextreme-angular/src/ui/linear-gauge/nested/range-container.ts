@@ -41,7 +41,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoLinearGaugeRangeContainerComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoLinearGaugeRangeContainerComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoLinearGaugeRangeContainerComponent';
 
     @ContentChildren(PROPERTY_TOKEN_ranges)

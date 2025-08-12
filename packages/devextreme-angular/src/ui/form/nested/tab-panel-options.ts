@@ -46,7 +46,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoFormTabPanelOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
@@ -442,7 +442,6 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'itemsChange' },
             { emit: 'selectedIndexChange' },

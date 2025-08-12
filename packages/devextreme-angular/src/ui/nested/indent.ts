@@ -33,7 +33,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoIndentComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoIndentComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoIndentComponent';
 
     

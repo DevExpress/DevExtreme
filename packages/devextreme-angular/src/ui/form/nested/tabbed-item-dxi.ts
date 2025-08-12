@@ -44,7 +44,7 @@ import {
          }
     ],
 })
-export class DxiFormTabbedItemComponent extends CollectionNestedOption { 
+export class DxiFormTabbedItemComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiFormTabbedItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
@@ -126,6 +126,8 @@ export class DxiFormTabbedItemComponent extends CollectionNestedOption {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.itemType = 'tabbed';
+    
     }
 
 

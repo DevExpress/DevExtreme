@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoBarGaugeLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoBarGaugeLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoBarGaugeLoadingIndicatorComponent';
 
     
@@ -86,7 +86,6 @@ export class DxoBarGaugeLoadingIndicatorComponent extends NestedOption implement
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'showChange' }
         ]);

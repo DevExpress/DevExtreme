@@ -38,7 +38,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoTreeListRowDraggingComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoTreeListRowDraggingComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoTreeListRowDraggingComponent';
 
     

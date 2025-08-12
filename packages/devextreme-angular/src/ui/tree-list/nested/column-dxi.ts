@@ -53,7 +53,7 @@ import {
          }
     ],
 })
-export class DxiTreeListColumnComponent extends CollectionNestedOption { 
+export class DxiTreeListColumnComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiTreeListColumnComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
@@ -573,7 +573,6 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption {
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'filterValueChange' },
             { emit: 'filterValuesChange' },

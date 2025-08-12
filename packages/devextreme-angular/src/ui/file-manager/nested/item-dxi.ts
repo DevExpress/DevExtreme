@@ -44,7 +44,7 @@ import {
          }
     ],
 })
-export class DxiFileManagerItemComponent extends CollectionNestedOption { 
+export class DxiFileManagerItemComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiFileManagerItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)

@@ -43,7 +43,7 @@ import {
         'items'
     ]
 })
-export class DxoTableContextMenuComponent extends DxoHtmlEditorTableContextMenu implements OnDestroy, OnInit { 
+export class DxoTableContextMenuComponent extends DxoHtmlEditorTableContextMenu implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoTableContextMenuComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)

@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoRangeSelectorValueComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoRangeSelectorValueComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoRangeSelectorValueComponent';
 
     
@@ -85,7 +85,6 @@ export class DxoRangeSelectorValueComponent extends NestedOption implements OnDe
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'endValueChange' },
             { emit: 'startValueChange' }

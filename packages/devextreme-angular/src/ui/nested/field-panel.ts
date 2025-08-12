@@ -33,7 +33,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoFieldPanelComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoFieldPanelComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoFieldPanelComponent';
 
     

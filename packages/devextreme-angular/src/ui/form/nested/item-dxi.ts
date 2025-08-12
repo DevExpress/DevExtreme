@@ -58,7 +58,7 @@ import {
     ],
 })
 export class DxiFormItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxiFormItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)

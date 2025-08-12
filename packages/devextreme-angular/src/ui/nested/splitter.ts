@@ -69,7 +69,7 @@ import {
         'width'
     ]
 })
-export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestroy, OnInit { 
+export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoSplitterComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
@@ -91,7 +91,6 @@ export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestro
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'itemsChange' }
         ]);

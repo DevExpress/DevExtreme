@@ -40,7 +40,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoPropertiesPanelComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoPropertiesPanelComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoPropertiesPanelComponent';
 
     @ContentChildren(PROPERTY_TOKEN_tabs)

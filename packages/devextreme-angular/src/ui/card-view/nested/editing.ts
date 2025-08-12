@@ -42,7 +42,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoCardViewEditingComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoCardViewEditingComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoCardViewEditingComponent';
 
     @ContentChildren(PROPERTY_TOKEN_changes)

@@ -38,7 +38,7 @@ import { DxoHtmlEditorTableResizing } from './base/html-editor-table-resizing';
         'minRowHeight'
     ]
 })
-export class DxoTableResizingComponent extends DxoHtmlEditorTableResizing implements OnDestroy, OnInit { 
+export class DxoTableResizingComponent extends DxoHtmlEditorTableResizing implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoTableResizingComponent';
 
     

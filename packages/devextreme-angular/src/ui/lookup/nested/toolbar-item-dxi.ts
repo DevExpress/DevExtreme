@@ -49,7 +49,7 @@ import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiLookupToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxiLookupToolbarItemComponent';
 
     

@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiDataGridRangeRuleComponent extends CollectionNestedOption { 
+export class DxiDataGridRangeRuleComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiDataGridRangeRuleComponent';
 
     
@@ -99,6 +99,8 @@ export class DxiDataGridRangeRuleComponent extends CollectionNestedOption {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.type = 'range';
+    
     }
 
 

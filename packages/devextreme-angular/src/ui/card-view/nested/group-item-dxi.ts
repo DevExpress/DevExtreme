@@ -52,7 +52,7 @@ import {
     ],
 })
 export class DxiCardViewGroupItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxiCardViewGroupItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
@@ -179,6 +179,8 @@ export class DxiCardViewGroupItemComponent extends CollectionNestedOption implem
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
         templateHost.setHost(this);
+        this.itemType = 'group';
+    
     }
 
     setTemplate(template: DxTemplateDirective) {

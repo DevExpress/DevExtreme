@@ -42,7 +42,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoPolarChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoPolarChartArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoPolarChartArgumentAxisComponent';
 
     @ContentChildren(PROPERTY_TOKEN_constantLines)

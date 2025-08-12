@@ -48,7 +48,7 @@ import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiChartAnnotationComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxiChartAnnotationComponent';
 
     

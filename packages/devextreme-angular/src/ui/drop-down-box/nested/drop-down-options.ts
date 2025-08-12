@@ -50,7 +50,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoDropDownBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoDropDownBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoDropDownBoxDropDownOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
@@ -477,7 +477,6 @@ export class DxoDropDownBoxDropDownOptionsComponent extends NestedOption impleme
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'heightChange' },
             { emit: 'positionChange' },

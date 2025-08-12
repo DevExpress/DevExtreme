@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoDataGridPagingComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoDataGridPagingComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoDataGridPagingComponent';
 
     
@@ -84,7 +84,6 @@ export class DxoDataGridPagingComponent extends NestedOption implements OnDestro
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'pageIndexChange' },
             { emit: 'pageSizeChange' }

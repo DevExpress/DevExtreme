@@ -40,7 +40,7 @@ import { PROPERTY_TOKEN_series } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiRangeSelectorSeriesComponent extends CollectionNestedOption { 
+export class DxiRangeSelectorSeriesComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiRangeSelectorSeriesComponent';
 
     

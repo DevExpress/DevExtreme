@@ -40,7 +40,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoHtmlEditorToolbarComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)

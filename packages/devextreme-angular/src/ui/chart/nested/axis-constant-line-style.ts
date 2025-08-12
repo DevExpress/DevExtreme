@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoChartAxisConstantLineStyleComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoChartAxisConstantLineStyleComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoChartAxisConstantLineStyleComponent';
 
     

@@ -44,7 +44,7 @@ import { DxoGanttFilterRow } from './base/gantt-filter-row';
         'visible'
     ]
 })
-export class DxoFilterRowComponent extends DxoGanttFilterRow implements OnDestroy, OnInit { 
+export class DxoFilterRowComponent extends DxoGanttFilterRow implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoFilterRowComponent';
 
     

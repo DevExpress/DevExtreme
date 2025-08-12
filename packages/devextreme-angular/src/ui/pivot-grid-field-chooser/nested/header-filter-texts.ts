@@ -33,7 +33,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoPivotGridFieldChooserHeaderFilterTextsComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoPivotGridFieldChooserHeaderFilterTextsComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoPivotGridFieldChooserHeaderFilterTextsComponent';
 
     

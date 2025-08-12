@@ -96,7 +96,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
         'width'
     ]
 })
-export class DxoStackedsplineComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit { 
+export class DxoStackedsplineComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoStackedsplineComponent';
 
     

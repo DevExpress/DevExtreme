@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiDataGridCompareRuleComponent extends CollectionNestedOption { 
+export class DxiDataGridCompareRuleComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiDataGridCompareRuleComponent';
 
     
@@ -91,6 +91,8 @@ export class DxiDataGridCompareRuleComponent extends CollectionNestedOption {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.type = 'compare';
+    
     }
 
 

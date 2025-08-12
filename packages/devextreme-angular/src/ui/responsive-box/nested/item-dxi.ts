@@ -52,7 +52,7 @@ import {
     ],
 })
 export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxiResponsiveBoxItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_location)

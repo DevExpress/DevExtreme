@@ -49,7 +49,7 @@ import { PROPERTY_TOKEN_mentions } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiHtmlEditorMentionComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxiHtmlEditorMentionComponent';
 
     

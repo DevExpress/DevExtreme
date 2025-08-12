@@ -43,7 +43,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoListSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoListSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoListSearchEditorOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
@@ -505,7 +505,6 @@ export class DxoListSearchEditorOptionsComponent extends NestedOption implements
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' }
         ]);

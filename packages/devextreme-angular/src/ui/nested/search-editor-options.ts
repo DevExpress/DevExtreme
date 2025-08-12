@@ -98,7 +98,7 @@ import {
         'width'
     ]
 })
-export class DxoSearchEditorOptionsComponent extends DxoTextBoxOptions implements OnDestroy, OnInit { 
+export class DxoSearchEditorOptionsComponent extends DxoTextBoxOptions implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoSearchEditorOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
@@ -127,7 +127,6 @@ export class DxoSearchEditorOptionsComponent extends DxoTextBoxOptions implement
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'textChange' },
             { emit: 'valueChange' }

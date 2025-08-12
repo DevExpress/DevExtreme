@@ -47,7 +47,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoArgumentAxisComponent';
 
     @ContentChildren(PROPERTY_TOKEN_breaks)
@@ -508,7 +508,6 @@ export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy,
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'categoriesChange' },
             { emit: 'visualRangeChange' }

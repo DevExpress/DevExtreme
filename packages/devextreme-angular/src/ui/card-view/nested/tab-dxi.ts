@@ -11,8 +11,6 @@ import {
     AfterViewInit,
     SkipSelf,
     Input,
-    ContentChildren,
-    QueryList,
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -27,15 +25,11 @@ import {
     DxTemplateDirective,
     IDxTemplateHost,
     DxTemplateHost,
-    ICollectionNestedOption,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
 import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/tokens';
 
-import {
-    PROPERTY_TOKEN_items,
-} from 'devextreme-angular/tokens';
 
 @Component({
     selector: 'dxi-card-view-tab',
@@ -53,13 +47,9 @@ import {
     ],
 })
 export class DxiCardViewTabComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxiCardViewTabComponent';
 
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsNestedItems(value: QueryList<ICollectionNestedOption>) {
-        this._setChildren('items', value);
-    }
     
     @Input()
     get alignItemLabels(): boolean {

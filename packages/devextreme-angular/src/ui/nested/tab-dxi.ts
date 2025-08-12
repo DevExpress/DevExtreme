@@ -69,7 +69,7 @@ import {
     ]
 })
 export class DxiTabComponent extends DxiHtmlEditorImageUploadTabItem implements AfterViewInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxiTabComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)

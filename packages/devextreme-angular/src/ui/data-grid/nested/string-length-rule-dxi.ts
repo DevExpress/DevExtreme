@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiDataGridStringLengthRuleComponent extends CollectionNestedOption { 
+export class DxiDataGridStringLengthRuleComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiDataGridStringLengthRuleComponent';
 
     
@@ -99,6 +99,8 @@ export class DxiDataGridStringLengthRuleComponent extends CollectionNestedOption
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.type = 'stringLength';
+    
     }
 
 

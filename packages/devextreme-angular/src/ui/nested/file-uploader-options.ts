@@ -101,7 +101,7 @@ import { DxoFileUploaderOptions } from './base/file-uploader-options';
         'width'
     ]
 })
-export class DxoFileUploaderOptionsComponent extends DxoFileUploaderOptions implements OnDestroy, OnInit { 
+export class DxoFileUploaderOptionsComponent extends DxoFileUploaderOptions implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoFileUploaderOptionsComponent';
 
     
@@ -119,7 +119,6 @@ export class DxoFileUploaderOptionsComponent extends DxoFileUploaderOptions impl
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' }
         ]);

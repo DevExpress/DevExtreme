@@ -43,7 +43,7 @@ import {
          }
     ],
 })
-export class DxiDiagramTabGroupComponent extends CollectionNestedOption { 
+export class DxiDiagramTabGroupComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiDiagramTabGroupComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)

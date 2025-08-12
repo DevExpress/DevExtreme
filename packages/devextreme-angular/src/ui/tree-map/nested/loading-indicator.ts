@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoTreeMapLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoTreeMapLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoTreeMapLoadingIndicatorComponent';
 
     
@@ -94,7 +94,6 @@ export class DxoTreeMapLoadingIndicatorComponent extends NestedOption implements
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'showChange' }
         ]);

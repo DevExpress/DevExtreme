@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoPolarChartVisualRangeComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoPolarChartVisualRangeComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoPolarChartVisualRangeComponent';
 
     
@@ -85,7 +85,6 @@ export class DxoPolarChartVisualRangeComponent extends NestedOption implements O
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'endValueChange' },
             { emit: 'startValueChange' }

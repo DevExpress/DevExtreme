@@ -43,7 +43,7 @@ import { DxoPager } from './base/pager';
         'visible'
     ]
 })
-export class DxoPagerComponent extends DxoPager implements OnDestroy, OnInit { 
+export class DxoPagerComponent extends DxoPager implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoPagerComponent';
 
     

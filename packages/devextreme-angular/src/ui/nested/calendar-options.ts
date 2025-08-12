@@ -78,7 +78,7 @@ import { DxoCalendarOptions } from './base/calendar-options';
         'zoomLevel'
     ]
 })
-export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements OnDestroy, OnInit { 
+export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoCalendarOptionsComponent';
 
     
@@ -103,7 +103,6 @@ export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements O
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' },
             { emit: 'zoomLevelChange' }

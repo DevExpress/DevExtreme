@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoRangeSelectorSubtitleComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoRangeSelectorSubtitleComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoRangeSelectorSubtitleComponent';
 
     

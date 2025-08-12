@@ -40,7 +40,7 @@ import { DxoColumnChooserSearchConfig } from './base/column-chooser-search-confi
         'searchExpr'
     ]
 })
-export class DxoSearchComponent extends DxoColumnChooserSearchConfig implements OnDestroy, OnInit { 
+export class DxoSearchComponent extends DxoColumnChooserSearchConfig implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoSearchComponent';
 
     

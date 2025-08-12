@@ -42,7 +42,7 @@ import {
          }
     ],
 })
-export class DxiMarkerComponent extends CollectionNestedOption { 
+export class DxiMarkerComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiMarkerComponent';
 
     @ContentChildren(PROPERTY_TOKEN_location)

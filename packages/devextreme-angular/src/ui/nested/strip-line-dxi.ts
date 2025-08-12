@@ -42,7 +42,7 @@ import { PROPERTY_TOKEN_stripLines } from 'devextreme-angular/tokens';
         'title'
     ]
 })
-export class DxiStripLineComponent extends DxiGanttStripLine { 
+export class DxiStripLineComponent extends DxiGanttStripLine {
     protected _dxClassName = 'DxiStripLineComponent';
 
     

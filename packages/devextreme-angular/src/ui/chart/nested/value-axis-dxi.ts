@@ -51,7 +51,7 @@ import {
          }
     ],
 })
-export class DxiChartValueAxisComponent extends CollectionNestedOption { 
+export class DxiChartValueAxisComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiChartValueAxisComponent';
 
     @ContentChildren(PROPERTY_TOKEN_breaks)
@@ -472,7 +472,6 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'categoriesChange' },
             { emit: 'visualRangeChange' }

@@ -39,7 +39,7 @@ import { PROPERTY_TOKEN_fileSelectionItems } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiFileManagerFileSelectionItemComponent extends CollectionNestedOption { 
+export class DxiFileManagerFileSelectionItemComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiFileManagerFileSelectionItemComponent';
 
     

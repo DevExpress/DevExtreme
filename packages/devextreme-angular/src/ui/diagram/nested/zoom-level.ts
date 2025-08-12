@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoDiagramZoomLevelComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoDiagramZoomLevelComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoDiagramZoomLevelComponent';
 
     
@@ -69,7 +69,6 @@ export class DxoDiagramZoomLevelComponent extends NestedOption implements OnDest
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' }
         ]);

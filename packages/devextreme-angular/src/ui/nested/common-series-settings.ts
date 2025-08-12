@@ -100,7 +100,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
         'closed'
     ]
 })
-export class DxoCommonSeriesSettingsComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit { 
+export class DxoCommonSeriesSettingsComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoCommonSeriesSettingsComponent';
 
     

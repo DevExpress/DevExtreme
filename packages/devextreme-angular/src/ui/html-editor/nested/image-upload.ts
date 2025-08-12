@@ -41,7 +41,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoHtmlEditorImageUploadComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoHtmlEditorImageUploadComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoHtmlEditorImageUploadComponent';
 
     @ContentChildren(PROPERTY_TOKEN_tabs)

@@ -40,7 +40,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoHtmlEditorTableContextMenuComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoHtmlEditorTableContextMenuComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoHtmlEditorTableContextMenuComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)

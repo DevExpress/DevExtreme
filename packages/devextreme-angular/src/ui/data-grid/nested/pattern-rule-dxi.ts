@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiDataGridPatternRuleComponent extends CollectionNestedOption { 
+export class DxiDataGridPatternRuleComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiDataGridPatternRuleComponent';
 
     
@@ -83,6 +83,8 @@ export class DxiDataGridPatternRuleComponent extends CollectionNestedOption {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.type = 'pattern';
+    
     }
 
 

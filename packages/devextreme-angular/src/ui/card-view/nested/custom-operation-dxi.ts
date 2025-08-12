@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiCardViewCustomOperationComponent extends CollectionNestedOption { 
+export class DxiCardViewCustomOperationComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiCardViewCustomOperationComponent';
 
     

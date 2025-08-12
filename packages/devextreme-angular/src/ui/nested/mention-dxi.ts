@@ -47,7 +47,7 @@ import { PROPERTY_TOKEN_mentions } from 'devextreme-angular/tokens';
         'valueExpr'
     ]
 })
-export class DxiMentionComponent extends DxiHtmlEditorMention { 
+export class DxiMentionComponent extends DxiHtmlEditorMention {
     protected _dxClassName = 'DxiMentionComponent';
 
     

@@ -70,7 +70,7 @@ import { DxoChartCommonAnnotationConfig } from './base/chart-common-annotation-c
         'coordinates'
     ]
 })
-export class DxoCommonAnnotationSettingsComponent extends DxoChartCommonAnnotationConfig implements OnDestroy, OnInit { 
+export class DxoCommonAnnotationSettingsComponent extends DxoChartCommonAnnotationConfig implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoCommonAnnotationSettingsComponent';
 
     

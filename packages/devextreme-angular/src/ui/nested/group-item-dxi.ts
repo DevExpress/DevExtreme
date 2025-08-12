@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_groupItems } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiGroupItemComponent extends CollectionNestedOption { 
+export class DxiGroupItemComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiGroupItemComponent';
 
     

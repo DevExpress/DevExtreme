@@ -139,7 +139,7 @@ import {
     ]
 })
 export class DxiItemComponent extends DxiButtonGroupItem implements AfterViewInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxiItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)

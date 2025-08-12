@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoPieChartLegendComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoPieChartLegendComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoPieChartLegendComponent';
 
     

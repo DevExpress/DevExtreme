@@ -40,7 +40,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoToolboxComponent';
 
     @ContentChildren(PROPERTY_TOKEN_groups)

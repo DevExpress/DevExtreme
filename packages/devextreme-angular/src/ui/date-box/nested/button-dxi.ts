@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiDateBoxButtonComponent extends CollectionNestedOption { 
+export class DxiDateBoxButtonComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiDateBoxButtonComponent';
 
     

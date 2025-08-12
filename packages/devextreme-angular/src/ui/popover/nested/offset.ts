@@ -33,7 +33,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoPopoverOffsetComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoPopoverOffsetComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoPopoverOffsetComponent';
 
     

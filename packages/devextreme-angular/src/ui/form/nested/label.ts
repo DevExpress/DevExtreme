@@ -45,7 +45,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoFormLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxoFormLabelComponent';
 
     

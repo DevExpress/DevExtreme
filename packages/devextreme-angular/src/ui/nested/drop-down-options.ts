@@ -96,7 +96,7 @@ import {
         'target'
     ]
 })
-export class DxoDropDownOptionsComponent extends DxoPopupOptions implements OnDestroy, OnInit { 
+export class DxoDropDownOptionsComponent extends DxoPopupOptions implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoDropDownOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
@@ -139,7 +139,6 @@ export class DxoDropDownOptionsComponent extends DxoPopupOptions implements OnDe
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'heightChange' },
             { emit: 'positionChange' },

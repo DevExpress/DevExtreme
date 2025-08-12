@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoChartScrollBarComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoChartScrollBarComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoChartScrollBarComponent';
 
     

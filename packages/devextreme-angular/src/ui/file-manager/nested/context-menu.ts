@@ -40,7 +40,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoFileManagerContextMenuComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoFileManagerContextMenuComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoFileManagerContextMenuComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)

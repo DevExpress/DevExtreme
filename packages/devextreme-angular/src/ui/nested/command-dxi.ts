@@ -51,7 +51,7 @@ import {
         'prompt'
     ]
 })
-export class DxiCommandComponent extends DxiDiagramCustomCommand { 
+export class DxiCommandComponent extends DxiDiagramCustomCommand {
     protected _dxClassName = 'DxiCommandComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)

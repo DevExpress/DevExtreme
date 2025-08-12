@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoKeyboardNavigationComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoKeyboardNavigationComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoKeyboardNavigationComponent';
 
     

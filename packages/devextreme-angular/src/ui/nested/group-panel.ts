@@ -36,7 +36,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoGroupPanelComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoGroupPanelComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoGroupPanelComponent';
 
     
@@ -78,7 +78,6 @@ export class DxoGroupPanelComponent extends NestedOption implements OnDestroy, O
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'visibleChange' }
         ]);

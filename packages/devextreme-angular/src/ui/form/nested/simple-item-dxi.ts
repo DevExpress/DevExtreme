@@ -55,7 +55,7 @@ import {
     ],
 })
 export class DxiFormSimpleItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxiFormSimpleItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
@@ -190,6 +190,8 @@ export class DxiFormSimpleItemComponent extends CollectionNestedOption implement
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
         templateHost.setHost(this);
+        this.itemType = 'simple';
+    
     }
 
     setTemplate(template: DxTemplateDirective) {

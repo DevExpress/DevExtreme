@@ -42,7 +42,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoRangeSelectorScaleComponent';
 
     @ContentChildren(PROPERTY_TOKEN_breaks)

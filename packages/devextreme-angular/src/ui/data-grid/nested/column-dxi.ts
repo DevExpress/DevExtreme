@@ -53,7 +53,7 @@ import {
          }
     ],
 })
-export class DxiDataGridColumnComponent extends CollectionNestedOption { 
+export class DxiDataGridColumnComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiDataGridColumnComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)
@@ -636,7 +636,6 @@ export class DxiDataGridColumnComponent extends CollectionNestedOption {
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'filterValueChange' },
             { emit: 'filterValuesChange' },

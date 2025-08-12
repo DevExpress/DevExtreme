@@ -34,7 +34,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoPolarChartStripLabelComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoPolarChartStripLabelComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoPolarChartStripLabelComponent';
 
     

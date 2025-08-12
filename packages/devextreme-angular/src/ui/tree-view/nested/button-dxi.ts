@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiTreeViewButtonComponent extends CollectionNestedOption { 
+export class DxiTreeViewButtonComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiTreeViewButtonComponent';
 
     

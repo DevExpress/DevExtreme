@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_ranges } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiCircularGaugeRangeComponent extends CollectionNestedOption { 
+export class DxiCircularGaugeRangeComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiCircularGaugeRangeComponent';
 
     

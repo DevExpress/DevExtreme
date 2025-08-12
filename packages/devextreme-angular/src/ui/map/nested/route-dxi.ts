@@ -43,7 +43,7 @@ import {
          }
     ],
 })
-export class DxiMapRouteComponent extends CollectionNestedOption { 
+export class DxiMapRouteComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiMapRouteComponent';
 
     @ContentChildren(PROPERTY_TOKEN_locations)

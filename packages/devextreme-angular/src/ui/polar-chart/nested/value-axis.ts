@@ -45,7 +45,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoPolarChartValueAxisComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoPolarChartValueAxisComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoPolarChartValueAxisComponent';
 
     @ContentChildren(PROPERTY_TOKEN_constantLines)
@@ -343,7 +343,6 @@ export class DxoPolarChartValueAxisComponent extends NestedOption implements OnD
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'visualRangeChange' }
         ]);

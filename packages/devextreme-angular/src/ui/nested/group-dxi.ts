@@ -43,7 +43,7 @@ import {
          }
     ],
 })
-export class DxiGroupComponent extends CollectionNestedOption { 
+export class DxiGroupComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiGroupComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)

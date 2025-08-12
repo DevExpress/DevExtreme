@@ -42,7 +42,7 @@ import {
          }
     ],
 })
-export class DxiFileManagerContextMenuItemComponent extends CollectionNestedOption { 
+export class DxiFileManagerContextMenuItemComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiFileManagerContextMenuItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)

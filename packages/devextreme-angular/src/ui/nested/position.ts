@@ -42,7 +42,7 @@ import { DxoPositionConfig } from './base/position-config';
         'offset'
     ]
 })
-export class DxoPositionComponent extends DxoPositionConfig implements OnDestroy, OnInit { 
+export class DxoPositionComponent extends DxoPositionConfig implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoPositionComponent';
 
     

@@ -59,7 +59,7 @@ import { DxoButtonOptions } from './base/button-options';
         'width'
     ]
 })
-export class DxoButtonOptionsComponent extends DxoButtonOptions implements OnDestroy, OnInit { 
+export class DxoButtonOptionsComponent extends DxoButtonOptions implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoButtonOptionsComponent';
 
     

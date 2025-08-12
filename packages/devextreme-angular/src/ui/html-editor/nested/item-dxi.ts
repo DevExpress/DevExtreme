@@ -55,7 +55,7 @@ import {
     ],
 })
 export class DxiHtmlEditorItemComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxiHtmlEditorItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_commands)

@@ -46,7 +46,7 @@ import { NestedOption } from 'devextreme-angular/core';
     ],
 })
 export class DxoChartCommonAxisSettingsLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxoChartCommonAxisSettingsLabelComponent';
 
     

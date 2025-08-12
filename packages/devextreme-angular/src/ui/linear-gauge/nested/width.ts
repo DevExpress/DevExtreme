@@ -33,7 +33,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoLinearGaugeWidthComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoLinearGaugeWidthComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoLinearGaugeWidthComponent';
 
     

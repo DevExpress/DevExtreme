@@ -37,7 +37,7 @@ import { DxoChartsColor } from './base/charts-color';
         'fillId'
     ]
 })
-export class DxoBackgroundColorComponent extends DxoChartsColor implements OnDestroy, OnInit { 
+export class DxoBackgroundColorComponent extends DxoChartsColor implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoBackgroundColorComponent';
 
     

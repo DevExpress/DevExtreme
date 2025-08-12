@@ -71,7 +71,7 @@ import {
         'width'
     ]
 })
-export class DxoFilterBuilderComponent extends DxoFilterBuilderOptions implements OnDestroy, OnInit { 
+export class DxoFilterBuilderComponent extends DxoFilterBuilderOptions implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoFilterBuilderComponent';
 
     @ContentChildren(PROPERTY_TOKEN_customOperations)
@@ -97,7 +97,6 @@ export class DxoFilterBuilderComponent extends DxoFilterBuilderOptions implement
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' }
         ]);

@@ -42,7 +42,7 @@ import { PROPERTY_TOKEN_layers } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiVectorMapLayerComponent extends CollectionNestedOption { 
+export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiVectorMapLayerComponent';
 
     

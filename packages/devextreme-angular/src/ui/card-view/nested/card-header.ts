@@ -50,7 +50,7 @@ import {
     ],
 })
 export class DxoCardViewCardHeaderComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxoCardViewCardHeaderComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)

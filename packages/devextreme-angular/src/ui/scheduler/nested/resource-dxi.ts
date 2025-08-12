@@ -39,7 +39,7 @@ import { PROPERTY_TOKEN_resources } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiSchedulerResourceComponent extends CollectionNestedOption { 
+export class DxiSchedulerResourceComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiSchedulerResourceComponent';
 
     

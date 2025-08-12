@@ -53,7 +53,7 @@ import {
     ],
 })
 export class DxiCustomShapeComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxiCustomShapeComponent';
 
     @ContentChildren(PROPERTY_TOKEN_connectionPoints)

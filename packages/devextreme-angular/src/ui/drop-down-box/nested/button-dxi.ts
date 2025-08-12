@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiDropDownBoxButtonComponent extends CollectionNestedOption { 
+export class DxiDropDownBoxButtonComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiDropDownBoxButtonComponent';
 
     

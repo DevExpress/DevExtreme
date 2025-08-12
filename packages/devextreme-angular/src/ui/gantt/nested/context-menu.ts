@@ -40,7 +40,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoGanttContextMenuComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoGanttContextMenuComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoGanttContextMenuComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)

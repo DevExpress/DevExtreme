@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiValidatorEmailRuleComponent extends CollectionNestedOption { 
+export class DxiValidatorEmailRuleComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiValidatorEmailRuleComponent';
 
     
@@ -75,6 +75,8 @@ export class DxiValidatorEmailRuleComponent extends CollectionNestedOption {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.type = 'email';
+    
     }
 
 

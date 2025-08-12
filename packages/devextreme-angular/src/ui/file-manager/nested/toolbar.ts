@@ -41,7 +41,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoFileManagerToolbarComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoFileManagerToolbarComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoFileManagerToolbarComponent';
 
     @ContentChildren(PROPERTY_TOKEN_fileSelectionItems)

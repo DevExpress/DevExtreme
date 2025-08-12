@@ -96,7 +96,7 @@ import { DxoChartCommonSeriesSettings } from './base/chart-common-series-setting
         'width'
     ]
 })
-export class DxoBubbleComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit { 
+export class DxoBubbleComponent extends DxoChartCommonSeriesSettings implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoBubbleComponent';
 
     

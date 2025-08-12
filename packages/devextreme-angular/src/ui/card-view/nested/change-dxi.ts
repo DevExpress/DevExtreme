@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_changes } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiCardViewChangeComponent extends CollectionNestedOption { 
+export class DxiCardViewChangeComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiCardViewChangeComponent';
 
     

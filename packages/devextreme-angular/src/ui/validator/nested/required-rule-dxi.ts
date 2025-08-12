@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiValidatorRequiredRuleComponent extends CollectionNestedOption { 
+export class DxiValidatorRequiredRuleComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiValidatorRequiredRuleComponent';
 
     
@@ -75,6 +75,8 @@ export class DxiValidatorRequiredRuleComponent extends CollectionNestedOption {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.type = 'required';
+    
     }
 
 

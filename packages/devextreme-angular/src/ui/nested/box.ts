@@ -66,7 +66,7 @@ import {
         'width'
     ]
 })
-export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit { 
+export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoBoxComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
@@ -88,7 +88,6 @@ export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'itemsChange' }
         ]);

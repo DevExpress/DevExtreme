@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_constantLines } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiPolarChartConstantLineComponent extends CollectionNestedOption { 
+export class DxiPolarChartConstantLineComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiPolarChartConstantLineComponent';
 
     

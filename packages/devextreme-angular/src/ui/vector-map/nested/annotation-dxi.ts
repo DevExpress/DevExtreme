@@ -48,7 +48,7 @@ import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/tokens';
     ],
 })
 export class DxiVectorMapAnnotationComponent extends CollectionNestedOption implements AfterViewInit,
-    IDxTemplateHost { 
+    IDxTemplateHost {
     protected _dxClassName = 'DxiVectorMapAnnotationComponent';
 
     

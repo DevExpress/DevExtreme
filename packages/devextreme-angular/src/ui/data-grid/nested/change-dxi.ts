@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_changes } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiDataGridChangeComponent extends CollectionNestedOption { 
+export class DxiDataGridChangeComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiDataGridChangeComponent';
 
     

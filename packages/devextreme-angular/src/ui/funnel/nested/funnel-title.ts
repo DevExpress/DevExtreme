@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoFunnelFunnelTitleComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoFunnelFunnelTitleComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoFunnelFunnelTitleComponent';
 
     

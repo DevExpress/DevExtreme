@@ -38,7 +38,7 @@ import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiFilterBuilderCustomOperationComponent extends CollectionNestedOption { 
+export class DxiFilterBuilderCustomOperationComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiFilterBuilderCustomOperationComponent';
 
     

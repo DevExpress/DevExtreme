@@ -46,7 +46,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoTreeListEditingComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoTreeListEditingComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoTreeListEditingComponent';
 
     @ContentChildren(PROPERTY_TOKEN_changes)
@@ -202,7 +202,6 @@ export class DxoTreeListEditingComponent extends NestedOption implements OnDestr
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'changesChange' },
             { emit: 'editColumnNameChange' },

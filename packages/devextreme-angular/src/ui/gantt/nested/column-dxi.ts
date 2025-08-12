@@ -41,7 +41,7 @@ import { PROPERTY_TOKEN_columns } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiGanttColumnComponent extends CollectionNestedOption { 
+export class DxiGanttColumnComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiGanttColumnComponent';
 
     
@@ -357,7 +357,6 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'filterValueChange' },
             { emit: 'filterValuesChange' },

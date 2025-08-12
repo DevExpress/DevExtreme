@@ -36,7 +36,7 @@ import { PROPERTY_TOKEN_markers } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiMapMarkerComponent extends CollectionNestedOption { 
+export class DxiMapMarkerComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiMapMarkerComponent';
 
     

@@ -35,7 +35,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoPopoverPositionComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoPopoverPositionComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoPopoverPositionComponent';
 
     

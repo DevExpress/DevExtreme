@@ -43,7 +43,7 @@ import { PROPERTY_TOKEN_changes } from 'devextreme-angular/tokens';
         'type'
     ]
 })
-export class DxiChangeComponent extends DxiDataChange { 
+export class DxiChangeComponent extends DxiDataChange {
     protected _dxClassName = 'DxiChangeComponent';
 
     

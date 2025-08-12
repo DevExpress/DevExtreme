@@ -44,7 +44,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoSchedulerOptionsComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoSchedulerOptionsComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoSchedulerOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
@@ -273,7 +273,6 @@ export class DxoSchedulerOptionsComponent extends NestedOption implements OnDest
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'selectedItemKeysChange' },
             { emit: 'selectedItemsChange' }

@@ -40,7 +40,7 @@ import { PROPERTY_TOKEN_alerts } from 'devextreme-angular/tokens';
         'message'
     ]
 })
-export class DxiAlertComponent extends DxiAlert { 
+export class DxiAlertComponent extends DxiAlert {
     protected _dxClassName = 'DxiAlertComponent';
 
     

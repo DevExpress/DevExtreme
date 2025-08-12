@@ -48,7 +48,7 @@ import {
         'multiline'
     ]
 })
-export class DxoToolbarComponent extends DxoDataGridToolbar implements OnDestroy, OnInit { 
+export class DxoToolbarComponent extends DxoDataGridToolbar implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoToolbarComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)

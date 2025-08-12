@@ -49,7 +49,7 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/tokens';
         'visible'
     ]
 })
-export class DxiButtonComponent extends DxiTextEditorButton { 
+export class DxiButtonComponent extends DxiTextEditorButton {
     protected _dxClassName = 'DxiButtonComponent';
 
     

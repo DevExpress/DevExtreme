@@ -44,7 +44,7 @@ import { DxoSearchPanel } from './base/search-panel';
         'width'
     ]
 })
-export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy, OnInit { 
+export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoSearchPanelComponent';
 
     
@@ -62,7 +62,6 @@ export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'textChange' }
         ]);

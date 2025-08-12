@@ -37,7 +37,7 @@ import { DxoHtmlEditorVariables } from './base/html-editor-variables';
         'escapeChar'
     ]
 })
-export class DxoVariablesComponent extends DxoHtmlEditorVariables implements OnDestroy, OnInit { 
+export class DxoVariablesComponent extends DxoHtmlEditorVariables implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoVariablesComponent';
 
     

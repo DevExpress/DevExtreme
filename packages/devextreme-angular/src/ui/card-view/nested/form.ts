@@ -43,7 +43,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoCardViewFormComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoCardViewFormComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoCardViewFormComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
@@ -385,7 +385,6 @@ export class DxoCardViewFormComponent extends NestedOption implements OnDestroy,
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'formDataChange' }
         ]);

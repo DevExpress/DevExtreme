@@ -43,7 +43,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoSummaryComponent';
 
     @ContentChildren(PROPERTY_TOKEN_groupItems)

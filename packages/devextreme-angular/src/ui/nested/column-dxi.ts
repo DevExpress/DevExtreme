@@ -112,7 +112,7 @@ import {
         'width'
     ]
 })
-export class DxiColumnComponent extends DxiDataGridColumn { 
+export class DxiColumnComponent extends DxiDataGridColumn {
     protected _dxClassName = 'DxiColumnComponent';
 
     @ContentChildren(PROPERTY_TOKEN_buttons)
@@ -191,7 +191,6 @@ export class DxiColumnComponent extends DxiDataGridColumn {
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'filterValueChange' },
             { emit: 'filterValuesChange' },

@@ -39,7 +39,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoCardViewLoadPanelComponent';
 
     
@@ -328,7 +328,6 @@ export class DxoCardViewLoadPanelComponent extends NestedOption implements OnDes
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'positionChange' },
             { emit: 'visibleChange' }

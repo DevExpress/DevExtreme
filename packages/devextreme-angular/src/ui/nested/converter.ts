@@ -37,7 +37,7 @@ import { DxoConverter } from './base/converter';
         'toHtml'
     ]
 })
-export class DxoConverterComponent extends DxoConverter implements OnDestroy, OnInit { 
+export class DxoConverterComponent extends DxoConverter implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoConverterComponent';
 
     

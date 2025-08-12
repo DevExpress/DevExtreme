@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiTreeListCompareRuleComponent extends CollectionNestedOption { 
+export class DxiTreeListCompareRuleComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiTreeListCompareRuleComponent';
 
     
@@ -91,6 +91,8 @@ export class DxiTreeListCompareRuleComponent extends CollectionNestedOption {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.type = 'compare';
+    
     }
 
 

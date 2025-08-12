@@ -41,7 +41,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoPageSizeComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoPageSizeComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoPageSizeComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
@@ -94,7 +94,6 @@ export class DxoPageSizeComponent extends NestedOption implements OnDestroy, OnI
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'heightChange' },
             { emit: 'widthChange' }

@@ -44,7 +44,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoDataGridSummaryComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoDataGridSummaryComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoDataGridSummaryComponent';
 
     @ContentChildren(PROPERTY_TOKEN_groupItems)

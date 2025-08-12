@@ -37,7 +37,7 @@ import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiCardViewCustomRuleComponent extends CollectionNestedOption { 
+export class DxiCardViewCustomRuleComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiCardViewCustomRuleComponent';
 
     
@@ -91,6 +91,8 @@ export class DxiCardViewCustomRuleComponent extends CollectionNestedOption {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.type = 'custom';
+    
     }
 
 

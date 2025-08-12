@@ -46,7 +46,7 @@ import {
         'uploadUrl'
     ]
 })
-export class DxoImageUploadComponent extends DxoHtmlEditorImageUpload implements OnDestroy, OnInit { 
+export class DxoImageUploadComponent extends DxoHtmlEditorImageUpload implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoImageUploadComponent';
 
     @ContentChildren(PROPERTY_TOKEN_tabs)

@@ -55,7 +55,7 @@ import {
         'visibleIndex'
     ]
 })
-export class DxoFormItemComponent extends DxoFormSimpleItem implements OnDestroy, OnInit { 
+export class DxoFormItemComponent extends DxoFormSimpleItem implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoFormItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_validationRules)

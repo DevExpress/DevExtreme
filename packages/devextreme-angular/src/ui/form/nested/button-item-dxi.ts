@@ -39,7 +39,7 @@ import { PROPERTY_TOKEN_items } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiFormButtonItemComponent extends CollectionNestedOption { 
+export class DxiFormButtonItemComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiFormButtonItemComponent';
 
     
@@ -125,6 +125,8 @@ export class DxiFormButtonItemComponent extends CollectionNestedOption {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.itemType = 'button';
+    
     }
 
 

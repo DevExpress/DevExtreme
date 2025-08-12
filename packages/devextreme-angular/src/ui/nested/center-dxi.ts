@@ -36,7 +36,7 @@ import { PROPERTY_TOKEN_center } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiCenterComponent extends CollectionNestedOption { 
+export class DxiCenterComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiCenterComponent';
 
     

@@ -40,7 +40,7 @@ import { DxoSorting } from './base/sorting';
         'showSortIndexes'
     ]
 })
-export class DxoSortingComponent extends DxoSorting implements OnDestroy, OnInit { 
+export class DxoSortingComponent extends DxoSorting implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoSortingComponent';
 
     

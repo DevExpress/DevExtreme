@@ -40,7 +40,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoDataGridToolbarComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoDataGridToolbarComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoDataGridToolbarComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)

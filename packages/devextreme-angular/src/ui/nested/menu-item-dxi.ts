@@ -36,7 +36,7 @@ import { PROPERTY_TOKEN_menuItems } from 'devextreme-angular/tokens';
          }
     ],
 })
-export class DxiMenuItemComponent extends CollectionNestedOption { 
+export class DxiMenuItemComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiMenuItemComponent';
 
     

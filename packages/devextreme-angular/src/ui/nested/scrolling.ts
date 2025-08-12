@@ -44,7 +44,7 @@ import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
         'useNative'
     ]
 })
-export class DxoScrollingComponent extends DxoSchedulerScrolling implements OnDestroy, OnInit { 
+export class DxoScrollingComponent extends DxoSchedulerScrolling implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoScrollingComponent';
 
     

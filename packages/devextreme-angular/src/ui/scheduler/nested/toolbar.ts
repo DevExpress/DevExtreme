@@ -40,7 +40,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoSchedulerToolbarComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoSchedulerToolbarComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoSchedulerToolbarComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)

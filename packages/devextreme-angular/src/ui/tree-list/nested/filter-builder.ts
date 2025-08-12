@@ -43,7 +43,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoTreeListFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoTreeListFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoTreeListFilterBuilderComponent';
 
     @ContentChildren(PROPERTY_TOKEN_customOperations)
@@ -285,7 +285,6 @@ export class DxoTreeListFilterBuilderComponent extends NestedOption implements O
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' }
         ]);

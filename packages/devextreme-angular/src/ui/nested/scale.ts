@@ -44,7 +44,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoScaleComponent';
 
     @ContentChildren(PROPERTY_TOKEN_breaks)

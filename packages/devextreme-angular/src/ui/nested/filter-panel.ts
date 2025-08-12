@@ -41,7 +41,7 @@ import { DxoFilterPanel } from './base/filter-panel';
         'visible'
     ]
 })
-export class DxoFilterPanelComponent extends DxoFilterPanel implements OnDestroy, OnInit { 
+export class DxoFilterPanelComponent extends DxoFilterPanel implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoFilterPanelComponent';
 
     
@@ -59,7 +59,6 @@ export class DxoFilterPanelComponent extends DxoFilterPanel implements OnDestroy
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'filterEnabledChange' }
         ]);

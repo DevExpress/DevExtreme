@@ -38,7 +38,7 @@ import { DxoVectorMapProjectionConfig } from './base/vector-map-projection-confi
         'to'
     ]
 })
-export class DxoProjectionComponent extends DxoVectorMapProjectionConfig implements OnDestroy, OnInit { 
+export class DxoProjectionComponent extends DxoVectorMapProjectionConfig implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoProjectionComponent';
 
     

@@ -44,7 +44,7 @@ import {
          }
     ],
 })
-export class DxiCardViewTabbedItemComponent extends CollectionNestedOption { 
+export class DxiCardViewTabbedItemComponent extends CollectionNestedOption {
     protected _dxClassName = 'DxiCardViewTabbedItemComponent';
 
     @ContentChildren(PROPERTY_TOKEN_tabs)
@@ -126,6 +126,8 @@ export class DxiCardViewTabbedItemComponent extends CollectionNestedOption {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.itemType = 'tabbed';
+    
     }
 
 

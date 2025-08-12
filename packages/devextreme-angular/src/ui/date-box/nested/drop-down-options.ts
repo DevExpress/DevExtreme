@@ -50,7 +50,7 @@ import {
         NestedOptionHost,
     ],
 })
-export class DxoDateBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoDateBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoDateBoxDropDownOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
@@ -477,7 +477,6 @@ export class DxoDateBoxDropDownOptionsComponent extends NestedOption implements 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'heightChange' },
             { emit: 'positionChange' },

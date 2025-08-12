@@ -88,7 +88,7 @@ import {
         'width'
     ]
 })
-export class DxoTabPanelOptionsComponent extends DxoTabPanelOptions implements OnDestroy, OnInit { 
+export class DxoTabPanelOptionsComponent extends DxoTabPanelOptions implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoTabPanelOptionsComponent';
 
     @ContentChildren(PROPERTY_TOKEN_items)
@@ -124,7 +124,6 @@ export class DxoTabPanelOptionsComponent extends DxoTabPanelOptions implements O
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'itemsChange' },
             { emit: 'selectedIndexChange' },

@@ -41,7 +41,7 @@ import { DxoFormat } from './base/format';
         'useCurrencyAccountingStyle'
     ]
 })
-export class DxoFormatComponent extends DxoFormat implements OnDestroy, OnInit { 
+export class DxoFormatComponent extends DxoFormat implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoFormatComponent';
 
     

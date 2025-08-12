@@ -38,7 +38,7 @@ import { NestedOption } from 'devextreme-angular/core';
         NestedOptionHost,
     ],
 })
-export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption implements OnDestroy, OnInit { 
+export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption implements OnDestroy, OnInit {
     protected _dxClassName = 'DxoHtmlEditorFileUploaderOptionsComponent';
 
     
@@ -568,7 +568,6 @@ export class DxoHtmlEditorFileUploaderOptionsComponent extends NestedOption impl
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' }
         ]);
