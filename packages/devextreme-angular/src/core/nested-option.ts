@@ -29,7 +29,7 @@ export const checkIncompatibleNestedItems = (
 ) => {
   if (items.length > 0 && legacyClassNames?.length > 0 && console && console.warn) {
     const itemsLassNames = items.map((item) => item._dxClassName);
-    const itemLegacyClassName = itemsLassNames.find((itemClassName) => legacyClassNames.includes(itemClassName));
+    const itemLegacyClassName = itemsLassNames.find((сlassName) => legacyClassNames.includes(сlassName));
     const itemClassName = itemsLassNames.find((itemClassName) => !legacyClassNames.includes(itemClassName));
 
     if (itemLegacyClassName && itemClassName) {
@@ -58,7 +58,7 @@ export abstract class BaseNestedOption implements INestedOptionContainer, IColle
   protected abstract get _optionPath(): string;
 
   _dxClassName = 'BaseNestedOption';
-  
+
   protected abstract _fullOptionPath(): string;
 
   constructor() {

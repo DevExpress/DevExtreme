@@ -68,7 +68,7 @@ export abstract class DxComponent implements OnChanges, OnInit, DoCheck, AfterCo
   protected _optionsToUpdate: any = {};
 
   private readonly _collectionContainerImpl: ICollectionNestedOptionContainer;
-  
+
   protected _legacyNestedClassNames: Record<string, any> = {};
 
   protected _dxClassName = 'DxComponent';

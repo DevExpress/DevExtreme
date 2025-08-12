@@ -56,32 +56,32 @@ describe('DxForm', () => {
 
   // spec
   [
-    { 
-      testName: 'legacy', 
-      formSimpleItem: 'dxi-item', 
-      formGroupItem: 'dxi-item', 
+    {
+      testName: 'legacy',
+      formSimpleItem: 'dxi-item',
+      formGroupItem: 'dxi-item',
       formGroupItemType: 'itemType="group"',
       formValidationItem: 'dxi-validation-rule',
       formValidationRequiredItemType: 'type="required"',
-      formValidationCustomItemType: 'type="custom"'
+      formValidationCustomItemType: 'type="custom"',
     },
-    { 
+    {
       testName: 'new',
       formSimpleItem: 'dxi-form-simple-item',
       formGroupItem: 'dxi-form-group-item',
       formGroupItemType: '',
       formValidationItem: 'dxi-form-required-rule',
       formValidationRequiredItemType: '',
-      formValidationCustomItemType: ''
-    } 
+      formValidationCustomItemType: '',
+    },
   ].forEach(({
-                 testName,
-                 formSimpleItem,
-                 formGroupItem,
-                 formGroupItemType,
-                 formValidationItem,
-                 formValidationRequiredItemType,
-                 formValidationCustomItemType
+    testName,
+    formSimpleItem,
+    formGroupItem,
+    formGroupItemType,
+    formValidationItem,
+    formValidationRequiredItemType,
+    formValidationCustomItemType,
   }) => {
     it(`should be able to accept items via nested dxi components (T459714) (with ${testName} nested items)`, () => {
       TestBed.overrideComponent(TestContainerComponent, {
