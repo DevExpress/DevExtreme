@@ -4,9 +4,8 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { setHeight, setWidth } from '@js/core/utils/size';
 import type { PanelLocation } from '@js/ui/drawer';
 import type Drawer from '@ts/ui/drawer/drawer';
-
-import type { FadeConfig } from './drawer.animation';
-import { animation } from './drawer.animation';
+import type { FadeConfig } from '@ts/ui/drawer/drawer.animation';
+import { animation } from '@ts/ui/drawer/drawer.animation';
 
 class DrawerStrategy {
   _drawer: Drawer;

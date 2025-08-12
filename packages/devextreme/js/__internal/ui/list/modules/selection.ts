@@ -1,1 +1,1 @@
-import '../list.edit.decorator.selection';
+import '@ts/ui/list/list.edit.decorator.selection';

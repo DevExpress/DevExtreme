@@ -5,7 +5,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { getOuterWidth, getWidth } from '@js/core/utils/size';
 import type { DxEvent } from '@js/events';
-import type { ClickEvent } from '@js/ui/button';
+import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import { current, isMaterialBased } from '@js/ui/themes';
 import type { BagConfig, SwipeEndArgs } from '@ts/ui/list/list.edit.decorator';
@@ -31,14 +31,18 @@ class SwitchableButtonEditDecorator extends SwitchableEditDecorator {
     const $buttonInnerWrapper = $('<div>').addClass(SWITCHABLE_DELETE_BUTTON_INNER_WRAPPER_CLASS);
     const $button = $('<div>').addClass(SWITCHABLE_DELETE_BUTTON_CLASS);
 
-    this._list._createComponent($button, Button, {
+    this._list._createComponent<Button, ButtonProperties>($button, Button, {
       text: messageLocalization.format('dxListEditDecorator-delete'),
       type: 'danger',
       stylingMode: isMaterialBased(current()) ? 'text' : 'contained',
-      onClick: (e: Required<ClickEvent>): void => {
+      onClick: (e): void => {
         this._deleteItem();
-        e.event.stopPropagation();
+
+        const { event } = e;
+
+        event?.stopPropagation();
       },
+      // @ts-expect-error
       integrationOptions: {},
       elementAttr: {
         role: null,
@@ -125,13 +129,14 @@ class SwitchableButtonToggleEditDecorator extends SwitchableButtonEditDecorator 
     const { $itemElement, $container } = config;
 
     const $toggle = $('<div>').addClass(TOGGLE_DELETE_SWITCH_CLASS);
-    this._list._createComponent($toggle, Button, {
+    this._list._createComponent<Button, ButtonProperties>($toggle, Button, {
       icon: 'toggle-delete',
-      onClick: (e: ClickEvent): void => {
+      onClick: (e): void => {
         fx.stop(this._$buttonContainer.get(0), false);
         this._toggleDeleteReady($itemElement);
         e.event?.stopPropagation();
       },
+      // @ts-expect-error
       integrationOptions: {},
       elementAttr: {
         role: null,
