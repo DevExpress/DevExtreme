@@ -78,6 +78,7 @@ class DropDownBox<
         return Array.isArray(value) ? value.join(', ') : value;
       },
       useHiddenSubmitElement: true,
+      _ignoreFieldTemplateDeprecation: true,
     };
   }
 

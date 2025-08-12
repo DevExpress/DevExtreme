@@ -102,6 +102,7 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
       // @ts-expect-error ts-error
       fieldTemplate: null,
       buttonsLocation: 'bottom after',
+      _ignoreFieldTemplateDeprecation: true,
     };
   }
 
