@@ -301,8 +301,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     /**
      * [descr:dxDropDownBoxOptions.fieldTemplate]
     
-     * @deprecated [depNote:dxDropDownBoxOptions.fieldTemplate]
-    
      */
     @Input()
     get fieldTemplate(): any {
