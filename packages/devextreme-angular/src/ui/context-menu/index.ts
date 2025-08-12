@@ -98,8 +98,8 @@ import { DxiContextMenuItemComponent } from 'devextreme-angular/ui/context-menu/
         IterableDifferHelper
     ]
 })
-export class DxContextMenuComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxContextMenu<TKey> = null;
+export class DxContextMenuComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxContextMenu<TItem, TKey> = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -288,10 +288,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get items(): Array<dxContextMenuItem> {
+    get items(): Array<any | dxContextMenuItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxContextMenuItem>) {
+    set items(value: Array<any | dxContextMenuItem>) {
         this._setOption('items', value);
     }
 
@@ -697,7 +697,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<dxContextMenuItem>>;
+    @Output() itemsChange: EventEmitter<Array<any | dxContextMenuItem>>;
 
     /**
     

@@ -131,7 +131,7 @@ export interface ContextMenuProperties<
   TItem extends dxMenuBaseItem = Item,
 > extends
   MenuBaseProperties<TItem>,
-  Pick<Properties, ContextMenuPropertiesKeys> {
+  Pick<Properties<TItem>, ContextMenuPropertiesKeys> {
   hideOnParentScroll?: boolean;
   visualContainer?: string | Element | Window | null;
   overlayContainer?: string | Element | null;

@@ -119,7 +119,7 @@ type MenuPropertiesKeys = Exclude<keyof Properties, keyof MenuBaseProperties>;
 
 interface MenuProperties extends
   MenuBaseProperties,
-  Pick<Properties, MenuPropertiesKeys> {
+  Pick<Properties<Item>, MenuPropertiesKeys> {
   templatesRenderAsynchronously?: boolean;
 }
 
