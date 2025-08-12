@@ -585,7 +585,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     if (!this._buttonGroup) {
       this.$element().append($buttonGroup);
     }
-    // @ts-expect-error ts-error
+
     this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._getButtonGroupOptions());
 
     this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));

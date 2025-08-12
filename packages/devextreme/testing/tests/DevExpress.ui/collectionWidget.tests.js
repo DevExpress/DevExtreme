@@ -1162,14 +1162,18 @@ module('option change', () => {
     });
 
     test('user defined selectedItem with null value should be more important than default selected index', function(assert) {
-        const TestCollection = CollectionWidget.inherit({
-            NAME: 'TestCollection',
+        class TestCollection extends CollectionWidget {
+            ctor(element, options) {
+                this.NAME = 'TestCollection';
+                super.ctor(element, options);
+            }
+
             _getDefaultOptions() {
-                return $.extend(this.callBase(), {
+                return $.extend(super._getDefaultOptions(), {
                     selectedIndex: 0
                 });
             }
-        });
+        }
 
         const instance = new TestCollection($('#cmp'), {
             items: [1, 2, 3],
@@ -1992,29 +1996,32 @@ module('isReady', () => {
     });
 });
 
-const TestWidget = CollectionWidget.inherit({
-    NAME: 'TestWidget',
+class TestWidget extends CollectionWidget {
+    ctor(element, options) {
+        this.NAME = 'TestWidget';
+        super.ctor(element, options);
+    }
 
     _renderItem(...args) {
-        this.callBase(...args);
-    },
+        super._renderItem(...args);
+    }
 
     _itemClass() {
         return 'div';
-    },
+    }
 
     _itemDataKey() {
         return '3AE08BA7-F7BC-464B-8B43-53C1F7307920';
     }
-});
+}
 
 let loadCount = 0;
-const TestStore = Store.inherit({
+class TestStore extends Store {
     _loadImpl() {
         loadCount++;
         return $.Deferred().resolve([1, 2, 3]);
     }
-});
+}
 
 module('Data layer integration', {
     beforeEach: function() {

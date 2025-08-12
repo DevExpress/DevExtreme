@@ -95,7 +95,6 @@ class EditDecoratorContext extends EditDecorator {
         this._menuItemClickHandler(event);
       },
       height: 'auto',
-      // @ts-expect-error ts-error
       integrationOptions: {},
     });
 
@@ -118,6 +117,7 @@ class EditDecoratorContext extends EditDecorator {
     if (!this._$itemWithMenu) {
       return;
     }
+
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._list.deleteItem(this._$itemWithMenu.get(0));
   }
