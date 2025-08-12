@@ -139,7 +139,6 @@ class DiagramToolbar extends DiagramPanel {
                 dataSource: items,
                 displayExpr: displayExpr || 'text',
                 valueExpr: valueExpr || 'value',
-                _ignoreFieldTemplateDeprecation: true,
             }
         });
 
@@ -221,7 +220,6 @@ class DiagramToolbar extends DiagramPanel {
                 onClosed: () => {
                     $('body').removeClass(DIAGRAM_MOBILE_TOOLBAR_COLOR_BOX_OPENED_CLASS);
                 },
-                _ignoreFieldTemplateDeprecation: true,
             }
         });
         return options;

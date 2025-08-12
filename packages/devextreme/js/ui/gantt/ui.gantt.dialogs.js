@@ -226,7 +226,6 @@ class TaskEditDialogInfo extends DialogInfoBase {
                         }
                     }
                 }],
-                _ignoreFieldTemplateDeprecation: true,
             }
         }];
     }
