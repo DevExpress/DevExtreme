@@ -64,19 +64,19 @@ QUnit.test('Scheduler should have a right rendering strategy for timeline views'
         }]
     });
 
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineDay strategy is OK');
+    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineDay strategy is OK');
 
     this.instance.option('currentView', 'timelineWeek');
     await waitAsync(0);
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineWeek strategy is OK');
+    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineWeek strategy is OK');
 
     this.instance.option('currentView', 'timelineWorkWeek');
     await waitAsync(0);
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineWorkWeek strategy is OK');
+    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineWorkWeek strategy is OK');
 
     this.instance.option('currentView', 'timelineMonth');
     await waitAsync(0);
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalMonthLineAppointmentsStrategy, 'timelineMonth strategy is OK');
+    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof HorizontalMonthLineAppointmentsStrategy, 'timelineMonth strategy is OK');
 });
 
 QUnit.test('Scheduler should have a right rendering strategy for views with config', async function(assert) {
@@ -97,11 +97,11 @@ QUnit.test('Scheduler should have a right rendering strategy for views with conf
         }]
     });
 
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof VerticalAppointmentStrategy, 'Strategy is OK');
+    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof VerticalAppointmentStrategy, 'Strategy is OK');
 
     this.instance.option('currentView', 'MonthView');
     await waitAsync(0);
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'Strategy is OK');
+    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'Strategy is OK');
 });
 
 QUnit.module('Appointments', moduleOptions);
@@ -1682,7 +1682,7 @@ QUnit.test('Full-size appointment should not have empty class in "auto" mode', a
         }
     );
 
-    const getHeightStub = sinon.stub(this.instance.getRenderingStrategyInstance(), '_getAppointmentDefaultHeight').callsFake(function() {
+    const getHeightStub = sinon.stub(this.instance.getLayoutManager().getRenderingStrategyInstance(), '_getAppointmentDefaultHeight').callsFake(function() {
         return 18;
     });
 
@@ -2359,7 +2359,7 @@ QUnit.test('_isAppointmentEmpty should work correctly in different strategies', 
         currentView: 'timelineDay'
     });
 
-    const renderingStrategy = this.instance.getRenderingStrategyInstance();
+    const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
 
     assert.ok(renderingStrategy._isAppointmentEmpty(34, 41), 'Appointment is empty');
     assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), 'Appointment isn\'t empty');

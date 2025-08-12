@@ -3241,7 +3241,7 @@ const createDragBehaviorConfig = (
 
     const items = appointments._renderItem(appointmentIndex, {
       itemData,
-      settings: [settings],
+      ...settings,
     });
 
     return items[0];
