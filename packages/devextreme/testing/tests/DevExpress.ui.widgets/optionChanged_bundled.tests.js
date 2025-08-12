@@ -40,6 +40,7 @@ QUnit.module('OptionChanged', {
                 name === 'ignoreChildEvents' ||
                 name === '_dataController' ||
                 name === '_ignorePreventScrollEventsDeprecation' ||
+                name === '_ignoreFieldTemplateDeprecation' ||
                 name === '_checkParentVisibility') {
                 return;
             }
