@@ -390,7 +390,7 @@ function calculateHue(r, g, b, delta) {
     case b:
       return (r - g) / delta + 4;
     default:
-      return 0; // should never happen
+      return undefined; // should never happen
   }
 }
 

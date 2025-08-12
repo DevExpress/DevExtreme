@@ -31,7 +31,7 @@ export interface DomAdapter {
   getRootNode: (element: HTMLElement) => Document | DocumentFragment;
   getAttribute: (element, name) => any;
   setAttribute: (element, name, value) => void;
-  createAttribute: (text: any, context?: any) => any;
+  createAttribute: (text: string, context?: Document) => Attr;
   removeAttribute: (element, name) => void;
   isElementNode: (element: any) => boolean;
   createElement: (tagName: string, context?: Document) => HTMLElement;
@@ -90,7 +90,9 @@ const nativeDOMAdapterStrategy: DomAdapter = {
   },
 
   createAttribute(text, context) {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     context = context || this._document;
+    // @ts-expect-error
     return context.createAttribute(text);
   },
 
