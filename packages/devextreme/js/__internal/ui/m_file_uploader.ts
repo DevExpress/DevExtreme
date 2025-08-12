@@ -832,7 +832,7 @@ class FileUploader extends Editor<FileUploaderProperties> {
       e.preventDefault();
       const $selectButton = this._selectButton.$element();
 
-      eventsEngine.triggerHandler($selectButton, { type: 'click' });
+      eventsEngine.triggerHandler($selectButton, { type: 'dxclick' });
     };
 
     return {
