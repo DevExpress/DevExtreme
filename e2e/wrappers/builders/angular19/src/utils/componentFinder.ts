@@ -10,6 +10,11 @@ export const COMPONENTS = [
     component: import('@external/inputs-list-in-form/angular19/inputs-list-in-form.component').then((m) => m.InputsListInFormComponent),
   },
   {
+    path: 'select-box-nested-validator',
+    name: 'SelectBoxNestedValidator',
+    component: import('@external/select-box-nested-validator/angular19/select-box-nested-validator.component').then((m) => m.SelectBoxNestedValidatorComponent),
+  },
+  {
     path: 'text-box-dynamic-styles',
     name: 'TextBoxDynamicStyles',
     component: import('@external/text-box-dynamic-styles/angular19/text-box-dynamic-styles.component').then((m) => m.TextBoxDynamicStylesComponent),
