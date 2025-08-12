@@ -5,10 +5,10 @@ import { current as currentTheme } from '@js/ui/themes';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { isAppointmentTakesAllDay } from '@ts/scheduler/r1/utils/index';
 
-import timeZoneUtils from '../../m_utils_time_zone';
-import type { SafeAppointment } from '../../types';
-import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
-import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
+import timeZoneUtils from '../../../m_utils_time_zone';
+import type { SafeAppointment } from '../../../types';
+import { AppointmentAdapter } from '../../../utils/appointment_adapter/appointment_adapter';
+import type { AppointmentDataAccessor } from '../../../utils/data_accessor/appointment_data_accessor';
 import { AppointmentSettingsGenerator } from '../m_settings_generator';
 import AdaptivePositioningStrategy from './m_appointments_positioning_strategy_adaptive';
 import AppointmentPositioningStrategy from './m_appointments_positioning_strategy_base';

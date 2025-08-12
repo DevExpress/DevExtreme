@@ -1,11 +1,8 @@
-import {
-  getAppointmentOccurrenceDates,
-} from '@ts/scheduler/appointments/data_provider/utils/get_appointment_filter/get_appointment_occurrence_dates';
-
 import type { TimeZoneCalculator } from '../../../../r1/timezone_calculator/calculator';
 import { isAppointmentTakesAllDay } from '../../../../r1/utils/index';
 import type { AppointmentDataItem } from '../../../../types';
 import type { FilterOptions } from '../type';
+import { getAppointmentOccurrenceDates } from './get_appointment_occurrence_dates';
 import { getAppointmentsOccurrences } from './get_appointments_occurrences';
 import { isAppointmentMatchedIntervals } from './is_appointment_matched_intervals';
 import { isAppointmentMatchedResources } from './is_appointment_matched_resources';

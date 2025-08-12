@@ -4,10 +4,10 @@ import {
   isDefined,
   isPlainObject,
 } from '@js/core/utils/type';
-
 import type {
   ScrollOffset,
-} from '../types';
+} from '@ts/ui/scroll_view/types';
+
 import {
   ScrollDirection,
 } from './scroll_direction';

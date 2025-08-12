@@ -28,6 +28,7 @@ import {
   getWidth,
 } from '@js/core/utils/size';
 import { isDefined, isObject } from '@js/core/utils/type';
+import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 import type { dxPopupAnimation, Properties, ToolbarItem } from '@js/ui/popup';
 import type { ResizeEndEvent, ResizeEvent, ResizeStartEvent } from '@js/ui/resizable';
@@ -739,10 +740,11 @@ class Popup<
     return (_, __, container): void => {
       const $button = $('<div>').addClass(POPUP_TITLE_CLOSEBUTTON_CLASS);
 
-      this._createComponent($button, Button, {
+      this._createComponent<Button, ButtonProperties>($button, Button, {
         icon: 'close',
         onClick: this._createToolbarItemAction(undefined),
         stylingMode: 'text',
+        // @ts-expect-error ts-error
         integrationOptions: {},
       });
 
@@ -837,7 +839,7 @@ class Popup<
     return {
       template: (_, __, container: dxElementWrapper): void => {
         const $toolbarItem = $('<div>').addClass(itemClass).appendTo(container);
-        this._createComponent($toolbarItem, Button, itemConfig);
+        this._createComponent<Button, ButtonProperties>($toolbarItem, Button, itemConfig);
       },
     };
   }

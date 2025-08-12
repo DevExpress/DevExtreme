@@ -5,11 +5,11 @@ import '__internal/scheduler/m_scheduler';
 import $ from 'jquery';
 import translator from 'common/core/animation/translator';
 
-import AppointmentLayoutManager from '__internal/scheduler/m_appointments_layout_manager';
-import BaseAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_base';
-import VerticalAppointmentStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_vertical';
-import HorizontalAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_horizontal';
-import HorizontalMonthLineAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_horizontal_month_line';
+import AppointmentLayoutManager from '__internal/scheduler/view_model/m_appointments_layout_manager';
+import BaseAppointmentsStrategy from '__internal/scheduler/view_model/generate_view_model/rendering_strategies/m_strategy_base';
+import VerticalAppointmentStrategy from '__internal/scheduler/view_model/generate_view_model/rendering_strategies/m_strategy_vertical';
+import HorizontalAppointmentsStrategy from '__internal/scheduler/view_model/generate_view_model/rendering_strategies/m_strategy_horizontal';
+import HorizontalMonthLineAppointmentsStrategy from '__internal/scheduler/view_model/generate_view_model/rendering_strategies/m_strategy_horizontal_month_line';
 import dataUtils from 'core/element_data';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
