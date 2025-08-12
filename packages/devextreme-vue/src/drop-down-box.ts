@@ -8,9 +8,11 @@ import  DOMComponent from "devextreme/core/dom_component";
 import  dxPopup from "devextreme/ui/popup";
 import {
  DropDownPredefinedButton,
+ FieldTemplate,
 } from "devextreme/ui/drop_down_editor/ui.drop_down_editor";
 import {
  TextEditorButton,
+ template,
  LabelMode,
  EditorStyle,
  ValidationMessageMode,
@@ -102,6 +104,7 @@ type AccessibleOptions = Pick<Properties,
   "dropDownOptions" |
   "elementAttr" |
   "fieldTemplate" |
+  "fieldTemplates" |
   "focusStateEnabled" |
   "height" |
   "hint" |
@@ -171,7 +174,8 @@ const componentConfig = {
     dropDownButtonTemplate: {},
     dropDownOptions: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
-    fieldTemplate: {},
+    fieldTemplate: [Object, Function] as PropType<FieldTemplate | (((data: any, element: any) => string | any)) | template>,
+    fieldTemplates: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
     height: [Number, String],
     hint: String,
@@ -238,6 +242,7 @@ const componentConfig = {
     "update:dropDownOptions": null,
     "update:elementAttr": null,
     "update:fieldTemplate": null,
+    "update:fieldTemplates": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hint": null,

@@ -299,6 +299,19 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
 
     /**
+     * [descr:dxDropDownEditorOptions.fieldTemplates]
+    
+     */
+    @Input()
+    get fieldTemplates(): any {
+        return this._getOption('fieldTemplates');
+    }
+    set fieldTemplates(value: any) {
+        this._setOption('fieldTemplates', value);
+    }
+
+
+    /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
     
      */
@@ -944,6 +957,13 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() fieldTemplatesChange: EventEmitter<any>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -1244,6 +1264,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
             { emit: 'dropDownOptionsChange' },
             { emit: 'elementAttrChange' },
             { emit: 'fieldTemplateChange' },
+            { emit: 'fieldTemplatesChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
             { emit: 'hintChange' },

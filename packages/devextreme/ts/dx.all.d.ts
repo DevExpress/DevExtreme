@@ -8687,7 +8687,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface DateBoxBaseOptions<TComponent>
-    extends dxDropDownEditorOptions<TComponent> {
+    extends Omit<dxDropDownEditorOptions<TComponent>, 'fieldTemplates'> {
     /**
      * [descr:DateBoxBaseOptions.applyButtonText]
      */
@@ -11463,12 +11463,7 @@ declare module DevExpress.ui {
      * [descr:dxColorBoxOptions.fieldTemplate]
      * @deprecated [depNote:dxColorBoxOptions.fieldTemplate]
      */
-    fieldTemplate?:
-      | template
-      | ((
-          value: string,
-          fieldElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+    fieldTemplate?: FieldTemplate<string>;
     /**
      * [descr:dxColorBoxOptions.keyStep]
      */
@@ -16271,12 +16266,7 @@ declare module DevExpress.ui {
      * [descr:dxDropDownBoxOptions.fieldTemplate]
      * @deprecated [depNote:dxDropDownBoxOptions.fieldTemplate]
      */
-    fieldTemplate?:
-      | template
-      | ((
-          value: any,
-          fieldElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+    fieldTemplate?: FieldTemplate;
     /**
      * [descr:dxDropDownBoxOptions.items]
      */
@@ -16615,6 +16605,10 @@ declare module DevExpress.ui {
           contentElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
+     * [descr:dxDropDownEditorOptions.fieldTemplates]
+     */
+    fieldTemplates?: FieldTemplates;
+    /**
      * [descr:dxDropDownEditorOptions.onClosed]
      */
     onClosed?: (e: DevExpress.common.core.events.EventInfo<TComponent>) => void;
@@ -16672,7 +16666,7 @@ declare module DevExpress.ui {
    */
   export interface dxDropDownListOptions<TComponent>
     extends DataExpressionMixinOptions<TComponent>,
-      dxDropDownEditorOptions<TComponent> {
+      Omit<dxDropDownEditorOptions<TComponent>, 'fieldTemplates'> {
     /**
      * [descr:dxDropDownListOptions.displayValue]
      */
@@ -27040,12 +27034,7 @@ declare module DevExpress.ui {
      * [descr:dxSelectBoxOptions.fieldTemplate]
      * @deprecated [depNote:dxSelectBoxOptions.fieldTemplate]
      */
-    fieldTemplate?:
-      | template
-      | ((
-          selectedItem: any,
-          fieldElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
+    fieldTemplate?: FieldTemplate;
     /**
      * [descr:dxSelectBoxOptions.onCustomItemCreating]
      */
@@ -32635,6 +32624,24 @@ declare module DevExpress.ui {
    * [descr:dxFilterBuilderField]
    */
   export type Field = dxFilterBuilderField;
+  /**
+   * [descr:FieldTemplate]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type FieldTemplate<T = any> =
+    | template
+    | ((
+        data: T,
+        element: DevExpress.core.DxElement
+      ) => string | DevExpress.core.UserDefinedElement);
+  /**
+   * [descr:FieldTemplates]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type FieldTemplates = {
+    beforeTemplate?: FieldTemplate;
+    afterTemplate?: FieldTemplate;
+  };
   /**
    * [descr:ui.hideToasts()]
    */

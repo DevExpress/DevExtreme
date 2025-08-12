@@ -48,8 +48,6 @@ type IColorBoxOptionsNarrowedEvents = {
 type IColorBoxOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IColorBoxOptionsNarrowedEvents> & IHtmlOptions & {
   dropDownButtonRender?: (...params: any) => React.ReactNode;
   dropDownButtonComponent?: React.ComponentType<any>;
-  fieldRender?: (...params: any) => React.ReactNode;
-  fieldComponent?: React.ComponentType<any>;
   defaultOpened?: boolean;
   defaultValue?: string;
   onOpenedChange?: (value: boolean) => void;
@@ -91,11 +89,6 @@ const ColorBox = memo(
           tmplOption: "dropDownButtonTemplate",
           render: "dropDownButtonRender",
           component: "dropDownButtonComponent"
-        },
-        {
-          tmplOption: "fieldTemplate",
-          render: "fieldRender",
-          component: "fieldComponent"
         },
       ]), []);
 

@@ -50,8 +50,6 @@ type IDropDownBoxOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties,
   contentComponent?: React.ComponentType<any>;
   dropDownButtonRender?: (...params: any) => React.ReactNode;
   dropDownButtonComponent?: React.ComponentType<any>;
-  fieldRender?: (...params: any) => React.ReactNode;
-  fieldComponent?: React.ComponentType<any>;
   defaultOpened?: boolean;
   onOpenedChange?: (value: boolean) => void;
 }>
@@ -95,11 +93,6 @@ const DropDownBox = memo(
           tmplOption: "dropDownButtonTemplate",
           render: "dropDownButtonRender",
           component: "dropDownButtonComponent"
-        },
-        {
-          tmplOption: "fieldTemplate",
-          render: "fieldRender",
-          component: "fieldComponent"
         },
       ]), []);
 

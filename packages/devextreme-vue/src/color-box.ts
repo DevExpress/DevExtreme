@@ -8,6 +8,7 @@ import  dxPopup from "devextreme/ui/popup";
 import {
  ApplyValueMode,
  TextEditorButton,
+ template,
  LabelMode,
  EditorStyle,
  ValidationMessageMode,
@@ -26,6 +27,7 @@ import {
 } from "devextreme/common";
 import {
  DropDownPredefinedButton,
+ FieldTemplate,
 } from "devextreme/ui/drop_down_editor/ui.drop_down_editor";
 import {
  dxPopupOptions,
@@ -96,6 +98,7 @@ type AccessibleOptions = Pick<Properties,
   "editAlphaChannel" |
   "elementAttr" |
   "fieldTemplate" |
+  "fieldTemplates" |
   "focusStateEnabled" |
   "height" |
   "hint" |
@@ -162,7 +165,8 @@ const componentConfig = {
     dropDownOptions: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
     editAlphaChannel: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
-    fieldTemplate: {},
+    fieldTemplate: [Object, Function] as PropType<FieldTemplate | (((data: any, element: any) => string | any)) | template>,
+    fieldTemplates: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
     height: [Number, String],
     hint: String,
@@ -226,6 +230,7 @@ const componentConfig = {
     "update:editAlphaChannel": null,
     "update:elementAttr": null,
     "update:fieldTemplate": null,
+    "update:fieldTemplates": null,
     "update:focusStateEnabled": null,
     "update:height": null,
     "update:hint": null,

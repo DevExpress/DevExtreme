@@ -9,6 +9,7 @@ import  dxPopup from "devextreme/ui/popup";
 import {
  ApplyValueMode,
  TextEditorButton,
+ template,
  LabelMode,
  SimplifiedSearchMode,
  SelectAllMode,
@@ -29,6 +30,7 @@ import {
 } from "devextreme/common";
 import {
  DropDownPredefinedButton,
+ FieldTemplate,
 } from "devextreme/ui/drop_down_editor/ui.drop_down_editor";
 import {
  CollectionWidgetItem,
@@ -205,7 +207,7 @@ const componentConfig = {
     dropDownButtonTemplate: {},
     dropDownOptions: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
-    fieldTemplate: {},
+    fieldTemplate: [Object, Function] as PropType<FieldTemplate | (((data: any, element: any) => string | any)) | template>,
     focusStateEnabled: Boolean,
     grouped: Boolean,
     groupTemplate: {},
