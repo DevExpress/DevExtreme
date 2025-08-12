@@ -33,7 +33,7 @@ import {
 } from './const';
 import type { EditingController } from './m_editing';
 import { isEditable } from './m_editing_utils';
-import type { NormalizedEditCellOptions } from './m_types';
+import type { NormalizedEditCellOptions } from './types';
 
 export interface ICellBasedEditingControllerExtender {
   // eslint-disable-next-line @typescript-eslint/method-signature-style
@@ -236,7 +236,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 
   private _editCellCore(options): boolean | DeferredObj<boolean> | undefined {
-    const editCellOptions: any = this._getNormalizedEditCellOptions(options);
+    const editCellOptions: NormalizedEditCellOptions = this._getNormalizedEditCellOptions(options);
     const {
       columnIndex,
       rowIndex,
@@ -432,7 +432,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _prepareChange(options, value, text) {
     const $cellElement = $(options.cellElement);
 
@@ -529,7 +528,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _allowRowAdding(params) {
     if (this.isBatchEditMode()) {
       return true;

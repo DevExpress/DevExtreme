@@ -92,7 +92,7 @@ import {
   isEditingCell,
   isEditingOrShowEditorAlwaysDataCell,
 } from './m_editing_utils';
-import type { NormalizedEditCellOptions } from './m_types';
+import type { NormalizedEditCellOptions } from './types';
 
 class EditingControllerImpl extends modules.ViewController {
   protected _columnsController!: Controllers['columns'];

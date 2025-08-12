@@ -88,6 +88,7 @@ export interface Item {
   cells?: unknown[];
   loadIndex?: number;
   isSelected?: boolean;
+  removed?: boolean;
 }
 
 export type Filter = any;
