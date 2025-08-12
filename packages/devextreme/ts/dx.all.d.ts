@@ -16264,7 +16264,6 @@ declare module DevExpress.ui {
     displayValueFormatter?: (value: string | Array<any>) => string;
     /**
      * [descr:dxDropDownBoxOptions.fieldTemplate]
-     * @deprecated [depNote:dxDropDownBoxOptions.fieldTemplate]
      */
     fieldTemplate?: FieldTemplate;
     /**
